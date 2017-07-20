@@ -1,0 +1,104 @@
+﻿Help on search text syntax and keyboard shortcuts
+
+=== Introduction ===
+
+	Searching is case-INsensitive
+
+	IMPORTANT: Searh result includes only exact matches to the words in query unless wildcard symbols are used.
+	a query 'angel OR demon' will not match words like 'angelic'.
+	
+	Wildcard symbols are: * - any characters or nothing, ? - any one character.
+	To find all words like 'smash', 'smashed', 'smashing' use query 'smash*'
+
+=== Search text keyboard shortcuts ===
+
+	* Show intellisense (a hint based on your input)
+	Ctrl+SPACE or Down arrow
+
+	* Select suggested value from intellisense
+	Up/down arrows to choose, ENTER to select
+	
+	* Hide intellisense
+	ESC
+	
+	* Apply modified search text
+	ENTER or wait 1 second
+	
+	* Intellisense on field name
+	Ctrl+SPACE when input caret is to the left of colon ':'
+	Ctrl+SPACE when search text is empty
+	
+	* Intellisense on textual value without specifying a field
+	Type something, press Ctrl+SPACE
+
+	* Intellisense on specific field's value
+	Type field name, type colon (:), hit Ctrl+SPACE
+	
+	* Erase one word
+	Ctrl+Backspace
+	
+	* Undo
+	Ctrl+Z or Alt+Left arrow
+	
+	* Redo
+	Ctrl+Y or Alt+Right arrow
+
+=== Search text syntax ===
+
+	Search text uses Lucene query language as specified at
+	https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+
+	* Boolean operators and nesting
+		((angel OR demon) AND legendary)
+
+	* Search in a specific field
+		Name:Ooze
+
+	* Searh in any field
+		disk
+
+	* Quotes (")
+	are used to search the entire phrase
+		"Llanowar elves"
+		
+	When no operators are specified, OR is applied.
+	The query below returns any card which types contain Rogue OR Rat
+		Type:(Rogue Rat)
+
+	* Wildcards
+	Using * you can control whether you search by word's prefix, suffix or you need exact word
+		Subtype:(*ngel OR dem* OR human NOT rogue)
+
+	Using ? you can restrict word's fragments length.
+	Use query below to search a word starting with su that has at least 6 characters
+		su????*
+
+	* Fuzzy search
+	The query below will return Nevinyrral's Disk and other cards mentioning Nevinyrral in text
+		nevniniral~ 
+
+	You can refine your search by changing desired minimum similarity.
+	Default similarity is 0.5, min is 0, max is 1.
+		nevniniral~0.2
+		nevniniral~0.9
+
+	* Proximity search
+	The query below searches for text where words mana and color have 2 or less words between them.
+		"Mana color"~2 
+
+	* Range search
+	You can correctly filter number fields like this:
+		powerNum:[1 TO 4]
+
+	The numbers are indexed as numbers, not as text so no power 11 cards will appear between 1 and 4.
+
+		PricingMid:{100 TO *} 
+	will search cards with price strictly > than 100$
+
+	You can also use range search with text fields. Query below matches card with names containing any word which lies between 'a' and 'ced' in alphanumerical order
+		Name:[a TO ced] 
+
+	* Term boosting
+	Term boosting is NOT supported because Mtgdb.Gui does not currently sort by relevance to search query.
+	The query below is parsed and executed correctly but ^3 booster to Angel term is just ignored
+		Angel^3 OR Demon

@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Dal</RootNamespace>
+    <AssemblyName>Mtgdb.Dal</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqLib, Version=1.0.4.2, Culture=neutral, PublicKeyToken=100a413726ba3d7c, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.10\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Loader.cs" />
+    <Compile Include="Keywords\KeywordSearcher.cs" />
+    <Compile Include="Keywords\CardKeywords.cs" />
+    <Compile Include="Index\DamerauLevenstineDistance.cs" />
+    <Compile Include="Index\DocumentFactory.cs" />
+    <Compile Include="Index\IndexVersion.cs" />
+    <Compile Include="Index\LuceneSearcher.cs" />
+    <Compile Include="Index\LuceneSpellchecker.cs" />
+    <Compile Include="Index\NumericAwareQueryParser.cs" />
+    <Compile Include="Index\SearchResult.cs" />
+    <Compile Include="Index\IntellisenseSuggest.cs" />
+    <Compile Include="Keywords\KeywordQueryTerm.cs" />
+    <Compile Include="Model\CollectionModel.cs" />
+    <Compile Include="Model\InternedStringArrayConverter.cs" />
+    <Compile Include="Model\InternedStringConverter.cs" />
+    <Compile Include="Model\IntToInternedStringConverter.cs" />
+    <Compile Include="Model\IUiForm.cs" />
+    <Compile Include="Model\Legality.cs" />
+    <Compile Include="RegexUtil.cs" />
+    <Compile Include="[ infrastructure ]\CardSizeConfig.cs" />
+    <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
+    <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
+    <Compile Include="GathererExtractorCsvParser.cs" />
+    <Compile Include="ImageCache\BmpFrameDetector.cs" />
+    <Compile Include="ImageCache\ImageCacheEntry.cs" />
+    <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
+    <Compile Include="ImageCache\BmpProcessor.cs" />
+    <Compile Include="ImageCache\BmpCornerRemoval.cs" />
+    <Compile Include="ImageRepository.cs" />
+    <Compile Include="Keywords\KeywordDefinitions.cs" />
+    <Compile Include="Model\CardDelta.cs" />
+    <Compile Include="Model\CardLocalization.cs" />
+    <Compile Include="Model\CardLocalizationRaw.cs" />
+    <Compile Include="CardRepository.cs" />
+    <Compile Include="EditDistance\EditDistance.cs" />
+    <Compile Include="EditDistance\ReplaceCost.cs" />
+    <Compile Include="EditDistance\Similarity.cs" />
+    <Compile Include="ImageCache\ImageCache.cs" />
+    <Compile Include="Model\Card.cs" />
+    <Compile Include="Model\ForeignName.cs" />
+    <Compile Include="Images\ImageModel.cs" />
+    <Compile Include="Model\GeneratedManaParser.cs" />
+    <Compile Include="Model\ICardCollection.cs" />
+    <Compile Include="Model\LegalityNote.cs" />
+    <Compile Include="Model\Ruling.cs" />
+    <Compile Include="Model\Set.cs" />
+    <Compile Include="Model\UiModel.cs" />
+    <Compile Include="[ infrastructure ]\DalModule.cs" />
+    <Compile Include="Partition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LocalizationRepository.cs" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="[ infrastructure ]\ZoomedCardSizeConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
+      <Name>EditedTokenLocator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpellChecker\Contrib.SpellChecker.csproj">
+      <Project>{ff45ee91-9ca3-443d-8231-75e9fa1af40e}</Project>
+      <Name>Contrib.SpellChecker</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Index\TolerantTokenizer\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

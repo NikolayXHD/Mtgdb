@@ -1,0 +1,3 @@
+[submodule "Lucene.Net.Contrib"]
+	path = Lucene.Net.Contrib
+	url = https://github.com/NikolayXHD/Lucene.Net.Contrib.git

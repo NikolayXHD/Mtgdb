@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Controls</RootNamespace>
+    <AssemblyName>Mtgdb.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\Cjk.cs">
+      <Link>Cjk.cs</Link>
+    </Compile>
+    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\EnumerableExtensions.cs">
+      <Link>EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="BitmapExtensions.cs" />
+    <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
+    <Compile Include="ButtonSubsystem\ButtonImages.cs" />
+    <Compile Include="ButtonSubsystem\CustomButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ButtonSubsystem\Popup.cs" />
+    <Compile Include="Contract\CardClickEventArgs.cs" />
+    <Compile Include="Contract\CustomDrawArgs.cs" />
+    <Compile Include="Contract\FieldSortInfo.cs" />
+    <Compile Include="Contract\HitInfo.cs" />
+    <Compile Include="CursorHelper.cs" />
+    <Compile Include="CustomPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LayoutView\CardLayoutUtil.cs" />
+    <Compile Include="ControlHelpers.cs" />
+    <Compile Include="LayoutView\CustomVScroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LayoutView\HighlightSettings.cs" />
+    <Compile Include="LayoutView\LayoutControlTypeConverter.cs" />
+    <Compile Include="LayoutView\LayoutViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayoutView\LayoutViewControl.Designer.cs">
+      <DependentUpon>LayoutViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Contract\TextRange.cs" />
+    <Compile Include="LayoutView\LayoutControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayoutView\RichTextRenderer.cs" />
+    <Compile Include="LayoutView\IconRecognizer.cs" />
+    <Compile Include="LayoutView\RichTextRenderContext.cs" />
+    <Compile Include="LayoutView\RenderAction.cs" />
+    <Compile Include="LayoutView\RenderBatchQueue.cs" />
+    <Compile Include="LayoutView\RenderBatch.cs" />
+    <Compile Include="LayoutView\FieldControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayoutView\SortOptions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="QuickFilter\FilterValueState.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickFilter\QuickFilterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QuickFilter\BorderShape.cs" />
+    <Compile Include="QuickFilter\StateClick.cs" />
+    <Compile Include="LayoutView\RichTextToken.cs" />
+    <Compile Include="LayoutView\RichTextLayout.cs" />
+    <Compile Include="LayoutView\RichTextTokenReader.cs" />
+    <Compile Include="LayoutView\RichTextTokenType.cs" />
+    <Compile Include="Statistics\Field.cs" />
+    <Compile Include="Statistics\FieldBuilder.cs" />
+    <Compile Include="Statistics\IField.cs" />
+    <Compile Include="TabForm\Direction.cs" />
+    <Compile Include="TabForm\CustomBorderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TabForm\CustomBorderForm.Designer.cs">
+      <DependentUpon>CustomBorderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TabForm\TabHeaderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabForm\TabHeaderControl.Designer.cs">
+      <DependentUpon>TabHeaderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TabForm\TabSettings.cs" />
+    <Compile Include="Tooltip\FixedRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Tooltip\ICustomTooltip.cs" />
+    <Compile Include="ShadowedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tooltip\StaticTooltipSettings.cs" />
+    <Compile Include="Tooltip\TooltipController.cs" />
+    <Compile Include="Tooltip\TooltipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tooltip\TooltipModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LayoutView\LayoutViewControl.resx">
+      <DependentUpon>LayoutViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabForm\CustomBorderForm.resx">
+      <DependentUpon>CustomBorderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabForm\TabHeaderControl.resx">
+      <DependentUpon>TabHeaderControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tooltip\TooltipForm.resx">
+      <DependentUpon>TooltipForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_tab_hovered_16.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1021 @@
+﻿Abandon Reason	3
+Abbot of Keral Keep	2
+Aberrant Researcher	3
+Abstruse Interference	4
+Abundant Maw	3
+Accomplished Automaton	4
+Accursed Spirit	4
+Acrobatic Maneuver	4
+Act of Treason	4
+Advanced Stitchwing	3
+Adverse Conditions	3
+Aeronaut Tinkerer	4
+Aether Hub	3
+Aether Meltdown	3
+Aether Theorist	4
+Aether Tradewinds	4
+Aethersquall Ancient	2
+Aetherstorm Roc	2
+Aethertorch Renegade	3
+Ainok Guide	4
+Akoum Firebird	1
+Akoum Flameseeker	4
+Akoum Hellkite	2
+Akoum Stonewaker	3
+Akroan Jailer	4
+Akroan Sergeant	4
+Alchemist's Vial	4
+Alhammarret, High Arbiter	2
+Aligned Hedron Network	2
+Allied Reinforcements	3
+Alms of the Vein	4
+Altar's Reap	4
+Altered Ego	2
+Always Watching	2
+Ambitious Aetherborn	4
+Ampryn Tactician	4
+Anchor to the Æther	3
+Ancient Crab	4
+Angel of Invention	1
+Angel of Renewal	3
+Angelic Destiny	1
+Angelic Purge	4
+Anguished Unmaking	2
+Animist's Awakening	2
+Anointer of Champions	3
+Apothecary Geist	4
+Appetite for the Unnatural	4
+Aradara Express	4
+Arborback Stomper	3
+Archangel Avacyn	1
+Architect of the Untamed	2
+Arlinn Kord	1
+Armorcraft Judge	3
+Artificer's Epiphany	4
+Aspiring Aeronaut	4
+Asylum Visitor	2
+Auramancer	4
+Avacyn's Judgment	2
+Avacynian Missionaries	3
+Avaricious Dragon	1
+Aviary Mechanic	4
+Ayli, Eternal Pilgrim	2
+Backwoods Survivalists	4
+Ballista Charger	3
+Baloth Null	3
+Baloth Pup	3
+Barrage Ogre	3
+Barrage Tyrant	2
+Bastion Mastodon	4
+Battlefront Krushok	3
+Bearer of Silence	2
+Bedlam Reveler	2
+Bellows Lizard	4
+Benthic Infiltrator	4
+Birthing Hulk	3
+Biting Rain	3
+Bitter Revelation	4
+Blazing Hellhound	3
+Blessed Alliance	3
+Blessed Spirits	3
+Blighted Steppe	3
+Blight Herder	2
+Blightcaster	3
+Blighted Gorge	3
+Blinding Drone	4
+Blisterpod	4
+Blood Mist	3
+Bloodbond Vampire	3
+Bloodbriar	4
+Blood-Cursed Knight	3
+Bloodﬂow Connoisseur	4
+Bloodhall Priest	2
+Bloodmad Vampire	4
+Bloodpyre Elemental	4
+Blossoming Defense	3
+Boiling Earth	4
+Bold Impaler	4
+Bomat Bazaar Barge	3
+Bomat Courier	2
+Bonded Construct	4
+Bonds of Mortality	3
+Bone Saw	4
+Bone Splinters	4
+Bone to Ash	4
+Boon of Emrakul	4
+Boonweaver Giant	3
+Borrowed Grace	4
+Borrowed Hostility	4
+Borrowed Malevolence	4
+Bottle Gnomes	3
+Boulder Salvo	4
+Bounding Krasis	3
+Brain in a Jar	2
+Brazen Scourge	3
+Breaker of Armies	3
+Breakneck Rider	3
+Brilliant Spectrum	4
+Bristling Hydra	2
+Broken Concentration	3
+Bronze Sable	4
+Brood Butcher	2
+Broodhunter Wurm	4
+Bruna, the Fading Light	2
+Brutal Expulsion	2
+Brute Strength	4
+Built to last	4
+Built to Smash	4
+Bygone Bishop	2
+Byway Courier	4
+Calculated Dismissal	4
+Call of the Full Moon	3
+Call the Bloodline	3
+Call the Gatewatch	2
+Campaign of Vengeance	3
+Canopy Gorger	4
+Canopy Vista	2
+Captured by the Consulate	2
+Carrier Thrall	3
+Cataclysmic Gearhulk	1
+Catalog	4
+Cathartic Reunion	4
+Celestial Flare	4
+Cemetery Recruitment	4
+Certain Death	4
+Champion of Arashin	4
+Chandra, Flamecaller	1
+Chandra, Fire of Kaladesh	1
+Chandra's Ignition	2
+Chasm Guide	3
+Chief of the Foundry	3
+Child of Night	4
+Chitinous Cloak	3
+Chorus of Might	4
+Cinder Barrens	4
+Cinder Glade	2
+Cinder Hellion	4
+Citadel Castellan	3
+Claustrophobia	4
+Cleric of the Forward Order	4
+Cliffhaven Vampire	3
+Cliffside Lookout	4
+Clifftop Retreat	2
+Cloudblazer	3
+Clutch of Currents	4
+Coastal Discovery	3
+Collective Defiance	2
+Collective Effort	2
+Combustible Gearhulk	1
+Commencement of Festivities	4
+Comparative Analysis	4
+Compelling Deterrence	3
+Complete Disregard	4
+Conclave Naturalists	3
+Conduit of Storms	3
+Confirm Suspicions	2
+Conﬁscation Coup	2
+Confront the Unknown	4
+Consecrated by Blood	3
+Consulate Skygate	4
+Consul's Lieutenant	3
+Consul's Shieldguard	3
+Containment Membrane	4
+Contraband Kingpin	3
+Convicted Killer	4
+Convolute	4
+Coral Merfolk	4
+Coralhelm Guide	4
+Corpse Hauler	4
+Countermand	4
+Courageous Outrider	3
+Courier Griffin	4
+Cowl Prowler	4
+Creeping Mold	3
+Crop Sigil	3
+Crossroads Consecrator	4
+Crow of Dark Tidings	4
+Cruel Revival	3
+Crumbling Vestige	4
+Crush of Tentacles	1
+Cryptbreaker	2
+Cryptic Cruiser	3
+Culling Drone	4
+Cult of the Waxing Moon	3
+Cultist's Staff	4
+Cultivator of Blades	2
+Cultivator's Caravan	2
+Curio Vendor	4
+Cyclone Sire	3
+Dark Salvation	2
+Darkslick Drake	3
+Dauntless Cathar	4
+Dauntless River Marshal	3
+Dazzling Reﬂection	4
+Dead Weight	4
+Deadbridge Shaman	4
+Deathcap Cultivator	2
+Deathless Behemoth	3
+Decimator of the Provinces	1
+Declaration in Stone	2
+Deepfathom Skulker	2
+Deﬁant Bloodlord	2
+Dehydration	4
+Demolition Stomper	3
+Demon's Grasp	4
+Depala, Pilot Exemplar	2
+Desolation Twin	2
+Desperate Sentry	4
+Despoiler of Souls	2
+Devils' Playground	2
+Devour in Flames	3
+Diabolic Tutor	3
+Die Young	4
+Dimensional Inﬁltrator	2
+Diregraf Colossus	2
+Disciple of the Ring	1
+Dispel	4
+Disperse	4
+Displace	4
+Displacement Wave	2
+Distemper of the Blood	4
+Distended Mindbender	2
+Docent of Perfection	2
+Dominator Drone	4
+Drag Under	4
+Dragon Fodder	4
+Dragonskull Summit	2
+Dramatic Reversal	4
+Drana's Chosen	2
+Drana's Emissary	3
+Drowned Catacomb	2
+Drowner of Hope	2
+Drownyard Behemoth	3
+Drownyard Explorers	4
+Drownyard Temple	2
+Drunau Corpse Trawler	3
+Dukhara Peafowl	4
+Durable Handicraft	3
+Duskwatch Recruiter	3
+Dust Stalker	2
+Dwynen, Gilt-Leaf Daen	2
+Dwynen's Elite	3
+Dynavolt Tower	2
+Eager Construct	4
+Elder Deep-Fiend	2
+Eldrazi Aggressor	4
+Eldrazi Devastator	4
+Eldrazi Displacer	2
+Eldrazi Mimic	2
+Eldrazi Obligator	2
+Eldrazi Skyspawner	4
+Eldritch Evolution	2
+Electrostatic Pummeler	2
+Elemental Bond	3
+Elemental Uprising	4
+Eliminate the Competition	2
+Elusive Tormentor	2
+Elvish Visionary	4
+Ember Beast	4
+Ember Hauler	3
+Ember-Eye Wolf	4
+Embermaw Hellion	2
+Embodiment of Fury	3
+Embodiment of Insight	3
+Embraal Bruiser	3
+Emeria Shepherd	2
+Emissary of the Sleepless	4
+Empyreal Voyager	3
+Emrakul's Evangel	2
+Emrakul's Inﬂuence	3
+Endbringer	2
+Engineered Might	3
+Enlightened Maniac	4
+Enshrouding Mist	4
+Enthralling Victor	3
+Equestrian Skill	4
+Era of Innovation	3
+Erdwal Illuminator	3
+Erebos's Titan	1
+Esperzoa	3
+Essence Depleter	3
+Essence Extraction	3
+Essence flux	3
+Ever After	2
+Evolutionary Leap	2
+Evolving Wilds	4
+Expedite	4
+Expedition Envoy	3
+Expedition Raptor	4
+Explosive Vegetation	4
+Expose Evil	4
+Exquisite Firecraft	2
+Extricator of Sin	3
+Exultant Cultist	4
+Eyeblight Assassin	4
+Eyeless Watcher	4
+Fog	4
+Faerie Miscreant	4
+Fairgrounds Trumpeter	3
+Faith Unbroken	3
+Faithbearer Paladin	4
+Falkenrath Reaver	4
+Fall of the Titans	2
+Farbog Revenant	4
+Fateful Showdown	2
+Felidar Cub	4
+Fertile Thicket	4
+Fevered Visions	2
+Fiery Conclusion	3
+fiery Impulse	4
+Fiery Temper	4
+Filigree Familiar	3
+firefiend Elemental	4
+Firemantle Mage	3
+Flameblade Angel	2
+Flameshadow Conjuring	2
+Flaring Flame-Kin	3
+flayer Drone	3
+Fleetwheel Cruiser	2
+Flesh to Dust	4
+Fleshbag Marauder	3
+Fogwalker	4
+Forerunner of Slaughter	3
+Forgotten Creation	2
+Fork in the Road	4
+Forsaken Sanctuary	4
+Fortified Rampart	4
+Foul Emissary	3
+Foul Orchard	4
+Foundry Inspector	3
+Foundry of the Consuls	3
+Foundry Screecher	4
+Fragmentize	4
+Fretwork Colony	3
+From Beyond	2
+From Under the Floorboards	2
+Frost Lynx	4
+Furtive Homunculus	4
+furyblade Vampire	3
+Gaea's Revenge	2
+Galvanic Bombardment	4
+Gather the Pack	3
+Gatstaf Arsonists	4
+Gavony Unhallowed	4
+Gearseeker Serpent	4
+Gearshift Ace	3
+Geier Reach Bandit	2
+Geier Reach Sanitarium	2
+Geistblast	3
+General Tazri	1
+Ghirapur Æther Grid	3
+Ghirapur Gearcrafter	4
+Ghirapur Orrery	2
+Ghostly Sentinel	4
+Ghoulcaller's Accomplice	4
+Ghoulsteed	3
+Giant Mantis	4
+Giant Spectacle	4
+Gideon, Ally of Zendikar	1
+Gideon's Reproach	4
+Gilt-Leaf Winnower	2
+Gisa and Geralf	1
+Gisa's Bidding	3
+Gisela, the Broken Blade	1
+Glacial Fortress	2
+Glimmer of Genius	3
+Glint-Nest Crane	3
+Glint-Sleeve Artisan	4
+Gnarlwood Dryad	3
+Goblin Arsonist	4
+Goblin Balloon Brigade	4
+Goblin Glory Chaser	3
+Goblin Piker	4
+Goblin War Paint	4
+Graf Harvest	3
+Graf Rats	4
+Grapple with the Past	4
+Grasp of Darkness	3
+Grasp of the Hieromancer	4
+Graveblade Marauder	2
+Gravedigger	3
+Gravity Negator	4
+Greenwarden of Murasa	1
+Grip of the Roil	3
+Grizzled Angler	3
+Grove Rumbler	3
+Gruesome Slaughter	2
+Guardian Automaton	4
+Guardian of Pilgrims	4
+Guardian of Tazeem	2
+Guardians of Meletis	4
+Gurmag Swiftwing	3
+Guul Draz Overseer	2
+Highspire Artisan	4
+Hagra Sharpshooter	3
+Hamlet Captain	3
+Hanweir Battlements	2
+Hanweir Garrison	2
+Hanweir Militia Captain	2
+Harbinger of the Tides	2
+Harnessed Lightning	3
+Haunted Cloak	3
+Haunted Dead	3
+Havoc Sower	3
+Hazardous Conditions	3
+Heir of Falkenrath	3
+Heliod's Pilgrim	4
+Herald of the Pantheon	2
+Hermit of the Natterknolls	3
+Hero of Goma Fada	2
+Heron's Grace Champion	2
+Highland Lake	4
+Hightide Hermit	4
+Hijack	4
+Hinterland Harbor	2
+Hinterland Logger	4
+Hissing Quagmire	2
+Hixus, Prison Warden	2
+Hope Against Hope	3
+Horribly Awry	3
+Howlpack Resurgence	3
+Hydrolash	3
+Immobilizer Eldrazi	3
+Impetuous Devils	2
+Imprisoned in the Moon	2
+Incendiary Sabotage	3
+Incorrigible Youths	3
+Incubator Drone	4
+Indulgent Aristocrat	3
+Infectious Bloodlust	4
+Infernal Scarring	4
+Inferno Fist	4
+Infuse with the Elements	3
+Ingenious Skaab	4
+Inner Struggle	3
+Insidious Will	2
+Inspiration	4
+Inspiring Captain	4
+Into the Maw of Hell	3
+Intrepid Provisioner	4
+Inventor's Apprentice	3
+Inventor's Goggles	4
+Inventors' Fair	2
+Invocation of Saint Traft	2
+Jori En, Ruin Diver	2
+Jorubai Murk Lurker	3
+Harvest Hand	3
+Iroas's Champion	3
+Ironclad Slayer	4
+Isolated Chapel	2
+Isolation Zone	4
+It of the Horrid Swarm	4
+Juggernaut	3
+Jace, Vryn's Prodigy	1
+Jhessian Thief	3
+Jwar Isle Avenger	4
+Kalastria Healer	4
+Kalastria Nightwatch	4
+Kalitas, Traitor of Ghet	1
+Kambal, Consul of Allocation	2
+Kapsho Kitefins	3
+Kazuul's Toll Collector	3
+Kessig Prowler	3
+Key to the City	2
+Kessig Forgemaster	3
+Kindly Stranger	3
+Kinsbaile Skirmisher	4
+Kiora, Master of the Depths	1
+Kird Chieftain	3
+Knight of the Pilgrim's Road	4
+Knight of the White Orchid	2
+Knightly Valor	3
+Kor Bladewhirl	3
+Kor Castigator	4
+Kor Entanglers	3
+Kor Scythemaster	4
+Kor Sky Climber	4
+Kothophed, Soul Hoarder	2
+Kozilek, the Great Distortion	1
+Kozilek's Shrieker	4
+Kozilek's Translator	4
+Kozilek's Pathfinder	4
+Kozilek's Return	1
+Kujar Seedsculptor	4
+Kytheon's Irregulars	2
+Kytheon's Tactics	4
+Laboratory Brute	4
+Jace, Unraveler of Secrets	1
+Jaddi Offshoot	3
+lambholt Paciﬁst	3
+lamplighter of Selhoff	4
+Languish	2
+Lantern Scout	2
+Larger Than Life	4
+lashweed Lurker	3
+Lathnu Hellion	2
+lavastep Raider	4
+Lead by Example	4
+Lifespring Druid	3
+Lightning Axe	3
+Liliana, Heretical Healer	1
+Liliana's Elite	3
+Linvala, the Preserver	1
+Live Fast	4
+Llanowar Empath	4
+Chandra, Torch of Defiance	1
+Inexorable Blob	2
+Inquisitor's Ox	4
+Insolent Neonate	4
+Loam Larva	4
+Lone Rider	3
+Long Road Home	3
+Long-Finned Skywhale	3
+Longtusk Cub	3
+Looming Spires	4
+Joraga Auxiliary	3
+Ishkanah, Grafwidow	1
+Lumbering Falls	2
+Lunar Force	3
+Lunarch Mantle	4
+Lupine Prototype	2
+Just the Wind	4
+Liliana, the Last Hope	1
+Lys Alana Huntmaster	4
+Lys Alana Scarblade	3
+Macabre Waltz	4
+Mage-Ring Bully	4
+Make a Stand	3
+Make Mischief	4
+Makindi Aeronaut	4
+Makindi Patrol	4
+Makindi Sliderunner	4
+Malakir Cullblade	3
+Malakir Familiar	3
+Malakir Soothsayer	3
+Malfunction	4
+Marionette Master	2
+Markov Crusader	3
+Master Trinketeer	2
+Matter Reshaper	2
+Maw of Kozilek	4
+Meandering River	4
+Merciless Resolve	4
+Mercurial Geists	3
+Metalwork Colossus	2
+Meteorite	3
+Metropolis Sprite	4
+Midnight Oil	2
+Midnight Scavengers	4
+Might Beyond Reason	4
+Might of the Masses	4
+Militant Inquisitor	4
+Mina and Denn, Wildborn	2
+Mind Raker	4
+Mindmelter	3
+Mindwrack Demon	1
+Minister of Inquiries	3
+Minotaur Abomination	4
+Mire's Malice	4
+Mirrorwing Dragon	1
+Mist Intruder	4
+Mockery of Nature	3
+Moldgraf Scavenger	4
+Molten Vortex	2
+Moorland Drifter	4
+Morkrut Necropod	3
+Mortuary Mire	4
+Mournwillow	3
+Multiform Wonder	2
+Munda, Ambush Leader	2
+Murasa Ranger	3
+Murder	3
+Murderer's Axe	3
+Murderous Compulsion	4
+Murk Strider	4
+Nagging Thoughts	4
+Nahiri, the Harbinger	1
+Nahiri's Machinations	3
+Nantuko Husk	4
+Narnam Cobra	4
+Natural Connection	4
+Nature's Way	3
+Nebelgast Herald	3
+Necromantic summons	3
+Necromantic Thirst	4
+Needle Spires	2
+Neglected Heirloom	3
+Nettle Drone	4
+Niblis of Frost	2
+Nightfire Giant	3
+Nimble Innovator	4
+Nimbus Wings	4
+Nirkana Assassin	4
+Nissa, Vastwood Seer	1
+Nissa, Vital Force	1
+Nissa's judgment	3
+Nissa's Pilgrimage	4
+Nissa's Renewal	2
+Nissa's Revelation	2
+Nissa, Voice of Zendikar	1
+Noxious Gearhulk	1
+Kytheon, Hero of Akros	1
+Oath of Chandra	2
+Oath of Gideon	2
+Oath of Jace	2
+Oath of Liliana	2
+Oath of Nissa	2
+Ob Nixilis Reignited	1
+Oblivion Sower	1
+Oblivion Strike	4
+Obsessive Skinner	3
+Olivia, Mobilized for War	1
+Olivia's Bloodsworn	3
+Olivia's Dragoon	4
+Omnath, Locus of Rage	1
+Ondu Champion	4
+Ondu Greathorn	4
+Ondu Rising	3
+Ondu War Cleric	4
+Oracle of Dust	4
+Oran-Rief Hydra	2
+Orchard Spirit	4
+Ornamental Courage	4
+Outland Colossus	2
+Ovalchase Daredevil	3
+Ovalchase Dragster	3
+Oviya Pashiri, Sage Lifecrafter	2
+Pack Guardian	3
+Padeem, Consul of Innovation	2
+Paranoid Parish-Blade	3
+Part the Waterveil	1
+Patron of the Valiant	3
+Peema Outrider	4
+Pharika's Disciple	4
+Pia and Kiran Nalaar	2
+Pia Nalaar	2
+Pieces of the Puzzle	4
+Pilgrim's Eye	3
+Pious Evangel	3
+Planar Outburst	2
+Plated Crusher	3
+Plummet	4
+Pore Over the Pages	3
+Possessed Skaab	3
+Prairie Stream	2
+Prakhata Club Security	4
+Prakhata Pillar-Bug	4
+Press for Answers	4
+Press into Service	3
+Prey Upon	4
+Priest of the Blood Rite	2
+Primal Bellow	3
+Primal Druid	4
+Primal Huntbeast	4
+Prism Array	2
+Prized Amalgam	2
+Processor Assault	3
+Propeller Pioneer	4
+Prophet of Distortion	3
+Pulse of Murasa	4
+Puncturing Light	4
+Pyre Hound	4
+Pyromancer's Assault	3
+Quilled Wolf	4
+Rabid Bite	4
+Rabid Bloodsucker	4
+Radiant Flames	2
+Rancid Rats	4
+Rattlechains	2
+Ravaging Blaze	3
+Ravenous Bloodseeker	3
+Razorfoot Grifﬁn	4
+Read the Bones	4
+Reality Hemorrhage	4
+Reality Smasher	2
+Reaper of Flight Moonsilver	3
+Reave Soul	4
+Reaver Drone	3
+Reckless Cohort	4
+Reckless Fireweaver	4
+Reckless Scholar	3
+Reclamation Sage	3
+Reclusive Artiﬁcer	3
+Reduce to Ashes	4
+Reﬂector Mage	3
+Refurbish	3
+Relentless Hunter	3
+Relic Seeker	2
+Renegade Freighter	4
+Reprisal	3
+Restoration Gearsmith	3
+Retreat to Coralhelm	3
+Retreat to Emeria	3
+Retreat to Hagra	3
+Retreat to Kazandu	3
+Retreat to Valakut	3
+Revoke Privileges	4
+Rhox Maulers	4
+Ride Down	3
+Ringwarden Owl	4
+Riparian Tiger	4
+Rise from the Grave	3
+Rise from the Tides	3
+Rising Miasma	3
+Rogue's Passage	3
+Roil Spout	3
+Roiling Waters	3
+Roil's Retribution	3
+Rolling Thunder	3
+Rootbound Crag	2
+Rot Shambler	3
+Rotted Hulk	4
+Ruin in Their Wake	3
+Ruin Processor	4
+Ruinous Gremlin	4
+Ruins of Oran-Rief	2
+Runed Servitor	3
+Rush of Adrenaline	4
+Rush of Vitality	4
+Saddleback Lagac	4
+Sage of Ancient Lore	2
+Sage of Shaila's Claim	4
+Saheeli's Artistry	2
+Salivating Gremlins	4
+Salvage Drone	4
+Sandstone Bridge	4
+Saheeli Rai	1
+Sanitarium Skeleton	4
+Savage Alliance	3
+Scarred Vinebreeder	4
+Scatter to the Winds	2
+Scion Summoner	4
+Scour the Laboratory	3
+Scourge Wolf	2
+Scrapheap Scrounger	2
+Scrapskin Drake	4
+Scrapyard Mongrel	4
+Screeching Skaab	4
+Scythe Leopard	3
+Seed Guardian	3
+Seer's Lantern	4
+Select for Inspection	4
+Self-Assembler	4
+Selﬂess Spirit	2
+Senseless Rage	4
+Separatist Voidmage	4
+Serene Steward	3
+Shadow Glider	4
+Shadows of the Past	3
+Shaman of the Pack	3
+Shambling Ghoul	4
+Shambling Vent	2
+Shatterskull Recruit	4
+Sheer Drop	4
+Shoulder to Shoulder	4
+Shrewd Negotiation	3
+Shrill Howler	3
+Siege Mastodon	4
+Siegecraft	4
+Sifter of Skulls	2
+Sigardian Priest	4
+Sigil of the Empty Throne	2
+Sigil of Valor	3
+Sigiled Starfish	3
+Silverfur Partisan	2
+Sinister Concoction	3
+Sire of Stagnation	1
+Skeleton Key	3
+Skitterskin	3
+Sky-Eel School	4
+Sky Scourer	4
+Sky Skiff	4
+Skyhunter Skirmisher	3
+Skyline Cascade	4
+Skyrider Elf	3
+Skysovereign, Consul Flagship	1
+Skyswirl Harrier	4
+Skywhaler's Shot	3
+Slab Hammer	3
+Slaughter Drone	4
+Slayer's Plate	2
+Sleep Paralysis	4
+Slip Through Space	4
+Sludge Crawler	4
+Smoldering Marsh	2
+Smoldering Werewolf	3
+Smothering Abomination	2
+Smuggler's Copter	2
+Snapping Gnarlid	4
+Snare Thopter	3
+Solemn Offering	4
+Solitary Hunter	4
+Sorin, Grim Nemesis	1
+Soulblade Djinn	2
+Sparkmage's Gambit	4
+Spatial Contortion	3
+Spawnbinder Mage	4
+Spectral Reserves	4
+Spectral Shepherd	3
+Speedway Fanatic	3
+Spell Queller	2
+Spell Shrivel	4
+Sphinx's Tutelage	3
+Spined Wurm	4
+Spirit of the Hunt	2
+Spontaneous Artist	4
+Spontaneous Mutation	4
+Stalking Drone	4
+Stallion of Ashmouth	4
+Stalwart Aven	4
+Start Your Engines	3
+Steadfast Cathar	4
+Stensia Banquet	4
+Stensia Innkeeper	4
+Stensia Masquerade	3
+Steppe Glider	3
+Stitched Mangler	4
+Stoic Builder	4
+Stone Haven Medic	4
+Stone Quarry	4
+Stoneforge Acolyte	3
+Stoneforge Masterwork	2
+Stonefury	4
+Stonework Puma	4
+Stormchaser Mage	3
+Stormrider Spirit	4
+Strider Harness	4
+Stromkirk Condemned	2
+Stromkirk Mentor	4
+Subjugator Angel	3
+Submerged Boneyard	4
+Subterranean Scout	4
+Subtle Strike	4
+Sulfur Falls	2
+Sunblade Elf	3
+Sunken Hollow	2
+Suntail Hawk	4
+Sunpetal Grove	2
+Suppression Bonds	4
+Survive the Night	4
+Sweep Away	4
+Swell of Growth	4
+Sylvan Advocate	2
+Syndicate Trafﬁcker	2
+Tainted Remedy	2
+Tajuru Pathwarden	4
+Tajuru Stalwart	4
+Take Inventory	4
+Talent of the Telepath	2
+Tamiyo's Journal	2
+Tamiyo, Field Researcher	1
+Tandem Tactics	4
+Tar Snare	4
+Tattered Haunter	4
+Telling Time	3
+Tenacity	3
+Terrain Elemental	4
+Territorial Baloth	4
+Territorial Gorger	2
+Thalia, Heretic Cathar	2
+Thalia's Lieutenant	2
+The Gitrog Monster	1
+Thermo-Alchemist	4
+Thing in the Ice	2
+Thopter Engineer	3
+Thopter Spy Network	2
+Thornbow Archer	4
+Thornhide Wolves	4
+Thought Harvester	3
+Thought-Knot Seer	2
+Thraben Foulbloods	4
+Thraben Gargoyle	3
+Thriving Grubs	4
+Thriving Ibex	4
+Thriving Rats	4
+Thriving Rhino	4
+Thriving Turtle	4
+Throttle	4
+Throwing Knife	3
+Thunderclap Wyvern	3
+Tireless Tracker	2
+Tide Drifter	3
+Tidy Conclusion	4
+Tightening Coils	4
+Timber Gorge	4
+Timberland Guide	4
+Timberpack Wolf	4
+Titanic Growth	4
+Titan's Presence	3
+Titan's Strength	4
+Toolcraft Exemplar	2
+Tooth Collector	3
+Topan Freeblade	4
+Topplegeist	3
+Torch Gauntlet	4
+Torrential Gearhulk	1
+Totem-Guide Hartebeest	3
+Touch of the Void	4
+Tower Geist	3
+Tragic Arrogance	2
+Traitorous Instinct	4
+Tranquil Expanse	4
+Trusty Companion	3
+Twin Bolt	4
+Twins of Maurer Estate	4
+Ulamog, the Ceaseless Hunger	1
+Ulamog's Despoiler	3
+Ulamog's Nullifier	3
+Ulamog's Reclaimer	3
+Ulrich of the Krallenhorde	1
+Ulrich's Kindred	3
+Ulvenwald Hydra	1
+Ulvenwald Mysteries	3
+Ulvenwald Observer	2
+Umara Entangler	4
+Undead Servant	4
+Undercity Troll	3
+Underhanded Designs	3
+Unholy Hunger	4
+Unified Front	3
+Unity of Purpose	3
+Unlicensed Disintegration	3
+Unnatural Aggression	4
+Unsubstantiate	3
+Untamed Hunger	4
+Valakut Invoker	4
+Valeron Wardens	3
+Valor in Akros	3
+Vampire Envoy	4
+Vampiric Rites	3
+Vedalken Blademaster	4
+Verdurous Gearhulk	1
+Vestige of Emrakul	4
+Vessel of Ephemera	4
+Vessel of Malignity	4
+Vessel of Nascency	4
+Vessel of Paramnesia	4
+Vessel of Volatility	4
+Veteran Cathar	3
+Veteran Motorist	3
+Veteran Warleader	2
+Veteran's Sidearm	4
+Vexing Scuttler	3
+Vildin-Pack Outcast	4
+Vile Aggregate	3
+Vile Redeemer	2
+Vines of the Recluse	4
+Visionary Augmenter	3
+Visions of Brutality	3
+Void Attendant	3
+Void Grafter	3
+Voldaren Duelist	4
+Voltaic Brawler	3
+Voracious Null	4
+Vryn Wingmare	2
+Walker of the Wastes	3
+Wall of Resurgence	3
+Wandering Fumarole	2
+Warden of Geometries	4
+Warped landscape	4
+Warping Wail	3
+Wasteland Strangler	2
+Wave-Wing Elemental	4
+Waxing Moon	4
+Wayward Giant	4
+Weaponcraft Enthusiast	3
+Weapons Trainer	3
+Weaver of Lightning	3
+Weirded Vampire	4
+Welcome to the Fold	2
+Weldfast Monitor	4
+Weldfast Wingsmith	4
+Welding Sparks	4
+Welkin Tern	4
+Westvale Abbey	2
+Wharf Infiltrator	2
+Whirler Rogue	3
+Whirler Virtuoso	3
+Whispers of Emrakul	3
+Wild Instincts	4
+Wild-Field Scarecrow	3
+Wildsize	4
+Willbreaker	2
+Windrider Patrol	3
+Wispweaver Angel	3
+Witness the End	4
+Wolf of Devil's Breach	1
+Wolfkin Bond	4
+Woodcutter's Grit	4
+Woodland Bellower	1
+Woodland Cemetery	2
+Woodland Patrol	4
+Woodland Stream	4
+Woodland Wanderer	2
+Workshop Assistant	4
+Wretched Gryff	4
+Yavimaya Wurm	4
+Yeva's Forcemage	4
+Zada's Commando	4
+Zendikar Incarnate	3
+Zendikar's Roil	3
+Zulaport Chainmage	4

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<WatchFile Mode="Auto" />
+
+	<!--
+		NOTE: These are display settings. General settings are located in \etc\Mtgdb.Gui.xml
+		
+		NOTE: To apply the changes made here save your changes and restart the program.
+	
+		NOTE: Be careful editing this. If you break XML syntax the application will fail to start.
+		To avoid this I suggest using notepad++ or any other syntax-enabled text editor.
+		
+		If this file gets broken for any reason you have 3 options:
+		* remove (better rename) this file.
+		* replace this file with the original from most resent downloaded version you have.
+			The files downloaded from Update window are located at \update\Mtgdb.Gui.v<Version>.zip
+		* ask my help
+			* post your question to https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299
+			* attach a copy of the broken config file
+			* attach a .zip with files from \logs directory
+	-->
+	
+	<!--
+		* AllowPartialCards
+		The purpose is to use window space effectively when the  window size is small.
+		If you want to see only cards that completely fit whithin the window set the
+		option value to "False".
+		
+		* ShowTextualFields
+		Set this option to "False" to display only card images in search result.
+		With default value "True" textual card details are displayed in search result 
+		alongside the card image.
+		
+		* Show deck
+		Set this option to "False" to hide the deck area in the bottow of the window.
+	-->
+	<View
+		AllowPartialCards="True"
+		ShowTextualFields="True"
+		ShowDeck="True"
+	/>
+	
+	<!-- A size of card image shown in search result -->
+	<CardSize Width="215" Height="300" />
+	
+	<!-- A size of card image shown when you zoom a card -->
+	<ZoomedCardSize Width="427" Height="596" />
+
+</configuration>
