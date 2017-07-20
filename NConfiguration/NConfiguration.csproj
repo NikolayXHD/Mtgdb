@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NConfiguration</RootNamespace>
+    <AssemblyName>NConfiguration</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateDocumentation>true</GenerateDocumentation>
+    <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="Combination\BuildUtils.cs" />
+    <Compile Include="Combination\CombinerAttribute.cs" />
+    <Compile Include="Combination\BuildUtils.Combiners.cs" />
+    <Compile Include="Combination\ComplexFunctionBuilder.cs" />
+    <Compile Include="Combination\DefaultCombiner.cs" />
+    <Compile Include="Combination\ChildCombiner.cs" />
+    <Compile Include="Combination\ICombinable%271.cs" />
+    <Compile Include="Combination\ICombinable.cs" />
+    <Compile Include="Combination\CombinerExtensions.cs" />
+    <Compile Include="Combination\ICombiner.cs" />
+    <Compile Include="Combination\ICombiner%271.cs" />
+    <Compile Include="Combination\ICombinerFactory.cs" />
+    <Compile Include="BaseConfigNodeProvider.cs" />
+    <Compile Include="Combination\Collections\Union%271.cs" />
+    <Compile Include="ReflectionExt.cs" />
+    <Compile Include="DefaultConfigNodeProvider.cs" />
+    <Compile Include="CachedConfigNodeProvider.cs" />
+    <Compile Include="IConfigNodeProvider.cs" />
+    <Compile Include="Ini\SettingsLoaderExtensions.cs" />
+    <Compile Include="Joining\IIncludeHandler.cs" />
+    <Compile Include="Monitoring\FirstChange.cs" />
+    <Compile Include="Joining\SettingsLoader.cs" />
+    <Compile Include="Json\SettingsLoaderExtensions.cs" />
+    <Compile Include="ChangeableAppSettings.cs" />
+    <Compile Include="IAppSettings.cs" />
+    <Compile Include="DeserializeChildException.cs" />
+    <Compile Include="IChangeable.cs" />
+    <Compile Include="Joining\FindingSettingsArgs.cs" />
+    <Compile Include="Monitoring\FileChecker.cs" />
+    <Compile Include="Monitoring\ILoadedFromFile.cs" />
+    <Compile Include="Monitoring\WaitHandleExtensions.cs" />
+    <Compile Include="Monitoring\ReadedFileInfo.cs" />
+    <Compile Include="Monitoring\WatchedFileChecker.cs" />
+    <Compile Include="Monitoring\PeriodicFileChecker.cs" />
+    <Compile Include="Monitoring\CheckMode.cs" />
+    <Compile Include="Serialization\DeserializerAttribute.cs" />
+    <Compile Include="Serialization\IDeserializerFactory.cs" />
+    <Compile Include="Serialization\ViewPlainField.cs" />
+    <Compile Include="Json\JsonFileSettings.cs" />
+    <Compile Include="Json\JsonSettings.cs" />
+    <Compile Include="Json\Parsing\CharEnumerator.cs" />
+    <Compile Include="Json\Parsing\JArray.cs" />
+    <Compile Include="Json\Parsing\JNumber.cs" />
+    <Compile Include="Json\Parsing\JNull.cs" />
+    <Compile Include="Json\Parsing\JBoolean.cs" />
+    <Compile Include="Json\Parsing\JValue.cs" />
+    <Compile Include="Json\Parsing\JString.cs" />
+    <Compile Include="Json\Parsing\JObject.cs" />
+    <Compile Include="Json\Parsing\TokenType.cs" />
+    <Compile Include="Json\ViewObject.cs" />
+    <Compile Include="Monitoring\WatchFileConfig.cs" />
+    <Compile Include="Monitoring\WatchMode.cs" />
+    <Compile Include="IIdentifiedSource.cs" />
+    <Compile Include="Serialization\ComplexFunctionBuilder.cs" />
+    <Compile Include="Serialization\Enums\IEnumParser_1.cs" />
+    <Compile Include="Serialization\Enums\EnumHelper_1.cs" />
+    <Compile Include="Serialization\Enums\EnumParsers.cs">
+      <DependentUpon>EnumParsers.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="NameComparer.cs" />
+    <Compile Include="Serialization\BuildUtils.cs" />
+    <Compile Include="Serialization\ChildDeserializer.cs" />
+    <Compile Include="Serialization\DefaultDeserializer.cs" />
+    <Compile Include="Serialization\FieldFunctionInfo.cs" />
+    <Compile Include="Serialization\IDeserializer%271.cs" />
+    <Compile Include="Serialization\SerializeExtensions.cs" />
+    <Compile Include="Serialization\IDeserializer.cs" />
+    <Compile Include="Serialization\SimpleTypes\Converter.cs" />
+    <Compile Include="Serialization\SimpleTypes\Converter.StringMethods.cs">
+      <DependentUpon>Converter.StringMethods.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CfgNode.cs" />
+    <Compile Include="Variables\CfgNodeWrapper.cs" />
+    <Compile Include="Variables\IVariableStorage.cs" />
+    <Compile Include="Variables\ValueRenderer.cs" />
+    <Compile Include="Variables\VariableStorage.cs" />
+    <Compile Include="Xml\SettingsLoaderExtensions.cs" />
+    <Compile Include="Xml\XmlViewNode.cs" />
+    <Compile Include="ICfgNode.cs" />
+    <Compile Include="IFilePathOwner.cs" />
+    <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Ini\Section.cs" />
+    <Compile Include="Ini\Parsing\TokenType.cs" />
+    <Compile Include="Ini\Parsing\ParseState.cs" />
+    <Compile Include="Ini\Parsing\ParseContext.cs" />
+    <Compile Include="Ini\IniSettings.cs" />
+    <Compile Include="Ini\ViewSection.cs" />
+    <Compile Include="Ini\IniFileSettings.cs" />
+    <Compile Include="Joining\FileSearcher.cs" />
+    <Compile Include="Xml\XmlFileSettings.cs" />
+    <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
+    <Compile Include="Xml\Protected\ConfigProtectedData.cs" />
+    <Compile Include="Joining\LoadedEventArgs.cs" />
+    <Compile Include="CancelableEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoader.cs" />
+    <Compile Include="Xml\Protected\ProviderCollection.cs" />
+    <Compile Include="SectionNotFoundException.cs" />
+    <Compile Include="Xml\PlainXmlSection.cs" />
+    <Compile Include="Xml\XmlSystemSettings.cs" />
+    <Compile Include="Xml\XmlLinqConversionExtensions.cs" />
+    <Compile Include="Joining\IncludeFileConfig.cs" />
+    <Compile Include="Joining\SearchMode.cs" />
+    <Compile Include="Joining\IncludeMode.cs" />
+    <Compile Include="Xml\XmlSettings.cs" />
+    <Compile Include="Xml\Protected\IProviderCollection.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="NConfiguration.nuspec" />
+    <None Include="Serialization\Enums\EnumParsers.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumParsers.cs</LastGenOutput>
+    </None>
+    <None Include="Serialization\SimpleTypes\Converter.StringMethods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Converter.StringMethods.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>

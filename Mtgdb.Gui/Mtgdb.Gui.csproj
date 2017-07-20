@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{97545C6D-ACD6-4A2C-84DD-CD91293CFBB6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Gui</RootNamespace>
+    <AssemblyName>Mtgdb.Gui</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\output\bin\debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\output\bin\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>mtg64.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LinqLib, Version=1.0.4.2, Culture=neutral, PublicKeyToken=100a413726ba3d7c, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.5\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\Cjk.cs">
+      <Link>Cjk.cs</Link>
+    </Compile>
+    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\EnumerableExtensions.cs">
+      <Link>EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\ShadowCopy.cs">
+      <Link>[ Infrastructure ]\ShadowCopy.cs</Link>
+    </Compile>
+    <Compile Include="DeckSerialization\DeckFile.cs" />
+    <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\JsonDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\MagarenaDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
+    <Compile Include="FormStat\Aggregates.cs" />
+    <Compile Include="FormStat\ChartPalettes.cs" />
+    <Compile Include="FormStat\ChartTypeMetadata.cs" />
+    <Compile Include="FormStat\DataElement.cs" />
+    <Compile Include="FormStat\DataSource.cs" />
+    <Compile Include="FormStat\Fields.cs" />
+    <Compile Include="FormMain\DeckCards.cs" />
+    <Compile Include="FormMain\DeckChangedEventHandler.cs" />
+    <Compile Include="FormMain\DraggingSubsystem.cs" />
+    <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
+    <Compile Include="FormMain\DeckEditingSubsystem.cs" />
+    <Compile Include="FormMain\DeckModel.cs" />
+    <Compile Include="FormMain\DrawingSubsystem.cs" />
+    <Compile Include="FormMain\Evaluators.cs" />
+    <Compile Include="FormMain\FormMain.Definitions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeckSerialization\IDeckFormatter.cs" />
+    <Compile Include="FormMain\FormMain.EventHandlers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain\FormMain.Tooltip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
+    <Compile Include="FormRoot\FormRoot.Menus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStat\FormChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStat\FormChart.Designer.cs">
+      <DependentUpon>FormChart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormStat\ReportSettings.cs" />
+    <Compile Include="FormStat\TabField.cs" />
+    <Compile Include="LayoutView\LayoutViewTooltip.cs" />
+    <Compile Include="LayoutView\HitInfoExtensions.cs" />
+    <Compile Include="FormMain\LegalitySubsystem.cs" />
+    <Compile Include="FormMain\PrintingSubsystem.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="QuickFilter\QuickFilterImages.cs" />
+    <Compile Include="FormMain\ScrollSubsystem.cs" />
+    <Compile Include="SearchString\SearchStringSubsystem.cs" />
+    <Compile Include="FormMain\SortSubsystem.cs" />
+    <Compile Include="SearchString\SearchStringHighlighter.cs" />
+    <Compile Include="FormMain\HistoryModel.cs" />
+    <Compile Include="FormMain\HistoryState.cs" />
+    <Compile Include="FormRoot\DownloaderSubsystem.cs" />
+    <Compile Include="QuickFilter\QuickFilterSetup.cs" />
+    <Compile Include="LayoutView\DeckLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayoutView\DeckLayout.Designer.cs">
+      <DependentUpon>DeckLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LayoutView\CardLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayoutView\CardLayout.Designer.cs">
+      <DependentUpon>CardLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LayoutView\LayoutView.cs" />
+    <Compile Include="FormRoot\FormRoot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRoot\FormRoot.Designer.cs">
+      <DependentUpon>FormRoot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormRoot\FormRoot.Tooltips.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="[ infrastructure ]\GuiModule.cs" />
+    <Compile Include="Resx\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain\SuggestModel.cs" />
+    <Compile Include="Resx\ResourcesAbilities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesAbilities.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resx\ResourcesCost.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesCost.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resx\ResourcesFilter.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesFilter.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resx\ResourcesFlags.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesFlags.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resx\ResourcesRarity.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesRarity.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resx\ResourcesType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourcesType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GuiSettings.cs" />
+    <Compile Include="[ infrastructure ]\GuiProgram.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zoom\FormZoomImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zoom\FormZoomImage.Designer.cs">
+      <DependentUpon>FormZoomImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QuickFilter\QuickFilterFacade.cs" />
+    <Compile Include="SearchString\SearhStringState.cs" />
+    <Compile Include="[ Infrastructure ]\ViewConfig.cs" />
+    <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
+    <EmbeddedResource Include="FormMain\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStat\FormChart.resx">
+      <DependentUpon>FormChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LayoutView\DeckLayout.resx">
+      <DependentUpon>DeckLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LayoutView\CardLayout.resx">
+      <DependentUpon>CardLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesAbilities.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesAbilities.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesCost.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ResourcesCost.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesFilter.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesFilter.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesFlags.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesFlags.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesRarity.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesRarity.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resx\ResourcesType.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesType.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormRoot\FormRoot.resx">
+      <DependentUpon>FormRoot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zoom\FormZoomImage.resx">
+      <DependentUpon>FormZoomImage.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
+      <Name>EditedTokenLocator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
+      <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
+      <Name>Mtgdb.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj">
+      <Project>{0fb12da2-a8bd-4bf7-8507-9eca5771fd3b}</Project>
+      <Name>NConfiguration</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mtg32.ico" />
+    <Content Include="mtg64.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\min_hovered.png" />
+    <None Include="Resources\max_hovered.png" />
+    <None Include="Resources\count_hovered.png" />
+    <None Include="Resources\count_distinct_hovered.png" />
+    <None Include="Resources\avg_hovered.png" />
+    <None Include="Resources\left_arrow_hovered.png" />
+    <None Include="Resources\sum_hovered.png" />
+    <None Include="Resources\sum.png" />
+    <None Include="Resources\sort_none_hovered.png" />
+    <None Include="Resources\sort_none.png" />
+    <None Include="Resources\sort_desc_hovered.png" />
+    <None Include="Resources\sort_desc.png" />
+    <None Include="Resources\sort_asc_hovered.png" />
+    <None Include="Resources\sort_asc.png" />
+    <None Include="Resources\sort_20.png" />
+    <None Include="Resources\add_tab_16.png" />
+    <None Include="Resources\close_tab_hovered_16.png" />
+    <None Include="Resources\close_tab_16.png" />
+    <None Include="Resources\DotP2014_32.png" />
+    <None Include="Resources\Save_32x32.png" />
+    <None Include="Resources\Open2_32x32.png" />
+    <None Include="Resources\Cockatrice_32.png" />
+    <None Include="Resources\normalize.png" />
+    <None Include="Resources\minimize.png" />
+    <None Include="Resources\maximize.png" />
+    <None Include="Resources\close.png" />
+    <None Include="Resources\YandexMoney_32.png" />
+    <None Include="Resources\xmage_32.png" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\z.png" />
+    <None Include="Resources\y.png" />
+    <None Include="packages.config" />
+    <None Include="Resources\x.png" />
+    <None Include="Resources\wu.png" />
+    <None Include="Resources\wp.png" />
+    <None Include="Resources\wb.png" />
+    <None Include="Resources\w.png" />
+    <None Include="Resources\chart2_16x16.png" />
+    <None Include="Resources\Clone24.png" />
+    <None Include="Resources\cmc0.png" />
+    <None Include="Resources\cmc1.png" />
+    <None Include="Resources\cmc2.png" />
+    <None Include="Resources\2b.png" />
+    <None Include="Resources\2g.png" />
+    <None Include="Resources\2r.png" />
+    <None Include="Resources\2u.png" />
+    <None Include="Resources\2w.png" />
+    <None Include="Resources\cmc3.png" />
+    <None Include="Resources\cmc4.png" />
+    <None Include="Resources\cmc5.png" />
+    <None Include="Resources\cmc6.png" />
+    <None Include="Resources\cmc7.png" />
+    <None Include="Resources\b.png" />
+    <None Include="Resources\bg.png" />
+    <None Include="Resources\bp.png" />
+    <None Include="Resources\br.png" />
+    <None Include="Resources\C.png" />
+    <None Include="Resources\cn.png" />
+    <None Include="Resources\de.png" />
+    <None Include="Resources\discard.png" />
+    <None Include="Resources\awake.png" />
+    <None Include="Resources\artifact.png" />
+    <None Include="Resources\creature.png" />
+    <None Include="Resources\8.png" />
+    <None Include="Resources\9.png" />
+    <None Include="Resources\10.png" />
+    <None Include="Resources\11.png" />
+    <None Include="Resources\12.png" />
+    <None Include="Resources\13.png" />
+    <None Include="Resources\14.png" />
+    <None Include="Resources\15.png" />
+    <None Include="Resources\16.png" />
+    <None Include="Resources\17.png" />
+    <None Include="Resources\18.png" />
+    <None Include="Resources\19.png" />
+    <None Include="Resources\20.png" />
+    <None Include="Resources\0.png" />
+    <None Include="Resources\1.png" />
+    <None Include="Resources\2.png" />
+    <None Include="Resources\3.png" />
+    <None Include="Resources\4.png" />
+    <None Include="Resources\5.png" />
+    <None Include="Resources\6.png" />
+    <None Include="Resources\7.png" />
+    <None Include="Resources\Box20.png" />
+    <None Include="Resources\ava.jpg" />
+    <None Include="Resources\open2_16x16.png" />
+    <None Include="Resources\print_16x16.png" />
+    <None Include="Resources\redo_16x16.png" />
+    <None Include="Resources\index_16x16.png" />
+    <None Include="Resources\hidden24.png" />
+    <None Include="Resources\include_plus24e.png" />
+    <None Include="Resources\exclude_minus24t.png" />
+    <None Include="Resources\e.png" />
+    <None Include="Resources\g.png" />
+    <None Include="Resources\gp.png" />
+    <None Include="Resources\gu.png" />
+    <None Include="Resources\gw.png" />
+    <None Include="Resources\r.png" />
+    <None Include="Resources\rg.png" />
+    <None Include="Resources\na.png" />
+    <None Include="Resources\es.png" />
+    <None Include="Resources\fr.png" />
+    <None Include="Resources\gb.png" />
+    <None Include="Resources\it.png" />
+    <None Include="Resources\jp.png" />
+    <None Include="Resources\kr.png" />
+    <None Include="Resources\pt.png" />
+    <None Include="Resources\mtg20.png" />
+    <None Include="Resources\draw a card.png" />
+    <None Include="Resources\filter.png" />
+    <None Include="Resources\Quick filters.png" />
+    <None Include="Resources\madness.png" />
+    <None Include="Resources\enchantment.png" />
+    <None Include="Resources\instant.png" />
+    <None Include="Resources\land.png" />
+    <None Include="Resources\planeswalker.png" />
+    <None Include="Resources\manatext25i.png" />
+    <None Include="Resources\manacost24ctc.png" />
+    <None Include="Resources\Legality20.png" />
+    <None Include="Resources\forge_32.png" />
+    <None Include="Resources\Magarena_32.png" />
+    <None Include="Resources\mtg32.png" />
+    <None Include="Resources\properties_16x16.png" />
+    <None Include="Resources\paypal_32.png" />
+    <None Include="Resources\ieroglif_32.png" />
+    <None Include="Resources\play-card-48.png" />
+    <None Include="Resources\rightclick32.png" />
+    <None Include="Resources\save_16x16.png" />
+    <None Include="Resources\trash_16x16.png" />
+    <None Include="Resources\undo_16x16.png" />
+    <None Include="Resources\showhidecomment_16x16.png" />
+    <None Include="Resources\shown24.png" />
+    <None Include="Resources\rp.png" />
+    <None Include="Resources\rw.png" />
+    <None Include="Resources\s.png" />
+    <None Include="Resources\t.png" />
+    <None Include="Resources\u.png" />
+    <None Include="Resources\ub.png" />
+    <None Include="Resources\up.png" />
+    <None Include="Resources\ur.png" />
+    <None Include="Resources\ut.png" />
+    <None Include="Resources\ru.png" />
+    <None Include="Resources\tw.png" />
+    <None Include="Resources\Stretch20bw.png" />
+    <None Include="Resources\Search-icon.png" />
+    <None Include="Resources\surge.png" />
+    <None Include="Resources\sorcery.png" />
+    <None Include="Resources\update.png" />
+    <None Include="Resources\update_bw.png" />
+    <None Include="Resources\sort_32.png" />
+    <None Include="Resources\view-zoom-in.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

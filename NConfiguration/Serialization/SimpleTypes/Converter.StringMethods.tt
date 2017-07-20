@@ -1,0 +1,67 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<# string[] types = new []{
+	"Boolean",
+	"Byte",
+	"SByte",
+	"Char",
+	"Int16",
+	"Int32",
+	"Int64",
+	"UInt16",
+	"UInt32",
+	"UInt64",
+	"Single",
+	"Double",
+	"Decimal",
+	"TimeSpan",
+	"DateTime",
+	"Guid"
+};#>
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace NConfiguration.Serialization.SimpleTypes
+{
+	public static partial class Converter
+	{
+		private static readonly HashSet<Type> _primitiveTypes = new HashSet<Type>
+		{
+<#foreach(var type in types){#>
+			typeof(<#= type#>),
+<#}#>
+			typeof(String),
+			typeof(byte[])
+		};
+
+		private static object CreateFunctionFromString(Type type)
+		{
+			if(type == typeof(string))
+				return (Deserialize<string>)ToString;
+			else if(type == typeof(byte[]))
+				return (Deserialize<byte[]>)ToByteArray;
+<#foreach(var type in types){#>
+			else if(type == typeof(<#= type#>))
+				return (Deserialize<<#= type#>>)To<#= type#>;
+			else if(type == typeof(<#= type#>?))
+				return (Deserialize<<#= type#>?>)ToN<#= type#>;
+<#}#>
+			
+			throw new NotSupportedException("type " + type.FullName + " not support");
+		}
+<#foreach(var type in types){#>
+		/// <summary>
+		/// Convert text to Nullable[<#= type#>]
+		/// </summary>
+		public static <#= type#>? ToN<#= type#>(IDeserializer context, ICfgNode node)
+		{
+			if (string.IsNullOrWhiteSpace(node.Text))
+				return null;
+
+			return To<#= type#>(context, node);
+		}
+<#}#>
+	}
+}
+

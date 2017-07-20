@@ -1,0 +1,320 @@
+megatools 1.9.98 - 2016-11-03
+=============================
+
+Bugfix release with some UI imporvements.
+
+New features:
+- Support upload/download speed limit settings
+- Support socks proxy
+- Improved progress reporting
+- Support for OpenSSL 1.1.x
+
+Removals:
+- Remove undocummented --abort-on-error option. Tools now always
+  report errors through exit status.
+- Remove libmega.so public library support and a lot of unused code
+  that was planned to be used for 2.0
+- Remove megamv (it was never implemented and confused users)
+- Remove megafs (it was just an experiment and confused users)
+
+Cleanups:
+- Cleanup build system a bit
+- Cleanup CLI option handling, improved --help output
+
+Fixes:
+- Enable automatic decompression (CURLOPT_ACCEPT_ENCODING) (by protomouse)
+  (This finally fixes the problem with HTTP compression.)
+- Exit status from all the tools is now correctly reported
+- Fix syncing of symlinked files
+- Support very long passwords in the password prompt (up to 1024 chars)
+
+megatools 1.9.97 - 2016-02-02
+=============================
+
+Bugfix release.
+
+Fixes:
+- Mega started compressing HTTP responses to API calls. Megatools now
+  uses libcurl to handle API requests, so HTTP compression is now 
+  supproted.
+
+megatools 1.9.96 - 2016-01-02
+=============================
+
+Bugfix release.
+
+Fixes:
+- Refer to mega.nz and use mega.nz links instead of deprecated mega.co.nz
+- Fix various build issues
+
+megatools 1.9.95 - 2015-04-15
+=============================
+
+Bugfix and optimization release.
+
+Fixes:
+- Improve compatibility wit older curl (whatever version is in centos 6.5)
+- Fix regression in megadl: fails to download exported folders #90
+- Remove megamv as it is not and will not be implemented in 1.9 branch
+- Slow down progress reporting on windows to once per second #102
+- Correct the default values in mega_session_load()
+
+Improvements:
+- Rename megasync to megacopy to avoid conflict with official mega sync client
+- Optimize session loading - issue #100
+- Optimize session loading - further optimization - issue #100
+- There's no need to use dbus-launcher when running megatools outside running
+  desktop to avoid a warning message.
+
+megatools 1.9.94 - 2015-01-02
+=============================
+
+Bugfix and optimization release.
+
+Fixes:
+- Force use of IPv4 addresses
+- Fix path sanitization so that trailing slashes are ignored
+- Document config file oddities in megarc manpage
+- Add info on how to build/install megatools on various distros
+
+Improvements:
+- Optimize path handling code so that filesystems with many files are 
+  usable. Previously, megatools would hang for quite some time when
+  updating it's path map.
+- Use non-recursive makefile to build megatools
+
+megatools 1.9.93 - 2014-10-24
+=============================
+
+Added OpenSSL exemption to the license.
+
+Fixes:
+
+- megadf now returns correct values
+- fixed path sanitization in mega_session_stat
+- raised safety limit os size of POST responses from 32 to 256 MiB
+- show progress when downloading folder using megadl
+- optimized buffer allocation during donwload and upload
+- report details of errors when stream callback fails to read/write file
+- fix detection of convert executeable for preview generation
+- allow to disable file previews
+
+megatools 1.9.92 - 2014-08-24
+=============================
+
+Created stable branch for bugfixes. This is the release from the stable 
+branch.
+
+This release contains mostly small bug fixes. Most important change is
+that Megatools now recognizes server busy errors as reported by mega.nz
+via HTTP status 500 Server Is Busy, and retries the communication. This
+reduces command failures by a lot, and you'll not see 500 Server Is Busy 
+errors anymore.
+
+Another major news is update to the windows package. There are now two 
+packages for 32bit and 64bit windows platform, and all dlls were updated to
+their latest versions.
+
+Other news:
+
+- Added 64bit windows package
+- Unmask Megatools to Mega.nz (user Megatools/VERSION User-Agent)
+- Check for a2x if --enable-docs-build=yes
+- Megadl now reports file download errors
+- Add megadl --print-names option
+- Fix megasync error (issue #45 on github)
+- Fix megadl used with pipe (--path -) on windows (issue #38)
+- Installation instructions for Mac
+- Add info about Gentoo ebuild to the README file (issue #26)
+- Fix Megatools thumbnails for PDF (issue #5)
+- Do repeated API calls after 500 Server Is Busy and increase retry delay
+- Fix issue to download a file with accent with megaget (issue #22)
+
+megatools 1.9.91 - 2013-04-14
+=============================
+
+Please note, that megatools is using GNOME release versioning. That means
+that in MAJOR.MINOR.PATCH, odd MINOR number signifies development version
+of the tools. PATCH version is increased on each public release.
+
+By using odd MINOR versions of the software you are using an unstable
+branch. That doesn't mean it will be crashing on you, but it may have 
+certain quirks, and oddities, missing or incomplete features, etc.
+
+Next stable release is going to be 2.0.0.
+
+To the news:
+
+- Added man pages for all tools
+- Removed megastream in favor of mega{dl,get} --path -
+- Megadf - fix unsigned overflow when server reports 0 total space
+- Implemented --debug option
+- Win32: Drop requirement for manual setup of GIO_EXTRA_MODULES
+- Load certificates from the binaries folder on windows
+- Enable CA validation for TLS connections
+- Fix compilation on FreeBSD by adding --enable-warnings
+- Add note that on FreeBSD GNU make must be used to build the tools
+- Fix typedef redefinitions (error on older gcc's)
+- Fix megals --names logic
+- megaput/megaget/megadl/megasync: --no-progress support
+- Fix mega_session_dl streaming mode segfault
+- megamkdir/megarm: Check for required arguments
+- Pretty print JSON in debug output
+
+AUR package is available at https://aur.archlinux.org/packages/megatools/
+
+Ubunut PPA is availble at https://launchpad.net/~megous/+archive/ppa
+
+If someone wants to take over packaging for Ubuntu or Debian, that would
+be very appretiated, as my speciality is Arch Linux.
+
+
+megatools 1.9.90 - 2013-04-11
+=============================
+
+Implemented much simpler and faster json parser than json-glib, which was
+used before. Megatools now use sjson, which you can find at:
+
+  https://github.com/megous/sjson
+
+Json-glib dependency was thus dropped.
+
+Initial work on getting rid of dependency on libcurl.
+
+Initial work on the new libmega library with support for gobject-introspection
+based bindings to various languages: JavaScript, Python, Ruby, LUA,...
+
+Experimental implementation of Mega API in JavaScript (gjs), this should help
+people develop GNOME GUI for Mega in the future.
+
+New command line tools:
+
+  megafs  - mount mega.nz filesystem usong FUSE (Linux only)
+  megamv  - move and rename remote files and directories
+
+
+megatools 1.2.2 - 2013-04-11
+============================
+
+Bugs fixed:
+
+- Trash and Inbox paths are no longer mixed up (bug reported by Ovidiu)
+- megadl segfault
+- megaput --path /Root/nonexistent-file local-file (remote file would get 
+  the name of the local file, instead of nonexistent-file)
+- megals /Root/file-name would return nothing
+- Segfault with password length over 15 chars
+- Fix file size parsing to make it work with files over 2GB in size
+
+
+megatools 1.2.1 - 2013-03-12
+============================
+
+Added support for OpenSUSE 12.1 and newer versions.
+
+Build libmega statically for binary distribution to ease installation 
+outside of /usr/local.
+
+
+megatools 1.2.0 - 2013-03-12
+============================
+
+Megatools now support download of shared files and folders.
+
+Megatools support creating thumbnails for image and video files uploaded 
+to Mega. This is enabled only on Linux, as it requires ffmpegthumbnailer 
+and convert (from ImageMagick package).
+
+You can now manage your contacts list via:
+  
+  - mkdir /Contacts/some@email.com
+  - rm /Contacts/some.other@email.com
+
+Exported folders can be downloaded using megadl.
+
+All tools gained a few more options to help with scripting needs.
+
+If you don't provide password on command-line or in config file you'll 
+be asked for it when the tool runs.
+
+Megals tool gained many new options.
+
+OpenSSL locks are now properly initialized.
+
+
+megatools 1.1.1 - 2013-03-10
+============================
+
+Binary packages for linux support more Linux distributions. Supported
+distros include (both 32bit and 64bit editions):
+
+  - Ubuntu LTS 12.04.2 and later
+  - Fedora 17 and later
+  - Current Arch Linux
+  - Suse (with a package for ubuntu)
+  - ...and probably any recent distribution with all dependencies installed
+
+Package structure was changed to allow easy installation to /usr/local.
+
+To install, run:
+
+  sudo tar -x -f megatools-1.1.1-i686.tar.gz -C / --no-overwrite-dir
+
+Tools now use shared library, which you can use to develop your own Mega
+tools. For example:
+
+  export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+
+  gcc -o sample sample.c -Wl,-rpath,/usr/local/lib `pkg-config --cflags --libs libmega`
+
+Sample source code sample.c can be found in /usr/local/share/doc/megatools/
+
+To develop mega apps, you'll need to install development packages on
+distros like Fedora or Ubuntu. For example on Fedora:
+
+  yum install openssl-devel json-glib-devel libcurl-devel glib2-devel
+
+Or on Ubuntu:
+
+  apt-get install libssl-dev libjson-glib-dev libcurl4-openssl-dev gcc make pkg-config
+
+
+megatools 1.1.0 - 2013-03-09
+============================
+
+Megareg tool is now implemented, and can be used to register new
+accounts without the need for Mega website. Unless you login to
+Mega, Mega will never be able to get your password key.
+
+Tools don't show version banner anymore, unless asked for via 
+--version option.
+
+Megadl learned to handle SIGPIPE if server drops connection,
+and megadl tries to write into a closed socket.
+
+
+megatools 1.0.0 - 2013-03-08
+============================
+
+This is initial public release of megatools. Current features are:
+
+- Local caching of remote session/filesystem information 
+  for faster execution. Cache is encrypted with your password 
+  key.
+- Support for configuration file to put login information in.
+  This is not wildly secure, but it's convenient.
+- Initial set of tools to manipulate remote filesystem:
+
+  megadf       Show your cloud storage space usage/quota
+  megals       List all remote files
+  megamkdir    Create remote directory
+  megarm       Remove remote file or directory
+  megaput      Upload individual files
+  megaget      Download individual files
+  megadl       Download file from a "public" Mega link
+               (doesn't require login)
+  megastream   Streaming download of a file
+               (can be used to preview videos or music)
+  megasync     Upload or download a directory tree
+
+See TODO for features that are comming in the future releases.

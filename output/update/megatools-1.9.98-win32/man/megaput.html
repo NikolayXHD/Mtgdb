@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>megaput(1)</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /></head><body><div xml:lang="en" class="article" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="idm140264330159072"></a>megaput(1)</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="#_name">1. NAME</a></span></dt><dt><span class="section"><a href="#_synopsis">2. SYNOPSIS</a></span></dt><dt><span class="section"><a href="#_description">3. DESCRIPTION</a></span></dt><dt><span class="section"><a href="#_options">4. OPTIONS</a></span></dt><dt><span class="section"><a href="#_examples">5. EXAMPLES</a></span></dt><dt><span class="section"><a href="#_remote_filesystem">6. REMOTE FILESYSTEM</a></span></dt><dt><span class="section"><a href="#_see_also">7. SEE ALSO</a></span></dt><dt><span class="section"><a href="#_megatools">8. MEGATOOLS</a></span></dt><dt><span class="section"><a href="#_bugs">9. BUGS</a></span></dt><dt><span class="section"><a href="#_author">10. AUTHOR</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_name"></a>1. NAME</h2></div></div></div><p>megaput - upload files to your Mega.nz account</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_synopsis"></a>2. SYNOPSIS</h2></div></div></div><div class="blockquote"><blockquote class="blockquote"><div class="literallayout"><p><span class="emphasis"><em>megaput</em></span> [--no-progress] [--path &lt;remotepath&gt;] &lt;paths&gt;…</p></div></blockquote></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_description"></a>3. DESCRIPTION</h2></div></div></div><p>Uploads files to your Mega.nz account.</p><p><span class="strong"><strong>NOTE</strong></span>: If you want to upload entire directories, use <a class="ulink" href="megacopy.html" target="_top">megacopy(1)</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_options"></a>4. OPTIONS</h2></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+--path &lt;remotepath&gt;
+</span></dt><dd>
+        Remote path to upload to. If this path is a directory, files are placed
+        into the directory. If this path doesn’t exist, and it’s parent
+        directory does, the file will be uploaded to a specified path (this only
+        works if you specify exactly one file).
+</dd><dt><span class="term">
+--no-progress
+</span></dt><dd>
+        Disable upload progress reporting.
+</dd><dt><span class="term">
+--disable-previews
+</span></dt><dd>
+        Never generate and upload file previews, when uploading new files
+</dd><dt><span class="term">
+-u &lt;email&gt;
+, </span><span class="term">
+--username &lt;email&gt;
+</span></dt><dd>
+        Account username (email)
+</dd><dt><span class="term">
+-p &lt;password&gt;
+, </span><span class="term">
+--password &lt;password&gt;
+</span></dt><dd>
+        Account password
+</dd><dt><span class="term">
+--no-ask-password
+</span></dt><dd>
+        Never ask interactively for a password
+</dd><dt><span class="term">
+--reload
+</span></dt><dd>
+        Reload filesystem cache
+</dd><dt><span class="term">
+--speed-limit &lt;speed&gt;
+</span></dt><dd>
+        Set maximum allowed upload and download speed in KiB/s.
+        This option overrides config file settings. 0 means no limit.
+</dd><dt><span class="term">
+--proxy &lt;proxy&gt;
+</span></dt><dd><p class="simpara">
+        Use proxy server to connect to mega.nz. This option overrides
+        config file settings.
+        More information can be found in libcurl documentation at
+        <a class="ulink" href="https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html" target="_top">https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html</a>.
+        Some acceptable values are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<code class="literal">none</code> : Disable proxy if it was enabled in the config file.
+</li><li class="listitem">
+<code class="literal">socks5://localhost:9050</code> : Local SOCKSv5 proxy server
+</li><li class="listitem">
+<code class="literal">socks5h://localhost:9050</code> : Local SOCKSv5 proxy server with DNS handled by the proxy
+</li></ul></div></dd><dt><span class="term">
+--config &lt;path&gt;
+</span></dt><dd>
+        Load configuration from a file
+</dd><dt><span class="term">
+--ignore-config-file
+</span></dt><dd>
+        Disable loading .megarc
+</dd><dt><span class="term">
+--debug [&lt;options&gt;]
+</span></dt><dd><p class="simpara">
+        Enable debugging of various aspects of the megatools
+        operation. You may enable multiple debugging options
+        separated by commas. (eg. <code class="literal">--debug api,fs</code>)
+</p><p class="simpara">Available options are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<code class="literal">api</code>: Dump Mega.nz API calls
+</li><li class="listitem">
+<code class="literal">fs</code>: Dump Mega.nz filesystem (may require <code class="literal">--reload</code> to actually print something)
+</li><li class="listitem">
+<code class="literal">cache</code>: Dump cache contents
+</li></ul></div></dd><dt><span class="term">
+--version
+</span></dt><dd>
+        Show version information
+</dd><dt><span class="term">
+&lt;paths&gt;
+</span></dt><dd>
+        One or more local files to upload.
+</dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_examples"></a>5. EXAMPLES</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p class="simpara">
+Upload file to the /Root:
+</p><pre class="screen">$ megaput README
+$ megals /Root
+
+/Root
+/Root/README</pre></li><li class="listitem"><p class="simpara">
+Upload file, while naming it differently:
+</p><pre class="screen">$ megaput --path /Root/README.TXT README
+$ megals /Root
+
+/Root
+/Root/README.TXT</pre></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_remote_filesystem"></a>6. REMOTE FILESYSTEM</h2></div></div></div><p>Mega.nz filesystem is represented as a tree of nodes of various types. Nodes
+are identified by a 8 character node handles (eg. <code class="literal">7Fdi3ZjC</code>). Structure of the
+filesystem is not encrypted.</p><p>Megatools maps node tree structure to a traditional filesystem paths (eg.
+<code class="literal">/Root/SomeFile.DAT</code>).</p><p><span class="strong"><strong>NOTE</strong></span>: By the nature of Mega.nz storage, several files in the directory can
+have the same name. To allow access to such files, the names of conflicting
+files are extended by appending dot and their node handle like this:</p><pre class="screen">/Root/conflictingfile
+/Root/conflictingfile.7Fdi3ZjC
+/Root/conflictingfile.mEU23aSD</pre><p>You need to be aware of several special folders:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+/Root
+</span></dt><dd>
+        Writable directory representing the root of the filesystem.
+</dd><dt><span class="term">
+/Trash
+</span></dt><dd>
+        Trash directory where Mega.nz web client moves deleted files. This
+        directory is not used by megatools when removing files.
+</dd><dt><span class="term">
+/Inbox
+</span></dt><dd>
+        Not sure.
+</dd><dt><span class="term">
+/Contacts
+</span></dt><dd>
+        Directory containing subdirectories representing your contacts list. If
+        you want to add contacts to the list, simply create subdirectory named
+        after the contact you want to add.
+</dd><dt><span class="term">
+/Contacts/&lt;email&gt;
+</span></dt><dd>
+        Directories representing individual contacts in your contacts list. These
+        directories contain folders that others shared with you. All shared
+        files are read-only, at the moment.
+</dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_see_also"></a>7. SEE ALSO</h2></div></div></div><p><a class="ulink" href="megatools.html" target="_top">megatools(7)</a>,
+<a class="ulink" href="megarc.html" target="_top">megarc(5)</a>,
+<a class="ulink" href="megadf.html" target="_top">megadf(1)</a>,
+<a class="ulink" href="megadl.html" target="_top">megadl(1)</a>,
+<a class="ulink" href="megaget.html" target="_top">megaget(1)</a>,
+<a class="ulink" href="megals.html" target="_top">megals(1)</a>,
+<a class="ulink" href="megamkdir.html" target="_top">megamkdir(1)</a>,
+<a class="ulink" href="megaput.html" target="_top">megaput(1)</a>,
+<a class="ulink" href="megareg.html" target="_top">megareg(1)</a>,
+<a class="ulink" href="megarm.html" target="_top">megarm(1)</a>,
+<a class="ulink" href="megacopy.html" target="_top">megacopy(1)</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_megatools"></a>8. MEGATOOLS</h2></div></div></div><p>Part of the <a class="ulink" href="megatools.html" target="_top">megatools(7)</a> suite.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_bugs"></a>9. BUGS</h2></div></div></div><p>Report bugs at <a class="ulink" href="https://github.com/megous/megatools" target="_top">https://github.com/megous/megatools</a> or <a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_author"></a>10. AUTHOR</h2></div></div></div><p>Megatools was written by Ondrej Jirman &lt;<a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>&gt;, 2013-2016.</p><p>Official website is <a class="ulink" href="http://megatools.megous.com" target="_top">http://megatools.megous.com</a>.</p></div></div></body></html>

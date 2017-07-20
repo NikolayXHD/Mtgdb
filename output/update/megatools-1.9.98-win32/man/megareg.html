@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>megareg(1)</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /></head><body><div xml:lang="en" class="article" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="idm140545052476384"></a>megareg(1)</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="#_name">1. NAME</a></span></dt><dt><span class="section"><a href="#_synopsis">2. SYNOPSIS</a></span></dt><dt><span class="section"><a href="#_description">3. DESCRIPTION</a></span></dt><dt><span class="section"><a href="#_options">4. OPTIONS</a></span></dt><dt><span class="section"><a href="#_example">5. EXAMPLE</a></span></dt><dt><span class="section"><a href="#_see_also">6. SEE ALSO</a></span></dt><dt><span class="section"><a href="#_megatools">7. MEGATOOLS</a></span></dt><dt><span class="section"><a href="#_bugs">8. BUGS</a></span></dt><dt><span class="section"><a href="#_author">9. AUTHOR</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_name"></a>1. NAME</h2></div></div></div><p>megareg - Register new Mega.nz account</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_synopsis"></a>2. SYNOPSIS</h2></div></div></div><div class="blockquote"><blockquote class="blockquote"><div class="literallayout"><p><span class="emphasis"><em>megareg</em></span> [--scripted] --register --email &lt;email&gt; --name &lt;realname&gt; --password &lt;password&gt;<br />
+<span class="emphasis"><em>megareg</em></span> [--scripted] --verify &lt;state&gt; &lt;link&gt;</p></div></blockquote></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_description"></a>3. DESCRIPTION</h2></div></div></div><p>Registers new Mega.nz account. Registration is split into two steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<code class="literal">--register</code>: Creates a new non-verified account
+</li><li class="listitem">
+<code class="literal">--verify</code>: Verifies account with the link that was sent to <code class="literal">&lt;email&gt;</code>
+</li></ol></div><p>See example of registration below.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_options"></a>4. OPTIONS</h2></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+--register
+</span></dt><dd>
+        Create new non-verified account.
+</dd><dt><span class="term">
+--verify &lt;state&gt; &lt;link&gt;
+</span></dt><dd>
+        Verify account previously created by <code class="literal">megareg --register</code>. You need to
+        pass <code class="literal">&lt;state&gt;</code> that was returned from <code class="literal">megareg --register</code> and
+        a verification link from the email that was sent to <code class="literal">&lt;email&gt;</code>.
+</dd><dt><span class="term">
+--email &lt;email&gt;
+</span></dt><dd><p class="simpara">
+        Email serves as your new account username, that you’ll be using to sign
+        in.
+</p><p class="simpara"><span class="strong"><strong>NOTES</strong></span>: Beware that ATM, email format is not validated by megatools.</p></dd><dt><span class="term">
+--name &lt;realname&gt;
+</span></dt><dd>
+        Your real (or fake) name.
+</dd><dt><span class="term">
+--password &lt;password&gt;
+</span></dt><dd>
+        Plaintext password. No strength checking is done, so make sure you pick
+        a strong password yourself.
+</dd><dt><span class="term">
+--scripted
+</span></dt><dd>
+        After registration, print the command that can be used to finish the
+        registration in a format suitable for scripting purposes.
+</dd><dt><span class="term">
+--speed-limit &lt;speed&gt;
+</span></dt><dd>
+        Set maximum allowed upload and download speed in KiB/s.
+        This option overrides config file settings. 0 means no limit.
+</dd><dt><span class="term">
+--proxy &lt;proxy&gt;
+</span></dt><dd><p class="simpara">
+        Use proxy server to connect to mega.nz. This option overrides
+        config file settings.
+        More information can be found in libcurl documentation at
+        <a class="ulink" href="https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html" target="_top">https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html</a>.
+        Some acceptable values are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<code class="literal">none</code> : Disable proxy if it was enabled in the config file.
+</li><li class="listitem">
+<code class="literal">socks5://localhost:9050</code> : Local SOCKSv5 proxy server
+</li><li class="listitem">
+<code class="literal">socks5h://localhost:9050</code> : Local SOCKSv5 proxy server with DNS handled by the proxy
+</li></ul></div></dd><dt><span class="term">
+--config &lt;path&gt;
+</span></dt><dd>
+        Load configuration from a file
+</dd><dt><span class="term">
+--ignore-config-file
+</span></dt><dd>
+        Disable loading .megarc
+</dd><dt><span class="term">
+--debug [&lt;options&gt;]
+</span></dt><dd><p class="simpara">
+        Enable debugging of various aspects of the megatools
+        operation. You may enable multiple debugging options
+        separated by commas. (eg. <code class="literal">--debug api,fs</code>)
+</p><p class="simpara">Available options are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<code class="literal">api</code>: Dump Mega.nz API calls
+</li><li class="listitem">
+<code class="literal">fs</code>: Dump Mega.nz filesystem (may require <code class="literal">--reload</code> to actually print something)
+</li><li class="listitem">
+<code class="literal">cache</code>: Dump cache contents
+</li></ul></div></dd><dt><span class="term">
+--version
+</span></dt><dd>
+        Show version information
+</dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_example"></a>5. EXAMPLE</h2></div></div></div><p>First create an non-verified account:</p><pre class="screen">$ megareg --register --email your@email.com --name "Your Name" --password "Your Password"
+
+Registration email was sent to test@megous.com. To complete registration, you must run:
+
+  megareg --verify vbFFFv7AFM25etzkFXLs9A==:Z7FFbgAAAAAAAAAArL33eA==:inEONh3tmwY @LINK@
+
+(Where @LINK@ is registration link from the 'MEGA Signup' email)</pre><p>Now wait for a verification mail and run the command as asked:</p><pre class="screen">$ megareg --verify vbFFFv7AFM25etzkFXLs9A==:Z7FFbgAAAAAAAAAArL33eA==:inEONh3tmwY \
+    'https://mega.nz/#confirmciyfWXRGFNcM...'
+
+Account registered successfully!</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_see_also"></a>6. SEE ALSO</h2></div></div></div><p><a class="ulink" href="megatools.html" target="_top">megatools(7)</a>,
+<a class="ulink" href="megarc.html" target="_top">megarc(5)</a>,
+<a class="ulink" href="megadf.html" target="_top">megadf(1)</a>,
+<a class="ulink" href="megadl.html" target="_top">megadl(1)</a>,
+<a class="ulink" href="megaget.html" target="_top">megaget(1)</a>,
+<a class="ulink" href="megals.html" target="_top">megals(1)</a>,
+<a class="ulink" href="megamkdir.html" target="_top">megamkdir(1)</a>,
+<a class="ulink" href="megaput.html" target="_top">megaput(1)</a>,
+<a class="ulink" href="megareg.html" target="_top">megareg(1)</a>,
+<a class="ulink" href="megarm.html" target="_top">megarm(1)</a>,
+<a class="ulink" href="megacopy.html" target="_top">megacopy(1)</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_megatools"></a>7. MEGATOOLS</h2></div></div></div><p>Part of the <a class="ulink" href="megatools.html" target="_top">megatools(7)</a> suite.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_bugs"></a>8. BUGS</h2></div></div></div><p>Report bugs at <a class="ulink" href="https://github.com/megous/megatools" target="_top">https://github.com/megous/megatools</a> or <a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_author"></a>9. AUTHOR</h2></div></div></div><p>Megatools was written by Ondrej Jirman &lt;<a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>&gt;, 2013-2016.</p><p>Official website is <a class="ulink" href="http://megatools.megous.com" target="_top">http://megatools.megous.com</a>.</p></div></div></body></html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>megarc(5)</title><link rel="stylesheet" type="text/css" href="docbook-xsl.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /></head><body><div xml:lang="en" class="article" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="idm140411767043040"></a>megarc(5)</h2></div></div><hr /></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="#_name">1. NAME</a></span></dt><dt><span class="section"><a href="#_synopsis">2. SYNOPSIS</a></span></dt><dt><span class="section"><a href="#_description">3. DESCRIPTION</a></span></dt><dt><span class="section"><a href="#_config_file_sections">4. CONFIG FILE SECTIONS</a></span></dt><dd><dl><dt><span class="section"><a href="#_login_section">4.1. [Login] Section</a></span></dt><dt><span class="section"><a href="#_cache_section">4.2. [Cache] Section</a></span></dt><dt><span class="section"><a href="#_network_section">4.3. [Network] Section</a></span></dt></dl></dd><dt><span class="section"><a href="#_example">5. EXAMPLE</a></span></dt><dt><span class="section"><a href="#_see_also">6. SEE ALSO</a></span></dt><dt><span class="section"><a href="#_megatools">7. MEGATOOLS</a></span></dt><dt><span class="section"><a href="#_bugs">8. BUGS</a></span></dt><dt><span class="section"><a href="#_author">9. AUTHOR</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_name"></a>1. NAME</h2></div></div></div><p>megarc - Configuration file for megatools</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_synopsis"></a>2. SYNOPSIS</h2></div></div></div><div class="blockquote"><blockquote class="blockquote"><div class="literallayout"><p><span class="emphasis"><em>~/.megarc</em></span><br />
+<span class="emphasis"><em>./.megarc</em></span></p></div></blockquote></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_description"></a>3. DESCRIPTION</h2></div></div></div><p>Megatools use INI configuration file to store commonly used login credentials.
+This makes it less bothersome to use the tools, as you can simply write</p><pre class="screen">$ megadf</pre><p>instead of</p><pre class="screen">$ megadf --username my@email.com --password mypass</pre><p>when using the tools.</p><p>Configuration file is read either from the current directory or user’s home
+directory. Exceptions are when <code class="literal">--ignore-config-file</code> was passed to the tool, or
+when explicit path to the config file was given via <code class="literal">--config &lt;path&gt;</code>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_config_file_sections"></a>4. CONFIG FILE SECTIONS</h2></div></div></div><p>All sections are optional. All names are case sensitive, thus you must write
+[Login], and not [login], and so on.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="_login_section"></a>4.1. [Login] Section</h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+Username
+</span></dt><dd>
+        Your username.
+</dd><dt><span class="term">
+Password
+</span></dt><dd>
+        Your password. Be aware that back slashes have special meaning. If you
+        have back slash in your password, you must escape it with another
+        backslash. For example: my\nice\password would be written as
+        my\\nice\\password in the config file.
+</dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="_cache_section"></a>4.2. [Cache] Section</h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+Timeout
+</span></dt><dd>
+        Cache timeout in seconds (default is 10 minutes).
+</dd></dl></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="_network_section"></a>4.3. [Network] Section</h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">
+DownloadSpeedLimit
+</span></dt><dd>
+        Set maximum allowed download speed in KiB/s.
+        0 means no limit. Overrides SpeedLimit setting.
+</dd><dt><span class="term">
+UploadSpeedLimit
+</span></dt><dd>
+        Set maximum allowed upload speed in KiB/s.
+        0 means no limit. Overrides SpeedLimit setting.
+</dd><dt><span class="term">
+SpeedLimit
+</span></dt><dd>
+        Set maximum allowed upload and download speed in KiB/s.
+        0 means no limit.
+</dd><dt><span class="term">
+Proxy
+</span></dt><dd><p class="simpara">
+        Use proxy server to connect to mega.nz.
+        More information can be found in libcurl documentation at
+        <a class="ulink" href="https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html" target="_top">https://curl.haxx.se/libcurl/c/CURLOPT_PROXY.html</a>.
+        Some acceptable values are:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<code class="literal">socks5://localhost:9050</code> : Local SOCKSv5 proxy server
+</li><li class="listitem">
+<code class="literal">socks5h://localhost:9050</code> : Local SOCKSv5 proxy server with DNS handled by the proxy
+</li></ul></div></dd></dl></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_example"></a>5. EXAMPLE</h2></div></div></div><p>Create ~/.megarc (on linux) or mega.ini file containing these 3 lines:</p><pre class="screen">[Login]
+Username = your@email
+Password = yourpassword
+
+[Network]
+; 1MiB/s
+SpeedLimit = 1024
+; Use over TOR
+Proxy = socks5://127.0.0.1:9050</pre><p>Run <a class="ulink" href="megadf.html" target="_top">megadf(1)</a> to check that megatools are able to login to your account.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_see_also"></a>6. SEE ALSO</h2></div></div></div><p><a class="ulink" href="megatools.html" target="_top">megatools(7)</a>,
+<a class="ulink" href="megarc.html" target="_top">megarc(5)</a>,
+<a class="ulink" href="megadf.html" target="_top">megadf(1)</a>,
+<a class="ulink" href="megadl.html" target="_top">megadl(1)</a>,
+<a class="ulink" href="megaget.html" target="_top">megaget(1)</a>,
+<a class="ulink" href="megals.html" target="_top">megals(1)</a>,
+<a class="ulink" href="megamkdir.html" target="_top">megamkdir(1)</a>,
+<a class="ulink" href="megaput.html" target="_top">megaput(1)</a>,
+<a class="ulink" href="megareg.html" target="_top">megareg(1)</a>,
+<a class="ulink" href="megarm.html" target="_top">megarm(1)</a>,
+<a class="ulink" href="megacopy.html" target="_top">megacopy(1)</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_megatools"></a>7. MEGATOOLS</h2></div></div></div><p>Part of the <a class="ulink" href="megatools.html" target="_top">megatools(7)</a> suite.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_bugs"></a>8. BUGS</h2></div></div></div><p>Report bugs at <a class="ulink" href="https://github.com/megous/megatools" target="_top">https://github.com/megous/megatools</a> or <a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="_author"></a>9. AUTHOR</h2></div></div></div><p>Megatools was written by Ondrej Jirman &lt;<a class="ulink" href="mailto:megous@megous.com" target="_top">megous@megous.com</a>&gt;, 2013-2016.</p><p>Official website is <a class="ulink" href="http://megatools.megous.com" target="_top">http://megatools.megous.com</a>.</p></div></div></body></html>

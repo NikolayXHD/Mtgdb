@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<WatchFile Mode="Auto" />
+
+	<ForgeIntegration
+		CardPicsPath="%LOCALAPPDATA%\Forge\Cache\pics\cards\"
+		CardPicsBackupPath ="%LOCALAPPDATA%\Forge\Cache\pics\cards.bak\"
+		Verbose ="False"
+	/>
+	
+</configuration>

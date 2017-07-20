@@ -1,0 +1,119 @@
+﻿{
+	// http://magic.wizards.com/en/articles/archive/news/january-9-2017-banned-and-restricted-announcement-2017-01-09
+	"Emrakul, the Promised End": {
+		"Legality": [
+			{
+				"Format": "Standard",
+				"Legality": "Banned"
+			}
+		]
+	},
+	"Smuggler's Copter": {
+		"Legality": [
+			{
+				"Format": "Standard",
+				"Legality": "Banned"
+			}
+		]
+	},
+	"Reflector Mage": {
+		"Legality": [
+			{
+				"Format": "Standard",
+				"Legality": "Banned"
+			}
+		]
+	},
+	"Gitaxian Probe": {
+		"Legality": [
+			{
+				"Format": "Modern",
+				"Legality": "Banned"
+			}
+		]
+	},
+	"Golgari Grave-Troll": {
+		"Legality": [
+			{
+				"Format": "Modern",
+				"Legality": "Banned"
+			}
+		]
+	},
+	"AER": {
+		"Legality": [
+			{
+				"Format": "Kaladesh Block",
+				"Legality": "Legal"
+			},
+			{
+				"Format": "Standard",
+				"Legality": "Legal"
+			},
+			{
+				"Format": "Modern",
+				"Legality": "Legal"
+			},
+			{
+				"Format": "Commander",
+				"Legality": "Legal"
+			},
+			{
+				"Format": "Legacy",
+				"Legality": "Legal"
+			},
+			{
+				"Format": "Vintage",
+				"Legality": "Legal"
+			}
+		]
+	},
+	"Plains": {
+		"Text": "{T}: Add {W} to your mana pool."
+	},
+	"Island": {
+		"Text": "{T}: Add {U} to your mana pool."
+	},
+	"Swamp": {
+		"Text": "{T}: Add {B} to your mana pool."
+	},
+	"Mountain": {
+		"Text": "{T}: Add {R} to your mana pool."
+	},
+	"Forest": {
+		"Text": "{T}: Add {G} to your mana pool."
+	},
+	"Wastes": {
+		"Text": "{T}: Add {C} to your mana pool."
+	},
+	"Snow-Covered Plains": {
+		"Text": "{T}: Add {W} to your mana pool."
+	},
+	"Snow-Covered Island": {
+		"Text": "{T}: Add {U} to your mana pool."
+	},
+	"Snow-Covered Swamp": {
+		"Text": "{T}: Add {B} to your mana pool."
+	},
+	"Snow-Covered Mountain": {
+		"Text": "{T}: Add {R} to your mana pool."
+	},
+	"Snow-Covered Forest": {
+		"Text": "{T}: Add {G} to your mana pool."
+	},
+	"Snow-Covered Wastes": {
+		"Text": "{T}: Add {C} to your mana pool."
+	},
+	"Doubling Cube": {
+		"GeneratedMana": "{W}{U}{B}{R}{G}"
+	},
+	"Elemental Resonance": {
+		"GeneratedMana": "{W}{U}{B}{R}{G}"
+	},
+	"Urborg, Tomb of Yawgmoth": {
+		"GeneratedMana": "{B}"
+	},
+	"Mons's Goblin Waiters": {
+		"GeneratedMana": "{R}"
+	}
+}

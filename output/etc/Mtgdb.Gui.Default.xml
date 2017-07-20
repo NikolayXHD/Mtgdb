@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<WatchFile Mode="Auto" />
+
+	<!-- === DEFAULT APPLICATION CONFIGURATION ===
+		Do not edit this. It's useless because your changes will not survive installing new version.
+		For your changes there is are separate files 
+		* etc\Mtgdb.Gui.xml
+		* etc\Mtgdb.Gui.Display.xml
+	-->
+	
+	<SuggestImageDownloader Enabled="True" />
+	<Undo MaxDepth="100" />
+
+	<View
+		AllowPartialCards="True"
+		ShowTextualFields="True"
+		ShowDeck="True"
+	/>
+	
+	<CardSize Width="215" Height="300" />
+	<ZoomedCardSize Width="427" Height="596" />
+
+	<ImageLocations>
+		<Directory Path="images\Mtgdb.Pictures\LQ" />
+		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
+		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
+	</ImageLocations>
+	
+	<ImageCache TransparentCornersWhenNotZoomed="True" CacheCapacity ="900"/>
+
+	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
+
+	<AppSource
+		TargetDirectory="update"
+		FileListUrl="https://mega.nz/#F!I99nQCYZ!9U9o76XLIusZ1_C12YJD6g"
+		ZipUrl="https://mega.nz/#F!hgcCgThb!bbLL4ZRMjepY8aGohKythA" />
+
+	<ImageSources>
+		<QualityGroup Quality="Art" TargetDirectory="images\Artworks" FileListUrl="https://mega.nz/#F!mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
+			<MegaDir Url="https://mega.nz/#F!39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
+		</QualityGroup>
+		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListUrl="https://mega.nz/#F!Jp1wETwQ!CL2o0x_C-y2rpiiGBGQfsA" >
+			<MegaDir Url="https://mega.nz/#F!wo0RBQgB!3NcB7vR2MsYe20YkueR3PA" Subdir="HOU" />
+			<MegaDir Url="https://mega.nz/#F!919wgDpA!WI33VrLrwGDFf99QBZig2A" Subdir="E01" />
+			<MegaDir Url="https://mega.nz/#F!UoVk1aKY!O-nz9Vy0nMZnCMgXo9vM-g" Subdir="CMA" />
+			<MegaDir Url="https://mega.nz/#F!x19lgDbZ!8Zs1lauFsvrEoaa2xXulBg" Subdir="MPS_AKH" />
+			<MegaDir Url="https://mega.nz/#F!spMWnaja!TyTKVjTwM8JlqEgRMAfBQg" Subdir="AKH" />
+			<MegaDir Url="https://mega.nz/#F!I1EASaIb!gFMar4F5h_mS9Wpd9aMXfA" Subdir="2ED" />
+			<MegaDir Url="https://mega.nz/#F!NpMkjZAS!gBWdInwSylKcKzGlSN_Brw" Subdir="3ED" />
+			<MegaDir Url="https://mega.nz/#F!s5M3ALKL!mXeWXy15-CRfnqBgB958IA" Subdir="4ED" />
+			<MegaDir Url="https://mega.nz/#F!F1ES3Qxa!a3OFs6KE641BE-nfw2bMtw" Subdir="5DN" />
+			<MegaDir Url="https://mega.nz/#F!slFByS5B!u9iuQCakkZaoDE_gKu9Fbw" Subdir="5ED" />
+			<MegaDir Url="https://mega.nz/#F!Fg13AYRY!q8kF1lWl-lnV8VQWWFfSAw" Subdir="6ED" />
+			<MegaDir Url="https://mega.nz/#F!xoMkyBZI!9mhX451wQE7r5iBNd5Xy3w" Subdir="7ED" />
+			<MegaDir Url="https://mega.nz/#F!J0V1TIQB!1dMweXPQjzAnDYhcovV6mg" Subdir="8ED" />
+			<MegaDir Url="https://mega.nz/#F!BskSxKCC!uwbXT8-yVjIdddfWlicYog" Subdir="9ED" />
+			<MegaDir Url="https://mega.nz/#F!d59iQCbZ!_wBr8IKPItp86J8JGM9Azw" Subdir="10E" />
+			<MegaDir Url="https://mega.nz/#F!Ql9kXIIJ!43nZ35s7w72kqsJ3nwIiDg" Subdir="AER" />
+			<MegaDir Url="https://mega.nz/#F!Qp1lTCaB!z43ZrEW97Y46Mnce2x-kbQ" Subdir="ALA" />
+			<MegaDir Url="https://mega.nz/#F!xxE0ERjJ!ohBHYj6ozsNcvS_jl4Q_vg" Subdir="ALL" />
+			<MegaDir Url="https://mega.nz/#F!dwUxWALa!KaPTuz_yaahiU4veRG29iw" Subdir="APC" />
+			<MegaDir Url="https://mega.nz/#F!Q4EwnYzR!26zkm4IlD3trNENUqzdPtg" Subdir="ARB" />
+			<MegaDir Url="https://mega.nz/#F!RltwzRCI!u-qGu7RkD7mJF4EVtSbUdg" Subdir="ARC" />
+			<MegaDir Url="https://mega.nz/#F!998F2biB!Qowe27bQ4k4qRc8G3qGeBA" Subdir="ARN" />
+			<MegaDir Url="https://mega.nz/#F!4llkwYQa!0Qyhsx8axFkkqypFyMEoJA" Subdir="ATH" />
+			<MegaDir Url="https://mega.nz/#F!UgE3VRgR!x0IOmC859gBPpKyqT2-4uA" Subdir="ATQ" />
+			<MegaDir Url="https://mega.nz/#F!J8NjUJgR!C_CjGvL8h4pFYHfUmKk6HQ" Subdir="AVR" />
+			<MegaDir Url="https://mega.nz/#F!tlVFVYzC!2wAJpeabH3GpyK2568S4qA" Subdir="BFZ" />
+			<MegaDir Url="https://mega.nz/#F!1l92lKrL!pWXru2IYDgxMVJai7TG_ZQ" Subdir="BNG" />
+			<MegaDir Url="https://mega.nz/#F!phlUVBqS!EWpNOTFOEjiUmqLzyGcE3A" Subdir="BOK" />
+			<MegaDir Url="https://mega.nz/#F!klNBmbID!5W_FLUgXDDmKznM30_TQ4g" Subdir="BRB" />
+			<MegaDir Url="https://mega.nz/#F!1tFmlayQ!4TY2HLWvXoIyEHwV0mkoAw" Subdir="BTD" />
+			<MegaDir Url="https://mega.nz/#F!8kkUUQKD!FbCUNyuMzu9v8XIYW1lELQ" Subdir="C13" />
+			<MegaDir Url="https://mega.nz/#F!w1EEQIjb!st2HDvE3EYWPdeehNVZatQ" Subdir="C14" />
+			<MegaDir Url="https://mega.nz/#F!woMC0bYS!ACF_Nr6koercdIM4yW2GRg" Subdir="C15" />
+			<MegaDir Url="https://mega.nz/#F!px9DlD7Y!IbAT5ewfF18YiyITNh1BrQ" Subdir="C16" />
+			<MegaDir Url="https://mega.nz/#F!IolyjRJD!8JpD9A3kURAeSkqliuZlVg" Subdir="CED" />
+			<MegaDir Url="https://mega.nz/#F!colnTA5S!M926PCpeueNL8flQ8RtBsg" Subdir="CEI" />
+			<MegaDir Url="https://mega.nz/#F!Ilcg1CaA!VVYXK4_p4cUxOT_5_bvsTw" Subdir="CHK" />
+			<MegaDir Url="https://mega.nz/#F!o9dCyLzI!AR3XE9lXrSC2seuQEigfHw" Subdir="CHR" />
+			<MegaDir Url="https://mega.nz/#F!lx8DlQ6L!5z9u9cGwALUigiEV3h5bvg" Subdir="CM1" />
+			<MegaDir Url="https://mega.nz/#F!0oMl0QLa!XH5Y3aWZZBB8QhyQ3usU5w" Subdir="CMD" />
+			<MegaDir Url="https://mega.nz/#F!Mt0xBK4J!U9CKnBnzbdEhQKrJhYF4Pg" Subdir="CN2" />
+			<MegaDir Url="https://mega.nz/#F!s00xUABa!a6ggX6ixacZ9g33f3ba_9g" Subdir="CNS" />
+			<MegaDir Url="https://mega.nz/#F!V0UAFSaR!LJO6TgXOUHEZxo53ba2BAw" Subdir="CON escape" />
+			<MegaDir Url="https://mega.nz/#F!lx1l1bDQ!W1bBDeM0gElX5W2dsWlL4w" Subdir="CPK" />
+			<MegaDir Url="https://mega.nz/#F!RtU3WZBD!AT7KVJZ4D7ihHtSoKVHuWg" Subdir="CSP" />
+			<MegaDir Url="https://mega.nz/#F!dwcSxB5J!3V3eAaZ5KbgI1YjcdnMuIA" Subdir="CST" />
+			<MegaDir Url="https://mega.nz/#F!90EXEJrD!8mq18XO9OqjanvNWeE2hDw" Subdir="DD2" />
+			<MegaDir Url="https://mega.nz/#F!ctkzBY5B!k0YfIfP9vwhvzpn3UJr3Qw" Subdir="DD3_DVD" />
+			<MegaDir Url="https://mega.nz/#F!kldB0RBb!jsfm95ZYQHTDCieltJw7zA" Subdir="DD3_EVG" />
+			<MegaDir Url="https://mega.nz/#F!cpUwARLa!NmMq29yi9PqoTMCb_LjHYg" Subdir="DD3_GVL" />
+			<MegaDir Url="https://mega.nz/#F!xssiQJAL!yEZunaiz6ivGBlPr9JyahQ" Subdir="DD3_JVC" />
+			<MegaDir Url="https://mega.nz/#F!A9kR1A4C!nTLOn0CugK3fhMjowSoD0w" Subdir="DDC" />
+			<MegaDir Url="https://mega.nz/#F!5gchDSBK!cMKs-euFZR8DElP12uPirA" Subdir="DDD" />
+			<MegaDir Url="https://mega.nz/#F!p4szVQxD!2tOzcXLYL9j0eTW4G4e49A" Subdir="DDE" />
+			<MegaDir Url="https://mega.nz/#F!l4t2AI4a!qVmyJhOjXpDXK90QfcRhXA" Subdir="DDF" />
+			<MegaDir Url="https://mega.nz/#F!Jo01UL5D!GQrAqXM53ljF9R86Qv3SrQ" Subdir="DDG" />
+			<MegaDir Url="https://mega.nz/#F!tkVSgJpR!V_g6WsT8WvSrnm7aR1XzSw" Subdir="DDH" />
+			<MegaDir Url="https://mega.nz/#F!B8MjXCAT!O9aJR_y0vcHa6yes2KHWQA" Subdir="DDI" />
+			<MegaDir Url="https://mega.nz/#F!1skDSbTT!lk0pS900fpdJ8Cc03YVwSg" Subdir="DDJ" />
+			<MegaDir Url="https://mega.nz/#F!N18gnTSD!mtoCJDRiOEjAB2biwbgRjA" Subdir="DDK" />
+			<MegaDir Url="https://mega.nz/#F!51dD2JjI!9X8atfdlwAKPgGEBLh1N_A" Subdir="DDL" />
+			<MegaDir Url="https://mega.nz/#F!J1USSLBb!OrhiiBHt_SBauC2xFmSobg" Subdir="DDM" />
+			<MegaDir Url="https://mega.nz/#F!9lMF2bTS!YtbIOjoB0jP5E4I1er77vA" Subdir="DDN" />
+			<MegaDir Url="https://mega.nz/#F!dk9ziYpD!E6rIBHMGYmnmHXPH5Ap07A" Subdir="DDO" />
+			<MegaDir Url="https://mega.nz/#F!1sdRCTQL!mhtcVAgedKzkjYJ2oevDkw" Subdir="DDP" />
+			<MegaDir Url="https://mega.nz/#F!5h0lzTDA!NqGmP8DRgiwSVxAPOkKDMQ" Subdir="DDQ" />
+			<MegaDir Url="https://mega.nz/#F!0oclWAjD!5ghvrTMyduVLKvk2UutBoQ" Subdir="DDR" />
+			<MegaDir Url="https://mega.nz/#F!9hMGySTa!pLXJvMdaZEDdChsJJoSPcQ" Subdir="DGM" />
+			<MegaDir Url="https://mega.nz/#F!J4N02YhC!-9ZI9grsnF7HLNDcuov2qw" Subdir="DIS" />
+			<MegaDir Url="https://mega.nz/#F!U8sGgIIC!23-tibFUXSFyzVTX3k9DXA" Subdir="DKA" />
+			<MegaDir Url="https://mega.nz/#F!Q98SgSYT!yCsffa8y73WR-Bg-VNu_mw" Subdir="DKM" />
+			<MegaDir Url="https://mega.nz/#F!9ptGHKKC!mmpVbIeBLiZuUv0Yfn-n5Q" Subdir="DPA" />
+			<MegaDir Url="https://mega.nz/#F!5g9k3Iha!s2v1lRk4Frbrq48Gb-eH1g" Subdir="DRB" />
+			<MegaDir Url="https://mega.nz/#F!YhcXyZCJ!HfRsDghuELo-fQS4Mai1NA" Subdir="DRK" />
+			<MegaDir Url="https://mega.nz/#F!Y99WhTLQ!xKLrfDiLoIHLfLs2JNSOnA" Subdir="DST" />
+			<MegaDir Url="https://mega.nz/#F!dxtEiKpS!WLrXWtxSdykv-ZS593JG-w" Subdir="DTK" />
+			<MegaDir Url="https://mega.nz/#F!E8cFkCgQ!d3swdvFHJLCQoPfKWcn5Aw" Subdir="EMA" />
+			<MegaDir Url="https://mega.nz/#F!85sy1KaA!iQrRXu0URgtGQRsR-bnYhQ" Subdir="EMN" />
+			<MegaDir Url="https://mega.nz/#F!5p8DECzS!LfGnC6zM0xKDFtt9e1okDQ" Subdir="EVE" />
+			<MegaDir Url="https://mega.nz/#F!0gtBSTbJ!YeG9xPFwqyIWA60vMOdEfg" Subdir="EVG" />
+			<MegaDir Url="https://mega.nz/#F!MgVxyQqa!VE2z5lYvxmgHJoi-QHx98g" Subdir="EXO" />
+			<MegaDir Url="https://mega.nz/#F!VtUlnDLB!0ur6D371LcrB_NduNnvZTg" Subdir="EXP" />
+			<MegaDir Url="https://mega.nz/#F!dlVEVJKC!QaRkF_vy_tGmDOOy0KqOnw" Subdir="FEM" />
+			<MegaDir Url="https://mega.nz/#F!xsdSRY6D!_zMobH1st7-10JktrUu7NQ" Subdir="FRF" />
+			<MegaDir Url="https://mega.nz/#F!5xtTnAZC!xGboEUBq3dK0_co9CFGviA" Subdir="FRF_UGIN" />
+			<MegaDir Url="https://mega.nz/#F!s9FBzBqR!ucNriTcgmea-ZPNqprJGeA" Subdir="FUT" />
+			<MegaDir Url="https://mega.nz/#F!9x1wGATQ!hx7OK0O2t4vcnaWKArV1mw" Subdir="GPT" />
+			<MegaDir Url="https://mega.nz/#F!w4E2TapI!jDUh8HWGUP0X1WzvueBAEw" Subdir="GTC" />
+			<MegaDir Url="https://mega.nz/#F!JtE2lZbL!wWk8aNmsm3NctluBvXfJzg" Subdir="H09" />
+			<MegaDir Url="https://mega.nz/#F!BoEQGCrK!UeXS_YcJs3_4b1f9w9kyIg" Subdir="HML" />
+			<MegaDir Url="https://mega.nz/#F!Q1s0zBJA!PkrlAkzfJ-qacFcYquzC0w" Subdir="HOP" />
+			<MegaDir Url="https://mega.nz/#F!4olkmRyL!Yu3NseKC-MAiaHpdmj5EHA" Subdir="ICE" />
+			<MegaDir Url="https://mega.nz/#F!FhMUjQTA!sXuNMbiQozN1mij1j8_krQ" Subdir="INV" />
+			<MegaDir Url="https://mega.nz/#F!FhtzWQKI!E8Zi3AatPJgZB0azVAgAMA" Subdir="ISD" />
+			<MegaDir Url="https://mega.nz/#F!M80yGC5B!5VfvSsn_wrscbo2QWYfifA" Subdir="ITP" />
+			<MegaDir Url="https://mega.nz/#F!RwtUCSIJ!3e6bU1iomteNBqVy-8h-Cw" Subdir="JOU" />
+			<MegaDir Url="https://mega.nz/#F!pwM0CBjK!ZhRBUHAeB8KL4bTIGcZgyA" Subdir="JUD" />
+			<MegaDir Url="https://mega.nz/#F!8wFHXDrJ!LpWs-ZjSdiu_ZUlN1slauA" Subdir="KLD" />
+			<MegaDir Url="https://mega.nz/#F!4gcGwRbQ!9uavmQEOs0XV8G-kLDGqbQ" Subdir="KTK" />
+			<MegaDir Url="https://mega.nz/#F!s99HHbwQ!tmaG7jyLVtT8upbBPErSDg" Subdir="LEA" />
+			<MegaDir Url="https://mega.nz/#F!58llCDiS!7l5miAG3krH0le2V8BHorA" Subdir="LEB" />
+			<MegaDir Url="https://mega.nz/#F!FgdmAL5B!KVQKTYQidH7mt2jdXbjjQA" Subdir="LEG" />
+			<MegaDir Url="https://mega.nz/#F!Q1NSyA6T!geBzAT7a7qHF7xyNGuh3MA" Subdir="LGN" />
+			<MegaDir Url="https://mega.nz/#F!B9NTXISZ!iwrbUdz09vlDi316lU7Okg" Subdir="LRW" />
+			<MegaDir Url="https://mega.nz/#F!wkNGABhD!3dy6Un3q6ynUrZpYIE5QNQ" Subdir="M10" />
+			<MegaDir Url="https://mega.nz/#F!p4dwwSxI!ukqKpsML2c-Zkh93FaF_VA" Subdir="M11" />
+			<MegaDir Url="https://mega.nz/#F!QwUVRIRL!JnHDCJZc8Z_Nlex2iPhSBw" Subdir="M12" />
+			<MegaDir Url="https://mega.nz/#F!9klRkS5T!h1deAhkLGRhjoKdHOaksCA" Subdir="M13" />
+			<MegaDir Url="https://mega.nz/#F!ct1ExTCC!ZJYOX_AoclbOmKPoVI-6cQ" Subdir="M14" />
+			<MegaDir Url="https://mega.nz/#F!w1cy1bCB!1WPOuaDRi0qGoJW3ndQHPw" Subdir="M15" />
+			<MegaDir Url="https://mega.nz/#F!Ig8VXDhJ!jpBCdc2n24yDIauQi3kxhw" Subdir="MBS" />
+			<MegaDir Url="https://mega.nz/#F!Qh0gzZIJ!Z0kwcdBxg-MP4HA_BAjEFw" Subdir="MD1" />
+			<MegaDir Url="https://mega.nz/#F!wxVjgL7L!dZGCP_myTjRT2K_NDhCqzg" Subdir="ME2" />
+			<MegaDir Url="https://mega.nz/#F!s5UCWQ4Q!ixWrfGgisrWGOtCJ1Ehgsw" Subdir="ME3" />
+			<MegaDir Url="https://mega.nz/#F!F9syxabK!eiNVVQo4OTEcaXVsbv8yhw" Subdir="ME4" />
+			<MegaDir Url="https://mega.nz/#F!Q0NjDCIR!TBxgve1ciMTlUA29-mOZwg" Subdir="MED" />
+			<MegaDir Url="https://mega.nz/#F!gw1m3TJL!GnfPfOhpgnVhf3c7hkukyw" Subdir="MGB" />
+			<MegaDir Url="https://mega.nz/#F!gptgUaBS!05zdCbobe25XaxxsaceS2Q" Subdir="MIR" />
+			<MegaDir Url="https://mega.nz/#F!c48UGZDQ!uoEMap5KayUL4IPs7Ku_jg" Subdir="MM2" />
+			<MegaDir Url="https://mega.nz/#F!tp9gkBDa!PWAZ7KJsjyrzfKAAdmr9yA" Subdir="MM3" />
+			<MegaDir Url="https://mega.nz/#F!pwMx1AqS!lheutif49r01ePFHXaORrw" Subdir="MMA" />
+			<MegaDir Url="https://mega.nz/#F!1h8SnB4A!CYqfQQfMCT8ea9Xqg3HLJg" Subdir="MMQ" />
+			<MegaDir Url="https://mega.nz/#F!YgECzBgB!hg_JhTisuCmVPFXVWphZPw" Subdir="MOR" />
+			<MegaDir Url="https://mega.nz/#F!NoVzTJhL!C4Yw0BeXc_jSr1q6-MUoqw" Subdir="MPS" />
+			<MegaDir Url="https://mega.nz/#F!9sFQWAoL!XF50x0XAV1bMXlWp4zzJ6w" Subdir="MRD" />
+			<MegaDir Url="https://mega.nz/#F!I18HzDrI!4y-cwkulk4u6BI5_tOj8QQ" Subdir="NMS" />
+			<MegaDir Url="https://mega.nz/#F!ptskURpB!1KkNnEZXdzVaKwk_1dyc6w" Subdir="NPH" />
+			<MegaDir Url="https://mega.nz/#F!51MxTDBK!8dSwguQsl4THQOWq7-sp_g" Subdir="ODY" />
+			<MegaDir Url="https://mega.nz/#F!c4klTKgQ!kIRjmQVi_JBF_XrkB23D1A" Subdir="OGW" />
+			<MegaDir Url="https://mega.nz/#F!AxUmGRpZ!jItom-9yARVuqq0Wm-U-0Q" Subdir="ONS" />
+			<MegaDir Url="https://mega.nz/#F!Vp9nlBxa!8h-Lv2afvpBtq0Zb9nGBLw" Subdir="ORI" />
+			<MegaDir Url="https://mega.nz/#F!M51nQZbD!pX9RIFanIaypO0zrE-m9Qw" Subdir="p2HG" />
+			<MegaDir Url="https://mega.nz/#F!lktAzJSR!I-vWYMO-BZUgE7BngdVF-Q" Subdir="p15A" />
+			<MegaDir Url="https://mega.nz/#F!NwNFkRSB!cWPazDH9dgdPCNoFFikdYQ" Subdir="pALP" />
+			<MegaDir Url="https://mega.nz/#F!0hkiiYbC!xt8PPr9LF6SV5W1uog8Peg" Subdir="pARL" />
+			<MegaDir Url="https://mega.nz/#F!ggkQgC7Y!trJA_KWyM3IiVkD9D-XqFQ" Subdir="PC2" />
+			<MegaDir Url="https://mega.nz/#F!F8VVQLKL!GRR3Zw62Y1YPWoYMa5igVQ" Subdir="PCA" />
+			<MegaDir Url="https://mega.nz/#F!V5NkBRoS!ILGD3aSthZ4oFlFJGnEVPg" Subdir="pCEL" />
+			<MegaDir Url="https://mega.nz/#F!RkcXCKIL!MWEVbaUKU15E0sLbQGJPUw" Subdir="pCMP" />
+			<MegaDir Url="https://mega.nz/#F!slF3hAZZ!_Rvdr75Dhg8Ftm__cl0_6w" Subdir="PCY" />
+			<MegaDir Url="https://mega.nz/#F!hgMHDIxR!bAr7m7mlUuorA0sKe9vOKw" Subdir="PD2" />
+			<MegaDir Url="https://mega.nz/#F!xoF2HJST!5I14L7STbf7oZWQU0og4pg" Subdir="PD3" />
+			<MegaDir Url="https://mega.nz/#F!5wU2RTLQ!Vk-KtOGCznWInDJJX6ABaw" Subdir="pDRC" />
+			<MegaDir Url="https://mega.nz/#F!d9MzjTZA!pDloyPg4uRk_PI7BqBLoxA" Subdir="pELP" />
+			<MegaDir Url="https://mega.nz/#F!J181QA4D!YAT92k6ZMU5LG8IXp_-1TA" Subdir="pFNM" />
+			<MegaDir Url="https://mega.nz/#F!sllz1YzC!uZDo4Gfyqun5THfTdAFL9A" Subdir="pGPX" />
+			<MegaDir Url="https://mega.nz/#F!E1Fn1TRD!fbFYzBk5N_jQk85_zCQD1Q" Subdir="pGRU" />
+			<MegaDir Url="https://mega.nz/#F!J0dCRDKY!MRiKwh4IbjfObqxr_Gqfsg" Subdir="pGTW" />
+			<MegaDir Url="https://mega.nz/#F!E5tXjJrb!L23INm1v9IjIuMIuAzlhaw" Subdir="pHHO" />
+			<MegaDir Url="https://mega.nz/#F!5tU10KaD!Es4r99g7Y-4GooP6s9cKLA" Subdir="pJGP" />
+			<MegaDir Url="https://mega.nz/#F!R4dinL4A!mJj1RqawD4TuQWuR98fo2A" Subdir="PLC" />
+			<MegaDir Url="https://mega.nz/#F!lhUVAZIQ!4GWZJup9yRUr2hkRSrR0AQ" Subdir="pLGM" />
+			<MegaDir Url="https://mega.nz/#F!UskQBAga!LM3SrKIP0oOkFjN1xeNSXQ" Subdir="pLPA" />
+			<MegaDir Url="https://mega.nz/#F!J0NwXJJI!BeMj8pIVvTY10FIQhLzv_Q" Subdir="PLS" />
+			<MegaDir Url="https://mega.nz/#F!Aw01iSSb!s-xxjrnk9RFcz5rD-uJqjQ" Subdir="pMEI" />
+			<MegaDir Url="https://mega.nz/#F!dscUzazB!V7NiwySAQZOioZVdRBVLHg" Subdir="pMGD" />
+			<MegaDir Url="https://mega.nz/#F!IsF2WCgI!fnOIGCP54YV6-s2pHMYoSw" Subdir="pMPR" />
+			<MegaDir Url="https://mega.nz/#F!5lNGyRja!p-GTeemlpncsWYGdycOwXA" Subdir="PO2" />
+			<MegaDir Url="https://mega.nz/#F!k9lRCayI!AyEL6oxZa0OmNxjWadRu3w" Subdir="POR" />
+			<MegaDir Url="https://mega.nz/#F!swlHGAQa!-vEMQcI-aCiyY6xQsVfjQw" Subdir="pPOD" />
+			<MegaDir Url="https://mega.nz/#F!o4lGXBbS!IFthBD9s0u9OnSUewh962g" Subdir="pPRE" />
+			<MegaDir Url="https://mega.nz/#F!pglTUIjT!iIVLu0pSRvVjn3KurVJO8Q" Subdir="pPRO" />
+			<MegaDir Url="https://mega.nz/#F!ZxkAjTbY!aQfcRbgBu8TOy6IpQkrcPQ" Subdir="pREL" />
+			<MegaDir Url="https://mega.nz/#F!BpshAJya!4pHO4QfllqIYfGxBZ6q4JA" Subdir="pSUM" />
+			<MegaDir Url="https://mega.nz/#F!BwMDnAQI!hJkbwQTifgI0uCyPBEFg6A" Subdir="pSUS" />
+			<MegaDir Url="https://mega.nz/#F!VpU2wLiJ!Hb1B2TDU7uTNmx5yppZ8ag" Subdir="PTK" />
+			<MegaDir Url="https://mega.nz/#F!Fkk3AITY!8hbu8IDF0SwRzo0X0zMiUQ" Subdir="pWCQ" />
+			<MegaDir Url="https://mega.nz/#F!8gMRAABB!hCd2vvUf1GM26tz0iZeG5w" Subdir="pWOR" />
+			<MegaDir Url="https://mega.nz/#F!BlsFWbCL!l1_wTybDlDHKBiLLs85WIg" Subdir="pWOS" />
+			<MegaDir Url="https://mega.nz/#F!ttFFgLxb!zzYc-qb5h4bNkaq8zk48iw" Subdir="pWPN" />
+			<MegaDir Url="https://mega.nz/#F!ghNFnSbB!_tjUErFh6SRRN28mhbX1bg" Subdir="RAV" />
+			<MegaDir Url="https://mega.nz/#F!N1lgxZTD!hpZFXqK6OB1B8pK0WAWz7w" Subdir="ROE" />
+			<MegaDir Url="https://mega.nz/#F!99sy2RTZ!cpt1z_D_xuYR1rzs_URFmQ" Subdir="RQS" />
+			<MegaDir Url="https://mega.nz/#F!JkMUVQwC!YyjuGwWpWO0K5j5CVLyCsg" Subdir="RTR" />
+			<MegaDir Url="https://mega.nz/#F!stch1DaC!aiGAPaCMa6b493RTsfr1wQ" Subdir="S00" />
+			<MegaDir Url="https://mega.nz/#F!old2yCDJ!T7oZkQ8FtVZg2KkTvn5loQ" Subdir="S99" />
+			<MegaDir Url="https://mega.nz/#F!JsMQ3bgT!fvHY5akvS6KWnD-7BRLQAw" Subdir="SCG" />
+			<MegaDir Url="https://mega.nz/#F!o81QgDaS!Satmcbb6WeJR7plkrRX6jg" Subdir="SHM" />
+			<MegaDir Url="https://mega.nz/#F!N9kz0ATC!am5ycxuxW9bMcqfoqR0mUw" Subdir="SOI" />
+			<MegaDir Url="https://mega.nz/#F!Y5lX0CjK!o8LLdm6VQ12Cg5JAV8mAEQ" Subdir="SOK" />
+			<MegaDir Url="https://mega.nz/#F!BhUVmKSB!3BlQVbscMFmg5dja7kJXag" Subdir="SOM" />
+			<MegaDir Url="https://mega.nz/#F!5sUDUS5L!giaog4Twyl8LDZ_dF4U_Ww" Subdir="STH" />
+			<MegaDir Url="https://mega.nz/#F!1gliyDRa!ojczisOeQRjVNJMXeEWtBQ" Subdir="THS" />
+			<MegaDir Url="https://mega.nz/#F!5kkmRIqI!LVrlygj3s5HqqJGgRdAMmA" Subdir="TMP" />
+			<MegaDir Url="https://mega.nz/#F!phcwyQRQ!ADJzAb_iiSCiIVFyCHxXnA" Subdir="TOR" />
+			<MegaDir Url="https://mega.nz/#F!olMDRRAa!FJJskz9fJKtkELKC1XmqOg" Subdir="TPR" />
+			<MegaDir Url="https://mega.nz/#F!8t13gDyA!-4SJ77o5Xe69BAYT_NEMhQ" Subdir="TSB" />
+			<MegaDir Url="https://mega.nz/#F!gwMWVaKb!skle-FK79onfvhBTh8dh_w" Subdir="TSP" />
+			<MegaDir Url="https://mega.nz/#F!lhlkRCRR!VzHD5XOK2Voe0xW0RdbK-A" Subdir="UDS" />
+			<MegaDir Url="https://mega.nz/#F!U8l2QAbY!EwUOUQQ8eQgAJLDr6HETDA" Subdir="UGL" />
+			<MegaDir Url="https://mega.nz/#F!xh0RAQpK!tbuZ4dg1BJiDQH2U_PmQXg" Subdir="ULG" />
+			<MegaDir Url="https://mega.nz/#F!Bk1G2ZQY!LX40xB4gTfjbulOM-jUaug" Subdir="UNH" />
+			<MegaDir Url="https://mega.nz/#F!918EXQqL!B0zpgi3NBleiEmvaGUVCdQ" Subdir="USG" />
+			<MegaDir Url="https://mega.nz/#F!V4UnAQiC!ft-rgbwiyf6Jn-6nptoC3w" Subdir="V09" />
+			<MegaDir Url="https://mega.nz/#F!UpUx2bpK!8Ghs44SOQIvwYZJ-6bYzJw" Subdir="V10" />
+			<MegaDir Url="https://mega.nz/#F!cwNGwCTa!lc5mXV4U4-POm0-n5Moz4Q" Subdir="V11" />
+			<MegaDir Url="https://mega.nz/#F!50MQyJTY!m4tUJA_HMsMBOTcLkTrljA" Subdir="V12" />
+			<MegaDir Url="https://mega.nz/#F!JgshQTaK!0IgGyCfX2XQJtWCzE2Wg4A" Subdir="V13" />
+			<MegaDir Url="https://mega.nz/#F!F9lznQ5J!oeYCcD_EFALLXraqfgNlkQ" Subdir="V14" />
+			<MegaDir Url="https://mega.nz/#F!98F2XCAb!sYO19nPP9x6Omp24z7JUQA" Subdir="V15" />
+			<MegaDir Url="https://mega.nz/#F!140EDAhC!671Sesefnd-Y8WQ4oZtsjQ" Subdir="V16" />
+			<MegaDir Url="https://mega.nz/#F!0kcE0YJB!J_dl47WcCYvd0XDbYxNiDA" Subdir="VAN" />
+			<MegaDir Url="https://mega.nz/#F!Z0clQCrJ!qSzxD6qk7f9hwoGOUDrV8w" Subdir="VIS" />
+			<MegaDir Url="https://mega.nz/#F!E18BBLwb!-olgy0GrzYtxDRFWW6-YTA" Subdir="VMA" />
+			<MegaDir Url="https://mega.nz/#F!11kniJqB!ki3FOSMvdlj4m3x-77ybiQ" Subdir="W16" />
+			<MegaDir Url="https://mega.nz/#F!c8dDnTKC!bHsw94M3MrnpjZlQIsB9Jw" Subdir="WTH" />
+			<MegaDir Url="https://mega.nz/#F!9p1TiaiT!ZM3xfMKdOLpt2SAk2JTbEQ" Subdir="WWK" />
+			<MegaDir Url="https://mega.nz/#F!IlsFTKRT!iVBNmHAOOFjzAWNOt5Lo8g" Subdir="ZEN" />
+		</QualityGroup>
+		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListUrl="https://mega.nz/#F!M80UFbwI!oneHfFYU8YNvUYeWBD-AzA">
+			<MegaDir Url="https://mega.nz/#F!gwkhgKrb!YEcQ9p2yvYkcpWjomvnHsA" Subdir="HOU" />
+			<MegaDir Url="https://mega.nz/#F!Y9kRmLTT!zmjsEVPVPuPpplWcUXgjhg" Subdir="E01" />
+			<MegaDir Url="https://mega.nz/#F!05NGGSQR!e870bVKIfcqowQfHH8ibSA" Subdir="CMA" />
+			<MegaDir Url="https://mega.nz/#F!Bw8AnTwQ!Una9SEuD-lP2nFClXUtm-Q" Subdir="MPS_AKH" />
+			<MegaDir Url="https://mega.nz/#F!94VD0BpS!ZYFLjmgkakOtCNgPaQf4KA" Subdir="AKH" />
+			<MegaDir Url="https://mega.nz/#F!A8UF1aoL!u40UwEGJq9MnSwLhgqCmlg" Subdir="2ED" />
+			<MegaDir Url="https://mega.nz/#F!5gUGVABI!xtdS3uCAfkJWF0tPLSmSGg" Subdir="3ED" />
+			<MegaDir Url="https://mega.nz/#F!Fp90mbZb!eO9wyTwEyv79vRkL6MkE0Q" Subdir="4ED" />
+			<MegaDir Url="https://mega.nz/#F!M4E3kRTI!oSH1lljH2DkbgqU6BCEj7A" Subdir="5DN" />
+			<MegaDir Url="https://mega.nz/#F!I9knAT5D!5SBs5Uz-6OA1-NPwe8ZKyA" Subdir="5ED" />
+			<MegaDir Url="https://mega.nz/#F!Bh1gjTra!NBbv908EWqaQqzbmeAj2PQ" Subdir="6ED" />
+			<MegaDir Url="https://mega.nz/#F!pkFQEJAY!T87x1IiXmXxcGU92amEbfA" Subdir="7ED" />
+			<MegaDir Url="https://mega.nz/#F!ApVyBRZL!7gN9FSSv91GLBKTCt50TKQ" Subdir="8ED" />
+			<MegaDir Url="https://mega.nz/#F!9gs00DJY!x-ARnxBfLioVorBj_4N_0A" Subdir="9ED" />
+			<MegaDir Url="https://mega.nz/#F!w90xHaLI!X9aqbhNkZtqQOz89V7kqGA" Subdir="10E" />
+			<MegaDir Url="https://mega.nz/#F!w00zzRjY!CX1LCqJHpfF26j5Tnf_3Bg" Subdir="AER" />
+			<MegaDir Url="https://mega.nz/#F!Ft8GWRrY!Cd2qHsooZXmiUHk6eBNqUw" Subdir="ALA" />
+			<MegaDir Url="https://mega.nz/#F!5sUCxDzT!_-dkd684UmkJTWyIDsZI1g" Subdir="ALL" />
+			<MegaDir Url="https://mega.nz/#F!1xNViZpL!cWBlTMXzDT93Umocp8BF_g" Subdir="APC" />
+			<MegaDir Url="https://mega.nz/#F!tgFWjCrT!Cz1tiLoI3Vmb5sOTNDJqXg" Subdir="ARB" />
+			<MegaDir Url="https://mega.nz/#F!0lsB2T6a!bxrvfq8vID1i5ANZFHqPxQ" Subdir="ARC" />
+			<MegaDir Url="https://mega.nz/#F!BtF0zQYR!0Fjb9HU0bCCqyKPk6kTo3Q" Subdir="ARN" />
+			<MegaDir Url="https://mega.nz/#F!kxsRCBiZ!Hc75J5nV0ItJKqagkcxIaA" Subdir="ATH" />
+			<MegaDir Url="https://mega.nz/#F!Q5EAlQ4a!ZKIlNaCUOlB6VcfGHC29xQ" Subdir="ATQ" />
+			<MegaDir Url="https://mega.nz/#F!9h9FQSwL!ESHJI74CFiHNbqVmlF0ETw" Subdir="AVR" />
+			<MegaDir Url="https://mega.nz/#F!csEmUYoB!LNvsprTAmlGdnWeyZBj5fA" Subdir="BFZ" />
+			<MegaDir Url="https://mega.nz/#F!op0nCYiB!EKMIsTOHb387TjhP4SA8lw" Subdir="BNG" />
+			<MegaDir Url="https://mega.nz/#F!Ytd3CSwC!smcPpyRNhetExWkfYFT1fw" Subdir="BOK" />
+			<MegaDir Url="https://mega.nz/#F!stNWCTbA!oHrzi0HwIgceEcglkdO_vg" Subdir="BRB" />
+			<MegaDir Url="https://mega.nz/#F!BpUiETyS!OGrOOW0Es30M3tyEzXRW8Q" Subdir="BTD" />
+			<MegaDir Url="https://mega.nz/#F!g11yDYYT!FJWFMOM-H3zmovd7bH2uWg" Subdir="C13" />
+			<MegaDir Url="https://mega.nz/#F!18tBALoD!4GV2lsUpel-KQoP9EYUA8w" Subdir="C14" />
+			<MegaDir Url="https://mega.nz/#F!Nl92mb5A!COkffOuJKxc-cwAl52lPGQ" Subdir="C15" />
+			<MegaDir Url="https://mega.nz/#F!tksTECLR!hTRWBikwxfyeQ30AgoIajw" Subdir="C16" />
+			<MegaDir Url="https://mega.nz/#F!gplTWJTb!fQmOuNXYq7XS1GXQx7sD8Q" Subdir="CED" />
+			<MegaDir Url="https://mega.nz/#F!I49HWKKT!AzbsysIiVuS-ES9unFBQRw" Subdir="CEI" />
+			<MegaDir Url="https://mega.nz/#F!4l0hBLIA!g39Rir2HNENXCAqGmVp3Uw" Subdir="CHK" />
+			<MegaDir Url="https://mega.nz/#F!wkl3CRKD!FF5UNUeYTcklgrTheiuwZg" Subdir="CHR" />
+			<MegaDir Url="https://mega.nz/#F!ExFjwRQA!cIzicv9K7E1PcsBN_IYmgA" Subdir="CM1" />
+			<MegaDir Url="https://mega.nz/#F!Yl9Tkaja!jfIQVq7s8cGiYuld58Z9CA" Subdir="CMD" />
+			<MegaDir Url="https://mega.nz/#F!00NkARwA!G0di6sJOMWOk5dxL9bhAcQ" Subdir="CN2" />
+			<MegaDir Url="https://mega.nz/#F!8ksFxajT!Svk5HAWESxRkqLkuJ58S7g" Subdir="CNS" />
+			<MegaDir Url="https://mega.nz/#F!s09UnSDD!SLGU7QZPkGY0kEMT51gfKg" Subdir="CON escape" />
+			<MegaDir Url="https://mega.nz/#F!Mg9XGRxA!90JKpHXqg6DvfOSgU3IvZg" Subdir="CPK" />
+			<MegaDir Url="https://mega.nz/#F!NkkCBYST!ANwUpG_mUeM23xbDHCvwbQ" Subdir="CSP" />
+			<MegaDir Url="https://mega.nz/#F!1x9ngZgb!jKkeUtaIyGkkEQo2uSn8lw" Subdir="CST" />
+			<MegaDir Url="https://mega.nz/#F!RldkwSJA!BmY0m8vlIzFwVkqvUE4OBw" Subdir="DD2" />
+			<MegaDir Url="https://mega.nz/#F!B0cHUILQ!ik1QhwMZNa7e0CJ6IcdBfQ" Subdir="DD3_DVD" />
+			<MegaDir Url="https://mega.nz/#F!coUzQA4a!pLc2iPZ4RxvzT7xSxKwWnw" Subdir="DD3_EVG" />
+			<MegaDir Url="https://mega.nz/#F!l50GFbwS!I6i-6jeZpT4fvv_2AWgYdw" Subdir="DD3_GVL" />
+			<MegaDir Url="https://mega.nz/#F!pxlETYaD!5esGqkLJdOSZCEY2gpUmug" Subdir="DD3_JVC" />
+			<MegaDir Url="https://mega.nz/#F!AslHUShA!nbBveRhbZ0fcNPVN8W7D-g" Subdir="DDC" />
+			<MegaDir Url="https://mega.nz/#F!Q51wja4I!iw1JeYNsvzU2TdhVVqifCA" Subdir="DDD" />
+			<MegaDir Url="https://mega.nz/#F!lkE2GTLS!z_IrHrjCCa6Q6OFgJZGBTg" Subdir="DDE" />
+			<MegaDir Url="https://mega.nz/#F!lwFRBCjC!-WaNe4KYh985FkeUb2I7Zw" Subdir="DDF" />
+			<MegaDir Url="https://mega.nz/#F!pll0jYxB!s_LD5Nq4ctyagyTLmF8vFw" Subdir="DDG" />
+			<MegaDir Url="https://mega.nz/#F!hl80TLBa!HO9rbCGtpRTkevPaRsx4mw" Subdir="DDH" />
+			<MegaDir Url="https://mega.nz/#F!UsEkCZDL!hjcwnC1qcBMFqcfp24N83A" Subdir="DDI" />
+			<MegaDir Url="https://mega.nz/#F!lhUyxaST!ryRhI9bp0z-9X-hf5LBHwA" Subdir="DDJ" />
+			<MegaDir Url="https://mega.nz/#F!EotDWBaS!pyFHxa04UQItXiPqfb8Ubg" Subdir="DDK" />
+			<MegaDir Url="https://mega.nz/#F!J4UkhTzK!H8HR1-WnxvCHeAGVZ_q2mw" Subdir="DDL" />
+			<MegaDir Url="https://mega.nz/#F!08tDzKiY!tMgLupzSrADuZX-OoKavXg" Subdir="DDM" />
+			<MegaDir Url="https://mega.nz/#F!wtlXESwI!1zoO3Vx56ZhSFI4eh9lT3w" Subdir="DDN" />
+			<MegaDir Url="https://mega.nz/#F!stcklRAA!ekbFjq7umAFeEj0qBSiLng" Subdir="DDO" />
+			<MegaDir Url="https://mega.nz/#F!MklU3YaQ!CJBQxYI2eOfuekfoPS4Geg" Subdir="DDP" />
+			<MegaDir Url="https://mega.nz/#F!19EEHZJT!ut7fSw1ncm_giiyP6_NZCw" Subdir="DDQ" />
+			<MegaDir Url="https://mega.nz/#F!001UxLQJ!X0AZn8h1xh2n3LotCVUZEg" Subdir="DDR" />
+			<MegaDir Url="https://mega.nz/#F!E1MwGIDQ!IR9aeQs4KCz9cRi745WCCA" Subdir="DGM" />
+			<MegaDir Url="https://mega.nz/#F!N1NmnDoD!5AysJAFtmSnlIcH2mRK5BQ" Subdir="DIS" />
+			<MegaDir Url="https://mega.nz/#F!981WjDxa!EY01b1-rNBNxN0Axfo58bA" Subdir="DKA" />
+			<MegaDir Url="https://mega.nz/#F!o4NlkB5C!EzuZ-nijX3D-5Fc1iWyIbQ" Subdir="DKM" />
+			<MegaDir Url="https://mega.nz/#F!MhcDDBQJ!rQIyNH4o4HEPvFoJ406Pfw" Subdir="DPA" />
+			<MegaDir Url="https://mega.nz/#F!xt1nEQYC!OsNZpLQKTHH7YEw59Fbf3w" Subdir="DRB" />
+			<MegaDir Url="https://mega.nz/#F!s1shgb5Y!LUT5wlzxSH9nZ29gOP2gRg" Subdir="DRK" />
+			<MegaDir Url="https://mega.nz/#F!c5M30LYI!xHbGr9PHzKhaFnazMoMPFg" Subdir="DST" />
+			<MegaDir Url="https://mega.nz/#F!F50ClBTK!UWqaNjwBLEDP77Rak3ZX2g" Subdir="DTK" />
+			<MegaDir Url="https://mega.nz/#F!xksk1YzY!oewvqWZmaJ8cauDKX5SQ3w" Subdir="EMA" />
+			<MegaDir Url="https://mega.nz/#F!999wCQ5b!GVWnLa6FM2ME_7JcP1CMtg" Subdir="EMN" />
+			<MegaDir Url="https://mega.nz/#F!wlsyFLDD!YIbGXzKdCpP4RLOgJPVbgw" Subdir="EVE" />
+			<MegaDir Url="https://mega.nz/#F!Zld0iKzK!mta6fP7KG0M95W5xWEpzzg" Subdir="EVG" />
+			<MegaDir Url="https://mega.nz/#F!sxlgWLRa!mwOYfJJ5PsQDdg8lsiIo3g" Subdir="EXO" />
+			<MegaDir Url="https://mega.nz/#F!AoVmHLAZ!b9U92kTHd2c1VxcIY9X3WA" Subdir="EXP" />
+			<MegaDir Url="https://mega.nz/#F!M08TnZiY!GEc3Amc57G8KDNGVH0tgQw" Subdir="FEM" />
+			<MegaDir Url="https://mega.nz/#F!hw0nkILS!1Smx6UMXez2AlVCaZ-cmVA" Subdir="FRF" />
+			<MegaDir Url="https://mega.nz/#F!l5VjiayA!sqOH_wQWtWS7n68meDE0bg" Subdir="FRF_UGIN" />
+			<MegaDir Url="https://mega.nz/#F!xkFGXKRB!ppalAE2tdtQ7FZoxDLDomA" Subdir="FUT" />
+			<MegaDir Url="https://mega.nz/#F!Bo1X3IpC!mO9_IVs4WesySSnRNCfONw" Subdir="GPT" />
+			<MegaDir Url="https://mega.nz/#F!ZkkHzZyA!SYkdIgqdG115gsSgrPKazQ" Subdir="GTC" />
+			<MegaDir Url="https://mega.nz/#F!ktNFEKzL!zhxXIADRUmW3a8E-QSdkCw" Subdir="H09" />
+			<MegaDir Url="https://mega.nz/#F!Mp0iiLoT!bBoWGtxX650EXbhlZBbmzQ" Subdir="HML" />
+			<MegaDir Url="https://mega.nz/#F!Ys9mUCyb!Dlo3_L9fq4qetrDT9St7yQ" Subdir="HOP" />
+			<MegaDir Url="https://mega.nz/#F!VoFz2CyA!kOkut6QLoAX3rkL0lX4a5Q" Subdir="ICE" />
+			<MegaDir Url="https://mega.nz/#F!oklAiYhB!kutC8eEn3bZ2neViRPBSHQ" Subdir="INV" />
+			<MegaDir Url="https://mega.nz/#F!BoN1kKhI!D_-urj9HRcE1GMYyA33s3g" Subdir="ISD" />
+			<MegaDir Url="https://mega.nz/#F!d1VD1YhK!28E1D3HaOrin1j3nDYgpZQ" Subdir="ITP" />
+			<MegaDir Url="https://mega.nz/#F!A812EJIQ!1zFfcXBwv8Okr1_a0A6Fhg" Subdir="JOU" />
+			<MegaDir Url="https://mega.nz/#F!84EyxCQb!2lXHhUZ2WJiVinVDG2UnzA" Subdir="JUD" />
+			<MegaDir Url="https://mega.nz/#F!I5kjSDgS!8rDjYyxwB-dXGRTEnwBe0g" Subdir="KLD" />
+			<MegaDir Url="https://mega.nz/#F!lwMHyagZ!2S1WUacQ0yDNKE30Fscvsw" Subdir="KTK" />
+			<MegaDir Url="https://mega.nz/#F!w4slVTjZ!Vn27q70AbgKrDn1wrlRh8g" Subdir="LEA" />
+			<MegaDir Url="https://mega.nz/#F!I4kEzRhL!IwNiia_5R_Ue5-UryNFKng" Subdir="LEB" />
+			<MegaDir Url="https://mega.nz/#F!YhNhhajA!pUB8J6AvTcD2uH_ASwQHmA" Subdir="LEG" />
+			<MegaDir Url="https://mega.nz/#F!Q80iQRKJ!E8GSGwnVPBqbT5Bfvr-kAg" Subdir="LGN" />
+			<MegaDir Url="https://mega.nz/#F!R19SCByQ!Y7eT3ZOAbSfyNx-98bWKEw" Subdir="LRW" />
+			<MegaDir Url="https://mega.nz/#F!gwlEHIbT!q7kHxkTB3fkYzAgLA0XY0w" Subdir="M10" />
+			<MegaDir Url="https://mega.nz/#F!85E2CSZT!m9HtyEOxnMtxbswX-j3mWA" Subdir="M11" />
+			<MegaDir Url="https://mega.nz/#F!00l3zYoB!2E2-hkyOnYOBTpMHEksSBA" Subdir="M12" />
+			<MegaDir Url="https://mega.nz/#F!IxdUybBY!llpP3u9fsrFDFWH0V-kiTg" Subdir="M13" />
+			<MegaDir Url="https://mega.nz/#F!14s1xByY!GoOtjCRbnZQkC8-49hVLLA" Subdir="M14" />
+			<MegaDir Url="https://mega.nz/#F!t1lG2TgB!LaAKw7P4lt7ReLPm7UQtDA" Subdir="M15" />
+			<MegaDir Url="https://mega.nz/#F!FscwyKwY!TUX-o8Xk4fyuosQ7cmvhKQ" Subdir="MBS" />
+			<MegaDir Url="https://mega.nz/#F!lktjkabT!LEEFcEDkuMRZtwGkpe5FxQ" Subdir="MD1" />
+			<MegaDir Url="https://mega.nz/#F!loNi3JyB!cf2C0h4w2aqNvri8SQYWtw" Subdir="ME2" />
+			<MegaDir Url="https://mega.nz/#F!VlNWHJ6b!ftl0xuXAGV1nR8Vv7OsQvg" Subdir="ME3" />
+			<MegaDir Url="https://mega.nz/#F!A4lHRTxD!0KqQBFgn7Hry5D2nQoLM6A" Subdir="ME4" />
+			<MegaDir Url="https://mega.nz/#F!olUFCT6I!9dQF4TCOm8AORDQlTySFtQ" Subdir="MED" />
+			<MegaDir Url="https://mega.nz/#F!F9VmSKoS!KZFF78bwqtCYO-W3xF9HRA" Subdir="MGB" />
+			<MegaDir Url="https://mega.nz/#F!VkViSTCB!8CEmsdy1ABZrKK7dpktdZQ" Subdir="MIR" />
+			<MegaDir Url="https://mega.nz/#F!EodVmZLD!zCAyaRekJdi-z1BuI77Oeg" Subdir="MM2" />
+			<MegaDir Url="https://mega.nz/#F!g0UT3CaQ!SUxDVOHQQsU33lfmUFLoCg" Subdir="MM3" />
+			<MegaDir Url="https://mega.nz/#F!018RSLjQ!OQfS9bG60IuvU7XVML90Jg" Subdir="MMA" />
+			<MegaDir Url="https://mega.nz/#F!0hkA3JpD!fqfrwVypS1MQ5Rj5MYquJA" Subdir="MMQ" />
+			<MegaDir Url="https://mega.nz/#F!dks3TTST!LMJgYgA_z0b5JDp_vrArsg" Subdir="MOR" />
+			<MegaDir Url="https://mega.nz/#F!lhNFSJrC!8Bzz1IWmY2idc81mMXbV7A" Subdir="MPS" />
+			<MegaDir Url="https://mega.nz/#F!p8kAGARb!7todJjsUawpiockG7sh90Q" Subdir="MRD" />
+			<MegaDir Url="https://mega.nz/#F!d5cBSZTK!w1PiQagG-iwzhtdOJukWDQ" Subdir="NMS" />
+			<MegaDir Url="https://mega.nz/#F!A1lDVBRL!pIok-cmLNVFvp9P74of5rA" Subdir="NPH" />
+			<MegaDir Url="https://mega.nz/#F!E9VBjCxR!5fzgo1kBCbdV4o2i1gPrQA" Subdir="ODY" />
+			<MegaDir Url="https://mega.nz/#F!txdj0IYD!03jrC7ta1RlAQtFA0617TA" Subdir="OGW" />
+			<MegaDir Url="https://mega.nz/#F!spl3hAIA!ozmR-Jpwr_mElSz0uP3fiA" Subdir="ONS" />
+			<MegaDir Url="https://mega.nz/#F!lxllhLoC!eze8Ty4Fwpl8W5cJLj9R4A" Subdir="ORI" />
+			<MegaDir Url="https://mega.nz/#F!Fx1lBayS!fyxKZPgXpPLPNqQKr5K4xw" Subdir="p2HG" />
+			<MegaDir Url="https://mega.nz/#F!c8VF3JIC!bWa-RH7abxvW25KuSPq29w" Subdir="p15A" />
+			<MegaDir Url="https://mega.nz/#F!8ttgyCLa!LDtqfdwUm08X7q4xxYq3nw" Subdir="pALP" />
+			<MegaDir Url="https://mega.nz/#F!lsNk3RAR!BuMXvgFEaLpObnClGEIE5w" Subdir="pARL" />
+			<MegaDir Url="https://mega.nz/#F!t1VGGKoI!VIaNAU6-B5gqFR-fGxY0Iw" Subdir="PC2" />
+			<MegaDir Url="https://mega.nz/#F!1pEHnbbJ!xRELuG4O832OGMwLg4OxkQ" Subdir="PCA" />
+			<MegaDir Url="https://mega.nz/#F!8hMXzSiQ!Msjzvd2DwVraDxCagleOVg" Subdir="pCEL" />
+			<MegaDir Url="https://mega.nz/#F!kllC2B6J!Q0ZSY-1xyCVMXRj5ntGaEw" Subdir="pCMP" />
+			<MegaDir Url="https://mega.nz/#F!9xkXAQKA!FnHjigUEzY4I6FYVfx-nIw" Subdir="PCY" />
+			<MegaDir Url="https://mega.nz/#F!Vs0gBJjB!IzySXEDJUs2lEhpj_A89Jw" Subdir="PD2" />
+			<MegaDir Url="https://mega.nz/#F!t1NlDbjQ!EkGqfMCelJYQtaOYq4zuSw" Subdir="PD3" />
+			<MegaDir Url="https://mega.nz/#F!0oU2mCjY!Ig8TPO2-_Ue1VCnNsXSiZg" Subdir="pDRC" />
+			<MegaDir Url="https://mega.nz/#F!BsUDXTqR!FG53JoDVh45VHm7E_jl9LA" Subdir="pELP" />
+			<MegaDir Url="https://mega.nz/#F!Ftl0mLQa!MTu6RTqg77ZHrQZk9ZTHqw" Subdir="pFNM" />
+			<MegaDir Url="https://mega.nz/#F!A0VA0SYQ!21KikssfyNQrjF7ukq53tg" Subdir="pGPX" />
+			<MegaDir Url="https://mega.nz/#F!t8tQVRaT!_3Z4guKqRkYHNe1YBuVHcQ" Subdir="pGRU" />
+			<MegaDir Url="https://mega.nz/#F!NhV2XK4Y!XPXQFa6CB1zd0fE4VwWQNA" Subdir="pGTW" />
+			<MegaDir Url="https://mega.nz/#F!MkVHkS5T!bMLxazB1pWxwWSnsneaLtg" Subdir="pHHO" />
+			<MegaDir Url="https://mega.nz/#F!Isl11DhT!T0wbTnUH7HbPIWwiTyHH6g" Subdir="pJGP" />
+			<MegaDir Url="https://mega.nz/#F!xsdTkbyK!-nfMq2D58ogKkO5INPakJA" Subdir="PLC" />
+			<MegaDir Url="https://mega.nz/#F!M5kFCJ5R!mQERfFF2kfJvcOUSVTFBYw" Subdir="pLGM" />
+			<MegaDir Url="https://mega.nz/#F!Rt1ClR5a!0rpvya9EOYZoDyT3EjWqlQ" Subdir="pLPA" />
+			<MegaDir Url="https://mega.nz/#F!h5dxERDa!IJVbRSUCFAeb6uTCd2ux6g" Subdir="PLS" />
+			<MegaDir Url="https://mega.nz/#F!Ul8gFJQL!A_R7mLngMe6Nz2_kxIS8Jw" Subdir="pMEI" />
+			<MegaDir Url="https://mega.nz/#F!Z0Uyyb5C!C7nPdpkK6bO-pYTPxuAO6Q" Subdir="pMGD" />
+			<MegaDir Url="https://mega.nz/#F!Ml9gQART!7WI-79bkSdwhznJPfsOdZg" Subdir="pMPR" />
+			<MegaDir Url="https://mega.nz/#F!1hU3FAKQ!O5aSUSLuDJrIVMaRh-bF8w" Subdir="PO2" />
+			<MegaDir Url="https://mega.nz/#F!QpcxjLCY!9G3P_jVf3jANhOoXzCX0yg" Subdir="POR" />
+			<MegaDir Url="https://mega.nz/#F!FsMlmCRA!IZ--IVBTXnBt9aVxa6w-zg" Subdir="pPOD" />
+			<MegaDir Url="https://mega.nz/#F!Fw8SUSTJ!4s4ipHQ77FCDDOQHbV7otw" Subdir="pPRE" />
+			<MegaDir Url="https://mega.nz/#F!xhFizYBR!XTEGDGdOGKUpqDJ6GKOavQ" Subdir="pPRO" />
+			<MegaDir Url="https://mega.nz/#F!M4syGBgb!bD29WlmNNZY-XB3xSLxIVA" Subdir="pREL" />
+			<MegaDir Url="https://mega.nz/#F!B8lRzBqD!nCLZBfLfHT6aJxoXzE0b3A" Subdir="pSUM" />
+			<MegaDir Url="https://mega.nz/#F!ds0ghRZT!fH1cc2uh_grSQ5_F_b-bFg" Subdir="pSUS" />
+			<MegaDir Url="https://mega.nz/#F!F09wyIIT!KH0Hgdq1SUmCSOb5xqCx2Q" Subdir="PTK" />
+			<MegaDir Url="https://mega.nz/#F!0h90iIha!FdoCdhx815CBR8WVHpjT-w" Subdir="pWCQ" />
+			<MegaDir Url="https://mega.nz/#F!AtczXZoJ!p9POQv8DDg2qyomso3INHQ" Subdir="pWOR" />
+			<MegaDir Url="https://mega.nz/#F!UsMyVR4Q!zYTf73lnymb_xoRRGjVZCw" Subdir="pWOS" />
+			<MegaDir Url="https://mega.nz/#F!48NXRIoD!e4qJ6S5azd1OYNZFvN6k3A" Subdir="pWPN" />
+			<MegaDir Url="https://mega.nz/#F!h1lDyRYR!vtNzHVEMmAqCp8LPe5Ighg" Subdir="RAV" />
+			<MegaDir Url="https://mega.nz/#F!coVHBQiY!ea-Ewmul0SUsgMry1XiOsw" Subdir="ROE" />
+			<MegaDir Url="https://mega.nz/#F!ktETXIiI!dv7GDJpV4DX0j7YOEoSR9A" Subdir="RQS" />
+			<MegaDir Url="https://mega.nz/#F!F4cghLRZ!TmXCRlgefSMKBDmqHwqGFA" Subdir="RTR" />
+			<MegaDir Url="https://mega.nz/#F!Zs1BXTRY!_NXB_hVYcqScVxzopfv9qQ" Subdir="S00" />
+			<MegaDir Url="https://mega.nz/#F!s4txWJ5C!BJAZ_fxoN2zUHk3g8tqgSA" Subdir="S99" />
+			<MegaDir Url="https://mega.nz/#F!lgcA2DCD!_8459rJA83rfTsz7C6M7IQ" Subdir="SCG" />
+			<MegaDir Url="https://mega.nz/#F!M5MlHQ6I!thloo0V8C9QRFCq1vRzSlA" Subdir="SHM" />
+			<MegaDir Url="https://mega.nz/#F!B000WbQK!ZBwXyO0CC4syLo3FKM1Wsw" Subdir="SOI" />
+			<MegaDir Url="https://mega.nz/#F!EkNXATBT!wETyuLE6lGyi6k6eKiDmcw" Subdir="SOK" />
+			<MegaDir Url="https://mega.nz/#F!os81DQqa!EVy9PNcOd4N2XeHKNIIymw" Subdir="SOM" />
+			<MegaDir Url="https://mega.nz/#F!8gUnSBxR!0kYhhwicBCrTJoXQoHONpQ" Subdir="STH" />
+			<MegaDir Url="https://mega.nz/#F!QwsygKKT!eFKoznQ_5tPW9L78VwV_yw" Subdir="THS" />
+			<MegaDir Url="https://mega.nz/#F!1hN0UIxT!bRfvrMftYnGbkn_v75RKlg" Subdir="TMP" />
+			<MegaDir Url="https://mega.nz/#F!Nk8GVRCa!KHl2s81DJL3WUG4FHdmaIA" Subdir="TOR" />
+			<MegaDir Url="https://mega.nz/#F!9tEwHbzJ!fbhSea8iKHVJQxPZn1rP_Q" Subdir="TPR" />
+			<MegaDir Url="https://mega.nz/#F!5kUgzZ6Y!YAvP3LJKivD3j8Ez5Zhq9Q" Subdir="TSB" />
+			<MegaDir Url="https://mega.nz/#F!h10CgB6C!2kvru0ZcDn9OjBTMiWmmOw" Subdir="TSP" />
+			<MegaDir Url="https://mega.nz/#F!ZwcyDaoA!D3jH7fkeKvZS9liEJfrZXA" Subdir="UDS" />
+			<MegaDir Url="https://mega.nz/#F!V00mAZhZ!kDzuCCm_rKg4K5o8X-9PnQ" Subdir="UGL" />
+			<MegaDir Url="https://mega.nz/#F!YltUEBgL!7tcGzRQUfWuThbafOCJMdQ" Subdir="ULG" />
+			<MegaDir Url="https://mega.nz/#F!p5MDQbDb!_IyMzCKyP1jo649e9Labyg" Subdir="UNH" />
+			<MegaDir Url="https://mega.nz/#F!BssgwBaC!h8mDh7kOStUVAb_7al9Ekw" Subdir="USG" />
+			<MegaDir Url="https://mega.nz/#F!RtslzRpS!NxfB9Se2aVHuZHmEakgBnQ" Subdir="V09" />
+			<MegaDir Url="https://mega.nz/#F!s8tDCZRQ!848OfWtQP81Pa9wpFgiGhw" Subdir="V10" />
+			<MegaDir Url="https://mega.nz/#F!ZoMX3AIZ!XuQQClqnYiBn-zWMw0RCbg" Subdir="V11" />
+			<MegaDir Url="https://mega.nz/#F!JtljHSID!us74VBNcuNkLn1AD_XlJEw" Subdir="V12" />
+			<MegaDir Url="https://mega.nz/#F!wosgHIDL!P8BnSbigoSSfRYL7nz6loA" Subdir="V13" />
+			<MegaDir Url="https://mega.nz/#F!IgUTlCiI!KSeOXH8VKLyfvftQws83wQ" Subdir="V14" />
+			<MegaDir Url="https://mega.nz/#F!QscyzLBB!7XDaExZBzXONJ0zF0Nd9Sw" Subdir="V15" />
+			<MegaDir Url="https://mega.nz/#F!JkcTkKSY!7_tTx-n_yfaSjqBWplqrWQ" Subdir="V16" />
+			<MegaDir Url="https://mega.nz/#F!0tlQHA6B!-xm7Nx_oa3jFqHKUpzCFWQ" Subdir="VAN" />
+			<MegaDir Url="https://mega.nz/#F!1g0R2Lra!2-pZrMV-G0wJih07n708Kg" Subdir="VIS" />
+			<MegaDir Url="https://mega.nz/#F!F9kUALAJ!GMaZpSQ1QjtAiBPfKcUozw" Subdir="VMA" />
+			<MegaDir Url="https://mega.nz/#F!tpUQXSya!QBbmSSaBDmapxb3DvV3rOA" Subdir="W16" />
+			<MegaDir Url="https://mega.nz/#F!Fs8EkIKT!MaCnEtW4AJWng8b0MdNC-Q" Subdir="WTH" />
+			<MegaDir Url="https://mega.nz/#F!Q80RHKqZ!6TxB4fq_DdbjiEPbYISyJg" Subdir="WWK" />
+			<MegaDir Url="https://mega.nz/#F!l0tDALQb!KJ3WktlK2u7nYUTxQRLMeA" Subdir="ZEN" />
+		</QualityGroup>
+	</ImageSources>
+
+</configuration>

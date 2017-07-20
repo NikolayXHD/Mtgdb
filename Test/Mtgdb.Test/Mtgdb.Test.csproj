@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C23E2DE4-5C35-4205-99B5-55A0CE80CCBE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Test</RootNamespace>
+    <AssemblyName>Mtgdb.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\bin\debug-test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\output\bin\release-test\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.6.1\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Waifu2x\models\noise1_model.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Waifu2x\models\noise2_model.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Waifu2x\models\scale2.0x_model.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
+      <Name>EditedTokenLocator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Gui\Mtgdb.Gui.csproj">
+      <Project>{97545c6d-acd6-4a2c-84dd-cd91293cfbb6}</Project>
+      <Name>Mtgdb.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NConfiguration\NConfiguration.csproj">
+      <Project>{0fb12da2-a8bd-4bf7-8507-9eca5771fd3b}</Project>
+      <Name>NConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpellChecker\Contrib.SpellChecker.csproj">
+      <Project>{ff45ee91-9ca3-443d-8231-75e9fa1af40e}</Project>
+      <Name>Contrib.SpellChecker</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DalTests.cs" />
+    <Compile Include="EditDistanceTests.cs" />
+    <Compile Include="GathererImagePreProcessor.cs" />
+    <Compile Include="Index\KeywordTests.cs" />
+    <Compile Include="LocalizationRepositoryTest.cs" />
+    <Compile Include="Index\TolerantTokenizerTests.cs" />
+    <Compile Include="Index\LuceneSearcherTests.cs" />
+    <Compile Include="Index\LuceneSpellcheckerTests.cs" />
+    <Compile Include="DeckFormattersTests.cs" />
+    <Compile Include="Index\TestLoadingUtil.cs" />
+    <Compile Include="WaifuScaler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Waifu2x\LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\opencv_core300.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\opencv_features2d300.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\opencv_imgcodecs300.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\opencv_imgproc300.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\Readme.RU.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\README.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Waifu2x\waifu2x-converter.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
