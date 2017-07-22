@@ -68,12 +68,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\Cjk.cs">
-      <Link>Cjk.cs</Link>
-    </Compile>
-    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\EnumerableExtensions.cs">
-      <Link>EnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -312,6 +306,7 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\planar.png" />
     <None Include="Resources\min_hovered.png" />
     <None Include="Resources\max_hovered.png" />
     <None Include="Resources\count_hovered.png" />

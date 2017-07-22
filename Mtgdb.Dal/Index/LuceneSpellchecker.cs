@@ -28,8 +28,7 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSpellchecker()
 		{
-			// 0.2 -> 0.3 new sets
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.3");
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.4");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
@@ -91,10 +90,7 @@ namespace Mtgdb.Dal.Index
 				if (!IsLoaded)
 					return EmptySuggest;
 
-				var values = SuggestValues(valuePart.ToLowerInvariant(), token.ParentField, language, maxCount)
-					.Select(StringEscaper.Escape)
-					.ToArray();
-
+				var values = SuggestValues(valuePart.ToLowerInvariant(), token.ParentField, language, maxCount);
 				return new IntellisenseSuggest(token, values);
 			}
 

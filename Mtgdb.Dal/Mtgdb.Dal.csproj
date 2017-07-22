@@ -66,6 +66,10 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Index\MtgdbAnalyzer.cs" />
+    <Compile Include="Index\MtgdbTokenizer.cs" />
+    <Compile Include="Index\MtgdbTokenizerPatterns.cs" />
+    <Compile Include="Index\ReplaceFilter.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />

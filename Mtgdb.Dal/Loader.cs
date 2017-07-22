@@ -78,7 +78,7 @@ namespace Mtgdb.Dal
 
 					_repository.Load();
 
-					while (!_imageRepository.IsLoadingComplete)
+					while (!_imageRepository.IsLoadingZoomComplete)
 						Thread.Sleep(50);
 
 					_repository.SelectCardImages(_imageRepository);

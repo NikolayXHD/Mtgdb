@@ -12,6 +12,7 @@ namespace Mtgdb.Dal
 		private const string TagItalicEnd = "_#";
 
 		private static readonly Regex NormalizePattern = new Regex("(£|#_|_#)", RegexOptions.Compiled);
+		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})", RegexOptions.Compiled);
 
 		private const char SeparatorRow = '\r';
 		private const string SeparatorField = "||";
@@ -117,11 +118,9 @@ namespace Mtgdb.Dal
 			var result = new CardLocalizationRaw
 			{
 				Set = intern(row[_fields[FieldSetCode]]),
+				
+				
 				Name = intern(row[_fields[FieldName]]),
-				Type = intern(row[_fields[FieldType]]),
-				Ability = intern(normalize(row[_fields[FieldAbility]])),
-				Flavor = intern(normalize(row[_fields[FieldFlavor]])),
-
 				NameCn = intern(nullify(row[_fields[FieldName + LangCn]])),
 				NameTw = intern(nullify(row[_fields[FieldName + LangTw]])),
 				NameFr = intern(nullify(row[_fields[FieldName + LangFr]])),
@@ -133,6 +132,7 @@ namespace Mtgdb.Dal
 				NameEs = intern(nullify(row[_fields[FieldName + LangEs]])),
 				NameKo = intern(nullify(row[_fields[FieldName + LangKo]])),
 
+				Type = intern(row[_fields[FieldType]]),
 				TypeCn = intern(nullify(row[_fields[FieldType + LangCn]])),
 				TypeTw = intern(nullify(row[_fields[FieldType + LangTw]])),
 				TypeFr = intern(nullify(row[_fields[FieldType + LangFr]])),
@@ -144,6 +144,7 @@ namespace Mtgdb.Dal
 				TypeEs = intern(nullify(row[_fields[FieldType + LangEs]])),
 				TypeKo = intern(nullify(row[_fields[FieldType + LangKo]])),
 
+				Ability = intern(normalize(row[_fields[FieldAbility]])),
 				AbilityCn = intern(normalize(row[_fields[FieldAbility + LangCn]])),
 				AbilityTw = intern(normalize(row[_fields[FieldAbility + LangTw]])),
 				AbilityFr = intern(normalize(row[_fields[FieldAbility + LangFr]])),
@@ -155,6 +156,7 @@ namespace Mtgdb.Dal
 				AbilityEs = intern(normalize(row[_fields[FieldAbility + LangEs]])),
 				AbilityKo = intern(normalize(row[_fields[FieldAbility + LangKo]])),
 
+				Flavor = intern(normalize(row[_fields[FieldFlavor]])),
 				FlavorCn = intern(normalize(row[_fields[FieldFlavor + LangCn]])),
 				FlavorTw = intern(normalize(row[_fields[FieldFlavor + LangTw]])),
 				FlavorFr = intern(normalize(row[_fields[FieldFlavor + LangFr]])),
@@ -188,8 +190,10 @@ namespace Mtgdb.Dal
 			if (str == string.Empty)
 				return null;
 
-			string result = NormalizePattern.Replace(str, match => match.Value == SeparatorLine ? "\n" : string.Empty);
-			return result;
+			str = NormalizePattern.Replace(str, match => match.Value == SeparatorLine ? "\n" : string.Empty);
+			str = IncompleteChaosPattern.Replace(str, "{CHAOS}");
+
+			return str;
 		}
 
 		private static string nullify(string str)

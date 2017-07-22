@@ -393,6 +393,7 @@ namespace Mtgdb.Gui
 			if (string.IsNullOrEmpty(selectedSuggest))
 				return;
 
+			selectedSuggest = StringEscaper.Escape(selectedSuggest);
 			applySuggestSelection(selectedSuggest);
 		}
 

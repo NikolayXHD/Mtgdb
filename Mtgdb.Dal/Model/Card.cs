@@ -336,6 +336,10 @@ namespace Mtgdb.Dal
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string TextEn { get; set; }
 
+		[JsonProperty("originalText")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		private string OriginalText { get; set; }
+
 		/// <summary>
 		/// The flavor text of the card.
 		/// </summary>
@@ -595,9 +599,12 @@ namespace Mtgdb.Dal
 			{
 				GeneratedMana = cardDelta.GeneratedMana;
 			}
+
+			if (cardDelta.FlipDuplicate)
+				Remove = TextEn != OriginalText;
 		}
 
-
+		internal bool Remove { get; private set; }
 
 		[JsonIgnore]
 		private Dictionary<string, LegalityNote> _legalityByFormat;

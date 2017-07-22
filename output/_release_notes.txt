@@ -1,3 +1,27 @@
+=== 2.0.6 ===
+
+* Fine-tuned tokenization for search string index. +,-,/,½ are not
+considered word separators anymore. As a result you can search +1/-1 in text
+using a following query:
+	text:\+1/\-1
+It wouldn't work in previous versions as +1/-1 was indexed as
+a sequence of two words "1" and "1" with +,-,/ characters omitted from
+index.
+
+* Fixed search result highlighting for Korean - it does use spaces to
+separate words which I didn't know previously. An example query to see the
+difference:
+	text:*신*
+
+* Fixed search text not working because of duplicate Id for cards Jaraku
+the Interloper, Scarmaker in AllSets-x.json.
+
+* Fixed startup delay between all sets loaded and images are selected.
+The reason was redundantly expecting artwork images lookup to complete.
+
+* Fixed stretching non-zoomed horizontal plane images
+* Render icon for {CHAOS} symbol
+
 === 2.0.5 ===
 
 * Added images for
