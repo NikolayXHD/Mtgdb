@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -10,10 +11,12 @@ using System.Text.RegularExpressions;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Dal.Index;
 using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
+	[Localizable(false)]
 	public class DrawingSubsystem
 	{
 		private readonly LayoutView _layoutViewCards;
@@ -77,12 +80,9 @@ namespace Mtgdb.Gui
 		{
 			string name = key.TrimStart('_');
 
-			if (name.Length == 1)
+			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "chaos")
 				return new[] { name };
-
-			if (name.Length == 2 && char.IsNumber(name[0]) && char.IsNumber(name[1]))
-				return new[] { name };
-
+			
 			if (name.Length == 2)
 				return new[] { $"{name[0]}/{name[1]}", $"{name[1]}/{name[0]}", $"{name[0]}{name[1]}", $"{name[1]}{name[0]}" };
 
@@ -108,7 +108,7 @@ namespace Mtgdb.Gui
 			e.Handled = true;
 
 			if (card.Image != null)
-				e.Graphics.DrawImage(card.Image, e.Bounds);
+				e.Graphics.DrawImage(card.Image, card.Image.Size.ZoomTo(e.Bounds));
 
 			if (card == _deckModel.TouchedCard)
 				drawSelection(e, Color.LightBlue, Color.AliceBlue, 236);
@@ -461,13 +461,13 @@ namespace Mtgdb.Gui
 			string suffixPattern = getPattern(suffixTokens);
 			string radixPattern = getPattern(radixTokens);
 
-			bool suffixEndsCjk = suffixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCjk() == true;
-			bool prefixEndsCjk = prefixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCjk() == true;
-			bool radixEndsCjk = radixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCjk() == true;
+			bool suffixEndsCjk = suffixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
+			bool prefixEndsCjk = prefixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
+			bool radixEndsCjk = radixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
 
-			bool suffixStartsCjk = suffixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCjk() == true;
-			bool prefixStartsCjk = prefixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCjk() == true;
-			bool radixStartsCjk = radixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCjk() == true;
+			bool suffixStartsCjk = suffixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
+			bool prefixStartsCjk = prefixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
+			bool radixStartsCjk = radixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
 
 			bool prefixNoValues = !prefixTokens.Any(_ => _.Type.Is(TokenType.FieldValue));
 			bool suffixNoValues = !suffixTokens.Any(_ => _.Type.Is(TokenType.FieldValue));
@@ -484,12 +484,12 @@ namespace Mtgdb.Gui
 				suffixNoValues && radixNoValues && prefixEndsCjk;
 
 			if (!prefixIsCjk)
-				prefixPattern = @"\b" + prefixPattern;
+				prefixPattern = MtgdbTokenizerPatterns.BPattern + prefixPattern;
 
 			if (!suffixIsCjk)
-				suffixPattern += @"\b";
+				suffixPattern += MtgdbTokenizerPatterns.BPattern;
 
-			string result = $@"(?<={prefixPattern}){radixPattern}(?={suffixPattern})";
+			string result = $"(?<={prefixPattern}){radixPattern}(?={suffixPattern})";
 			return result;
 		}
 
@@ -500,8 +500,8 @@ namespace Mtgdb.Gui
 			{
 				if (token.Next == null ||
 					!token.Next.TouchesCaret(token.Position + token.Value.Length) ||
-					token.Type.Is(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCjk() ||
-					token.Next.Type.Is(TokenType.FieldValue) && token.Next.Value[0].IsCjk())
+					token.Type.Is(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
+					token.Next.Type.Is(TokenType.FieldValue) && token.Next.Value[0].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
@@ -524,8 +524,8 @@ namespace Mtgdb.Gui
 			{
 				if (token.Previous == null ||
 					!token.Previous.TouchesCaret(token.Position) ||
-					token.Type.Is(TokenType.FieldValue) && token.Value[0].IsCjk() ||
-					token.Previous.Type.Is(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCjk())
+					token.Type.Is(TokenType.FieldValue) && token.Value[0].IsCj() ||
+					token.Previous.Type.Is(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
@@ -547,14 +547,22 @@ namespace Mtgdb.Gui
 			foreach (var token in tokens)
 			{
 				if (token.Type.Is(TokenType.AnyChar))
-					pattern.Append(@"\w");
+				{
+					pattern.Append(MtgdbTokenizerPatterns.WPattern);
+				}
 				else if (token.Type.Is(TokenType.AnyString))
-					pattern.Append(@"\w*");
+					pattern.Append(MtgdbTokenizerPatterns.WPattern + "*");
 				else if (token.Type.Is(TokenType.FieldValue))
 				{
 					string luceneUnescaped = StringEscaper.Unescape(token.Value);
-					string regexEscaped = Regex.Escape(luceneUnescaped);
-					pattern.Append(regexEscaped);
+
+					foreach (char c in luceneUnescaped)
+					{
+						if (c == '-')
+							pattern.Append("(-|−)");
+						else
+							pattern.Append(Regex.Escape(new string(c, 1)));
+					}
 				}
 			}
 

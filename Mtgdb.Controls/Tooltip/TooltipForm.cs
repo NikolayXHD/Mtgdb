@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Lucene.Net.Contrib;
 
 namespace Mtgdb.Controls
 {
@@ -57,22 +56,6 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.KeyDown += text_keyDown;
 			_tooltipTextbox.LostFocus += text_lostFocus;
 
-			_titleTextbox = new FixedRichTextBox
-			{
-				Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
-				ReadOnly = true,
-				TabStop = false,
-				ScrollBars = RichTextBoxScrollBars.None,
-				WordWrap = true,
-				Size = new Size(Width - TextPadding*2, Height - TextPadding*2),
-				Location = new Point(TextPadding, TextPadding),
-				Margin = new Padding(TextPadding),
-				BackColor = BackColor,
-				BorderStyle = BorderStyle.None,
-				HideSelection = true,
-				Font = new Font(new FontFamily("Tahoma"), 8.25f, FontStyle.Bold)
-			};
-
 			panel.Controls.Add(_tooltipTextbox);
 
 			_tooltipFocusTarget = new Control
@@ -102,7 +85,7 @@ namespace Mtgdb.Controls
 			_buttonClose.BringToFront();
 			_buttonClose.Visible = false;
 
-			this.Resize += resize;
+			Resize += resize;
 
 			Show();
 		}
@@ -158,7 +141,7 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionStart = 0;
 			_tooltipTextbox.SelectionLength = 0;
 
-			var size = measureTooltip(tooltip, titleFont);
+			var size = measureTooltip(tooltip);
 			var bounds = allocateTooltip(size, tooltip.Control.RectangleToScreen(tooltip.ObjectBounds));
 
 			if (_tooltipTextbox.Focused)
@@ -338,7 +321,7 @@ namespace Mtgdb.Controls
 			return rectangle;
 		}
 
-		private Size measureTooltip(TooltipModel tooltip, Font titleFont)
+		private Size measureTooltip(TooltipModel tooltip)
 		{
 			string measuredContentText;
 			if (!string.IsNullOrEmpty(tooltip.Title) && !string.IsNullOrEmpty(tooltip.Text))
@@ -353,26 +336,36 @@ namespace Mtgdb.Controls
 				TextFormatFlags.TextBoxControl |
 				TextFormatFlags.WordBreak;
 
+			var graphics = _tooltipTextbox.CreateGraphics();
+
 			Size titleSize;
 			if (string.IsNullOrEmpty(tooltip.Title))
 				titleSize = new Size(0, 0);
 			else
-				titleSize = TextRenderer.MeasureText(_titleTextbox.CreateGraphics(), tooltip.Title, titleFont, _tooltipTextbox.Size, formatFlags);
+				titleSize = TextRenderer.MeasureText(
+					graphics,
+					tooltip.Title,
+					new Font(_tooltipTextbox.Font, FontStyle.Bold),
+					_tooltipTextbox.Size,
+					formatFlags);
 
 			Size contentSize;
 			if (string.IsNullOrEmpty(measuredContentText))
 				contentSize = new Size(0, 0);
 			else
-				contentSize = TextRenderer.MeasureText(_tooltipTextbox.CreateGraphics(),
+			{
+				contentSize = TextRenderer.MeasureText(
+					graphics,
 					measuredContentText,
 					_tooltipTextbox.Font,
 					_tooltipTextbox.Size,
 					formatFlags);
+			}
 
 			int contentWidth = Math.Max(titleSize.Width, contentSize.Width);
 
-			// строки из иероглифов недополучают при измерении
-			int cjkTermH = tooltip.Text.IsCjk() ? 16 : 0;
+			// СЃС‚СЂРѕРєРё РёР· РёРµСЂРѕРіР»РёС„РѕРІ РЅРµРґРѕРїРѕР»СѓС‡Р°СЋС‚ РїСЂРё РёР·РјРµСЂРµРЅРёРё
+			int cjkTermH = tooltip.Text.IsCjk() ? 32 : 0;
 			int cjkTermV = tooltip.Text.IsCjk() ? 6 : 0;
 
 			if (Clickable)
@@ -501,7 +494,6 @@ namespace Mtgdb.Controls
 		private int _selectionStart;
 		private bool _selectionManual;
 		private readonly FixedRichTextBox _tooltipTextbox;
-		private readonly FixedRichTextBox _titleTextbox;
 		private readonly Control _tooltipFocusTarget;
 		private readonly Button _buttonClose;
 

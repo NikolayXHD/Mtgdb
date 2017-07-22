@@ -115,5 +115,11 @@
 	},
 	"Mons's Goblin Waiters": {
 		"GeneratedMana": "{R}"
+	},
+	"Jaraku the Interloper": {
+		"FlipDuplicate": true
+	},
+	"Scarmaker": {
+		"FlipDuplicate": true
 	}
 }

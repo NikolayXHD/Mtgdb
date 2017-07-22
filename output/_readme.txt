@@ -36,3 +36,7 @@ see more at http://www.slightlymagic.net/forum/viewforum.php?f=26
 === I already have card images somewhere on my PC. How do I make Mtgdb.Gui use them? ===
 
 Edit the configuration file \etc\Mtgdb.Gui.xml
+
+=== More help ===
+
+Use help menu in window header to get help on specific topics.

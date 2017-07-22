@@ -37,12 +37,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\Cjk.cs">
-      <Link>Cjk.cs</Link>
-    </Compile>
-    <Compile Include="..\Lucene.Net.Contrib\EditedTokenLocator\EnumerableExtensions.cs">
-      <Link>EnumerableExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
@@ -53,6 +47,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ButtonSubsystem\Popup.cs" />
+    <Compile Include="Cjk.cs" />
     <Compile Include="Contract\CardClickEventArgs.cs" />
     <Compile Include="Contract\CustomDrawArgs.cs" />
     <Compile Include="Contract\FieldSortInfo.cs" />
@@ -61,6 +56,7 @@
     <Compile Include="CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
     <Compile Include="LayoutView\CustomVScroll.cs">

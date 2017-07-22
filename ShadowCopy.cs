@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Mtgdb
 {
+	[Localizable(false)]
 	internal static class ShadowCopy
 	{
 		private static readonly Regex _invalidChar = new Regex("[\x00\x0a\x0d]", RegexOptions.Compiled);
@@ -101,13 +103,9 @@ namespace Mtgdb
 		{
 			string dirName = AppDir.BinVersion.LastPathSegment();
 
-			return Str.Equals(dirName, @"debug")
-				|| Str.Equals(dirName, @"release")
-				|| Str.Equals(dirName, @"debug-proto")
-				|| Str.Equals(dirName, @"release-proto")
-				|| Str.Equals(dirName, @"debug-test")
-				|| Str.Equals(dirName, @"release-test")
-				|| AppDir.BinVersion == AppDir.BinShadowCopy;
+			return dirName.IndexOf("debug", Str.Comparison) >= 0 ||
+			       dirName.IndexOf("release", Str.Comparison) >= 0 ||
+			       AppDir.BinVersion == AppDir.BinShadowCopy;
 		}
 
 		private static void copyRecursively(string sourcePath, string targetPath)

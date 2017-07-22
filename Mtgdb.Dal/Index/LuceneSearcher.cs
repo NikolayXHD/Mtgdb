@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
@@ -27,8 +27,7 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.2 -> 0.3 new sets
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.3");
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.4");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
@@ -74,9 +73,9 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		private static StandardAnalyzer createAnalyzer()
+		private static Analyzer createAnalyzer()
 		{
-			return new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
+			return new MtgdbAnalyzer();
 		}
 
 		private static NumericAwareQueryParser createParser(string language)
@@ -124,9 +123,13 @@ namespace Mtgdb.Dal.Index
 
 			var searchResult = _searcher.Search(query, _searcher.MaxDoc);
 			
-			var searchRankById = Enumerable.Range(0, searchResult.ScoreDocs.Length)
-				.ToDictionary(i => searchResult.ScoreDocs[i].GetId(_searcher));
-			
+			var searchRankLookup = Enumerable.Range(0, searchResult.ScoreDocs.Length)
+				.GroupBy(i => searchResult.ScoreDocs[i].GetId(_searcher))
+				.ToDictionary(gr=>gr.Key, gr=>gr.ToList());
+
+			//var badIds = searchRankLookup.Where(_ => _.Value.Count > 1).ToArray();
+
+			var searchRankById = searchRankLookup.ToDictionary(_ => _.Key, _ => _.Value.Min());
 			return new SearchResult(searchRankById, highlightTerms);
 		}
 

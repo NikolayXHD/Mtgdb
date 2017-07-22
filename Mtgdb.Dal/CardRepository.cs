@@ -89,6 +89,10 @@ namespace Mtgdb.Dal
 						preProcessCard(card);
 					}
 
+					for (int i = set.Cards.Count - 1; i >= 0; i--)
+						if (set.Cards[i].Remove)
+							set.Cards.RemoveAt(i);
+
 					// после preProcessCard, чтобы было заполено поле NameNormalized
 					set.CardsByName = set.Cards.GroupBy(_ => _.NameNormalized)
 						.ToDictionary(
@@ -187,6 +191,12 @@ namespace Mtgdb.Dal
 			card.PowerNum = getPower(card.Power);
 			card.ToughnessNum = getPower(card.Toughness);
 			card.LoyaltyNum = getLoyalty(card.Loyalty);
+
+			if (card.TextEn != null)
+				card.TextEn = GathererExtractorCsvParser.IncompleteChaosPattern.Replace(card.TextEn, "{CHAOS}");
+
+			if (card.FlavorEn != null)
+				card.FlavorEn = GathererExtractorCsvParser.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
 		}
 
 		private static float? getPower(string power)

@@ -13,7 +13,7 @@ namespace Mtgdb.Controls
 				original.Width - 2 * frame.Width,
 				original.Height - 2 * frame.Height);
 
-			size = zoom(croppedSize, size);
+			size = croppedSize.ZoomTo(size);
 
 			var result = new Bitmap(size.Width, size.Height);
 
@@ -36,7 +36,7 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		private static Size zoom(Size originalSize, Size viewPortSize)
+		public static Size ZoomTo(this Size originalSize, Size viewPortSize)
 		{
 			var factor = Math.Min(
 				(float) viewPortSize.Width/originalSize.Width,
@@ -47,6 +47,24 @@ namespace Mtgdb.Controls
 				(int) Math.Round(originalSize.Height*factor));
 
 			return zoomed;
+		}
+
+		public static SizeF ZoomTo(this Size originalSize, SizeF viewPortSize)
+		{
+			var factor = Math.Min(
+				viewPortSize.Width / originalSize.Width,
+				viewPortSize.Height / originalSize.Height);
+
+			var zoomed = new SizeF(
+				originalSize.Width * factor,
+				originalSize.Height * factor);
+
+			return zoomed;
+		}
+
+		public static Rectangle ZoomTo(this Size original, Rectangle viewPort)
+		{
+			return new Rectangle(viewPort.Location, original.ZoomTo(viewPort.Size));
 		}
 
 		public static Bitmap SetOpacity(this Bitmap image, float opacity)

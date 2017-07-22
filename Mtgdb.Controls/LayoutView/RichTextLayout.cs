@@ -104,10 +104,13 @@ namespace Mtgdb.Controls
 				}
 				else
 				{
-					var iconRect = new RectangleF(_x, _y, _lineHeight, _lineHeight);
+					var iconRect = new RectangleF(
+						new PointF(_x, _y),
+						token.Icon.Size.ZoomTo(new SizeF(float.MaxValue, _lineHeight)));
 					
 					if (!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{E}") &&
-						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}"))
+						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
+						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}"))
 					{
 						iconRect.Inflate(-0.5f, -0.5f);
 						iconRect.Offset(-0.35f, 0.5f);
@@ -250,7 +253,7 @@ namespace Mtgdb.Controls
 			if (richTextToken.Icon == null)
 				delta = getLineSize(text.Substring(richTextToken.Index, richTextToken.Length)).Width;
 			else
-				delta = _lineHeight;
+				delta = richTextToken.Icon.Size.ZoomTo(new SizeF(float.MaxValue, _lineHeight)).Width;
 
 			return delta;
 		}
