@@ -59,7 +59,7 @@
     <Compile Include="VersionComparer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj">
+    <ProjectReference Include="..\Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj">
       <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
       <Name>NConfiguration</Name>
     </ProjectReference>

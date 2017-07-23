@@ -296,7 +296,7 @@
       <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
       <Name>Mtgdb.Downloader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj">
+    <ProjectReference Include="..\Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj">
       <Project>{0fb12da2-a8bd-4bf7-8507-9eca5771fd3b}</Project>
       <Name>NConfiguration</Name>
     </ProjectReference>

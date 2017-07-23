@@ -19,7 +19,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "output", "output\output.shp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ version ]", "[ version ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ version ]", "[ version ]"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrib.SpellChecker", "SpellChecker\Contrib.SpellChecker.csproj", "{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lucene.Net.Contrib", "Lucene.Net.Contrib", "{0DE878BB-4070-4139-978A-883AC52E882F}"
 EndProject

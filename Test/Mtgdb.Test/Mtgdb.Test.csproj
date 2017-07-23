@@ -78,7 +78,7 @@
       <Project>{97545c6d-acd6-4a2c-84dd-cd91293cfbb6}</Project>
       <Name>Mtgdb.Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\NConfiguration\NConfiguration.csproj">
+    <ProjectReference Include="..\..\Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj">
       <Project>{0fb12da2-a8bd-4bf7-8507-9eca5771fd3b}</Project>
       <Name>NConfiguration</Name>
     </ProjectReference>
