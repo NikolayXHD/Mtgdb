@@ -1,3 +1,12 @@
+=== 2.0.7 ===
+
+* Prices were updated not using Gatherer Extractor as it currently
+fails to download prices.
+
+* Fixed bug when loading 2 Forge decks consecutively. 
+When first deck has sideboard the second deck cards were all shown in
+sideboard.
+
 === 2.0.6 ===
 
 * Fine-tuned tokenization for search string index. +,-,/,½ are not

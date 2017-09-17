@@ -36,6 +36,10 @@
       <HintPath>..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -74,6 +78,10 @@
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
       <Name>Mtgdb.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
+      <Project>{3229CA82-875D-4154-92B7-2F7C47678010}</Project>
+      <Name>Mtgdb.Downloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Gui\Mtgdb.Gui.csproj">
       <Project>{97545c6d-acd6-4a2c-84dd-cd91293cfbb6}</Project>
       <Name>Mtgdb.Gui</Name>
@@ -98,6 +106,7 @@
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
     <Compile Include="DeckFormattersTests.cs" />
     <Compile Include="Index\TestLoadingUtil.cs" />
+    <Compile Include="Price\PriceDownloaderTests.cs" />
     <Compile Include="WaifuScaler.cs" />
   </ItemGroup>
   <ItemGroup>

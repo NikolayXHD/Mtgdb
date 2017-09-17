@@ -150,10 +150,5 @@ namespace Mtgdb.Dal
 			yield return "es";
 			yield return "kr";
 		}
-
-		public float? PricingLow => _raw.PricingLow;
-		public float? PricingMid => _raw.PricingMid;
-		public float? PricingHigh => _raw.PricingHigh;
-		public string GeneratedMana => _raw.GeneratedMana;
 	}
 }

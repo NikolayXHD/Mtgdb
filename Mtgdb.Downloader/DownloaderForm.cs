@@ -50,6 +50,8 @@ namespace Mtgdb.Downloader
 			Closing += closing;
 			Load += load;
 			DoubleBuffered = true;
+
+			_imageDownloader.FileDownloaded += imageDownloaded;
 		}
 
 		public void CalculateProgress()
@@ -345,10 +347,16 @@ namespace Mtgdb.Downloader
 
 		private void suggestAbortImageDownloading(Button button)
 		{
-			_downloadingImages = true;
-
 			this.Invoke(delegate
 			{
+				_downloadingImages = true;
+
+				_progressBar.Value = 0;
+				_progressBar.Visible = true;
+
+				_labelProgress.Text = null;
+				_labelProgress.Visible = true;
+
 				button.Enabled = true;
 				button.Tag = button.Text;
 				button.Text = "Abort";
@@ -357,9 +365,12 @@ namespace Mtgdb.Downloader
 
 		private void suggestImageDownloading(Button button)
 		{
-			_downloadingImages = false;
 			this.Invoke(delegate
 			{
+				_downloadingImages = false;
+				_progressBar.Visible = false;
+				_labelProgress.Visible = false;
+
 				button.Text = (string) button.Tag;
 			});
 		}
@@ -379,6 +390,17 @@ namespace Mtgdb.Downloader
 		private void buttonDesktopShortcut(object sender, EventArgs e)
 		{
 			_installer.CreateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+		}
+
+		private void imageDownloaded()
+		{
+			this.Invoke(delegate
+			{
+				_progressBar.Maximum = _imageDownloader.TotalCount;
+				_progressBar.Value = Math.Min(_imageDownloader.DownloadedCount, _imageDownloader.TotalCount);
+
+				_labelProgress.Text = $"{_imageDownloader.DownloadedCount} / {_imageDownloader.TotalCount} files ready";
+			});
 		}
 	}
 }

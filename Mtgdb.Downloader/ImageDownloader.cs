@@ -13,6 +13,7 @@ namespace Mtgdb.Downloader
 		public ImageDownloader()
 		{
 			_megatools = new Megatools();
+			_megatools.FileDownloaded += fileDownloaded;
 		}
 
 		public void Download(string quality, IList<ImageDownloadProgress> allProgress)
@@ -22,6 +23,11 @@ namespace Mtgdb.Downloader
 				.ToArray();
 
 			Console.WriteLine("Found {0} directories for quality '{1}' in configuration", qualityProgress.Length, quality);
+
+			TotalCount = qualityProgress.Sum(_ => _.FilesOnline.Count);
+			CountInDownloadedDirs = 0;
+
+			FileDownloaded?.Invoke();
 
 			foreach (var progress in qualityProgress)
 			{
@@ -35,11 +41,16 @@ namespace Mtgdb.Downloader
 				if (alreadyDownloaded)
 				{
 					Console.WriteLine("[Skip] {0}", progress.MegaDir.Subdirectory);
+					CountInDownloadedDirs += progress.FilesOnline.Count;
 					continue;
 				}
 
 				string targetDirAbsolute = ImageDownloadProgressReader.GetTargetDirAbsolute(progress);
+
+				CountInDownloadedDirs += progress.FilesDownloaded.Count;
 				_megatools.Download(progress.MegaDir.Subdirectory, progress.MegaDir.Url, targetDirAbsolute);
+				CountInDownloadedDirs += progress.FilesOnline.Count - progress.FilesDownloaded.Count;
+
 				ImageDownloadProgressReader.WriteExistingSignatures(progress);
 			}
 		}
@@ -111,5 +122,16 @@ namespace Mtgdb.Downloader
 			_abort = true;
 			_megatools.Abort();
 		}
+
+		private void fileDownloaded()
+		{
+			FileDownloaded?.Invoke();
+		}
+
+		private int CountInDownloadedDirs { get; set; }
+		public int DownloadedCount => CountInDownloadedDirs + _megatools.DownloadedCount;
+		public int TotalCount { get; private set; }
+
+		public event Action FileDownloaded;
 	}
 }

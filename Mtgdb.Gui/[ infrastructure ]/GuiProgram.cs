@@ -36,6 +36,7 @@ namespace Mtgdb.Gui
 			Kernel.Load<GuiModule>();
 
 			Kernel.Get<Installer>().MtgjsonFileUpdated += mtgjsonFileUpdated;
+			Kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
 			var formRoot = Kernel.Get<FormRoot>();
 			formRoot.NewTab();
@@ -47,6 +48,11 @@ namespace Mtgdb.Gui
 		{
 			Kernel.Get<LuceneSearcher>().InvalidateIndex();
 			Kernel.Get<KeywordSearcher>().InvalidateIndex();
+		}
+
+		private static void pricesDownloaded()
+		{
+			Kernel.Get<LuceneSearcher>().InvalidateIndex();
 		}
 
 		private static void threadException(object sender, ThreadExceptionEventArgs e)

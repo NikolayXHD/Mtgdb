@@ -208,6 +208,9 @@ namespace Mtgdb.Dal
 		public CardLocalization Localization { get; internal set; }
 
 		[JsonIgnore]
+		internal PriceValues PricesValues { get; set; }
+
+		[JsonIgnore]
 		public string Name => GetName(UiModel?.Language);
 
 		[JsonIgnore]
@@ -222,13 +225,13 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public float? PricingLow => Localization?.PricingLow;
+		public float? PricingLow => PricesValues?.Low;
 
 		[JsonIgnore]
-		public float? PricingMid => Localization?.PricingMid;
+		public float? PricingMid => PricesValues?.Mid;
 
 		[JsonIgnore]
-		public float? PricingHigh => Localization?.PricingHigh;
+		public float? PricingHigh => PricesValues?.High;
 
 		[JsonIgnore]
 		public float? PriceLow => PricingLow ?? PricingMid ?? PricingHigh;
@@ -602,6 +605,9 @@ namespace Mtgdb.Dal
 
 			if (cardDelta.FlipDuplicate)
 				Remove = TextEn != OriginalText;
+
+			if (cardDelta.MciNumber != null)
+				MciNumber = cardDelta.MciNumber;
 		}
 
 		internal bool Remove { get; private set; }
