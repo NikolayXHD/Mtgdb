@@ -87,9 +87,6 @@ namespace Mtgdb.Dal
 		public bool HasImage => ImageModel != null;
 
 		[JsonIgnore]
-		public bool IsMagicDuels { get; set; }
-
-		[JsonIgnore]
 		public float? PowerNum { get; internal set; }
 
 		[JsonIgnore]

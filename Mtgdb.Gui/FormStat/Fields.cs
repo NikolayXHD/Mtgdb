@@ -50,7 +50,6 @@ namespace Mtgdb.Gui
 			Builder.Get(nameof(Card.CollectionTotalHigh), c => c.CollectionTotalHigh),
 
 			Builder.Get(nameof(Card.IsSearchResult), c => c.IsSearchResult),
-			Builder.Get(nameof(Card.IsMagicDuels), c => c.IsMagicDuels),
 			Builder.Get(nameof(Card.HasImage), c => c.HasImage),
 
 			Builder.Get(nameof(Card.ReleaseMonth), c => c.ReleaseMonth),
@@ -92,7 +91,6 @@ namespace Mtgdb.Gui
 			nameof(Card.CollectionTotalHigh),
 
 			nameof(Card.IsSearchResult),
-			nameof(Card.IsMagicDuels),
 			nameof(Card.HasImage)
 		};
 	}

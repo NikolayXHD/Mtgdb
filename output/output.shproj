@@ -8,9 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="data\AllSets-x.json" />
-    <Content Include="data\banned_and_restricted.json" />
+    <Content Include="data\patch.json" />
     <Content Include="data\gatherer_extractor.csv" />
-    <Content Include="data\MagicDuelsCards.txt" />
     <Content Include="data\price.id.json" />
     <Content Include="data\price.json" />
     <Content Include="etc\Mtgdb.Gui.Display.xml" />

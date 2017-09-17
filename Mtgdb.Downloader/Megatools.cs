@@ -79,7 +79,10 @@ namespace Mtgdb.Downloader
 			if (string.IsNullOrEmpty(e.Data))
 				return;
 
-			Console.WriteLine(e.Data.Replace("ERROR: File already exists at ", "[Skip] "));
+			if (e.Data.StartsWith("ERROR: File already exists at "))
+				return;
+
+			Console.WriteLine(e.Data);
 		}
 
 		private void downloadOutputReceived(object sender, DataReceivedEventArgs e)

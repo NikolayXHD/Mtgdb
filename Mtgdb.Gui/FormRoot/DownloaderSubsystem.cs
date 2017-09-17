@@ -39,12 +39,13 @@ namespace Mtgdb.Gui
 			NeedToSuggestDownloader = notDownloaded > 0 && _config.Enabled != false;
 		}
 		
-		public void ShowDownloader(Form parent, bool auto)
+		public void ShowDownloader(Form owner, bool auto)
 		{
 			_downloaderForm.IsShownAutomatically = auto;
-			parent.Invoke(delegate
+			owner.Invoke(delegate
 			{
-				_downloaderForm.Show(parent);
+				_downloaderForm.SetWindowLocation(owner);
+				_downloaderForm.Show(owner);
 
 				if (!_downloaderForm.Focused)
 					_downloaderForm.Focus();

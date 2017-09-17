@@ -3,9 +3,15 @@
 * Prices were updated not using Gatherer Extractor as it currently
 fails to download prices.
 
-* Fixed bug when loading 2 Forge decks consecutively. 
+* Update window shows progress bar when downloading images
+
+* Fixed bug when loading 2 Forge decks consecutively.
 When first deck has sideboard the second deck cards were all shown in
 sideboard.
+
+* Removed card property IsMagicDuels because Magic Duels game is changing
+with time and the list of cards it supports needs to be maintained. I don't
+do it so the list gets obsolete.
 
 === 2.0.6 ===
 
