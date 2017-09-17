@@ -1,4 +1,5 @@
-﻿using Mtgdb.Dal.Index;
+﻿using System.Linq;
+using Mtgdb.Dal.Index;
 using Ninject.Modules;
 
 namespace Mtgdb.Dal
@@ -46,8 +47,13 @@ namespace Mtgdb.Dal
 				.InSingletonScope();
 
 			Kernel.Bind<PriceRepository>()
-				// Нужны разные экземпляры для чтения карт в программе и выкачивателе цен
-				.ToSelf();
+				.ToSelf()
+				.InSingletonScope();
+				
+
+			Kernel.Bind<DownloaderPriceRepository>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Mtgdb.Dal;
 using Ninject;
 using Ninject.Modules;
 
@@ -19,7 +20,8 @@ namespace Mtgdb.Downloader
 			Kernel.Bind<ImageDownloader>().ToSelf();
 			Kernel.Bind<ImageDownloadProgressReader>().ToSelf();
 
-			Kernel.Bind<PriceDownloader>().ToSelf()
+			Kernel.Bind<PriceDownloader>()
+				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<DownloaderForm>().ToSelf();

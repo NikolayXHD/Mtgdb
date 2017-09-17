@@ -8,7 +8,9 @@ namespace Mtgdb.Downloader
 {
 	public class PriceDownloader
 	{
-		public PriceDownloader(CardRepository repo, PriceRepository priceRepository)
+		public PriceDownloader(
+			CardRepository repo,
+			DownloaderPriceRepository priceRepository)
 		{
 			_repo = repo;
 			_client = new PriceClient();
@@ -17,13 +19,13 @@ namespace Mtgdb.Downloader
 
 		public void LoadPendingProgress()
 		{
-			_priceRepository.LoadPendingProgress();
+			_priceRepository.Load();
 		}
 
 		public void ResetPendingProgress()
 		{
 			_priceRepository.ResetPendingProgress();
-			_priceRepository.LoadPendingProgress();
+			_priceRepository.Load();
 		}
 
 		public void Download()
@@ -34,11 +36,27 @@ namespace Mtgdb.Downloader
 			if (!_priceRepository.IsLoadingComplete)
 				throw new InvalidOperationException("Price repository is not loaded");
 
+			if (_downloading)
+				throw new InvalidOperationException("Another price downloading is in progress");
+
+			_aborted = false;
+			_downloading = true;
+
 			downloadIds();
 			downloadPrices();
 
-			_priceRepository.CommitProgress();
-			PricesDownloaded?.Invoke();
+			if (!_aborted)
+			{
+				_priceRepository.CommitProgress();
+				PricesDownloaded?.Invoke();
+			}
+
+			_downloading = false;
+		}
+
+		public void Abort()
+		{
+			_aborted = true;
 		}
 
 		private void downloadIds()
@@ -50,6 +68,9 @@ namespace Mtgdb.Downloader
 				foreach (var set in sets)
 					foreach (var card in set.Cards)
 					{
+						if (_aborted)
+							return;
+
 						if (!_priceRepository.IsDefined(card) || _priceRepository.ContainsSid(card))
 							continue;
 
@@ -72,6 +93,9 @@ namespace Mtgdb.Downloader
 				foreach (var set in sets)
 					foreach (var card in set.Cards)
 					{
+						if (_aborted)
+							return;
+
 						if (!_priceRepository.IsDefined(card))
 							continue;
 
@@ -115,8 +139,11 @@ namespace Mtgdb.Downloader
 
 		private int? _definedCardsCount;
 
+		private bool _aborted;
+		private bool _downloading;
+
 		private readonly CardRepository _repo;
-		private readonly PriceRepository _priceRepository;
+		private readonly DownloaderPriceRepository _priceRepository;
 		private readonly PriceClient _client;
 	}
 }

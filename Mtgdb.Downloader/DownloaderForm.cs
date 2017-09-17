@@ -6,26 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using Mtgdb.Dal;
 using Mtgdb.Updater;
 
 namespace Mtgdb.Downloader
 {
 	public sealed partial class DownloaderForm : CustomBorderForm
 	{
-		private readonly Installer _installer;
-		private readonly ImageDownloader _imageDownloader;
-		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
-		private static readonly VersionComparer _versionComparer = new VersionComparer();
-
-		private bool _downloadingImages;
-		private bool _appVersionOnlineChecked;
-		private string _appVersionInstalled;
-		private string _appVersionOnline;
-		private string _appVersionDownloaded;
-		public IList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
-
-		public bool IsShownAutomatically { get; set; }
-
 		public DownloaderForm()
 		{
 			InitializeComponent();
@@ -34,25 +21,32 @@ namespace Mtgdb.Downloader
 		public DownloaderForm(
 			Installer installer,
 			ImageDownloader imageDownloader,
-			ImageDownloadProgressReader imageDownloadProgressReader)
+			ImageDownloadProgressReader imageDownloadProgressReader,
+			PriceDownloader priceDownloader,
+			PriceRepository priceRepository)
 			:this()
 		{
 			_installer = installer;
 			_imageDownloader = imageDownloader;
 			_imageDownloadProgressReader = imageDownloadProgressReader;
+			_priceDownloader = priceDownloader;
+			_priceRepository = priceRepository;
 
 			_buttonApp.Click += appClick;
 			_buttonImgLq.Click += imgLqClick;
 			_buttonImgMq.Click += imgMqClick;
 			_buttonImgArt.Click += imgArtClick;
 			_buttonsMtgjson.Click += mtgsonClick;
+			_buttonPrices.Click += pricesClick;
 			_buttonEditConfig.Click += editConfigClick;
 
 			Closing += closing;
 			Load += load;
 			DoubleBuffered = true;
 
-			_imageDownloader.FileDownloaded += imageDownloaded;
+			_imageDownloader.ProgressChanged += downloadImageProgressChanged;
+			_priceDownloader.SidAdded += downloadPricesProgressChanged;
+			_priceDownloader.PriceAdded += downloadPricesProgressChanged;
 		}
 
 		public void CalculateProgress()
@@ -99,7 +93,7 @@ namespace Mtgdb.Downloader
 				setButtonsEnabled(true);
 			});
 		}
-		
+
 		private void appClick(object sender, EventArgs e)
 		{
 			if (!_appVersionOnlineChecked)
@@ -346,6 +340,8 @@ namespace Mtgdb.Downloader
 			downloadImageClick(sender, ImageQuality.Art);
 		}
 
+
+
 		private void suggestAbortImageDownloading(Button button)
 		{
 			this.Invoke(delegate
@@ -382,35 +378,138 @@ namespace Mtgdb.Downloader
 			{
 				_buttonApp.Enabled =
 				_buttonsMtgjson.Enabled =
+				_buttonPrices.Enabled =
 				_buttonImgArt.Enabled =
 				_buttonImgLq.Enabled =
 				_buttonImgMq.Enabled = enabled;
 			});
 		}
 
+
+
 		private void buttonDesktopShortcut(object sender, EventArgs e)
 		{
 			_installer.CreateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 		}
 
-		private void imageDownloaded()
+		private void downloadImageProgressChanged()
 		{
 			this.Invoke(delegate
 			{
-				_progressBar.Maximum = _imageDownloader.TotalCount;
-				_progressBar.Value = Math.Min(_imageDownloader.DownloadedCount, _imageDownloader.TotalCount);
+				setProgress(
+					_imageDownloader.TotalCount,
+					_imageDownloader.DownloadedCount,
+					"{0} / {1} files ready");
+			});
+		}
 
-				_labelProgress.Text = $"{_imageDownloader.DownloadedCount} / {_imageDownloader.TotalCount} files ready";
+		private void setProgress(int total, int current, string messageFormat)
+		{
+			_progressBar.Maximum = total;
+			_progressBar.Value = Math.Min(current, total);
+			_labelProgress.Text = string.Format(messageFormat, current, total);
+		}
+
+
+		private void pricesClick(object sender, EventArgs e)
+		{
+			if (_downloadingPrices)
+			{
+				setButtonsEnabled(false);
+				_priceDownloader.Abort();
+				Console.WriteLine("Interrupting...");
+			}
+			else
+			{
+				ThreadPool.QueueUserWorkItem(_ =>
+				{
+					setButtonsEnabled(false);
+					suggestAbortPriceDownloading();
+					
+					Console.WriteLine("Downloading prices ...");
+
+					_priceDownloader.LoadPendingProgress();
+					_priceDownloader.Download();
+
+					Console.WriteLine("Done");
+
+					suggestPriceDownloading();
+					setButtonsEnabled(true);
+				});
+			}
+		}
+
+		private void suggestAbortPriceDownloading()
+		{
+			this.Invoke(delegate
+			{
+				var button = _buttonPrices;
+
+				_downloadingPrices = true;
+
+				_progressBar.Value = 0;
+				_progressBar.Visible = true;
+
+				_labelProgress.Text = null;
+				_labelProgress.Visible = true;
+
+				button.Enabled = true;
+				button.Tag = button.Text;
+				button.Text = "Abort";
+			});
+		}
+
+		private void suggestPriceDownloading()
+		{
+			this.Invoke(delegate
+			{
+				var button = _buttonPrices;
+
+				_downloadingPrices = false;
+				_progressBar.Visible = false;
+				_labelProgress.Visible = false;
+				
+				button.Text = (string)button.Tag;
+			});
+		}
+
+		private void downloadPricesProgressChanged()
+		{
+			this.Invoke(delegate
+			{
+				setProgress(
+					_priceDownloader.DefinedCardsCount * 2 - _priceRepository.SidCount,
+					_priceDownloader.SidCount + _priceDownloader.PricesCount - _priceRepository.SidCount,
+					"{0} / {1} operations done");
 			});
 		}
 
 		public void SetWindowLocation(Form owner)
 		{
-			this.StartPosition = FormStartPosition.Manual;
+			StartPosition = FormStartPosition.Manual;
 
-			this.Location = new Point(
-				owner.Left + (owner.Width - this.Width) / 2,
-				owner.Top + (owner.Height - this.Height) / 2);
+			Location = new Point(
+				owner.Left + (owner.Width - Width) / 2,
+				owner.Top + (owner.Height - Height) / 2);
 		}
+
+		public bool IsShownAutomatically { get; set; }
+
+
+
+		private readonly Installer _installer;
+		private readonly ImageDownloader _imageDownloader;
+		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
+		private readonly PriceDownloader _priceDownloader;
+		private readonly PriceRepository _priceRepository;
+		private static readonly VersionComparer _versionComparer = new VersionComparer();
+
+		private bool _downloadingImages;
+		private bool _downloadingPrices;
+		private bool _appVersionOnlineChecked;
+		private string _appVersionInstalled;
+		private string _appVersionOnline;
+		private string _appVersionDownloaded;
+		public IList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
 	}
 }

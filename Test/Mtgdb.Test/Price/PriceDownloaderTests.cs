@@ -21,7 +21,7 @@ namespace Mtgdb.Test
 		public void DownloadPrices()
 		{
 			var repo = _kernel.Get<CardRepository>();
-			var priceRepo = _kernel.Get<PriceRepository>();
+			var priceRepo = _kernel.Get<DownloaderPriceRepository>();
 
 			repo.LoadFile();
 			repo.Load();

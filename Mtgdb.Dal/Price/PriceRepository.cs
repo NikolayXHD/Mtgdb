@@ -12,22 +12,17 @@ namespace Mtgdb.Dal
 		{
 			var directory = AppDir.Data;
 
-			_priceFile = Path.Combine(directory, "price.json");
-			_priceFileInProgress = Path.Combine(directory, "price.inprogress.json");
-			_idFile = Path.Combine(directory, "price.id.json");
+			PriceFile = Path.Combine(directory, "price.json");
+			PriceFileInProgress = Path.Combine(directory, "price.inprogress.json");
+			IdFile = Path.Combine(directory, "price.id.json");
 		}
 
-		public void Load()
+		public virtual void Load()
 		{
-			load(_idFile, _priceFile);
+			Load(IdFile, PriceFile);
 		}
 
-		public void LoadPendingProgress()
-		{
-			load(_idFile, _priceFileInProgress);
-		}
-
-		private void load(string idFile, string priceFile)
+		protected void Load(string idFile, string priceFile)
 		{
 			IsLoadingComplete = false;
 
@@ -133,33 +128,6 @@ namespace Mtgdb.Dal
 			return _priceBySid[priceId.Sid];
 		}
 
-		public void ResetPendingProgress()
-		{
-			if (File.Exists(_priceFileInProgress))
-				File.Delete(_priceFileInProgress);
-		}
-
-		public void CommitProgress()
-		{
-			if (File.Exists(_priceFile))
-				File.Delete(_priceFile);
-
-			File.Move(_priceFileInProgress, _priceFile);
-		}
-
-		public FileStream AppendPriceInProgressStream()
-		{
-			var stream = new FileInfo(_priceFileInProgress).Open(FileMode.Append, FileAccess.Write, FileShare.None);
-			return stream;
-		}
-
-		public FileStream AppendPriceIdStream()
-		{
-			var stream = new FileInfo(_idFile).Open(FileMode.Append, FileAccess.Write, FileShare.None);
-			return stream;
-		}
-
-
 		private static IEnumerable<string> readJsonLines(string file)
 		{
 			var content = File.ReadAllText(file);
@@ -186,9 +154,9 @@ namespace Mtgdb.Dal
 		private Dictionary<string, Dictionary<string, PriceId>> _sidsBySetByCard;
 		private Dictionary<string, PriceValues> _priceBySid;
 		
-		private readonly string _priceFile;
-		private readonly string _priceFileInProgress;
-		private readonly string _idFile;
+		protected readonly string PriceFile;
+		protected readonly string PriceFileInProgress;
+		protected readonly string IdFile;
 
 		public bool IsLoadingComplete { get; private set; }
 	}
