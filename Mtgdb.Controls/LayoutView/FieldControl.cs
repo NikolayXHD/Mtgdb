@@ -145,6 +145,9 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool AllowSort { get; set; } = true;
 
+		[Category("Settings"), DefaultValue(true)]
+		public bool AllowSearch { get; set; } = true;
+
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked
 		{
@@ -210,6 +213,34 @@ namespace Mtgdb.Controls
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool IsSearchHotTracked
+		{
+			get { return _isSearchHotTracked; }
+			set
+			{
+				if (_isSearchHotTracked != value)
+				{
+					_isSearchHotTracked = value;
+					Invalid?.Invoke(this);
+				}
+			}
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool IsSearchVisible
+		{
+			get { return _isSearchVisible; }
+			set
+			{
+				if (_isSearchVisible != value)
+				{
+					_isSearchVisible = value;
+					Invalid?.Invoke(this);
+				}
+			}
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsSortVisible
 		{
 			get { return _isSortVisible; }
@@ -224,6 +255,7 @@ namespace Mtgdb.Controls
 		}
 
 
+
 		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;
 		private Image _image;
@@ -233,6 +265,10 @@ namespace Mtgdb.Controls
 		private bool _isHotTracked;
 		private bool _isSortHotTracked;
 		private bool _isSortVisible;
+
+		private bool _isSearchHotTracked;
+		private bool _isSearchVisible;
+		
 		private SortOrder _sortOrder;
 	}
 }

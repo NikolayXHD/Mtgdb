@@ -11,8 +11,8 @@ namespace Mtgdb.Gui
 
 		private readonly LuceneSpellchecker _spellchecker;
 
-		private SearhStringState _searchState;
-		public SearhStringState SearhStateCurrent { get; set; }
+		private SearchStringState _searchState;
+		public SearchStringState SearchStateCurrent { get; set; }
 
 		private string _language;
 		public string LanguageCurrent;
@@ -39,7 +39,7 @@ namespace Mtgdb.Gui
 
 		private void suggest()
 		{
-			_searchState = SearhStateCurrent;
+			_searchState = SearchStateCurrent;
 			_language = LanguageCurrent;
 
 			var suggest = _spellchecker.Suggest(_searchState.Text, _searchState.Caret, _language, SuggestCount);
@@ -54,16 +54,16 @@ namespace Mtgdb.Gui
 			if (_language != LanguageCurrent)
 				return false;
 
-			if (_searchState == null && SearhStateCurrent == null)
+			if (_searchState == null && SearchStateCurrent == null)
 				return true;
 
-			if (_searchState == null || SearhStateCurrent == null)
+			if (_searchState == null || SearchStateCurrent == null)
 				return false;
 
-			if (_searchState.Text != SearhStateCurrent.Text)
+			if (_searchState.Text != SearchStateCurrent.Text)
 				return false;
 			
-			if (_searchState.Caret != SearhStateCurrent.Caret)
+			if (_searchState.Caret != SearchStateCurrent.Caret)
 				return false;
 
 			return true;

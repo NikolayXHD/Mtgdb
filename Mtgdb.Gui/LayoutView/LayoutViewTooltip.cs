@@ -11,9 +11,10 @@ namespace Mtgdb.Gui
 		public event Action<TooltipModel> Show;
 		public event Action Hide;
 
-		public LayoutViewTooltip(LayoutView layoutView)
+		public LayoutViewTooltip(LayoutView layoutView, SearchStringSubsystem searchStringSubsystem)
 		{
 			_layoutView = layoutView;
+			_searchStringSubsystem = searchStringSubsystem;
 		}
 
 		public void SubscribeToEvents()
@@ -58,19 +59,53 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			Show?.Invoke(new TooltipModel
+			if (hitInfo.IsSortButton)
 			{
-				Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
-				ObjectBounds = hitInfo.FieldBounds.Value,
-				Control = _layoutView.Control,
-				Title = hitInfo.FieldName,
-				Text = _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName),
-				HighlightRanges = _layoutView.GetHiglightRanges(hitInfo.RowHandle, hitInfo.FieldName),
-				HighlightSettings = _layoutView.GetHighlightSettings(),
-				Clickable = true
-			});
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.sort",
+					ObjectBounds = _layoutView.GetSortButtonBounds(hitInfo),
+					Control = _layoutView.Control,
+					Title = "Sort by " + hitInfo.FieldName,
+					Text = "Click to sort by this field.\r\n\r\n" +
+					       "Shift+Click to ADD this field to sorting. Currently sorted fields will have higher sort priority.\r\n\r\n" +
+					       "Ctrl+Click to REMOVE this field from sorting. Other fields sort order will remain unchanged.\r\n\r\n" +
+					       "Repeated click on sort button cycles sort order between Ascending, Descending, None.",
+					Clickable = false
+				});
+			}
+			else if (hitInfo.IsSearchButton)
+			{
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
+					ObjectBounds = _layoutView.GetSearchButtonBounds(hitInfo),
+					Control = _layoutView.Control,
+					Title = "Add to search",
+					Text = "Click to EXTEND search result by cards matching this value\r\n" +
+					       "Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
+					       "Following term will be added to search text\r\n" +
+					       _searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)),
+					Clickable = false
+				});
+			}
+			else
+			{
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
+					ObjectBounds = hitInfo.FieldBounds.Value,
+					Control = _layoutView.Control,
+					Title = hitInfo.FieldName,
+					Text = _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName),
+					HighlightRanges = _layoutView.GetHiglightRanges(hitInfo.RowHandle, hitInfo.FieldName),
+					HighlightSettings = _layoutView.GetHighlightSettings(),
+					Clickable = true
+				});
+			}
 		}
 
 		private readonly LayoutView _layoutView;
+		private readonly SearchStringSubsystem _searchStringSubsystem;
 	}
 }

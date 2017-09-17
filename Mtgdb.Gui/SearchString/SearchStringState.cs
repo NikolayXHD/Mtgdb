@@ -1,8 +1,8 @@
 ﻿namespace Mtgdb.Gui
 {
-	public class SearhStringState
+	public class SearchStringState
 	{
-		public SearhStringState(string text, int caret)
+		public SearchStringState(string text, int caret)
 		{
 			Text = text;
 			Caret = caret;

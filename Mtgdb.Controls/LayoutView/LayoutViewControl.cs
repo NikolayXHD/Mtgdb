@@ -15,6 +15,7 @@ namespace Mtgdb.Controls
 		public event Action<object, CustomDrawArgs> CustomDrawField;
 		public event Action<object, int> RowDataLoaded;
 		public event Action<object> SortChanged;
+		public event Action<object, SearchArgs> SearchClicked;
 
 		public LayoutViewControl()
 		{
@@ -93,15 +94,41 @@ namespace Mtgdb.Controls
 
 					if (field.IsSortVisible)
 					{
-						var sortIcon = SortOptions.GetSortIcon(field);
-						if (sortIcon != null)
+						var icon = SortOptions.GetIcon(field);
+						if (icon != null)
 						{
-							var sortIconBounds = SortOptions.GetSortButtonBounds(field, card);
-							e.Graphics.DrawImageUnscaled(sortIcon, sortIconBounds.Location);
+							var iconBounds = SortOptions.GetButtonBounds(field, card);
+							e.Graphics.DrawImageUnscaled(icon, iconBounds.Location);
+						}
+					}
+
+					if (field.IsSearchVisible)
+					{
+						var icon = SearchOptions.GetIcon(field);
+						if (icon != null)
+						{
+							var iconBounds = SearchOptions.GetButtonBounds(field, card);
+							e.Graphics.DrawImageUnscaled(icon, iconBounds.Location);
 						}
 					}
 				}
 			}
+		}
+
+		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
+		{
+			if (hitInfo.Card == null || hitInfo.Field == null)
+				return Rectangle.Empty;
+
+			return SearchOptions.GetButtonBounds(hitInfo.Field, hitInfo.Card);
+		}
+
+		public Rectangle GetSortButtonBounds(HitInfo hitInfo)
+		{
+			if (hitInfo.Card == null || hitInfo.Field == null)
+				return Rectangle.Empty;
+
+			return SortOptions.GetButtonBounds(hitInfo.Field, hitInfo.Card);
 		}
 
 		public void RefreshData()
@@ -311,15 +338,22 @@ namespace Mtgdb.Controls
 			{
 				_hitInfo.Field.IsHotTracked = true;
 				_hitInfo.Field.IsSortHotTracked = _hitInfo.IsSortButton;
+				_hitInfo.Field.IsSearchHotTracked = _hitInfo.IsSearchButton;
 			}
 
 			if (prevHitInfo?.Card != null && prevHitInfo.Card != _hitInfo.Card)
 				foreach (var field in prevHitInfo.Card.Fields)
+				{
 					field.IsSortVisible = false;
+					field.IsSearchVisible = false;
+				}
 
 			if (_hitInfo.Card != null)
 				foreach (var field in _hitInfo.Card.Fields)
-					field.IsSortVisible = SortOptions.AllowSort && field.AllowSort  && (field.IsHotTracked || field.SortOrder != SortOrder.None);
+				{
+					field.IsSortVisible = SortOptions.Allow && field.AllowSort  && (field.IsHotTracked || field.SortOrder != SortOrder.None);
+					field.IsSearchVisible = SearchOptions.Allow && field.AllowSearch && field.IsHotTracked;
+				}
 		}
 
 		private void mouseClick(object sender, MouseEventArgs e)
@@ -328,73 +362,83 @@ namespace Mtgdb.Controls
 				return;
 
 			var hitInfo = CalcHitInfo(e.Location);
-			if (!hitInfo.IsSortButton)
-				return;
-
-			int sortIndex;
-			FieldSortInfo sortInfo;
-
-			if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out sortIndex))
+			if (hitInfo.IsSearchButton)
 			{
-				sortIndex = -1;
-				sortInfo = null;
+				SearchClicked?.Invoke(this,
+					new SearchArgs
+					{
+						FieldName = hitInfo.FieldName,
+						FieldValue = GetText(hitInfo.RowHandle, hitInfo.FieldName),
+						UseAndOperator = ModifierKeys == Keys.Shift
+					});
 			}
-			else
-				sortInfo = _sortInfos[sortIndex];
-
-
-			if (ModifierKeys == Keys.None)
+			if (hitInfo.IsSortButton)
 			{
-				_sortInfos.Clear();
-				_sortIndexByField.Clear();
+				int sortIndex;
+				FieldSortInfo sortInfo;
 
-				if (sortInfo == null)
+				if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out sortIndex))
 				{
-					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+					sortIndex = -1;
+					sortInfo = null;
+				}
+				else
+					sortInfo = _sortInfos[sortIndex];
 
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-				}
-				else if (sortInfo.SortOrder == SortOrder.Ascending)
-				{
-					sortInfo.SortOrder = SortOrder.Descending;
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-				}
 
-				updateSort();
-				SortChanged?.Invoke(this);
-			}
-			else if (ModifierKeys == Keys.Shift)
-			{
-				if (sortInfo == null)
+				if (ModifierKeys == Keys.None)
 				{
-					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-				}
-				else if (sortInfo.SortOrder == SortOrder.Ascending)
-				{
-					sortInfo.SortOrder = SortOrder.Descending;
-				}
-				else if (sortInfo.SortOrder == SortOrder.Descending)
-				{
-					_sortInfos.RemoveAt(sortIndex);
-					_sortIndexByField.Remove(hitInfo.FieldName);
-				}
+					_sortInfos.Clear();
+					_sortIndexByField.Clear();
 
-				updateSort();
-				SortChanged?.Invoke(this);
-			}
-			else if (ModifierKeys == Keys.Control)
-			{
-				if (sortInfo != null)
-				{
-					_sortInfos.RemoveAt(sortIndex);
-					_sortIndexByField.Remove(hitInfo.FieldName);
+					if (sortInfo == null)
+					{
+						sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+
+						_sortInfos.Add(sortInfo);
+						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					}
+					else if (sortInfo.SortOrder == SortOrder.Ascending)
+					{
+						sortInfo.SortOrder = SortOrder.Descending;
+						_sortInfos.Add(sortInfo);
+						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					}
 
 					updateSort();
 					SortChanged?.Invoke(this);
+				}
+				else if (ModifierKeys == Keys.Shift)
+				{
+					if (sortInfo == null)
+					{
+						sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+						_sortInfos.Add(sortInfo);
+						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					}
+					else if (sortInfo.SortOrder == SortOrder.Ascending)
+					{
+						sortInfo.SortOrder = SortOrder.Descending;
+					}
+					else if (sortInfo.SortOrder == SortOrder.Descending)
+					{
+						_sortInfos.RemoveAt(sortIndex);
+						_sortIndexByField.Remove(hitInfo.FieldName);
+					}
+
+					updateSort();
+					SortChanged?.Invoke(this);
+				}
+				else if (ModifierKeys == Keys.Control)
+				{
+					if (sortInfo != null)
+					{
+						_sortInfos.RemoveAt(sortIndex);
+						_sortIndexByField.Remove(hitInfo.FieldName);
+
+						updateSort();
+						SortChanged?.Invoke(this);
+					}
 				}
 			}
 		}
@@ -477,9 +521,14 @@ namespace Mtgdb.Controls
 					hitInfo.Field = field;
 
 					hitInfo.IsSortButton =
-						SortOptions.AllowSort &&
+						SortOptions.Allow &&
 						hitInfo.Field.AllowSort &&
-						SortOptions.GetSortButtonBounds(field, card).Contains(location);
+						SortOptions.GetButtonBounds(field, card).Contains(location);
+
+					hitInfo.IsSearchButton =
+						SearchOptions.Allow &&
+						hitInfo.Field.AllowSearch &&
+						SearchOptions.GetButtonBounds(field, card).Contains(location);
 
 					return hitInfo;
 				}
@@ -551,8 +600,9 @@ namespace Mtgdb.Controls
 					if (row != null)
 					{
 						Cards[index].DataSource = row;
-						RowDataLoaded?.Invoke(this, rowHandle);
 						Cards[index].Visible = true;
+
+						RowDataLoaded?.Invoke(this, rowHandle);
 					}
 					else
 					{
@@ -587,7 +637,7 @@ namespace Mtgdb.Controls
 			int rowsCount = getRowsCount();
 			int result = rowHandle - CardIndex;
 
-			if (result < 0 || result >= columnsCount*rowsCount)
+			if (result < 0 || result >= columnsCount*rowsCount || !Cards[result].Visible)
 				return -1;
 
 			return result;
@@ -666,7 +716,9 @@ namespace Mtgdb.Controls
 		[TypeConverter(typeof (ExpandableObjectConverter))]
 		public SortOptions SortOptions { get; set; } = new SortOptions();
 
-
+		[Category("Settings")]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CardIndex

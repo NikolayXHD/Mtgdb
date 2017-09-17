@@ -30,8 +30,8 @@ namespace Mtgdb.Dal
 
 		public KeywordSearcher()
 		{
-			// 0.2 -> 0.3 new sets
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.4");
+			// new cards
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.5");
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 

@@ -33,8 +33,8 @@ namespace Mtgdb.Dal
 
 		public CardRepository(UiModel uiModel)
 		{
-			SetsFile = Path.Combine(AppDir.Data, "AllSets-x.json");
-			BannedAndRestrictedFile = Path.Combine(AppDir.Data, "patch.json");
+			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
+			BannedAndRestrictedFile = AppDir.Data.AddPath("patch.json");
 
 			Cards = new List<Card>();
 			

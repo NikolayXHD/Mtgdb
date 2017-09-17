@@ -42,9 +42,6 @@ namespace Mtgdb.Gui
 			_uiModel = uiModel;
 			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo);
 			
-			_toolTipController = tooltipController;
-			_tooltipViewCards = new LayoutViewTooltip(_viewCards);
-
 			beginRestoreSettings();
 
 			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo);
@@ -77,7 +74,11 @@ namespace Mtgdb.Gui
 				_panelIconSearch,
 				_listBoxSuggest,
 				_uiModel,
-				luceneSearcher);
+				luceneSearcher,
+				_viewCards);
+
+			_toolTipController = tooltipController;
+			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
 
 			var formZoomCard = new FormZoomImage(_cardRepo, imageRepo, imageCache);
 
@@ -229,6 +230,8 @@ namespace Mtgdb.Gui
 			_luceneSearcher.IndexingProgress += luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress += luceneSearcherIndexingProgress;
 			_luceneSearcher.Loaded += luceneSearcherLoaded;
+			_luceneSearcher.Disposed += luceneSearcherDisposed;
+
 
 			_keywordSearcher.Loaded += keywordSearcherLoaded;
 			_keywordSearcher.LoadingProgress += keywordSearcherLoadingProgress;
@@ -286,6 +289,7 @@ namespace Mtgdb.Gui
 			_luceneSearcher.IndexingProgress -= luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress -= luceneSearcherIndexingProgress;
 			_luceneSearcher.Loaded -= luceneSearcherLoaded;
+			_luceneSearcher.Disposed -= luceneSearcherDisposed;
 
 			_keywordSearcher.Loaded -= keywordSearcherLoaded;
 			_keywordSearcher.LoadingProgress -= keywordSearcherLoadingProgress;
@@ -303,18 +307,6 @@ namespace Mtgdb.Gui
 			_deckSerializationSubsystem.DeckSaved -= deckSaved;
 
 			Application.ApplicationExit -= applicationExit;
-		}
-
-		private void luceneSearcherLoaded()
-		{
-			this.Invoke(delegate
-			{
-				beginRestoreSettings();
-				_searchStringSubsystem.ApplyFind();
-				endRestoreSettings();
-
-				RunRefilterTask();
-			});
 		}
 
 		private readonly CardRepository _cardRepo;

@@ -1,9 +1,103 @@
+=== 2.1.2 ===
+
+* In search stirng curly braces {,} are considered normal word characters
+
+As a result a query ManaCost: \{W\} yields only the cards with ManaCost
+exactly equal to {W} instead of cards like {3}{W}, {W}{B} and etc.
+
+To control the precision of the query use * or ?. The query
+ManaCost: *\{W\}* will return all cards that contain {W} in their
+mana cost.
+
+Consider a query ManaCost: \{B\}???
+It returns cards with mana cost beginning with {B} and containing 1 more
+mana symbol after: {B}{B}, {B}{R}, and etc.
+
+Side note: as since 2.1.1 the indexes are packaged with the program
+no index rebuilding will be required.
+
+=== 2.1.1 ===
+
+* Tooltips on Sort and Search buttons
+
+* Eliminated the need to rebuild search indexes after
+- installing the program first time
+- installing new version with changed data like
+	1. cards from mtgjson.com 
+	2. prices
+
+The overall download size increased from ~40MB to ~70MB. I find it a reasonable
+cost to cutting ~6 minutes of waiting for the program to become fully functional.
+
+The indexes will still be rebuilt when you download new data yourself using
+update window.
+
+=== 2.1.0 ===
+
+* Added Search icon over card text
+
+When you hover a mouse over card text you can see a Search icon. It is in most cases
+followed by Sort icon.
+
+By clicking Search icon you modify the search text.
+For example, if you click Search icon over card's mana cost you will see
+something like
+	ManaCost: \{3\}\{W\}\{W\}
+added to your search string
+As a result the search result will only show cards that contain in mana cost {3}{W}{W}
+
+When you add more than one search terms you are ADDING more cards to search result.
+This is because when no logical operator such as AND, OR is used it is interpreted
+as OR in Lucene query language used in Search text.
+
+By Shift+Clicking Search button you can instead NARROW DOWN search result.
+It is achieved by adding terms with '+' operator which is almost equivalent to AND
+
+=== 2.0.9 ===
+
+Fixed collection report unreadility when it cannot be well fit into one screen.
+
+=== 2.0.8 ===
+
+* Statistics window
+	
+	1. Added 'collection price' report
+	
+	2. Added 'filter by search result' checkbox. Use it to see the price of only the part of your
+	deck or collection that match search criteria from the search result window.
+
+* Search text input
+
+	1. Fixed flickering in search input when text was ~100 characters or longer. It was usually
+	happening when pasting big chunks of text into search input.
+
+	2. Escaping special symbols when pasting into search input. 2004-11-20 converts to 2004\-11\-20
+	Without escaping 2004-11-20 gets interpreted as 2004 AND NOT 11 AND NOT 20
+
+		2a. Copy-pasting within search input does not involve escaping to avoid double-escaping
+	
+		2b. When pasting a text into search input it gets separated by whitespaces from the rest
+		of query to avoid field value to merge with field name of pasted text and vice-versa.
+
+	3. When pasting text from tooltip to search text it is converted to a valid field-value
+	query like ReleaseDate: 2004\-11\-20
+
+		3a. Allowed using $ in filter for number fields. Previously that would be considered
+		syntax error. That makes pasting a price from a tooltip to produce valid query
+		PricingMid: $1.50
+
+* Tooltips
+	1. Increased tooltip font
+	2. Added 'selectability' icon on selectable tootlips
+
 === 2.0.7 ===
+
+* Update window - added button to update prices
+
+* Update window shows progress bar when downloading images
 
 * Prices were updated not using Gatherer Extractor as it currently
 fails to download prices.
-
-* Update window shows progress bar when downloading images
 
 * Fixed bug when loading 2 Forge decks consecutively.
 When first deck has sideboard the second deck cards were all shown in
@@ -211,7 +305,7 @@ In a query ANDY first 3 chars were incorrectly highlighted as AND operator.
 
 	* AllowPartialCards
 	The purpose is to use window space effectively when the  window size is small.
-	If you want to see only cards that completely fit whithin the window set the
+	If you want to see only cards that completely fit within the window set the
 	option value to "False".
 
 	* CardSize
@@ -329,7 +423,7 @@ It brings 2 major improvments
 		
 		* Using wildcard syntax you can control whether you search by word's prefix, suffix or you need exact word
 			Subtype:(*ngel OR dem* OR human NOT rogue)
-		Previously the text was allways searched at any position whithin the word like if you entered *ange*
+		Previously the text was allways searched at any position within the word like if you entered *ange*
 		
 		* Fuzzy search:
 			nevniniral~
@@ -394,7 +488,7 @@ XMage deck format supported
 Windows XP compatibility
 
 === 1.3.5.9 ===
-Update from whithin the application. The update window can
+Update from within the application. The update window can
 * Download and install new version
 * Download images of selected quality
 * Download cards from mtgjson.com

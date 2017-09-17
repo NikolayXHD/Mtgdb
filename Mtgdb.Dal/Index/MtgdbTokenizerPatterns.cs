@@ -4,12 +4,12 @@ namespace Mtgdb.Dal.Index
 {
 	public static class MtgdbTokenizerPatterns
 	{
-		private static readonly string WStr = Regex.Escape(new string(MtgdbTokenizer.WChars));
+		private static readonly string _word = Regex.Escape(new string(MtgdbTokenizer.WordChars));
 
-		public static readonly Regex WPattern = new Regex($@"[\d\w{WStr}]",
+		public static readonly Regex Word = new Regex($@"[\d\w{_word}]",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		public static readonly Regex BPattern = new Regex($@"(^|$|[^\d\w{WStr}])",
+		public static readonly Regex Boundary = new Regex($@"(^|$|[^\d\w{_word}])",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	}
 }

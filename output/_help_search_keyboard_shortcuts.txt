@@ -1,0 +1,44 @@
+﻿Help on search text keyboard shortcuts
+
+=== Introduction ===
+
+	Searching is case-INsensitive
+
+	IMPORTANT: Searh result includes only exact matches to the words in query unless wildcard symbols are used.
+	a query 'angel OR demon' will not match words like 'angelic'.
+	
+	Wildcard symbols are: * - any characters or nothing, ? - any one character.
+	To find all words like 'smash', 'smashed', 'smashing' use query 'smash*'
+
+=== Search text keyboard shortcuts ===
+
+	* Show intellisense (a hint based on your input)
+	Ctrl+SPACE or Down arrow
+
+	* Select suggested value from intellisense
+	Up/down arrows to choose, ENTER to select
+	
+	* Hide intellisense
+	ESC
+	
+	* Apply modified search text
+	ENTER or wait 1 second
+	
+	* Intellisense on field name
+	Ctrl+SPACE when input caret is to the left of colon ':'
+	Ctrl+SPACE when search text is empty
+	
+	* Intellisense on textual value without specifying a field
+	Type something, press Ctrl+SPACE
+
+	* Intellisense on specific field's value
+	Type field name, type colon (:), hit Ctrl+SPACE
+	
+	* Erase one word
+	Ctrl+Backspace
+	
+	* Undo
+	Ctrl+Z or Alt+Left arrow
+	
+	* Redo
+	Ctrl+Y or Alt+Right arrow

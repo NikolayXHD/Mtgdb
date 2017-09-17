@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -539,7 +540,7 @@ namespace Mtgdb.Controls
 				var textTop = Height - (textSize.Height + SlopeSize.Height)/2;
 				var textBounds = new Rectangle(new Point(textLeft, textTop), textSize);
 
-				TextRenderer.DrawText(g, text, Font, textBounds, ForeColor, TextFormatFlags);
+				TextRenderer.DrawText(g, text, Font, textBounds, ForeColor, _textFormatFlags);
 			}
 
 			if (closeIcon != null)
@@ -698,7 +699,7 @@ namespace Mtgdb.Controls
 			var image = new Bitmap(100, 100);
 			var g = Graphics.FromImage(image);
 
-			var size = TextRenderer.MeasureText(g, text, Font, new Size(1024, 100), TextFormatFlags);
+			var size = TextRenderer.MeasureText(g, text, Font, new Size(1024, 100), _textFormatFlags);
 
 			return size;
 		}
@@ -706,6 +707,27 @@ namespace Mtgdb.Controls
 		public string GetDefaultText(int i)
 		{
 			return $"Tab no.{i + 1}";
+		}
+
+		protected override void OnLayout(LayoutEventArgs e)
+		{
+			if (IsLayoutSuspended())
+				return;
+
+			base.OnLayout(e);
+		}
+
+		public new void ResumeLayout()
+		{
+			base.ResumeLayout();
+			OnLayout(new LayoutEventArgs(this, null));
+		}
+
+		protected bool IsLayoutSuspended()
+		{
+			var property = typeof(Control).GetProperty("IsLayoutSuspended", BindingFlags.NonPublic | BindingFlags.Instance);
+			bool result = (bool) property.GetValue(this, null);
+			return result;
 		}
 
 
@@ -1031,6 +1053,6 @@ namespace Mtgdb.Controls
 		private bool _allowRemovingTabs = true;
 		private Bitmap _addIcon;
 
-		private static readonly TextFormatFlags TextFormatFlags = new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
+		private static readonly TextFormatFlags _textFormatFlags = new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
 	}
 }

@@ -1,0 +1,13 @@
+https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
+	I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
+
+http://sales.starcitygames.com/deckdatabase/index.php
+	deck searching page example
+
+http://www.mtgsalvation.com/forums/magic-fundamentals/other-magic-products/third-party-products/338741-best-inventory-software
+	multiple conditions of card
+	normal/foil
+	
+http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-mtg-inventory-manager	
+	draw simulator
+	import CSV files

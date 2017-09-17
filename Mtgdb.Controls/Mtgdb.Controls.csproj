@@ -52,6 +52,7 @@
     <Compile Include="Contract\CustomDrawArgs.cs" />
     <Compile Include="Contract\FieldSortInfo.cs" />
     <Compile Include="Contract\HitInfo.cs" />
+    <Compile Include="Contract\SearchArgs.cs" />
     <Compile Include="CursorHelper.cs" />
     <Compile Include="CustomPanel.cs">
       <SubType>Component</SubType>
@@ -59,6 +60,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
+    <Compile Include="LayoutView\ContentAlignmentRanges.cs" />
     <Compile Include="LayoutView\CustomVScroll.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -83,6 +85,7 @@
     <Compile Include="LayoutView\FieldControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="LayoutView\SearchOptions.cs" />
     <Compile Include="LayoutView\SortOptions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,6 +154,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\close_tab_hovered_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\selectable_transp_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

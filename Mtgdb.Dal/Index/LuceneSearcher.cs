@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
@@ -27,7 +28,7 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.4");
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.5" /*new prices*/);
 			Spellchecker = new LuceneSpellchecker();
 		}
 
@@ -43,6 +44,9 @@ namespace Mtgdb.Dal.Index
 			else
 				_index = createIndex(repository);
 			
+			if (_abort)
+				return;
+
 			_searcher = new IndexSearcher(_index);
 			
 			IsLoaded = true;
@@ -61,8 +65,16 @@ namespace Mtgdb.Dal.Index
 			using (var writer = new IndexWriter(index, createAnalyzer(), create: true, mfl: IndexWriter.MaxFieldLength.UNLIMITED))
 				foreach (var set in repository.SetsByCode.Values)
 				{
+					if (_abort)
+						return null;
+
 					foreach (var card in set.Cards)
+					{
+						if (_abort)
+							return null;
+
 						writer.AddDocument(card.ToDocument());
+					}
 
 					SetsAddedToIndex++;
 					IndexingProgress?.Invoke();
@@ -183,20 +195,47 @@ namespace Mtgdb.Dal.Index
 		public void InvalidateIndex()
 		{
 			_version.Invalidate();
+		}
+
+		public void InvalidateSpellcheckerIndex()
+		{
 			Spellchecker.Version.Invalidate();
 		}
 
 		public void Dispose()
 		{
+			abortLoading();
+			IsLoaded = false;
+
+			// Сначала Spellchecker, потому что он использует _index
+			Spellchecker.Dispose();
+
 			_searcher.Dispose();
 			_index.Dispose();
+
+			Disposed?.Invoke();
 		}
 
+		private void abortLoading()
+		{
+			if (!IsLoading)
+				return;
 
+			_abort = true;
+
+			while (IsLoading)
+				Thread.Sleep(100);
+
+			_abort = false;
+		}
+
+		public event Action Disposed;
 
 		private Directory _index;
 		private IndexSearcher _searcher;
 
 		private readonly IndexVersion _version;
+
+		private bool _abort;
 	}
 }

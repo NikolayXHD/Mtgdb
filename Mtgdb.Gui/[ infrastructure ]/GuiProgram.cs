@@ -35,7 +35,12 @@ namespace Mtgdb.Gui
 			Kernel.Load<DownloaderModule>();
 			Kernel.Load<GuiModule>();
 
-			Kernel.Get<Installer>().MtgjsonFileUpdated += mtgjsonFileUpdated;
+			var installer = Kernel.Get<Installer>();
+
+			installer.MtgjsonFileUpdated += mtgjsonFileUpdated;
+			installer.BeginInstall += beginInstall;
+			installer.EndInstall += endInstall;
+
 			Kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
 			var formRoot = Kernel.Get<FormRoot>();
@@ -46,8 +51,26 @@ namespace Mtgdb.Gui
 
 		private static void mtgjsonFileUpdated()
 		{
-			Kernel.Get<LuceneSearcher>().InvalidateIndex();
+			var luceneSearcher = Kernel.Get<LuceneSearcher>();
+
+			luceneSearcher.InvalidateIndex();
+			luceneSearcher.InvalidateSpellcheckerIndex();
+
 			Kernel.Get<KeywordSearcher>().InvalidateIndex();
+		}
+
+		private static void beginInstall()
+		{
+			var luceneSearcher = Kernel.Get<LuceneSearcher>();
+
+			while (luceneSearcher.IsLoading || luceneSearcher.Spellchecker?.IsLoading != false)
+				Thread.Sleep(100);
+
+			luceneSearcher.Dispose();
+		}
+
+		private static void endInstall()
+		{
 		}
 
 		private static void pricesDownloaded()

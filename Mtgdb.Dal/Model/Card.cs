@@ -409,6 +409,10 @@ namespace Mtgdb.Dal
 		[JsonProperty("imageName")]
 		public string ImageName { get; internal set; }
 
+		[JsonConverter(typeof(InternedStringConverter))]
+		[JsonProperty("layout")]
+		public string Layout { get; set; }
+
 		/*
 		/// <summary>
 		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.

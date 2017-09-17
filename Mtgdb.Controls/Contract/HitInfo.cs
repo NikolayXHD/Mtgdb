@@ -14,6 +14,7 @@ namespace Mtgdb.Controls
 		public string FieldName { get; set; }
 		public bool InBounds { get; set; }
 		public bool IsSortButton { get; set; }
+		public bool IsSearchButton { get; set; }
 
 		internal LayoutControl Card { get; set; }
 		internal FieldControl Field { get; set; }

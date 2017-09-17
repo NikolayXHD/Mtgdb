@@ -484,10 +484,10 @@ namespace Mtgdb.Gui
 				suffixNoValues && radixNoValues && prefixEndsCjk;
 
 			if (!prefixIsCjk)
-				prefixPattern = MtgdbTokenizerPatterns.BPattern + prefixPattern;
+				prefixPattern = MtgdbTokenizerPatterns.Boundary + prefixPattern;
 
 			if (!suffixIsCjk)
-				suffixPattern += MtgdbTokenizerPatterns.BPattern;
+				suffixPattern += MtgdbTokenizerPatterns.Boundary;
 
 			string result = $"(?<={prefixPattern}){radixPattern}(?={suffixPattern})";
 			return result;
@@ -548,10 +548,10 @@ namespace Mtgdb.Gui
 			{
 				if (token.Type.Is(TokenType.AnyChar))
 				{
-					pattern.Append(MtgdbTokenizerPatterns.WPattern);
+					pattern.Append(MtgdbTokenizerPatterns.Word);
 				}
 				else if (token.Type.Is(TokenType.AnyString))
-					pattern.Append(MtgdbTokenizerPatterns.WPattern + "*");
+					pattern.Append(MtgdbTokenizerPatterns.Word + "*");
 				else if (token.Type.Is(TokenType.FieldValue))
 				{
 					string luceneUnescaped = StringEscaper.Unescape(token.Value);

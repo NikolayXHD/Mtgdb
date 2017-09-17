@@ -10,38 +10,15 @@ namespace Mtgdb.Downloader
 {
 	public class Installer
 	{
-		private const string ExecutableFileName = "Mtgdb.Gui.exe";
-		public const string ShortcutFileName = "Mtgdb.Gui.lnk";
-
-		private static readonly HashSet<string> ProtectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
-		{
-			AppDir.GeneralConfigXml,
-			AppDir.DisplayConfigXml
-		};
-
-		private readonly AppSourceConfig _appSourceConfig;
-		private readonly MtgjsonSourceConfig _mtgjsonSourceConfig;
-		
-		private readonly string _updateAppDir;
-		private readonly string _appOnlineSignatureFile;
-		private readonly string _appDownloadedSignatureFile;
-		private readonly string _appInstalledVersionFile;
-		public FileSignature AppOnlineSignature { get; private set; }
-		public FileSignature AppDownloadedSignature { get; private set; }
-		private readonly WebClient _webClient;
-		private readonly Megatools _megatools;
-
-		public event Action MtgjsonFileUpdated;
-
 		public Installer(AppSourceConfig appSourceConfig, MtgjsonSourceConfig mtgjsonSourceConfig)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
-			_updateAppDir = Path.Combine(AppDir.Update, "app");
+			_updateAppDir = AppDir.Update.AddPath("app");
 			
 			_appOnlineSignatureFile = Path.Combine(_updateAppDir, Signer.SignaturesFile);
-			_appDownloadedSignatureFile = Path.Combine(AppDir.Update, Signer.SignaturesFile);
-			_appInstalledVersionFile = Path.Combine(AppDir.Update, "version.txt");
+			_appDownloadedSignatureFile = AppDir.Update.AddPath(Signer.SignaturesFile);
+			_appInstalledVersionFile = AppDir.Update.AddPath("version.txt");
 
 			AppDownloadedSignature = getAppDownloadedSignature();
 
@@ -120,8 +97,8 @@ namespace Mtgdb.Downloader
 				throw new InvalidOperationException("Cannot validate downloaded app. Online signature must be downloaded first");
 
 			var expectedSignature = AppOnlineSignature;
-			var appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
-			var appDownloaded = Path.Combine(AppDir.Update, expectedSignature.Path);
+			var appOnline = _updateAppDir.AddPath(expectedSignature.Path);
+			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
 
 			if (!File.Exists(appOnline))
 			{
@@ -134,8 +111,9 @@ namespace Mtgdb.Downloader
 
 			if (signatureMatch)
 			{
-				File.Copy(_appOnlineSignatureFile, _appDownloadedSignatureFile, true);
-				File.Copy(appOnline, appDownloaded, true);
+				move(appOnline, appDownloaded, overwrite: true);
+				move(_appOnlineSignatureFile, _appDownloadedSignatureFile, overwrite: true);
+
 				Console.WriteLine("Downloading complete.");
 
 				AppDownloadedSignature = getAppDownloadedSignature();
@@ -144,6 +122,14 @@ namespace Mtgdb.Downloader
 
 			Console.WriteLine("The downloaded file {0} is corrupted.", expectedSignature.Path);
 			return false;
+		}
+
+		private static void move(string appOnline, string appDownloaded, bool overwrite)
+		{
+			if (File.Exists(appDownloaded) && overwrite)
+				File.Delete(appDownloaded);
+
+			File.Move(appOnline, appDownloaded);
 		}
 
 		private static void ensureFileDeleted(string file)
@@ -158,20 +144,36 @@ namespace Mtgdb.Downloader
 		public void Install()
 		{
 			var expectedSignature = AppOnlineSignature;
-			var appDownloaded = Path.Combine(AppDir.Update, expectedSignature.Path);
+			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
 
-			Console.WriteLine("Extracting {0} to {1}", appDownloaded, AppDir.Root);
+			BeginInstall?.Invoke();
 
-			new FastZip().ExtractZip(
-				appDownloaded,
-				AppDir.Root,
-				FastZip.Overwrite.Prompt,
-				name => !ProtectedFiles.Contains(name),
-				null,
-				null,
-				true);
+			// to avoid slow replacement of many small files
+			// also to ensure index files were unlocked before we start unpacking
+			Directory.Delete(AppDir.Data.AddPath("index"), recursive: true);
 
-			writeInstalledVersion(expectedSignature.Path);
+			if (new SevenZip().Extract(appDownloaded, AppDir.Root, _protectedFiles))
+			{
+				EndInstall?.Invoke();
+				writeInstalledVersion(expectedSignature.Path);
+				CreateApplicationShortcut(AppDir.Root);
+				updateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
+				Console.WriteLine();
+				Console.WriteLine("Upgrade complete!");
+				Console.WriteLine("Restart Mtgdb.Gui to enjoy new version immediately :)");
+			}
+			else
+			{
+				Console.WriteLine();
+				Console.WriteLine($"Failed to extract new version files from {appDownloaded}.");
+				Console.WriteLine("I apologize. I hoped it will never happen, but here we are :(");
+				Console.WriteLine();
+				Console.WriteLine("However you should be able to run the current version normally.");
+				Console.WriteLine("If it's not the case you can");
+				Console.WriteLine("\t* Re-download and manually install Mtgdb.Gui");
+				Console.WriteLine("\t* Report the problem and get help at https://www.slightlymagic.net/forum/viewtopic.php?f=15&t=19298&sid=02dfce1282b368b1b8f40d452ac0af18");
+			}
 		}
 
 		private FileSignature getAppOnlineSignature()
@@ -202,7 +204,7 @@ namespace Mtgdb.Downloader
 			File.WriteAllText(_appInstalledVersionFile, version);
 		}
 
-		public void UpdateApplicationShortcut(string shortcutLocation)
+		private void updateApplicationShortcut(string shortcutLocation)
 		{
 			string shortcutPath = Path.Combine(shortcutLocation, ShortcutFileName);
 			if (File.Exists(shortcutPath))
@@ -250,5 +252,33 @@ namespace Mtgdb.Downloader
 				Console.WriteLine("Created shortcut {0}", shortcutPath);
 			}
 		}
+
+
+
+		public event Action MtgjsonFileUpdated;
+
+		public event Action BeginInstall;
+		public event Action EndInstall;
+
+		public const string ShortcutFileName = "Mtgdb.Gui.lnk";
+		private const string ExecutableFileName = "Mtgdb.Gui.exe";
+
+		private static readonly HashSet<string> _protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+		{
+			AppDir.GeneralConfigXml,
+			AppDir.DisplayConfigXml
+		};
+
+		private readonly AppSourceConfig _appSourceConfig;
+		private readonly MtgjsonSourceConfig _mtgjsonSourceConfig;
+
+		private readonly string _updateAppDir;
+		private readonly string _appOnlineSignatureFile;
+		private readonly string _appDownloadedSignatureFile;
+		private readonly string _appInstalledVersionFile;
+		public FileSignature AppOnlineSignature { get; private set; }
+		public FileSignature AppDownloadedSignature { get; private set; }
+		private readonly WebClient _webClient;
+		private readonly Megatools _megatools;
 	}
 }

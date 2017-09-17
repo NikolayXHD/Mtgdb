@@ -4,7 +4,7 @@ namespace Mtgdb
 {
 	public static class ComparableExtension
 	{
-		public static TVal WhithinRange<TVal>(this TVal value, TVal? min, TVal? max)
+		public static TVal WithinRange<TVal>(this TVal value, TVal? min, TVal? max)
 			where TVal : struct, IComparable<TVal>
 		{
 			if (min.HasValue && value.CompareTo(min.Value) < 0)

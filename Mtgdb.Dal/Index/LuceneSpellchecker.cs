@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
@@ -11,21 +12,6 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSpellchecker : IDisposable
 	{
-		private static readonly IntellisenseSuggest EmptySuggest = new IntellisenseSuggest(null, new string[0]);
-		
-		private Spellchecker _spellchecker;
-		private IndexReader _reader;
-		private readonly DamerauLevenstineDistance _stringDistance;
-		internal IndexVersion Version { get; }
-
-		public bool IsLoaded { get; private set; }
-		public bool IndexLoading { get; private set; }
-
-		public event Action IndexingProgress;
-
-		public int IndexedFields { get; private set; }
-		public int TotalFields { get; private set; }
-
 		public LuceneSpellchecker()
 		{
 			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.4");
@@ -53,7 +39,7 @@ namespace Mtgdb.Dal.Index
 
 		private Spellchecker createSpellchecker(Analyzer analyzer, IndexReader indexReader)
 		{
-			IndexLoading = true;
+			IsLoading = true;
 
 			Version.CreateDirectory();
 
@@ -63,14 +49,17 @@ namespace Mtgdb.Dal.Index
 			TotalFields = DocumentFactory.TextFields.Count;
 			foreach (string textField in DocumentFactory.TextFields)
 			{
-				spellChecker.IndexDictionary(new LuceneDictionary(indexReader, textField), analyzer);
+				if (_abort)
+					return null;
+
+				spellChecker.IndexDictionary(new LuceneDictionary(indexReader, textField), analyzer, () => _abort);
 
 				IndexedFields++;
-				IndexLoading = IndexedFields < TotalFields;
+				IsLoading = IndexedFields < TotalFields;
 				IndexingProgress?.Invoke();
 			}
 
-			IndexLoading = false;
+			IsLoading = false;
 
 			Version.SetIsUpToDate();
 			return spellChecker;
@@ -81,14 +70,14 @@ namespace Mtgdb.Dal.Index
 			var token = EditedTokenLocator.GetEditedToken(query, caret);
 
 			if (token == null || token.Type.Is(TokenType.ModifierValue))
-				return EmptySuggest;
+				return _emptySuggest;
 
 			string valuePart = token.Value.Substring(0, caret - token.Position);
 
 			if (token.Type.Is(TokenType.FieldValue))
 			{
 				if (!IsLoaded)
-					return EmptySuggest;
+					return _emptySuggest;
 
 				var values = SuggestValues(valuePart.ToLowerInvariant(), token.ParentField, language, maxCount);
 				return new IntellisenseSuggest(token, values);
@@ -102,7 +91,7 @@ namespace Mtgdb.Dal.Index
 					token,
 					new[] { "AND", "OR", "NOT", "&&", "||", "!", "+", "-" }.OrderByDescending(_ => _.Equals(token.Value)).ToArray());
 
-			return EmptySuggest;
+			return _emptySuggest;
 		}
 
 
@@ -207,8 +196,42 @@ namespace Mtgdb.Dal.Index
 
 		public void Dispose()
 		{
+			abortLoading();
+
+			IsLoaded = false;
 			_reader.Dispose();
 			_spellchecker.Dispose();
 		}
+
+		private void abortLoading()
+		{
+			if (!IsLoading)
+				return;
+
+			_abort = true;
+
+			while (IsLoading)
+				Thread.Sleep(100);
+
+			_abort = false;
+		}
+
+		public bool IsLoaded { get; private set; }
+		public bool IsLoading { get; private set; }
+
+		public event Action IndexingProgress;
+
+		public int IndexedFields { get; private set; }
+		public int TotalFields { get; private set; }
+
+
+
+		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
+
+		private Spellchecker _spellchecker;
+		private IndexReader _reader;
+		private readonly DamerauLevenstineDistance _stringDistance;
+		internal IndexVersion Version { get; }
+		private bool _abort;
 	}
 }

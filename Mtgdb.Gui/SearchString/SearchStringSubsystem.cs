@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
@@ -14,49 +15,18 @@ namespace Mtgdb.Gui
 {
 	public class SearchStringSubsystem
 	{
-		private readonly Form _parent;
-		private readonly SuggestModel _suggestModel;
-		private readonly RichTextBox _findEditor;
-		private readonly Panel _panelSearchIcon;
-		private readonly ListBox _listBoxSuggest;
-		private readonly UiModel _uiModel;
-		private readonly LuceneSearcher _searcher;
-
-		private string _appliedText;
-		private DateTime? _lastUserInput;
-		private readonly Thread _idleInputMonitoringThread;
-
-		public SearchResult SearchResult { get; private set; }
-		private readonly BindingList<string> _dataSource = new BindingList<string>();
-
-		private readonly SearchStringHighlighter _highligter;
-		private string _currentText = string.Empty;
-		
-		public event Action TextApplied;
-		public event Action TextChanged;
-		
-		public string AppliedText
-		{
-			get { return _appliedText; }
-			set
-			{
-				_appliedText = value;
-				_findEditor.Text = value;
-			}
-		}
-
-		public SearchStringSubsystem(Form parent, SuggestModel suggestModel, RichTextBox findEditor, Panel panelSearchIcon, ListBox listBoxSuggest, UiModel uiModel, LuceneSearcher searcher)
+		public SearchStringSubsystem(Form parent, SuggestModel suggestModel, RichTextBox findEditor, Panel panelSearchIcon, ListBox listBoxSuggest, UiModel uiModel, LuceneSearcher searcher, LayoutView viewCards)
 		{
 			_parent = parent;
 			_suggestModel = suggestModel;
 
 			_findEditor = findEditor;
 			_panelSearchIcon = panelSearchIcon;
-			//_findEditor.Properties.NullValuePrompt = Resources.FindEditor_Prompt;
 
 			_listBoxSuggest = listBoxSuggest;
 			_uiModel = uiModel;
 			_searcher = searcher;
+			_viewCards = viewCards;
 
 			_listBoxSuggest.Visible = false;
 			_listBoxSuggest.Height = 0;
@@ -72,6 +42,7 @@ namespace Mtgdb.Gui
 		{
 			_findEditor.KeyDown += findKeyDown;
 			_findEditor.KeyUp += findKeyUp;
+			
 			_findEditor.TextChanged += findTextChanged;
 			_findEditor.LocationChanged += findLocationChanged;
 
@@ -84,6 +55,7 @@ namespace Mtgdb.Gui
 			
 			_parent.KeyDown += parentKeyDown;
 			_uiModel.Form.LanguageChanged += languageChanged;
+			_viewCards.SearchClicked += gridSearchClicked;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -101,6 +73,7 @@ namespace Mtgdb.Gui
 			
 			_parent.KeyDown -= parentKeyDown;
 			_uiModel.Form.LanguageChanged -= languageChanged;
+			_viewCards.SearchClicked -= gridSearchClicked;
 		}
 
 		private static void findEditorMouseWheel(object sender, MouseEventArgs e)
@@ -231,9 +204,13 @@ namespace Mtgdb.Gui
 
 		private void findTextChanged(object sender, EventArgs e)
 		{
+			if (_highligter.HighlightingInProgress)
+				return;
+
 			_currentText = _findEditor.Text;
 
 			UpdateSuggestInput();
+
 			_highligter.Highlight();
 			TextChanged?.Invoke();
 		}
@@ -245,7 +222,7 @@ namespace Mtgdb.Gui
 
 		public void UpdateSuggestInput()
 		{
-			_suggestModel.SearhStateCurrent = new SearhStringState(_currentText, _findEditor.SelectionStart);
+			_suggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
 			_suggestModel.LanguageCurrent = _uiModel.Language;
 		}
 
@@ -262,7 +239,6 @@ namespace Mtgdb.Gui
 				ApplyFind();
 			}
 		}
-
 
 		private void findKeyDown(object sender, KeyEventArgs e)
 		{
@@ -320,33 +296,124 @@ namespace Mtgdb.Gui
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 			}
+			else if (e.KeyData == (Keys.Control | Keys.X) || e.KeyData == (Keys.Shift | Keys.Delete))
+			{
+				if (!string.IsNullOrEmpty(_findEditor.SelectedText))
+				{
+					Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
+					SendKeys.Send(@"{Delete}");
+				}
+
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
+			else if (e.KeyData == (Keys.Control | Keys.C) || e.KeyData == (Keys.Control | Keys.Insert))
+			{
+				if (!string.IsNullOrEmpty(_findEditor.SelectedText))
+					Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
+
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
 			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
 			{
 				if (Clipboard.ContainsText())
 				{
-					int selectionStart = _findEditor.SelectionStart;
-					int suffixStart = selectionStart + _findEditor.SelectionLength;
-					string text = _findEditor.Text;
+					string searchQuery = clipboardTextToQuery(Clipboard.GetText());
+					pasteSearchQuery(searchQuery);
+				}
 
-					var builder = new StringBuilder();
-					if (selectionStart >= 0)
-						builder.Append(text.Substring(0, selectionStart));
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
+		}
 
-					builder.Append(Clipboard.GetText().Replace(@"\r\n", @" ").Replace(@"\n", @" ").Replace(@"\r", @" "));
+		private void pasteSearchQuery(string searchQuery)
+		{
+			int selectionStart = _findEditor.SelectionStart;
+			int suffixStart = selectionStart + _findEditor.SelectionLength;
+			string text = _findEditor.Text;
 
-					int length = builder.Length;
+			var builder = new StringBuilder();
+			if (selectionStart >= 0)
+			{
+				string prefix = text.Substring(0, selectionStart);
+				builder.Append(prefix);
+				if (prefix.Length > 0 && !prefix.EndsWith(" ") && !searchQuery.StartsWith(" "))
+					builder.Append(' ');
+			}
 
-					if (suffixStart < text.Length)
-						builder.Append(text.Substring(suffixStart));
+			builder.Append(searchQuery);
 
+			int length = builder.Length;
 
-					_findEditor.Text = builder.ToString();
-					_findEditor.SelectionStart = length;
+			if (suffixStart < text.Length)
+			{
+				string suffix = text.Substring(suffixStart);
 
-					e.Handled = true;
-					e.SuppressKeyPress = true;
+				if (suffix.Length > 0 && !suffix.StartsWith(" ") && !searchQuery.EndsWith(" "))
+					builder.Append(' ');
+
+				builder.Append(suffix);
+			}
+
+			_findEditor.Text = builder.ToString();
+			_findEditor.SelectionStart = length;
+		}
+
+		private string clipboardTextToQuery(string text)
+		{
+			if (text.StartsWith(SearchStringMark))
+				return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
+
+			int endOfLine = text.IndexOf('\n');
+
+			if (endOfLine >= 0)
+			{
+				string fieldName = text.Substring(0, endOfLine).Trim();
+				
+				if (DocumentFactory.UserFields.Contains(fieldName))
+				{
+					string fieldValue = text.Substring(endOfLine);
+					return GetFieldValueQuery(fieldName, fieldValue);
 				}
 			}
+
+			return getValueQuery(text);
+		}
+
+		public string GetFieldValueQuery(string fieldName, string fieldValue)
+		{
+			return fieldName + ": " + getValueQuery(fieldValue);
+		}
+
+		private static string getValueQuery(string text)
+		{
+			var lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+			if (lines.Length == 0)
+				return string.Empty;
+
+			var builder = new StringBuilder();
+
+			if (lines.Length == 1 && lines[0].IndexOf(' ') < 0)
+				builder.Append(StringEscaper.Escape(lines[0]));
+			else if (lines.Length >= 1)
+			{
+				builder.Append('"');
+
+				for (int i = 0; i < lines.Length; i++)
+				{
+					if (i > 0)
+						builder.Append(' ');
+
+					builder.Append(StringEscaper.Escape(lines[i]));
+				}
+
+				builder.Append('"');
+			}
+
+			return builder.ToString();
 		}
 
 		private void findKeyUp(object sender, KeyEventArgs e)
@@ -400,7 +467,7 @@ namespace Mtgdb.Gui
 		private void applySuggestSelection(string selectedSuggest)
 		{
 			var token = _suggestModel.Token;
-			var editParts = _suggestModel.SearhStateCurrent;
+			var editParts = _suggestModel.SearchStateCurrent;
 
 			int left = token?.Position ?? editParts.Caret;
 			var length = token?.Value?.Length ?? 0;
@@ -490,5 +557,52 @@ namespace Mtgdb.Gui
 			if (_dataSource.Count == 0)
 				closeSuggest();
 		}
+
+		private void gridSearchClicked(object view, SearchArgs searchArgs)
+		{
+			string query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
+
+			if (searchArgs.UseAndOperator)
+				query = "+" + query;
+
+			pasteSearchQuery(query);
+			ApplyFind();
+		}
+
+
+		public string AppliedText
+		{
+			get { return _appliedText; }
+			set
+			{
+				_appliedText = value;
+				_findEditor.Text = value;
+			}
+		}
+
+		public event Action TextApplied;
+		public event Action TextChanged;
+
+		private const string SearchStringMark = "search: ";
+		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
+
+		private readonly Form _parent;
+		private readonly SuggestModel _suggestModel;
+		private readonly RichTextBox _findEditor;
+		private readonly Panel _panelSearchIcon;
+		private readonly ListBox _listBoxSuggest;
+		private readonly UiModel _uiModel;
+		private readonly LuceneSearcher _searcher;
+		private readonly LayoutView _viewCards;
+
+		private string _appliedText;
+		private DateTime? _lastUserInput;
+		private readonly Thread _idleInputMonitoringThread;
+
+		public SearchResult SearchResult { get; private set; }
+		private readonly BindingList<string> _dataSource = new BindingList<string>();
+
+		private readonly SearchStringHighlighter _highligter;
+		private string _currentText = string.Empty;
 	}
 }

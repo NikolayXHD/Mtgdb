@@ -18,16 +18,6 @@ namespace Mtgdb.Dal.Index
 		{
 		}
 
-		public NumericAwareQueryParser(ICharStream stream) : base(stream)
-		{
-		}
-
-		public NumericAwareQueryParser(QueryParserTokenManager tm) : base(tm)
-		{
-		}
-
-
-
 		public override Query Parse(string query)
 		{
 			if (NumericTerms != null)
@@ -47,7 +37,7 @@ namespace Mtgdb.Dal.Index
 				NumericTerms.Add(new Term(field, queryText));
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, queryText, float.TryParse, NumericRangeQuery.NewFloatRange);
+				return createRangeQuery<float>(field, queryText, tryParseFloat, NumericRangeQuery.NewFloatRange);
 
 			if (field.IsIntField())
 				return createRangeQuery<int>(field, queryText, int.TryParse, NumericRangeQuery.NewIntRange);
@@ -68,7 +58,7 @@ namespace Mtgdb.Dal.Index
 			}
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, query, float.TryParse, NumericRangeQuery.NewFloatRange);
+				return createRangeQuery<float>(field, query, tryParseFloat, NumericRangeQuery.NewFloatRange);
 
 			if (field.IsIntField())
 				return createRangeQuery<int>(field, query, int.TryParse, NumericRangeQuery.NewIntRange);
@@ -76,10 +66,18 @@ namespace Mtgdb.Dal.Index
 			return query;
 		}
 
+		private static bool tryParseFloat(string s, out float f)
+		{
+			if (s.StartsWith("$"))
+				return float.TryParse(s.Substring(1), out f);
+
+			return float.TryParse(s, out f);
+		}
+
 		protected override Query GetFuzzyQuery(string field, string termStr, float minSimilarity)
 		{
 			field = localize(field);
-			minSimilarity = minSimilarity.WhithinRange(0.001f, 0.999f);
+			minSimilarity = minSimilarity.WithinRange(0.001f, 0.999f);
 			return base.GetFuzzyQuery(field, termStr, minSimilarity);
 		}
 
@@ -123,22 +121,19 @@ namespace Mtgdb.Dal.Index
 		private static TVal? getValue<TVal>(string field, Parser<TVal> parser, string term) 
 			where TVal : struct, IComparable<TVal>
 		{
-			TVal? lowerValue = null;
-			if (isNumberSpecified(term))
-			{
-				TVal lower;
-				if (!parser(term, out lower))
-					throw new ParseException($"Non-numeric value '{term}' for numeric field {field}");
+			if (!isNumberSpecified(term))
+				return null;
 
-				lowerValue = lower;
-			}
+			TVal lower;
+			if (!parser(term, out lower))
+				throw new ParseException($"Non-numeric value '{term}' for numeric field {field}");
 
-			return lowerValue;
+			return lower;
 		}
 
 		private static bool isNumberSpecified(string term)
 		{
-			return !string.IsNullOrEmpty(term) && !NonSpecifiedNumer.Contains(term);
+			return !string.IsNullOrEmpty(term) && !_nonSpecifiedNubmer.Contains(term);
 		}
 
 		private string localize(string field)
@@ -154,7 +149,7 @@ namespace Mtgdb.Dal.Index
 		private delegate NumericRangeQuery<TVal> RangeQueryFactory<TVal>(string field, TVal? lower, TVal? upper, bool includeLower, bool includeUpper)
 			where TVal : struct, IComparable<TVal>;
 
-		private static readonly HashSet<string> NonSpecifiedNumer = new HashSet<string>
+		private static readonly HashSet<string> _nonSpecifiedNubmer = new HashSet<string>
 		{
 			"*",
 			"?"

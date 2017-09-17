@@ -8,6 +8,7 @@ namespace Mtgdb.Gui
 	class SearchStringHighlighter
 	{
 		private readonly RichTextBox _findEditor;
+		public bool HighlightingInProgress { get; private set; }
 
 		public SearchStringHighlighter(RichTextBox findEditor)
 		{
@@ -16,6 +17,10 @@ namespace Mtgdb.Gui
 
 		public void Highlight()
 		{
+			HighlightingInProgress = true;
+
+			_findEditor.Visible = false;
+
 			var start = _findEditor.SelectionStart;
 			var len = _findEditor.SelectionLength;
 			
@@ -40,6 +45,9 @@ namespace Mtgdb.Gui
 
 			_findEditor.SelectionStart = start;
 			_findEditor.SelectionLength = len;
+
+			_findEditor.Visible = true;
+			HighlightingInProgress = false;
 		}
 
 		private void setColor(int from, int len, Color? backColor, Color? foreColor, bool underline)

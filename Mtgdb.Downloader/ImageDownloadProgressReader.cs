@@ -7,7 +7,7 @@ namespace Mtgdb.Downloader
 {
 	public class ImageDownloadProgressReader
 	{
-		private static readonly string _updateImgDir = Path.Combine(AppDir.Update, "img");
+		private static readonly string _updateImgDir = AppDir.Update.AddPath("img");
 		private readonly ImageSourcesConfig _config;
 		private readonly Megatools _megatools;
 

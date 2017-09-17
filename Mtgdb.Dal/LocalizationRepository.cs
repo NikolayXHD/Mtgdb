@@ -28,7 +28,7 @@ namespace Mtgdb.Dal
 		public void LoadFile()
 		{
 			_parsers = _csvFiles
-				.Select(_ => new GathererExtractorCsvParser(File.ReadAllText(Path.Combine(AppDir.Data, _))))
+				.Select(_ => new GathererExtractorCsvParser(File.ReadAllText(AppDir.Data.AddPath(_))))
 				.ToArray();
 				
 			IsFileLoadingComplete = true;

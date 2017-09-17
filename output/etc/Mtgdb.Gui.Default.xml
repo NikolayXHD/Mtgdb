@@ -33,8 +33,8 @@
 
 	<AppSource
 		TargetDirectory="update"
-		FileListUrl="https://mega.nz/#F!I99nQCYZ!9U9o76XLIusZ1_C12YJD6g"
-		ZipUrl="https://mega.nz/#F!hgcCgThb!bbLL4ZRMjepY8aGohKythA" />
+		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
+		ZipUrl="https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg" />
 
 	<ImageSources>
 		<QualityGroup Quality="Art" TargetDirectory="images\Artworks" FileListUrl="https://mega.nz/#F!mgY1SSga!iP67fkG5mHQT23uYXwdP5g">

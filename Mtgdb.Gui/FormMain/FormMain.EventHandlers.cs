@@ -79,6 +79,26 @@ namespace Mtgdb.Gui
 			RunRefilterTask();
 		}
 
+
+
+
+		private void luceneSearcherLoaded()
+		{
+			this.Invoke(delegate
+			{
+				beginRestoreSettings();
+				_searchStringSubsystem.ApplyFind();
+				endRestoreSettings();
+
+				RunRefilterTask();
+			});
+		}
+
+		private void luceneSearcherDisposed()
+		{
+			this.Invoke(updateFormStatus);
+		}
+
 		private void luceneSearcherIndexingProgress()
 		{
 			this.Invoke(updateFormStatus);

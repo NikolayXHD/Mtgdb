@@ -15,7 +15,7 @@ rmdir /s /q %targetRoot%
 mkdir %targetRoot%
 mkdir %target%
 
-xcopy /r /d /i /y %output%\data %target%\data
+xcopy /r /d /i /y /E %output%\data %target%\data
 xcopy /r /d /i /y /E %output%\bin\%configuration% %targetBin%
 xcopy /r /d /i /y /E %output%\etc %target%\etc
 xcopy /r /d /i /y /E %output%\images %target%\images
@@ -37,5 +37,5 @@ cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuratio
 del /s /q %target%\*.vshost.*
 %output%\bin\%configuration%\Mtgdb.Util.exe -sign %target%\bin\v%version% -output %targetBin%\filelist.txt
 
-"c:\Program Files\7-Zip\7z.exe" a %target%.zip -tzip -ir!%target%\*
+"%output%\update\7z\7za.exe" a %target%.zip -tzip -ir!%target%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
 %output%\bin\%configuration%\Mtgdb.Util.exe -sign %target%.zip -output %targetRoot%\filelist.txt
