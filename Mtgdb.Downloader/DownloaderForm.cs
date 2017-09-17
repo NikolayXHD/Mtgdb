@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,7 +10,7 @@ using Mtgdb.Updater;
 
 namespace Mtgdb.Downloader
 {
-	public sealed partial class DownloaderForm : Form
+	public sealed partial class DownloaderForm : CustomBorderForm
 	{
 		private readonly Installer _installer;
 		private readonly ImageDownloader _imageDownloader;
@@ -65,10 +66,10 @@ namespace Mtgdb.Downloader
 
 			if (IsShownAutomatically)
 			{
-				Console.WriteLine("Using this window you can download card images. After downloading all images this window will stop showing up.");
-				Console.WriteLine("If you already have card images somewhere on your PC edit <ImageLocations /> section in configuration file.");
+				Console.WriteLine("Here you can download card images. After downloading images this window will stop showing up.");
+				Console.WriteLine("If you already have card images edit <ImageLocations /> section in configuration file.");
 				Console.WriteLine("To prevent showing this window set <SuggestImageDownloader Enabled=\"False\" />");
-				Console.WriteLine("To edit configuration file click 'Edit configuration' button...");
+				Console.WriteLine("To edit configuration click 'Edit configuration' button...");
 				Console.WriteLine();
 			}
 			
@@ -83,7 +84,7 @@ namespace Mtgdb.Downloader
 			e.Cancel = true;
 		}
 
-		private void editConfigClick(object sender, EventArgs e)
+		private static void editConfigClick(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start(AppDir.GeneralConfigXml);
 		}
@@ -401,6 +402,15 @@ namespace Mtgdb.Downloader
 
 				_labelProgress.Text = $"{_imageDownloader.DownloadedCount} / {_imageDownloader.TotalCount} files ready";
 			});
+		}
+
+		public void SetWindowLocation(Form owner)
+		{
+			this.StartPosition = FormStartPosition.Manual;
+
+			this.Location = new Point(
+				owner.Left + (owner.Width - this.Width) / 2,
+				owner.Top + (owner.Height - this.Height) / 2);
 		}
 	}
 }

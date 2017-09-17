@@ -22,10 +22,7 @@ namespace Mtgdb.Dal
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
 		private string SetsFile { get; }
-		private string MagicDuelsFile { get; }
 		private string BannedAndRestrictedFile { get; }
-
-		private List<Set> Sets { get; }
 
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
@@ -37,11 +34,9 @@ namespace Mtgdb.Dal
 		public CardRepository(UiModel uiModel)
 		{
 			SetsFile = Path.Combine(AppDir.Data, "AllSets-x.json");
-			MagicDuelsFile = Path.Combine(AppDir.Data, "MagicDuelsCards.txt");
-			BannedAndRestrictedFile = Path.Combine(AppDir.Data, "banned_and_restricted.json");
+			BannedAndRestrictedFile = Path.Combine(AppDir.Data, "patch.json");
 
 			Cards = new List<Card>();
-			Sets = new List<Set>();
 			
 			_uiModel = uiModel;
 		}
@@ -58,7 +53,6 @@ namespace Mtgdb.Dal
 		public void Load()
 		{
 			var serializer = new JsonSerializer();
-			var countInDuels = readMagicDuelsCards();
 			
 			Stream stream = new MemoryStream(_streamContent);
 			using (stream)
@@ -85,8 +79,7 @@ namespace Mtgdb.Dal
 						var card = set.Cards[i];
 						card.Set = set;
 						card.UiModel = _uiModel;
-						card.IsMagicDuels = countInDuels.Contains(card.NameEn) || card.TypeEn.StartsWith("Basic Land", Str.Comparison);
-
+						
 						preProcessCard(card);
 					}
 
@@ -102,10 +95,7 @@ namespace Mtgdb.Dal
 							Str.Comparer);
 
 					lock (SetsByCode)
-					{
 						SetsByCode.Add(set.Code, set);
-						Sets.Add(set);
-					}
 
 					lock (Cards)
 						foreach (var card in set.Cards)
@@ -252,16 +242,6 @@ namespace Mtgdb.Dal
 		private ImageModel selectCardImage(Card card, ImageRepository repository)
 		{
 			return repository.GetImageSmall(card, GetReleaseDate);
-		}
-
-		private HashSet<string> readMagicDuelsCards()
-		{
-			if (!File.Exists(MagicDuelsFile))
-				return new HashSet<string>();
-
-			var lines = File.ReadAllLines(MagicDuelsFile);
-			var result = new HashSet<string>(lines.Select(_ => _.Split(new[] { "\t" }, StringSplitOptions.RemoveEmptyEntries)[0]));
-			return result;
 		}
 
 		public List<ImageModel> GetImagesZoom(Card card, ImageRepository repository)
