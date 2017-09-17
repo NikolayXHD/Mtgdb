@@ -12,9 +12,9 @@ namespace Mtgdb.Dal
 		{
 			var directory = AppDir.Data;
 
-			PriceFile = Path.Combine(directory, "price.json");
-			PriceFileInProgress = Path.Combine(directory, "price.inprogress.json");
-			IdFile = Path.Combine(directory, "price.id.json");
+			PriceFile = directory.AddPath("price.json");
+			PriceFileInProgress = directory.AddPath("price.inprogress.json");
+			IdFile = directory.AddPath("price.id.json");
 		}
 
 		public virtual void Load()

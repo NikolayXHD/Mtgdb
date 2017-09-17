@@ -277,7 +277,7 @@ namespace Mtgdb.Gui
 					_luceneSearcher.SetsAddedToIndex,
 					_cardRepo.SetsByCode.Count);
 			}
-			else if (_luceneSearcher.Spellchecker.IndexLoading)
+			else if (_luceneSearcher.Spellchecker.IsLoading)
 			{
 				noInputText = string.Format(
 					Resources.Title_building_index,

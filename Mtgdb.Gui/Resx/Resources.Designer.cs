@@ -472,7 +472,7 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to pending index rebuild....
+        ///   Looks up a localized string similar to pending index load....
         /// </summary>
         internal static string Title_building_index_pending {
             get {

@@ -34,8 +34,15 @@ namespace Mtgdb.Dal
 		/// </summary>
 		public IList<Card> Cards { get; set; }
 
+		public string MkmName { get; set; }
+
 		[JsonIgnore]
 		public Dictionary<string, List<Card>> CardsByName { get; set; }
+
+		public override string ToString()
+		{
+			return $"{Code}: {Name}";
+		}
 
 		/*
 		/// <summary>

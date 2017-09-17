@@ -10,12 +10,11 @@ namespace Mtgdb.Downloader
 		public void Download(string name, string storageUrl, string targetDirectory)
 		{
 			if (_process != null)
-				throw new InvalidOperationException("Download is already running. Use another instance to start new download");
+				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
 
-			_targetDirectory = targetDirectory;
 			DownloadedCount = 0;
 
-			var megadlExePath = Path.Combine(AppDir.Update, @"megatools-1.9.98-win32\megadl.exe");
+			var megadlExePath = AppDir.Update.AddPath(@"megatools-1.9.98-win32\megadl.exe");
 
 			string arguments;
 
@@ -60,8 +59,6 @@ namespace Mtgdb.Downloader
 		{
 			if (_process == null)
 				return;
-
-			_targetDirectory = null;
 
 			_process.OutputDataReceived -= downloadOutputReceived;
 			_process.ErrorDataReceived -= downloadErrorReceived;
@@ -108,6 +105,5 @@ namespace Mtgdb.Downloader
 		public event Action FileDownloaded;
 
 		private Process _process;
-		private string _targetDirectory;
 	}
 }

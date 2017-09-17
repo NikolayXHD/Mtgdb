@@ -63,6 +63,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="ClientBase.cs" />
     <Compile Include="PriceDownloader.cs" />
     <Compile Include="PriceClient.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -70,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SevenZip.cs" />
     <Compile Include="StreamExt.cs" />
     <Compile Include="WebClient.cs">
       <SubType>Component</SubType>

@@ -9,42 +9,42 @@ namespace Mtgdb.Controls
 	{
 		[Category("Settings")]
 		[DefaultValue(false)]
-		public bool AllowSort { get; set; }
+		public bool Allow { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortAscIcon { get; set; }
+		public Bitmap AscIcon { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortDescIcon { get; set; }
+		public Bitmap DescIcon { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortIconHovered { get; set; }
+		public Bitmap IconHovered { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortAscIconHovered { get; set; }
+		public Bitmap AscIconHovered { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortDescIconHovered { get; set; }
+		public Bitmap DescIconHovered { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap SortIcon { get; set; }
+		public Bitmap Icon { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(typeof(ContentAlignment), "TopRight")]
-		public ContentAlignment SortButtonAlignment { get; set; } = ContentAlignment.TopRight;
+		public ContentAlignment ButtonAlignment { get; set; } = ContentAlignment.TopRight;
 
 		[Category("Settings")]
 		[DefaultValue(typeof(Size), "2, 2")]
-		public Size SortButtonMargin { get; set; } = new Size(2, 2);
+		public Size ButtonMargin { get; set; } = new Size(2, 2);
 
 
-		public Rectangle GetSortButtonBounds(FieldControl field, LayoutControl layout)
+		public Rectangle GetButtonBounds(FieldControl field, LayoutControl layout)
 		{
 			if (!field.AllowSort || !field.IsSortVisible)
 				return Rectangle.Empty;
@@ -52,37 +52,37 @@ namespace Mtgdb.Controls
 			var fieldBounds = field.Bounds;
 			fieldBounds.Offset(layout.Location);
 
-			var imageBounds = new Rectangle(fieldBounds.Location, SortIcon.Size);
+			var imageBounds = new Rectangle(fieldBounds.Location, Icon.Size);
 
-			if (AnyCenter.HasFlag(SortButtonAlignment))
+			if (ContentAlignmentRanges.AnyCenter.HasFlag(ButtonAlignment))
 				imageBounds.Offset((fieldBounds.Width - imageBounds.Width) / 2, 0);
-			else if (AnyRight.HasFlag(SortButtonAlignment))
-				imageBounds.Offset(fieldBounds.Width - imageBounds.Width - SortButtonMargin.Width, 0);
-			else if (AnyLeft.HasFlag(SortButtonAlignment))
-				imageBounds.Offset(SortButtonMargin.Width, 0);
+			else if (ContentAlignmentRanges.AnyRight.HasFlag(ButtonAlignment))
+				imageBounds.Offset(fieldBounds.Width - imageBounds.Width - ButtonMargin.Width, 0);
+			else if (ContentAlignmentRanges.AnyLeft.HasFlag(ButtonAlignment))
+				imageBounds.Offset(ButtonMargin.Width, 0);
 
-			if (AnyMiddle.HasFlag(SortButtonAlignment))
+			if (ContentAlignmentRanges.AnyMiddle.HasFlag(ButtonAlignment))
 				imageBounds.Offset(0, (fieldBounds.Height - imageBounds.Height) / 2);
-			else if (AnyBottom.HasFlag(SortButtonAlignment))
-				imageBounds.Offset(0, fieldBounds.Height - imageBounds.Height - SortButtonMargin.Height);
-			else if (AnyTop.HasFlag(SortButtonAlignment))
-				imageBounds.Offset(0, SortButtonMargin.Height);
+			else if (ContentAlignmentRanges.AnyBottom.HasFlag(ButtonAlignment))
+				imageBounds.Offset(0, fieldBounds.Height - imageBounds.Height - ButtonMargin.Height);
+			else if (ContentAlignmentRanges.AnyTop.HasFlag(ButtonAlignment))
+				imageBounds.Offset(0, ButtonMargin.Height);
 
 			return imageBounds;
 		}
 
-		public Bitmap GetSortIcon(FieldControl field)
+		public Bitmap GetIcon(FieldControl field)
 		{
 			if (field.IsSortHotTracked)
 			{
 				switch (field.SortOrder)
 				{
 					case SortOrder.None:
-						return SortIconHovered;
+						return IconHovered;
 					case SortOrder.Ascending:
-						return SortAscIconHovered;
+						return AscIconHovered;
 					case SortOrder.Descending:
-						return SortDescIconHovered;
+						return DescIconHovered;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -91,22 +91,14 @@ namespace Mtgdb.Controls
 			switch (field.SortOrder)
 			{
 				case SortOrder.None:
-					return SortIcon;
+					return Icon;
 				case SortOrder.Ascending:
-					return SortAscIcon;
+					return AscIcon;
 				case SortOrder.Descending:
-					return SortDescIcon;
+					return DescIcon;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-
-		private const ContentAlignment AnyLeft = ContentAlignment.TopLeft | ContentAlignment.MiddleLeft | ContentAlignment.BottomLeft;
-		private const ContentAlignment AnyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
-		private const ContentAlignment AnyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
-
-		private const ContentAlignment AnyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-		private const ContentAlignment AnyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
-		private const ContentAlignment AnyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
 	}
 }

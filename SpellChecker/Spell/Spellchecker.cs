@@ -358,9 +358,10 @@ namespace SpellChecker.Net.Search.Spell
 		/// <param name="mergeFactor">mergeFactor to use when indexing</param>
 		/// <param name="ramMB">the max amount or memory in MB to use</param>
 		/// <param name="analyzer"></param>
+		/// <param name="abortRequested"></param>
 		/// <throws>  IOException </throws>
 		/// <throws>AlreadyClosedException if the Spellchecker is already closed</throws>
-		public virtual void IndexDictionary(IDictionary dict, int mergeFactor, int ramMB, Analyzer analyzer = null)
+		public virtual void IndexDictionary(IDictionary dict, int mergeFactor, int ramMB, Analyzer analyzer, Func<bool> abortRequested)
 		{
 			lock (modifyCurrentIndexLock)
 			{
@@ -373,6 +374,9 @@ namespace SpellChecker.Net.Search.Spell
 				IEnumerator iter = dict.GetWordsIterator();
 				while (iter.MoveNext())
 				{
+					if (abortRequested())
+						return;
+
 					string word = (string) iter.Current;
 
 					int len = word.Length;
@@ -405,9 +409,10 @@ namespace SpellChecker.Net.Search.Spell
 		/// </summary>
 		/// <param name="dict">dict the dictionary to index</param>
 		/// <param name="analyzer">analyzer to write terms</param>
-		public void IndexDictionary(IDictionary dict, Analyzer analyzer = null)
+		/// <param name="abortRequested">delegate enabling the caller to abort</param>
+		public void IndexDictionary(IDictionary dict, Analyzer analyzer, Func<bool> abortRequested)
 		{
-			IndexDictionary(dict, 300, 10, analyzer);
+			IndexDictionary(dict, 300, 10, analyzer, abortRequested);
 		}
 
 		private int GetMin(int l)

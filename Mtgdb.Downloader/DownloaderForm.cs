@@ -159,14 +159,12 @@ namespace Mtgdb.Downloader
 
 			Console.WriteLine();
 			_installer.Install();
-			_installer.CreateApplicationShortcut(AppDir.Root);
-			_installer.UpdateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+			Console.WriteLine();
 
 			setButtonsEnabled(true);
 
 			_appVersionInstalled = getAppVersionInstalled();
-			Console.WriteLine("The new version will be launched on next start.");
-
+			
 			suggestCheckAppVersionOnline();
 		}
 

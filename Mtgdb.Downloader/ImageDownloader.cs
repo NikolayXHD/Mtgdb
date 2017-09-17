@@ -42,6 +42,7 @@ namespace Mtgdb.Downloader
 				{
 					Console.WriteLine("[Skip] {0}", progress.MegaDir.Subdirectory);
 					CountInDownloadedDirs += progress.FilesOnline.Count;
+					ProgressChanged?.Invoke();
 					continue;
 				}
 
@@ -58,7 +59,6 @@ namespace Mtgdb.Downloader
 		private static bool isAlreadyDownloaded(ImageDownloadProgress progress)
 		{
 			string targetDirAbsolute = ImageDownloadProgressReader.GetTargetDirAbsolute(progress);
-			Console.WriteLine("Creating directory {0}", targetDirAbsolute);
 			Directory.CreateDirectory(targetDirAbsolute);
 
 			if (progress.FilesOnline == null)

@@ -23,7 +23,7 @@
 	<!--
 		* AllowPartialCards
 		The purpose is to use window space effectively when the  window size is small.
-		If you want to see only cards that completely fit whithin the window set the
+		If you want to see only cards that completely fit within the window set the
 		option value to "False".
 		
 		* ShowTextualFields

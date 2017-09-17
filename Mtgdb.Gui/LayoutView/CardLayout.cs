@@ -32,9 +32,13 @@ namespace Mtgdb.Gui
 			_fieldRulings.FieldName = nameof(Card.Rulings);
 
 			_fieldImage.AllowSort = false;
+			_fieldImage.AllowSearch = false;
+
 			_fieldText.AllowSort = false;
 			_fieldFlavor.AllowSort = false;
+
 			_fieldRulings.AllowSort = false;
+			_fieldRulings.AllowSearch = false;
 
 			HighlightSettings.HighlightBorderColor = Color.CadetBlue;
 			HighlightSettings.HighlightColor = Color.LightBlue;

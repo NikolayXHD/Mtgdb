@@ -12,9 +12,9 @@ namespace Mtgdb.Gui
 	{
 		public event Action SortChanged;
 
-		private static readonly Dictionary<string, IField<Card>> Fields = Gui.Fields.ByName;
+		private static readonly Dictionary<string, IField<Card>> _fields = Fields.ByName;
 
-		private static readonly HashSet<string> LocalizableFields = new HashSet<string>
+		private static readonly HashSet<string> _localizableFields = new HashSet<string>
 		{
 			nameof(Card.Name),
 			nameof(Card.Type)
@@ -25,7 +25,7 @@ namespace Mtgdb.Gui
 			_layoutViewCards = layoutViewCards;
 			_repository = repository;
 
-			ApplySort(String.Empty);
+			ApplySort(string.Empty);
 		}
 
 		public void SubscribeToEvents()
@@ -68,17 +68,18 @@ namespace Mtgdb.Gui
 
 		private static List<Card> sort(IEnumerable<Card> cards, IEnumerable<FieldSortInfo> sortInfo)
 		{
-			sortInfo = sortInfo.Concat(Enumerable.Repeat(DefaultSort, 1));
-			var enumerator = sortInfo.GetEnumerator();
+			sortInfo = sortInfo.Concat(Enumerable.Repeat(_defaultSort, 1));
+			using (var enumerator = sortInfo.GetEnumerator())
+			{
+				enumerator.MoveNext();
+				var cardsOrdered = _fields[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
 
-			enumerator.MoveNext();
-			var cardsOrdered = Fields[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
+				while (enumerator.MoveNext())
+					cardsOrdered = _fields[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
 
-			while (enumerator.MoveNext())
-				cardsOrdered = Fields[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
-
-			var result = cardsOrdered.ToList();
-			return result;
+				var result = cardsOrdered.ToList();
+				return result;
+			}
 		}
 
 		private static string toString(IList<FieldSortInfo> sortInfo)
@@ -147,11 +148,11 @@ namespace Mtgdb.Gui
 		private readonly LayoutView _layoutViewCards;
 		private readonly CardRepository _repository;
 		private List<Card> _sortedCards;
-		private static readonly FieldSortInfo DefaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
+		private static readonly FieldSortInfo _defaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
 		public string SortString { get; private set; }
 
 		private IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
 
-		public bool IsLanguageDependent => SortInfo.Any(_ => LocalizableFields.Contains(_.FieldName));
+		public bool IsLanguageDependent => SortInfo.Any(_ => _localizableFields.Contains(_.FieldName));
 	}
 }

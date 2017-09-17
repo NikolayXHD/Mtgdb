@@ -32,7 +32,7 @@ namespace Mtgdb.Util
 			directory = args.GetParam("-sign");
 			if (directory != null)
 			{
-				var output = args.GetParam("-output") ?? Path.Combine(AppDir.Root, "filelist.txt");
+				var output = args.GetParam("-output") ?? AppDir.Root.AddPath("filelist.txt");
 				sign(directory, output);
 				return;
 			}

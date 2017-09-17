@@ -185,13 +185,11 @@ namespace Mtgdb.Dal.Index
 			// Tested
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
-			// Tested
-			foreach (string symbol in parseManaSymbols(card.GeneratedMana))
-				doc.addTextField(nameof(card.GeneratedMana), symbol);
+			if (!string.IsNullOrEmpty(card.GeneratedMana))
+				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana);
 
-			// Tested
-			foreach (string symbol in parseManaSymbols(card.ManaCost))
-				doc.addTextField(nameof(card.ManaCost), symbol);
+			if (!string.IsNullOrEmpty(card.ManaCost))
+				doc.addTextField(nameof(card.ManaCost), card.ManaCost);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Rarity))

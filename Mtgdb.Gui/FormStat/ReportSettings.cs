@@ -12,6 +12,7 @@ namespace Mtgdb.Gui
 		}
 
 		public DataSource DataSource { get; set; } = DataSource.Deck;
+		public bool ApplyFilter { get; set; } = false;
 		public List<string> SeriesFields { get; set; } = new List<string>();
 		public List<SortOrder> SeriesFieldsSort { get; set; } = new List<SortOrder>();
 		public List<string> ColumnFields { get; set; } = new List<string>();

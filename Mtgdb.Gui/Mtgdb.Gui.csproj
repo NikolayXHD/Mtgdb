@@ -209,7 +209,7 @@
       <DependentUpon>FormZoomImage.cs</DependentUpon>
     </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
-    <Compile Include="SearchString\SearhStringState.cs" />
+    <Compile Include="SearchString\SearchStringState.cs" />
     <Compile Include="[ Infrastructure ]\ViewConfig.cs" />
     <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
     <EmbeddedResource Include="FormMain\FormMain.resx">
@@ -276,7 +276,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+    <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
       <Name>EditedTokenLocator</Name>
     </ProjectReference>
@@ -306,6 +306,9 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\mtg_16.png" />
+    <None Include="Resources\Search_16.png" />
+    <None Include="Resources\Search_transp_16.png" />
     <None Include="Resources\planar.png" />
     <None Include="Resources\min_hovered.png" />
     <None Include="Resources\max_hovered.png" />

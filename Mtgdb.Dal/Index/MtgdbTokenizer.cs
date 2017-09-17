@@ -9,8 +9,8 @@ namespace Mtgdb.Dal.Index
 {
 	public sealed class MtgdbTokenizer : Tokenizer
 	{
-		public MtgdbTokenizer(TextReader _in)
-			: base(_in)
+		public MtgdbTokenizer(TextReader inputReader)
+			: base(inputReader)
 		{
 			init();
 		}
@@ -78,7 +78,7 @@ namespace Mtgdb.Dal.Index
 
 				char c = _ioBuffer[_bufferIndex++];
 
-				if (Char.IsLetterOrDigit(c) || WordChars.Contains(c))
+				if (Char.IsLetterOrDigit(c) || WordCharsSet.Contains(c))
 				{
 					if (c.IsCj())
 					{
@@ -128,15 +128,17 @@ namespace Mtgdb.Dal.Index
 			Reset();
 		}
 
-		public static readonly char[] WChars =
+		public static readonly char[] WordChars =
 		{
 			'½',
 			'-',
 			'−',
 			'+',
-			'/'
+			'/',
+			'{',
+			'}'
 		};
 
-		public static readonly HashSet<char> WordChars = new HashSet<char>(WChars);
+		public static readonly HashSet<char> WordCharsSet = new HashSet<char>(WordChars);
 	}
 }

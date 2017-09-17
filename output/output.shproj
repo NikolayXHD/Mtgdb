@@ -67,7 +67,9 @@
     <Content Include="update\megatools-1.9.98-win32\zlib1.dll" />
     <Content Include="_help_buttons.txt" />
     <Content Include="_help_editor.txt" />
-    <Content Include="_help_search.txt" />
+    <Content Include="_help_search_button_over_card_text.txt" />
+    <Content Include="_help_search_keyboard_shortcuts.txt" />
+    <Content Include="_help_search_syntax.txt" />
     <Content Include="_help_sort.txt" />
     <Content Include="_readme.txt" />
     <Content Include="_release_notes.txt" />

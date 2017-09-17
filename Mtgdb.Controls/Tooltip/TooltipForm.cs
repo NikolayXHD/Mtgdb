@@ -20,14 +20,14 @@ namespace Mtgdb.Controls
 			TopMost = true;
 			KeyPreview = false;
 
-			var panel = new CustomPanel
+			_panel = new CustomPanel
 			{
 				BorderColor = BorderColor,
 				BackColor = BackColor,
 				Dock = DockStyle.Fill
 			};
 
-			Controls.Add(panel);
+			Controls.Add(_panel);
 
 			_tooltipTextbox = new FixedRichTextBox
 			{
@@ -42,7 +42,7 @@ namespace Mtgdb.Controls
 				BackColor = BackColor,
 				BorderStyle = BorderStyle.None,
 				HideSelection = true,
-				Font = new Font(new FontFamily("Tahoma"), 8.25f, FontStyle.Regular),
+				Font = new Font(new FontFamily("Tahoma"), 9.75f, FontStyle.Regular),
 				AutoWordSelection = false
 			};
 
@@ -56,7 +56,7 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.KeyDown += text_keyDown;
 			_tooltipTextbox.LostFocus += text_lostFocus;
 
-			panel.Controls.Add(_tooltipTextbox);
+			_panel.Controls.Add(_tooltipTextbox);
 
 			_tooltipFocusTarget = new Control
 			{
@@ -64,30 +64,53 @@ namespace Mtgdb.Controls
 				Location = new Point(-1, -1)
 			};
 
-			panel.Controls.Add(_tooltipFocusTarget);
+			_panel.Controls.Add(_tooltipFocusTarget);
 
 			_buttonClose = new Button
 			{
+				TabStop = false,
 				Anchor = AnchorStyles.Right | AnchorStyles.Top,
+
 				FlatStyle = FlatStyle.Flat,
-				BackgroundImage = Properties.Resources.close_tab_hovered_16,
-				Size = Properties.Resources.close_tab_hovered_16.Size,
-				Location = new Point(panel.Width - Properties.Resources.close_tab_hovered_16.Width - 1, 1),
-				TabStop = false
+				FlatAppearance =
+				{
+					BorderSize = 0,
+					MouseOverBackColor = Color.Transparent,
+					MouseDownBackColor = Color.Transparent,
+					CheckedBackColor = Color.Transparent,
+					// присвоение Color.Transparent приводит к исключению
+					BorderColor = Color.FromArgb(0, 255, 255, 255)
+				}
 			};
 
-			_buttonClose.FlatAppearance.BorderSize = 0;
-			_buttonClose.FlatAppearance.MouseOverBackColor = Color.Transparent;
-			_buttonClose.FlatAppearance.MouseDownBackColor = Color.Transparent;
 			_buttonClose.Click += closeClick;
 
-			panel.Controls.Add(_buttonClose);
+			_panel.Controls.Add(_buttonClose);
 			_buttonClose.BringToFront();
-			_buttonClose.Visible = false;
+
+			setCloseEnabled(false);
 
 			Resize += resize;
 
 			Show();
+		}
+
+		private void setCloseEnabled(bool value)
+		{
+			_closeEnabled = value;
+
+			if (value)
+			{
+				_buttonClose.Location = new Point(_panel.Width - Properties.Resources.close_tab_hovered_16.Width - 1, 1);
+				_buttonClose.Size = Properties.Resources.close_tab_hovered_16.Size;
+				_buttonClose.BackgroundImage = Properties.Resources.close_tab_hovered_16;
+			}
+			else
+			{
+				_buttonClose.Location = new Point(_panel.Width - Properties.Resources.selectable_transp_32.Width - 3, 3);
+				_buttonClose.Size = Properties.Resources.selectable_transp_32.Size;
+				_buttonClose.BackgroundImage = Properties.Resources.selectable_transp_32;
+			}
 		}
 
 		private void resize(object sender, EventArgs e)
@@ -102,8 +125,9 @@ namespace Mtgdb.Controls
 		{
 			_tooltip = tooltip;
 			Clickable = tooltip.Clickable;
+			_buttonClose.Visible = Clickable;
 
-			Size = TooltipSize;
+			Size = _tooltipSize;
 
 			var titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold);
 
@@ -206,7 +230,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(0, TooltipMargin),
 					IsNearCursor = target.Bottom - cursor.Y < target.Width,
 					IsAlongCursor = target.Left + size.Width > cursor.X,
-					IsWhithinScreen = target.Bottom + size.Height <= workingArea.Bottom,
+					IsWithinScreen = target.Bottom + size.Height <= workingArea.Bottom,
 				},
 
 				// bottom - cursor
@@ -220,7 +244,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(0, TooltipMargin),
 					IsNearCursor = target.Bottom - cursor.Y < target.Width,
 					IsAlongCursor = true,
-					IsWhithinScreen = target.Bottom + size.Height <= workingArea.Bottom
+					IsWithinScreen = target.Bottom + size.Height <= workingArea.Bottom
 				},
 
 				// right - top
@@ -234,7 +258,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(TooltipMargin, 0),
 					IsNearCursor = target.Right - cursor.X < target.Height,
 					IsAlongCursor = target.Top + size.Height > cursor.Y,
-					IsWhithinScreen = target.Right + size.Width <= workingArea.Right
+					IsWithinScreen = target.Right + size.Width <= workingArea.Right
 				},
 
 				// right - cursor
@@ -248,7 +272,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(TooltipMargin, 0),
 					IsNearCursor = target.Right - cursor.X < target.Height,
 					IsAlongCursor = true,
-					IsWhithinScreen = target.Right + size.Width <= workingArea.Right
+					IsWithinScreen = target.Right + size.Width <= workingArea.Right
 				},
 
 				// left - top
@@ -262,7 +286,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(-TooltipMargin, 0),
 					IsNearCursor = cursor.X - target.Left < target.Height,
 					IsAlongCursor = target.Top + size.Height > cursor.Y,
-					IsWhithinScreen = target.Left - size.Width > workingArea.Left
+					IsWithinScreen = target.Left - size.Width > workingArea.Left
 				},
 
 				// left - cursor
@@ -276,7 +300,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(-TooltipMargin, 0),
 					IsNearCursor = cursor.X - target.Left < target.Height,
 					IsAlongCursor = true,
-					IsWhithinScreen = target.Left - size.Width > workingArea.Left
+					IsWithinScreen = target.Left - size.Width > workingArea.Left
 				},
 
 				// top - left
@@ -290,7 +314,7 @@ namespace Mtgdb.Controls
 					Offset = new Point(0, -TooltipMargin),
 					IsNearCursor = cursor.Y - target.Top < target.Width,
 					IsAlongCursor = target.Left + size.Width > cursor.X,
-					IsWhithinScreen = target.Top - size.Height > workingArea.Top
+					IsWithinScreen = target.Top - size.Height > workingArea.Top
 				},
 
 				// top - cursor
@@ -304,14 +328,14 @@ namespace Mtgdb.Controls
 					Offset = new Point(0, -TooltipMargin),
 					IsNearCursor = cursor.Y - target.Top < target.Width,
 					IsAlongCursor = true,
-					IsWhithinScreen = target.Top - size.Height > workingArea.Top
+					IsWithinScreen = target.Top - size.Height > workingArea.Top
 				}
 			};
 
 			var candidate = candidates
 				.OrderByDescending(_ => _.IsAlongCursor)
-				.ThenByDescending(_ => _.IsNearCursor && _.IsWhithinScreen)
-				.ThenByDescending(_ => _.IsWhithinScreen)
+				.ThenByDescending(_ => _.IsNearCursor && _.IsWithinScreen)
+				.ThenByDescending(_ => _.IsWithinScreen)
 				.ThenByDescending(_ => _.IsNearCursor)
 				.First();
 
@@ -459,7 +483,10 @@ namespace Mtgdb.Controls
 
 		private void closeClick(object sender, EventArgs e)
 		{
-			HideTooltip();
+			if (_closeEnabled)
+				HideTooltip();
+			else
+				setCloseEnabled(true);
 		}
 
 
@@ -480,7 +507,7 @@ namespace Mtgdb.Controls
 			private set
 			{
 				_userInteracted = value;
-				_buttonClose.Visible = value;
+				setCloseEnabled(value);
 			}
 		}
 
@@ -489,7 +516,7 @@ namespace Mtgdb.Controls
 		private const int TextPadding = 6;
 		private const int TooltipMargin = 12;
 
-		private static readonly Size TooltipSize = new Size(300, 300);
+		private static readonly Size _tooltipSize = new Size(400, 300);
 
 		private int _selectionStart;
 		private bool _selectionManual;
@@ -500,6 +527,8 @@ namespace Mtgdb.Controls
 		public bool Clickable { get; private set; }
 		private bool _userInteracted;
 		private TooltipModel _tooltip;
+		private readonly CustomPanel _panel;
+		private bool _closeEnabled;
 
 		private class TooltipPosition
 		{
@@ -508,7 +537,7 @@ namespace Mtgdb.Controls
 
 			public bool IsNearCursor { get; set; }
 			public bool IsAlongCursor { get; set; }
-			public bool IsWhithinScreen { get; set; }
+			public bool IsWithinScreen { get; set; }
 		}
 	}
 }

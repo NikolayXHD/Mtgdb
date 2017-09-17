@@ -12,7 +12,7 @@ namespace Mtgdb.Dal.Index
 
 		public sealed override TokenStream TokenStream(string fieldName, TextReader reader)
 		{
-			var result = new ReplaceFilter(new MtgdbTokenizer(reader), Replacements);
+			var result = new ReplaceFilter(new MtgdbTokenizer(reader), _replacements);
 			return result;
 		}
 
@@ -23,27 +23,27 @@ namespace Mtgdb.Dal.Index
 			if (streams == null)
 			{
 				streams = new SavedStreams();
-				streams.source = new MtgdbTokenizer(reader);
-				streams.result = new ReplaceFilter(streams.source, Replacements);
+				streams.Source = new MtgdbTokenizer(reader);
+				streams.Result = new ReplaceFilter(streams.Source, _replacements);
 				PreviousTokenStream = streams;
 			}
 			else
 			{
-				streams.source.Reset(reader);
+				streams.Source.Reset(reader);
 			}
 
-			return streams.result;
+			return streams.Result;
 		}
 
-		private static readonly Dictionary<char, char> Replacements = new Dictionary<char, char>
+		private static readonly Dictionary<char, char> _replacements = new Dictionary<char, char>
 		{
 			{ '−', '-' }
 		};
 
 		private class SavedStreams
 		{
-			protected internal Tokenizer source;
-			protected internal TokenStream result;
+			protected internal Tokenizer Source;
+			protected internal TokenStream Result;
 		};
 	}
 }

@@ -25,7 +25,7 @@ namespace Mtgdb.Dal.Index
 
 			var postfixDistance = getPrefixDistance(s1Rev, s2Rev);
 
-			var lengthDistance = (s2.Length - s1.Length).WhithinRange(0, 4) / 12f;
+			var lengthDistance = (s2.Length - s1.Length).WithinRange(0, 4) / 12f;
 
 			float typos = lengthDistance + 0.5f * Math.Min(prefixDistance, postfixDistance + 0.001f);
 			
@@ -38,7 +38,7 @@ namespace Mtgdb.Dal.Index
 
 		private static float getMaxTypos(int length)
 		{
-			return (0.35f * length).WhithinRange(0.01f, 4f);
+			return (0.35f * length).WithinRange(0.01f, 4f);
 		}
 
 		private float getPrefixDistance(string s1, string s2)

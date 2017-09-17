@@ -95,6 +95,12 @@ namespace Mtgdb.Gui
 			remove { _view.SortChanged -= value; }
 		}
 
+		public event Action<object, SearchArgs> SearchClicked
+		{
+			add { _view.SearchClicked += value; }
+			remove { _view.SearchClicked -= value; }
+		}
+
 		public event MouseEventHandler MouseDown
 		{
 			add { _view.MouseDown += value; }
@@ -238,6 +244,16 @@ namespace Mtgdb.Gui
 		}
 
 		public int ScrollWidth => _view.ScrollWidth;
+
+		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
+		{
+			return _view.GetSearchButtonBounds(hitInfo);
+		}
+
+		public Rectangle GetSortButtonBounds(HitInfo hitInfo)
+		{
+			return _view.GetSortButtonBounds(hitInfo);
+		}
 
 		private readonly LayoutViewControl _view;
 	}

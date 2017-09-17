@@ -28,7 +28,7 @@ namespace Mtgdb.Gui
 
 			Load += load;
 
-			_headerButtons = new[] { _buttonManaCurve, _buttonDeckPrice, _buttonArtistsPerYear };
+			_headerButtons = new[] { _buttonManaCurve, _buttonDeckPrice, _buttonCollectionPrice, _buttonArtistsPerYear };
 
 			foreach (var button in _headerButtons)
 				button.Click += buttonClick;
@@ -36,28 +36,28 @@ namespace Mtgdb.Gui
 			SnapTo(Direction.North, System.Windows.Forms.Cursor.Position);
 
 			var defaultIcons = new[] { SortIconsOrder[0], SortIconsOrder[0], AggregateIconsOrder[0], SortIconsOrder[0] };
-			var tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
+			_tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
 
 			var buttons = new[] { _buttonAddCol, _buttonAddRow, _buttonAddSum };
 
 			_tabByButton = Enumerable.Range(0, buttons.Length)
-				.ToDictionary(i => buttons[i], i => tabs[i]);
+				.ToDictionary(i => buttons[i], i => _tabs[i]);
 
 			foreach (var button in buttons)
 				button.Click += buttonAddFieldClick;
 
 			_buttonApply.Click += buttonApplyClick;
 
-			for (int i = 0; i < tabs.Length; i++)
+			for (int i = 0; i < _tabs.Length; i++)
 			{
-				tabs[i].DefaultIcon = defaultIcons[i];
+				_tabs[i].DefaultIcon = defaultIcons[i];
 
-				if (tabs[i] != _tabSumm)
-					tabs[i].Click += tabAxisClick;
+				if (_tabs[i] != _tabSumm)
+					_tabs[i].Click += tabAxisClick;
 				else
-					tabs[i].Click += tabSummClick;
+					_tabs[i].Click += tabSummClick;
 
-				tabs[i].TabRemoving += tabRemoving;
+				_tabs[i].TabRemoving += tabRemoving;
 			}
 
 			_menuDataSource.Items.AddRange(Enum.GetNames(typeof (DataSource)).Cast<object>().ToArray());
@@ -109,6 +109,7 @@ namespace Mtgdb.Gui
 			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
+			_buttonApplyFilter.CheckedChanged += applyFilterChanged;
 
 			_headerButtons[0].Checked = true;
 		}
@@ -122,6 +123,14 @@ namespace Mtgdb.Gui
 		}
 
 		private void chartTypeChanged(object sender, EventArgs e)
+		{
+			if (_applyingSettings)
+				return;
+
+			buildCustomChart();
+		}
+
+		private void applyFilterChanged(object sender, EventArgs e)
 		{
 			if (_applyingSettings)
 				return;
@@ -322,7 +331,7 @@ namespace Mtgdb.Gui
 
 				isReady = () => _repository.IsLoadingComplete;
 			}
-			else if (button == _buttonDeckPrice)
+			else if (button == _buttonDeckPrice || button == _buttonCollectionPrice)
 			{
 				settings = new ReportSettings
 				{
@@ -330,9 +339,21 @@ namespace Mtgdb.Gui
 					SummaryFunctions = new List<string> { Aggregates.Sum, Aggregates.Sum },
 					SummarySort = new List<SortOrder> { SortOrder.Descending, SortOrder.None },
 					LabelDataElement = DataElement.SummaryField,
-					SummaryFields = getPriceSummaryFields(),
 					ChartType = (SeriesChartType) Enum.Parse(typeof (SeriesChartType), (string) _menuPriceChartType.SelectedItem)
 				};
+
+				if (button == _buttonDeckPrice)
+				{
+					settings.SummaryFields = getPriceSummaryFields(_deckPriceTotalFields);
+					settings.DataSource = DataSource.Deck;
+				}
+				else if (button == _buttonCollectionPrice)
+				{
+					settings.SummaryFields = getPriceSummaryFields(_collectionPriceTotalFields);
+					settings.DataSource = DataSource.Collection;
+				}
+				else
+					throw new Exception("Logical error");
 
 				if (!ChartTypeMetadata.ByType[settings.ChartType].CanDisplayMultipleSeries)
 				{
@@ -348,40 +369,20 @@ namespace Mtgdb.Gui
 				loadWhenReady(button, isReady, settings, false);
 		}
 
-		private List<string> getPriceSummaryFields()
+		private List<string> getPriceSummaryFields(string[] totalFields)
 		{
-			List<string> summaryFields;
+			var summaryFields = new List<string>
+			{
+				totalFields[_menuPrice.SelectedIndex],
+				_priceFields[_menuPrice.SelectedIndex]
+			};
 
-			if (_menuPrice.SelectedIndex == 0)
-			{
-				summaryFields = new List<string>
-				{
-					nameof(Card.DeckTotalLow),
-					nameof(Card.PriceLow)
-				};
-			}
-			else if (_menuPrice.SelectedIndex == 1)
-			{
-				summaryFields = new List<string>
-				{
-					nameof(Card.DeckTotalMid),
-					nameof(Card.PriceMid)
-				};
-			}
-			else
-			{
-				summaryFields = new List<string>
-				{
-					nameof(Card.DeckTotalHigh),
-					nameof(Card.PriceHigh)
-				};
-			}
 			return summaryFields;
 		}
 
 		private void buildReport(ReportSettings settings)
 		{
-			var cards = getCards(settings.DataSource)
+			var cards = getCards(settings.DataSource, settings.ApplyFilter)
 				.ToArray();
 
 			var seriesGroups = getGroups(settings.SeriesFields, settings.SeriesFieldsSort, cards);
@@ -725,6 +726,40 @@ namespace Mtgdb.Gui
 							chartSeries.Points[i].AxisLabel = argumentSummaries[i];
 					}
 			}
+
+			setupScrollbar(metadata);
+		}
+
+		private void setupScrollbar(ChartTypeMetadata metadata)
+		{
+			if (metadata.RequireAxes)
+			{
+				foreach (var chartArea in _chart.ChartAreas)
+				{
+					var chartSeries = _chart.Series.Where(s => s.ChartArea == chartArea.Name).ToArray();
+
+					if (chartSeries.Length == 0)
+						continue;
+
+					var pointsCount = chartSeries.Max(s => s.Points.Count);
+
+					if (pointsCount <= 60)
+						continue;
+
+					var scrollAxis = chartArea.AxisX;
+					var scrollBar = scrollAxis.ScrollBar;
+
+					scrollBar.Size = 15;
+					scrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+					scrollBar.IsPositionedInside = false;
+					scrollBar.Enabled = true;
+					scrollBar.BackColor = Color.FromArgb(235, 235, 235);
+					scrollBar.ButtonColor = Color.Gainsboro;
+					scrollBar.LineColor = Color.DarkGray;
+					
+					scrollAxis.ScaleView.Zoom(0, 40);
+				}
+			}
 		}
 
 
@@ -784,21 +819,29 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private IEnumerable<Card> getCards(DataSource source)
+		private IEnumerable<Card> getCards(DataSource source, bool applyFilter)
 		{
+			IEnumerable<Card> result;
+
 			switch (source)
 			{
 				case DataSource.Collection:
-					return _repository.Cards.Where(_ => _.CollectionCount > 0);
+					result = _repository.Cards.Where(_ => _.CollectionCount > 0);
+					break;
 				case DataSource.Deck:
-					return _repository.Cards.Where(_ => _.DeckCount > 0);
-				case DataSource.SearchResult:
-					return _repository.Cards.Where(_ => _.IsSearchResult);
+					result = _repository.Cards.Where(_ => _.DeckCount > 0);
+					break;
 				case DataSource.AllCards:
-					return _repository.Cards;
+					result = _repository.Cards;
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(source), source, null);
 			}
+
+			if (applyFilter)
+				result = result.Where(_ => _.IsSearchResult);
+
+			return result;
 		}
 
 
@@ -806,6 +849,11 @@ namespace Mtgdb.Gui
 		private void display(ReportSettings settings)
 		{
 			_applyingSettings = true;
+
+			foreach (var tab in _tabs)
+				tab.SuspendLayout();
+
+			// _panelFields.Visible = false;
 
 			displayAxis(_tabCols, settings.ColumnFields, settings.ColumnFieldsSort);
 			displayAxis(_tabRows, settings.SeriesFields, settings.SeriesFieldsSort);
@@ -826,6 +874,7 @@ namespace Mtgdb.Gui
 			}
 
 			_menuDataSource.SelectedIndex = (int) settings.DataSource;
+			_buttonApplyFilter.Checked = settings.ApplyFilter;
 			_menuLabelDataElement.SelectedIndex = (int) settings.LabelDataElement;
 			_menuChartType.SelectedIndex = _menuChartType.Items.IndexOf(settings.ChartType.ToString());
 
@@ -833,6 +882,10 @@ namespace Mtgdb.Gui
 			_buttonSeriesTotal.Checked = settings.ShowSeriesTotal;
 			_buttonExplainTotal.Checked = settings.ExplainTotal;
 
+			foreach (var tab in _tabs)
+				tab.ResumeLayout();
+
+			//_panelFields.Visible = true;
 			_applyingSettings = false;
 		}
 
@@ -856,6 +909,7 @@ namespace Mtgdb.Gui
 			var result = new ReportSettings
 			{
 				DataSource = (DataSource) Enum.Parse(typeof (DataSource), (string) _menuDataSource.SelectedItem),
+				ApplyFilter = _buttonApplyFilter.Checked,
 				LabelDataElement = (DataElement) Enum.Parse(typeof (DataElement), (string) _menuLabelDataElement.SelectedItem),
 				ChartType = (SeriesChartType) Enum.Parse(typeof (SeriesChartType), (string) _menuChartType.SelectedItem),
 				ColumnFields = readFields(_tabCols),
@@ -936,8 +990,6 @@ namespace Mtgdb.Gui
 			_applyingSettings = false;
 		}
 
-
-
 		private static readonly string[] AggregatesOrder =
 		{
 			Aggregates.Sum,
@@ -967,6 +1019,7 @@ namespace Mtgdb.Gui
 
 		private readonly Dictionary<Button, TabHeaderControl> _tabByButton;
 		private readonly TabHeaderControl[] _summTabs;
+		private readonly TabHeaderControl[] _tabs;
 
 		private const string SeriesSeparator = " / ";
 		private const string ArgumentSeparator = " / ";
@@ -976,5 +1029,26 @@ namespace Mtgdb.Gui
 		private readonly CardRepository _repository;
 		private bool _applyingSettings;
 		private readonly CheckBox[] _headerButtons;
+
+		private static readonly string[] _priceFields =
+		{
+			nameof(Card.PriceLow),
+			nameof(Card.PriceMid),
+			nameof(Card.PriceHigh)
+		};
+
+		private static readonly string[] _deckPriceTotalFields =
+		{
+			nameof(Card.DeckTotalLow),
+			nameof(Card.DeckTotalMid),
+			nameof(Card.DeckTotalHigh)
+		};
+
+		private static readonly string[] _collectionPriceTotalFields =
+		{
+			nameof(Card.CollectionTotalLow),
+			nameof(Card.CollectionTotalMid),
+			nameof(Card.CollectionTotalHigh)
+		};
 	}
 }
