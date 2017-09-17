@@ -88,6 +88,7 @@
     <Compile Include="Model\IntToInternedStringConverter.cs" />
     <Compile Include="Model\IUiForm.cs" />
     <Compile Include="Model\Legality.cs" />
+    <Compile Include="Price\DownloaderPriceRepository.cs" />
     <Compile Include="Price\PriceId.cs" />
     <Compile Include="Price\PriceRepository.cs" />
     <Compile Include="Price\PriceValues.cs" />

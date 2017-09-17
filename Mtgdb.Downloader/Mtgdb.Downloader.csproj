@@ -144,6 +144,30 @@
   <ItemGroup>
     <None Include="Resources\normalize.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\properties_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mtg_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\price_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\card_img_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\art_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\card_data_20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\card_img_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\update.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

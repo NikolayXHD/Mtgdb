@@ -587,7 +587,7 @@ namespace Mtgdb.Controls
 			int rowsCount = getRowsCount();
 			int result = rowHandle - CardIndex;
 
-			if (result < 0 || result > columnsCount*rowsCount)
+			if (result < 0 || result >= columnsCount*rowsCount)
 				return -1;
 
 			return result;

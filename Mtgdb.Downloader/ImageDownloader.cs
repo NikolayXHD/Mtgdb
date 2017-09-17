@@ -27,7 +27,7 @@ namespace Mtgdb.Downloader
 			TotalCount = qualityProgress.Sum(_ => _.FilesOnline.Count);
 			CountInDownloadedDirs = 0;
 
-			FileDownloaded?.Invoke();
+			ProgressChanged?.Invoke();
 
 			foreach (var progress in qualityProgress)
 			{
@@ -125,13 +125,13 @@ namespace Mtgdb.Downloader
 
 		private void fileDownloaded()
 		{
-			FileDownloaded?.Invoke();
+			ProgressChanged?.Invoke();
 		}
+
+		public event Action ProgressChanged;
 
 		private int CountInDownloadedDirs { get; set; }
 		public int DownloadedCount => CountInDownloadedDirs + _megatools.DownloadedCount;
 		public int TotalCount { get; private set; }
-
-		public event Action FileDownloaded;
 	}
 }
