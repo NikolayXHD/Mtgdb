@@ -44,6 +44,10 @@ namespace Mtgdb.Dal
 			Kernel.Bind<LuceneSearcher>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<PriceRepository>()
+				// Нужны разные экземпляры для чтения карт в программе и выкачивателе цен
+				.ToSelf();
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
@@ -185,6 +186,9 @@ namespace Mtgdb.Dal
 			if (_cardLegailityDeltas.TryGetValue(card.NameEn, out delta))
 				card.ApplyDelta(delta);
 
+			if (_cardLegailityDeltas.TryGetValue(card.Id, out delta))
+				card.ApplyDelta(delta);
+
 			if (card.GeneratedMana == null)
 				card.GeneratedMana = string.Intern(GeneratedManaParser.ParseGeneratedMana(card.TextEn));
 
@@ -197,6 +201,9 @@ namespace Mtgdb.Dal
 
 			if (card.FlavorEn != null)
 				card.FlavorEn = GathererExtractorCsvParser.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
+
+			if (card.MciNumber != null && card.MciNumber.EndsWith(".html"))
+				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
 		}
 
 		private static float? getPower(string power)
@@ -318,6 +325,14 @@ namespace Mtgdb.Dal
 
 			IsLocalizationLoadingComplete = true;
 			LocalizationLoadingComplete?.Invoke();
+		}
+
+		private static readonly Regex _mciNumberRegex = new Regex(@"(?<id>[\w\d]+).html", RegexOptions.Compiled);
+
+		public void SetPrices(PriceRepository priceRepository)
+		{
+			foreach (var card in Cards)
+				card.PricesValues = priceRepository.GetPrice(card);
 		}
 	}
 }

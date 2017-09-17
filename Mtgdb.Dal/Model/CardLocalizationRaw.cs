@@ -51,11 +51,5 @@ namespace Mtgdb.Dal
 		public string FlavorRu { get; set; }
 		public string FlavorEs { get; set; }
 		public string FlavorKo { get; set; }
-
-		public float? PricingLow { get; set; }
-		public float? PricingMid { get; set; }
-		public float? PricingHigh { get; set; }
-
-		public string GeneratedMana { get; set; }
 	}
 }

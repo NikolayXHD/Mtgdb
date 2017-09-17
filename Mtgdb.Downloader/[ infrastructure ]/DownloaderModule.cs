@@ -13,15 +13,16 @@ namespace Mtgdb.Downloader
 			Kernel.BindConfig<MtgjsonSourceConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException
-			Kernel.Bind<Installer>().ToSelf().InSingletonScope();
+			Kernel.Bind<Installer>().ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<ImageDownloader>().ToSelf();
 			Kernel.Bind<ImageDownloadProgressReader>().ToSelf();
 
-			Kernel.Bind<DownloaderForm>()
-				.ToConstructor(_ => new DownloaderForm(
-					_.Inject<Installer>(),
-					_.Inject<ImageDownloader>(),
-					_.Inject<ImageDownloadProgressReader>()));
+			Kernel.Bind<PriceDownloader>().ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<DownloaderForm>().ToSelf();
 
 			Func<DownloaderForm> downloaderFormFactory = () => Kernel.Get<DownloaderForm>();
 

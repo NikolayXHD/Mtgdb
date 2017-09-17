@@ -41,6 +41,10 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +63,8 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="PriceDownloader.cs" />
+    <Compile Include="PriceClient.cs" />
     <Compile Include="StreamExt.cs" />
     <Compile Include="WebClient.cs">
       <SubType>Component</SubType>
@@ -108,6 +114,10 @@
     <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
       <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}</Project>
+      <Name>Mtgdb.Dal</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

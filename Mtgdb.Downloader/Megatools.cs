@@ -7,12 +7,13 @@ namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
-		private Process _process;
-
 		public void Download(string name, string storageUrl, string targetDirectory)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download");
+
+			_targetDirectory = targetDirectory;
+			DownloadedCount = 0;
 
 			var megadlExePath = Path.Combine(AppDir.Update, @"megatools-1.9.98-win32\megadl.exe");
 
@@ -60,6 +61,8 @@ namespace Mtgdb.Downloader
 			if (_process == null)
 				return;
 
+			_targetDirectory = null;
+
 			_process.OutputDataReceived -= downloadOutputReceived;
 			_process.ErrorDataReceived -= downloadErrorReceived;
 
@@ -79,7 +82,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine(e.Data.Replace("ERROR: File already exists at ", "[Skip] "));
 		}
 
-		private static void downloadOutputReceived(object sender, DataReceivedEventArgs e)
+		private void downloadOutputReceived(object sender, DataReceivedEventArgs e)
 		{
 			if (string.IsNullOrEmpty(e.Data))
 				return;
@@ -87,7 +90,21 @@ namespace Mtgdb.Downloader
 			if (e.Data.StartsWith("F "))
 				return;
 
+			if (e.Data.StartsWith("D "))
+				return;
+
 			Console.WriteLine(e.Data);
+
+
+			DownloadedCount++;
+			FileDownloaded?.Invoke();
 		}
+
+		public int DownloadedCount { get; private set; }
+
+		public event Action FileDownloaded;
+
+		private Process _process;
+		private string _targetDirectory;
 	}
 }

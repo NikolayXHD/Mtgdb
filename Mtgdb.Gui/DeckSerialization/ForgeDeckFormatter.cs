@@ -54,6 +54,12 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
+		public override GuiSettings ImportDeck(string serialized)
+		{
+			_isSideboard = false;
+			return base.ImportDeck(serialized);
+		}
+
 		public override bool IsSideboard(Match match, string line)
 		{
 			_isSideboard |= line.StartsWith(SideboardMark, Str.Comparison);

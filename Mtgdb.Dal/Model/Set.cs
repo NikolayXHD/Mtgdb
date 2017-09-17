@@ -25,6 +25,11 @@ namespace Mtgdb.Dal
 		public string ReleaseDate { get; set; }
 
 		/// <summary>
+		/// The code that magiccards.info uses for the set. Only present if magiccards.info has this set
+		/// </summary>
+		public string MagicCardsInfoCode { get; set; }
+
+		/// <summary>
 		/// The cards in the set
 		/// </summary>
 		public IList<Card> Cards { get; set; }
@@ -42,11 +47,6 @@ namespace Mtgdb.Dal
 		/// An old style code used by some Magic software. Only present if different than 'gathererCode' and 'code'
 		/// </summary>
 		public string OldCode { get; set; }
-
-		/// <summary>
-		/// The code that magiccards.info uses for the set. Only present if magiccards.info has this set
-		/// </summary>
-		public string MagicCardsInfoCode { get; set; }
 
 		/// <summary>
 		/// The type of border on the cards, either "white", "black" or "silver"

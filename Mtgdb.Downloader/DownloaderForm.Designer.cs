@@ -38,14 +38,16 @@ namespace Mtgdb.Downloader
 			this._buttonsMtgjson = new System.Windows.Forms.Button();
 			this._buttonImgMq = new System.Windows.Forms.Button();
 			this._buttonImgLq = new System.Windows.Forms.Button();
-			this._buttonEditConfig = new System.Windows.Forms.Button();
 			this._buttonDesktopShortcut = new System.Windows.Forms.Button();
+			this._buttonEditConfig = new System.Windows.Forms.Button();
+			this._progressBar = new System.Windows.Forms.ProgressBar();
+			this._labelProgress = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// _buttonApp
 			// 
 			this._buttonApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonApp.Location = new System.Drawing.Point(597, 367);
+			this._buttonApp.Location = new System.Drawing.Point(597, 363);
 			this._buttonApp.Name = "_buttonApp";
 			this._buttonApp.Size = new System.Drawing.Size(111, 38);
 			this._buttonApp.TabIndex = 1;
@@ -60,14 +62,14 @@ namespace Mtgdb.Downloader
 			this._textBoxLog.Location = new System.Drawing.Point(12, 12);
 			this._textBoxLog.Name = "_textBoxLog";
 			this._textBoxLog.ReadOnly = true;
-			this._textBoxLog.Size = new System.Drawing.Size(696, 305);
+			this._textBoxLog.Size = new System.Drawing.Size(696, 252);
 			this._textBoxLog.TabIndex = 0;
 			this._textBoxLog.Text = "";
 			// 
 			// _buttonImgArt
 			// 
 			this._buttonImgArt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonImgArt.Location = new System.Drawing.Point(246, 323);
+			this._buttonImgArt.Location = new System.Drawing.Point(246, 319);
 			this._buttonImgArt.Name = "_buttonImgArt";
 			this._buttonImgArt.Size = new System.Drawing.Size(111, 38);
 			this._buttonImgArt.TabIndex = 5;
@@ -77,7 +79,7 @@ namespace Mtgdb.Downloader
 			// _buttonsMtgjson
 			// 
 			this._buttonsMtgjson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonsMtgjson.Location = new System.Drawing.Point(597, 323);
+			this._buttonsMtgjson.Location = new System.Drawing.Point(597, 319);
 			this._buttonsMtgjson.Name = "_buttonsMtgjson";
 			this._buttonsMtgjson.Size = new System.Drawing.Size(111, 38);
 			this._buttonsMtgjson.TabIndex = 2;
@@ -87,7 +89,7 @@ namespace Mtgdb.Downloader
 			// _buttonImgMq
 			// 
 			this._buttonImgMq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonImgMq.Location = new System.Drawing.Point(363, 367);
+			this._buttonImgMq.Location = new System.Drawing.Point(363, 363);
 			this._buttonImgMq.Name = "_buttonImgMq";
 			this._buttonImgMq.Size = new System.Drawing.Size(111, 38);
 			this._buttonImgMq.TabIndex = 4;
@@ -97,27 +99,17 @@ namespace Mtgdb.Downloader
 			// _buttonImgLq
 			// 
 			this._buttonImgLq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonImgLq.Location = new System.Drawing.Point(246, 367);
+			this._buttonImgLq.Location = new System.Drawing.Point(246, 363);
 			this._buttonImgLq.Name = "_buttonImgLq";
 			this._buttonImgLq.Size = new System.Drawing.Size(111, 38);
 			this._buttonImgLq.TabIndex = 3;
 			this._buttonImgLq.Text = "Donwload low quality images";
 			this._buttonImgLq.UseVisualStyleBackColor = true;
 			// 
-			// _buttonEditConfig
-			// 
-			this._buttonEditConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonEditConfig.Location = new System.Drawing.Point(12, 323);
-			this._buttonEditConfig.Name = "_buttonEditConfig";
-			this._buttonEditConfig.Size = new System.Drawing.Size(111, 38);
-			this._buttonEditConfig.TabIndex = 6;
-			this._buttonEditConfig.Text = "Edit configuration";
-			this._buttonEditConfig.UseVisualStyleBackColor = true;
-			// 
 			// _buttonDesktopShortcut
 			// 
 			this._buttonDesktopShortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonDesktopShortcut.Location = new System.Drawing.Point(12, 367);
+			this._buttonDesktopShortcut.Location = new System.Drawing.Point(12, 363);
 			this._buttonDesktopShortcut.Name = "_buttonDesktopShortcut";
 			this._buttonDesktopShortcut.Size = new System.Drawing.Size(111, 38);
 			this._buttonDesktopShortcut.TabIndex = 7;
@@ -125,11 +117,44 @@ namespace Mtgdb.Downloader
 			this._buttonDesktopShortcut.UseVisualStyleBackColor = true;
 			this._buttonDesktopShortcut.Click += new System.EventHandler(this.buttonDesktopShortcut);
 			// 
+			// _buttonEditConfig
+			// 
+			this._buttonEditConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._buttonEditConfig.Location = new System.Drawing.Point(12, 319);
+			this._buttonEditConfig.Name = "_buttonEditConfig";
+			this._buttonEditConfig.Size = new System.Drawing.Size(111, 38);
+			this._buttonEditConfig.TabIndex = 6;
+			this._buttonEditConfig.Text = "Edit configuration";
+			this._buttonEditConfig.UseVisualStyleBackColor = true;
+			// 
+			// _progressBar
+			// 
+			this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._progressBar.Location = new System.Drawing.Point(12, 270);
+			this._progressBar.Name = "_progressBar";
+			this._progressBar.Size = new System.Drawing.Size(696, 23);
+			this._progressBar.TabIndex = 8;
+			this._progressBar.Visible = false;
+			// 
+			// _labelProgress
+			// 
+			this._labelProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelProgress.AutoSize = true;
+			this._labelProgress.Location = new System.Drawing.Point(12, 296);
+			this._labelProgress.Name = "_labelProgress";
+			this._labelProgress.Size = new System.Drawing.Size(145, 13);
+			this._labelProgress.TabIndex = 9;
+			this._labelProgress.Text = "121 / 10030 files ready";
+			this._labelProgress.Visible = false;
+			// 
 			// DownloaderForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(720, 417);
+			this.ClientSize = new System.Drawing.Size(720, 413);
+			this.Controls.Add(this._labelProgress);
+			this.Controls.Add(this._progressBar);
 			this.Controls.Add(this._buttonDesktopShortcut);
 			this.Controls.Add(this._buttonEditConfig);
 			this.Controls.Add(this._buttonImgMq);
@@ -145,6 +170,7 @@ namespace Mtgdb.Downloader
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Mtgdb.Gui updater";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -155,7 +181,9 @@ namespace Mtgdb.Downloader
 		private Button _buttonsMtgjson;
 		private Button _buttonImgMq;
 		private Button _buttonImgLq;
-		private Button _buttonEditConfig;
 		private Button _buttonDesktopShortcut;
+		private Button _buttonEditConfig;
+		private ProgressBar _progressBar;
+		private Label _labelProgress;
 	}
 }

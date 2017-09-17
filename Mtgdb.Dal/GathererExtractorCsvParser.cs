@@ -7,57 +7,6 @@ namespace Mtgdb.Dal
 {
 	internal class GathererExtractorCsvParser
 	{
-		private const string SeparatorLine = "£";
-		private const string TagItalicBegin = "#_";
-		private const string TagItalicEnd = "_#";
-
-		private static readonly Regex NormalizePattern = new Regex("(£|#_|_#)", RegexOptions.Compiled);
-		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})", RegexOptions.Compiled);
-
-		private const char SeparatorRow = '\r';
-		private const string SeparatorField = "||";
-		private const string SeparatorFlip = "———";
-		
-		private const string FieldName = "name";
-		private const string FieldSet = "set";
-		private const string FieldSetCode = "set_code";
-		private const string FieldId = "id";
-		private const string FieldType = "type";
-		private const string FieldPower = "power";
-		private const string FieldToughness = "toughness";
-		private const string FieldLoyalty = "loyalty";
-
-		private const string FieldManaCost = "manacost";
-		private const string FieldConvertedManaCost = "converted_manacost";
-		private const string FieldArtist = "artist";
-		private const string FieldFlavor = "flavor";
-
-		private const string FieldColor = "color";
-		private const string FieldGeneratedMana = "generated_mana";
-
-		private const string FieldRarity = "rarity";
-		private const string FieldRuling = "ruling";
-		private const string FieldVariation = "variation";
-		private const string FieldAbility = "ability";
-		private const string FieldPricingLow = "pricing_low";
-		private const string FieldPricingMid = "pricing_mid";
-		private const string FieldPricingHigh = "pricing_high";
-
-		private const string LangCn = "_CN";
-		private const string LangTw = "_TW";
-		private const string LangFr = "_FR";
-		private const string LangDe = "_DE";
-		private const string LangIt = "_IT";
-		private const string LangJp = "_JP";
-		private const string LangPt = "_PT";
-		private const string LangRu = "_RU";
-		private const string LangEs = "_ES";
-		private const string LangKo = "_KO";
-
-		
-		private readonly Dictionary<string, int> _fields;
-		private readonly List<List<string>> _rows;
-
 		public int Count => _rows.Count;
 
 		public GathererExtractorCsvParser(string text)
@@ -119,7 +68,6 @@ namespace Mtgdb.Dal
 			{
 				Set = intern(row[_fields[FieldSetCode]]),
 				
-				
 				Name = intern(row[_fields[FieldName]]),
 				NameCn = intern(nullify(row[_fields[FieldName + LangCn]])),
 				NameTw = intern(nullify(row[_fields[FieldName + LangTw]])),
@@ -166,12 +114,7 @@ namespace Mtgdb.Dal
 				FlavorPt = intern(normalize(row[_fields[FieldFlavor + LangPt]])),
 				FlavorRu = intern(normalize(row[_fields[FieldFlavor + LangRu]])),
 				FlavorEs = intern(normalize(row[_fields[FieldFlavor + LangEs]])),
-				FlavorKo = intern(normalize(row[_fields[FieldFlavor + LangKo]])),
-
-				PricingLow = parseFloat(row[_fields[FieldPricingLow]]),
-				PricingMid = parseFloat(row[_fields[FieldPricingMid]]),
-				PricingHigh = parseFloat(row[_fields[FieldPricingHigh]]),
-				GeneratedMana = string.Intern(row[_fields[FieldGeneratedMana]])
+				FlavorKo = intern(normalize(row[_fields[FieldFlavor + LangKo]]))
 			};
 
 			return result;
@@ -190,7 +133,7 @@ namespace Mtgdb.Dal
 			if (str == string.Empty)
 				return null;
 
-			str = NormalizePattern.Replace(str, match => match.Value == SeparatorLine ? "\n" : string.Empty);
+			str = _normalizePattern.Replace(str, match => match.Value == SeparatorLine ? "\n" : string.Empty);
 			str = IncompleteChaosPattern.Replace(str, "{CHAOS}");
 
 			return str;
@@ -204,6 +147,37 @@ namespace Mtgdb.Dal
 			return str;
 		}
 
+		private readonly Dictionary<string, int> _fields;
+		private readonly List<List<string>> _rows;
+
+		private const string SeparatorLine = "£";
+
+		private static readonly Regex _normalizePattern = new Regex("(£|#_|_#)", RegexOptions.Compiled);
+		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})", RegexOptions.Compiled);
+
+		private const char SeparatorRow = '\r';
+		private const string SeparatorField = "||";
+
+		private const string FieldName = "name";
+		private const string FieldSetCode = "set_code";
+		private const string FieldType = "type";
+
+		private const string FieldFlavor = "flavor";
+
+		private const string FieldAbility = "ability";
+
+		private const string LangCn = "_CN";
+		private const string LangTw = "_TW";
+		private const string LangFr = "_FR";
+		private const string LangDe = "_DE";
+		private const string LangIt = "_IT";
+		private const string LangJp = "_JP";
+		private const string LangPt = "_PT";
+		private const string LangRu = "_RU";
+		private const string LangEs = "_ES";
+		private const string LangKo = "_KO";
+
+		/*
 		private static float? parseFloat(string val)
 		{
 			if (val == string.Empty || val == "N/A")
@@ -211,5 +185,27 @@ namespace Mtgdb.Dal
 
 			return float.Parse(val);
 		}
+
+		private const string FieldPricingLow = "pricing_low";
+		private const string FieldPricingMid = "pricing_mid";
+		private const string FieldPricingHigh = "pricing_high";
+		private const string FieldRarity = "rarity";
+		private const string FieldRuling = "ruling";
+		private const string FieldVariation = "variation";
+		private const string FieldColor = "color";
+		private const string FieldGeneratedMana = "generated_mana";
+		private const string FieldManaCost = "manacost";
+		private const string FieldConvertedManaCost = "converted_manacost";
+		private const string FieldArtist = "artist";
+		private const string FieldPower = "power";
+		private const string FieldToughness = "toughness";
+		private const string FieldLoyalty = "loyalty";
+		private const string FieldId = "id";
+		private const string FieldSet = "set";
+
+		private const string SeparatorFlip = "———";
+		private const string TagItalicBegin = "#_";
+		private const string TagItalicEnd = "_#";
+		*/
 	}
 }

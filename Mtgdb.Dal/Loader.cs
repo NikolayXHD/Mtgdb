@@ -9,24 +9,20 @@ namespace Mtgdb.Dal
 {
 	public class Loader
 	{
-		private readonly CardRepository _repository;
-		private readonly ImageRepository _imageRepository;
-		private readonly LocalizationRepository _localizationRepository;
-		private readonly LuceneSearcher _luceneSearcher;
-		private readonly KeywordSearcher _keywordSearcher;
-
 		public Loader(
 			CardRepository repository,
 			ImageRepository imageRepository,
 			LocalizationRepository localizationRepository,
 			LuceneSearcher luceneSearcher,
-			KeywordSearcher keywordSearcher)
+			KeywordSearcher keywordSearcher,
+			PriceRepository priceRepository)
 		{
 			_repository = repository;
 			_imageRepository = imageRepository;
 			_localizationRepository = localizationRepository;
 			_luceneSearcher = luceneSearcher;
 			_keywordSearcher = keywordSearcher;
+			_priceRepository = priceRepository;
 
 			_loadingActions = createLoadingActions();
 		}
@@ -70,21 +66,24 @@ namespace Mtgdb.Dal
 					_imageRepository.Load();
 					_imageRepository.LoadZoom();
 					_imageRepository.LoadArt();
+
+					_priceRepository.Load();
 				},
 				() =>
 				{
 					while (!_repository.IsFileLoadingComplete)
 						Thread.Sleep(50);
-
 					_repository.Load();
 
 					while (!_imageRepository.IsLoadingZoomComplete)
 						Thread.Sleep(50);
-
 					_repository.SelectCardImages(_imageRepository);
 
-					_localizationRepository.LoadFile();
+					while (!_priceRepository.IsLoadingComplete)
+						Thread.Sleep(50);
+					_repository.SetPrices(_priceRepository);
 
+					_localizationRepository.LoadFile();
 					_localizationRepository.Load();
 					_repository.FillLocalizations(_localizationRepository);
 
@@ -113,18 +112,25 @@ namespace Mtgdb.Dal
 				}
 				catch (ThreadAbortException ex)
 				{
-					Log.Info(ex, "Thread aborted");
+					_log.Info(ex, "Thread aborted");
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex);
+					_log.Error(ex);
 					LogManager.Flush();
 				}
 			});
 		}
 
-		private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 		private readonly IList<Action> _loadingActions;
 		private List<Thread> _loadingThreads;
+
+		private readonly CardRepository _repository;
+		private readonly ImageRepository _imageRepository;
+		private readonly LocalizationRepository _localizationRepository;
+		private readonly LuceneSearcher _luceneSearcher;
+		private readonly KeywordSearcher _keywordSearcher;
+		private readonly PriceRepository _priceRepository;
 	}
 }
