@@ -151,24 +151,70 @@ namespace Mtgdb.Gui
 			{
 				_breakRefreshing = false;
 
-				List<Card> filteredCards = new List<Card>();
+				var filteredCards = new List<Card>();
 
 				var allCards = _sortSubsystem.SortedCards;
-				for (int i = 0; i < allCards.Count; i++)
+
+				if (showDuplicates)
 				{
-					var card = allCards[i];
-					if (card == null)
-						throw new Exception(@"null in sorted cards");
+					for (int i = 0; i < allCards.Count; i++)
+					{
+						if (_breakRefreshing)
+							return;
 
-					if (_breakRefreshing)
-						return;
+						var card = allCards[i];
 
-					bool isFit = (showDuplicates || card.IsNonDuplicate) && fit(card, filterManagerStates);
+						card.IsSearchResult = fit(card, filterManagerStates);
 
-					if (isFit || card == touchedCard)
-						filteredCards.Add(card);
+						if (card.IsSearchResult || card == touchedCard)
+							filteredCards.Add(card);
+					}
+				}
+				else
+				{
+					var cardsByName = new Dictionary<string, Card>();
 
-					card.IsSearchResult = isFit;
+					for (int i = 0; i < allCards.Count; i++)
+					{
+						if (_breakRefreshing)
+							return;
+
+						var card = allCards[i];
+
+						if (fit(card, filterManagerStates))
+						{
+							Card otherCard;
+							bool isCurrentCardMoreRecent;
+
+							if (!cardsByName.TryGetValue(card.NameNormalized, out otherCard))
+								isCurrentCardMoreRecent = true;
+							else
+							{
+								var dateCompare = Str.Compare(card.ReleaseDate, otherCard.ReleaseDate);
+								if (dateCompare > 0)
+									isCurrentCardMoreRecent = true;
+								else if (dateCompare == 0)
+									isCurrentCardMoreRecent = card.IndexInFile < otherCard.IndexInFile;
+								else
+									isCurrentCardMoreRecent = false;
+							}
+
+							if (isCurrentCardMoreRecent)
+								cardsByName[card.NameNormalized] = card;
+						}
+					}
+
+					for (int i = 0; i < allCards.Count; i++)
+					{
+						if (_breakRefreshing)
+							return;
+
+						var card = allCards[i];
+						card.IsSearchResult = cardsByName.TryGet(card.NameNormalized) == card;
+
+						if (card.IsSearchResult || card == touchedCard)
+							filteredCards.Add(card);
+					}
 				}
 
 				_filteredCards.Clear();

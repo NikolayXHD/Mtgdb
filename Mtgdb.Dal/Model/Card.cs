@@ -57,9 +57,6 @@ namespace Mtgdb.Dal
 		public int IndexInFile { get; set; }
 
 		[JsonIgnore]
-		public bool IsNonDuplicate { get; internal set; }
-
-		[JsonIgnore]
 		public bool IsSearchResult { get; set; }
 
 

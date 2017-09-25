@@ -115,10 +115,6 @@ namespace Mtgdb.Dal
 					gr => gr.OrderByDescending(_=>_.ReleaseDate).ToList(),
 					Str.Comparer);
 
-			foreach (var group in CardsByName.Values)
-				group[0].IsNonDuplicate = true;
-
-
 			for (int i = 0; i < Cards.Count; i++)
 				Cards[i].IndexInFile = i;
 

@@ -58,6 +58,7 @@ namespace Mtgdb.Dal
 				.Select(_ => _.Path)
 				.Select(AppDir.GetRootPath)
 				.Where(Directory.Exists)
+				// связь с другим местом use_dir_sorting_to_find_most_nested_root
 				.OrderByDescending(_ => _.Length)
 				.ToArray();
 		}
@@ -107,6 +108,7 @@ namespace Mtgdb.Dal
 			Shell shl = null;
 			foreach (var entryByDirectory in files.GroupBy(Path.GetDirectoryName))
 			{
+				// связь с другим местом use_dir_sorting_to_find_most_nested_root
 				string root = directories.First(_ => entryByDirectory.Key.StartsWith(_));
 				bool readAttributes = _directoriesArtAttributes.Contains(root);
 
