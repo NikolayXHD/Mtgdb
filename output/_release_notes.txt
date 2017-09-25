@@ -1,3 +1,15 @@
+=== 2.1.3 ===
+
+* Changed the way card hiding card duplicates works.
+Previously the card was considered duplicate if and only if there were more recently
+released namesake.
+
+This works ok except when you search by set. In this case many cards from the set are
+not shown at all because there is a more recent version.
+
+So the fix is to check existence of a more recent version only among other cards that
+comply to the search criterion.
+
 === 2.1.2 ===
 
 * In search stirng curly braces {,} are considered normal word characters
