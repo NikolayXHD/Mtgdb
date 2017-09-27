@@ -410,6 +410,12 @@ namespace Mtgdb.Dal
 		[JsonProperty("layout")]
 		public string Layout { get; set; }
 
+		/// <summary>
+		/// The multiverseid of the card on Wizard's Gatherer web page. Cards from sets that do not exist on Gatherer will NOT have a multiverseid. Sets not on Gatherer are: ATH, ITP, DKM, RQS, DPA and all sets with a 4 letter code that starts with a lowercase 'p'.
+		/// </summary>
+		[JsonProperty("multiverseId")]
+		public int? MultiverseId { get; set; }
+
 		/*
 		/// <summary>
 		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.
@@ -427,11 +433,6 @@ namespace Mtgdb.Dal
 		/// This is created reading all card color information and costs. It is the same for double-sided cards (if they have different colors, the identity will have both colors). It also identifies all mana symbols in the card (cost and text). Mostly used on commander decks.
 		/// </summary>
 		public List<string> ColorIdentity { get; set; }
-		
-		/// <summary>
-		/// The multiverseid of the card on Wizard's Gatherer web page. Cards from sets that do not exist on Gatherer will NOT have a multiverseid. Sets not on Gatherer are: ATH, ITP, DKM, RQS, DPA and all sets with a 4 letter code that starts with a lowercase 'p'.
-		/// </summary>
-		public int? Multiverseid { get; set; }
 		
 		/// <summary>
 		/// If a card has alternate art (for example, 4 different Forests, or the 2 Brothers Yamazaki) then each other variation's multiverseid will be listed here, NOT including the current card's multiverseid. NOTE: Only present for sets that exist on Gatherer.

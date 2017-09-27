@@ -1,3 +1,5 @@
+Announcement to show in update window in case of emergency situation with updates
+
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
 	I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 

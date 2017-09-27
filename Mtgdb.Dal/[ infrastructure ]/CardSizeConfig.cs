@@ -2,7 +2,7 @@
 
 namespace Mtgdb.Gui
 {
-	[DataContract(Name = "CardSize")]
+	[DataContract(Name = "NormalCardSize")]
 	public class CardSizeConfig
 	{
 		[DataMember(Name = "Width")]

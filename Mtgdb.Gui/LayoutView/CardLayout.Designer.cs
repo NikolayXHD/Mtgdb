@@ -72,12 +72,12 @@ namespace Mtgdb.Gui
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";
-			this._fieldImage.Size = new System.Drawing.Size(215, 300);
+			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
 			// 
 			// _fieldName
 			// 
-			this._fieldName.Location = new System.Drawing.Point(217, 0);
+			this._fieldName.Location = new System.Drawing.Point(225, 0);
 			this._fieldName.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldName.Name = "_fieldName";
 			this._fieldName.Padding = new System.Windows.Forms.Padding(2);
@@ -88,7 +88,7 @@ namespace Mtgdb.Gui
 			// 
 			this._fieldManaCost.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldManaCost.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._fieldManaCost.Location = new System.Drawing.Point(342, 0);
+			this._fieldManaCost.Location = new System.Drawing.Point(350, 0);
 			this._fieldManaCost.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldManaCost.Name = "_fieldManaCost";
 			this._fieldManaCost.Padding = new System.Windows.Forms.Padding(2);
@@ -98,7 +98,7 @@ namespace Mtgdb.Gui
 			// _fieldCmc
 			// 
 			this._fieldCmc.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._fieldCmc.Location = new System.Drawing.Point(392, 20);
+			this._fieldCmc.Location = new System.Drawing.Point(400, 20);
 			this._fieldCmc.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCmc.Name = "_fieldCmc";
 			this._fieldCmc.Padding = new System.Windows.Forms.Padding(2);
@@ -107,7 +107,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldType
 			// 
-			this._fieldType.Location = new System.Drawing.Point(217, 20);
+			this._fieldType.Location = new System.Drawing.Point(225, 20);
 			this._fieldType.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldType.Name = "_fieldType";
 			this._fieldType.Padding = new System.Windows.Forms.Padding(2);
@@ -116,7 +116,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldSetName
 			// 
-			this._fieldSetName.Location = new System.Drawing.Point(257, 40);
+			this._fieldSetName.Location = new System.Drawing.Point(265, 40);
 			this._fieldSetName.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSetName.Name = "_fieldSetName";
 			this._fieldSetName.Padding = new System.Windows.Forms.Padding(2);
@@ -125,7 +125,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldSetCode
 			// 
-			this._fieldSetCode.Location = new System.Drawing.Point(217, 40);
+			this._fieldSetCode.Location = new System.Drawing.Point(225, 40);
 			this._fieldSetCode.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSetCode.Name = "_fieldSetCode";
 			this._fieldSetCode.Padding = new System.Windows.Forms.Padding(2);
@@ -134,17 +134,17 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldText
 			// 
-			this._fieldText.Location = new System.Drawing.Point(217, 60);
+			this._fieldText.Location = new System.Drawing.Point(225, 60);
 			this._fieldText.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldText.Name = "_fieldText";
 			this._fieldText.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldText.Size = new System.Drawing.Size(215, 120);
+			this._fieldText.Size = new System.Drawing.Size(215, 131);
 			this._fieldText.TabIndex = 7;
 			// 
 			// _fieldFlavor
 			// 
 			this._fieldFlavor.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldFlavor.Location = new System.Drawing.Point(217, 180);
+			this._fieldFlavor.Location = new System.Drawing.Point(225, 191);
 			this._fieldFlavor.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldFlavor.Name = "_fieldFlavor";
 			this._fieldFlavor.Padding = new System.Windows.Forms.Padding(2);
@@ -154,7 +154,7 @@ namespace Mtgdb.Gui
 			// _fieldArtist
 			// 
 			this._fieldArtist.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldArtist.Location = new System.Drawing.Point(217, 220);
+			this._fieldArtist.Location = new System.Drawing.Point(225, 231);
 			this._fieldArtist.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldArtist.Name = "_fieldArtist";
 			this._fieldArtist.Padding = new System.Windows.Forms.Padding(2);
@@ -163,7 +163,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldReleaseDate
 			// 
-			this._fieldReleaseDate.Location = new System.Drawing.Point(287, 220);
+			this._fieldReleaseDate.Location = new System.Drawing.Point(295, 231);
 			this._fieldReleaseDate.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldReleaseDate.Name = "_fieldReleaseDate";
 			this._fieldReleaseDate.Padding = new System.Windows.Forms.Padding(2);
@@ -172,7 +172,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldRarity
 			// 
-			this._fieldRarity.Location = new System.Drawing.Point(357, 220);
+			this._fieldRarity.Location = new System.Drawing.Point(365, 231);
 			this._fieldRarity.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldRarity.Name = "_fieldRarity";
 			this._fieldRarity.Padding = new System.Windows.Forms.Padding(2);
@@ -182,7 +182,7 @@ namespace Mtgdb.Gui
 			// _fieldPricingLow
 			// 
 			this._fieldPricingLow.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldPricingLow.Location = new System.Drawing.Point(217, 240);
+			this._fieldPricingLow.Location = new System.Drawing.Point(225, 251);
 			this._fieldPricingLow.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingLow.Name = "_fieldPricingLow";
 			this._fieldPricingLow.Padding = new System.Windows.Forms.Padding(2);
@@ -192,7 +192,7 @@ namespace Mtgdb.Gui
 			// _fieldPricingMid
 			// 
 			this._fieldPricingMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldPricingMid.Location = new System.Drawing.Point(252, 240);
+			this._fieldPricingMid.Location = new System.Drawing.Point(260, 251);
 			this._fieldPricingMid.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingMid.Name = "_fieldPricingMid";
 			this._fieldPricingMid.Padding = new System.Windows.Forms.Padding(2);
@@ -202,7 +202,7 @@ namespace Mtgdb.Gui
 			// _fieldPricingHigh
 			// 
 			this._fieldPricingHigh.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldPricingHigh.Location = new System.Drawing.Point(292, 240);
+			this._fieldPricingHigh.Location = new System.Drawing.Point(300, 251);
 			this._fieldPricingHigh.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingHigh.Name = "_fieldPricingHigh";
 			this._fieldPricingHigh.Padding = new System.Windows.Forms.Padding(2);
@@ -211,7 +211,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldLoyalty
 			// 
-			this._fieldLoyalty.Location = new System.Drawing.Point(327, 240);
+			this._fieldLoyalty.Location = new System.Drawing.Point(335, 251);
 			this._fieldLoyalty.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLoyalty.Name = "_fieldLoyalty";
 			this._fieldLoyalty.Padding = new System.Windows.Forms.Padding(2);
@@ -220,7 +220,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldPower
 			// 
-			this._fieldPower.Location = new System.Drawing.Point(362, 240);
+			this._fieldPower.Location = new System.Drawing.Point(370, 251);
 			this._fieldPower.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPower.Name = "_fieldPower";
 			this._fieldPower.Padding = new System.Windows.Forms.Padding(2);
@@ -229,7 +229,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldToughness
 			// 
-			this._fieldToughness.Location = new System.Drawing.Point(397, 240);
+			this._fieldToughness.Location = new System.Drawing.Point(405, 251);
 			this._fieldToughness.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldToughness.Name = "_fieldToughness";
 			this._fieldToughness.Padding = new System.Windows.Forms.Padding(2);
@@ -240,7 +240,7 @@ namespace Mtgdb.Gui
 			// 
 			this._fieldRulings.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldRulings.ForeColor = System.Drawing.Color.Gray;
-			this._fieldRulings.Location = new System.Drawing.Point(217, 260);
+			this._fieldRulings.Location = new System.Drawing.Point(225, 271);
 			this._fieldRulings.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldRulings.Name = "_fieldRulings";
 			this._fieldRulings.Padding = new System.Windows.Forms.Padding(2);
@@ -270,7 +270,7 @@ namespace Mtgdb.Gui
 			this.Controls.Add(this._fieldName);
 			this.Controls.Add(this._fieldImage);
 			this.Name = "CardLayout";
-			this.Size = new System.Drawing.Size(432, 300);
+			this.Size = new System.Drawing.Size(440, 311);
 			this.ResumeLayout(false);
 
 		}

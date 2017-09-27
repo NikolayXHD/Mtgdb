@@ -152,7 +152,7 @@ namespace Mtgdb.Dal
 
 		private const string SeparatorLine = "£";
 
-		private static readonly Regex _normalizePattern = new Regex("(£|#_|_#)", RegexOptions.Compiled);
+		private static readonly Regex _normalizePattern = new Regex("£|#", RegexOptions.Compiled);
 		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})", RegexOptions.Compiled);
 
 		private const char SeparatorRow = '\r';

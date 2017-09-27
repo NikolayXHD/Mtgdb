@@ -53,7 +53,7 @@ namespace Mtgdb.Dal
 
 			double radius = corner/(Math.Sqrt(2) - 1);
 			// у них закругление не касается сторон карты, а пересекает под небольшим углом.
-			radius *= 2.1;
+			radius *= 1.9;
 
 			modify(+radius, +radius, 0, 0);
 			modify(+radius, -radius, 0, Rect.Height - 1);

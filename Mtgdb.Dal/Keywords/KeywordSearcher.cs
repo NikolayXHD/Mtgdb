@@ -13,25 +13,10 @@ namespace Mtgdb.Dal
 {
 	public class KeywordSearcher
 	{
-		public bool IsUpToDate => _version.IsUpToDate;
-
-		public bool IsLoading { get; private set; }
-		public bool IsLoaded { get; private set; }
-		public event Action Loaded;
-		public event Action LoadingProgress;
-
-		private readonly string _file;
-		private readonly IndexVersion _version;
-
-		public int SetsCount { get; private set; }
-
-		private RAMDirectory _index;
-		private IndexSearcher _searcher;
-
 		public KeywordSearcher()
 		{
 			// new cards
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.5");
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.6" /* new sets */ );
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 
@@ -155,5 +140,23 @@ namespace Mtgdb.Dal
 		{
 			_version.Invalidate();
 		}
+
+
+
+		public bool IsUpToDate => _version.IsUpToDate;
+
+		public bool IsLoading { get; private set; }
+		public bool IsLoaded { get; private set; }
+		public event Action Loaded;
+		public event Action LoadingProgress;
+
+		public int SetsCount { get; private set; }
+
+
+
+		private readonly string _file;
+		private readonly IndexVersion _version;
+		private RAMDirectory _index;
+		private IndexSearcher _searcher;
 	}
 }

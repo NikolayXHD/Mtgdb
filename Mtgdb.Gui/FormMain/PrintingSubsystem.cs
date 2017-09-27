@@ -75,7 +75,7 @@ namespace Mtgdb.Gui
 					if (card.ImageModel == null)
 						continue;
 
-					var model = _imageRepository.GetImagePrint(card, _cardRepository.GetReleaseDate);
+					var model = _imageRepository.GetImagePrint(card, _cardRepository.GetReleaseDateSimilarity);
 					var image = Image.FromFile(model.FullPath);
 
 					int count = deck.GetCount(card);

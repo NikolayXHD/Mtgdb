@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Mtgdb.Downloader
 {
-	public class ClientBase
+	public class WebClientBase
 	{
-		protected ClientBase()
+		protected WebClientBase()
 		{
 			_webClient = new System.Net.WebClient();
 			_webClient.Headers.Add(
@@ -16,16 +16,9 @@ namespace Mtgdb.Downloader
 			_webClient.Headers.Add(
 				"Accept",
 				"text / html,application / xhtml + xml,application / xml; q = 0.9,image / webp,image / apng,*/*;q=0.8");
-
-			_webClient.Headers.Add("Accept-Language", "en,ru;q=0.8");
-			_webClient.Headers.Add("Accept-Encoding", "gzip, deflate");
-			_webClient.Headers.Add("Referer", "http://prices.tcgplayer.com/price-guide/magic/box-sets");
-			_webClient.Headers.Add("Upgrade-Insecure-Requests", "1");
-			_webClient.CachePolicy = new HttpRequestCachePolicy(HttpCacheAgeControl.MaxAge, TimeSpan.Zero);
-			_webClient.Headers.Add("Host", " prices.tcgplayer.com");
 		}
 
-		protected string Download(string pageUrl)
+		protected string DownloadString(string pageUrl)
 		{
 			using (var stream = _webClient.OpenRead(pageUrl))
 			{
@@ -38,6 +31,11 @@ namespace Mtgdb.Downloader
 					return result;
 				}
 			}
+		}
+
+		protected Stream DownloadStream(string pageUrl)
+		{
+			return _webClient.OpenRead(pageUrl);
 		}
 
 		private readonly System.Net.WebClient _webClient;

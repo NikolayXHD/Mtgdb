@@ -45,15 +45,15 @@ namespace Mtgdb.Util
 				bool zoomed = args.GetFlag("-zoomed");
 				string setCode = args.GetParam("-set");
 
-				string smallSubdir = null;
-				string zoomedSubdir = null;
+				string smallSubdir;
+				string zoomedSubdir;
 
-				if (small && zoomed)
+				if (small || zoomed)
 				{
 					smallSubdir = args.GetParam("-small");
 					zoomedSubdir = args.GetParam("-zoomed");
 				}
-				else if (!small && !zoomed)
+				else
 				{
 					printUsage();
 					return;
@@ -77,7 +77,7 @@ namespace Mtgdb.Util
 
 		
 
-		private static void exportImages(bool small, bool zoomed, string setCode, string directory, bool silent, string smallSubdir, string zoomedSubdir)
+		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir)
 		{
 			var integration = _kernel.Get<ForgeIntegration>();
 
@@ -88,8 +88,8 @@ namespace Mtgdb.Util
 			else
 				Console.Write("Small and Zoomed ");
 
-			if (setCode != null)
-				Console.Write("set " + setCode + " ");
+			if (setCodes != null)
+				Console.Write("set " + setCodes + " ");
 			else
 				Console.Write("all sets ");
 
@@ -104,7 +104,9 @@ namespace Mtgdb.Util
 			integration.Load();
 
 			Console.WriteLine("== Exporting card images ==");
-			integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir);
+
+			foreach (string setCode in setCodes?.Split(';') ?? new string[] { null })
+				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir);
 
 			if (!silent)
 			{
@@ -142,12 +144,12 @@ namespace Mtgdb.Util
 			Console.WriteLine("Mtgdb.Util.exe -forge [-set setcode]");
 			Console.WriteLine("\t- replace images in Forge image directory");
 
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode] -small");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small");
 			Console.WriteLine("\t- export small images to directory specified after -path");
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode] -zoomed");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -zoomed");
 			Console.WriteLine("\t- export zoomed images to directory specified after -path");
 
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode] -small subdirectory_small -zoomed subdirectory_zoomed");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small subdirectory_small -zoomed subdirectory_zoomed");
 			Console.WriteLine("\t- export small images to directory\\subdirectory_small and zoomed images to directory\\subdirectory_zoomed");
 
 			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name]");

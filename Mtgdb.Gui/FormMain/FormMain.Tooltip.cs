@@ -156,7 +156,8 @@
 				"Ctrl+SPACE to get intellisense\r\n" +
 				"Enter to apply\r\n" +
 				"Ctrl+Backspace to delete one word\r\n" +
-				"F1 to learn searh string syntax",
+				"F1 to learn searh string syntax\r\n\r\n" +
+				"Ctrl+F to focus search input",
 				_findCustomPanel,
 				_findEditor,
 				_panelIconSearch);

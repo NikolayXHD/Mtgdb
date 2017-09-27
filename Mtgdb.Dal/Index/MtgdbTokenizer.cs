@@ -38,7 +38,7 @@ namespace Mtgdb.Dal.Index
 			if (_length == 0)
 				_start = _offset - 1; // start of token
 
-			_buffer[_length++] = Char.ToLower(c); // buffer it
+			_buffer[_length++] = char.ToLower(c); // buffer it
 		}
 
 		private bool flush()
@@ -130,13 +130,15 @@ namespace Mtgdb.Dal.Index
 
 		public static readonly char[] WordChars =
 		{
-			'½',
+			'_',
 			'-',
 			'−',
+			'—',
 			'+',
 			'/',
 			'{',
-			'}'
+			'}',
+			'½'
 		};
 
 		public static readonly HashSet<char> WordCharsSet = new HashSet<char>(WordChars);

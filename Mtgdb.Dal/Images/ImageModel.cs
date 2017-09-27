@@ -7,7 +7,7 @@ namespace Mtgdb.Dal
 {
 	public class ImageModel
 	{
-		private static readonly Regex SetCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.Compiled);
+		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		
 		public ImageModel(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
 		{
@@ -52,7 +52,8 @@ namespace Mtgdb.Dal
 			HasTransparentCorner = directoryName.Contains("MagicDuels");
 			IsPreprocessed = directoryName.Contains("Mtgdb.Pictures");
 
-			IsCrop = FullPath.Contains("Crops") || (Type != null && (Type.Contains("crop") || Type.Contains("xrop")));
+			IsCrop = FullPath.Contains("Crops") ||
+				Type != null && (Type.Contains("crop") || Type.Contains("xrop"));
 
 			rootPath = AppDir.GetRootPath(rootPath);
 
@@ -69,7 +70,7 @@ namespace Mtgdb.Dal
 			}
 			else
 			{
-				var setCodeMatch = SetCodeRegex.Match(directoryName.Substring(rootPath.Length));
+				var setCodeMatch = _setCodeRegex.Match(directoryName.Substring(rootPath.Length));
 				if (setCodeMatch.Success)
 					SetCode = string.Intern(setCodeMatch.Value.ToUpperInvariant());
 				else

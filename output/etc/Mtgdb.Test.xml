@@ -3,7 +3,6 @@
 	<WatchFile Mode="Auto" />
 
 	<ImageLocations />
-	<DatafilesPostprocessing HumanReadableSetsFile="False" />
 	<ImageCache CacheCapacity ="100" />
 
 </configuration>

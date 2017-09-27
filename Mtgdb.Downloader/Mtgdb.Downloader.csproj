@@ -63,7 +63,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="ClientBase.cs" />
+    <Compile Include="WebClientBase.cs" />
     <Compile Include="PriceDownloader.cs" />
     <Compile Include="PriceClient.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

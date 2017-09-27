@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ version ]", "[ version ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
 		backlog.txt = backlog.txt
+		etc\Mtgdb.Gui.xml = etc\Mtgdb.Gui.xml
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject

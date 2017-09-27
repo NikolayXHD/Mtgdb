@@ -8,14 +8,14 @@ namespace Mtgdb.Dal
 {
 	public class ImageCache
 	{
-		public static readonly Size SizeCropped = new Size(246, 343);
+		public static readonly Size SizeCropped = new Size(205, 293);
 
 		private readonly Dictionary<string, ImageCacheEntry> _imagesByPath = new Dictionary<string, ImageCacheEntry>();
 		private readonly LinkedList<string> _ratings = new LinkedList<string>();
 
-		public Size CardSizeDefault { get; } = new Size(215, 300);
-		public Size CardSize { get; } = new Size(215, 300);
-		public Size ZoomedCardSize { get; } = new Size(427, 596);
+		public Size CardSizeDefault { get; } = new Size(223, 311);
+		public Size CardSize { get; } = new Size(223, 311);
+		public Size ZoomedCardSize { get; } = new Size(446, 622);
 
 		public int Capacity { get; }
 		private readonly bool _transparentCornersWhenNotZoomed;
@@ -65,9 +65,6 @@ namespace Mtgdb.Dal
 				return null;
 
 			var result = Transform(original, model, size, transparentCorners, crop, whiteCorner);
-			if (result != original)
-				original.Dispose();
-
 			return result;
 		}
 
@@ -104,17 +101,26 @@ namespace Mtgdb.Dal
 				else
 					frame = new Size(0, 0);
 
+				bool scaled;
+
 				try
 				{
 					bitmap = original.Scale(size, frame);
+					scaled = true;
 				}
 				catch
 				{
 					bitmap = original;
+					scaled = false;
 				}
+
+				if (scaled)
+					original.Dispose();
 			}
 			else
+			{
 				bitmap = original;
+			}
 
 			if (!transparentCorners && !whiteCorner ||
 			    size == CardSize && model.IsPreprocessed ||
@@ -124,22 +130,30 @@ namespace Mtgdb.Dal
 				return bitmap;
 			}
 
-			using (bitmap)
-			{
-				var edited = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+			var edited = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
 
-				try
-				{
-					var gr = Graphics.FromImage(edited);
-					gr.DrawImage(bitmap, new Rectangle(new Point(0, 0), bitmap.Size));
-					new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: size == CardSize).Execute();
-					return edited;
-				}
-				catch
-				{
-					edited.Dispose();
-					return null;
-				}
+			bool cornerRemoved;
+			try
+			{
+				var gr = Graphics.FromImage(edited);
+				gr.DrawImage(bitmap, new Rectangle(new Point(0, 0), bitmap.Size));
+				new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: size == CardSize).Execute();
+				cornerRemoved = true;
+			}
+			catch
+			{
+				cornerRemoved = false;
+			}
+
+			if (cornerRemoved)
+			{
+				bitmap.Dispose();
+				return edited;
+			}
+			else
+			{
+				edited.Dispose();
+				return bitmap;
 			}
 		}
 
