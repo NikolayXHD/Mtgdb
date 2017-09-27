@@ -36,15 +36,15 @@ namespace Mtgdb.Gui
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";
-			this._fieldImage.Size = new System.Drawing.Size(215, 300);
+			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
 			// 
-			// DeckLayoutControl
+			// DeckLayout
 			// 
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this._fieldImage);
 			this.Name = "DeckLayout";
-			this.Size = new System.Drawing.Size(215, 300);
+			this.Size = new System.Drawing.Size(223, 311);
 			this.ResumeLayout(false);
 
 		}

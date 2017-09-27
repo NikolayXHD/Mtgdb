@@ -21,6 +21,7 @@
 	-->
 	
 	<!--
+		=== View tag ===
 		* AllowPartialCards
 		The purpose is to use window space effectively when the  window size is small.
 		If you want to see only cards that completely fit within the window set the
@@ -33,17 +34,24 @@
 		
 		* Show deck
 		Set this option to "False" to hide the deck area in the bottow of the window.
+		
+		=== NormalCardSize tag ==
+		A size of card image shown in search result
+		
+		=== ZoomCardSize tag ===
+		A size of card image shown when you zoom a card
 	-->
+	
+	<!--
 	<View
 		AllowPartialCards="True"
 		ShowTextualFields="True"
 		ShowDeck="True"
 	/>
 	
-	<!-- A size of card image shown in search result -->
-	<CardSize Width="215" Height="300" />
+	<NormalCardSize Width="446" Height="622" />
 	
-	<!-- A size of card image shown when you zoom a card -->
-	<ZoomedCardSize Width="427" Height="596" />
+	<ZoomCardSize Width="892" Height="1244" />
+	-->
 
 </configuration>

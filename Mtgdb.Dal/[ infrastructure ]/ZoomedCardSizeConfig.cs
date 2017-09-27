@@ -2,7 +2,7 @@
 
 namespace Mtgdb.Gui
 {
-	[DataContract(Name = "ZoomedCardSize")]
+	[DataContract(Name = "ZoomCardSize")]
 	public class ZoomedCardSizeConfig
 	{
 		[DataMember(Name = "Width")]

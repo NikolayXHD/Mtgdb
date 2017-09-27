@@ -9,57 +9,22 @@ namespace Mtgdb.Dal
 {
 	public class ImageRepository
 	{
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariant =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
-
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantZoom =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
-
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantArt =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
-
-		public bool IsLoadingComplete { get; private set; }
-		public bool IsLoadingZoomComplete { get; private set; }
-		public bool IsLoadingArtComplete { get; private set; }
-
-		public bool IsFileLoadingComplete { get; private set; }
-		
-		public event Action LoadingComplete;
-
-		private readonly List<string> _files = new List<string>();
-		private readonly List<string> _filesZoom = new List<string>();
-		private readonly List<string> _filesArt = new List<string>();
-
-		private readonly IList<string> _directories;
-		private readonly IList<string> _directoriesZoom;
-		private readonly IList<string> _directoriesArt;
-		private readonly HashSet<string> _directoriesArtAttributes;
-
-		private static readonly string[] _extensions = { "*.jpg", "*.png" };
-
-		private static readonly string[] _metadataSeparator = { "][" };
-		private const char MetadataBegin = '[';
-		private const char MetadataEnd = ']';
-		private static readonly char[] _metadataValueSeparator = { ',', ';' };
-
 		public ImageRepository(ImageLocationsConfig config)
 		{
-			_directories = getFolders(config.Directories.Where(_ => _.Zoom != true && _.Art != true));
-			_directoriesZoom = getFolders(config.Directories.Where(_ => _.Zoom == true));
-			_directoriesArt = getFolders(config.Directories.Where(_ => _.Art == true));
+			foreach (var directoryConfig in config.Directories)
+				directoryConfig.Path = AppDir.GetRootPath(directoryConfig.Path);
 
-			_directoriesArtAttributes = new HashSet<string>(
-				getFolders(config.Directories.Where(_ => _.Art == true && _.ReadMetadataFromAttributes == true)));
+			_directories = getFolders(config.Directories, ImageType.Small);
+			_directoriesZoom = getFolders(config.Directories, ImageType.Zoom);
+			_directoriesArt = getFolders(config.Directories, ImageType.Art);
 		}
 
-		private static string[] getFolders(IEnumerable<DirectoryConfig> directoryConfigs)
+		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
 		{
 			return directoryConfigs
-				.Select(_ => _.Path)
-				.Select(AppDir.GetRootPath)
-				.Where(Directory.Exists)
+				.Where(c=> filter(c) && Directory.Exists(c.Path))
 				// связь с другим местом use_dir_sorting_to_find_most_nested_root
-				.OrderByDescending(_ => _.Length)
+				.OrderByDescending(c => c.Path.Length)
 				.ToArray();
 		}
 
@@ -71,12 +36,21 @@ namespace Mtgdb.Dal
 			IsFileLoadingComplete = true;
 		}
 
-		private static void loadFiles(IList<string> directories, ICollection<string> files)
+		private static void loadFiles(IList<DirectoryConfig> directories, ICollection<string> files)
 		{
 			foreach (var directory in directories)
+			{
+				var excludes = directory.Exclude?.Split(';');
+
 				foreach (string extension in _extensions)
-					foreach (string file in Directory.EnumerateFiles(directory, extension, SearchOption.AllDirectories))
+					foreach (string file in Directory.EnumerateFiles(directory.Path, extension, SearchOption.AllDirectories))
+					{
+						if (excludes != null && excludes.Any(exclude => file.IndexOf(exclude, Str.Comparison) >= 0))
+							continue;
+
 						files.Add(file);
+					}
+			}
 		}
 
 		public void Load()
@@ -99,9 +73,9 @@ namespace Mtgdb.Dal
 			IsLoadingArtComplete = true;
 		}
 
-		private void load(
+		private static void load(
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant,
-			IList<string> directories,
+			IList<DirectoryConfig> directories,
 			IEnumerable<string> files,
 			bool isArt = false)
 		{
@@ -109,8 +83,10 @@ namespace Mtgdb.Dal
 			foreach (var entryByDirectory in files.GroupBy(Path.GetDirectoryName))
 			{
 				// связь с другим местом use_dir_sorting_to_find_most_nested_root
-				string root = directories.First(_ => entryByDirectory.Key.StartsWith(_));
-				bool readAttributes = _directoriesArtAttributes.Contains(root);
+				var root = directories.First(_ => entryByDirectory.Key.StartsWith(_.Path));
+				string customSetCode = root.Set;
+
+				bool readAttributes = root.ReadMetadataFromAttributes == true;
 
 				Folder dir = null;
 				if (isArt && readAttributes)
@@ -122,23 +98,24 @@ namespace Mtgdb.Dal
 				foreach (string file in entryByDirectory)
 				{
 					IList<string> authors = null;
-					IList<string> keywords = null;
+					IList<string> setCodes = customSetCode?.Split(';').ToList();
+
 					if (isArt)
 					{
 						string fileName = Path.GetFileName(file);
-						getMetadataFromName(fileName, ref authors, ref keywords);
+						getMetadataFromName(fileName, ref authors, ref setCodes);
 
 						if (readAttributes)
-							getMetadataFromAttributes(dir, fileName, ref authors, ref keywords);
+							getMetadataFromAttributes(dir, fileName, ref authors, ref setCodes);
 					}
 
 					authors = notNullOrEmpty(authors);
-					keywords = notNullOrEmpty(keywords);
+					setCodes = notNullOrEmpty(setCodes);
 
 					foreach (string author in authors)
-						foreach (string setCode in keywords)
+						foreach (string setCode in setCodes)
 						{
-							var model = new ImageModel(file, root, setCode, author, isArt);
+							var model = new ImageModel(file, root.Path, setCode, author, isArt);
 
 							if (model.IsCrop)
 								continue;
@@ -265,12 +242,14 @@ namespace Mtgdb.Dal
 		}
 
 
-		public ImageModel GetImageSmall(Card card, Func<string, string> setCodePreference)
+		public ImageModel GetImageSmall(Card card, Func<string, string, string> setCodePreference)
 		{
-			return getImage(card, setCodePreference, _modelsByNameBySetByVariant);
+			return
+				getImage(card, setCodePreference, _modelsByNameBySetByVariant) ??
+				getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom);
 		}
 
-		public ImageModel GetImagePrint(Card card, Func<string, string> setCodePreference)
+		public ImageModel GetImagePrint(Card card, Func<string, string, string> setCodePreference)
 		{
 			return
 				getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom) ??
@@ -279,7 +258,7 @@ namespace Mtgdb.Dal
 
 		private static ImageModel getImage(
 			Card card,
-			Func<string, string> setCodePreference,
+			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
 		{
 			lock (modelsByNameBySetByVariant)
@@ -292,7 +271,7 @@ namespace Mtgdb.Dal
 
 				Dictionary<int, ImageModel> byImageVariant;
 				if (card.SetCode == null || !bySet.TryGetValue(card.SetCode, out byImageVariant))
-					byImageVariant = bySet.ElementAtMax(pair => setCodePreference.Invoke(pair.Key)).Value;
+					byImageVariant = bySet.ElementAtMax(pair => setCodePreference(card.SetCode, pair.Key)).Value;
 
 				var model = byImageVariant.ElementAtMax(pair => getMatchRank(pair.Value, imageName)).Value;
 				return model;
@@ -308,7 +287,7 @@ namespace Mtgdb.Dal
 			return -variantNumber + 100*quality + 10000*Convert.ToInt32(imageNameIsMatching);
 		}
 
-		public List<ImageModel> GetImagesZoom(Card card, Func<string, string> setCodePreference)
+		public List<ImageModel> GetImagesZoom(Card card, Func<string, string, string> setCodePreference)
 		{
 			var models = getSpecificModels(card,
 				setCodePreference,
@@ -319,7 +298,7 @@ namespace Mtgdb.Dal
 			return models;
 		}
 
-		public List<ImageModel> GetImagesArt(Card card, Func<string, string> setCodePreference)
+		public List<ImageModel> GetImagesArt(Card card, Func<string, string, string> setCodePreference)
 		{
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
 			var distinctModels = models?.GroupBy(_ => _.FullPath).Select(_ => _.First()).ToList();
@@ -336,7 +315,7 @@ namespace Mtgdb.Dal
 
 		private static List<ImageModel> getSpecificModels(
 			Card card,
-			Func<string, string> setCodePreference,
+			Func<string, string, string> setCodePreference,
 			bool isLoadingSpecificComplete,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsSpecific,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsFallback)
@@ -357,7 +336,7 @@ namespace Mtgdb.Dal
 
 		private static List<ImageModel> getImageModels(
 			Card card,
-			Func<string, string> setCodePreference,
+			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
 		{
 			lock (modelsByNameBySetByVariant)
@@ -372,7 +351,7 @@ namespace Mtgdb.Dal
 					// Далее сеты, в которых есть вариант с совпадающим артистом
 					.ThenByDescending(bySet => card.Artist != null && bySet.Value.Values.Any(_ => Str.Equals(_.Artist, card.Artist)))
 					// Остальные сеты пойдут от новых к старым
-					.ThenByDescending(bySet => setCodePreference(bySet.Key))
+					.ThenByDescending(bySet => setCodePreference(card.SetCode, bySet.Key))
 					.SelectMany(bySet =>
 						bySet.Value.Select(byVariant => byVariant.Value)
 							// В совпадающем сете покажем 
@@ -399,7 +378,7 @@ namespace Mtgdb.Dal
 		}
 
 
-		public ImageModel GetReplacementImage(ImageModel model, Func<string, string> setCodePreference)
+		public ImageModel GetReplacementImage(ImageModel model, Func<string, string, string> setCodePreference)
 		{
 			if (string.IsNullOrEmpty(model.Name))
 				return null;
@@ -413,7 +392,7 @@ namespace Mtgdb.Dal
 
 		private static ImageModel getReplacementImage(
 			ImageModel modelOriginal,
-			Func<string, string> setCodePreference,
+			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
 		{
 			string setCode = modelOriginal.SetCode;
@@ -428,7 +407,7 @@ namespace Mtgdb.Dal
 
 				Dictionary<int, ImageModel> byImageVariant;
 				if (setCode == null || !bySet.TryGetValue(setCode, out byImageVariant))
-					byImageVariant = bySet.ElementAtMax(pair => setCodePreference.Invoke(pair.Key)).Value;
+					byImageVariant = bySet.ElementAtMax(pair => setCodePreference.Invoke(modelOriginal.SetCode, pair.Key)).Value;
 
 				ImageModel model;
 				if (!byImageVariant.TryGetValue(variant, out model))
@@ -437,5 +416,41 @@ namespace Mtgdb.Dal
 				return model;
 			}
 		}
+
+
+
+		public bool IsLoadingComplete { get; private set; }
+		public bool IsLoadingZoomComplete { get; private set; }
+		public bool IsLoadingArtComplete { get; private set; }
+
+		public bool IsFileLoadingComplete { get; private set; }
+
+		public event Action LoadingComplete;
+
+
+		private readonly HashSet<string> _files = new HashSet<string>(Str.Comparer);
+		private readonly HashSet<string> _filesZoom = new HashSet<string>(Str.Comparer);
+		private readonly HashSet<string> _filesArt = new HashSet<string>(Str.Comparer);
+
+		private readonly IList<DirectoryConfig> _directories;
+		private readonly IList<DirectoryConfig> _directoriesZoom;
+		private readonly IList<DirectoryConfig> _directoriesArt;
+
+		private static readonly string[] _extensions = { "*.jpg", "*.png" };
+
+		private static readonly string[] _metadataSeparator = { "][" };
+		private const char MetadataBegin = '[';
+		private const char MetadataEnd = ']';
+		private static readonly char[] _metadataValueSeparator = { ',', ';' };
+
+
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariant =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
+
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantZoom =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
+
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantArt =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
 	}
 }

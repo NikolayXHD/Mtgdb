@@ -1,11 +1,31 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Mtgdb.Dal;
+using Mtgdb.Downloader;
 using Mtgdb.ImageProcessing;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
+	public class GathererClient : WebClientBase
+	{
+		public void DownloadCard(Card card, string targetDirectory)
+		{
+			var setDirectory = Path.Combine(targetDirectory, card.SetCode);
+			Directory.CreateDirectory(setDirectory);
+
+			if (card.MultiverseId == null)
+				return;
+
+			using (var webStream = DownloadStream(BaseUrl + card.MultiverseId))
+			using (var fileStream = File.Open(Path.Combine(setDirectory, card.ImageName + ".png"), FileMode.Create))
+				webStream.CopyTo(fileStream);
+		}
+
+		private const string BaseUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=";
+	}
+
 	[TestFixture]
 	public class GathererImagePreProcessor
 	{
@@ -19,12 +39,27 @@ namespace Mtgdb.Test
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
 		private static readonly string FramedImagesDir = @"D:\Distrib\games\mtg\Gatherer.Framed";
 
-		[TestCase("CMA")]
-		public void PreProcessImages(string subdir)
+		[TestCase("cma")]
+		public void DownloadImages(string setCode)
+		{
+			TestLoadingUtil.LoadModules();
+			TestLoadingUtil.LoadCardRepository();
+
+			var client = new GathererClient();
+
+			var set = TestLoadingUtil.CardRepository.SetsByCode[setCode];
+			foreach (var card in set.Cards)
+				client.DownloadCard(card, GathererOriginalDir);
+		}
+
+		[TestCase("CMA", "*.png")]
+		[TestCase("C17", "*.png")]
+		[TestCase("XLN", "*.png")]
+		public void PreProcessImages(string subdir, string pattern)
 		{
 			var sourceImages = Directory.GetFiles(
 				Path.Combine(GathererOriginalDir, subdir),
-				"*.jpg",
+				pattern,
 				SearchOption.AllDirectories)
 				.ToArray();
 

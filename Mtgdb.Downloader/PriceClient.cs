@@ -4,7 +4,7 @@ using Mtgdb.Dal;
 
 namespace Mtgdb.Downloader
 {
-	public class PriceClient : ClientBase
+	public class PriceClient : WebClientBase
 	{
 		public PriceId DownloadSid(string mciSetCode, string mciCardNumber)
 		{
@@ -14,7 +14,7 @@ namespace Mtgdb.Downloader
 			if (string.IsNullOrEmpty(mciCardNumber))
 				return null;
 
-			string html = Download(MagiccardsUrl + "/" + mciSetCode.ToLowerInvariant() + "/en/" + mciCardNumber + ".html");
+			string html = DownloadString(MagiccardsUrl + "/" + mciSetCode.ToLowerInvariant() + "/en/" + mciCardNumber + ".html");
 
 			if (html == null)
 				return null;
@@ -31,7 +31,7 @@ namespace Mtgdb.Downloader
 
 		public PriceValues DownloadPrice(PriceId priceId)
 		{
-			string script = Download(MagiccardsUrl + "/tcgplayer/hl?sid=" + priceId.Sid);
+			string script = DownloadString(MagiccardsUrl + "/tcgplayer/hl?sid=" + priceId.Sid);
 
 			var result = new PriceValues
 			{

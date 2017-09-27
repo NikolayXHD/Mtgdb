@@ -28,7 +28,7 @@ namespace Mtgdb.Util
 						Path = directory,
 						Art = true,
 						ReadMetadataFromAttributes = true,
-						Zoom = false
+						Zoom = "False"
 					}
 				}
 			});

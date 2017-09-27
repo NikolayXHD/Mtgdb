@@ -290,6 +290,7 @@ namespace Mtgdb.Downloader
 
 					_imageDownloadProgressReader.DownloadSignatures(quality);
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
+
 					_imageDownloader.Download(quality, ImageDownloadProgress);
 
 					Console.WriteLine("Looking up downloaded images...");

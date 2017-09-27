@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -230,6 +229,9 @@ namespace Mtgdb.Gui
 
 		private void refreshData()
 		{
+			if (_viewCards.VisibleRecordIndex >= _filteredCards.Count)
+				_viewCards.VisibleRecordIndex = 0;
+
 			_viewCards.RefreshData();
 			_viewCards.Invalidate();
 

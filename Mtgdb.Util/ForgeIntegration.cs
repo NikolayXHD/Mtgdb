@@ -18,7 +18,9 @@ namespace Mtgdb.Util
 		private readonly bool _verbose;
 		private bool _crop;
 		private bool _whiteCorner;
-		
+		private Dictionary<string, string> _setByForgeSet;
+		private Dictionary<string, string> _forgeSetBySet;
+
 		public ForgeIntegration(
 			ImageRepository imageRepo, 
 			CardRepository cardRepo, 
@@ -50,6 +52,17 @@ namespace Mtgdb.Util
 		public void OverrideForgePictures(string setCode)
 		{
 			_crop = true;
+
+			var lineParts = File.ReadAllLines(AppDir.Data.AddPath("forge_set_mapping.txt"))
+				.Select(_ => _.Split('\t'))
+				.ToArray();
+
+			_setByForgeSet = lineParts
+				.ToDictionary(_ => _[0], _ => _[1]);
+
+			_forgeSetBySet = lineParts
+				.ToDictionary(_ => _[1], _ => _[0]);
+
 			if (!Directory.Exists(CardPicsPath))
 			{
 				Console.WriteLine($"== Aborting. Not found {CardPicsPath} ==");
@@ -68,7 +81,7 @@ namespace Mtgdb.Util
 			addNewFiles(setCode, small: false);
 		}
 
-		private void addNewFiles(string code, bool small)
+		private void addNewFiles(string setCode, bool small)
 		{
 			var allImageModels = _imageRepo.GetAllImageModels();
 
@@ -80,17 +93,21 @@ namespace Mtgdb.Util
 
 			foreach (var entryBySetCode in modelsBySetCode.OrderBy(entry=>entry.Key))
 			{
-				string setCode = entryBySetCode.Key;
+				string modelSetCode = entryBySetCode.Key;
 
-				if (code != null && !Str.Equals(setCode, code))
+				if (setCode != null && !Str.Equals(modelSetCode, setCode))
 					continue;
 
-				string subdir = Path.Combine(CardPicsPath, setCode);
+				string forgeSet;
+				if (!_forgeSetBySet.TryGetValue(modelSetCode, out forgeSet))
+					forgeSet = modelSetCode;
+
+				string subdir = Path.Combine(CardPicsPath, forgeSet);
 
 				if (!Directory.Exists(subdir))
 					continue;
 
-				Console.WriteLine($"== Scanning {setCode} ... ==");
+				Console.WriteLine($"== Scanning {forgeSet} ... ==");
 
 				foreach (var model in entryBySetCode.Value)
 					using (var original = ImageCache.Open(model))
@@ -110,12 +127,16 @@ namespace Mtgdb.Util
 			{
 				Console.WriteLine($"== Scanning {subdir} ... ==");
 
-				string setCode = Path.GetFileName(subdir);
+				string forgeSetCode = Path.GetFileName(subdir);
 
-				if (setCode == null)
+				if (forgeSetCode == null)
 					continue;
 
-				if (code != null && !Str.Equals(setCode, code))
+				string mappedSetCode;
+				if (_setByForgeSet.TryGetValue(forgeSetCode, out mappedSetCode))
+					forgeSetCode = mappedSetCode;
+				
+				if (code != null && !Str.Equals(forgeSetCode, code))
 					continue;
 
 				var oldFiles = Directory.GetFiles(subdir, "*.jpg", SearchOption.AllDirectories);
@@ -144,6 +165,9 @@ namespace Mtgdb.Util
 				if (removeExtension(ref fileName, ".jpg"))
 					continue;
 
+				if (removeExtension(ref fileName, ".png"))
+					continue;
+
 				if (removeExtension(ref fileName, ".xlhq"))
 					continue;
 
@@ -156,7 +180,14 @@ namespace Mtgdb.Util
 				break;
 			}
 
-			var targetFileName = fileName + ".full.jpg";
+			string targetFileName;
+			if (model.FullPath.EndsWith(".jpg", Str.Comparison))
+				targetFileName = fileName + ".jpg";
+			else if (model.FullPath.EndsWith(".png", Str.Comparison))
+				targetFileName = fileName + ".png";
+			else
+				throw new NotSupportedException("only .png .jpg extensions are supported");
+
 			var targetFullPath = Path.Combine(subdir, targetFileName);
 			return targetFullPath;
 		}
@@ -175,7 +206,7 @@ namespace Mtgdb.Util
 		private void replaceExistingFile(string oldFile, bool small)
 		{
 			var model = new ImageModel(oldFile, CardPicsPath);
-			var replacementModel = _imageRepo.GetReplacementImage(model, setCode => _cardRepo.GetReleaseDate(setCode));
+			var replacementModel = _imageRepo.GetReplacementImage(model, _cardRepo.GetReleaseDateSimilarity);
 
 			if (replacementModel == null)
 				return;
@@ -210,9 +241,7 @@ namespace Mtgdb.Util
 			}
 
 			string fileName = Path.GetFileName(model.FullPath);
-			if (fileName == null)
-				return;
-
+			
 			if (_verbose)
 				Console.WriteLine($"\tReplacing {model.FullPath}");
 
@@ -242,32 +271,43 @@ namespace Mtgdb.Util
 
 		private static byte[] saveToByteArray(ImageModel replacementModel, Bitmap image)
 		{
-			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-
-			var codec = codecs.First(_ => _.MimeType == "image/jpeg");
-
-			var encoderParams = new EncoderParameters
 			{
-				Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
-			};
+				ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
 
-			byte[] bytes;
-			using (var stream = new MemoryStream())
-			{
-				try
-				{
-					image.Save(stream, codec, encoderParams);
-				}
-				catch
-				{
-					Console.WriteLine("Failed to save " + replacementModel.FullPath);
-					return null;
-				}
 
-				bytes = stream.ToArray();
+				byte[] bytes;
+
+				using (var stream = new MemoryStream())
+				{
+					try
+					{
+						if (replacementModel.FullPath.EndsWith(".jpg", Str.Comparison))
+						{
+							var codec = codecs.First(_ => _.MimeType == "image/jpeg");
+							var encoderParams = new EncoderParameters
+							{
+								Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
+							};
+
+							image.Save(stream, codec, encoderParams);
+						}
+						else if (replacementModel.FullPath.EndsWith(".png", Str.Comparison))
+						{
+							image.Save(stream, ImageFormat.Png);
+						}
+						else
+							throw new NotSupportedException("only .png .jpg extensions are supported");
+					}
+					catch
+					{
+						Console.WriteLine("Failed to save " + replacementModel.FullPath);
+						return null;
+					}
+
+					bytes = stream.ToArray();
+					return bytes;
+				}
 			}
-
-			return bytes;
 		}
 
 		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir)
@@ -275,13 +315,14 @@ namespace Mtgdb.Util
 			_crop = false;
 			_whiteCorner = true;
 
-			var exported = new HashSet<string>();
+			var exportedSmall = new HashSet<string>();
+			var exportedZoomed = new HashSet<string>();
 
-			export(directory, code, exported, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true);
-			export(directory, code, exported, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false);
 		}
 
-		private void export(string directory, string code, HashSet<string> exported, bool small, bool zoomed, string smallSubdir, string zoomedSubdir, bool matchingSet)
+		private void export(string directory, string code, HashSet<string> exportedSmall, HashSet<string> exportedZoomed, bool small, bool zoomed, string smallSubdir, string zoomedSubdir, bool matchingSet)
 		{
 			//var withoutImage = _cardRepo.Cards.Where(_ => _.ImageModel == null).ToArray();
 
@@ -317,26 +358,51 @@ namespace Mtgdb.Util
 
 				foreach (var card in entryBySetCode.Value.Cards)
 				{
-					var model = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDate);
-					if (model != null && Str.Equals(card.SetCode, model.SetCode) == matchingSet && exported.Add(model.FullPath))
+					ImageModel modelSmall = null;
+					ImageModel modelZoom = null;
+					Bitmap original = null;
+					
+					if (small)
 					{
-						string zoomedPath = getTargetPath(model, zoomedSetSubdir);
-						string smallPath = getTargetPath(model, smallSetSubdir);
-						bool zoomedExists = File.Exists(zoomedPath);
-						bool smallExists = File.Exists(smallPath);
+						modelSmall = _imageRepo.GetImageSmall(card, _cardRepo.GetReleaseDateSimilarity);
 
-						if (smallExists && zoomedExists)
-							continue;
-
-						using (var original = ImageCache.Open(model))
+						if (modelSmall != null && Str.Equals(card.SetCode, modelSmall.SetCode) == matchingSet && exportedSmall.Add(modelSmall.FullPath))
 						{
-							if (small && !smallExists)
-								addFile(original, model, true, smallPath);
+							string smallPath = getTargetPath(modelSmall, smallSetSubdir);
+							bool smallExists = File.Exists(smallPath);
 
-							if (zoomed && !zoomedExists)
-								addFile(original, model, false, zoomedPath);
+							if (!smallExists)
+							{
+								original = ImageCache.Open(modelSmall);
+								addFile(original, modelSmall, true, smallPath);
+							}
 						}
 					}
+
+					if (zoomed)
+					{
+						modelZoom = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
+
+						if (modelZoom != null && Str.Equals(card.SetCode, modelZoom.SetCode) == matchingSet && exportedZoomed.Add(modelZoom.FullPath))
+						{
+							string zoomedPath = getTargetPath(modelZoom, zoomedSetSubdir);
+							bool zoomedExists = File.Exists(zoomedPath);
+
+							if (!zoomedExists)
+							{
+								if (modelSmall == null || modelSmall.FullPath != modelZoom.FullPath)
+								{
+									original?.Dispose();
+									original = ImageCache.Open(modelZoom);
+								}
+
+
+								addFile(original, modelZoom, false, zoomedPath);
+							}
+						}
+					}
+
+					original?.Dispose();
 				}
 			}
 		}

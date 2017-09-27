@@ -2,24 +2,28 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Mtgdb.Dal;
 
 namespace Mtgdb.Downloader
 {
 	public class ImageDownloader
 	{
-		private readonly Megatools _megatools;
-		private bool _abort;
-
-		public ImageDownloader()
+		public ImageDownloader(CardRepository repository)
 		{
+			_repository = repository;
 			_megatools = new Megatools();
 			_megatools.FileDownloaded += fileDownloaded;
 		}
 
 		public void Download(string quality, IList<ImageDownloadProgress> allProgress)
 		{
-			var qualityProgress = allProgress
-				.Where(_ => Str.Equals(_.QualityGroup.Quality, quality))
+			var relevantProgress = allProgress
+				.Where(_ => Str.Equals(_.QualityGroup.Quality, quality));
+
+			if (_repository.IsLoadingComplete)
+				relevantProgress = relevantProgress.OrderByDescending(_ => _repository.SetsByCode.TryGet(_.MegaDir.Subdirectory)?.ReleaseDate);
+
+			var qualityProgress = relevantProgress
 				.ToArray();
 
 			Console.WriteLine("Found {0} directories for quality '{1}' in configuration", qualityProgress.Length, quality);
@@ -133,5 +137,11 @@ namespace Mtgdb.Downloader
 		private int CountInDownloadedDirs { get; set; }
 		public int DownloadedCount => CountInDownloadedDirs + _megatools.DownloadedCount;
 		public int TotalCount { get; private set; }
+
+
+
+		private readonly CardRepository _repository;
+		private readonly Megatools _megatools;
+		private bool _abort;
 	}
 }

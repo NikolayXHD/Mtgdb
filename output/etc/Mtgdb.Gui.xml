@@ -45,7 +45,20 @@
 			Total size: 3.76 GB
 			https://mega.nz/#F!p8RBBT6Y!ksgSGJbMsKU0HX_ho-QS5g
 		-->
-		<!--<Directory Path="images\XLHQ Mega" />-->
+		
+		<!--
+		
+		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega" />
+		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Sets" />
+		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Tokens" />
+		<Directory Zoom="Any" Set="MPS_AKH" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Amonkhet Invocations" />
+		<Directory Zoom="Any" Set="MPS"     Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Kaladesh Inventions" />
+		<Directory Zoom="Any" Set="EXP"     Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Zendikar Expeditions" />
+		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos" />
+		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos\Pre-Release Promos" />
+		<Directory Zoom="Any" Set="VMA"                                                   Path="images\XLHQ Mega\Other\Vintage Champs 300DPI" />
+		
+		-->
 		
 		<!--
 			High quality images for promo sets
@@ -53,7 +66,85 @@
 			use the following magnet link to download with torrent client
 			magnet:?xt=urn:btih:e9b27add0a5a0f53f3c46c39eb9c27f02899cb32&dn=XLHQ%20Promos&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
 		-->
-		<!--<Directory Path="images\XLHQ Promos" />-->
+		
+		<!--
+		
+		<Directory Zoom="Any"                 Path="images\XLHQ Promos" />
+		<Directory Zoom="Any" Set="pDRC"      Path="images\XLHQ Promos\Convention Promos\DragonCon" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Convention Promos\www.magicthegathering.com" />
+		<Directory Zoom="Any" Set="MGB"       Path="images\XLHQ Promos\Major Set Variants\Multiverse Box Set" />
+		<Directory Zoom="Any" Set="pPOD"      Path="images\XLHQ Promos\Major Set Variants\Portal Demogame" />
+		<Directory Zoom="Any" Set="S00"       Path="images\XLHQ Promos\Major Set Variants\Starter 2000 Sampler" />
+		<Directory Zoom="Any" Set="pSUS"      Path="images\XLHQ Promos\Major Set Variants\Summer Magic (Partial)" />
+		<Directory Zoom="Any" Set="10E"       Path="images\XLHQ Promos\Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Media Inserts" />
+		<Directory Zoom="Any" Set="pHHO"      Path="images\XLHQ Promos\Other\Happy Holidays" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Other\Resale Reward" />
+		<Directory Zoom="Any" Set="pCEL"      Path="images\XLHQ Promos\Other\Richard Garfield" />
+		<Directory Zoom="Any" Set="pWOS"      Path="images\XLHQ Promos\Other\WotC Online Store" />
+		<Directory Zoom="Any" Set="s99"       Path="images\XLHQ Promos\Oversized\6x9\Starter" />
+		<Directory Zoom="Any" Set="8ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Eighth Edition" />
+		<Directory Zoom="Any" Set="8ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Eighth Edition Promos" />
+		<Directory Zoom="Any" Set="9ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Ninth Edition" />
+		<Directory Zoom="Any" Set="CMD"       Path="images\XLHQ Promos\Oversized\Commanders\Commander 2011 Launch Party" />
+		<Directory Zoom="Any" Set="AVR"       Path="images\XLHQ Promos\Oversized\Commanders\Helvault" />
+		<Directory Zoom="Any" Set="VMA"       Path="images\XLHQ Promos\Oversized\Vintage Championship" />
+		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Oversized\Magic Player Rewards" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Buy-a-Box" />
+		<Directory Zoom="Any" Set="pMGD"      Path="images\XLHQ Promos\Set Promos\Game Day" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Holiday Gift Box" />
+		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Intro Packs" />
+		<Directory Zoom="Any" Set="DD2"       Path="images\XLHQ Promos\Set Promos\Jace vs Chandra Anime" />
+		<Directory Zoom="Any" Set="pPRE"      Path="images\XLHQ Promos\Set Promos\Prerelease" />
+		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2003" />
+		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2004" />
+		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2005" />
+		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2006" />
+		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2007" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2008" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2009" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2010" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2011" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2012" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2013" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2014" />
+		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2015" />
+		<Directory Zoom="Any" Set="DTK"       Path="images\XLHQ Promos\Set Promos\Tarkir Dragonfury" />
+		<Directory Zoom="Any" Set="FRF_UGIN"  Path="images\XLHQ Promos\Set Promos\Ugin's Fate" />
+		<Directory Zoom="Any" Set="FEM"       Path="images\XLHQ Promos\Tokens\Duelist Fallen Empires Tokens" />
+		<Directory Zoom="Any" Set="pFNM"      Path="images\XLHQ Promos\Tokens\FNM" />
+		<Directory Zoom="Any" Set="AVR"       Path="images\XLHQ Promos\Tokens\Helvault" />
+		<Directory Zoom="Any" Set="pJGP"      Path="images\XLHQ Promos\Tokens\Judge" />
+		<Directory Zoom="Any" Set="pARL"      Path="images\XLHQ Promos\Tokens\League" />
+		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Tokens\Magic Player Rewards" />
+		<Directory Zoom="Any" Set="CSP"       Path="images\XLHQ Promos\Tokens\Release Events" />
+		<Directory Zoom="Any" Set="TSP"       Path="images\XLHQ Promos\Tokens\Time Spiral Bonus Program" />
+		<Directory Zoom="Any" Set="p15A"      Path="images\XLHQ Promos\Tournament and Program Promos\15th Anniversary" />
+		<Directory Zoom="Any" Set="pALP"      Path="images\XLHQ Promos\Tournament and Program Promos\APAC Lands" />
+		<Directory Zoom="Any" Set="pARL"      Path="images\XLHQ Promos\Tournament and Program Promos\Arena League" />
+		<Directory Zoom="Any" Set="pCMP"      Path="images\XLHQ Promos\Tournament and Program Promos\Champs" />
+		<Directory Zoom="Any" Set="pLGM"      Path="images\XLHQ Promos\Tournament and Program Promos\DCI Legend" />
+		<Directory Zoom="Any" Set="pELP"      Path="images\XLHQ Promos\Tournament and Program Promos\Euro Lands" />
+		<Directory Zoom="Any" Set="pFNM"      Path="images\XLHQ Promos\Tournament and Program Promos\Friday Night Magic" />
+		<Directory Zoom="Any" Set="pGTW"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2006" />
+		<Directory Zoom="Any" Set="pGTW"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2007" />
+		<Directory Zoom="Any" Set="pGTW;pWPN" Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2008" />
+		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2009" />
+		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2010" />
+		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2011" />
+		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2012" />
+		<Directory Zoom="Any" Set="pGPX"      Path="images\XLHQ Promos\Tournament and Program Promos\Grand Prix" />
+		<Directory Zoom="Any" Set="pGRU"      Path="images\XLHQ Promos\Tournament and Program Promos\Guru" />
+		<Directory Zoom="Any" Set="pJGP"      Path="images\XLHQ Promos\Tournament and Program Promos\Judge" />
+		<Directory Zoom="Any" Set="pSUS"      Path="images\XLHQ Promos\Tournament and Program Promos\Junior Series" />
+		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards" />
+		<Directory Zoom="Any" Set="pPRO"      Path="images\XLHQ Promos\Tournament and Program Promos\Pro Tour" />
+		<Directory Zoom="Any" Set="pSUM"      Path="images\XLHQ Promos\Tournament and Program Promos\Summer of Magic" />
+		<Directory Zoom="Any" Set="p2HG"      Path="images\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
+		<Directory Zoom="Any" Set="pWCQ"      Path="images\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
+		<Directory Zoom="Any" Set="pWOR"      Path="images\XLHQ Promos\Tournament and Program Promos\Worlds" />
+		
+		-->
 		
 		<!--
 			High quality images for older sets
@@ -61,14 +152,10 @@
 			use the following magnet link to download with torrent client
 			magnet:?xt=urn:btih:b07f3c3b288b20d49f5bbedcdf73214045abcce5&dn=XLHQ-Sets-Torrent&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
 		-->
-		<!--<Directory Path="images\XLHQ-Sets-Torrent" />-->
+		<!--
+		<Directory Zoom="Any" Path="images\XLHQ-Sets-Torrent" />
+		-->
 	</ImageLocations>
-	
-	<!-- === Human readable file Resources\All-sets-x.json ===
-		You may set HumanReadableSetsFile="True" to make All-sets-x.json file human-readable/editable.
-		The downside would be slowing down program startup due to increased file size.
-	-->
-	<DatafilesPostprocessing HumanReadableSetsFile="False" />
 	
 	<!-- === Transparent corners for non-zoomed images ===
 		Disabling transparent corners can increase scrolling speed due to faster image loading,

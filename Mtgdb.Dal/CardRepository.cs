@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ namespace Mtgdb.Dal
 {
 	public class CardRepository
 	{
+		private const string MinReleaseDate = @"1900-01-01";
 		private readonly UiModel _uiModel;
 
 		public event Action SetAdded;
@@ -227,7 +229,7 @@ namespace Mtgdb.Dal
 		public void SelectCardImages(ImageRepository repository)
 		{
 			foreach (var card in Cards)
-				card.ImageModel = selectCardImage(card, repository);
+				card.ImageModel = repository.GetImageSmall(card, GetReleaseDateSimilarity);
 
 			//var withoutImages = Cards.Where(_ => _.ImageModel == null).ToArray();
 
@@ -235,27 +237,48 @@ namespace Mtgdb.Dal
 			ImageLoadingComplete?.Invoke();
 		}
 
-		private ImageModel selectCardImage(Card card, ImageRepository repository)
-		{
-			return repository.GetImageSmall(card, GetReleaseDate);
-		}
-
 		public List<ImageModel> GetImagesZoom(Card card, ImageRepository repository)
 		{
-			return repository.GetImagesZoom(card, GetReleaseDate);
+			return repository.GetImagesZoom(card, GetReleaseDateSimilarity);
 		}
 
 		public List<ImageModel> GetImagesArt(Card card, ImageRepository repository)
 		{
-			return repository.GetImagesArt(card, GetReleaseDate) 
+			return repository.GetImagesArt(card, GetReleaseDateSimilarity)
 				?? new List<ImageModel>();
 		}
 
-		public string GetReleaseDate(string setCode)
+		public string GetReleaseDateSimilarity(string cardSet, string setCode)
+		{
+			var cardReleasDate = parseReleaseDate(SetsByCode.TryGet(cardSet)?.ReleaseDate);
+			var setReleaseDate = parseReleaseDate(SetsByCode.TryGet(setCode)?.ReleaseDate);
+
+			var n = (setReleaseDate - cardReleasDate).TotalDays;
+
+			if (n < 0)
+				n = 1000000 + n;
+
+			return ((int) n).ToString("D7", CultureInfo.InvariantCulture);
+		}
+
+		private static DateTime parseReleaseDate(string releaseDate)
+		{
+			if (!string.IsNullOrEmpty(releaseDate))
+			{
+				DateTime result;
+
+				if (DateTime.TryParseExact(releaseDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+					return result;
+			}
+
+			return DateTime.MinValue;
+		}
+
+		public string GetSetReleaseDate(string setCode)
 		{
 			Set set;
 			if (setCode == null || !SetsByCode.TryGetValue(setCode, out set))
-				return @"0000-00-00";
+				return MinReleaseDate;
 
 			return set.ReleaseDate;
 		}

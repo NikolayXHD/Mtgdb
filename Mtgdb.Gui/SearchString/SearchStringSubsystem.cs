@@ -235,8 +235,21 @@ namespace Mtgdb.Gui
 
 			if (e.KeyCode == Keys.Enter && !_listBoxSuggest.Visible)
 			{
-				e.Handled = true;
 				ApplyFind();
+
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
+			else if (e.KeyData == (Keys.Control | Keys.F))
+			{
+				if (!isSearchFocused())
+				{
+					_findEditor.SelectionStart = _findEditor.TextLength;
+					focusSearch();
+				}
+
+				e.Handled = true;
+				e.SuppressKeyPress = true;
 			}
 		}
 
@@ -301,7 +314,14 @@ namespace Mtgdb.Gui
 				if (!string.IsNullOrEmpty(_findEditor.SelectedText))
 				{
 					Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
-					SendKeys.Send(@"{Delete}");
+
+					var prefix = _findEditor.Text.Substring(0, _findEditor.SelectionStart);
+					int suffixStart = _findEditor.SelectionStart + _findEditor.SelectionLength;
+					var suffix = suffixStart < _findEditor.Text.Length
+						? _findEditor.Text.Substring(suffixStart)
+						: string.Empty;
+
+					setFindText(prefix + suffix, prefix.Length);
 				}
 
 				e.Handled = true;
@@ -365,6 +385,17 @@ namespace Mtgdb.Gui
 		{
 			if (text.StartsWith(SearchStringMark))
 				return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
+
+			string[] postfixes = 
+			{
+				".jpg",
+				".xlhq",
+				".full"
+			};
+
+			foreach (var postfix in postfixes)
+				if (text.EndsWith(postfix, Str.Comparison))
+					text = text.Substring(0, text.Length - postfix.Length);
 
 			int endOfLine = text.IndexOf('\n');
 
@@ -434,7 +465,7 @@ namespace Mtgdb.Gui
 				closeSuggest();
 			}
 			else if (e.KeyCode == Keys.Up && _listBoxSuggest.SelectedIndex == 0)
-				focusFind();
+				focusSearch();
 			else if (e.KeyCode == Keys.Escape)
 				closeSuggest();
 		}
@@ -448,7 +479,7 @@ namespace Mtgdb.Gui
 
 		private void closeSuggest()
 		{
-			focusFind();
+			focusSearch();
 			if (_listBoxSuggest.Visible)
 				_listBoxSuggest.Visible = false;
 		}
@@ -510,7 +541,7 @@ namespace Mtgdb.Gui
 			_findEditor.SelectionLength = 0;
 		}
 
-		private void focusFind()
+		private void focusSearch()
 		{
 			int originalSelectionStart = _findEditor.SelectionStart;
 			int originalSelectionLength = _findEditor.SelectionLength;
