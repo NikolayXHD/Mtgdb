@@ -48,14 +48,6 @@ namespace Mtgdb.Gui
 			File.WriteAllText(fileToSave.File, serialized);
 
 			DeckSaved?.Invoke();
-
-			//var thread = new Thread(_ =>
-			//{
-				
-			//});
-
-			//thread.SetApartmentState(ApartmentState.STA);
-			//thread.Start();
 		}
 
 		public void LoadDeck()
@@ -65,8 +57,26 @@ namespace Mtgdb.Gui
 			if (fileToOpen == null)
 				return;
 
-			var serialized = File.ReadAllText(fileToOpen);
-			var format = @"*" + Path.GetExtension(fileToOpen);
+			LoadDeck(fileToOpen);
+		}
+
+		public void LoadDeck(string file)
+		{
+			LastLoadedFile = file;
+
+			int maxLen = 0x8000000; // 128 MB
+			if (new FileInfo(file).Length > maxLen)
+			{
+				MessageBox.Show($"File {file} exceeds maximum allowed deck size {maxLen} bytes",
+					@"Message",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+
+				return;
+			}
+
+			var serialized = File.ReadAllText(file);
+			var format = @"*" + Path.GetExtension(file);
 
 			foreach (var formatter in _formatters)
 			{
@@ -81,15 +91,10 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			MessageBox.Show($"Failed to read deck from {fileToOpen}", @"Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-			//var thread = new Thread(_ =>
-			//{
-				
-			//});
-
-			//thread.SetApartmentState(ApartmentState.STA);
-			//thread.Start();
+			MessageBox.Show($"Failed to read deck from {file}",
+				@"Message",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
 		}
 
 
@@ -169,7 +174,6 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return null;
 
-			LastLoadedFile = dlg.FileName;
 			return dlg.FileName;
 		}
 

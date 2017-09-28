@@ -232,16 +232,6 @@ namespace Mtgdb.Dal
 		}
 
 
-		public IEnumerable<ImageModel> GetAllImageModels()
-		{
-			lock (_modelsByNameBySetByVariant)
-				foreach (var bySet in _modelsByNameBySetByVariant.Values)
-					foreach (var byVariant in bySet.Values)
-						foreach (var model in byVariant.Values)
-							yield return model;
-		}
-
-
 		public ImageModel GetImageSmall(Card card, Func<string, string, string> setCodePreference)
 		{
 			return

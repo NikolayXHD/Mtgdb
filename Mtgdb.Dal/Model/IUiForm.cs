@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 		event Action LanguageChanged;
 
 		void NextTab();
-		void NewTab();
+		void NewTab(Action<object> onFormMainCreated);
 		void CloseTab();
 	}
 }

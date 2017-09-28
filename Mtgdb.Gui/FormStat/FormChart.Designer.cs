@@ -579,7 +579,7 @@
 			this._buttonArtistsPerYear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonArtistsPerYear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonArtistsPerYear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonArtistsPerYear.Location = new System.Drawing.Point(499, 0);
+			this._buttonArtistsPerYear.Location = new System.Drawing.Point(499, 1);
 			this._buttonArtistsPerYear.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
 			this._buttonArtistsPerYear.Name = "_buttonArtistsPerYear";
 			this._buttonArtistsPerYear.Size = new System.Drawing.Size(101, 51);

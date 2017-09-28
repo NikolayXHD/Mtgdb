@@ -55,6 +55,7 @@ namespace Mtgdb.Gui
 			this.Invoke(delegate
 			{
 				beginRestoreSettings();
+
 				_deckModel.LoadDeck(_cardRepo);
 				_sortSubsystem.Invalidate();
 
@@ -62,6 +63,12 @@ namespace Mtgdb.Gui
 					_viewCards.VisibleRecordIndex = _historyModel.Current.SearchResultScroll.Value;
 				
 				endRestoreSettings();
+
+				foreach (var handler in _loadingCompleteHandlers)
+					handler.Invoke(this);
+
+				// to prevent memory leaks
+				_loadingCompleteHandlers.Clear();
 			});
 
 			RunRefilterTask();
@@ -128,7 +135,7 @@ namespace Mtgdb.Gui
 			}
 			else if (e.KeyData == (Keys.Control | Keys.T))
 			{
-				_uiModel.Form.NewTab();
+				_uiModel.Form.NewTab(null);
 				e.Handled = true;
 			}
 			else if (e.KeyData == (Keys.Control | Keys.S))
