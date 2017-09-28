@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 
@@ -137,9 +138,13 @@ namespace Mtgdb.Gui
 		private void downloadClick(object sender, EventArgs e)
 		{
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
+
+			ThreadPool.QueueUserWorkItem(_ =>
+			{
+				Thread.Sleep(2000);
+				this.Invoke(updateDownloadButton);
+			});
 		}
-
-
 
 		private void setupLanguageMenu()
 		{

@@ -11,14 +11,14 @@ using Mtgdb.Updater;
 
 namespace Mtgdb.Downloader
 {
-	public sealed partial class DownloaderForm : CustomBorderForm
+	public sealed partial class UpdateForm : CustomBorderForm
 	{
-		public DownloaderForm()
+		public UpdateForm()
 		{
 			InitializeComponent();
 		}
 
-		public DownloaderForm(
+		public UpdateForm(
 			Installer installer,
 			ImageDownloader imageDownloader,
 			ImageDownloadProgressReader imageDownloadProgressReader,
@@ -39,6 +39,7 @@ namespace Mtgdb.Downloader
 			_buttonsMtgjson.Click += mtgsonClick;
 			_buttonPrices.Click += pricesClick;
 			_buttonEditConfig.Click += editConfigClick;
+			_buttonNotifications.Click += notificationsClick;
 
 			Closing += closing;
 			Load += load;
@@ -70,6 +71,8 @@ namespace Mtgdb.Downloader
 			_appVersionInstalled = getAppVersionInstalled();
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
+			
+			_installer.DisplayNotifications();
 		}
 
 		private void closing(object sender, CancelEventArgs e)
@@ -102,6 +105,19 @@ namespace Mtgdb.Downloader
 				ThreadPool.QueueUserWorkItem(downloadNewVersion);
 			else
 				ThreadPool.QueueUserWorkItem(installNewVersion);
+		}
+
+		private void notificationsClick(object sender, EventArgs e)
+		{
+			setButtonsEnabled(false);
+
+			ThreadPool.QueueUserWorkItem(_ =>
+			{
+				_installer.DownloadNotifications(repeatViewed: true);
+				_installer.DisplayNotifications();
+
+				setButtonsEnabled(true);
+			});
 		}
 
 
@@ -147,7 +163,11 @@ namespace Mtgdb.Downloader
 				suggestInstallApp(appVersionDownloaded);
 			}
 			else
+			{
 				suggestCheckAppVersionOnline();
+			}
+
+			Console.WriteLine();
 		}
 
 		private void installNewVersion(object _)
@@ -157,15 +177,13 @@ namespace Mtgdb.Downloader
 
 			setButtonsEnabled(false);
 
-			Console.WriteLine();
 			_installer.Install();
-			Console.WriteLine();
-
-			setButtonsEnabled(true);
-
-			_appVersionInstalled = getAppVersionInstalled();
 			
+			setButtonsEnabled(true);
+			_appVersionInstalled = getAppVersionInstalled();
 			suggestCheckAppVersionOnline();
+
+			Console.WriteLine();
 		}
 
 
@@ -322,6 +340,8 @@ namespace Mtgdb.Downloader
 
 				Console.WriteLine($"{quality}: {downloadedDirsCount}/{totalDirs} directories, {downloadedFiles}/{totalFiles} files");
 			}
+
+			Console.WriteLine();
 		}
 
 		private void imgLqClick(object sender, EventArgs e)
@@ -380,7 +400,8 @@ namespace Mtgdb.Downloader
 				_buttonPrices.Enabled =
 				_buttonImgArt.Enabled =
 				_buttonImgLq.Enabled =
-				_buttonImgMq.Enabled = enabled;
+				_buttonImgMq.Enabled = 
+				_buttonNotifications.Enabled = enabled;
 			});
 		}
 

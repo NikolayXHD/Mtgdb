@@ -22,6 +22,12 @@ namespace Mtgdb
 			return Path.Combine(original, dir);
 		}
 
+		public static void EmptyDirectory(this string dir)
+		{
+			foreach (var fileSystemInfo in new DirectoryInfo(dir).GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
+				fileSystemInfo.Delete();
+		}
+
 		public static string RemoveDiacritics(this string value)
 		{
 			var normalizedString = value.Normalize(NormalizationForm.FormD);

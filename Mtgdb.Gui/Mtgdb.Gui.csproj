@@ -306,6 +306,7 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\update_notification.png" />
     <None Include="Resources\mtg_16.png" />
     <None Include="Resources\Search_16.png" />
     <None Include="Resources\Search_transp_16.png" />

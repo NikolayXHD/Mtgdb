@@ -663,6 +663,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap update_notification {
+            get {
+                object obj = ResourceManager.GetObject("update_notification", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap xmage_32 {
             get {
                 object obj = ResourceManager.GetObject("xmage_32", resourceCulture);

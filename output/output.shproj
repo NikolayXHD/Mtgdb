@@ -85,6 +85,8 @@
     <Folder Include="images\XLHQ Mega\" />
     <Folder Include="images\XLHQ Promos\" />
     <Folder Include="images\XLHQ-Sets-Torrent\" />
+    <Folder Include="update\notifications\new\" />
+    <Folder Include="update\notifications\read\" />
     <Folder Include="update\app\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

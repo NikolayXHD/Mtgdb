@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
@@ -85,19 +87,6 @@ namespace Mtgdb.Gui
 		private FormMain getSelectedForm()
 		{
 			return (FormMain)_tabs.SelectedTabId;
-		}
-
-		private void suggestDownloader()
-		{
-			_downloaderSubsystem.CalculateProgress();
-
-			this.Invoke(delegate
-			{
-				_buttonDownload.Enabled = true;
-			});
-
-			if (_downloaderSubsystem.NeedToSuggestDownloader)
-				_downloaderSubsystem.ShowDownloader(this, auto: true);
 		}
 
 		private void pageCreated(TabHeaderControl sender, int i)
@@ -188,10 +177,40 @@ namespace Mtgdb.Gui
 
 		private void load(object sender, EventArgs e)
 		{
-			_loader.Add(suggestDownloader);
+			_loader.Add(() =>
+			{
+				_downloaderSubsystem.DownloadNotifications(false);
+				this.Invoke(updateDownloadButton);
+			});
+
+			_loader.Add(() =>
+			{
+				_downloaderSubsystem.CalculateProgress();
+
+				while (!_downloaderSubsystem.NotificationsLoaded)
+					Thread.Sleep(100);
+
+				this.Invoke(delegate
+				{
+					_buttonDownload.Enabled = true;
+				});
+
+				if (_downloaderSubsystem.NeedToSuggestDownloader)
+					_downloaderSubsystem.ShowDownloader(this, auto: true);
+			});
+
 			_loader.Run();
 
 			_suggestModel.StartSuggestThread();
+		}
+
+		private void updateDownloadButton()
+		{
+			_buttonDownload.Image = _downloaderSubsystem.HasUnreadNotifications
+				? Resources.update_notification
+				: Resources.update;
+
+			setupButton(_buttonDownload);
 		}
 
 		private void closed(object sender, EventArgs e)
