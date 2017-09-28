@@ -25,6 +25,7 @@ BOK	BOK	Betrayers of Kamigawa
 BR	BRB	Battle Royale
 BT8	BT8	Box Toppers 8E
 BTP	BTP	Box Toppers Promo
+CFX	CON	Conflux
 CH	CHR	Chronicles
 CHK	CHK	Champions of Kamigawa
 CHP	CHP	Promo – Champs
@@ -67,7 +68,8 @@ MED	MED	Masters Edition
 MI	MIR	Mirage
 MM	MMQ	Mercadian Masques
 MOR	MOR	Morningtide
-MPS	MPS	Magic Premiere Shop Lands
+MPS	XXX	Magic Premiere Shop Lands
+MPS_KLD	MPS	Masterpiece Series: Kaladesh Inventions
 MR	MRD	Mirrodin
 MV	MUV	Multiverse
 NE	NMS	Nemesis

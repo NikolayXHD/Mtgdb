@@ -8,6 +8,6 @@ http://www.mtgsalvation.com/forums/magic-fundamentals/other-magic-products/third
 	multiple conditions of card
 	normal/foil
 	
-http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-mtg-inventory-manager	
+http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-mtg-inventory-manager
 	draw simulator
 	import CSV files

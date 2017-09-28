@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -250,6 +251,43 @@ namespace Mtgdb.Gui
 			_deckSerializationSubsystem.DeckSaved += deckSaved;
 
 			Application.ApplicationExit += applicationExit;
+
+			_layoutViewDeck.AllowDrop = true;
+			_layoutViewDeck.DragEnter += deckDragEnter;
+			_layoutViewDeck.DragDrop += deckDragDropped;
+
+			_layoutViewCards.AllowDrop = true;
+			_layoutViewCards.DragEnter += deckDragEnter;
+			_layoutViewCards.DragDrop += deckDragDropped;
+		}
+
+		private static void deckDragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if (files.Length < 10)
+					e.Effect = DragDropEffects.Copy;
+			}
+		}
+
+		private void deckDragDropped(object sender, DragEventArgs e)
+		{
+			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+			LoadDeck(files[0]);
+
+			for (int i = 1; i < files.Length; i++)
+			{
+				var file = files[i];
+
+				_uiModel.Form.NewTab(form => ((FormMain) form).AddLoadingCompleteHandler(f => f.LoadDeck(file)));
+			}
+		}
+
+		public void LoadDeck(string filename)
+		{
+			_deckSerializationSubsystem.LoadDeck(filename);
 		}
 
 		private void unsubscribeFromEvents()
@@ -307,6 +345,17 @@ namespace Mtgdb.Gui
 			_deckSerializationSubsystem.DeckSaved -= deckSaved;
 
 			Application.ApplicationExit -= applicationExit;
+
+			_layoutViewDeck.DragEnter -= deckDragEnter;
+			_layoutViewDeck.DragDrop -= deckDragDropped;
+
+			_layoutViewCards.DragEnter -= deckDragEnter;
+			_layoutViewCards.DragDrop -= deckDragDropped;
+		}
+
+		public void AddLoadingCompleteHandler(Action<FormMain> a)
+		{
+			_loadingCompleteHandlers.Add(a);
 		}
 
 		private readonly CardRepository _cardRepo;
@@ -356,5 +405,7 @@ namespace Mtgdb.Gui
 		private readonly TooltipController _toolTipController;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly ButtonSubsystem _buttonSubsystem;
+
+		private readonly List<Action<FormMain>> _loadingCompleteHandlers = new List<Action<FormMain>>();
 	}
 }

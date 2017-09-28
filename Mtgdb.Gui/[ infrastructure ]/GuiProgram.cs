@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 			Kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
 			var formRoot = Kernel.Get<FormRoot>();
-			formRoot.NewTab();
+			formRoot.NewTab(null);
 			formRoot.Show();
 			Application.Run(formRoot);
 		}

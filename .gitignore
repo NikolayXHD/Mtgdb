@@ -20,3 +20,4 @@ output/images/**/*.bak
 output/history/
 output/save/
 output/logs/
+output/update/notifications/

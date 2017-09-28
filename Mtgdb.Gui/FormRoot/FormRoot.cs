@@ -266,7 +266,7 @@ namespace Mtgdb.Gui
 			if (hoveredForm != null && selectedForm != hoveredForm)
 				_tabs.SelectedTabId = hoveredForm;
 			else if (_tabs.HoveredIndex == _tabs.AddButtonIndex)
-				NewTab();
+				NewTab(null);
 		}
 
 
@@ -313,9 +313,22 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void NewTab()
+		public void NewTab(Action<object> onFormCreated)
 		{
-			_tabs.AddTab();
+			if (onFormCreated != null)
+			{
+				Action<TabHeaderControl, int> onTabCreated = (c, i) =>
+				{
+					var form = (FormMain) c.TabIds[i];
+					onFormCreated(form);
+				};
+
+				_tabs.TabAdded += onTabCreated;
+				_tabs.AddTab();
+				_tabs.TabAdded -= onTabCreated;
+			}
+			else
+				_tabs.AddTab();
 		}
 
 		public void CloseTab()
