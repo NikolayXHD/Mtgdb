@@ -25,8 +25,8 @@ del /q %target%\etc\Mtgdb.Test.xml
 del /s /q %target%\update\app\*
 del /s /q %target%\update\*.bak
 del /s /q %target%\update\*.zip
-del /s /q %target%\update\announce\new\*.txt
-del /s /q %target%\update\announce\read\*.txt
+del /s /q %target%\update\notifications\new\*.txt
+del /s /q %target%\update\notifications\read\*.txt
 del /q %target%\update\filelist.txt
 
 del /s /q %target%\images\*.jpg
