@@ -54,6 +54,7 @@ namespace Mtgdb.Downloader
 
 			Abort();
 
+			Console.WriteLine();
 			return exitCode == 0;
 		}
 

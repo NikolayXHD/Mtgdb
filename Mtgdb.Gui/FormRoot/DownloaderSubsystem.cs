@@ -8,24 +8,23 @@ namespace Mtgdb.Gui
 {
 	public class DownloaderSubsystem
 	{
-		private readonly SuggestImageDownloaderConfig _config;
-		private readonly DownloaderForm _downloaderForm;
-
 		public bool NeedToSuggestDownloader { get; private set; }
 
 		public DownloaderSubsystem(
 			SuggestImageDownloaderConfig config,
-			DownloaderForm downloaderForm)
+			UpdateForm updateForm,
+			Installer installer)
 		{
 			_config = config;
-			_downloaderForm = downloaderForm;
+			_updateForm = updateForm;
+			_installer = installer;
 		}
 
 		public void CalculateProgress()
 		{
-			_downloaderForm.CalculateProgress();
+			_updateForm.CalculateProgress();
 
-			var progress = _downloaderForm.ImageDownloadProgress;
+			var progress = _updateForm.ImageDownloadProgress;
 
 			var countTotal = progress
 				.Sum(_ => _.FilesOnline?.Count ?? 0);
@@ -41,15 +40,23 @@ namespace Mtgdb.Gui
 		
 		public void ShowDownloader(Form owner, bool auto)
 		{
-			_downloaderForm.IsShownAutomatically = auto;
+			_updateForm.IsShownAutomatically = auto;
 			owner.Invoke(delegate
 			{
-				_downloaderForm.SetWindowLocation(owner);
-				_downloaderForm.Show(owner);
+				_updateForm.SetWindowLocation(owner);
+				_updateForm.Show(owner);
 
-				if (!_downloaderForm.Focused)
-					_downloaderForm.Focus();
+				if (!_updateForm.Focused)
+					_updateForm.Focus();
 			});
 		}
+
+		public void DownloadNotifications(bool repeatViewed) => _installer.DownloadNotifications(repeatViewed);
+		public bool NotificationsLoaded => _installer.NotificationsLoaded;
+		public bool HasUnreadNotifications => _installer.HasUnreadNotifications;
+
+		private readonly SuggestImageDownloaderConfig _config;
+		private readonly UpdateForm _updateForm;
+		private readonly Installer _installer;
 	}
 }

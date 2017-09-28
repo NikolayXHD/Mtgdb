@@ -36,6 +36,7 @@ namespace Mtgdb.Downloader
 				if (responseStream == null)
 				{
 					Console.WriteLine("Failed to send request to mtgjson.com: empty response");
+					Console.WriteLine();
 					return;
 				}
 
@@ -53,6 +54,7 @@ namespace Mtgdb.Downloader
 					MtgjsonFileUpdated?.Invoke();
 
 					Console.WriteLine("Done. On next start new cards will be loaded and full-text index will be rebuilt.");
+					Console.WriteLine();
 				}
 			}
 			catch (AggregateException ex)
@@ -158,14 +160,14 @@ namespace Mtgdb.Downloader
 				writeInstalledVersion(expectedSignature.Path);
 				CreateApplicationShortcut(AppDir.Root);
 				updateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-
 				Console.WriteLine();
+
 				Console.WriteLine("Upgrade complete!");
 				Console.WriteLine("Restart Mtgdb.Gui to enjoy new version immediately :)");
+				Console.WriteLine();
 			}
 			else
 			{
-				Console.WriteLine();
 				Console.WriteLine($"Failed to extract new version files from {appDownloaded}.");
 				Console.WriteLine("I apologize. I hoped it will never happen, but here we are :(");
 				Console.WriteLine();
@@ -173,6 +175,7 @@ namespace Mtgdb.Downloader
 				Console.WriteLine("If it's not the case you can");
 				Console.WriteLine("\t* Re-download and manually install Mtgdb.Gui");
 				Console.WriteLine("\t* Report the problem and get help at https://www.slightlymagic.net/forum/viewtopic.php?f=15&t=19298&sid=02dfce1282b368b1b8f40d452ac0af18");
+				Console.WriteLine();
 			}
 		}
 
@@ -228,6 +231,71 @@ namespace Mtgdb.Downloader
 			createApplicationShortcut(shortcutPath, execPath, iconPath);
 		}
 
+		public void DisplayNotifications()
+		{
+			if (_announcementFiles == null)
+				return;
+
+			foreach (var file in _announcementFiles)
+			{
+				string readAnnounceFile = getReadAnnounceFile(file);
+
+				string text = File.ReadAllText(file).Trim();
+
+				bool isLocked = file.IndexOf("[locked]", Str.Comparison) >= 0;
+
+				if (!isLocked && !File.Exists(readAnnounceFile))
+					File.Move(file, readAnnounceFile);
+				
+				if (string.IsNullOrEmpty(text))
+					continue;
+
+				Console.WriteLine();
+
+				Console.WriteLine(text);
+				Console.WriteLine();
+			}
+
+			_announcementFiles.Clear();
+		}
+
+		public void DownloadNotifications(bool repeatViewed)
+		{
+			string announceDir = getNewAnnounceDir();
+			announceDir.EmptyDirectory();
+
+			Console.Write("Checking update server notifications... ");
+
+			if (_megatools.Download(null, _appSourceConfig.NotificationsUrl, announceDir, quiet: true, timeoutSec: 15))
+				Console.WriteLine("done");
+			else
+				Console.WriteLine("timeout");
+
+			Console.WriteLine();
+
+			var newAnnounces = Directory.GetFiles(announceDir, "*.txt", SearchOption.TopDirectoryOnly)
+				.Where(file => repeatViewed || !File.Exists(getReadAnnounceFile(file)))
+				.ToList();
+
+			_announcementFiles = newAnnounces;
+		}
+
+		private static string getNewAnnounceDir()
+		{
+			return AppDir.Update.AddPath("notifications").AddPath("new");
+		}
+
+		private static string getReadAnnounceDir()
+		{
+			return AppDir.Update.AddPath("notifications").AddPath("read");
+		}
+
+		private static string getReadAnnounceFile(string file)
+		{
+			return getReadAnnounceDir().AddPath(Path.GetFileName(file));
+		}
+
+
 		private static void createApplicationShortcut(string shortcutPath, string exePath, string iconPath)
 		{
 			var wsh = new WshShell();
@@ -269,6 +337,9 @@ namespace Mtgdb.Downloader
 			AppDir.DisplayConfigXml
 		};
 
+		public bool NotificationsLoaded => _announcementFiles != null;
+		public bool HasUnreadNotifications => _announcementFiles != null && _announcementFiles.Count > 0;
+
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly MtgjsonSourceConfig _mtgjsonSourceConfig;
 
@@ -280,5 +351,7 @@ namespace Mtgdb.Downloader
 		public FileSignature AppDownloadedSignature { get; private set; }
 		private readonly WebClient _webClient;
 		private readonly Megatools _megatools;
+
+		private List<string> _announcementFiles;
 	}
 }

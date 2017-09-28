@@ -7,10 +7,12 @@ namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
-		public void Download(string name, string storageUrl, string targetDirectory)
+		public bool Download(string name, string storageUrl, string targetDirectory, bool quiet = false, int? timeoutSec = null)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
+
+			_quiet = quiet;
 
 			DownloadedCount = 0;
 
@@ -39,15 +41,24 @@ namespace Mtgdb.Downloader
 			_process.OutputDataReceived += downloadOutputReceived;
 			_process.ErrorDataReceived += downloadErrorReceived;
 			
-			Console.WriteLine("Downloading {0} from {1} to {2}", name, storageUrl, targetDirectory);
+			if (!_quiet)
+				Console.WriteLine("Downloading {0} from {1} to {2}", name, storageUrl, targetDirectory);
 
 			AppDomain.CurrentDomain.ProcessExit += processExit;
 			_process.Start();
 			_process.BeginOutputReadLine();
 			_process.BeginErrorReadLine();
-			_process.WaitForExit();
+
+			if (timeoutSec.HasValue)
+				_process.WaitForExit(timeoutSec.Value * 1000);
+			else
+				_process.WaitForExit();
+
+			bool processFinished = _process.HasExited;
 
 			Abort();
+
+			return processFinished;
 		}
 
 		private void processExit(object sender, EventArgs e)
@@ -84,6 +95,9 @@ namespace Mtgdb.Downloader
 
 		private void downloadOutputReceived(object sender, DataReceivedEventArgs e)
 		{
+			if (_quiet)
+				return;
+
 			if (string.IsNullOrEmpty(e.Data))
 				return;
 
@@ -105,5 +119,6 @@ namespace Mtgdb.Downloader
 		public event Action FileDownloaded;
 
 		private Process _process;
+		private bool _quiet;
 	}
 }
