@@ -1,44 +1,24 @@
-﻿Help on search text keyboard shortcuts
+﻿Search text keyboard shortcuts
+------------------------------
 
-=== Introduction ===
+Show intellisense (a hint based on your input) `Ctrl`+`SPACE` or `Down`
 
-	Searching is case-INsensitive
+Select suggested value from intellisense `Up`/`Down` arrows to choose, `ENTER` to select
 
-	IMPORTANT: Searh result includes only exact matches to the words in query unless wildcard symbols are used.
-	a query 'angel OR demon' will not match words like 'angelic'.
-	
-	Wildcard symbols are: * - any characters or nothing, ? - any one character.
-	To find all words like 'smash', 'smashed', 'smashing' use query 'smash*'
+Hide intellisense `ESC`
 
-=== Search text keyboard shortcuts ===
+Apply modified search text `ENTER` or wait 1 second
 
-	* Show intellisense (a hint based on your input)
-	Ctrl+SPACE or Down arrow
+Intellisense on field name
+- `Ctrl`+`SPACE` when input caret is to the left of `:`
+- `Ctrl`+`SPACE` when search text is empty
 
-	* Select suggested value from intellisense
-	Up/down arrows to choose, ENTER to select
-	
-	* Hide intellisense
-	ESC
-	
-	* Apply modified search text
-	ENTER or wait 1 second
-	
-	* Intellisense on field name
-	Ctrl+SPACE when input caret is to the left of colon ':'
-	Ctrl+SPACE when search text is empty
-	
-	* Intellisense on textual value without specifying a field
-	Type something, press Ctrl+SPACE
+Intellisense on textual value without specifying a field. Type something, press `Ctrl+SPACE`
 
-	* Intellisense on specific field's value
-	Type field name, type colon (:), hit Ctrl+SPACE
-	
-	* Erase one word
-	Ctrl+Backspace
-	
-	* Undo
-	Ctrl+Z or Alt+Left arrow
-	
-	* Redo
-	Ctrl+Y or Alt+Right arrow
+Intellisense on specific field's value. Type field name, type `:`, hit `Ctrl`+`SPACE`
+
+Erase one word `Ctrl`+`Backspace`
+
+Undo `Ctrl`+`Z` or `Alt`+`Left`
+
+Redo `Ctrl`+`Y` or `Alt`+`Right`
