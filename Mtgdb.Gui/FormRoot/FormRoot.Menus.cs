@@ -36,7 +36,8 @@ namespace Mtgdb.Gui
 				_buttonHelpReleaseNotes,
 				_buttonHelpReadme,
 				_buttonHelpEditor,
-				_buttonHelpForum
+				_buttonHelpForum,
+				_buttonHelpAbout
 			};
 
 			foreach (var helpButton in helpButtons)
@@ -88,6 +89,8 @@ namespace Mtgdb.Gui
 				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_readme.txt"));
 			else if (_buttonHelpForum == sender)
 				System.Diagnostics.Process.Start("https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299");
+			else if (_buttonHelpAbout == sender)
+				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_about.txt"));
 		}
 
 		private void redoClick(object sender, EventArgs e)
