@@ -179,7 +179,7 @@ namespace Mtgdb.Gui
 		{
 			_loader.Add(() =>
 			{
-				_downloaderSubsystem.DownloadNotifications(false);
+				_downloaderSubsystem.FetchNews(false);
 				this.Invoke(updateDownloadButton);
 			});
 
@@ -187,7 +187,7 @@ namespace Mtgdb.Gui
 			{
 				_downloaderSubsystem.CalculateProgress();
 
-				while (!_downloaderSubsystem.NotificationsLoaded)
+				while (!_downloaderSubsystem.NewsLoaded)
 					Thread.Sleep(100);
 
 				this.Invoke(delegate
@@ -206,7 +206,7 @@ namespace Mtgdb.Gui
 
 		private void updateDownloadButton()
 		{
-			_buttonDownload.Image = _downloaderSubsystem.HasUnreadNotifications
+			_buttonDownload.Image = _downloaderSubsystem.HasUnreadNews
 				? Resources.update_notification
 				: Resources.update;
 
@@ -313,14 +313,14 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void NewTab(Action<object> onFormCreated)
+		public void NewTab(Action<object> onCreated)
 		{
-			if (onFormCreated != null)
+			if (onCreated != null)
 			{
 				Action<TabHeaderControl, int> onTabCreated = (c, i) =>
 				{
 					var form = (FormMain) c.TabIds[i];
-					onFormCreated(form);
+					onCreated(form);
 				};
 
 				_tabs.TabAdded += onTabCreated;

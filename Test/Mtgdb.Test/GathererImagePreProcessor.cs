@@ -18,9 +18,9 @@ namespace Mtgdb.Test
 			if (card.MultiverseId == null)
 				return;
 
-			using (var webStream = DownloadStream(BaseUrl + card.MultiverseId))
-			using (var fileStream = File.Open(Path.Combine(setDirectory, card.ImageName + ".png"), FileMode.Create))
-				webStream.CopyTo(fileStream);
+			DownloadFile(
+				BaseUrl + card.MultiverseId,
+				Path.Combine(setDirectory, card.ImageName + ".png"));
 		}
 
 		private const string BaseUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=";
@@ -29,11 +29,11 @@ namespace Mtgdb.Test
 	[TestFixture]
 	public class GathererImagePreProcessor
 	{
-		private static readonly Size CroppedSize = new Size(393, 564);
-		private static readonly Point CroppedLocation = new Point(17, 17);
+		private static readonly Size _croppedSize = new Size(393, 564);
+		private static readonly Point _croppedLocation = new Point(17, 17);
 
-		private static readonly Size CroppedSizeSmall = new Size(198, 284);
-		private static readonly Point CroppedLocationSmall = new Point(9, 9);
+		private static readonly Size _croppedSizeSmall = new Size(198, 284);
+		private static readonly Point _croppedLocationSmall = new Point(9, 9);
 
 		private const string GathererOriginalDir = @"D:\Distrib\games\mtg\Gatherer.Original";
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
@@ -45,11 +45,12 @@ namespace Mtgdb.Test
 			TestLoadingUtil.LoadModules();
 			TestLoadingUtil.LoadCardRepository();
 
-			var client = new GathererClient();
-
-			var set = TestLoadingUtil.CardRepository.SetsByCode[setCode];
-			foreach (var card in set.Cards)
-				client.DownloadCard(card, GathererOriginalDir);
+			using (var client = new GathererClient())
+			{
+				var set = TestLoadingUtil.CardRepository.SetsByCode[setCode];
+				foreach (var card in set.Cards)
+					client.DownloadCard(card, GathererOriginalDir);
+			}
 		}
 
 		[TestCase("CMA", "*.png")]
@@ -82,8 +83,8 @@ namespace Mtgdb.Test
 			addFrame(
 				Path.Combine("MQ", setSubdir),
 				"frame.png",
-				CroppedLocation,
-				CroppedSize,
+				_croppedLocation,
+				_croppedSize,
 				Path.Combine(GathererPreprocessedDir, setSubdir));
 		}
 		[TestCase("CMA")]
@@ -92,8 +93,8 @@ namespace Mtgdb.Test
 			addFrame(
 				Path.Combine("LQ", setSubdir),
 				"frame.small.png", 
-				CroppedLocationSmall,
-				CroppedSizeSmall,
+				_croppedLocationSmall,
+				_croppedSizeSmall,
 				Path.Combine(GathererOriginalDir, setSubdir));
 		}
 

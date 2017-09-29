@@ -32,9 +32,9 @@
 	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
 
 	<AppSource
-		FileListUrl=      "https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
-		ZipUrl=           "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
-		NotificationsUrl= "https://mega.nz/#F!BpERBIJb!KgBzGRfQQ5mRg87mqW696g" />
+		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
+		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
+		NewsUrl=    "https://goo.gl/MoGdz8" />
 
 	<ImageSources>
 		<QualityGroup Quality="Art" TargetDirectory="images\Artworks" FileListUrl="https://mega.nz/#F!mgY1SSga!iP67fkG5mHQT23uYXwdP5g">

@@ -72,7 +72,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
 			
-			_installer.DisplayNotifications();
+			_installer.DisplayNews();
 		}
 
 		private void closing(object sender, CancelEventArgs e)
@@ -113,8 +113,8 @@ namespace Mtgdb.Downloader
 
 			ThreadPool.QueueUserWorkItem(_ =>
 			{
-				_installer.DownloadNotifications(repeatViewed: true);
-				_installer.DisplayNotifications();
+				_installer.FetchNews(repeatViewed: true);
+				_installer.DisplayNews();
 
 				setButtonsEnabled(true);
 			});
@@ -522,7 +522,7 @@ namespace Mtgdb.Downloader
 		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
 		private readonly PriceDownloader _priceDownloader;
 		private readonly PriceRepository _priceRepository;
-		private static readonly VersionComparer _versionComparer = new VersionComparer();
+		private readonly VersionComparer _versionComparer = new VersionComparer();
 
 		private bool _downloadingImages;
 		private bool _downloadingPrices;

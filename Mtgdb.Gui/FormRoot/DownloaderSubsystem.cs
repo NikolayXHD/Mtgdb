@@ -51,9 +51,9 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		public void DownloadNotifications(bool repeatViewed) => _installer.DownloadNotifications(repeatViewed);
-		public bool NotificationsLoaded => _installer.NotificationsLoaded;
-		public bool HasUnreadNotifications => _installer.HasUnreadNotifications;
+		public void FetchNews(bool repeatViewed) => _installer.FetchNews(repeatViewed);
+		public bool NewsLoaded => _installer.NewsLoaded;
+		public bool HasUnreadNews => _installer.HasUnreadNews;
 
 		private readonly SuggestImageDownloaderConfig _config;
 		private readonly UpdateForm _updateForm;

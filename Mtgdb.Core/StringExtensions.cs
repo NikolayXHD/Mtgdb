@@ -24,8 +24,13 @@ namespace Mtgdb
 
 		public static void EmptyDirectory(this string dir)
 		{
-			foreach (var fileSystemInfo in new DirectoryInfo(dir).GetFileSystemInfos("*", SearchOption.TopDirectoryOnly))
-				fileSystemInfo.Delete();
+			var dirInfo = new DirectoryInfo(dir);
+
+			foreach (var subdirInfo in dirInfo.GetDirectories())
+				subdirInfo.Delete(recursive: true);
+
+			foreach (var fileInfo in dirInfo.GetFiles())
+				fileInfo.Delete();
 		}
 
 		public static string RemoveDiacritics(this string value)

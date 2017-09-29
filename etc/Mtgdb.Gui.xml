@@ -4,6 +4,8 @@
 
 	<SuggestImageDownloader Enabled="False" />
 	
+	<AppSource NewsUrl="https://github.com/NikolayXHD/Notifications/archive/master.zip" />
+	
 	<ImageLocations>
 		
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
@@ -26,7 +28,7 @@
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ\Promos\Pre-Release Promos" />
 		<Directory Zoom="Any" Set="VMA"                                                   Path="D:\Distrib\games\mtg\Mega\XLHQ\Other\Vintage Champs 300DPI" />
 		           
-		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent" />
+		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
 		
 		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ Promos" />
 		<Directory Zoom="Any" Set="pDRC"      Path="D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\DragonCon" />

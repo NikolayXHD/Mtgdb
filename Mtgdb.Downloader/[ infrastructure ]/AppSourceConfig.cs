@@ -11,7 +11,7 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "ZipUrl")]
 		public string ZipUrl { get; set; }
 
-		[DataMember(Name = "NotificationsUrl")]
-		public string NotificationsUrl { get; set; }
+		[DataMember(Name = "NewsUrl")]
+		public string NewsUrl { get; set; }
 	}
 }
