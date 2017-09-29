@@ -1,67 +1,73 @@
-=== Zoom in / out the card image ===
+Zoom in / out the card image
+----------------------------
 
-	* Left mouse click
+`Left` mouse click
 
-=== Deck editing ===
+Deck editing
+------------
 
-	* Use deck area 'main deck' / 'sideboard' tabs to switch between main deck and sideboard a.k.a side deck.
-	* Drag-n-drop card to deck area (bottow area of the window) or use mouse buttons (right and middle) to add/remove 1 card.
-	* You can drag from main deck and drop to sideboard by dragging a card to 'main deck' / 'sideboard' tab.
-	* You can drag-n-drop cards between different open tabs by dragging a card to a tab in window header.
-	* You can create a new tab while draggig a card by dragging card to '+' button in window header.
-	* Use Ctrl+drag-n-drop or Ctrl+right/middle mouse click to add/remove 4 cards.
+Use deck area `main deck` / `sideboard` tabs to switch between main deck and sideboard a.k.a 
+side deck.
 
-=== Collection editing ===
+`Drag-n-drop` card to deck area (bottow area of the window) or use mouse buttons (`Right` and 
+`Middle`) to add/remove 1 card.
 
-	* Use Alt+right / middle mouse click to add / remove 1 card from collection.
-	* Use Ctrl+Alt+right / middle mouse click to add / remove 4 cards from collections.
-	
-=== Undo / redo buttons ===
-Are located at the top left of the window in the header.
+You can `drag` from main deck and `drop` to sideboard by `dragging` a card to `main deck` / 
+`sideboard` tab.
 
-=== ===
+You can `drag-n-drop` cards between different open tabs by `dragging` a card to a tab in window 
+header.
 
-=== Buttons in the window header, left ===
+You can create a new tab while `draggig` a card by `dragging` card to `+` button in window header.
 
-	* Undo
-	* Redo
-	Applies to many end-user actions like checking/unchecking Filter buttons, changing search text and so on.
+Use `Ctrl`+`drag-n-drop` or `Ctrl`+`Right` / `Middle` mouse click to add/remove 4 cards.
 
-=== Buttons in the window header, right ===
+Collection editing
+------------------
 
-	* Open deck from a file
-	* Save deck to a file
-		Supported are deck formats of
-			* Magarena https://www.slightlymagic.net/forum/viewforum.php?f=82
-			* Forge https://www.slightlymagic.net/forum/viewforum.php?f=26
-			* XMage http://www.xmage.de
-			* Cockatrice https://cockatrice.github.io/ supports the format used by Magarena
-			* To use your decks with Riiak's DotP 2014 Deck Builder https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999
-			use a modified version supporting Forge deck format https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467
-	* Deck statistics
-		Opens a Pivot report window. Use it to view mana curve, price breakdown,
-		or create a custom report by moving field captions between Row, Column and Summary areas of grid.
-		TIP: To view statistics for entire search result instead of deck only:
-			* replace 'Count in Deck' by 'Is filter match' in summary area.
-			* If a card with Cmc (Converted Mana Cost) value 10.000 matches your filter
-			you get a range from 0 to 10000 for X axis which ruins mana curve usabililty.
-			In this case apply a filter to 'Cmc' to exclude '10.000'.
-	* Print deck
-		The print buttons doesn't actually print, instead it creates images of cards by groups of 8 that can be printed on A4 paper.
-	* Clear deck
-		Use it to start creating a new deck from scratch
-	* Help menu
-		This is how you probably got to read this file.
-	* Enable / disable tooltips
-		Tooltips are helpful but also annoying.
-	* Edit configuration file
-		Use it to tell the program where to find your custom card images or tweak some other settings.
-		NOTE: To apply your changes save the modified configuration file and restart the program.
-	* Language selector
-		The Language selector affects the cards' texts only. The User Interface is allways in English.
-	* Update
-		Shows a window where you can
-			* Check for a new version of Mtgdb.Gui
-			* Download the most recent cards database from Mtgjson.com
-			* Download card images
-			* Download artworks
+- Use `Alt`+`Right` / `Middle` mouse click to add / remove 1 card from collection.
+- Use `Ctrl`+`Alt`+`Right` / `Middle` mouse click to add / remove 4 cards from collections.
+
+Undo / redo buttons
+-------------------
+
+Are located at the top left of the window in the header. `Undo`, `Redo` apply to many end-user 
+actions like checking / unchecking Filter buttons, changing search text and so on.
+
+Buttons in the window header right side
+---------------------------------------
+
+`Open deck` from a file, `Save deck` to a file. Supported are deck formats of
+- Magarena https://www.slightlymagic.net/forum/viewforum.php?f=82
+- Forge https://www.slightlymagic.net/forum/viewforum.php?f=26
+- XMage http://www.xmage.de
+- Cockatrice https://cockatrice.github.io/ supports the format used by Magarena
+- To use your decks with Riiak's DotP 2014 Deck Builder 
+https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999 use a modified version supporting 
+Forge deck format https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467
+
+`Deck statistics`. Opens a Pivot report window. Use it to view mana curve, price breakdown, or 
+create a custom report by specifying `argument`, `series` and `summary` fields.
+
+`Print deck`. The print buttons doesn't actually print, instead it creates images of cards by 
+groups of 8 that can be printed on A4 paper.
+
+`Clear deck`. Use it to start creating a new deck from scratch
+
+`Help` menu. This is how you probably got to read this file.
+
+`Enable / disable tooltips`. Tooltips are helpful but also annoying.
+
+`Edit configuration file` Use it to tell the program where to find your custom card images or 
+tweak some other settings.
+
+NOTE: To apply your changes save the modified configuration file and restart the program.
+
+`Language selector`. The Language selector affects the cards' texts only. The User Interface is 
+allways in English.
+
+`Update` Shows a window where you can
+- Check for a new version of Mtgdb.Gui
+- Download the most recent cards database from Mtgjson.com
+- Download card images
+- Download artworks

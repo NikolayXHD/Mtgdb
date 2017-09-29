@@ -1,31 +1,36 @@
-=== Sorting search result ===
+Sorting search result
+---------------------
 
-By default the cards are sorted in the same order they appear in data\AllSets-x.json file.
-You can sort by most fields you see in search result. To make 'sort' button visible move the
-mouse over a field you want to sort.
+By default the cards are sorted in the same order they appear in data\AllSets-x.json file. You 
+can sort by most fields you see in search result. To make 'sort' button visible move the mouse 
+over a field you want to sort.
 
-== Sort by multiple fields ===
+Sort by multiple fields
+-----------------------
 
 To sort by more than one field use Shift+click on sort button on second and subsequent fields.
 
-=== Three-state cycle: Descending-Ascending-None ===
+Three-state cycle: Descending-Ascending-None
+--------------------------------------------
 
 Clicking sort button cycles between 3 states:
 - first click makes sort direction Ascending
 - second click changes direction to Descending
 - third click stops sorting the field
 
-=== Stop sorting one field ===
+Stop sorting one field
+----------------------
 
 There are two ways to exclude a field from sorting.
 
-1. Shift+click sort button until it becomes not sorted.
+- Shift+click sort button until it becomes not sorted.
 By using Shift you preserve any existing sorting by other fields.
 
-2. Ctrl+click sort button.
+- Ctrl+click sort button.
 The clicked field stops being sorted. Any other sorted fields remain sorted.
 
-=== Cancel sorting on all fields ===
+Cancel sorting on all fields
+----------------------------
 
 Click sort button (without holding Shift) on any field until it becomes not sorted.
 Because Shift key is not down while clicking, other fields are excluded from sorting too.
