@@ -220,14 +220,6 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.SelectedIndexChanged += deckAreaChanged;
 			_tabHeadersDeck.MouseMove += deckAreaHover;
 
-			_cardRepo.SetAdded += cardRepoSetAdded;
-			
-			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
-			if (_cardRepo.IsImageLoadingComplete)
-				imageLoadingComplete();
-			else
-				_cardRepo.ImageLoadingComplete += imageLoadingComplete;
-
 			_luceneSearcher.IndexingProgress += luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress += luceneSearcherIndexingProgress;
 			_luceneSearcher.Loaded += luceneSearcherLoaded;
@@ -259,6 +251,13 @@ namespace Mtgdb.Gui
 			_layoutViewCards.AllowDrop = true;
 			_layoutViewCards.DragEnter += deckDragEnter;
 			_layoutViewCards.DragDrop += deckDragDropped;
+
+			_cardRepo.SetAdded += cardRepoSetAdded;
+			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
+			if (_cardRepo.IsImageLoadingComplete)
+				imageLoadingComplete();
+			else
+				_cardRepo.ImageLoadingComplete += imageLoadingComplete;
 		}
 
 		private static void deckDragEnter(object sender, DragEventArgs e)
@@ -281,7 +280,10 @@ namespace Mtgdb.Gui
 			{
 				var file = files[i];
 
-				_uiModel.Form.NewTab(form => ((FormMain) form).AddLoadingCompleteHandler(f => f.LoadDeck(file)));
+				Action<FormMain> onLoaded = f => f.LoadDeck(file);
+				Action<object> onCreated = form => ((FormMain)form).OnLoaded(onLoaded);
+
+				_uiModel.Form.NewTab(onCreated);
 			}
 		}
 
@@ -320,10 +322,6 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.SelectedIndexChanged -= deckAreaChanged;
 			_tabHeadersDeck.MouseMove -= deckAreaHover;
 
-			_cardRepo.SetAdded -= cardRepoSetAdded;
-			_cardRepo.ImageLoadingComplete -= imageLoadingComplete;
-			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
-
 			_luceneSearcher.IndexingProgress -= luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress -= luceneSearcherIndexingProgress;
 			_luceneSearcher.Loaded -= luceneSearcherLoaded;
@@ -351,11 +349,15 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.DragEnter -= deckDragEnter;
 			_layoutViewCards.DragDrop -= deckDragDropped;
+
+			_cardRepo.SetAdded -= cardRepoSetAdded;
+			_cardRepo.ImageLoadingComplete -= imageLoadingComplete;
+			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 		}
 
-		public void AddLoadingCompleteHandler(Action<FormMain> a)
+		public void OnLoaded(Action<FormMain> a)
 		{
-			_loadingCompleteHandlers.Add(a);
+			_onLoadHandlers.Add(a);
 		}
 
 		private readonly CardRepository _cardRepo;
@@ -406,6 +408,6 @@ namespace Mtgdb.Gui
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly ButtonSubsystem _buttonSubsystem;
 
-		private readonly List<Action<FormMain>> _loadingCompleteHandlers = new List<Action<FormMain>>();
+		private readonly List<Action<FormMain>> _onLoadHandlers = new List<Action<FormMain>>();
 	}
 }

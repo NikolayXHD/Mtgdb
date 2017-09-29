@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
+using NLog;
 using File = System.IO.File;
 
 namespace Mtgdb.Downloader
@@ -20,11 +21,19 @@ namespace Mtgdb.Downloader
 			_appDownloadedSignatureFile = AppDir.Update.AddPath(Signer.SignaturesFile);
 			_appInstalledVersionFile = AppDir.Update.AddPath("version.txt");
 
+			string newsDir = AppDir.Update.AddPath("notifications");
+
+			_newsArchive = newsDir.AddPath("archive.zip");
+			_unzippedNewsDir = newsDir.AddPath("archive");
+
+			_unreadNewsDir = newsDir.AddPath("new");
+			_readNewsDir = newsDir.AddPath("read");
+
 			AppDownloadedSignature = getAppDownloadedSignature();
 
 			_webClient = new WebClient();
 			_megatools = new Megatools();
-		}
+	}
 
 		public void DownloadMtgjson()
 		{
@@ -48,7 +57,15 @@ namespace Mtgdb.Downloader
 					using (var stream = new MemoryStream(byteArray))
 					{
 						Console.WriteLine("Extracting to {0}", AppDir.Data);
-						new FastZip().ExtractZip(stream, AppDir.Data, FastZip.Overwrite.Always, name => true, null, null, true, false);
+						new FastZip().ExtractZip(
+							stream,
+							AppDir.Data,
+							FastZip.Overwrite.Always,
+							name => true,
+							fileFilter: null,
+							directoryFilter: null,
+							restoreDateTime: true,
+							isStreamOwner: false);
 					}
 
 					MtgjsonFileUpdated?.Invoke();
@@ -231,14 +248,14 @@ namespace Mtgdb.Downloader
 			createApplicationShortcut(shortcutPath, execPath, iconPath);
 		}
 
-		public void DisplayNotifications()
+		public void DisplayNews()
 		{
-			if (_announcementFiles == null)
+			if (_unreadNews == null)
 				return;
 
-			foreach (var file in _announcementFiles)
+			foreach (var file in _unreadNews)
 			{
-				string readAnnounceFile = getReadAnnounceFile(file);
+				string readAnnounceFile = getReadNewsFile(file);
 
 				string text = File.ReadAllText(file).Trim();
 
@@ -256,43 +273,64 @@ namespace Mtgdb.Downloader
 				Console.WriteLine();
 			}
 
-			_announcementFiles.Clear();
+			_unreadNews.Clear();
 		}
 
-		public void DownloadNotifications(bool repeatViewed)
+		public void FetchNews(bool repeatViewed)
 		{
-			string announceDir = getNewAnnounceDir();
-			announceDir.EmptyDirectory();
+			downloadNews();
+			unpackNews();
 
-			Console.Write("Checking update server notifications... ");
+			_unreadNews = Directory.GetFiles(_unreadNewsDir, "*.txt", SearchOption.TopDirectoryOnly)
+				.Where(file => repeatViewed || !File.Exists(getReadNewsFile(file)))
+				.OrderByDescending(Path.GetFileNameWithoutExtension, _versionComparer)
+				.ToList();
+		}
 
-			if (_megatools.Download(null, _appSourceConfig.NotificationsUrl, announceDir, quiet: true, timeoutSec: 15))
+		private void downloadNews()
+		{
+			Console.Write("Fetching update news... ");
+
+			try
+			{
+				using (var webClient = new WebClientBase())
+					webClient.DownloadFile(_appSourceConfig.NewsUrl, _newsArchive);
+
 				Console.WriteLine("done");
-			else
-				Console.WriteLine("timeout");
+			}
+			catch (Exception ex)
+			{
+				_log.Info(ex, "Download news failed");
+				Console.WriteLine("failed");
+			}
 
 			Console.WriteLine();
-
-			var newAnnounces = Directory.GetFiles(announceDir, "*.txt", SearchOption.TopDirectoryOnly)
-				.Where(file => repeatViewed || !File.Exists(getReadAnnounceFile(file)))
-				.ToList();
-
-			_announcementFiles = newAnnounces;
 		}
 
-		private static string getNewAnnounceDir()
+		private void unpackNews()
 		{
-			return AppDir.Update.AddPath("notifications").AddPath("new");
+			if (File.Exists(_newsArchive))
+			{
+				_unzippedNewsDir.EmptyDirectory();
+
+				new FastZip().ExtractZip(_newsArchive, _unzippedNewsDir, fileFilter: null);
+				var unzipped = Directory.GetFiles(_unzippedNewsDir, "*.txt", SearchOption.AllDirectories);
+
+				_unreadNewsDir.EmptyDirectory();
+
+				foreach (var file in unzipped)
+					File.Copy(file, getUnreadNewsFile(file));
+			}
 		}
 
-		private static string getReadAnnounceDir()
+		private string getUnreadNewsFile(string file)
 		{
-			return AppDir.Update.AddPath("notifications").AddPath("read");
+			return _unreadNewsDir.AddPath(Path.GetFileName(file));
 		}
 
-		private static string getReadAnnounceFile(string file)
+		private string getReadNewsFile(string file)
 		{
-			return getReadAnnounceDir().AddPath(Path.GetFileName(file));
+			return _readNewsDir.AddPath(Path.GetFileName(file));
 		}
 
 
@@ -321,8 +359,6 @@ namespace Mtgdb.Downloader
 			}
 		}
 
-
-
 		public event Action MtgjsonFileUpdated;
 
 		public event Action BeginInstall;
@@ -337,8 +373,8 @@ namespace Mtgdb.Downloader
 			AppDir.DisplayConfigXml
 		};
 
-		public bool NotificationsLoaded => _announcementFiles != null;
-		public bool HasUnreadNotifications => _announcementFiles != null && _announcementFiles.Count > 0;
+		public bool NewsLoaded => _unreadNews != null;
+		public bool HasUnreadNews => _unreadNews != null && _unreadNews.Count > 0;
 
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly MtgjsonSourceConfig _mtgjsonSourceConfig;
@@ -351,7 +387,14 @@ namespace Mtgdb.Downloader
 		public FileSignature AppDownloadedSignature { get; private set; }
 		private readonly WebClient _webClient;
 		private readonly Megatools _megatools;
+		private List<string> _unreadNews;
 
-		private List<string> _announcementFiles;
+		private readonly string _unzippedNewsDir;
+		private readonly string _unreadNewsDir;
+		private readonly string _readNewsDir;
+		private readonly string _newsArchive;
+
+		private readonly VersionComparer _versionComparer = new VersionComparer();
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

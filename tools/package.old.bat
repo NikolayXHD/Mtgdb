@@ -25,8 +25,10 @@ del /q %target%\etc\Mtgdb.Test.xml
 del /s /q %target%\update\app\*
 del /s /q %target%\update\*.bak
 del /s /q %target%\update\*.zip
-del /s /q %target%\update\notifications\new\*.txt
-del /s /q %target%\update\notifications\read\*.txt
+del /s /q %target%\update\notifications\*.zip
+del /s /q %target%\update\notifications\new\*
+del /s /q %target%\update\notifications\read\*
+del /s /q %target%\update\notifications\archive\*
 del /q %target%\update\filelist.txt
 
 del /s /q %target%\images\*.jpg
@@ -34,7 +36,7 @@ del /s /q %target%\images\*.txt
 
 copy %output%\*.txt %target%
 xcopy /r /i /y /E %output%\original %target%
-xcopy %output%\..\LICENSE %target%\LICENSE
+xcopy %output%\..\LICENSE %target%
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 

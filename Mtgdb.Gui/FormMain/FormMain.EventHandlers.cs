@@ -57,6 +57,13 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				_deckModel.LoadDeck(_cardRepo);
+
+				foreach (var handler in _onLoadHandlers)
+					handler.Invoke(this);
+
+				// to prevent memory leaks
+				_onLoadHandlers.Clear();
+
 				_sortSubsystem.Invalidate();
 
 				if (_historyModel.Current.SearchResultScroll.HasValue)
@@ -64,14 +71,8 @@ namespace Mtgdb.Gui
 				
 				endRestoreSettings();
 
-				foreach (var handler in _loadingCompleteHandlers)
-					handler.Invoke(this);
-
-				// to prevent memory leaks
-				_loadingCompleteHandlers.Clear();
+				RunRefilterTask();
 			});
-
-			RunRefilterTask();
 		}
 
 		private void localizationLoadingComplete()

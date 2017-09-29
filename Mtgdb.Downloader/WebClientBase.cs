@@ -1,21 +1,18 @@
 using System;
 using System.IO;
-using System.Net.Cache;
 using System.Text;
 
 namespace Mtgdb.Downloader
 {
-	public class WebClientBase
+	public class WebClientBase : IDisposable
 	{
-		protected WebClientBase()
+		public WebClientBase()
 		{
 			_webClient = new System.Net.WebClient();
+
 			_webClient.Headers.Add(
 				"User-Agent",
 				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-			_webClient.Headers.Add(
-				"Accept",
-				"text / html,application / xhtml + xml,application / xml; q = 0.9,image / webp,image / apng,*/*;q=0.8");
 		}
 
 		protected string DownloadString(string pageUrl)
@@ -38,6 +35,18 @@ namespace Mtgdb.Downloader
 			return _webClient.OpenRead(pageUrl);
 		}
 
+		public void DownloadFile(string downloadUrl, string downloadTarget)
+		{
+			using (var webStream = DownloadStream(downloadUrl))
+			using (var fileStream = File.Open(downloadTarget, FileMode.Create))
+				webStream.CopyTo(fileStream);
+		}
+
 		private readonly System.Net.WebClient _webClient;
+
+		public void Dispose()
+		{
+			_webClient?.Dispose();
+		}
 	}
 }

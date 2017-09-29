@@ -86,6 +86,7 @@
     <Folder Include="images\XLHQ Mega\" />
     <Folder Include="images\XLHQ Promos\" />
     <Folder Include="images\XLHQ-Sets-Torrent\" />
+    <Folder Include="update\notifications\archive\" />
     <Folder Include="update\notifications\new\" />
     <Folder Include="update\notifications\read\" />
     <Folder Include="update\app\" />
