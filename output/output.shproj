@@ -67,6 +67,7 @@
     <Content Include="update\megatools-1.9.98-win32\ssleay32.dll" />
     <Content Include="update\megatools-1.9.98-win32\TODO.TXT" />
     <Content Include="update\megatools-1.9.98-win32\zlib1.dll" />
+    <Content Include="_about.txt" />
     <Content Include="_help_buttons.txt" />
     <Content Include="_help_editor.txt" />
     <Content Include="_help_search_button_over_card_text.txt" />

@@ -34,6 +34,8 @@ del /s /q %target%\images\*.txt
 
 copy %output%\*.txt %target%
 xcopy /r /i /y /E %output%\original %target%
+xcopy %output%\..\LICENSE %target%\LICENSE
+
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 
 del /s /q %target%\*.vshost.*

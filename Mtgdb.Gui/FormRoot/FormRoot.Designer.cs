@@ -86,6 +86,7 @@
 			this._menuConfig = new Mtgdb.Controls.CustomPanel();
 			this._buttonDisplaySettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonGeneralSettings = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonHelpAbout = new Mtgdb.Controls.CustomCheckBox();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
@@ -910,6 +911,7 @@
 			// _menuHelp
 			// 
 			this._menuHelp.BackColor = System.Drawing.Color.White;
+			this._menuHelp.Controls.Add(this._buttonHelpAbout);
 			this._menuHelp.Controls.Add(this._buttonHelpForum);
 			this._menuHelp.Controls.Add(this._buttonHelpSearchFromGrid);
 			this._menuHelp.Controls.Add(this._buttonHelpSearchShortcuts);
@@ -921,7 +923,7 @@
 			this._menuHelp.Controls.Add(this._buttonHelpEditor);
 			this._menuHelp.Location = new System.Drawing.Point(300, 50);
 			this._menuHelp.Name = "_menuHelp";
-			this._menuHelp.Size = new System.Drawing.Size(200, 242);
+			this._menuHelp.Size = new System.Drawing.Size(200, 266);
 			this._menuHelp.TabIndex = 29;
 			this._menuHelp.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -1180,6 +1182,27 @@
 			this._buttonGeneralSettings.Text = "General settings";
 			this._buttonGeneralSettings.UseVisualStyleBackColor = false;
 			// 
+			// _buttonAbout
+			// 
+			this._buttonHelpAbout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonHelpAbout.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonHelpAbout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._buttonHelpAbout.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonHelpAbout.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonHelpAbout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonHelpAbout.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonHelpAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonHelpAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonHelpAbout.Location = new System.Drawing.Point(1, 241);
+			this._buttonHelpAbout.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
+			this._buttonHelpAbout.Name = "_buttonHelpAbout";
+			this._buttonHelpAbout.Size = new System.Drawing.Size(198, 24);
+			this._buttonHelpAbout.TabIndex = 28;
+			this._buttonHelpAbout.TabStop = false;
+			this._buttonHelpAbout.Text = "        About";
+			this._buttonHelpAbout.UseVisualStyleBackColor = true;
+			// 
 			// FormRoot
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1276,5 +1299,6 @@
 		private Controls.CustomCheckBox _buttonHelpSearchFromGrid;
 		private Controls.CustomCheckBox _buttonHelpSearchShortcuts;
 		private Controls.CustomCheckBox _buttonHelpForum;
+		private Controls.CustomCheckBox _buttonHelpAbout;
 	}
 }
