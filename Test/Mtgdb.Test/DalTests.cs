@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
+using Mtgdb.Dal;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -68,6 +69,48 @@ namespace Mtgdb.Test
 
 				Console.WriteLine();
 			}
+		}
+
+		[Test]
+		public void Zoom_images_match_small_ones()
+		{
+			TestLoadingUtil.LoadModules();
+
+			var cardRepo = TestLoadingUtil.CardRepository;
+			var imgRepo = TestLoadingUtil.ImageRepository;
+
+			cardRepo.LoadFile();
+			cardRepo.Load();
+
+			imgRepo.LoadFiles();
+
+			imgRepo.LoadSmall();
+			imgRepo.LoadZoom();
+
+			foreach (var set in cardRepo.SetsByCode.OrderBy(_ => _.Value.ReleaseDate))
+				foreach (var card in set.Value.Cards)
+				{
+					var small = cardRepo.GetSmallImage(card, imgRepo);
+					var zooms = cardRepo.GetZoomImages(card, imgRepo);
+
+					Assert.That(small, Is.Not.Null);
+					Assert.That(zooms, Is.Not.Null);
+					Assert.That(zooms, Is.Not.Empty);
+
+					var smallPath = small.FullPath;
+					var zoomPath = zooms[0].FullPath;
+
+					smallPath = smallPath.ToLowerInvariant()
+						.Replace("gatherer.original", "gatherer")
+						.Replace("\\lq\\", string.Empty);
+
+					zoomPath = zoomPath.ToLowerInvariant()
+						.Replace("gatherer.preprocessed", "gatherer")
+						.Replace("\\mq\\", string.Empty);
+
+					if (!Str.Equals(smallPath, zoomPath))
+						Assert.Fail();
+				}
 		}
 	}
 }

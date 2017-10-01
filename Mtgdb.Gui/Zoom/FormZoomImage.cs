@@ -131,7 +131,7 @@ namespace Mtgdb.Gui
 					index++;
 				}
 
-				foreach (var model in _cardRepository.GetImagesZoom(_cardForms[j], _imageRepository))
+				foreach (var model in _cardRepository.GetZoomImages(_cardForms[j], _imageRepository))
 				{
 					while (index > _imageIndex + 10)
 						Thread.Sleep(100);

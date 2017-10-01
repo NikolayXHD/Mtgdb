@@ -8,10 +8,12 @@
 	
 	<ImageLocations>
 		
-		<!--<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
-		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />-->
+		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
+		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
 		<!--<Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />-->
 
+		<!--
+		
 		<Directory Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
 		<Directory Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
 
@@ -118,7 +120,7 @@
 		<Directory Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
 
-
+		-->
 
 		<!-- non-set codes -->
 			<!-- 

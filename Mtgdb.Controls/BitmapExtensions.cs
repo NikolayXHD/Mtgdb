@@ -23,7 +23,7 @@ namespace Mtgdb.Controls
 				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 				graphics.DrawImage(
 					original,
-					destRect: new Rectangle(new Point(0, 0), result.Size),
+					destRect: new RectangleF(-0.5f, -0.5f, result.Width + 0.5f, result.Height + 0.5f),
 					srcRect: new Rectangle(new Point(frame), croppedSize),
 					srcUnit: GraphicsUnit.Pixel);
 			}

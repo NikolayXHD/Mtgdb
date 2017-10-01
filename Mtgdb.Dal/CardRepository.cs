@@ -151,6 +151,10 @@ namespace Mtgdb.Dal
 				if (modifiedName != null)
 					card.ImageName = string.Intern(modifiedName);
 			}
+			else if (Str.Equals(card.ImageName, "Sultai Ascendacy"))
+			{
+					card.ImageName = "Sultai Ascendancy";
+			}
 
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
@@ -229,7 +233,7 @@ namespace Mtgdb.Dal
 		public void SelectCardImages(ImageRepository repository)
 		{
 			foreach (var card in Cards)
-				card.ImageModel = repository.GetImageSmall(card, GetReleaseDateSimilarity);
+				card.ImageModel = GetSmallImage(card, repository);
 
 			//var withoutImages = Cards.Where(_ => _.ImageModel == null).ToArray();
 
@@ -237,9 +241,14 @@ namespace Mtgdb.Dal
 			ImageLoadingComplete?.Invoke();
 		}
 
-		public List<ImageModel> GetImagesZoom(Card card, ImageRepository repository)
+		public ImageModel GetSmallImage(Card card, ImageRepository repository)
 		{
-			return repository.GetImagesZoom(card, GetReleaseDateSimilarity);
+			return repository.GetSmallImage(card, GetReleaseDateSimilarity);
+		}
+
+		public List<ImageModel> GetZoomImages(Card card, ImageRepository repository)
+		{
+			return repository.GetZoomImages(card, GetReleaseDateSimilarity);
 		}
 
 		public List<ImageModel> GetImagesArt(Card card, ImageRepository repository)
@@ -272,15 +281,6 @@ namespace Mtgdb.Dal
 			}
 
 			return DateTime.MinValue;
-		}
-
-		public string GetSetReleaseDate(string setCode)
-		{
-			Set set;
-			if (setCode == null || !SetsByCode.TryGetValue(setCode, out set))
-				return MinReleaseDate;
-
-			return set.ReleaseDate;
 		}
 
 		public List<Card> GetForms(Card card)

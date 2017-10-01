@@ -63,7 +63,7 @@ namespace Mtgdb.Dal
 						_luceneSearcher.LoadIndex(null);
 
 					_imageRepository.LoadFiles();
-					_imageRepository.Load();
+					_imageRepository.LoadSmall();
 					_imageRepository.LoadZoom();
 					_imageRepository.LoadArt();
 
