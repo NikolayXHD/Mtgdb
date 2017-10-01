@@ -8,17 +8,21 @@
 	
 	<ImageLocations>
 		
-		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
-		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
-		<!-- <Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />  -->
-		
-		
-		<!--
-		
+		<!--<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
+		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />-->
+		<!--<Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />-->
+
 		<Directory Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
 		<Directory Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
+
+		<Directory Zoom="Any"   Path="D:\Distrib\games\mtg\Patch" />
 		
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ" />
+		<Directory Zoom="Any" Set="DD3_DVD"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
+		<Directory Zoom="Any" Set="DD3_EVG"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
+		<Directory Zoom="Any" Set="DD3_GVL"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
+		<Directory Zoom="Any" Set="DD3_JVC"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
+		
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\games\mtg\Mega\XLHQ\Digital Sets" />
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ\Digital Tokens" />
 		<Directory Zoom="Any" Set="MPS_AKH" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ\Masterpiece Series\Amonkhet Invocations" />
@@ -27,9 +31,18 @@
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ\Promos" />
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\Games\mtg\Mega\XLHQ\Promos\Pre-Release Promos" />
 		<Directory Zoom="Any" Set="VMA"                                                   Path="D:\Distrib\games\mtg\Mega\XLHQ\Other\Vintage Champs 300DPI" />
-		           
+
 		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
+		<Directory Zoom="Any" Set="MMA"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\MM1" />
+		<Directory Zoom="Any" Set="RQS;ITP"   Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\I2P" />
+		<Directory Zoom="Any" Set="NMS"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\NEM" />
+		<Directory Zoom="Any" Set="CST"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CTD" />
+		<Directory Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX" />
+		<Directory Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Extras" />
+		<Directory Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Tokens" />
+		<Directory Zoom="Any" Set="MD1"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\MED" />
 		
+
 		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ Promos" />
 		<Directory Zoom="Any" Set="pDRC"      Path="D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\DragonCon" />
 		<Directory Zoom="Any" Set="pMEI"      Path="D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\www.magicthegathering.com" />
@@ -104,9 +117,9 @@
 		<Directory Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
-		
-		-->
-		
+
+
+
 		<!-- non-set codes -->
 			<!-- 
 			
@@ -170,8 +183,7 @@
 	</ImageLocations>
 	
 	<ImageCache CacheCapacity ="1000" />
-	<DatafilesPostprocessing HumanReadableSetsFile="True" />
-	
+
 	<ImageSources>
 		<QualityGroup Quality="Art" TargetDirectory="D:\Distrib\games\mtg\Artwork" FileListUrl="https://mega.nz/#F!mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
 			<MegaDir Url="https://mega.nz/#F!39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />

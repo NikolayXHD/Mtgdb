@@ -17,7 +17,9 @@ namespace Mtgdb.Dal
 
 		protected override void ExecuteRaw()
 		{
-			int margin = (int) Math.Ceiling(Rect.Height/50f);
+			int size = Math.Max(Rect.Width, Rect.Height);
+
+			int margin = (int) Math.Ceiling(size/150f);
 
 			int leftTop = GetLocation(0, 0);
 			int middleTop = GetLocation(Rect.Width/2, margin);
@@ -39,22 +41,13 @@ namespace Mtgdb.Dal
 			if (!hasCorner)
 				return;
 
+			if (SameColor(leftTop, 0, 0, 0, 0) || _whiteCorner && SameColor(leftTop, 255, 255, 255, 255))
+				return;
+
+			double radius = 13f / 370f * size;
+
 			ImageChanged = true;
-
-			int corner = 0;
-			int maxCorner = Rect.Width/15;
-
-			for (int i = 0; i < maxCorner; i++)
-				if (!SameColor(leftTop, GetLocation(i, i)))
-				{
-					corner = i;
-					break;
-				}
-
-			double radius = corner/(Math.Sqrt(2) - 1);
-			// у них закругление не касается сторон карты, а пересекает под небольшим углом.
-			radius *= 1.9;
-
+			
 			modify(+radius, +radius, 0, 0);
 			modify(+radius, -radius, 0, Rect.Height - 1);
 			modify(-radius, +radius, Rect.Width - 1, 0);
@@ -64,7 +57,7 @@ namespace Mtgdb.Dal
 		private void modify(
 			double radiusX,
 			double radiusY,
-			int left,
+			int left, 
 			int top)
 		{
 			//int modified = 0;

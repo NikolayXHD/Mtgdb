@@ -8,25 +8,13 @@ namespace Mtgdb.Dal
 {
 	public class ImageCache
 	{
-		public static readonly Size SizeCropped = new Size(205, 293);
-
-		private readonly Dictionary<string, ImageCacheEntry> _imagesByPath = new Dictionary<string, ImageCacheEntry>();
-		private readonly LinkedList<string> _ratings = new LinkedList<string>();
-
-		public Size CardSizeDefault { get; } = new Size(223, 311);
-		public Size CardSize { get; } = new Size(223, 311);
-		public Size ZoomedCardSize { get; } = new Size(446, 622);
-
-		public int Capacity { get; }
-		private readonly bool _transparentCornersWhenNotZoomed;
-
-		public ImageCache(ImageCacheConfig config, CardSizeConfig cardSizeConfig, ZoomedCardSizeConfig zoomedCardSizeConfig)
+		public ImageCache(ImageCacheConfig config, SmallConfig smallConfig, ZoomedConfig zoomedConfig)
 		{
-			if (cardSizeConfig.Width.HasValue && cardSizeConfig.Height.HasValue)
-				CardSize = new Size(cardSizeConfig.Width.Value, cardSizeConfig.Height.Value);
+			if (smallConfig.Width.HasValue && smallConfig.Height.HasValue)
+				CardSize = new Size(smallConfig.Width.Value, smallConfig.Height.Value);
 
-			if (zoomedCardSizeConfig.Width.HasValue && zoomedCardSizeConfig.Height.HasValue)
-				ZoomedCardSize = new Size(zoomedCardSizeConfig.Width.Value, zoomedCardSizeConfig.Height.Value);
+			if (zoomedConfig.Width.HasValue && zoomedConfig.Height.HasValue)
+				ZoomedCardSize = new Size(zoomedConfig.Width.Value, zoomedConfig.Height.Value);
 
 			Capacity = config.GetCacheCapacity();
 			_transparentCornersWhenNotZoomed = config.TransparentCornersWhenNotZoomed ?? true;
@@ -65,6 +53,10 @@ namespace Mtgdb.Dal
 				return null;
 
 			var result = Transform(original, model, size, transparentCorners, crop, whiteCorner);
+
+			if (result != original)
+				original.Dispose();
+
 			return result;
 		}
 
@@ -88,7 +80,8 @@ namespace Mtgdb.Dal
 
 		public Bitmap Transform(Bitmap original, ImageModel model, Size size, bool transparentCorners, bool crop, bool whiteCorner)
 		{
-			Bitmap bitmap;
+			Bitmap bitmap = original;
+
 			if (crop || size != original.Size)
 			{
 				Size frame;
@@ -101,25 +94,13 @@ namespace Mtgdb.Dal
 				else
 					frame = new Size(0, 0);
 
-				bool scaled;
-
 				try
 				{
 					bitmap = original.Scale(size, frame);
-					scaled = true;
 				}
 				catch
 				{
-					bitmap = original;
-					scaled = false;
 				}
-
-				if (scaled)
-					original.Dispose();
-			}
-			else
-			{
-				bitmap = original;
 			}
 
 			if (!transparentCorners && !whiteCorner ||
@@ -130,31 +111,32 @@ namespace Mtgdb.Dal
 				return bitmap;
 			}
 
-			var edited = new Bitmap(bitmap.Size.Width, bitmap.Size.Height);
+			var edited = new Bitmap(bitmap.Width, bitmap.Height);
 
 			bool cornerRemoved;
 			try
 			{
 				var gr = Graphics.FromImage(edited);
 				gr.DrawImage(bitmap, new Rectangle(new Point(0, 0), bitmap.Size));
-				new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: size == CardSize).Execute();
-				cornerRemoved = true;
+				var remover = new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: true);
+				remover.Execute();
+				cornerRemoved = remover.ImageChanged;
 			}
 			catch
 			{
 				cornerRemoved = false;
 			}
 
-			if (cornerRemoved)
-			{
-				bitmap.Dispose();
-				return edited;
-			}
-			else
+			if (!cornerRemoved)
 			{
 				edited.Dispose();
 				return bitmap;
 			}
+
+			if (bitmap != original)
+				bitmap.Dispose();
+
+			return edited;
 		}
 
 		private Bitmap tryGetFromCache(string path)
@@ -194,5 +176,18 @@ namespace Mtgdb.Dal
 			_ratings.RemoveLast();
 			_imagesByPath.Remove(keyToRemove);
 		}
+
+
+		public static readonly Size SizeCropped = new Size(205, 293);
+
+		private readonly Dictionary<string, ImageCacheEntry> _imagesByPath = new Dictionary<string, ImageCacheEntry>();
+		private readonly LinkedList<string> _ratings = new LinkedList<string>();
+
+		public Size CardSizeDefault { get; } = new Size(223, 311);
+		public Size CardSize { get; } = new Size(223, 311);
+		public Size ZoomedCardSize { get; } = new Size(446, 622);
+
+		public int Capacity { get; }
+		private readonly bool _transparentCornersWhenNotZoomed;
 	}
 }

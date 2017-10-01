@@ -44,7 +44,7 @@ namespace Mtgdb.Test
 		{
 			TestLoadingUtil.LoadModules();
 			TestLoadingUtil.LoadCardRepository();
-
+			
 			using (var client = new GathererClient())
 			{
 				var set = TestLoadingUtil.CardRepository.SetsByCode[setCode];

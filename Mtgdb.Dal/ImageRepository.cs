@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LinqLib.Sequence;
 using Shell32;
 
 namespace Mtgdb.Dal
@@ -116,10 +115,6 @@ namespace Mtgdb.Dal
 						foreach (string setCode in setCodes)
 						{
 							var model = new ImageModel(file, root.Path, setCode, author, isArt);
-
-							if (model.IsCrop)
-								continue;
-
 							add(model, modelsByNameBySetByVariant);
 						}
 				}
@@ -234,9 +229,13 @@ namespace Mtgdb.Dal
 
 		public ImageModel GetImageSmall(Card card, Func<string, string, string> setCodePreference)
 		{
-			return
-				getImage(card, setCodePreference, _modelsByNameBySetByVariant) ??
-				getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom);
+			var result = getImage(card, setCodePreference, _modelsByNameBySetByVariant);
+
+			if (result != null)
+				return result;
+
+			result = getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom);
+			return result;
 		}
 
 		public ImageModel GetImagePrint(Card card, Func<string, string, string> setCodePreference)
@@ -251,41 +250,59 @@ namespace Mtgdb.Dal
 			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
 		{
+			return getImage(modelsByNameBySetByVariant,
+				setCodePreference,
+				card.SetCode,
+				card.ImageNameBase,
+				card.ImageName,
+				card.Artist);
+		}
+
+		private static ImageModel getImage(Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant, Func<string, string, string> setCodePreference, string set, string imageNameBase, string imageName, string artist)
+		{
 			lock (modelsByNameBySetByVariant)
 			{
-				string imageName = card.ImageName;
-
 				Dictionary<string, Dictionary<int, ImageModel>> bySet;
-				if (!modelsByNameBySetByVariant.TryGetValue(card.ImageNameBase, out bySet))
+				if (!modelsByNameBySetByVariant.TryGetValue(imageNameBase, out bySet))
 					return null;
 
 				Dictionary<int, ImageModel> byImageVariant;
-				if (card.SetCode == null || !bySet.TryGetValue(card.SetCode, out byImageVariant))
-					byImageVariant = bySet.ElementAtMax(pair => setCodePreference(card.SetCode, pair.Key)).Value;
 
-				var model = byImageVariant.ElementAtMax(pair => getMatchRank(pair.Value, imageName)).Value;
+
+				if (set == null || !bySet.TryGetValue(set, out byImageVariant))
+				{
+					byImageVariant = bySet
+						.AtMax(setPriority2(artist))
+						.ThenAtMax(setPriority3(setCodePreference, set))
+						.Find()
+						.Value;
+				}
+
+				var model = byImageVariant.Values
+					.AtMax(cardPriority1(set, imageName))
+					.ThenAtMax(cardPriority2(set, artist))
+					.ThenAtMax(cardPriority3(artist))
+					.ThenAtMin(cardUnpriority4())
+					.Find();
+
 				return model;
 			}
 		}
 
-		private static int getMatchRank(ImageModel model, string imageName)
-		{
-			bool imageNameIsMatching = Str.Equals(model.ImageName, imageName);
-			int variantNumber = model.VariantNumber;
-			var quality = model.Quality;
-
-			return -variantNumber + 100*quality + 10000*Convert.ToInt32(imageNameIsMatching);
-		}
-
 		public List<ImageModel> GetImagesZoom(Card card, Func<string, string, string> setCodePreference)
 		{
-			var models = getSpecificModels(card,
-				setCodePreference,
-				IsLoadingZoomComplete,
-				_modelsByNameBySetByVariantZoom,
-				_modelsByNameBySetByVariant);
+			List<ImageModel> result;
 
-			return models;
+			if (IsLoadingZoomComplete)
+			{
+				result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantZoom);
+
+				if (result != null)
+					return result;
+			}
+
+			result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariant);
+			return result;
 		}
 
 		public List<ImageModel> GetImagesArt(Card card, Func<string, string, string> setCodePreference)
@@ -303,25 +320,12 @@ namespace Mtgdb.Dal
 						yield return model;
 		}
 
-		private static List<ImageModel> getSpecificModels(
-			Card card,
-			Func<string, string, string> setCodePreference,
-			bool isLoadingSpecificComplete,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsSpecific,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsFallback)
+		public IEnumerable<ImageModel> GetAllImagesZoom()
 		{
-			List<ImageModel> models;
-
-			if (isLoadingSpecificComplete)
-			{
-				models =
-					getImageModels(card, setCodePreference, modelsSpecific) ??
-					getImageModels(card, setCodePreference, modelsFallback);
-			}
-			else
-				models = getImageModels(card, setCodePreference, modelsFallback);
-
-			return models;
+			foreach (var bySet in _modelsByNameBySetByVariantZoom.Values)
+				foreach (var byVariant in bySet.Values)
+					foreach (var model in byVariant.Values)
+						yield return model;
 		}
 
 		private static List<ImageModel> getImageModels(
@@ -336,28 +340,15 @@ namespace Mtgdb.Dal
 					return null;
 
 				var models = modelsBySet
-					// Сначала совпадающий сет
-					.OrderByDescending(bySet => Str.Equals(bySet.Key, card.SetCode))
-					// Далее сеты, в которых есть вариант с совпадающим артистом
-					.ThenByDescending(bySet => card.Artist != null && bySet.Value.Values.Any(_ => Str.Equals(_.Artist, card.Artist)))
-					// Остальные сеты пойдут от новых к старым
-					.ThenByDescending(bySet => setCodePreference(card.SetCode, bySet.Key))
+						.OrderByDescending(setPriority1(card.SetCode))
+						.ThenByDescending(setPriority2(card.Artist))
+						.ThenByDescending(setPriority3(setCodePreference, card.SetCode))
 					.SelectMany(bySet =>
 						bySet.Value.Select(byVariant => byVariant.Value)
-							// В совпадающем сете покажем 
-							// * сначала карту с совпадающим номером варианта
-							.OrderByDescending(model =>
-								Str.Equals(model.SetCode, card.SetCode) &&
-								Str.Equals(model.ImageName, card.ImageName))
-							// * далее карту с совпадающим артистом
-							.ThenByDescending(model =>
-								Str.Equals(model.SetCode, card.SetCode) &&
-								Str.Equals(model.Artist, card.Artist))
-							// В остальных сетах 
-							// * сначала карту с совпадающим артистом
-							.ThenByDescending(model => Str.Equals(model.Artist, card.Artist))
-							// * прочие по возрастанию номера варианта
-							.ThenBy(model => model.VariantNumber))
+							.OrderByDescending(cardPriority1(card.SetCode, card.ImageName))
+							.ThenByDescending(cardPriority2(card.SetCode, card.Artist))
+							.ThenByDescending(cardPriority3(card.Artist))
+							.ThenBy(cardUnpriority4()))
 					.ToList();
 
 				if (models.Count > 0)
@@ -368,43 +359,93 @@ namespace Mtgdb.Dal
 		}
 
 
+
+		/// <summary>
+		/// Сначала совпадающий сет
+		/// </summary>
+		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, bool> setPriority1(string set)
+		{
+			return bySet => Str.Equals(bySet.Key, set);
+		}
+
+		/// <summary>
+		/// Далее сеты, в которых есть вариант с совпадающим артистом
+		/// </summary>
+		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, bool> setPriority2(string artist)
+		{
+			return bySet => artist != null && bySet.Value.Values.Any(_ => Str.Equals(_.Artist, artist));
+		}
+
+		/// <summary>
+		/// Остальные сеты пойдут от новых к старым
+		/// </summary>
+		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, string> setPriority3(Func<string, string, string> setCodePreference, string set)
+		{
+			return bySet => setCodePreference(set, bySet.Key);
+		}
+
+		/// <summary>
+		/// В совпадающем сете покажем сначала карту с совпадающим номером варианта
+		/// </summary>
+		private static Func<ImageModel, bool> cardPriority1(string set, string imageName)
+		{
+			return model =>
+				Str.Equals(model.SetCode, set) &&
+				Str.Equals(model.ImageName, imageName);
+		}
+
+		/// <summary>
+		/// далее карту с совпадающим артистом
+		/// </summary>
+		private static Func<ImageModel, bool> cardPriority2(string set, string artist)
+		{
+			return model =>
+				Str.Equals(model.SetCode, set) &&
+				Str.Equals(model.Artist, artist);
+		}
+
+		/// <summary>
+		/// В остальных сетах сначала карту с совпадающим артистом
+		/// </summary>
+		private static Func<ImageModel, bool> cardPriority3(string artist)
+		{
+			return model => Str.Equals(model.Artist, artist);
+		}
+
+		/// <summary>
+		/// прочие по возрастанию номера варианта
+		/// </summary>
+		/// <returns></returns>
+		private static Func<ImageModel, int> cardUnpriority4()
+		{
+			return model => model.VariantNumber;
+		}
+
+
+
 		public ImageModel GetReplacementImage(ImageModel model, Func<string, string, string> setCodePreference)
 		{
 			if (string.IsNullOrEmpty(model.Name))
 				return null;
 
-			var result =
-				getReplacementImage(model, setCodePreference, _modelsByNameBySetByVariantZoom) ??
-				getReplacementImage(model, setCodePreference, _modelsByNameBySetByVariant);
+			var result = getImage(_modelsByNameBySetByVariantZoom,
+					setCodePreference,
+					model.SetCode,
+					model.Name,
+					model.ImageName,
+					model.Artist);
+
+			if (result != null)
+				return result;
+
+			result = getImage(_modelsByNameBySetByVariant,
+				setCodePreference,
+				model.SetCode,
+				model.Name,
+				model.ImageName,
+				model.Artist);
 
 			return result;
-		}
-
-		private static ImageModel getReplacementImage(
-			ImageModel modelOriginal,
-			Func<string, string, string> setCodePreference,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
-		{
-			string setCode = modelOriginal.SetCode;
-			string name = modelOriginal.Name;
-			int variant = modelOriginal.VariantNumber;
-
-			lock (modelsByNameBySetByVariant)
-			{
-				Dictionary<string, Dictionary<int, ImageModel>> bySet;
-				if (!modelsByNameBySetByVariant.TryGetValue(name, out bySet))
-					return null;
-
-				Dictionary<int, ImageModel> byImageVariant;
-				if (setCode == null || !bySet.TryGetValue(setCode, out byImageVariant))
-					byImageVariant = bySet.ElementAtMax(pair => setCodePreference.Invoke(modelOriginal.SetCode, pair.Key)).Value;
-
-				ImageModel model;
-				if (!byImageVariant.TryGetValue(variant, out model))
-					model = byImageVariant.ElementAtMax(pair => -pair.Key + pair.Value.Quality*1000).Value;
-
-				return model;
-			}
 		}
 
 

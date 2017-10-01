@@ -52,9 +52,6 @@ namespace Mtgdb.Dal
 			HasTransparentCorner = directoryName.Contains("MagicDuels");
 			IsPreprocessed = directoryName.Contains("Mtgdb.Pictures");
 
-			IsCrop = FullPath.Contains("Crops") ||
-				Type != null && (Type.Contains("crop") || Type.Contains("xrop"));
-
 			rootPath = AppDir.GetRootPath(rootPath);
 
 			if (!rootPath.EndsWith("\\"))
@@ -112,7 +109,6 @@ namespace Mtgdb.Dal
 		private string Type { get; }
 		public string FullPath { get; }
 		public bool HasTransparentCorner { get; }
-		public bool IsCrop { get; }
 		public int Quality { get; }
 		public string Artist { get; }
 		public bool IsArt { get; }

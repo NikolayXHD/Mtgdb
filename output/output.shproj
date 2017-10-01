@@ -16,9 +16,6 @@
     <Content Include="etc\Mtgdb.Gui.Display.xml" />
     <Content Include="etc\Mtgdb.Gui.xml" />
     <Content Include="etc\Mtgdb.Gui.Default.xml" />
-    <Content Include="etc\Mtgdb.Test.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="etc\Mtgdb.Util.xml" />
     <Content Include="update\7z\7za.exe" />
     <Content Include="update\img\art\filelist.txt" />
