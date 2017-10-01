@@ -52,7 +52,7 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public void Load()
+		public void LoadSmall()
 		{
 			load(_modelsByNameBySetByVariant, _directories, _files);
 
@@ -227,7 +227,7 @@ namespace Mtgdb.Dal
 		}
 
 
-		public ImageModel GetImageSmall(Card card, Func<string, string, string> setCodePreference)
+		public ImageModel GetSmallImage(Card card, Func<string, string, string> setCodePreference)
 		{
 			var result = getImage(card, setCodePreference, _modelsByNameBySetByVariant);
 
@@ -268,7 +268,6 @@ namespace Mtgdb.Dal
 
 				Dictionary<int, ImageModel> byImageVariant;
 
-
 				if (set == null || !bySet.TryGetValue(set, out byImageVariant))
 				{
 					byImageVariant = bySet
@@ -282,14 +281,15 @@ namespace Mtgdb.Dal
 					.AtMax(cardPriority1(set, imageName))
 					.ThenAtMax(cardPriority2(set, artist))
 					.ThenAtMax(cardPriority3(artist))
-					.ThenAtMin(cardUnpriority4())
+					.ThenAtMax(cardPriority4(imageName))
+					.ThenAtMin(cardUnpriority5())
 					.Find();
 
 				return model;
 			}
 		}
 
-		public List<ImageModel> GetImagesZoom(Card card, Func<string, string, string> setCodePreference)
+		public List<ImageModel> GetZoomImages(Card card, Func<string, string, string> setCodePreference)
 		{
 			List<ImageModel> result;
 
@@ -339,16 +339,14 @@ namespace Mtgdb.Dal
 				if (!modelsByNameBySetByVariant.TryGetValue(card.ImageNameBase, out modelsBySet))
 					return null;
 
-				var models = modelsBySet
-						.OrderByDescending(setPriority1(card.SetCode))
-						.ThenByDescending(setPriority2(card.Artist))
-						.ThenByDescending(setPriority3(setCodePreference, card.SetCode))
-					.SelectMany(bySet =>
-						bySet.Value.Select(byVariant => byVariant.Value)
-							.OrderByDescending(cardPriority1(card.SetCode, card.ImageName))
-							.ThenByDescending(cardPriority2(card.SetCode, card.Artist))
-							.ThenByDescending(cardPriority3(card.Artist))
-							.ThenBy(cardUnpriority4()))
+				var entriesBySet = modelsBySet
+					.OrderByDescending(setPriority1(card.SetCode))
+					.ThenByDescending(setPriority2(card.Artist))
+					.ThenByDescending(setPriority3(setCodePreference, card.SetCode))
+					.ToList();
+
+				var models = entriesBySet
+					.SelectMany(bySet => orderCardsWithinSet(card, bySet.Value))
 					.ToList();
 
 				if (models.Count > 0)
@@ -356,6 +354,19 @@ namespace Mtgdb.Dal
 
 				return null;
 			}
+		}
+
+		private static IEnumerable<ImageModel> orderCardsWithinSet(Card card, Dictionary<int, ImageModel> variants)
+		{
+			var result = variants.Select(byVariant => byVariant.Value)
+				.OrderByDescending(cardPriority1(card.SetCode, card.ImageName))
+				.ThenByDescending(cardPriority2(card.SetCode, card.Artist))
+				.ThenByDescending(cardPriority3(card.Artist))
+				.ThenByDescending(cardPriority4(card.ImageName))
+				.ThenBy(cardUnpriority5())
+				.ToList();
+
+			return result;
 		}
 
 
@@ -413,10 +424,18 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
+		/// Далее совпадающим номером
+		/// </summary>
+		private static Func<ImageModel, bool> cardPriority4(string imageName)
+		{
+			return model => Str.Equals(model.ImageName, imageName);
+		}
+
+		/// <summary>
 		/// прочие по возрастанию номера варианта
 		/// </summary>
 		/// <returns></returns>
-		private static Func<ImageModel, int> cardUnpriority4()
+		private static Func<ImageModel, int> cardUnpriority5()
 		{
 			return model => model.VariantNumber;
 		}

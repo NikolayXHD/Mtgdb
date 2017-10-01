@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using Mtgdb.Dal;
+using NLog;
 
 namespace Mtgdb.Util
 {
@@ -43,7 +44,7 @@ namespace Mtgdb.Util
 
 			Console.WriteLine("== Loading pictures ==");
 			_imageRepo.LoadFiles();
-			_imageRepo.Load();
+			_imageRepo.LoadSmall();
 			_imageRepo.LoadZoom();
 
 			_cardRepo.SelectCardImages(_imageRepo);
@@ -166,8 +167,7 @@ namespace Mtgdb.Util
 
 		private void addFile(Bitmap original, ImageModel model, string target, bool small, bool forge)
 		{
-			Console.WriteLine($"\tCopying {target}");
-
+			_log.Debug($"\tCopying {target}");
 			var bytes = transform(original, model, small, forge);
 
 			if (bytes != null)
@@ -330,11 +330,11 @@ namespace Mtgdb.Util
 
 		private void export(string directory, string code, HashSet<string> exportedSmall, HashSet<string> exportedZoomed, bool small, bool zoomed, string smallSubdir, string zoomedSubdir, bool matchingSet)
 		{
-			//var withoutImage = _cardRepo.Cards.Where(_ => _.ImageModel == null).ToArray();
-
 			foreach (var entryBySetCode in _cardRepo.SetsByCode)
 			{
 				string setCode = entryBySetCode.Key;
+
+				Console.WriteLine(setCode);
 
 				if (code != null && !Str.Equals(code, setCode))
 					continue;
@@ -364,13 +364,12 @@ namespace Mtgdb.Util
 
 				foreach (var card in entryBySetCode.Value.Cards)
 				{
-					
 					Bitmap original = null;
 					ImageModel modelSmall = null;
 
 					if (small)
 					{
-						modelSmall = _imageRepo.GetImageSmall(card, _cardRepo.GetReleaseDateSimilarity);
+						modelSmall = _imageRepo.GetSmallImage(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelSmall != null
 								&& Str.Equals(card.SetCode, modelSmall.SetCode) == matchingSet &&
@@ -433,5 +432,7 @@ namespace Mtgdb.Util
 
 			return smallSet;
 		}
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

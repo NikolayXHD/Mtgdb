@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using Mtgdb.Controls;
 using Mtgdb.Gui;
+using NLog;
 
 namespace Mtgdb.Dal
 {
@@ -117,7 +118,8 @@ namespace Mtgdb.Dal
 			try
 			{
 				var gr = Graphics.FromImage(edited);
-				gr.DrawImage(bitmap, new Rectangle(new Point(0, 0), bitmap.Size));
+				gr.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+
 				var remover = new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: true);
 				remover.Execute();
 				cornerRemoved = remover.ImageChanged;
@@ -126,7 +128,7 @@ namespace Mtgdb.Dal
 			{
 				cornerRemoved = false;
 			}
-
+			
 			if (!cornerRemoved)
 			{
 				edited.Dispose();
@@ -135,6 +137,8 @@ namespace Mtgdb.Dal
 
 			if (bitmap != original)
 				bitmap.Dispose();
+
+			_log.Debug("Corners fixed: " + model.FullPath);
 
 			return edited;
 		}
@@ -189,5 +193,6 @@ namespace Mtgdb.Dal
 
 		public int Capacity { get; }
 		private readonly bool _transparentCornersWhenNotZoomed;
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

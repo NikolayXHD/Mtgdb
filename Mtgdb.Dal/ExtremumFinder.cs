@@ -125,6 +125,7 @@ namespace Mtgdb.Dal
 					if (parentCompare > 0)
 					{
 						_max = value;
+						_hasValue = true;
 						return parentCompare;
 					}
 				}
