@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Lucene.Net.Contrib;
 
 namespace Mtgdb.Controls
 {

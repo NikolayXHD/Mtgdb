@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using LinqLib.Sequence;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Resx;
@@ -35,7 +34,7 @@ namespace Mtgdb.Gui
 
 			SnapTo(Direction.North, System.Windows.Forms.Cursor.Position);
 
-			var defaultIcons = new[] { SortIconsOrder[0], SortIconsOrder[0], AggregateIconsOrder[0], SortIconsOrder[0] };
+			var defaultIcons = new[] { _sortIconsOrder[0], _sortIconsOrder[0], _aggregateIconsOrder[0], _sortIconsOrder[0] };
 			_tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
 
 			var buttons = new[] { _buttonAddCol, _buttonAddRow, _buttonAddSum };
@@ -74,7 +73,7 @@ namespace Mtgdb.Gui
 					.Cast<object>().ToArray());
 			_menuChartType.SelectedIndex = 0;
 
-			_menuFields.Items.AddRange(FieldsOrder.Select(_ => Fields.ByName[_].Alias).Cast<object>().ToArray());
+			_menuFields.Items.AddRange(_fieldsOrder.Select(_ => Fields.ByName[_].Alias).Cast<object>().ToArray());
 
 			_summTabs = new[]
 			{
@@ -166,8 +165,8 @@ namespace Mtgdb.Gui
 			if (tabSetting == null)
 				return;
 
-			var index = (SortIconsOrder.IndexOf(tabSetting.Icon) + 1)%SortIconsOrder.Length;
-			var sortIcon = SortIconsOrder[index];
+			var index = (_sortIconsOrder.IndexOf(tabSetting.Icon) + 1)%_sortIconsOrder.Count;
+			var sortIcon = _sortIconsOrder[index];
 
 			tab.SetTabSetting(tabSetting.TabId, new TabSettings(sortIcon));
 		}
@@ -189,16 +188,16 @@ namespace Mtgdb.Gui
 			string fieldName = getFieldName(tabSetting.TabId);
 			var field = Fields.ByName[fieldName];
 
-			var index = AggregateIconsOrder.IndexOf(tabSetting.Icon);
+			var index = _aggregateIconsOrder.IndexOf(tabSetting.Icon);
 			while (true)
 			{
-				index = (index + 1)%AggregateIconsOrder.Length;
-				var aggreate = AggregatesOrder[index];
+				index = (index + 1)%_aggregateIconsOrder.Count;
+				var aggreate = _aggregatesOrder[index];
 				if (field.IsNumeric || aggreate == Aggregates.Count || aggreate == Aggregates.CountDistinct)
 					break;
 			}
 
-			var aggregateIcon = AggregateIconsOrder[index];
+			var aggregateIcon = _aggregateIconsOrder[index];
 			tab.SetTabSetting(tabSetting.TabId, new TabSettings(aggregateIcon));
 		}
 
@@ -209,7 +208,7 @@ namespace Mtgdb.Gui
 				return;
 
 			var fieldName = getFieldName(tabSettings.TabId);
-			var fieldIndex = FieldsOrder.IndexOf(fieldName);
+			var fieldIndex = _fieldsOrder.IndexOf(fieldName);
 
 			if (fieldIndex < 0)
 				return;
@@ -237,7 +236,7 @@ namespace Mtgdb.Gui
 
 			var button = (Button) sender;
 			var tab = _tabByButton[button];
-			var fieldName = FieldsOrder[_menuFields.SelectedIndex];
+			var fieldName = _fieldsOrder[_menuFields.SelectedIndex];
 
 			var field = Fields.ByName[fieldName];
 			var tabId = createTabId(fieldName);
@@ -247,7 +246,7 @@ namespace Mtgdb.Gui
 				if (field.IsNumeric)
 					tab.AddTab(tabId, field.Alias);
 				else
-					tab.AddTab(tabId, field.Alias, AggregateIconsOrder[AggregatesOrder.IndexOf(Aggregates.Count)]);
+					tab.AddTab(tabId, field.Alias, _aggregateIconsOrder[_aggregatesOrder.IndexOf(Aggregates.Count)]);
 			}
 			else
 			{
@@ -865,12 +864,12 @@ namespace Mtgdb.Gui
 				_tabSummSort.AddTab(
 					createTabId(settings.SummaryFields[i]),
 					Fields.ByName[settings.SummaryFields[i]].Alias,
-					SortIconsOrder[(int) settings.SummarySort[i]]);
+					_sortIconsOrder[(int) settings.SummarySort[i]]);
 
 				_tabSumm.AddTab(
 					createTabId(settings.SummaryFields[i]),
 					Fields.ByName[settings.SummaryFields[i]].Alias,
-					AggregateIconsOrder[AggregatesOrder.IndexOf(settings.SummaryFunctions[i])]);
+					_aggregateIconsOrder[_aggregatesOrder.IndexOf(settings.SummaryFunctions[i])]);
 			}
 
 			_menuDataSource.SelectedIndex = (int) settings.DataSource;
@@ -900,7 +899,7 @@ namespace Mtgdb.Gui
 
 				tab.AddTab(createTabId(fields[i]),
 					Fields.ByName[fields[i]].Alias,
-					SortIconsOrder[(int) fieldsSort[i]]);
+					_sortIconsOrder[(int) fieldsSort[i]]);
 			}
 		}
 
@@ -913,13 +912,13 @@ namespace Mtgdb.Gui
 				LabelDataElement = (DataElement) Enum.Parse(typeof (DataElement), (string) _menuLabelDataElement.SelectedItem),
 				ChartType = (SeriesChartType) Enum.Parse(typeof (SeriesChartType), (string) _menuChartType.SelectedItem),
 				ColumnFields = readFields(_tabCols),
-				ColumnFieldsSort = readEnum<SortOrder>(_tabCols, SortIconsOrder),
+				ColumnFieldsSort = readEnum<SortOrder>(_tabCols, _sortIconsOrder),
 				SeriesFields = readFields(_tabRows),
-				SeriesFieldsSort = readEnum<SortOrder>(_tabRows, SortIconsOrder),
+				SeriesFieldsSort = readEnum<SortOrder>(_tabRows, _sortIconsOrder),
 				SummaryFields = readFields(_tabSummSort),
-				SummarySort = readEnum<SortOrder>(_tabSummSort, SortIconsOrder),
+				SummarySort = readEnum<SortOrder>(_tabSummSort, _sortIconsOrder),
 				SummaryFunctions = _tabSumm.Icons
-					.Select(icn => AggregatesOrder[AggregateIconsOrder.IndexOf(icn)])
+					.Select(icn => _aggregatesOrder[_aggregateIconsOrder.IndexOf(icn)])
 					.ToList(),
 				ShowArgumentTotal = _buttonArgumentTotals.Checked,
 				ShowSeriesTotal = _buttonSeriesTotal.Checked,
@@ -934,10 +933,10 @@ namespace Mtgdb.Gui
 			return tab.TabIds.Select(getFieldName).ToList();
 		}
 
-		private static List<T> readEnum<T>(TabHeaderControl tab, Bitmap[] iconsOrder)
+		private static List<T> readEnum<T>(TabHeaderControl tab, IList<Bitmap> iconsOrder)
 		{
 			return tab.Icons
-				.Select(icn => iconsOrder.IndexOf(icn))
+				.Select(iconsOrder.IndexOf)
 				.Cast<T>()
 				.ToList();
 		}
@@ -990,7 +989,7 @@ namespace Mtgdb.Gui
 			_applyingSettings = false;
 		}
 
-		private static readonly string[] AggregatesOrder =
+		private static readonly IList<string> _aggregatesOrder = new[]
 		{
 			Aggregates.Sum,
 			Aggregates.Count,
@@ -1000,7 +999,7 @@ namespace Mtgdb.Gui
 			Aggregates.Max
 		};
 
-		private static readonly Bitmap[] AggregateIconsOrder =
+		private static readonly IList<Bitmap> _aggregateIconsOrder = new[]
 		{
 			ResourcesFilter.sum_hovered,
 			ResourcesFilter.count_hovered,
@@ -1010,7 +1009,7 @@ namespace Mtgdb.Gui
 			ResourcesFilter.max_hovered
 		};
 
-		private static readonly Bitmap[] SortIconsOrder =
+		private static readonly IList<Bitmap> _sortIconsOrder = new[]
 		{
 			ResourcesFilter.sort_none_hovered,
 			ResourcesFilter.sort_asc_hovered,
@@ -1024,7 +1023,7 @@ namespace Mtgdb.Gui
 		private const string SeriesSeparator = " / ";
 		private const string ArgumentSeparator = " / ";
 
-		private static readonly string[] FieldsOrder = Fields.ChartFields.OrderBy(_ => Fields.ByName[_].Alias).ToArray();
+		private static readonly IList<string> _fieldsOrder = Fields.ChartFields.OrderBy(_ => Fields.ByName[_].Alias).ToArray();
 
 		private readonly CardRepository _repository;
 		private bool _applyingSettings;

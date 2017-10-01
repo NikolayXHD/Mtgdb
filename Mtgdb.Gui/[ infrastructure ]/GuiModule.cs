@@ -13,8 +13,8 @@ namespace Mtgdb.Gui
 		public override void Load()
 		{
 			Kernel.BindConfig<UndoConfig>();
-			Kernel.BindConfig<CardSizeConfig>();
-			Kernel.BindConfig<ZoomedCardSizeConfig>();
+			Kernel.BindConfig<SmallConfig>();
+			Kernel.BindConfig<ZoomedConfig>();
 			Kernel.BindConfig<ViewConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException

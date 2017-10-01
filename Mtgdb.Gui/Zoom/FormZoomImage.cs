@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using LinqLib.Sequence;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Resx;
@@ -21,7 +20,7 @@ namespace Mtgdb.Gui
 		private int _imageIndex;
 		private Bitmap _image;
 		private List<Bitmap> _images;
-		private static readonly Color DefaultBgColor = Color.FromArgb(0, 5, 27);
+		private static readonly Color _defaultBgColor = Color.FromArgb(255, 250, 228);
 		private List<ImageModel> _models;
 		private Card _card;
 
@@ -45,7 +44,7 @@ namespace Mtgdb.Gui
 			_imageCache = imageCache;
 
 			BackgroundImageLayout = ImageLayout.Zoom;
-			TransparencyKey = BackColor = DefaultBgColor;
+			TransparencyKey = BackColor = _defaultBgColor;
 
 			_pictureBox.MouseClick += click;
 			MouseWheel += mouseWheel;
@@ -205,17 +204,15 @@ namespace Mtgdb.Gui
 			if (!_showOtherSetsButton.Checked && imageModel.SetCode != _card.SetCode)
 				return false;
 
+			if (_showDuplicatesButton.Checked)
+				return true;
 
-			if (!_showDuplicatesButton.Checked)
-			{
-				var currentSetCode = _models[_imageIndex].SetCode;
-				var setRepresentative = _models.Where(_ => _.SetCode == currentSetCode).ElementAtMin(_ => _.VariantNumber);
+			var currentSetCode = _models[_imageIndex].SetCode;
 
-				if (imageModel.SetCode == currentSetCode && imageModel != setRepresentative)
-					return false;
-			}
+			var setRepresentative = _models.Where(_ => _.SetCode == currentSetCode)
+				.AtMin(_ => _.VariantNumber).Find();
 
-			return true;
+			return imageModel.SetCode != currentSetCode || imageModel == setRepresentative;
 		}
 
 		private bool nextImage()

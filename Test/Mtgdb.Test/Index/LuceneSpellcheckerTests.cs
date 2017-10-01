@@ -15,7 +15,10 @@ namespace Mtgdb.Test
 		public void Setup()
 		{
 			TestLoadingUtil.LoadModules();
+			TestLoadingUtil.LoadCardRepository();
+			TestLoadingUtil.LoadLocalizations();
 			TestLoadingUtil.LoadSearcher();
+
 			_searcher = TestLoadingUtil.Searcher;
 			_spellchecker = _searcher.Spellchecker;
 		}

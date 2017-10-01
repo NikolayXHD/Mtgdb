@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-	<WatchFile Mode="Auto" />
-
-	<ImageLocations />
-	<ImageCache CacheCapacity ="100" />
-
-</configuration>

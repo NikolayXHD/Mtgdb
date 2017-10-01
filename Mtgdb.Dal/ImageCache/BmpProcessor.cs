@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 		protected int BytesPerPixel { get; private set; }
 		protected Rectangle Rect { get; private set; }
 		protected byte[] RgbValues { get; private set; }
-		protected bool ImageChanged { get; set; }
+		public bool ImageChanged { get; protected set; }
 
 		protected BmpProcessor(Bitmap bmp)
 		{
@@ -59,11 +59,23 @@ namespace Mtgdb.Dal
 
 		protected bool SameColor(int first, int second)
 		{
-			int delta = Math.Abs(RgbValues[first] - RgbValues[second + 0]) +
-			            Math.Abs(RgbValues[first + 1] - RgbValues[second + 1]) +
-			            Math.Abs(RgbValues[first + 2] - RgbValues[second + 2]);
+			int delta =
+				Math.Abs(RgbValues[first] - RgbValues[second + 0]) +
+				Math.Abs(RgbValues[first + 1] - RgbValues[second + 1]) +
+				Math.Abs(RgbValues[first + 2] - RgbValues[second + 2]);
 
-			return 60 > delta;
+			return 50 > delta;
+		}
+
+		protected bool SameColor(int location, byte r, byte g, byte b, byte a)
+		{
+			int delta =
+				Math.Abs(RgbValues[location] - r) +
+				Math.Abs(RgbValues[location + 1] - g) +
+				Math.Abs(RgbValues[location + 2] - b) +
+				Math.Abs(RgbValues[location + 3] - a);
+
+			return 50 > delta;
 		}
 
 		protected int GetLocation(int x, int y)

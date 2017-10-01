@@ -39,10 +39,6 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LinqLib, Version=1.0.4.2, Culture=neutral, PublicKeyToken=100a413726ba3d7c, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
@@ -66,6 +62,8 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtension.cs" />
+    <Compile Include="ExtremumFinder.cs" />
     <Compile Include="Index\MtgdbAnalyzer.cs" />
     <Compile Include="Index\MtgdbTokenizer.cs" />
     <Compile Include="Index\MtgdbTokenizerPatterns.cs" />
@@ -93,7 +91,7 @@
     <Compile Include="Price\PriceRepository.cs" />
     <Compile Include="Price\PriceValues.cs" />
     <Compile Include="RegexUtil.cs" />
-    <Compile Include="[ infrastructure ]\CardSizeConfig.cs" />
+    <Compile Include="[ infrastructure ]\SmallConfig.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
     <Compile Include="GathererExtractorCsvParser.cs" />
@@ -128,7 +126,7 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="[ infrastructure ]\ZoomedCardSizeConfig.cs" />
+    <Compile Include="[ infrastructure ]\ZoomedConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

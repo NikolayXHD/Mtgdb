@@ -3,7 +3,7 @@
 namespace Mtgdb.Gui
 {
 	[DataContract(Name = "NormalCardSize")]
-	public class CardSizeConfig
+	public class SmallConfig
 	{
 		[DataMember(Name = "Width")]
 		public int? Width { get; set; }

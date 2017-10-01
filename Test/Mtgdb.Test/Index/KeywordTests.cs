@@ -14,6 +14,8 @@ namespace Mtgdb.Test
 		{
 			TestLoadingUtil.LoadModules();
 			TestLoadingUtil.LoadCardRepository();
+			TestLoadingUtil.LoadLocalizations();
+
 			_repo = TestLoadingUtil.CardRepository;
 		}
 

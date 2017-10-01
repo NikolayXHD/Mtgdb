@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Lucene.Net.Contrib
+namespace Mtgdb.Controls
 {
 	internal static class EnumerableExtensions
 	{

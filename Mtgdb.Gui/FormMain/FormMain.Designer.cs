@@ -947,6 +947,7 @@
 			this._layoutViewCards.Name = "_layoutViewCards";
 			this._layoutViewCards.PartialCardsThreshold = new System.Drawing.Size(161, 225);
 			searchOptions2.Allow = true;
+			searchOptions2.ButtonMargin = new System.Drawing.Size(19, 2);
 			searchOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.Search_transp_16;
 			searchOptions2.IconHovered = global::Mtgdb.Gui.Properties.Resources.Search_16;
 			this._layoutViewCards.SearchOptions = searchOptions2;

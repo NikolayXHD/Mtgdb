@@ -42,10 +42,6 @@
     <ApplicationIcon>mtg64.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LinqLib, Version=1.0.4.2, Culture=neutral, PublicKeyToken=100a413726ba3d7c, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
