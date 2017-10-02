@@ -7,7 +7,7 @@ namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
-		public bool Download(string name, string storageUrl, string targetDirectory, bool quiet = false, int? timeoutSec = null)
+		public void Download(string name, string storageUrl, string targetDirectory, bool quiet = false, int? timeoutSec = null)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
@@ -54,11 +54,7 @@ namespace Mtgdb.Downloader
 			else
 				_process.WaitForExit();
 
-			bool processFinished = _process.HasExited;
-
 			Abort();
-
-			return processFinished;
 		}
 
 		private void processExit(object sender, EventArgs e)
