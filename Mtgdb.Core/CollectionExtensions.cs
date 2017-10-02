@@ -7,6 +7,9 @@ namespace Mtgdb
 	{
 		public static TVal TryGet<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key)
 		{
+			if (key == null)
+				return default(TVal);
+
 			TVal val;
 			dict.TryGetValue(key, out val);
 

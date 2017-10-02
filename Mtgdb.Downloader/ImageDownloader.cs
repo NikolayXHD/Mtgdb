@@ -21,12 +21,17 @@ namespace Mtgdb.Downloader
 				.Where(_ => Str.Equals(_.QualityGroup.Quality, quality));
 
 			if (_repository.IsLoadingComplete)
-				relevantProgress = relevantProgress.OrderByDescending(_ => _repository.SetsByCode.TryGet(_.MegaDir.Subdirectory)?.ReleaseDate);
+			{
+				relevantProgress = relevantProgress.OrderByDescending(_ =>
+					_repository.SetsByCode.TryGet(_.MegaDir.Subdirectory)?.ReleaseDate);
+			}
 
 			var qualityProgress = relevantProgress
 				.ToArray();
 
-			Console.WriteLine("Found {0} directories for quality '{1}' in configuration", qualityProgress.Length, quality);
+			Console.WriteLine("Found {0} directories for quality '{1}' in configuration",
+				qualityProgress.Length,
+				quality);
 
 			TotalCount = qualityProgress.Sum(_ => _.FilesOnline.Count);
 			CountInDownloadedDirs = 0;
