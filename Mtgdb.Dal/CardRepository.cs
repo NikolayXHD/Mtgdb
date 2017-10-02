@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mtgdb.Dal
 {
 	public class CardRepository
 	{
-		private const string MinReleaseDate = @"1900-01-01";
 		private readonly UiModel _uiModel;
 
 		public event Action SetAdded;
@@ -74,6 +74,7 @@ namespace Mtgdb.Dal
 
 					// пропустить имя сета
 					jsonReader.Read();
+
 					var set = serializer.Deserialize<Set>(jsonReader);
 
 					for (int i = 0; i < set.Cards.Count; i++)

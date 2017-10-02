@@ -8,11 +8,11 @@
 	
 	<ImageLocations>
 		
+		<!-- 
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
+		-->
 		<!--<Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />-->
-
-		<!--
 		
 		<Directory Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
 		<Directory Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
@@ -66,6 +66,7 @@
 		<Directory Zoom="Any" Set="AVR"       Path="D:\Distrib\games\mtg\XLHQ Promos\Oversized\Commanders\Helvault" />
 		<Directory Zoom="Any" Set="VMA"       Path="D:\Distrib\games\mtg\XLHQ Promos\Oversized\Vintage Championship" />
 		<Directory Zoom="Any" Set="pMPR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Oversized\Magic Player Rewards" />
+		<Directory Zoom="Any" Set="pMEI"      Path="D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Duels of the Planeswalkers Reward Cards" />
 		<Directory Zoom="Any" Set="pMEI"      Path="D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Buy-a-Box" />
 		<Directory Zoom="Any" Set="pMGD"      Path="D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Game Day" />
 		<Directory Zoom="Any" Set="pMEI"      Path="D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Holiday Gift Box" />
@@ -119,8 +120,6 @@
 		<Directory Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
-
-		-->
 
 		<!-- non-set codes -->
 			<!-- 
