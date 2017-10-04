@@ -1,6 +1,8 @@
 # Mtgdb.Gui
 a Windows desktop program to search MTG cards and build decks
 
+![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/blob/master/doc/img/Ixalan_small.jpg)
+
 ## Mtgdb.Controls project
 Most non-standard WinForms controls used in Mtgdb.Gui were separated into a
 project Mtgdb.Controls with no external dependencies. Thus you can copy-paste
@@ -18,5 +20,5 @@ for screenshots. You can also download and run Mtgdb.Gui
 ## Search text input
 The search functionality in Mtgdb.Gui is quite advanced.
 You type a search query in [Lucene query language](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html).
-The query editor **highlights query syntax** and gives you **intellisense** when hitting Ctrl+Space
+The query editor **highlights query syntax** and gives you **intellisense** when hitting `Ctrl`+`Space`
 
