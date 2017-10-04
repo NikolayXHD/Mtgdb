@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Mtgdb.Dal
 {
@@ -55,7 +54,7 @@ namespace Mtgdb.Dal
 		public void Load()
 		{
 			var serializer = new JsonSerializer();
-			
+
 			Stream stream = new MemoryStream(_streamContent);
 			using (stream)
 			using (var stringReader = new StreamReader(stream))
@@ -151,6 +150,21 @@ namespace Mtgdb.Dal
 
 				if (modifiedName != null)
 					card.ImageName = string.Intern(modifiedName);
+			}
+			else if (Str.Equals(card.SetCode, "AKH"))
+			{
+				if (Str.Equals(card.Rarity, "Basic Land"))
+				{
+					var parts = card.ImageName.SplitTalingNumber();
+					card.ImageName = parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4);
+				}
+			}
+			else if (Str.Equals(card.SetCode, "DD3_DVD"))
+			{
+				if (Str.Equals(card.ImageName, "swamp3"))
+					card.ImageName = "swamp4";
+				else if (Str.Equals(card.ImageName, "swamp4"))
+					card.ImageName = "swamp3";
 			}
 			else if (Str.Equals(card.ImageName, "Sultai Ascendacy"))
 			{

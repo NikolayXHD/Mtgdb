@@ -1,3 +1,11 @@
+2.2.2
+-----
+
+Fixed Basic Lands image mapping for sets
+- Amonkhet, all basic lands;
+- Duel Decks Divine vs Demonic, two swamps.
+XLHQ image numbers fore these sets do not match mtgjson.com numbers.
+
 2.2.1
 -----
 
