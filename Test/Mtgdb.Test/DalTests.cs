@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
 using Mtgdb.Dal;
 using NUnit.Framework;
 
@@ -38,7 +37,7 @@ namespace Mtgdb.Test
 			TestLoadingUtil.ImageRepository.LoadFiles();
 			TestLoadingUtil.ImageRepository.LoadZoom();
 
-			var zoomImages = TestLoadingUtil.ImageRepository.GetAllImagesZoom();
+			var zoomImages = TestLoadingUtil.ImageRepository.GetAllZooms();
 
 			var imagesBySet = zoomImages.GroupBy(_ => _.SetCode ?? string.Empty, Str.Comparer)
 				.ToDictionary(
@@ -111,6 +110,60 @@ namespace Mtgdb.Test
 					if (!Str.Equals(smallPath, zoomPath))
 						Assert.Fail();
 				}
+		}
+
+		[Test]
+		public void Find_non_used_transparency_key()
+		{
+			TestLoadingUtil.LoadModules();
+			TestLoadingUtil.ImageRepository.LoadFiles();
+			TestLoadingUtil.ImageRepository.LoadZoom();
+
+			var zoomImages = TestLoadingUtil.ImageRepository.GetAllZooms().ToList();
+
+			var detectedColors = new bool[0x1000000];
+
+			for (int i = 0; i < zoomImages.Count; i++)
+			{
+				var img = new Bitmap(zoomImages[i].FullPath);
+				new ColorDetector(img, detectedColors).Execute();
+			}
+
+			int color = Enumerable.Range(0, detectedColors.Length)
+				.Where(i => !detectedColors[i])
+				.AtMax(getBrightness)
+				.Find();
+
+			Console.WriteLine($"R: {color / 0x10000} G: {color % 0x10000 / 0x100} B: {color % 0x100}");
+		}
+
+		private static int getBrightness(int color)
+		{
+			return color / 0x10000 + color % 0x10000 / 0x100 + color % 0x100;
+		}
+
+		public class ColorDetector : BmpProcessor
+		{
+			public ColorDetector(Bitmap bmp, bool[] detectedColors) : base(bmp)
+			{
+				_detectedColors = detectedColors;
+			}
+
+			protected override void ExecuteRaw()
+			{
+				for (int x = 0; x < Rect.Width; x++)
+					for (int y = 0; y < Rect.Height; y++)
+					{
+						int l = GetLocation(x, y);
+						var r = RgbValues[l];
+						var g = RgbValues[l + 1];
+						var b = RgbValues[l + 2];
+
+						_detectedColors[r * 0x10000 + g * 0x100 + b] = true;
+					}
+			}
+
+			private readonly bool[] _detectedColors;
 		}
 	}
 }

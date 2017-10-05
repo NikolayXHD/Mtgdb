@@ -289,7 +289,7 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public List<ImageModel> GetZoomImages(Card card, Func<string, string, string> setCodePreference)
+		public List<ImageModel> GetZooms(Card card, Func<string, string, string> setCodePreference)
 		{
 			List<ImageModel> result;
 
@@ -305,14 +305,14 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		public List<ImageModel> GetImagesArt(Card card, Func<string, string, string> setCodePreference)
+		public List<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
 			var distinctModels = models?.GroupBy(_ => _.FullPath).Select(_ => _.First()).ToList();
 			return distinctModels;
 		}
 
-		public IEnumerable<ImageModel> GetAllImagesArt()
+		public IEnumerable<ImageModel> GetAllArts()
 		{
 			foreach (var bySet in _modelsByNameBySetByVariantArt.Values)
 				foreach (var byVariant in bySet.Values)
@@ -320,7 +320,7 @@ namespace Mtgdb.Dal
 						yield return model;
 		}
 
-		public IEnumerable<ImageModel> GetAllImagesZoom()
+		public IEnumerable<ImageModel> GetAllZooms()
 		{
 			foreach (var bySet in _modelsByNameBySetByVariantZoom.Values)
 				foreach (var byVariant in bySet.Values)

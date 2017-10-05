@@ -1,3 +1,15 @@
+2.2.4
+-----
+
+Changed transparency key on zoomed image to a color has no matching pixel in any current zoomed 
+image. Previous value was matching some pixels in Hours of Devastation set leading to pixel-size 
+defects in zoom.
+
+2.2.3
+-----
+
+Added online wiki reference to help menu
+
 2.2.2
 -----
 

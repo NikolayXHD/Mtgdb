@@ -198,11 +198,11 @@
     <Compile Include="GuiSettings.cs" />
     <Compile Include="[ infrastructure ]\GuiProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zoom\FormZoomImage.cs">
+    <Compile Include="Zoom\FormZoom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Zoom\FormZoomImage.Designer.cs">
-      <DependentUpon>FormZoomImage.cs</DependentUpon>
+    <Compile Include="Zoom\FormZoom.Designer.cs">
+      <DependentUpon>FormZoom.cs</DependentUpon>
     </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
     <Compile Include="SearchString\SearchStringState.cs" />
@@ -264,8 +264,8 @@
     <EmbeddedResource Include="FormRoot\FormRoot.resx">
       <DependentUpon>FormRoot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Zoom\FormZoomImage.resx">
-      <DependentUpon>FormZoomImage.cs</DependentUpon>
+    <EmbeddedResource Include="Zoom\FormZoom.resx">
+      <DependentUpon>FormZoom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
