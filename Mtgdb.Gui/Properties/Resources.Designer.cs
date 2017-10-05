@@ -253,6 +253,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap illustrated_wiki {
+            get {
+                object obj = ResourceManager.GetObject("illustrated_wiki", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap include_plus24e {
             get {
                 object obj = ResourceManager.GetObject("include_plus24e", resourceCulture);

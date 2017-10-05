@@ -1170,7 +1170,7 @@
 			this._listBoxSuggest.FormattingEnabled = true;
 			this._listBoxSuggest.Location = new System.Drawing.Point(3, 72);
 			this._listBoxSuggest.Name = "_listBoxSuggest";
-			this._listBoxSuggest.Size = new System.Drawing.Size(327, 54);
+			this._listBoxSuggest.Size = new System.Drawing.Size(192, 54);
 			this._listBoxSuggest.TabIndex = 9;
 			this._listBoxSuggest.TabStop = false;
 			// 
