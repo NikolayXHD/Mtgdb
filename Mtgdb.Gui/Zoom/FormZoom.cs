@@ -12,7 +12,7 @@ using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
-	public sealed partial class FormZoomImage : Form
+	public sealed partial class FormZoom : Form
 	{
 		private readonly CardRepository _cardRepository;
 		private readonly ImageRepository _imageRepository;
@@ -20,7 +20,7 @@ namespace Mtgdb.Gui
 		private int _imageIndex;
 		private Bitmap _image;
 		private List<Bitmap> _images;
-		private static readonly Color _defaultBgColor = Color.FromArgb(255, 250, 228);
+		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
 		private List<ImageModel> _models;
 		private Card _card;
 
@@ -28,12 +28,12 @@ namespace Mtgdb.Gui
 		private List<Card> _cardForms;
 		private Point _location;
 
-		public FormZoomImage()
+		public FormZoom()
 		{
 			InitializeComponent();
 		}
 
-		public FormZoomImage(
+		public FormZoom(
 			CardRepository cardRepository, 
 			ImageRepository imageRepository,
 			ImageCache imageCache)

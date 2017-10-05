@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 		private readonly CollectionModel _collectionModel;
 		private readonly ScrollSubsystem _scrollSubsystem;
 		private readonly DraggingSubsystem _draggingSubsystem;
-		private readonly FormZoomImage _formZoomImage;
+		private readonly FormZoom _formZoom;
 		private readonly Cursor _zoomCursor;
 		
 		public DeckEditingSubsystem(
@@ -26,7 +26,7 @@ namespace Mtgdb.Gui
 			ScrollSubsystem scrollSubsystem,
 			DraggingSubsystem draggingSubsystem,
 			Cursor cursor,
-			FormZoomImage formZoomImage)
+			FormZoom formZoom)
 		{
 			_zoomCursor = CursorHelper.CreateCursor(Resources.view_zoom_in, 0, 0);
 
@@ -41,7 +41,7 @@ namespace Mtgdb.Gui
 			_draggingSubsystem.DragRemoved += dragRemoved;
 			_draggingSubsystem.DragAdded += dragAdded;
 
-			_formZoomImage = formZoomImage;
+			_formZoom = formZoom;
 		}
 
 		private void dragRemoved(Card card)
@@ -156,8 +156,8 @@ namespace Mtgdb.Gui
 			if (card.ImageModel == null)
 				return;
 			
-			_formZoomImage.LoadImages(card);
-			_formZoomImage.ShowImages();
+			_formZoom.LoadImages(card);
+			_formZoom.ShowImages();
 		}
 
 		private void changeCountInDeck(Card card, int increment)

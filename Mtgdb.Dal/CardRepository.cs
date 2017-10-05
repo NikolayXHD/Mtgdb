@@ -263,12 +263,12 @@ namespace Mtgdb.Dal
 
 		public List<ImageModel> GetZoomImages(Card card, ImageRepository repository)
 		{
-			return repository.GetZoomImages(card, GetReleaseDateSimilarity);
+			return repository.GetZooms(card, GetReleaseDateSimilarity);
 		}
 
 		public List<ImageModel> GetImagesArt(Card card, ImageRepository repository)
 		{
-			return repository.GetImagesArt(card, GetReleaseDateSimilarity)
+			return repository.GetArts(card, GetReleaseDateSimilarity)
 				?? new List<ImageModel>();
 		}
 

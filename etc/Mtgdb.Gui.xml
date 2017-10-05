@@ -8,11 +8,12 @@
 	
 	<ImageLocations>
 		
-		<!-- 
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
-		-->
+
 		<!--<Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />-->
+		
+		<!--
 		
 		<Directory Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
 		<Directory Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
@@ -43,7 +44,7 @@
 		<Directory Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Extras" />
 		<Directory Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Tokens" />
 		<Directory Zoom="Any" Set="MD1"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\MED" />
-		
+
 
 		<Directory Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ Promos" />
 		<Directory Zoom="Any" Set="pDRC"      Path="D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\DragonCon" />
@@ -120,6 +121,8 @@
 		<Directory Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
+
+		-->
 
 		<!-- non-set codes -->
 			<!-- 

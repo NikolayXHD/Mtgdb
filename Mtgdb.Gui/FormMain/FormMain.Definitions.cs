@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 			_toolTipController = tooltipController;
 			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
 
-			var formZoomCard = new FormZoomImage(_cardRepo, imageRepo, imageCache);
+			var formZoomCard = new FormZoom(_cardRepo, imageRepo, imageCache);
 
 			_scrollSubsystem = new ScrollSubsystem(_viewDeck, _viewCards);
 

@@ -40,7 +40,7 @@ namespace Mtgdb.Util
 
 			Console.WriteLine("Renaming...");
 
-			var images = imageRepository.GetAllImagesArt()
+			var images = imageRepository.GetAllArts()
 				.GroupBy(_ => _.FullPath)
 				.ToDictionary(
 					gr => gr.Key,

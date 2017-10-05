@@ -1,6 +1,6 @@
 ﻿namespace Mtgdb.Gui
 {
-	sealed partial class FormZoomImage
+	sealed partial class FormZoom
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormZoomImage));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormZoom));
 			this._pictureBox = new System.Windows.Forms.PictureBox();
 			this._contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._showInExplorerButton = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +125,7 @@
 			this.ClientSize = new System.Drawing.Size(427, 596);
 			this.Controls.Add(this._pictureBox);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Name = "FormZoomImage";
+			this.Name = "FormZoom";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
