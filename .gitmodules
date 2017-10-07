@@ -1,6 +1,3 @@
-[submodule "Subrepo/NConfiguration"]
-	path = Subrepo/NConfiguration
-	url = https://github.com/NikolayXHD/NConfiguration
 [submodule "Subrepo/Lucene.Net.Contrib"]
 	path = Subrepo/Lucene.Net.Contrib
 	url = https://github.com/NikolayXHD/Lucene.Net.Contrib.git

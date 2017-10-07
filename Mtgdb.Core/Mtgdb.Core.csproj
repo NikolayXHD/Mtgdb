@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NConfiguration, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NConfiguration-net40.2.4.1\lib\net40\NConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -57,12 +61,6 @@
     <Compile Include="Str.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="VersionComparer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj">
-      <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
-      <Name>NConfiguration</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
