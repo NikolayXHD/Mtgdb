@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Resources\tcg\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Waifu2x\LICENSE.txt">
