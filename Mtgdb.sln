@@ -19,8 +19,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "output", "output\output.shp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "Subrepo\NConfiguration\NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ version ]", "[ version ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
 		backlog.txt = backlog.txt
@@ -92,14 +90,6 @@ Global
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|x64.ActiveCfg = Release|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|x64.Build.0 = Release|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|x64.Build.0 = Debug|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|x64.ActiveCfg = Release|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|x64.Build.0 = Release|Any CPU
 		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Debug|x64.ActiveCfg = Debug|Any CPU
