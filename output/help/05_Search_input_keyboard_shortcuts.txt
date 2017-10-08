@@ -1,0 +1,26 @@
+Search input keyboard shortcuts
+------------------------------
+
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true
+
+Show intellisense (a hint based on your input) `Ctrl`+`SPACE` or `Down`
+
+Select suggested value from intellisense `Up`/`Down` arrows to choose, `ENTER` to select
+
+Hide intellisense `ESC`
+
+Apply modified search text `ENTER` or wait 1 second
+
+Intellisense on field name
+- `Ctrl`+`SPACE` when input caret is to the left of `:`
+- `Ctrl`+`SPACE` when search text is empty
+
+Intellisense on textual value without specifying a field. Type something, press `Ctrl+SPACE`
+
+Intellisense on specific field's value. Type field name, type `:`, hit `Ctrl`+`SPACE`
+
+Erase one word `Ctrl`+`Backspace`
+
+Undo `Ctrl`+`Z` or `Alt`+`Left`
+
+Redo `Ctrl`+`Y` or `Alt`+`Right`

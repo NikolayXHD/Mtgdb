@@ -1,0 +1,45 @@
+Filter buttons in top- and right- most window panels
+----------------------------------------------------
+
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/filter_buttons.jpg?raw=true
+
+The 7 button groups differ by the card property they correspond to.
+These buttons filter cards by 
+- card abilities (text)
+- type
+- rarity
+- mana symbol in card abilities (text)
+- generated mana
+- converted mana cost
+- mana cost
+
+Checking the button in top row (right column for vertical panel) applies filter with operator AND.
+
+Checking the button in bottom row (left column for vertical groups) applies filter with operator 
+OR.
+
+Filters by different properties are always joined through AND.
+
+Resetting
+---------
+
+To reset filter buttons group to it's default state click it using `middle` mouse button.
+
+Combining buttons with other filters
+------------------------------------
+
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/filter_manager.jpg?raw=true
+
+Using Filter buttons and other User Interface elements you can set the following types of filters:
+- Filter buttons
+- Search text
+- Legality filter
+- Filter to cards present in your collection
+- Filter to cards present in your deck
+
+To select between AND / OR operators for those types use the the rightmost buttons group in top 
+panel.
+
+Just like with filter buttons checking in the top row corresponds to AND, in the bottom to OR.
+
+If neither top or bottom is checked, the filter type is ignored when filtering cards.

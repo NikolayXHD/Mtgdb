@@ -14,29 +14,42 @@ namespace Mtgdb.Test
 		public void Renders_html()
 		{
 			var helpFiles = Directory.GetFiles(
-				AppDir.Root.AddPath("help"),
-				"*.txt",
+				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"),
+				"*.md",
 				SearchOption.TopDirectoryOnly);
 
 			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\html\\template.html"));
 
 			foreach (string helpFile in helpFiles)
 			{
+				string mdContent = File.ReadAllText(helpFile);
+
 				var htmlFile = AppDir.Root.AddPath($"help\\html\\{getPageName(helpFile)}.html");
-				string htmlPage = getHtmlPage(helpFile, htmlTemplate, helpFiles);
+				string htmlPage = getHtmlPage(helpFile, mdContent, htmlTemplate, helpFiles);
 				File.WriteAllText(htmlFile, htmlPage);
+
+				var textFile = AppDir.Root.AddPath($"help\\{getTextFileName(helpFile)}.txt");
+				var textContent = _imgRegex.Replace(mdContent, "${url}");
+
+				File.WriteAllText(textFile, textContent);
 			}
+		}
+
+		private static string getTextFileName(string helpFile)
+		{
+			string name = Path.GetFileNameWithoutExtension(helpFile);
+			return (name.Substring(0, 2) + name.Substring(3)).Replace('-', '_');
+
 		}
 
 		private static string getPageName(string helpFile)
 		{
-			return Path.GetFileNameWithoutExtension(helpFile).Substring(3);
+			return Path.GetFileNameWithoutExtension(helpFile).Substring(4).Replace("-", "_");
 		}
 
-		private static string getHtmlPage(string mdFile, string htmlTemplate, IList<string> mdFiles)
+		private static string getHtmlPage(string mdFile, string mdContent, string htmlTemplate, IList<string> mdFiles)
 		{
-			var readmeText = File.ReadAllText(mdFile);
-			readmeText = readmeText.Replace(
+			var readmeText = mdContent.Replace(
 				"https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/",
 				"../img/");
 
@@ -45,9 +58,8 @@ namespace Mtgdb.Test
 				.Build();
 
 			var htmlContent = Markdown.ToHtml(readmeText, pipeline);
-			htmlContent = _imgRegex.Replace(htmlContent, "<a href=${url}>${0}</a>");
+			//htmlContent = _imgRegex.Replace(htmlContent, "<a href=${url}>${0}</a>");
 			string title = getPageTitle(mdFile);
-
 			var navigationItems = getNavigationItems(mdFile, mdFiles);
 
 			var htmlPage = htmlTemplate
@@ -86,7 +98,7 @@ namespace Mtgdb.Test
 		}
 
 		private static readonly Regex _imgRegex = new Regex(
-			"<img src=\"(?<url>[^\"]+)\"(?: alt=\"[^\"]+\")? />",
+			@"\[!\[[^\]]+\]\((?<url>[^\)]+)\)\]\(\1\)",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	}
 }
