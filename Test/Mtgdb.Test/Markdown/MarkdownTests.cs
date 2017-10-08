@@ -11,7 +11,7 @@ namespace Mtgdb.Test
 	public class MarkdownTests
 	{
 		[Test]
-		public void Renders_html()
+		public void Render_local_help()
 		{
 			var helpFiles = Directory.GetFiles(
 				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"),
@@ -49,7 +49,9 @@ namespace Mtgdb.Test
 
 		private static string getHtmlPage(string mdFile, string mdContent, string htmlTemplate, IList<string> mdFiles)
 		{
-			var readmeText = mdContent.Replace(
+			var readmeText = mdContent
+				.Replace(".jpg?raw=true", ".jpg")
+				.Replace(
 				"https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/",
 				"../img/");
 
