@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Mtgdb.Gui help - Deck and collection editor
+	</title>
+	<link rel="stylesheet" type="text/css" href="help_style.css"/>
+</head>
+<body>
+<div>
+	<div class="page-title">
+		<h1>
+			Deck and collection editor
+		</h1>
+	</div>
+	<div class="page-content">
+		<div class="navigation">
+			<ul class="internal">
+				<li class=""><a href="home.html">Home</a></li><li class="selected"><a href="deck_and_collection_editor.html">Deck and collection editor</a></li><li class=""><a href="filter_buttons.html">Filter buttons</a></li><li class=""><a href="search_syntax.html">Search syntax</a></li><li class=""><a href="search_input_keyboard_shortcuts.html">Search input keyboard shortcuts</a></li><li class=""><a href="search_button_over_card_text.html">Search button over card text</a></li><li class=""><a href="sort.html">Sort</a></li><li class=""><a href="release_notes.html">Release notes</a></li><li class=""><a href="about.html">About</a></li>
+			</ul>
+			<ul class="external">
+				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
+				<li><a href="https://github.com/NikolayXHD/Mtgdb">Source code on Github</a></li>
+			</ul>
+		</div>
+		<div class="content">
+			<h2 id="zoom-in-out-the-card-image">Zoom in / out the card image</h2>
+<p><code>Left</code> mouse click</p>
+<h2 id="deck-editing">Deck editing</h2>
+<p>Use deck area <code>main deck</code> / <code>sideboard</code> tabs to switch between main deck and sideboard a.k.a
+side deck.</p>
+<p><a href=../img/sideboard.jpg><img src="../img/sideboard.jpg" alt="sideboard tab" /></a></p>
+<p><code>Drag-n-drop</code> card to deck area (bottow area of the window) or use mouse buttons (<code>Right</code> and
+<code>Middle</code>) to add/remove 1 card.</p>
+<p>You can <code>drag</code> from main deck and <code>drop</code> to sideboard by <code>dragging</code> a card to <code>main deck</code> /
+<code>sideboard</code> tab.</p>
+<p>You can <code>drag-n-drop</code> cards between different open tabs by <code>dragging</code> a card to a tab in window
+header.</p>
+<p>You can create a new tab while <code>draggig</code> a card by <code>dragging</code> card to <code>+</code> button in window header.</p>
+<p>Use <code>Ctrl</code>+<code>drag-n-drop</code> or <code>Ctrl</code>+<code>Right</code> / <code>Middle</code> mouse click to add/remove 4 cards.</p>
+<h2 id="collection-editing">Collection editing</h2>
+<ul>
+<li>Use <code>Alt</code>+<code>Right</code> / <code>Middle</code> mouse click to add / remove 1 card from collection.</li>
+<li>Use <code>Ctrl</code>+<code>Alt</code>+<code>Right</code> / <code>Middle</code> mouse click to add / remove 4 cards from collections.</li>
+</ul>
+<h2 id="undo-redo-buttons">Undo / redo buttons</h2>
+<p>Are located at the top left of the window in the header. <code>Undo</code>, <code>Redo</code> apply to many end-user
+actions like checking / unchecking Filter buttons, changing search text and so on.</p>
+<p><a href=../img/undo.jpg><img src="../img/undo.jpg" alt="undo" /></a></p>
+<h2 id="buttons-in-the-window-header-right-side">Buttons in the window header right side</h2>
+<p><a href=../img/header_buttons.jpg><img src="../img/header_buttons.jpg" alt="header buttons" /></a></p>
+<p><code>Open deck</code> from a file, <code>Save deck</code> to a file. Supported are deck formats of</p>
+<ul>
+<li>Magarena <a href="https://www.slightlymagic.net/forum/viewforum.php?f=82">https://www.slightlymagic.net/forum/viewforum.php?f=82</a></li>
+<li>Forge <a href="https://www.slightlymagic.net/forum/viewforum.php?f=26">https://www.slightlymagic.net/forum/viewforum.php?f=26</a></li>
+<li>XMage <a href="http://www.xmage.de">http://www.xmage.de</a></li>
+<li>Cockatrice <a href="https://cockatrice.github.io/">https://cockatrice.github.io/</a> supports the format used by Magarena</li>
+<li>To use your decks with Riiak's DotP 2014 Deck Builder
+<a href="https://www.slightlymagic.net/forum/viewtopic.php?f=99&amp;t=10999">https://www.slightlymagic.net/forum/viewtopic.php?f=99&amp;t=10999</a> use a modified version supporting
+Forge deck format <a href="https://www.slightlymagic.net/forum/viewtopic.php?f=99&amp;t=10999&amp;start=270#p213467">https://www.slightlymagic.net/forum/viewtopic.php?f=99&amp;t=10999&amp;start=270#p213467</a></li>
+</ul>
+<p><code>Deck statistics</code>. Opens a Pivot report window. Use it to view mana curve, price breakdown, or
+create a custom report by specifying <code>argument</code>, <code>series</code> and <code>summary</code> fields.</p>
+<p><code>Print deck</code>. The print buttons doesn't actually print, instead it creates images of cards by
+groups of 8 that can be printed on A4 paper.</p>
+<p><code>Clear deck</code>. Use it to start creating a new deck from scratch</p>
+<p><code>Help</code> menu. This is how you probably got to read this file.</p>
+<p><code>Enable / disable tooltips</code>. Tooltips are helpful but also annoying.</p>
+<p><code>Edit configuration file</code> Use it to tell the program where to find your custom card images or
+tweak some other settings.</p>
+<p>NOTE: To apply your changes save the modified configuration file and restart the program.</p>
+<p><code>Language selector</code>. The Language selector affects the cards' texts only. The User Interface is
+allways in English.</p>
+<p><code>Update</code> Shows a window where you can</p>
+<ul>
+<li>Check for a new version of Mtgdb.Gui</li>
+<li>Download the most recent cards database from Mtgjson.com</li>
+<li>Download card images</li>
+<li>Download artworks</li>
+</ul>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

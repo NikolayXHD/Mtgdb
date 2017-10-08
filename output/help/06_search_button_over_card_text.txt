@@ -1,6 +1,8 @@
 ﻿When you hover a mouse over card text you can see a Search icon. It is in most cases followed by 
 Sort icon.
 
+![search button](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_button.jpg)
+
 Search button purpose
 ---------------------
 
@@ -11,6 +13,8 @@ card's mana cost you will see something like
 
 added to your search string. As a result the search result will only show cards that have mana 
 cost `{3}{W}{W}`
+
+![search button effect](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_button_result.jpg)
 
 Clicking Search button several times
 ------------------------------------

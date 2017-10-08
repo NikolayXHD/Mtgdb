@@ -1,6 +1,8 @@
 ﻿Filter buttons in top- and right- most window panels
 ----------------------------------------------------
 
+![filter buttons](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/filter_buttons.jpg)
+
 The 7 button groups differ by the card property they correspond to.
 These buttons filter cards by 
 - card abilities (text)
@@ -21,10 +23,12 @@ Filters by different properties are always joined through AND.
 Resetting
 ---------
 
-To reset filter buttons group to it's default state click it using middle mouse button.
+To reset filter buttons group to it's default state click it using `middle` mouse button.
 
 Combining buttons with other filters
 ------------------------------------
+
+![filter manager](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/filter_manager.jpg)
 
 Using Filter buttons and other User Interface elements you can set the following types of filters:
 - Filter buttons

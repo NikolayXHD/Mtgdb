@@ -9,6 +9,8 @@ Deck editing
 Use deck area `main deck` / `sideboard` tabs to switch between main deck and sideboard a.k.a 
 side deck.
 
+![sideboard tab](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/sideboard.jpg)
+
 `Drag-n-drop` card to deck area (bottow area of the window) or use mouse buttons (`Right` and 
 `Middle`) to add/remove 1 card.
 
@@ -34,8 +36,12 @@ Undo / redo buttons
 Are located at the top left of the window in the header. `Undo`, `Redo` apply to many end-user 
 actions like checking / unchecking Filter buttons, changing search text and so on.
 
+![undo](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/undo.jpg)
+
 Buttons in the window header right side
 ---------------------------------------
+
+![header buttons](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/header_buttons.jpg)
 
 `Open deck` from a file, `Save deck` to a file. Supported are deck formats of
 - Magarena https://www.slightlymagic.net/forum/viewforum.php?f=82

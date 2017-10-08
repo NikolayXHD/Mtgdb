@@ -20,6 +20,8 @@ xcopy /r /d /i /y /E %output%\bin\%configuration% %targetBin%
 xcopy /r /d /i /y /E %output%\etc %target%\etc
 xcopy /r /d /i /y /E %output%\images %target%\images
 xcopy /r /d /i /y /E %output%\update %target%\update
+xcopy /r /d /i /y /E %output%\help %target%\help
+xcopy %output%\..\LICENSE %target%
 
 del /q %target%\etc\Mtgdb.Test.xml
 del /s /q %target%\update\app\*
@@ -33,10 +35,6 @@ del /q %target%\update\filelist.txt
 
 del /s /q %target%\images\*.jpg
 del /s /q %target%\images\*.txt
-
-copy %output%\*.txt %target%
-xcopy /r /i /y /E %output%\original %target%
-xcopy %output%\..\LICENSE %target%
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 

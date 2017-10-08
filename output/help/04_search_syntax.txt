@@ -79,7 +79,7 @@ any word which lies between 'a' and 'ced' in alphanumerical order
 
     Name:[a TO ced]
 
-#Term boosting
+Term boosting
 
 Term boosting is NOT supported because Mtgdb.Gui does not currently sort by relevance to search 
 query. The query below is parsed and executed correctly but ^3 booster to Angel term is just 

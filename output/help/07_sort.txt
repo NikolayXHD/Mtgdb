@@ -1,8 +1,10 @@
 Sorting search result
 ---------------------
 
+![sort](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/sort.jpg)
+
 By default the cards are sorted in the same order they appear in data\AllSets-x.json file. You 
-can sort by most fields you see in search result. To make 'sort' button visible move the mouse 
+can sort by most fields you see in search result. To make `sort` button visible move the mouse 
 over a field you want to sort.
 
 Sort by multiple fields

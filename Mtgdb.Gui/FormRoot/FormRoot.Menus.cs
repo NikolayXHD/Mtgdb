@@ -26,23 +26,7 @@ namespace Mtgdb.Gui
 			_buttonUndo.Click += undoClick;
 			_buttonRedo.Click += redoClick;
 
-			var helpButtons = new[]
-			{
-				_buttonHelpButtons,
-				_buttonHelpSearchSyntax,
-				_buttonHelpSearchShortcuts,
-				_buttonHelpSearchFromGrid,
-				_buttonHelpSort,
-				_buttonHelpReleaseNotes,
-				_buttonHelpReadme,
-				_buttonHelpEditor,
-				_buttonHelpForum,
-				_buttonHelpAbout,
-				_buttonHelpWiki
-			};
-
-			foreach (var helpButton in helpButtons)
-				helpButton.Click += helpClick;
+			_buttonHelp.Click += helpClick;
 
 			_buttonGeneralSettings.Click += configClick;
 			_buttonDisplaySettings.Click += configClick;
@@ -70,30 +54,8 @@ namespace Mtgdb.Gui
 
 		private void helpClick(object sender, EventArgs e)
 		{
-			if (_buttonHelpButtons == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_buttons.txt"));
-			else if (_buttonHelpEditor == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_editor.txt"));
-
-			else if (_buttonHelpSearchSyntax == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_search_syntax.txt"));
-			else if (_buttonHelpSearchShortcuts == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_search_keyboard_shortcuts.txt"));
-			else if (_buttonHelpSearchFromGrid == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_search_button_over_card_text.txt"));
-
-			else if (_buttonHelpSort == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_sort.txt"));
-			else if (_buttonHelpReleaseNotes == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_release_notes.txt"));
-			else if (_buttonHelpReadme == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_readme.txt"));
-			else if (_buttonHelpForum == sender)
-				System.Diagnostics.Process.Start("https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299");
-			else if (_buttonHelpAbout == sender)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_about.txt"));
-			else if (_buttonHelpWiki == sender)
-				System.Diagnostics.Process.Start("https://github.com/NikolayXHD/Mtgdb/wiki");
+			var helpFileUrl = "file:///" + AppDir.Root.Replace("\\", "/") + "/help/html/home.html";
+			System.Diagnostics.Process.Start(helpFileUrl);
 		}
 
 		private void redoClick(object sender, EventArgs e)
@@ -235,7 +197,6 @@ namespace Mtgdb.Gui
 			setupButton(_buttonTooltips);
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
-			_buttonSubsystem.SetupPopup(new Popup(_menuHelp, _buttonHelp));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage,
 				closeOnMenuClick: true));

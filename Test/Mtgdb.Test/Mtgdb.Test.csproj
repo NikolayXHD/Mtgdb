@@ -36,6 +36,11 @@
       <HintPath>..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Markdig, Version=0.13.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Markdig.0.13.3\lib\net40\Markdig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -102,6 +107,7 @@
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
     <Compile Include="DeckFormattersTests.cs" />
     <Compile Include="Index\TestLoadingUtil.cs" />
+    <Compile Include="Markdown\MarkdownTests.cs" />
     <Compile Include="Price\PriceDownloaderTests.cs" />
     <Compile Include="WaifuScaler.cs" />
   </ItemGroup>

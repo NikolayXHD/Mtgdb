@@ -1,5 +1,7 @@
-﻿Search text keyboard shortcuts
+﻿Search input keyboard shortcuts
 ------------------------------
+
+![search intellisense](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg)
 
 Show intellisense (a hint based on your input) `Ctrl`+`SPACE` or `Down`
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Mtgdb.Gui help - Sort
+	</title>
+	<link rel="stylesheet" type="text/css" href="help_style.css"/>
+</head>
+<body>
+<div>
+	<div class="page-title">
+		<h1>
+			Sort
+		</h1>
+	</div>
+	<div class="page-content">
+		<div class="navigation">
+			<ul class="internal">
+				<li class=""><a href="home.html">Home</a></li><li class=""><a href="deck_and_collection_editor.html">Deck and collection editor</a></li><li class=""><a href="filter_buttons.html">Filter buttons</a></li><li class=""><a href="search_syntax.html">Search syntax</a></li><li class=""><a href="search_input_keyboard_shortcuts.html">Search input keyboard shortcuts</a></li><li class=""><a href="search_button_over_card_text.html">Search button over card text</a></li><li class="selected"><a href="sort.html">Sort</a></li><li class=""><a href="release_notes.html">Release notes</a></li><li class=""><a href="about.html">About</a></li>
+			</ul>
+			<ul class="external">
+				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
+				<li><a href="https://github.com/NikolayXHD/Mtgdb">Source code on Github</a></li>
+			</ul>
+		</div>
+		<div class="content">
+			<h2 id="sorting-search-result">Sorting search result</h2>
+<p><a href=../img/sort.jpg><img src="../img/sort.jpg" alt="sort" /></a></p>
+<p>By default the cards are sorted in the same order they appear in data\AllSets-x.json file. You
+can sort by most fields you see in search result. To make <code>sort</code> button visible move the mouse
+over a field you want to sort.</p>
+<h2 id="sort-by-multiple-fields">Sort by multiple fields</h2>
+<p>To sort by more than one field use Shift+click on sort button on second and subsequent fields.</p>
+<h2 id="three-state-cycle-descending-ascending-none">Three-state cycle: Descending-Ascending-None</h2>
+<p>Clicking sort button cycles between 3 states:</p>
+<ul>
+<li>first click makes sort direction Ascending</li>
+<li>second click changes direction to Descending</li>
+<li>third click stops sorting the field</li>
+</ul>
+<h2 id="stop-sorting-one-field">Stop sorting one field</h2>
+<p>There are two ways to exclude a field from sorting.</p>
+<ul>
+<li><p>Shift+click sort button until it becomes not sorted.
+By using Shift you preserve any existing sorting by other fields.</p>
+</li>
+<li><p>Ctrl+click sort button.
+The clicked field stops being sorted. Any other sorted fields remain sorted.</p>
+</li>
+</ul>
+<h2 id="cancel-sorting-on-all-fields">Cancel sorting on all fields</h2>
+<p>Click sort button (without holding Shift) on any field until it becomes not sorted.
+Because Shift key is not down while clicking, other fields are excluded from sorting too.</p>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>
