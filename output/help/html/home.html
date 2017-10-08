@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Mtgdb.Gui help - Home
+	</title>
+	<link rel="stylesheet" type="text/css" href="help_style.css"/>
+</head>
+<body>
+<div>
+	<div class="page-title">
+		<h1>
+			Home
+		</h1>
+	</div>
+	<div class="page-content">
+		<div class="navigation">
+			<ul class="internal">
+				<li class="selected"><a href="home.html">Home</a></li><li class=""><a href="deck_and_collection_editor.html">Deck and collection editor</a></li><li class=""><a href="filter_buttons.html">Filter buttons</a></li><li class=""><a href="search_syntax.html">Search syntax</a></li><li class=""><a href="search_input_keyboard_shortcuts.html">Search input keyboard shortcuts</a></li><li class=""><a href="search_button_over_card_text.html">Search button over card text</a></li><li class=""><a href="sort.html">Sort</a></li><li class=""><a href="release_notes.html">Release notes</a></li><li class=""><a href="about.html">About</a></li>
+			</ul>
+			<ul class="external">
+				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
+				<li><a href="https://github.com/NikolayXHD/Mtgdb">Source code on Github</a></li>
+			</ul>
+		</div>
+		<div class="content">
+			<h2 id="overview">Overview</h2>
+<p>Mtgdb.Gui is a Windows application to search MTG cards, build decks and keep track of collection.</p>
+<p><a href=../img/Ixalan.jpg><img src="../img/Ixalan.jpg" alt="Mtgdb.Gui user interface" /></a></p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>The program requires .NET Framework v4.0 Most people have it already installed.
+In case you don't download it from <a href="https://www.microsoft.com/en-gb/download/details.aspx?id=17851">https://www.microsoft.com/en-gb/download/details.aspx?id=17851</a></p>
+<h2 id="running-mtgdb.gui">Running Mtgdb.Gui</h2>
+<p>Run Mtgdb.Gui shortcut in the root of extracted .zip</p>
+<p><a href=../img/shortcut.jpg><img src="../img/shortcut.jpg" alt="shortcut" /></a></p>
+<h2 id="downloading-images">Downloading Images</h2>
+<p>Press the red cloud button in top right corner of Mtgdb.Gui window.
+An update window will open where you will see buttons to download images.</p>
+<p><a href=../img/update_window.jpg><img src="../img/update_window.jpg" alt="Update window" /></a></p>
+<p>To download images manually</p>
+<ul>
+<li>Open etc\Mtgdb.Gui.xml</li>
+<li>Find the section <code>&lt;ImageLocations&gt;</code></li>
+<li>Read the comments above commented <code>&lt;Directory /&gt;</code> tags. There you will find a download link
+and a brief description of images to be downloaded.</li>
+<li>Uncomment the <code>&lt;Directory /&gt;</code> tags you want</li>
+<li>Download images to the location specified in <code>&lt;Directory Path=&quot;...&quot; /&gt;</code></li>
+</ul>
+<p>You can also setup <code>&lt;ImageLocations&gt; &lt;Directory /&gt;</code> tags to use your custom images.</p>
+<p><a href=../img/Mtgb.Gui.xml.jpg><img src="../img/Mtgb.Gui.xml.jpg" alt="Edit configuration file" /></a></p>
+<h2 id="how-to-use-images-from-mtgdb.gui-in-forge">How to use images from Mtgdb.Gui in Forge</h2>
+<p>In cmd type and execute:</p>
+<pre><code>Mtgdb.Util.exe -forge
+</code></pre>
+<p>or</p>
+<pre><code>Mtgdb.Util.exe -forge -set AKH
+</code></pre>
+<p>to replace images only specific set</p>
+<p>Forge is a very feature-rich application to play Magic The Gaghering
+see more at <a href="http://www.slightlymagic.net/forum/viewforum.php?f=26">http://www.slightlymagic.net/forum/viewforum.php?f=26</a></p>
+<h2 id="i-already-have-card-images-somewhere-on-my-pc.how-do-i-make-mtgdb.gui-use-them">I already have card images somewhere on my PC. How do I make Mtgdb.Gui use them?</h2>
+<p>Edit the configuration file \etc\Mtgdb.Gui.xml</p>
+<h2 id="more-help">More help</h2>
+<p>Use help menu in window header to get help on specific topics.</p>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

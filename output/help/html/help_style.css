@@ -1,0 +1,134 @@
+﻿html {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	overflow: -moz-scrollbars-vertical;
+}
+
+img {
+	max-width: 100%;
+}
+
+h2 {
+	padding-bottom: 0.3em;
+	font-size: 1.5em;
+	border-bottom: 1px solid #eaecef;
+	margin-bottom: 16px;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+code {
+	background-color: #f0f2f4;
+	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 3px;
+}
+
+pre {
+	padding: 16px;
+	overflow: auto;
+	font-size: 85%;
+	line-height: 1.45;
+	background-color: #f0f2f4;
+	border-radius: 5px;
+}
+
+pre code {
+	display: inline;
+	max-width: auto;
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	line-height: inherit;
+	word-wrap: normal;
+	background-color: transparent;
+	border: 0;
+}
+
+body {
+	margin: 0;
+	padding:5px;
+}
+
+body div {
+	font-family: "Segoe UI";
+	font-size: 16px;
+	line-height: 1.4;
+	margin: auto;
+	max-width: 960px;
+}
+
+div.navigation {
+	float: right;
+	max-width: 240px;
+	font-size: 14px;
+	border: 1px solid rgba(27, 31, 35, 0.15);
+	border-radius: 5px;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.06);
+}
+
+div.content {
+	max-width: 700px;
+	padding-right: 260px;
+}
+
+div.page-title {
+	border-radius: 8px;
+	background-color: rgba(210, 210, 220, 0.5);
+}
+
+div.page-title h1 {
+	padding: 5px;
+	font-size: 32px;
+	font-weight: normal;
+	margin: 0;
+}
+
+div.page-content {
+	padding-left: 5px;
+	margin: 0;
+}
+
+
+
+div.navigation ul {
+	list-style-type: none;
+	margin: 3px;
+	padding: 3px;
+}
+
+div.navigation ul li a {
+	padding: 0 10px;
+	text-decoration: none;
+	display:inline-block;
+	width: 100%;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+div.navigation ul.internal li a {
+	font-weight: 500;
+	color: rgb(3, 102, 214);
+}
+
+div.navigation ul.external li a {
+	font-weight: 400;
+	padding-left: 15px;
+	color: rgb(3, 80, 170);
+}
+
+div.navigation ul li {
+	border-radius: 4px;
+}
+
+div.navigation ul.internal li.selected {
+	background-color: rgba(210, 210, 220, 0.5);
+}
+
+div.navigation ul.internal li:hover:not(.selected), div.navigation ul.external li:hover {
+	background-color: rgba(230, 230, 240, 0.5);
+	-webkit-transition: background-color 0.2s ease-out;
+	-moz-transition: background-color 0.2s ease-out;
+	-o-transition: background-color 0.2s ease-out;
+	transition: background-color 0.2s ease-out;
+}

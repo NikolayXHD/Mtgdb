@@ -73,18 +73,6 @@
 			this._buttonDonatePayPal = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDonateYandexMoney = new Mtgdb.Controls.CustomCheckBox();
 			this._panelAva = new System.Windows.Forms.Panel();
-			this._menuHelp = new Mtgdb.Controls.CustomPanel();
-			this._buttonHelpWiki = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpAbout = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpSearchFromGrid = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpSearchShortcuts = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpReadme = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpReleaseNotes = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpSort = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpSearchSyntax = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpButtons = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpEditor = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHelpForum = new Mtgdb.Controls.CustomCheckBox();
 			this._menuConfig = new Mtgdb.Controls.CustomPanel();
 			this._buttonDisplaySettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonGeneralSettings = new Mtgdb.Controls.CustomCheckBox();
@@ -92,7 +80,6 @@
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
 			this._menuDonate.SuspendLayout();
-			this._menuHelp.SuspendLayout();
 			this._menuConfig.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -909,268 +896,6 @@
 			this._panelAva.Size = new System.Drawing.Size(87, 117);
 			this._panelAva.TabIndex = 0;
 			// 
-			// _menuHelp
-			// 
-			this._menuHelp.BackColor = System.Drawing.Color.White;
-			this._menuHelp.Controls.Add(this._buttonHelpWiki);
-			this._menuHelp.Controls.Add(this._buttonHelpAbout);
-			this._menuHelp.Controls.Add(this._buttonHelpSearchFromGrid);
-			this._menuHelp.Controls.Add(this._buttonHelpSearchShortcuts);
-			this._menuHelp.Controls.Add(this._buttonHelpReadme);
-			this._menuHelp.Controls.Add(this._buttonHelpReleaseNotes);
-			this._menuHelp.Controls.Add(this._buttonHelpSort);
-			this._menuHelp.Controls.Add(this._buttonHelpSearchSyntax);
-			this._menuHelp.Controls.Add(this._buttonHelpButtons);
-			this._menuHelp.Controls.Add(this._buttonHelpForum);
-			this._menuHelp.Controls.Add(this._buttonHelpEditor);
-			this._menuHelp.Location = new System.Drawing.Point(300, 50);
-			this._menuHelp.Name = "_menuHelp";
-			this._menuHelp.Size = new System.Drawing.Size(200, 314);
-			this._menuHelp.TabIndex = 29;
-			this._menuHelp.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _buttonHelpWiki
-			// 
-			this._buttonHelpWiki.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpWiki.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpWiki.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpWiki.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpWiki.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpWiki.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpWiki.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpWiki.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpWiki.Image = global::Mtgdb.Gui.Properties.Resources.illustrated_wiki;
-			this._buttonHelpWiki.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpWiki.Location = new System.Drawing.Point(1, 1);
-			this._buttonHelpWiki.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpWiki.Name = "_buttonHelpWiki";
-			this._buttonHelpWiki.Size = new System.Drawing.Size(198, 48);
-			this._buttonHelpWiki.TabIndex = 29;
-			this._buttonHelpWiki.TabStop = false;
-			this._buttonHelpWiki.Text = "              Illustrated wiki online";
-			this._buttonHelpWiki.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpAbout
-			// 
-			this._buttonHelpAbout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpAbout.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpAbout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpAbout.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpAbout.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpAbout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpAbout.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpAbout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpAbout.Location = new System.Drawing.Point(1, 289);
-			this._buttonHelpAbout.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpAbout.Name = "_buttonHelpAbout";
-			this._buttonHelpAbout.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpAbout.TabIndex = 28;
-			this._buttonHelpAbout.TabStop = false;
-			this._buttonHelpAbout.Text = "        About";
-			this._buttonHelpAbout.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpSearchFromGrid
-			// 
-			this._buttonHelpSearchFromGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpSearchFromGrid.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpSearchFromGrid.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpSearchFromGrid.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpSearchFromGrid.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpSearchFromGrid.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchFromGrid.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchFromGrid.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpSearchFromGrid.Image = global::Mtgdb.Gui.Properties.Resources.Search_icon;
-			this._buttonHelpSearchFromGrid.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpSearchFromGrid.Location = new System.Drawing.Point(1, 193);
-			this._buttonHelpSearchFromGrid.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpSearchFromGrid.Name = "_buttonHelpSearchFromGrid";
-			this._buttonHelpSearchFromGrid.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpSearchFromGrid.TabIndex = 26;
-			this._buttonHelpSearchFromGrid.TabStop = false;
-			this._buttonHelpSearchFromGrid.Text = "        Search button over card text";
-			this._buttonHelpSearchFromGrid.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpSearchShortcuts
-			// 
-			this._buttonHelpSearchShortcuts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpSearchShortcuts.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpSearchShortcuts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpSearchShortcuts.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpSearchShortcuts.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpSearchShortcuts.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchShortcuts.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchShortcuts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpSearchShortcuts.Image = global::Mtgdb.Gui.Properties.Resources.Search_icon;
-			this._buttonHelpSearchShortcuts.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpSearchShortcuts.Location = new System.Drawing.Point(1, 169);
-			this._buttonHelpSearchShortcuts.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpSearchShortcuts.Name = "_buttonHelpSearchShortcuts";
-			this._buttonHelpSearchShortcuts.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpSearchShortcuts.TabIndex = 25;
-			this._buttonHelpSearchShortcuts.TabStop = false;
-			this._buttonHelpSearchShortcuts.Text = "        Search keyboard shortcuts";
-			this._buttonHelpSearchShortcuts.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpReadme
-			// 
-			this._buttonHelpReadme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpReadme.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpReadme.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpReadme.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpReadme.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpReadme.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpReadme.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpReadme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpReadme.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpReadme.Location = new System.Drawing.Point(1, 265);
-			this._buttonHelpReadme.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpReadme.Name = "_buttonHelpReadme";
-			this._buttonHelpReadme.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpReadme.TabIndex = 24;
-			this._buttonHelpReadme.TabStop = false;
-			this._buttonHelpReadme.Text = "        Overview";
-			this._buttonHelpReadme.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpReleaseNotes
-			// 
-			this._buttonHelpReleaseNotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpReleaseNotes.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpReleaseNotes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpReleaseNotes.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpReleaseNotes.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpReleaseNotes.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpReleaseNotes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpReleaseNotes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpReleaseNotes.Image = global::Mtgdb.Gui.Properties.Resources.update_bw;
-			this._buttonHelpReleaseNotes.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpReleaseNotes.Location = new System.Drawing.Point(1, 241);
-			this._buttonHelpReleaseNotes.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpReleaseNotes.Name = "_buttonHelpReleaseNotes";
-			this._buttonHelpReleaseNotes.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpReleaseNotes.TabIndex = 23;
-			this._buttonHelpReleaseNotes.TabStop = false;
-			this._buttonHelpReleaseNotes.Text = "        Release notes";
-			this._buttonHelpReleaseNotes.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpSort
-			// 
-			this._buttonHelpSort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpSort.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpSort.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpSort.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpSort.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpSort.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSort.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpSort.Image = global::Mtgdb.Gui.Properties.Resources.sort_20;
-			this._buttonHelpSort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpSort.Location = new System.Drawing.Point(1, 217);
-			this._buttonHelpSort.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpSort.Name = "_buttonHelpSort";
-			this._buttonHelpSort.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpSort.TabIndex = 22;
-			this._buttonHelpSort.TabStop = false;
-			this._buttonHelpSort.Text = "        Help on Sort";
-			this._buttonHelpSort.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpSearchSyntax
-			// 
-			this._buttonHelpSearchSyntax.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpSearchSyntax.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpSearchSyntax.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpSearchSyntax.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpSearchSyntax.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpSearchSyntax.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchSyntax.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpSearchSyntax.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpSearchSyntax.Image = global::Mtgdb.Gui.Properties.Resources.Search_icon;
-			this._buttonHelpSearchSyntax.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpSearchSyntax.Location = new System.Drawing.Point(1, 145);
-			this._buttonHelpSearchSyntax.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpSearchSyntax.Name = "_buttonHelpSearchSyntax";
-			this._buttonHelpSearchSyntax.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpSearchSyntax.TabIndex = 21;
-			this._buttonHelpSearchSyntax.TabStop = false;
-			this._buttonHelpSearchSyntax.Text = "        Search syntax";
-			this._buttonHelpSearchSyntax.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpButtons
-			// 
-			this._buttonHelpButtons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpButtons.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpButtons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpButtons.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpButtons.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpButtons.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpButtons.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpButtons.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpButtons.Image = global::Mtgdb.Gui.Properties.Resources.Quick_filters;
-			this._buttonHelpButtons.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpButtons.Location = new System.Drawing.Point(1, 121);
-			this._buttonHelpButtons.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpButtons.Name = "_buttonHelpButtons";
-			this._buttonHelpButtons.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpButtons.TabIndex = 20;
-			this._buttonHelpButtons.TabStop = false;
-			this._buttonHelpButtons.Text = "        Help on Filter buttons";
-			this._buttonHelpButtons.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpEditor
-			// 
-			this._buttonHelpEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpEditor.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpEditor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpEditor.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpEditor.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpEditor.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpEditor.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpEditor.Image = global::Mtgdb.Gui.Properties.Resources.Box20;
-			this._buttonHelpEditor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpEditor.Location = new System.Drawing.Point(1, 97);
-			this._buttonHelpEditor.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpEditor.Name = "_buttonHelpEditor";
-			this._buttonHelpEditor.Size = new System.Drawing.Size(198, 24);
-			this._buttonHelpEditor.TabIndex = 19;
-			this._buttonHelpEditor.TabStop = false;
-			this._buttonHelpEditor.Text = "        Help on deck / collection editor";
-			this._buttonHelpEditor.UseVisualStyleBackColor = true;
-			// 
-			// _buttonHelpForum
-			// 
-			this._buttonHelpForum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonHelpForum.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHelpForum.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonHelpForum.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonHelpForum.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonHelpForum.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpForum.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonHelpForum.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelpForum.Image = global::Mtgdb.Gui.Properties.Resources.mtg_16;
-			this._buttonHelpForum.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonHelpForum.Location = new System.Drawing.Point(1, 49);
-			this._buttonHelpForum.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonHelpForum.Name = "_buttonHelpForum";
-			this._buttonHelpForum.Size = new System.Drawing.Size(198, 48);
-			this._buttonHelpForum.TabIndex = 27;
-			this._buttonHelpForum.TabStop = false;
-			this._buttonHelpForum.Text = "        Mtgdb.Gui thread at\r\n        www.slightlymagic.net";
-			this._buttonHelpForum.UseVisualStyleBackColor = true;
-			// 
 			// _menuConfig
 			// 
 			this._menuConfig.BackColor = System.Drawing.Color.White;
@@ -1233,7 +958,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1000, 800);
 			this.Controls.Add(this._menuConfig);
-			this.Controls.Add(this._menuHelp);
 			this.Controls.Add(this._menuDonate);
 			this.Controls.Add(this._menuLanguage);
 			this.Controls.Add(this._menuOpen);
@@ -1252,14 +976,12 @@
 			this.Controls.SetChildIndex(this._menuOpen, 0);
 			this.Controls.SetChildIndex(this._menuLanguage, 0);
 			this.Controls.SetChildIndex(this._menuDonate, 0);
-			this.Controls.SetChildIndex(this._menuHelp, 0);
 			this.Controls.SetChildIndex(this._menuConfig, 0);
 			this._panelHeader.ResumeLayout(false);
 			this._menuOpen.ResumeLayout(false);
 			this._menuOpen.PerformLayout();
 			this._menuLanguage.ResumeLayout(false);
 			this._menuDonate.ResumeLayout(false);
-			this._menuHelp.ResumeLayout(false);
 			this._menuConfig.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -1310,20 +1032,8 @@
 		private Mtgdb.Controls.CustomCheckBox _buttonDonatePayPal;
 		private Mtgdb.Controls.CustomCheckBox _buttonDonateYandexMoney;
 		private System.Windows.Forms.Label _labelDonate;
-		private Controls.CustomPanel _menuHelp;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpEditor;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpButtons;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpSearchSyntax;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpSort;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpReleaseNotes;
-		private Mtgdb.Controls.CustomCheckBox _buttonHelpReadme;
 		private Controls.CustomPanel _menuConfig;
 		private Mtgdb.Controls.CustomCheckBox _buttonDisplaySettings;
 		private Mtgdb.Controls.CustomCheckBox _buttonGeneralSettings;
-		private Controls.CustomCheckBox _buttonHelpSearchFromGrid;
-		private Controls.CustomCheckBox _buttonHelpSearchShortcuts;
-		private Controls.CustomCheckBox _buttonHelpForum;
-		private Controls.CustomCheckBox _buttonHelpAbout;
-		private Controls.CustomCheckBox _buttonHelpWiki;
 	}
 }
