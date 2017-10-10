@@ -1,7 +1,7 @@
 # Mtgdb.Gui
 a Windows desktop program to search MTG cards and build decks
 
-![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/blob/master/doc/img/Ixalan_small.jpg)
+[![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan_small.jpg?raw=true)](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan_small.jpg?raw=true)
 
 ## Mtgdb.Controls project
 Most non-standard WinForms controls used in Mtgdb.Gui were separated into a
