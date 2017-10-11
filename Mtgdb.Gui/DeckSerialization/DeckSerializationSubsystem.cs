@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Mtgdb.Dal;
 
@@ -20,7 +21,8 @@ namespace Mtgdb.Gui
 				new JsonDeckFormatter(),
 				new ForgeDeckFormatter(cardRepository, forgeSetRepo),
 				new MagarenaDeckFormatter(cardRepository),
-				new XMageDeckFormatter(cardRepository)
+				new XMageDeckFormatter(cardRepository),
+				new MtgoDeckFormatter(cardRepository)
 			};
 
 			string anyFormatFilter = $"Any deck|{string.Join(@";", _formatters.Where(_ => _.SupportsImport).Select(f => f.FileNamePattern).Distinct())}";
@@ -47,7 +49,16 @@ namespace Mtgdb.Gui
 			var formatter = _formatters[fileToSave.FormatIndex];
 
 			string serialized = formatter.ExportDeck(name, current);
-			File.WriteAllText(fileToSave.File, serialized);
+
+			if (!formatter.UseBom)
+				File.WriteAllText(fileToSave.File, serialized);
+			else
+			{
+				var preamble = Encoding.UTF8.GetPreamble();
+				var content = Encoding.UTF8.GetBytes(serialized);
+				var bytes = preamble.Concat(content).ToArray();
+				File.WriteAllBytes(fileToSave.File, bytes);
+			}
 
 			DeckSaved?.Invoke();
 		}
@@ -199,11 +210,10 @@ namespace Mtgdb.Gui
 			if (extension == null)
 				return 0;
 
-			string filterPart = @"*" + extension;
-			var filterParts = filter.Split('|');
+			string filterPart = @"*" + extension.ToLowerInvariant();
+			var filterParts = filter.Split('|').Select(_=>_.ToLowerInvariant()).ToArray();
 
-			var index = Enumerable.Range(0, filterParts.Length)
-				.First(i => filterParts[i].Equals(filterPart));
+			var index = Array.IndexOf(filterParts, filterPart);
 
 			return 1 + index / 2;
 		}

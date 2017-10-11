@@ -74,6 +74,7 @@
     <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
     <Compile Include="DeckSerialization\JsonDeckFormatter.cs" />
     <Compile Include="DeckSerialization\MagarenaDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />
     <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
     <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
     <Compile Include="FormStat\Aggregates.cs" />
@@ -298,6 +299,9 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\mtgo_32.png" />
+    <None Include="Resources\draw_a_card_32.png" />
+    <None Include="Resources\Box_32.png" />
     <None Include="Resources\illustrated_wiki.png" />
     <None Include="Resources\update_notification.png" />
     <None Include="Resources\mtg_16.png" />

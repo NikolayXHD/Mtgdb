@@ -15,11 +15,19 @@ namespace Mtgdb.Gui
 			_buttonTooltips.Checked = true;
 			_buttonDownload.Enabled = false;
 
-			_buttonLoad.MouseEnter += loadMouseEnter;
-			_buttonSave.MouseEnter += saveMouseEnter;
+			foreach (var button in _saveLoadButtons)
+				button.MouseEnter += saveLoadMouseEnter;
+
 			_buttonDownload.Click += downloadClick;
-			_buttonLoad.Click += loadDeckClick;
-			_buttonSave.Click += saveDeckClick;
+
+			_buttonOpenDeck.Click += openDeckClick;
+			_buttonMenuOpenDeck.Click += openDeckClick;
+			_buttonSaveDeck.Click += saveDeckClick;
+			_buttonMenuSaveDeck.Click += saveDeckClick;
+
+			_buttonMenuOpenCollection.Click += openCollectionClick;
+			_buttonMenuSaveCollection.Click += saveCollectionClick;
+
 			_buttonStat.Click += statClick;
 			_buttonPrint.Click += printClick;
 			_buttonClear.Click += clearClick;
@@ -98,9 +106,19 @@ namespace Mtgdb.Gui
 			getSelectedForm()?.ButtonSaveDeck();
 		}
 
-		private void loadDeckClick(object sender, EventArgs e)
+		private void openDeckClick(object sender, EventArgs e)
 		{
 			getSelectedForm()?.ButtonLoadDeck();
+		}
+
+		private void saveCollectionClick(object sender, EventArgs e)
+		{
+			getSelectedForm()?.ButtonSaveCollection();
+		}
+
+		private void openCollectionClick(object sender, EventArgs e)
+		{
+			getSelectedForm()?.ButtonLoadCollection();
 		}
 
 		private void downloadClick(object sender, EventArgs e)
@@ -166,24 +184,26 @@ namespace Mtgdb.Gui
 
 
 
-		private void loadMouseEnter(object sender, EventArgs e)
+		private void saveLoadMouseEnter(object sender, EventArgs e)
 		{
-			_labelLoad.Visible = true;
-			_labelSave.Visible = false;
+			for (int i = 0; i < _saveLoadButtons.Length; i++)
+			{
+				bool visible = sender == _saveLoadButtons[i];
+				var menuButtons = _saveLoadMenuButtons[i];
+
+				for (int j = 0; j < menuButtons.Length; j++)
+					menuButtons[j].Visible = visible;
+			}
 		}
-
-		private void saveMouseEnter(object sender, EventArgs e)
-		{
-			_labelLoad.Visible = false;
-			_labelSave.Visible = true;
-		}
-
-
 
 		private void setupButtons()
 		{
-			setupButton(_buttonLoad);
-			setupButton(_buttonSave);
+			foreach (var button in _saveLoadButtons)
+				setupButton(button);
+
+			setupButton(_buttonOpenDeck);
+			setupButton(_buttonSaveDeck);
+
 			setupButton(_buttonStat);
 			setupButton(_buttonPrint);
 			setupButton(_buttonClear);
@@ -192,8 +212,6 @@ namespace Mtgdb.Gui
 			setupButton(_buttonHelp);
 			setupButton(_buttonLanguage);
 			setupButton(_buttonDonate);
-			setupButton(_buttonLoad);
-			setupButton(_buttonSave);
 			setupButton(_buttonTooltips);
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
@@ -207,11 +225,8 @@ namespace Mtgdb.Gui
 				closeOnMenuClick: true,
 				borderOnHover: false));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonLoad,
-				borderOnHover: false));
-
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSave,
-				borderOnHover: false));
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck, borderOnHover: false));
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck, borderOnHover: false));
 
 			_buttonSubsystem.SubscribeToEvents();
 		}
@@ -264,5 +279,7 @@ namespace Mtgdb.Gui
 		public event Action LanguageChanged;
 
 		private readonly ButtonSubsystem _buttonSubsystem;
+		private readonly CheckBox[] _saveLoadButtons;
+		private readonly CheckBox[][] _saveLoadMenuButtons;
 	}
 }

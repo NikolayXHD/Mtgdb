@@ -666,6 +666,16 @@ namespace Mtgdb.Gui
 			_deckSerializationSubsystem.LoadDeck();
 		}
 
+		public void ButtonSaveCollection()
+		{
+			_deckSerializationSubsystem.SaveDeck(_historyModel.Current);
+		}
+
+		public void ButtonLoadCollection()
+		{
+			_deckSerializationSubsystem.LoadDeck();
+		}
+
 		private void deckLoaded(GuiSettings loadedDeck)
 		{
 			this.Invoke(delegate

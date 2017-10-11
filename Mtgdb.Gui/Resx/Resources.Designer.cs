@@ -158,6 +158,15 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Magic The Gathering Online deck.
+        /// </summary>
+        internal static string Formatter_MtgoDeck_Description {
+            get {
+                return ResourceManager.GetString("Formatter_MtgoDeck_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XMage deck.
         /// </summary>
         internal static string Formatter_XMageDeck_Description {

@@ -65,5 +65,6 @@ namespace Mtgdb.Gui
 		public abstract bool ValidateFormat(string serialized);
 		public abstract bool SupportsExport { get; }
 		public abstract bool SupportsImport { get; }
+		public virtual bool UseBom => false;
 	}
 }

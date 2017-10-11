@@ -99,8 +99,8 @@ namespace Mtgdb.Controls
 
 
 		public bool OpenOnHover { get; }
-		public bool CloseOnMenuClick { get; set; }
-		public bool BorderOnHover { get; set; }
+		public bool CloseOnMenuClick { get; }
+		public bool BorderOnHover { get; }
 		public ButtonBase Owner { get; }
 		private readonly HorizontalAlignment _alignment;
 		private Point? _screenLocation;
