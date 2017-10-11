@@ -149,6 +149,16 @@ namespace Mtgdb.Gui
 				ButtonLoadDeck();
 				e.Handled = true;
 			}
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
+			{
+				ButtonSaveCollection();
+				e.Handled = true;
+			}
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
+			{
+				ButtonLoadCollection();
+				e.Handled = true;
+			}
 			else if (e.KeyData == (Keys.Control | Keys.P))
 			{
 				ButtonPrint();

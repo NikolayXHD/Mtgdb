@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mtgdb.Dal;
@@ -44,6 +45,23 @@ namespace Mtgdb.Test
 			findCards(decksLocation, new MagarenaDeckFormatter(_cardRepo));
 		}
 
+		[Test]
+		public void Mtgo()
+		{
+			var mtgoCardsFile = TestContext.CurrentContext.TestDirectory.AddPath("Resources\\Mtgo\\cards.txt");
+			var mtgoCardNames = File.ReadAllLines(mtgoCardsFile).Distinct().OrderBy(_ => _);
+
+			Console.WriteLine("Unmatched mtgo cards");
+			Console.WriteLine();
+
+			var cardsByMtgoName = _cardRepo.Cards.GroupBy(MtgoDeckFormatter.ToMtgoName)
+				.ToDictionary(_ => _.Key, _ => _.ToList());
+
+			foreach (string name in mtgoCardNames)
+				if (!cardsByMtgoName.ContainsKey(name))
+					Console.WriteLine(name);
+		}
+
 		private static void findCards(string decksLocation, RegexDeckFormatter formatter)
 		{
 			var matches = Directory.GetFiles(decksLocation, formatter.FileNamePattern, SearchOption.AllDirectories)
@@ -73,6 +91,24 @@ namespace Mtgdb.Test
 				if (match.card == null)
 					Console.WriteLine("NOT FOUND {0} in\r\n{1}", match.match.Value, string.Join("\r\n", match.files.Select(_ => '\t' + _)));
 			}
+		}
+
+		public class MtgoCard
+		{
+			public string Name { get; set; }
+			public string Number { get; set; }
+			public string Id { get; set; }
+
+			public override string ToString() => $"{Id} #{Number} {Name}";
+		}
+
+		public class MtgoSet
+		{
+			public string Code { get; set; }
+			public string Name { get; set; }
+			public string Group { get; set; }
+
+			public override string ToString() => $"{Code}\t{Name}\t{Group}";
 		}
 	}
 }

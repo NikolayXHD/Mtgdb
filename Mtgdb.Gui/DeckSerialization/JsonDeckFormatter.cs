@@ -32,5 +32,6 @@ namespace Mtgdb.Gui
 
 		public bool SupportsExport => true;
 		public bool SupportsImport => true;
+		public bool UseBom => false;
 	}
 }

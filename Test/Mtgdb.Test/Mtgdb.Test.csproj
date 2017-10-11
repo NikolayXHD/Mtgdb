@@ -56,6 +56,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -109,6 +111,12 @@
     <Compile Include="Index\TestLoadingUtil.cs" />
     <Compile Include="Markdown\MarkdownTests.cs" />
     <Compile Include="Price\PriceDownloaderTests.cs" />
+    <Content Include="Resources\mtgo\cards.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\mtgo\setmap.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="WaifuScaler.cs" />
   </ItemGroup>
   <ItemGroup>

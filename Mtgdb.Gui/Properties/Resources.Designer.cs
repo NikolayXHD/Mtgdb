@@ -83,6 +83,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Box_32 {
+            get {
+                object obj = ResourceManager.GetObject("Box_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Box20 {
             get {
                 object obj = ResourceManager.GetObject("Box20", resourceCulture);
@@ -186,6 +196,16 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap draw_a_card {
             get {
                 object obj = ResourceManager.GetObject("draw_a_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap draw_a_card_32 {
+            get {
+                object obj = ResourceManager.GetObject("draw_a_card_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,6 +376,16 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap mtg_16 {
             get {
                 object obj = ResourceManager.GetObject("mtg_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mtgo_32 {
+            get {
+                object obj = ResourceManager.GetObject("mtgo_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

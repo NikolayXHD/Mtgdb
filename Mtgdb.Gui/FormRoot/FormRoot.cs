@@ -14,6 +14,27 @@ namespace Mtgdb.Gui
 		public FormRoot()
 		{
 			InitializeComponent();
+
+			_deckButtons = new ButtonBase[]
+			{
+				_buttonOpenDeck,
+				_buttonSaveDeck,
+				_buttonPrint,
+				_buttonClear,
+				_buttonStat
+			};
+
+			_saveLoadButtons = new CheckBox[]
+			{
+				_buttonOpenDeck,
+				_buttonSaveDeck
+			};
+
+			_saveLoadMenuButtons = new CheckBox[][]
+			{
+				new [] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
+				new [] { _buttonMenuSaveDeck, _buttonMenuSaveCollection }
+			};
 		}
 
 		// ReSharper disable once UnusedMember.Global
@@ -57,15 +78,6 @@ namespace Mtgdb.Gui
 
 			if (!DesignMode)
 				SnapTo(Direction.North, default(Point));
-
-			_deckButtons = new ButtonBase[]
-			{
-				_buttonLoad,
-				_buttonSave,
-				_buttonPrint,
-				_buttonClear,
-				_buttonStat
-			};
 
 			foreach (var button in _deckButtons)
 				button.Enabled = false;
