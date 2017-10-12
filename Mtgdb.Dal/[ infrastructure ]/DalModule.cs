@@ -49,9 +49,12 @@ namespace Mtgdb.Dal
 			Kernel.Bind<PriceRepository>()
 				.ToSelf()
 				.InSingletonScope();
-				
 
 			Kernel.Bind<DownloaderPriceRepository>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<ForgeSetRepository>()
 				.ToSelf()
 				.InSingletonScope();
 		}

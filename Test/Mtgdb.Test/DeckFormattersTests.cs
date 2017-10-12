@@ -35,7 +35,7 @@ namespace Mtgdb.Test
 		[TestCase(@"C:\Users\Kolia\AppData\Roaming\Forge\decks")]
 		public void Forge(string decksLocation)
 		{
-			findCards(decksLocation, new ForgeDeckFormatter(_cardRepo));
+			findCards(decksLocation, new ForgeDeckFormatter(_cardRepo, _kernel.Get<ForgeSetRepository>()));
 		}
 
 		[TestCase(@"D:\games\Magarena-1.81\Magarena\decks")]

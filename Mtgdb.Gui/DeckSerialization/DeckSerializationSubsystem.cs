@@ -11,12 +11,14 @@ namespace Mtgdb.Gui
 		public event Action<GuiSettings> DeckLoaded;
 		public event Action DeckSaved;
 
-		public DeckSerializationSubsystem(CardRepository cardRepository)
+		public DeckSerializationSubsystem(
+			CardRepository cardRepository,
+			ForgeSetRepository forgeSetRepo)
 		{
 			_formatters = new IDeckFormatter[]
 			{
 				new JsonDeckFormatter(),
-				new ForgeDeckFormatter(cardRepository),
+				new ForgeDeckFormatter(cardRepository, forgeSetRepo),
 				new MagarenaDeckFormatter(cardRepository),
 				new XMageDeckFormatter(cardRepository)
 			};

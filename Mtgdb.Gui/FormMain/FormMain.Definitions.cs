@@ -27,6 +27,7 @@ namespace Mtgdb.Gui
 			LuceneSearcher luceneSearcher,
 			KeywordSearcher keywordSearcher,
 			TooltipController tooltipController,
+			ForgeSetRepository forgeSetRepo,
 			UiModel uiModel)
 			: this()
 		{
@@ -41,7 +42,7 @@ namespace Mtgdb.Gui
 			_cardRepo = cardRepo;
 			_collectionModel = collectionModel;
 			_uiModel = uiModel;
-			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo);
+			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo, forgeSetRepo);
 			
 			beginRestoreSettings();
 

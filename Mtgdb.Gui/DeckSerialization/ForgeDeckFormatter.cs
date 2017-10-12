@@ -9,15 +9,10 @@ namespace Mtgdb.Gui
 {
 	public class ForgeDeckFormatter : RegexDeckFormatter
 	{
-		private const string SideboardMark = @"[sideboard]";
-		private const string Header = @"[metadata]";
-
-		private readonly CardRepository _cardRepo;
-		private bool _isSideboard;
-
-		public ForgeDeckFormatter(CardRepository cardRepo)
+		public ForgeDeckFormatter(CardRepository cardRepo, ForgeSetRepository forgeSetRepo)
 		{
 			_cardRepo = cardRepo;
+			_forgeSetRepo = forgeSetRepo;
 		}
 
 		public override Card GetCard(Match match)
@@ -32,7 +27,9 @@ namespace Mtgdb.Gui
 
 			if (setGroup.Success)
 			{
-				var cards = _cardRepo.SetsByCode.TryGet(setGroup.Value)
+				var setCode = _forgeSetRepo.FromForgeSet(setGroup.Value);
+
+				var cards = _cardRepo.SetsByCode.TryGet(setCode)
 					?.CardsByName.TryGet(name);
 
 				if (cards != null)
@@ -56,6 +53,8 @@ namespace Mtgdb.Gui
 
 		public override GuiSettings ImportDeck(string serialized)
 		{
+			_forgeSetRepo.EnsureLoaded();
+
 			_isSideboard = false;
 			return base.ImportDeck(serialized);
 		}
@@ -77,6 +76,8 @@ namespace Mtgdb.Gui
 
 		public override string ExportDeck(string name, GuiSettings current)
 		{
+			_forgeSetRepo.EnsureLoaded();
+
 			var result = new StringBuilder();
 			result.AppendLine(Header);
 			result.AppendLine($@"Name={name}");
@@ -99,7 +100,8 @@ namespace Mtgdb.Gui
 			{
 				var count = deck[cardId];
 				var card = _cardRepo.CardsById[cardId];
-				result.AppendLine($"{count} {card.NameNormalized}|{card.SetCode}");
+				var set = _forgeSetRepo.ToForgeSet(card.SetCode);
+				result.AppendLine($"{count} {card.NameNormalized}|{set}");
 			}
 		}
 
@@ -118,5 +120,14 @@ namespace Mtgdb.Gui
 		public override string FileNamePattern => @"*.dck";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;
+
+
+
+		private const string SideboardMark = @"[sideboard]";
+		private const string Header = @"[metadata]";
+
+		private readonly CardRepository _cardRepo;
+		private readonly ForgeSetRepository _forgeSetRepo;
+		private bool _isSideboard;
 	}
 }

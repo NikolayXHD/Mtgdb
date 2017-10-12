@@ -11,28 +11,21 @@ namespace Mtgdb.Util
 {
 	public class ForgeIntegration
 	{
-		private readonly ImageRepository _imageRepo;
-		private readonly CardRepository _cardRepo;
-		private readonly ImageCache _imageCache;
-		public readonly string CardPicsPath;
-		public readonly string CardPicsBackupPath;
-		private readonly bool _verbose;
-		private bool _crop;
-		private bool _whiteCorner;
-		private Dictionary<string, string> _setByForgeSet;
-		private Dictionary<string, string> _forgeSetBySet;
-
 		public ForgeIntegration(
 			ImageRepository imageRepo, 
 			CardRepository cardRepo, 
 			ForgeIntegrationConfig config,
+			ForgeSetRepository forgeSetRepository,
 			ImageCache imageCache)
 		{
 			_imageRepo = imageRepo;
 			_cardRepo = cardRepo;
+			_forgeSetRepository = forgeSetRepository;
 			_imageCache = imageCache;
+
 			CardPicsPath = Environment.ExpandEnvironmentVariables(config.CardPicsPath);
 			CardPicsBackupPath = Environment.ExpandEnvironmentVariables(config.CardPicsBackupPath);
+
 			_verbose = config.Verbose == true;
 		}
 
@@ -50,20 +43,12 @@ namespace Mtgdb.Util
 			_cardRepo.SelectCardImages(_imageRepo);
 		}
 
-		public void OverrideForgePictures(string setCode)
+		public void OverrideForgePictures(string targetSetCode)
 		{
 			_crop = true;
 
-			var lineParts = File.ReadAllLines(AppDir.Data.AddPath("forge_set_mapping.txt"))
-				.Select(_ => _.Split('\t'))
-				.ToArray();
-
-			_setByForgeSet = lineParts
-				.ToDictionary(_ => _[0], _ => _[1]);
-
-			_forgeSetBySet = lineParts
-				.ToDictionary(_ => _[1], _ => _[0]);
-
+			_forgeSetRepository.Load();
+			
 			if (!Directory.Exists(CardPicsPath))
 			{
 				Console.WriteLine($"== Aborting. Not found {CardPicsPath} ==");
@@ -78,31 +63,29 @@ namespace Mtgdb.Util
 				Directory.CreateDirectory(CardPicsBackupPath);
 			}
 
-			replaceExistingFiles(setCode, small: false);
-			addNewFiles(setCode, small: false);
+			replaceExistingFiles(targetSetCode, small: false);
+			addNewFiles(targetSetCode, small: false);
 		}
 
-		private void addNewFiles(string setCode, bool small)
+		private void addNewFiles(string targetSetCode, bool small)
 		{
 			Console.WriteLine("== Adding missing files ==");
 
 			foreach (var set in _cardRepo.SetsByCode.Values.OrderBy(s=>s.Code))
 			{
-				string modelSetCode = set.Code;
+				string setCode = set.Code;
 
-				if (setCode != null && !Str.Equals(modelSetCode, setCode))
+				if (targetSetCode != null && !Str.Equals(setCode, targetSetCode))
 					continue;
 
-				string forgeSet;
-				if (!_forgeSetBySet.TryGetValue(modelSetCode, out forgeSet))
-					forgeSet = modelSetCode;
-
-				string subdir = Path.Combine(CardPicsPath, forgeSet);
+				string forgeSetCode = _forgeSetRepository.ToForgeSet(setCode);
+				
+				string subdir = Path.Combine(CardPicsPath, forgeSetCode);
 
 				if (!Directory.Exists(subdir))
 					continue;
 				
-				Console.WriteLine($"== Scanning {forgeSet} ... ==");
+				Console.WriteLine($"== Scanning {forgeSetCode} ... ==");
 
 				var models = set.Cards
 					.Select(c => _imageRepo.GetImagePrint(c, _cardRepo.GetReleaseDateSimilarity))
@@ -121,7 +104,7 @@ namespace Mtgdb.Util
 			}
 		}
 
-		private void replaceExistingFiles(string code, bool small)
+		private void replaceExistingFiles(string targetSetCode, bool small)
 		{
 			var subdirs = Directory.GetDirectories(CardPicsPath);
 			foreach (string subdir in subdirs)
@@ -133,20 +116,18 @@ namespace Mtgdb.Util
 				if (forgeSetCode == null)
 					continue;
 
-				string mappedSetCode;
-				if (!_setByForgeSet.TryGetValue(forgeSetCode, out mappedSetCode))
-					mappedSetCode = forgeSetCode;
+				string setCode = _forgeSetRepository.FromForgeSet(forgeSetCode);
 				
-				if (code != null && !Str.Equals(mappedSetCode, code))
+				if (targetSetCode != null && !Str.Equals(setCode, targetSetCode))
 					continue;
 
 				var oldFiles = Directory.GetFiles(subdir, "*.jpg", SearchOption.AllDirectories);
 
 				foreach (string oldFile in oldFiles)
 				{
-					var model = new ImageModel(oldFile, CardPicsPath, setCode: mappedSetCode);
+					var model = new ImageModel(oldFile, CardPicsPath, setCode: setCode);
 
-					var artist = _cardRepo.SetsByCode.TryGet(mappedSetCode)
+					var artist = _cardRepo.SetsByCode.TryGet(setCode)
 						?.Cards
 						.Where(_ => _.ImageNameBase == model.Name)
 						.AtMax(_ => _.ImageName == model.ImageName)
@@ -154,7 +135,7 @@ namespace Mtgdb.Util
 						?.Artist;
 
 					var model2 = artist != null
-						? new ImageModel(oldFile, CardPicsPath, setCode: mappedSetCode, artist: artist)
+						? new ImageModel(oldFile, CardPicsPath, setCode: setCode, artist: artist)
 						: model;
 
 					var replacementModel = _imageRepo.GetReplacementImage(model2, _cardRepo.GetReleaseDateSimilarity);
@@ -385,10 +366,9 @@ namespace Mtgdb.Util
 						}
 					}
 
-					ImageModel modelZoom = null;
 					if (zoomed)
 					{
-						modelZoom = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
+						var modelZoom = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelZoom != null &&
 								Str.Equals(card.SetCode, modelZoom.SetCode) == matchingSet &&
@@ -432,6 +412,18 @@ namespace Mtgdb.Util
 
 			return smallSet;
 		}
+
+
+
+		private readonly ImageRepository _imageRepo;
+		private readonly CardRepository _cardRepo;
+		private readonly ForgeSetRepository _forgeSetRepository;
+		private readonly ImageCache _imageCache;
+		public readonly string CardPicsPath;
+		public readonly string CardPicsBackupPath;
+		private readonly bool _verbose;
+		private bool _crop;
+		private bool _whiteCorner;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
