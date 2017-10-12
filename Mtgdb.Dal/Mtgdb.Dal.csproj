@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="EnumerableExtension.cs" />
     <Compile Include="ExtremumFinder.cs" />
+    <Compile Include="Forge\ForgeSetRepository.cs" />
     <Compile Include="Index\MtgdbAnalyzer.cs" />
     <Compile Include="Index\MtgdbTokenizer.cs" />
     <Compile Include="Index\MtgdbTokenizerPatterns.cs" />
