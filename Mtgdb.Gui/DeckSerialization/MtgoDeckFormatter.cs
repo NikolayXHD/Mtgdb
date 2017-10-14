@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 			_repository = repository;
 		}
 
-		public override GuiSettings ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized)
 		{
 			ensureLoaded();
 
@@ -73,25 +73,22 @@ namespace Mtgdb.Gui
 			return name;
 		}
 
-		public override string ExportDeck(string name, GuiSettings current)
+		public override string ExportDeck(string name, Deck current)
 		{
 			var result = new StringBuilder();
 			
-			writeCards(result, current.Deck, current.DeckOrder);
+			writeCards(result, current.MainDeck);
 			result.AppendLine();
-			writeCards(result, current.SideDeck, current.SideDeckOrder);
+			writeCards(result, current.SideDeck);
 
 			return result.ToString();
 		}
 
-		private void writeCards(
-			StringBuilder result,
-			Dictionary<string, int> deck,
-			List<string> deckOrder)
+		private void writeCards(StringBuilder result, DeckZone deckZone)
 		{
-			foreach (var cardId in deckOrder)
+			foreach (var cardId in deckZone.Order)
 			{
-				var count = deck[cardId];
+				var count = deckZone.Count[cardId];
 				var card = _repository.CardsById[cardId];
 
 				result.AppendLine($"{count} {ToMtgoName(card)}");

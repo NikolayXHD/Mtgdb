@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -70,22 +69,22 @@ namespace Mtgdb.Gui
 			return xMageName;
 		}
 
-		public override string ExportDeck(string name, GuiSettings current)
+		public override string ExportDeck(string name, Deck current)
 		{
 			var result = new StringBuilder();
 			result.AppendLine(Header + name);
 
-			writeCards(result, current.Deck, current.DeckOrder, string.Empty);
-			writeCards(result, current.SideDeck, current.SideDeckOrder, @"SB: ");
+			writeCards(result, current.MainDeck, string.Empty);
+			writeCards(result, current.SideDeck, @"SB: ");
 
 			return result.ToString();
 		}
 
-		private void writeCards(StringBuilder result, Dictionary<string, int> deck, List<string> deckOrder, string prefix)
+		private void writeCards(StringBuilder result, DeckZone zone, string prefix)
 		{
-			foreach (var cardId in deckOrder)
+			foreach (var cardId in zone.Order)
 			{
-				var count = deck[cardId];
+				var count = zone.Count[cardId];
 				var card = _repository.CardsById[cardId];
 
 				result.AppendLine($"{prefix}{count} [{card.SetCode}:{0}] {card.NameNormalized}");

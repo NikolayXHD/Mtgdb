@@ -36,13 +36,13 @@ namespace Mtgdb.Gui
 
 
 
-		public override string ExportDeck(string name, GuiSettings current)
+		public override string ExportDeck(string name, Deck current)
 		{
 			var creatures = new List<Card>();
 			var lands = new List<Card>();
 			var spells = new List<Card>();
 
-			foreach (var cardId in current.DeckOrder)
+			foreach (var cardId in current.MainDeck.Order)
 			{
 				var card = _cardRepo.CardsById[cardId];
 
@@ -58,7 +58,7 @@ namespace Mtgdb.Gui
 			result.AppendLine($"# {creatures.Count} creatures");
 			foreach (var card in creatures)
 			{
-				int count = current.Deck[card.Id];
+				int count = current.MainDeck.Count[card.Id];
 				result.AppendLine($"{count} {card.NameEn}");
 			}
 			result.AppendLine();
@@ -66,7 +66,7 @@ namespace Mtgdb.Gui
 			result.AppendLine($"# {spells.Count} spells");
 			foreach (var card in spells)
 			{
-				int count = current.Deck[card.Id];
+				int count = current.MainDeck.Count[card.Id];
 				result.AppendLine($"{count} {card.NameEn}");
 			}
 			result.AppendLine();
@@ -74,7 +74,7 @@ namespace Mtgdb.Gui
 			result.AppendLine($"# {lands.Count} lands");
 			foreach (var card in lands)
 			{
-				int count = current.Deck[card.Id];
+				int count = current.MainDeck.Count[card.Id];
 				result.AppendLine($"{count} {card.NameEn}");
 			}
 

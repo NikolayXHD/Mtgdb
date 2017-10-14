@@ -15,8 +15,8 @@ namespace Mtgdb.Gui
 		public Card TouchedCard { get; set; }
 		public bool DraggingFromDeck;
 
-		public DeckCards MainDeck { get; }
-		public DeckCards SideDeck { get; }
+		public DeckZoneModel MainDeck { get; }
+		public DeckZoneModel SideDeck { get; }
 		public bool IsSide { get; set; }
 
 		public void SetIsSide(bool value, CardRepository repo)
@@ -25,7 +25,7 @@ namespace Mtgdb.Gui
 			LoadDeck(repo);
 		}
 
-		private DeckCards Deck
+		private DeckZoneModel Deck
 		{
 			get
 			{
@@ -41,20 +41,16 @@ namespace Mtgdb.Gui
 
 		public DeckModel()
 		{
-			MainDeck = new DeckCards();
-			SideDeck = new DeckCards();
+			MainDeck = new DeckZoneModel();
+			SideDeck = new DeckZoneModel();
 		}
 
-		public void SetDeck(
-			Dictionary<string, int> countById, 
-			List<string> order,
-			Dictionary<string, int> sideCountById,
-			List<string> sideOrder)
+		public void SetDeck(Deck deck)
 		{
 			Clear(loadingDeck: true);
 
-			MainDeck.SetDeck(countById, order);
-			SideDeck.SetDeck(sideCountById, sideOrder);
+			MainDeck.SetDeck(deck.MainDeck);
+			SideDeck.SetDeck(deck.SideDeck);
 		}
 
 		public void LoadDeck(CardRepository cardRepository)
@@ -70,7 +66,11 @@ namespace Mtgdb.Gui
 				add(card, loadingDeck: true, newCount: card.DeckCount);
 			}
 
-			DeckChanged?.Invoke(true, true, false, null);
+			DeckChanged?.Invoke(
+				listChanged: true,
+				countChanged: true,
+				card: null,
+				touchedChanged: false);
 		}
 
 		public void Add(Card card, int increment)
@@ -99,7 +99,11 @@ namespace Mtgdb.Gui
 			bool listChanged = previousCount == 0 || card.DeckCount == 0;
 			bool countChanged = previousCount != card.DeckCount;
 			bool touchedChanged = previousTouchedCard != TouchedCard;
-			DeckChanged?.Invoke(listChanged, countChanged, touchedChanged, card);
+			DeckChanged?.Invoke(
+				listChanged,
+				countChanged,
+				card,
+				touchedChanged);
 		}
 
 		private void remove(Card card, int newCount)
@@ -130,7 +134,11 @@ namespace Mtgdb.Gui
 			if (!loadingDeck)
 			{
 				Deck.Clear();
-				DeckChanged?.Invoke(true, true, false, null);
+				DeckChanged?.Invoke(
+					listChanged: true,
+					countChanged: true,
+					card: null,
+					touchedChanged: false);
 			}
 		}
 
@@ -191,7 +199,12 @@ namespace Mtgdb.Gui
 			}
 
 			Deck.SetOrder(cardIds);
-			DeckChanged?.Invoke(true, false, false, null);
+
+			DeckChanged?.Invoke(
+				listChanged: true,
+				countChanged: false,
+				card: null,
+				touchedChanged: false);
 		}
 
 		public void DragStart(Card card, bool fromDeck)

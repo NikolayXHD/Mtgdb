@@ -136,6 +136,9 @@ namespace Mtgdb.Gui
 			if (_settingsIndex < 0 || _settingsIndex >= _settingsHistory.Count)
 				throw new IndexOutOfRangeException();
 		}
+
+		public string DeckFile { get; set; }
+		public string DeckName { get; set; }
 	}
 
 	internal class CustomConverter : JsonConverter

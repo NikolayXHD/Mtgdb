@@ -4,7 +4,7 @@ using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
-	public class DeckCards
+	public class DeckZoneModel
 	{
 		public Dictionary<string, int> CountById { get; private set; } = new Dictionary<string, int>();
 
@@ -12,7 +12,7 @@ namespace Mtgdb.Gui
 
 		public IEnumerable<string> CardsIds => Order;
 
-		public DeckCards()
+		public DeckZoneModel()
 		{
 		}
 
@@ -41,10 +41,10 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public void SetDeck(Dictionary<string, int> countById, List<string> order)
+		public void SetDeck(DeckZone deckZone)
 		{
-			CountById = countById?.ToDictionary() ?? new Dictionary<string, int>();
-			Order = order?.ToList() ?? CountById.Keys.ToList();
+			CountById = deckZone.Count.ToDictionary();
+			Order = deckZone.Order.ToList();
 		}
 
 		public void SetOrder(List<string> cardIds)

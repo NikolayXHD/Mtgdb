@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Mtgdb.Controls;
 using Newtonsoft.Json;
 
@@ -18,11 +19,18 @@ namespace Mtgdb.Gui
 		public FilterValueState[] FilterCmc { get; set; }
 		public FilterValueState[] FilterGrid { get; set; }
 
-		public Dictionary<string, int> Deck { get; set; } = new Dictionary<string, int>();
-		public List<string> DeckOrder { get; set; } = new List<string>();
-		public Dictionary<string, int> SideDeck { get; set; } = new Dictionary<string, int>();
+		[JsonProperty("Deck")]
+		public Dictionary<string, int> MainDeckCount { get; set; } = new Dictionary<string, int>();
+
+		[JsonProperty("DeckOrder")]
+		public List<string> MainDeckOrder { get; set; } = new List<string>();
+
+		[JsonProperty("SideDeck")]
+		public Dictionary<string, int> SideDeckCount { get; set; } = new Dictionary<string, int>();
+
+		[JsonProperty("SideDeckOrder")]
 		public List<string> SideDeckOrder { get; set; } = new List<string>();
-		
+
 		public string Language { get; set; }
 		public bool ShowDuplicates { get; set; }
 		public bool HideTooltips { get; set; }
@@ -30,12 +38,35 @@ namespace Mtgdb.Gui
 		public bool? ExcludeManaCost { get; set; }
 		public bool ShowProhibit { get; set; }
 		public string Sort { get; set; }
-		public Dictionary<string, int> Collection { get; set; }
+
+		[JsonProperty("Collection")]
+		public Dictionary<string, int> CollectionCount { get; set; }
+
 		public string LegalityFilterFormat { get; set; }
 		public bool? LegalityAllowLegal { get; set; }
 		public bool? LegalityAllowRestricted { get; set; }
 		public bool? LegalityAllowBanned { get; set; }
+
 		public string DeckFile { get; set; }
+		public string DeckName { get; set; }
+
 		public int? SearchResultScroll { get; set; }
+
+		[JsonIgnore]
+		public Deck Deck
+		{
+			get
+			{
+				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder);
+
+				deck.Name = DeckName;
+				deck.File = DeckFile;
+
+				return deck;
+			}
+		}
+
+		[JsonIgnore]
+		public Deck Collection => Deck.Create(CollectionCount, CollectionCount?.Keys.ToList(), null, null);
 	}
 }

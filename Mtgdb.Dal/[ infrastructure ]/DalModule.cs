@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Mtgdb.Dal.Index;
+﻿using Mtgdb.Dal.Index;
 using Ninject.Modules;
 
 namespace Mtgdb.Dal
@@ -55,6 +54,10 @@ namespace Mtgdb.Dal
 				.InSingletonScope();
 
 			Kernel.Bind<ForgeSetRepository>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<CollectionModel>()
 				.ToSelf()
 				.InSingletonScope();
 		}

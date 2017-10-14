@@ -62,17 +62,14 @@ namespace Mtgdb.Gui
 				FilterValueState.Ignored
 			};
 
-			var costNeutralValues = new[]
+			var costNeutralValues = new HashSet<string>
 			{
 				null,
 				@"{X}"
 			};
 
-			foreach (string costNeutralValue in costNeutralValues)
-			{
-				form.FilterManaCost.CostNeutralValues.Add(costNeutralValue);
-				form.FilterManaAbility.CostNeutralValues.Add(costNeutralValue);
-			}
+			form.FilterManaCost.CostNeutralValues = costNeutralValues;
+			form.FilterManaAbility.CostNeutralValues = costNeutralValues;
 		}
 	}
 }

@@ -1,12 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mtgdb.Gui;
 
 namespace Mtgdb.Dal
 {
 	public class CollectionModel : ICardCollection
 	{
-		public event Action<bool, bool, Card> CollectionChanged;
+		public event DeckChangedEventHandler CollectionChanged;
 
 		public Dictionary<string, int> CountById = new Dictionary<string, int>();
 		public bool IsInitialized { get; private set; }
@@ -20,10 +20,16 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public void SetCollection(Dictionary<string, int> countById)
+		public void SetCollection(Deck deck)
 		{
 			IsInitialized = true;
-			CountById = countById?.ToDictionary() ?? new Dictionary<string, int>();
+			CountById = deck.MainDeck.Count.ToDictionary();
+
+			CollectionChanged?.Invoke(
+				listChanged: true,
+				countChanged: true,
+				touchedChanged: false,
+				card: null);
 		}
 
 		public void Add(Card card, int increment)
@@ -42,7 +48,11 @@ namespace Mtgdb.Dal
 			bool listChanged = countBefore == 0 || card.CollectionCount == 0;
 			bool countChanged = countBefore != card.CollectionCount;
 
-			CollectionChanged?.Invoke(listChanged, countChanged, card);
+			CollectionChanged?.Invoke(
+				listChanged,
+				countChanged,
+				card,
+				touchedChanged: false);
 		}
 
 		private void remove(Card card, int newCount)

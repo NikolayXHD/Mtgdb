@@ -95,11 +95,17 @@ namespace Mtgdb.Gui
 
 
 
-
 		private void refilterChangedDeck(bool listChanged, bool touchedChanged, Card card)
 		{
+			updateViewDeck(listChanged, touchedChanged, card);
+
+			if (restoringSettings())
+				return;
+
 			if (touchedChanged || listChanged && isFilterGroupEnabled(FilterGroupDeck))
+			{
 				RunRefilterTask();
+			}
 			else
 			{
 				if (card == null)
@@ -109,8 +115,6 @@ namespace Mtgdb.Gui
 
 				updateFormStatus();
 			}
-
-			updateViewDeck(listChanged, touchedChanged, card);
 		}
 
 		private void updateViewDeck(bool listChanged, bool touchedChanged, Card card)
@@ -264,6 +268,8 @@ namespace Mtgdb.Gui
 			_labelStatusFilterDeck.Text = getStatusDeckOnly(filterManagerStates);
 
 			_labelStatusFilterLegality.Text = getStatusLegalityFilter(filterManagerStates);
+
+			setTitle(_historyModel.DeckName);
 		}
 
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)
@@ -467,8 +473,8 @@ namespace Mtgdb.Gui
 			if (_uiModel.HasLanguage && _uiModel.Language != settings.Language)
 				settings.Language = _uiModel.Language;
 
-			if (_collectionModel.IsInitialized && !_collectionModel.CountById.IsEqualTo(settings.Collection))
-				settings.Collection = _collectionModel.CountById.ToDictionary();
+			if (_collectionModel.IsInitialized && !_collectionModel.CountById.IsEqualTo(settings.CollectionCount))
+				settings.CollectionCount = _collectionModel.CountById.ToDictionary();
 
 			if (_uiModel.Form.HideTooltips != settings.HideTooltips)
 				settings.HideTooltips = _uiModel.Form.HideTooltips;
@@ -491,11 +497,11 @@ namespace Mtgdb.Gui
 				FilterCmc = FilterCmc.States,
 				FilterGrid = FilterManager.States,
 				Language = _uiModel.Language,
-				Deck = _deckModel.MainDeck.CountById.ToDictionary(),
-				DeckOrder = _deckModel.MainDeck.CardsIds.ToList(),
-				SideDeck = _deckModel.SideDeck.CountById.ToDictionary(),
+				MainDeckCount = _deckModel.MainDeck.CountById.ToDictionary(),
+				MainDeckOrder = _deckModel.MainDeck.CardsIds.ToList(),
+				SideDeckCount = _deckModel.SideDeck.CountById.ToDictionary(),
 				SideDeckOrder = _deckModel.SideDeck.CardsIds.ToList(),
-				Collection = _collectionModel.CountById.ToDictionary(),
+				CollectionCount = _collectionModel.CountById.ToDictionary(),
 				ShowDuplicates = _buttonShowDuplicates.Checked,
 				HideTooltips = !_toolTipController.Active,
 				ExcludeManaAbilities = _buttonExcludeManaAbility.Checked,
@@ -506,7 +512,8 @@ namespace Mtgdb.Gui
 				LegalityAllowLegal = _legalitySubsystem.AllowLegal,
 				LegalityAllowRestricted = _legalitySubsystem.AllowRestricted,
 				LegalityAllowBanned = _legalitySubsystem.AllowBanned,
-				DeckFile = _deckSerializationSubsystem.LastFile,
+				DeckFile = _historyModel.DeckFile,
+				DeckName = _historyModel.DeckName,
 				SearchResultScroll = _viewCards.VisibleRecordIndex
 			};
 
@@ -558,8 +565,8 @@ namespace Mtgdb.Gui
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
 			_sortSubsystem.ApplySort(settings.Sort);
 
-			_collectionModel.SetCollection(settings.Collection);
-			loadDeck(settings);
+			loadCollection(settings.Collection);
+			loadDeck(settings.Deck);
 
 			_legalitySubsystem.SetFilterFormat(settings.LegalityFilterFormat);
 			_legalitySubsystem.SetAllowLegal(settings.LegalityAllowLegal != false);
@@ -574,18 +581,22 @@ namespace Mtgdb.Gui
 			resetTouchedCard();
 			RunRefilterTask();
 			historyUpdateButtons();
-			setTitle(settings.DeckFile);
+			
+			setTitle(settings.DeckName);
 		}
 
-		private void loadDeck(GuiSettings settings)
+		private void loadDeck(Deck deck)
 		{
-			_deckModel.SetDeck(
-				settings.Deck,
-				settings.DeckOrder,
-				settings.SideDeck,
-				settings.SideDeckOrder);
+			_historyModel.DeckFile = deck.File;
+			_historyModel.DeckName = deck.Name;
 
+			_deckModel.SetDeck(deck);
 			_deckModel.LoadDeck(_cardRepo);
+		}
+
+		private void loadCollection(Deck collection)
+		{
+			_collectionModel.SetCollection(collection);
 		}
 
 		private void historyRedo()
@@ -658,57 +669,77 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveDeck()
 		{
-			_deckSerializationSubsystem.SaveDeck(_historyModel.Current);
+			var saved = _deckSerializationSubsystem.Save(_historyModel.Current.Deck);
+
+			if (saved == null)
+				return;
+
+			setTitle(saved.Name);
+			_historyModel.DeckFile = saved.File;
+			_historyModel.DeckName = saved.Name;
 		}
 
 		public void ButtonLoadDeck()
 		{
-			_deckSerializationSubsystem.LoadDeck();
+			var loaded = _deckSerializationSubsystem.Load();
+
+			if (loaded == null)
+				return;
+
+			deckLoaded(loaded);
 		}
 
 		public void ButtonSaveCollection()
 		{
-			_deckSerializationSubsystem.SaveDeck(_historyModel.Current);
+			var saved = _deckSerializationSubsystem.Save(_historyModel.Current.Collection);
+
+			if (saved == null)
+				return;
+
+			if (saved.Error != null)
+				MessageBox.Show(this, saved.Error);
 		}
 
 		public void ButtonLoadCollection()
 		{
-			_deckSerializationSubsystem.LoadDeck();
-		}
+			var loaded = _deckSerializationSubsystem.Load();
 
-		private void deckLoaded(GuiSettings loadedDeck)
-		{
-			this.Invoke(delegate
+			if (loaded == null)
+				return;
+
+			if (loaded.Error != null)
 			{
-				loadDeck(loadedDeck);
-				setTitle(_deckSerializationSubsystem.LastFile);
+				MessageBox.Show(this, loaded.Error);
+				return;
+			}
 
-				historyUpdate();
-			});
+			loadCollection(loaded);
 		}
 
-		private void deckSaved()
+		private void deckLoaded(Deck deck)
 		{
-			this.Invoke(delegate
+			if (deck.Error != null)
 			{
-				setTitle(_deckSerializationSubsystem.LastFile);
-				_historyModel.Current.DeckFile = _deckSerializationSubsystem.LastFile;
-			});
+				MessageBox.Show(deck.Error);
+				return;
+			}
+
+			loadDeck(deck);
 		}
 
-		private void setTitle(string file)
+		private void setTitle(string deckName)
 		{
-			if (file == null)
+			if (deckName == null)
 			{
 				Text = null;
 				return;
 			}
 
-			string fileName = Path.GetFileName(file);
-			const int maxLength = 20;
+			string fileName = Path.GetFileName(deckName);
+			const int maxLength = 22;
 
 			if (fileName.Length > maxLength)
-				fileName = $"...{fileName.Substring(fileName.Length - maxLength)}";
+				fileName = $"…{fileName.Substring(fileName.Length - maxLength)}";
 
 			Text = fileName;
 		}

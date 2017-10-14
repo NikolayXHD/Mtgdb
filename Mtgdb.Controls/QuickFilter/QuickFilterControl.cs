@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -60,7 +58,7 @@ namespace Mtgdb.Controls
 			if (_propertyImages == null)
 				return;
 
-			_images =
+			_images = 
 				transformImages(0.00f, 0.00f, 1.00f, Opacity1Enabled, _propertyImages);
 
 			_imagesToEnable =
@@ -73,72 +71,27 @@ namespace Mtgdb.Controls
 				transformImages(0.25f, 0.00f, 0.75f, Opacity4Disabled, _propertyImages);
 		}
 
-		private static Image[] transformImages(
+		private static IList<Bitmap> transformImages(
 			float whiteFactor,
 			float greyFactor,
 			float colorFactor,
 			float opacity,
-			Image[] imageCollection)
+			IList<Bitmap> imageCollection)
 		{
-			if (imageCollection == null || imageCollection.Length == 0)
+			if (imageCollection == null || imageCollection.Count == 0)
 				return null;
 
-			var imagesTransformed = new Image[imageCollection.Length];
+			var imagesTransformed = new Bitmap[imageCollection.Count];
 
 			for (int i = 0; i < imagesTransformed.Length; i++)
 			{
-				var copy = new Bitmap(imageCollection[i]);
-
-				makeGreyscale(copy, colorFactor, whiteFactor, greyFactor, opacity);
-
-				imagesTransformed[i] = copy;
+				imagesTransformed[i] = (Bitmap)imageCollection[i].Clone();
+				new GrayscaleBmpProcessor(imagesTransformed[i], colorFactor, whiteFactor, greyFactor, opacity)
+					.Execute();
 			}
 
 			return imagesTransformed;
 		}
-
-
-
-		private static void makeGreyscale(Bitmap bmp, float colorFactor, float whiteFactor, float grayFactor, float opacity)
-		{
-			// Specify a pixel format.
-			const PixelFormat pxf = PixelFormat.Format32bppArgb;
-
-			// Lock the bitmap's bits.
-			var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-			var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
-
-			// Get the address of the first line.
-			var ptr = bmpData.Scan0;
-
-			// Declare an array to hold the bytes of the bitmap. 
-			// int numBytes = bmp.Width * bmp.Height * 3; 
-			int numBytes = bmpData.Stride*bmp.Height;
-			var rgbValues = new byte[numBytes];
-
-			// Copy the RGB values into the array.
-			Marshal.Copy(ptr, rgbValues, 0, numBytes);
-
-			float white = Byte.MaxValue*whiteFactor;
-			var transparent = (byte) (Byte.MaxValue*opacity);
-			for (int counter = 0; counter < rgbValues.Length; counter += 4)
-			{
-				var min = white + grayFactor*(rgbValues[counter] + rgbValues[counter + 1] + rgbValues[counter + 2])/3f;
-
-				rgbValues[counter] = (byte) (min + rgbValues[counter]*colorFactor);
-				rgbValues[counter + 1] = (byte) (min + rgbValues[counter + 1]*colorFactor);
-				rgbValues[counter + 2] = (byte) (min + rgbValues[counter + 2]*colorFactor);
-				rgbValues[counter + 3] = Math.Min(transparent, rgbValues[counter + 3]);
-			}
-
-			// Copy the RGB values back to the bitmap
-			Marshal.Copy(rgbValues, 0, ptr, numBytes);
-
-			// Unlock the bits.
-			bmp.UnlockBits(bmpData);
-		}
-
-
 
 		private void setButtonState(StateClick click, FilterValueState[] states)
 		{
@@ -163,7 +116,7 @@ namespace Mtgdb.Controls
 
 				case FilterValueState.Ignored:
 
-					if (EnableCostBehavior && !isCostNeutral(click.ButtonIndex) && click.MouseButton == MouseButtons.Left)
+					if (EnableCostBehavior && click.MouseButton == MouseButtons.Left)
 						applyUncheckCostLogic(click, states);
 					else if (EnableRequiringSome)
 						states[click.ButtonIndex] = FilterValueState.Ignored;
@@ -187,17 +140,23 @@ namespace Mtgdb.Controls
 		private void applyUncheckCostLogic(StateClick click, FilterValueState[] states)
 		{
 			bool allAllowed = true;
+			bool allProhibited = true;
 			
 			var i = click.ButtonIndex;
 			for (int j = 0; j < states.Length; j++)
 			{
-				if (i == j || isCostNeutral(j))
+				if (i == j)
+					continue;
+
+				allProhibited &= states[j] == FilterValueState.Prohibited;
+
+				if (isCostNeutral(j))
 					continue;
 
 				allAllowed &= states[j] == FilterValueState.Ignored;
 			}
 
-			if (allAllowed)
+			if (allAllowed && !isCostNeutral(i))
 			{
 				// Оставить разрешёнными только кликнутое требование и его более слабую версию
 				// Например, {W} и {W/P}
@@ -207,6 +166,16 @@ namespace Mtgdb.Controls
 						continue;
 
 					states[j] = FilterValueState.Prohibited;
+				}
+			}
+			else if (allProhibited)
+			{
+				for (int j = 0; j < states.Length; j++)
+				{
+					if (i == j || isCostNeutral(j) && !isCostNeutral(i))
+						continue;
+					
+					states[j] = FilterValueState.Ignored;
 				}
 			}
 			else
@@ -445,10 +414,10 @@ namespace Mtgdb.Controls
 
 			for (int i = 0; i < PropertiesCount; i++)
 			{
-				var state = _states[i];
-				var statePreview = _statesPreview[i];
+				var state = _states?[i] ?? FilterValueState.Ignored;
+				var statePreview = _statesPreview?[i] ?? FilterValueState.Ignored;
 
-				if (_images == null || i >= _images.Length)
+				if (_images == null || i >= _images.Count)
 					return;
 
 				paintRequireButton(e, state, statePreview, i);
@@ -806,7 +775,7 @@ namespace Mtgdb.Controls
 		public Size HintTextShift { get; set; }
 
 		[Category("Settings")]
-		public Image[] PropertyImages
+		public IList<Bitmap> PropertyImages
 		{
 			get { return _propertyImages; }
 			set
@@ -1022,10 +991,10 @@ namespace Mtgdb.Controls
 
 
 
-		[Browsable(false)]
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FilterValueState[] StatesDefault { get; set; }
 
-		[Browsable(false)]
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FilterValueState[] States
 		{
 			get { return _states.ToArray(); }
@@ -1048,17 +1017,17 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Browsable(false)]
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public HashSet<string> CostNeutralValues { get; set; }
 
-		[Browsable(false)]
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IList<string> Properties { get; set; }
 
 
-		private Image[] _images;
-		private Image[] _imagesToDisable;
-		private Image[] _imagesToEnable;
-		private Image[] _imagesDisabled;
+		private IList<Bitmap> _images;
+		private IList<Bitmap> _imagesToDisable;
+		private IList<Bitmap> _imagesToEnable;
+		private IList<Bitmap> _imagesDisabled;
 
 		private FilterValueState[] _statesPreview;
 		private StateClick? _lastClick;
@@ -1072,7 +1041,7 @@ namespace Mtgdb.Controls
 		private int _propertiesCount;
 		private Size _imageSize;
 		private Size _spacing;
-		private Image[] _propertyImages;
+		private IList<Bitmap> _propertyImages;
 		private Color _selectionColor;
 		private Color _selectionBorderColor;
 		private Color _prohibitedColor;

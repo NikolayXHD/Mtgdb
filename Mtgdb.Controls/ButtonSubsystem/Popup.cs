@@ -7,11 +7,11 @@ namespace Mtgdb.Controls
 {
 	public class Popup
 	{
-		public Popup(Control control, ButtonBase owner, HorizontalAlignment alignment = HorizontalAlignment.Left, bool openOnHover = true, bool closeOnMenuClick = false, bool borderOnHover = true)
+		public Popup(Control control, ButtonBase owner, HorizontalAlignment alignment = HorizontalAlignment.Left, bool openOnHover = true, bool closeMenuOnClick = false, bool borderOnHover = true)
 		{
 			Control = control;
 			OpenOnHover = openOnHover;
-			CloseOnMenuClick = closeOnMenuClick;
+			CloseMenuOnClick = closeMenuOnClick;
 			BorderOnHover = borderOnHover;
 			Owner = owner;
 			_alignment = alignment;
@@ -99,7 +99,7 @@ namespace Mtgdb.Controls
 
 
 		public bool OpenOnHover { get; }
-		public bool CloseOnMenuClick { get; }
+		public bool CloseMenuOnClick { get; }
 		public bool BorderOnHover { get; }
 		public ButtonBase Owner { get; }
 		private readonly HorizontalAlignment _alignment;

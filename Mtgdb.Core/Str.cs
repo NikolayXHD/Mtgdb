@@ -16,5 +16,7 @@ namespace Mtgdb
 		{
 			return Comparer.Equals(x, y);
 		}
+
+		public static readonly string Endl = Environment.NewLine;
 	}
 }

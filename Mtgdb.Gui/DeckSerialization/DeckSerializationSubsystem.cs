@@ -9,9 +9,6 @@ namespace Mtgdb.Gui
 {
 	public class DeckSerializationSubsystem
 	{
-		public event Action<GuiSettings> DeckLoaded;
-		public event Action DeckSaved;
-
 		public DeckSerializationSubsystem(
 			CardRepository cardRepository,
 			ForgeSetRepository forgeSetRepo)
@@ -38,76 +35,107 @@ namespace Mtgdb.Gui
 
 
 
-		public void SaveDeck(GuiSettings current)
+		public Deck Save(Deck deck)
+		{
+			return save(deck);
+		}
+
+		private Deck save(Deck deck)
 		{
 			var fileToSave = selectFileToSave();
 
 			if (fileToSave == null)
-				return;
+				return null;
+
+			deck.File = fileToSave.File;
+			if (deck.Name == null)
+				deck.Name = Path.GetFileNameWithoutExtension(fileToSave.File);
 
 			var name = Path.GetFileNameWithoutExtension(fileToSave.File);
 			var formatter = _formatters[fileToSave.FormatIndex];
 
-			string serialized = formatter.ExportDeck(name, current);
+			string serialized = formatter.ExportDeck(name, deck);
 
-			if (!formatter.UseBom)
-				File.WriteAllText(fileToSave.File, serialized);
-			else
+			try
 			{
-				var preamble = Encoding.UTF8.GetPreamble();
-				var content = Encoding.UTF8.GetBytes(serialized);
-				var bytes = preamble.Concat(content).ToArray();
-				File.WriteAllBytes(fileToSave.File, bytes);
+				if (formatter.UseBom)
+				{
+					var preamble = Encoding.UTF8.GetPreamble();
+					var content = Encoding.UTF8.GetBytes(serialized);
+					var bytes = preamble.Concat(content).ToArray();
+
+					File.WriteAllBytes(fileToSave.File, bytes);
+				}
+				else
+				{
+					File.WriteAllText(fileToSave.File, serialized);
+				}
+			}
+			catch (IOException ex)
+			{
+				deck.Error = ex.Message;
 			}
 
-			DeckSaved?.Invoke();
+			return deck;
 		}
 
-		public void LoadDeck()
+		public Deck Load()
 		{
 			var fileToOpen = selectFileToOpen();
 
 			if (fileToOpen == null)
-				return;
+				return null;
 
-			LoadDeck(fileToOpen);
+			var deck = Load(fileToOpen);
+			return deck;
 		}
 
-		public void LoadDeck(string file)
+		public Deck Load(string file)
 		{
 			LastLoadedFile = file;
+
+			Deck deck = Deck.Create();
+			deck.File = file;
 
 			int maxLen = 0x8000000; // 128 MB
 			if (new FileInfo(file).Length > maxLen)
 			{
-				MessageBox.Show($"File {file} exceeds maximum allowed deck size {maxLen} bytes",
-					@"Message",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information);
-
-				return;
+				deck.Error = "Deck file is too large";
+				return deck;
 			}
 
-			var serialized = File.ReadAllText(file);
+			string serialized;
+
+			try
+			{
+				serialized = File.ReadAllText(file);
+			}
+			catch (IOException ex)
+			{
+				deck.Error = ex.Message;
+				return deck;
+			}
+			
 			var format = @"*" + Path.GetExtension(file);
 
-			foreach (var formatter in _formatters)
+			var formatter = _formatters.FirstOrDefault(f =>
+				Str.Equals(f.FileNamePattern, format) &&
+				f.ValidateFormat(serialized)
+			);
+
+			if (formatter == null)
 			{
-				if (!Str.Equals(formatter.FileNamePattern, format))
-					continue;
-
-				if (!formatter.ValidateFormat(serialized))
-					continue;
-
-				var settings = formatter.ImportDeck(serialized);
-				DeckLoaded?.Invoke(settings);
-				return;
+				deck.Error = "Deck format is not supported";
+				return deck;
 			}
 
-			MessageBox.Show($"Failed to read deck from {file}",
-				@"Message",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Information);
+			deck = formatter.ImportDeck(serialized);
+			deck.File = file;
+
+			if (deck.Name == null)
+				deck.Name = Path.GetFileNameWithoutExtension(file);
+
+			return deck;
 		}
 
 
@@ -135,8 +163,6 @@ namespace Mtgdb.Gui
 			}
 		}
 
-
-
 		private string LastSavedDirectory => getDir(LastSavedFile);
 
 		private string LastLoadedDirectory => getDir(LastLoadedFile);
@@ -152,8 +178,6 @@ namespace Mtgdb.Gui
 		private int SaveFilterIndex => getIndex(LastSavedExtension, _saveFilter);
 
 		private int LoadFilterIndex => getIndex(LastLoadedExtension, _loadFilter);
-
-
 
 		private DeckFile selectFileToSave()
 		{

@@ -5,8 +5,8 @@ namespace Mtgdb.Gui
 		string Description { get; }
 		string FileNamePattern { get; }
 
-		GuiSettings ImportDeck(string serialized);
-		string ExportDeck(string name, GuiSettings current);
+		Deck ImportDeck(string serialized);
+		string ExportDeck(string name, Deck current);
 
 		bool ValidateFormat(string serialized);
 
