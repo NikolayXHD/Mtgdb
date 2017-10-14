@@ -26,8 +26,8 @@
 				_labelStatusSets);
 
 			_toolTipController.SetTooltip("Collection cards count",
-				"Use Alt+right/mdiddle mouse click to add/remove card to collection.\r\n" +
-				"Use Alt+right/mdiddle mouse click to add/remove 4 copies.",
+				"Use Alt+right/middle mouse click to add/remove card to collection.\r\n" +
+				"Use Ctrl+Alt+right/middle mouse click to add/remove 4 copies.",
 				_panelIconStatusCollection,
 				_labelStatusCollection);
 

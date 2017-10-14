@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="QuickFilter\FilterValueState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="QuickFilter\QuickFilterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -157,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\selectable_transp_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -14,7 +15,6 @@ namespace Mtgdb.Gui
 			InitializeComponent();
 		}
 
-		// ReSharper disable once UnusedMember.Global
 		public FormMain(
 			UndoConfig undoConfig,
 			ViewConfig viewConfig,
@@ -218,8 +218,8 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged += showProhibitChanged;
 
-			_tabHeadersDeck.SelectedIndexChanged += deckAreaChanged;
-			_tabHeadersDeck.MouseMove += deckAreaHover;
+			_tabHeadersDeck.SelectedIndexChanged += deckZoneChanged;
+			_tabHeadersDeck.MouseMove += deckZoneHover;
 
 			_luceneSearcher.IndexingProgress += luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress += luceneSearcherIndexingProgress;
@@ -239,9 +239,6 @@ namespace Mtgdb.Gui
 
 			FilterManager.StateChanged += quickFilterManagerChanged;
 			_buttonSubsystem.SubscribeToEvents();
-
-			_deckSerializationSubsystem.DeckLoaded += deckLoaded;
-			_deckSerializationSubsystem.DeckSaved += deckSaved;
 
 			Application.ApplicationExit += applicationExit;
 
@@ -275,22 +272,32 @@ namespace Mtgdb.Gui
 		{
 			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-			LoadDeck(files[0]);
+			var decks = files.Select(f => _deckSerializationSubsystem.Load(f))
+				.ToArray();
 
-			for (int i = 1; i < files.Length; i++)
+			var failedDecks = decks.Where(d => d.Error != null).ToArray();
+			var loadedDecks = decks.Where(d => d.Error == null).ToArray();
+
+			if (failedDecks.Length > 0)
 			{
-				var file = files[i];
+				var message = string.Join(Str.Endl, 
+					failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
 
-				Action<FormMain> onLoaded = f => f.LoadDeck(file);
+				MessageBox.Show(message);
+			}
+
+			if (loadedDecks.Length > 0)
+				deckLoaded(loadedDecks[0]);
+
+			for (int i = 1; i < loadedDecks.Length; i++)
+			{
+				var deck = loadedDecks[i];
+
+				Action<FormMain> onLoaded = f => { f.deckLoaded(deck); };
 				Action<object> onCreated = form => ((FormMain)form).OnLoaded(onLoaded);
 
 				_uiModel.Form.NewTab(onCreated);
 			}
-		}
-
-		public void LoadDeck(string filename)
-		{
-			_deckSerializationSubsystem.LoadDeck(filename);
 		}
 
 		private void unsubscribeFromEvents()
@@ -320,8 +327,8 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;
 
-			_tabHeadersDeck.SelectedIndexChanged -= deckAreaChanged;
-			_tabHeadersDeck.MouseMove -= deckAreaHover;
+			_tabHeadersDeck.SelectedIndexChanged -= deckZoneChanged;
+			_tabHeadersDeck.MouseMove -= deckZoneHover;
 
 			_luceneSearcher.IndexingProgress -= luceneSearcherIndexingProgress;
 			_luceneSearcher.Spellchecker.IndexingProgress -= luceneSearcherIndexingProgress;
@@ -339,9 +346,6 @@ namespace Mtgdb.Gui
 
 			FilterManager.StateChanged -= quickFilterManagerChanged;
 			_buttonSubsystem.UnsubscribeFromEvents();
-
-			_deckSerializationSubsystem.DeckLoaded -= deckLoaded;
-			_deckSerializationSubsystem.DeckSaved -= deckSaved;
 
 			Application.ApplicationExit -= applicationExit;
 
@@ -361,13 +365,13 @@ namespace Mtgdb.Gui
 			_onLoadHandlers.Add(a);
 		}
 
-		private readonly CardRepository _cardRepo;
-		private readonly QuickFilterFacade _quickFilterFacade;
-
 		/// <summary>
 		/// Предотвращает реакцию на изменения состояния формы и её контролов.
 		/// </summary>
 		private int _restoringGuiSettings;
+
+		private readonly CardRepository _cardRepo;
+		private readonly QuickFilterFacade _quickFilterFacade;
 
 		private readonly Evaluators _evaluators;
 

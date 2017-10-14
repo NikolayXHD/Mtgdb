@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
@@ -49,6 +50,7 @@
     </Compile>
     <Compile Include="ArgsExt.cs" />
     <Compile Include="AppDir.cs" />
+    <Compile Include="BmpProcessor\BmpProcessor.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="ComparableExtension.cs" />
     <Compile Include="FileSignature.cs" />

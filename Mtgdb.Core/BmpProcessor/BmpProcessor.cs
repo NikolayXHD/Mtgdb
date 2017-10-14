@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Mtgdb.Dal
+namespace Mtgdb
 {
 	public abstract class BmpProcessor
 	{

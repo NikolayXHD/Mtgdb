@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Gui
@@ -8,21 +7,24 @@ namespace Mtgdb.Gui
 		public string Description => @"Mtgdb.Gui deck";
 		public string FileNamePattern => @"*.json";
 
-		public GuiSettings ImportDeck(string serialized)
+		public Deck ImportDeck(string serialized)
 		{
-			var result = new GuiSettings();
 			var saved = JsonConvert.DeserializeObject<GuiSettings>(serialized);
-			result.Deck = saved.Deck ?? new Dictionary<string, int>();
-			result.DeckOrder = saved.DeckOrder ?? new List<string>();
-			result.SideDeck = saved.SideDeck ?? new Dictionary<string, int>();
-			result.SideDeckOrder = saved.SideDeckOrder ?? new List<string>();
-
+			var result = saved.Deck;
 			return result;
 		}
 
-		public string ExportDeck(string name, GuiSettings current)
+		public string ExportDeck(string name, Deck current)
 		{
-			return JsonConvert.SerializeObject(current, Formatting.Indented);
+			var settings = new GuiSettings
+			{
+				MainDeckCount = current.MainDeck?.Count,
+				MainDeckOrder = current.MainDeck?.Order,
+				SideDeckCount = current.SideDeck?.Count,
+				SideDeckOrder = current.SideDeck?.Order
+			};
+
+			return JsonConvert.SerializeObject(settings, Formatting.Indented);
 		}
 
 		public bool ValidateFormat(string serialized)

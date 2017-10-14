@@ -15,7 +15,8 @@ namespace Mtgdb
 
 		private static TConfig getConfig<TConfig>(IContext ctx)
 		{
-			return ctx.Kernel.Get<IAppSettings>().Get<TConfig>();
+			var appSettings = ctx.Kernel.Get<IAppSettings>();
+			return appSettings.Get<TConfig>();
 		}
 	}
 }

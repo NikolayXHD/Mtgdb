@@ -281,7 +281,7 @@ namespace Mtgdb.Gui
 
 
 
-		private void collectionChanged(bool listChanged, bool countChanged, Card card)
+		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			if (restoringSettings())
 				return;
@@ -290,8 +290,17 @@ namespace Mtgdb.Gui
 				RunRefilterTask();
 			else
 			{
-				_viewCards.InvalidateCard(card);
-				_viewDeck.InvalidateCard(card);
+				if (card != null)
+				{
+					_viewCards.InvalidateCard(card);
+					_viewDeck.InvalidateCard(card);
+				}
+				else
+				{
+					_viewCards.Invalidate();
+					_viewDeck.Invalidate();
+				}
+
 				updateFormStatus();
 			}
 
@@ -299,7 +308,7 @@ namespace Mtgdb.Gui
 				historyUpdate();
 		}
 
-		private void deckChanged(bool listChanged, bool countChanged, bool touchedChanged, Card card)
+		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			refilterChangedDeck(listChanged, touchedChanged, card);
 
@@ -310,7 +319,7 @@ namespace Mtgdb.Gui
 				historyUpdate();
 		}
 
-		private void deckAreaHover(object sender, EventArgs e)
+		private void deckZoneHover(object sender, EventArgs e)
 		{
 			if (!IsDraggingCard)
 				return;
@@ -327,7 +336,7 @@ namespace Mtgdb.Gui
 			dragCard(card);
 		}
 
-		private void deckAreaChanged(TabHeaderControl sender, int selected)
+		private void deckZoneChanged(TabHeaderControl sender, int selected)
 		{
 			bool isSide = Equals(_tabHeadersDeck.SelectedTabId, 1);
 

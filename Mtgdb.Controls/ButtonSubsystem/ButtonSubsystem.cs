@@ -167,7 +167,7 @@ namespace Mtgdb.Controls
 			var owner = menu.GetTag<ButtonBase>("Owner");
 			var popup = _popups[owner];
 
-			if (popup.CloseOnMenuClick)
+			if (popup.CloseMenuOnClick)
 				popup.Hide();
 		}
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
+using NLog;
 
 namespace Mtgdb.Gui
 {
@@ -11,13 +12,13 @@ namespace Mtgdb.Gui
 		public abstract bool IsSideboard(Match match, string line);
 		public abstract Card GetCard(Match match);
 
-		public virtual GuiSettings ImportDeck(string serialized)
+		public virtual Deck ImportDeck(string serialized)
 		{
-			var result = new GuiSettings();
+			var result = Deck.Create();
 			
 			var lines = serialized.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-			//var unmatched = new HashSet<string>();
+			var unmatched = new HashSet<string>();
 
 			foreach (string line in lines)
 			{
@@ -33,38 +34,40 @@ namespace Mtgdb.Gui
 
 				if (card == null)
 				{
-					//unmatched.Add(match.Value);
+					unmatched.Add(match.Value);
 					continue;
 				}
 				
 				if (isSideboard)
-					setCount(card, count, result.SideDeck, result.SideDeckOrder);
+					add(card, count, result.SideDeck);
 				else
-					setCount(card, count, result.Deck, result.DeckOrder);
+					add(card, count, result.MainDeck);
 			}
 
-			//string unmatchedStr = string.Join(Environment.NewLine, unmatched);
+			_log.Info("Unmatched cards:\r\n{0}", string.Join("\r\n", unmatched));
 
 			return result;
 		}
 
-		private static void setCount(Card card, int count, Dictionary<string, int> deck, List<string> deckOrder)
+		private static void add(Card card, int count, DeckZone collection)
 		{
-			if (deck.ContainsKey(card.Id))
-				deck[card.Id] += count;
+			if (collection.Count.ContainsKey(card.Id))
+				collection.Count[card.Id] += count;
 			else
 			{
-				deck[card.Id] = count;
-				deckOrder.Add(card.Id);
+				collection.Count[card.Id] = count;
+				collection.Order.Add(card.Id);
 			}
 		}
 
-		public abstract string ExportDeck(string name, GuiSettings current);
+		public abstract string ExportDeck(string name, Deck current);
 		public abstract string Description { get; }
 		public abstract string FileNamePattern { get; }
 		public abstract bool ValidateFormat(string serialized);
 		public abstract bool SupportsExport { get; }
 		public abstract bool SupportsImport { get; }
 		public virtual bool UseBom => false;
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

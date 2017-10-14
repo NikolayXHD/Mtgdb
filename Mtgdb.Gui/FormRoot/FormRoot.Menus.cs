@@ -173,6 +173,9 @@ namespace Mtgdb.Gui
 
 			_buttonDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
 			_buttonDonateYandexMoney.Click += buttonVisitClick;
+
+			_buttonVisitMtgo.SetTag(@"https://magic.wizards.com/en/content/magic-online-products-game-info");
+			_buttonVisitMtgo.Click += buttonVisitClick;
 		}
 
 		private static void buttonVisitClick(object sender, EventArgs e)
@@ -217,16 +220,23 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage,
-				closeOnMenuClick: true));
+				closeMenuOnClick: true));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate,
 				alignment: HorizontalAlignment.Center,
 				openOnHover: false,
-				closeOnMenuClick: true,
+				closeMenuOnClick: true,
 				borderOnHover: false));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck, borderOnHover: false));
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck, borderOnHover: false));
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
+				_buttonOpenDeck,
+				borderOnHover: false,
+				closeMenuOnClick: true));
+
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
+				_buttonSaveDeck,
+				borderOnHover: false,
+				closeMenuOnClick: true));
 
 			_buttonSubsystem.SubscribeToEvents();
 		}

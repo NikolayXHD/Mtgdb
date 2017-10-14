@@ -82,6 +82,9 @@
     <Compile Include="Index\IntellisenseSuggest.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CollectionModel.cs" />
+    <Compile Include="Model\Deck.cs" />
+    <Compile Include="Model\DeckChangedEventHandler.cs" />
+    <Compile Include="Model\DeckZone.cs" />
     <Compile Include="Model\InternedStringArrayConverter.cs" />
     <Compile Include="Model\InternedStringConverter.cs" />
     <Compile Include="Model\IntToInternedStringConverter.cs" />
@@ -99,7 +102,6 @@
     <Compile Include="ImageCache\BmpFrameDetector.cs" />
     <Compile Include="ImageCache\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
-    <Compile Include="ImageCache\BmpProcessor.cs" />
     <Compile Include="ImageCache\BmpCornerRemoval.cs" />
     <Compile Include="ImageRepository.cs" />
     <Compile Include="Keywords\KeywordDefinitions.cs" />

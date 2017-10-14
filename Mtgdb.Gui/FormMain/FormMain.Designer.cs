@@ -28,13 +28,12 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
 			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.SortOptions sortOptions1 = new Mtgdb.Controls.SortOptions();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
 			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.SortOptions sortOptions2 = new Mtgdb.Controls.SortOptions();
 			this._tableRoot = new System.Windows.Forms.TableLayoutPanel();
-			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._panelFilters = new System.Windows.Forms.FlowLayoutPanel();
 			this.FilterAbility = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterType = new Mtgdb.Controls.QuickFilterControl();
@@ -68,7 +67,6 @@
 			this._panelCostMode = new System.Windows.Forms.FlowLayoutPanel();
 			this._buttonExcludeManaCost = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonExcludeManaAbility = new Mtgdb.Controls.CustomCheckBox();
-			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
 			this._buttonShowProhibit = new Mtgdb.Controls.CustomCheckBox();
 			this._panelMenu = new System.Windows.Forms.FlowLayoutPanel();
 			this._findCustomPanel = new Mtgdb.Controls.CustomPanel();
@@ -81,6 +79,8 @@
 			this._buttonLegalityAllowBanned = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonShowDuplicates = new Mtgdb.Controls.CustomCheckBox();
 			this._listBoxSuggest = new System.Windows.Forms.ListBox();
+			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
+			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
 			this._tableRoot.SuspendLayout();
 			this._panelFilters.SuspendLayout();
 			this._panelStatus.SuspendLayout();
@@ -117,33 +117,6 @@
 			this._tableRoot.Size = new System.Drawing.Size(1476, 698);
 			this._tableRoot.TabIndex = 8;
 			// 
-			// _layoutViewDeck
-			// 
-			this._layoutViewDeck.AllowPartialCards = true;
-			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
-			this._layoutViewDeck.CardInterval = new System.Drawing.Size(2, 2);
-			this._tableRoot.SetColumnSpan(this._layoutViewDeck, 2);
-			this._layoutViewDeck.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._layoutViewDeck.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
-			this._layoutViewDeck.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
-			this._layoutViewDeck.Location = new System.Drawing.Point(0, 387);
-			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewDeck.Name = "_layoutViewDeck";
-			this._layoutViewDeck.PartialCardsThreshold = new System.Drawing.Size(161, 225);
-			this._layoutViewDeck.SearchOptions = searchOptions1;
-			this._layoutViewDeck.Size = new System.Drawing.Size(1372, 311);
-			sortOptions1.Allow = true;
-			sortOptions1.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc;
-			sortOptions1.AscIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions1.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc;
-			sortOptions1.DescIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none;
-			sortOptions1.IconHovered = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
-			this._layoutViewDeck.SortOptions = sortOptions1;
-			this._layoutViewDeck.TabIndex = 42;
-			this._layoutViewDeck.TabStop = false;
-			// 
 			// _panelFilters
 			// 
 			this._panelFilters.AutoSize = true;
@@ -163,7 +136,6 @@
 			// FilterAbility
 			// 
 			this.FilterAbility.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterAbility.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterAbility.CostNeutralValues")));
 			this.FilterAbility.EnableRequiringSome = true;
 			this.FilterAbility.HideProhibit = true;
 			this.FilterAbility.Location = new System.Drawing.Point(0, 0);
@@ -174,7 +146,6 @@
 			this.FilterAbility.Opacity2ToEnable = 0.75F;
 			this.FilterAbility.Opacity4Disabled = 0.2F;
 			this.FilterAbility.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterAbility.Properties = null;
 			this.FilterAbility.PropertiesCount = 43;
 			this.FilterAbility.PropertyImages = null;
 			this.FilterAbility.SelectionBorder = 1.75F;
@@ -183,101 +154,12 @@
 			this.FilterAbility.ShowValueHint = true;
 			this.FilterAbility.Size = new System.Drawing.Size(948, 46);
 			this.FilterAbility.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterAbility.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterAbility.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterAbility.TabIndex = 13;
 			this.FilterAbility.TabStop = false;
 			// 
 			// FilterType
 			// 
 			this.FilterType.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterType.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterType.CostNeutralValues")));
 			this.FilterType.EnableCostBehavior = true;
 			this.FilterType.HideProhibit = true;
 			this.FilterType.Location = new System.Drawing.Point(968, 0);
@@ -288,7 +170,6 @@
 			this.FilterType.Opacity2ToEnable = 0.75F;
 			this.FilterType.Opacity4Disabled = 0.2F;
 			this.FilterType.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterType.Properties = null;
 			this.FilterType.PropertiesCount = 8;
 			this.FilterType.PropertyImages = null;
 			this.FilterType.SelectionBorder = 1.75F;
@@ -297,31 +178,12 @@
 			this.FilterType.ShowValueHint = true;
 			this.FilterType.Size = new System.Drawing.Size(178, 46);
 			this.FilterType.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterType.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterType.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterType.TabIndex = 14;
 			this.FilterType.TabStop = false;
 			// 
 			// FilterRarity
 			// 
 			this.FilterRarity.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterRarity.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterRarity.CostNeutralValues")));
 			this.FilterRarity.EnableCostBehavior = true;
 			this.FilterRarity.EnableMutuallyExclusive = true;
 			this.FilterRarity.HideProhibit = true;
@@ -333,7 +195,6 @@
 			this.FilterRarity.Opacity2ToEnable = 0.75F;
 			this.FilterRarity.Opacity4Disabled = 0.1F;
 			this.FilterRarity.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterRarity.Properties = null;
 			this.FilterRarity.PropertiesCount = 6;
 			this.FilterRarity.PropertyImages = null;
 			this.FilterRarity.SelectionBorder = 1.75F;
@@ -342,20 +203,6 @@
 			this.FilterRarity.ShowValueHint = true;
 			this.FilterRarity.Size = new System.Drawing.Size(134, 46);
 			this.FilterRarity.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterRarity.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterRarity.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterRarity.TabIndex = 15;
 			this.FilterRarity.TabStop = false;
 			// 
@@ -363,7 +210,6 @@
 			// 
 			this.FilterManager.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.FilterManager.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterManager.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterManager.CostNeutralValues")));
 			this.FilterManager.EnableRequiringSome = true;
 			this.FilterManager.HideProhibit = true;
 			this.FilterManager.Location = new System.Drawing.Point(1320, 0);
@@ -374,7 +220,6 @@
 			this.FilterManager.Opacity2ToEnable = 0.65F;
 			this.FilterManager.Opacity4Disabled = 0.2F;
 			this.FilterManager.ProhibitedColor = System.Drawing.Color.Tomato;
-			this.FilterManager.Properties = null;
 			this.FilterManager.PropertyImages = null;
 			this.FilterManager.SelectionBorder = 2F;
 			this.FilterManager.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
@@ -382,19 +227,6 @@
 			this.FilterManager.ShowValueHint = true;
 			this.FilterManager.Size = new System.Drawing.Size(112, 46);
 			this.FilterManager.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterManager.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterManager.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterManager.TabIndex = 16;
 			this.FilterManager.TabStop = false;
 			// 
@@ -650,7 +482,6 @@
 			// FilterManaAbility
 			// 
 			this.FilterManaAbility.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterManaAbility.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterManaAbility.CostNeutralValues")));
 			this.FilterManaAbility.EnableRequiringSome = true;
 			this.FilterManaAbility.HideProhibit = true;
 			this.FilterManaAbility.HintIcon = global::Mtgdb.Gui.Resx.Resources.manatext25i;
@@ -665,7 +496,6 @@
 			this.FilterManaAbility.Opacity2ToEnable = 0.75F;
 			this.FilterManaAbility.Opacity4Disabled = 0.2F;
 			this.FilterManaAbility.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterManaAbility.Properties = null;
 			this.FilterManaAbility.PropertiesCount = 11;
 			this.FilterManaAbility.PropertyImages = null;
 			this.FilterManaAbility.SelectionBorder = 1.75F;
@@ -674,37 +504,12 @@
 			this.FilterManaAbility.ShowValueHint = true;
 			this.FilterManaAbility.Size = new System.Drawing.Size(46, 244);
 			this.FilterManaAbility.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterManaAbility.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterManaAbility.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterManaAbility.TabIndex = 19;
 			this.FilterManaAbility.TabStop = false;
 			// 
 			// FilterGeneratedMana
 			// 
 			this.FilterGeneratedMana.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterGeneratedMana.CostNeutralValues = null;
 			this.FilterGeneratedMana.EnableRequiringSome = true;
 			this.FilterGeneratedMana.HideProhibit = true;
 			this.FilterGeneratedMana.IsFlipped = true;
@@ -717,7 +522,6 @@
 			this.FilterGeneratedMana.Opacity2ToEnable = 0.75F;
 			this.FilterGeneratedMana.Opacity4Disabled = 0.2F;
 			this.FilterGeneratedMana.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterGeneratedMana.Properties = null;
 			this.FilterGeneratedMana.PropertiesCount = 7;
 			this.FilterGeneratedMana.PropertyImages = null;
 			this.FilterGeneratedMana.SelectionBorder = 1.75F;
@@ -726,29 +530,12 @@
 			this.FilterGeneratedMana.ShowValueHint = true;
 			this.FilterGeneratedMana.Size = new System.Drawing.Size(46, 156);
 			this.FilterGeneratedMana.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterGeneratedMana.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterGeneratedMana.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterGeneratedMana.TabIndex = 20;
 			this.FilterGeneratedMana.TabStop = false;
 			// 
 			// FilterCmc
 			// 
 			this.FilterCmc.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterCmc.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterCmc.CostNeutralValues")));
 			this.FilterCmc.EnableCostBehavior = true;
 			this.FilterCmc.EnableMutuallyExclusive = true;
 			this.FilterCmc.HideProhibit = true;
@@ -762,7 +549,6 @@
 			this.FilterCmc.Opacity2ToEnable = 0.75F;
 			this.FilterCmc.Opacity4Disabled = 0.1F;
 			this.FilterCmc.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterCmc.Properties = null;
 			this.FilterCmc.PropertiesCount = 8;
 			this.FilterCmc.PropertyImages = null;
 			this.FilterCmc.SelectionBorder = 1.75F;
@@ -770,31 +556,12 @@
 			this.FilterCmc.SelectionColor = System.Drawing.SystemColors.Window;
 			this.FilterCmc.Size = new System.Drawing.Size(46, 178);
 			this.FilterCmc.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterCmc.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterCmc.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterCmc.TabIndex = 21;
 			this.FilterCmc.TabStop = false;
 			// 
 			// FilterManaCost
 			// 
 			this.FilterManaCost.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterManaCost.CostNeutralValues = ((System.Collections.Generic.HashSet<string>)(resources.GetObject("FilterManaCost.CostNeutralValues")));
 			this.FilterManaCost.EnableCostBehavior = true;
 			this.FilterManaCost.HideProhibit = true;
 			this.FilterManaCost.HintIcon = global::Mtgdb.Gui.Resx.Resources.manacost24ctc;
@@ -809,7 +576,6 @@
 			this.FilterManaCost.Opacity2ToEnable = 0.75F;
 			this.FilterManaCost.Opacity4Disabled = 0.1F;
 			this.FilterManaCost.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterManaCost.Properties = null;
 			this.FilterManaCost.PropertiesCount = 28;
 			this.FilterManaCost.PropertyImages = null;
 			this.FilterManaCost.SelectionBorder = 1.75F;
@@ -818,64 +584,6 @@
 			this.FilterManaCost.ShowValueHint = true;
 			this.FilterManaCost.Size = new System.Drawing.Size(46, 618);
 			this.FilterManaCost.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterManaCost.States = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
-			this.FilterManaCost.StatesDefault = new Mtgdb.Controls.FilterValueState[] {
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored,
-        Mtgdb.Controls.FilterValueState.Ignored};
 			this.FilterManaCost.TabIndex = 22;
 			this.FilterManaCost.TabStop = false;
 			// 
@@ -931,37 +639,6 @@
 			this._buttonExcludeManaAbility.TabIndex = 41;
 			this._buttonExcludeManaAbility.TabStop = false;
 			this._buttonExcludeManaAbility.UseVisualStyleBackColor = false;
-			// 
-			// _layoutViewCards
-			// 
-			this._layoutViewCards.AllowPartialCards = true;
-			this._layoutViewCards.BackColor = System.Drawing.Color.White;
-			this._layoutViewCards.CardInterval = new System.Drawing.Size(2, 2);
-			this._tableRoot.SetColumnSpan(this._layoutViewCards, 2);
-			this._layoutViewCards.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._layoutViewCards.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
-			this._layoutViewCards.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
-			this._layoutViewCards.Location = new System.Drawing.Point(0, 74);
-			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewCards.Name = "_layoutViewCards";
-			this._layoutViewCards.PartialCardsThreshold = new System.Drawing.Size(161, 225);
-			searchOptions2.Allow = true;
-			searchOptions2.ButtonMargin = new System.Drawing.Size(19, 2);
-			searchOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.Search_transp_16;
-			searchOptions2.IconHovered = global::Mtgdb.Gui.Properties.Resources.Search_16;
-			this._layoutViewCards.SearchOptions = searchOptions2;
-			this._layoutViewCards.Size = new System.Drawing.Size(1372, 289);
-			sortOptions2.Allow = true;
-			sortOptions2.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc;
-			sortOptions2.AscIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions2.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc;
-			sortOptions2.DescIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none;
-			sortOptions2.IconHovered = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
-			this._layoutViewCards.SortOptions = sortOptions2;
-			this._layoutViewCards.TabIndex = 19;
-			this._layoutViewCards.TabStop = false;
 			// 
 			// _buttonShowProhibit
 			// 
@@ -1173,6 +850,64 @@
 			this._listBoxSuggest.Size = new System.Drawing.Size(192, 54);
 			this._listBoxSuggest.TabIndex = 9;
 			this._listBoxSuggest.TabStop = false;
+			// 
+			// _layoutViewDeck
+			// 
+			this._layoutViewDeck.AllowPartialCards = true;
+			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
+			this._layoutViewDeck.CardInterval = new System.Drawing.Size(2, 2);
+			this._tableRoot.SetColumnSpan(this._layoutViewDeck, 2);
+			this._layoutViewDeck.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._layoutViewDeck.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
+			this._layoutViewDeck.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
+			this._layoutViewDeck.Location = new System.Drawing.Point(0, 387);
+			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
+			this._layoutViewDeck.Name = "_layoutViewDeck";
+			this._layoutViewDeck.PartialCardsThreshold = new System.Drawing.Size(161, 225);
+			this._layoutViewDeck.SearchOptions = searchOptions1;
+			this._layoutViewDeck.Size = new System.Drawing.Size(1372, 311);
+			sortOptions1.Allow = true;
+			sortOptions1.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc;
+			sortOptions1.AscIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
+			sortOptions1.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc;
+			sortOptions1.DescIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
+			sortOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none;
+			sortOptions1.IconHovered = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
+			this._layoutViewDeck.SortOptions = sortOptions1;
+			this._layoutViewDeck.TabIndex = 42;
+			this._layoutViewDeck.TabStop = false;
+			// 
+			// _layoutViewCards
+			// 
+			this._layoutViewCards.AllowPartialCards = true;
+			this._layoutViewCards.BackColor = System.Drawing.Color.White;
+			this._layoutViewCards.CardInterval = new System.Drawing.Size(2, 2);
+			this._tableRoot.SetColumnSpan(this._layoutViewCards, 2);
+			this._layoutViewCards.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._layoutViewCards.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
+			this._layoutViewCards.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
+			this._layoutViewCards.Location = new System.Drawing.Point(0, 74);
+			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
+			this._layoutViewCards.Name = "_layoutViewCards";
+			this._layoutViewCards.PartialCardsThreshold = new System.Drawing.Size(161, 225);
+			searchOptions2.Allow = true;
+			searchOptions2.ButtonMargin = new System.Drawing.Size(19, 2);
+			searchOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.Search_transp_16;
+			searchOptions2.IconHovered = global::Mtgdb.Gui.Properties.Resources.Search_16;
+			this._layoutViewCards.SearchOptions = searchOptions2;
+			this._layoutViewCards.Size = new System.Drawing.Size(1372, 289);
+			sortOptions2.Allow = true;
+			sortOptions2.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc;
+			sortOptions2.AscIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
+			sortOptions2.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc;
+			sortOptions2.DescIconHovered = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
+			sortOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none;
+			sortOptions2.IconHovered = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
+			this._layoutViewCards.SortOptions = sortOptions2;
+			this._layoutViewCards.TabIndex = 19;
+			this._layoutViewCards.TabStop = false;
 			// 
 			// FormMain
 			// 

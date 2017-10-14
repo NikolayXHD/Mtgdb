@@ -1,7 +1,6 @@
 using System;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
@@ -30,10 +29,6 @@ namespace Mtgdb.Gui
 				.InSingletonScope();
 
 			Kernel.Bind<SuggestModel>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<CollectionModel>()
 				.ToSelf()
 				.InSingletonScope();
 

@@ -83,8 +83,7 @@
     <Compile Include="FormStat\DataElement.cs" />
     <Compile Include="FormStat\DataSource.cs" />
     <Compile Include="FormStat\Fields.cs" />
-    <Compile Include="FormMain\DeckCards.cs" />
-    <Compile Include="FormMain\DeckChangedEventHandler.cs" />
+    <Compile Include="FormMain\DeckZoneModel.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
     <Compile Include="FormMain\DeckEditingSubsystem.cs" />

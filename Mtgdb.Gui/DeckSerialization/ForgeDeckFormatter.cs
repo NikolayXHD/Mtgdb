@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -51,7 +50,7 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
-		public override GuiSettings ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized)
 		{
 			_forgeSetRepo.EnsureLoaded();
 
@@ -74,7 +73,7 @@ namespace Mtgdb.Gui
 		}
 
 
-		public override string ExportDeck(string name, GuiSettings current)
+		public override string ExportDeck(string name, Deck current)
 		{
 			_forgeSetRepo.EnsureLoaded();
 
@@ -83,22 +82,19 @@ namespace Mtgdb.Gui
 			result.AppendLine($@"Name={name}");
 
 			result.AppendLine(@"[Main]");
-			writeCards(result, current.Deck, current.DeckOrder);
+			writeCards(result, current.MainDeck);
 
 			result.AppendLine(@"[Sideboard]");
-			writeCards(result, current.SideDeck, current.SideDeckOrder);
+			writeCards(result, current.SideDeck);
 
 			return result.ToString();
 		}
 
-		private void writeCards(StringBuilder result, Dictionary<string, int> deck, List<string> deckOrder)
+		private void writeCards(StringBuilder result, DeckZone deckZone)
 		{
-			if (deckOrder == null)
-				return;
-
-			foreach (var cardId in deckOrder)
+			foreach (var cardId in deckZone.Order)
 			{
-				var count = deck[cardId];
+				var count = deckZone.Count[cardId];
 				var card = _cardRepo.CardsById[cardId];
 				var set = _forgeSetRepo.ToForgeSet(card.SetCode);
 				result.AppendLine($"{count} {card.NameNormalized}|{set}");
