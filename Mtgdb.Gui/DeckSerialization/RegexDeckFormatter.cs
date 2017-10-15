@@ -16,7 +16,7 @@ namespace Mtgdb.Gui
 		{
 			var result = Deck.Create();
 			
-			var lines = serialized.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			var lines = SplitToLines(serialized);
 
 			var unmatched = new HashSet<string>();
 
@@ -47,6 +47,11 @@ namespace Mtgdb.Gui
 			_log.Info("Unmatched cards:\r\n{0}", string.Join("\r\n", unmatched));
 
 			return result;
+		}
+
+		protected virtual string[] SplitToLines(string serialized)
+		{
+			return serialized.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		private static void add(Card card, int count, DeckZone collection)

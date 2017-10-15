@@ -38,6 +38,11 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
+		protected override string[] SplitToLines(string serialized)
+		{
+			return serialized.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+		}
+
 		public override bool IsSideboard(Match match, string line)
 		{
 			_isSideboard |= line == string.Empty;
