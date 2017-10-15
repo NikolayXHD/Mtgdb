@@ -1,3 +1,8 @@
+2.2.7
+-----
+
+Fixed not recognizing MTGO deck sideboard
+
 2.2.6
 -----
 
