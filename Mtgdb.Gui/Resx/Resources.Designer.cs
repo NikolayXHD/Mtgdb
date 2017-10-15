@@ -140,7 +140,7 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forge deck.
+        ///   Looks up a localized string similar to Forge {type}.
         /// </summary>
         internal static string Formatter_ForgeDeck_Description {
             get {
@@ -149,7 +149,7 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magarena deck.
+        ///   Looks up a localized string similar to Magarena {type}.
         /// </summary>
         internal static string Formatter_MagarenaDeck_Description {
             get {
@@ -158,7 +158,7 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Magic The Gathering Online deck.
+        ///   Looks up a localized string similar to Magic The Gathering Online {type}.
         /// </summary>
         internal static string Formatter_MtgoDeck_Description {
             get {
@@ -167,7 +167,7 @@ namespace Mtgdb.Gui.Resx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XMage deck.
+        ///   Looks up a localized string similar to XMage {type}.
         /// </summary>
         internal static string Formatter_XMageDeck_Description {
             get {

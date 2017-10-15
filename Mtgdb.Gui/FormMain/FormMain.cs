@@ -669,7 +669,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveDeck()
 		{
-			var saved = _deckSerializationSubsystem.Save(_historyModel.Current.Deck);
+			var saved = _deckSerializationSubsystem.SaveDeck(_historyModel.Current.Deck);
 
 			if (saved == null)
 				return;
@@ -681,7 +681,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadDeck()
 		{
-			var loaded = _deckSerializationSubsystem.Load();
+			var loaded = _deckSerializationSubsystem.LoadDeck();
 
 			if (loaded == null)
 				return;
@@ -691,7 +691,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveCollection()
 		{
-			var saved = _deckSerializationSubsystem.Save(_historyModel.Current.Collection);
+			var saved = _deckSerializationSubsystem.SaveCollection(_historyModel.Current.Collection);
 
 			if (saved == null)
 				return;
@@ -702,7 +702,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadCollection()
 		{
-			var loaded = _deckSerializationSubsystem.Load();
+			var loaded = _deckSerializationSubsystem.LoadCollection();
 
 			if (loaded == null)
 				return;

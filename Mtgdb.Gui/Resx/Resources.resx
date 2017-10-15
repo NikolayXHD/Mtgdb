@@ -167,7 +167,7 @@
     <value>modified, press ENTER to apply</value>
   </data>
   <data name="Formatter_XMageDeck_Description" xml:space="preserve">
-    <value>XMage deck</value>
+    <value>XMage {type}</value>
   </data>
   <data name="Title_deck_size_0_" xml:space="preserve">
     <value>Deck: {0}</value>
@@ -182,7 +182,7 @@
     <value>..\Resources\open2_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Formatter_MagarenaDeck_Description" xml:space="preserve">
-    <value>Magarena deck</value>
+    <value>Magarena {type}</value>
   </data>
   <data name="xmage_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\xmage_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -221,7 +221,7 @@
     <value>..\Resources\Magarena_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Formatter_ForgeDeck_Description" xml:space="preserve">
-    <value>Forge deck</value>
+    <value>Forge {type}</value>
   </data>
   <data name="hidden24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hidden24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -320,6 +320,6 @@
     <value>..\Resources\normalize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Formatter_MtgoDeck_Description" xml:space="preserve">
-    <value>Magic The Gathering Online deck</value>
+    <value>Magic The Gathering Online {type}</value>
   </data>
 </root>

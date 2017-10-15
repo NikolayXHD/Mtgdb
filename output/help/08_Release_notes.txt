@@ -1,3 +1,47 @@
+2.2.6
+-----
+
+### Compatibility with MTGO (Magic The Gathering Online)
+You can save and load decks and collection in plain-text format created by MTGO.
+
+* To export cards collection from MTGO
+  - Make sure you have no filters hiding some cards from your collection
+  - `right` click on collection area outside any card
+  - in context menu pick `Select all`
+  - open context menu again, pick `Export`
+  - select `Plain TXT format (*.txt)` format
+  
+* To import cards collection to Mtgdb.Gui
+  - Hover mouse over `Open` button in window header
+  - in popup menu pick `Load collection from file` item
+  - in open file dialog pick `Magic The Gathering online deck (*.txt)` format
+  - find and open the collection *.txt file you created in MTGO
+  - Use Filter Manager 'Collection' button in top row to show your collection in
+Search result.
+
+* To export from MTGO a deck or any other item in `Decks & Binders` panel
+  - `Right` click on item (e.g. deck)
+  - pick `Export` in context menu
+  - select `Plain TXT format (*.txt)`
+
+* To import a deck created in Mtgdb.Gui into MTGO
+  - Save deck in Mtgdb.Gui using `Magic The Gathering online deck (*.txt)` format
+  - in MTGO click `Add deck` button next to `Decks & Binders` panel
+  - click `Import` in `Add or Import Deck(s)` dialog
+  - find and open a deck you saved in Mtgdb.Gui
+
+* To import collection of cards from Mtgdb.GUI into MTGO
+  - That would be a hell of a feature, wouldn't it? :)
+
+As you can now import collection from file, as well as save it, you can in fact switch between 
+several collections e.g. your physical collection and MTGO collection. You can also easily 
+manipulate your collection outside Mtgd.Gui because `*.txt` collection format is very simple.
+
+### Filter button uncheck behaviour
+Was slighlty changed filter to avoid accidentally creating a filter that excludes all cards by 
+prohibiting all values of a certain property. Previosly I abandoned this approach as it did not 
+work well with filtering by Mana Cost. Now I think I got the right way to do it.
+
 2.2.5
 -----
 

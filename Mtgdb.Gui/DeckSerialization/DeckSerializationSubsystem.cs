@@ -22,27 +22,32 @@ namespace Mtgdb.Gui
 				new MtgoDeckFormatter(cardRepository)
 			};
 
-			string anyFormatFilter = $"Any deck|{string.Join(@";", _formatters.Where(_ => _.SupportsImport).Select(f => f.FileNamePattern).Distinct())}";
+			string anyFormatFilter = $"Any {{type}}|{string.Join(@";", _formatters.Where(_ => _.SupportsImport).Select(f => f.FileNamePattern).Distinct())}";
 
-			_loadFilter = string.Join(@"|",
-				Enumerable.Repeat(anyFormatFilter, 1).Concat(
-					_formatters.Where(_ => _.SupportsImport).Select(f => $"{f.Description}|{f.FileNamePattern}")));
+			_loadFilter = string.Join(@"|", Enumerable.Repeat(anyFormatFilter, 1).Concat(
+				_formatters.Where(_ => _.SupportsImport).Select(f => $"{f.Description}|{f.FileNamePattern}")));
 
-			_saveFilter = string.Join(@"|", _formatters.Where(_ => _.SupportsExport).Select(f => $"{f.Description}|{f.FileNamePattern}"));
+			_saveFilter = string.Join(@"|",
+				_formatters.Where(_ => _.SupportsExport).Select(f => $"{f.Description}|{f.FileNamePattern}"));
 
 			Directory.CreateDirectory(AppDir.Save);
 		}
 
 
 
-		public Deck Save(Deck deck)
+		public Deck SaveDeck(Deck deck)
 		{
-			return save(deck);
+			return save(deck, "deck");
 		}
 
-		private Deck save(Deck deck)
+		public Deck SaveCollection(Deck collection)
 		{
-			var fileToSave = selectFileToSave();
+			return save(collection, "collection");
+		}
+
+		private Deck save(Deck deck, string fileType)
+		{
+			var fileToSave = selectFileToSave(fileType);
 
 			if (fileToSave == null)
 				return null;
@@ -79,9 +84,19 @@ namespace Mtgdb.Gui
 			return deck;
 		}
 
-		public Deck Load()
+		public Deck LoadDeck()
 		{
-			var fileToOpen = selectFileToOpen();
+			return load("deck");
+		}
+
+		public Deck LoadCollection()
+		{
+			return load("collection");
+		}
+
+		private Deck load(string fileType)
+		{
+			var fileToOpen = selectFileToOpen(fileType);
 
 			if (fileToOpen == null)
 				return null;
@@ -179,15 +194,15 @@ namespace Mtgdb.Gui
 
 		private int LoadFilterIndex => getIndex(LastLoadedExtension, _loadFilter);
 
-		private DeckFile selectFileToSave()
+		private DeckFile selectFileToSave(string fileType)
 		{
 			var dlg = new SaveFileDialog
 			{
 				InitialDirectory = LastSavedDirectory ?? new DirectoryInfo(AppDir.Save).FullName,
-				Filter = _saveFilter,
+				Filter = _saveFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = SaveFilterIndex,
-				Title = @"Select a file to save deck"
+				Title = @"Select a file to save " + fileType
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)
@@ -197,15 +212,15 @@ namespace Mtgdb.Gui
 			return new DeckFile(dlg.FileName, dlg.FilterIndex - 1);
 		}
 
-		private string selectFileToOpen()
+		private string selectFileToOpen(string fileType)
 		{
 			var dlg = new OpenFileDialog
 			{
 				InitialDirectory = LastLoadedDirectory ?? new DirectoryInfo(AppDir.Save).FullName,
-				Filter = _loadFilter,
+				Filter = _loadFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = LoadFilterIndex,
-				Title = @"Select a file to load deck"
+				Title = @"Select a file to load " + fileType
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)

@@ -19,6 +19,7 @@
     <Content Include="etc\Mtgdb.Util.xml" />
     <Content Include="help\01_Home.txt" />
     <Content Include="help\02_Deck_and_Collection_Editor.txt" />
+    <Content Include="help\02_Import_collection_&amp;_decks_from_Magic_The_Gathering_Online.txt" />
     <Content Include="help\03_Filter_buttons.txt" />
     <Content Include="help\04_Search_syntax.txt" />
     <Content Include="help\05_Search_input_keyboard_shortcuts.txt" />
@@ -47,6 +48,17 @@
     <Content Include="help\img\Ixalan_small.jpg" />
     <Content Include="help\img\Legality.jpg" />
     <Content Include="help\img\Mtgb.Gui.xml.jpg" />
+    <Content Include="help\img\mtgo_export_collection.jpg" />
+    <Content Include="help\img\mtgo_export_deck.jpg" />
+    <Content Include="help\img\mtgo_export_deck_format.jpg" />
+    <Content Include="help\img\mtgo_export_format.jpg" />
+    <Content Include="help\img\mtgo_export_from_mtgdbgui.jpg" />
+    <Content Include="help\img\mtgo_import_collection.jpg" />
+    <Content Include="help\img\mtgo_import_collection_file.jpg" />
+    <Content Include="help\img\mtgo_import_deck.jpg" />
+    <Content Include="help\img\mtgo_import_deck_format.jpg" />
+    <Content Include="help\img\mtgo_import_deck_result.jpg" />
+    <Content Include="help\img\mtgo_select_all.jpg" />
     <Content Include="help\img\Price statistics.jpg" />
     <Content Include="help\img\proxy.jpg" />
     <Content Include="help\img\Report_example_p2.jpg" />
