@@ -1,0 +1,46 @@
+You can save and load decks and collection in plain-text format created by MTGO.
+
+To export cards collection from MTGO
+------------------------------------
+- Make sure you have no filters hiding some cards from your collection
+- `right` click on collection area outside any card
+- in context menu pick `Select all`
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_select_all.jpg?raw=true
+- open context menu again, pick `Export`
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_collection.jpg?raw=true
+- select `Plain TXT format (*.txt)` format
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_format.jpg?raw=true
+  
+To import cards collection to Mtgdb.Gui
+---------------------------------------
+- Hover mouse over `Load` button in window header
+- in popup menu pick `Load collection from file` item
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_collection.jpg?raw=true
+- in open file dialog pick `Magic The Gathering online deck (*.txt)` format
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_collection_file.jpg?raw=true
+- find and open the collection `*.txt` file you created in MTGO
+- Use Filter Manager `Collection` button in top row to show your collection in
+Search result.
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_deck_result.jpg?raw=true
+
+To export from MTGO a deck or any other item in `Decks & Binders` panel
+-----------------------------------------------------------------------
+- `Right` click on item (e.g. deck)
+- pick `Export` in context menu
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_deck.jpg?raw=true
+- select `Plain TXT format (*.txt)`
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_deck_format.jpg?raw=true
+
+To import a deck created in Mtgdb.Gui into MTGO
+-----------------------------------------------
+- Save deck in Mtgdb.Gui using `Magic The Gathering online deck (*.txt)` format
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_from_mtgdbgui.jpg?raw=true
+- in MTGO click `Add deck` button next to `Decks & Binders` panel
+- click `Import` in `Add or Import Deck(s)` dialog
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_deck.jpg?raw=true
+- find and open a deck in `*.txt` format you saved in Mtgdb.Gui
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_deck_format.jpg?raw=true
+
+To import collection of cards from Mtgdb.GUI into MTGO
+------------------------------------------------------
+  - That would be a hell of a feature, wouldn't it? :)

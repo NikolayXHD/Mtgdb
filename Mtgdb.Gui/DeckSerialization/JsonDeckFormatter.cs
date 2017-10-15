@@ -4,7 +4,7 @@ namespace Mtgdb.Gui
 {
 	public class JsonDeckFormatter : IDeckFormatter
 	{
-		public string Description => @"Mtgdb.Gui deck";
+		public string Description => @"Mtgdb.Gui {type}";
 		public string FileNamePattern => @"*.json";
 
 		public Deck ImportDeck(string serialized)
