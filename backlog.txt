@@ -1,21 +1,3 @@
-2.2.9
------
-
-Pasting deck from Clipboard
-Added `Paste` menu to window header and corresponding keyboard shortcuts
-* `Ctrl`+`V` to create a new deck from Clipboard text
-* `Ctrl`+`Shift`+`V` to add cards to an existing deck instead of creating new one
-
-Drag-n-dropping deck text from websites and other applications. Works the same way as pasting.
-* Normal `drag-n-drop` to create new deck from dragged text
-* `Shift`+`drag-n-drop` to add cards from dragged text to an existing deck
-
-I tested copy-pasting and drag-n-dropping in following websites:
-* [http://sales.starcitygames.com/deckdatabase/](sales.starcitygames.com)
-* [https://www.mtggoldfish.com/](www.mtggoldfish.com)
-* [https://magic.wizards.com/en/articles/archive/top-decks/what-we-learned-world-championship-2017-10-12](magic.wizards.com)
-* [https://deckbox.org/decks/mtg](deckbox.org)
-
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
 	I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 
