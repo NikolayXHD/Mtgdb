@@ -49,7 +49,7 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		protected virtual string[] SplitToLines(string serialized)
+		protected virtual IList<string> SplitToLines(string serialized)
 		{
 			return serialized.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 		}

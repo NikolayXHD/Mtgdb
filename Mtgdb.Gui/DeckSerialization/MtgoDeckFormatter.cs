@@ -38,9 +38,21 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
-		protected override string[] SplitToLines(string serialized)
+		protected override IList<string> SplitToLines(string serialized)
 		{
-			return serialized.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+			var lines = serialized.Trim().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+			var result = new List<string>();
+
+			foreach (string line in lines)
+			{
+				if (line == string.Empty && result.Count > 0 && result[result.Count - 1] == string.Empty)
+					continue;
+
+				result.Add(line);
+			}
+
+			return result;
 		}
 
 		public override bool IsSideboard(Match match, string line)
@@ -102,17 +114,18 @@ namespace Mtgdb.Gui
 
 		public override bool ValidateFormat(string serialized)
 		{
-			var lines = serialized.Split(new [] {Environment.NewLine}, StringSplitOptions.None);
-			if (lines.Length == 0)
+			var lines = SplitToLines(serialized);
+			
+			if (lines.Count == 0)
 				return false;
 
 			int blankLinesCount = 0;
 
-			for (int i = 0; i < lines.Length; i++)
+			for (int i = 0; i < lines.Count; i++)
 			{
 				string line = lines[i];
 
-				if (line == string.Empty && i < lines.Length - 1)
+				if (line == string.Empty && i < lines.Count - 1)
 					blankLinesCount++;
 
 				if (blankLinesCount > 1)
