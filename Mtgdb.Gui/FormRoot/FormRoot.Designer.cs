@@ -45,7 +45,6 @@
 			this._buttonTooltips = new Mtgdb.Controls.CustomCheckBox();
 			this._menuOpen = new Mtgdb.Controls.CustomPanel();
 			this.label2 = new System.Windows.Forms.Label();
-			this._buttonMenuSaveCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonVisitMtgo = new System.Windows.Forms.LinkLabel();
 			this._labelDotP2 = new System.Windows.Forms.Label();
 			this._labelMagarena2 = new System.Windows.Forms.Label();
@@ -56,8 +55,9 @@
 			this._buttonVisitForge = new System.Windows.Forms.LinkLabel();
 			this._labelFormats = new System.Windows.Forms.Label();
 			this._buttonMenuOpenCollection = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonMenuSaveDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuOpenDeck = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuSaveCollection = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuSaveDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._menuLanguage = new Mtgdb.Controls.CustomPanel();
 			this._buttonPT = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonTW = new Mtgdb.Controls.CustomCheckBox();
@@ -78,11 +78,17 @@
 			this._menuConfig = new Mtgdb.Controls.CustomPanel();
 			this._buttonDisplaySettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonGeneralSettings = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonPaste = new Mtgdb.Controls.CustomCheckBox();
+			this._menuPaste = new Mtgdb.Controls.CustomPanel();
+			this._labelPasteInfo = new System.Windows.Forms.Label();
+			this._buttonMenuPasteAppend = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuPaste = new Mtgdb.Controls.CustomCheckBox();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
 			this._menuDonate.SuspendLayout();
 			this._menuConfig.SuspendLayout();
+			this._menuPaste.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _panelClient
@@ -93,6 +99,7 @@
 			// 
 			// _panelHeader
 			// 
+			this._panelHeader.Controls.Add(this._buttonPaste);
 			this._panelHeader.Controls.Add(this._buttonTooltips);
 			this._panelHeader.Controls.Add(this._buttonOpenDeck);
 			this._panelHeader.Controls.Add(this._buttonSaveDeck);
@@ -330,8 +337,8 @@
 			this._buttonSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16x16;
-			this._buttonSaveDeck.Location = new System.Drawing.Point(455, 3);
-			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this._buttonSaveDeck.Location = new System.Drawing.Point(440, 3);
+			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 4, 15, 0);
 			this._buttonSaveDeck.Name = "_buttonSaveDeck";
 			this._buttonSaveDeck.Size = new System.Drawing.Size(30, 24);
 			this._buttonSaveDeck.TabIndex = 16;
@@ -349,7 +356,7 @@
 			this._buttonOpenDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open2_16x16;
-			this._buttonOpenDeck.Location = new System.Drawing.Point(425, 3);
+			this._buttonOpenDeck.Location = new System.Drawing.Point(410, 3);
 			this._buttonOpenDeck.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
 			this._buttonOpenDeck.Name = "_buttonOpenDeck";
 			this._buttonOpenDeck.Size = new System.Drawing.Size(30, 24);
@@ -382,7 +389,6 @@
 			// 
 			this._menuOpen.BackColor = System.Drawing.Color.White;
 			this._menuOpen.Controls.Add(this.label2);
-			this._menuOpen.Controls.Add(this._buttonMenuSaveCollection);
 			this._menuOpen.Controls.Add(this._buttonVisitMtgo);
 			this._menuOpen.Controls.Add(this._labelDotP2);
 			this._menuOpen.Controls.Add(this._labelMagarena2);
@@ -393,8 +399,9 @@
 			this._menuOpen.Controls.Add(this._buttonVisitForge);
 			this._menuOpen.Controls.Add(this._labelFormats);
 			this._menuOpen.Controls.Add(this._buttonMenuOpenCollection);
-			this._menuOpen.Controls.Add(this._buttonMenuSaveDeck);
 			this._menuOpen.Controls.Add(this._buttonMenuOpenDeck);
+			this._menuOpen.Controls.Add(this._buttonMenuSaveCollection);
+			this._menuOpen.Controls.Add(this._buttonMenuSaveDeck);
 			this._menuOpen.Location = new System.Drawing.Point(29, 59);
 			this._menuOpen.Name = "_menuOpen";
 			this._menuOpen.Size = new System.Drawing.Size(293, 353);
@@ -413,28 +420,6 @@
 			this.label2.TabIndex = 36;
 			this.label2.Text = "* MTGO .txt format is supported in many websites including magic.wizards.com, www" +
     ".mtggoldfish.com";
-			// 
-			// _buttonMenuSaveCollection
-			// 
-			this._buttonMenuSaveCollection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonMenuSaveCollection.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuSaveCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuSaveCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuSaveCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuSaveCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuSaveCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuSaveCollection.Image = global::Mtgdb.Gui.Properties.Resources.Box_32;
-			this._buttonMenuSaveCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuSaveCollection.Location = new System.Drawing.Point(3, 42);
-			this._buttonMenuSaveCollection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-			this._buttonMenuSaveCollection.Name = "_buttonMenuSaveCollection";
-			this._buttonMenuSaveCollection.Size = new System.Drawing.Size(287, 37);
-			this._buttonMenuSaveCollection.TabIndex = 34;
-			this._buttonMenuSaveCollection.TabStop = false;
-			this._buttonMenuSaveCollection.Text = "            Save collection to file: Ctrl+Alt+S";
-			this._buttonMenuSaveCollection.UseVisualStyleBackColor = true;
-			this._buttonMenuSaveCollection.Visible = false;
 			// 
 			// _buttonVisitMtgo
 			// 
@@ -594,28 +579,6 @@
 			this._buttonMenuOpenCollection.UseVisualStyleBackColor = true;
 			this._buttonMenuOpenCollection.Visible = false;
 			// 
-			// _buttonMenuSaveDeck
-			// 
-			this._buttonMenuSaveDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonMenuSaveDeck.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuSaveDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuSaveDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.draw_a_card_32;
-			this._buttonMenuSaveDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuSaveDeck.Location = new System.Drawing.Point(3, 3);
-			this._buttonMenuSaveDeck.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-			this._buttonMenuSaveDeck.Name = "_buttonMenuSaveDeck";
-			this._buttonMenuSaveDeck.Size = new System.Drawing.Size(287, 37);
-			this._buttonMenuSaveDeck.TabIndex = 33;
-			this._buttonMenuSaveDeck.TabStop = false;
-			this._buttonMenuSaveDeck.Text = "            Save deck to file: Ctrl+S";
-			this._buttonMenuSaveDeck.UseVisualStyleBackColor = true;
-			this._buttonMenuSaveDeck.Visible = false;
-			// 
 			// _buttonMenuOpenDeck
 			// 
 			this._buttonMenuOpenDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -637,6 +600,50 @@
 			this._buttonMenuOpenDeck.Text = "            Load deck from file: Ctrl+O";
 			this._buttonMenuOpenDeck.UseVisualStyleBackColor = true;
 			this._buttonMenuOpenDeck.Visible = false;
+			// 
+			// _buttonMenuSaveCollection
+			// 
+			this._buttonMenuSaveCollection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonMenuSaveCollection.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuSaveCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuSaveCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuSaveCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuSaveCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuSaveCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuSaveCollection.Image = global::Mtgdb.Gui.Properties.Resources.Box_32;
+			this._buttonMenuSaveCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuSaveCollection.Location = new System.Drawing.Point(3, 42);
+			this._buttonMenuSaveCollection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
+			this._buttonMenuSaveCollection.Name = "_buttonMenuSaveCollection";
+			this._buttonMenuSaveCollection.Size = new System.Drawing.Size(287, 37);
+			this._buttonMenuSaveCollection.TabIndex = 34;
+			this._buttonMenuSaveCollection.TabStop = false;
+			this._buttonMenuSaveCollection.Text = "            Save collection to file: Ctrl+Alt+S";
+			this._buttonMenuSaveCollection.UseVisualStyleBackColor = true;
+			this._buttonMenuSaveCollection.Visible = false;
+			// 
+			// _buttonMenuSaveDeck
+			// 
+			this._buttonMenuSaveDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonMenuSaveDeck.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuSaveDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuSaveDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.draw_a_card_32;
+			this._buttonMenuSaveDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuSaveDeck.Location = new System.Drawing.Point(3, 3);
+			this._buttonMenuSaveDeck.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+			this._buttonMenuSaveDeck.Name = "_buttonMenuSaveDeck";
+			this._buttonMenuSaveDeck.Size = new System.Drawing.Size(287, 37);
+			this._buttonMenuSaveDeck.TabIndex = 33;
+			this._buttonMenuSaveDeck.TabStop = false;
+			this._buttonMenuSaveDeck.Text = "            Save deck to file: Ctrl+S";
+			this._buttonMenuSaveDeck.UseVisualStyleBackColor = true;
+			this._buttonMenuSaveDeck.Visible = false;
 			// 
 			// _menuLanguage
 			// 
@@ -1027,11 +1034,99 @@
 			this._buttonGeneralSettings.Text = "General settings";
 			this._buttonGeneralSettings.UseVisualStyleBackColor = false;
 			// 
+			// _buttonPaste
+			// 
+			this._buttonPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonPaste.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonPaste.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._buttonPaste.FlatAppearance.BorderSize = 0;
+			this._buttonPaste.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(220)))));
+			this._buttonPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
+			this._buttonPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonPaste.Image = ((System.Drawing.Image)(resources.GetObject("_buttonPaste.Image")));
+			this._buttonPaste.Location = new System.Drawing.Point(365, 3);
+			this._buttonPaste.Margin = new System.Windows.Forms.Padding(0, 4, 15, 0);
+			this._buttonPaste.Name = "_buttonPaste";
+			this._buttonPaste.Size = new System.Drawing.Size(30, 24);
+			this._buttonPaste.TabIndex = 19;
+			this._buttonPaste.TabStop = false;
+			this._buttonPaste.UseVisualStyleBackColor = true;
+			// 
+			// _menuPaste
+			// 
+			this._menuPaste.BackColor = System.Drawing.Color.White;
+			this._menuPaste.Controls.Add(this._labelPasteInfo);
+			this._menuPaste.Controls.Add(this._buttonMenuPasteAppend);
+			this._menuPaste.Controls.Add(this._buttonMenuPaste);
+			this._menuPaste.Location = new System.Drawing.Point(458, 363);
+			this._menuPaste.Name = "_menuPaste";
+			this._menuPaste.Size = new System.Drawing.Size(244, 182);
+			this._menuPaste.TabIndex = 37;
+			this._menuPaste.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// _labelPasteInfo
+			// 
+			this._labelPasteInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._labelPasteInfo.Location = new System.Drawing.Point(6, 85);
+			this._labelPasteInfo.Margin = new System.Windows.Forms.Padding(6);
+			this._labelPasteInfo.Name = "_labelPasteInfo";
+			this._labelPasteInfo.Size = new System.Drawing.Size(232, 91);
+			this._labelPasteInfo.TabIndex = 35;
+			this._labelPasteInfo.Text = resources.GetString("_labelPasteInfo.Text");
+			// 
+			// _buttonMenuPasteAppend
+			// 
+			this._buttonMenuPasteAppend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonMenuPasteAppend.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPasteAppend.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPasteAppend.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPasteAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPasteAppend.Image = ((System.Drawing.Image)(resources.GetObject("_buttonMenuPasteAppend.Image")));
+			this._buttonMenuPasteAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPasteAppend.Location = new System.Drawing.Point(3, 42);
+			this._buttonMenuPasteAppend.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
+			this._buttonMenuPasteAppend.Name = "_buttonMenuPasteAppend";
+			this._buttonMenuPasteAppend.Size = new System.Drawing.Size(238, 37);
+			this._buttonMenuPasteAppend.TabIndex = 34;
+			this._buttonMenuPasteAppend.TabStop = false;
+			this._buttonMenuPasteAppend.Text = "        Add cards from Clipboard: Ctrl+Shift+V";
+			this._buttonMenuPasteAppend.UseVisualStyleBackColor = true;
+			// 
+			// _buttonMenuPaste
+			// 
+			this._buttonMenuPaste.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonMenuPaste.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPaste.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPaste.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPaste.Image = ((System.Drawing.Image)(resources.GetObject("_buttonMenuPaste.Image")));
+			this._buttonMenuPaste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPaste.Location = new System.Drawing.Point(3, 3);
+			this._buttonMenuPaste.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+			this._buttonMenuPaste.Name = "_buttonMenuPaste";
+			this._buttonMenuPaste.Size = new System.Drawing.Size(238, 37);
+			this._buttonMenuPaste.TabIndex = 33;
+			this._buttonMenuPaste.TabStop = false;
+			this._buttonMenuPaste.Text = "        Create new deck from Clipboard: Ctrl+V";
+			this._buttonMenuPaste.UseVisualStyleBackColor = true;
+			// 
 			// FormRoot
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1000, 800);
+			this.Controls.Add(this._menuPaste);
 			this.Controls.Add(this._menuOpen);
 			this.Controls.Add(this._menuConfig);
 			this.Controls.Add(this._menuDonate);
@@ -1052,12 +1147,14 @@
 			this.Controls.SetChildIndex(this._menuDonate, 0);
 			this.Controls.SetChildIndex(this._menuConfig, 0);
 			this.Controls.SetChildIndex(this._menuOpen, 0);
+			this.Controls.SetChildIndex(this._menuPaste, 0);
 			this._panelHeader.ResumeLayout(false);
 			this._menuOpen.ResumeLayout(false);
 			this._menuOpen.PerformLayout();
 			this._menuLanguage.ResumeLayout(false);
 			this._menuDonate.ResumeLayout(false);
 			this._menuConfig.ResumeLayout(false);
+			this._menuPaste.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1112,5 +1209,10 @@
 		private Controls.CustomCheckBox _buttonMenuSaveDeck;
 		private Controls.CustomCheckBox _buttonMenuSaveCollection;
 		private System.Windows.Forms.Label label2;
+		private Controls.CustomCheckBox _buttonPaste;
+		private Controls.CustomPanel _menuPaste;
+		private System.Windows.Forms.Label _labelPasteInfo;
+		private Controls.CustomCheckBox _buttonMenuPasteAppend;
+		private Controls.CustomCheckBox _buttonMenuPaste;
 	}
 }

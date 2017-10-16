@@ -273,16 +273,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap illustrated_wiki {
-            get {
-                object obj = ResourceManager.GetObject("illustrated_wiki", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap include_plus24e {
             get {
                 object obj = ResourceManager.GetObject("include_plus24e", resourceCulture);
@@ -413,9 +403,9 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Open2_32x32 {
+        internal static System.Drawing.Bitmap paste_16 {
             get {
-                object obj = ResourceManager.GetObject("Open2_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("paste_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -496,16 +486,6 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap save_16x16 {
             get {
                 object obj = ResourceManager.GetObject("save_16x16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Save_32x32 {
-            get {
-                object obj = ResourceManager.GetObject("Save_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

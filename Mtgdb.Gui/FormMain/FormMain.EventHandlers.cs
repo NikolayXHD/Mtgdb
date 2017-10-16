@@ -109,13 +109,6 @@ namespace Mtgdb.Gui
 
 
 
-		private void formKeyDown(object sender, KeyEventArgs e)
-		{
-			
-		}
-
-
-
 		private void resetExcludeManaAbility(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Middle)
@@ -217,7 +210,49 @@ namespace Mtgdb.Gui
 
 
 
-		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
+		private void deckZoneChanged(TabHeaderControl sender, int selected)
+		{
+			bool isSide = Equals(_tabHeadersDeck.SelectedTabId, 1);
+
+			if (_deckModel.IsSide != isSide)
+			{
+				beginRestoreSettings();
+				_deckModel.SetIsSide(isSide, _cardRepo);
+				endRestoreSettings();
+
+				updateViewCards(true, null, FilterGroupDeck, false);
+				updateViewDeck(true, null, false);
+				updateFormStatus();
+			}
+		}
+
+		private void appendToDeck(Deck deck)
+		{
+			beginRestoreSettings();
+
+			foreach (var cardId in deck.MainDeck.Order)
+				_deckModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId]);
+
+			foreach (var cardId in deck.SideDeck.Order)
+				_deckModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId]);
+
+			endRestoreSettings();
+
+			updateViewCards(true, null, FilterGroupDeck, false);
+			updateViewDeck(true, null, false);
+			updateFormStatus();
+		}
+
+		private void loadDeck(Deck deck)
+		{
+			_historyModel.DeckFile = deck.File;
+			_historyModel.DeckName = deck.Name;
+
+			_deckModel.SetDeck(deck);
+			_deckModel.LoadDeck(_cardRepo);
+		}
+
+		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
 			updateViewDeck(listChanged, card, touchedChanged);
@@ -231,7 +266,7 @@ namespace Mtgdb.Gui
 			updateFormStatus();
 		}
 
-		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
+		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
 			updateViewDeck(listChanged, card, touchedChanged);
@@ -291,22 +326,6 @@ namespace Mtgdb.Gui
 			var card = DraggedCard;
 			StopDragging();
 			dragCard(card);
-		}
-
-		private void deckZoneChanged(TabHeaderControl sender, int selected)
-		{
-			bool isSide = Equals(_tabHeadersDeck.SelectedTabId, 1);
-
-			if (_deckModel.IsSide != isSide)
-			{
-				beginRestoreSettings();
-				_deckModel.SetIsSide(isSide, _cardRepo);
-				endRestoreSettings();
-
-				updateViewCards(true, null, FilterGroupDeck, false);
-				updateViewDeck(true, null, false);
-				updateFormStatus();
-			}
 		}
 
 		private void legalityFilterChanged()

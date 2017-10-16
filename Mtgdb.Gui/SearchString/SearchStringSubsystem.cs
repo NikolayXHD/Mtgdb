@@ -241,7 +241,7 @@ namespace Mtgdb.Gui
 
 		public void FocusSearch()
 		{
-			if (isSearchFocused())
+			if (IsSearchFocused())
 				return;
 
 			_findEditor.SelectionStart = _findEditor.TextLength;
@@ -569,7 +569,7 @@ namespace Mtgdb.Gui
 				SearchResult = null;
 		}
 
-		private bool isSearchFocused()
+		public bool IsSearchFocused()
 		{
 			return _findEditor.ContainsFocus;
 		}

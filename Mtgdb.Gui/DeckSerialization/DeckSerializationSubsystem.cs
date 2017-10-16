@@ -86,26 +86,26 @@ namespace Mtgdb.Gui
 
 		public Deck LoadDeck()
 		{
-			return load("deck");
+			return loadFile("deck");
 		}
 
 		public Deck LoadCollection()
 		{
-			return load("collection");
+			return loadFile("collection");
 		}
 
-		private Deck load(string fileType)
+		private Deck loadFile(string fileType)
 		{
 			var fileToOpen = selectFileToOpen(fileType);
 
 			if (fileToOpen == null)
 				return null;
 
-			var deck = Load(fileToOpen);
+			var deck = LoadFile(fileToOpen);
 			return deck;
 		}
 
-		public Deck Load(string file)
+		public Deck LoadFile(string file)
 		{
 			LastLoadedFile = file;
 
@@ -133,10 +133,7 @@ namespace Mtgdb.Gui
 			
 			var format = @"*" + Path.GetExtension(file);
 
-			var formatter = _formatters.FirstOrDefault(f =>
-				Str.Equals(f.FileNamePattern, format) &&
-				f.ValidateFormat(serialized)
-			);
+			var formatter = getFormatter(format, serialized);
 
 			if (formatter == null)
 			{
@@ -144,7 +141,8 @@ namespace Mtgdb.Gui
 				return deck;
 			}
 
-			deck = formatter.ImportDeck(serialized);
+			deck = LoadSerialized(format, serialized);
+
 			deck.File = file;
 
 			if (deck.Name == null)
@@ -153,6 +151,40 @@ namespace Mtgdb.Gui
 			return deck;
 		}
 
+		private IDeckFormatter getFormatter(string format, string serialized)
+		{
+			var formatter = _formatters.FirstOrDefault(f =>
+				Str.Equals(f.FileNamePattern, format) &&
+				f.ValidateFormat(serialized)
+			);
+
+			return formatter;
+		}
+
+		public Deck LoadSerialized(string format, string serialized)
+		{
+			var formatter = getFormatter(format, serialized);
+
+			Deck deck;
+			if (formatter == null)
+			{
+				deck = Deck.Create();
+
+				deck.Error = "Deck format is not supported";
+
+				var hint = _formatters.Where(f => Str.Equals(f.FileNamePattern, format))
+					.Select(f => f.FormatHint)
+					.FirstOrDefault();
+
+				if (hint != null)
+					deck.Error += Str.Endl + hint;
+
+				return deck;
+			}
+
+			deck = formatter.ImportDeck(serialized);
+			return deck;
+		}
 
 		public string LastFile { get; set; }
 

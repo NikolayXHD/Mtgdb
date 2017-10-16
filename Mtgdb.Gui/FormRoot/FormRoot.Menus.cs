@@ -39,6 +39,15 @@ namespace Mtgdb.Gui
 			_buttonGeneralSettings.Click += configClick;
 			_buttonDisplaySettings.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
+
+			_buttonMenuPaste.Click += pasteClick;
+			_buttonPaste.Click += pasteClick;
+			_buttonMenuPasteAppend.Click += pasteClick;
+		}
+
+		private void pasteClick(object sender, EventArgs e)
+		{
+			getSelectedForm()?.PasteDeck(append: sender == _buttonMenuPasteAppend);
 		}
 
 		private void configClick(object sender, EventArgs e)
@@ -62,7 +71,7 @@ namespace Mtgdb.Gui
 
 		private void helpClick(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(AppDir.Root.AddPath("\\help\\html\\home.html"));
+			System.Diagnostics.Process.Start(AppDir.Root.AddPath("help\\html\\home.html"));
 		}
 
 		private void redoClick(object sender, EventArgs e)
@@ -215,6 +224,9 @@ namespace Mtgdb.Gui
 			setupButton(_buttonLanguage);
 			setupButton(_buttonDonate);
 			setupButton(_buttonTooltips);
+			setupButton(_buttonPaste);
+			setupButton(_buttonMenuPaste);
+			setupButton(_buttonMenuPasteAppend);
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
 
@@ -234,6 +246,11 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
 				_buttonSaveDeck,
+				borderOnHover: false,
+				closeMenuOnClick: true));
+
+			_buttonSubsystem.SetupPopup(new Popup(_menuPaste,
+				_buttonPaste,
 				borderOnHover: false,
 				closeMenuOnClick: true));
 
@@ -269,16 +286,6 @@ namespace Mtgdb.Gui
 				NextTab();
 			else if (e.KeyData == (Keys.Control | Keys.T))
 				NewTab(onCreated: null);
-			else if (e.KeyData == (Keys.Control | Keys.S))
-				form.ButtonSaveDeck();
-			else if (e.KeyData == (Keys.Control | Keys.O))
-				form.ButtonLoadDeck();
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
-				form.ButtonSaveCollection();
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
-				form.ButtonLoadCollection();
-			else if (e.KeyData == (Keys.Control | Keys.P))
-				form.ButtonPrint();
 			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))
 				form.ButtonUndo();
 			else if (e.KeyData == (Keys.Alt | Keys.Right) || e.KeyData == (Keys.Control | Keys.Y))
@@ -289,6 +296,21 @@ namespace Mtgdb.Gui
 				form.ApplySearch();
 			else if (e.KeyData == Keys.Escape)
 				form.StopDragging();
+			else if (e.KeyData == (Keys.Control | Keys.S))
+				form.ButtonSaveDeck();
+			else if (e.KeyData == (Keys.Control | Keys.O))
+				form.ButtonLoadDeck();
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
+				form.ButtonSaveCollection();
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
+				form.ButtonLoadCollection();
+			else if (e.KeyData == (Keys.Control | Keys.P))
+				form.ButtonPrint();
+			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
+				form.PasteDeck(append: false);
+			else if (e.KeyData == (Keys.Control | Keys.Shift | Keys.V))
+				form.PasteDeck(append: true);
+
 			else if (!e.Modifiers.Equals(Keys.Alt))
 				handled = false;
 
