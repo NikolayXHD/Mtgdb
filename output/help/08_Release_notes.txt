@@ -1,12 +1,13 @@
-2.2.8
------
+2.2.7-2.2.8
+-----------
+
+Fixed not recognizing MTGO deck sideboard
 
 MTGO *.txt deck format supports decks downloaded from magic.wizards.com
 
-2.2.7
------
+`Clear deck` button clears side deck as well
 
-Fixed not recognizing MTGO deck sideboard
+Use current deck name when saving file
 
 2.2.6
 -----
@@ -60,51 +61,34 @@ web-browser. Help website is generated from `.txt` files using Markdown syntax.
 
 In case you need them you can find `.txt` help files in `\help` directory.
 
-2.2.4
------
+2.1.9-2.2.4
+-----------
 
-Changed transparency key on zoomed image to a color that has no matching pixel in any current 
-zoomed image. Previous value was matching some pixels in Hours of Devastation set, leading to 
-pixel-size defects in zoom.
+Revised mapping XLHQ directories to Mtgjson.com set codes. Sets MMA, RQS, ITP, NMS, CST, CON, MD1 
+have different codes in XLHQ Mega archive. Mtgdb.Gui images were updated correspondingly. You can 
+download updated small and zoom images from Update window.
 
-2.2.3
------
-
-Added online wiki reference to help menu
-
-2.2.2
------
+Fixed bug in Update window preventing downloading Artworks
 
 Fixed Basic Lands image mapping for sets
 - Amonkhet, all basic lands;
 - Duel Decks Divine vs Demonic, two swamps.
 XLHQ image numbers fore these sets do not match mtgjson.com numbers.
 
-2.2.1
------
-
-Fixed bug in Update window preventing downloading Artworks
-
-2.2.0
------
+Added online wiki reference to help menu
 
 Minor changes in picture rendering.
 
-Revised mapping XLHQ directories to Mtgjson.com set codes. Sets MMA, RQS, ITP, NMS, CST, CON, MD1 
-have different codes in XLHQ Mega arhive. Mtgdb.Gui images were updated correspondingly. You can 
-download updated small and zoom images from Update window.
+Changed transparency key on zoomed image to a color that has no matching pixel in any current 
+zoomed image. Previous value was matching some pixels in Hours of Devastation set, leading to 
+pixel-size defects in zoom.
 
-2.1.9
------
-
-Supported dropping multiple (up to 10) deck files. Second and subsequent decks are opened in new 
-tabs.
-
-2.1.5 - 2.1.8
+2.1.5 - 2.1.9
 -------------
 
-Dropping deck file from explorer opens a deck. You can drop to deck area or search result. Only 
-1-file drop is accepted.
+Dropping deck file from explorer opens a deck. You can drop to deck area or search result. 
+Supported dropping multiple (up to 10) deck files. Second and subsequent decks are opened in new 
+tabs.
 
 Fixed some Forge picture replacement algorithm flaws
 
