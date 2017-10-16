@@ -63,7 +63,22 @@ namespace Mtgdb.Gui
 
 		public static string FromMtgoName(string mtgoName)
 		{
-			var separatorIndex = mtgoName.IndexOf('/');
+			var separators = new[]
+			{
+				" // ",
+				" / ",
+				"//",
+				"/"
+			};
+
+			int separatorIndex = -1;
+
+			for (int i = 0; i < separators.Length; i++)
+			{
+				separatorIndex = mtgoName.IndexOf(separators[i], Str.Comparison);
+				if (separatorIndex >= 0)
+					break;
+			}
 
 			if (separatorIndex >= 0)
 				mtgoName = mtgoName.Substring(0, separatorIndex);
