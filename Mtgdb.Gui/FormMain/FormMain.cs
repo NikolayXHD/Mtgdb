@@ -663,8 +663,10 @@ namespace Mtgdb.Gui
 
 		public void ButtonClearDeck()
 		{
-			_deckModel.Clear(loadingDeck: false);
+			_historyModel.DeckFile = null;
+			_historyModel.DeckName = null;
 			resetTouchedCard();
+			_deckModel.Clear(loadingDeck: false);
 		}
 
 		public void ButtonSaveDeck()
