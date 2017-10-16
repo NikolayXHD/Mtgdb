@@ -558,15 +558,6 @@ namespace Mtgdb.Gui
 			setTitle(settings.DeckName);
 		}
 
-		private void loadDeck(Deck deck)
-		{
-			_historyModel.DeckFile = deck.File;
-			_historyModel.DeckName = deck.Name;
-
-			_deckModel.SetDeck(deck);
-			_deckModel.LoadDeck(_cardRepo);
-		}
-
 		private void loadCollection(Deck collection)
 		{
 			_collectionModel.SetCollection(collection);
@@ -644,6 +635,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveDeck()
 		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
 			var saved = _deckSerializationSubsystem.SaveDeck(_historyModel.Current.Deck);
 
 			if (saved == null)
@@ -656,6 +650,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadDeck()
 		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
 			var loaded = _deckSerializationSubsystem.LoadDeck();
 
 			if (loaded == null)
@@ -666,6 +663,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveCollection()
 		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
 			var saved = _deckSerializationSubsystem.SaveCollection(_historyModel.Current.Collection);
 
 			if (saved == null)
@@ -677,6 +677,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadCollection()
 		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
 			var loaded = _deckSerializationSubsystem.LoadCollection();
 
 			if (loaded == null)
@@ -736,6 +739,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonPrint()
 		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
 			_printingSubsystem.ShowPrintingDialog(_deckModel);
 		}
 

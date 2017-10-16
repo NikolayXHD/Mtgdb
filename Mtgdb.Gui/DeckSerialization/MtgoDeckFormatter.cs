@@ -20,7 +20,18 @@ namespace Mtgdb.Gui
 			ensureLoaded();
 
 			_isSideboard = false;
+			_sideboardIndicator = getSideboardIndicator(serialized);
 			return base.ImportDeck(serialized);
+		}
+
+		private static string getSideboardIndicator(string serialized)
+		{
+			string sideboardIndicator;
+			if (serialized.IndexOf("sideboard", Str.Comparison) >= 0)
+				sideboardIndicator = "sideboard";
+			else
+				sideboardIndicator = string.Empty;
+			return sideboardIndicator;
 		}
 
 		public override Card GetCard(Match match)
@@ -40,25 +51,79 @@ namespace Mtgdb.Gui
 
 		protected override IList<string> SplitToLines(string serialized)
 		{
+			_sideboardIndicator = getSideboardIndicator(serialized);
+
 			var lines = serialized.Trim().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
 			var result = new List<string>();
 
 			foreach (string line in lines)
 			{
-				if (line == string.Empty && result.Count > 0 && result[result.Count - 1] == string.Empty)
-					continue;
+				var match = LineRegex.Match(line);
 
-				result.Add(line);
+				if (line == string.Empty)
+				{
+					if (result.Count > 0 && result[result.Count - 1] != string.Empty)
+						result.Add(line);
+				}
+				else if (isSideboardIndicator(line))
+					result.Add(line);
+				else if (match.Success && isKnownMtgoName(match.Groups["name"].Value))
+					result.Add(line);
+				else if (line.IndexOf("\t", Str.Comparison) >= 0)
+				{
+					var parts = line.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+					for (int i = 0; i < parts.Length; i++)
+					{
+						if (isKnownMtgoName(parts[i]))
+						{
+							if (i > 0 && parts[i - 1].All(char.IsDigit))
+								result.Add(parts[i - 1] + ' ' + parts[i]);
+							else if (i < parts.Length - 1 && parts[i + 1].All(char.IsDigit))
+								result.Add(parts[i + 1] + ' ' + parts[i]);
+							break;
+						}
+					}
+				}
+				else
+				{
+					var splits = _splitterRegex.Matches(line)
+						.OfType<Match>()
+						.Select(m => m.Index)
+						.ToList();
+
+					if (splits.Count > 0)
+						splits.Add(line.Length);
+
+					for (int i = 0; i < splits.Count - 1; i++)
+					{
+						string substring = line.Substring(splits[i], splits[i + 1] - splits[i]).TrimEnd();
+						if (LineRegex.IsMatch(substring))
+							result.Add(substring);
+					}
+				}
 			}
 
 			return result;
 		}
 
+		private bool isKnownMtgoName(string name)
+		{
+			return _cardsByName.ContainsKey(FromMtgoName(name));
+		}
+
 		public override bool IsSideboard(Match match, string line)
 		{
-			_isSideboard |= line == string.Empty;
+			_isSideboard |= isSideboardIndicator(line);
 			return _isSideboard;
+		}
+
+		private bool isSideboardIndicator(string line)
+		{
+			return
+				_sideboardIndicator == string.Empty && line == string.Empty ||
+				_sideboardIndicator != string.Empty && line.IndexOf(_sideboardIndicator, Str.Comparison) >= 0;
 		}
 
 		public static string FromMtgoName(string mtgoName)
@@ -129,49 +194,16 @@ namespace Mtgdb.Gui
 
 		public override bool ValidateFormat(string serialized)
 		{
+			ensureLoaded();
 			var lines = SplitToLines(serialized);
-			
-			if (lines.Count == 0)
-				return false;
-
-			int blankLinesCount = 0;
-
-			for (int i = 0; i < lines.Count; i++)
-			{
-				string line = lines[i];
-
-				if (line == string.Empty && i < lines.Count - 1)
-					blankLinesCount++;
-
-				if (blankLinesCount > 1)
-					return false;
-
-				if (line == string.Empty)
-					continue;
-
-				for (int j = 0; j < lines[j].Length; j++)
-				{
-					if (char.IsDigit(line[j]))
-						continue;
-
-					if (char.IsWhiteSpace(line[j]))
-					{
-						if (j > 0)
-							break;
-
-						return false;
-					}
-
-					return false;
-				}
-			}
-
-			return true;
+			return lines.Count != 0;
 		}
 
 		public override Regex LineRegex { get; } = new Regex(
 			@"^(?<count>\d+)\s+(?<name>.+)$",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+		private static readonly Regex _splitterRegex = new Regex(@"\b(?<count>\d+)\s+\b", RegexOptions.Compiled);
 
 		private void ensureLoaded()
 		{
@@ -187,6 +219,8 @@ namespace Mtgdb.Gui
 		public override bool SupportsImport => true;
 
 		private bool _isSideboard;
+		private string _sideboardIndicator;
+
 		private readonly CardRepository _repository;
 		private Dictionary<string, List<Card>> _cardsByName;
 

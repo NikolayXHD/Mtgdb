@@ -72,6 +72,7 @@ namespace Mtgdb.Gui
 		public abstract bool SupportsExport { get; }
 		public abstract bool SupportsImport { get; }
 		public virtual bool UseBom => false;
+		public virtual string FormatHint => null;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

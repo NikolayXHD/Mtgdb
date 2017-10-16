@@ -60,6 +60,14 @@
     <Content Include="help\img\mtgo_import_deck_format.jpg" />
     <Content Include="help\img\mtgo_import_deck_result.jpg" />
     <Content Include="help\img\mtgo_select_all.jpg" />
+    <Content Include="help\img\paste_deckbox.jpg" />
+    <Content Include="help\img\paste_deckbox_result.jpg" />
+    <Content Include="help\img\paste_magicwizards.jpg" />
+    <Content Include="help\img\paste_magicwizards_result.jpg" />
+    <Content Include="help\img\paste_mtggoldfish.jpg" />
+    <Content Include="help\img\paste_mtggoldfish_result.jpg" />
+    <Content Include="help\img\paste_starcitygames.jpg" />
+    <Content Include="help\img\paste_starcitygames_result.jpg" />
     <Content Include="help\img\Price statistics.jpg" />
     <Content Include="help\img\proxy.jpg" />
     <Content Include="help\img\Report_example_p2.jpg" />

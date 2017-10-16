@@ -264,33 +264,75 @@ namespace Mtgdb.Gui
 				if (files.Length < 10)
 					e.Effect = DragDropEffects.Copy;
 			}
+			else if (e.Data.GetFormats().Contains(DataFormats.Text))
+			{
+				e.Effect = DragDropEffects.Copy;
+			}
+		}
+
+		public void PasteDeck(bool append)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			if (_searchStringSubsystem.IsSearchFocused())
+				return;
+
+			var text = Clipboard.GetText();
+			if (string.IsNullOrWhiteSpace(text))
+				return;
+
+			pasteDeckFromText(text, append);
 		}
 
 		private void deckDragDropped(object sender, DragEventArgs e)
 		{
-			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-			var decks = files.Select(f => _deckSerializationSubsystem.Load(f))
-				.ToArray();
-
-			var failedDecks = decks.Where(d => d.Error != null).ToArray();
-			var loadedDecks = decks.Where(d => d.Error == null).ToArray();
-
-			if (failedDecks.Length > 0)
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
-				var message = string.Join(Str.Endl, 
-					failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
+				var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+				
+				var decks = files.Select(f => _deckSerializationSubsystem.LoadFile(f))
+					.ToArray();
 
-				MessageBox.Show(message);
+				var failedDecks = decks.Where(d => d.Error != null).ToArray();
+				var loadedDecks = decks.Where(d => d.Error == null).ToArray();
+
+				if (failedDecks.Length > 0)
+				{
+					var message = string.Join(Str.Endl,
+						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
+
+					MessageBox.Show(message);
+				}
+
+				if (loadedDecks.Length > 0)
+					deckLoaded(loadedDecks[0]);
+
+				for (int i = 1; i < loadedDecks.Length; i++)
+				{
+					var deck = loadedDecks[i];
+					_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
+				}
 			}
-
-			if (loadedDecks.Length > 0)
-				deckLoaded(loadedDecks[0]);
-
-			for (int i = 1; i < loadedDecks.Length; i++)
+			else if (e.Data.GetFormats().Contains(DataFormats.Text))
 			{
-				var deck = loadedDecks[i];
-				_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
+				string text = (string) e.Data.GetData(DataFormats.Text, autoConvert: true);
+				pasteDeckFromText(text, append: ModifierKeys == Keys.Shift);
+			}
+		}
+
+		private void pasteDeckFromText(string text, bool append)
+		{
+			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
+
+			if (deck.Error != null)
+				MessageBox.Show(deck.Error);
+			else
+			{
+				if (append)
+					appendToDeck(deck);
+				else
+					loadDeck(deck);
 			}
 		}
 

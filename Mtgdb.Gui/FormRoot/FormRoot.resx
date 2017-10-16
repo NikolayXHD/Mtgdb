@@ -893,6 +893,65 @@
         7avV6ts//9k=
 </value>
   </data>
+  <data name="_buttonPaste.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTnU1rJk
+        AAAChElEQVQ4T6WTXUjTURjGD3RhQd9hV9FFQXQTRQTVRUZhFjZbLBIzslYxlRIny3IjtWaKLr+Wps3I
+        j6E2PzJRUooNI3GULWduRh8SqdHW0nY2ddM0ns75w0hJ6cIDD+/F+T+/5z3v/xwCgCxG85lXdbZmwfRI
+        jeYKJWw9RsbHxoVCiLW7/XljdYGFycGEirzTcDtrMO68j6H+XFyVhaEgU9F3V6Oa0WYmM6DJPBtGmIn6
+        aQOmPPXwu2uhL1VgYqQKmlQZ3nWl4PplEVKku+DsPIuRtk1IjDnW9w+Am6c8BpRknYHVnAv6tQiOfhU+
+        m8+jpUyM2OgQ1KRuwJsCgvhTRwfnAOqr8qgAoA9ZagzSFVFQJUTiWrwECpkYcqkIcdGhKEzcLACiwkNG
+        5wBqyzV0ktZh0qXDxHA2XG8TYK9aJ8hWuRbW0hXo1gYJZq7QvTtm5gD0uizqc1XAN5iBifeXMN5zArR1
+        JfIr25Cta8aNO3VI0eghV5chVqlFTFIO/yvLAhBSXqz2jQ1pMd4vw9hrEbwvduL742DBHFhT0zNwe/wY
+        dLgRGXcTEedUBrYXzCGkLD8N9EMGvK/C4O3YBk/7egxVEiGZr/KmTkE6gwm2ASc341mXHYclUsq2L5Di
+        HCVGe6/AY9oK+mQNXA1BGHhAhLZ/Tf/GTy9L/uaG7ZMT5t4vCI+WI0wixcEjxxGybz9I4a1kuF7GMfNq
+        /GhciuHqJbCXECSyM/O2Ax3cYx0U6dvR0mEXKtee7VtAbqcnCRckMOVAlbGBzU42mj8K5oanVhjaLH8B
+        fRYj8tMushsmtkolhywRB3ZbGNnCp83PHEibrwodLPBIlp9k0+Yf/EfWRT1lHv4H2NDOboBlEOIAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="_labelPasteInfo.Text" xml:space="preserve">
+    <value>NOTE: Instead of pasting the text you can Drag-n-drop it. Use Shift+Drag-n-drop to add cards instead of creating new deck.
+
+NOTE: Many websites and applications support downloading deck in *.txt file. You can open them as MTGO *.txt deck.</value>
+  </data>
+  <data name="_buttonMenuPasteAppend.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTnU1rJk
+        AAAChElEQVQ4T6WTXUjTURjGD3RhQd9hV9FFQXQTRQTVRUZhFjZbLBIzslYxlRIny3IjtWaKLr+Wps3I
+        j6E2PzJRUooNI3GULWduRh8SqdHW0nY2ddM0ns75w0hJ6cIDD+/F+T+/5z3v/xwCgCxG85lXdbZmwfRI
+        jeYKJWw9RsbHxoVCiLW7/XljdYGFycGEirzTcDtrMO68j6H+XFyVhaEgU9F3V6Oa0WYmM6DJPBtGmIn6
+        aQOmPPXwu2uhL1VgYqQKmlQZ3nWl4PplEVKku+DsPIuRtk1IjDnW9w+Am6c8BpRknYHVnAv6tQiOfhU+
+        m8+jpUyM2OgQ1KRuwJsCgvhTRwfnAOqr8qgAoA9ZagzSFVFQJUTiWrwECpkYcqkIcdGhKEzcLACiwkNG
+        5wBqyzV0ktZh0qXDxHA2XG8TYK9aJ8hWuRbW0hXo1gYJZq7QvTtm5gD0uizqc1XAN5iBifeXMN5zArR1
+        JfIr25Cta8aNO3VI0eghV5chVqlFTFIO/yvLAhBSXqz2jQ1pMd4vw9hrEbwvduL742DBHFhT0zNwe/wY
+        dLgRGXcTEedUBrYXzCGkLD8N9EMGvK/C4O3YBk/7egxVEiGZr/KmTkE6gwm2ASc341mXHYclUsq2L5Di
+        HCVGe6/AY9oK+mQNXA1BGHhAhLZ/Tf/GTy9L/uaG7ZMT5t4vCI+WI0wixcEjxxGybz9I4a1kuF7GMfNq
+        /GhciuHqJbCXECSyM/O2Ax3cYx0U6dvR0mEXKtee7VtAbqcnCRckMOVAlbGBzU42mj8K5oanVhjaLH8B
+        fRYj8tMushsmtkolhywRB3ZbGNnCp83PHEibrwodLPBIlp9k0+Yf/EfWRT1lHv4H2NDOboBlEOIAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="_buttonMenuPaste.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTnU1rJk
+        AAAChElEQVQ4T6WTXUjTURjGD3RhQd9hV9FFQXQTRQTVRUZhFjZbLBIzslYxlRIny3IjtWaKLr+Wps3I
+        j6E2PzJRUooNI3GULWduRh8SqdHW0nY2ddM0ns75w0hJ6cIDD+/F+T+/5z3v/xwCgCxG85lXdbZmwfRI
+        jeYKJWw9RsbHxoVCiLW7/XljdYGFycGEirzTcDtrMO68j6H+XFyVhaEgU9F3V6Oa0WYmM6DJPBtGmIn6
+        aQOmPPXwu2uhL1VgYqQKmlQZ3nWl4PplEVKku+DsPIuRtk1IjDnW9w+Am6c8BpRknYHVnAv6tQiOfhU+
+        m8+jpUyM2OgQ1KRuwJsCgvhTRwfnAOqr8qgAoA9ZagzSFVFQJUTiWrwECpkYcqkIcdGhKEzcLACiwkNG
+        5wBqyzV0ktZh0qXDxHA2XG8TYK9aJ8hWuRbW0hXo1gYJZq7QvTtm5gD0uizqc1XAN5iBifeXMN5zArR1
+        JfIr25Cta8aNO3VI0eghV5chVqlFTFIO/yvLAhBSXqz2jQ1pMd4vw9hrEbwvduL742DBHFhT0zNwe/wY
+        dLgRGXcTEedUBrYXzCGkLD8N9EMGvK/C4O3YBk/7egxVEiGZr/KmTkE6gwm2ASc341mXHYclUsq2L5Di
+        HCVGe6/AY9oK+mQNXA1BGHhAhLZ/Tf/GTy9L/uaG7ZMT5t4vCI+WI0wixcEjxxGybz9I4a1kuF7GMfNq
+        /GhciuHqJbCXECSyM/O2Ax3cYx0U6dvR0mEXKtee7VtAbqcnCRckMOVAlbGBzU42mj8K5oanVhjaLH8B
+        fRYj8tMushsmtkolhywRB3ZbGNnCp83PHEibrwodLPBIlp9k0+Yf/EfWRT1lHv4H2NDOboBlEOIAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAQEAAAAEAIAAoQgAAFgAAACgAAABAAAAAgAAAAAEAIAAAAAAAAEAAAMIOAADCDgAAAAAAAAAA

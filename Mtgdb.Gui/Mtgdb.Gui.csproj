@@ -223,8 +223,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resx\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -298,6 +298,7 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\paste_16.png" />
     <None Include="Resources\mtgo_32.png" />
     <None Include="Resources\draw_a_card_32.png" />
     <None Include="Resources\Box_32.png" />
@@ -326,8 +327,6 @@
     <None Include="Resources\close_tab_hovered_16.png" />
     <None Include="Resources\close_tab_16.png" />
     <None Include="Resources\DotP2014_32.png" />
-    <None Include="Resources\Save_32x32.png" />
-    <None Include="Resources\Open2_32x32.png" />
     <None Include="Resources\Cockatrice_32.png" />
     <None Include="Resources\normalize.png" />
     <None Include="Resources\minimize.png" />

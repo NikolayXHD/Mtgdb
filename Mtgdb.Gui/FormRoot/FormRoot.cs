@@ -21,7 +21,8 @@ namespace Mtgdb.Gui
 				_buttonSaveDeck,
 				_buttonPrint,
 				_buttonClear,
-				_buttonStat
+				_buttonStat,
+				_buttonPaste
 			};
 
 			_saveLoadButtons = new CheckBox[]
