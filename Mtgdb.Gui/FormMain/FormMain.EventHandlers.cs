@@ -21,7 +21,15 @@ namespace Mtgdb.Gui
 			startThreads();
 
 			historyUpdateGlobals();
+
 			historyApply(_historyModel.Current);
+
+			if (_requiredDeck != null)
+			{
+				_requiredDeck = null;
+				historyUpdate();
+			}
+
 			_deckSerializationSubsystem.LastFile = _historyModel.Current.DeckFile;
 		}
 
@@ -57,18 +65,8 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				_deckModel.LoadDeck(_cardRepo);
-
-				foreach (var handler in _onLoadHandlers)
-					handler.Invoke(this);
-
-				// to prevent memory leaks
-				_onLoadHandlers.Clear();
-
 				_sortSubsystem.Invalidate();
 
-				if (_historyModel.Current.SearchResultScroll.HasValue)
-					_viewCards.VisibleRecordIndex = _historyModel.Current.SearchResultScroll.Value;
-				
 				endRestoreSettings();
 
 				RunRefilterTask();
@@ -82,13 +80,10 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 				_sortSubsystem.Invalidate();
 				endRestoreSettings();
+
+				RunRefilterTask();
 			});
-
-			RunRefilterTask();
 		}
-
-
-
 
 		private void luceneSearcherLoaded()
 		{
@@ -116,69 +111,7 @@ namespace Mtgdb.Gui
 
 		private void formKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Modifiers.Equals(Keys.Alt))
-				e.Handled = true;
-
-			if (e.KeyData == Keys.F1)
-			{
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"_help_search.txt"));
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.F4))
-			{
-				_uiModel.Form.CloseTab();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.Tab))
-			{
-				_uiModel.Form.NextTab();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.T))
-			{
-				_uiModel.Form.NewTab(null);
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.S))
-			{
-				ButtonSaveDeck();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.O))
-			{
-				ButtonLoadDeck();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
-			{
-				ButtonSaveCollection();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
-			{
-				ButtonLoadCollection();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.P))
-			{
-				ButtonPrint();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))
-			{
-				historyUndo();
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Alt | Keys.Right) || e.KeyData == (Keys.Control | Keys.Y))
-			{
-				e.Handled = true;
-				historyRedo();
-			}
-			else if (e.KeyData == Keys.Escape && IsDraggingCard)
-			{
-				e.Handled = true;
-				StopDragging();
-			}
+			
 		}
 
 
@@ -241,6 +174,9 @@ namespace Mtgdb.Gui
 
 		private void gridScrolled(LayoutView sender)
 		{
+			if (restoringSettings())
+				return;
+
 			if (sender == _viewCards)
 			{
 				_imagePreloadingSubsystem.Reset();
@@ -283,41 +219,62 @@ namespace Mtgdb.Gui
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
+			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
+			updateViewDeck(listChanged, card, touchedChanged);
+			
 			if (restoringSettings())
 				return;
 
-			if (listChanged && isFilterGroupEnabled(FilterGroupCollection))
-				RunRefilterTask();
-			else
-			{
-				if (card != null)
-				{
-					_viewCards.InvalidateCard(card);
-					_viewDeck.InvalidateCard(card);
-				}
-				else
-				{
-					_viewCards.Invalidate();
-					_viewDeck.Invalidate();
-				}
-
-				updateFormStatus();
-			}
-
 			if (countChanged || listChanged)
 				historyUpdate();
+
+			updateFormStatus();
 		}
 
 		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
-			refilterChangedDeck(listChanged, touchedChanged, card);
-
+			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
+			updateViewDeck(listChanged, card, touchedChanged);
+			
 			if (restoringSettings())
 				return;
 
 			if (countChanged || listChanged)
 				historyUpdate();
+
+			updateFormStatus();
 		}
+
+		private void updateViewCards(bool listChanged, Card card, int filterGroup, bool touchedChanged)
+		{
+			if (touchedChanged || listChanged && isFilterGroupEnabled(filterGroup))
+			{
+				if (!restoringSettings())
+					RunRefilterTask();
+			}
+			else
+			{
+				if (card == null)
+					_viewCards.Invalidate();
+				else
+					_viewCards.InvalidateCard(card);
+			}
+		}
+
+		private void updateViewDeck(bool listChanged, Card card, bool touchedChanged)
+		{
+			if (listChanged)
+			{
+				_viewDeck.RefreshData();
+				_viewDeck.Invalidate();
+			}
+			else if (touchedChanged)
+				_viewDeck.Invalidate();
+			else if (card != null)
+				_viewDeck.InvalidateCard(card);
+		}
+
+
 
 		private void deckZoneHover(object sender, EventArgs e)
 		{
@@ -346,7 +303,9 @@ namespace Mtgdb.Gui
 				_deckModel.SetIsSide(isSide, _cardRepo);
 				endRestoreSettings();
 
-				refilterChangedDeck(listChanged: true, touchedChanged: false, card: null);
+				updateViewCards(true, null, FilterGroupDeck, false);
+				updateViewDeck(true, null, false);
+				updateFormStatus();
 			}
 		}
 

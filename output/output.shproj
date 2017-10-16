@@ -32,6 +32,7 @@
     <Content Include="help\html\Filter_buttons.html" />
     <Content Include="help\html\help_style.css" />
     <Content Include="help\html\Home.html" />
+    <Content Include="help\html\Import_collection_&amp;_decks_from_Magic_The_Gathering_Online.html" />
     <Content Include="help\html\Release_notes.html" />
     <Content Include="help\html\Search_button_over_card_text.html" />
     <Content Include="help\html\Search_input_keyboard_shortcuts.html" />

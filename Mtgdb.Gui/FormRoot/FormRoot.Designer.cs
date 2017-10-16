@@ -44,6 +44,7 @@
 			this._buttonOpenDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonTooltips = new Mtgdb.Controls.CustomCheckBox();
 			this._menuOpen = new Mtgdb.Controls.CustomPanel();
+			this.label2 = new System.Windows.Forms.Label();
 			this._buttonMenuSaveCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonVisitMtgo = new System.Windows.Forms.LinkLabel();
 			this._labelDotP2 = new System.Windows.Forms.Label();
@@ -77,7 +78,6 @@
 			this._menuConfig = new Mtgdb.Controls.CustomPanel();
 			this._buttonDisplaySettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonGeneralSettings = new Mtgdb.Controls.CustomCheckBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
@@ -397,11 +397,22 @@
 			this._menuOpen.Controls.Add(this._buttonMenuOpenDeck);
 			this._menuOpen.Location = new System.Drawing.Point(29, 59);
 			this._menuOpen.Name = "_menuOpen";
-			this._menuOpen.Size = new System.Drawing.Size(299, 353);
+			this._menuOpen.Size = new System.Drawing.Size(293, 353);
 			this._menuOpen.TabIndex = 0;
 			this._menuOpen.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// label2
+			// 
+			this.label2.BackColor = System.Drawing.Color.Transparent;
+			this.label2.Location = new System.Drawing.Point(82, 178);
+			this.label2.Margin = new System.Windows.Forms.Padding(0);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(205, 41);
+			this.label2.TabIndex = 36;
+			this.label2.Text = "* MTGO .txt format is supported in many websites including magic.wizards.com, www" +
+    ".mtggoldfish.com";
 			// 
 			// _buttonMenuSaveCollection
 			// 
@@ -418,7 +429,7 @@
 			this._buttonMenuSaveCollection.Location = new System.Drawing.Point(3, 42);
 			this._buttonMenuSaveCollection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
 			this._buttonMenuSaveCollection.Name = "_buttonMenuSaveCollection";
-			this._buttonMenuSaveCollection.Size = new System.Drawing.Size(293, 37);
+			this._buttonMenuSaveCollection.Size = new System.Drawing.Size(287, 37);
 			this._buttonMenuSaveCollection.TabIndex = 34;
 			this._buttonMenuSaveCollection.TabStop = false;
 			this._buttonMenuSaveCollection.Text = "            Save collection to file: Ctrl+Alt+S";
@@ -433,7 +444,7 @@
 			this._buttonVisitMtgo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMtgo.LinkArea = new System.Windows.Forms.LinkArea(0, 26);
 			this._buttonVisitMtgo.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMtgo.Location = new System.Drawing.Point(0, 175);
+			this._buttonVisitMtgo.Location = new System.Drawing.Point(6, 175);
 			this._buttonVisitMtgo.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitMtgo.Name = "_buttonVisitMtgo";
 			this._buttonVisitMtgo.Size = new System.Drawing.Size(90, 54);
@@ -446,7 +457,7 @@
 			// 
 			this._labelDotP2.AutoSize = true;
 			this._labelDotP2.BackColor = System.Drawing.Color.Transparent;
-			this._labelDotP2.Location = new System.Drawing.Point(76, 241);
+			this._labelDotP2.Location = new System.Drawing.Point(82, 241);
 			this._labelDotP2.Margin = new System.Windows.Forms.Padding(0);
 			this._labelDotP2.Name = "_labelDotP2";
 			this._labelDotP2.Size = new System.Drawing.Size(205, 13);
@@ -457,7 +468,7 @@
 			// 
 			this._labelMagarena2.AutoSize = true;
 			this._labelMagarena2.BackColor = System.Drawing.Color.Transparent;
-			this._labelMagarena2.Location = new System.Drawing.Point(76, 304);
+			this._labelMagarena2.Location = new System.Drawing.Point(82, 304);
 			this._labelMagarena2.Margin = new System.Windows.Forms.Padding(0);
 			this._labelMagarena2.Name = "_labelMagarena2";
 			this._labelMagarena2.Size = new System.Drawing.Size(145, 13);
@@ -472,7 +483,7 @@
 			this._buttonVisitDotP2014.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitDotP2014.LinkArea = new System.Windows.Forms.LinkArea(0, 30);
 			this._buttonVisitDotP2014.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitDotP2014.Location = new System.Drawing.Point(0, 238);
+			this._buttonVisitDotP2014.Location = new System.Drawing.Point(6, 238);
 			this._buttonVisitDotP2014.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitDotP2014.Name = "_buttonVisitDotP2014";
 			this._buttonVisitDotP2014.Size = new System.Drawing.Size(90, 54);
@@ -489,7 +500,7 @@
 			this._buttonVisitCockatrice.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitCockatrice.LinkArea = new System.Windows.Forms.LinkArea(0, 10);
 			this._buttonVisitCockatrice.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitCockatrice.Location = new System.Drawing.Point(0, 301);
+			this._buttonVisitCockatrice.Location = new System.Drawing.Point(6, 301);
 			this._buttonVisitCockatrice.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitCockatrice.Name = "_buttonVisitCockatrice";
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(90, 46);
@@ -506,7 +517,7 @@
 			this._buttonVisitMagarena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMagarena.LinkArea = new System.Windows.Forms.LinkArea(0, 8);
 			this._buttonVisitMagarena.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMagarena.Location = new System.Drawing.Point(160, 118);
+			this._buttonVisitMagarena.Location = new System.Drawing.Point(166, 118);
 			this._buttonVisitMagarena.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitMagarena.Name = "_buttonVisitMagarena";
 			this._buttonVisitMagarena.Size = new System.Drawing.Size(90, 48);
@@ -523,7 +534,7 @@
 			this._buttonVisitXMage.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitXMage.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
 			this._buttonVisitXMage.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitXMage.Location = new System.Drawing.Point(80, 118);
+			this._buttonVisitXMage.Location = new System.Drawing.Point(86, 118);
 			this._buttonVisitXMage.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitXMage.Name = "_buttonVisitXMage";
 			this._buttonVisitXMage.Size = new System.Drawing.Size(90, 48);
@@ -540,7 +551,7 @@
 			this._buttonVisitForge.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitForge.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
 			this._buttonVisitForge.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitForge.Location = new System.Drawing.Point(0, 118);
+			this._buttonVisitForge.Location = new System.Drawing.Point(6, 118);
 			this._buttonVisitForge.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
 			this._buttonVisitForge.Name = "_buttonVisitForge";
 			this._buttonVisitForge.Size = new System.Drawing.Size(90, 48);
@@ -576,7 +587,7 @@
 			this._buttonMenuOpenCollection.Location = new System.Drawing.Point(3, 42);
 			this._buttonMenuOpenCollection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
 			this._buttonMenuOpenCollection.Name = "_buttonMenuOpenCollection";
-			this._buttonMenuOpenCollection.Size = new System.Drawing.Size(293, 37);
+			this._buttonMenuOpenCollection.Size = new System.Drawing.Size(287, 37);
 			this._buttonMenuOpenCollection.TabIndex = 31;
 			this._buttonMenuOpenCollection.TabStop = false;
 			this._buttonMenuOpenCollection.Text = "            Load collection from file: Ctrl+Alt+O";
@@ -598,7 +609,7 @@
 			this._buttonMenuSaveDeck.Location = new System.Drawing.Point(3, 3);
 			this._buttonMenuSaveDeck.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._buttonMenuSaveDeck.Name = "_buttonMenuSaveDeck";
-			this._buttonMenuSaveDeck.Size = new System.Drawing.Size(293, 37);
+			this._buttonMenuSaveDeck.Size = new System.Drawing.Size(287, 37);
 			this._buttonMenuSaveDeck.TabIndex = 33;
 			this._buttonMenuSaveDeck.TabStop = false;
 			this._buttonMenuSaveDeck.Text = "            Save deck to file: Ctrl+S";
@@ -620,7 +631,7 @@
 			this._buttonMenuOpenDeck.Location = new System.Drawing.Point(3, 3);
 			this._buttonMenuOpenDeck.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._buttonMenuOpenDeck.Name = "_buttonMenuOpenDeck";
-			this._buttonMenuOpenDeck.Size = new System.Drawing.Size(293, 37);
+			this._buttonMenuOpenDeck.Size = new System.Drawing.Size(287, 37);
 			this._buttonMenuOpenDeck.TabIndex = 30;
 			this._buttonMenuOpenDeck.TabStop = false;
 			this._buttonMenuOpenDeck.Text = "            Load deck from file: Ctrl+O";
@@ -1015,17 +1026,6 @@
 			this._buttonGeneralSettings.TabStop = false;
 			this._buttonGeneralSettings.Text = "General settings";
 			this._buttonGeneralSettings.UseVisualStyleBackColor = false;
-			// 
-			// label2
-			// 
-			this.label2.BackColor = System.Drawing.Color.Transparent;
-			this.label2.Location = new System.Drawing.Point(76, 178);
-			this.label2.Margin = new System.Windows.Forms.Padding(0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(205, 41);
-			this.label2.TabIndex = 36;
-			this.label2.Text = "* MTGO .txt format is supported in many websites including magic.wizards.com, www" +
-    ".mtggoldfish.com";
 			// 
 			// FormRoot
 			// 

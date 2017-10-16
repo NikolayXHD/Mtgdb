@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -91,43 +90,6 @@ namespace Mtgdb.Gui
 		{
 			FilterManaAbility.EnableRequiringSome = !_buttonExcludeManaAbility.Checked;
 			FilterManaAbility.EnableCostBehavior = _buttonExcludeManaAbility.Checked;
-		}
-
-
-
-		private void refilterChangedDeck(bool listChanged, bool touchedChanged, Card card)
-		{
-			updateViewDeck(listChanged, touchedChanged, card);
-
-			if (restoringSettings())
-				return;
-
-			if (touchedChanged || listChanged && isFilterGroupEnabled(FilterGroupDeck))
-			{
-				RunRefilterTask();
-			}
-			else
-			{
-				if (card == null)
-					_viewCards.Invalidate();
-				else
-					_viewCards.InvalidateCard(card);
-
-				updateFormStatus();
-			}
-		}
-
-		private void updateViewDeck(bool listChanged, bool touchedChanged, Card card)
-		{
-			if (listChanged)
-			{
-				_viewDeck.RefreshData();
-				_viewDeck.Invalidate();
-			}
-			else if (touchedChanged)
-				_viewDeck.Invalidate();
-			else
-				_viewDeck.InvalidateCard(card);
 		}
 
 
@@ -233,8 +195,20 @@ namespace Mtgdb.Gui
 
 		private void refreshData()
 		{
-			if (_viewCards.VisibleRecordIndex >= _filteredCards.Count)
-				_viewCards.VisibleRecordIndex = 0;
+			int visibleRecordIndex;
+
+			if (_requiredScroll.HasValue && _cardRepo.IsImageLoadingComplete)
+			{
+				visibleRecordIndex = _requiredScroll.Value;
+				_requiredScroll = null;
+			}
+			else
+				visibleRecordIndex = _viewCards.VisibleRecordIndex;
+
+			if (visibleRecordIndex >= _filteredCards.Count)
+				visibleRecordIndex = 0;
+
+			_viewCards.VisibleRecordIndex = visibleRecordIndex;
 
 			_viewCards.RefreshData();
 			_viewCards.Invalidate();
@@ -566,15 +540,14 @@ namespace Mtgdb.Gui
 			_sortSubsystem.ApplySort(settings.Sort);
 
 			loadCollection(settings.Collection);
-			loadDeck(settings.Deck);
+			loadDeck(_requiredDeck ?? settings.Deck);
 
 			_legalitySubsystem.SetFilterFormat(settings.LegalityFilterFormat);
 			_legalitySubsystem.SetAllowLegal(settings.LegalityAllowLegal != false);
 			_legalitySubsystem.SetAllowRestricted(settings.LegalityAllowRestricted != false);
 			_legalitySubsystem.SetAllowBanned(settings.LegalityAllowBanned == true);
 
-			if (settings.SearchResultScroll.HasValue && _cardRepo.IsImageLoadingComplete)
-				_viewCards.VisibleRecordIndex = settings.SearchResultScroll.Value;
+			_requiredScroll = settings.SearchResultScroll;
 
 			endRestoreSettings();
 			
@@ -733,17 +706,16 @@ namespace Mtgdb.Gui
 		{
 			if (deckName == null)
 			{
-				Text = null;
+				Text = DeckSerializationSubsystem.NoDeck;
 				return;
 			}
 
-			string fileName = Path.GetFileName(deckName);
 			const int maxLength = 22;
 
-			if (fileName.Length > maxLength)
-				fileName = $"…{fileName.Substring(fileName.Length - maxLength)}";
+			if (deckName.Length > maxLength)
+				deckName = $"…{deckName.Substring(deckName.Length - maxLength)}";
 
-			Text = fileName;
+			Text = deckName;
 		}
 
 		public void ButtonUndo()
@@ -767,7 +739,15 @@ namespace Mtgdb.Gui
 			_printingSubsystem.ShowPrintingDialog(_deckModel);
 		}
 
+		public void FocusSearch()
+		{
+			_searchStringSubsystem.FocusSearch();
+		}
 
+		public void ApplySearch()
+		{
+			_searchStringSubsystem.ProcessEnterKey();
+		}
 
 
 
@@ -797,7 +777,8 @@ namespace Mtgdb.Gui
 
 		public void StopDragging()
 		{
-			_draggingSubsystem.DragAbort();
+			if (_draggingSubsystem.IsDragging())
+				_draggingSubsystem.DragAbort();
 		}
 
 

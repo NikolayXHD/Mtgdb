@@ -229,28 +229,23 @@ namespace Mtgdb.Gui
 		private void parentKeyDown(object sender, KeyEventArgs e)
 		{
 			updateBackgroundColor();
+		}
 
+		public void ProcessEnterKey()
+		{
+			if (_listBoxSuggest.Visible)
+				return;
+
+			ApplyFind();
+		}
+
+		public void FocusSearch()
+		{
 			if (isSearchFocused())
 				return;
 
-			if (e.KeyCode == Keys.Enter && !_listBoxSuggest.Visible)
-			{
-				ApplyFind();
-
-				e.Handled = true;
-				e.SuppressKeyPress = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.F))
-			{
-				if (!isSearchFocused())
-				{
-					_findEditor.SelectionStart = _findEditor.TextLength;
-					focusSearch();
-				}
-
-				e.Handled = true;
-				e.SuppressKeyPress = true;
-			}
+			_findEditor.SelectionStart = _findEditor.TextLength;
+			focusSearch();
 		}
 
 		private void findKeyDown(object sender, KeyEventArgs e)

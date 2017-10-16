@@ -203,7 +203,7 @@ namespace Mtgdb.Gui
 				AddExtension = true,
 				FilterIndex = SaveFilterIndex,
 				Title = @"Select a file to save " + fileType,
-				FileName =  name.NonEmpty()
+				FileName =  name.Non(string.Empty)
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)
@@ -267,5 +267,11 @@ namespace Mtgdb.Gui
 		private string _lastLoadedFile;
 
 		private readonly IDeckFormatter[] _formatters;
+
+		/// <summary>
+		/// Used instead of empty string or null to avoid weird .NET call to RecreateHandle()
+		/// when setting form text to null or empty
+		/// </summary>
+		public const string NoDeck = " ";
 	}
 }

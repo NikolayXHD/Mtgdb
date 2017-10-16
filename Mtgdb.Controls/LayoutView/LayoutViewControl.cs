@@ -839,6 +839,9 @@ namespace Mtgdb.Controls
 
 		public bool PreFilterMessage(ref Message m)
 		{
+			if (Disposing || IsDisposed)
+				return false;
+
 			// WM_MOUSEWHEEL, WM_KEYDOWN
 			if (m.Msg != 0x020a && m.Msg != 0x0100)
 				return false;

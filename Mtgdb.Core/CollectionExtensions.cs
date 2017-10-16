@@ -123,9 +123,9 @@ namespace Mtgdb
 		}
 
 
-		public static string NonEmpty(this string value)
+		public static string Non(this string value, string empty)
 		{
-			if (value.Length == 0)
+			if (value == empty)
 				return null;
 
 			return value;

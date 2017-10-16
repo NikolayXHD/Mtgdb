@@ -69,6 +69,8 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndexChanged += selectedPageChanged;
 			_tabs.TabReordered += pageReordered;
 
+			KeyDown += formKeyDown;
+
 			setupButtons();
 
 			setupExternalLinks();
@@ -117,7 +119,10 @@ namespace Mtgdb.Gui
 			if (formIndex < 0)
 				return;
 
-			string text = formMain.Text.NonEmpty() ?? _tabs.GetDefaultText(formIndex);
+			string text =
+				formMain.Text.Non(DeckSerializationSubsystem.NoDeck) ??
+				_tabs.GetDefaultText(formIndex);
+
 			_tabs.SetTabSetting(formMain, new TabSettings(text));
 		}
 
