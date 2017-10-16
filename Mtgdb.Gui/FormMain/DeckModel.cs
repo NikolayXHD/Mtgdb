@@ -133,7 +133,9 @@ namespace Mtgdb.Gui
 
 			if (!loadingDeck)
 			{
-				Deck.Clear();
+				MainDeck.Clear();
+				SideDeck.Clear();
+
 				DeckChanged?.Invoke(
 					listChanged: true,
 					countChanged: true,
