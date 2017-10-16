@@ -96,7 +96,11 @@ namespace Mtgdb.Downloader
 		public void DownloadAppSignature()
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
-			_megatools.Download("current version signature", _appSourceConfig.FileListUrl, _updateAppDir);
+			_megatools.Download("current version signature",
+				_appSourceConfig.FileListUrl,
+				_updateAppDir,
+				silent: true);
+
 			AppOnlineSignature = getAppOnlineSignature();
 		}
 

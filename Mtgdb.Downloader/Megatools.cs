@@ -7,12 +7,12 @@ namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
-		public void Download(string name, string storageUrl, string targetDirectory, bool quiet = false, int? timeoutSec = null)
+		public void Download(string name, string storageUrl, string targetDirectory, bool silent = false, int? timeoutSec = null)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
 
-			_quiet = quiet;
+			_quiet = silent;
 
 			DownloadedCount = 0;
 
