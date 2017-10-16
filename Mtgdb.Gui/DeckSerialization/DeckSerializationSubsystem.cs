@@ -47,7 +47,7 @@ namespace Mtgdb.Gui
 
 		private Deck save(Deck deck, string fileType)
 		{
-			var fileToSave = selectFileToSave(fileType);
+			var fileToSave = selectFileToSave(deck.Name, fileType);
 
 			if (fileToSave == null)
 				return null;
@@ -194,7 +194,7 @@ namespace Mtgdb.Gui
 
 		private int LoadFilterIndex => getIndex(LastLoadedExtension, _loadFilter);
 
-		private DeckFile selectFileToSave(string fileType)
+		private DeckFile selectFileToSave(string name, string fileType)
 		{
 			var dlg = new SaveFileDialog
 			{
@@ -202,7 +202,8 @@ namespace Mtgdb.Gui
 				Filter = _saveFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = SaveFilterIndex,
-				Title = @"Select a file to save " + fileType
+				Title = @"Select a file to save " + fileType,
+				FileName =  name.NonEmpty()
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)
