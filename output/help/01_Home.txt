@@ -5,6 +5,10 @@ Mtgdb.Gui is a Windows application to search MTG cards, build decks and keep tra
 
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan.jpg?raw=true
 
+[Download link](http://goo.gl/LuC6ce)
+
+[Forum thread](http://goo.gl/VXv71n)
+
 Prerequisites
 -------------
 
@@ -59,7 +63,7 @@ I already have card images somewhere on my PC. How do I make Mtgdb.Gui use them?
 
 Edit the configuration file \etc\Mtgdb.Gui.xml
 
-More help
----------
+Support
+-------
 
-Use help menu in window header to get help on specific topics.
+If you need assistance ask your question in [Mtgdb.Gui forum thread](http://goo.gl/VXv71n)
