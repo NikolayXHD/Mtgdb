@@ -79,7 +79,7 @@ namespace Mtgdb.Gui
 			historyUpdate();
 		}
 
-		
+
 
 		private void updateExcludeManaCost()
 		{
