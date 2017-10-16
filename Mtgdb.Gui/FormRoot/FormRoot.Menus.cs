@@ -62,8 +62,7 @@ namespace Mtgdb.Gui
 
 		private void helpClick(object sender, EventArgs e)
 		{
-			var helpFileUrl = "file:///" + AppDir.Root.Replace("\\", "/") + "/help/html/home.html";
-			System.Diagnostics.Process.Start(helpFileUrl);
+			System.Diagnostics.Process.Start(AppDir.Root.AddPath("\\help\\html\\home.html"));
 		}
 
 		private void redoClick(object sender, EventArgs e)
@@ -174,7 +173,7 @@ namespace Mtgdb.Gui
 			_buttonDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
 			_buttonDonateYandexMoney.Click += buttonVisitClick;
 
-			_buttonVisitMtgo.SetTag(@"https://magic.wizards.com/en/content/magic-online-products-game-info");
+			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
 			_buttonVisitMtgo.Click += buttonVisitClick;
 		}
 
@@ -254,7 +253,47 @@ namespace Mtgdb.Gui
 					hoveredImage));
 		}
 
+		private void formKeyDown(object sender, KeyEventArgs e)
+		{
+			var form = getSelectedForm();
+			if (form == null)
+				return;
 
+			bool handled = true;
+
+			if (e.KeyData == Keys.F1)
+				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"help\\html\\Search_input_keyboard_shortcuts.html"));
+			else if (e.KeyData == (Keys.Control | Keys.F4))
+				CloseTab();
+			else if (e.KeyData == (Keys.Control | Keys.Tab))
+				NextTab();
+			else if (e.KeyData == (Keys.Control | Keys.T))
+				NewTab(onCreated: null);
+			else if (e.KeyData == (Keys.Control | Keys.S))
+				form.ButtonSaveDeck();
+			else if (e.KeyData == (Keys.Control | Keys.O))
+				form.ButtonLoadDeck();
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
+				form.ButtonSaveCollection();
+			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
+				form.ButtonLoadCollection();
+			else if (e.KeyData == (Keys.Control | Keys.P))
+				form.ButtonPrint();
+			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))
+				form.ButtonUndo();
+			else if (e.KeyData == (Keys.Alt | Keys.Right) || e.KeyData == (Keys.Control | Keys.Y))
+				form.ButtonRedo();
+			else if (e.KeyData == (Keys.Control | Keys.F))
+				form.FocusSearch();
+			else if (e.KeyData == Keys.Enter)
+				form.ApplySearch();
+			else if (e.KeyData == Keys.Escape)
+				form.StopDragging();
+			else if (!e.Modifiers.Equals(Keys.Alt))
+				handled = false;
+
+			e.Handled = handled;
+		}
 
 		private void unsubsribeButtonEvents()
 		{

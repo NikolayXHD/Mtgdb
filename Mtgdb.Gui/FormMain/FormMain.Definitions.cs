@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -183,8 +182,7 @@ namespace Mtgdb.Gui
 		private void subscribeToEvents()
 		{
 			FormClosing += formClosing;
-			KeyDown += formKeyDown;
-
+			
 			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown += resetExcludeManaAbility;
 			_buttonShowDuplicates.CheckedChanged += showDuplicatesCheckedChanged;
@@ -292,11 +290,7 @@ namespace Mtgdb.Gui
 			for (int i = 1; i < loadedDecks.Length; i++)
 			{
 				var deck = loadedDecks[i];
-
-				Action<FormMain> onLoaded = f => { f.deckLoaded(deck); };
-				Action<object> onCreated = form => ((FormMain)form).OnLoaded(onLoaded);
-
-				_uiModel.Form.NewTab(onCreated);
+				_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
 			}
 		}
 
@@ -304,8 +298,7 @@ namespace Mtgdb.Gui
 		{
 			Load -= formLoad;
 			FormClosing -= formClosing;
-			KeyDown -= formKeyDown;
-
+			
 			_buttonExcludeManaCost.MouseDown -= resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
 			_buttonShowDuplicates.CheckedChanged -= showDuplicatesCheckedChanged;
@@ -360,10 +353,8 @@ namespace Mtgdb.Gui
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 		}
 
-		public void OnLoaded(Action<FormMain> a)
-		{
-			_onLoadHandlers.Add(a);
-		}
+		private Deck _requiredDeck;
+		private int? _requiredScroll;
 
 		/// <summary>
 		/// Предотвращает реакцию на изменения состояния формы и её контролов.
@@ -412,7 +403,5 @@ namespace Mtgdb.Gui
 		private readonly TooltipController _toolTipController;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly ButtonSubsystem _buttonSubsystem;
-
-		private readonly List<Action<FormMain>> _onLoadHandlers = new List<Action<FormMain>>();
 	}
 }

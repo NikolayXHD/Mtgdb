@@ -150,8 +150,6 @@ namespace Mtgdb.Downloader
 			setButtonsEnabled(false);
 
 			Console.WriteLine();
-			Console.WriteLine("Downloading {0}...", _appVersionOnline);
-
 			_installer.DownloadApp();
 			bool downloadSuccess = _installer.ValidateDownloadedApp();
 
