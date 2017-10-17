@@ -43,14 +43,14 @@ Buttons in the window header right side
 
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/header_buttons.jpg?raw=true
 
-`Open deck` from a file, `Save deck` to a file. Supported are deck formats of
-- Magarena https://www.slightlymagic.net/forum/viewforum.php?f=82
-- Forge https://www.slightlymagic.net/forum/viewforum.php?f=26
-- XMage http://www.xmage.de
-- Cockatrice https://cockatrice.github.io/ supports the format used by Magarena
-- To use your decks with Riiak's DotP 2014 Deck Builder 
-https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999 use a modified version supporting 
-Forge deck format https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467
+`Load deck` or `collection` from a file, `Save deck` or `collection` to a file. Supported are formats of
+- [Forge](https://www.slightlymagic.net/forum/viewforum.php?f=26)
+- [Magarena](https://www.slightlymagic.net/forum/viewforum.php?f=82)
+- [XMage](http://www.xmage.de)
+- [Magic The Gathering Online](https://magic.wizards.com/en/content/magic-online-products-game-info) *.txt deck and collection files
+- [Cockatrice](https://cockatrice.github.io/) supports the format used by Magarena
+- To use your decks with [Riiak's DotP 2014 Deck Builder](https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999) use a [modified version](https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467) supporting 
+Forge deck format
 
 `Deck statistics`. Opens a Pivot report window. Use it to view mana curve, price breakdown, or 
 create a custom report by specifying `argument`, `series` and `summary` fields.

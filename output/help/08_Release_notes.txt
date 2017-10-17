@@ -1,3 +1,22 @@
+2.2.9
+-----
+
+### Pasting deck from Clipboard text
+Added `Paste` menu to window header and corresponding keyboard shortcuts
+* `Ctrl`+`V` to create a new deck from Clipboard text
+* `Ctrl`+`Shift`+`V` to add cards to an existing deck instead of creating new one
+
+### Drag-n-dropping deck text from websites and other applications.
+Works the same way as pasting.
+* Normal `drag-n-drop` to create new deck from dragged text
+* `Shift`+`drag-n-drop` to add cards from dragged text to an existing deck
+
+I tested copy-pasting and drag-n-dropping in following websites:
+* [sales.starcitygames.com](http://sales.starcitygames.com/deckdatabase/)
+* [www.mtggoldfish.com](https://www.mtggoldfish.com/)
+* [magic.wizards.com](https://magic.wizards.com/en/articles/archive/top-decks/what-we-learned-world-championship-2017-10-12)
+* [deckbox.org](https://deckbox.org/decks/mtg)
+
 2.2.7-2.2.8
 -----------
 

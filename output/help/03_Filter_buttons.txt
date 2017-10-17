@@ -20,6 +20,8 @@ OR.
 
 Filters by different properties are always joined through AND.
 
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Filter_example.jpg?raw=true
+
 Resetting
 ---------
 

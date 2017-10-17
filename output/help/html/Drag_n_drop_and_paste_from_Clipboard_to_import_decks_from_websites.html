@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Mtgdb.Gui help - Drag n drop and paste from Clipboard to import decks from websites
+	</title>
+	<link rel="stylesheet" type="text/css" href="help_style.css"/>
+</head>
+<body>
+<div>
+	<div class="page-title">
+		<h1>
+			Drag n drop and paste from Clipboard to import decks from websites
+		</h1>
+	</div>
+	<div class="page-content">
+		<div class="navigation">
+			<ul class="internal">
+				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="Deck_and_Collection_Editor.html">Deck and Collection Editor</a></li><li class="selected"><a href="Drag_n_drop_and_paste_from_Clipboard_to_import_decks_from_websites.html">Drag n drop and paste from Clipboard to import decks from websites</a></li><li class=""><a href="Import_collection_&_decks_from_Magic_The_Gathering_Online.html">Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="Filter_buttons.html">Filter buttons</a></li><li class=""><a href="Search_syntax.html">Search syntax</a></li><li class=""><a href="Search_input_keyboard_shortcuts.html">Search input keyboard shortcuts</a></li><li class=""><a href="Search_button_over_card_text.html">Search button over card text</a></li><li class=""><a href="Sort.html">Sort</a></li><li class=""><a href="Release_notes.html">Release notes</a></li><li class=""><a href="About.html">About</a></li>
+			</ul>
+			<ul class="external">
+				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
+				<li><a href="https://github.com/NikolayXHD/Mtgdb">Source code on Github</a></li>
+			</ul>
+		</div>
+		<div class="content">
+			<p>Some MTG webistes let you download the deck in <code>*.txt</code> format. Then you can open it as MTGO *.txt
+deck. However the website <code>download deck</code> button is not always easy to find, and sometimes there
+is none. Also it's not that fast to locate the downloaded file in <code>Load deck</code> dialog.</p>
+<p>I implemented Copy-paste &amp; Drag-n-drop deck text features to cut-down and unify the hassle as
+much as I can.</p>
+<h2 id="pasting-deck-from-clipboard">Pasting deck from Clipboard</h2>
+<p>You can find <code>Paste</code> menu before save / load buttons in window header.</p>
+<p><a href="../img/paste_menu.jpg"><img src="../img/paste_menu.jpg" alt="" /></a></p>
+<ul>
+<li><code>Ctrl</code>+<code>V</code> to create a new deck from Clipboard text</li>
+<li><code>Ctrl</code>+<code>Shift</code>+<code>V</code> to add cards to an existing deck instead of creating new one</li>
+</ul>
+<h2 id="drag-n-dropping-deck-text-from-websites-and-other-applications">Drag-n-dropping deck text from websites and other applications</h2>
+<p>Works the same way as pasting.</p>
+<ul>
+<li>Normal <code>drag-n-drop</code> to create a new deck from dragged text</li>
+<li><code>Shift</code>+<code>drag-n-drop</code> to add cards from dragged text to an existing deck</li>
+</ul>
+<p>Copy-pasting and drag-n-dropping were tested in following websites</p>
+<h3 id="magic.wizards.com"><a href="https://magic.wizards.com/en/articles/archive/top-decks/what-we-learned-world-championship-2017-10-12">magic.wizards.com</a></h3>
+<p>Dragging:</p>
+<p><a href="../img/paste_magicwizards.jpg"><img src="../img/paste_magicwizards.jpg" alt="wizards.magic.com drag" /></a></p>
+<p>Result:</p>
+<p><a href="../img/paste_magicwizards_result.jpg"><img src="../img/paste_magicwizards_result.jpg" alt="wizards.magic.com drag result" /></a></p>
+<h3 id="deckbox.org"><a href="https://deckbox.org/decks/mtg">deckbox.org</a></h3>
+<p>Dragging:</p>
+<p><a href="../img/paste_deckbox.jpg"><img src="../img/paste_deckbox.jpg" alt="deckbox.org drag" /></a></p>
+<p>Result:</p>
+<p><a href="../img/paste_deckbox_result.jpg"><img src="../img/paste_deckbox_result.jpg" alt="deckbox.org drag result" /></a></p>
+<h3 id="www.mtggoldfish.com"><a href="https://www.mtggoldfish.com/">www.mtggoldfish.com</a></h3>
+<p>Dragging:</p>
+<p><a href="../img/paste_mtggoldfish.jpg"><img src="../img/paste_mtggoldfish.jpg" alt="mtggoldfish.com dragging" /></a></p>
+<p>Result:</p>
+<p><a href="../img/paste_mtggoldfish.jpg_result?raw=true"><img src="../img/paste_mtggoldfish_result.jpg" alt="mtggoldfish.com dragging result" /></a></p>
+<h3 id="sales.starcitygames.com"><a href="http://sales.starcitygames.com/deckdatabase/">sales.starcitygames.com</a></h3>
+<p>Dragging:</p>
+<p><a href="../img/paste_starcitygames.jpg"><img src="../img/paste_starcitygames.jpg" alt="starcitygames.com dragging" /></a></p>
+<p>Result:</p>
+<p><a href="../img/paste_starcitygames_result.jpg"><img src="../img/paste_starcitygames_result.jpg" alt="starcitygames.com dragging result" /></a></p>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

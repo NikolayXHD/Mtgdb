@@ -1,19 +1,20 @@
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true
+
 Introduction
 ------------
 
 Searching is case-INsensitive
 
 IMPORTANT: Searh result includes only exact matches to the words in query unless wildcard symbols 
-are used. A query 'angel OR demon' will not match words like 'angelic'.
+are used. A query `angel OR demon` *will not* match words like `angelic`.
 
-Wildcard symbols are: * - any characters or nothing, ? - any one character. To find all words 
-like 'smash', 'smashed', 'smashing' use query `smash*`
+Wildcard symbols are: `*` - any characters or nothing, `?` - any one character. To find all words 
+like `smash`, `smashed`, `smashing` use query `smash*`
 
 Search text syntax
 ------------------
 
-Search text uses Lucene query language as specified at 
-https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+Search text uses [Lucene query language](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html)
 
 Boolean operators and nesting
 
