@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Markdig;
@@ -13,10 +14,7 @@ namespace Mtgdb.Test
 		[Test]
 		public void Render_local_help()
 		{
-			var helpFiles = Directory.GetFiles(
-				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"),
-				"*.md",
-				SearchOption.TopDirectoryOnly);
+			var helpFiles = getHelpFiles();
 
 			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\html\\template.html"));
 
@@ -35,6 +33,45 @@ namespace Mtgdb.Test
 			}
 		}
 
+		[Test]
+		public void No_redundant_images()
+		{
+			string imgDir = AppDir.Root.AddPath("help\\img");
+			var images = Directory.GetFiles(imgDir, "*.jpg", SearchOption.TopDirectoryOnly);
+
+			var redundantImages = new HashSet<string>(images.Select(Path.GetFileNameWithoutExtension),
+				Str.Comparer);
+
+			var usedImages = new HashSet<string>(Str.Comparer);
+
+			var helpFiles = getHelpFiles();
+
+			var imgUrlRegex = new Regex(Regex.Escape(ImgDirUrl) + @"(?<name>[^@\/]+)\.jpg",
+				RegexOptions.Compiled);
+
+			foreach (string helpFile in helpFiles)
+			{
+				string mdContent = File.ReadAllText(helpFile);
+
+				foreach (Match match in imgUrlRegex.Matches(mdContent))
+					usedImages.Add(match.Groups["name"].Value);
+			}
+
+			redundantImages.ExceptWith(usedImages);
+			CollectionAssert.IsNotEmpty(usedImages);
+			CollectionAssert.IsEmpty(redundantImages);
+		}
+
+
+		private static string[] getHelpFiles()
+		{
+			var helpFiles = Directory.GetFiles(
+				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"),
+				"*.md",
+				SearchOption.TopDirectoryOnly);
+			return helpFiles;
+		}
+
 		private static string getTextFileName(string helpFile)
 		{
 			string name = Path.GetFileNameWithoutExtension(helpFile);
@@ -51,9 +88,7 @@ namespace Mtgdb.Test
 		{
 			var readmeText = mdContent
 				.Replace(".jpg?raw=true", ".jpg")
-				.Replace(
-				"https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/",
-				"../img/");
+				.Replace(ImgDirUrl, "../img/");
 
 			var pipeline = new MarkdownPipelineBuilder()
 				.UseAdvancedExtensions()
@@ -102,5 +137,7 @@ namespace Mtgdb.Test
 		private static readonly Regex _imgRegex = new Regex(
 			@"\[!\[[^\]]+\]\((?<url>[^\)]+)\)\]\(\1\)",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+		private const string ImgDirUrl = "https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/";
 	}
 }

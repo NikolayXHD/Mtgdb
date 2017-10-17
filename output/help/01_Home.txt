@@ -1,9 +1,9 @@
 Overview
 --------
 
-Mtgdb.Gui is a Windows application to search MTG cards, build decks and keep track of collection.
+Mtgdb.Gui is a *Windows* application to search MTG cards, build decks and keep track of collection.
 
-https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan.jpg?raw=true
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan_small.jpg?raw=true
 
 [Download link](http://goo.gl/LuC6ce)
 
@@ -12,8 +12,10 @@ https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Ixalan.jpg?raw=t
 Prerequisites
 -------------
 
-The program requires .NET Framework v4.0 Most people have it already installed.
+The program requires **.NET Framework v4.0** Most people have it already installed.
 In case you don't download it from https://www.microsoft.com/en-gb/download/details.aspx?id=17851
+
+.NET Framework v4.0 itself can run on **Windows XP** or newer versions of MS Windows
 
 Running Mtgdb.Gui
 -----------------
@@ -31,7 +33,7 @@ An update window will open where you will see buttons to download images.
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/update_window.jpg?raw=true
 
 To download images manually 
-* Open etc\Mtgdb.Gui.xml
+* Open `etc\Mtgdb.Gui.xml`
 * Find the section `<ImageLocations>`
 * Read the comments above commented `<Directory />` tags. There you will find a download link
   and a brief description of images to be downloaded.
@@ -61,7 +63,7 @@ see more at http://www.slightlymagic.net/forum/viewforum.php?f=26
 I already have card images somewhere on my PC. How do I make Mtgdb.Gui use them?
 --------------------------------------------------------------------------------
 
-Edit the configuration file \etc\Mtgdb.Gui.xml
+Edit the configuration file `\etc\Mtgdb.Gui.xml`
 
 Support
 -------
