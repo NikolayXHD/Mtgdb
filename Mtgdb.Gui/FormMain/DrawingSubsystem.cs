@@ -108,7 +108,10 @@ namespace Mtgdb.Gui
 			e.Handled = true;
 
 			if (card.Image != null)
-				e.Graphics.DrawImage(card.Image, card.Image.Size.ZoomTo(e.Bounds));
+			{
+				var bounds = card.Image.Size.FitIn(e.Bounds);
+				e.Graphics.DrawImage(card.Image, bounds);
+			}
 
 			if (card == _deckModel.TouchedCard)
 				drawSelection(e, Color.LightBlue, Color.AliceBlue, 236);
@@ -121,7 +124,7 @@ namespace Mtgdb.Gui
 
 			var legalityWarning = _legalitySubsystem.GetWarning(card);
 
-			if (legalityWarning == Resources.Title_Restricted && card.DeckCount <= 1 && sender == _layoutViewDeck)
+			if (legalityWarning == Legality.Restricted && card.DeckCount <= 1 && sender == _layoutViewDeck)
 				legalityWarning = null;
 
 			if (!string.IsNullOrEmpty(legalityWarning))
@@ -191,15 +194,15 @@ namespace Mtgdb.Gui
 			var rect = getSelectionRectangle(e);
 
 			const int opacity = 224;
-			const int size = 18;
-			
-			var targetRect = new Rectangle(
-				(int) (rect.Left + 0.5f*(rect.Width - countText.Length*size*0.57f)),
-				(int) (rect.Top - 2 + 0.5f*(rect.Height - size)),
-				size*countText.Length,
-				size);
+			var size = new Size(18, 18).ByDpi();
 
-			var font = new Font(_font.FontFamily, size, FontStyle.Bold, GraphicsUnit.Pixel);
+			var targetRect = new Rectangle(
+				(int) (rect.Left + 0.5f * (rect.Width - countText.Length * size.Width * 0.57f)),
+				(int) (rect.Top - 2 + 0.5f * (rect.Height - size.Height)),
+				size.Width * countText.Length,
+				size.Height);
+
+			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
 
 			e.Graphics.DrawString(
 				countText,
@@ -218,15 +221,15 @@ namespace Mtgdb.Gui
 			var rect = getSelectionRectangle(e);
 
 			const int opacity = 224;
-			const int size = 18;
+			var size = new Size(18, 18).ByDpi();
 
 			var targetRect = new Rectangle(
-				(int)(rect.Left + 0.5f * (rect.Width - countText.Length * size * 0.57f)),
-				(int)(rect.Top - 2 + 0.5f * (rect.Height - size)),
-				size * countText.Length,
-				size);
+				(int)(rect.Left + 0.5f * (rect.Width - countText.Length * size.Width * 0.57f)),
+				(int)(rect.Top - 2 + 0.5f * (rect.Height - size.Height)),
+				size.Width * countText.Length,
+				size.Height);
 
-			var font = new Font(_font.FontFamily, size, FontStyle.Bold, GraphicsUnit.Pixel);
+			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
 
 			e.Graphics.DrawString(
 				countText,
@@ -238,27 +241,26 @@ namespace Mtgdb.Gui
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)
 		{
-			const int width = 50;
-			const int height = 30;
-			const int padding = 0;
+			var size = new Size(50, 30).ByDpi();
 
 			var rect = new Rectangle(
-				e.Bounds.Left + (_imageCache.CardSize.Width - width)/2,
-				e.Bounds.Bottom - height - padding,
-				width,
-				height);
+				e.Bounds.Left + (_imageCache.CardSize.Width - size.Width)/2,
+				e.Bounds.Bottom - size.Height,
+				size.Width,
+				size.Height);
 
 			return rect;
 		}
 
 		private Rectangle getWarningRectangle(CustomDrawArgs e)
 		{
-			const int height = 30;
+			var stripSize = new Size(_imageCache.CardSize.Width, 30.ByDpiHeight());
+
 			var rect = new Rectangle(
 				e.Bounds.Left,
-				(int) (e.Bounds.Bottom - 1.75f * height),
-				_imageCache.CardSize.Width,
-				height);
+				(int) (e.Bounds.Bottom - 1.75f * stripSize.Height),
+				stripSize.Width,
+				stripSize.Height);
 
 			return rect;
 		}
@@ -287,7 +289,7 @@ namespace Mtgdb.Gui
 			foreach (var fieldName in view.FieldNames)
 			{
 				if (fieldName == nameof(Card.Image))
-					return;
+					continue;
 
 				var text = _layoutViewCards.GetFieldText(rowHandle, fieldName);
 				setMatches(rowHandle, text, fieldName);

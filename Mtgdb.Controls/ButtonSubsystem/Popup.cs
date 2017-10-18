@@ -7,9 +7,10 @@ namespace Mtgdb.Controls
 {
 	public class Popup
 	{
-		public Popup(Control control, ButtonBase owner, HorizontalAlignment alignment = HorizontalAlignment.Left, bool openOnHover = true, bool closeMenuOnClick = false, bool borderOnHover = true)
+		public Popup(Control control, ButtonBase owner, HorizontalAlignment alignment = HorizontalAlignment.Left, bool openOnHover = true, bool closeMenuOnClick = false, bool borderOnHover = true, Control container = null)
 		{
 			Control = control;
+			Container = container ?? control;
 			OpenOnHover = openOnHover;
 			CloseMenuOnClick = closeMenuOnClick;
 			BorderOnHover = borderOnHover;
@@ -18,6 +19,7 @@ namespace Mtgdb.Controls
 		}
 
 		public Control Control { get; }
+		public Control Container { get; }
 		
 		public bool Visible => Control.Visible;
 		public void Hide() => Control.Hide();
@@ -57,7 +59,7 @@ namespace Mtgdb.Controls
 
 			if (Control is ContextMenuStrip)
 			{
-				var screenRect = new Rectangle(_screenLocation.Value, Control.Size);
+				var screenRect = new Rectangle(_screenLocation.Value, Container.Size);
 				return screenRect.Contains(cursorPosition);
 			}
 			else

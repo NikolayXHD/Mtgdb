@@ -36,6 +36,10 @@
       <HintPath>..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Magick.NET-Q16-AnyCPU.7.0.7.700\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Markdig, Version=0.13.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Markdig.0.13.3\lib\net40\Markdig.dll</HintPath>
       <Private>True</Private>
@@ -73,6 +77,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Util\Mtgdb.Util.csproj">
+      <Project>{56661dad-10a7-41ef-8672-f417f15923cb}</Project>
+      <Name>Mtgdb.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
       <Name>EditedTokenLocator</Name>
@@ -100,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DalTests.cs" />
+    <Compile Include="DownsamplingTests.cs" />
     <Compile Include="EditDistanceTests.cs" />
     <Compile Include="GathererImagePreProcessor.cs" />
     <Compile Include="Index\KeywordTests.cs" />
@@ -108,15 +121,9 @@
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
     <Compile Include="DeckFormattersTests.cs" />
-    <Compile Include="Index\TestLoadingUtil.cs" />
+    <Compile Include="Index\TestLoader.cs" />
     <Compile Include="Markdown\MarkdownTests.cs" />
     <Compile Include="Price\PriceDownloaderTests.cs" />
-    <Content Include="Resources\mtgo\cards.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\mtgo\setmap.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Compile Include="WaifuScaler.cs" />
   </ItemGroup>
   <ItemGroup>

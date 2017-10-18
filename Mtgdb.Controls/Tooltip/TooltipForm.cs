@@ -13,6 +13,11 @@ namespace Mtgdb.Controls
 		{
 			BackColor = Color.White;
 			FormBorderStyle = FormBorderStyle.None;
+
+			_tooltipSize = new Size(400, 300).ByDpi();
+			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
+			_selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
+
 			ControlBox = false;
 			ShowInTaskbar = false;
 			StartPosition = FormStartPosition.Manual;
@@ -20,7 +25,7 @@ namespace Mtgdb.Controls
 			TopMost = true;
 			KeyPreview = false;
 
-			_panel = new CustomPanel
+			_panel = new BorderedPanel
 			{
 				BorderColor = BorderColor,
 				BackColor = BackColor,
@@ -101,15 +106,15 @@ namespace Mtgdb.Controls
 
 			if (value)
 			{
-				_buttonClose.Location = new Point(_panel.Width - Properties.Resources.close_tab_hovered_16.Width - 1, 1);
-				_buttonClose.Size = Properties.Resources.close_tab_hovered_16.Size;
-				_buttonClose.BackgroundImage = Properties.Resources.close_tab_hovered_16;
+				_buttonClose.Location = new Point(_panel.Width - _closeIcon.Width - 1, 1);
+				_buttonClose.BackgroundImage = _closeIcon;
+				_buttonClose.Size = _closeIcon.Size;
 			}
 			else
 			{
-				_buttonClose.Location = new Point(_panel.Width - Properties.Resources.selectable_transp_32.Width - 3, 3);
-				_buttonClose.Size = Properties.Resources.selectable_transp_32.Size;
-				_buttonClose.BackgroundImage = Properties.Resources.selectable_transp_32;
+				_buttonClose.Location = new Point(_panel.Width - _selectableTextIcon.Width - 3, 3);
+				_buttonClose.Size = _selectableTextIcon.Size;
+				_buttonClose.BackgroundImage = _selectableTextIcon;
 			}
 		}
 
@@ -390,15 +395,17 @@ namespace Mtgdb.Controls
 
 			// строки из иероглифов недополучают при измерении
 			int cjkTermH = tooltip.Text.IsCjk() ? 32 : 0;
-			int cjkTermV = tooltip.Text.IsCjk() ? 6 : 0;
 
 			if (Clickable)
 				cjkTermH = Math.Max(cjkTermH, titleSize.Width - contentWidth + (int) (_buttonClose.Width*1.25f) - TextPadding);
 
+			int cjkTermV = tooltip.Text.IsCjk() ? 6 : 0;
+
+			var cjkTermSize = new Size(cjkTermH, cjkTermV).ByDpi();
 
 			var size = new Size(
-				contentWidth + _tooltipTextbox.Margin.Horizontal + 2 + cjkTermH,
-				titleSize.Height + contentSize.Height + _tooltipTextbox.Margin.Vertical + cjkTermV);
+				contentWidth + _tooltipTextbox.Margin.Horizontal + 2 + cjkTermSize.Width,
+				titleSize.Height + contentSize.Height + _tooltipTextbox.Margin.Vertical + cjkTermSize.Height);
 
 			return size;
 		}
@@ -516,7 +523,7 @@ namespace Mtgdb.Controls
 		private const int TextPadding = 6;
 		private const int TooltipMargin = 12;
 
-		private static readonly Size _tooltipSize = new Size(400, 300);
+		private readonly Size _tooltipSize;
 
 		private int _selectionStart;
 		private bool _selectionManual;
@@ -527,8 +534,10 @@ namespace Mtgdb.Controls
 		public bool Clickable { get; private set; }
 		private bool _userInteracted;
 		private TooltipModel _tooltip;
-		private readonly CustomPanel _panel;
+		private readonly BorderedPanel _panel;
 		private bool _closeEnabled;
+		private readonly Bitmap _closeIcon;
+		private readonly Bitmap _selectableTextIcon;
 
 		private class TooltipPosition
 		{

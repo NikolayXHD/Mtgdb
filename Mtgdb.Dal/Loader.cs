@@ -34,6 +34,8 @@ namespace Mtgdb.Dal
 
 		public void Run()
 		{
+			_indexesUpToDate = _luceneSearcher.IsUpToDate && _luceneSearcher.Spellchecker.IsUpToDate;
+
 			_loadingThreads = _loadingActions.Select(createLoadingThread)
 				.ToList();
 
@@ -59,7 +61,7 @@ namespace Mtgdb.Dal
 					if (_keywordSearcher.IsUpToDate)
 						_keywordSearcher.Load(null);
 
-					if (_luceneSearcher.IsUpToDate)
+					if (_indexesUpToDate)
 						_luceneSearcher.LoadIndex(null);
 
 					_imageRepository.LoadFiles();
@@ -92,7 +94,7 @@ namespace Mtgdb.Dal
 					if (!_keywordSearcher.IsUpToDate)
 						_keywordSearcher.Load(_repository);
 
-					if (!_luceneSearcher.IsUpToDate)
+					if (!_indexesUpToDate)
 						_luceneSearcher.LoadIndex(_repository);
 
 					GC.Collect();
@@ -132,5 +134,6 @@ namespace Mtgdb.Dal
 		private readonly LuceneSearcher _luceneSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 		private readonly PriceRepository _priceRepository;
+		private bool _indexesUpToDate;
 	}
 }

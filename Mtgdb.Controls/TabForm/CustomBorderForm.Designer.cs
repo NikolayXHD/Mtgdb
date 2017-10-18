@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this._panelClient = new System.Windows.Forms.Panel();
-			this._panelHeader = new Mtgdb.Controls.CustomPanel();
+			this._panelHeader = new Mtgdb.Controls.BorderedPanel();
 			this.SuspendLayout();
 			// 
 			// _panelClient
@@ -71,6 +71,6 @@
 		#endregion
 
 		protected System.Windows.Forms.Panel _panelClient;
-		protected Mtgdb.Controls.CustomPanel _panelHeader;
+		protected Mtgdb.Controls.BorderedPanel _panelHeader;
 	}
 }

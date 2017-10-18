@@ -6,7 +6,7 @@ https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_button.jp
 Search button purpose
 ---------------------
 
-By clicking Search icon you modify the search text. For example, if you click Search icon over 
+By clicking Search icon you modify the search text. For example, if you click `Search` icon over 
 card's mana cost you will see something like
 
     ManaCost: \{3\}\{W\}\{W\}
@@ -19,9 +19,9 @@ https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_button_re
 Clicking Search button several times
 ------------------------------------
 
-When you add more than one search terms you are **adding more cards to search result**. This is 
+When you add more than one search terms you are _adding more cards to search result_. This is 
 because when no logical operator such as `AND`, `OR` is used it is interpreted as `OR` in Lucene 
 query language used in Search text.
 
-By `Shift`+`Click`ing Search button you can instead **narrow down search result**. It is achiveved by 
+By `Shift`+`Click`ing Search button you can instead _narrow down search result_. It is achiveved by 
 adding terms with `+` operator which is almost equivalent to `AND`

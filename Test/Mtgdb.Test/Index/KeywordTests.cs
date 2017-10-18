@@ -12,11 +12,11 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			TestLoadingUtil.LoadModules();
-			TestLoadingUtil.LoadCardRepository();
-			TestLoadingUtil.LoadLocalizations();
+			TestLoader.LoadModules();
+			TestLoader.LoadCardRepository();
+			TestLoader.LoadLocalizations();
 
-			_repo = TestLoadingUtil.CardRepository;
+			_repo = TestLoader.CardRepository;
 		}
 
 		[Test]

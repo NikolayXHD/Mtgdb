@@ -30,7 +30,7 @@
 		The maximum number of undo/redo operations saved to history
 	-->
 	<Undo MaxDepth="1000" />
-
+	
 	<!-- === Directories with card images. Path can either be relative to application directory or absolute.
 		When you edit this, set the Path in a way that it's first subdirectory begins with set code.
 		The program will use it to correctly assign a picture to a card when there are matching images in different sets.
@@ -40,6 +40,15 @@
 		Path -> ^^^^^^^^^^^^^^^^^^^^ ^^^ <- Set code
 	-->
 	<ImageLocations>
+		<!-- LQ images in search result look blurry with high DPI enabled in 
+			Control Panel\All Control Panel Items\Display
+			Uncomment the next directory to use MQ images instead.
+		-->
+		
+		<!--
+		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="Any" />
+		-->
+		
 		<!--
 			High quality images for modern sets
 			Total size: 3.76 GB

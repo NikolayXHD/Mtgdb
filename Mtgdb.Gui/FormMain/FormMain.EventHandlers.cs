@@ -3,7 +3,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
+using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
@@ -346,7 +346,7 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (_sortSubsystem.IsLanguageDependent || (isFilterGroupEnabled(FilterGroupFind) && isSearchStringApplied()))
+			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroupFind) && isSearchStringApplied())
 			{
 				if (_sortSubsystem.IsLanguageDependent)
 					_sortSubsystem.Invalidate();
@@ -401,31 +401,35 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem.SetupButton(_buttonShowDuplicates,
 				new ButtonImages(
-					Resources.Clone24.TransformColors(saturation: 0f),
-					Resources.Clone24,
-					Resources.Clone24.TransformColors(saturation: 0.9f),
-					Resources.Clone24.TransformColors(saturation: 2.5f)));
+					Resources.clone_48.TransformColors(saturation: 0f),
+					Resources.clone_48,
+					Resources.clone_48.TransformColors(saturation: 0.9f),
+					Resources.clone_48.TransformColors(saturation: 2.5f),
+					areImagesDoubleSized: true));
 
 			_buttonSubsystem.SetupButton(_buttonShowProhibit,
 				new ButtonImages(
-					Resources.hidden24,
-					Resources.shown24,
-					Resources.hidden24.TransformColors(sat, 1.2f),
-					Resources.shown24.TransformColors(sat, 1.2f)));
+					Resources.exclude_hidden_24,
+					Resources.exclude_shown_24,
+					Resources.exclude_hidden_24.TransformColors(sat, 1.2f),
+					Resources.exclude_shown_24.TransformColors(sat, 1.2f),
+					areImagesDoubleSized: true));
 
 			_buttonSubsystem.SetupButton(_buttonExcludeManaAbility,
 				new ButtonImages(
-					Resources.include_plus24e,
-					Resources.exclude_minus24t,
-					Resources.include_plus24e.TransformColors(sat, 1f),
-					Resources.exclude_minus24t.TransformColors(sat, 1.2f)));
+					Resources.include_plus_24,
+					Resources.exclude_minus_24,
+					Resources.include_plus_24.TransformColors(sat, 1f),
+					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
+					areImagesDoubleSized: true));
 
 			_buttonSubsystem.SetupButton(_buttonExcludeManaCost,
 				new ButtonImages(
-					Resources.include_plus24e,
-					Resources.exclude_minus24t,
-					Resources.include_plus24e.TransformColors(sat, 1f),
-					Resources.exclude_minus24t.TransformColors(sat, 1.2f)));
+					Resources.include_plus_24,
+					Resources.exclude_minus_24,
+					Resources.include_plus_24.TransformColors(sat, 1f),
+					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
+					areImagesDoubleSized: true));
 		}
 	}
 }

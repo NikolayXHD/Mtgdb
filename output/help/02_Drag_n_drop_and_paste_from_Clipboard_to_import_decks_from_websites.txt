@@ -1,9 +1,9 @@
-Some MTG webistes let you download the deck in `*.txt` format. Then you can open it as MTGO *.txt 
+Some MTG webistes let you download a deck in `*.txt` format. Then you can open it as MTGO *.txt 
 deck. However the website `download deck` button is not always easy to find, and sometimes there 
 is none. Also it's not that fast to locate the downloaded file in `Load deck` dialog.
 
-I implemented Copy-paste & Drag-n-drop deck text features to cut-down and unify the hassle as 
-much as I can.
+I implemented Copy-paste & Drag-n-drop deck text features to cut down the hassle as much as I 
+can.
 
 Pasting deck from Clipboard
 ---------------------------

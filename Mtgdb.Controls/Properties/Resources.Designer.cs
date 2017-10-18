@@ -63,9 +63,9 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap close_tab_hovered_16 {
+        internal static System.Drawing.Bitmap close_tab_hovered_32 {
             get {
-                object obj = ResourceManager.GetObject("close_tab_hovered_16", resourceCulture);
+                object obj = ResourceManager.GetObject("close_tab_hovered_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap selectable_transp_32 {
+        internal static System.Drawing.Bitmap selectable_transp_64 {
             get {
-                object obj = ResourceManager.GetObject("selectable_transp_32", resourceCulture);
+                object obj = ResourceManager.GetObject("selectable_transp_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

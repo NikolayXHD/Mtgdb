@@ -10,14 +10,14 @@ namespace Mtgdb.Dal.Index
 {
 	public static class DocumentFactory
 	{
-		private static readonly List<string> Langs;
+		private static readonly List<string> _langs;
 		private const string AnyField = "*";
 
-		private static readonly HashSet<string> IntFields = new HashSet<string>(Str.Comparer);
-		private static readonly HashSet<string> FloatFields = new HashSet<string>(Str.Comparer);
+		private static readonly HashSet<string> _intFields = new HashSet<string>(Str.Comparer);
+		private static readonly HashSet<string> _floatFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> TextFields = new HashSet<string>(Str.Comparer);
 
-		private static readonly HashSet<string> LocalizedFields = new HashSet<string>(Str.Comparer);
+		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> LimitedValuesFields = new HashSet<string>(Str.Comparer);
 
@@ -26,11 +26,14 @@ namespace Mtgdb.Dal.Index
 
 		static DocumentFactory()
 		{
-			Langs = CardLocalization.GetAllLanguages().ToList();
+			_langs = CardLocalization.GetAllLanguages().ToList();
 
 			addTextField(nameof(Card.SetName), isLimitedValues: true);
 			addTextField(nameof(Card.SetCode), isLimitedValues: true);
 			addTextField(nameof(Card.Artist), isLimitedValues: true);
+
+			addTextField(nameof(Card.OriginalText));
+			addTextField(nameof(Card.OriginalType), isLimitedValues: true);
 
 			addTextField(nameof(Card.NameEn),
 				nameof(Card.Name));
@@ -40,11 +43,11 @@ namespace Mtgdb.Dal.Index
 				nameof(Card.Flavor));
 			addTextField(nameof(Card.TypeEn),
 				nameof(Card.Type), isLimitedValues: true);
-			addTextField(nameof(Card.SupertypesArr),
+			addTextField(nameof(Card.Supertypes),
 				nameof(Card.Type), isLimitedValues: true);
-			addTextField(nameof(Card.TypesArr),
+			addTextField(nameof(Card.Types),
 				nameof(Card.Type), isLimitedValues: true);
-			addTextField(nameof(Card.SubtypesArr),
+			addTextField(nameof(Card.Subtypes),
 				nameof(Card.Type), isLimitedValues: true);
 			addTextField(nameof(Card.LegalIn),
 				nameof(Card.Rulings), isLimitedValues: true);
@@ -61,6 +64,7 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.ManaCost), isLimitedValues: true);
 			addTextField(nameof(Card.Rarity), isLimitedValues: true);
 			addTextField(nameof(Card.ReleaseDate), isLimitedValues: true);
+			addTextField(nameof(Card.Layout), isLimitedValues: true);
 
 			addFloatField(nameof(Card.PowerNum),
 				nameof(Card.Power));
@@ -69,12 +73,15 @@ namespace Mtgdb.Dal.Index
 			addIntField(nameof(Card.LoyaltyNum),
 				nameof(Card.Loyalty));
 
+			addIntField(nameof(Card.Hand));
+			addIntField(nameof(Card.Life));
+
 			addFloatField(nameof(Card.Cmc));
 			addFloatField(nameof(Card.PricingLow));
 			addFloatField(nameof(Card.PricingMid));
 			addFloatField(nameof(Card.PricingHigh));
 
-			foreach (var lang in Langs)
+			foreach (var lang in _langs)
 			{
 				addSpecificTextField(nameof(Card.Name), lang);
 				addSpecificTextField(nameof(Card.Type), lang, isLimitedValues: true);
@@ -112,6 +119,12 @@ namespace Mtgdb.Dal.Index
 			//Tested
 			doc.addTextField(nameof(card.SetCode), card.SetCode);
 
+			if (!string.IsNullOrEmpty(card.OriginalText))
+				doc.addTextField(nameof(Card.OriginalText), card.OriginalText);
+
+			if (!string.IsNullOrEmpty(card.OriginalType))
+				doc.addTextField(nameof(Card.OriginalType), card.OriginalType);
+
 			if (!string.IsNullOrEmpty(card.Artist))
 				doc.addTextField(nameof(card.Artist), card.Artist);
 
@@ -129,17 +142,17 @@ namespace Mtgdb.Dal.Index
 			// Tested
 			if (card.SupertypesArr != null)
 				foreach (string type in card.SupertypesArr)
-					doc.addTextField(nameof(card.SupertypesArr), type);
+					doc.addTextField(nameof(card.Supertypes), type);
 
 			// Tested
 			if (card.TypesArr != null)
 				foreach (string type in card.TypesArr)
-					doc.addTextField(nameof(card.TypesArr), type);
+					doc.addTextField(nameof(card.Types), type);
 
 			// Tested
 			if (card.SubtypesArr != null)
 				foreach (string type in card.SubtypesArr)
-					doc.addTextField(nameof(card.SubtypesArr), type);
+					doc.addTextField(nameof(card.Subtypes), type);
 
 			foreach (var note in card.LegalityByFormat.Values)
 			{
@@ -182,6 +195,12 @@ namespace Mtgdb.Dal.Index
 			if (card.LoyaltyNum.HasValue)
 				doc.addNumericField(nameof(card.LoyaltyNum), card.LoyaltyNum.Value);
 
+			if (card.Life.HasValue)
+				doc.addNumericField(nameof(card.Life), card.Life.Value);
+
+			if (card.Hand.HasValue)
+				doc.addNumericField(nameof(card.Hand), card.Hand.Value);
+
 			// Tested
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
@@ -211,7 +230,10 @@ namespace Mtgdb.Dal.Index
 			if (card.PricingLow.HasValue)
 				doc.addNumericField(nameof(card.PricingLow), card.PricingLow.Value);
 
-			foreach (var lang in Langs)
+			if (!string.IsNullOrEmpty(card.Layout))
+				doc.addTextField(nameof(Card.Layout), card.Layout);
+
+			foreach (var lang in _langs)
 			{
 				// Tested
 				string name = card.GetName(lang);
@@ -243,34 +265,6 @@ namespace Mtgdb.Dal.Index
 			return doc;
 		}
 
-		private static IEnumerable<string> parseManaSymbols(string manaCost)
-		{
-			if (string.IsNullOrEmpty(manaCost))
-				yield break;
-
-			int open = -1;
-
-			for (int i = 0; i < manaCost.Length; i++)
-			{
-				char c = manaCost[i];
-
-				if (c == '{')
-					open = i;
-				else if (c == '}')
-				{
-					int length = i - open - 1;
-
-					if (length > 0)
-					{
-						string symbol = manaCost.Substring(open + 1, length);
-						yield return symbol;
-					}
-
-					open = -1;
-				}
-			}
-		}
-
 		private static void addIdField(this Document doc, string fieldName, string fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
@@ -290,7 +284,7 @@ namespace Mtgdb.Dal.Index
 			// поиск "по любому полю" и определённым языком требует,
 			// чтобы значения нейтральных к языку полей попали
 			// во все индексы "по любому полю" *_ru, *_en и т.д.
-			foreach (var lang in Langs)
+			foreach (var lang in _langs)
 				addAnyTextField(doc, fieldValue, lang);
 		}
 
@@ -375,7 +369,7 @@ namespace Mtgdb.Dal.Index
 			if (fieldName != AnyField)
 				UserFields.Add(fieldName);
 
-			LocalizedFields.Add(fieldName);
+			_localizedFields.Add(fieldName);
 			var localizedFieldName = getLocalizedField(fieldName, language);
 			TextFields.Add(localizedFieldName);
 
@@ -388,7 +382,7 @@ namespace Mtgdb.Dal.Index
 		private static void addFloatField(string fieldName, string displayFieldName = null)
 		{
 			UserFields.Add(fieldName);
-			FloatFields.Add(fieldName);
+			_floatFields.Add(fieldName);
 
 			if (displayFieldName != null)
 				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
@@ -397,7 +391,7 @@ namespace Mtgdb.Dal.Index
 		private static void addIntField(string fieldName, string displayFieldName = null)
 		{
 			UserFields.Add(fieldName);
-			IntFields.Add(fieldName);
+			_intFields.Add(fieldName);
 
 			if (displayFieldName != null)
 				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
@@ -418,7 +412,7 @@ namespace Mtgdb.Dal.Index
 
 			field = field.ToLowerInvariant();
 
-			if (LocalizedFields.Contains(field))
+			if (_localizedFields.Contains(field))
 				return getLocalizedField(field, language);
 
 			return field;
@@ -458,12 +452,12 @@ namespace Mtgdb.Dal.Index
 
 		public static bool IsIntField(this string field)
 		{
-			return IntFields.Contains(field);
+			return _intFields.Contains(field);
 		}
 
 		public static bool IsFloatField(this string field)
 		{
-			return FloatFields.Contains(field);
+			return _floatFields.Contains(field);
 		}
 	}
 }

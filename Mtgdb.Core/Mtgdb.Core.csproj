@@ -50,7 +50,6 @@
     </Compile>
     <Compile Include="ArgsExt.cs" />
     <Compile Include="AppDir.cs" />
-    <Compile Include="BmpProcessor\BmpProcessor.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="ComparableExtension.cs" />
     <Compile Include="FileSignature.cs" />
@@ -66,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BmpProcessor\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

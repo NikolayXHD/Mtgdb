@@ -15,29 +15,11 @@
     <Content Include="data\price.json" />
     <Content Include="etc\Mtgdb.Gui.Display.xml" />
     <Content Include="etc\Mtgdb.Gui.xml" />
-    <Content Include="etc\Mtgdb.Gui.Default.xml" />
+    <Content Include="etc\Mtgdb.Gui.Default.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="etc\Mtgdb.Util.xml" />
-    <Content Include="help\01_Home.txt" />
-    <Content Include="help\02_Deck_and_Collection_Editor.txt" />
-    <Content Include="help\02_Import_collection_&amp;_decks_from_Magic_The_Gathering_Online.txt" />
-    <Content Include="help\03_Filter_buttons.txt" />
-    <Content Include="help\04_Search_syntax.txt" />
-    <Content Include="help\05_Search_input_keyboard_shortcuts.txt" />
-    <Content Include="help\06_Search_button_over_card_text.txt" />
-    <Content Include="help\07_Sort.txt" />
-    <Content Include="help\08_Release_notes.txt" />
-    <Content Include="help\09_About.txt" />
-    <Content Include="help\html\About.html" />
-    <Content Include="help\html\Deck_and_Collection_Editor.html" />
-    <Content Include="help\html\Filter_buttons.html" />
     <Content Include="help\html\help_style.css" />
-    <Content Include="help\html\Home.html" />
-    <Content Include="help\html\Import_collection_&amp;_decks_from_Magic_The_Gathering_Online.html" />
-    <Content Include="help\html\Release_notes.html" />
-    <Content Include="help\html\Search_button_over_card_text.html" />
-    <Content Include="help\html\Search_input_keyboard_shortcuts.html" />
-    <Content Include="help\html\Search_syntax.html" />
-    <Content Include="help\html\Sort.html" />
     <Content Include="help\html\template.html" />
     <Content Include="help\img\filter_buttons.jpg" />
     <Content Include="help\img\Filter_example.jpg" />

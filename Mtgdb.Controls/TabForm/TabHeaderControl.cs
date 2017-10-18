@@ -525,7 +525,7 @@ namespace Mtgdb.Controls
 			if (icon != null)
 			{
 				var iconTop = Height - (icon.Height + SlopeSize.Height)/2;
-				g.DrawImageUnscaled(icon, left, iconTop);
+				g.DrawImage(icon, new Rectangle(left, iconTop, icon.Width, icon.Height));
 			}
 
 			int iconWidth = icon?.Width ?? 0;
@@ -547,7 +547,7 @@ namespace Mtgdb.Controls
 			{
 				int closeLeft = left + iconWidth + TextPadding + textSize.Width + TextPadding;
 				var closeTop = Height - (closeIcon.Height + SlopeSize.Height)/2;
-				g.DrawImageUnscaled(closeIcon, closeLeft, closeTop);
+				g.DrawImage(closeIcon, new Rectangle(closeLeft, closeTop, closeIcon.Width, closeIcon.Height));
 			}
 		}
 
@@ -559,7 +559,7 @@ namespace Mtgdb.Controls
 			var left = points[2].X - addIcon.Width;
 			var top = Height - (addIcon.Height + AddButtonSlopeSize.Height) / 2;
 
-			g.DrawImageUnscaled(addIcon, left, top);
+			g.DrawImage(addIcon, new Rectangle(left, top, addIcon.Width, addIcon.Height));
 		}
 
 		private Bitmap getCloseIcon(int i)

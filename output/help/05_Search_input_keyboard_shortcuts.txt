@@ -1,7 +1,7 @@
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true
+
 Search input keyboard shortcuts
 ------------------------------
-
-https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true
 
 Show intellisense (a hint based on your input) `Ctrl`+`SPACE` or `Down`
 

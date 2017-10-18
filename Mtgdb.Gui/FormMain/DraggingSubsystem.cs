@@ -4,28 +4,12 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
+using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
 	public class DraggingSubsystem
 	{
-		private DateTime? _dragStartedTime;
-		private Point? _mouseDownLocation;
-		private Card _cardMouseDown;
-
-		private LayoutView _dragFromView;
-		private readonly LayoutView _layoutViewDeck;
-		private readonly LayoutView _layoutViewCards;
-		private readonly DeckModel _deckModel;
-		private readonly Control _parent;
-		private readonly ImageCache _imageCache;
-		private Cursor _dragCursor;
-
-		public event Action<Card> DraggedLikeClick;
-		public event Action<Card> DragRemoved;
-		public event Action<Card> DragAdded;
-
 		public DraggingSubsystem(
 			LayoutView layoutViewDeck,
 			LayoutView layoutViewCards,
@@ -225,27 +209,27 @@ namespace Mtgdb.Gui
 
 		private void createDragCursor(Card card)
 		{
-			var size = new Size(69, 96);
-			const int overlapY = 28;
-			var handImage = Resources.play_card_48;
+			var cardIconSize = new Size(69, 96).ByDpi();
+			int overlapY = 28.ByDpiHeight();
+			var handImage = Resources.play_card_48.ResizeDpi();
 
-			var cursorImage = new Bitmap(size.Width, size.Height + handImage.Height - overlapY);
+			var cursorImage = new Bitmap(cardIconSize.Width, cardIconSize.Height + handImage.Height - overlapY);
 			using (var g = Graphics.FromImage(cursorImage))
 			{
 				if (card?.Image == null)
-					g.DrawRectangle(new Pen(Color.Black, 2), new Rectangle(0, 0, size.Width, size.Height));
+					g.DrawRectangle(new Pen(Color.Black, width: 2), new Rectangle(Point.Empty, cardIconSize));
 				else
-					g.DrawImage(card.Image, new Rectangle(new Point(0, 0), size));
+					g.DrawImage(card.Image, new Rectangle(Point.Empty, cardIconSize));
 
-				g.DrawImage(handImage, new Rectangle(new Point((size.Width - handImage.Width) / 2, size.Height - overlapY - 1), handImage.Size));
+				g.DrawImage(handImage,
+					new Rectangle(
+						new Point((cardIconSize.Width - handImage.Width) / 2, cardIconSize.Height - overlapY - 1),
+						handImage.Size));
 			}
 
-			var result = cursorImage.SetOpacity(0.65f);
-				
-			_dragCursor = CursorHelper.CreateCursor(
-				result,
-				result.Width/2,
-				size.Height);
+			cursorImage = cursorImage.SetOpacity(0.65f);
+			var hotSpot = new Size(cursorImage.Width / 2, cardIconSize.Height);
+			_dragCursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
 		}
 
 
@@ -333,7 +317,7 @@ namespace Mtgdb.Gui
 			const int opacity = 66;
 
 			var gradientRectangle = e.Bounds;
-			gradientRectangle.Inflate(-70, -30);
+			gradientRectangle.Inflate(new Size(-70, -30).ByDpi());
 
 			var brush = new LinearGradientBrush(
 				gradientRectangle,
@@ -373,5 +357,25 @@ namespace Mtgdb.Gui
 			var reorderedDeck = _deckModel.GetReorderedCards(_deckModel.CardDragged, _deckModel.CardBelowDragged);
 			return reorderedDeck[visibleIndex];
 		}
+
+
+
+		public event Action<Card> DraggedLikeClick;
+		public event Action<Card> DragRemoved;
+		public event Action<Card> DragAdded;
+
+
+
+		private DateTime? _dragStartedTime;
+		private Point? _mouseDownLocation;
+		private Card _cardMouseDown;
+
+		private LayoutView _dragFromView;
+		private readonly LayoutView _layoutViewDeck;
+		private readonly LayoutView _layoutViewCards;
+		private readonly DeckModel _deckModel;
+		private readonly Control _parent;
+		private readonly ImageCache _imageCache;
+		private Cursor _dragCursor;
 	}
 }

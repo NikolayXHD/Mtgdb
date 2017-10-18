@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -136,42 +137,98 @@ namespace Mtgdb.Gui
 			DoubleBuffered = true;
 			KeyPreview = true;
 
+			_buttonSubsystem = new ButtonSubsystem();
+			_tabHeadersDeck.SelectedIndex = 0;
+
+			applyDisplayConfig(viewConfig, imageCache);
+			scale();
+
+			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
+
+			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
+			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
+
+			Load += formLoad;
+		}
+
+		private void applyDisplayConfig(ViewConfig viewConfig, ImageCache imageCache)
+		{
 			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards =
 				viewConfig.AllowPartialCards != false;
 
 			var cardSize = imageCache.CardSize;
-
-			int partialCardHorizontal = _viewCards.PartialCardHorizontal;
-			int partialCardVertical = _viewCards.PartialCardVertical;
-
-			_viewCards.PartialCardHorizontal = _viewDeck.PartialCardHorizontal =
-				partialCardHorizontal * cardSize.Height / imageCache.CardSizeDefault.Height;
-
-			_viewCards.PartialCardVertical = _viewDeck.PartialCardVertical =
-				partialCardVertical * cardSize.Height / imageCache.CardSizeDefault.Height;
-
 
 			if (viewConfig.ShowTextualFields == false)
 				_viewCards.HideTextualFields();
 
 			_viewCards.SetImageSize(cardSize);
 			_viewDeck.SetImageSize(cardSize);
+			_layoutViewDeck.Height = cardSize.Height;
 
-			int deckRowIndex = _tableRoot.GetRow(_viewDeck.Control);
 			if (viewConfig.ShowDeck == false)
-			{
 				_viewDeck.Control.Visible = false;
-				_tableRoot.RowStyles[deckRowIndex].Height = 0;
-			}
-			else
+		}
+
+		private void scale()
+		{
+			_viewCards.PartialCardSize = _viewCards.PartialCardSize.ByDpi();
+			_viewDeck.PartialCardSize = _viewDeck.PartialCardSize.ByDpi();
+
+			_findBorderedPanel.ScaleDpi();
+			_menuLegalityFormat.ScaleDpi();
+
+			_panelIconSearch.ScaleDpi();
+			_panelIconLegality.ScaleDpi();
+			_buttonShowDuplicates.ScaleDpi();
+			_panelIconStatusScrollDeck.ScaleDpi();
+			_panelIconStatusScrollCards.ScaleDpi();
+			_panelIconStatusSets.ScaleDpi();
+			_panelIconStatusCollection.ScaleDpi();
+			_panelIconStatusFilterButtons.ScaleDpi();
+			_panelIconStatusSearch.ScaleDpi();
+			_panelIconStatusFilterCollection.ScaleDpi();
+			_panelIconStatusFilterDeck.ScaleDpi();
+			_panelIconStatusFilterLegality.ScaleDpi();
+
+			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
+			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
+			_tabHeadersDeck.AddButtonSlopeSize = _tabHeadersDeck.AddButtonSlopeSize.ByDpi();
+			_tabHeadersDeck.AddButtonWidth = _tabHeadersDeck.AddButtonWidth.ByDpiWidth();
+
+			_listBoxSuggest.Width = _listBoxSuggest.Width.ByDpiWidth();
+
+			foreach (var qf in _quickFilterControls.Concat(Enumerable.Repeat(FilterManager, 1)))
 			{
-				_tableRoot.RowStyles[deckRowIndex].Height = cardSize.Height;
+				qf.ImageSize = qf.ImageSize.ByDpi();
+				qf.HintTextShift = qf.HintTextShift.ByDpi();
+				qf.HintIcon = qf.HintIcon?.ResizeDpi();
 			}
 
-			_buttonSubsystem = new ButtonSubsystem();
-			_tabHeadersDeck.SelectedIndex = 0;
+			var modeButtonSize = new Size(
+				FilterManaCost.ImageSize.Width + FilterManaCost.Spacing.Width * 2,
+				FilterManaCost.ImageSize.Height + FilterManaCost.Spacing.Height * 2);
 
-			Load += formLoad;
+			_buttonExcludeManaAbility.Size = _buttonExcludeManaCost.Size = _buttonShowProhibit.Size =
+				modeButtonSize;
+
+			_buttonExcludeManaCost.Margin = _buttonExcludeManaAbility.Margin =
+				new Padding(0, 0, modeButtonSize.Width, 0);
+
+			_layout.RowStyles[0].Height = _layout.RowStyles[1].Height = modeButtonSize.Height;
+
+			var searchToSortMargin =
+				_layoutViewCards.SearchOptions.ButtonMargin.Width -
+				(_layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width / 2);
+
+			_layoutViewCards.SortOptions.Icon = _layoutViewCards.SortOptions.Icon.HalfResizeDpi();
+			_layoutViewCards.SortOptions.AscIcon = _layoutViewCards.SortOptions.AscIcon.HalfResizeDpi();
+			_layoutViewCards.SortOptions.DescIcon = _layoutViewCards.SortOptions.DescIcon.HalfResizeDpi();
+
+			_layoutViewCards.SearchOptions.Icon = _layoutViewCards.SearchOptions.Icon.HalfResizeDpi();
+
+			_layoutViewCards.SearchOptions.ButtonMargin = new Size(
+				searchToSortMargin + _layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width,
+				_layoutViewCards.SearchOptions.ButtonMargin.Height);
 		}
 
 		public void SetId(string tabId)
@@ -254,6 +311,8 @@ namespace Mtgdb.Gui
 				imageLoadingComplete();
 			else
 				_cardRepo.ImageLoadingComplete += imageLoadingComplete;
+
+			_eventsSubscribed = true;
 		}
 
 		private static void deckDragEnter(object sender, DragEventArgs e)
@@ -270,12 +329,11 @@ namespace Mtgdb.Gui
 			}
 		}
 
+		public bool IsSearchFocused() => _searchStringSubsystem.IsSearchFocused();
+
 		public void PasteDeck(bool append)
 		{
 			if (!_cardRepo.IsImageLoadingComplete)
-				return;
-
-			if (_searchStringSubsystem.IsSearchFocused())
 				return;
 
 			var text = Clipboard.GetText();
@@ -445,5 +503,11 @@ namespace Mtgdb.Gui
 		private readonly TooltipController _toolTipController;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly ButtonSubsystem _buttonSubsystem;
+
+		private readonly bool _luceneSearchIndexUpToDate;
+		private readonly bool _spellcheckerIndexUpToDate;
+
+		private bool _threadsRunning;
+		private bool _eventsSubscribed;
 	}
 }

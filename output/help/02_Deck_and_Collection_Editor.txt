@@ -11,7 +11,7 @@ side deck.
 
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/sideboard.jpg?raw=true
 
-`Drag-n-drop` card to deck area (bottow area of the window) or use mouse buttons (`Right` and 
+`Drag-n-drop` card to deck area (bottom area of the window) or use mouse buttons (`Right` and 
 `Middle`) to add/remove 1 card.
 
 You can `drag` from main deck and `drop` to sideboard by `dragging` a card to `main deck` / 

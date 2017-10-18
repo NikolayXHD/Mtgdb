@@ -13,8 +13,8 @@ namespace Mtgdb.Test
 		[Test]
 		public void Test_repository_is_not_empty()
 		{
-			TestLoadingUtil.LoadModules();
-			var repo = TestLoadingUtil.CardRepository;
+			TestLoader.LoadModules();
+			var repo = TestLoader.CardRepository;
 
 			repo.LoadFile();
 			repo.Load();
@@ -29,15 +29,15 @@ namespace Mtgdb.Test
 		[Test]
 		public void Map_xlhq_sets()
 		{
-			TestLoadingUtil.LoadModules();
+			TestLoader.LoadModules();
 			
-			TestLoadingUtil.CardRepository.LoadFile();
-			TestLoadingUtil.CardRepository.Load();
+			TestLoader.CardRepository.LoadFile();
+			TestLoader.CardRepository.Load();
 
-			TestLoadingUtil.ImageRepository.LoadFiles();
-			TestLoadingUtil.ImageRepository.LoadZoom();
+			TestLoader.ImageRepository.LoadFiles();
+			TestLoader.ImageRepository.LoadZoom();
 
-			var zoomImages = TestLoadingUtil.ImageRepository.GetAllZooms();
+			var zoomImages = TestLoader.ImageRepository.GetAllZooms();
 
 			var imagesBySet = zoomImages.GroupBy(_ => _.SetCode ?? string.Empty, Str.Comparer)
 				.ToDictionary(
@@ -46,7 +46,7 @@ namespace Mtgdb.Test
 					Str.Comparer
 				);
 
-			var sets = TestLoadingUtil.CardRepository.SetsByCode.Values.OrderBy(_=>_.ReleaseDate);
+			var sets = TestLoader.CardRepository.SetsByCode.Values.OrderBy(_=>_.ReleaseDate);
 			foreach (var set in sets)
 			{
 				Console.WriteLine($"{set.Code}\t{set.Cards.Count}\t{set.Name}");
@@ -73,10 +73,10 @@ namespace Mtgdb.Test
 		[Test]
 		public void Zoom_images_match_small_ones()
 		{
-			TestLoadingUtil.LoadModules();
+			TestLoader.LoadModules();
 
-			var cardRepo = TestLoadingUtil.CardRepository;
-			var imgRepo = TestLoadingUtil.ImageRepository;
+			var cardRepo = TestLoader.CardRepository;
+			var imgRepo = TestLoader.ImageRepository;
 
 			cardRepo.LoadFile();
 			cardRepo.Load();
@@ -115,11 +115,11 @@ namespace Mtgdb.Test
 		[Test]
 		public void Find_non_used_transparency_key()
 		{
-			TestLoadingUtil.LoadModules();
-			TestLoadingUtil.ImageRepository.LoadFiles();
-			TestLoadingUtil.ImageRepository.LoadZoom();
+			TestLoader.LoadModules();
+			TestLoader.ImageRepository.LoadFiles();
+			TestLoader.ImageRepository.LoadZoom();
 
-			var zoomImages = TestLoadingUtil.ImageRepository.GetAllZooms().ToList();
+			var zoomImages = TestLoader.ImageRepository.GetAllZooms().ToList();
 
 			var detectedColors = new bool[0x1000000];
 

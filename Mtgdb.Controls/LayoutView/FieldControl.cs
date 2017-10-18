@@ -66,7 +66,7 @@ namespace Mtgdb.Controls
 				RichTextRenderer.Render(context, _iconRecognizer);
 			}
 			else if (Image != null)
-				graphics.DrawImage(Image, Image.Size.ZoomTo(contentArea));
+				graphics.DrawImage(Image, Image.Size.FitIn(contentArea));
 		}
 
 		private Rectangle getArea(Point parentLocation, Padding padding)

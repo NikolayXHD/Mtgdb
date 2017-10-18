@@ -59,7 +59,7 @@ namespace Mtgdb.Gui
 				"your custom card images or tweak some other settings.\r\n\r\n" +
 				"NOTE: To apply your changes save the modified configuration\r\n" +
 				"file and restart the program.",
-				_buttonGeneralSettings);
+				_buttonMenuGeneralSettings);
 
 			_tooltipController.SetTooltip(string.Empty,
 				"Edit Display settings to\r\n" +
@@ -68,7 +68,7 @@ namespace Mtgdb.Gui
 				"  * disallow showing non-entirely-fit-to-screen card image\r\n\r\n" +
 				"NOTE: To apply your changes save the modified configuration\r\n" +
 				"file and restart the program.",
-				_buttonDisplaySettings);
+				_buttonMenuDisplaySettings);
 
 			Load += loadTooltips;
 			Closing += closeTooltips;

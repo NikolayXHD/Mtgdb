@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Gui.Properties;
 using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
@@ -18,6 +19,63 @@ namespace Mtgdb.Gui
 		public FormChart()
 		{
 			InitializeComponent();
+
+			_menus = new[] { _menuDataSource, _menuChartType, _menuFields, _menuLabelDataElement, _menuPrice, _menuPriceChartType };
+			_buttons = new[] { _buttonAddCol, _buttonAddRow, _buttonAddSum };
+			_headerButtons = new[] { _buttonManaCurve, _buttonDeckPrice, _buttonCollectionPrice, _buttonArtistsPerYear };
+			_tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
+			_summTabs = new[] { _tabSumm, _tabSummSort };
+
+			scale();
+		}
+
+		private void scale()
+		{
+			TitleHeight = TitleHeight.ByDpiHeight();
+
+			ImageMinimize = ImageMinimize.HalfResizeDpi();
+			ImageMaximize = ImageMaximize.HalfResizeDpi();
+			ImageNormalize = ImageNormalize.HalfResizeDpi();
+			ImageClose = ImageClose.HalfResizeDpi();
+
+			foreach (var tab in _tabs)
+			{
+				tab.Height = tab.Height.ByDpiHeight();
+				tab.SlopeSize = tab.SlopeSize.ByDpi();
+				tab.AddButtonSlopeSize = tab.SlopeSize.ByDpi();
+
+				tab.CloseIcon = tab.CloseIcon.HalfResizeDpi();
+				tab.CloseIconHovered = tab.CloseIconHovered.HalfResizeDpi();
+			}
+
+			_buttonApply.ScaleDpi();
+			_progressBar.ScaleDpi();
+
+			foreach (var button in _buttons)
+				button.ScaleDpi();
+
+			foreach (var button in _headerButtons)
+				button.ScaleDpi();
+
+			foreach (var menu in _menus)
+				menu.ScaleDpi();
+
+			_sortIconsOrder = new[]
+			{
+				Resources.sort_none_hovered.HalfResizeDpi(),
+				Resources.sort_asc_hovered.HalfResizeDpi(),
+				Resources.sort_desc_hovered.HalfResizeDpi()
+			};
+
+			_aggregateIconsOrder = new[]
+			{
+				ResourcesFilter.sum_hovered.HalfResizeDpi(),
+				ResourcesFilter.count_hovered.HalfResizeDpi(),
+				ResourcesFilter.count_distinct_hovered.HalfResizeDpi(),
+				ResourcesFilter.min_hovered.HalfResizeDpi(),
+				ResourcesFilter.avg_hovered.HalfResizeDpi(),
+				ResourcesFilter.max_hovered.HalfResizeDpi()
+			};
 		}
 
 		public FormChart(CardRepository repository)
@@ -27,25 +85,20 @@ namespace Mtgdb.Gui
 
 			Load += load;
 
-			_headerButtons = new[] { _buttonManaCurve, _buttonDeckPrice, _buttonCollectionPrice, _buttonArtistsPerYear };
-
 			foreach (var button in _headerButtons)
 				button.Click += buttonClick;
 
 			SnapTo(Direction.North, System.Windows.Forms.Cursor.Position);
 
-			var defaultIcons = new[] { _sortIconsOrder[0], _sortIconsOrder[0], _aggregateIconsOrder[0], _sortIconsOrder[0] };
-			_tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
+			_tabByButton = Enumerable.Range(0, _buttons.Length)
+				.ToDictionary(i => _buttons[i], i => _tabs[i]);
 
-			var buttons = new[] { _buttonAddCol, _buttonAddRow, _buttonAddSum };
-
-			_tabByButton = Enumerable.Range(0, buttons.Length)
-				.ToDictionary(i => buttons[i], i => _tabs[i]);
-
-			foreach (var button in buttons)
+			foreach (var button in _buttons)
 				button.Click += buttonAddFieldClick;
 
 			_buttonApply.Click += buttonApplyClick;
+
+			var defaultIcons = new[] { _sortIconsOrder[0], _sortIconsOrder[0], _aggregateIconsOrder[0], _sortIconsOrder[0] };
 
 			for (int i = 0; i < _tabs.Length; i++)
 			{
@@ -74,12 +127,6 @@ namespace Mtgdb.Gui
 			_menuChartType.SelectedIndex = 0;
 
 			_menuFields.Items.AddRange(_fieldsOrder.Select(_ => Fields.ByName[_].Alias).Cast<object>().ToArray());
-
-			_summTabs = new[]
-			{
-				_tabSumm,
-				_tabSummSort
-			};
 
 			foreach (var tab in _summTabs)
 			{
@@ -151,7 +198,7 @@ namespace Mtgdb.Gui
 			loadWhenReady(null, () => _repository.IsLocalizationLoadingComplete, settings, true);
 		}
 
-		private static void tabAxisClick(object sender, EventArgs e)
+		private void tabAxisClick(object sender, EventArgs e)
 		{
 			var tab = (TabHeaderControl) sender;
 
@@ -171,7 +218,7 @@ namespace Mtgdb.Gui
 			tab.SetTabSetting(tabSetting.TabId, new TabSettings(sortIcon));
 		}
 
-		private static void tabSummClick(object sender, EventArgs e)
+		private void tabSummClick(object sender, EventArgs e)
 		{
 			var tab = (TabHeaderControl) sender;
 
@@ -888,7 +935,7 @@ namespace Mtgdb.Gui
 			_applyingSettings = false;
 		}
 
-		private static void displayAxis(TabHeaderControl tab, List<string> fields, List<SortOrder> fieldsSort)
+		private void displayAxis(TabHeaderControl tab, List<string> fields, List<SortOrder> fieldsSort)
 		{
 			tab.Count = 0;
 
@@ -999,22 +1046,9 @@ namespace Mtgdb.Gui
 			Aggregates.Max
 		};
 
-		private static readonly IList<Bitmap> _aggregateIconsOrder = new[]
-		{
-			ResourcesFilter.sum_hovered,
-			ResourcesFilter.count_hovered,
-			ResourcesFilter.count_distinct_hovered,
-			ResourcesFilter.min_hovered,
-			ResourcesFilter.avg_hovered,
-			ResourcesFilter.max_hovered
-		};
+		private IList<Bitmap> _aggregateIconsOrder;
 
-		private static readonly IList<Bitmap> _sortIconsOrder = new[]
-		{
-			ResourcesFilter.sort_none_hovered,
-			ResourcesFilter.sort_asc_hovered,
-			ResourcesFilter.sort_desc_hovered
-		};
+		private IList<Bitmap> _sortIconsOrder;
 
 		private readonly Dictionary<Button, TabHeaderControl> _tabByButton;
 		private readonly TabHeaderControl[] _summTabs;
@@ -1049,5 +1083,8 @@ namespace Mtgdb.Gui
 			nameof(Card.CollectionTotalMid),
 			nameof(Card.CollectionTotalHigh)
 		};
+
+		private readonly Button[] _buttons;
+		private readonly ComboBox[] _menus;
 	}
 }

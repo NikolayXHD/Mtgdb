@@ -12,7 +12,7 @@ namespace Mtgdb.Dal.Index
 
 		public IndexVersion(string directory, string indexVerision)
 		{
-			Directory = directory;
+			Directory = Path.Combine(directory, indexVerision);
 			_indexVerision = indexVerision;
 			_completionLabelFile = Directory.AddPath("indexing.done");
 		}

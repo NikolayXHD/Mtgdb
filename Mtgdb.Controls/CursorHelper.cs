@@ -23,6 +23,11 @@ namespace Mtgdb.Controls
 		[DllImport("user32.dll")]
 		public static extern IntPtr CreateIconIndirect(ref IconInfo icon);
 
+		public static Cursor CreateCursor(Bitmap bmp, Size hotSpot)
+		{
+			return CreateCursor(bmp, hotSpot.Width, hotSpot.Height);
+		}
+
 		public static Cursor CreateCursor(Bitmap bmp, int xHotSpot, int yHotSpot)
 		{
 			IntPtr ptr = bmp.GetHicon();

@@ -16,7 +16,7 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSearcher : IDisposable
 	{
-		public bool IsUpToDate => _version.IsUpToDate && Spellchecker.Version.IsUpToDate;
+		public bool IsUpToDate => _version.IsUpToDate;
 
 		public event Action Loaded;
 		public event Action IndexingProgress;
@@ -28,9 +28,13 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.6" /*new sets*/);
+			// SubtypesArr -> Subtypes
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.7");
 			Spellchecker = new LuceneSpellchecker();
 		}
+
+		public string SearcherDirectory => _version.Directory;
+		public string SpellcheckerDirectory => Spellchecker.Version.Directory;
 
 		public void LoadIndex(CardRepository repository)
 		{

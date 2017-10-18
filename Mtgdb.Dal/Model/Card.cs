@@ -42,7 +42,7 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public Bitmap Image => UiModel?.ImageCache.GetImage(ImageModel, UiModel.ImageCache.CardSize);
+		public Bitmap Image => UiModel?.ImageCache.GetSmallImage(ImageModel);
 
 		[JsonIgnore]
 		public ImageModel ImageModel { get; set; }
@@ -335,7 +335,14 @@ namespace Mtgdb.Dal
 
 		[JsonProperty("originalText")]
 		[JsonConverter(typeof(InternedStringConverter))]
-		private string OriginalText { get; set; }
+		public string OriginalText { get; set; }
+
+		/// <summary>
+		/// The original type on the card at the time it was printed. This field is not available for promo cards.
+		/// </summary>
+		[JsonProperty("originalType")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string OriginalType { get; set; }
 
 		/// <summary>
 		/// The flavor text of the card.
@@ -416,14 +423,25 @@ namespace Mtgdb.Dal
 		[JsonProperty("multiverseId")]
 		public int? MultiverseId { get; set; }
 
-		/*
 		/// <summary>
 		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.
 		/// </summary>
+		[JsonProperty("foreignNames")]
 		public List<ForeignName> ForeignNames { get; set; }
-		
-		
 
+		/// <summary>
+		/// Maximum hand size modifier. Only exists for Vanguard cards.
+		/// </summary>
+		[JsonProperty("hand")]
+		public int? Hand { get; set; }
+
+		/// <summary>
+		/// Starting life total modifier. Only exists for Vanguard cards.
+		/// </summary>
+		[JsonProperty("life")]
+		public int? Life { get; set; }
+
+		/*
 		/// <summary>
 		/// The card colors. Usually this is derived from the casting cost, but some cards are special (like the back of double-faced cards and Ghostfire).
 		/// </summary>
@@ -455,16 +473,6 @@ namespace Mtgdb.Dal
 		public bool Timeshifted { get; set; }
 
 		/// <summary>
-		/// Maximum hand size modifier. Only exists for Vanguard cards.
-		/// </summary>
-		public int? Hand { get; set; }
-
-		/// <summary>
-		/// Starting life total modifier. Only exists for Vanguard cards.
-		/// </summary>
-		public int? Life { get; set; }
-
-		/// <summary>
 		/// Set to true if this card is reserved by Wizards Official Reprint Policy
 		/// </summary>
 		public bool Reserved { get; set; }
@@ -483,16 +491,6 @@ namespace Mtgdb.Dal
 		/// The sets that this card was printed in, expressed as an array of set codes.
 		/// </summary>
 		public List<string> Printings { get; set; }
-
-		/// <summary>
-		/// The original text on the card at the time it was printed. This field is not available for promo cards.
-		/// </summary>
-		public string OriginalText { get; set; }
-
-		/// <summary>
-		/// The original type on the card at the time it was printed. This field is not available for promo cards.
-		/// </summary>
-		public string OriginalType { get; set; }
 
 		/// <summary>
 		/// For promo cards, this is where this card was originally obtained. For box sets that are theme decks, this is which theme deck the card is from. For clash packs, this is which deck it is from.
@@ -535,7 +533,7 @@ namespace Mtgdb.Dal
 
 		public void PreloadImage()
 		{
-			UiModel?.ImageCache.GetImage(ImageModel, UiModel.ImageCache.CardSize);
+			UiModel?.ImageCache.GetSmallImage(ImageModel);
 		}
 
 

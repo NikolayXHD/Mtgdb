@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Downloader;
@@ -26,6 +27,8 @@ namespace Mtgdb.Gui
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			AppDomain.CurrentDomain.UnhandledException += unhandledException;
 			Application.ThreadException += threadException;
+
+			Dpi.Initialize();
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
@@ -61,12 +64,6 @@ namespace Mtgdb.Gui
 
 		private static void beginInstall()
 		{
-			var luceneSearcher = Kernel.Get<LuceneSearcher>();
-
-			while (luceneSearcher.IsLoading || luceneSearcher.Spellchecker?.IsLoading != false)
-				Thread.Sleep(100);
-
-			luceneSearcher.Dispose();
 		}
 
 		private static void endInstall()

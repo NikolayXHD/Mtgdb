@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -29,6 +30,11 @@ namespace Mtgdb.Controls
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
 		public static extern bool SetForegroundWindow(HandleRef hWnd);
+
+		public static void ScaleDpi(this Control control)
+		{
+			control.Size = control.Size.ByDpi();
+		}
 
 		public static void Invoke(this Control value, Action method)
 		{
@@ -206,7 +212,32 @@ namespace Mtgdb.Controls
 			return GetTag<TValue>(control, typeof(TValue).FullName);
 		}
 
+		public static void PaintPanel(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
+		{
+			graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
+			graphics.Clear(c.BackColor);
+			var pen = new Pen(borderColor);
+			if (c.BackgroundImage != null)
+			{
+				graphics.DrawImage(c.BackgroundImage,
+					new Rectangle(
+						Point.Empty,
+						c.BackgroundImage.Size.FitIn(c.Size)));
+			}
+
+			if ((borders & AnchorStyles.Top) > 0)
+				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
+
+			if ((borders & AnchorStyles.Bottom) > 0)
+				graphics.DrawLine(pen, 0, c.Height - 1, c.Width - 1, c.Height - 1);
+
+			if ((borders & AnchorStyles.Left) > 0)
+				graphics.DrawLine(pen, 0, 0, 0, c.Height - 1);
+
+			if ((borders & AnchorStyles.Right) > 0)
+				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
+		}
 
 		private const int EM_CHARFROMPOS = 0x00D7;
 

@@ -41,6 +41,10 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="BitmapExtensions.cs" />
+    <Compile Include="BmpProcessor.cs" />
+    <Compile Include="BorderedFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
     <Compile Include="ButtonSubsystem\ButtonImages.cs" />
     <Compile Include="ButtonSubsystem\CustomButton.cs">
@@ -54,9 +58,13 @@
     <Compile Include="Contract\HitInfo.cs" />
     <Compile Include="Contract\SearchArgs.cs" />
     <Compile Include="CursorHelper.cs" />
-    <Compile Include="CustomPanel.cs">
+    <Compile Include="BorderedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BorderedTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dpi.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
@@ -141,6 +149,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="TabForm\CustomBorderForm.resx">
@@ -154,16 +163,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\close_tab_hovered_16.png" />
+    <None Include="Resources\close_tab_hovered_32.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\selectable_transp_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
-      <Name>Mtgdb.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

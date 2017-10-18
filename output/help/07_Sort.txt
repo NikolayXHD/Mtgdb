@@ -1,16 +1,16 @@
 Sorting search result
 ---------------------
 
-https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/sort.jpg?raw=true
-
 By default the cards are sorted in the same order they appear in data\AllSets-x.json file. You 
 can sort by most fields you see in search result. To make `sort` button visible move the mouse 
 over a field you want to sort.
 
+https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/sort.jpg?raw=true
+
 Sort by multiple fields
 -----------------------
 
-To sort by more than one field use Shift+click on sort button on second and subsequent fields.
+To sort by more than one field use `Shift`+`click` on `sort` button on second and subsequent fields.
 
 Three-state cycle: Descending-Ascending-None
 --------------------------------------------
@@ -25,14 +25,15 @@ Stop sorting one field
 
 There are two ways to exclude a field from sorting.
 
-- Shift+click sort button until it becomes not sorted.
-By using Shift you preserve any existing sorting by other fields.
+- `Shift`+`click` sort button until it becomes not sorted.
+By using `Shift` you preserve any existing sorting by other fields.
 
-- Ctrl+click sort button.
-The clicked field stops being sorted. Any other sorted fields remain sorted.
+- `Ctrl`+`click` sort button.
+The clicked field stops being sorted. Any existing sorting by other fields is remains 
+unaffected.
 
 Cancel sorting on all fields
 ----------------------------
 
-Click sort button (without holding Shift) on any field until it becomes not sorted.
-Because Shift key is not down while clicking, other fields are excluded from sorting too.
+Click sort button (_without_ holding `Shift`) on any field until it becomes not sorted.
+Because `Shift` key is not down while clicking, other fields are excluded from sorting too.

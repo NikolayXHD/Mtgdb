@@ -54,7 +54,7 @@ namespace Mtgdb.Gui
 				view.Control.Width - view.ScrollWidth,
 				view.CardMinSize.Width,
 				view.CardHorzInterval,
-				view.PartialCardHorizontal,
+				view.PartialCardSize.Width,
 				view.AllowPartialCards);
 		}
 
@@ -64,7 +64,7 @@ namespace Mtgdb.Gui
 				view.Control.Height,
 				view.CardMinSize.Height,
 				view.CardVertInterval,
-				view.PartialCardVertical,
+				view.PartialCardSize.Height,
 				view.AllowPartialCards);
 		}
 

@@ -8,7 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
+using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
@@ -50,9 +50,16 @@ namespace Mtgdb.Gui
 			MouseWheel += mouseWheel;
 			DoubleBuffered = true;
 
-			Cursor = CursorHelper.CreateCursor(Resources.rightclick32, 12, 0);
+			var hotSpot = new Size(12, 0).ByDpi();
+			var cursorImage = Resources.rightclick_32.ResizeDpi();
 
-			Margin = new Padding(12);
+			Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
+
+			_openFileButton.Image = Resources.image_file_48.HalfResizeDpi();
+			_showInExplorerButton.Image = Resources.open_32.HalfResizeDpi();
+			var cloneImg = Resources.clone_48.HalfResizeDpi();
+			_showDuplicatesButton.Image = cloneImg;
+			_showOtherSetsButton.Image = cloneImg;
 		}
 
 		public void LoadImages(Card card)
@@ -163,14 +170,10 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private Size getSizeArt()
+		private static Size getSizeArt()
 		{
 			var screenArea = getScreenArea();
-
-			int size = Math.Min(
-				screenArea.Height - Margin.Horizontal,
-				screenArea.Width - Margin.Vertical);
-
+			int size = Math.Min(screenArea.Height, screenArea.Width);
 			return new Size(size, size);
 		}
 

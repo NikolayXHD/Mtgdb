@@ -33,6 +33,7 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldImage
 			// 
+			this._fieldImage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";

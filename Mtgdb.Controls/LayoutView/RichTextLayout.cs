@@ -106,7 +106,7 @@ namespace Mtgdb.Controls
 				{
 					var iconRect = new RectangleF(
 						new PointF(_x, _y),
-						token.Icon.Size.ZoomTo(new SizeF(float.MaxValue, _lineHeight)));
+						token.Icon.Size.FitIn(new SizeF(float.MaxValue, _lineHeight)));
 					
 					if (!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{E}") &&
 						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
@@ -253,7 +253,7 @@ namespace Mtgdb.Controls
 			if (richTextToken.Icon == null)
 				delta = getLineSize(text.Substring(richTextToken.Index, richTextToken.Length)).Width;
 			else
-				delta = richTextToken.Icon.Size.ZoomTo(new SizeF(float.MaxValue, _lineHeight)).Width;
+				delta = richTextToken.Icon.Size.FitIn(new SizeF(float.MaxValue, _lineHeight)).Width;
 
 			return delta;
 		}

@@ -42,12 +42,12 @@ namespace Mtgdb.Test
 		[TestCase("cma")]
 		public void DownloadImages(string setCode)
 		{
-			TestLoadingUtil.LoadModules();
-			TestLoadingUtil.LoadCardRepository();
+			TestLoader.LoadModules();
+			TestLoader.LoadCardRepository();
 			
 			using (var client = new GathererClient())
 			{
-				var set = TestLoadingUtil.CardRepository.SetsByCode[setCode];
+				var set = TestLoader.CardRepository.SetsByCode[setCode];
 				foreach (var card in set.Cards)
 					client.DownloadCard(card, GathererOriginalDir);
 			}
