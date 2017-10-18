@@ -235,10 +235,6 @@ namespace Mtgdb.Controls
 			if (HideProhibit)
 				return;
 
-
-			//if (ImageProhibit != null && (state == ButtonState.Prohibited || statePreview == ButtonState.Prohibited && _showPreview))
-			//	e.Graphics.DrawImage(ImageProhibit, rectangle);
-
 			paintButton(e, state, statePreview, FilterValueState.Prohibited, _imagesDisabled[i], i);
 		}
 
@@ -407,6 +403,7 @@ namespace Mtgdb.Controls
 			if (_images == null)
 				createDerivedImages();
 
+			e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 			e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
 			paintProhibitZone(e);
@@ -522,15 +519,17 @@ namespace Mtgdb.Controls
 
 			int iconWidth = HintIcon?.Width ?? 0;
 
+			float fontSize = font.SizeInPixels();
+
 			int wordWidth = Math.Max(
 				iconWidth,
-				(int) (property.Length*font.Size) + HintTextShift.Width);
+				(int) (property.Length*fontSize * 0.67f) + HintTextShift.Width);
 
 			if (x + wordWidth > Width)
 				x = Width - wordWidth;
 
 			int wordHeight =
-				(int) (font.Size*1.2f - HintTextShift.Height);
+				(int) (fontSize - HintTextShift.Height);
 
 			if (IsVertical)
 			{
@@ -768,7 +767,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Image HintIcon { get; set; }
+		public Bitmap HintIcon { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(typeof(Size), "0, 0")]

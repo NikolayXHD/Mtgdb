@@ -1,21 +1,28 @@
+using System;
 using System.Drawing;
 
 namespace Mtgdb.Controls
 {
 	public class ButtonImages
 	{
-		public ButtonImages(Bitmap uncheckedImage, Bitmap uncheckedHoveredImage)
+		public ButtonImages(
+			Bitmap uncheckedImage,
+			Bitmap checkedImage,
+			Bitmap uncheckedHoveredImage,
+			Bitmap checkedHoveredImage,
+			bool areImagesDoubleSized)
 		{
-			_unchecked = uncheckedImage;
-			_uncheckedHovered = uncheckedHoveredImage;
-		}
+			Func<Bitmap, Bitmap> scale;
 
-		public ButtonImages(Bitmap uncheckedImage, Bitmap checkedImage, Bitmap uncheckedHoveredImage, Bitmap checkedHoveredImage)
-		{
-			_unchecked = uncheckedImage;
-			_checked = checkedImage;
-			_uncheckedHovered = uncheckedHoveredImage;
-			_checkedHovered = checkedHoveredImage;
+			if (areImagesDoubleSized)
+				scale = bitmap => bitmap?.HalfResizeDpi();
+			else
+				scale = bitmap => bitmap?.ResizeDpi();
+
+			_unchecked = scale(uncheckedImage);
+			_checked = scale(checkedImage);
+			_uncheckedHovered = scale(uncheckedHoveredImage);
+			_checkedHovered = scale(checkedHoveredImage);
 		}
 
 		private readonly Bitmap _unchecked;

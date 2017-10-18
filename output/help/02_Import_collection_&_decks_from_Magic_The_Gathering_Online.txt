@@ -28,7 +28,7 @@ https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_coll
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_collection_file.jpg?raw=true
 
 - find and open the collection `*.txt` file you created in MTGO
-- Use Filter Manager `Collection` button in top row to show your collection in
+- use Filter Manager `Collection` button in top row to show your collection in
 Search result.
 
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_import_deck_result.jpg?raw=true
@@ -46,7 +46,7 @@ https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_deck
 
 To import a deck created in Mtgdb.Gui into MTGO
 -----------------------------------------------
-- Save deck in Mtgdb.Gui using `Magic The Gathering online deck (*.txt)` format
+- Save deck in Mtgdb.Gui using `Magic The Gathering Online deck (*.txt)` format
 
 https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/mtgo_export_from_mtgdbgui.jpg?raw=true
 

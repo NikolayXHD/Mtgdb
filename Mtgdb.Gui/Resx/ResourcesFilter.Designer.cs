@@ -73,6 +73,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap box_20 {
+            get {
+                object obj = ResourceManager.GetObject("box_20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap count_distinct_hovered {
             get {
                 object obj = ResourceManager.GetObject("count_distinct_hovered", resourceCulture);
@@ -93,9 +103,9 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filter {
+        internal static System.Drawing.Bitmap legality_20 {
             get {
-                object obj = ResourceManager.GetObject("filter", resourceCulture);
+                object obj = ResourceManager.GetObject("legality_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +133,9 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Quick_filters {
+        internal static System.Drawing.Bitmap quick_filters_20 {
             get {
-                object obj = ResourceManager.GetObject("Quick_filters", resourceCulture);
+                object obj = ResourceManager.GetObject("quick_filters_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,39 +143,9 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Search_icon {
+        internal static System.Drawing.Bitmap search_20 {
             get {
-                object obj = ResourceManager.GetObject("Search_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_asc_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_asc_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_desc_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_desc_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_none_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_none_hovered", resourceCulture);
+                object obj = ResourceManager.GetObject("search_20", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

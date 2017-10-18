@@ -32,6 +32,16 @@ namespace Mtgdb.Controls
 			Disposed += disposed;
 
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+
+			scaleScrollbar();
+		}
+
+		private void scaleScrollbar()
+		{
+			int scrollbarWidth = _scrollBar.Width.ByDpiWidth();
+
+			_scrollBar.Left = _scrollBar.Right - scrollbarWidth;
+			_scrollBar.Width = scrollbarWidth;
 		}
 
 		private void layout(object sender, LayoutEventArgs e)
@@ -44,6 +54,8 @@ namespace Mtgdb.Controls
 		private void paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+			e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
 			e.Graphics.Clear(BackColor);
 
 			for (int i = 0; i < Cards.Count; i++)
@@ -98,7 +110,7 @@ namespace Mtgdb.Controls
 						if (icon != null)
 						{
 							var iconBounds = SortOptions.GetButtonBounds(field, card);
-							e.Graphics.DrawImageUnscaled(icon, iconBounds.Location);
+							e.Graphics.DrawImage(icon, iconBounds);
 						}
 					}
 
@@ -108,7 +120,7 @@ namespace Mtgdb.Controls
 						if (icon != null)
 						{
 							var iconBounds = SearchOptions.GetButtonBounds(field, card);
-							e.Graphics.DrawImageUnscaled(icon, iconBounds.Location);
+							e.Graphics.DrawImage(icon, iconBounds);
 						}
 					}
 				}
@@ -186,6 +198,7 @@ namespace Mtgdb.Controls
 			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
 			result.Size = ProbeCard.Size;
+			result.Font = ProbeCard.Font;
 
 			var probeEnumerator = ProbeCard.Fields.GetEnumerator();
 			var enumerator = result.Fields.GetEnumerator();
@@ -215,6 +228,8 @@ namespace Mtgdb.Controls
 		{
 			var result = (LayoutControl)Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
+			result.Font = Font;
+
 			return result;
 		}
 
@@ -510,28 +525,31 @@ namespace Mtgdb.Controls
 
 			foreach (var field in card.Fields)
 			{
-				bool inField = field.Bounds.Contains(locationInField);
-				if (inField)
-				{
-					var rectField = field.Bounds;
-					rectField.Offset(card.Location);
-					hitInfo.FieldBounds = rectField;
+				if (!field.Bounds.Contains(locationInField))
+					continue;
 
-					hitInfo.FieldName = field.FieldName;
-					hitInfo.Field = field;
+				var rectField = field.Bounds;
+				rectField.Offset(card.Location);
+				hitInfo.FieldBounds = rectField;
 
-					hitInfo.IsSortButton =
-						SortOptions.Allow &&
-						hitInfo.Field.AllowSort &&
-						SortOptions.GetButtonBounds(field, card).Contains(location);
+				hitInfo.FieldName = field.FieldName;
+				hitInfo.Field = field;
 
-					hitInfo.IsSearchButton =
-						SearchOptions.Allow &&
-						hitInfo.Field.AllowSearch &&
-						SearchOptions.GetButtonBounds(field, card).Contains(location);
+				var sortButtonBounds = SortOptions.GetButtonBounds(field, card);
 
-					return hitInfo;
-				}
+				hitInfo.IsSortButton =
+					SortOptions.Allow &&
+					hitInfo.Field.AllowSort &&
+					sortButtonBounds.Contains(location);
+
+				var searchButtonBounds = SearchOptions.GetButtonBounds(field, card);
+
+				hitInfo.IsSearchButton =
+					SearchOptions.Allow &&
+					hitInfo.Field.AllowSearch &&
+					searchButtonBounds.Contains(location);
+
+				return hitInfo;
 			}
 
 			return hitInfo;

@@ -35,7 +35,6 @@ namespace Mtgdb.Gui
 			_highligter.Highlight();
 
 			_listBoxSuggest.DataSource = _dataSource;
-			_idleInputMonitoringThread = new Thread(idleInputMonitoringThread);
 		}
 
 		public void SubscribeToEvents()
@@ -81,20 +80,16 @@ namespace Mtgdb.Gui
 			SendKeys.Send(@"{Tab}");
 		}
 
-		private static int getHeight(string text)
+		private int getHeight(string text)
 		{
-			int linesCount = 1;
-			for (int i = 0; i < text.Length; i++)
-			{
-				if (text[i] == '\n')
-					linesCount++;
-			}
-
-			return 11*linesCount + 2;
+			var fontSize = _findEditor.Font.SizeInPixels();
+			int linesCount = 1 + text.Count(_ => _ == '\n');
+			return (int) (fontSize * 1.2f * linesCount);
 		}
 
 		public void StartThread()
 		{
+			_idleInputMonitoringThread = new Thread(idleInputMonitoringThread);
 			_idleInputMonitoringThread.Start();
 		}
 
@@ -623,7 +618,7 @@ namespace Mtgdb.Gui
 
 		private string _appliedText;
 		private DateTime? _lastUserInput;
-		private readonly Thread _idleInputMonitoringThread;
+		private Thread _idleInputMonitoringThread;
 
 		public SearchResult SearchResult { get; private set; }
 		private readonly BindingList<string> _dataSource = new BindingList<string>();

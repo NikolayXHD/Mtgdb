@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
+using Mtgdb.Dal.Index;
 using NLog;
 using File = System.IO.File;
 
@@ -11,7 +12,10 @@ namespace Mtgdb.Downloader
 {
 	public class Installer
 	{
-		public Installer(AppSourceConfig appSourceConfig, MtgjsonSourceConfig mtgjsonSourceConfig)
+		public Installer(
+			AppSourceConfig appSourceConfig, 
+			MtgjsonSourceConfig mtgjsonSourceConfig,
+			LuceneSearcher luceneSearcher)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
@@ -33,7 +37,15 @@ namespace Mtgdb.Downloader
 
 			_webClient = new WebClient();
 			_megatools = new Megatools();
-	}
+
+			_protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+			{
+				AppDir.GeneralConfigXml,
+				AppDir.DisplayConfigXml,
+				luceneSearcher.SearcherDirectory.AddPath("*.*"),
+				luceneSearcher.SpellcheckerDirectory.AddPath("*.*")
+			};
+		}
 
 		public void DownloadMtgjson()
 		{
@@ -170,10 +182,6 @@ namespace Mtgdb.Downloader
 			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
 
 			BeginInstall?.Invoke();
-
-			// to avoid slow replacement of many small files
-			// also to ensure index files were unlocked before we start unpacking
-			Directory.Delete(AppDir.Data.AddPath("index"), recursive: true);
 
 			if (new SevenZip().Extract(appDownloaded, AppDir.Root, _protectedFiles))
 			{
@@ -371,11 +379,7 @@ namespace Mtgdb.Downloader
 		public const string ShortcutFileName = "Mtgdb.Gui.lnk";
 		private const string ExecutableFileName = "Mtgdb.Gui.exe";
 
-		private static readonly HashSet<string> _protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
-		{
-			AppDir.GeneralConfigXml,
-			AppDir.DisplayConfigXml
-		};
+		private readonly HashSet<string> _protectedFiles;
 
 		public bool NewsLoaded => _unreadNews != null;
 		public bool HasUnreadNews => _unreadNews != null && _unreadNews.Count > 0;

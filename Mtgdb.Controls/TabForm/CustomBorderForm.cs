@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -155,9 +156,9 @@ namespace Mtgdb.Controls
 		{
 			titleRectangle = new Rectangle(
 				_panelHeader.Width,
-				controlBox.Bottom,
+				controlBox.Top,
 				titleRectangle.Right - _panelHeader.Width,
-				titleRectangle.Height - controlBox.Bottom);
+				titleRectangle.Height - controlBox.Top);
 
 			if (clipRectangle.IntersectsWith(titleRectangle))
 				g.FillRectangle(new SolidBrush(TitleBackroundColor), titleRectangle);
@@ -174,7 +175,7 @@ namespace Mtgdb.Controls
 					x -= images[i].Width;
 
 					Point location = new Point(x, 0);
-					g.DrawImageUnscaled(images[i], location);
+					g.DrawImage(images[i], new Rectangle(location, images[i].Size));
 				}
 			}
 		}

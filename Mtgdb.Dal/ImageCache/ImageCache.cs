@@ -12,13 +12,18 @@ namespace Mtgdb.Dal
 		public ImageCache(ImageCacheConfig config, SmallConfig smallConfig, ZoomedConfig zoomedConfig)
 		{
 			if (smallConfig.Width.HasValue && smallConfig.Height.HasValue)
-				CardSize = new Size(smallConfig.Width.Value, smallConfig.Height.Value);
+				_cardSize = new Size(smallConfig.Width.Value, smallConfig.Height.Value);
 
 			if (zoomedConfig.Width.HasValue && zoomedConfig.Height.HasValue)
-				ZoomedCardSize = new Size(zoomedConfig.Width.Value, zoomedConfig.Height.Value);
+				_zoomedCardSize = new Size(zoomedConfig.Width.Value, zoomedConfig.Height.Value);
 
 			Capacity = config.GetCacheCapacity();
 			_transparentCornersWhenNotZoomed = config.TransparentCornersWhenNotZoomed ?? true;
+		}
+
+		public Bitmap GetSmallImage(ImageModel model)
+		{
+			return GetImage(model, CardSize);
 		}
 
 		public Bitmap GetImage(ImageModel model, Size size)
@@ -97,7 +102,7 @@ namespace Mtgdb.Dal
 
 				try
 				{
-					bitmap = original.Scale(size, frame);
+					bitmap = original.FitIn(size, frame);
 				}
 				catch
 				{
@@ -105,7 +110,7 @@ namespace Mtgdb.Dal
 			}
 
 			if (!transparentCorners && !whiteCorner ||
-			    size == CardSize && model.IsPreprocessed ||
+			    size == _cardSize && model.IsPreprocessed ||
 			    model.HasTransparentCorner ||
 			    model.IsArt)
 			{
@@ -118,7 +123,7 @@ namespace Mtgdb.Dal
 			try
 			{
 				var gr = Graphics.FromImage(edited);
-				gr.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+				gr.DrawImage(bitmap, new Rectangle(Point.Empty, bitmap.Size));
 
 				var remover = new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: true);
 				remover.Execute();
@@ -181,15 +186,16 @@ namespace Mtgdb.Dal
 			_imagesByPath.Remove(keyToRemove);
 		}
 
-
-		public static readonly Size SizeCropped = new Size(205, 293);
-
 		private readonly Dictionary<string, ImageCacheEntry> _imagesByPath = new Dictionary<string, ImageCacheEntry>();
 		private readonly LinkedList<string> _ratings = new LinkedList<string>();
 
-		public Size CardSizeDefault { get; } = new Size(223, 311);
-		public Size CardSize { get; } = new Size(223, 311);
-		public Size ZoomedCardSize { get; } = new Size(446, 622);
+
+		public static readonly Size SizeCropped = new Size(205, 293);
+		private Size _cardSize = new Size(223, 311);
+		private Size _zoomedCardSize = new Size(446, 622);
+
+		public Size CardSize => _cardSize.ByDpi();
+		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
 		public int Capacity { get; }
 		private readonly bool _transparentCornersWhenNotZoomed;

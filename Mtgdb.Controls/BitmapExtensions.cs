@@ -7,13 +7,26 @@ namespace Mtgdb.Controls
 {
 	public static class BitmapExtensions
 	{
-		public static Bitmap Scale(this Bitmap original, Size size, Size frame)
+		public static Bitmap ResizeDpi(this Bitmap original)
+		{
+			return original.FitIn(original.Size.ByDpi());
+		}
+
+		public static Bitmap HalfResizeDpi(this Bitmap original)
+		{
+			return original.FitIn(original.Size.HalfByDpi());
+		}
+
+		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default(Size))
 		{
 			var croppedSize = new Size(
 				original.Width - 2 * frame.Width,
 				original.Height - 2 * frame.Height);
 
-			size = croppedSize.ZoomTo(size);
+			size = croppedSize.FitIn(size);
+
+			if (size == original.Size)
+				return original;
 
 			var result = new Bitmap(size.Width, size.Height);
 
@@ -21,9 +34,10 @@ namespace Mtgdb.Controls
 			{
 				var graphics = Graphics.FromImage(result);
 				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
 				graphics.DrawImage(
 					original,
-					destRect: new RectangleF(-0.5f, -0.5f, result.Width + 0.5f, result.Height + 0.5f),
+					destRect: new RectangleF(Point.Empty, result.Size),
 					srcRect: new Rectangle(new Point(frame), croppedSize),
 					srcUnit: GraphicsUnit.Pixel);
 			}
@@ -36,7 +50,7 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		public static Size ZoomTo(this Size originalSize, Size viewPortSize)
+		public static Size FitIn(this Size originalSize, Size viewPortSize)
 		{
 			var factor = Math.Min(
 				(float) viewPortSize.Width/originalSize.Width,
@@ -49,7 +63,7 @@ namespace Mtgdb.Controls
 			return zoomed;
 		}
 
-		public static SizeF ZoomTo(this Size originalSize, SizeF viewPortSize)
+		public static SizeF FitIn(this Size originalSize, SizeF viewPortSize)
 		{
 			var factor = Math.Min(
 				viewPortSize.Width / originalSize.Width,
@@ -62,9 +76,9 @@ namespace Mtgdb.Controls
 			return zoomed;
 		}
 
-		public static Rectangle ZoomTo(this Size original, Rectangle viewPort)
+		public static Rectangle FitIn(this Size original, Rectangle viewPort)
 		{
-			return new Rectangle(viewPort.Location, original.ZoomTo(viewPort.Size));
+			return new Rectangle(viewPort.Location, original.FitIn(viewPort.Size));
 		}
 
 		public static Bitmap SetOpacity(this Bitmap image, float opacity)
@@ -83,7 +97,7 @@ namespace Mtgdb.Controls
 			using (var g = Graphics.FromImage(output))
 			{
 				g.SmoothingMode = SmoothingMode.AntiAlias;
-				var destRect = new Rectangle(0, 0, image.Width, image.Height);
+				var destRect = new Rectangle(Point.Empty, image.Size);
 				g.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttributes);
 			}
 
@@ -124,7 +138,7 @@ namespace Mtgdb.Controls
 			using (var g = Graphics.FromImage(output))
 			{
 				g.SmoothingMode = SmoothingMode.AntiAlias;
-				var destRect = new Rectangle(0, 0, image.Width, image.Height);
+				var destRect = new Rectangle(Point.Empty, image.Size);
 				g.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttributes);
 			}
 

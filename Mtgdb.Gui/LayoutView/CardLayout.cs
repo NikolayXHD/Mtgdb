@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 
@@ -43,6 +45,8 @@ namespace Mtgdb.Gui
 			HighlightSettings.HighlightBorderColor = Color.CadetBlue;
 			HighlightSettings.HighlightColor = Color.LightBlue;
 			HighlightSettings.HighlightContextColor = Color.LightCyan;
+
+			SubscribeToFieldEvents();
 		}
 
 		protected override void LoadData(object dataSource)
@@ -69,5 +73,7 @@ namespace Mtgdb.Gui
 			_fieldToughness.Text = card?.Toughness;
 			_fieldRulings.Text = card?.Rulings;
 		}
+
+		public override IEnumerable<FieldControl> Fields => _layout.Controls.Cast<FieldControl>();
 	}
 }

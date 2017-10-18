@@ -13,6 +13,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,6 +56,7 @@
   <PropertyGroup>
     <ApplicationIcon>mtg64.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -156,11 +172,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="[ infrastructure ]\GuiModule.cs" />
-    <Compile Include="Resx\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="FormMain\SuggestModel.cs" />
     <Compile Include="Resx\ResourcesAbilities.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -225,11 +236,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resx\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resx\ResourcesAbilities.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -298,41 +304,99 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\paste_16.png" />
+    <Content Include="Resources\05.png" />
+    <Content Include="Resources\7+.png" />
+    <Content Include="Resources\Annihilator.png" />
+    <Content Include="Resources\Attacks each turn.png" />
+    <Content Include="Resources\Box_48.png" />
+    <Content Include="Resources\Cant be blocked.png" />
+    <Content Include="Resources\Cant block.png" />
+    <Content Include="Resources\clone_32.png" />
+    <Content Include="Resources\cmc6.png" />
+    <Content Include="Resources\Cohort.png" />
+    <Content Include="Resources\common.png" />
+    <Content Include="Resources\Copy.png" />
+    <Content Include="Resources\Counter.png" />
+    <Content Include="Resources\Deathtouch.png" />
+    <Content Include="Resources\Defender.png" />
+    <Content Include="Resources\Delirium.png" />
+    <Content Include="Resources\Doesnt untap.png" />
+    <Content Include="Resources\Double Strike.png" />
+    <Content Include="Resources\draw_a_card_48.png" />
+    <Content Include="Resources\Enchant.png" />
+    <Content Include="Resources\Equip.png" />
+    <Content Include="Resources\Exile.png" />
+    <Content Include="Resources\First strike.png" />
+    <Content Include="Resources\Flash.png" />
+    <Content Include="Resources\Flying.png" />
+    <Content Include="Resources\Gain control.png" />
+    <Content Include="Resources\Haste.png" />
+    <Content Include="Resources\Hexproof.png" />
+    <Content Include="Resources\image_file_32.png" />
+    <Content Include="Resources\Indestructible.png" />
+    <Content Include="Resources\Ingest.png" />
+    <Content Include="Resources\Intimidate.png" />
+    <Content Include="Resources\legality_48.png" />
+    <Content Include="Resources\Lifelink.png" />
+    <Content Include="Resources\Menace.png" />
+    <Content Include="Resources\mtg_48.png" />
+    <Content Include="Resources\mythic.png" />
+    <Content Include="Resources\open_32.png" />
+    <Content Include="Resources\paste_40.png" />
+    <Content Include="Resources\print_32.png" />
+    <Content Include="Resources\properties_32.png" />
+    <Content Include="Resources\Prowess.png" />
+    <Content Include="Resources\quick_filters_48.png" />
+    <Content Include="Resources\Rally.png" />
+    <Content Include="Resources\rare.png" />
+    <Content Include="Resources\Reach.png" />
+    <Content Include="Resources\Regenerate.png" />
+    <Content Include="Resources\Renown.png" />
+    <Content Include="Resources\rightclick_48.png" />
+    <Content Include="Resources\scroll_48.png" />
+    <Content Include="Resources\Scry.png" />
+    <Content Include="Resources\search_48.png" />
+    <Content Include="Resources\search_hovered.png" />
+    <Content Include="Resources\Shroud.png" />
+    <Content Include="Resources\Skulk.png" />
+    <Content Include="Resources\Trample.png" />
+    <Content Include="Resources\Transform.png" />
+    <Content Include="Resources\uncommon.png" />
+    <Content Include="Resources\Undying.png" />
+    <Content Include="Resources\Vigilance.png" />
+    <Content Include="Resources\zoom_48.png" />
+    <None Include="Resources\exclude_shown_24.png" />
+    <None Include="Resources\manatext_25.png" />
+    <None Include="Resources\manacost_25.png" />
+    <None Include="Resources\Box_40.png" />
+    <None Include="Resources\legality_40.png" />
+    <None Include="Resources\search_40.png" />
+    <None Include="Resources\quick_filters_40.png" />
     <None Include="Resources\mtgo_32.png" />
-    <None Include="Resources\draw_a_card_32.png" />
-    <None Include="Resources\Box_32.png" />
-    <None Include="Resources\illustrated_wiki.png" />
-    <None Include="Resources\update_notification.png" />
-    <None Include="Resources\mtg_16.png" />
-    <None Include="Resources\Search_16.png" />
-    <None Include="Resources\Search_transp_16.png" />
+    <None Include="Resources\update_notification_40.png" />
     <None Include="Resources\planar.png" />
     <None Include="Resources\min_hovered.png" />
     <None Include="Resources\max_hovered.png" />
     <None Include="Resources\count_hovered.png" />
     <None Include="Resources\count_distinct_hovered.png" />
     <None Include="Resources\avg_hovered.png" />
-    <None Include="Resources\left_arrow_hovered.png" />
     <None Include="Resources\sum_hovered.png" />
-    <None Include="Resources\sum.png" />
     <None Include="Resources\sort_none_hovered.png" />
     <None Include="Resources\sort_none.png" />
     <None Include="Resources\sort_desc_hovered.png" />
     <None Include="Resources\sort_desc.png" />
     <None Include="Resources\sort_asc_hovered.png" />
     <None Include="Resources\sort_asc.png" />
-    <None Include="Resources\sort_20.png" />
-    <None Include="Resources\add_tab_16.png" />
-    <None Include="Resources\close_tab_hovered_16.png" />
-    <None Include="Resources\close_tab_16.png" />
+    <None Include="Resources\add_tab_32.png" />
+    <None Include="Resources\close_tab_hovered_32.png" />
+    <None Include="Resources\close_tab_32.png" />
     <None Include="Resources\DotP2014_32.png" />
-    <None Include="Resources\Cockatrice_32.png" />
+    <None Include="Resources\cockatrice_32.png" />
     <None Include="Resources\normalize.png" />
     <None Include="Resources\minimize.png" />
     <None Include="Resources\maximize.png" />
     <None Include="Resources\close.png" />
-    <None Include="Resources\YandexMoney_32.png" />
+    <None Include="Resources\yandex_money_32.png" />
     <None Include="Resources\xmage_32.png" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -345,8 +409,8 @@
     <None Include="Resources\wp.png" />
     <None Include="Resources\wb.png" />
     <None Include="Resources\w.png" />
-    <None Include="Resources\chart2_16x16.png" />
-    <None Include="Resources\Clone24.png" />
+    <None Include="Resources\chart_32.png" />
+    <None Include="Resources\clone_48.png" />
     <None Include="Resources\cmc0.png" />
     <None Include="Resources\cmc1.png" />
     <None Include="Resources\cmc2.png" />
@@ -358,7 +422,6 @@
     <None Include="Resources\cmc3.png" />
     <None Include="Resources\cmc4.png" />
     <None Include="Resources\cmc5.png" />
-    <None Include="Resources\cmc6.png" />
     <None Include="Resources\cmc7.png" />
     <None Include="Resources\b.png" />
     <None Include="Resources\bg.png" />
@@ -392,15 +455,12 @@
     <None Include="Resources\5.png" />
     <None Include="Resources\6.png" />
     <None Include="Resources\7.png" />
-    <None Include="Resources\Box20.png" />
     <None Include="Resources\ava.jpg" />
-    <None Include="Resources\open2_16x16.png" />
-    <None Include="Resources\print_16x16.png" />
-    <None Include="Resources\redo_16x16.png" />
-    <None Include="Resources\index_16x16.png" />
-    <None Include="Resources\hidden24.png" />
-    <None Include="Resources\include_plus24e.png" />
-    <None Include="Resources\exclude_minus24t.png" />
+    <None Include="Resources\redo_32.png" />
+    <None Include="Resources\help_32.png" />
+    <None Include="Resources\exclude_hidden_24.png" />
+    <None Include="Resources\include_plus_24.png" />
+    <None Include="Resources\exclude_minus_24.png" />
     <None Include="Resources\e.png" />
     <None Include="Resources\g.png" />
     <None Include="Resources\gp.png" />
@@ -416,31 +476,21 @@
     <None Include="Resources\jp.png" />
     <None Include="Resources\kr.png" />
     <None Include="Resources\pt.png" />
-    <None Include="Resources\mtg20.png" />
-    <None Include="Resources\draw a card.png" />
+    <None Include="Resources\draw_a_card_40.png" />
     <None Include="Resources\filter.png" />
-    <None Include="Resources\Quick filters.png" />
     <None Include="Resources\madness.png" />
     <None Include="Resources\enchantment.png" />
     <None Include="Resources\instant.png" />
     <None Include="Resources\land.png" />
     <None Include="Resources\planeswalker.png" />
-    <None Include="Resources\manatext25i.png" />
-    <None Include="Resources\manacost24ctc.png" />
-    <None Include="Resources\Legality20.png" />
     <None Include="Resources\forge_32.png" />
-    <None Include="Resources\Magarena_32.png" />
-    <None Include="Resources\mtg32.png" />
-    <None Include="Resources\properties_16x16.png" />
+    <None Include="Resources\magarena_32.png" />
     <None Include="Resources\paypal_32.png" />
-    <None Include="Resources\ieroglif_32.png" />
-    <None Include="Resources\play-card-48.png" />
-    <None Include="Resources\rightclick32.png" />
-    <None Include="Resources\save_16x16.png" />
-    <None Include="Resources\trash_16x16.png" />
-    <None Include="Resources\undo_16x16.png" />
-    <None Include="Resources\showhidecomment_16x16.png" />
-    <None Include="Resources\shown24.png" />
+    <None Include="Resources\play_card_48.png" />
+    <None Include="Resources\save_32.png" />
+    <None Include="Resources\trash_32.png" />
+    <None Include="Resources\undo_32.png" />
+    <None Include="Resources\tooltip_32.png" />
     <None Include="Resources\rp.png" />
     <None Include="Resources\rw.png" />
     <None Include="Resources\s.png" />
@@ -452,16 +502,27 @@
     <None Include="Resources\ut.png" />
     <None Include="Resources\ru.png" />
     <None Include="Resources\tw.png" />
-    <None Include="Resources\Stretch20bw.png" />
-    <None Include="Resources\Search-icon.png" />
     <None Include="Resources\surge.png" />
     <None Include="Resources\sorcery.png" />
-    <None Include="Resources\update.png" />
-    <None Include="Resources\update_bw.png" />
-    <None Include="Resources\sort_32.png" />
-    <None Include="Resources\view-zoom-in.png" />
+    <None Include="Resources\update_40.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -13,9 +13,9 @@ These buttons filter cards by
 - converted mana cost
 - mana cost
 
-Checking the button in top row (right column for vertical panel) applies filter with operator AND.
+Checking the button in _top row_ (_right column_ for vertical panel) applies filter with operator AND.
 
-Checking the button in bottom row (left column for vertical groups) applies filter with operator 
+Checking the button in _bottom row_ (_left column_ for vertical groups) applies filter with operator 
 OR.
 
 Filters by different properties are always joined through AND.
@@ -42,6 +42,6 @@ Using Filter buttons and other User Interface elements you can set the following
 To select between AND / OR operators for those types use the the rightmost buttons group in top 
 panel.
 
-Just like with filter buttons checking in the top row corresponds to AND, in the bottom to OR.
+Just like with filter buttons checking in the _top row_ corresponds to AND, in the _bottom_ to OR.
 
 If neither top or bottom is checked, the filter type is ignored when filtering cards.

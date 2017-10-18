@@ -16,6 +16,26 @@ namespace Mtgdb.Downloader
 		public UpdateForm()
 		{
 			InitializeComponent();
+
+			scale();
+		}
+
+		private void scale()
+		{
+			TitleHeight = TitleHeight.ByDpiHeight();
+
+			ImageMinimize = ImageMinimize.HalfResizeDpi();
+			ImageMaximize = ImageMaximize.HalfResizeDpi();
+			ImageNormalize = ImageNormalize.HalfResizeDpi();
+			ImageClose = ImageClose.HalfResizeDpi();
+
+			_progressBar.Height = _progressBar.Height.ByDpiHeight();
+
+			this.ScaleDpi();
+			_tableLayoutButtons.ScaleDpi();
+
+			foreach (var button in _tableLayoutButtons.Controls.Cast<Button>())
+				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
 		}
 
 		public UpdateForm(
@@ -344,6 +364,20 @@ namespace Mtgdb.Downloader
 
 		private void imgLqClick(object sender, EventArgs e)
 		{
+			if (Dpi.ScalePercent > 100)
+			{
+				var dlgResult = MessageBox.Show($@"Your scren DPI is {Dpi.ScalePercent}% from default. Small images will look blurry on your screen.
+It is recommended to download zoom images only.
+
+Are you sure you need small images? (Recommended answer is NO)",
+					"Warning",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning);
+
+				if (dlgResult != DialogResult.Yes)
+					return;
+			}
+
 			downloadImageClick(sender, ImageQuality.Low);
 		}
 

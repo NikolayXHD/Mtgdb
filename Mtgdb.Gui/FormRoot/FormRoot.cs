@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -14,6 +16,21 @@ namespace Mtgdb.Gui
 		public FormRoot()
 		{
 			InitializeComponent();
+
+			_languageIcons = new Dictionary<string, Bitmap>(Str.Comparer)
+			{
+				{ "cn", Resources.cn },
+				{ "jp", Resources.jp },
+				{ "kr", Resources.kr },
+				{ "tw", Resources.tw },
+				{ "es", Resources.es },
+				{ "fr", Resources.fr },
+				{ "it", Resources.it },
+				{ "pt", Resources.pt },
+				{ "de", Resources.de },
+				{ "en", Resources.en },
+				{ "ru", Resources.ru }
+			};
 
 			_deckButtons = new ButtonBase[]
 			{
@@ -36,6 +53,66 @@ namespace Mtgdb.Gui
 				new [] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
 				new [] { _buttonMenuSaveDeck, _buttonMenuSaveCollection }
 			};
+
+			scale();
+
+			RegisterDragControl(_layoutTitle);
+			RegisterDragControl(_flowTitleLeft);
+			RegisterDragControl(_flowTitleRight);
+		}
+
+		private void scale()
+		{
+			TitleHeight = TitleHeight.ByDpiHeight();
+
+			ImageMinimize = ImageMinimize.HalfResizeDpi();
+			ImageMaximize = ImageMaximize.HalfResizeDpi();
+			ImageNormalize = ImageNormalize.HalfResizeDpi();
+			ImageClose = ImageClose.HalfResizeDpi();
+
+			_buttonDonateYandexMoney.ScaleDpi();
+			_buttonDonatePayPal.ScaleDpi();
+			_panelAva.ScaleDpi();
+			_labelDonate.ScaleDpi();
+
+			_buttonMenuPaste.ScaleDpi();
+			_buttonMenuPasteAppend.ScaleDpi();
+			_labelPasteInfo.ScaleDpi();
+
+			_buttonMenuGeneralSettings.ScaleDpi();
+			_buttonMenuDisplaySettings.ScaleDpi();
+
+			_buttonMenuOpenDeck.ScaleDpi();
+			_buttonMenuSaveDeck.ScaleDpi();
+			_buttonMenuOpenCollection.ScaleDpi();
+			_buttonMenuSaveCollection.ScaleDpi();
+			_buttonVisitForge.ScaleDpi();
+			_buttonVisitMagarena.ScaleDpi();
+			_buttonVisitXMage.ScaleDpi();
+			_buttonVisitMtgo.ScaleDpi();
+			_buttonVisitDotP2014.ScaleDpi();
+			_buttonVisitCockatrice.ScaleDpi();
+			_labelMtgo.ScaleDpi();
+			_labelMagarena.ScaleDpi();
+			_labelDotP2.ScaleDpi();
+
+			_tabs.Height = _tabs.Height.ByDpiHeight();
+			_tabs.SlopeSize = _tabs.SlopeSize.ByDpi();
+			_tabs.AddButtonSlopeSize = _tabs.AddButtonSlopeSize.ByDpi();
+			_tabs.AddButtonWidth = _tabs.AddButtonWidth.ByDpiWidth();
+
+			_tabs.CloseIcon = _tabs.CloseIcon.HalfResizeDpi();
+			_tabs.CloseIconHovered = _tabs.CloseIconHovered.HalfResizeDpi();
+			_tabs.AddIcon = _tabs.AddIcon.HalfResizeDpi();
+
+			foreach (var langButton in getLanguageMenuItems())
+				langButton.ScaleDpi();
+
+			foreach (var leftTitleButton in _flowTitleLeft.Controls.OfType<ButtonBase>())
+				leftTitleButton.ScaleDpi();
+
+			foreach (var leftTitleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
+				leftTitleButton.ScaleDpi();
 		}
 
 		// ReSharper disable once UnusedMember.Global
@@ -111,7 +188,6 @@ namespace Mtgdb.Gui
 		}
 
 
-
 		private void formTextChanged(object sender, EventArgs e)
 		{
 			var formMain = (FormMain) sender;
@@ -143,6 +219,8 @@ namespace Mtgdb.Gui
 
 			if (_draggingForm != null && _draggingForm == form)
 				_draggingForm.StopDragging();
+
+			form?.OnTabUnselected();
 		}
 
 		private void pageSelected()
@@ -162,7 +240,7 @@ namespace Mtgdb.Gui
 			}
 
 			selectedForm.BringToFront();
-			selectedForm.OnSelectedTab(_draggedCard);
+			selectedForm.OnTabSelected(_draggedCard);
 
 			_draggingForm = null;
 			_draggedCard = null;
@@ -224,11 +302,11 @@ namespace Mtgdb.Gui
 
 		private void updateDownloadButton()
 		{
-			_buttonDownload.Image = _downloaderSubsystem.HasUnreadNews
-				? Resources.update_notification
-				: Resources.update;
+			var image = _downloaderSubsystem.HasUnreadNews
+				? Resources.update_notification_40
+				: Resources.update_40;
 
-			setupButton(_buttonDownload);
+			setupButton(_buttonDownload, image, true);
 		}
 
 		private void closed(object sender, EventArgs e)

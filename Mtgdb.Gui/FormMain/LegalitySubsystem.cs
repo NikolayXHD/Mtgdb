@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
@@ -86,12 +85,12 @@ namespace Mtgdb.Gui
 				return null;
 
 			if (c.IsRestrictedIn(FilterFormat))
-				return Resources.Title_Restricted;
+				return Legality.Restricted;
 
 			if (c.IsBannedIn(FilterFormat))
-				return Resources.Title_Banned;
+				return Legality.Banned;
 
-			return Resources.Title_Illegal;
+			return Legality.Illegal;
 		}
 
 		public readonly string AnyFormat;

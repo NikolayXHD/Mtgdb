@@ -11,29 +11,56 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool Allow { get; set; }
 
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap AscIcon { get; set; }
+
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap IconTransp { get; private set; }
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap AscIconTransp { get; private set; }
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap DescIconTransp { get; private set; }
+
+
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap DescIcon { get; set; }
+		public Bitmap Icon
+		{
+			get { return _icon; }
+			set {
+				_icon = value;
+				IconTransp = value.SetOpacity(0.75f);
+			}
+		}
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap IconHovered { get; set; }
+		public Bitmap AscIcon
+		{
+			get { return _ascIcon; }
+			set
+			{
+				_ascIcon = value;
+				AscIconTransp = value.SetOpacity(0.75f);
+			}
+		}
 
 		[Category("Settings")]
 		[DefaultValue(null)]
-		public Bitmap AscIconHovered { get; set; }
-
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap DescIconHovered { get; set; }
-
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap Icon { get; set; }
+		public Bitmap DescIcon
+		{
+			get { return _descIcon; }
+			set
+			{
+				_descIcon = value;
+				DescIconTransp = value.SetOpacity(0.75f);
+			}
+		}
 
 		[Category("Settings")]
 		[DefaultValue(typeof(ContentAlignment), "TopRight")]
@@ -52,7 +79,7 @@ namespace Mtgdb.Controls
 			var fieldBounds = field.Bounds;
 			fieldBounds.Offset(layout.Location);
 
-			var imageBounds = new Rectangle(fieldBounds.Location, Icon.Size);
+			var imageBounds = new Rectangle(fieldBounds.Location, IconTransp.Size);
 
 			if (ContentAlignmentRanges.AnyCenter.HasFlag(ButtonAlignment))
 				imageBounds.Offset((fieldBounds.Width - imageBounds.Width) / 2, 0);
@@ -78,11 +105,11 @@ namespace Mtgdb.Controls
 				switch (field.SortOrder)
 				{
 					case SortOrder.None:
-						return IconHovered;
+						return Icon;
 					case SortOrder.Ascending:
-						return AscIconHovered;
+						return AscIcon;
 					case SortOrder.Descending:
-						return DescIconHovered;
+						return DescIcon;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -91,14 +118,18 @@ namespace Mtgdb.Controls
 			switch (field.SortOrder)
 			{
 				case SortOrder.None:
-					return Icon;
+					return IconTransp;
 				case SortOrder.Ascending:
-					return AscIcon;
+					return AscIconTransp;
 				case SortOrder.Descending:
-					return DescIcon;
+					return DescIconTransp;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
+
+		private Bitmap _icon;
+		private Bitmap _ascIcon;
+		private Bitmap _descIcon;
 	}
 }

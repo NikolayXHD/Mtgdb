@@ -11,6 +11,8 @@ namespace Mtgdb.Gui
 
 			_fieldImage.FieldName = nameof(Card.Image);
 			_fieldImage.AllowSort = false;
+
+			SubscribeToFieldEvents();
 		}
 
 		protected override void LoadData(object dataSource)

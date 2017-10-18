@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
@@ -92,7 +91,7 @@ namespace Mtgdb.Gui
 			@"^(?<count>\d+) (?<name>.+)$",
 			RegexOptions.Compiled);
 
-		public override string Description => Resources.Formatter_MagarenaDeck_Description;
+		public override string Description => "Magarena {type}";
 		public override string FileNamePattern => @"*.dec";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;

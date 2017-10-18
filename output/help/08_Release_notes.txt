@@ -1,3 +1,43 @@
+2.3.0
+-----
+
+### Supported high DPI
+
+Increasing screen DPI from default `96dpi` you can make Windows applications display larger fonts 
+and scale up most user interface elements. Now Mtgdb.Gui will scale itself correctly proportional 
+to DPI and the text will not become blurry as before. 
+
+High DPI can be enabled in
+
+    Control Panel\All Control Panel Items\Display
+
+With high DPI you should not use small LQ images, instead use zoomed MQ. To accomplish this 
+
+* do not download small images from `Update` window. Zoomed will be automatically used instead of 
+small ones.
+* in case you already downloaded LQ images you may 
+  - either remove or rename LQ images directory `\images\Mtgdb.Pictures\LQ`
+  - or disable using LQ images in `etc\Mtgdb.Gui.xml`:
+
+    `<ImageLocations> <Directory Path="images\Mtgdb.Pictures\MQ" Zoom="Any" > </ImageLocations>`
+
+### Fixed keyboard shortcuts
+
+Fixed `Ctrl`+`V` not pasting into search input
+
+Fixed `Enter` not selecting search text intellisense
+
+### Search text fields
+Renamed 
+* `SubtypesArr` -> `Subtypes` 
+* `TypesArr` -> `Types` 
+* `SupertypesArr` -> `Supertypes`
+
+Added
+* `Layout` to search for `meld`, `flip`, `aftermath` and etc.
+* `Hand` modifier in Vanguard cards
+* `Life` modifier in Vanguard cards
+
 2.2.9
 -----
 

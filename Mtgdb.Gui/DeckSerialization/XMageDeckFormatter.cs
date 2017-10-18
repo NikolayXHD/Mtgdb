@@ -2,7 +2,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
@@ -100,7 +99,7 @@ namespace Mtgdb.Gui
 			@"^(?<sb>SB: )?(?<count>\d+) \[(?<set>[^:]+):(?<id>\d+)\] (?<name>.*)$",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		
-		public override string Description => Resources.Formatter_XMageDeck_Description;
+		public override string Description => "XMage {type}";
 		public override string FileNamePattern => @"*.dck";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;

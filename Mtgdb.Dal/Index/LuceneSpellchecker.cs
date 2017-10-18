@@ -14,11 +14,14 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.6" /* new sets */);
+			// SubtypesArr -> Subtypes
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.7" /* new sets */);
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
-		public void LoadIndex(Analyzer analyzer, Directory index)
+		public bool IsUpToDate => Version.IsUpToDate;
+
+		internal void LoadIndex(Analyzer analyzer, Directory index)
 		{
 			_reader = IndexReader.Open(index, readOnly: true);
 
@@ -199,8 +202,8 @@ namespace Mtgdb.Dal.Index
 			abortLoading();
 
 			IsLoaded = false;
-			_reader.Dispose();
-			_spellchecker.Dispose();
+			_reader?.Dispose();
+			_spellchecker?.Dispose();
 		}
 
 		private void abortLoading()

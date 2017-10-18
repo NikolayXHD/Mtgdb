@@ -16,12 +16,12 @@ namespace Mtgdb.Controls
 
 		public void SetupPopup(Popup popup)
 		{
-			_popups[popup.Owner] = popup;
+			_popupsByOwner[popup.Owner] = popup;
 
 			popup.Control.Visible = false;
 
 			if (popup.BorderOnHover)
-				foreach (var button in popup.Control.Controls.OfType<ButtonBase>())
+				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
 				{
 					button.SetTag(button.FlatAppearance.BorderColor);
 					button.FlatAppearance.BorderColor = popup.Control.BackColor;
@@ -55,11 +55,12 @@ namespace Mtgdb.Controls
 		private void popupOwnerHover(object sender, EventArgs e)
 		{
 			var owner = (ButtonBase) sender;
-			var popup = _popups[owner];
+			var popup = _popupsByOwner[owner];
 
 			if (popup.OpenOnHover && !popup.Visible)
 			{
 				popup.Control.SetTag("Owner", popup.Owner);
+				popup.Container.SetTag("Owner", popup.Owner);
 				popup.Show();
 			}
 		}
@@ -67,13 +68,14 @@ namespace Mtgdb.Controls
 		private void popupOwnerClick(object sender, EventArgs e)
 		{
 			var owner = (ButtonBase)sender;
-			var popup = _popups[owner];
+			var popup = _popupsByOwner[owner];
 
 			if (popup.Visible)
 				popup.Hide();
 			else if (!popup.OpenOnHover)
 			{
 				popup.Control.SetTag("Owner", popup.Owner);
+				popup.Container.SetTag("Owner", popup.Owner);
 				popup.Show();
 			}
 		}
@@ -81,7 +83,7 @@ namespace Mtgdb.Controls
 		private void popupOwnerMouseLeave(object sender, EventArgs e)
 		{
 			var button = (ButtonBase) sender;
-			var popup = _popups[button];
+			var popup = _popupsByOwner[button];
 			if (!popup.Visible)
 				return;
 
@@ -91,9 +93,9 @@ namespace Mtgdb.Controls
 
 		private void popupMouseLeave(object sender, EventArgs e)
 		{
-			var popupControl = (Control) sender;
-			var owner = popupControl.GetTag<ButtonBase>("Owner");
-			var popup = _popups[owner];
+			var control = (Control) sender;
+			var owner = control.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
 
 			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
 				popup.Hide();
@@ -112,20 +114,21 @@ namespace Mtgdb.Controls
 				control.MouseLeave += mouseLeave;
 			}
 
-			foreach (var popup in _popups.Values.Distinct())
+			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
 				popup.Owner.MouseEnter += popupOwnerHover;
 				popup.Owner.Click += popupOwnerClick;
 				
 				popup.Owner.MouseLeave += popupOwnerMouseLeave;
 
-				foreach (var button in popup.Control.Controls.OfType<ButtonBase>())
+				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
 				{
 					button.Click += popupItemClick;
 					button.MouseEnter += popupItemMouseEnter;
 					button.MouseLeave += popupItemMouseLeave;
 				}
 
+				popup.Container.MouseLeave += popupMouseLeave;
 				popup.Control.MouseLeave += popupMouseLeave;
 			}
 		}
@@ -141,20 +144,21 @@ namespace Mtgdb.Controls
 				control.MouseLeave -= mouseLeave;
 			}
 
-			foreach (var popup in _popups.Values.Distinct())
+			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
 				popup.Owner.MouseEnter -= popupOwnerHover;
 				popup.Owner.Click -= popupOwnerClick;
 
 				popup.Owner.MouseLeave -= popupOwnerMouseLeave;
 
-				foreach (var button in popup.Control.Controls.OfType<ButtonBase>())
+				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
 				{
 					button.Click -= popupItemClick;
 					button.MouseEnter -= popupItemMouseEnter;
 					button.MouseLeave -= popupItemMouseLeave;
 				}
 
+				popup.Container.MouseLeave -= popupMouseLeave;
 				popup.Control.MouseLeave -= popupMouseLeave;
 			}
 		}
@@ -163,9 +167,9 @@ namespace Mtgdb.Controls
 		private void popupItemClick(object sender, EventArgs e)
 		{
 			var button = (ButtonBase)sender;
-			var menu = button.Parent;
-			var owner = menu.GetTag<ButtonBase>("Owner");
-			var popup = _popups[owner];
+			var container = button.Parent;
+			var owner = container.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
 
 			if (popup.CloseMenuOnClick)
 				popup.Hide();
@@ -175,9 +179,9 @@ namespace Mtgdb.Controls
 		{
 			var button = (ButtonBase)sender;
 
-			var menu = button.Parent;
-			var owner = menu.GetTag<ButtonBase>("Owner");
-			var popup = _popups[owner];
+			var container = button.Parent;
+			var owner = container.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
 
 			if (popup.BorderOnHover)
 				button.FlatAppearance.BorderColor = button.GetTag<Color>();
@@ -186,12 +190,12 @@ namespace Mtgdb.Controls
 		private void popupItemMouseLeave(object sender, EventArgs e)
 		{
 			var button = (ButtonBase)sender;
-			var menu = button.Parent;
-			var owner = menu.GetTag<ButtonBase>("Owner");
-			var popup = _popups[owner];
+			var container = button.Parent;
+			var owner = container.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
 
 			if (popup.BorderOnHover)
-				button.FlatAppearance.BorderColor = menu.BackColor;
+				button.FlatAppearance.BorderColor = container.BackColor;
 
 			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
 				popup.Hide();
@@ -204,6 +208,6 @@ namespace Mtgdb.Controls
 		}
 
 		private readonly Dictionary<ButtonBase, ButtonImages> _images = new Dictionary<ButtonBase, ButtonImages>();
-		private readonly Dictionary<ButtonBase, Popup> _popups = new Dictionary<ButtonBase, Popup>();
+		private readonly Dictionary<ButtonBase, Popup> _popupsByOwner = new Dictionary<ButtonBase, Popup>();
 	}
 }

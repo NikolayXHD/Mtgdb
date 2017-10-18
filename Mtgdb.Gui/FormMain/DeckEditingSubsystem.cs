@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
+using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
@@ -28,8 +29,6 @@ namespace Mtgdb.Gui
 			Cursor cursor,
 			FormZoom formZoom)
 		{
-			_zoomCursor = CursorHelper.CreateCursor(Resources.view_zoom_in, 0, 0);
-
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_cursor = cursor;
@@ -42,6 +41,9 @@ namespace Mtgdb.Gui
 			_draggingSubsystem.DragAdded += dragAdded;
 
 			_formZoom = formZoom;
+
+			var hotSpot = Size.Empty.ByDpi();
+			_zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
 		}
 
 		private void dragRemoved(Card card)

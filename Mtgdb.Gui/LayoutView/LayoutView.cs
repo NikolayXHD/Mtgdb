@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
@@ -45,16 +43,10 @@ namespace Mtgdb.Gui
 			set { _view.AllowPartialCards = value; }
 		}
 
-		public int PartialCardVertical
+		public Size PartialCardSize
 		{
-			get { return _view.PartialCardsThreshold.Height; }
-			set { _view.PartialCardsThreshold = new Size(_view.PartialCardsThreshold.Width, value); }
-		}
-
-		public int PartialCardHorizontal
-		{
-			get { return _view.PartialCardsThreshold.Width; }
-			set { _view.PartialCardsThreshold = new Size(value, _view.PartialCardsThreshold.Height); }
+			get { return _view.PartialCardsThreshold; }
+			set { _view.PartialCardsThreshold = value; }
 		}
 
 		public int VisibleRecordIndex
@@ -186,25 +178,12 @@ namespace Mtgdb.Gui
 
 		public void SetImageSize(Size size)
 		{
-			var imageField = _view.ProbeCard.Fields.Single(_ => _.FieldName == nameof(Card.Image));
-			var textField = _view.ProbeCard.Fields.SingleOrDefault(_ => _.FieldName == nameof(Card.Text));
+			var cardSize = _view.ProbeCard.Size;
 
-			if (textField == null)
-				_view.ProbeCard.Size = size;
-			else
-			{
-				var xOffset = size.Width - imageField.Width;
+			_view.ProbeCard.Size = new Size(
+				(int) (size.Height / ((float) cardSize.Height / cardSize.Width)),
+				size.Height);
 
-				_view.ProbeCard.Size = new Size(
-					_view.ProbeCard.Width + xOffset,
-					size.Height);
-
-				foreach (var field in _view.ProbeCard.Fields)
-					if (field != imageField)
-						field.Location = new Point(field.Location.X + xOffset, field.Location.Y);
-			}
-
-			imageField.Size = size;
 			_view.InvalidateLayout();
 		}
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
@@ -213,7 +212,7 @@ namespace Mtgdb.Gui
 					.ToDictionary(_ => _.Key, _ => _.ToList());
 		}
 
-		public override string Description => Resources.Formatter_MtgoDeck_Description;
+		public override string Description => "Magic The Gathering Online {type}";
 		public override string FileNamePattern => @"*.txt";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;

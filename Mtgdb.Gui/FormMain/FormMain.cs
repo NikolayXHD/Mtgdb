@@ -5,19 +5,20 @@ using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
 	public sealed partial class FormMain : Form
 	{
+		private bool _keywordsIndexUpToDate;
+
 		public void SaveHistory(string id)
 		{
 			_historyModel.Id = id;
 			_historyModel.Save();
 		}
 
-		public void OnSelectedTab(Card draggedCard)
+		public void OnTabSelected(Card draggedCard)
 		{
 			_uiModel.Deck = _deckModel;
 			_searchStringSubsystem.UpdateSuggestInput();
@@ -27,6 +28,14 @@ namespace Mtgdb.Gui
 				_findEditor.Focus();
 			else
 				dragCard(draggedCard);
+
+			if (_eventsSubscribed)
+				startThreads();
+		}
+
+		public void OnTabUnselected()
+		{
+			stopThreads();
 		}
 
 
@@ -46,22 +55,6 @@ namespace Mtgdb.Gui
 				control.ResumeLayout(false);
 				control.PerformLayout();
 			}
-
-			_panelCostMode.Width = _panelCost.Width = FilterManaAbility.Width + FilterManaCost.Margin.Left + FilterManaCost.Width;
-
-			int rightMargin = FilterManaCost.ImageSize.Width + FilterManaCost.Spacing.Width;
-
-			_buttonExcludeManaCost.Margin = new Padding(
-				FilterManaCost.Width - rightMargin - _buttonExcludeManaCost.Width,
-				0,
-				rightMargin,
-				0);
-
-			_buttonExcludeManaAbility.Margin = new Padding(
-				0,
-				0,
-				rightMargin + FilterManaCost.Margin.Left,
-				0);
 
 			ResumeLayout(false);
 			PerformLayout();
@@ -249,39 +242,32 @@ namespace Mtgdb.Gui
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)
 		{
 			if (!_keywordSearcher.IsLoading && !_keywordSearcher.IsLoaded)
-				return Resources.Title_building_keywords_pending;
+				return "pending keywod search…";
 
-			if (_keywordSearcher.IsUpToDate && _keywordSearcher.IsLoading)
-				return Resources.Title_loading_keywords;
+			if (_keywordsIndexUpToDate && _keywordSearcher.IsLoading)
+				return "loading keywords…";
 
 			if (_keywordSearcher.IsLoading)
-			{
-				return string.Format(
-					Resources.Title_building_index,
-					Resources.Title_building_index_keywords,
-					_keywordSearcher.SetsCount,
-					_cardRepo.SetsByCode.Count);
-			}
+				return $"indexing keywords {_keywordSearcher.SetsCount} / {_cardRepo.SetsByCode.Count} sets…";
 
 			string filterManagerModeDisplayText = getFilterManagerModeDisplayText(
 				filterManagerStates,
 				FilterGroupButtons,
 				isQuickFilteringActive(),
-				Resources.Title_mode_no_input);
+				"empty");
 
 			return filterManagerModeDisplayText;
 		}
 
 		private static string getStatusDeckOnly(FilterValueState[] filterManagerStates)
 		{
-			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupDeck, true, Resources.Title_mode_no_input);
-
+			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupDeck, true, "empty");
 			return gridFilterModeText;
 		}
 
 		private static string getStatusCollectionOnly(FilterValueState[] filterManagerStates)
 		{
-			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupCollection, true, Resources.Title_mode_no_input);
+			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupCollection, true, "empty");
 
 			return gridFilterModeText;
 		}
@@ -289,34 +275,30 @@ namespace Mtgdb.Gui
 		private string getStatusSearch(FilterValueState[] filterManagerStates)
 		{
 			if (isSearchStringModified())
-				return Resources.Title_mode_search_string_is_modified;
+				return "receving user input";
 
 			string noInputText;
 
 			if (!_luceneSearcher.IsLoading && !_luceneSearcher.IsLoaded)
-			{
-				noInputText = Resources.Title_building_index_pending;
-			}
+				noInputText = "pending index load…";
 			else if (_luceneSearcher.IsLoading)
 			{
-				noInputText = string.Format(
-					Resources.Title_building_index,
-					Resources.Title_building_index_cards,
-					_luceneSearcher.SetsAddedToIndex,
-					_cardRepo.SetsByCode.Count);
+				if (_luceneSearchIndexUpToDate)
+					noInputText = "loading search index…";
+				else
+					noInputText = $"indexing search {_luceneSearcher.SetsAddedToIndex} / {_cardRepo.SetsByCode.Count} sets…";
 			}
 			else if (_luceneSearcher.Spellchecker.IsLoading)
 			{
-				noInputText = string.Format(
-					Resources.Title_building_index,
-					Resources.Title_building_index_intellisense,
-					_luceneSearcher.Spellchecker.IndexedFields,
-					_luceneSearcher.Spellchecker.TotalFields);
+				if (_spellcheckerIndexUpToDate)
+					noInputText = "loading intellisense…";
+				else
+					noInputText = $"indexing intellisense {_luceneSearcher.Spellchecker.IndexedFields} / {_luceneSearcher.Spellchecker.TotalFields} fields…";
 			}
 			else if (_searchStringSubsystem.SearchResult?.ParseErrorMessage != null)
-				noInputText = Resources.Title_syntax_error;
+				noInputText = "syntax error";
 			else
-				noInputText = Resources.Title_mode_no_input;
+				noInputText = "empty";
 
 			var searchStringText = getFilterManagerModeDisplayText(
 				filterManagerStates,
@@ -357,19 +339,20 @@ namespace Mtgdb.Gui
 					result.Append(allowed);
 				else
 					result.Append(notAllowed);
-				result.Append(Resources.Title_Legal);
+				result.Append(Legality.Legal);
 
 				if (_legalitySubsystem.AllowRestricted)
 					result.Append(allowed);
 				else
 					result.Append(notAllowed);
-				result.Append(Resources.Title_Restricted);
+				result.Append(Legality.Restricted);
 
 				if (_legalitySubsystem.AllowBanned)
 					result.Append(allowed);
 				else
 					result.Append(notAllowed);
-				result.Append(Resources.Title_Banned);
+
+				result.Append(Legality.Banned);
 			}
 
 			return result.ToString();
@@ -392,11 +375,11 @@ namespace Mtgdb.Gui
 				switch (filterManagerStates[filterVariantIndex])
 				{
 					case FilterValueState.RequiredSome:
-						return Resources.Title_mode_or;
+						return "OR mode";
 					case FilterValueState.Required:
-						return Resources.Title_mode_and;
+						return "AND mode";
 					default:
-						return Resources.Title_mode_ignored;
+						return "ignored";
 				}
 			}
 
@@ -614,12 +597,28 @@ namespace Mtgdb.Gui
 
 		private void startThreads()
 		{
+			lock (this)
+			{
+				if (_threadsRunning)
+					return;
+
+				_threadsRunning = true;
+			}
+
 			_imagePreloadingSubsystem.StartThread();
 			_searchStringSubsystem.StartThread();
 		}
 
 		private void stopThreads()
 		{
+			lock (this)
+			{
+				if (!_threadsRunning)
+					return;
+
+				_threadsRunning = false;
+			}
+
 			_imagePreloadingSubsystem.AbortThread();
 			_searchStringSubsystem.AbortThread();
 		}
@@ -748,11 +747,6 @@ namespace Mtgdb.Gui
 		public void FocusSearch()
 		{
 			_searchStringSubsystem.FocusSearch();
-		}
-
-		public void ApplySearch()
-		{
-			_searchStringSubsystem.ProcessEnterKey();
 		}
 
 

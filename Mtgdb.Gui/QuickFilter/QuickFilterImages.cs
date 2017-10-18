@@ -19,10 +19,10 @@ namespace Mtgdb.Gui
 
 		private static readonly Bitmap[] FilterManager =
 		{
-			ResourcesFilter.Quick_filters,
-			ResourcesFilter.Search_icon,
-			Resources.Legality20,
-			Resources.Box20,
+			ResourcesFilter.quick_filters_20,
+			ResourcesFilter.search_20,
+			ResourcesFilter.legality_20,
+			ResourcesFilter.box_20,
 			ResourcesAbilities.draw_a_card
 		};
 
@@ -55,7 +55,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.bg,
 			ResourcesCost.rg,
 			ResourcesCost.x,
-			Resources.na
+			ResourcesCost.na
 		};
 
 		private static readonly Bitmap[] ManaAbility =
@@ -70,7 +70,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.t,
 			ResourcesCost.q,
 			ResourcesCost.x,
-			Resources.na
+			ResourcesCost.na
 		};
 
 		private static readonly Bitmap[] Type =
@@ -82,7 +82,7 @@ namespace Mtgdb.Gui
 			ResourcesType.enchantment,
 			ResourcesType.artifact,
 			ResourcesType.land,
-			Resources.na
+			ResourcesCost.na
 		};
 
 		private static readonly Bitmap[] Ability =
@@ -151,7 +151,7 @@ namespace Mtgdb.Gui
 			ResourcesRarity.rare2,
 			ResourcesRarity.mythic2,
 			ResourcesType.land,
-			Resources.na
+			ResourcesCost.na
 		};
 	}
 }

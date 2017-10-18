@@ -14,12 +14,12 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			TestLoadingUtil.LoadModules();
-			TestLoadingUtil.LoadCardRepository();
-			TestLoadingUtil.LoadLocalizations();
-			TestLoadingUtil.LoadSearcher();
+			TestLoader.LoadModules();
+			TestLoader.LoadCardRepository();
+			TestLoader.LoadLocalizations();
+			TestLoader.LoadSearcher();
 
-			_searcher = TestLoadingUtil.Searcher;
+			_searcher = TestLoader.Searcher;
 			_spellchecker = _searcher.Spellchecker;
 		}
 

@@ -10,15 +10,9 @@ namespace Mtgdb.Controls
 	{
 		public event Action<LayoutControl, FieldControl> Invalid;
 
-		public LayoutControl()
+		protected void SubscribeToFieldEvents()
 		{
-			ControlAdded += controlAdded;
-		}
-
-		private void controlAdded(object sender, ControlEventArgs e)
-		{
-			var field = e.Control as FieldControl;
-			if (field != null)
+			foreach (var field in Fields)
 				field.Invalid += fieldInvalidated;
 		}
 
@@ -54,7 +48,7 @@ namespace Mtgdb.Controls
 		{
 		}
 
-		public IEnumerable<FieldControl> Fields => Controls.Cast<FieldControl>();
+		public virtual IEnumerable<FieldControl> Fields => Controls.Cast<FieldControl>();
 		private object _dataSource;
 	}
 }

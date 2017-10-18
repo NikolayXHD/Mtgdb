@@ -2,7 +2,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
-using Mtgdb.Gui.Resx;
 
 namespace Mtgdb.Gui
 {
@@ -36,10 +35,7 @@ namespace Mtgdb.Gui
 					if (variantGroup.Success)
 						card = cards.FirstOrDefault(_ => Str.Equals(_.ImageName, name + variantGroup.Value));
 
-					if (card == null)
-						card = cards.First();
-
-					return card;
+					return card ?? cards.First();
 				}
 			}
 
@@ -112,7 +108,7 @@ namespace Mtgdb.Gui
 			@"^(?<count>\d+) (?<name>[^|]+)(\|(?<set>[^|]+)(\|(?<variant>[^|]+))?)?",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		public override string Description => Resources.Formatter_ForgeDeck_Description;
+		public override string Description => "Forge {type}";
 		public override string FileNamePattern => @"*.dck";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;

@@ -83,10 +83,11 @@ namespace Mtgdb.Gui
 					{
 						gr.DrawImage(
 							image,
-							x*(CardSizePx.Width + Border),
-							y*(CardSizePx.Height + Border),
-							CardSizePx.Width,
-							CardSizePx.Height);
+							new Rectangle(
+								x * (CardSizePx.Width + Border),
+								y * (CardSizePx.Height + Border),
+								CardSizePx.Width,
+								CardSizePx.Height));
 
 						pageSaved = false;
 

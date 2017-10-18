@@ -5,7 +5,7 @@ Introduction
 
 Searching is case-INsensitive
 
-IMPORTANT: Searh result includes only exact matches to the words in query unless wildcard symbols 
+IMPORTANT: Searh result includes only _exact matches_ to the words in query unless _wildcard_ symbols 
 are used. A query `angel OR demon` *will not* match words like `angelic`.
 
 Wildcard symbols are: `*` - any characters or nothing, `?` - any one character. To find all words 
@@ -26,7 +26,7 @@ Searh in any field
 
     disk
 
-Quotes " are used to search the entire phrase
+Quotes `"` are used to search the entire phrase
 
     "Llanowar elves"
 

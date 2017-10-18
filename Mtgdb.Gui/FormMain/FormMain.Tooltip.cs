@@ -158,7 +158,7 @@
 				"Ctrl+Backspace to delete one word\r\n" +
 				"F1 to learn searh string syntax\r\n\r\n" +
 				"Ctrl+F to focus search input",
-				_findCustomPanel,
+				_findBorderedPanel,
 				_findEditor,
 				_panelIconSearch);
 
