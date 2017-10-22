@@ -13,12 +13,14 @@ it and reuse in your projects. What's there:
 * Album like data viewer
 * Boolean filter buttons
 
-To get an idea of what these controls look like and what they can I suggest
-seeing [Project page](https://www.slightlymagic.net/forum/viewtopic.php?f=15&t=19298&p=204067#p204067)
-for screenshots. You can also download and run Mtgdb.Gui
+[![screenshot](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Filter_example.jpg?raw=true)](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/Filter_example.jpg?raw=true)
+
+To get an idea of what these controls look like and what they can I suggest seeing [wiki](https://github.com/NikolayXHD/Mtgdb/wiki)
+for screenshots.
 
 ## Search text input
 The search functionality in Mtgdb.Gui is quite advanced.
 You type a search query in [Lucene query language](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html).
 The query editor **highlights query syntax** and gives you **intellisense** when hitting `Ctrl`+`Space`
 
+[![search intellisense](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true)](https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/search_intellisense.jpg?raw=true)
