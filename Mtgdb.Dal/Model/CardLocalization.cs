@@ -5,135 +5,70 @@ namespace Mtgdb.Dal
 {
 	public class CardLocalization
 	{
-		private readonly CardLocalizationRaw _raw;
+		private readonly Dictionary<string, Translation> _translations =
+			new Dictionary<string, Translation>(Str.Comparer);
 
-		internal CardLocalization(CardLocalizationRaw raw)
+		private readonly Dictionary<string, ForeignName> _names =
+			new Dictionary<string, ForeignName>(Str.Comparer);
+
+		public void Add(ForeignName name, Translation translation)
 		{
-			_raw = raw;
+			var lang = getLang(name.Language);
+			
+			if (_names.ContainsKey(lang))
+				return;
+
+			_translations.Add(lang, translation);
+			_names.Add(lang, name);
+		}
+
+		private static string getLang(string language)
+		{
+			switch (language)
+			{
+				case "French":
+					return "fr";
+				case "Chinese Simplified":
+					return "cn";
+				case "Chinese Traditional":
+					return "tw";
+				case "German":
+					return "de";
+				case "Italian":
+					return "it";
+				case "Japanese":
+					return "jp";
+				case "Korean":
+					return "kr";
+				case "Portuguese (Brazil)":
+					return "pt";
+				case "Russian":
+					return "ru";
+				case "Spanish":
+					return "es";
+				default:
+					throw new NotSupportedException();
+			}
 		}
 
 		public string GetName(string language)
 		{
-			switch (language)
-			{
-				case "en":
-					return _raw.Name;
-				case "cn":
-					return _raw.NameCn;
-				case "tw":
-					return _raw.NameTw;
-				case "fr":
-					return _raw.NameFr;
-				case "de":
-					return _raw.NameDe;
-				case "it":
-					return _raw.NameIt;
-				case "jp":
-					return _raw.NameJp;
-				case "pt":
-					return _raw.NamePt;
-				case "ru":
-					return _raw.NameRu;
-				case "es":
-					return _raw.NameEs;
-				case "kr":
-					return _raw.NameKo;
-				default:
-					throw new InvalidOperationException($"language {language} not supported");
-			}
+			return _names.TryGet(language)?.Name;
 		}
 
 		public string GetType(string language)
 		{
-			switch (language)
-			{
-				case "en":
-					return _raw.Type;
-				case "cn":
-					return _raw.TypeCn;
-				case "tw":
-					return _raw.TypeTw;
-				case "fr":
-					return _raw.TypeFr;
-				case "de":
-					return _raw.TypeDe;
-				case "it":
-					return _raw.TypeIt;
-				case "jp":
-					return _raw.TypeJp;
-				case "pt":
-					return _raw.TypePt;
-				case "ru":
-					return _raw.TypeRu;
-				case "es":
-					return _raw.TypeEs;
-				case "kr":
-					return _raw.TypeKo;
-				default:
-					throw new InvalidOperationException($"language {language} not supported");
-			}
+			return _translations.TryGet(language)?.Type;
 		}
 
 		public string GetAbility(string language)
 		{
-			switch (language)
-			{
-				case "en":
-					return _raw.Ability;
-				case "cn":
-					return _raw.AbilityCn;
-				case "tw":
-					return _raw.AbilityTw;
-				case "fr":
-					return _raw.AbilityFr;
-				case "de":
-					return _raw.AbilityDe;
-				case "it":
-					return _raw.AbilityIt;
-				case "jp":
-					return _raw.AbilityJp;
-				case "pt":
-					return _raw.AbilityPt;
-				case "ru":
-					return _raw.AbilityRu;
-				case "es":
-					return _raw.AbilityEs;
-				case "kr":
-					return _raw.AbilityKo;
-				default:
-					throw new InvalidOperationException($"language {language} not supported");
-			}
+			return _translations.TryGet(language)?.Text;
 		}
 
 		public string GetFlavor(string language)
 		{
-			switch (language)
-			{
-				case "en":
-					return _raw.Flavor;
-				case "cn":
-					return _raw.FlavorCn;
-				case "tw":
-					return _raw.FlavorTw;
-				case "fr":
-					return _raw.FlavorFr;
-				case "de":
-					return _raw.FlavorDe;
-				case "it":
-					return _raw.FlavorIt;
-				case "jp":
-					return _raw.FlavorJp;
-				case "pt":
-					return _raw.FlavorPt;
-				case "ru":
-					return _raw.FlavorRu;
-				case "es":
-					return _raw.FlavorEs;
-				case "kr":
-					return _raw.FlavorKo;
-				default:
-					throw new InvalidOperationException($"language {language} not supported");
-			}
+			return _translations.TryGet(language)?.Flavor;
 		}
 
 		public static IEnumerable<string> GetAllLanguages()

@@ -25,11 +25,6 @@ namespace Mtgdb.Test
 				var htmlFile = AppDir.Root.AddPath($"help\\html\\{getPageName(helpFile)}.html");
 				string htmlPage = getHtmlPage(helpFile, mdContent, htmlTemplate, helpFiles);
 				File.WriteAllText(htmlFile, htmlPage);
-
-				var textFile = AppDir.Root.AddPath($"help\\{getTextFileName(helpFile)}.txt");
-				var textContent = _imgRegex.Replace(mdContent, "${url}");
-
-				File.WriteAllText(textFile, textContent);
 			}
 		}
 
@@ -66,36 +61,34 @@ namespace Mtgdb.Test
 		private static string[] getHelpFiles()
 		{
 			var helpFiles = Directory.GetFiles(
-				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"),
-				"*.md",
-				SearchOption.TopDirectoryOnly);
-			return helpFiles;
-		}
+				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.md", SearchOption.TopDirectoryOnly);
 
-		private static string getTextFileName(string helpFile)
-		{
-			string name = Path.GetFileNameWithoutExtension(helpFile);
-			return (name.Substring(0, 2) + name.Substring(3)).Replace('-', '_');
-
+			return helpFiles.OrderByDescending(f => Str.Equals("home.md", Path.GetFileName(f)))
+				.ToArray();
 		}
 
 		private static string getPageName(string helpFile)
 		{
-			return Path.GetFileNameWithoutExtension(helpFile).Substring(4).Replace("-", "_");
+			return Path.GetFileNameWithoutExtension(helpFile);
 		}
 
 		private static string getHtmlPage(string mdFile, string mdContent, string htmlTemplate, IList<string> mdFiles)
 		{
 			var readmeText = mdContent
-				.Replace(".jpg?raw=true", ".jpg")
 				.Replace(ImgDirUrl, "../img/");
+
+			foreach (string file in mdFiles)
+			{
+				var fileName = Path.GetFileNameWithoutExtension(file);
+				readmeText = readmeText
+					.Replace("(" + fileName, "(" + fileName + ".html");
+			}
 
 			var pipeline = new MarkdownPipelineBuilder()
 				.UseAdvancedExtensions()
 				.Build();
 
 			var htmlContent = Markdown.ToHtml(readmeText, pipeline);
-			//htmlContent = _imgRegex.Replace(htmlContent, "<a href=${url}>${0}</a>");
 			string title = getPageTitle(mdFile);
 			var navigationItems = getNavigationItems(mdFile, mdFiles);
 
@@ -128,16 +121,12 @@ namespace Mtgdb.Test
 		private static string getPageTitle(string helpFile)
 		{
 			string title = getPageName(helpFile)
-				.Replace('_', ' ');
+				.Replace('-', ' ');
 
 			title = title.Substring(0, 1).ToUpperInvariant() + title.Substring(1);
 			return title;
 		}
 
-		private static readonly Regex _imgRegex = new Regex(
-			@"\[!\[[^\]]+\]\((?<url>[^\)]+)\)\]\(\1\)",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-		private const string ImgDirUrl = "https://github.com/NikolayXHD/Mtgdb/blob/master/output/help/img/";
+		private const string ImgDirUrl = "../raw/master/output/help/img/";
 	}
 }

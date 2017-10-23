@@ -10,9 +10,9 @@
     <Content Include="data\AllSets-x.json" />
     <Content Include="data\forge_set_mapping.txt" />
     <Content Include="data\patch.json" />
-    <Content Include="data\gatherer_extractor.csv" />
     <Content Include="data\price.id.json" />
     <Content Include="data\price.json" />
+    <Content Include="data\translations.json" />
     <Content Include="etc\Mtgdb.Gui.Display.xml" />
     <Content Include="etc\Mtgdb.Gui.xml" />
     <Content Include="etc\Mtgdb.Gui.Default.xml">
@@ -23,6 +23,7 @@
     <Content Include="help\html\template.html" />
     <Content Include="help\img\filter_buttons.jpg" />
     <Content Include="help\img\Filter_example.jpg" />
+    <Content Include="help\img\filter_legality.jpg" />
     <Content Include="help\img\filter_manager.jpg" />
     <Content Include="help\img\header_buttons.jpg" />
     <Content Include="help\img\Ixalan_small.jpg" />
@@ -47,12 +48,18 @@
     <Content Include="help\img\paste_mtggoldfish_result.jpg" />
     <Content Include="help\img\paste_starcitygames.jpg" />
     <Content Include="help\img\paste_starcitygames_result.jpg" />
+    <Content Include="help\img\proxy.jpg" />
     <Content Include="help\img\search_button.jpg" />
     <Content Include="help\img\search_button_result.jpg" />
     <Content Include="help\img\search_intellisense.jpg" />
     <Content Include="help\img\shortcut.jpg" />
+    <Content Include="help\img\show_duplicate.jpg" />
     <Content Include="help\img\sideboard.jpg" />
     <Content Include="help\img\sort.jpg" />
+    <Content Include="help\img\statisitcs_manacurve.jpg" />
+    <Content Include="help\img\statistics_collection.jpg" />
+    <Content Include="help\img\statistics_custom.jpg" />
+    <Content Include="help\img\statistics_deck_price.jpg" />
     <Content Include="help\img\undo.jpg" />
     <Content Include="help\img\update_window.jpg" />
     <Content Include="update\7z\7za.exe" />
