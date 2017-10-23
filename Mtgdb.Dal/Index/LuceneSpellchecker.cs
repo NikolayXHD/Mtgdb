@@ -14,8 +14,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// SubtypesArr -> Subtypes
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.7" /* new sets */);
+			// Translations
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.8");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 

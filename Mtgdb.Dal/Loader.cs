@@ -83,10 +83,12 @@ namespace Mtgdb.Dal
 
 					while (!_priceRepository.IsLoadingComplete)
 						Thread.Sleep(50);
+
 					_repository.SetPrices(_priceRepository);
 
 					_localizationRepository.LoadFile();
 					_localizationRepository.Load();
+
 					_repository.FillLocalizations(_localizationRepository);
 
 					_localizationRepository.Clear();

@@ -204,10 +204,10 @@ namespace Mtgdb.Dal
 			card.LoyaltyNum = getLoyalty(card.Loyalty);
 
 			if (card.TextEn != null)
-				card.TextEn = GathererExtractorCsvParser.IncompleteChaosPattern.Replace(card.TextEn, "{CHAOS}");
+				card.TextEn = LocalizationRepository.IncompleteChaosPattern.Replace(card.TextEn, "{CHAOS}");
 
 			if (card.FlavorEn != null)
-				card.FlavorEn = GathererExtractorCsvParser.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
+				card.FlavorEn = LocalizationRepository.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
 
 			if (card.MciNumber != null && card.MciNumber.EndsWith(".html"))
 				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
@@ -329,7 +329,7 @@ namespace Mtgdb.Dal
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
-				card.Localization = localizationRepository.GetLocalization(card.SetCode, card.NameEn);
+				card.Localization = localizationRepository.GetLocalization(card);
 
 				//if (!string.IsNullOrEmpty(card.Localization?.GeneratedMana) && string.IsNullOrEmpty(card.GeneratedMana))
 				//{

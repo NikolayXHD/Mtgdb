@@ -28,8 +28,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// SubtypesArr -> Subtypes
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.7");
+			// Translations
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.8");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
