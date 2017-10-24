@@ -236,7 +236,7 @@ namespace SpellChecker.Net.Search.Spell
 					sugWord.termString = indexSearcher.Doc(hits[i].Doc).Get(F_WORD); // get orig word
 
 					// edit distance
-					sugWord.score = sd.GetDistance(word, sugWord.termString);
+					sugWord.score = sd.GetSimilarity(word, sugWord.termString);
 					if (sugWord.score < min)
 					{
 						continue;

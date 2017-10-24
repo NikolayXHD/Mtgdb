@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{106FC38B-1268-47D8-A527-E4376709F683}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "output", "output\output.shproj", "{3D9F2D28-B04F-4B23-A671-CE8B6EC439F7}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{3D9F2D28-B04F-4B23-A671-CE8B6EC439F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
 EndProject

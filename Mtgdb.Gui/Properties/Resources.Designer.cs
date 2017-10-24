@@ -523,9 +523,9 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap rightclick_32 {
+        internal static System.Drawing.Bitmap rightclick_48 {
             get {
-                object obj = ResourceManager.GetObject("rightclick_32", resourceCulture);
+                object obj = ResourceManager.GetObject("rightclick_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

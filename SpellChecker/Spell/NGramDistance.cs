@@ -43,7 +43,7 @@ namespace SpellChecker.Net.Search.Spell
         {
         }
 
-        public float GetDistance(String source, String target)
+        public float GetSimilarity(String source, String target)
         {
             int sl = source.Length;
             int tl = target.Length;
