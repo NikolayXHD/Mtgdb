@@ -51,7 +51,7 @@ namespace Mtgdb.Gui
 			DoubleBuffered = true;
 
 			var hotSpot = new Size(12, 0).ByDpi();
-			var cursorImage = Resources.rightclick_32.ResizeDpi();
+			var cursorImage = Resources.rightclick_48.HalfResizeDpi();
 
 			Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
 

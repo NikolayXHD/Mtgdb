@@ -1,0 +1,38 @@
+﻿div.navigation ul {
+	list-style-type: none;
+	margin: 3pt;
+	padding: 2pt;
+}
+
+div.navigation ul li {
+	border-radius: 2pt;
+}
+
+div.navigation ul li a {
+	text-decoration: none;
+	display:inline-block;
+	padding: 3pt 6pt;
+	font-weight: 500;
+	color:#304050;
+	/* кликабельность по всей ширине меню */
+	width: 100%;
+	box-sizing: border-box;
+}
+
+div.navigation ul.external li a {
+	color:#1020D0;
+	font-weight: 400;
+	padding-left: 12pt;
+}
+
+div.navigation ul.internal li.selected {
+	background-color: rgba(210, 210, 220, 0.5);
+}
+
+div.navigation ul.internal li:hover:not(.selected), div.navigation ul.external li:hover {
+	background-color: rgba(230, 230, 240, 0.5);
+	-webkit-transition: background-color 0.15s ease-out;
+	-moz-transition: background-color 0.15s ease-out;
+	-o-transition: background-color 0.15s ease-out;
+	transition: background-color 0.15s ease-out;
+}

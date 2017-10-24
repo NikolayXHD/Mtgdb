@@ -13,10 +13,7 @@ namespace Mtgdb.Dal.Index
 			_editDistance = new EditDistance();
 		}
 
-		/// <summary>
-		/// Ќа самом деле это схожесть, а не рассто€ние
-		/// </summary>
-		public float GetDistance(string s1, string s2)
+		public float GetSimilarity(string s1, string s2)
 		{
 			float prefixDistance = getPrefixDistance(s1, s2);
 

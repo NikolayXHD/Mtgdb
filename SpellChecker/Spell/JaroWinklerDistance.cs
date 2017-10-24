@@ -105,7 +105,7 @@ namespace SpellChecker.Net.Search.Spell
             return new int[] { matches, transpositions / 2, prefix, Max.Length };
         }
 
-        public float GetDistance(String s1, String s2)
+        public float GetSimilarity(String s1, String s2)
         {
             var mtp = Matches(s1, s2);
             var m = (float)mtp[0];

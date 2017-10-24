@@ -34,7 +34,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\output\bin\debug\</OutputPath>
+    <OutputPath>..\out\bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,7 +46,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\output\bin\release\</OutputPath>
+    <OutputPath>..\out\bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -479,7 +479,6 @@
     <None Include="Resources\draw_a_card_40.png" />
     <None Include="Resources\filter.png" />
     <None Include="Resources\madness.png" />
-    <None Include="Resources\enchantment.png" />
     <None Include="Resources\instant.png" />
     <None Include="Resources\land.png" />
     <None Include="Resources\planeswalker.png" />

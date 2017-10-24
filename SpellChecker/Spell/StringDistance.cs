@@ -33,7 +33,7 @@ namespace SpellChecker.Net.Search.Spell
         /// <param name="s1">The first string.</param>
         /// <param name="s2">The second string.</param>
         /// <returns>a float between 0 and 1 based on how similar the specified strings are to one another.</returns>
-        float GetDistance(String s1, String s2);
+        float GetSimilarity(String s1, String s2);
 
     }
 }

@@ -1,0 +1,39 @@
+﻿html {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	overflow: -moz-scrollbars-vertical;
+}
+
+body {
+	font-family: "Segoe UI";
+	color:#303030;
+}
+
+div.page-title h1 {
+	font-weight: normal;
+	margin-left: -4pt;
+	padding: 4pt;
+	border-radius: 3pt;
+	background-color: rgba(210, 210, 220, 0.5);
+}
+
+div.page-content {
+	margin: auto;
+	max-width: 780pt;
+}
+
+div.navigation {
+	float: right;
+	max-width: 200pt;
+	border: 1px solid #e0e1e2;
+	border-radius: 3pt;
+	box-shadow: 0 2pt 2pt 0 rgba(0,0,0,0.06);
+}
+
+div.markdown-body, div.page-title {
+	max-width: 560pt;
+	padding-right: 215pt;
+}
+
+div.markdown-body {
+}

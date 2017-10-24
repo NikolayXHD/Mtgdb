@@ -1,7 +1,7 @@
 set configuration=release
 
 set origin=F:\Repo\Git\mtgDb
-set output=%origin%\output
+set output=%origin%\out
 
 @for /f "delims=" %%x in (%origin%\SolutionInfo.cs) do @set version=%%x
 rem [assembly: AssemblyVersion("1.3.5.20")]

@@ -35,7 +35,7 @@ namespace SpellChecker.Net.Search.Spell
         /// <param name="target">The first string.</param>
         /// <param name="other">The second string.</param>
         /// <returns>a float between 0 and 1 based on how similar the specified strings are to one another.</returns>
-        public float GetDistance(String target, String other)
+        public float GetSimilarity(String target, String other)
         {
             char[] sa;
             int n;

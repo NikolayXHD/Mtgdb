@@ -121,7 +121,7 @@ namespace Mtgdb.Dal.Index
 		private string[] fullScan(string field, string value, string language, int maxCount)
 		{
 			var values = getValues(field, language, _reader.MaxDoc)
-				.OrderByDescending(_ => _stringDistance.GetDistance(value, _))
+				.OrderByDescending(_ => _stringDistance.GetSimilarity(value, _))
 				.Take(maxCount)
 				.ToArray();
 
@@ -193,7 +193,7 @@ namespace Mtgdb.Dal.Index
 					.ToArray();
 
 			return DocumentFactory.UserFields
-				.OrderByDescending(_ => _stringDistance.GetDistance(field, _))
+				.OrderByDescending(_ => _stringDistance.GetSimilarity(field, _))
 				.ToArray();
 		}
 
