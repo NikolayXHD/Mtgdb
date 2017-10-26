@@ -54,22 +54,6 @@ namespace Mtgdb.Gui
 				"  * Download artworks",
 				_buttonDownload);
 
-			_tooltipController.SetTooltip(string.Empty,
-				"Edit General settings to tell the program where to find\r\n" +
-				"your custom card images or tweak some other settings.\r\n\r\n" +
-				"NOTE: To apply your changes save the modified configuration\r\n" +
-				"file and restart the program.",
-				_buttonMenuGeneralSettings);
-
-			_tooltipController.SetTooltip(string.Empty,
-				"Edit Display settings to\r\n" +
-				"  * change image size\r\n" +
-				"  * hide texutal card details\r\n" +
-				"  * disallow showing non-entirely-fit-to-screen card image\r\n\r\n" +
-				"NOTE: To apply your changes save the modified configuration\r\n" +
-				"file and restart the program.",
-				_buttonMenuDisplaySettings);
-
 			Load += loadTooltips;
 			Closing += closeTooltips;
 		}

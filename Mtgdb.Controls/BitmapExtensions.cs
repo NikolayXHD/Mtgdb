@@ -35,10 +35,7 @@ namespace Mtgdb.Controls
 				IgnoreAspectRatio = true
 			};
 
-			//if (size.Width > original.Width || size.Height > original.Height)
-				//magic.Resize(magicSize);
-			//else
-				magic.Scale(magicSize);
+			magic.Scale(magicSize);
 
 			var result = magic.ToBitmap();
 			return result;

@@ -32,8 +32,11 @@ namespace Mtgdb.Controls
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			bool isChecked = (sender as CheckBox)?.Checked == true;
-			setCheckImage((ButtonBase)sender, isChecked, false);
+			if (sender is ButtonBase)
+			{
+				bool isChecked = (sender as CheckBox)?.Checked == true;
+				setCheckImage((ButtonBase)sender, isChecked, false);
+			}
 		}
 
 		private void mouseEnter(object sender, EventArgs e)
@@ -121,7 +124,7 @@ namespace Mtgdb.Controls
 				
 				popup.Owner.MouseLeave += popupOwnerMouseLeave;
 
-				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
+				foreach (Control button in popup.Container.Controls)
 				{
 					button.Click += popupItemClick;
 					button.MouseEnter += popupItemMouseEnter;
@@ -166,6 +169,9 @@ namespace Mtgdb.Controls
 
 		private void popupItemClick(object sender, EventArgs e)
 		{
+			if (!(sender is ButtonBase))
+				return;
+
 			var button = (ButtonBase)sender;
 			var container = button.Parent;
 			var owner = container.GetTag<ButtonBase>("Owner");
@@ -177,6 +183,9 @@ namespace Mtgdb.Controls
 
 		private void popupItemMouseEnter(object sender, EventArgs e)
 		{
+			if (!(sender is ButtonBase))
+				return;
+
 			var button = (ButtonBase)sender;
 
 			var container = button.Parent;
@@ -189,13 +198,13 @@ namespace Mtgdb.Controls
 
 		private void popupItemMouseLeave(object sender, EventArgs e)
 		{
-			var button = (ButtonBase)sender;
+			var button = (Control)sender;
 			var container = button.Parent;
 			var owner = container.GetTag<ButtonBase>("Owner");
 			var popup = _popupsByOwner[owner];
 
-			if (popup.BorderOnHover)
-				button.FlatAppearance.BorderColor = container.BackColor;
+			if (popup.BorderOnHover && sender is ButtonBase)
+				((ButtonBase) button).FlatAppearance.BorderColor = container.BackColor;
 
 			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
 				popup.Hide();
