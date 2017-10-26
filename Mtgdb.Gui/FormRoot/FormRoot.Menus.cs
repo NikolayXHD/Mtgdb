@@ -198,6 +198,7 @@ namespace Mtgdb.Gui
 
 		private void saveLoadMouseEnter(object sender, EventArgs e)
 		{
+			_layoutOpen.SuspendLayout();
 			for (int i = 0; i < _saveLoadButtons.Length; i++)
 			{
 				bool visible = sender == _saveLoadButtons[i];
@@ -206,6 +207,9 @@ namespace Mtgdb.Gui
 				for (int j = 0; j < menuButtons.Length; j++)
 					menuButtons[j].Visible = visible;
 			}
+
+			_layoutOpen.ResumeLayout(false);
+			_layoutOpen.PerformLayout();
 		}
 
 		private void setupButtons()
