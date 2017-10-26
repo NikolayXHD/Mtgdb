@@ -25,12 +25,10 @@ namespace Mtgdb.Downloader
 		{
 			TitleHeight = TitleHeight.ByDpiHeight();
 
-			var low = InterpolationMode.Bilinear;
-
-			ImageMinimize = ImageMinimize.HalfResizeDpi(low);
-			ImageMaximize = ImageMaximize.HalfResizeDpi(low);
-			ImageNormalize = ImageNormalize.HalfResizeDpi(low);
-			ImageClose = ImageClose.HalfResizeDpi(low);
+			ImageMinimize = ImageMinimize.HalfResizeDpi();
+			ImageMaximize = ImageMaximize.HalfResizeDpi();
+			ImageNormalize = ImageNormalize.HalfResizeDpi();
+			ImageClose = ImageClose.HalfResizeDpi();
 
 			_progressBar.Height = _progressBar.Height.ByDpiHeight();
 

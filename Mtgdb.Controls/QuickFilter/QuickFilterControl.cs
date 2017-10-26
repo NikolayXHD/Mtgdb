@@ -10,6 +10,11 @@ namespace Mtgdb.Controls
 {
 	public class QuickFilterControl : UserControl
 	{
+		private const float OpacityEnabled = 1.00f;
+		private const float OpacityToEnable = 0.90f;
+		private const float OpacityToDisable = 0.30f;
+		private const float OpacityDisabled = 0.24f;
+
 		public QuickFilterControl()
 		{
 			init();
@@ -20,10 +25,10 @@ namespace Mtgdb.Controls
 			_selectionBorderColor = Color.Transparent;
 			_prohibitedColor = Color.Transparent;
 
-			_opacityEnabled = 0.80f;
-			_opacityToEnable = 0.65f;
-			_opacityToDisable = 0.35f;
-			_opacityDisabled = 0.20f;
+			_opacityEnabled = OpacityEnabled;
+			_opacityToEnable = OpacityToEnable;
+			_opacityToDisable = OpacityToDisable;
+			_opacityDisabled = OpacityDisabled;
 
 			CostNeutralValues = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -59,22 +64,19 @@ namespace Mtgdb.Controls
 				return;
 
 			_images = 
-				transformImages(0.00f, 0.00f, 1.00f, Opacity1Enabled, _propertyImages);
+				transformImages(Opacity1Enabled, _propertyImages);
 
 			_imagesToEnable =
-				transformImages(0.05f, 0.00f, 0.95f, Opacity2ToEnable, _propertyImages);
+				transformImages(Opacity2ToEnable, _propertyImages);
 
 			_imagesToDisable =
-				transformImages(0.20f, 0.00f, 0.80f, Opacity3ToDisable, _propertyImages);
+				transformImages(Opacity3ToDisable, _propertyImages);
 
 			_imagesDisabled =
-				transformImages(0.25f, 0.00f, 0.75f, Opacity4Disabled, _propertyImages);
+				transformImages(Opacity4Disabled, _propertyImages);
 		}
 
-		private static IList<Bitmap> transformImages(
-			float whiteFactor,
-			float greyFactor,
-			float colorFactor,
+		private IList<Bitmap> transformImages(
 			float opacity,
 			IList<Bitmap> imageCollection)
 		{
@@ -85,8 +87,8 @@ namespace Mtgdb.Controls
 
 			for (int i = 0; i < imagesTransformed.Length; i++)
 			{
-				imagesTransformed[i] = (Bitmap)imageCollection[i].Clone();
-				new GrayscaleBmpProcessor(imagesTransformed[i], colorFactor, whiteFactor, greyFactor, opacity)
+				imagesTransformed[i] = imageCollection[i].FitIn(ImageSize);
+				new GrayscaleBmpProcessor(imagesTransformed[i], opacity)
 					.Execute();
 			}
 
@@ -724,6 +726,7 @@ namespace Mtgdb.Controls
 			{
 				_imageSize = value;
 				updateSize();
+				createDerivedImages();
 			}
 		}
 
@@ -909,7 +912,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(0.80f)]
+		[DefaultValue(OpacityEnabled)]
 		public float Opacity1Enabled
 		{
 			get { return _opacityEnabled; }
@@ -922,7 +925,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(0.65f)]
+		[DefaultValue(OpacityDisabled)]
 		public float Opacity4Disabled
 		{
 			get { return _opacityDisabled; }
@@ -935,7 +938,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(0.35f)]
+		[DefaultValue(OpacityToDisable)]
 		public float Opacity3ToDisable
 		{
 			get { return _opacityToDisable; }
@@ -947,7 +950,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[DefaultValue(0.20f)]
+		[DefaultValue(OpacityToEnable)]
 		[Category("Settings")]
 		public float Opacity2ToEnable
 		{

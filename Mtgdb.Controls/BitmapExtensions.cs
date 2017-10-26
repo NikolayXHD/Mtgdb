@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using ImageMagick;
 
 namespace Mtgdb.Controls
 {
@@ -12,18 +13,12 @@ namespace Mtgdb.Controls
 			return original.FitIn(original.Size.ByDpi());
 		}
 
-		public static Bitmap HalfResizeDpi(
-			this Bitmap original,
-			InterpolationMode interpolation = InterpolationMode.HighQualityBicubic)
+		public static Bitmap HalfResizeDpi(this Bitmap original)
 		{
-			return original.FitIn(original.Size.HalfByDpi(), interpolation: interpolation);
+			return original.FitIn(original.Size.HalfByDpi());
 		}
 
-		public static Bitmap FitIn(
-			this Bitmap original,
-			Size size,
-			Size frame = default(Size),
-			InterpolationMode interpolation = InterpolationMode.HighQualityBicubic)
+		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default(Size))
 		{
 			var croppedSize = new Size(
 				original.Width - 2 * frame.Width,
@@ -32,27 +27,20 @@ namespace Mtgdb.Controls
 			size = croppedSize.FitIn(size);
 
 			if (size == original.Size)
-				return original;
+				return (Bitmap) original.Clone();
 
-			var result = new Bitmap(size.Width * 2, size.Height * 2);
-
-			try
+			var magic = new MagickImage(original);
+			var magicSize = new MagickGeometry(size.Width, size.Height)
 			{
-				var graphics = Graphics.FromImage(result);
-				graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
+				IgnoreAspectRatio = true
+			};
 
-				graphics.DrawImage(
-					original,
-					destRect: new RectangleF(new Point(10, 10), size),
-					srcRect: new Rectangle(new Point(frame), croppedSize),
-					srcUnit: GraphicsUnit.Pixel);
-			}
-			catch
-			{
-				result.Dispose();
-				throw;
-			}
+			//if (size.Width > original.Width || size.Height > original.Height)
+				//magic.Resize(magicSize);
+			//else
+				magic.Scale(magicSize);
 
+			var result = magic.ToBitmap();
 			return result;
 		}
 

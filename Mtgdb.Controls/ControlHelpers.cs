@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -214,17 +213,11 @@ namespace Mtgdb.Controls
 
 		public static void PaintPanel(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
 		{
-			graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
 			graphics.Clear(c.BackColor);
 			var pen = new Pen(borderColor);
+
 			if (c.BackgroundImage != null)
-			{
-				graphics.DrawImage(c.BackgroundImage,
-					new Rectangle(
-						Point.Empty,
-						c.BackgroundImage.Size.FitIn(c.Size)));
-			}
+				graphics.DrawImage(c.BackgroundImage, new Rectangle(Point.Empty, c.BackgroundImage.Size));
 
 			if ((borders & AnchorStyles.Top) > 0)
 				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
