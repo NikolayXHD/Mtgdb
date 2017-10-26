@@ -151,7 +151,7 @@ namespace Mtgdb.Gui
 			this._buttonUndo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonUndo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonUndo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonUndo.Image = global::Mtgdb.Gui.Properties.Resources.undo_32;
+			this._buttonUndo.Image = global::Mtgdb.Gui.Properties.Resources.undo_16;
 			this._buttonUndo.Location = new System.Drawing.Point(0, 3);
 			this._buttonUndo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonUndo.Name = "_buttonUndo";
@@ -168,7 +168,7 @@ namespace Mtgdb.Gui
 			this._buttonRedo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonRedo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonRedo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonRedo.Image = global::Mtgdb.Gui.Properties.Resources.redo_32;
+			this._buttonRedo.Image = global::Mtgdb.Gui.Properties.Resources.redo_16;
 			this._buttonRedo.Location = new System.Drawing.Point(32, 3);
 			this._buttonRedo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonRedo.Name = "_buttonRedo";
@@ -247,7 +247,7 @@ namespace Mtgdb.Gui
 			this._buttonConfig.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_32;
+			this._buttonConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_16;
 			this._buttonConfig.Location = new System.Drawing.Point(292, 3);
 			this._buttonConfig.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonConfig.Name = "_buttonConfig";
@@ -266,7 +266,7 @@ namespace Mtgdb.Gui
 			this._buttonHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_32;
+			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_16;
 			this._buttonHelp.Location = new System.Drawing.Point(228, 3);
 			this._buttonHelp.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonHelp.Name = "_buttonHelp";
@@ -285,7 +285,7 @@ namespace Mtgdb.Gui
 			this._buttonClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_32;
+			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_16;
 			this._buttonClear.Location = new System.Drawing.Point(184, 3);
 			this._buttonClear.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonClear.Name = "_buttonClear";
@@ -304,7 +304,7 @@ namespace Mtgdb.Gui
 			this._buttonPrint.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonPrint.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonPrint.Image = global::Mtgdb.Gui.Properties.Resources.print_32;
+			this._buttonPrint.Image = global::Mtgdb.Gui.Properties.Resources.print_16;
 			this._buttonPrint.Location = new System.Drawing.Point(120, 3);
 			this._buttonPrint.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonPrint.Name = "_buttonPrint";
@@ -323,7 +323,7 @@ namespace Mtgdb.Gui
 			this._buttonStat.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonStat.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonStat.Image = global::Mtgdb.Gui.Properties.Resources.chart_32;
+			this._buttonStat.Image = global::Mtgdb.Gui.Properties.Resources.chart_16;
 			this._buttonStat.Location = new System.Drawing.Point(152, 3);
 			this._buttonStat.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonStat.Name = "_buttonStat";
@@ -342,7 +342,7 @@ namespace Mtgdb.Gui
 			this._buttonSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_32;
+			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSaveDeck.Location = new System.Drawing.Point(76, 3);
 			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonSaveDeck.Name = "_buttonSaveDeck";
@@ -361,7 +361,7 @@ namespace Mtgdb.Gui
 			this._buttonOpenDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonOpenDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open_32;
+			this._buttonOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonOpenDeck.Location = new System.Drawing.Point(44, 3);
 			this._buttonOpenDeck.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonOpenDeck.Name = "_buttonOpenDeck";
@@ -382,7 +382,7 @@ namespace Mtgdb.Gui
 			this._buttonTooltips.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonTooltips.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonTooltips.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_32;
+			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_16;
 			this._buttonTooltips.Location = new System.Drawing.Point(260, 3);
 			this._buttonTooltips.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonTooltips.Name = "_buttonTooltips";
@@ -1112,7 +1112,7 @@ namespace Mtgdb.Gui
 			this._buttonPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonPaste.Image = global::Mtgdb.Gui.Properties.Resources.paste_40;
+			this._buttonPaste.Image = global::Mtgdb.Gui.Properties.Resources.paste_16;
 			this._buttonPaste.Location = new System.Drawing.Point(0, 3);
 			this._buttonPaste.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonPaste.Name = "_buttonPaste";

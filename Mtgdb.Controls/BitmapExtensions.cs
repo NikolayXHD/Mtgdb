@@ -12,12 +12,18 @@ namespace Mtgdb.Controls
 			return original.FitIn(original.Size.ByDpi());
 		}
 
-		public static Bitmap HalfResizeDpi(this Bitmap original)
+		public static Bitmap HalfResizeDpi(
+			this Bitmap original,
+			InterpolationMode interpolation = InterpolationMode.HighQualityBicubic)
 		{
-			return original.FitIn(original.Size.HalfByDpi());
+			return original.FitIn(original.Size.HalfByDpi(), interpolation: interpolation);
 		}
 
-		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default(Size))
+		public static Bitmap FitIn(
+			this Bitmap original,
+			Size size,
+			Size frame = default(Size),
+			InterpolationMode interpolation = InterpolationMode.HighQualityBicubic)
 		{
 			var croppedSize = new Size(
 				original.Width - 2 * frame.Width,
@@ -28,16 +34,16 @@ namespace Mtgdb.Controls
 			if (size == original.Size)
 				return original;
 
-			var result = new Bitmap(size.Width, size.Height);
+			var result = new Bitmap(size.Width * 2, size.Height * 2);
 
 			try
 			{
 				var graphics = Graphics.FromImage(result);
-				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
 
 				graphics.DrawImage(
 					original,
-					destRect: new RectangleF(Point.Empty, result.Size),
+					destRect: new RectangleF(new Point(10, 10), size),
 					srcRect: new Rectangle(new Point(frame), croppedSize),
 					srcUnit: GraphicsUnit.Pixel);
 			}
@@ -53,12 +59,12 @@ namespace Mtgdb.Controls
 		public static Size FitIn(this Size originalSize, Size viewPortSize)
 		{
 			var factor = Math.Min(
-				(float) viewPortSize.Width/originalSize.Width,
-				(float) viewPortSize.Height/originalSize.Height);
+				(float) viewPortSize.Width / originalSize.Width,
+				(float) viewPortSize.Height / originalSize.Height);
 
 			var zoomed = new Size(
-				(int) Math.Round(originalSize.Width*factor),
-				(int) Math.Round(originalSize.Height*factor));
+				(int) Math.Round(originalSize.Width * factor),
+				(int) Math.Round(originalSize.Height * factor));
 
 			return zoomed;
 		}

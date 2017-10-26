@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -24,10 +25,12 @@ namespace Mtgdb.Downloader
 		{
 			TitleHeight = TitleHeight.ByDpiHeight();
 
-			ImageMinimize = ImageMinimize.HalfResizeDpi();
-			ImageMaximize = ImageMaximize.HalfResizeDpi();
-			ImageNormalize = ImageNormalize.HalfResizeDpi();
-			ImageClose = ImageClose.HalfResizeDpi();
+			var low = InterpolationMode.Bilinear;
+
+			ImageMinimize = ImageMinimize.HalfResizeDpi(low);
+			ImageMaximize = ImageMaximize.HalfResizeDpi(low);
+			ImageNormalize = ImageNormalize.HalfResizeDpi(low);
+			ImageClose = ImageClose.HalfResizeDpi(low);
 
 			_progressBar.Height = _progressBar.Height.ByDpiHeight();
 
