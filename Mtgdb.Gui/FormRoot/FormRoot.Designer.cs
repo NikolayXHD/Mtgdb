@@ -399,7 +399,7 @@ namespace Mtgdb.Gui
 			this._menuOpen.Controls.Add(this._layoutOpen);
 			this._menuOpen.Location = new System.Drawing.Point(414, 287);
 			this._menuOpen.Name = "_menuOpen";
-			this._menuOpen.Size = new System.Drawing.Size(272, 419);
+			this._menuOpen.Size = new System.Drawing.Size(272, 411);
 			this._menuOpen.TabIndex = 0;
 			this._menuOpen.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -440,7 +440,7 @@ namespace Mtgdb.Gui
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.Size = new System.Drawing.Size(270, 417);
+			this._layoutOpen.Size = new System.Drawing.Size(270, 409);
 			this._layoutOpen.TabIndex = 0;
 			// 
 			// _buttonMenuSaveCollection
@@ -467,7 +467,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelMagarena.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelMagarena, 2);
-			this._labelMagarena.Location = new System.Drawing.Point(104, 358);
+			this._labelMagarena.Location = new System.Drawing.Point(104, 350);
 			this._labelMagarena.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._labelMagarena.Name = "_labelMagarena";
 			this._labelMagarena.Size = new System.Drawing.Size(163, 59);
@@ -499,7 +499,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelDotP2.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelDotP2, 2);
-			this._labelDotP2.Location = new System.Drawing.Point(104, 290);
+			this._labelDotP2.Location = new System.Drawing.Point(104, 282);
 			this._labelDotP2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._labelDotP2.Name = "_labelDotP2";
 			this._labelDotP2.Size = new System.Drawing.Size(163, 65);
@@ -531,7 +531,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelMtgo.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelMtgo, 2);
-			this._labelMtgo.Location = new System.Drawing.Point(104, 222);
+			this._labelMtgo.Location = new System.Drawing.Point(104, 214);
 			this._labelMtgo.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._labelMtgo.Name = "_labelMtgo";
 			this._labelMtgo.Size = new System.Drawing.Size(163, 65);
@@ -568,7 +568,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMtgo.LinkArea = new System.Windows.Forms.LinkArea(0, 26);
 			this._buttonVisitMtgo.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMtgo.Location = new System.Drawing.Point(3, 219);
+			this._buttonVisitMtgo.Location = new System.Drawing.Point(3, 211);
 			this._buttonVisitMtgo.Name = "_buttonVisitMtgo";
 			this._buttonVisitMtgo.Size = new System.Drawing.Size(95, 59);
 			this._buttonVisitMtgo.TabIndex = 32;
@@ -584,7 +584,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitCockatrice.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitCockatrice.LinkArea = new System.Windows.Forms.LinkArea(0, 10);
 			this._buttonVisitCockatrice.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitCockatrice.Location = new System.Drawing.Point(3, 355);
+			this._buttonVisitCockatrice.Location = new System.Drawing.Point(3, 347);
 			this._buttonVisitCockatrice.Name = "_buttonVisitCockatrice";
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(95, 53);
 			this._buttonVisitCockatrice.TabIndex = 3;
@@ -600,7 +600,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitDotP2014.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitDotP2014.LinkArea = new System.Windows.Forms.LinkArea(0, 30);
 			this._buttonVisitDotP2014.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitDotP2014.Location = new System.Drawing.Point(3, 287);
+			this._buttonVisitDotP2014.Location = new System.Drawing.Point(3, 279);
 			this._buttonVisitDotP2014.Name = "_buttonVisitDotP2014";
 			this._buttonVisitDotP2014.Size = new System.Drawing.Size(95, 59);
 			this._buttonVisitDotP2014.TabIndex = 4;
@@ -617,7 +617,7 @@ namespace Mtgdb.Gui
 			this._labelFormats.Location = new System.Drawing.Point(3, 147);
 			this._labelFormats.Margin = new System.Windows.Forms.Padding(3);
 			this._labelFormats.Name = "_labelFormats";
-			this._labelFormats.Size = new System.Drawing.Size(163, 22);
+			this._labelFormats.Size = new System.Drawing.Size(114, 14);
 			this._labelFormats.TabIndex = 6;
 			this._labelFormats.Text = "Supported formats:";
 			this._labelFormats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -630,7 +630,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitForge.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitForge.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
 			this._buttonVisitForge.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitForge.Location = new System.Drawing.Point(3, 172);
+			this._buttonVisitForge.Location = new System.Drawing.Point(3, 164);
 			this._buttonVisitForge.Name = "_buttonVisitForge";
 			this._buttonVisitForge.Size = new System.Drawing.Size(95, 47);
 			this._buttonVisitForge.TabIndex = 0;
@@ -646,7 +646,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitXMage.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitXMage.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
 			this._buttonVisitXMage.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitXMage.Location = new System.Drawing.Point(104, 172);
+			this._buttonVisitXMage.Location = new System.Drawing.Point(104, 164);
 			this._buttonVisitXMage.Name = "_buttonVisitXMage";
 			this._buttonVisitXMage.Size = new System.Drawing.Size(56, 47);
 			this._buttonVisitXMage.TabIndex = 1;
@@ -662,7 +662,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMagarena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMagarena.LinkArea = new System.Windows.Forms.LinkArea(0, 8);
 			this._buttonVisitMagarena.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMagarena.Location = new System.Drawing.Point(166, 172);
+			this._buttonVisitMagarena.Location = new System.Drawing.Point(166, 164);
 			this._buttonVisitMagarena.Name = "_buttonVisitMagarena";
 			this._buttonVisitMagarena.Size = new System.Drawing.Size(63, 47);
 			this._buttonVisitMagarena.TabIndex = 2;
@@ -692,7 +692,6 @@ namespace Mtgdb.Gui
 			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutLanguage.Controls.Add(this._buttonRU, 2, 2);
 			this._layoutLanguage.Controls.Add(this._buttonPT, 1, 3);
 			this._layoutLanguage.Controls.Add(this._buttonDE, 2, 1);
 			this._layoutLanguage.Controls.Add(this._buttonCN, 0, 0);
@@ -703,6 +702,7 @@ namespace Mtgdb.Gui
 			this._layoutLanguage.Controls.Add(this._buttonKR, 0, 2);
 			this._layoutLanguage.Controls.Add(this._buttonFR, 1, 1);
 			this._layoutLanguage.Controls.Add(this._buttonES, 1, 0);
+			this._layoutLanguage.Controls.Add(this._buttonRU, 2, 2);
 			this._layoutLanguage.Location = new System.Drawing.Point(1, 1);
 			this._layoutLanguage.Margin = new System.Windows.Forms.Padding(1);
 			this._layoutLanguage.Name = "_layoutLanguage";
@@ -732,7 +732,7 @@ namespace Mtgdb.Gui
 			this._buttonRU.TabIndex = 26;
 			this._buttonRU.TabStop = false;
 			this._buttonRU.Text = "       RU";
-			this._buttonRU.UseVisualStyleBackColor = true;
+			this._buttonRU.UseVisualStyleBackColor = false;
 			// 
 			// _buttonPT
 			// 
@@ -752,7 +752,7 @@ namespace Mtgdb.Gui
 			this._buttonPT.TabIndex = 28;
 			this._buttonPT.TabStop = false;
 			this._buttonPT.Text = "       PT";
-			this._buttonPT.UseVisualStyleBackColor = true;
+			this._buttonPT.UseVisualStyleBackColor = false;
 			// 
 			// _buttonDE
 			// 
@@ -772,7 +772,7 @@ namespace Mtgdb.Gui
 			this._buttonDE.TabIndex = 23;
 			this._buttonDE.TabStop = false;
 			this._buttonDE.Text = "       DE";
-			this._buttonDE.UseVisualStyleBackColor = true;
+			this._buttonDE.UseVisualStyleBackColor = false;
 			// 
 			// _buttonCN
 			// 
@@ -792,7 +792,7 @@ namespace Mtgdb.Gui
 			this._buttonCN.TabIndex = 18;
 			this._buttonCN.TabStop = false;
 			this._buttonCN.Text = "       CN";
-			this._buttonCN.UseVisualStyleBackColor = true;
+			this._buttonCN.UseVisualStyleBackColor = false;
 			// 
 			// _buttonEN
 			// 
@@ -812,7 +812,7 @@ namespace Mtgdb.Gui
 			this._buttonEN.TabIndex = 20;
 			this._buttonEN.TabStop = false;
 			this._buttonEN.Text = "       EN";
-			this._buttonEN.UseVisualStyleBackColor = true;
+			this._buttonEN.UseVisualStyleBackColor = false;
 			// 
 			// _buttonTW
 			// 
@@ -832,7 +832,7 @@ namespace Mtgdb.Gui
 			this._buttonTW.TabIndex = 27;
 			this._buttonTW.TabStop = false;
 			this._buttonTW.Text = "       TW";
-			this._buttonTW.UseVisualStyleBackColor = true;
+			this._buttonTW.UseVisualStyleBackColor = false;
 			// 
 			// _buttonIT
 			// 
@@ -852,7 +852,7 @@ namespace Mtgdb.Gui
 			this._buttonIT.TabIndex = 25;
 			this._buttonIT.TabStop = false;
 			this._buttonIT.Text = "       IT";
-			this._buttonIT.UseVisualStyleBackColor = true;
+			this._buttonIT.UseVisualStyleBackColor = false;
 			// 
 			// _buttonJP
 			// 
@@ -872,7 +872,7 @@ namespace Mtgdb.Gui
 			this._buttonJP.TabIndex = 21;
 			this._buttonJP.TabStop = false;
 			this._buttonJP.Text = "       JP";
-			this._buttonJP.UseVisualStyleBackColor = true;
+			this._buttonJP.UseVisualStyleBackColor = false;
 			// 
 			// _buttonKR
 			// 
@@ -892,7 +892,7 @@ namespace Mtgdb.Gui
 			this._buttonKR.TabIndex = 24;
 			this._buttonKR.TabStop = false;
 			this._buttonKR.Text = "       KR";
-			this._buttonKR.UseVisualStyleBackColor = true;
+			this._buttonKR.UseVisualStyleBackColor = false;
 			// 
 			// _buttonFR
 			// 
@@ -912,7 +912,7 @@ namespace Mtgdb.Gui
 			this._buttonFR.TabIndex = 22;
 			this._buttonFR.TabStop = false;
 			this._buttonFR.Text = "       FR";
-			this._buttonFR.UseVisualStyleBackColor = true;
+			this._buttonFR.UseVisualStyleBackColor = false;
 			// 
 			// _buttonES
 			// 
@@ -932,7 +932,7 @@ namespace Mtgdb.Gui
 			this._buttonES.TabIndex = 19;
 			this._buttonES.TabStop = false;
 			this._buttonES.Text = "       ES";
-			this._buttonES.UseVisualStyleBackColor = true;
+			this._buttonES.UseVisualStyleBackColor = false;
 			// 
 			// _menuDonate
 			// 

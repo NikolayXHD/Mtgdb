@@ -252,16 +252,10 @@ namespace Mtgdb.Gui
 
 			var screenArea = getScreenArea();
 			var workingArea = new Rectangle(
-				screenArea.Left + Margin.Left,
-				screenArea.Top + Margin.Top,
-				screenArea.Width - Margin.Horizontal,
-				screenArea.Height - Margin.Vertical);
-
-			if (formArea.Left < workingArea.Left)
-				formArea.Offset(workingArea.Left - formArea.Left, 0);
-
-			if (formArea.Top < workingArea.Top)
-				formArea.Offset(0, workingArea.Top - formArea.Top);
+				screenArea.Left,
+				screenArea.Top,
+				screenArea.Width,
+				screenArea.Height);
 
 			if (formArea.Bottom > workingArea.Bottom)
 				formArea.Offset(0, workingArea.Bottom -formArea.Bottom);
@@ -269,8 +263,14 @@ namespace Mtgdb.Gui
 			if (formArea.Right > workingArea.Right)
 				formArea.Offset(workingArea.Right - formArea.Right, 0);
 
+			if (formArea.Left < workingArea.Left)
+				formArea.Offset(workingArea.Left - formArea.Left, 0);
+
+			if (formArea.Top < workingArea.Top)
+				formArea.Offset(0, workingArea.Top - formArea.Top);
+
 			_pictureBox.Size = _image.Size;
-			_pictureBox.Location = new Point(0, 0);
+			_pictureBox.Location = Point.Empty;
 
 			Size = formArea.Size;
 			Location = formArea.Location;

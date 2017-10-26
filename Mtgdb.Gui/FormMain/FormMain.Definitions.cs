@@ -144,7 +144,6 @@ namespace Mtgdb.Gui
 			scale();
 
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
-
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
 
@@ -229,6 +228,26 @@ namespace Mtgdb.Gui
 			_layoutViewCards.SearchOptions.ButtonMargin = new Size(
 				searchToSortMargin + _layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width,
 				_layoutViewCards.SearchOptions.ButtonMargin.Height);
+
+			scalePanelIcon(_panelIconLegality);
+			scalePanelIcon(_panelIconSearch);
+
+			scalePanelIcon(_panelIconStatusCollection);
+			scalePanelIcon(_panelIconStatusScrollCards);
+			scalePanelIcon(_panelIconStatusScrollDeck);
+			scalePanelIcon(_panelIconStatusSearch);
+			scalePanelIcon(_panelIconStatusSets);
+
+			scalePanelIcon(_panelIconStatusFilterButtons);
+			scalePanelIcon(_panelIconStatusFilterCollection);
+			scalePanelIcon(_panelIconStatusFilterDeck);
+			scalePanelIcon(_panelIconStatusFilterLegality);
+		}
+
+		private static void scalePanelIcon(BorderedPanel panel)
+		{
+			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage)
+				.HalfResizeDpi();
 		}
 
 		public void SetId(string tabId)
