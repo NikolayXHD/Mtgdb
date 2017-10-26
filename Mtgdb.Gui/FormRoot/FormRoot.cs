@@ -72,6 +72,7 @@ namespace Mtgdb.Gui
 
 			_buttonDonateYandexMoney.ScaleDpi();
 			_buttonDonatePayPal.ScaleDpi();
+			_panelAva.BackgroundImage = ((Bitmap) _panelAva.BackgroundImage).HalfResizeDpi();
 			_panelAva.ScaleDpi();
 			_labelDonate.ScaleDpi();
 
