@@ -12,15 +12,13 @@ div.navigation ul li a {
 	text-decoration: none;
 	display:inline-block;
 	padding: 3pt 6pt;
-	font-weight: 500;
-	color:#304050;
+	color:#3060C0;
 	/* кликабельность по всей ширине меню */
 	width: 100%;
 	box-sizing: border-box;
 }
 
 div.navigation ul.external li a {
-	color:#1020D0;
 	font-weight: 400;
 	padding-left: 12pt;
 }

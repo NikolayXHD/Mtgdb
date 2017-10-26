@@ -61,11 +61,11 @@ namespace Mtgdb.Gui
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
-			HideTooltips = !((CheckBox)sender).Checked;
+			HideTooltips = !((CheckBox) sender).Checked;
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
-				var formMain = (FormMain)_tabs.TabIds[i];
+				var formMain = (FormMain) _tabs.TabIds[i];
 				formMain?.ButtonTooltip();
 			}
 		}
@@ -149,7 +149,7 @@ namespace Mtgdb.Gui
 
 		private void languageMenuClick(object sender, EventArgs e)
 		{
-			var button = (ButtonBase)sender;
+			var button = (ButtonBase) sender;
 			Language = button.Text.ToLowerInvariant();
 		}
 
@@ -189,7 +189,7 @@ namespace Mtgdb.Gui
 
 		private static void buttonVisitClick(object sender, EventArgs e)
 		{
-			var control = (Control)sender;
+			var control = (Control) sender;
 			var url = control.GetTag<string>();
 			System.Diagnostics.Process.Start(url);
 		}
@@ -210,24 +210,55 @@ namespace Mtgdb.Gui
 
 		private void setupButtons()
 		{
-			setupButton(_buttonUndo, Resources.undo_32, true);
-			setupButton(_buttonRedo, Resources.redo_32, true);
+			setupButton(_buttonUndo,
+				Resources.undo_16,
+				Resources.undo_32);
 
-			setupButton(_buttonPaste, Resources.paste_40, true);
+			setupButton(_buttonRedo,
+				Resources.redo_16,
+				Resources.redo_32);
 
-			setupButton(_buttonSaveDeck, Resources.save_32, true);
-			setupButton(_buttonOpenDeck, Resources.open_32, true);
+			setupButton(_buttonSaveDeck,
+				Resources.save_16,
+				Resources.save_32);
+
+			setupButton(_buttonOpenDeck,
+				Resources.open_16,
+				Resources.open_32);
+
+			setupButton(_buttonStat,
+				Resources.chart_16,
+				Resources.chart_32);
+
+			setupButton(_buttonPrint,
+				Resources.print_16,
+				Resources.print_32);
+
+			setupButton(_buttonClear,
+				Resources.trash_16,
+				Resources.trash_32);
+
+			setupButton(_buttonPaste,
+				Resources.paste_16,
+				Resources.paste_32);
+
+			setupButton(_buttonHelp,
+				Resources.index_16,
+				Resources.index_32);
+
+			setupButton(_buttonConfig,
+				Resources.properties_16,
+				Resources.properties_32);
+
+			setupButton(_buttonTooltips,
+				Resources.tooltip_16,
+				Resources.tooltip_32);
+
+			setupButton(_buttonDownload, Resources.update_40, true);
 			setupButton(_buttonMenuOpenDeck, Resources.draw_a_card_48, true);
 			setupButton(_buttonMenuOpenCollection, Resources.box_48, true);
 			setupButton(_buttonMenuSaveDeck, Resources.draw_a_card_48, true);
 			setupButton(_buttonMenuSaveCollection, Resources.box_48, true);
-
-			setupButton(_buttonStat, Resources.chart_32, true);
-			setupButton(_buttonPrint, Resources.print_32, true);
-			setupButton(_buttonClear, Resources.trash_32, true);
-			setupButton(_buttonDownload, Resources.update_40, true);
-			setupButton(_buttonConfig, Resources.properties_32, true);
-			setupButton(_buttonHelp, Resources.index_32, true);
 
 			setupButton(_buttonLanguage, Resources.en, true);
 			foreach (var langButton in getLanguageMenuItems())
@@ -236,32 +267,36 @@ namespace Mtgdb.Gui
 			setupButton(_buttonDonate, null, false);
 			setupButton(_buttonDonateYandexMoney, Resources.yandex_money_32, false);
 			setupButton(_buttonDonatePayPal, Resources.paypal_32, false);
-			setupButton(_buttonTooltips, Resources.tooltip_32, true);
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig, container: _layoutConfig));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage,
+			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
+				_buttonLanguage,
 				container: _layoutLanguage,
 				closeMenuOnClick: true));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate,
+			_buttonSubsystem.SetupPopup(new Popup(_menuDonate,
+				_buttonDonate,
 				container: _layoutDonate,
 				alignment: HorizontalAlignment.Center,
 				openOnHover: false,
 				closeMenuOnClick: true,
 				borderOnHover: false));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck,
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
+				_buttonOpenDeck,
 				container: _layoutOpen,
 				borderOnHover: false,
 				closeMenuOnClick: true));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck,
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
+				_buttonSaveDeck,
 				container: _layoutOpen,
 				borderOnHover: false,
 				closeMenuOnClick: true));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste,
+			_buttonSubsystem.SetupPopup(new Popup(_menuPaste,
+				_buttonPaste,
 				container: _layoutPaste,
 				borderOnHover: false,
 				closeMenuOnClick: true));
@@ -280,6 +315,33 @@ namespace Mtgdb.Gui
 					hoveredImage,
 					hoveredImage,
 					areImagesDoublesized));
+		}
+
+		private void setupButton(ButtonBase button, Bitmap image, Bitmap imageDouble)
+		{
+			bool useDoubleSizedImage = Dpi.ScalePercent > 100;
+
+			Bitmap normal;
+			Bitmap hovered;
+
+			if (useDoubleSizedImage)
+			{
+				hovered = imageDouble?.TransformColors(1.1f, 1.05f);
+				normal = imageDouble;
+			}
+			else
+			{
+				hovered = image?.TransformColors(1.1f, 1.05f);
+				normal = image;
+			}
+
+			_buttonSubsystem.SetupButton(button,
+				new ButtonImages(
+					normal,
+					normal,
+					hovered,
+					hovered,
+					useDoubleSizedImage));
 		}
 
 		private void formKeyDown(object sender, KeyEventArgs e)

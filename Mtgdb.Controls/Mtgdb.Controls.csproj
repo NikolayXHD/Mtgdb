@@ -166,7 +166,7 @@
     <None Include="Resources\close_tab_hovered_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\selectable_transp_32.png" />
+    <Content Include="Resources\selectable_transp_64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
