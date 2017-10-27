@@ -5,7 +5,7 @@ namespace Mtgdb.Dal.Index
 {
 	public class SearchResult
 	{
-		public SearchResult(Dictionary<string, int> searchRankById, Dictionary<string, Token[]> highlightTerms)
+		public SearchResult(Dictionary<int, int> searchRankById, Dictionary<string, Token[]> highlightTerms)
 		{
 			SearchRankById = searchRankById;
 			HighlightTerms = highlightTerms;
@@ -27,7 +27,7 @@ namespace Mtgdb.Dal.Index
 		};
 
 		public Dictionary<string, Token[]> HighlightTerms { get; }
-		public Dictionary<string, int> SearchRankById { get; }
+		public Dictionary<int, int> SearchRankById { get; }
 		public string ParseErrorMessage { get; }
 		public bool IndexNotBuilt { get; private set; }
 	}

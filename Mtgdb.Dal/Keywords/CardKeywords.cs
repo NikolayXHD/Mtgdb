@@ -10,7 +10,7 @@ namespace Mtgdb.Dal
 		public const string NoneKeyword = "_none_";
 		
 		[JsonProperty]
-		public string Id { get; set; }
+		public int IndexInFile { get; set; }
 
 		[JsonProperty]
 		public Dictionary<string, HashSet<string>> KeywordsByProperty { get; set; }

@@ -15,8 +15,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// new cards
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.6" /* new sets */ );
+			// 0.9 Store numeric id
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.9");
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 
@@ -49,7 +49,7 @@ namespace Mtgdb.Dal
 			Loaded?.Invoke();
 		}
 
-		public IEnumerable<string> GetCardIds(IEnumerable<KeywordQueryTerm> andTerms, IEnumerable<KeywordQueryTerm> orTerms, IEnumerable<KeywordQueryTerm> notTerms)
+		public IEnumerable<int> GetCardIds(IEnumerable<KeywordQueryTerm> andTerms, IEnumerable<KeywordQueryTerm> orTerms, IEnumerable<KeywordQueryTerm> notTerms)
 		{
 			var query = toLuceneQuery(andTerms, orTerms, notTerms);
 			var searchResult = _searcher.Search(query, _searcher.MaxDoc);
@@ -109,7 +109,7 @@ namespace Mtgdb.Dal
 				{
 					var keywords = new CardKeywords
 					{
-						Id = card.Id
+						IndexInFile = card.IndexInFile
 					};
 
 					keywords.LoadKeywordsFrom(card);

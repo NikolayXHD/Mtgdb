@@ -14,8 +14,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// Translations
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.8");
+			// 0.9 Not storing * in separate field
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.9");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
@@ -99,12 +99,30 @@ namespace Mtgdb.Dal.Index
 
 
 
-		public string[] SuggestValues(string value, string field, string language, int maxCount)
+		public IList<string> SuggestValues(string value, string field, string language, int maxCount)
 		{
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
-			field = DocumentFactory.Normalize(field, language);
+			if (string.IsNullOrEmpty(field) || field == NumericAwareQueryParser.AnyField)
+			{
+				var result = new List<string>();
+
+				foreach (var userField in DocumentFactory.UserFields)
+				{
+					var specificValues = SuggestValues(value, userField, language, maxCount);
+					result.AddRange(specificValues);
+				}
+
+				result.Sort(Str.Comparer);
+
+				if (result.Count > maxCount)
+					result.RemoveRange(maxCount, result.Count - maxCount);
+
+				return result;
+			}
+
+			field = DocumentFactory.Localize(field, language);
 
 			if (field.IsNumericField())
 				return getNumericSuggest(value, field, language, maxCount);
@@ -118,7 +136,7 @@ namespace Mtgdb.Dal.Index
 			return _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
 		}
 
-		private string[] fullScan(string field, string value, string language, int maxCount)
+		private IList<string> fullScan(string field, string value, string language, int maxCount)
 		{
 			var values = getValues(field, language, _reader.MaxDoc)
 				.OrderByDescending(_ => _stringDistance.GetSimilarity(value, _))
@@ -128,7 +146,7 @@ namespace Mtgdb.Dal.Index
 			return values;
 		}
 
-		private string[] getNumericSuggest(string value, string field, string language, int maxCount)
+		private IList<string> getNumericSuggest(string value, string field, string language, int maxCount)
 		{
 			var strVals = getValues(field, language, _reader.MaxDoc)
 				.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
@@ -144,7 +162,12 @@ namespace Mtgdb.Dal.Index
 
 		private IEnumerable<string> getValues(string field, string language, int maxCount)
 		{
-			field = DocumentFactory.Normalize(field, language);
+			if (string.IsNullOrEmpty(field) || field == NumericAwareQueryParser.AnyField)
+				foreach (var userField in DocumentFactory.UserFields)
+					foreach (string specificResult in getValues(userField, language, maxCount))
+						yield return specificResult;
+
+			field = DocumentFactory.Localize(field, language);
 
 			bool isFloat = field.IsFloatField();
 			bool isInt = field.IsIntField();
