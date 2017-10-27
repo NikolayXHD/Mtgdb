@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="data\index\keywords\" />
+    <Folder Include="data\index\search\" />
     <Folder Include="data\index\suggest\" />
     <Folder Include="images\Artworks\" />
     <Folder Include="images\Mtgdb.Pictures\LQ\" />

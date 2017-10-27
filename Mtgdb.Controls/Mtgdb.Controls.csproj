@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
-      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.7.0.7.700\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -167,11 +163,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Resources\close_tab_hovered_32.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\selectable_transp_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

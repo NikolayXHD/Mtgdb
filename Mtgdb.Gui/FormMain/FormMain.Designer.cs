@@ -513,6 +513,7 @@
             "Battle for Zendikar Block",
             "Ice Age Block",
             "Innistrad Block",
+            "Ixalan Block",
             "Invasion Block",
             "Kaladesh Block",
             "Kamigawa Block",
