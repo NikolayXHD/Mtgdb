@@ -15,8 +15,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.9 Store numeric id
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.9");
+			// 0.10 updated mtgjson.com
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.10");
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 

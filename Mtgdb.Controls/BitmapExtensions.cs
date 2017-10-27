@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using ImageMagick;
 
 namespace Mtgdb.Controls
 {
@@ -29,15 +28,10 @@ namespace Mtgdb.Controls
 			if (size == original.Size)
 				return (Bitmap) original.Clone();
 
-			var magic = new MagickImage(original);
-			var magicSize = new MagickGeometry(size.Width, size.Height)
-			{
-				IgnoreAspectRatio = true
-			};
+			var result = new Bitmap(size.Width, size.Height);
+			var scaler = new BmpScaler(result, original);
+			scaler.Execute();
 
-			magic.Scale(magicSize);
-
-			var result = magic.ToBitmap();
 			return result;
 		}
 

@@ -487,7 +487,7 @@
     <None Include="Resources\jp.png" />
     <None Include="Resources\kr.png" />
     <None Include="Resources\pt.png" />
-    <None Include="Resources\draw_a_card_40.png" />
+    <None Include="Resources\draw_a_card.png" />
     <None Include="Resources\madness.png" />
     <None Include="Resources\instant.png" />
     <None Include="Resources\land.png" />

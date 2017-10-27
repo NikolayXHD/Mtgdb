@@ -28,8 +28,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.9 Store numeric id, 0.9 Not storing * in separate field
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.9");
+			// 0.10 Updated mtgjson.com
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.10");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
