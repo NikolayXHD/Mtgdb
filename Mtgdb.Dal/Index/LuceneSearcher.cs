@@ -28,8 +28,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// Translations
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.8");
+			// 0.9 Store numeric id, 0.9 Not storing * in separate field
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.9");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
@@ -103,6 +103,9 @@ namespace Mtgdb.Dal.Index
 			};
 		}
 
+		/// <summary>
+		/// For test
+		/// </summary>
 		public IEnumerable<Card> SearchCards(string queryStr, string language, CardRepository repository)
 		{
 			var parser = createParser(language);
@@ -112,7 +115,7 @@ namespace Mtgdb.Dal.Index
 			foreach (var scoreDoc in searchResult.ScoreDocs)
 			{
 				var id = scoreDoc.GetId(_searcher);
-				var card = repository.CardsById[id];
+				var card = repository.Cards[id];
 				yield return card;
 			}
 		}

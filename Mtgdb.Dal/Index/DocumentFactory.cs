@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
@@ -11,7 +10,6 @@ namespace Mtgdb.Dal.Index
 	public static class DocumentFactory
 	{
 		private static readonly List<string> _langs;
-		private const string AnyField = "*";
 
 		private static readonly HashSet<string> _intFields = new HashSet<string>(Str.Comparer);
 		private static readonly HashSet<string> _floatFields = new HashSet<string>(Str.Comparer);
@@ -32,8 +30,8 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.SetCode), isLimitedValues: true);
 			addTextField(nameof(Card.Artist), isLimitedValues: true);
 
-			addTextField(nameof(Card.OriginalText));
-			addTextField(nameof(Card.OriginalType), isLimitedValues: true);
+			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
+			addTextField(nameof(Card.OriginalType), nameof(Card.Type), isLimitedValues: true);
 
 			addTextField(nameof(Card.NameEn),
 				nameof(Card.Name));
@@ -83,22 +81,27 @@ namespace Mtgdb.Dal.Index
 
 			foreach (var lang in _langs)
 			{
+				if (Str.Equals(lang, "en"))
+					continue;
+
 				addSpecificTextField(nameof(Card.Name), lang);
 				addSpecificTextField(nameof(Card.Type), lang, isLimitedValues: true);
 				addSpecificTextField(nameof(Card.Text), lang);
 				addSpecificTextField(nameof(Card.Flavor), lang);
-				addSpecificTextField(AnyField, lang);
 			}
 		}
 
 		public static Document ToDocument(this CardKeywords cardKeywords)
 		{
 			var doc = new Document();
-			doc.addIdField(nameof(cardKeywords.Id), cardKeywords.Id);
+			doc.addIdField(nameof(CardKeywords.IndexInFile), cardKeywords.IndexInFile);
 
 			foreach (var pair in cardKeywords.KeywordsByProperty)
 				foreach (string value in pair.Value)
-					doc.Add(new Field(pair.Key.ToLowerInvariant(), value.ToLowerInvariant(), Field.Store.NO, Field.Index.NOT_ANALYZED_NO_NORMS));
+					doc.Add(new Field(pair.Key.ToLowerInvariant(),
+						value.ToLowerInvariant(),
+						Field.Store.NO,
+						Field.Index.NOT_ANALYZED_NO_NORMS));
 
 			return doc;
 		}
@@ -108,7 +111,7 @@ namespace Mtgdb.Dal.Index
 			var doc = new Document();
 
 			// Tested
-			doc.addIdField(nameof(card.Id), card.Id);
+			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
 
 			// Tested
 			doc.addTextField(nameof(card.NameEn), card.NameEn);
@@ -236,13 +239,13 @@ namespace Mtgdb.Dal.Index
 			foreach (var lang in _langs)
 			{
 				// Tested
-				string name = card.GetName(lang);
+				string name = card.Localization?.GetName(lang);
 
 				if (!string.IsNullOrEmpty(name))
 					doc.addTextField(nameof(card.Name), name, lang);
 
 				// Tested
-				string type = card.GetType(lang);
+				string type = card.Localization?.GetType(lang);
 				if (!string.IsNullOrEmpty(type))
 				{
 					var typeParts = type.Split(new[] { ' ', '—' }, StringSplitOptions.RemoveEmptyEntries);
@@ -252,12 +255,12 @@ namespace Mtgdb.Dal.Index
 				}
 
 				// Tested
-				string text = card.GetText(lang);
+				string text = card.Localization?.GetAbility(lang);
 				if (!string.IsNullOrEmpty(text))
 					doc.addTextField(nameof(card.Text), text, lang);
 
 				// Tested
-				string flavor = card.GetFlavor(lang);
+				string flavor = card.Localization?.GetFlavor(lang);
 				if (!string.IsNullOrEmpty(flavor))
 					doc.addTextField(nameof(card.Flavor), flavor, lang);
 			}
@@ -265,40 +268,31 @@ namespace Mtgdb.Dal.Index
 			return doc;
 		}
 
-		private static void addIdField(this Document doc, string fieldName, string fieldValue)
+		private static void addIdField(this Document doc, string fieldName, int fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
 
-			doc.Add(new Field(
-				fieldName,
-				fieldValue,
-				Field.Store.YES,
-				Field.Index.NOT_ANALYZED_NO_NORMS));
+			var field = new NumericField(fieldName, Field.Store.YES, index: false);
+			field.SetIntValue(fieldValue);
+
+			doc.Add(field);
 		}
 
 		private static void addTextField(this Document doc, string fieldName, string fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
 			addSpecificTextField(doc, fieldName, fieldValue);
-
-			// поиск "по любому полю" и определённым языком требует,
-			// чтобы значения нейтральных к языку полей попали
-			// во все индексы "по любому полю" *_ru, *_en и т.д.
-			foreach (var lang in _langs)
-				addAnyTextField(doc, fieldValue, lang);
 		}
 
 		private static void addTextField(this Document doc, string fieldName, string fieldValue, string language)
 		{
-			fieldName = fieldName.ToLowerInvariant();
-
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
 
+			fieldName = fieldName.ToLowerInvariant();
+
 			var localizedFieldName = getLocalizedField(fieldName, language);
 			addSpecificTextField(doc, localizedFieldName, fieldValue);
-
-			addAnyTextField(doc, fieldValue, language);
 		}
 
 		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue)
@@ -311,16 +305,6 @@ namespace Mtgdb.Dal.Index
 			doc.Add(new Field(fieldName, fieldValue, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS));
 		}
 
-		private static void addAnyTextField(Document doc, string fieldValue, string language)
-		{
-			var anyFieldName = getLocalizedField(AnyField, language);
-
-			if (!TextFields.Contains(anyFieldName))
-				throw new InvalidOperationException($"Text field {anyFieldName} not intialized");
-
-			doc.Add(new Field(anyFieldName, fieldValue, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS));
-		}
-
 		private static void addNumericField(this Document doc, string fieldName, float fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
@@ -331,7 +315,6 @@ namespace Mtgdb.Dal.Index
 			var field = new NumericField(fieldName);
 			field.SetFloatValue(fieldValue);
 			doc.Add(field);
-			doc.Add(new Field(AnyField, fieldValue.ToString(CultureInfo.InvariantCulture), Field.Store.NO, Field.Index.ANALYZED_NO_NORMS));
 		}
 
 		private static void addNumericField(this Document doc, string fieldName, int fieldValue)
@@ -344,7 +327,6 @@ namespace Mtgdb.Dal.Index
 			var field = new NumericField(fieldName);
 			field.SetIntValue(fieldValue);
 			doc.Add(field);
-			doc.Add(new Field(AnyField, fieldValue.ToString(), Field.Store.NO, Field.Index.ANALYZED_NO_NORMS));
 		}
 
 
@@ -366,10 +348,12 @@ namespace Mtgdb.Dal.Index
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
 
-			if (fieldName != AnyField)
-				UserFields.Add(fieldName);
+			UserFields.Add(fieldName);
+
+			fieldName = fieldName.ToLowerInvariant();
 
 			_localizedFields.Add(fieldName);
+
 			var localizedFieldName = getLocalizedField(fieldName, language);
 			TextFields.Add(localizedFieldName);
 
@@ -402,14 +386,14 @@ namespace Mtgdb.Dal.Index
 			if (language == null)
 				throw new InvalidOperationException($"Language must be specified for localized field {fieldName}");
 
+			if (Str.Equals(language, "en"))
+				return fieldName + "en";
+
 			return fieldName + "_" + language;
 		}
 
-		public static string Normalize(string field, string language)
+		public static string Localize(string field, string language)
 		{
-			if (string.IsNullOrEmpty(field))
-				field = AnyField;
-
 			field = field.ToLowerInvariant();
 
 			if (_localizedFields.Contains(field))
@@ -420,12 +404,12 @@ namespace Mtgdb.Dal.Index
 
 
 
-		public static string GetId(this ScoreDoc scoreDoc, IndexSearcher indexSearcher)
+		public static int GetId(this ScoreDoc scoreDoc, IndexSearcher indexSearcher)
 		{
-			return indexSearcher.Doc(scoreDoc.Doc).Get(nameof(Card.Id).ToLowerInvariant());
+			var doc = indexSearcher.Doc(scoreDoc.Doc);
+			string value = doc.Get(nameof(Card.IndexInFile).ToLowerInvariant());
+			return int.Parse(value);
 		}
-
-
 
 		public static float? TryParseFloat(this string val)
 		{

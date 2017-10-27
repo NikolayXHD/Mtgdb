@@ -64,7 +64,7 @@ namespace Mtgdb.Gui
 				{ 3, c => c.CollectionCount > 0 },
 				{ 4, c => c.DeckCount > 0 },
 				{ 0, c => _quickFilterFacade.Evaluate(c) },
-				{ 1, c => _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.Id) != false }
+				{ 1, c => _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false }
 			};
 
 			endRestoreSettings();

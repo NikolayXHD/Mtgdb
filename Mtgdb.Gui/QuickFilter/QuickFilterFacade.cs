@@ -16,7 +16,7 @@ namespace Mtgdb.Gui
 		private readonly IList<IList<Regex>> _patterns;
 		private readonly Dictionary<string, HashSet<int>> _indexByFieldNameDisplay;
 
-		private HashSet<string> _matchingCardIds;
+		private HashSet<int> _matchingCardIds;
 
 		public QuickFilterFacade(
 			IList<IList<Regex>> patterns,
@@ -114,7 +114,7 @@ namespace Mtgdb.Gui
 			}
 
 			var cardIds = _searcher.GetCardIds(Required, RequiredSome, Prohibited);
-			_matchingCardIds = new HashSet<string>(cardIds, Str.Comparer);
+			_matchingCardIds = new HashSet<int>(cardIds);
 		}
 
 		private KeywordQueryTerm[] Required { get; }
@@ -127,7 +127,7 @@ namespace Mtgdb.Gui
 			if (_matchingCardIds == null)
 				return true;
 
-			return _matchingCardIds.Contains(c.Id);
+			return _matchingCardIds.Contains(c.IndexInFile);
 		}
 
 		public List<Match> GetMatchedText(string fieldValue, string fieldName)

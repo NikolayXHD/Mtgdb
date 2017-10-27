@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -169,7 +170,7 @@ namespace Mtgdb.Gui
 			updateDataSource(intellisenseSuggest.Values);
 			_listBoxSuggest.EndUpdate();
 
-			if (intellisenseSuggest.Values.Length > 0)
+			if (intellisenseSuggest.Values.Count > 0)
 				_listBoxSuggest.Height = 2 + intellisenseSuggest.Values.Sum(getHeight);
 			else
 				_listBoxSuggest.Height = 0;
@@ -569,7 +570,7 @@ namespace Mtgdb.Gui
 			return _findEditor.ContainsFocus;
 		}
 
-		private void updateDataSource(string[] suggest)
+		private void updateDataSource(IList<string> suggest)
 		{
 			_dataSource.Clear();
 			foreach (var sugg in suggest)
