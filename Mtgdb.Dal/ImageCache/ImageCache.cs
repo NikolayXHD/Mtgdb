@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using Mtgdb.Controls;
 using Mtgdb.Gui;
@@ -10,6 +9,8 @@ namespace Mtgdb.Dal
 {
 	public class ImageCache
 	{
+		public static object SyncRoot = new object();
+
 		public ImageCache(ImageCacheConfig config, SmallConfig smallConfig, ZoomedConfig zoomedConfig)
 		{
 			if (smallConfig.Width.HasValue && smallConfig.Height.HasValue)
@@ -73,7 +74,12 @@ namespace Mtgdb.Dal
 
 			try
 			{
-				original = new Bitmap(model.FullPath);
+				byte[] bytes;
+
+				lock (SyncRoot)
+					bytes = File.ReadAllBytes(model.FullPath);
+
+				original = new Bitmap(new MemoryStream(bytes));
 			}
 			catch
 			{

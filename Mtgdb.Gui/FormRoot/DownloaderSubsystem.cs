@@ -24,7 +24,9 @@ namespace Mtgdb.Gui
 		{
 			_updateForm.CalculateProgress();
 
-			var progress = _updateForm.ImageDownloadProgress;
+			var progress = _updateForm.ImageDownloadProgress
+				.Where(p => !Str.Equals(p.QualityGroup.Quality, "Art"))
+				.ToArray();
 
 			var countTotal = progress
 				.Sum(_ => _.FilesOnline?.Count ?? 0);

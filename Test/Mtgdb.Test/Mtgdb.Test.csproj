@@ -114,7 +114,9 @@
     <Compile Include="DalTests.cs" />
     <Compile Include="DownsamplingTests.cs" />
     <Compile Include="EditDistanceTests.cs" />
+    <Compile Include="ExportImages\ExportImages.cs" />
     <Compile Include="GathererImagePreProcessor.cs" />
+    <Compile Include="ExportImages\ImageMagickScaler.cs" />
     <Compile Include="Index\KeywordTests.cs" />
     <Compile Include="LocalizationRepositoryTest.cs" />
     <Compile Include="Index\TolerantTokenizerTests.cs" />

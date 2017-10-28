@@ -10,37 +10,34 @@ namespace Mtgdb
 		private const int ByesPerPixel = 4;
 		private readonly Bitmap _bmp;
 
-		protected Rectangle Rect { get; private set; }
+		protected Rectangle Rect { get; }
 		protected byte[] RgbValues { get; private set; }
 		public bool ImageChanged { get; protected set; }
 
-		protected BmpProcessor(Bitmap bmp)
+		protected BmpProcessor(Bitmap bmp, Rectangle? rect = null)
 		{
 			_bmp = bmp;
+			Rect = rect ?? new Rectangle(Point.Empty, _bmp.Size);
 		}
 
 		public void Execute()
 		{
-			const PixelFormat pixelFormat = PixelFormat.Format32bppArgb;
-
-			// Lock the bitmap's bits.
-			Rect = new Rectangle(Point.Empty, _bmp.Size);
-			var bmpData = _bmp.LockBits(Rect, ImageLockMode.ReadWrite, pixelFormat);
+			const PixelFormat format = PixelFormat.Format32bppArgb;
+			var bmpData = _bmp.LockBits(Rect, ImageLockMode.ReadWrite, format);
 
 			try
 			{
 				// Declare an array to hold the bytes of the bitmap. 
-				int numBytes = bmpData.Stride * Rect.Height;
+				int numBytes = bmpData.Stride * bmpData.Height;
 				RgbValues = new byte[numBytes];
 
-				var firstBytePtr = bmpData.Scan0;
-				Marshal.Copy(firstBytePtr, RgbValues, 0, numBytes);
+				Marshal.Copy(bmpData.Scan0, RgbValues, 0, numBytes);
 
 				ExecuteRaw();
 
 				if (ImageChanged)
 					// Copy the RGB values back to the bitmap
-					Marshal.Copy(RgbValues, 0, firstBytePtr, numBytes);
+					Marshal.Copy(RgbValues, 0, bmpData.Scan0, numBytes);
 			}
 			finally
 			{
@@ -88,43 +85,41 @@ namespace Mtgdb
 		private const int ByesPerPixel = 4;
 
 		private readonly Bitmap _bmp;
-		private readonly BitmapData _bitmapData;
+		private readonly BitmapData _bmpData;
 
-		protected Rectangle Rect { get; }
+		private Rectangle _rect;
 		public byte[] RgbValues { get; }
 		
-		public BmpReader(Bitmap bmp)
+		public BmpReader(Bitmap bmp, Rectangle rect)
 		{
+			const PixelFormat format = PixelFormat.Format32bppArgb;
+
+			_rect = rect;
 			_bmp = bmp;
-			const PixelFormat pixelFormat = PixelFormat.Format32bppArgb;
-			// Lock the bitmap's bits.
-			Rect = new Rectangle(Point.Empty, _bmp.Size);
-
-			_bitmapData = _bmp.LockBits(Rect, ImageLockMode.ReadOnly, pixelFormat);
+			_bmpData = _bmp.LockBits(_rect, ImageLockMode.ReadOnly, format);
 			
-			int numBytes = _bitmapData.Stride * Rect.Height;
+			int numBytes = _bmpData.Stride * _bmpData.Height;
 			RgbValues = new byte[numBytes];
-
-			var firstBytePtr = _bitmapData.Scan0;
-			Marshal.Copy(firstBytePtr, RgbValues, 0, numBytes);
+			Marshal.Copy(_bmpData.Scan0, RgbValues, 0, numBytes);
 		}
 
 		public int GetLocation(int x, int y)
 		{
-			return ByesPerPixel * (Rect.Width * y + x);
+			return ByesPerPixel * (_rect.Width * y + x);
 		}
 
 		public void Dispose()
 		{
-			_bmp.UnlockBits(_bitmapData);
+			_bmp.UnlockBits(_bmpData);
 		}
 	}
 
 	public class BmpScaler : BmpProcessor
 	{
-		public BmpScaler(Bitmap bmp, Bitmap original) : base(bmp)
+		public BmpScaler(Bitmap bmp, Bitmap original, Rectangle sourceRect) : base(bmp)
 		{
 			_original = original;
+			_sourceRect = sourceRect;
 		}
 
 		protected override void ExecuteRaw()
@@ -134,7 +129,7 @@ namespace Mtgdb
 			float scaleX = (float)_original.Width / Rect.Width;
 			float scaleY = (float)_original.Height / Rect.Height;
 			
-			using (var original = new BmpReader(_original))
+			using (var original = new BmpReader(_original, _sourceRect))
 				for (int i = 0; i < Rect.Width; i++)
 				{
 					float left = i * scaleX;
@@ -214,5 +209,6 @@ namespace Mtgdb
 		}
 
 		private readonly Bitmap _original;
+		private readonly Rectangle _sourceRect;
 	}
 }
