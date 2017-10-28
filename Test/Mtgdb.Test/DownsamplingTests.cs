@@ -11,9 +11,11 @@ namespace Mtgdb.Test
 		[TestCase("F:\\Repo\\Git\\Mtgdb\\Mtgdb.Gui\\Resources\\r.png")]
 		public void Resample(string file)
 		{
-			var image = new MagickImage(new Bitmap(file));
-			image.Resize(new Percentage(50));
-			image.Write("D:\\temp\\img\\" + Path.GetFileName(file));
+			using (var image = new MagickImage(file))
+			{
+				image.Resize(new Percentage(50));
+				image.Write("D:\\temp\\img\\" + Path.GetFileName(file));
+			}
 		}
 	}
 }
