@@ -245,10 +245,12 @@ namespace Mtgdb.Util
 
 		private byte[] transform(Bitmap original, ImageModel replacementModel, bool small, bool forge)
 		{
+			var size = small ? _imageCache.CardSize : _imageCache.ZoomedCardSize;
+
 			var image = _imageCache.Transform(
 				original,
 				replacementModel,
-				small ? _imageCache.CardSize : _imageCache.ZoomedCardSize,
+				size,
 				transparentCorners: false,
 				crop: _crop,
 				whiteCorner: _whiteCorner);

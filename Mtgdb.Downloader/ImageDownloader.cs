@@ -102,7 +102,18 @@ namespace Mtgdb.Downloader
 				{
 					alreadyDownloaded = false;
 					Console.WriteLine("Deleting modified or corrupted file {0}", filePath);
-					File.Delete(filePath);
+
+					lock (ImageCache.SyncRoot)
+					{
+						try
+						{
+							File.Delete(filePath);
+						}
+						catch (IOException ex)
+						{
+							Console.WriteLine($"Failed to remove {filePath}. {ex.Message}");
+						}
+					}
 				}
 				else
 				{

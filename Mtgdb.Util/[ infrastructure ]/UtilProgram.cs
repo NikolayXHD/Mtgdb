@@ -75,8 +75,6 @@ namespace Mtgdb.Util
 			}
 		}
 
-		
-
 		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir)
 		{
 			var integration = _kernel.Get<ForgeIntegration>();

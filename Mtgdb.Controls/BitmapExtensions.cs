@@ -7,6 +7,8 @@ namespace Mtgdb.Controls
 {
 	public static class BitmapExtensions
 	{
+		public static Func<Bitmap, Rectangle, Size, Bitmap> CustomScaleStrategy { get; set; }
+
 		public static Bitmap ResizeDpi(this Bitmap original)
 		{
 			return original.FitIn(original.Size.ByDpi());
@@ -25,13 +27,23 @@ namespace Mtgdb.Controls
 
 			size = croppedSize.FitIn(size);
 
-			if (size == original.Size)
+			if (size == original.Size && frame == default(Size))
 				return (Bitmap) original.Clone();
 
-			var result = new Bitmap(size.Width, size.Height);
-			var scaler = new BmpScaler(result, original);
-			scaler.Execute();
+			var sourceRect = new Rectangle(new Point(frame), croppedSize);
 
+			var result = scale(original, sourceRect, size);
+			return result;
+		}
+
+		private static Bitmap scale(Bitmap original, Rectangle sourceRect, Size size)
+		{
+			if (CustomScaleStrategy != null)
+				return CustomScaleStrategy(original, sourceRect, size);
+
+			var result = new Bitmap(size.Width, size.Height);
+			var scaler = new BmpScaler(result, original, sourceRect);
+			scaler.Execute();
 			return result;
 		}
 
