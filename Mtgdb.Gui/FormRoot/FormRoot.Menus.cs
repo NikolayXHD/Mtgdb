@@ -41,14 +41,34 @@ namespace Mtgdb.Gui
 			_buttonMenuDisplaySettings.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 
-			_buttonMenuPaste.Click += pasteClick;
+			
 			_buttonPaste.Click += pasteClick;
-			_buttonMenuPasteAppend.Click += pasteClick;
+			_buttonMenuPasteDeck.Click += pasteClick;
+			_buttonMenuPasteDeckAppend.Click += pasteClick;
+			_buttonMenuPasteCollection.Click += pasteClick;
+			_buttonMenuPasteCollectionAppend.Click += pasteClick;
+			_buttonMenuCopyCollection.Click += pasteClick;
+			_buttonMenuCopyDeck.Click += pasteClick;
 		}
 
 		private void pasteClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.PasteDeck(append: sender == _buttonMenuPasteAppend);
+			var form = getSelectedForm();
+			if (form == null)
+				return;
+
+			if (sender == _buttonPaste || sender == _buttonMenuPasteDeck)
+				form.PasteDeck(append: false);
+			else if (sender == _buttonMenuPasteDeck)
+				form.PasteDeck(append: true);
+			else if (sender == _buttonMenuPasteCollection)
+				form.PasteCollection(append: false);
+			else if (sender == _buttonMenuPasteCollectionAppend)
+				form.PasteCollection(append: true);
+			else if (sender == _buttonMenuCopyDeck)
+				form.CopyDeck();
+			else if (sender == _buttonMenuCopyCollection)
+				form.CopyCollection();
 		}
 
 		private void configClick(object sender, EventArgs e)
@@ -390,6 +410,24 @@ namespace Mtgdb.Gui
 					handled = false;
 				else
 					form.PasteDeck(append: false);
+			}
+			else if (e.KeyData == (Keys.Alt | Keys.Shift | Keys.V))
+				form.PasteCollection(append: true);
+			else if (e.KeyData == (Keys.Alt | Keys.V))
+				form.PasteCollection(append: false);
+			else if (e.KeyData == (Keys.Control | Keys.C))
+			{
+				if (form.IsSearchFocused())
+					handled = false;
+				else
+					form.CopyDeck();
+			}
+			else if (e.KeyData == (Keys.Alt | Keys.C))
+			{
+				if (form.IsSearchFocused())
+					handled = false;
+				else
+					form.CopyCollection();
 			}
 			else
 			{

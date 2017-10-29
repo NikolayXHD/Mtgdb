@@ -8,7 +8,7 @@ namespace Mtgdb.Dal
 	{
 		public event DeckChangedEventHandler CollectionChanged;
 
-		public Dictionary<string, int> CountById = new Dictionary<string, int>();
+		public readonly Dictionary<string, int> CountById = new Dictionary<string, int>();
 		public bool IsInitialized { get; private set; }
 
 		public int CollectionSize
@@ -23,7 +23,18 @@ namespace Mtgdb.Dal
 		public void SetCollection(Deck deck)
 		{
 			IsInitialized = true;
-			CountById = deck.MainDeck.Count.ToDictionary();
+			
+			CountById.Clear();
+
+			foreach (var id in deck.MainDeck.Count.Keys)
+				CountById[id] = 0;
+			foreach (var id in deck.SideDeck.Count.Keys)
+				CountById[id] = 0;
+
+			foreach (var pair in deck.MainDeck.Count)
+				CountById[pair.Key] += pair.Value;
+			foreach (var pair in deck.SideDeck.Count)
+				CountById[pair.Key] += pair.Value;
 
 			CollectionChanged?.Invoke(
 				listChanged: true,

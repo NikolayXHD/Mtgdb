@@ -13,11 +13,11 @@ namespace Mtgdb.Controls.Statistics
 
 	public static class FieldNameFormatter
 	{
-		private static readonly Regex CamelPattern = new Regex("(\\B[A-Z])", RegexOptions.Compiled);
+		private static readonly Regex _camelPattern = new Regex("(\\B[A-Z])", RegexOptions.Compiled);
 
 		public static string FromCamelCase(this string name)
 		{
-			return CamelPattern.Replace(name, "_$1").ToLowerInvariant();
+			return _camelPattern.Replace(name, "_$1").ToLowerInvariant();
 		}
 	}
 }

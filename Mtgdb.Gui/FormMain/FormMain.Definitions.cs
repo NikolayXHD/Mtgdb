@@ -112,7 +112,7 @@ namespace Mtgdb.Gui
 				formZoomCard);
 
 			_viewDeck.SetDataSource(_deckModel.DataSource);
-			_viewCards.SetDataSource(_filteredCards);
+			_viewCards.SetDataSource(_searchResultCards);
 
 			_legalitySubsystem = new LegalitySubsystem(
 				_menuLegalityFormat,
@@ -350,6 +350,8 @@ namespace Mtgdb.Gui
 
 		public bool IsSearchFocused() => _searchStringSubsystem.IsSearchFocused();
 
+
+
 		public void PasteDeck(bool append)
 		{
 			if (!_cardRepo.IsImageLoadingComplete)
@@ -361,6 +363,74 @@ namespace Mtgdb.Gui
 
 			pasteDeckFromText(text, append);
 		}
+
+		public void PasteCollection(bool append)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			var text = Clipboard.GetText();
+			if (string.IsNullOrWhiteSpace(text))
+				return;
+
+			pasteCollectionFromText(text, append);
+		}
+
+		public void CopyCollection()
+		{
+			var deck = Deck.Create(
+				_collectionModel.CountById?.ToDictionary(),
+				_collectionModel.CountById?.Keys.OrderBy(_ => _cardRepo.CardsById[_].NameEn).ToList(),
+				null,
+				null);
+
+			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
+			Clipboard.SetText(serialized);
+		}
+
+		public void CopyDeck()
+		{
+			var deck = Deck.Create(
+				_deckModel.MainDeck.CountById.ToDictionary(),
+				_deckModel.MainDeck.CardsIds.ToList(),
+				_deckModel.SideDeck.CountById.ToDictionary(),
+				_deckModel.SideDeck.CardsIds.ToList());
+
+			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
+			Clipboard.SetText(serialized);
+		}
+
+		private void pasteDeckFromText(string text, bool append)
+		{
+			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
+
+			if (deck.Error != null)
+				MessageBox.Show(deck.Error);
+			else
+			{
+				if (append)
+					appendToDeck(deck);
+				else
+					loadDeck(deck);
+			}
+		}
+
+		private void pasteCollectionFromText(string text, bool append)
+		{
+			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
+
+			if (deck.Error != null)
+				MessageBox.Show(deck.Error);
+			else
+			{
+				if (append)
+					appendToCollection(deck);
+				else
+					loadCollection(deck);
+			}
+		}
+
+
 
 		private void deckDragDropped(object sender, DragEventArgs e)
 		{
@@ -394,24 +464,19 @@ namespace Mtgdb.Gui
 			else if (e.Data.GetFormats().Contains(DataFormats.Text))
 			{
 				string text = (string) e.Data.GetData(DataFormats.Text, autoConvert: true);
-				pasteDeckFromText(text, append: ModifierKeys == Keys.Shift);
+
+				if (ModifierKeys == Keys.Alt)
+					pasteCollectionFromText(text, append: false);
+				else if (ModifierKeys == (Keys.Alt | Keys.Shift))
+					pasteCollectionFromText(text, append: true);
+				else if (ModifierKeys == Keys.None)
+					pasteDeckFromText(text, append: false);
+				else if (ModifierKeys == Keys.Shift)
+					pasteDeckFromText(text, append: true);
 			}
 		}
 
-		private void pasteDeckFromText(string text, bool append)
-		{
-			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
 
-			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-			{
-				if (append)
-					appendToDeck(deck);
-				else
-					loadDeck(deck);
-			}
-		}
 
 		private void unsubscribeFromEvents()
 		{
@@ -480,6 +545,8 @@ namespace Mtgdb.Gui
 		/// </summary>
 		private int _restoringGuiSettings;
 
+		private readonly bool _keywordsIndexUpToDate;
+
 		private readonly CardRepository _cardRepo;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
@@ -491,7 +558,9 @@ namespace Mtgdb.Gui
 		private const int FilterGroupCollection = 3;
 		private const int FilterGroupDeck = 4;
 
-		private readonly List<Card> _filteredCards = new List<Card>();
+		private readonly List<Card> _searchResultCards = new List<Card>();
+		private readonly HashSet<Card> _filteredCards = new HashSet<Card>();
+
 		private bool _breakRefreshing;
 
 		private HistoryModel _historyModel;

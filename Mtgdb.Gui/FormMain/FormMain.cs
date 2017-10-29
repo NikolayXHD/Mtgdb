@@ -10,8 +10,6 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormMain : Form
 	{
-		private bool _keywordsIndexUpToDate;
-
 		public void SaveHistory(string id)
 		{
 			_historyModel.Id = id;
@@ -20,7 +18,11 @@ namespace Mtgdb.Gui
 
 		public void OnTabSelected(Card draggedCard)
 		{
+			lock (_searchResultCards)
+				updateIsSearchResult();
+
 			_uiModel.Deck = _deckModel;
+
 			_searchStringSubsystem.UpdateSuggestInput();
 			historyUpdateButtons();
 
@@ -59,7 +61,6 @@ namespace Mtgdb.Gui
 			ResumeLayout(false);
 			PerformLayout();
 
-			//SuspendPaint = false;
 			Refresh();
 		}
 
@@ -105,10 +106,11 @@ namespace Mtgdb.Gui
 
 			_breakRefreshing = true;
 
-			lock (_filteredCards)
+			lock (_searchResultCards)
 			{
 				_breakRefreshing = false;
 
+				var searchResultCards = new List<Card>();
 				var filteredCards = new List<Card>();
 
 				var allCards = _sortSubsystem.SortedCards;
@@ -122,9 +124,12 @@ namespace Mtgdb.Gui
 
 						var card = allCards[i];
 
-						card.IsSearchResult = fit(card, filterManagerStates);
+						bool isFiltered = fit(card, filterManagerStates);
 
-						if (card.IsSearchResult || card == touchedCard)
+						if (isFiltered || card == touchedCard)
+							searchResultCards.Add(card);
+
+						if (isFiltered)
 							filteredCards.Add(card);
 					}
 				}
@@ -168,15 +173,24 @@ namespace Mtgdb.Gui
 							return;
 
 						var card = allCards[i];
-						card.IsSearchResult = cardsByName.TryGet(card.NameNormalized) == card;
 
-						if (card.IsSearchResult || card == touchedCard)
+						bool isFiltered = cardsByName.TryGet(card.NameNormalized) == card;
+						
+						if (isFiltered || card == touchedCard)
+							searchResultCards.Add(card);
+
+						if (isFiltered)
 							filteredCards.Add(card);
 					}
 				}
 
+				_searchResultCards.Clear();
+				_searchResultCards.AddRange(searchResultCards);
+
 				_filteredCards.Clear();
-				_filteredCards.AddRange(filteredCards);
+				_filteredCards.UnionWith(filteredCards);
+
+				updateIsSearchResult();
 			}
 
 			this.Invoke(delegate
@@ -184,6 +198,12 @@ namespace Mtgdb.Gui
 				_imagePreloadingSubsystem.Reset();
 				refreshData();
 			});
+		}
+
+		private void updateIsSearchResult()
+		{
+			foreach (var card in _sortSubsystem.SortedCards)
+				card.IsSearchResult = _filteredCards.Contains(card);
 		}
 
 		private void refreshData()
@@ -198,7 +218,7 @@ namespace Mtgdb.Gui
 			else
 				visibleRecordIndex = _viewCards.VisibleRecordIndex;
 
-			if (visibleRecordIndex >= _filteredCards.Count)
+			if (visibleRecordIndex >= _searchResultCards.Count)
 				visibleRecordIndex = 0;
 
 			_viewCards.VisibleRecordIndex = visibleRecordIndex;
@@ -216,7 +236,7 @@ namespace Mtgdb.Gui
 		private void updateFormStatus()
 		{
 			_labelStatusSets.Text = _cardRepo.SetsByCode.Count.ToString();
-			_labelStatusScrollCards.Text = $"{_viewCards.VisibleRecordIndex}/{_filteredCards.Count}";
+			_labelStatusScrollCards.Text = $"{_viewCards.VisibleRecordIndex}/{_searchResultCards.Count}";
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
@@ -539,11 +559,6 @@ namespace Mtgdb.Gui
 			historyUpdateButtons();
 			
 			setTitle(settings.DeckName);
-		}
-
-		private void loadCollection(Deck collection)
-		{
-			_collectionModel.SetCollection(collection);
 		}
 
 		private void historyRedo()

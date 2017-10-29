@@ -88,12 +88,16 @@ namespace Mtgdb.Gui
 			this._buttonPaste = new Mtgdb.Controls.CustomCheckBox();
 			this._menuPaste = new Mtgdb.Controls.BorderedPanel();
 			this._layoutPaste = new System.Windows.Forms.TableLayoutPanel();
+			this._buttonMenuPasteCollectionAppend = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuPasteCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._labelPasteInfo = new System.Windows.Forms.Label();
-			this._buttonMenuPaste = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonMenuPasteAppend = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuPasteDeck = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuPasteDeckAppend = new Mtgdb.Controls.CustomCheckBox();
 			this._layoutTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._flowTitleRight = new System.Windows.Forms.FlowLayoutPanel();
 			this._flowTitleLeft = new System.Windows.Forms.FlowLayoutPanel();
+			this._buttonMenuCopyDeck = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuCopyCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._layoutOpen.SuspendLayout();
@@ -397,7 +401,7 @@ namespace Mtgdb.Gui
 			this._menuOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuOpen.BackColor = System.Drawing.Color.White;
 			this._menuOpen.Controls.Add(this._layoutOpen);
-			this._menuOpen.Location = new System.Drawing.Point(414, 287);
+			this._menuOpen.Location = new System.Drawing.Point(349, 287);
 			this._menuOpen.Name = "_menuOpen";
 			this._menuOpen.Size = new System.Drawing.Size(272, 425);
 			this._menuOpen.TabIndex = 0;
@@ -1133,9 +1137,9 @@ namespace Mtgdb.Gui
 			this._menuPaste.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuPaste.BackColor = System.Drawing.Color.White;
 			this._menuPaste.Controls.Add(this._layoutPaste);
-			this._menuPaste.Location = new System.Drawing.Point(369, 62);
+			this._menuPaste.Location = new System.Drawing.Point(35, 287);
 			this._menuPaste.Name = "_menuPaste";
-			this._menuPaste.Size = new System.Drawing.Size(226, 188);
+			this._menuPaste.Size = new System.Drawing.Size(305, 392);
 			this._menuPaste.TabIndex = 37;
 			this._menuPaste.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -1147,64 +1151,108 @@ namespace Mtgdb.Gui
 			this._layoutPaste.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._layoutPaste.ColumnCount = 1;
 			this._layoutPaste.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutPaste.Controls.Add(this._labelPasteInfo, 0, 2);
-			this._layoutPaste.Controls.Add(this._buttonMenuPaste, 0, 0);
-			this._layoutPaste.Controls.Add(this._buttonMenuPasteAppend, 0, 1);
+			this._layoutPaste.Controls.Add(this._buttonMenuCopyCollection, 0, 5);
+			this._layoutPaste.Controls.Add(this._buttonMenuCopyDeck, 0, 4);
+			this._layoutPaste.Controls.Add(this._buttonMenuPasteCollectionAppend, 0, 3);
+			this._layoutPaste.Controls.Add(this._buttonMenuPasteCollection, 0, 2);
+			this._layoutPaste.Controls.Add(this._labelPasteInfo, 0, 6);
+			this._layoutPaste.Controls.Add(this._buttonMenuPasteDeck, 0, 0);
+			this._layoutPaste.Controls.Add(this._buttonMenuPasteDeckAppend, 0, 1);
 			this._layoutPaste.Location = new System.Drawing.Point(1, 1);
 			this._layoutPaste.Margin = new System.Windows.Forms.Padding(1);
 			this._layoutPaste.Name = "_layoutPaste";
-			this._layoutPaste.RowCount = 3;
+			this._layoutPaste.RowCount = 7;
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.Size = new System.Drawing.Size(224, 186);
+			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._layoutPaste.Size = new System.Drawing.Size(303, 390);
 			this._layoutPaste.TabIndex = 0;
+			// 
+			// _buttonMenuPasteCollectionAppend
+			// 
+			this._buttonMenuPasteCollectionAppend.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPasteCollectionAppend.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPasteCollectionAppend.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPasteCollectionAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteCollectionAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteCollectionAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPasteCollectionAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPasteCollectionAppend.Location = new System.Drawing.Point(2, 110);
+			this._buttonMenuPasteCollectionAppend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuPasteCollectionAppend.Name = "_buttonMenuPasteCollectionAppend";
+			this._buttonMenuPasteCollectionAppend.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuPasteCollectionAppend.TabIndex = 37;
+			this._buttonMenuPasteCollectionAppend.TabStop = false;
+			this._buttonMenuPasteCollectionAppend.Text = "Add to Collection from Clipboard: Alt + Shift + V";
+			this._buttonMenuPasteCollectionAppend.UseVisualStyleBackColor = true;
+			// 
+			// _buttonMenuPasteCollection
+			// 
+			this._buttonMenuPasteCollection.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPasteCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPasteCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPasteCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPasteCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPasteCollection.Location = new System.Drawing.Point(2, 74);
+			this._buttonMenuPasteCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuPasteCollection.Name = "_buttonMenuPasteCollection";
+			this._buttonMenuPasteCollection.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuPasteCollection.TabIndex = 36;
+			this._buttonMenuPasteCollection.TabStop = false;
+			this._buttonMenuPasteCollection.Text = "Create Collection from Clipboard: Alt + V";
+			this._buttonMenuPasteCollection.UseVisualStyleBackColor = true;
 			// 
 			// _labelPasteInfo
 			// 
-			this._labelPasteInfo.Location = new System.Drawing.Point(3, 75);
+			this._labelPasteInfo.Location = new System.Drawing.Point(3, 219);
 			this._labelPasteInfo.Margin = new System.Windows.Forms.Padding(3);
 			this._labelPasteInfo.Name = "_labelPasteInfo";
-			this._labelPasteInfo.Size = new System.Drawing.Size(218, 108);
+			this._labelPasteInfo.Size = new System.Drawing.Size(295, 168);
 			this._labelPasteInfo.TabIndex = 35;
 			this._labelPasteInfo.Text = resources.GetString("_labelPasteInfo.Text");
 			this._labelPasteInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// _buttonMenuPaste
+			// _buttonMenuPasteDeck
 			// 
-			this._buttonMenuPaste.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuPaste.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuPaste.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPaste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuPaste.Location = new System.Drawing.Point(2, 2);
-			this._buttonMenuPaste.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
-			this._buttonMenuPaste.Name = "_buttonMenuPaste";
-			this._buttonMenuPaste.Size = new System.Drawing.Size(220, 34);
-			this._buttonMenuPaste.TabIndex = 33;
-			this._buttonMenuPaste.TabStop = false;
-			this._buttonMenuPaste.Text = "Create new deck from Clipboard: Ctrl+V";
-			this._buttonMenuPaste.UseVisualStyleBackColor = true;
+			this._buttonMenuPasteDeck.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPasteDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPasteDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPasteDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPasteDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPasteDeck.Location = new System.Drawing.Point(2, 2);
+			this._buttonMenuPasteDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuPasteDeck.Name = "_buttonMenuPasteDeck";
+			this._buttonMenuPasteDeck.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuPasteDeck.TabIndex = 33;
+			this._buttonMenuPasteDeck.TabStop = false;
+			this._buttonMenuPasteDeck.Text = "Create new Deck from Clipboard: Ctrl + V";
+			this._buttonMenuPasteDeck.UseVisualStyleBackColor = true;
 			// 
-			// _buttonMenuPasteAppend
+			// _buttonMenuPasteDeckAppend
 			// 
-			this._buttonMenuPasteAppend.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuPasteAppend.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuPasteAppend.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuPasteAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuPasteAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuPasteAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPasteAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuPasteAppend.Location = new System.Drawing.Point(2, 38);
-			this._buttonMenuPasteAppend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
-			this._buttonMenuPasteAppend.Name = "_buttonMenuPasteAppend";
-			this._buttonMenuPasteAppend.Size = new System.Drawing.Size(220, 34);
-			this._buttonMenuPasteAppend.TabIndex = 34;
-			this._buttonMenuPasteAppend.TabStop = false;
-			this._buttonMenuPasteAppend.Text = "Add cards from Clipboard: Ctrl+Shift+V";
-			this._buttonMenuPasteAppend.UseVisualStyleBackColor = true;
+			this._buttonMenuPasteDeckAppend.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuPasteDeckAppend.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuPasteDeckAppend.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuPasteDeckAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteDeckAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuPasteDeckAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuPasteDeckAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuPasteDeckAppend.Location = new System.Drawing.Point(2, 38);
+			this._buttonMenuPasteDeckAppend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuPasteDeckAppend.Name = "_buttonMenuPasteDeckAppend";
+			this._buttonMenuPasteDeckAppend.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuPasteDeckAppend.TabIndex = 34;
+			this._buttonMenuPasteDeckAppend.TabStop = false;
+			this._buttonMenuPasteDeckAppend.Text = "Add to Deck from Clipboard: Ctrl + Shift + V";
+			this._buttonMenuPasteDeckAppend.UseVisualStyleBackColor = true;
 			// 
 			// _layoutTitle
 			// 
@@ -1263,6 +1311,42 @@ namespace Mtgdb.Gui
 			this._flowTitleLeft.Size = new System.Drawing.Size(64, 27);
 			this._flowTitleLeft.TabIndex = 0;
 			this._flowTitleLeft.WrapContents = false;
+			// 
+			// _buttonMenuCopyDeck
+			// 
+			this._buttonMenuCopyDeck.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuCopyDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuCopyDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuCopyDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuCopyDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuCopyDeck.Location = new System.Drawing.Point(2, 146);
+			this._buttonMenuCopyDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuCopyDeck.Name = "_buttonMenuCopyDeck";
+			this._buttonMenuCopyDeck.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuCopyDeck.TabIndex = 38;
+			this._buttonMenuCopyDeck.TabStop = false;
+			this._buttonMenuCopyDeck.Text = "Copy Deck to Clipboard: Ctrl + C";
+			this._buttonMenuCopyDeck.UseVisualStyleBackColor = true;
+			// 
+			// _buttonMenuCopyCollection
+			// 
+			this._buttonMenuCopyCollection.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuCopyCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuCopyCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuCopyCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuCopyCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuCopyCollection.Location = new System.Drawing.Point(2, 182);
+			this._buttonMenuCopyCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuCopyCollection.Name = "_buttonMenuCopyCollection";
+			this._buttonMenuCopyCollection.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuCopyCollection.TabIndex = 39;
+			this._buttonMenuCopyCollection.TabStop = false;
+			this._buttonMenuCopyCollection.Text = "Copy Collection to Clipboard: Alt + C";
+			this._buttonMenuCopyCollection.UseVisualStyleBackColor = true;
 			// 
 			// FormRoot
 			// 
@@ -1368,8 +1452,8 @@ namespace Mtgdb.Gui
 		private Controls.CustomCheckBox _buttonPaste;
 		private Controls.BorderedPanel _menuPaste;
 		private System.Windows.Forms.Label _labelPasteInfo;
-		private Controls.CustomCheckBox _buttonMenuPasteAppend;
-		private Controls.CustomCheckBox _buttonMenuPaste;
+		private Controls.CustomCheckBox _buttonMenuPasteDeckAppend;
+		private Controls.CustomCheckBox _buttonMenuPasteDeck;
 		private System.Windows.Forms.TableLayoutPanel _layoutOpen;
 		private System.Windows.Forms.TableLayoutPanel _layoutPaste;
 		private System.Windows.Forms.TableLayoutPanel _layoutDonate;
@@ -1378,5 +1462,9 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.BorderedTableLayoutPanel _layoutTitle;
 		private System.Windows.Forms.FlowLayoutPanel _flowTitleLeft;
 		private System.Windows.Forms.FlowLayoutPanel _flowTitleRight;
+		private CustomCheckBox _buttonMenuPasteCollectionAppend;
+		private CustomCheckBox _buttonMenuPasteCollection;
+		private CustomCheckBox _buttonMenuCopyDeck;
+		private CustomCheckBox _buttonMenuCopyCollection;
 	}
 }

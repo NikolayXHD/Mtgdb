@@ -1,13 +1,65 @@
+2.3.5
+-----
+
+More clipboard and ``Drag-n-drop`` commands
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added following commands to ``Paste`` menu
+
+- ``Alt``  + ``V`` to create Collection from clipboard
+- ``Alt``  + ``Drag-n-drop`` to create Collection from dropped text
+- ``Ctrl`` + ``Alt`` + ``V`` to add from clipboard to Collection
+- ``Ctrl`` + ``Alt`` + ``Drag-n-drop`` to add from dropped text to Collection
+- ``Ctrl`` + ``C`` to copy Deck to clipboard
+- ``Alt``  + ``C`` to copy Collection to clipboard
+
+Using Mtgdb.Gui to build deck for Sealed Deck match format in Forge
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Suppose you are playing Sealed Deck match in Forge. The first step is to build your deck from 90 
+cards in Forge deck editor. Forge developers took care for all of us by supporting ``Ctrl`` + ``C``
+to copy selected cards in List View mode from Deck editor. Now I took care too so you can ``paste``
+selected cards as **Collection** in Mtgdb.Gui. The next step is to enable ``Filter by Collection`` 
+and voila - you are working with the 90 cards from Sealed deck boosters to build your deck.
+
+- In Forge select and copy (``Ctrl`` + ``C``) cards in List View mode.
+- In Mtgdb.Gui 
+
+  - in ``Paste menu`` pick ``Paste collection from Clipboard`` or press ``Alt`` + ``V``
+  - filter by cards in collection
+
+Now you can effectively build your deck from 90 cards available to you in Forge Deck editor.
+
+
+
+Ufortunately there is a last-moment issue: my current version of Forge 1.6.4-r-1 fails to import
+deck to Deck editor in Sealed Deck mode.
+
+The bug was `reported <https://www.slightlymagic.net/forum/viewtopic.php?f=26&t=21186&p=220390#p220390>`_\ .
+
+Statistics
+~~~~~~~~~~
+
+Added ``Color`` field to **Statistics charts** and **Search text**
+
+Added new **Statistics charts**
+
+- deck mana curve / color
+- deck color / type
+- collection color / type
+
+
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
-	I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
+	[ ] I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 
 http://sales.starcitygames.com/deckdatabase/index.php
-	deck searching page example
+	[ ] deck searching page example
+
+http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-mtg-inventory-manager
+	[ ] draw simulator
+	[v] import CSV files
+		[can be done by copy-paste or drag-n-drop from spreadshit]
 
 http://www.mtgsalvation.com/forums/magic-fundamentals/other-magic-products/third-party-products/338741-best-inventory-software
 	multiple conditions of card
 	normal/foil
-	
-http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-mtg-inventory-manager
-	draw simulator
-	import CSV files

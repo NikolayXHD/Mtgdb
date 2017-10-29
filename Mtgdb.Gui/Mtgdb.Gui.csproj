@@ -93,12 +93,12 @@
     <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />
     <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
     <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
-    <Compile Include="FormStat\Aggregates.cs" />
-    <Compile Include="FormStat\ChartPalettes.cs" />
-    <Compile Include="FormStat\ChartTypeMetadata.cs" />
-    <Compile Include="FormStat\DataElement.cs" />
-    <Compile Include="FormStat\DataSource.cs" />
-    <Compile Include="FormStat\Fields.cs" />
+    <Compile Include="FormChart\Aggregates.cs" />
+    <Compile Include="FormChart\ChartPalettes.cs" />
+    <Compile Include="FormChart\ChartTypeMetadata.cs" />
+    <Compile Include="FormChart\DataElement.cs" />
+    <Compile Include="FormChart\DataSource.cs" />
+    <Compile Include="FormChart\Fields.cs" />
     <Compile Include="FormMain\DeckZoneModel.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
@@ -123,14 +123,14 @@
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStat\FormChart.cs">
+    <Compile Include="FormChart\FormChart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormStat\FormChart.Designer.cs">
+    <Compile Include="FormChart\FormChart.Designer.cs">
       <DependentUpon>FormChart.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormStat\ReportSettings.cs" />
-    <Compile Include="FormStat\TabField.cs" />
+    <Compile Include="FormChart\ReportSettings.cs" />
+    <Compile Include="FormChart\TabField.cs" />
     <Compile Include="LayoutView\LayoutViewTooltip.cs" />
     <Compile Include="LayoutView\HitInfoExtensions.cs" />
     <Compile Include="FormMain\LegalitySubsystem.cs" />
@@ -223,7 +223,7 @@
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormStat\FormChart.resx">
+    <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\DeckLayout.resx">

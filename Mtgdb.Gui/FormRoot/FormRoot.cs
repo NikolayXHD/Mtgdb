@@ -76,8 +76,13 @@ namespace Mtgdb.Gui
 			_panelAva.ScaleDpi();
 			_labelDonate.ScaleDpi();
 
-			_buttonMenuPaste.ScaleDpi();
-			_buttonMenuPasteAppend.ScaleDpi();
+			_buttonMenuPasteDeck.ScaleDpi();
+			_buttonMenuPasteDeckAppend.ScaleDpi();
+			_buttonMenuPasteCollection.ScaleDpi();
+			_buttonMenuPasteCollectionAppend.ScaleDpi();
+			_buttonMenuCopyCollection.ScaleDpi();
+			_buttonMenuCopyDeck.ScaleDpi();
+
 			_labelPasteInfo.ScaleDpi();
 
 			_buttonMenuGeneralSettings.ScaleDpi();

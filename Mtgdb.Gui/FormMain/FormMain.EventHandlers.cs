@@ -226,6 +226,17 @@ namespace Mtgdb.Gui
 			}
 		}
 
+
+
+		private void loadDeck(Deck deck)
+		{
+			_historyModel.DeckFile = deck.File;
+			_historyModel.DeckName = deck.Name;
+
+			_deckModel.SetDeck(deck);
+			_deckModel.LoadDeck(_cardRepo);
+		}
+
 		private void appendToDeck(Deck deck)
 		{
 			beginRestoreSettings();
@@ -240,16 +251,33 @@ namespace Mtgdb.Gui
 
 			updateViewCards(true, null, FilterGroupDeck, false);
 			updateViewDeck(true, null, false);
+
+			historyUpdate();
 			updateFormStatus();
 		}
 
-		private void loadDeck(Deck deck)
+		private void loadCollection(Deck collection)
 		{
-			_historyModel.DeckFile = deck.File;
-			_historyModel.DeckName = deck.Name;
+			_collectionModel.SetCollection(collection);
+		}
 
-			_deckModel.SetDeck(deck);
-			_deckModel.LoadDeck(_cardRepo);
+		private void appendToCollection(Deck deck)
+		{
+			beginRestoreSettings();
+
+			foreach (var cardId in deck.MainDeck.Order)
+				_collectionModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId]);
+
+			foreach (var cardId in deck.SideDeck.Order)
+				_collectionModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId]);
+
+			endRestoreSettings();
+
+			updateViewCards(true, null, FilterGroupCollection, false);
+			updateViewDeck(false, null, false);
+
+			historyUpdate();
+			updateFormStatus();
 		}
 
 		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)

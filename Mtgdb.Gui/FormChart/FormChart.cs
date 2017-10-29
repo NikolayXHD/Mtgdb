@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -23,15 +22,35 @@ namespace Mtgdb.Gui
 
 			_menus = new[] { _menuDataSource, _menuChartType, _menuFields, _menuLabelDataElement, _menuPrice, _menuPriceChartType };
 			_buttons = new[] { _buttonAddCol, _buttonAddRow, _buttonAddSum };
-			_headerButtons = new[] { _buttonManaCurve, _buttonDeckPrice, _buttonCollectionPrice, _buttonArtistsPerYear };
+
+			_headerButtons = new[]
+			{
+				_buttonDeckPrice,
+				_buttonCollectionPrice,
+
+				_buttonManaCurveType,
+				_buttonManaCurveManacost,
+				_buttonDeckColors,
+				_buttonCollectionColors,
+
+				_buttonArtistsPerYear
+			};
+
 			_tabs = new[] { _tabCols, _tabRows, _tabSumm, _tabSummSort };
 			_summTabs = new[] { _tabSumm, _tabSummSort };
+
+			RegisterDragControl(_layoutTitle);
+
+			foreach (var button in _headerButtons)
+				RegisterDragControl(button);
 
 			scale();
 		}
 
 		private void scale()
 		{
+			this.SuspendLayout();
+
 			TitleHeight = TitleHeight.ByDpiHeight();
 
 			ImageMinimize = ImageMinimize.HalfResizeDpi();
@@ -77,6 +96,9 @@ namespace Mtgdb.Gui
 				ResourcesFilter.avg_hovered.HalfResizeDpi(),
 				ResourcesFilter.max_hovered.HalfResizeDpi()
 			};
+
+			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
 
 		public FormChart(CardRepository repository)
@@ -143,6 +165,7 @@ namespace Mtgdb.Gui
 				SeriesChartType.Pie.ToString(),
 				SeriesChartType.Doughnut.ToString()
 			});
+
 			_menuPriceChartType.SelectedIndex = 0;
 
 			_menuPrice.Items.AddRange(new object[]
@@ -151,14 +174,13 @@ namespace Mtgdb.Gui
 				@"Mid",
 				@"High"
 			});
+
 			_menuPrice.SelectedIndex = 1;
 
 			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
 			_buttonApplyFilter.CheckedChanged += applyFilterChanged;
-
-			_headerButtons[0].Checked = true;
 		}
 
 
@@ -320,7 +342,8 @@ namespace Mtgdb.Gui
 
 		private void load(object sender, EventArgs e)
 		{
-			loadReport(_buttonManaCurve);
+			_buttonManaCurveType.Checked = true;
+			loadReport(_buttonManaCurveType);
 		}
 
 		private void priceMenuIndexChanged(object sender, EventArgs e)
@@ -345,11 +368,11 @@ namespace Mtgdb.Gui
 			ReportSettings settings = null;
 			Func<bool> isReady = () => _repository.IsLocalizationLoadingComplete;
 
-			if (button == _buttonManaCurve)
+			if (button == _buttonManaCurveType || button == _buttonManaCurveManacost)
 			{
 				settings = new ReportSettings
 				{
-					SeriesFields = new List<string> { nameof(Card.Types) },
+					DataSource = DataSource.Deck,
 					SeriesFieldsSort = new List<SortOrder> { SortOrder.Ascending },
 					ColumnFields = new List<string> { nameof(Card.Cmc) },
 					ColumnFieldsSort = new List<SortOrder> { SortOrder.Ascending },
@@ -359,6 +382,11 @@ namespace Mtgdb.Gui
 					LabelDataElement = DataElement.Series,
 					ShowArgumentTotal = true
 				};
+
+				if (button == _buttonManaCurveType)
+					settings.SeriesFields = new List<string> { nameof(Card.Types) };
+				else if (button == _buttonManaCurveManacost)
+					settings.SeriesFields = new List<string> { nameof(Card.Color) };
 
 				isReady = () => _repository.IsLoadingComplete;
 			}
@@ -410,6 +438,33 @@ namespace Mtgdb.Gui
 
 					settings.LabelDataElement = DataElement.Argument;
 				}
+			}
+			else if (button == _buttonDeckColors || button == _buttonCollectionColors)
+			{
+				settings = new ReportSettings
+				{
+					SeriesFields = new List<string> { nameof(Card.Types) },
+					SeriesFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					ColumnFields = new List<string> { nameof(Card.Color) },
+					ColumnFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					SummaryFunctions = new List<string> { Aggregates.Sum },
+					ChartType = SeriesChartType.StackedColumn,
+					LabelDataElement = DataElement.Series,
+					ShowArgumentTotal = true
+				};
+
+				if (button == _buttonDeckColors)
+				{
+					settings.SummaryFields = new List<string> { nameof(Card.DeckCount) };
+					settings.DataSource = DataSource.Deck;
+				}
+				else if (button == _buttonCollectionColors)
+				{
+					settings.SummaryFields = new List<string> { nameof(Card.CollectionCount) };
+					settings.DataSource = DataSource.Collection;
+				}
+
+				isReady = () => _repository.IsLoadingComplete;
 			}
 
 			if (settings != null)
