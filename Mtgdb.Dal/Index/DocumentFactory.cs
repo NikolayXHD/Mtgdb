@@ -26,10 +26,12 @@ namespace Mtgdb.Dal.Index
 		{
 			_langs = CardLocalization.GetAllLanguages().ToList();
 
+			addTextField(nameof(Card.Color), isLimitedValues: true);
+
 			addTextField(nameof(Card.SetName), isLimitedValues: true);
 			addTextField(nameof(Card.SetCode), isLimitedValues: true);
 			addTextField(nameof(Card.Artist), isLimitedValues: true);
-
+			
 			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
 			addTextField(nameof(Card.OriginalType), nameof(Card.Type), isLimitedValues: true);
 
@@ -112,6 +114,9 @@ namespace Mtgdb.Dal.Index
 
 			// Tested
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
+
+			if (!string.IsNullOrEmpty(card.Color))
+				doc.addTextField(nameof(card.Color), card.Color);
 
 			// Tested
 			doc.addTextField(nameof(card.NameEn), card.NameEn);

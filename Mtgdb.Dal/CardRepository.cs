@@ -211,6 +211,10 @@ namespace Mtgdb.Dal
 
 			if (card.MciNumber != null && card.MciNumber.EndsWith(".html"))
 				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
+
+			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
+				? string.Join(" ", card.ColorsArr)
+				: "Colorless";
 		}
 
 		private static float? getPower(string power)

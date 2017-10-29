@@ -161,6 +161,13 @@ namespace Mtgdb.Gui
 			return formatter;
 		}
 
+		public string SaveSerialized(string format, Deck deck)
+		{
+			var formatter = _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
+			var result = formatter.ExportDeck(deck.Name, deck);
+			return result;
+		}
+
 		public Deck LoadSerialized(string format, string serialized)
 		{
 			var formatter = getFormatter(format, serialized);
@@ -172,7 +179,7 @@ namespace Mtgdb.Gui
 
 				deck.Error = "Deck format is not supported";
 
-				var hint = _formatters.Where(f => Str.Equals(f.FileNamePattern, format))
+				var hint = _formatters.Where(f => Str.Equals(f.FileNamePattern, format) && f.SupportsImport)
 					.Select(f => f.FormatHint)
 					.FirstOrDefault();
 

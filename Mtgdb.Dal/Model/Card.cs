@@ -441,11 +441,18 @@ namespace Mtgdb.Dal
 		[JsonProperty("life")]
 		public int? Life { get; set; }
 
+		[JsonProperty("colors")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> ColorsArr { get; set; }
+
+		[JsonIgnore]
+		public string Color { get; set; }
+
 		/*
 		/// <summary>
 		/// The card colors. Usually this is derived from the casting cost, but some cards are special (like the back of double-faced cards and Ghostfire).
 		/// </summary>
-		public List<string> Colors { get; set; }
+		
 
 		/// <summary>
 		/// This is created reading all card color information and costs. It is the same for double-sided cards (if they have different colors, the identity will have both colors). It also identifies all mana symbols in the card (cost and text). Mostly used on commander decks.
