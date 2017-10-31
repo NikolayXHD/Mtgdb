@@ -1,3 +1,10 @@
+2.3.6
+-----
+
+Implemented Prohibit mode in Filter manager.
+For instance if Filter Buttons are set in prohibited mode in Filter Manager the search result will
+show only cards that do *not* match filter buttons.
+
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
 	[ ] I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 
