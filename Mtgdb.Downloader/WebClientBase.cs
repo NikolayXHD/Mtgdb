@@ -15,7 +15,7 @@ namespace Mtgdb.Downloader
 				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
 		}
 
-		protected string DownloadString(string pageUrl)
+		public string DownloadString(string pageUrl)
 		{
 			using (var stream = _webClient.OpenRead(pageUrl))
 			{
