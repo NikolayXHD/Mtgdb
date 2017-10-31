@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -49,17 +51,17 @@ namespace Mtgdb.Gui
 		private void dragRemoved(Card card)
 		{
 			if (Control.ModifierKeys == Keys.Control)
-				changeCountInDeck(card, -4);
+				changeCountInDeck(card, -4, touch: true);
 			else
-				changeCountInDeck(card, -1);
+				changeCountInDeck(card, -1, touch: true);
 		}
 
 		private void dragAdded(Card card)
 		{
 			if (Control.ModifierKeys == Keys.Control)
-				changeCountInDeck(card, 4);
+				changeCountInDeck(card, 4, touch: true);
 			else
-				changeCountInDeck(card, 1);
+				changeCountInDeck(card, 1, touch: true);
 		}
 
 		public void SubscribeToEvents()
@@ -138,7 +140,7 @@ namespace Mtgdb.Gui
 			if ((Control.ModifierKeys & Keys.Alt) > 0)
 				changeCountInCollection(card, countDelta);
 			else
-				changeCountInDeck(card, countDelta);
+				changeCountInDeck(card, countDelta, touch: true);
 		}
 
 		private static Card getCard(LayoutView view, MouseEventArgs e)
@@ -162,9 +164,9 @@ namespace Mtgdb.Gui
 			_formZoom.ShowImages();
 		}
 
-		private void changeCountInDeck(Card card, int increment)
+		private void changeCountInDeck(Card card, int increment, bool touch)
 		{
-			_deckModel.Add(card, increment);
+			_deckModel.Add(card, increment, touch);
 			
 			var touchedCard = _deckModel.TouchedCard;
 			if (touchedCard != null)
@@ -198,5 +200,74 @@ namespace Mtgdb.Gui
 
 			throw new Exception(@"wrapper not found");
 		}
+
+
+		public void NewSampleHand(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
+				return;
+
+			createSampleHand(7, cardRepository);
+		}
+
+		public void Draw(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
+				return;
+
+			draw(cardRepository, touch: true);
+		}
+
+		public void Mulligan(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
+				return;
+
+			int count = getMulliganCount();
+			createSampleHand(count, cardRepository);
+		}
+
+		private int getMulliganCount()
+		{
+			return Math.Max(0, _deckModel.SampleHand.CountById.Sum(_ => _.Value) - 1);
+		}
+
+		private void createSampleHand(int handSize, CardRepository cardRepository)
+		{
+			_deckModel.SampleHand.Clear();
+			_deckModel.DataSource.Clear();
+
+			Shuffle();
+
+			for (int i = 0; i < handSize; i++)
+				draw(cardRepository, touch: false);
+		}
+
+		public void Shuffle()
+		{
+			var library = new List<string>();
+
+			foreach (var pair in _deckModel.MainDeck.CountById)
+				for (int i = 0; i < pair.Value; i++)
+					library.Add(pair.Key);
+
+			_library = library;
+		}
+
+		private void draw(CardRepository cardRepository, bool touch)
+		{
+			if (_library == null || _library.Count == 0)
+				return;
+
+			var index = _random.Next(_library.Count);
+			var id = _library[index];
+			_library.RemoveAt(index);
+
+			changeCountInDeck(cardRepository.CardsById[id], 1, touch);
+		}
+
+
+		private static readonly Random _random = new Random();
+		private List<string> _library;
 	}
 }

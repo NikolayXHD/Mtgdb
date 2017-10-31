@@ -87,20 +87,28 @@ namespace Mtgdb.Util
 				
 				Console.WriteLine($"== Scanning {forgeSetCode} ... ==");
 
-				var models = set.Cards
-					.Select(c => _imageRepo.GetImagePrint(c, _cardRepo.GetReleaseDateSimilarity))
-					.Where(m => m != null)
-					.Distinct()
-					.ToList();
+				var exported = new HashSet<string>(Str.Comparer);
 
-				foreach (var model in models)
+				foreach (var card in set.Cards)
+				{
+					var model = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
+
+					if (model == null)
+						continue;
+
+					if (exported.Contains(model.FullPath))
+						continue;
+
+					exported.Add(model.FullPath);
+
 					using (var original = ImageCache.Open(model))
 					{
-						string targetFullPath = getTargetPath(model, subdir, forge: true);
+						string targetFullPath = getTargetPath(card, model, subdir, forge: true);
 
 						if (!File.Exists(targetFullPath))
 							addFile(original, model, targetFullPath, small, forge: true);
 					}
+				}
 			}
 		}
 
@@ -155,7 +163,7 @@ namespace Mtgdb.Util
 				File.WriteAllBytes(target, bytes);
 		}
 
-		private static string getTargetPath(ImageModel model, string subdir, bool forge)
+		private static string getTargetPath(Card card, ImageModel model, string subdir, bool forge)
 		{
 			var fileName = Path.GetFileName(model.FullPath);
 
@@ -179,13 +187,31 @@ namespace Mtgdb.Util
 				break;
 			}
 
-			string forgeAddition = forge ? ".full" : "";
+			if (forge)
+			{
+				if (Str.Equals(card.Layout, "aftermath") && fileName.IndexOf("»", Str.Comparison) < 0)
+				{
+					int[] capitalIndices = Enumerable.Range(0, fileName.Length)
+						.Where(i => char.IsUpper(fileName[i]))
+						.ToArray();
+
+					if (capitalIndices.Length == 2 && capitalIndices[0] == 0)
+					{
+						fileName =
+							fileName.Substring(0, capitalIndices[1]) +
+							"»" +
+							fileName.Substring(capitalIndices[1]);
+					}
+				}
+
+				fileName += ".full";
+			}
 
 			string targetFileName;
 			if (forge || model.FullPath.EndsWith(".jpg", Str.Comparison))
-				targetFileName = fileName + forgeAddition + ".jpg";
+				targetFileName = fileName + ".jpg";
 			else if (model.FullPath.EndsWith(".png", Str.Comparison))
-				targetFileName = fileName + forgeAddition + ".png";
+				targetFileName = fileName + ".png";
 			else
 				throw new NotSupportedException("only .png .jpg extensions are supported");
 
@@ -358,7 +384,7 @@ namespace Mtgdb.Util
 								&& Str.Equals(card.SetCode, modelSmall.SetCode) == matchingSet &&
 								exportedSmall.Add(modelSmall.FullPath))
 						{
-							string smallPath = getTargetPath(modelSmall, smallSetSubdir, forge: false);
+							string smallPath = getTargetPath(card, modelSmall, smallSetSubdir, forge: false);
 
 							if (!File.Exists(smallPath))
 							{
@@ -376,7 +402,7 @@ namespace Mtgdb.Util
 								Str.Equals(card.SetCode, modelZoom.SetCode) == matchingSet &&
 								exportedZoomed.Add(modelZoom.FullPath))
 						{
-							string zoomedPath = getTargetPath(modelZoom, zoomedSetSubdir, forge: false);
+							string zoomedPath = getTargetPath(card, modelZoom, zoomedSetSubdir, forge: false);
 
 							if (!File.Exists(zoomedPath))
 							{

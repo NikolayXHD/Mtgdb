@@ -16,12 +16,12 @@ namespace Mtgdb.Gui
 		{
 		}
 
-		public void Add(Card card, int newCount)
+		public void Add(string cardId, int newCount)
 		{
-			CountById[card.Id] = newCount;
+			CountById[cardId] = newCount;
 
-			if (!Order.Contains(card.Id))
-				Order.Add(card.Id);
+			if (!Order.Contains(cardId))
+				Order.Add(cardId);
 		}
 
 		public void Clear()
@@ -30,14 +30,14 @@ namespace Mtgdb.Gui
 			Order.Clear();
 		}
 
-		public void Remove(Card card, int newCount)
+		public void Remove(string cardId, int newCount)
 		{
 			if (newCount > 0)
-				CountById[card.Id] = newCount;
+				CountById[cardId] = newCount;
 			else
 			{
-				CountById.Remove(card.Id);
-				Order.Remove(card.Id);
+				CountById.Remove(cardId);
+				Order.Remove(cardId);
 			}
 		}
 
@@ -52,10 +52,10 @@ namespace Mtgdb.Gui
 			Order = cardIds;
 		}
 
-		public int GetCount(Card card)
+		public int GetCount(string cardId)
 		{
 			int count;
-			CountById.TryGetValue(card.Id, out count);
+			CountById.TryGetValue(cardId, out count);
 			return count;
 		}
 	}

@@ -189,6 +189,10 @@ namespace Mtgdb.Gui
 			_panelIconStatusFilterDeck.ScaleDpi();
 			_panelIconStatusFilterLegality.ScaleDpi();
 
+			_buttonSampleHandNew.ScaleDpi();
+			_buttonSampleHandDraw.ScaleDpi();
+			_buttonSampleHandMulligan.ScaleDpi();
+
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
 			_tabHeadersDeck.AddButtonSlopeSize = _tabHeadersDeck.AddButtonSlopeSize.ByDpi();
@@ -246,8 +250,7 @@ namespace Mtgdb.Gui
 
 		private static void scalePanelIcon(BorderedPanel panel)
 		{
-			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage)
-				.HalfResizeDpi();
+			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage).HalfResizeDpi();
 		}
 
 		public void SetId(string tabId)
@@ -331,149 +334,11 @@ namespace Mtgdb.Gui
 			else
 				_cardRepo.ImageLoadingComplete += imageLoadingComplete;
 
+			_buttonSampleHandNew.Click += sampleHandNew;
+			_buttonSampleHandMulligan.Click += sampleHandMulligan;
+			_buttonSampleHandDraw.Click += sampleHandDraw;
+
 			_eventsSubscribed = true;
-		}
-
-		private static void deckDragEnter(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-			{
-				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-				if (files.Length < 10)
-					e.Effect = DragDropEffects.Copy;
-			}
-			else if (e.Data.GetFormats().Contains(DataFormats.Text))
-			{
-				e.Effect = DragDropEffects.Copy;
-			}
-		}
-
-		public bool IsSearchFocused() => _searchStringSubsystem.IsSearchFocused();
-
-
-
-		public void PasteDeck(bool append)
-		{
-			if (!_cardRepo.IsImageLoadingComplete)
-				return;
-
-			var text = Clipboard.GetText();
-			if (string.IsNullOrWhiteSpace(text))
-				return;
-
-			pasteDeckFromText(text, append);
-		}
-
-		public void PasteCollection(bool append)
-		{
-			if (!_cardRepo.IsImageLoadingComplete)
-				return;
-
-			var text = Clipboard.GetText();
-			if (string.IsNullOrWhiteSpace(text))
-				return;
-
-			pasteCollectionFromText(text, append);
-		}
-
-		public void CopyCollection()
-		{
-			var deck = Deck.Create(
-				_collectionModel.CountById?.ToDictionary(),
-				_collectionModel.CountById?.Keys.OrderBy(_ => _cardRepo.CardsById[_].NameEn).ToList(),
-				null,
-				null);
-
-			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
-			Clipboard.SetText(serialized);
-		}
-
-		public void CopyDeck()
-		{
-			var deck = Deck.Create(
-				_deckModel.MainDeck.CountById.ToDictionary(),
-				_deckModel.MainDeck.CardsIds.ToList(),
-				_deckModel.SideDeck.CountById.ToDictionary(),
-				_deckModel.SideDeck.CardsIds.ToList());
-
-			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
-			Clipboard.SetText(serialized);
-		}
-
-		private void pasteDeckFromText(string text, bool append)
-		{
-			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
-
-			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-			{
-				if (append)
-					appendToDeck(deck);
-				else
-					loadDeck(deck);
-			}
-		}
-
-		private void pasteCollectionFromText(string text, bool append)
-		{
-			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
-
-			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-			{
-				if (append)
-					appendToCollection(deck);
-				else
-					loadCollection(deck);
-			}
-		}
-
-
-
-		private void deckDragDropped(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-			{
-				var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
-				
-				var decks = files.Select(f => _deckSerializationSubsystem.LoadFile(f))
-					.ToArray();
-
-				var failedDecks = decks.Where(d => d.Error != null).ToArray();
-				var loadedDecks = decks.Where(d => d.Error == null).ToArray();
-
-				if (failedDecks.Length > 0)
-				{
-					var message = string.Join(Str.Endl,
-						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
-
-					MessageBox.Show(message);
-				}
-
-				if (loadedDecks.Length > 0)
-					deckLoaded(loadedDecks[0]);
-
-				for (int i = 1; i < loadedDecks.Length; i++)
-				{
-					var deck = loadedDecks[i];
-					_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
-				}
-			}
-			else if (e.Data.GetFormats().Contains(DataFormats.Text))
-			{
-				string text = (string) e.Data.GetData(DataFormats.Text, autoConvert: true);
-
-				if (ModifierKeys == Keys.Alt)
-					pasteCollectionFromText(text, append: false);
-				else if (ModifierKeys == (Keys.Alt | Keys.Shift))
-					pasteCollectionFromText(text, append: true);
-				else if (ModifierKeys == Keys.None)
-					pasteDeckFromText(text, append: false);
-				else if (ModifierKeys == Keys.Shift)
-					pasteDeckFromText(text, append: true);
-			}
 		}
 
 
@@ -535,6 +400,10 @@ namespace Mtgdb.Gui
 			_cardRepo.SetAdded -= cardRepoSetAdded;
 			_cardRepo.ImageLoadingComplete -= imageLoadingComplete;
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
+
+			_buttonSampleHandNew.Click -= sampleHandNew;
+			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
+			_buttonSampleHandDraw.Click -= sampleHandDraw;
 		}
 
 		private Deck _requiredDeck;

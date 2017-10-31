@@ -88,6 +88,8 @@ namespace Mtgdb.Gui
 			this._buttonPaste = new Mtgdb.Controls.CustomCheckBox();
 			this._menuPaste = new Mtgdb.Controls.BorderedPanel();
 			this._layoutPaste = new System.Windows.Forms.TableLayoutPanel();
+			this._buttonMenuCopyCollection = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonMenuCopyDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuPasteCollectionAppend = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuPasteCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._labelPasteInfo = new System.Windows.Forms.Label();
@@ -96,8 +98,6 @@ namespace Mtgdb.Gui
 			this._layoutTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._flowTitleRight = new System.Windows.Forms.FlowLayoutPanel();
 			this._flowTitleLeft = new System.Windows.Forms.FlowLayoutPanel();
-			this._buttonMenuCopyDeck = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonMenuCopyCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._layoutOpen.SuspendLayout();
@@ -223,7 +223,6 @@ namespace Mtgdb.Gui
 			this._buttonLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonLanguage.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonLanguage.BackColor = System.Drawing.Color.White;
-			this._buttonLanguage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonLanguage.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(170)))));
 			this._buttonLanguage.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonLanguage.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
@@ -727,7 +726,6 @@ namespace Mtgdb.Gui
 			// _buttonPT
 			// 
 			this._buttonPT.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonPT.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonPT.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonPT.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonPT.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -747,7 +745,6 @@ namespace Mtgdb.Gui
 			// _buttonDE
 			// 
 			this._buttonDE.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonDE.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonDE.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonDE.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonDE.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -767,7 +764,6 @@ namespace Mtgdb.Gui
 			// _buttonCN
 			// 
 			this._buttonCN.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonCN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonCN.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonCN.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonCN.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -787,7 +783,6 @@ namespace Mtgdb.Gui
 			// _buttonEN
 			// 
 			this._buttonEN.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonEN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonEN.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonEN.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonEN.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -807,7 +802,6 @@ namespace Mtgdb.Gui
 			// _buttonTW
 			// 
 			this._buttonTW.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonTW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonTW.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonTW.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonTW.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -827,7 +821,6 @@ namespace Mtgdb.Gui
 			// _buttonIT
 			// 
 			this._buttonIT.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonIT.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonIT.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonIT.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonIT.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -847,7 +840,6 @@ namespace Mtgdb.Gui
 			// _buttonJP
 			// 
 			this._buttonJP.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonJP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonJP.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonJP.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonJP.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -867,7 +859,6 @@ namespace Mtgdb.Gui
 			// _buttonKR
 			// 
 			this._buttonKR.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonKR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonKR.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonKR.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonKR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -887,7 +878,6 @@ namespace Mtgdb.Gui
 			// _buttonFR
 			// 
 			this._buttonFR.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonFR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonFR.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonFR.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonFR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -907,7 +897,6 @@ namespace Mtgdb.Gui
 			// _buttonES
 			// 
 			this._buttonES.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonES.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonES.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonES.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonES.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -927,7 +916,6 @@ namespace Mtgdb.Gui
 			// _buttonRU
 			// 
 			this._buttonRU.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonRU.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._buttonRU.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
 			this._buttonRU.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
 			this._buttonRU.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
@@ -1172,6 +1160,42 @@ namespace Mtgdb.Gui
 			this._layoutPaste.Size = new System.Drawing.Size(303, 390);
 			this._layoutPaste.TabIndex = 0;
 			// 
+			// _buttonMenuCopyCollection
+			// 
+			this._buttonMenuCopyCollection.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuCopyCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuCopyCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuCopyCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuCopyCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuCopyCollection.Location = new System.Drawing.Point(2, 182);
+			this._buttonMenuCopyCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuCopyCollection.Name = "_buttonMenuCopyCollection";
+			this._buttonMenuCopyCollection.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuCopyCollection.TabIndex = 39;
+			this._buttonMenuCopyCollection.TabStop = false;
+			this._buttonMenuCopyCollection.Text = "Copy Collection to Clipboard: Alt + C";
+			this._buttonMenuCopyCollection.UseVisualStyleBackColor = true;
+			// 
+			// _buttonMenuCopyDeck
+			// 
+			this._buttonMenuCopyDeck.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMenuCopyDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+			this._buttonMenuCopyDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonMenuCopyDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
+			this._buttonMenuCopyDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMenuCopyDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._buttonMenuCopyDeck.Location = new System.Drawing.Point(2, 146);
+			this._buttonMenuCopyDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
+			this._buttonMenuCopyDeck.Name = "_buttonMenuCopyDeck";
+			this._buttonMenuCopyDeck.Size = new System.Drawing.Size(299, 34);
+			this._buttonMenuCopyDeck.TabIndex = 38;
+			this._buttonMenuCopyDeck.TabStop = false;
+			this._buttonMenuCopyDeck.Text = "Copy Deck to Clipboard: Ctrl + C";
+			this._buttonMenuCopyDeck.UseVisualStyleBackColor = true;
+			// 
 			// _buttonMenuPasteCollectionAppend
 			// 
 			this._buttonMenuPasteCollectionAppend.Appearance = System.Windows.Forms.Appearance.Button;
@@ -1311,42 +1335,6 @@ namespace Mtgdb.Gui
 			this._flowTitleLeft.Size = new System.Drawing.Size(64, 27);
 			this._flowTitleLeft.TabIndex = 0;
 			this._flowTitleLeft.WrapContents = false;
-			// 
-			// _buttonMenuCopyDeck
-			// 
-			this._buttonMenuCopyDeck.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuCopyDeck.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuCopyDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuCopyDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuCopyDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuCopyDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuCopyDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuCopyDeck.Location = new System.Drawing.Point(2, 146);
-			this._buttonMenuCopyDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
-			this._buttonMenuCopyDeck.Name = "_buttonMenuCopyDeck";
-			this._buttonMenuCopyDeck.Size = new System.Drawing.Size(299, 34);
-			this._buttonMenuCopyDeck.TabIndex = 38;
-			this._buttonMenuCopyDeck.TabStop = false;
-			this._buttonMenuCopyDeck.Text = "Copy Deck to Clipboard: Ctrl + C";
-			this._buttonMenuCopyDeck.UseVisualStyleBackColor = true;
-			// 
-			// _buttonMenuCopyCollection
-			// 
-			this._buttonMenuCopyCollection.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuCopyCollection.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuCopyCollection.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuCopyCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuCopyCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuCopyCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuCopyCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuCopyCollection.Location = new System.Drawing.Point(2, 182);
-			this._buttonMenuCopyCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
-			this._buttonMenuCopyCollection.Name = "_buttonMenuCopyCollection";
-			this._buttonMenuCopyCollection.Size = new System.Drawing.Size(299, 34);
-			this._buttonMenuCopyCollection.TabIndex = 39;
-			this._buttonMenuCopyCollection.TabStop = false;
-			this._buttonMenuCopyCollection.Text = "Copy Collection to Clipboard: Alt + C";
-			this._buttonMenuCopyCollection.UseVisualStyleBackColor = true;
 			// 
 			// FormRoot
 			// 

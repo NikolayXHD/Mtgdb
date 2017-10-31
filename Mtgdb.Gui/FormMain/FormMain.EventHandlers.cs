@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -15,6 +17,7 @@ namespace Mtgdb.Gui
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
 			updateShowProhibited();
+			updateShowSampleHandButtons();
 
 			setupTooltips();
 			subscribeToEvents();
@@ -62,6 +65,8 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
+				updateShowSampleHandButtons();
+
 				beginRestoreSettings();
 
 				_deckModel.LoadDeck(_cardRepo);
@@ -212,18 +217,22 @@ namespace Mtgdb.Gui
 
 		private void deckZoneChanged(TabHeaderControl sender, int selected)
 		{
-			bool isSide = Equals(_tabHeadersDeck.SelectedTabId, 1);
+			var uiDeckZone = (Zone)(int)_tabHeadersDeck.SelectedTabId;
 
-			if (_deckModel.IsSide != isSide)
+			if (_deckModel.Zone != uiDeckZone)
 			{
 				beginRestoreSettings();
-				_deckModel.SetIsSide(isSide, _cardRepo);
+
+				_deckModel.SetUIZone(uiDeckZone, _cardRepo);
+
 				endRestoreSettings();
 
 				updateViewCards(true, null, FilterGroupDeck, false);
 				updateViewDeck(true, null, false);
 				updateFormStatus();
 			}
+
+			updateShowSampleHandButtons();
 		}
 
 
@@ -235,6 +244,7 @@ namespace Mtgdb.Gui
 
 			_deckModel.SetDeck(deck);
 			_deckModel.LoadDeck(_cardRepo);
+			_deckEditingSubsystem.Shuffle();
 		}
 
 		private void appendToDeck(Deck deck)
@@ -242,10 +252,10 @@ namespace Mtgdb.Gui
 			beginRestoreSettings();
 
 			foreach (var cardId in deck.MainDeck.Order)
-				_deckModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId]);
+				_deckModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId], touch: false);
 
 			foreach (var cardId in deck.SideDeck.Order)
-				_deckModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId]);
+				_deckModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId], touch: false);
 
 			endRestoreSettings();
 
@@ -427,6 +437,32 @@ namespace Mtgdb.Gui
 		{
 			const float sat = 2f;
 
+			float sampleHandOpacity = 0.6f;
+
+			_buttonSubsystem.SetupButton(_buttonSampleHandNew,
+				new ButtonImages(
+					null,
+					Resources.hand_48.SetOpacity(sampleHandOpacity),
+					null,
+					Resources.hand_48,
+					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonSampleHandDraw,
+				new ButtonImages(
+					null,
+					Resources.draw_48.SetOpacity(sampleHandOpacity),
+					null,
+					Resources.draw_48,
+					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonSampleHandMulligan,
+				new ButtonImages(
+					null,
+					Resources.mulligan_48.SetOpacity(sampleHandOpacity),
+					null,
+					Resources.mulligan_48,
+					areImagesDoubleSized: true));
+
 			_buttonSubsystem.SetupButton(_buttonShowDuplicates,
 				new ButtonImages(
 					Resources.clone_48.TransformColors(saturation: 0f),
@@ -458,6 +494,184 @@ namespace Mtgdb.Gui
 					Resources.include_plus_24.TransformColors(sat, 1f),
 					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
 					areImagesDoubleSized: true));
+		}
+
+
+
+		private static void deckDragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if (files.Length < 10)
+					e.Effect = DragDropEffects.Copy;
+			}
+			else if (e.Data.GetFormats().Contains(DataFormats.Text))
+			{
+				e.Effect = DragDropEffects.Copy;
+			}
+		}
+
+		public bool IsSearchFocused() => _searchStringSubsystem.IsSearchFocused();
+
+
+
+		public void PasteDeck(bool append)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			var text = Clipboard.GetText();
+			if (string.IsNullOrWhiteSpace(text))
+				return;
+
+			pasteDeckFromText(text, append);
+		}
+
+		public void PasteCollection(bool append)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			var text = Clipboard.GetText();
+			if (string.IsNullOrWhiteSpace(text))
+				return;
+
+			pasteCollectionFromText(text, append);
+		}
+
+		public void CopyCollection()
+		{
+			var deck = Deck.Create(
+				_collectionModel.CountById?.ToDictionary(),
+				_collectionModel.CountById?.Keys.OrderBy(_ => _cardRepo.CardsById[_].NameEn).ToList(),
+				null,
+				null);
+
+			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
+			Clipboard.SetText(serialized);
+		}
+
+		public void CopyDeck()
+		{
+			var deck = Deck.Create(
+				_deckModel.MainDeck.CountById.ToDictionary(),
+				_deckModel.MainDeck.CardsIds.ToList(),
+				_deckModel.SideDeck.CountById.ToDictionary(),
+				_deckModel.SideDeck.CardsIds.ToList());
+
+			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
+			Clipboard.SetText(serialized);
+		}
+
+		private void pasteDeckFromText(string text, bool append)
+		{
+			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
+
+			if (deck.Error != null)
+				MessageBox.Show(deck.Error);
+			else
+			{
+				if (append)
+					appendToDeck(deck);
+				else
+					loadDeck(deck);
+			}
+		}
+
+		private void pasteCollectionFromText(string text, bool append)
+		{
+			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
+
+			if (deck.Error != null)
+				MessageBox.Show(deck.Error);
+			else
+			{
+				if (append)
+					appendToCollection(deck);
+				else
+					loadCollection(deck);
+			}
+		}
+
+		private void deckDragDropped(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+				var decks = files.Select(f => _deckSerializationSubsystem.LoadFile(f))
+					.ToArray();
+
+				var failedDecks = decks.Where(d => d.Error != null).ToArray();
+				var loadedDecks = decks.Where(d => d.Error == null).ToArray();
+
+				if (failedDecks.Length > 0)
+				{
+					var message = string.Join(Str.Endl,
+						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
+
+					MessageBox.Show(message);
+				}
+
+				if (loadedDecks.Length > 0)
+					deckLoaded(loadedDecks[0]);
+
+				for (int i = 1; i < loadedDecks.Length; i++)
+				{
+					var deck = loadedDecks[i];
+					_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
+				}
+			}
+			else if (e.Data.GetFormats().Contains(DataFormats.Text))
+			{
+				string text = (string)e.Data.GetData(DataFormats.Text, autoConvert: true);
+
+				if (ModifierKeys == Keys.Alt)
+					pasteCollectionFromText(text, append: false);
+				else if (ModifierKeys == (Keys.Alt | Keys.Shift))
+					pasteCollectionFromText(text, append: true);
+				else if (ModifierKeys == Keys.None)
+					pasteDeckFromText(text, append: false);
+				else if (ModifierKeys == Keys.Shift)
+					pasteDeckFromText(text, append: true);
+			}
+		}
+
+
+
+		private void sampleHandNew(object sender, EventArgs e)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			beginRestoreSettings();
+			_deckEditingSubsystem.NewSampleHand(_cardRepo);
+			endRestoreSettings();
+
+			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
+			updateFormStatus();
+		}
+
+		private void sampleHandMulligan(object sender, EventArgs e)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			beginRestoreSettings();
+			_deckEditingSubsystem.Mulligan(_cardRepo);
+			endRestoreSettings();
+
+			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
+			updateFormStatus();
+		}
+
+		private void sampleHandDraw(object sender, EventArgs e)
+		{
+			if (!_cardRepo.IsImageLoadingComplete)
+				return;
+
+			_deckEditingSubsystem.Draw(_cardRepo);
 		}
 	}
 }
