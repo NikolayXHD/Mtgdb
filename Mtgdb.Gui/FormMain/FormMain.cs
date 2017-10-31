@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -46,13 +47,17 @@ namespace Mtgdb.Gui
 		{
 			SuspendLayout();
 
-			foreach (var control in _quickFilterControls)
+			var controls = _quickFilterControls
+				.Concat(Enumerable.Repeat(FilterManager, 1))
+				.ToArray();
+
+			foreach (var control in controls)
 				control.SuspendLayout();
 
-			foreach (var control in _quickFilterControls)
+			foreach (var control in controls)
 				control.HideProhibit = !_buttonShowProhibit.Checked;
 
-			foreach (var control in _quickFilterControls)
+			foreach (var control in controls)
 			{
 				control.ResumeLayout(false);
 				control.PerformLayout();
@@ -414,9 +419,12 @@ namespace Mtgdb.Gui
 			{
 				case FilterValueState.Required:
 				case FilterValueState.RequiredSome:
+				case FilterValueState.Prohibited:
 					return true;
-				default:
+				case FilterValueState.Ignored:
 					return false;
+				default:
+					throw new NotSupportedException();
 			}
 		}
 
@@ -590,8 +598,20 @@ namespace Mtgdb.Gui
 		private bool fit(Card card, FilterValueState[] filterManagerStates)
 		{
 			foreach (var ev in _evaluators)
-				if ((ev.Key >= filterManagerStates.Length || filterManagerStates[ev.Key] == FilterValueState.Required) && !ev.Value(card))
+			{
+				if (ev.Key >= filterManagerStates.Length)
+					continue;
+
+				var state = filterManagerStates[ev.Key];
+
+				if (state != FilterValueState.Required && state != FilterValueState.Prohibited)
+					continue;
+
+				bool requiredResult = state == FilterValueState.Required;
+
+				if (ev.Value(card) != requiredResult)
 					return false;
+			}
 
 			bool existsRequiredSome = false;
 			foreach (var ev in _evaluators)

@@ -436,32 +436,36 @@ namespace Mtgdb.Controls
 			for (int i = 0; i < PropertiesCount; i++)
 			{
 				var rectangle = (RectangleF) getPaintingRectangle(i, FilterValueState.Prohibited);
-				rectangle.Inflate(new SizeF(Spacing.Width/2f, Spacing.Height/2f));
+				//rectangle.Inflate(new SizeF(Spacing.Width/2f, Spacing.Height/2f));
 
-				var color = Color.FromArgb(56, ProhibitedColor);
+				var color = Color.FromArgb(30, ProhibitedColor);
 				var color2 = Color.FromArgb(0, ProhibitedColor);
 
 				Brush fillBrush;
 
+				float widthPart = 0.5f;
+
 				if (IsVertical)
 				{
+					rectangle.Inflate(new SizeF(0, Spacing.Height / 2f));
+
 					if (IsFlipped)
 					{
 						rectangle = new RectangleF(
-							new PointF(rectangle.Left + rectangle.Width/2f, rectangle.Top),
-							new SizeF(rectangle.Width/2f, rectangle.Height));
+							new PointF(rectangle.Right - rectangle.Width * widthPart, rectangle.Top),
+							new SizeF(rectangle.Width * widthPart, rectangle.Height));
 
 						fillBrush = new LinearGradientBrush(
-							new PointF(rectangle.Left - 1, rectangle.Top),
-							new PointF(rectangle.Right, rectangle.Top),
-							color2,
-							color);
+							new PointF(rectangle.Right + 1, rectangle.Top),
+							new PointF(rectangle.Left, rectangle.Top),
+							color,
+							color2);
 					}
 					else
 					{
 						rectangle = new RectangleF(
 							rectangle.Location,
-							new SizeF(rectangle.Width/2f, rectangle.Height));
+							new SizeF(rectangle.Width * widthPart, rectangle.Height));
 
 						fillBrush = new LinearGradientBrush(
 							new PointF(rectangle.Left, rectangle.Top),
@@ -472,9 +476,11 @@ namespace Mtgdb.Controls
 				}
 				else
 				{
+					rectangle.Inflate(new SizeF(Spacing.Width / 2f, 0));
+
 					rectangle = new RectangleF(
 						rectangle.Location,
-						new SizeF(rectangle.Width, rectangle.Height/2f));
+						new SizeF(rectangle.Width, rectangle.Height * widthPart));
 
 					fillBrush = new LinearGradientBrush(
 						new PointF(rectangle.Left, rectangle.Top),
@@ -612,19 +618,26 @@ namespace Mtgdb.Controls
 				else
 					throw new NotSupportedException();
 
+				Color selectionColor;
+
+				if (state == FilterValueState.Prohibited)
+					selectionColor = Color.FromArgb((int) (255 * 0.2f), ProhibitedColor);
+				else
+					selectionColor = SelectionColor;
+
 				if (SelectionBorder > 0)
 				{
 					fillBorder(SelectionBorderColor, rectBorder, SelectionBorder);
-					fill(SelectionColor, rectContent);
+					fill(selectionColor, rectContent);
 				}
 				else if (SelectionBorder < 0)
 				{
 					fillBorder(SelectionBorderColor, rectContent, -SelectionBorder);
-					fill(SelectionColor, rectBorder);
+					fill(selectionColor, rectBorder);
 				}
 				else
 				{
-					fill(SelectionColor, rectBorder);
+					fill(selectionColor, rectBorder);
 				}
 			}
 		}
