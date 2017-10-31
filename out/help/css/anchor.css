@@ -4,6 +4,10 @@
 	padding: 2pt;
 }
 
+a.anchor:focus {
+	outline: none;
+}
+
 a.anchor svg {
 	fill-opacity:0;
 }

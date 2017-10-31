@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Markdig;
+using System.Web;
+using Mtgdb.Downloader;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -16,54 +18,22 @@ namespace Mtgdb.Test
 		{
 			var helpFiles = getHelpFiles();
 
-			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\html\\template.html"));
+			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\template.html"));
 
 			foreach (string helpFile in helpFiles)
 			{
-				string mdContent = File.ReadAllText(helpFile);
-
-				var htmlFile = AppDir.Root.AddPath($"help\\html\\{getPageName(helpFile)}.html");
-				string htmlPage = getHtmlPage(helpFile, mdContent, htmlTemplate, helpFiles);
+				var htmlFile = AppDir.Root.AddPath($"help\\{getPageName(helpFile)}.html");
+				string htmlPage = getHtmlPage(helpFile, htmlTemplate, helpFiles);
 				File.WriteAllText(htmlFile, htmlPage);
 			}
 		}
 
-		[Test]
-		public void No_redundant_images()
-		{
-			string imgDir = AppDir.Root.AddPath("help\\img");
-			var images = Directory.GetFiles(imgDir, "*.jpg", SearchOption.TopDirectoryOnly);
-
-			var redundantImages = new HashSet<string>(images.Select(Path.GetFileNameWithoutExtension),
-				Str.Comparer);
-
-			var usedImages = new HashSet<string>(Str.Comparer);
-
-			var helpFiles = getHelpFiles();
-
-			var imgUrlRegex = new Regex(Regex.Escape(ImgDirUrl) + @"(?<name>[^@\/]+)\.jpg",
-				RegexOptions.Compiled);
-
-			foreach (string helpFile in helpFiles)
-			{
-				string mdContent = File.ReadAllText(helpFile);
-
-				foreach (Match match in imgUrlRegex.Matches(mdContent))
-					usedImages.Add(match.Groups["name"].Value);
-			}
-
-			redundantImages.ExceptWith(usedImages);
-			CollectionAssert.IsNotEmpty(usedImages);
-			CollectionAssert.IsEmpty(redundantImages);
-		}
-
-
 		private static string[] getHelpFiles()
 		{
 			var helpFiles = Directory.GetFiles(
-				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.md", SearchOption.TopDirectoryOnly);
+				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
 
-			return helpFiles.OrderByDescending(f => Str.Equals("home.md", Path.GetFileName(f)))
+			return helpFiles.OrderByDescending(f => Str.Equals("home.rest", Path.GetFileName(f)))
 				.ToArray();
 		}
 
@@ -72,24 +42,25 @@ namespace Mtgdb.Test
 			return Path.GetFileNameWithoutExtension(helpFile);
 		}
 
-		private static string getHtmlPage(string mdFile, string mdContent, string htmlTemplate, IList<string> mdFiles)
+		private static string getHtmlPage(string mdFile, string htmlTemplate, IList<string> mdFiles)
 		{
-			var readmeText = mdContent
-				.Replace(ImgDirUrl, "../img/");
+			string htmlContent = getContent(mdFile);
 
-			foreach (string file in mdFiles)
-			{
-				var fileName = Path.GetFileNameWithoutExtension(file);
-				readmeText = readmeText
-					.Replace("(" + fileName, "(" + fileName + ".html");
-			}
+			foreach (string imgDirUrl in _imgDirUrls)
+				htmlContent = htmlContent
+					.Replace(imgDirUrl, string.Empty);
 
-			var pipeline = new MarkdownPipelineBuilder()
-				.UseAdvancedExtensions()
-				.Build();
+			htmlContent = htmlContent.Replace("id=\"user-content-", "id=\"");
 
-			var htmlContent = Markdown.ToHtml(readmeText, pipeline);
+			var hrefRegex = new Regex("(?<prefix>href=\"[^\"]*)(?<name>" + 
+				string.Join("|", mdFiles.Select(f => Regex.Escape(HttpUtility.HtmlEncode(Path.GetFileNameWithoutExtension(f))))) 
+				+ ")(?<postfix>[^\"]*\")",
+				RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+			htmlContent = hrefRegex.Replace(htmlContent, "${prefix}${name}.html${postfix}");
+			
 			string title = getPageTitle(mdFile);
+
 			var navigationItems = getNavigationItems(mdFile, mdFiles);
 
 			var htmlPage = htmlTemplate
@@ -98,6 +69,40 @@ namespace Mtgdb.Test
 				.Replace("<!--Title-->", title)
 				.Replace("<!--Content-->", htmlContent);
 			return htmlPage;
+		}
+
+		private static string getContent(string mdFile)
+		{
+			var client = new WebClientBase();
+			string name = Path.GetFileNameWithoutExtension(mdFile);
+
+			var pageContent = client.DownloadString("https://github.com/NikolayXHD/Mtgdb/wiki/" + name);
+
+			var startIndex = pageContent.IndexOf("<div class=\"markdown-body\">", Str.Comparison);
+			var contentPrefix = pageContent.Substring(startIndex);
+
+			var openers = new Regex("<div").Matches(contentPrefix);
+			var closers = new Regex("</div>").Matches(contentPrefix);
+
+			var tags = openers.Cast<Match>()
+				.Select(m => new { index = m.Index, length = m.Length, open = true })
+				.Concat(closers.Cast<Match>().Select(m => new { index = m.Index, length = m.Length, open = false }))
+				.OrderBy(_ => _.index)
+				.ToArray();
+
+			int c = 0;
+			for (int i = 0; i < tags.Length; i++)
+			{
+				if (tags[i].open)
+					c++;
+				else
+					c--;
+
+				if (c == 0)
+					return contentPrefix.Substring(0, tags[i].index + tags[i].length);
+			}
+
+			throw new FormatException();
 		}
 
 		private static string getNavigationItems(string mdFile, IList<string> mdFiles)
@@ -127,6 +132,10 @@ namespace Mtgdb.Test
 			return title;
 		}
 
-		private const string ImgDirUrl = "../raw/master/output/help/img/";
+		private static readonly string[] _imgDirUrls =
+		{
+			"wiki/",
+			"../raw/master/out/help/"
+		};
 	}
 }
