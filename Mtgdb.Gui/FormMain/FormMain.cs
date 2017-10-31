@@ -41,7 +41,19 @@ namespace Mtgdb.Gui
 			stopThreads();
 		}
 
+		private void updateShowSampleHandButtons()
+		{
+			bool isSampleHand = _deckModel.Zone == Zone.SampleHand;
+			bool enabled = _cardRepo.IsImageLoadingComplete;
 
+			_buttonSampleHandNew.Visible = isSampleHand;
+			_buttonSampleHandDraw.Visible = isSampleHand;
+			_buttonSampleHandMulligan.Visible = isSampleHand;
+
+			_buttonSampleHandNew.Enabled = enabled;
+			_buttonSampleHandDraw.Enabled = enabled;
+			_buttonSampleHandMulligan.Enabled = enabled;
+		}
 
 		private void updateShowProhibited()
 		{
@@ -246,7 +258,8 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
 				{ 0, new TabSettings($"main deck: {_deckModel.MainDeckSize}/60") },
-				{ 1, new TabSettings($"sideboard: {_deckModel.SideDeckSize}/15") }
+				{ 1, new TabSettings($"sideboard: {_deckModel.SideDeckSize}/15") },
+				{ 2, new TabSettings($"sample hand: {_deckModel.SampleHandSize}") }
 			});
 
 			_labelStatusScrollDeck.Text = $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}";

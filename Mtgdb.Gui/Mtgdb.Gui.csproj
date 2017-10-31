@@ -323,6 +323,7 @@
     <Content Include="Resources\Delirium.png" />
     <Content Include="Resources\Doesnt untap.png" />
     <Content Include="Resources\Double Strike.png" />
+    <None Include="Resources\draw_48.png" />
     <Content Include="Resources\draw_a_card_48.png" />
     <Content Include="Resources\Enchant.png" />
     <Content Include="Resources\Equip.png" />
@@ -331,6 +332,7 @@
     <Content Include="Resources\Flash.png" />
     <Content Include="Resources\Flying.png" />
     <Content Include="Resources\Gain control.png" />
+    <None Include="Resources\hand_48.png" />
     <Content Include="Resources\Haste.png" />
     <Content Include="Resources\Hexproof.png" />
     <Content Include="Resources\image_file_32.png" />
@@ -342,6 +344,7 @@
     <Content Include="Resources\Lifelink.png" />
     <Content Include="Resources\Menace.png" />
     <Content Include="Resources\mtg_48.png" />
+    <None Include="Resources\mulligan_48.png" />
     <Content Include="Resources\mythic.png" />
     <None Include="Resources\open_16.png" />
     <Content Include="Resources\open_32.png" />

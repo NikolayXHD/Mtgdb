@@ -197,7 +197,7 @@ namespace Mtgdb.Dal
 		private readonly LinkedList<string> _ratings = new LinkedList<string>();
 
 
-		public static readonly Size SizeCropped = new Size(205, 293);
+		public static readonly Size SizeCropped = new Size(424, 622);
 		private Size _cardSize = new Size(223, 311);
 		private Size _zoomedCardSize = new Size(446, 622);
 

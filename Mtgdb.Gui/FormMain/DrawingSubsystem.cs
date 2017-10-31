@@ -120,8 +120,6 @@ namespace Mtgdb.Gui
 			else if (card.DeckCount > 0)
 				drawSelection(e, Color.Lavender, Color.White, 236);
 
-			drawCount(e, card);
-
 			var legalityWarning = _legalitySubsystem.GetWarning(card);
 
 			if (legalityWarning == Legality.Restricted && card.DeckCount <= 1 && sender == _layoutViewDeck)
@@ -130,7 +128,7 @@ namespace Mtgdb.Gui
 			if (!string.IsNullOrEmpty(legalityWarning))
 				drawLegalityWarning(e, legalityWarning);
 
-			drawDeckPart(e, card);
+			drawCount(sender, e, card);
 		}
 
 		private void drawLegalityWarning(CustomDrawArgs e, string warning)
@@ -185,58 +183,33 @@ namespace Mtgdb.Gui
 			e.Graphics.FillClosedCurve(brush, points);
 		}
 
-		private void drawCount(CustomDrawArgs e, Card card)
+		private void drawCount(object sender, CustomDrawArgs e, Card card)
 		{
-			var countText = getCountText(card);
+			var countText = getCountText(sender, card);
 			if (string.IsNullOrEmpty(countText))
 				return;
 
 			var rect = getSelectionRectangle(e);
 
+			var format = StringFormat.GenericTypographic;
+			var size = new Size(12, 18).ByDpi();
+			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
+			var textSize = e.Graphics.MeasureString(countText, font, rect.Size, format);
+
 			const int opacity = 224;
-			var size = new Size(18, 18).ByDpi();
 
 			var targetRect = new Rectangle(
-				(int) (rect.Left + 0.5f * (rect.Width - countText.Length * size.Width * 0.57f)),
-				(int) (rect.Top - 2 + 0.5f * (rect.Height - size.Height)),
-				size.Width * countText.Length,
-				size.Height);
-
-			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
+				(int) Math.Floor(rect.Left + 0.5f * (rect.Width - textSize.Width)),
+				(int) Math.Floor(rect.Top + 0.5f * (rect.Height - textSize.Height)),
+				(int) Math.Ceiling(textSize.Width),
+				(int) Math.Ceiling(textSize.Height));
 
 			e.Graphics.DrawString(
 				countText,
 				font,
 				new SolidBrush(Color.FromArgb(opacity, Color.Black)),
 				targetRect,
-				StringFormat.GenericTypographic);
-		}
-
-		private void drawDeckPart(CustomDrawArgs e, Card card)
-		{
-			var countText = getCountText(card);
-			if (string.IsNullOrEmpty(countText))
-				return;
-
-			var rect = getSelectionRectangle(e);
-
-			const int opacity = 224;
-			var size = new Size(18, 18).ByDpi();
-
-			var targetRect = new Rectangle(
-				(int)(rect.Left + 0.5f * (rect.Width - countText.Length * size.Width * 0.57f)),
-				(int)(rect.Top - 2 + 0.5f * (rect.Height - size.Height)),
-				size.Width * countText.Length,
-				size.Height);
-
-			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
-
-			e.Graphics.DrawString(
-				countText,
-				font,
-				new SolidBrush(Color.FromArgb(opacity, Color.Black)),
-				targetRect,
-				StringFormat.GenericTypographic);
+				format);
 		}
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)
@@ -265,13 +238,14 @@ namespace Mtgdb.Gui
 			return rect;
 		}
 
-		private static string getCountText(Card card)
+		private string getCountText(object sender, Card card)
 		{
 			var countText = new StringBuilder();
+
 			if (card.DeckCount > 0)
 				countText.Append(card.DeckCount);
 
-			if (card.CollectionCount > 0)
+			if (card.CollectionCount > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
 				countText.AppendFormat(@"/{0}", card.CollectionCount);
 
 			string countTextStr = countText.ToString();

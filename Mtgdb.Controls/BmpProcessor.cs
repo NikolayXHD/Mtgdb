@@ -126,8 +126,8 @@ namespace Mtgdb
 		{
 			ImageChanged = true;
 
-			float scaleX = (float)_original.Width / Rect.Width;
-			float scaleY = (float)_original.Height / Rect.Height;
+			float scaleX = (float)_sourceRect.Width / Rect.Width;
+			float scaleY = (float)_sourceRect.Height / Rect.Height;
 			
 			using (var original = new BmpReader(_original, _sourceRect))
 				for (int i = 0; i < Rect.Width; i++)

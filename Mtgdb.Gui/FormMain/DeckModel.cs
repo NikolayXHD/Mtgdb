@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Dal;
 
@@ -9,7 +10,7 @@ namespace Mtgdb.Gui
 		public event DeckChangedEventHandler DeckChanged;
 
 		public readonly List<Card> DataSource = new List<Card>();
-		
+
 		public Card CardDragged;
 		public Card CardBelowDragged { get; set; }
 		public Card TouchedCard { get; set; }
@@ -17,11 +18,13 @@ namespace Mtgdb.Gui
 
 		public DeckZoneModel MainDeck { get; }
 		public DeckZoneModel SideDeck { get; }
-		public bool IsSide { get; set; }
+		public DeckZoneModel SampleHand { get; }
 
-		public void SetIsSide(bool value, CardRepository repo)
+		public Zone Zone { get; set; }
+
+		public void SetUIZone(Zone value, CardRepository repo)
 		{
-			IsSide = value;
+			Zone = value;
 			LoadDeck(repo);
 		}
 
@@ -29,20 +32,29 @@ namespace Mtgdb.Gui
 		{
 			get
 			{
-				if (IsSide)
-					return SideDeck;
-
-				return MainDeck;
+				switch (Zone)
+				{
+					case Zone.Main:
+						return MainDeck;
+					case Zone.Side:
+						return SideDeck;
+					case Zone.SampleHand:
+						return SampleHand;
+					default:
+						throw new NotSupportedException();
+				}
 			}
 		}
 
 		public int MainDeckSize => MainDeck.CountById.Values.Sum();
 		public int SideDeckSize => SideDeck.CountById.Values.Sum();
+		public int SampleHandSize => SampleHand.CountById.Values.Sum();
 
 		public DeckModel()
 		{
 			MainDeck = new DeckZoneModel();
 			SideDeck = new DeckZoneModel();
+			SampleHand = new DeckZoneModel();
 		}
 
 		public void SetDeck(Deck deck)
@@ -73,9 +85,9 @@ namespace Mtgdb.Gui
 				touchedChanged: false);
 		}
 
-		public void Add(Card card, int increment)
+		public void Add(Card card, int increment, bool touch)
 		{
-			int previousCount = Deck.GetCount(card);
+			int previousCount = Deck.GetCount(card.Id);
 			var count = previousCount + increment;
 
 			if (card.Rarity != @"Basic Land" && count > 4)
@@ -90,15 +102,19 @@ namespace Mtgdb.Gui
 
 			var previousTouchedCard = TouchedCard;
 
-			// уменьшение количества карты, которой в колоде уже 0 приводит к снятию отметки о последнем прикосновении
-			if (previousCount == 0 && increment < 0)
-				TouchedCard = null;
-			else
-				TouchedCard = card;
+			if (touch)
+			{
+				// уменьшение количества карты, которой в колоде уже 0 приводит к снятию отметки о последнем прикосновении
+				if (previousCount == 0 && increment < 0)
+					TouchedCard = null;
+				else
+					TouchedCard = card;
+			}
 
 			bool listChanged = previousCount == 0 || card.DeckCount == 0;
 			bool countChanged = previousCount != card.DeckCount;
 			bool touchedChanged = previousTouchedCard != TouchedCard;
+
 			DeckChanged?.Invoke(
 				listChanged,
 				countChanged,
@@ -108,7 +124,7 @@ namespace Mtgdb.Gui
 
 		private void remove(Card card, int newCount)
 		{
-			Deck.Remove(card, newCount);
+			Deck.Remove(card.Id, newCount);
 
 			if (newCount == 0)
 				lock (DataSource)
@@ -118,7 +134,7 @@ namespace Mtgdb.Gui
 		private void add(Card card, bool loadingDeck, int newCount)
 		{
 			if (!loadingDeck)
-				Deck.Add(card, newCount);
+				Deck.Add(card.Id, newCount);
 
 			lock (DataSource)
 				if (!DataSource.Contains(card))
@@ -228,7 +244,12 @@ namespace Mtgdb.Gui
 
 		public int GetCount(Card c)
 		{
-			return Deck.GetCount(c);
+			return Deck.GetCount(c.Id);
 		}
+	}
+
+	public enum Zone
+	{
+		Main = 0, Side = 1, SampleHand = 2
 	}
 }

@@ -50,7 +50,7 @@ namespace Mtgdb.Controls
 		private void checkedChanged(object sender, EventArgs e)
 		{
 			var checkButton = (CheckBox)sender;
-			setCheckImage(checkButton, checkButton.Checked, false);
+			setCheckImage(checkButton, checkButton.Checked, true);
 		}
 
 
