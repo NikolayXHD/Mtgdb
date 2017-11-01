@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.ComponentModel.Com2Interop;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
@@ -217,8 +216,6 @@ namespace Mtgdb.Gui
 				return;
 
 			draw(cardRepository, touch: true);
-
-			reorderDeck(cardRepository);
 		}
 
 		public void Mulligan(CardRepository cardRepository)

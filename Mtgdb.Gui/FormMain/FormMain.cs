@@ -563,6 +563,7 @@ namespace Mtgdb.Gui
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
 			_sortSubsystem.ApplySort(settings.Sort);
 
+			hideSampleHand();
 			loadCollection(settings.Collection);
 			loadDeck(_requiredDeck ?? settings.Deck);
 
@@ -749,6 +750,7 @@ namespace Mtgdb.Gui
 				return;
 			}
 
+			hideSampleHand();
 			loadDeck(deck);
 		}
 
