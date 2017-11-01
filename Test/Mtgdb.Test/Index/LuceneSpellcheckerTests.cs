@@ -31,12 +31,13 @@ namespace Mtgdb.Test
 		}
 
 
-		[TestCase("*", @"d", "en")]
-		[TestCase("NameEn", @"neveiral", null)]
-		[TestCase("Name", @"гел", "ru")]
-		[TestCase("*", @"арха", "ru")]
-		[TestCase("*", @"ange", "en")]
-		[TestCase("TextEn", @"disc", null)]
+		//[TestCase("*", @"d", "en")]
+		//[TestCase("NameEn", @"neveiral", null)]
+		//[TestCase("Name", @"гел", "ru")]
+		//[TestCase("*", @"арха", "ru")]
+		//[TestCase("*", @"ange", "en")]
+		//[TestCase("TextEn", @"disc", null)]
+		[TestCase("layout", @"aft", null)]
 		public void Suggest_text_values(string field, string value, string language)
 		{
 			suggest(field, value, language);

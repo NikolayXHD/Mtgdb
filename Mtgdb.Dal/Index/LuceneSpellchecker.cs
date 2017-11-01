@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Lucene.Net.Analysis;
@@ -47,7 +48,7 @@ namespace Mtgdb.Dal.Index
 			Version.CreateDirectory();
 
 			var spellcheckerIndex = FSDirectory.Open(Version.Directory);
-			var spellChecker = new Spellchecker(spellcheckerIndex, _stringDistance);
+			var spellchecker = new Spellchecker(spellcheckerIndex, _stringDistance);
 
 			TotalFields = DocumentFactory.TextFields.Count;
 			foreach (string textField in DocumentFactory.TextFields)
@@ -55,7 +56,7 @@ namespace Mtgdb.Dal.Index
 				if (_abort)
 					return null;
 
-				spellChecker.IndexDictionary(new LuceneDictionary(indexReader, textField), analyzer, () => _abort);
+				spellchecker.IndexDictionary(new LuceneDictionary(indexReader, textField), analyzer, () => _abort);
 
 				IndexedFields++;
 				IsLoading = IndexedFields < TotalFields;
@@ -65,7 +66,7 @@ namespace Mtgdb.Dal.Index
 			IsLoading = false;
 
 			Version.SetIsUpToDate();
-			return spellChecker;
+			return spellchecker;
 		}
 
 		public IntellisenseSuggest Suggest(string query, int caret, string language, int maxCount)
@@ -104,22 +105,40 @@ namespace Mtgdb.Dal.Index
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
+			var valueIsNumeric = isValueNumeric(value);
+
 			if (string.IsNullOrEmpty(field) || field == NumericAwareQueryParser.AnyField)
 			{
-				var result = new List<string>();
+				var valuesSet = new HashSet<string>();
 
 				foreach (var userField in DocumentFactory.UserFields)
 				{
-					var specificValues = SuggestValues(value, userField, language, maxCount);
-					result.AddRange(specificValues);
+					if (!valueIsNumeric && userField.IsNumericField())
+						continue;
+
+					var specificValues = SuggestValues(value, userField, language, maxCount / 4);
+					valuesSet.UnionWith(specificValues);
 				}
 
-				result.Sort(Str.Comparer);
+				var values = valuesSet.ToList();
 
-				if (result.Count > maxCount)
-					result.RemoveRange(maxCount, result.Count - maxCount);
+				if (string.IsNullOrEmpty(value))
+					values.Sort(Str.Comparer);
+				else
+				{
+					var similarities = values.Select(_ => _stringDistance.GetSimilarity(value, _))
+						.ToArray();
 
-				return result;
+					values = Enumerable.Range(0, values.Count)
+						.OrderByDescending(i => similarities[i])
+						.Select(i => values[i])
+						.ToList();
+				}
+
+				if (values.Count > maxCount)
+					values.RemoveRange(maxCount, values.Count - maxCount);
+
+				return values;
 			}
 
 			field = DocumentFactory.Localize(field, language);
@@ -127,11 +146,14 @@ namespace Mtgdb.Dal.Index
 			if (field.IsNumericField())
 				return getNumericSuggest(value, field, language, maxCount);
 
-			if (string.IsNullOrEmpty(value))
-				return getValues(field, language, maxCount).ToArray();
-
 			if (DocumentFactory.LimitedValuesFields.Contains(field))
 				return fullScan(field, value, language, maxCount);
+
+			if (string.IsNullOrEmpty(value))
+			{
+				var result = getValues(field, language, maxCount).ToArray();
+				return result;
+			}
 
 			return _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
 		}
@@ -139,25 +161,36 @@ namespace Mtgdb.Dal.Index
 		private IList<string> fullScan(string field, string value, string language, int maxCount)
 		{
 			var values = getValues(field, language, _reader.MaxDoc)
-				.OrderByDescending(_ => _stringDistance.GetSimilarity(value, _))
-				.Take(maxCount)
-				.ToArray();
+				.Distinct()
+				.ToList();
 
-			return values;
+			if (!string.IsNullOrEmpty(value))
+			{
+				var similarities = values.Select(_ => _stringDistance.GetSimilarity(value, _))
+					.ToArray();
+
+				values = Enumerable.Range(0, values.Count)
+					.OrderByDescending(i => similarities[i])
+					.Select(i => values[i])
+					.ToList();
+			}
+			else
+				values.Sort(Str.Comparer);
+
+			return values.Take(maxCount).ToArray();
 		}
 
 		private IList<string> getNumericSuggest(string value, string field, string language, int maxCount)
 		{
-			var strVals = getValues(field, language, _reader.MaxDoc)
+			var values = getValues(field, language, _reader.MaxDoc)
 				.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
 
 			if (field.IsFloatField())
-				strVals = strVals.OrderBy(float.Parse);
+				values = values.OrderBy(float.Parse);
 			else if (field.IsIntField())
-				strVals = strVals.OrderBy(int.Parse);
+				values = values.OrderBy(int.Parse);
 
-			var result = strVals.Take(maxCount).ToArray();
-			return result;
+			return values.Take(maxCount).ToArray();
 		}
 
 		private IEnumerable<string> getValues(string field, string language, int maxCount)
@@ -168,56 +201,72 @@ namespace Mtgdb.Dal.Index
 						yield return specificResult;
 
 			field = DocumentFactory.Localize(field, language);
-
-			bool isFloat = field.IsFloatField();
-			bool isInt = field.IsIntField();
-
 			var terms = _reader.Terms(new Term(field));
-
 			int count = 0;
-			while (terms.Next())
+
+			if (field.IsFloatField())
 			{
-				if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
-					yield break;
-
-				string text = terms.Term.Text;
-
-				if (isFloat)
+				do
 				{
-					var value = text.TryParseFloat();
+					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
+						yield break;
+
+					var value = terms.Term.Text.TryParseFloat();
 					if (value.HasValue)
 					{
 						yield return value.ToString();
 						count++;
 					}
-				}
-				else if (isInt)
+				} while (terms.Next());
+			}
+			else if (field.IsIntField())
+			{
+				do
 				{
-					var value = text.TryParseInt();
+					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
+						yield break;
+
+					var value = terms.Term.Text.TryParseInt();
 					if (value.HasValue)
 					{
 						yield return value.ToString();
 						count++;
 					}
-				}
-				else
+				} while (terms.Next());
+			}
+			else
+			{
+				do
 				{
-					yield return text;
+					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
+						yield break;
+
+					yield return terms.Term.Text;
 					count++;
-				}
+				} while (terms.Next());
 			}
 		}
 
-		private string[] suggestFields(string field)
+		private IList<string> suggestFields(string field)
 		{
-			if (string.IsNullOrEmpty(field))
-				return DocumentFactory.UserFields
-					.OrderBy(_ => _)
+			var userFields = DocumentFactory.UserFields.ToList();
+
+			if (!string.IsNullOrEmpty(field))
+			{
+				var similarities = userFields.Select(_ => _stringDistance.GetSimilarity(field, _))
 					.ToArray();
 
-			return DocumentFactory.UserFields
-				.OrderByDescending(_ => _stringDistance.GetSimilarity(field, _))
-				.ToArray();
+				userFields = Enumerable.Range(0, userFields.Count)
+					.OrderByDescending(i => similarities[i])
+					.Select(i => userFields[i])
+					.ToList();
+			}
+			else
+			{
+				userFields.Sort(Str.Comparer);
+			}
+
+			return userFields;
 		}
 
 		public void Dispose()
@@ -240,6 +289,17 @@ namespace Mtgdb.Dal.Index
 				Thread.Sleep(100);
 
 			_abort = false;
+		}
+
+		private static bool isValueNumeric(string queryText)
+		{
+			int intVal;
+			float floatVal;
+
+			bool valueIsNumeric =
+				int.TryParse(queryText, NumberStyles.Integer, CultureInfo.InvariantCulture, out intVal) ||
+				float.TryParse(queryText, NumberStyles.Float, CultureInfo.InvariantCulture, out floatVal);
+			return valueIsNumeric;
 		}
 
 		public bool IsLoaded { get; private set; }
