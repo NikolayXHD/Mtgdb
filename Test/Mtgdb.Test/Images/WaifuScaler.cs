@@ -7,7 +7,7 @@ namespace Mtgdb.ImageProcessing
 	{
 		public static void Scale(string sourceFile, string targetFile)
 		{
-			string exe = AppDir.GetBinPath(@"Waifu2x\waifu2x-converter.exe");
+			string exe = AppDir.Root.AddPath(@"..\..\..\Test\Waifu2x\waifu2x-converter.exe");
 			string args = $"--jobs 2 --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
 
 			var process = Process.Start(new ProcessStartInfo(exe, args)

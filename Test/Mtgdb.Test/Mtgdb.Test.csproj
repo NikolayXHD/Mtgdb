@@ -59,19 +59,14 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Tesseract, Version=3.0.2.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tesseract.3.0.2.0\lib\net40\Tesseract.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Waifu2x\models\noise1_model.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Waifu2x\models\noise2_model.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Waifu2x\models\scale2.0x_model.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">
@@ -108,50 +103,41 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DalTests.cs" />
-    <Compile Include="DownsamplingTests.cs" />
-    <Compile Include="EditDistanceTests.cs" />
+    <Compile Include="Dal\DalTests.cs" />
+    <Compile Include="Dal\DeckFormattersTests.cs" />
+    <Compile Include="Dal\EditDistanceTests.cs" />
+    <Compile Include="ExternalDataSources\GathererClient.cs" />
+    <Compile Include="Images\ArtistDetection.cs" />
+    <Compile Include="Images\BwFilter.cs" />
+    <Compile Include="Images\DownsamplingTests.cs" />
     <Compile Include="ExportImages\ExportImages.cs" />
-    <Compile Include="GathererImagePreProcessor.cs" />
+    <Compile Include="ExternalDataSources\GathererImagePreProcessor.cs" />
     <Compile Include="ExportImages\ImageMagickScaler.cs" />
+    <Compile Include="Images\MedianFilter.cs" />
+    <Compile Include="Images\SaturationFilter.cs" />
+    <Compile Include="Images\WaifuScaler.cs" />
     <Compile Include="Index\KeywordTests.cs" />
-    <Compile Include="LocalizationRepositoryTest.cs" />
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
-    <Compile Include="DeckFormattersTests.cs" />
     <Compile Include="Index\TestLoader.cs" />
     <Compile Include="Markdown\MarkdownTests.cs" />
     <Compile Include="Price\PriceDownloaderTests.cs" />
-    <Compile Include="WaifuScaler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Resources\tcg\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Waifu2x\LICENSE.txt">
+    <Content Include="x64\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Waifu2x\opencv_core300.dll">
+    <Content Include="x64\libtesseract304.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Waifu2x\opencv_features2d300.dll">
+    <Content Include="x86\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Waifu2x\opencv_imgcodecs300.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Waifu2x\opencv_imgproc300.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Waifu2x\Readme.RU.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Waifu2x\README.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Waifu2x\waifu2x-converter.exe">
+    <Content Include="x86\libtesseract304.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
