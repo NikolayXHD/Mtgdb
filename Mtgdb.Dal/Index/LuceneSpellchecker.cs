@@ -14,8 +14,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.11 colors field
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.11");
+			// 0.12 prices
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.12");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
