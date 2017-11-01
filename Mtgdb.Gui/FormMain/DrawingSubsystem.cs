@@ -114,7 +114,7 @@ namespace Mtgdb.Gui
 			}
 
 			if (card == _deckModel.TouchedCard)
-				drawSelection(e, Color.LightBlue, Color.AliceBlue, 236);
+				drawSelection(e, Color.LightSkyBlue, Color.LightCyan, 236);
 			else if (card.DeckCount == 0 && card.CollectionCount > 0)
 				drawSelection(e, Color.Lavender, Color.White, 96);
 			else if (card.DeckCount > 0)

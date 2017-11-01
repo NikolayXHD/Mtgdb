@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.ComponentModel.Com2Interop;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
@@ -216,6 +217,8 @@ namespace Mtgdb.Gui
 				return;
 
 			draw(cardRepository, touch: true);
+
+			reorderDeck(cardRepository);
 		}
 
 		public void Mulligan(CardRepository cardRepository)
@@ -241,6 +244,21 @@ namespace Mtgdb.Gui
 
 			for (int i = 0; i < handSize; i++)
 				draw(cardRepository, touch: false);
+
+			reorderDeck(cardRepository);
+		}
+
+		private void reorderDeck(CardRepository cardRepository)
+		{
+			_deckModel.Deck.SetOrder(_deckModel.SampleHand.CardsIds
+				.OrderBy(id => cardRepository.CardsById[id].Cmc)
+				.ThenBy(id => cardRepository.CardsById[id].TypeEn)
+				.ThenBy(id => cardRepository.CardsById[id].Color)
+				.ToList());
+
+			_deckModel.DataSource.Sort((c1, c2) =>
+				_deckModel.SampleHand.CardsIds.IndexOf(c1.Id)
+					.CompareTo(_deckModel.SampleHand.CardsIds.IndexOf(c2.Id)));
 		}
 
 		public void Shuffle()

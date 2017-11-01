@@ -20,15 +20,15 @@ namespace Mtgdb.Gui
 		public DeckZoneModel SideDeck { get; }
 		public DeckZoneModel SampleHand { get; }
 
-		public Zone Zone { get; set; }
+		public Zone Zone { get; private set; }
 
-		public void SetUIZone(Zone value, CardRepository repo)
+		public void SetZone(Zone value, CardRepository repo)
 		{
 			Zone = value;
 			LoadDeck(repo);
 		}
 
-		private DeckZoneModel Deck
+		public DeckZoneModel Deck
 		{
 			get
 			{
