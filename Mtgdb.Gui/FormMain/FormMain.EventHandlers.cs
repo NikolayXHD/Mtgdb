@@ -571,14 +571,19 @@ namespace Mtgdb.Gui
 				MessageBox.Show(deck.Error);
 			else
 			{
+				hideSampleHand();
+
 				if (append)
 					appendToDeck(deck);
 				else
 					loadDeck(deck);
-
-				if (_tabHeadersDeck.SelectedIndex == (int) Zone.SampleHand)
-					_tabHeadersDeck.SelectedIndex = (int) Zone.Main;
 			}
+		}
+
+		private void hideSampleHand()
+		{
+			if (_tabHeadersDeck.SelectedIndex == (int) Zone.SampleHand)
+				_tabHeadersDeck.SelectedIndex = (int) Zone.Main;
 		}
 
 		private void pasteCollectionFromText(string text, bool append)
