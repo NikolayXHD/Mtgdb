@@ -43,8 +43,8 @@ namespace Mtgdb.Dal.Index
 			if (s1.Length > EditDistance.MaxInput)
 				s1 = s1.Substring(0, EditDistance.MaxInput);
 
-			if (s2.Length > EditDistance.MaxInput)
-				s2 = s2.Substring(0, EditDistance.MaxInput);
+			if (s2.Length > EditDistance.MaxDict)
+				s2 = s2.Substring(0, EditDistance.MaxDict);
 
 			lock (_editDistance)
 			{
