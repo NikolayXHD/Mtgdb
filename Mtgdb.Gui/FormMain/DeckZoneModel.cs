@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
@@ -10,7 +9,7 @@ namespace Mtgdb.Gui
 
 		private List<string> Order { get; set; } = new List<string>();
 
-		public IEnumerable<string> CardsIds => Order;
+		public IList<string> CardsIds => Order;
 
 		public DeckZoneModel()
 		{

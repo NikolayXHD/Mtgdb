@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -223,7 +222,7 @@ namespace Mtgdb.Gui
 			{
 				beginRestoreSettings();
 
-				_deckModel.SetUIZone(uiDeckZone, _cardRepo);
+				_deckModel.SetZone(uiDeckZone, _cardRepo);
 
 				endRestoreSettings();
 
@@ -576,6 +575,9 @@ namespace Mtgdb.Gui
 					appendToDeck(deck);
 				else
 					loadDeck(deck);
+
+				if (_tabHeadersDeck.SelectedIndex == (int) Zone.SampleHand)
+					_tabHeadersDeck.SelectedIndex = (int) Zone.Main;
 			}
 		}
 
@@ -649,7 +651,8 @@ namespace Mtgdb.Gui
 			_deckEditingSubsystem.NewSampleHand(_cardRepo);
 			endRestoreSettings();
 
-			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
+			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: false);
+			updateViewDeck(listChanged: true, card: null, touchedChanged: false);
 			updateFormStatus();
 		}
 
@@ -662,7 +665,8 @@ namespace Mtgdb.Gui
 			_deckEditingSubsystem.Mulligan(_cardRepo);
 			endRestoreSettings();
 
-			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
+			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: false);
+			updateViewDeck(listChanged: true, card: null, touchedChanged: false);
 			updateFormStatus();
 		}
 
@@ -671,7 +675,17 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
+			beginRestoreSettings();
 			_deckEditingSubsystem.Draw(_cardRepo);
+			endRestoreSettings();
+
+			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: true);
+			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
+
+			_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewDeck);
+			_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewCards);
+
+			updateFormStatus();
 		}
 	}
 }
