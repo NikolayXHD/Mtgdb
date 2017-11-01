@@ -28,8 +28,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.11 Colors field
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.11");
+			// 0.12 prices
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.12");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
