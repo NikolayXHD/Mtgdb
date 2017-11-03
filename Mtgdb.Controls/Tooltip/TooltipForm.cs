@@ -51,17 +51,16 @@ namespace Mtgdb.Controls
 				AutoWordSelection = false
 			};
 
-			_tooltipTextbox.AutoWordSelection = true;
-			_tooltipTextbox.AutoWordSelection = false;
-
 			_tooltipTextbox.MouseDown += text_MouseDown;
 			_tooltipTextbox.MouseClick += text_MouseClick;
-			_tooltipTextbox.MouseMove += text_MouseMove;
-			_tooltipTextbox.MouseUp += text_MouseUp;
+			
 			_tooltipTextbox.KeyDown += text_keyDown;
 			_tooltipTextbox.LostFocus += text_lostFocus;
 
 			_panel.Controls.Add(_tooltipTextbox);
+
+			_selectionSubsystem = new RichTextBoxSelectionSubsystem(_tooltipTextbox);
+			_selectionSubsystem.SubsribeToEvents();
 
 			_tooltipFocusTarget = new Control
 			{
@@ -415,8 +414,8 @@ namespace Mtgdb.Controls
 			if (_tooltipTextbox.Focused || _buttonClose.Focused)
 				_tooltip.Control.Focus();
 
-			_selectionStart = -1;
-			_selectionManual = false;
+			_selectionSubsystem.Reset();
+
 			Location = new Point(-10000, -10000);
 			UserInteracted = false;
 			Clickable = false;
@@ -428,47 +427,8 @@ namespace Mtgdb.Controls
 			if (!Clickable)
 				return;
 
-			if (e.Button == MouseButtons.Left)
-			{
-				int current = _tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
-				if (current == _selectionStart)
-					_selectionManual = true;
-
-				UserInteracted = true;
-			}
+			UserInteracted = true;
 		}
-
-		private void text_MouseUp(object sender, MouseEventArgs e)
-		{
-			if (!Clickable)
-				return;
-
-			_selectionStart = -1;
-			_selectionManual = false;
-		}
-
-		private void text_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (!Clickable)
-				return;
-
-			if (!_selectionManual)
-			{
-				if (!_tooltipTextbox.Focused)
-					_tooltipTextbox.SelectionStart = _selectionStart = _tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
-			}
-			else
-			{
-				var current = _tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
-				if (current != _selectionStart)
-				{
-					_tooltipTextbox.SelectionStart = Math.Min(current, _selectionStart);
-					_tooltipTextbox.SelectionLength = Math.Abs(current - _selectionStart);
-				}
-			}
-		}
-
-
 
 		private void text_MouseClick(object sender, MouseEventArgs e)
 		{
@@ -525,19 +485,29 @@ namespace Mtgdb.Controls
 
 		private readonly Size _tooltipSize;
 
-		private int _selectionStart;
-		private bool _selectionManual;
+		private readonly RichTextBoxSelectionSubsystem _selectionSubsystem;
 		private readonly FixedRichTextBox _tooltipTextbox;
 		private readonly Control _tooltipFocusTarget;
 		private readonly Button _buttonClose;
 
-		public bool Clickable { get; private set; }
+		public bool Clickable
+		{
+			get { return _clickable; }
+
+			private set
+			{
+				_clickable = value;
+				_selectionSubsystem.SelectionEnabled = value;
+			}
+		}
+
 		private bool _userInteracted;
 		private TooltipModel _tooltip;
 		private readonly BorderedPanel _panel;
 		private bool _closeEnabled;
 		private readonly Bitmap _closeIcon;
 		private readonly Bitmap _selectableTextIcon;
+		private bool _clickable;
 
 		private class TooltipPosition
 		{
