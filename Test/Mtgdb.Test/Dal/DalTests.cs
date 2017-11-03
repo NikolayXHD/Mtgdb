@@ -11,7 +11,7 @@ namespace Mtgdb.Test
 	public class DalTests
 	{
 		[Test]
-		public void Test_repository_is_not_empty()
+		public void Repository_is_not_empty()
 		{
 			TestLoader.LoadModules();
 			var repo = TestLoader.CardRepository;
@@ -24,6 +24,19 @@ namespace Mtgdb.Test
 
 			Assert.That(repo.SetsByCode, Is.Not.Null);
 			Assert.That(repo.SetsByCode.Count, Is.GreaterThan(0));
+		}
+
+		[Test]
+		public void Aftermath_cards_have_mci_number()
+		{
+			TestLoader.LoadModules();
+			var repo = TestLoader.CardRepository;
+
+			repo.LoadFile();
+			repo.Load();
+
+			var aftermathCards = repo.Cards.Where(c => Str.Equals(c.Layout, "aftermath"));
+			var mciNumbers = aftermathCards.Select(c => c.MciNumber).ToList();
 		}
 
 		[Test]
