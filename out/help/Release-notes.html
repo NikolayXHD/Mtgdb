@@ -34,12 +34,18 @@
 <a name="user-content-added-some-missing-card-prices"></a>
 <h3>
 <a id="added-some-missing-card-prices" class="anchor" href="#added-some-missing-card-prices" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Added some missing card prices</h3>
-<p>for ~700 cards including all aftermath cards. These cards have no <code>mciNumber</code> in data from mtgjson.com, but they have
+<p>for ~700 cards including all aftermath cards. These cards have no <code>mciNumber</code> in data from mtgjson.com, but they do have
 actual pages in <a href="http://magiccards.info">magiccards.info</a> with urls derived from <code>number</code> field.</p>
 <a name="user-content-search-input"></a>
 <h3>
 <a id="search-input" class="anchor" href="#search-input" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Search input</h3>
-<p>Fixed caret positioning on first click.</p>
+<p>Fixed wrong caret (user input) location on first click</p>
+<p>Fixed <code>Esc</code> not hiding intellisense</p>
+<p>Special meaning of wildcards <code>?</code> and <code>*</code> in range query even when it's not numeric but textual.</p>
+<pre>
+releasedate: [2017\-01\-01 TO *]
+</pre>
+<p>is interpreted as <code>ReleaseDate &gt;= 2017-01-01</code> rather than <code>2017-01-01 &lt;= ReleaseDate &lt;= *</code>, with * meaning literally star character.</p>
 <a name="user-content-redrawn-zoom-icon"></a>
 <h3>
 <a id="redrawn-zoom-icon" class="anchor" href="#redrawn-zoom-icon" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Redrawn zoom icon</h3>

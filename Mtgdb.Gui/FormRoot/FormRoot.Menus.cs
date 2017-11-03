@@ -391,7 +391,12 @@ namespace Mtgdb.Gui
 			else if (e.KeyData == (Keys.Control | Keys.F))
 				form.FocusSearch();
 			else if (e.KeyData == Keys.Escape)
-				form.StopDragging();
+			{
+				if (form.IsSearchFocused())
+					handled = false;
+				else
+					form.StopDragging();
+			}
 			else if (e.KeyData == (Keys.Control | Keys.S))
 				form.ButtonSaveDeck();
 			else if (e.KeyData == (Keys.Control | Keys.O))

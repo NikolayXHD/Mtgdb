@@ -110,7 +110,7 @@ namespace Mtgdb.Dal.Index
 			if (field.IsIntField())
 				return createRangeQuery<int>(field, query, int.TryParse, NumericRangeQuery.NewIntRange);
 
-			return query;
+			return createRangeQuery(field, query);
 		}
 
 		private static bool tryParseFloat(string s, out float f)
@@ -206,9 +206,15 @@ namespace Mtgdb.Dal.Index
 			return base.GetWildcardQuery(field, termStr);
 		}
 
+		private static Query createRangeQuery(string field, TermRangeQuery query)
+		{
+			var lowerValue = getValue(query.LowerTerm);
+			var upperValue = getValue(query.UpperTerm);
+			var result = new TermRangeQuery(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
+			return result;
+		}
 
-
-		private static NumericRangeQuery<TVal> createRangeQuery<TVal>(string field, TermRangeQuery query, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory) 
+		private static Query createRangeQuery<TVal>(string field, TermRangeQuery query, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory) 
 			where TVal: struct, IComparable<TVal>
 		{
 			var lowerValue = getValue(field, parser, query.LowerTerm);
@@ -217,12 +223,20 @@ namespace Mtgdb.Dal.Index
 			return result;
 		}
 
-		private static NumericRangeQuery<TVal> createRangeQuery<TVal>(string field, string queryText, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory)
+		private static Query createRangeQuery<TVal>(string field, string queryText, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory)
 			where TVal : struct, IComparable<TVal>
 		{
 			var value = getValue(field, parser, queryText);
 			var result = rangeQueryFactory(field, value, value, true, true);
 			return result;
+		}
+
+		private static string getValue(string term)
+		{
+			if (!isNumberSpecified(term))
+				return null;
+
+			return term;
 		}
 
 		private static TVal? getValue<TVal>(string field, Parser<TVal> parser, string term) 
@@ -231,11 +245,11 @@ namespace Mtgdb.Dal.Index
 			if (!isNumberSpecified(term))
 				return null;
 
-			TVal lower;
-			if (!parser(term, out lower))
+			TVal value;
+			if (!parser(term, out value))
 				throw new ParseException($"Non-numeric value '{term}' for numeric field {field}");
 
-			return lower;
+			return value;
 		}
 
 		private static bool isNumberSpecified(string term)
@@ -253,7 +267,7 @@ namespace Mtgdb.Dal.Index
 		private delegate bool Parser<TVal>(string value, out TVal result)
 			where TVal : struct;
 
-		private delegate NumericRangeQuery<TVal> RangeQueryFactory<TVal>(string field, TVal? lower, TVal? upper, bool includeLower, bool includeUpper)
+		private delegate Query RangeQueryFactory<TVal>(string field, TVal? lower, TVal? upper, bool includeLower, bool includeUpper)
 			where TVal : struct, IComparable<TVal>;
 
 		private static readonly HashSet<string> _nonSpecifiedNubmer = new HashSet<string>
