@@ -22,12 +22,6 @@ namespace Mtgdb.Downloader
 			_priceRepository.Load();
 		}
 
-		public void ResetPendingProgress()
-		{
-			_priceRepository.ResetPendingProgress();
-			_priceRepository.Load();
-		}
-
 		public void Download()
 		{
 			if (!_repo.IsLoadingComplete)
@@ -75,6 +69,10 @@ namespace Mtgdb.Downloader
 							continue;
 
 						var sid = _client.DownloadSid(set.MagicCardsInfoCode, card.MciNumber);
+
+						if (sid == null)
+							continue;
+
 						_priceRepository.AddSid(card, sid);
 
 						SidAdded?.Invoke();
@@ -100,6 +98,9 @@ namespace Mtgdb.Downloader
 							continue;
 
 						var sid = _priceRepository.GetPriceId(card);
+
+						if (sid == null)
+							continue;
 
 						if (_priceRepository.ContainsPrice(sid))
 							continue;

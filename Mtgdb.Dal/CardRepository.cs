@@ -209,7 +209,9 @@ namespace Mtgdb.Dal
 			if (card.FlavorEn != null)
 				card.FlavorEn = LocalizationRepository.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
 
-			if (card.MciNumber != null && card.MciNumber.EndsWith(".html"))
+			if (card.MciNumber == null)
+				card.MciNumber = card.Number;
+			else if (card.MciNumber?.EndsWith(".html") == true)
 				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
 
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0

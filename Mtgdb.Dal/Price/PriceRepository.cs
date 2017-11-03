@@ -13,7 +13,6 @@ namespace Mtgdb.Dal
 			var directory = AppDir.Data;
 
 			PriceFile = directory.AddPath("price.json");
-			PriceFileInProgress = directory.AddPath("price.inprogress.json");
 			IdFile = directory.AddPath("price.id.json");
 		}
 
@@ -117,7 +116,7 @@ namespace Mtgdb.Dal
 			if (priceId?.Sid == null)
 				return null;
 
-			return _priceBySid[priceId.Sid];
+			return _priceBySid.TryGet(priceId.Sid);
 		}
 
 		public PriceValues GetPrice(PriceId priceId)
@@ -155,7 +154,6 @@ namespace Mtgdb.Dal
 		private Dictionary<string, PriceValues> _priceBySid;
 		
 		protected readonly string PriceFile;
-		protected readonly string PriceFileInProgress;
 		protected readonly string IdFile;
 
 		public bool IsLoadingComplete { get; private set; }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace Mtgdb.Downloader
@@ -17,7 +18,17 @@ namespace Mtgdb.Downloader
 
 		public string DownloadString(string pageUrl)
 		{
-			using (var stream = _webClient.OpenRead(pageUrl))
+			Stream stream;
+			try
+			{
+				stream = _webClient.OpenRead(pageUrl);
+			}
+			catch (WebException ex) when (ex.Status == WebExceptionStatus.ProtocolError)
+			{
+				return null;
+			}
+
+			using (stream)
 			{
 				if (stream == null)
 					return null;
