@@ -148,6 +148,8 @@ namespace Mtgdb.Gui
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
 
 			Load += formLoad;
+
+			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
 		}
 
 		private void applyDisplayConfig(ViewConfig viewConfig, ImageCache imageCache)
@@ -338,6 +340,8 @@ namespace Mtgdb.Gui
 			_buttonSampleHandMulligan.Click += sampleHandMulligan;
 			_buttonSampleHandDraw.Click += sampleHandDraw;
 
+			_findEditorSelectionSubsystem.SubsribeToEvents();
+
 			_eventsSubscribed = true;
 		}
 
@@ -404,6 +408,8 @@ namespace Mtgdb.Gui
 			_buttonSampleHandNew.Click -= sampleHandNew;
 			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
 			_buttonSampleHandDraw.Click -= sampleHandDraw;
+
+			_findEditorSelectionSubsystem.UnsubsribeFromEvents();
 		}
 
 		private Deck _requiredDeck;
@@ -463,6 +469,7 @@ namespace Mtgdb.Gui
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
+		private readonly RichTextBoxSelectionSubsystem _findEditorSelectionSubsystem;
 
 		private bool _threadsRunning;
 		private bool _eventsSubscribed;

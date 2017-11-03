@@ -103,6 +103,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dal\ColorDetector.cs" />
     <Compile Include="Dal\DalTests.cs" />
     <Compile Include="Dal\DeckFormattersTests.cs" />
     <Compile Include="Dal\EditDistanceTests.cs" />

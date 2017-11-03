@@ -33,7 +33,7 @@ namespace Mtgdb.Test
 			var helpFiles = Directory.GetFiles(
 				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
 
-			return helpFiles.OrderByDescending(f => Str.Equals("home.rest", Path.GetFileName(f)))
+			return helpFiles.OrderByDescending(f => Str.Equals("home", Path.GetFileNameWithoutExtension(f)))
 				.ToArray();
 		}
 
