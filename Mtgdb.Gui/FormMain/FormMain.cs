@@ -110,12 +110,12 @@ namespace Mtgdb.Gui
 			_deckModel.TouchedCard = null;
 		}
 
-		public void RunRefilterTask()
+		public void RunRefilterTask(Action onFinished = null)
 		{
-			ThreadPool.QueueUserWorkItem(_ => refilter());
+			ThreadPool.QueueUserWorkItem(_ => refilter(onFinished));
 		}
 
-		private void refilter()
+		private void refilter(Action onFinished)
 		{
 			var touchedCard = _deckModel.TouchedCard;
 			bool showDuplicates = _buttonShowDuplicates.Checked;
@@ -214,6 +214,7 @@ namespace Mtgdb.Gui
 			{
 				_imagePreloadingSubsystem.Reset();
 				refreshData();
+				onFinished?.Invoke();
 			});
 		}
 
@@ -678,7 +679,7 @@ namespace Mtgdb.Gui
 			_historyModel.DeckFile = null;
 			_historyModel.DeckName = null;
 			resetTouchedCard();
-			_deckModel.Clear(loadingDeck: false);
+			_deckModel.Clear();
 		}
 
 		public void ButtonSaveDeck()

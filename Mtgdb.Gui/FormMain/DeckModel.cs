@@ -57,48 +57,49 @@ namespace Mtgdb.Gui
 			SampleHand = new DeckZoneModel();
 		}
 
-		public void SetDeck(Deck deck)
+		public void SetDeck(Deck deck, CardRepository repo)
 		{
-			Clear(loadingDeck: true);
+			lock (DataSource)
+				DataSource.Clear();
 
 			MainDeck.SetDeck(deck.MainDeck);
 			SideDeck.SetDeck(deck.SideDeck);
+
+			LoadDeck(repo);
 		}
 
 		public void LoadDeck(CardRepository cardRepository)
 		{
-			Clear(loadingDeck: true);
+			if (!cardRepository.IsLoadingComplete)
+				return;
 
-			foreach (var id in Deck.CardsIds)
+			lock (DataSource)
 			{
-				Card card;
-				if (cardRepository.CardsById == null || !cardRepository.CardsById.TryGetValue(id, out card))
-					continue;
-
-				add(card, loadingDeck: true, newCount: card.DeckCount);
+				DataSource.Clear();
+				DataSource.AddRange(Deck.CardsIds.Select(id => cardRepository.CardsById[id]));
 			}
 
 			DeckChanged?.Invoke(
 				listChanged: true,
 				countChanged: true,
 				card: null,
-				touchedChanged: false);
+				touchedChanged: false,
+				changedZone: Zone);
 		}
 
 		public void Add(Card card, int increment, bool touch)
 		{
 			int previousCount = Deck.GetCount(card.Id);
-			var count = previousCount + increment;
 
-			if (card.Rarity != @"Basic Land" && count > 4)
-				count = 4;
-			else if (count < 0)
-				count = 0;
+			var count = (previousCount + increment)
+				.WithinRange(
+					card.MinDeckCount(),
+					card.MaxDeckCount());
 
 			if (increment > 0)
-				add(card, loadingDeck: false, newCount: count);
+				add(card, newCount: count);
 			else if (increment < 0)
-				remove(card, count);
+				remove(card, newCount: count);
 
 			var previousTouchedCard = TouchedCard;
 
@@ -119,7 +120,8 @@ namespace Mtgdb.Gui
 				listChanged,
 				countChanged,
 				card,
-				touchedChanged);
+				touchedChanged,
+				Zone);
 		}
 
 		private void remove(Card card, int newCount)
@@ -131,10 +133,9 @@ namespace Mtgdb.Gui
 					DataSource.Remove(card);
 		}
 
-		private void add(Card card, bool loadingDeck, int newCount)
+		private void add(Card card, int newCount)
 		{
-			if (!loadingDeck)
-				Deck.Add(card.Id, newCount);
+			Deck.Add(card.Id, newCount);
 
 			lock (DataSource)
 				if (!DataSource.Contains(card))
@@ -142,22 +143,33 @@ namespace Mtgdb.Gui
 		}
 
 
-		public void Clear(bool loadingDeck)
+		public void Clear()
 		{
+			switch (Zone)
+			{
+				case Zone.SampleHand:
+					SampleHand.Clear();
+					break;
+				case Zone.Side:
+					SideDeck.Clear();
+					break;
+				case Zone.Main:
+					MainDeck.Clear();
+					SideDeck.Clear();
+					break;
+				default:
+					return;
+			}
+
 			lock (DataSource)
 				DataSource.Clear();
 
-			if (!loadingDeck)
-			{
-				MainDeck.Clear();
-				SideDeck.Clear();
-
-				DeckChanged?.Invoke(
-					listChanged: true,
-					countChanged: true,
-					card: null,
-					touchedChanged: false);
-			}
+			DeckChanged?.Invoke(
+				listChanged: true,
+				countChanged: true,
+				card: null,
+				touchedChanged: false,
+				changedZone: Zone);
 		}
 
 		public List<Card> GetReorderedCards(Card cardDragged, Card cardBelowDragged)
@@ -222,7 +234,8 @@ namespace Mtgdb.Gui
 				listChanged: true,
 				countChanged: false,
 				card: null,
-				touchedChanged: false);
+				touchedChanged: false,
+				changedZone: Zone);
 		}
 
 		public void DragStart(Card card, bool fromDeck)
@@ -246,10 +259,156 @@ namespace Mtgdb.Gui
 		{
 			return Deck.GetCount(c.Id);
 		}
-	}
 
-	public enum Zone
-	{
-		Main = 0, Side = 1, SampleHand = 2
+
+		public void Paste(Deck deck, bool append, CardRepository repo)
+		{
+			var operations = new Dictionary<DeckZone, DeckZoneModel>();
+
+			switch (Zone)
+			{
+				case Zone.Main:
+					operations.Add(deck.MainDeck, MainDeck);
+					if (deck.SideDeck.Order.Count > 0)
+						operations.Add(deck.SideDeck, SideDeck);
+					break;
+				case Zone.Side:
+					operations.Add(deck.MainDeck, SideDeck);
+					break;
+				case Zone.SampleHand:
+					operations.Add(deck.MainDeck, SampleHand);
+					break;
+				default:
+					return;
+			}
+
+			if (!append && (Zone == Zone.Main || Zone == Zone.Side))
+				lock (DataSource)
+					DataSource.Clear();
+
+			foreach (var operation in operations)
+			{
+				if (!append)
+					operation.Value.Clear();
+
+				foreach (var cardId in operation.Key.Order)
+				{
+					var prevCount = operation.Value.CountById.TryGet(cardId);
+					var increment = operation.Key.Count[cardId];
+
+					var card = repo.CardsById[cardId];
+
+					var newCount = (prevCount + increment)
+						.WithinRange(card.MinDeckCount(), card.MaxDeckCount());
+
+					operation.Value.Add(cardId, newCount);
+				}
+			}
+
+			LoadDeck(repo);
+		}
+
+		public void NewSampleHand(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+				return;
+
+			createSampleHand(7, cardRepository);
+		}
+
+		public void Mulligan(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+				return;
+
+			int count = getMulliganCount();
+			createSampleHand(count, cardRepository);
+		}
+
+		public void Draw(CardRepository cardRepository)
+		{
+			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+				return;
+
+			var drawn = draw(cardRepository);
+
+			if (drawn == null)
+				return;
+
+			TouchedCard = drawn;
+
+			lock (DataSource)
+				if (!DataSource.Contains(drawn))
+					DataSource.Add(drawn);
+
+			DeckChanged?.Invoke(
+				listChanged: SampleHand.GetCount(drawn.Id) == 1,
+				countChanged: true,
+				card: drawn,
+				touchedChanged: true,
+				changedZone: Zone);
+		}
+
+		private int getMulliganCount()
+		{
+			return Math.Max(0, SampleHand.CountById.Sum(_ => _.Value) - 1);
+		}
+
+		private void createSampleHand(int handSize, CardRepository cardRepository)
+		{
+			SampleHand.Clear();
+
+			Shuffle();
+
+			for (int i = 0; i < handSize; i++)
+				draw(cardRepository);
+
+			SampleHand.SetOrder(SampleHand.CardsIds
+				.OrderBy(id => cardRepository.CardsById[id].Cmc)
+				.ThenBy(id => cardRepository.CardsById[id].TypeEn)
+				.ThenBy(id => cardRepository.CardsById[id].Color)
+				.ToList());
+
+			lock (DataSource)
+			{
+				DataSource.Clear();
+				DataSource.AddRange(SampleHand.CardsIds.Select(id => cardRepository.CardsById[id]));
+			}
+
+			DeckChanged?.Invoke(
+				listChanged: true,
+				countChanged: true,
+				card: null,
+				touchedChanged: false,
+				changedZone: Zone);
+		}
+
+		public void Shuffle()
+		{
+			var library = new List<string>();
+
+			foreach (var pair in MainDeck.CountById)
+				for (int i = 0; i < pair.Value; i++)
+					library.Add(pair.Key);
+
+			_library = library;
+		}
+
+		private Card draw(CardRepository cardRepository)
+		{
+			if (_library == null || _library.Count == 0)
+				return null;
+
+			var index = _random.Next(_library.Count);
+			var id = _library[index];
+			_library.RemoveAt(index);
+
+			SampleHand.Add(id, SampleHand.GetCount(id) + 1);
+
+			return cardRepository.CardsById[id];
+		}
+
+		private static readonly Random _random = new Random();
+		private List<string> _library;
 	}
 }

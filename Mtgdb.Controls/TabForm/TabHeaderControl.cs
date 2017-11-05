@@ -218,7 +218,7 @@ namespace Mtgdb.Controls
 
 			int hoveredIndex;
 			bool hoveredClose;
-			getTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+			GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
 
 			if (hoveredIndex < 0 || hoveredIndex >= Count || hoveredClose)
 			{
@@ -264,7 +264,7 @@ namespace Mtgdb.Controls
 
 			int hoveredIndex;
 			bool hoveredClose;
-			getTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+			GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
 
 			if (e.Button == MouseButtons.Left)
 			{
@@ -296,7 +296,7 @@ namespace Mtgdb.Controls
 			{
 				int hoveredIndex;
 				bool hoveredClose;
-				getTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+				GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
 				HoveredIndex = hoveredIndex;
 				HoveredCloseIndex = hoveredClose ? hoveredIndex : -1;
 			}
@@ -425,7 +425,7 @@ namespace Mtgdb.Controls
 			Invalidate();
 		}
 
-		private void getTabIndex(Point location, out int hoveredIndex, out bool hoveredClose)
+		public void GetTabIndex(Point location, out int hoveredIndex, out bool hoveredClose)
 		{
 			hoveredIndex = -1;
 			hoveredClose = false;

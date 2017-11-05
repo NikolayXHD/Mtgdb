@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -92,7 +93,9 @@ namespace Mtgdb.Gui
 
 		public override bool ValidateFormat(string serialized)
 		{
-			return serialized.IndexOf(Header, Str.Comparison) >= 0;
+			var lines = SplitToLines(serialized);
+			bool valid = lines.Any(LineRegex.IsMatch);
+			return valid;
 		}
 
 		public override Regex LineRegex { get; } = new Regex(

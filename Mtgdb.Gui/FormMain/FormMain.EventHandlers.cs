@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -216,83 +217,40 @@ namespace Mtgdb.Gui
 
 		private void deckZoneChanged(TabHeaderControl sender, int selected)
 		{
-			var uiDeckZone = (Zone)(int)_tabHeadersDeck.SelectedTabId;
+			beginRestoreSettings();
 
-			if (_deckModel.Zone != uiDeckZone)
-			{
-				beginRestoreSettings();
+			_deckModel.SetZone(DeckZone, _cardRepo);
 
-				_deckModel.SetZone(uiDeckZone, _cardRepo);
+			endRestoreSettings();
 
-				endRestoreSettings();
-
-				updateViewCards(true, null, FilterGroupDeck, false);
-				updateViewDeck(true, null, false);
-				updateFormStatus();
-			}
-
+			updateFormStatus();
 			updateShowSampleHandButtons();
 		}
 
 
-
-		private void loadDeck(Deck deck)
-		{
-			_historyModel.DeckFile = deck.File;
-			_historyModel.DeckName = deck.Name;
-
-			_deckModel.SetDeck(deck);
-			_deckModel.LoadDeck(_cardRepo);
-			_deckEditingSubsystem.Shuffle();
-		}
-
-		private void appendToDeck(Deck deck)
-		{
-			beginRestoreSettings();
-
-			foreach (var cardId in deck.MainDeck.Order)
-				_deckModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId], touch: false);
-
-			foreach (var cardId in deck.SideDeck.Order)
-				_deckModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId], touch: false);
-
-			endRestoreSettings();
-
-			updateViewCards(true, null, FilterGroupDeck, false);
-			updateViewDeck(true, null, false);
-
-			historyUpdate();
-			updateFormStatus();
-		}
-
-		private void loadCollection(Deck collection)
-		{
-			_collectionModel.SetCollection(collection);
-		}
-
-		private void appendToCollection(Deck deck)
-		{
-			beginRestoreSettings();
-
-			foreach (var cardId in deck.MainDeck.Order)
-				_collectionModel.Add(_cardRepo.CardsById[cardId], deck.MainDeck.Count[cardId]);
-
-			foreach (var cardId in deck.SideDeck.Order)
-				_collectionModel.Add(_cardRepo.CardsById[cardId], deck.SideDeck.Count[cardId]);
-
-			endRestoreSettings();
-
-			updateViewCards(true, null, FilterGroupCollection, false);
-			updateViewDeck(false, null, false);
-
-			historyUpdate();
-			updateFormStatus();
-		}
-
-		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
+		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
 		{
 			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
-			updateViewDeck(listChanged, card, touchedChanged);
+			updateViewDeck(listChanged, countChanged, card, touchedChanged);
+
+			if (restoringSettings())
+				return;
+
+			if (zone != Zone.SampleHand && (countChanged || listChanged))
+				historyUpdate();
+
+			updateFormStatus();
+		}
+
+		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
+		{
+			updateViewCards(listChanged, card, FilterGroupCollection, touchedChanged);
+
+			updateViewDeck(
+				listChanged:false,
+				countChanged: true,
+				card: card,
+				touchedChanged: touchedChanged);
 			
 			if (restoringSettings())
 				return;
@@ -303,26 +261,26 @@ namespace Mtgdb.Gui
 			updateFormStatus();
 		}
 
-		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged)
-		{
-			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
-			updateViewDeck(listChanged, card, touchedChanged);
-			
-			if (restoringSettings())
-				return;
 
-			if (countChanged || listChanged)
-				historyUpdate();
-
-			updateFormStatus();
-		}
 
 		private void updateViewCards(bool listChanged, Card card, int filterGroup, bool touchedChanged)
 		{
 			if (touchedChanged || listChanged && isFilterGroupEnabled(filterGroup))
 			{
-				if (!restoringSettings())
+				if (restoringSettings())
+					return;
+
+				if (touchedChanged && _deckModel.TouchedCard != null)
+				{
+					Action onFinished = () =>
+						_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewCards);
+
+					RunRefilterTask(onFinished);
+				}
+				else
+				{
 					RunRefilterTask();
+				}
 			}
 			else
 			{
@@ -333,17 +291,36 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void updateViewDeck(bool listChanged, Card card, bool touchedChanged)
+		private void updateViewDeck(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			if (listChanged)
-			{
 				_viewDeck.RefreshData();
+
+			if (touchedChanged && _deckModel.TouchedCard != null)
+				_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewDeck);
+
+			if (listChanged)
 				_viewDeck.Invalidate();
-			}
-			else if (touchedChanged)
+			else if (touchedChanged || countChanged)
 				_viewDeck.Invalidate();
 			else if (card != null)
 				_viewDeck.InvalidateCard(card);
+		}
+
+
+
+		private void loadDeck(Deck deck)
+		{
+			_historyModel.DeckFile = deck.File;
+			_historyModel.DeckName = deck.Name;
+
+			_deckModel.SetDeck(deck, _cardRepo);
+			_deckModel.Shuffle();
+		}
+
+		private void loadCollection(Deck collection)
+		{
+			_collectionModel.LoadCollection(collection, append: false);
 		}
 
 
@@ -364,6 +341,22 @@ namespace Mtgdb.Gui
 			StopDragging();
 			dragCard(card);
 		}
+
+		private void deckZoneDrag(object sender, DragEventArgs e)
+		{
+			var location = _tabHeadersDeck.PointToClient(new Point(e.X, e.Y));
+
+			int hoveredIndex;
+			bool hoveredClose;
+			_tabHeadersDeck.GetTabIndex(location, out hoveredIndex, out hoveredClose);
+
+			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= _tabHeadersDeck.Count)
+				return;
+
+			_tabHeadersDeck.SelectedIndex = hoveredIndex;
+		}
+
+
 
 		private void legalityFilterChanged()
 		{
@@ -553,11 +546,34 @@ namespace Mtgdb.Gui
 
 		public void CopyDeck()
 		{
-			var deck = Deck.Create(
-				_deckModel.MainDeck.CountById.ToDictionary(),
-				_deckModel.MainDeck.CardsIds.ToList(),
-				_deckModel.SideDeck.CountById.ToDictionary(),
-				_deckModel.SideDeck.CardsIds.ToList());
+			Deck deck;
+
+			switch (DeckZone)
+			{
+				case Zone.SampleHand:
+					deck = Deck.Create(
+						_deckModel.SampleHand.CountById.ToDictionary(),
+						_deckModel.SampleHand.CardsIds.ToList(),
+						null,
+						null);
+					break;
+				case Zone.Side:
+					deck = Deck.Create(
+						_deckModel.SideDeck.CountById.ToDictionary(),
+						_deckModel.SideDeck.CardsIds.ToList(),
+						null,
+						null);
+					break;
+				case Zone.Main:
+					deck = Deck.Create(
+						_deckModel.MainDeck.CountById.ToDictionary(),
+						_deckModel.MainDeck.CardsIds.ToList(),
+						_deckModel.SideDeck.CountById.ToDictionary(),
+						_deckModel.SideDeck.CardsIds.ToList());
+					break;
+				default:
+					return;
+			}
 
 			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
 			Clipboard.SetText(serialized);
@@ -570,20 +586,13 @@ namespace Mtgdb.Gui
 			if (deck.Error != null)
 				MessageBox.Show(deck.Error);
 			else
-			{
-				hideSampleHand();
-
-				if (append)
-					appendToDeck(deck);
-				else
-					loadDeck(deck);
-			}
+				_deckModel.Paste(deck, append, _cardRepo);
 		}
 
 		private void hideSampleHand()
 		{
-			if (_tabHeadersDeck.SelectedIndex == (int) Zone.SampleHand)
-				_tabHeadersDeck.SelectedIndex = (int) Zone.Main;
+			if (DeckZone == Zone.SampleHand)
+				DeckZone = Zone.Main;
 		}
 
 		private void pasteCollectionFromText(string text, bool append)
@@ -593,19 +602,32 @@ namespace Mtgdb.Gui
 			if (deck.Error != null)
 				MessageBox.Show(deck.Error);
 			else
-			{
-				if (append)
-					appendToCollection(deck);
-				else
-					loadCollection(deck);
-			}
+				_collectionModel.LoadCollection(deck, append);
 		}
 
 		private void deckDragDropped(object sender, DragEventArgs e)
 		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			if (_cardRepo.IsLoadingComplete)
 			{
-				var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				dragDropped(e.Data);
+				return;
+			}
+
+			_cardRepo.LoadingComplete += () => { this.Invoke(delegate { dragDropped(e.Data); }); };
+
+			MessageBox.Show(this,
+				"Mtgdb.Gui is loading cards.\r\n" +
+				"When completed, the deck(s) will be opened.",
+				"Opening deck(s) delayed",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information);
+		}
+
+		private void dragDropped(IDataObject dragData)
+		{
+			if (dragData.GetDataPresent(DataFormats.FileDrop))
+			{
+				var files = (string[]) dragData.GetData(DataFormats.FileDrop);
 
 				var decks = files.Select(f => _deckSerializationSubsystem.LoadFile(f))
 					.ToArray();
@@ -627,12 +649,12 @@ namespace Mtgdb.Gui
 				for (int i = 1; i < loadedDecks.Length; i++)
 				{
 					var deck = loadedDecks[i];
-					_uiModel.Form.NewTab(form => ((FormMain)form)._requiredDeck = deck);
+					_uiModel.Form.NewTab(form => ((FormMain) form)._requiredDeck = deck);
 				}
 			}
-			else if (e.Data.GetFormats().Contains(DataFormats.Text))
+			else if (dragData.GetFormats().Contains(DataFormats.Text))
 			{
-				string text = (string)e.Data.GetData(DataFormats.Text, autoConvert: true);
+				string text = (string) dragData.GetData(DataFormats.Text, autoConvert: true);
 
 				if (ModifierKeys == Keys.Alt)
 					pasteCollectionFromText(text, append: false);
@@ -652,13 +674,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			beginRestoreSettings();
-			_deckEditingSubsystem.NewSampleHand(_cardRepo);
-			endRestoreSettings();
-
-			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: false);
-			updateViewDeck(listChanged: true, card: null, touchedChanged: false);
-			updateFormStatus();
+			_deckModel.NewSampleHand(_cardRepo);
 		}
 
 		private void sampleHandMulligan(object sender, EventArgs e)
@@ -666,13 +682,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			beginRestoreSettings();
-			_deckEditingSubsystem.Mulligan(_cardRepo);
-			endRestoreSettings();
-
-			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: false);
-			updateViewDeck(listChanged: true, card: null, touchedChanged: false);
-			updateFormStatus();
+			_deckModel.Mulligan(_cardRepo);
 		}
 
 		private void sampleHandDraw(object sender, EventArgs e)
@@ -680,17 +690,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			beginRestoreSettings();
-			_deckEditingSubsystem.Draw(_cardRepo);
-			endRestoreSettings();
-
-			updateViewCards(listChanged: true, card: null, filterGroup: FilterGroupDeck, touchedChanged: true);
-			updateViewDeck(listChanged: true, card: null, touchedChanged: true);
-
-			_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewDeck);
-			_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewCards);
-
-			updateFormStatus();
+			_deckModel.Draw(_cardRepo);
 		}
 	}
 }

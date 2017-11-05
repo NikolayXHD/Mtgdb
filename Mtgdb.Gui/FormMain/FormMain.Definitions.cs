@@ -106,7 +106,6 @@ namespace Mtgdb.Gui
 				_viewDeck,
 				_deckModel,
 				_collectionModel,
-				_scrollSubsystem,
 				_draggingSubsystem,
 				Cursor,
 				formZoomCard);
@@ -138,7 +137,7 @@ namespace Mtgdb.Gui
 			KeyPreview = true;
 
 			_buttonSubsystem = new ButtonSubsystem();
-			_tabHeadersDeck.SelectedIndex = 0;
+			DeckZone = Zone.Main;
 
 			applyDisplayConfig(viewConfig, imageCache);
 			scale();
@@ -322,12 +321,18 @@ namespace Mtgdb.Gui
 			Application.ApplicationExit += applicationExit;
 
 			_layoutViewDeck.AllowDrop = true;
-			_layoutViewDeck.DragEnter += deckDragEnter;
-			_layoutViewDeck.DragDrop += deckDragDropped;
-
+			_tabHeadersDeck.AllowDrop = true;
 			_layoutViewCards.AllowDrop = true;
+
+			_layoutViewDeck.DragEnter += deckDragEnter;
 			_layoutViewCards.DragEnter += deckDragEnter;
+			_tabHeadersDeck.DragEnter += deckDragEnter;
+
+			_layoutViewDeck.DragDrop += deckDragDropped;
 			_layoutViewCards.DragDrop += deckDragDropped;
+			_tabHeadersDeck.DragDrop += deckDragDropped;
+
+			_tabHeadersDeck.DragOver += deckZoneDrag;
 
 			_cardRepo.SetAdded += cardRepoSetAdded;
 			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
@@ -396,10 +401,14 @@ namespace Mtgdb.Gui
 			Application.ApplicationExit -= applicationExit;
 
 			_layoutViewDeck.DragEnter -= deckDragEnter;
-			_layoutViewDeck.DragDrop -= deckDragDropped;
-
 			_layoutViewCards.DragEnter -= deckDragEnter;
+			_tabHeadersDeck.DragEnter -= deckDragEnter;
+
+			_layoutViewDeck.DragDrop -= deckDragDropped;
 			_layoutViewCards.DragDrop -= deckDragDropped;
+			_tabHeadersDeck.DragDrop -= deckDragDropped;
+
+			_tabHeadersDeck.DragOver -= deckZoneDrag;
 
 			_cardRepo.SetAdded -= cardRepoSetAdded;
 			_cardRepo.ImageLoadingComplete -= imageLoadingComplete;
@@ -473,5 +482,11 @@ namespace Mtgdb.Gui
 
 		private bool _threadsRunning;
 		private bool _eventsSubscribed;
+
+		public Zone DeckZone
+		{
+			get { return (Zone)_tabHeadersDeck.SelectedIndex; }
+			set { _tabHeadersDeck.SelectedIndex = (int) value; }
+		}
 	}
 }

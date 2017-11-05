@@ -172,7 +172,6 @@ namespace Mtgdb.Downloader
 			if (!File.Exists(file))
 				return;
 
-			Console.WriteLine("Deleting {0}", file);
 			File.Delete(file);
 		}
 
