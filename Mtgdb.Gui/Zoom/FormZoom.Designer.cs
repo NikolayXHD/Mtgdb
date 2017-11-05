@@ -66,7 +66,7 @@
 			// 
 			// _openFileButton
 			// 
-			this._openFileButton.Image = global::Mtgdb.Gui.Properties.Resources.image_file_48;
+			this._openFileButton.Image = global::Mtgdb.Gui.Properties.Resources.image_file_32;
 			this._openFileButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._openFileButton.Name = "_openFileButton";
 			this._openFileButton.Size = new System.Drawing.Size(392, 38);

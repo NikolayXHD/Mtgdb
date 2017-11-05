@@ -50,14 +50,20 @@ namespace Mtgdb.Gui
 			MouseWheel += mouseWheel;
 			DoubleBuffered = true;
 
-			var hotSpot = new Size(12, 0).ByDpi();
+			var hotSpot = new Size(14, 8).ByDpi();
 			var cursorImage = Resources.rightclick_48.HalfResizeDpi();
-
 			Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
 
-			_openFileButton.Image = Resources.image_file_48.HalfResizeDpi();
-			_showInExplorerButton.Image = Resources.open_32.HalfResizeDpi();
+			_openFileButton.Image = Dpi.ScalePercent > 100
+				? Resources.image_file_32.HalfResizeDpi()
+				: Resources.image_file_16.ResizeDpi();
+
+			_showInExplorerButton.Image = Dpi.ScalePercent > 100
+				? Resources.open_32.HalfResizeDpi()
+				: Resources.open_16.ResizeDpi();
+
 			var cloneImg = Resources.clone_48.HalfResizeDpi();
+
 			_showDuplicatesButton.Image = cloneImg;
 			_showOtherSetsButton.Image = cloneImg;
 		}

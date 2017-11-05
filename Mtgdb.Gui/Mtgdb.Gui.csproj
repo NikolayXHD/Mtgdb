@@ -335,6 +335,7 @@
     <None Include="Resources\hand_48.png" />
     <Content Include="Resources\Haste.png" />
     <Content Include="Resources\Hexproof.png" />
+    <None Include="Resources\image_file_16.png" />
     <Content Include="Resources\image_file_32.png" />
     <Content Include="Resources\Indestructible.png" />
     <None Include="Resources\index_16.png" />
