@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Mtgdb.Gui;
 
 namespace Mtgdb.Dal
@@ -20,27 +21,25 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public void SetCollection(Deck deck)
+		public void LoadCollection(Deck deck, bool append)
 		{
 			IsInitialized = true;
-			
-			CountById.Clear();
 
-			foreach (var id in deck.MainDeck.Count.Keys)
-				CountById[id] = 0;
-			foreach (var id in deck.SideDeck.Count.Keys)
-				CountById[id] = 0;
+			if (!append)
+				CountById.Clear();
 
-			foreach (var pair in deck.MainDeck.Count)
-				CountById[pair.Key] += pair.Value;
-			foreach (var pair in deck.SideDeck.Count)
-				CountById[pair.Key] += pair.Value;
+			var toAdd = deck.MainDeck.Count
+				.Concat(deck.SideDeck.Count);
+
+			foreach (var pair in toAdd)
+				CountById[pair.Key] = CountById.TryGet(pair.Key) + pair.Value;
 
 			CollectionChanged?.Invoke(
 				listChanged: true,
 				countChanged: true,
 				touchedChanged: false,
-				card: null);
+				card: null,
+				changedZone: null);
 		}
 
 		public void Add(Card card, int increment)
@@ -63,7 +62,8 @@ namespace Mtgdb.Dal
 				listChanged,
 				countChanged,
 				card,
-				touchedChanged: false);
+				touchedChanged: false,
+				changedZone: null);
 		}
 
 		private void remove(Card card, int newCount)

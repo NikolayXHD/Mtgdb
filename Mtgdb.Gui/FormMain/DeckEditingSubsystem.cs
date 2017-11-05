@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -16,7 +14,6 @@ namespace Mtgdb.Gui
 		private readonly Cursor _cursor;
 		private readonly DeckModel _deckModel;
 		private readonly CollectionModel _collectionModel;
-		private readonly ScrollSubsystem _scrollSubsystem;
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly FormZoom _formZoom;
 		private readonly Cursor _zoomCursor;
@@ -26,7 +23,6 @@ namespace Mtgdb.Gui
 			LayoutView layoutViewDeck,
 			DeckModel deckModel,
 			CollectionModel collectionModel,
-			ScrollSubsystem scrollSubsystem,
 			DraggingSubsystem draggingSubsystem,
 			Cursor cursor,
 			FormZoom formZoom)
@@ -36,7 +32,6 @@ namespace Mtgdb.Gui
 			_cursor = cursor;
 			_deckModel = deckModel;
 			_collectionModel = collectionModel;
-			_scrollSubsystem = scrollSubsystem;
 			_draggingSubsystem = draggingSubsystem;
 			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
 			_draggingSubsystem.DragRemoved += dragRemoved;
@@ -167,13 +162,6 @@ namespace Mtgdb.Gui
 		private void changeCountInDeck(Card card, int increment, bool touch)
 		{
 			_deckModel.Add(card, increment, touch);
-			
-			var touchedCard = _deckModel.TouchedCard;
-			if (touchedCard != null)
-			{
-				_scrollSubsystem.EnsureCardVisibility(touchedCard, _layoutViewCards);
-				_scrollSubsystem.EnsureCardVisibility(touchedCard, _layoutViewDeck);
-			}
 		}
 
 		private void changeCountInCollection(Card card, int increment)
@@ -200,89 +188,5 @@ namespace Mtgdb.Gui
 
 			throw new Exception(@"wrapper not found");
 		}
-
-
-		public void NewSampleHand(CardRepository cardRepository)
-		{
-			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
-				return;
-
-			createSampleHand(7, cardRepository);
-		}
-
-		public void Draw(CardRepository cardRepository)
-		{
-			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
-				return;
-
-			draw(cardRepository, touch: true);
-		}
-
-		public void Mulligan(CardRepository cardRepository)
-		{
-			if (!cardRepository.IsLoadingComplete || _deckModel.Zone != Zone.SampleHand)
-				return;
-
-			int count = getMulliganCount();
-			createSampleHand(count, cardRepository);
-		}
-
-		private int getMulliganCount()
-		{
-			return Math.Max(0, _deckModel.SampleHand.CountById.Sum(_ => _.Value) - 1);
-		}
-
-		private void createSampleHand(int handSize, CardRepository cardRepository)
-		{
-			_deckModel.SampleHand.Clear();
-			_deckModel.DataSource.Clear();
-
-			Shuffle();
-
-			for (int i = 0; i < handSize; i++)
-				draw(cardRepository, touch: false);
-
-			reorderDeck(cardRepository);
-		}
-
-		private void reorderDeck(CardRepository cardRepository)
-		{
-			_deckModel.Deck.SetOrder(_deckModel.SampleHand.CardsIds
-				.OrderBy(id => cardRepository.CardsById[id].Cmc)
-				.ThenBy(id => cardRepository.CardsById[id].TypeEn)
-				.ThenBy(id => cardRepository.CardsById[id].Color)
-				.ToList());
-
-			_deckModel.DataSource.Sort((c1, c2) =>
-				_deckModel.SampleHand.CardsIds.IndexOf(c1.Id)
-					.CompareTo(_deckModel.SampleHand.CardsIds.IndexOf(c2.Id)));
-		}
-
-		public void Shuffle()
-		{
-			var library = new List<string>();
-
-			foreach (var pair in _deckModel.MainDeck.CountById)
-				for (int i = 0; i < pair.Value; i++)
-					library.Add(pair.Key);
-
-			_library = library;
-		}
-
-		private void draw(CardRepository cardRepository, bool touch)
-		{
-			if (_library == null || _library.Count == 0)
-				return;
-
-			var index = _random.Next(_library.Count);
-			var id = _library[index];
-			_library.RemoveAt(index);
-
-			changeCountInDeck(cardRepository.CardsById[id], 1, touch);
-		}
-
-
-		private static readonly Random _random = new Random();
-		private List<string> _library;
 	}
 }

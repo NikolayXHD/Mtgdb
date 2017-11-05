@@ -152,6 +152,8 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndexChanging += selectedPageChanging;
 			_tabs.SelectedIndexChanged += selectedPageChanged;
 			_tabs.TabReordered += pageReordered;
+			_tabs.AllowDrop = true;
+			_tabs.DragOver += tabsDragOver;
 
 			KeyDown += formKeyDown;
 
@@ -171,6 +173,26 @@ namespace Mtgdb.Gui
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
 
 			uiModel.Form = this;
+		}
+
+		private void tabsDragOver(object sender, DragEventArgs e)
+		{
+			var location = _tabs.PointToClient(new Point(e.X, e.Y));
+
+			int hoveredIndex;
+			bool hoveredClose;
+			_tabs.GetTabIndex(location, out hoveredIndex, out hoveredClose);
+
+			if (hoveredIndex == _tabs.AddButtonIndex)
+			{
+				_tabs.AddTab();
+				return;
+			}
+
+			if (hoveredIndex < 0 || hoveredIndex == _tabs.SelectedIndex || hoveredIndex >= _tabs.Count)
+				return;
+			
+			_tabs.SelectedIndex = hoveredIndex;
 		}
 
 		private void repositoryLoaded()

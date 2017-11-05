@@ -81,6 +81,7 @@
     <Compile Include="Index\SearchResult.cs" />
     <Compile Include="Index\IntellisenseSuggest.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
+    <Compile Include="Model\CardExtensions.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\Deck.cs" />
     <Compile Include="Model\DeckChangedEventHandler.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Model\IntToInternedStringConverter.cs" />
     <Compile Include="Model\IUiForm.cs" />
     <Compile Include="Model\Legality.cs" />
+    <Compile Include="Model\Zone.cs" />
     <Compile Include="Price\DownloaderPriceRepository.cs" />
     <Compile Include="Price\PriceId.cs" />
     <Compile Include="Price\PriceRepository.cs" />
