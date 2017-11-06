@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace Mtgdb.Controls
 {
 	public class RichTextToken
@@ -9,6 +7,6 @@ namespace Mtgdb.Controls
 		public RichTextTokenType Type { get; set; }
 		public bool IsHighlighted { get; set; }
 		public bool IsContext { get; set; }
-		public Bitmap Icon { get; set; }
+		public string IconName { get; set; }
 	}
 }

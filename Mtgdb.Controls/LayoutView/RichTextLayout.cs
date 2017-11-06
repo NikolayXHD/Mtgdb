@@ -8,35 +8,23 @@ namespace Mtgdb.Controls
 {
 	internal class RichTextLayout
 	{
-		private const float HeightPart = 0.8f;
-
-		private float _x;
-		private float _y;
-		private readonly float _lineHeight;
-		private readonly float _spaceWidth;
-
-		private readonly Brush _brush;
-		private readonly Brush _contextBrush;
-		private readonly Pen _pen;
-
-		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
-		private readonly RichTextRenderContext _renderContext;
-		private readonly SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x50, 0x50, 0x50));
-
-		public RichTextLayout(RichTextRenderContext renderContext)
+		public RichTextLayout(RichTextRenderContext renderContext, IconRecognizer iconRecognizer)
 		{
 			_renderContext = renderContext;
-			
+			_iconRecognizer = iconRecognizer;
+
 			_brush = new SolidBrush(renderContext.HighlightColor);
 			_contextBrush = new SolidBrush(renderContext.HighlightContextColor);
 			_pen = new Pen(renderContext.HighlightBorderColor, renderContext.HighlightBorderWidth);
-
+			
 			_x = _renderContext.Rect.Left;
 			_y = _renderContext.Rect.Top;
 
 			var lineSize = getLineSize(@" ");
 			_lineHeight = lineSize.Height;
 			_spaceWidth = lineSize.Width;
+
+			_iconShadowOffset = new SizeF(-0.7f, 1f).ByDpi().ToPointF();
 		}
 
 		public bool PrintWord(List<RichTextToken> word)
@@ -75,7 +63,7 @@ namespace Mtgdb.Controls
 
 				string tokenText = _renderContext.Text.Substring(token.Index, token.Length);
 
-				if (token.Icon == null)
+				if (token.IconName == null)
 				{
 					if (overflow)
 						while (tokenText.Length > 0 && getLineSize(tokenText).Width > targetRect.Width)
@@ -105,21 +93,25 @@ namespace Mtgdb.Controls
 						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
 						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}"))
 					{
-						var icon = token.Icon.FitIn(new Size(int.MaxValue, (int)Math.Round(_lineHeight - 1)));
-						var iconRect = new RectangleF(new Point((int) Math.Round(_x), (int) Math.Round(_y)), icon.Size);
+						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
+						var iconRect = new RectangleF(location.Round(), icon.Size);
 
 						printBatch.Add(iconRect, (rect, hb, he) =>
 						{
-							rect.Offset(-0.7f, 1f);
+							var shadowOffset = _iconShadowOffset.Multiply(_lineHeight / 16f);
+							rect.Offset(shadowOffset);
 							_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
 						});
 
-						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(icon, rect));
+						printBatch.Add(iconRect, (rect, hb, he) =>
+						{
+							_renderContext.Graphics.DrawImage(icon, rect);
+						});
 					}
 					else
 					{
-						var icon = token.Icon.FitIn(new Size(int.MaxValue, (int)Math.Round(_lineHeight)));
-						var iconRect = new RectangleF(new Point((int)Math.Round(_x), (int)Math.Round(_y)), icon.Size);
+						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round());
+						var iconRect = new RectangleF(location.Round(), icon.Size);
 
 						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(icon, rect));
 					}
@@ -242,10 +234,10 @@ namespace Mtgdb.Controls
 		private float getTokenWidth(string text, RichTextToken richTextToken)
 		{
 			float delta;
-			if (richTextToken.Icon == null)
+			if (richTextToken.IconName == null)
 				delta = getLineSize(text.Substring(richTextToken.Index, richTextToken.Length)).Width;
 			else
-				delta = richTextToken.Icon.Size.FitIn(new SizeF(float.MaxValue, _lineHeight)).Width;
+				delta = _iconRecognizer.GetIcon(richTextToken.IconName, (int) Math.Round(_lineHeight)).Width;
 
 			return delta;
 		}
@@ -292,5 +284,24 @@ namespace Mtgdb.Controls
 
 			queue.Clear();
 		}
+
+
+
+		private const float HeightPart = 0.8f;
+
+		private float _x;
+		private float _y;
+		private readonly float _lineHeight;
+		private readonly float _spaceWidth;
+
+		private readonly Brush _brush;
+		private readonly Brush _contextBrush;
+		private readonly Pen _pen;
+
+		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
+		private readonly RichTextRenderContext _renderContext;
+		private readonly IconRecognizer _iconRecognizer;
+		private readonly SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x50, 0x50, 0x50));
+		private readonly PointF _iconShadowOffset;
 	}
 }

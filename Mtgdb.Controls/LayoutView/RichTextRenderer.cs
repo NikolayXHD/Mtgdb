@@ -6,7 +6,7 @@ namespace Mtgdb.Controls
 	{
 		public static void Render(RichTextRenderContext renderContext, IconRecognizer iconRecognizer)
 		{
-			var textTokenPrinter = new RichTextLayout(renderContext);
+			var textTokenPrinter = new RichTextLayout(renderContext, iconRecognizer);
 			var readingContext = new RichTextTokenReader(renderContext.Text, renderContext.HighlightRanges);
 
 			var currentWord = new List<RichTextToken>();

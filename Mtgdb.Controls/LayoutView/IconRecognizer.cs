@@ -7,6 +7,9 @@ namespace Mtgdb.Controls
 	{
 		private readonly Dictionary<string, Bitmap> _imageByText;
 
+		private readonly Dictionary<string, Dictionary<int, Bitmap>> _iconsByTextByHeight =
+			new Dictionary<string, Dictionary<int, Bitmap>>();
+
 		public IconRecognizer(Dictionary<string, Bitmap> imageByText)
 		{
 			_imageByText = imageByText;
@@ -39,7 +42,7 @@ namespace Mtgdb.Controls
 						result.Add(
 							new RichTextToken
 							{
-								Icon = null,
+								IconName = null,
 								Index = index,
 								Length = length,
 								Type = richTextToken.Type,
@@ -55,27 +58,55 @@ namespace Mtgdb.Controls
 					iconEnd = i;
 					int length = i + 1 - iconStart;
 
-					string symbol = text.Substring(iconStart + 1, length -2);
+					var textToken = new RichTextToken
+					{
+						Index = iconStart,
+						Length = length,
+						Type = richTextToken.Type,
+						IsHighlighted = richTextToken.IsHighlighted,
+						IsContext = richTextToken.IsContext
+					};
 
-					Bitmap icon;
-					_imageByText.TryGetValue(symbol, out icon);
+					string symbol = text.Substring(iconStart + 1, length - 2);
 
-					result.Add(
-						new RichTextToken
-						{
-							Icon = icon,
-							Index = iconStart,
-							Length = length,
-							Type = richTextToken.Type,
-							IsHighlighted = richTextToken.IsHighlighted,
-							IsContext = richTextToken.IsContext
-						});
+					if (_imageByText.ContainsKey(symbol))
+						textToken.IconName = symbol;
+
+					result.Add(textToken);
 
 					iconStart = -1;
 				}
 			}
 
 			return result;
+		}
+
+		public Bitmap GetIcon(string name, int maxHeight)
+		{
+			Bitmap icon;
+			if (!_imageByText.TryGetValue(name, out icon))
+				return null;
+
+			var scaledSize = icon.Size.FitIn(new Size(int.MaxValue, maxHeight));
+
+			if (scaledSize == icon.Size)
+				return icon;
+
+			Dictionary<int, Bitmap> iconsBySize;
+			if (!_iconsByTextByHeight.TryGetValue(name, out iconsBySize))
+			{
+				iconsBySize = new Dictionary<int, Bitmap>();
+				_iconsByTextByHeight.Add(name, iconsBySize);
+			}
+
+			Bitmap scaledIcon;
+			if (!iconsBySize.TryGetValue(scaledSize.Height, out scaledIcon))
+			{
+				scaledIcon = icon.FitIn(scaledSize);
+				iconsBySize.Add(scaledSize.Height, scaledIcon);
+			}
+
+			return scaledIcon;
 		}
 	}
 }
