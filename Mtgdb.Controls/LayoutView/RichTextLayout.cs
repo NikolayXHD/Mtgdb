@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -18,7 +17,6 @@ namespace Mtgdb.Controls
 
 		private readonly Brush _brush;
 		private readonly Brush _contextBrush;
-		private readonly Brush _backgroundBrush;
 		private readonly Pen _pen;
 
 		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
@@ -32,7 +30,6 @@ namespace Mtgdb.Controls
 			_brush = new SolidBrush(renderContext.HighlightColor);
 			_contextBrush = new SolidBrush(renderContext.HighlightContextColor);
 			_pen = new Pen(renderContext.HighlightBorderColor, renderContext.HighlightBorderWidth);
-			_backgroundBrush = new SolidBrush(renderContext.BackgroundColor);
 
 			_x = _renderContext.Rect.Left;
 			_y = _renderContext.Rect.Top;
@@ -104,32 +101,27 @@ namespace Mtgdb.Controls
 				}
 				else
 				{
-					var iconRect = new RectangleF(
-						new PointF(_x, _y),
-						token.Icon.Size.FitIn(new SizeF(float.MaxValue, _lineHeight)));
-					
 					if (!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{E}") &&
 						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
 						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}"))
 					{
-						iconRect.Inflate(-0.5f, -0.5f);
-						iconRect.Offset(-0.35f, 0.5f);
-						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.FillEllipse(_shadowBrush, rect));
+						var icon = token.Icon.FitIn(new Size(int.MaxValue, (int)Math.Round(_lineHeight - 1)));
+						var iconRect = new RectangleF(new Point((int) Math.Round(_x), (int) Math.Round(_y)), icon.Size);
 
-						iconRect.Offset(0.7f, -1f);
+						printBatch.Add(iconRect, (rect, hb, he) =>
+						{
+							rect.Offset(-0.7f, 1f);
+							_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
+						});
 
-						printBatch.Add(iconRect,
-							(rect, hb, he) =>
-							{
-								rect.Inflate(-0.5f, -0.5f);
-								_renderContext.Graphics.FillEllipse(_backgroundBrush, rect);
-							});
-
-						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(token.Icon, rect));
+						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(icon, rect));
 					}
 					else
 					{
-						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(token.Icon, rect));
+						var icon = token.Icon.FitIn(new Size(int.MaxValue, (int)Math.Round(_lineHeight)));
+						var iconRect = new RectangleF(new Point((int)Math.Round(_x), (int)Math.Round(_y)), icon.Size);
+
+						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(icon, rect));
 					}
 				}
 

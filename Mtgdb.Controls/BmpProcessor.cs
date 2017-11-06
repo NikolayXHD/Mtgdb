@@ -89,7 +89,7 @@ namespace Mtgdb
 
 		private Rectangle _rect;
 		public byte[] RgbValues { get; }
-		
+
 		public BmpReader(Bitmap bmp, Rectangle rect)
 		{
 			const PixelFormat format = PixelFormat.Format32bppArgb;
@@ -97,7 +97,7 @@ namespace Mtgdb
 			_rect = rect;
 			_bmp = bmp;
 			_bmpData = _bmp.LockBits(_rect, ImageLockMode.ReadOnly, format);
-			
+
 			int numBytes = _bmpData.Stride * _bmpData.Height;
 			RgbValues = new byte[numBytes];
 			Marshal.Copy(_bmpData.Scan0, RgbValues, 0, numBytes);
@@ -126,9 +126,9 @@ namespace Mtgdb
 		{
 			ImageChanged = true;
 
-			float scaleX = (float)_sourceRect.Width / Rect.Width;
-			float scaleY = (float)_sourceRect.Height / Rect.Height;
-			
+			float scaleX = (float) _sourceRect.Width / Rect.Width;
+			float scaleY = (float) _sourceRect.Height / Rect.Height;
+
 			using (var original = new BmpReader(_original, _sourceRect))
 				for (int i = 0; i < Rect.Width; i++)
 				{
@@ -144,11 +144,11 @@ namespace Mtgdb
 
 						float r = 0, g = 0, b = 0, a = 0, w = 0, wc = 0, nr = 0, ng = 0, nb = 0;
 
-						for (int iOr = (int) Math.Floor(left); iOr < Math.Ceiling(right); iOr++)
+						for (int iOr = (int) Math.Floor(left); iOr < (int) Math.Ceiling(right - 0.0001); iOr++)
 						{
 							float wX = Math.Min(right, iOr + 1) - Math.Max(left, iOr);
 
-							for (int jOr = (int) Math.Floor(top); jOr < Math.Ceiling(bottom); jOr++)
+							for (int jOr = (int) Math.Floor(top); jOr < (int) Math.Ceiling(bottom - 0.0001); jOr++)
 							{
 								float wY = Math.Min(bottom, jOr + 1) - Math.Max(top, jOr);
 
