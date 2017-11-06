@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using Mtgdb.Dal;
-using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
 {

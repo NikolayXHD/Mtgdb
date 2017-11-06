@@ -1,56 +1,65 @@
 ﻿{
-	"Plains": {
-		"Text": "{T}: Add {W} to your mana pool."
+	"Cards": {
+		"Plains": {
+			"Text": "{T}: Add {W} to your mana pool."
+		},
+		"Island": {
+			"Text": "{T}: Add {U} to your mana pool."
+		},
+		"Swamp": {
+			"Text": "{T}: Add {B} to your mana pool."
+		},
+		"Mountain": {
+			"Text": "{T}: Add {R} to your mana pool."
+		},
+		"Forest": {
+			"Text": "{T}: Add {G} to your mana pool."
+		},
+		"Wastes": {
+			"Text": "{T}: Add {C} to your mana pool."
+		},
+		"Snow-Covered Plains": {
+			"Text": "{T}: Add {W} to your mana pool."
+		},
+		"Snow-Covered Island": {
+			"Text": "{T}: Add {U} to your mana pool."
+		},
+		"Snow-Covered Swamp": {
+			"Text": "{T}: Add {B} to your mana pool."
+		},
+		"Snow-Covered Mountain": {
+			"Text": "{T}: Add {R} to your mana pool."
+		},
+		"Snow-Covered Forest": {
+			"Text": "{T}: Add {G} to your mana pool."
+		},
+		"Snow-Covered Wastes": {
+			"Text": "{T}: Add {C} to your mana pool."
+		},
+		"Doubling Cube": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Elemental Resonance": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Urborg, Tomb of Yawgmoth": {
+			"GeneratedMana": "{B}"
+		},
+		"Mons's Goblin Waiters": {
+			"GeneratedMana": "{R}"
+		},
+		"Jaraku the Interloper": {
+			"FlipDuplicate": true
+		},
+		"Scarmaker": {
+			"FlipDuplicate": true
+		}
 	},
-	"Island": {
-		"Text": "{T}: Add {U} to your mana pool."
-	},
-	"Swamp": {
-		"Text": "{T}: Add {B} to your mana pool."
-	},
-	"Mountain": {
-		"Text": "{T}: Add {R} to your mana pool."
-	},
-	"Forest": {
-		"Text": "{T}: Add {G} to your mana pool."
-	},
-	"Wastes": {
-		"Text": "{T}: Add {C} to your mana pool."
-	},
-	"Snow-Covered Plains": {
-		"Text": "{T}: Add {W} to your mana pool."
-	},
-	"Snow-Covered Island": {
-		"Text": "{T}: Add {U} to your mana pool."
-	},
-	"Snow-Covered Swamp": {
-		"Text": "{T}: Add {B} to your mana pool."
-	},
-	"Snow-Covered Mountain": {
-		"Text": "{T}: Add {R} to your mana pool."
-	},
-	"Snow-Covered Forest": {
-		"Text": "{T}: Add {G} to your mana pool."
-	},
-	"Snow-Covered Wastes": {
-		"Text": "{T}: Add {C} to your mana pool."
-	},
-	"Doubling Cube": {
-		"GeneratedMana": "{W}{U}{B}{R}{G}"
-	},
-	"Elemental Resonance": {
-		"GeneratedMana": "{W}{U}{B}{R}{G}"
-	},
-	"Urborg, Tomb of Yawgmoth": {
-		"GeneratedMana": "{B}"
-	},
-	"Mons's Goblin Waiters": {
-		"GeneratedMana": "{R}"
-	},
-	"Jaraku the Interloper": {
-		"FlipDuplicate": true
-	},
-	"Scarmaker": {
-		"FlipDuplicate": true
+	"Legality": {
+		"Standard": {
+				"Sets": [ "XLN", "HOU", "AKH", "AER", "KLD", "W17" ],
+					"Banned": [ "Aetherworks Marvel", "Smuggler's Copter", "Felidar Guardian" ],
+					"Restricted": []
+		}
 	}
 }

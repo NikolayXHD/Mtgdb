@@ -91,6 +91,8 @@
     <Compile Include="Model\IntToInternedStringConverter.cs" />
     <Compile Include="Model\IUiForm.cs" />
     <Compile Include="Model\Legality.cs" />
+    <Compile Include="Model\Patch\LegalityPatch.cs" />
+    <Compile Include="Model\Patch\Patch.cs" />
     <Compile Include="Model\Zone.cs" />
     <Compile Include="Price\DownloaderPriceRepository.cs" />
     <Compile Include="Price\PriceId.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="ImageCache\BmpCornerRemoval.cs" />
     <Compile Include="ImageRepository.cs" />
     <Compile Include="Keywords\KeywordDefinitions.cs" />
-    <Compile Include="Model\CardDelta.cs" />
+    <Compile Include="Model\Patch\CardPatch.cs" />
     <Compile Include="Model\CardLocalization.cs" />
     <Compile Include="CardRepository.cs" />
     <Compile Include="EditDistance\EditDistance.cs" />
