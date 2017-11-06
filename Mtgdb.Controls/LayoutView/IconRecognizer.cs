@@ -5,9 +5,9 @@ namespace Mtgdb.Controls
 {
 	public class IconRecognizer
 	{
-		private readonly Dictionary<string, Image> _imageByText;
+		private readonly Dictionary<string, Bitmap> _imageByText;
 
-		public IconRecognizer(Dictionary<string, Image> imageByText)
+		public IconRecognizer(Dictionary<string, Bitmap> imageByText)
 		{
 			_imageByText = imageByText;
 		}
@@ -57,7 +57,7 @@ namespace Mtgdb.Controls
 
 					string symbol = text.Substring(iconStart + 1, length -2);
 
-					Image icon;
+					Bitmap icon;
 					_imageByText.TryGetValue(symbol, out icon);
 
 					result.Add(

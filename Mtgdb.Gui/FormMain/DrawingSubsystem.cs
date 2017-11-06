@@ -59,9 +59,9 @@ namespace Mtgdb.Gui
 			var mappings = ResourcesCost.ResourceManager
 				.GetResourceSet(CultureInfo.CurrentCulture, false, true)
 				.Cast<DictionaryEntry>()
-				.Select(_ => new { symbols = getSymbol((string) _.Key), image = (Image) _.Value });
+				.Select(_ => new { symbols = getSymbol((string) _.Key), image = (Bitmap) _.Value });
 
-			var imageByText = new Dictionary<string, Image>(Str.Comparer);
+			var imageByText = new Dictionary<string, Bitmap>(Str.Comparer);
 
 			foreach (var mapping in mappings)
 			{
