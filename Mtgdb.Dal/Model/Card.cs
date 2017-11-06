@@ -196,7 +196,22 @@ namespace Mtgdb.Dal
 			}
 		}
 
-
+		internal void SetLegality(string format, string legality)
+		{
+			if (Str.Equals(legality, Legality.Illegal))
+				LegalityByFormat.Remove(format);
+			else
+			{
+				LegalityNote note;
+				if (LegalityByFormat.TryGetValue(format, out note))
+					note.Legality = legality;
+				else
+				{
+					note = new LegalityNote { Format = format, Legality = legality };
+					LegalityByFormat.Add(format, note);
+				}
+			}
+		}
 
 		[JsonIgnore]
 		public CardLocalization Localization { get; internal set; }
@@ -582,36 +597,24 @@ namespace Mtgdb.Dal
 
 		public string GetFlavor(string language) => Localization?.GetFlavor(language) ?? FlavorEn;
 
-
-
-		internal void ApplyDelta(CardDelta cardDelta)
+		internal void PatchCard(CardPatch cardPatch)
 		{
-			if (cardDelta.Legality != null)
-				foreach (var delta in cardDelta.Legality)
-				{
-					LegalityNote legality;
-					if (LegalityByFormat.TryGetValue(delta.Format, out legality))
-						legality.Legality = delta.Legality;
-					else
-						LegalityByFormat.Add(delta.Format, delta);
-				}
-
-			if (cardDelta.Text != null)
+			if (cardPatch.Text != null)
 			{
 				_textDeltaApplied = true;
-				TextEn = cardDelta.Text;
+				TextEn = cardPatch.Text;
 			}
 
-			if (cardDelta.GeneratedMana != null)
+			if (cardPatch.GeneratedMana != null)
 			{
-				GeneratedMana = cardDelta.GeneratedMana;
+				GeneratedMana = cardPatch.GeneratedMana;
 			}
 
-			if (cardDelta.FlipDuplicate)
+			if (cardPatch.FlipDuplicate)
 				Remove = TextEn != OriginalText;
 
-			if (cardDelta.MciNumber != null)
-				MciNumber = cardDelta.MciNumber;
+			if (cardPatch.MciNumber != null)
+				MciNumber = cardPatch.MciNumber;
 		}
 
 		internal bool Remove { get; private set; }

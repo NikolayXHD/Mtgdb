@@ -10,35 +10,13 @@ namespace Mtgdb.Dal
 {
 	public class CardRepository
 	{
-		private readonly UiModel _uiModel;
-
-		public event Action SetAdded;
-		public event Action LoadingComplete;
-		public event Action ImageLoadingComplete;
-		public event Action LocalizationLoadingComplete;
-
-		public bool IsFileLoadingComplete { get; private set; }
-		public bool IsLoadingComplete { get; private set; }
-		public bool IsImageLoadingComplete { get; private set; }
-		public bool IsLocalizationLoadingComplete { get; private set; }
-
-		private string SetsFile { get; }
-		private string BannedAndRestrictedFile { get; }
-
-		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
-		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
-		public IDictionary<string, List<Card>> CardsByName { get; private set; }
-
-		private byte[] _streamContent;
-		private Dictionary<string, CardDelta> _cardLegailityDeltas;
-
 		public CardRepository(UiModel uiModel)
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
 			BannedAndRestrictedFile = AppDir.Data.AddPath("patch.json");
 
 			Cards = new List<Card>();
-			
+
 			_uiModel = uiModel;
 		}
 
@@ -47,7 +25,7 @@ namespace Mtgdb.Dal
 		public void LoadFile()
 		{
 			_streamContent = File.ReadAllBytes(SetsFile);
-			_cardLegailityDeltas = JsonConvert.DeserializeObject<Dictionary<string, CardDelta>>(File.ReadAllText(BannedAndRestrictedFile));
+			_patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(BannedAndRestrictedFile));
 			IsFileLoadingComplete = true;
 		}
 
@@ -81,7 +59,7 @@ namespace Mtgdb.Dal
 						var card = set.Cards[i];
 						card.Set = set;
 						card.UiModel = _uiModel;
-						
+
 						preProcessCard(card);
 					}
 
@@ -114,18 +92,20 @@ namespace Mtgdb.Dal
 				.ToDictionary(
 					gr => gr.Key,
 					// card_by_name_sorting
-					gr => gr.OrderByDescending(_=>_.ReleaseDate).ToList(),
+					gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
 					Str.Comparer);
 
 			for (int i = 0; i < Cards.Count; i++)
 				Cards[i].IndexInFile = i;
+
+			patchLegality();
 
 			IsLoadingComplete = true;
 			LoadingComplete?.Invoke();
 
 			// освободить память
 			_streamContent = null;
-			_cardLegailityDeltas = null;
+			_patch = null;
 			Cards.Capacity = Cards.Count;
 		}
 
@@ -168,7 +148,7 @@ namespace Mtgdb.Dal
 			}
 			else if (Str.Equals(card.ImageName, "Sultai Ascendacy"))
 			{
-					card.ImageName = "Sultai Ascendancy";
+				card.ImageName = "Sultai Ascendancy";
 			}
 
 			if (card.SubtypesArr != null)
@@ -186,15 +166,15 @@ namespace Mtgdb.Dal
 			else
 				card.Supertypes = string.Empty;
 
-			CardDelta delta;
-			if (_cardLegailityDeltas.TryGetValue(card.SetCode, out delta))
-				card.ApplyDelta(delta);
+			CardPatch patch;
+			if (_patch.Cards.TryGetValue(card.SetCode, out patch))
+				card.PatchCard(patch);
 
-			if (_cardLegailityDeltas.TryGetValue(card.NameEn, out delta))
-				card.ApplyDelta(delta);
+			if (_patch.Cards.TryGetValue(card.NameEn, out patch))
+				card.PatchCard(patch);
 
-			if (_cardLegailityDeltas.TryGetValue(card.Id, out delta))
-				card.ApplyDelta(delta);
+			if (_patch.Cards.TryGetValue(card.Id, out patch))
+				card.PatchCard(patch);
 
 			if (card.GeneratedMana == null)
 				card.GeneratedMana = string.Intern(GeneratedManaParser.ParseGeneratedMana(card.TextEn));
@@ -217,6 +197,31 @@ namespace Mtgdb.Dal
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
 				? string.Join(" ", card.ColorsArr)
 				: "Colorless";
+		}
+
+		private void patchLegality()
+		{
+			foreach (var pair in _patch.Legality)
+			{
+				var legal = new HashSet<string>(Str.Comparer);
+
+				foreach (string set in pair.Value.Sets)
+					foreach (var card in SetsByCode[set].Cards)
+						if (!pair.Value.Banned.Contains(card.NameEn) && !pair.Value.Restricted.Contains(card.NameEn))
+							legal.Add(card.NameEn);
+
+				foreach (var card in Cards)
+				{
+					if (legal.Contains(card.NameEn))
+						card.SetLegality(pair.Key, Legality.Legal);
+					else if (pair.Value.Restricted.Contains(card.NameEn))
+						card.SetLegality(pair.Key, Legality.Restricted);
+					else if (pair.Value.Banned.Contains(card.NameEn))
+						card.SetLegality(pair.Key, Legality.Banned);
+					else
+						card.SetLegality(pair.Key, Legality.Illegal);
+				}
+			}
 		}
 
 		private static float? getPower(string power)
@@ -274,8 +279,7 @@ namespace Mtgdb.Dal
 
 		public List<ImageModel> GetImagesArt(Card card, ImageRepository repository)
 		{
-			return repository.GetArts(card, GetReleaseDateSimilarity)
-				?? new List<ImageModel>();
+			return repository.GetArts(card, GetReleaseDateSimilarity) ?? new List<ImageModel>();
 		}
 
 		public string GetReleaseDateSimilarity(string cardSet, string setCode)
@@ -354,5 +358,29 @@ namespace Mtgdb.Dal
 			foreach (var card in Cards)
 				card.PricesValues = priceRepository.GetPrice(card);
 		}
+
+
+
+		private readonly UiModel _uiModel;
+
+		public event Action SetAdded;
+		public event Action LoadingComplete;
+		public event Action ImageLoadingComplete;
+		public event Action LocalizationLoadingComplete;
+
+		public bool IsFileLoadingComplete { get; private set; }
+		public bool IsLoadingComplete { get; private set; }
+		public bool IsImageLoadingComplete { get; private set; }
+		public bool IsLocalizationLoadingComplete { get; private set; }
+
+		private string SetsFile { get; }
+		private string BannedAndRestrictedFile { get; }
+
+		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
+		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
+		public IDictionary<string, List<Card>> CardsByName { get; private set; }
+
+		private byte[] _streamContent;
+		private Patch _patch;
 	}
 }
