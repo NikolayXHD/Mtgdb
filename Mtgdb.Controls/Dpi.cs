@@ -12,7 +12,7 @@ namespace Mtgdb.Controls
 				SetProcessDPIAware();
 
 			_scale = getScale();
-			_scaleHalf = _scale.multiply(0.5f);
+			_scaleHalf = _scale.Multiply(0.5f);
 		}
 
 		public static int ByDpiWidth(this int width)
@@ -27,29 +27,17 @@ namespace Mtgdb.Controls
 
 		public static Size ByDpi(this Size original)
 		{
-			return scaleBy(original, _scale);
+			return original.ScaleBy(_scale);
+		}
+
+		public static SizeF ByDpi(this SizeF original)
+		{
+			return original.ScaleBy(_scale);
 		}
 
 		public static Size HalfByDpi(this Size original)
 		{
-			return scaleBy(original, _scaleHalf);
-		}
-
-		public static int SizeInPixels(this Font font)
-		{
-			return ((int)(font.SizeInPoints * 96 / 72)).ByDpiWidth();
-		}
-
-		private static Size scaleBy(this Size original, SizeF scale)
-		{
-			return new Size(
-				(int)(original.Width * scale.Width),
-				(int)(original.Height * scale.Height));
-		}
-
-		private static SizeF multiply(this SizeF size, float value)
-		{
-			return new SizeF(value * size.Width, value * size.Height);
+			return original.ScaleBy(_scaleHalf);
 		}
 
 		private static SizeF getScale()

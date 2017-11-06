@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Dpi.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="GeometryHelpers.cs" />
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
     <Compile Include="LayoutView\ContentAlignmentRanges.cs" />
