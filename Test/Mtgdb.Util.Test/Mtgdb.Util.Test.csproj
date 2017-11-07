@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{71505A79-B810-4C19-9DC4-C880F23E2A16}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Util</RootNamespace>
+    <AssemblyName>Mtgdb.Util.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\out\bin\debug-test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\out\bin\release-test\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.0.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Magick.NET-Q16-AnyCPU.7.0.7.900\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.6.1\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="Tesseract, Version=3.0.2.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Tesseract.3.0.2.0\lib\net40\Tesseract.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\liblept172.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\libtesseract304.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\liblept172.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\libtesseract304.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dal\DeckFormattersTests.cs" />
+    <Compile Include="ExternalData\GathererClient.cs" />
+    <Compile Include="ExternalData\GathererImagePreProcessor.cs" />
+    <Compile Include="ExternalData\WaifuScaler.cs" />
+    <Compile Include="Images\ArtistDetection.cs" />
+    <Compile Include="Images\BwFilter.cs" />
+    <Compile Include="Images\ColorDetector.cs" />
+    <Compile Include="Images\DownsamplingTests.cs" />
+    <Compile Include="Images\ExportImages.cs" />
+    <Compile Include="Images\ImageMagickScaler.cs" />
+    <Compile Include="Images\ImageMappingTests.cs" />
+    <Compile Include="Images\MedianFilter.cs" />
+    <Compile Include="Images\SaturationFilter.cs" />
+    <Compile Include="Markdown\MarkdownTests.cs" />
+    <Compile Include="Price\PriceDownloaderTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}</Project>
+      <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
+      <Project>{3229CA82-875D-4154-92B7-2F7C47678010}</Project>
+      <Name>Mtgdb.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Gui\Mtgdb.Gui.csproj">
+      <Project>{97545C6D-ACD6-4A2C-84DD-CD91293CFBB6}</Project>
+      <Name>Mtgdb.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Util\Mtgdb.Util.csproj">
+      <Project>{56661dad-10a7-41ef-8672-f417f15923cb}</Project>
+      <Name>Mtgdb.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Test.Core\Mtgdb.Test.Core.csproj">
+      <Project>{dd429228-a094-4617-bf08-57fe1ef44a96}</Project>
+      <Name>Mtgdb.Test.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

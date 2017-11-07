@@ -91,23 +91,5 @@ namespace Mtgdb.Test
 					Console.WriteLine("NOT FOUND {0} in\r\n{1}", match.match.Value, string.Join("\r\n", match.files.Select(_ => '\t' + _)));
 			}
 		}
-
-		public class MtgoCard
-		{
-			public string Name { get; set; }
-			public string Number { get; set; }
-			public string Id { get; set; }
-
-			public override string ToString() => $"{Id} #{Number} {Name}";
-		}
-
-		public class MtgoSet
-		{
-			public string Code { get; set; }
-			public string Name { get; set; }
-			public string Group { get; set; }
-
-			public override string ToString() => $"{Code}\t{Name}\t{Group}";
-		}
 	}
 }

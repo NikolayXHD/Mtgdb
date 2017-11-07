@@ -6,23 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Dal.EditDistance
 {
-	public class EditDistance
+	public class LevenstineDistance
 	{
 		private static readonly Regex _wordRegex = new Regex(@"\b\w+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		private static readonly ConcurrentStack<EditDistance> _instances = new ConcurrentStack<EditDistance>();
+		private static readonly ConcurrentStack<LevenstineDistance> _instances = new ConcurrentStack<LevenstineDistance>();
 		private static readonly Dictionary<Tuple<string, string>, float> _distanceCache = new Dictionary<Tuple<string, string>, float>();
 		private static readonly Dictionary<string, Dictionary<string, int>> _userWordsCache = new Dictionary<string, Dictionary<string, int>>(Str.Comparer);
 		private static readonly Dictionary<string, string[]> _dictWordsCache = new Dictionary<string, string[]>(Str.Comparer);
 
 		public static float GetEditDistance(Dictionary<string, int> userWords, string[] dictWords)
 		{
-			EditDistance instance;
+			LevenstineDistance instance;
 			bool createInstance = !_instances.TryPop(out instance);
 			if (createInstance)
-				instance = new EditDistance();
+				instance = new LevenstineDistance();
 
 			float totalDist = getTotalDist(instance, userWords, dictWords);
 
@@ -32,7 +32,7 @@ namespace Mtgdb.Dal
 			return totalDist;
 		}
 
-		private static float getTotalDist(EditDistance instance, Dictionary<string, int> userWords, string[] dictWords)
+		private static float getTotalDist(LevenstineDistance instance, Dictionary<string, int> userWords, string[] dictWords)
 		{
 			float totalDist = 0;
 			foreach (var pair in userWords)

@@ -3,35 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
 using NUnit.Framework;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Mtgdb.Test
 {
-	public class LuceneSearcherTests
+	public class LuceneSearcherTests : IndexTestsBase
 	{
-		// ReSharper disable CompareOfFloatsByEqualityOperator
-		private LuceneSearcher _searcher;
-		private CardRepository _repository;
-
-		[OneTimeSetUp]
-		public void Setup()
-		{
-			TestLoader.LoadModules();
-			TestLoader.LoadCardRepository();
-			TestLoader.LoadLocalizations();
-			TestLoader.LoadSearcher();
-
-			_searcher = TestLoader.Searcher;
-			_repository = TestLoader.CardRepository;
-		}
-		
-		[OneTimeTearDown]
-		public void Teardown()
-		{
-			_searcher.Dispose();
-		}
-
 		[TestCase(@"NameEn:Forest")]
 		public void Search_by_NameEn(string queryStr)
 		{
@@ -200,18 +178,18 @@ namespace Mtgdb.Test
 			Assert.That(cards.All(_ => _.Cmc == 5f));
 		}
 
-		[TestCase(@"GeneratedMana:E")]
-		[TestCase(@"GeneratedMana:(E AND W)")]
-		[TestCase(@"GeneratedMana:(E OR W)")]
+		[TestCase(@"GeneratedMana:\{E\}")]
+		[TestCase(@"GeneratedMana:(*E* AND *W*)")]
+		[TestCase(@"GeneratedMana:(\{E\} OR \{W\})")]
 		public void Search_by_GeneratedMana(string queryStr)
 		{
 			search(queryStr, c => c.NameEn + ": " + c.GeneratedMana);
 		}
 
-		[TestCase(@"ManaCost:B")]
-		[TestCase(@"ManaCost:(B AND W)")]
-		[TestCase(@"ManaCost:(B OR W)")]
-		[TestCase(@"ManaCost:W/P")]
+		[TestCase(@"ManaCost:\{B\}")]
+		[TestCase(@"ManaCost:(*B* AND *W*)")]
+		[TestCase(@"ManaCost:(*B* OR *W*)")]
+		[TestCase(@"ManaCost:\{W/P\}")]
 		public void Search_by_ManaCost(string queryStr)
 		{
 			search(queryStr, c => c.NameEn + ": " + c.ManaCost);
@@ -243,7 +221,7 @@ namespace Mtgdb.Test
 		[TestCase(@"demon")]
 		public void Search_by_AnyField(string queryStr)
 		{
-			var cards = search(queryStr, c => c.NameEn + ": " + c.TypeEn + Environment.NewLine + c.TextEn + Environment.NewLine);
+			var cards = search(queryStr, c => c.NameEn + ": " + c.TypeEn + Environment.NewLine + c.TextEn + Environment.NewLine, "en");
 
 			Assert.That(cards.Any(c => c.TextEn.IndexOf(queryStr, Str.Comparison) < 0));
 			Assert.That(cards.Any(c => c.Name.IndexOf(queryStr, Str.Comparison) < 0));
@@ -279,7 +257,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var cards = _searcher.SearchCards(queryStr, language, _repository).ToList();
+			var cards = Searcher.SearchCards(queryStr, language, Repo).ToList();
 
 			sw.Stop();
 			Console.WriteLine($"Found {cards.Count} cards in {sw.ElapsedMilliseconds} ms");

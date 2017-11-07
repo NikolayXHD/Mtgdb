@@ -1,16 +1,17 @@
 using System;
 using System.Linq;
+using Mtgdb.Dal.EditDistance;
 using SpellChecker.Net.Search.Spell;
 
 namespace Mtgdb.Dal.Index
 {
 	public class DamerauLevenstineDistance : StringDistance
 	{
-		private readonly EditDistance _editDistance;
+		private readonly LevenstineDistance _editDistance;
 
 		public DamerauLevenstineDistance()
 		{
-			_editDistance = new EditDistance();
+			_editDistance = new LevenstineDistance();
 		}
 
 		public float GetSimilarity(string s1, string s2)
@@ -40,11 +41,11 @@ namespace Mtgdb.Dal.Index
 
 		private float getPrefixDistance(string s1, string s2)
 		{
-			if (s1.Length > EditDistance.MaxInput)
-				s1 = s1.Substring(0, EditDistance.MaxInput);
+			if (s1.Length > LevenstineDistance.MaxInput)
+				s1 = s1.Substring(0, LevenstineDistance.MaxInput);
 
-			if (s2.Length > EditDistance.MaxDict)
-				s2 = s2.Substring(0, EditDistance.MaxDict);
+			if (s2.Length > LevenstineDistance.MaxDict)
+				s2 = s2.Substring(0, LevenstineDistance.MaxDict);
 
 			lock (_editDistance)
 			{

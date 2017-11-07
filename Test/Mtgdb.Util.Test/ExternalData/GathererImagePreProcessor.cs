@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class GathererImagePreProcessor
+	public class GathererImagePreProcessor : TestsBase
 	{
 		private static readonly Size _croppedSize = new Size(393, 564);
 		private static readonly Point _croppedLocation = new Point(17, 17);
@@ -22,12 +22,12 @@ namespace Mtgdb.Test
 		[TestCase("cma")]
 		public void DownloadImages(string setCode)
 		{
-			TestLoader.LoadModules();
-			TestLoader.LoadCardRepository();
-			
+			LoadModules();
+			LoadCards();
+
 			using (var client = new GathererClient())
 			{
-				var set = TestLoader.CardRepository.SetsByCode[setCode];
+				var set = Repo.SetsByCode[setCode];
 				foreach (var card in set.Cards)
 					client.DownloadCard(card, GathererOriginalDir);
 			}

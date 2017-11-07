@@ -1,42 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
-using Mtgdb.Dal.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class LuceneSpellcheckerTests
+	public class LuceneSpellcheckerTests : IndexTestsBase
 	{
-		private LuceneSpellchecker _spellchecker;
-		private LuceneSearcher _searcher;
-
-		[OneTimeSetUp]
-		public void Setup()
-		{
-			TestLoader.LoadModules();
-			TestLoader.LoadCardRepository();
-			TestLoader.LoadLocalizations();
-			TestLoader.LoadSearcher();
-
-			_searcher = TestLoader.Searcher;
-			_spellchecker = _searcher.Spellchecker;
-		}
-
-		[OneTimeTearDown]
-		public void Teardown()
-		{
-			_spellchecker.Dispose();
-			_searcher.Dispose();
-		}
-
-
-		//[TestCase("*", @"d", "en")]
-		//[TestCase("NameEn", @"neveiral", null)]
-		//[TestCase("Name", @"гел", "ru")]
-		//[TestCase("*", @"арха", "ru")]
-		//[TestCase("*", @"ange", "en")]
-		//[TestCase("TextEn", @"disc", null)]
+		[TestCase("*", @"d", "en")]
+		[TestCase("NameEn", @"neveiral", null)]
+		[TestCase("Name", @"гел", "ru")]
+		[TestCase("*", @"арха", "ru")]
+		[TestCase("*", @"ange", "en")]
+		[TestCase("TextEn", @"disc", null)]
 		[TestCase("layout", @"aft", null)]
 		public void Suggest_text_values(string field, string value, string language)
 		{
@@ -69,7 +45,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var list = _spellchecker.SuggestValues(value, field, language, 20);
+			var list = Spellchecker.SuggestValues(value, field, language, 20);
 
 			sw.Stop();
 			Console.WriteLine($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -86,7 +62,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var suggest = _spellchecker.Suggest(query, caret, language, 50);
+			var suggest = Spellchecker.Suggest(query, caret, language, 50);
 
 			sw.Stop();
 			Console.WriteLine($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
