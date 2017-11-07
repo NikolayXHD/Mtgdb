@@ -1,32 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C23E2DE4-5C35-4205-99B5-55A0CE80CCBE}</ProjectGuid>
+    <ProjectGuid>{DD429228-A094-4617-BF08-57FE1EF44A96}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mtgdb.Test</RootNamespace>
-    <AssemblyName>Mtgdb.Test</AssemblyName>
+    <AssemblyName>Mtgdb.Test.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\out\bin\debug-test\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\out\bin\release-test\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,57 +34,27 @@
       <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NUnit.3.6.1\lib\net40\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="TestsBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
-      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
-      <Name>EditedTokenLocator</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
       <Name>Mtgdb.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
       <Name>Mtgdb.Dal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Test.Core\Mtgdb.Test.Core.csproj">
-      <Project>{dd429228-a094-4617-bf08-57fe1ef44a96}</Project>
-      <Name>Mtgdb.Test.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dal\EditDistanceTests.cs" />
-    <Compile Include="Images\ImageMappingTests.cs" />
-    <Compile Include="Index\IndexTestsBase.cs" />
-    <Compile Include="Index\KeywordTests.cs" />
-    <Compile Include="Index\TolerantTokenizerTests.cs" />
-    <Compile Include="Index\LuceneSearcherTests.cs" />
-    <Compile Include="Index\LuceneSpellcheckerTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Shell32">
-      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

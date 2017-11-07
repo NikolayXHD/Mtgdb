@@ -60,11 +60,11 @@ namespace Mtgdb.Dal
 
 			// Даёт High
 
-			//var translitCost = translitReplaceCost(c1, c2);
-			//if (translitCost <= Similarity.High)
-			//	return translitCost;
+			var translitCost = translitReplaceCost(c1, c2);
+			if (translitCost <= Similarity.High)
+				return translitCost;
 
-			// Даёт High, Normal, Light
+			// Даёт High, Light
 			var keyboardCost = keyboardReplaceCost(c1, c2);
 			if (keyboardCost <= Similarity.Normal)
 				return keyboardCost;

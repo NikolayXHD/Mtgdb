@@ -7,13 +7,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Dal.EditDistance;
+using Mtgdb.Test;
 using NUnit.Framework;
 using Tesseract;
 
-namespace Mtgdb.Test.Ocr
+namespace Mtgdb.Util
 {
 	[TestFixture]
-	public class ArtistDetectionTests
+	public class ArtistDetectionTests : TestsBase
 	{
 		[OneTimeSetUp]
 		public void Setup()
@@ -23,15 +25,15 @@ namespace Mtgdb.Test.Ocr
 				"eng",
 				EngineMode.CubeOnly);
 
-			TestLoader.LoadModules();
-			TestLoader.LoadCardRepository();
+			LoadModules();
+			LoadCards();
+
+			ImgRepo.LoadFiles();
+			ImgRepo.LoadZoom();
 			
-			TestLoader.ImageRepository.LoadFiles();
-			TestLoader.ImageRepository.LoadZoom();
+			Repo.SelectCardImages(ImgRepo);
 
-			TestLoader.CardRepository.SelectCardImages(TestLoader.ImageRepository);
-
-			_distance = new EditDistance();
+			_distance = new LevenstineDistance();
 		}
 
 		[Test]
@@ -68,7 +70,7 @@ namespace Mtgdb.Test.Ocr
 
 			foreach (string setCode in setCodes)
 			{
-				var cards = TestLoader.CardRepository.SetsByCode[setCode].Cards
+				var cards = Repo.SetsByCode[setCode].Cards
 					.OrderBy(c => c.ImageName).ToList();
 
 				_artists = cards
@@ -207,6 +209,6 @@ namespace Mtgdb.Test.Ocr
 		private TesseractEngine _engine;
 		private string[] _artists;
 		private float[] _artistDistance;
-		private EditDistance _distance;
+		private LevenstineDistance _distance;
 	}
 }

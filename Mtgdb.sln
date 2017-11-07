@@ -43,6 +43,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ tools ]", "[ tools ]", "{
 		tools\sign images.bat = tools\sign images.bat
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Test", "Test\Mtgdb.Util.Test\Mtgdb.Util.Test.csproj", "{71505A79-B810-4C19-9DC4-C880F23E2A16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Test.Core", "Test\Mtgdb.Test.Core\Mtgdb.Test.Core.csproj", "{DD429228-A094-4617-BF08-57FE1EF44A96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,14 @@ Global
 		{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD429228-A094-4617-BF08-57FE1EF44A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD429228-A094-4617-BF08-57FE1EF44A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD429228-A094-4617-BF08-57FE1EF44A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD429228-A094-4617-BF08-57FE1EF44A96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,5 +104,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C23E2DE4-5C35-4205-99B5-55A0CE80CCBE} = {106FC38B-1268-47D8-A527-E4376709F683}
 		{482239D1-673C-4181-A2DD-F9E5B1A2FD9B} = {0DE878BB-4070-4139-978A-883AC52E882F}
+		{71505A79-B810-4C19-9DC4-C880F23E2A16} = {106FC38B-1268-47D8-A527-E4376709F683}
+		{DD429228-A094-4617-BF08-57FE1EF44A96} = {106FC38B-1268-47D8-A527-E4376709F683}
 	EndGlobalSection
 EndGlobal

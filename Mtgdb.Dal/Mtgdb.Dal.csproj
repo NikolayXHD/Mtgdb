@@ -112,7 +112,7 @@
     <Compile Include="Model\Patch\CardPatch.cs" />
     <Compile Include="Model\CardLocalization.cs" />
     <Compile Include="CardRepository.cs" />
-    <Compile Include="EditDistance\EditDistance.cs" />
+    <Compile Include="EditDistance\LevenstineDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ImageCache\ImageCache.cs" />
