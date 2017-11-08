@@ -60,9 +60,10 @@ namespace Mtgdb.Dal
 
 			// Даёт High
 
-			var translitCost = translitReplaceCost(c1, c2);
-			if (translitCost <= Similarity.High)
-				return translitCost;
+			// пока индекс не учитывает такую возможность, в этом нет смысла
+			//var translitCost = translitReplaceCost(c1, c2);
+			//if (translitCost <= Similarity.High)
+			//	return translitCost;
 
 			// Даёт High, Light
 			var keyboardCost = keyboardReplaceCost(c1, c2);
