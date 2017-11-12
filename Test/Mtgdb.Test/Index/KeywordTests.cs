@@ -16,15 +16,20 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Lea_badlands_manacost_keywords()
+		public void Card_keywords_contain_expected_value(
+			[Values("LEA")] string setcode,
+			[Values("Badlands")] string name,
+			[Values(nameof(KeywordDefinitions.ManaCost))] string field,
+			[Values(CardKeywords.NoneKeyword)] string expectedValue)
 		{
-			var card = Repo.SetsByCode["LEA"].CardsByName["Badlands"].First();
+			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
 			var keywords = new CardKeywords();
 			keywords.LoadKeywordsFrom(card);
-			var values = keywords.KeywordsByProperty[nameof(KeywordDefinitions.ManaCost)];
+
+			var values = keywords.KeywordsByProperty[field];
 
 			Assert.That(values, Is.Not.Null);
-			Assert.That(values, Is.Not.Empty);
+			Assert.That(values, Does.Contain(expectedValue));
 		}
 	}
 }

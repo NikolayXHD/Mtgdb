@@ -250,12 +250,25 @@ namespace Mtgdb.Dal
 			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
 		{
-			return getImage(modelsByNameBySetByVariant,
+			var model = getImage(modelsByNameBySetByVariant,
 				setCodePreference,
 				card.SetCode,
 				card.ImageNameBase,
 				card.ImageName,
 				card.Artist);
+
+			if (model == null)
+				return null;
+
+			bool isAftermath =
+				Str.Equals(card.Layout, "aftermath") &&
+				card.Names?.Count == 2 &&
+				Str.Equals(card.NameEn, card.Names[1]);
+
+			if (isAftermath)
+				model = model.Rotate();
+
+			return model;
 		}
 
 		private static ImageModel getImage(Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant, Func<string, string, string> setCodePreference, string set, string imageNameBase, string imageName, string artist)
@@ -349,10 +362,18 @@ namespace Mtgdb.Dal
 					.SelectMany(bySet => orderCardsWithinSet(card, bySet.Value))
 					.ToList();
 
-				if (models.Count > 0)
-					return models;
+				if (models.Count == 0)
+					return null;
 
-				return null;
+				bool isAftermath =
+					Str.Equals(card.Layout, "aftermath") &&
+					card.Names?.Count == 2 &&
+					Str.Equals(card.NameEn, card.Names[1]);
+
+				if (isAftermath)
+					return models.Select(m => m.Rotate()).ToList();
+
+				return models;
 			}
 		}
 

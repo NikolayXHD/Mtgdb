@@ -16,7 +16,7 @@ namespace Mtgdb.Controls
 			_brush = new SolidBrush(renderContext.HighlightColor);
 			_contextBrush = new SolidBrush(renderContext.HighlightContextColor);
 			_pen = new Pen(renderContext.HighlightBorderColor, renderContext.HighlightBorderWidth);
-			
+
 			_x = _renderContext.Rect.Left;
 			_y = _renderContext.Rect.Top;
 
@@ -29,7 +29,7 @@ namespace Mtgdb.Controls
 
 		public bool PrintWord(List<RichTextToken> word)
 		{
-			if (_y + _lineHeight*HeightPart > _renderContext.Rect.Bottom)
+			if (_y + _lineHeight * HeightPart > _renderContext.Rect.Bottom)
 				return false;
 
 			var size = getLineSize(_renderContext.Text, word);
@@ -72,41 +72,41 @@ namespace Mtgdb.Controls
 					if (tokenText.Length > 0)
 					{
 						printBatch.Add(
-						targetRect,
-						(rect, hb, he) =>
-						{
-							rect = new RectangleF(rect.Location, new SizeF(rect.Width + 2, rect.Height));
+							targetRect,
+							(rect, hb, he) =>
+							{
+								rect = new RectangleF(rect.Location, new SizeF(rect.Width + 2, rect.Height));
 
-							TextRenderer.DrawText(
-								_renderContext.Graphics,
-								tokenText,
-								_renderContext.Font,
-								toRectangle(rect),
-								_renderContext.ForeColor,
-								_renderContext.StringFormat.ToTextFormatFlags());
-						});
+								TextRenderer.DrawText(
+									_renderContext.Graphics,
+									tokenText,
+									_renderContext.Font,
+									toRectangle(rect),
+									_renderContext.ForeColor,
+									_renderContext.StringFormat.ToTextFormatFlags());
+							});
 					}
 				}
 				else
 				{
 					if (!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{E}") &&
-						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
-						!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}"))
+							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
+							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}") &&
+							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{100}") &&
+							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{1000000}"))
 					{
 						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
 						var iconRect = new RectangleF(location.Round(), icon.Size);
 
-						printBatch.Add(iconRect, (rect, hb, he) =>
-						{
-							var shadowOffset = _iconShadowOffset.Multiply(_lineHeight / 16f);
-							rect.Offset(shadowOffset);
-							_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
-						});
+						printBatch.Add(iconRect,
+							(rect, hb, he) =>
+							{
+								var shadowOffset = _iconShadowOffset.Multiply(_lineHeight / 16f);
+								rect.Offset(shadowOffset);
+								_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
+							});
 
-						printBatch.Add(iconRect, (rect, hb, he) =>
-						{
-							_renderContext.Graphics.DrawImage(icon, rect);
-						});
+						printBatch.Add(iconRect, (rect, hb, he) => { _renderContext.Graphics.DrawImage(icon, rect); });
 					}
 					else
 					{
@@ -128,7 +128,7 @@ namespace Mtgdb.Controls
 
 		private static int strongRound(double value)
 		{
-			return Math.Sign(value) * (int)(Math.Abs(value) + 0.5);
+			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
 		}
 
 		private static Rectangle toRectangle(RectangleF rect)
@@ -177,7 +177,7 @@ namespace Mtgdb.Controls
 
 		public bool PrintSpace(RichTextToken space)
 		{
-			if (_y + _lineHeight*HeightPart < _renderContext.Rect.Bottom)
+			if (_y + _lineHeight * HeightPart < _renderContext.Rect.Bottom)
 			{
 				if (_x + _spaceWidth >= _renderContext.Rect.Right)
 					return newLine();
@@ -204,7 +204,7 @@ namespace Mtgdb.Controls
 		private bool newLine()
 		{
 			_y += _lineHeight;
-			if (_y + _lineHeight*HeightPart < _renderContext.Rect.Bottom)
+			if (_y + _lineHeight * HeightPart < _renderContext.Rect.Bottom)
 			{
 				Flush();
 				_x = _renderContext.Rect.Left;
@@ -219,10 +219,10 @@ namespace Mtgdb.Controls
 		{
 			Flush();
 
-			_y += _lineHeight*4/3;
+			_y += _lineHeight * 4 / 3;
 			_x = _renderContext.Rect.Left;
 
-			return _y + _lineHeight*HeightPart < _renderContext.Rect.Bottom;
+			return _y + _lineHeight * HeightPart < _renderContext.Rect.Bottom;
 		}
 
 		private SizeF getLineSize(string text, IList<RichTextToken> word)
@@ -252,13 +252,13 @@ namespace Mtgdb.Controls
 				_renderContext.Graphics,
 				tokenText,
 				_renderContext.Font,
-				new Size((int) (area.Width*1.2f), area.Height),
+				new Size((int) (area.Width * 1.2f), area.Height),
 				textFormatFlags);
 
 			return size;
 		}
 
-		
+
 
 		public void Flush()
 		{
@@ -266,7 +266,7 @@ namespace Mtgdb.Controls
 			if (_renderContext.HorizAlignment == HorizontalAlignment.Right)
 				offsetX = _renderContext.Rect.Right - _x;
 			else if (_renderContext.HorizAlignment == HorizontalAlignment.Center)
-				offsetX = 0.5f*(_renderContext.Rect.Right - _x);
+				offsetX = 0.5f * (_renderContext.Rect.Right - _x);
 			else
 				offsetX = 0f;
 

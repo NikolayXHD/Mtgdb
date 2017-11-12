@@ -1,7 +1,7 @@
-using System;
 using System.Diagnostics;
 using Mtgdb.Dal.Index;
 using Ninject;
+using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -28,7 +28,7 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(Repo);
 				sw.Stop();
 
-				Console.WriteLine($"Index created in {sw.ElapsedMilliseconds} ms");
+				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 			else
 			{
@@ -38,17 +38,25 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(null);
 
 				sw.Stop();
-				Console.WriteLine($"Index created in {sw.ElapsedMilliseconds} ms");
+				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 
 			Spellchecker = Searcher.Spellchecker;
 		}
 
 		[OneTimeTearDown]
-		public void Teardown()
+		public void OneTimeTeardown()
 		{
 			Spellchecker.Dispose();
 			Searcher.Dispose();
 		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			LogManager.Flush();
+		}
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

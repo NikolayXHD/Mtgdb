@@ -15,8 +15,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.12 prices
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.12");
+			// 0.14 new allsets-x.json
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.14");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
@@ -51,12 +51,15 @@ namespace Mtgdb.Dal.Index
 			var spellchecker = new Spellchecker(spellcheckerIndex, _stringDistance);
 
 			TotalFields = DocumentFactory.TextFields.Count;
-			foreach (string textField in DocumentFactory.TextFields)
+			foreach (string field in DocumentFactory.TextFields)
 			{
+				var storedField = field.ToLowerInvariant();
+
 				if (_abort)
 					return null;
 
-				spellchecker.IndexDictionary(new LuceneDictionary(indexReader, textField), analyzer, () => _abort);
+				var luceneDictionary = new LuceneDictionary(indexReader, storedField);
+				spellchecker.IndexDictionary(luceneDictionary, analyzer, () => _abort);
 
 				IndexedFields++;
 				IsLoading = IndexedFields < TotalFields;

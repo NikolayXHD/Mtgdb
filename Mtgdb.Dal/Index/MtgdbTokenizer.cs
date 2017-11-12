@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Tokenattributes;
@@ -78,7 +77,7 @@ namespace Mtgdb.Dal.Index
 
 				char c = _ioBuffer[_bufferIndex++];
 
-				if (Char.IsLetterOrDigit(c) || WordCharsSet.Contains(c))
+				if (char.IsLetterOrDigit(c) || _wordCharsSet.Contains(c))
 				{
 					if (c.IsCj())
 					{
@@ -128,19 +127,7 @@ namespace Mtgdb.Dal.Index
 			Reset();
 		}
 
-		public static readonly char[] WordChars =
-		{
-			'_',
-			'-',
-			'−',
-			'—',
-			'+',
-			'/',
-			'{',
-			'}',
-			'½'
-		};
-
-		public static readonly HashSet<char> WordCharsSet = new HashSet<char>(WordChars);
+		public static readonly string WordChars = @"&*+-/?_{}²½–—’•−∞";
+		private static readonly HashSet<char> _wordCharsSet = new HashSet<char>(WordChars);
 	}
 }

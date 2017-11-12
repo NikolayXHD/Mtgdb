@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -5,7 +6,7 @@ namespace Mtgdb.Dal
 {
 	internal class ImageCacheEntry
 	{
-		public ImageCacheEntry(Bitmap image, LinkedListNode<string> ratingEntry)
+		public ImageCacheEntry(Bitmap image, LinkedListNode<Tuple<string, bool>> ratingEntry)
 		{
 			RatingEntry = ratingEntry;
 			Image = image;
@@ -13,6 +14,6 @@ namespace Mtgdb.Dal
 
 		public Bitmap Image { get; }
 
-		public LinkedListNode<string> RatingEntry { get; }
+		public LinkedListNode<Tuple<string, bool>> RatingEntry { get; }
 	}
 }

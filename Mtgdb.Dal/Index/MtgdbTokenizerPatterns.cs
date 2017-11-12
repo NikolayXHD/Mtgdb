@@ -4,7 +4,7 @@ namespace Mtgdb.Dal.Index
 {
 	public static class MtgdbTokenizerPatterns
 	{
-		private static readonly string _word = Regex.Escape(new string(MtgdbTokenizer.WordChars));
+		private static readonly string _word = Regex.Escape(MtgdbTokenizer.WordChars);
 
 		public static readonly Regex Word = new Regex($@"[\d\w{_word}]",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);

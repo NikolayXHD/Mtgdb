@@ -7,7 +7,7 @@ namespace Mtgdb.Test
 	public class EditDistanceTests
 	{
 		[TestCase("M", "M16")]
-		public static void Test_substring_to_superstring_distance_equals_0(string  val1, string val2)
+		public static void Substring_to_superstring_distance_equals_0(string  val1, string val2)
 		{
 			var distance = LevenstineDistance.GetEditDistance(
 				LevenstineDistance.GetInputWords(val1), 
@@ -99,9 +99,9 @@ namespace Mtgdb.Test
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
 
-		[TestCase("ююю", "uuu", 1.5f)]
-		[TestCase("zzzzz", "жжжжжжжжж", 2.5f)]
-		public static void Test_translit_typo_costs_0_5(string val1, string val2, float expectedDistance)
+		[TestCase("ююю", "uuu", 6f)]
+		[TestCase("zzzzz", "жжжжжжжжж", 10f)]
+		public static void Test_translit_typo_costs_2(string val1, string val2, float expectedDistance)
 		{
 			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;

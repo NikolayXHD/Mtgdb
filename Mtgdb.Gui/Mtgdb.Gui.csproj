@@ -305,6 +305,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\05.png" />
+    <None Include="Resources\100.png" />
+    <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />
     <Content Include="Resources\Annihilator.png" />
     <Content Include="Resources\Attacks each turn.png" />
@@ -336,6 +338,7 @@
     <Content Include="Resources\Haste.png" />
     <Content Include="Resources\Hexproof.png" />
     <None Include="Resources\image_file_16.png" />
+    <None Include="Resources\i.png" />
     <Content Include="Resources\image_file_32.png" />
     <Content Include="Resources\Indestructible.png" />
     <None Include="Resources\index_16.png" />

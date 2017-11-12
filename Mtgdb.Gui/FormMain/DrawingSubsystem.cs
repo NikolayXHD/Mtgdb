@@ -80,7 +80,13 @@ namespace Mtgdb.Gui
 		{
 			string name = key.TrimStart('_');
 
-			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "chaos")
+			if (name == "05")
+				return new[] { "0.5", ".5", "1/2", "½" };
+
+			if (name == "i")
+				return new[] { "∞", "oo" };
+
+			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "100" || name == "1000000" || name == "chaos")
 				return new[] { name };
 			
 			if (name.Length == 2)

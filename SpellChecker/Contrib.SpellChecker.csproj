@@ -38,7 +38,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <RootNamespace>Lucene.Net.Search.Spell</RootNamespace>
+    <RootNamespace>SpellChecker.Net.Search.Spell</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
