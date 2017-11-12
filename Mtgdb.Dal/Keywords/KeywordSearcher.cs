@@ -15,8 +15,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.11 Colors field
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.11");
+			// 0.14 new allsets-x.json
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.14");
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Mtgdb.Controls;
@@ -9,7 +10,7 @@ namespace Mtgdb.Dal
 {
 	public class ImageCache
 	{
-		public static object SyncRoot = new object();
+		public static readonly object SyncRoot = new object();
 
 		public ImageCache(ImageCacheConfig config, SmallConfig smallConfig, ZoomedConfig zoomedConfig)
 		{
@@ -35,7 +36,7 @@ namespace Mtgdb.Dal
 
 			Bitmap image;
 			lock (_imagesByPath)
-				image = tryGetFromCache(model.FullPath);
+				image = tryGetFromCache(model.FullPath, model.Rotated);
 
 			if (image != null)
 				return image;
@@ -46,7 +47,7 @@ namespace Mtgdb.Dal
 			image = LoadImage(model, size, transparentCorners: _transparentCornersWhenNotZoomed, crop: false);
 
 			lock (_imagesByPath)
-				if (addFirst(model.FullPath, image))
+				if (addFirst(model.FullPath, model.Rotated, image))
 					if (_ratings.Count >= Capacity)
 						removeLast();
 
@@ -80,6 +81,9 @@ namespace Mtgdb.Dal
 					bytes = File.ReadAllBytes(model.FullPath);
 
 				original = new Bitmap(new MemoryStream(bytes));
+
+				if (model.Rotated)
+					original.RotateFlip(RotateFlipType.Rotate270FlipNone);
 			}
 			catch
 			{
@@ -155,10 +159,10 @@ namespace Mtgdb.Dal
 			return edited;
 		}
 
-		private Bitmap tryGetFromCache(string path)
+		private Bitmap tryGetFromCache(string path, bool rotated)
 		{
 			ImageCacheEntry cacheEntry;
-			if (!_imagesByPath.TryGetValue(path, out cacheEntry))
+			if (!_imagesByPath.TryGetValue(new Tuple<string, bool>(path, rotated), out cacheEntry))
 				return null;
 
 			shiftFromLast(cacheEntry);
@@ -175,26 +179,28 @@ namespace Mtgdb.Dal
 				ratingEntry.SwapWith(previousEntry);
 		}
 
-		private bool addFirst(string path, Bitmap image)
+		private bool addFirst(string path, bool rotated, Bitmap image)
 		{
-			if (_imagesByPath.ContainsKey(path))
+			var key = new Tuple<string, bool>(path, rotated);
+
+			if (_imagesByPath.ContainsKey(key))
 				return false;
 
-			_ratings.AddFirst(path);
-			_imagesByPath[path] = new ImageCacheEntry(image, _ratings.First);
+			_ratings.AddFirst(key);
+			_imagesByPath[key] = new ImageCacheEntry(image, _ratings.First);
 
 			return true;
 		}
 
 		private void removeLast()
 		{
-			string keyToRemove = _ratings.Last.Value;
+			var keyToRemove = _ratings.Last.Value;
 			_ratings.RemoveLast();
 			_imagesByPath.Remove(keyToRemove);
 		}
 
-		private readonly Dictionary<string, ImageCacheEntry> _imagesByPath = new Dictionary<string, ImageCacheEntry>();
-		private readonly LinkedList<string> _ratings = new LinkedList<string>();
+		private readonly Dictionary<Tuple<string, bool>, ImageCacheEntry> _imagesByPath = new Dictionary<Tuple<string, bool>, ImageCacheEntry>();
+		private readonly LinkedList<Tuple<string, bool>> _ratings = new LinkedList<Tuple<string, bool>>();
 
 
 		public static readonly Size SizeCropped = new Size(424, 622);

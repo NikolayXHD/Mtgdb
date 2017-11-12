@@ -116,65 +116,65 @@ namespace Mtgdb.Dal.Index
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
 
 			if (!string.IsNullOrEmpty(card.Color))
-				doc.addTextField(nameof(card.Color), card.Color);
+				doc.addTextField(nameof(card.Color), card.Color, analyze: true);
 
 			// Tested
-			doc.addTextField(nameof(card.NameEn), card.NameEn);
+			doc.addTextField(nameof(card.NameEn), card.NameEn, analyze: true);
 
 			// Tested
-			doc.addTextField(nameof(card.SetName), card.SetName);
+			doc.addTextField(nameof(card.SetName), card.SetName, analyze: true);
 
 			//Tested
-			doc.addTextField(nameof(card.SetCode), card.SetCode);
+			doc.addTextField(nameof(card.SetCode), card.SetCode, analyze: true);
 
 			if (!string.IsNullOrEmpty(card.OriginalText))
-				doc.addTextField(nameof(Card.OriginalText), card.OriginalText);
+				doc.addTextField(nameof(Card.OriginalText), card.OriginalText, analyze: true);
 
 			if (!string.IsNullOrEmpty(card.OriginalType))
-				doc.addTextField(nameof(Card.OriginalType), card.OriginalType);
+				doc.addTextField(nameof(Card.OriginalType), card.OriginalType, analyze: true);
 
 			if (!string.IsNullOrEmpty(card.Artist))
-				doc.addTextField(nameof(card.Artist), card.Artist);
+				doc.addTextField(nameof(card.Artist), card.Artist, analyze: true);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.TextEn))
-				doc.addTextField(nameof(card.TextEn), card.TextEn);
+				doc.addTextField(nameof(card.TextEn), card.TextEn, analyze: true);
 
 			if (!string.IsNullOrEmpty(card.FlavorEn))
-				doc.addTextField(nameof(card.FlavorEn), card.FlavorEn);
+				doc.addTextField(nameof(card.FlavorEn), card.FlavorEn, analyze: true);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.TypeEn))
-				doc.addTextField(nameof(card.TypeEn), card.TypeEn);
+				doc.addTextField(nameof(card.TypeEn), card.TypeEn, analyze: true);
 
 			// Tested
 			if (card.SupertypesArr != null)
 				foreach (string type in card.SupertypesArr)
-					doc.addTextField(nameof(card.Supertypes), type);
+					doc.addTextField(nameof(card.Supertypes), type, analyze: true);
 
 			// Tested
 			if (card.TypesArr != null)
 				foreach (string type in card.TypesArr)
-					doc.addTextField(nameof(card.Types), type);
+					doc.addTextField(nameof(card.Types), type, analyze: true);
 
 			// Tested
 			if (card.SubtypesArr != null)
 				foreach (string type in card.SubtypesArr)
-					doc.addTextField(nameof(card.Subtypes), type);
+					doc.addTextField(nameof(card.Subtypes), type, analyze: true);
 
 			foreach (var note in card.LegalityByFormat.Values)
 			{
 				// Tested
 				if (Str.Equals(note.Legality, Legality.Legal))
-					doc.addTextField(nameof(card.LegalIn), note.Format);
+					doc.addTextField(nameof(card.LegalIn), note.Format, analyze: true);
 
 				// Tested
 				else if (Str.Equals(note.Legality, Legality.Restricted))
-					doc.addTextField(nameof(card.RestrictedIn), note.Format);
+					doc.addTextField(nameof(card.RestrictedIn), note.Format, analyze: true);
 
 				// Tested
 				else if (Str.Equals(note.Legality, Legality.Banned))
-					doc.addTextField(nameof(card.BannedIn), note.Format);
+					doc.addTextField(nameof(card.BannedIn), note.Format, analyze: true);
 
 				else
 					throw new NotSupportedException($"Unknown legality {note.Legality}");
@@ -182,14 +182,20 @@ namespace Mtgdb.Dal.Index
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Power))
-				doc.addTextField(nameof(card.Power), card.Power);
+			{
+				if (card.Power.Contains("*"))
+				{
+				}
+
+				doc.addTextField(nameof(card.Power), card.Power, analyze: false);
+			}
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Toughness))
-				doc.addTextField(nameof(card.Toughness), card.Toughness);
+				doc.addTextField(nameof(card.Toughness), card.Toughness, analyze: false);
 
 			if (!string.IsNullOrEmpty(card.Loyalty))
-				doc.addTextField(nameof(card.Loyalty), card.Loyalty);
+				doc.addTextField(nameof(card.Loyalty), card.Loyalty, analyze: false);
 
 			// Tested
 			if (card.PowerNum.HasValue)
@@ -213,18 +219,18 @@ namespace Mtgdb.Dal.Index
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
 			if (!string.IsNullOrEmpty(card.GeneratedMana))
-				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana);
+				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana, analyze: true);
 
 			if (!string.IsNullOrEmpty(card.ManaCost))
-				doc.addTextField(nameof(card.ManaCost), card.ManaCost);
+				doc.addTextField(nameof(card.ManaCost), card.ManaCost, analyze: true);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Rarity))
-				doc.addTextField(nameof(card.Rarity), card.Rarity);
+				doc.addTextField(nameof(card.Rarity), card.Rarity, analyze: true);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.ReleaseDate))
-				doc.addTextField(nameof(card.ReleaseDate), card.ReleaseDate);
+				doc.addTextField(nameof(card.ReleaseDate), card.ReleaseDate, analyze: true);
 
 			// Tested
 			if (card.PricingHigh.HasValue)
@@ -239,7 +245,7 @@ namespace Mtgdb.Dal.Index
 				doc.addNumericField(nameof(card.PricingLow), card.PricingLow.Value);
 
 			if (!string.IsNullOrEmpty(card.Layout))
-				doc.addTextField(nameof(Card.Layout), card.Layout);
+				doc.addTextField(nameof(Card.Layout), card.Layout, analyze: true);
 
 			foreach (var lang in _langs)
 			{
@@ -283,10 +289,10 @@ namespace Mtgdb.Dal.Index
 			doc.Add(field);
 		}
 
-		private static void addTextField(this Document doc, string fieldName, string fieldValue)
+		private static void addTextField(this Document doc, string fieldName, string fieldValue, bool analyze)
 		{
 			fieldName = fieldName.ToLowerInvariant();
-			addSpecificTextField(doc, fieldName, fieldValue);
+			addSpecificTextField(doc, fieldName, fieldValue, analyze);
 		}
 
 		private static void addTextField(this Document doc, string fieldName, string fieldValue, string language)
@@ -297,17 +303,21 @@ namespace Mtgdb.Dal.Index
 			fieldName = fieldName.ToLowerInvariant();
 
 			var localizedFieldName = getLocalizedField(fieldName, language);
-			addSpecificTextField(doc, localizedFieldName, fieldValue);
+			addSpecificTextField(doc, localizedFieldName, fieldValue, analyze: true);
 		}
 
-		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue)
+		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue, bool analyze)
 		{
 			fieldName = fieldName.ToLowerInvariant();
 
 			if (!TextFields.Contains(fieldName))
 				throw new InvalidOperationException($"Text field {fieldName} not intialized");
 
-			doc.Add(new Field(fieldName, fieldValue, Field.Store.NO, Field.Index.ANALYZED_NO_NORMS));
+			var indexing = analyze
+				? Field.Index.ANALYZED_NO_NORMS
+				: Field.Index.NOT_ANALYZED_NO_NORMS;
+
+			doc.Add(new Field(fieldName, fieldValue, Field.Store.NO, indexing));
 		}
 
 		private static void addNumericField(this Document doc, string fieldName, float fieldValue)

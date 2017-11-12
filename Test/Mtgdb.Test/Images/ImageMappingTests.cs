@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -17,10 +17,10 @@ namespace Mtgdb.Test
 			ImgRepo.LoadZoom();
 		}
 
-		[Test]
-		public void Zoom_images_match_small_ones()
+		[Test, Order(1)]
+		public void No_cards_without_image()
 		{
-			foreach (var set in Repo.SetsByCode.OrderBy(_ => _.Value.ReleaseDate))
+			foreach (var set in Repo.SetsByCode)
 				foreach (var card in set.Value.Cards)
 				{
 					var small = Repo.GetSmallImage(card, ImgRepo);
@@ -29,6 +29,17 @@ namespace Mtgdb.Test
 					Assert.That(small, Is.Not.Null);
 					Assert.That(zooms, Is.Not.Null);
 					Assert.That(zooms, Is.Not.Empty);
+				}
+		}
+
+		[Test, Order(2)]
+		public void Zoom_images_match_small_ones()
+		{
+			foreach (var set in Repo.SetsByCode)
+				foreach (var card in set.Value.Cards)
+				{
+					var small = Repo.GetSmallImage(card, ImgRepo);
+					var zooms = Repo.GetZoomImages(card, ImgRepo);
 
 					var smallPath = small.FullPath;
 					var zoomPath = zooms[0].FullPath;
@@ -42,7 +53,7 @@ namespace Mtgdb.Test
 						.Replace("\\mq\\", string.Empty);
 
 					if (!Str.Equals(smallPath, zoomPath))
-						Assert.Fail();
+						Assert.Fail(smallPath + Environment.NewLine + zoomPath);
 				}
 		}
 	}

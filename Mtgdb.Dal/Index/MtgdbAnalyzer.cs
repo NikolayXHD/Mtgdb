@@ -37,7 +37,11 @@ namespace Mtgdb.Dal.Index
 
 		private static readonly Dictionary<char, char> _replacements = new Dictionary<char, char>
 		{
-			{ '−', '-' }
+			{ '−', '-' },
+			{ '–', '-' },
+			{ 'û', 'u' },
+			{ 'ö', 'o' },
+			{ '’', '\'' }
 		};
 
 		private class SavedStreams

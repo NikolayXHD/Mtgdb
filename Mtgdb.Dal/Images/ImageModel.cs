@@ -8,7 +8,7 @@ namespace Mtgdb.Dal
 	public class ImageModel
 	{
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		
+
 		public ImageModel(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
 		{
 			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
@@ -82,10 +82,31 @@ namespace Mtgdb.Dal
 			IsArt = isArt;
 			IsToken = directoryName.IndexOf("Tokens", Str.Comparison) >= 0;
 		}
-		
 
-		public string ImageName { get; }
-		public bool IsPreprocessed { get; }
+		private ImageModel()
+		{
+		}
+
+		public ImageModel Rotate()
+		{
+			return _rotated ?? (_rotated = new ImageModel
+			{
+				ImageName = ImageName,
+				IsPreprocessed = IsPreprocessed,
+				SetCode = SetCode,
+				SetCodeIsFromAttribute = SetCodeIsFromAttribute,
+				Name = Name,
+				VariantNumber = VariantNumber,
+				Type = Type,
+				FullPath = FullPath,
+				HasTransparentCorner = HasTransparentCorner,
+				Quality = Quality,
+				Artist = Artist,
+				IsArt = IsArt,
+				IsToken = IsToken,
+				Rotated = true
+			});
+		}
 
 		private int getQuality()
 		{
@@ -101,18 +122,26 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		public string SetCode { get; }
-		public bool SetCodeIsFromAttribute { get; }
+		private ImageModel _rotated;
 
-		public string Name { get; }
-		public int VariantNumber { get; }
-		private string Type { get; }
-		public string FullPath { get; }
-		public bool HasTransparentCorner { get; }
-		public int Quality { get; }
-		public string Artist { get; }
-		public bool IsArt { get; }
-		public bool IsToken { get; }
+		public string ImageName { get; private set; }
+
+		public bool IsPreprocessed { get; private set; }
+
+		public string SetCode { get; private set; }
+		public bool SetCodeIsFromAttribute { get; private set; }
+
+		public string Name { get; private set; }
+		public int VariantNumber { get; private set; }
+		private string Type { get; set; }
+		public string FullPath { get; private set; }
+		public bool HasTransparentCorner { get; private set; }
+		public int Quality { get; private set; }
+		public string Artist { get; private set; }
+		public bool IsArt { get; private set; }
+		public bool IsToken { get; private set; }
+
+		public bool Rotated { get; private set; }
 
 		public override string ToString()
 		{

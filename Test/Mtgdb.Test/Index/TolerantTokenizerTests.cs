@@ -1,5 +1,5 @@
-using System;
 using Lucene.Net.Contrib;
+using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -28,24 +28,31 @@ namespace Mtgdb.Test
 
 		private static TolerantTokenizer tokenize(string queryStr)
 		{
-			Console.WriteLine(queryStr);
-			Console.WriteLine();
+			_log.Debug(queryStr);
 
 			var parser = new TolerantTokenizer(queryStr);
 			parser.Parse();
 
 			if (parser.SyntaxErrors.Count > 0)
-				Console.WriteLine("Errors:");
+				_log.Debug("Errors:");
 
 			foreach (string error in parser.SyntaxErrors)
-				Console.WriteLine(error);
+				_log.Debug(error);
 
-			Console.WriteLine("Tokens:");
+			_log.Debug("Tokens:");
 
 			foreach (var token in parser.Tokens)
-				Console.WriteLine(token);
+				_log.Debug(token);
 
 			return parser;
 		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			LogManager.Flush();
+		}
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

@@ -315,23 +315,6 @@ namespace SpellChecker.Net.Search.Spell
 			return res;
 		}
 
-		
-		/// <summary>
-		/// Removes all terms from the spell check index.
-		/// </summary>
-		public virtual void ClearIndex()
-		{
-			lock (modifyCurrentIndexLock)
-			{
-				EnsureOpen();
-				Directory dir = spellindex;
-				IndexWriter writer = new IndexWriter(dir, null, true, IndexWriter.MaxFieldLength.UNLIMITED);
-				writer.Close();
-				SwapSearcher(dir);
-			}
-		}
-
-
 		/// <summary> Check whether the word exists in the index.</summary>
 		/// <param name="word">String
 		/// </param>
@@ -356,22 +339,31 @@ namespace SpellChecker.Net.Search.Spell
 		/// <summary> Index a Dictionary</summary>
 		/// <param name="dict">the dictionary to index</param>
 		/// <param name="mergeFactor">mergeFactor to use when indexing</param>
-		/// <param name="ramMB">the max amount or memory in MB to use</param>
+		/// <param name="ramMb">the max amount or memory in MB to use</param>
 		/// <param name="analyzer"></param>
 		/// <param name="abortRequested"></param>
 		/// <throws>  IOException </throws>
 		/// <throws>AlreadyClosedException if the Spellchecker is already closed</throws>
-		public virtual void IndexDictionary(IDictionary dict, int mergeFactor, int ramMB, Analyzer analyzer, Func<bool> abortRequested)
+		public virtual void IndexDictionary(IDictionary dict, int mergeFactor, int ramMb, Analyzer analyzer, Func<bool> abortRequested)
 		{
 			lock (modifyCurrentIndexLock)
 			{
 				EnsureOpen();
-				Directory dir = spellindex;
-				IndexWriter writer = new IndexWriter(spellindex, analyzer ?? new WhitespaceAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
-				writer.MergeFactor = mergeFactor;
-				writer.SetMaxBufferedDocs(ramMB);
+
+				var dir = spellindex;
+
+				var writer = new IndexWriter(
+					spellindex,
+					analyzer ?? new WhitespaceAnalyzer(),
+					IndexWriter.MaxFieldLength.UNLIMITED)
+				{
+					MergeFactor = mergeFactor
+				};
+
+				writer.SetMaxBufferedDocs(ramMb);
 
 				IEnumerator iter = dict.GetWordsIterator();
+
 				while (iter.MoveNext())
 				{
 					if (abortRequested())
@@ -381,9 +373,7 @@ namespace SpellChecker.Net.Search.Spell
 
 					int len = word.Length;
 					if (len == 0)
-					{
-						continue; // too short we bail but "too long" is fine...
-					}
+						continue;
 
 					if (Exist(word))
 					{
@@ -412,7 +402,7 @@ namespace SpellChecker.Net.Search.Spell
 		/// <param name="abortRequested">delegate enabling the caller to abort</param>
 		public void IndexDictionary(IDictionary dict, Analyzer analyzer, Func<bool> abortRequested)
 		{
-			IndexDictionary(dict, 300, 10, analyzer, abortRequested);
+			IndexDictionary(dict, 300, 512, analyzer, abortRequested);
 		}
 
 		private int GetMin(int l)

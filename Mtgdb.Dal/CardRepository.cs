@@ -201,6 +201,9 @@ namespace Mtgdb.Dal
 
 		private void patchLegality()
 		{
+			if (_patch.Legality == null)
+				return;
+
 			foreach (var pair in _patch.Legality)
 			{
 				var legal = new HashSet<string>(Str.Comparer);
@@ -260,8 +263,6 @@ namespace Mtgdb.Dal
 		{
 			foreach (var card in Cards)
 				card.ImageModel = GetSmallImage(card, repository);
-
-			//var withoutImages = Cards.Where(_ => _.ImageModel == null).ToArray();
 
 			IsImageLoadingComplete = true;
 			ImageLoadingComplete?.Invoke();
