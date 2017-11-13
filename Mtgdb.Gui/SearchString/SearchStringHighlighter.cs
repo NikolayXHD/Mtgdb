@@ -35,6 +35,8 @@ namespace Mtgdb.Gui
 					setColor(token.Position, token.Value.Length, _findEditor.BackColor, null, true);
 				else if (token.Type.Is(TokenType.Field | TokenType.Colon))
 					setColor(token.Position, token.Value.Length, null, Color.Teal, false);
+				else if (token.Type.Is(TokenType.RegexBody))
+					setColor(token.Position, token.Value.Length, null, Color.DarkRed, false);
 				//else if (token.Type.Is(TokenType.ModifierValue))
 				//	setColor(token.Position, token.Value.Length, Color.LightBlue);
 				//else if (token.Type.Is(TokenType.Quote | TokenType.Open | TokenType.Close))

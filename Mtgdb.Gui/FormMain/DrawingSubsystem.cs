@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -278,8 +280,8 @@ namespace Mtgdb.Gui
 
 		private void setMatches(int rowHandle, string text, string fieldName)
 		{
-			var matches = _quickFilterFacade.GetMatchedText(text, fieldName) ?? new List<Match>();
-			var contextMatches = new List<Match>();
+			var matches = _quickFilterFacade.GetMatchedText(text, fieldName) ?? new List<TextRange>();
+			var contextMatches = new List<TextRange>();
 			
 			addHighlightTerms(matches, contextMatches, text, fieldName);
 
@@ -287,7 +289,8 @@ namespace Mtgdb.Gui
 			{
 				var legalityMatches = new Regex(_legalitySubsystem.FilterFormat).Matches(text)
 					.OfType<Match>()
-					.Where(_ => _.Success);
+					.Where(_ => _.Success)
+					.Select(TextRange.Copy);
 
 				matches.AddRange(legalityMatches);
 			}
@@ -296,39 +299,41 @@ namespace Mtgdb.Gui
 			_layoutViewCards.SetHighlightTextRanges(highlightAreas, rowHandle, fieldName);
 		}
 
-		private static List<TextRange> getHighlightRanges(IList<Match> matches, IList<Match> contextMathes)
+		private static List<TextRange> getHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
 		{
 			var result = new List<TextRange>();
 
-			var orderedMatches = matches.Select(_ => new { Match = _, IsContext = false }).Union(
-				contextMathes.Select(_ => new { Match = _, IsContext = true }))
-				.OrderBy(_ => _.Match.Index)
-				.ThenByDescending(_ => _.Match.Length);
+			foreach (var match in contextMathes)
+				match.IsContext = true;
+
+			var orderedMatches = matches.Union(contextMathes)
+				.OrderBy(_ => _.Index)
+				.ThenByDescending(_ => _.Length);
 
 			TextRange previousArea = null;
 			int previousMatchEnd = 0;
 			foreach (var m in orderedMatches)
 			{
-				var thisEnd = m.Match.Index + m.Match.Length;
+				var thisEnd = m.Index + m.Length;
 
-				if (previousArea != null && m.Match.Index < previousMatchEnd)
+				if (previousArea != null && m.Index < previousMatchEnd)
 				{
 					if (thisEnd > previousMatchEnd)
 					{
-						int newPreviousLength = m.Match.Index - previousArea.Index;
+						int newPreviousLength = m.Index - previousArea.Index;
 						if (newPreviousLength > 0)
 							previousArea.Length = newPreviousLength;
 						else
 							result.RemoveAt(result.Count - 1);
 
-						previousArea = new TextRange(m.Match.Index, m.Match.Length, m.IsContext);
+						previousArea = m;
 						previousMatchEnd = thisEnd;
 						result.Add(previousArea);
 					}
 				}
 				else
 				{
-					previousArea = new TextRange(m.Match.Index, m.Match.Length, m.IsContext);
+					previousArea = m;
 					previousMatchEnd = thisEnd;
 					result.Add(previousArea);
 				}
@@ -337,25 +342,29 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		private void addHighlightTerms(List<Match> matches, List<Match> contextMatches, string displayText, string fieldName)
+		private void addHighlightTerms(List<TextRange> matches, List<TextRange> contextMatches, string displayText, string fieldName)
 		{
 			if (_searchStringSubsystem.SearchResult?.HighlightTerms == null)
 				return;
 
 			foreach (var term in _searchStringSubsystem.SearchResult.HighlightTerms)
 			{
-				string field;
+				string displayField;
 				if (string.IsNullOrEmpty(term.Key))
-					field = null;
+					displayField = null;
 				else
-					field = term.Key;
+					displayField = term.Key;
 
-				if (!string.IsNullOrEmpty(field) && !Str.Equals(field, fieldName))
+				if (!string.IsNullOrEmpty(displayField) && !Str.Equals(displayField, fieldName))
 					continue;
 
 				var patternsSet = new HashSet<string>();
 				var contextPatternsSet = new HashSet<string>();
-				var relevantTokens = term.Value.Where(token => token.Type.Is(TokenType.FieldValue|TokenType.AnyChar) && !string.IsNullOrEmpty(token.Value));
+
+				var relevantTokens = term.Value.Where(token => 
+					token.Type.Is(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody) &&
+					!string.IsNullOrEmpty(token.Value));
+
 				foreach (var token in relevantTokens)
 				{
 					string pattern;
@@ -369,22 +378,47 @@ namespace Mtgdb.Gui
 						contextPatternsSet.Add(contextPattern);
 				}
 
-				addMatches(displayText, patternsSet, matches);
-				addMatches(displayText, contextPatternsSet, contextMatches);
+				addMatches(displayText, patternsSet, matches, fieldName);
+				addMatches(displayText, contextPatternsSet, contextMatches, fieldName);
 			}
 		}
 
-		private static void addMatches(string displayText, IEnumerable<string> patterns, List<Match> matches)
+		private static void addMatches(string displayText, IEnumerable<string> patterns, List<TextRange> matches, string fieldName)
 		{
 			foreach (string pattern in patterns)
 			{
-				var findRegex = new Regex(pattern, RegexOptions.IgnoreCase);
+				var findRegex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-				var findMatches = findRegex.Matches(displayText)
-					.OfType<Match>()
-					.Where(_ => _.Success && _.Length > 0);
+				if (DocumentFactory.NotAnalyzedFields.Contains(fieldName))
+				{
+					var findMatches = findRegex.Matches(displayText)
+						.OfType<Match>()
+						.Where(_ => _.Success && _.Length > 0)
+						.Select(TextRange.Copy);
 
-				matches.AddRange(findMatches);
+					matches.AddRange(findMatches);
+				}
+				else
+				{
+					var analyzer = new MtgdbAnalyzer();
+					var tokenStream = analyzer.GetTokenStream(fieldName, displayText);
+
+					tokenStream.Reset();
+
+					using (tokenStream)
+						while (tokenStream.IncrementToken())
+						{
+							var term = tokenStream.GetAttribute<ICharTermAttribute>();
+							var offset = tokenStream.GetAttribute<IOffsetAttribute>();
+
+							var findMatches = findRegex.Matches(term.ToString())
+								.OfType<Match>()
+								.Where(_ => _.Success && _.Length > 0)
+								.Select(_ => TextRange.Offset(offset.StartOffset, _));
+
+							matches.AddRange(findMatches);
+						}
+				}
 			}
 		}
 
@@ -394,7 +428,7 @@ namespace Mtgdb.Gui
 			var currentTokens = new List<Token> { token };
 			var suffixTokens = getSuffixTokens(token);
 
-			if (token.Type.Is(TokenType.FieldValue))
+			if (token.Type.Is(TokenType.FieldValue | TokenType.RegexBody))
 				result = getPattern(prefixTokens, currentTokens, suffixTokens);
 			else
 				result = null;
@@ -478,6 +512,10 @@ namespace Mtgdb.Gui
 		private static List<Token> getSuffixTokens(Token token)
 		{
 			var suffixTokens = new List<Token>();
+
+			if (token.Type.Is(TokenType.RegexBody))
+				return suffixTokens;
+
 			while (true)
 			{
 				if (token.Next == null ||
@@ -501,7 +539,10 @@ namespace Mtgdb.Gui
 		private static List<Token> getPrefixTokens(Token token)
 		{
 			var prefixTokens = new List<Token>();
-			
+
+			if (token.Type.Is(TokenType.RegexBody))
+				return prefixTokens;
+
 			while (true)
 			{
 				if (token.Previous == null ||
@@ -540,11 +581,27 @@ namespace Mtgdb.Gui
 
 					foreach (char c in luceneUnescaped)
 					{
-						if (c == '-')
-							pattern.Append("(-|−)");
-						else
-							pattern.Append(Regex.Escape(new string(c, 1)));
+						var equivalents = MtgdbTokenizerPatterns.GetEquivalents(c);
+						pattern.Append("(");
+
+						using (var enumerator = equivalents.GetEnumerator())
+							if (enumerator.MoveNext())
+							{
+								pattern.Append(Regex.Escape(new string(enumerator.Current, 1)));
+
+								while (enumerator.MoveNext())
+								{
+									pattern.Append("|");
+									pattern.Append(Regex.Escape(new string(enumerator.Current, 1)));
+								}
+							}
+
+						pattern.Append(")");
 					}
+				}
+				else if (token.Type.Is(TokenType.RegexBody))
+				{
+					pattern.Append(token.Value);
 				}
 			}
 

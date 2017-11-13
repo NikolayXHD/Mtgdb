@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
+using Lucene.Net.Search.Spell;
 using Mtgdb.Dal.EditDistance;
-using SpellChecker.Net.Search.Spell;
 
 namespace Mtgdb.Dal.Index
 {
-	public class DamerauLevenstineDistance : StringDistance
+	public class DamerauLevenstineDistance : IStringDistance
 	{
 		private readonly LevenstineDistance _editDistance;
 
@@ -14,7 +14,10 @@ namespace Mtgdb.Dal.Index
 			_editDistance = new LevenstineDistance();
 		}
 
-		public float GetSimilarity(string s1, string s2)
+		/// <summary>
+		/// In fact it is not distance, it is similarity
+		/// </summary>
+		public float GetDistance(string s1, string s2)
 		{
 			float prefixDistance = getPrefixDistance(s1, s2);
 
@@ -27,10 +30,9 @@ namespace Mtgdb.Dal.Index
 
 			float typos = lengthDistance + 0.5f * Math.Min(prefixDistance, postfixDistance + 0.001f);
 			
-
 			float maxTypos = getMaxTypos(s1.Length);
 
-			float result = Math.Min(1f, 1.001f - 0.5f * typos / maxTypos);
+			float result = (1.001f - 0.5f * typos / maxTypos).WithinRange(0, 1);
 			return result;
 		}
 

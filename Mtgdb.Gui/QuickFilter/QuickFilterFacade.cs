@@ -130,7 +130,7 @@ namespace Mtgdb.Gui
 			return _matchingCardIds.Contains(c.IndexInFile);
 		}
 
-		public List<Match> GetMatchedText(string fieldValue, string fieldName)
+		public List<TextRange> GetMatchedText(string fieldValue, string fieldName)
 		{
 			HashSet<int> indexes;
 			if (!_indexByFieldNameDisplay.TryGetValue(fieldName, out indexes))
@@ -149,7 +149,9 @@ namespace Mtgdb.Gui
 					Ignored[i].AddMatches(fieldValue, matches);
 			}
 
-			return matches;
+			return matches
+				.Select(TextRange.Copy)
+				.ToList();
 		}
 	}
 }

@@ -26,8 +26,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{86
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrib.SpellChecker", "SpellChecker\Contrib.SpellChecker.csproj", "{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lucene.Net.Contrib", "Lucene.Net.Contrib", "{0DE878BB-4070-4139-978A-883AC52E882F}"
@@ -77,10 +75,6 @@ Global
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF45EE91-9CA3-443D-8231-75E9FA1AF40E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU

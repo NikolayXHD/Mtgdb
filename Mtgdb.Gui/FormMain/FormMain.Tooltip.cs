@@ -152,12 +152,16 @@
 				"+ mode: REQUIRE ANY checked value",
 				_buttonExcludeManaCost);
 
-			_toolTipController.SetTooltip("Search string",
-				"Ctrl+SPACE to get intellisense\r\n" +
-				"Enter to apply\r\n" +
-				"Ctrl+Backspace to delete one word\r\n" +
-				"F1 to learn searh string syntax\r\n\r\n" +
-				"Ctrl+F to focus search input",
+			_toolTipController.SetTooltip(
+				() =>
+					_searchStringSubsystem.SearchResult?.ParseErrorMessage != null ? "Syntax error" : "Search string",
+				() =>
+					_searchStringSubsystem.SearchResult?.ParseErrorMessage ??
+					"Ctrl+SPACE to get intellisense\r\n" +
+					"Enter to apply\r\n" +
+					"Ctrl+Backspace to delete one word\r\n" +
+					"F1 to learn searh string syntax\r\n\r\n" +
+					"Ctrl+F to focus search input",
 				_findBorderedPanel,
 				_findEditor,
 				_panelIconSearch);
