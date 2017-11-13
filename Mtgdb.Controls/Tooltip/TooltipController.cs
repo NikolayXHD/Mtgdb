@@ -19,6 +19,11 @@ namespace Mtgdb.Controls
 
 		public void SetTooltip(string title, string tooltip, params Control[] controls)
 		{
+			SetTooltip(() => title, () => tooltip, controls);
+		}
+
+		public void SetTooltip(Func<string> title, Func<string> tooltip, params Control[] controls)
+		{
 			var settings = new StaticTooltipSettings
 			{
 				Text = tooltip,
@@ -195,8 +200,8 @@ namespace Mtgdb.Controls
 					Control = locationControl,
 					ObjectBounds = locationControl.ClientRectangle,
 
-					Title = settgins.Title,
-					Text = settgins.Text
+					Title = settgins.Title(),
+					Text = settgins.Text()
 				};
 		}
 

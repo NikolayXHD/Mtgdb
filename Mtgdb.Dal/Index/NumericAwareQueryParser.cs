@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
-using Lucene.Net.QueryParsers;
+using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
-using Version = Lucene.Net.Util.Version;
+using Lucene.Net.Util;
+using Lucene.Net.Util.Automaton;
 
 namespace Mtgdb.Dal.Index
 {
@@ -17,7 +18,7 @@ namespace Mtgdb.Dal.Index
 
 		public HashSet<Term> NumericTerms { get; private set; }
 		
-		public NumericAwareQueryParser(Version matchVersion, string f, Analyzer a) : base(matchVersion, f, a)
+		public NumericAwareQueryParser(LuceneVersion matchVersion, string f, Analyzer a) : base(matchVersion, f, a)
 		{
 		}
 
@@ -31,9 +32,40 @@ namespace Mtgdb.Dal.Index
 			return result;
 		}
 
+		protected override Query GetRegexpQuery(string field, string termStr)
+		{
+			if (string.IsNullOrEmpty(field) || field == AnyField)
+			{
+				var result = new BooleanQuery(disableCoord: true);
 
+				foreach (var userField in DocumentFactory.UserFields)
+				{
+					if (userField.IsNumericField())
+						continue;
 
-		protected override Query GetFieldQuery(string field, string queryText)
+					var specificFieldQuery = GetRegexpQuery(userField, termStr);
+
+					if (specificFieldQuery != null)
+						result.Add(specificFieldQuery, Occur.SHOULD);
+				}
+
+				return result;
+			}
+
+			field = localize(field);
+
+			if (field.IsNumericField())
+				return null;
+
+			return base.GetRegexpQuery(field, termStr);
+		}
+
+		protected override Query NewRegexpQuery(Term regexp)
+		{
+			return new RegexpQuery(regexp, RegExpSyntax.ALL);
+		}
+
+		protected override Query GetFieldQuery(string field, string queryText, bool quoted)
 		{
 			bool valueIsNumeric = isValueNumeric(queryText);
 
@@ -43,8 +75,15 @@ namespace Mtgdb.Dal.Index
 
 				foreach (var userField in DocumentFactory.UserFields)
 				{
-					if (valueIsNumeric || !userField.IsNumericField())
-						result.Add(GetFieldQuery(userField, queryText), Occur.SHOULD);
+					if (!valueIsNumeric && userField.IsNumericField())
+						continue;
+
+					var specificFieldQuery = GetFieldQuery(userField, queryText, quoted);
+						
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -56,12 +95,12 @@ namespace Mtgdb.Dal.Index
 				NumericTerms.Add(new Term(field, queryText));
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, queryText, tryParseFloat, NumericRangeQuery.NewFloatRange);
+				return createRangeQuery<float>(field, queryText, tryParseFloat, NumericRangeQuery.NewSingleRange);
 
 			if (field.IsIntField())
-				return createRangeQuery<int>(field, queryText, int.TryParse, NumericRangeQuery.NewIntRange);
+				return createRangeQuery<int>(field, queryText, int.TryParse, NumericRangeQuery.NewInt32Range);
 
-			return base.GetFieldQuery(field, queryText);
+			return base.GetFieldQuery(field, queryText, quoted);
 		}
 
 		private static bool isValueNumeric(string queryText)
@@ -75,7 +114,7 @@ namespace Mtgdb.Dal.Index
 			return valueIsNumeric;
 		}
 
-		protected override Query GetRangeQuery(string field, string part1, string part2, bool inclusive)
+		protected override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
 		{
 			bool valuesAreNumeric =
 				(isValueNumeric(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
@@ -87,8 +126,13 @@ namespace Mtgdb.Dal.Index
 
 				foreach (var userField in DocumentFactory.UserFields)
 				{
-					if (valuesAreNumeric || !userField.IsNumericField())
-						result.Add(GetRangeQuery(userField, part1, part2, inclusive), Occur.SHOULD);
+					if (!valuesAreNumeric && userField.IsNumericField())
+						continue;
+
+					var specificFieldQuery = GetRangeQuery(userField, part1, part2, startInclusive, endInclusive);
+
+					if (specificFieldQuery != null)
+						result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -96,7 +140,7 @@ namespace Mtgdb.Dal.Index
 
 			field = localize(field);
 
-			var query = (TermRangeQuery) base.GetRangeQuery(field, part1, part2, inclusive);
+			var query = (TermRangeQuery) base.GetRangeQuery(field, part1, part2, startInclusive, endInclusive);
 
 			if (field.IsNumericField())
 			{
@@ -105,10 +149,10 @@ namespace Mtgdb.Dal.Index
 			}
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, query, tryParseFloat, NumericRangeQuery.NewFloatRange);
+				return createRangeQuery<float>(field, query, tryParseFloat, NumericRangeQuery.NewSingleRange);
 
 			if (field.IsIntField())
-				return createRangeQuery<int>(field, query, int.TryParse, NumericRangeQuery.NewIntRange);
+				return createRangeQuery<int>(field, query, int.TryParse, NumericRangeQuery.NewInt32Range);
 
 			return createRangeQuery(field, query);
 		}
@@ -132,7 +176,12 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					result.Add(GetFuzzyQuery(userField, termStr, minSimilarity), Occur.SHOULD);
+					var specificFieldQuery = GetFuzzyQuery(userField, termStr, minSimilarity);
+
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -154,7 +203,12 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					result.Add(GetFieldQuery(userField, queryText, slop), Occur.SHOULD);
+					var specificFieldQuery = GetFieldQuery(userField, queryText, slop);
+
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -175,7 +229,12 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					result.Add(GetPrefixQuery(userField, termStr), Occur.SHOULD);
+					var specificFieldQuery = GetPrefixQuery(userField, termStr);
+
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -196,7 +255,12 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					result.Add(GetWildcardQuery(userField, termStr), Occur.SHOULD);
+					var specificFieldQuery = GetWildcardQuery(userField, termStr);
+
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
 				return result;
@@ -208,17 +272,18 @@ namespace Mtgdb.Dal.Index
 
 		private static Query createRangeQuery(string field, TermRangeQuery query)
 		{
-			var lowerValue = getValue(query.LowerTerm);
-			var upperValue = getValue(query.UpperTerm);
-			var result = new TermRangeQuery(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
+			var lowerValue = getValue(query.LowerTerm.Utf8ToString());
+			var upperValue = getValue(query.UpperTerm.Utf8ToString());
+			var result = new TermRangeQuery(field, new BytesRef(lowerValue), new BytesRef(upperValue), query.IncludesLower, query.IncludesUpper);
+
 			return result;
 		}
 
 		private static Query createRangeQuery<TVal>(string field, TermRangeQuery query, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory) 
 			where TVal: struct, IComparable<TVal>
 		{
-			var lowerValue = getValue(field, parser, query.LowerTerm);
-			var upperValue = getValue(field, parser, query.UpperTerm);
+			var lowerValue = getValue(field, parser, query.LowerTerm.Utf8ToString());
+			var upperValue = getValue(field, parser, query.UpperTerm.Utf8ToString());
 			var result = rangeQueryFactory(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
 			return result;
 		}

@@ -1,11 +1,22 @@
+using System.Text.RegularExpressions;
+
 namespace Mtgdb.Controls
 {
 	public class TextRange
 	{
-		public TextRange(int index, int length, bool isContext)
+		public static TextRange Copy(Match m)
+		{
+			return new TextRange(m.Index, m.Length);
+		}
+
+		public static TextRange Offset(int offset, Match m)
+		{
+			return new TextRange(m.Index + offset, m.Length);
+		}
+
+		public TextRange(int index, int length)
 		{
 			Length = length;
-			IsContext = isContext;
 			Index = index;
 		}
 
@@ -13,7 +24,7 @@ namespace Mtgdb.Controls
 
 		public int Length { get; set; }
 
-		public bool IsContext { get; private set; }
+		public bool IsContext { get; set; }
 
 		public override string ToString()
 		{

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Miscellaneous;
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Lucene.Net.Util;
@@ -18,6 +20,7 @@ namespace Mtgdb.Dal.Index
 		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> LimitedValuesFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> NotAnalyzedFields = new HashSet<string>(Str.Comparer);
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
 		
@@ -26,10 +29,10 @@ namespace Mtgdb.Dal.Index
 		{
 			_langs = CardLocalization.GetAllLanguages().ToList();
 
-			addTextField(nameof(Card.Color), isLimitedValues: true);
+			addTextField(nameof(Card.Color), isLimitedValues: true, analyze: false);
 
 			addTextField(nameof(Card.SetName), isLimitedValues: true);
-			addTextField(nameof(Card.SetCode), isLimitedValues: true);
+			addTextField(nameof(Card.SetCode), isLimitedValues: true, analyze: false);
 			addTextField(nameof(Card.Artist), isLimitedValues: true);
 			
 			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
@@ -37,34 +40,44 @@ namespace Mtgdb.Dal.Index
 
 			addTextField(nameof(Card.NameEn),
 				nameof(Card.Name));
+
 			addTextField(nameof(Card.TextEn),
 				nameof(Card.Text));
+
 			addTextField(nameof(Card.FlavorEn),
 				nameof(Card.Flavor));
+
 			addTextField(nameof(Card.TypeEn),
 				nameof(Card.Type), isLimitedValues: true);
+
 			addTextField(nameof(Card.Supertypes),
-				nameof(Card.Type), isLimitedValues: true);
+				nameof(Card.Type), isLimitedValues: true, analyze: false);
+
 			addTextField(nameof(Card.Types),
-				nameof(Card.Type), isLimitedValues: true);
+				nameof(Card.Type), isLimitedValues: true, analyze: false);
+
 			addTextField(nameof(Card.Subtypes),
-				nameof(Card.Type), isLimitedValues: true);
+				nameof(Card.Type), isLimitedValues: true, analyze: false);
+
 			addTextField(nameof(Card.LegalIn),
 				nameof(Card.Rulings), isLimitedValues: true);
+
 			addTextField(nameof(Card.RestrictedIn),
 				nameof(Card.Rulings), isLimitedValues: true);
+
 			addTextField(nameof(Card.BannedIn),
 				nameof(Card.Rulings), isLimitedValues: true);
-			addTextField(nameof(Card.GeneratedMana),
-				nameof(Card.Text), isLimitedValues: true);
 
-			addTextField(nameof(Card.Power), isLimitedValues: true);
-			addTextField(nameof(Card.Toughness), isLimitedValues: true);
-			addTextField(nameof(Card.Loyalty), isLimitedValues: true);
-			addTextField(nameof(Card.ManaCost), isLimitedValues: true);
+			addTextField(nameof(Card.GeneratedMana),
+				nameof(Card.Text), isLimitedValues: true, analyze: false);
+
+			addTextField(nameof(Card.Power), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.Toughness), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.Loyalty), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.ManaCost), isLimitedValues: true, analyze: false);
 			addTextField(nameof(Card.Rarity), isLimitedValues: true);
-			addTextField(nameof(Card.ReleaseDate), isLimitedValues: true);
-			addTextField(nameof(Card.Layout), isLimitedValues: true);
+			addTextField(nameof(Card.ReleaseDate), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.Layout), isLimitedValues: true, analyze: false);
 
 			addFloatField(nameof(Card.PowerNum),
 				nameof(Card.Power));
@@ -100,10 +113,12 @@ namespace Mtgdb.Dal.Index
 
 			foreach (var pair in cardKeywords.KeywordsByProperty)
 				foreach (string value in pair.Value)
-					doc.Add(new Field(pair.Key.ToLowerInvariant(),
+				{
+					doc.Add(new StringField(
+						pair.Key.ToLowerInvariant(),
 						value.ToLowerInvariant(),
-						Field.Store.NO,
-						Field.Index.NOT_ANALYZED_NO_NORMS));
+						Field.Store.NO));
+				}
 
 			return doc;
 		}
@@ -115,66 +130,69 @@ namespace Mtgdb.Dal.Index
 			// Tested
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
 
-			if (!string.IsNullOrEmpty(card.Color))
-				doc.addTextField(nameof(card.Color), card.Color, analyze: true);
+			if (card.ColorsArr?.Count > 0)
+				foreach (var color in card.ColorsArr)
+					doc.addTextField(nameof(card.Color), color);
+			else if (!string.IsNullOrEmpty(card.Color))
+				doc.addTextField(nameof(card.Color), card.Color);
 
 			// Tested
-			doc.addTextField(nameof(card.NameEn), card.NameEn, analyze: true);
+			doc.addTextField(nameof(card.NameEn), card.NameEn);
 
 			// Tested
-			doc.addTextField(nameof(card.SetName), card.SetName, analyze: true);
+			doc.addTextField(nameof(card.SetName), card.SetName);
 
 			//Tested
-			doc.addTextField(nameof(card.SetCode), card.SetCode, analyze: true);
+			doc.addTextField(nameof(card.SetCode), card.SetCode);
 
 			if (!string.IsNullOrEmpty(card.OriginalText))
-				doc.addTextField(nameof(Card.OriginalText), card.OriginalText, analyze: true);
+				doc.addTextField(nameof(Card.OriginalText), card.OriginalText);
 
 			if (!string.IsNullOrEmpty(card.OriginalType))
-				doc.addTextField(nameof(Card.OriginalType), card.OriginalType, analyze: true);
+				doc.addTextField(nameof(Card.OriginalType), card.OriginalType);
 
 			if (!string.IsNullOrEmpty(card.Artist))
-				doc.addTextField(nameof(card.Artist), card.Artist, analyze: true);
+				doc.addTextField(nameof(card.Artist), card.Artist);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.TextEn))
-				doc.addTextField(nameof(card.TextEn), card.TextEn, analyze: true);
+				doc.addTextField(nameof(card.TextEn), card.TextEn);
 
 			if (!string.IsNullOrEmpty(card.FlavorEn))
-				doc.addTextField(nameof(card.FlavorEn), card.FlavorEn, analyze: true);
+				doc.addTextField(nameof(card.FlavorEn), card.FlavorEn);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.TypeEn))
-				doc.addTextField(nameof(card.TypeEn), card.TypeEn, analyze: true);
+				doc.addTextField(nameof(card.TypeEn), card.TypeEn);
 
 			// Tested
 			if (card.SupertypesArr != null)
 				foreach (string type in card.SupertypesArr)
-					doc.addTextField(nameof(card.Supertypes), type, analyze: true);
+					doc.addTextField(nameof(card.Supertypes), type);
 
 			// Tested
 			if (card.TypesArr != null)
 				foreach (string type in card.TypesArr)
-					doc.addTextField(nameof(card.Types), type, analyze: true);
+					doc.addTextField(nameof(card.Types), type);
 
 			// Tested
 			if (card.SubtypesArr != null)
 				foreach (string type in card.SubtypesArr)
-					doc.addTextField(nameof(card.Subtypes), type, analyze: true);
+					doc.addTextField(nameof(card.Subtypes), type);
 
 			foreach (var note in card.LegalityByFormat.Values)
 			{
 				// Tested
 				if (Str.Equals(note.Legality, Legality.Legal))
-					doc.addTextField(nameof(card.LegalIn), note.Format, analyze: true);
+					doc.addTextField(nameof(card.LegalIn), note.Format);
 
 				// Tested
 				else if (Str.Equals(note.Legality, Legality.Restricted))
-					doc.addTextField(nameof(card.RestrictedIn), note.Format, analyze: true);
+					doc.addTextField(nameof(card.RestrictedIn), note.Format);
 
 				// Tested
 				else if (Str.Equals(note.Legality, Legality.Banned))
-					doc.addTextField(nameof(card.BannedIn), note.Format, analyze: true);
+					doc.addTextField(nameof(card.BannedIn), note.Format);
 
 				else
 					throw new NotSupportedException($"Unknown legality {note.Legality}");
@@ -187,15 +205,15 @@ namespace Mtgdb.Dal.Index
 				{
 				}
 
-				doc.addTextField(nameof(card.Power), card.Power, analyze: false);
+				doc.addTextField(nameof(card.Power), card.Power);
 			}
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Toughness))
-				doc.addTextField(nameof(card.Toughness), card.Toughness, analyze: false);
+				doc.addTextField(nameof(card.Toughness), card.Toughness);
 
 			if (!string.IsNullOrEmpty(card.Loyalty))
-				doc.addTextField(nameof(card.Loyalty), card.Loyalty, analyze: false);
+				doc.addTextField(nameof(card.Loyalty), card.Loyalty);
 
 			// Tested
 			if (card.PowerNum.HasValue)
@@ -219,18 +237,18 @@ namespace Mtgdb.Dal.Index
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
 			if (!string.IsNullOrEmpty(card.GeneratedMana))
-				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana, analyze: true);
+				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana);
 
 			if (!string.IsNullOrEmpty(card.ManaCost))
-				doc.addTextField(nameof(card.ManaCost), card.ManaCost, analyze: true);
+				doc.addTextField(nameof(card.ManaCost), card.ManaCost);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Rarity))
-				doc.addTextField(nameof(card.Rarity), card.Rarity, analyze: true);
+				doc.addTextField(nameof(card.Rarity), card.Rarity);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.ReleaseDate))
-				doc.addTextField(nameof(card.ReleaseDate), card.ReleaseDate, analyze: true);
+				doc.addTextField(nameof(card.ReleaseDate), card.ReleaseDate);
 
 			// Tested
 			if (card.PricingHigh.HasValue)
@@ -245,7 +263,7 @@ namespace Mtgdb.Dal.Index
 				doc.addNumericField(nameof(card.PricingLow), card.PricingLow.Value);
 
 			if (!string.IsNullOrEmpty(card.Layout))
-				doc.addTextField(nameof(Card.Layout), card.Layout, analyze: true);
+				doc.addTextField(nameof(Card.Layout), card.Layout);
 
 			foreach (var lang in _langs)
 			{
@@ -282,17 +300,14 @@ namespace Mtgdb.Dal.Index
 		private static void addIdField(this Document doc, string fieldName, int fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
-
-			var field = new NumericField(fieldName, Field.Store.YES, index: false);
-			field.SetIntValue(fieldValue);
-
+			var field = new Int32Field(fieldName, fieldValue, Field.Store.YES);
 			doc.Add(field);
 		}
 
-		private static void addTextField(this Document doc, string fieldName, string fieldValue, bool analyze)
+		private static void addTextField(this Document doc, string fieldName, string fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
-			addSpecificTextField(doc, fieldName, fieldValue, analyze);
+			addSpecificTextField(doc, fieldName, fieldValue);
 		}
 
 		private static void addTextField(this Document doc, string fieldName, string fieldValue, string language)
@@ -303,21 +318,23 @@ namespace Mtgdb.Dal.Index
 			fieldName = fieldName.ToLowerInvariant();
 
 			var localizedFieldName = getLocalizedField(fieldName, language);
-			addSpecificTextField(doc, localizedFieldName, fieldValue, analyze: true);
+			addSpecificTextField(doc, localizedFieldName, fieldValue);
 		}
 
-		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue, bool analyze)
+		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue)
 		{
 			fieldName = fieldName.ToLowerInvariant();
 
 			if (!TextFields.Contains(fieldName))
 				throw new InvalidOperationException($"Text field {fieldName} not intialized");
 
-			var indexing = analyze
-				? Field.Index.ANALYZED_NO_NORMS
-				: Field.Index.NOT_ANALYZED_NO_NORMS;
+			TextField field;
+			if (NotAnalyzedFields.Contains(fieldName))
+				field = new TextField(fieldName, new SingleTokenTokenStream(new Token(fieldValue, 0, fieldValue.Length)));
+			else
+				field = new TextField(fieldName, fieldValue, Field.Store.NO);
 
-			doc.Add(new Field(fieldName, fieldValue, Field.Store.NO, indexing));
+			doc.Add(field);
 		}
 
 		private static void addNumericField(this Document doc, string fieldName, float fieldValue)
@@ -327,8 +344,7 @@ namespace Mtgdb.Dal.Index
 			if (!fieldName.IsFloatField())
 				throw new ArgumentException($"Numeric float field {fieldName} not intialized");
 
-			var field = new NumericField(fieldName);
-			field.SetFloatValue(fieldValue);
+			var field = new SingleField(fieldName, fieldValue, Field.Store.NO);
 			doc.Add(field);
 		}
 
@@ -339,14 +355,13 @@ namespace Mtgdb.Dal.Index
 			if (!fieldName.IsIntField())
 				throw new ArgumentException($"Numeric int field {fieldName} not intialized");
 
-			var field = new NumericField(fieldName);
-			field.SetIntValue(fieldValue);
+			var field = new Int32Field(fieldName, fieldValue, Field.Store.NO);
 			doc.Add(field);
 		}
 
 
 
-		private static void addTextField(string fieldName, string displayField = null, bool isLimitedValues = false)
+		private static void addTextField(string fieldName, string displayField = null, bool isLimitedValues = false, bool analyze = true)
 		{
 			TextFields.Add(fieldName);
 			UserFields.Add(fieldName);
@@ -356,6 +371,9 @@ namespace Mtgdb.Dal.Index
 
 			if (isLimitedValues)
 				LimitedValuesFields.Add(fieldName);
+
+			if (!analyze)
+				NotAnalyzedFields.Add(fieldName);
 		}
 
 		private static void addSpecificTextField(string fieldName, string language, bool isLimitedValues = false)
@@ -426,22 +444,20 @@ namespace Mtgdb.Dal.Index
 			return int.Parse(value);
 		}
 
-		public static float? TryParseFloat(this string val)
+		public static float? TryParseFloat(this BytesRef val)
 		{
-			int shift = val[0] - NumericUtils.SHIFT_START_INT;
-			if (shift > 0 && shift <= 31)
+			if (val == null)
 				return null;
 
-			return NumericUtils.SortableIntToFloat(NumericUtils.PrefixCodedToInt(val));
+			return NumericUtils.SortableInt32ToSingle(NumericUtils.PrefixCodedToInt32(val));
 		}
 
-		public static int? TryParseInt(this string val)
+		public static int? TryParseInt(this BytesRef val)
 		{
-			int shift = val[0] - NumericUtils.SHIFT_START_INT;
-			if (shift > 0 && shift <= 31)
+			if (val == null)
 				return null;
 
-			return NumericUtils.PrefixCodedToInt(val);
+			return NumericUtils.PrefixCodedToInt32(val);
 		}
 
 		public static bool IsNumericField(this string field)

@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Core;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
+using Lucene.Net.Util;
 using Mtgdb.Dal.Index;
 using Newtonsoft.Json;
 
@@ -35,14 +36,15 @@ namespace Mtgdb.Dal
 				keywords = createKeywordsFrom(repository);
 
 			_index = new RAMDirectory();
-			using (var writer = new IndexWriter(_index, new KeywordAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED))
+			using (var writer = new IndexWriter(_index, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
 				foreach (var keyword in keywords)
 				{
 					var doc = keyword.ToDocument();
 					writer.AddDocument(doc);
 				}
 
-			_searcher = new IndexSearcher(_index, readOnly: true);
+			_indexReader = DirectoryReader.Open(_index);
+			_searcher = new IndexSearcher(_indexReader);
 
 			IsLoaded = true;
 			IsLoading = false;
@@ -52,7 +54,7 @@ namespace Mtgdb.Dal
 		public IEnumerable<int> GetCardIds(IEnumerable<KeywordQueryTerm> andTerms, IEnumerable<KeywordQueryTerm> orTerms, IEnumerable<KeywordQueryTerm> notTerms)
 		{
 			var query = toLuceneQuery(andTerms, orTerms, notTerms);
-			var searchResult = _searcher.Search(query, _searcher.MaxDoc);
+			var searchResult = _searcher.Search(query, filter: null, n: _indexReader.MaxDoc);
 
 			foreach (var scoreDoc in searchResult.ScoreDocs)
 			{
@@ -158,5 +160,6 @@ namespace Mtgdb.Dal
 		private readonly IndexVersion _version;
 		private RAMDirectory _index;
 		private IndexSearcher _searcher;
+		private DirectoryReader _indexReader;
 	}
 }

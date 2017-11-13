@@ -5,9 +5,8 @@ using System.Linq;
 using System.Threading;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
-using Lucene.Net.Store;
 using Lucene.Net.Contrib;
-using SpellChecker.Net.Search.Spell;
+using Lucene.Net.Store;
 
 namespace Mtgdb.Dal.Index
 {
@@ -22,14 +21,14 @@ namespace Mtgdb.Dal.Index
 
 		public bool IsUpToDate => Version.IsUpToDate;
 
-		internal void LoadIndex(Analyzer analyzer, Directory index)
+		internal void LoadIndex(Analyzer analyzer, IndexReader reader)
 		{
-			_reader = IndexReader.Open(index, readOnly: true);
+			_reader = reader;
 
 			if (Version.IsUpToDate)
 				_spellchecker = openSpellchecker();
 			else
-				_spellchecker = createSpellchecker(analyzer, _reader);
+				_spellchecker = createSpellchecker(analyzer);
 			
 			IsLoaded = true;
 		}
@@ -38,10 +37,11 @@ namespace Mtgdb.Dal.Index
 		{
 			var spellcheckerIndex = FSDirectory.Open(Version.Directory);
 			var spellChecker = new Spellchecker(spellcheckerIndex, _stringDistance);
+
 			return spellChecker;
 		}
 
-		private Spellchecker createSpellchecker(Analyzer analyzer, IndexReader indexReader)
+		private Spellchecker createSpellchecker(Analyzer analyzer)
 		{
 			IsLoading = true;
 
@@ -50,21 +50,36 @@ namespace Mtgdb.Dal.Index
 			var spellcheckerIndex = FSDirectory.Open(Version.Directory);
 			var spellchecker = new Spellchecker(spellcheckerIndex, _stringDistance);
 
-			TotalFields = DocumentFactory.TextFields.Count;
-			foreach (string field in DocumentFactory.TextFields)
+			var fields = new HashSet<string>();
+			fields.UnionWith(DocumentFactory.TextFields);
+			fields.ExceptWith(DocumentFactory.LimitedValuesFields);
+			
+			TotalFields = fields.Count;
+
+			spellchecker.BeginIndex(analyzer);
+
+			foreach (string field in fields)
 			{
 				var storedField = field.ToLowerInvariant();
 
 				if (_abort)
-					return null;
-
-				var luceneDictionary = new LuceneDictionary(indexReader, storedField);
-				spellchecker.IndexDictionary(luceneDictionary, analyzer, () => _abort);
+					break;
 
 				IndexedFields++;
+
+				var terms = MultiFields.GetTerms(_reader, storedField);
+				var iterator = terms.GetIterator(null);
+				
+				spellchecker.IndexDictionary(iterator, () => _abort);
+
 				IsLoading = IndexedFields < TotalFields;
 				IndexingProgress?.Invoke();
 			}
+
+			spellchecker.EndIndex();
+
+			if (_abort)
+				return null;
 
 			IsLoading = false;
 
@@ -129,7 +144,7 @@ namespace Mtgdb.Dal.Index
 					values.Sort(Str.Comparer);
 				else
 				{
-					var similarities = values.Select(_ => _stringDistance.GetSimilarity(value, _))
+					var similarities = values.Select(_ => _stringDistance.GetDistance(value, _))
 						.ToArray();
 
 					values = Enumerable.Range(0, values.Count)
@@ -157,8 +172,11 @@ namespace Mtgdb.Dal.Index
 				var result = getValues(field, language, maxCount).ToArray();
 				return result;
 			}
-
-			return _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
+			else
+			{
+				var values = _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
+				return values;
+			}
 		}
 
 		private IList<string> fullScan(string field, string value, string language, int maxCount)
@@ -169,7 +187,7 @@ namespace Mtgdb.Dal.Index
 
 			if (!string.IsNullOrEmpty(value))
 			{
-				var similarities = values.Select(_ => _stringDistance.GetSimilarity(value, _))
+				var similarities = values.Select(_ => _stringDistance.GetDistance(value, _))
 					.ToArray();
 
 				values = Enumerable.Range(0, values.Count)
@@ -204,49 +222,48 @@ namespace Mtgdb.Dal.Index
 						yield return specificResult;
 
 			field = DocumentFactory.Localize(field, language);
-			var terms = _reader.Terms(new Term(field));
 			int count = 0;
+
+			var terms = MultiFields.GetTerms(_reader, field);
+			var iterator = terms.GetIterator(null);
 
 			if (field.IsFloatField())
 			{
-				do
+				while (iterator.Next() != null && count <= maxCount)
 				{
-					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
-						yield break;
+					var value = iterator.Term.TryParseFloat();
 
-					var value = terms.Term.Text.TryParseFloat();
 					if (value.HasValue)
 					{
 						yield return value.ToString();
 						count++;
 					}
-				} while (terms.Next());
+				}
 			}
 			else if (field.IsIntField())
 			{
-				do
+				while (iterator.Next() != null && count <= maxCount)
 				{
-					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
-						yield break;
+					var value = iterator.Term.TryParseInt();
 
-					var value = terms.Term.Text.TryParseInt();
 					if (value.HasValue)
 					{
 						yield return value.ToString();
 						count++;
 					}
-				} while (terms.Next());
+				}
 			}
 			else
 			{
-				do
+				while (iterator.Next() != null && count <= maxCount)
 				{
-					if (count >= maxCount || !Str.Equals(terms.Term.Field, field))
-						yield break;
+					if (iterator.Term == null)
+						continue;
 
-					yield return terms.Term.Text;
+					var value = iterator.Term.Utf8ToString();
+					yield return value;
 					count++;
-				} while (terms.Next());
+				}
 			}
 		}
 
@@ -256,7 +273,7 @@ namespace Mtgdb.Dal.Index
 
 			if (!string.IsNullOrEmpty(field))
 			{
-				var similarities = userFields.Select(_ => _stringDistance.GetSimilarity(field, _))
+				var similarities = userFields.Select(_ => _stringDistance.GetDistance(field, _))
 					.ToArray();
 
 				userFields = Enumerable.Range(0, userFields.Count)
@@ -278,7 +295,6 @@ namespace Mtgdb.Dal.Index
 
 			IsLoaded = false;
 			_reader?.Dispose();
-			_spellchecker?.Dispose();
 		}
 
 		private void abortLoading()

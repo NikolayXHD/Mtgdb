@@ -242,7 +242,7 @@ namespace Mtgdb.Test
 		[TestCase(@"ManaCost:\{B\}")]
 		[TestCase(@"ManaCost:(*B* AND *W*)")]
 		[TestCase(@"ManaCost:(*B* OR *W*)")]
-		[TestCase(@"ManaCost:\{W/P\}")]
+		[TestCase(@"ManaCost:\{W\/P\}")]
 		public void Search_by_ManaCost(string queryStr)
 		{
 			search(queryStr, c => c.NameEn + ": " + c.ManaCost);

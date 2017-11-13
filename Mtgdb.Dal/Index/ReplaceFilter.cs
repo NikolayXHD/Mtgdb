@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Tokenattributes;
+using Lucene.Net.Analysis.TokenAttributes;
 
 namespace Mtgdb.Dal.Index
 {
@@ -13,17 +13,17 @@ namespace Mtgdb.Dal.Index
 			: base(@in)
 		{
 			_replacements = replacements;
-			_termAtt = AddAttribute<ITermAttribute>();
+			_termAtt = AddAttribute<ICharTermAttribute>();
 		}
 
-		private readonly ITermAttribute _termAtt;
+		private readonly ICharTermAttribute _termAtt;
 
 		public override bool IncrementToken()
 		{
-			if (input.IncrementToken())
+			if (m_input.IncrementToken())
 			{
-				char[] buffer = _termAtt.TermBuffer();
-				int length = _termAtt.TermLength();
+				char[] buffer = _termAtt.Buffer;
+				int length = _termAtt.Length;
 
 				for (int i = 0; i < length; i++)
 				{

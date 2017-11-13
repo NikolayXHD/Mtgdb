@@ -85,7 +85,7 @@ namespace Mtgdb.Gui
 		{
 			var fontSize = _findEditor.Font.SizeInPixels();
 			int linesCount = 1 + text.Count(_ => _ == '\n');
-			return (int) (fontSize * 1.2f * linesCount);
+			return (int) (fontSize * 1.1f * linesCount);
 		}
 
 		public void StartThread()
@@ -225,14 +225,6 @@ namespace Mtgdb.Gui
 		private void parentKeyDown(object sender, KeyEventArgs e)
 		{
 			updateBackgroundColor();
-		}
-
-		public void ProcessEnterKey()
-		{
-			if (_listBoxSuggest.Visible)
-				return;
-
-			ApplyFind();
 		}
 
 		public void FocusSearch()

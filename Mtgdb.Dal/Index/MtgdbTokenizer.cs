@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Tokenattributes;
+using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Contrib;
 
 namespace Mtgdb.Dal.Index
@@ -11,26 +10,9 @@ namespace Mtgdb.Dal.Index
 		public MtgdbTokenizer(TextReader inputReader)
 			: base(inputReader)
 		{
-			init();
-		}
-
-		private void init()
-		{
-			_termAtt = AddAttribute<ITermAttribute>();
+			_termAtt = AddAttribute<ICharTermAttribute>();
 			_offsetAtt = AddAttribute<IOffsetAttribute>();
 		}
-
-		private int _offset, _bufferIndex, _dataLen;
-		private const int MaxWordLen = 255;
-		private const int IoBufferSize = 1024;
-		private readonly char[] _buffer = new char[MaxWordLen];
-		private readonly char[] _ioBuffer = new char[IoBufferSize];
-
-		private int _length;
-		private int _start;
-
-		private ITermAttribute _termAtt;
-		private IOffsetAttribute _offsetAtt;
 
 		private void push(char c)
 		{
@@ -44,8 +26,8 @@ namespace Mtgdb.Dal.Index
 		{
 			if (_length == 0)
 				return false;
-
-			_termAtt.SetTermBuffer(_buffer, 0, _length);
+			
+			_termAtt.CopyBuffer(_buffer, 0, _length);
 			_offsetAtt.SetOffset(CorrectOffset(_start), CorrectOffset(_start + _length));
 			return true;
 		}
@@ -58,18 +40,18 @@ namespace Mtgdb.Dal.Index
 			_length = 0;
 			_start = _offset;
 
-
 			while (true)
 			{
 				_offset++;
 
 				if (_bufferIndex >= _dataLen)
 				{
-					_dataLen = input.Read(_ioBuffer, 0, _ioBuffer.Length);
+
+					_dataLen = m_input.Read(_ioBuffer, 0, _ioBuffer.Length);
 					_bufferIndex = 0;
 				}
 
-				if (_dataLen == 0)
+				if (_dataLen <= 0)
 				{
 					_offset--;
 					return flush();
@@ -77,7 +59,7 @@ namespace Mtgdb.Dal.Index
 
 				char c = _ioBuffer[_bufferIndex++];
 
-				if (char.IsLetterOrDigit(c) || _wordCharsSet.Contains(c))
+				if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c))
 				{
 					if (c.IsCj())
 					{
@@ -121,13 +103,18 @@ namespace Mtgdb.Dal.Index
 			_offset = _bufferIndex = _dataLen = 0;
 		}
 
-		public override void Reset(TextReader inputReader)
-		{
-			base.Reset(inputReader);
-			Reset();
-		}
 
-		public static readonly string WordChars = @"&*+-/?_{}²½–—’•−∞";
-		private static readonly HashSet<char> _wordCharsSet = new HashSet<char>(WordChars);
+
+		private int _offset, _bufferIndex, _dataLen;
+		private const int MaxWordLen = 255;
+		private const int IoBufferSize = 1024;
+		private readonly char[] _buffer = new char[MaxWordLen];
+		private readonly char[] _ioBuffer = new char[IoBufferSize];
+
+		private int _length;
+		private int _start;
+
+		private readonly ICharTermAttribute _termAtt;
+		private readonly IOffsetAttribute _offsetAtt;
 	}
 }
