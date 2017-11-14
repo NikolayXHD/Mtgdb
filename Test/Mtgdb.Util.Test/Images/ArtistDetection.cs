@@ -120,7 +120,7 @@ namespace Mtgdb.Util
 					if (!Str.Equals(card.Artist, detectedArtist))
 					{
 						string message = setCode + "\t" + card.ImageName + "\t" + card.Artist + "\t" + detectedArtist + "\t" + model.FullPath;
-						Console.WriteLine(message);
+						Log.Debug(message);
 						result.AppendLine(message);
 					}
 				}
