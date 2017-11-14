@@ -20,9 +20,6 @@ namespace Mtgdb.Dal.Index
 		public static readonly Regex Word = new Regex($@"[\d\w{_word}]",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		public static readonly Regex Boundary = new Regex($@"(^|$|[^\d\w{_word}])",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
 		public static readonly Dictionary<char, char> Replacements = new Dictionary<char, char>
 		{
 			{ '−', '-' },

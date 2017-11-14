@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -477,33 +476,8 @@ namespace Mtgdb.Gui
 			string suffixPattern = getPattern(suffixTokens);
 			string radixPattern = getPattern(radixTokens);
 
-			bool suffixEndsCjk = suffixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
-			bool prefixEndsCjk = prefixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
-			bool radixEndsCjk = radixTokens.LastOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetLast()?.IsCj() == true;
-
-			bool suffixStartsCjk = suffixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
-			bool prefixStartsCjk = prefixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
-			bool radixStartsCjk = radixTokens.FirstOrDefault(_ => _.Type.Is(TokenType.FieldValue))?.Value.TryGetFirst()?.IsCj() == true;
-
-			bool prefixNoValues = !prefixTokens.Any(_ => _.Type.Is(TokenType.FieldValue));
-			bool suffixNoValues = !suffixTokens.Any(_ => _.Type.Is(TokenType.FieldValue));
-			bool radixNoValues = !radixTokens.Any(_ => _.Type.Is(TokenType.FieldValue));
-
-			bool prefixIsCjk =
-				prefixStartsCjk ||
-				prefixNoValues && radixStartsCjk ||
-				prefixNoValues && radixNoValues && suffixStartsCjk;
-
-			bool suffixIsCjk =
-				suffixEndsCjk ||
-				suffixNoValues && radixEndsCjk ||
-				suffixNoValues && radixNoValues && prefixEndsCjk;
-
-			if (!prefixIsCjk)
-				prefixPattern = MtgdbTokenizerPatterns.Boundary + prefixPattern;
-
-			if (!suffixIsCjk)
-				suffixPattern += MtgdbTokenizerPatterns.Boundary;
+			prefixPattern = "^" + prefixPattern;
+			suffixPattern += "$";
 
 			string result = $"(?<={prefixPattern}){radixPattern}(?={suffixPattern})";
 			return result;
