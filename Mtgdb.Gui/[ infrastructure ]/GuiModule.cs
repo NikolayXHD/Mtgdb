@@ -1,6 +1,5 @@
 using System;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;

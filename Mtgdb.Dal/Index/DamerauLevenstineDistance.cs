@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Lucene.Net.Search.Spell;
 using Mtgdb.Dal.EditDistance;
 
 namespace Mtgdb.Dal.Index
