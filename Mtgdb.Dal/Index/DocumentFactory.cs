@@ -130,6 +130,7 @@ namespace Mtgdb.Dal.Index
 			// Tested
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
 
+			// tested
 			if (card.ColorsArr?.Count > 0)
 				foreach (var color in card.ColorsArr)
 					doc.addTextField(nameof(card.Color), color);
@@ -145,12 +146,15 @@ namespace Mtgdb.Dal.Index
 			//Tested
 			doc.addTextField(nameof(card.SetCode), card.SetCode);
 
+			//Tested
 			if (!string.IsNullOrEmpty(card.OriginalText))
 				doc.addTextField(nameof(Card.OriginalText), card.OriginalText);
 
+			//Tested
 			if (!string.IsNullOrEmpty(card.OriginalType))
 				doc.addTextField(nameof(Card.OriginalType), card.OriginalType);
 
+			//Tested
 			if (!string.IsNullOrEmpty(card.Artist))
 				doc.addTextField(nameof(card.Artist), card.Artist);
 
@@ -158,6 +162,7 @@ namespace Mtgdb.Dal.Index
 			if (!string.IsNullOrEmpty(card.TextEn))
 				doc.addTextField(nameof(card.TextEn), card.TextEn);
 
+			// Tested
 			if (!string.IsNullOrEmpty(card.FlavorEn))
 				doc.addTextField(nameof(card.FlavorEn), card.FlavorEn);
 
@@ -200,18 +205,13 @@ namespace Mtgdb.Dal.Index
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Power))
-			{
-				if (card.Power.Contains("*"))
-				{
-				}
-
 				doc.addTextField(nameof(card.Power), card.Power);
-			}
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Toughness))
 				doc.addTextField(nameof(card.Toughness), card.Toughness);
 
+			// Tested
 			if (!string.IsNullOrEmpty(card.Loyalty))
 				doc.addTextField(nameof(card.Loyalty), card.Loyalty);
 
@@ -227,18 +227,22 @@ namespace Mtgdb.Dal.Index
 			if (card.LoyaltyNum.HasValue)
 				doc.addNumericField(nameof(card.LoyaltyNum), card.LoyaltyNum.Value);
 
+			// Tested
 			if (card.Life.HasValue)
 				doc.addNumericField(nameof(card.Life), card.Life.Value);
 
+			// Tested
 			if (card.Hand.HasValue)
 				doc.addNumericField(nameof(card.Hand), card.Hand.Value);
 
 			// Tested
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
+			// Tested
 			if (!string.IsNullOrEmpty(card.GeneratedMana))
 				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana);
 
+			// Tested
 			if (!string.IsNullOrEmpty(card.ManaCost))
 				doc.addTextField(nameof(card.ManaCost), card.ManaCost);
 
@@ -262,6 +266,7 @@ namespace Mtgdb.Dal.Index
 			if (card.PricingLow.HasValue)
 				doc.addNumericField(nameof(card.PricingLow), card.PricingLow.Value);
 
+			// Tested
 			if (!string.IsNullOrEmpty(card.Layout))
 				doc.addTextField(nameof(Card.Layout), card.Layout);
 
@@ -269,7 +274,6 @@ namespace Mtgdb.Dal.Index
 			{
 				// Tested
 				string name = card.Localization?.GetName(lang);
-
 				if (!string.IsNullOrEmpty(name))
 					doc.addTextField(nameof(card.Name), name, lang);
 
