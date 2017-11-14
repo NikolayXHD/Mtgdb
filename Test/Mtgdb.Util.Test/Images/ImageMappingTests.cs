@@ -36,12 +36,12 @@ namespace Mtgdb.Util
 			var sets = Repo.SetsByCode.Values.OrderBy(_ => _.ReleaseDate);
 			foreach (var set in sets)
 			{
-				Console.WriteLine($"{set.Code}\t{set.Cards.Count}\t{set.Name}");
+				Log.Debug($"{set.Code}\t{set.Cards.Count}\t{set.Name}");
 
 				var entry = imagesBySet.TryGet(set.Code);
 
 				if (entry == null)
-					Console.WriteLine($"\t{0}\t");
+					Log.Debug($"\t{0}\t");
 				else
 				{
 					foreach (var dir in entry
@@ -49,11 +49,9 @@ namespace Mtgdb.Util
 						.ToDictionary(gr => gr.Key, gr => gr.Count())
 						.OrderBy(_ => _.Key))
 					{
-						Console.WriteLine($"\t{dir.Value}\t{dir.Key}");
+						Log.Debug($"\t{dir.Value}\t{dir.Key}");
 					}
 				}
-
-				Console.WriteLine();
 			}
 		}
 
@@ -75,7 +73,7 @@ namespace Mtgdb.Util
 				.AtMax(getBrightness)
 				.Find();
 
-			Console.WriteLine($"R: {color / 0x10000} G: {color % 0x10000 / 0x100} B: {color % 0x100}");
+			Log.Debug($"R: {color / 0x10000} G: {color % 0x10000 / 0x100} B: {color % 0x100}");
 		}
 
 		private static int getBrightness(int color)

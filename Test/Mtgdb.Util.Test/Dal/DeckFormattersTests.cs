@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Mtgdb.Dal;
 using Mtgdb.Gui;
@@ -9,7 +8,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class DeckFormattersTests
+	public class DeckFormattersTests : TestsBase
 	{
 		private readonly IKernel _kernel = new StandardKernel();
 		private CardRepository _cardRepo;
@@ -50,15 +49,14 @@ namespace Mtgdb.Test
 			var mtgoCardsFile = TestContext.CurrentContext.TestDirectory.AddPath("Resources\\Mtgo\\cards.txt");
 			var mtgoCardNames = File.ReadAllLines(mtgoCardsFile).Distinct().OrderBy(_ => _);
 
-			Console.WriteLine("Unmatched mtgo cards");
-			Console.WriteLine();
-
+			Log.Debug("Unmatched mtgo cards");
+			
 			var cardsByMtgoName = _cardRepo.Cards.GroupBy(MtgoDeckFormatter.ToMtgoName)
 				.ToDictionary(_ => _.Key, _ => _.ToList());
 
 			foreach (string name in mtgoCardNames)
 				if (!cardsByMtgoName.ContainsKey(name))
-					Console.WriteLine(name);
+					Log.Debug(name);
 		}
 
 		private static void findCards(string decksLocation, RegexDeckFormatter formatter)
@@ -88,7 +86,7 @@ namespace Mtgdb.Test
 			foreach (var match in matches)
 			{
 				if (match.card == null)
-					Console.WriteLine("NOT FOUND {0} in\r\n{1}", match.match.Value, string.Join("\r\n", match.files.Select(_ => '\t' + _)));
+					Log.Debug("NOT FOUND {0} in\r\n{1}", match.match.Value, string.Join("\r\n", match.files.Select(_ => '\t' + _)));
 			}
 		}
 	}
