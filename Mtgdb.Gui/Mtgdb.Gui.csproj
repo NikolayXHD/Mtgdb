@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mtgdb.Gui</RootNamespace>
     <AssemblyName>Mtgdb.Gui</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -58,16 +58,16 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="Lucene.Net, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lucene.Net.4.8.0-beta00005\lib\net45\Lucene.Net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -280,10 +280,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
-      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
-      <Name>EditedTokenLocator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Controls</Name>
@@ -300,6 +296,10 @@
       <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
       <Name>Mtgdb.Downloader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+      <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
+      <Name>EditedTokenLocator</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="mtg32.ico" />
@@ -307,6 +307,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\05.png" />
+    <None Include="packages.config" />
     <None Include="Resources\100.png" />
     <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />
@@ -423,7 +424,6 @@
     </None>
     <None Include="Resources\z.png" />
     <None Include="Resources\y.png" />
-    <None Include="packages.config" />
     <None Include="Resources\x.png" />
     <None Include="Resources\wu.png" />
     <None Include="Resources\wp.png" />

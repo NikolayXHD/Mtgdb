@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
-using Lucene.Net.Search.Spell;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
 
@@ -175,7 +175,7 @@ namespace Mtgdb.Dal.Index
 				
 				var hits = indexSearcher.Search(query, maxHits).ScoreDocs;
 				
-				var sugQueue = new SuggestWordQueue(numSug);
+				var sugQueue = new SortedSet<SuggestWord>();
 
 				// go thru more than 'maxr' matches in case the distance filter triggers
 				int stop = Math.Min(hits.Length, maxHits);
@@ -202,23 +202,19 @@ namespace Mtgdb.Dal.Index
 					if (alreadySeen.Add(sugWord.String) == false) // we already seen this word, no point returning it twice
 						continue;
 
-					sugQueue.InsertWithOverflow(sugWord);
-					
-					// if queue full, maintain the minScore score
 					if (sugQueue.Count == numSug)
-						min = sugQueue.Top.Score;
+					{
+						// if queue full, maintain the minScore score
+						min = sugQueue.Min.Score;
+						sugQueue.Remove(sugQueue.Min);
+					}
 
+					sugQueue.Add(sugWord);
 					sugWord = new SuggestWord();
 				}
 
-				// convert to array string
-				var list = new List<string>(sugQueue.Count);
-				for (int i = sugQueue.Count - 1; i >= 0; i--)
-					list.Add(sugQueue.Pop().String);
-
-				list.Reverse();
-
-				return list;
+				return sugQueue.Reverse().Select(_=>_.String)
+					.ToList();
 			}
 			finally
 			{
@@ -284,7 +280,6 @@ namespace Mtgdb.Dal.Index
 
 		/// <summary> Index a Dictionary</summary>
 		/// <param name="iterator">the dictionary to index</param>
-		/// <param name="analyzer"></param>
 		/// <param name="abortRequested"></param>
 		/// <throws>  IOException </throws>
 		/// <throws>AlreadyClosedException if the Spellchecker is already closed</throws>
@@ -316,15 +311,6 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		public void EndIndex()
-		{
-			_indexWriter.Flush(triggerMerge: true, applyAllDeletes: false);
-			_indexWriter.Dispose();
-			// also re-open the spell index to see our own changes when the next suggestion
-			// is fetched:
-			swapSearcher(Spellindex);
-		}
-
 		public void BeginIndex(Analyzer analyzer)
 		{
 			ensureOpen();
@@ -340,6 +326,15 @@ namespace Mtgdb.Dal.Index
 			};
 
 			_indexWriter = new IndexWriter(Spellindex, indexWriterConfig);
+		}
+
+		public void EndIndex()
+		{
+			_indexWriter.Flush(triggerMerge: true, applyAllDeletes: false);
+			_indexWriter.Dispose();
+			// also re-open the spell index to see our own changes when the next suggestion
+			// is fetched:
+			swapSearcher(Spellindex);
 		}
 
 		private static int getMin(int l)

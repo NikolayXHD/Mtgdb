@@ -33,20 +33,20 @@ namespace Mtgdb.Gui
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			
-			Kernel.Load<CoreModule>();
-			Kernel.Load<DalModule>();
-			Kernel.Load<DownloaderModule>();
-			Kernel.Load<GuiModule>();
+			_kernel.Load<CoreModule>();
+			_kernel.Load<DalModule>();
+			_kernel.Load<DownloaderModule>();
+			_kernel.Load<GuiModule>();
 
-			var installer = Kernel.Get<Installer>();
+			var installer = _kernel.Get<Installer>();
 
 			installer.MtgjsonFileUpdated += mtgjsonFileUpdated;
 			installer.BeginInstall += beginInstall;
 			installer.EndInstall += endInstall;
 
-			Kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
+			_kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
-			var formRoot = Kernel.Get<FormRoot>();
+			var formRoot = _kernel.Get<FormRoot>();
 			formRoot.NewTab(null);
 			formRoot.Show();
 			Application.Run(formRoot);
@@ -54,12 +54,12 @@ namespace Mtgdb.Gui
 
 		private static void mtgjsonFileUpdated()
 		{
-			var luceneSearcher = Kernel.Get<LuceneSearcher>();
+			var luceneSearcher = _kernel.Get<LuceneSearcher>();
 
 			luceneSearcher.InvalidateIndex();
 			luceneSearcher.InvalidateSpellcheckerIndex();
 
-			Kernel.Get<KeywordSearcher>().InvalidateIndex();
+			_kernel.Get<KeywordSearcher>().InvalidateIndex();
 		}
 
 		private static void beginInstall()
@@ -72,22 +72,22 @@ namespace Mtgdb.Gui
 
 		private static void pricesDownloaded()
 		{
-			Kernel.Get<LuceneSearcher>().InvalidateIndex();
+			_kernel.Get<LuceneSearcher>().InvalidateIndex();
 		}
 
 		private static void threadException(object sender, ThreadExceptionEventArgs e)
 		{
-			Log.Error(e.Exception);
+			_log.Error(e.Exception);
 			LogManager.Flush();
 		}
 
 		private static void unhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			Log.Error(e.ExceptionObject);
+			_log.Error(e.ExceptionObject);
 			LogManager.Flush();
 		}
 
-		private static readonly Logger Log = LogManager.GetCurrentClassLogger();
-		private static readonly IKernel Kernel = new StandardKernel();
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+		private static readonly IKernel _kernel = new StandardKernel();
 	}
 }

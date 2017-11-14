@@ -1,5 +1,4 @@
 ﻿using System;
-using Mtgdb.Dal;
 using Ninject;
 using Ninject.Modules;
 
