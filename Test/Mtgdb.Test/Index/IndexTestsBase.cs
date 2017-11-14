@@ -28,7 +28,7 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(Repo);
 				sw.Stop();
 
-				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
+				Log.Info($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 			else
 			{
@@ -38,10 +38,12 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(null);
 
 				sw.Stop();
-				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
+				Log.Info($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 
 			Spellchecker = Searcher.Spellchecker;
+
+			LogManager.Flush();
 		}
 
 		[OneTimeTearDown]
@@ -56,7 +58,5 @@ namespace Mtgdb.Test
 		{
 			LogManager.Flush();
 		}
-
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

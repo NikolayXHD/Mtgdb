@@ -1,7 +1,7 @@
-using System;
 using System.Diagnostics;
 using Mtgdb.Dal;
 using Ninject;
+using NLog;
 
 namespace Mtgdb.Test
 {
@@ -15,6 +15,7 @@ namespace Mtgdb.Test
 
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();
+			PriceRepo = Kernel.Get<PriceRepository>();
 		}
 
 		protected void LoadCards()
@@ -26,7 +27,7 @@ namespace Mtgdb.Test
 			Repo.Load();
 
 			sw.Stop();
-			Console.WriteLine($"Cards loaded in {sw.ElapsedMilliseconds} ms");
+			Log.Info($"Cards loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
 		protected void LoadTranslations()
@@ -41,13 +42,27 @@ namespace Mtgdb.Test
 			Repo.FillLocalizations(locRepo);
 
 			sw.Stop();
-			Console.WriteLine($"Translations loaded in {sw.ElapsedMilliseconds} ms");
+			Log.Info($"Translations loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
+		protected void LoadPrices()
+		{
+			var sw = new Stopwatch();
+			sw.Start();
+
+			PriceRepo.Load();
+			Repo.SetPrices(PriceRepo);
+
+			sw.Stop();
+			Log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
+		}
 
 
 		protected IKernel Kernel;
 		protected CardRepository Repo;
 		protected ImageRepository ImgRepo;
+		protected PriceRepository PriceRepo;
+
+		protected static readonly Logger Log = LogManager.GetCurrentClassLogger();
 	}
 }

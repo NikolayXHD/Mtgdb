@@ -342,8 +342,6 @@ namespace Mtgdb.Gui
 			{
 				string prefix = text.Substring(0, selectionStart);
 				builder.Append(prefix);
-				if (prefix.Length > 0 && !prefix.EndsWith(" ") && !searchQuery.StartsWith(" "))
-					builder.Append(' ');
 			}
 
 			builder.Append(searchQuery);
@@ -353,10 +351,6 @@ namespace Mtgdb.Gui
 			if (suffixStart < text.Length)
 			{
 				string suffix = text.Substring(suffixStart);
-
-				if (suffix.Length > 0 && !suffix.StartsWith(" ") && !searchQuery.EndsWith(" "))
-					builder.Append(' ');
-
 				builder.Append(suffix);
 			}
 

@@ -12,18 +12,21 @@ namespace Mtgdb.Test
 		[TestCase(@"""\""angelic demon""")]
 		[TestCase(@"ManaCost:*E?")]
 		[TestCase(@"NameEn:(NOT(angel OR demon NOT ""angelic demon"") OR [Animal TO Clan]) AND nofield")]
-		public void Tokenize_correct_query(string queryStr)
+		[TestCase(@"NameEn:/.{1,2}nge.*/")]
+		public void When_query_is_correct_detected_errors_count_is_0(string queryStr)
 		{
 			var tokenizer = tokenize(queryStr);
 			Assert.That(tokenizer.SyntaxErrors.Count, Is.EqualTo(0));
 		}
 
-		[TestCase(@"NameEn:(NOT(angel OR demon NOT", 0)]
-		[TestCase(@"))NOT(angel O", 2)]
-		public void Tokenize_incorrect_query(string queryStr, int expectedErrors)
+		[TestCase(@"NameEn:(NOT(angel OR demon NOT")]
+		[TestCase(@"))NOT(angel O")]
+		[TestCase(@"type:/unfinished regex")]
+		public void When_query_is_NOT_correct_tokenize_does_not_throw(string queryStr)
 		{
 			var tokenizer = tokenize(queryStr);
-			Assert.That(tokenizer.SyntaxErrors.Count, Is.EqualTo(expectedErrors));
+			Assert.That(tokenizer.Tokens, Is.Not.Null);
+			Assert.That(tokenizer.Tokens, Is.Not.Empty);
 		}
 
 		private static TolerantTokenizer tokenize(string queryStr)

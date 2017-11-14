@@ -330,7 +330,7 @@ namespace Mtgdb.Dal.Index
 
 			TextField field;
 			if (NotAnalyzedFields.Contains(fieldName))
-				field = new TextField(fieldName, new SingleTokenTokenStream(new Token(fieldValue, 0, fieldValue.Length)));
+				field = new TextField(fieldName, new SingleTokenTokenStream(new Token(fieldValue.ToLowerInvariant(), 0, fieldValue.Length)));
 			else
 				field = new TextField(fieldName, fieldValue, Field.Store.NO);
 
