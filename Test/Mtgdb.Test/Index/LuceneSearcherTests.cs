@@ -17,54 +17,99 @@ namespace Mtgdb.Test
 			LogManager.Flush();
 		}
 
+		[TestCase(@"OriginalText:set", "set")]
+		public void Search_by_OriginalText(string queryStr, string expected)
+		{
+			var cards = search(queryStr, c => c.NameEn + ": " + c.OriginalText);
+
+			foreach (var card in cards)
+				Assert.That(card.OriginalText, Contains.Substring(expected).IgnoreCase);
+		}
+
+		[TestCase(@"OriginalType:summon", "summon")]
+		public void Search_by_OriginalType(string queryStr, string expected)
+		{
+			var cards = search(queryStr, c => c.NameEn + ": " + c.OriginalType);
+
+			foreach (var card in cards)
+				Assert.That(card.OriginalType, Contains.Substring(expected).IgnoreCase);
+		}
+
+		[TestCase(@"Layout:after*", "aftermath")]
+		public void Search_by_Layout(string queryStr, string expected)
+		{
+			var cards = search(queryStr, c => c.Layout + ": " + c.OriginalType);
+
+			foreach (var card in cards)
+				Assert.That(card.Layout, Is.EqualTo(expected).IgnoreCase);
+		}
+
+		[TestCase(@"Hand:[3 TO *]", 3)]
+		public void Search_by_Hand(string queryStr, int min)
+		{
+			var cards = search(queryStr, c => c.NameEn + ": Hand " + c.Hand);
+
+			foreach (var card in cards)
+				Assert.That(card.Hand, Is.GreaterThanOrEqualTo(min));
+		}
+
+		[TestCase(@"Life:[2 TO *]", 2)]
+		public void Search_by_Life(string queryStr, int min)
+		{
+			var cards = search(queryStr, c => c.NameEn + ": Life " + c.Life);
+
+			foreach (var card in cards)
+				Assert.That(card.Life, Is.GreaterThanOrEqualTo(min));
+		}
+
 		[TestCase(@"NameEn:Forest", "Forest")]
-		public void Search_by_NameEn(string queryStr, string expectedName)
+		public void Search_by_NameEn(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.NameEn);
 
 			foreach (var card in cards)
-				Assert.That(card.NameEn, Contains.Substring(expectedName).IgnoreCase);
+				Assert.That(card.NameEn, Contains.Substring(expected).IgnoreCase);
 		}
 
 		[TestCase(@"TextEn:embalm", "embalm")]
-		public void Search_by_TextEn(string queryStr, string expectedText)
+		public void Search_by_TextEn(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.TextEn + Environment.NewLine);
 
 			foreach (var card in cards)
-				Assert.That(card.TextEn, Contains.Substring(expectedText).IgnoreCase);
+				Assert.That(card.TextEn, Contains.Substring(expected).IgnoreCase);
 		}
 
 		[TestCase(@"FlavorEn:angel", "angel")]
-		public void Search_by_FlavorEn(string queryStr, string expectedFlavor)
+		public void Search_by_FlavorEn(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.FlavorEn + Environment.NewLine);
 
 			foreach (var card in cards)
-				Assert.That(card.FlavorEn, Contains.Substring(expectedFlavor).IgnoreCase);
+				Assert.That(card.FlavorEn, Contains.Substring(expected).IgnoreCase);
 		}
 
 		[TestCase(@"SetName:""Battle for""", "battle", "for")]
 		[TestCase(@"SetName:""Battle zendikar""~1", "battle", "zendikar")]
-		public void Search_by_SetName(string queryStr, params string[] expectedValues)
+		public void Search_by_SetName(string queryStr, params string[] allEexpected)
 		{
 			var cards = search(queryStr, c => c.SetName);
 
-			Assert.That(expectedValues, Is.Not.Null);
-			Assert.That(expectedValues, Is.Not.Empty);
+			Assert.That(allEexpected, Is.Not.Null);
+			Assert.That(allEexpected, Is.Not.Empty);
 
 			foreach (var card in cards)
-				foreach (string name in expectedValues)
+				foreach (string name in allEexpected)
 					Assert.That(card.SetName, Contains.Substring(name).IgnoreCase);
 		}
 
 		[TestCase("SetCode:LEA", "LEA")]
-		public void Search_by_SetCode(string queryStr, string expectedSetCode)
+		public void Search_by_SetCode(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.SetCode);
 
 			foreach (var card in cards)
-				StringAssert.AreEqualIgnoringCase(card.SetCode, expectedSetCode);
+				StringAssert.AreEqualIgnoringCase(card.SetCode, expected);
 		}
 
 		[TestCase("SetCode:LE?", "LE", 3)]
@@ -90,12 +135,12 @@ namespace Mtgdb.Test
 
 		[TestCase(@"TypeEn:Human", "Human")]
 		[TestCase(@"TypeEn:""Legendary Human""~2", "Legendary", "Human")]
-		public void Search_by_TypeEn(string queryStr, params string[] expectedValues)
+		public void Search_by_TypeEn(string queryStr, params string[] allEexpected)
 		{
 			var cards = search(queryStr, c => c.TypeEn);
 
 			foreach (var card in cards)
-				foreach (string name in expectedValues)
+				foreach (string name in allEexpected)
 					Assert.That(card.TypeEn, Contains.Substring(name).IgnoreCase);
 		}
 
@@ -110,12 +155,12 @@ namespace Mtgdb.Test
 		}
 
 		[TestCase(@"Types:*fact", "fact")]
-		public void Search_by_Types_suffix(string queryStr, string suffix)
+		public void Search_by_Types_suffix(string queryStr, string expectedSuffix)
 		{
 			var cards = search(queryStr, c => string.Join(" ", c.TypesArr ?? Enumerable.Empty<string>()));
 
 			foreach (var card in cards)
-				Assert.That(card.TypesArr, Has.Some.EndsWith(suffix).IgnoreCase);
+				Assert.That(card.TypesArr, Has.Some.EndsWith(expectedSuffix).IgnoreCase);
 		}
 
 		[TestCase(@"Supertypes:Legendary", "Legendary")]
@@ -385,48 +430,48 @@ namespace Mtgdb.Test
 		}
 
 		[TestCase(@"Text:Демон", "Демон", "ru")]
-		public void Search_by_Text(string queryStr, string value, string lang)
+		public void Search_by_Text(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetAbility(lang)}", lang);
 			foreach (var card in cards)
-				Assert.That(card.GetText(lang), Does.Contain(value).IgnoreCase);
+				Assert.That(card.GetText(lang), Does.Contain(expected).IgnoreCase);
 		}
 
 		[TestCase(@"Flavor:Демон", "Демон", "ru")]
-		public void Search_by_Flavor(string queryStr, string value, string lang)
+		public void Search_by_Flavor(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetFlavor(lang)}", lang);
 
 			foreach (var card in cards)
-				Assert.That(card.GetFlavor(lang), Does.Contain(value).IgnoreCase);
+				Assert.That(card.GetFlavor(lang), Does.Contain(expected).IgnoreCase);
 		}
 
 		[TestCase(@"Name:Демон", "Демон", "ru")]
-		public void Search_by_Name(string queryStr, string value, string lang)
+		public void Search_by_Name(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => c.Localization.GetName(lang), lang);
 
 			foreach (var card in cards)
-				Assert.That(card.GetName(lang), Does.Contain(value).IgnoreCase);
+				Assert.That(card.GetName(lang), Does.Contain(expected).IgnoreCase);
 		}
 
 		[TestCase(@"Type:Демон", "Демон", "ru")]
-		public void Search_by_Type(string queryStr, string value, string lang)
+		public void Search_by_Type(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Localization.GetType(lang), lang);
 
 			foreach (var card in cards)
-				Assert.That(card.GetType(lang), Does.Contain(value).IgnoreCase);
+				Assert.That(card.GetType(lang), Does.Contain(expected).IgnoreCase);
 		}
 
 		[TestCase(@"Color:white", "white")]
 		[TestCase(@"Color:colorless", "colorless")]
-		public void Search_by_Color(string queryStr, string expectedColor)
+		public void Search_by_Color(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Color);
 
 			foreach (var card in cards)
-				Assert.That(card.Color, Does.Contain(expectedColor).IgnoreCase);
+				Assert.That(card.Color, Does.Contain(expected).IgnoreCase);
 		}
 
 		[TestCase(@"nameen:/[ab]ngel.+/", "angel")]
