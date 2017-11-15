@@ -54,12 +54,5 @@
 		"Scarmaker": {
 			"FlipDuplicate": true
 		}
-	},
-	"Legality": {
-		"Standard": {
-				"Sets": [ "XLN", "HOU", "AKH", "AER", "KLD", "W17" ],
-					"Banned": [ "Aetherworks Marvel", "Smuggler's Copter", "Felidar Guardian" ],
-					"Restricted": []
-		}
 	}
 }

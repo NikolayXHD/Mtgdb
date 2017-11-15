@@ -33,7 +33,7 @@
 <h2>
 <a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Syntax</h2>
 <div>
-<div>Search text uses <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene query language</a>.</div>
+<div>Search text uses <a href="https://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description">Lucene query language</a>.</div>
 <div>Searching is case-INsensitive.</div>
 <div><br></div>
 </div>
@@ -108,6 +108,14 @@ character</td>
 characters</td>
 </tr>
 <tr>
+<td>Search by <strong>regular
+expression</strong>
+</td>
+<td><code>nameen:/[ab]nge.{1,2}|demon/</code></td>
+<td>forward slashes <code>/</code> delimit
+regular expression boundaries</td>
+</tr>
+<tr>
 <td>search by approximate
 spelling</td>
 <td><code>nevniniral~</code></td>
@@ -136,17 +144,25 @@ mana and color have 2 or less
 words between them</td>
 </tr>
 <tr>
-<td>Range search</td>
+<td rowspan="3">Range search</td>
 <td><code>powerNum:[1 TO 4]</code></td>
 <td>correctly filters number
 fields. No power 11 cards will
 appear between 1 and 4</td>
 </tr>
 <tr>
-<td> </td>
 <td><code>PricingMid:{100 TO *}</code></td>
 <td>searches cards with price
 strictly &gt; than 100$</td>
+</tr>
+<tr>
+<td><code>ManaCost:{0 TO 2]</code></td>
+<td>
+<p>curly brace <code>{</code> makes non-
+inclusive boundary. square
+<code>]</code> brace makes it inclusive:</p>
+<p>0 &lt; <code>ManaCost</code> &lt;= 2</p>
+</td>
 </tr>
 <tr>
 <td>range search with text</td>
