@@ -41,6 +41,8 @@
 			<MegaDir Url="https://mega.nz/#F!39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
 		</QualityGroup>
 		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListUrl="https://mega.nz/#F!Jp1wETwQ!CL2o0x_C-y2rpiiGBGQfsA" >
+			<MegaDir Subdir="DDT"        Url="https://mega.nz/#F!JllkDLaY!C6bDRfnC0TuaxiuVtMtdqA" />
+			<MegaDir Subdir="IMA"        Url="https://mega.nz/#F!dk1CVZ7Q!nLxMb-u75oxf7fCZdfJZEg" />
 			<MegaDir Subdir="2ED"        Url="https://mega.nz/#F!ZhtzzTjQ!UyL_Q0DMoZv8E0iq1OHv3g" />
 			<MegaDir Subdir="3ED"        Url="https://mega.nz/#F!Yp83WJTY!QE8NumcSO7GmnVdzOCDI3Q" />
 			<MegaDir Subdir="4ED"        Url="https://mega.nz/#F!0llHQQwD!K8fkaZTv7Ro1xzfgOi6YKg" />
@@ -257,6 +259,8 @@
 			<MegaDir Subdir="ZEN"        Url="https://mega.nz/#F!01MBxTCY!NcbAwOsA9pDqxAQ41jcFVA" />
 		</QualityGroup>
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListUrl="https://mega.nz/#F!M80UFbwI!oneHfFYU8YNvUYeWBD-AzA">
+			<MegaDir Subdir="DDT"        Url="https://mega.nz/#F!M4VUgLID!MeAxX7ajdHyWQU-lozkHeA" />
+			<MegaDir Subdir="IMA"        Url="https://mega.nz/#F!Q40yXKSY!-Z7LViz573etopQyicCL7w" />
 			<MegaDir Subdir="2ED"        Url="https://mega.nz/#F!p00kjQwS!dcRBCI956eb1SZDlELRcHA" />
 			<MegaDir Subdir="3ED"        Url="https://mega.nz/#F!ZtVDQJyQ!PfbWMOy0kBGtJVjPyldfbw" />
 			<MegaDir Subdir="4ED"        Url="https://mega.nz/#F!kpsyCZbB!0CMTvvy8STJbiViFkRpKOw" />
