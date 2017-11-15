@@ -88,7 +88,7 @@
     <Compile Include="Dal\DeckFormattersTests.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="ExternalData\GathererImagePreProcessor.cs" />
-    <Compile Include="ExternalData\WaifuScaler.cs" />
+    <Compile Include="Images\WaifuScaler.cs" />
     <Compile Include="Images\ArtistDetection.cs" />
     <Compile Include="Images\BwFilter.cs" />
     <Compile Include="Images\ColorDetector.cs" />
