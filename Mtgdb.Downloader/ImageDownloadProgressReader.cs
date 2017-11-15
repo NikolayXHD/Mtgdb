@@ -40,16 +40,12 @@ namespace Mtgdb.Downloader
 			if (File.Exists(signaturesFile))
 			{
 				if (File.Exists(signaturesFileBak))
-				{
-					Console.WriteLine("Delete {0}", signaturesFileBak);
 					File.Delete(signaturesFileBak);
-				}
 
-				Console.WriteLine("Move {0} to {1}", signaturesFile, signaturesFileBak);
 				File.Move(signaturesFile, signaturesFileBak);
 			}
 
-			_megatools.Download($"Signatures for {qualityGroup.Quality} images", qualityGroup.FileListUrl, signaturesDir);
+			_megatools.Download($"Signatures for {qualityGroup.Quality} images", qualityGroup.FileListUrl, signaturesDir, silent: true);
 
 			if (!File.Exists(signaturesFile))
 			{
@@ -63,7 +59,6 @@ namespace Mtgdb.Downloader
 			}
 			else
 			{
-				Console.WriteLine("Delete {0}", signaturesFileBak);
 				File.Delete(signaturesFileBak);
 			}
 		}
