@@ -130,7 +130,7 @@ namespace Mtgdb.Gui
 			return _matchingCardIds.Contains(c.IndexInFile);
 		}
 
-		public List<TextRange> GetMatchedText(string fieldValue, string fieldName)
+		public List<TextRange> GetMatches(string fieldValue, string fieldName)
 		{
 			HashSet<int> indexes;
 			if (!_indexByFieldNameDisplay.TryGetValue(fieldName, out indexes))

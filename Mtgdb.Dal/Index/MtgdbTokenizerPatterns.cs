@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -13,12 +12,9 @@ namespace Mtgdb.Dal.Index
 		}
 
 		private const string WordChars = @"&*+-/?_{}²½–—’•−∞";
-
 		public static readonly HashSet<char> WordCharsSet = new HashSet<char>(WordChars);
-		private static readonly string _word = Regex.Escape(WordChars);
-
-		public static readonly Regex Word = new Regex($@"[\d\w{_word}]",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		
+		public const string CharPattern = ".";
 
 		public static readonly Dictionary<char, char> Replacements = new Dictionary<char, char>
 		{

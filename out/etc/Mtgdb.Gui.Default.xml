@@ -27,7 +27,7 @@
 		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 	</ImageLocations>
 	
-	<ImageCache TransparentCornersWhenNotZoomed="True" CacheCapacity ="900"/>
+	<ImageCache CacheCapacity ="900"/>
 
 	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
 

@@ -19,9 +19,11 @@ namespace Mtgdb.Gui
 		private readonly ImageCache _imageCache;
 		private int _imageIndex;
 		private Bitmap _image;
-		private List<Bitmap> _images;
+
+		private readonly List<Bitmap> _images = new List<Bitmap>();
+		private readonly List<ImageModel> _models = new List<ImageModel>();
+
 		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
-		private List<ImageModel> _models;
 		private Card _card;
 
 		private Thread _imageLoadingThread;
@@ -75,8 +77,12 @@ namespace Mtgdb.Gui
 
 			_cardForms = _cardRepository.GetForms(card);
 			_card = card;
-			_images = new List<Bitmap>();
-			_models = new List<ImageModel>();
+
+			foreach (var oldImg in _images)
+				oldImg.Dispose();
+
+			_images.Clear();
+			_models.Clear();
 			_imageIndex = 0;
 
 			_imageLoadingThread = new Thread(loadImages);
@@ -133,9 +139,11 @@ namespace Mtgdb.Gui
 					while (index > _imageIndex + 10)
 						Thread.Sleep(100);
 
-					var image = _imageCache.LoadImage(model, model.IsArt
+					var size = model.IsArt
 						? getSizeArt()
-						: _imageCache.ZoomedCardSize, transparentCorners: true, crop: false);
+						: _imageCache.ZoomedCardSize;
+
+					var image = ImageCache.LoadImage(model, size, crop: false);
 
 					if (image == null)
 						continue;
@@ -149,9 +157,11 @@ namespace Mtgdb.Gui
 					while (index > _imageIndex + 10)
 						Thread.Sleep(100);
 
-					var image = _imageCache.LoadImage(model, model.IsArt
+					var size = model.IsArt
 						? getSizeArt()
-						: _imageCache.ZoomedCardSize, transparentCorners: true, crop: false);
+						: _imageCache.ZoomedCardSize;
+
+					var image = ImageCache.LoadImage(model, size, crop: false);
 
 					if (image == null)
 						continue;
@@ -179,8 +189,11 @@ namespace Mtgdb.Gui
 		private static Size getSizeArt()
 		{
 			var screenArea = getScreenArea();
-			int size = Math.Min(screenArea.Height, screenArea.Width);
-			return new Size(size, size);
+
+			if (screenArea.Width > screenArea.Height)
+				return new SizeF(screenArea.Height + (screenArea.Width - screenArea.Height) * 0.75f, screenArea.Height).Round();
+			else
+				return new SizeF(screenArea.Width, screenArea.Width + (screenArea.Height - screenArea.Width) * 0.75f).Round();
 		}
 
 		private void updateImage()
@@ -285,7 +298,7 @@ namespace Mtgdb.Gui
 		private static Rectangle getScreenArea()
 		{
 			var screen = Screen.FromPoint(Cursor.Position);
-			Rectangle workingArea = screen.WorkingArea;
+			var workingArea = screen.WorkingArea;
 			return workingArea;
 		}
 

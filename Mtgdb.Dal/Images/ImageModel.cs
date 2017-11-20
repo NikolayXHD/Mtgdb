@@ -49,9 +49,6 @@ namespace Mtgdb.Dal
 			Name = string.Intern(nameParts.Item1);
 			VariantNumber = nameParts.Item2;
 			
-			HasTransparentCorner = directoryName.Contains("MagicDuels");
-			IsPreprocessed = directoryName.Contains("Mtgdb.Pictures");
-
 			rootPath = AppDir.GetRootPath(rootPath);
 
 			if (!rootPath.EndsWith("\\"))
@@ -92,14 +89,12 @@ namespace Mtgdb.Dal
 			return _rotated ?? (_rotated = new ImageModel
 			{
 				ImageName = ImageName,
-				IsPreprocessed = IsPreprocessed,
 				SetCode = SetCode,
 				SetCodeIsFromAttribute = SetCodeIsFromAttribute,
 				Name = Name,
 				VariantNumber = VariantNumber,
 				Type = Type,
 				FullPath = FullPath,
-				HasTransparentCorner = HasTransparentCorner,
 				Quality = Quality,
 				Artist = Artist,
 				IsArt = IsArt,
@@ -126,8 +121,6 @@ namespace Mtgdb.Dal
 
 		public string ImageName { get; private set; }
 
-		public bool IsPreprocessed { get; private set; }
-
 		public string SetCode { get; private set; }
 		public bool SetCodeIsFromAttribute { get; private set; }
 
@@ -135,7 +128,6 @@ namespace Mtgdb.Dal
 		public int VariantNumber { get; private set; }
 		private string Type { get; set; }
 		public string FullPath { get; private set; }
-		public bool HasTransparentCorner { get; private set; }
 		public int Quality { get; private set; }
 		public string Artist { get; private set; }
 		public bool IsArt { get; private set; }

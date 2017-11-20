@@ -20,16 +20,6 @@ namespace Mtgdb.Gui
 	[Localizable(false)]
 	public class DrawingSubsystem
 	{
-		private readonly LayoutView _layoutViewCards;
-		private readonly LayoutView _layoutViewDeck;
-		private readonly Font _font;
-		private readonly DraggingSubsystem _draggingSubsystem;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
-		private readonly DeckModel _deckModel;
-		private readonly QuickFilterFacade _quickFilterFacade;
-		private readonly LegalitySubsystem _legalitySubsystem;
-		private readonly ImageCache _imageCache;
-		
 		public DrawingSubsystem(
 			LayoutView layoutViewCards,
 			LayoutView layoutViewDeck,
@@ -53,6 +43,7 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
+			_mtgdbAnalyzer = new MtgdbAnalyzer();
 		}
 
 		private static IconRecognizer createIconRecognizer()
@@ -273,75 +264,46 @@ namespace Mtgdb.Gui
 					continue;
 
 				var text = _layoutViewCards.GetFieldText(rowHandle, fieldName);
-				setMatches(rowHandle, text, fieldName);
+
+				var matches = new List<TextRange>();
+				var contextMatches = new List<TextRange>();
+
+				addFilterButtonMatches(matches, fieldName, text);
+				addSearchStringMatches(matches, contextMatches, fieldName, text);
+				addLegalityMatches(matches, fieldName, text);
+
+				var highlightRanges = getHighlightRanges(matches, contextMatches);
+				_layoutViewCards.SetHighlightTextRanges(highlightRanges, rowHandle, fieldName);
 			}
 		}
 
-		private void setMatches(int rowHandle, string text, string fieldName)
+		private void addFilterButtonMatches(List<TextRange> matches, string fieldName, string text)
 		{
-			var matches = _quickFilterFacade.GetMatchedText(text, fieldName) ?? new List<TextRange>();
-			var contextMatches = new List<TextRange>();
-			
-			addHighlightTerms(matches, contextMatches, text, fieldName);
+			var quickFilterMatches = _quickFilterFacade.GetMatches(text, fieldName);
 
-			if (!string.IsNullOrEmpty(_legalitySubsystem.FilterFormat) && fieldName == nameof(Card.Rulings))
-			{
-				var legalityMatches = new Regex(_legalitySubsystem.FilterFormat).Matches(text)
-					.OfType<Match>()
-					.Where(_ => _.Success)
-					.Select(TextRange.Copy);
+			if (quickFilterMatches == null)
+				return;
 
-				matches.AddRange(legalityMatches);
-			}
-
-			var highlightAreas = getHighlightRanges(matches, contextMatches);
-			_layoutViewCards.SetHighlightTextRanges(highlightAreas, rowHandle, fieldName);
+			matches.AddRange(quickFilterMatches);
 		}
 
-		private static List<TextRange> getHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
+		private void addLegalityMatches(List<TextRange> matches, string fieldName, string text)
 		{
-			var result = new List<TextRange>();
+			if (string.IsNullOrEmpty(_legalitySubsystem.FilterFormat))
+				return;
 
-			foreach (var match in contextMathes)
-				match.IsContext = true;
+			if (fieldName != nameof(Card.Rulings))
+				return;
 
-			var orderedMatches = matches.Union(contextMathes)
-				.OrderBy(_ => _.Index)
-				.ThenByDescending(_ => _.Length);
+			var legalityMatches = new Regex(_legalitySubsystem.FilterFormat).Matches(text)
+				.OfType<Match>()
+				.Where(_ => _.Success)
+				.Select(TextRange.Copy);
 
-			TextRange previousArea = null;
-			int previousMatchEnd = 0;
-			foreach (var m in orderedMatches)
-			{
-				var thisEnd = m.Index + m.Length;
-
-				if (previousArea != null && m.Index < previousMatchEnd)
-				{
-					if (thisEnd > previousMatchEnd)
-					{
-						int newPreviousLength = m.Index - previousArea.Index;
-						if (newPreviousLength > 0)
-							previousArea.Length = newPreviousLength;
-						else
-							result.RemoveAt(result.Count - 1);
-
-						previousArea = m;
-						previousMatchEnd = thisEnd;
-						result.Add(previousArea);
-					}
-				}
-				else
-				{
-					previousArea = m;
-					previousMatchEnd = thisEnd;
-					result.Add(previousArea);
-				}
-			}
-
-			return result;
+			matches.AddRange(legalityMatches);
 		}
 
-		private void addHighlightTerms(List<TextRange> matches, List<TextRange> contextMatches, string displayText, string fieldName)
+		private void addSearchStringMatches(List<TextRange> matches, List<TextRange> contextMatches, string fieldName, string displayText)
 		{
 			if (_searchStringSubsystem.SearchResult?.HighlightTerms == null)
 				return;
@@ -357,8 +319,8 @@ namespace Mtgdb.Gui
 				if (!string.IsNullOrEmpty(displayField) && !Str.Equals(displayField, fieldName))
 					continue;
 
-				var patternsSet = new HashSet<string>();
-				var contextPatternsSet = new HashSet<string>();
+				var patternsSet = new Dictionary<string, Regex>();
+				var contextPatternsSet = new Dictionary<string, Regex>();
 
 				var relevantTokens = term.Value.Where(token => 
 					token.Type.Is(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody) &&
@@ -370,52 +332,67 @@ namespace Mtgdb.Gui
 					List<string> contextPatterns;
 					getPattern(token, out pattern, out contextPatterns);
 
-					if (pattern != null)
-						patternsSet.Add(pattern);
+					addPattern(pattern, patternsSet);
 
 					foreach (string contextPattern in contextPatterns)
-						contextPatternsSet.Add(contextPattern);
+						addPattern(contextPattern, contextPatternsSet);
 				}
 
-				addMatches(displayText, patternsSet, matches, fieldName);
-				addMatches(displayText, contextPatternsSet, contextMatches, fieldName);
+				addMatches(displayText, patternsSet.Values, matches, fieldName);
+				addMatches(displayText, contextPatternsSet.Values, contextMatches, fieldName);
 			}
 		}
 
-		private static void addMatches(string displayText, IEnumerable<string> patterns, List<TextRange> matches, string fieldName)
+		private void addPattern(string pattern, Dictionary<string, Regex> patternsSet)
 		{
-			foreach (string pattern in patterns)
-			{
-				var findRegex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			if (pattern == null)
+				return;
 
+			Regex regex;
+			if (patternsSet.TryGetValue(pattern, out regex))
+				return;
+			
+			if (!_regexCache.TryGetValue(pattern, out regex))
+			{
+				regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				_regexCache.Add(pattern, regex);
+			}
+
+			patternsSet.Add(pattern, regex);
+		}
+
+		private void addMatches(string displayText, IEnumerable<Regex> patterns, List<TextRange> matches, string fieldName)
+		{
+			foreach (Regex findRegex in patterns)
+			{
 				if (DocumentFactory.NotAnalyzedFields.Contains(fieldName))
 				{
-					var findMatches = findRegex.Matches(displayText)
-						.OfType<Match>()
-						.Where(_ => _.Success && _.Length > 0)
+					var toAdd = findRegex
+						.Matches(displayText)
+						.Cast<Match>()
+						.Where(match => match.Success && match.Length != 0)
 						.Select(TextRange.Copy);
 
-					matches.AddRange(findMatches);
+					matches.AddRange(toAdd);
 				}
 				else
 				{
-					var analyzer = new MtgdbAnalyzer();
-					var tokenStream = analyzer.GetTokenStream(fieldName, displayText);
+					var tokenStream = _mtgdbAnalyzer.GetTokenStream(fieldName, displayText);
 
 					tokenStream.Reset();
 
 					using (tokenStream)
 						while (tokenStream.IncrementToken())
 						{
-							var term = tokenStream.GetAttribute<ICharTermAttribute>();
-							var offset = tokenStream.GetAttribute<IOffsetAttribute>();
+							var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
+							var offset = tokenStream.GetAttribute<IOffsetAttribute>().StartOffset;
 
-							var findMatches = findRegex.Matches(term.ToString())
-								.OfType<Match>()
-								.Where(_ => _.Success && _.Length > 0)
-								.Select(_ => TextRange.Offset(offset.StartOffset, _));
+							var toAdd = findRegex.Matches(term)
+								.Cast<Match>()
+								.Where(match => match.Success && match.Length != 0)
+								.Select(match => TextRange.Offset(offset, match));
 
-							matches.AddRange(findMatches);
+							matches.AddRange(toAdd);
 						}
 				}
 			}
@@ -544,33 +521,36 @@ namespace Mtgdb.Gui
 			foreach (var token in tokens)
 			{
 				if (token.Type.Is(TokenType.AnyChar))
-				{
-					pattern.Append(MtgdbTokenizerPatterns.Word);
-				}
+					pattern.Append(MtgdbTokenizerPatterns.CharPattern);
 				else if (token.Type.Is(TokenType.AnyString))
-					pattern.Append(MtgdbTokenizerPatterns.Word + "*");
+					pattern.Append(MtgdbTokenizerPatterns.CharPattern + "*");
 				else if (token.Type.Is(TokenType.FieldValue))
 				{
 					string luceneUnescaped = StringEscaper.Unescape(token.Value);
 
 					foreach (char c in luceneUnescaped)
 					{
-						var equivalents = MtgdbTokenizerPatterns.GetEquivalents(c);
-						pattern.Append("(");
+						var equivalents = MtgdbTokenizerPatterns.GetEquivalents(c).ToArray();
 
-						using (var enumerator = equivalents.GetEnumerator())
-							if (enumerator.MoveNext())
+
+						if (equivalents.Length == 0)
+							continue;
+						if (equivalents.Length == 1)
+							pattern.Append(Regex.Escape(new string(equivalents[0], 1)));
+						else
+						{
+							pattern.Append("(");
+
+							pattern.Append(Regex.Escape(new string(equivalents[0], 1)));
+
+							for (int i = 1; i < equivalents.Length; i++)
 							{
-								pattern.Append(Regex.Escape(new string(enumerator.Current, 1)));
-
-								while (enumerator.MoveNext())
-								{
-									pattern.Append("|");
-									pattern.Append(Regex.Escape(new string(enumerator.Current, 1)));
-								}
+								pattern.Append("|");
+								pattern.Append(Regex.Escape(new string(equivalents[i], 1)));
 							}
 
-						pattern.Append(")");
+							pattern.Append(")");
+						}
 					}
 				}
 				else if (token.Type.Is(TokenType.RegexBody))
@@ -582,6 +562,53 @@ namespace Mtgdb.Gui
 			return pattern.ToString();
 		}
 
+
+
+		private static List<TextRange> getHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
+		{
+			var result = new List<TextRange>();
+
+			foreach (var match in contextMathes)
+				match.IsContext = true;
+
+			var orderedMatches = matches.Union(contextMathes)
+				.OrderBy(_ => _.Index)
+				.ThenByDescending(_ => _.Length);
+
+			TextRange previousArea = null;
+			int previousMatchEnd = 0;
+			foreach (var m in orderedMatches)
+			{
+				var thisEnd = m.Index + m.Length;
+
+				if (previousArea != null && m.Index < previousMatchEnd)
+				{
+					if (thisEnd > previousMatchEnd)
+					{
+						int newPreviousLength = m.Index - previousArea.Index;
+						if (newPreviousLength > 0)
+							previousArea.Length = newPreviousLength;
+						else
+							result.RemoveAt(result.Count - 1);
+
+						previousArea = m;
+						previousMatchEnd = thisEnd;
+						result.Add(previousArea);
+					}
+				}
+				else
+				{
+					previousArea = m;
+					previousMatchEnd = thisEnd;
+					result.Add(previousArea);
+				}
+			}
+
+			return result;
+		}
+
+
+
 		private LayoutView getView(object view)
 		{
 			if (_layoutViewCards.Wraps(view))
@@ -592,5 +619,18 @@ namespace Mtgdb.Gui
 
 			throw new Exception(@"wrapper not found");
 		}
+
+		private readonly Dictionary<string, Regex> _regexCache = new Dictionary<string, Regex>();
+
+		private readonly LayoutView _layoutViewCards;
+		private readonly LayoutView _layoutViewDeck;
+		private readonly Font _font;
+		private readonly DraggingSubsystem _draggingSubsystem;
+		private readonly SearchStringSubsystem _searchStringSubsystem;
+		private readonly DeckModel _deckModel;
+		private readonly QuickFilterFacade _quickFilterFacade;
+		private readonly LegalitySubsystem _legalitySubsystem;
+		private readonly ImageCache _imageCache;
+		private readonly MtgdbAnalyzer _mtgdbAnalyzer;
 	}
 }

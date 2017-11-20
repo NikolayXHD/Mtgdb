@@ -792,7 +792,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			_printingSubsystem.ShowPrintingDialog(_deckModel);
+			_printingSubsystem.ShowPrintingDialog(_deckModel, _historyModel.DeckName);
 		}
 
 		public void FocusSearch()

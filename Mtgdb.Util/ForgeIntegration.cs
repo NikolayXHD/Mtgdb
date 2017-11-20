@@ -45,8 +45,6 @@ namespace Mtgdb.Util
 
 		public void OverrideForgePictures(string targetSetCode)
 		{
-			_crop = true;
-
 			_forgeSetRepository.Load();
 			
 			if (!Directory.Exists(CardPicsPath))
@@ -273,13 +271,7 @@ namespace Mtgdb.Util
 		{
 			var size = small ? _imageCache.CardSize : _imageCache.ZoomedCardSize;
 
-			var image = _imageCache.Transform(
-				original,
-				replacementModel,
-				size,
-				transparentCorners: false,
-				crop: _crop,
-				whiteCorner: _whiteCorner);
+			var image = ImageCache.Transform(original, replacementModel, size, crop: forge);
 
 			var result = saveToByteArray(replacementModel, image, forge);
 
@@ -327,9 +319,6 @@ namespace Mtgdb.Util
 
 		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir)
 		{
-			_crop = false;
-			_whiteCorner = true;
-
 			var exportedSmall = new HashSet<string>();
 			var exportedZoomed = new HashSet<string>();
 
@@ -450,8 +439,6 @@ namespace Mtgdb.Util
 		public readonly string CardPicsPath;
 		public readonly string CardPicsBackupPath;
 		private readonly bool _verbose;
-		private bool _crop;
-		private bool _whiteCorner;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

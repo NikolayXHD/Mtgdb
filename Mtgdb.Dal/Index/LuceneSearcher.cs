@@ -66,7 +66,17 @@ namespace Mtgdb.Dal.Index
 
 			var index = FSDirectory.Open(_version.Directory);
 
-			using (var writer = new IndexWriter(index, new IndexWriterConfig(LuceneVersion.LUCENE_48, createAnalyzer())))
+			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, createAnalyzer())
+			{
+				OpenMode = OpenMode.CREATE_OR_APPEND,
+				RAMPerThreadHardLimitMB = 512,
+				RAMBufferSizeMB = 512,
+				CheckIntegrityAtMerge = false,
+				MaxBufferedDocs = int.MaxValue,
+				MergePolicy = new LogDocMergePolicy { MergeFactor = 300 }
+			};
+
+			using (var writer = new IndexWriter(index, indexWriterConfig))
 				foreach (var set in repository.SetsByCode.Values)
 				{
 					if (_abort)
