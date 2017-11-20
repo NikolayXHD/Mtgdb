@@ -178,6 +178,6 @@
 		Zoomed images are not cached.
 	-->
 	
-	<ImageCache TransparentCornersWhenNotZoomed="True" CacheCapacity ="900"/>
+	<ImageCache CacheCapacity ="900"/>
 
 </configuration>

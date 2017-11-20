@@ -15,15 +15,15 @@ namespace Mtgdb.Gui
 		private const int PxPerInch = 300;
 		private const float MmPerInch = 25.4f;
 		private const float BorderMm = 0.25f;
-		private static readonly SizeF SizeMm = new SizeF(63, 88);
-		private static readonly int Border = (int)Math.Round(BorderMm * PxPerInch / MmPerInch);
+		private static readonly SizeF _sizeMm = new SizeF(63, 88);
+		private static readonly int _border = (int)Math.Round(BorderMm * PxPerInch / MmPerInch);
 
-		private static readonly Size CardSizePx = new Size(
-				(int)Math.Round(SizeMm.Width * PxPerInch / MmPerInch),
-				(int)Math.Round(SizeMm.Height * PxPerInch / MmPerInch));
+		private static readonly Size _cardSizePx = new Size(
+				(int)Math.Round(_sizeMm.Width * PxPerInch / MmPerInch),
+				(int)Math.Round(_sizeMm.Height * PxPerInch / MmPerInch));
 
-		private static readonly int Height = CardSizePx.Height * CardsPerColumn + Border * (CardsPerColumn - 1);
-		private static readonly int Width = CardSizePx.Width * CardsPerRow + Border * (CardsPerRow - 1);
+		private static readonly int _height = _cardSizePx.Height * CardsPerColumn + _border * (CardsPerColumn - 1);
+		private static readonly int _width = _cardSizePx.Width * CardsPerRow + _border * (CardsPerRow - 1);
 
 		private readonly ImageRepository _imageRepository;
 		private readonly CardRepository _cardRepository;
@@ -34,13 +34,14 @@ namespace Mtgdb.Gui
 			_cardRepository = cardRepository;
 		}
 
-		public void ShowPrintingDialog(DeckModel deckModel)
+		public void ShowPrintingDialog(DeckModel deckModel, string fileName)
 		{
 			var dlg = new SaveFileDialog
 			{
 				Filter = @"|*.png",
 				AddExtension = true,
-				DefaultExt = @".png"
+				DefaultExt = @".png",
+				FileName = fileName.NullIfEmpty() ?? "deck"
 			};
 
 			if (dlg.ShowDialog() == DialogResult.OK)
@@ -84,10 +85,10 @@ namespace Mtgdb.Gui
 						gr.DrawImage(
 							image,
 							new Rectangle(
-								x * (CardSizePx.Width + Border),
-								y * (CardSizePx.Height + Border),
-								CardSizePx.Width,
-								CardSizePx.Height));
+								x * (_cardSizePx.Width + _border),
+								y * (_cardSizePx.Height + _border),
+								_cardSizePx.Width,
+								_cardSizePx.Height));
 
 						pageSaved = false;
 
@@ -120,7 +121,7 @@ namespace Mtgdb.Gui
 
 		private static void createPage(out Bitmap page, out Graphics gr)
 		{
-			page = new Bitmap(Width, Height);
+			page = new Bitmap(_width, _height);
 			page.SetResolution(PxPerInch, PxPerInch);
 			gr = Graphics.FromImage(page);
 			gr.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point(0, 0), page.Size));

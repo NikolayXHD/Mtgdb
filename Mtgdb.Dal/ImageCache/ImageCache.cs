@@ -21,15 +21,9 @@ namespace Mtgdb.Dal
 				_zoomedCardSize = new Size(zoomedConfig.Width.Value, zoomedConfig.Height.Value);
 
 			Capacity = config.GetCacheCapacity();
-			_transparentCornersWhenNotZoomed = config.TransparentCornersWhenNotZoomed ?? true;
 		}
 
 		public Bitmap GetSmallImage(ImageModel model)
-		{
-			return GetImage(model, CardSize);
-		}
-
-		public Bitmap GetImage(ImageModel model, Size size)
 		{
 			if (model == null)
 				return null;
@@ -44,7 +38,7 @@ namespace Mtgdb.Dal
 			if (!File.Exists(model.FullPath))
 				return null;
 
-			image = LoadImage(model, size, transparentCorners: _transparentCornersWhenNotZoomed, crop: false);
+			image = LoadImage(model, CardSize, crop: false);
 
 			lock (_imagesByPath)
 				if (addFirst(model.FullPath, model.Rotated, image))
@@ -54,14 +48,14 @@ namespace Mtgdb.Dal
 			return image;
 		}
 
-		public Bitmap LoadImage(ImageModel model, Size size, bool transparentCorners, bool crop, bool whiteCorner = false)
+		public static Bitmap LoadImage(ImageModel model, Size size, bool crop)
 		{
 			var original = Open(model);
 
 			if (original == null)
 				return null;
 
-			var result = Transform(original, model, size, transparentCorners, crop, whiteCorner);
+			var result = Transform(original, model, size, crop);
 
 			if (result != original)
 				original.Dispose();
@@ -95,68 +89,69 @@ namespace Mtgdb.Dal
 			return original;
 		}
 
-		public Bitmap Transform(Bitmap original, ImageModel model, Size size, bool transparentCorners, bool crop, bool whiteCorner)
+		public static Bitmap Transform(Bitmap original, ImageModel model, Size size, bool crop)
 		{
-			Bitmap bitmap = original;
+			Bitmap resizedBmp;
 
-			if (crop || size != original.Size)
-			{
-				Size frame;
-				if (crop)
-				{
-					var frameDetector = new BmpFrameDetector(original);
-					frameDetector.Execute();
-					frame = frameDetector.Frame;
-				}
-				else
-					frame = new Size(0, 0);
+			var frame = getFrame(original, crop);
 
+			if (!crop && size == original.Size || model.IsArt && original.Size.FitsIn(size))
+				resizedBmp = original;
+			else
 				try
 				{
-					bitmap = original.FitIn(size, frame);
+					resizedBmp = original.FitIn(size, frame);
 				}
-				catch
+				catch (Exception ex)
 				{
+					resizedBmp = original;
+					_log.Error(ex);
 				}
-			}
 
-			if (!transparentCorners && !whiteCorner ||
-			    size == _cardSize && model.IsPreprocessed ||
-			    model.HasTransparentCorner ||
-			    model.IsArt)
-			{
-				return bitmap;
-			}
+			if (model.IsArt || crop)
+				return resizedBmp;
 
-			var edited = new Bitmap(bitmap.Width, bitmap.Height);
+			var corneredBmp = (Bitmap) resizedBmp.Clone();
 
 			bool cornerRemoved;
 			try
 			{
-				var gr = Graphics.FromImage(edited);
-				gr.DrawImage(bitmap, new Rectangle(Point.Empty, bitmap.Size));
-
-				var remover = new BmpCornerRemoval(edited, whiteCorner, allowSemitransparent: true);
+				var remover = new BmpCornerRemoval(corneredBmp);
 				remover.Execute();
 				cornerRemoved = remover.ImageChanged;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_log.Error(ex);
 				cornerRemoved = false;
 			}
-			
-			if (!cornerRemoved)
+
+			if (cornerRemoved)
 			{
-				edited.Dispose();
-				return bitmap;
+				if (resizedBmp != original)
+					resizedBmp.Dispose();
+
+				return corneredBmp;
 			}
+			else
+			{
+				corneredBmp.Dispose();
+				return resizedBmp;
+			}
+		}
 
-			if (bitmap != original)
-				bitmap.Dispose();
-
-			_log.Debug("Corners fixed: " + model.FullPath);
-
-			return edited;
+		private static Size getFrame(Bitmap original, bool crop)
+		{
+			Size frame;
+			if (crop)
+			{
+				var frameDetector = new BmpFrameDetector(original);
+				frameDetector.Execute();
+				frame = frameDetector.Frame;
+			}
+			else
+				frame = default(Size);
+			return frame;
 		}
 
 		private Bitmap tryGetFromCache(string path, bool rotated)
@@ -211,7 +206,6 @@ namespace Mtgdb.Dal
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
 		public int Capacity { get; }
-		private readonly bool _transparentCornersWhenNotZoomed;
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

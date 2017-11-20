@@ -573,6 +573,20 @@ namespace Mtgdb.Gui
 			if (searchArgs.UseAndOperator)
 				query = "+" + query;
 
+			if (_findEditor.TextLength > 0)
+			{
+				var caret = _findEditor.SelectionStart;
+
+				bool leftIsBoundary = caret == 0 || caret > 0 && char.IsWhiteSpace(_findEditor.Text[caret - 1]);
+				bool isRightBoundary = caret == _findEditor.TextLength || caret < _findEditor.TextLength && char.IsWhiteSpace(_findEditor.Text[caret]);
+
+				if (!leftIsBoundary)
+					query = " " + query;
+
+				if (!isRightBoundary)
+					query += " ";
+			}
+
 			pasteSearchQuery(query);
 			ApplyFind();
 		}

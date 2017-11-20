@@ -5,14 +5,9 @@ namespace Mtgdb.Dal
 {
 	internal class BmpCornerRemoval : BmpProcessor
 	{
-		private readonly bool _whiteCorner;
-		private readonly bool _allowSemitransparent;
-
-		public BmpCornerRemoval(Bitmap bmp, bool whiteCorner, bool allowSemitransparent)
+		public BmpCornerRemoval(Bitmap bmp)
 			: base(bmp)
 		{
-			_whiteCorner = whiteCorner;
-			_allowSemitransparent = allowSemitransparent;
 		}
 
 		protected override void ExecuteRaw()
@@ -41,7 +36,7 @@ namespace Mtgdb.Dal
 			if (!hasCorner)
 				return;
 
-			if (SameColor(leftTop, 0, 0, 0, 0) || _whiteCorner && SameColor(leftTop, 255, 255, 255, 255))
+			if (SameColor(leftTop, 0, 0, 0, 0))
 				return;
 
 			double radius = 13f / 370f * size;
@@ -66,10 +61,7 @@ namespace Mtgdb.Dal
 			int signY = Math.Sign(radiusY);
 			double r = Math.Round(Math.Abs(radiusX));
 
-			if (_allowSemitransparent)
-				makeTransparentSmooth(left, top, r, signX, signY);
-			else
-				makeTransparentAliased(left, top, r, signX, signY);
+			makeTransparentSmooth(left, top, r, signX, signY);
 		}
 
 		private void makeTransparentSmooth(int left, int top, double r, int signX, int signY)
@@ -79,8 +71,8 @@ namespace Mtgdb.Dal
 				double maxY = r + 2 - Math.Sqrt(r*r - (x - r)*(x - r));
 				for (int y = 0; y < maxY; y++)
 				{
-					int i = left + signX*x;
-					int j = top + signY*y;
+					int i = left + signX * x;
+					int j = top + signY * y;
 					int counter = GetLocation(i, j);
 
 					double alphaRel = getAlphaRel(x, y, r);
@@ -88,38 +80,8 @@ namespace Mtgdb.Dal
 					if (alphaRel >= 1)
 						continue;
 
-					if (!_whiteCorner)
-					{
-						byte alpha = (byte) (255*alphaRel);
-						RgbValues[counter + 3] = alpha;
-					}
-					else
-					{
-						RgbValues[counter] = (byte) (RgbValues[counter]*alphaRel + 255*(1 - alphaRel));
-						RgbValues[counter + 1] = (byte) (RgbValues[counter + 1]*alphaRel + 255*(1 - alphaRel));
-						RgbValues[counter + 2] = (byte) (RgbValues[counter + 2]*alphaRel + 255*(1 - alphaRel));
-					}
-				}
-			}
-		}
-
-		private void makeTransparentAliased(int left, int top, double r, int signX, int signY)
-		{
-			const int shift = 2;
-
-			for (int x = 0; x + shift < r ; x++)
-			{
-				double maxY = r - Math.Sqrt(r*r - (x + shift - r)*(x + shift - r));
-				for (int y = 0; y + shift < maxY; y++)
-				{
-					int i = left + signX*x;
-					int j = top + signY*y;
-					int counter = GetLocation(i, j);
-
-					if (!_whiteCorner)
-						RgbValues[counter + 3] = 0;
-					else
-						RgbValues[counter] = RgbValues[counter + 1] = RgbValues[counter + 2] = 255;
+					byte alpha = (byte) (255 * alphaRel);
+					RgbValues[counter + 3] = alpha;
 				}
 			}
 		}

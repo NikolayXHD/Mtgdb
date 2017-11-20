@@ -7,13 +7,11 @@
 	<AppSource NewsUrl="https://github.com/NikolayXHD/Notifications/archive/master.zip" />
 	
 	<ImageLocations>
-		
-		
+
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
 		<Directory Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
-		
 
-		<!--<Directory Path="E:\Distrib\games\mtg\Artwork" Art="True" ReadMetadataFromAttributes="False" />-->
+		<Directory Path="D:\Games\Mtgdb.Gui\images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 		
 		<!--
 		<Directory Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />

@@ -47,37 +47,6 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		public static Size FitIn(this Size originalSize, Size viewPortSize)
-		{
-			var factor = Math.Min(
-				(float) viewPortSize.Width / originalSize.Width,
-				(float) viewPortSize.Height / originalSize.Height);
-
-			var zoomed = new Size(
-				(int) Math.Round(originalSize.Width * factor),
-				(int) Math.Round(originalSize.Height * factor));
-
-			return zoomed;
-		}
-
-		public static SizeF FitIn(this Size originalSize, SizeF viewPortSize)
-		{
-			var factor = Math.Min(
-				viewPortSize.Width / originalSize.Width,
-				viewPortSize.Height / originalSize.Height);
-
-			var zoomed = new SizeF(
-				originalSize.Width * factor,
-				originalSize.Height * factor);
-
-			return zoomed;
-		}
-
-		public static Rectangle FitIn(this Size original, Rectangle viewPort)
-		{
-			return new Rectangle(viewPort.Location, original.FitIn(viewPort.Size));
-		}
-
 		public static Bitmap SetOpacity(this Bitmap image, float opacity)
 		{
 			var colorMatrix = new ColorMatrix { Matrix33 = opacity };
