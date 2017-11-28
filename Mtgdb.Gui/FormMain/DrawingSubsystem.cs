@@ -64,7 +64,12 @@ namespace Mtgdb.Gui
 					imageByText[symbol] = mapping.image;
 			}
 
-			var iconRecognizer = new IconRecognizer(imageByText);
+			var nonShadowedIcons = new HashSet<string>(Str.Comparer)
+			{
+				"E", "Q"
+			};
+
+			var iconRecognizer = new IconRecognizer(imageByText, nonShadowedIcons);
 			return iconRecognizer;
 		}
 
@@ -398,7 +403,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private static void getPattern(Token token, out string result, out List<string> contextPatterns)
+		private void getPattern(Token token, out string result, out List<string> contextPatterns)
 		{
 			var prefixTokens = getPrefixTokens(token);
 			var currentTokens = new List<Token> { token };
@@ -447,7 +452,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private static string getPattern(List<Token> prefixTokens, List<Token> radixTokens, List<Token> suffixTokens)
+		private string getPattern(List<Token> prefixTokens, List<Token> radixTokens, List<Token> suffixTokens)
 		{
 			string prefixPattern = getPattern(prefixTokens);
 			string suffixPattern = getPattern(suffixTokens);
@@ -515,7 +520,7 @@ namespace Mtgdb.Gui
 			return prefixTokens;
 		}
 
-		private static string getPattern(IEnumerable<Token> tokens)
+		private string getPattern(IEnumerable<Token> tokens)
 		{
 			var pattern = new StringBuilder();
 			foreach (var token in tokens)
@@ -527,6 +532,23 @@ namespace Mtgdb.Gui
 				else if (token.Type.Is(TokenType.FieldValue))
 				{
 					string luceneUnescaped = StringEscaper.Unescape(token.Value);
+
+					if (!DocumentFactory.NotAnalyzedFields.Contains(token.ParentField))
+					{
+						var builder = new StringBuilder();
+						var tokenStream = _mtgdbAnalyzer.GetTokenStream(token.ParentField, luceneUnescaped);
+
+						tokenStream.Reset();
+
+						using (tokenStream)
+							while (tokenStream.IncrementToken())
+							{
+								var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
+								builder.Append(term);
+							}
+
+						luceneUnescaped = builder.ToString();
+					}
 
 					foreach (char c in luceneUnescaped)
 					{

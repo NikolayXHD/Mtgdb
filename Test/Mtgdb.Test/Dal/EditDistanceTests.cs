@@ -1,4 +1,5 @@
 ﻿using Mtgdb.Dal.EditDistance;
+using Mtgdb.Dal.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -9,13 +10,9 @@ namespace Mtgdb.Test
 		[TestCase("M", "M16")]
 		public static void Substring_to_superstring_distance_equals_0(string  val1, string val2)
 		{
-			var distance = LevenstineDistance.GetEditDistance(
-				LevenstineDistance.GetInputWords(val1), 
-				LevenstineDistance.GetDictionaryWords(val2));
-
+			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
 			Assert.That(distance, Is.EqualTo(0));
 		}
-		
 
 		[TestCase("asd")]
 		public static void Test_same_string_distance_equals_0(string val)

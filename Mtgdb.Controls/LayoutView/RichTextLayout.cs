@@ -89,11 +89,7 @@ namespace Mtgdb.Controls
 				}
 				else
 				{
-					if (!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{E}") &&
-							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{Q}") &&
-							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{CHAOS}") &&
-							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{100}") &&
-							!StringComparer.InvariantCultureIgnoreCase.Equals(tokenText, @"{1000000}"))
+					if (token.IconNeedsShadow)
 					{
 						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
 						var iconRect = new RectangleF(location.Round(), icon.Size);

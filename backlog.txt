@@ -1,3 +1,12 @@
+* Fixed not parsing ``releasedate:[2016 TO *]`` query
+* Fixed error in image scaling algorithm leading to some Artworks being shown in their original
+  huge size
+* Improved ``GeneratedMana`` analyzing algorithm
+* Added {S} to ``GeneratedMana`` field
+* Added {S} to button filters by ``GeneratedMana`` and ``ManaAbility`` fields
+* Added {S}, {hw}, {hr} icons
+* Fixed search result highlighting issue when search text contains non-indexed characters e.g ``,``
+
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
 	[ ] I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 
@@ -12,3 +21,41 @@ http://www.mtgsalvation.com/forums/magic-fundamentals/magic-general/574774-best-
 http://www.mtgsalvation.com/forums/magic-fundamentals/other-magic-products/third-party-products/338741-best-inventory-software
 	multiple conditions of card
 	normal/foil
+
+Incorporating new sets checklist
+================================
+
+Data
+----
+
+Download new mtgjson.com file
+Download new translations from gatherer.wizards.com
+Download new prices
+Increase index versions for LuceneSearcher, LuceneSpellchecker, KeywordsSearcher
+
+Legalities
+----------
+
+verify modern and standard legalities in data file
+if necessary fix the legalities using patch.json
+add new item XXX_block to legality dropdown if new set opens a new block
+
+Generated mana
+--------------
+
+Seek for unknown patterns for generating mana.
+- Ban all generated mana in filter by Generated mana
+- search: texten:("produce mana"~6 OR "produces mana"~6 OR "add mana"~6 OR "adds mana"~6 OR "mana pool"~3)
+
+Images
+------
+
+download new gatherer images
+use select images.bat and sign images.bat
+create new MEGA directories
+add them to config
+upload new images to mega storage
+create update notification for users
+
+Run unit tests
+--------------

@@ -7,17 +7,17 @@ namespace Mtgdb.Gui
 	{
 		public static void SetImages(FormMain formMain)
 		{
-			formMain.FilterAbility.PropertyImages = Ability;
-			formMain.FilterCmc.PropertyImages = Cmc;
-			formMain.FilterGeneratedMana.PropertyImages = ManaAbility;
-			formMain.FilterManaAbility.PropertyImages = ManaAbility;
-			formMain.FilterManaCost.PropertyImages = ManaCost;
-			formMain.FilterManager.PropertyImages = FilterManager;
-			formMain.FilterRarity.PropertyImages = Rarity;
-			formMain.FilterType.PropertyImages = Type;
+			formMain.FilterAbility.PropertyImages = _ability;
+			formMain.FilterCmc.PropertyImages = _cmc;
+			formMain.FilterGeneratedMana.PropertyImages = _manaAbility;
+			formMain.FilterManaAbility.PropertyImages = _manaAbility;
+			formMain.FilterManaCost.PropertyImages = _manaCost;
+			formMain.FilterManager.PropertyImages = _filterManager;
+			formMain.FilterRarity.PropertyImages = _rarity;
+			formMain.FilterType.PropertyImages = _type;
 		}
 
-		private static readonly Bitmap[] FilterManager =
+		private static readonly Bitmap[] _filterManager =
 		{
 			ResourcesFilter.quick_filters_20,
 			ResourcesFilter.search_20,
@@ -26,7 +26,7 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.draw_a_card
 		};
 
-		private static readonly Bitmap[] ManaCost =
+		private static readonly Bitmap[] _manaCost =
 		{
 			ResourcesCost.w,
 			ResourcesCost.u,
@@ -58,7 +58,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.na
 		};
 
-		private static readonly Bitmap[] ManaAbility =
+		private static readonly Bitmap[] _manaAbility =
 		{
 			ResourcesCost.w,
 			ResourcesCost.u,
@@ -66,6 +66,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.r,
 			ResourcesCost.g,
 			ResourcesCost.c,
+			ResourcesCost.s,
 			ResourcesCost.e,
 			ResourcesCost.t,
 			ResourcesCost.q,
@@ -73,7 +74,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.na
 		};
 
-		private static readonly Bitmap[] Type =
+		private static readonly Bitmap[] _type =
 		{
 			ResourcesType.creature,
 			ResourcesType.instant,
@@ -85,7 +86,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.na
 		};
 
-		private static readonly Bitmap[] Ability =
+		private static readonly Bitmap[] _ability =
 		{
 			ResourcesAbilities.Annihilator,
 			ResourcesAbilities.Attacks_each_turn,
@@ -132,7 +133,7 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Vigilance
 		};
 
-		private static readonly Bitmap[] Cmc =
+		private static readonly Bitmap[] _cmc =
 		{
 			ResourcesCost.cmc0,
 			ResourcesCost.cmc1,
@@ -144,7 +145,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.cmc7,
 		};
 
-		private static readonly Bitmap[] Rarity =
+		private static readonly Bitmap[] _rarity =
 		{
 			ResourcesRarity.common2,
 			ResourcesRarity.uncommon2,

@@ -5,14 +5,10 @@ namespace Mtgdb.Controls
 {
 	public class IconRecognizer
 	{
-		private readonly Dictionary<string, Bitmap> _imageByText;
-
-		private readonly Dictionary<string, Dictionary<int, Bitmap>> _iconsByTextByHeight =
-			new Dictionary<string, Dictionary<int, Bitmap>>();
-
-		public IconRecognizer(Dictionary<string, Bitmap> imageByText)
+		public IconRecognizer(Dictionary<string, Bitmap> imageByText, HashSet<string> nonShadowedIcons)
 		{
 			_imageByText = imageByText;
+			_nonShadowedIcons = nonShadowedIcons;
 		}
 
 		public IList<RichTextToken> Recognize(RichTextToken richTextToken, string text)
@@ -69,8 +65,12 @@ namespace Mtgdb.Controls
 
 					string symbol = text.Substring(iconStart + 1, length - 2);
 
-					if (_imageByText.ContainsKey(symbol))
+					Bitmap icon;
+					if (_imageByText.TryGetValue(symbol, out icon))
+					{
 						textToken.IconName = symbol;
+						textToken.IconNeedsShadow = icon.Width == icon.Height && !_nonShadowedIcons.Contains(symbol);
+					}
 
 					result.Add(textToken);
 
@@ -108,5 +108,11 @@ namespace Mtgdb.Controls
 
 			return scaledIcon;
 		}
+
+		private readonly Dictionary<string, Bitmap> _imageByText;
+		private readonly HashSet<string> _nonShadowedIcons;
+
+		private readonly Dictionary<string, Dictionary<int, Bitmap>> _iconsByTextByHeight =
+			new Dictionary<string, Dictionary<int, Bitmap>>();
 	}
 }

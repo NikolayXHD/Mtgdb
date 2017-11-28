@@ -8,5 +8,6 @@ namespace Mtgdb.Controls
 		public bool IsHighlighted { get; set; }
 		public bool IsContext { get; set; }
 		public string IconName { get; set; }
+		public bool IconNeedsShadow { get; set; }
 	}
 }

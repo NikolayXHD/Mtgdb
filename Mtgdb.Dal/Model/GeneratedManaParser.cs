@@ -5,34 +5,26 @@ namespace Mtgdb.Dal
 {
 	internal static class GeneratedManaParser
 	{
-		private static readonly Regex _manaRegex = new Regex(
-			@"(\byou get (?<e>\{e\}))|(?<any>\bmana ((to his or her mana pool )|(to your mana pool )|)of ((the chosen )|(any one )|(any )|(that ))\b)|(\badd(s|) ((an amount of )|([^ ]+ mana in any combination of )|(that much )|)(((?<w>\{w\})|(?<u>\{[u]\})|(?<b>\{[b]\})|(?<r>\{[r]\})|(?<g>\{[g]\})|(?<c>\{[c1-9]\}))(( and/or )|(, or )|(, )|( or )|))+)",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-		private static readonly string[] _symbols =
+		public static string ParseGeneratedMana(Card c)
 		{
-			"{W}",
-			"{U}",
-			"{B}",
-			"{R}",
-			"{G}",
-			"{C}",
-			"{E}"
-		};
+			var text = c.TextEn;
 
-		public static string ParseGeneratedMana(string text)
-		{
 			if (string.IsNullOrEmpty(text))
 				return string.Empty;
 
-			var matches = _manaRegex.Matches(text);
+			foreach (string harmfulExplanation in _harmfulExplanations)
+				text = text.Replace(harmfulExplanation, string.Empty);
+
 			bool[] matched = new bool[_symbols.Length];
 
-			foreach (Match match in matches)
+			if (_anyPatterns.Any(_ => _.IsMatch(text)))
+				matched[0] = matched[1] = matched[2] = matched[3] = matched[4] = true;
+
+			foreach (var pattern in _specificPatterns)
 			{
-				if (match.Groups["any"].Success)
-					matched[0] = matched[1] = matched[2] = matched[3] = matched[4] = true;
-				else
+				var matches = pattern.Matches(text);
+
+				foreach (Match match in matches)
 				{
 					if (match.Groups["w"].Success)
 						matched[0] = true;
@@ -44,15 +36,16 @@ namespace Mtgdb.Dal
 						matched[3] = true;
 					if (match.Groups["g"].Success)
 						matched[4] = true;
+					if (match.Groups["c"].Success)
+						matched[5] = true;
 				}
-				
-				if (match.Groups["c"].Success)
-					matched[5] = true;
-
-				if (match.Groups["e"].Success)
-					matched[6] = true;
 			}
 
+			if (matched.Contains(true))
+				matched[6] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
+
+			if (_ePatterns.Any(_ => _.IsMatch(text)))
+				matched[7] = true;
 			var result = string.Concat(
 				Enumerable.Range(0, matched.Length)
 					.Where(i => matched[i])
@@ -60,5 +53,42 @@ namespace Mtgdb.Dal
 
 			return result;
 		}
+
+		private static readonly string[] _harmfulExplanations = 
+		{
+			// convoke explanation
+			"(Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)"
+		};
+
+		private static readonly Regex[] _ePatterns =
+		{
+			new Regex(@"\byou get \{e\}",
+				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+		};
+
+		private static readonly Regex[] _anyPatterns =
+		{
+			new Regex(@"\bmana (to his or her mana pool |to your mana pool )?(of (the chosen|any one|any|that)|in any combination of colors|of a color of your choice|of one of the card's colors)",
+				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+		};
+
+		private static readonly Regex[] _specificPatterns =
+		{
+			new Regex(
+				@"\b(adds?|produces?) (an amount of |([^ ]+ )?mana in any combination of |that much )?(((?<w>\{w\})|(?<u>\{[u]\})|(?<b>\{[b]\})|(?<r>\{[r]\})|(?<g>\{[g]\})|(?<c>\{[c1-9]\}|colorless mana))( and/or |, or |, | or )?)+",
+				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+		};
+
+		private static readonly string[] _symbols =
+		{
+			"{W}",
+			"{U}",
+			"{B}",
+			"{R}",
+			"{G}",
+			"{C}",
+			"{S}",
+			"{E}"
+		};
 	}
 }

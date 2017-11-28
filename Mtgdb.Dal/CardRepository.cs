@@ -176,9 +176,6 @@ namespace Mtgdb.Dal
 			if (_patch.Cards.TryGetValue(card.Id, out patch))
 				card.PatchCard(patch);
 
-			if (card.GeneratedMana == null)
-				card.GeneratedMana = string.Intern(GeneratedManaParser.ParseGeneratedMana(card.TextEn));
-
 			card.PowerNum = getPower(card.Power);
 			card.ToughnessNum = getPower(card.Toughness);
 			card.LoyaltyNum = getLoyalty(card.Loyalty);

@@ -16,8 +16,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.14 new allsets-x.json
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.14");
+			// 0.15 new generated mana patterns
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.15");
 			_file = _version.Directory.AddPath("keywords.json");
 		}
 
@@ -114,7 +114,7 @@ namespace Mtgdb.Dal
 						IndexInFile = card.IndexInFile
 					};
 
-					keywords.LoadKeywordsFrom(card);
+					keywords.Parse(card);
 					keywordsList.Add(keywords);
 				}
 

@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.14 new allsets-x.json
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.14");
+			// 0.15 new generated mana patterns
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.15");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
@@ -57,7 +57,7 @@ namespace Mtgdb.Dal.Index
 			IsLoading = false;
 			Loaded?.Invoke();
 
-			Spellchecker.LoadIndex(createAnalyzer(), _indexReader);
+			Spellchecker.LoadIndex(createAnalyzer(), repository, _indexReader);
 		}
 
 		private Directory createIndex(CardRepository repository)
@@ -87,7 +87,7 @@ namespace Mtgdb.Dal.Index
 						if (_abort)
 							return null;
 
-						writer.AddDocument(card.ToDocument());
+						writer.AddDocument(card.Document);
 					}
 
 					SetsAddedToIndex++;

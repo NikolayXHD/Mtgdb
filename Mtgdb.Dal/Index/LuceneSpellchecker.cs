@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Core;
+using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Index;
 using Lucene.Net.Contrib;
 using Lucene.Net.Store;
@@ -14,21 +16,21 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.14 new allsets-x.json
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.14");
+			// 0.15 added snow mana to GeneratedMana field
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.15");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
 		public bool IsUpToDate => Version.IsUpToDate;
 
-		internal void LoadIndex(Analyzer analyzer, IndexReader reader)
+		internal void LoadIndex(Analyzer analyzer, CardRepository repository, DirectoryReader indexReader)
 		{
-			_reader = reader;
+			_reader = indexReader;
 
 			if (Version.IsUpToDate)
 				_spellchecker = openSpellchecker();
 			else
-				_spellchecker = createSpellchecker(analyzer);
+				_spellchecker = createSpellchecker(repository, analyzer);
 			
 			IsLoaded = true;
 		}
@@ -41,7 +43,7 @@ namespace Mtgdb.Dal.Index
 			return spellChecker;
 		}
 
-		private Spellchecker createSpellchecker(Analyzer analyzer)
+		private Spellchecker createSpellchecker(CardRepository repository, Analyzer analyzer)
 		{
 			IsLoading = true;
 
@@ -54,26 +56,63 @@ namespace Mtgdb.Dal.Index
 			fields.UnionWith(DocumentFactory.TextFields);
 			fields.ExceptWith(DocumentFactory.LimitedValuesFields);
 			
-			TotalFields = fields.Count;
+			spellchecker.BeginIndex();
 
-			spellchecker.BeginIndex(analyzer);
+			var indexedWords = new HashSet<string>(Str.Comparer);
+			var indexedValues = new HashSet<string>(Str.Comparer);
 
-			foreach (string field in fields)
+			var keywordAnalyzer = new KeywordAnalyzer();
+
+			TotalCards = repository.Cards.Count;
+			foreach (var card in repository.Cards)
 			{
-				var storedField = field.ToLowerInvariant();
-
 				if (_abort)
 					break;
 
-				IndexedFields++;
+				var doc = card.Document;
 
-				var terms = MultiFields.GetTerms(_reader, storedField);
-				var iterator = terms.GetIterator(null);
-				
-				spellchecker.IndexDictionary(iterator, () => _abort);
+				foreach (string fieldName in fields)
+				{
+					if (_abort)
+						break;
 
-				IsLoading = IndexedFields < TotalFields;
-				IndexingProgress?.Invoke();
+					var docField = doc.GetField(fieldName.ToLowerInvariant());
+
+					if (docField == null)
+						continue;
+
+					bool isAnalyzed = DocumentFactory.NotAnalyzedFields.Contains(fieldName);
+
+					var fieldAnalyzer = isAnalyzed
+						? keywordAnalyzer
+						: analyzer;
+
+					string value = docField.GetStringValue()?.ToLowerInvariant();
+
+					if (string.IsNullOrEmpty(value))
+						continue;
+
+					if (isAnalyzed && !indexedValues.Add(value) || !isAnalyzed && indexedWords.Contains(value))
+						continue;
+					
+					var tokenStream = fieldAnalyzer.GetTokenStream(fieldName, value);
+
+					tokenStream.Reset();
+
+					using (tokenStream)
+						while (tokenStream.IncrementToken())
+						{
+							var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
+							if (indexedWords.Add(term))
+								spellchecker.IndexWord(term);
+						}
+				}
+
+				IndexedCards++;
+				IsLoading = IndexedCards < TotalCards;
+
+				if (IndexedCards % 9 == 0 || IndexedCards == TotalCards)
+					IndexingProgress?.Invoke();
 			}
 
 			spellchecker.EndIndex();
@@ -326,17 +365,15 @@ namespace Mtgdb.Dal.Index
 
 		public event Action IndexingProgress;
 
-		public int IndexedFields { get; private set; }
-		public int TotalFields { get; private set; }
-
-
+		public int IndexedCards { get; private set; }
+		public int TotalCards { get; private set; }
 
 		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
 
 		private Spellchecker _spellchecker;
-		private IndexReader _reader;
 		private readonly DamerauLevenstineDistance _stringDistance;
 		internal IndexVersion Version { get; }
 		private bool _abort;
+		private DirectoryReader _reader;
 	}
 }
