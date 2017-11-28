@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Core;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
@@ -277,45 +277,25 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-
-		/// <summary> Index a Dictionary</summary>
-		/// <param name="iterator">the dictionary to index</param>
-		/// <param name="abortRequested"></param>
-		/// <throws>  IOException </throws>
-		/// <throws>AlreadyClosedException if the Spellchecker is already closed</throws>
-		public void IndexDictionary(TermsEnum iterator, Func<bool> abortRequested)
+		public void IndexWord(string word)
 		{
 			lock (_modifyCurrentIndexLock)
 			{
-				while (iterator.Next() != null)
-				{
-					if (abortRequested())
-						return;
+				int len = word.Length;
+				if (len == 0)
+					return;
 
-					string word = iterator.Term.Utf8ToString();
-
-					int len = word.Length;
-					if (len == 0)
-						continue;
-
-					if (Exist(word))
-					{
-						// if the word already exist in the gramindex
-						continue;
-					}
-
-					// ok index the word
-					var doc = createDocument(word, getMin(len), getMax(len));
-					_indexWriter.AddDocument(doc);
-				}
+				// ok index the word
+				var doc = createDocument(word, getMin(len), getMax(len));
+				_indexWriter.AddDocument(doc);
 			}
 		}
 
-		public void BeginIndex(Analyzer analyzer)
+		public void BeginIndex()
 		{
 			ensureOpen();
 
-			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer)
+			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())
 			{
 				OpenMode = OpenMode.CREATE_OR_APPEND,
 				RAMPerThreadHardLimitMB = 512,

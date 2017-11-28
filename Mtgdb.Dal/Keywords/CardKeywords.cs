@@ -15,7 +15,7 @@ namespace Mtgdb.Dal
 		[JsonProperty]
 		public Dictionary<string, HashSet<string>> KeywordsByProperty { get; set; }
 
-		public void LoadKeywordsFrom(Card card)
+		public void Parse(Card card)
 		{
 			KeywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
 

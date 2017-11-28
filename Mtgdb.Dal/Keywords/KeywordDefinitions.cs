@@ -82,6 +82,7 @@ namespace Mtgdb.Dal
 			"{R}",
 			"{G}",
 			"{C}",
+			"{S}",
 			"{E}",
 			"{T}",
 			"{Q}",
@@ -97,6 +98,7 @@ namespace Mtgdb.Dal
 			"{R}",
 			"{G}",
 			"{C}",
+			"{S}",
 			"{E}"
 		};
 

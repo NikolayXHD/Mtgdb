@@ -31,7 +31,7 @@ namespace Mtgdb.Dal.Index
 			
 			float maxTypos = getMaxTypos(s1.Length);
 
-			float result = (1.001f - 0.5f * typos / maxTypos).WithinRange(0, 1);
+			float result = (1.001f - 0.5f * typos / maxTypos).WithinRange(null, 1f);
 			return result;
 		}
 
@@ -50,8 +50,8 @@ namespace Mtgdb.Dal.Index
 
 			lock (_editDistance)
 			{
-				var prefixDistance = _editDistance.GetPrefixDistance(s1, s2);
-				return prefixDistance;
+				var distances = _editDistance.GetDistances(s1, s2);
+				return distances.PrefixDistance + 0.001f * distances.Distance;
 			}
 		}
 	}

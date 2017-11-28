@@ -87,16 +87,16 @@ namespace Mtgdb
 		private readonly Bitmap _bmp;
 		private readonly BitmapData _bmpData;
 
-		private Rectangle _rect;
+		public Rectangle Rect { get; }
 		public byte[] RgbValues { get; }
 
 		public BmpReader(Bitmap bmp, Rectangle rect)
 		{
 			const PixelFormat format = PixelFormat.Format32bppArgb;
 
-			_rect = rect;
+			Rect = rect;
 			_bmp = bmp;
-			_bmpData = _bmp.LockBits(_rect, ImageLockMode.ReadOnly, format);
+			_bmpData = _bmp.LockBits(Rect, ImageLockMode.ReadOnly, format);
 
 			int numBytes = _bmpData.Stride * _bmpData.Height;
 			RgbValues = new byte[numBytes];
@@ -105,7 +105,7 @@ namespace Mtgdb
 
 		public int GetLocation(int x, int y)
 		{
-			return ByesPerPixel * (_rect.Width * y + x);
+			return ByesPerPixel * (Rect.Width * y + x);
 		}
 
 		public void Dispose()
@@ -144,11 +144,17 @@ namespace Mtgdb
 
 						float r = 0, g = 0, b = 0, a = 0, w = 0, wc = 0, nr = 0, ng = 0, nb = 0;
 
-						for (int iOr = (int) Math.Floor(left); iOr < (int) Math.Ceiling(right - 0.0001); iOr++)
+						int iOrMin = Math.Max((int) Math.Floor(left), original.Rect.Left);
+						int iOrMax = Math.Min((int) Math.Ceiling(right), original.Rect.Right);
+
+						int jOrMin = Math.Max((int) Math.Floor(top), original.Rect.Top);
+						int jOrMax = Math.Min((int) Math.Ceiling(bottom), original.Rect.Bottom);
+
+						for (int iOr = iOrMin; iOr < iOrMax; iOr++)
 						{
 							float wX = Math.Min(right, iOr + 1) - Math.Max(left, iOr);
-
-							for (int jOr = (int) Math.Floor(top); jOr < (int) Math.Ceiling(bottom - 0.0001); jOr++)
+							
+							for (int jOr = jOrMin; jOr < jOrMax; jOr++)
 							{
 								float wY = Math.Min(bottom, jOr + 1) - Math.Max(top, jOr);
 

@@ -105,7 +105,7 @@ namespace Mtgdb.Util
 
 					for (int a = 0; a < _artists.Length; a++)
 					{
-						_artistDistance[a] = texts.Min(text => _distance.GetDistance(_artists[a], text));
+						_artistDistance[a] = texts.Min(text => _distance.GetDistances(_artists[a], text)).Distance;
 					}
 
 					int artistIndex = Enumerable.Range(0, _artists.Length)

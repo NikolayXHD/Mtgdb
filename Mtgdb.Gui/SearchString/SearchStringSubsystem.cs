@@ -241,93 +241,99 @@ namespace Mtgdb.Gui
 			updateBackgroundColor();
 			_lastUserInput = DateTime.Now;
 			
-			if (e.KeyData == Keys.Down)
+			switch (e.KeyData)
 			{
-				if (_listBoxSuggest.Visible)
-				{
-					if (_listBoxSuggest.SelectedIndex < _dataSource.Count - 1)
-						_listBoxSuggest.SelectedIndex++;
-				}
-				else
-					showSuggest();
-
-				e.Handled = true;
-			}
-			else if (e.KeyData == Keys.Up)
-			{
-				if (_listBoxSuggest.Visible)
-				{
-					if (_listBoxSuggest.SelectedIndex > 0)
-						_listBoxSuggest.SelectedIndex--;
+				case Keys.Down:
+					if (_listBoxSuggest.Visible)
+					{
+						if (_listBoxSuggest.SelectedIndex < _dataSource.Count - 1)
+							_listBoxSuggest.SelectedIndex++;
+					}
 					else
+						showSuggest();
+
+					e.Handled = true;
+					break;
+				case Keys.Up:
+					if (_listBoxSuggest.Visible)
+					{
+						if (_listBoxSuggest.SelectedIndex > 0)
+							_listBoxSuggest.SelectedIndex--;
+						else
+							closeSuggest();
+					}
+
+					e.Handled = true;
+					break;
+				case Keys.Escape:
+					if (_listBoxSuggest.Visible)
 						closeSuggest();
-				}
-
-				e.Handled = true;
-			}
-			else if (e.KeyData == Keys.Escape)
-			{
-				if (_listBoxSuggest.Visible)
-					closeSuggest();
 				
-				e.Handled = true;
-			}
-			else if (e.KeyData == Keys.Enter)
-			{
-				if (!_listBoxSuggest.Visible)
+					e.Handled = true;
+					break;
+				case Keys.Enter:
+					if (!_listBoxSuggest.Visible)
+					{
+						ApplyFind();
+					}
+					else
+					{
+						selectSuggest();
+						closeSuggest();
+					}
+
+					e.Handled = true;
+					break;
+				case Keys.Control | Keys.Space:
+					showSuggest();
+					e.Handled = true;
+					e.SuppressKeyPress = true;
+					break;
+				case Keys.Control | Keys.X:
+				case Keys.Shift | Keys.Delete:
+					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
+					{
+						Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
+
+						var prefix = _findEditor.Text.Substring(0, _findEditor.SelectionStart);
+						int suffixStart = _findEditor.SelectionStart + _findEditor.SelectionLength;
+						var suffix = suffixStart < _findEditor.Text.Length
+							? _findEditor.Text.Substring(suffixStart)
+							: string.Empty;
+
+						setFindText(prefix + suffix, prefix.Length);
+					}
+
+					e.Handled = true;
+					e.SuppressKeyPress = true;
+					break;
+				case Keys.Control | Keys.C:
+				case Keys.Control | Keys.Insert:
+					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
+						Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
+
+					e.Handled = true;
+					e.SuppressKeyPress = true;
+					break;
+				case Keys.Control | Keys.V:
+				case Keys.Shift | Keys.Insert:
+					if (Clipboard.ContainsText())
+					{
+						string searchQuery = clipboardTextToQuery(Clipboard.GetText());
+						pasteSearchQuery(searchQuery);
+					}
+
+					e.Handled = true;
+					e.SuppressKeyPress = true;
+					break;
+				case Keys.Control | Keys.Shift | Keys.Right:
 				{
-					ApplyFind();
+					break;
 				}
-				else
+				case Keys.Control | Keys.Shift | Keys.Left:
 				{
-					selectSuggest();
-					closeSuggest();
+					break;
 				}
-
-				e.Handled = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.Space))
-			{
-				showSuggest();
-				e.Handled = true;
-				e.SuppressKeyPress = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.X) || e.KeyData == (Keys.Shift | Keys.Delete))
-			{
-				if (!string.IsNullOrEmpty(_findEditor.SelectedText))
-				{
-					Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
-
-					var prefix = _findEditor.Text.Substring(0, _findEditor.SelectionStart);
-					int suffixStart = _findEditor.SelectionStart + _findEditor.SelectionLength;
-					var suffix = suffixStart < _findEditor.Text.Length
-						? _findEditor.Text.Substring(suffixStart)
-						: string.Empty;
-
-					setFindText(prefix + suffix, prefix.Length);
-				}
-
-				e.Handled = true;
-				e.SuppressKeyPress = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.C) || e.KeyData == (Keys.Control | Keys.Insert))
-			{
-				if (!string.IsNullOrEmpty(_findEditor.SelectedText))
-					Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
-
-				e.Handled = true;
-				e.SuppressKeyPress = true;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
-			{
-				if (Clipboard.ContainsText())
-				{
-					string searchQuery = clipboardTextToQuery(Clipboard.GetText());
-					pasteSearchQuery(searchQuery);
-				}
-
-				e.Handled = true;
-				e.SuppressKeyPress = true;
 			}
 		}
 

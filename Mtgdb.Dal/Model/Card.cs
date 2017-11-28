@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Lucene.Net.Documents;
+using Mtgdb.Dal.Index;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
@@ -93,9 +95,26 @@ namespace Mtgdb.Dal
 		public int? LoyaltyNum { get; internal set; }
 
 		[JsonIgnore]
-		public string GeneratedMana { get; set; }
+		public string GeneratedMana
+		{
+			get
+			{
+				if (!_generatedManaParsed)
+				{
+					_generatedMana = string.Intern(GeneratedManaParser.ParseGeneratedMana(this));
+					_generatedManaParsed = true;
+				}
+				
+				return _generatedMana;
+			}
+			private set
+			{
+				_generatedManaParsed = true;
+				_generatedMana = value;
+			}
+		}
 
-
+		public Document Document => _document ?? (_document = this.ToDocument());
 
 		[JsonIgnore]
 		public string Rulings
@@ -620,6 +639,12 @@ namespace Mtgdb.Dal
 		internal bool Remove { get; private set; }
 
 		[JsonIgnore]
+		private bool _generatedManaParsed;
+
+		[JsonIgnore]
+		private string _generatedMana;
+
+		[JsonIgnore]
 		private Dictionary<string, LegalityNote> _legalityByFormat;
 
 		[JsonIgnore]
@@ -636,5 +661,8 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private bool _textDeltaApplied;
+
+		[JsonIgnore]
+		private Document _document;
 	}
 }

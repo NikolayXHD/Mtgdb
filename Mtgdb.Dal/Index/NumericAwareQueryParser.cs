@@ -266,8 +266,7 @@ namespace Mtgdb.Dal.Index
 		{
 			var lowerValue = getRangeValue(query.LowerTerm);
 			var upperValue = getRangeValue(query.UpperTerm);
-			var result = new TermRangeQuery(field, new BytesRef(lowerValue), new BytesRef(upperValue), query.IncludesLower, query.IncludesUpper);
-
+			var result = TermRangeQuery.NewStringRange(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
 			return result;
 		}
 

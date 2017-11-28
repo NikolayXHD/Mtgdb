@@ -7,7 +7,7 @@ namespace Mtgdb.Dal
 {
 	internal static class ReplaceCost
 	{
-		public const char EndOfWord = '$';
+		public const char EndOfWord = ' ';
 
 		private static readonly Dictionary<char, HashSet<int>>[] _soundGroupsByChar =
 		{

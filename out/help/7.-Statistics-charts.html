@@ -47,10 +47,33 @@
 <a name="user-content-custom-reports"></a>
 <h2>
 <a id="custom-reports" class="anchor" href="#custom-reports" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Custom reports</h2>
-<a href="l/statistics_custom.jpg"><img alt="l/statistics_custom.jpg" src="l/statistics_custom.jpg"></a>
 <p>All predesigned reports were built <em>only</em> using settings that can be modified in User Inteface. As a
 result you can build your own entirely unique charts like <strong>How many different artists were drawing
-MTG cards every year</strong></p>
+MTG cards every year</strong>.</p>
+<p>Customizing report is conceptually similar to creating Pivot Table / Pivot Chart in <strong>Microsoft Excel</strong>
+or <strong>Libre Office Calc</strong>. In case you are not familiar with Pivot tables there is a
+<a href="https://en.wikipedia.org/Pivot_table">Wikipedia page on the subject</a>.</p>
+<p>To create a custom graph</p>
+<ul>
+<li>select graph data source: <code>Deck</code>, <code>Collection</code>, <code>All cards</code><ul>
+<li>use <code>Filter by search result</code> checkbox to apply the filters from main window.
+This way you can use all the filters like <code>Search text</code>, <code>Filter buttons</code>,
+<code>Filter by Legality</code> and so on to confine the data used when building a graph.</li>
+</ul>
+</li>
+<li>setup <strong>Argument</strong> fields - correspond to X axis</li>
+<li>setup <strong>Series</strong> fields - correspond to different stacks in stacked bars.</li>
+<li>setup <strong>Aggregate</strong> fields - aggreate field is used to produce Y value<ul>
+<li>select aggregate type: <code>sum</code>, <code>count</code>, <code>min</code>, <code>max</code>, <code>average</code> by clicking
+aggregate field caption</li>
+</ul>
+</li>
+<li>setup sorting by argument / series / aggregate fields by clicking field captions</li>
+<li>select the chart type: <code>Stacked column</code>, <code>Spline</code>, <code>Circular</code> and so on</li>
+<li>click <code>Build!</code>
+</li>
+</ul>
+<a href="l/statistics_custom.jpg"><img alt="l/statistics_custom.jpg" src="l/statistics_custom.jpg"></a>
 
 
         </div>

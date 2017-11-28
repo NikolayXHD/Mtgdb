@@ -24,7 +24,7 @@ namespace Mtgdb.Test
 		{
 			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
 			var keywords = new CardKeywords();
-			keywords.LoadKeywordsFrom(card);
+			keywords.Parse(card);
 
 			var values = keywords.KeywordsByProperty[field];
 

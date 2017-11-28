@@ -48,6 +48,21 @@
 		"Mons's Goblin Waiters": {
 			"GeneratedMana": "{R}"
 		},
+		"Ice Cauldron": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Jeweled Amulet": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Mana Reflection": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Drain Power": {
+			"GeneratedMana": "{W}{U}{B}{R}{G}"
+		},
+		"Kruphix, God of Horizons": {
+			"GeneratedMana": "{C}"
+		},
 		"Jaraku the Interloper": {
 			"FlipDuplicate": true
 		},

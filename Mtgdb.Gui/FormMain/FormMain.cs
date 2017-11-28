@@ -332,7 +332,7 @@ namespace Mtgdb.Gui
 				if (_spellcheckerIndexUpToDate)
 					noInputText = "loading intellisense…";
 				else
-					noInputText = $"indexing intellisense {_luceneSearcher.Spellchecker.IndexedFields} / {_luceneSearcher.Spellchecker.TotalFields} fields…";
+					noInputText = $"indexing intellisense {_luceneSearcher.Spellchecker.IndexedCards} / {_luceneSearcher.Spellchecker.TotalCards} cards…";
 			}
 			else if (_searchStringSubsystem.SearchResult?.ParseErrorMessage != null)
 				noInputText = "syntax error";

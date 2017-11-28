@@ -543,6 +543,26 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hr {
+            get {
+                object obj = ResourceManager.GetObject("hr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hw {
+            get {
+                object obj = ResourceManager.GetObject("hw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap i {
             get {
                 object obj = ResourceManager.GetObject("i", resourceCulture);
@@ -606,6 +626,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap rw {
             get {
                 object obj = ResourceManager.GetObject("rw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap s {
+            get {
+                object obj = ResourceManager.GetObject("s", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
