@@ -11,6 +11,7 @@ namespace Mtgdb.Test
 	{
 		[TestCase("*", "d", "en", null)]
 		[TestCase("NameEn", "neveinral", null, "nevinyrral")]
+		[TestCase("NameEn", "vinira", null, "nevinyrral")]
 		[TestCase("TextEn", "disk", null, "disk")]
 		[TestCase("Name", "гел", "ru", "ангел")]
 		[TestCase("*", "арха", "ru", "архангел")]

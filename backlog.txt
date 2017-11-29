@@ -1,12 +1,3 @@
-* Fixed not parsing ``releasedate:[2016 TO *]`` query
-* Fixed error in image scaling algorithm leading to some Artworks being shown in their original
-  huge size
-* Improved ``GeneratedMana`` analyzing algorithm
-* Added {S} to ``GeneratedMana`` field
-* Added {S} to button filters by ``GeneratedMana`` and ``ManaAbility`` fields
-* Added {S}, {hw}, {hr} icons
-* Fixed search result highlighting issue when search text contains non-indexed characters e.g ``,``
-
 https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
 	[ ] I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
 

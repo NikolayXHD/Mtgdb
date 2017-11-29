@@ -30,7 +30,7 @@ namespace Mtgdb.Test
 			imgRepo.LoadFiles();
 			imgRepo.LoadZoom();
 
-			repo.SelectCardImages(imgRepo);
+			repo.OnImagesLoaded();
 
 			_integration = kernel.Get<ForgeIntegration>();
 		}

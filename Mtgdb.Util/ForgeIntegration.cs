@@ -40,7 +40,7 @@ namespace Mtgdb.Util
 			_imageRepo.LoadSmall();
 			_imageRepo.LoadZoom();
 
-			_cardRepo.SelectCardImages(_imageRepo);
+			_cardRepo.OnImagesLoaded();
 		}
 
 		public void OverrideForgePictures(string targetSetCode)

@@ -18,6 +18,7 @@ namespace Mtgdb.Dal
 			Cards = new List<Card>();
 
 			_uiModel = uiModel;
+			_uiModel.CardRepo = this;
 		}
 
 		public List<Card> Cards { get; }
@@ -256,11 +257,8 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		public void SelectCardImages(ImageRepository repository)
+		public void OnImagesLoaded()
 		{
-			foreach (var card in Cards)
-				card.ImageModel = GetSmallImage(card, repository);
-
 			IsImageLoadingComplete = true;
 			ImageLoadingComplete?.Invoke();
 		}

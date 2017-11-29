@@ -318,7 +318,7 @@ namespace Mtgdb.Gui
 
 			string noInputText;
 
-			if (!_luceneSearcher.IsLoading && !_luceneSearcher.IsLoaded)
+			if (!_luceneSearcher.IsLoading && !_luceneSearcher.IsLoaded && !_luceneSearcher.Spellchecker.IsLoading && !_luceneSearcher.Spellchecker.IsLoaded)
 				noInputText = "pending index load…";
 			else if (_luceneSearcher.IsLoading)
 			{

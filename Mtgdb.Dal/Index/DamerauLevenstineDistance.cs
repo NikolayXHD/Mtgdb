@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Mtgdb.Dal.EditDistance;
 
 namespace Mtgdb.Dal.Index
@@ -18,29 +17,34 @@ namespace Mtgdb.Dal.Index
 		/// </summary>
 		public float GetDistance(string s1, string s2)
 		{
-			float prefixDistance = getPrefixDistance(s1, s2);
+			float minDist = float.MaxValue;
+			var prefixes = 1 + Math.Max(0, s2.Length - s1.Length);
 
-			var s1Rev = new string(s1.Reverse().ToArray());
-			var s2Rev = new string(s2.Reverse().ToArray());
+			for (int l = 0; l < prefixes; l++)
+			{
+				int r = Math.Min(s2.Length, l + 2 * s1.Length);
 
-			var postfixDistance = getPrefixDistance(s1Rev, s2Rev);
+				var prefixDistance = getPrefixDistance(s1, s2.Substring(l, r - l)).PrefixDistance;
 
-			var lengthDistance = (s2.Length - s1.Length).WithinRange(0, 4) / 12f;
+				var dist = prefixDistance + 0.0001f * Math.Min(l, 0.5f + Math.Max(0, s2.Length - s1.Length - l) + 0.001f * Math.Abs(s2.Length - s1.Length));
 
-			float typos = lengthDistance + 0.5f * Math.Min(prefixDistance, postfixDistance + 0.001f);
-			
+				if (dist < minDist)
+					minDist = dist;
+			}
+
+			float typos = 0.5f * minDist;
 			float maxTypos = getMaxTypos(s1.Length);
 
-			float result = (1.001f - 0.5f * typos / maxTypos).WithinRange(null, 1f);
+			float result = 1f - typos / maxTypos;
 			return result;
 		}
 
 		private static float getMaxTypos(int length)
 		{
-			return (0.35f * length).WithinRange(0.01f, 4f);
+			return (0.7f * length).WithinRange(null, 8f);
 		}
 
-		private float getPrefixDistance(string s1, string s2)
+		private EditDistances getPrefixDistance(string s1, string s2)
 		{
 			if (s1.Length > LevenstineDistance.MaxInput)
 				s1 = s1.Substring(0, LevenstineDistance.MaxInput);
@@ -51,7 +55,7 @@ namespace Mtgdb.Dal.Index
 			lock (_editDistance)
 			{
 				var distances = _editDistance.GetDistances(s1, s2);
-				return distances.PrefixDistance + 0.001f * distances.Distance;
+				return distances;
 			}
 		}
 	}

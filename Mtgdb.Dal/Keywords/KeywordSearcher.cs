@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Lucene.Net.Analysis.Core;
 using Lucene.Net.Index;
@@ -8,7 +7,6 @@ using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
 using Mtgdb.Dal.Index;
-using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
 {
@@ -16,9 +14,9 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.15 new generated mana patterns
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.15");
-			_file = _version.Directory.AddPath("keywords.json");
+			// 0.16 normal index directory instead of json
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.16");
+			_version.Directory.AddPath("keywords.json");
 		}
 
 		public void Load(CardRepository repository)
@@ -28,20 +26,10 @@ namespace Mtgdb.Dal
 
 			IsLoading = true;
 
-			IList<CardKeywords> keywords;
-
 			if (_version.IsUpToDate)
-				keywords = loadKeywordsFromFile();
+				_index = FSDirectory.Open(_version.Directory);
 			else
-				keywords = createKeywordsFrom(repository);
-
-			_index = new RAMDirectory();
-			using (var writer = new IndexWriter(_index, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
-				foreach (var keyword in keywords)
-				{
-					var doc = keyword.ToDocument();
-					writer.AddDocument(doc);
-				}
+				_index = createKeywordsFrom(repository);
 
 			_indexReader = DirectoryReader.Open(_index);
 			_searcher = new IndexSearcher(_indexReader);
@@ -101,7 +89,7 @@ namespace Mtgdb.Dal
 			return value.ToLowerInvariant();
 		}
 
-		private List<CardKeywords> createKeywordsFrom(CardRepository repository)
+		private FSDirectory createKeywordsFrom(CardRepository repository)
 		{
 			var keywordsList = new List<CardKeywords>();
 
@@ -122,20 +110,20 @@ namespace Mtgdb.Dal
 				LoadingProgress?.Invoke();
 			}
 
-			var serialized = JsonConvert.SerializeObject(keywordsList);
-
 			_version.CreateDirectory();
-			File.WriteAllText(_file, serialized);
+
+			var index = FSDirectory.Open(_version.Directory);
+
+			using (var writer = new IndexWriter(index, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
+				foreach (var keyword in keywordsList)
+				{
+					var doc = keyword.ToDocument();
+					writer.AddDocument(doc);
+				}
+
 			_version.SetIsUpToDate();
 
-			return keywordsList;
-		}
-
-		private List<CardKeywords> loadKeywordsFromFile()
-		{
-			var serialized = File.ReadAllText(_file);
-			var keywords = JsonConvert.DeserializeObject<List<CardKeywords>>(serialized);
-			return keywords;
+			return index;
 		}
 
 		public void InvalidateIndex()
@@ -156,9 +144,8 @@ namespace Mtgdb.Dal
 
 
 
-		private readonly string _file;
 		private readonly IndexVersion _version;
-		private RAMDirectory _index;
+		private FSDirectory _index;
 		private IndexSearcher _searcher;
 		private DirectoryReader _indexReader;
 	}

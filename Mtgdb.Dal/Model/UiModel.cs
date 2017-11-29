@@ -4,9 +4,10 @@ namespace Mtgdb.Dal
 {
 	public class UiModel
 	{
-		public UiModel(ImageCache imageCache, [Optional] CollectionModel collection)
+		public UiModel(ImageCache imageCache, ImageRepository imageRepo, [Optional] CollectionModel collection)
 		{
 			ImageCache = imageCache;
+			ImageRepo = imageRepo;
 			Collection = collection;
 		}
 
@@ -27,5 +28,7 @@ namespace Mtgdb.Dal
 
 		public ICardCollection Collection { get; }
 		public ImageCache ImageCache { get; }
+		public CardRepository CardRepo { get; set; }
+		public ImageRepository ImageRepo { get; }
 	}
 }
