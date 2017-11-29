@@ -12,43 +12,29 @@ namespace Mtgdb.Dal.EditDistance
 			return GetDistances(userStr, dictStr).PrefixDistance;
 		}
 
-		public Distances GetDistances(string userStr, string dictStr)
+		public EditDistances GetDistances(string userStr, string dictStr)
 		{
 			userStr = userStr.ToLower(CultureInfo.InvariantCulture);
 			dictStr = dictStr.ToLower(CultureInfo.InvariantCulture);
 
-			int userLength = userStr.Length;
-			var dictLength = dictStr.Length;
+			int userStrLength = userStr.Length;
+			int dictStrLength = dictStr.Length;
 
-			fillTrace(userStr, dictStr, userLength, dictLength);
+			fillTrace(userStr, dictStr, userStrLength, dictStr.Length);
 
 			// Возьмем минимальное
 			// префиксное расстояние
-			float minPrefixDist = _trace[userLength, 0];
-			for (int i = 1; i <= dictLength; i++)
+			float minPrefixDist = _trace[userStrLength, 0];
+			
+			for (int i = 1; i <= dictStrLength; i++)
 			{
-				float dist = _trace[userLength, i];
+				float dist = _trace[userStrLength, i];
 
 				if (dist < minPrefixDist)
 					minPrefixDist = dist;
 			}
 
-			return new Distances(minPrefixDist, _trace[userLength, dictLength]);
-		}
-
-		private static void validate(string userStr, string dictStr)
-		{
-			if (string.IsNullOrEmpty(userStr))
-				throw new ArgumentException("user string empty");
-
-			if (string.IsNullOrEmpty(dictStr))
-				throw new ArgumentException("dict string empty");
-
-			if (userStr.Length > MaxInput)
-				throw new ArgumentException($"user string length exceeds {MaxInput}: {userStr.Length}");
-
-			if (dictStr.Length > MaxDict)
-				throw new ArgumentException($"dict string length exceeds {MaxDict}: {dictStr.Length}");
+			return new EditDistances(minPrefixDist, _trace[userStrLength, dictStr.Length]);
 		}
 
 		private void fillTrace(string userStr, string dictStr, int userLength, int dictLength)
@@ -112,15 +98,15 @@ namespace Mtgdb.Dal.EditDistance
 			return result;
 		}
 
-		public const int MaxInput = 80;
-		public const int MaxDict = 200;
+		public const int MaxInput = 40;
+		public const int MaxDict = 100;
 		private readonly float[,] _trace = new float[MaxInput + 1, MaxDict + 1];
 		private static readonly Dictionary<Tuple<char, char>, float> _replaceCostCached = new Dictionary<Tuple<char, char>, float>();
 	}
 
-	public struct Distances
+	public struct EditDistances
 	{
-		public Distances(float prefixDistance, float distance)
+		public EditDistances(float prefixDistance, float distance)
 		{
 			PrefixDistance = prefixDistance;
 			Distance = distance;

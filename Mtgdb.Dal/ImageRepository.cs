@@ -56,7 +56,7 @@ namespace Mtgdb.Dal
 		{
 			load(_modelsByNameBySetByVariant, _directories, _files);
 
-			IsLoadingComplete = true;
+			IsLoadingSmallComplete = true;
 			LoadingComplete?.Invoke();
 		}
 
@@ -490,7 +490,7 @@ namespace Mtgdb.Dal
 
 
 
-		public bool IsLoadingComplete { get; private set; }
+		public bool IsLoadingSmallComplete { get; private set; }
 		public bool IsLoadingZoomComplete { get; private set; }
 		public bool IsLoadingArtComplete { get; private set; }
 

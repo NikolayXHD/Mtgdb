@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\DeckFormattersTests.cs" />
+    <Compile Include="Dal\EditDistanceTests.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="ExternalData\GathererImagePreProcessor.cs" />
     <Compile Include="Images\WaifuScaler.cs" />

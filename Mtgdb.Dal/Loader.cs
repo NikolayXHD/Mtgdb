@@ -57,17 +57,17 @@ namespace Mtgdb.Dal
 				() =>
 				{
 					_repository.LoadFile();
-					
-					if (_keywordSearcher.IsUpToDate)
-						_keywordSearcher.Load(null);
+
+					_imageRepository.LoadFiles();
+
+					_imageRepository.LoadSmall();
+					_imageRepository.LoadZoom();
 
 					if (_indexesUpToDate)
 						_luceneSearcher.LoadIndex(null);
 
-					_imageRepository.LoadFiles();
-					_imageRepository.LoadSmall();
-					_imageRepository.LoadZoom();
-					_imageRepository.LoadArt();
+					if (_keywordSearcher.IsUpToDate)
+						_keywordSearcher.Load(null);
 
 					_priceRepository.Load();
 				},
@@ -75,11 +75,13 @@ namespace Mtgdb.Dal
 				{
 					while (!_repository.IsFileLoadingComplete)
 						Thread.Sleep(50);
+
 					_repository.Load();
 
 					while (!_imageRepository.IsLoadingZoomComplete)
 						Thread.Sleep(50);
-					_repository.SelectCardImages(_imageRepository);
+
+					_repository.OnImagesLoaded();
 
 					while (!_priceRepository.IsLoadingComplete)
 						Thread.Sleep(50);
@@ -98,6 +100,8 @@ namespace Mtgdb.Dal
 
 					if (!_indexesUpToDate)
 						_luceneSearcher.LoadIndex(_repository);
+
+					_imageRepository.LoadArt();
 
 					GC.Collect();
 				}

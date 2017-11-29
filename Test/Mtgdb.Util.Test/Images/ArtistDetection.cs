@@ -31,7 +31,7 @@ namespace Mtgdb.Util
 			ImgRepo.LoadFiles();
 			ImgRepo.LoadZoom();
 			
-			Repo.SelectCardImages(ImgRepo);
+			Repo.OnImagesLoaded();
 
 			_distance = new LevenstineDistance();
 		}

@@ -2,9 +2,11 @@ using System.Diagnostics;
 using Mtgdb.Dal;
 using Ninject;
 using NLog;
+using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
+	[TestFixture]
 	public class TestsBase
 	{
 		protected void LoadModules()
@@ -57,6 +59,11 @@ namespace Mtgdb.Test
 			Log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
+		[TearDown]
+		protected void TearDown()
+		{
+			LogManager.Flush();
+		}
 
 		protected IKernel Kernel;
 		protected CardRepository Repo;

@@ -149,25 +149,18 @@ namespace Mtgdb.Dal.Index
 					var grams = formGrams(word, ng);
 
 					if (grams.Length == 0)
-					{
 						continue; // hmm
-					}
 
 					if (_bStart > 0)
-					{
 						// should we boost prefixes?
 						add(query, "start" + ng, grams[0], _bStart); // matches start of word
-					}
 
 					if (_bEnd > 0)
-					{
 						// should we boost suffixes
 						add(query, "end" + ng, grams[grams.Length - 1], _bEnd); // matches end of word
-					}
+
 					for (int i = 0; i < grams.Length; i++)
-					{
 						add(query, key, grams[i]);
-					}
 				}
 
 				int maxHits = 30 * numSug;
@@ -250,31 +243,11 @@ namespace Mtgdb.Dal.Index
 		{
 			int len = text.Length;
 			string[] res = new string[len - ng + 1];
-			for (int i = 0; i < len - ng + 1; i++)
-			{
-				res[i] = text.Substring(i, ng);
-			}
-			return res;
-		}
 
-		/// <summary> Check whether the word exists in the index.</summary>
-		/// <param name="word">String
-		/// </param>
-		/// <throws>  IOException </throws>
-		/// <returns> true iff the word exists in the index
-		/// </returns>
-		public bool Exist(string word)
-		{
-			// obtainSearcher calls ensureOpen
-			IndexSearcher indexSearcher = obtainSearcher();
-			try
-			{
-				return indexSearcher.IndexReader.DocFreq(new Term(FWord, new BytesRef(word))) > 0;
-			}
-			finally
-			{
-				releaseSearcher(indexSearcher);
-			}
+			for (int i = 0; i < len - ng + 1; i++)
+				res[i] = text.Substring(i, ng);
+
+			return res;
 		}
 
 		public void IndexWord(string word)

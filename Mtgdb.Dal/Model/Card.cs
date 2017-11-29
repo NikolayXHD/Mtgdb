@@ -44,10 +44,34 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public Bitmap Image => UiModel?.ImageCache.GetSmallImage(ImageModel);
+		public Bitmap Image
+		{
+			get
+			{
+				if (ImageModel == null)
+					return null;
+
+				return UiModel?.ImageCache.GetSmallImage(ImageModel);
+			}
+		}
 
 		[JsonIgnore]
-		public ImageModel ImageModel { get; set; }
+		public ImageModel ImageModel
+		{
+			get
+			{
+				if (!_imageModelSelected)
+				{
+					if (UiModel?.CardRepo.IsImageLoadingComplete != true)
+						return null;
+
+					_imageModel = UiModel?.CardRepo.GetSmallImage(this, UiModel.ImageRepo);
+					_imageModelSelected = true;
+				}
+
+				return _imageModel;
+			}
+		}
 
 		[JsonIgnore]
 		public string ImageNameBase => ImageName.SplitTalingNumber().Item1;
@@ -636,6 +660,7 @@ namespace Mtgdb.Dal
 				MciNumber = cardPatch.MciNumber;
 		}
 
+		[JsonIgnore]
 		internal bool Remove { get; private set; }
 
 		[JsonIgnore]
@@ -664,5 +689,11 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private Document _document;
+
+		[JsonIgnore]
+		private ImageModel _imageModel;
+
+		[JsonIgnore]
+		private bool _imageModelSelected;
 	}
 }
