@@ -98,8 +98,10 @@ namespace Mtgdb.Dal
 			"{R}",
 			"{G}",
 			"{C}",
+			"{any}",
 			"{S}",
-			"{E}"
+			"{E}",
+			null
 		};
 
 		public static readonly string[] Cmc =

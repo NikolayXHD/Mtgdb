@@ -119,22 +119,25 @@ namespace Mtgdb.Dal
 		public int? LoyaltyNum { get; internal set; }
 
 		[JsonIgnore]
-		public string GeneratedMana
+		public string GeneratedMana => _generatedMana ?? (_generatedMana = string.Concat(GeneratedManaArr));
+
+		[JsonIgnore]
+		public IList<string> GeneratedManaArr
 		{
 			get
 			{
 				if (!_generatedManaParsed)
 				{
-					_generatedMana = string.Intern(GeneratedManaParser.ParseGeneratedMana(this));
+					_generatedManaArr = GeneratedManaParser.ParseGeneratedMana(this);
 					_generatedManaParsed = true;
 				}
-				
-				return _generatedMana;
+
+				return _generatedManaArr;
 			}
 			private set
 			{
 				_generatedManaParsed = true;
-				_generatedMana = value;
+				_generatedManaArr = value;
 			}
 		}
 
@@ -649,9 +652,7 @@ namespace Mtgdb.Dal
 			}
 
 			if (cardPatch.GeneratedMana != null)
-			{
-				GeneratedMana = cardPatch.GeneratedMana;
-			}
+				GeneratedManaArr = cardPatch.GeneratedMana;
 
 			if (cardPatch.FlipDuplicate)
 				Remove = TextEn != OriginalText;
@@ -668,6 +669,9 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private string _generatedMana;
+
+		[JsonIgnore]
+		private IList<string> _generatedManaArr;
 
 		[JsonIgnore]
 		private Dictionary<string, LegalityNote> _legalityByFormat;

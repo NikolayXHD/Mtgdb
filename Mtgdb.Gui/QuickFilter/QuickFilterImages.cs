@@ -9,7 +9,7 @@ namespace Mtgdb.Gui
 		{
 			formMain.FilterAbility.PropertyImages = _ability;
 			formMain.FilterCmc.PropertyImages = _cmc;
-			formMain.FilterGeneratedMana.PropertyImages = _manaAbility;
+			formMain.FilterGeneratedMana.PropertyImages = _manaGenerated;
 			formMain.FilterManaAbility.PropertyImages = _manaAbility;
 			formMain.FilterManaCost.PropertyImages = _manaCost;
 			formMain.FilterManager.PropertyImages = _filterManager;
@@ -71,6 +71,20 @@ namespace Mtgdb.Gui
 			ResourcesCost.t,
 			ResourcesCost.q,
 			ResourcesCost.x,
+			ResourcesCost.na
+		};
+
+		private static readonly Bitmap[] _manaGenerated =
+		{
+			ResourcesCost.w,
+			ResourcesCost.u,
+			ResourcesCost.b,
+			ResourcesCost.r,
+			ResourcesCost.g,
+			ResourcesCost.c,
+			ResourcesCost.any,
+			ResourcesCost.s,
+			ResourcesCost.e,
 			ResourcesCost.na
 		};
 

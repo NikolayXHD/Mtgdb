@@ -55,11 +55,12 @@ namespace Mtgdb.Gui
 		private static void mtgjsonFileUpdated()
 		{
 			var luceneSearcher = _kernel.Get<LuceneSearcher>();
+			var keywordSearcher = _kernel.Get<KeywordSearcher>();
 
 			luceneSearcher.InvalidateIndex();
 			luceneSearcher.InvalidateSpellcheckerIndex();
 
-			_kernel.Get<KeywordSearcher>().InvalidateIndex();
+			keywordSearcher.InvalidateIndex();
 		}
 
 		private static void beginInstall()

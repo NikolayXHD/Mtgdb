@@ -312,6 +312,7 @@
     <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />
     <Content Include="Resources\Annihilator.png" />
+    <None Include="Resources\any.png" />
     <Content Include="Resources\Attacks each turn.png" />
     <Content Include="Resources\Box_48.png" />
     <Content Include="Resources\Cant be blocked.png" />

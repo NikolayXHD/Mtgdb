@@ -14,10 +14,12 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.16 normal index directory instead of json
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.16");
+			// 0.18 generated mana of any color
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.18");
 			_version.Directory.AddPath("keywords.json");
 		}
+
+		public string Directory => _version.Directory;
 
 		public void Load(CardRepository repository)
 		{
@@ -27,7 +29,7 @@ namespace Mtgdb.Dal
 			IsLoading = true;
 
 			if (_version.IsUpToDate)
-				_index = FSDirectory.Open(_version.Directory);
+				_index = new RAMDirectory(FSDirectory.Open(_version.Directory), IOContext.READ_ONCE);
 			else
 				_index = createKeywordsFrom(repository);
 
@@ -89,7 +91,7 @@ namespace Mtgdb.Dal
 			return value.ToLowerInvariant();
 		}
 
-		private FSDirectory createKeywordsFrom(CardRepository repository)
+		private RAMDirectory createKeywordsFrom(CardRepository repository)
 		{
 			var keywordsList = new List<CardKeywords>();
 
@@ -112,9 +114,8 @@ namespace Mtgdb.Dal
 
 			_version.CreateDirectory();
 
-			var index = FSDirectory.Open(_version.Directory);
-
-			using (var writer = new IndexWriter(index, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
+			var fsIndex = FSDirectory.Open(_version.Directory);
+			using (var writer = new IndexWriter(fsIndex, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
 				foreach (var keyword in keywordsList)
 				{
 					var doc = keyword.ToDocument();
@@ -123,6 +124,7 @@ namespace Mtgdb.Dal
 
 			_version.SetIsUpToDate();
 
+			var index = new RAMDirectory(fsIndex, IOContext.READ_ONCE);
 			return index;
 		}
 
@@ -145,7 +147,7 @@ namespace Mtgdb.Dal
 
 
 		private readonly IndexVersion _version;
-		private FSDirectory _index;
+		private RAMDirectory _index;
 		private IndexSearcher _searcher;
 		private DirectoryReader _indexReader;
 	}
