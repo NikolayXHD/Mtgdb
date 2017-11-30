@@ -16,8 +16,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.15 added snow mana to GeneratedMana field
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.15");
+			// 0.18 generated mana of any color
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.18");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
@@ -63,56 +63,61 @@ namespace Mtgdb.Dal.Index
 
 			var keywordAnalyzer = new KeywordAnalyzer();
 
-			TotalCards = repository.Cards.Count;
-			foreach (var card in repository.Cards)
+			TotalSets = repository.SetsByCode.Count;
+
+			foreach (var set in repository.SetsByCode.Values)
 			{
 				if (_abort)
 					break;
 
-				var doc = card.Document;
-
-				foreach (string fieldName in fields)
+				foreach (var card in set.Cards)
 				{
 					if (_abort)
 						break;
 
-					var docField = doc.GetField(fieldName.ToLowerInvariant());
+					var doc = card.Document;
 
-					if (docField == null)
-						continue;
+					foreach (string fieldName in fields)
+					{
+						if (_abort)
+							break;
 
-					bool isAnalyzed = DocumentFactory.NotAnalyzedFields.Contains(fieldName);
+						var docField = doc.GetField(fieldName.ToLowerInvariant());
 
-					var fieldAnalyzer = isAnalyzed
-						? keywordAnalyzer
-						: analyzer;
+						if (docField == null)
+							continue;
 
-					string value = docField.GetStringValue()?.ToLowerInvariant();
+						bool isAnalyzed = DocumentFactory.NotAnalyzedFields.Contains(fieldName);
 
-					if (string.IsNullOrEmpty(value))
-						continue;
+						var fieldAnalyzer = isAnalyzed
+							? keywordAnalyzer
+							: analyzer;
 
-					if (isAnalyzed && !indexedValues.Add(value) || !isAnalyzed && indexedWords.Contains(value))
-						continue;
-					
-					var tokenStream = fieldAnalyzer.GetTokenStream(fieldName, value);
+						string value = docField.GetStringValue()?.ToLowerInvariant();
 
-					tokenStream.Reset();
+						if (string.IsNullOrEmpty(value))
+							continue;
 
-					using (tokenStream)
-						while (tokenStream.IncrementToken())
-						{
-							var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
-							if (indexedWords.Add(term))
-								spellchecker.IndexWord(term);
-						}
+						if (isAnalyzed && !indexedValues.Add(value) || !isAnalyzed && indexedWords.Contains(value))
+							continue;
+
+						var tokenStream = fieldAnalyzer.GetTokenStream(fieldName, value);
+
+						tokenStream.Reset();
+
+						using (tokenStream)
+							while (tokenStream.IncrementToken())
+							{
+								var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
+								if (indexedWords.Add(term))
+									spellchecker.IndexWord(term);
+							}
+					}
 				}
 
-				IndexedCards++;
-				IsLoading = IndexedCards < TotalCards;
-
-				if (IndexedCards % 9 == 0 || IndexedCards == TotalCards)
-					IndexingProgress?.Invoke();
+				IndexedSets++;
+				IsLoading = IndexedSets < TotalSets;
+				IndexingProgress?.Invoke();
 			}
 
 			spellchecker.EndIndex();
@@ -365,8 +370,8 @@ namespace Mtgdb.Dal.Index
 
 		public event Action IndexingProgress;
 
-		public int IndexedCards { get; private set; }
-		public int TotalCards { get; private set; }
+		public int IndexedSets { get; private set; }
+		public int TotalSets { get; private set; }
 
 		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
 

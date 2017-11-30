@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.15 new generated mana patterns
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.15");
+			// 0.18 generated mana of any color
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.18");
 			Spellchecker = new LuceneSpellchecker();
 		}
 

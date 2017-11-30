@@ -37,31 +37,43 @@
 			"Text": "{T}: Add {C} to your mana pool."
 		},
 		"Doubling Cube": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
 		},
 		"Elemental Resonance": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
-		},
-		"Urborg, Tomb of Yawgmoth": {
-			"GeneratedMana": "{B}"
-		},
-		"Mons's Goblin Waiters": {
-			"GeneratedMana": "{R}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
 		},
 		"Ice Cauldron": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
 		},
 		"Jeweled Amulet": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
 		},
 		"Mana Reflection": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
 		},
 		"Drain Power": {
-			"GeneratedMana": "{W}{U}{B}{R}{G}"
+			"GeneratedMana": [
+				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+			]
+		},
+		"Urborg, Tomb of Yawgmoth": {
+			"GeneratedMana": [ "{B}" ]
+		},
+		"Mons's Goblin Waiters": {
+			"GeneratedMana": [ "{R}" ]
 		},
 		"Kruphix, God of Horizons": {
-			"GeneratedMana": "{C}"
+			"GeneratedMana": [ "{C}" ]
 		},
 		"Jaraku the Interloper": {
 			"FlipDuplicate": true

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
+using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using NLog;
 using File = System.IO.File;
@@ -15,7 +16,8 @@ namespace Mtgdb.Downloader
 		public Installer(
 			AppSourceConfig appSourceConfig, 
 			MtgjsonSourceConfig mtgjsonSourceConfig,
-			LuceneSearcher luceneSearcher)
+			LuceneSearcher luceneSearcher,
+			KeywordSearcher keywordSearcher)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
@@ -43,7 +45,8 @@ namespace Mtgdb.Downloader
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
 				luceneSearcher.SearcherDirectory.AddPath("*.*"),
-				luceneSearcher.SpellcheckerDirectory.AddPath("*.*")
+				luceneSearcher.SpellcheckerDirectory.AddPath("*.*"),
+				keywordSearcher.Directory.AddPath("*.*")
 			};
 		}
 

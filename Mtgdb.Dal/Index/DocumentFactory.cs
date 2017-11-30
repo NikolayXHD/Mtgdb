@@ -239,8 +239,8 @@ namespace Mtgdb.Dal.Index
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
 			// Tested
-			if (!string.IsNullOrEmpty(card.GeneratedMana))
-				doc.addTextField(nameof(card.GeneratedMana), card.GeneratedMana);
+			foreach (var mana in card.GeneratedManaArr)
+				doc.addTextField(nameof(card.GeneratedMana), mana);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.ManaCost))

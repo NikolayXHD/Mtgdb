@@ -1,16 +1,17 @@
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Mtgdb.Dal
 {
 	internal static class GeneratedManaParser
 	{
-		public static string ParseGeneratedMana(Card c)
+		public static IList<string> ParseGeneratedMana(Card c)
 		{
 			var text = c.TextEn;
 
 			if (string.IsNullOrEmpty(text))
-				return string.Empty;
+				return _empty;
 
 			foreach (string harmfulExplanation in _harmfulExplanations)
 				text = text.Replace(harmfulExplanation, string.Empty);
@@ -18,7 +19,7 @@ namespace Mtgdb.Dal
 			bool[] matched = new bool[_symbols.Length];
 
 			if (_anyPatterns.Any(_ => _.IsMatch(text)))
-				matched[0] = matched[1] = matched[2] = matched[3] = matched[4] = true;
+				matched[0] = matched[1] = matched[2] = matched[3] = matched[4] = matched[6] = true;
 
 			foreach (var pattern in _specificPatterns)
 			{
@@ -42,14 +43,14 @@ namespace Mtgdb.Dal
 			}
 
 			if (matched.Contains(true))
-				matched[6] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
+				matched[7] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
 
 			if (_ePatterns.Any(_ => _.IsMatch(text)))
-				matched[7] = true;
-			var result = string.Concat(
+				matched[8] = true;
+			var result = 
 				Enumerable.Range(0, matched.Length)
 					.Where(i => matched[i])
-					.Select(i => _symbols[i]));
+					.Select(i => _symbols[i]).ToList();
 
 			return result;
 		}
@@ -87,8 +88,11 @@ namespace Mtgdb.Dal
 			"{R}",
 			"{G}",
 			"{C}",
+			"{any}",
 			"{S}",
 			"{E}"
 		};
+
+		private static readonly IList<string> _empty = new List<string>();
 	}
 }
