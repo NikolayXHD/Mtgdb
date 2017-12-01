@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,7 +18,6 @@ namespace Mtgdb.Gui
 
 		public FormMain(
 			UndoConfig undoConfig,
-			ViewConfig viewConfig,
 			CardRepository cardRepo,
 			ImageRepository imageRepo,
 			ImageCacheConfig imageCacheConfig,
@@ -40,6 +40,7 @@ namespace Mtgdb.Gui
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
 			_cardRepo = cardRepo;
+			_imageCache = imageCache;
 			_collectionModel = collectionModel;
 			_uiModel = uiModel;
 			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo, forgeSetRepo);
@@ -82,7 +83,7 @@ namespace Mtgdb.Gui
 			_toolTipController = tooltipController;
 			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
 
-			var formZoomCard = new FormZoom(_cardRepo, imageRepo, imageCache);
+			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageCache);
 
 			_scrollSubsystem = new ScrollSubsystem(_viewDeck, _viewCards);
 
@@ -99,7 +100,7 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_deckModel,
 				this,
-				imageCache);
+				_imageCache);
 
 			_deckEditingSubsystem = new DeckEditingSubsystem(
 				_viewCards,
@@ -128,7 +129,7 @@ namespace Mtgdb.Gui
 				_deckModel,
 				_quickFilterFacade,
 				_legalitySubsystem,
-				imageCache);
+				_imageCache);
 
 
 			_printingSubsystem = new PrintingSubsystem(imageRepo, _cardRepo);
@@ -139,8 +140,9 @@ namespace Mtgdb.Gui
 			_buttonSubsystem = new ButtonSubsystem();
 			DeckZone = Zone.Main;
 
-			applyDisplayConfig(viewConfig, imageCache);
 			scale();
+
+			applyCardSize(_imageCache);
 
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
@@ -151,22 +153,48 @@ namespace Mtgdb.Gui
 			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
 		}
 
-		private void applyDisplayConfig(ViewConfig viewConfig, ImageCache imageCache)
+		private void applyCardSize(ImageCache imageCache)
 		{
-			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards =
-				viewConfig.AllowPartialCards != false;
+			_viewCards.SetImageSize(imageCache.CardSize);
+			_viewDeck.SetImageSize(imageCache.CardSize);
+			_layoutViewDeck.Height = imageCache.CardSize.Height;
+		}
 
-			var cardSize = imageCache.CardSize;
+		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
+		{
+			setDeckVisibility(!_buttonHideDeck.Checked);
+		}
 
-			if (viewConfig.ShowTextualFields == false)
-				_viewCards.HideTextualFields();
+		private void buttonHideTextChanged(object sender, EventArgs e)
+		{
+			_viewCards.TextualFieldsVisible =!_buttonHideText.Checked;
+			applyCardSize(_imageCache);
+			_viewCards.RefreshData();
+			_viewDeck.RefreshData();
+		}
 
-			_viewCards.SetImageSize(cardSize);
-			_viewDeck.SetImageSize(cardSize);
-			_layoutViewDeck.Height = cardSize.Height;
+		private void buttonPartialCardsChanged(object sender, EventArgs e)
+		{
+			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards = !_buttonHidePartialCards.Checked;
+			_viewCards.RefreshData();
+			_viewDeck.RefreshData();
+		}
 
-			if (viewConfig.ShowDeck == false)
+		private void setDeckVisibility(bool deckVisible)
+		{
+			int row = _layout.GetRow(_viewDeck.Control);
+
+			if (deckVisible)
+			{
+				_viewDeck.Control.Visible = true;
+				_layout.RowStyles[row].SizeType = SizeType.AutoSize;
+			}
+			else
+			{
+				_layout.RowStyles[row].Height = 0;
+				_layout.RowStyles[row].SizeType = SizeType.Absolute;
 				_viewDeck.Control.Visible = false;
+			}
 		}
 
 		private void scale()
@@ -179,7 +207,6 @@ namespace Mtgdb.Gui
 
 			_panelIconSearch.ScaleDpi();
 			_panelIconLegality.ScaleDpi();
-			_buttonShowDuplicates.ScaleDpi();
 			_panelIconStatusScrollDeck.ScaleDpi();
 			_panelIconStatusScrollCards.ScaleDpi();
 			_panelIconStatusSets.ScaleDpi();
@@ -190,9 +217,13 @@ namespace Mtgdb.Gui
 			_panelIconStatusFilterDeck.ScaleDpi();
 			_panelIconStatusFilterLegality.ScaleDpi();
 
+			_buttonShowDuplicates.ScaleDpi();
 			_buttonSampleHandNew.ScaleDpi();
 			_buttonSampleHandDraw.ScaleDpi();
 			_buttonSampleHandMulligan.ScaleDpi();
+			_buttonHideDeck.ScaleDpi();
+			_buttonHidePartialCards.ScaleDpi();
+			_buttonHideText.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
@@ -218,7 +249,7 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaCost.Margin = _buttonExcludeManaAbility.Margin =
 				new Padding(0, 0, modeButtonSize.Width, 0);
 
-			_layout.RowStyles[0].Height = _layout.RowStyles[1].Height = modeButtonSize.Height;
+			_layoutRight.RowStyles[0].Height = _layoutRight.RowStyles[1].Height = modeButtonSize.Height;
 
 			var searchToSortMargin =
 				_layoutViewCards.SearchOptions.ButtonMargin.Width -
@@ -347,10 +378,12 @@ namespace Mtgdb.Gui
 
 			_findEditorSelectionSubsystem.SubsribeToEvents();
 
+			_buttonHideDeck.CheckedChanged += buttonDeckHideChanged;
+			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
+			_buttonHideText.CheckedChanged += buttonHideTextChanged;
+
 			_eventsSubscribed = true;
 		}
-
-
 
 		private void unsubscribeFromEvents()
 		{
@@ -419,6 +452,10 @@ namespace Mtgdb.Gui
 			_buttonSampleHandDraw.Click -= sampleHandDraw;
 
 			_findEditorSelectionSubsystem.UnsubsribeFromEvents();
+
+			_buttonHideDeck.CheckedChanged -= buttonDeckHideChanged;
+			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
+			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
 		}
 
 		private Deck _requiredDeck;
@@ -432,6 +469,7 @@ namespace Mtgdb.Gui
 		private readonly bool _keywordsIndexUpToDate;
 
 		private readonly CardRepository _cardRepo;
+		private readonly ImageCache _imageCache;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
 		private readonly Evaluators _evaluators;

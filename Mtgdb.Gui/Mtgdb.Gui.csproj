@@ -219,7 +219,6 @@
     </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
     <Compile Include="SearchString\SearchStringState.cs" />
-    <Compile Include="[ Infrastructure ]\ViewConfig.cs" />
     <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
     <EmbeddedResource Include="FormMain\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -345,6 +344,7 @@
     <None Include="Resources\i.png" />
     <None Include="Resources\hr.png" />
     <None Include="Resources\hw.png" />
+    <None Include="Resources\hidden_40.png" />
     <Content Include="Resources\image_file_32.png" />
     <Content Include="Resources\Indestructible.png" />
     <None Include="Resources\index_16.png" />
@@ -361,6 +361,8 @@
     <None Include="Resources\paste_16.png" />
     <None Include="Resources\paste_32.png" />
     <None Include="Resources\print_16.png" />
+    <None Include="Resources\partial_card_enabled_40.png" />
+    <None Include="Resources\partial_card_disabled_40.png" />
     <Content Include="Resources\print_32.png" />
     <None Include="Resources\properties_16.png" />
     <Content Include="Resources\properties_32.png" />
@@ -378,9 +380,12 @@
     <Content Include="Resources\Scry.png" />
     <Content Include="Resources\search_48.png" />
     <Content Include="Resources\search_hovered.png" />
+    <None Include="Resources\shown_40.png" />
     <Content Include="Resources\Shroud.png" />
     <Content Include="Resources\Skulk.png" />
     <None Include="Resources\tooltip_16.png" />
+    <None Include="Resources\text_disabled_40.png" />
+    <None Include="Resources\text_enabled_40.png" />
     <Content Include="Resources\Trample.png" />
     <Content Include="Resources\Transform.png" />
     <None Include="Resources\trash_16.png" />
@@ -389,7 +394,7 @@
     <Content Include="Resources\Undying.png" />
     <Content Include="Resources\Vigilance.png" />
     <Content Include="Resources\zoom_48.png" />
-    <None Include="Resources\exclude_shown_24.png" />
+    <None Include="Resources\exclude_shown_40.png" />
     <None Include="Resources\manatext_25.png" />
     <None Include="Resources\manacost_25.png" />
     <None Include="Resources\Box_40.png" />
@@ -481,9 +486,9 @@
     <None Include="Resources\ava.jpg" />
     <None Include="Resources\redo_32.png" />
     <None Include="Resources\help_32.png" />
-    <None Include="Resources\exclude_hidden_24.png" />
-    <None Include="Resources\include_plus_24.png" />
-    <None Include="Resources\exclude_minus_24.png" />
+    <None Include="Resources\exclude_hidden_40.png" />
+    <None Include="Resources\include_plus_40.png" />
+    <None Include="Resources\exclude_minus_40.png" />
     <None Include="Resources\e.png" />
     <None Include="Resources\g.png" />
     <None Include="Resources\gp.png" />

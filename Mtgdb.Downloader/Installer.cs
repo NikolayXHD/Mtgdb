@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
 using Mtgdb.Dal;
@@ -102,7 +103,10 @@ namespace Mtgdb.Downloader
 		public string GetAppVersionInstalled()
 		{
 			if (!File.Exists(_appInstalledVersionFile))
-				return null;
+			{
+				string versionFromAssembly = getVersionFromAssembly();
+				return versionFromAssembly;
+			}
 
 			var result = File.ReadAllText(_appInstalledVersionFile);
 			return result;
@@ -260,6 +264,12 @@ namespace Mtgdb.Downloader
 			string iconPath = currentBin.AddPath("mtg64.ico");
 
 			createApplicationShortcut(shortcutPath, execPath, iconPath);
+		}
+
+		private static string getVersionFromAssembly()
+		{
+			string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+			return "Mtgdb.Gui.v" + version + ".zip";
 		}
 
 		public void DisplayNews()
