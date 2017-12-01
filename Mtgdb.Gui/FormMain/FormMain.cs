@@ -75,6 +75,11 @@ namespace Mtgdb.Gui
 				control.PerformLayout();
 			}
 
+			int width = FilterManaCost.Width + FilterManaCost.Margin.Left + FilterManaAbility.Width;
+			_layoutRight.Left = _layoutRight.Right - width;
+			_layoutRight.Width = width;
+			_layout.Width = _layoutRight.Left;
+
 			ResumeLayout(false);
 			PerformLayout();
 

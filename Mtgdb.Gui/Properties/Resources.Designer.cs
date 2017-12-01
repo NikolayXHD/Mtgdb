@@ -303,6 +303,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hidden_40 {
+            get {
+                object obj = ResourceManager.GetObject("hidden_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap image_file_16 {
             get {
                 object obj = ResourceManager.GetObject("image_file_16", resourceCulture);
@@ -503,6 +513,26 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap partial_card_disabled_40 {
+            get {
+                object obj = ResourceManager.GetObject("partial_card_disabled_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap partial_card_enabled_40 {
+            get {
+                object obj = ResourceManager.GetObject("partial_card_enabled_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap paste_16 {
             get {
                 object obj = ResourceManager.GetObject("paste_16", resourceCulture);
@@ -693,6 +723,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap shown_40 {
+            get {
+                object obj = ResourceManager.GetObject("shown_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sort_asc_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_asc_hovered", resourceCulture);
@@ -716,6 +756,26 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap sort_none_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_none_hovered", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap text_disabled_40 {
+            get {
+                object obj = ResourceManager.GetObject("text_disabled_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap text_enabled_40 {
+            get {
+                object obj = ResourceManager.GetObject("text_enabled_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

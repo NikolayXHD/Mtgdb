@@ -13,7 +13,6 @@ namespace Mtgdb.Gui
 			Kernel.BindConfig<UndoConfig>();
 			Kernel.BindConfig<SmallConfig>();
 			Kernel.BindConfig<ZoomedConfig>();
-			Kernel.BindConfig<ViewConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException
 			Kernel.Bind<DownloaderSubsystem>()

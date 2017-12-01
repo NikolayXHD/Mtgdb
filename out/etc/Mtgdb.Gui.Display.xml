@@ -21,20 +21,6 @@
 	-->
 	
 	<!--
-		=== View tag ===
-		* AllowPartialCards
-		The purpose is to use window space effectively when the  window size is small.
-		If you want to see only cards that completely fit within the window set the
-		option value to "False".
-		
-		* ShowTextualFields
-		Set this option to "False" to display only card images in search result.
-		With default value "True" textual card details are displayed in search result 
-		alongside the card image.
-		
-		* Show deck
-		Set this option to "False" to hide the deck area in the bottow of the window.
-		
 		=== NormalCardSize tag ==
 		A size of card image shown in search result
 		
@@ -43,12 +29,6 @@
 	-->
 	
 	<!--
-	<View
-		AllowPartialCards="True"
-		ShowTextualFields="True"
-		ShowDeck="True"
-	/>
-	
 	<NormalCardSize Width="446" Height="622" />
 	
 	<ZoomCardSize Width="892" Height="1244" />

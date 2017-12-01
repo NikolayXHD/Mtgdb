@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -200,24 +201,25 @@ namespace Mtgdb.Controls
 			result.Size = ProbeCard.Size;
 			result.Font = ProbeCard.Font;
 
-			var probeEnumerator = ProbeCard.Fields.GetEnumerator();
-			var enumerator = result.Fields.GetEnumerator();
-
-			while (probeEnumerator.MoveNext())
+			using (var probeEnumerator = ProbeCard.Fields.GetEnumerator())
+			using (var enumerator = result.Fields.GetEnumerator())
 			{
-				enumerator.MoveNext();
+				while (probeEnumerator.MoveNext())
+				{
+					enumerator.MoveNext();
 
-				var probeField = probeEnumerator.Current;
-				var field = enumerator.Current;
+					var probeField = probeEnumerator.Current;
+					var field = enumerator.Current;
 
-				field.Location = probeField.Location;
-				field.Size = probeField.Size;
-				field.Font = probeField.Font;
-				field.BackColor = probeField.BackColor;
-				field.ForeColor = probeField.ForeColor;
-				field.HorizontalAlignment = probeField.HorizontalAlignment;
+					field.Location = probeField.Location;
+					field.Size = probeField.Size;
+					field.Font = probeField.Font;
+					field.BackColor = probeField.BackColor;
+					field.ForeColor = probeField.ForeColor;
+					field.HorizontalAlignment = probeField.HorizontalAlignment;
 
-				updateSort(field);
+					updateSort(field);
+				}
 			}
 
 			result.Invalid += cardInvalidated;
@@ -598,11 +600,6 @@ namespace Mtgdb.Controls
 			return value;
 		}
 
-		public void InvalidateLayout()
-		{
-			Cards.Clear();
-		}
-
 		public void ApplyCardIndex()
 		{
 			int columnsCount = getColumnsCount();
@@ -682,7 +679,9 @@ namespace Mtgdb.Controls
 			{
 				_layoutControlType = value;
 				ProbeCard = createProbeCard();
-				InvalidateLayout();
+				Cards.Clear();
+				Invalidate();
+				OnLayout(new LayoutEventArgs(this, nameof(LayoutControlType)));
 			}
 		}
 
@@ -694,6 +693,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_cardInterval = value;
+				Invalidate();
 				OnLayout(new LayoutEventArgs(this, nameof(CardInterval)));
 			}
 		}
@@ -706,6 +706,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_allowPartialCards = value;
+				Invalidate();
 				OnLayout(new LayoutEventArgs(this, nameof(AllowPartialCards)));
 			}
 		}
@@ -867,7 +868,7 @@ namespace Mtgdb.Controls
 			if (m.Msg == 0x0100)
 			{
 				var keyCode = m.WParam.ToInt32();
-				if (keyCode < NavigationKeys[0] || keyCode > NavigationKeys[NavigationKeys.Length - 1])
+				if (keyCode < _navigationKeys[0] || keyCode > _navigationKeys[_navigationKeys.Length - 1])
 					return false;
 			}
 
@@ -883,7 +884,7 @@ namespace Mtgdb.Controls
 			return Handle.Equals(ControlHelpers.WindowFromPoint(Cursor.Position));
 		}
 
-		private static readonly int[] NavigationKeys = 
+		private static readonly int[] _navigationKeys = 
 		{
 			0x21, // pgup
 			0x22, // pgdn

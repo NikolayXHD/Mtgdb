@@ -184,12 +184,30 @@ namespace Mtgdb.Gui
 				(int) (size.Height / ((float) cardSize.Height / cardSize.Width)),
 				size.Height);
 
-			_view.InvalidateLayout();
+			_view.PerformLayout();
 		}
 
-		public void HideTextualFields()
+		public bool TextualFieldsVisible
 		{
-			_view.LayoutControlType = typeof (DeckLayout);
+			get { return _view.LayoutControlType == typeof(CardLayout); }
+			set
+			{
+				var layout = value ? typeof(CardLayout) : typeof(DeckLayout);
+				_view.LayoutControlType = layout;
+
+				var interval = _view.CardInterval;
+
+				if (value)
+					_view.CardInterval = new Size(interval.Height * 2, interval.Height);
+				else
+					_view.CardInterval = new Size(interval.Height, interval.Height);
+
+				var threshold = _view.PartialCardsThreshold;
+
+				_view.PartialCardsThreshold = new Size(
+					_view.ProbeCard.Width * threshold.Height / _view.ProbeCard.Height,
+					threshold.Height);
+			}
 		}
 
 		public string GetFieldText(int cardIndex, string fieldName)

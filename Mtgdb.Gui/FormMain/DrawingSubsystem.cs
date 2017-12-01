@@ -258,6 +258,10 @@ namespace Mtgdb.Gui
 		private void setHighlightMatches(object sender, int rowHandle)
 		{
 			var view = getView(sender);
+
+			if (!view.TextualFieldsVisible)
+				return;
+
 			var card = (Card) view.GetRow(rowHandle);
 
 			if (card == null)

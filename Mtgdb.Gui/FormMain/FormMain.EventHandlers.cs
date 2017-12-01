@@ -486,6 +486,30 @@ namespace Mtgdb.Gui
 					Resources.include_plus_24.TransformColors(sat, 1f),
 					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
 					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonHideDeck,
+				new ButtonImages(
+					Resources.shown_40,
+					Resources.hidden_40,
+					Resources.shown_40.TransformColors(brightness: 0.1f),
+					Resources.hidden_40.TransformColors(brightness: 0.1f),
+					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonHidePartialCards,
+				new ButtonImages(
+					Resources.partial_card_enabled_40,
+					Resources.partial_card_disabled_40,
+					Resources.partial_card_enabled_40.TransformColors(brightness: 0.1f),
+					Resources.partial_card_disabled_40.TransformColors(brightness: 0.1f),
+					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonHideText,
+				new ButtonImages(
+					Resources.text_enabled_40,
+					Resources.text_disabled_40,
+					Resources.text_enabled_40.TransformColors(brightness: 0.1f),
+					Resources.text_disabled_40.TransformColors(brightness: 0.1f),
+					areImagesDoubleSized: true));
 		}
 
 
