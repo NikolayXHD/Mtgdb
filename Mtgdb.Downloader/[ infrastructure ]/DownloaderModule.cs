@@ -23,6 +23,10 @@ namespace Mtgdb.Downloader
 				.ToSelf()
 				.InSingletonScope();
 
+			Kernel.Bind<NewsService>()
+				.ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<UpdateForm>().ToSelf();
 
 			Func<UpdateForm> downloaderFormFactory = () => Kernel.Get<UpdateForm>();
