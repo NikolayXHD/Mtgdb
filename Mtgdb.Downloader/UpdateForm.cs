@@ -42,6 +42,7 @@ namespace Mtgdb.Downloader
 			Installer installer,
 			ImageDownloader imageDownloader,
 			ImageDownloadProgressReader imageDownloadProgressReader,
+			NewsService newsService,
 			PriceDownloader priceDownloader,
 			PriceRepository priceRepository)
 			:this()
@@ -49,6 +50,7 @@ namespace Mtgdb.Downloader
 			_installer = installer;
 			_imageDownloader = imageDownloader;
 			_imageDownloadProgressReader = imageDownloadProgressReader;
+			_newsService = newsService;
 			_priceDownloader = priceDownloader;
 			_priceRepository = priceRepository;
 
@@ -92,7 +94,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
 			
-			_installer.DisplayNews();
+			_newsService.DisplayNews();
 		}
 
 		private void closing(object sender, CancelEventArgs e)
@@ -133,8 +135,8 @@ namespace Mtgdb.Downloader
 
 			ThreadPool.QueueUserWorkItem(_ =>
 			{
-				_installer.FetchNews(repeatViewed: true);
-				_installer.DisplayNews();
+				_newsService.FetchNews(repeatViewed: true);
+				_newsService.DisplayNews();
 
 				setButtonsEnabled(true);
 			});
@@ -552,6 +554,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly Installer _installer;
 		private readonly ImageDownloader _imageDownloader;
 		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
+		private readonly NewsService _newsService;
 		private readonly PriceDownloader _priceDownloader;
 		private readonly PriceRepository _priceRepository;
 		private readonly VersionComparer _versionComparer = new VersionComparer();

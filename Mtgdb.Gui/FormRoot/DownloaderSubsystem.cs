@@ -13,11 +13,11 @@ namespace Mtgdb.Gui
 		public DownloaderSubsystem(
 			SuggestImageDownloaderConfig config,
 			UpdateForm updateForm,
-			Installer installer)
+			NewsService newsService)
 		{
 			_config = config;
 			_updateForm = updateForm;
-			_installer = installer;
+			_newsService = newsService;
 		}
 
 		public void CalculateProgress()
@@ -53,12 +53,12 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		public void FetchNews(bool repeatViewed) => _installer.FetchNews(repeatViewed);
-		public bool NewsLoaded => _installer.NewsLoaded;
-		public bool HasUnreadNews => _installer.HasUnreadNews;
+		public void FetchNews(bool repeatViewed) => _newsService.FetchNews(repeatViewed);
+		public bool NewsLoaded => _newsService.NewsLoaded;
+		public bool HasUnreadNews => _newsService.HasUnreadNews;
 
 		private readonly SuggestImageDownloaderConfig _config;
 		private readonly UpdateForm _updateForm;
-		private readonly Installer _installer;
+		private readonly NewsService _newsService;
 	}
 }
