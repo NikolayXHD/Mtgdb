@@ -1,7 +1,29 @@
 # Mtgdb.Gui
-a Windows desktop program to search MTG cards and build decks
+
+[Download link](http://goo.gl/LuC6ce)
+
+[Forum thread](http://goo.gl/VXv71n) to get support or sumbit your feedback
+
+[Wiki](https://github.com/NikolayXHD/Mtgdb/wiki)
 
 [![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)
+
+## Overview
+
+**Mtgdb.Gui** is a *free* and *opensource* **Windows** application to help **Magic the Gathering** players build
+decks. Card search features are well-thought, powerful and intutive. Users may limit the search to the cards
+from their own collection.
+
+Mtgdb.Gui supports several ways to input decks and collections. Some of them are blazingly fast like *drag-n-drop* as well as *copy* and *paste* operations from other applications or websites.
+
+Decks can be saved in various formats compatible with other MTG-related applications such as
+Magic the Gathering Online, Forge or XMage.
+
+Graphical diagrams give you a high-level understanding of what is your current workset like.
+The simplest example of a diagram is *mana curve*.
+
+You can analyze your deck or collection from different angles by *building your own diagram*. 
+It is conceptually the same as building *pivot table* or *pivot diagram* in Excel.
 
 ## Mtgdb.Controls project
 Most non-standard WinForms controls used in Mtgdb.Gui were separated into a
@@ -24,3 +46,11 @@ You type a search query in [Lucene query language](https://lucene.apache.org/cor
 The query editor **highlights query syntax** and gives you **intellisense** when hitting `Ctrl`+`Space`
 
 [![search intellisense](https://github.com/NikolayXHD/Mtgdb/blob/master/out/help/l/search_intellisense.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/output/help/l/search_intellisense.jpg?raw=true)
+
+## SEO phrases
+
+The phrases below are to make this page more visible to search engines
+
+###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) advanced card search in card database
+###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) deck building and deck analisys
+###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) inventory tracking collection management
