@@ -121,7 +121,6 @@
     <Compile Include="Price\PriceValues.cs" />
     <Compile Include="RegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
-    <Compile Include="[ infrastructure ]\SmallConfig.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
     <Compile Include="ImageCache\BmpFrameDetector.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="[ infrastructure ]\ZoomedConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

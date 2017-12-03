@@ -10,7 +10,9 @@ namespace Mtgdb.Gui
 			InitializeComponent();
 
 			_fieldImage.FieldName = nameof(Card.Image);
+
 			_fieldImage.AllowSort = false;
+			_fieldImage.AllowSearch = false;
 
 			SubscribeToFieldEvents();
 		}

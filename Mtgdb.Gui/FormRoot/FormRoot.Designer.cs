@@ -83,7 +83,6 @@ namespace Mtgdb.Gui
 			this._labelDonate = new System.Windows.Forms.Label();
 			this._menuConfig = new Mtgdb.Controls.BorderedPanel();
 			this._layoutConfig = new System.Windows.Forms.TableLayoutPanel();
-			this._buttonMenuDisplaySettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuGeneralSettings = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonPaste = new Mtgdb.Controls.CustomCheckBox();
 			this._menuPaste = new Mtgdb.Controls.BorderedPanel();
@@ -1039,7 +1038,7 @@ namespace Mtgdb.Gui
 			this._menuConfig.Controls.Add(this._layoutConfig);
 			this._menuConfig.Location = new System.Drawing.Point(663, 198);
 			this._menuConfig.Name = "_menuConfig";
-			this._menuConfig.Size = new System.Drawing.Size(189, 56);
+			this._menuConfig.Size = new System.Drawing.Size(189, 29);
 			this._menuConfig.TabIndex = 30;
 			this._menuConfig.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -1051,35 +1050,15 @@ namespace Mtgdb.Gui
 			this._layoutConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._layoutConfig.ColumnCount = 1;
 			this._layoutConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutConfig.Controls.Add(this._buttonMenuDisplaySettings, 0, 1);
 			this._layoutConfig.Controls.Add(this._buttonMenuGeneralSettings, 0, 0);
 			this._layoutConfig.Location = new System.Drawing.Point(1, 1);
 			this._layoutConfig.Margin = new System.Windows.Forms.Padding(1);
 			this._layoutConfig.Name = "_layoutConfig";
-			this._layoutConfig.RowCount = 2;
+			this._layoutConfig.RowCount = 1;
 			this._layoutConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutConfig.Size = new System.Drawing.Size(187, 54);
+			this._layoutConfig.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this._layoutConfig.Size = new System.Drawing.Size(187, 27);
 			this._layoutConfig.TabIndex = 39;
-			// 
-			// _buttonMenuDisplaySettings
-			// 
-			this._buttonMenuDisplaySettings.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonMenuDisplaySettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._buttonMenuDisplaySettings.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
-			this._buttonMenuDisplaySettings.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonMenuDisplaySettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuDisplaySettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
-			this._buttonMenuDisplaySettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuDisplaySettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonMenuDisplaySettings.Location = new System.Drawing.Point(1, 28);
-			this._buttonMenuDisplaySettings.Margin = new System.Windows.Forms.Padding(1, 1, 0, 0);
-			this._buttonMenuDisplaySettings.Name = "_buttonMenuDisplaySettings";
-			this._buttonMenuDisplaySettings.Size = new System.Drawing.Size(186, 26);
-			this._buttonMenuDisplaySettings.TabIndex = 20;
-			this._buttonMenuDisplaySettings.TabStop = false;
-			this._buttonMenuDisplaySettings.Text = "Display settings";
-			this._buttonMenuDisplaySettings.UseVisualStyleBackColor = true;
 			// 
 			// _buttonMenuGeneralSettings
 			// 
@@ -1429,7 +1408,6 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonDonateYandexMoney;
 		private System.Windows.Forms.Label _labelDonate;
 		private Controls.BorderedPanel _menuConfig;
-		private Mtgdb.Controls.CustomCheckBox _buttonMenuDisplaySettings;
 		private Mtgdb.Controls.CustomCheckBox _buttonMenuGeneralSettings;
 		private Controls.CustomCheckBox _buttonMenuOpenDeck;
 		private Controls.CustomCheckBox _buttonMenuOpenCollection;

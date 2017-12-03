@@ -170,6 +170,52 @@ namespace Mtgdb.Gui
 
 
 
+		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
+		{
+			setDeckVisibility(!_buttonHideDeck.Checked);
+		}
+
+		private void buttonHideTextChanged(object sender, EventArgs e)
+		{
+			_viewCards.TextualFieldsVisible = !_buttonHideText.Checked;
+			applyCardSize(_imageCache);
+			_viewCards.RefreshData();
+			_viewDeck.RefreshData();
+		}
+
+		private void buttonPartialCardsChanged(object sender, EventArgs e)
+		{
+			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards = !_buttonHidePartialCards.Checked;
+			_viewCards.RefreshData();
+			_viewDeck.RefreshData();
+		}
+
+		private void setDeckVisibility(bool deckVisible)
+		{
+			SuspendLayout();
+
+			_viewDeck.Control.Visible = deckVisible;
+
+			ResumeLayout(false);
+			PerformLayout();
+		}
+
+		private void rightLayoutChanged(object sender, EventArgs e)
+		{
+			setPanelCostWidth();
+		}
+
+		private void setPanelCostWidth()
+		{
+			var cell = _layoutRight.GetCellPosition(_panelCostLeft);
+			var preferredSize = _panelCostLeft.GetPreferredSize(new Size(int.MaxValue, _panelCostLeft.Height));
+			_layoutRight.ColumnStyles[cell.Column].Width =
+				preferredSize.Width +
+				_panelCostLeft.Margin.Right +
+				_panelCostLeft.Margin.Left;
+		}
+
+
 		private void gridScrolled(LayoutView sender)
 		{
 			if (restoringSettings())

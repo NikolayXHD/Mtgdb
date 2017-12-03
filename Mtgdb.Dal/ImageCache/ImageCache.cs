@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Mtgdb.Controls;
-using Mtgdb.Gui;
 using NLog;
 
 namespace Mtgdb.Dal
@@ -12,14 +11,8 @@ namespace Mtgdb.Dal
 	{
 		public static readonly object SyncRoot = new object();
 
-		public ImageCache(ImageCacheConfig config, SmallConfig smallConfig, ZoomedConfig zoomedConfig)
+		public ImageCache(ImageCacheConfig config)
 		{
-			if (smallConfig.Width.HasValue && smallConfig.Height.HasValue)
-				_cardSize = new Size(smallConfig.Width.Value, smallConfig.Height.Value);
-
-			if (zoomedConfig.Width.HasValue && zoomedConfig.Height.HasValue)
-				_zoomedCardSize = new Size(zoomedConfig.Width.Value, zoomedConfig.Height.Value);
-
 			Capacity = config.GetCacheCapacity();
 		}
 
