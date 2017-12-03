@@ -823,9 +823,9 @@
 			// 
 			this._listBoxSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this._listBoxSuggest.FormattingEnabled = true;
-			this._listBoxSuggest.Location = new System.Drawing.Point(12, 94);
+			this._listBoxSuggest.Location = new System.Drawing.Point(12, 84);
 			this._listBoxSuggest.Name = "_listBoxSuggest";
-			this._listBoxSuggest.Size = new System.Drawing.Size(192, 119);
+			this._listBoxSuggest.Size = new System.Drawing.Size(204, 119);
 			this._listBoxSuggest.TabIndex = 9;
 			this._listBoxSuggest.TabStop = false;
 			// 
@@ -1046,8 +1046,8 @@
 			// FormMain
 			// 
 			this.ClientSize = new System.Drawing.Size(1641, 826);
-			this.Controls.Add(this._layoutRoot);
 			this.Controls.Add(this._listBoxSuggest);
+			this.Controls.Add(this._layoutRoot);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormMain";

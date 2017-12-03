@@ -30936,6 +30936,222 @@ c42f6160143416da2dacc2b6da7cb59b	USG\Wirecat.jpg
 2c82b3b6995b2fd0379fcf2eaca1d422	USG\Yawgmoth's Will.jpg
 4b95d12d0c0ccf4bf305e986eeb8f965	USG\Zephid's Embrace.jpg
 ce2f72feaf323db44b266442f9f3e85f	USG\Zephid.jpg
+88286267d0304460c365d2b3914d09c2	UST\accessories to murder.png
+cd93eb92adc6297130ddf166f6f3c9ae	UST\adorable kitten.png
+0894ea9cfded110242600f41dc621410	UST\aerial toastmaster.png
+84550d9d583fdc90e767306aa812a71c	UST\amateur auteur.png
+15051048367f146750055b4731f6b396	UST\angelic rocket.png
+0e3ed722ad03f59a311993ad7fc5acbd	UST\animate library.png
+f2932a96e83c822c6c5757b10708cf28	UST\applied aeronautics.png
+15ee9c4e9247db4f509578f19f5ccf32	UST\arms depot.png
+685e785eba502820568991d009d776a8	UST\as luck would have it.png
+eb7fd91f76419f266c366fe7323e8204	UST\auto-key.png
+ec2ab47917b455f17ddf7c27d418ec99	UST\baron von count.png
+8c233e97d64bb83247269c25cc58c34a	UST\beast in show.png
+c93230c5a9550fde9f86099ffa511f54	UST\bee-bee gun.png
+012247e90634d135009134a78755d95d	UST\better than one.png
+67be9fe0076a1e1a0450d64736ad5aae	UST\big boa constrictor.png
+c99125ad36aa6f2f8d7b20f87470b642	UST\blurry beeble.png
+2ce4b34a2ad9cf30a256d7e93a650935	UST\boomflinger.png
+33ed4e7622564fe33b0717775f8076dd	UST\border guardian.png
+4970af81dd2af8756d17bad758ded7fe	UST\box of free-range goblins.png
+e03f4c0ae7458b01aa63ea29242a4a57	UST\bumbling pangolin.png
+2806eec6b6a6678e84decceec79715b2	UST\buzz buggy.png
+0aa1522a5993fa6545da491bab83466e	UST\buzzing whack-a-doodle.png
+89603313e2a67502277f31b3b532dafe	UST\by gnome means.png
+2bc71132a00015a90488ec0d2db58170	UST\capital offense.png
+d2b3923d502fcd3b34b22577c6bbae4b	UST\chipper chopper.png
+c263bae0dca13d2f167dbea952e7f0f8	UST\chittering doom.png
+ca3e31d0492222c2ac5840007c41b88a	UST\chivalrous chevalier.png
+cb25bd5ec742d97b1d0f048e2894d56d	UST\clever combo.png
+351262541ca631df20670f5dae3feba1	UST\clock of doooooooooooom!.png
+c505187eb5e8cc764ab95ca5935f9895	UST\clocknapper.png
+27cfb3a49d849245d601623092c38a97	UST\cogmentor.png
+b5552a6abc6f0fbd2771cbc3f0ae1be4	UST\common iguana.png
+ea067f4945308e902acd8ebd20c0c5ef	UST\contraption cannon.png
+4501f230db092f2213685eedc80b9b4e	UST\crafty octopus.png
+752a3f4bdabfdea245b4e345c327f8a5	UST\cramped bunker.png
+fd0e86d874c608cece9f47de8160982b	UST\crow storm.png
+73df1cb1198831c2a36dbff602093d06	UST\curious killbot.png
+df733fe62c39eded9a5eecc57f9e99d2	UST\deadly poison sampler.png
+6c6977fbfab7d80e236b453b59e32dd0	UST\defective detective.png
+b4de9877d1cb741db965403aedea2e09	UST\dictation quillograph.png
+0a2197a5ab175a44a651519ebb9cabd9	UST\dirty rat.png
+dbfcb1625d6ccaea17bc406507a495e7	UST\dispatch dispensary.png
+e7e54fc4970d3aa4d393d5233645407e	UST\division table.png
+b6dab9b92844190ce069bde1b423382b	UST\do-it-yourself seraph.png
+4e9e3cd0cb6e48e3bd43debb7772c833	UST\dogsnail engine.png
+05ebe5d61c2da2f26bb06df41edff809	UST\dr. julius jumblemorph.png
+7a07a0b0b56a3c8bbc1f9acfaafb71d3	UST\druid of the sacred beaker.png
+d27996745e21a194d4cce45e67ac13c6	UST\dual doomsuits.png
+bbee8cddde22e3a16f8c237bb23e2a55	UST\duplication device.png
+852c750e89a34ff7f86041ced1ffae8d	UST\eager beaver.png
+85a7363eb2aa2f18badca0c139b91eed	UST\earl of squirrel.png
+c0162c0529d4804142b1a04c7e07ee15	UST\entirely normal armchair.png
+d8f3aac74cf4f49265c762e4a253ff98	UST\everythingamajig.png
+a4dfca484bd6e49473c3043b4c1b40aa	UST\extremely slow zombie.png
+5b2306ca60baf620c89b2d17ea5b51ed	UST\faerie aerie.png
+9d51d01b7300bc0a6345be1a0530bbe9	UST\feisty stegosaurus.png
+8dfdbd2c685689433087d364a3b158aa	UST\finders, keepers.png
+90433a5292125c60bc82cca6f51081ca	UST\first pick.png
+68dc3e3da55a171ad23edadf9f15a124	UST\five-finger discount.png
+281e0608cbe8fdc49b03bbc3fe6035e1	UST\forest.png
+4a609b564ca43cd1ca1df8cf732764e0	UST\garbage elemental.png
+99058f290f52762216bb31431dc333ec	UST\genetic recombinator.png
+0599aca0615ea003eba74443d21c6793	UST\gift horse.png
+6240a0635c738b92582d4e190f145ff7	UST\gimme five.png
+54bf405f92dd0525937df4ade1ba0a73	UST\gnome-made engine.png
+8d22e9cacbf6502051f321d48f6f24ba	UST\gnomeball machine.png
+ca9dfc34214f5c35e2de6c779127762f	UST\go to jail.png
+ee17a6d6b648ea6a3f0ef0fce5730360	UST\goblin haberdasher.png
+90c546ae8b5fae24a33d47cea6b36bd6	UST\goblin slingshot.png
+93a0a97ccf25813773e344e475a9b552	UST\graveyard busybody.png
+ade169479d4c5441485cfe49e0dbb544	UST\ground pounder.png
+1d1d0157e89f24b6fe71dff8a8e2b1c5	UST\grusilda, monster masher.png
+3433901ded9b3a329ca5cb3cb56fcc9b	UST\guest list.png
+d1abaed6f72e963cb2d11fb822489ad3	UST\half-kitten, half-.png
+e171424c3bbe25659b668c10da252fb5	UST\half-orc, half-.png
+2408d27bff7b68f514e297b68cb76526	UST\half-shark, half-.png
+ecfd35530c4451b8dbf9cadd759ed818	UST\half-squirrel, half-.png
+6bffc514eb5a0c19e8f2e2325c27d52d	UST\hammer helper.png
+1db08dcc389ca7ffc246cb71e34d695c	UST\hammer jammer.png
+70cdf4a346060ce9be7bac0b7f1e72fb	UST\hammerfest boomtacular.png
+af39dbd18e6384478b8ed5196ca5c582	UST\handy dandy clone machine.png
+c1db2750a420df88be265424b79ca3a7	UST\hangman.png
+3a109b4576e76bd03308787be0378d2d	UST\hard hat area.png
+691acc464ffecccfff85d2e280df9eb8	UST\hazmat suit (used).png
+f892eb41c7a7e8e53299442cb1833700	UST\head banger.png
+c5a56a164745fc80e4f5aefb69526757	UST\hoisted hireling.png
+707ce95f2bddbce063ba6af70f487e85	UST\hot fix.png
+4f41dbfacc8ad4149ba681d3dcb4e751	UST\humming-.png
+d6366034da2625e652295912e5645714	UST\hydradoodle.png
+2bf791ef9642b8f1fb150fbb176d952e	UST\hypnotic swirly disc.png
+58f104ee78ed19a0a7b0e7d0cf52c266	UST\incite insight.png
+bfcb6a3624b8dfa13c8460d6687b680b	UST\ineffable blessing.png
+63775d0e3861a39039b72018968a948e	UST\infinity elemental.png
+0c854a2c5d44ea27ddc7b9f6542382a4	UST\inflation station.png
+65b5a913aade89e718201784b452d5ac	UST\inhumaniac.png
+324cc879b5ef818896e885cd97a6bed8	UST\insufferable syphon.png
+667cd2cdd94617d2f49a3caae879a3bc	UST\island.png
+36e288a11c1193348581f1e8b373f559	UST\it that gets left hanging.png
+c8f5313234dded6bf98ea52fe9c84c0c	UST\jackknight.png
+af1aa05a25583593191b0207c21846ca	UST\jamming device.png
+c55fc1ef7ab417aa9a8ee69eea173946	UST\joyride rigger.png
+f4a1a61b1e468221e8deac6460ff2184	UST\just desserts.png
+316860443c05466baef7e6a5afb111d8	UST\kindly cognician.png
+bdc9f108ed7eeda765f38bc99fc4b5b7	UST\kindslaver.png
+111ae11b25bb98bf2124986cf16cdc6d	UST\knight of the kitchen sink.png
+f8486a588edefcf8203ebde43f42ae96	UST\knight of the widget.png
+7784d7f9d19012a2202ffb755e52617b	UST\krark's other thumb.png
+b44fff74ad7d025f8e916c4ee4704ef3	UST\labro bot.png
+129ad89a70ae3cf079415071e2c554d6	UST\lackey recycler.png
+7ed82c28a04bad40e352ac5ed162137e	UST\lobe lobber.png
+4d410b830e48f45b4c738708af32e567	UST\mad science fair project.png
+acc0452d89eca91fd236580849f0fea1	UST\magic word.png
+5ff4b65b4492d7a202b9ba5070de22cc	UST\mandatory friendship shackles.png
+c85d90194748513590adbf65d47ebd96	UST\mary o'kill.png
+8eedb3c7853d57278f04061e510d485e	UST\masterful ninja.png
+6b5597719fcd3f985d8c21f5e9afbe4a	UST\mer man.png
+1319ce0047d8dc1bab30cd32499daa7c	UST\midlife upgrade.png
+e24d8a0e07278f38f7a9999fbd9d95bc	UST\modular monstrosity.png
+81f64a4ce33b6063f51d57e50f8dc530	UST\monkey-.png
+f4711c07eb3a00c688f9ae6250b4ab17	UST\more or less.png
+8758b15782fdef4a6a66276bdbf068a7	UST\mother kangaroo.png
+151646e6b38c84b095c3a84a61c0e3da	UST\mountain.png
+fbf0c9a2a2b283955a782f8fa60b4ce0	UST\multi-headed.png
+e062dea97ccf6e1e5a6ae9602921607b	UST\neural network.png
+ddceb3cc07cf8cae75ed64479ed196d4	UST\ninja.png
+e42e7681e2f1b476d27a42c3e2fc7b79	UST\novellamental.png
+29f3fc4e30131e07aea366cec5ecd67b	UST\numbing jellyfish.png
+9eb85b751b76f0a89f853b14ff1d9a1f	UST\oaken power suit.png
+7208c4ebb3a8f755e4252eb7ee3f7ade	UST\oddly uneven.png
+e259f8178f1218719dd14dca100430fe	UST\ol' buzzbark.png
+0ed8ff3339bddb9956df8210e94b41d4	UST\old guard.png
+f9092d308d79890523571ac3192a37ca	UST\old-fashioned vampire.png
+189582d44190a1dbe512b827f9d6497c	UST\optical optimizer.png
+cafd26cddf2dd363b1253d1843ac390d	UST\ordinary pony.png
+949651e277358a641f1e89691a3e479b	UST\over my dead bodies.png
+0ce4cf3c807576725f2f519e8a84ea47	UST\overt operative.png
+dcaccc4bda5f12eae0ea89a8fe93c667	UST\painiac.png
+7fb449a84afddf51dc1a3b523d0e2f5b	UST\party crasher.png
+7d98ab082baa181ad5d1e5e91ddd1ef8	UST\pet project.png
+df6757c1afa5fe4dc8011b2ec96a2887	UST\phoebe, head of s.n.e.a.k..png
+61eba1b97477c8db25b7304dc4d0ec81	UST\plains.png
+59569b693bc5d593666f68455c1c4e7b	UST\proper laboratory attire.png
+212bb165b9c99dfe1595f373fd362f78	UST\quick-stick lick trick.png
+e855282ca85daef27d94cc0742d3c068	UST\rapid prototyper.png
+e64f80893a06ad39bdba3c2cdd22dbff	UST\really epic punch.png
+62a87c11f6b4f12f1a1aa424ffb84313	UST\record store.png
+f558a17de80201baff4873ff5243dcd4	UST\refibrillator.png
+1b43c9e1e8107bcc6058d6e7969048d0	UST\rhino-.png
+57ad587f3e04758583c737410947402c	UST\riveting rigger.png
+00f7211a81ba4dd3c20e0eb37509669e	UST\robo-.png
+ce2b46f1e0feac76a5ef98524a47a36d	UST\rules lawyer.png
+a605178ca6967d8fbd7ab103cba6e240	UST\rumors of my death . . ..png
+8e901bb834902db33aaf8b4dd483e1cc	UST\s.n.e.a.k. dispatcher.png
+6c4f6bef91ed33099625e3857896c31a	UST\sacrifice play.png
+904f462d077714e700930fec60275d42	UST\sap sucker.png
+6e838f015e51e3b726d330418e6f5115	UST\secret base.png
+f64754fec3db2166094c0c44171b910a	UST\selfie preservation.png
+00a2991c27d9af274dc1f830186bccbf	UST\serpentine.png
+1c8dce7cbbe3a2c373ae2885b10fcd6f	UST\shaggy camel.png
+55fe5e649ed8a9a21bda02cf9df8a258	UST\shellephant.png
+130f999cbb84fbc6c4ea28ef39b80f7f	UST\side quest.png
+9a8080bcb7fadfcc795d80fc5cf62761	UST\skull saucer.png
+8e08add2a84938a04a571994c07cd16a	UST\slaying mantis.png
+993dd7be95eb9a6c8cc85ca3b27f3ee7	UST\sly spy.png
+2bba8d4feebc944471134bb4bb2e3dcf	UST\snickering squirrel.png
+ad8f1c9fe6e3e5c0bda6ff43c3829982	UST\socketed sprocketer.png
+d76140bd351b746f83655cc78b7a7a26	UST\spell suck.png
+5ca3f89686e78c5a361ea88d658e0208	UST\spike, tournament grinder.png
+0c9f409332385b7dc5752422d70a33b3	UST\split screen.png
+872e06ca4d68608cb1250e6a36bcf697	UST\spy eye.png
+8f3120a40c2473c43beb9e40697c063b	UST\squirrel dealer.png
+73eff31903dc35e941daf153babec520	UST\squirrel-powered scheme.png
+e4543610e822e418f3a3ece893d6ac26	UST\staff of the letter magus.png
+97bef125a91a827e7540bfed2876f62b	UST\stamp of approval.png
+a7531a7913865eecb998aa168715daae	UST\steady-handed mook.png
+86fb8838156b8266c1936eab2a3859cc	UST\steam-powered.png
+d2e135b4e16473b1405ef5b78b149ed0	UST\steamflogger boss.png
+29172a9bfe3ae8fbbc97d4b54e632eb2	UST\steamflogger of the month.png
+1faec3b740841024226f6cb69a2d804a	UST\steamflogger service rep.png
+1649f982e36134deff1de81d504ba89b	UST\steamflogger temp.png
+4e5d2b920b52a45745bf1382a8318066	UST\steamfloggery.png
+21b57ef4f9162580d91d2d625764524b	UST\steel squirrel.png
+ddf1d1bd5d7f75b34e9db70e0ec40615	UST\stinging scorpion.png
+1ed21988099590561f44f6f2724bc300	UST\subcontract.png
+1a7171aa03cb34ee071f9bd45823c113	UST\success!.png
+890f2edf498dcf9c2a4671159d8fa72a	UST\summon the pack.png
+b280a023e9371316708583806739d63c	UST\sundering fork.png
+c08be0a70bff71d894b72bc45c4dfe32	UST\super-duper death ray.png
+524900f86b01afe72eb807433635b525	UST\suspicious nanny.png
+c9bb008977d595df014270ac137a1ee5	UST\swamp.png
+237f7ac1973f7463c56458412a082ccb	UST\sword of dungeons & dragons.png
+cbc4a25fdbef659e325379e57e361d13	UST\target minotaur.png
+1bb04496915c73a13a363fd72422f18a	UST\targeting rocket.png
+1558e728dcb7fb4489fc35a87fa0124b	UST\teacher's pet.png
+ac16ed1d7e071d42649c0b438c2415cf	UST\the big idea.png
+1822a35d8ac7d988b146fa8b27d8d540	UST\the countdown is at one.png
+454ab86fdf30198e007fa20eb16bd713	UST\the grand calcutron.png
+5903839c9a7e75dabb492c619abbd188	UST\three-headed goblin.png
+1fa4c3403241caca67050184685500ef	UST\thud-for-duds.png
+a4061f4b6f33efe967bce6c8665664e8	UST\time out.png
+2798b12fad315186c122f3a2d05e7aba	UST\top-secret tunnel.png
+44791a46ad5262679abdcbb9d6d4ee78	UST\tread mill.png
+e701aef98ecb294e444c1becfbe67fed	UST\turbo-thwacking auto-hammer.png
+e51716eeec9ad27da190b23d27e3c57e	UST\twiddlestick charger.png
+bf9520fab321e86afa285e2bee53010f	UST\urza, academy headmaster.png
+924d4ae7a9bd15457b3094730c12c435	UST\very cryptic command.png
+6dc68edf31054771b54cd9da9a96dcdf	UST\voracious vacuum.png
+9c9e60130b8d4427210497bd1000140b	UST\wall of fortune.png
+4ce3faa4fd0ee8a89ef0974c42e9ef17	UST\watermarket.png
+dc4f275e37e414f2f69d894c2ca8b6a4	UST\widget contraption.png
+a486f22b4250b0ed95501a277113a7f5	UST\wild crocodile.png
+8826edc638649e6ca83e6d2528829811	UST\willing test subject.png
+fd12c5a8520a3bb597c2262d84d6570c	UST\work a double.png
+1fe48100dab0da9e2c57985b947011ad	UST\wrench-rigger.png
+76254d61fefc1a24b8dc25fdad02c214	UST\x.png
+e6fcd1237715cfe1e2a94ff9eba74478	UST\zombified.png
 f5f5ee600aeaf4d9be2213d1d8bbb99e	V09\Balance.jpg
 912f4dd9f7b4349fec8fd73f7676021d	V09\Berserk.jpg
 c2a0c63d4644474a3800c05f16729c54	V09\Channel.jpg
