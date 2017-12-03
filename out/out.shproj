@@ -13,7 +13,6 @@
     <Content Include="data\price.id.json" />
     <Content Include="data\price.json" />
     <Content Include="data\translations.json" />
-    <Content Include="etc\Mtgdb.Gui.Display.xml" />
     <Content Include="etc\Mtgdb.Gui.xml" />
     <Content Include="etc\Mtgdb.Gui.Default.xml">
       <SubType>Designer</SubType>

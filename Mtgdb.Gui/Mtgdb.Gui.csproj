@@ -76,10 +76,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
@@ -172,6 +174,12 @@
     </Compile>
     <Compile Include="FormRoot\FormRoot.Tooltips.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestLayoutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestLayoutForm.Designer.cs">
+      <DependentUpon>TestLayoutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="[ infrastructure ]\GuiModule.cs" />
     <Compile Include="FormMain\SuggestModel.cs" />
@@ -270,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRoot\FormRoot.resx">
       <DependentUpon>FormRoot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestLayoutForm.resx">
+      <DependentUpon>TestLayoutForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zoom\FormZoom.resx">
       <DependentUpon>FormZoom.cs</DependentUpon>

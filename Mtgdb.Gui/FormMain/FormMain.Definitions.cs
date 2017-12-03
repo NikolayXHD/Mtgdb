@@ -144,6 +144,8 @@ namespace Mtgdb.Gui
 
 			applyCardSize(_imageCache);
 
+			setPanelCostWidth();
+
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
@@ -158,43 +160,6 @@ namespace Mtgdb.Gui
 			_viewCards.SetImageSize(imageCache.CardSize);
 			_viewDeck.SetImageSize(imageCache.CardSize);
 			_layoutViewDeck.Height = imageCache.CardSize.Height;
-		}
-
-		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
-		{
-			setDeckVisibility(!_buttonHideDeck.Checked);
-		}
-
-		private void buttonHideTextChanged(object sender, EventArgs e)
-		{
-			_viewCards.TextualFieldsVisible =!_buttonHideText.Checked;
-			applyCardSize(_imageCache);
-			_viewCards.RefreshData();
-			_viewDeck.RefreshData();
-		}
-
-		private void buttonPartialCardsChanged(object sender, EventArgs e)
-		{
-			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards = !_buttonHidePartialCards.Checked;
-			_viewCards.RefreshData();
-			_viewDeck.RefreshData();
-		}
-
-		private void setDeckVisibility(bool deckVisible)
-		{
-			int row = _layout.GetRow(_viewDeck.Control);
-
-			if (deckVisible)
-			{
-				_viewDeck.Control.Visible = true;
-				_layout.RowStyles[row].SizeType = SizeType.AutoSize;
-			}
-			else
-			{
-				_layout.RowStyles[row].Height = 0;
-				_layout.RowStyles[row].SizeType = SizeType.Absolute;
-				_viewDeck.Control.Visible = false;
-			}
 		}
 
 		private void scale()
@@ -382,6 +347,8 @@ namespace Mtgdb.Gui
 			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged += buttonHideTextChanged;
 
+			_layoutRight.SizeChanged += rightLayoutChanged;
+
 			_eventsSubscribed = true;
 		}
 
@@ -456,6 +423,8 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.CheckedChanged -= buttonDeckHideChanged;
 			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
+
+			_layoutRight.SizeChanged -= rightLayoutChanged;
 		}
 
 		private Deck _requiredDeck;

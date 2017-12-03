@@ -3,8 +3,6 @@
 	<WatchFile Mode="Auto" />
 
 	<!--
-		NOTE: These are general settings. Display settings are located in \etc\Mtgdb.Gui.Display.xml
-		
 		NOTE: To apply the changes made here save your changes and restart the program.
 	
 		NOTE: Be careful editing this. If you break XML syntax the application will fail to start.

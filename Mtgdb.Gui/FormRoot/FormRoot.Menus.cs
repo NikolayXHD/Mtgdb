@@ -38,7 +38,6 @@ namespace Mtgdb.Gui
 			_buttonHelp.Click += helpClick;
 
 			_buttonMenuGeneralSettings.Click += configClick;
-			_buttonMenuDisplaySettings.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 
 			
@@ -75,8 +74,6 @@ namespace Mtgdb.Gui
 		{
 			if (_buttonMenuGeneralSettings == sender)
 				System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
-			else if (_buttonMenuDisplaySettings == sender)
-				System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.Display.xml"));
 		}
 
 		private void tooltipsChecked(object sender, EventArgs e)

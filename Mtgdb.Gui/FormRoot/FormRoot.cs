@@ -86,7 +86,6 @@ namespace Mtgdb.Gui
 			_labelPasteInfo.ScaleDpi();
 
 			_buttonMenuGeneralSettings.ScaleDpi();
-			_buttonMenuDisplaySettings.ScaleDpi();
 
 			_buttonMenuOpenDeck.ScaleDpi();
 			_buttonMenuSaveDeck.ScaleDpi();

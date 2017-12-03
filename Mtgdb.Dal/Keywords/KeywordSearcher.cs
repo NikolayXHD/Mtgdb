@@ -14,8 +14,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.18 generated mana of any color
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.18");
+			// 0.19 new AllSets-x.json
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.19");
 			_version.Directory.AddPath("keywords.json");
 		}
 

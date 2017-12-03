@@ -11,8 +11,6 @@ namespace Mtgdb.Gui
 		public override void Load()
 		{
 			Kernel.BindConfig<UndoConfig>();
-			Kernel.BindConfig<SmallConfig>();
-			Kernel.BindConfig<ZoomedConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException
 			Kernel.Bind<DownloaderSubsystem>()
