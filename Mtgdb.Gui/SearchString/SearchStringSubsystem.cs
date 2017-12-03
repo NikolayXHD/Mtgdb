@@ -155,11 +155,12 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private void suggested(IntellisenseSuggest intellisenseSuggest)
+		private void suggested(IntellisenseSuggest intellisenseSuggest, SearchStringState searchStringState)
 		{
 			if (_parent.Visible)
 				_findEditor.Invoke(delegate
 				{
+					_suggestSource = searchStringState;
 					updateSuggestListBox(intellisenseSuggest);
 				});
 		}
@@ -469,29 +470,33 @@ namespace Mtgdb.Gui
 
 		private void selectSuggest()
 		{
-			var selectedSuggest = (string) _listBoxSuggest.SelectedItem;
+			var searchStringState = _suggestSource;
+
+			if (!searchStringState.Equals(_suggestModel.SearchStateCurrent))
+				return;
+
+			var selectedSuggest = (string)_listBoxSuggest.SelectedItem;
 
 			if (string.IsNullOrEmpty(selectedSuggest))
 				return;
 
 			selectedSuggest = StringEscaper.Escape(selectedSuggest);
-			applySuggestSelection(selectedSuggest);
+			applySuggestSelection(selectedSuggest, searchStringState);
 		}
 
-		private void applySuggestSelection(string selectedSuggest)
+		private void applySuggestSelection(string selectedSuggest, SearchStringState suggestSource)
 		{
 			var token = _suggestModel.Token;
-			var editParts = _suggestModel.SearchStateCurrent;
 
-			int left = token?.Position ?? editParts.Caret;
+			int left = token?.Position ?? suggestSource.Caret;
 			var length = token?.Value?.Length ?? 0;
 			if (token?.Type.Is(TokenType.Field) == true)
 				// Включим : в токен
-				if (left + length < editParts.Text.Length)
+				if (left + length < suggestSource.Text.Length)
 					length++;
 
-			string prefix = editParts.Text.Substring(0, left);
-			string suffix = editParts.Text.Substring(left + length);
+			string prefix = suggestSource.Text.Substring(0, left);
+			string suffix = suggestSource.Text.Substring(left + length);
 
 			string rightTerminator;
 			if (token?.Type.Is(TokenType.Field) == true)
@@ -632,5 +637,6 @@ namespace Mtgdb.Gui
 
 		private readonly SearchStringHighlighter _highligter;
 		private string _currentText = string.Empty;
+		private SearchStringState _suggestSource;
 	}
 }

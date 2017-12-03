@@ -17,7 +17,7 @@ namespace Mtgdb.Gui
 		private string _language;
 		public string LanguageCurrent;
 
-		public event Action<IntellisenseSuggest> Suggested;
+		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
 		
 		private readonly Thread _suggestThread;
 
@@ -39,14 +39,14 @@ namespace Mtgdb.Gui
 
 		private void suggest()
 		{
-			_searchState = SearchStateCurrent;
+			var searchState =_searchState = SearchStateCurrent;
 			_language = LanguageCurrent;
 
 			var suggest = _spellchecker.Suggest(_searchState.Text, _searchState.Caret, _language, SuggestCount);
 			Token = suggest.Token;
 
 			if (isSuggestUpToDate())
-				Suggested?.Invoke(suggest);
+				Suggested?.Invoke(suggest, searchState);
 		}
 
 		private bool isSuggestUpToDate()
