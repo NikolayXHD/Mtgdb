@@ -8,8 +8,6 @@ namespace Mtgdb.Gui
 {
 	public class MagarenaDeckFormatter : RegexDeckFormatter
 	{
-		private readonly CardRepository _cardRepo;
-
 		public MagarenaDeckFormatter(CardRepository cardRepo)
 		{
 			_cardRepo = cardRepo;
@@ -82,7 +80,8 @@ namespace Mtgdb.Gui
 
 		public override bool ValidateFormat(string serialized)
 		{
-			return true;
+			var lines = SplitToLines(serialized);
+			return !lines.Any(l => l.StartsWith("SB: "));
 		}
 
 
@@ -92,8 +91,10 @@ namespace Mtgdb.Gui
 			RegexOptions.Compiled);
 
 		public override string Description => "Magarena {type}";
-		public override string FileNamePattern => @"*.dec";
+		public override string FileNamePattern => "*.dec";
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;
+
+		private readonly CardRepository _cardRepo;
 	}
 }

@@ -90,6 +90,7 @@
     <Compile Include="..\ShadowCopy.cs">
       <Link>[ Infrastructure ]\ShadowCopy.cs</Link>
     </Compile>
+    <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
     <Compile Include="DeckSerialization\DeckFile.cs" />
     <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
     <Compile Include="DeckSerialization\JsonDeckFormatter.cs" />
