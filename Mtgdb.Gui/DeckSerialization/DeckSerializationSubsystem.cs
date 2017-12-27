@@ -18,6 +18,7 @@ namespace Mtgdb.Gui
 				new JsonDeckFormatter(),
 				new ForgeDeckFormatter(cardRepository, forgeSetRepo),
 				new MagarenaDeckFormatter(cardRepository),
+				new DeckedBuilderDeckFormatter(cardRepository),
 				new XMageDeckFormatter(cardRepository),
 				new MtgoDeckFormatter(cardRepository)
 			};
