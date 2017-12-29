@@ -28,7 +28,7 @@ namespace Mtgdb.Gui
 			historyUpdateButtons();
 
 			if (draggedCard == null)
-				_findEditor.Focus();
+				_findEditor.Focus();  
 			else
 				dragCard(draggedCard);
 

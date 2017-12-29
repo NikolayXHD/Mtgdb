@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 		public override bool ValidateFormat(string serialized)
 		{
 			var lines = SplitToLines(serialized);
-			return !lines.Any(l => l.StartsWith("SB: "));
+			return !lines.Any(l => l.StartsWith(DeckedBuilderDeckFormatter.SideboardPrefix));
 		}
 
 
