@@ -55,14 +55,14 @@ namespace Mtgdb.Gui
 		public override bool ValidateFormat(string serialized)
 		{
 			var lines = SplitToLines(serialized);
-			return lines.Any(l => l.StartsWith("SB: "));
+			return lines.Any(l => l.StartsWith(SideboardPrefix));
 		}
 
 		public override Regex LineRegex { get; } = new Regex(
 			@"^(SB: )?(?<count>\d+) (?<name>.+)$",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		private const string SideboardPrefix = "SB: ";
+		public const string SideboardPrefix = "SB: ";
 
 		public override bool SupportsExport => true;
 		public override bool SupportsImport => true;
