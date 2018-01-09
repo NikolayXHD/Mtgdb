@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Dal
 {
 	public class Deck
 	{
@@ -48,12 +49,27 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
+		public void Replace(Dictionary<string, string> replacements)
+		{
+			MainDeck = replace(MainDeck, replacements);
+			SideDeck = replace(SideDeck, replacements);
+		}
+
 		private Deck()
 		{
 		}
 
-		public DeckZone MainDeck { get; set; }
-		public DeckZone SideDeck { get; set; }
+		private static DeckZone replace(DeckZone original, Dictionary<string, string> replacements)
+		{
+			return new DeckZone
+			{
+				Order = original.Order.Select(_ => replacements[_]).ToList(),
+				Count = original.Count.ToDictionary(_ => replacements[_.Key], _ => _.Value)
+			};
+		}
+
+		public DeckZone MainDeck { get; private set; }
+		public DeckZone SideDeck { get; private set; }
 
 		public string Name { get; set; }
 		public string File { get; set; }

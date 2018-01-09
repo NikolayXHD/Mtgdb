@@ -21,6 +21,9 @@ namespace Mtgdb.Gui
 
 			setupTooltips();
 			subscribeToEvents();
+			// only after subscribeToEvents so that probeCardCreating handler executes
+			resetLayouts();
+
 			startThreads();
 
 			historyUpdateGlobals();
@@ -34,6 +37,12 @@ namespace Mtgdb.Gui
 			}
 
 			_deckSerializationSubsystem.LastFile = _historyModel.Current.DeckFile;
+		}
+
+		private void resetLayouts()
+		{
+			_layoutViewCards.LayoutControlType = _layoutViewCards.LayoutControlType;
+			_layoutViewDeck.LayoutControlType = _layoutViewDeck.LayoutControlType;
 		}
 
 		private void applicationExit(object sender, EventArgs e)
@@ -178,9 +187,7 @@ namespace Mtgdb.Gui
 		private void buttonHideTextChanged(object sender, EventArgs e)
 		{
 			_viewCards.TextualFieldsVisible = !_buttonHideText.Checked;
-			applyCardSize(_imageCache);
 			_viewCards.RefreshData();
-			_viewDeck.RefreshData();
 		}
 
 		private void buttonPartialCardsChanged(object sender, EventArgs e)

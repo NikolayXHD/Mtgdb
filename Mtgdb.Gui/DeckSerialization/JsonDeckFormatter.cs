@@ -1,3 +1,4 @@
+using Mtgdb.Dal;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Gui

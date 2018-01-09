@@ -17,6 +17,7 @@ namespace Mtgdb.Controls
 		public event Action<object, int> RowDataLoaded;
 		public event Action<object> SortChanged;
 		public event Action<object, SearchArgs> SearchClicked;
+		public event Action<object, LayoutControl> ProbeCardCreating;
 
 		public LayoutViewControl()
 		{
@@ -198,8 +199,9 @@ namespace Mtgdb.Controls
 		{
 			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
-			result.Size = ProbeCard.Size;
 			result.Font = ProbeCard.Font;
+
+			result.Size = ProbeCard.Size;
 
 			using (var probeEnumerator = ProbeCard.Fields.GetEnumerator())
 			using (var enumerator = result.Fields.GetEnumerator())
@@ -231,6 +233,8 @@ namespace Mtgdb.Controls
 			var result = (LayoutControl)Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
 			result.Font = Font;
+
+			ProbeCardCreating?.Invoke(this, result);
 
 			return result;
 		}

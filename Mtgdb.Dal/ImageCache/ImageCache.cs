@@ -195,7 +195,14 @@ namespace Mtgdb.Dal
 		private Size _cardSize = new Size(223, 311);
 		private Size _zoomedCardSize = new Size(446, 622);
 
-		public Size CardSize => _cardSize.ByDpi();
+		public Size CardSize
+		{
+			get
+			{
+				return _cardSize.ByDpi();
+			}
+		}
+
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
 		public int Capacity { get; }

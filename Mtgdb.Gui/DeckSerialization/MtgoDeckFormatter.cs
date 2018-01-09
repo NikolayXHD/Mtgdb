@@ -20,7 +20,9 @@ namespace Mtgdb.Gui
 
 			_isSideboard = false;
 			_sideboardIndicator = getSideboardIndicator(serialized);
-			return base.ImportDeck(serialized);
+			var deck = base.ImportDeck(serialized);
+			new XitaxDeckTransformation(_repository).Transform(deck);
+			return deck;
 		}
 
 		private static string getSideboardIndicator(string serialized)

@@ -502,6 +502,9 @@ namespace Mtgdb.Dal
 		[JsonProperty("life")]
 		public int? Life { get; set; }
 
+		/// <summary>
+		/// The card colors. Usually this is derived from the casting cost, but some cards are special (like the back of double-faced cards and Ghostfire).
+		/// </summary>
 		[JsonProperty("colors")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
 		public IList<string> ColorsArr { get; set; }
@@ -509,12 +512,16 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public string Color { get; set; }
 
-		/*
 		/// <summary>
-		/// The card colors. Usually this is derived from the casting cost, but some cards are special (like the back of double-faced cards and Ghostfire).
+		/// The sets that this card was printed in, expressed as an array of set codes.
 		/// </summary>
-		
+		[JsonProperty("printings")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> Printings { get; set; }
 
+		/*
+		
+		
 		/// <summary>
 		/// This is created reading all card color information and costs. It is the same for double-sided cards (if they have different colors, the identity will have both colors). It also identifies all mana symbols in the card (cost and text). Mostly used on commander decks.
 		/// </summary>
@@ -554,11 +561,6 @@ namespace Mtgdb.Dal
 		/// Set to true if this card was only released as part of a core box set. These are technically part of the core sets and are tournament legal despite not being available in boosters.
 		/// </summary>
 		public bool Starter { get; set; }
-
-		/// <summary>
-		/// The sets that this card was printed in, expressed as an array of set codes.
-		/// </summary>
-		public List<string> Printings { get; set; }
 
 		/// <summary>
 		/// For promo cards, this is where this card was originally obtained. For box sets that are theme decks, this is which theme deck the card is from. For clash packs, this is which deck it is from.
