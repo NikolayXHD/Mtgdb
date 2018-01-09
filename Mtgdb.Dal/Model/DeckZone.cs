@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Dal
 {
 	public class DeckZone
 	{

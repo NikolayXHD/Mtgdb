@@ -176,17 +176,6 @@ namespace Mtgdb.Gui
 			_view.RefreshData();
 		}
 
-		public void SetImageSize(Size size)
-		{
-			var cardSize = _view.ProbeCard.Size;
-
-			_view.ProbeCard.Size = new Size(
-				(int) (size.Height / ((float) cardSize.Height / cardSize.Width)),
-				size.Height);
-
-			_view.PerformLayout();
-		}
-
 		public bool TextualFieldsVisible
 		{
 			get { return _view.LayoutControlType == typeof(CardLayout); }

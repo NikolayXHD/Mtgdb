@@ -141,9 +141,6 @@ namespace Mtgdb.Gui
 			DeckZone = Zone.Main;
 
 			scale();
-
-			applyCardSize(_imageCache);
-
 			setPanelCostWidth();
 
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
@@ -153,13 +150,6 @@ namespace Mtgdb.Gui
 			Load += formLoad;
 
 			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
-		}
-
-		private void applyCardSize(ImageCache imageCache)
-		{
-			_viewCards.SetImageSize(imageCache.CardSize);
-			_viewDeck.SetImageSize(imageCache.CardSize);
-			_layoutViewDeck.Height = imageCache.CardSize.Height;
 		}
 
 		private void scale()
@@ -230,6 +220,8 @@ namespace Mtgdb.Gui
 				searchToSortMargin + _layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width,
 				_layoutViewCards.SearchOptions.ButtonMargin.Height);
 
+			_layoutViewDeck.Height = _layoutViewDeck.Height.ByDpiHeight();
+
 			scalePanelIcon(_panelIconLegality);
 			scalePanelIcon(_panelIconSearch);
 
@@ -243,6 +235,11 @@ namespace Mtgdb.Gui
 			scalePanelIcon(_panelIconStatusFilterCollection);
 			scalePanelIcon(_panelIconStatusFilterDeck);
 			scalePanelIcon(_panelIconStatusFilterLegality);
+		}
+
+		private static void probeCardCreating(object view, LayoutControl probeCard)
+		{
+			probeCard.ScaleDpi();
 		}
 
 		private static void scalePanelIcon(BorderedPanel panel)
@@ -349,6 +346,9 @@ namespace Mtgdb.Gui
 
 			_layoutRight.SizeChanged += rightLayoutChanged;
 
+			_layoutViewCards.ProbeCardCreating += probeCardCreating;
+			_layoutViewDeck.ProbeCardCreating += probeCardCreating;
+
 			_eventsSubscribed = true;
 		}
 
@@ -425,6 +425,8 @@ namespace Mtgdb.Gui
 			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
 
 			_layoutRight.SizeChanged -= rightLayoutChanged;
+			_layoutViewCards.ProbeCardCreating -= probeCardCreating;
+			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 		}
 
 		private Deck _requiredDeck;

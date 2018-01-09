@@ -1,3 +1,5 @@
+using Mtgdb.Dal;
+
 namespace Mtgdb.Gui
 {
 	public interface IDeckFormatter

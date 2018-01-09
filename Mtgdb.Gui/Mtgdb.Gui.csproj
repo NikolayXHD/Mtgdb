@@ -97,6 +97,7 @@
     <Compile Include="DeckSerialization\MagarenaDeckFormatter.cs" />
     <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />
     <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\XitaxDeckTransformation.cs" />
     <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
     <Compile Include="FormChart\Aggregates.cs" />
     <Compile Include="FormChart\ChartPalettes.cs" />
