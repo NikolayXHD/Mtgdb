@@ -14,8 +14,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.19 new AllSets-x.json
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.19");
+			// 0.20 e02
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.20");
 			_version.Directory.AddPath("keywords.json");
 		}
 

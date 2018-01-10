@@ -11,6 +11,9 @@ namespace Mtgdb.Dal
 
 		public override void Load()
 		{
+			if (!File.Exists(PriceFileInProgress))
+				File.Copy(PriceFile, PriceFileInProgress);
+
 			Load(IdFile, PriceFileInProgress);
 		}
 

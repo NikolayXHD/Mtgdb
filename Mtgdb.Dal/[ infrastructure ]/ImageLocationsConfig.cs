@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Mtgdb.Dal
 {
@@ -7,6 +9,24 @@ namespace Mtgdb.Dal
 	{
 		[DataMember(Name = "Directory")]
 		public DirectoryConfig[] Directories { get; set; }
+
+		public IList<DirectoryConfig> EnabledDirectories
+		{
+			get
+			{
+				if (EnabledGroups == null)
+					return Directories;
+
+				var groups = new HashSet<string>(EnabledGroups.Split(';'));
+
+				return Directories
+					.Where(_ => groups.Contains(_.Group ?? string.Empty))
+					.ToList();
+			}
+		}
+
+		[DataMember(Name = "EnabledGroups")]
+		public string EnabledGroups { get; set; }
 	}
 
 	[DataContract]
@@ -29,6 +49,9 @@ namespace Mtgdb.Dal
 
 		[DataMember(Name = "Exclude")]
 		public string Exclude { get; set; }
+
+		[DataMember(Name = "Group")]
+		public string Group { get; set; }
 	}
 
 	public static class ImageType

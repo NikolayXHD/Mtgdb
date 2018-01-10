@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -56,5 +58,30 @@ namespace Mtgdb.Test
 						Assert.Fail(smallPath + Environment.NewLine + zoomPath);
 				}
 		}
+
+		[TestCase("c17", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
+		[TestCase("ima", XlhqDir, "IMA - Iconic Masters\\300DPI Cards")]
+		[TestCase("ust", XlhqDir, "UST - Unstable\\300DPI Cards")]
+		[TestCase("ced", XlhqDir, "CED - Collectors\' Edition\\300DPI")]
+		[TestCase("xln", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
+		[TestCase("ugl", XlhqTorrentsDir, "UGL", "UGL Tokens")]
+		[TestCase("dde", XlhqTorrentsDir, "DDE", "DDE Tokens")]
+		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
+		{
+			var expectedDirsSet = expectedSubdirs
+				.Select(_ => Path.Combine(baseDir, _))
+				.ToList();
+				
+			var set = Repo.SetsByCode[setCode];
+			foreach (var card in set.Cards)
+			{
+				var imageModel = Repo.GetSmallImage(card, ImgRepo);
+				var dir = Path.GetDirectoryName(imageModel.FullPath);
+				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, card.ImageName);
+			}
+		}
+
+		private const string XlhqDir = "D:\\Distrib\\games\\mtg\\Mega\\XLHQ";
+		private const string XlhqTorrentsDir = "D:\\Distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
 	}
 }

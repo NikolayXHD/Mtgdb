@@ -1,15 +1,13 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Linq;
 using Mtgdb.Dal;
-using Mtgdb.Test;
 using NUnit.Framework;
 
-namespace Mtgdb.Util
+namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class ImageMappingTests : TestsBase
+	public class ImageMappingUtils : TestsBase
 	{
 		[SetUp]
 		public void Setup()
