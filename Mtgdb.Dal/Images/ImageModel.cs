@@ -22,15 +22,16 @@ namespace Mtgdb.Dal
 			FullPath = fileName;
 
 			string[] parts = fileNameWithoutExtension.Split(new[] { '.' }, StringSplitOptions.None);
-			var lastNamePart = Enumerable.Range(0, parts.Length).Last(i =>
-				i == 0 ||
-				// Richard Garfield, Ph.D..xlhq.jpg
-				// S.N.O.T..xlhq.jpg
-				// Our Market Research....xlhq.jpg
-				parts[i].Length <= 1 ||
-				// Sarpadian Empires, Vol. VII.xlhq.jpg
-				// Но Thoughtseize.[Size 16x20].jpg
-				!(parts[i].StartsWith("[") && parts[i].EndsWith("]")) && parts[i].Contains(' '));
+			var lastNamePart = Enumerable.Range(0, parts.Length)
+				.Last(i =>
+					i == 0 ||
+					// Richard Garfield, Ph.D..xlhq.jpg
+					// S.N.O.T..xlhq.jpg
+					// Our Market Research....xlhq.jpg
+					parts[i].Length <= 1 ||
+					// Sarpadian Empires, Vol. VII.xlhq.jpg
+					// Но Thoughtseize.[Size 16x20].jpg
+					!(parts[i].StartsWith("[") && parts[i].EndsWith("]")) && parts[i].Contains(' '));
 
 			Type = string.Join(".", parts.Skip(1 + lastNamePart));
 			string name = string.Join(".", parts.Take(1 + lastNamePart));
@@ -41,14 +42,20 @@ namespace Mtgdb.Dal
 				name = "Richard Garfield, Ph.D.";
 			else if (name.StartsWith("Our Market Research", Str.Comparison))
 				name = "our market research shows that players like really long card names so we made";
+			else if (Str.Equals(name, "Two headed Giant of Foriys"))
+				name = "Two-Headed Giant of Foriys";
+			else if (Str.Equals(name, "Will O' The Wisp"))
+				name = "Will-O'-The-Wisp";
+			else if (Str.Equals(name, "_Rumors of My Death . . ._"))
+				name = "Rumors of My Death . . .";
 			else
 				name = name.Replace(" - ", string.Empty);
-			
+
 			ImageName = string.Intern(name);
 			var nameParts = ImageName.SplitTalingNumber();
 			Name = string.Intern(nameParts.Item1);
 			VariantNumber = nameParts.Item2;
-			
+
 			rootPath = AppDir.GetRootPath(rootPath);
 
 			if (!rootPath.EndsWith("\\"))
@@ -108,10 +115,10 @@ namespace Mtgdb.Dal
 			if (string.IsNullOrEmpty(Type))
 				return 1;
 
-			if (Type.Equals("full", Str.Comparison))
+			if (Str.Equals(Type, "full"))
 				return 2;
 
-			if (Type.Equals("xlhq", Str.Comparison))
+			if (Str.Equals(Type, "xlhq"))
 				return 3;
 
 			return 0;

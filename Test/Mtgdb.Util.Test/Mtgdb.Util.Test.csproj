@@ -37,6 +37,10 @@
       <HintPath>..\..\packages\Magick.NET-Q16-AnyCPU.7.1.0\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +57,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Tesseract, Version=3.0.2.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Tesseract.3.0.2.0\lib\net40\Tesseract.dll</HintPath>
       <Private>True</Private>
@@ -88,7 +94,10 @@
     <Compile Include="Dal\DeckFormattersTests.cs" />
     <Compile Include="Dal\EditDistanceTests.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
-    <Compile Include="ExternalData\GathererImagePreProcessor.cs" />
+    <Compile Include="ExternalData\MagicspoilerClient.cs" />
+    <Compile Include="ExternalData\TranslationDownloaderUtils.cs" />
+    <Compile Include="Images\ImageDownloadingUtils.cs" />
+    <Compile Include="Images\ImageMappingUtils.cs" />
     <Compile Include="Images\WaifuScaler.cs" />
     <Compile Include="Images\ArtistDetection.cs" />
     <Compile Include="Images\BwFilter.cs" />
@@ -96,7 +105,6 @@
     <Compile Include="Images\DownsamplingTests.cs" />
     <Compile Include="Images\ExportImages.cs" />
     <Compile Include="Images\ImageMagickScaler.cs" />
-    <Compile Include="Images\ImageMappingTests.cs" />
     <Compile Include="Images\MedianFilter.cs" />
     <Compile Include="Images\SaturationFilter.cs" />
     <Compile Include="Markdown\MarkdownTests.cs" />

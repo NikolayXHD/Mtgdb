@@ -154,13 +154,23 @@
 		-->
 		
 		<!--
-			High quality images for older sets
+			High quality images for older sets. 
+			Unzip downloaded .zip files. 2ED.zip must be unzipped to 2ED directory and so on.
+			
 			Total size: 13.6 GB
 			use the following magnet link to download with torrent client
 			magnet:?xt=urn:btih:b07f3c3b288b20d49f5bbedcdf73214045abcce5&dn=XLHQ-Sets-Torrent&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
 		-->
 		<!--
-		<Directory Zoom="Any" Path="images\XLHQ-Sets-Torrent" />
+		<Directory Zoom="Any"                 Path="images\XLHQ-Sets-Torrent" />
+		<Directory Zoom="Any" Set="MMA"       Path="images\XLHQ-Sets-Torrent\MM1" />
+		<Directory Zoom="Any" Set="RQS;ITP"   Path="images\XLHQ-Sets-Torrent\I2P" />
+		<Directory Zoom="Any" Set="NMS"       Path="images\XLHQ-Sets-Torrent\NEM" />
+		<Directory Zoom="Any" Set="CST"       Path="images\XLHQ-Sets-Torrent\CTD" />
+		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX" />
+		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX Extras" />
+		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX Tokens" />
+		<Directory Zoom="Any" Set="MD1"       Path="images\XLHQ-Sets-Torrent\MED" />
 		-->
 	</ImageLocations>
 	

@@ -2,52 +2,54 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using Mtgdb.ImageProcessing;
+using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class GathererImagePreProcessor : TestsBase
+	public class ImageDownloadingUtils: TestsBase
 	{
-		private static readonly Size _croppedSize = new Size(393, 564);
-		private static readonly Point _croppedLocation = new Point(17, 17);
-
-		private static readonly Size _croppedSizeSmall = new Size(198, 284);
-		private static readonly Point _croppedLocationSmall = new Point(9, 9);
-
-		private const string GathererOriginalDir = @"D:\Distrib\games\mtg\Gatherer.Original";
-		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
-		private static readonly string FramedImagesDir = @"D:\Distrib\games\mtg\Gatherer.Framed";
-
-		[TestCase("cma")]
-		public void DownloadImages(string setCode)
+		[OneTimeSetUp]
+		public void Setup()
 		{
 			LoadModules();
 			LoadCards();
+			LogManager.Flush();
+		}
 
+		[TestCase("E02")]
+		public void DownloadGathererImages(string setCode)
+		{
 			using (var client = new GathererClient())
 			{
 				var set = Repo.SetsByCode[setCode];
 				foreach (var card in set.Cards)
-					client.DownloadCard(card, GathererOriginalDir);
+					client.DownloadCardImage(card, GathererDir);
 			}
 		}
 
-		[TestCase("CMA", "*.png")]
-		[TestCase("C17", "*.png")]
-		[TestCase("XLN", "*.png")]
-		public void PreProcessImages(string subdir, string pattern)
+		[TestCase("xln")]
+		[TestCase("c17")]
+		public void DownloadMagicspoilerImages(string setCode)
 		{
-			var sourceImages = Directory.GetFiles(
-				Path.Combine(GathererOriginalDir, subdir),
-				pattern,
-				SearchOption.AllDirectories)
-				.ToArray();
+			using (var client = new MagicspoilerClient())
+			{
+				var set = Repo.SetsByCode[setCode];
+				client.DownloadSet(set, MagicspoilerDir);
+			}
+		}
+
+		// [TestCase(MagicspoilerDir, MagicspoilerPreprocessedDir, "XLN")]
+		[TestCase(GathererDir, GathererPreprocessedDir, "E02")]
+		public void PreProcessImages(string dir, string targetDir, string subdir)
+		{
+			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();
 
 			foreach (var sourceImage in sourceImages)
 			{
 				var targetImage = sourceImage
-					.Replace(GathererOriginalDir, GathererPreprocessedDir);
+					.Replace(dir, targetDir);
 
 				if (File.Exists(targetImage))
 					continue;
@@ -56,6 +58,8 @@ namespace Mtgdb.Test
 				WaifuScaler.Scale(sourceImage, targetImage);
 			}
 		}
+
+
 
 		[TestCase("CMA")]
 		public void AddFrame(string setSubdir)
@@ -67,15 +71,16 @@ namespace Mtgdb.Test
 				_croppedSize,
 				Path.Combine(GathererPreprocessedDir, setSubdir));
 		}
+
 		[TestCase("CMA")]
 		public void AddFrameSmall(string setSubdir)
 		{
 			addFrame(
 				Path.Combine("LQ", setSubdir),
-				"frame.small.png", 
+				"frame.small.png",
 				_croppedLocationSmall,
 				_croppedSizeSmall,
-				Path.Combine(GathererOriginalDir, setSubdir));
+				Path.Combine(GathererDir, setSubdir));
 		}
 
 		private static void addFrame(string targetSubdir, string frameFile, Point location, Size size, string originalDir)
@@ -97,5 +102,18 @@ namespace Mtgdb.Test
 				}
 			}
 		}
+
+		private static readonly Size _croppedSize = new Size(393, 564);
+		private static readonly Point _croppedLocation = new Point(17, 17);
+
+		private static readonly Size _croppedSizeSmall = new Size(198, 284);
+		private static readonly Point _croppedLocationSmall = new Point(9, 9);
+
+		private const string GathererDir = @"D:\Distrib\games\mtg\Gatherer.Original";
+		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
+		private static readonly string FramedImagesDir = @"D:\Distrib\games\mtg\Gatherer.Framed";
+
+		private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
+		private const string MagicspoilerPreprocessedDir = @"D:\Distrib\games\mtg\magicspoiler.preprocessed";
 	}
 }

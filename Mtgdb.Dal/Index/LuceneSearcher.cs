@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.19 new AllSets-x.json
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.19");
+			// 0.20 e02
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.20");
 			Spellchecker = new LuceneSpellchecker();
 		}
 

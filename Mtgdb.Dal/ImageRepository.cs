@@ -10,45 +10,73 @@ namespace Mtgdb.Dal
 	{
 		public ImageRepository(ImageLocationsConfig config)
 		{
-			foreach (var directoryConfig in config.Directories)
+			foreach (var directoryConfig in config.EnabledDirectories)
 				directoryConfig.Path = AppDir.GetRootPath(directoryConfig.Path);
 
-			_directories = getFolders(config.Directories, ImageType.Small);
-			_directoriesZoom = getFolders(config.Directories, ImageType.Zoom);
-			_directoriesArt = getFolders(config.Directories, ImageType.Art);
+			_directories = getFolders(config.EnabledDirectories, ImageType.Small);
+			_directoriesZoom = getFolders(config.EnabledDirectories, ImageType.Zoom);
+			_directoriesArt = getFolders(config.EnabledDirectories, ImageType.Art);
 		}
 
 		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
 		{
 			return directoryConfigs
 				.Where(c=> filter(c) && Directory.Exists(c.Path))
-				// связь с другим местом use_dir_sorting_to_find_most_nested_root
+				// use_dir_sorting_to_find_most_nested_root
 				.OrderByDescending(c => c.Path.Length)
 				.ToArray();
 		}
 
 		public void LoadFiles()
 		{
-			loadFiles(_directories, _files);
-			loadFiles(_directoriesZoom, _filesZoom);
-			loadFiles(_directoriesArt, _filesArt);
+			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
+
+			loadFiles(filesByDirCache, _directories, _files);
+			loadFiles(filesByDirCache, _directoriesZoom, _filesZoom);
+			loadFiles(filesByDirCache, _directoriesArt, _filesArt);
+
 			IsFileLoadingComplete = true;
 		}
 
-		private static void loadFiles(IList<DirectoryConfig> directories, ICollection<string> files)
+		private static void loadFiles(Dictionary<string, IList<string>> filesByDirCache, IList<DirectoryConfig> directories, ICollection<string> files)
 		{
 			foreach (var directory in directories)
 			{
 				var excludes = directory.Exclude?.Split(';');
 
-				foreach (string extension in _extensions)
-					foreach (string file in Directory.EnumerateFiles(directory.Path, extension, SearchOption.AllDirectories))
-					{
-						if (excludes != null && excludes.Any(exclude => file.IndexOf(exclude, Str.Comparison) >= 0))
-							continue;
+				foreach (string file in getDirectoryFiles(filesByDirCache, directory.Path))
+				{
+					if (excludes != null && excludes.Any(exclude => file.IndexOf(exclude, Str.Comparison) >= 0))
+						continue;
 
-						files.Add(file);
-					}
+					files.Add(file);
+				}
+			}
+		}
+
+		private static IEnumerable<string> getDirectoryFiles(Dictionary<string, IList<string>> filesByDirCache, string path)
+		{
+			IList<string> cache;
+
+			if (filesByDirCache.TryGetValue(path, out cache))
+			{
+				foreach (string file in cache)
+					yield return file;
+			}
+			else
+			{
+				cache = new List<string>();
+
+				foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
+				{
+					if (!_extensions.Contains(Path.GetExtension(file)))
+						continue;
+
+					cache.Add(file);
+					yield return file;
+				}
+
+				filesByDirCache.Add(path, cache);
 			}
 		}
 
@@ -81,7 +109,7 @@ namespace Mtgdb.Dal
 			Shell shl = null;
 			foreach (var entryByDirectory in files.GroupBy(Path.GetDirectoryName))
 			{
-				// связь с другим местом use_dir_sorting_to_find_most_nested_root
+				// use_dir_sorting_to_find_most_nested_root
 				var root = directories.First(_ => entryByDirectory.Key.StartsWith(_.Path));
 				string customSetCode = root.Set;
 
@@ -200,9 +228,6 @@ namespace Mtgdb.Dal
 
 		private static void add(ImageModel model, Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant, string name)
 		{
-			if (model.IsToken)
-				return;
-
 			name = string.Intern(name);
 
 			Dictionary<string, Dictionary<int, ImageModel>> modelsBySet;
@@ -507,7 +532,7 @@ namespace Mtgdb.Dal
 		private readonly IList<DirectoryConfig> _directoriesZoom;
 		private readonly IList<DirectoryConfig> _directoriesArt;
 
-		private static readonly string[] _extensions = { "*.jpg", "*.png" };
+		private static readonly HashSet<string> _extensions = new HashSet<string>(Str.Comparer) { ".jpg", ".png" };
 
 		private static readonly string[] _metadataSeparator = { "][" };
 		private const char MetadataBegin = '[';
