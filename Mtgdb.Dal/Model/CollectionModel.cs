@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Mtgdb.Gui;
 
 namespace Mtgdb.Dal
 {
@@ -9,30 +7,21 @@ namespace Mtgdb.Dal
 	{
 		public event DeckChangedEventHandler CollectionChanged;
 
-		public readonly Dictionary<string, int> CountById = new Dictionary<string, int>();
-		public bool IsInitialized { get; private set; }
-
-		public int CollectionSize
-		{
-			get
-			{
-				lock (CountById)
-					return CountById.Sum(_ => _.Value);
-			}
-		}
-
 		public void LoadCollection(Deck deck, bool append)
 		{
-			IsInitialized = true;
+			IsLoaded = true;
 
-			if (!append)
-				CountById.Clear();
+			var modified = (append
+					? CountById
+					: Enumerable.Empty<KeyValuePair<string, int>>())
+				.Concat(deck.MainDeck.Count)
+				.Concat(deck.SideDeck.Count)
+				.GroupBy(_ => _.Key)
+				.ToDictionary(
+					gr => gr.Key,
+					gr => gr.Sum(_ => _.Value));
 
-			var toAdd = deck.MainDeck.Count
-				.Concat(deck.SideDeck.Count);
-
-			foreach (var pair in toAdd)
-				CountById[pair.Key] = CountById.TryGet(pair.Key) + pair.Value;
+			CountById = modified;
 
 			CollectionChanged?.Invoke(
 				listChanged: true,
@@ -85,5 +74,21 @@ namespace Mtgdb.Dal
 			CountById.TryGetValue(c.Id, out count);
 			return count;
 		}
+
+
+
+		public int CollectionSize
+		{
+			get
+			{
+				lock (CountById)
+					return CountById.Sum(_ => _.Value);
+			}
+		}
+
+
+
+		public Dictionary<string, int> CountById { get; private set; } = new Dictionary<string, int>();
+		public bool IsLoaded { get; private set; }
 	}
 }

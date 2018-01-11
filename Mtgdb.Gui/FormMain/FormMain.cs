@@ -19,12 +19,24 @@ namespace Mtgdb.Gui
 
 		public void OnTabSelected(Card draggedCard)
 		{
+			_isTabSelected = true;
+
 			lock (_searchResultCards)
 				updateIsSearchResult();
 
 			_uiModel.Deck = _deckModel;
 
 			_searchStringSubsystem.UpdateSuggestInput();
+
+			historyUpdateGlobals(_historyModel.Current);
+			historyApply(_historyModel.Current);
+
+			if (_requiredDeck != null)
+			{
+				_requiredDeck = null;
+				historyUpdate();
+			}
+
 			historyUpdateButtons();
 
 			if (draggedCard == null)
@@ -38,6 +50,7 @@ namespace Mtgdb.Gui
 
 		public void OnTabUnselected()
 		{
+			_isTabSelected = false;
 			stopThreads();
 		}
 
@@ -85,6 +98,9 @@ namespace Mtgdb.Gui
 
 		public void ButtonTooltip()
 		{
+			if (!_isTabSelected)
+				return;
+
 			if (restoringSettings())
 				return;
 
@@ -467,18 +483,14 @@ namespace Mtgdb.Gui
 
 
 
-		private void historyUpdateGlobals()
+		private void historyUpdateGlobals(GuiSettings settings)
 		{
-			var settings = _historyModel.Current;
-			
-			if (_uiModel.HasLanguage && _uiModel.Language != settings.Language)
-				settings.Language = _uiModel.Language;
+			settings.Language = _uiModel.Form.Language ?? settings.Language;
 
-			if (_collectionModel.IsInitialized && !_collectionModel.CountById.IsEqualTo(settings.CollectionCount))
+			if (_collectionModel.IsLoaded)
 				settings.CollectionCount = _collectionModel.CountById.ToDictionary();
 
-			if (_uiModel.Form.HideTooltips != settings.HideTooltips)
-				settings.HideTooltips = _uiModel.Form.HideTooltips;
+			settings.HideTooltips = _uiModel.Form.HideTooltips;
 		}
 
 		private void historyUpdate()
@@ -497,7 +509,7 @@ namespace Mtgdb.Gui
 				FilterType = FilterType.States,
 				FilterCmc = FilterCmc.States,
 				FilterGrid = FilterManager.States,
-				Language = _uiModel.Language,
+				Language = _uiModel.Form.Language,
 				MainDeckCount = _deckModel.MainDeck.CountById.ToDictionary(),
 				MainDeckOrder = _deckModel.MainDeck.CardsIds.ToList(),
 				SideDeckCount = _deckModel.SideDeck.CountById.ToDictionary(),
@@ -555,7 +567,7 @@ namespace Mtgdb.Gui
 			_searchStringSubsystem.AppliedText = settings.Find ?? string.Empty;
 
 			if (settings.Language != null)
-				_uiModel.Language = settings.Language;
+				_uiModel.Form.Language = settings.Language;
 
 			_searchStringSubsystem.ApplyFind();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
@@ -567,7 +579,8 @@ namespace Mtgdb.Gui
 			_sortSubsystem.ApplySort(settings.Sort);
 
 			hideSampleHand();
-			loadCollection(settings.Collection);
+
+			_collectionModel.LoadCollection(settings.Collection, append: false);
 			loadDeck(_requiredDeck ?? settings.Deck);
 
 			_legalitySubsystem.SetFilterFormat(settings.LegalityFilterFormat);
@@ -742,7 +755,7 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			loadCollection(loaded);
+			_collectionModel.LoadCollection(loaded, append: false);
 		}
 
 		private void deckLoaded(Deck deck)

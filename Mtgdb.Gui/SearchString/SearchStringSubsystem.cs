@@ -101,7 +101,7 @@ namespace Mtgdb.Gui
 
 		private void languageChanged()
 		{
-			_suggestModel.LanguageCurrent = _uiModel.Language;
+			_suggestModel.LanguageCurrent = _uiModel.Form.Language;
 		}
 
 		private void idleInputMonitoringThread()
@@ -220,7 +220,7 @@ namespace Mtgdb.Gui
 		public void UpdateSuggestInput()
 		{
 			_suggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
-			_suggestModel.LanguageCurrent = _uiModel.Language;
+			_suggestModel.LanguageCurrent = _uiModel.Form.Language;
 		}
 
 		private void parentKeyDown(object sender, KeyEventArgs e)
@@ -557,7 +557,7 @@ namespace Mtgdb.Gui
 		private void updateSearchResult()
 		{
 			if (!string.IsNullOrWhiteSpace(_currentText))
-				SearchResult = _searcher.Search(_currentText, _uiModel.Language);
+				SearchResult = _searcher.Search(_currentText, _uiModel.Form.Language);
 			else
 				SearchResult = null;
 		}

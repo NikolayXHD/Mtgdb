@@ -379,6 +379,8 @@ namespace Mtgdb.Gui
 				CloseTab();
 			else if (e.KeyData == (Keys.Control | Keys.Tab))
 				NextTab();
+			else if (e.KeyData == (Keys.Control | Keys.Shift | Keys.Tab))
+				PrevTab();
 			else if (e.KeyData == (Keys.Control | Keys.T))
 				NewTab(onCreated: null);
 			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))

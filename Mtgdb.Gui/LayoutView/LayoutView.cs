@@ -32,21 +32,21 @@ namespace Mtgdb.Gui
 
 		public Control Control => _view;
 		public Size CardMinSize => _view.CardSize;
-		public int CardHorzInterval => _view.CardInterval.Width;
-		public int CardVertInterval => _view.CardInterval.Height;
+		public int CardHorzInterval => _view.LayoutOptions.CardInterval.Width;
+		public int CardVertInterval => _view.LayoutOptions.CardInterval.Height;
 		public int RowCount => _view.Count;
 		public IEnumerable<string> FieldNames => _view.FieldNames;
 
 		public bool AllowPartialCards
 		{
-			get { return _view.AllowPartialCards; }
-			set { _view.AllowPartialCards = value; }
+			get { return _view.LayoutOptions.AllowPartialCards; }
+			set { _view.LayoutOptions.AllowPartialCards = value; }
 		}
 
 		public Size PartialCardSize
 		{
-			get { return _view.PartialCardsThreshold; }
-			set { _view.PartialCardsThreshold = value; }
+			get { return _view.LayoutOptions.PartialCardsThreshold; }
+			set { _view.LayoutOptions.PartialCardsThreshold = value; }
 		}
 
 		public int VisibleRecordIndex
@@ -184,16 +184,16 @@ namespace Mtgdb.Gui
 				var layout = value ? typeof(CardLayout) : typeof(DeckLayout);
 				_view.LayoutControlType = layout;
 
-				var interval = _view.CardInterval;
+				var interval = _view.LayoutOptions.CardInterval;
 
 				if (value)
-					_view.CardInterval = new Size(interval.Height * 2, interval.Height);
+					_view.LayoutOptions.CardInterval = new Size(interval.Height * 2, interval.Height);
 				else
-					_view.CardInterval = new Size(interval.Height, interval.Height);
+					_view.LayoutOptions.CardInterval = new Size(interval.Height, interval.Height);
 
-				var threshold = _view.PartialCardsThreshold;
+				var threshold = _view.LayoutOptions.PartialCardsThreshold;
 
-				_view.PartialCardsThreshold = new Size(
+				_view.LayoutOptions.PartialCardsThreshold = new Size(
 					_view.ProbeCard.Width * threshold.Height / _view.ProbeCard.Height,
 					threshold.Height);
 			}

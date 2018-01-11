@@ -93,6 +93,7 @@
     <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
     <Compile Include="DeckSerialization\DeckFile.cs" />
     <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\FileDialogState.cs" />
     <Compile Include="DeckSerialization\JsonDeckFormatter.cs" />
     <Compile Include="DeckSerialization\MagarenaDeckFormatter.cs" />
     <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />

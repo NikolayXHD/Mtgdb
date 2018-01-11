@@ -25,6 +25,8 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
+			Kernel.BindLazy<CardRepository>();
+
 			Kernel.Bind<KeywordSearcher>()
 				.ToSelf()
 				.InSingletonScope();

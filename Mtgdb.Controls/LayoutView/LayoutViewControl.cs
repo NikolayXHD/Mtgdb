@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -258,16 +257,16 @@ namespace Mtgdb.Controls
 		private int getColumnsCount() => CardLayoutUtil.GetVisibleCount(
 			Width - _scrollBar.Width,
 			CardSize.Width,
-			CardInterval.Width,
-			PartialCardsThreshold.Width,
-			AllowPartialCards);
+			LayoutOptions.CardInterval.Width,
+			LayoutOptions.PartialCardsThreshold.Width,
+			LayoutOptions.AllowPartialCards);
 
 		private int getRowsCount() => CardLayoutUtil.GetVisibleCount(
 			Height,
 			CardSize.Height,
-			CardInterval.Height,
-			PartialCardsThreshold.Height,
-			AllowPartialCards);
+			LayoutOptions.CardInterval.Height,
+			LayoutOptions.PartialCardsThreshold.Height,
+			LayoutOptions.AllowPartialCards);
 
 		private void scrolled(object sender, EventArgs e)
 		{
@@ -563,16 +562,20 @@ namespace Mtgdb.Controls
 
 		private Point getCardLocation(int i, int j)
 		{
+			var cardInterval = LayoutOptions.CardInterval;
+
 			return new Point(
-				CardInterval.Width/2 + i*(CardSize.Width + CardInterval.Width),
-				CardInterval.Height/2 + j*(CardSize.Height + CardInterval.Height));
+				cardInterval.Width/2 + i*(CardSize.Width + cardInterval.Width),
+				cardInterval.Height/2 + j*(CardSize.Height + cardInterval.Height));
 		}
 
 		private Point getCardCell(Point location)
 		{
+			var cardInterval = LayoutOptions.CardInterval;
+
 			return new Point(
-				(location.X - CardInterval.Width/2)/(CardSize.Width + CardInterval.Width),
-				(location.Y - CardInterval.Height/2)/(CardSize.Height + CardInterval.Height));
+				(location.X - cardInterval.Width/2)/(CardSize.Width + cardInterval.Width),
+				(location.Y - cardInterval.Height/2)/(CardSize.Height + cardInterval.Height));
 		}
 
 		private static int getCardIndex(int i, int j, int columnsCount)
@@ -690,44 +693,6 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof (Size), "0, 0")]
-		public Size CardInterval
-		{
-			get { return _cardInterval; }
-			set
-			{
-				_cardInterval = value;
-				Invalidate();
-				OnLayout(new LayoutEventArgs(this, nameof(CardInterval)));
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(false)]
-		public bool AllowPartialCards
-		{
-			get { return _allowPartialCards; }
-			set
-			{
-				_allowPartialCards = value;
-				Invalidate();
-				OnLayout(new LayoutEventArgs(this, nameof(AllowPartialCards)));
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(typeof (Size), "0, 0")]
-		public Size PartialCardsThreshold
-		{
-			get { return _partialCardsThreshold; }
-			set
-			{
-				_partialCardsThreshold = value;
-				OnLayout(new LayoutEventArgs(this, nameof(PartialCardsThreshold)));
-			}
-		}
-
-		[Category("Settings")]
 		[DefaultValue(typeof (Color), "Transparent")]
 		public Color HotTrackBackgroundColor { get; set; }
 
@@ -742,6 +707,33 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
+
+		private LayoutOptions _layoutOptions = new LayoutOptions();
+
+		[Category("Settings")]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		public LayoutOptions LayoutOptions
+		{
+			get { return _layoutOptions; }
+			set
+			{
+				if (value != _layoutOptions)
+				{
+					if (_layoutOptions != null)
+						_layoutOptions.Changed -= layoutOptionsChanged;
+
+					_layoutOptions = value;
+					layoutOptionsChanged();
+					_layoutOptions.Changed += layoutOptionsChanged;
+				}
+			}
+		}
+
+		private void layoutOptionsChanged()
+		{
+			Invalidate();
+			OnLayout(new LayoutEventArgs(this, nameof(LayoutOptions)));
+		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CardIndex
@@ -846,10 +838,7 @@ namespace Mtgdb.Controls
 			get { return ProbeCard.Fields.Select(_ => _.FieldName); }
 		}
 
-		private Size _cardInterval;
 		private Type _layoutControlType;
-		private bool _allowPartialCards;
-		private Size _partialCardsThreshold;
 		private int _cardIndex;
 
 		private readonly Dictionary<object, int> _rowHandleByObject = new Dictionary<object, int>();
