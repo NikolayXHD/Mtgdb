@@ -266,16 +266,16 @@ namespace Mtgdb.Dal
 		internal PriceValues PricesValues { get; set; }
 
 		[JsonIgnore]
-		public string Name => GetName(UiModel?.Language);
+		public string Name => GetName(UiModel?.Form?.Language);
 
 		[JsonIgnore]
-		public string Type => GetType(UiModel?.Language);
+		public string Type => GetType(UiModel?.Form?.Language);
 
 		[JsonIgnore]
-		public string Text => GetText(UiModel?.Language);
+		public string Text => GetText(UiModel?.Form?.Language);
 
 		[JsonIgnore]
-		public string Flavor => GetFlavor(UiModel?.Language);
+		public string Flavor => GetFlavor(UiModel?.Form?.Language);
 
 
 

@@ -126,8 +126,7 @@ namespace Mtgdb.Gui
 			SuggestModel suggestModel,
 			Loader loader,
 			TooltipController tooltipController,
-			CardRepository repository,
-			UiModel uiModel)
+			CardRepository repository)
 			:this()
 		{
 			_tooltipController = tooltipController;
@@ -170,8 +169,6 @@ namespace Mtgdb.Gui
 				button.Enabled = false;
 
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
-
-			uiModel.Form = this;
 		}
 
 		private void tabsDragOver(object sender, DragEventArgs e)
@@ -302,7 +299,7 @@ namespace Mtgdb.Gui
 		{
 			_loader.Add(() =>
 			{
-				_downloaderSubsystem.FetchNews(false);
+				_downloaderSubsystem.FetchNews(repeatViewed: false);
 				this.Invoke(updateDownloadButton);
 			});
 
@@ -432,6 +429,16 @@ namespace Mtgdb.Gui
 
 			if (nextPageIndex == _tabs.Count)
 				nextPageIndex = 0;
+
+			_tabs.SelectedIndex = nextPageIndex;
+		}
+
+		public void PrevTab()
+		{
+			int nextPageIndex = _tabs.SelectedIndex - 1;
+
+			if (nextPageIndex < 0)
+				nextPageIndex = _tabs.Count - 1;
 
 			_tabs.SelectedIndex = nextPageIndex;
 		}

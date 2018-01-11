@@ -30,8 +30,11 @@
 		{
 			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.SortOptions sortOptions1 = new Mtgdb.Controls.SortOptions();
+			Mtgdb.Controls.LayoutOptions layoutOptions1 = new Mtgdb.Controls.LayoutOptions();
 			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.SortOptions sortOptions2 = new Mtgdb.Controls.SortOptions();
+			Mtgdb.Controls.LayoutOptions layoutOptions2 = new Mtgdb.Controls.LayoutOptions();
+
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
 			this._panelFilters = new System.Windows.Forms.FlowLayoutPanel();
 			this.FilterAbility = new Mtgdb.Controls.QuickFilterControl();
@@ -858,19 +861,22 @@
 			// 
 			// _layoutViewCards
 			// 
-			this._layoutViewCards.AllowPartialCards = true;
+			layoutOptions1.AllowPartialCards = true;
+			layoutOptions1.CardInterval = new System.Drawing.Size(4, 2);
+			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(334, 225);
+			this._layoutViewCards.LayoutOptions = layoutOptions1;
 			this._layoutViewCards.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._layoutViewCards.BackColor = System.Drawing.Color.White;
-			this._layoutViewCards.CardInterval = new System.Drawing.Size(4, 2);
+			
 			this._layoutViewCards.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
 			this._layoutViewCards.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
 			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
 			this._layoutViewCards.Location = new System.Drawing.Point(0, 70);
 			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewCards.Name = "_layoutViewCards";
-			this._layoutViewCards.PartialCardsThreshold = new System.Drawing.Size(334, 225);
+			
 			searchOptions1.Allow = true;
 			searchOptions1.ButtonMargin = new System.Drawing.Size(19, 2);
 			searchOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
@@ -898,18 +904,19 @@
 			// 
 			// _layoutViewDeck
 			// 
-			this._layoutViewDeck.AllowPartialCards = true;
+			layoutOptions2.AllowPartialCards = true;
+			layoutOptions2.CardInterval = new System.Drawing.Size(2, 2);
+			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(161, 225);
+			this._layoutViewDeck.LayoutOptions = layoutOptions2;
 			this._layoutViewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
-			this._layoutViewDeck.CardInterval = new System.Drawing.Size(2, 2);
 			this._layoutViewDeck.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
 			this._layoutViewDeck.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
 			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
 			this._layoutViewDeck.Location = new System.Drawing.Point(0, 515);
 			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewDeck.Name = "_layoutViewDeck";
-			this._layoutViewDeck.PartialCardsThreshold = new System.Drawing.Size(161, 225);
 			this._layoutViewDeck.SearchOptions = searchOptions2;
 			this._layoutViewDeck.Size = new System.Drawing.Size(1537, 311);
 			sortOptions2.Allow = true;

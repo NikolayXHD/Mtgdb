@@ -8,13 +8,15 @@ namespace Mtgdb.Gui
 {
 	public class HistoryModel
 	{
-		private List<GuiSettings> _settingsHistory;
-		private int _settingsIndex;
-		private readonly int _maxDepth;
+		static HistoryModel()
+		{
+			_jsonSerializerSettings = new JsonSerializerSettings
+			{
+				Formatting = Formatting.Indented
+			};
 
-		private string HistoryFile => AppDir.History.AddPath($"{Id}.json");
-
-		public string Id { get; set; }
+			_jsonSerializerSettings.Converters.Add(new CustomConverter());
+		}
 
 		public HistoryModel(string id, string language, int? maxDepth)
 		{
@@ -23,7 +25,13 @@ namespace Mtgdb.Gui
 			Directory.CreateDirectory(AppDir.History);
 
 			if (File.Exists(HistoryFile))
-				loadState();
+			{
+				var serialized = File.ReadAllText(HistoryFile);
+				var state = JsonConvert.DeserializeObject<HistoryState>(serialized);
+
+				_settingsHistory = state.SettingsHistory;
+				_settingsIndex = state.SettingsIndex;
+			}
 			else
 			{
 				_settingsHistory = new List<GuiSettings>();
@@ -32,31 +40,11 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public GuiSettings Current => _settingsHistory[_settingsIndex];
-
-		public bool CanRedo
-		{
-			get
-			{
-				validate();
-				return _settingsIndex < _settingsHistory.Count - 1;
-			}
-		}
-
-		public bool CanUndo
-		{
-			get
-			{
-				validate();
-				return _settingsIndex > 0;
-			}
-		}
 
 
 		public void Add(GuiSettings settings)
 		{
 			_settingsHistory.Add(settings);
-			
 			_settingsIndex = _settingsHistory.Count - 1;
 		}
 
@@ -88,47 +76,29 @@ namespace Mtgdb.Gui
 
 		public void Save()
 		{
-			int index = _settingsIndex;
-			string serialized = serialize(_settingsHistory, _maxDepth, index);
-
+			var state = getState();
+			string serialized = JsonConvert.SerializeObject(state, _jsonSerializerSettings);
 			File.WriteAllText(HistoryFile, serialized);
 		}
 
-		private static string serialize(List<GuiSettings> settingsHistory, int maxDepth, int settingsIndex)
+		private HistoryState getState()
 		{
-			int minSaveIndex = settingsIndex - maxDepth;
-			int saveCount = 1 + 2*maxDepth;
+			int minSaveIndex = _settingsIndex - _maxDepth;
+			int saveCount = 1 + 2 * _maxDepth;
 
 			if (minSaveIndex < 0)
 				minSaveIndex = 0;
 
-			if (saveCount > settingsHistory.Count - minSaveIndex)
-				saveCount = settingsHistory.Count - minSaveIndex;
+			if (saveCount > _settingsHistory.Count - minSaveIndex)
+				saveCount = _settingsHistory.Count - minSaveIndex;
 
 			var state = new HistoryState
 			{
-				SettingsHistory = settingsHistory.SkipFirst(minSaveIndex).TakeFirst(saveCount),
-				SettingsIndex = settingsIndex - minSaveIndex
+				SettingsHistory = _settingsHistory.SkipFirst(minSaveIndex).TakeFirst(saveCount),
+				SettingsIndex = _settingsIndex - minSaveIndex
 			};
 
-			var settings = new JsonSerializerSettings
-			{
-				Formatting = Formatting.Indented,
-			};
-
-			settings.Converters.Add(new CustomConverter());
-
-			string serialized = JsonConvert.SerializeObject(state, settings);
-			return serialized;
-		}
-
-		private void loadState()
-		{
-			var serialized = File.ReadAllText(HistoryFile);
-			var state = JsonConvert.DeserializeObject<HistoryState>(serialized);
-
-			_settingsHistory = state.SettingsHistory;
-			_settingsIndex = state.SettingsIndex;
+			return state;
 		}
 
 		private void validate()
@@ -137,8 +107,41 @@ namespace Mtgdb.Gui
 				throw new IndexOutOfRangeException();
 		}
 
+
+
+		public GuiSettings Current => _settingsHistory[_settingsIndex];
+
+		public bool CanRedo
+		{
+			get
+			{
+				validate();
+				return _settingsIndex < _settingsHistory.Count - 1;
+			}
+		}
+
+		public bool CanUndo
+		{
+			get
+			{
+				validate();
+				return _settingsIndex > 0;
+			}
+		}
+
+		private string HistoryFile => AppDir.History.AddPath($"{Id}.json");
+		public string Id { get; set; }
+
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }
+
+
+
+		private int _settingsIndex;
+
+		private readonly List<GuiSettings> _settingsHistory;
+		private readonly int _maxDepth;
+		private static readonly JsonSerializerSettings _jsonSerializerSettings;
 	}
 
 	internal class CustomConverter : JsonConverter

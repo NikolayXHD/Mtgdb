@@ -26,17 +26,7 @@ namespace Mtgdb.Gui
 
 			startThreads();
 
-			historyUpdateGlobals();
-
-			historyApply(_historyModel.Current);
-
-			if (_requiredDeck != null)
-			{
-				_requiredDeck = null;
-				historyUpdate();
-			}
-
-			_deckSerializationSubsystem.LastFile = _historyModel.Current.DeckFile;
+			_deckSerializationSubsystem.State.LastFile = _historyModel.Current.DeckFile;
 		}
 
 		private void resetLayouts()
@@ -305,6 +295,9 @@ namespace Mtgdb.Gui
 				card: card,
 				touchedChanged: touchedChanged);
 			
+			if (!_isTabSelected)
+				return;
+
 			if (restoringSettings())
 				return;
 
@@ -371,11 +364,6 @@ namespace Mtgdb.Gui
 			_deckModel.Shuffle();
 		}
 
-		private void loadCollection(Deck collection)
-		{
-			_collectionModel.LoadCollection(collection, append: false);
-		}
-
 
 
 		private void deckZoneHover(object sender, EventArgs e)
@@ -426,6 +414,9 @@ namespace Mtgdb.Gui
 
 		private void languageChanged()
 		{
+			if (!_isTabSelected)
+				return;
+
 			if (restoringSettings())
 				return;
 

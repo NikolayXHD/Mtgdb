@@ -249,7 +249,7 @@ namespace Mtgdb.Gui
 
 		public void SetId(string tabId)
 		{
-			_historyModel = new HistoryModel(tabId, _uiModel.Language, _undoConfig.MaxDepth);
+			_historyModel = new HistoryModel(tabId, _uiModel.Form.Language, _undoConfig.MaxDepth);
 		}
 
 		private void subscribeToEvents()
@@ -491,6 +491,7 @@ namespace Mtgdb.Gui
 
 		private bool _threadsRunning;
 		private bool _eventsSubscribed;
+		private bool _isTabSelected;
 
 		public Zone DeckZone
 		{

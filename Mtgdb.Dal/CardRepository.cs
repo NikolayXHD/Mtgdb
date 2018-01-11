@@ -12,13 +12,11 @@ namespace Mtgdb.Dal
 	{
 		public CardRepository(UiModel uiModel)
 		{
+			_uiModel = uiModel;
+
 			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
 			BannedAndRestrictedFile = AppDir.Data.AddPath("patch.json");
-
 			Cards = new List<Card>();
-
-			_uiModel = uiModel;
-			_uiModel.CardRepo = this;
 		}
 
 		public List<Card> Cards { get; }

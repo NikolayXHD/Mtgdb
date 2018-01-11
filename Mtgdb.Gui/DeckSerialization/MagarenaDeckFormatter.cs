@@ -13,6 +13,13 @@ namespace Mtgdb.Gui
 			_cardRepo = cardRepo;
 		}
 
+		public override Deck ImportDeck(string serialized)
+		{
+			var deck = base.ImportDeck(serialized);
+			new XitaxDeckTransformation(_cardRepo).Transform(deck);
+			return deck;
+		}
+
 		public override Card GetCard(Match match)
 		{
 			var card = _cardRepo.CardsByName.TryGet(match.Groups["name"].Value.RemoveDiacritics())

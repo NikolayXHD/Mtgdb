@@ -108,15 +108,16 @@ namespace Mtgdb.Gui
 
 		public Deck LoadFile(string file)
 		{
-			LastLoadedFile = file;
+			State.LastLoadedFile = file;
 
 			Deck deck = Deck.Create();
 			deck.File = file;
 
 			int maxLen = 0x8000000; // 128 MB
-			if (new FileInfo(file).Length > maxLen)
+			long length = new FileInfo(file).Length;
+			if (length > maxLen)
 			{
-				deck.Error = "Deck file is too large";
+				deck.Error = $"File size {length} bytes exceeds maximum of {maxLen} bytes";
 				return deck;
 			}
 
@@ -194,39 +195,15 @@ namespace Mtgdb.Gui
 			return deck;
 		}
 
-		public string LastFile { get; set; }
+		private string LastSavedDirectory => getDir(State.LastSavedFile);
 
-		private string LastSavedFile
-		{
-			get { return _lastSavedFile ?? LastFile; }
-
-			set
-			{
-				_lastSavedFile = value;
-				LastFile = value;
-			}
-		}
-
-		private string LastLoadedFile
-		{
-			get { return _lastLoadedFile ?? LastFile; }
-
-			set
-			{
-				_lastLoadedFile = value;
-				LastFile = value;
-			}
-		}
-
-		private string LastSavedDirectory => getDir(LastSavedFile);
-
-		private string LastLoadedDirectory => getDir(LastLoadedFile);
+		private string LastLoadedDirectory => getDir(State.LastLoadedFile);
 
 
 
-		private string LastSavedExtension => Path.GetExtension(LastSavedFile);
+		private string LastSavedExtension => Path.GetExtension(State.LastSavedFile);
 
-		private string LastLoadedExtension => Path.GetExtension(_lastLoadedFile);
+		private string LastLoadedExtension => Path.GetExtension(State.LastLoadedFile);
 
 
 
@@ -249,7 +226,7 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return null;
 
-			LastSavedFile = dlg.FileName;
+			State.LastSavedFile = dlg.FileName;
 			return new DeckFile(dlg.FileName, dlg.FilterIndex - 1);
 		}
 
@@ -303,10 +280,8 @@ namespace Mtgdb.Gui
 		private readonly string _loadFilter;
 		private readonly string _saveFilter;
 
-		private string _lastSavedFile;
-		private string _lastLoadedFile;
-
 		private readonly IDeckFormatter[] _formatters;
+		public FileDialogState State { get; } = new FileDialogState();
 
 		/// <summary>
 		/// Used instead of empty string or null to avoid weird .NET call to RecreateHandle()
