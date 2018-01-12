@@ -24,9 +24,8 @@ namespace Mtgdb.Gui
 			// only after subscribeToEvents so that probeCardCreating handler executes
 			resetLayouts();
 
-			startThreads();
-
 			_deckSerializationSubsystem.State.LastFile = _historyModel.Current.DeckFile;
+			_isLoaded = true;
 		}
 
 		private void resetLayouts()

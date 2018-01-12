@@ -147,9 +147,11 @@ namespace Mtgdb.Gui
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
 
-			Load += formLoad;
-
 			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
+			_historyModel = new HistoryModel(_uiModel.Form.Language, _undoConfig.MaxDepth);
+
+			updateFormStatus();
+			Load += formLoad;
 		}
 
 		private void scale()
@@ -249,7 +251,7 @@ namespace Mtgdb.Gui
 
 		public void SetId(string tabId)
 		{
-			_historyModel = new HistoryModel(tabId, _uiModel.Form.Language, _undoConfig.MaxDepth);
+			_historyModel.Id = tabId;
 		}
 
 		private void subscribeToEvents()
@@ -348,8 +350,6 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.ProbeCardCreating += probeCardCreating;
 			_layoutViewDeck.ProbeCardCreating += probeCardCreating;
-
-			_eventsSubscribed = true;
 		}
 
 		private void unsubscribeFromEvents()
@@ -490,7 +490,7 @@ namespace Mtgdb.Gui
 		private readonly RichTextBoxSelectionSubsystem _findEditorSelectionSubsystem;
 
 		private bool _threadsRunning;
-		private bool _eventsSubscribed;
+		private bool _isLoaded;
 		private bool _isTabSelected;
 
 		public Zone DeckZone

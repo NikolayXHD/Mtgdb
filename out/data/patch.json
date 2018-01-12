@@ -38,48 +38,117 @@
 		},
 		"Doubling Cube": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Elemental Resonance": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Ice Cauldron": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Jeweled Amulet": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Mana Reflection": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Drain Power": {
 			"GeneratedMana": [
-				"{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"
+				"{W}",
+				"{U}",
+				"{B}",
+				"{R}",
+				"{G}",
+				"{C}",
+				"{any}"
 			]
 		},
 		"Urborg, Tomb of Yawgmoth": {
-			"GeneratedMana": [ "{B}" ]
+			"GeneratedMana": ["{B}"]
 		},
 		"Mons's Goblin Waiters": {
-			"GeneratedMana": [ "{R}" ]
+			"GeneratedMana": ["{R}"]
 		},
 		"Kruphix, God of Horizons": {
-			"GeneratedMana": [ "{C}" ]
+			"GeneratedMana": ["{C}"]
 		},
 		"Jaraku the Interloper": {
 			"FlipDuplicate": true
 		},
 		"Scarmaker": {
 			"FlipDuplicate": true
+		}
+	},
+
+	"Legality": {
+		"Ixalan Block": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Standard": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Modern": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Commander": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Legacy": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Vintage": {
+			"Sets": { "Add": ["RIX"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
 		}
 	}
 }

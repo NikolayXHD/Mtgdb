@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using Mtgdb.ImageProcessing;
@@ -18,7 +19,7 @@ namespace Mtgdb.Test
 			LogManager.Flush();
 		}
 
-		[TestCase("E02")]
+		[TestCase("RIX"), Order(1)]
 		public void DownloadGathererImages(string setCode)
 		{
 			using (var client = new GathererClient())
@@ -30,7 +31,6 @@ namespace Mtgdb.Test
 		}
 
 		[TestCase("xln")]
-		[TestCase("c17")]
 		public void DownloadMagicspoilerImages(string setCode)
 		{
 			using (var client = new MagicspoilerClient())
@@ -41,15 +41,15 @@ namespace Mtgdb.Test
 		}
 
 		// [TestCase(MagicspoilerDir, MagicspoilerPreprocessedDir, "XLN")]
-		[TestCase(GathererDir, GathererPreprocessedDir, "E02")]
-		public void PreProcessImages(string dir, string targetDir, string subdir)
+		[TestCase(GathererDir, GathererPreprocessedDir, "RIX.large"), Order(2)]
+		public void PreProcessImages(string sourceDir, string targetDir, string subdir)
 		{
-			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();
+			var sourceImages = Directory.GetFiles(Path.Combine(sourceDir, subdir)).ToArray();
 
 			foreach (var sourceImage in sourceImages)
 			{
 				var targetImage = sourceImage
-					.Replace(dir, targetDir);
+					.Replace(sourceDir, targetDir);
 
 				if (File.Exists(targetImage))
 					continue;
@@ -59,55 +59,34 @@ namespace Mtgdb.Test
 			}
 		}
 
-
-
-		[TestCase("CMA")]
-		public void AddFrame(string setSubdir)
+		//[TestCase(GathererDir, "RIX.large", "RIX.jpg"), Order(3)]
+		[TestCase(GathererDir, "RIX", "RIX.jpg")]
+		//[TestCase(GathererPreprocessedDir, "RIX.large", "RIX.jpg")]
+		[TestCase(GathererPreprocessedDir, "RIX", "RIX.jpg")]
+		public void ConvertToJpg(string dir, string sourceSubdir, string targetSubdir)
 		{
-			addFrame(
-				Path.Combine("MQ", setSubdir),
-				"frame.png",
-				_croppedLocation,
-				_croppedSize,
-				Path.Combine(GathererPreprocessedDir, setSubdir));
-		}
-
-		[TestCase("CMA")]
-		public void AddFrameSmall(string setSubdir)
-		{
-			addFrame(
-				Path.Combine("LQ", setSubdir),
-				"frame.small.png",
-				_croppedLocationSmall,
-				_croppedSizeSmall,
-				Path.Combine(GathererDir, setSubdir));
-		}
-
-		private static void addFrame(string targetSubdir, string frameFile, Point location, Size size, string originalDir)
-		{
-			string targetDir = Path.Combine(FramedImagesDir, targetSubdir);
-			var frameImage = Image.FromFile(Path.Combine(FramedImagesDir, frameFile));
-
-			var imageFiles = Directory.GetFiles(originalDir, "*.jpg", SearchOption.AllDirectories)
-				.ToArray();
-
-			foreach (var imageFile in imageFiles)
+			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+			var codec = codecs.First(_ => _.MimeType == "image/jpeg");
+			var encoderParams = new EncoderParameters
 			{
-				using (var image = new Bitmap(frameImage, frameImage.Width, frameImage.Height))
-				using (var graphics = Graphics.FromImage(image))
-				using (var sourceImage = Image.FromFile(imageFile))
-				{
-					graphics.DrawImage(sourceImage, new Rectangle(location, size));
-					image.Save(Path.Combine(targetDir, Path.GetFileName(imageFile)));
-				}
+				Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
+			};
+
+			var sourceImages = Directory.GetFiles(Path.Combine(dir, sourceSubdir)).ToArray();
+
+			var targetDir = Path.Combine(dir, targetSubdir);
+			Directory.CreateDirectory(targetDir);
+
+			foreach (var sourceImage in sourceImages)
+			{
+				var targetImage = Path.Combine(targetDir, Path.GetFileNameWithoutExtension(sourceImage) + ".jpg");
+
+				if (File.Exists(targetImage))
+					continue;
+
+				new Bitmap(sourceImage).Save(targetImage, codec, encoderParams);
 			}
 		}
-
-		private static readonly Size _croppedSize = new Size(393, 564);
-		private static readonly Point _croppedLocation = new Point(17, 17);
-
-		private static readonly Size _croppedSizeSmall = new Size(198, 284);
-		private static readonly Point _croppedLocationSmall = new Point(9, 9);
 
 		private const string GathererDir = @"D:\Distrib\games\mtg\Gatherer.Original";
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";

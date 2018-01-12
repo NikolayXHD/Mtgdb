@@ -48,8 +48,8 @@ namespace Mtgdb.Gui
 
 			var formRoot = _kernel.Get<FormRoot>();
 
-			formRoot.NewTab(onCreated: null);
 			formRoot.Show();
+			formRoot.NewTab(onCreated: null);
 			Application.Run(formRoot);
 		}
 

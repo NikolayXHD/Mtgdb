@@ -169,6 +169,8 @@ namespace Mtgdb.Gui
 				button.Enabled = false;
 
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
+
+			_language = _buttonLanguage.Text.ToLowerInvariant();
 		}
 
 		private void tabsDragOver(object sender, DragEventArgs e)

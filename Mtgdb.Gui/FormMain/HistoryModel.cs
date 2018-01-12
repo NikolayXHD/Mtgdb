@@ -18,10 +18,9 @@ namespace Mtgdb.Gui
 			_jsonSerializerSettings.Converters.Add(new CustomConverter());
 		}
 
-		public HistoryModel(string id, string language, int? maxDepth)
+		public HistoryModel(string language, int? maxDepth)
 		{
 			_maxDepth = maxDepth ?? 100;
-			Id = id;
 			Directory.CreateDirectory(AppDir.History);
 
 			if (File.Exists(HistoryFile))

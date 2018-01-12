@@ -31,7 +31,7 @@ namespace Mtgdb.Dal
 			if (!File.Exists(model.FullPath))
 				return null;
 
-			image = LoadImage(model, CardSize, crop: false);
+			image = LoadImage(model, CardSize);
 
 			lock (_imagesByPath)
 				if (addFirst(model.FullPath, model.Rotated, image))
@@ -41,14 +41,14 @@ namespace Mtgdb.Dal
 			return image;
 		}
 
-		public static Bitmap LoadImage(ImageModel model, Size size, bool crop)
+		public static Bitmap LoadImage(ImageModel model, Size size)
 		{
 			var original = Open(model);
 
 			if (original == null)
 				return null;
 
-			var result = Transform(original, model, size, crop);
+			var result = Transform(original, model, size, crop: false);
 
 			if (result != original)
 				original.Dispose();
@@ -86,11 +86,12 @@ namespace Mtgdb.Dal
 		{
 			Bitmap resizedBmp;
 
-			var frame = getFrame(original, crop);
-
 			if (!crop && size == original.Size || model.IsArt && original.Size.FitsIn(size))
 				resizedBmp = original;
 			else
+			{
+				var frame = getFrame(original, crop);
+
 				try
 				{
 					resizedBmp = original.FitIn(size, frame);
@@ -100,6 +101,7 @@ namespace Mtgdb.Dal
 					resizedBmp = original;
 					_log.Error(ex);
 				}
+			}
 
 			if (model.IsArt || crop)
 				return resizedBmp;
