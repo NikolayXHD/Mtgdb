@@ -5,13 +5,19 @@ namespace Mtgdb.Dal
 {
 	internal class LegalityPatch
 	{
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public HashSet<string> Sets { get; set; }
+		public Operation Sets { get; set; }
 
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public HashSet<string> Banned { get; set; }
+		public Operation Banned { get; set; }
 
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public HashSet<string> Restricted { get; set; }
+		public Operation Restricted { get; set; }
+
+		public class Operation
+		{
+			[JsonConverter(typeof(InternedStringArrayConverter))]
+			public HashSet<string> Add { get; set; }
+
+			[JsonConverter(typeof(InternedStringArrayConverter))]
+			public HashSet<string> Remove { get; set; }
+		}
 	}
 }

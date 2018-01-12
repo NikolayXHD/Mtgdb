@@ -19,6 +19,9 @@ namespace Mtgdb.Gui
 
 		public void OnTabSelected(Card draggedCard)
 		{
+			if (!_isLoaded)
+				throw new InvalidOperationException("Form must be loaded first");
+
 			_isTabSelected = true;
 
 			lock (_searchResultCards)
@@ -43,9 +46,8 @@ namespace Mtgdb.Gui
 				_findEditor.Focus();  
 			else
 				dragCard(draggedCard);
-
-			if (_eventsSubscribed)
-				startThreads();
+			
+			startThreads();
 		}
 
 		public void OnTabUnselected()

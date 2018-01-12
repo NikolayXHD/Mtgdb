@@ -202,23 +202,30 @@ namespace Mtgdb.Dal
 
 			foreach (var pair in _patch.Legality)
 			{
-				var legal = new HashSet<string>(Str.Comparer);
-
-				foreach (string set in pair.Value.Sets)
-					foreach (var card in SetsByCode[set].Cards)
-						if (!pair.Value.Banned.Contains(card.NameEn) && !pair.Value.Restricted.Contains(card.NameEn))
-							legal.Add(card.NameEn);
+				string format = pair.Key;
+				var patch = pair.Value;
 
 				foreach (var card in Cards)
 				{
-					if (legal.Contains(card.NameEn))
-						card.SetLegality(pair.Key, Legality.Legal);
-					else if (pair.Value.Restricted.Contains(card.NameEn))
-						card.SetLegality(pair.Key, Legality.Restricted);
-					else if (pair.Value.Banned.Contains(card.NameEn))
-						card.SetLegality(pair.Key, Legality.Banned);
+					if (card.IsBannedIn(format) && !patch.Banned.Remove.Contains(card.NameEn) ||
+						patch.Banned.Add.Contains(card.NameEn))
+					{
+						card.SetLegality(format, Legality.Banned);
+					}
+					else if (card.IsRestrictedIn(format) && !patch.Restricted.Remove.Contains(card.NameEn) ||
+						patch.Restricted.Add.Contains(card.NameEn))
+					{
+						card.SetLegality(format, Legality.Restricted);
+					}
+					else if (card.IsLegalIn(format) && !card.Printings.Any(patch.Sets.Remove.Contains) ||
+						card.Printings.Any(patch.Sets.Add.Contains))
+					{
+						card.SetLegality(format, Legality.Legal);
+					}
 					else
-						card.SetLegality(pair.Key, Legality.Illegal);
+					{
+						card.SetLegality(format, Legality.Illegal);
+					}
 				}
 			}
 		}

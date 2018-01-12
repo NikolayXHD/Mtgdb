@@ -59,13 +59,17 @@ namespace Mtgdb.Test
 				}
 		}
 
-		[TestCase("c17", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
-		[TestCase("ima", XlhqDir, "IMA - Iconic Masters\\300DPI Cards")]
-		[TestCase("ust", XlhqDir, "UST - Unstable\\300DPI Cards")]
-		[TestCase("ced", XlhqDir, "CED - Collectors\' Edition\\300DPI")]
-		[TestCase("xln", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
-		[TestCase("ugl", XlhqTorrentsDir, "UGL", "UGL Tokens")]
-		[TestCase("dde", XlhqTorrentsDir, "DDE", "DDE Tokens")]
+		[TestCase("C17", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
+		[TestCase("IMA", XlhqDir, "IMA - Iconic Masters\\300DPI Cards")]
+		[TestCase("UST", XlhqDir, "UST - Unstable\\300DPI Cards")]
+		[TestCase("CED", XlhqDir, "CED - Collectors\' Edition\\300DPI")]
+		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
+		[TestCase("UGL", XlhqTorrentsDir, "UGL", "UGL Tokens")]
+		[TestCase("DDE", XlhqTorrentsDir, "DDE", "DDE Tokens")]
+		[TestCase("CMA", GathererDir, "CMA")]
+		[TestCase("DDT", GathererDir, "DDT")]
+		[TestCase("E02", GathererDir, "E02")]
+		[TestCase("RIX", GathererDir, "RIX")]
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs
@@ -83,5 +87,6 @@ namespace Mtgdb.Test
 
 		private const string XlhqDir = "D:\\Distrib\\games\\mtg\\Mega\\XLHQ";
 		private const string XlhqTorrentsDir = "D:\\Distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
+		private const string GathererDir = "D:\\Distrib\\games\\mtg\\Gatherer.Original";
 	}
 }

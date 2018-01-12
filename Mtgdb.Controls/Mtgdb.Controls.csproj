@@ -44,6 +44,8 @@
     </Compile>
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="BmpProcessor.cs" />
+    <Compile Include="BmpReader.cs" />
+    <Compile Include="BmpScaler.cs" />
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>

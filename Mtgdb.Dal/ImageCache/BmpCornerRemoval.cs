@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Mtgdb.Controls;
 
 namespace Mtgdb.Dal
 {
@@ -39,9 +40,9 @@ namespace Mtgdb.Dal
 			if (SameColor(leftTop, 0, 0, 0, 0))
 				return;
 
-			double radius = 13f / 370f * size;
-
 			ImageChanged = true;
+
+			double radius = 13f / 370f * size;
 			
 			modify(+radius, +radius, 0, 0);
 			modify(+radius, -radius, 0, Rect.Height - 1);

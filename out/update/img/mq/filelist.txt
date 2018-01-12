@@ -27148,6 +27148,218 @@ bf3ef57e673f3888dfc85e628b791e3d	RAV\Wojek Embermage.jpg
 0a4028e1dc1f1aa1f14cb46c3cc1ef30	RAV\Woodwraith Corrupter.jpg
 b91e027ceeb46a70b9b085dd93b7fc81	RAV\Woodwraith Strangler.jpg
 f1f2b3735bdc11e5d540f3790486bf30	RAV\Zephyr Spirit.jpg
+7b9052b23ed6c20dcedd3baa51e38432	RIX\admiral's order.jpg
+f4f83b3219252648752d81246f3bbe9c	RIX\aggressive urge.jpg
+4b6eae5ca2d7ddc5b8608d86e363fdd6	RIX\angrath's ambusher.jpg
+763a0f9a2918971e15f68bf696106238	RIX\angrath's fury.jpg
+5a176f373c6ccad3665acd35645ec9dd	RIX\angrath, minotaur pirate.jpg
+74eebe40d97c8ce4586ba2fd77e3d403	RIX\angrath, the flame-chained.jpg
+6795020dab6183a0f6b2cae67c43e429	RIX\aquatic incursion.jpg
+34a96d7fcd80b606262e0aff200f1589	RIX\arch of orazca.jpg
+e1cbc13b39a20f7549f95704cc205965	RIX\arterial flow.jpg
+c1df5d4be96faac8531461df6764a7e9	RIX\atzal, cave of eternity.jpg
+4ede6897c1f5245dbff68e268f74861e	RIX\atzocan seer.jpg
+c80301fd25df27219675a3eae6ae3e4b	RIX\awakened amalgam.jpg
+d974717638c9293cda74b03d53050925	RIX\azor's gateway.jpg
+36bf1beffbcabbdda401b9a823815101	RIX\azor, the lawbringer.jpg
+30e37fe422ddb9f7ce4c1dd039c7b67b	RIX\baffling end.jpg
+aae8d68c8aafafa707f6af18e6572357	RIX\bishop of binding.jpg
+f5504cfaa2895fb2d655621a67aa953c	RIX\blazing hope.jpg
+3e28b2334e57060ed742bbeab38c5ab9	RIX\blood sun.jpg
+ccf820275919931be149c78f09ef1e64	RIX\bombard.jpg
+9910b6c3e4c0b0e9032c289298eabb93	RIX\brass's bounty.jpg
+a7fa9361307ca36f0e861e596b89c242	RIX\brazen freebooter.jpg
+e44ed9561aeb4122c5ac3e311376cdb0	RIX\buccaneer's bravado.jpg
+74363e7c0008e0245d0c60600593ff47	RIX\cacophodon.jpg
+74b1619740fb66f6c78e0920a26b8f2b	RIX\canal monitor.jpg
+db112ded1f2ded1280de1991e3eaa8e9	RIX\captain's hook.jpg
+8f4c567fee5f6e02df41e5213f820110	RIX\champion of dusk.jpg
+c04196369fd992befaf4edef2c797282	RIX\charging tuskodon.jpg
+3ded11a40f8e5e3b502c9c47c58352ed	RIX\cherished hatchling.jpg
+62027b13a8c7eb59d280cb02bb3b6008	RIX\cinder barrens.jpg
+88b4621f330038cc37175372b75d9de5	RIX\cleansing ray.jpg
+bd81996c0de0fb8edda7fa11013d3826	RIX\colossal dreadmaw.jpg
+b1eae6e7d5397d7709992dc350915b5c	RIX\crafty cutpurse.jpg
+671225f00c84ddb80a6fbe98984caf85	RIX\crashing tide.jpg
+3a37bdcd470857be4471695ab16cbd86	RIX\crested herdcaller.jpg
+615afb8338256cd8fc0183a12f4fc528	RIX\curious obsession.jpg
+39674a1c346693e481c2225d712fbe49	RIX\daring buccaneer.jpg
+8d2ce33a3781a00f61cbed9099a46417	RIX\dark inquiry.jpg
+108083102425c8e91ad51ee5b3a359d7	RIX\dead man's chest.jpg
+fecf74837794eb6efd39ef7e12b92b3d	RIX\deadeye brawler.jpg
+2ed19fb49184e7cdbab9b9e5bbef198b	RIX\deadeye rig-hauler.jpg
+cad7d35ee7878f3b38023f38e02708d9	RIX\deeproot elite.jpg
+0284051e4f116b558ba626873ad9e262	RIX\dinosaur hunter.jpg
+460141e1c1207e4020dab918a1ac7aad	RIX\dire fleet daredevil.jpg
+ff375e6f127ef862aa85a72ff8906207	RIX\dire fleet neckbreaker.jpg
+7cf2bd5ad6a917dffe193e2bd3865b70	RIX\dire fleet poisoner.jpg
+c50a22bb511e89ea2a9b2304d8d3d8e9	RIX\divine verdict.jpg
+3f05f49834f17cc3a2ecf1aebfacef4f	RIX\dusk charger.jpg
+b12290fdefe02c3d08e167b0b3523344	RIX\dusk legion zealot.jpg
+66aa4fe6d383ddf7237327a9885ce2d5	RIX\elenda, the dusk rose.jpg
+f8e1885068196669829626c01e8746e7	RIX\enter the unknown.jpg
+15ad812ea65cf05dd51587623c0270ac	RIX\etali, primal storm.jpg
+5288b050fe94d0c00441b196e0a937c7	RIX\everdawn champion.jpg
+bb3e3116c07e1d05ca2ba8f16936af4a	RIX\evolving wilds.jpg
+3f8797be6f597120867f39f391a8380e	RIX\expel from orazca.jpg
+2494a815dffc3532120c5c5743c1a4e3	RIX\exultant skymarcher.jpg
+bb142f95bac418ff35d6350d18e3cb80	RIX\famished paladin.jpg
+8b9eb012a0253a53d73fb0d677b20c26	RIX\fanatical firebrand.jpg
+1b9f7969da151488bd6553b6e6c24235	RIX\fathom fleet boarder.jpg
+00def686374df2ca3e3683c5b7bc529c	RIX\flood of recollection.jpg
+4ebac77fef9d3ba58a0d768f6d130f08	RIX\forerunner of the coalition.jpg
+b8811f08097711e4c9c68010509a0ad7	RIX\forerunner of the empire.jpg
+882b2a05821feae8169c5598ff461a8f	RIX\forerunner of the heralds.jpg
+ee28fa00716526a1f9ee579fafea97a8	RIX\forerunner of the legion.jpg
+6411bf6c4327e1532113dbf06e1a3374	RIX\forest.jpg
+d9c39c324a612fa3ba032278251a76d2	RIX\form of the dinosaur.jpg
+3c3ed9dab4f1ad3107aeef7d208c6187	RIX\forsaken sanctuary.jpg
+c6295e14d98252ef17bc849480038942	RIX\foul orchard.jpg
+4f0de8016eaeba0a44c1c99fe6e42cc9	RIX\frilled deathspitter.jpg
+1cc9393bcdf87bad9df108048dbdf2fb	RIX\ghalta, primal hunger.jpg
+dbecbb6cc133ac44d33619c7e8727929	RIX\giltgrove stalker.jpg
+12f837dac7f33f9f0e98f4b32ad2f32a	RIX\gleaming barrier.jpg
+875827d307422ea807dd78f6448ae601	RIX\goblin trailblazer.jpg
+17ac18c3a3b71951d48250505e1e74ab	RIX\gold-forge garrison.jpg
+359411296e2eca249760c24d0b84fe90	RIX\golden demise.jpg
+120a1228f5d6e35c166e8aa8cdeb3ead	RIX\golden guardian.jpg
+8ea11cc659e5bf44d3bd6cbe487e86bb	RIX\grasping scoundrel.jpg
+89e5fce96c5bf01058e28817734e9c8b	RIX\gruesome fate.jpg
+42f525fd08ed7bd6ab7431c45298a8be	RIX\hadana's climb.jpg
+c10913a44a7c9f0c8d5eb1eec77ee9f8	RIX\hardy veteran.jpg
+6caaf1138444341ca3afa91d30f1085a	RIX\highland lake.jpg
+34c77701f3a4262927ba0fa5abbe3b5b	RIX\hornswoggle.jpg
+6b567f326e6c5115b902de490a0a3617	RIX\huatli, radiant champion.jpg
+3db38cfef55f692b7865c011018ae846	RIX\hunt the weak.jpg
+786259a11a1255f03ef5d41bee936c78	RIX\impale.jpg
+cc9caffffecd4d8b81795d17685757a2	RIX\imperial ceratops.jpg
+a5af75b5ae4c788f2b1f6c55696829fc	RIX\induced amnesia.jpg
+551746cba27d2096806243ee48d4dc77	RIX\island.jpg
+8eed04300882f0e515b5c85af4b88455	RIX\jade bearer.jpg
+b1eb68c70c89a4167090e20870afd88c	RIX\jadecraft artisan.jpg
+af647c49200e59e6f860214eac98a38f	RIX\jadelight ranger.jpg
+f8eceb7ac9b43e5621a4a0009ecb2071	RIX\journey to eternity.jpg
+74ab7e797ea6d922aba54da089a8c471	RIX\jungle creeper.jpg
+1cc8feefe19f56917767266cf67fa5aa	RIX\jungleborn pioneer.jpg
+a547d33267c8abab00df3df6b2679c00	RIX\kitesail corsair.jpg
+aa920ce1ba49c0716c214a21c359ef3c	RIX\knight of the stampede.jpg
+3a6ee3794e72fb5d4738f87c530c381c	RIX\kumena's awakening.jpg
+ec787b90e53155ab9fe98f08a110e20f	RIX\kumena, tyrant of orazca.jpg
+faf4e12b000a7e8d13ece9c34b651ed6	RIX\legion conquistador.jpg
+3e7e172358d8bc870e8c61425ad27a60	RIX\legion lieutenant.jpg
+a895cecdc71a070358c2f43e213820ee	RIX\luminous bonds.jpg
+979eaca357fe4089594859165920fcfd	RIX\majestic heliopterus.jpg
+101df6e9daa5bc0e5cad05463d18dd20	RIX\martyr of dusk.jpg
+512a36bbb183aac9c6cb794f45bd9f15	RIX\mastermind's acquisition.jpg
+a07ce20d05e22be26fdba70429fbd7d9	RIX\mausoleum harpy.jpg
+bbb05c879472a0a2096ddbb3bb66e089	RIX\merfolk mistbinder.jpg
+a98e23d437ef7f9e05d3de41919dae4c	RIX\metzali, tower of triumph.jpg
+662f5fda2ea6fd68936171f0f5658e68	RIX\mist-cloaked herald.jpg
+5df367149bb6d909d38b34cc522b223e	RIX\moment of craving.jpg
+bdd6224bc39adba424d934f87abda759	RIX\moment of triumph.jpg
+2f3e576a73f6264ac50f6e906a9d668c	RIX\mountain.jpg
+f92e7f7505b9cc5deaa63f4e507714c9	RIX\mutiny.jpg
+c235592e29bb8cf948016d755b546ff1	RIX\naturalize.jpg
+695d7f048a15d84070e1862238a477bc	RIX\needletooth raptor.jpg
+c9280714366a79c00ab0dcfea069c06a	RIX\negate.jpg
+7115b9ede0714f8681bb752071e0219d	RIX\nezahal, primal tide.jpg
+b25cd98d84c94a67db4ee5d48f7a478f	RIX\oathsworn vampire.jpg
+2dcdbf8a347d68b7e5fb99dd53f5e11c	RIX\orazca frillback.jpg
+23fd8f7af09f99ae8e33d522c334d851	RIX\orazca raptor.jpg
+e9d750c1216c66391bdb748e5f5b911b	RIX\orazca relic.jpg
+2d0e0fd4a523d1573e01e39f51084c08	RIX\overgrown armasaur.jpg
+d4238b8cac8785588e8d4397c5be788e	RIX\paladin of atonement.jpg
+3f6e82d5230ff16a832125518455ff62	RIX\path of discovery.jpg
+26af6c987834bf8f0589f152480b87d4	RIX\path of mettle.jpg
+d87eb5c4adec29bd6acc813c4c4019dd	RIX\pirate's pillage.jpg
+27f689670d0762563cc67ca2ff83e30f	RIX\pitiless plunderer.jpg
+11e6bce585cd8d8ae4b999fbb38c11eb	RIX\plains.jpg
+fed3264fec8bcd044346d51517a1fe90	RIX\plummet.jpg
+b80227d9d9143e858c2be7cb481490ae	RIX\polyraptor.jpg
+68c3e274dec1dd453152dd5a551b94fa	RIX\pride of conquerors.jpg
+8bc3f058ae06c17800094b95ae09e63c	RIX\profane procession.jpg
+365ffc4e30350cddc42cb3d6bb1f6c03	RIX\protean raider.jpg
+33c5a42c1708255b263f421d6f8b397c	RIX\radiant destiny.jpg
+0dd5c581d3100675343d6323fb802d3d	RIX\raging regisaur.jpg
+120a454647d8ba27b1ab40be395fa032	RIX\raptor companion.jpg
+7da5bbbf8d02f3183147cb18a12f5291	RIX\ravenous chupacabra.jpg
+9bf0be84149b44364b699fc65ef91864	RIX\reaver ambush.jpg
+5d70ba6dfb9ba1a088be157f2652dbed	RIX\reckless rage.jpg
+b1b69ee1c5e301a77b4713a257841fb7	RIX\recover.jpg
+6c1319733be195e8f69724b2ee1f76d2	RIX\rekindling phoenix.jpg
+73f83bf6d60d8ac9626056a7fb301cf4	RIX\release to the wind.jpg
+9392a4f5d291bc86eb247547972f2c57	RIX\relentless raptor.jpg
+beb3055efd5bf99046f576ef63b5766e	RIX\resplendent griffin.jpg
+ebbabf056ec4100e3b1ca61fbe01b63e	RIX\river darter.jpg
+40c1706aee39a91fac6b1efa1ffe11f1	RIX\riverwise augur.jpg
+f07ae86cc8e930eef2d2e29d0e7ab17d	RIX\sadistic skymarcher.jpg
+ed26d8ad0a28b7e7127d76cb5940c118	RIX\sailor of means.jpg
+7c35e305134ad59ca6ca693e8de87378	RIX\sanctum of the sun.jpg
+abd3cef71817cc7aa81fec37875dda7a	RIX\sanguine glorifier.jpg
+740a548ede876ec07756d91a0ee42380	RIX\sea legs.jpg
+555526479a6b929fdc5175b6cacdd71a	RIX\seafloor oracle.jpg
+fde4b81f4dec404be8c10883e98f5e6e	RIX\secrets of the golden city.jpg
+9b547b2022080b7ef05ca529ab0536af	RIX\see red.jpg
+0aafc8373aebff7a2715315f73cd85ea	RIX\shake the foundations.jpg
+b50d9e1d27cc055be9e131413e7c2784	RIX\shatter.jpg
+ffbbfb30a202aaf29c0221036f1bee3e	RIX\siegehorn ceratops.jpg
+288b691e1841cd0e9753f9e83edc226d	RIX\silent gravestone.jpg
+e71b21db216ef445439a7e556b10967e	RIX\silverclad ferocidons.jpg
+c0f6e853fb471365cc08883ca53be978	RIX\silvergill adept.jpg
+d0c7afa19455da22e930b6ad89e17c26	RIX\siren reaver.jpg
+894dfbcdd913f03303d2c05a9b781692	RIX\skymarcher aspirant.jpg
+84620abc6524f784e8baa6d020871139	RIX\slaughter the strong.jpg
+62f790c428726477f1efc8b4458e660c	RIX\slippery scoundrel.jpg
+582813d8ab36ae4d62ad94a06f473d89	RIX\snubhorn sentry.jpg
+6102a23f0961394c0356d5e6c697bbe9	RIX\soul of the rapids.jpg
+26281cf41cbf24ec6b0e2587b3b64fd1	RIX\sphinx's decree.jpg
+31866ea6a18897684cf313371fd0fb03	RIX\spire winder.jpg
+fea3cf1426f488cc8dd3581ed4e3a9a9	RIX\squire's devotion.jpg
+90ddad5ee87766c8e3dfb923315b9ed6	RIX\stampeding horncrest.jpg
+9addb189f2d300da365e6d5342a7b08d	RIX\stone quarry.jpg
+3bb3020d55ece4a51379e9447c143c5f	RIX\storm fleet sprinter.jpg
+26e6879c119b799ab04dbb7fe9c05a05	RIX\storm fleet swashbuckler.jpg
+1a17781274ca95f898e947436f2a2e6a	RIX\storm the vault.jpg
+e4eac59f6956d555f9ce7017c20a82ba	RIX\strength of the pack.jpg
+f29dff9cf1730b4e30c87109973767f6	RIX\strider harness.jpg
+f064eeecc37b1ce6a9c76af40226f215	RIX\sun sentinel.jpg
+a4c635d4e539e69c152b9b5db7efe0de	RIX\sun-collared raptor.jpg
+caaf61eaa6cdae64bc03baf2a7b5e271	RIX\sun-crested pterodon.jpg
+62f88bc5ee3e390976ffb7165b6ee346	RIX\swab goblin.jpg
+009fbeb762f87ca4cde5f787a63e2942	RIX\swaggering corsair.jpg
+cea6818e682bd6cac5629a63d6ebbfe8	RIX\swamp.jpg
+4049a8c7a2835372b89c15051845464b	RIX\swift warden.jpg
+ab391c6098f9468a8f1ce8d56dca7557	RIX\sworn guardian.jpg
+8321d96aca7bc93c81c216e4c369cce4	RIX\temple altisaur.jpg
+8160467f423d7c70cecbea869a044a94	RIX\tendershoot dryad.jpg
+3fd67042c9e5ad7f06ba7f61fd40e197	RIX\tetzimoc, primal death.jpg
+6edce0a83babbf64acdd4410e14f414e	RIX\the immortal sun.jpg
+a453c090f1e2c4ec2cd9f8185c210514	RIX\thrashing brontodon.jpg
+a13bc3f6595b48bb3ae45c960b38e78a	RIX\thunderherd migration.jpg
+c2cf735a7e38e006acae6ac497c0a65b	RIX\tilonalli's crown.jpg
+2fea98befdc7c2ed20e0fd8adbd3c5a1	RIX\tilonalli's summoner.jpg
+00698ecc499ba1bec22c9e8cdaa4629a	RIX\timestream navigator.jpg
+e4f49af5a852bcbfc37e58734734bc19	RIX\tomb of the dusk rose.jpg
+628fb8fd7abbac2f112a49640fe4a6ad	RIX\tomb robber.jpg
+adb30b538da10db5a3379344e8b9ee41	RIX\trapjaw tyrant.jpg
+ba2b9159566056cbcbc981b91a1d5e3b	RIX\traveler's amulet.jpg
+22c6ee797a528b0e06ad062f81591a92	RIX\twilight prophet.jpg
+108ebc3384fa9de7654812b14b495085	RIX\vampire champion.jpg
+cf9f93df54ec08aebd1248a51b4d5dc3	RIX\vampire revenant.jpg
+4646c3ab701103ab5ef92630fe6e3cae	RIX\vault of catlacan.jpg
+7053e0f84376fb1e54e0ba550654410d	RIX\vona's hunger.jpg
+8f6a0936fc89b1a6b7270003ebe0e77a	RIX\voracious vampire.jpg
+92fa0a40ae5d27b8031697c74b573c33	RIX\vraska's conquistador.jpg
+81b6ac0a27d6af10452aa44e5e170065	RIX\vraska's scorn.jpg
+cd0ae87d9a6f2c499efb3383335ca83e	RIX\vraska, scheming gorgon.jpg
+82c04e1e3dbb9b47e3c353b1ed54ebbc	RIX\warkite marauder.jpg
+978016bf7c315b250e56bee07b2edd60	RIX\waterknot.jpg
+562b2fc75787645a3b7e569a2caa74c7	RIX\wayward swordtooth.jpg
+7b230d5b1323c8e8302e888d4f77cf29	RIX\winged temple of orazca.jpg
+1e5107ef0ae5697a946aff7eb6a6d144	RIX\woodland stream.jpg
+ca6c1ac30dd9d4208135ba64d56be682	RIX\world shaper.jpg
+dae68ecc4fe3dbd53af3c433c76af3a2	RIX\zacama, primal calamity.jpg
+a1d342d65f7e8feac0f029e02b7254d7	RIX\zetalpa, primal dawn.jpg
 36bfa8fc3244c88ee02a4f725e89a09c	ROE\Affa Guard Hound.jpg
 dbce1c7bb37b32b4f529756563f02be1	ROE\Akoum Boulderfoot.jpg
 7fcafc46c61f414e1cde8d4f742d2b5c	ROE\All Is Dust.jpg

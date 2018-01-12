@@ -15,7 +15,7 @@ using Tesseract;
 namespace Mtgdb.Util
 {
 	[TestFixture]
-	public class ArtistDetectionTests : TestsBase
+	public class ArtistDetectionUtils : TestsBase
 	{
 		[OneTimeSetUp]
 		public void Setup()

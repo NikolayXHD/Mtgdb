@@ -143,7 +143,7 @@ namespace Mtgdb.Gui
 						? getSizeArt()
 						: _imageCache.ZoomedCardSize;
 
-					var image = ImageCache.LoadImage(model, size, crop: false);
+					var image = ImageCache.LoadImage(model, size);
 
 					if (image == null)
 						continue;
@@ -161,7 +161,7 @@ namespace Mtgdb.Gui
 						? getSizeArt()
 						: _imageCache.ZoomedCardSize;
 
-					var image = ImageCache.LoadImage(model, size, crop: false);
+					var image = ImageCache.LoadImage(model, size);
 
 					if (image == null)
 						continue;

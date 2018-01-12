@@ -7,7 +7,7 @@
     <ProjectGuid>{71505A79-B810-4C19-9DC4-C880F23E2A16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mtgdb.Test</RootNamespace>
+    <RootNamespace>Mtgdb.Util</RootNamespace>
     <AssemblyName>Mtgdb.Util.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -99,7 +99,7 @@
     <Compile Include="Images\ImageDownloadingUtils.cs" />
     <Compile Include="Images\ImageMappingUtils.cs" />
     <Compile Include="Images\WaifuScaler.cs" />
-    <Compile Include="Images\ArtistDetection.cs" />
+    <Compile Include="Images\ArtistDetectionUtils.cs" />
     <Compile Include="Images\BwFilter.cs" />
     <Compile Include="Images\ColorDetector.cs" />
     <Compile Include="Images\DownsamplingTests.cs" />
