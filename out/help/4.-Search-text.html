@@ -32,11 +32,14 @@
 <a name="user-content-syntax"></a>
 <h2>
 <a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Syntax</h2>
-<div>
-<div>Search text uses <a href="https://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description">Lucene query language</a>.</div>
-<div>Searching is case-INsensitive.</div>
-<div><br></div>
-</div>
+<p>Search text works in <a href="https://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description">Lucene query language</a>.</p>
+<p>Searching is case-INsensitive.</p>
+<p>The default operator is <code>OR</code>.</p>
+<p>Use quotes <code>""</code> to search the entire phrase.</p>
+<p>NOTE: <code>name: shivan dragon</code> <em>will not</em> search cards with name <strong>shivan dragon</strong> because the
+query is equivalent to <code>name: shivan OR *:dragon</code> where <code>*</code> means <strong>any field</strong>.</p>
+<p>NOTE: <code>angel OR demon</code> <em>will not</em> match words like <code>angelic</code>. Use wildcards <code>*</code> and <code>?</code>
+to search by partial word.</p>
 <table>
 <colgroup>
 <col width="27%">
@@ -51,15 +54,6 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr>
-<td><strong>IMPORTANT</strong></td>
-<td><code>angel OR demon</code></td>
-<td>
-<em>will not</em> match words like
-<code>angelic</code>. Use wildcards
-<code>*</code> and <code>?</code> to search by
-partial word</td>
-</tr>
 <tr>
 <td>Boolean operators and
 nesting</td>
@@ -277,8 +271,8 @@ ManaCost: \{3\}\{W\}\{W\}
 <h3>
 <a id="clicking-search-button-several-times" class="anchor" href="#clicking-search-button-several-times" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Clicking Search button several times</h3>
 <p>When you add more than one search terms you are <em>adding more cards to search result</em>. This is
-because when no logical operator such as <code>AND</code>, <code>OR</code> is used it is interpreted as <code>OR</code> in
-Lucene query language used in Search text.</p>
+because <em>when</em> no logical operator such as <code>AND</code>, <code>OR</code> is used <em>then</em> default operator <code>OR</code>
+is applied.</p>
 <p>By <code>Shift</code>+<code>Click</code>ing Search button you can instead <em>narrow down search result</em>. It is
 achiveved by adding terms with <code>+</code> operator which is almost equivalent to <code>AND</code>.</p>
 
