@@ -7,12 +7,12 @@ namespace Mtgdb.Gui
 	{
 		public static bool IsOverImage(this HitInfo value)
 		{
-			return value.CardBounds.HasValue && IsImageField(value.FieldName);
+			return IsImageField(value.FieldName);
 		}
 
 		public static bool IsImageField(string fieldName)
 		{
-			return Str.Equals(fieldName, nameof(Card.Image)) || string.IsNullOrEmpty(fieldName);
+			return Str.Equals(fieldName, nameof(Card.Image));
 		}
 	}
 }

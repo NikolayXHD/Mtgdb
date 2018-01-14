@@ -740,7 +740,7 @@ namespace Mtgdb.Controls
 						foreach (var border in getBorders(direction))
 							if (border.Contains(clientLocation))
 							{
-								m.Result = (IntPtr) direction.ToWmNChittest();
+								m.Result = (IntPtr) direction.ToWmNcHitTest();
 								return;
 							}
 			}

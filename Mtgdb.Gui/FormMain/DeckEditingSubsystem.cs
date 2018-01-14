@@ -67,8 +67,8 @@ namespace Mtgdb.Gui
 			_layoutViewCards.MouseMove += gridMouseMove;
 			_layoutViewDeck.MouseMove += gridMouseMove;
 
-			_layoutViewCards.Control.MouseClick += gridMouseClick;
-			_layoutViewDeck.Control.MouseClick += gridMouseClick;
+			_layoutViewCards.MouseClicked += gridMouseClick;
+			_layoutViewDeck.MouseClicked += gridMouseClick;
 		}
 
 		private void gridMouseLeave(object sender, EventArgs e)
@@ -104,13 +104,17 @@ namespace Mtgdb.Gui
 				: _cursor;
 		}
 
-		private void gridMouseClick(object sender, MouseEventArgs e)
+		private void gridMouseClick(object sender, HitInfo hitInfo, MouseEventArgs e)
 		{
 			if (_draggingSubsystem.IsDragging())
 				return;
 
 			var view = getView(sender);
-			var card = getCard(view, e);
+
+			if (hitInfo.AlignButtonDirection.HasValue)
+				return;
+
+			var card = getCard(view, hitInfo);
 
 			if (card == null)
 				return;
@@ -138,9 +142,8 @@ namespace Mtgdb.Gui
 				changeCountInDeck(card, countDelta, touch: true);
 		}
 
-		private static Card getCard(LayoutView view, MouseEventArgs e)
+		private static Card getCard(LayoutView view, HitInfo hitInfo)
 		{
-			var hitInfo = view.CalcHitInfo(e.Location);
 			bool overImage = hitInfo.IsOverImage();
 
 			if (!overImage)

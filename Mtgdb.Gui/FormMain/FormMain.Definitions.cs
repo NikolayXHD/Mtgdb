@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -208,21 +207,12 @@ namespace Mtgdb.Gui
 
 			_layoutRight.RowStyles[0].Height = _layoutRight.RowStyles[1].Height = modeButtonSize.Height;
 
-			var searchToSortMargin =
-				_layoutViewCards.SearchOptions.ButtonMargin.Width -
-				(_layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width / 2);
+			scaleLayoutView(_layoutViewCards);
+			scaleLayoutView(_layoutViewDeck);
 
-			_layoutViewCards.SortOptions.Icon = _layoutViewCards.SortOptions.Icon.HalfResizeDpi();
-			_layoutViewCards.SortOptions.AscIcon = _layoutViewCards.SortOptions.AscIcon.HalfResizeDpi();
-			_layoutViewCards.SortOptions.DescIcon = _layoutViewCards.SortOptions.DescIcon.HalfResizeDpi();
-
-			_layoutViewCards.SearchOptions.Icon = _layoutViewCards.SearchOptions.Icon.HalfResizeDpi();
-
-			_layoutViewCards.SearchOptions.ButtonMargin = new Size(
-				searchToSortMargin + _layoutViewCards.SortOptions.ButtonMargin.Width + _layoutViewCards.SortOptions.Icon.Width,
-				_layoutViewCards.SearchOptions.ButtonMargin.Height);
-
-			_layoutViewDeck.Height = _layoutViewDeck.Height.ByDpiHeight();
+			_layoutViewDeck.Height = _imageCache.CardSize
+				.Plus(_layoutViewDeck.LayoutOptions.CardInterval)
+				.Height;
 
 			scalePanelIcon(_panelIconLegality);
 			scalePanelIcon(_panelIconSearch);
@@ -237,6 +227,24 @@ namespace Mtgdb.Gui
 			scalePanelIcon(_panelIconStatusFilterCollection);
 			scalePanelIcon(_panelIconStatusFilterDeck);
 			scalePanelIcon(_panelIconStatusFilterLegality);
+		}
+
+		private static void scaleLayoutView(LayoutViewControl view)
+		{
+			var searchToSortMargin =
+				view.SearchOptions.ButtonMargin.Width -
+				(view.SortOptions.ButtonMargin.Width + view.SortOptions.Icon.Width / 2);
+
+			view.SortOptions.Icon = view.SortOptions.Icon?.HalfResizeDpi();
+			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
+			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
+			view.SearchOptions.Icon = view.SearchOptions.Icon?.HalfResizeDpi();
+			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
+			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
+
+			view.SearchOptions.ButtonMargin = new Size(
+				searchToSortMargin + view.SortOptions.ButtonMargin.Width + view.SortOptions.Icon.Width,
+				view.SearchOptions.ButtonMargin.Height);
 		}
 
 		private static void probeCardCreating(object view, LayoutControl probeCard)

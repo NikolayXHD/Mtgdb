@@ -6,7 +6,7 @@
 	
 	<AppSource NewsUrl="https://github.com/NikolayXHD/Notifications/archive/master.zip" />
 	
-	<ImageLocations EnabledGroups="xlhq;dev" >
+	<ImageLocations EnabledGroups="prod" >
 
 		<Directory Group="prod" Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
 		<Directory Group="prod" Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />

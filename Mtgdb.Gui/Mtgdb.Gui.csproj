@@ -231,12 +231,11 @@
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
     <Compile Include="SearchString\SearchStringState.cs" />
     <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
-    <EmbeddedResource Include="FormMain\FormMain.resx">
-      <DependentUpon>FormMain.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\DeckLayout.resx">
       <DependentUpon>DeckLayout.cs</DependentUpon>
@@ -336,6 +335,8 @@
     <Content Include="Resources\Cohort.png" />
     <Content Include="Resources\common.png" />
     <Content Include="Resources\Copy.png" />
+    <None Include="Resources\corner_32.png" />
+    <None Include="Resources\corner_hovered_32.png" />
     <Content Include="Resources\Counter.png" />
     <Content Include="Resources\Deathtouch.png" />
     <Content Include="Resources\Defender.png" />

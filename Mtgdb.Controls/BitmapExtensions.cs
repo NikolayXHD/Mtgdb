@@ -110,5 +110,12 @@ namespace Mtgdb.Controls
 
 			return output;
 		}
+
+		public static Bitmap Transform(this Bitmap value, RotateFlipType transform)
+		{
+			value = (Bitmap)value.Clone();
+			value.RotateFlip(transform);
+			return value;
+		}
 	}
 }

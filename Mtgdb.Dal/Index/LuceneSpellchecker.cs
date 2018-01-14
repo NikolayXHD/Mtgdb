@@ -167,6 +167,10 @@ namespace Mtgdb.Dal.Index
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
+			if (!string.IsNullOrEmpty(field) && !DocumentFactory.UserFields.Contains(field))
+				// incomplete or incorrect field name
+				return _emptySuggest.Values;
+
 			var valueIsNumeric = isValueNumeric(value);
 
 			if (string.IsNullOrEmpty(field) || field == NumericAwareQueryParser.AnyField)

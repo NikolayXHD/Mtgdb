@@ -123,12 +123,17 @@ namespace Mtgdb.Gui
 			remove { _view.MouseLeave -= value; }
 		}
 
+		public event Action<object, HitInfo, MouseEventArgs> MouseClicked
+		{
+			add { _view.MouseClicked += value; }
+			remove { _view.MouseClicked -= value; }
+		}
+
 		public event EventHandler LostFocus
 		{
 			add { _view.LostFocus += value; }
 			remove { _view.LostFocus -= value; }
 		}
-		
 
 		public object GetRow(int cardIndex)
 		{
@@ -234,6 +239,11 @@ namespace Mtgdb.Gui
 		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
 		{
 			return _view.GetSearchButtonBounds(hitInfo);
+		}
+
+		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
+		{
+			return _view.GetAlignButtonBounds(hitInfo);
 		}
 
 		public Rectangle GetSortButtonBounds(HitInfo hitInfo)
