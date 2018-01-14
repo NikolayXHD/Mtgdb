@@ -34,63 +34,62 @@
 			Mtgdb.Controls.LayoutOptions layoutOptions2 = new Mtgdb.Controls.LayoutOptions();
 			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.SortOptions sortOptions2 = new Mtgdb.Controls.SortOptions();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
 			this._panelFilters = new System.Windows.Forms.FlowLayoutPanel();
 			this.FilterAbility = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterType = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterRarity = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterManager = new Mtgdb.Controls.QuickFilterControl();
 			this._panelStatus = new System.Windows.Forms.FlowLayoutPanel();
-			this._buttonHideDeck = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHidePartialCards = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonHideText = new Mtgdb.Controls.CustomCheckBox();
 			this._tabHeadersDeck = new Mtgdb.Controls.TabHeaderControl();
-			this._buttonSampleHandNew = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonSampleHandMulligan = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonSampleHandDraw = new Mtgdb.Controls.CustomCheckBox();
 			this._labelStatusScrollDeck = new System.Windows.Forms.Label();
-			this._panelIconStatusScrollDeck = new Mtgdb.Controls.BorderedPanel();
-			this._panelIconStatusSets = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusSets = new System.Windows.Forms.Label();
 			this._labelStatusScrollCards = new System.Windows.Forms.Label();
-			this._panelIconStatusScrollCards = new Mtgdb.Controls.BorderedPanel();
-			this._panelIconStatusCollection = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusCollection = new System.Windows.Forms.Label();
-			this._panelIconStatusFilterButtons = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusFilterButtons = new System.Windows.Forms.Label();
-			this._panelIconStatusSearch = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusSearch = new System.Windows.Forms.Label();
-			this._panelIconStatusFilterCollection = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusFilterCollection = new System.Windows.Forms.Label();
-			this._panelIconStatusFilterDeck = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusFilterDeck = new System.Windows.Forms.Label();
-			this._panelIconStatusFilterLegality = new Mtgdb.Controls.BorderedPanel();
 			this._labelStatusFilterLegality = new System.Windows.Forms.Label();
 			this._panelMenu = new System.Windows.Forms.FlowLayoutPanel();
 			this._findBorderedPanel = new Mtgdb.Controls.BorderedFlowLayoutPanel();
-			this._panelIconSearch = new Mtgdb.Controls.BorderedPanel();
 			this._findEditor = new Mtgdb.Controls.FixedRichTextBox();
-			this._panelIconLegality = new Mtgdb.Controls.BorderedPanel();
 			this._menuLegalityFormat = new System.Windows.Forms.ComboBox();
 			this._buttonLegalityAllowLegal = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonLegalityAllowRestricted = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonLegalityAllowBanned = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonShowDuplicates = new Mtgdb.Controls.CustomCheckBox();
 			this._panelCostLeft = new System.Windows.Forms.FlowLayoutPanel();
-			this.FilterManaAbility = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterGeneratedMana = new Mtgdb.Controls.QuickFilterControl();
 			this.FilterCmc = new Mtgdb.Controls.QuickFilterControl();
 			this._listBoxSuggest = new System.Windows.Forms.ListBox();
 			this._layout = new System.Windows.Forms.TableLayoutPanel();
+			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this._buttonExcludeManaAbility = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonExcludeManaCost = new Mtgdb.Controls.CustomCheckBox();
-			this.FilterManaCost = new Mtgdb.Controls.QuickFilterControl();
-			this._buttonShowProhibit = new Mtgdb.Controls.CustomCheckBox();
+			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._layoutRight = new System.Windows.Forms.TableLayoutPanel();
 			this._layoutRoot = new System.Windows.Forms.TableLayoutPanel();
-			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
-			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
+			this._panelIconSearch = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconLegality = new Mtgdb.Controls.BorderedPanel();
+			this._buttonShowDuplicates = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonHideDeck = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonHidePartialCards = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonHideText = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSampleHandNew = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSampleHandMulligan = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSampleHandDraw = new Mtgdb.Controls.CustomCheckBox();
+			this._panelIconStatusScrollDeck = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusSets = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusScrollCards = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusCollection = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusFilterButtons = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusSearch = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusFilterCollection = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusFilterDeck = new Mtgdb.Controls.BorderedPanel();
+			this._panelIconStatusFilterLegality = new Mtgdb.Controls.BorderedPanel();
+			this._buttonExcludeManaAbility = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonExcludeManaCost = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonShowProhibit = new Mtgdb.Controls.CustomCheckBox();
+			this.FilterManaAbility = new Mtgdb.Controls.QuickFilterControl();
+			this.FilterManaCost = new Mtgdb.Controls.QuickFilterControl();
 			this._panelFilters.SuspendLayout();
 			this._panelStatus.SuspendLayout();
 			this._panelMenu.SuspendLayout();
@@ -229,65 +228,11 @@
 			this._panelStatus.Controls.Add(this._labelStatusFilterDeck);
 			this._panelStatus.Controls.Add(this._panelIconStatusFilterLegality);
 			this._panelStatus.Controls.Add(this._labelStatusFilterLegality);
-			this._panelStatus.Location = new System.Drawing.Point(0, 491);
+			this._panelStatus.Location = new System.Drawing.Point(0, 489);
 			this._panelStatus.Margin = new System.Windows.Forms.Padding(0);
 			this._panelStatus.Name = "_panelStatus";
 			this._panelStatus.Size = new System.Drawing.Size(1510, 24);
 			this._panelStatus.TabIndex = 14;
-			// 
-			// _buttonHideDeck
-			// 
-			this._buttonHideDeck.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHideDeck.BackColor = System.Drawing.Color.Transparent;
-			this._buttonHideDeck.FlatAppearance.BorderSize = 0;
-			this._buttonHideDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHideDeck.Image = global::Mtgdb.Gui.Properties.Resources.shown_40;
-			this._buttonHideDeck.Location = new System.Drawing.Point(2, 0);
-			this._buttonHideDeck.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonHideDeck.Name = "_buttonHideDeck";
-			this._buttonHideDeck.Size = new System.Drawing.Size(24, 24);
-			this._buttonHideDeck.TabIndex = 47;
-			this._buttonHideDeck.TabStop = false;
-			this._buttonHideDeck.UseVisualStyleBackColor = false;
-			// 
-			// _buttonHidePartialCards
-			// 
-			this._buttonHidePartialCards.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHidePartialCards.BackColor = System.Drawing.Color.Transparent;
-			this._buttonHidePartialCards.FlatAppearance.BorderSize = 0;
-			this._buttonHidePartialCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonHidePartialCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonHidePartialCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonHidePartialCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHidePartialCards.Image = global::Mtgdb.Gui.Properties.Resources.partial_card_enabled_40;
-			this._buttonHidePartialCards.Location = new System.Drawing.Point(28, 0);
-			this._buttonHidePartialCards.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonHidePartialCards.Name = "_buttonHidePartialCards";
-			this._buttonHidePartialCards.Size = new System.Drawing.Size(24, 24);
-			this._buttonHidePartialCards.TabIndex = 48;
-			this._buttonHidePartialCards.TabStop = false;
-			this._buttonHidePartialCards.UseVisualStyleBackColor = false;
-			// 
-			// _buttonHideText
-			// 
-			this._buttonHideText.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHideText.BackColor = System.Drawing.Color.Transparent;
-			this._buttonHideText.FlatAppearance.BorderSize = 0;
-			this._buttonHideText.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHideText.Image = global::Mtgdb.Gui.Properties.Resources.text_enabled_40;
-			this._buttonHideText.Location = new System.Drawing.Point(54, 0);
-			this._buttonHideText.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonHideText.Name = "_buttonHideText";
-			this._buttonHideText.Size = new System.Drawing.Size(24, 24);
-			this._buttonHideText.TabIndex = 49;
-			this._buttonHideText.TabStop = false;
-			this._buttonHideText.UseVisualStyleBackColor = false;
 			// 
 			// _tabHeadersDeck
 			// 
@@ -304,60 +249,6 @@
 			this._tabHeadersDeck.TabIndex = 29;
 			this._tabHeadersDeck.TabStop = false;
 			// 
-			// _buttonSampleHandNew
-			// 
-			this._buttonSampleHandNew.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonSampleHandNew.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandNew.FlatAppearance.BorderSize = 0;
-			this._buttonSampleHandNew.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandNew.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandNew.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSampleHandNew.Image = global::Mtgdb.Gui.Properties.Resources.hand_48;
-			this._buttonSampleHandNew.Location = new System.Drawing.Point(305, 0);
-			this._buttonSampleHandNew.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonSampleHandNew.Name = "_buttonSampleHandNew";
-			this._buttonSampleHandNew.Size = new System.Drawing.Size(60, 24);
-			this._buttonSampleHandNew.TabIndex = 44;
-			this._buttonSampleHandNew.TabStop = false;
-			this._buttonSampleHandNew.UseVisualStyleBackColor = false;
-			// 
-			// _buttonSampleHandMulligan
-			// 
-			this._buttonSampleHandMulligan.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonSampleHandMulligan.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandMulligan.FlatAppearance.BorderSize = 0;
-			this._buttonSampleHandMulligan.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandMulligan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandMulligan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandMulligan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSampleHandMulligan.Image = global::Mtgdb.Gui.Properties.Resources.mulligan_48;
-			this._buttonSampleHandMulligan.Location = new System.Drawing.Point(367, 0);
-			this._buttonSampleHandMulligan.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonSampleHandMulligan.Name = "_buttonSampleHandMulligan";
-			this._buttonSampleHandMulligan.Size = new System.Drawing.Size(48, 24);
-			this._buttonSampleHandMulligan.TabIndex = 45;
-			this._buttonSampleHandMulligan.TabStop = false;
-			this._buttonSampleHandMulligan.UseVisualStyleBackColor = false;
-			// 
-			// _buttonSampleHandDraw
-			// 
-			this._buttonSampleHandDraw.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonSampleHandDraw.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandDraw.FlatAppearance.BorderSize = 0;
-			this._buttonSampleHandDraw.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandDraw.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandDraw.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonSampleHandDraw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSampleHandDraw.Image = global::Mtgdb.Gui.Properties.Resources.draw_48;
-			this._buttonSampleHandDraw.Location = new System.Drawing.Point(417, 0);
-			this._buttonSampleHandDraw.Margin = new System.Windows.Forms.Padding(2, 0, 24, 0);
-			this._buttonSampleHandDraw.Name = "_buttonSampleHandDraw";
-			this._buttonSampleHandDraw.Size = new System.Drawing.Size(36, 24);
-			this._buttonSampleHandDraw.TabIndex = 46;
-			this._buttonSampleHandDraw.TabStop = false;
-			this._buttonSampleHandDraw.UseVisualStyleBackColor = false;
-			// 
 			// _labelStatusScrollDeck
 			// 
 			this._labelStatusScrollDeck.AutoSize = true;
@@ -367,28 +258,6 @@
 			this._labelStatusScrollDeck.Size = new System.Drawing.Size(36, 13);
 			this._labelStatusScrollDeck.TabIndex = 35;
 			this._labelStatusScrollDeck.Text = "63/60";
-			// 
-			// _panelIconStatusScrollDeck
-			// 
-			this._panelIconStatusScrollDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.scroll_48;
-			this._panelIconStatusScrollDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusScrollDeck.Location = new System.Drawing.Point(513, 0);
-			this._panelIconStatusScrollDeck.Margin = new System.Windows.Forms.Padding(0);
-			this._panelIconStatusScrollDeck.Name = "_panelIconStatusScrollDeck";
-			this._panelIconStatusScrollDeck.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusScrollDeck.TabIndex = 31;
-			this._panelIconStatusScrollDeck.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
-			// _panelIconStatusSets
-			// 
-			this._panelIconStatusSets.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.mtg_48;
-			this._panelIconStatusSets.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusSets.Location = new System.Drawing.Point(561, 0);
-			this._panelIconStatusSets.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusSets.Name = "_panelIconStatusSets";
-			this._panelIconStatusSets.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusSets.TabIndex = 34;
-			this._panelIconStatusSets.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _labelStatusSets
 			// 
@@ -410,28 +279,6 @@
 			this._labelStatusScrollCards.TabIndex = 37;
 			this._labelStatusScrollCards.Text = "15999/16001";
 			// 
-			// _panelIconStatusScrollCards
-			// 
-			this._panelIconStatusScrollCards.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.scroll_48;
-			this._panelIconStatusScrollCards.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusScrollCards.Location = new System.Drawing.Point(706, 0);
-			this._panelIconStatusScrollCards.Margin = new System.Windows.Forms.Padding(0);
-			this._panelIconStatusScrollCards.Name = "_panelIconStatusScrollCards";
-			this._panelIconStatusScrollCards.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusScrollCards.TabIndex = 30;
-			this._panelIconStatusScrollCards.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
-			// _panelIconStatusCollection
-			// 
-			this._panelIconStatusCollection.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.box_48;
-			this._panelIconStatusCollection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusCollection.Location = new System.Drawing.Point(754, 0);
-			this._panelIconStatusCollection.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusCollection.Name = "_panelIconStatusCollection";
-			this._panelIconStatusCollection.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusCollection.TabIndex = 31;
-			this._panelIconStatusCollection.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
 			// _labelStatusCollection
 			// 
 			this._labelStatusCollection.AutoSize = true;
@@ -441,17 +288,6 @@
 			this._labelStatusCollection.Size = new System.Drawing.Size(25, 13);
 			this._labelStatusCollection.TabIndex = 38;
 			this._labelStatusCollection.Text = "691";
-			// 
-			// _panelIconStatusFilterButtons
-			// 
-			this._panelIconStatusFilterButtons.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.quick_filters_48;
-			this._panelIconStatusFilterButtons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusFilterButtons.Location = new System.Drawing.Point(827, 0);
-			this._panelIconStatusFilterButtons.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusFilterButtons.Name = "_panelIconStatusFilterButtons";
-			this._panelIconStatusFilterButtons.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusFilterButtons.TabIndex = 32;
-			this._panelIconStatusFilterButtons.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _labelStatusFilterButtons
 			// 
@@ -463,17 +299,6 @@
 			this._labelStatusFilterButtons.TabIndex = 39;
 			this._labelStatusFilterButtons.Text = "ignored";
 			// 
-			// _panelIconStatusSearch
-			// 
-			this._panelIconStatusSearch.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.search_48;
-			this._panelIconStatusSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusSearch.Location = new System.Drawing.Point(917, 0);
-			this._panelIconStatusSearch.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusSearch.Name = "_panelIconStatusSearch";
-			this._panelIconStatusSearch.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusSearch.TabIndex = 33;
-			this._panelIconStatusSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
 			// _labelStatusSearch
 			// 
 			this._labelStatusSearch.AutoSize = true;
@@ -483,17 +308,6 @@
 			this._labelStatusSearch.Size = new System.Drawing.Size(145, 13);
 			this._labelStatusSearch.TabIndex = 41;
 			this._labelStatusSearch.Text = "modified, press Enter to apply";
-			// 
-			// _panelIconStatusFilterCollection
-			// 
-			this._panelIconStatusFilterCollection.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.box_48;
-			this._panelIconStatusFilterCollection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusFilterCollection.Location = new System.Drawing.Point(1110, 0);
-			this._panelIconStatusFilterCollection.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusFilterCollection.Name = "_panelIconStatusFilterCollection";
-			this._panelIconStatusFilterCollection.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusFilterCollection.TabIndex = 32;
-			this._panelIconStatusFilterCollection.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _labelStatusFilterCollection
 			// 
@@ -505,17 +319,6 @@
 			this._labelStatusFilterCollection.TabIndex = 40;
 			this._labelStatusFilterCollection.Text = "ignored";
 			// 
-			// _panelIconStatusFilterDeck
-			// 
-			this._panelIconStatusFilterDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.draw_a_card_48;
-			this._panelIconStatusFilterDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusFilterDeck.Location = new System.Drawing.Point(1200, 0);
-			this._panelIconStatusFilterDeck.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusFilterDeck.Name = "_panelIconStatusFilterDeck";
-			this._panelIconStatusFilterDeck.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusFilterDeck.TabIndex = 33;
-			this._panelIconStatusFilterDeck.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
 			// _labelStatusFilterDeck
 			// 
 			this._labelStatusFilterDeck.AutoSize = true;
@@ -525,17 +328,6 @@
 			this._labelStatusFilterDeck.Size = new System.Drawing.Size(42, 13);
 			this._labelStatusFilterDeck.TabIndex = 42;
 			this._labelStatusFilterDeck.Text = "ignored";
-			// 
-			// _panelIconStatusFilterLegality
-			// 
-			this._panelIconStatusFilterLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
-			this._panelIconStatusFilterLegality.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconStatusFilterLegality.Location = new System.Drawing.Point(1290, 0);
-			this._panelIconStatusFilterLegality.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
-			this._panelIconStatusFilterLegality.Name = "_panelIconStatusFilterLegality";
-			this._panelIconStatusFilterLegality.Size = new System.Drawing.Size(24, 24);
-			this._panelIconStatusFilterLegality.TabIndex = 34;
-			this._panelIconStatusFilterLegality.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _labelStatusFilterLegality
 			// 
@@ -578,17 +370,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			// 
-			// _panelIconSearch
-			// 
-			this._panelIconSearch.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.search_48;
-			this._panelIconSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconSearch.Location = new System.Drawing.Point(1, 1);
-			this._panelIconSearch.Margin = new System.Windows.Forms.Padding(1);
-			this._panelIconSearch.Name = "_panelIconSearch";
-			this._panelIconSearch.Size = new System.Drawing.Size(22, 22);
-			this._panelIconSearch.TabIndex = 21;
-			this._panelIconSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
 			// _findEditor
 			// 
 			this._findEditor.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -605,17 +386,6 @@
 			this._findEditor.TabStop = false;
 			this._findEditor.Text = "";
 			this._findEditor.WordWrap = false;
-			// 
-			// _panelIconLegality
-			// 
-			this._panelIconLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
-			this._panelIconLegality.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this._panelIconLegality.Location = new System.Drawing.Point(488, 0);
-			this._panelIconLegality.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this._panelIconLegality.Name = "_panelIconLegality";
-			this._panelIconLegality.Size = new System.Drawing.Size(24, 24);
-			this._panelIconLegality.TabIndex = 35;
-			this._panelIconLegality.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _menuLegalityFormat
 			// 
@@ -709,24 +479,6 @@
 			this._buttonLegalityAllowBanned.Text = "banned";
 			this._buttonLegalityAllowBanned.UseVisualStyleBackColor = true;
 			// 
-			// _buttonShowDuplicates
-			// 
-			this._buttonShowDuplicates.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonShowDuplicates.BackColor = System.Drawing.Color.Transparent;
-			this._buttonShowDuplicates.FlatAppearance.BorderSize = 0;
-			this._buttonShowDuplicates.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowDuplicates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowDuplicates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowDuplicates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowDuplicates.Image = global::Mtgdb.Gui.Properties.Resources.clone_48;
-			this._buttonShowDuplicates.Location = new System.Drawing.Point(811, 0);
-			this._buttonShowDuplicates.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
-			this._buttonShowDuplicates.Name = "_buttonShowDuplicates";
-			this._buttonShowDuplicates.Size = new System.Drawing.Size(24, 24);
-			this._buttonShowDuplicates.TabIndex = 40;
-			this._buttonShowDuplicates.TabStop = false;
-			this._buttonShowDuplicates.UseVisualStyleBackColor = false;
-			// 
 			// _panelCostLeft
 			// 
 			this._panelCostLeft.AutoSize = true;
@@ -740,34 +492,6 @@
 			this._panelCostLeft.Name = "_panelCostLeft";
 			this._panelCostLeft.Size = new System.Drawing.Size(46, 706);
 			this._panelCostLeft.TabIndex = 0;
-			// 
-			// FilterManaAbility
-			// 
-			this.FilterManaAbility.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
-			this.FilterManaAbility.EnableRequiringSome = true;
-			this.FilterManaAbility.HideProhibit = true;
-			this.FilterManaAbility.HintIcon = global::Mtgdb.Gui.Properties.Resources.manatext_25;
-			this.FilterManaAbility.HintTextShift = new System.Drawing.Size(-4, -4);
-			this.FilterManaAbility.IsFlipped = true;
-			this.FilterManaAbility.IsVertical = true;
-			this.FilterManaAbility.Location = new System.Drawing.Point(0, 0);
-			this.FilterManaAbility.Margin = new System.Windows.Forms.Padding(0, 0, 0, 20);
-			this.FilterManaAbility.MaximumSize = new System.Drawing.Size(50, 200);
-			this.FilterManaAbility.MinimumSize = new System.Drawing.Size(46, 266);
-			this.FilterManaAbility.Name = "FilterManaAbility";
-			this.FilterManaAbility.Opacity3ToDisable = 0.2F;
-			this.FilterManaAbility.Opacity4Disabled = 0.1F;
-			this.FilterManaAbility.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterManaAbility.PropertiesCount = 12;
-			this.FilterManaAbility.PropertyImages = null;
-			this.FilterManaAbility.SelectionBorder = 1.75F;
-			this.FilterManaAbility.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
-			this.FilterManaAbility.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterManaAbility.ShowValueHint = true;
-			this.FilterManaAbility.Size = new System.Drawing.Size(46, 266);
-			this.FilterManaAbility.Spacing = new System.Drawing.Size(2, 2);
-			this.FilterManaAbility.TabIndex = 19;
-			this.FilterManaAbility.TabStop = false;
 			// 
 			// FilterGeneratedMana
 			// 
@@ -854,6 +578,37 @@
 			this._layout.Size = new System.Drawing.Size(1537, 826);
 			this._layout.TabIndex = 44;
 			// 
+			// _layoutViewCards
+			// 
+			this._layoutViewCards.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._layoutViewCards.BackColor = System.Drawing.Color.White;
+			this._layoutViewCards.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
+			this._layoutViewCards.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
+			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
+			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
+			layoutOptions1.AllowPartialCards = true;
+			layoutOptions1.CardInterval = new System.Drawing.Size(4, 2);
+			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(327, 209);
+			this._layoutViewCards.LayoutOptions = layoutOptions1;
+			this._layoutViewCards.Location = new System.Drawing.Point(0, 70);
+			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
+			this._layoutViewCards.Name = "_layoutViewCards";
+			searchOptions1.Allow = true;
+			searchOptions1.ButtonMargin = new System.Drawing.Size(19, 2);
+			searchOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
+			this._layoutViewCards.SearchOptions = searchOptions1;
+			this._layoutViewCards.Size = new System.Drawing.Size(1537, 419);
+			sortOptions1.Allow = true;
+			sortOptions1.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
+			sortOptions1.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
+			sortOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
+			this._layoutViewCards.SortOptions = sortOptions1;
+			this._layoutViewCards.TabIndex = 19;
+			this._layoutViewCards.TabStop = false;
+			// 
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -865,6 +620,317 @@
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(0, 0);
 			this.flowLayoutPanel1.TabIndex = 22;
+			// 
+			// _layoutViewDeck
+			// 
+			this._layoutViewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
+			this._layoutViewDeck.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
+			this._layoutViewDeck.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
+			layoutOptions2.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
+			layoutOptions2.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
+			layoutOptions2.AllowPartialCards = true;
+			layoutOptions2.CardInterval = new System.Drawing.Size(2, 2);
+			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(150, 209);
+			this._layoutViewDeck.LayoutOptions = layoutOptions2;
+			this._layoutViewDeck.Location = new System.Drawing.Point(0, 513);
+			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
+			this._layoutViewDeck.Name = "_layoutViewDeck";
+			this._layoutViewDeck.SearchOptions = searchOptions2;
+			this._layoutViewDeck.Size = new System.Drawing.Size(1537, 313);
+			sortOptions2.Allow = true;
+			sortOptions2.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
+			sortOptions2.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
+			sortOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
+			this._layoutViewDeck.SortOptions = sortOptions2;
+			this._layoutViewDeck.TabIndex = 42;
+			this._layoutViewDeck.TabStop = false;
+			// 
+			// _layoutRight
+			// 
+			this._layoutRight.AutoSize = true;
+			this._layoutRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this._layoutRight.ColumnCount = 2;
+			this._layoutRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+			this._layoutRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._layoutRight.Controls.Add(this._buttonExcludeManaAbility, 0, 1);
+			this._layoutRight.Controls.Add(this._buttonExcludeManaCost, 1, 1);
+			this._layoutRight.Controls.Add(this._buttonShowProhibit, 1, 0);
+			this._layoutRight.Controls.Add(this._panelCostLeft, 0, 2);
+			this._layoutRight.Controls.Add(this.FilterManaCost, 1, 2);
+			this._layoutRight.Location = new System.Drawing.Point(1537, 0);
+			this._layoutRight.Margin = new System.Windows.Forms.Padding(0);
+			this._layoutRight.Name = "_layoutRight";
+			this._layoutRight.RowCount = 3;
+			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._layoutRight.Size = new System.Drawing.Size(104, 750);
+			this._layoutRight.TabIndex = 45;
+			// 
+			// _layoutRoot
+			// 
+			this._layoutRoot.ColumnCount = 2;
+			this._layoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._layoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._layoutRoot.Controls.Add(this._layout, 0, 0);
+			this._layoutRoot.Controls.Add(this._layoutRight, 1, 0);
+			this._layoutRoot.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._layoutRoot.Location = new System.Drawing.Point(0, 0);
+			this._layoutRoot.Name = "_layoutRoot";
+			this._layoutRoot.RowCount = 1;
+			this._layoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._layoutRoot.Size = new System.Drawing.Size(1641, 826);
+			this._layoutRoot.TabIndex = 46;
+			// 
+			// _panelIconSearch
+			// 
+			this._panelIconSearch.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.search_48;
+			this._panelIconSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconSearch.Location = new System.Drawing.Point(1, 1);
+			this._panelIconSearch.Margin = new System.Windows.Forms.Padding(1);
+			this._panelIconSearch.Name = "_panelIconSearch";
+			this._panelIconSearch.Size = new System.Drawing.Size(22, 22);
+			this._panelIconSearch.TabIndex = 21;
+			this._panelIconSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconLegality
+			// 
+			this._panelIconLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
+			this._panelIconLegality.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconLegality.Location = new System.Drawing.Point(488, 0);
+			this._panelIconLegality.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this._panelIconLegality.Name = "_panelIconLegality";
+			this._panelIconLegality.Size = new System.Drawing.Size(24, 24);
+			this._panelIconLegality.TabIndex = 35;
+			this._panelIconLegality.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _buttonShowDuplicates
+			// 
+			this._buttonShowDuplicates.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonShowDuplicates.BackColor = System.Drawing.Color.Transparent;
+			this._buttonShowDuplicates.FlatAppearance.BorderSize = 0;
+			this._buttonShowDuplicates.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowDuplicates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowDuplicates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowDuplicates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonShowDuplicates.Image = global::Mtgdb.Gui.Properties.Resources.clone_48;
+			this._buttonShowDuplicates.Location = new System.Drawing.Point(811, 0);
+			this._buttonShowDuplicates.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonShowDuplicates.Name = "_buttonShowDuplicates";
+			this._buttonShowDuplicates.Size = new System.Drawing.Size(24, 24);
+			this._buttonShowDuplicates.TabIndex = 40;
+			this._buttonShowDuplicates.TabStop = false;
+			this._buttonShowDuplicates.UseVisualStyleBackColor = false;
+			// 
+			// _buttonHideDeck
+			// 
+			this._buttonHideDeck.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonHideDeck.BackColor = System.Drawing.Color.Transparent;
+			this._buttonHideDeck.FlatAppearance.BorderSize = 0;
+			this._buttonHideDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonHideDeck.Image = global::Mtgdb.Gui.Properties.Resources.shown_40;
+			this._buttonHideDeck.Location = new System.Drawing.Point(2, 0);
+			this._buttonHideDeck.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonHideDeck.Name = "_buttonHideDeck";
+			this._buttonHideDeck.Size = new System.Drawing.Size(24, 24);
+			this._buttonHideDeck.TabIndex = 47;
+			this._buttonHideDeck.TabStop = false;
+			this._buttonHideDeck.UseVisualStyleBackColor = false;
+			// 
+			// _buttonHidePartialCards
+			// 
+			this._buttonHidePartialCards.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonHidePartialCards.BackColor = System.Drawing.Color.Transparent;
+			this._buttonHidePartialCards.FlatAppearance.BorderSize = 0;
+			this._buttonHidePartialCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonHidePartialCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonHidePartialCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonHidePartialCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonHidePartialCards.Image = global::Mtgdb.Gui.Properties.Resources.partial_card_enabled_40;
+			this._buttonHidePartialCards.Location = new System.Drawing.Point(28, 0);
+			this._buttonHidePartialCards.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonHidePartialCards.Name = "_buttonHidePartialCards";
+			this._buttonHidePartialCards.Size = new System.Drawing.Size(24, 24);
+			this._buttonHidePartialCards.TabIndex = 48;
+			this._buttonHidePartialCards.TabStop = false;
+			this._buttonHidePartialCards.UseVisualStyleBackColor = false;
+			// 
+			// _buttonHideText
+			// 
+			this._buttonHideText.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonHideText.BackColor = System.Drawing.Color.Transparent;
+			this._buttonHideText.FlatAppearance.BorderSize = 0;
+			this._buttonHideText.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonHideText.Image = global::Mtgdb.Gui.Properties.Resources.text_enabled_40;
+			this._buttonHideText.Location = new System.Drawing.Point(54, 0);
+			this._buttonHideText.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonHideText.Name = "_buttonHideText";
+			this._buttonHideText.Size = new System.Drawing.Size(24, 24);
+			this._buttonHideText.TabIndex = 49;
+			this._buttonHideText.TabStop = false;
+			this._buttonHideText.UseVisualStyleBackColor = false;
+			// 
+			// _buttonSampleHandNew
+			// 
+			this._buttonSampleHandNew.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonSampleHandNew.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandNew.FlatAppearance.BorderSize = 0;
+			this._buttonSampleHandNew.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandNew.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandNew.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSampleHandNew.Image = global::Mtgdb.Gui.Properties.Resources.hand_48;
+			this._buttonSampleHandNew.Location = new System.Drawing.Point(305, 0);
+			this._buttonSampleHandNew.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonSampleHandNew.Name = "_buttonSampleHandNew";
+			this._buttonSampleHandNew.Size = new System.Drawing.Size(60, 24);
+			this._buttonSampleHandNew.TabIndex = 44;
+			this._buttonSampleHandNew.TabStop = false;
+			this._buttonSampleHandNew.UseVisualStyleBackColor = false;
+			// 
+			// _buttonSampleHandMulligan
+			// 
+			this._buttonSampleHandMulligan.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonSampleHandMulligan.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandMulligan.FlatAppearance.BorderSize = 0;
+			this._buttonSampleHandMulligan.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandMulligan.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandMulligan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandMulligan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSampleHandMulligan.Image = global::Mtgdb.Gui.Properties.Resources.mulligan_48;
+			this._buttonSampleHandMulligan.Location = new System.Drawing.Point(367, 0);
+			this._buttonSampleHandMulligan.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonSampleHandMulligan.Name = "_buttonSampleHandMulligan";
+			this._buttonSampleHandMulligan.Size = new System.Drawing.Size(48, 24);
+			this._buttonSampleHandMulligan.TabIndex = 45;
+			this._buttonSampleHandMulligan.TabStop = false;
+			this._buttonSampleHandMulligan.UseVisualStyleBackColor = false;
+			// 
+			// _buttonSampleHandDraw
+			// 
+			this._buttonSampleHandDraw.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonSampleHandDraw.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandDraw.FlatAppearance.BorderSize = 0;
+			this._buttonSampleHandDraw.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandDraw.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandDraw.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonSampleHandDraw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSampleHandDraw.Image = global::Mtgdb.Gui.Properties.Resources.draw_48;
+			this._buttonSampleHandDraw.Location = new System.Drawing.Point(417, 0);
+			this._buttonSampleHandDraw.Margin = new System.Windows.Forms.Padding(2, 0, 24, 0);
+			this._buttonSampleHandDraw.Name = "_buttonSampleHandDraw";
+			this._buttonSampleHandDraw.Size = new System.Drawing.Size(36, 24);
+			this._buttonSampleHandDraw.TabIndex = 46;
+			this._buttonSampleHandDraw.TabStop = false;
+			this._buttonSampleHandDraw.UseVisualStyleBackColor = false;
+			// 
+			// _panelIconStatusScrollDeck
+			// 
+			this._panelIconStatusScrollDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.scroll_48;
+			this._panelIconStatusScrollDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusScrollDeck.Location = new System.Drawing.Point(513, 0);
+			this._panelIconStatusScrollDeck.Margin = new System.Windows.Forms.Padding(0);
+			this._panelIconStatusScrollDeck.Name = "_panelIconStatusScrollDeck";
+			this._panelIconStatusScrollDeck.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusScrollDeck.TabIndex = 31;
+			this._panelIconStatusScrollDeck.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusSets
+			// 
+			this._panelIconStatusSets.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.mtg_48;
+			this._panelIconStatusSets.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusSets.Location = new System.Drawing.Point(561, 0);
+			this._panelIconStatusSets.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusSets.Name = "_panelIconStatusSets";
+			this._panelIconStatusSets.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusSets.TabIndex = 34;
+			this._panelIconStatusSets.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusScrollCards
+			// 
+			this._panelIconStatusScrollCards.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.scroll_48;
+			this._panelIconStatusScrollCards.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusScrollCards.Location = new System.Drawing.Point(706, 0);
+			this._panelIconStatusScrollCards.Margin = new System.Windows.Forms.Padding(0);
+			this._panelIconStatusScrollCards.Name = "_panelIconStatusScrollCards";
+			this._panelIconStatusScrollCards.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusScrollCards.TabIndex = 30;
+			this._panelIconStatusScrollCards.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusCollection
+			// 
+			this._panelIconStatusCollection.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.box_48;
+			this._panelIconStatusCollection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusCollection.Location = new System.Drawing.Point(754, 0);
+			this._panelIconStatusCollection.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusCollection.Name = "_panelIconStatusCollection";
+			this._panelIconStatusCollection.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusCollection.TabIndex = 31;
+			this._panelIconStatusCollection.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusFilterButtons
+			// 
+			this._panelIconStatusFilterButtons.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.quick_filters_48;
+			this._panelIconStatusFilterButtons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusFilterButtons.Location = new System.Drawing.Point(827, 0);
+			this._panelIconStatusFilterButtons.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusFilterButtons.Name = "_panelIconStatusFilterButtons";
+			this._panelIconStatusFilterButtons.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusFilterButtons.TabIndex = 32;
+			this._panelIconStatusFilterButtons.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusSearch
+			// 
+			this._panelIconStatusSearch.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.search_48;
+			this._panelIconStatusSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusSearch.Location = new System.Drawing.Point(917, 0);
+			this._panelIconStatusSearch.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusSearch.Name = "_panelIconStatusSearch";
+			this._panelIconStatusSearch.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusSearch.TabIndex = 33;
+			this._panelIconStatusSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusFilterCollection
+			// 
+			this._panelIconStatusFilterCollection.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.box_48;
+			this._panelIconStatusFilterCollection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusFilterCollection.Location = new System.Drawing.Point(1110, 0);
+			this._panelIconStatusFilterCollection.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusFilterCollection.Name = "_panelIconStatusFilterCollection";
+			this._panelIconStatusFilterCollection.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusFilterCollection.TabIndex = 32;
+			this._panelIconStatusFilterCollection.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusFilterDeck
+			// 
+			this._panelIconStatusFilterDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.draw_a_card_48;
+			this._panelIconStatusFilterDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusFilterDeck.Location = new System.Drawing.Point(1200, 0);
+			this._panelIconStatusFilterDeck.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusFilterDeck.Name = "_panelIconStatusFilterDeck";
+			this._panelIconStatusFilterDeck.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusFilterDeck.TabIndex = 33;
+			this._panelIconStatusFilterDeck.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _panelIconStatusFilterLegality
+			// 
+			this._panelIconStatusFilterLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
+			this._panelIconStatusFilterLegality.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._panelIconStatusFilterLegality.Location = new System.Drawing.Point(1290, 0);
+			this._panelIconStatusFilterLegality.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);
+			this._panelIconStatusFilterLegality.Name = "_panelIconStatusFilterLegality";
+			this._panelIconStatusFilterLegality.Size = new System.Drawing.Size(24, 24);
+			this._panelIconStatusFilterLegality.TabIndex = 34;
+			this._panelIconStatusFilterLegality.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _buttonExcludeManaAbility
 			// 
@@ -906,6 +972,53 @@
 			this._buttonExcludeManaCost.TabStop = false;
 			this._buttonExcludeManaCost.UseVisualStyleBackColor = false;
 			// 
+			// _buttonShowProhibit
+			// 
+			this._buttonShowProhibit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonShowProhibit.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonShowProhibit.BackColor = System.Drawing.Color.Transparent;
+			this._buttonShowProhibit.FlatAppearance.BorderSize = 0;
+			this._buttonShowProhibit.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowProhibit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowProhibit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonShowProhibit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonShowProhibit.Image = global::Mtgdb.Gui.Properties.Resources.exclude_hidden_24;
+			this._buttonShowProhibit.Location = new System.Drawing.Point(80, 0);
+			this._buttonShowProhibit.Margin = new System.Windows.Forms.Padding(0);
+			this._buttonShowProhibit.Name = "_buttonShowProhibit";
+			this._buttonShowProhibit.Size = new System.Drawing.Size(24, 24);
+			this._buttonShowProhibit.TabIndex = 41;
+			this._buttonShowProhibit.TabStop = false;
+			this._buttonShowProhibit.UseVisualStyleBackColor = false;
+			// 
+			// FilterManaAbility
+			// 
+			this.FilterManaAbility.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
+			this.FilterManaAbility.EnableRequiringSome = true;
+			this.FilterManaAbility.HideProhibit = true;
+			this.FilterManaAbility.HintIcon = global::Mtgdb.Gui.Properties.Resources.manatext_25;
+			this.FilterManaAbility.HintTextShift = new System.Drawing.Size(-4, -4);
+			this.FilterManaAbility.IsFlipped = true;
+			this.FilterManaAbility.IsVertical = true;
+			this.FilterManaAbility.Location = new System.Drawing.Point(0, 0);
+			this.FilterManaAbility.Margin = new System.Windows.Forms.Padding(0, 0, 0, 20);
+			this.FilterManaAbility.MaximumSize = new System.Drawing.Size(50, 200);
+			this.FilterManaAbility.MinimumSize = new System.Drawing.Size(46, 266);
+			this.FilterManaAbility.Name = "FilterManaAbility";
+			this.FilterManaAbility.Opacity3ToDisable = 0.2F;
+			this.FilterManaAbility.Opacity4Disabled = 0.1F;
+			this.FilterManaAbility.ProhibitedColor = System.Drawing.Color.OrangeRed;
+			this.FilterManaAbility.PropertiesCount = 12;
+			this.FilterManaAbility.PropertyImages = null;
+			this.FilterManaAbility.SelectionBorder = 1.75F;
+			this.FilterManaAbility.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
+			this.FilterManaAbility.SelectionColor = System.Drawing.SystemColors.Window;
+			this.FilterManaAbility.ShowValueHint = true;
+			this.FilterManaAbility.Size = new System.Drawing.Size(46, 266);
+			this.FilterManaAbility.Spacing = new System.Drawing.Size(2, 2);
+			this.FilterManaAbility.TabIndex = 19;
+			this.FilterManaAbility.TabStop = false;
+			// 
 			// FilterManaCost
 			// 
 			this.FilterManaCost.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
@@ -933,123 +1046,12 @@
 			this.FilterManaCost.TabIndex = 22;
 			this.FilterManaCost.TabStop = false;
 			// 
-			// _buttonShowProhibit
-			// 
-			this._buttonShowProhibit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonShowProhibit.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonShowProhibit.BackColor = System.Drawing.Color.Transparent;
-			this._buttonShowProhibit.FlatAppearance.BorderSize = 0;
-			this._buttonShowProhibit.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowProhibit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowProhibit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonShowProhibit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowProhibit.Image = global::Mtgdb.Gui.Properties.Resources.exclude_hidden_24;
-			this._buttonShowProhibit.Location = new System.Drawing.Point(80, 0);
-			this._buttonShowProhibit.Margin = new System.Windows.Forms.Padding(0);
-			this._buttonShowProhibit.Name = "_buttonShowProhibit";
-			this._buttonShowProhibit.Size = new System.Drawing.Size(24, 24);
-			this._buttonShowProhibit.TabIndex = 41;
-			this._buttonShowProhibit.TabStop = false;
-			this._buttonShowProhibit.UseVisualStyleBackColor = false;
-			// 
-			// _layoutRight
-			// 
-			this._layoutRight.AutoSize = true;
-			this._layoutRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutRight.ColumnCount = 2;
-			this._layoutRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-			this._layoutRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutRight.Controls.Add(this._buttonExcludeManaAbility, 0, 1);
-			this._layoutRight.Controls.Add(this._buttonExcludeManaCost, 1, 1);
-			this._layoutRight.Controls.Add(this._buttonShowProhibit, 1, 0);
-			this._layoutRight.Controls.Add(this._panelCostLeft, 0, 2);
-			this._layoutRight.Controls.Add(this.FilterManaCost, 1, 2);
-			this._layoutRight.Location = new System.Drawing.Point(1537, 0);
-			this._layoutRight.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutRight.Name = "_layoutRight";
-			this._layoutRight.RowCount = 3;
-			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this._layoutRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._layoutRight.Size = new System.Drawing.Size(104, 750);
-			this._layoutRight.TabIndex = 45;
-			// 
-			// _layoutRoot
-			// 
-			this._layoutRoot.ColumnCount = 2;
-			this._layoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._layoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutRoot.Controls.Add(this._layout, 0, 0);
-			this._layoutRoot.Controls.Add(this._layoutRight, 1, 0);
-			this._layoutRoot.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._layoutRoot.Location = new System.Drawing.Point(0, 0);
-			this._layoutRoot.Name = "_layoutRoot";
-			this._layoutRoot.RowCount = 1;
-			this._layoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._layoutRoot.Size = new System.Drawing.Size(1641, 826);
-			this._layoutRoot.TabIndex = 46;
-			// 
-			// _layoutViewCards
-			// 
-			this._layoutViewCards.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutViewCards.BackColor = System.Drawing.Color.White;
-			this._layoutViewCards.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
-			this._layoutViewCards.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
-			layoutOptions1.AllowPartialCards = true;
-			layoutOptions1.CardInterval = new System.Drawing.Size(4, 2);
-			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(334, 225);
-			this._layoutViewCards.LayoutOptions = layoutOptions1;
-			this._layoutViewCards.Location = new System.Drawing.Point(0, 70);
-			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewCards.Name = "_layoutViewCards";
-			searchOptions1.Allow = true;
-			searchOptions1.ButtonMargin = new System.Drawing.Size(19, 2);
-			searchOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
-			this._layoutViewCards.SearchOptions = searchOptions1;
-			this._layoutViewCards.Size = new System.Drawing.Size(1537, 421);
-			sortOptions1.Allow = true;
-			sortOptions1.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions1.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
-			this._layoutViewCards.SortOptions = sortOptions1;
-			this._layoutViewCards.TabIndex = 19;
-			this._layoutViewCards.TabStop = false;
-			// 
-			// _layoutViewDeck
-			// 
-			this._layoutViewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
-			this._layoutViewDeck.HotTrackBackgroundColor = System.Drawing.Color.WhiteSmoke;
-			this._layoutViewDeck.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
-			layoutOptions2.AllowPartialCards = true;
-			layoutOptions2.CardInterval = new System.Drawing.Size(2, 2);
-			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(161, 225);
-			this._layoutViewDeck.LayoutOptions = layoutOptions2;
-			this._layoutViewDeck.Location = new System.Drawing.Point(0, 515);
-			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewDeck.Name = "_layoutViewDeck";
-			this._layoutViewDeck.SearchOptions = searchOptions2;
-			this._layoutViewDeck.Size = new System.Drawing.Size(1537, 311);
-			sortOptions2.Allow = true;
-			sortOptions2.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions2.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
-			this._layoutViewDeck.SortOptions = sortOptions2;
-			this._layoutViewDeck.TabIndex = 42;
-			this._layoutViewDeck.TabStop = false;
-			// 
 			// FormMain
 			// 
 			this.ClientSize = new System.Drawing.Size(1641, 826);
 			this.Controls.Add(this._listBoxSuggest);
 			this.Controls.Add(this._layoutRoot);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormMain";
 			this._panelFilters.ResumeLayout(false);
 			this._panelStatus.ResumeLayout(false);

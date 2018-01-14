@@ -17,6 +17,7 @@ namespace Mtgdb.Controls
 		public event Action<object> SortChanged;
 		public event Action<object, SearchArgs> SearchClicked;
 		public event Action<object, LayoutControl> ProbeCardCreating;
+		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
 
 		public LayoutViewControl()
 		{
@@ -31,6 +32,9 @@ namespace Mtgdb.Controls
 			Paint += paint;
 			Layout += layout;
 			Disposed += disposed;
+
+			_alignButtonVisible.Changed += alignButtonStateChanged;
+			_alignButtonHotTracked.Changed += alignButtonStateChanged;
 
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
@@ -52,81 +56,146 @@ namespace Mtgdb.Controls
 			updateScrollbar();
 		}
 
-		private void paint(object sender, PaintEventArgs e)
+		private void paint(object sender, PaintEventArgs eArgs)
 		{
-			e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-			e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+			var paintActions = new PaintActions();
 
-			e.Graphics.Clear(BackColor);
+			paintActions.Background.Add(e => e.Graphics.Clear(BackColor));
+			addPaintCardActions(paintActions, eArgs.ClipRectangle);
+			paintActions.AlignButtons.Add(paintAlignButtons);
+
+			eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+			eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+			paintActions.Background.Paint(eArgs);
+			paintActions.FieldData.Paint(eArgs);
+			paintActions.AlignButtons.Paint(eArgs);
+			// paint field buttons over align buttons
+			paintActions.FieldButtons.Paint(eArgs);
+		}
+
+		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle)
+		{
+			var hotTrackBgBrush = new SolidBrush(HotTrackBackgroundColor);
+			var hotTrackBgPen = new Pen(HotTrackBorderColor);
 
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
+				int rowHandle = getRowHandle(displayIndex: i);
 
 				if (!card.Visible || card.DataSource == null)
 					continue;
 
 				var cardArea = new Rectangle(card.Location, card.Size);
-				if (!e.ClipRectangle.IntersectsWith(cardArea))
+				if (!clipRectangle.IntersectsWith(cardArea))
 					continue;
-				
-				e.Graphics.FillRectangle(new SolidBrush(BackColor), cardArea);
-				
+
+				if (!card.BackColor.Equals(BackColor) && !card.BackColor.Equals(Color.Transparent))
+					actions.Background.Add(e => e.Graphics.FillRectangle(new SolidBrush(card.BackColor), cardArea));
+
 				foreach (var field in card.Fields)
 				{
-					var fieldArea = new Rectangle(card.Location.X + field.Location.X, card.Location.Y + field.Location.Y, field.Width, field.Height);
+					var fieldArea = new Rectangle(card.Location.Plus(field.Location), field.Size);
 
-					if (!fieldArea.IntersectsWith(e.ClipRectangle))
+					if (!clipRectangle.IntersectsWith(fieldArea))
 						continue;
 
-					if (field.IsHotTracked)
-					{
-						var area = fieldArea;
-						e.Graphics.FillRectangle(new SolidBrush(HotTrackBackgroundColor), area);
-						e.Graphics.DrawRectangle(new Pen(HotTrackBorderColor),
-							new Rectangle(area.Location, new Size(area.Width - 1, area.Height - 1)));
-					}
-
-					var customFieldArgs = new CustomDrawArgs
-					{
-						RowHandle = getRowHandle(i),
-						Graphics = e.Graphics,
-						Bounds = fieldArea,
-						FieldName = field.FieldName,
-						Handled = false,
-						Font = field.Font,
-						ForeColor = field.ForeColor,
-						DisplayText = field.Text,
-						HAlignment = field.HorizontalAlignment,
-					};
-
-					CustomDrawField?.Invoke(this, customFieldArgs);
-
-					if (!customFieldArgs.Handled)
-						field.PaintSelf(e.Graphics, card.Location, card.HighlightSettings);
-
-					if (field.IsSortVisible)
-					{
-						var icon = SortOptions.GetIcon(field);
-						if (icon != null)
-						{
-							var iconBounds = SortOptions.GetButtonBounds(field, card);
-							e.Graphics.DrawImage(icon, iconBounds);
-						}
-					}
-
-					if (field.IsSearchVisible)
-					{
-						var icon = SearchOptions.GetIcon(field);
-						if (icon != null)
-						{
-							var iconBounds = SearchOptions.GetButtonBounds(field, card);
-							e.Graphics.DrawImage(icon, iconBounds);
-						}
-					}
+					actions.Background.Add(e => paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
+					actions.FieldData.Add(e => paintFieldData(e, card, field, fieldArea, rowHandle));
+					actions.FieldButtons.Add(e => paintSortButton(e, field, card));
+					actions.FieldButtons.Add(e => paintSearchButton(e, field, card));
 				}
 			}
 		}
+
+		private void paintFieldBg(PaintEventArgs e, FieldControl field, Rectangle fieldArea, SolidBrush hotTrackBgBrush, Pen hotTrackBgPen)
+		{
+			if (field.IsHotTracked)
+			{
+				e.Graphics.FillRectangle(hotTrackBgBrush, fieldArea);
+				e.Graphics.DrawRectangle(hotTrackBgPen,
+					new Rectangle(fieldArea.Location, new Size(fieldArea.Width - 1, fieldArea.Height - 1)));
+			}
+			else if (!field.BackColor.Equals(BackColor) && !field.BackColor.Equals(Color.Transparent))
+			{
+				var bgBrush = new SolidBrush(field.BackColor);
+				e.Graphics.FillRectangle(bgBrush, fieldArea);
+			}
+		}
+
+		private void paintFieldData(PaintEventArgs e, LayoutControl card, FieldControl field, Rectangle fieldArea, int rowHandle)
+		{
+			if (CustomDrawField != null)
+			{
+				var customFieldArgs = new CustomDrawArgs
+				{
+					RowHandle = rowHandle,
+					Graphics = e.Graphics,
+					Bounds = fieldArea,
+					FieldName = field.FieldName,
+					Handled = false,
+					Font = field.Font,
+					ForeColor = field.ForeColor,
+					DisplayText = field.Text,
+					HAlignment = field.HorizontalAlignment,
+				};
+
+				CustomDrawField.Invoke(this, customFieldArgs);
+
+				if (!customFieldArgs.Handled)
+					field.PaintSelf(e.Graphics, card.Location, card.HighlightSettings);
+			}
+			else
+				field.PaintSelf(e.Graphics, card.Location, card.HighlightSettings);
+		}
+
+		private void paintSearchButton(PaintEventArgs e, FieldControl field, LayoutControl card)
+		{
+			if (!field.IsSearchVisible)
+				return;
+
+			var icon = SearchOptions.GetIcon(field);
+			if (icon == null)
+				return;
+
+			var iconBounds = SearchOptions.GetButtonBounds(field, card);
+			e.Graphics.DrawImage(icon, iconBounds);
+		}
+
+		private void paintSortButton(PaintEventArgs e, FieldControl field, LayoutControl card)
+		{
+			if (!field.IsSortVisible)
+				return;
+
+			var icon = SortOptions.GetIcon(field);
+			if (icon == null)
+				return;
+
+			var iconBounds = SortOptions.GetButtonBounds(field, card);
+			e.Graphics.DrawImage(icon, iconBounds);
+		}
+
+		private void paintAlignButtons(PaintEventArgs e)
+		{
+			if (!LayoutOptions.HasAlignIcons)
+				return;
+
+			foreach (var direction in getAlignDirections())
+			{
+				if (!_alignButtonVisible[direction])
+					continue;
+
+				var bounds = getAlignIconBounds(direction);
+				if (!e.ClipRectangle.IntersectsWith(bounds))
+					continue;
+
+				var icon = LayoutOptions.GetAlignIcon(direction, _alignButtonHotTracked[direction]);
+				e.Graphics.DrawImage(icon, bounds);
+			}
+		}
+
+
 
 		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
 		{
@@ -142,6 +211,14 @@ namespace Mtgdb.Controls
 				return Rectangle.Empty;
 
 			return SortOptions.GetButtonBounds(hitInfo.Field, hitInfo.Card);
+		}
+
+		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
+		{
+			if (!hitInfo.AlignButtonDirection.HasValue)
+				return Rectangle.Empty;
+
+			return getAlignIconBounds(hitInfo.AlignButtonDirection.Value);
 		}
 
 		public void RefreshData()
@@ -182,6 +259,7 @@ namespace Mtgdb.Controls
 			KeyDown += keyDown;
 
 			MouseMove += mouseMove;
+			MouseLeave += mouseLeave;
 			MouseClick += mouseClick;
 
 			Application.AddMessageFilter(this);
@@ -229,7 +307,7 @@ namespace Mtgdb.Controls
 
 		private LayoutControl createProbeCard()
 		{
-			var result = (LayoutControl)Activator.CreateInstance(LayoutControlType);
+			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
 			result.Font = Font;
 
@@ -284,9 +362,9 @@ namespace Mtgdb.Controls
 			e.Handled = true;
 
 			if (e.KeyData == Keys.PageDown)
-				scrollAdd(getRowsCount()*getColumnsCount());
+				scrollAdd(getRowsCount() * getColumnsCount());
 			else if (e.KeyData == Keys.PageUp)
-				scrollAdd(-(getRowsCount()*getColumnsCount()));
+				scrollAdd(-(getRowsCount() * getColumnsCount()));
 			else if (e.KeyData == Keys.End)
 				scrollAdd(Count);
 			else if (e.KeyData == Keys.Home)
@@ -320,12 +398,14 @@ namespace Mtgdb.Controls
 
 		private void applySize()
 		{
+			var shift = getAlignmentShift();
+
 			int columnsCount = getColumnsCount();
 			int rowsCount = getRowsCount();
 			for (int j = 0; j < rowsCount; j++)
 				for (int i = 0; i < columnsCount; i++)
 				{
-					var location = getCardLocation(i, j);
+					var location = getCardLocation(i, j, shift);
 
 					int index = getCardIndex(i, j, columnsCount);
 					if (index == Cards.Count)
@@ -343,11 +423,21 @@ namespace Mtgdb.Controls
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			var location = e.Location;
+			var hitInfo = CalcHitInfo(e.Location);
+			handleMouseMove(hitInfo);
+		}
 
+		private void mouseLeave(object sender, EventArgs e)
+		{
+			var hitInfo = CalcHitInfo(new Point(-10000, -10000));
+			handleMouseMove(hitInfo);
+		}
+
+		private void handleMouseMove(HitInfo hitInfo)
+		{
 			var prevHitInfo = _hitInfo;
-			_hitInfo = CalcHitInfo(location);
-			
+			_hitInfo = hitInfo;
+
 			if (prevHitInfo?.Field != null && prevHitInfo.Field != _hitInfo.Field)
 			{
 				prevHitInfo.Field.IsHotTracked = false;
@@ -371,96 +461,115 @@ namespace Mtgdb.Controls
 			if (_hitInfo.Card != null)
 				foreach (var field in _hitInfo.Card.Fields)
 				{
-					field.IsSortVisible = SortOptions.Allow && field.AllowSort  && (field.IsHotTracked || field.SortOrder != SortOrder.None);
+					field.IsSortVisible = SortOptions.Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
 					field.IsSearchVisible = SearchOptions.Allow && field.AllowSearch && field.IsHotTracked;
 				}
+
+			foreach (var direction in getAlignDirections())
+				_alignButtonHotTracked[direction] = direction == _hitInfo.AlignButtonDirection;
 		}
 
 		private void mouseClick(object sender, MouseEventArgs e)
 		{
-			if (e.Button != MouseButtons.Left)
-				return;
-
 			var hitInfo = CalcHitInfo(e.Location);
-			if (hitInfo.IsSearchButton)
+
+			if (e.Button == MouseButtons.Left)
 			{
-				SearchClicked?.Invoke(this,
-					new SearchArgs
-					{
-						FieldName = hitInfo.FieldName,
-						FieldValue = GetText(hitInfo.RowHandle, hitInfo.FieldName),
-						UseAndOperator = ModifierKeys == Keys.Shift
-					});
+				if (hitInfo.IsSearchButton)
+					handleSearchClick(hitInfo);
+				else if (hitInfo.IsSortButton)
+					handleSortClick(hitInfo);
+				else if (hitInfo.AlignButtonDirection.HasValue)
+					handleAlignClick(hitInfo);
 			}
-			if (hitInfo.IsSortButton)
+
+			MouseClicked?.Invoke(this, hitInfo, e);
+		}
+
+		private void handleSearchClick(HitInfo hitInfo)
+		{
+			SearchClicked?.Invoke(this,
+				new SearchArgs
+				{
+					FieldName = hitInfo.FieldName,
+					FieldValue = GetText(hitInfo.RowHandle, hitInfo.FieldName),
+					UseAndOperator = ModifierKeys == Keys.Shift
+				});
+		}
+
+		private void handleSortClick(HitInfo hitInfo)
+		{
+			int sortIndex;
+			FieldSortInfo sortInfo;
+
+			if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out sortIndex))
 			{
-				int sortIndex;
-				FieldSortInfo sortInfo;
+				sortIndex = -1;
+				sortInfo = null;
+			}
+			else
+				sortInfo = _sortInfos[sortIndex];
 
-				if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out sortIndex))
+
+			if (ModifierKeys == Keys.None)
+			{
+				_sortInfos.Clear();
+				_sortIndexByField.Clear();
+
+				if (sortInfo == null)
 				{
-					sortIndex = -1;
-					sortInfo = null;
+					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+
+					_sortInfos.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
 				}
-				else
-					sortInfo = _sortInfos[sortIndex];
-
-
-				if (ModifierKeys == Keys.None)
+				else if (sortInfo.SortOrder == SortOrder.Ascending)
 				{
-					_sortInfos.Clear();
-					_sortIndexByField.Clear();
+					sortInfo.SortOrder = SortOrder.Descending;
+					_sortInfos.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+				}
 
-					if (sortInfo == null)
-					{
-						sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+				updateSort();
+				SortChanged?.Invoke(this);
+			}
+			else if (ModifierKeys == Keys.Shift)
+			{
+				if (sortInfo == null)
+				{
+					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
+					_sortInfos.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+				}
+				else if (sortInfo.SortOrder == SortOrder.Ascending)
+				{
+					sortInfo.SortOrder = SortOrder.Descending;
+				}
+				else if (sortInfo.SortOrder == SortOrder.Descending)
+				{
+					_sortInfos.RemoveAt(sortIndex);
+					_sortIndexByField.Remove(hitInfo.FieldName);
+				}
 
-						_sortInfos.Add(sortInfo);
-						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-					}
-					else if (sortInfo.SortOrder == SortOrder.Ascending)
-					{
-						sortInfo.SortOrder = SortOrder.Descending;
-						_sortInfos.Add(sortInfo);
-						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-					}
+				updateSort();
+				SortChanged?.Invoke(this);
+			}
+			else if (ModifierKeys == Keys.Control)
+			{
+				if (sortInfo != null)
+				{
+					_sortInfos.RemoveAt(sortIndex);
+					_sortIndexByField.Remove(hitInfo.FieldName);
 
 					updateSort();
 					SortChanged?.Invoke(this);
 				}
-				else if (ModifierKeys == Keys.Shift)
-				{
-					if (sortInfo == null)
-					{
-						sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
-						_sortInfos.Add(sortInfo);
-						_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
-					}
-					else if (sortInfo.SortOrder == SortOrder.Ascending)
-					{
-						sortInfo.SortOrder = SortOrder.Descending;
-					}
-					else if (sortInfo.SortOrder == SortOrder.Descending)
-					{
-						_sortInfos.RemoveAt(sortIndex);
-						_sortIndexByField.Remove(hitInfo.FieldName);
-					}
-
-					updateSort();
-					SortChanged?.Invoke(this);
-				}
-				else if (ModifierKeys == Keys.Control)
-				{
-					if (sortInfo != null)
-					{
-						_sortInfos.RemoveAt(sortIndex);
-						_sortIndexByField.Remove(hitInfo.FieldName);
-
-						updateSort();
-						SortChanged?.Invoke(this);
-					}
-				}
 			}
+		}
+
+		private void handleAlignClick(HitInfo hitInfo)
+		{
+			LayoutOptions.Alignment = hitInfo.AlignButtonDirection.Value;
 		}
 
 		private void updateSort()
@@ -493,90 +602,217 @@ namespace Mtgdb.Controls
 			Invalidate(card.Bounds);
 		}
 
+
+
 		public HitInfo CalcHitInfo(Point location)
 		{
 			var hitInfo = new HitInfo
 			{
-				RowHandle = -1,
-				InBounds = new Rectangle(new Point(0, 0), Size).Contains(location)
+				InBounds = getDisplayBounds().Contains(location)
 			};
 
 			if (!hitInfo.InBounds)
 				return hitInfo;
 
+			setFieldRelatedData(location, hitInfo);
+
+			if (!hitInfo.IsSearchButton && !hitInfo.IsSortButton)
+			{
+				setAlignButtonDirection(location, hitInfo);
+
+				if (hitInfo.AlignButtonDirection.HasValue)
+				{
+					hitInfo.ClearCard();
+					hitInfo.ClearField();
+				}
+			}
+
+			return hitInfo;
+		}
+
+		private void setFieldRelatedData(Point location, HitInfo hitInfo)
+		{
 			var cardCell = getCardCell(location);
 
 			int rowsCount = getRowsCount();
 			int columnsCount = getColumnsCount();
 
 			if (cardCell.X < 0 || cardCell.X >= columnsCount || cardCell.Y < 0 || cardCell.Y >= rowsCount)
-				return hitInfo;
+				return;
 
 			var index = getCardIndex(cardCell.X, cardCell.Y, columnsCount);
 
 			if (index < 0 || index >= Cards.Count)
-				return hitInfo;
+				return;
 
 			var card = Cards[index];
 
 			if (!card.Visible)
-				return hitInfo;
+				return;
 
-			hitInfo.RowHandle = getRowHandle(index);
-			hitInfo.CardBounds = card.Bounds;
-			hitInfo.Card = card;
+			hitInfo.SetCard(card, getRowHandle(index));
 
-			var locationInField = new Point(location.X - card.Bounds.X, location.Y - card.Bounds.Y);
+			var field = card.Fields.FirstOrDefault(_ => _.Bounds.Plus(card.Bounds.Location).Contains(location));
 
-			foreach (var field in card.Fields)
-			{
-				if (!field.Bounds.Contains(locationInField))
-					continue;
+			if (field == null)
+				return;
 
-				var rectField = field.Bounds;
-				rectField.Offset(card.Location);
-				hitInfo.FieldBounds = rectField;
+			bool isSortButton = SortOptions.Allow && field.AllowSort &&
+				SortOptions.GetButtonBounds(field, card).Contains(location);
 
-				hitInfo.FieldName = field.FieldName;
-				hitInfo.Field = field;
+			bool isSearchButton = SearchOptions.Allow && field.AllowSearch &&
+				SearchOptions.GetButtonBounds(field, card).Contains(location);
 
-				var sortButtonBounds = SortOptions.GetButtonBounds(field, card);
-
-				hitInfo.IsSortButton =
-					SortOptions.Allow &&
-					hitInfo.Field.AllowSort &&
-					sortButtonBounds.Contains(location);
-
-				var searchButtonBounds = SearchOptions.GetButtonBounds(field, card);
-
-				hitInfo.IsSearchButton =
-					SearchOptions.Allow &&
-					hitInfo.Field.AllowSearch &&
-					searchButtonBounds.Contains(location);
-
-				return hitInfo;
-			}
-
-			return hitInfo;
+			hitInfo.SetField(field, isSortButton, isSearchButton);
 		}
 
-		private Point getCardLocation(int i, int j)
+		private void setAlignButtonDirection(Point location, HitInfo hitInfo)
+		{
+			var alignDirection = getAlignIconDirection(location);
+
+			if (!alignDirection.HasValue || !_alignButtonVisible[alignDirection.Value])
+				return;
+
+			hitInfo.AlignButtonDirection = alignDirection.Value;
+		}
+
+
+
+		private void alignButtonStateChanged(Direction direction, bool prevVal, bool newVal)
+		{
+			var bounds = getAlignIconBounds(direction);
+			Invalidate(bounds);
+		}
+
+		private static IEnumerable<Direction> getAlignDirections()
+		{
+			yield return Direction.TopLeft;
+			yield return Direction.TopRight;
+			yield return Direction.BottomRight;
+			yield return Direction.BottomLeft;
+		}
+
+		private bool isAlignIconVisible(Direction direction)
+		{
+			return LayoutOptions.Alignment != direction;
+		}
+
+		private Point getCornerCardCell(Direction direction)
+		{
+			switch (direction)
+			{
+				case Direction.TopLeft:
+					return new Point(0, 0);
+				case Direction.TopRight:
+					return new Point(getColumnsCount() - 1, 0);
+				case Direction.BottomRight:
+					return new Point(getColumnsCount() - 1, getRowsCount() - 1);
+				case Direction.BottomLeft:
+					return new Point(0, getRowsCount() - 1);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+			}
+		}
+
+		private Direction? getAlignIconDirection(Point location)
+		{
+			if (!LayoutOptions.HasAlignIcons)
+				return null;
+
+			foreach (var direction in getAlignDirections())
+				if (getAlignIconBounds(direction).Contains(location))
+					return direction;
+
+			return null;
+		}
+
+		private Rectangle getDisplayBounds()
+		{
+			return new Rectangle(new Point(0, 0), new Size(Width - ScrollWidth, Height));
+		}
+
+		private Rectangle getAlignIconBounds(Direction direction)
+		{
+			var size = LayoutOptions.AlignIconSize;
+			var bounds = getDisplayBounds();
+
+			switch (direction)
+			{
+				case Direction.TopLeft:
+					return new Rectangle(new Point(0, 0), size);
+				case Direction.TopRight:
+					return new Rectangle(new Point(bounds.Width - size.Width, 0), size);
+				case Direction.BottomRight:
+					return new Rectangle(new Point(bounds.Width - size.Width, bounds.Height - size.Height), size);
+				case Direction.BottomLeft:
+					return new Rectangle(new Point(0, bounds.Height - size.Height), size);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+			}
+		}
+
+		private Rectangle getCardBounds(int i, int j, Point alignmentShift)
+		{
+			var cardArea = new Rectangle(getCardLocation(i, j, alignmentShift), CardSize);
+			return cardArea;
+		}
+
+		private Point getCardLocation(int i, int j, Point alignmentShift)
 		{
 			var cardInterval = LayoutOptions.CardInterval;
 
-			return new Point(
-				cardInterval.Width/2 + i*(CardSize.Width + cardInterval.Width),
-				cardInterval.Height/2 + j*(CardSize.Height + cardInterval.Height));
+			var result = new Point(
+				cardInterval.Width / 2 + i * (CardSize.Width + cardInterval.Width),
+				cardInterval.Height / 2 + j * (CardSize.Height + cardInterval.Height));
+
+			result = result.Plus(alignmentShift);
+
+			return result;
 		}
 
 		private Point getCardCell(Point location)
 		{
+			var shift = getAlignmentShift();
+			location = location.Minus(shift);
+
 			var cardInterval = LayoutOptions.CardInterval;
 
 			return new Point(
-				(location.X - cardInterval.Width/2)/(CardSize.Width + cardInterval.Width),
-				(location.Y - cardInterval.Height/2)/(CardSize.Height + cardInterval.Height));
+				(location.X - cardInterval.Width / 2) / (CardSize.Width + cardInterval.Width),
+				(location.Y - cardInterval.Height / 2) / (CardSize.Height + cardInterval.Height));
 		}
+
+		private Point getAlignmentShift()
+		{
+			var cell = getCornerCardCell(Direction.BottomRight);
+
+			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point))
+				.RightBottom()
+				.Plus(LayoutOptions.CardInterval.ScaleBy(new SizeF(0.5f, 0.5f)));
+
+			var cardToDisplayRightBottom = getDisplayBounds()
+				.RightBottom()
+				.Minus(cardLogicalBounds);
+
+			var result = new Point(
+				applyAlignmentSide(cardToDisplayRightBottom.X, LayoutOptions.Alignment.HasFlag(Direction.Left)),
+				applyAlignmentSide(cardToDisplayRightBottom.Y, LayoutOptions.Alignment.HasFlag(Direction.Top)));
+
+			return result;
+		}
+
+		private static int applyAlignmentSide(int cardToDisplayMaxValue, bool alignToMin)
+		{
+			if (alignToMin && cardToDisplayMaxValue < 0)
+				return 0;
+
+			if (cardToDisplayMaxValue > 0)
+				return cardToDisplayMaxValue / 2;
+
+			return cardToDisplayMaxValue;
+		}
+
+
 
 		private static int getCardIndex(int i, int j, int columnsCount)
 		{
@@ -600,8 +836,8 @@ namespace Mtgdb.Controls
 
 			if (value >= 0)
 			{
-				int pageSize = columnsCount*rowsCount;
-				value = pageSize*(value/pageSize);
+				int pageSize = columnsCount * rowsCount;
+				value = pageSize * (value / pageSize);
 			}
 
 			return value;
@@ -615,7 +851,7 @@ namespace Mtgdb.Controls
 			for (int j = 0; j < rowsCount; j++)
 				for (int i = 0; i < columnsCount; i++)
 				{
-					int index = j*columnsCount + i;
+					int index = j * columnsCount + i;
 					int rowHandle = getRowHandle(index);
 					var row = FindRow(rowHandle);
 
@@ -633,10 +869,16 @@ namespace Mtgdb.Controls
 					}
 				}
 
-			for (int index = rowsCount*columnsCount; index < Cards.Count; index++)
+			for (int index = rowsCount * columnsCount; index < Cards.Count; index++)
 			{
 				Cards[index].DataSource = null;
 				Cards[index].Visible = false;
+			}
+
+			foreach (var direction in getAlignDirections())
+			{
+				bool visible = isAlignIconVisible(direction);
+				_alignButtonVisible[direction] = visible;
 			}
 		}
 
@@ -659,7 +901,7 @@ namespace Mtgdb.Controls
 			int rowsCount = getRowsCount();
 			int result = rowHandle - CardIndex;
 
-			if (result < 0 || result >= columnsCount*rowsCount || !Cards[result].Visible)
+			if (result < 0 || result >= columnsCount * rowsCount || !Cards[result].Visible)
 				return -1;
 
 			return result;
@@ -677,8 +919,10 @@ namespace Mtgdb.Controls
 			return field.HighlightRanges;
 		}
 
+
+
 		[Category("Settings")]
-		[DefaultValue(typeof (LayoutControl)), TypeConverter(typeof (LayoutControlTypeConverter))]
+		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
 		public Type LayoutControlType
 		{
 			get { return _layoutControlType; }
@@ -693,15 +937,15 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof (Color), "Transparent")]
+		[DefaultValue(typeof(Color), "Transparent")]
 		public Color HotTrackBackgroundColor { get; set; }
 
 		[Category("Settings")]
-		[DefaultValue(typeof (Color), "Transparent")]
+		[DefaultValue(typeof(Color), "Transparent")]
 		public Color HotTrackBorderColor { get; set; }
 
 		[Category("Settings")]
-		[TypeConverter(typeof (ExpandableObjectConverter))]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SortOptions SortOptions { get; set; } = new SortOptions();
 
 		[Category("Settings")]
@@ -781,11 +1025,11 @@ namespace Mtgdb.Controls
 		{
 			get
 			{
-				int pageSize = getRowsCount()*getColumnsCount();
+				int pageSize = getRowsCount() * getColumnsCount();
 
-				int pageCount = Count/pageSize;
+				int pageCount = Count / pageSize;
 
-				if (Count%pageSize > 0)
+				if (Count % pageSize > 0)
 					pageCount++;
 
 				return pageCount;
@@ -845,6 +1089,9 @@ namespace Mtgdb.Controls
 		private readonly List<FieldSortInfo> _sortInfos = new List<FieldSortInfo>();
 		private Dictionary<string, int> _sortIndexByField = new Dictionary<string, int>();
 
+		private readonly EventFiringMap<Direction, bool> _alignButtonVisible = new EventFiringMap<Direction, bool>();
+		private readonly EventFiringMap<Direction, bool> _alignButtonHotTracked = new EventFiringMap<Direction, bool>();
+
 		private HitInfo _hitInfo;
 
 		#region mouse wheel without focus
@@ -877,7 +1124,7 @@ namespace Mtgdb.Controls
 			return Handle.Equals(ControlHelpers.WindowFromPoint(Cursor.Position));
 		}
 
-		private static readonly int[] _navigationKeys = 
+		private static readonly int[] _navigationKeys =
 		{
 			0x21, // pgup
 			0x22, // pgdn

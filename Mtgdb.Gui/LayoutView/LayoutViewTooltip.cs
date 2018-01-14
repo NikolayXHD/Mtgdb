@@ -53,7 +53,7 @@ namespace Mtgdb.Gui
 			var hitInfo = _layoutView.CalcHitInfo(cursorPosition);
 
 			var card = (Card)_layoutView.GetRow(hitInfo.RowHandle);
-			if (card == null || hitInfo.IsOverImage() || !hitInfo.FieldBounds.HasValue)
+			if (!hitInfo.AlignButtonDirection.HasValue && (card == null || hitInfo.IsOverImage() || !hitInfo.FieldBounds.HasValue))
 			{
 				Hide?.Invoke();
 				return;
@@ -86,6 +86,20 @@ namespace Mtgdb.Gui
 					       "Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
 					       "Following term will be added to search text\r\n" +
 					       _searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)),
+					Clickable = false
+				});
+			}
+			else if (hitInfo.AlignButtonDirection.HasValue)
+			{
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.align",
+					ObjectBounds = _layoutView.GetAlignButtonBounds(hitInfo),
+					Control = _layoutView.Control,
+					Title = "Viewport alignment",
+					Text = "Aligns viewport by this corner.\r\n\r\n" +
+					       "If this corner would be truncated\r\n"+
+					       "viewport will shift to fit it into the screen.",
 					Clickable = false
 				});
 			}

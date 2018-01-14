@@ -90,6 +90,8 @@
     <Compile Include="LayoutView\LayoutControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="LayoutView\PaintActions.cs" />
+    <Compile Include="LayoutView\PaintActionsExt.cs" />
     <Compile Include="LayoutView\RichTextRenderer.cs" />
     <Compile Include="LayoutView\IconRecognizer.cs" />
     <Compile Include="LayoutView\RichTextRenderContext.cs" />
@@ -101,6 +103,7 @@
     </Compile>
     <Compile Include="LayoutView\SearchOptions.cs" />
     <Compile Include="LayoutView\SortOptions.cs" />
+    <Compile Include="LayoutView\EventFiringMap.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

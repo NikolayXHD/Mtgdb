@@ -124,7 +124,6 @@ namespace Mtgdb.Gui
 					else
 						DraggedLikeClick?.Invoke(null);
 				}
-					
 			}
 			else
 			{

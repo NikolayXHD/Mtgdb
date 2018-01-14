@@ -6,19 +6,36 @@ namespace Mtgdb.Controls
 	public enum Direction
 	{
 		None = 0,
+		MiddleCenter = None,
+
 		North = 1 << 0,
+		Top = North,
+
 		NorthEast = North | East,
+		TopRight = NorthEast,
+
 		East = 1 << 1,
+		Right = East,
+
 		SouthEast = East | South,
+		BottomRight = SouthEast,
+
 		South = 1 << 2,
+		Bottom = South,
+
 		SouthWest = South | West,
+		BottomLeft = SouthWest,
+
 		West = 1 << 3,
-		NorthWest = North | West
+		Left = West,
+
+		NorthWest = North | West,
+		TopLeft = NorthWest
 	}
 
 	public static class DirectionExtension
 	{
-		public static int ToWmNChittest(this Direction value)
+		public static int ToWmNcHitTest(this Direction value)
 		{
 			switch (value)
 			{
@@ -52,6 +69,16 @@ namespace Mtgdb.Controls
 				default:
 					throw new ArgumentOutOfRangeException(nameof(value), value, null);
 			}
+		}
+
+		public static bool IsVertical(this Direction value)
+		{
+			return value.HasFlag(Direction.North) | value.HasFlag(Direction.South);
+		}
+
+		public static bool IsHorizontal(this Direction value)
+		{
+			return value.HasFlag(Direction.East) | value.HasFlag(Direction.West);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Mtgdb.Controls
@@ -33,14 +34,47 @@ namespace Mtgdb.Controls
 			return ScaleBy((SizeF) original, scale).ToSize();
 		}
 
+		public static Point ScaleBy(this Point original, SizeF scale)
+		{
+			return new Point(
+				(int) (original.X * scale.Width),
+				(int) (original.Y * scale.Height));
+		}
+
 		public static SizeF Multiply(this SizeF size, float value)
 		{
 			return new SizeF(value * size.Width, value * size.Height);
 		}
 
-		public static SizeF Add(this SizeF size, SizeF value)
+		public static Rectangle Plus(this Rectangle rect, Point offset)
 		{
-			return new SizeF(size.Width + value.Width, size.Height + value.Height);
+			rect.Offset(offset);
+			return rect;
+		}
+
+		public static Point RightBottom(this Rectangle rect)
+		{
+			return new Point(rect.Right, rect.Bottom);
+		}
+
+		public static Point Plus(this Point left, Point right)
+		{
+			return new Point(left.X + right.X, left.Y + right.Y);
+		}
+
+		public static Size Plus(this Size left, Size right)
+		{
+			return new Size(left.Width + right.Width, left.Height + right.Height);
+		}
+
+		public static Point Plus(this Point left, Size right)
+		{
+			return new Point(left.X + right.Width, left.Y + right.Height);
+		}
+
+		public static Point Minus(this Point left, Point right)
+		{
+			return new Point(left.X - right.X, left.Y - right.Y);
 		}
 
 		public static PointF Multiply(this PointF location, float value)
@@ -87,6 +121,43 @@ namespace Mtgdb.Controls
 		public static bool FitsIn(this Size value, Size size)
 		{
 			return value.Width <= size.Width && value.Height <= size.Height;
+		}
+
+		public static bool ContainsPoint(this Point[] poly, Point point)
+		{
+			var coef = poly
+				.Skip(1)
+				.Select((p, i) => (point.Y - poly[i].Y) * (p.X - poly[i].X) - (point.X - poly[i].X) * (p.Y - poly[i].Y))
+				.ToList();
+
+			if (coef.Any(p => p == 0))
+				return true;
+
+			for (int i = 1; i < coef.Count; i++)
+			{
+				if (coef[i] * coef[i - 1] < 0)
+					return false;
+			}
+
+			return true;
+		}
+
+		public static Point ProjectTo(this Point desiredLocation, Rectangle rect)
+		{
+			int x = desiredLocation.X;
+			int y = desiredLocation.Y;
+
+			if (x < rect.Left)
+				x = rect.Left;
+			if (x > rect.Right - 1)
+				x = rect.Right - 1;
+			if (y < rect.Top)
+				y = rect.Top;
+			if (y > rect.Bottom - 1)
+				y = rect.Bottom - 1;
+
+			desiredLocation = new Point(x, y);
+			return desiredLocation;
 		}
 	}
 }

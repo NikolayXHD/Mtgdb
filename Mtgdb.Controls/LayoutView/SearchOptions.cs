@@ -23,7 +23,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_icon = value;
-				IconTransp = value.SetOpacity(0.75f);
+				IconTransp = value?.SetOpacity(0.75f);
 			}
 		}
 
