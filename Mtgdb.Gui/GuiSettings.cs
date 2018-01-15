@@ -53,6 +53,10 @@ namespace Mtgdb.Gui
 
 		public int? SearchResultScroll { get; set; }
 
+		public bool? ShowTextualFields { get; set; }
+		public bool? ShowDeck { get; set; }
+		public bool? ShowPartialCards { get; set; }
+
 		[JsonIgnore]
 		public Deck Deck
 		{

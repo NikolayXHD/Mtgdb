@@ -8,7 +8,7 @@ using System.Web;
 using Mtgdb.Downloader;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class MarkdownTests
