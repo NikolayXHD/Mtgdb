@@ -209,7 +209,9 @@ namespace Mtgdb.Gui
 
 		private void pageCreated(TabHeaderControl sender, int i)
 		{
-			var form = createFormMain(i);
+			var form = createFormMain();
+			form.LoadHistory(i.ToString());
+
 			_tabs.TabIds[i] = form;
 		}
 
@@ -350,11 +352,9 @@ namespace Mtgdb.Gui
 
 
 
-		private FormMain createFormMain(int tabsCount)
+		private FormMain createFormMain()
 		{
-			string tabId = tabsCount.ToString();
 			var form = _formMainFactory();
-			form.SetId(tabId);
 
 			form.TopLevel = false;
 			form.ControlBox = false;

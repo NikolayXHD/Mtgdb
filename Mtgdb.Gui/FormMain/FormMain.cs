@@ -11,9 +11,15 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormMain : Form
 	{
-		public void SaveHistory(string id)
+		public void LoadHistory(string tabId)
 		{
-			_historyModel.Id = id;
+			_historyModel.LoadHistory(tabId, _uiModel.Form.Language);
+			updateFormStatus();
+		}
+
+		public void SaveHistory(string tabId)
+		{
+			_historyModel.TabId = tabId;
 			_historyModel.Save();
 		}
 
@@ -21,6 +27,9 @@ namespace Mtgdb.Gui
 		{
 			if (!_isLoaded)
 				throw new InvalidOperationException("Form must be loaded first");
+
+			if (!_historyModel.IsLoaded)
+				throw new InvalidOperationException("History must be loaded first");
 
 			_isTabSelected = true;
 
@@ -309,26 +318,25 @@ namespace Mtgdb.Gui
 			if (_keywordSearcher.IsLoading)
 				return $"indexing keywords {_keywordSearcher.SetsCount} / {_cardRepo.SetsByCode.Count} sets…";
 
-			string filterManagerModeDisplayText = getFilterManagerModeDisplayText(
+			string status = getFilterStatusText(
 				filterManagerStates,
-				FilterGroupButtons,
+				FilterGroup.Buttons,
 				isQuickFilteringActive(),
 				"empty");
 
-			return filterManagerModeDisplayText;
+			return status;
 		}
 
 		private static string getStatusDeckOnly(FilterValueState[] filterManagerStates)
 		{
-			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupDeck, true, "empty");
-			return gridFilterModeText;
+			var status = getFilterStatusText(filterManagerStates, FilterGroup.Deck, true, "empty");
+			return status;
 		}
 
 		private static string getStatusCollectionOnly(FilterValueState[] filterManagerStates)
 		{
-			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates, FilterGroupCollection, true, "empty");
-
-			return gridFilterModeText;
+			var status = getFilterStatusText(filterManagerStates, FilterGroup.Collection, true, "empty");
+			return status;
 		}
 
 		private string getStatusSearch(FilterValueState[] filterManagerStates)
@@ -359,13 +367,13 @@ namespace Mtgdb.Gui
 			else
 				noInputText = "empty";
 
-			var searchStringText = getFilterManagerModeDisplayText(
+			var status = getFilterStatusText(
 				filterManagerStates,
-				FilterGroupFind,
+				FilterGroup.Find,
 				isSearchStringApplied(),
 				noInputText);
 
-			return searchStringText;
+			return status;
 		}
 
 		private bool isSearchStringApplied()
@@ -379,12 +387,12 @@ namespace Mtgdb.Gui
 		{
 			var result = new StringBuilder();
 
-			var gridFilterModeText = getFilterManagerModeDisplayText(filterManagerStates,
-				FilterGroupLegality,
+			var status = getFilterStatusText(filterManagerStates,
+				FilterGroup.Legality,
 				!string.IsNullOrEmpty(_legalitySubsystem.FilterFormat),
 				_legalitySubsystem.AnyFormat);
 
-			result.Append(gridFilterModeText);
+			result.Append(status);
 
 			if (!string.IsNullOrEmpty(_legalitySubsystem.FilterFormat))
 			{
@@ -423,31 +431,29 @@ namespace Mtgdb.Gui
 			return _historyModel != null && _findEditor.Text != (_historyModel.Current.Find ?? string.Empty);
 		}
 
-		private static string getFilterManagerModeDisplayText(
+		private static string getFilterStatusText(
 			FilterValueState[] filterManagerStates,
-			int filterVariantIndex,
+			FilterGroup filterGroup,
 			bool hasInput,
 			string noInputText)
 		{
-			if (hasInput)
-			{
-				switch (filterManagerStates[filterVariantIndex])
-				{
-					case FilterValueState.RequiredSome:
-						return "OR mode";
-					case FilterValueState.Required:
-						return "AND mode";
-					default:
-						return "ignored";
-				}
-			}
+			if (!hasInput)
+				return noInputText;
 
-			return noInputText;
+			switch (filterManagerStates[filterGroup.Index()])
+			{
+				case FilterValueState.RequiredSome:
+					return "OR mode";
+				case FilterValueState.Required:
+					return "AND mode";
+				default:
+					return "ignored";
+			}
 		}
 
-		private bool isFilterGroupEnabled(int index)
+		private bool isFilterGroupEnabled(FilterGroup filterGroup)
 		{
-			var state = FilterManager.States[index];
+			var state = FilterManager.States[filterGroup.Index()];
 
 			switch (state)
 			{
@@ -469,14 +475,14 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		private void setFilterManagerState(int i, FilterValueState value)
+		private void setFilterManagerState(FilterGroup filterGroup, FilterValueState value)
 		{
 			var states = FilterManager.States;
 
-			if (states[i] == value)
+			if (states[filterGroup.Index()] == value)
 				return;
 
-			states[i] = value;
+			states[filterGroup.Index()] = value;
 
 			beginRestoreSettings();
 			FilterManager.States = states;

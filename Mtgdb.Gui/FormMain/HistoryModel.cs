@@ -18,11 +18,15 @@ namespace Mtgdb.Gui
 			_jsonSerializerSettings.Converters.Add(new CustomConverter());
 		}
 
-		public HistoryModel(string language, int? maxDepth)
+		public HistoryModel(UndoConfig undoConfig)
 		{
-			_maxDepth = maxDepth ?? 100;
+			_maxDepth = undoConfig.MaxDepth ?? 100;
 			Directory.CreateDirectory(AppDir.History);
+		}
 
+		public void LoadHistory(string tabId, string language)
+		{
+			TabId = tabId;
 			if (File.Exists(HistoryFile))
 			{
 				var serialized = File.ReadAllText(HistoryFile);
@@ -128,17 +132,17 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private string HistoryFile => AppDir.History.AddPath($"{Id}.json");
-		public string Id { get; set; }
+		private string HistoryFile => AppDir.History.AddPath($"{TabId}.json");
+		public string TabId { get; set; }
 
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }
 
-
+		public bool IsLoaded => TabId != null;
 
 		private int _settingsIndex;
 
-		private readonly List<GuiSettings> _settingsHistory;
+		private List<GuiSettings> _settingsHistory;
 		private readonly int _maxDepth;
 		private static readonly JsonSerializerSettings _jsonSerializerSettings;
 	}

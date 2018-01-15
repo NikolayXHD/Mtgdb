@@ -33,7 +33,6 @@ namespace Mtgdb.Gui
 			_viewCards = new LayoutView(_layoutViewCards);
 			_viewDeck = new LayoutView(_layoutViewDeck);
 
-			_undoConfig = undoConfig;
 			_luceneSearcher = luceneSearcher;
 			_keywordSearcher = keywordSearcher;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
@@ -147,10 +146,10 @@ namespace Mtgdb.Gui
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
 
 			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
-			_historyModel = new HistoryModel(_uiModel.Form.Language, _undoConfig.MaxDepth);
 
-			updateFormStatus();
 			Load += formLoad;
+
+			_historyModel = new HistoryModel(undoConfig);
 		}
 
 		private void scale()
@@ -255,11 +254,6 @@ namespace Mtgdb.Gui
 		private static void scalePanelIcon(BorderedPanel panel)
 		{
 			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage).HalfResizeDpi();
-		}
-
-		public void SetId(string tabId)
-		{
-			_historyModel.Id = tabId;
 		}
 
 		private void subscribeToEvents()
@@ -453,18 +447,12 @@ namespace Mtgdb.Gui
 
 		private readonly Evaluators _evaluators;
 
-		private const int FilterGroupButtons = 0;
-		private const int FilterGroupFind = 1;
-		private const int FilterGroupLegality = 2;
-		private const int FilterGroupCollection = 3;
-		private const int FilterGroupDeck = 4;
-
 		private readonly List<Card> _searchResultCards = new List<Card>();
 		private readonly HashSet<Card> _filteredCards = new HashSet<Card>();
 
 		private bool _breakRefreshing;
 
-		private HistoryModel _historyModel;
+		private readonly HistoryModel _historyModel;
 		private readonly DeckSerializationSubsystem _deckSerializationSubsystem;
 		private readonly SearchStringSubsystem _searchStringSubsystem;
 		private readonly DeckModel _deckModel;
@@ -483,7 +471,6 @@ namespace Mtgdb.Gui
 		private readonly QuickFilterControl[] _quickFilterControls;
 		private readonly PrintingSubsystem _printingSubsystem;
 		private readonly LegalitySubsystem _legalitySubsystem;
-		private readonly UndoConfig _undoConfig;
 		private readonly LuceneSearcher _luceneSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 
