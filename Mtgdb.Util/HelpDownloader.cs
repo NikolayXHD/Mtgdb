@@ -6,15 +6,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Mtgdb.Downloader;
-using NUnit.Framework;
 
 namespace Mtgdb.Util
 {
-	[TestFixture]
-	public class MarkdownTests
+	public class HelpDownloader
 	{
-		[Test]
-		public void Render_local_help()
+		public void UpdateLocalHelp()
 		{
 			var helpFiles = getHelpFiles();
 

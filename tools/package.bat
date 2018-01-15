@@ -11,6 +11,8 @@ set targetRoot=D:\Distrib\games\mtg\Packaged\%version%
 set target=%targetRoot%\Mtgdb.Gui.v%version%
 set targetBin=%target%\bin\v%version%
 
+%output%\bin\%configuration%\Mtgdb.Util.exe -update_help
+
 rmdir /s /q %targetRoot%
 mkdir %targetRoot%
 mkdir %target%

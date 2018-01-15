@@ -52,6 +52,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
@@ -62,6 +63,7 @@
     </Compile>
     <Compile Include="ForgeIntegration.cs" />
     <Compile Include="ArtworkRenamer.cs" />
+    <Compile Include="HelpDownloader.cs" />
     <Compile Include="[ infrastructure ]\ForgeIntegrationConfig.cs" />
     <Compile Include="[ infrastructure ]\UtilModule.cs" />
     <Compile Include="[ infrastructure ]\UtilProgram.cs" />
