@@ -235,8 +235,8 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (!isFilterGroupEnabled(FilterGroupButtons))
-				setFilterManagerState(FilterGroupButtons, FilterValueState.Required);
+			if (!isFilterGroupEnabled(FilterGroup.Buttons))
+				setFilterManagerState(FilterGroup.Buttons, FilterValueState.Required);
 
 			updateTerms();
 
@@ -272,7 +272,7 @@ namespace Mtgdb.Gui
 
 		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
 		{
-			updateViewCards(listChanged, card, FilterGroupDeck, touchedChanged);
+			updateViewCards(listChanged, card, FilterGroup.Deck, touchedChanged);
 			updateViewDeck(listChanged, countChanged, card, touchedChanged);
 
 			if (restoringSettings())
@@ -286,7 +286,7 @@ namespace Mtgdb.Gui
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
 		{
-			updateViewCards(listChanged, card, FilterGroupCollection, touchedChanged);
+			updateViewCards(listChanged, card, FilterGroup.Collection, touchedChanged);
 
 			updateViewDeck(
 				listChanged:false,
@@ -308,9 +308,9 @@ namespace Mtgdb.Gui
 
 
 
-		private void updateViewCards(bool listChanged, Card card, int filterGroup, bool touchedChanged)
+		private void updateViewCards(bool listChanged, Card card, FilterGroup changeRelatedFilterGroup, bool touchedChanged)
 		{
-			if (touchedChanged || listChanged && isFilterGroupEnabled(filterGroup))
+			if (touchedChanged || listChanged && isFilterGroupEnabled(changeRelatedFilterGroup))
 			{
 				if (restoringSettings())
 					return;
@@ -403,8 +403,8 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (!isFilterGroupEnabled(FilterGroupLegality))
-				setFilterManagerState(FilterGroupLegality, FilterValueState.Required);
+			if (!isFilterGroupEnabled(FilterGroup.Legality))
+				setFilterManagerState(FilterGroup.Legality, FilterValueState.Required);
 
 			RunRefilterTask();
 			historyUpdate();
@@ -419,12 +419,12 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroupFind) && isSearchStringApplied())
+			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 			{
 				if (_sortSubsystem.IsLanguageDependent)
 					_sortSubsystem.Invalidate();
 
-				if (isFilterGroupEnabled(FilterGroupFind) && isSearchStringApplied())
+				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 					_searchStringSubsystem.ApplyFind();
 
 				RunRefilterTask();
@@ -443,8 +443,8 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (!isFilterGroupEnabled(FilterGroupFind))
-				setFilterManagerState(FilterGroupFind, FilterValueState.Required);
+			if (!isFilterGroupEnabled(FilterGroup.Find))
+				setFilterManagerState(FilterGroup.Find, FilterValueState.Required);
 
 			resetTouchedCard();
 

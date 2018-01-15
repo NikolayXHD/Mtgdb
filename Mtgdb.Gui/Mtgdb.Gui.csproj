@@ -113,6 +113,7 @@
     <Compile Include="FormMain\DeckModel.cs" />
     <Compile Include="FormMain\DrawingSubsystem.cs" />
     <Compile Include="FormMain\Evaluators.cs" />
+    <Compile Include="FormMain\FilterGroup.cs" />
     <Compile Include="FormMain\FormMain.Definitions.cs">
       <SubType>Form</SubType>
     </Compile>

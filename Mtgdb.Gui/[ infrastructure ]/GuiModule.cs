@@ -1,8 +1,6 @@
-using System;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Modules;
 
 namespace Mtgdb.Gui
@@ -44,16 +42,6 @@ namespace Mtgdb.Gui
 			Kernel.Bind<TooltipController>()
 				.ToSelf()
 				.InSingletonScope();
-		}
-
-		private static Func<FormMain> formMainFactory(IContext ctx)
-		{
-			return () => ctx.Kernel.Get<FormMain>();
-		}
-
-		private static Func<FormRoot> formRootFactory(IContext ctx)
-		{
-			return () => ctx.Kernel.Get<FormRoot>();
 		}
 	}
 }
