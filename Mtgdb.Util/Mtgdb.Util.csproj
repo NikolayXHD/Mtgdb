@@ -64,6 +64,7 @@
     <Compile Include="ForgeIntegration.cs" />
     <Compile Include="ArtworkRenamer.cs" />
     <Compile Include="HelpDownloader.cs" />
+    <Compile Include="NewVersionNotifier.cs" />
     <Compile Include="[ infrastructure ]\ForgeIntegrationConfig.cs" />
     <Compile Include="[ infrastructure ]\UtilModule.cs" />
     <Compile Include="[ infrastructure ]\UtilProgram.cs" />
