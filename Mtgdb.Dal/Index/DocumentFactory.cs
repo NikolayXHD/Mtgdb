@@ -453,7 +453,12 @@ namespace Mtgdb.Dal.Index
 			if (val == null)
 				return null;
 
-			return NumericUtils.SortableInt32ToSingle(NumericUtils.PrefixCodedToInt32(val));
+			if (val.Length < 6)
+				return null;
+
+			int intVal = NumericUtils.PrefixCodedToInt32(val);
+			float result = NumericUtils.SortableInt32ToSingle(intVal);
+			return result;
 		}
 
 		public static int? TryParseInt(this BytesRef val)
@@ -461,7 +466,11 @@ namespace Mtgdb.Dal.Index
 			if (val == null)
 				return null;
 
-			return NumericUtils.PrefixCodedToInt32(val);
+			if (val.Length < 6)
+				return null;
+
+			int intVal = NumericUtils.PrefixCodedToInt32(val);
+			return intVal;
 		}
 
 		public static bool IsNumericField(this string field)

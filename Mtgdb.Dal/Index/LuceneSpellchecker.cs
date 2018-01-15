@@ -273,7 +273,7 @@ namespace Mtgdb.Dal.Index
 			int count = 0;
 
 			var terms = MultiFields.GetTerms(_reader, field);
-			var iterator = terms.GetIterator(null);
+			var iterator = terms.GetIterator(reuse: null);
 
 			if (field.IsFloatField())
 			{
@@ -283,7 +283,8 @@ namespace Mtgdb.Dal.Index
 
 					if (value.HasValue)
 					{
-						yield return value.ToString();
+						string result = value.ToString();
+						yield return result;
 						count++;
 					}
 				}
@@ -296,7 +297,8 @@ namespace Mtgdb.Dal.Index
 
 					if (value.HasValue)
 					{
-						yield return value.ToString();
+						string result = value.ToString();
+						yield return result;
 						count++;
 					}
 				}
