@@ -21,6 +21,12 @@ namespace Mtgdb.Util
 			_kernel.Load<DalModule>();
 			_kernel.Load<UtilModule>();
 
+			if (args.GetFlag("-notify"))
+			{
+				NewVersionNotifier.Notify();
+				return;
+			}
+
 			if (args.GetFlag("-update_help"))
 			{
 				Console.Write("Updating local help...");
