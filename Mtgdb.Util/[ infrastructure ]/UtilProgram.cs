@@ -21,6 +21,13 @@ namespace Mtgdb.Util
 			_kernel.Load<DalModule>();
 			_kernel.Load<UtilModule>();
 
+			if (args.GetFlag("-update_help"))
+			{
+				Console.Write("Updating local help...");
+				new HelpDownloader().UpdateLocalHelp();
+				Console.WriteLine(" Done");
+				return;
+			}
 
 			string directory = args.GetParam("-rename_artworks");
 			if (directory != null)
@@ -152,6 +159,10 @@ namespace Mtgdb.Util
 
 			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name]");
 			Console.WriteLine("\t- create a list of files with corresponding md5 hashes");
+
+			Console.WriteLine("Mtgdb.Util.exe -update_help");
+			Console.WriteLine("\t- update local help web pages from https://github.com/NikolayXHD/Mtgdb/wiki");
+
 			Console.WriteLine("Press ENTER to exit");
 			Console.ReadLine();
 		}

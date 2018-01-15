@@ -107,7 +107,6 @@
     <Compile Include="Images\ImageMagickScaler.cs" />
     <Compile Include="Images\MedianFilter.cs" />
     <Compile Include="Images\SaturationFilter.cs" />
-    <Compile Include="Markdown\MarkdownTests.cs" />
     <Compile Include="Price\PriceDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
