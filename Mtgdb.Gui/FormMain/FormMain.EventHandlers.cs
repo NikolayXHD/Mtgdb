@@ -170,30 +170,44 @@ namespace Mtgdb.Gui
 
 		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
 		{
-			setDeckVisibility(!_buttonHideDeck.Checked);
+			updateGlobalDisplaySettings();
+
+			SuspendLayout();
+
+			_viewDeck.Control.Visible = !_buttonHideDeck.Checked;
+
+			ResumeLayout(false);
+			PerformLayout();
+
+			if (!restoringSettings())
+				historyUpdate();
 		}
 
 		private void buttonHideTextChanged(object sender, EventArgs e)
 		{
-			_viewCards.TextualFieldsVisible = !_buttonHideText.Checked;
+			updateGlobalDisplaySettings();
+
+			_viewCards.TextualFieldsVisible =
+				!_buttonHideText.Checked;
+
 			_viewCards.RefreshData();
+
+			if (!restoringSettings())
+				historyUpdate();
 		}
 
 		private void buttonPartialCardsChanged(object sender, EventArgs e)
 		{
-			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards = !_buttonHidePartialCards.Checked;
+			updateGlobalDisplaySettings();
+
+			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards =
+				!_buttonHidePartialCards.Checked;
+
 			_viewCards.RefreshData();
 			_viewDeck.RefreshData();
-		}
 
-		private void setDeckVisibility(bool deckVisible)
-		{
-			SuspendLayout();
-
-			_viewDeck.Control.Visible = deckVisible;
-
-			ResumeLayout(false);
-			PerformLayout();
+			if (!restoringSettings())
+				historyUpdate();
 		}
 
 		private void rightLayoutChanged(object sender, EventArgs e)

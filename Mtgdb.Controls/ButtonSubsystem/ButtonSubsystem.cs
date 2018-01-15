@@ -49,8 +49,10 @@ namespace Mtgdb.Controls
 
 		private void checkedChanged(object sender, EventArgs e)
 		{
+			var cursorPosition = Cursor.Position;
 			var checkButton = (CheckBox)sender;
-			setCheckImage(checkButton, checkButton.Checked, true);
+			bool hovered = checkButton.ClientRectangle.Contains(checkButton.PointToClient(cursorPosition));
+			setCheckImage(checkButton, checkButton.Checked, hovered);
 		}
 
 

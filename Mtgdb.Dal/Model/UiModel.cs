@@ -31,5 +31,9 @@ namespace Mtgdb.Dal
 
 		private readonly Lazy<IUiForm> _formFactory;
 		private readonly Lazy<CardRepository> _cardRepoFactory;
+
+		public bool ShowTextualFields { get; set; }
+		public bool ShowDeck { get; set; }
+		public bool ShowPartialCards { get; set; }
 	}
 }

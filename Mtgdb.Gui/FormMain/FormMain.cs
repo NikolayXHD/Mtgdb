@@ -40,7 +40,14 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.UpdateSuggestInput();
 
-			historyUpdateGlobals(_historyModel.Current);
+			// hack to detect if this is the first time
+			bool firstTimeTabSelected = !_collectionModel.IsLoaded;
+
+			if (firstTimeTabSelected)
+				updateGlobalDisplaySettings();
+			else
+				historyUpdateGlobals(_historyModel.Current);
+
 			historyApply(_historyModel.Current);
 
 			if (_requiredDeck != null)
@@ -57,6 +64,13 @@ namespace Mtgdb.Gui
 				dragCard(draggedCard);
 			
 			startThreads();
+		}
+
+		private void updateGlobalDisplaySettings()
+		{
+			_uiModel.ShowDeck = !_buttonHideDeck.Checked;
+			_uiModel.ShowPartialCards = !_buttonHidePartialCards.Checked;
+			_uiModel.ShowTextualFields = !_buttonHideText.Checked;
 		}
 
 		public void OnTabUnselected()
@@ -493,12 +507,12 @@ namespace Mtgdb.Gui
 
 		private void historyUpdateGlobals(GuiSettings settings)
 		{
-			settings.Language = _uiModel.Form.Language ?? settings.Language;
-
-			if (_collectionModel.IsLoaded)
-				settings.CollectionCount = _collectionModel.CountById.ToDictionary();
-
+			settings.CollectionCount = _collectionModel.CountById.ToDictionary();
+			settings.Language = _uiModel.Form.Language;
 			settings.HideTooltips = _uiModel.Form.HideTooltips;
+			settings.ShowPartialCards = _uiModel.ShowPartialCards;
+			settings.ShowDeck = _uiModel.ShowDeck;
+			settings.ShowTextualFields = _uiModel.ShowTextualFields;
 		}
 
 		private void historyUpdate()
@@ -535,7 +549,10 @@ namespace Mtgdb.Gui
 				LegalityAllowBanned = _legalitySubsystem.AllowBanned,
 				DeckFile = _historyModel.DeckFile,
 				DeckName = _historyModel.DeckName,
-				SearchResultScroll = _viewCards.VisibleRecordIndex
+				SearchResultScroll = _viewCards.VisibleRecordIndex,
+				ShowDeck = !_buttonHideDeck.Checked,
+				ShowPartialCards = !_buttonHidePartialCards.Checked,
+				ShowTextualFields = !_buttonHideText.Checked
 			};
 
 			_historyModel.Add(settings);
@@ -597,6 +614,10 @@ namespace Mtgdb.Gui
 			_legalitySubsystem.SetAllowBanned(settings.LegalityAllowBanned == true);
 
 			_requiredScroll = settings.SearchResultScroll;
+
+			_buttonHideDeck.Checked = settings.ShowDeck == false;
+			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
+			_buttonHideText.Checked = settings.ShowTextualFields == false;
 
 			endRestoreSettings();
 			
