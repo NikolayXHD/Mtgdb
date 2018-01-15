@@ -23,7 +23,7 @@ namespace Mtgdb.Dal
 
 			Bitmap image;
 			lock (_imagesByPath)
-				image = tryGetFromCache(model.FullPath, model.Rotated);
+				image = tryGetFromCache(model.FullPath, model.Rotations);
 
 			if (image != null)
 				return image;
@@ -34,7 +34,7 @@ namespace Mtgdb.Dal
 			image = LoadImage(model, CardSize);
 
 			lock (_imagesByPath)
-				if (addFirst(model.FullPath, model.Rotated, image))
+				if (addFirst(model.FullPath, model.Rotations, image))
 					if (_ratings.Count >= Capacity)
 						removeLast();
 
@@ -69,8 +69,8 @@ namespace Mtgdb.Dal
 
 				original = new Bitmap(new MemoryStream(bytes));
 
-				if (model.Rotated)
-					original.RotateFlip(RotateFlipType.Rotate270FlipNone);
+				if (model.Rotations != RotateFlipType.RotateNoneFlipNone)
+					original.RotateFlip(model.Rotations);
 			}
 			catch
 			{
@@ -149,10 +149,10 @@ namespace Mtgdb.Dal
 			return frame;
 		}
 
-		private Bitmap tryGetFromCache(string path, bool rotated)
+		private Bitmap tryGetFromCache(string path, RotateFlipType rotations)
 		{
 			ImageCacheEntry cacheEntry;
-			if (!_imagesByPath.TryGetValue(new Tuple<string, bool>(path, rotated), out cacheEntry))
+			if (!_imagesByPath.TryGetValue(new Tuple<string, RotateFlipType>(path, rotations), out cacheEntry))
 				return null;
 
 			shiftFromLast(cacheEntry);
@@ -169,9 +169,9 @@ namespace Mtgdb.Dal
 				ratingEntry.SwapWith(previousEntry);
 		}
 
-		private bool addFirst(string path, bool rotated, Bitmap image)
+		private bool addFirst(string path, RotateFlipType rotations, Bitmap image)
 		{
-			var key = new Tuple<string, bool>(path, rotated);
+			var key = new Tuple<string, RotateFlipType>(path, rotations);
 
 			if (_imagesByPath.ContainsKey(key))
 				return false;
@@ -189,8 +189,11 @@ namespace Mtgdb.Dal
 			_imagesByPath.Remove(keyToRemove);
 		}
 
-		private readonly Dictionary<Tuple<string, bool>, ImageCacheEntry> _imagesByPath = new Dictionary<Tuple<string, bool>, ImageCacheEntry>();
-		private readonly LinkedList<Tuple<string, bool>> _ratings = new LinkedList<Tuple<string, bool>>();
+		private readonly Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry> _imagesByPath =
+			new Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry>();
+
+		private readonly LinkedList<Tuple<string, RotateFlipType>> _ratings =
+			new LinkedList<Tuple<string, RotateFlipType>>();
 
 
 		public static readonly Size SizeCropped = new Size(424, 622);

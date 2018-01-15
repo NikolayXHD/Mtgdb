@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -91,9 +92,68 @@ namespace Mtgdb.Dal
 		{
 		}
 
-		public ImageModel Rotate()
+		public ImageModel ApplyRotation(Card card, bool zoom, bool art)
 		{
-			return _rotated ?? (_rotated = new ImageModel
+			if (art)
+				return this;
+
+			bool isAftermath =
+				Str.Equals(card.Layout, "aftermath") &&
+				card.Names?.Count == 2 &&
+				Str.Equals(card.NameEn, card.Names[1]);
+
+			if (isAftermath)
+				return RotateLeft();
+
+			if (zoom && Str.Equals(card.Layout, "split"))
+				return RotateRight();
+
+			bool isFlip = Str.Equals(card.Layout, "flip")
+				&& card.Names?.Count == 2 &&
+				Str.Equals(card.NameEn, card.Names[1]);
+
+			if (isFlip)
+				return Rotate180();
+
+			return this;
+		}
+
+		public ImageModel RotateLeft()
+		{
+			if (_rotatedLeft == null)
+			{
+				_rotatedLeft = clone();
+				_rotatedLeft.Rotations = RotateFlipType.Rotate270FlipNone;
+			}
+
+			return _rotatedLeft;
+		}
+
+		public ImageModel RotateRight()
+		{
+			if (_rotatedRight == null)
+			{
+				_rotatedRight = clone();
+				_rotatedRight.Rotations = RotateFlipType.Rotate90FlipNone;
+			}
+
+			return _rotatedRight;
+		}
+
+		public ImageModel Rotate180()
+		{
+			if (_rotated180 == null)
+			{
+				_rotated180 = clone();
+				_rotated180.Rotations = RotateFlipType.Rotate180FlipNone;
+			}
+
+			return _rotated180;
+		}
+
+		private ImageModel clone()
+		{
+			return new ImageModel
 			{
 				ImageName = ImageName,
 				SetCode = SetCode,
@@ -105,9 +165,8 @@ namespace Mtgdb.Dal
 				Quality = Quality,
 				Artist = Artist,
 				IsArt = IsArt,
-				IsToken = IsToken,
-				Rotated = true
-			});
+				IsToken = IsToken
+			};
 		}
 
 		private int getQuality()
@@ -124,7 +183,9 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		private ImageModel _rotated;
+		private ImageModel _rotatedLeft;
+		private ImageModel _rotatedRight;
+		private ImageModel _rotated180;
 
 		public string ImageName { get; private set; }
 
@@ -140,7 +201,7 @@ namespace Mtgdb.Dal
 		public bool IsArt { get; private set; }
 		public bool IsToken { get; private set; }
 
-		public bool Rotated { get; private set; }
+		public RotateFlipType Rotations { get; private set; } = RotateFlipType.RotateNoneFlipNone;
 
 		public override string ToString()
 		{
