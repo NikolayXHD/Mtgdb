@@ -10,9 +10,7 @@ TestResults
 TestResult.xml
 packages/
 .vs
-out/data/translations.json
-out/data/allsets-x.json
-out/data/index/
+.idea
 out/update/app/
 out/update/*.txt
 out/update/*.zip
