@@ -10,19 +10,16 @@ namespace Mtgdb.Dal
 		[DataMember(Name = "Directory")]
 		public DirectoryConfig[] Directories { get; set; }
 
-		public IList<DirectoryConfig> EnabledDirectories
+		public IList<DirectoryConfig> GetEnabledDirectories(IEnumerable<string> enabledGroups)
 		{
-			get
-			{
-				if (EnabledGroups == null)
-					return Directories;
+			if (EnabledGroups == null)
+				return Directories;
 
-				var groups = new HashSet<string>(EnabledGroups.Split(';'));
+			var groups = new HashSet<string>(enabledGroups ?? EnabledGroups.Split(';'));
 
-				return Directories
-					.Where(_ => groups.Contains(_.Group ?? string.Empty))
-					.ToList();
-			}
+			return Directories
+				.Where(_ => groups.Contains(_.Group ?? string.Empty))
+				.ToList();
 		}
 
 		[DataMember(Name = "EnabledGroups")]

@@ -29,7 +29,7 @@ namespace Mtgdb.Test
 			Repo.Load();
 
 			sw.Stop();
-			Log.Info($"Cards loaded in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Cards loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
 		protected void LoadTranslations()
@@ -44,7 +44,7 @@ namespace Mtgdb.Test
 			Repo.FillLocalizations(locRepo);
 
 			sw.Stop();
-			Log.Info($"Translations loaded in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Translations loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
 		protected void LoadPrices()
@@ -56,7 +56,7 @@ namespace Mtgdb.Test
 			Repo.SetPrices(PriceRepo);
 
 			sw.Stop();
-			Log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Prices loaded in {sw.ElapsedMilliseconds} ms");
 		}
 
 		[TearDown]

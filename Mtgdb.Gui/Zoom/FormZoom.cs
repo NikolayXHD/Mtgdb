@@ -139,7 +139,7 @@ namespace Mtgdb.Gui
 					while (index > _imageIndex + 10)
 						Thread.Sleep(100);
 
-					var size = model.IsArt
+					var size = model.ImageFile.IsArt
 						? getSizeArt()
 						: _imageCache.ZoomedCardSize;
 
@@ -157,7 +157,7 @@ namespace Mtgdb.Gui
 					while (index > _imageIndex + 10)
 						Thread.Sleep(100);
 
-					var size = model.IsArt
+					var size = model.ImageFile.IsArt
 						? getSizeArt()
 						: _imageCache.ZoomedCardSize;
 
@@ -223,18 +223,18 @@ namespace Mtgdb.Gui
 
 		private bool filter(ImageModel imageModel)
 		{
-			if (!_showOtherSetsButton.Checked && imageModel.SetCode != _card.SetCode)
+			if (!_showOtherSetsButton.Checked && imageModel.ImageFile.SetCode != _card.SetCode)
 				return false;
 
 			if (_showDuplicatesButton.Checked)
 				return true;
 
-			var currentSetCode = _models[_imageIndex].SetCode;
+			var currentSetCode = _models[_imageIndex].ImageFile.SetCode;
 
-			var setRepresentative = _models.Where(_ => _.SetCode == currentSetCode)
-				.AtMin(_ => _.VariantNumber).Find();
+			var setRepresentative = _models.Where(_ => _.ImageFile.SetCode == currentSetCode)
+				.AtMin(_ => _.ImageFile.VariantNumber).Find();
 
-			return imageModel.SetCode != currentSetCode || imageModel == setRepresentative;
+			return imageModel.ImageFile.SetCode != currentSetCode || imageModel == setRepresentative;
 		}
 
 		private bool nextImage()
@@ -320,7 +320,7 @@ namespace Mtgdb.Gui
 
 		private void openInExplorerClick(object sender, EventArgs e)
 		{
-			string fullPath = _models[_imageIndex].FullPath;
+			string fullPath = _models[_imageIndex].ImageFile.FullPath;
 
 			if (!File.Exists(fullPath))
 				return;
@@ -335,7 +335,7 @@ namespace Mtgdb.Gui
 
 		private void openFileClick(object sender, EventArgs e)
 		{
-			string fullPath = _models[_imageIndex].FullPath;
+			string fullPath = _models[_imageIndex].ImageFile.FullPath;
 			Process.Start(new ProcessStartInfo(fullPath));
 		}
 	}

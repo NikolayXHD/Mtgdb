@@ -94,17 +94,17 @@ namespace Mtgdb.Util
 					if (model == null)
 						continue;
 
-					if (exported.Contains(model.FullPath))
+					if (exported.Contains(model.ImageFile.FullPath))
 						continue;
 
-					exported.Add(model.FullPath);
+					exported.Add(model.ImageFile.FullPath);
 
 					using (var original = ImageCache.Open(model))
 					{
-						string targetFullPath = getTargetPath(card, model, subdir, forge: true);
+						string targetFullPath = getTargetPath(card, model.ImageFile, subdir, forge: true);
 
 						if (!File.Exists(targetFullPath))
-							addFile(original, model, targetFullPath, small, forge: true);
+							addFile(original, model.ImageFile, targetFullPath, small, forge: true);
 					}
 				}
 			}
@@ -131,7 +131,7 @@ namespace Mtgdb.Util
 
 				foreach (string oldFile in oldFiles)
 				{
-					var model = new ImageModel(oldFile, CardPicsPath, setCode: setCode);
+					var model = new ImageFile(oldFile, CardPicsPath, setCode: setCode);
 
 					var artist = _cardRepo.SetsByCode.TryGet(setCode)
 						?.Cards
@@ -141,7 +141,7 @@ namespace Mtgdb.Util
 						?.Artist;
 
 					var model2 = artist != null
-						? new ImageModel(oldFile, CardPicsPath, setCode: setCode, artist: artist)
+						? new ImageFile(oldFile, CardPicsPath, setCode: setCode, artist: artist)
 						: model;
 
 					var replacementModel = _imageRepo.GetReplacementImage(model2, _cardRepo.GetReleaseDateSimilarity);
@@ -152,18 +152,18 @@ namespace Mtgdb.Util
 			}
 		}
 
-		private void addFile(Bitmap original, ImageModel model, string target, bool small, bool forge)
+		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small, bool forge)
 		{
 			_log.Debug($"\tCopying {target}");
-			var bytes = transform(original, model, small, forge);
+			var bytes = transform(original, imageFile, small, forge);
 
 			if (bytes != null)
 				File.WriteAllBytes(target, bytes);
 		}
 
-		private static string getTargetPath(Card card, ImageModel model, string subdir, bool forge)
+		private static string getTargetPath(Card card, ImageFile imageFile, string subdir, bool forge)
 		{
-			var fileName = Path.GetFileName(model.FullPath);
+			var fileName = Path.GetFileName(imageFile.FullPath);
 
 			while (true)
 			{
@@ -206,9 +206,9 @@ namespace Mtgdb.Util
 			}
 
 			string targetFileName;
-			if (forge || model.FullPath.EndsWith(".jpg", Str.Comparison))
+			if (forge || imageFile.FullPath.EndsWith(".jpg", Str.Comparison))
 				targetFileName = fileName + ".jpg";
-			else if (model.FullPath.EndsWith(".png", Str.Comparison))
+			else if (imageFile.FullPath.EndsWith(".png", Str.Comparison))
 				targetFileName = fileName + ".png";
 			else
 				throw new NotSupportedException("only .png .jpg extensions are supported");
@@ -228,25 +228,25 @@ namespace Mtgdb.Util
 			return false;
 		}
 
-		private void replace(ImageModel replacementModel, ImageModel model, bool small)
+		private void replace(ImageModel replacementModel, ImageFile imageFile, bool small)
 		{
 			byte[] bytes;
 
 			using (var original = ImageCache.Open(replacementModel))
-				bytes = transform(original, replacementModel, small, forge: true);
+				bytes = transform(original, replacementModel.ImageFile, small, forge: true);
 
 			if (bytes == null)
 				return;
 
-			if (bytes.Length == new FileInfo(model.FullPath).Length)
+			if (bytes.Length == new FileInfo(imageFile.FullPath).Length)
 			{
 				if (_verbose)
-					Console.WriteLine($"\tSkippng identical {replacementModel.FullPath}");
+					Console.WriteLine($"\tSkippng identical {replacementModel.ImageFile.FullPath}");
 
 				return;
 			}
 
-			var setBackupDir = Path.Combine(CardPicsBackupPath, model.SetCode);
+			var setBackupDir = Path.Combine(CardPicsBackupPath, imageFile.SetCode);
 			if (!Directory.Exists(setBackupDir))
 			{
 				if (_verbose)
@@ -254,26 +254,26 @@ namespace Mtgdb.Util
 				Directory.CreateDirectory(setBackupDir);
 			}
 
-			string fileName = Path.GetFileName(model.FullPath);
+			string fileName = Path.GetFileName(imageFile.FullPath);
 			
 			if (_verbose)
-				Console.WriteLine($"\tReplacing {model.FullPath}");
+				Console.WriteLine($"\tReplacing {imageFile.FullPath}");
 
 			var backupFile = Path.Combine(setBackupDir, fileName);
 
 			if (!File.Exists(backupFile))
-				File.Move(model.FullPath, backupFile);
+				File.Move(imageFile.FullPath, backupFile);
 
-			File.WriteAllBytes(model.FullPath, bytes);
+			File.WriteAllBytes(imageFile.FullPath, bytes);
 		}
 
-		private byte[] transform(Bitmap original, ImageModel replacementModel, bool small, bool forge)
+		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool forge)
 		{
 			var size = small ? _imageCache.CardSize : _imageCache.ZoomedCardSize;
 
-			var image = ImageCache.Transform(original, replacementModel, size, crop: forge);
+			var image = ImageCache.Transform(original, replacementImageFile, size, crop: forge);
 
-			var result = saveToByteArray(replacementModel, image, forge);
+			var result = saveToByteArray(replacementImageFile, image, forge);
 
 			if (image != original)
 				image.Dispose();
@@ -281,7 +281,7 @@ namespace Mtgdb.Util
 			return result;
 		}
 
-		private static byte[] saveToByteArray(ImageModel replacementModel, Bitmap image, bool forge)
+		private static byte[] saveToByteArray(ImageFile replacementImageFile, Bitmap image, bool forge)
 		{
 			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
 
@@ -289,7 +289,7 @@ namespace Mtgdb.Util
 			{
 				try
 				{
-					if (forge || replacementModel.FullPath.EndsWith(".jpg", Str.Comparison))
+					if (forge || replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
 					{
 						var codec = codecs.First(_ => _.MimeType == "image/jpeg");
 						var encoderParams = new EncoderParameters
@@ -299,7 +299,7 @@ namespace Mtgdb.Util
 
 						image.Save(stream, codec, encoderParams);
 					}
-					else if (replacementModel.FullPath.EndsWith(".png", Str.Comparison))
+					else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
 					{
 						image.Save(stream, ImageFormat.Png);
 					}
@@ -308,7 +308,7 @@ namespace Mtgdb.Util
 				}
 				catch
 				{
-					Console.WriteLine("Failed to save " + replacementModel.FullPath);
+					Console.WriteLine("Failed to save " + replacementImageFile.FullPath);
 					return null;
 				}
 
@@ -370,15 +370,15 @@ namespace Mtgdb.Util
 						modelSmall = _imageRepo.GetSmallImage(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelSmall != null
-								&& Str.Equals(card.SetCode, modelSmall.SetCode) == matchingSet &&
-								exportedSmall.Add(modelSmall.FullPath))
+								&& Str.Equals(card.SetCode, modelSmall.ImageFile.SetCode) == matchingSet &&
+								exportedSmall.Add(modelSmall.ImageFile.FullPath))
 						{
-							string smallPath = getTargetPath(card, modelSmall, smallSetSubdir, forge: false);
+							string smallPath = getTargetPath(card, modelSmall.ImageFile, smallSetSubdir, forge: false);
 
 							if (!File.Exists(smallPath))
 							{
 								original = ImageCache.Open(modelSmall);
-								addFile(original, modelSmall, smallPath, small: true, forge: false);
+								addFile(original, modelSmall.ImageFile, smallPath, small: true, forge: false);
 							}
 						}
 					}
@@ -388,20 +388,20 @@ namespace Mtgdb.Util
 						var modelZoom = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelZoom != null &&
-								Str.Equals(card.SetCode, modelZoom.SetCode) == matchingSet &&
-								exportedZoomed.Add(modelZoom.FullPath))
+								Str.Equals(card.SetCode, modelZoom.ImageFile.SetCode) == matchingSet &&
+								exportedZoomed.Add(modelZoom.ImageFile.FullPath))
 						{
-							string zoomedPath = getTargetPath(card, modelZoom, zoomedSetSubdir, forge: false);
+							string zoomedPath = getTargetPath(card, modelZoom.ImageFile, zoomedSetSubdir, forge: false);
 
 							if (!File.Exists(zoomedPath))
 							{
-								if (original == null || modelSmall.FullPath != modelZoom.FullPath)
+								if (original == null || modelSmall.ImageFile.FullPath != modelZoom.ImageFile.FullPath)
 								{
 									original?.Dispose();
 									original = ImageCache.Open(modelZoom);
 								}
 
-								addFile(original, modelZoom, zoomedPath, small: false, forge: false);
+								addFile(original, modelZoom.ImageFile, zoomedPath, small: false, forge: false);
 							}
 						}
 					}

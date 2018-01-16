@@ -14,6 +14,10 @@ set target=%targetRoot%\%packageName%
 set targetBin=%target%\bin\v%version%
 set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 
+"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" %origin%\Mtgdb.sln /verbosity:m
+
+if errorlevel 1 exit /b
+
 %utilexe% -update_help
 
 rmdir /q /s %targetRoot%
@@ -49,18 +53,16 @@ del /q /s %target%\*.vshost.*
 "%output%\update\7z\7za.exe" a %target%.zip -tzip -ir!%target%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
 %utilexe% -sign %target%.zip -output %targetRoot%\filelist.txt
 
-echo Ready to publish %packageName%
-pause
-
 del /q /s %pub%\Archive\*.zip
 del /q /s %pub%\FileList\*.txt
 xcopy /q %target%.zip %pub%\Archive
 xcopy /q %targetRoot%\filelist.txt %pub%\FileList
 
-echo Ready to run installed Mtgdb.Gui
-pause
+start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
-D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
+%origin%\Test\NUnit.Console-3.7.0\nunit3-console.exe %output%\bin\release-test\Mtgdb.Test.dll
+
+if errorlevel 1 exit /b %errorlevel%
 
 echo Ready to create update Notification
 pause
@@ -72,4 +74,4 @@ git -C f:/Repo/Git/Mtgdb.Notifications commit -m auto
 git -C f:/Repo/Git/Mtgdb.Notifications push
 
 echo Ready to exit
-pause
+exit /b

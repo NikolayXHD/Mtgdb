@@ -491,13 +491,13 @@ namespace Mtgdb.Test
 			var cards = Searcher.SearchCards(queryStr, language, Repo).ToList();
 
 			sw.Stop();
-			_log.Debug($"Found {cards.Count} cards in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Found {cards.Count} cards in {sw.ElapsedMilliseconds} ms");
 
 			Assert.That(cards, Is.Not.Null);
 			Assert.That(cards, Is.Not.Empty);
 
 			foreach (var card in cards)
-				_log.Debug(getter(card));
+				Log.Debug(getter(card));
 
 			return cards;
 		}
@@ -507,7 +507,5 @@ namespace Mtgdb.Test
 		{
 			LogManager.Flush();
 		}
-
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal
 {
-	public class ImageModel
+	public class ImageFile
 	{
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-		public ImageModel(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
+		public ImageFile(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
 		{
 			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 			if (fileNameWithoutExtension == null)
@@ -88,85 +88,51 @@ namespace Mtgdb.Dal
 			IsToken = directoryName.IndexOf("Tokens", Str.Comparison) >= 0;
 		}
 
-		private ImageModel()
+		private ImageFile()
 		{
 		}
 
-		public ImageModel ApplyRotation(Card card, bool zoom, bool art)
+		public ImageModel ApplyRotation(Card card, bool zoom)
 		{
-			if (art)
-				return this;
-
 			bool isAftermath =
 				Str.Equals(card.Layout, "aftermath") &&
 				card.Names?.Count == 2 &&
 				Str.Equals(card.NameEn, card.Names[1]);
 
 			if (isAftermath)
-				return RotateLeft();
+				return rotateLeft();
 
 			if (zoom && Str.Equals(card.Layout, "split"))
-				return RotateRight();
+				return rotateRight();
 
 			bool isFlip = Str.Equals(card.Layout, "flip")
 				&& card.Names?.Count == 2 &&
 				Str.Equals(card.NameEn, card.Names[1]);
 
 			if (isFlip)
-				return Rotate180();
+				return rotate180();
 
-			return this;
+			return NonRotated();
 		}
 
-		public ImageModel RotateLeft()
+		public ImageModel NonRotated()
 		{
-			if (_rotatedLeft == null)
-			{
-				_rotatedLeft = clone();
-				_rotatedLeft.Rotations = RotateFlipType.Rotate270FlipNone;
-			}
-
-			return _rotatedLeft;
+			return new ImageModel(this);
 		}
 
-		public ImageModel RotateRight()
+		private ImageModel rotateLeft()
 		{
-			if (_rotatedRight == null)
-			{
-				_rotatedRight = clone();
-				_rotatedRight.Rotations = RotateFlipType.Rotate90FlipNone;
-			}
-
-			return _rotatedRight;
+			return new ImageModel(this, RotateFlipType.Rotate270FlipNone);
 		}
 
-		public ImageModel Rotate180()
+		private ImageModel rotateRight()
 		{
-			if (_rotated180 == null)
-			{
-				_rotated180 = clone();
-				_rotated180.Rotations = RotateFlipType.Rotate180FlipNone;
-			}
-
-			return _rotated180;
+			return new ImageModel(this, RotateFlipType.Rotate90FlipNone);
 		}
 
-		private ImageModel clone()
+		private ImageModel rotate180()
 		{
-			return new ImageModel
-			{
-				ImageName = ImageName,
-				SetCode = SetCode,
-				SetCodeIsFromAttribute = SetCodeIsFromAttribute,
-				Name = Name,
-				VariantNumber = VariantNumber,
-				Type = Type,
-				FullPath = FullPath,
-				Quality = Quality,
-				Artist = Artist,
-				IsArt = IsArt,
-				IsToken = IsToken
-			};
+			return new ImageModel(this, RotateFlipType.Rotate180FlipNone);
 		}
 
 		private int getQuality()
@@ -183,29 +149,35 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		private ImageModel _rotatedLeft;
-		private ImageModel _rotatedRight;
-		private ImageModel _rotated180;
+		public string ImageName { get; }
 
-		public string ImageName { get; private set; }
+		public string SetCode { get; }
+		public bool SetCodeIsFromAttribute { get; }
 
-		public string SetCode { get; private set; }
-		public bool SetCodeIsFromAttribute { get; private set; }
-
-		public string Name { get; private set; }
-		public int VariantNumber { get; private set; }
-		private string Type { get; set; }
-		public string FullPath { get; private set; }
-		public int Quality { get; private set; }
-		public string Artist { get; private set; }
-		public bool IsArt { get; private set; }
-		public bool IsToken { get; private set; }
-
-		public RotateFlipType Rotations { get; private set; } = RotateFlipType.RotateNoneFlipNone;
+		public string Name { get; }
+		public int VariantNumber { get; }
+		private string Type { get; }
+		public string FullPath { get; }
+		public int Quality { get; }
+		public string Artist { get; }
+		public bool IsArt { get; }
+		public bool IsToken { get; }
 
 		public override string ToString()
 		{
 			return $"{SetCode} {Name} #{VariantNumber} q{Quality}";
 		}
+	}
+
+	public class ImageModel
+	{
+		public ImageModel(ImageFile imageFile, RotateFlipType rotation = RotateFlipType.RotateNoneFlipNone)
+		{
+			ImageFile = imageFile;
+			Rotation = rotation;
+		}
+
+		public ImageFile ImageFile { get; }
+		public RotateFlipType Rotation { get; }
 	}
 }

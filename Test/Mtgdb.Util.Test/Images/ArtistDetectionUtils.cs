@@ -87,7 +87,7 @@ namespace Mtgdb.Util
 				{
 					var card = cards[m];
 					var model = card.ImageModel;
-					var path = model.FullPath;
+					var path = model.ImageFile.FullPath;
 
 					Stopwatch sw = new Stopwatch();
 
@@ -119,7 +119,7 @@ namespace Mtgdb.Util
 
 					if (!Str.Equals(card.Artist, detectedArtist))
 					{
-						string message = setCode + "\t" + card.ImageName + "\t" + card.Artist + "\t" + detectedArtist + "\t" + model.FullPath;
+						string message = setCode + "\t" + card.ImageName + "\t" + card.Artist + "\t" + detectedArtist + "\t" + model.ImageFile.FullPath;
 						Log.Debug(message);
 						result.AppendLine(message);
 					}

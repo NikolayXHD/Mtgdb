@@ -490,7 +490,7 @@ namespace Mtgdb.Gui
 
 			int left = token?.Position ?? suggestSource.Caret;
 			var length = token?.Value?.Length ?? 0;
-			if (token?.Type.Is(TokenType.Field) == true)
+			if (token?.Type.IsAny(TokenType.Field) == true)
 				// Включим : в токен
 				if (left + length < suggestSource.Text.Length)
 					length++;
@@ -499,7 +499,7 @@ namespace Mtgdb.Gui
 			string suffix = suggestSource.Text.Substring(left + length);
 
 			string rightTerminator;
-			if (token?.Type.Is(TokenType.Field) == true)
+			if (token?.Type.IsAny(TokenType.Field) == true)
 				rightTerminator = @":";
 			else
 				rightTerminator = @" ";
@@ -508,7 +508,7 @@ namespace Mtgdb.Gui
 				selectedSuggest += rightTerminator;
 
 			string leftTerminator;
-			if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.Is(TokenType.CloseQuote | TokenType.Close) == true)
+			if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.IsAny(TokenType.CloseQuote | TokenType.Close) == true)
 				leftTerminator = @" ";
 			else
 				leftTerminator = string.Empty;
