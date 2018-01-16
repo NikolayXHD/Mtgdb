@@ -14,8 +14,6 @@ set target=%targetRoot%\%packageName%
 set targetBin=%target%\bin\v%version%
 set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 
-GOTO notify
-
 %utilexe% -update_help
 
 rmdir /q /s %targetRoot%
@@ -64,7 +62,6 @@ pause
 
 D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
-:notify
 echo Ready to create update Notification
 pause
 
