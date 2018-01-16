@@ -23,18 +23,18 @@ namespace Mtgdb.Dal
 
 			Bitmap image;
 			lock (_imagesByPath)
-				image = tryGetFromCache(model.FullPath, model.Rotations);
+				image = tryGetFromCache(model.ImageFile.FullPath, model.Rotation);
 
 			if (image != null)
 				return image;
 
-			if (!File.Exists(model.FullPath))
+			if (!File.Exists(model.ImageFile.FullPath))
 				return null;
 
 			image = LoadImage(model, CardSize);
 
 			lock (_imagesByPath)
-				if (addFirst(model.FullPath, model.Rotations, image))
+				if (addFirst(model.ImageFile.FullPath, model.Rotation, image))
 					if (_ratings.Count >= Capacity)
 						removeLast();
 
@@ -48,7 +48,7 @@ namespace Mtgdb.Dal
 			if (original == null)
 				return null;
 
-			var result = Transform(original, model, size, crop: false);
+			var result = Transform(original, model.ImageFile, size, crop: false);
 
 			if (result != original)
 				original.Dispose();
@@ -65,12 +65,12 @@ namespace Mtgdb.Dal
 				byte[] bytes;
 
 				lock (SyncRoot)
-					bytes = File.ReadAllBytes(model.FullPath);
+					bytes = File.ReadAllBytes(model.ImageFile.FullPath);
 
 				original = new Bitmap(new MemoryStream(bytes));
 
-				if (model.Rotations != RotateFlipType.RotateNoneFlipNone)
-					original.RotateFlip(model.Rotations);
+				if (model.Rotation != RotateFlipType.RotateNoneFlipNone)
+					original.RotateFlip(model.Rotation);
 			}
 			catch
 			{
@@ -82,11 +82,11 @@ namespace Mtgdb.Dal
 			return original;
 		}
 
-		public static Bitmap Transform(Bitmap original, ImageModel model, Size size, bool crop)
+		public static Bitmap Transform(Bitmap original, ImageFile imageFile, Size size, bool crop)
 		{
 			Bitmap resizedBmp;
 
-			if (!crop && size == original.Size || model.IsArt && original.Size.FitsIn(size))
+			if (!crop && size == original.Size || imageFile.IsArt && original.Size.FitsIn(size))
 				resizedBmp = original;
 			else
 			{
@@ -103,7 +103,7 @@ namespace Mtgdb.Dal
 				}
 			}
 
-			if (model.IsArt || crop)
+			if (imageFile.IsArt || crop)
 				return resizedBmp;
 
 			var corneredBmp = (Bitmap) resizedBmp.Clone();

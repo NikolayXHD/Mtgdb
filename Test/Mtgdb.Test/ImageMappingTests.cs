@@ -14,7 +14,7 @@ namespace Mtgdb.Test
 			LoadModules();
 			LoadCards();
 
-			ImgRepo.LoadFiles();
+			ImgRepo.LoadFiles(new [] {"dev", "xlhq"});
 			ImgRepo.LoadSmall();
 			ImgRepo.LoadZoom();
 		}
@@ -43,8 +43,8 @@ namespace Mtgdb.Test
 					var small = Repo.GetSmallImage(card, ImgRepo);
 					var zooms = Repo.GetZoomImages(card, ImgRepo);
 
-					var smallPath = small.FullPath;
-					var zoomPath = zooms[0].FullPath;
+					var smallPath = small.ImageFile.FullPath;
+					var zoomPath = zooms[0].ImageFile.FullPath;
 
 					smallPath = smallPath.ToLowerInvariant()
 						.Replace("gatherer.original", "gatherer")
@@ -80,7 +80,7 @@ namespace Mtgdb.Test
 			foreach (var card in set.Cards)
 			{
 				var imageModel = Repo.GetSmallImage(card, ImgRepo);
-				var dir = Path.GetDirectoryName(imageModel.FullPath);
+				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
 				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, card.ImageName);
 			}
 		}

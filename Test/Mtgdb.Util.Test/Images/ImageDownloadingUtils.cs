@@ -3,10 +3,11 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using Mtgdb.ImageProcessing;
+using Mtgdb.Test;
 using NLog;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class ImageDownloadingUtils: TestsBase
@@ -90,9 +91,7 @@ namespace Mtgdb.Test
 
 		private const string GathererDir = @"D:\Distrib\games\mtg\Gatherer.Original";
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
-		private static readonly string FramedImagesDir = @"D:\Distrib\games\mtg\Gatherer.Framed";
 
 		private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
-		private const string MagicspoilerPreprocessedDir = @"D:\Distrib\games\mtg\magicspoiler.preprocessed";
 	}
 }

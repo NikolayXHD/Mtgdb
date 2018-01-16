@@ -186,7 +186,7 @@ namespace Mtgdb.Dal.Index
 			var tokenizer = new TolerantTokenizer(queryStr);
 			tokenizer.Parse();
 
-			var highlightTerms = tokenizer.Tokens.Where(_ => _.Type.Is(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody))
+			var highlightTerms = tokenizer.Tokens.Where(_ => _.Type.IsAny(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody))
 				.GroupBy(getDisplayField, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,

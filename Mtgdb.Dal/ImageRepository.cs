@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ninject;
 using Shell32;
 
 namespace Mtgdb.Dal
@@ -10,12 +11,27 @@ namespace Mtgdb.Dal
 	{
 		public ImageRepository(ImageLocationsConfig config)
 		{
-			foreach (var directoryConfig in config.EnabledDirectories)
+			_config = config;
+		}
+
+		public void LoadFiles(IEnumerable<string> enabledGroups = null)
+		{
+			var enabledDirectories = _config.GetEnabledDirectories(enabledGroups);
+
+			foreach (var directoryConfig in enabledDirectories)
 				directoryConfig.Path = AppDir.GetRootPath(directoryConfig.Path);
 
-			_directories = getFolders(config.EnabledDirectories, ImageType.Small);
-			_directoriesZoom = getFolders(config.EnabledDirectories, ImageType.Zoom);
-			_directoriesArt = getFolders(config.EnabledDirectories, ImageType.Art);
+			_directories = getFolders(enabledDirectories, ImageType.Small);
+			_directoriesZoom = getFolders(enabledDirectories, ImageType.Zoom);
+			_directoriesArt = getFolders(enabledDirectories, ImageType.Art);
+
+			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
+
+			loadFiles(filesByDirCache, _directories, _files);
+			loadFiles(filesByDirCache, _directoriesZoom, _filesZoom);
+			loadFiles(filesByDirCache, _directoriesArt, _filesArt);
+
+			IsFileLoadingComplete = true;
 		}
 
 		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
@@ -25,17 +41,6 @@ namespace Mtgdb.Dal
 				// use_dir_sorting_to_find_most_nested_root
 				.OrderByDescending(c => c.Path.Length)
 				.ToArray();
-		}
-
-		public void LoadFiles()
-		{
-			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
-
-			loadFiles(filesByDirCache, _directories, _files);
-			loadFiles(filesByDirCache, _directoriesZoom, _filesZoom);
-			loadFiles(filesByDirCache, _directoriesArt, _filesArt);
-
-			IsFileLoadingComplete = true;
 		}
 
 		private static void loadFiles(Dictionary<string, IList<string>> filesByDirCache, IList<DirectoryConfig> directories, ICollection<string> files)
@@ -82,6 +87,8 @@ namespace Mtgdb.Dal
 
 		public void LoadSmall()
 		{
+			ensureIsFileLoadingComplete();
+
 			load(_modelsByNameBySetByVariant, _directories, _files);
 
 			IsLoadingSmallComplete = true;
@@ -90,18 +97,28 @@ namespace Mtgdb.Dal
 
 		public void LoadZoom()
 		{
+			ensureIsFileLoadingComplete();
+
 			load(_modelsByNameBySetByVariantZoom, _directoriesZoom, _filesZoom);
 			IsLoadingZoomComplete = true;
 		}
 
 		public void LoadArt()
 		{
+			ensureIsFileLoadingComplete();
+
 			load(_modelsByNameBySetByVariantArt, _directoriesArt, _filesArt, isArt: true);
 			IsLoadingArtComplete = true;
 		}
 
+		private void ensureIsFileLoadingComplete()
+		{
+			if (!IsFileLoadingComplete)
+				throw new InvalidOperationException(nameof(LoadFiles) + " must be completed first");
+		}
+
 		private static void load(
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant,
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant,
 			IList<DirectoryConfig> directories,
 			IEnumerable<string> files,
 			bool isArt = false)
@@ -142,7 +159,7 @@ namespace Mtgdb.Dal
 					foreach (string author in authors)
 						foreach (string setCode in setCodes)
 						{
-							var model = new ImageModel(file, root.Path, setCode, author, isArt);
+							var model = new ImageFile(file, root.Path, setCode, author, isArt);
 							add(model, modelsByNameBySetByVariant);
 						}
 				}
@@ -209,46 +226,46 @@ namespace Mtgdb.Dal
 		}
 
 		private static void add(
-			ImageModel model,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
+			ImageFile imageFile,
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant)
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				int separator = model.Name.IndexOfAny(new[] { '_', '»' });
+				int separator = imageFile.Name.IndexOfAny(new[] { '_', '»' });
 
-				if (separator > 0 && separator < model.Name.Length - 1)
+				if (separator > 0 && separator < imageFile.Name.Length - 1)
 				{
-					add(model, modelsByNameBySetByVariant, model.Name.Substring(0, separator));
-					add(model, modelsByNameBySetByVariant, model.Name.Substring(separator + 1));
+					add(imageFile, modelsByNameBySetByVariant, imageFile.Name.Substring(0, separator));
+					add(imageFile, modelsByNameBySetByVariant, imageFile.Name.Substring(separator + 1));
 				}
 				else
-					add(model, modelsByNameBySetByVariant, model.Name);
+					add(imageFile, modelsByNameBySetByVariant, imageFile.Name);
 			}
 		}
 
-		private static void add(ImageModel model, Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant, string name)
+		private static void add(ImageFile imageFile, Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant, string name)
 		{
 			name = string.Intern(name);
 
-			Dictionary<string, Dictionary<int, ImageModel>> modelsBySet;
+			Dictionary<string, Dictionary<int, ImageFile>> modelsBySet;
 			if (!modelsByNameBySetByVariant.TryGetValue(name, out modelsBySet))
 			{
-				modelsBySet = new Dictionary<string, Dictionary<int, ImageModel>>(Str.Comparer);
+				modelsBySet = new Dictionary<string, Dictionary<int, ImageFile>>(Str.Comparer);
 				modelsByNameBySetByVariant.Add(name, modelsBySet);
 			}
 
-			Dictionary<int, ImageModel> modelsByImageVariant;
-			if (!modelsBySet.TryGetValue(model.SetCode, out modelsByImageVariant))
+			Dictionary<int, ImageFile> modelsByImageVariant;
+			if (!modelsBySet.TryGetValue(imageFile.SetCode, out modelsByImageVariant))
 			{
-				modelsByImageVariant = new Dictionary<int, ImageModel>();
-				modelsBySet.Add(model.SetCode, modelsByImageVariant);
+				modelsByImageVariant = new Dictionary<int, ImageFile>();
+				modelsBySet.Add(imageFile.SetCode, modelsByImageVariant);
 			}
 
-			ImageModel currentModel;
+			ImageFile currentImageFile;
 
 			// Для каждого номера варианта выберем представителя с наилучшим качеством
-			if (!modelsByImageVariant.TryGetValue(model.VariantNumber, out currentModel) || currentModel.Quality < model.Quality)
-				modelsByImageVariant[model.VariantNumber] = model;
+			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out currentImageFile) || currentImageFile.Quality < imageFile.Quality)
+				modelsByImageVariant[imageFile.VariantNumber] = imageFile;
 		}
 
 
@@ -266,14 +283,14 @@ namespace Mtgdb.Dal
 		public ImageModel GetImagePrint(Card card, Func<string, string, string> setCodePreference)
 		{
 			return
-				getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom) ??
-				getImage(card, setCodePreference, _modelsByNameBySetByVariant);
+				getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom)?.ImageFile.NonRotated() ??
+				getImage(card, setCodePreference, _modelsByNameBySetByVariant)?.ImageFile.NonRotated();
 		}
 
 		private static ImageModel getImage(
 			Card card,
 			Func<string, string, string> setCodePreference,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant)
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant)
 		{
 			var model = getImage(modelsByNameBySetByVariant,
 				setCodePreference,
@@ -282,22 +299,19 @@ namespace Mtgdb.Dal
 				card.ImageName,
 				card.Artist);
 
-			if (model == null)
-				return null;
-
-			model = model.ApplyRotation(card, zoom: false, art: false);
-			return model;
+			var result = model?.ApplyRotation(card, zoom: false);
+			return result;
 		}
 
-		private static ImageModel getImage(Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant, Func<string, string, string> setCodePreference, string set, string imageNameBase, string imageName, string artist)
+		private static ImageFile getImage(Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant, Func<string, string, string> setCodePreference, string set, string imageNameBase, string imageName, string artist)
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				Dictionary<string, Dictionary<int, ImageModel>> bySet;
+				Dictionary<string, Dictionary<int, ImageFile>> bySet;
 				if (!modelsByNameBySetByVariant.TryGetValue(imageNameBase, out bySet))
 					return null;
 
-				Dictionary<int, ImageModel> byImageVariant;
+				Dictionary<int, ImageFile> byImageVariant;
 
 				if (set == null || !bySet.TryGetValue(set, out byImageVariant))
 				{
@@ -326,24 +340,24 @@ namespace Mtgdb.Dal
 
 			if (IsLoadingZoomComplete)
 			{
-				result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantZoom, isArt: false);
+				result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantZoom);
 
 				if (result != null)
 					return result;
 			}
 
-			result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariant, isArt: false);
+			result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariant);
 			return result;
 		}
 
 		public List<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
-			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt, isArt: true);
-			var distinctModels = models?.GroupBy(_ => _.FullPath).Select(_ => _.First()).ToList();
+			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
+			var distinctModels = models?.GroupBy(_ => _.ImageFile.FullPath).Select(_ => _.First().ImageFile.NonRotated()).ToList();
 			return distinctModels;
 		}
 
-		public IEnumerable<ImageModel> GetAllArts()
+		public IEnumerable<ImageFile> GetAllArts()
 		{
 			foreach (var bySet in _modelsByNameBySetByVariantArt.Values)
 				foreach (var byVariant in bySet.Values)
@@ -351,7 +365,7 @@ namespace Mtgdb.Dal
 						yield return model;
 		}
 
-		public IEnumerable<ImageModel> GetAllZooms()
+		public IEnumerable<ImageFile> GetAllZooms()
 		{
 			foreach (var bySet in _modelsByNameBySetByVariantZoom.Values)
 				foreach (var byVariant in bySet.Values)
@@ -362,12 +376,11 @@ namespace Mtgdb.Dal
 		private static List<ImageModel> getImageModels(
 			Card card,
 			Func<string, string, string> setCodePreference,
-			Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> modelsByNameBySetByVariant,
-			bool isArt)
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant)
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				Dictionary<string, Dictionary<int, ImageModel>> modelsBySet;
+				Dictionary<string, Dictionary<int, ImageFile>> modelsBySet;
 				if (!modelsByNameBySetByVariant.TryGetValue(card.ImageNameBase, out modelsBySet))
 					return null;
 
@@ -384,11 +397,11 @@ namespace Mtgdb.Dal
 				if (models.Count == 0)
 					return null;
 
-				return models.Select(m => m.ApplyRotation(card, zoom: true, art: isArt)).ToList();
+				return models.Select(m => m.ApplyRotation(card, zoom: true)).ToList();
 			}
 		}
 
-		private static IEnumerable<ImageModel> orderCardsWithinSet(Card card, Dictionary<int, ImageModel> variants)
+		private static IEnumerable<ImageFile> orderCardsWithinSet(Card card, Dictionary<int, ImageFile> variants)
 		{
 			var result = variants.Select(byVariant => byVariant.Value)
 				.OrderByDescending(cardPriority1(card.SetCode, card.ImageName))
@@ -406,7 +419,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// Сначала совпадающий сет
 		/// </summary>
-		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, bool> setPriority1(string set)
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority1(string set)
 		{
 			return bySet => Str.Equals(bySet.Key, set);
 		}
@@ -414,7 +427,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// Далее сеты, в которых есть вариант с совпадающим артистом
 		/// </summary>
-		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, bool> setPriority2(string artist)
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority2(string artist)
 		{
 			return bySet => artist != null && bySet.Value.Values.Any(_ => Str.Equals(_.Artist, artist));
 		}
@@ -422,7 +435,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// Остальные сеты пойдут от новых к старым
 		/// </summary>
-		private static Func<KeyValuePair<string, Dictionary<int, ImageModel>>, string> setPriority3(Func<string, string, string> setCodePreference, string set)
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, string> setPriority3(Func<string, string, string> setCodePreference, string set)
 		{
 			return bySet => setCodePreference(set, bySet.Key);
 		}
@@ -430,7 +443,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// В совпадающем сете покажем сначала карту с совпадающим номером варианта
 		/// </summary>
-		private static Func<ImageModel, bool> cardPriority1(string set, string imageName)
+		private static Func<ImageFile, bool> cardPriority1(string set, string imageName)
 		{
 			return model =>
 				Str.Equals(model.SetCode, set) &&
@@ -440,7 +453,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// далее карту с совпадающим артистом
 		/// </summary>
-		private static Func<ImageModel, bool> cardPriority2(string set, string artist)
+		private static Func<ImageFile, bool> cardPriority2(string set, string artist)
 		{
 			return model =>
 				Str.Equals(model.SetCode, set) &&
@@ -450,7 +463,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// В остальных сетах сначала карту с совпадающим артистом
 		/// </summary>
-		private static Func<ImageModel, bool> cardPriority3(string artist)
+		private static Func<ImageFile, bool> cardPriority3(string artist)
 		{
 			return model => Str.Equals(model.Artist, artist);
 		}
@@ -458,7 +471,7 @@ namespace Mtgdb.Dal
 		/// <summary>
 		/// Далее совпадающим номером
 		/// </summary>
-		private static Func<ImageModel, bool> cardPriority4(string imageName)
+		private static Func<ImageFile, bool> cardPriority4(string imageName)
 		{
 			return model => Str.Equals(model.ImageName, imageName);
 		}
@@ -467,36 +480,36 @@ namespace Mtgdb.Dal
 		/// прочие по возрастанию номера варианта
 		/// </summary>
 		/// <returns></returns>
-		private static Func<ImageModel, int> cardUnpriority5()
+		private static Func<ImageFile, int> cardUnpriority5()
 		{
 			return model => model.VariantNumber;
 		}
 
 
 
-		public ImageModel GetReplacementImage(ImageModel model, Func<string, string, string> setCodePreference)
+		public ImageModel GetReplacementImage(ImageFile imageFile, Func<string, string, string> setCodePreference)
 		{
-			if (string.IsNullOrEmpty(model.Name))
+			if (string.IsNullOrEmpty(imageFile.Name))
 				return null;
 
 			var result = getImage(_modelsByNameBySetByVariantZoom,
 					setCodePreference,
-					model.SetCode,
-					model.Name,
-					model.ImageName,
-					model.Artist);
+					imageFile.SetCode,
+					imageFile.Name,
+					imageFile.ImageName,
+					imageFile.Artist);
 
 			if (result != null)
-				return result;
+				return result.NonRotated();
 
 			result = getImage(_modelsByNameBySetByVariant,
 				setCodePreference,
-				model.SetCode,
-				model.Name,
-				model.ImageName,
-				model.Artist);
+				imageFile.SetCode,
+				imageFile.Name,
+				imageFile.ImageName,
+				imageFile.Artist);
 
-			return result;
+			return result.NonRotated();
 		}
 
 
@@ -509,14 +522,15 @@ namespace Mtgdb.Dal
 
 		public event Action LoadingComplete;
 
+		private readonly ImageLocationsConfig _config;
 
 		private readonly HashSet<string> _files = new HashSet<string>(Str.Comparer);
 		private readonly HashSet<string> _filesZoom = new HashSet<string>(Str.Comparer);
 		private readonly HashSet<string> _filesArt = new HashSet<string>(Str.Comparer);
 
-		private readonly IList<DirectoryConfig> _directories;
-		private readonly IList<DirectoryConfig> _directoriesZoom;
-		private readonly IList<DirectoryConfig> _directoriesArt;
+		private IList<DirectoryConfig> _directories;
+		private IList<DirectoryConfig> _directoriesZoom;
+		private IList<DirectoryConfig> _directoriesArt;
 
 		private static readonly HashSet<string> _extensions = new HashSet<string>(Str.Comparer) { ".jpg", ".png" };
 
@@ -526,13 +540,13 @@ namespace Mtgdb.Dal
 		private static readonly char[] _metadataValueSeparator = { ',', ';' };
 
 
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariant =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariant =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantZoom =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantZoom =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>> _modelsByNameBySetByVariantArt =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageModel>>>(Str.Comparer);
+		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantArt =
+			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 	}
 }

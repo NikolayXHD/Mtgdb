@@ -64,11 +64,11 @@ namespace Mtgdb.Test
 		[TestCase("en",
 			"PricingMid:[0 TO 1] OR",
 			"----------------------^", "OR")]
-		public void Suggest_by_user_input(string langauge, string queryStr, string caretIndicator, string expectedSuggest)
+		public void Suggest_by_user_input(string language, string queryStr, string caretIndicator, string expectedSuggest)
 		{
 			int caret = caretIndicator.IndexOf("^", Str.Comparison);
 
-			var list = suggestByInput(queryStr, caret, langauge);
+			var list = suggestByInput(queryStr, caret, language);
 
 			if (expectedSuggest == "{float}")
 			{
@@ -89,13 +89,13 @@ namespace Mtgdb.Test
 			var list = Spellchecker.SuggestValues(value, field, language, 20);
 
 			sw.Stop();
-			_log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
 
 			Assert.That(list, Is.Not.Null);
 			Assert.That(list, Is.Not.Empty);
 
 			foreach (string variant in list)
-				_log.Debug(variant);
+				Log.Debug(variant);
 
 			return list;
 		}
@@ -108,7 +108,7 @@ namespace Mtgdb.Test
 			var suggest = Spellchecker.Suggest(query, caret, language, 50);
 
 			sw.Stop();
-			_log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
+			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
 
 			Assert.That(suggest, Is.Not.Null);
 
@@ -117,10 +117,10 @@ namespace Mtgdb.Test
 			Assert.That(list, Is.Not.Null);
 			Assert.That(list, Is.Not.Empty);
 
-			_log.Debug("Token: " + suggest.Token);
-			_log.Debug("Suggest:");
+			Log.Debug("Token: " + suggest.Token);
+			Log.Debug("Suggest:");
 			foreach (string variant in list)
-				_log.Debug(variant);
+				Log.Debug(variant);
 
 			return list;
 		}
@@ -130,7 +130,5 @@ namespace Mtgdb.Test
 		{
 			LogManager.Flush();
 		}
-
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

@@ -75,8 +75,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dal\EditDistanceTests.cs" />
-    <Compile Include="Images\ImageMappingTests.cs" />
+    <Compile Include="EditDistanceTests.cs" />
+    <Compile Include="ImageMappingTests.cs" />
+    <Compile Include="Index\EditedTokenLocatorTests.cs" />
     <Compile Include="Index\IndexTestsBase.cs" />
     <Compile Include="Index\KeywordTests.cs" />
     <Compile Include="Index\TolerantTokenizerTests.cs" />

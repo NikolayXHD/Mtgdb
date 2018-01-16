@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class TolerantTokenizerTests
+	public class TolerantTokenizerTests : TestsBase
 	{
 		[TestCase(@"PricingLow:{10 TO *]")]
 		[TestCase(@"\""""angelic demon""")]
@@ -31,21 +31,21 @@ namespace Mtgdb.Test
 
 		private static TolerantTokenizer tokenize(string queryStr)
 		{
-			_log.Debug(queryStr);
+			Log.Debug(queryStr);
 
 			var parser = new TolerantTokenizer(queryStr);
 			parser.Parse();
 
 			if (parser.SyntaxErrors.Count > 0)
-				_log.Debug("Errors:");
+				Log.Debug("Errors:");
 
 			foreach (string error in parser.SyntaxErrors)
-				_log.Debug(error);
+				Log.Debug(error);
 
-			_log.Debug("Tokens:");
+			Log.Debug("Tokens:");
 
 			foreach (var token in parser.Tokens)
-				_log.Debug(token);
+				Log.Debug(token);
 
 			return parser;
 		}
@@ -55,7 +55,5 @@ namespace Mtgdb.Test
 		{
 			LogManager.Flush();
 		}
-
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

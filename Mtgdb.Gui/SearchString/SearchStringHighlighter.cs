@@ -31,11 +31,11 @@ namespace Mtgdb.Gui
 
 			foreach (var token in tokenizer.Tokens)
 			{
-				if (token.Type.Is(TokenType.FieldValue))
+				if (token.Type.IsAny(TokenType.FieldValue))
 					setColor(token.Position, token.Value.Length, _findEditor.BackColor, null, true);
-				else if (token.Type.Is(TokenType.Field | TokenType.Colon))
+				else if (token.Type.IsAny(TokenType.Field | TokenType.Colon))
 					setColor(token.Position, token.Value.Length, null, Color.Teal, false);
-				else if (token.Type.Is(TokenType.RegexBody))
+				else if (token.Type.IsAny(TokenType.RegexBody))
 					setColor(token.Position, token.Value.Length, null, Color.DarkRed, false);
 				//else if (token.Type.Is(TokenType.ModifierValue))
 				//	setColor(token.Position, token.Value.Length, Color.LightBlue);

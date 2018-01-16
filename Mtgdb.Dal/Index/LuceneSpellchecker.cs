@@ -135,12 +135,12 @@ namespace Mtgdb.Dal.Index
 		{
 			var token = EditedTokenLocator.GetEditedToken(query, caret);
 
-			if (token == null || token.Type.Is(TokenType.ModifierValue))
+			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
 				return _emptySuggest;
 
 			string valuePart = token.Value.Substring(0, caret - token.Position);
 
-			if (token.Type.Is(TokenType.FieldValue))
+			if (token.Type.IsAny(TokenType.FieldValue))
 			{
 				if (!IsLoaded)
 					return _emptySuggest;
@@ -149,10 +149,10 @@ namespace Mtgdb.Dal.Index
 				return new IntellisenseSuggest(token, values);
 			}
 
-			if (token.Type.Is(TokenType.Field))
+			if (token.Type.IsAny(TokenType.Field))
 				return new IntellisenseSuggest(token, suggestFields(valuePart));
 
-			if (token.Type.Is(TokenType.Boolean))
+			if (token.Type.IsAny(TokenType.Boolean))
 				return new IntellisenseSuggest(
 					token,
 					new[] { "AND", "OR", "NOT", "&&", "||", "!", "+", "-" }.OrderByDescending(_ => _.Equals(token.Value)).ToArray());
@@ -167,8 +167,12 @@ namespace Mtgdb.Dal.Index
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
-			if (!string.IsNullOrEmpty(field) && !DocumentFactory.UserFields.Contains(field))
-				// incomplete or incorrect field name
+			bool isFieldInvalid =
+				!string.IsNullOrEmpty(field) &&
+				!Str.Equals(field, NumericAwareQueryParser.AnyField) &&
+				!DocumentFactory.UserFields.Contains(field);
+
+			if (isFieldInvalid)
 				return _emptySuggest.Values;
 
 			var valueIsNumeric = isValueNumeric(value);

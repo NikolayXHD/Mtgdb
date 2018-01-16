@@ -332,7 +332,7 @@ namespace Mtgdb.Gui
 				var contextPatternsSet = new Dictionary<string, Regex>();
 
 				var relevantTokens = term.Value.Where(token => 
-					token.Type.Is(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody) &&
+					token.Type.IsAny(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody) &&
 					!string.IsNullOrEmpty(token.Value));
 
 				foreach (var token in relevantTokens)
@@ -413,7 +413,7 @@ namespace Mtgdb.Gui
 			var currentTokens = new List<Token> { token };
 			var suffixTokens = getSuffixTokens(token);
 
-			if (token.Type.Is(TokenType.FieldValue | TokenType.RegexBody))
+			if (token.Type.IsAny(TokenType.FieldValue | TokenType.RegexBody))
 				result = getPattern(prefixTokens, currentTokens, suffixTokens);
 			else
 				result = null;
@@ -433,7 +433,7 @@ namespace Mtgdb.Gui
 			int i = 0;
 			while (true)
 			{
-				i += suffixTokens.TakeWhile(_ => !_.Type.Is(TokenType.Wildcard)).Count();
+				i += suffixTokens.TakeWhile(_ => !_.Type.IsAny(TokenType.Wildcard)).Count();
 
 				if (i == tokenGroup.Count)
 					break;
@@ -444,7 +444,7 @@ namespace Mtgdb.Gui
 
 				currentTokens.Clear();
 				currentTokens.AddRange(
-					tokenGroup.Skip(i).TakeWhile(_ => _.Type.Is(TokenType.Wildcard)));
+					tokenGroup.Skip(i).TakeWhile(_ => _.Type.IsAny(TokenType.Wildcard)));
 
 				i = prefixTokens.Count + currentTokens.Count;
 
@@ -473,19 +473,19 @@ namespace Mtgdb.Gui
 		{
 			var suffixTokens = new List<Token>();
 
-			if (token.Type.Is(TokenType.RegexBody))
+			if (token.Type.IsAny(TokenType.RegexBody))
 				return suffixTokens;
 
 			while (true)
 			{
 				if (token.Next == null ||
 					!token.Next.TouchesCaret(token.Position + token.Value.Length) ||
-					token.Type.Is(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
-					token.Next.Type.Is(TokenType.FieldValue) && token.Next.Value[0].IsCj())
+					token.Type.IsAny(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
+					token.Next.Type.IsAny(TokenType.FieldValue) && token.Next.Value[0].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
-				if (token.Next.Type.Is(TokenType.Wildcard | TokenType.FieldValue))
+				if (token.Next.Type.IsAny(TokenType.Wildcard | TokenType.FieldValue))
 					suffixTokens.Add(token.Next);
 				else
 					break;
@@ -500,20 +500,20 @@ namespace Mtgdb.Gui
 		{
 			var prefixTokens = new List<Token>();
 
-			if (token.Type.Is(TokenType.RegexBody))
+			if (token.Type.IsAny(TokenType.RegexBody))
 				return prefixTokens;
 
 			while (true)
 			{
 				if (token.Previous == null ||
 					!token.Previous.TouchesCaret(token.Position) ||
-					token.Type.Is(TokenType.FieldValue) && token.Value[0].IsCj() ||
-					token.Previous.Type.Is(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
+					token.Type.IsAny(TokenType.FieldValue) && token.Value[0].IsCj() ||
+					token.Previous.Type.IsAny(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
 
-				if (token.Previous.Type.Is(TokenType.Wildcard | TokenType.FieldValue))
+				if (token.Previous.Type.IsAny(TokenType.Wildcard | TokenType.FieldValue))
 					prefixTokens.Insert(0, token.Previous);
 				else
 					break;
@@ -529,11 +529,11 @@ namespace Mtgdb.Gui
 			var pattern = new StringBuilder();
 			foreach (var token in tokens)
 			{
-				if (token.Type.Is(TokenType.AnyChar))
+				if (token.Type.IsAny(TokenType.AnyChar))
 					pattern.Append(MtgdbTokenizerPatterns.CharPattern);
-				else if (token.Type.Is(TokenType.AnyString))
+				else if (token.Type.IsAny(TokenType.AnyString))
 					pattern.Append(MtgdbTokenizerPatterns.CharPattern + "*");
-				else if (token.Type.Is(TokenType.FieldValue))
+				else if (token.Type.IsAny(TokenType.FieldValue))
 				{
 					string luceneUnescaped = StringEscaper.Unescape(token.Value);
 
@@ -579,7 +579,7 @@ namespace Mtgdb.Gui
 						}
 					}
 				}
-				else if (token.Type.Is(TokenType.RegexBody))
+				else if (token.Type.IsAny(TokenType.RegexBody))
 				{
 					pattern.Append(token.Value);
 				}

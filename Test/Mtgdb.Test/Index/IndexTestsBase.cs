@@ -28,7 +28,7 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(Repo);
 				sw.Stop();
 
-				Log.Info($"Index created in {sw.ElapsedMilliseconds} ms");
+				Log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 			else
 			{
@@ -38,7 +38,7 @@ namespace Mtgdb.Test
 				Searcher.LoadIndex(null);
 
 				sw.Stop();
-				Log.Info($"Index created in {sw.ElapsedMilliseconds} ms");
+				Log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
 			}
 
 			Spellchecker = Searcher.Spellchecker;

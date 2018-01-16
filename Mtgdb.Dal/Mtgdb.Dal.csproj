@@ -138,7 +138,7 @@
     <Compile Include="ImageCache\ImageCache.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\ForeignName.cs" />
-    <Compile Include="Images\ImageModel.cs" />
+    <Compile Include="Images\ImageFile.cs" />
     <Compile Include="Model\GeneratedManaParser.cs" />
     <Compile Include="Model\ICardCollection.cs" />
     <Compile Include="Model\LegalityNote.cs" />
