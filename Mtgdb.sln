@@ -34,6 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls", "Mtgdb.Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ tools ]", "[ tools ]", "{7E0371BE-7415-4304-BCC7-BD6A33C5607C}"
 	ProjectSection(SolutionItems) = preProject
+		tools\gdrive-windows-x64.exe = tools\gdrive-windows-x64.exe
 		tools\package.bat = tools\package.bat
 		tools\package.old.bat = tools\package.old.bat
 		tools\select images.bat = tools\select images.bat

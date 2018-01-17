@@ -94,7 +94,13 @@
     <Compile Include="Dal\DeckFormattersTests.cs" />
     <Compile Include="Dal\EditDistanceTests.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
+    <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />
+    <Compile Include="ExternalData\PriceDownloaderTests.cs" />
+    <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />
+    <Compile Include="Tcg\TcgCard.cs" />
+    <Compile Include="Tcg\TcgParser.cs" />
+    <Compile Include="Tcg\TcgSet.cs" />
     <Compile Include="ExternalData\TranslationDownloaderUtils.cs" />
     <Compile Include="Images\ImageDownloadingUtils.cs" />
     <Compile Include="Images\ImageMappingUtils.cs" />
@@ -107,7 +113,6 @@
     <Compile Include="Images\ImageMagickScaler.cs" />
     <Compile Include="Images\MedianFilter.cs" />
     <Compile Include="Images\SaturationFilter.cs" />
-    <Compile Include="Price\PriceDownloaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">

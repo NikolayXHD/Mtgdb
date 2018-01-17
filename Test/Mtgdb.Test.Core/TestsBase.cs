@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Mtgdb.Dal;
+using Mtgdb.Downloader;
 using Ninject;
 using NLog;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ namespace Mtgdb.Test
 			Kernel = new StandardKernel();
 			Kernel.Load<CoreModule>();
 			Kernel.Load<DalModule>();
+			Kernel.Load<DownloaderModule>();
 
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();

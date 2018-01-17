@@ -1,32 +1,24 @@
-﻿using Mtgdb.Dal;
 using Mtgdb.Downloader;
+using Mtgdb.Test;
 using Ninject;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
-	public class PriceDownloaderTests
+	public class PriceDownloaderTests: TestsBase
 	{
-		private readonly IKernel _kernel = new StandardKernel();
-
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			_kernel.Load<CoreModule>();
-			_kernel.Load<DalModule>();
+			LoadModules();
+			LoadCards();
 		}
 
 		[Test]
 		public void DownloadPrices()
 		{
-			var repo = _kernel.Get<CardRepository>();
-			var priceRepo = _kernel.Get<DownloaderPriceRepository>();
-
-			repo.LoadFile();
-			repo.Load();
-
-			var downloader = new PriceDownloader(repo, priceRepo);
+			var downloader = Kernel.Get<PriceDownloader>();
 			downloader.LoadPendingProgress();
 			downloader.Download();
 		}
