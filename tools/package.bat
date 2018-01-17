@@ -14,6 +14,11 @@ set target=%targetRoot%\%packageName%
 set targetBin=%target%\bin\v%version%
 set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 
+set googledriveexe=%origin%\tools\gdrive-windows-x64.exe
+set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
+
+goto upload
+
 "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" %origin%\Mtgdb.sln /verbosity:m
 
 if errorlevel 1 exit /b
@@ -73,5 +78,7 @@ git -C f:/Repo/Git/Mtgdb.Notifications add -A
 git -C f:/Repo/Git/Mtgdb.Notifications commit -m auto
 git -C f:/Repo/Git/Mtgdb.Notifications push
 
-echo Ready to exit
+:upload
+%googledriveexe% update %fileid% %pub%\Archive\%packageName%.zip
+
 exit /b
