@@ -63,6 +63,10 @@
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
       <Name>Mtgdb.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
+      <Project>{3229CA82-875D-4154-92B7-2F7C47678010}</Project>
+      <Name>Mtgdb.Downloader</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
