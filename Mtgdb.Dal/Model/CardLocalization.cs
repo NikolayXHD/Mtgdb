@@ -71,9 +71,11 @@ namespace Mtgdb.Dal
 			return _translations.TryGet(language)?.Flavor;
 		}
 
+		public const string DefaultLanguage = "en";
+
 		public static IEnumerable<string> GetAllLanguages()
 		{
-			yield return "en";
+			yield return DefaultLanguage;
 			yield return "cn";
 			yield return "tw";
 			yield return "fr";

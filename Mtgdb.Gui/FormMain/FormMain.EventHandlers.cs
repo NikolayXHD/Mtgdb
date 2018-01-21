@@ -24,8 +24,8 @@ namespace Mtgdb.Gui
 			// only after subscribeToEvents so that probeCardCreating handler executes
 			resetLayouts();
 
-			_deckSerializationSubsystem.State.LastFile = _historyModel.Current.DeckFile;
-			_isLoaded = true;
+			_deckSerializationSubsystem.State.LastFile = _historySubsystem.Current.DeckFile;
+			IsLoaded = true;
 		}
 
 		private void resetLayouts()
@@ -36,7 +36,6 @@ namespace Mtgdb.Gui
 
 		private void applicationExit(object sender, EventArgs e)
 		{
-			new Thread(_ => _historyModel.Save()).Start();
 			stopThreads();
 			unsubscribeFromEvents();
 		}
@@ -236,7 +235,7 @@ namespace Mtgdb.Gui
 				_imagePreloadingSubsystem.Reset();
 
 				if (_cardRepo.IsLoadingComplete)
-					_historyModel.Current.SearchResultScroll = _viewCards.VisibleRecordIndex;
+					_historySubsystem.Current.SearchResultScroll = _viewCards.VisibleRecordIndex;
 			}
 
 			updateFormStatus();
@@ -370,8 +369,8 @@ namespace Mtgdb.Gui
 
 		private void loadDeck(Deck deck)
 		{
-			_historyModel.DeckFile = deck.File;
-			_historyModel.DeckName = deck.Name;
+			_historySubsystem.DeckFile = deck.File;
+			_historySubsystem.DeckName = deck.Name;
 
 			_deckModel.SetDeck(deck, _cardRepo);
 			_deckModel.Shuffle();
