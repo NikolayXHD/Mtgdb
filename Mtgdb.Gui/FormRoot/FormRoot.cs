@@ -149,9 +149,10 @@ namespace Mtgdb.Gui
 			_tabs.TabRemoved += pageClosed;
 			_tabs.SelectedIndexChanging += selectedPageChanging;
 			_tabs.SelectedIndexChanged += selectedPageChanged;
-			_tabs.TabReordered += pageReordered;
 			_tabs.AllowDrop = true;
 			_tabs.DragOver += tabsDragOver;
+
+			Application.ApplicationExit += applicationExit;
 
 			KeyDown += formKeyDown;
 
@@ -170,8 +171,48 @@ namespace Mtgdb.Gui
 
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
 
-			_language = _buttonLanguage.Text.ToLowerInvariant();
+			Language = CardLocalization.DefaultLanguage;
 		}
+
+		private void load(object sender, EventArgs e)
+		{
+			_loader.Add(() =>
+			{
+				_downloaderSubsystem.FetchNews(repeatViewed: false);
+				this.Invoke(updateDownloadButton);
+			});
+
+			_loader.Add(() =>
+			{
+				_downloaderSubsystem.CalculateProgress();
+
+				while (!_downloaderSubsystem.NewsLoaded)
+					Thread.Sleep(100);
+
+				this.Invoke(delegate
+				{
+					_buttonDownload.Enabled = true;
+				});
+
+				if (_downloaderSubsystem.NeedToSuggestDownloader)
+					_downloaderSubsystem.ShowDownloader(this, auto: true);
+			});
+
+			_loader.Run();
+
+			_suggestModel.StartSuggestThread();
+		}
+
+		private void repositoryLoaded()
+		{
+			this.Invoke(delegate
+			{
+				foreach (var button in _deckButtons)
+					button.Enabled = true;
+			});
+		}
+
+
 
 		private void tabsDragOver(object sender, DragEventArgs e)
 		{
@@ -191,15 +232,6 @@ namespace Mtgdb.Gui
 				return;
 			
 			_tabs.SelectedIndex = hoveredIndex;
-		}
-
-		private void repositoryLoaded()
-		{
-			this.Invoke(delegate
-			{
-				foreach (var button in _deckButtons)
-					button.Enabled = true;
-			});
 		}
 
 		private FormMain getSelectedForm()
@@ -282,50 +314,19 @@ namespace Mtgdb.Gui
 			formMain.Close();
 		}
 
-		private void pageReordered(TabHeaderControl sender)
-		{
-			for (int i = 0; i < _tabs.Count; i++)
-			{
-				var formMain = (FormMain)_tabs.TabIds[i];
-				formMain.SaveHistory(i.ToString());
-			}
-		}
-
 		private void pageClosed(TabHeaderControl sender)
 		{
-			pageReordered(sender);
-
 			if (_tabs.Count == 0)
 				Close();
 		}
 
-		private void load(object sender, EventArgs e)
+		private void applicationExit(object sender, EventArgs e)
 		{
-			_loader.Add(() =>
+			for (int i = 0; i < _tabs.Count; i++)
 			{
-				_downloaderSubsystem.FetchNews(repeatViewed: false);
-				this.Invoke(updateDownloadButton);
-			});
-
-			_loader.Add(() =>
-			{
-				_downloaderSubsystem.CalculateProgress();
-
-				while (!_downloaderSubsystem.NewsLoaded)
-					Thread.Sleep(100);
-
-				this.Invoke(delegate
-				{
-					_buttonDownload.Enabled = true;
-				});
-
-				if (_downloaderSubsystem.NeedToSuggestDownloader)
-					_downloaderSubsystem.ShowDownloader(this, auto: true);
-			});
-
-			_loader.Run();
-
-			_suggestModel.StartSuggestThread();
+				var formMain = (FormMain) _tabs.TabIds[i];
+				formMain.SaveHistory(i.ToString());
+			}
 		}
 
 		private void updateDownloadButton()

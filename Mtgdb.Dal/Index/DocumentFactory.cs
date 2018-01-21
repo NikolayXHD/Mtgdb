@@ -96,7 +96,7 @@ namespace Mtgdb.Dal.Index
 
 			foreach (var lang in _langs)
 			{
-				if (Str.Equals(lang, "en"))
+				if (Str.Equals(lang, CardLocalization.DefaultLanguage))
 					continue;
 
 				addSpecificTextField(nameof(Card.Name), lang);
@@ -423,8 +423,8 @@ namespace Mtgdb.Dal.Index
 			if (language == null)
 				throw new InvalidOperationException($"Language must be specified for localized field {fieldName}");
 
-			if (Str.Equals(language, "en"))
-				return fieldName + "en";
+			if (Str.Equals(language, CardLocalization.DefaultLanguage))
+				return fieldName + CardLocalization.DefaultLanguage;
 
 			return fieldName + "_" + language;
 		}

@@ -149,7 +149,7 @@ namespace Mtgdb.Gui
 
 			Load += formLoad;
 
-			_historyModel = new HistoryModel(undoConfig);
+			_historySubsystem = new HistorySubsystem(undoConfig);
 		}
 
 		private void scale()
@@ -431,6 +431,14 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 		}
 
+		private bool IsLoaded { get; set; }
+
+		private Zone DeckZone
+		{
+			get { return (Zone)_tabHeadersDeck.SelectedIndex; }
+			set { _tabHeadersDeck.SelectedIndex = (int)value; }
+		}
+
 		private Deck _requiredDeck;
 		private int? _requiredScroll;
 
@@ -452,7 +460,7 @@ namespace Mtgdb.Gui
 
 		private bool _breakRefreshing;
 
-		private readonly HistoryModel _historyModel;
+		private readonly HistorySubsystem _historySubsystem;
 		private readonly DeckSerializationSubsystem _deckSerializationSubsystem;
 		private readonly SearchStringSubsystem _searchStringSubsystem;
 		private readonly DeckModel _deckModel;
@@ -485,13 +493,6 @@ namespace Mtgdb.Gui
 		private readonly RichTextBoxSelectionSubsystem _findEditorSelectionSubsystem;
 
 		private bool _threadsRunning;
-		private bool _isLoaded;
 		private bool _isTabSelected;
-
-		public Zone DeckZone
-		{
-			get { return (Zone)_tabHeadersDeck.SelectedIndex; }
-			set { _tabHeadersDeck.SelectedIndex = (int) value; }
-		}
 	}
 }

@@ -13,22 +13,21 @@ namespace Mtgdb.Gui
 	{
 		public void LoadHistory(string tabId)
 		{
-			_historyModel.LoadHistory(tabId, _uiModel.Form.Language);
+			_historySubsystem.LoadHistory(AppDir.History, tabId);
 			updateFormStatus();
 		}
 
 		public void SaveHistory(string tabId)
 		{
-			_historyModel.TabId = tabId;
-			_historyModel.Save();
+			_historySubsystem.Save(AppDir.History, tabId);
 		}
 
 		public void OnTabSelected(Card draggedCard)
 		{
-			if (!_isLoaded)
+			if (!IsLoaded)
 				throw new InvalidOperationException("Form must be loaded first");
 
-			if (!_historyModel.IsLoaded)
+			if (!_historySubsystem.IsLoaded)
 				throw new InvalidOperationException("History must be loaded first");
 
 			_isTabSelected = true;
@@ -46,9 +45,9 @@ namespace Mtgdb.Gui
 			if (firstTimeTabSelected)
 				updateGlobalDisplaySettings();
 			else
-				historyUpdateGlobals(_historyModel.Current);
+				historyUpdateGlobals(_historySubsystem.Current);
 
-			historyApply(_historyModel.Current);
+			historyApply(_historySubsystem.Current);
 
 			if (_requiredDeck != null)
 			{
@@ -318,7 +317,7 @@ namespace Mtgdb.Gui
 
 			_labelStatusFilterLegality.Text = getStatusLegalityFilter(filterManagerStates);
 
-			setTitle(_historyModel.DeckName);
+			setTitle(_historySubsystem.DeckName);
 		}
 
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)
@@ -442,7 +441,7 @@ namespace Mtgdb.Gui
 
 		private bool isSearchStringModified()
 		{
-			return _historyModel != null && _findEditor.Text != (_historyModel.Current.Find ?? string.Empty);
+			return _historySubsystem != null && _findEditor.Text != (_historySubsystem.Current.Find ?? string.Empty);
 		}
 
 		private static string getFilterStatusText(
@@ -517,7 +516,7 @@ namespace Mtgdb.Gui
 
 		private void historyUpdate()
 		{
-			if (_historyModel == null)
+			if (_historySubsystem == null)
 				return;
 
 			var settings = new GuiSettings
@@ -547,15 +546,15 @@ namespace Mtgdb.Gui
 				LegalityAllowLegal = _legalitySubsystem.AllowLegal,
 				LegalityAllowRestricted = _legalitySubsystem.AllowRestricted,
 				LegalityAllowBanned = _legalitySubsystem.AllowBanned,
-				DeckFile = _historyModel.DeckFile,
-				DeckName = _historyModel.DeckName,
+				DeckFile = _historySubsystem.DeckFile,
+				DeckName = _historySubsystem.DeckName,
 				SearchResultScroll = _viewCards.VisibleRecordIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked
 			};
 
-			_historyModel.Add(settings);
+			_historySubsystem.Add(settings);
 			historyUpdateButtons();
 		}
 
@@ -591,8 +590,7 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.AppliedText = settings.Find ?? string.Empty;
 
-			if (settings.Language != null)
-				_uiModel.Form.Language = settings.Language;
+			_uiModel.Form.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
 			_searchStringSubsystem.ApplyFind();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
@@ -630,20 +628,20 @@ namespace Mtgdb.Gui
 
 		private void historyRedo()
 		{
-			if (_historyModel.Redo())
-				historyApply(_historyModel.Current);
+			if (_historySubsystem.Redo())
+				historyApply(_historySubsystem.Current);
 		}
 
 		private void historyUndo()
 		{
-			if (_historyModel.Undo())
-				historyApply(_historyModel.Current);
+			if (_historySubsystem.Undo())
+				historyApply(_historySubsystem.Current);
 		}
 
 		private void historyUpdateButtons()
 		{
-			_uiModel.Form.CanUndo = _historyModel.CanUndo;
-			_uiModel.Form.CanRedo = _historyModel.CanRedo;
+			_uiModel.Form.CanUndo = _historySubsystem.CanUndo;
+			_uiModel.Form.CanRedo = _historySubsystem.CanRedo;
 		}
 
 		private void updateTerms()
@@ -720,8 +718,8 @@ namespace Mtgdb.Gui
 
 		public void ButtonClearDeck()
 		{
-			_historyModel.DeckFile = null;
-			_historyModel.DeckName = null;
+			_historySubsystem.DeckFile = null;
+			_historySubsystem.DeckName = null;
 			resetTouchedCard();
 			_deckModel.Clear();
 		}
@@ -731,14 +729,14 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			var saved = _deckSerializationSubsystem.SaveDeck(_historyModel.Current.Deck);
+			var saved = _deckSerializationSubsystem.SaveDeck(_historySubsystem.Current.Deck);
 
 			if (saved == null)
 				return;
 
 			setTitle(saved.Name);
-			_historyModel.DeckFile = saved.File;
-			_historyModel.DeckName = saved.Name;
+			_historySubsystem.DeckFile = saved.File;
+			_historySubsystem.DeckName = saved.Name;
 		}
 
 		public void ButtonLoadDeck()
@@ -759,7 +757,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			var saved = _deckSerializationSubsystem.SaveCollection(_historyModel.Current.Collection);
+			var saved = _deckSerializationSubsystem.SaveCollection(_historySubsystem.Current.Collection);
 
 			if (saved == null)
 				return;
@@ -836,7 +834,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			_printingSubsystem.ShowPrintingDialog(_deckModel, _historyModel.DeckName);
+			_printingSubsystem.ShowPrintingDialog(_deckModel, _historySubsystem.DeckName);
 		}
 
 		public void FocusSearch()

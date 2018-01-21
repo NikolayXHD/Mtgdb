@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 
 namespace Mtgdb.Gui
 {
-	public class HistoryModel
+	public class HistorySubsystem
 	{
-		static HistoryModel()
+		static HistorySubsystem()
 		{
 			_jsonSerializerSettings = new JsonSerializerSettings
 			{
@@ -18,18 +18,21 @@ namespace Mtgdb.Gui
 			_jsonSerializerSettings.Converters.Add(new CustomConverter());
 		}
 
-		public HistoryModel(UndoConfig undoConfig)
+		public HistorySubsystem(UndoConfig undoConfig)
 		{
 			_maxDepth = undoConfig.MaxDepth ?? 100;
-			Directory.CreateDirectory(AppDir.History);
 		}
 
-		public void LoadHistory(string tabId, string language)
+		public void LoadHistory(string historyDirectory, string tabId)
 		{
-			TabId = tabId;
-			if (File.Exists(HistoryFile))
+			IsLoaded = true;
+
+			Directory.CreateDirectory(historyDirectory);
+			string historyFile = getHistoryFile(tabId, historyDirectory);
+
+			if (File.Exists(historyFile))
 			{
-				var serialized = File.ReadAllText(HistoryFile);
+				var serialized = File.ReadAllText(historyFile);
 				var state = JsonConvert.DeserializeObject<HistoryState>(serialized);
 
 				_settingsHistory = state.SettingsHistory;
@@ -38,7 +41,7 @@ namespace Mtgdb.Gui
 			else
 			{
 				_settingsHistory = new List<GuiSettings>();
-				var defaultSettings = new GuiSettings { Language = language };
+				var defaultSettings = new GuiSettings();
 				Add(defaultSettings);
 			}
 		}
@@ -77,11 +80,11 @@ namespace Mtgdb.Gui
 			return false;
 		}
 
-		public void Save()
+		public void Save(string historyDirectory, string tabId)
 		{
 			var state = getState();
 			string serialized = JsonConvert.SerializeObject(state, _jsonSerializerSettings);
-			File.WriteAllText(HistoryFile, serialized);
+			File.WriteAllText(getHistoryFile(tabId, historyDirectory), serialized);
 		}
 
 		private HistoryState getState()
@@ -132,18 +135,17 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private string HistoryFile => AppDir.History.AddPath($"{TabId}.json");
-		public string TabId { get; set; }
+		private string getHistoryFile(string tabId, string historyDirectory) => historyDirectory.AddPath($"{tabId}.json");
 
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }
 
-		public bool IsLoaded => TabId != null;
+		public bool IsLoaded { get; private set; }
 
 		private int _settingsIndex;
-
 		private List<GuiSettings> _settingsHistory;
 		private readonly int _maxDepth;
+
 		private static readonly JsonSerializerSettings _jsonSerializerSettings;
 	}
 
