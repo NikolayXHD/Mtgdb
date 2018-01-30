@@ -17,7 +17,8 @@ set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 set googledriveexe=%origin%\tools\gdrive-windows-x64.exe
 set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
 
-goto upload
+rem goto upload
+rem goto sign
 
 "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" %origin%\Mtgdb.sln /verbosity:m
 
@@ -37,7 +38,6 @@ xcopy /q /r /i /e %output%\update %target%\update
 xcopy /q /r /i /e %output%\help %target%\help
 xcopy /q %output%\..\LICENSE %target%
 
-del /q %target%\etc\Mtgdb.Test.xml
 del /q /s %target%\update\app\*
 del /q /s %target%\update\*.bak
 del /q /s %target%\update\*.zip
@@ -56,6 +56,8 @@ del /q /s %target%\*.vshost.*
 %utilexe% -sign %target%\bin\v%version% -output %targetBin%\filelist.txt
 
 "%output%\update\7z\7za.exe" a %target%.zip -tzip -ir!%target%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
+
+:sign
 %utilexe% -sign %target%.zip -output %targetRoot%\filelist.txt
 
 del /q /s %pub%\Archive\*.zip
@@ -64,7 +66,6 @@ xcopy /q %target%.zip %pub%\Archive
 xcopy /q %targetRoot%\filelist.txt %pub%\FileList
 
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
-
 %origin%\Test\NUnit.Console-3.7.0\nunit3-console.exe %output%\bin\release-test\Mtgdb.Test.dll
 
 if errorlevel 1 exit /b %errorlevel%

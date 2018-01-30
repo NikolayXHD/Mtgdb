@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Mtgdb
 {
@@ -18,5 +19,7 @@ namespace Mtgdb
 		}
 
 		public static readonly string Endl = Environment.NewLine;
+
+		public static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
 	}
 }

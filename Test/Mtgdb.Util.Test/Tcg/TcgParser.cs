@@ -124,7 +124,7 @@ namespace Mtgdb.Test
 			float? price = null;
 
 			if (priceRaw.StartsWith("$"))
-				price = float.Parse(priceRaw.Substring(1), CultureInfo.InvariantCulture);
+				price = float.Parse(priceRaw.Substring(1), Str.Culture);
 			return price;
 		}
 	}

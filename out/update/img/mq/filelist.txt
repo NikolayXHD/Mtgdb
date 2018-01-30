@@ -31501,6 +31501,9 @@ ce2f72feaf323db44b266442f9f3e85f	USG\Zephid.jpg
 3167900642ae19cde99058d2880c8ccd	UST\Adorable Kitten.jpg
 e8a601e73edf701a5fce9546b05e7496	UST\Aerial Toastmaster.jpg
 0dfe28703a18909b981985ea900c0337	UST\Amateur Auteur1.jpg
+4ab0ab2b41e663f1a3aa7883257d4a37	UST\Amateur Auteur2.jpg
+6ea403897ad57edc016aac944b10e3b5	UST\Amateur Auteur3.jpg
+6860f6131f2111d7fde39588eff7ceae	UST\Amateur Auteur4.jpg
 5fe5af2022a5db4234cfcb9abdf037a8	UST\Angelic Rocket.jpg
 08fe8580e71357f1433a42f69accaaae	UST\Animate Library.jpg
 8583097c30776405201c1ea72ca27dc0	UST\Applied Aeronautics.jpg
@@ -31509,6 +31512,9 @@ e8a601e73edf701a5fce9546b05e7496	UST\Aerial Toastmaster.jpg
 0c4878bf86c29e990e34704cb7ffebc2	UST\Auto-Key.jpg
 bbb480324cb093e5e2312202faace8d9	UST\Baron Von Count.jpg
 0835ea636deeb652a1ea1daf6adbc7db	UST\Beast in Show1.jpg
+2759a4cc20d934c3da4e24e77065f575	UST\Beast in Show2.jpg
+4d81d74dc88667b11ea43729b557620e	UST\Beast in Show3.jpg
+bab7e18d868a51c8108781d8d19253c5	UST\Beast in Show4.jpg
 8b3b04a6d5451c87829f2be6932225ab	UST\Bee-Bee Gun.jpg
 7823dbb2ac14da519bb5568aefe3585f	UST\Better Than One.jpg
 784826a984caf9cbd5750efeb0c48b24	UST\Big Boa Constrictor.jpg
@@ -31536,6 +31542,8 @@ f8e150b92ea72007935f5f8519817778	UST\Crow Storm.jpg
 9e1fa7f942971754b489b23446661ab1	UST\Curious Killbot.jpg
 c199a7d69df6e5d8bb0ae3dc228aca27	UST\Deadly Poison Sampler.jpg
 dc62214cd4c7539df30a3c909e4c0068	UST\Defective Detective.jpg
+1b65655ed0b67431cd6134bbc61648ad	UST\Delighted Killbot.jpg
+f018acfb669a7c79ada61c75f0b0e3f0	UST\Despondent Killbot.jpg
 b3529514d0e7154226b9cb17ab2244c9	UST\Dictation Quillograph.jpg
 4f84b94f882f2c2ee68436801483b29f	UST\Dirty Rat.jpg
 6d3ec5711d0531e561a1e30cf9371477	UST\Dispatch Dispensary.jpg
@@ -31548,9 +31556,13 @@ e19d3b57cdc3e101b53f0e01cae1d068	UST\Dogsnail Engine.jpg
 d575df6445f324804ef3153b3915d312	UST\Duplication Device.jpg
 26fc858f3c4b26770850a627536d9210	UST\Eager Beaver.jpg
 75ffd946c78f14c82f63592f2b95f9c3	UST\Earl of Squirrel.jpg
+0c35980657c805602c722db9bb9161aa	UST\Enraged Killbot.jpg
 a8d9ee7b0838e92dfdac081c7790b725	UST\Entirely Normal Armchair.jpg
 f9682a84e35a428330bcf0152cffaa0a	UST\Everythingamajig1.jpg
 37a94f5f97c05f6c4b84c68d37f5b5f6	UST\Extremely Slow Zombie1.jpg
+50c0cb93bffb32c3eab841d1e9330251	UST\Extremely Slow Zombie2.jpg
+0295ad34c462993b7f4e2f40aa979aa1	UST\Extremely Slow Zombie3.jpg
+2052af9dac7185b94dd2bbda11ca2043	UST\Extremely Slow Zombie4.jpg
 43f26325d275692a1f9478e38b991e03	UST\Faerie Aerie.jpg
 9e678daf2df70d00786ccb67fb6f723f	UST\Feisty Stegosaurus.jpg
 00b4a7f7e1e42828f36a381365555250	UST\Finders, Keepers.jpg
@@ -31623,6 +31635,9 @@ d82879c1e2120ff3adda111dd5c800ae	UST\Monkey-.jpg
 e6edcbac1823e1b48aa9c7189836e363	UST\Neural Network.jpg
 afcb2651c9629442bf29d9526254540e	UST\Ninja.jpg
 a3127bf7036f66eca32d629b90dcba3a	UST\Novellamental1.jpg
+58db361f48390af3d59fbdf3e6c4da41	UST\Novellamental2.jpg
+f33a9f8992bb6130955230be4be0e57b	UST\Novellamental3.jpg
+c1b8107efa39762fa412e41eba726b33	UST\Novellamental4.jpg
 aa107bf7f4d5bce0597e8f87b85ef8f4	UST\Numbing Jellyfish.jpg
 3bedd1bdee9c3b29998cf67f9541ced2	UST\Oaken Power Suit.jpg
 d0ccc147ddf10572a195275528a45e7d	UST\Oddly Uneven.jpg
@@ -31652,6 +31667,10 @@ bf5c996cac2a75b11679335884ffb1da	UST\Rules Lawyer.jpg
 070adb0b6f4d7990591f342cec0df630	UST\Sacrifice Play.jpg
 6f234949a333b75157f8adfadaf77844	UST\Sap Sucker.jpg
 307b19e4eaad254605ade2db7ddaae08	UST\Secret Base1.jpg
+383f8d8df1ab6c96c4dca7eac41f870b	UST\Secret Base2.jpg
+626957d4c5fe9f8ff4c31676e628906d	UST\Secret Base3.jpg
+fa45289a83def3474cd167915ab925e1	UST\Secret Base4.jpg
+63da8317a7b7e91cec6a8b85c00b6164	UST\Secret Base5.jpg
 3293279c499e10693417483cdf0b0a6a	UST\Selfie Preservation.jpg
 7520a2efc73eb16c2f718064bbb8ba4b	UST\Serpentine.jpg
 8da46fe86628e232f21ff8ff9d54b658	UST\Shaggy Camel.jpg
@@ -31688,6 +31707,9 @@ e203bbcbdb08b452f2ee7771c8b0a9f2	UST\Super-Duper Death Ray.jpg
 b5fcf636a9297bd43cc038317e70d6bc	UST\Swamp.jpg
 e7c50a7b5e930511cee1eb08c23a7005	UST\Sword of Dungeons & Dragons.jpg
 9c60fc4538217188593936eac478ec31	UST\Target Minotaur1.jpg
+e28dce388b547dc77701ac568d3e28b7	UST\Target Minotaur2.jpg
+8d2d2257a356e448a1ba42d90930e87e	UST\Target Minotaur3.jpg
+b617f3d24658fc3a0d14748f1d8500cc	UST\Target Minotaur4.jpg
 e21224700fdd15ff2d324d27fa24231f	UST\Targeting Rocket.jpg
 e8554086e91431de353dd3442297b84b	UST\Teacher's Pet.jpg
 915f2e8fe60cc82b5544d982f88397df	UST\The Big Idea.jpg
@@ -31838,6 +31860,35 @@ d6adeaf6719b6593fd6ad8603515ce42	V16\Mind's Desire.jpg
 71b78c87fcf14c5dfc75c39e73e0d238	V16\Tolaria West.jpg
 4370c6ff6ce175cab14289694848e020	V16\Umezawa's Jitte.jpg
 b2daee361d1bda47aa2b513cb4d229ff	V16\Unmask.jpg
+83a62549fc5dd05ade235c64abcbad48	V17\Archangel Avacyn.jpg
+235ca47cb5a9de97bc2a0bca9fab8d31	V17\Arguel's Blood Fast.jpg
+65ff8a317855618b5cece836432bc4ae	V17\Arlinn Kord.jpg
+0b9572c20c7e055d657de05bee219604	V17\Arlinn, Embraced by the Moon.jpg
+da0b06ab8812027e1e0ed636eaf9060e	V17\Avacyn, the Purifier.jpg
+4249619f04be7738b32e253f30176ff3	V17\Bloodline Keeper.jpg
+71ade56be7f9905d791e46c7accc80d3	V17\Brisela, Voice of Nightmares.jpg
+e9de1d7d4495c588e3c3932ecc6a310f	V17\Bruna, the Fading Light.jpg
+f8f340472c6b2d55d93f1e4a04b061cf	V17\Chandra, Fire of Kaladesh.jpg
+f910ad8bb9b5d6b7acf3852d34739129	V17\Chandra, Roaring Flame.jpg
+12ccffc8d5fb82a42965e06a696a895b	V17\Delver of Secrets.jpg
+c76912ada8cabd0c1fd651ede7779d7b	V17\Elbrus, the Binding Blade.jpg
+74b1b2187573aefc5fcc36852206cd34	V17\Garruk Relentless.jpg
+4a60a12b8be8cb874c510c53905aef3c	V17\Garruk, the Veil-Cursed.jpg
+e8d2e0da038a77ffce96f1eed50d08a7	V17\Gideon, Battle-Forged.jpg
+147f7c6ecaa2788e4d346c3bdef78901	V17\Gisela, the Broken Blade.jpg
+1fd14c0fae46705912648b2333a469c0	V17\Huntmaster of the Fells.jpg
+528d9624cf354f83c20e5e5dc8f4ff9e	V17\Insectile Aberration.jpg
+53c2502a34d0c6542e2e144382b95520	V17\Jace, Telepath Unbound.jpg
+bcc8c20b33a78a9515f8dc5c2734658a	V17\Jace, Vryn's Prodigy.jpg
+c0f673229ded464e804b7ad5b761d827	V17\Kytheon, Hero of Akros.jpg
+967dc27934a4d0fba7b0a0ac5d90f4fe	V17\Liliana, Defiant Necromancer.jpg
+98707e338685380645c13c3e3e772b31	V17\Liliana, Heretical Healer.jpg
+bce997f4ad8b92774ef11e8f17a15ab4	V17\Lord of Lineage.jpg
+042aa661db09ca120bc7f13a6e6f8e16	V17\Nissa, Sage Animist.jpg
+91f864dde6b6089e71fdb1ac5547bb1b	V17\Nissa, Vastwood Seer.jpg
+5d823523935554f15f35803adc0b4fda	V17\Ravager of the Fells.jpg
+7830e45d704ab9a2f3de41a3f61bed28	V17\Temple of Aclazotz.jpg
+e8c76c23e9fc5b0d1a4af58a52fb250a	V17\Withengar Unbound.jpg
 9a6f2aa98735e658877c2838ce8a79ab	VAN\Akroma, Angel of Wrath Avatar.jpg
 8fb76495791b01e72131e61ea34a8e4c	VAN\Arcanis, the Omnipotent Avatar.jpg
 9c76d1d0750e54859755b903eee621c8	VAN\Arcbound Overseer Avatar.jpg

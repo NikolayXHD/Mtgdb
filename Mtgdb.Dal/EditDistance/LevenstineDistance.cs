@@ -14,8 +14,8 @@ namespace Mtgdb.Dal.EditDistance
 
 		public EditDistances GetDistances(string userStr, string dictStr)
 		{
-			userStr = userStr.ToLower(CultureInfo.InvariantCulture);
-			dictStr = dictStr.ToLower(CultureInfo.InvariantCulture);
+			userStr = userStr.ToLower(Str.Culture);
+			dictStr = dictStr.ToLower(Str.Culture);
 
 			int userStrLength = userStr.Length;
 			int dictStrLength = dictStr.Length;

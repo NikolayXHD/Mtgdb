@@ -97,8 +97,8 @@ namespace Mtgdb.Dal.Index
 			float floatVal;
 
 			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, CultureInfo.InvariantCulture, out intVal) ||
-				float.TryParse(queryText, NumberStyles.Float, CultureInfo.InvariantCulture, out floatVal);
+				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out intVal) ||
+				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out floatVal);
 			return valueIsNumeric;
 		}
 
