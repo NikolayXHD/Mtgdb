@@ -335,6 +335,9 @@ namespace Mtgdb.Downloader
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
 					write(ImageDownloadProgress);
 					
+					Console.WriteLine("Restart Mtgdb.Gui to see downloaded images immediately.");
+					Console.WriteLine();
+
 					suggestImageDownloading((Button) sender);
 					setButtonsEnabled(true);
 				});

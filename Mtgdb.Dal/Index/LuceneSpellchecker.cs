@@ -16,8 +16,8 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.21 RIX
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.21");
+			// 0.22 V17
+			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.22");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
@@ -370,8 +370,8 @@ namespace Mtgdb.Dal.Index
 			float floatVal;
 
 			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, CultureInfo.InvariantCulture, out intVal) ||
-				float.TryParse(queryText, NumberStyles.Float, CultureInfo.InvariantCulture, out floatVal);
+				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out intVal) ||
+				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out floatVal);
 			return valueIsNumeric;
 		}
 

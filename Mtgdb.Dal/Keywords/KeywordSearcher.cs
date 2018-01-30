@@ -14,8 +14,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.21 RIX
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.21");
+			// 0.22 V17
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.22");
 			_version.Directory.AddPath("keywords.json");
 		}
 

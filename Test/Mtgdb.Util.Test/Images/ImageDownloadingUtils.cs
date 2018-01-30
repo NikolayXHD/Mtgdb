@@ -42,7 +42,8 @@ namespace Mtgdb.Util
 		}
 
 		// [TestCase(MagicspoilerDir, MagicspoilerPreprocessedDir, "XLN")]
-		[TestCase(GathererDir, GathererPreprocessedDir, "RIX.large"), Order(2)]
+		// [TestCase(GathererDir, GathererPreprocessedDir, "RIX.large"), Order(2)]
+		[TestCase(GathererDir, GathererPreprocessedDir, "V17"), Order(2)]
 		public void PreProcessImages(string sourceDir, string targetDir, string subdir)
 		{
 			var sourceImages = Directory.GetFiles(Path.Combine(sourceDir, subdir)).ToArray();
@@ -61,9 +62,11 @@ namespace Mtgdb.Util
 		}
 
 		//[TestCase(GathererDir, "RIX.large", "RIX.jpg"), Order(3)]
-		[TestCase(GathererDir, "RIX", "RIX.jpg")]
+		//[TestCase(GathererDir, "RIX", "RIX.jpg")]
 		//[TestCase(GathererPreprocessedDir, "RIX.large", "RIX.jpg")]
-		[TestCase(GathererPreprocessedDir, "RIX", "RIX.jpg")]
+		//[TestCase(GathererPreprocessedDir, "RIX", "RIX.jpg")]
+		[TestCase(GathererDir, "V17", "V17.jpg")]
+		[TestCase(GathererPreprocessedDir, "V17", "V17.jpg")]
 		public void ConvertToJpg(string dir, string sourceSubdir, string targetSubdir)
 		{
 			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();

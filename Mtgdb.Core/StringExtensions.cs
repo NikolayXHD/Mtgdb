@@ -26,6 +26,12 @@ namespace Mtgdb
 		{
 			var dirInfo = new DirectoryInfo(dir);
 
+			if (!dirInfo.Exists)
+			{
+				dirInfo.Create();
+				return;
+			}
+
 			foreach (var subdirInfo in dirInfo.GetDirectories())
 				subdirInfo.Delete(recursive: true);
 

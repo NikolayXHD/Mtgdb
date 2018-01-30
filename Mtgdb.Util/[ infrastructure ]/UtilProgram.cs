@@ -112,7 +112,7 @@ namespace Mtgdb.Util
 				Console.ReadLine();
 			}
 			
-			integration.Load();
+			integration.Load(enabledImageGroups: new[] { "dev", "xlhq" });
 
 			Console.WriteLine("== Exporting card images ==");
 

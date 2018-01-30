@@ -26,7 +26,7 @@ namespace Mtgdb.Dal
 				c => c.TypeEn,
 				c => c.Rarity,
 				c => c.TextEn,
-				c => c.Cmc.ToString(CultureInfo.InvariantCulture),
+				c => c.Cmc.ToString(Str.Culture),
 				c => c.TextEn,
 				c => c.GeneratedMana
 			};

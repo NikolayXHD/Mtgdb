@@ -29,14 +29,14 @@ namespace Mtgdb.Util
 			_verbose = config.Verbose == true;
 		}
 
-		public void Load()
+		public void Load(string[] enabledImageGroups = null)
 		{
 			Console.WriteLine("== Loading cards ==");
 			_cardRepo.LoadFile();
 			_cardRepo.Load();
 
 			Console.WriteLine("== Loading pictures ==");
-			_imageRepo.LoadFiles();
+			_imageRepo.LoadFiles(enabledImageGroups);
 			_imageRepo.LoadSmall();
 			_imageRepo.LoadZoom();
 

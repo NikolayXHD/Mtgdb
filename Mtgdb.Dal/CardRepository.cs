@@ -112,43 +112,7 @@ namespace Mtgdb.Dal
 		{
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
 
-			if (Str.Equals(card.SetCode, "ZEN"))
-			{
-				// Plains1a.xlhq.jpg -> Plains5.xlhq.jpg
-
-				string modifiedName = null;
-
-				if (card.ImageName.EndsWith("1a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '5';
-				else if (card.ImageName.EndsWith("2a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '6';
-				else if (card.ImageName.EndsWith("3a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '7';
-				else if (card.ImageName.EndsWith("4a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '8';
-
-				if (modifiedName != null)
-					card.ImageName = string.Intern(modifiedName);
-			}
-			else if (Str.Equals(card.SetCode, "AKH"))
-			{
-				if (Str.Equals(card.Rarity, "Basic Land"))
-				{
-					var parts = card.ImageName.SplitTalingNumber();
-					card.ImageName = parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4);
-				}
-			}
-			else if (Str.Equals(card.SetCode, "DD3_DVD"))
-			{
-				if (Str.Equals(card.ImageName, "swamp3"))
-					card.ImageName = "swamp4";
-				else if (Str.Equals(card.ImageName, "swamp4"))
-					card.ImageName = "swamp3";
-			}
-			else if (Str.Equals(card.ImageName, "Sultai Ascendacy"))
-			{
-				card.ImageName = "Sultai Ascendancy";
-			}
+			ImageNamePatcher.Patch(card);
 
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
@@ -235,16 +199,23 @@ namespace Mtgdb.Dal
 			if (string.IsNullOrEmpty(power))
 				return null;
 
-			float result;
-			if (float.TryParse(power, out result))
-				return result;
-
 			var parts = power.Split('+');
 			float sum = 0;
+
 			foreach (string part in parts)
 			{
-				float.TryParse(part, out result);
-				sum += result;
+				float partValue;
+
+				if (part.EndsWith("½"))
+				{
+					if (float.TryParse(part.Substring(0, part.Length - 1), out partValue))
+						sum += partValue + 0.5f;
+				}
+				else
+				{
+					if (float.TryParse(part, out partValue))
+						sum += partValue;
+				}
 			}
 
 			return sum;
@@ -293,7 +264,7 @@ namespace Mtgdb.Dal
 			if (n < 0)
 				n = 1000000 + n;
 
-			return ((int) n).ToString("D7", CultureInfo.InvariantCulture);
+			return ((int) n).ToString("D7", Str.Culture);
 		}
 
 		private static DateTime parseReleaseDate(string releaseDate)
@@ -302,7 +273,7 @@ namespace Mtgdb.Dal
 			{
 				DateTime result;
 
-				if (DateTime.TryParseExact(releaseDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+				if (DateTime.TryParseExact(releaseDate, "yyyy-MM-dd", Str.Culture, DateTimeStyles.None, out result))
 					return result;
 			}
 

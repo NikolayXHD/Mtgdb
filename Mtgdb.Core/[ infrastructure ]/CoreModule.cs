@@ -17,7 +17,7 @@ namespace Mtgdb
 				.ToMethod(loadSettings)
 				.InSingletonScope();
 
-			ApplicationCulture.SetCulture(CultureInfo.InvariantCulture);
+			ApplicationCulture.SetCulture(Str.Culture);
 		}
 
 		private static IAppSettings loadSettings(IContext ctx)

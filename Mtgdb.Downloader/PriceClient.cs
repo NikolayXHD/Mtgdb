@@ -56,7 +56,7 @@ namespace Mtgdb.Downloader
 		private static float? parsePrice(string value)
 		{
 			if (value[0] == '$')
-				return float.Parse(value.Substring(1), CultureInfo.InvariantCulture);
+				return float.Parse(value.Substring(1), Str.Culture);
 
 			return null;
 		}

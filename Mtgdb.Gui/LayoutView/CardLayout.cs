@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 			_fieldName.Text = card?.Name;
 			_fieldManaCost.Text = card?.ManaCost;
 			_fieldType.Text = card?.Type;
-			_fieldCmc.Text = card?.Cmc.ToString(CultureInfo.InvariantCulture);
+			_fieldCmc.Text = card?.Cmc.ToString(Str.Culture);
 			_fieldSetCode.Text = card?.SetCode;
 			_fieldSetName.Text = card?.SetName;
 			_fieldText.Text = card?.Text;
