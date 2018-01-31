@@ -39,7 +39,7 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<ImageCache>()
+			Kernel.Bind<ImageLoader>()
 				.ToSelf()
 				.InSingletonScope();
 

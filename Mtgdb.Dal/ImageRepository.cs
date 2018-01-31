@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ninject;
 using Shell32;
 
 namespace Mtgdb.Dal
@@ -16,23 +15,63 @@ namespace Mtgdb.Dal
 
 		public void LoadFiles(IEnumerable<string> enabledGroups = null)
 		{
+			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
 			var enabledDirectories = _config.GetEnabledDirectories(enabledGroups);
 
-			foreach (var directoryConfig in enabledDirectories)
-				directoryConfig.Path = AppDir.GetRootPath(directoryConfig.Path);
-
-			_directories = getFolders(enabledDirectories, ImageType.Small);
-			_directoriesZoom = getFolders(enabledDirectories, ImageType.Zoom);
-			_directoriesArt = getFolders(enabledDirectories, ImageType.Art);
-
-			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
-
-			loadFiles(filesByDirCache, _directories, _files);
-			loadFiles(filesByDirCache, _directoriesZoom, _filesZoom);
-			loadFiles(filesByDirCache, _directoriesArt, _filesArt);
-
-			IsFileLoadingComplete = true;
+			loadFilesSmall(enabledDirectories, filesByDirCache);
+			loadFilesZoom(enabledDirectories, filesByDirCache);
+			loadFilesArt(enabledDirectories, filesByDirCache);
 		}
+
+		public void LoadFilesSmall()
+		{
+			loadFilesSmall(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+		}
+
+		public void LoadFilesZoom()
+		{
+			loadFilesZoom(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+		}
+
+		public void LoadFilesArt()
+		{
+			loadFilesArt(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+		}
+
+		private void loadFilesSmall(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		{
+			var directories = getFolders(enabledDirectories, ImageType.Small);
+			var files = new HashSet<string>(Str.Comparer);
+
+			loadFiles(filesByDirCache, directories, files);
+
+			_directories = directories;
+			_files = files;
+		}
+
+		private void loadFilesZoom(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		{
+			var directories = getFolders(enabledDirectories, ImageType.Zoom);
+			var files = new HashSet<string>(Str.Comparer);
+
+			loadFiles(filesByDirCache, directories, files);
+
+			_directoriesZoom = directories;
+			_filesZoom = files;
+		}
+
+		private void loadFilesArt(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		{
+			var directories = getFolders(enabledDirectories, ImageType.Art);
+			var files = new HashSet<string>(Str.Comparer);
+
+			loadFiles(filesByDirCache, directories, files);
+
+			_directoriesArt = directories;
+			_filesArt = files;
+		}
+
+
 
 		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
 		{
@@ -85,36 +124,42 @@ namespace Mtgdb.Dal
 			}
 		}
 
+
+
 		public void LoadSmall()
 		{
-			ensureIsFileLoadingComplete();
+			if (!IsLoadingSmallFileComplete)
+				throw new InvalidOperationException($"{nameof(LoadFilesSmall)} must be executed first");
 
-			load(_modelsByNameBySetByVariant, _directories, _files);
+			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 
-			IsLoadingSmallComplete = true;
-			LoadingComplete?.Invoke();
+			load(models, _directories, _files);
+
+			_modelsByNameBySetByVariant = models;
 		}
 
 		public void LoadZoom()
 		{
-			ensureIsFileLoadingComplete();
+			if (!IsLoadingZoomFileComplete)
+				throw new InvalidOperationException($"{nameof(LoadFilesZoom)} must be executed first");
 
-			load(_modelsByNameBySetByVariantZoom, _directoriesZoom, _filesZoom);
-			IsLoadingZoomComplete = true;
+			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
+
+			load(models, _directoriesZoom, _filesZoom);
+
+			_modelsByNameBySetByVariantZoom = models;
 		}
 
 		public void LoadArt()
 		{
-			ensureIsFileLoadingComplete();
+			if (!IsLoadingArtFileComplete)
+				throw new InvalidOperationException($"{nameof(LoadFilesArt)} must be executed first");
 
-			load(_modelsByNameBySetByVariantArt, _directoriesArt, _filesArt, isArt: true);
-			IsLoadingArtComplete = true;
-		}
+			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 
-		private void ensureIsFileLoadingComplete()
-		{
-			if (!IsFileLoadingComplete)
-				throw new InvalidOperationException(nameof(LoadFiles) + " must be completed first");
+			load(models, _directoriesArt, _filesArt, isArt: true);
+
+			_modelsByNameBySetByVariantArt = models;
 		}
 
 		private static void load(
@@ -353,7 +398,12 @@ namespace Mtgdb.Dal
 		public List<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
-			var distinctModels = models?.GroupBy(_ => _.ImageFile.FullPath).Select(_ => _.First().ImageFile.NonRotated()).ToList();
+
+			var distinctModels = models?
+				.GroupBy(_ => _.ImageFile.FullPath)
+				.Select(_ => _.First().ImageFile.NonRotated())
+				.ToList();
+
 			return distinctModels;
 		}
 
@@ -513,40 +563,37 @@ namespace Mtgdb.Dal
 		}
 
 
+		public bool IsLoadingSmallComplete => _modelsByNameBySetByVariant != null;
+		public bool IsLoadingZoomComplete => _modelsByNameBySetByVariantZoom != null;
+		public bool IsLoadingArtComplete => _modelsByNameBySetByVariantArt != null;
 
-		public bool IsLoadingSmallComplete { get; private set; }
-		public bool IsLoadingZoomComplete { get; private set; }
-		public bool IsLoadingArtComplete { get; private set; }
+		private bool IsLoadingSmallFileComplete => _files != null && _directories != null;
+		private bool IsLoadingZoomFileComplete => _filesZoom != null && _directoriesZoom != null;
+		private bool IsLoadingArtFileComplete => _filesArt != null && _directoriesArt != null;
 
-		public bool IsFileLoadingComplete { get; private set; }
 
-		public event Action LoadingComplete;
-
-		private readonly ImageLocationsConfig _config;
-
-		private readonly HashSet<string> _files = new HashSet<string>(Str.Comparer);
-		private readonly HashSet<string> _filesZoom = new HashSet<string>(Str.Comparer);
-		private readonly HashSet<string> _filesArt = new HashSet<string>(Str.Comparer);
+		private HashSet<string> _files;
+		private HashSet<string> _filesZoom;
+		private HashSet<string> _filesArt;
 
 		private IList<DirectoryConfig> _directories;
 		private IList<DirectoryConfig> _directoriesZoom;
 		private IList<DirectoryConfig> _directoriesArt;
 
-		private static readonly HashSet<string> _extensions = new HashSet<string>(Str.Comparer) { ".jpg", ".png" };
+		private Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariant;
+		private Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantZoom;
+		private Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantArt;
 
+
+
+		private static readonly HashSet<string> _extensions = new HashSet<string>(Str.Comparer) { ".jpg", ".png" };
 		private static readonly string[] _metadataSeparator = { "][" };
 		private const char MetadataBegin = '[';
 		private const char MetadataEnd = ']';
 		private static readonly char[] _metadataValueSeparator = { ',', ';' };
 
 
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariant =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
 
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantZoom =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
-
-		private readonly Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> _modelsByNameBySetByVariantArt =
-			new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
+		private readonly ImageLocationsConfig _config;
 	}
 }

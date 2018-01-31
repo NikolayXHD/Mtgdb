@@ -155,7 +155,7 @@ namespace Mtgdb.Gui
 
 		private void zoomCard(Card card)
 		{
-			if (card.ImageModel == null)
+			if (!card.HasImage)
 				return;
 			
 			_formZoom.LoadImages(card);

@@ -7,11 +7,14 @@ using NLog;
 
 namespace Mtgdb.Dal
 {
-	public class ImageCache
+	public class ImageLoader
 	{
+		public event Action CornerRemoved;
+		public event Action FoundInCache;
+
 		public static readonly object SyncRoot = new object();
 
-		public ImageCache(ImageCacheConfig config)
+		public ImageLoader(ImageCacheConfig config)
 		{
 			Capacity = config.GetCacheCapacity();
 		}
@@ -26,7 +29,10 @@ namespace Mtgdb.Dal
 				image = tryGetFromCache(model.ImageFile.FullPath, model.Rotation);
 
 			if (image != null)
+			{
+				FoundInCache?.Invoke();
 				return image;
+			}
 
 			if (!File.Exists(model.ImageFile.FullPath))
 				return null;
@@ -41,7 +47,7 @@ namespace Mtgdb.Dal
 			return image;
 		}
 
-		public static Bitmap LoadImage(ImageModel model, Size size)
+		public Bitmap LoadImage(ImageModel model, Size size)
 		{
 			var original = Open(model);
 
@@ -82,7 +88,7 @@ namespace Mtgdb.Dal
 			return original;
 		}
 
-		public static Bitmap Transform(Bitmap original, ImageFile imageFile, Size size, bool crop)
+		public Bitmap Transform(Bitmap original, ImageFile imageFile, Size size, bool crop)
 		{
 			Bitmap resizedBmp;
 
@@ -125,6 +131,8 @@ namespace Mtgdb.Dal
 			{
 				if (resizedBmp != original)
 					resizedBmp.Dispose();
+
+				CornerRemoved?.Invoke();
 
 				return corneredBmp;
 			}

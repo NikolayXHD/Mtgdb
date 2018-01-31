@@ -46,7 +46,9 @@ namespace Mtgdb.Gui
 			owner.Invoke(delegate
 			{
 				_updateForm.SetWindowLocation(owner);
-				_updateForm.Show(owner);
+
+				if (!_updateForm.Visible)
+					_updateForm.Show(owner);
 
 				if (!_updateForm.Focused)
 					_updateForm.Focus();

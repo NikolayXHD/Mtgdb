@@ -6,7 +6,7 @@ namespace Mtgdb.Dal
 	public class UiModel
 	{
 		public UiModel(
-			ImageCache imageCache,
+			ImageLoader imageLoader,
 			ImageRepository imageRepo,
 			Lazy<CardRepository> cardRepoFactory,
 			[Optional] Lazy<IUiForm> formFactory,
@@ -16,7 +16,7 @@ namespace Mtgdb.Dal
 			_cardRepoFactory = cardRepoFactory;
 
 			Collection = collection;
-			ImageCache = imageCache;
+			ImageLoader = imageLoader;
 			ImageRepo = imageRepo;
 		}
 
@@ -24,7 +24,7 @@ namespace Mtgdb.Dal
 		public CardRepository CardRepo => _cardRepoFactory.Value;
 
 		public ICardCollection Collection { get; }
-		public ImageCache ImageCache { get; }
+		public ImageLoader ImageLoader { get; }
 		public ImageRepository ImageRepo { get; }
 
 		public ICardCollection Deck { get; set; }

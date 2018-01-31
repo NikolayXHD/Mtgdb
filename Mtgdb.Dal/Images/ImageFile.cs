@@ -35,24 +35,11 @@ namespace Mtgdb.Dal
 					!(parts[i].StartsWith("[") && parts[i].EndsWith("]")) && parts[i].Contains(' '));
 
 			Type = string.Join(".", parts.Skip(1 + lastNamePart));
-			string name = string.Join(".", parts.Take(1 + lastNamePart));
 
-			if (Str.Equals(name, "The Ultimate Nightmare of Wizards of the Coast Customer Service"))
-				name = "the ultimate nightmare of wizards of the coastr customer service";
-			else if (Str.Equals(name, "Richard Garfield, Ph.D"))
-				name = "Richard Garfield, Ph.D.";
-			else if (name.StartsWith("Our Market Research", Str.Comparison))
-				name = "our market research shows that players like really long card names so we made";
-			else if (Str.Equals(name, "Two headed Giant of Foriys"))
-				name = "Two-Headed Giant of Foriys";
-			else if (Str.Equals(name, "Will O' The Wisp"))
-				name = "Will-O'-The-Wisp";
-			else if (Str.Equals(name, "_Rumors of My Death . . ._"))
-				name = "Rumors of My Death . . .";
-			else
-				name = name.Replace(" - ", string.Empty);
+			ImageName = string.Intern(
+				string.Join(".", parts.Take(1 + lastNamePart))
+					.Replace(" - ", string.Empty));
 
-			ImageName = string.Intern(name);
 			var nameParts = ImageName.SplitTalingNumber();
 			Name = string.Intern(nameParts.Item1);
 			VariantNumber = nameParts.Item2;

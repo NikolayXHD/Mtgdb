@@ -20,7 +20,7 @@ namespace Mtgdb.Gui
 			CardRepository cardRepo,
 			ImageRepository imageRepo,
 			ImageCacheConfig imageCacheConfig,
-			ImageCache imageCache,
+			ImageLoader imageLoader,
 			SuggestModel suggestModel,
 			CollectionModel collectionModel,
 			LuceneSearcher luceneSearcher,
@@ -38,7 +38,7 @@ namespace Mtgdb.Gui
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
 			_cardRepo = cardRepo;
-			_imageCache = imageCache;
+			_imageLoader = imageLoader;
 			_collectionModel = collectionModel;
 			_uiModel = uiModel;
 			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo, forgeSetRepo);
@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 			_toolTipController = tooltipController;
 			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
 
-			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageCache);
+			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
 			_scrollSubsystem = new ScrollSubsystem(_viewDeck, _viewCards);
 
@@ -98,7 +98,7 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_deckModel,
 				this,
-				_imageCache);
+				_imageLoader);
 
 			_deckEditingSubsystem = new DeckEditingSubsystem(
 				_viewCards,
@@ -127,7 +127,7 @@ namespace Mtgdb.Gui
 				_deckModel,
 				_quickFilterFacade,
 				_legalitySubsystem,
-				_imageCache);
+				_imageLoader);
 
 
 			_printingSubsystem = new PrintingSubsystem(imageRepo, _cardRepo);
@@ -209,7 +209,7 @@ namespace Mtgdb.Gui
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
-			_layoutViewDeck.Height = _imageCache.CardSize
+			_layoutViewDeck.Height = _imageLoader.CardSize
 				.Plus(_layoutViewDeck.LayoutOptions.CardInterval)
 				.Height;
 
@@ -450,7 +450,7 @@ namespace Mtgdb.Gui
 		private readonly bool _keywordsIndexUpToDate;
 
 		private readonly CardRepository _cardRepo;
-		private readonly ImageCache _imageCache;
+		private readonly ImageLoader _imageLoader;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
 		private readonly Evaluators _evaluators;

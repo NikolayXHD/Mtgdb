@@ -15,10 +15,14 @@ namespace Mtgdb.Downloader
 			string newsDir = AppDir.Update.AddPath("notifications");
 
 			_newsArchive = newsDir.AddPath("archive.zip");
-			_unzippedNewsDir = newsDir.AddPath("archive");
 
+			_unzippedNewsDir = newsDir.AddPath("archive");
 			_unreadNewsDir = newsDir.AddPath("new");
 			_readNewsDir = newsDir.AddPath("read");
+
+			Directory.CreateDirectory(_unzippedNewsDir);
+			Directory.CreateDirectory(_unreadNewsDir);
+			Directory.CreateDirectory(_readNewsDir);
 		}
 
 		public void DisplayNews()

@@ -18,6 +18,10 @@ namespace Mtgdb.Dal
 			int margin = (int) Math.Ceiling(size/150f);
 
 			int leftTop = GetLocation(0, 0);
+
+			if (SameColor(leftTop, 0, 0, 0, 0))
+				return;
+
 			int middleTop = GetLocation(Rect.Width/2, margin);
 			int rightTop = GetLocation(Rect.Width - 1, 0);
 			int rightMiddle = GetLocation(Rect.Width - margin, Rect.Height/2);
@@ -35,9 +39,6 @@ namespace Mtgdb.Dal
 					!SameColor(leftTop, leftMiddle));
 
 			if (!hasCorner)
-				return;
-
-			if (SameColor(leftTop, 0, 0, 0, 0))
 				return;
 
 			ImageChanged = true;

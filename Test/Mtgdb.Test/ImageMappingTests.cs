@@ -28,9 +28,11 @@ namespace Mtgdb.Test
 					var small = Repo.GetSmallImage(card, ImgRepo);
 					var zooms = Repo.GetZoomImages(card, ImgRepo);
 
-					Assert.That(small, Is.Not.Null);
-					Assert.That(zooms, Is.Not.Null);
-					Assert.That(zooms, Is.Not.Empty);
+					string message = $"{card.SetCode} {card.ImageName}";
+
+					Assert.That(small, Is.Not.Null, message);
+					Assert.That(zooms, Is.Not.Null, message);
+					Assert.That(zooms, Is.Not.Empty, message);
 				}
 		}
 
