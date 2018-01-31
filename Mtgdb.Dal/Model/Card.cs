@@ -48,29 +48,32 @@ namespace Mtgdb.Dal
 		{
 			get
 			{
-				if (ImageModel == null)
+				var imageModel = GetImageModel();
+
+				if (imageModel == null)
 					return null;
 
-				return UiModel?.ImageCache.GetSmallImage(ImageModel);
+				return UiModel?.ImageLoader.GetSmallImage(imageModel);
 			}
 		}
 
-		[JsonIgnore]
-		public ImageModel ImageModel
+		public ImageModel GetImageModel()
 		{
-			get
+			if (!_imageModelSelected)
 			{
-				if (!_imageModelSelected)
-				{
-					if (UiModel?.CardRepo.IsImageLoadingComplete != true)
-						return null;
+				if (UiModel?.CardRepo.IsImageLoadingComplete != true)
+					return null;
 
-					_imageModel = UiModel?.CardRepo.GetSmallImage(this, UiModel.ImageRepo);
-					_imageModelSelected = true;
-				}
-
-				return _imageModel;
+				_imageModel = UiModel?.CardRepo.GetSmallImage(this, UiModel.ImageRepo);
+				_imageModelSelected = true;
 			}
+
+			return _imageModel;
+		}
+
+		public void ResetImageModel()
+		{
+			_imageModelSelected = false;
 		}
 
 		[JsonIgnore]
@@ -107,7 +110,7 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public bool HasImage => ImageModel != null;
+		public bool HasImage => GetImageModel() != null;
 
 		[JsonIgnore]
 		public float? PowerNum { get; internal set; }
@@ -603,7 +606,7 @@ namespace Mtgdb.Dal
 
 		public void PreloadImage()
 		{
-			UiModel?.ImageCache.GetSmallImage(ImageModel);
+			UiModel?.ImageLoader.GetSmallImage(GetImageModel());
 		}
 
 

@@ -16,12 +16,12 @@ namespace Mtgdb.Util
 			CardRepository cardRepo, 
 			ForgeIntegrationConfig config,
 			ForgeSetRepository forgeSetRepository,
-			ImageCache imageCache)
+			ImageLoader imageLoader)
 		{
 			_imageRepo = imageRepo;
 			_cardRepo = cardRepo;
 			_forgeSetRepository = forgeSetRepository;
-			_imageCache = imageCache;
+			_imageLoader = imageLoader;
 
 			CardPicsPath = Environment.ExpandEnvironmentVariables(config.CardPicsPath);
 			CardPicsBackupPath = Environment.ExpandEnvironmentVariables(config.CardPicsBackupPath);
@@ -99,7 +99,7 @@ namespace Mtgdb.Util
 
 					exported.Add(model.ImageFile.FullPath);
 
-					using (var original = ImageCache.Open(model))
+					using (var original = ImageLoader.Open(model))
 					{
 						string targetFullPath = getTargetPath(card, model.ImageFile, subdir, forge: true);
 
@@ -232,7 +232,7 @@ namespace Mtgdb.Util
 		{
 			byte[] bytes;
 
-			using (var original = ImageCache.Open(replacementModel))
+			using (var original = ImageLoader.Open(replacementModel))
 				bytes = transform(original, replacementModel.ImageFile, small, forge: true);
 
 			if (bytes == null)
@@ -269,9 +269,9 @@ namespace Mtgdb.Util
 
 		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool forge)
 		{
-			var size = small ? _imageCache.CardSize : _imageCache.ZoomedCardSize;
+			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
 
-			var image = ImageCache.Transform(original, replacementImageFile, size, crop: forge);
+			var image = _imageLoader.Transform(original, replacementImageFile, size, crop: forge);
 
 			var result = saveToByteArray(replacementImageFile, image, forge);
 
@@ -377,7 +377,7 @@ namespace Mtgdb.Util
 
 							if (!File.Exists(smallPath))
 							{
-								original = ImageCache.Open(modelSmall);
+								original = ImageLoader.Open(modelSmall);
 								addFile(original, modelSmall.ImageFile, smallPath, small: true, forge: false);
 							}
 						}
@@ -398,7 +398,7 @@ namespace Mtgdb.Util
 								if (original == null || modelSmall.ImageFile.FullPath != modelZoom.ImageFile.FullPath)
 								{
 									original?.Dispose();
-									original = ImageCache.Open(modelZoom);
+									original = ImageLoader.Open(modelZoom);
 								}
 
 								addFile(original, modelZoom.ImageFile, zoomedPath, small: false, forge: false);
@@ -435,7 +435,7 @@ namespace Mtgdb.Util
 		private readonly ImageRepository _imageRepo;
 		private readonly CardRepository _cardRepo;
 		private readonly ForgeSetRepository _forgeSetRepository;
-		private readonly ImageCache _imageCache;
+		private readonly ImageLoader _imageLoader;
 		public readonly string CardPicsPath;
 		public readonly string CardPicsBackupPath;
 		private readonly bool _verbose;

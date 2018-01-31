@@ -57,7 +57,7 @@ namespace Mtgdb.Dal
 				}
 			}
 
-			var sizeCropped = ImageCache.SizeCropped;
+			var sizeCropped = ImageLoader.SizeCropped;
 			float proportion = (float) sizeCropped.Height/sizeCropped.Width;
 			float resultProportion = (float) (Rect.Size.Height - frameHeight)/(Rect.Size.Width - frameWidth);
 

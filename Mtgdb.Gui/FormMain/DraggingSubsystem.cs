@@ -15,13 +15,13 @@ namespace Mtgdb.Gui
 			LayoutView layoutViewCards,
 			DeckModel deckModel,
 			Control parent,
-			ImageCache imageCache)
+			ImageLoader imageLoader)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
 			_deckModel = deckModel;
 			_parent = parent;
-			_imageCache = imageCache;
+			_imageLoader = imageLoader;
 		}
 
 
@@ -324,7 +324,7 @@ namespace Mtgdb.Gui
 				Color.FromArgb(opacity, Color.AliceBlue),
 				LinearGradientMode.BackwardDiagonal);
 
-			e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageCache.CardSize));
+			e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageLoader.CardSize));
 		}
 
 
@@ -374,7 +374,7 @@ namespace Mtgdb.Gui
 		private readonly LayoutView _layoutViewCards;
 		private readonly DeckModel _deckModel;
 		private readonly Control _parent;
-		private readonly ImageCache _imageCache;
+		private readonly ImageLoader _imageLoader;
 		private Cursor _dragCursor;
 	}
 }

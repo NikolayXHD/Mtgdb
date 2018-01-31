@@ -136,7 +136,7 @@
     <Compile Include="EditDistance\LevenstineDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
-    <Compile Include="ImageCache\ImageCache.cs" />
+    <Compile Include="ImageCache\ImageLoader.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\ForeignName.cs" />
     <Compile Include="Images\ImageFile.cs" />

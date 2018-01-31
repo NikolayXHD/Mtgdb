@@ -29,7 +29,7 @@ namespace Mtgdb.Gui
 			DeckModel deckModel,
 			QuickFilterFacade quickFilterFacade,
 			LegalitySubsystem legalitySubsystem,
-			ImageCache imageCache)
+			ImageLoader imageLoader)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
@@ -39,7 +39,7 @@ namespace Mtgdb.Gui
 			_deckModel = deckModel;
 			_quickFilterFacade = quickFilterFacade;
 			_legalitySubsystem = legalitySubsystem;
-			_imageCache = imageCache;
+			_imageLoader = imageLoader;
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
@@ -220,7 +220,7 @@ namespace Mtgdb.Gui
 			var size = new Size(50, 30).ByDpi();
 
 			var rect = new Rectangle(
-				e.Bounds.Left + (_imageCache.CardSize.Width - size.Width)/2,
+				e.Bounds.Left + (_imageLoader.CardSize.Width - size.Width)/2,
 				e.Bounds.Bottom - size.Height,
 				size.Width,
 				size.Height);
@@ -230,7 +230,7 @@ namespace Mtgdb.Gui
 
 		private Rectangle getWarningRectangle(CustomDrawArgs e)
 		{
-			var stripSize = new Size(_imageCache.CardSize.Width, 30.ByDpiHeight());
+			var stripSize = new Size(_imageLoader.CardSize.Width, 30.ByDpiHeight());
 
 			var rect = new Rectangle(
 				e.Bounds.Left,
@@ -656,7 +656,7 @@ namespace Mtgdb.Gui
 		private readonly DeckModel _deckModel;
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;
-		private readonly ImageCache _imageCache;
+		private readonly ImageLoader _imageLoader;
 		private readonly MtgdbAnalyzer _mtgdbAnalyzer;
 	}
 }

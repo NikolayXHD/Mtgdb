@@ -16,7 +16,7 @@ namespace Mtgdb.Gui
 	{
 		private readonly CardRepository _cardRepository;
 		private readonly ImageRepository _imageRepository;
-		private readonly ImageCache _imageCache;
+		private readonly ImageLoader _imageLoader;
 		private int _imageIndex;
 		private Bitmap _image;
 
@@ -38,12 +38,12 @@ namespace Mtgdb.Gui
 		public FormZoom(
 			CardRepository cardRepository, 
 			ImageRepository imageRepository,
-			ImageCache imageCache)
+			ImageLoader imageLoader)
 			: this()
 		{
 			_cardRepository = cardRepository;
 			_imageRepository = imageRepository;
-			_imageCache = imageCache;
+			_imageLoader = imageLoader;
 
 			BackgroundImageLayout = ImageLayout.Zoom;
 			TransparencyKey = BackColor = _defaultBgColor;
@@ -141,9 +141,9 @@ namespace Mtgdb.Gui
 
 					var size = model.ImageFile.IsArt
 						? getSizeArt()
-						: _imageCache.ZoomedCardSize;
+						: _imageLoader.ZoomedCardSize;
 
-					var image = ImageCache.LoadImage(model, size);
+					var image = _imageLoader.LoadImage(model, size);
 
 					if (image == null)
 						continue;
@@ -159,9 +159,9 @@ namespace Mtgdb.Gui
 
 					var size = model.ImageFile.IsArt
 						? getSizeArt()
-						: _imageCache.ZoomedCardSize;
+						: _imageLoader.ZoomedCardSize;
 
-					var image = ImageCache.LoadImage(model, size);
+					var image = _imageLoader.LoadImage(model, size);
 
 					if (image == null)
 						continue;

@@ -44,7 +44,9 @@ namespace Mtgdb.Downloader
 			ImageDownloadProgressReader imageDownloadProgressReader,
 			NewsService newsService,
 			PriceDownloader priceDownloader,
-			PriceRepository priceRepository)
+			PriceRepository priceRepository,
+			ImageRepository imageRepository,
+			CardRepository cardRepository)
 			:this()
 		{
 			_installer = installer;
@@ -53,6 +55,8 @@ namespace Mtgdb.Downloader
 			_newsService = newsService;
 			_priceDownloader = priceDownloader;
 			_priceRepository = priceRepository;
+			_imageRepository = imageRepository;
+			_cardRepository = cardRepository;
 
 			_buttonApp.Click += appClick;
 			_buttonImgLq.Click += imgLqClick;
@@ -335,13 +339,37 @@ namespace Mtgdb.Downloader
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
 					write(ImageDownloadProgress);
 					
-					Console.WriteLine("Restart Mtgdb.Gui to see downloaded images immediately.");
-					Console.WriteLine();
+					Console.Write("Reloading images...");
+
+					switch (quality)
+					{
+						case ImageQuality.Low:
+							_imageRepository.LoadFilesSmall();
+							_imageRepository.LoadSmall();
+							resetCardImages();
+							break;
+						case ImageQuality.Medium:
+							_imageRepository.LoadFilesZoom();
+							_imageRepository.LoadZoom();
+							break;
+						case ImageQuality.Art:
+							_imageRepository.LoadFilesArt();
+							_imageRepository.LoadArt();
+							break;
+					}
+
+					Console.WriteLine(" Done");
 
 					suggestImageDownloading((Button) sender);
 					setButtonsEnabled(true);
 				});
 			}
+		}
+
+		private void resetCardImages()
+		{
+			foreach (var card in _cardRepository.Cards)
+				card.ResetImageModel();
 		}
 
 		private static void write(IList<ImageDownloadProgress> imageDownloadProgresses)
@@ -560,6 +588,8 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly NewsService _newsService;
 		private readonly PriceDownloader _priceDownloader;
 		private readonly PriceRepository _priceRepository;
+		private readonly ImageRepository _imageRepository;
+		private readonly CardRepository _cardRepository;
 		private readonly VersionComparer _versionComparer = new VersionComparer();
 
 		private bool _downloadingImages;

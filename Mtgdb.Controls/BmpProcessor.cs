@@ -77,7 +77,7 @@ namespace Mtgdb.Controls
 		}
 
 		private const int ByesPerPixel = 4;
-		private const int ColorSimilarityThreshold = 40;
+		private const int ColorSimilarityThreshold = 20;
 		private readonly Bitmap _bmp;
 	}
 }

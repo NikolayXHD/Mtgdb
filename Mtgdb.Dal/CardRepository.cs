@@ -295,7 +295,7 @@ namespace Mtgdb.Dal
 					continue;
 
 				var namesakeWithImage = CardsByName.TryGet(namesakeName)
-					?.FirstOrDefault(_ => _.ImageModel != null);
+					?.FirstOrDefault(_ => _.HasImage);
 
 				if (namesakeWithImage != null)
 					forms.Add(namesakeWithImage);

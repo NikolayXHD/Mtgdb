@@ -73,7 +73,7 @@ namespace Mtgdb.Gui
 				{
 					var card = _cardRepository.CardsById[cardsId];
 
-					if (card.ImageModel == null)
+					if (!card.HasImage)
 						continue;
 
 					var model = _imageRepository.GetImagePrint(card, _cardRepository.GetReleaseDateSimilarity);
