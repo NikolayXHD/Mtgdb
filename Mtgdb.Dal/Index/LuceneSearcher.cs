@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 
 		public LuceneSearcher()
 		{
-			// 0.22 V17
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.22");
+			// 0.23 udpated translations
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.23");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
