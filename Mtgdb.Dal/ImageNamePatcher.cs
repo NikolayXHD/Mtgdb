@@ -90,7 +90,7 @@ namespace Mtgdb.Dal
 		{
 			char letterNumber = match.Groups["num"].Value[0];
 
-			var result = (1 + char.GetNumericValue(letterNumber) - char.GetNumericValue('a'))
+			var result = (1 + letterNumber - 'a')
 				.ToString(Str.Culture);
 
 			return result;
