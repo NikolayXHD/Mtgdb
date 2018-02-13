@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal
 {
@@ -6,84 +8,42 @@ namespace Mtgdb.Dal
 	{
 		public static void Patch(Card card)
 		{
-			if (Str.Equals(card.SetCode, "ZEN"))
+			string fixedName;
+			Tuple<Regex, MatchEvaluator> regexReplacement;
+
+			if (tryGetFixedName(card, out fixedName))
 			{
-				// Plains1a.xlhq.jpg -> Plains5.xlhq.jpg
+				card.ImageName = fixedName;
+			}
+			else if (_replacementBySet.TryGetValue(card.SetCode, out regexReplacement))
+			{
+				var pattern = regexReplacement.Item1;
+				var replacement = regexReplacement.Item2;
 
-				string modifiedName = null;
-
-				if (card.ImageName.EndsWith("1a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '5';
-				else if (card.ImageName.EndsWith("2a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '6';
-				else if (card.ImageName.EndsWith("3a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '7';
-				else if (card.ImageName.EndsWith("4a", Str.Comparison))
-					modifiedName = card.ImageName.Substring(0, card.ImageName.Length - 2) + '8';
-
-				if (modifiedName != null)
-					card.ImageName = string.Intern(modifiedName);
+				card.ImageName = string.Intern(pattern.Replace(card.ImageName, replacement));
 			}
 			else if (Str.Equals(card.SetCode, "AKH"))
 			{
 				if (Str.Equals(card.Rarity, "Basic Land"))
 				{
 					var parts = card.ImageName.SplitTalingNumber();
-					card.ImageName = parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4);
+					card.ImageName = string.Intern(
+						parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4));
 				}
 			}
-			else if (Str.Equals(card.SetCode, "UST"))
-			{
-				if (Str.Equals(card.ImageName, "Rumors of My Death . . ."))
-					card.ImageName = "_Rumors of My Death . . ._";
-				else
-					card.ImageName = _unstableSetPattern.Replace(card.ImageName, unstableSetReplacement);
-			}
-			else if (Str.Equals(card.SetCode, "UNH"))
-			{
-				if (Str.Equals(card.ImageName, "curse of the fire penguin creature"))
-					card.ImageName = "curse of the fire penguin";
-				else if (Str.Equals(card.ImageName, "whowhatwhenwherewhy"))
-					card.ImageName = "who what when where why";
-				else if (Str.Equals(card.ImageName, "richard garfield, ph.d."))
-					card.ImageName = "richard garfield, ph.d";
-				else if (Str.Equals(card.ImageName, "our market research shows that players like really long card names so we made"))
-					card.ImageName = "Our Market Research...";
-			}
-			else if (Str.Equals(card.SetCode, "UGL"))
-			{
-				if (Str.Equals(card.ImageName, "b.f.m. (big furry monster)1") ||
-					Str.Equals(card.ImageName, "b.f.m. (big furry monster)2"))
-				{
-					card.ImageName = "b.f.m. 1";
-				}
-				else if (Str.Equals(card.ImageName, "b.f.m. (big furry monster, right side)1") ||
-					Str.Equals(card.ImageName, "b.f.m. (big furry monster, right side)2"))
-				{
-					card.ImageName = "b.f.m. 2";
-				}
-				else if (Str.Equals(card.ImageName, "the ultimate nightmare of wizards of the coastr customer service"))
-					card.ImageName = "The Ultimate Nightmare of Wizards of the Coast Customer Service";
-			}
-			else if (Str.Equals(card.SetCode, "DD3_DVD"))
-			{
-				if (Str.Equals(card.ImageName, "swamp3"))
-					card.ImageName = "swamp4";
-				else if (Str.Equals(card.ImageName, "swamp4"))
-					card.ImageName = "swamp3";
-			}
-			else if (Str.Equals(card.ImageName, "Sultai Ascendacy"))
-			{
-				card.ImageName = "Sultai Ascendancy";
-			}
-			else if (Str.Equals(card.ImageName, "Two-Headed Giant of Foriys"))
-			{
-				card.ImageName = "Two headed Giant of Foriys";
-			}
-			else if (Str.Equals(card.ImageName, "Will-O'-The-Wisp"))
-			{
-				card.ImageName = "Will O' The Wisp";
-			}
+		}
+
+		private static bool tryGetFixedName(Card card, out string fixedName)
+		{
+			Dictionary<string, string> setFixedNames;
+
+			if (_fixedNamesBySet[string.Empty].TryGetValue(card.ImageName, out fixedName))
+				return true;
+
+			if (_fixedNamesBySet.TryGetValue(card.SetCode, out setFixedNames))
+				return setFixedNames.TryGetValue(card.ImageName, out fixedName);
+
+			return false;
 		}
 
 		private static string unstableSetReplacement(Match match)
@@ -96,8 +56,72 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		private static readonly Regex _unstableSetPattern = new Regex(
-			@" \((?<num>[a-f])\)$",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static string zendikarSetReplacement(Match match)
+		{
+			// Plains1a.xlhq.jpg -> Plains5.xlhq.jpg
+
+			char letterNumber = match.Groups["num"].Value[0];
+
+			var result = (4 + letterNumber - '0')
+				.ToString(Str.Culture);
+
+			return result;
+		}
+
+		private static readonly Dictionary<string, Tuple<Regex, MatchEvaluator>> _replacementBySet =
+			new Dictionary<string, Tuple<Regex, MatchEvaluator>>(Str.Comparer)
+			{
+				["UST"] = new Tuple<Regex, MatchEvaluator>(
+					new Regex(
+						@" \((?<num>[a-f])\)$",
+						RegexOptions.Compiled | RegexOptions.IgnoreCase),
+					unstableSetReplacement),
+
+				["ZEN"] = new Tuple<Regex, MatchEvaluator>(
+					new Regex(
+						@"(?<num>[1-4])a$",
+						RegexOptions.Compiled | RegexOptions.IgnoreCase),
+					zendikarSetReplacement)
+			};
+
+		private static readonly Dictionary<string, Dictionary<string, string>> _fixedNamesBySet = new Dictionary<string, Dictionary<string, string>>(Str.Comparer)
+		{
+			[String.Empty] = new Dictionary<string, string>(Str.Comparer)
+			{
+				["Sultai Ascendacy"] = "Sultai Ascendancy",
+				["Two-Headed Giant of Foriys"] = "Two headed Giant of Foriys",
+				["Will-O'-The-Wisp"] = "Will O' The Wisp"
+			},
+
+			["DD3_DVD"] = new Dictionary<string, string>(Str.Comparer)
+			{
+				["swamp3"] = "swamp4",
+				["swamp4"] = "swamp3"
+			},
+
+			["UGL"] = new Dictionary<string, string>(Str.Comparer)
+			{
+				["b.f.m. (big furry monster)1"] = "b.f.m. 1",
+				["b.f.m. (big furry monster)2"] = "b.f.m. 1",
+
+				["b.f.m. (big furry monster, right side)1"] = "b.f.m. 2",
+				["b.f.m. (big furry monster, right side)2"] = "b.f.m. 2",
+
+				["the ultimate nightmare of wizards of the coastr customer service"] = "The Ultimate Nightmare of Wizards of the Coast Customer Service"
+			},
+
+			["UNH"] = new Dictionary<string, string>(Str.Comparer)
+			{
+				["curse of the fire penguin creature"] = "curse of the fire penguin",
+				["whowhatwhenwherewhy"] = "who what when where why",
+				["richard garfield, ph.d."] = "richard garfield, ph.d",
+				["our market research shows that players like really long card names so we made"] = "Our Market Research..."
+			},
+
+			["UST"] = new Dictionary<string, string>(Str.Comparer)
+			{
+				["Rumors of My Death . . ."] = "_Rumors of My Death . . ._"
+			}
+		};
 	}
 }
