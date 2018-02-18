@@ -1,7 +1,3 @@
-https://boardgames.stackexchange.com/questions/9561/software-to-search-for-mtg-decks-based-on-a-list-of-cards
-	[ ] I'm looking for something that searches for a deck based on the cards you have (or on a list you provide).
-	deck searching page example http://sales.starcitygames.com/deckdatabase/index.php
-
 Incorporating new sets checklist
 ================================
 
@@ -32,15 +28,15 @@ Images
 
 download new gatherer images
   by using ImageDownloadingUtils tests
+  
 verify new images are used
   by adding test case to Set_images_are_from_expected_directory
+  
 visually inspect set images
-	by running Mtgdb.Gui
+  by running Mtgdb.Gui
+  
 use select images.bat and sign images.bat
 create new MEGA directories
 add them to config
 upload new images to mega storage
 create update notification for users
-
-Run unit tests
---------------

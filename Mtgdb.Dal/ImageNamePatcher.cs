@@ -86,7 +86,7 @@ namespace Mtgdb.Dal
 
 		private static readonly Dictionary<string, Dictionary<string, string>> _fixedNamesBySet = new Dictionary<string, Dictionary<string, string>>(Str.Comparer)
 		{
-			[String.Empty] = new Dictionary<string, string>(Str.Comparer)
+			[string.Empty] = new Dictionary<string, string>(Str.Comparer)
 			{
 				["Sultai Ascendacy"] = "Sultai Ascendancy",
 				["Two-Headed Giant of Foriys"] = "Two headed Giant of Foriys",
