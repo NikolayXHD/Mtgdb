@@ -31,17 +31,11 @@ Seek for unknown patterns for generating mana.
 Images
 ------
 
-download new gatherer images
+download new gatherer images by using ImageDownloadingUtils tests
   
-  by using ImageDownloadingUtils tests
+verify new images are used by adding test case to Set_images_are_from_expected_directory
   
-verify new images are used
-  
-  by adding test case to Set_images_are_from_expected_directory
-  
-visually inspect set images
-  
-  by running Mtgdb.Gui
+visually inspect set images by running Mtgdb.Gui
   
 use select images.bat and sign images.bat
 
