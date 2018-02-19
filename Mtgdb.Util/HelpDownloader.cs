@@ -13,19 +13,19 @@ namespace Mtgdb.Util
 	{
 		public void UpdateLocalHelp()
 		{
-			var helpFiles = getHelpFiles();
+			var helpFileNames = getHelpFileNames();
 
 			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\template.html"));
 
-			foreach (string helpFile in helpFiles)
+			foreach (string helpFileName in helpFileNames)
 			{
-				var htmlFile = AppDir.Root.AddPath($"help\\{getPageName(helpFile)}.html");
-				string htmlPage = getHtmlPage(helpFile, htmlTemplate, helpFiles);
+				var htmlFile = AppDir.Root.AddPath($"help\\{getPageName(helpFileName)}.html");
+				string htmlPage = getHtmlPage(helpFileName, htmlTemplate, helpFileNames);
 				File.WriteAllText(htmlFile, htmlPage);
 			}
 		}
 
-		private static string[] getHelpFiles()
+		private static string[] getHelpFileNames()
 		{
 			var helpFiles = Directory.GetFiles(
 				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
@@ -39,9 +39,10 @@ namespace Mtgdb.Util
 			return Path.GetFileNameWithoutExtension(helpFile);
 		}
 
-		private static string getHtmlPage(string mdFile, string htmlTemplate, IList<string> mdFiles)
+		private static string getHtmlPage(string helpFileName, string htmlTemplate, IList<string> helpFileNames)
 		{
-			string htmlContent = getContent(mdFile);
+			string htmlContent = getOnlineHelpContent(helpFileName);
+			htmlContent = trimSeoSectionFrom(htmlContent);
 
 			foreach (string imgDirUrl in _imgDirUrls)
 				htmlContent = htmlContent
@@ -49,16 +50,17 @@ namespace Mtgdb.Util
 
 			htmlContent = htmlContent.Replace("id=\"user-content-", "id=\"");
 
-			var hrefRegex = new Regex("(?<prefix>href=\"[^\"]*)(?<name>" + 
-				string.Join("|", mdFiles.Select(f => Regex.Escape(HttpUtility.HtmlEncode(Path.GetFileNameWithoutExtension(f))))) 
-				+ ")(?<postfix>[^\"]*\")",
+			var hrefRegex = new Regex(
+				"(?<prefix>href=\"[^\"]*)(?<name>" +
+				string.Join("|", helpFileNames.Select(f => Regex.Escape(HttpUtility.HtmlEncode(Path.GetFileNameWithoutExtension(f))))) +
+				")(?<postfix>[^\"]*\")",
 				RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 			htmlContent = hrefRegex.Replace(htmlContent, "${prefix}${name}.html${postfix}");
 			
-			string title = getPageTitle(mdFile);
+			string title = getPageTitle(helpFileName);
 
-			var navigationItems = getNavigationItems(mdFile, mdFiles);
+			var navigationItems = getNavigationItems(helpFileName, helpFileNames);
 
 			var htmlPage = htmlTemplate
 				.Replace("<!--Header-->", $"Mtgdb.Gui help - {title}")
@@ -68,14 +70,37 @@ namespace Mtgdb.Util
 			return htmlPage;
 		}
 
-		private static string getContent(string mdFile)
+		private static string trimSeoSectionFrom(string htmlContent)
+		{
+			if (!htmlContent.StartsWith(HelpContentOpenElement, Str.Comparison))
+				throw new FormatException("Unexpected html content start");
+
+			if (!htmlContent.EndsWith(HelpContentCloseElement, Str.Comparison))
+				throw new FormatException("Unexpected html content end");
+
+			var seoStartIndex = htmlContent.IndexOf("seo phrases", Str.Comparison);
+
+			if (seoStartIndex < 0)
+				return htmlContent;
+
+			var headerMatches = _htmlHeaderTagRegex.Matches(htmlContent);
+			var lastHeaderMatch = headerMatches.OfType<Match>().LastOrDefault(_ => _.Index < seoStartIndex);
+
+			if (lastHeaderMatch == null)
+				return htmlContent;
+
+			string result = htmlContent.Substring(0, lastHeaderMatch.Index) + HelpContentCloseElement;
+			return result;
+		}
+
+		private static string getOnlineHelpContent(string helpFileName)
 		{
 			var client = new WebClientBase();
-			string name = Path.GetFileNameWithoutExtension(mdFile);
+			string name = Path.GetFileNameWithoutExtension(helpFileName);
 
 			var pageContent = client.DownloadString("https://github.com/NikolayXHD/Mtgdb/wiki/" + name);
 
-			var startIndex = pageContent.IndexOf("<div class=\"markdown-body\">", Str.Comparison);
+			var startIndex = pageContent.IndexOf(HelpContentOpenElement, Str.Comparison);
 			var contentPrefix = pageContent.Substring(startIndex);
 
 			var openers = new Regex("<div").Matches(contentPrefix);
@@ -128,6 +153,12 @@ namespace Mtgdb.Util
 			title = title.Substring(0, 1).ToUpperInvariant() + title.Substring(1);
 			return title;
 		}
+
+		private static readonly Regex _htmlHeaderTagRegex = new Regex("<h[1-6]>",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+		private const string HelpContentOpenElement = "<div class=\"markdown-body\">";
+		private const string HelpContentCloseElement = "</div>";
 
 		private static readonly string[] _imgDirUrls =
 		{

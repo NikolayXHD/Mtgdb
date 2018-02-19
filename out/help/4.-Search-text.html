@@ -29,17 +29,77 @@
 		</div>
 		<div class="markdown-body">
           <a href="l/search_intellisense.jpg"><img alt="l/search_intellisense.jpg" src="l/search_intellisense.jpg"></a>
+<a name="user-content-basic-examples"></a>
+<h2>
+<a id="basic-examples" class="anchor" href="#basic-examples" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Basic examples</h2>
+<table>
+<colgroup>
+<col width="32%">
+<col width="68%">
+</colgroup>
+<tbody valign="top">
+<tr>
+<td><code>llanowar elves</code></td>
+<td>yields cards that have <em>either</em> <strong>llanowar</strong> <em>OR</em> <strong>elves</strong>  in
+<em>any field</em>
+</td>
+</tr>
+<tr>
+<td><code>"llanowar elves"</code></td>
+<td>in contrast yelds the card that contain <em>both words in exactly
+same order</em> in <em>some field</em>
+</td>
+</tr>
+<tr>
+<td><code>name:"llanowar elves"</code></td>
+<td>restricts the search to <em>name</em> field only</td>
+</tr>
+<tr>
+<td><code>llanowar AND elves</code></td>
+<td>requres both words to be present without restricting the order of
+words nor requiring them to appear in the same field</td>
+</tr>
+</tbody>
+</table>
+<a name="user-content-caveats"></a>
+<h2>
+<a id="caveats" class="anchor" href="#caveats" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Caveats</h2>
+<table>
+<colgroup>
+<col width="32%">
+<col width="68%">
+</colgroup>
+<tbody valign="top">
+<tr>
+<td><code>name: shivan dragon</code></td>
+<td>
+<p><em>will not</em> search cards with name <strong>shivan dragon</strong> because the
+query is equivalent to <code>name: shivan OR *:dragon</code> where <code>*</code>
+means <strong>any field</strong>.</p>
+<p>Each unquoted word is a separate term joined to others by <code>OR</code>
+unless you write <code>AND</code> between them.</p>
+<p>Correct queries would be <code>name: "shivan dragon"</code> or
+<code>name:(shivan OR dragon)</code></p>
+</td>
+</tr>
+<tr>
+<td><code>angel OR demon</code></td>
+<td>
+<em>will not</em> match words like <code>angelic</code>. Use wildcards <code>*</code> and
+<code>?</code> to search by partial word, e.g. <code>angel*</code>
+</td>
+</tr>
+<tr>
+<td> </td>
+<td>Search is case-INsensitive. However boolean operators <code>AND</code>
+<code>OR</code> <code>NOT</code> must be written uppercase.</td>
+</tr>
+</tbody>
+</table>
 <a name="user-content-syntax"></a>
 <h2>
 <a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Syntax</h2>
-<p>Search text works in <a href="https://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" rel="nofollow">Lucene query language</a>.</p>
-<p>Searching is case-INsensitive.</p>
-<p>The default operator is <code>OR</code>.</p>
-<p>Use quotes <code>""</code> to search the entire phrase.</p>
-<p>NOTE: <code>name: shivan dragon</code> <em>will not</em> search cards with name <strong>shivan dragon</strong> because the
-query is equivalent to <code>name: shivan OR *:dragon</code> where <code>*</code> means <strong>any field</strong>.</p>
-<p>NOTE: <code>angel OR demon</code> <em>will not</em> match words like <code>angelic</code>. Use wildcards <code>*</code> and <code>?</code>
-to search by partial word.</p>
+<p>Query language used in search text is <a href="https://lucene.apache.org/core/4_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" rel="nofollow">Lucene</a>.</p>
 <table>
 <colgroup>
 <col width="27%">
