@@ -1076,7 +1076,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuGeneralSettings.Size = new System.Drawing.Size(186, 26);
 			this._buttonMenuGeneralSettings.TabIndex = 19;
 			this._buttonMenuGeneralSettings.TabStop = false;
-			this._buttonMenuGeneralSettings.Text = "General settings";
+			this._buttonMenuGeneralSettings.Text = "Advanced settings";
 			this._buttonMenuGeneralSettings.UseVisualStyleBackColor = false;
 			// 
 			// _buttonPaste
@@ -1106,7 +1106,7 @@ namespace Mtgdb.Gui
 			this._menuPaste.Controls.Add(this._layoutPaste);
 			this._menuPaste.Location = new System.Drawing.Point(35, 287);
 			this._menuPaste.Name = "_menuPaste";
-			this._menuPaste.Size = new System.Drawing.Size(305, 392);
+			this._menuPaste.Size = new System.Drawing.Size(305, 404);
 			this._menuPaste.TabIndex = 37;
 			this._menuPaste.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -1136,7 +1136,7 @@ namespace Mtgdb.Gui
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.Size = new System.Drawing.Size(303, 390);
+			this._layoutPaste.Size = new System.Drawing.Size(303, 402);
 			this._layoutPaste.TabIndex = 0;
 			// 
 			// _buttonMenuCopyCollection
@@ -1216,7 +1216,7 @@ namespace Mtgdb.Gui
 			this._labelPasteInfo.Location = new System.Drawing.Point(3, 219);
 			this._labelPasteInfo.Margin = new System.Windows.Forms.Padding(3);
 			this._labelPasteInfo.Name = "_labelPasteInfo";
-			this._labelPasteInfo.Size = new System.Drawing.Size(295, 168);
+			this._labelPasteInfo.Size = new System.Drawing.Size(295, 180);
 			this._labelPasteInfo.TabIndex = 35;
 			this._labelPasteInfo.Text = resources.GetString("_labelPasteInfo.Text");
 			this._labelPasteInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
