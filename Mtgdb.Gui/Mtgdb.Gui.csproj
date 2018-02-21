@@ -349,6 +349,10 @@
     <Content Include="Resources\Enchant.png" />
     <Content Include="Resources\Equip.png" />
     <Content Include="Resources\Exile.png" />
+    <None Include="Resources\filters_hide_32.png" />
+    <None Include="Resources\filters_hide_32_hovered.png" />
+    <None Include="Resources\filters_show_32.png" />
+    <None Include="Resources\filters_show_hovered_32.png" />
     <Content Include="Resources\First strike.png" />
     <Content Include="Resources\Flash.png" />
     <Content Include="Resources\Flying.png" />

@@ -293,6 +293,46 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap filters_hide_32 {
+            get {
+                object obj = ResourceManager.GetObject("filters_hide_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filters_hide_32_hovered {
+            get {
+                object obj = ResourceManager.GetObject("filters_hide_32_hovered", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filters_show_32 {
+            get {
+                object obj = ResourceManager.GetObject("filters_show_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filters_show_hovered_32 {
+            get {
+                object obj = ResourceManager.GetObject("filters_show_hovered_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap forge_32 {
             get {
                 object obj = ResourceManager.GetObject("forge_32", resourceCulture);

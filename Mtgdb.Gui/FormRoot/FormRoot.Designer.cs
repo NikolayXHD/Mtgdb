@@ -96,6 +96,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuPasteDeckAppend = new Mtgdb.Controls.CustomCheckBox();
 			this._layoutTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._flowTitleRight = new System.Windows.Forms.FlowLayoutPanel();
+			this._buttonFilterPanels = new Mtgdb.Controls.CustomCheckBox();
 			this._flowTitleLeft = new System.Windows.Forms.FlowLayoutPanel();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
@@ -189,7 +190,7 @@ namespace Mtgdb.Gui
 			this._buttonDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonDonate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDonate.Location = new System.Drawing.Point(438, 3);
+			this._buttonDonate.Location = new System.Drawing.Point(470, 3);
 			this._buttonDonate.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonDonate.Name = "_buttonDonate";
 			this._buttonDonate.Size = new System.Drawing.Size(50, 24);
@@ -209,7 +210,7 @@ namespace Mtgdb.Gui
 			this._buttonDownload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDownload.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
-			this._buttonDownload.Location = new System.Drawing.Point(394, 3);
+			this._buttonDownload.Location = new System.Drawing.Point(426, 3);
 			this._buttonDownload.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonDownload.Name = "_buttonDownload";
 			this._buttonDownload.Size = new System.Drawing.Size(32, 24);
@@ -229,7 +230,7 @@ namespace Mtgdb.Gui
 			this._buttonLanguage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonLanguage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonLanguage.Location = new System.Drawing.Point(324, 3);
+			this._buttonLanguage.Location = new System.Drawing.Point(356, 3);
 			this._buttonLanguage.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonLanguage.Name = "_buttonLanguage";
 			this._buttonLanguage.Size = new System.Drawing.Size(58, 22);
@@ -250,7 +251,7 @@ namespace Mtgdb.Gui
 			this._buttonConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_16;
-			this._buttonConfig.Location = new System.Drawing.Point(292, 3);
+			this._buttonConfig.Location = new System.Drawing.Point(324, 3);
 			this._buttonConfig.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonConfig.Name = "_buttonConfig";
 			this._buttonConfig.Size = new System.Drawing.Size(32, 24);
@@ -1291,16 +1292,38 @@ namespace Mtgdb.Gui
 			this._flowTitleRight.Controls.Add(this._buttonClear);
 			this._flowTitleRight.Controls.Add(this._buttonHelp);
 			this._flowTitleRight.Controls.Add(this._buttonTooltips);
+			this._flowTitleRight.Controls.Add(this._buttonFilterPanels);
 			this._flowTitleRight.Controls.Add(this._buttonConfig);
 			this._flowTitleRight.Controls.Add(this._buttonLanguage);
 			this._flowTitleRight.Controls.Add(this._buttonDownload);
 			this._flowTitleRight.Controls.Add(this._buttonDonate);
-			this._flowTitleRight.Location = new System.Drawing.Point(300, 0);
+			this._flowTitleRight.Location = new System.Drawing.Point(268, 0);
 			this._flowTitleRight.Margin = new System.Windows.Forms.Padding(0);
 			this._flowTitleRight.Name = "_flowTitleRight";
-			this._flowTitleRight.Size = new System.Drawing.Size(500, 27);
+			this._flowTitleRight.Size = new System.Drawing.Size(532, 27);
 			this._flowTitleRight.TabIndex = 1;
 			this._flowTitleRight.WrapContents = false;
+			// 
+			// _buttonFilterPanel
+			// 
+			this._buttonFilterPanels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonFilterPanels.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonFilterPanels.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this._buttonFilterPanels.Checked = true;
+			this._buttonFilterPanels.CheckState = System.Windows.Forms.CheckState.Checked;
+			this._buttonFilterPanels.FlatAppearance.BorderSize = 0;
+			this._buttonFilterPanels.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(220)))));
+			this._buttonFilterPanels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(220)))));
+			this._buttonFilterPanels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(220)))));
+			this._buttonFilterPanels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonFilterPanels.Image = global::Mtgdb.Gui.Properties.Resources.filters_show_32;
+			this._buttonFilterPanels.Location = new System.Drawing.Point(292, 3);
+			this._buttonFilterPanels.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._buttonFilterPanels.Name = "_buttonFilterPanels";
+			this._buttonFilterPanels.Size = new System.Drawing.Size(32, 24);
+			this._buttonFilterPanels.TabIndex = 20;
+			this._buttonFilterPanels.TabStop = false;
+			this._buttonFilterPanels.UseVisualStyleBackColor = true;
 			// 
 			// _flowTitleLeft
 			// 
@@ -1432,5 +1455,6 @@ namespace Mtgdb.Gui
 		private CustomCheckBox _buttonMenuPasteCollection;
 		private CustomCheckBox _buttonMenuCopyDeck;
 		private CustomCheckBox _buttonMenuCopyCollection;
+		private CustomCheckBox _buttonFilterPanels;
 	}
 }

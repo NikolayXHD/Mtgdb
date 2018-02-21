@@ -46,6 +46,10 @@ namespace Mtgdb.Gui
 				"Uncheck this button to disable tooltips.",
 				_buttonTooltips);
 
+			_tooltipController.SetTooltip("Show / hide filter panels",
+				"filter panels are located on top and right edges of the window.",
+				_buttonFilterPanels);
+
 			_tooltipController.SetTooltip("Update",
 				"Shows a window where you can\r\n" +
 				"  * Check for a new version of Mtgdb.Gui\r\n" +

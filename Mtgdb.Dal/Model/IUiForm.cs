@@ -9,7 +9,9 @@ namespace Mtgdb.Dal
 		string Language { get; set; }
 
 		bool HideTooltips { get; set; }
+		bool ShowFilterPanels { get; set; }
 		event Action LanguageChanged;
+		event Action ShowFilterPanelsChanged;
 
 		void NextTab();
 		void PrevTab();

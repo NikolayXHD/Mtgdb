@@ -424,6 +424,26 @@ namespace Mtgdb.Gui
 			_viewCards.Focus();
 		}
 
+		private void showFilterPanelsChanged()
+		{
+			if (!_isTabSelected)
+				return;
+
+			if (restoringSettings())
+				return;
+
+			applyShowFilterPanels();
+
+			historyUpdate();
+		}
+
+		private void applyShowFilterPanels()
+		{
+			_layoutRight.Visible =
+				_panelFilters.Visible =
+					_panelMenu.Visible = _uiModel.Form.ShowFilterPanels;
+		}
+
 		private void languageChanged()
 		{
 			if (!_isTabSelected)

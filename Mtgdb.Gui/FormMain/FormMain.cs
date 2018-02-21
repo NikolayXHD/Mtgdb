@@ -512,6 +512,7 @@ namespace Mtgdb.Gui
 			settings.ShowPartialCards = _uiModel.ShowPartialCards;
 			settings.ShowDeck = _uiModel.ShowDeck;
 			settings.ShowTextualFields = _uiModel.ShowTextualFields;
+			settings.ShowFilterPanels = _uiModel.Form.ShowFilterPanels;
 		}
 
 		private void historyUpdate()
@@ -551,7 +552,8 @@ namespace Mtgdb.Gui
 				SearchResultScroll = _viewCards.VisibleRecordIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
-				ShowTextualFields = !_buttonHideText.Checked
+				ShowTextualFields = !_buttonHideText.Checked,
+				ShowFilterPanels = _uiModel.Form.ShowFilterPanels
 			};
 
 			_historySubsystem.Add(settings);
@@ -616,6 +618,8 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.Checked = settings.ShowDeck == false;
 			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
 			_buttonHideText.Checked = settings.ShowTextualFields == false;
+			_uiModel.Form.ShowFilterPanels = settings.ShowFilterPanels != false;
+			applyShowFilterPanels();
 
 			endRestoreSettings();
 			

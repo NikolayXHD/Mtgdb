@@ -87,6 +87,7 @@ namespace Mtgdb.Gui
 
 			_buttonMenuGeneralSettings.ScaleDpi();
 
+			
 			_buttonMenuOpenDeck.ScaleDpi();
 			_buttonMenuSaveDeck.ScaleDpi();
 			_buttonMenuOpenCollection.ScaleDpi();
@@ -113,11 +114,11 @@ namespace Mtgdb.Gui
 			foreach (var langButton in getLanguageMenuItems())
 				langButton.ScaleDpi();
 
-			foreach (var leftTitleButton in _flowTitleLeft.Controls.OfType<ButtonBase>())
-				leftTitleButton.ScaleDpi();
+			foreach (var titleButton in _flowTitleLeft.Controls.OfType<ButtonBase>())
+				titleButton.ScaleDpi();
 
-			foreach (var leftTitleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
-				leftTitleButton.ScaleDpi();
+			foreach (var titleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
+				titleButton.ScaleDpi();
 		}
 
 		// ReSharper disable once UnusedMember.Global
@@ -392,6 +393,14 @@ namespace Mtgdb.Gui
 				NewTab(null);
 		}
 
+
+		public bool ShowFilterPanels
+		{
+			get { return _buttonFilterPanels.Checked; }
+			set { _buttonFilterPanels.Checked = value; }
+		}
+
+		public event Action ShowFilterPanelsChanged;
 
 		public bool HideTooltips
 		{

@@ -14,6 +14,7 @@ namespace Mtgdb.Gui
 		private void setupButtonClicks()
 		{
 			_buttonTooltips.Checked = true;
+			_buttonFilterPanels.Checked = true;
 			_buttonDownload.Enabled = false;
 
 			foreach (var button in _saveLoadButtons)
@@ -39,7 +40,7 @@ namespace Mtgdb.Gui
 
 			_buttonMenuGeneralSettings.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
-
+			_buttonFilterPanels.CheckedChanged += filterPanelsChecked;
 			
 			_buttonPaste.Click += pasteClick;
 			_buttonMenuPasteDeck.Click += pasteClick;
@@ -74,6 +75,11 @@ namespace Mtgdb.Gui
 		{
 			if (_buttonMenuGeneralSettings == sender)
 				System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
+		}
+
+		private void filterPanelsChecked(object sender, EventArgs e)
+		{
+			ShowFilterPanelsChanged?.Invoke();
 		}
 
 		private void tooltipsChecked(object sender, EventArgs e)
@@ -274,6 +280,14 @@ namespace Mtgdb.Gui
 			setupButton(_buttonTooltips,
 				Resources.tooltip_16,
 				Resources.tooltip_32);
+
+			_buttonSubsystem.SetupButton(_buttonFilterPanels,
+				new ButtonImages(
+					Resources.filters_hide_32,
+					Resources.filters_show_32,
+					Resources.filters_hide_32_hovered,
+					Resources.filters_show_hovered_32,
+					areImagesDoubleSized: true));
 
 			setupButton(_buttonDownload, Resources.update_40, true);
 			setupButton(_buttonMenuOpenDeck, Resources.draw_a_card_48, true);

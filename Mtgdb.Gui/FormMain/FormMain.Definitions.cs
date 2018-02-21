@@ -289,6 +289,8 @@ namespace Mtgdb.Gui
 			_sortSubsystem.SortChanged += sortChanged;
 
 			_uiModel.Form.LanguageChanged += languageChanged;
+			_uiModel.Form.ShowFilterPanelsChanged += showFilterPanelsChanged;
+
 			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged += showProhibitChanged;
@@ -376,6 +378,7 @@ namespace Mtgdb.Gui
 			_sortSubsystem.SortChanged -= sortChanged;
 
 			_uiModel.Form.LanguageChanged -= languageChanged;
+			_uiModel.Form.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;

@@ -57,6 +57,8 @@ namespace Mtgdb.Gui
 		public bool? ShowDeck { get; set; }
 		public bool? ShowPartialCards { get; set; }
 
+		public bool? ShowFilterPanels { get; set; }
+
 		[JsonIgnore]
 		public Deck Deck
 		{
