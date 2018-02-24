@@ -50,9 +50,9 @@ namespace Mtgdb.Gui
 			{
 				var card = _cardRepo.CardsById[cardId];
 
-				if (card.Type.IndexOf(@"Creature", Str.Comparison) >= 0)
+				if (card.TypeEn.IndexOf(@"Creature", Str.Comparison) >= 0)
 					creatures.Add(card);
-				else if (card.Type.IndexOf(@"Land", Str.Comparison) >=0)
+				else if (card.TypeEn.IndexOf(@"Land", Str.Comparison) >=0)
 					lands.Add(card);
 				else
 					spells.Add(card);

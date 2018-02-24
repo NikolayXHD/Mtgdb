@@ -1,6 +1,5 @@
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Ninject;
 using Ninject.Modules;
 
 namespace Mtgdb.Gui
@@ -22,24 +21,25 @@ namespace Mtgdb.Gui
 			Kernel.BindFunc<FormMain>();
 
 			Kernel.Bind<SuggestModel>()
-				.ToSelf()
-				.InSingletonScope();
+				.ToSelf();
 
 			Kernel.Bind<FormRoot>()
-				.ToSelf()
-				.InSingletonScope();
+				.ToSelf();
 
-			Kernel.Bind<IUiForm>()
-				.ToMethod(ctx=>ctx.Kernel.Get<FormRoot>())
-				.InSingletonScope();
-
-			Kernel.BindLazy<IUiForm>();
+			Kernel.BindFunc<FormRoot>();
 
 			Kernel.Bind<TooltipForm>()
 				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<TooltipController>()
+				.ToSelf();
+
+			Kernel.Bind<GuiLoader>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<FormManager>()
 				.ToSelf()
 				.InSingletonScope();
 		}

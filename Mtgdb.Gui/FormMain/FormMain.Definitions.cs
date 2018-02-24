@@ -21,13 +21,10 @@ namespace Mtgdb.Gui
 			ImageRepository imageRepo,
 			ImageCacheConfig imageCacheConfig,
 			ImageLoader imageLoader,
-			SuggestModel suggestModel,
 			CollectionModel collectionModel,
 			LuceneSearcher luceneSearcher,
 			KeywordSearcher keywordSearcher,
-			TooltipController tooltipController,
-			ForgeSetRepository forgeSetRepo,
-			UiModel uiModel)
+			ForgeSetRepository forgeSetRepo)
 			: this()
 		{
 			_viewCards = new LayoutView(_layoutViewCards);
@@ -40,7 +37,6 @@ namespace Mtgdb.Gui
 			_cardRepo = cardRepo;
 			_imageLoader = imageLoader;
 			_collectionModel = collectionModel;
-			_uiModel = uiModel;
 			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo, forgeSetRepo);
 			
 			beginRestoreSettings();
@@ -57,28 +53,16 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_evaluators = new Evaluators
-			{
-				{ 2, c => _legalitySubsystem.IsAllowedInFormat(c) },
-				{ 3, c => c.CollectionCount > 0 },
-				{ 4, c => c.DeckCount > 0 },
-				{ 0, c => _quickFilterFacade.Evaluate(c) },
-				{ 1, c => _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false }
-			};
-
-			endRestoreSettings();
-
 			_searchStringSubsystem = new SearchStringSubsystem(
 				this,
-				suggestModel,
 				_findEditor,
 				_panelIconSearch,
 				_listBoxSuggest,
-				_uiModel,
 				luceneSearcher,
 				_viewCards);
 
-			_toolTipController = tooltipController;
+			endRestoreSettings();
+
 			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
 
 			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
@@ -246,9 +230,10 @@ namespace Mtgdb.Gui
 				view.SearchOptions.ButtonMargin.Height);
 		}
 
-		private static void probeCardCreating(object view, LayoutControl probeCard)
+		private void probeCardCreating(object view, LayoutControl probeCard)
 		{
 			probeCard.ScaleDpi();
+			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
 		}
 
 		private static void scalePanelIcon(BorderedPanel panel)
@@ -288,8 +273,8 @@ namespace Mtgdb.Gui
 			_sortSubsystem.SubscribeToEvents();
 			_sortSubsystem.SortChanged += sortChanged;
 
-			_uiModel.Form.LanguageChanged += languageChanged;
-			_uiModel.Form.ShowFilterPanelsChanged += showFilterPanelsChanged;
+			_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
+			_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
 
 			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
@@ -308,7 +293,7 @@ namespace Mtgdb.Gui
 			_keywordSearcher.LoadingProgress += keywordSearcherLoadingProgress;
 
 			_scrollSubsystem.Scrolled += gridScrolled;
-			_toolTipController.SubscribeToEvents();
+
 			_tooltipViewCards.SubscribeToEvents();
 
 			foreach (var filterControl in _quickFilterControls)
@@ -354,6 +339,8 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.ProbeCardCreating += probeCardCreating;
 			_layoutViewDeck.ProbeCardCreating += probeCardCreating;
+
+			_historySubsystem.Loaded += historyLoaded;
 		}
 
 		private void unsubscribeFromEvents()
@@ -377,8 +364,8 @@ namespace Mtgdb.Gui
 			_sortSubsystem.UnsubscribeFromEvents();
 			_sortSubsystem.SortChanged -= sortChanged;
 
-			_uiModel.Form.LanguageChanged -= languageChanged;
-			_uiModel.Form.ShowFilterPanelsChanged -= showFilterPanelsChanged;
+			_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
+			_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;
@@ -432,6 +419,7 @@ namespace Mtgdb.Gui
 			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_layoutViewCards.ProbeCardCreating -= probeCardCreating;
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
+			_historySubsystem.Loaded -= historyLoaded;
 		}
 
 		private bool IsLoaded { get; set; }
@@ -442,6 +430,13 @@ namespace Mtgdb.Gui
 			set { _tabHeadersDeck.SelectedIndex = (int)value; }
 		}
 
+		private Evaluators _evaluators;
+		private Fields _fields;
+		private IFormRoot _formRoot;
+
+		private bool _threadsRunning;
+		private bool _isTabSelected;
+		
 		private Deck _requiredDeck;
 		private int? _requiredScroll;
 
@@ -456,8 +451,6 @@ namespace Mtgdb.Gui
 		private readonly ImageLoader _imageLoader;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
-		private readonly Evaluators _evaluators;
-
 		private readonly List<Card> _searchResultCards = new List<Card>();
 		private readonly HashSet<Card> _filteredCards = new HashSet<Card>();
 
@@ -465,12 +458,11 @@ namespace Mtgdb.Gui
 
 		private readonly HistorySubsystem _historySubsystem;
 		private readonly DeckSerializationSubsystem _deckSerializationSubsystem;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
 		private readonly DeckModel _deckModel;
 		private readonly ImagePreloadingSubsystem _imagePreloadingSubsystem;
 		private readonly ScrollSubsystem _scrollSubsystem;
 		private readonly CollectionModel _collectionModel;
-		private readonly UiModel _uiModel;
+		private readonly SearchStringSubsystem _searchStringSubsystem;
 
 		// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 		private readonly DeckEditingSubsystem _deckEditingSubsystem;
@@ -487,15 +479,11 @@ namespace Mtgdb.Gui
 
 		private readonly LayoutView _viewCards;
 		private readonly LayoutView _viewDeck;
-		private readonly TooltipController _toolTipController;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly ButtonSubsystem _buttonSubsystem;
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
 		private readonly RichTextBoxSelectionSubsystem _findEditorSelectionSubsystem;
-
-		private bool _threadsRunning;
-		private bool _isTabSelected;
 	}
 }

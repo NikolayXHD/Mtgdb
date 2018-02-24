@@ -17,15 +17,9 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<UiModel>()
-				.ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<CardRepository>()
 				.ToSelf()
 				.InSingletonScope();
-
-			Kernel.BindLazy<CardRepository>();
 
 			Kernel.Bind<KeywordSearcher>()
 				.ToSelf()
@@ -62,6 +56,9 @@ namespace Mtgdb.Dal
 			Kernel.Bind<CollectionModel>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<UiModel>()
+				.ToSelf();
 		}
 	}
 }

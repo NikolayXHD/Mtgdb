@@ -101,7 +101,7 @@ namespace Mtgdb.Gui
 				if (_cardsToPreloadImage != _cardsToPreloadImageStarted)
 					break;
 
-				card.PreloadImage();
+				card.PreloadImage(Ui);
 			}
 		}
 
@@ -116,5 +116,7 @@ namespace Mtgdb.Gui
 			{
 			}
 		}
+
+		public UiModel Ui { get; set; }
 	}
 }

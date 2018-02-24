@@ -40,8 +40,7 @@ namespace Mtgdb.Gui
 		public bool ShowProhibit { get; set; }
 		public string Sort { get; set; }
 
-		[JsonProperty("Collection")]
-		public Dictionary<string, int> CollectionCount { get; set; }
+		public Dictionary<string, int> Collection { get; set; }
 
 		public string LegalityFilterFormat { get; set; }
 		public bool? LegalityAllowLegal { get; set; }
@@ -52,8 +51,8 @@ namespace Mtgdb.Gui
 		public string DeckName { get; set; }
 
 		public int? SearchResultScroll { get; set; }
-
 		public bool? ShowTextualFields { get; set; }
+
 		public bool? ShowDeck { get; set; }
 		public bool? ShowPartialCards { get; set; }
 
@@ -74,6 +73,6 @@ namespace Mtgdb.Gui
 		}
 
 		[JsonIgnore]
-		public Deck Collection => Deck.Create(CollectionCount, CollectionCount?.Keys.ToList(), null, null);
+		public Deck CollectionModel => Deck.Create(Collection, Collection?.Keys.ToList(), null, null);
 	}
 }

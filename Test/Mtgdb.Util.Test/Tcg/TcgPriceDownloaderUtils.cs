@@ -176,7 +176,7 @@ namespace Mtgdb.Util
 
 		private static string preProcessMtgjsonName(Card card)
 		{
-			var name = card.Name;
+			var name = card.NameEn;
 
 			// Sauté
 			name = name.RemoveDiacritics();

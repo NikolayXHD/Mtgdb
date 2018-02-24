@@ -16,16 +16,21 @@ namespace Mtgdb.Gui
 {
 	public class SearchStringSubsystem
 	{
-		public SearchStringSubsystem(Form parent, SuggestModel suggestModel, RichTextBox findEditor, Panel panelSearchIcon, ListBox listBoxSuggest, UiModel uiModel, LuceneSearcher searcher, LayoutView viewCards)
+		public SearchStringSubsystem(
+			Form parent,
+			RichTextBox findEditor,
+			Panel panelSearchIcon,
+			ListBox listBoxSuggest,
+			LuceneSearcher searcher,
+			LayoutView viewCards)
 		{
 			_parent = parent;
-			_suggestModel = suggestModel;
 
 			_findEditor = findEditor;
 			_panelSearchIcon = panelSearchIcon;
 
 			_listBoxSuggest = listBoxSuggest;
-			_uiModel = uiModel;
+
 			_searcher = searcher;
 			_viewCards = viewCards;
 
@@ -51,10 +56,10 @@ namespace Mtgdb.Gui
 			_listBoxSuggest.Click += suggestClick;
 			_listBoxSuggest.KeyUp += suggestKeyUp;
 
-			_suggestModel.Suggested += suggested;
+			SuggestModel.Suggested += suggested;
 			
 			_parent.KeyDown += parentKeyDown;
-			_uiModel.Form.LanguageChanged += languageChanged;
+			Ui.LanguageController.LanguageChanged += languageChanged;
 			_viewCards.SearchClicked += gridSearchClicked;
 		}
 
@@ -69,10 +74,10 @@ namespace Mtgdb.Gui
 			_listBoxSuggest.Click -= suggestClick;
 			_listBoxSuggest.KeyUp -= suggestKeyUp;
 
-			_suggestModel.Suggested -= suggested;
+			SuggestModel.Suggested -= suggested;
 			
 			_parent.KeyDown -= parentKeyDown;
-			_uiModel.Form.LanguageChanged -= languageChanged;
+			Ui.LanguageController.LanguageChanged -= languageChanged;
 			_viewCards.SearchClicked -= gridSearchClicked;
 		}
 
@@ -101,7 +106,7 @@ namespace Mtgdb.Gui
 
 		private void languageChanged()
 		{
-			_suggestModel.LanguageCurrent = _uiModel.Form.Language;
+			SuggestModel.LanguageCurrent = Ui.LanguageController.Language;
 		}
 
 		private void idleInputMonitoringThread()
@@ -190,7 +195,7 @@ namespace Mtgdb.Gui
 
 		private void updateSuggestLocation()
 		{
-			int editedWordIndex = _suggestModel.Token?.Position ?? _findEditor.SelectionStart;
+			int editedWordIndex = SuggestModel.Token?.Position ?? _findEditor.SelectionStart;
 			var caretPosition = _findEditor.GetPositionFromCharIndex(editedWordIndex);
 			var caretPositionAtForm = _parent.PointToClient(_findEditor, caretPosition);
 
@@ -219,8 +224,8 @@ namespace Mtgdb.Gui
 
 		public void UpdateSuggestInput()
 		{
-			_suggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
-			_suggestModel.LanguageCurrent = _uiModel.Form.Language;
+			SuggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
+			SuggestModel.LanguageCurrent = Ui.LanguageController.Language;
 		}
 
 		private void parentKeyDown(object sender, KeyEventArgs e)
@@ -472,7 +477,7 @@ namespace Mtgdb.Gui
 		{
 			var searchStringState = _suggestSource;
 
-			if (!searchStringState.Equals(_suggestModel.SearchStateCurrent))
+			if (!searchStringState.Equals(SuggestModel.SearchStateCurrent))
 				return;
 
 			var selectedSuggest = (string)_listBoxSuggest.SelectedItem;
@@ -486,7 +491,7 @@ namespace Mtgdb.Gui
 
 		private void applySuggestSelection(string selectedSuggest, SearchStringState suggestSource)
 		{
-			var token = _suggestModel.Token;
+			var token = SuggestModel.Token;
 
 			int left = token?.Position ?? suggestSource.Caret;
 			var length = token?.Value?.Length ?? 0;
@@ -557,7 +562,7 @@ namespace Mtgdb.Gui
 		private void updateSearchResult()
 		{
 			if (!string.IsNullOrWhiteSpace(_currentText))
-				SearchResult = _searcher.Search(_currentText, _uiModel.Form.Language);
+				SearchResult = _searcher.Search(_currentText, Ui.LanguageController.Language);
 			else
 				SearchResult = null;
 		}
@@ -619,12 +624,14 @@ namespace Mtgdb.Gui
 		private const string SearchStringMark = "search: ";
 		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
 
+		public SuggestModel SuggestModel { get; set; }
+		public UiModel Ui { get; set; }
+
 		private readonly Form _parent;
-		private readonly SuggestModel _suggestModel;
+		
 		private readonly RichTextBox _findEditor;
 		private readonly Panel _panelSearchIcon;
 		private readonly ListBox _listBoxSuggest;
-		private readonly UiModel _uiModel;
 		private readonly LuceneSearcher _searcher;
 		private readonly LayoutView _viewCards;
 

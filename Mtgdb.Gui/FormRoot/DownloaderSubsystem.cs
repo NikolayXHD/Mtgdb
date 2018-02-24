@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
@@ -12,12 +13,10 @@ namespace Mtgdb.Gui
 
 		public DownloaderSubsystem(
 			SuggestImageDownloaderConfig config,
-			UpdateForm updateForm,
-			NewsService newsService)
+			UpdateForm updateForm)
 		{
 			_config = config;
 			_updateForm = updateForm;
-			_newsService = newsService;
 		}
 
 		public void CalculateProgress()
@@ -38,29 +37,38 @@ namespace Mtgdb.Gui
 			var notDownloaded = countTotal - countDownloaded;
 
 			NeedToSuggestDownloader = notDownloaded > 0 && _config.Enabled != false;
+
+			ProgressCalculated?.Invoke();
 		}
-		
+
 		public void ShowDownloader(Form owner, bool auto)
 		{
-			_updateForm.IsShownAutomatically = auto;
-			owner.Invoke(delegate
+			if (auto)
 			{
-				_updateForm.SetWindowLocation(owner);
+				if (_wasAutoShown)
+					return;
 
-				if (!_updateForm.Visible)
-					_updateForm.Show(owner);
+				_wasAutoShown = true;
+			}
 
-				if (!_updateForm.Focused)
-					_updateForm.Focus();
-			});
+			_updateForm.IsShownAutomatically = auto;
+
+			_updateForm.SetWindowLocation(owner);
+
+			if (!_updateForm.Visible)
+				_updateForm.Show(owner);
+
+			if (!_updateForm.Focused)
+				_updateForm.Focus();
 		}
 
-		public void FetchNews(bool repeatViewed) => _newsService.FetchNews(repeatViewed);
-		public bool NewsLoaded => _newsService.NewsLoaded;
-		public bool HasUnreadNews => _newsService.HasUnreadNews;
+		public bool IsProgressCalculated => _updateForm.IsProgressCalculated;
+
+		public event Action ProgressCalculated;
+
+		private bool _wasAutoShown;
 
 		private readonly SuggestImageDownloaderConfig _config;
 		private readonly UpdateForm _updateForm;
-		private readonly NewsService _newsService;
 	}
 }

@@ -133,6 +133,9 @@
   <data name="update_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\update_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="partial_card_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\partial_card_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="paste_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\paste_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -214,17 +217,29 @@
   <data name="xmage_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\xmage_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="text_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\text_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="text_enabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\text_enabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="exclude_minus_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exclude_minus_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="filters_show_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filters_show_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="paypal_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\paypal_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="sort_none_hovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sort_none_hovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="undo_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\undo_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sort_none_hovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sort_none_hovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="maximize" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="mtgo_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\mtgo_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -234,6 +249,9 @@
   </data>
   <data name="box_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Box_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="partial_card_enabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\partial_card_enabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -298,8 +316,8 @@
   <data name="trash_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\trash_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="maximize" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\maximize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="filters_hide_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filters_hide_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="properties_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\properties_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -309,6 +327,9 @@
   </data>
   <data name="close" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="filters_hide_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filters_hide_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="undo_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\undo_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -355,37 +376,19 @@
   <data name="update_notification_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\update_notification_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="kr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\kr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="partial_card_enabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\partial_card_enabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="partial_card_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\partial_card_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="text_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\text_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="text_enabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\text_enabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="corner_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\corner_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="corner_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\corner_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="filters_hide_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_hide_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="filters_hide_32_hovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_hide_32_hovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="filters_show_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_show_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="kr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\kr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="filters_show_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\filters_show_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_form_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_form_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

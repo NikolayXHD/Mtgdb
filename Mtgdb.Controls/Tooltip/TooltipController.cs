@@ -46,6 +46,9 @@ namespace Mtgdb.Controls
 		{
 			foreach (var control in _staticTooltips.Keys)
 			{
+				if (!_subscribed.Add(control))
+					continue;
+				
 				control.MouseEnter += mouseEnter;
 				control.MouseLeave += mouseLeave;
 				control.GotFocus += gotFocus;
@@ -55,6 +58,9 @@ namespace Mtgdb.Controls
 
 			foreach (var customClient in _customTooltips)
 			{
+				if (!_subscribed.Add(customClient))
+					continue;
+
 				customClient.Show += customTooltipShow;
 				customClient.Hide += customTooltipHide;
 			}
@@ -242,6 +248,8 @@ namespace Mtgdb.Controls
 
 		private readonly Dictionary<Control, StaticTooltipSettings> _staticTooltips = new Dictionary<Control, StaticTooltipSettings>();
 		private readonly HashSet<ICustomTooltip> _customTooltips = new HashSet<ICustomTooltip>();
+
+		private readonly HashSet<object> _subscribed = new HashSet<object>();
 
 		private TooltipModel _tooltip;
 

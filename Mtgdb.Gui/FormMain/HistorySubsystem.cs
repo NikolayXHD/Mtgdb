@@ -25,8 +25,6 @@ namespace Mtgdb.Gui
 
 		public void LoadHistory(string historyDirectory, string tabId)
 		{
-			IsLoaded = true;
-
 			Directory.CreateDirectory(historyDirectory);
 			string historyFile = getHistoryFile(tabId, historyDirectory);
 
@@ -44,6 +42,9 @@ namespace Mtgdb.Gui
 				var defaultSettings = new GuiSettings();
 				Add(defaultSettings);
 			}
+
+			IsLoaded = true;
+			Loaded?.Invoke();
 		}
 
 
@@ -82,9 +83,12 @@ namespace Mtgdb.Gui
 
 		public void Save(string historyDirectory, string tabId)
 		{
+			Directory.CreateDirectory(historyDirectory);
+			string historyFile = getHistoryFile(tabId, historyDirectory);
+
 			var state = getState();
 			string serialized = JsonConvert.SerializeObject(state, _jsonSerializerSettings);
-			File.WriteAllText(getHistoryFile(tabId, historyDirectory), serialized);
+			File.WriteAllText(historyFile, serialized);
 		}
 
 		private HistoryState getState()
@@ -140,6 +144,7 @@ namespace Mtgdb.Gui
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }
 
+		public event Action Loaded;
 		public bool IsLoaded { get; private set; }
 
 		private int _settingsIndex;

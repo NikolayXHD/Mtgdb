@@ -110,39 +110,91 @@ namespace Mtgdb.Gui
 
 			e.Handled = true;
 
-			if (card.Image != null)
+			if (card.Image(Ui) != null)
 			{
-				var bounds = card.Image.Size.FitIn(e.Bounds);
-				e.Graphics.DrawImage(card.Image, bounds);
+				var bounds = card.Image(Ui).Size.FitIn(e.Bounds);
+				e.Graphics.DrawImage(card.Image(Ui), bounds);
 			}
 
 			if (card == _deckModel.TouchedCard)
 				drawSelection(e, Color.LightSkyBlue, Color.LightCyan, 236);
-			else if (card.DeckCount == 0 && card.CollectionCount > 0)
+			else if (card.DeckCount(Ui) == 0 && card.CollectionCount(Ui) > 0)
 				drawSelection(e, Color.Lavender, Color.White, 96);
-			else if (card.DeckCount > 0)
+			else if (card.DeckCount(Ui) > 0)
 				drawSelection(e, Color.Lavender, Color.White, 236);
 
-			var legalityWarning = _legalitySubsystem.GetWarning(card);
+			drawLegalityWarning(e, sender, card);
 
-			if (legalityWarning == Legality.Restricted && card.DeckCount <= 1 && sender == _layoutViewDeck)
-				legalityWarning = null;
-
-			if (!string.IsNullOrEmpty(legalityWarning))
-				drawLegalityWarning(e, legalityWarning);
+			drawCountWarning(e, card);
 
 			drawCount(sender, e, card);
 		}
 
-		private void drawLegalityWarning(CustomDrawArgs e, string warning)
+		private void drawLegalityWarning(CustomDrawArgs e, object sender, Card card)
 		{
-			var rect = getWarningRectangle(e);
+			var legalityWarning = _legalitySubsystem.GetWarning(card);
+
+			if (legalityWarning == Legality.Restricted && card.DeckCount(Ui) <= 1 && sender == _layoutViewDeck)
+				legalityWarning = null;
+
+			if (string.IsNullOrEmpty(legalityWarning))
+				return;
+
+			var rect = getLegalityWarningRectangle(e);
 			const int size = 18;
 			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
 			var brush = new SolidBrush(Color.FromArgb(192, Color.OrangeRed));
 
-			var lineSize = e.Graphics.MeasureString(warning, font);
+			var lineSize = e.Graphics.MeasureString(legalityWarning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width)/2f), 0);
+
+			e.Graphics.DrawString(legalityWarning, font, brush, rect, StringFormat.GenericDefault);
+		}
+
+		private void drawCountWarning(CustomDrawArgs e, Card card)
+		{
+			int countInMain = _deckModel.MainDeck.GetCount(card.Id);
+			int countInSideboard = _deckModel.SideDeck.GetCount(card.Id);
+
+			if (countInMain == 0 || countInSideboard == 0)
+				// the excessive count is not due to main + side sum
+				// therefore it is obvious, warning is not neseccary
+				return;
+
+			var totalCount = countInMain + countInSideboard;
+
+			Color color;
+			int maxCount;
+
+			if (totalCount > card.MaxCountInDeck())
+			{
+				maxCount = card.MaxCountInDeck();
+				color = Color.Crimson;
+			}
+			else if (totalCount > card.CollectionCount(Ui) && card.CollectionCount(Ui) > 0)
+			{
+				maxCount = card.CollectionCount(Ui);
+				color = Color.Blue;
+			}
+			else
+				return;
+
+			string warning;
+			if (countInMain == 0)
+				warning = $"{countInSideboard}/{maxCount}";
+			else if (countInSideboard == 0)
+				warning = $"{countInMain}/{maxCount}";
+			else
+				warning = $"{countInMain}+{countInSideboard}/{maxCount}";
+
+			var rect = getCountWarningRectangle(e);
+
+			const int size = 16;
+			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
+			
+			var brush = new SolidBrush(Color.FromArgb(224, color));
+			var lineSize = e.Graphics.MeasureString(warning, font);
+			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
 			e.Graphics.DrawString(warning, font, brush, rect, StringFormat.GenericDefault);
 		}
@@ -228,28 +280,35 @@ namespace Mtgdb.Gui
 			return rect;
 		}
 
-		private Rectangle getWarningRectangle(CustomDrawArgs e)
+		private Rectangle getLegalityWarningRectangle(CustomDrawArgs e)
 		{
-			var stripSize = new Size(_imageLoader.CardSize.Width, 30.ByDpiHeight());
+			var stripSize = new Size(_imageLoader.CardSize.Width, 20.ByDpiHeight());
 
 			var rect = new Rectangle(
 				e.Bounds.Left,
-				(int) (e.Bounds.Bottom - 1.75f * stripSize.Height),
+				(int) (e.Bounds.Bottom - 2.625f * stripSize.Height),
 				stripSize.Width,
 				stripSize.Height);
 
 			return rect;
 		}
 
+		private Rectangle getCountWarningRectangle(CustomDrawArgs e)
+		{
+			var result = getLegalityWarningRectangle(e);
+			result.Offset(new Point(0, -result.Height));
+			return result;
+		}
+
 		private string getCountText(object sender, Card card)
 		{
 			var countText = new StringBuilder();
 
-			if (card.DeckCount > 0)
-				countText.Append(card.DeckCount);
+			if (card.DeckCount(Ui) > 0)
+				countText.Append(card.DeckCount(Ui));
 
-			if (card.CollectionCount > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
-				countText.AppendFormat(@"/{0}", card.CollectionCount);
+			if (card.CollectionCount(Ui) > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
+				countText.AppendFormat(@"/{0}", card.CollectionCount(Ui));
 
 			string countTextStr = countText.ToString();
 			return countTextStr;
@@ -645,6 +704,10 @@ namespace Mtgdb.Gui
 
 			throw new Exception(@"wrapper not found");
 		}
+
+
+		public UiModel Ui { get; set; }
+
 
 		private readonly Dictionary<string, Regex> _regexCache = new Dictionary<string, Regex>();
 

@@ -73,7 +73,7 @@ namespace Mtgdb.Gui
 				{
 					var card = _cardRepository.CardsById[cardsId];
 
-					if (!card.HasImage)
+					if (!card.HasImage(Ui))
 						continue;
 
 					var model = _imageRepository.GetImagePrint(card, _cardRepository.GetReleaseDateSimilarity);
@@ -126,5 +126,7 @@ namespace Mtgdb.Gui
 			gr = Graphics.FromImage(page);
 			gr.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point(0, 0), page.Size));
 		}
+
+		public UiModel Ui { get; set; }
 	}
 }

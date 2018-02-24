@@ -1,9 +1,8 @@
-﻿using Mtgdb.Controls;
-using Mtgdb.Dal;
+﻿using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
-	public partial class DeckLayout : LayoutControl
+	public partial class DeckLayout : CardLayoutControlBase
 	{
 		public DeckLayout()
 		{
@@ -20,7 +19,7 @@ namespace Mtgdb.Gui
 		protected override void LoadData(object dataSource)
 		{
 			var card = (Card) dataSource;
-			_fieldImage.Image = card?.Image;
+			_fieldImage.Image = card?.Image(Ui);
 		}
 	}
 }

@@ -50,5 +50,31 @@ namespace Mtgdb.Controls
 
 		public virtual IEnumerable<FieldControl> Fields => Controls.Cast<FieldControl>();
 		private object _dataSource;
+
+		public virtual void CopyTo(LayoutControl other)
+		{
+			other.Font = Font;
+			other.Size = Size;
+
+			using (var probeEnumerator = Fields.GetEnumerator())
+			using (var enumerator = other.Fields.GetEnumerator())
+			{
+				while (probeEnumerator.MoveNext())
+				{
+					enumerator.MoveNext();
+
+					var probeField = probeEnumerator.Current;
+					var field = enumerator.Current;
+
+					field.Location = probeField.Location;
+					field.Size = probeField.Size;
+					field.Font = probeField.Font;
+					field.BackColor = probeField.BackColor;
+					field.ForeColor = probeField.ForeColor;
+					field.HorizontalAlignment = probeField.HorizontalAlignment;
+					field.IconRecognizer = probeField.IconRecognizer;
+				}
+			}
+		}
 	}
 }

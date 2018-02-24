@@ -26,6 +26,8 @@ if errorlevel 1 exit /b
 
 %utilexe% -update_help
 
+if errorlevel 1 exit /b
+
 rmdir /q /s %targetRoot%
 mkdir %targetRoot%
 mkdir %target%

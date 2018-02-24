@@ -12,8 +12,6 @@ namespace Mtgdb.Gui
 	{
 		public event Action SortChanged;
 
-		private static readonly Dictionary<string, IField<Card>> _fields = Fields.ByName;
-
 		private static readonly HashSet<string> _localizableFields = new HashSet<string>
 		{
 			nameof(Card.Name),
@@ -66,16 +64,16 @@ namespace Mtgdb.Gui
 			Invalidate();
 		}
 
-		private static List<Card> sort(IEnumerable<Card> cards, IEnumerable<FieldSortInfo> sortInfo)
+		private List<Card> sort(IEnumerable<Card> cards, IEnumerable<FieldSortInfo> sortInfo)
 		{
 			sortInfo = sortInfo.Concat(Enumerable.Repeat(_defaultSort, 1));
 			using (var enumerator = sortInfo.GetEnumerator())
 			{
 				enumerator.MoveNext();
-				var cardsOrdered = _fields[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
+				var cardsOrdered = Fields.ByName[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
 
 				while (enumerator.MoveNext())
-					cardsOrdered = _fields[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
+					cardsOrdered = Fields.ByName[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
 
 				var result = cardsOrdered.ToList();
 				return result;
@@ -154,5 +152,7 @@ namespace Mtgdb.Gui
 		private IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
 
 		public bool IsLanguageDependent => SortInfo.Any(_ => _localizableFields.Contains(_.FieldName));
+
+		public Fields Fields { get; set; }
 	}
 }

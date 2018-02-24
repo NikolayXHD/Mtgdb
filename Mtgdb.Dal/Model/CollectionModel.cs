@@ -33,7 +33,7 @@ namespace Mtgdb.Dal
 
 		public void Add(Card card, int increment)
 		{
-			var countBefore = card.CollectionCount;
+			var countBefore = GetCount(card);
 			var count = countBefore + increment;
 
 			if (count < 0)
@@ -44,8 +44,8 @@ namespace Mtgdb.Dal
 			else if (increment < 0)
 				remove(card, newCount: count);
 
-			bool listChanged = countBefore == 0 || card.CollectionCount == 0;
-			bool countChanged = countBefore != card.CollectionCount;
+			bool listChanged = countBefore == 0 || GetCount(card) == 0;
+			bool countChanged = countBefore != GetCount(card);
 
 			CollectionChanged?.Invoke(
 				listChanged,

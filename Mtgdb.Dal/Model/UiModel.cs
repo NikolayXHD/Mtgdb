@@ -1,4 +1,3 @@
-using System;
 using Ninject;
 
 namespace Mtgdb.Dal
@@ -8,32 +7,24 @@ namespace Mtgdb.Dal
 		public UiModel(
 			ImageLoader imageLoader,
 			ImageRepository imageRepo,
-			Lazy<CardRepository> cardRepoFactory,
-			[Optional] Lazy<IUiForm> formFactory,
+			CardRepository cardRepo,
 			[Optional] CollectionModel collection)
 		{
-			_formFactory = formFactory;
-			_cardRepoFactory = cardRepoFactory;
-
+			CardRepo = cardRepo;
 			Collection = collection;
 			ImageLoader = imageLoader;
 			ImageRepo = imageRepo;
+
+			LanguageController = new LanguageController(CardLocalization.DefaultLanguage);
 		}
 
-		public IUiForm Form => _formFactory?.Value;
-		public CardRepository CardRepo => _cardRepoFactory.Value;
+		public LanguageController LanguageController { get; }
+		public CardRepository CardRepo { get; }
 
 		public ICardCollection Collection { get; }
 		public ImageLoader ImageLoader { get; }
 		public ImageRepository ImageRepo { get; }
 
 		public ICardCollection Deck { get; set; }
-
-		private readonly Lazy<IUiForm> _formFactory;
-		private readonly Lazy<CardRepository> _cardRepoFactory;
-
-		public bool ShowTextualFields { get; set; }
-		public bool ShowDeck { get; set; }
-		public bool ShowPartialCards { get; set; }
 	}
 }

@@ -70,12 +70,12 @@ namespace Mtgdb.Gui
 			_showOtherSetsButton.Image = cloneImg;
 		}
 
-		public void LoadImages(Card card)
+		public void LoadImages(Card card, UiModel ui)
 		{
 			_location = Cursor.Position;
 			_imageLoadingThread?.Abort();
 
-			_cardForms = _cardRepository.GetForms(card);
+			_cardForms = _cardRepository.GetForms(card, ui);
 			_card = card;
 
 			foreach (var oldImg in _images)

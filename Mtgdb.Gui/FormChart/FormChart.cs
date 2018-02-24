@@ -101,9 +101,14 @@ namespace Mtgdb.Gui
 			this.PerformLayout();
 		}
 
-		public FormChart(CardRepository repository)
+		public FormChart(CardRepository repository, UiModel ui, Fields fields)
 			: this()
 		{
+			_ui = ui;
+			_fields = fields;
+			_fieldsOrder = fields.ChartFields.OrderBy(_ => _fields.ByName[_].Alias)
+				.ToArray();
+
 			_repository = repository;
 
 			Load += load;
@@ -149,7 +154,7 @@ namespace Mtgdb.Gui
 					.Cast<object>().ToArray());
 			_menuChartType.SelectedIndex = 0;
 
-			_menuFields.Items.AddRange(_fieldsOrder.Select(_ => Fields.ByName[_].Alias).Cast<object>().ToArray());
+			_menuFields.Items.AddRange(_fieldsOrder.Select(_ => _fields.ByName[_].Alias).Cast<object>().ToArray());
 
 			foreach (var tab in _summTabs)
 			{
@@ -256,7 +261,7 @@ namespace Mtgdb.Gui
 				return;
 
 			string fieldName = getFieldName(tabSetting.TabId);
-			var field = Fields.ByName[fieldName];
+			var field = _fields.ByName[fieldName];
 
 			var index = _aggregateIconsOrder.IndexOf(tabSetting.Icon);
 			while (true)
@@ -308,7 +313,7 @@ namespace Mtgdb.Gui
 			var tab = _tabByButton[button];
 			var fieldName = _fieldsOrder[_menuFields.SelectedIndex];
 
-			var field = Fields.ByName[fieldName];
+			var field = _fields.ByName[fieldName];
 			var tabId = createTabId(fieldName);
 
 			if (button == _buttonAddSum)
@@ -509,7 +514,7 @@ namespace Mtgdb.Gui
 			populateData(sortedArguments, series, sortedValues, sortedArgumentTotals, seriesTotals, settings);
 		}
 
-		private static IList<object[]> getTotals(ReportSettings settings, List<KeyValuePair<List<object>, HashSet<Card>>> groups)
+		private IList<object[]> getTotals(ReportSettings settings, List<KeyValuePair<List<object>, HashSet<Card>>> groups)
 		{
 			object[][] totals = new object[groups.Count][];
 			for (int i = 0; i < totals.Length; i++)
@@ -519,7 +524,7 @@ namespace Mtgdb.Gui
 			{
 				int s = k;
 
-				var summField = Fields.ByName[settings.SummaryFields[s]];
+				var summField = _fields.ByName[settings.SummaryFields[s]];
 				var summFunction = Aggregates.ByName[settings.SummaryFunctions[s]];
 
 				for (int i = 0; i < totals.Length; i++)
@@ -531,12 +536,12 @@ namespace Mtgdb.Gui
 
 
 
-		private static List<KeyValuePair<List<object>, HashSet<Card>>> getGroups(List<string> fields, List<SortOrder> order, Card[] cards)
+		private List<KeyValuePair<List<object>, HashSet<Card>>> getGroups(List<string> fields, List<SortOrder> order, Card[] cards)
 		{
-			var columnGroups = Fields.ByName[fields[0]].GroupBy(cards, order[0]);
+			var columnGroups = _fields.ByName[fields[0]].GroupBy(cards, order[0]);
 
 			for (int i = 1; i < fields.Count; i++)
-				columnGroups = Fields.ByName[fields[i]].ThenGroupBy(columnGroups, order[i]);
+				columnGroups = _fields.ByName[fields[i]].ThenGroupBy(columnGroups, order[i]);
 
 			return columnGroups;
 		}
@@ -554,7 +559,7 @@ namespace Mtgdb.Gui
 			return seriesNames;
 		}
 		
-		private static List<List<object[]>> getValues(
+		private List<List<object[]>> getValues(
 			List<KeyValuePair<List<object>, HashSet<Card>>> rowGroups,
 			List<KeyValuePair<List<object>, HashSet<Card>>> columnGroups,
 			List<string> aggregateFields,
@@ -577,7 +582,7 @@ namespace Mtgdb.Gui
 					{
 						string function = aggregateFunctions[k];
 						string field = aggregateFields[k];
-						object aggregated = Aggregates.ByName[function](objects, Fields.ByName[field]);
+						object aggregated = Aggregates.ByName[function](objects, _fields.ByName[field]);
 						aggregates[k] = aggregated;
 					}
 
@@ -642,7 +647,7 @@ namespace Mtgdb.Gui
 
 			for (int k = 0; k < summaryFields.Count; k++)
 			{
-				string summaryFieldAlias = Fields.ByName[summaryFields[k]].Alias;
+				string summaryFieldAlias = _fields.ByName[summaryFields[k]].Alias;
 				string summaryFunctionAlias = Aggregates.Alias[settings.SummaryFunctions[k]];
 
 				if (k == 0 || !metadata.CanDisplayMultipleSeries)
@@ -928,10 +933,10 @@ namespace Mtgdb.Gui
 			switch (source)
 			{
 				case DataSource.Collection:
-					result = _repository.Cards.Where(_ => _.CollectionCount > 0);
+					result = _repository.Cards.Where(_ => _.CollectionCount(_ui) > 0);
 					break;
 				case DataSource.Deck:
-					result = _repository.Cards.Where(_ => _.DeckCount > 0);
+					result = _repository.Cards.Where(_ => _.DeckCount(_ui) > 0);
 					break;
 				case DataSource.AllCards:
 					result = _repository.Cards;
@@ -966,12 +971,12 @@ namespace Mtgdb.Gui
 			{
 				_tabSummSort.AddTab(
 					createTabId(settings.SummaryFields[i]),
-					Fields.ByName[settings.SummaryFields[i]].Alias,
+					_fields.ByName[settings.SummaryFields[i]].Alias,
 					_sortIconsOrder[(int) settings.SummarySort[i]]);
 
 				_tabSumm.AddTab(
 					createTabId(settings.SummaryFields[i]),
-					Fields.ByName[settings.SummaryFields[i]].Alias,
+					_fields.ByName[settings.SummaryFields[i]].Alias,
 					_aggregateIconsOrder[_aggregatesOrder.IndexOf(settings.SummaryFunctions[i])]);
 			}
 
@@ -1001,7 +1006,7 @@ namespace Mtgdb.Gui
 					continue;
 
 				tab.AddTab(createTabId(fields[i]),
-					Fields.ByName[fields[i]].Alias,
+					_fields.ByName[fields[i]].Alias,
 					_sortIconsOrder[(int) fieldsSort[i]]);
 			}
 		}
@@ -1113,7 +1118,7 @@ namespace Mtgdb.Gui
 		private const string SeriesSeparator = " / ";
 		private const string ArgumentSeparator = " / ";
 
-		private static readonly IList<string> _fieldsOrder = Fields.ChartFields.OrderBy(_ => Fields.ByName[_].Alias).ToArray();
+		private readonly IList<string> _fieldsOrder;
 
 		private readonly CardRepository _repository;
 		private bool _applyingSettings;
@@ -1142,5 +1147,8 @@ namespace Mtgdb.Gui
 
 		private readonly Button[] _buttons;
 		private readonly ComboBox[] _menus;
+
+		private readonly Fields _fields;
+		private readonly UiModel _ui;
 	}
 }

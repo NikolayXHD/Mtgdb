@@ -155,10 +155,10 @@ namespace Mtgdb.Gui
 
 		private void zoomCard(Card card)
 		{
-			if (!card.HasImage)
+			if (!card.HasImage(Ui))
 				return;
 			
-			_formZoom.LoadImages(card);
+			_formZoom.LoadImages(card, Ui);
 			_formZoom.ShowImages();
 		}
 
@@ -191,5 +191,9 @@ namespace Mtgdb.Gui
 
 			throw new Exception(@"wrapper not found");
 		}
+
+
+
+		public UiModel Ui { get; set; }
 	}
 }

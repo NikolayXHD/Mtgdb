@@ -20,6 +20,7 @@ namespace Mtgdb.Test
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();
 			PriceRepo = Kernel.Get<PriceRepository>();
+			Ui = Kernel.Get<UiModel>();
 		}
 
 		protected void LoadCards()
@@ -71,6 +72,7 @@ namespace Mtgdb.Test
 		protected CardRepository Repo;
 		protected ImageRepository ImgRepo;
 		protected PriceRepository PriceRepo;
+		protected UiModel Ui;
 
 		protected static readonly Logger Log = LogManager.GetCurrentClassLogger();
 	}

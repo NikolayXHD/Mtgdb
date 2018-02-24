@@ -93,8 +93,8 @@ namespace Mtgdb.Gui
 
 			var count = (previousCount + increment)
 				.WithinRange(
-					card.MinDeckCount(),
-					card.MaxDeckCount());
+					card.MinCountInDeck(),
+					card.MaxCountInDeck());
 
 			if (increment > 0)
 				add(card, newCount: count);
@@ -112,8 +112,8 @@ namespace Mtgdb.Gui
 					TouchedCard = card;
 			}
 
-			bool listChanged = previousCount == 0 || card.DeckCount == 0;
-			bool countChanged = previousCount != card.DeckCount;
+			bool listChanged = previousCount == 0 || GetCount(card) == 0;
+			bool countChanged = previousCount != GetCount(card);
 			bool touchedChanged = previousTouchedCard != TouchedCard;
 
 			DeckChanged?.Invoke(
@@ -299,7 +299,7 @@ namespace Mtgdb.Gui
 					var card = repo.CardsById[cardId];
 
 					var newCount = (prevCount + increment)
-						.WithinRange(card.MinDeckCount(), card.MaxDeckCount());
+						.WithinRange(card.MinCountInDeck(), card.MaxCountInDeck());
 
 					operation.Value.Add(cardId, newCount);
 				}

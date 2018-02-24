@@ -15,9 +15,6 @@ namespace Mtgdb.Dal
 	public class Card
 	{
 		[JsonIgnore]
-		public UiModel UiModel { get; internal set; }
-
-		[JsonIgnore]
 		public Set Set { get; set; }
 
 		/// <summary>
@@ -44,39 +41,6 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public Bitmap Image
-		{
-			get
-			{
-				var imageModel = GetImageModel();
-
-				if (imageModel == null)
-					return null;
-
-				return UiModel?.ImageLoader.GetSmallImage(imageModel);
-			}
-		}
-
-		public ImageModel GetImageModel()
-		{
-			if (!_imageModelSelected)
-			{
-				if (UiModel?.CardRepo.IsImageLoadingComplete != true)
-					return null;
-
-				_imageModel = UiModel?.CardRepo.GetSmallImage(this, UiModel.ImageRepo);
-				_imageModelSelected = true;
-			}
-
-			return _imageModel;
-		}
-
-		public void ResetImageModel()
-		{
-			_imageModelSelected = false;
-		}
-
-		[JsonIgnore]
 		public string ImageNameBase => ImageName.SplitTalingNumber().Item1;
 
 		[JsonIgnore]
@@ -91,14 +55,6 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public int DeckCount => UiModel?.Deck?.GetCount(this) ?? 0;
-
-		[JsonIgnore]
-		public int CollectionCount => UiModel?.Collection?.GetCount(this) ?? 0;
-
-
-
-		[JsonIgnore]
 		public string Types { get; internal set; }
 
 		[JsonIgnore]
@@ -108,9 +64,6 @@ namespace Mtgdb.Dal
 		public string Supertypes { get; internal set; }
 
 
-
-		[JsonIgnore]
-		public bool HasImage => GetImageModel() != null;
 
 		[JsonIgnore]
 		public float? PowerNum { get; internal set; }
@@ -269,20 +222,6 @@ namespace Mtgdb.Dal
 		internal PriceValues PricesValues { get; set; }
 
 		[JsonIgnore]
-		public string Name => GetName(UiModel?.Form?.Language);
-
-		[JsonIgnore]
-		public string Type => GetType(UiModel?.Form?.Language);
-
-		[JsonIgnore]
-		public string Text => GetText(UiModel?.Form?.Language);
-
-		[JsonIgnore]
-		public string Flavor => GetFlavor(UiModel?.Form?.Language);
-
-
-
-		[JsonIgnore]
 		public float? PricingLow => PricesValues?.Low;
 
 		[JsonIgnore]
@@ -300,29 +239,11 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public float? PriceHigh => PricingHigh ?? PricingMid ?? PricingLow;
 
-		[JsonIgnore]
-		public float? CollectionTotalLow => CollectionCount == 0 ? (float?) null : (PriceLow ?? 0)*CollectionCount;
-
-		[JsonIgnore]
-		public float? CollectionTotalMid => CollectionCount == 0 ? (float?) null : (PriceMid ?? 0)*CollectionCount;
-
-		[JsonIgnore]
-		public float? CollectionTotalHigh => CollectionCount == 0 ? (float?) null : (PriceHigh ?? 0)*CollectionCount;
-
-		[JsonIgnore]
-		public float? DeckTotalLow => DeckCount == 0 ? (float?) null : (PriceLow ?? 0)*DeckCount;
-
-		[JsonIgnore]
-		public float? DeckTotalMid => DeckCount == 0 ? (float?) null : (PriceMid ?? 0)*DeckCount;
-
-		[JsonIgnore]
-		public float? DeckTotalHigh => DeckCount == 0 ? (float?) null : (PriceHigh ?? 0)*DeckCount;
-
-
 
 
 		/// <summary>
-		/// A unique id for this card. It is made up by doing an SHA1 hash of setCode + cardName + cardImageName
+		/// A unique id for this card. It is made up by doing an SHA1 hash of
+		/// setCode + cardName + cardImageName
 		/// </summary>
 		[JsonProperty("id")]
 		[JsonConverter(typeof(InternedStringConverter))]
@@ -506,7 +427,8 @@ namespace Mtgdb.Dal
 		public int? Life { get; set; }
 
 		/// <summary>
-		/// The card colors. Usually this is derived from the casting cost, but some cards are special (like the back of double-faced cards and Ghostfire).
+		/// The card colors. Usually this is derived from the casting cost,
+		/// but some cards are special (like the back of double-faced cards and Ghostfire).
 		/// </summary>
 		[JsonProperty("colors")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
@@ -577,8 +499,8 @@ namespace Mtgdb.Dal
 		{
 			var builder = new StringBuilder();
 
-			builder.AppendLine($"{ManaCost} {Name}");
-			builder.Append($"{Type}");
+			builder.AppendLine($"{ManaCost} {NameEn}");
+			builder.Append($"{TypeEn}");
 
 			if (LoyaltyNum.HasValue)
 				builder.Append($" {LoyaltyNum}");
@@ -588,25 +510,20 @@ namespace Mtgdb.Dal
 
 			builder.AppendLine();
 
-			if (!string.IsNullOrEmpty(Text))
-				builder.AppendLine(Text);
+			if (!string.IsNullOrEmpty(TextEn))
+				builder.AppendLine(TextEn);
 
 			string rulingsText = Rulings;
 			if (!string.IsNullOrEmpty(rulingsText))
 				builder.AppendLine(rulingsText);
 
-			if (!string.IsNullOrEmpty(Flavor))
-				builder.AppendLine(Flavor);
+			if (!string.IsNullOrEmpty(FlavorEn))
+				builder.AppendLine(FlavorEn);
 
 			if (!string.IsNullOrEmpty(Artist))
 				builder.AppendLine(Artist);
 
 			return builder.ToString();
-		}
-
-		public void PreloadImage()
-		{
-			UiModel?.ImageLoader.GetSmallImage(GetImageModel());
 		}
 
 
@@ -666,6 +583,74 @@ namespace Mtgdb.Dal
 				MciNumber = cardPatch.MciNumber;
 		}
 
+
+
+		public Bitmap Image(UiModel ui)
+		{
+			var imageModel = ImageModel(ui);
+
+			if (imageModel == null)
+				return null;
+
+			return ui.ImageLoader.GetSmallImage(imageModel);
+		}
+
+		public ImageModel ImageModel(UiModel ui)
+		{
+			if (!_imageModelSelected)
+			{
+				if (ui.CardRepo.IsImageLoadingComplete != true)
+					return null;
+
+				_imageModel = ui.CardRepo.GetSmallImage(this, ui.ImageRepo);
+				_imageModelSelected = true;
+			}
+
+			return _imageModel;
+		}
+
+		public void ResetImageModel()
+		{
+			_imageModelSelected = false;
+		}
+
+		public bool HasImage(UiModel ui) => ImageModel(ui) != null;
+
+		public void PreloadImage(UiModel ui)
+		{
+			ui.ImageLoader.GetSmallImage(ImageModel(ui));
+		}
+
+
+
+		public string Name(UiModel ui) => GetName(ui.LanguageController?.Language);
+
+		public string Type(UiModel ui) => GetType(ui.LanguageController?.Language);
+
+		public string Text(UiModel ui) => GetText(ui.LanguageController?.Language);
+
+		public string Flavor(UiModel ui) => GetFlavor(ui.LanguageController?.Language);
+
+
+
+		public float? CollectionTotalLow(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceLow ?? 0) * CollectionCount(ui);
+
+		public float? CollectionTotalMid(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceMid ?? 0) * CollectionCount(ui);
+
+		public float? CollectionTotalHigh(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceHigh ?? 0) * CollectionCount(ui);
+
+		public float? DeckTotalLow(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceLow ?? 0) * DeckCount(ui);
+
+		public float? DeckTotalMid(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceMid ?? 0) * DeckCount(ui);
+
+		public float? DeckTotalHigh(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceHigh ?? 0) * DeckCount(ui);
+
+
+		public int DeckCount(UiModel ui) => ui.Deck?.GetCount(this) ?? 0;
+
+		public int CollectionCount(UiModel ui) => ui.Collection?.GetCount(this) ?? 0;
+
+
 		[JsonIgnore]
 		internal bool Remove { get; private set; }
 
@@ -699,10 +684,8 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		private Document _document;
 
-		[JsonIgnore]
 		private ImageModel _imageModel;
 
-		[JsonIgnore]
 		private bool _imageModelSelected;
 	}
 }

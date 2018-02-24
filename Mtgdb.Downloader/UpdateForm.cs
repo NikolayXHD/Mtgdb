@@ -580,7 +580,9 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 		public bool IsShownAutomatically { get; set; }
 
+		public IList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
 
+		public bool IsProgressCalculated => ImageDownloadProgress != null;
 
 		private readonly Installer _installer;
 		private readonly ImageDownloader _imageDownloader;
@@ -598,6 +600,5 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private string _appVersionInstalled;
 		private string _appVersionOnline;
 		private string _appVersionDownloaded;
-		public IList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
 	}
 }

@@ -275,7 +275,7 @@ namespace Mtgdb.Dal.Index
 				// Tested
 				string name = card.Localization?.GetName(lang);
 				if (!string.IsNullOrEmpty(name))
-					doc.addTextField(nameof(card.Name), name, lang);
+					doc.addTextField(nameof(Card.Name), name, lang);
 
 				// Tested
 				string type = card.Localization?.GetType(lang);
@@ -284,18 +284,18 @@ namespace Mtgdb.Dal.Index
 					var typeParts = type.Split(new[] { ' ', '—' }, StringSplitOptions.RemoveEmptyEntries);
 
 					foreach (string typePart in typeParts)
-						doc.addTextField(nameof(card.Type), typePart, lang);
+						doc.addTextField(nameof(Card.Type), typePart, lang);
 				}
 
 				// Tested
 				string text = card.Localization?.GetAbility(lang);
 				if (!string.IsNullOrEmpty(text))
-					doc.addTextField(nameof(card.Text), text, lang);
+					doc.addTextField(nameof(Card.Text), text, lang);
 
 				// Tested
 				string flavor = card.Localization?.GetFlavor(lang);
 				if (!string.IsNullOrEmpty(flavor))
-					doc.addTextField(nameof(card.Flavor), flavor, lang);
+					doc.addTextField(nameof(Card.Flavor), flavor, lang);
 			}
 
 			return doc;

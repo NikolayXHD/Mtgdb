@@ -46,11 +46,16 @@ namespace Mtgdb.Gui
 
 			_kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
-			var formRoot = _kernel.Get<FormRoot>();
+			var loader = _kernel.Get<GuiLoader>();
 
-			formRoot.Show();
-			formRoot.NewTab(onCreated: null);
-			Application.Run(formRoot);
+			loader.Run();
+
+			var formManager = _kernel.Get<FormManager>();
+			formManager.CreateForm();
+
+			Application.Run(formManager);
+
+			loader.Abort();
 		}
 
 		private static void mtgjsonFileUpdated()

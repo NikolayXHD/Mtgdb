@@ -139,6 +139,12 @@
     </Compile>
     <Compile Include="FormChart\ReportSettings.cs" />
     <Compile Include="FormChart\TabField.cs" />
+    <Compile Include="FormRoot\IFormRoot.cs" />
+    <Compile Include="FormRoot\FormManager.cs" />
+    <Compile Include="LayoutView\CardLayoutControlBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="[ Infrastructure ]\GuiLoader.cs" />
     <Compile Include="LayoutView\LayoutViewTooltip.cs" />
     <Compile Include="LayoutView\HitInfoExtensions.cs" />
     <Compile Include="FormMain\LegalitySubsystem.cs" />
@@ -324,6 +330,7 @@
     <None Include="Resources\100.png" />
     <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />
+    <None Include="Resources\add_form_32.png" />
     <Content Include="Resources\Annihilator.png" />
     <None Include="Resources\any.png" />
     <Content Include="Resources\Attacks each turn.png" />
@@ -350,7 +357,7 @@
     <Content Include="Resources\Equip.png" />
     <Content Include="Resources\Exile.png" />
     <None Include="Resources\filters_hide_32.png" />
-    <None Include="Resources\filters_hide_32_hovered.png" />
+    <None Include="Resources\filters_hide_hovered_32.png" />
     <None Include="Resources\filters_show_32.png" />
     <None Include="Resources\filters_show_hovered_32.png" />
     <Content Include="Resources\First strike.png" />

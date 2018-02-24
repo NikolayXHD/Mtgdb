@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Gui.Properties;
@@ -38,11 +37,12 @@ namespace Mtgdb.Gui
 
 			_buttonHelp.Click += helpClick;
 
-			_buttonMenuGeneralSettings.Click += configClick;
+			_buttonConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 			_buttonFilterPanels.CheckedChanged += filterPanelsChecked;
 			
 			_buttonPaste.Click += pasteClick;
+			_buttonOpenWindow.Click += openWindowClick;
 			_buttonMenuPasteDeck.Click += pasteClick;
 			_buttonMenuPasteDeckAppend.Click += pasteClick;
 			_buttonMenuPasteCollection.Click += pasteClick;
@@ -71,10 +71,14 @@ namespace Mtgdb.Gui
 				form.CopyCollection();
 		}
 
+		private void openWindowClick(object sender, EventArgs e)
+		{
+			_formManager.CreateForm();
+		}
+
 		private void configClick(object sender, EventArgs e)
 		{
-			if (_buttonMenuGeneralSettings == sender)
-				System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
+			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
 		}
 
 		private void filterPanelsChecked(object sender, EventArgs e)
@@ -156,16 +160,13 @@ namespace Mtgdb.Gui
 		private void downloadClick(object sender, EventArgs e)
 		{
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
-
-			ThreadPool.QueueUserWorkItem(_ =>
-			{
-				Thread.Sleep(2000);
-				this.Invoke(updateDownloadButton);
-			});
 		}
 
 		private void setupLanguageMenu()
 		{
+			updateLanguage();
+			UiModel.LanguageController.LanguageChanged += updateLanguage;
+
 			foreach (var langMenuItem in getLanguageMenuItems())
 				langMenuItem.Click += languageMenuClick;
 		}
@@ -173,7 +174,19 @@ namespace Mtgdb.Gui
 		private void languageMenuClick(object sender, EventArgs e)
 		{
 			var button = (ButtonBase) sender;
-			Language = button.Text.ToLowerInvariant();
+			UiModel.LanguageController.Language = button.Text.ToLowerInvariant().Trim();
+		}
+
+		private void updateLanguage()
+		{
+			var language = UiModel.LanguageController.Language;
+
+			var menuItem = getLanguageMenuItems()
+				.Single(_ => Str.Equals(_.Text.Trim(), language));
+
+			_buttonLanguage.Image = menuItem.Image;
+			_buttonLanguage.Text = language.ToUpperInvariant();
+			setupButton(_buttonLanguage, _languageIcons[language], true);
 		}
 
 		private IEnumerable<ButtonBase> getLanguageMenuItems()
@@ -285,7 +298,7 @@ namespace Mtgdb.Gui
 				new ButtonImages(
 					Resources.filters_hide_32,
 					Resources.filters_show_32,
-					Resources.filters_hide_32_hovered,
+					Resources.filters_hide_hovered_32,
 					Resources.filters_show_hovered_32,
 					areImagesDoubleSized: true));
 
@@ -294,6 +307,7 @@ namespace Mtgdb.Gui
 			setupButton(_buttonMenuOpenCollection, Resources.box_48, true);
 			setupButton(_buttonMenuSaveDeck, Resources.draw_a_card_48, true);
 			setupButton(_buttonMenuSaveCollection, Resources.box_48, true);
+			setupButton(_buttonOpenWindow, Resources.add_form_32, true);
 
 			setupButton(_buttonLanguage, Resources.en, true);
 			foreach (var langButton in getLanguageMenuItems())
@@ -302,8 +316,6 @@ namespace Mtgdb.Gui
 			setupButton(_buttonDonate, null, false);
 			setupButton(_buttonDonateYandexMoney, Resources.yandex_money_32, false);
 			setupButton(_buttonDonatePayPal, Resources.paypal_32, false);
-
-			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig, container: _layoutConfig));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
 				_buttonLanguage,
@@ -462,33 +474,7 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.UnsubscribeFromEvents();
 		}
 
-
-
-		public string Language
-		{
-			get { return _language; }
-			set
-			{
-				value = value.Trim();
-
-				if (value == _language)
-					return;
-
-				_language = value;
-
-				var menuItem = getLanguageMenuItems()
-					.Single(_ => Str.Equals(_.Text.Trim(), value));
-
-				_buttonLanguage.Image = menuItem.Image;
-				_buttonLanguage.Text = value.ToUpperInvariant();
-				setupButton(_buttonLanguage, _languageIcons[value], true);
-
-				LanguageChanged?.Invoke();
-			}
-		}
-
 		private readonly ButtonBase[] _deckButtons;
-		public event Action LanguageChanged;
 
 		private readonly ButtonSubsystem _buttonSubsystem;
 		private readonly CheckBox[] _saveLoadButtons;

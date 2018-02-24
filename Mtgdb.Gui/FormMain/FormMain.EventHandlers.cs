@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -169,7 +168,7 @@ namespace Mtgdb.Gui
 
 		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
 		{
-			updateGlobalDisplaySettings();
+			updateFormSettings();
 
 			SuspendLayout();
 
@@ -184,7 +183,7 @@ namespace Mtgdb.Gui
 
 		private void buttonHideTextChanged(object sender, EventArgs e)
 		{
-			updateGlobalDisplaySettings();
+			updateFormSettings();
 
 			_viewCards.TextualFieldsVisible =
 				!_buttonHideText.Checked;
@@ -197,7 +196,7 @@ namespace Mtgdb.Gui
 
 		private void buttonPartialCardsChanged(object sender, EventArgs e)
 		{
-			updateGlobalDisplaySettings();
+			updateFormSettings();
 
 			_viewCards.AllowPartialCards = _viewDeck.AllowPartialCards =
 				!_buttonHidePartialCards.Checked;
@@ -441,7 +440,7 @@ namespace Mtgdb.Gui
 		{
 			_layoutRight.Visible =
 				_panelFilters.Visible =
-					_panelMenu.Visible = _uiModel.Form.ShowFilterPanels;
+					_panelMenu.Visible = _formRoot.ShowFilterPanels;
 		}
 
 		private void languageChanged()
@@ -749,7 +748,7 @@ namespace Mtgdb.Gui
 				for (int i = 1; i < loadedDecks.Length; i++)
 				{
 					var deck = loadedDecks[i];
-					_uiModel.Form.NewTab(form => ((FormMain) form)._requiredDeck = deck);
+					_formRoot.NewTab(form => ((FormMain) form)._requiredDeck = deck);
 				}
 			}
 			else if (dragData.GetFormats().Contains(DataFormats.Text))
@@ -791,6 +790,13 @@ namespace Mtgdb.Gui
 				return;
 
 			_deckModel.Draw(_cardRepo);
+		}
+
+
+
+		private void historyLoaded()
+		{
+			updateFormStatus();
 		}
 	}
 }

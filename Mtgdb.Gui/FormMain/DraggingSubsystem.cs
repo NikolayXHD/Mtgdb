@@ -215,10 +215,10 @@ namespace Mtgdb.Gui
 			var cursorImage = new Bitmap(cardIconSize.Width, cardIconSize.Height + handImage.Height - overlapY);
 			using (var g = Graphics.FromImage(cursorImage))
 			{
-				if (card?.Image == null)
+				if (card?.Image(Ui) == null)
 					g.DrawRectangle(new Pen(Color.Black, width: 2), new Rectangle(Point.Empty, cardIconSize));
 				else
-					g.DrawImage(card.Image, new Rectangle(Point.Empty, cardIconSize));
+					g.DrawImage(card.Image(Ui), new Rectangle(Point.Empty, cardIconSize));
 
 				g.DrawImage(handImage,
 					new Rectangle(
@@ -363,6 +363,8 @@ namespace Mtgdb.Gui
 		public event Action<Card> DragRemoved;
 		public event Action<Card> DragAdded;
 
+
+		public UiModel Ui { get; set; }
 
 
 		private DateTime? _dragStartedTime;

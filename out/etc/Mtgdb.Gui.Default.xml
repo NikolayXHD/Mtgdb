@@ -4,42 +4,28 @@
 
 	<!-- === DEFAULT APPLICATION CONFIGURATION ===
 		Do not edit this. It's useless because your changes will not survive installing new version.
-		For your changes there is are separate files 
+		For your changes there is is a separate file
 		* etc\Mtgdb.Gui.xml
-		* etc\Mtgdb.Gui.Display.xml
 	-->
 	
 	<SuggestImageDownloader Enabled="True" />
-	<Undo MaxDepth="100" />
-
-	<View
-		AllowPartialCards="True"
-		ShowTextualFields="True"
-		ShowDeck="True"
-	/>
 	
-	<NormalCardSize Width="223" Height="311" />
-	<ZoomCardSize Width="446" Height="622" />
-
+	<Undo MaxDepth="100" />
+	
+	<ImageCache CacheCapacity ="900"/>
+	
 	<ImageLocations>
 		<Directory Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
 		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 	</ImageLocations>
-	
-	<ImageCache CacheCapacity ="900"/>
-
-	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
-
-	<AppSource
-		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
-		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
-		NewsUrl=    "https://goo.gl/MoGdz8" />
 
 	<ImageSources>
+		
 		<QualityGroup Quality="Art" TargetDirectory="images\Artworks" FileListUrl="https://mega.nz/#F!mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
 			<MegaDir Url="https://mega.nz/#F!39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
 		</QualityGroup>
+		
 		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListUrl="https://mega.nz/#F!Jp1wETwQ!CL2o0x_C-y2rpiiGBGQfsA" >
 			<MegaDir Subdir="V17"        Url="https://mega.nz/#F!9okmHTQJ!eNAizb6D-bCKpsHxmB7rEA" />
 			<MegaDir Subdir="RIX"        Url="https://mega.nz/#F!p8dn3QxT!Suqk5bp_aepdhhzz8UGZFQ" />
@@ -262,6 +248,7 @@
 			<MegaDir Subdir="XLN"        Url="https://mega.nz/#F!A1dyRbzb!1BuoYy0tZPKX7ZnowVZaVw" />
 			<MegaDir Subdir="ZEN"        Url="https://mega.nz/#F!01MBxTCY!NcbAwOsA9pDqxAQ41jcFVA" />
 		</QualityGroup>
+		
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListUrl="https://mega.nz/#F!M80UFbwI!oneHfFYU8YNvUYeWBD-AzA">
 			<MegaDir Subdir="V17"        Url="https://mega.nz/#F!BoUTwLTA!p08s0Cu0AGWWap6DCGMjuQ" />
 			<MegaDir Subdir="RIX"        Url="https://mega.nz/#F!shMGgJLI!HoaKBRM_yFutrOTPMcJXcw" />
@@ -485,5 +472,12 @@
 			<MegaDir Subdir="ZEN"        Url="https://mega.nz/#F!psdyEAyQ!kCX7dNpQI2PHQkkrOW1kfw" />
 		</QualityGroup>
 	</ImageSources>
+
+	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
+
+	<AppSource
+		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
+		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
+		NewsUrl=    "https://goo.gl/MoGdz8" />
 
 </configuration>

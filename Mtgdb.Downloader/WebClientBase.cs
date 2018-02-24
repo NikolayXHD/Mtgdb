@@ -9,7 +9,7 @@ namespace Mtgdb.Downloader
 	{
 		public WebClientBase()
 		{
-			_webClient = new System.Net.WebClient();
+			_webClient = new WebClient();
 
 			_webClient.Headers.Add(
 				"User-Agent",

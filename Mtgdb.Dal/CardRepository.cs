@@ -10,10 +10,8 @@ namespace Mtgdb.Dal
 {
 	public class CardRepository
 	{
-		public CardRepository(UiModel uiModel)
+		public CardRepository()
 		{
-			_uiModel = uiModel;
-
 			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
 			BannedAndRestrictedFile = AppDir.Data.AddPath("patch.json");
 			Cards = new List<Card>();
@@ -57,7 +55,6 @@ namespace Mtgdb.Dal
 					{
 						var card = set.Cards[i];
 						card.Set = set;
-						card.UiModel = _uiModel;
 
 						preProcessCard(card);
 					}
@@ -280,7 +277,7 @@ namespace Mtgdb.Dal
 			return DateTime.MinValue;
 		}
 
-		public List<Card> GetForms(Card card)
+		public List<Card> GetForms(Card card, UiModel ui)
 		{
 			var forms = new List<Card> { card };
 
@@ -295,7 +292,7 @@ namespace Mtgdb.Dal
 					continue;
 
 				var namesakeWithImage = CardsByName.TryGet(namesakeName)
-					?.FirstOrDefault(_ => _.HasImage);
+					?.FirstOrDefault(c => c.HasImage(ui));
 
 				if (namesakeWithImage != null)
 					forms.Add(namesakeWithImage);
@@ -332,8 +329,6 @@ namespace Mtgdb.Dal
 		}
 
 
-
-		private readonly UiModel _uiModel;
 
 		public event Action SetAdded;
 		public event Action LoadingComplete;

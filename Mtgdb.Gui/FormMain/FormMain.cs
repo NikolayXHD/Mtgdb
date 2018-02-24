@@ -11,15 +11,40 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormMain : Form
 	{
-		public void LoadHistory(string tabId)
+		public void SetFormRoot(IFormRoot formRoot)
 		{
-			_historySubsystem.LoadHistory(AppDir.History, tabId);
-			updateFormStatus();
+			_formRoot = formRoot;
+
+			_searchStringSubsystem.SuggestModel = formRoot.SuggestModel;
+
+			_searchStringSubsystem.Ui =
+				_deckEditingSubsystem.Ui =
+					_imagePreloadingSubsystem.Ui =
+						_printingSubsystem.Ui =
+							_draggingSubsystem.Ui =
+								_drawingSubsystem.Ui = _formRoot.UiModel;
+
+			_fields = new Fields(_formRoot.UiModel);
+			_sortSubsystem.Fields = _fields;
+
+			_evaluators = new Evaluators
+			{
+				{ 2, c => _legalitySubsystem.IsAllowedInFormat(c) },
+				{ 3, c => c.CollectionCount(_formRoot.UiModel) > 0 },
+				{ 4, c => c.DeckCount(_formRoot.UiModel) > 0 },
+				{ 0, c => _quickFilterFacade.Evaluate(c) },
+				{ 1, c => _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false }
+			};
 		}
 
-		public void SaveHistory(string tabId)
+		public void LoadHistory(string historyDirectory, string tabId)
 		{
-			_historySubsystem.Save(AppDir.History, tabId);
+			_historySubsystem.LoadHistory(historyDirectory, tabId);
+		}
+
+		public void SaveHistory(string historyDirectory, string tabId)
+		{
+			_historySubsystem.Save(historyDirectory, tabId);
 		}
 
 		public void OnTabSelected(Card draggedCard)
@@ -35,17 +60,22 @@ namespace Mtgdb.Gui
 			lock (_searchResultCards)
 				updateIsSearchResult();
 
-			_uiModel.Deck = _deckModel;
+			_formRoot.UiModel.Deck = _deckModel;
 
 			_searchStringSubsystem.UpdateSuggestInput();
 
 			// hack to detect if this is the first time
-			bool firstTimeTabSelected = !_collectionModel.IsLoaded;
-
-			if (firstTimeTabSelected)
-				updateGlobalDisplaySettings();
+			bool isGloballyFirst = !_collectionModel.IsLoaded;
+			if (isGloballyFirst)
+				updateGlobalSettings();
 			else
-				historyUpdateGlobals(_historySubsystem.Current);
+				historyUpdateGlobalSettings(_historySubsystem.Current);
+
+			bool isFirstInForm = _formRoot.TabsCount == 1;
+			if (isFirstInForm)
+				updateFormSettings();
+			else
+				historyUpdateFormSettings(_historySubsystem.Current);
 
 			historyApply(_historySubsystem.Current);
 
@@ -63,13 +93,6 @@ namespace Mtgdb.Gui
 				dragCard(draggedCard);
 			
 			startThreads();
-		}
-
-		private void updateGlobalDisplaySettings()
-		{
-			_uiModel.ShowDeck = !_buttonHideDeck.Checked;
-			_uiModel.ShowPartialCards = !_buttonHidePartialCards.Checked;
-			_uiModel.ShowTextualFields = !_buttonHideText.Checked;
 		}
 
 		public void OnTabUnselected()
@@ -503,16 +526,31 @@ namespace Mtgdb.Gui
 		}
 
 
-
-		private void historyUpdateGlobals(GuiSettings settings)
+		private void updateGlobalSettings()
 		{
-			settings.CollectionCount = _collectionModel.CountById.ToDictionary();
-			settings.Language = _uiModel.Form.Language;
-			settings.HideTooltips = _uiModel.Form.HideTooltips;
-			settings.ShowPartialCards = _uiModel.ShowPartialCards;
-			settings.ShowDeck = _uiModel.ShowDeck;
-			settings.ShowTextualFields = _uiModel.ShowTextualFields;
-			settings.ShowFilterPanels = _uiModel.Form.ShowFilterPanels;
+		}
+
+		private void updateFormSettings()
+		{
+			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
+			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
+			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
+		}
+
+		private void historyUpdateGlobalSettings(GuiSettings settings)
+		{
+			settings.Collection = _collectionModel.CountById.ToDictionary();
+		}
+
+		private void historyUpdateFormSettings(GuiSettings settings)
+		{
+			settings.ShowDeck = _formRoot.ShowDeck;
+			settings.ShowPartialCards = _formRoot.ShowPartialCards;
+			settings.ShowTextualFields = _formRoot.ShowTextualFields;
+
+			settings.ShowFilterPanels = _formRoot.ShowFilterPanels;
+			settings.HideTooltips = _formRoot.HideTooltips;
+			settings.Language = _formRoot.UiModel.LanguageController.Language;
 		}
 
 		private void historyUpdate()
@@ -531,14 +569,14 @@ namespace Mtgdb.Gui
 				FilterType = FilterType.States,
 				FilterCmc = FilterCmc.States,
 				FilterGrid = FilterManager.States,
-				Language = _uiModel.Form.Language,
+				Language = _formRoot.UiModel.LanguageController.Language,
 				MainDeckCount = _deckModel.MainDeck.CountById.ToDictionary(),
 				MainDeckOrder = _deckModel.MainDeck.CardsIds.ToList(),
 				SideDeckCount = _deckModel.SideDeck.CountById.ToDictionary(),
 				SideDeckOrder = _deckModel.SideDeck.CardsIds.ToList(),
-				CollectionCount = _collectionModel.CountById.ToDictionary(),
+				Collection = _collectionModel.CountById.ToDictionary(),
 				ShowDuplicates = _buttonShowDuplicates.Checked,
-				HideTooltips = !_toolTipController.Active,
+				HideTooltips = !_formRoot.TooltipController.Active,
 				ExcludeManaAbilities = _buttonExcludeManaAbility.Checked,
 				ExcludeManaCost = _buttonExcludeManaCost.Checked,
 				ShowProhibit = _buttonShowProhibit.Checked,
@@ -553,7 +591,7 @@ namespace Mtgdb.Gui
 				ShowDeck = !_buttonHideDeck.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
-				ShowFilterPanels = _uiModel.Form.ShowFilterPanels
+				ShowFilterPanels = _formRoot.ShowFilterPanels
 			};
 
 			_historySubsystem.Add(settings);
@@ -592,12 +630,12 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.AppliedText = settings.Find ?? string.Empty;
 
-			_uiModel.Form.Language = settings.Language ?? CardLocalization.DefaultLanguage;
+			_formRoot.UiModel.LanguageController.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
 			_searchStringSubsystem.ApplyFind();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
-			_toolTipController.Active = !settings.HideTooltips;
+			_formRoot.TooltipController.Active = !settings.HideTooltips;
 			_buttonExcludeManaAbility.Checked = settings.ExcludeManaAbilities;
 			_buttonExcludeManaCost.Checked = settings.ExcludeManaCost != false;
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
@@ -605,7 +643,7 @@ namespace Mtgdb.Gui
 
 			hideSampleHand();
 
-			_collectionModel.LoadCollection(settings.Collection, append: false);
+			_collectionModel.LoadCollection(settings.CollectionModel, append: false);
 			loadDeck(_requiredDeck ?? settings.Deck);
 
 			_legalitySubsystem.SetFilterFormat(settings.LegalityFilterFormat);
@@ -618,7 +656,7 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.Checked = settings.ShowDeck == false;
 			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
 			_buttonHideText.Checked = settings.ShowTextualFields == false;
-			_uiModel.Form.ShowFilterPanels = settings.ShowFilterPanels != false;
+			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
 			applyShowFilterPanels();
 
 			endRestoreSettings();
@@ -644,8 +682,8 @@ namespace Mtgdb.Gui
 
 		private void historyUpdateButtons()
 		{
-			_uiModel.Form.CanUndo = _historySubsystem.CanUndo;
-			_uiModel.Form.CanRedo = _historySubsystem.CanRedo;
+			_formRoot.CanUndo = _historySubsystem.CanUndo;
+			_formRoot.CanRedo = _historySubsystem.CanRedo;
 		}
 
 		private void updateTerms()
@@ -761,7 +799,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsImageLoadingComplete)
 				return;
 
-			var saved = _deckSerializationSubsystem.SaveCollection(_historySubsystem.Current.Collection);
+			var saved = _deckSerializationSubsystem.SaveCollection(_historySubsystem.Current.CollectionModel);
 
 			if (saved == null)
 				return;
@@ -829,7 +867,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPivot()
 		{
-			var formPivot = new FormChart(_cardRepo);
+			var formPivot = new FormChart(_cardRepo, _formRoot.UiModel, _fields);
 			formPivot.Show();
 		}
 

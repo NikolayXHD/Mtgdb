@@ -86,7 +86,7 @@ namespace Mtgdb.Util
 				for (int m = 0; m < cards.Count; m++)
 				{
 					var card = cards[m];
-					var model = card.GetImageModel();
+					var model = card.ImageModel(Ui);
 					var path = model.ImageFile.FullPath;
 
 					Stopwatch sw = new Stopwatch();

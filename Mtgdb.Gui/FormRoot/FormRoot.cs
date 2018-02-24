@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Downloader;
 using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
-	public partial class FormRoot : CustomBorderForm, IUiForm
+	public partial class FormRoot : CustomBorderForm, IFormRoot
 	{
 		public FormRoot()
 		{
@@ -85,9 +85,6 @@ namespace Mtgdb.Gui
 
 			_labelPasteInfo.ScaleDpi();
 
-			_buttonMenuGeneralSettings.ScaleDpi();
-
-			
 			_buttonMenuOpenDeck.ScaleDpi();
 			_buttonMenuSaveDeck.ScaleDpi();
 			_buttonMenuOpenCollection.ScaleDpi();
@@ -124,15 +121,20 @@ namespace Mtgdb.Gui
 		// ReSharper disable once UnusedMember.Global
 		public FormRoot(Func<FormMain> formMainFactory,
 			DownloaderSubsystem downloaderSubsystem,
+			NewsService newsService,
 			SuggestModel suggestModel,
-			Loader loader,
 			TooltipController tooltipController,
-			CardRepository repository)
+			CardRepository repo,
+			UiModel uiModel,
+			FormManager formManager)
 			:this()
 		{
-			_tooltipController = tooltipController;
+			TooltipController = tooltipController;
+			UiModel = uiModel;
+			_formManager = formManager;
 
-			repository.LoadingComplete += repositoryLoaded;
+			_repo = repo;
+			_repo.LoadingComplete += repositoryLoaded;
 
 			_buttonSubsystem = new ButtonSubsystem();
 			RegisterDragControl(_tabs);
@@ -142,8 +144,8 @@ namespace Mtgdb.Gui
 
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
-			_suggestModel = suggestModel;
-			_loader = loader;
+			_newsService = newsService;
+			SuggestModel = suggestModel;
 
 			_tabs.TabAdded += pageCreated;
 			_tabs.TabRemoving += pageClosing;
@@ -153,9 +155,13 @@ namespace Mtgdb.Gui
 			_tabs.AllowDrop = true;
 			_tabs.DragOver += tabsDragOver;
 
-			Application.ApplicationExit += applicationExit;
+			FormClosing += formClosing;
 
 			KeyDown += formKeyDown;
+
+			_newsService.NewsFetched += newsFetched;
+			_newsService.NewsDisplayed += newsDisplayed;
+			_downloaderSubsystem.ProgressCalculated += downloaderProgressCalculated;
 
 			setupButtons();
 
@@ -172,45 +178,26 @@ namespace Mtgdb.Gui
 
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
 
-			Language = CardLocalization.DefaultLanguage;
+			_formManager.Add(this);
 		}
 
 		private void load(object sender, EventArgs e)
 		{
-			_loader.Add(() =>
-			{
-				_downloaderSubsystem.FetchNews(repeatViewed: false);
-				this.Invoke(updateDownloadButton);
-			});
+			updateDownloadButton();
+			updateDeckButtons();
 
-			_loader.Add(() =>
-			{
-				_downloaderSubsystem.CalculateProgress();
-
-				while (!_downloaderSubsystem.NewsLoaded)
-					Thread.Sleep(100);
-
-				this.Invoke(delegate
-				{
-					_buttonDownload.Enabled = true;
-				});
-
-				if (_downloaderSubsystem.NeedToSuggestDownloader)
-					_downloaderSubsystem.ShowDownloader(this, auto: true);
-			});
-
-			_loader.Run();
-
-			_suggestModel.StartSuggestThread();
+			SuggestModel.StartSuggestThread();
 		}
 
 		private void repositoryLoaded()
 		{
-			this.Invoke(delegate
-			{
-				foreach (var button in _deckButtons)
-					button.Enabled = true;
-			});
+			this.Invoke(updateDeckButtons);
+		}
+
+		private void updateDeckButtons()
+		{
+			foreach (var button in _deckButtons)
+				button.Enabled = _repo.IsLoadingComplete;
 		}
 
 
@@ -243,11 +230,15 @@ namespace Mtgdb.Gui
 		private void pageCreated(TabHeaderControl sender, int i)
 		{
 			var form = createFormMain();
-			form.LoadHistory(i.ToString());
+
+			form.SetFormRoot(this);
+
+			string tabId = i.ToString();
+			
+			form.LoadHistory(AppDir.History.AddPath(Id.ToString()), tabId);
 
 			_tabs.TabIds[i] = form;
 		}
-
 
 		private void formTextChanged(object sender, EventArgs e)
 		{
@@ -311,7 +302,8 @@ namespace Mtgdb.Gui
 		{
 			var formMain = (FormMain) _tabs.TabIds[i];
 			var lastTabId = (_tabs.Count - 1).ToString();
-			formMain.SaveHistory(lastTabId);
+
+			formMain.SaveHistory(AppDir.History.AddPath(Id.ToString()), lastTabId);
 			formMain.Close();
 		}
 
@@ -321,29 +313,60 @@ namespace Mtgdb.Gui
 				Close();
 		}
 
-		private void applicationExit(object sender, EventArgs e)
+		private void formClosing(object sender, EventArgs e)
 		{
+			_formManager.MoveToEnd(this);
+
 			for (int i = 0; i < _tabs.Count; i++)
 			{
 				var formMain = (FormMain) _tabs.TabIds[i];
-				formMain.SaveHistory(i.ToString());
+				formMain.SaveHistory(AppDir.History.AddPath(Id.ToString()), i.ToString());
 			}
+
+			_formManager.Remove(this);
+		}
+
+
+
+		private void newsFetched()
+		{
+			updateDownloadButton();
+		}
+
+		private void newsDisplayed()
+		{
+			updateDownloadButton();
+		}
+
+		private void downloaderProgressCalculated()
+		{
+			updateDownloadButton();
 		}
 
 		private void updateDownloadButton()
 		{
-			var image = _downloaderSubsystem.HasUnreadNews
+			var image = _newsService.HasUnreadNews
 				? Resources.update_notification_40
 				: Resources.update_40;
 
-			setupButton(_buttonDownload, image, true);
+			bool enabled = _downloaderSubsystem.IsProgressCalculated && _newsService.NewsLoaded;
+
+			this.Invoke(delegate
+			{
+				_buttonDownload.Enabled = enabled;
+				setupButton(_buttonDownload, image, true);
+
+				if (enabled && _downloaderSubsystem.NeedToSuggestDownloader)
+					_downloaderSubsystem.ShowDownloader(this, auto: true);
+			});
 		}
+
+
 
 		private void closed(object sender, EventArgs e)
 		{
 			unsubsribeButtonEvents();
-			_loader.Abort();
-			_suggestModel.AbortSuggestThread();
+			SuggestModel.AbortSuggestThread();
 		}
 
 		private void queryHandleDrag(object sender, MouseEventArgs e, CancelEventArgs cancelArgs)
@@ -406,13 +429,13 @@ namespace Mtgdb.Gui
 		{
 			get
 			{
-				return !_tooltipController.Active;
+				return !TooltipController.Active;
 			}
 			set
 			{
 				bool showTooltips = !value;
-				if (_tooltipController.Active != showTooltips)
-					_tooltipController.Active = showTooltips;
+				if (TooltipController.Active != showTooltips)
+					TooltipController.Active = showTooltips;
 
 				if (_buttonTooltips.Checked != showTooltips)
 					_buttonTooltips.Checked = showTooltips;
@@ -478,17 +501,29 @@ namespace Mtgdb.Gui
 			_tabs.RemoveTab(_tabs.SelectedIndex);
 		}
 
+		public int TabsCount => _tabs.Count;
+
+		public SuggestModel SuggestModel { get; }
+		public UiModel UiModel { get; }
+		public TooltipController TooltipController { get; }
+
+		public bool ShowTextualFields { get; set; }
+		public bool ShowDeck { get; set; }
+		public bool ShowPartialCards { get; set; }
+
 		private readonly Func<FormMain> _formMainFactory;
 		private readonly DownloaderSubsystem _downloaderSubsystem;
-		private readonly SuggestModel _suggestModel;
-		private readonly Loader _loader;
-		private string _language;
-
+		private readonly NewsService _newsService;
+		
 		private bool _undoingOrRedoing;
 		private Card _draggedCard;
 		private FormMain _draggingForm;
-		private readonly TooltipController _tooltipController;
 		
+		private readonly FormManager _formManager;
+		private CardRepository _repo;
+
+		private int Id => _formManager.GetId(this);
+
 		public sealed override string Text
 		{
 			get { return base.Text; }

@@ -51,6 +51,14 @@ namespace Mtgdb.Downloader
 			}
 
 			_unreadNews.Clear();
+
+			NewsDisplayed?.Invoke();
+		}
+
+
+		public void FetchNews()
+		{
+			FetchNews(repeatViewed: false);
 		}
 
 		public void FetchNews(bool repeatViewed)
@@ -62,6 +70,8 @@ namespace Mtgdb.Downloader
 				.Where(file => repeatViewed || !File.Exists(getReadNewsFile(file)))
 				.OrderByDescending(Path.GetFileNameWithoutExtension, _versionComparer)
 				.ToList();
+
+			NewsFetched?.Invoke();
 		}
 
 		private void downloadNews()
@@ -109,6 +119,9 @@ namespace Mtgdb.Downloader
 		{
 			return _readNewsDir.AddPath(Path.GetFileName(file));
 		}
+
+		public event Action NewsFetched;
+		public event Action NewsDisplayed;
 
 		public bool NewsLoaded => _unreadNews != null;
 		public bool HasUnreadNews => _unreadNews != null && _unreadNews.Count > 0;

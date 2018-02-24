@@ -63,6 +63,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add_form_32 {
+            get {
+                object obj = ResourceManager.GetObject("add_form_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap add_tab_32 {
             get {
                 object obj = ResourceManager.GetObject("add_tab_32", resourceCulture);
@@ -303,9 +313,9 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filters_hide_32_hovered {
+        internal static System.Drawing.Bitmap filters_hide_hovered_32 {
             get {
-                object obj = ResourceManager.GetObject("filters_hide_32_hovered", resourceCulture);
+                object obj = ResourceManager.GetObject("filters_hide_hovered_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

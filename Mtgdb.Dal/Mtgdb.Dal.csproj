@@ -111,7 +111,7 @@
     <Compile Include="Model\InternedStringArrayConverter.cs" />
     <Compile Include="Model\InternedStringConverter.cs" />
     <Compile Include="Model\IntToInternedStringConverter.cs" />
-    <Compile Include="Model\IUiForm.cs" />
+    <Compile Include="Model\LanguageController.cs" />
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />
     <Compile Include="Model\Patch\Patch.cs" />

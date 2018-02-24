@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
-	public partial class CardLayout : LayoutControl
+	public partial class CardLayout : CardLayoutControlBase
 	{
 		public CardLayout()
 		{
@@ -53,15 +52,15 @@ namespace Mtgdb.Gui
 		{
 			var card = (Card) dataSource;
 
-			_fieldImage.Image = card?.Image;
-			_fieldName.Text = card?.Name;
+			_fieldImage.Image = card?.Image(Ui);
+			_fieldName.Text = card?.Name(Ui);
 			_fieldManaCost.Text = card?.ManaCost;
-			_fieldType.Text = card?.Type;
+			_fieldType.Text = card?.Type(Ui);
 			_fieldCmc.Text = card?.Cmc.ToString(Str.Culture);
 			_fieldSetCode.Text = card?.SetCode;
 			_fieldSetName.Text = card?.SetName;
-			_fieldText.Text = card?.Text;
-			_fieldFlavor.Text = card?.Flavor;
+			_fieldText.Text = card?.Text(Ui);
+			_fieldFlavor.Text = card?.Flavor(Ui);
 			_fieldArtist.Text = card?.Artist;
 			_fieldReleaseDate.Text = card?.ReleaseDate;
 			_fieldRarity.Text = card?.Rarity;

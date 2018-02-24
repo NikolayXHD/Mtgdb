@@ -275,33 +275,14 @@ namespace Mtgdb.Controls
 		private LayoutControl createCard()
 		{
 			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
-			result.SetIconRecognizer(IconRecognizer);
-			result.Font = ProbeCard.Font;
 
-			result.Size = ProbeCard.Size;
+			ProbeCard.CopyTo(result);
 
-			using (var probeEnumerator = ProbeCard.Fields.GetEnumerator())
-			using (var enumerator = result.Fields.GetEnumerator())
-			{
-				while (probeEnumerator.MoveNext())
-				{
-					enumerator.MoveNext();
-
-					var probeField = probeEnumerator.Current;
-					var field = enumerator.Current;
-
-					field.Location = probeField.Location;
-					field.Size = probeField.Size;
-					field.Font = probeField.Font;
-					field.BackColor = probeField.BackColor;
-					field.ForeColor = probeField.ForeColor;
-					field.HorizontalAlignment = probeField.HorizontalAlignment;
-
-					updateSort(field);
-				}
-			}
+			foreach (var field in result.Fields)
+				updateSort(field);
 
 			result.Invalid += cardInvalidated;
+
 			return result;
 		}
 
