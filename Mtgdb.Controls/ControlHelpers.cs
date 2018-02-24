@@ -194,6 +194,31 @@ namespace Mtgdb.Controls
 				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
 		}
 
+		public static bool IsUnderMouse(this Control c)
+		{
+			return c.Handle.Equals(WindowFromPoint(Cursor.Position));
+		}
+
+		public static bool IsChildUnderMouse(this Control c)
+		{
+			var position = Cursor.Position;
+			var handle = WindowFromPoint(position);
+
+			while (true)
+			{
+				var clientPosition = c.PointToClient(position);
+				var child = c.GetChildAtPoint(clientPosition);
+
+				if (child == null || child == c)
+				{
+					bool result = c.Handle.Equals(handle);
+					return result;
+				}
+
+				c = child;
+			}
+		}
+
 		private const int EM_CHARFROMPOS = 0x00D7;
 
 		[StructLayout(LayoutKind.Sequential)]

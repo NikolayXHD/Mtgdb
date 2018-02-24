@@ -336,7 +336,7 @@ namespace Mtgdb.Controls
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
-			if (!isUnderMouse())
+			if (!this.IsUnderMouse())
 				return;
 
 			e.SuppressKeyPress = true;
@@ -359,7 +359,7 @@ namespace Mtgdb.Controls
 
 		private void mouseWheel(object sender, MouseEventArgs e)
 		{
-			if (!isUnderMouse())
+			if (!this.IsUnderMouse())
 				return;
 
 			if (e.Delta < 0)
@@ -1093,16 +1093,11 @@ namespace Mtgdb.Controls
 					return false;
 			}
 
-			if (!Focused && isUnderMouse())
+			if (!Focused && this.IsUnderMouse())
 				// Отправить событие в данный контрол
 				ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 
 			return false;
-		}
-
-		private bool isUnderMouse()
-		{
-			return Handle.Equals(ControlHelpers.WindowFromPoint(Cursor.Position));
 		}
 
 		private static readonly int[] _navigationKeys =

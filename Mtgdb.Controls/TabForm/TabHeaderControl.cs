@@ -212,7 +212,7 @@ namespace Mtgdb.Controls
 
 			if (IsDragging() || isReadyToDrag())
 			{
-				abortDrag();
+				AbortDrag();
 				return;
 			}
 
@@ -222,7 +222,7 @@ namespace Mtgdb.Controls
 
 			if (hoveredIndex < 0 || hoveredIndex >= Count || hoveredClose)
 			{
-				abortDrag();
+				AbortDrag();
 				return;
 			}
 
@@ -237,18 +237,18 @@ namespace Mtgdb.Controls
 
 			if (IsDragging())
 			{
-				int draggingIndex = _draggingIndex.Value;
+				int draggingIndex = DraggingIndex.Value;
 				_dragCurrentX = e.Location.X;
 				int draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, draggingIndex);
 
 				RelocateTab(draggingIndex, draggingOverIndex, selectRelocated: true);
 
-				abortDrag();
+				AbortDrag();
 				return;
 			}
 
 			if (isReadyToDrag())
-				abortDrag();
+				AbortDrag();
 		}
 
 		private void mouseLeave(object sender, EventArgs e)
@@ -289,7 +289,7 @@ namespace Mtgdb.Controls
 			else if (IsDragging())
 			{
 				_dragCurrentX = e.X;
-				_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, _draggingIndex.Value);
+				_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
 				Invalidate();
 			}
 			else
@@ -318,9 +318,9 @@ namespace Mtgdb.Controls
 
 				if (IsDragging())
 				{
-					texts = texts.Reorder(_draggingIndex.Value, _draggingOverIndex.Value);
-					widths = widths.Reorder(_draggingIndex.Value, _draggingOverIndex.Value);
-					icons = icons.Reorder(_draggingIndex.Value, _draggingOverIndex.Value);
+					texts = texts.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
+					widths = widths.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
+					icons = icons.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
 
 					for (int i = widths.Count - 1; i >= 0; i--)
 					{
@@ -391,7 +391,7 @@ namespace Mtgdb.Controls
 			_dragStartedX = null;
 			_dragCurrentX = x;
 
-			_draggingIndex = index;
+			DraggingIndex = index;
 			_draggingOverIndex = null;
 		}
 
@@ -400,13 +400,25 @@ namespace Mtgdb.Controls
 			return _dragCurrentX.HasValue && !_dragStartedX.HasValue;
 		}
 
+		public void BeginDrag(int index)
+		{
+			var position = Cursor.Position;
+			var clientPosition = PointToClient(position);
+
+			var tabPolygon = getTabPolygon(index, Widths);
+			var middleX = (tabPolygon[0].X + tabPolygon[tabPolygon.Length - 1].X) / 2;
+
+			getReadyToDrag(middleX, index);
+			beginDrag(clientPosition.X);
+		}
+
 		private void beginDrag(int x)
 		{
 			_dragStartedX = _dragCurrentX;
 			_dragCurrentX = x;
 
-			SelectedIndex = HoveredIndex = _draggingIndex.Value;
-			_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, _draggingIndex.Value);
+			SelectedIndex = HoveredIndex = DraggingIndex.Value;
+			_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
 		}
 
 		public bool IsDragging()
@@ -414,12 +426,12 @@ namespace Mtgdb.Controls
 			return _dragStartedX.HasValue;
 		}
 
-		private void abortDrag()
+		public void AbortDrag()
 		{
 			_dragStartedX =
 			_dragCurrentX = null;
 
-			_draggingIndex = null;
+			DraggingIndex = null;
 			_draggingOverIndex = null;
 
 			Invalidate();
@@ -593,7 +605,7 @@ namespace Mtgdb.Controls
 			if (!isDraggedOver(i))
 				x1 = getTabLeft(i, slopeSize, widths);
 			else
-				x1 = getTabLeft(_draggingIndex.Value, slopeSize, Widths) + _dragCurrentX.Value - _dragStartedX.Value;
+				x1 = getTabLeft(DraggingIndex.Value, slopeSize, Widths) + _dragCurrentX.Value - _dragStartedX.Value;
 
 			int x2;
 			if (i < widths.Count)
@@ -1043,7 +1055,7 @@ namespace Mtgdb.Controls
 		private int _textPadding = 6;
 		private bool _allowAddingTabs = true;
 
-		private int? _draggingIndex;
+		public int? DraggingIndex;
 		private int? _draggingOverIndex;
 		private int? _dragStartedX;
 		private int? _dragCurrentX;

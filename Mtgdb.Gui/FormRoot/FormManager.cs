@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Gui
@@ -22,7 +23,12 @@ namespace Mtgdb.Gui
 
 		public int GetId(FormRoot form)
 		{
-			return _instances.IndexOf(form);
+			int result = _instances.IndexOf(form);
+
+			if (result == -1)
+				return _instances.Count;
+
+			return result;
 		}
 
 		public void Add(FormRoot form)
@@ -59,6 +65,39 @@ namespace Mtgdb.Gui
 			_instances.RemoveAt(idBeforeClosing);
 			_instances.Add(form);
 		}
+
+		public void SwapTabs(int formId1, int tabId1, int formId2, int tabId2)
+		{
+			var tempDir = AppDir.History.AddPath("temp");
+
+			var file1 = AppDir.History.AddPath(formId1.ToString()).AddPath(tabId1 + ".json");
+			var file2 = AppDir.History.AddPath(formId2.ToString()).AddPath(tabId2 + ".json");
+
+			var tempFile = Path.Combine(tempDir, Path.GetFileName(file1));
+
+			if (Directory.Exists(tempDir))
+				Directory.Delete(tempDir, recursive: true);
+
+			Directory.CreateDirectory(tempDir);
+
+			if (File.Exists(file1))
+				File.Move(file1, tempFile);
+
+			if (File.Exists(file2))
+				File.Move(file2, file1);
+
+			if (File.Exists(tempFile))
+				File.Move(tempFile, file2);
+		}
+
+		public FormMain FindCardDraggingForm()
+		{
+			return _instances
+				.SelectMany(_ => _.Tabs)
+				.FirstOrDefault(_ => _.IsDraggingCard);
+		}
+
+		public IEnumerable<FormRoot> Forms => _instances;
 
 		private readonly List<FormRoot> _instances = new List<FormRoot>();
 		private readonly Func<FormRoot> _formFactory;

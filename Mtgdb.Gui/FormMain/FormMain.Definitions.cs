@@ -24,7 +24,8 @@ namespace Mtgdb.Gui
 			CollectionModel collectionModel,
 			LuceneSearcher luceneSearcher,
 			KeywordSearcher keywordSearcher,
-			ForgeSetRepository forgeSetRepo)
+			ForgeSetRepository forgeSetRepo,
+			FormManager formManager)
 			: this()
 		{
 			_viewCards = new LayoutView(_layoutViewCards);
@@ -32,6 +33,7 @@ namespace Mtgdb.Gui
 
 			_luceneSearcher = luceneSearcher;
 			_keywordSearcher = keywordSearcher;
+			_formManager = formManager;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
 			_cardRepo = cardRepo;
@@ -82,7 +84,8 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_deckModel,
 				this,
-				_imageLoader);
+				_imageLoader,
+				_formManager);
 
 			_deckEditingSubsystem = new DeckEditingSubsystem(
 				_viewCards,
@@ -352,7 +355,10 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
 			_buttonShowDuplicates.CheckedChanged -= showDuplicatesCheckedChanged;
 
+			_draggingSubsystem.UnsubscribeFromEvents();
+
 			_scrollSubsystem.UnsubscribeFromEvents();
+
 			_legalitySubsystem.FilterChanged -= legalityFilterChanged;
 			_deckModel.DeckChanged -= deckChanged;
 			_collectionModel.CollectionChanged -= collectionChanged;
@@ -476,6 +482,7 @@ namespace Mtgdb.Gui
 		private readonly LegalitySubsystem _legalitySubsystem;
 		private readonly LuceneSearcher _luceneSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
+		private readonly FormManager _formManager;
 
 		private readonly LayoutView _viewCards;
 		private readonly LayoutView _viewDeck;

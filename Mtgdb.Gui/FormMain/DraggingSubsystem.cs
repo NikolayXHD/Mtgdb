@@ -8,20 +8,22 @@ using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
-	public class DraggingSubsystem
+	public class DraggingSubsystem: IMessageFilter
 	{
 		public DraggingSubsystem(
 			LayoutView layoutViewDeck,
 			LayoutView layoutViewCards,
 			DeckModel deckModel,
-			Control parent,
-			ImageLoader imageLoader)
+			FormMain parent,
+			ImageLoader imageLoader,
+			FormManager formManager)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
 			_deckModel = deckModel;
 			_parent = parent;
 			_imageLoader = imageLoader;
+			_formManager = formManager;
 		}
 
 
@@ -44,6 +46,30 @@ namespace Mtgdb.Gui
 
 			_layoutViewDeck.MouseLeave += mouseLeave;
 			_layoutViewCards.MouseLeave += mouseLeave;
+
+			Application.AddMessageFilter(this);
+		}
+
+		public void UnsubscribeFromEvents()
+		{
+			_layoutViewDeck.MouseDown -= mouseDown;
+			_layoutViewCards.MouseDown -= mouseDown;
+
+			_layoutViewDeck.MouseMove -= mouseMove;
+			_layoutViewCards.MouseMove -= mouseMove;
+
+			_layoutViewDeck.MouseUp -= mouseUp;
+			_layoutViewCards.MouseUp -= mouseUp;
+
+			_layoutViewDeck.VisibleRecordIndexChanged -= deckScrolled;
+
+			_layoutViewDeck.MouseEnter -= mouseEnter;
+			_layoutViewCards.MouseEnter -= mouseEnter;
+
+			_layoutViewDeck.MouseLeave -= mouseLeave;
+			_layoutViewCards.MouseLeave -= mouseLeave;
+
+			Application.RemoveMessageFilter(this);
 		}
 
 		public void SetupDrawingDraggingMarkEvent()
@@ -358,11 +384,45 @@ namespace Mtgdb.Gui
 		}
 
 
+		public bool PreFilterMessage(ref Message m)
+		{
+			// WM_MOUSEMOVE
+			if (m.Msg == 0x0200)
+				mouseMoved();
+
+			return false;
+		}
+
+		private void mouseMoved()
+		{
+			if (IsDragging())
+				return;
+
+			bool underMouse = _parent.IsChildUnderMouse();
+
+			if (!underMouse)
+				return;
+
+			var draggingForm = _formManager.FindCardDraggingForm();
+
+			if (draggingForm == null || draggingForm == _parent)
+				return;
+
+			var draggedCard = draggingForm.DraggedCard;
+			draggingForm.StopDragging();
+
+			if (IsDragging())
+				DragAbort();
+
+			DragBegin(draggedCard, _layoutViewCards);
+		}
+
+
 
 		public event Action<Card> DraggedLikeClick;
 		public event Action<Card> DragRemoved;
 		public event Action<Card> DragAdded;
-
+		
 
 		public UiModel Ui { get; set; }
 
@@ -375,8 +435,9 @@ namespace Mtgdb.Gui
 		private readonly LayoutView _layoutViewDeck;
 		private readonly LayoutView _layoutViewCards;
 		private readonly DeckModel _deckModel;
-		private readonly Control _parent;
+		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;
+		private readonly FormManager _formManager;
 		private Cursor _dragCursor;
 	}
 }

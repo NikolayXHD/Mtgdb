@@ -47,7 +47,7 @@ namespace Mtgdb.Gui
 			_historySubsystem.Save(historyDirectory, tabId);
 		}
 
-		public void OnTabSelected(Card draggedCard)
+		public void OnTabSelected()
 		{
 			if (!IsLoaded)
 				throw new InvalidOperationException("Form must be loaded first");
@@ -86,13 +86,9 @@ namespace Mtgdb.Gui
 			}
 
 			historyUpdateButtons();
-
-			if (draggedCard == null)
-				_findEditor.Focus();  
-			else
-				dragCard(draggedCard);
-			
 			startThreads();
+
+			_findEditor.Focus();
 		}
 
 		public void OnTabUnselected()
@@ -907,6 +903,8 @@ namespace Mtgdb.Gui
 				_draggingSubsystem. DragAbort();
 
 			_viewCards.Focus();
+			
+			// _viewCards to avoid deck reordering
 			_draggingSubsystem.DragBegin(card, _viewCards);
 		}
 

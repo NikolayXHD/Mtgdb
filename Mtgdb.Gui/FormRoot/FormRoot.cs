@@ -11,7 +11,7 @@ using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
-	public partial class FormRoot : CustomBorderForm, IFormRoot
+	public partial class FormRoot : CustomBorderForm, IFormRoot, IMessageFilter
 	{
 		public FormRoot()
 		{
@@ -154,6 +154,7 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndexChanged += selectedPageChanged;
 			_tabs.AllowDrop = true;
 			_tabs.DragOver += tabsDragOver;
+			_tabs.MouseMove += tabMouseMove;
 
 			FormClosing += formClosing;
 
@@ -187,6 +188,7 @@ namespace Mtgdb.Gui
 			updateDeckButtons();
 
 			SuggestModel.StartSuggestThread();
+			Application.AddMessageFilter(this);
 		}
 
 		private void repositoryLoaded()
@@ -260,19 +262,15 @@ namespace Mtgdb.Gui
 			pageUnselecting();
 		}
 
-		private void selectedPageChanged(TabHeaderControl sender, int selected)
-		{
-			pageSelected();
-		}
-
 		private void pageUnselecting()
 		{
 			var form = getSelectedForm();
-
-			if (_draggingForm != null && _draggingForm == form)
-				_draggingForm.StopDragging();
-
 			form?.OnTabUnselected();
+		}
+
+		private void selectedPageChanged(TabHeaderControl sender, int selected)
+		{
+			pageSelected();
 		}
 
 		private void pageSelected()
@@ -292,10 +290,7 @@ namespace Mtgdb.Gui
 			}
 
 			selectedForm.BringToFront();
-			selectedForm.OnTabSelected(_draggedCard);
-
-			_draggingForm = null;
-			_draggedCard = null;
+			selectedForm.OnTabSelected();
 		}
 
 		private void pageClosing(object sender, int i)
@@ -324,6 +319,8 @@ namespace Mtgdb.Gui
 			}
 
 			_formManager.Remove(this);
+
+			Application.RemoveMessageFilter(this);
 		}
 
 
@@ -389,33 +386,58 @@ namespace Mtgdb.Gui
 			form.Location = new Point(0, 0);
 
 			form.TextChanged += formTextChanged;
-			_tabs.MouseMove += tabMouseMove;
 			return form;
 		}
 
 		private void tabMouseMove(object sender, MouseEventArgs e)
 		{
-			_draggedCard = null;
+			var draggingFromTab = _formManager.FindCardDraggingForm();
 
-			var selectedForm = getSelectedForm();
-
-			if (selectedForm == null)
+			if (draggingFromTab == null)
 				return;
 
-			if (!selectedForm.IsDraggingCard)
-				return;
+			var hoveredForm = (FormMain) _tabs.HoveredTabId;
 
-			_draggedCard = selectedForm.DraggedCard;
-			_draggingForm = selectedForm;
-
-			var hoveredForm = (FormMain)_tabs.HoveredTabId;
-
-			if (hoveredForm != null && selectedForm != hoveredForm)
+			if (hoveredForm != null && draggingFromTab != hoveredForm)
 				_tabs.SelectedTabId = hoveredForm;
 			else if (_tabs.HoveredIndex == _tabs.AddButtonIndex)
 				NewTab(null);
 		}
 
+		public bool PreFilterMessage(ref Message m)
+		{
+			// WM_MOUSEMOVE
+			if (m.Msg == 0x0200)
+				mouseMoved();
+
+			return false;
+		}
+
+		private void mouseMoved()
+		{
+			if (!_tabs.IsUnderMouse())
+				return;
+
+			var tabDraggingForm = _formManager.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
+
+			if (tabDraggingForm == this)
+				return;
+
+			if (tabDraggingForm == null)
+				return;
+
+			var draggedIndex = tabDraggingForm._tabs.DraggingIndex.Value;
+			tabDraggingForm._tabs.AbortDrag();
+			tabDraggingForm._tabs.Capture = false;
+
+			tabDraggingForm._tabs.RemoveTab(draggedIndex);
+
+			_formManager.SwapTabs(Id, TabsCount, tabDraggingForm.Id, tabDraggingForm.TabsCount);
+
+			NewTab(null);
+
+			_tabs.BeginDrag(TabsCount - 1);
+		}
 
 		public bool ShowFilterPanels
 		{
@@ -503,6 +525,8 @@ namespace Mtgdb.Gui
 
 		public int TabsCount => _tabs.Count;
 
+		public IEnumerable<FormMain> Tabs => _tabs.TabIds.Cast<FormMain>();
+
 		public SuggestModel SuggestModel { get; }
 		public UiModel UiModel { get; }
 		public TooltipController TooltipController { get; }
@@ -514,13 +538,11 @@ namespace Mtgdb.Gui
 		private readonly Func<FormMain> _formMainFactory;
 		private readonly DownloaderSubsystem _downloaderSubsystem;
 		private readonly NewsService _newsService;
-		
+
 		private bool _undoingOrRedoing;
-		private Card _draggedCard;
-		private FormMain _draggingForm;
-		
+
 		private readonly FormManager _formManager;
-		private CardRepository _repo;
+		private readonly CardRepository _repo;
 
 		private int Id => _formManager.GetId(this);
 
