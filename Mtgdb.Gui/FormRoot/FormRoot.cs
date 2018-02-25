@@ -131,6 +131,10 @@ namespace Mtgdb.Gui
 		{
 			TooltipController = tooltipController;
 			UiModel = uiModel;
+			SuggestModel = suggestModel;
+
+			SuggestModel.Ui = UiModel;
+
 			_formManager = formManager;
 
 			_repo = repo;
@@ -145,13 +149,12 @@ namespace Mtgdb.Gui
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
 			_newsService = newsService;
-			SuggestModel = suggestModel;
 
-			_tabs.TabAdded += pageCreated;
-			_tabs.TabRemoving += pageClosing;
-			_tabs.TabRemoved += pageClosed;
-			_tabs.SelectedIndexChanging += selectedPageChanging;
-			_tabs.SelectedIndexChanged += selectedPageChanged;
+			_tabs.TabAdded += tabCreated;
+			_tabs.TabRemoving += tabClosing;
+			_tabs.TabRemoved += tabClosed;
+			_tabs.SelectedIndexChanging += selectedTabChanging;
+			_tabs.SelectedIndexChanged += selectedTabChanged;
 			_tabs.AllowDrop = true;
 			_tabs.DragOver += tabsDragOver;
 			_tabs.MouseMove += tabMouseMove;
@@ -187,8 +190,8 @@ namespace Mtgdb.Gui
 			updateDownloadButton();
 			updateDeckButtons();
 
-			SuggestModel.StartSuggestThread();
 			Application.AddMessageFilter(this);
+			SuggestModel.StartSuggestThread();
 		}
 
 		private void repositoryLoaded()
@@ -229,17 +232,22 @@ namespace Mtgdb.Gui
 			return (FormMain)_tabs.SelectedTabId;
 		}
 
-		private void pageCreated(TabHeaderControl sender, int i)
+		private void tabCreated(TabHeaderControl sender, int i)
 		{
-			var form = createFormMain();
+			var form = (FormMain) _tabs.TabIds[i];
+
+			bool creatingNewForm = form == null;
+
+			if (creatingNewForm)
+				form = createFormMain();
 
 			form.SetFormRoot(this);
 
-			string tabId = i.ToString();
-			
-			form.LoadHistory(AppDir.History.AddPath(Id.ToString()), tabId);
-
-			_tabs.TabIds[i] = form;
+			if (creatingNewForm)
+			{
+				form.LoadHistory(AppDir.History.AddPath(Id.ToString()), i.ToString());
+				_tabs.TabIds[i] = form;
+			}
 		}
 
 		private void formTextChanged(object sender, EventArgs e)
@@ -257,23 +265,23 @@ namespace Mtgdb.Gui
 			_tabs.SetTabSetting(formMain, new TabSettings(text));
 		}
 
-		private void selectedPageChanging(TabHeaderControl sender, int selected)
+		private void selectedTabChanging(TabHeaderControl sender, int selected)
 		{
-			pageUnselecting();
+			tabUnselecting();
 		}
 
-		private void pageUnselecting()
+		private void tabUnselecting()
 		{
 			var form = getSelectedForm();
 			form?.OnTabUnselected();
 		}
 
-		private void selectedPageChanged(TabHeaderControl sender, int selected)
+		private void selectedTabChanged(TabHeaderControl sender, int selected)
 		{
-			pageSelected();
+			tabSelected();
 		}
 
-		private void pageSelected()
+		private void tabSelected()
 		{
 			var selectedForm = getSelectedForm();
 
@@ -293,16 +301,21 @@ namespace Mtgdb.Gui
 			selectedForm.OnTabSelected();
 		}
 
-		private void pageClosing(object sender, int i)
+		private void tabClosing(object sender, int i)
 		{
 			var formMain = (FormMain) _tabs.TabIds[i];
+
+			// implicit connection: move_tab_between_forms
+			if (formMain == null)
+				return;
+
 			var lastTabId = (_tabs.Count - 1).ToString();
 
 			formMain.SaveHistory(AppDir.History.AddPath(Id.ToString()), lastTabId);
 			formMain.Close();
 		}
 
-		private void pageClosed(TabHeaderControl sender)
+		private void tabClosed(TabHeaderControl sender)
 		{
 			if (_tabs.Count == 0)
 				Close();
@@ -401,11 +414,14 @@ namespace Mtgdb.Gui
 			if (hoveredForm != null && draggingFromTab != hoveredForm)
 				_tabs.SelectedTabId = hoveredForm;
 			else if (_tabs.HoveredIndex == _tabs.AddButtonIndex)
-				NewTab(null);
+				AddTab();
 		}
 
 		public bool PreFilterMessage(ref Message m)
 		{
+			if (Disposing || IsDisposed)
+				return false;
+
 			// WM_MOUSEMOVE
 			if (m.Msg == 0x0200)
 				mouseMoved();
@@ -427,15 +443,29 @@ namespace Mtgdb.Gui
 				return;
 
 			var draggedIndex = tabDraggingForm._tabs.DraggingIndex.Value;
-			tabDraggingForm._tabs.AbortDrag();
-			tabDraggingForm._tabs.Capture = false;
 
-			tabDraggingForm._tabs.RemoveTab(draggedIndex);
+			takeTabFromAnotherForm(tabDraggingForm, draggedIndex);
+		}
+
+		private void takeTabFromAnotherForm(FormRoot tabDraggingForm, int draggedIndex)
+		{
+			var dragSourceTabs = tabDraggingForm._tabs;
+
+			dragSourceTabs.AbortDrag();
+			dragSourceTabs.Capture = false;
+
+			var formMain = (FormMain) dragSourceTabs.TabIds[draggedIndex];
+
+			// implicit connection: move_tab_between_forms
+			dragSourceTabs.TabIds[draggedIndex] = null;
+
+			dragSourceTabs.RemoveTab(draggedIndex);
 
 			_formManager.SwapTabs(Id, TabsCount, tabDraggingForm.Id, tabDraggingForm.TabsCount);
 
-			NewTab(null);
+			AddTab(formMain);
 
+			_tabs.Capture = true;
 			_tabs.BeginDrag(TabsCount - 1);
 		}
 
@@ -480,7 +510,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public void NextTab()
+		public void SelectNextTab()
 		{
 			int nextPageIndex = 1 + _tabs.SelectedIndex;
 
@@ -490,7 +520,7 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void PrevTab()
+		public void SelectPreviousTab()
 		{
 			int nextPageIndex = _tabs.SelectedIndex - 1;
 
@@ -500,28 +530,35 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void NewTab(Action<object> onCreated)
+		public void AddTab()
 		{
-			if (onCreated != null)
-			{
-				Action<TabHeaderControl, int> onTabCreated = (c, i) =>
-				{
-					var form = (FormMain) c.TabIds[i];
-					onCreated(form);
-				};
+			_tabs.AddTab();
+		}
 
-				_tabs.TabAdded += onTabCreated;
-				_tabs.AddTab();
-				_tabs.TabAdded -= onTabCreated;
-			}
-			else
-				_tabs.AddTab();
+		public void AddTab(Action<object> onCreated)
+		{
+			Action<TabHeaderControl, int> onTabCreated = (c, i) =>
+			{
+				var form = (FormMain) c.TabIds[i];
+				onCreated(form);
+			};
+
+			_tabs.TabAdded += onTabCreated;
+			_tabs.AddTab();
+			_tabs.TabAdded -= onTabCreated;
+		}
+
+		public void AddTab(FormMain form)
+		{
+			_tabs.AddTab(form);
 		}
 
 		public void CloseTab()
 		{
 			_tabs.RemoveTab(_tabs.SelectedIndex);
 		}
+
+
 
 		public int TabsCount => _tabs.Count;
 
@@ -535,15 +572,6 @@ namespace Mtgdb.Gui
 		public bool ShowDeck { get; set; }
 		public bool ShowPartialCards { get; set; }
 
-		private readonly Func<FormMain> _formMainFactory;
-		private readonly DownloaderSubsystem _downloaderSubsystem;
-		private readonly NewsService _newsService;
-
-		private bool _undoingOrRedoing;
-
-		private readonly FormManager _formManager;
-		private readonly CardRepository _repo;
-
 		private int Id => _formManager.GetId(this);
 
 		public sealed override string Text
@@ -551,5 +579,15 @@ namespace Mtgdb.Gui
 			get { return base.Text; }
 			set { base.Text = value; }
 		}
+
+		private bool _undoingOrRedoing;
+
+
+
+		private readonly Func<FormMain> _formMainFactory;
+		private readonly DownloaderSubsystem _downloaderSubsystem;
+		private readonly NewsService _newsService;
+		private readonly FormManager _formManager;
+		private readonly CardRepository _repo;
 	}
 }

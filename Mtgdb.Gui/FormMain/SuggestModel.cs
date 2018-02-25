@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Lucene.Net.Contrib;
+using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 
 namespace Mtgdb.Gui
@@ -15,7 +16,6 @@ namespace Mtgdb.Gui
 		public SearchStringState SearchStateCurrent { get; set; }
 
 		private string _language;
-		public string LanguageCurrent;
 
 		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
 		
@@ -31,7 +31,7 @@ namespace Mtgdb.Gui
 
 		private void suggestLoopIteration()
 		{
-			if (_spellchecker == null || isSuggestUpToDate())
+			if (_spellchecker == null || SearchStateCurrent == null || isSuggestUpToDate())
 				Thread.Sleep(100);
 			else
 				suggest();
@@ -40,9 +40,9 @@ namespace Mtgdb.Gui
 		private void suggest()
 		{
 			var searchState =_searchState = SearchStateCurrent;
-			_language = LanguageCurrent;
+			_language = Ui.LanguageController.Language;
 
-			var suggest = _spellchecker.Suggest(_searchState.Text, _searchState.Caret, _language, SuggestCount);
+			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language, SuggestCount);
 			Token = suggest.Token;
 
 			if (isSuggestUpToDate())
@@ -51,7 +51,7 @@ namespace Mtgdb.Gui
 
 		private bool isSuggestUpToDate()
 		{
-			if (_language != LanguageCurrent)
+			if (_language != Ui.LanguageController.Language)
 				return false;
 
 			if (_searchState == null && SearchStateCurrent == null)
@@ -90,5 +90,7 @@ namespace Mtgdb.Gui
 			{
 			}
 		}
+
+		public UiModel Ui { get; set; }
 	}
 }

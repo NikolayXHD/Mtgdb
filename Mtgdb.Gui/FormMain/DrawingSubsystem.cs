@@ -110,18 +110,26 @@ namespace Mtgdb.Gui
 
 			e.Handled = true;
 
-			if (card.Image(Ui) != null)
+			var image = card.Image(Ui);
+
+			if (image != null)
 			{
-				var bounds = card.Image(Ui).Size.FitIn(e.Bounds);
-				e.Graphics.DrawImage(card.Image(Ui), bounds);
+				var bounds = image.Size.FitIn(e.Bounds);
+				e.Graphics.DrawImage(image, bounds);
 			}
 
 			if (card == _deckModel.TouchedCard)
 				drawSelection(e, Color.LightSkyBlue, Color.LightCyan, 236);
-			else if (card.DeckCount(Ui) == 0 && card.CollectionCount(Ui) > 0)
-				drawSelection(e, Color.Lavender, Color.White, 96);
-			else if (card.DeckCount(Ui) > 0)
-				drawSelection(e, Color.Lavender, Color.White, 236);
+			else
+			{
+				int deckCount = card.DeckCount(Ui);
+				int collectionCount = card.CollectionCount(Ui);
+
+				if (deckCount == 0 && collectionCount > 0)
+					drawSelection(e, Color.Lavender, Color.White, 96);
+				else if (deckCount > 0)
+					drawSelection(e, Color.Lavender, Color.White, 236);
+			}
 
 			drawLegalityWarning(e, sender, card);
 
@@ -134,7 +142,9 @@ namespace Mtgdb.Gui
 		{
 			var legalityWarning = _legalitySubsystem.GetWarning(card);
 
-			if (legalityWarning == Legality.Restricted && card.DeckCount(Ui) <= 1 && sender == _layoutViewDeck)
+			int deckCount = card.DeckCount(Ui);
+
+			if (legalityWarning == Legality.Restricted && deckCount <= 1 && sender == _layoutViewDeck)
 				legalityWarning = null;
 
 			if (string.IsNullOrEmpty(legalityWarning))
@@ -171,13 +181,18 @@ namespace Mtgdb.Gui
 				maxCount = card.MaxCountInDeck();
 				color = Color.Crimson;
 			}
-			else if (totalCount > card.CollectionCount(Ui) && card.CollectionCount(Ui) > 0)
-			{
-				maxCount = card.CollectionCount(Ui);
-				color = Color.Blue;
-			}
 			else
-				return;
+			{
+				int collectionCount = card.CollectionCount(Ui);
+
+				if (totalCount > collectionCount && collectionCount > 0)
+				{
+					maxCount = collectionCount;
+					color = Color.Blue;
+				}
+				else
+					return;
+			}
 
 			string warning;
 			if (countInMain == 0)
@@ -304,11 +319,15 @@ namespace Mtgdb.Gui
 		{
 			var countText = new StringBuilder();
 
-			if (card.DeckCount(Ui) > 0)
-				countText.Append(card.DeckCount(Ui));
+			int deckCount = card.DeckCount(Ui);
 
-			if (card.CollectionCount(Ui) > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
-				countText.AppendFormat(@"/{0}", card.CollectionCount(Ui));
+			if (deckCount > 0)
+				countText.Append(deckCount);
+
+			int collectionCount = card.CollectionCount(Ui);
+
+			if (collectionCount > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
+				countText.AppendFormat(@"/{0}", collectionCount);
 
 			string countTextStr = countText.ToString();
 			return countTextStr;

@@ -33,7 +33,6 @@ namespace Mtgdb.Gui
 
 			_luceneSearcher = luceneSearcher;
 			_keywordSearcher = keywordSearcher;
-			_formManager = formManager;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
 			_cardRepo = cardRepo;
@@ -43,7 +42,8 @@ namespace Mtgdb.Gui
 			
 			beginRestoreSettings();
 
-			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo);
+			_fields = new Fields();
+			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields);
 
 			QuickFilterImages.SetImages(this);
 			QuickFilterSetup.SetQuickFilterProperties(this);
@@ -85,7 +85,7 @@ namespace Mtgdb.Gui
 				_deckModel,
 				this,
 				_imageLoader,
-				_formManager);
+				formManager);
 
 			_deckEditingSubsystem = new DeckEditingSubsystem(
 				_viewCards,
@@ -134,9 +134,18 @@ namespace Mtgdb.Gui
 
 			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
 
-			Load += formLoad;
-
 			_historySubsystem = new HistorySubsystem(undoConfig);
+
+			_evaluators = new Evaluators
+			{
+				{ 2, _legalitySubsystem.IsAllowedInFormat },
+				{ 3, evalFilterByCollection },
+				{ 4, evalFilterByDeck },
+				{ 0, _quickFilterFacade.Evaluate },
+				{ 1, evalFilterBySearchText }
+			};
+
+			Load += formLoad;
 		}
 
 		private void scale()
@@ -276,9 +285,6 @@ namespace Mtgdb.Gui
 			_sortSubsystem.SubscribeToEvents();
 			_sortSubsystem.SortChanged += sortChanged;
 
-			_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
-			_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
-
 			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged += showProhibitChanged;
@@ -344,6 +350,8 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.ProbeCardCreating += probeCardCreating;
 
 			_historySubsystem.Loaded += historyLoaded;
+
+			subscribeFormRootEvents();
 		}
 
 		private void unsubscribeFromEvents()
@@ -370,8 +378,6 @@ namespace Mtgdb.Gui
 			_sortSubsystem.UnsubscribeFromEvents();
 			_sortSubsystem.SortChanged -= sortChanged;
 
-			_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
-			_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
 			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;
@@ -426,6 +432,20 @@ namespace Mtgdb.Gui
 			_layoutViewCards.ProbeCardCreating -= probeCardCreating;
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_historySubsystem.Loaded -= historyLoaded;
+
+			unsubscribeFormRootEvents();
+		}
+
+		private void subscribeFormRootEvents()
+		{
+			_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
+			_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
+		}
+
+		private void unsubscribeFormRootEvents()
+		{
+			_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
+			_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 		}
 
 		private bool IsLoaded { get; set; }
@@ -436,13 +456,12 @@ namespace Mtgdb.Gui
 			set { _tabHeadersDeck.SelectedIndex = (int)value; }
 		}
 
-		private Evaluators _evaluators;
-		private Fields _fields;
 		private IFormRoot _formRoot;
 
 		private bool _threadsRunning;
 		private bool _isTabSelected;
-		
+		private bool _breakRefreshing;
+
 		private Deck _requiredDeck;
 		private int? _requiredScroll;
 
@@ -451,6 +470,8 @@ namespace Mtgdb.Gui
 		/// </summary>
 		private int _restoringGuiSettings;
 
+		private readonly Evaluators _evaluators;
+		private readonly Fields _fields;
 		private readonly bool _keywordsIndexUpToDate;
 
 		private readonly CardRepository _cardRepo;
@@ -459,8 +480,6 @@ namespace Mtgdb.Gui
 
 		private readonly List<Card> _searchResultCards = new List<Card>();
 		private readonly HashSet<Card> _filteredCards = new HashSet<Card>();
-
-		private bool _breakRefreshing;
 
 		private readonly HistorySubsystem _historySubsystem;
 		private readonly DeckSerializationSubsystem _deckSerializationSubsystem;
@@ -482,7 +501,6 @@ namespace Mtgdb.Gui
 		private readonly LegalitySubsystem _legalitySubsystem;
 		private readonly LuceneSearcher _luceneSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
-		private readonly FormManager _formManager;
 
 		private readonly LayoutView _viewCards;
 		private readonly LayoutView _viewDeck;

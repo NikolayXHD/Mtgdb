@@ -224,11 +224,16 @@ namespace Mtgdb.Controls
 		public void RefreshData()
 		{
 			_rowHandleByObject.Clear();
-			for (int i = 0; i < DataSource.Count; i++)
-				_rowHandleByObject[DataSource[i]] = i;
 
-			if (CardIndex < 0 || CardIndex >= Count)
-				CardIndex = snapCardIndex(CardIndex, Count);
+			// implicit connection: data_source_sync
+			lock (DataSource)
+			{
+				for (int i = 0; i < DataSource.Count; i++)
+					_rowHandleByObject[DataSource[i]] = i;
+			
+				if (CardIndex < 0 || CardIndex >= Count)
+					CardIndex = snapCardIndex(CardIndex, Count);
+			}
 
 			ApplyCardIndex();
 			updateScrollbar();

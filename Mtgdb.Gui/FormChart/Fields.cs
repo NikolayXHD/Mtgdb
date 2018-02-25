@@ -7,13 +7,13 @@ namespace Mtgdb.Gui
 {
 	public class Fields
 	{
-		public Fields(UiModel ui)
+		public Fields()
 		{
 			ByName = new IField<Card>[]
 			{
-				_builder.Get(nameof(Card.Name), c => c.Name(ui)),
+				_builder.Get(nameof(Card.Name), c => c.Name(Ui)),
 				_builder.Get(nameof(Card.ManaCost), c => c.ManaCost),
-				_builder.Get(nameof(Card.Type), c => c.Type(ui)),
+				_builder.Get(nameof(Card.Type), c => c.Type(Ui)),
 				_builder.Get(nameof(Card.Cmc), c => c.Cmc),
 				_builder.Get(nameof(Card.SetCode), c => c.SetCode),
 				_builder.Get(nameof(Card.SetName), c => c.SetName),
@@ -37,20 +37,20 @@ namespace Mtgdb.Gui
 				_builder.Get(nameof(Card.Subtypes), c => c.Subtypes),
 
 
-				_builder.Get(nameof(Card.CollectionCount), c => c.CollectionCount(ui)),
-				_builder.Get(nameof(Card.DeckCount), c => c.DeckCount(ui)),
+				_builder.Get(nameof(Card.CollectionCount), c => c.CollectionCount(Ui)),
+				_builder.Get(nameof(Card.DeckCount), c => c.DeckCount(Ui)),
 				_builder.Get(nameof(Card.PriceLow), c => c.PriceLow),
 				_builder.Get(nameof(Card.PriceMid), c => c.PriceMid),
 				_builder.Get(nameof(Card.PriceHigh), c => c.PriceHigh),
-				_builder.Get(nameof(Card.DeckTotalLow), c => c.DeckTotalLow(ui)),
-				_builder.Get(nameof(Card.DeckTotalMid), c => c.DeckTotalMid(ui)),
-				_builder.Get(nameof(Card.DeckTotalHigh), c => c.DeckTotalHigh(ui)),
-				_builder.Get(nameof(Card.CollectionTotalLow), c => c.CollectionTotalLow(ui)),
-				_builder.Get(nameof(Card.CollectionTotalMid), c => c.CollectionTotalMid(ui)),
-				_builder.Get(nameof(Card.CollectionTotalHigh), c => c.CollectionTotalHigh(ui)),
+				_builder.Get(nameof(Card.DeckTotalLow), c => c.DeckTotalLow(Ui)),
+				_builder.Get(nameof(Card.DeckTotalMid), c => c.DeckTotalMid(Ui)),
+				_builder.Get(nameof(Card.DeckTotalHigh), c => c.DeckTotalHigh(Ui)),
+				_builder.Get(nameof(Card.CollectionTotalLow), c => c.CollectionTotalLow(Ui)),
+				_builder.Get(nameof(Card.CollectionTotalMid), c => c.CollectionTotalMid(Ui)),
+				_builder.Get(nameof(Card.CollectionTotalHigh), c => c.CollectionTotalHigh(Ui)),
 
 				_builder.Get(nameof(Card.IsSearchResult), c => c.IsSearchResult),
-				_builder.Get(nameof(Card.HasImage), c => c.HasImage(ui)),
+				_builder.Get(nameof(Card.HasImage), c => c.HasImage(Ui)),
 
 				_builder.Get(nameof(Card.ReleaseMonth), c => c.ReleaseMonth),
 				_builder.Get(nameof(Card.ReleaseYear), c => c.ReleaseYear),
@@ -62,7 +62,11 @@ namespace Mtgdb.Gui
 
 		public readonly Dictionary<string, IField<Card>> ByName;
 
-		public readonly List<string> ChartFields = new List<string>
+		public readonly List<string> ChartFields = _chartFields;
+
+		private static readonly FieldBuilder<Card> _builder = new FieldBuilder<Card>();
+
+		private static readonly List<string> _chartFields = new List<string>
 		{
 			nameof(Card.ManaCost),
 			nameof(Card.Cmc),
@@ -99,6 +103,6 @@ namespace Mtgdb.Gui
 			nameof(Card.HasImage)
 		};
 
-		private static readonly FieldBuilder<Card> _builder = new FieldBuilder<Card>();
+		public UiModel Ui { get; set; }
 	}
 }

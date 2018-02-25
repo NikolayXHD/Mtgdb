@@ -47,10 +47,10 @@ namespace Mtgdb.Gui
 			_kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
 			var loader = _kernel.Get<GuiLoader>();
-
 			loader.Run();
 
 			var formManager = _kernel.Get<FormManager>();
+			formManager.MigrateHistoryFiles();
 			formManager.CreateForm();
 
 			Application.Run(formManager);

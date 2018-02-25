@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Controls.Statistics;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
@@ -18,8 +17,9 @@ namespace Mtgdb.Gui
 			nameof(Card.Type)
 		};
 
-		public SortSubsystem(LayoutView layoutViewCards, CardRepository repository)
+		public SortSubsystem(LayoutView layoutViewCards, CardRepository repository, Fields fields)
 		{
+			_fields = fields;
 			_layoutViewCards = layoutViewCards;
 			_repository = repository;
 
@@ -67,13 +67,15 @@ namespace Mtgdb.Gui
 		private List<Card> sort(IEnumerable<Card> cards, IEnumerable<FieldSortInfo> sortInfo)
 		{
 			sortInfo = sortInfo.Concat(Enumerable.Repeat(_defaultSort, 1));
+
 			using (var enumerator = sortInfo.GetEnumerator())
 			{
 				enumerator.MoveNext();
-				var cardsOrdered = Fields.ByName[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
+				
+				var cardsOrdered = _fields.ByName[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
 
 				while (enumerator.MoveNext())
-					cardsOrdered = Fields.ByName[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
+					cardsOrdered = _fields.ByName[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
 
 				var result = cardsOrdered.ToList();
 				return result;
@@ -143,16 +145,19 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private readonly LayoutView _layoutViewCards;
-		private readonly CardRepository _repository;
-		private List<Card> _sortedCards;
-		private static readonly FieldSortInfo _defaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
 		public string SortString { get; private set; }
 
+		private List<Card> _sortedCards;
 		private IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
 
 		public bool IsLanguageDependent => SortInfo.Any(_ => _localizableFields.Contains(_.FieldName));
 
-		public Fields Fields { get; set; }
+
+
+		private static readonly FieldSortInfo _defaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
+
+		private readonly LayoutView _layoutViewCards;
+		private readonly CardRepository _repository;
+		private readonly Fields _fields;
 	}
 }

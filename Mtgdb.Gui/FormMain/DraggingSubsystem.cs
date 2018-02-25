@@ -241,10 +241,12 @@ namespace Mtgdb.Gui
 			var cursorImage = new Bitmap(cardIconSize.Width, cardIconSize.Height + handImage.Height - overlapY);
 			using (var g = Graphics.FromImage(cursorImage))
 			{
-				if (card?.Image(Ui) == null)
+				var bitmap = card?.Image(Ui);
+
+				if (bitmap == null)
 					g.DrawRectangle(new Pen(Color.Black, width: 2), new Rectangle(Point.Empty, cardIconSize));
 				else
-					g.DrawImage(card.Image(Ui), new Rectangle(Point.Empty, cardIconSize));
+					g.DrawImage(bitmap, new Rectangle(Point.Empty, cardIconSize));
 
 				g.DrawImage(handImage,
 					new Rectangle(
@@ -386,6 +388,9 @@ namespace Mtgdb.Gui
 
 		public bool PreFilterMessage(ref Message m)
 		{
+			if (_parent.IsDisposed || _parent.Disposing)
+				return false;
+
 			// WM_MOUSEMOVE
 			if (m.Msg == 0x0200)
 				mouseMoved();

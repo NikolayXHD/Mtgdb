@@ -1038,6 +1038,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<Bitmap> Icons { get; set; }
 
+		public int? DraggingIndex { get; private set; }
 
 		private Size _slopeSize = new Size(15, 21);
 		private Size _addButtonSlopeSize = new Size(10, 14);
@@ -1055,7 +1056,6 @@ namespace Mtgdb.Controls
 		private int _textPadding = 6;
 		private bool _allowAddingTabs = true;
 
-		public int? DraggingIndex;
 		private int? _draggingOverIndex;
 		private int? _dragStartedX;
 		private int? _dragCurrentX;

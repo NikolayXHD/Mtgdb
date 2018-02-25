@@ -68,8 +68,8 @@ namespace Mtgdb.Gui
 				_buttonConfig
 			);
 
-			TooltipController.SetTooltip(null,
-				"Open new window",
+			TooltipController.SetTooltip("Open new window",
+				"You can drag-n-drop Cards and Tabs between windows.",
 				_buttonOpenWindow);
 
 			Load += loadTooltips;

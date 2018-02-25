@@ -404,11 +404,11 @@ namespace Mtgdb.Gui
 			else if (e.KeyData == (Keys.Control | Keys.F4))
 				CloseTab();
 			else if (e.KeyData == (Keys.Control | Keys.Tab))
-				NextTab();
+				SelectNextTab();
 			else if (e.KeyData == (Keys.Control | Keys.Shift | Keys.Tab))
-				PrevTab();
+				SelectPreviousTab();
 			else if (e.KeyData == (Keys.Control | Keys.T))
-				NewTab(onCreated: null);
+				AddTab();
 			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))
 				form.ButtonUndo();
 			else if (e.KeyData == (Keys.Alt | Keys.Right) || e.KeyData == (Keys.Control | Keys.Y))

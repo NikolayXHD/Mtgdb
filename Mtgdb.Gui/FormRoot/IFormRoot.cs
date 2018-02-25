@@ -14,9 +14,12 @@ namespace Mtgdb.Gui
 
 		event Action ShowFilterPanelsChanged;
 
-		void NextTab();
-		void PrevTab();
-		void NewTab(Action<object> onCreated);
+		void SelectNextTab();
+		void SelectPreviousTab();
+
+		void AddTab(Action<object> onCreated);
+		void AddTab();
+
 		void CloseTab();
 
 		int TabsCount { get; }

@@ -748,7 +748,7 @@ namespace Mtgdb.Gui
 				for (int i = 1; i < loadedDecks.Length; i++)
 				{
 					var deck = loadedDecks[i];
-					_formRoot.NewTab(form => ((FormMain) form)._requiredDeck = deck);
+					_formRoot.AddTab(form => ((FormMain) form)._requiredDeck = deck);
 				}
 			}
 			else if (dragData.GetFormats().Contains(DataFormats.Text))

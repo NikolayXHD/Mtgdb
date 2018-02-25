@@ -13,12 +13,25 @@ namespace Mtgdb.Gui
 			_formFactory = formFactory;
 		}
 
+		public void MigrateHistoryFiles()
+		{
+			string firstFormDirectory = AppDir.History.AddPath(0.ToString());
+
+			if (Directory.Exists(firstFormDirectory))
+				return;
+
+			Directory.CreateDirectory(firstFormDirectory);
+
+			foreach (var file in Directory.GetFiles(AppDir.History))
+				File.Copy(file, firstFormDirectory.AddPath(Path.GetFileName(file)));
+		}
+
 		public void CreateForm()
 		{
 			var form = _formFactory();
 
 			form.Show();
-			form.NewTab(onCreated: null);
+			form.AddTab();
 		}
 
 		public int GetId(FormRoot form)

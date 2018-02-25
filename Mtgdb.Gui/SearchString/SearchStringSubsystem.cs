@@ -47,7 +47,7 @@ namespace Mtgdb.Gui
 		{
 			_findEditor.KeyDown += findKeyDown;
 			_findEditor.KeyUp += findKeyUp;
-			
+
 			_findEditor.TextChanged += findTextChanged;
 			_findEditor.LocationChanged += findLocationChanged;
 
@@ -56,11 +56,12 @@ namespace Mtgdb.Gui
 			_listBoxSuggest.Click += suggestClick;
 			_listBoxSuggest.KeyUp += suggestKeyUp;
 
-			SuggestModel.Suggested += suggested;
-			
 			_parent.KeyDown += parentKeyDown;
-			Ui.LanguageController.LanguageChanged += languageChanged;
 			_viewCards.SearchClicked += gridSearchClicked;
+
+			subscribeSuggestModelEvents();
+
+			_subscribed = true;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -74,11 +75,29 @@ namespace Mtgdb.Gui
 			_listBoxSuggest.Click -= suggestClick;
 			_listBoxSuggest.KeyUp -= suggestKeyUp;
 
-			SuggestModel.Suggested -= suggested;
-			
 			_parent.KeyDown -= parentKeyDown;
-			Ui.LanguageController.LanguageChanged -= languageChanged;
 			_viewCards.SearchClicked -= gridSearchClicked;
+
+			unsubscribeSuggestModelEvents();
+
+			_subscribed = false;
+		}
+
+		private void subscribeSuggestModelEvents()
+		{
+			SuggestModel.Suggested += suggested;
+		}
+
+		private void unsubscribeSuggestModelEvents()
+		{
+			SuggestModel.Suggested -= suggested;
+		}
+
+
+
+		private string getLanguage()
+		{
+			return Ui.LanguageController.Language;
 		}
 
 		private static void findEditorMouseWheel(object sender, MouseEventArgs e)
@@ -102,11 +121,6 @@ namespace Mtgdb.Gui
 		public void AbortThread()
 		{
 			_idleInputMonitoringThread.Abort();
-		}
-
-		private void languageChanged()
-		{
-			SuggestModel.LanguageCurrent = Ui.LanguageController.Language;
 		}
 
 		private void idleInputMonitoringThread()
@@ -225,7 +239,6 @@ namespace Mtgdb.Gui
 		public void UpdateSuggestInput()
 		{
 			SuggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
-			SuggestModel.LanguageCurrent = Ui.LanguageController.Language;
 		}
 
 		private void parentKeyDown(object sender, KeyEventArgs e)
@@ -562,7 +575,7 @@ namespace Mtgdb.Gui
 		private void updateSearchResult()
 		{
 			if (!string.IsNullOrWhiteSpace(_currentText))
-				SearchResult = _searcher.Search(_currentText, Ui.LanguageController.Language);
+				SearchResult = _searcher.Search(_currentText, getLanguage());
 			else
 				SearchResult = null;
 		}
@@ -624,26 +637,53 @@ namespace Mtgdb.Gui
 		private const string SearchStringMark = "search: ";
 		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
 
-		public SuggestModel SuggestModel { get; set; }
+		public SuggestModel SuggestModel
+		{
+			get
+			{
+				return _suggestModel;
+			}
+
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException();
+
+				if (_suggestModel == value)
+					return;
+
+				if (_subscribed)
+					unsubscribeSuggestModelEvents();
+
+				_suggestModel = value;
+
+				if (_subscribed)
+					subscribeSuggestModelEvents();
+			}
+		}
+
 		public UiModel Ui { get; set; }
 
-		private readonly Form _parent;
-		
-		private readonly RichTextBox _findEditor;
-		private readonly Panel _panelSearchIcon;
-		private readonly ListBox _listBoxSuggest;
-		private readonly LuceneSearcher _searcher;
-		private readonly LayoutView _viewCards;
+		public SearchResult SearchResult { get; private set; }
 
 		private string _appliedText;
 		private DateTime? _lastUserInput;
 		private Thread _idleInputMonitoringThread;
 
-		public SearchResult SearchResult { get; private set; }
-		private readonly BindingList<string> _dataSource = new BindingList<string>();
-
-		private readonly SearchStringHighlighter _highligter;
 		private string _currentText = string.Empty;
 		private SearchStringState _suggestSource;
+		private SuggestModel _suggestModel;
+
+		private bool _subscribed;
+
+
+		private readonly Form _parent;
+		private readonly RichTextBox _findEditor;
+		private readonly Panel _panelSearchIcon;
+		private readonly ListBox _listBoxSuggest;
+		private readonly LuceneSearcher _searcher;
+		private readonly LayoutView _viewCards;
+		private readonly SearchStringHighlighter _highligter;
+		private readonly BindingList<string> _dataSource = new BindingList<string>();
 	}
 }

@@ -13,7 +13,19 @@ namespace Mtgdb.Gui
 	{
 		public void SetFormRoot(IFormRoot formRoot)
 		{
+			if (formRoot == null)
+				throw new ArgumentNullException(nameof(formRoot));
+
+			if (formRoot == _formRoot)
+				return;
+
+			if (IsLoaded)
+				unsubscribeFormRootEvents();
+
 			_formRoot = formRoot;
+
+			if (IsLoaded)
+				subscribeFormRootEvents();
 
 			_searchStringSubsystem.SuggestModel = formRoot.SuggestModel;
 
@@ -22,19 +34,23 @@ namespace Mtgdb.Gui
 					_imagePreloadingSubsystem.Ui =
 						_printingSubsystem.Ui =
 							_draggingSubsystem.Ui =
-								_drawingSubsystem.Ui = _formRoot.UiModel;
+								_drawingSubsystem.Ui =
+									_fields.Ui = _formRoot.UiModel;
+		}
 
-			_fields = new Fields(_formRoot.UiModel);
-			_sortSubsystem.Fields = _fields;
+		private bool evalFilterBySearchText(Card c)
+		{
+			return _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false;
+		}
 
-			_evaluators = new Evaluators
-			{
-				{ 2, c => _legalitySubsystem.IsAllowedInFormat(c) },
-				{ 3, c => c.CollectionCount(_formRoot.UiModel) > 0 },
-				{ 4, c => c.DeckCount(_formRoot.UiModel) > 0 },
-				{ 0, c => _quickFilterFacade.Evaluate(c) },
-				{ 1, c => _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false }
-			};
+		private bool evalFilterByDeck(Card c)
+		{
+			return c.DeckCount(_formRoot.UiModel) > 0;
+		}
+
+		private bool evalFilterByCollection(Card c)
+		{
+			return c.CollectionCount(_formRoot.UiModel) > 0;
 		}
 
 		public void LoadHistory(string historyDirectory, string tabId)
@@ -262,8 +278,12 @@ namespace Mtgdb.Gui
 					}
 				}
 
-				_searchResultCards.Clear();
-				_searchResultCards.AddRange(searchResultCards);
+				// implicit connection: data_source_sync
+				lock (_searchResultCards)
+				{
+					_searchResultCards.Clear();
+					_searchResultCards.AddRange(searchResultCards);
+				}
 
 				_filteredCards.Clear();
 				_filteredCards.UnionWith(filteredCards);

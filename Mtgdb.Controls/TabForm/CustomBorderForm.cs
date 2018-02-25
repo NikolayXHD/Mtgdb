@@ -564,7 +564,7 @@ namespace Mtgdb.Controls
 
 		private static int getSnappingCornerDistance(Rectangle screenBounds)
 		{
-			return screenBounds.Height/6;
+			return screenBounds.Height/10;
 		}
 
 		private static Rectangle getScreenBounds(Point cursorPosition)
