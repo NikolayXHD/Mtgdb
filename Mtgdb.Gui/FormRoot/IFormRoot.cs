@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 
@@ -24,6 +25,7 @@ namespace Mtgdb.Gui
 
 		int TabsCount { get; }
 
+		bool LoadedGuiSettings { get; set; }
 		bool ShowTextualFields { get; set; }
 		bool ShowDeck { get; set; }
 		bool ShowPartialCards { get; set; }
@@ -32,5 +34,7 @@ namespace Mtgdb.Gui
 		TooltipController TooltipController { get; }
 
 		UiModel UiModel { get; }
+		Direction? SnapDirection { get; set; }
+		Rectangle WindowArea { get; set; }
 	}
 }

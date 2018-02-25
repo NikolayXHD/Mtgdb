@@ -53,7 +53,7 @@ namespace Mtgdb.Gui
 
 		private void pasteClick(object sender, EventArgs e)
 		{
-			var form = getSelectedForm();
+			var form = SelectedTab;
 			if (form == null)
 				return;
 
@@ -108,7 +108,7 @@ namespace Mtgdb.Gui
 				return;
 
 			_undoingOrRedoing = true;
-			getSelectedForm()?.ButtonRedo();
+			SelectedTab?.ButtonRedo();
 			_undoingOrRedoing = false;
 		}
 
@@ -118,43 +118,43 @@ namespace Mtgdb.Gui
 				return;
 
 			_undoingOrRedoing = true;
-			getSelectedForm()?.ButtonUndo();
+			SelectedTab?.ButtonUndo();
 			_undoingOrRedoing = false;
 		}
 
 		private void clearClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonClearDeck();
+			SelectedTab?.ButtonClearDeck();
 		}
 
 		private void printClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonPrint();
+			SelectedTab?.ButtonPrint();
 		}
 
 		private void statClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonPivot();
+			SelectedTab?.ButtonPivot();
 		}
 
 		private void saveDeckClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonSaveDeck();
+			SelectedTab?.ButtonSaveDeck();
 		}
 
 		private void openDeckClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonLoadDeck();
+			SelectedTab?.ButtonLoadDeck();
 		}
 
 		private void saveCollectionClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonSaveCollection();
+			SelectedTab?.ButtonSaveCollection();
 		}
 
 		private void openCollectionClick(object sender, EventArgs e)
 		{
-			getSelectedForm()?.ButtonLoadCollection();
+			SelectedTab?.ButtonLoadCollection();
 		}
 
 		private void downloadClick(object sender, EventArgs e)
@@ -393,7 +393,7 @@ namespace Mtgdb.Gui
 
 		private void formKeyDown(object sender, KeyEventArgs e)
 		{
-			var form = getSelectedForm();
+			var form = SelectedTab;
 			if (form == null)
 				return;
 

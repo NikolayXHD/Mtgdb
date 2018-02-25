@@ -182,7 +182,7 @@ namespace Mtgdb.Gui
 
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
 
-			_formManager.Add(this);
+			WindowState = FormWindowState.Minimized;
 		}
 
 		private void load(object sender, EventArgs e)
@@ -227,14 +227,9 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = hoveredIndex;
 		}
 
-		private FormMain getSelectedForm()
-		{
-			return (FormMain)_tabs.SelectedTabId;
-		}
-
 		private void tabCreated(TabHeaderControl sender, int i)
 		{
-			var form = (FormMain) _tabs.TabIds[i];
+			var form = getTab(i);
 
 			bool creatingNewForm = form == null;
 
@@ -245,7 +240,7 @@ namespace Mtgdb.Gui
 
 			if (creatingNewForm)
 			{
-				form.LoadHistory(AppDir.History.AddPath(Id.ToString()), i.ToString());
+				form.LoadHistory(_formManager.GetHistoryFile(Id, i));
 				_tabs.TabIds[i] = form;
 			}
 		}
@@ -272,7 +267,7 @@ namespace Mtgdb.Gui
 
 		private void tabUnselecting()
 		{
-			var form = getSelectedForm();
+			var form = SelectedTab;
 			form?.OnTabUnselected();
 		}
 
@@ -283,7 +278,7 @@ namespace Mtgdb.Gui
 
 		private void tabSelected()
 		{
-			var selectedForm = getSelectedForm();
+			var selectedForm = SelectedTab;
 
 			if (selectedForm == null)
 				return;
@@ -303,15 +298,15 @@ namespace Mtgdb.Gui
 
 		private void tabClosing(object sender, int i)
 		{
-			var formMain = (FormMain) _tabs.TabIds[i];
+			var formMain = getTab(i);
 
 			// implicit connection: move_tab_between_forms
 			if (formMain == null)
 				return;
 
-			var lastTabId = (_tabs.Count - 1).ToString();
+			var lastTabId = _tabs.Count - 1;
 
-			formMain.SaveHistory(AppDir.History.AddPath(Id.ToString()), lastTabId);
+			formMain.SaveHistory(_formManager.GetHistoryFile(Id, lastTabId));
 			formMain.Close();
 		}
 
@@ -323,12 +318,12 @@ namespace Mtgdb.Gui
 
 		private void formClosing(object sender, EventArgs e)
 		{
-			_formManager.MoveToEnd(this);
+			_formManager.MoveFormHistoryToEnd(this);
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
-				var formMain = (FormMain) _tabs.TabIds[i];
-				formMain.SaveHistory(AppDir.History.AddPath(Id.ToString()), i.ToString());
+				var formMain = getTab(i);
+				formMain.SaveHistory(_formManager.GetHistoryFile(Id, i));
 			}
 
 			_formManager.Remove(this);
@@ -409,7 +404,7 @@ namespace Mtgdb.Gui
 			if (draggingFromTab == null)
 				return;
 
-			var hoveredForm = (FormMain) _tabs.HoveredTabId;
+			var hoveredForm = HoveredTab;
 
 			if (hoveredForm != null && draggingFromTab != hoveredForm)
 				_tabs.SelectedTabId = hoveredForm;
@@ -454,14 +449,15 @@ namespace Mtgdb.Gui
 			dragSourceTabs.AbortDrag();
 			dragSourceTabs.Capture = false;
 
-			var formMain = (FormMain) dragSourceTabs.TabIds[draggedIndex];
+			var formMain = tabDraggingForm.getTab(draggedIndex);
 
 			// implicit connection: move_tab_between_forms
 			dragSourceTabs.TabIds[draggedIndex] = null;
+			tabDraggingForm._panelClient.Controls.Remove(formMain);
 
 			dragSourceTabs.RemoveTab(draggedIndex);
 
-			_formManager.SwapTabs(Id, TabsCount, tabDraggingForm.Id, tabDraggingForm.TabsCount);
+			_formManager.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
 
 			AddTab(formMain);
 
@@ -537,11 +533,7 @@ namespace Mtgdb.Gui
 
 		public void AddTab(Action<object> onCreated)
 		{
-			Action<TabHeaderControl, int> onTabCreated = (c, i) =>
-			{
-				var form = (FormMain) c.TabIds[i];
-				onCreated(form);
-			};
+			Action<TabHeaderControl, int> onTabCreated = (c, i) => onCreated(getTab(i));
 
 			_tabs.TabAdded += onTabCreated;
 			_tabs.AddTab();
@@ -559,6 +551,11 @@ namespace Mtgdb.Gui
 		}
 
 
+		private FormMain SelectedTab => (FormMain)_tabs.SelectedTabId;
+
+		private FormMain HoveredTab => (FormMain)_tabs.HoveredTabId;
+
+		private FormMain getTab(int i) => (FormMain) _tabs.TabIds[i];
 
 		public int TabsCount => _tabs.Count;
 
@@ -566,11 +563,45 @@ namespace Mtgdb.Gui
 
 		public SuggestModel SuggestModel { get; }
 		public UiModel UiModel { get; }
+
+		public Direction? SnapDirection
+		{
+			get
+			{
+				return Enum.GetValues(typeof(Direction))
+					.Cast<Direction>()
+					.FirstOrDefault(IsSnappedTo);
+			}
+
+			set
+			{
+				if (!value.HasValue)
+					return;
+
+				if (!IsSnappedTo(value.Value))
+					SnapTo(value.Value);
+			}
+		}
+
+		public Rectangle WindowArea
+		{
+			get { return DesktopBounds; }
+			set
+			{
+				WindowState = FormWindowState.Normal;
+
+				var nearestScreenArea = Screen.GetWorkingArea(value);
+				if (nearestScreenArea.IntersectsWith(value))
+					DesktopBounds = value;
+			}
+		}
+
 		public TooltipController TooltipController { get; }
 
 		public bool ShowTextualFields { get; set; }
 		public bool ShowDeck { get; set; }
 		public bool ShowPartialCards { get; set; }
+		public bool LoadedGuiSettings { get; set; }
 
 		private int Id => _formManager.GetId(this);
 

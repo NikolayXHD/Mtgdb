@@ -12,6 +12,9 @@ namespace Mtgdb.Dal
 
 		public void AddMatches(string fieldValue, List<Match> matches)
 		{
+			if (Patterns == null)
+				return;
+
 			foreach (Regex pattern in Patterns)
 				if (pattern != null)
 					matches.AddRange(pattern.Matches(fieldValue).Cast<Match>());

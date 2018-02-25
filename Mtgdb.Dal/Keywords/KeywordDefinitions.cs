@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -131,7 +130,7 @@ namespace Mtgdb.Dal
 		public static readonly string[] Ability =
 		{
 			"Annihilator",
-			"Attacks each turn",
+			"/\\bAttacks? each (combat|turn) if able\\b/",
 			"Awaken",
 			"Can't be blocked",
 			"Can't block",

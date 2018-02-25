@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -351,6 +352,8 @@ namespace Mtgdb.Gui
 
 			_historySubsystem.Loaded += historyLoaded;
 
+			SizeChanged += sizeChanged;
+
 			subscribeFormRootEvents();
 		}
 
@@ -432,6 +435,8 @@ namespace Mtgdb.Gui
 			_layoutViewCards.ProbeCardCreating -= probeCardCreating;
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_historySubsystem.Loaded -= historyLoaded;
+
+			SizeChanged -= sizeChanged;
 
 			unsubscribeFormRootEvents();
 		}

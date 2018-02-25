@@ -53,14 +53,15 @@ namespace Mtgdb.Gui
 			return c.CollectionCount(_formRoot.UiModel) > 0;
 		}
 
-		public void LoadHistory(string historyDirectory, string tabId)
+		public void LoadHistory(string historyFile)
 		{
-			_historySubsystem.LoadHistory(historyDirectory, tabId);
+			_historySubsystem.LoadHistory(historyFile);
 		}
 
-		public void SaveHistory(string historyDirectory, string tabId)
+		public void SaveHistory(string historyFile)
 		{
-			_historySubsystem.Save(historyDirectory, tabId);
+			historyUpdateFormPosition(_historySubsystem.Current);
+			_historySubsystem.Save(historyFile);
 		}
 
 		public void OnTabSelected()
@@ -80,16 +81,18 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.UpdateSuggestInput();
 
-			// hack to detect if this is the first time
+			// hack
 			bool isGloballyFirst = !_collectionModel.IsLoaded;
 			if (isGloballyFirst)
 				updateGlobalSettings();
 			else
 				historyUpdateGlobalSettings(_historySubsystem.Current);
 
-			bool isFirstInForm = _formRoot.TabsCount == 1;
-			if (isFirstInForm)
+			if (!_formRoot.LoadedGuiSettings)
+			{
 				updateFormSettings();
+				updateFormPosition();
+			}
 			else
 				historyUpdateFormSettings(_historySubsystem.Current);
 
@@ -105,6 +108,27 @@ namespace Mtgdb.Gui
 			startThreads();
 
 			_findEditor.Focus();
+		}
+
+		private void updateFormPosition()
+		{
+			if (_historySubsystem.Current.WindowArea.HasValue)
+			{
+				_formRoot.WindowArea = _historySubsystem.Current.WindowArea.Value;
+
+				if (_historySubsystem.Current.WindowSnapDirection.HasValue)
+					_formRoot.SnapDirection = _historySubsystem.Current.WindowSnapDirection.Value;
+			}
+			else
+			{
+				_formRoot.SnapDirection = Direction.North;
+			}
+		}
+
+		private void historyUpdateFormPosition(GuiSettings settings)
+		{
+			settings.WindowArea = _formRoot.WindowArea;
+			settings.WindowSnapDirection = _formRoot.SnapDirection;
 		}
 
 		public void OnTabUnselected()
@@ -551,6 +575,7 @@ namespace Mtgdb.Gui
 			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
 			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
 			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
+			_formRoot.LoadedGuiSettings = true;
 		}
 
 		private void historyUpdateGlobalSettings(GuiSettings settings)
@@ -607,8 +632,10 @@ namespace Mtgdb.Gui
 				ShowDeck = !_buttonHideDeck.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
-				ShowFilterPanels = _formRoot.ShowFilterPanels
+				ShowFilterPanels = _formRoot.ShowFilterPanels,
 			};
+
+			historyUpdateFormPosition(settings);
 
 			_historySubsystem.Add(settings);
 			historyUpdateButtons();

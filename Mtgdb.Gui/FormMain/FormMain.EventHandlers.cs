@@ -798,5 +798,10 @@ namespace Mtgdb.Gui
 		{
 			updateFormStatus();
 		}
+
+		private void sizeChanged(object sender, EventArgs e)
+		{
+			_layoutRight.PerformLayout();
+		}
 	}
 }

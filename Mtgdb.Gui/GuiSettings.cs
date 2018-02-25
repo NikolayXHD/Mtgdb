@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -57,6 +58,9 @@ namespace Mtgdb.Gui
 		public bool? ShowPartialCards { get; set; }
 
 		public bool? ShowFilterPanels { get; set; }
+
+		public Direction? WindowSnapDirection { get; set; }
+		public Rectangle? WindowArea { get; set; }
 
 		[JsonIgnore]
 		public Deck Deck

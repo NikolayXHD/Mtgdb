@@ -23,11 +23,10 @@ namespace Mtgdb.Gui
 			_maxDepth = undoConfig.MaxDepth ?? 100;
 		}
 
-		public void LoadHistory(string historyDirectory, string tabId)
+		public void LoadHistory(string historyFile)
 		{
-			Directory.CreateDirectory(historyDirectory);
-			string historyFile = getHistoryFile(tabId, historyDirectory);
-
+			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
+			
 			if (File.Exists(historyFile))
 			{
 				var serialized = File.ReadAllText(historyFile);
@@ -81,11 +80,10 @@ namespace Mtgdb.Gui
 			return false;
 		}
 
-		public void Save(string historyDirectory, string tabId)
+		public void Save(string historyFile)
 		{
-			Directory.CreateDirectory(historyDirectory);
-			string historyFile = getHistoryFile(tabId, historyDirectory);
-
+			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
+			
 			var state = getState();
 			string serialized = JsonConvert.SerializeObject(state, _jsonSerializerSettings);
 			File.WriteAllText(historyFile, serialized);
@@ -138,8 +136,6 @@ namespace Mtgdb.Gui
 				return _settingsIndex > 0;
 			}
 		}
-
-		private string getHistoryFile(string tabId, string historyDirectory) => historyDirectory.AddPath($"{tabId}.json");
 
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }

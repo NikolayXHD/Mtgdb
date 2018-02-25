@@ -10,6 +10,12 @@ namespace Mtgdb.Dal
 			if (string.IsNullOrEmpty(value))
 				return null;
 
+			if (value.StartsWith("/") && value.EndsWith("/"))
+			{
+				return new Regex(value.Substring(1, value.Length - 2),
+					RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			}
+
 			var builder = new StringBuilder();
 			if (char.IsLetterOrDigit(value[0]))
 				builder.Append("\\b");
@@ -29,6 +35,12 @@ namespace Mtgdb.Dal
 		{
 			if (value == null)
 				return null;
+
+			if (value.StartsWith("/") && value.EndsWith("/"))
+			{
+				return new Regex(value.Substring(1, value.Length - 2),
+					RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			}
 
 			var result = new Regex($@"^{Regex.Escape(value)}$",
 				RegexOptions.Compiled | RegexOptions.IgnoreCase);

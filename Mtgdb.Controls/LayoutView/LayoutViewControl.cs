@@ -60,18 +60,22 @@ namespace Mtgdb.Controls
 		{
 			var paintActions = new PaintActions();
 
-			paintActions.Background.Add(e => e.Graphics.Clear(BackColor));
-			addPaintCardActions(paintActions, eArgs.ClipRectangle);
-			paintActions.AlignButtons.Add(paintAlignButtons);
+			// implicit connection: data_source_sync
+			lock (DataSource)
+			{
+				paintActions.Background.Add(e => e.Graphics.Clear(BackColor));
+				addPaintCardActions(paintActions, eArgs.ClipRectangle);
+				paintActions.AlignButtons.Add(paintAlignButtons);
 
-			eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-			eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+				eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-			paintActions.Background.Paint(eArgs);
-			paintActions.FieldData.Paint(eArgs);
-			paintActions.AlignButtons.Paint(eArgs);
-			// paint field buttons over align buttons
-			paintActions.FieldButtons.Paint(eArgs);
+				paintActions.Background.Paint(eArgs);
+				paintActions.FieldData.Paint(eArgs);
+				paintActions.AlignButtons.Paint(eArgs);
+				// paint field buttons over align buttons
+				paintActions.FieldButtons.Paint(eArgs);
+			}
 		}
 
 		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle)

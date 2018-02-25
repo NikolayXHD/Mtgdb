@@ -32,6 +32,8 @@ namespace Mtgdb.Gui
 
 			form.Show();
 			form.AddTab();
+
+			_instances.Add(form);
 		}
 
 		public int GetId(FormRoot form)
@@ -44,11 +46,6 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		public void Add(FormRoot form)
-		{
-			_instances.Add(form);
-		}
-
 		public void Remove(FormRoot form)
 		{
 			_instances.Remove(form);
@@ -57,7 +54,7 @@ namespace Mtgdb.Gui
 				ExitThread();
 		}
 
-		public void MoveToEnd(FormRoot form)
+		public void MoveFormHistoryToEnd(FormRoot form)
 		{
 			var idBeforeClosing = GetId(form);
 
@@ -79,29 +76,51 @@ namespace Mtgdb.Gui
 			_instances.Add(form);
 		}
 
-		public void SwapTabs(int formId1, int tabId1, int formId2, int tabId2)
+		public void MoveTabHistory(int toFormId, int toTabId, int fromFormId, int fromTabId)
 		{
-			var tempDir = AppDir.History.AddPath("temp");
+			var fromFile = GetHistoryFile(fromFormId, fromTabId);
 
-			var file1 = AppDir.History.AddPath(formId1.ToString()).AddPath(tabId1 + ".json");
-			var file2 = AppDir.History.AddPath(formId2.ToString()).AddPath(tabId2 + ".json");
+			var toFile = GetHistoryFile(toFormId, toTabId);
 
-			var tempFile = Path.Combine(tempDir, Path.GetFileName(file1));
+			var toTabIds = getSavedTabIds(toFormId)
+				.Where(tabId => tabId >= toTabId)
+				.OrderByDescending(tabId => tabId)
+				.ToList();
 
-			if (Directory.Exists(tempDir))
-				Directory.Delete(tempDir, recursive: true);
+			foreach (int tabId in toTabIds)
+			{
+				File.Move(
+					GetHistoryFile(toFormId, tabId), 
+					GetHistoryFile(toFormId, tabId + 1));
+			}
 
-			Directory.CreateDirectory(tempDir);
+			if (File.Exists(fromFile))
+				File.Move(fromFile, toFile);
 
-			if (File.Exists(file1))
-				File.Move(file1, tempFile);
+			var fromTabIds = getSavedTabIds(fromFormId)
+				.Where(tabId => tabId > fromTabId)
+				.OrderBy(tabId => tabId)
+				.ToList();
 
-			if (File.Exists(file2))
-				File.Move(file2, file1);
-
-			if (File.Exists(tempFile))
-				File.Move(tempFile, file2);
+			foreach (int tabId in fromTabIds)
+			{
+				File.Move(
+					GetHistoryFile(fromFormId, tabId), 
+					GetHistoryFile(fromFormId, tabId - 1));
+			}
 		}
+
+		private IEnumerable<int> getSavedTabIds(int formId)
+		{
+			return Directory.GetFiles(GetHistoryDirectory(formId))
+				.Where(f => Str.Equals(Path.GetExtension(f), ".json"))
+				.Select(Path.GetFileNameWithoutExtension)
+				.Where(n => n.All(c => '0' <= c && c <= '9'))
+				.Select(int.Parse);
+		}
+
+		public string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.json");
+		public string GetHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
 
 		public FormMain FindCardDraggingForm()
 		{
