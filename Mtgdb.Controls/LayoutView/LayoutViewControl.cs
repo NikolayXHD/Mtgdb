@@ -23,6 +23,8 @@ namespace Mtgdb.Controls
 		{
 			InitializeComponent();
 
+			DataSource = new List<object>();
+
 			Cards = new List<LayoutControl>();
 			CardIndex = 0;
 
