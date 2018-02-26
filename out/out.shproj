@@ -1,96 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3d9f2d28-b04f-4b23-a671-ce8b6ec439f7}</ProjectGuid>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-    <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>3d9f2d28-b04f-4b23-a671-ce8b6ec439f7</SharedGUID>
+    <ProjectGuid>31a12adc-2d40-4484-9165-44b5567df191</ProjectGuid>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="data\AllSets-x.json" />
-    <Content Include="data\forge_set_mapping.txt" />
-    <Content Include="data\patch.json" />
-    <Content Include="data\price.id.json" />
-    <Content Include="data\price.json" />
-    <Content Include="data\translations.json" />
-    <Content Include="etc\Mtgdb.Gui.xml" />
-    <Content Include="etc\Mtgdb.Gui.Default.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="etc\Mtgdb.Util.xml" />
-    <Content Include="help\css\image.css" />
-    <Content Include="help\css\anchor.css" />
-    <Content Include="help\css\table.css" />
-    <Content Include="help\css\elements.css" />
-    <Content Include="help\css\menu.css" />
-    <Content Include="help\css\page.css" />
-    <Content Include="help\template.html" />
-    <Content Include="update\7z\7za.exe" />
-    <Content Include="update\img\art\filelist.txt" />
-    <Content Include="update\img\lq\filelist.txt" />
-    <Content Include="update\img\mq\filelist.txt" />
-    <Content Include="update\megatools-1.9.98-win32\libcharset-1.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libcurl-4.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libeay32.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libffi-6.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libgcc_s_sjlj-1.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libgio-2.0-0.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libglib-2.0-0.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libgmodule-2.0-0.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libgmp-10.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libgobject-2.0-0.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libiconv-2.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libidn-11.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libintl-8.dll" />
-    <Content Include="update\megatools-1.9.98-win32\libwinpthread-1.dll" />
-    <Content Include="update\megatools-1.9.98-win32\LICENSE.TXT" />
-    <Content Include="update\megatools-1.9.98-win32\man\docbook-xsl.css" />
-    <Content Include="update\megatools-1.9.98-win32\man\megacopy.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megadf.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megadl.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megaget.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megals.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megamkdir.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megaput.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megarc.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megareg.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megarm.html" />
-    <Content Include="update\megatools-1.9.98-win32\man\megatools.html" />
-    <Content Include="update\megatools-1.9.98-win32\mega.ini" />
-    <Content Include="update\megatools-1.9.98-win32\megacmd.bat" />
-    <Content Include="update\megatools-1.9.98-win32\megacopy.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megadf.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megadl.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megaget.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megals.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megamkdir.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megaput.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megareg.exe" />
-    <Content Include="update\megatools-1.9.98-win32\megarm.exe" />
-    <Content Include="update\megatools-1.9.98-win32\NEWS.TXT" />
-    <Content Include="update\megatools-1.9.98-win32\README.TXT" />
-    <Content Include="update\megatools-1.9.98-win32\ssleay32.dll" />
-    <Content Include="update\megatools-1.9.98-win32\TODO.TXT" />
-    <Content Include="update\megatools-1.9.98-win32\zlib1.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\" />
-    <Folder Include="data\index\keywords\" />
-    <Folder Include="data\index\search\" />
-    <Folder Include="data\index\suggest\" />
-    <Folder Include="images\Artworks\" />
-    <Folder Include="images\Mtgdb.Pictures\LQ\" />
-    <Folder Include="images\Mtgdb.Pictures\MQ\" />
-    <Folder Include="images\XLHQ Mega\" />
-    <Folder Include="images\XLHQ Promos\" />
-    <Folder Include="images\XLHQ-Sets-Torrent\" />
-    <Folder Include="update\notifications\archive\" />
-    <Folder Include="update\notifications\new\" />
-    <Folder Include="update\notifications\read\" />
-    <Folder Include="update\app\" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.CodeSharing.JavaScript.targets" />
+  <PropertyGroup />
+  <Import Project="out.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>

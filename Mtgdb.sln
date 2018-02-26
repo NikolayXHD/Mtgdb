@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dal", "Mtgdb.Dal\Mtgdb.Dal.csproj", "{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}"
 EndProject
@@ -15,14 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{106FC38B-1268-47D8-A527-E4376709F683}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{3D9F2D28-B04F-4B23-A671-CE8B6EC439F7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
-		backlog.txt = backlog.txt
+		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
 		etc\Mtgdb.Gui.xml = etc\Mtgdb.Gui.xml
+		new-set-checklist.md = new-set-checklist.md
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
@@ -46,7 +45,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Test", "Test\Mtg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Test.Core", "Test\Mtgdb.Test.Core\Mtgdb.Test.Core.csproj", "{DD429228-A094-4617-BF08-57FE1EF44A96}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{31A12ADC-2D40-4484-9165-44B5567DF191}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		out\out.projitems*{31a12adc-2d40-4484-9165-44b5567df191}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -101,5 +105,8 @@ Global
 		{482239D1-673C-4181-A2DD-F9E5B1A2FD9B} = {0DE878BB-4070-4139-978A-883AC52E882F}
 		{71505A79-B810-4C19-9DC4-C880F23E2A16} = {106FC38B-1268-47D8-A527-E4376709F683}
 		{DD429228-A094-4617-BF08-57FE1EF44A96} = {106FC38B-1268-47D8-A527-E4376709F683}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8DBE440-37DD-45E8-AFE7-4C0B1B4C2336}
 	EndGlobalSection
 EndGlobal
