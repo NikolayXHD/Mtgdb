@@ -9,15 +9,6 @@ namespace Mtgdb.Gui
 {
 	public class QuickFilterFacade
 	{
-		private static readonly List<Regex> EmptyPatterns = new List<Regex>();
-
-		private readonly IList<IList<string>> _values;
-		private readonly KeywordSearcher _searcher;
-		private readonly IList<IList<Regex>> _patterns;
-		private readonly Dictionary<string, HashSet<int>> _indexByFieldNameDisplay;
-
-		private HashSet<int> _matchingCardIds;
-
 		public QuickFilterFacade(
 			IList<IList<Regex>> patterns,
 			IList<IList<string>> values,
@@ -87,7 +78,7 @@ namespace Mtgdb.Gui
 					.ToArray();
 
 				if (stateArr.All(_ => _ != FilterValueState.Prohibited))
-					Ignored[c].Patterns = EmptyPatterns;
+					Ignored[c].Patterns = _emptyPatterns;
 				else
 					Ignored[c].Patterns = Enumerable.Range(0, stateArr.Count)
 						.Where(i => stateArr[i] == FilterValueState.Ignored)
@@ -132,8 +123,7 @@ namespace Mtgdb.Gui
 
 		public List<TextRange> GetMatches(string fieldValue, string fieldName)
 		{
-			HashSet<int> indexes;
-			if (!_indexByFieldNameDisplay.TryGetValue(fieldName, out indexes))
+			if (!_indexByFieldNameDisplay.TryGetValue(fieldName, out var indexes))
 				return null;
 
 			var matches = new List<Match>();
@@ -153,5 +143,16 @@ namespace Mtgdb.Gui
 				.Select(TextRange.Copy)
 				.ToList();
 		}
+
+
+
+		private HashSet<int> _matchingCardIds;
+
+		private static readonly List<Regex> _emptyPatterns = new List<Regex>();
+
+		private readonly IList<IList<string>> _values;
+		private readonly KeywordSearcher _searcher;
+		private readonly IList<IList<Regex>> _patterns;
+		private readonly Dictionary<string, HashSet<int>> _indexByFieldNameDisplay;
 	}
 }

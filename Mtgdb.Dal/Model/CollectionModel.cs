@@ -70,8 +70,7 @@ namespace Mtgdb.Dal
 
 		public int GetCount(Card c)
 		{
-			int count;
-			CountById.TryGetValue(c.Id, out count);
+			CountById.TryGetValue(c.Id, out int count);
 			return count;
 		}
 

@@ -47,9 +47,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
     <Compile Include="ArgsExt.cs" />
     <Compile Include="AppDir.cs" />
     <Compile Include="CollectionExtensions.cs" />
@@ -71,6 +68,7 @@
   <ItemGroup>
     <Folder Include="BmpProcessor\" />
   </ItemGroup>
+  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

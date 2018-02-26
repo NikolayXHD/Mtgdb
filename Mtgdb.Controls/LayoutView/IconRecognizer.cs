@@ -65,8 +65,7 @@ namespace Mtgdb.Controls
 
 					string symbol = text.Substring(iconStart + 1, length - 2);
 
-					Bitmap icon;
-					if (_imageByText.TryGetValue(symbol, out icon))
+					if (_imageByText.TryGetValue(symbol, out var icon))
 					{
 						textToken.IconName = symbol;
 						textToken.IconNeedsShadow = icon.Width == icon.Height && !_nonShadowedIcons.Contains(symbol);
@@ -83,8 +82,7 @@ namespace Mtgdb.Controls
 
 		public Bitmap GetIcon(string name, int maxHeight)
 		{
-			Bitmap icon;
-			if (!_imageByText.TryGetValue(name, out icon))
+			if (!_imageByText.TryGetValue(name, out var icon))
 				return null;
 
 			var scaledSize = icon.Size.FitIn(new Size(int.MaxValue, maxHeight));
@@ -92,15 +90,13 @@ namespace Mtgdb.Controls
 			if (scaledSize == icon.Size)
 				return icon;
 
-			Dictionary<int, Bitmap> iconsBySize;
-			if (!_iconsByTextByHeight.TryGetValue(name, out iconsBySize))
+			if (!_iconsByTextByHeight.TryGetValue(name, out var iconsBySize))
 			{
 				iconsBySize = new Dictionary<int, Bitmap>();
 				_iconsByTextByHeight.Add(name, iconsBySize);
 			}
 
-			Bitmap scaledIcon;
-			if (!iconsBySize.TryGetValue(scaledSize.Height, out scaledIcon))
+			if (!iconsBySize.TryGetValue(scaledSize.Height, out var scaledIcon))
 			{
 				scaledIcon = icon.FitIn(scaledSize);
 				iconsBySize.Add(scaledSize.Height, scaledIcon);

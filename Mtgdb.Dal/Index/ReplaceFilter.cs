@@ -27,8 +27,7 @@ namespace Mtgdb.Dal.Index
 
 				for (int i = 0; i < length; i++)
 				{
-					char replaced;
-					if (_replacements.TryGetValue(buffer[i], out replaced))
+					if (_replacements.TryGetValue(buffer[i], out char replaced))
 						buffer[i] = replaced;
 					else
 						buffer[i] = char.ToLowerInvariant(buffer[i]);

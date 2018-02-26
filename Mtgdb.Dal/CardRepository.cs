@@ -126,8 +126,7 @@ namespace Mtgdb.Dal
 			else
 				card.Supertypes = string.Empty;
 
-			CardPatch patch;
-			if (_patch.Cards.TryGetValue(card.SetCode, out patch))
+			if (_patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);
 
 			if (_patch.Cards.TryGetValue(card.NameEn, out patch))
@@ -223,8 +222,7 @@ namespace Mtgdb.Dal
 			if (string.IsNullOrEmpty(loyalty))
 				return null;
 
-			int result;
-			if (int.TryParse(loyalty, out result))
+			if (int.TryParse(loyalty, out int result))
 				return result;
 
 			return 0;
@@ -268,9 +266,7 @@ namespace Mtgdb.Dal
 		{
 			if (!string.IsNullOrEmpty(releaseDate))
 			{
-				DateTime result;
-
-				if (DateTime.TryParseExact(releaseDate, "yyyy-MM-dd", Str.Culture, DateTimeStyles.None, out result))
+				if (DateTime.TryParseExact(releaseDate, "yyyy-MM-dd", Str.Culture, DateTimeStyles.None, out var result))
 					return result;
 			}
 

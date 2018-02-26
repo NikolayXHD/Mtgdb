@@ -114,8 +114,7 @@ namespace Mtgdb.Util
 				if (minSetCode != null && Str.Compare(set.Code, minSetCode) < 0)
 					continue;
 
-				string tcgSet;
-				if (!tcgSetsBySet.TryGetValue(set.Code, out tcgSet))
+				if (!tcgSetsBySet.TryGetValue(set.Code, out string tcgSet))
 					continue;
 
 				var tcgCards = tcgCardsByTcgSet[tcgSet];

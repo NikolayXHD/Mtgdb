@@ -57,10 +57,7 @@ namespace Mtgdb.Gui
 
 			var ext = Path.GetExtension(fileName);
 
-			Bitmap page;
-			Graphics gr;
-
-			createPage(out page, out gr);
+			createPage(out var page, out var gr);
 
 			int x = 0, y = 0;
 			int pageNum = 0;

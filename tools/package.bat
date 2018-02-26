@@ -4,7 +4,7 @@ set origin=F:\Repo\Git\mtgDb
 set output=%origin%\out
 set pub=D:\Distrib\games\mtg\Mega\Mtgdb.Gui
 
-for /f "delims=" %%x in (%origin%\SolutionInfo.cs) do @set version=%%x
+for /f "delims=" %%x in (%origin%\shared\SolutionInfo.cs) do @set version=%%x
 rem [assembly: AssemblyVersion("1.3.5.20")]
 set version=%version:~28,-3%
 
@@ -68,7 +68,7 @@ xcopy /q %target%.zip %pub%\Archive
 xcopy /q %targetRoot%\filelist.txt %pub%\FileList
 
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
-%origin%\Test\NUnit.Console-3.7.0\nunit3-console.exe %output%\bin\release-test\Mtgdb.Test.dll
+%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe %output%\bin\release-test\Mtgdb.Test.dll
 
 if errorlevel 1 exit /b %errorlevel%
 

@@ -56,8 +56,7 @@ namespace Mtgdb.Dal
 
 		public bool ContainsSid(Card c)
 		{
-			Dictionary<string, PriceId> sidsByCard;
-			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out sidsByCard))
+			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out var sidsByCard))
 				return false;
 
 			return sidsByCard.ContainsKey(c.MciNumber);
@@ -73,12 +72,10 @@ namespace Mtgdb.Dal
 			if (string.IsNullOrEmpty(c.MciNumber) || string.IsNullOrEmpty(c.Set.MagicCardsInfoCode))
 				return null;
 
-			Dictionary<string, PriceId> sidsByCard;
-			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out sidsByCard))
+			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out var sidsByCard))
 				return null;
 
-			PriceId sid;
-			if (!sidsByCard.TryGetValue(c.MciNumber, out sid))
+			if (!sidsByCard.TryGetValue(c.MciNumber, out var sid))
 				return null;
 
 			return sid;
@@ -92,8 +89,7 @@ namespace Mtgdb.Dal
 			if (sid.Set != card.Set.MagicCardsInfoCode || sid.Card != card.MciNumber)
 				throw new ArgumentException("sid doesnt match the card");
 
-			Dictionary<string, PriceId> ids;
-			if (!_sidsBySetByCard.TryGetValue(card.Set.MagicCardsInfoCode, out ids))
+			if (!_sidsBySetByCard.TryGetValue(card.Set.MagicCardsInfoCode, out var ids))
 			{
 				ids = new Dictionary<string, PriceId>();
 				_sidsBySetByCard.Add(card.Set.MagicCardsInfoCode, ids);

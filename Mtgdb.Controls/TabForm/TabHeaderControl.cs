@@ -71,8 +71,7 @@ namespace Mtgdb.Controls
 					if (TabIds[i] == null)
 						continue;
 
-					TabSettings setting;
-					if (settingsByTabId.TryGetValue(TabIds[i], out setting))
+					if (settingsByTabId.TryGetValue(TabIds[i], out var setting))
 					{
 						if (setting.HasText)
 							Texts[i] = setting.Text;
@@ -216,9 +215,7 @@ namespace Mtgdb.Controls
 				return;
 			}
 
-			int hoveredIndex;
-			bool hoveredClose;
-			GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+			GetTabIndex(e.Location, out int hoveredIndex, out bool hoveredClose);
 
 			if (hoveredIndex < 0 || hoveredIndex >= Count || hoveredClose)
 			{
@@ -262,9 +259,7 @@ namespace Mtgdb.Controls
 			if (IsDragging())
 				return;
 
-			int hoveredIndex;
-			bool hoveredClose;
-			GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+			GetTabIndex(e.Location, out int hoveredIndex, out bool hoveredClose);
 
 			if (e.Button == MouseButtons.Left)
 			{
@@ -294,9 +289,7 @@ namespace Mtgdb.Controls
 			}
 			else
 			{
-				int hoveredIndex;
-				bool hoveredClose;
-				GetTabIndex(e.Location, out hoveredIndex, out hoveredClose);
+				GetTabIndex(e.Location, out int hoveredIndex, out bool hoveredClose);
 				HoveredIndex = hoveredIndex;
 				HoveredCloseIndex = hoveredClose ? hoveredIndex : -1;
 			}
@@ -746,7 +739,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(Size), "15, 21")]
 		public Size SlopeSize
 		{
-			get { return _slopeSize; }
+			get => _slopeSize;
 			set
 			{
 				_slopeSize = value;
@@ -757,7 +750,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(Size), "10, 14")]
 		public Size AddButtonSlopeSize
 		{
-			get { return _addButtonSlopeSize; }
+			get => _addButtonSlopeSize;
 			set
 			{
 				_addButtonSlopeSize = value;
@@ -768,7 +761,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(30)]
 		public int AddButtonWidth
 		{
-			get { return _addButtonWidth; }
+			get => _addButtonWidth;
 			set
 			{
 				_addButtonWidth = value;
@@ -779,7 +772,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(-1)]
 		public int SelectedIndex
 		{
-			get { return _selectedIndex; }
+			get => _selectedIndex;
 			set
 			{
 				if (value >= Count)
@@ -798,7 +791,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(-1)]
 		public int HoveredIndex
 		{
-			get { return _hoveredIndex; }
+			get => _hoveredIndex;
 			private set
 			{
 				if (_hoveredIndex != value)
@@ -812,7 +805,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(false)]
 		public int HoveredCloseIndex
 		{
-			get { return _hoveredCloseIndex; }
+			get => _hoveredCloseIndex;
 			private set
 			{
 				if (_hoveredCloseIndex != value)
@@ -827,7 +820,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "232, 232, 232")]
 		public Color ColorUnselected
 		{
-			get { return _colorUnselected; }
+			get => _colorUnselected;
 			set
 			{
 				_colorUnselected = value;
@@ -839,7 +832,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "WhiteSmoke")]
 		public Color ColorSelected
 		{
-			get { return _colorSelected; }
+			get => _colorSelected;
 			set
 			{
 				_colorSelected = value;
@@ -851,7 +844,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "WhiteSmoke")]
 		public Color ColorUnselectedHovered
 		{
-			get { return _colorUnselectedHovered; }
+			get => _colorUnselectedHovered;
 			set
 			{
 				_colorUnselectedHovered = value;
@@ -863,7 +856,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "White")]
 		public Color ColorSelectedHovered
 		{
-			get { return _colorSelectedHovered; }
+			get => _colorSelectedHovered;
 			set
 			{
 				_colorSelectedHovered = value;
@@ -875,7 +868,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "DarkGray")]
 		public Color ColorTabBorder
 		{
-			get { return _colorTabBorder; }
+			get => _colorTabBorder;
 			set
 			{
 				_colorTabBorder = value;
@@ -887,7 +880,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(1)]
 		public int TabBorderWidth
 		{
-			get { return _tabBorderWidth; }
+			get => _tabBorderWidth;
 			set
 			{
 				_tabBorderWidth = value;
@@ -899,7 +892,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(true)]
 		public bool AllowAddingTabs
 		{
-			get { return _allowAddingTabs; }
+			get => _allowAddingTabs;
 			set
 			{
 				_allowAddingTabs = value;
@@ -912,7 +905,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(true)]
 		public bool AllowRemovingTabs
 		{
-			get { return _allowRemovingTabs; }
+			get => _allowRemovingTabs;
 			set
 			{
 				_allowRemovingTabs = value;
@@ -928,7 +921,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(6)]
 		public int TextPadding
 		{
-			get { return _textPadding; }
+			get => _textPadding;
 			set
 			{
 				if (_selectedIndex != value)
@@ -943,14 +936,14 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(0)]
 		public int Count
 		{
-			get { return TabIds.Count; }
-			set { setIds(Enumerable.Range(0, value).Cast<object>().ToList()); }
+			get => TabIds.Count;
+			set => setIds(Enumerable.Range(0, value).Cast<object>().ToList());
 		}
 
 		[Category("Settings"), DefaultValue(false)]
 		public bool DrawBottomBorder
 		{
-			get { return _drawBottomBorder; }
+			get => _drawBottomBorder;
 			set
 			{
 				_drawBottomBorder = value;
@@ -961,7 +954,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap CloseIcon
 		{
-			get { return _closeIcon; }
+			get => _closeIcon;
 			set
 			{
 				_closeIcon = value;
@@ -976,7 +969,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap AddIcon
 		{
-			get { return _addIcon; }
+			get => _addIcon;
 			set
 			{
 				_addIcon = value;
@@ -987,7 +980,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap DefaultIcon
 		{
-			get { return _defaultIcon; }
+			get => _defaultIcon;
 			set
 			{
 				_defaultIcon = value;
@@ -1011,7 +1004,7 @@ namespace Mtgdb.Controls
 
 				return TabIds[SelectedIndex];
 			}
-			set { SelectedIndex = TabIds.IndexOf(value); }
+			set => SelectedIndex = TabIds.IndexOf(value);
 		}
 
 		[Browsable(false)]

@@ -20,8 +20,10 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
+			string tessdataPath = TestContext.CurrentContext.TestDirectory.AddPath(@"..\..\..\tools\tessdata");
+
 			_engine = new TesseractEngine(
-				TestContext.CurrentContext.TestDirectory.AddPath("tessdata"),
+				tessdataPath,
 				"eng",
 				EngineMode.CubeOnly);
 

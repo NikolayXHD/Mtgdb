@@ -93,12 +93,10 @@ namespace Mtgdb.Dal
 
 		private static float soundReplaceCost(char c1, char c2, Dictionary<char, HashSet<int>> soundGroupsByChar)
 		{
-			HashSet<int> c1Groups, c2Groups;
-
-			if (!soundGroupsByChar.TryGetValue(c1, out c1Groups))
+			if (!soundGroupsByChar.TryGetValue(c1, out var c1Groups))
 				return Similarity.None;
 
-			if (!soundGroupsByChar.TryGetValue(c2, out c2Groups))
+			if (!soundGroupsByChar.TryGetValue(c2, out var c2Groups))
 				return Similarity.None;
 
 			// Входят в одну фонетическую группу
@@ -114,12 +112,10 @@ namespace Mtgdb.Dal
 
 		private static float opticalReplaceCost(char c1, char c2)
 		{
-			HashSet<int> c1Groups, c2Groups;
-
-			if (!_opticalGroupsByChar.TryGetValue(c1, out c1Groups))
+			if (!_opticalGroupsByChar.TryGetValue(c1, out var c1Groups))
 				return Similarity.None;
 
-			if (!_opticalGroupsByChar.TryGetValue(c2, out c2Groups))
+			if (!_opticalGroupsByChar.TryGetValue(c2, out var c2Groups))
 				return Similarity.None;
 
 			// Входят в одну оптическую группу
@@ -131,12 +127,10 @@ namespace Mtgdb.Dal
 
 		private static float translitReplaceCost(char c1, char c2)
 		{
-			HashSet<int> c1TranslitGroups, c2TranslitGroups;
-
-			if (!_translitGroupsByChar.TryGetValue(c1, out c1TranslitGroups))
+			if (!_translitGroupsByChar.TryGetValue(c1, out var c1TranslitGroups))
 				return Similarity.None;
 
-			if (!_translitGroupsByChar.TryGetValue(c2, out c2TranslitGroups))
+			if (!_translitGroupsByChar.TryGetValue(c2, out var c2TranslitGroups))
 				return Similarity.None;
 
 			if (c1TranslitGroups.Overlaps(c2TranslitGroups))
@@ -147,12 +141,10 @@ namespace Mtgdb.Dal
 
 		private static float keyboardReplaceCost(char c1, char c2)
 		{
-			HashSet<Point> c1KeyboardLocations, c2KeyboardLocations;
-
-			if (!_keyboardLocationsByChar.TryGetValue(c1, out c1KeyboardLocations))
+			if (!_keyboardLocationsByChar.TryGetValue(c1, out var c1KeyboardLocations))
 				return Similarity.None;
 
-			if (!_keyboardLocationsByChar.TryGetValue(c2, out c2KeyboardLocations))
+			if (!_keyboardLocationsByChar.TryGetValue(c2, out var c2KeyboardLocations))
 				return Similarity.None;
 
 			float minDistance = float.MaxValue;

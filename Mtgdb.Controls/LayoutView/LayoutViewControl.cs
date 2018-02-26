@@ -310,8 +310,7 @@ namespace Mtgdb.Controls
 
 		private void updateSort(FieldControl field)
 		{
-			int sortIndex;
-			if (_sortIndexByField.TryGetValue(field.FieldName, out sortIndex))
+			if (_sortIndexByField.TryGetValue(field.FieldName, out int sortIndex))
 				field.SortOrder = _sortInfos[sortIndex].SortOrder;
 			else
 				field.SortOrder = SortOrder.None;
@@ -491,10 +490,9 @@ namespace Mtgdb.Controls
 
 		private void handleSortClick(HitInfo hitInfo)
 		{
-			int sortIndex;
 			FieldSortInfo sortInfo;
 
-			if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out sortIndex))
+			if (!_sortIndexByField.TryGetValue(hitInfo.FieldName, out int sortIndex))
 			{
 				sortIndex = -1;
 				sortInfo = null;
@@ -917,7 +915,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
 		public Type LayoutControlType
 		{
-			get { return _layoutControlType; }
+			get => _layoutControlType;
 			set
 			{
 				_layoutControlType = value;
@@ -950,7 +948,7 @@ namespace Mtgdb.Controls
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public LayoutOptions LayoutOptions
 		{
-			get { return _layoutOptions; }
+			get => _layoutOptions;
 			set
 			{
 				if (value != _layoutOptions)
@@ -974,7 +972,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CardIndex
 		{
-			get { return _cardIndex; }
+			get => _cardIndex;
 			set
 			{
 				if (value == _cardIndex)
@@ -994,7 +992,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<FieldSortInfo> SortInfo
 		{
-			get { return _sortInfos.ToList(); }
+			get => _sortInfos.ToList();
 
 			set
 			{
@@ -1036,8 +1034,7 @@ namespace Mtgdb.Controls
 
 		public int FindRow(object row)
 		{
-			int rowHandle;
-			if (!_rowHandleByObject.TryGetValue(row, out rowHandle))
+			if (!_rowHandleByObject.TryGetValue(row, out int rowHandle))
 				return -1;
 
 			return rowHandle;

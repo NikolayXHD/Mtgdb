@@ -10,8 +10,7 @@ namespace Mtgdb
 			if (key == null)
 				return default(TVal);
 
-			TVal val;
-			dict.TryGetValue(key, out val);
+			dict.TryGetValue(key, out var val);
 
 			return val;
 		}
@@ -109,9 +108,7 @@ namespace Mtgdb
 			// ReSharper disable PossibleNullReferenceException
 			foreach (var pair in dict)
 			{
-				TVal value2;
-
-				if (!dict2.TryGetValue(pair.Key, out value2))
+				if (!dict2.TryGetValue(pair.Key, out var value2))
 					return false;
 
 				// ReSharper enable PossibleNullReferenceException

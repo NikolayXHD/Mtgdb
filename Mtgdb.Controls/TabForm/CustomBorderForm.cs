@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -168,8 +167,7 @@ namespace Mtgdb.Controls
 				int x = Bounds.Width;
 
 				var clientLocation = PointToClient(Cursor.Position);
-				bool hoveredClose, hoveredMaximize, hoveredMinimize;
-				var images = getControlBoxImages(clientLocation, out hoveredClose, out hoveredMaximize, out hoveredMinimize);
+				var images = getControlBoxImages(clientLocation, out _, out _, out _);
 				for (int i = images.Count - 1; i >= 0; i--)
 				{
 					x -= images[i].Width;
@@ -284,7 +282,7 @@ namespace Mtgdb.Controls
 
 		private void keyUp(object sender, KeyEventArgs e)
 		{
-			bool winModifier = WinModifiers.Any(_downKeys.Contains);
+			bool winModifier = _winModifiers.Any(_downKeys.Contains);
 			_downKeys.Remove(e.KeyData);
 
 			if (!winModifier)
@@ -586,8 +584,7 @@ namespace Mtgdb.Controls
 
 		private Rectangle getControlBoxRectangle()
 		{
-			bool hoveredClose, hoveredMaximize, hoveredMinimize;
-			var images = getControlBoxImages(default(Point), out hoveredClose, out hoveredMaximize, out hoveredMinimize);
+			var images = getControlBoxImages(default(Point), out _, out _, out _);
 
 			var width = images.Count > 0
 				? images.Sum(_ => _.Width)
@@ -661,8 +658,10 @@ namespace Mtgdb.Controls
 		{
 			var screenLocation = Cursor.Position;
 
-			bool hoveredClose, hoveredMaximize, hoveredMinimize;
-			getControlBoxImages(PointToClient(screenLocation), out hoveredClose, out hoveredMaximize, out hoveredMinimize);
+			getControlBoxImages(PointToClient(screenLocation),
+				out bool hoveredClose,
+				out bool hoveredMaximize,
+				out bool hoveredMinimize);
 
 			if (hoveredClose)
 				Close();
@@ -732,8 +731,10 @@ namespace Mtgdb.Controls
 				var screenLocation = new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16);
 				var clientLocation = PointToClient(screenLocation);
 
-				bool hoveredClose, hoveredMaximize, hoveredMinimize;
-				getControlBoxImages(clientLocation, out hoveredClose, out hoveredMaximize, out hoveredMinimize);
+				getControlBoxImages(clientLocation,
+					out bool hoveredClose,
+					out bool hoveredMaximize,
+					out bool hoveredMinimize);
 
 				if (!hoveredMinimize && !hoveredMaximize && !hoveredClose)
 					foreach (Direction direction in Enum.GetValues(typeof (Direction)))
@@ -753,7 +754,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap ImageClose
 		{
-			get { return _imageClose[0]; }
+			get => _imageClose[0];
 			set
 			{
 				if (_imageClose[0] == value)
@@ -767,7 +768,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool ShowCloseButton
 		{
-			get { return _showCloseButton; }
+			get => _showCloseButton;
 			set
 			{
 				_showCloseButton = value;
@@ -778,7 +779,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap ImageMinimize
 		{
-			get { return _imageMinimize[0]; }
+			get => _imageMinimize[0];
 			set
 			{
 				if (_imageMinimize[0] == value)
@@ -792,7 +793,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool ShowMinimizeButton
 		{
-			get { return _showMinimizeButton; }
+			get => _showMinimizeButton;
 			set
 			{
 				_showMinimizeButton = value;
@@ -803,7 +804,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap ImageMaximize
 		{
-			get { return _imageMaximize[0]; }
+			get => _imageMaximize[0];
 			set
 			{
 				if (_imageMaximize[0] == value)
@@ -817,7 +818,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool ShowMaximizeButton
 		{
-			get { return _showMaximizeButton; }
+			get => _showMaximizeButton;
 			set
 			{
 				_showMaximizeButton = value;
@@ -828,7 +829,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap ImageNormalize
 		{
-			get { return _imageNormalize[0]; }
+			get => _imageNormalize[0];
 			set
 			{
 				if (_imageNormalize[0] == value)
@@ -842,7 +843,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(24)]
 		public int TitleHeight
 		{
-			get { return _titleHeight; }
+			get => _titleHeight;
 			set
 			{
 				_titleHeight = value;
@@ -854,7 +855,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(4)]
 		public int Border
 		{
-			get { return _border; }
+			get => _border;
 			set
 			{
 				_border = value;
@@ -869,7 +870,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof (Color), "210, 210, 220")]
 		public Color TitleBackroundColor
 		{
-			get { return _titleBackroundColor; }
+			get => _titleBackroundColor;
 			set
 			{
 				_titleBackroundColor = value;
@@ -890,7 +891,7 @@ namespace Mtgdb.Controls
 		[Browsable(false)]
 		private bool IsMaximized
 		{
-			get { return _isMaximized; }
+			get => _isMaximized;
 			set
 			{
 				if (_isMaximized != value)
@@ -923,7 +924,7 @@ namespace Mtgdb.Controls
 
 		private readonly HashSet<Keys> _downKeys = new HashSet<Keys>();
 
-		private static readonly Keys[] WinModifiers =
+		private static readonly Keys[] _winModifiers =
 		{
 			Keys.LWin,
 			Keys.RWin

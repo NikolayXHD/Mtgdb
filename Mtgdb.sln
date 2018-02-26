@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dal", "Mtgdb.Dal\Mtgdb.Dal.csproj", "{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}"
 EndProject
@@ -20,9 +20,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
 		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
+		LICENSE = LICENSE
 		etc\Mtgdb.Gui.xml = etc\Mtgdb.Gui.xml
 		new-set-checklist.md = new-set-checklist.md
-		SolutionInfo.cs = SolutionInfo.cs
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
@@ -31,25 +32,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lucene.Net.Contrib", "Lucen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls", "Mtgdb.Controls\Mtgdb.Controls.csproj", "{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ tools ]", "[ tools ]", "{7E0371BE-7415-4304-BCC7-BD6A33C5607C}"
-	ProjectSection(SolutionItems) = preProject
-		tools\gdrive-windows-x64.exe = tools\gdrive-windows-x64.exe
-		tools\package.bat = tools\package.bat
-		tools\package.old.bat = tools\package.old.bat
-		tools\select images.bat = tools\select images.bat
-		tools\shortcut.vbs = tools\shortcut.vbs
-		tools\sign images.bat = tools\sign images.bat
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Test", "Test\Mtgdb.Util.Test\Mtgdb.Util.Test.csproj", "{71505A79-B810-4C19-9DC4-C880F23E2A16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Test.Core", "Test\Mtgdb.Test.Core\Mtgdb.Test.Core.csproj", "{DD429228-A094-4617-BF08-57FE1EF44A96}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{31A12ADC-2D40-4484-9165-44B5567DF191}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "shared", "shared\shared.shproj", "{C2763956-008B-4E6B-8AC7-B634D8741C3B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{37029487-6A56-4FA3-AA23-B2E46D5AA1B0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "tools", "tools\tools.shproj", "{B1C7F4D9-46BA-4D18-92A0-2E8214973929}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		out\out.projitems*{31a12adc-2d40-4484-9165-44b5567df191}*SharedItemsImports = 13
+		shared\shared.projitems*{3229ca82-875d-4154-92b7-2f7c47678010}*SharedItemsImports = 4
+		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13
+		shared\shared.projitems*{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}*SharedItemsImports = 4
+		shared\shared.projitems*{4fe226ac-ec61-451f-a602-c79da136ce25}*SharedItemsImports = 4
+		shared\shared.projitems*{56661dad-10a7-41ef-8672-f417f15923cb}*SharedItemsImports = 4
+		shared\shared.projitems*{97545c6d-acd6-4a2c-84dd-cd91293cfbb6}*SharedItemsImports = 4
+		tools\tools.projitems*{b1c7f4d9-46ba-4d18-92a0-2e8214973929}*SharedItemsImports = 13
+		shared\shared.projitems*{c2763956-008b-4e6b-8ac7-b634d8741c3b}*SharedItemsImports = 13
+		shared\shared.projitems*{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

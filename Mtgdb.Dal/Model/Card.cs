@@ -204,8 +204,7 @@ namespace Mtgdb.Dal
 				LegalityByFormat.Remove(format);
 			else
 			{
-				LegalityNote note;
-				if (LegalityByFormat.TryGetValue(format, out note))
+				if (LegalityByFormat.TryGetValue(format, out var note))
 					note.Legality = legality;
 				else
 				{
@@ -530,8 +529,7 @@ namespace Mtgdb.Dal
 
 		public bool IsLegalIn(string format)
 		{
-			LegalityNote legality;
-			if (LegalityByFormat.TryGetValue(format, out legality))
+			if (LegalityByFormat.TryGetValue(format, out var legality))
 				return Str.Equals(legality.Legality, Legality.Legal);
 
 			return false;
@@ -539,8 +537,7 @@ namespace Mtgdb.Dal
 
 		public bool IsRestrictedIn(string format)
 		{
-			LegalityNote legality;
-			if (LegalityByFormat.TryGetValue(format, out legality))
+			if (LegalityByFormat.TryGetValue(format, out var legality))
 				return Str.Equals(legality.Legality, Legality.Restricted);
 
 			return false;
@@ -548,8 +545,7 @@ namespace Mtgdb.Dal
 
 		public bool IsBannedIn(string format)
 		{
-			LegalityNote legality;
-			if (LegalityByFormat.TryGetValue(format, out legality))
+			if (LegalityByFormat.TryGetValue(format, out var legality))
 				return Str.Equals(legality.Legality, Legality.Banned);
 
 			return false;

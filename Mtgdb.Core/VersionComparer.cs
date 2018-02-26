@@ -23,8 +23,7 @@ namespace Mtgdb
 			int minLen = Math.Min(partsX.Length, partsY.Length);
 			for (int i = 0; i < minLen; i++)
 			{
-				int vX, vY;
-				if (int.TryParse(partsX[i], out vX) && int.TryParse(partsY[i], out vY))
+				if (int.TryParse(partsX[i], out int vX) && int.TryParse(partsY[i], out int vY))
 					compareResult = vX.CompareTo(vY);
 				else
 					compareResult = _partsComparer.Compare(partsX[i], partsY[i]);

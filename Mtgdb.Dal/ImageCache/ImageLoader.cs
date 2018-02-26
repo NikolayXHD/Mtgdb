@@ -159,8 +159,7 @@ namespace Mtgdb.Dal
 
 		private Bitmap tryGetFromCache(string path, RotateFlipType rotations)
 		{
-			ImageCacheEntry cacheEntry;
-			if (!_imagesByPath.TryGetValue(new Tuple<string, RotateFlipType>(path, rotations), out cacheEntry))
+			if (!_imagesByPath.TryGetValue(new Tuple<string, RotateFlipType>(path, rotations), out var cacheEntry))
 				return null;
 
 			shiftFromLast(cacheEntry);

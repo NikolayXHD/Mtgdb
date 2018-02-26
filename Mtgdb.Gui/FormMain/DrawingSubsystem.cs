@@ -415,9 +415,7 @@ namespace Mtgdb.Gui
 
 				foreach (var token in relevantTokens)
 				{
-					string pattern;
-					List<string> contextPatterns;
-					getPattern(token, out pattern, out contextPatterns);
+					getPattern(token, out string pattern, out var contextPatterns);
 
 					addPattern(pattern, patternsSet);
 
@@ -435,8 +433,7 @@ namespace Mtgdb.Gui
 			if (pattern == null)
 				return;
 
-			Regex regex;
-			if (patternsSet.TryGetValue(pattern, out regex))
+			if (patternsSet.TryGetValue(pattern, out var regex))
 				return;
 			
 			if (!_regexCache.TryGetValue(pattern, out regex))

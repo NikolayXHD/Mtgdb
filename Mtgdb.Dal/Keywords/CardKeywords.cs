@@ -41,7 +41,10 @@ namespace Mtgdb.Dal
 							.ToList();
 
 						if (matches?.Count > 0)
-							addKeyword(propertyName, propertyValues[j]);
+						{
+							string displayText = KeywordRegexUtil.GetKeywordDisplayText(propertyValues[j]);
+							addKeyword(propertyName, displayText);
+						}
 					}
 				}
 
@@ -52,8 +55,7 @@ namespace Mtgdb.Dal
 
 		private void addKeyword(string propertyName, string value)
 		{
-			HashSet<string> keywords;
-			if (!KeywordsByProperty.TryGetValue(propertyName, out keywords))
+			if (!KeywordsByProperty.TryGetValue(propertyName, out var keywords))
 			{
 				keywords = new HashSet<string>(Str.Comparer);
 				KeywordsByProperty.Add(propertyName, keywords);

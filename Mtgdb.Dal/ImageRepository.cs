@@ -100,9 +100,7 @@ namespace Mtgdb.Dal
 
 		private static IEnumerable<string> getDirectoryFiles(Dictionary<string, IList<string>> filesByDirCache, string path)
 		{
-			IList<string> cache;
-
-			if (filesByDirCache.TryGetValue(path, out cache))
+			if (filesByDirCache.TryGetValue(path, out var cache))
 			{
 				foreach (string file in cache)
 					yield return file;
@@ -292,24 +290,20 @@ namespace Mtgdb.Dal
 		{
 			name = string.Intern(name);
 
-			Dictionary<string, Dictionary<int, ImageFile>> modelsBySet;
-			if (!modelsByNameBySetByVariant.TryGetValue(name, out modelsBySet))
+			if (!modelsByNameBySetByVariant.TryGetValue(name, out var modelsBySet))
 			{
 				modelsBySet = new Dictionary<string, Dictionary<int, ImageFile>>(Str.Comparer);
 				modelsByNameBySetByVariant.Add(name, modelsBySet);
 			}
 
-			Dictionary<int, ImageFile> modelsByImageVariant;
-			if (!modelsBySet.TryGetValue(imageFile.SetCode, out modelsByImageVariant))
+			if (!modelsBySet.TryGetValue(imageFile.SetCode, out var modelsByImageVariant))
 			{
 				modelsByImageVariant = new Dictionary<int, ImageFile>();
 				modelsBySet.Add(imageFile.SetCode, modelsByImageVariant);
 			}
 
-			ImageFile currentImageFile;
-
 			// Для каждого номера варианта выберем представителя с наилучшим качеством
-			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out currentImageFile) || currentImageFile.Quality < imageFile.Quality)
+			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out var currentImageFile) || currentImageFile.Quality < imageFile.Quality)
 				modelsByImageVariant[imageFile.VariantNumber] = imageFile;
 		}
 
@@ -352,13 +346,10 @@ namespace Mtgdb.Dal
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				Dictionary<string, Dictionary<int, ImageFile>> bySet;
-				if (!modelsByNameBySetByVariant.TryGetValue(imageNameBase, out bySet))
+				if (!modelsByNameBySetByVariant.TryGetValue(imageNameBase, out var bySet))
 					return null;
 
-				Dictionary<int, ImageFile> byImageVariant;
-
-				if (set == null || !bySet.TryGetValue(set, out byImageVariant))
+				if (set == null || !bySet.TryGetValue(set, out var byImageVariant))
 				{
 					byImageVariant = bySet
 						.AtMax(setPriority2(artist))
@@ -430,8 +421,7 @@ namespace Mtgdb.Dal
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				Dictionary<string, Dictionary<int, ImageFile>> modelsBySet;
-				if (!modelsByNameBySetByVariant.TryGetValue(card.ImageNameBase, out modelsBySet))
+				if (!modelsByNameBySetByVariant.TryGetValue(card.ImageNameBase, out var modelsBySet))
 					return null;
 
 				var entriesBySet = modelsBySet

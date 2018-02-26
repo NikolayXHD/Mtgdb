@@ -22,8 +22,7 @@ namespace Mtgdb.Downloader
 			{
 				var otherGroup = entry.Value;
 
-				QualityGroupConfig group;
-				if (groupsByType.TryGetValue(entry.Key, out group))
+				if (groupsByType.TryGetValue(entry.Key, out var @group))
 				{
 					var combined = combiner.Combine(group, otherGroup);
 					resultGroups.Add(combined);

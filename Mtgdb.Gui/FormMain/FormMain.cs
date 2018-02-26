@@ -264,10 +264,9 @@ namespace Mtgdb.Gui
 
 						if (fit(card, filterManagerStates))
 						{
-							Card otherCard;
 							bool isCurrentCardMoreRecent;
 
-							if (!cardsByName.TryGetValue(card.NameNormalized, out otherCard))
+							if (!cardsByName.TryGetValue(card.NameNormalized, out var otherCard))
 								isCurrentCardMoreRecent = true;
 							else
 							{
@@ -844,10 +843,7 @@ namespace Mtgdb.Gui
 
 			var saved = _deckSerializationSubsystem.SaveCollection(_historySubsystem.Current.CollectionModel);
 
-			if (saved == null)
-				return;
-
-			if (saved.Error != null)
+			if (saved?.Error != null)
 				MessageBox.Show(this, saved.Error);
 		}
 

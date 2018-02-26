@@ -93,12 +93,9 @@ namespace Mtgdb.Dal.Index
 
 		private static bool isValueNumeric(string queryText)
 		{
-			int intVal;
-			float floatVal;
-
 			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out intVal) ||
-				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out floatVal);
+				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
+				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
 			return valueIsNumeric;
 		}
 
@@ -301,8 +298,7 @@ namespace Mtgdb.Dal.Index
 			if (!isNumberSpecified(term))
 				return null;
 
-			TVal value;
-			if (!parser(term, out value))
+			if (!parser(term, out var value))
 				throw new ParseException($"Non-numeric value '{term}' for numeric field {field}");
 
 			return value;

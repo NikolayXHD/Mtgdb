@@ -16,8 +16,7 @@ namespace Mtgdb.Test
 			var setDirectory = Path.Combine(targetDirectory, set.Code);
 			Directory.CreateDirectory(setDirectory);
 
-			Tuple<string, int> siteSet;
-			if (!_siteSetCodes.TryGetValue(set.Code, out siteSet))
+			if (!_siteSetCodes.TryGetValue(set.Code, out var siteSet))
 				return;
 
 			for (int i = 0; i < siteSet.Item2; i++)

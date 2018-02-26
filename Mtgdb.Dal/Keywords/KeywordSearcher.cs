@@ -14,8 +14,8 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.22 V17
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.22");
+			// 0.24 store keyword name for explicit regex keywords
+			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.24");
 			_version.Directory.AddPath("keywords.json");
 		}
 

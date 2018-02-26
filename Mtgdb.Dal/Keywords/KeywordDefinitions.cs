@@ -9,17 +9,16 @@ namespace Mtgdb.Dal
 	{
 		private static Func<string, Regex>[] Matchers { get; } = 
 		{
-			RegexUtil.CreateContainsRegex,
-			RegexUtil.CreateContainsRegex,
-			RegexUtil.CreateEqualsRegex,
-			RegexUtil.CreateContainsRegex,
-			RegexUtil.CreateEqualsRegex,
-			RegexUtil.CreateContainsRegex,
-			RegexUtil.CreateContainsRegex
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateContainsRegex
 		};
 		
 		public static Func<Card, string>[] Getters { get; } =
-			new Func<Card, string>[]
 			{
 				c => c.ManaCost,
 				c => c.TypeEn,
@@ -130,7 +129,7 @@ namespace Mtgdb.Dal
 		public static readonly string[] Ability =
 		{
 			"Annihilator",
-			"/\\bAttacks? each (combat|turn) if able\\b/",
+			@"/\bAttacks? each (combat|turn) if able\b/ Attack each turn",
 			"Awaken",
 			"Can't be blocked",
 			"Can't block",

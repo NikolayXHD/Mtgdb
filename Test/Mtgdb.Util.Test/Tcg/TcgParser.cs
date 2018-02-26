@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Newtonsoft.Json;
-using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
 	public class TcgParser
 	{
-		private readonly string _resourcesDir = Path.Combine(
-			TestContext.CurrentContext.TestDirectory,
-			@"D:\Distrib\games\mtg\tcg");
+		private readonly string _resourcesDir = @"D:\Distrib\games\mtg\tcg";
 
 		public Dictionary<string, Dictionary<string, int>> GetOrderByCard()
 		{

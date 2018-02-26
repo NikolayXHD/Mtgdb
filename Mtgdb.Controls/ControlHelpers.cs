@@ -161,8 +161,7 @@ namespace Mtgdb.Controls
 
 			var dict = (Dictionary<string, object>)control.Tag;
 
-			object result;
-			if (!dict.TryGetValue(key, out result))
+			if (!dict.TryGetValue(key, out var result))
 				return default(TValue);
 
 			return (TValue) result;

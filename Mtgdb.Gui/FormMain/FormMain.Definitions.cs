@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -51,7 +50,7 @@ namespace Mtgdb.Gui
 
 			_quickFilterFacade = new QuickFilterFacade(
 				KeywordDefinitions.Patterns,
-				KeywordDefinitions.Values,
+				KeywordDefinitions.Values.ToKeywordDisplayTexts(),
 				KeywordDefinitions.PropertyNames,
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);

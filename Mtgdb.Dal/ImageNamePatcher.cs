@@ -8,14 +8,11 @@ namespace Mtgdb.Dal
 	{
 		public static void Patch(Card card)
 		{
-			string fixedName;
-			Tuple<Regex, MatchEvaluator> regexReplacement;
-
-			if (tryGetFixedName(card, out fixedName))
+			if (tryGetFixedName(card, out string fixedName))
 			{
 				card.ImageName = fixedName;
 			}
-			else if (_replacementBySet.TryGetValue(card.SetCode, out regexReplacement))
+			else if (_replacementBySet.TryGetValue(card.SetCode, out var regexReplacement))
 			{
 				var pattern = regexReplacement.Item1;
 				var replacement = regexReplacement.Item2;
@@ -35,12 +32,10 @@ namespace Mtgdb.Dal
 
 		private static bool tryGetFixedName(Card card, out string fixedName)
 		{
-			Dictionary<string, string> setFixedNames;
-
 			if (_fixedNamesBySet[string.Empty].TryGetValue(card.ImageName, out fixedName))
 				return true;
 
-			if (_fixedNamesBySet.TryGetValue(card.SetCode, out setFixedNames))
+			if (_fixedNamesBySet.TryGetValue(card.SetCode, out var setFixedNames))
 				return setFixedNames.TryGetValue(card.ImageName, out fixedName);
 
 			return false;

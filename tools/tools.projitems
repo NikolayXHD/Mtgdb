@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b1c7f4d9-46ba-4d18-92a0-2e8214973929</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>tools</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)gdrive-windows-x64.exe" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit-project-loader.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit-v2-result-writer.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit.core.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit.core.interfaces.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit.v2.driver.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\teamcity-event-listener.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\vs-project-loader.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\License.rtf" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\Mono.Cecil.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit-agent-x86.exe" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit-agent-x86.exe.config" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit-agent.exe" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit-agent.exe.config" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.engine.addins" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.engine.api.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.engine.dll" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit3-console.exe" />
+    <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit3-console.exe.config" />
+    <None Include="$(MSBuildThisFileDirectory)package.bat" />
+    <None Include="$(MSBuildThisFileDirectory)select images.bat" />
+    <None Include="$(MSBuildThisFileDirectory)shortcut.vbs" />
+    <None Include="$(MSBuildThisFileDirectory)sign images.bat" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.bigrams" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.fold" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.lm" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.nn" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.params" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.size" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.word-freq" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.tesseract_cube.nn" />
+    <None Include="$(MSBuildThisFileDirectory)tessdata\eng.traineddata" />
+    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_core300.dll" />
+    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_features2d300.dll" />
+    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_imgcodecs300.dll" />
+    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_imgproc300.dll" />
+    <None Include="$(MSBuildThisFileDirectory)Waifu2x\waifu2x-converter.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\COMPONENTS.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\LICENSE.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\NOTICES.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.engine.api.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\LICENSE.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\noise1_model.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\noise2_model.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\scale2.0x_model.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\Readme.RU.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\README.txt" />
+  </ItemGroup>
+</Project>

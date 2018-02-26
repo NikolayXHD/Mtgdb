@@ -398,9 +398,7 @@ namespace Mtgdb.Gui
 		{
 			var location = _tabHeadersDeck.PointToClient(new Point(e.X, e.Y));
 
-			int hoveredIndex;
-			bool hoveredClose;
-			_tabHeadersDeck.GetTabIndex(location, out hoveredIndex, out hoveredClose);
+			_tabHeadersDeck.GetTabIndex(location, out int hoveredIndex, out _);
 
 			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= _tabHeadersDeck.Count)
 				return;

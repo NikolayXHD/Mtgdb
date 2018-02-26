@@ -120,7 +120,7 @@
     <Compile Include="Price\PriceId.cs" />
     <Compile Include="Price\PriceRepository.cs" />
     <Compile Include="Price\PriceValues.cs" />
-    <Compile Include="RegexUtil.cs" />
+    <Compile Include="KeywordRegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
@@ -150,9 +150,6 @@
     <Compile Include="Partition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translations\LocalizationRepository.cs" />
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -187,6 +184,7 @@
   <ItemGroup>
     <Folder Include="Index\TolerantTokenizer\" />
   </ItemGroup>
+  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

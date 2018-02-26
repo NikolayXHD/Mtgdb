@@ -48,10 +48,10 @@ namespace Mtgdb.Gui
 				_buttonSaveDeck
 			};
 
-			_saveLoadMenuButtons = new CheckBox[][]
+			_saveLoadMenuButtons = new[]
 			{
-				new [] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
-				new [] { _buttonMenuSaveDeck, _buttonMenuSaveCollection }
+				new CheckBox[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
+				new CheckBox[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection }
 			};
 
 			scale();
@@ -211,9 +211,7 @@ namespace Mtgdb.Gui
 		{
 			var location = _tabs.PointToClient(new Point(e.X, e.Y));
 
-			int hoveredIndex;
-			bool hoveredClose;
-			_tabs.GetTabIndex(location, out hoveredIndex, out hoveredClose);
+			_tabs.GetTabIndex(location, out int hoveredIndex, out _);
 
 			if (hoveredIndex == _tabs.AddButtonIndex)
 			{
@@ -467,18 +465,15 @@ namespace Mtgdb.Gui
 
 		public bool ShowFilterPanels
 		{
-			get { return _buttonFilterPanels.Checked; }
-			set { _buttonFilterPanels.Checked = value; }
+			get => _buttonFilterPanels.Checked;
+			set => _buttonFilterPanels.Checked = value;
 		}
 
 		public event Action ShowFilterPanelsChanged;
 
 		public bool HideTooltips
 		{
-			get
-			{
-				return !TooltipController.Active;
-			}
+			get => !TooltipController.Active;
 			set
 			{
 				bool showTooltips = !value;
@@ -492,18 +487,12 @@ namespace Mtgdb.Gui
 
 		public bool CanUndo
 		{
-			set
-			{
-				_buttonUndo.Enabled = value;
-			}
+			set => _buttonUndo.Enabled = value;
 		}
 
 		public bool CanRedo
 		{
-			set
-			{
-				_buttonRedo.Enabled = value;
-			}
+			set => _buttonRedo.Enabled = value;
 		}
 
 		public void SelectNextTab()
@@ -566,12 +555,9 @@ namespace Mtgdb.Gui
 
 		public Direction? SnapDirection
 		{
-			get
-			{
-				return Enum.GetValues(typeof(Direction))
-					.Cast<Direction>()
-					.FirstOrDefault(IsSnappedTo);
-			}
+			get => Enum.GetValues(typeof(Direction))
+				.Cast<Direction>()
+				.FirstOrDefault(IsSnappedTo);
 
 			set
 			{
@@ -585,7 +571,7 @@ namespace Mtgdb.Gui
 
 		public Rectangle WindowArea
 		{
-			get { return DesktopBounds; }
+			get => DesktopBounds;
 			set
 			{
 				WindowState = FormWindowState.Normal;
@@ -607,8 +593,8 @@ namespace Mtgdb.Gui
 
 		public sealed override string Text
 		{
-			get { return base.Text; }
-			set { base.Text = value; }
+			get => base.Text;
+			set => base.Text = value;
 		}
 
 		private bool _undoingOrRedoing;

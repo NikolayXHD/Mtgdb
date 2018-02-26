@@ -54,8 +54,7 @@ namespace Mtgdb.Gui
 
 		public int GetCount(string cardId)
 		{
-			int count;
-			CountById.TryGetValue(cardId, out count);
+			CountById.TryGetValue(cardId, out int count);
 			return count;
 		}
 	}

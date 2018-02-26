@@ -149,8 +149,7 @@ namespace Mtgdb.Gui
 			if (separatorIndex >= 0)
 				mtgoName = mtgoName.Substring(0, separatorIndex);
 
-			string result;
-			if (_nameByMtgoName.TryGetValue(mtgoName, out result))
+			if (_nameByMtgoName.TryGetValue(mtgoName, out string result))
 				return result;
 
 			return mtgoName;
@@ -164,8 +163,7 @@ namespace Mtgdb.Gui
 			else
 				name = card.NameEn;
 
-			string result;
-			if (_mtgoNameByName.TryGetValue(name, out result))
+			if (_mtgoNameByName.TryGetValue(name, out string result))
 				return result;
 
 			return name;

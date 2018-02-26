@@ -66,9 +66,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
     <Compile Include="NewsService.cs" />
     <Compile Include="WebClientBase.cs" />
     <Compile Include="PriceDownloader.cs" />
@@ -181,6 +178,7 @@
   <ItemGroup>
     <None Include="Resources\mailbox_26.png" />
   </ItemGroup>
+  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

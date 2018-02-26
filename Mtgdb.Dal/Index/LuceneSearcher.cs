@@ -164,8 +164,7 @@ namespace Mtgdb.Dal.Index
 
 		private static void fixNegativeClauses(Query query)
 		{
-			var boolean = query as BooleanQuery;
-			if (boolean == null)
+			if (!(query is BooleanQuery boolean))
 				return;
 
 			bool existsPositive = false;
@@ -200,8 +199,7 @@ namespace Mtgdb.Dal.Index
 			if (token.ParentField == null)
 				return string.Empty;
 
-			string name;
-			if (DocumentFactory.DisplayFieldByIndexField.TryGetValue(token.ParentField, out name))
+			if (DocumentFactory.DisplayFieldByIndexField.TryGetValue(token.ParentField, out string name))
 				return name;
 			
 			return token.ParentField;

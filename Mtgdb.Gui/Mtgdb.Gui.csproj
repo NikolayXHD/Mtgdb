@@ -84,12 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\ShadowCopy.cs">
-      <Link>[ Infrastructure ]\ShadowCopy.cs</Link>
-    </Compile>
     <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
     <Compile Include="DeckSerialization\DeckFile.cs" />
     <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
@@ -576,6 +570,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
