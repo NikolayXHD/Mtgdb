@@ -938,23 +938,11 @@ namespace Mtgdb.Gui
 
 		public bool IsDraggingCard => _draggingSubsystem.IsDragging();
 
-		public Card DraggedCard => _deckModel.CardDragged;
-
-		private void dragCard(Card card)
-		{
-			if (_draggingSubsystem.IsDragging())
-				_draggingSubsystem. DragAbort();
-
-			_viewCards.Focus();
-			
-			// _viewCards to avoid deck reordering
-			_draggingSubsystem.DragBegin(card, _viewCards);
-		}
+		public Card DraggedCard => _deckModel.DraggedCard;
 
 		public void StopDragging()
 		{
-			if (_draggingSubsystem.IsDragging())
-				_draggingSubsystem.DragAbort();
+			_draggingSubsystem.DragAbort();
 		}
 
 

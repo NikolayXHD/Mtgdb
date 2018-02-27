@@ -20,7 +20,7 @@ set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
 rem goto upload
 rem goto sign
 
-"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" %origin%\Mtgdb.sln /verbosity:m
+"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" %origin%\Mtgdb.sln /verbosity:m
 
 if errorlevel 1 exit /b
 

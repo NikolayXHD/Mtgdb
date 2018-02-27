@@ -128,60 +128,43 @@ namespace Mtgdb.Gui
 			if (!_deckModel.IsDragging())
 				return;
 
-			var cardDragged = _deckModel.CardDragged;
+			var draggedCard = _deckModel.DraggedCard;
 			var cardBelowDragged = _deckModel.CardBelowDragged;
 
-			TimeSpan dragDuration = DateTime.Now - (_dragStartedTime ?? DateTime.MinValue);
-			dragEnd();
-
-			var deckHitInfo = getHitInfo(_layoutViewCards, cursorPosition);
-			var cardHitInfo = getHitInfo(_layoutViewDeck, cursorPosition);
-
-			const float dragMinDurationSec = 0.3f;
-
-			if (deckHitInfo.InBounds)
+			var cardHitInfo = getHitInfo(_layoutViewCards, cursorPosition);
+			var deckHitInfo = getHitInfo(_layoutViewDeck, cursorPosition);
+			
+			if (cardHitInfo.InBounds)
 			{
-				if (_dragFromView == _layoutViewDeck)
-					DragRemoved?.Invoke(cardDragged);
+				if (_deckModel.IsDraggingFromZone.HasValue)
+					DragRemoved?.Invoke(draggedCard, _deckModel.IsDraggingFromZone.Value);
 				else
-				{
-					if (dragDuration.TotalSeconds < dragMinDurationSec && deckHitInfo.CardBounds.HasValue)
-						DraggedLikeClick?.Invoke(cardDragged);
-					else
-						DraggedLikeClick?.Invoke(null);
-				}
+					handleDraggedLikeClick(cardHitInfo);
 			}
-			else
+			else if (deckHitInfo.InBounds)
 			{
-				if (cardHitInfo.InBounds)
-				{
-					if (_dragFromView == _layoutViewCards)
-					{
-						DragAdded?.Invoke(cardDragged);
-					}
-					else
-					{
-						if (cardBelowDragged != cardDragged)
-						{
-							_deckModel.ApplyReorder(cardDragged, cardBelowDragged);
-						}
-						else 
-						{
-							if (dragDuration.TotalSeconds < dragMinDurationSec && cardHitInfo.CardBounds.HasValue)
-								DraggedLikeClick?.Invoke(cardDragged);
-							else
-								DraggedLikeClick?.Invoke(null);
-						}
-					}
-				}
+				if (_deckModel.IsDraggingFromZone != _deckModel.Zone)
+					DragAdded?.Invoke(draggedCard, _deckModel.IsDraggingFromZone);
+				else if (cardBelowDragged != draggedCard)
+					_deckModel.ApplyReorder(draggedCard, cardBelowDragged);
+				else
+					handleDraggedLikeClick(deckHitInfo);
 			}
 
-			// потому что больше нет отметки на карте, которую мы тащим
-			_layoutViewCards.InvalidateCard(cardDragged);
-
-			_layoutViewDeck.Invalidate();
+			DragAbort();
 		}
-		
+
+		private void handleDraggedLikeClick(HitInfo hitInfo)
+		{
+			TimeSpan dragDuration = DateTime.Now - (_dragStartedTime ?? DateTime.MinValue);
+			const float dragMinDurationSec = 0.2f;
+
+			if (dragDuration.TotalSeconds < dragMinDurationSec && hitInfo.CardBounds.HasValue)
+				DraggedLikeClick?.Invoke((Card)hitInfo.RowDataSource);
+			else
+				DraggedLikeClick?.Invoke(null);
+		}
+
 		private void deckScrolled(object sender)
 		{
 			if (!_deckModel.IsDragging())
@@ -205,7 +188,7 @@ namespace Mtgdb.Gui
 		private void mouseLeave(object sender, EventArgs e)
 		{
 			if (_deckModel.IsDragging())
-				setCardBelowDragged(_deckModel.CardDragged);
+				setCardBelowDragged(_deckModel.DraggedCard);
 		}
 
 
@@ -222,6 +205,7 @@ namespace Mtgdb.Gui
 			_dragFromView = dragFromView;
 			
 			_dragStartedTime = DateTime.Now;
+
 			_deckModel.DragStart(card, fromDeck: dragFromView == _layoutViewDeck);
 
 			createDragCursor(card);
@@ -262,20 +246,16 @@ namespace Mtgdb.Gui
 
 		public void DragAbort()
 		{
-			// потому что больше нет отметки на карте, которую мы тащим
-			_layoutViewCards.InvalidateCard(_deckModel.CardDragged);
-
-			_layoutViewDeck.Invalidate();
-
-			dragEnd();
-		}
-
-		private void dragEnd()
-		{
+			var draggedCard = _deckModel.DraggedCard;
+			
 			_mouseDownLocation = null;
 			_dragStartedTime = null;
 			_deckModel.DragAbort();
 			updateCursor();
+
+			// потому что больше нет отметки на карте, которую мы тащим
+			_layoutViewCards.InvalidateCard(draggedCard);
+			_layoutViewDeck.Invalidate();
 		}
 
 		private void setCardBelowDragged(Card card)
@@ -335,7 +315,7 @@ namespace Mtgdb.Gui
 			if (e.FieldName != nameof(Card.Image))
 				return;
 			
-			if (card == _deckModel.CardDragged)
+			if (card == _deckModel.DraggedCard)
 				drawDraggingMark(e);
 		}
 
@@ -381,8 +361,7 @@ namespace Mtgdb.Gui
 			if (visibleIndex < 0)
 				return null;
 
-			var reorderedDeck = _deckModel.GetReorderedCards(_deckModel.CardDragged, _deckModel.CardBelowDragged);
-			return reorderedDeck[visibleIndex];
+			return _deckModel.GetVisibleCards()[visibleIndex];
 		}
 
 
@@ -425,8 +404,8 @@ namespace Mtgdb.Gui
 
 
 		public event Action<Card> DraggedLikeClick;
-		public event Action<Card> DragRemoved;
-		public event Action<Card> DragAdded;
+		public event Action<Card, Zone> DragRemoved;
+		public event Action<Card, Zone?> DragAdded;
 		
 
 		public UiModel Ui { get; set; }

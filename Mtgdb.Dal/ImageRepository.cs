@@ -388,6 +388,9 @@ namespace Mtgdb.Dal
 
 		public List<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
+			if (!IsLoadingArtComplete)
+				return null;
+
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
 
 			var distinctModels = models?

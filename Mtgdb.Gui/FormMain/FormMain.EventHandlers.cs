@@ -282,21 +282,27 @@ namespace Mtgdb.Gui
 		}
 
 
-		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
+		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone, bool changeTerminatesBatch)
 		{
-			updateViewCards(listChanged, card, FilterGroup.Deck, touchedChanged);
-			updateViewDeck(listChanged, countChanged, card, touchedChanged);
+			if (!zone.HasValue)
+				throw new ArgumentNullException(nameof(zone));
+
+			if (zone == _deckModel.Zone)
+			{
+				updateViewCards(listChanged, card, FilterGroup.Deck, touchedChanged);
+				updateViewDeck(listChanged, countChanged, card, touchedChanged);
+			}
 
 			if (restoringSettings())
 				return;
 
-			if (zone != Zone.SampleHand && (countChanged || listChanged))
+			if (zone != Zone.SampleHand && (countChanged || listChanged) && changeTerminatesBatch)
 				historyUpdate();
 
 			updateFormStatus();
 		}
 
-		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone)
+		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone, bool changeTerminatesBatch)
 		{
 			updateViewCards(listChanged, card, FilterGroup.Collection, touchedChanged);
 
@@ -388,10 +394,6 @@ namespace Mtgdb.Gui
 				return;
 
 			_tabHeadersDeck.SelectedIndex = hoveredIndex;
-
-			var card = DraggedCard;
-			StopDragging();
-			dragCard(card);
 		}
 
 		private void deckZoneDrag(object sender, DragEventArgs e)

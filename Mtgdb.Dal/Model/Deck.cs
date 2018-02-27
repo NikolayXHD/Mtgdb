@@ -61,10 +61,20 @@ namespace Mtgdb.Dal
 
 		private static DeckZone replace(DeckZone original, Dictionary<string, string> replacements)
 		{
+			// replacements are not guaranteed to be unique
+
 			return new DeckZone
 			{
-				Order = original.Order.Select(_ => replacements[_]).ToList(),
-				Count = original.Count.ToDictionary(_ => replacements[_.Key], _ => _.Value)
+				Order = original.Order
+					.Select(_ => replacements[_])
+					.Distinct()
+					.ToList(),
+				
+				Count = original.Count
+					.GroupBy(_ => replacements[_.Key])
+					.ToDictionary(
+						gr => gr.Key,
+						gr => gr.Sum(_ => _.Value))
 			};
 		}
 

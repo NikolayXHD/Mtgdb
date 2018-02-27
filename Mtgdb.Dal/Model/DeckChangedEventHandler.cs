@@ -5,5 +5,6 @@ namespace Mtgdb.Dal
 		bool countChanged,
 		Card card,
 		bool touchedChanged,
-		Zone? changedZone);
+		Zone? changedZone,
+		bool changeTerminatesBatch);
 }

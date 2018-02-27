@@ -12,16 +12,17 @@ namespace Mtgdb.Controls
 			RowHandle = EmptyRowHandle;
 		}
 
-		internal void SetCard(LayoutControl card, int rowHandle)
+		internal void SetCard(LayoutControl card, int rowHandle, object dataSource)
 		{
 			Card = card;
 			RowHandle = rowHandle;
 			CardBounds = card?.Bounds;
+			RowDataSource = dataSource;
 		}
 
 		internal void ClearCard()
 		{
-			SetCard(card: null, rowHandle: EmptyRowHandle);
+			SetCard(card: null, rowHandle: EmptyRowHandle, dataSource: null);
 		}
 
 		internal void SetField(FieldControl field, bool isSortButton, bool isSearchButton)
@@ -47,6 +48,7 @@ namespace Mtgdb.Controls
 		public Direction? AlignButtonDirection { get; set; }
 
 		public int RowHandle { get; private set; }
+		public Object RowDataSource { get; private set; }
 		internal LayoutControl Card { get; private set; }
 		public Rectangle? CardBounds { get; private set; }
 

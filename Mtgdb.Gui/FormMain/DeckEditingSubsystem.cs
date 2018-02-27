@@ -43,20 +43,20 @@ namespace Mtgdb.Gui
 			_zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
 		}
 
-		private void dragRemoved(Card card)
+		private void dragRemoved(Card card, Zone fromDeckZone)
 		{
-			if (Control.ModifierKeys == Keys.Control)
-				changeCountInDeck(card, -4, touch: true);
-			else
-				changeCountInDeck(card, -1, touch: true);
+			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
+			_deckModel.Add(card, -count, fromDeckZone);
 		}
 
-		private void dragAdded(Card card)
+		private void dragAdded(Card card, Zone? fromDeckZone)
 		{
-			if (Control.ModifierKeys == Keys.Control)
-				changeCountInDeck(card, 4, touch: true);
-			else
-				changeCountInDeck(card, 1, touch: true);
+			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
+
+			if (fromDeckZone.HasValue && _deckModel.Zone != Zone.SampleHand)
+				_deckModel.Add(card, -count, zone: fromDeckZone, changeTerminatesBatch: false);
+
+			_deckModel.Add(card, +count);
 		}
 
 		public void SubscribeToEvents()
@@ -135,11 +135,11 @@ namespace Mtgdb.Gui
 
 			if ((Control.ModifierKeys & Keys.Control) > 0)
 				countDelta *= 4;
-			
+
 			if ((Control.ModifierKeys & Keys.Alt) > 0)
 				changeCountInCollection(card, countDelta);
 			else
-				changeCountInDeck(card, countDelta, touch: true);
+				_deckModel.Add(card, countDelta);
 		}
 
 		private static Card getCard(LayoutView view, HitInfo hitInfo)
@@ -160,11 +160,6 @@ namespace Mtgdb.Gui
 			
 			_formZoom.LoadImages(card, Ui);
 			_formZoom.ShowImages();
-		}
-
-		private void changeCountInDeck(Card card, int increment, bool touch)
-		{
-			_deckModel.Add(card, increment, touch);
 		}
 
 		private void changeCountInCollection(Card card, int increment)

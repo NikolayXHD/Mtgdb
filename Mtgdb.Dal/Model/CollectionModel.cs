@@ -28,7 +28,8 @@ namespace Mtgdb.Dal
 				countChanged: true,
 				touchedChanged: false,
 				card: null,
-				changedZone: null);
+				changedZone: null,
+				changeTerminatesBatch: true);
 		}
 
 		public void Add(Card card, int increment)
@@ -52,7 +53,8 @@ namespace Mtgdb.Dal
 				countChanged,
 				card,
 				touchedChanged: false,
-				changedZone: null);
+				changedZone: null,
+				changeTerminatesBatch: true);
 		}
 
 		private void remove(Card card, int newCount)

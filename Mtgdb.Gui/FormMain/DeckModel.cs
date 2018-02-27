@@ -11,10 +11,10 @@ namespace Mtgdb.Gui
 
 		public readonly List<Card> DataSource = new List<Card>();
 
-		public Card CardDragged;
+		public Card DraggedCard { get; set; }
 		public Card CardBelowDragged { get; set; }
 		public Card TouchedCard { get; set; }
-		public bool DraggingFromDeck;
+		public Zone? IsDraggingFromZone { get; set; }
 
 		public DeckZoneModel MainDeck { get; }
 		public DeckZoneModel SideDeck { get; }
@@ -28,27 +28,36 @@ namespace Mtgdb.Gui
 			LoadDeck(repo);
 		}
 
-		public DeckZoneModel Deck
+		public DeckZoneModel Deck => getDeckZone(Zone);
+
+		private DeckZoneModel getDeckZone(Zone zone)
 		{
-			get
+			switch (zone)
 			{
-				switch (Zone)
-				{
-					case Zone.Main:
-						return MainDeck;
-					case Zone.Side:
-						return SideDeck;
-					case Zone.SampleHand:
-						return SampleHand;
-					default:
-						throw new NotSupportedException();
-				}
+				case Zone.Main:
+					return MainDeck;
+				case Zone.Side:
+					return SideDeck;
+				case Zone.SampleHand:
+					return SampleHand;
+				default:
+					throw new NotSupportedException();
 			}
 		}
 
 		public int MainDeckSize => MainDeck.CountById.Values.Sum();
 		public int SideDeckSize => SideDeck.CountById.Values.Sum();
 		public int SampleHandSize => SampleHand.CountById.Values.Sum();
+
+		public IList<Card> GetVisibleCards()
+		{
+			if (IsDraggingFromZone == Zone)
+				return getReorderedCards(DraggedCard, CardBelowDragged);
+
+			lock (DataSource)
+				return DataSource.ToList();
+		}
+
 
 		public DeckModel()
 		{
@@ -84,12 +93,16 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone);
+				changedZone: Zone,
+				changeTerminatesBatch: true);
 		}
 
-		public void Add(Card card, int increment, bool touch)
+		public void Add(Card card, int increment, Zone? zone = null, bool changeTerminatesBatch = true)
 		{
-			int previousCount = Deck.GetCount(card.Id);
+			var specificZone = zone ?? Zone;
+			var deckZone = getDeckZone(specificZone);
+
+			int previousCount = deckZone.GetCount(card.Id);
 
 			var count = (previousCount + increment)
 				.WithinRange(
@@ -97,20 +110,17 @@ namespace Mtgdb.Gui
 					card.MaxCountInDeck());
 
 			if (increment > 0)
-				add(card, newCount: count);
+				add(card, newCount: count, zone: specificZone);
 			else if (increment < 0)
-				remove(card, newCount: count);
+				remove(card, newCount: count, zone: specificZone);
 
 			var previousTouchedCard = TouchedCard;
-
-			if (touch)
-			{
-				// уменьшение количества карты, которой в колоде уже 0 приводит к снятию отметки о последнем прикосновении
-				if (previousCount == 0 && increment < 0)
-					TouchedCard = null;
-				else
-					TouchedCard = card;
-			}
+			
+			// уменьшение количества карты, которой в колоде уже 0 приводит к снятию отметки о последнем прикосновении
+			if (previousCount == 0 && increment < 0)
+				TouchedCard = null;
+			else
+				TouchedCard = card;
 
 			bool listChanged = previousCount == 0 || GetCount(card) == 0;
 			bool countChanged = previousCount != GetCount(card);
@@ -121,21 +131,28 @@ namespace Mtgdb.Gui
 				countChanged,
 				card,
 				touchedChanged,
-				Zone);
+				Zone,
+				changeTerminatesBatch);
 		}
 
-		private void remove(Card card, int newCount)
+		private void remove(Card card, int newCount, Zone zone)
 		{
-			Deck.Remove(card.Id, newCount);
+			getDeckZone(zone).Remove(card.Id, newCount);
+
+			if (zone != Zone)
+				return;
 
 			if (newCount == 0)
 				lock (DataSource)
 					DataSource.Remove(card);
 		}
 
-		private void add(Card card, int newCount)
+		private void add(Card card, int newCount, Zone zone)
 		{
-			Deck.Add(card.Id, newCount);
+			getDeckZone(zone).Add(card.Id, newCount);
+
+			if (zone != Zone)
+				return;
 
 			lock (DataSource)
 				if (!DataSource.Contains(card))
@@ -169,17 +186,18 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone);
+				changedZone: Zone,
+				changeTerminatesBatch: true);
 		}
 
-		public List<Card> GetReorderedCards(Card cardDragged, Card cardBelowDragged)
+		private List<Card> getReorderedCards(Card cardDragged, Card cardBelowDragged)
 		{
 			List<Card> copy;
 
 			lock (DataSource)
 				copy = DataSource.ToList();
 
-			if (cardBelowDragged == null || cardDragged == null || !DraggingFromDeck)
+			if (cardBelowDragged == null || cardDragged == null)
 				return copy;
 
 			var cardBelowDraggedIndex = copy.IndexOf(cardBelowDragged);
@@ -219,7 +237,12 @@ namespace Mtgdb.Gui
 
 		public void ApplyReorder(Card cardDragged, Card cardBelowDragged)
 		{
-			var cards = GetReorderedCards(cardDragged, cardBelowDragged);
+			// possible if some keyboard shortcuts (e.g. undo / redo or paste)
+			// modified the deck while dragging the card
+			if (!Deck.Contains(cardDragged))
+				return;
+
+			var cards = getReorderedCards(cardDragged, cardBelowDragged);
 			var cardIds = getReorderedIds(cardDragged, cardBelowDragged);
 
 			lock (DataSource)
@@ -235,24 +258,26 @@ namespace Mtgdb.Gui
 				countChanged: false,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone);
+				changedZone: Zone,
+				changeTerminatesBatch: true);
 		}
 
 		public void DragStart(Card card, bool fromDeck)
 		{
-			CardDragged = CardBelowDragged = card;
-			DraggingFromDeck = fromDeck;
+			DraggedCard = CardBelowDragged = card;
+			IsDraggingFromZone = fromDeck ? Zone : (Zone?) null;
 		}
 
 		public bool IsDragging()
 		{
-			return CardDragged != null;
+			return DraggedCard != null;
 		}
 
 		public void DragAbort()
 		{
-			CardDragged = null;
+			DraggedCard = null;
 			CardBelowDragged = null;
+			IsDraggingFromZone = null;
 		}
 
 		public int GetCount(Card c)
@@ -346,7 +371,8 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: drawn,
 				touchedChanged: true,
-				changedZone: Zone);
+				changedZone: Zone,
+				changeTerminatesBatch: true);
 		}
 
 		private int getMulliganCount()
@@ -380,7 +406,8 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone);
+				changedZone: Zone,
+				changeTerminatesBatch: true);
 		}
 
 		public void Shuffle()

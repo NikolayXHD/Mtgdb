@@ -640,7 +640,10 @@ namespace Mtgdb.Controls
 			if (!card.Visible)
 				return;
 
-			hitInfo.SetCard(card, getRowHandle(index));
+			int handle = getRowHandle(index);
+			var rowDataSource = FindRow(handle);
+
+			hitInfo.SetCard(card, handle, rowDataSource);
 
 			var field = card.Fields.FirstOrDefault(_ => _.Bounds.Plus(card.Bounds.Location).Contains(location));
 

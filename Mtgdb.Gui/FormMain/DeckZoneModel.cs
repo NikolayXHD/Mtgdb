@@ -57,5 +57,10 @@ namespace Mtgdb.Gui
 			CountById.TryGetValue(cardId, out int count);
 			return count;
 		}
+
+		public bool Contains(Card c)
+		{
+			return CountById.ContainsKey(c.Id);
+		}
 	}
 }
