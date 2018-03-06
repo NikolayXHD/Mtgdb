@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Mtgdb.Controls
 {
@@ -60,16 +59,6 @@ namespace Mtgdb.Controls
 		public static Point Plus(this Point left, Point right)
 		{
 			return new Point(left.X + right.X, left.Y + right.Y);
-		}
-
-		public static Size Plus(this Size left, Size right)
-		{
-			return new Size(left.Width + right.Width, left.Height + right.Height);
-		}
-
-		public static Point Plus(this Point left, Size right)
-		{
-			return new Point(left.X + right.Width, left.Y + right.Height);
 		}
 
 		public static Point Minus(this Point left, Point right)

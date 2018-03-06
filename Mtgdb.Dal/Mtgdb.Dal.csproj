@@ -37,6 +37,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
@@ -124,10 +127,10 @@
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
-    <Compile Include="ImageCache\BmpFrameDetector.cs" />
-    <Compile Include="ImageCache\ImageCacheEntry.cs" />
+    <Compile Include="Images\BmpFrameDetector.cs" />
+    <Compile Include="Images\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
-    <Compile Include="ImageCache\BmpCornerRemoval.cs" />
+    <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="ImageRepository.cs" />
     <Compile Include="Keywords\KeywordDefinitions.cs" />
     <Compile Include="Model\Patch\CardPatch.cs" />
@@ -136,7 +139,7 @@
     <Compile Include="EditDistance\LevenstineDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
-    <Compile Include="ImageCache\ImageLoader.cs" />
+    <Compile Include="Images\ImageLoader.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\ForeignName.cs" />
     <Compile Include="Images\ImageFile.cs" />
@@ -147,7 +150,6 @@
     <Compile Include="Model\Set.cs" />
     <Compile Include="Model\UiModel.cs" />
     <Compile Include="[ infrastructure ]\DalModule.cs" />
-    <Compile Include="Partition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translations\LocalizationRepository.cs" />
   </ItemGroup>
@@ -181,9 +183,7 @@
       <Name>EditedTokenLocator</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Index\TolerantTokenizer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

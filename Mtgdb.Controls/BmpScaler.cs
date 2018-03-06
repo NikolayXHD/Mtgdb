@@ -33,11 +33,11 @@ namespace Mtgdb.Controls
 
 						float r = 0, g = 0, b = 0, a = 0, w = 0, wc = 0, nr = 0, ng = 0, nb = 0;
 
-						int iOrMin = Math.Max((int) Math.Floor(left), original.Rect.Left);
-						int iOrMax = Math.Min((int) Math.Ceiling(right), original.Rect.Right);
+						int iOrMin = Math.Max((int) Math.Floor(left), 0);
+						int iOrMax = Math.Min((int) Math.Ceiling(right), _sourceRect.Width);
 
-						int jOrMin = Math.Max((int) Math.Floor(top), original.Rect.Top);
-						int jOrMax = Math.Min((int) Math.Ceiling(bottom), original.Rect.Bottom);
+						int jOrMin = Math.Max((int) Math.Floor(top), 0);
+						int jOrMax = Math.Min((int) Math.Ceiling(bottom), _sourceRect.Height);
 
 						for (int iOr = iOrMin; iOr < iOrMax; iOr++)
 						{

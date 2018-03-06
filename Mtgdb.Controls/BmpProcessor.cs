@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -11,10 +11,10 @@ namespace Mtgdb.Controls
 		protected byte[] RgbValues { get; private set; }
 		public bool ImageChanged { get; protected set; }
 
-		protected BmpProcessor(Bitmap bmp, Rectangle? rect = null)
+		protected BmpProcessor(Bitmap bmp)
 		{
 			_bmp = bmp;
-			Rect = rect ?? new Rectangle(Point.Empty, _bmp.Size);
+			Rect = new Rectangle(Point.Empty, _bmp.Size);
 		}
 
 		public void Execute()
@@ -44,9 +44,9 @@ namespace Mtgdb.Controls
 		}
 
 		/// <summary>
-		/// Выполняет некоторую обработку изображения.
-		/// Это может быть анализ и сохранение его результата в свойство класса,
-		/// а может быть преобразование изображения.
+		/// Р’С‹РїРѕР»РЅСЏРµС‚ РЅРµРєРѕС‚РѕСЂСѓСЋ РѕР±СЂР°Р±РѕС‚РєСѓ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.
+		/// Р­С‚Рѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р°РЅР°Р»РёР· Рё СЃРѕС…СЂР°РЅРµРЅРёРµ РµРіРѕ СЂРµР·СѓР»СЊС‚Р°С‚Р° РІ СЃРІРѕР№СЃС‚РІРѕ РєР»Р°СЃСЃР°,
+		/// Р° РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.
 		/// </summary>
 		protected abstract void ExecuteRaw();
 
@@ -77,7 +77,7 @@ namespace Mtgdb.Controls
 		}
 
 		private const int ByesPerPixel = 4;
-		private const int ColorSimilarityThreshold = 20;
+		protected virtual int ColorSimilarityThreshold => 20;
 		private readonly Bitmap _bmp;
 	}
 }

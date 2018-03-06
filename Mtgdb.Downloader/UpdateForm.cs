@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Updater;
@@ -38,6 +39,7 @@ namespace Mtgdb.Downloader
 				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
 		}
 
+		[UsedImplicitly]
 		public UpdateForm(
 			Installer installer,
 			ImageDownloader imageDownloader,

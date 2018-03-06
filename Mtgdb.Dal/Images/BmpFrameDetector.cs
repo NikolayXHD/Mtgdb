@@ -78,5 +78,7 @@ namespace Mtgdb.Dal
 
 			return true;
 		}
+
+		protected override int ColorSimilarityThreshold => 40;
 	}
 }

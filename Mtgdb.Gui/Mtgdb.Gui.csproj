@@ -58,6 +58,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
@@ -179,12 +182,6 @@
     <Compile Include="FormRoot\FormRoot.Tooltips.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestLayoutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TestLayoutForm.Designer.cs">
-      <DependentUpon>TestLayoutForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="[ infrastructure ]\GuiModule.cs" />
     <Compile Include="FormMain\SuggestModel.cs" />
     <Compile Include="Resx\ResourcesAbilities.Designer.cs">
@@ -281,9 +278,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRoot\FormRoot.resx">
       <DependentUpon>FormRoot.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TestLayoutForm.resx">
-      <DependentUpon>TestLayoutForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zoom\FormZoom.resx">
       <DependentUpon>FormZoom.cs</DependentUpon>

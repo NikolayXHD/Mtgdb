@@ -60,20 +60,20 @@ namespace Mtgdb.Controls
 
 		private void createDerivedImages()
 		{
-			if (_propertyImages == null)
+			if (PropertyImages == null)
 				return;
 
 			_images = 
-				transformImages(Opacity1Enabled, _propertyImages);
+				transformImages(Opacity1Enabled, PropertyImages);
 
 			_imagesToEnable =
-				transformImages(Opacity2ToEnable, _propertyImages);
+				transformImages(Opacity2ToEnable, PropertyImages);
 
 			_imagesToDisable =
-				transformImages(Opacity3ToDisable, _propertyImages);
+				transformImages(Opacity3ToDisable, PropertyImages);
 
 			_imagesDisabled =
-				transformImages(Opacity4Disabled, _propertyImages);
+				transformImages(Opacity4Disabled, PropertyImages);
 		}
 
 		private IList<Bitmap> transformImages(
@@ -186,7 +186,7 @@ namespace Mtgdb.Controls
 
 		private bool isWeakerRequirement(int i, int j)
 		{
-			if (Properties == null || Properties[i] == null || Properties[j] == null)
+			if (Properties?[i] == null || Properties[j] == null)
 				return false;
 
 			return Properties[j].Trim('{', '}').Contains(Properties[i].Trim('{', '}'));
@@ -734,7 +734,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "20, 20")]
 		public Size ImageSize
 		{
-			get { return _imageSize; }
+			get => _imageSize;
 			set
 			{
 				_imageSize = value;
@@ -747,7 +747,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "0, 0")]
 		public Size Spacing
 		{
-			get { return _spacing; }
+			get => _spacing;
 			set
 			{
 				_spacing = value;
@@ -759,7 +759,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(5)]
 		public int PropertiesCount
 		{
-			get { return _propertiesCount; }
+			get => _propertiesCount;
 			set
 			{
 				_propertiesCount = value;
@@ -773,7 +773,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(null)]
 		public Image ImageRequired
 		{
-			get { return _imageRequired; }
+			get => _imageRequired;
 			set
 			{
 				_imageRequired = value;
@@ -792,7 +792,7 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		public IList<Bitmap> PropertyImages
 		{
-			get { return _propertyImages; }
+			get => _propertyImages;
 			set
 			{
 				_propertyImages = value;
@@ -805,7 +805,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionColor
 		{
-			get { return _selectionColor; }
+			get => _selectionColor;
 			set
 			{
 				_selectionColor = value;
@@ -817,7 +817,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionBorderColor
 		{
-			get { return _selectionBorderColor; }
+			get => _selectionBorderColor;
 			set
 			{
 				_selectionBorderColor = value;
@@ -829,7 +829,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color ProhibitedColor
 		{
-			get { return _prohibitedColor; }
+			get => _prohibitedColor;
 			set
 			{
 				_prohibitedColor = value;
@@ -841,7 +841,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(BorderShape), "Rectangle")]
 		public BorderShape BorderShape
 		{
-			get { return _borderShape; }
+			get => _borderShape;
 			set
 			{
 				_borderShape = value;
@@ -853,7 +853,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(0f)]
 		public float SelectionBorder
 		{
-			get { return _selectionBorder; }
+			get => _selectionBorder;
 			set
 			{
 				_selectionBorder = value;
@@ -869,7 +869,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool EnableMutuallyExclusive
 		{
-			get { return _enableMutuallyExclusive; }
+			get => _enableMutuallyExclusive;
 			set
 			{
 				_enableMutuallyExclusive = value;
@@ -881,7 +881,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool HideProhibit
 		{
-			get { return _hideProhibit; }
+			get => _hideProhibit;
 			set
 			{
 				_hideProhibit = value;
@@ -906,7 +906,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(false)]
 		public bool EnableRequiringSome
 		{
-			get { return _enableRequiringSome; }
+			get => _enableRequiringSome;
 			set
 			{
 				if (value != _enableRequiringSome)
@@ -928,7 +928,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(OpacityEnabled)]
 		public float Opacity1Enabled
 		{
-			get { return _opacityEnabled; }
+			get => _opacityEnabled;
 			set
 			{
 				_opacityEnabled = value;
@@ -941,7 +941,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(OpacityDisabled)]
 		public float Opacity4Disabled
 		{
-			get { return _opacityDisabled; }
+			get => _opacityDisabled;
 			set
 			{
 				_opacityDisabled = value;
@@ -954,7 +954,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(OpacityToDisable)]
 		public float Opacity3ToDisable
 		{
-			get { return _opacityToDisable; }
+			get => _opacityToDisable;
 			set
 			{
 				_opacityToDisable = value;
@@ -967,7 +967,7 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		public float Opacity2ToEnable
 		{
-			get { return _opacityToEnable; }
+			get => _opacityToEnable;
 			set
 			{
 				_opacityToEnable = value;
@@ -984,7 +984,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool IsVertical
 		{
-			get { return _isVertical; }
+			get => _isVertical;
 			set
 			{
 				_isVertical = value;
@@ -996,7 +996,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool IsFlipped
 		{
-			get { return _isFlipped; }
+			get => _isFlipped;
 			set
 			{
 				_isFlipped = value;
@@ -1012,7 +1012,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FilterValueState[] States
 		{
-			get { return _states.ToArray(); }
+			get => _states.ToArray();
 			set
 			{
 				if (value == null || value.Length != PropertiesCount)

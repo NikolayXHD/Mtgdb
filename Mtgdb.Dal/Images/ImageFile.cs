@@ -75,10 +75,6 @@ namespace Mtgdb.Dal
 			IsToken = directoryName.IndexOf("Tokens", Str.Comparison) >= 0;
 		}
 
-		private ImageFile()
-		{
-		}
-
 		public ImageModel ApplyRotation(Card card, bool zoom)
 		{
 			bool isAftermath =

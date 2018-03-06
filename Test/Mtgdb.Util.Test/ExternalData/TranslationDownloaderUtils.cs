@@ -6,6 +6,12 @@ namespace Mtgdb.Test
 	[TestFixture]
 	public class TranslationDownloaderUtils : TestsBase
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			LoadCards();
+		}
+
 		private const string DownloadedDir = @"D:\temp\gatherer-downloaded";
 		private const string ParsedDir = @"D:\temp\gatherer-parsed";
 		private const string ResultDir = @"D:\temp\gatherer-result";
@@ -13,9 +19,6 @@ namespace Mtgdb.Test
 		[Test]
 		public void Update_translations()
 		{
-			LoadModules();
-			LoadCards();
-
 			Directory.CreateDirectory(ParsedDir);
 			Directory.CreateDirectory(ResultDir);
 

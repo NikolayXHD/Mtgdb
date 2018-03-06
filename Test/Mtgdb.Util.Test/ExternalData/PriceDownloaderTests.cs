@@ -8,16 +8,10 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class PriceDownloaderTests: TestsBase
 	{
-		[OneTimeSetUp]
-		public void Setup()
-		{
-			LoadModules();
-			LoadCards();
-		}
-
 		[Test]
 		public void DownloadPrices()
 		{
+			LoadCards();
 			var downloader = Kernel.Get<PriceDownloader>();
 			downloader.LoadPendingProgress();
 			downloader.Download();

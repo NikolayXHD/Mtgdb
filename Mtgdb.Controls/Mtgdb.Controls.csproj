@@ -53,7 +53,6 @@
     </Compile>
     <Compile Include="ButtonSubsystem\Popup.cs" />
     <Compile Include="Cjk.cs" />
-    <Compile Include="Contract\CardClickEventArgs.cs" />
     <Compile Include="Contract\CustomDrawArgs.cs" />
     <Compile Include="Contract\FieldSortInfo.cs" />
     <Compile Include="Contract\HitInfo.cs" />
@@ -71,9 +70,6 @@
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
     <Compile Include="LayoutView\ContentAlignmentRanges.cs" />
-    <Compile Include="LayoutView\CustomVScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="LayoutView\HighlightSettings.cs" />
     <Compile Include="LayoutView\LayoutControlTypeConverter.cs" />
     <Compile Include="LayoutView\LayoutOptions.cs" />

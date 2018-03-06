@@ -305,6 +305,7 @@ namespace Mtgdb.Dal.Index
 		{
 			fieldName = fieldName.ToLowerInvariant();
 			var field = new Int32Field(fieldName, fieldValue, Field.Store.YES);
+			
 			doc.Add(field);
 		}
 

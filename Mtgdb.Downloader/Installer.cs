@@ -36,9 +36,9 @@ namespace Mtgdb.Downloader
 			{
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
-				luceneSearcher.SearcherDirectory.AddPath("*.*"),
-				luceneSearcher.SpellcheckerDirectory.AddPath("*.*"),
-				keywordSearcher.Directory.AddPath("*.*")
+				luceneSearcher.IndexDirectory.AddPath("*.*"),
+				luceneSearcher.Spellchecker.IndexDirectory.AddPath("*.*"),
+				keywordSearcher.IndexDirectory.AddPath("*.*")
 			};
 		}
 

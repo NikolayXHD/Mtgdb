@@ -14,7 +14,6 @@ namespace Mtgdb.Gui
 			userDefaltCultureProperty.SetValue(null, culture);
 			userDefaltUICultureProperty.SetValue(null, culture);
 
-
 			Thread.CurrentThread.CurrentCulture = culture;
 			Thread.CurrentThread.CurrentUICulture = culture;
 		}

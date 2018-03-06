@@ -228,12 +228,6 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		public void OnImagesLoaded()
-		{
-			IsImageLoadingComplete = true;
-			ImageLoadingComplete?.Invoke();
-		}
-
 		public ImageModel GetSmallImage(Card card, ImageRepository repository)
 		{
 			return repository.GetSmallImage(card, GetReleaseDateSimilarity);
@@ -328,12 +322,10 @@ namespace Mtgdb.Dal
 
 		public event Action SetAdded;
 		public event Action LoadingComplete;
-		public event Action ImageLoadingComplete;
 		public event Action LocalizationLoadingComplete;
 
 		public bool IsFileLoadingComplete { get; private set; }
 		public bool IsLoadingComplete { get; private set; }
-		public bool IsImageLoadingComplete { get; private set; }
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
 		private string SetsFile { get; }

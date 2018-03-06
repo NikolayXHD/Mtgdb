@@ -43,6 +43,9 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="NConfiguration, Version=2.4.0.0, Culture=neutral, PublicKeyToken=bfc22cf7cdd506d6, processorArchitecture=MSIL">
       <HintPath>..\packages\NConfiguration.2.5.0\lib\net40\NConfiguration.dll</HintPath>
       <Private>True</Private>

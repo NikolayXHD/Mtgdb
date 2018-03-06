@@ -19,12 +19,6 @@ namespace Mtgdb.Controls
 			_actions.Add(new RenderAction(rect, action));
 		}
 
-		public void Offset(PointF point)
-		{
-			foreach (var action in _actions)
-				action.Offset(point);
-		}
-
 		public void Offset(float x, float y)
 		{
 			foreach (var action in _actions)

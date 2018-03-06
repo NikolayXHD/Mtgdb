@@ -16,12 +16,26 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker()
 		{
-			// 0.23 udpated translations
-			Version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("suggest"), "0.23");
+			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
 			_stringDistance = new DamerauLevenstineDistance();
 		}
 
+		public string IndexDirectory => Version.Directory;
+
+		public string IndexDirectoryParent
+		{
+			get => Version.Directory.Parent();
+
+			// 0.23 udpated translations
+			set => Version = new IndexVersion(value, "0.23");
+		}
+
 		public bool IsUpToDate => Version.IsUpToDate;
+
+		public void InvalidateIndex()
+		{
+			Version.Invalidate();
+		}
 
 		internal void LoadIndex(Analyzer analyzer, CardRepository repository, DirectoryReader indexReader)
 		{
@@ -69,6 +83,9 @@ namespace Mtgdb.Dal.Index
 			{
 				if (_abort)
 					break;
+
+				if (!FilterSet(set))
+					continue;
 
 				foreach (var card in set.Cards)
 				{
@@ -375,6 +392,8 @@ namespace Mtgdb.Dal.Index
 			return valueIsNumeric;
 		}
 
+		public Func<Set, bool> FilterSet { get; set; } = set => true;
+
 		public bool IsLoaded { get; private set; }
 		public bool IsLoading { get; private set; }
 
@@ -383,12 +402,13 @@ namespace Mtgdb.Dal.Index
 		public int IndexedSets { get; private set; }
 		public int TotalSets { get; private set; }
 
-		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
-
 		private Spellchecker _spellchecker;
-		private readonly DamerauLevenstineDistance _stringDistance;
-		internal IndexVersion Version { get; }
+		internal IndexVersion Version { get; set; }
 		private bool _abort;
 		private DirectoryReader _reader;
+
+		private readonly DamerauLevenstineDistance _stringDistance;
+
+		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
 	}
 }

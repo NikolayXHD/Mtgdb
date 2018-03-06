@@ -59,7 +59,7 @@ namespace Mtgdb.Gui
 
 			if (sender == _buttonPaste || sender == _buttonMenuPasteDeck)
 				form.PasteDeck(append: false);
-			else if (sender == _buttonMenuPasteDeck)
+			else if (sender == _buttonMenuPasteDeckAppend)
 				form.PasteDeck(append: true);
 			else if (sender == _buttonMenuPasteCollection)
 				form.PasteCollection(append: false);

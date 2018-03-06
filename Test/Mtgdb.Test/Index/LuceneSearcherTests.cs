@@ -1,19 +1,30 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mtgdb.Dal;
+using Ninject;
 using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
-	public class LuceneSearcherTests : IndexTestsBase
+	public class LuceneSearcherTests : TestsBase
 	{
 		[OneTimeSetUp]
-		public new void Setup()
+		public void Setup()
 		{
-			LoadPrices();
+			LoadIndexes();
+
+			var priceRepo = Kernel.Get<PriceRepository>();
+			var sw = new Stopwatch();
+			sw.Start();
+
+			priceRepo.Load();
+			Repo.SetPrices(priceRepo);
+
+			sw.Stop();
+			Log.Debug($"Prices loaded in {sw.ElapsedMilliseconds} ms");
 			LogManager.Flush();
 		}
 
@@ -429,7 +440,7 @@ namespace Mtgdb.Test
 			Assert.That(cards.Select(c => c.TypeEn).Where(_ => _ != null).Distinct(), Has.Some.Contain(queryStr).IgnoreCase);
 		}
 
-		[TestCase(@"Text:Äåìîí", "Äåìîí", "ru")]
+		[TestCase(@"Text:Ð”ÐµÐ¼Ð¾Ð½", "Ð”ÐµÐ¼Ð¾Ð½", "ru")]
 		public void Search_by_Text(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetAbility(lang)}", lang);
@@ -437,7 +448,7 @@ namespace Mtgdb.Test
 				Assert.That(card.GetText(lang), Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Flavor:Äåìîí", "Äåìîí", "ru")]
+		[TestCase(@"Flavor:Ð”ÐµÐ¼Ð¾Ð½", "Ð”ÐµÐ¼Ð¾Ð½", "ru")]
 		public void Search_by_Flavor(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetFlavor(lang)}", lang);
@@ -446,7 +457,7 @@ namespace Mtgdb.Test
 				Assert.That(card.GetFlavor(lang), Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Name:Äåìîí", "Äåìîí", "ru")]
+		[TestCase(@"Name:Ð”ÐµÐ¼Ð¾Ð½", "Ð”ÐµÐ¼Ð¾Ð½", "ru")]
 		public void Search_by_Name(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => c.Localization.GetName(lang), lang);
@@ -455,7 +466,7 @@ namespace Mtgdb.Test
 				Assert.That(card.GetName(lang), Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Type:Äåìîí", "Äåìîí", "ru")]
+		[TestCase(@"Type:Ð”ÐµÐ¼Ð¾Ð½", "Ð”ÐµÐ¼Ð¾Ð½", "ru")]
 		public void Search_by_Type(string queryStr, string expected, string lang)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Localization.GetType(lang), lang);
@@ -500,12 +511,6 @@ namespace Mtgdb.Test
 				Log.Debug(getter(card));
 
 			return cards;
-		}
-
-		[TearDown]
-		public new void Teardown()
-		{
-			LogManager.Flush();
 		}
 	}
 }

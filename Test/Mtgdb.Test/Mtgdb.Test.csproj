@@ -80,7 +80,7 @@
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />
     <Compile Include="Index\EditedTokenLocatorTests.cs" />
-    <Compile Include="Index\IndexTestsBase.cs" />
+    <Compile Include="Index\IndexCreationTests.cs" />
     <Compile Include="Index\KeywordTests.cs" />
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />

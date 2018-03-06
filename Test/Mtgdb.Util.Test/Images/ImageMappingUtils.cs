@@ -12,9 +12,7 @@ namespace Mtgdb.Test
 		[SetUp]
 		public void Setup()
 		{
-			LoadModules();
 			LoadCards();
-
 			ImgRepo.LoadFiles();
 			ImgRepo.LoadZoom();
 		}

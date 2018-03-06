@@ -1,5 +1,4 @@
 using System;
-using Mtgdb.Dal.EditDistance;
 
 namespace Mtgdb.Dal.Index
 {

@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class LuceneSpellcheckerTests : IndexTestsBase
+	public class LuceneSpellcheckerTests : TestsBase
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			LoadIndexes();
+		}
+
 		[TestCase("*", "d", "en", null)]
 		[TestCase("NameEn", "neveinral", null, "nevinyrral")]
 		[TestCase("NameEn", "vinira", null, "nevinyrral")]
@@ -32,8 +37,7 @@ namespace Mtgdb.Test
 		{
 			var list = suggest(field, value, language);
 
-			float val;
-			Assert.That(list.All(v=>float.TryParse(v, out val)));
+			Assert.That(list.All(v=>float.TryParse(v, out _)));
 			Assert.That(list.Any(v => v.Contains(value)));
 		}
 
@@ -72,8 +76,7 @@ namespace Mtgdb.Test
 
 			if (expectedSuggest == "{float}")
 			{
-				float val;
-				Assert.That(list.All(v => float.TryParse(v, out val)));
+				Assert.That(list.All(v => float.TryParse(v, out _)));
 			}
 			else if (expectedSuggest != null)
 			{
@@ -123,12 +126,6 @@ namespace Mtgdb.Test
 				Log.Debug(variant);
 
 			return list;
-		}
-
-		[TearDown]
-		public new void Teardown()
-		{
-			LogManager.Flush();
 		}
 	}
 }

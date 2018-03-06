@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using JetBrains.Annotations;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
@@ -15,25 +16,30 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSearcher : IDisposable
 	{
-		public bool IsUpToDate => _version.IsUpToDate;
-
-		public event Action Loaded;
-		public event Action IndexingProgress;
-
-		public int SetsAddedToIndex { get; private set; }
-		
-		public bool IsLoading { get; private set; }
-		public bool IsLoaded { get; private set; }
-
 		public LuceneSearcher()
 		{
-			// 0.23 udpated translations
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("search"), "0.23");
+			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("search");
 			Spellchecker = new LuceneSpellchecker();
 		}
 
-		public string SearcherDirectory => _version.Directory;
-		public string SpellcheckerDirectory => Spellchecker.Version.Directory;
+		public string IndexDirectory => Version.Directory;
+
+		public string IndexDirectoryParent
+		{
+			get => Version.Directory.Parent();
+
+			// 0.23 udpated translations
+			set => Version = new IndexVersion(value, "0.23");
+		}
+
+
+		public bool IsUpToDate => Version.IsUpToDate;
+
+		public void LoadIndexes(CardRepository repository)
+		{
+			LoadIndex(repository);
+			LoadSpellcheckerIndex(repository);
+		}
 
 		public void LoadIndex(CardRepository repository)
 		{
@@ -42,29 +48,32 @@ namespace Mtgdb.Dal.Index
 
 			IsLoading = true;
 
-			if (_version.IsUpToDate)
-				_index = FSDirectory.Open(_version.Directory);
+			if (Version.IsUpToDate)
+				_index = FSDirectory.Open(Version.Directory);
 			else
 				_index = createIndex(repository);
-			
+
 			if (_abort)
 				return;
 
 			_indexReader = DirectoryReader.Open(_index);
 			_searcher = new IndexSearcher(_indexReader);
-			
+
 			IsLoaded = true;
 			IsLoading = false;
 			Loaded?.Invoke();
+		}
 
+		public void LoadSpellcheckerIndex(CardRepository repository)
+		{
 			Spellchecker.LoadIndex(createAnalyzer(), repository, _indexReader);
 		}
 
 		private Directory createIndex(CardRepository repository)
 		{
-			_version.CreateDirectory();
+			Version.CreateDirectory();
 
-			var index = FSDirectory.Open(_version.Directory);
+			var index = FSDirectory.Open(Version.Directory);
 
 			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, createAnalyzer())
 			{
@@ -82,6 +91,9 @@ namespace Mtgdb.Dal.Index
 					if (_abort)
 						return null;
 
+					if (!FilterSet(set))
+						continue;
+
 					foreach (var card in set.Cards)
 					{
 						if (_abort)
@@ -94,7 +106,7 @@ namespace Mtgdb.Dal.Index
 					IndexingProgress?.Invoke();
 				}
 
-			_version.SetIsUpToDate();
+			Version.SetIsUpToDate();
 
 			return index;
 		}
@@ -209,12 +221,7 @@ namespace Mtgdb.Dal.Index
 
 		public void InvalidateIndex()
 		{
-			_version.Invalidate();
-		}
-
-		public void InvalidateSpellcheckerIndex()
-		{
-			Spellchecker.Version.Invalidate();
+			Version.Invalidate();
 		}
 
 		public void Dispose()
@@ -244,12 +251,21 @@ namespace Mtgdb.Dal.Index
 			_abort = false;
 		}
 
+		public Func<Set, bool> FilterSet { get; set; } = set => true;
+
 		public event Action Disposed;
+		public event Action Loaded;
+		public event Action IndexingProgress;
+
+		public int SetsAddedToIndex { get; private set; }
+		
+		public bool IsLoading { get; private set; }
+		public bool IsLoaded { get; private set; }
 
 		private Directory _index;
 		private IndexSearcher _searcher;
 
-		private readonly IndexVersion _version;
+		private IndexVersion Version { get; set; }
 
 		private bool _abort;
 		private DirectoryReader _indexReader;

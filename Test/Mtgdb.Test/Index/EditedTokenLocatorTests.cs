@@ -4,8 +4,14 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class EditedTokenLocatorTests : IndexTestsBase
+	public class EditedTokenLocatorTests : TestsBase
 	{
+		[OneTimeSetUp]
+		public static void Setup()
+		{
+			LoadIndexes();
+		}
+
 		[TestCase(
 			"*:",
 			"--^")]

@@ -1,4 +1,4 @@
-﻿using Mtgdb.Dal.EditDistance;
+﻿using Mtgdb.Dal;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

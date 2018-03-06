@@ -9,11 +9,6 @@ namespace Mtgdb.Dal
 {
 	public class ImageLoader
 	{
-		public event Action CornerRemoved;
-		public event Action FoundInCache;
-
-		public static readonly object SyncRoot = new object();
-
 		public ImageLoader(ImageCacheConfig config)
 		{
 			Capacity = config.GetCacheCapacity();
@@ -54,7 +49,12 @@ namespace Mtgdb.Dal
 			if (original == null)
 				return null;
 
-			var result = Transform(original, model.ImageFile, size, crop: false);
+			Bitmap result;
+
+			if (model.ImageFile.IsArt)
+				result = TransformArt(original, size);
+			else
+				result = Transform(original, size);
 
 			if (result != original)
 				original.Dispose();
@@ -64,8 +64,6 @@ namespace Mtgdb.Dal
 
 		public static Bitmap Open(ImageModel model)
 		{
-			Bitmap original;
-
 			try
 			{
 				byte[] bytes;
@@ -73,89 +71,91 @@ namespace Mtgdb.Dal
 				lock (SyncRoot)
 					bytes = File.ReadAllBytes(model.ImageFile.FullPath);
 
-				original = new Bitmap(new MemoryStream(bytes));
+				var result = new Bitmap(new MemoryStream(bytes));
 
 				if (model.Rotation != RotateFlipType.RotateNoneFlipNone)
-					original.RotateFlip(model.Rotation);
+					result.RotateFlip(model.Rotation);
+
+				return result;
 			}
 			catch
 			{
 				// Некорректный файл изображения.
 				// Штатная ситуация из за возможного прерывания скачивания файла.
-				original = null;
+				return null;
 			}
-
-			return original;
 		}
 
-		public Bitmap Transform(Bitmap original, ImageFile imageFile, Size size, bool crop)
+
+
+		public Bitmap TransformForgeImage(Bitmap original, Size size)
 		{
-			Bitmap resizedBmp;
+			var frameDetector = new BmpFrameDetector(original);
+			frameDetector.Execute();
+			var frame = frameDetector.Frame;
 
-			if (!crop && size == original.Size || imageFile.IsArt && original.Size.FitsIn(size))
-				resizedBmp = original;
-			else
-			{
-				var frame = getFrame(original, crop);
+			return tryResize(original, size, frame);
+		}
 
-				try
-				{
-					resizedBmp = original.FitIn(size, frame);
-				}
-				catch (Exception ex)
-				{
-					resizedBmp = original;
-					_log.Error(ex);
-				}
-			}
+		public Bitmap TransformArt(Bitmap original, Size size)
+		{
+			if (original.Size.FitsIn(size))
+				return original;
 
-			if (imageFile.IsArt || crop)
-				return resizedBmp;
+			return tryResize(original, size);
+		}
 
-			var corneredBmp = (Bitmap) resizedBmp.Clone();
+		public Bitmap Transform(Bitmap original, Size size)
+		{
+			var resizedBmp = tryResize(original, size);
+			var cornerRemovedBmp = tryRemoveCorners(resizedBmp);
 
-			bool cornerRemoved;
+			if (cornerRemovedBmp != resizedBmp && resizedBmp != original)
+				resizedBmp.Dispose();
+
+			return cornerRemovedBmp;
+		}
+
+		
+		
+		private static Bitmap tryResize(Bitmap original, Size requiredSize, Size frame = default(Size))
+		{
+			if (frame == default(Size) && original.Size == requiredSize)
+				return original;
+
 			try
 			{
-				var remover = new BmpCornerRemoval(corneredBmp);
-				remover.Execute();
-				cornerRemoved = remover.ImageChanged;
+				return original.FitIn(requiredSize, frame);
 			}
 			catch (Exception ex)
 			{
 				_log.Error(ex);
-				cornerRemoved = false;
-			}
-
-			if (cornerRemoved)
-			{
-				if (resizedBmp != original)
-					resizedBmp.Dispose();
-
-				CornerRemoved?.Invoke();
-
-				return corneredBmp;
-			}
-			else
-			{
-				corneredBmp.Dispose();
-				return resizedBmp;
+				return original;
 			}
 		}
 
-		private static Size getFrame(Bitmap original, bool crop)
+		private Bitmap tryRemoveCorners(Bitmap bitmap)
 		{
-			Size frame;
-			if (crop)
+			var result = (Bitmap) bitmap.Clone();
+
+			try
 			{
-				var frameDetector = new BmpFrameDetector(original);
-				frameDetector.Execute();
-				frame = frameDetector.Frame;
+				var remover = new BmpCornerRemoval(result);
+				remover.Execute();
+
+				if (remover.ImageChanged)
+					CornerRemoved?.Invoke();
+
+				return result;
 			}
-			else
-				frame = default(Size);
-			return frame;
+			catch (Exception ex)
+			{
+				_log.Error(ex);
+				return bitmap;
+			}
 		}
+
+
 
 		private Bitmap tryGetFromCache(string path, RotateFlipType rotations)
 		{
@@ -196,6 +196,13 @@ namespace Mtgdb.Dal
 			_imagesByPath.Remove(keyToRemove);
 		}
 
+
+
+		public event Action CornerRemoved;
+		public event Action FoundInCache;
+
+		public static readonly object SyncRoot = new object();
+
 		private readonly Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry> _imagesByPath =
 			new Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry>();
 
@@ -203,7 +210,7 @@ namespace Mtgdb.Dal
 			new LinkedList<Tuple<string, RotateFlipType>>();
 
 
-		public static readonly Size SizeCropped = new Size(424, 622);
+		public static readonly Size SizeCropped = new Size(470, 659);
 		private Size _cardSize = new Size(223, 311);
 		private Size _zoomedCardSize = new Size(446, 622);
 

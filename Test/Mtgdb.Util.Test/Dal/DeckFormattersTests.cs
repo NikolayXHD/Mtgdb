@@ -10,37 +10,29 @@ namespace Mtgdb.Test
 	[TestFixture]
 	public class DeckFormattersTests : TestsBase
 	{
-		private readonly IKernel _kernel = new StandardKernel();
-		private CardRepository _cardRepo;
-
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			_kernel.Load<CoreModule>();
-			_kernel.Load<DalModule>();
-
-			_cardRepo = _kernel.Get<CardRepository>();
-			_cardRepo.LoadFile();
-			_cardRepo.Load();
+			LoadCards();
 		}
 
 		[TestCase(@"D:\Games\xmage\mage-client\sample-decks")]
 		public void XMage(string decksLocation)
 		{
-			findCards(decksLocation, new XMageDeckFormatter(_cardRepo));
+			findCards(decksLocation, new XMageDeckFormatter(Repo));
 		}
 
 		[TestCase(@"D:\Games\Forge\res\quest\world")]
 		[TestCase(@"C:\Users\Kolia\AppData\Roaming\Forge\decks")]
 		public void Forge(string decksLocation)
 		{
-			findCards(decksLocation, new ForgeDeckFormatter(_cardRepo, _kernel.Get<ForgeSetRepository>()));
+			findCards(decksLocation, new ForgeDeckFormatter(Repo, Kernel.Get<ForgeSetRepository>()));
 		}
 
 		[TestCase(@"D:\games\Magarena-1.81\Magarena\decks")]
 		public void Magarena(string decksLocation)
 		{
-			findCards(decksLocation, new MagarenaDeckFormatter(_cardRepo));
+			findCards(decksLocation, new MagarenaDeckFormatter(Repo));
 		}
 
 		[Test]
@@ -51,7 +43,7 @@ namespace Mtgdb.Test
 
 			Log.Debug("Unmatched mtgo cards");
 			
-			var cardsByMtgoName = _cardRepo.Cards.GroupBy(MtgoDeckFormatter.ToMtgoName)
+			var cardsByMtgoName = Repo.Cards.GroupBy(MtgoDeckFormatter.ToMtgoName)
 				.ToDictionary(_ => _.Key, _ => _.ToList());
 
 			foreach (string name in mtgoCardNames)
@@ -59,7 +51,7 @@ namespace Mtgdb.Test
 					Log.Debug(name);
 		}
 
-		private static void findCards(string decksLocation, RegexDeckFormatter formatter)
+		private void findCards(string decksLocation, RegexDeckFormatter formatter)
 		{
 			var matches = Directory.GetFiles(decksLocation, formatter.FileNamePattern, SearchOption.AllDirectories)
 				.SelectMany(file => File.ReadAllLines(file).Select(line => new { line, file }))

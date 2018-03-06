@@ -779,9 +779,8 @@ namespace Mtgdb.Controls
 		{
 			var cell = getCornerCardCell(Direction.BottomRight);
 
-			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point))
-				.RightBottom()
-				.Plus(LayoutOptions.CardInterval.ScaleBy(new SizeF(0.5f, 0.5f)));
+			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point)).RightBottom() + 
+				LayoutOptions.CardInterval.ScaleBy(new SizeF(0.5f, 0.5f));
 
 			var cardToDisplayRightBottom = getDisplayBounds()
 				.RightBottom()

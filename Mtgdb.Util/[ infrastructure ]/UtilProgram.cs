@@ -130,7 +130,7 @@ namespace Mtgdb.Util
 		{
 			var integration = _kernel.Get<ForgeIntegration>();
 
-			Console.WriteLine($"Forge images at {integration.CardPicsPath} will be replaced.");
+			Console.WriteLine($"Forge images for {setCode ?? "all sets"} at {integration.CardPicsPath} will be replaced.");
 			Console.WriteLine($"Replaced images will be backed up to {integration.CardPicsBackupPath}.");
 			Console.WriteLine(@"To change target directory edit etc\Mtgdb.Integration.Forge.xml and start this executable again.");
 			Console.WriteLine("To begin replacing Forge images press ENTER.");

@@ -5,6 +5,7 @@ namespace Mtgdb.Dal.Index
 	internal class IndexVersion
 	{
 		public string Directory { get; }
+
 		private readonly string _completionLabelFile;
 		private readonly string _indexVerision;
 
@@ -20,7 +21,7 @@ namespace Mtgdb.Dal.Index
 		public void CreateDirectory()
 		{
 			if (System.IO.Directory.Exists(Directory))
-				System.IO.Directory.Delete(Directory, true);
+				System.IO.Directory.Delete(Directory, recursive: true);
 
 			System.IO.Directory.CreateDirectory(Directory);
 		}
@@ -32,7 +33,10 @@ namespace Mtgdb.Dal.Index
 
 		public void Invalidate()
 		{
-			File.Delete(_completionLabelFile);
+			var fileInfo = new FileInfo(_completionLabelFile);
+			
+			if (fileInfo.Exists)
+				fileInfo.Delete();
 		}
 	}
 }

@@ -25,18 +25,4 @@
 			};
 		}
 	}
-
-	public class PatchFileMetadata
-	{
-		public string Path { get; set; }
-		public PatchAction RequiredAction { get; set; }
-	}
-
-	public enum PatchAction
-	{
-		None,
-		Add,
-		Replace,
-		Remove
-	}
 }

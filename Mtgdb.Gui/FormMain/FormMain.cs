@@ -140,7 +140,7 @@ namespace Mtgdb.Gui
 		private void updateShowSampleHandButtons()
 		{
 			bool isSampleHand = _deckModel.Zone == Zone.SampleHand;
-			bool enabled = _cardRepo.IsImageLoadingComplete;
+			bool enabled = _cardRepo.IsLoadingComplete;
 
 			_buttonSampleHandNew.Visible = isSampleHand;
 			_buttonSampleHandDraw.Visible = isSampleHand;
@@ -332,7 +332,7 @@ namespace Mtgdb.Gui
 		{
 			int visibleRecordIndex;
 
-			if (_requiredScroll.HasValue && _cardRepo.IsImageLoadingComplete)
+			if (_requiredScroll.HasValue && _cardRepo.IsLoadingComplete)
 			{
 				visibleRecordIndex = _requiredScroll.Value;
 				_requiredScroll = null;
@@ -810,7 +810,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveDeck()
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var saved = _deckSerializationSubsystem.SaveDeck(_historySubsystem.Current.Deck);
@@ -825,7 +825,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadDeck()
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var loaded = _deckSerializationSubsystem.LoadDeck();
@@ -838,7 +838,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveCollection()
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var saved = _deckSerializationSubsystem.SaveCollection(_historySubsystem.Current.CollectionModel);
@@ -849,7 +849,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadCollection()
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var loaded = _deckSerializationSubsystem.LoadCollection();
@@ -912,7 +912,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPrint()
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			_printingSubsystem.ShowPrintingDialog(_deckModel, _historySubsystem.DeckName);

@@ -9,7 +9,6 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			LoadModules();
 			LoadCards();
 
 			ImgRepo.LoadFilesSmall();

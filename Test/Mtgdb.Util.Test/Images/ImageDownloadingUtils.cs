@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Mtgdb.ImageProcessing;
 using Mtgdb.Test;
-using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Util
@@ -15,9 +14,7 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			LoadModules();
 			LoadCards();
-			LogManager.Flush();
 		}
 
 		[TestCase("RIX"), Order(1)]

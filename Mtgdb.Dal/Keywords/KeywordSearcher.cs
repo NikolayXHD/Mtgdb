@@ -14,12 +14,25 @@ namespace Mtgdb.Dal
 	{
 		public KeywordSearcher()
 		{
-			// 0.24 store keyword name for explicit regex keywords
-			_version = new IndexVersion(AppDir.Data.AddPath("index").AddPath("keywords"), "0.24");
-			_version.Directory.AddPath("keywords.json");
+			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("keywords");
 		}
 
-		public string Directory => _version.Directory;
+		public string IndexDirectory => _version.Directory;
+
+		public string IndexDirectoryParent
+		{
+			get => _version.Directory.Parent();
+
+			// 0.24 store keyword name for explicit regex keywords
+			set => _version = new IndexVersion(value, "0.24");
+		}
+
+		public void InvalidateIndex()
+		{
+			_version.Invalidate();
+		}
+
+		public bool IsUpToDate => _version.IsUpToDate;
 
 		public void Load(CardRepository repository)
 		{
@@ -97,6 +110,9 @@ namespace Mtgdb.Dal
 
 			foreach (var set in repository.SetsByCode.Values)
 			{
+				if (!FilterSet(set))
+					continue;
+
 				foreach (var card in set.Cards)
 				{
 					var keywords = new CardKeywords
@@ -128,14 +144,7 @@ namespace Mtgdb.Dal
 			return index;
 		}
 
-		public void InvalidateIndex()
-		{
-			_version.Invalidate();
-		}
-
-
-
-		public bool IsUpToDate => _version.IsUpToDate;
+		public Func<Set, bool> FilterSet { get; set; } = set => true;
 
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; private set; }
@@ -146,7 +155,7 @@ namespace Mtgdb.Dal
 
 
 
-		private readonly IndexVersion _version;
+		private IndexVersion _version;
 		private RAMDirectory _index;
 		private IndexSearcher _searcher;
 		private DirectoryReader _indexReader;

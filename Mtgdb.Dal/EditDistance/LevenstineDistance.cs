@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
-namespace Mtgdb.Dal.EditDistance
+namespace Mtgdb.Dal
 {
 	public class LevenstineDistance
 	{

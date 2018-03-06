@@ -43,49 +43,6 @@ namespace Mtgdb
 			}
 		}
 
-		public static PatchFileMetadata[] CreatePatchMetadata(FileSignature[] package, FileSignature[] existing)
-		{
-			var packageHashByPath = package.ToDictionary(_ => _.Path, _ => _.Md5Hash, Str.Comparer);
-			var existingHashByPath = existing.ToDictionary(_ => _.Path, _ => _.Md5Hash, Str.Comparer);
-
-			var paths = packageHashByPath.Keys.Union(existingHashByPath.Keys, Str.Comparer).ToArray();
-
-			var result = new PatchFileMetadata[paths.Length];
-
-			for (int i = 0; i < paths.Length; i++)
-			{
-				var path = paths[i];
-
-				PatchAction action;
-				if (packageHashByPath.ContainsKey(path))
-				{
-					if (existingHashByPath.ContainsKey(path))
-					{
-						if (packageHashByPath[path] == existingHashByPath[path])
-							action = PatchAction.None;
-						else
-							action = PatchAction.Replace;
-					}
-					else
-					{
-						action = PatchAction.Add;
-					}
-				}
-				else
-				{
-					action = PatchAction.Remove;
-				}
-
-				result[i] = new PatchFileMetadata
-				{
-					Path = path,
-					RequiredAction = action
-				};
-			}
-
-			return result;
-		}
-
 		public static void WriteToFile(string targetFile, IEnumerable<FileSignature> signatures)
 		{
 			File.WriteAllLines(targetFile, signatures.Select(_ => _.Md5Hash + "\t" + _.Path));

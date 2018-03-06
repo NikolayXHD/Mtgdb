@@ -12,11 +12,8 @@ namespace Mtgdb.Gui
 {
 	internal static class GuiProgram
 	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[LoaderOptimization(LoaderOptimization.MultiDomainHost)]
 		[STAThread]
+		[LoaderOptimization(LoaderOptimization.MultiDomainHost)]
 		public static void Main(string[] args)
 		{
 			ShadowCopy.RunMain(main, args);
@@ -64,8 +61,7 @@ namespace Mtgdb.Gui
 			var keywordSearcher = _kernel.Get<KeywordSearcher>();
 
 			luceneSearcher.InvalidateIndex();
-			luceneSearcher.InvalidateSpellcheckerIndex();
-
+			luceneSearcher.Spellchecker.InvalidateIndex();
 			keywordSearcher.InvalidateIndex();
 		}
 

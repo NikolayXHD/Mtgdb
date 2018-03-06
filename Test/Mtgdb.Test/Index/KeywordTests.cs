@@ -8,10 +8,8 @@ namespace Mtgdb.Test
 	public class KeywordTests : TestsBase
 	{
 		[OneTimeSetUp]
-		public void Setup()
+		public static void Setup()
 		{
-			LoadModules();
-			LoadCards();
 			LoadTranslations();
 		}
 

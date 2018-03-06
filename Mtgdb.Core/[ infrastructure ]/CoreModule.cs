@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Mtgdb.Gui;
+﻿using Mtgdb.Gui;
 using NConfiguration;
 using NConfiguration.Joining;
 using NConfiguration.Xml;

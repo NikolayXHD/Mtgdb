@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Reflection;
 
@@ -45,16 +44,6 @@ namespace Mtgdb
 				return path;
 
 			var result = Root.AddPath(path);
-			return result;
-		}
-
-		public static string GetBinPath(string name)
-		{
-			var result = BinVersion.AddPath(name);
-
-			if (!File.Exists(result) && !Directory.Exists(result))
-				throw new ConfigurationErrorsException($"File or directory {name} not found at {result}");
-
 			return result;
 		}
 

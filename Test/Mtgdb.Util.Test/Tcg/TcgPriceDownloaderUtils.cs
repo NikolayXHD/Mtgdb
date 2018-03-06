@@ -12,12 +12,15 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class TcgPriceDownloaderUtils: TestsBase
 	{
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			LoadCards();
+		}
+
 		[Test]
 		public void MapSets()
 		{
-			LoadModules();
-			LoadCards();
-
 			var tcgSets = new TcgParser().ParseSets();
 
 			var notMapped = new List<TcgSet>();
@@ -54,9 +57,6 @@ namespace Mtgdb.Util
 		[Test]
 		public void PrintNotMappedSets()
 		{
-			LoadModules();
-			LoadCards();
-
 			var tcgParser = new TcgParser();
 
 			var tcgSetBySet = tcgParser.GetTcgSetBySet();
@@ -94,9 +94,6 @@ namespace Mtgdb.Util
 		//[TestCase("pMEI")]
 		public void MapCards(string minSetCode)
 		{
-			LoadModules();
-			LoadCards();
-
 			var tcgParser = new TcgParser();
 
 			var tcgSetsBySet = tcgParser.GetTcgSetBySet();

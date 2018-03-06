@@ -1,17 +1,33 @@
 using System.Diagnostics;
 using Mtgdb.Dal;
+using Mtgdb.Dal.Index;
 using Mtgdb.Downloader;
+using Mtgdb.Gui;
 using Ninject;
 using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
-	[TestFixture]
 	public class TestsBase
 	{
-		protected void LoadModules()
+		[SetUp]
+		public void BaseSetup()
 		{
+			ApplicationCulture.SetCulture(Str.Culture);
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			LogManager.Flush();
+		}
+
+		private static void loadModules()
+		{
+			if (_loadedModules)
+				return;
+
 			Kernel = new StandardKernel();
 			Kernel.Load<CoreModule>();
 			Kernel.Load<DalModule>();
@@ -19,12 +35,18 @@ namespace Mtgdb.Test
 
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();
-			PriceRepo = Kernel.Get<PriceRepository>();
 			Ui = Kernel.Get<UiModel>();
+
+			_loadedModules = true;
 		}
 
-		protected void LoadCards()
+		protected static void LoadCards()
 		{
+			if (_loadedCards)
+				return;
+
+			loadModules();
+
 			var sw = new Stopwatch();
 			sw.Start();
 
@@ -32,11 +54,20 @@ namespace Mtgdb.Test
 			Repo.Load();
 
 			sw.Stop();
-			Log.Debug($"Cards loaded in {sw.ElapsedMilliseconds} ms");
+			_log.Info($"Cards loaded in {sw.ElapsedMilliseconds} ms");
+
+			LogManager.Flush();
+
+			_loadedCards = true;
 		}
 
-		protected void LoadTranslations()
+		protected static void LoadTranslations()
 		{
+			if (_loadedTranslations)
+				return;
+
+			LoadCards();
+
 			var sw = new Stopwatch();
 			sw.Start();
 
@@ -47,33 +78,64 @@ namespace Mtgdb.Test
 			Repo.FillLocalizations(locRepo);
 
 			sw.Stop();
-			Log.Debug($"Translations loaded in {sw.ElapsedMilliseconds} ms");
-		}
+			_log.Info($"Translations loaded in {sw.ElapsedMilliseconds} ms");
 
-		protected void LoadPrices()
-		{
-			var sw = new Stopwatch();
-			sw.Start();
-
-			PriceRepo.Load();
-			Repo.SetPrices(PriceRepo);
-
-			sw.Stop();
-			Log.Debug($"Prices loaded in {sw.ElapsedMilliseconds} ms");
-		}
-
-		[TearDown]
-		protected void TearDown()
-		{
 			LogManager.Flush();
+
+			_loadedTranslations = true;
 		}
 
-		protected IKernel Kernel;
-		protected CardRepository Repo;
-		protected ImageRepository ImgRepo;
-		protected PriceRepository PriceRepo;
-		protected UiModel Ui;
+		protected static void LoadIndexes()
+		{
+			if (_loadedIndexes)
+				return;
 
-		protected static readonly Logger Log = LogManager.GetCurrentClassLogger();
+			LoadTranslations();
+
+			Searcher = Kernel.Get<LuceneSearcher>();
+
+			if (!Searcher.IsUpToDate)
+			{
+				var sw = new Stopwatch();
+				sw.Restart();
+				Searcher.LoadIndexes(Repo);
+				sw.Stop();
+
+				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
+			}
+			else
+			{
+				var sw = new Stopwatch();
+				sw.Start();
+
+				Searcher.LoadIndexes(null);
+
+				sw.Stop();
+				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
+			}
+
+			Spellchecker = Searcher.Spellchecker;
+
+			LogManager.Flush();
+
+			_loadedIndexes = true;
+		}
+
+		protected static IKernel Kernel;
+		protected static CardRepository Repo;
+		protected static ImageRepository ImgRepo;
+		protected static UiModel Ui;
+
+		protected static LuceneSearcher Searcher;
+		protected static LuceneSpellchecker Spellchecker;
+
+		private static bool _loadedModules;
+		private static bool _loadedCards;
+		private static bool _loadedTranslations;
+		private static bool _loadedIndexes;
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
+		protected Logger Log => LogManager.GetLogger(GetType().FullName);
 	}
 }

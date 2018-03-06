@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 				});
 		}
 
-		private void imageLoadingComplete()
+		private void repoLoadingComplete()
 		{
 			this.Invoke(delegate
 			{
@@ -609,7 +609,7 @@ namespace Mtgdb.Gui
 
 		public void PasteDeck(bool append)
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var text = Clipboard.GetText();
@@ -621,7 +621,7 @@ namespace Mtgdb.Gui
 
 		public void PasteCollection(bool append)
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			var text = Clipboard.GetText();
@@ -770,7 +770,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandNew(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			_deckModel.NewSampleHand(_cardRepo);
@@ -778,7 +778,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandMulligan(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			_deckModel.Mulligan(_cardRepo);
@@ -786,7 +786,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandDraw(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsImageLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete)
 				return;
 
 			_deckModel.Draw(_cardRepo);

@@ -1,5 +1,4 @@
 using Lucene.Net.Contrib;
-using NLog;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -29,7 +28,7 @@ namespace Mtgdb.Test
 			Assert.That(tokenizer.Tokens, Is.Not.Empty);
 		}
 
-		private static TolerantTokenizer tokenize(string queryStr)
+		private TolerantTokenizer tokenize(string queryStr)
 		{
 			Log.Debug(queryStr);
 
@@ -48,12 +47,6 @@ namespace Mtgdb.Test
 				Log.Debug(token);
 
 			return parser;
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			LogManager.Flush();
 		}
 	}
 }

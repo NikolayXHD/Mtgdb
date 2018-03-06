@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Dal.EditDistance;
 using Mtgdb.Test;
 using NUnit.Framework;
 using Tesseract;
@@ -20,20 +19,17 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
+			LoadCards();
+
+			ImgRepo.LoadFiles();
+			ImgRepo.LoadZoom();
+			
 			string tessdataPath = TestContext.CurrentContext.TestDirectory.AddPath(@"..\..\..\tools\tessdata");
 
 			_engine = new TesseractEngine(
 				tessdataPath,
 				"eng",
 				EngineMode.CubeOnly);
-
-			LoadModules();
-			LoadCards();
-
-			ImgRepo.LoadFiles();
-			ImgRepo.LoadZoom();
-			
-			Repo.OnImagesLoaded();
 
 			_distance = new LevenstineDistance();
 		}

@@ -4,16 +4,18 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 using NLog;
 
 namespace Mtgdb.Util
 {
+	[UsedImplicitly]
 	public class ForgeIntegration
 	{
 		public ForgeIntegration(
-			ImageRepository imageRepo, 
-			CardRepository cardRepo, 
+			ImageRepository imageRepo,
+			CardRepository cardRepo,
 			ForgeIntegrationConfig config,
 			ForgeSetRepository forgeSetRepository,
 			ImageLoader imageLoader)
@@ -39,14 +41,12 @@ namespace Mtgdb.Util
 			_imageRepo.LoadFiles(enabledImageGroups);
 			_imageRepo.LoadSmall();
 			_imageRepo.LoadZoom();
-
-			_cardRepo.OnImagesLoaded();
 		}
 
 		public void OverrideForgePictures(string targetSetCode)
 		{
 			_forgeSetRepository.Load();
-			
+
 			if (!Directory.Exists(CardPicsPath))
 			{
 				Console.WriteLine($"== Aborting. Not found {CardPicsPath} ==");
@@ -69,7 +69,7 @@ namespace Mtgdb.Util
 		{
 			Console.WriteLine("== Adding missing files ==");
 
-			foreach (var set in _cardRepo.SetsByCode.Values.OrderBy(s=>s.Code))
+			foreach (var set in _cardRepo.SetsByCode.Values.OrderBy(s => s.Code))
 			{
 				string setCode = set.Code;
 
@@ -77,12 +77,12 @@ namespace Mtgdb.Util
 					continue;
 
 				string forgeSetCode = _forgeSetRepository.ToForgeSet(setCode);
-				
+
 				string subdir = Path.Combine(CardPicsPath, forgeSetCode);
 
 				if (!Directory.Exists(subdir))
 					continue;
-				
+
 				Console.WriteLine($"== Scanning {forgeSetCode} ... ==");
 
 				var exported = new HashSet<string>(Str.Comparer);
@@ -123,7 +123,7 @@ namespace Mtgdb.Util
 					continue;
 
 				string setCode = _forgeSetRepository.FromForgeSet(forgeSetCode);
-				
+
 				if (targetSetCode != null && !Str.Equals(setCode, targetSetCode))
 					continue;
 
@@ -181,7 +181,7 @@ namespace Mtgdb.Util
 
 				if (removeExtension(ref fileName, ".full"))
 					continue;
-				
+
 				break;
 			}
 
@@ -255,7 +255,7 @@ namespace Mtgdb.Util
 			}
 
 			string fileName = Path.GetFileName(imageFile.FullPath);
-			
+
 			if (_verbose)
 				Console.WriteLine($"\tReplacing {imageFile.FullPath}");
 
@@ -271,7 +271,11 @@ namespace Mtgdb.Util
 		{
 			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
 
-			var image = _imageLoader.Transform(original, replacementImageFile, size, crop: forge);
+			Bitmap image;
+			if (forge)
+				image = _imageLoader.TransformForgeImage(original, size);
+			else
+				image = _imageLoader.Transform(original, size);
 
 			var result = saveToByteArray(replacementImageFile, image, forge);
 
@@ -326,7 +330,16 @@ namespace Mtgdb.Util
 			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false);
 		}
 
-		private void export(string directory, string code, HashSet<string> exportedSmall, HashSet<string> exportedZoomed, bool small, bool zoomed, string smallSubdir, string zoomedSubdir, bool matchingSet)
+		private void export(
+			string directory,
+			string code,
+			HashSet<string> exportedSmall,
+			HashSet<string> exportedZoomed,
+			bool small,
+			bool zoomed,
+			string smallSubdir,
+			string zoomedSubdir,
+			bool matchingSet)
 		{
 			foreach (var entryBySetCode in _cardRepo.SetsByCode)
 			{
@@ -370,8 +383,8 @@ namespace Mtgdb.Util
 						modelSmall = _imageRepo.GetSmallImage(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelSmall != null
-								&& Str.Equals(card.SetCode, modelSmall.ImageFile.SetCode) == matchingSet &&
-								exportedSmall.Add(modelSmall.ImageFile.FullPath))
+							&& Str.Equals(card.SetCode, modelSmall.ImageFile.SetCode) == matchingSet &&
+							exportedSmall.Add(modelSmall.ImageFile.FullPath))
 						{
 							string smallPath = getTargetPath(card, modelSmall.ImageFile, smallSetSubdir, forge: false);
 
@@ -388,8 +401,8 @@ namespace Mtgdb.Util
 						var modelZoom = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
 
 						if (modelZoom != null &&
-								Str.Equals(card.SetCode, modelZoom.ImageFile.SetCode) == matchingSet &&
-								exportedZoomed.Add(modelZoom.ImageFile.FullPath))
+							Str.Equals(card.SetCode, modelZoom.ImageFile.SetCode) == matchingSet &&
+							exportedZoomed.Add(modelZoom.ImageFile.FullPath))
 						{
 							string zoomedPath = getTargetPath(card, modelZoom.ImageFile, zoomedSetSubdir, forge: false);
 

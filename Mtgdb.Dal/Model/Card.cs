@@ -595,7 +595,7 @@ namespace Mtgdb.Dal
 		{
 			if (!_imageModelSelected)
 			{
-				if (ui.CardRepo.IsImageLoadingComplete != true)
+				if (!ui.ImageRepo.IsLoadingSmallComplete)
 					return null;
 
 				_imageModel = ui.CardRepo.GetSmallImage(this, ui.ImageRepo);

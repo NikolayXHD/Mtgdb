@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
@@ -15,6 +16,7 @@ namespace Mtgdb.Gui
 			InitializeComponent();
 		}
 
+		[UsedImplicitly]
 		public FormMain(
 			UndoConfig undoConfig,
 			CardRepository cardRepo,
@@ -205,9 +207,7 @@ namespace Mtgdb.Gui
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
-			_layoutViewDeck.Height = _imageLoader.CardSize
-				.Plus(_layoutViewDeck.LayoutOptions.CardInterval)
-				.Height;
+			_layoutViewDeck.Height = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
 
 			scalePanelIcon(_panelIconLegality);
 			scalePanelIcon(_panelIconSearch);
@@ -329,10 +329,11 @@ namespace Mtgdb.Gui
 
 			_cardRepo.SetAdded += cardRepoSetAdded;
 			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
-			if (_cardRepo.IsImageLoadingComplete)
-				imageLoadingComplete();
+			
+			if (_cardRepo.IsLoadingComplete)
+				repoLoadingComplete();
 			else
-				_cardRepo.ImageLoadingComplete += imageLoadingComplete;
+				_cardRepo.LoadingComplete += repoLoadingComplete;
 
 			_buttonSampleHandNew.Click += sampleHandNew;
 			_buttonSampleHandMulligan.Click += sampleHandMulligan;
@@ -417,7 +418,7 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
 
 			_cardRepo.SetAdded -= cardRepoSetAdded;
-			_cardRepo.ImageLoadingComplete -= imageLoadingComplete;
+			_cardRepo.LoadingComplete -= repoLoadingComplete;
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 
 			_buttonSampleHandNew.Click -= sampleHandNew;
