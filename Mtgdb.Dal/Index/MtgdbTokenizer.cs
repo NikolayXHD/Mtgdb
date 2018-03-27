@@ -46,7 +46,6 @@ namespace Mtgdb.Dal.Index
 
 				if (_bufferIndex >= _dataLen)
 				{
-
 					_dataLen = m_input.Read(_ioBuffer, 0, _ioBuffer.Length);
 					_bufferIndex = 0;
 				}

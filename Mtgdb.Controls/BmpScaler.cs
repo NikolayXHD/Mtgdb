@@ -31,7 +31,7 @@ namespace Mtgdb.Controls
 
 						var l = GetLocation(i, j);
 
-						float r = 0, g = 0, b = 0, a = 0, w = 0, wc = 0, nr = 0, ng = 0, nb = 0;
+						float r = 0f, g = 0f, b = 0f, a = 0f, w = 0f, wc = 0f, nr = 0f, ng = 0f, nb = 0f;
 
 						int iOrMin = Math.Max((int) Math.Floor(left), 0);
 						int iOrMax = Math.Min((int) Math.Ceiling(right), _sourceRect.Width);
@@ -65,8 +65,8 @@ namespace Mtgdb.Controls
 								r += dwc * dr;
 								g += dwc * dg;
 								b += dwc * db;
-
-								if (wc == 0)
+								
+								if (wc.Equals(0f))
 								{
 									nr += dr * dw;
 									ng += dg * dw;
@@ -75,7 +75,7 @@ namespace Mtgdb.Controls
 							}
 						}
 
-						if (wc == 0)
+						if (wc.Equals(0f))
 						{
 							r = nr / w;
 							g = ng / w;

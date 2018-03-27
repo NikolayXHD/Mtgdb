@@ -94,7 +94,7 @@ namespace Mtgdb.Dal
 			frameDetector.Execute();
 			var frame = frameDetector.Frame;
 
-			return tryResize(original, size, frame);
+			return tryGetResized(original, size, frame) ?? original;
 		}
 
 		public Bitmap TransformArt(Bitmap original, Size size)
@@ -102,26 +102,29 @@ namespace Mtgdb.Dal
 			if (original.Size.FitsIn(size))
 				return original;
 
-			return tryResize(original, size);
+			return tryGetResized(original, size) ?? original;
 		}
 
 		public Bitmap Transform(Bitmap original, Size size)
 		{
-			var resizedBmp = tryResize(original, size);
+			var resizedBmp = tryGetResized(original, size) ?? (Bitmap) original.Clone();
+
 			var cornerRemovedBmp = tryRemoveCorners(resizedBmp);
-
-			if (cornerRemovedBmp != resizedBmp && resizedBmp != original)
+			if (cornerRemovedBmp != null)
+			{
 				resizedBmp.Dispose();
+				return cornerRemovedBmp;
+			}
 
-			return cornerRemovedBmp;
+			return resizedBmp;
 		}
 
-		
-		
-		private static Bitmap tryResize(Bitmap original, Size requiredSize, Size frame = default(Size))
+
+
+		private static Bitmap tryGetResized(Bitmap original, Size requiredSize, Size frame = default(Size))
 		{
 			if (frame == default(Size) && original.Size == requiredSize)
-				return original;
+				return null;
 
 			try
 			{
@@ -130,28 +133,26 @@ namespace Mtgdb.Dal
 			catch (Exception ex)
 			{
 				_log.Error(ex);
-				return original;
+				return null;
 			}
 		}
 
 		private Bitmap tryRemoveCorners(Bitmap bitmap)
 		{
-			var result = (Bitmap) bitmap.Clone();
-
 			try
 			{
-				var remover = new BmpCornerRemoval(result);
+				var remover = new BmpCornerRemoval(bitmap);
 				remover.Execute();
 
 				if (remover.ImageChanged)
 					CornerRemoved?.Invoke();
 
-				return result;
+				return bitmap;
 			}
 			catch (Exception ex)
 			{
 				_log.Error(ex);
-				return bitmap;
+				return null;
 			}
 		}
 

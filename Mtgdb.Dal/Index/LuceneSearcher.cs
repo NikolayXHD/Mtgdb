@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using JetBrains.Annotations;
 using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.Search;

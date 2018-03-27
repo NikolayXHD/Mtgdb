@@ -214,7 +214,9 @@ namespace Mtgdb.Downloader
 			}
 
 			var fileList = Signer.ReadFromFile(_appOnlineSignatureFile);
-			var lastMetadata = fileList[fileList.Length - 1];
+			
+			// may be empty if downloading signature failed
+			var lastMetadata = fileList.LastOrDefault();
 			return lastMetadata;
 		}
 
