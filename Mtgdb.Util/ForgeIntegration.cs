@@ -233,7 +233,7 @@ namespace Mtgdb.Util
 			byte[] bytes;
 
 			using (var original = ImageLoader.Open(replacementModel))
-				bytes = transform(original, replacementModel.ImageFile, small, forge: true);
+				bytes = transform(original, replacementModel.ImageFile, small, isForge: true);
 
 			if (bytes == null)
 				return;
@@ -267,22 +267,20 @@ namespace Mtgdb.Util
 			File.WriteAllBytes(imageFile.FullPath, bytes);
 		}
 
-		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool forge)
+		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool isForge)
 		{
 			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
 
-			Bitmap image;
-			if (forge)
-				image = _imageLoader.TransformForgeImage(original, size);
-			else
-				image = _imageLoader.Transform(original, size);
+			var chain = isForge
+				? _imageLoader.TransformForgeImage(original, size)
+				: _imageLoader.Transform(original, size);
 
-			var result = saveToByteArray(replacementImageFile, image, forge);
-
-			if (image != original)
-				image.Dispose();
-
-			return result;
+			using (chain)
+			{
+				var result = saveToByteArray(replacementImageFile, chain.Result, isForge);
+				chain.DisposeDifferentResult();
+				return result;
+			}
 		}
 
 		private static byte[] saveToByteArray(ImageFile replacementImageFile, Bitmap image, bool forge)

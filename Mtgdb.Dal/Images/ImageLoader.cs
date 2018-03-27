@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Mtgdb.Controls;
-using NLog;
 
 namespace Mtgdb.Dal
 {
@@ -49,17 +48,15 @@ namespace Mtgdb.Dal
 			if (original == null)
 				return null;
 
-			Bitmap result;
+			var chain = model.ImageFile.IsArt
+				? TransformArt(original, size)
+				: Transform(original, size);
 
-			if (model.ImageFile.IsArt)
-				result = TransformArt(original, size);
-			else
-				result = Transform(original, size);
-
-			if (result != original)
-				original.Dispose();
-
-			return result;
+			using (chain)
+			{
+				chain.DisposeDifferentOriginal();
+				return chain.Result;
+			}
 		}
 
 		public static Bitmap Open(ImageModel model)
@@ -88,72 +85,53 @@ namespace Mtgdb.Dal
 
 
 
-		public Bitmap TransformForgeImage(Bitmap original, Size size)
+		public BitmapTransformationChain TransformForgeImage(Bitmap original, Size size)
 		{
 			var frameDetector = new BmpFrameDetector(original);
 			frameDetector.Execute();
 			var frame = frameDetector.Frame;
 
-			return tryGetResized(original, size, frame) ?? original;
+			var chain = new BitmapTransformationChain(original);
+			chain.TransformCopying(_ => resize(_, size, frame));
+			return chain;
 		}
 
-		public Bitmap TransformArt(Bitmap original, Size size)
+		public BitmapTransformationChain TransformArt(Bitmap original, Size size)
 		{
-			if (original.Size.FitsIn(size))
-				return original;
+			var chain = new BitmapTransformationChain(original);
 
-			return tryGetResized(original, size) ?? original;
+			if (!original.Size.FitsIn(size))
+				chain.TransformCopying(_ => resize(_, size));
+
+			return chain;
 		}
 
-		public Bitmap Transform(Bitmap original, Size size)
+		public BitmapTransformationChain Transform(Bitmap original, Size size)
 		{
-			var resizedBmp = tryGetResized(original, size) ?? (Bitmap) original.Clone();
+			var chain = new BitmapTransformationChain(original);
+			chain.TransformCopying(_ => resize(_, size));
+			chain.TransformInplace(removeCorners);
 
-			var cornerRemovedBmp = tryRemoveCorners(resizedBmp);
-			if (cornerRemovedBmp != null)
-			{
-				resizedBmp.Dispose();
-				return cornerRemovedBmp;
-			}
-
-			return resizedBmp;
+			return chain;
 		}
 
 
 
-		private static Bitmap tryGetResized(Bitmap original, Size requiredSize, Size frame = default(Size))
+		private static Bitmap resize(Bitmap original, Size requiredSize, Size frame = default(Size))
 		{
 			if (frame == default(Size) && original.Size == requiredSize)
-				return null;
+				return original;
 
-			try
-			{
-				return original.FitIn(requiredSize, frame);
-			}
-			catch (Exception ex)
-			{
-				_log.Error(ex);
-				return null;
-			}
+			return original.FitIn(requiredSize, frame);
 		}
 
-		private Bitmap tryRemoveCorners(Bitmap bitmap)
+		private void removeCorners(Bitmap bitmap)
 		{
-			try
-			{
-				var remover = new BmpCornerRemoval(bitmap);
-				remover.Execute();
+			var remover = new BmpCornerRemoval(bitmap);
+			remover.Execute();
 
-				if (remover.ImageChanged)
-					CornerRemoved?.Invoke();
-
-				return bitmap;
-			}
-			catch (Exception ex)
-			{
-				_log.Error(ex);
-				return null;
-			}
+			if (remover.ImageChanged)
+				CornerRemoved?.Invoke();
 		}
 
 
@@ -219,6 +197,5 @@ namespace Mtgdb.Dal
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
 		public int Capacity { get; }
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

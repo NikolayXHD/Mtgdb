@@ -39,10 +39,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapExtensions.cs" />
-    <Compile Include="BmpProcessor.cs" />
-    <Compile Include="BmpReader.cs" />
-    <Compile Include="BmpScaler.cs" />
+    <Compile Include="Bitmap\BitmapExtensions.cs" />
+    <Compile Include="Bitmap\BmpProcessor.cs" />
+    <Compile Include="Bitmap\BmpReader.cs" />
+    <Compile Include="Bitmap\BmpScaler.cs" />
+    <Compile Include="Bitmap\TransformationChain.cs" />
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
