@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -360,7 +361,7 @@ namespace Mtgdb.Dal
 		/// The loyalty of the card. This is only present for planeswalkers.
 		/// </summary>
 		[JsonProperty("loyalty")]
-		[JsonConverter(typeof (IntToInternedStringConverter))]
+		[JsonConverter(typeof(IntToInternedStringConverter))]
 		public string Loyalty { get; set; }
 
 		/// <summary>
@@ -553,13 +554,44 @@ namespace Mtgdb.Dal
 
 
 
-		public string GetName(string language) => Localization?.GetName(language) ?? NameEn;
+		public string GetName(string language) => getLocalizedField(nameof(NameEn), language, (loc, lang) => loc.GetName(lang), c => c.NameEn);
 
-		public string GetType(string language) => Localization?.GetType(language) ?? TypeEn;
+		public string GetType(string language) => getLocalizedField(nameof(TypeEn), language, (loc, lang) => loc.GetType(lang), c => c.TypeEn);
 
-		public string GetText(string language) => _textDeltaApplied ? TextEn : (Localization?.GetAbility(language) ?? TextEn);
+		public string GetText(string language) => _textDeltaApplied
+			? TextEn
+			: getLocalizedField(nameof(TextEn), language, (loc, lang) => loc.GetAbility(lang), c => c.TextEn);
 
-		public string GetFlavor(string language) => Localization?.GetFlavor(language) ?? FlavorEn;
+		public string GetFlavor(string language) => getLocalizedField(nameof(FlavorEn), language, (loc, lang) => loc.GetFlavor(lang), c => c.FlavorEn);
+
+		private string getLocalizedField(string propertyName, string language, Func<CardLocalization, string, string> getter, Func<Card, string> defaultGetter)
+		{
+			string result = 
+				Localization?.Invoke(getter, language) ??
+				findNamesakeTranslation(propertyName, language, getter) ??
+				defaultGetter(this);
+
+			return result;
+		}
+
+		private string findNamesakeTranslation(string propertyName, string language, Func<CardLocalization, string, string> getter)
+		{
+			if (Namesakes == null)
+				return null;
+
+			if (_namesakeTranslations.TryGetValue((propertyName, language), out string result))
+				return result;
+
+			result = Namesakes
+				.Select(namesake => namesake.Localization?.Invoke(getter, language))
+				.FirstOrDefault(transl => transl != null);
+
+			_namesakeTranslations.Add((propertyName, language), result);
+
+			return result;
+		}
+
+
 
 		internal void PatchCard(CardPatch cardPatch)
 		{
@@ -629,23 +661,25 @@ namespace Mtgdb.Dal
 
 
 
-		public float? CollectionTotalLow(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceLow ?? 0) * CollectionCount(ui);
+		public float? CollectionTotalLow(UiModel ui) => CollectionCount(ui) == 0 ? (float?) null : (PriceLow ?? 0) * CollectionCount(ui);
 
-		public float? CollectionTotalMid(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceMid ?? 0) * CollectionCount(ui);
+		public float? CollectionTotalMid(UiModel ui) => CollectionCount(ui) == 0 ? (float?) null : (PriceMid ?? 0) * CollectionCount(ui);
 
-		public float? CollectionTotalHigh(UiModel ui) => CollectionCount(ui) == 0 ? (float?)null : (PriceHigh ?? 0) * CollectionCount(ui);
+		public float? CollectionTotalHigh(UiModel ui) => CollectionCount(ui) == 0 ? (float?) null : (PriceHigh ?? 0) * CollectionCount(ui);
 
-		public float? DeckTotalLow(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceLow ?? 0) * DeckCount(ui);
+		public float? DeckTotalLow(UiModel ui) => DeckCount(ui) == 0 ? (float?) null : (PriceLow ?? 0) * DeckCount(ui);
 
-		public float? DeckTotalMid(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceMid ?? 0) * DeckCount(ui);
+		public float? DeckTotalMid(UiModel ui) => DeckCount(ui) == 0 ? (float?) null : (PriceMid ?? 0) * DeckCount(ui);
 
-		public float? DeckTotalHigh(UiModel ui) => DeckCount(ui) == 0 ? (float?)null : (PriceHigh ?? 0) * DeckCount(ui);
+		public float? DeckTotalHigh(UiModel ui) => DeckCount(ui) == 0 ? (float?) null : (PriceHigh ?? 0) * DeckCount(ui);
 
 
 		public int DeckCount(UiModel ui) => ui.Deck?.GetCount(this) ?? 0;
 
 		public int CollectionCount(UiModel ui) => ui.Collection?.GetCount(this) ?? 0;
 
+		[JsonIgnore]
+		public ICollection<Card> Namesakes { get; internal set; }
 
 		[JsonIgnore]
 		internal bool Remove { get; private set; }
@@ -683,5 +717,8 @@ namespace Mtgdb.Dal
 		private ImageModel _imageModel;
 
 		private bool _imageModelSelected;
+
+		private readonly Dictionary<(string PropertyName, string Language), string> _namesakeTranslations =
+			new Dictionary<(string PropertyName, string Language), string>();
 	}
 }

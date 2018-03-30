@@ -9,14 +9,14 @@ namespace Mtgdb.Test
 		[TestCase("M", "M16")]
 		public static void Substring_to_superstring_distance_equals_0(string  val1, string val2)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			Assert.That(distance, Is.EqualTo(0));
 		}
 
 		[TestCase("asd")]
 		public static void Test_same_string_distance_equals_0(string val)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val, val);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val, val);
 			Assert.That(distance, Is.EqualTo(0));
 		}
 
@@ -24,7 +24,7 @@ namespace Mtgdb.Test
 		[TestCase("aaaaa", "bbb", 10)]
 		public static void Test_normal_edit_costs_2(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -33,7 +33,7 @@ namespace Mtgdb.Test
 		[TestCase(",,,,,", "<<<<<<<<<", 2.5f)]
 		public static void Test_CAPS_keyboard_typo_costs_0_5(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -42,7 +42,7 @@ namespace Mtgdb.Test
 		[TestCase("ббббб", "<<<<<<<<<", 2.5f)]
 		public static void Test_Language_keyboard_typo_costs_0_5(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -51,7 +51,7 @@ namespace Mtgdb.Test
 		[TestCase("<<<<<", ">>>>>>>>>", 7.5f)]
 		public static void Test_near_keyboard_typo_costs_1_5(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -60,7 +60,7 @@ namespace Mtgdb.Test
 		[TestCase("yyyyy", "nnnnnnnnnn", 10f)]
 		public static void Test_by_far_keys_typo_costs_2(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -72,7 +72,7 @@ namespace Mtgdb.Test
 		[TestCase("lllll", "1111111111", 5f)]
 		public static void Test_optycal_typo_costs_1(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -81,7 +81,7 @@ namespace Mtgdb.Test
 		[TestCase("ллллл", "ммммммм", 5f)]
 		public static void Test_acoustic_typo_costs_1(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -90,7 +90,7 @@ namespace Mtgdb.Test
 		[TestCase("vvvvv", "jjjjjjjjj", 7.5f)]
 		public static void Test_far_acoustic_typo_costs_1_5(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -99,7 +99,7 @@ namespace Mtgdb.Test
 		[TestCase("zzzzz", "жжжжжжжжж", 10f)]
 		public static void Test_translit_typo_costs_2(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}
@@ -107,7 +107,7 @@ namespace Mtgdb.Test
 		[TestCase("абвгд", "бавдг", 2f)]
 		public static void Test_swap_typo_costs_1(string val1, string val2, float expectedDistance)
 		{
-			var distance = new LevenstineDistance().GetPrefixDistance(val1, val2);
+			var distance = new LevenshteinDistance().GetPrefixDistance(val1, val2);
 			const float epsilon = 0.1f;
 			Assert.That(distance, Is.InRange(expectedDistance - epsilon, expectedDistance + epsilon));
 		}

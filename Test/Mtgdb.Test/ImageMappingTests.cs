@@ -72,6 +72,7 @@ namespace Mtgdb.Test
 		[TestCase("E02", GathererDir, "E02")]
 		[TestCase("RIX", GathererDir, "RIX")]
 		[TestCase("V17", GathererDir, "V17")]
+		[TestCase("A25", GathererDir, "A25")]
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs

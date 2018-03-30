@@ -23,8 +23,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.24 store keyword name for explicit regex keywords
-			set => _version = new IndexVersion(value, "0.24");
+			// 0.25 Masters 25
+			set => _version = new IndexVersion(value, "0.25");
 		}
 
 		public void InvalidateIndex()

@@ -40,9 +40,14 @@ namespace Mtgdb.Controls
 				(int) (original.Y * scale.Height));
 		}
 
-		public static SizeF Multiply(this SizeF size, float value)
+		public static SizeF MultiplyBy(this SizeF size, float value)
 		{
 			return new SizeF(value * size.Width, value * size.Height);
+		}
+
+		public static Size MultiplyBy(this Size size, float value)
+		{
+			return new Size((int) (value * size.Width), (int) (value * size.Height));
 		}
 
 		public static Rectangle Plus(this Rectangle rect, Point offset)
@@ -66,25 +71,25 @@ namespace Mtgdb.Controls
 			return new Point(left.X - right.X, left.Y - right.Y);
 		}
 
-		public static PointF Multiply(this PointF location, float value)
+		public static PointF MultiplyBy(this PointF location, float value)
 		{
 			return new PointF(value * location.X, value * location.Y);
 		}
 
 		public static int SizeInPixels(this Font font)
 		{
-			return ((int)(font.SizeInPoints * 96 / 72)).ByDpiWidth();
+			return ((int) (font.SizeInPoints * 96 / 72)).ByDpiWidth();
 		}
 
 		public static Size FitIn(this Size originalSize, Size viewPortSize)
 		{
 			var factor = Math.Min(
-				(float)viewPortSize.Width / originalSize.Width,
-				(float)viewPortSize.Height / originalSize.Height);
+				(float) viewPortSize.Width / originalSize.Width,
+				(float) viewPortSize.Height / originalSize.Height);
 
 			var zoomed = new Size(
-				(int)Math.Round(originalSize.Width * factor),
-				(int)Math.Round(originalSize.Height * factor));
+				(int) Math.Round(originalSize.Width * factor),
+				(int) Math.Round(originalSize.Height * factor));
 
 			return zoomed;
 		}

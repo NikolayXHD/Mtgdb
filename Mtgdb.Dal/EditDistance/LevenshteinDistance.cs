@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mtgdb.Dal
 {
-	public class LevenstineDistance
+	public class LevenshteinDistance
 	{
 		public float GetPrefixDistance(string userStr, string dictStr)
 		{

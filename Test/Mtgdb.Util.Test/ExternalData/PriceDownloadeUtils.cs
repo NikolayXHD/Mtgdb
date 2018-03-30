@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Mtgdb.Util
 {
 	[TestFixture]
-	public class PriceDownloaderTests: TestsBase
+	public class PriceDownloadeUtils: TestsBase
 	{
 		[Test]
 		public void DownloadPrices()

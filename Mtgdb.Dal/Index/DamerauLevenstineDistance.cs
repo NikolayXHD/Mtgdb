@@ -4,11 +4,11 @@ namespace Mtgdb.Dal.Index
 {
 	public class DamerauLevenstineDistance : IStringDistance
 	{
-		private readonly LevenstineDistance _editDistance;
+		private readonly LevenshteinDistance _editDistance;
 
 		public DamerauLevenstineDistance()
 		{
-			_editDistance = new LevenstineDistance();
+			_editDistance = new LevenshteinDistance();
 		}
 
 		/// <summary>
@@ -45,11 +45,11 @@ namespace Mtgdb.Dal.Index
 
 		private EditDistances getPrefixDistance(string s1, string s2)
 		{
-			if (s1.Length > LevenstineDistance.MaxInput)
-				s1 = s1.Substring(0, LevenstineDistance.MaxInput);
+			if (s1.Length > LevenshteinDistance.MaxInput)
+				s1 = s1.Substring(0, LevenshteinDistance.MaxInput);
 
-			if (s2.Length > LevenstineDistance.MaxDict)
-				s2 = s2.Substring(0, LevenstineDistance.MaxDict);
+			if (s2.Length > LevenshteinDistance.MaxDict)
+				s2 = s2.Substring(0, LevenshteinDistance.MaxDict);
 
 			lock (_editDistance)
 			{

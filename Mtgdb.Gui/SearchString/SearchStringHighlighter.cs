@@ -5,7 +5,7 @@ using Mtgdb.Controls;
 
 namespace Mtgdb.Gui
 {
-	class SearchStringHighlighter
+	public class SearchStringHighlighter
 	{
 		private readonly RichTextBox _findEditor;
 		public bool HighlightingInProgress { get; private set; }

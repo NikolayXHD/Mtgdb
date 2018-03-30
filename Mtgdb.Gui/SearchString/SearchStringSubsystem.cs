@@ -623,7 +623,7 @@ namespace Mtgdb.Gui
 
 		public string AppliedText
 		{
-			get { return _appliedText; }
+			get => _appliedText;
 			set
 			{
 				_appliedText = value;

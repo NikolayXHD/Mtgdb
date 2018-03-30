@@ -12,7 +12,7 @@ namespace Mtgdb.Controls
 				SetProcessDPIAware();
 
 			_scale = getScale();
-			_scaleHalf = _scale.Multiply(0.5f);
+			_scaleHalf = _scale.MultiplyBy(0.5f);
 		}
 
 		public static int ByDpiWidth(this int width)

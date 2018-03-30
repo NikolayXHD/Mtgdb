@@ -304,6 +304,11 @@ namespace Mtgdb.Dal
 				//{
 				//	generatedManaMismatchCards.Add(card);
 				//}
+
+				card.Namesakes = CardsByName[card.NameNormalized]
+					.Where(c => c != card)
+					.OrderByDescending(c => c.ReleaseDate)
+					.ToArray();
 			}
 
 			IsLocalizationLoadingComplete = true;

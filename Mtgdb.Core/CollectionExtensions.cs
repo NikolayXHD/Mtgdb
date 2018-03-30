@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -150,6 +151,11 @@ namespace Mtgdb
 				return null;
 
 			return value;
+		}
+
+		public static TResult Invoke<TObj, TParam, TResult>(this TObj target, Func<TObj, TParam, TResult> getter, TParam param)
+		{
+			return getter(target, param);
 		}
 	}
 }

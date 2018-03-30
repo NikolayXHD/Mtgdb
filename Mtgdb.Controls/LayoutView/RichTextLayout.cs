@@ -97,7 +97,7 @@ namespace Mtgdb.Controls
 						printBatch.Add(iconRect,
 							(rect, hb, he) =>
 							{
-								var shadowOffset = _iconShadowOffset.Multiply(_lineHeight / 16f);
+								var shadowOffset = _iconShadowOffset.MultiplyBy(_lineHeight / 16f);
 								rect.Offset(shadowOffset);
 								_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
 							});

@@ -18,7 +18,7 @@ namespace Mtgdb.Dal
 			if (EnabledGroups == null)
 				return Directories;
 
-			var groups = new HashSet<string>(enabledGroups ?? EnabledGroups.Split(';', ' '));
+			var groups = new HashSet<string>(enabledGroups ?? EnabledGroups.Split(';', ' ', ',', '|'));
 
 			return Directories
 				.Where(_ => groups.Contains(_.Group ?? string.Empty))

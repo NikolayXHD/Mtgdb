@@ -100,5 +100,7 @@ namespace Mtgdb.Dal
 			double alphaRel = 1 - outness;
 			return alphaRel;
 		}
+
+		protected override int ColorSimilarityThreshold => 25;
 	}
 }

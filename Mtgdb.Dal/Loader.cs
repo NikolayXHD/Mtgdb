@@ -90,7 +90,6 @@ namespace Mtgdb.Dal
 					_localizationRepository.Load();
 
 					_repository.FillLocalizations(_localizationRepository);
-
 					_localizationRepository.Clear();
 
 					if (!_keywordSearcher.IsUpToDate)

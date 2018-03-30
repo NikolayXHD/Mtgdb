@@ -96,7 +96,7 @@
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />
-    <Compile Include="ExternalData\PriceDownloaderTests.cs" />
+    <Compile Include="ExternalData\PriceDownloadeUtils.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />
     <Compile Include="Tcg\TcgCard.cs" />
     <Compile Include="Tcg\TcgParser.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Images\ImageDownloadingUtils.cs" />
     <Compile Include="Images\ImageMappingUtils.cs" />
     <Compile Include="Images\WaifuScaler.cs" />
-    <Compile Include="Images\ArtistDetectionUtils.cs" />
+    <Compile Include="Images\OcrUtils.cs" />
     <Compile Include="Images\BwFilter.cs" />
     <Compile Include="Images\ColorDetector.cs" />
     <Compile Include="Images\DownsamplingTests.cs" />

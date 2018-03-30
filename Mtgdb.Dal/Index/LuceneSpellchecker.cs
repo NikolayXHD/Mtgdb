@@ -26,8 +26,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.23 udpated translations
-			set => Version = new IndexVersion(value, "0.23");
+			// 0.25 Masters 25
+			set => Version = new IndexVersion(value, "0.25");
 		}
 
 		public bool IsUpToDate => Version.IsUpToDate;
