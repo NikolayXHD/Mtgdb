@@ -11,32 +11,18 @@ namespace Mtgdb.Dal.Index
 {
 	public static class DocumentFactory
 	{
-		private static readonly List<string> _langs;
-
-		private static readonly HashSet<string> _intFields = new HashSet<string>(Str.Comparer);
-		private static readonly HashSet<string> _floatFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> TextFields = new HashSet<string>(Str.Comparer);
-
-		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> LimitedValuesFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> NotAnalyzedFields = new HashSet<string>(Str.Comparer);
-
-		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
-		
-
 		static DocumentFactory()
 		{
 			_langs = CardLocalization.GetAllLanguages().ToList();
 
-			addTextField(nameof(Card.Color), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.Color), analyze: false);
 
-			addTextField(nameof(Card.SetName), isLimitedValues: true);
-			addTextField(nameof(Card.SetCode), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.Artist), isLimitedValues: true);
-			
+			addTextField(nameof(Card.SetName));
+			addTextField(nameof(Card.SetCode), analyze: false);
+			addTextField(nameof(Card.Artist));
+
 			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
-			addTextField(nameof(Card.OriginalType), nameof(Card.Type), isLimitedValues: true);
+			addTextField(nameof(Card.OriginalType), nameof(Card.Type));
 
 			addTextField(nameof(Card.NameEn),
 				nameof(Card.Name));
@@ -48,36 +34,40 @@ namespace Mtgdb.Dal.Index
 				nameof(Card.Flavor));
 
 			addTextField(nameof(Card.TypeEn),
-				nameof(Card.Type), isLimitedValues: true);
+				nameof(Card.Type));
 
 			addTextField(nameof(Card.Supertypes),
-				nameof(Card.Type), isLimitedValues: true, analyze: false);
+				nameof(Card.Type),
+				analyze: false);
 
 			addTextField(nameof(Card.Types),
-				nameof(Card.Type), isLimitedValues: true, analyze: false);
+				nameof(Card.Type),
+				analyze: false);
 
 			addTextField(nameof(Card.Subtypes),
-				nameof(Card.Type), isLimitedValues: true, analyze: false);
+				nameof(Card.Type),
+				analyze: false);
 
 			addTextField(nameof(Card.LegalIn),
-				nameof(Card.Rulings), isLimitedValues: true);
+				nameof(Card.Rulings));
 
 			addTextField(nameof(Card.RestrictedIn),
-				nameof(Card.Rulings), isLimitedValues: true);
+				nameof(Card.Rulings));
 
 			addTextField(nameof(Card.BannedIn),
-				nameof(Card.Rulings), isLimitedValues: true);
+				nameof(Card.Rulings));
 
 			addTextField(nameof(Card.GeneratedMana),
-				nameof(Card.Text), isLimitedValues: true, analyze: false);
+				nameof(Card.Text),
+				analyze: false);
 
-			addTextField(nameof(Card.Power), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.Toughness), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.Loyalty), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.ManaCost), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.Rarity), isLimitedValues: true);
-			addTextField(nameof(Card.ReleaseDate), isLimitedValues: true, analyze: false);
-			addTextField(nameof(Card.Layout), isLimitedValues: true, analyze: false);
+			addTextField(nameof(Card.Power), analyze: false);
+			addTextField(nameof(Card.Toughness), analyze: false);
+			addTextField(nameof(Card.Loyalty), analyze: false);
+			addTextField(nameof(Card.ReleaseDate), analyze: false);
+			addTextField(nameof(Card.Layout), analyze: false);
+			addTextField(nameof(Card.ManaCost));
+			addTextField(nameof(Card.Rarity));
 
 			addFloatField(nameof(Card.PowerNum),
 				nameof(Card.Power));
@@ -100,7 +90,7 @@ namespace Mtgdb.Dal.Index
 					continue;
 
 				addSpecificTextField(nameof(Card.Name), lang);
-				addSpecificTextField(nameof(Card.Type), lang, isLimitedValues: true);
+				addSpecificTextField(nameof(Card.Type), lang);
 				addSpecificTextField(nameof(Card.Text), lang);
 				addSpecificTextField(nameof(Card.Flavor), lang);
 			}
@@ -305,7 +295,7 @@ namespace Mtgdb.Dal.Index
 		{
 			fieldName = fieldName.ToLowerInvariant();
 			var field = new Int32Field(fieldName, fieldValue, Field.Store.YES);
-			
+
 			doc.Add(field);
 		}
 
@@ -366,7 +356,7 @@ namespace Mtgdb.Dal.Index
 
 
 
-		private static void addTextField(string fieldName, string displayField = null, bool isLimitedValues = false, bool analyze = true)
+		private static void addTextField(string fieldName, string displayField = null, bool analyze = true)
 		{
 			TextFields.Add(fieldName);
 			UserFields.Add(fieldName);
@@ -374,14 +364,11 @@ namespace Mtgdb.Dal.Index
 			if (displayField != null)
 				DisplayFieldByIndexField.Add(fieldName, displayField);
 
-			if (isLimitedValues)
-				LimitedValuesFields.Add(fieldName);
-
 			if (!analyze)
 				NotAnalyzedFields.Add(fieldName);
 		}
 
-		private static void addSpecificTextField(string fieldName, string language, bool isLimitedValues = false)
+		private static void addSpecificTextField(string fieldName, string language)
 		{
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
@@ -396,9 +383,6 @@ namespace Mtgdb.Dal.Index
 			TextFields.Add(localizedFieldName);
 
 			DisplayFieldByIndexField.Add(localizedFieldName, fieldName);
-
-			if (isLimitedValues)
-				LimitedValuesFields.Add(localizedFieldName);
 		}
 
 		private static void addFloatField(string fieldName, string displayFieldName = null)
@@ -488,5 +472,50 @@ namespace Mtgdb.Dal.Index
 		{
 			return _floatFields.Contains(field);
 		}
+
+		private static readonly List<string> _langs;
+
+		private static readonly HashSet<string> _intFields = new HashSet<string>(Str.Comparer);
+		private static readonly HashSet<string> _floatFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> TextFields = new HashSet<string>(Str.Comparer);
+
+		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> NotAnalyzedFields = new HashSet<string>(Str.Comparer);
+
+		public static readonly Dictionary<string, Func<Card, string>> LimitedValueGetters =
+			new Dictionary<string, Func<Card, string>>(Str.Comparer)
+			{
+				[nameof(Card.SetName)] = c => c.SetName,
+				[nameof(Card.SetCode)] = c => c.SetCode,
+				[nameof(Card.Artist)] = c => c.Artist,
+				[nameof(Card.Supertypes)] = c => c.Supertypes,
+				[nameof(Card.Types)] = c => c.Types,
+				[nameof(Card.Power)] = c => c.Power,
+				[nameof(Card.Toughness)] = c => c.Toughness,
+				[nameof(Card.Loyalty)] = c => c.Loyalty,
+				[nameof(Card.Rarity)] = c => c.Rarity,
+				[nameof(Card.ReleaseDate)] = c => c.ReleaseDate,
+				[nameof(Card.Layout)] = c => c.Layout
+			};
+
+		public static readonly Dictionary<string, Func<Card, string, string>> LimitedLocalizedValueGetters =
+			new Dictionary<string, Func<Card, string, string>>(Str.Comparer);
+
+		public static readonly HashSet<string> CombinatoricValueFields = new HashSet<string>
+		{
+			nameof(Card.OriginalType),
+			nameof(Card.TypeEn),
+			nameof(Card.Type),
+			nameof(Card.Subtypes),
+			nameof(Card.LegalIn),
+			nameof(Card.RestrictedIn),
+			nameof(Card.BannedIn),
+			nameof(Card.Color),
+			nameof(Card.GeneratedMana),
+			nameof(Card.ManaCost)
+		};
+
+		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
 	}
 }

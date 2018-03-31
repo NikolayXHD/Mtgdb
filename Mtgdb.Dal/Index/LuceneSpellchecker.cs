@@ -26,8 +26,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.25 Masters 25
-			set => Version = new IndexVersion(value, "0.25");
+			// 0.26 mana symols in ManaCost are treated as separate words
+			set => Version = new IndexVersion(value, "0.26");
 		}
 
 		public bool IsUpToDate => Version.IsUpToDate;
@@ -39,13 +39,14 @@ namespace Mtgdb.Dal.Index
 
 		internal void LoadIndex(Analyzer analyzer, CardRepository repository, DirectoryReader indexReader)
 		{
+			_cardRepository = repository;
 			_reader = indexReader;
 
 			if (Version.IsUpToDate)
 				_spellchecker = openSpellchecker();
 			else
 				_spellchecker = createSpellchecker(repository, analyzer);
-			
+
 			IsLoaded = true;
 		}
 
@@ -59,6 +60,9 @@ namespace Mtgdb.Dal.Index
 
 		private Spellchecker createSpellchecker(CardRepository repository, Analyzer analyzer)
 		{
+			if (!repository.IsLocalizationLoadingComplete)
+				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
+
 			IsLoading = true;
 
 			Version.CreateDirectory();
@@ -68,8 +72,10 @@ namespace Mtgdb.Dal.Index
 
 			var fields = new HashSet<string>();
 			fields.UnionWith(DocumentFactory.TextFields);
-			fields.ExceptWith(DocumentFactory.LimitedValuesFields);
-			
+			fields.ExceptWith(DocumentFactory.LimitedValueGetters.Keys);
+			fields.ExceptWith(DocumentFactory.LimitedLocalizedValueGetters.Keys);
+			fields.ExceptWith(DocumentFactory.CombinatoricValueFields);
+
 			spellchecker.BeginIndex();
 
 			var indexedWords = new HashSet<string>(Str.Comparer);
@@ -233,8 +239,23 @@ namespace Mtgdb.Dal.Index
 			if (field.IsNumericField())
 				return getNumericSuggest(value, field, language, maxCount);
 
-			if (DocumentFactory.LimitedValuesFields.Contains(field))
-				return fullScan(field, value, language, maxCount);
+			if (DocumentFactory.LimitedValueGetters.ContainsKey(field))
+			{
+				var result = getLimitedValueFieldValues(field, value, maxCount);
+				return result;
+			}
+
+			if (DocumentFactory.LimitedLocalizedValueGetters.ContainsKey(field))
+			{
+				var result = getLimitedLocalizedValueFieldValues(field, value, language, maxCount);
+				return result;
+			}
+
+			if (DocumentFactory.CombinatoricValueFields.Contains(field))
+			{
+				var result = fullScan(field, value, language, maxCount);
+				return result;
+			}
 
 			if (string.IsNullOrEmpty(value))
 			{
@@ -243,8 +264,8 @@ namespace Mtgdb.Dal.Index
 			}
 			else
 			{
-				var values = _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
-				return values;
+				var result = _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
+				return result;
 			}
 		}
 
@@ -254,6 +275,36 @@ namespace Mtgdb.Dal.Index
 				.Distinct()
 				.ToList();
 
+			return getMostSimilarValues(values, value, maxCount);
+		}
+
+		private IList<string> getLimitedLocalizedValueFieldValues(string field, string value, string language, int maxCount)
+		{
+			if (!_cardRepository.IsLoadingComplete)
+				return _emptySuggest.Values;
+
+			var values = getLimitedLocalizedValues(field, language);
+
+			return getMostSimilarValues(values, value, maxCount);
+		}
+
+		private IList<string> getLimitedValueFieldValues(string field, string value, int maxCount)
+		{
+			if (!_cardRepository.IsLoadingComplete)
+				return _emptySuggest.Values;
+
+			if (!_cardRepository.IsLoadingComplete)
+				return _emptySuggest.Values;
+
+			var values = getLimitedValues(field);
+
+			return getMostSimilarValues(values, value, maxCount);
+		}
+
+
+
+		private IList<string> getMostSimilarValues(List<string> values, string value, int maxCount)
+		{
 			if (!string.IsNullOrEmpty(value))
 			{
 				var similarities = values.Select(_ => _stringDistance.GetDistance(value, _))
@@ -268,6 +319,42 @@ namespace Mtgdb.Dal.Index
 				values.Sort(Str.Comparer);
 
 			return values.Take(maxCount).ToArray();
+		}
+
+		private List<string> getLimitedValues(string field)
+		{
+			if (!_limitedValueFieldValues.TryGetValue(field, out var values))
+			{
+				values = _cardRepository.Cards
+					.Select(DocumentFactory.LimitedValueGetters[field])
+					.Where(_ => _ != null)
+					.Select(_ => _.Trim().ToLowerInvariant())
+					.Distinct()
+					.ToList();
+
+				_limitedValueFieldValues[field] = values;
+			}
+
+			return values;
+		}
+
+		private List<string> getLimitedLocalizedValues(string field, string language)
+		{
+			string key = $"{field}.{language}";
+
+			if (!_limitedValueFieldValues.TryGetValue(key, out var values))
+			{
+				values = _cardRepository.Cards
+					.Select(c => DocumentFactory.LimitedLocalizedValueGetters[field](c, language))
+					.Where(_ => _ != null)
+					.Select(_ => _.Trim().ToLowerInvariant())
+					.Distinct()
+					.ToList();
+
+				_limitedValueFieldValues[field] = values;
+			}
+
+			return values;
 		}
 
 		private IList<string> getNumericSuggest(string value, string field, string language, int maxCount)
@@ -383,12 +470,9 @@ namespace Mtgdb.Dal.Index
 
 		private static bool isValueNumeric(string queryText)
 		{
-			int intVal;
-			float floatVal;
-
 			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out intVal) ||
-				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out floatVal);
+				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
+				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
 			return valueIsNumeric;
 		}
 
@@ -408,7 +492,9 @@ namespace Mtgdb.Dal.Index
 		private DirectoryReader _reader;
 
 		private readonly DamerauLevenstineDistance _stringDistance;
-
 		private static readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null, new string[0]);
+
+		private readonly Dictionary<string, List<string>> _limitedValueFieldValues = new Dictionary<string, List<string>>();
+		private CardRepository _cardRepository;
 	}
 }

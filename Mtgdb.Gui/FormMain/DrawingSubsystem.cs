@@ -537,10 +537,7 @@ namespace Mtgdb.Gui
 			string suffixPattern = getPattern(suffixTokens);
 			string radixPattern = getPattern(radixTokens);
 
-			prefixPattern = "^" + prefixPattern;
-			suffixPattern += "$";
-
-			string result = $"(?<={prefixPattern}){radixPattern}(?={suffixPattern})";
+			string result = $"(?<=^{prefixPattern}){radixPattern}(?={suffixPattern}$)";
 			return result;
 		}
 

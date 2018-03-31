@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.25 Masters 25
-			set => Version = new IndexVersion(value, "0.25");
+			// 0.26 mana symols in ManaCost are treated as separate words
+			set => Version = new IndexVersion(value, "0.26");
 		}
 
 
@@ -70,6 +70,9 @@ namespace Mtgdb.Dal.Index
 
 		private Directory createIndex(CardRepository repository)
 		{
+			if (!repository.IsLocalizationLoadingComplete)
+				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
+
 			Version.CreateDirectory();
 
 			var index = FSDirectory.Open(Version.Directory);

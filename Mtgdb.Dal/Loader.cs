@@ -64,10 +64,10 @@ namespace Mtgdb.Dal
 					_imageRepository.LoadZoom();
 
 					if (_indexesUpToDate)
-						_luceneSearcher.LoadIndexes(null);
+						_luceneSearcher.LoadIndexes(_repository);
 
 					if (_keywordSearcher.IsUpToDate)
-						_keywordSearcher.Load(null);
+						_keywordSearcher.Load(_repository);
 
 					_priceRepository.Load();
 				},

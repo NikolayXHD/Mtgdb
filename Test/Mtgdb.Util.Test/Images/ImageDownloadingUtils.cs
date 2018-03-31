@@ -56,21 +56,22 @@ namespace Mtgdb.Util
 			string publishedDir,
 			string publishedSubdir)
 		{
-			var sourceImages = Directory.GetFiles(Path.Combine(sourceDir, subdir)).ToArray();
-			var publishDirectory = Path.Combine(PublishedDir, publishedSubdir);
+			string sourceSubdir = Path.Combine(sourceDir, subdir);
+			string targetSubdir = Path.Combine(targetDir, subdir);
+			string publishSubdir = Path.Combine(PublishedDir, publishedSubdir);
+
+			Directory.CreateDirectory(targetSubdir);
+
+			var sourceImages = Directory.GetFiles(sourceSubdir);
 
 			foreach (var sourceImage in sourceImages)
 			{
-				var targetImage = sourceImage
-					.Replace(sourceDir, targetDir);
+				var targetImage = sourceImage.Replace(sourceDir, targetDir);
 
 				if (!File.Exists(targetImage))
-				{
-					Directory.CreateDirectory(Path.GetDirectoryName(targetImage));
 					WaifuScaler.Scale(sourceImage, targetImage);
-				}
 
-				convertToJpg(targetImage, publishDirectory);
+				convertToJpg(targetImage, publishSubdir);
 			}
 		}
 

@@ -106,6 +106,9 @@ namespace Mtgdb.Dal
 
 		private RAMDirectory createKeywordsFrom(CardRepository repository)
 		{
+			if (!repository.IsLoadingComplete)
+				throw new InvalidOperationException($"{nameof(CardRepository)} must be loaded first");
+
 			var keywordsList = new List<CardKeywords>();
 
 			foreach (var set in repository.SetsByCode.Values)

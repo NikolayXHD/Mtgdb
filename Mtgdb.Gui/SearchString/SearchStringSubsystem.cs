@@ -499,6 +499,7 @@ namespace Mtgdb.Gui
 				return;
 
 			selectedSuggest = StringEscaper.Escape(selectedSuggest);
+
 			applySuggestSelection(selectedSuggest, searchStringState);
 		}
 
@@ -516,23 +517,31 @@ namespace Mtgdb.Gui
 			string prefix = suggestSource.Text.Substring(0, left);
 			string suffix = suggestSource.Text.Substring(left + length);
 
-			string rightTerminator;
-			if (token?.Type.IsAny(TokenType.Field) == true)
-				rightTerminator = @":";
+			bool suggestContainsWhitespace = selectedSuggest.Contains(" ");
+
+			string rightDelimiter;
+
+			if (suggestContainsWhitespace)
+				rightDelimiter = "\"";
+			else if (token?.Type.IsAny(TokenType.Field) == true)
+				rightDelimiter = @":";
 			else
-				rightTerminator = @" ";
+				rightDelimiter = @" ";
 			
-			if (!suffix.StartsWith(rightTerminator) && !selectedSuggest.EndsWith(rightTerminator))
-				selectedSuggest += rightTerminator;
+			if (!suffix.StartsWith(rightDelimiter))
+				selectedSuggest += rightDelimiter;
 
-			string leftTerminator;
-			if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.IsAny(TokenType.CloseQuote | TokenType.Close) == true)
-				leftTerminator = @" ";
+			string leftDelimiter;
+
+			if (suggestContainsWhitespace)
+				leftDelimiter = "\"";
+			else if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.IsAny(TokenType.CloseQuote | TokenType.Close) == true)
+				leftDelimiter = @" ";
 			else
-				leftTerminator = string.Empty;
+				leftDelimiter = string.Empty;
 
-			if (!string.IsNullOrEmpty(prefix) && !string.IsNullOrEmpty(leftTerminator) && !prefix.StartsWith(leftTerminator))
-				selectedSuggest = leftTerminator + selectedSuggest;
+			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter))
+				selectedSuggest = leftDelimiter + selectedSuggest;
 
 			var replacement = prefix + selectedSuggest + suffix;
 				

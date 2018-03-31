@@ -58,21 +58,27 @@ namespace Mtgdb.Dal.Index
 
 				char c = _ioBuffer[_bufferIndex++];
 
-				if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c))
+				if (c == '}')
+					return terminateToken(c);
+				else if (c == '{')
+				{
+					if (_length > 0)
+						return terminatePreviousToken();
+					else
+					{
+						push(c);
+						if (_length == MaxWordLen)
+							return flush();
+					}
+				}
+				else if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c))
 				{
 					if (c.IsCj())
 					{
 						if (_length > 0)
-						{
-							_bufferIndex--;
-							_offset--;
-							return flush();
-						}
+							return terminatePreviousToken();
 						else
-						{
-							push(c);
-							return flush();
-						}
+							return terminateToken(c);
 					}
 					else
 					{
@@ -87,6 +93,19 @@ namespace Mtgdb.Dal.Index
 						return flush();
 				}
 			}
+		}
+
+		private bool terminatePreviousToken()
+		{
+			_bufferIndex--;
+			_offset--;
+			return flush();
+		}
+
+		private bool terminateToken(char c)
+		{
+			push(c);
+			return flush();
 		}
 
 		public override void End()
