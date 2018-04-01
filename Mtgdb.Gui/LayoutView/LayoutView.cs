@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -26,8 +27,8 @@ namespace Mtgdb.Gui
 
 		public List<FieldSortInfo> SortInfo
 		{
-			get { return _view.SortInfo; }
-			set { _view.SortInfo = value; }
+			get => _view.SortInfo;
+			set => _view.SortInfo = value;
 		}
 
 		public Control Control => _view;
@@ -39,19 +40,19 @@ namespace Mtgdb.Gui
 
 		public bool AllowPartialCards
 		{
-			get { return _view.LayoutOptions.AllowPartialCards; }
-			set { _view.LayoutOptions.AllowPartialCards = value; }
+			get => _view.LayoutOptions.AllowPartialCards;
+			set => _view.LayoutOptions.AllowPartialCards = value;
 		}
 
 		public Size PartialCardSize
 		{
-			get { return _view.LayoutOptions.PartialCardsThreshold; }
-			set { _view.LayoutOptions.PartialCardsThreshold = value; }
+			get => _view.LayoutOptions.PartialCardsThreshold;
+			set => _view.LayoutOptions.PartialCardsThreshold = value;
 		}
 
 		public int VisibleRecordIndex
 		{
-			get { return _view.CardIndex; }
+			get => _view.CardIndex;
 			set
 			{
 				if (_view.CardIndex == value)
@@ -65,74 +66,80 @@ namespace Mtgdb.Gui
 
 		public event Action<object> VisibleRecordIndexChanged
 		{
-			add { _view.CardIndexChanged += value; }
-			remove { _view.CardIndexChanged -= value; }
+			add => _view.CardIndexChanged += value;
+			remove => _view.CardIndexChanged -= value;
 		}
 
 		public event Action<object, CustomDrawArgs> CustomDrawField
 		{
-			add { _view.CustomDrawField += value; }
-			remove { _view.CustomDrawField -= value; }
+			add => _view.CustomDrawField += value;
+			remove => _view.CustomDrawField -= value;
 		}
 
 		public event Action<object, int> RowDataLoaded
 		{
-			add { _view.RowDataLoaded += value; }
-			remove { _view.RowDataLoaded -= value; }
+			add => _view.RowDataLoaded += value;
+			remove => _view.RowDataLoaded -= value;
 		}
 
 		public event Action<object> SortChanged
 		{
-			add { _view.SortChanged += value; }
-			remove { _view.SortChanged -= value; }
+			add => _view.SortChanged += value;
+			remove => _view.SortChanged -= value;
 		}
 
 		public event Action<object, SearchArgs> SearchClicked
 		{
-			add { _view.SearchClicked += value; }
-			remove { _view.SearchClicked -= value; }
+			add => _view.SearchClicked += value;
+			remove => _view.SearchClicked -= value;
 		}
 
 		public event MouseEventHandler MouseDown
 		{
-			add { _view.MouseDown += value; }
-			remove { _view.MouseDown -= value; }
+			add => _view.MouseDown += value;
+			remove => _view.MouseDown -= value;
 		}
 
 		public event MouseEventHandler MouseUp
 		{
-			add { _view.MouseUp += value; }
-			remove { _view.MouseUp -= value; }
+			add => _view.MouseUp += value;
+			remove => _view.MouseUp -= value;
 		}
 
 		public event MouseEventHandler MouseMove
 		{
-			add { _view.MouseMove += value; }
-			remove { _view.MouseMove -= value; }
+			add => _view.MouseMove += value;
+			remove => _view.MouseMove -= value;
 		}
 
 		public event EventHandler MouseEnter
 		{
-			add { _view.MouseEnter += value; }
-			remove { _view.MouseEnter -= value; }
+			add => _view.MouseEnter += value;
+			remove => _view.MouseEnter -= value;
 		}
 
 		public event EventHandler MouseLeave
 		{
-			add { _view.MouseLeave += value; }
-			remove { _view.MouseLeave -= value; }
+			add => _view.MouseLeave += value;
+			remove => _view.MouseLeave -= value;
 		}
 
 		public event Action<object, HitInfo, MouseEventArgs> MouseClicked
 		{
-			add { _view.MouseClicked += value; }
-			remove { _view.MouseClicked -= value; }
+			add => _view.MouseClicked += value;
+			remove => _view.MouseClicked -= value;
+		}
+
+		public event Action<object, HitInfo, CancelEventArgs> SelectionStarted
+		{
+			add => _view.SelectionStarted += value;
+			remove => _view.SelectionStarted -= value;
 		}
 
 		public event EventHandler LostFocus
 		{
-			add { _view.LostFocus += value; }
-			remove { _view.LostFocus -= value; }
+			add => _view.LostFocus += value;
+			remove => _view.LostFocus -= value;
 		}
 
 		public object GetRow(int cardIndex)
@@ -183,7 +190,7 @@ namespace Mtgdb.Gui
 
 		public bool TextualFieldsVisible
 		{
-			get { return _view.LayoutControlType == typeof(CardLayout); }
+			get => _view.LayoutControlType == typeof(CardLayout);
 			set
 			{
 				var layout = value ? typeof(CardLayout) : typeof(DeckLayout);
@@ -250,6 +257,18 @@ namespace Mtgdb.Gui
 		{
 			return _view.GetSortButtonBounds(hitInfo);
 		}
+
+
+
+		public string GetSelectedText() => _view.GetSelectedText();
+
+		public void ResetSelectedText() => _view.ResetSelectedText();
+
+		public bool IsSelectingText() => _view.IsSelectingText();
+
+		public void SelectAllText() => _view.SelectAllTextInField();
+
+
 
 		private readonly LayoutViewControl _view;
 	}

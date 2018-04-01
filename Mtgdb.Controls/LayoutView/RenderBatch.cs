@@ -6,9 +6,6 @@ namespace Mtgdb.Controls
 {
 	internal class RenderBatch
 	{
-		private readonly IList<RenderAction> _actions = new List<RenderAction>();
-		public bool IsHighlighted { get; }
-
 		public RenderBatch(bool isHighlighted)
 		{
 			IsHighlighted = isHighlighted;
@@ -30,5 +27,8 @@ namespace Mtgdb.Controls
 			foreach (var action in _actions)
 				action.Invoke(highlightBegin, highlightEnd);
 		}
+
+		public bool IsHighlighted { get; }
+		private readonly IList<RenderAction> _actions = new List<RenderAction>();
 	}
 }

@@ -1053,7 +1053,7 @@ namespace Mtgdb.Gui
 			this._menuPaste.Controls.Add(this._layoutPaste);
 			this._menuPaste.Location = new System.Drawing.Point(35, 287);
 			this._menuPaste.Name = "_menuPaste";
-			this._menuPaste.Size = new System.Drawing.Size(305, 404);
+			this._menuPaste.Size = new System.Drawing.Size(305, 461);
 			this._menuPaste.TabIndex = 37;
 			this._menuPaste.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -1083,7 +1083,7 @@ namespace Mtgdb.Gui
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.Size = new System.Drawing.Size(303, 402);
+			this._layoutPaste.Size = new System.Drawing.Size(303, 459);
 			this._layoutPaste.TabIndex = 0;
 			// 
 			// _buttonMenuCopyCollection
@@ -1163,7 +1163,7 @@ namespace Mtgdb.Gui
 			this._labelPasteInfo.Location = new System.Drawing.Point(3, 219);
 			this._labelPasteInfo.Margin = new System.Windows.Forms.Padding(3);
 			this._labelPasteInfo.Name = "_labelPasteInfo";
-			this._labelPasteInfo.Size = new System.Drawing.Size(295, 180);
+			this._labelPasteInfo.Size = new System.Drawing.Size(295, 237);
 			this._labelPasteInfo.TabIndex = 35;
 			this._labelPasteInfo.Text = resources.GetString("_labelPasteInfo.Text");
 			this._labelPasteInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1285,7 +1285,7 @@ namespace Mtgdb.Gui
 			this._flowTitleLeft.TabIndex = 0;
 			this._flowTitleLeft.WrapContents = false;
 			// 
-			// _buttonAddWindow
+			// _buttonOpenWindow
 			// 
 			this._buttonOpenWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonOpenWindow.Appearance = System.Windows.Forms.Appearance.Button;

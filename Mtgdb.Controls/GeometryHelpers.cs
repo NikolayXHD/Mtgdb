@@ -71,6 +71,16 @@ namespace Mtgdb.Controls
 			return new Point(left.X - right.X, left.Y - right.Y);
 		}
 
+		public static Size Minus(this Size left, Size right)
+		{
+			return new Size(left.Width - right.Width, left.Height - right.Height);
+		}
+
+		public static Size ToSize(this Point value)
+		{
+			return new Size(value);
+		}
+
 		public static PointF MultiplyBy(this PointF location, float value)
 		{
 			return new PointF(value * location.X, value * location.Y);

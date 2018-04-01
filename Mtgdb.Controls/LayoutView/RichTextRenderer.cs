@@ -15,7 +15,7 @@ namespace Mtgdb.Controls
 			{
 				var token = readingContext.Current;
 
-				bool isCjk = renderContext.Text[token.Index + token.Length - 1].IsCjk();
+				bool isCj = renderContext.Text[token.Index + token.Length - 1].IsCj();
 
 				if (token.Type == RichTextTokenType.Word)
 				{
@@ -27,7 +27,7 @@ namespace Mtgdb.Controls
 						currentWord.AddRange(tokens);
 					}
 
-					if (isCjk)
+					if (isCj)
 					{
 						if (currentWord.Count > 0 && !textTokenPrinter.PrintWord(currentWord))
 						{

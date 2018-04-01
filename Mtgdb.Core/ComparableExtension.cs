@@ -15,5 +15,17 @@ namespace Mtgdb
 
 			return value;
 		}
+
+		public static bool IsWithin<TVal>(this TVal value, TVal min, TVal max)
+			where TVal : struct, IComparable<TVal>
+		{
+			if (min.CompareTo(value) > 0)
+				return false;
+
+			if (max.CompareTo(value) < 0)
+				return false;
+
+			return true;
+		}
 	}
 }

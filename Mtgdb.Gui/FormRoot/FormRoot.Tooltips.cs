@@ -43,7 +43,13 @@ namespace Mtgdb.Gui
 
 			TooltipController.SetTooltip("Enable / disable tooltips",
 				"Tooltips are helpful but also annoying.\r\n" +
-				"Uncheck this button to disable tooltips.",
+				"Uncheck this button to disable tooltips.\r\n\r\n" +
+				"Tooltips on card text have selectable text. " +
+				"They can be used to select a part of a long text not fitting into the field area.\r\n\r\n"+
+				"Hold Alt key to temporarily disable / enable tooltips.\r\n\r\n" +
+				"When selecting text in a small field disabling tooltip by holding Alt key helps avoid distraction from tooltips.\r\n\r\n" +
+				"Temporarily enabling tooltip by holding Alt key helps to see one particular tooltip for a very large " +
+				"text field, e.g. some long Rulings, without enabling tooltips in general.",
 				_buttonTooltips);
 
 			TooltipController.SetTooltip("Show / hide filter panels",

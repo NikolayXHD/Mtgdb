@@ -38,8 +38,15 @@ namespace Mtgdb.Gui
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			var position = Cursor.Position;
-			showFieldTooltip(position);
+			if (_layoutView.IsSelectingText())
+			{
+				Hide?.Invoke();
+			}
+			else
+			{
+				var position = Cursor.Position;
+				showFieldTooltip(position);
+			}
 		}
 
 		private void mouseLeave(object sender, EventArgs e)
@@ -52,7 +59,7 @@ namespace Mtgdb.Gui
 			var cursorPosition = _layoutView.Control.PointToClient(position);
 			var hitInfo = _layoutView.CalcHitInfo(cursorPosition);
 
-			var card = (Card)_layoutView.GetRow(hitInfo.RowHandle);
+			var card = (Card) _layoutView.GetRow(hitInfo.RowHandle);
 			if (!hitInfo.AlignButtonDirection.HasValue && (card == null || hitInfo.IsOverImage() || !hitInfo.FieldBounds.HasValue))
 			{
 				Hide?.Invoke();
@@ -67,10 +74,12 @@ namespace Mtgdb.Gui
 					ObjectBounds = _layoutView.GetSortButtonBounds(hitInfo),
 					Control = _layoutView.Control,
 					Title = "Sort by " + hitInfo.FieldName,
-					Text = "Click to sort by this field.\r\n\r\n" +
-					       "Shift+Click to ADD this field to sorting. Currently sorted fields will have higher sort priority.\r\n\r\n" +
-					       "Ctrl+Click to REMOVE this field from sorting. Other fields sort order will remain unchanged.\r\n\r\n" +
-					       "Repeated click on sort button cycles sort order between Ascending, Descending, None.",
+					Text =
+						"Click to sort by this field.\r\n\r\n" +
+						"Shift+Click to ADD this field to sorting. Currently sorted fields will have higher sort priority.\r\n\r\n" +
+						"Ctrl+Click to REMOVE this field from sorting. Other fields sort order will remain unchanged.\r\n\r\n" +
+						"Repeated click on sort button cycles sort order between Ascending, Descending, None.\r\n\r\n" +
+						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.",
 					Clickable = false
 				});
 			}
@@ -83,9 +92,11 @@ namespace Mtgdb.Gui
 					Control = _layoutView.Control,
 					Title = "Add to search",
 					Text = "Click to EXTEND search result by cards matching this value\r\n" +
-					       "Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
-					       "Following term will be added to search text\r\n" +
-					       _searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)),
+						"Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
+						"Following term will be added to search text\r\n" +
+						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)) +
+						"\r\n\r\n" +
+						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.",
 					Clickable = false
 				});
 			}
@@ -98,8 +109,8 @@ namespace Mtgdb.Gui
 					Control = _layoutView.Control,
 					Title = "Viewport alignment",
 					Text = "Aligns viewport by this corner.\r\n\r\n" +
-					       "If this corner would be truncated\r\n"+
-					       "viewport will shift to fit it into the screen.",
+						"If this corner would be truncated\r\n" +
+						"viewport will shift to fit it into the screen.",
 					Clickable = false
 				});
 			}

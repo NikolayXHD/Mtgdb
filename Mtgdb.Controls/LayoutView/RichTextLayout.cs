@@ -59,7 +59,7 @@ namespace Mtgdb.Controls
 				var printBatch = new RenderBatch(token.IsHighlighted);
 
 				if (token.IsHighlighted)
-					printSelection(targetRect, printBatch, token.IsContext);
+					printHighlight(targetRect, printBatch, token.IsContext);
 
 				string tokenText = _renderContext.Text.Substring(token.Index, token.Length);
 
@@ -76,13 +76,19 @@ namespace Mtgdb.Controls
 							(rect, hb, he) =>
 							{
 								rect = new RectangleF(rect.Location, new SizeF(rect.Width + 2, rect.Height));
+								var rectangle = toRectangle(rect);
+
+								var foreColor = _renderContext.ForeColor;
+
+								if (printSelection(rect, token))
+									foreColor = _renderContext.SelectionForeColor;
 
 								TextRenderer.DrawText(
 									_renderContext.Graphics,
 									tokenText,
 									_renderContext.Font,
-									toRectangle(rect),
-									_renderContext.ForeColor,
+									rectangle,
+									foreColor,
 									_renderContext.StringFormat.ToTextFormatFlags());
 							});
 					}
@@ -91,25 +97,34 @@ namespace Mtgdb.Controls
 				{
 					if (token.IconNeedsShadow)
 					{
-						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
-						var iconRect = new RectangleF(location.Round(), icon.Size);
-
-						printBatch.Add(iconRect,
+						printBatch.Add(targetRect,
 							(rect, hb, he) =>
 							{
-								var shadowOffset = _iconShadowOffset.MultiplyBy(_lineHeight / 16f);
-								rect.Offset(shadowOffset);
-								_renderContext.Graphics.FillEllipse(_shadowBrush, rect);
-							});
+								var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
+								var iconRect = new RectangleF(rect.Location.Round(), icon.Size);
 
-						printBatch.Add(iconRect, (rect, hb, he) => { _renderContext.Graphics.DrawImage(icon, rect); });
+								printSelection(rect, token);
+
+								var shadowOffset = _iconShadowOffset.MultiplyBy(_lineHeight / 16f);
+
+								var shadowRect = iconRect;
+								shadowRect.Offset(shadowOffset);
+								_renderContext.Graphics.FillEllipse(_shadowBrush, shadowRect);
+
+								_renderContext.Graphics.DrawImage(icon, iconRect);
+							});
 					}
 					else
 					{
-						var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round());
-						var iconRect = new RectangleF(location.Round(), icon.Size);
+						printBatch.Add(targetRect,
+							(rect, hb, he) =>
+							{
+								var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round());
+								var iconRect = new RectangleF(targetRect.Location.Round(), icon.Size);
 
-						printBatch.Add(iconRect, (rect, hb, he) => _renderContext.Graphics.DrawImage(icon, rect));
+								printSelection(rect, token);
+								_renderContext.Graphics.DrawImage(icon, iconRect);
+							});
 					}
 				}
 
@@ -122,23 +137,14 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private static int strongRound(double value)
-		{
-			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
-		}
-
-		private static Rectangle toRectangle(RectangleF rect)
-		{
-			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
-		}
-
-		private void printSelection(RectangleF targetRect, RenderBatch batch, bool isContext)
+		private void printHighlight(RectangleF targetRect, RenderBatch batch, bool isContext)
 		{
 			batch.Add(targetRect,
 				(rectF, hb, he) =>
 				{
 					var rect = toRectangle(new RectangleF(rectF.Location, new SizeF(rectF.Width - _spaceWidth + 1, rectF.Height)));
-					rect.Inflate(1, 1);
+
+					rect = new Rectangle(new Point(rect.X - 1, rect.Y - 1), new Size(rect.Width + 2, rect.Height + 1));
 
 					var brush = isContext ? _contextBrush : _brush;
 					_renderContext.Graphics.FillRectangle(brush, rect);
@@ -171,6 +177,18 @@ namespace Mtgdb.Controls
 				});
 		}
 
+		private static Rectangle toRectangle(RectangleF rect)
+		{
+			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
+		}
+
+		private static int strongRound(double value)
+		{
+			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
+		}
+
+
+
 		public bool PrintSpace(RichTextToken space)
 		{
 			if (_y + _lineHeight * HeightPart < _renderContext.Rect.Bottom)
@@ -178,23 +196,32 @@ namespace Mtgdb.Controls
 				if (_x + _spaceWidth >= _renderContext.Rect.Right)
 					return newLine();
 
+				var targetRect = new RectangleF(_x, _y, _spaceWidth, _lineHeight);
+
+				var printBatch = new RenderBatch(space.IsHighlighted);
+
+				printBatch.Add(targetRect, (rect, hb, he) => printSelection(rect, space));
+
 				if (space.IsHighlighted)
-				{
-					var printBatch = new RenderBatch(true);
-					printSelection(new RectangleF(_x, _y, _spaceWidth, _lineHeight), printBatch, space.IsContext);
-					_lineQueue.Add(printBatch);
-				}
-				else
-				{
-					var printBatch = new RenderBatch(false);
-					_lineQueue.Add(printBatch);
-				}
+					printHighlight(targetRect, printBatch, space.IsContext);
+
+				_lineQueue.Add(printBatch);
 
 				_x += _spaceWidth;
 				return true;
 			}
 
 			return false;
+		}
+
+		public bool NewParagraph()
+		{
+			Flush();
+
+			_y += _lineHeight * 4 / 3;
+			_x = _renderContext.Rect.Left;
+
+			return _y + _lineHeight * HeightPart < _renderContext.Rect.Bottom;
 		}
 
 		private bool newLine()
@@ -211,15 +238,7 @@ namespace Mtgdb.Controls
 			return false;
 		}
 
-		public bool NewParagraph()
-		{
-			Flush();
 
-			_y += _lineHeight * 4 / 3;
-			_x = _renderContext.Rect.Left;
-
-			return _y + _lineHeight * HeightPart < _renderContext.Rect.Bottom;
-		}
 
 		private SizeF getLineSize(string text, IList<RichTextToken> word)
 		{
@@ -252,6 +271,95 @@ namespace Mtgdb.Controls
 				textFormatFlags);
 
 			return size;
+		}
+
+
+
+		private bool printSelection(RectangleF rectangle, RichTextToken token)
+		{
+			if (!_renderContext.RectSelected)
+				return false;
+
+			if (_renderContext.SelectionStartIndex < 0)
+			{
+				if (!isSelectionStart(rectangle))
+					return false;
+
+				_renderContext.SelectionStartIndex = token.Index;
+				_renderContext.SelectionLength = token.Length;
+			}
+			else
+			{
+				if (!isSelectionContinuation(rectangle))
+					return false;
+
+				_renderContext.SelectionLength = token.Index + token.Length - _renderContext.SelectionStartIndex;
+			}
+
+			rectangle = toRectangle(rectangle);
+			rectangle.Offset(-0.5f, -0.5f);
+
+			_renderContext.Graphics.FillRectangle(new SolidBrush(_renderContext.SelectionBackColor), rectangle);
+
+			return true;
+		}
+
+		private bool isSelectionStart(RectangleF tokenFromLine)
+		{
+			if (_renderContext.SelectionIsAll)
+				return true;
+
+			var (selectionStartX, selectionEndX) = getSelectionDelimitersForLine(tokenFromLine);
+
+			return tokenFromLine.Right - 1 >= selectionStartX && tokenFromLine.Left <= selectionEndX;
+		}
+
+		private bool isSelectionContinuation(RectangleF rectangle)
+		{
+			return _renderContext.SelectionIsAll || rectangle.Left <= getSelectionDelimitersForLine(rectangle).SelectionEndX;
+		}
+
+		private (int SelectionStartX, int SelectionEndX) getSelectionDelimitersForLine(RectangleF tokenFromLine)
+		{
+			float lineTop = tokenFromLine.Top;
+			float lineBottom = tokenFromLine.Bottom - 1;
+
+			bool selectionStartsBeforeLine =
+				_renderContext.SelectionStart.Y < lineTop ||
+				_renderContext.SelectionEnd.Y < lineTop;
+
+			bool selectionStartsWithinLine = ((float) _renderContext.SelectionStart.Y).IsWithin(lineTop, lineBottom);
+			bool selectionEndsWithinLine = ((float) _renderContext.SelectionEnd.Y).IsWithin(lineTop, lineBottom);
+
+			bool selectionContinuesNextLine =
+				_renderContext.SelectionStart.Y > lineBottom ||
+				_renderContext.SelectionEnd.Y > lineBottom;
+
+			int selectionEndX;
+			if (selectionContinuesNextLine)
+				selectionEndX = int.MaxValue;
+			else if (selectionStartsWithinLine && selectionEndsWithinLine)
+				selectionEndX = Math.Max(_renderContext.SelectionStart.X, _renderContext.SelectionEnd.X);
+			else if (selectionStartsWithinLine)
+				selectionEndX = _renderContext.SelectionStart.X;
+			else if (selectionEndsWithinLine)
+				selectionEndX = _renderContext.SelectionEnd.X;
+			else
+				selectionEndX = int.MinValue;
+
+			int selectionStartX;
+			if (selectionStartsBeforeLine)
+				selectionStartX = int.MinValue;
+			else if (selectionStartsWithinLine && selectionEndsWithinLine)
+				selectionStartX = Math.Min(_renderContext.SelectionStart.X, _renderContext.SelectionEnd.X);
+			else if (selectionStartsWithinLine)
+				selectionStartX = _renderContext.SelectionStart.X;
+			else if (selectionEndsWithinLine)
+				selectionStartX = _renderContext.SelectionEnd.X;
+			else
+				selectionStartX = int.MaxValue;
+
+			return (selectionStartX, selectionEndX);
 		}
 
 

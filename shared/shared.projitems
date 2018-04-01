@@ -9,6 +9,8 @@
     <Import_RootNamespace>shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Cj.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShadowCopy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />
   </ItemGroup>

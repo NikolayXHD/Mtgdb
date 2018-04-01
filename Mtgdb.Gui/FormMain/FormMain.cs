@@ -81,12 +81,7 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.UpdateSuggestInput();
 
-			// hack
-			bool isGloballyFirst = !_collectionModel.IsLoaded;
-			if (isGloballyFirst)
-				updateGlobalSettings();
-			else
-				historyUpdateGlobalSettings(_historySubsystem.Current);
+			historyUpdateGlobalSettings(_historySubsystem.Current);
 
 			if (!_formRoot.LoadedGuiSettings)
 			{
@@ -292,7 +287,7 @@ namespace Mtgdb.Gui
 						var card = allCards[i];
 
 						bool isFiltered = cardsByName.TryGet(card.NameNormalized) == card;
-						
+
 						if (isFiltered || card == touchedCard)
 							searchResultCards.Add(card);
 
@@ -565,15 +560,12 @@ namespace Mtgdb.Gui
 		}
 
 
-		private void updateGlobalSettings()
-		{
-		}
-
 		private void updateFormSettings()
 		{
 			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
 			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
 			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
+
 			_formRoot.LoadedGuiSettings = true;
 		}
 
@@ -677,7 +669,8 @@ namespace Mtgdb.Gui
 			_searchStringSubsystem.ApplyFind();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
-			_formRoot.TooltipController.Active = !settings.HideTooltips;
+			_formRoot.HideTooltips = settings.HideTooltips;
+
 			_buttonExcludeManaAbility.Checked = settings.ExcludeManaAbilities;
 			_buttonExcludeManaCost.Checked = settings.ExcludeManaCost != false;
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
@@ -702,11 +695,11 @@ namespace Mtgdb.Gui
 			applyShowFilterPanels();
 
 			endRestoreSettings();
-			
+
 			resetTouchedCard();
 			RunRefilterTask();
 			historyUpdateButtons();
-			
+
 			setTitle(settings.DeckName);
 		}
 
@@ -940,10 +933,15 @@ namespace Mtgdb.Gui
 
 		public Card DraggedCard => _deckModel.DraggedCard;
 
-		public void StopDragging()
-		{
-			_draggingSubsystem.DragAbort();
-		}
+		public void StopDragging() => _draggingSubsystem.DragAbort();
+
+
+
+		public string GetSelectedText() => _viewCards.GetSelectedText();
+
+		public void ResetSelectedText() => _viewCards.ResetSelectedText();
+
+		public void SelectAllText() => _viewCards.SelectAllText();
 
 
 

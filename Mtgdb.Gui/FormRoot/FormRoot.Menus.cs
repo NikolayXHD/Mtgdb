@@ -417,10 +417,12 @@ namespace Mtgdb.Gui
 				form.FocusSearch();
 			else if (e.KeyData == Keys.Escape)
 			{
-				if (form.IsSearchFocused())
-					handled = false;
-				else
+				if (form.IsDraggingCard)
 					form.StopDragging();
+				else if (!form.IsSearchFocused() && form.GetSelectedText() != null)
+					form.ResetSelectedText();
+				else
+					handled = false;
 			}
 			else if (e.KeyData == (Keys.Control | Keys.S))
 				form.ButtonSaveDeck();
@@ -447,8 +449,12 @@ namespace Mtgdb.Gui
 				form.PasteCollection(append: false);
 			else if (e.KeyData == (Keys.Control | Keys.C))
 			{
+				string selectedText;
+
 				if (form.IsSearchFocused())
 					handled = false;
+				else if (!string.IsNullOrEmpty(selectedText = form.GetSelectedText()))
+					Clipboard.SetText(selectedText);
 				else
 					form.CopyDeck();
 			}
@@ -458,6 +464,13 @@ namespace Mtgdb.Gui
 					handled = false;
 				else
 					form.CopyCollection();
+			}
+			else if (e.KeyData == (Keys.Control | Keys.A))
+			{
+				if (form.IsSearchFocused())
+					handled = false;
+				else
+					form.SelectAllText();
 			}
 			else
 			{

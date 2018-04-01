@@ -574,7 +574,9 @@ namespace Mtgdb.Gui
 			get => DesktopBounds;
 			set
 			{
-				WindowState = FormWindowState.Normal;
+				//WindowState = FormWindowState.Normal;
+
+				SnapTo(Direction.MiddleCenter);
 
 				var nearestScreenArea = Screen.GetWorkingArea(value);
 				if (nearestScreenArea.IntersectsWith(value))

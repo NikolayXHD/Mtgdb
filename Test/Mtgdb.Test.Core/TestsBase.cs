@@ -108,7 +108,7 @@ namespace Mtgdb.Test
 				var sw = new Stopwatch();
 				sw.Start();
 
-				Searcher.LoadIndexes(null);
+				Searcher.LoadIndexes(Repo);
 
 				sw.Stop();
 				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");

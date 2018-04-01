@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -17,7 +18,8 @@ namespace Mtgdb.Gui
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly FormZoom _formZoom;
 		private readonly Cursor _zoomCursor;
-		
+		private readonly Cursor _textSelectionCursor;
+
 		public DeckEditingSubsystem(
 			LayoutView layoutViewCards,
 			LayoutView layoutViewDeck,
@@ -36,11 +38,16 @@ namespace Mtgdb.Gui
 			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
 			_draggingSubsystem.DragRemoved += dragRemoved;
 			_draggingSubsystem.DragAdded += dragAdded;
+			_layoutViewCards.SelectionStarted += selectionStarted;
 
 			_formZoom = formZoom;
 
 			var hotSpot = Size.Empty.ByDpi();
 			_zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
+
+			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
+			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
+			_textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
 		}
 
 		private void dragRemoved(Card card, Zone fromDeckZone)
@@ -76,32 +83,46 @@ namespace Mtgdb.Gui
 			if (_deckModel.IsDragging())
 				return;
 
-			showZoomIcon(false, getView(sender).Control);
+			updateCursor(getView(sender).Control, outside: true);
 		}
 
 		private void gridMouseMove(object sender, MouseEventArgs e)
 		{
 			var view = getView(sender);
 
-			var hitInfo = view.CalcHitInfo(e.Location);
-			var card = (Card)view.GetRow(hitInfo.RowHandle);
-			var overImage = hitInfo.IsOverImage();
-
-			
 			if (_deckModel.IsDragging())
 				return;
 
-			if (card == null)
-				showZoomIcon(false, view.Control);
+			var hitInfo = view.CalcHitInfo(e.Location);
+			var card = (Card) view.GetRow(hitInfo.RowHandle);
+
+			if (card != null)
+			{
+				bool isOverImage = hitInfo.IsOverImage();
+
+				updateCursor(view.Control,
+					overImage: isOverImage,
+					overText: hitInfo.FieldBounds != null && !isOverImage,
+					overButton: hitInfo.IsSearchButton || hitInfo.IsSortButton);
+			}
 			else
-				showZoomIcon(overImage, view.Control);
+			{
+				updateCursor(view.Control);
+			}
 		}
 
-		private void showZoomIcon(bool overImage, Control control)
+		private void updateCursor(Control control, bool overImage = false, bool overText = false, bool overButton = false, bool outside = false)
 		{
-			control.Cursor = overImage 
-				? _zoomCursor 
-				: _cursor;
+			if (outside)
+				control.Cursor = _cursor;
+			else if (overButton)
+				control.Cursor = Cursors.Default;
+			else if (overImage)
+				control.Cursor = _zoomCursor;
+			else if (overText)
+				control.Cursor = _textSelectionCursor;
+			else
+				control.Cursor = Cursors.Default;
 		}
 
 		private void gridMouseClick(object sender, HitInfo hitInfo, MouseEventArgs e)
@@ -131,7 +152,8 @@ namespace Mtgdb.Gui
 				countDelta = -1;
 			else if (e.Button == MouseButtons.Right)
 				countDelta = +1;
-			else return;
+			else
+				return;
 
 			if ((Control.ModifierKeys & Keys.Control) > 0)
 				countDelta *= 4;
@@ -149,7 +171,7 @@ namespace Mtgdb.Gui
 			if (!overImage)
 				return null;
 
-			var card = (Card)view.GetRow(hitInfo.RowHandle);
+			var card = (Card) view.GetRow(hitInfo.RowHandle);
 			return card;
 		}
 
@@ -157,7 +179,7 @@ namespace Mtgdb.Gui
 		{
 			if (!card.HasImage(Ui))
 				return;
-			
+
 			_formZoom.LoadImages(card, Ui);
 			_formZoom.ShowImages();
 		}
@@ -174,6 +196,12 @@ namespace Mtgdb.Gui
 
 			if (card != null)
 				zoomCard(card);
+		}
+
+		private static void selectionStarted(object sender, HitInfo hitInfo, CancelEventArgs cancelArgs)
+		{
+			if (hitInfo.IsOverImage())
+				cancelArgs.Cancel = true;
 		}
 
 		private LayoutView getView(object view)

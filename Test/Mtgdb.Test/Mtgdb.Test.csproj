@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
       <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
       <Name>Mtgdb.Core</Name>
@@ -85,6 +89,7 @@
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
+    <Compile Include="SelectionStateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

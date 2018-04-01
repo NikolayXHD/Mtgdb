@@ -401,6 +401,7 @@
     <None Include="Resources\tooltip_16.png" />
     <None Include="Resources\text_disabled_40.png" />
     <None Include="Resources\text_enabled_40.png" />
+    <None Include="Resources\text_selection_24.png" />
     <Content Include="Resources\Trample.png" />
     <Content Include="Resources\Transform.png" />
     <None Include="Resources\trash_16.png" />

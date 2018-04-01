@@ -40,9 +40,17 @@ namespace Mtgdb.Controls
 					new Size(contentArea.Width - 1, contentArea.Height - 1)));
 		}
 
-		public void PaintSelf(Graphics graphics, Point parentLocation, HighlightSettings highlightSettings)
+		public void PaintSelf(
+			Graphics graphics,
+			Point parentLocation,
+			HighlightSettings highlightSettings,
+			SelectionState selection,
+			SelectionOptions selectionOptions,
+			Color hotTrackBackgroundColor)
 		{
 			var contentArea = getArea(parentLocation, Padding);
+			var completeArea = getArea(parentLocation, new Padding(0));
+
 
 			if (!string.IsNullOrEmpty(Text))
 			{
@@ -56,14 +64,31 @@ namespace Mtgdb.Controls
 					StringFormat = new StringFormat(default(StringFormatFlags)),
 					Font = Font,
 					ForeColor = ForeColor,
-					BackgroundColor = BackColor,
+
+					BackColor = IsHotTracked
+						? hotTrackBackgroundColor
+						: BackColor,
+
 					HighlightContextColor = highlightSettings.HighlightContextColor,
 					HighlightColor = highlightSettings.HighlightColor,
 					HighlightBorderColor = highlightSettings.HighlightBorderColor,
 					HighlightBorderWidth = 1f
 				};
 
+				if (completeArea.Contains(selection.Start))
+				{
+					context.RectSelected = true;
+
+					context.SelectionEnd = selection.End;
+					context.SelectionStart = selection.Start;
+					context.SelectionIsAll = selection.SelectAll;
+
+					context.SelectionBackColor = selectionOptions.BackColor;
+					context.SelectionForeColor = selectionOptions.ForeColor;
+				}
+
 				RichTextRenderer.Render(context, _iconRecognizer);
+				SelectedText = context.SelectedText;
 			}
 			else if (Image != null)
 				graphics.DrawImage(Image, Image.Size.FitIn(contentArea));
@@ -100,7 +125,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(HorizontalAlignment), "Left")]
 		public HorizontalAlignment HorizontalAlignment
 		{
-			get { return _horizontalAlignment; }
+			get => _horizontalAlignment;
 			set
 			{
 				if (_horizontalAlignment != value)
@@ -114,7 +139,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Image Image
 		{
-			get { return _image; }
+			get => _image;
 			set
 			{
 				if (_image != value)
@@ -128,7 +153,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public override string Text
 		{
-			get { return base.Text; }
+			get => base.Text;
 			set
 			{
 				if (base.Text != value)
@@ -151,7 +176,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked
 		{
-			get { return _isHotTracked; }
+			get => _isHotTracked;
 			set
 			{
 				if (_isHotTracked != value)
@@ -165,7 +190,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IList<TextRange> HighlightRanges
 		{
-			get { return _highlightRanges; }
+			get => _highlightRanges;
 			set
 			{
 				_highlightRanges = value;
@@ -176,7 +201,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IconRecognizer IconRecognizer
 		{
-			get { return _iconRecognizer; }
+			get => _iconRecognizer;
 			set
 			{
 				_iconRecognizer = value;
@@ -187,7 +212,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SortOrder SortOrder
 		{
-			get { return _sortOrder; }
+			get => _sortOrder;
 			set
 			{
 				if (_sortOrder != value)
@@ -201,7 +226,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsSortHotTracked
 		{
-			get { return _isSortHotTracked; }
+			get => _isSortHotTracked;
 			set
 			{
 				if (_isSortHotTracked != value)
@@ -215,7 +240,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsSearchHotTracked
 		{
-			get { return _isSearchHotTracked; }
+			get => _isSearchHotTracked;
 			set
 			{
 				if (_isSearchHotTracked != value)
@@ -229,7 +254,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsSearchVisible
 		{
-			get { return _isSearchVisible; }
+			get => _isSearchVisible;
 			set
 			{
 				if (_isSearchVisible != value)
@@ -243,7 +268,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsSortVisible
 		{
-			get { return _isSortVisible; }
+			get => _isSortVisible;
 			set
 			{
 				if (_isSortVisible != value)
@@ -254,7 +279,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public string SelectedText { get; private set; }
 
 		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;
@@ -268,7 +294,7 @@ namespace Mtgdb.Controls
 
 		private bool _isSearchHotTracked;
 		private bool _isSearchVisible;
-		
+
 		private SortOrder _sortOrder;
 	}
 }

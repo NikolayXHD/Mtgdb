@@ -462,7 +462,14 @@ namespace Mtgdb.Controls
 		protected bool IsSnappedTo(Direction snapDirection)
 		{
 			var rect = getSnappingRectangle(PointToScreen(new Point(0, 0)), snapDirection);
-			return Bounds == rect;
+
+			if (Bounds != rect)
+				return false;
+
+			if (snapDirection == Direction.North)
+				return WindowState == FormWindowState.Maximized;
+			
+			return WindowState == FormWindowState.Normal;
 		}
 
 		protected void SnapTo(Direction snapDirection, Point? cursorPosition = null)

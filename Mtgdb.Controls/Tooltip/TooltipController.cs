@@ -48,7 +48,7 @@ namespace Mtgdb.Controls
 			{
 				if (!_subscribed.Add(control))
 					continue;
-				
+
 				control.MouseEnter += mouseEnter;
 				control.MouseLeave += mouseLeave;
 				control.GotFocus += gotFocus;
@@ -78,7 +78,7 @@ namespace Mtgdb.Controls
 
 		public bool Active
 		{
-			get { return _active; }
+			get => _active;
 			set
 			{
 				_active = value;
@@ -132,7 +132,7 @@ namespace Mtgdb.Controls
 
 					if (curr.Id != null && !curr.Id.Equals(prev.Id))
 					{
-						int elapsedMs = (int)(DateTime.Now - curr.Created).TotalMilliseconds;
+						int elapsedMs = (int) (DateTime.Now - curr.Created).TotalMilliseconds;
 						if (elapsedMs < DelayMs)
 						{
 							Thread.Sleep(DelayMs - elapsedMs + IntervalMs);
@@ -187,10 +187,11 @@ namespace Mtgdb.Controls
 
 		private void mouseEnter(object sender, EventArgs e)
 		{
-			if (!Active)
+			if (Active && Alt || !Active && !Alt)
 				return;
 
 			var control = (Control) sender;
+
 			var settgins = _staticTooltips[control];
 
 			var locationControl = settgins.Controls[0];
@@ -225,8 +226,10 @@ namespace Mtgdb.Controls
 
 		private void customTooltipShow(TooltipModel tooltip)
 		{
-			if (Active)
-				Tooltip = tooltip;
+			if (Active && Alt || !Active && !Alt)
+				return;
+			
+			Tooltip = tooltip;
 		}
 
 		private void customTooltipHide()
@@ -238,7 +241,7 @@ namespace Mtgdb.Controls
 		public int ShowCounter { get; private set; }
 		public int HideCounter { get; private set; }
 
-
+		private static bool Alt => Control.ModifierKeys == Keys.Alt;
 
 		private TooltipModel Tooltip { get; set; } = new TooltipModel();
 

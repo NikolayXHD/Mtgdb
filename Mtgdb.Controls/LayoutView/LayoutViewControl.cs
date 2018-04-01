@@ -11,14 +11,6 @@ namespace Mtgdb.Controls
 {
 	public partial class LayoutViewControl : UserControl, IMessageFilter
 	{
-		public event Action<object> CardIndexChanged;
-		public event Action<object, CustomDrawArgs> CustomDrawField;
-		public event Action<object, int> RowDataLoaded;
-		public event Action<object> SortChanged;
-		public event Action<object, SearchArgs> SearchClicked;
-		public event Action<object, LayoutControl> ProbeCardCreating;
-		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
-
 		public LayoutViewControl()
 		{
 			InitializeComponent();
@@ -58,6 +50,8 @@ namespace Mtgdb.Controls
 			updateScrollbar();
 		}
 
+
+
 		private void paint(object sender, PaintEventArgs eArgs)
 		{
 			var paintActions = new PaintActions();
@@ -68,15 +62,44 @@ namespace Mtgdb.Controls
 				paintActions.Background.Add(e => e.Graphics.Clear(BackColor));
 				addPaintCardActions(paintActions, eArgs.ClipRectangle);
 				paintActions.AlignButtons.Add(paintAlignButtons);
+				paintActions.Selection.Add(paintSelection);
 
 				eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 				eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
 				paintActions.Background.Paint(eArgs);
 				paintActions.FieldData.Paint(eArgs);
+				paintActions.Selection.Paint(eArgs);
+
 				paintActions.AlignButtons.Paint(eArgs);
 				// paint field buttons over align buttons
 				paintActions.FieldButtons.Paint(eArgs);
+			}
+		}
+
+		private void paintSelection(PaintEventArgs e)
+		{
+			if (!_selection.Selecting)
+				return;
+
+			if (!e.ClipRectangle.IntersectsWith(_selection.Rectangle))
+				return;
+
+			byte alpha = SelectionOptions.RectAlpha;
+			var rectangle = new Rectangle(_selection.Rectangle.Location, _selection.Rectangle.Size.Minus(new Size(1, 1)));
+
+			if (SelectionOptions.RectFillColor != Color.Transparent && alpha > 0)
+			{
+				e.Graphics.FillRectangle(
+					new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor)),
+					rectangle);
+			}
+
+			if (SelectionOptions.RectBorderColor != Color.Transparent && alpha > 0)
+			{
+				e.Graphics.DrawRectangle(
+					new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor)),
+					rectangle);
 			}
 		}
 
@@ -145,15 +168,32 @@ namespace Mtgdb.Controls
 					ForeColor = field.ForeColor,
 					DisplayText = field.Text,
 					HAlignment = field.HorizontalAlignment,
+					Selection = _selection
 				};
 
 				CustomDrawField.Invoke(this, customFieldArgs);
 
 				if (!customFieldArgs.Handled)
-					field.PaintSelf(e.Graphics, card.Location, card.HighlightSettings);
+				{
+					field.PaintSelf(
+						e.Graphics,
+						card.Location,
+						card.HighlightSettings,
+						_selection,
+						SelectionOptions,
+						HotTrackBackgroundColor);
+				}
 			}
 			else
-				field.PaintSelf(e.Graphics, card.Location, card.HighlightSettings);
+			{
+				field.PaintSelf(
+					e.Graphics,
+					card.Location,
+					card.HighlightSettings,
+					_selection,
+					SelectionOptions,
+					HotTrackBackgroundColor);
+			}
 		}
 
 		private void paintSearchButton(PaintEventArgs e, FieldControl field, LayoutControl card)
@@ -236,7 +276,7 @@ namespace Mtgdb.Controls
 			{
 				for (int i = 0; i < DataSource.Count; i++)
 					_rowHandleByObject[DataSource[i]] = i;
-			
+
 				if (CardIndex < 0 || CardIndex >= Count)
 					CardIndex = snapCardIndex(CardIndex, Count);
 			}
@@ -269,9 +309,14 @@ namespace Mtgdb.Controls
 			MouseWheel += mouseWheel;
 			KeyDown += keyDown;
 
+			MouseDown += mouseDown;
 			MouseMove += mouseMove;
 			MouseLeave += mouseLeave;
+			MouseUp += mouseUp;
+
 			MouseClick += mouseClick;
+
+			_selection.Changed += selectionChanged;
 
 			Application.AddMessageFilter(this);
 		}
@@ -383,6 +428,7 @@ namespace Mtgdb.Controls
 			int cardIndex = CardIndex;
 			cardIndex += pageSize;
 			CardIndex = snapCardIndex(cardIndex, Count);
+
 			ApplyCardIndex();
 			updateScrollbar();
 		}
@@ -412,10 +458,112 @@ namespace Mtgdb.Controls
 
 
 
+		private void selectionChanged(
+			Rectangle previousRect,
+			Point previousStart,
+			bool previousSelecting,
+			IEnumerable<Rectangle> delta)
+		{
+			// update selection rectangle where its presence changed
+			foreach (var rectangle in delta)
+			{
+				rectangle.Inflate(1, 1);
+				Invalidate(rectangle);
+			}
+
+			// paint or erase entire selection rectangle
+			if (previousSelecting != _selection.Selecting)
+				Invalidate(previousRect);
+
+			// paint previously selected field to reflect changed selected text
+			if (previousStart != _selection.Start)
+				invalidateFieldAt(previousStart);
+
+			// paint currently selected field to show selected text
+			if (_selection.Rectangle != previousRect)
+				invalidateFieldAt(_selection.Start);
+		}
+
+		private void invalidateFieldAt(Point location)
+		{
+			var index = getCardIndex(location);
+
+			if (index < 0)
+				return;
+			
+			var card = Cards[index];
+
+			if (!card.Visible)
+				return;
+			
+			var field = card.Fields.FirstOrDefault(f => new Rectangle(f.Location.Plus(card.Location), f.Size).Contains(location));
+
+			if (field == null)
+				return;
+			
+			invalidateField(field, card);
+		}
+
+		private void invalidateField(FieldControl field, LayoutControl card)
+		{
+			Invalidate(new Rectangle(field.Location.Plus(card.Location), field.Size));
+		}
+
+		private void mouseDown(object sender, MouseEventArgs e)
+		{
+			if (SelectionOptions.Enabled && e.Button == MouseButtons.Left)
+			{
+				var cancelArgs = new CancelEventArgs();
+				var hitInfo = CalcHitInfo(e.Location);
+
+				SelectionStarted?.Invoke(this, hitInfo, cancelArgs);
+
+				if (!cancelArgs.Cancel)
+				{
+					_selection.StartSelectionAt(e.Location);
+					hideButtons();
+				}
+			}
+			else
+			{
+				_selection.ResetSelection();
+			}
+		}
+
+		private void mouseUp(object sender, MouseEventArgs e)
+		{
+			if (SelectionOptions.Enabled && _selection.Selecting && e.Button == MouseButtons.Left)
+			{
+				_selection.MoveSelectionTo(e.Location);
+				_selection.EndSelection();
+
+				var hitInfo = CalcHitInfo(e.Location);
+				handleMouseMove(hitInfo);
+			}
+		}
+
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			var hitInfo = CalcHitInfo(e.Location);
-			handleMouseMove(hitInfo);
+			if (SelectionOptions.Enabled && _selection.Selecting)
+			{
+				_selection.MoveSelectionTo(e.Location);
+				hideButtons();
+			}
+			else
+			{
+				var hitInfo = CalcHitInfo(e.Location);
+				handleMouseMove(hitInfo);
+			}
+		}
+
+		private void hideButtons()
+		{
+			if (_hitInfo?.Card != null)
+				foreach (var field in _hitInfo.Card.Fields)
+				{
+					field.IsSortVisible = false;
+					field.IsSearchVisible = false;
+				}
 		}
 
 		private void mouseLeave(object sender, EventArgs e)
@@ -449,11 +597,13 @@ namespace Mtgdb.Controls
 					field.IsSearchVisible = false;
 				}
 
+			bool suppressed = ModifierKeys == Keys.Alt;
+
 			if (_hitInfo.Card != null)
 				foreach (var field in _hitInfo.Card.Fields)
 				{
-					field.IsSortVisible = SortOptions.Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
-					field.IsSearchVisible = SearchOptions.Allow && field.AllowSearch && field.IsHotTracked;
+					field.IsSortVisible = !suppressed && SortOptions.Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
+					field.IsSearchVisible = !suppressed && SearchOptions.Allow && field.AllowSearch && field.IsHotTracked;
 				}
 
 			foreach (var direction in getAlignDirections())
@@ -462,6 +612,9 @@ namespace Mtgdb.Controls
 
 		private void mouseClick(object sender, MouseEventArgs e)
 		{
+			if (_selection.Selecting)
+				return;
+
 			var hitInfo = CalcHitInfo(e.Location);
 
 			if (e.Button == MouseButtons.Left)
@@ -622,17 +775,9 @@ namespace Mtgdb.Controls
 
 		private void setFieldRelatedData(Point location, HitInfo hitInfo)
 		{
-			var cardCell = getCardCell(location);
+			var index = getCardIndex(location);
 
-			int rowsCount = getRowsCount();
-			int columnsCount = getColumnsCount();
-
-			if (cardCell.X < 0 || cardCell.X >= columnsCount || cardCell.Y < 0 || cardCell.Y >= rowsCount)
-				return;
-
-			var index = getCardIndex(cardCell.X, cardCell.Y, columnsCount);
-
-			if (index < 0 || index >= Cards.Count)
+			if (index < 0)
 				return;
 
 			var card = Cards[index];
@@ -657,6 +802,24 @@ namespace Mtgdb.Controls
 				SearchOptions.GetButtonBounds(field, card).Contains(location);
 
 			hitInfo.SetField(field, isSortButton, isSearchButton);
+		}
+
+		private int getCardIndex(Point location)
+		{
+			var cardCell = getCardCell(location);
+
+			int rowsCount = getRowsCount();
+			int columnsCount = getColumnsCount();
+
+			if (cardCell.X < 0 || cardCell.X >= columnsCount || cardCell.Y < 0 || cardCell.Y >= rowsCount)
+				return -1;
+
+			var index = getCardIndex(cardCell.X, cardCell.Y, columnsCount);
+
+			if (index < 0 || index >= Cards.Count)
+				return -1;
+
+			return index;
 		}
 
 		private void setAlignButtonDirection(Point location, HitInfo hitInfo)
@@ -779,7 +942,7 @@ namespace Mtgdb.Controls
 		{
 			var cell = getCornerCardCell(Direction.BottomRight);
 
-			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point)).RightBottom() + 
+			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point)).RightBottom() +
 				LayoutOptions.CardInterval.ScaleBy(new SizeF(0.5f, 0.5f));
 
 			var cardToDisplayRightBottom = getDisplayBounds()
@@ -837,6 +1000,9 @@ namespace Mtgdb.Controls
 
 		public void ApplyCardIndex()
 		{
+			if (!_selection.Selecting)
+				_selection.ResetSelection();
+
 			int columnsCount = getColumnsCount();
 			int rowsCount = getRowsCount();
 
@@ -911,6 +1077,82 @@ namespace Mtgdb.Controls
 			return field.HighlightRanges;
 		}
 
+		public int FindRow(object row)
+		{
+			if (!_rowHandleByObject.TryGetValue(row, out int rowHandle))
+				return -1;
+
+			return rowHandle;
+		}
+
+		public object FindRow(int index)
+		{
+			if (DataSource == null || index < 0 || index >= DataSource.Count)
+				return null;
+
+			return DataSource[index];
+		}
+
+		public string GetText(int index, string fieldName)
+		{
+			var dataObject = FindRow(index);
+
+			if (dataObject == null)
+				return null;
+
+			var field = ProbeCard.Fields.FirstOrDefault(_ => _.FieldName == fieldName);
+			if (field == null)
+				return null;
+
+			ProbeCard.DataSource = dataObject;
+			return field.Text;
+		}
+
+
+
+		public void ResetSelectedText() => _selection.ResetSelection();
+
+		public bool IsSelectingText() => _selection.Selecting;
+
+		public string GetSelectedText()
+		{
+			foreach (var card in Cards)
+			{
+				if (!card.Visible)
+					continue;
+
+				foreach (var field in card.Fields)
+				{
+					if (field.SelectedText != null)
+						return field.SelectedText;
+				}
+			}
+
+			return null;
+		}
+
+		public void SelectAllTextInField()
+		{
+			foreach (var card in Cards)
+			{
+				if (!card.Visible)
+					continue;
+
+				foreach (var field in card.Fields)
+				{
+					if (field.IsHotTracked)
+					{
+						_selection.ResetSelection();
+						_selection.StartSelectionAt(card.Location.Plus(field.Location));
+						_selection.EndSelection();
+						_selection.SelectAll = true;
+
+						invalidateField(field, card);
+						return;
+					}
+				}
+			}
+		}
 
 
 		[Category("Settings")]
@@ -943,6 +1185,10 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
+
+		[Category("Settings")]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		public SelectionOptions SelectionOptions { get; set; } = new SelectionOptions();
 
 		private LayoutOptions _layoutOptions = new LayoutOptions();
 
@@ -1034,37 +1280,6 @@ namespace Mtgdb.Controls
 		[Browsable(false)]
 		private IList<LayoutControl> Cards { get; }
 
-		public int FindRow(object row)
-		{
-			if (!_rowHandleByObject.TryGetValue(row, out int rowHandle))
-				return -1;
-
-			return rowHandle;
-		}
-
-		public object FindRow(int index)
-		{
-			if (DataSource == null || index < 0 || index >= DataSource.Count)
-				return null;
-
-			return DataSource[index];
-		}
-
-		public string GetText(int index, string fieldName)
-		{
-			var dataObject = FindRow(index);
-
-			if (dataObject == null)
-				return null;
-
-			var field = ProbeCard.Fields.FirstOrDefault(_ => _.FieldName == fieldName);
-			if (field == null)
-				return null;
-
-			ProbeCard.DataSource = dataObject;
-			return field.Text;
-		}
-
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public LayoutControl ProbeCard { get; private set; }
 
@@ -1072,6 +1287,18 @@ namespace Mtgdb.Controls
 		{
 			get { return ProbeCard.Fields.Select(_ => _.FieldName); }
 		}
+
+
+
+		public event Action<object> CardIndexChanged;
+		public event Action<object, CustomDrawArgs> CustomDrawField;
+		public event Action<object, int> RowDataLoaded;
+		public event Action<object> SortChanged;
+		public event Action<object, SearchArgs> SearchClicked;
+		public event Action<object, LayoutControl> ProbeCardCreating;
+		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
+		public event Action<object, HitInfo, CancelEventArgs> SelectionStarted;
+
 
 		private Type _layoutControlType;
 		private int _cardIndex;
@@ -1084,6 +1311,8 @@ namespace Mtgdb.Controls
 		private readonly EventFiringMap<Direction, bool> _alignButtonHotTracked = new EventFiringMap<Direction, bool>();
 
 		private HitInfo _hitInfo;
+
+		private readonly SelectionState _selection = new SelectionState();
 
 		#region mouse wheel without focus
 

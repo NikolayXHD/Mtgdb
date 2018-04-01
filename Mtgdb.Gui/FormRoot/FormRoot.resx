@@ -127,7 +127,10 @@ Alt + Shift + Drag-n-drop to add to Collection
 
 NOTE: In Forge Deck editor you can select and Ctrl + C the cards when in List View mode.
 
-NOTE: Many websites and applications support downloading deck in *.txt file. You can open them as MTGO *.txt deck.</value>
+NOTE: Many websites and applications support downloading deck in *.txt file. You can open them as MTGO *.txt deck.
+
+NOTE: When Search result contains selected text, Ctrl + C will copy selected text instead of Deck.
+To clear selection press ESC.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
