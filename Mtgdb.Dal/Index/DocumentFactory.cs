@@ -94,6 +94,9 @@ namespace Mtgdb.Dal.Index
 				addSpecificTextField(nameof(Card.Text), lang);
 				addSpecificTextField(nameof(Card.Flavor), lang);
 			}
+
+			NumericFields.UnionWith(FloatFields);
+			NumericFields.UnionWith(IntFields);
 		}
 
 		public static Document ToDocument(this CardKeywords cardKeywords)
@@ -388,7 +391,7 @@ namespace Mtgdb.Dal.Index
 		private static void addFloatField(string fieldName, string displayFieldName = null)
 		{
 			UserFields.Add(fieldName);
-			_floatFields.Add(fieldName);
+			FloatFields.Add(fieldName);
 
 			if (displayFieldName != null)
 				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
@@ -397,7 +400,7 @@ namespace Mtgdb.Dal.Index
 		private static void addIntField(string fieldName, string displayFieldName = null)
 		{
 			UserFields.Add(fieldName);
-			_intFields.Add(fieldName);
+			IntFields.Add(fieldName);
 
 			if (displayFieldName != null)
 				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
@@ -460,23 +463,24 @@ namespace Mtgdb.Dal.Index
 
 		public static bool IsNumericField(this string field)
 		{
-			return field.IsFloatField() || field.IsIntField();
+			return NumericFields.Contains(field);
 		}
 
 		public static bool IsIntField(this string field)
 		{
-			return _intFields.Contains(field);
+			return IntFields.Contains(field);
 		}
 
 		public static bool IsFloatField(this string field)
 		{
-			return _floatFields.Contains(field);
+			return FloatFields.Contains(field);
 		}
 
 		private static readonly List<string> _langs;
 
-		private static readonly HashSet<string> _intFields = new HashSet<string>(Str.Comparer);
-		private static readonly HashSet<string> _floatFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> IntFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> FloatFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> NumericFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> TextFields = new HashSet<string>(Str.Comparer);
 
 		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
@@ -498,9 +502,6 @@ namespace Mtgdb.Dal.Index
 				[nameof(Card.ReleaseDate)] = c => c.ReleaseDate,
 				[nameof(Card.Layout)] = c => c.Layout
 			};
-
-		public static readonly Dictionary<string, Func<Card, string, string>> LimitedLocalizedValueGetters =
-			new Dictionary<string, Func<Card, string, string>>(Str.Comparer);
 
 		public static readonly HashSet<string> CombinatoricValueFields = new HashSet<string>
 		{

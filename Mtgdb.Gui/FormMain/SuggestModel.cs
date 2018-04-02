@@ -8,24 +8,10 @@ namespace Mtgdb.Gui
 {
 	public class SuggestModel
 	{
-		private const int SuggestCount = 20;
-
-		private readonly LuceneSpellchecker _spellchecker;
-
-		private SearchStringState _searchState;
-		public SearchStringState SearchStateCurrent { get; set; }
-
-		private string _language;
-
-		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
-		
-		private readonly Thread _suggestThread;
-
-		public Token Token { get; private set; }
-
 		public SuggestModel(LuceneSearcher searcher)
 		{
 			_spellchecker = searcher.Spellchecker;
+			_spellchecker.MaxCount = 20;
 			_suggestThread = new Thread(_ => suggestThread());
 		}
 
@@ -42,7 +28,7 @@ namespace Mtgdb.Gui
 			var searchState =_searchState = SearchStateCurrent;
 			_language = Ui.LanguageController.Language;
 
-			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language, SuggestCount);
+			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language);
 			Token = suggest.Token;
 
 			if (isSuggestUpToDate())
@@ -92,5 +78,18 @@ namespace Mtgdb.Gui
 		}
 
 		public UiModel Ui { get; set; }
+
+		private readonly LuceneSpellchecker _spellchecker;
+
+		private SearchStringState _searchState;
+		public SearchStringState SearchStateCurrent { get; set; }
+
+		private string _language;
+
+		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
+		
+		private readonly Thread _suggestThread;
+
+		public Token Token { get; private set; }
 	}
 }

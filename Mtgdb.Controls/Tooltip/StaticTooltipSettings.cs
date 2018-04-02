@@ -10,5 +10,6 @@ namespace Mtgdb.Controls
 		public Control[] Controls { get; set; }
 
 		public bool IsEmpty => string.IsNullOrEmpty(Text()) && string.IsNullOrEmpty(Title());
+		public object Owner { get; set; }
 	}
 }

@@ -30,8 +30,8 @@ namespace Mtgdb.Gui
 		{
 			var form = _formFactory();
 
-			form.Show();
 			form.AddTab();
+			form.Show();
 
 			_instances.Add(form);
 		}

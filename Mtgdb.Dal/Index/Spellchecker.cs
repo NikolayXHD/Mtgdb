@@ -7,6 +7,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -130,7 +131,7 @@ namespace Mtgdb.Dal.Index
 		/// first criteria: the edit distance, second criteria (only if restricted mode): the popularity
 		/// of the suggest words in the field of the user index
 		/// </returns>
-		public List<string> SuggestSimilar(string word, int numSug, IndexReader ir, string field)
+		public IReadOnlyList<string> SuggestSimilar(string word, int numSug, IndexReader ir, string field)
 		{
 			// obtainSearcher calls ensureOpen
 			var indexSearcher = obtainSearcher();
@@ -206,8 +207,9 @@ namespace Mtgdb.Dal.Index
 					sugWord = new SuggestWord();
 				}
 
-				return sugQueue.Reverse().Select(_=>_.String)
-					.ToList();
+				return sugQueue.Reverse()
+					.Select(_=>_.String)
+					.ToReadOnlyList();
 			}
 			finally
 			{

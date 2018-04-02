@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Mtgdb.Dal;
@@ -33,6 +34,9 @@ namespace Mtgdb.Gui
 
 		public void StartThread()
 		{
+			if (_preloadImageThread?.ThreadState == ThreadState.Running)
+				throw new InvalidOperationException("Already started");
+
 			_preloadImageThread = new Thread(_ => preloadImageThread());
 			_preloadImageThread.Start();
 		}

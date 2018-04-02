@@ -101,7 +101,7 @@ namespace Mtgdb.Test
 		[Test, Order(2)]
 		public void LuceneSpellchecker_searches()
 		{
-			var suggest = _luceneSearcher.Spellchecker.SuggestValues("vamp", "nameen", "en", 20);
+			var suggest = _luceneSearcher.Spellchecker.SuggestValues("vamp", "nameen", "en");
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
 			Assert.That(suggest, Does.Contain("vampire"));

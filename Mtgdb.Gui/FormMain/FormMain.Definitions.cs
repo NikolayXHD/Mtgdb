@@ -30,6 +30,9 @@ namespace Mtgdb.Gui
 			FormManager formManager)
 			: this()
 		{
+			DoubleBuffered = true;
+			KeyPreview = true;
+
 			_viewCards = new LayoutView(_layoutViewCards);
 			_viewDeck = new LayoutView(_layoutViewDeck);
 
@@ -67,7 +70,7 @@ namespace Mtgdb.Gui
 
 			endRestoreSettings();
 
-			_tooltipViewCards = new LayoutViewTooltip(_viewCards, _searchStringSubsystem);
+			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchStringSubsystem);
 
 			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -121,9 +124,6 @@ namespace Mtgdb.Gui
 
 			_printingSubsystem = new PrintingSubsystem(imageRepo, _cardRepo);
 
-			DoubleBuffered = true;
-			KeyPreview = true;
-
 			_buttonSubsystem = new ButtonSubsystem();
 			DeckZone = Zone.Main;
 
@@ -147,7 +147,12 @@ namespace Mtgdb.Gui
 				{ 1, evalFilterBySearchText }
 			};
 
-			Load += formLoad;
+			setupCheckButtonImages();
+			updateExcludeManaAbility();
+			updateExcludeManaCost();
+			updateShowProhibited();
+			updateShowSampleHandButtons();
+			subscribeToEvents();
 		}
 
 		private void scale()
@@ -255,6 +260,7 @@ namespace Mtgdb.Gui
 
 		private void subscribeToEvents()
 		{
+			Load += formLoad;
 			FormClosing += formClosing;
 			
 			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
@@ -276,11 +282,6 @@ namespace Mtgdb.Gui
 
 			_deckModel.DeckChanged += deckChanged;
 			_collectionModel.CollectionChanged += collectionChanged;
-
-			_searchStringSubsystem.SubscribeToEvents();
-			_searchStringSubsystem.TextApplied += searchStringApplied;
-			_searchStringSubsystem.TextChanged += searchStringChanged;
-
 
 			_sortSubsystem.SubscribeToEvents();
 			_sortSubsystem.SortChanged += sortChanged;
@@ -327,14 +328,6 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.DragOver += deckZoneDrag;
 
-			_cardRepo.SetAdded += cardRepoSetAdded;
-			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
-			
-			if (_cardRepo.IsLoadingComplete)
-				repoLoadingComplete();
-			else
-				_cardRepo.LoadingComplete += repoLoadingComplete;
-
 			_buttonSampleHandNew.Click += sampleHandNew;
 			_buttonSampleHandMulligan.Click += sampleHandMulligan;
 			_buttonSampleHandDraw.Click += sampleHandDraw;
@@ -352,9 +345,9 @@ namespace Mtgdb.Gui
 
 			_historySubsystem.Loaded += historyLoaded;
 
-			SizeChanged += sizeChanged;
+			_searchStringSubsystem.SubscribeToEvents();
 
-			subscribeFormRootEvents();
+			SizeChanged += sizeChanged;
 		}
 
 		private void unsubscribeFromEvents()
@@ -373,10 +366,6 @@ namespace Mtgdb.Gui
 			_legalitySubsystem.FilterChanged -= legalityFilterChanged;
 			_deckModel.DeckChanged -= deckChanged;
 			_collectionModel.CollectionChanged -= collectionChanged;
-
-			_searchStringSubsystem.UnsubscribeFromEvents();
-			_searchStringSubsystem.TextApplied -= searchStringApplied;
-			_searchStringSubsystem.TextChanged -= searchStringChanged;
 
 			_sortSubsystem.UnsubscribeFromEvents();
 			_sortSubsystem.SortChanged -= sortChanged;
@@ -417,10 +406,6 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
 
-			_cardRepo.SetAdded -= cardRepoSetAdded;
-			_cardRepo.LoadingComplete -= repoLoadingComplete;
-			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
-
 			_buttonSampleHandNew.Click -= sampleHandNew;
 			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
 			_buttonSampleHandDraw.Click -= sampleHandDraw;
@@ -436,29 +421,15 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_historySubsystem.Loaded -= historyLoaded;
 
+			_searchStringSubsystem.UnsubscribeFromEvents();
+
 			SizeChanged -= sizeChanged;
-
-			unsubscribeFormRootEvents();
 		}
-
-		private void subscribeFormRootEvents()
-		{
-			_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
-			_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
-		}
-
-		private void unsubscribeFormRootEvents()
-		{
-			_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
-			_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
-		}
-
-		private bool IsLoaded { get; set; }
 
 		private Zone DeckZone
 		{
-			get { return (Zone)_tabHeadersDeck.SelectedIndex; }
-			set { _tabHeadersDeck.SelectedIndex = (int)value; }
+			get => (Zone)_tabHeadersDeck.SelectedIndex;
+			set => _tabHeadersDeck.SelectedIndex = (int)value;
 		}
 
 		private IFormRoot _formRoot;

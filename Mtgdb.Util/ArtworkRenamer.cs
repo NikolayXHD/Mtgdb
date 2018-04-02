@@ -101,7 +101,7 @@ namespace Mtgdb.Util
 				var sets = attribute.sets
 					.Where(_=>!string.IsNullOrWhiteSpace(_))
 					.Distinct(Str.Comparer)
-					.OrderBy(_ => _)
+					.OrderBy(Str.Comparer)
 					.ToList();
 
 				if (sets.Count > 0)

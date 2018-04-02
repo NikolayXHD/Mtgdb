@@ -4,6 +4,7 @@ namespace Mtgdb.Controls
 {
 	public interface ICustomTooltip
 	{
+		object Owner { get; }
 		event Action<TooltipModel> Show;
 		event Action Hide;
 	}

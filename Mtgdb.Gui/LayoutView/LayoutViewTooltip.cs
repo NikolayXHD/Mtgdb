@@ -11,8 +11,9 @@ namespace Mtgdb.Gui
 		public event Action<TooltipModel> Show;
 		public event Action Hide;
 
-		public LayoutViewTooltip(LayoutView layoutView, SearchStringSubsystem searchStringSubsystem)
+		public LayoutViewTooltip(object owner, LayoutView layoutView, SearchStringSubsystem searchStringSubsystem)
 		{
+			Owner = owner;
 			_layoutView = layoutView;
 			_searchStringSubsystem = searchStringSubsystem;
 		}
@@ -132,5 +133,7 @@ namespace Mtgdb.Gui
 
 		private readonly LayoutView _layoutView;
 		private readonly SearchStringSubsystem _searchStringSubsystem;
+
+		public object Owner { get; }
 	}
 }

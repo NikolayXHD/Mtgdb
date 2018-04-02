@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mtgdb.Controls;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Gui
@@ -10,12 +9,8 @@ namespace Mtgdb.Gui
 	{
 		static HistorySubsystem()
 		{
-			_jsonSerializerSettings = new JsonSerializerSettings
-			{
-				Formatting = Formatting.Indented
-			};
-
-			_jsonSerializerSettings.Converters.Add(new CustomConverter());
+			_serializer = new JsonSerializer();
+			_serializer.Converters.Add(new CustomConverter());
 		}
 
 		public HistorySubsystem(UndoConfig undoConfig)
@@ -26,11 +21,14 @@ namespace Mtgdb.Gui
 		public void LoadHistory(string historyFile)
 		{
 			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
-			
+
 			if (File.Exists(historyFile))
 			{
-				var serialized = File.ReadAllText(historyFile);
-				var state = JsonConvert.DeserializeObject<HistoryState>(serialized);
+				HistoryState state;
+
+				using (var fileReader = File.OpenText(historyFile))
+				using (var jsonReader = new JsonTextReader(fileReader))
+					state = _serializer.Deserialize<HistoryState>(jsonReader);
 
 				_settingsHistory = state.SettingsHistory;
 				_settingsIndex = state.SettingsIndex;
@@ -83,10 +81,12 @@ namespace Mtgdb.Gui
 		public void Save(string historyFile)
 		{
 			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
-			
+
 			var state = getState();
-			string serialized = JsonConvert.SerializeObject(state, _jsonSerializerSettings);
-			File.WriteAllText(historyFile, serialized);
+
+			using (var writer = File.CreateText(historyFile))
+			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
+				_serializer.Serialize(jsonWriter, state);
 		}
 
 		private HistoryState getState()
@@ -146,28 +146,6 @@ namespace Mtgdb.Gui
 		private int _settingsIndex;
 		private List<GuiSettings> _settingsHistory;
 		private readonly int _maxDepth;
-
-		private static readonly JsonSerializerSettings _jsonSerializerSettings;
-	}
-
-	internal class CustomConverter : JsonConverter
-	{
-		public override bool CanConvert(Type objectType)
-		{
-			return
-				typeof (IEnumerable<FilterValueState>).IsAssignableFrom(objectType) ||
-				typeof (IDictionary<string, int>).IsAssignableFrom(objectType) ||
-				typeof (IEnumerable<string>).IsAssignableFrom(objectType);
-		}
-
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-		{
-			throw new NotSupportedException();
-		}
-
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			writer.WriteRawValue(JsonConvert.SerializeObject(value, Formatting.None));
-		}
+		private static readonly JsonSerializer _serializer;
 	}
 }

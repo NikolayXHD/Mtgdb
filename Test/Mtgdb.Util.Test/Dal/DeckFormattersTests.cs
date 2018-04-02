@@ -39,7 +39,7 @@ namespace Mtgdb.Test
 		public void Mtgo()
 		{
 			var mtgoCardsFile = TestContext.CurrentContext.TestDirectory.AddPath("Resources\\Mtgo\\cards.txt");
-			var mtgoCardNames = File.ReadAllLines(mtgoCardsFile).Distinct().OrderBy(_ => _);
+			var mtgoCardNames = File.ReadAllLines(mtgoCardsFile).Distinct().OrderBy(Str.Comparer);
 
 			Log.Debug("Unmatched mtgo cards");
 			

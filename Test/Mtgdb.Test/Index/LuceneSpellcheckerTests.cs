@@ -12,6 +12,7 @@ namespace Mtgdb.Test
 		public void Setup()
 		{
 			LoadIndexes();
+			Spellchecker.MaxCount = 50;
 		}
 
 		[TestCase("*", "d", "en", null)]
@@ -46,7 +47,7 @@ namespace Mtgdb.Test
 			"-------------^", "demon")]
 		[TestCase("en",
 			"PricingMid:[",
-			"----------^--", "PricingMid")]
+			"----------^--", "PricingMid:")]
 		[TestCase("en",
 			"PricingMid:[",
 			"-----------^-", "{float}")]
@@ -58,7 +59,7 @@ namespace Mtgdb.Test
 			"------------------^----", "{float}")]
 		[TestCase("en",
 			"PricingMid:[0 TO 1] OR",
-			"-------------------^---", "PricingMid" /*complete field list*/)]
+			"-------------------^---", "PricingMid:" /*complete field list*/)]
 		[TestCase("en",
 			"PricingMid:[0 TO 1] OR",
 			"--------------------^--", "OR")]
@@ -84,12 +85,12 @@ namespace Mtgdb.Test
 			}
 		}
 
-		private IList<string> suggest(string field, string value, string language)
+		private IReadOnlyList<string> suggest(string field, string value, string language)
 		{
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var list = Spellchecker.SuggestValues(value, field, language, 20);
+			var list = Spellchecker.SuggestValues(value, field, language);
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -103,12 +104,12 @@ namespace Mtgdb.Test
 			return list;
 		}
 
-		private IList<string> suggestByInput(string query, int caret, string language)
+		private IReadOnlyList<string> suggestByInput(string query, int caret, string language)
 		{
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var suggest = Spellchecker.Suggest(query, caret, language, 50);
+			var suggest = Spellchecker.Suggest(query, caret, language);
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");

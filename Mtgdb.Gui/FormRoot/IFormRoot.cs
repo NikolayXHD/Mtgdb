@@ -19,7 +19,6 @@ namespace Mtgdb.Gui
 		void SelectPreviousTab();
 
 		void AddTab(Action<object> onCreated);
-		void AddTab();
 
 		void CloseTab();
 

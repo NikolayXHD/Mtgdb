@@ -13,29 +13,46 @@ namespace Mtgdb.Gui
 	{
 		public void SetFormRoot(IFormRoot formRoot)
 		{
-			if (formRoot == null)
-				throw new ArgumentNullException(nameof(formRoot));
-
 			if (formRoot == _formRoot)
 				return;
 
-			if (IsLoaded)
-				unsubscribeFormRootEvents();
+			if (_formRoot != null)
+			{
+				_searchStringSubsystem.UnsubscribeSuggestModelEvents();
+				_searchStringSubsystem.TextApplied -= searchStringApplied;
+				_searchStringSubsystem.TextChanged -= searchStringChanged;
+
+				_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
+				_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
+				_formRoot.TooltipController.UnsetTooltips(this);
+			}
 
 			_formRoot = formRoot;
 
-			if (IsLoaded)
-				subscribeFormRootEvents();
+			if (formRoot != null)
+			{
+				_searchStringSubsystem.Ui =
+					_deckEditingSubsystem.Ui =
+						_imagePreloadingSubsystem.Ui =
+							_printingSubsystem.Ui =
+								_draggingSubsystem.Ui =
+									_drawingSubsystem.Ui =
+										_fields.Ui = _formRoot.UiModel;
 
-			_searchStringSubsystem.SuggestModel = formRoot.SuggestModel;
+				_searchStringSubsystem.SuggestModel = _formRoot.SuggestModel;
 
-			_searchStringSubsystem.Ui =
-				_deckEditingSubsystem.Ui =
-					_imagePreloadingSubsystem.Ui =
-						_printingSubsystem.Ui =
-							_draggingSubsystem.Ui =
-								_drawingSubsystem.Ui =
-									_fields.Ui = _formRoot.UiModel;
+				_searchStringSubsystem.SubscribeSuggestModelEvents();
+
+				_searchStringSubsystem.TextApplied += searchStringApplied;
+				_searchStringSubsystem.TextChanged += searchStringChanged;
+
+				_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
+				_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
+				setupTooltips(_formRoot);
+
+				// calls probeCardCreating handler
+				resetLayouts();
+			}
 		}
 
 		private bool evalFilterBySearchText(Card c)
@@ -56,6 +73,7 @@ namespace Mtgdb.Gui
 		public void LoadHistory(string historyFile)
 		{
 			_historySubsystem.LoadHistory(historyFile);
+			_deckSerializationSubsystem.State.LastFile = _historySubsystem.Current.DeckFile;
 		}
 
 		public void SaveHistory(string historyFile)
@@ -66,9 +84,6 @@ namespace Mtgdb.Gui
 
 		public void OnTabSelected()
 		{
-			if (!IsLoaded)
-				throw new InvalidOperationException("Form must be loaded first");
-
 			if (!_historySubsystem.IsLoaded)
 				throw new InvalidOperationException("History must be loaded first");
 
@@ -81,16 +96,22 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem.UpdateSuggestInput();
 
-			historyUpdateGlobalSettings(_historySubsystem.Current);
+			bool isFirstTime = !_formRoot.LoadedGuiSettings;
 
-			if (!_formRoot.LoadedGuiSettings)
+			if (isFirstTime)
 			{
 				updateFormSettings();
 				updateFormPosition();
 			}
 			else
-				historyUpdateFormSettings(_historySubsystem.Current);
+			{
+				readFormSettingsTo(_historySubsystem.Current);
+			}
 
+			if (_collectionModel.IsLoaded)
+				_historySubsystem.Current.Collection = _collectionModel.CountById.ToDictionary();
+
+			// loads collection
 			historyApply(_historySubsystem.Current);
 
 			if (_requiredDeck != null)
@@ -100,10 +121,15 @@ namespace Mtgdb.Gui
 			}
 
 			historyUpdateButtons();
-			startThreads();
 
-			_findEditor.Focus();
+			if (IsHandleCreated)
+			{
+				_findEditor.Focus();
+				startThreads();
+			}
 		}
+
+
 
 		private void updateFormPosition()
 		{
@@ -569,12 +595,7 @@ namespace Mtgdb.Gui
 			_formRoot.LoadedGuiSettings = true;
 		}
 
-		private void historyUpdateGlobalSettings(GuiSettings settings)
-		{
-			settings.Collection = _collectionModel.CountById.ToDictionary();
-		}
-
-		private void historyUpdateFormSettings(GuiSettings settings)
+		private void readFormSettingsTo(GuiSettings settings)
 		{
 			settings.ShowDeck = _formRoot.ShowDeck;
 			settings.ShowPartialCards = _formRoot.ShowPartialCards;
@@ -772,10 +793,10 @@ namespace Mtgdb.Gui
 					return;
 
 				_threadsRunning = true;
-			}
 
-			_imagePreloadingSubsystem.StartThread();
-			_searchStringSubsystem.StartThread();
+				_imagePreloadingSubsystem.StartThread();
+				_searchStringSubsystem.StartThread();
+			}
 		}
 
 		private void stopThreads()
@@ -786,10 +807,10 @@ namespace Mtgdb.Gui
 					return;
 
 				_threadsRunning = false;
-			}
 
-			_imagePreloadingSubsystem.AbortThread();
-			_searchStringSubsystem.AbortThread();
+				_imagePreloadingSubsystem.AbortThread();
+				_searchStringSubsystem.AbortThread();
+			}
 		}
 
 

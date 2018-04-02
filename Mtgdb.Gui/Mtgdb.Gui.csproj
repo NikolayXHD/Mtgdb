@@ -77,6 +77,12 @@
       <HintPath>..\packages\NLog.4.4.12\lib\net40\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReadOnlyCollectionsExtensions, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionExtensions.1.3.0\lib\NET40-client\ReadOnlyCollectionsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="ReadOnlyCollectionsInterfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionInterfaces.1.0.0\lib\NET40-client\ReadOnlyCollectionsInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -103,6 +109,7 @@
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\Fields.cs" />
+    <Compile Include="FormMain\CustomConverter.cs" />
     <Compile Include="FormMain\DeckZoneModel.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />

@@ -10,23 +10,6 @@ namespace Mtgdb.Gui
 {
 	partial class FormMain
 	{
-		private void formLoad(object sender, EventArgs e)
-		{
-			setupCheckButtonImages();
-			updateExcludeManaAbility();
-			updateExcludeManaCost();
-			updateShowProhibited();
-			updateShowSampleHandButtons();
-
-			setupTooltips();
-			subscribeToEvents();
-			// only after subscribeToEvents so that probeCardCreating handler executes
-			resetLayouts();
-
-			_deckSerializationSubsystem.State.LastFile = _historySubsystem.Current.DeckFile;
-			IsLoaded = true;
-		}
-
 		private void resetLayouts()
 		{
 			_layoutViewCards.LayoutControlType = _layoutViewCards.LayoutControlType;
@@ -35,14 +18,45 @@ namespace Mtgdb.Gui
 
 		private void applicationExit(object sender, EventArgs e)
 		{
-			stopThreads();
-			unsubscribeFromEvents();
+			shutdown();
+		}
+
+		private void formLoad(object sender, EventArgs e)
+		{
+			_findEditor.Focus();
+			startThreads();
+
+			subscribeCardRepoEvents();
+		}
+
+		private void subscribeCardRepoEvents()
+		{
+			_cardRepo.SetAdded += cardRepoSetAdded;
+			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
+
+			if (_cardRepo.IsLoadingComplete)
+				repoLoadingComplete();
+			else
+				_cardRepo.LoadingComplete += repoLoadingComplete;
+		}
+
+		private void unsubscribeCardRepoEvents()
+		{
+			_cardRepo.SetAdded -= cardRepoSetAdded;
+			_cardRepo.LoadingComplete -= repoLoadingComplete;
+			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 		}
 
 		private void formClosing(object sender, FormClosingEventArgs e)
 		{
+			shutdown();
+		}
+
+		private void shutdown()
+		{
 			stopThreads();
 			unsubscribeFromEvents();
+			unsubscribeCardRepoEvents();
 		}
 
 
@@ -334,16 +348,9 @@ namespace Mtgdb.Gui
 					return;
 
 				if (touchedChanged && _deckModel.TouchedCard != null)
-				{
-					Action onFinished = () =>
-						_scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewCards);
-
-					RunRefilterTask(onFinished);
-				}
+					RunRefilterTask(() => _scrollSubsystem.EnsureCardVisibility(_deckModel.TouchedCard, _viewCards));
 				else
-				{
 					RunRefilterTask();
-				}
 			}
 			else
 			{

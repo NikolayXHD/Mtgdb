@@ -31,7 +31,7 @@ namespace Mtgdb
 		}
 
 		public static bool Contains<TVal>(this HashSet<TVal> collection, TVal? value)
-			where TVal: struct
+			where TVal : struct
 		{
 			return value.HasValue && collection.Contains(value.Value);
 		}
@@ -90,7 +90,9 @@ namespace Mtgdb
 			return list[index];
 		}
 
-		public static Dictionary<TKey, TVal> ToDictionary<TKey, TVal>(this IEnumerable<KeyValuePair<TKey, TVal>> dict, IEqualityComparer<TKey> equalityComparer = null)
+		public static Dictionary<TKey, TVal> ToDictionary<TKey, TVal>(
+			this IEnumerable<KeyValuePair<TKey, TVal>> dict,
+			IEqualityComparer<TKey> equalityComparer = null)
 		{
 			if (equalityComparer == null)
 				return dict.ToDictionary(_ => _.Key, _ => _.Value);
@@ -157,5 +159,8 @@ namespace Mtgdb
 		{
 			return getter(target, param);
 		}
+
+		public static IOrderedEnumerable<TVal> OrderBy<TVal>(this IEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
+			sequence.OrderBy(_ => _, comparer);
 	}
 }

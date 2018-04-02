@@ -11,6 +11,7 @@ using Lucene.Net.Contrib;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Controls;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
@@ -40,7 +41,7 @@ namespace Mtgdb.Gui
 			_highligter = new SearchStringHighlighter(_findEditor);
 			_highligter.Highlight();
 
-			_listBoxSuggest.DataSource = _dataSource;
+			_listBoxSuggest.DataSource = _suggestValues;
 		}
 
 		public void SubscribeToEvents()
@@ -58,10 +59,6 @@ namespace Mtgdb.Gui
 
 			_parent.KeyDown += parentKeyDown;
 			_viewCards.SearchClicked += gridSearchClicked;
-
-			subscribeSuggestModelEvents();
-
-			_subscribed = true;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -77,18 +74,14 @@ namespace Mtgdb.Gui
 
 			_parent.KeyDown -= parentKeyDown;
 			_viewCards.SearchClicked -= gridSearchClicked;
-
-			unsubscribeSuggestModelEvents();
-
-			_subscribed = false;
 		}
 
-		private void subscribeSuggestModelEvents()
+		public void SubscribeSuggestModelEvents()
 		{
 			SuggestModel.Suggested += suggested;
 		}
 
-		private void unsubscribeSuggestModelEvents()
+		public void UnsubscribeSuggestModelEvents()
 		{
 			SuggestModel.Suggested -= suggested;
 		}
@@ -114,6 +107,9 @@ namespace Mtgdb.Gui
 
 		public void StartThread()
 		{
+			if (_idleInputMonitoringThread?.ThreadState == ThreadState.Running)
+				throw new InvalidOperationException("Already started");
+
 			_idleInputMonitoringThread = new Thread(idleInputMonitoringThread);
 			_idleInputMonitoringThread.Start();
 		}
@@ -165,9 +161,9 @@ namespace Mtgdb.Gui
 
 				if (_findEditor.BackColor != requiredColor)
 				{
-					_findEditor.BackColor = 
-					_findEditor.Parent.BackColor = 
-					_panelSearchIcon.BackColor = requiredColor;
+					_findEditor.BackColor =
+						_findEditor.Parent.BackColor =
+							_panelSearchIcon.BackColor = requiredColor;
 
 					_highligter.Highlight();
 				}
@@ -186,21 +182,34 @@ namespace Mtgdb.Gui
 
 		private void updateSuggestListBox(IntellisenseSuggest intellisenseSuggest)
 		{
-			_listBoxSuggest.BeginUpdate();
-			updateDataSource(intellisenseSuggest.Values);
-			_listBoxSuggest.EndUpdate();
+			lock (_suggestSync)
+			{
+				_listBoxSuggest.BeginUpdate();
+				
+				_suggestTypes = intellisenseSuggest.Types;
 
-			if (intellisenseSuggest.Values.Count > 0)
-				_listBoxSuggest.Height = 2 + intellisenseSuggest.Values.Sum(getHeight);
-			else
+				_suggestValues.Clear();
+				foreach (string sugg in intellisenseSuggest.Values)
+					_suggestValues.Add(sugg);
+
+				_listBoxSuggest.EndUpdate();
+			}
+
+			if (_suggestValues.Count == 0)
+			{
 				_listBoxSuggest.Height = 0;
-
-			updateSuggestLocation();
+				closeSuggest();
+			}
+			else
+			{
+				_listBoxSuggest.Height = 2 + intellisenseSuggest.Values.Sum(getHeight);
+				updateSuggestLocation();
+			}
 		}
 
 		private void showSuggest()
 		{
-			if (_dataSource.Count == 0)
+			if (_suggestValues.Count == 0)
 				return;
 
 			updateSuggestLocation();
@@ -259,13 +268,13 @@ namespace Mtgdb.Gui
 		{
 			updateBackgroundColor();
 			_lastUserInput = DateTime.Now;
-			
+
 			switch (e.KeyData)
 			{
 				case Keys.Down:
 					if (_listBoxSuggest.Visible)
 					{
-						if (_listBoxSuggest.SelectedIndex < _dataSource.Count - 1)
+						if (_listBoxSuggest.SelectedIndex < _suggestValues.Count - 1)
 							_listBoxSuggest.SelectedIndex++;
 					}
 					else
@@ -287,7 +296,7 @@ namespace Mtgdb.Gui
 				case Keys.Escape:
 					if (_listBoxSuggest.Visible)
 						closeSuggest();
-				
+
 					e.Handled = true;
 					break;
 				case Keys.Enter:
@@ -388,7 +397,7 @@ namespace Mtgdb.Gui
 			if (text.StartsWith(SearchStringMark))
 				return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
 
-			string[] postfixes = 
+			string[] postfixes =
 			{
 				".jpg",
 				".xlhq",
@@ -404,7 +413,7 @@ namespace Mtgdb.Gui
 			if (endOfLine >= 0)
 			{
 				string fieldName = text.Substring(0, endOfLine).Trim();
-				
+
 				if (DocumentFactory.UserFields.Contains(fieldName))
 				{
 					string fieldValue = text.Substring(endOfLine);
@@ -488,19 +497,33 @@ namespace Mtgdb.Gui
 
 		private void selectSuggest()
 		{
-			var searchStringState = _suggestSource;
+			SearchStringState searchStringState;
+			string suggestValue;
+			TokenType suggestType;
 
-			if (!searchStringState.Equals(SuggestModel.SearchStateCurrent))
+			lock (_suggestSync)
+			{
+				searchStringState = _suggestSource;
+
+				if (!searchStringState.Equals(SuggestModel.SearchStateCurrent))
+					return;
+
+				int selectedIndex = _listBoxSuggest.SelectedIndex;
+
+				if (selectedIndex < 0)
+					return;
+
+				suggestValue = _suggestValues[selectedIndex];
+				suggestType = _suggestTypes[selectedIndex];
+			}
+
+			if (string.IsNullOrEmpty(suggestValue))
 				return;
 
-			var selectedSuggest = (string)_listBoxSuggest.SelectedItem;
+			if (suggestType.IsAny(TokenType.FieldValue))
+				suggestValue = StringEscaper.Escape(suggestValue);
 
-			if (string.IsNullOrEmpty(selectedSuggest))
-				return;
-
-			selectedSuggest = StringEscaper.Escape(selectedSuggest);
-
-			applySuggestSelection(selectedSuggest, searchStringState);
+			applySuggestSelection(suggestValue, searchStringState);
 		}
 
 		private void applySuggestSelection(string selectedSuggest, SearchStringState suggestSource)
@@ -509,10 +532,10 @@ namespace Mtgdb.Gui
 
 			int left = token?.Position ?? suggestSource.Caret;
 			var length = token?.Value?.Length ?? 0;
-			if (token?.Type.IsAny(TokenType.Field) == true)
-				// Включим : в токен
-				if (left + length < suggestSource.Text.Length)
-					length++;
+
+			// Включим : в токен
+			if (token?.Type.IsAny(TokenType.Field) == true && left + length < suggestSource.Text.Length)
+				length++;
 
 			string prefix = suggestSource.Text.Substring(0, left);
 			string suffix = suggestSource.Text.Substring(left + length);
@@ -527,8 +550,8 @@ namespace Mtgdb.Gui
 				rightDelimiter = @":";
 			else
 				rightDelimiter = @" ";
-			
-			if (!suffix.StartsWith(rightDelimiter))
+
+			if (!suffix.StartsWith(rightDelimiter) && !selectedSuggest.EndsWith(rightDelimiter))
 				selectedSuggest += rightDelimiter;
 
 			string leftDelimiter;
@@ -540,11 +563,11 @@ namespace Mtgdb.Gui
 			else
 				leftDelimiter = string.Empty;
 
-			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter))
+			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter) && !selectedSuggest.StartsWith(leftDelimiter))
 				selectedSuggest = leftDelimiter + selectedSuggest;
 
 			var replacement = prefix + selectedSuggest + suffix;
-				
+
 			setFindText(replacement, left + selectedSuggest.Length);
 			updateBackgroundColor();
 		}
@@ -594,16 +617,6 @@ namespace Mtgdb.Gui
 			return _findEditor.ContainsFocus;
 		}
 
-		private void updateDataSource(IList<string> suggest)
-		{
-			_dataSource.Clear();
-			foreach (var sugg in suggest)
-				_dataSource.Add(sugg);
-
-			if (_dataSource.Count == 0)
-				closeSuggest();
-		}
-
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{
 			string query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
@@ -646,30 +659,7 @@ namespace Mtgdb.Gui
 		private const string SearchStringMark = "search: ";
 		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
 
-		public SuggestModel SuggestModel
-		{
-			get
-			{
-				return _suggestModel;
-			}
-
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException();
-
-				if (_suggestModel == value)
-					return;
-
-				if (_subscribed)
-					unsubscribeSuggestModelEvents();
-
-				_suggestModel = value;
-
-				if (_subscribed)
-					subscribeSuggestModelEvents();
-			}
-		}
+		public SuggestModel SuggestModel { get; set; }
 
 		public UiModel Ui { get; set; }
 
@@ -681,10 +671,6 @@ namespace Mtgdb.Gui
 
 		private string _currentText = string.Empty;
 		private SearchStringState _suggestSource;
-		private SuggestModel _suggestModel;
-
-		private bool _subscribed;
-
 
 		private readonly Form _parent;
 		private readonly RichTextBox _findEditor;
@@ -693,6 +679,9 @@ namespace Mtgdb.Gui
 		private readonly LuceneSearcher _searcher;
 		private readonly LayoutView _viewCards;
 		private readonly SearchStringHighlighter _highligter;
-		private readonly BindingList<string> _dataSource = new BindingList<string>();
+
+		private readonly object _suggestSync = new object();
+		private readonly BindingList<string> _suggestValues = new BindingList<string>();
+		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
 	}
 }

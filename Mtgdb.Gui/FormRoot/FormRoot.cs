@@ -457,7 +457,7 @@ namespace Mtgdb.Gui
 
 			_formManager.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
 
-			AddTab(formMain);
+			addTab(formMain);
 
 			_tabs.Capture = true;
 			_tabs.BeginDrag(TabsCount - 1);
@@ -515,24 +515,23 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void AddTab()
+		public void AddTab(Action<object> onCreated = null)
 		{
-			_tabs.AddTab();
+			if (onCreated != null)
+			{
+				void onTabCreated(TabHeaderControl c, int i) => onCreated(getTab(i));
+
+				_tabs.TabAdded += onTabCreated;
+				_tabs.AddTab();
+				_tabs.TabAdded -= onTabCreated;
+			}
+			else
+			{
+				_tabs.AddTab();
+			}
 		}
 
-		public void AddTab(Action<object> onCreated)
-		{
-			Action<TabHeaderControl, int> onTabCreated = (c, i) => onCreated(getTab(i));
-
-			_tabs.TabAdded += onTabCreated;
-			_tabs.AddTab();
-			_tabs.TabAdded -= onTabCreated;
-		}
-
-		public void AddTab(FormMain form)
-		{
-			_tabs.AddTab(form);
-		}
+		private void addTab(FormMain form) => _tabs.AddTab(form);
 
 		public void CloseTab()
 		{

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -17,18 +18,19 @@ namespace Mtgdb.Controls
 			_tooltipForm = form;
 		}
 
-		public void SetTooltip(string title, string tooltip, params Control[] controls)
+		public void SetTooltip(object owner, string title, string tooltip, params Control[] controls)
 		{
-			SetTooltip(() => title, () => tooltip, controls);
+			SetTooltip(owner, () => title, () => tooltip, controls);
 		}
 
-		public void SetTooltip(Func<string> title, Func<string> tooltip, params Control[] controls)
+		public void SetTooltip(object owner, Func<string> title, Func<string> tooltip, params Control[] controls)
 		{
 			var settings = new StaticTooltipSettings
 			{
 				Text = tooltip,
 				Title = title,
-				Controls = controls
+				Controls = controls,
+				Owner = owner
 			};
 
 			foreach (var control in controls)
@@ -49,11 +51,7 @@ namespace Mtgdb.Controls
 				if (!_subscribed.Add(control))
 					continue;
 
-				control.MouseEnter += mouseEnter;
-				control.MouseLeave += mouseLeave;
-				control.GotFocus += gotFocus;
-				control.MouseDown += gotFocus;
-				control.KeyDown += gotFocus;
+				subsribeStaticTooltipEvents(control);
 			}
 
 			foreach (var customClient in _customTooltips)
@@ -61,10 +59,67 @@ namespace Mtgdb.Controls
 				if (!_subscribed.Add(customClient))
 					continue;
 
-				customClient.Show += customTooltipShow;
-				customClient.Hide += customTooltipHide;
+				subscribeCustomTooltipEvents(customClient);
 			}
 		}
+
+		private void subsribeStaticTooltipEvents(Control control)
+		{
+			control.MouseEnter += mouseEnter;
+			control.MouseLeave += mouseLeave;
+			control.GotFocus += gotFocus;
+			control.MouseDown += gotFocus;
+			control.KeyDown += gotFocus;
+		}
+
+		private void subscribeCustomTooltipEvents(ICustomTooltip customClient)
+		{
+			customClient.Show += customTooltipShow;
+			customClient.Hide += customTooltipHide;
+		}
+
+
+
+		public void UnsetTooltips(object owner)
+		{
+			var staticTooltipsToRemove = _staticTooltips
+				.Where(_ => _.Value.Owner == owner)
+				.Select(_=>_.Key)
+				.ToArray();
+
+			foreach (var control in staticTooltipsToRemove)
+			{
+				unsubsribeStaticTooltipEvents(control);
+				_staticTooltips.Remove(control);
+			}
+
+			var customTooltipsToRemove = _customTooltips
+				.Where(_ => _.Owner == owner)
+				.ToArray();
+
+			foreach (var customTooltip in customTooltipsToRemove)
+			{
+				unsubscribeCustomTooltipEvents(customTooltip);
+				_customTooltips.Remove(customTooltip);
+			}
+		}
+
+		private void unsubsribeStaticTooltipEvents(Control control)
+		{
+			control.MouseEnter -= mouseEnter;
+			control.MouseLeave -= mouseLeave;
+			control.GotFocus -= gotFocus;
+			control.MouseDown -= gotFocus;
+			control.KeyDown -= gotFocus;
+		}
+
+		private void unsubscribeCustomTooltipEvents(ICustomTooltip customClient)
+		{
+			customClient.Show -= customTooltipShow;
+			customClient.Hide -= customTooltipHide;
+		}
+
+
 
 		public void StartThread()
 		{
