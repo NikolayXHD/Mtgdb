@@ -623,39 +623,6 @@
 			this._menuLegalityFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuLegalityFormat.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuLegalityFormat.IntegralHeight = false;
-			this._menuLegalityFormat.Items.AddRange(new object[] {
-            "[ any format ]",
-            "Standard",
-            "Modern",
-            "Commander",
-            "Legacy",
-            "Vintage",
-            "Un-Sets",
-            "Amonkhet Block",
-            "Battle for Zendikar Block",
-            "Ice Age Block",
-            "Innistrad Block",
-            "Ixalan Block",
-            "Invasion Block",
-            "Kaladesh Block",
-            "Kamigawa Block",
-            "Khans of Tarkir Block",
-            "Lorwyn-Shadowmoor Block",
-            "Masques Block",
-            "Mirage Block",
-            "Mirrodin Block",
-            "Odyssey Block",
-            "Onslaught Block",
-            "Ravnica Block",
-            "Return to Ravnica Block",
-            "Scars of Mirrodin Block",
-            "Shadows over Innistrad Block",
-            "Shards of Alara Block",
-            "Tempest Block",
-            "Theros Block",
-            "Time Spiral Block",
-            "Urza Block",
-            "Zendikar Block"});
 			this._menuLegalityFormat.Location = new System.Drawing.Point(514, 2);
 			this._menuLegalityFormat.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this._menuLegalityFormat.MaxDropDownItems = 35;
@@ -877,7 +844,8 @@
 			searchOptions1.ButtonMargin = new System.Drawing.Size(19, 2);
 			searchOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
 			this._layoutViewCards.SearchOptions = searchOptions1;
-			selectionOptions1.BackColor = System.Drawing.Color.RoyalBlue;
+			selectionOptions1.Alpha = ((byte)(192));
+			selectionOptions1.BackColor = System.Drawing.Color.MediumBlue;
 			selectionOptions1.ForeColor = System.Drawing.Color.White;
 			selectionOptions1.RectAlpha = ((byte)(16));
 			selectionOptions1.RectBorderColor = System.Drawing.Color.MediumBlue;
@@ -922,6 +890,7 @@
 			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewDeck.Name = "_layoutViewDeck";
 			this._layoutViewDeck.SearchOptions = searchOptions2;
+			selectionOptions2.Alpha = ((byte)(255));
 			selectionOptions2.BackColor = System.Drawing.Color.Empty;
 			selectionOptions2.Enabled = false;
 			selectionOptions2.ForeColor = System.Drawing.Color.Empty;

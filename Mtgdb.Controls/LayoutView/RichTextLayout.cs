@@ -13,8 +13,10 @@ namespace Mtgdb.Controls
 			_renderContext = renderContext;
 			_iconRecognizer = iconRecognizer;
 
-			_brush = new SolidBrush(renderContext.HighlightColor);
-			_contextBrush = new SolidBrush(renderContext.HighlightContextColor);
+			_highlightBrush = new SolidBrush(renderContext.HighlightColor);
+			_highlightContextBrush = new SolidBrush(renderContext.HighlightContextColor);
+			_selectionBrush = new SolidBrush(Color.FromArgb(_renderContext.SelectionAlpha, _renderContext.SelectionBackColor));
+
 			_pen = new Pen(renderContext.HighlightBorderColor, renderContext.HighlightBorderWidth);
 
 			_x = _renderContext.Rect.Left;
@@ -75,19 +77,19 @@ namespace Mtgdb.Controls
 							targetRect,
 							(rect, hb, he) =>
 							{
-								rect = new RectangleF(rect.Location, new SizeF(rect.Width + 2, rect.Height));
-								var rectangle = toRectangle(rect);
-
 								var foreColor = _renderContext.ForeColor;
 
 								if (printSelection(rect, token))
 									foreColor = _renderContext.SelectionForeColor;
 
+								rect.Inflate(1, 0);
+								rect.Offset(1, 0);
+
 								TextRenderer.DrawText(
 									_renderContext.Graphics,
 									tokenText,
 									_renderContext.Font,
-									rectangle,
+									toRectangle(rect),
 									foreColor,
 									_renderContext.StringFormat.ToTextFormatFlags());
 							});
@@ -142,38 +144,44 @@ namespace Mtgdb.Controls
 			batch.Add(targetRect,
 				(rectF, hb, he) =>
 				{
-					var rect = toRectangle(new RectangleF(rectF.Location, new SizeF(rectF.Width - _spaceWidth + 1, rectF.Height)));
+					var rect = toRectangle(rectF);
 
-					rect = new Rectangle(new Point(rect.X - 1, rect.Y - 1), new Size(rect.Width + 2, rect.Height + 1));
+					var fillRect = (RectangleF) rect;
+					fillRect.Offset(-0.5f, -0.5f);
 
-					var brush = isContext ? _contextBrush : _brush;
-					_renderContext.Graphics.FillRectangle(brush, rect);
+					var brush = isContext ? _highlightContextBrush : _highlightBrush;
+					_renderContext.Graphics.FillRectangle(brush, fillRect);
+
+					int left = rect.Left - 1;
+					int top = rect.Top - 1;
+					int bottom = rect.Bottom;
+					int right = rect.Right;
 
 					if (hb)
 						_renderContext.Graphics.DrawLine(_pen,
-							rect.Left,
-							rect.Top,
-							rect.Left,
-							rect.Bottom);
-
+							left,
+							top,
+							left,
+							bottom);
+					
 					if (he)
 						_renderContext.Graphics.DrawLine(_pen,
-							rect.Right,
-							rect.Top,
-							rect.Right,
-							rect.Bottom);
+							right,
+							top,
+							right,
+							bottom);
 
 					_renderContext.Graphics.DrawLine(_pen,
-						rect.Left,
-						rect.Top,
-						rect.Right,
-						rect.Top);
+						left,
+						top,
+						right,
+						top);
 
 					_renderContext.Graphics.DrawLine(_pen,
-						rect.Left,
-						rect.Bottom,
-						rect.Right,
-						rect.Bottom);
+						left,
+						bottom,
+						right,
+						bottom);
 				});
 		}
 
@@ -200,10 +208,10 @@ namespace Mtgdb.Controls
 
 				var printBatch = new RenderBatch(space.IsHighlighted);
 
-				printBatch.Add(targetRect, (rect, hb, he) => printSelection(rect, space));
-
 				if (space.IsHighlighted)
 					printHighlight(targetRect, printBatch, space.IsContext);
+
+				printBatch.Add(targetRect, (rect, hb, he) => printSelection(rect, space));
 
 				_lineQueue.Add(printBatch);
 
@@ -297,9 +305,10 @@ namespace Mtgdb.Controls
 			}
 
 			rectangle = toRectangle(rectangle);
+
 			rectangle.Offset(-0.5f, -0.5f);
 
-			_renderContext.Graphics.FillRectangle(new SolidBrush(_renderContext.SelectionBackColor), rectangle);
+			_renderContext.Graphics.FillRectangle(_selectionBrush, rectangle);
 
 			return true;
 		}
@@ -398,8 +407,8 @@ namespace Mtgdb.Controls
 		private readonly float _lineHeight;
 		private readonly float _spaceWidth;
 
-		private readonly Brush _brush;
-		private readonly Brush _contextBrush;
+		private readonly Brush _highlightBrush;
+		private readonly Brush _highlightContextBrush;
 		private readonly Pen _pen;
 
 		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
@@ -407,5 +416,6 @@ namespace Mtgdb.Controls
 		private readonly IconRecognizer _iconRecognizer;
 		private readonly SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x50, 0x50, 0x50));
 		private readonly PointF _iconShadowOffset;
+		private readonly SolidBrush _selectionBrush;
 	}
 }

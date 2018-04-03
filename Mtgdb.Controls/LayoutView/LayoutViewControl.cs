@@ -511,23 +511,25 @@ namespace Mtgdb.Controls
 
 		private void mouseDown(object sender, MouseEventArgs e)
 		{
-			if (SelectionOptions.Enabled && e.Button == MouseButtons.Left)
-			{
-				var cancelArgs = new CancelEventArgs();
-				var hitInfo = CalcHitInfo(e.Location);
+			if (!SelectionOptions.Enabled)
+				return;
 
-				SelectionStarted?.Invoke(this, hitInfo, cancelArgs);
+			if (e.Button != MouseButtons.Left)
+				return;
 
-				if (!cancelArgs.Cancel)
-				{
-					_selection.StartSelectionAt(e.Location);
-					hideButtons();
-				}
-			}
-			else
-			{
-				_selection.ResetSelection();
-			}
+			var hitInfo = CalcHitInfo(e.Location);
+
+			if (_hitInfo.IsSearchButton || _hitInfo.IsSortButton)
+				return;
+
+			var cancelArgs = new CancelEventArgs();
+			SelectionStarted?.Invoke(this, hitInfo, cancelArgs);
+
+			if (cancelArgs.Cancel)
+				return;
+			
+			_selection.StartSelectionAt(e.Location);
+			hideButtons();
 		}
 
 		private void mouseUp(object sender, MouseEventArgs e)

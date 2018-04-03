@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Core;
-using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Index;
 using Lucene.Net.Contrib;
 using Lucene.Net.Store;
@@ -28,8 +25,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.26 mana symols in ManaCost are treated as separate words
-			set => Version = new IndexVersion(value, "0.26");
+			// 0.27 after refactoring, to be on the safe side
+			set => Version = new IndexVersion(value, "0.27");
 		}
 
 		public bool IsUpToDate => Version.IsUpToDate;
@@ -39,7 +36,7 @@ namespace Mtgdb.Dal.Index
 			Version.Invalidate();
 		}
 
-		internal void LoadIndex(Analyzer analyzer, CardRepository repository, DirectoryReader indexReader)
+		internal void LoadIndex(MtgdbAnalyzer analyzer, CardRepository repository, DirectoryReader indexReader)
 		{
 			_cardRepository = repository;
 			_reader = indexReader;
@@ -60,7 +57,7 @@ namespace Mtgdb.Dal.Index
 			return spellChecker;
 		}
 
-		private Spellchecker createSpellchecker(CardRepository repository, Analyzer analyzer)
+		private Spellchecker createSpellchecker(CardRepository repository, MtgdbAnalyzer analyzer)
 		{
 			if (!repository.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
@@ -75,14 +72,13 @@ namespace Mtgdb.Dal.Index
 			var fields = new HashSet<string>();
 			fields.UnionWith(DocumentFactory.TextFields);
 			fields.ExceptWith(DocumentFactory.LimitedValueGetters.Keys);
+			fields.ExceptWith(DocumentFactory.CombinatoricValueGetters.Keys);
 			fields.ExceptWith(DocumentFactory.CombinatoricValueFields);
 
 			spellchecker.BeginIndex();
 
 			var indexedWords = new HashSet<string>(Str.Comparer);
 			var indexedValues = new HashSet<string>(Str.Comparer);
-
-			var keywordAnalyzer = new KeywordAnalyzer();
 
 			TotalSets = repository.SetsByCode.Count;
 
@@ -113,10 +109,6 @@ namespace Mtgdb.Dal.Index
 
 						bool isAnalyzed = DocumentFactory.NotAnalyzedFields.Contains(fieldName);
 
-						var fieldAnalyzer = isAnalyzed
-							? keywordAnalyzer
-							: analyzer;
-
 						string value = docField.GetStringValue()?.ToLowerInvariant();
 
 						if (string.IsNullOrEmpty(value))
@@ -125,17 +117,9 @@ namespace Mtgdb.Dal.Index
 						if (isAnalyzed && !indexedValues.Add(value) || !isAnalyzed && indexedWords.Contains(value))
 							continue;
 
-						var tokenStream = fieldAnalyzer.GetTokenStream(fieldName, value);
-
-						tokenStream.Reset();
-
-						using (tokenStream)
-							while (tokenStream.IncrementToken())
-							{
-								var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
-								if (indexedWords.Add(term))
-									spellchecker.IndexWord(term);
-							}
+						foreach (var token in analyzer.GetTokens(fieldName, value))
+							if (indexedWords.Add(token.Term))
+								spellchecker.IndexWord(token.Term);
 					}
 				}
 
@@ -241,7 +225,13 @@ namespace Mtgdb.Dal.Index
 				return getNumericSuggest(value, field, language, maxCount);
 
 			if (DocumentFactory.LimitedValueGetters.ContainsKey(field))
-				return getLimitedValueFieldValues(field, value, maxCount);
+				return getLimitedValuesSuggest(field, value, maxCount);
+
+			if (DocumentFactory.CombinatoricValueGetters.ContainsKey(field))
+				return getCombinatoricValuesSuggest(field, value, maxCount);
+
+			if (_legalityFields.Contains(field))
+				return getMostSimilarValues(_legalityValues, value, _legalityValues.Count);
 
 			if (string.IsNullOrEmpty(value) || DocumentFactory.CombinatoricValueFields.Contains(field))
 			{
@@ -252,12 +242,22 @@ namespace Mtgdb.Dal.Index
 			return _spellchecker.SuggestSimilar(value, maxCount, _reader, DocumentFactory.Localize(field, language));
 		}
 
-		private IReadOnlyList<string> getLimitedValueFieldValues(string field, string value, int maxCount)
+		private IReadOnlyList<string> getLimitedValuesSuggest(string field, string value, int maxCount)
 		{
 			if (!_cardRepository.IsLoadingComplete)
 				return _emptySuggest.Values;
 
 			var values = getAllLimitedValues(field);
+
+			return getMostSimilarValues(values, value, maxCount);
+		}
+
+		private IReadOnlyList<string> getCombinatoricValuesSuggest(string field, string value, int maxCount)
+		{
+			if (!_cardRepository.IsLoadingComplete)
+				return _emptySuggest.Values;
+
+			var values = getAllCombinatoricValues(field);
 
 			return getMostSimilarValues(values, value, maxCount);
 		}
@@ -281,7 +281,7 @@ namespace Mtgdb.Dal.Index
 
 		private IReadOnlyList<string> getAllLimitedValues(string field)
 		{
-			if (_limitedValueFieldValues.TryGetValue(field, out var values))
+			if (_limitedFieldValues.TryGetValue(field, out var values))
 				return values;
 
 			values = _cardRepository.Cards
@@ -291,7 +291,24 @@ namespace Mtgdb.Dal.Index
 				.Distinct()
 				.ToReadOnlyList();
 
-			_limitedValueFieldValues[field] = values;
+			_limitedFieldValues[field] = values;
+
+			return values;
+		}
+
+		private IReadOnlyList<string> getAllCombinatoricValues(string field)
+		{
+			if (_limitedFieldValues.TryGetValue(field, out var values))
+				return values;
+
+			values = _cardRepository.Cards
+				.SelectMany(DocumentFactory.CombinatoricValueGetters[field])
+				.Where(_ => _ != null)
+				.Select(_ => _.Trim().ToLowerInvariant())
+				.Distinct()
+				.ToReadOnlyList();
+
+			_limitedFieldValues[field] = values;
 
 			return values;
 		}
@@ -438,7 +455,7 @@ namespace Mtgdb.Dal.Index
 
 		private readonly DamerauLevenstineDistance _stringDistance;
 
-		private readonly Dictionary<string, IReadOnlyList<string>> _limitedValueFieldValues = new Dictionary<string, IReadOnlyList<string>>();
+		private readonly Dictionary<string, IReadOnlyList<string>> _limitedFieldValues = new Dictionary<string, IReadOnlyList<string>>();
 		private CardRepository _cardRepository;
 
 		private static readonly IReadOnlyList<string> _userFields = DocumentFactory.UserFields
@@ -449,6 +466,15 @@ namespace Mtgdb.Dal.Index
 		private static readonly IReadOnlyList<string> _booleanOperators =
 			new List<string> { "AND", "OR", "NOT", "&&", "||", "!", "+", "-" }
 				.AsReadOnlyList();
+
+		private static readonly HashSet<string> _legalityFields = new HashSet<string>(Str.Comparer)
+		{
+			nameof(Card.LegalIn),
+			nameof(Card.RestrictedIn),
+			nameof(Card.BannedIn)
+		};
+
+		private static readonly IReadOnlyList<string> _legalityValues = Legality.Formats;
 
 		private static readonly IReadOnlyList<TokenType> _allTokensAreField = _userFields
 			.Select(_ => TokenType.Field)

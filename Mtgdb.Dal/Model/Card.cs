@@ -129,54 +129,29 @@ namespace Mtgdb.Dal
 		}
 
 		[JsonIgnore]
-		public string LegalIn
-		{
-			get
-			{
-				if (_legalIn != null)
-					return _legalIn;
-
-				var legalFormats = LegalityByFormat
-					.Where(_ => Str.Equals(_.Value.Legality, "legal"))
-					.Select(_ => _.Key);
-
-				_legalIn = string.Intern(string.Join(@", ", legalFormats));
-				return _legalIn;
-			}
-		}
+		public string LegalIn => _legalIn ?? (_legalIn = string.Intern(string.Join(@", ", LegalFormats)));
 
 		[JsonIgnore]
-		public string RestrictedIn
-		{
-			get
-			{
-				if (_restrictedIn != null)
-					return _restrictedIn;
-
-				var legalFormats = LegalityByFormat
-					.Where(_ => Str.Equals(_.Value.Legality, "restricted"))
-					.Select(_ => _.Key);
-
-				_restrictedIn = string.Intern(string.Join(@", ", legalFormats));
-				return _restrictedIn;
-			}
-		}
+		public string RestrictedIn => _restrictedIn ?? (_restrictedIn = string.Intern(string.Join(@", ", RestrictedFormats)));
 
 		[JsonIgnore]
-		public string BannedIn
+		public string BannedIn => _bannedIn ?? (_bannedIn = string.Intern(string.Join(@", ", BannedFormats)));
+
+		[JsonIgnore]
+		public string[] LegalFormats => _legalFormats ?? (_legalFormats = getFormats(Legality.Legal));
+
+		[JsonIgnore]
+		public string[] RestrictedFormats => _restrictedFormats ?? (_restrictedFormats = getFormats(Legality.Restricted));
+
+		[JsonIgnore]
+		public string[] BannedFormats => _bannedFormats ?? (_bannedFormats = getFormats(Legality.Banned));
+
+		private string[] getFormats(string objB)
 		{
-			get
-			{
-				if (_bannedIn != null)
-					return _bannedIn;
-
-				var legalFormats = LegalityByFormat
-					.Where(_ => Str.Equals(_.Value.Legality, "banned"))
-					.Select(_ => _.Key);
-
-				_bannedIn = string.Intern(string.Join(@", ", legalFormats));
-				return _bannedIn;
-			}
+			return LegalityByFormat
+				.Where(_ => Str.Equals(_.Value.Legality, objB))
+				.Select(_ => _.Key)
+				.ToArray();
 		}
 
 		[JsonIgnore]
@@ -566,7 +541,7 @@ namespace Mtgdb.Dal
 
 		private string getLocalizedField(string propertyName, string language, Func<CardLocalization, string, string> getter, Func<Card, string> defaultGetter)
 		{
-			string result = 
+			string result =
 				Localization?.Invoke(getter, language) ??
 				findNamesakeTranslation(propertyName, language, getter) ??
 				defaultGetter(this);
@@ -707,6 +682,15 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private string _bannedIn;
+
+		[JsonIgnore]
+		private string[] _legalFormats;
+
+		[JsonIgnore]
+		private string[] _restrictedFormats;
+
+		[JsonIgnore]
+		private string[] _bannedFormats;
 
 		[JsonIgnore]
 		private bool _textDeltaApplied;

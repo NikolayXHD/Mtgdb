@@ -20,10 +20,15 @@ namespace Mtgdb.Gui
 			CheckBox buttonLegalityAllowBanned)
 		{
 			_menuLegalityFormat = menuLegalityFormat;
+
+			_menuLegalityFormat.Items.Clear();
+			_menuLegalityFormat.Items.Add(Legality.AnyFormat);
+			foreach (string format in Legality.Formats)
+				_menuLegalityFormat.Items.Add(format);
+
 			_buttonLegalityAllowLegal = buttonLegalityAllowLegal;
 			_buttonLegalityAllowRestricted = buttonLegalityAllowRestricted;
 			_buttonLegalityAllowBanned = buttonLegalityAllowBanned;
-			AnyFormat = (string) _menuLegalityFormat.Items[0];
 		}
 
 		public void SubscribeToEvents()
@@ -91,8 +96,6 @@ namespace Mtgdb.Gui
 
 			return Legality.Illegal;
 		}
-
-		public readonly string AnyFormat;
 
 		private string getFilterFormat()
 		{

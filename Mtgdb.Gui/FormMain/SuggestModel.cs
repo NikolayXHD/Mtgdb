@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Lucene.Net.Contrib;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 
@@ -8,6 +8,7 @@ namespace Mtgdb.Gui
 {
 	public class SuggestModel
 	{
+		[UsedImplicitly]
 		public SuggestModel(LuceneSearcher searcher)
 		{
 			_spellchecker = searcher.Spellchecker;
@@ -29,7 +30,6 @@ namespace Mtgdb.Gui
 			_language = Ui.LanguageController.Language;
 
 			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language);
-			Token = suggest.Token;
 
 			if (isSuggestUpToDate())
 				Suggested?.Invoke(suggest, searchState);
@@ -89,7 +89,5 @@ namespace Mtgdb.Gui
 		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
 		
 		private readonly Thread _suggestThread;
-
-		public Token Token { get; private set; }
 	}
 }

@@ -24,57 +24,31 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
 			addTextField(nameof(Card.OriginalType), nameof(Card.Type));
 
-			addTextField(nameof(Card.NameEn),
-				nameof(Card.Name));
+			addTextField(nameof(Card.NameEn), nameof(Card.Name));
+			addTextField(nameof(Card.TextEn), nameof(Card.Text));
+			addTextField(nameof(Card.FlavorEn), nameof(Card.Flavor));
+			addTextField(nameof(Card.TypeEn), nameof(Card.Type));
+			addTextField(nameof(Card.Supertypes), nameof(Card.Type));
+			addTextField(nameof(Card.Types), nameof(Card.Type));
+			addTextField(nameof(Card.Subtypes), nameof(Card.Type));
 
-			addTextField(nameof(Card.TextEn),
-				nameof(Card.Text));
-
-			addTextField(nameof(Card.FlavorEn),
-				nameof(Card.Flavor));
-
-			addTextField(nameof(Card.TypeEn),
-				nameof(Card.Type));
-
-			addTextField(nameof(Card.Supertypes),
-				nameof(Card.Type),
-				analyze: false);
-
-			addTextField(nameof(Card.Types),
-				nameof(Card.Type),
-				analyze: false);
-
-			addTextField(nameof(Card.Subtypes),
-				nameof(Card.Type),
-				analyze: false);
-
-			addTextField(nameof(Card.LegalIn),
-				nameof(Card.Rulings));
-
-			addTextField(nameof(Card.RestrictedIn),
-				nameof(Card.Rulings));
-
-			addTextField(nameof(Card.BannedIn),
-				nameof(Card.Rulings));
-
-			addTextField(nameof(Card.GeneratedMana),
-				nameof(Card.Text),
-				analyze: false);
-
+			addTextField(nameof(Card.LegalIn), nameof(Card.Rulings));
+			addTextField(nameof(Card.RestrictedIn), nameof(Card.Rulings));
+			addTextField(nameof(Card.BannedIn), nameof(Card.Rulings));
+			
 			addTextField(nameof(Card.Power), analyze: false);
 			addTextField(nameof(Card.Toughness), analyze: false);
 			addTextField(nameof(Card.Loyalty), analyze: false);
 			addTextField(nameof(Card.ReleaseDate), analyze: false);
 			addTextField(nameof(Card.Layout), analyze: false);
+
+			addTextField(nameof(Card.GeneratedMana), nameof(Card.Text));
 			addTextField(nameof(Card.ManaCost));
 			addTextField(nameof(Card.Rarity));
 
-			addFloatField(nameof(Card.PowerNum),
-				nameof(Card.Power));
-			addFloatField(nameof(Card.ToughnessNum),
-				nameof(Card.Toughness));
-			addIntField(nameof(Card.LoyaltyNum),
-				nameof(Card.Loyalty));
+			addFloatField(nameof(Card.PowerNum), nameof(Card.Power));
+			addFloatField(nameof(Card.ToughnessNum), nameof(Card.Toughness));
+			addIntField(nameof(Card.LoyaltyNum), nameof(Card.Loyalty));
 
 			addIntField(nameof(Card.Hand));
 			addIntField(nameof(Card.Life));
@@ -123,12 +97,7 @@ namespace Mtgdb.Dal.Index
 			// Tested
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
 
-			// tested
-			if (card.ColorsArr?.Count > 0)
-				foreach (var color in card.ColorsArr)
-					doc.addTextField(nameof(card.Color), color);
-			else if (!string.IsNullOrEmpty(card.Color))
-				doc.addTextField(nameof(card.Color), card.Color);
+			doc.addTextField(nameof(card.Color), card.Color);
 
 			// Tested
 			doc.addTextField(nameof(card.NameEn), card.NameEn);
@@ -164,19 +133,16 @@ namespace Mtgdb.Dal.Index
 				doc.addTextField(nameof(card.TypeEn), card.TypeEn);
 
 			// Tested
-			if (card.SupertypesArr != null)
-				foreach (string type in card.SupertypesArr)
-					doc.addTextField(nameof(card.Supertypes), type);
+			if (!string.IsNullOrEmpty(card.Supertypes))
+				doc.addTextField(nameof(card.Supertypes), card.Supertypes);
 
 			// Tested
-			if (card.TypesArr != null)
-				foreach (string type in card.TypesArr)
-					doc.addTextField(nameof(card.Types), type);
+			if (!string.IsNullOrEmpty(card.Types))
+				doc.addTextField(nameof(card.Types), card.Types);
 
 			// Tested
-			if (card.SubtypesArr != null)
-				foreach (string type in card.SubtypesArr)
-					doc.addTextField(nameof(card.Subtypes), type);
+			if (!string.IsNullOrEmpty(card.Subtypes))
+				doc.addTextField(nameof(card.Subtypes), card.Subtypes);
 
 			foreach (var note in card.LegalityByFormat.Values)
 			{
@@ -503,19 +469,26 @@ namespace Mtgdb.Dal.Index
 				[nameof(Card.Layout)] = c => c.Layout
 			};
 
+		public static readonly Dictionary<string, Func<Card, IEnumerable<string>>> CombinatoricValueGetters =
+			new Dictionary<string, Func<Card, IEnumerable<string>>>(Str.Comparer)
+			{
+				[nameof(Card.LegalIn)] = c => c.LegalFormats,
+				[nameof(Card.RestrictedIn)] = c => c.RestrictedFormats,
+				[nameof(Card.BannedIn)] = c => c.BannedFormats,
+				[nameof(Card.GeneratedMana)] = c => c.GeneratedManaArr
+			};
+
 		public static readonly HashSet<string> CombinatoricValueFields = new HashSet<string>
 		{
 			nameof(Card.OriginalType),
 			nameof(Card.TypeEn),
 			nameof(Card.Type),
 			nameof(Card.Subtypes),
-			nameof(Card.LegalIn),
-			nameof(Card.RestrictedIn),
-			nameof(Card.BannedIn),
 			nameof(Card.Color),
-			nameof(Card.GeneratedMana),
 			nameof(Card.ManaCost)
 		};
+
+
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
 	}

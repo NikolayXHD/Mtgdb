@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
-using Lucene.Net.Contrib;
 
 namespace Mtgdb.Dal.Index
 {

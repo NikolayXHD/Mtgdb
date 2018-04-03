@@ -28,5 +28,9 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[DefaultValue(255)]
 		public byte RectAlpha { get; set; } = 255;
+
+		[Category("Settings")]
+		[DefaultValue(255)]
+		public byte Alpha { get; set; } = 255;
 	}
 }

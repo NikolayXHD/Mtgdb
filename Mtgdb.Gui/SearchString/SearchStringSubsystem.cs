@@ -42,6 +42,7 @@ namespace Mtgdb.Gui
 			_highligter.Highlight();
 
 			_listBoxSuggest.DataSource = _suggestValues;
+			_analyzer = new MtgdbAnalyzer();
 		}
 
 		public void SubscribeToEvents()
@@ -170,26 +171,26 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private void suggested(IntellisenseSuggest intellisenseSuggest, SearchStringState searchStringState)
+		private void suggested(IntellisenseSuggest suggest, SearchStringState source)
 		{
-			if (_parent.Visible)
-				_findEditor.Invoke(delegate
-				{
-					_suggestSource = searchStringState;
-					updateSuggestListBox(intellisenseSuggest);
-				});
+			if (!_parent.Visible)
+				return;
+
+			_findEditor.Invoke(delegate { updateSuggestListBox(suggest, source); });
 		}
 
-		private void updateSuggestListBox(IntellisenseSuggest intellisenseSuggest)
+		private void updateSuggestListBox(IntellisenseSuggest suggest, SearchStringState source)
 		{
 			lock (_suggestSync)
 			{
+				_suggestSource = source;
+				_suggestTypes = suggest.Types;
+				_suggestToken = suggest.Token;
+
 				_listBoxSuggest.BeginUpdate();
-				
-				_suggestTypes = intellisenseSuggest.Types;
 
 				_suggestValues.Clear();
-				foreach (string sugg in intellisenseSuggest.Values)
+				foreach (string sugg in suggest.Values)
 					_suggestValues.Add(sugg);
 
 				_listBoxSuggest.EndUpdate();
@@ -202,7 +203,7 @@ namespace Mtgdb.Gui
 			}
 			else
 			{
-				_listBoxSuggest.Height = 2 + intellisenseSuggest.Values.Sum(getHeight);
+				_listBoxSuggest.Height = 2 + suggest.Values.Sum(getHeight);
 				updateSuggestLocation();
 			}
 		}
@@ -218,7 +219,7 @@ namespace Mtgdb.Gui
 
 		private void updateSuggestLocation()
 		{
-			int editedWordIndex = SuggestModel.Token?.Position ?? _findEditor.SelectionStart;
+			int editedWordIndex = _suggestToken?.Position ?? _findEditor.SelectionStart;
 			var caretPosition = _findEditor.GetPositionFromCharIndex(editedWordIndex);
 			var caretPositionAtForm = _parent.PointToClient(_findEditor, caretPosition);
 
@@ -421,41 +422,40 @@ namespace Mtgdb.Gui
 				}
 			}
 
-			return getValueQuery(text);
+			return getValueQuery(null, text);
 		}
 
 		public string GetFieldValueQuery(string fieldName, string fieldValue)
 		{
-			return fieldName + ": " + getValueQuery(fieldValue);
+			if (string.IsNullOrEmpty(fieldValue))
+				return $"-{fieldName}:*";
+
+			return $"{fieldName}: {getValueQuery(fieldName, fieldValue)}";
 		}
 
-		private static string getValueQuery(string text)
+		private string getValueQuery(string fieldName, string text)
 		{
-			var lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-			if (lines.Length == 0)
-				return string.Empty;
+			text = _endLineRegex.Replace(text, " ");
 
 			var builder = new StringBuilder();
 
-			if (lines.Length == 1 && lines[0].IndexOf(' ') < 0)
-				builder.Append(StringEscaper.Escape(lines[0]));
-			else if (lines.Length >= 1)
+			int count = 0;
+
+			foreach (var token in _analyzer.GetTokens(fieldName, text))
 			{
-				builder.Append('"');
+				if (count > 0)
+					builder.Append(' ');
 
-				for (int i = 0; i < lines.Length; i++)
-				{
-					if (i > 0)
-						builder.Append(' ');
-
-					builder.Append(StringEscaper.Escape(lines[i]));
-				}
-
-				builder.Append('"');
+				builder.Append(StringEscaper.Escape(token.Term));
+				count++;
 			}
 
-			return builder.ToString();
+			string valueQuery = builder.ToString();
+
+			if (count > 1 || valueQuery.IndexOf(" ", Str.Comparison) >= 0)
+				return '"' + valueQuery + '"';
+
+			return valueQuery;
 		}
 
 		private void findKeyUp(object sender, KeyEventArgs e)
@@ -497,15 +497,16 @@ namespace Mtgdb.Gui
 
 		private void selectSuggest()
 		{
-			SearchStringState searchStringState;
-			string suggestValue;
-			TokenType suggestType;
+			SearchStringState source;
+			string value;
+			TokenType type;
+			Token token;
 
 			lock (_suggestSync)
 			{
-				searchStringState = _suggestSource;
+				source = _suggestSource;
 
-				if (!searchStringState.Equals(SuggestModel.SearchStateCurrent))
+				if (!source.Equals(SuggestModel.SearchStateCurrent))
 					return;
 
 				int selectedIndex = _listBoxSuggest.SelectedIndex;
@@ -513,62 +514,63 @@ namespace Mtgdb.Gui
 				if (selectedIndex < 0)
 					return;
 
-				suggestValue = _suggestValues[selectedIndex];
-				suggestType = _suggestTypes[selectedIndex];
+				value = _suggestValues[selectedIndex];
+				type = _suggestTypes[selectedIndex];
+				token = _suggestToken;
 			}
 
-			if (string.IsNullOrEmpty(suggestValue))
+			if (string.IsNullOrEmpty(value))
 				return;
 
-			if (suggestType.IsAny(TokenType.FieldValue))
-				suggestValue = StringEscaper.Escape(suggestValue);
-
-			applySuggestSelection(suggestValue, searchStringState);
+			applySuggestSelection(value, type, source, token);
 		}
 
-		private void applySuggestSelection(string selectedSuggest, SearchStringState suggestSource)
+		private void applySuggestSelection(string value, TokenType type, SearchStringState source, Token token)
 		{
-			var token = SuggestModel.Token;
-
-			int left = token?.Position ?? suggestSource.Caret;
+			int left = token?.Position ?? source.Caret;
 			var length = token?.Value?.Length ?? 0;
 
 			// Включим : в токен
-			if (token?.Type.IsAny(TokenType.Field) == true && left + length < suggestSource.Text.Length)
+			if (token?.Type.IsAny(TokenType.Field) == true && left + length < source.Text.Length)
 				length++;
 
-			string prefix = suggestSource.Text.Substring(0, left);
-			string suffix = suggestSource.Text.Substring(left + length);
+			string prefix = source.Text.Substring(0, left);
+			string suffix = source.Text.Substring(left + length);
 
-			bool suggestContainsWhitespace = selectedSuggest.Contains(" ");
+			bool multipleTokens = _analyzer.GetTokens(token?.ParentField, value)
+				.Skip(1)
+				.Any();
+
+			if (type.IsAny(TokenType.FieldValue))
+				value = StringEscaper.Escape(value);
 
 			string rightDelimiter;
 
-			if (suggestContainsWhitespace)
+			if (multipleTokens)
 				rightDelimiter = "\"";
 			else if (token?.Type.IsAny(TokenType.Field) == true)
 				rightDelimiter = @":";
 			else
 				rightDelimiter = @" ";
 
-			if (!suffix.StartsWith(rightDelimiter) && !selectedSuggest.EndsWith(rightDelimiter))
-				selectedSuggest += rightDelimiter;
+			if (!suffix.StartsWith(rightDelimiter) && !value.EndsWith(rightDelimiter))
+				value += rightDelimiter;
 
 			string leftDelimiter;
 
-			if (suggestContainsWhitespace)
+			if (multipleTokens)
 				leftDelimiter = "\"";
 			else if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.IsAny(TokenType.CloseQuote | TokenType.Close) == true)
 				leftDelimiter = @" ";
 			else
 				leftDelimiter = string.Empty;
 
-			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter) && !selectedSuggest.StartsWith(leftDelimiter))
-				selectedSuggest = leftDelimiter + selectedSuggest;
+			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter) && !value.StartsWith(leftDelimiter))
+				value = leftDelimiter + value;
 
-			var replacement = prefix + selectedSuggest + suffix;
+			var replacement = prefix + value + suffix;
 
-			setFindText(replacement, left + selectedSuggest.Length);
+			setFindText(replacement, left + value.Length);
 			updateBackgroundColor();
 		}
 
@@ -621,7 +623,7 @@ namespace Mtgdb.Gui
 		{
 			string query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
 
-			if (searchArgs.UseAndOperator)
+			if (searchArgs.UseAndOperator && !string.IsNullOrEmpty(searchArgs.FieldValue))
 				query = "+" + query;
 
 			if (_findEditor.TextLength > 0)
@@ -641,7 +643,6 @@ namespace Mtgdb.Gui
 			pasteSearchQuery(query);
 			ApplyFind();
 		}
-
 
 		public string AppliedText
 		{
@@ -670,7 +671,11 @@ namespace Mtgdb.Gui
 		private Thread _idleInputMonitoringThread;
 
 		private string _currentText = string.Empty;
+		
 		private SearchStringState _suggestSource;
+		private readonly BindingList<string> _suggestValues = new BindingList<string>();
+		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
+		private Token _suggestToken;
 
 		private readonly Form _parent;
 		private readonly RichTextBox _findEditor;
@@ -679,9 +684,8 @@ namespace Mtgdb.Gui
 		private readonly LuceneSearcher _searcher;
 		private readonly LayoutView _viewCards;
 		private readonly SearchStringHighlighter _highligter;
+		private readonly MtgdbAnalyzer _analyzer;
 
 		private readonly object _suggestSync = new object();
-		private readonly BindingList<string> _suggestValues = new BindingList<string>();
-		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
 	}
 }

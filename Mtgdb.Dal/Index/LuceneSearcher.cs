@@ -27,8 +27,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.26 mana symols in ManaCost are treated as separate words
-			set => Version = new IndexVersion(value, "0.26");
+			// 0.27 after refactoring, to be on the safe side
+			set => Version = new IndexVersion(value, "0.27");
 		}
 
 
@@ -113,7 +113,7 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		private static Analyzer createAnalyzer()
+		private static MtgdbAnalyzer createAnalyzer()
 		{
 			return new MtgdbAnalyzer();
 		}

@@ -486,7 +486,7 @@ namespace Mtgdb.Gui
 			var status = getFilterStatusText(filterManagerStates,
 				FilterGroup.Legality,
 				!string.IsNullOrEmpty(_legalitySubsystem.FilterFormat),
-				_legalitySubsystem.AnyFormat);
+				Legality.AnyFormat);
 
 			result.Append(status);
 

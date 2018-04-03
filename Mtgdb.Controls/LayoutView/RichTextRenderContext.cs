@@ -11,6 +11,7 @@ namespace Mtgdb.Controls
 
 		public Color SelectionBackColor { get; set; }
 		public Color SelectionForeColor { get; set; }
+		public byte SelectionAlpha { get; set; }
 
 		public RectangleF Rect { get; set; }
 		public string Text { get; set; }

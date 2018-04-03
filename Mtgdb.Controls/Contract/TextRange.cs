@@ -9,11 +9,6 @@ namespace Mtgdb.Controls
 			return new TextRange(m.Index, m.Length);
 		}
 
-		public static TextRange Offset(int offset, Match m)
-		{
-			return new TextRange(m.Index + offset, m.Length);
-		}
-
 		public TextRange(int index, int length)
 		{
 			Length = length;

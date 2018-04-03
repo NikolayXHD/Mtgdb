@@ -43,7 +43,7 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
-			_mtgdbAnalyzer = new MtgdbAnalyzer();
+			_analyzer = new MtgdbAnalyzer();
 		}
 
 		private static IconRecognizer createIconRecognizer()
@@ -448,38 +448,15 @@ namespace Mtgdb.Gui
 		private void addMatches(string displayText, IEnumerable<Regex> patterns, List<TextRange> matches, string fieldName)
 		{
 			foreach (Regex findRegex in patterns)
-			{
-				if (DocumentFactory.NotAnalyzedFields.Contains(fieldName))
+				foreach (var token in _analyzer.GetTokens(fieldName, displayText))
 				{
-					var toAdd = findRegex
-						.Matches(displayText)
+					var toAdd = findRegex.Matches(token.Term)
 						.Cast<Match>()
 						.Where(match => match.Success && match.Length != 0)
-						.Select(TextRange.Copy);
+						.Select(match => new TextRange(match.Index + token.Offset, match.Length));
 
 					matches.AddRange(toAdd);
 				}
-				else
-				{
-					var tokenStream = _mtgdbAnalyzer.GetTokenStream(fieldName, displayText);
-
-					tokenStream.Reset();
-
-					using (tokenStream)
-						while (tokenStream.IncrementToken())
-						{
-							var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
-							var offset = tokenStream.GetAttribute<IOffsetAttribute>().StartOffset;
-
-							var toAdd = findRegex.Matches(term)
-								.Cast<Match>()
-								.Where(match => match.Success && match.Length != 0)
-								.Select(match => TextRange.Offset(offset, match));
-
-							matches.AddRange(toAdd);
-						}
-				}
-			}
 		}
 
 		private void getPattern(Token token, out string result, out List<string> contextPatterns)
@@ -607,29 +584,16 @@ namespace Mtgdb.Gui
 					pattern.Append(MtgdbTokenizerPatterns.CharPattern + "*");
 				else if (token.Type.IsAny(TokenType.FieldValue))
 				{
-					string luceneUnescaped = StringEscaper.Unescape(token.Value);
+					var builder = new StringBuilder();
 
-					if (!DocumentFactory.NotAnalyzedFields.Contains(token.ParentField))
-					{
-						var builder = new StringBuilder();
-						var tokenStream = _mtgdbAnalyzer.GetTokenStream(token.ParentField, luceneUnescaped);
+					foreach (var word in _analyzer.GetTokens(token.ParentField, StringEscaper.Unescape(token.Value)))
+						builder.Append(word.Term);
 
-						tokenStream.Reset();
-
-						using (tokenStream)
-							while (tokenStream.IncrementToken())
-							{
-								var term = tokenStream.GetAttribute<ICharTermAttribute>().ToString();
-								builder.Append(term);
-							}
-
-						luceneUnescaped = builder.ToString();
-					}
+					var luceneUnescaped = builder.ToString();
 
 					foreach (char c in luceneUnescaped)
 					{
 						var equivalents = MtgdbTokenizerPatterns.GetEquivalents(c).ToArray();
-
 
 						if (equivalents.Length == 0)
 							continue;
@@ -733,6 +697,6 @@ namespace Mtgdb.Gui
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;
 		private readonly ImageLoader _imageLoader;
-		private readonly MtgdbAnalyzer _mtgdbAnalyzer;
+		private readonly MtgdbAnalyzer _analyzer;
 	}
 }

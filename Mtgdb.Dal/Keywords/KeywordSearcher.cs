@@ -23,8 +23,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.25 Masters 25
-			set => _version = new IndexVersion(value, "0.25");
+			// 0.27 after refactoring, to be on the safe side
+			set => _version = new IndexVersion(value, "0.27");
 		}
 
 		public void InvalidateIndex()

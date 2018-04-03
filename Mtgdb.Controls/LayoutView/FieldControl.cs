@@ -85,6 +85,7 @@ namespace Mtgdb.Controls
 
 					context.SelectionBackColor = selectionOptions.BackColor;
 					context.SelectionForeColor = selectionOptions.ForeColor;
+					context.SelectionAlpha = selectionOptions.Alpha;
 				}
 
 				RichTextRenderer.Render(context, _iconRecognizer);
