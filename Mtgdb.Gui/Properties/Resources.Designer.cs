@@ -793,6 +793,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap search_like_hovered_32 {
+            get {
+                object obj = ResourceManager.GetObject("search_like_hovered_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shown_40 {
             get {
                 object obj = ResourceManager.GetObject("shown_40", resourceCulture);

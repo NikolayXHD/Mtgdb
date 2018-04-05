@@ -73,6 +73,8 @@ namespace Mtgdb.Controls
 					field.ForeColor = probeField.ForeColor;
 					field.HorizontalAlignment = probeField.HorizontalAlignment;
 					field.IconRecognizer = probeField.IconRecognizer;
+					field.CustomSearchIcon = probeField.CustomSearchIcon;
+					field.ShowSearchOnlyWhenHotTracked = probeField.ShowSearchOnlyWhenHotTracked;
 				}
 			}
 		}

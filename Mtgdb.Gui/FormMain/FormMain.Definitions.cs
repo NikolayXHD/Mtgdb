@@ -48,7 +48,6 @@ namespace Mtgdb.Gui
 			beginRestoreSettings();
 
 			_fields = new Fields();
-			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields);
 
 			QuickFilterImages.SetImages(this);
 			QuickFilterSetup.SetQuickFilterProperties(this);
@@ -67,6 +66,8 @@ namespace Mtgdb.Gui
 				_listBoxSuggest,
 				luceneSearcher,
 				_viewCards);
+
+			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchStringSubsystem);
 
 			endRestoreSettings();
 
@@ -239,6 +240,7 @@ namespace Mtgdb.Gui
 			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
 			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
 			view.SearchOptions.Icon = view.SearchOptions.Icon?.HalfResizeDpi();
+
 			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
 			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
 
@@ -250,6 +252,13 @@ namespace Mtgdb.Gui
 		private void probeCardCreating(object view, LayoutControl probeCard)
 		{
 			probeCard.ScaleDpi();
+
+			foreach (var field in probeCard.Fields)
+			{
+				if (field.CustomSearchIcon != null)
+					field.CustomSearchIcon = field.CustomSearchIcon.HalfResizeDpi();
+			}
+
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
 		}
 

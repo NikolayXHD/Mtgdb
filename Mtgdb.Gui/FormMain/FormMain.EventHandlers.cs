@@ -75,6 +75,8 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
+				_searchStringSubsystem.ApplyFind();
+
 				updateShowSampleHandButtons();
 
 				beginRestoreSettings();
@@ -484,6 +486,8 @@ namespace Mtgdb.Gui
 
 			if (!isFilterGroupEnabled(FilterGroup.Find))
 				setFilterManagerState(FilterGroup.Find, FilterValueState.Required);
+
+			_sortSubsystem.Invalidate();
 
 			resetTouchedCard();
 

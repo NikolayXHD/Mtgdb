@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -15,32 +14,32 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSearcher : IDisposable
 	{
-		public LuceneSearcher()
+		public LuceneSearcher(CardRepository repository)
 		{
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("search");
-			Spellchecker = new LuceneSpellchecker();
-		}
 
-		public string IndexDirectory => Version.Directory;
+			_repo = repository;
+			_queryParserAnalyzer = new MtgdbAnalyzer();
+			var spellcheckerAnalyzer = new MtgdbAnalyzer();
+
+			Spellchecker = new LuceneSpellchecker(repository, spellcheckerAnalyzer);
+		}
 
 		public string IndexDirectoryParent
 		{
 			get => Version.Directory.Parent();
 
-			// 0.27 after refactoring, to be on the safe side
-			set => Version = new IndexVersion(value, "0.27");
+			// 0.28 analyze all fields
+			set => Version = new IndexVersion(value, "0.28");
 		}
 
-
-		public bool IsUpToDate => Version.IsUpToDate;
-
-		public void LoadIndexes(CardRepository repository)
+		public void LoadIndexes()
 		{
-			LoadIndex(repository);
-			LoadSpellcheckerIndex(repository);
+			LoadIndex();
+			LoadSpellcheckerIndex();
 		}
 
-		public void LoadIndex(CardRepository repository)
+		public void LoadIndex()
 		{
 			if (IsLoaded || IsLoading)
 				return;
@@ -50,7 +49,7 @@ namespace Mtgdb.Dal.Index
 			if (Version.IsUpToDate)
 				_index = FSDirectory.Open(Version.Directory);
 			else
-				_index = createIndex(repository);
+				_index = createIndex();
 
 			if (_abort)
 				return;
@@ -63,21 +62,23 @@ namespace Mtgdb.Dal.Index
 			Loaded?.Invoke();
 		}
 
-		public void LoadSpellcheckerIndex(CardRepository repository)
+		public void LoadSpellcheckerIndex()
 		{
-			Spellchecker.LoadIndex(createAnalyzer(), repository, _indexReader);
+			Spellchecker.LoadIndex(_indexReader);
 		}
 
-		private Directory createIndex(CardRepository repository)
+		private Directory createIndex()
 		{
-			if (!repository.IsLocalizationLoadingComplete)
+			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
 
 			Version.CreateDirectory();
 
 			var index = FSDirectory.Open(Version.Directory);
 
-			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, createAnalyzer())
+			var indexWriterAnalyzer = new MtgdbAnalyzer();
+
+			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, indexWriterAnalyzer)
 			{
 				OpenMode = OpenMode.CREATE_OR_APPEND,
 				RAMPerThreadHardLimitMB = 512,
@@ -88,7 +89,7 @@ namespace Mtgdb.Dal.Index
 			};
 
 			using (var writer = new IndexWriter(index, indexWriterConfig))
-				foreach (var set in repository.SetsByCode.Values)
+				foreach (var set in _repo.SetsByCode.Values)
 				{
 					if (_abort)
 						return null;
@@ -113,14 +114,9 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		private static MtgdbAnalyzer createAnalyzer()
+		private NumericAwareQueryParser createParser(string language)
 		{
-			return new MtgdbAnalyzer();
-		}
-
-		private static NumericAwareQueryParser createParser(string language)
-		{
-			return new NumericAwareQueryParser(LuceneVersion.LUCENE_48, "*", createAnalyzer())
+			return new NumericAwareQueryParser(LuceneVersion.LUCENE_48, "*", _queryParserAnalyzer, _repo)
 			{
 				AllowLeadingWildcard = true,
 				Language = language
@@ -130,10 +126,14 @@ namespace Mtgdb.Dal.Index
 		/// <summary>
 		/// For test
 		/// </summary>
-		public IEnumerable<Card> SearchCards(string queryStr, string language, CardRepository repository)
+		internal IEnumerable<Card> SearchCards(string queryStr, string language, CardRepository repository)
 		{
 			var parser = createParser(language);
-			var query = parser.Parse(queryStr);
+
+			Query query;
+			lock (_syncQueryParser)
+				query = parser.Parse(queryStr);
+
 			var searchResult = _searcher.Search(query, _indexReader.MaxDoc);
 
 			foreach (var scoreDoc in searchResult.ScoreDocs)
@@ -146,17 +146,18 @@ namespace Mtgdb.Dal.Index
 
 		public SearchResult Search(string queryStr, string language)
 		{
-			var highlightTerms = getHighlightTerms(queryStr);
+			var (highlightTerms, highlightPhrases) = getHighlightElements(queryStr);
 
 			var parser = createParser(language);
 			Query query;
 			try
 			{
-				query = parser.Parse(queryStr);
+				lock (_syncQueryParser)
+					query = parser.Parse(queryStr);
 			}
 			catch (Exception ex)
 			{
-				return new SearchResult(ex.Message, highlightTerms);
+				return new SearchResult(ex.Message, highlightTerms, highlightPhrases);
 			}
 
 			fixNegativeClauses(query);
@@ -165,15 +166,12 @@ namespace Mtgdb.Dal.Index
 				return SearchResult.IndexNotBuiltResult;
 
 			var searchResult = _searcher.Search(query, _indexReader.MaxDoc);
-			
-			var searchRankLookup = Enumerable.Range(0, searchResult.ScoreDocs.Length)
-				.GroupBy(i => searchResult.ScoreDocs[i].GetId(_searcher))
-				.ToDictionary(gr=>gr.Key, gr=>gr.ToList());
 
-			//var badIds = searchRankLookup.Where(_ => _.Value.Count > 1).ToArray();
+			var relevanceById = searchResult.ScoreDocs
+				.GroupBy(d => d.GetId(_searcher))
+				.ToDictionary(gr => gr.Key, gr => gr.First().Score);
 
-			var searchRankById = searchRankLookup.ToDictionary(_ => _.Key, _ => _.Value.Min());
-			return new SearchResult(searchRankById, highlightTerms);
+			return new SearchResult(relevanceById, highlightTerms, highlightPhrases);
 		}
 
 		private static void fixNegativeClauses(Query query)
@@ -194,18 +192,52 @@ namespace Mtgdb.Dal.Index
 				boolean.Add(new MatchAllDocsQuery(), Occur.MUST);
 		}
 
-		private static Dictionary<string, Token[]> getHighlightTerms(string queryStr)
+		private (Dictionary<string, Token[]> Terms, Dictionary<string, List<string[]>> Phrases) getHighlightElements(string queryStr)
 		{
 			var tokenizer = new TolerantTokenizer(queryStr);
 			tokenizer.Parse();
 
-			var highlightTerms = tokenizer.Tokens.Where(_ => _.Type.IsAny(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody))
+			Dictionary<Token, List<(string Term, int Offset)>> analyzedTokens;
+
+			lock (_syncQueryParser)
+			{
+				analyzedTokens = tokenizer.Tokens
+					.Where(_ => _.Type.IsAny(TokenType.FieldValue))
+					.ToDictionary(
+						_ => _,
+						_ => _queryParserAnalyzer.GetTokens(
+							_.ParentField,
+							StringEscaper.Unescape(_.Value)).ToList());
+			}
+
+			string[] getAnalyzedTokens(Token t)
+			{
+				if (t.IsPhraseStart)
+					return t.GetPhraseTokens()
+						.SelectMany(p => analyzedTokens[p].Select(_ => _.Term))
+						.ToArray();
+
+				return analyzedTokens[t].Select(_ => _.Term).ToArray();
+			}
+
+			var highlightTerms = tokenizer.Tokens
+				.Where(_ => !_.IsPhrase && (
+					_.Type.IsAny(TokenType.FieldValue) && analyzedTokens[_].Count < 2 ||
+					_.Type.IsAny(TokenType.AnyChar | TokenType.RegexBody)))
 				.GroupBy(getDisplayField, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,
 					gr => gr.ToArray());
 
-			return highlightTerms;
+			var highlightPhrases = tokenizer.Tokens
+				.Where(_ => _.IsPhraseStart ||
+					!_.IsPhrase &&
+					_.Type.IsAny(TokenType.FieldValue) &&
+					analyzedTokens[_].Count > 1)
+				.GroupBy(getDisplayField, Str.Comparer)
+				.ToDictionary(gr => gr.Key, gr => gr.Select(getAnalyzedTokens).ToList());
+
+			return (highlightTerms, highlightPhrases);
 		}
 
 		private static string getDisplayField(Token token)
@@ -215,7 +247,7 @@ namespace Mtgdb.Dal.Index
 
 			if (DocumentFactory.DisplayFieldByIndexField.TryGetValue(token.ParentField, out string name))
 				return name;
-			
+
 			return token.ParentField;
 		}
 
@@ -254,13 +286,15 @@ namespace Mtgdb.Dal.Index
 		}
 
 		public Func<Set, bool> FilterSet { get; set; } = set => true;
+		public string IndexDirectory => Version.Directory;
+		public bool IsUpToDate => Version.IsUpToDate;
 
 		public event Action Disposed;
 		public event Action Loaded;
 		public event Action IndexingProgress;
 
 		public int SetsAddedToIndex { get; private set; }
-		
+
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; private set; }
 
@@ -271,5 +305,9 @@ namespace Mtgdb.Dal.Index
 
 		private bool _abort;
 		private DirectoryReader _indexReader;
+
+		private readonly object _syncQueryParser = new object();
+		private readonly MtgdbAnalyzer _queryParserAnalyzer;
+		private readonly CardRepository _repo;
 	}
 }

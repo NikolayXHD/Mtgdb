@@ -41,6 +41,9 @@ namespace Mtgdb.Gui
 			_fieldRulings.AllowSort = false;
 			_fieldRulings.AllowSearch = false;
 
+			_fieldName.ShowSearchOnlyWhenHotTracked = false;
+			_fieldName.CustomSearchIcon = Properties.Resources.search_like_hovered_32;
+
 			HighlightSettings.HighlightBorderColor = Color.CadetBlue;
 			HighlightSettings.HighlightColor = Color.LightBlue;
 			HighlightSettings.HighlightContextColor = Color.LightCyan;

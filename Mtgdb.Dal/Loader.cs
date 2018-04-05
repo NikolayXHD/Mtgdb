@@ -64,7 +64,7 @@ namespace Mtgdb.Dal
 					_imageRepository.LoadZoom();
 
 					if (_indexesUpToDate)
-						_luceneSearcher.LoadIndexes(_repository);
+						_luceneSearcher.LoadIndexes();
 
 					if (_keywordSearcher.IsUpToDate)
 						_keywordSearcher.Load(_repository);
@@ -96,7 +96,7 @@ namespace Mtgdb.Dal
 						_keywordSearcher.Load(_repository);
 
 					if (!_indexesUpToDate)
-						_luceneSearcher.LoadIndexes(_repository);
+						_luceneSearcher.LoadIndexes();
 
 					_imageRepository.LoadArt();
 

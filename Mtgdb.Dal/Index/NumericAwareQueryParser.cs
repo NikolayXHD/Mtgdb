@@ -1,20 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Lucene.Net.Analysis;
+using Lucene.Net.Contrib;
 using Lucene.Net.Index;
+using Lucene.Net.Queries.Mlt;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
 using Lucene.Net.Util;
 using Lucene.Net.Util.Automaton;
+using Token = Lucene.Net.QueryParsers.Classic.Token;
 
 namespace Mtgdb.Dal.Index
 {
 	public class NumericAwareQueryParser : QueryParser
 	{
-		public NumericAwareQueryParser(LuceneVersion matchVersion, string f, Analyzer a)
+		public NumericAwareQueryParser(LuceneVersion matchVersion, string f, Analyzer a, CardRepository repository)
 			: base(matchVersion, f, a)
 		{
+			_repository = repository;
 		}
 
 		public override Query Parse(string query)
@@ -58,6 +63,9 @@ namespace Mtgdb.Dal.Index
 
 		protected override Query GetFieldQuery(string field, string queryText, bool quoted)
 		{
+			if (Str.Equals(Like, field))
+				return getMoreLikeQuery(queryText, 0);
+
 			bool valueIsNumeric = isValueNumeric(queryText);
 
 			if (string.IsNullOrEmpty(field) || field == AnyField)
@@ -88,15 +96,19 @@ namespace Mtgdb.Dal.Index
 			if (field.IsIntField())
 				return createRangeQuery<int>(field, queryText, tryParseInt, NumericRangeQuery.NewInt32Range);
 
-			return base.GetFieldQuery(field, queryText, quoted);
-		}
+			var tokens = Analyzer.GetTokens(field, queryText).ToList();
 
-		private static bool isValueNumeric(string queryText)
-		{
-			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
-				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
-			return valueIsNumeric;
+			if (tokens.Count > 1)
+			{
+				var query = new PhraseQuery();
+
+				foreach (var token in tokens)
+					query.Add(new Term(field, token.Term));
+
+				return query;
+			}
+
+			return base.GetFieldQuery(field, queryText, quoted);
 		}
 
 		protected override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
@@ -136,26 +148,11 @@ namespace Mtgdb.Dal.Index
 			return createRangeQuery(field, query);
 		}
 
-		private static bool tryParseInt(BytesRef bytes, out int f)
-		{
-			var s = bytes.Utf8ToString();
-			if (s.StartsWith("$"))
-				return int.TryParse(s.Substring(1), out f);
-
-			return int.TryParse(s, out f);
-		}
-
-		private static bool tryParseFloat(BytesRef bytes, out float f)
-		{
-			var s = bytes.Utf8ToString();
-			if (s.StartsWith("$"))
-				return float.TryParse(s.Substring(1), out f);
-
-			return float.TryParse(s, out f);
-		}
-
 		protected override Query GetFuzzyQuery(string field, string termStr, float minSimilarity)
 		{
+			if (Str.Equals(Like, field))
+				return getMoreLikeQuery(termStr, minSimilarity);
+
 			if (string.IsNullOrEmpty(field) || field == AnyField)
 			{
 				var result = new BooleanQuery(disableCoord: true);
@@ -181,6 +178,22 @@ namespace Mtgdb.Dal.Index
 			return base.GetFuzzyQuery(field, termStr, minSimilarity);
 		}
 
+		public override Query HandleQuotedTerm(string qfield, Token term, Token fuzzySlop)
+		{
+			if (Str.Equals(Like, qfield))
+			{
+				if (term.Image.Length <= 1 || !float.TryParse(term.Image.Substring(1), NumberStyles.Float, Str.Culture, out var slop))
+					slop = 0;
+
+				string unquotedTerm = term.Image.Substring(1, term.Image.Length - 2);
+				string unescapedTerm = StringEscaper.Escape(unquotedTerm);
+
+				return getMoreLikeQuery(unescapedTerm, slop);
+			}
+
+			return base.HandleQuotedTerm(qfield, term, fuzzySlop);
+		}
+
 		protected override Query GetFieldQuery(string field, string queryText, int slop)
 		{
 			if (string.IsNullOrEmpty(field) || field == AnyField)
@@ -204,6 +217,19 @@ namespace Mtgdb.Dal.Index
 			}
 
 			field = localize(field);
+
+			var tokens = Analyzer.GetTokens(field, queryText).ToList();
+
+			if (tokens.Count > 1)
+			{
+				var query = new PhraseQuery { Slop = slop };
+
+				foreach (var token in tokens)
+					query.Add(new Term(field, token.Term));
+
+				return query;
+			}
+
 			return base.GetFieldQuery(field, queryText, slop);
 		}
 
@@ -257,6 +283,102 @@ namespace Mtgdb.Dal.Index
 
 			field = localize(field);
 			return base.GetWildcardQuery(field, termStr);
+		}
+
+
+
+		private Query getMoreLikeQuery(string queryText, float slop)
+		{
+			if (string.IsNullOrEmpty(queryText))
+				return _matchNothingQuery;
+
+			if (!_repository.IsLoadingComplete)
+				return _matchNothingQuery;
+
+			if (!_repository.CardsByName.TryGetValue(queryText, out var cards))
+				return _matchNothingQuery;
+
+			var card = cards[0];
+
+			var result = new DisjunctionMaxQuery(0.1f);
+
+			if (!string.IsNullOrEmpty(card.TextEn))
+				result.Add(createMoreLikeThisQuery(
+					slop,
+					card.TextEn,
+					nameof(card.TextEn),
+					nameof(card.TextEn),
+					nameof(card.OriginalText)));
+
+			if (!string.IsNullOrEmpty(card.OriginalText))
+			{
+				result.Add(createMoreLikeThisQuery(
+					slop,
+					card.OriginalText,
+					nameof(card.OriginalText),
+					nameof(card.TextEn),
+					nameof(card.OriginalText)));
+			}
+
+			if (!string.IsNullOrEmpty(card.GeneratedMana))
+			{
+				result.Add(createMoreLikeThisQuery(
+					slop,
+					card.GeneratedMana,
+					nameof(card.GeneratedMana),
+					nameof(card.GeneratedMana)));
+			}
+
+			if (result.Disjuncts.Count > 0)
+				return result;
+
+			return _matchNothingQuery;
+		}
+
+		private MoreLikeThisQuery createMoreLikeThisQuery(float slop, string value, string field, params string[] fields)
+		{
+			if (slop <= 0f)
+				slop = 0.6f;
+			else if (slop > 1f)
+				slop = 1f;
+
+			return new MoreLikeThisQuery(
+				value,
+				fields.Select(_ => _.ToLowerInvariant()).ToArray(),
+				Analyzer,
+				field.ToLowerInvariant())
+			{
+				PercentTermsToMatch = slop,
+				MaxQueryTerms = 20,
+				MinDocFreq = 3,
+				StopWords = _moreLikeStopWords
+			};
+		}
+
+		private static bool isValueNumeric(string queryText)
+		{
+			bool valueIsNumeric =
+				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
+				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
+			return valueIsNumeric;
+		}
+
+		private static bool tryParseInt(BytesRef bytes, out int f)
+		{
+			var s = bytes.Utf8ToString();
+			if (s.StartsWith("$"))
+				return int.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
+
+			return int.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
+		}
+
+		private static bool tryParseFloat(BytesRef bytes, out float f)
+		{
+			var s = bytes.Utf8ToString();
+			if (s.StartsWith("$"))
+				return float.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
+
+			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
 		}
 
 		private static Query createRangeQuery(string field, TermRangeQuery query)
@@ -322,6 +444,8 @@ namespace Mtgdb.Dal.Index
 
 		public const string AnyField = "*";
 
+		public const string Like = nameof(Like);
+
 		public string Language { get; set; }
 
 		private delegate bool Parser<TVal>(BytesRef value, out TVal result)
@@ -335,5 +459,13 @@ namespace Mtgdb.Dal.Index
 			"*",
 			"?"
 		};
+
+		private static readonly Query _matchNothingQuery = new BooleanQuery();
+
+		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
+			new[] { "a", "an", "the", "of" }.Concat(MtgdbTokenizerPatterns.SingletoneWordChars.Select(c => new string(c, 1))),
+			Str.Comparer);
+
+		private readonly CardRepository _repository;
 	}
 }

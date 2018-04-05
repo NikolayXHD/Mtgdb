@@ -490,17 +490,17 @@ namespace Mtgdb.Controls
 
 			if (index < 0)
 				return;
-			
+
 			var card = Cards[index];
 
 			if (!card.Visible)
 				return;
-			
+
 			var field = card.Fields.FirstOrDefault(f => new Rectangle(f.Location.Plus(card.Location), f.Size).Contains(location));
 
 			if (field == null)
 				return;
-			
+
 			invalidateField(field, card);
 		}
 
@@ -527,7 +527,7 @@ namespace Mtgdb.Controls
 
 			if (cancelArgs.Cancel)
 				return;
-			
+
 			_selection.StartSelectionAt(e.Location);
 			hideButtons();
 		}
@@ -583,6 +583,7 @@ namespace Mtgdb.Controls
 			{
 				prevHitInfo.Field.IsHotTracked = false;
 				prevHitInfo.Field.IsSortHotTracked = false;
+				prevHitInfo.Field.IsSearchHotTracked = false;
 			}
 
 			if (_hitInfo.Field != null)
@@ -592,7 +593,9 @@ namespace Mtgdb.Controls
 				_hitInfo.Field.IsSearchHotTracked = _hitInfo.IsSearchButton;
 			}
 
-			if (prevHitInfo?.Card != null && prevHitInfo.Card != _hitInfo.Card)
+			var card = _hitInfo.Card;
+
+			if (prevHitInfo?.Card != null && prevHitInfo.Card != card)
 				foreach (var field in prevHitInfo.Card.Fields)
 				{
 					field.IsSortVisible = false;
@@ -601,11 +604,20 @@ namespace Mtgdb.Controls
 
 			bool suppressed = ModifierKeys == Keys.Alt;
 
-			if (_hitInfo.Card != null)
-				foreach (var field in _hitInfo.Card.Fields)
+			if (card != null)
+				foreach (var field in card.Fields)
 				{
-					field.IsSortVisible = !suppressed && SortOptions.Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
-					field.IsSearchVisible = !suppressed && SearchOptions.Allow && field.AllowSearch && field.IsHotTracked;
+					field.IsSortVisible =
+						!suppressed &&
+						SortOptions.Allow &&
+						field.AllowSort &&
+						(field.IsHotTracked || field.SortOrder != SortOrder.None);
+
+					field.IsSearchVisible =
+						!suppressed &&
+						SearchOptions.Allow &&
+						field.AllowSearch &&
+						(field.IsHotTracked || !field.ShowSearchOnlyWhenHotTracked);
 				}
 
 			foreach (var direction in getAlignDirections())

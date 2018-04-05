@@ -70,9 +70,9 @@ namespace Mtgdb.Dal.Index
 							return flush();
 					}
 				}
-				else if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c))
+				else if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c) || MtgdbTokenizerPatterns.SingletoneWordChars.Contains(c))
 				{
-					if (c.IsCj())
+					if (c.IsCj() || MtgdbTokenizerPatterns.SingletoneWordChars.Contains(c))
 					{
 						if (_length > 0)
 							return terminatePreviousToken();

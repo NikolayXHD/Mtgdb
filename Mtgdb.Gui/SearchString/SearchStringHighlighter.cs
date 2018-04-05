@@ -27,22 +27,18 @@ namespace Mtgdb.Gui
 			var tokenizer = new TolerantTokenizer(_findEditor.Text);
 			tokenizer.Parse();
 
-			setColor(0, _findEditor.TextLength, _findEditor.BackColor, Color.Black, false);
+			setColor(0, _findEditor.TextLength, Color.Black, false);
 
 			foreach (var token in tokenizer.Tokens)
 			{
 				if (token.Type.IsAny(TokenType.FieldValue))
-					setColor(token.Position, token.Value.Length, _findEditor.BackColor, null, true);
+					setColor(token.Position, token.Value.Length, null, true);
 				else if (token.Type.IsAny(TokenType.Field | TokenType.Colon))
-					setColor(token.Position, token.Value.Length, null, Color.Teal, false);
+					setColor(token.Position, token.Value.Length, Color.Teal, false);
 				else if (token.Type.IsAny(TokenType.RegexBody))
-					setColor(token.Position, token.Value.Length, null, Color.DarkRed, false);
-				//else if (token.Type.Is(TokenType.ModifierValue))
-				//	setColor(token.Position, token.Value.Length, Color.LightBlue);
-				//else if (token.Type.Is(TokenType.Quote | TokenType.Open | TokenType.Close))
-				//	setColor(token.Position, token.Value.Length, null, Color.MediumBlue, false);
+					setColor(token.Position, token.Value.Length, Color.DarkRed, false);
 				else
-					setColor(token.Position, token.Value.Length, null, Color.MediumBlue, false);
+					setColor(token.Position, token.Value.Length, Color.MediumBlue, false);
 			}
 
 			_findEditor.SelectionStart = start;
@@ -52,12 +48,11 @@ namespace Mtgdb.Gui
 			HighlightingInProgress = false;
 		}
 
-		private void setColor(int from, int len, Color? backColor, Color? foreColor, bool underline)
+		private void setColor(int from, int len, Color? foreColor, bool underline)
 		{
 			_findEditor.SelectionStart = from;
 			_findEditor.SelectionLength = len;
-			if (backColor.HasValue)
-				_findEditor.SelectionBackColor = backColor.Value;
+
 			if (foreColor.HasValue)
 				_findEditor.SelectionColor = foreColor.Value;
 

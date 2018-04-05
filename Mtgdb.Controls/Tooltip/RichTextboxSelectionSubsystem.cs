@@ -5,24 +5,24 @@ namespace Mtgdb.Controls
 {
 	public class RichTextBoxSelectionSubsystem
 	{
-		public RichTextBoxSelectionSubsystem(FixedRichTextBox tooltipTextbox)
+		public RichTextBoxSelectionSubsystem(FixedRichTextBox textbox)
 		{
-			_tooltipTextbox = tooltipTextbox;
+			_textbox = textbox;
 			SelectionEnabled = true;
 		}
 
 		public void SubsribeToEvents()
 		{
-			_tooltipTextbox.MouseDown += text_MouseDown;
-			_tooltipTextbox.MouseUp += text_MouseUp;
-			_tooltipTextbox.MouseMove += text_MouseMove;
+			_textbox.MouseDown += text_MouseDown;
+			_textbox.MouseUp += text_MouseUp;
+			_textbox.MouseMove += text_MouseMove;
 		}
 
 		public void UnsubsribeFromEvents()
 		{
-			_tooltipTextbox.MouseDown -= text_MouseDown;
-			_tooltipTextbox.MouseUp -= text_MouseUp;
-			_tooltipTextbox.MouseMove -= text_MouseMove;
+			_textbox.MouseDown -= text_MouseDown;
+			_textbox.MouseUp -= text_MouseUp;
+			_textbox.MouseMove -= text_MouseMove;
 		}
 
 		private void text_MouseDown(object sender, MouseEventArgs e)
@@ -32,7 +32,7 @@ namespace Mtgdb.Controls
 
 			if (e.Button == MouseButtons.Left)
 			{
-				int current = _tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
+				int current = _textbox.GetTrueIndexPositionFromPoint(e.Location);
 
 				if (current == _selectionStart)
 					_selectionManual = true;
@@ -55,18 +55,20 @@ namespace Mtgdb.Controls
 
 			if (_selectionManual)
 			{
-				var current = _tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
+				var current = _textbox.GetTrueIndexPositionFromPoint(e.Location);
 
 				if (current != _selectionStart)
 				{
-					_tooltipTextbox.SelectionStart = Math.Min(current, _selectionStart);
-					_tooltipTextbox.SelectionLength = Math.Abs(current - _selectionStart);
+					int start = Math.Min(current, _selectionStart);
+
+					_textbox.SelectionStart = start;
+					_textbox.SelectionLength = Math.Abs(current - _selectionStart);
 				}
 			}
-			else if (!_tooltipTextbox.Focused)
+			else if (!_textbox.Focused)
 			{
-				_tooltipTextbox.SelectionStart = _selectionStart =
-					_tooltipTextbox.GetTrueIndexPositionFromPoint(e.Location);
+				_textbox.SelectionStart = _selectionStart =
+					_textbox.GetTrueIndexPositionFromPoint(e.Location);
 			}
 		}
 
@@ -81,6 +83,6 @@ namespace Mtgdb.Controls
 		private int _selectionStart;
 		private bool _selectionManual;
 
-		private readonly FixedRichTextBox _tooltipTextbox;
+		private readonly FixedRichTextBox _textbox;
 	}
 }

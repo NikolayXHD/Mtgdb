@@ -41,9 +41,9 @@ namespace Mtgdb.Dal.Index
 		internal Directory Spellindex;
 
 		/// <summary> Boost value for start and end grams</summary>
-		private static readonly float _bStart = 2.0f;
+		private static readonly float _bStart = 1.5f;
 
-		private static readonly float _bEnd = 2.0f;
+		private static readonly float _bEnd = 1.5f;
 
 		// don't use this searcher directly - see #swapSearcher()
 		private IndexSearcher _searcher;
@@ -63,7 +63,7 @@ namespace Mtgdb.Dal.Index
 
 		private volatile bool _closed;
 
-		internal const float MinScore = 0.5f; //LUCENENET-359 Spellchecker accuracy gets overwritten
+		internal const float MinScore = 0.4f; //LUCENENET-359 Spellchecker accuracy gets overwritten
 
 		private IStringDistance _sd;
 		private IndexWriter _indexWriter;
@@ -166,10 +166,9 @@ namespace Mtgdb.Dal.Index
 
 				int maxHits = 30 * numSug;
 
-				
 				var hits = indexSearcher.Search(query, maxHits).ScoreDocs;
-				
-				var sugQueue = new SortedSet<SuggestWord>();
+
+				var sugQueue = new OrderedSet<SuggestWord, float>();
 
 				// go thru more than 'maxr' matches in case the distance filter triggers
 				int stop = Math.Min(hits.Length, maxHits);
@@ -197,13 +196,10 @@ namespace Mtgdb.Dal.Index
 						continue;
 
 					if (sugQueue.Count == numSug)
-					{
 						// if queue full, maintain the minScore score
-						min = sugQueue.Min.Score;
-						sugQueue.Remove(sugQueue.Min);
-					}
+						min = sugQueue.TryRemoveMin().Score;
 
-					sugQueue.Add(sugWord);
+					sugQueue.TryAdd(sugWord, sugWord.Score);
 					sugWord = new SuggestWord();
 				}
 
@@ -294,16 +290,18 @@ namespace Mtgdb.Dal.Index
 
 		private static int getMin(int l)
 		{
-			if (l <= 5)
+			if (l <= 3)
 				return 1;
 
-			return 2;
-		}
+			if (l <= 6)
+				return 2;
 
+			return 3;
+		}
 
 		private static int getMax(int l)
 		{
-			return Math.Min(l, 4);
+			return Math.Min(l, 5);
 		}
 
 

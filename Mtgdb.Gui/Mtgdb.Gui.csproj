@@ -112,6 +112,7 @@
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\Fields.cs" />
+    <Compile Include="FormChart\FieldsExtension.cs" />
     <Compile Include="FormMain\CustomConverter.cs" />
     <Compile Include="FormMain\DeckZoneModel.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
@@ -135,6 +136,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
+    <Compile Include="SearchString\KnutMorrisPrattSubstringSearch.cs" />
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,7 +239,7 @@
       <DependentUpon>FormZoom.cs</DependentUpon>
     </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
-    <Compile Include="SearchString\SearchStringState.cs" />
+    <Compile Include="SearchString\SearchInputState.cs" />
     <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
@@ -406,6 +408,7 @@
     <Content Include="Resources\search_48.png" />
     <Content Include="Resources\search_hovered.png" />
     <None Include="Resources\shown_40.png" />
+    <None Include="Resources\search_like_hovered_32.png" />
     <Content Include="Resources\Shroud.png" />
     <Content Include="Resources\Skulk.png" />
     <None Include="Resources\tooltip_16.png" />

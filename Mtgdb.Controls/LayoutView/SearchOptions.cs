@@ -19,7 +19,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(null)]
 		public Bitmap Icon
 		{
-			get { return _icon; }
+			get => _icon;
 			set
 			{
 				_icon = value;
@@ -43,7 +43,9 @@ namespace Mtgdb.Controls
 			var fieldBounds = field.Bounds;
 			fieldBounds.Offset(layout.Location);
 
-			var imageBounds = new Rectangle(fieldBounds.Location, IconTransp.Size);
+			var icon = field.CustomSearchIcon ?? Icon;
+
+			var imageBounds = new Rectangle(fieldBounds.Location, icon.Size);
 
 			if (ContentAlignmentRanges.AnyCenter.HasFlag(ButtonAlignment))
 				imageBounds.Offset((fieldBounds.Width - imageBounds.Width) / 2, 0);
@@ -65,9 +67,9 @@ namespace Mtgdb.Controls
 		public Bitmap GetIcon(FieldControl field)
 		{
 			if (field.IsSearchHotTracked)
-				return Icon;
+				return field.CustomSearchIcon ?? Icon;
 
-			return IconTransp;
+			return field.CustomSearchIconTransp ?? IconTransp;
 		}
 
 		private Bitmap _icon;

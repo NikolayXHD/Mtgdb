@@ -13,38 +13,35 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSpellchecker : IDisposable
 	{
-		public LuceneSpellchecker()
+		public LuceneSpellchecker(CardRepository repo, MtgdbAnalyzer analyzer)
 		{
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
 			_stringDistance = new DamerauLevenstineDistance();
+			_repo = repo;
+			_analyzer = analyzer;
 		}
-
-		public string IndexDirectory => Version.Directory;
 
 		public string IndexDirectoryParent
 		{
 			get => Version.Directory.Parent();
 
-			// 0.27 after refactoring, to be on the safe side
-			set => Version = new IndexVersion(value, "0.27");
+			// 0.28 analyze all fields
+			set => Version = new IndexVersion(value, "0.28");
 		}
-
-		public bool IsUpToDate => Version.IsUpToDate;
 
 		public void InvalidateIndex()
 		{
 			Version.Invalidate();
 		}
 
-		internal void LoadIndex(MtgdbAnalyzer analyzer, CardRepository repository, DirectoryReader indexReader)
+		internal void LoadIndex(DirectoryReader indexReader)
 		{
-			_cardRepository = repository;
 			_reader = indexReader;
 
 			if (Version.IsUpToDate)
 				_spellchecker = openSpellchecker();
 			else
-				_spellchecker = createSpellchecker(repository, analyzer);
+				_spellchecker = createSpellchecker();
 
 			IsLoaded = true;
 		}
@@ -57,9 +54,9 @@ namespace Mtgdb.Dal.Index
 			return spellChecker;
 		}
 
-		private Spellchecker createSpellchecker(CardRepository repository, MtgdbAnalyzer analyzer)
+		private Spellchecker createSpellchecker()
 		{
-			if (!repository.IsLocalizationLoadingComplete)
+			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
 
 			IsLoading = true;
@@ -80,9 +77,9 @@ namespace Mtgdb.Dal.Index
 			var indexedWords = new HashSet<string>(Str.Comparer);
 			var indexedValues = new HashSet<string>(Str.Comparer);
 
-			TotalSets = repository.SetsByCode.Count;
+			TotalSets = _repo.SetsByCode.Count;
 
-			foreach (var set in repository.SetsByCode.Values)
+			foreach (var set in _repo.SetsByCode.Values)
 			{
 				if (_abort)
 					break;
@@ -107,17 +104,19 @@ namespace Mtgdb.Dal.Index
 						if (docField == null)
 							continue;
 
-						bool isAnalyzed = DocumentFactory.NotAnalyzedFields.Contains(fieldName);
+						string field = getSpellcheckedField(fieldName);
+
+						bool isAnalyzed = !DocumentFactory.NotAnalyzedFields.Contains(field);
 
 						string value = docField.GetStringValue()?.ToLowerInvariant();
 
 						if (string.IsNullOrEmpty(value))
 							continue;
 
-						if (isAnalyzed && !indexedValues.Add(value) || !isAnalyzed && indexedWords.Contains(value))
+						if (!isAnalyzed && !indexedValues.Add(value) || isAnalyzed && indexedWords.Contains(value))
 							continue;
 
-						foreach (var token in analyzer.GetTokens(fieldName, value))
+						foreach (var token in _analyzer.GetTokens(field, value))
 							if (indexedWords.Add(token.Term))
 								spellchecker.IndexWord(token.Term);
 					}
@@ -139,6 +138,19 @@ namespace Mtgdb.Dal.Index
 			return spellchecker;
 		}
 
+		private static string getSpellcheckedField(string fieldName)
+		{
+			string field;
+
+			if (Str.Equals(fieldName, nameof(Card.NameEn)))
+				field = nameof(Card.NameEnNa);
+			else if (Str.Equals(fieldName, nameof(Card.Name)))
+				field = nameof(Card.NameNa);
+			else
+				field = fieldName;
+			return field;
+		}
+
 		public IntellisenseSuggest Suggest(string query, int caret, string language)
 		{
 			var token = EditedTokenLocator.GetEditedToken(query, caret);
@@ -154,7 +166,7 @@ namespace Mtgdb.Dal.Index
 
 				if (!string.IsNullOrEmpty(token.ParentField))
 					return new IntellisenseSuggest(token, valueSuggest, _allTokensAreValues);
-				
+
 				var fieldSuggest = suggestFields(valuePart);
 
 				var values = fieldSuggest.Concat(valueSuggest).ToReadOnlyList();
@@ -190,10 +202,25 @@ namespace Mtgdb.Dal.Index
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
+			if (Str.Equals(field, NumericAwareQueryParser.Like))
+				field = nameof(Card.NameEn);
+
+			if (Str.Equals(language, CardLocalization.DefaultLanguage))
+			{
+				if (Str.Equals(field, nameof(Card.Name)))
+					field = nameof(Card.NameEn);
+				else if (Str.Equals(field, nameof(Card.Text)))
+					field = nameof(Card.TextEn);
+				else if (Str.Equals(field, nameof(Card.Type)))
+					field = nameof(Card.TypeEn);
+				else if (Str.Equals(field, nameof(Card.Flavor)))
+					field = nameof(Card.FlavorEn);
+			}
+
 			bool isFieldInvalid =
 				!string.IsNullOrEmpty(field) &&
-				!Str.Equals(field, NumericAwareQueryParser.AnyField) &&
-				!DocumentFactory.UserFields.Contains(field);
+				!DocumentFactory.UserFields.Contains(field) &&
+				!Str.Equals(field, NumericAwareQueryParser.AnyField);
 
 			if (isFieldInvalid)
 				return _emptySuggest.Values;
@@ -231,7 +258,7 @@ namespace Mtgdb.Dal.Index
 				return getCombinatoricValuesSuggest(field, value, maxCount);
 
 			if (_legalityFields.Contains(field))
-				return getMostSimilarValues(_legalityValues, value, _legalityValues.Count);
+				return getMostSimilarValues(Legality.Formats, value, Legality.Formats.Count);
 
 			if (string.IsNullOrEmpty(value) || DocumentFactory.CombinatoricValueFields.Contains(field))
 			{
@@ -239,12 +266,14 @@ namespace Mtgdb.Dal.Index
 				return getMostSimilarValues(values, value, maxCount);
 			}
 
-			return _spellchecker.SuggestSimilar(value, maxCount, _reader, DocumentFactory.Localize(field, language));
+			field = getSpellcheckedField(field);
+			field = DocumentFactory.Localize(field, language);
+			return _spellchecker.SuggestSimilar(value, maxCount, _reader, field);
 		}
 
 		private IReadOnlyList<string> getLimitedValuesSuggest(string field, string value, int maxCount)
 		{
-			if (!_cardRepository.IsLoadingComplete)
+			if (!_repo.IsLoadingComplete)
 				return _emptySuggest.Values;
 
 			var values = getAllLimitedValues(field);
@@ -254,7 +283,7 @@ namespace Mtgdb.Dal.Index
 
 		private IReadOnlyList<string> getCombinatoricValuesSuggest(string field, string value, int maxCount)
 		{
-			if (!_cardRepository.IsLoadingComplete)
+			if (!_repo.IsLoadingComplete)
 				return _emptySuggest.Values;
 
 			var values = getAllCombinatoricValues(field);
@@ -284,7 +313,7 @@ namespace Mtgdb.Dal.Index
 			if (_limitedFieldValues.TryGetValue(field, out var values))
 				return values;
 
-			values = _cardRepository.Cards
+			values = _repo.Cards
 				.Select(DocumentFactory.LimitedValueGetters[field])
 				.Where(_ => _ != null)
 				.Select(_ => _.Trim().ToLowerInvariant())
@@ -301,7 +330,7 @@ namespace Mtgdb.Dal.Index
 			if (_limitedFieldValues.TryGetValue(field, out var values))
 				return values;
 
-			values = _cardRepository.Cards
+			values = _repo.Cards
 				.SelectMany(DocumentFactory.CombinatoricValueGetters[field])
 				.Where(_ => _ != null)
 				.Select(_ => _.Trim().ToLowerInvariant())
@@ -332,6 +361,10 @@ namespace Mtgdb.Dal.Index
 			int count = 0;
 
 			var terms = MultiFields.GetTerms(_reader, field);
+
+			if (terms == null)
+				yield break;
+
 			var iterator = terms.GetIterator(reuse: null);
 
 			if (field.IsFloatField())
@@ -432,17 +465,12 @@ namespace Mtgdb.Dal.Index
 		}
 
 		public Func<Set, bool> FilterSet { get; set; } = set => true;
-
+		public string IndexDirectory => Version.Directory;
+		public bool IsUpToDate => Version.IsUpToDate;
 		public bool IsLoaded { get; private set; }
 		public bool IsLoading { get; private set; }
-
-		public event Action IndexingProgress;
-
 		public int IndexedSets { get; private set; }
 		public int TotalSets { get; private set; }
-
-		private Spellchecker _spellchecker;
-		internal IndexVersion Version { get; set; }
 
 		public int MaxCount
 		{
@@ -450,15 +478,16 @@ namespace Mtgdb.Dal.Index
 			set => _allTokensAreValues = Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToReadOnlyList();
 		}
 
-		private bool _abort;
-		private DirectoryReader _reader;
+		internal IndexVersion Version { get; set; }
 
-		private readonly DamerauLevenstineDistance _stringDistance;
 
-		private readonly Dictionary<string, IReadOnlyList<string>> _limitedFieldValues = new Dictionary<string, IReadOnlyList<string>>();
-		private CardRepository _cardRepository;
+
+		public event Action IndexingProgress;
+
+
 
 		private static readonly IReadOnlyList<string> _userFields = DocumentFactory.UserFields
+			.Append(NumericAwareQueryParser.Like)
 			.Select(f => f + ":")
 			.OrderBy(Str.Comparer)
 			.ToReadOnlyList();
@@ -473,8 +502,6 @@ namespace Mtgdb.Dal.Index
 			nameof(Card.RestrictedIn),
 			nameof(Card.BannedIn)
 		};
-
-		private static readonly IReadOnlyList<string> _legalityValues = Legality.Formats;
 
 		private static readonly IReadOnlyList<TokenType> _allTokensAreField = _userFields
 			.Select(_ => TokenType.Field)
@@ -491,5 +518,16 @@ namespace Mtgdb.Dal.Index
 		private readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null,
 			Enumerable.Empty<string>().ToReadOnlyList(),
 			Enumerable.Empty<TokenType>().ToReadOnlyList());
+
+
+
+		private bool _abort;
+		private DirectoryReader _reader;
+		private Spellchecker _spellchecker;
+
+		private readonly DamerauLevenstineDistance _stringDistance;
+		private readonly Dictionary<string, IReadOnlyList<string>> _limitedFieldValues = new Dictionary<string, IReadOnlyList<string>>();
+		private readonly CardRepository _repo;
+		private readonly MtgdbAnalyzer _analyzer;
 	}
 }

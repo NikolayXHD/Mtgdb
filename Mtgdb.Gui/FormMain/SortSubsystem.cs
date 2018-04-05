@@ -17,9 +17,10 @@ namespace Mtgdb.Gui
 			nameof(Card.Type)
 		};
 
-		public SortSubsystem(LayoutView layoutViewCards, CardRepository repository, Fields fields)
+		public SortSubsystem(LayoutView layoutViewCards, CardRepository repository, Fields fields, SearchStringSubsystem searchStringSubsystem)
 		{
 			_fields = fields;
+			_searchStringSubsystem = searchStringSubsystem;
 			_layoutViewCards = layoutViewCards;
 			_repository = repository;
 
@@ -35,8 +36,6 @@ namespace Mtgdb.Gui
 		{
 			_layoutViewCards.SortChanged -= sortChanged;
 		}
-
-
 
 		public void ApplySort(string sort)
 		{
@@ -64,18 +63,33 @@ namespace Mtgdb.Gui
 			Invalidate();
 		}
 
-		private List<Card> sort(IEnumerable<Card> cards, IEnumerable<FieldSortInfo> sortInfo)
+		private List<Card> sort(IEnumerable<Card> cards, IList<FieldSortInfo> sortInfo)
 		{
-			sortInfo = sortInfo.Concat(Enumerable.Repeat(_defaultSort, 1));
+			var relevanceById = _searchStringSubsystem?.SearchResult?.RelevanceById;
+
+			float getRelevance(Card c) => 
+				relevanceById?.TryGet(c.IndexInFile, int.MaxValue) ?? 0f;
+
+			if (sortInfo.Count == 0)
+			{
+				return cards
+					.OrderByDescending(getRelevance)
+					.ThenBy(_defaultSort, _fields)
+					.ToList();
+			}
 
 			using (var enumerator = sortInfo.GetEnumerator())
 			{
 				enumerator.MoveNext();
-				
-				var cardsOrdered = _fields.ByName[enumerator.Current.FieldName].OrderBy(cards, enumerator.Current.SortOrder);
+
+				var cardsOrdered = cards.OrderBy(enumerator.Current, _fields);
 
 				while (enumerator.MoveNext())
-					cardsOrdered = _fields.ByName[enumerator.Current.FieldName].ThenOrderBy(cardsOrdered, enumerator.Current.SortOrder);
+					cardsOrdered = cardsOrdered.ThenBy(enumerator.Current, _fields);
+
+				cardsOrdered = cardsOrdered
+					.ThenByDescending(getRelevance)
+					.ThenBy(_defaultSort, _fields);
 
 				var result = cardsOrdered.ToList();
 				return result;
@@ -84,17 +98,17 @@ namespace Mtgdb.Gui
 
 		private static string toString(IList<FieldSortInfo> sortInfo)
 		{
-			string sort = String.Join(@",", sortInfo.Select(_ => $"{_.FieldName} {_.SortOrder}"));
+			string sort = string.Join(@",", sortInfo.Select(_ => $"{_.FieldName} {_.SortOrder}"));
 
-			if (String.IsNullOrEmpty(sort))
-				return String.Empty;
+			if (string.IsNullOrEmpty(sort))
+				return string.Empty;
 
 			return sort;
 		}
 
 		private static IEnumerable<FieldSortInfo> parse(string sort)
 		{
-			if (String.IsNullOrEmpty(sort))
+			if (string.IsNullOrEmpty(sort))
 				yield break;
 
 			var sortExpressions = sort.Split(',');
@@ -159,5 +173,6 @@ namespace Mtgdb.Gui
 		private readonly LayoutView _layoutViewCards;
 		private readonly CardRepository _repository;
 		private readonly Fields _fields;
+		private readonly SearchStringSubsystem _searchStringSubsystem;
 	}
 }

@@ -231,6 +231,9 @@ namespace Mtgdb.Dal
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string NameEn { get; set; }
 
+		[JsonIgnore]
+		public string NameEnNa => throw new NotSupportedException();
+
 		/// <summary>
 		/// Only used for split, flip, double-faced, and meld cards. Will contain all the names on this card, front or back. For meld cards, the first name is the card with the meld ability, which has the top half on its back, the second name is the card with the reminder text, and the third name is the melded back face.
 		/// </summary>
@@ -627,6 +630,8 @@ namespace Mtgdb.Dal
 
 
 		public string Name(UiModel ui) => GetName(ui.LanguageController?.Language);
+
+		public string NameNa(UiModel ui) => throw new NotSupportedException();
 
 		public string Type(UiModel ui) => GetType(ui.LanguageController?.Language);
 

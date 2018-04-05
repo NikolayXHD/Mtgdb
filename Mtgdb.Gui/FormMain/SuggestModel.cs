@@ -18,7 +18,7 @@ namespace Mtgdb.Gui
 
 		private void suggestLoopIteration()
 		{
-			if (_spellchecker == null || SearchStateCurrent == null || isSuggestUpToDate())
+			if (_spellchecker == null || SearchInputStateCurrent == null || isSuggestUpToDate())
 				Thread.Sleep(100);
 			else
 				suggest();
@@ -26,7 +26,7 @@ namespace Mtgdb.Gui
 
 		private void suggest()
 		{
-			var searchState =_searchState = SearchStateCurrent;
+			var searchState =_searchInputState = SearchInputStateCurrent;
 			_language = Ui.LanguageController.Language;
 
 			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language);
@@ -40,19 +40,13 @@ namespace Mtgdb.Gui
 			if (_language != Ui.LanguageController.Language)
 				return false;
 
-			if (_searchState == null && SearchStateCurrent == null)
+			if (_searchInputState == null && SearchInputStateCurrent == null)
 				return true;
 
-			if (_searchState == null || SearchStateCurrent == null)
+			if (_searchInputState == null || SearchInputStateCurrent == null)
 				return false;
 
-			if (_searchState.Text != SearchStateCurrent.Text)
-				return false;
-			
-			if (_searchState.Caret != SearchStateCurrent.Caret)
-				return false;
-
-			return true;
+			return _searchInputState.Equals(SearchInputStateCurrent);
 		}
 
 		public void StartSuggestThread()
@@ -81,12 +75,12 @@ namespace Mtgdb.Gui
 
 		private readonly LuceneSpellchecker _spellchecker;
 
-		private SearchStringState _searchState;
-		public SearchStringState SearchStateCurrent { get; set; }
+		private SearchInputState _searchInputState;
+		public SearchInputState SearchInputStateCurrent { get; set; }
 
 		private string _language;
 
-		public event Action<IntellisenseSuggest, SearchStringState> Suggested;
+		public event Action<IntellisenseSuggest, SearchInputState> Suggested;
 		
 		private readonly Thread _suggestThread;
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -51,9 +52,8 @@ namespace Mtgdb.Gui
 			_findEditor.KeyUp += findKeyUp;
 
 			_findEditor.TextChanged += findTextChanged;
+			_findEditor.SelectionChanged += findSelectionChanged;
 			_findEditor.LocationChanged += findLocationChanged;
-
-			_findEditor.MouseWheel += findEditorMouseWheel;
 
 			_listBoxSuggest.Click += suggestClick;
 			_listBoxSuggest.KeyUp += suggestKeyUp;
@@ -67,8 +67,8 @@ namespace Mtgdb.Gui
 			_findEditor.KeyDown -= findKeyDown;
 			_findEditor.KeyUp -= findKeyUp;
 			_findEditor.TextChanged -= findTextChanged;
+			_findEditor.SelectionChanged -= findSelectionChanged;
 			_findEditor.LocationChanged -= findLocationChanged;
-			_findEditor.MouseWheel -= findEditorMouseWheel;
 
 			_listBoxSuggest.Click -= suggestClick;
 			_listBoxSuggest.KeyUp -= suggestKeyUp;
@@ -92,11 +92,6 @@ namespace Mtgdb.Gui
 		private string getLanguage()
 		{
 			return Ui.LanguageController.Language;
-		}
-
-		private static void findEditorMouseWheel(object sender, MouseEventArgs e)
-		{
-			SendKeys.Send(@"{Tab}");
 		}
 
 		private int getHeight(string text)
@@ -151,37 +146,41 @@ namespace Mtgdb.Gui
 		{
 			_findEditor.Invoke(delegate
 			{
-				Color requiredColor;
+				var color = getBackgroundColor();
 
-				if (SearchResult?.ParseErrorMessage != null)
-					requiredColor = Color.LavenderBlush;
-				else if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
-					requiredColor = Color.FromArgb(0xF0, 0xF0, 0xF0);
-				else
-					requiredColor = _panelSearchIcon.BackColor = Color.White;
-
-				if (_findEditor.BackColor != requiredColor)
-				{
+				if (_findEditor.BackColor != color)
 					_findEditor.BackColor =
 						_findEditor.Parent.BackColor =
-							_panelSearchIcon.BackColor = requiredColor;
-
-					_highligter.Highlight();
-				}
+							_panelSearchIcon.BackColor = color;
 			});
 		}
 
-		private void suggested(IntellisenseSuggest suggest, SearchStringState source)
+		private Color getBackgroundColor()
+		{
+			Color requiredColor;
+
+			if (SearchResult?.ParseErrorMessage != null)
+				requiredColor = Color.LavenderBlush;
+			else if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
+				requiredColor = Color.FromArgb(0xF0, 0xF0, 0xF0);
+			else
+				requiredColor = _panelSearchIcon.BackColor = Color.White;
+			return requiredColor;
+		}
+
+
+
+		private void suggested(IntellisenseSuggest suggest, SearchInputState source)
 		{
 			if (!_parent.Visible)
 				return;
 
-			_findEditor.Invoke(delegate { updateSuggestListBox(suggest, source); });
+			_parent.Invoke(delegate { updateSuggestListBox(suggest, source); });
 		}
 
-		private void updateSuggestListBox(IntellisenseSuggest suggest, SearchStringState source)
+		private void updateSuggestListBox(IntellisenseSuggest suggest, SearchInputState source)
 		{
-			lock (_suggestSync)
+			lock (_syncSuggest)
 			{
 				_suggestSource = source;
 				_suggestTypes = suggest.Types;
@@ -228,6 +227,14 @@ namespace Mtgdb.Gui
 		}
 
 
+		private void findSelectionChanged(object sender, EventArgs e)
+		{
+			if (_highligter.HighlightingInProgress)
+				return;
+
+			UpdateSuggestInput();
+		}
+
 		private void findTextChanged(object sender, EventArgs e)
 		{
 			if (_highligter.HighlightingInProgress)
@@ -248,8 +255,13 @@ namespace Mtgdb.Gui
 
 		public void UpdateSuggestInput()
 		{
-			SuggestModel.SearchStateCurrent = new SearchStringState(_currentText, _findEditor.SelectionStart);
+			SuggestModel.SearchInputStateCurrent = getSearchInputState();
 		}
+
+		private SearchInputState getSearchInputState() => new SearchInputState(
+			_currentText,
+			_findEditor.SelectionStart,
+			_findEditor.SelectionLength);
 
 		private void parentKeyDown(object sender, KeyEventArgs e)
 		{
@@ -283,6 +295,7 @@ namespace Mtgdb.Gui
 
 					e.Handled = true;
 					break;
+
 				case Keys.Up:
 					if (_listBoxSuggest.Visible)
 					{
@@ -294,12 +307,14 @@ namespace Mtgdb.Gui
 
 					e.Handled = true;
 					break;
+
 				case Keys.Escape:
 					if (_listBoxSuggest.Visible)
 						closeSuggest();
 
 					e.Handled = true;
 					break;
+
 				case Keys.Enter:
 					if (!_listBoxSuggest.Visible)
 					{
@@ -313,11 +328,13 @@ namespace Mtgdb.Gui
 
 					e.Handled = true;
 					break;
+
 				case Keys.Control | Keys.Space:
 					showSuggest();
 					e.Handled = true;
 					e.SuppressKeyPress = true;
 					break;
+
 				case Keys.Control | Keys.X:
 				case Keys.Shift | Keys.Delete:
 					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
@@ -336,6 +353,7 @@ namespace Mtgdb.Gui
 					e.Handled = true;
 					e.SuppressKeyPress = true;
 					break;
+
 				case Keys.Control | Keys.C:
 				case Keys.Control | Keys.Insert:
 					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
@@ -344,60 +362,108 @@ namespace Mtgdb.Gui
 					e.Handled = true;
 					e.SuppressKeyPress = true;
 					break;
+
 				case Keys.Control | Keys.V:
 				case Keys.Shift | Keys.Insert:
-					if (Clipboard.ContainsText())
-					{
-						string searchQuery = clipboardTextToQuery(Clipboard.GetText());
-						pasteSearchQuery(searchQuery);
-					}
+					pasteFromClipboard();
 
 					e.Handled = true;
 					e.SuppressKeyPress = true;
 					break;
-				case Keys.Control | Keys.Shift | Keys.Right:
-				{
+
+				case Keys.PageDown:
+				case Keys.PageUp:
+					e.Handled = true;
+					e.SuppressKeyPress = true;
 					break;
-				}
-				case Keys.Control | Keys.Shift | Keys.Left:
-				{
+
+				// prevent beep sound on attempt to move caret outside text bounds
+				case Keys.Right:
+				case Keys.End:
+				case Keys.Control | Keys.Right:
+				case Keys.Control | Keys.End:
+					if (_findEditor.SelectionStart == _findEditor.TextLength)
+					{
+						e.Handled = true;
+						e.SuppressKeyPress = true;
+					}
 					break;
-				}
+
+				case Keys.Shift | Keys.Right:
+				case Keys.Shift | Keys.End:
+				case Keys.Shift | Keys.Control | Keys.Right:
+				case Keys.Shift | Keys.Control | Keys.End:
+					if (_findEditor.SelectionStart + _findEditor.SelectionLength == _findEditor.TextLength)
+					{
+						e.Handled = true;
+						e.SuppressKeyPress = true;
+					}
+					break;
+
+				case Keys.Left:
+				case Keys.Home:
+				case Keys.Control | Keys.Left:
+				case Keys.Control | Keys.Home:
+				case Keys.Shift | Keys.Left:
+				case Keys.Shift | Keys.Home:
+				case Keys.Shift | Keys.Control | Keys.Left:
+				case Keys.Shift | Keys.Control | Keys.Home:
+					if (_findEditor.SelectionStart == 0)
+					{
+						e.Handled = true;
+						e.SuppressKeyPress = true;
+					}
+					break;
 			}
 		}
 
-		private void pasteSearchQuery(string searchQuery)
+
+
+		private void pasteFromClipboard()
 		{
-			int selectionStart = _findEditor.SelectionStart;
-			int suffixStart = selectionStart + _findEditor.SelectionLength;
-			string text = _findEditor.Text;
+			string text;
 
-			var builder = new StringBuilder();
-			if (selectionStart >= 0)
+			try
 			{
-				string prefix = text.Substring(0, selectionStart);
-				builder.Append(prefix);
+				text = Clipboard.GetText();
+			}
+			catch (ExternalException)
+			{
+				return;
 			}
 
-			builder.Append(searchQuery);
+			if (string.IsNullOrEmpty(text))
+				return;
 
-			int length = builder.Length;
+			text = text.Trim();
 
-			if (suffixStart < text.Length)
-			{
-				string suffix = text.Substring(suffixStart);
-				builder.Append(suffix);
-			}
+			var (preProcessedText, type) = classifyPastedText(text);
 
-			_findEditor.Text = builder.ToString();
-			_findEditor.SelectionStart = length;
+			var source = getSearchInputState();
+			var token = EditedTokenLocator.GetTokenForArbitraryInsertion(source.Text, source.Caret);
+			pasteText(preProcessedText, type, source, token);
 		}
 
-		private string clipboardTextToQuery(string text)
+		private (string PreProcessedText, TokenType Type) classifyPastedText(string text)
 		{
 			if (text.StartsWith(SearchStringMark))
-				return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
+				return (preProcessTextCopiedFromSearchInput(text), TokenType.None);
 
+			var (fieldName, fieldValue) = parseCopiedFromTooltip(text);
+
+			if (fieldName != null)
+				return (GetFieldValueQuery(fieldName, fieldValue), TokenType.None);
+
+			return (preProcessArbitraryPastedText(text), TokenType.FieldValue);
+		}
+
+		private static string preProcessTextCopiedFromSearchInput(string text)
+		{
+			return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
+		}
+
+		private static string preProcessArbitraryPastedText(string text)
+		{
 			string[] postfixes =
 			{
 				".jpg",
@@ -409,54 +475,118 @@ namespace Mtgdb.Gui
 				if (text.EndsWith(postfix, Str.Comparison))
 					text = text.Substring(0, text.Length - postfix.Length);
 
+			return text;
+		}
+
+		private static (string FieldName, string FieldValue) parseCopiedFromTooltip(string text)
+		{
 			int endOfLine = text.IndexOf('\n');
 
-			if (endOfLine >= 0)
-			{
-				string fieldName = text.Substring(0, endOfLine).Trim();
+			if (endOfLine < 0)
+				return (null, null);
 
-				if (DocumentFactory.UserFields.Contains(fieldName))
-				{
-					string fieldValue = text.Substring(endOfLine);
-					return GetFieldValueQuery(fieldName, fieldValue);
-				}
+			string fieldName = text.Substring(0, endOfLine).Trim();
+
+			if (!DocumentFactory.UserFields.Contains(fieldName))
+				return (null, null);
+
+			string fieldValue = text.Substring(endOfLine);
+
+			return (fieldName, fieldValue);
+		}
+
+		private void pasteText(string value, TokenType type, SearchInputState source, Token token)
+		{
+			int left;
+			int length;
+
+			if (token != null && source.SelectionLength == 0)
+			{
+				left = token.Position;
+				length = token.Value.Length;
+			}
+			else
+			{
+				left = source.Caret;
+				length = source.SelectionLength;
 			}
 
-			return getValueQuery(null, text);
+			string prefix = source.Text.Substring(0, left).Trim();
+			string suffix = source.Text.Substring(left + length).Trim();
+
+			if (type.IsAny(TokenType.Field))
+			{
+				if (suffix.StartsWith(":"))
+					suffix = suffix.Substring(1);
+			}
+			else if (type.IsAny(TokenType.FieldValue))
+			{
+				bool isInsidePhrase = token?.IsPhrase == true || token?.Type.IsAny(TokenType.OpenQuote) == true;
+
+				List<(string Term, int Offset)> tokens;
+
+				lock (_syncAnalyzer)
+					tokens = _analyzer.GetTokens(token?.ParentField, value).ToList();
+
+				value = string.Join(" ", tokens.Select(_ => StringEscaper.Escape(_.Term)));
+				if (tokens.Count > 1 && !isInsidePhrase)
+					value = "\"" + value + "\"";
+			}
+
+			if (token?.Previous != null && !token.Previous.Type.IsAny(TokenType.AnyOpen))
+				value = " " + value;
+
+			if (token?.Next == null || !token.Next.Type.IsAny(TokenType.AnyClose))
+				value += " ";
+
+			var replacement = prefix + value + suffix;
+			int caret = left + value.Length;
+
+			setFindText(replacement, caret: caret);
+			updateBackgroundColor();
 		}
 
-		public string GetFieldValueQuery(string fieldName, string fieldValue)
+
+
+		public string GetFieldValueQuery(string fieldName, string fieldValue, bool useAndOperator = false)
 		{
-			if (string.IsNullOrEmpty(fieldValue))
+			if (fieldName == nameof(Card.Name))
+				fieldName = NumericAwareQueryParser.Like;
+
+			List<(string Term, int Offset)> valueTokens;
+
+			lock (_syncAnalyzer)
+				valueTokens = _analyzer.GetTokens(fieldName, fieldValue).ToList();
+
+			if (valueTokens.Count == 0)
 				return $"-{fieldName}:*";
-
-			return $"{fieldName}: {getValueQuery(fieldName, fieldValue)}";
-		}
-
-		private string getValueQuery(string fieldName, string text)
-		{
-			text = _endLineRegex.Replace(text, " ");
 
 			var builder = new StringBuilder();
 
-			int count = 0;
+			if (useAndOperator)
+				builder.Append('+');
 
-			foreach (var token in _analyzer.GetTokens(fieldName, text))
+			builder.Append(fieldName);
+			builder.Append(':');
+
+			if (valueTokens.Count > 1)
+				builder.Append('"');
+
+			for (int i = 0; i < valueTokens.Count; i++)
 			{
-				if (count > 0)
+				if (i > 0)
 					builder.Append(' ');
 
-				builder.Append(StringEscaper.Escape(token.Term));
-				count++;
+				builder.Append(StringEscaper.Escape(valueTokens[i].Term));
 			}
 
-			string valueQuery = builder.ToString();
+			if (valueTokens.Count > 1)
+				builder.Append('"');
 
-			if (count > 1 || valueQuery.IndexOf(" ", Str.Comparison) >= 0)
-				return '"' + valueQuery + '"';
-
-			return valueQuery;
+			return builder.ToString();
 		}
+
+
 
 		private void findKeyUp(object sender, KeyEventArgs e)
 		{
@@ -490,23 +620,25 @@ namespace Mtgdb.Gui
 
 		private void closeSuggest()
 		{
-			focusSearch();
 			if (_listBoxSuggest.Visible)
+			{
 				_listBoxSuggest.Visible = false;
+				focusSearch();
+			}
 		}
 
 		private void selectSuggest()
 		{
-			SearchStringState source;
+			SearchInputState source;
 			string value;
 			TokenType type;
 			Token token;
 
-			lock (_suggestSync)
+			lock (_syncSuggest)
 			{
 				source = _suggestSource;
 
-				if (!source.Equals(SuggestModel.SearchStateCurrent))
+				if (!source.Equals(SuggestModel.SearchInputStateCurrent))
 					return;
 
 				int selectedIndex = _listBoxSuggest.SelectedIndex;
@@ -522,62 +654,13 @@ namespace Mtgdb.Gui
 			if (string.IsNullOrEmpty(value))
 				return;
 
-			applySuggestSelection(value, type, source, token);
+			pasteText(value, type, source, token);
 		}
 
-		private void applySuggestSelection(string value, TokenType type, SearchStringState source, Token token)
-		{
-			int left = token?.Position ?? source.Caret;
-			var length = token?.Value?.Length ?? 0;
-
-			// Включим : в токен
-			if (token?.Type.IsAny(TokenType.Field) == true && left + length < source.Text.Length)
-				length++;
-
-			string prefix = source.Text.Substring(0, left);
-			string suffix = source.Text.Substring(left + length);
-
-			bool multipleTokens = _analyzer.GetTokens(token?.ParentField, value)
-				.Skip(1)
-				.Any();
-
-			if (type.IsAny(TokenType.FieldValue))
-				value = StringEscaper.Escape(value);
-
-			string rightDelimiter;
-
-			if (multipleTokens)
-				rightDelimiter = "\"";
-			else if (token?.Type.IsAny(TokenType.Field) == true)
-				rightDelimiter = @":";
-			else
-				rightDelimiter = @" ";
-
-			if (!suffix.StartsWith(rightDelimiter) && !value.EndsWith(rightDelimiter))
-				value += rightDelimiter;
-
-			string leftDelimiter;
-
-			if (multipleTokens)
-				leftDelimiter = "\"";
-			else if (token?.Previous?.IsConnectedToCaret(token.Position) == true || token?.Previous?.Type.IsAny(TokenType.CloseQuote | TokenType.Close) == true)
-				leftDelimiter = @" ";
-			else
-				leftDelimiter = string.Empty;
-
-			if (!string.IsNullOrEmpty(leftDelimiter) && !prefix.EndsWith(leftDelimiter) && !value.StartsWith(leftDelimiter))
-				value = leftDelimiter + value;
-
-			var replacement = prefix + value + suffix;
-
-			setFindText(replacement, left + value.Length);
-			updateBackgroundColor();
-		}
-
-		private void setFindText(string text, int editedRight)
+		private void setFindText(string text, int caret)
 		{
 			_findEditor.Text = text;
-			_findEditor.SelectionStart = editedRight;
+			_findEditor.SelectionStart = caret;
 			_findEditor.SelectionLength = 0;
 		}
 
@@ -621,28 +704,79 @@ namespace Mtgdb.Gui
 
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{
-			string query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
+			var query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue, searchArgs.UseAndOperator);
+			var source = getSearchInputState();
 
-			if (searchArgs.UseAndOperator && !string.IsNullOrEmpty(searchArgs.FieldValue))
-				query = "+" + query;
-
-			if (_findEditor.TextLength > 0)
+			int queryStartIndex = source.Text.IndexOf(query, Str.Comparison);
+			if (queryStartIndex >= 0)
+				removeQueryFromInput(queryStartIndex, query, source);
+			else
 			{
-				var caret = _findEditor.SelectionStart;
-
-				bool leftIsBoundary = caret == 0 || caret > 0 && char.IsWhiteSpace(_findEditor.Text[caret - 1]);
-				bool isRightBoundary = caret == _findEditor.TextLength || caret < _findEditor.TextLength && char.IsWhiteSpace(_findEditor.Text[caret]);
-
-				if (!leftIsBoundary)
-					query = " " + query;
-
-				if (!isRightBoundary)
-					query += " ";
+				var token = EditedTokenLocator.GetTokenForTermInsertion(source.Text, source.Caret);
+				pasteText(query, TokenType.None, source, token);
 			}
 
-			pasteSearchQuery(query);
 			ApplyFind();
 		}
+
+
+
+		private void removeQueryFromInput(int queryStartIndex, string query, SearchInputState source)
+		{
+			string sourceText = source.Text;
+			int caret = source.Caret;
+
+			var (modifiedText, movedCaret) = removeSubstring(sourceText, caret, queryStartIndex, query.Length);
+			(modifiedText, movedCaret) = trimStart(modifiedText, movedCaret);
+			(modifiedText, movedCaret) = removeDuplicateWhitespaces(modifiedText, movedCaret);
+
+			setFindText(modifiedText, movedCaret);
+		}
+
+		private static (string modifiedText, int movedCaret) removeSubstring(string sourceText, int caret, int queryStartIndex, int length)
+		{
+			int queryEndIndex = queryStartIndex + length;
+			int movedCaret;
+
+			if (caret >= queryEndIndex)
+				movedCaret = caret - length;
+			else if (caret > queryStartIndex)
+				movedCaret = queryStartIndex;
+			else
+				movedCaret = caret;
+
+			string modifiedText = sourceText.Substring(0, queryStartIndex) + sourceText.Substring(queryEndIndex);
+			return (modifiedText, movedCaret);
+		}
+
+		private static (string modifiedText, int movedCaret) trimStart(string modifiedText, int movedCaret)
+		{
+			var trimmedStart = modifiedText.TrimStart();
+			var deltaLength = modifiedText.Length - trimmedStart.Length;
+			modifiedText = trimmedStart;
+			movedCaret = Math.Max(0, movedCaret - deltaLength);
+			return (modifiedText, movedCaret);
+		}
+
+		private static (string modifiedText, int movedCaret) removeDuplicateWhitespaces(string modifiedText, int movedCaret)
+		{
+			while (true)
+			{
+				int duplicateWhitespaceIndex = modifiedText.IndexOf("  ", Str.Comparison);
+
+				if (duplicateWhitespaceIndex < 0)
+					break;
+
+				if (movedCaret > duplicateWhitespaceIndex)
+					movedCaret--;
+
+				modifiedText = modifiedText.Substring(0, duplicateWhitespaceIndex) + modifiedText.Substring(duplicateWhitespaceIndex + 1);
+			}
+
+			return (modifiedText, movedCaret);
+		}
+
+
 
 		public string AppliedText
 		{
@@ -671,8 +805,8 @@ namespace Mtgdb.Gui
 		private Thread _idleInputMonitoringThread;
 
 		private string _currentText = string.Empty;
-		
-		private SearchStringState _suggestSource;
+
+		private SearchInputState _suggestSource;
 		private readonly BindingList<string> _suggestValues = new BindingList<string>();
 		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
 		private Token _suggestToken;
@@ -686,6 +820,7 @@ namespace Mtgdb.Gui
 		private readonly SearchStringHighlighter _highligter;
 		private readonly MtgdbAnalyzer _analyzer;
 
-		private readonly object _suggestSync = new object();
+		private readonly object _syncSuggest = new object();
+		private readonly object _syncAnalyzer = new object();
 	}
 }

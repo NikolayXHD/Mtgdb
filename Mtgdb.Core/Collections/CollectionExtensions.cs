@@ -16,6 +16,16 @@ namespace Mtgdb
 			return val;
 		}
 
+		public static TVal TryGet<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key, TVal defaultValue)
+		{
+			if (key == null)
+				return defaultValue;
+
+			dict.TryGetValue(key, out var val);
+
+			return val;
+		}
+
 		public static TVal TryPeek<TVal>(this Stack<TVal> stack)
 		{
 			if (stack.Count == 0)
@@ -162,5 +172,15 @@ namespace Mtgdb
 
 		public static IOrderedEnumerable<TVal> OrderBy<TVal>(this IEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
 			sequence.OrderBy(_ => _, comparer);
+
+		public static void UnionWithNullable<T>(this HashSet<T> set, IEnumerable<T> values)
+		{
+			if (values == null)
+				return;
+
+			set.UnionWith(values);
+		}
+
+		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Enumerable.Repeat(value, 1));
 	}
 }

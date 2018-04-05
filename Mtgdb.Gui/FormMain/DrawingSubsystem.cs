@@ -8,12 +8,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Gui.Resx;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
@@ -43,6 +43,7 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
+
 			_analyzer = new MtgdbAnalyzer();
 		}
 
@@ -66,7 +67,8 @@ namespace Mtgdb.Gui
 
 			var nonShadowedIcons = new HashSet<string>(Str.Comparer)
 			{
-				"E", "Q"
+				"E",
+				"Q"
 			};
 
 			var iconRecognizer = new IconRecognizer(imageByText, nonShadowedIcons);
@@ -85,7 +87,7 @@ namespace Mtgdb.Gui
 
 			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "100" || name == "1000000" || name == "chaos")
 				return new[] { name };
-			
+
 			if (name.Length == 2)
 				return new[] { $"{name[0]}/{name[1]}", $"{name[1]}/{name[0]}", $"{name[0]}{name[1]}", $"{name[1]}{name[0]}" };
 
@@ -156,7 +158,7 @@ namespace Mtgdb.Gui
 			var brush = new SolidBrush(Color.FromArgb(192, Color.OrangeRed));
 
 			var lineSize = e.Graphics.MeasureString(legalityWarning, font);
-			rect.Offset((int) ((rect.Width - lineSize.Width)/2f), 0);
+			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
 			e.Graphics.DrawString(legalityWarning, font, brush, rect, StringFormat.GenericDefault);
 		}
@@ -206,7 +208,7 @@ namespace Mtgdb.Gui
 
 			const int size = 16;
 			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
-			
+
 			var brush = new SolidBrush(Color.FromArgb(224, color));
 			var lineSize = e.Graphics.MeasureString(warning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
@@ -224,8 +226,8 @@ namespace Mtgdb.Gui
 
 			rect.Inflate(new Size(-borderWidth, -borderWidth));
 
-			int cornerYSize = rect.Height/cornerShare;
-			int cornerXSize = rect.Height/cornerShare;
+			int cornerYSize = rect.Height / cornerShare;
+			int cornerXSize = rect.Height / cornerShare;
 
 			var points = new[]
 			{
@@ -237,7 +239,7 @@ namespace Mtgdb.Gui
 
 				new Point(rect.Right + cornerOffset - cornerXSize, rect.Bottom + cornerOffset),
 				new Point(rect.Left - cornerOffset + cornerXSize, rect.Bottom + cornerOffset),
-					
+
 				new Point(rect.Left - cornerOffset, rect.Bottom + cornerOffset - cornerYSize),
 				new Point(rect.Left - cornerOffset, rect.Top - cornerOffset + cornerYSize)
 			};
@@ -287,7 +289,7 @@ namespace Mtgdb.Gui
 			var size = new Size(50, 30).ByDpi();
 
 			var rect = new Rectangle(
-				e.Bounds.Left + (_imageLoader.CardSize.Width - size.Width)/2,
+				e.Bounds.Left + (_imageLoader.CardSize.Width - size.Width) / 2,
 				e.Bounds.Bottom - size.Height,
 				size.Width,
 				size.Height);
@@ -345,22 +347,22 @@ namespace Mtgdb.Gui
 			if (card == null)
 				return;
 
-			foreach (var fieldName in view.FieldNames)
+			foreach (var displayField in view.FieldNames)
 			{
-				if (fieldName == nameof(Card.Image))
+				if (displayField == nameof(Card.Image))
 					continue;
 
-				var text = _layoutViewCards.GetFieldText(rowHandle, fieldName);
+				var displayText = _layoutViewCards.GetFieldText(rowHandle, displayField);
 
 				var matches = new List<TextRange>();
 				var contextMatches = new List<TextRange>();
 
-				addFilterButtonMatches(matches, fieldName, text);
-				addSearchStringMatches(matches, contextMatches, fieldName, text);
-				addLegalityMatches(matches, fieldName, text);
+				addFilterButtonMatches(matches, displayField, displayText);
+				addSearchStringMatches(matches, contextMatches, displayField, displayText);
+				addLegalityMatches(matches, displayField, displayText);
 
 				var highlightRanges = getHighlightRanges(matches, contextMatches);
-				_layoutViewCards.SetHighlightTextRanges(highlightRanges, rowHandle, fieldName);
+				_layoutViewCards.SetHighlightTextRanges(highlightRanges, rowHandle, displayField);
 			}
 		}
 
@@ -390,27 +392,81 @@ namespace Mtgdb.Gui
 			matches.AddRange(legalityMatches);
 		}
 
-		private void addSearchStringMatches(List<TextRange> matches, List<TextRange> contextMatches, string fieldName, string displayText)
+		private void addSearchStringMatches(List<TextRange> matches, List<TextRange> contextMatches, string displayField, string displayText)
 		{
-			if (_searchStringSubsystem.SearchResult?.HighlightTerms == null)
+			var searchResult = _searchStringSubsystem.SearchResult;
+
+			addTermMatches(matches, contextMatches, displayField, displayText, searchResult?.HighlightTerms);
+			addPhraseMatches(matches, displayField, displayText, searchResult?.HighlightPhrases);
+		}
+
+		private void addPhraseMatches(
+			List<TextRange> matches,
+			string displayField,
+			string displayText,
+			Dictionary<string, List<string[]>> highlightPhrases)
+		{
+			if (highlightPhrases == null)
 				return;
 
-			foreach (var term in _searchStringSubsystem.SearchResult.HighlightTerms)
+			var displayTextTokens = new Lazy<IReadOnlyList<(string Term, int Offset)>>(() =>
+				_analyzer.GetTokens(displayField, displayText).ToReadOnlyList());
+
+			var displayTextValues = new Lazy<IReadOnlyList<string>>(() =>
+				displayTextTokens.Value.Select(_ => _.Term).ToReadOnlyList());
+
+			foreach (var term in highlightPhrases.Where(term => isRelevantField(displayField, term.Key)))
 			{
-				string displayField;
-				if (string.IsNullOrEmpty(term.Key))
-					displayField = null;
-				else
-					displayField = term.Key;
+				foreach (var sequence in term.Value)
+				{
+					var pattern = sequence.Select(StringEscaper.Unescape).ToReadOnlyList();
 
-				if (!string.IsNullOrEmpty(displayField) && !Str.Equals(displayField, fieldName))
-					continue;
+					if (pattern.Count == 0)
+						continue;
 
+					if (pattern.Count == 1)
+					{
+						var mathesToAdd = displayTextTokens.Value
+							.Where(token => Str.Comparer.Equals(token.Term, pattern[0]))
+							.Select(token => new TextRange(token.Offset, token.Term.Length));
+
+						matches.AddRange(mathesToAdd);
+						continue;
+					}
+
+					var searcher = new KnutMorrisPrattSubstringSearch<string>(pattern, Str.Comparer);
+
+					foreach (int index in searcher.FindAll(displayTextValues.Value))
+					{
+						var firstWordMatch = displayTextTokens.Value[index];
+						var lastWordMatch = displayTextTokens.Value[index + pattern.Count - 1];
+
+						var startIndex = firstWordMatch.Offset;
+						var length = lastWordMatch.Offset + lastWordMatch.Term.Length - startIndex;
+
+						matches.Add(new TextRange(startIndex, length));
+					}
+				}
+			}
+		}
+
+		private void addTermMatches(
+			List<TextRange> matches,
+			List<TextRange> contextMatches,
+			string displayField,
+			string displayText,
+			Dictionary<string, Token[]> highlightTerms)
+		{
+			if (highlightTerms == null)
+				return;
+
+			foreach (var term in highlightTerms.Where(term => isRelevantField(displayField, term.Key)))
+			{
 				var patternsSet = new Dictionary<string, Regex>();
 				var contextPatternsSet = new Dictionary<string, Regex>();
 
-				var relevantTokens = term.Value.Where(token => 
-					token.Type.IsAny(TokenType.FieldValue|TokenType.AnyChar|TokenType.RegexBody) &&
+				var relevantTokens = term.Value.Where(token =>
+					token.Type.IsAny(TokenType.FieldValue | TokenType.AnyChar | TokenType.RegexBody) &&
 					!string.IsNullOrEmpty(token.Value));
 
 				foreach (var token in relevantTokens)
@@ -423,9 +479,14 @@ namespace Mtgdb.Gui
 						addPattern(contextPattern, contextPatternsSet);
 				}
 
-				addMatches(displayText, patternsSet.Values, matches, fieldName);
-				addMatches(displayText, contextPatternsSet.Values, contextMatches, fieldName);
+				addMatches(displayText, displayField, patternsSet.Values, matches);
+				addMatches(displayText, displayField, contextPatternsSet.Values, contextMatches);
 			}
+		}
+
+		private static bool isRelevantField(string displayField, string queryField)
+		{
+			return String.IsNullOrEmpty(queryField) || Str.Equals(queryField, displayField);
 		}
 
 		private void addPattern(string pattern, Dictionary<string, Regex> patternsSet)
@@ -435,7 +496,7 @@ namespace Mtgdb.Gui
 
 			if (patternsSet.TryGetValue(pattern, out var regex))
 				return;
-			
+
 			if (!_regexCache.TryGetValue(pattern, out regex))
 			{
 				regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -445,7 +506,7 @@ namespace Mtgdb.Gui
 			patternsSet.Add(pattern, regex);
 		}
 
-		private void addMatches(string displayText, IEnumerable<Regex> patterns, List<TextRange> matches, string fieldName)
+		private void addMatches(string displayText, string fieldName, IEnumerable<Regex> patterns, List<TextRange> matches)
 		{
 			foreach (Regex findRegex in patterns)
 				foreach (var token in _analyzer.GetTokens(fieldName, displayText))
@@ -528,9 +589,9 @@ namespace Mtgdb.Gui
 			while (true)
 			{
 				if (token.Next == null ||
-					!token.Next.TouchesCaret(token.Position + token.Value.Length) ||
-					token.Type.IsAny(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
-					token.Next.Type.IsAny(TokenType.FieldValue) && token.Next.Value[0].IsCj())
+						!token.Next.TouchesCaret(token.Position + token.Value.Length) ||
+						token.Type.IsAny(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
+						token.Next.Type.IsAny(TokenType.FieldValue) && token.Next.Value[0].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
@@ -555,9 +616,9 @@ namespace Mtgdb.Gui
 			while (true)
 			{
 				if (token.Previous == null ||
-					!token.Previous.TouchesCaret(token.Position) ||
-					token.Type.IsAny(TokenType.FieldValue) && token.Value[0].IsCj() ||
-					token.Previous.Type.IsAny(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
+						!token.Previous.TouchesCaret(token.Position) ||
+						token.Type.IsAny(TokenType.FieldValue) && token.Value[0].IsCj() ||
+						token.Previous.Type.IsAny(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
@@ -623,8 +684,6 @@ namespace Mtgdb.Gui
 
 			return pattern.ToString();
 		}
-
-
 
 		private static List<TextRange> getHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
 		{

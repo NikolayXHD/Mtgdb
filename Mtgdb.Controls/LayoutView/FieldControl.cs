@@ -174,6 +174,9 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool AllowSearch { get; set; } = true;
 
+		[Category("Settings"), DefaultValue(true)]
+		public bool ShowSearchOnlyWhenHotTracked { get; set; } = true;
+
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked
 		{
@@ -282,6 +285,24 @@ namespace Mtgdb.Controls
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public string SelectedText { get; private set; }
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap CustomSearchIconTransp { get; private set; }
+
+		[Category("Settings")]
+		[DefaultValue(null)]
+		public Bitmap CustomSearchIcon
+		{
+			get => _icon;
+			set
+			{
+				_icon = value;
+				CustomSearchIconTransp = value?.SetOpacity(0.66f);
+			}
+		}
+
+		private Bitmap _icon;
 
 		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;

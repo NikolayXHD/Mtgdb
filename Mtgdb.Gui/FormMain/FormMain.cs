@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 
 		private bool evalFilterBySearchText(Card c)
 		{
-			return _searchStringSubsystem.SearchResult?.SearchRankById?.ContainsKey(c.IndexInFile) != false;
+			return _searchStringSubsystem.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
 		}
 
 		private bool evalFilterByDeck(Card c)
@@ -475,7 +475,7 @@ namespace Mtgdb.Gui
 		private bool isSearchStringApplied()
 		{
 			return
-				_searchStringSubsystem.SearchResult?.SearchRankById != null &&
+				_searchStringSubsystem.SearchResult?.RelevanceById != null &&
 				_luceneSearcher.Spellchecker.IsLoaded;
 		}
 

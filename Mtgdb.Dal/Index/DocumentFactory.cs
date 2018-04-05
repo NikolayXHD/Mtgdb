@@ -15,7 +15,7 @@ namespace Mtgdb.Dal.Index
 		{
 			_langs = CardLocalization.GetAllLanguages().ToList();
 
-			addTextField(nameof(Card.Color), analyze: false);
+			addTextField(nameof(Card.Color));
 
 			addTextField(nameof(Card.SetName));
 			addTextField(nameof(Card.SetCode), analyze: false);
@@ -25,6 +25,8 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.OriginalType), nameof(Card.Type));
 
 			addTextField(nameof(Card.NameEn), nameof(Card.Name));
+			addTextField(nameof(Card.NameEnNa), nameof(Card.Name), analyze: false);
+
 			addTextField(nameof(Card.TextEn), nameof(Card.Text));
 			addTextField(nameof(Card.FlavorEn), nameof(Card.Flavor));
 			addTextField(nameof(Card.TypeEn), nameof(Card.Type));
@@ -40,7 +42,7 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.Toughness), analyze: false);
 			addTextField(nameof(Card.Loyalty), analyze: false);
 			addTextField(nameof(Card.ReleaseDate), analyze: false);
-			addTextField(nameof(Card.Layout), analyze: false);
+			addTextField(nameof(Card.Layout));
 
 			addTextField(nameof(Card.GeneratedMana), nameof(Card.Text));
 			addTextField(nameof(Card.ManaCost));
@@ -64,6 +66,7 @@ namespace Mtgdb.Dal.Index
 					continue;
 
 				addSpecificTextField(nameof(Card.Name), lang);
+				addSpecificTextField(nameof(Card.NameNa), lang, analyze: false);
 				addSpecificTextField(nameof(Card.Type), lang);
 				addSpecificTextField(nameof(Card.Text), lang);
 				addSpecificTextField(nameof(Card.Flavor), lang);
@@ -101,6 +104,7 @@ namespace Mtgdb.Dal.Index
 
 			// Tested
 			doc.addTextField(nameof(card.NameEn), card.NameEn);
+			doc.addTextField(nameof(card.NameEnNa), card.NameEn);
 
 			// Tested
 			doc.addTextField(nameof(card.SetName), card.SetName);
@@ -234,7 +238,10 @@ namespace Mtgdb.Dal.Index
 				// Tested
 				string name = card.Localization?.GetName(lang);
 				if (!string.IsNullOrEmpty(name))
+				{
 					doc.addTextField(nameof(Card.Name), name, lang);
+					doc.addTextField(nameof(Card.NameNa), name, lang);
+				}
 
 				// Tested
 				string type = card.Localization?.GetType(lang);
@@ -337,7 +344,7 @@ namespace Mtgdb.Dal.Index
 				NotAnalyzedFields.Add(fieldName);
 		}
 
-		private static void addSpecificTextField(string fieldName, string language)
+		private static void addSpecificTextField(string fieldName, string language, bool analyze = true)
 		{
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
@@ -352,6 +359,9 @@ namespace Mtgdb.Dal.Index
 			TextFields.Add(localizedFieldName);
 
 			DisplayFieldByIndexField.Add(localizedFieldName, fieldName);
+
+			if (!analyze)
+				NotAnalyzedFields.Add(localizedFieldName);
 		}
 
 		private static void addFloatField(string fieldName, string displayFieldName = null)
@@ -432,6 +442,11 @@ namespace Mtgdb.Dal.Index
 			return NumericFields.Contains(field);
 		}
 
+		public static bool IsNotAnalyzedField(this string field)
+		{
+			return NotAnalyzedFields.Contains(field);
+		}
+
 		public static bool IsIntField(this string field)
 		{
 			return IntFields.Contains(field);
@@ -487,8 +502,6 @@ namespace Mtgdb.Dal.Index
 			nameof(Card.Color),
 			nameof(Card.ManaCost)
 		};
-
-
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
 	}
