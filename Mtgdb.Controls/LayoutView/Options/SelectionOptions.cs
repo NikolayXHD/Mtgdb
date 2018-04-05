@@ -6,6 +6,14 @@ namespace Mtgdb.Controls
 	public class SelectionOptions
 	{
 		[Category("Settings")]
+		[DefaultValue(typeof(Color), "Transparent")]
+		public Color HotTrackBackColor { get; set; }
+
+		[Category("Settings")]
+		[DefaultValue(typeof(Color), "Transparent")]
+		public Color HotTrackBorderColor { get; set; }
+
+		[Category("Settings")]
 		[DefaultValue(true)]
 		public bool Enabled { get; set; } = true;
 

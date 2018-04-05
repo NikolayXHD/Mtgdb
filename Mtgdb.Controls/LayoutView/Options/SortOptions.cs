@@ -7,6 +7,11 @@ namespace Mtgdb.Controls
 {
 	public class SortOptions
 	{
+		public bool IsButtonVisible(FieldControl field)
+		{
+			return Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
+		}
+
 		[Category("Settings")]
 		[DefaultValue(false)]
 		public bool Allow { get; set; }

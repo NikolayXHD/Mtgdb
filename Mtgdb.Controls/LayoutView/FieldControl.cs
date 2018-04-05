@@ -43,10 +43,9 @@ namespace Mtgdb.Controls
 		public void PaintSelf(
 			Graphics graphics,
 			Point parentLocation,
-			HighlightSettings highlightSettings,
+			HighlightOptions highlightOptions,
 			SelectionState selection,
-			SelectionOptions selectionOptions,
-			Color hotTrackBackgroundColor)
+			SelectionOptions selectionOptions)
 		{
 			var contentArea = getArea(parentLocation, Padding);
 			var completeArea = getArea(parentLocation, new Padding(0));
@@ -66,12 +65,12 @@ namespace Mtgdb.Controls
 					ForeColor = ForeColor,
 
 					BackColor = IsHotTracked
-						? hotTrackBackgroundColor
+						? selectionOptions.HotTrackBackColor
 						: BackColor,
 
-					HighlightContextColor = highlightSettings.HighlightContextColor,
-					HighlightColor = highlightSettings.HighlightColor,
-					HighlightBorderColor = highlightSettings.HighlightBorderColor,
+					HighlightContextColor = highlightOptions.HighlightContextColor,
+					HighlightColor = highlightOptions.HighlightColor,
+					HighlightBorderColor = highlightOptions.HighlightBorderColor,
 					HighlightBorderWidth = 1f
 				};
 
@@ -171,11 +170,12 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool AllowSort { get; set; } = true;
 
-		[Category("Settings"), DefaultValue(true)]
-		public bool AllowSearch { get; set; } = true;
-
-		[Category("Settings"), DefaultValue(true)]
-		public bool ShowSearchOnlyWhenHotTracked { get; set; } = true;
+		[Category("Settings")]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		public SearchOptions SearchOptions { get; set; } = new SearchOptions
+		{
+			Button = new ButtonOptions()
+		};
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked
@@ -286,23 +286,7 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public string SelectedText { get; private set; }
 
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap CustomSearchIconTransp { get; private set; }
 
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap CustomSearchIcon
-		{
-			get => _icon;
-			set
-			{
-				_icon = value;
-				CustomSearchIconTransp = value?.SetOpacity(0.66f);
-			}
-		}
-
-		private Bitmap _icon;
 
 		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;

@@ -11,7 +11,7 @@ namespace Mtgdb.Gui
 			_fieldImage.FieldName = nameof(Card.Image);
 
 			_fieldImage.AllowSort = false;
-			_fieldImage.AllowSearch = false;
+			_fieldImage.SearchOptions.Allow = false;
 
 			SubscribeToFieldEvents();
 		}

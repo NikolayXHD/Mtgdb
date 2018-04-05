@@ -160,9 +160,9 @@ namespace Mtgdb.Controls
 						_tooltipTextbox.SelectionLength = range.Length;
 
 						if (range.IsContext)
-							_tooltipTextbox.SelectionBackColor = tooltip.HighlightSettings.HighlightContextColor;
+							_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightContextColor;
 						else
-							_tooltipTextbox.SelectionBackColor = tooltip.HighlightSettings.HighlightColor;
+							_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightColor;
 					}
 			}
 

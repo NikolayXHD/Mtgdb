@@ -23,7 +23,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "0, 0")]
 		public Size CardInterval
 		{
-			get { return _cardInterval; }
+			get => _cardInterval;
 			set
 			{
 				if (value != _cardInterval)
@@ -38,7 +38,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(false)]
 		public bool AllowPartialCards
 		{
-			get { return _allowPartialCards; }
+			get => _allowPartialCards;
 			set
 			{
 				if (value != _allowPartialCards)
@@ -53,7 +53,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "0, 0")]
 		public Size PartialCardsThreshold
 		{
-			get { return _partialCardsThreshold; }
+			get => _partialCardsThreshold;
 			set
 			{
 				if (value != _partialCardsThreshold)
@@ -68,7 +68,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Direction), "TopLeft")]
 		public Direction Alignment
 		{
-			get { return _alignment; }
+			get => _alignment;
 			set
 			{
 				if (value != _alignment)
@@ -83,7 +83,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(null)]
 		public Bitmap AlignTopLeftIcon
 		{
-			get { return _alignTopLeftIcon; }
+			get => _alignTopLeftIcon;
 			set
 			{
 				_alignTopLeftIcon = value;
@@ -95,7 +95,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(null)]
 		public Bitmap AlignTopLeftHoveredIcon
 		{
-			get { return _alignTopLeftHoveredIcon; }
+			get => _alignTopLeftHoveredIcon;
 			set
 			{
 				_alignTopLeftHoveredIcon = value;

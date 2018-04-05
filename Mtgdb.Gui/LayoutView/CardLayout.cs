@@ -33,20 +33,21 @@ namespace Mtgdb.Gui
 			_fieldRulings.FieldName = nameof(Card.Rulings);
 
 			_fieldImage.AllowSort = false;
-			_fieldImage.AllowSearch = false;
+			_fieldImage.SearchOptions.Allow = false;
 
 			_fieldText.AllowSort = false;
 			_fieldFlavor.AllowSort = false;
 
 			_fieldRulings.AllowSort = false;
-			_fieldRulings.AllowSearch = false;
+			_fieldRulings.SearchOptions.Allow = false;
 
-			_fieldName.ShowSearchOnlyWhenHotTracked = false;
-			_fieldName.CustomSearchIcon = Properties.Resources.search_like_hovered_32;
+			_fieldName.SearchOptions.Button.ShowOnlyWhenHotTracked = false;
+			_fieldName.SearchOptions.Button.UnfocusedOpacity = 0.75f;
+			_fieldName.SearchOptions.Button.Icon = Properties.Resources.search_like_hovered_32;
 
-			HighlightSettings.HighlightBorderColor = Color.CadetBlue;
-			HighlightSettings.HighlightColor = Color.LightBlue;
-			HighlightSettings.HighlightContextColor = Color.LightCyan;
+			HighlightOptions.HighlightBorderColor = Color.CadetBlue;
+			HighlightOptions.HighlightColor = Color.LightBlue;
+			HighlightOptions.HighlightContextColor = Color.LightCyan;
 
 			SubscribeToFieldEvents();
 		}

@@ -59,7 +59,7 @@ namespace Mtgdb.Controls
 			// implicit connection: data_source_sync
 			lock (DataSource)
 			{
-				paintActions.Background.Add(e => e.Graphics.Clear(BackColor));
+				paintActions.Back.Add(e => e.Graphics.Clear(BackColor));
 				addPaintCardActions(paintActions, eArgs.ClipRectangle);
 				paintActions.AlignButtons.Add(paintAlignButtons);
 				paintActions.Selection.Add(paintSelection);
@@ -67,7 +67,7 @@ namespace Mtgdb.Controls
 				eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 				eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-				paintActions.Background.Paint(eArgs);
+				paintActions.Back.Paint(eArgs);
 				paintActions.FieldData.Paint(eArgs);
 				paintActions.Selection.Paint(eArgs);
 
@@ -105,8 +105,8 @@ namespace Mtgdb.Controls
 
 		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle)
 		{
-			var hotTrackBgBrush = new SolidBrush(HotTrackBackgroundColor);
-			var hotTrackBgPen = new Pen(HotTrackBorderColor);
+			var hotTrackBgBrush = new SolidBrush(SelectionOptions.HotTrackBackColor);
+			var hotTrackBgPen = new Pen(SelectionOptions.HotTrackBorderColor);
 
 			for (int i = 0; i < Cards.Count; i++)
 			{
@@ -121,7 +121,7 @@ namespace Mtgdb.Controls
 					continue;
 
 				if (!card.BackColor.Equals(BackColor) && !card.BackColor.Equals(Color.Transparent))
-					actions.Background.Add(e => e.Graphics.FillRectangle(new SolidBrush(card.BackColor), cardArea));
+					actions.Back.Add(e => e.Graphics.FillRectangle(new SolidBrush(card.BackColor), cardArea));
 
 				foreach (var field in card.Fields)
 				{
@@ -130,7 +130,7 @@ namespace Mtgdb.Controls
 					if (!clipRectangle.IntersectsWith(fieldArea))
 						continue;
 
-					actions.Background.Add(e => paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
+					actions.Back.Add(e => paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
 					actions.FieldData.Add(e => paintFieldData(e, card, field, fieldArea, rowHandle));
 					actions.FieldButtons.Add(e => paintSortButton(e, field, card));
 					actions.FieldButtons.Add(e => paintSearchButton(e, field, card));
@@ -178,10 +178,9 @@ namespace Mtgdb.Controls
 					field.PaintSelf(
 						e.Graphics,
 						card.Location,
-						card.HighlightSettings,
+						card.HighlightOptions,
 						_selection,
-						SelectionOptions,
-						HotTrackBackgroundColor);
+						SelectionOptions);
 				}
 			}
 			else
@@ -189,10 +188,9 @@ namespace Mtgdb.Controls
 				field.PaintSelf(
 					e.Graphics,
 					card.Location,
-					card.HighlightSettings,
+					card.HighlightOptions,
 					_selection,
-					SelectionOptions,
-					HotTrackBackgroundColor);
+					SelectionOptions);
 			}
 		}
 
@@ -607,17 +605,8 @@ namespace Mtgdb.Controls
 			if (card != null)
 				foreach (var field in card.Fields)
 				{
-					field.IsSortVisible =
-						!suppressed &&
-						SortOptions.Allow &&
-						field.AllowSort &&
-						(field.IsHotTracked || field.SortOrder != SortOrder.None);
-
-					field.IsSearchVisible =
-						!suppressed &&
-						SearchOptions.Allow &&
-						field.AllowSearch &&
-						(field.IsHotTracked || !field.ShowSearchOnlyWhenHotTracked);
+					field.IsSortVisible = !suppressed && SortOptions.IsButtonVisible(field);
+					field.IsSearchVisible = !suppressed && SearchOptions.IsButtonVisible(field);
 				}
 
 			foreach (var direction in getAlignDirections())
@@ -812,7 +801,7 @@ namespace Mtgdb.Controls
 			bool isSortButton = SortOptions.Allow && field.AllowSort &&
 				SortOptions.GetButtonBounds(field, card).Contains(location);
 
-			bool isSearchButton = SearchOptions.Allow && field.AllowSearch &&
+			bool isSearchButton = SearchOptions.Allow && field.SearchOptions.Allow &&
 				SearchOptions.GetButtonBounds(field, card).Contains(location);
 
 			hitInfo.SetField(field, isSortButton, isSearchButton);
@@ -1183,14 +1172,6 @@ namespace Mtgdb.Controls
 				OnLayout(new LayoutEventArgs(this, nameof(LayoutControlType)));
 			}
 		}
-
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color HotTrackBackgroundColor { get; set; }
-
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color HotTrackBorderColor { get; set; }
 
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]

@@ -123,7 +123,7 @@ namespace Mtgdb.Gui
 			{
 				while (true)
 				{
-					updateBackgroundColor();
+					updateBackColor();
 
 					int deltaMs;
 					if (!_lastUserInput.HasValue || _listBoxSuggest.Visible || _currentText == _appliedText)
@@ -142,11 +142,11 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void updateBackgroundColor()
+		private void updateBackColor()
 		{
 			_findEditor.Invoke(delegate
 			{
-				var color = getBackgroundColor();
+				var color = getBackColor();
 
 				if (_findEditor.BackColor != color)
 					_findEditor.BackColor =
@@ -155,7 +155,7 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private Color getBackgroundColor()
+		private Color getBackColor()
 		{
 			Color requiredColor;
 
@@ -265,7 +265,7 @@ namespace Mtgdb.Gui
 
 		private void parentKeyDown(object sender, KeyEventArgs e)
 		{
-			updateBackgroundColor();
+			updateBackColor();
 		}
 
 		public void FocusSearch()
@@ -279,7 +279,7 @@ namespace Mtgdb.Gui
 
 		private void findKeyDown(object sender, KeyEventArgs e)
 		{
-			updateBackgroundColor();
+			updateBackColor();
 			_lastUserInput = DateTime.Now;
 
 			switch (e.KeyData)
@@ -543,7 +543,7 @@ namespace Mtgdb.Gui
 			int caret = left + value.Length;
 
 			setFindText(replacement, caret: caret);
-			updateBackgroundColor();
+			updateBackColor();
 		}
 
 
@@ -590,7 +590,7 @@ namespace Mtgdb.Gui
 
 		private void findKeyUp(object sender, KeyEventArgs e)
 		{
-			updateBackgroundColor();
+			updateBackColor();
 			_lastUserInput = DateTime.Now;
 			UpdateSuggestInput();
 		}
@@ -678,7 +678,7 @@ namespace Mtgdb.Gui
 		{
 			_appliedText = _currentText;
 
-			updateBackgroundColor();
+			updateBackColor();
 			updateSearchResult();
 
 			if (SearchResult?.ParseErrorMessage == null)

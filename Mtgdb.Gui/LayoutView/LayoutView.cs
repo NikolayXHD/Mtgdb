@@ -236,9 +236,9 @@ namespace Mtgdb.Gui
 			return _view.GetHighlihgtTextRanges(rowHandle, fieldName);
 		}
 
-		public HighlightSettings GetHighlightSettings()
+		public HighlightOptions GetHighlightSettings()
 		{
-			return _view.ProbeCard.HighlightSettings;
+			return _view.ProbeCard.HighlightOptions;
 		}
 
 		public int ScrollWidth => _view.ScrollWidth;

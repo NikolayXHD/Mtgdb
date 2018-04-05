@@ -232,21 +232,29 @@ namespace Mtgdb.Gui
 
 		private static void scaleLayoutView(LayoutViewControl view)
 		{
-			var searchToSortMargin =
-				view.SearchOptions.ButtonMargin.Width -
-				(view.SortOptions.ButtonMargin.Width + view.SortOptions.Icon.Width / 2);
+			var sortIcon = view.SortOptions.Icon;
 
-			view.SortOptions.Icon = view.SortOptions.Icon?.HalfResizeDpi();
+			view.SortOptions.Icon = sortIcon.HalfResizeDpi();
 			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
 			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
-			view.SearchOptions.Icon = view.SearchOptions.Icon?.HalfResizeDpi();
+			view.SearchOptions.Button.Icon = view.SearchOptions.Button.Icon?.HalfResizeDpi();
 
 			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
 			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
 
-			view.SearchOptions.ButtonMargin = new Size(
-				searchToSortMargin + view.SortOptions.ButtonMargin.Width + view.SortOptions.Icon.Width,
-				view.SearchOptions.ButtonMargin.Height);
+
+			if (view.SearchOptions.Button.Margin.HasValue)
+			{
+				var searchButtonMargin = view.SearchOptions.Button.Margin.Value;
+				
+				var searchToSortMargin =
+					searchButtonMargin.Width -
+					(view.SortOptions.ButtonMargin.Width + sortIcon.Width);
+
+				view.SearchOptions.Button.Margin = new Size(
+					searchToSortMargin + view.SortOptions.ButtonMargin.Width + sortIcon.Width,
+					searchButtonMargin.Height);
+			}
 		}
 
 		private void probeCardCreating(object view, LayoutControl probeCard)
@@ -255,8 +263,10 @@ namespace Mtgdb.Gui
 
 			foreach (var field in probeCard.Fields)
 			{
-				if (field.CustomSearchIcon != null)
-					field.CustomSearchIcon = field.CustomSearchIcon.HalfResizeDpi();
+				var customSearchIcon = field.SearchOptions.Button.Icon;
+
+				if (customSearchIcon != null)
+					field.SearchOptions.Button.Icon = customSearchIcon.HalfResizeDpi();
 			}
 
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;

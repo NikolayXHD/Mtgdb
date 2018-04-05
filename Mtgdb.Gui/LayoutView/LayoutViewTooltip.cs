@@ -125,7 +125,7 @@ namespace Mtgdb.Gui
 					Title = hitInfo.FieldName,
 					Text = _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName),
 					HighlightRanges = _layoutView.GetHiglightRanges(hitInfo.RowHandle, hitInfo.FieldName),
-					HighlightSettings = _layoutView.GetHighlightSettings(),
+					HighlightOptions = _layoutView.GetHighlightSettings(),
 					Clickable = true
 				});
 			}

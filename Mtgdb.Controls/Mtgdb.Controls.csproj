@@ -73,12 +73,13 @@
     </Compile>
     <Compile Include="Dpi.cs" />
     <Compile Include="GeometryHelpers.cs" />
+    <Compile Include="LayoutView\Options\ButtonOptions.cs" />
     <Compile Include="LayoutView\CardLayoutUtil.cs" />
     <Compile Include="ControlHelpers.cs" />
     <Compile Include="LayoutView\ContentAlignmentRanges.cs" />
-    <Compile Include="LayoutView\HighlightSettings.cs" />
+    <Compile Include="LayoutView\Options\HighlightOptions.cs" />
     <Compile Include="LayoutView\LayoutControlTypeConverter.cs" />
-    <Compile Include="LayoutView\LayoutOptions.cs" />
+    <Compile Include="LayoutView\Options\LayoutOptions.cs" />
     <Compile Include="LayoutView\LayoutViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,20 +92,20 @@
     </Compile>
     <Compile Include="LayoutView\PaintActions.cs" />
     <Compile Include="LayoutView\PaintActionsExt.cs" />
-    <Compile Include="LayoutView\RichTextRenderer.cs" />
-    <Compile Include="LayoutView\IconRecognizer.cs" />
-    <Compile Include="LayoutView\RichTextRenderContext.cs" />
-    <Compile Include="LayoutView\RenderAction.cs" />
-    <Compile Include="LayoutView\RenderBatchQueue.cs" />
-    <Compile Include="LayoutView\RenderBatch.cs" />
+    <Compile Include="LayoutView\RichText\RichTextRenderer.cs" />
+    <Compile Include="LayoutView\RichText\IconRecognizer.cs" />
+    <Compile Include="LayoutView\RichText\RichTextRenderContext.cs" />
+    <Compile Include="LayoutView\RichText\RenderAction.cs" />
+    <Compile Include="LayoutView\RichText\RenderBatchQueue.cs" />
+    <Compile Include="LayoutView\RichText\RenderBatch.cs" />
     <Compile Include="LayoutView\FieldControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="LayoutView\SearchOptions.cs" />
-    <Compile Include="LayoutView\SelectionOptions.cs" />
+    <Compile Include="LayoutView\Options\SearchOptions.cs" />
+    <Compile Include="LayoutView\Options\SelectionOptions.cs" />
     <Compile Include="LayoutView\SelectionState.cs" />
     <Compile Include="LayoutView\SelectionStateChanged.cs" />
-    <Compile Include="LayoutView\SortOptions.cs" />
+    <Compile Include="LayoutView\Options\SortOptions.cs" />
     <Compile Include="LayoutView\EventFiringMap.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -119,10 +120,10 @@
     </Compile>
     <Compile Include="QuickFilter\BorderShape.cs" />
     <Compile Include="QuickFilter\StateClick.cs" />
-    <Compile Include="LayoutView\RichTextToken.cs" />
-    <Compile Include="LayoutView\RichTextLayout.cs" />
-    <Compile Include="LayoutView\RichTextTokenReader.cs" />
-    <Compile Include="LayoutView\RichTextTokenType.cs" />
+    <Compile Include="LayoutView\RichText\RichTextToken.cs" />
+    <Compile Include="LayoutView\RichText\RichTextLayout.cs" />
+    <Compile Include="LayoutView\RichText\RichTextTokenReader.cs" />
+    <Compile Include="LayoutView\RichText\RichTextTokenType.cs" />
     <Compile Include="Statistics\Field.cs" />
     <Compile Include="Statistics\FieldBuilder.cs" />
     <Compile Include="Statistics\IField.cs" />
@@ -187,6 +188,7 @@
       <Name>Mtgdb.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

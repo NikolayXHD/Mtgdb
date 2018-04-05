@@ -19,7 +19,7 @@ namespace Mtgdb.Controls
 		public DateTime Created { get; private set; }
 		public bool Clickable { get; set; }
 		public IList<TextRange> HighlightRanges { get; set; }
-		public HighlightSettings HighlightSettings { get; set; }
+		public HighlightOptions HighlightOptions { get; set; }
 		public Rectangle ObjectBounds { get; set; }
 
 		public DateTime? Abandoned { get; set; }
