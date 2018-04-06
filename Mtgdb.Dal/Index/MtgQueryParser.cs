@@ -14,9 +14,9 @@ using Token = Lucene.Net.QueryParsers.Classic.Token;
 
 namespace Mtgdb.Dal.Index
 {
-	public class NumericAwareQueryParser : QueryParser
+	public class MtgQueryParser : QueryParser
 	{
-		public NumericAwareQueryParser(LuceneVersion matchVersion, string f, Analyzer a, CardRepository repository)
+		public MtgQueryParser(LuceneVersion matchVersion, string f, Analyzer a, CardRepository repository)
 			: base(matchVersion, f, a)
 		{
 			_repository = repository;
@@ -307,32 +307,19 @@ namespace Mtgdb.Dal.Index
 					slop,
 					card.TextEn,
 					nameof(card.TextEn),
-					nameof(card.TextEn),
-					nameof(card.OriginalText)));
-
-			if (!string.IsNullOrEmpty(card.OriginalText))
-			{
-				result.Add(createMoreLikeThisQuery(
-					slop,
-					card.OriginalText,
-					nameof(card.OriginalText),
-					nameof(card.TextEn),
-					nameof(card.OriginalText)));
-			}
+					nameof(card.TextEn)));
 
 			if (!string.IsNullOrEmpty(card.GeneratedMana))
-			{
 				result.Add(createMoreLikeThisQuery(
 					slop,
 					card.GeneratedMana,
 					nameof(card.GeneratedMana),
 					nameof(card.GeneratedMana)));
-			}
 
-			if (result.Disjuncts.Count > 0)
-				return result;
+			if (result.Disjuncts.Count == 0)
+				return _matchNothingQuery;
 
-			return _matchNothingQuery;
+			return result;
 		}
 
 		private MoreLikeThisQuery createMoreLikeThisQuery(float slop, string value, string field, params string[] fields)
@@ -463,7 +450,7 @@ namespace Mtgdb.Dal.Index
 		private static readonly Query _matchNothingQuery = new BooleanQuery();
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
-			new[] { "a", "an", "the", "of" }.Concat(MtgdbTokenizerPatterns.SingletoneWordChars.Select(c => new string(c, 1))),
+			new[] { "a", "an", "the" }.Concat(MtgdbTokenizerPatterns.SingletoneWordChars.Select(c => new string(c, 1))),
 			Str.Comparer);
 
 		private readonly CardRepository _repository;

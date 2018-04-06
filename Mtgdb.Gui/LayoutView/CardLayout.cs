@@ -32,18 +32,16 @@ namespace Mtgdb.Gui
 			_fieldToughness.FieldName = nameof(Card.Toughness);
 			_fieldRulings.FieldName = nameof(Card.Rulings);
 
-			_fieldImage.AllowSort = false;
-			_fieldImage.SearchOptions.Allow = false;
+			_fieldImage.AllowSort =
+				_fieldText.AllowSort =
+					_fieldFlavor.AllowSort =
+						_fieldRulings.AllowSort = false;
 
-			_fieldText.AllowSort = false;
-			_fieldFlavor.AllowSort = false;
-
-			_fieldRulings.AllowSort = false;
 			_fieldRulings.SearchOptions.Allow = false;
 
-			_fieldName.SearchOptions.Button.ShowOnlyWhenHotTracked = false;
-			_fieldName.SearchOptions.Button.UnfocusedOpacity = 0.75f;
-			_fieldName.SearchOptions.Button.Icon = Properties.Resources.search_like_hovered_32;
+			_fieldImage.SearchOptions.Button.ShowOnlyWhenHotTracked = false;
+			_fieldImage.SearchOptions.Button.Icon = Properties.Resources.search_like_hovered_32;
+			_fieldImage.SearchOptions.Button.Margin = new Size(4, 4);
 
 			HighlightOptions.HighlightBorderColor = Color.CadetBlue;
 			HighlightOptions.HighlightColor = Color.LightBlue;
@@ -57,6 +55,8 @@ namespace Mtgdb.Gui
 			var card = (Card) dataSource;
 
 			_fieldImage.Image = card?.Image(Ui);
+			_fieldImage.Text = card?.NameEn;
+
 			_fieldName.Text = card?.Name(Ui);
 			_fieldManaCost.Text = card?.ManaCost;
 			_fieldType.Text = card?.Type(Ui);

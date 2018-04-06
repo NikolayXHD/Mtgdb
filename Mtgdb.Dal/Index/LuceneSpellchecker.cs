@@ -13,7 +13,7 @@ namespace Mtgdb.Dal.Index
 {
 	public class LuceneSpellchecker : IDisposable
 	{
-		public LuceneSpellchecker(CardRepository repo, MtgdbAnalyzer analyzer)
+		public LuceneSpellchecker(CardRepository repo, MtgAnalyzer analyzer)
 		{
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
 			_stringDistance = new DamerauLevenstineDistance();
@@ -202,7 +202,7 @@ namespace Mtgdb.Dal.Index
 			if (!IsLoaded)
 				throw new InvalidOperationException("Index must be loaded first");
 
-			if (Str.Equals(field, NumericAwareQueryParser.Like))
+			if (Str.Equals(field, MtgQueryParser.Like))
 				field = nameof(Card.NameEn);
 
 			if (Str.Equals(language, CardLocalization.DefaultLanguage))
@@ -220,14 +220,14 @@ namespace Mtgdb.Dal.Index
 			bool isFieldInvalid =
 				!string.IsNullOrEmpty(field) &&
 				!DocumentFactory.UserFields.Contains(field) &&
-				!Str.Equals(field, NumericAwareQueryParser.AnyField);
+				!Str.Equals(field, MtgQueryParser.AnyField);
 
 			if (isFieldInvalid)
 				return _emptySuggest.Values;
 
 			var valueIsNumeric = isValueNumeric(value);
 
-			if (string.IsNullOrEmpty(field) || field == NumericAwareQueryParser.AnyField)
+			if (string.IsNullOrEmpty(field) || field == MtgQueryParser.AnyField)
 			{
 				var valuesSet = new HashSet<string>();
 
@@ -487,7 +487,7 @@ namespace Mtgdb.Dal.Index
 
 
 		private static readonly IReadOnlyList<string> _userFields = DocumentFactory.UserFields
-			.Append(NumericAwareQueryParser.Like)
+			.Append(MtgQueryParser.Like)
 			.Select(f => f + ":")
 			.OrderBy(Str.Comparer)
 			.ToReadOnlyList();
@@ -528,6 +528,6 @@ namespace Mtgdb.Dal.Index
 		private readonly DamerauLevenstineDistance _stringDistance;
 		private readonly Dictionary<string, IReadOnlyList<string>> _limitedFieldValues = new Dictionary<string, IReadOnlyList<string>>();
 		private readonly CardRepository _repo;
-		private readonly MtgdbAnalyzer _analyzer;
+		private readonly MtgAnalyzer _analyzer;
 	}
 }

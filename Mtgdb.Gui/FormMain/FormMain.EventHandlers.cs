@@ -75,12 +75,10 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				_searchStringSubsystem.ApplyFind();
-
-				updateShowSampleHandButtons();
-
 				beginRestoreSettings();
 
+				updateShowSampleHandButtons();
+				_searchStringSubsystem.ApplyFind();
 				_deckModel.LoadDeck(_cardRepo);
 				_sortSubsystem.Invalidate();
 
@@ -462,11 +460,15 @@ namespace Mtgdb.Gui
 
 			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 			{
+				beginRestoreSettings();
+				
 				if (_sortSubsystem.IsLanguageDependent)
 					_sortSubsystem.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 					_searchStringSubsystem.ApplyFind();
+
+				endRestoreSettings();
 
 				RunRefilterTask();
 			}
@@ -481,13 +483,15 @@ namespace Mtgdb.Gui
 
 		private void searchStringApplied()
 		{
+			beginRestoreSettings();
+			_sortSubsystem.Invalidate();
+			endRestoreSettings();
+
 			if (restoringSettings())
 				return;
 
 			if (!isFilterGroupEnabled(FilterGroup.Find))
 				setFilterManagerState(FilterGroup.Find, FilterValueState.Required);
-
-			_sortSubsystem.Invalidate();
 
 			resetTouchedCard();
 

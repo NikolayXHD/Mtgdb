@@ -24,7 +24,8 @@ namespace Mtgdb.Gui
 			Panel panelSearchIcon,
 			ListBox listBoxSuggest,
 			LuceneSearcher searcher,
-			LayoutView viewCards)
+			LayoutView viewCards,
+			LayoutView viewDeck)
 		{
 			_parent = parent;
 
@@ -35,6 +36,7 @@ namespace Mtgdb.Gui
 
 			_searcher = searcher;
 			_viewCards = viewCards;
+			_viewDeck = viewDeck;
 
 			_listBoxSuggest.Visible = false;
 			_listBoxSuggest.Height = 0;
@@ -43,7 +45,7 @@ namespace Mtgdb.Gui
 			_highligter.Highlight();
 
 			_listBoxSuggest.DataSource = _suggestValues;
-			_analyzer = new MtgdbAnalyzer();
+			_analyzer = new MtgAnalyzer();
 		}
 
 		public void SubscribeToEvents()
@@ -60,6 +62,7 @@ namespace Mtgdb.Gui
 
 			_parent.KeyDown += parentKeyDown;
 			_viewCards.SearchClicked += gridSearchClicked;
+			_viewDeck.SearchClicked += gridSearchClicked;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -75,6 +78,7 @@ namespace Mtgdb.Gui
 
 			_parent.KeyDown -= parentKeyDown;
 			_viewCards.SearchClicked -= gridSearchClicked;
+			_viewDeck.SearchClicked -= gridSearchClicked;
 		}
 
 		public void SubscribeSuggestModelEvents()
@@ -387,6 +391,7 @@ namespace Mtgdb.Gui
 						e.Handled = true;
 						e.SuppressKeyPress = true;
 					}
+
 					break;
 
 				case Keys.Shift | Keys.Right:
@@ -398,6 +403,7 @@ namespace Mtgdb.Gui
 						e.Handled = true;
 						e.SuppressKeyPress = true;
 					}
+
 					break;
 
 				case Keys.Left:
@@ -413,6 +419,7 @@ namespace Mtgdb.Gui
 						e.Handled = true;
 						e.SuppressKeyPress = true;
 					}
+
 					break;
 			}
 		}
@@ -523,14 +530,11 @@ namespace Mtgdb.Gui
 			{
 				bool isInsidePhrase = token?.IsPhrase == true || token?.Type.IsAny(TokenType.OpenQuote) == true;
 
-				List<(string Term, int Offset)> tokens;
-
 				lock (_syncAnalyzer)
-					tokens = _analyzer.GetTokens(token?.ParentField, value).ToList();
+					value = _analyzer.GetValueExpression(token?.ParentField, value);
 
-				value = string.Join(" ", tokens.Select(_ => StringEscaper.Escape(_.Term)));
-				if (tokens.Count > 1 && !isInsidePhrase)
-					value = "\"" + value + "\"";
+				if (isInsidePhrase && value.StartsWith("\"") && value.EndsWith("\""))
+					value = value.Substring(1, value.Length - 2);
 			}
 
 			if (token?.Previous != null && !token.Previous.Type.IsAny(TokenType.AnyOpen))
@@ -550,15 +554,15 @@ namespace Mtgdb.Gui
 
 		public string GetFieldValueQuery(string fieldName, string fieldValue, bool useAndOperator = false)
 		{
-			if (fieldName == nameof(Card.Name))
-				fieldName = NumericAwareQueryParser.Like;
+			if (fieldName == nameof(Card.Image))
+				fieldName = MtgQueryParser.Like;
 
-			List<(string Term, int Offset)> valueTokens;
+			string valueExpression;
 
 			lock (_syncAnalyzer)
-				valueTokens = _analyzer.GetTokens(fieldName, fieldValue).ToList();
+				valueExpression = _analyzer.GetValueExpression(fieldName, fieldValue);
 
-			if (valueTokens.Count == 0)
+			if (string.IsNullOrEmpty(valueExpression))
 				return $"-{fieldName}:*";
 
 			var builder = new StringBuilder();
@@ -569,24 +573,10 @@ namespace Mtgdb.Gui
 			builder.Append(fieldName);
 			builder.Append(':');
 
-			if (valueTokens.Count > 1)
-				builder.Append('"');
-
-			for (int i = 0; i < valueTokens.Count; i++)
-			{
-				if (i > 0)
-					builder.Append(' ');
-
-				builder.Append(StringEscaper.Escape(valueTokens[i].Term));
-			}
-
-			if (valueTokens.Count > 1)
-				builder.Append('"');
+			builder.Append(valueExpression);
 
 			return builder.ToString();
 		}
-
-
 
 		private void findKeyUp(object sender, KeyEventArgs e)
 		{
@@ -817,8 +807,9 @@ namespace Mtgdb.Gui
 		private readonly ListBox _listBoxSuggest;
 		private readonly LuceneSearcher _searcher;
 		private readonly LayoutView _viewCards;
+		private readonly LayoutView _viewDeck;
 		private readonly SearchStringHighlighter _highligter;
-		private readonly MtgdbAnalyzer _analyzer;
+		private readonly MtgAnalyzer _analyzer;
 
 		private readonly object _syncSuggest = new object();
 		private readonly object _syncAnalyzer = new object();

@@ -440,11 +440,8 @@
     <None Include="Resources\avg_hovered.png" />
     <None Include="Resources\sum_hovered.png" />
     <None Include="Resources\sort_none_hovered.png" />
-    <None Include="Resources\sort_none.png" />
     <None Include="Resources\sort_desc_hovered.png" />
-    <None Include="Resources\sort_desc.png" />
     <None Include="Resources\sort_asc_hovered.png" />
-    <None Include="Resources\sort_asc.png" />
     <None Include="Resources\add_tab_32.png" />
     <None Include="Resources\close_tab_hovered_32.png" />
     <None Include="Resources\close_tab_32.png" />

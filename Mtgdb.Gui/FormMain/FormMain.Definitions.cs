@@ -65,7 +65,8 @@ namespace Mtgdb.Gui
 				_panelIconSearch,
 				_listBoxSuggest,
 				luceneSearcher,
-				_viewCards);
+				_viewCards,
+				_viewDeck);
 
 			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchStringSubsystem);
 
@@ -241,20 +242,6 @@ namespace Mtgdb.Gui
 
 			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
 			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
-
-
-			if (view.SearchOptions.Button.Margin.HasValue)
-			{
-				var searchButtonMargin = view.SearchOptions.Button.Margin.Value;
-				
-				var searchToSortMargin =
-					searchButtonMargin.Width -
-					(view.SortOptions.ButtonMargin.Width + sortIcon.Width);
-
-				view.SearchOptions.Button.Margin = new Size(
-					searchToSortMargin + view.SortOptions.ButtonMargin.Width + sortIcon.Width,
-					searchButtonMargin.Height);
-			}
 		}
 
 		private void probeCardCreating(object view, LayoutControl probeCard)
@@ -262,12 +249,7 @@ namespace Mtgdb.Gui
 			probeCard.ScaleDpi();
 
 			foreach (var field in probeCard.Fields)
-			{
-				var customSearchIcon = field.SearchOptions.Button.Icon;
-
-				if (customSearchIcon != null)
-					field.SearchOptions.Button.Icon = customSearchIcon.HalfResizeDpi();
-			}
+				field.SearchOptions.Button.Icon = field.SearchOptions.Button.Icon?.HalfResizeDpi();
 
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
 		}

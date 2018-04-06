@@ -56,7 +56,16 @@ namespace Mtgdb.Controls
 		{
 		}
 
+		public virtual IEnumerable<ButtonLayout> GetFieldButtons(FieldControl field, SearchOptions searchOptions, SortOptions sortOptions)
+		{
+			// the order is reversed because alignment is top-right
 
+			if (field.IsSortVisible)
+				yield return sortOptions.GetButtonLayout(field);
+
+			if (field.IsSearchVisible)
+				yield return searchOptions.GetButtonLayout(field);
+		}
 
 		private void fieldInvalidated(FieldControl field)
 		{

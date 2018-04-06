@@ -50,48 +50,51 @@ namespace Mtgdb.Controls
 			var contentArea = getArea(parentLocation, Padding);
 			var completeArea = getArea(parentLocation, new Padding(0));
 
-
-			if (!string.IsNullOrEmpty(Text))
+			if (Image != null)
 			{
-				var context = new RichTextRenderContext
-				{
-					Text = Text,
-					HighlightRanges = HighlightRanges,
-					Graphics = graphics,
-					Rect = contentArea,
-					HorizAlignment = HorizontalAlignment,
-					StringFormat = new StringFormat(default(StringFormatFlags)),
-					Font = Font,
-					ForeColor = ForeColor,
-
-					BackColor = IsHotTracked
-						? selectionOptions.HotTrackBackColor
-						: BackColor,
-
-					HighlightContextColor = highlightOptions.HighlightContextColor,
-					HighlightColor = highlightOptions.HighlightColor,
-					HighlightBorderColor = highlightOptions.HighlightBorderColor,
-					HighlightBorderWidth = 1f
-				};
-
-				if (completeArea.Contains(selection.Start))
-				{
-					context.RectSelected = true;
-
-					context.SelectionEnd = selection.End;
-					context.SelectionStart = selection.Start;
-					context.SelectionIsAll = selection.SelectAll;
-
-					context.SelectionBackColor = selectionOptions.BackColor;
-					context.SelectionForeColor = selectionOptions.ForeColor;
-					context.SelectionAlpha = selectionOptions.Alpha;
-				}
-
-				RichTextRenderer.Render(context, _iconRecognizer);
-				SelectedText = context.SelectedText;
-			}
-			else if (Image != null)
 				graphics.DrawImage(Image, Image.Size.FitIn(contentArea));
+				return;
+			}
+
+			if (string.IsNullOrEmpty(Text))
+				return;
+
+			var context = new RichTextRenderContext
+			{
+				Text = Text,
+				HighlightRanges = HighlightRanges,
+				Graphics = graphics,
+				Rect = contentArea,
+				HorizAlignment = HorizontalAlignment,
+				StringFormat = new StringFormat(default(StringFormatFlags)),
+				Font = Font,
+				ForeColor = ForeColor,
+
+				BackColor = IsHotTracked
+					? selectionOptions.HotTrackBackColor
+					: BackColor,
+
+				HighlightContextColor = highlightOptions.HighlightContextColor,
+				HighlightColor = highlightOptions.HighlightColor,
+				HighlightBorderColor = highlightOptions.HighlightBorderColor,
+				HighlightBorderWidth = 1f
+			};
+
+			if (completeArea.Contains(selection.Start))
+			{
+				context.RectSelected = true;
+
+				context.SelectionEnd = selection.End;
+				context.SelectionStart = selection.Start;
+				context.SelectionIsAll = selection.SelectAll;
+
+				context.SelectionBackColor = selectionOptions.BackColor;
+				context.SelectionForeColor = selectionOptions.ForeColor;
+				context.SelectionAlpha = selectionOptions.Alpha;
+			}
+
+			RichTextRenderer.Render(context, _iconRecognizer);
+			SelectedText = context.SelectedText;
 		}
 
 		private Rectangle getArea(Point parentLocation, Padding padding)
@@ -172,10 +175,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		public SearchOptions SearchOptions { get; set; } = new SearchOptions
-		{
-			Button = new ButtonOptions()
-		};
+		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked

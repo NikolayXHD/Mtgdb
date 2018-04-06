@@ -9,13 +9,22 @@ namespace Mtgdb.Controls
 		{
 			return new ButtonOptions
 			{
+				HotTrackOpacityDelta = HotTrackOpacityDelta,
 				Icon = Icon,
-				UnfocusedOpacity = UnfocusedOpacity,
 				Alignment = Alignment,
 				Margin = Margin,
-				ShowOnlyWhenHotTracked = ShowOnlyWhenHotTracked
+				ShowOnlyWhenHotTracked = ShowOnlyWhenHotTracked,
 			};
 		}
+
+
+
+		private void updateTranspIcon(Bitmap value)
+		{
+			IconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
+		}
+
+
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -33,22 +42,15 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void updateTranspIcon(Bitmap value)
-		{
-			IconTransp = value?.SetOpacity(UnfocusedOpacity);
-		}
-
 		[Category("Settings")]
-		[DefaultValue(0.5f)]
-		public float UnfocusedOpacity
+		[DefaultValue(0.25f)]
+		public float HotTrackOpacityDelta
 		{
-			get => _unfocusedOpacity;
+			get => _hotTrackOpacityDelta;
 			set
 			{
-				_unfocusedOpacity = value;
-
-				if (_icon != null)
-					updateTranspIcon(_icon);
+				_hotTrackOpacityDelta = value;
+				updateTranspIcon(_icon);
 			}
 		}
 
@@ -64,6 +66,6 @@ namespace Mtgdb.Controls
 		public bool? ShowOnlyWhenHotTracked { get; set; }
 
 		private Bitmap _icon;
-		private float _unfocusedOpacity = 0.5f;
+		private float _hotTrackOpacityDelta = 0.25f;
 	}
 }

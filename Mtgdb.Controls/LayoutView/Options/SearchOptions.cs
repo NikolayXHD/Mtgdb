@@ -22,49 +22,22 @@ namespace Mtgdb.Controls
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public ButtonOptions Button { get; set; } = new ButtonOptions();
 
-		public Rectangle GetButtonBounds(FieldControl field, LayoutControl layout)
+		public ButtonLayout GetButtonLayout(FieldControl field)
 		{
 			if (!field.SearchOptions.Allow || !field.IsSearchVisible)
-				return Rectangle.Empty;
-
-			var fieldBounds = field.Bounds;
-			fieldBounds.Offset(layout.Location);
+				return new ButtonLayout(null, Size.Empty, Size.Empty, ContentAlignment.MiddleCenter, ButtonType.Search);
 
 			var fieldOptions = field.SearchOptions.Button;
 			var generalOptions = Button;
 
-			var icon = fieldOptions.Icon ?? generalOptions.Icon;
+			var icon = field.IsSearchHotTracked
+				? fieldOptions.Icon ?? generalOptions.Icon
+				: fieldOptions.IconTransp ?? generalOptions.IconTransp;
+
 			var buttonAlignment = fieldOptions.Alignment ?? generalOptions.Alignment ?? ContentAlignment.TopRight;
 			var buttonMargin = fieldOptions.Margin ?? generalOptions.Margin ?? new Size(2, 2);
 
-			var imageBounds = new Rectangle(fieldBounds.Location, icon.Size);
-
-			if (ContentAlignmentRanges.AnyCenter.HasFlag(buttonAlignment))
-				imageBounds.Offset((fieldBounds.Width - imageBounds.Width) / 2, 0);
-			else if (ContentAlignmentRanges.AnyRight.HasFlag(buttonAlignment))
-				imageBounds.Offset(fieldBounds.Width - imageBounds.Width - buttonMargin.Width, 0);
-			else if (ContentAlignmentRanges.AnyLeft.HasFlag(buttonAlignment))
-				imageBounds.Offset(buttonMargin.Width, 0);
-
-			if (ContentAlignmentRanges.AnyMiddle.HasFlag(buttonAlignment))
-				imageBounds.Offset(0, (fieldBounds.Height - imageBounds.Height) / 2);
-			else if (ContentAlignmentRanges.AnyBottom.HasFlag(buttonAlignment))
-				imageBounds.Offset(0, fieldBounds.Height - imageBounds.Height - buttonMargin.Height);
-			else if (ContentAlignmentRanges.AnyTop.HasFlag(buttonAlignment))
-				imageBounds.Offset(0, buttonMargin.Height);
-
-			return imageBounds;
-		}
-
-		public Bitmap GetIcon(FieldControl field)
-		{
-			var fieldOptions = field.SearchOptions.Button;
-			var generalOptions = Button;
-
-			if (field.IsSearchHotTracked)
-				return fieldOptions.Icon ?? generalOptions.Icon;
-
-			return fieldOptions.IconTransp ?? generalOptions.IconTransp;
+			return new ButtonLayout(icon, icon.Size, buttonMargin, buttonAlignment, ButtonType.Search);
 		}
 
 		public bool IsButtonVisible(FieldControl field)

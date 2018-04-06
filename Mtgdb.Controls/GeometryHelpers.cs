@@ -50,6 +50,11 @@ namespace Mtgdb.Controls
 			return new Size((int) (value * size.Width), (int) (value * size.Height));
 		}
 
+		public static Size MultiplyBy(this Size size, Size value)
+		{
+			return new Size(value.Width * size.Width, value.Height * size.Height);
+		}
+
 		public static Rectangle Plus(this Rectangle rect, Point offset)
 		{
 			rect.Offset(offset);
@@ -66,6 +71,11 @@ namespace Mtgdb.Controls
 			return new Point(left.X + right.X, left.Y + right.Y);
 		}
 
+		public static Point Plus(this Point left, Size right)
+		{
+			return new Point(left.X + right.Width, left.Y + right.Height);
+		}
+
 		public static Point Minus(this Point left, Point right)
 		{
 			return new Point(left.X - right.X, left.Y - right.Y);
@@ -79,6 +89,11 @@ namespace Mtgdb.Controls
 		public static SizeF Plus(this SizeF left, SizeF right)
 		{
 			return new SizeF(left.Width + right.Width, left.Height + right.Height);
+		}
+
+		public static Size Plus(this Size left, Size right)
+		{
+			return new Size(left.Width + right.Width, left.Height + right.Height);
 		}
 
 		public static Size Minus(this Size left, Size right)

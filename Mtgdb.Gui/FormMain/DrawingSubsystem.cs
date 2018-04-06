@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
 
-			_analyzer = new MtgdbAnalyzer();
+			_analyzer = new MtgAnalyzer();
 		}
 
 		private static IconRecognizer createIconRecognizer()
@@ -756,6 +756,6 @@ namespace Mtgdb.Gui
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;
 		private readonly ImageLoader _imageLoader;
-		private readonly MtgdbAnalyzer _analyzer;
+		private readonly MtgAnalyzer _analyzer;
 	}
 }

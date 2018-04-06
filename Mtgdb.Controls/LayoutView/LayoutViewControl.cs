@@ -132,8 +132,7 @@ namespace Mtgdb.Controls
 
 					actions.Back.Add(e => paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
 					actions.FieldData.Add(e => paintFieldData(e, card, field, fieldArea, rowHandle));
-					actions.FieldButtons.Add(e => paintSortButton(e, field, card));
-					actions.FieldButtons.Add(e => paintSearchButton(e, field, card));
+					actions.FieldButtons.Add(e => paintButtons(e, field, card));
 				}
 			}
 		}
@@ -194,30 +193,27 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void paintSearchButton(PaintEventArgs e, FieldControl field, LayoutControl card)
+		private void paintButtons(PaintEventArgs e, FieldControl field, LayoutControl card)
 		{
-			if (!field.IsSearchVisible)
-				return;
+			var fieldBounds = getFieldBounds(field, card);
 
-			var icon = SearchOptions.GetIcon(field);
-			if (icon == null)
-				return;
+			var buttons = card.GetFieldButtons(field, SearchOptions, SortOptions).ToList();
+			buttons.LayOutIn(fieldBounds);
 
-			var iconBounds = SearchOptions.GetButtonBounds(field, card);
-			e.Graphics.DrawImage(icon, iconBounds);
+			foreach (var button in buttons)
+			{
+				if (button.Size == Size.Empty || button.Icon == null)
+					continue;
+
+				e.Graphics.DrawImage(button.Icon, button.Location);
+			}
 		}
 
-		private void paintSortButton(PaintEventArgs e, FieldControl field, LayoutControl card)
+		private static Rectangle getFieldBounds(FieldControl field, LayoutControl card)
 		{
-			if (!field.IsSortVisible)
-				return;
-
-			var icon = SortOptions.GetIcon(field);
-			if (icon == null)
-				return;
-
-			var iconBounds = SortOptions.GetButtonBounds(field, card);
-			e.Graphics.DrawImage(icon, iconBounds);
+			var fieldBounds = field.Bounds;
+			fieldBounds.Offset(card.Location);
+			return fieldBounds;
 		}
 
 		private void paintAlignButtons(PaintEventArgs e)
@@ -241,21 +237,30 @@ namespace Mtgdb.Controls
 
 
 
-		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
+		public Rectangle GetSearchButtonBounds(HitInfo hitInfo) =>
+			getButtonBounds(hitInfo.Card, hitInfo.Field, ButtonType.Search);
+
+		public Rectangle GetSortButtonBounds(HitInfo hitInfo) =>
+			getButtonBounds(hitInfo.Card, hitInfo.Field, ButtonType.Sort);
+
+		private Rectangle getButtonBounds(LayoutControl card, FieldControl field, ButtonType buttonType)
 		{
-			if (hitInfo.Card == null || hitInfo.Field == null)
+			if (card == null || field == null)
 				return Rectangle.Empty;
 
-			return SearchOptions.GetButtonBounds(hitInfo.Field, hitInfo.Card);
-		}
+			var buttons = card.GetFieldButtons(field, SearchOptions, SortOptions).ToList();
+			var button = buttons.FirstOrDefault(_ => _.Type == buttonType);
 
-		public Rectangle GetSortButtonBounds(HitInfo hitInfo)
-		{
-			if (hitInfo.Card == null || hitInfo.Field == null)
+			if (button == null)
 				return Rectangle.Empty;
 
-			return SortOptions.GetButtonBounds(hitInfo.Field, hitInfo.Card);
+			var bounds = getFieldBounds(field, card);
+			buttons.LayOutIn(bounds);
+
+			return new Rectangle(button.Location, button.Size);
 		}
+
+
 
 		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
 		{
@@ -366,14 +371,14 @@ namespace Mtgdb.Controls
 			Invalidate(rect);
 		}
 
-		private int getColumnsCount() => CardLayoutUtil.GetVisibleCount(
+		private int getColumnsCount() => LayoutUtil.GetVisibleCardsCount(
 			Width - _scrollBar.Width,
 			CardSize.Width,
 			LayoutOptions.CardInterval.Width,
 			LayoutOptions.PartialCardsThreshold.Width,
 			LayoutOptions.AllowPartialCards);
 
-		private int getRowsCount() => CardLayoutUtil.GetVisibleCount(
+		private int getRowsCount() => LayoutUtil.GetVisibleCardsCount(
 			Height,
 			CardSize.Height,
 			LayoutOptions.CardInterval.Height,
@@ -798,11 +803,15 @@ namespace Mtgdb.Controls
 			if (field == null)
 				return;
 
+			var bounds = getFieldBounds(field, card);
+			var buttons = card.GetFieldButtons(field, SearchOptions, SortOptions).ToList();
+			buttons.LayOutIn(bounds);
+
 			bool isSortButton = SortOptions.Allow && field.AllowSort &&
-				SortOptions.GetButtonBounds(field, card).Contains(location);
+				buttons.Any(b => b.Type == ButtonType.Sort && b.Bounds.Contains(location));
 
 			bool isSearchButton = SearchOptions.Allow && field.SearchOptions.Allow &&
-				SearchOptions.GetButtonBounds(field, card).Contains(location);
+				buttons.Any(b => b.Type == ButtonType.Search && b.Bounds.Contains(location));
 
 			hitInfo.SetField(field, isSortButton, isSearchButton);
 		}

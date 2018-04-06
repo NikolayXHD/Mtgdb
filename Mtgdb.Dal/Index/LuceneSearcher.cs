@@ -19,8 +19,8 @@ namespace Mtgdb.Dal.Index
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("search");
 
 			_repo = repository;
-			_queryParserAnalyzer = new MtgdbAnalyzer();
-			var spellcheckerAnalyzer = new MtgdbAnalyzer();
+			_queryParserAnalyzer = new MtgAnalyzer();
+			var spellcheckerAnalyzer = new MtgAnalyzer();
 
 			Spellchecker = new LuceneSpellchecker(repository, spellcheckerAnalyzer);
 		}
@@ -76,7 +76,7 @@ namespace Mtgdb.Dal.Index
 
 			var index = FSDirectory.Open(Version.Directory);
 
-			var indexWriterAnalyzer = new MtgdbAnalyzer();
+			var indexWriterAnalyzer = new MtgAnalyzer();
 
 			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, indexWriterAnalyzer)
 			{
@@ -114,9 +114,9 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		private NumericAwareQueryParser createParser(string language)
+		private MtgQueryParser createParser(string language)
 		{
-			return new NumericAwareQueryParser(LuceneVersion.LUCENE_48, "*", _queryParserAnalyzer, _repo)
+			return new MtgQueryParser(LuceneVersion.LUCENE_48, "*", _queryParserAnalyzer, _repo)
 			{
 				AllowLeadingWildcard = true,
 				Language = language
@@ -307,7 +307,7 @@ namespace Mtgdb.Dal.Index
 		private DirectoryReader _indexReader;
 
 		private readonly object _syncQueryParser = new object();
-		private readonly MtgdbAnalyzer _queryParserAnalyzer;
+		private readonly MtgAnalyzer _queryParserAnalyzer;
 		private readonly CardRepository _repo;
 	}
 }

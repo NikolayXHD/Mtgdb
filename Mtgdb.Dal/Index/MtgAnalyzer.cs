@@ -4,9 +4,9 @@ using Lucene.Net.Analysis.Core;
 
 namespace Mtgdb.Dal.Index
 {
-	public class MtgdbAnalyzer : Analyzer
+	public class MtgAnalyzer : Analyzer
 	{
-		public MtgdbAnalyzer()
+		public MtgAnalyzer()
 		:base(PER_FIELD_REUSE_STRATEGY)
 		{
 		}

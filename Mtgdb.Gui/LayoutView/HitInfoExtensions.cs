@@ -7,7 +7,7 @@ namespace Mtgdb.Gui
 	{
 		public static bool IsOverImage(this HitInfo value)
 		{
-			return IsImageField(value.FieldName);
+			return IsImageField(value.FieldName) && !value.IsSearchButton && !value.IsSortButton;
 		}
 
 		public static bool IsImageField(string fieldName)

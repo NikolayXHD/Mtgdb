@@ -99,7 +99,7 @@
     <Compile Include="Images\BitmapTransformationChain.cs" />
     <Compile Include="Index\AnalyzerExtension.cs" />
     <Compile Include="Index\IStringDistance.cs" />
-    <Compile Include="Index\MtgdbAnalyzer.cs" />
+    <Compile Include="Index\MtgAnalyzer.cs" />
     <Compile Include="Index\MtgdbTokenizer.cs" />
     <Compile Include="Index\MtgdbTokenizerPatterns.cs" />
     <Compile Include="Index\ReplaceFilter.cs" />
@@ -113,7 +113,7 @@
     <Compile Include="Index\IndexVersion.cs" />
     <Compile Include="Index\LuceneSearcher.cs" />
     <Compile Include="Index\LuceneSpellchecker.cs" />
-    <Compile Include="Index\NumericAwareQueryParser.cs" />
+    <Compile Include="Index\MtgQueryParser.cs" />
     <Compile Include="Index\SearchResult.cs" />
     <Compile Include="Index\IntellisenseSuggest.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />

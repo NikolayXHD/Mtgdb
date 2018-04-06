@@ -12,98 +12,17 @@ namespace Mtgdb.Controls
 			return Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
 		}
 
-		[Category("Settings")]
-		[DefaultValue(false)]
-		public bool Allow { get; set; }
-
-
-
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap IconTransp { get; private set; }
-
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap AscIconTransp { get; private set; }
-
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap DescIconTransp { get; private set; }
-
-
-
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap Icon
-		{
-			get { return _icon; }
-			set {
-				_icon = value;
-				IconTransp = value.SetOpacity(0.75f);
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap AscIcon
-		{
-			get { return _ascIcon; }
-			set
-			{
-				_ascIcon = value;
-				AscIconTransp = value.SetOpacity(0.75f);
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(null)]
-		public Bitmap DescIcon
-		{
-			get { return _descIcon; }
-			set
-			{
-				_descIcon = value;
-				DescIconTransp = value.SetOpacity(0.75f);
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(typeof(ContentAlignment), "TopRight")]
-		public ContentAlignment ButtonAlignment { get; set; } = ContentAlignment.TopRight;
-
-		[Category("Settings")]
-		[DefaultValue(typeof(Size), "2, 2")]
-		public Size ButtonMargin { get; set; } = new Size(2, 2);
-
-
-		public Rectangle GetButtonBounds(FieldControl field, LayoutControl layout)
+		public ButtonLayout GetButtonLayout(FieldControl field)
 		{
 			if (!field.AllowSort || !field.IsSortVisible)
-				return Rectangle.Empty;
+				return new ButtonLayout(null, Size.Empty, Size.Empty, ContentAlignment.MiddleCenter, ButtonType.Sort);
 
-			var fieldBounds = field.Bounds;
-			fieldBounds.Offset(layout.Location);
+			var icon = getIcon(field);
 
-			var imageBounds = new Rectangle(fieldBounds.Location, IconTransp.Size);
-
-			if (ContentAlignmentRanges.AnyCenter.HasFlag(ButtonAlignment))
-				imageBounds.Offset((fieldBounds.Width - imageBounds.Width) / 2, 0);
-			else if (ContentAlignmentRanges.AnyRight.HasFlag(ButtonAlignment))
-				imageBounds.Offset(fieldBounds.Width - imageBounds.Width - ButtonMargin.Width, 0);
-			else if (ContentAlignmentRanges.AnyLeft.HasFlag(ButtonAlignment))
-				imageBounds.Offset(ButtonMargin.Width, 0);
-
-			if (ContentAlignmentRanges.AnyMiddle.HasFlag(ButtonAlignment))
-				imageBounds.Offset(0, (fieldBounds.Height - imageBounds.Height) / 2);
-			else if (ContentAlignmentRanges.AnyBottom.HasFlag(ButtonAlignment))
-				imageBounds.Offset(0, fieldBounds.Height - imageBounds.Height - ButtonMargin.Height);
-			else if (ContentAlignmentRanges.AnyTop.HasFlag(ButtonAlignment))
-				imageBounds.Offset(0, ButtonMargin.Height);
-
-			return imageBounds;
+			return new ButtonLayout(icon, icon.Size, ButtonMargin, ButtonAlignment, ButtonType.Sort);
 		}
 
-		public Bitmap GetIcon(FieldControl field)
+		private Bitmap getIcon(FieldControl field)
 		{
 			if (field.IsSortHotTracked)
 			{
@@ -133,8 +52,107 @@ namespace Mtgdb.Controls
 			}
 		}
 
+
+
+		private void updateIconTransp(Bitmap value)
+		{
+			IconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
+		}
+
+		private void updateAscIconTransp(Bitmap value)
+		{
+			AscIconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
+		}
+
+		private void updateDescIconTransp(Bitmap value)
+		{
+			DescIconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
+		}
+
+
+
+		[Category("Settings")]
+		[DefaultValue(false)]
+		public bool Allow { get; set; }
+
+
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap IconTransp { get; private set; }
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap AscIconTransp { get; private set; }
+
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Bitmap DescIconTransp { get; private set; }
+
+
+
+		[Category("Settings")]
+		[DefaultValue(null)]
+		public Bitmap Icon
+		{
+			get => _icon;
+			set
+			{
+				_icon = value;
+				updateIconTransp(value);
+			}
+		}
+
+		[Category("Settings")]
+		[DefaultValue(null)]
+		public Bitmap AscIcon
+		{
+			get => _ascIcon;
+			set
+			{
+				_ascIcon = value;
+				updateAscIconTransp(value);
+			}
+		}
+
+		[Category("Settings")]
+		[DefaultValue(null)]
+		public Bitmap DescIcon
+		{
+			get => _descIcon;
+			set
+			{
+				_descIcon = value;
+				updateDescIconTransp(value);
+			}
+		}
+
+		[Category("Settings")]
+		[DefaultValue(typeof(ContentAlignment), "TopRight")]
+		public ContentAlignment ButtonAlignment { get; set; } = ContentAlignment.TopRight;
+
+		[Category("Settings")]
+		[DefaultValue(typeof(Size), "2, 2")]
+		public Size ButtonMargin { get; set; } = new Size(2, 2);
+
+		[Category("Settings")]
+		[DefaultValue(0.25f)]
+		public float HotTrackOpacityDelta
+		{
+			get => _hotTrackOpacityDelta;
+			set
+			{
+				_hotTrackOpacityDelta = value;
+
+				updateIconTransp(_icon);
+				updateAscIconTransp(_ascIcon);
+				updateDescIconTransp(_descIcon);
+			}
+		}
+
 		private Bitmap _icon;
 		private Bitmap _ascIcon;
 		private Bitmap _descIcon;
+		private float _hotTrackOpacityDelta = 0.25f;
 	}
 }
