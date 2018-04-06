@@ -4,9 +4,9 @@ using Lucene.Net.Analysis.TokenAttributes;
 
 namespace Mtgdb.Dal.Index
 {
-	public sealed class MtgdbTokenizer : Tokenizer
+	public sealed class MtgTokenizer : Tokenizer
 	{
-		public MtgdbTokenizer(TextReader inputReader)
+		public MtgTokenizer(TextReader inputReader)
 			: base(inputReader)
 		{
 			_termAtt = AddAttribute<ICharTermAttribute>();
@@ -70,9 +70,9 @@ namespace Mtgdb.Dal.Index
 							return flush();
 					}
 				}
-				else if (char.IsLetterOrDigit(c) || MtgdbTokenizerPatterns.WordCharsSet.Contains(c) || MtgdbTokenizerPatterns.SingletoneWordChars.Contains(c))
+				else if (char.IsLetterOrDigit(c) || MtgAplhabet.WordCharsSet.Contains(c) || MtgAplhabet.SingletoneWordChars.Contains(c))
 				{
-					if (c.IsCj() || MtgdbTokenizerPatterns.SingletoneWordChars.Contains(c))
+					if (c.IsCj() || MtgAplhabet.SingletoneWordChars.Contains(c))
 					{
 						if (_length > 0)
 							return terminatePreviousToken();

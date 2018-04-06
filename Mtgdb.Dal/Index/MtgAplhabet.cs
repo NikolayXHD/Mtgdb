@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mtgdb.Dal.Index
 {
-	public static class MtgdbTokenizerPatterns
+	public static class MtgAplhabet
 	{
 		public static IEnumerable<char> GetEquivalents(char c)
 		{

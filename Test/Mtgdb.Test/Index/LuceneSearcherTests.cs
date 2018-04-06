@@ -499,7 +499,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var cards = Searcher.SearchCards(queryStr, language, Repo).ToList();
+			var cards = Searcher.SearchCards(queryStr, language).ToList();
 
 			sw.Stop();
 			Log.Debug($"Found {cards.Count} cards in {sw.ElapsedMilliseconds} ms");

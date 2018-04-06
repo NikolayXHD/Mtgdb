@@ -640,9 +640,9 @@ namespace Mtgdb.Gui
 			foreach (var token in tokens)
 			{
 				if (token.Type.IsAny(TokenType.AnyChar))
-					pattern.Append(MtgdbTokenizerPatterns.CharPattern);
+					pattern.Append(MtgAplhabet.CharPattern);
 				else if (token.Type.IsAny(TokenType.AnyString))
-					pattern.Append(MtgdbTokenizerPatterns.CharPattern + "*");
+					pattern.Append(MtgAplhabet.CharPattern + "*");
 				else if (token.Type.IsAny(TokenType.FieldValue))
 				{
 					var builder = new StringBuilder();
@@ -654,7 +654,7 @@ namespace Mtgdb.Gui
 
 					foreach (char c in luceneUnescaped)
 					{
-						var equivalents = MtgdbTokenizerPatterns.GetEquivalents(c).ToArray();
+						var equivalents = MtgAplhabet.GetEquivalents(c).ToArray();
 
 						if (equivalents.Length == 0)
 							continue;

@@ -76,13 +76,13 @@ namespace Mtgdb.Test
 				if (c == '\r')
 					continue;
 
-				if (MtgdbTokenizerPatterns.Replacements.ContainsKey(c))
+				if (MtgAplhabet.Replacements.ContainsKey(c))
 					continue;
 
-				if (MtgdbTokenizerPatterns.WordCharsSet.Contains(c))
+				if (MtgAplhabet.WordCharsSet.Contains(c))
 					continue;
 
-				if (MtgdbTokenizerPatterns.SingletoneWordChars.Contains(c))
+				if (MtgAplhabet.SingletoneWordChars.Contains(c))
 					continue;
 
 				if (knownSpecialChars.Contains(c))

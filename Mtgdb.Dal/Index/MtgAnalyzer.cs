@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Core;
+using Lucene.Net.Util;
 
 namespace Mtgdb.Dal.Index
 {
@@ -14,12 +15,17 @@ namespace Mtgdb.Dal.Index
 		protected override TokenStreamComponents CreateComponents(string fieldName, TextReader reader)
 		{
 			if (fieldName.IsNumericField() || fieldName.IsNotAnalyzedField())
-				return new TokenStreamComponents(new KeywordTokenizer(reader));
-			
-			var tokenizer = new MtgdbTokenizer(reader);
-			var filter = new ReplaceFilter(tokenizer, MtgdbTokenizerPatterns.Replacements);
-
-			return new TokenStreamComponents(tokenizer, filter);
+			{
+				var tokenizer = new KeywordTokenizer(reader);
+				var filter = new LowerCaseFilter(LuceneVersion.LUCENE_48, tokenizer);
+				return new TokenStreamComponents(tokenizer, filter);
+			}
+			else
+			{
+				var tokenizer = new MtgTokenizer(reader);
+				var filter = new ReplaceFilter(tokenizer, MtgAplhabet.Replacements);
+				return new TokenStreamComponents(tokenizer, filter);
+			}
 		}
 	}
 }

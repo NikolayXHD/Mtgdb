@@ -183,7 +183,7 @@ namespace Mtgdb.Dal.Index
 			if (Str.Equals(Like, qfield))
 			{
 				string unquotedTerm = term.Image.Substring(1, term.Image.Length - 2);
-				string unescapedTerm = StringEscaper.Escape(unquotedTerm);
+				string unescapedTerm = StringEscaper.Unescape(unquotedTerm);
 
 				float slop = parseSlop(fuzzySlop);
 				return getMoreLikeQuery(unescapedTerm, slop);
@@ -306,7 +306,8 @@ namespace Mtgdb.Dal.Index
 			if (!_repository.IsLoadingComplete)
 				return _matchNothingQuery;
 
-			if (!_repository.CardsByName.TryGetValue(queryText.RemoveDiacritics(), out var cards))
+			string cardName = queryText.RemoveDiacritics();
+			if (!_repository.CardsByName.TryGetValue(cardName, out var cards))
 				return _matchNothingQuery;
 
 			var card = cards[0];
@@ -461,7 +462,7 @@ namespace Mtgdb.Dal.Index
 		private static readonly Query _matchNothingQuery = new BooleanQuery();
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
-			new[] { "a", "an", "the" }.Concat(MtgdbTokenizerPatterns.SingletoneWordChars.Select(c => new string(c, 1))),
+			new[] { "a", "an", "the" }.Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
 			Str.Comparer);
 
 		private readonly CardRepository _repository;

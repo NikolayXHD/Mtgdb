@@ -100,8 +100,8 @@
     <Compile Include="Index\AnalyzerExtension.cs" />
     <Compile Include="Index\IStringDistance.cs" />
     <Compile Include="Index\MtgAnalyzer.cs" />
-    <Compile Include="Index\MtgdbTokenizer.cs" />
-    <Compile Include="Index\MtgdbTokenizerPatterns.cs" />
+    <Compile Include="Index\MtgTokenizer.cs" />
+    <Compile Include="Index\MtgAplhabet.cs" />
     <Compile Include="Index\ReplaceFilter.cs" />
     <Compile Include="Index\Spellchecker.cs" />
     <Compile Include="Index\SuggestWord.cs" />

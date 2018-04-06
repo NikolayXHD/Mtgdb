@@ -65,7 +65,7 @@ namespace Mtgdb.Test
 		[Test, Order(1)]
 		public void LuceneSearcher_searches()
 		{
-			var cards = _luceneSearcher.SearchCards("nameen:vampire", "en", Repo)
+			var cards = _luceneSearcher.SearchCards("nameen:vampire", "en")
 				.ToArray();
 
 			Assert.That(cards, Is.Not.Null.And.Not.Empty);
@@ -104,10 +104,8 @@ namespace Mtgdb.Test
 			var suggest = _luceneSearcher.Spellchecker.SuggestValues("vamp", "nameen", "en");
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
-			Assert.That(suggest, Does.Contain("vampire"));
+			Assert.That(suggest, Has.Some.Contains("vampire"));
 		}
-
-		
 
 		private LuceneSearcher _luceneSearcher;
 		private KeywordSearcher _keywordSearcher;

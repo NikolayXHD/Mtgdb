@@ -17,7 +17,7 @@ namespace Mtgdb.Test
 
 		[TestCase("*", "d", "en", null)]
 		[TestCase("NameEn", "neveinral", null, "nevinyrral")]
-		[TestCase("NameEn", "vinira", null, "nevinyrral")]
+		[TestCase("NameEn", "viniral", null, "nevinyrral")]
 		[TestCase("TextEn", "disk", null, "disk")]
 		[TestCase("Name", "гел", "ru", "ангел")]
 		[TestCase("*", "арха", "ru", "архангел")]
@@ -29,7 +29,7 @@ namespace Mtgdb.Test
 			var list = suggest(field, value, language);
 
 			if (expectedSuggest != null)
-				Assert.That(list, Does.Contain(expectedSuggest));
+				Assert.That(list, Has.Some.Contain(expectedSuggest));
 		}
 
 		[TestCase("PricingMid", @"34", null)]

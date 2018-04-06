@@ -29,8 +29,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.28 analyze all fields
-			set => Version = new IndexVersion(value, "0.28");
+			// 0.29 fix case sensitivity on not analyzed fields
+			set => Version = new IndexVersion(value, "0.29");
 		}
 
 		public void LoadIndexes()
@@ -126,7 +126,7 @@ namespace Mtgdb.Dal.Index
 		/// <summary>
 		/// For test
 		/// </summary>
-		internal IEnumerable<Card> SearchCards(string queryStr, string language, CardRepository repository)
+		internal IEnumerable<Card> SearchCards(string queryStr, string language)
 		{
 			var parser = createParser(language);
 
@@ -139,7 +139,7 @@ namespace Mtgdb.Dal.Index
 			foreach (var scoreDoc in searchResult.ScoreDocs)
 			{
 				var id = scoreDoc.GetId(_searcher);
-				var card = repository.Cards[id];
+				var card = _repo.Cards[id];
 				yield return card;
 			}
 		}
