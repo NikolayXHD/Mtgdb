@@ -17,8 +17,6 @@ namespace Mtgdb.Dal
 			Cards = new List<Card>();
 		}
 
-		public List<Card> Cards { get; }
-
 		public void LoadFile()
 		{
 			_streamContent = File.ReadAllBytes(SetsFile);
@@ -336,6 +334,7 @@ namespace Mtgdb.Dal
 		private string SetsFile { get; }
 		private string BannedAndRestrictedFile { get; }
 
+		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }

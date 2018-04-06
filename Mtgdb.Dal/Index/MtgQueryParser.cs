@@ -182,16 +182,27 @@ namespace Mtgdb.Dal.Index
 		{
 			if (Str.Equals(Like, qfield))
 			{
-				if (term.Image.Length <= 1 || !float.TryParse(term.Image.Substring(1), NumberStyles.Float, Str.Culture, out var slop))
-					slop = 0;
-
 				string unquotedTerm = term.Image.Substring(1, term.Image.Length - 2);
 				string unescapedTerm = StringEscaper.Escape(unquotedTerm);
 
+				float slop = parseSlop(fuzzySlop);
 				return getMoreLikeQuery(unescapedTerm, slop);
 			}
 
 			return base.HandleQuotedTerm(qfield, term, fuzzySlop);
+		}
+
+		private static float parseSlop(Token fuzzySlop)
+		{
+			if (fuzzySlop == null)
+				return 0f;
+
+			if (fuzzySlop.Image.Length <= 1)
+				return 0f;
+
+			float.TryParse(fuzzySlop.Image.Substring(1), NumberStyles.Float, Str.Culture, out var slop);
+
+			return slop;
 		}
 
 		protected override Query GetFieldQuery(string field, string queryText, int slop)
@@ -295,7 +306,7 @@ namespace Mtgdb.Dal.Index
 			if (!_repository.IsLoadingComplete)
 				return _matchNothingQuery;
 
-			if (!_repository.CardsByName.TryGetValue(queryText, out var cards))
+			if (!_repository.CardsByName.TryGetValue(queryText.RemoveDiacritics(), out var cards))
 				return _matchNothingQuery;
 
 			var card = cards[0];

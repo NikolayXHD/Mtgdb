@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{86
 		etc\Mtgdb.Gui.xml = etc\Mtgdb.Gui.xml
 		new-set-checklist.md = new-set-checklist.md
 		README.md = README.md
+		shared\SolutionInfo.cs = shared\SolutionInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
