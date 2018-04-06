@@ -86,18 +86,35 @@ namespace Mtgdb.Gui
 			}
 			else if (hitInfo.IsSearchButton)
 			{
+				string text;
+				string title;
+				if (hitInfo.FieldName == nameof(Card.Image))
+				{
+					title = "Search similar cards";
+					text = "Click to search cards similar to this one.\r\n" +
+						"Similarity is determined by Text and GenearatedMana fields.\r\n\r\n" +
+						"Following term will be added to search text\r\n" +
+						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+				}
+				else
+				{
+					title = "Add to search";
+					text = "Click to EXTEND search result by cards matching this value\r\n" +
+						"Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
+						"Following term will be added to search text\r\n" +
+						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)) +
+						"\r\n\r\n" +
+						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";
+				}
+
+
 				Show?.Invoke(new TooltipModel
 				{
 					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
 					ObjectBounds = _layoutView.GetSearchButtonBounds(hitInfo),
 					Control = _layoutView.Control,
-					Title = "Add to search",
-					Text = "Click to EXTEND search result by cards matching this value\r\n" +
-						"Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
-						"Following term will be added to search text\r\n" +
-						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)) +
-						"\r\n\r\n" +
-						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.",
+					Title = title,
+					Text = text,
 					Clickable = false
 				});
 			}
