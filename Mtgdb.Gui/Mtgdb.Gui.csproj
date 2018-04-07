@@ -337,6 +337,8 @@
     <Content Include="Resources\Annihilator.png" />
     <None Include="Resources\any.png" />
     <Content Include="Resources\Attacks each turn.png" />
+    <None Include="Resources\book_40.png" />
+    <None Include="Resources\book_40_hovered.png" />
     <Content Include="Resources\Box_48.png" />
     <Content Include="Resources\Cant be blocked.png" />
     <Content Include="Resources\Cant block.png" />

@@ -600,6 +600,14 @@ namespace Mtgdb.Gui
 					Resources.text_enabled_40.TransformColors(brightness: 0.1f),
 					Resources.text_disabled_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonFindDropDown,
+				new ButtonImages(
+					null,
+					Resources.book_40,
+					null,
+					Resources.book_40_hovered,
+					areImagesDoubleSized: true));
 		}
 
 

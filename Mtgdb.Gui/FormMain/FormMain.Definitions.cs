@@ -184,6 +184,7 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
 			_buttonHideText.ScaleDpi();
+			_buttonFindDropDown.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
