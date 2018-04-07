@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -18,9 +19,9 @@ namespace Mtgdb.Controls
 			return wholeCardsCount + 1;
 		}
 
-		public static void LayOutIn(this IEnumerable<ILayoutElement> elements, Rectangle containerBounds)
+		public static void LayOutIn(this IList<ButtonLayout> elements, Rectangle containerBounds)
 		{
-			var current = new Dictionary<ContentAlignment, Point>
+			var start = new Dictionary<ContentAlignment, Point>
 			{
 				[ContentAlignment.TopLeft] = new Point(containerBounds.Left, containerBounds.Top),
 				[ContentAlignment.BottomLeft] = new Point(containerBounds.Left, containerBounds.Bottom),
@@ -28,41 +29,46 @@ namespace Mtgdb.Controls
 				[ContentAlignment.BottomRight] = new Point(containerBounds.Right, containerBounds.Bottom)
 			};
 
-			using (var enumerator = elements.GetEnumerator())
+			var current = start.ToDictionary();
+
+			var isFirst = new Dictionary<ContentAlignment, bool>
 			{
-				if (!enumerator.MoveNext())
-					return;
+				[ContentAlignment.TopLeft] = true,
+				[ContentAlignment.BottomLeft] = true,
+				[ContentAlignment.TopRight] = true,
+				[ContentAlignment.BottomRight] = true
+			};
 
-				var element = enumerator.Current;
+			foreach (var element in elements)
+			{
+				if (element.Size == Size.Empty)
+					continue;
 
-				if (element.Size != Size.Empty)
+				var alignment = element.Alignment;
+				var location = current[alignment];
+
+				if (isFirst[alignment])
 				{
-					var alignment = element.Alignment;
-					var location = current[alignment];
-					
 					location = location
 						.Plus(element.Size.MultiplyBy(_firstSizeSign[alignment]))
 						.Plus(element.Margin.MultiplyBy(_firstMarginSign[alignment]));
-					
-					element.Location = location;
-					current[alignment] = location;
+
+					isFirst[alignment] = false;
+				}
+				else
+				{
+					location = location.Plus(_deltaSign[alignment].MultiplyBy(element.Margin.Plus(element.Size)));
 				}
 
-				while (enumerator.MoveNext())
+				element.Location = location;
+
+				if (element.BreaksLayout)
 				{
-					element = enumerator.Current;
-					
-					if (element.Size == Size.Empty)
-						continue;
-					
-					var alignment = element.Alignment;
-					var location = current[alignment];
-						
-					location = location.Plus(_deltaSign[alignment].MultiplyBy(element.Margin.Plus(element.Size)));
-						
-					element.Location = location;
-					current[alignment] = location;
+					location = start[alignment].Plus(element.Size.MultiplyBy(_nextLineSign[alignment]));
+					isFirst[alignment] = true;
 				}
+
+				current[alignment] = location;
 			}
 		}
 
@@ -91,6 +97,15 @@ namespace Mtgdb.Controls
 				[ContentAlignment.BottomLeft] = new Size(1, 0),
 				[ContentAlignment.TopRight] = new Size(-1, 0),
 				[ContentAlignment.BottomRight] = new Size(-1, 0)
+			};
+
+		private static readonly Dictionary<ContentAlignment, Size> _nextLineSign =
+			new Dictionary<ContentAlignment, Size>
+			{
+				[ContentAlignment.TopLeft] = new Size(0, 1),
+				[ContentAlignment.BottomLeft] = new Size(0, -1),
+				[ContentAlignment.TopRight] = new Size(0, 1),
+				[ContentAlignment.BottomRight] = new Size(0, -1)
 			};
 	}
 }

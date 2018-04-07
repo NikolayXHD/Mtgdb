@@ -510,7 +510,7 @@
 			// 
 			// _panelIconStatusFilterDeck
 			// 
-			this._panelIconStatusFilterDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.draw_a_card_48;
+			this._panelIconStatusFilterDeck.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.deck_48;
 			this._panelIconStatusFilterDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._panelIconStatusFilterDeck.Location = new System.Drawing.Point(1200, 0);
 			this._panelIconStatusFilterDeck.Margin = new System.Windows.Forms.Padding(24, 0, 0, 0);

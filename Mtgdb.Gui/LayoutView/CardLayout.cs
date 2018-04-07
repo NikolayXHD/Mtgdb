@@ -47,6 +47,8 @@ namespace Mtgdb.Gui
 			HighlightOptions.HighlightColor = Color.LightBlue;
 			HighlightOptions.HighlightContextColor = Color.LightCyan;
 
+			DeckEditorButtons.SetupButtons(_fieldImage);
+
 			SubscribeToFieldEvents();
 		}
 

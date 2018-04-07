@@ -7,10 +7,10 @@ namespace Mtgdb.Gui
 	{
 		public UiModel Ui { get; set; }
 
-		public override void CopyTo(LayoutControl other)
+		public override void CopyFrom(LayoutControl other)
 		{
-			base.CopyTo(other);
-			((CardLayoutControlBase) other).Ui = Ui;
+			base.CopyFrom(other);
+			Ui = ((CardLayoutControlBase) other).Ui;
 		}
 	}
 }

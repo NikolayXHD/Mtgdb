@@ -2,6 +2,6 @@ namespace Mtgdb.Controls
 {
 	public enum ButtonType
 	{
-		None, Sort, Search
+		None, Sort, Search, Custom
 	}
 }

@@ -54,6 +54,9 @@ del /q %target%\update\filelist.txt
 
 del /q /s %target%\images\*.jpg
 del /q /s %target%\images\*.txt
+rmdir /q /s %target%\data\index\keywords-test
+rmdir /q /s %target%\data\index\search-test
+rmdir /q /s %target%\data\index\suggest-test
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 

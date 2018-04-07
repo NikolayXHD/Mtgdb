@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -97,6 +98,19 @@ namespace Mtgdb.Controls
 			SelectedText = context.SelectedText;
 		}
 
+		public void CopyFrom(FieldControl other)
+		{
+			Location = other.Location;
+			Size = other.Size;
+			Font = other.Font;
+			BackColor = other.BackColor;
+			ForeColor = other.ForeColor;
+			HorizontalAlignment = other.HorizontalAlignment;
+			IconRecognizer = other.IconRecognizer;
+			SearchOptions = other.SearchOptions.Clone();
+			CustomButtons = other.CustomButtons.Select(_ => _.Clone()).ToList();
+		}
+
 		private Rectangle getArea(Point parentLocation, Padding padding)
 		{
 			return new Rectangle(
@@ -122,8 +136,6 @@ namespace Mtgdb.Controls
 			Name = "FieldControl";
 			ResumeLayout(false);
 		}
-
-
 
 		[Category("Settings"), DefaultValue(typeof(HorizontalAlignment), "Left")]
 		public HorizontalAlignment HorizontalAlignment
@@ -176,6 +188,25 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
+
+		[Category("Settings")]
+		public List<ButtonOptions> CustomButtons { get; set; } = new List<ButtonOptions>();
+
+
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int HotTrackedCustomButtonIndex
+		{
+			get => _hotTrackedCustomButtonIndex;
+			set
+			{
+				if (_hotTrackedCustomButtonIndex != value)
+				{
+					_hotTrackedCustomButtonIndex = value;
+					Invalid?.Invoke(this);
+				}
+			}
+		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsHotTracked
@@ -302,5 +333,6 @@ namespace Mtgdb.Controls
 		private bool _isSearchVisible;
 
 		private SortOrder _sortOrder;
+		private int _hotTrackedCustomButtonIndex = -1;
 	}
 }

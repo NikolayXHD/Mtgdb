@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -23,7 +24,6 @@ namespace Mtgdb.Gui
 		public DrawingSubsystem(
 			LayoutView layoutViewCards,
 			LayoutView layoutViewDeck,
-			Font font,
 			DraggingSubsystem draggingSubsystem,
 			SearchStringSubsystem searchStringSubsystem,
 			DeckModel deckModel,
@@ -33,7 +33,6 @@ namespace Mtgdb.Gui
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
-			_font = font;
 			_draggingSubsystem = draggingSubsystem;
 			_searchStringSubsystem = searchStringSubsystem;
 			_deckModel = deckModel;
@@ -263,30 +262,37 @@ namespace Mtgdb.Gui
 
 			var rect = getSelectionRectangle(e);
 
-			var format = StringFormat.GenericTypographic;
-			var size = new Size(12, 18).ByDpi();
-			var font = new Font(_font.FontFamily, size.Height, FontStyle.Bold, GraphicsUnit.Pixel);
-			var textSize = e.Graphics.MeasureString(countText, font, rect.Size, format);
+			var font = new Font("Arial Black", 18.ByDpiHeight(), GraphicsUnit.Pixel);
+			var textFormatFlags = new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
 
-			const int opacity = 224;
-
-			var targetRect = new Rectangle(
-				(int) Math.Floor(rect.Left + 0.5f * (rect.Width - textSize.Width)),
-				(int) Math.Floor(rect.Top + 0.5f * (rect.Height - textSize.Height)),
-				(int) Math.Ceiling(textSize.Width),
-				(int) Math.Ceiling(textSize.Height));
-
-			e.Graphics.DrawString(
+			var textSize = TextRenderer.MeasureText(
+				e.Graphics,
 				countText,
 				font,
-				new SolidBrush(Color.FromArgb(opacity, Color.Black)),
+				new Size((int) (rect.Width * 1.5f), rect.Height),
+				textFormatFlags);
+
+			var targetRect = new Rectangle(
+				(int) Math.Ceiling(rect.Left + 0.5f * (rect.Width - textSize.Width)),
+				(int) Math.Ceiling(rect.Top + 0.5f * (rect.Height - textSize.Height)),
+				textSize.Width,
+				textSize.Height);
+
+			targetRect.Inflate(1, 0);
+			targetRect.Offset(2, 0);
+
+			TextRenderer.DrawText(
+				e.Graphics,
+				countText,
+				font,
 				targetRect,
-				format);
+				Color.Black,
+				textFormatFlags);
 		}
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)
 		{
-			var size = new Size(50, 30).ByDpi();
+			var size = new Size(80, 30).ByDpi();
 
 			var rect = new Rectangle(
 				e.Bounds.Left + (_imageLoader.CardSize.Width - size.Width) / 2,
@@ -329,7 +335,7 @@ namespace Mtgdb.Gui
 			int collectionCount = card.CollectionCount(Ui);
 
 			if (collectionCount > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
-				countText.AppendFormat(@"/{0}", collectionCount);
+				countText.AppendFormat(@" / {0}", collectionCount);
 
 			string countTextStr = countText.ToString();
 			return countTextStr;
@@ -486,7 +492,7 @@ namespace Mtgdb.Gui
 
 		private static bool isRelevantField(string displayField, string queryField)
 		{
-			return String.IsNullOrEmpty(queryField) || Str.Equals(queryField, displayField);
+			return string.IsNullOrEmpty(queryField) || Str.Equals(queryField, displayField);
 		}
 
 		private void addPattern(string pattern, Dictionary<string, Regex> patternsSet)
@@ -749,7 +755,6 @@ namespace Mtgdb.Gui
 
 		private readonly LayoutView _layoutViewCards;
 		private readonly LayoutView _layoutViewDeck;
-		private readonly Font _font;
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly SearchStringSubsystem _searchStringSubsystem;
 		private readonly DeckModel _deckModel;

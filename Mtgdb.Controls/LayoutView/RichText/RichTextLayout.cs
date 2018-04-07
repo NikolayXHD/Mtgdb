@@ -89,7 +89,7 @@ namespace Mtgdb.Controls
 									_renderContext.Graphics,
 									tokenText,
 									_renderContext.Font,
-									toRectangle(rect),
+									rect.Round(),
 									foreColor,
 									_renderContext.StringFormat.ToTextFormatFlags());
 							});
@@ -144,7 +144,7 @@ namespace Mtgdb.Controls
 			batch.Add(targetRect,
 				(rectF, hb, he) =>
 				{
-					var rect = toRectangle(rectF);
+					var rect = rectF.Round();
 
 					var fillRect = (RectangleF) rect;
 					fillRect.Offset(-0.5f, -0.5f);
@@ -183,16 +183,6 @@ namespace Mtgdb.Controls
 						right,
 						bottom);
 				});
-		}
-
-		private static Rectangle toRectangle(RectangleF rect)
-		{
-			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
-		}
-
-		private static int strongRound(double value)
-		{
-			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
 		}
 
 
@@ -304,7 +294,7 @@ namespace Mtgdb.Controls
 				_renderContext.SelectionLength = token.Index + token.Length - _renderContext.SelectionStartIndex;
 			}
 
-			rectangle = toRectangle(rectangle);
+			rectangle = rectangle.Round();
 
 			rectangle.Offset(-0.5f, -0.5f);
 

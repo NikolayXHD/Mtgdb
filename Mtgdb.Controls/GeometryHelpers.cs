@@ -55,6 +55,11 @@ namespace Mtgdb.Controls
 			return new Size(value.Width * size.Width, value.Height * size.Height);
 		}
 
+		public static Size MultiplyBy(this Point point, Size value)
+		{
+			return new Size(value.Width * point.X, value.Height * point.Y);
+		}
+
 		public static Rectangle Plus(this Rectangle rect, Point offset)
 		{
 			rect.Offset(offset);
@@ -187,6 +192,16 @@ namespace Mtgdb.Controls
 
 			desiredLocation = new Point(x, y);
 			return desiredLocation;
+		}
+
+		public static Rectangle Round(this RectangleF rect)
+		{
+			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
+		}
+
+		private static int strongRound(double value)
+		{
+			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
 		}
 	}
 }

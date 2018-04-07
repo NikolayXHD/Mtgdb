@@ -218,6 +218,7 @@
 				_buttonShowDuplicates);
 
 			controller.SetCustomTooltip(_tooltipViewCards);
+			controller.SetCustomTooltip(_tooltipViewDeck);
 
 			controller.SubscribeToEvents();
 		}

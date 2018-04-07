@@ -25,7 +25,7 @@ namespace Mtgdb.Controls
 			SetCard(card: null, rowHandle: EmptyRowHandle, dataSource: null);
 		}
 
-		internal void SetField(FieldControl field, bool isSortButton, bool isSearchButton)
+		internal void SetField(FieldControl field, bool isSortButton, bool isSearchButton, int customButtonIndex, Rectangle? buttonBounds)
 		{
 			if (field != null && Card == null)
 				throw new InvalidOperationException($"{nameof(Card)} must be set first");
@@ -35,11 +35,13 @@ namespace Mtgdb.Controls
 			FieldName = field?.FieldName;
 			IsSortButton = isSortButton;
 			IsSearchButton = isSearchButton;
+			CustomButtonIndex = customButtonIndex;
+			ButtonBounds = buttonBounds ?? Rectangle.Empty;
 		}
 
 		internal void ClearField()
 		{
-			SetField(field: null, isSortButton: false, isSearchButton: false);
+			SetField(field: null, isSortButton: false, isSearchButton: false, customButtonIndex: -1, buttonBounds: null);
 		}
 
 
@@ -48,14 +50,16 @@ namespace Mtgdb.Controls
 		public Direction? AlignButtonDirection { get; set; }
 
 		public int RowHandle { get; private set; }
-		public Object RowDataSource { get; private set; }
+		public object RowDataSource { get; private set; }
 		internal LayoutControl Card { get; private set; }
 		public Rectangle? CardBounds { get; private set; }
+		public Rectangle ButtonBounds { get; private set; }
 
 		internal FieldControl Field { get; private set; }
 		public Rectangle? FieldBounds { get; private set; }
 		public string FieldName { get; private set; }
 		public bool IsSortButton { get; private set; }
 		public bool IsSearchButton { get; private set; }
+		public int CustomButtonIndex { get; set; }
 	}
 }

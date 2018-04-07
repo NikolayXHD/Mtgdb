@@ -17,6 +17,8 @@ namespace Mtgdb.Gui
 			_fieldImage.SearchOptions.Button.Icon = Properties.Resources.search_like_hovered_32;
 			_fieldImage.SearchOptions.Button.Margin = new Size(4, 4);
 
+			DeckEditorButtons.SetupButtons(_fieldImage);
+
 			SubscribeToFieldEvents();
 		}
 

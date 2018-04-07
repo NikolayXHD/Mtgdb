@@ -14,6 +14,7 @@ namespace Mtgdb.Controls
 				Alignment = Alignment,
 				Margin = Margin,
 				ShowOnlyWhenHotTracked = ShowOnlyWhenHotTracked,
+				BreaksLayout = BreaksLayout
 			};
 		}
 
@@ -57,6 +58,10 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[DefaultValue(null)]
 		public ContentAlignment? Alignment { get; set; }
+
+		[Category("Settings")]
+		[DefaultValue(null)]
+		public bool? BreaksLayout { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(null)]

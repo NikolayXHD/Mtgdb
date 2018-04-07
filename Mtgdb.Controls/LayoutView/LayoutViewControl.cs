@@ -335,7 +335,7 @@ namespace Mtgdb.Controls
 		{
 			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 
-			ProbeCard.CopyTo(result);
+			result.CopyFrom(ProbeCard);
 
 			foreach (var field in result.Fields)
 				updateSort(field);
@@ -587,6 +587,7 @@ namespace Mtgdb.Controls
 				prevHitInfo.Field.IsHotTracked = false;
 				prevHitInfo.Field.IsSortHotTracked = false;
 				prevHitInfo.Field.IsSearchHotTracked = false;
+				prevHitInfo.Field.HotTrackedCustomButtonIndex = -1;
 			}
 
 			if (_hitInfo.Field != null)
@@ -594,6 +595,7 @@ namespace Mtgdb.Controls
 				_hitInfo.Field.IsHotTracked = true;
 				_hitInfo.Field.IsSortHotTracked = _hitInfo.IsSortButton;
 				_hitInfo.Field.IsSearchHotTracked = _hitInfo.IsSearchButton;
+				_hitInfo.Field.HotTrackedCustomButtonIndex = _hitInfo.CustomButtonIndex;
 			}
 
 			var card = _hitInfo.Card;
@@ -807,13 +809,35 @@ namespace Mtgdb.Controls
 			var buttons = card.GetFieldButtons(field, SearchOptions, SortOptions).ToList();
 			buttons.LayOutIn(bounds);
 
-			bool isSortButton = SortOptions.Allow && field.AllowSort &&
-				buttons.Any(b => b.Type == ButtonType.Sort && b.Bounds.Contains(location));
+			ButtonLayout button = null;
+			bool isSortButton = SortOptions.Allow && field.AllowSort && 
+				(button = buttons.FirstOrDefault(b => b.Type == ButtonType.Sort && b.Bounds.Contains(location))) != null;
 
-			bool isSearchButton = SearchOptions.Allow && field.SearchOptions.Allow &&
-				buttons.Any(b => b.Type == ButtonType.Search && b.Bounds.Contains(location));
+			bool isSearchButton = button == null && SearchOptions.Allow && field.SearchOptions.Allow &&
+				(button = buttons.FirstOrDefault(b => b.Type == ButtonType.Search && b.Bounds.Contains(location))) != null;
 
-			hitInfo.SetField(field, isSortButton, isSearchButton);
+			int customButtonIndex;
+			(customButtonIndex, button) = button == null
+				? getCustomButtonIndex(location, buttons)
+				: (-1, button);
+
+			hitInfo.SetField(field, isSortButton, isSearchButton, customButtonIndex, button?.Bounds);
+		}
+
+		private static (int Index, ButtonLayout layout) getCustomButtonIndex(Point location, IList<ButtonLayout> buttons)
+		{
+			int firstCustomButtonIndex = buttons.BinarySearchFirstIndexOf(button => button.Type == ButtonType.Custom);
+
+			if (firstCustomButtonIndex == -1)
+				return (-1, null);
+
+			for (int i = firstCustomButtonIndex; i < buttons.Count; i++)
+			{
+				if (buttons[i].Bounds.Contains(location))
+					return (i - firstCustomButtonIndex, buttons[i]);
+			}
+
+			return  (-1, null);
 		}
 
 		private int getCardIndex(Point location)

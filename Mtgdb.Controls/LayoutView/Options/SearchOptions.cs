@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Drawing;
 
 namespace Mtgdb.Controls
 {
@@ -25,7 +24,7 @@ namespace Mtgdb.Controls
 		public ButtonLayout GetButtonLayout(FieldControl field)
 		{
 			if (!field.SearchOptions.Allow || !field.IsSearchVisible)
-				return new ButtonLayout(null, Size.Empty, Size.Empty, ContentAlignment.MiddleCenter, ButtonType.Search);
+				return new ButtonLayout(type: ButtonType.Search);
 
 			var fieldOptions = field.SearchOptions.Button;
 			var generalOptions = Button;
@@ -34,10 +33,11 @@ namespace Mtgdb.Controls
 				? fieldOptions.Icon ?? generalOptions.Icon
 				: fieldOptions.IconTransp ?? generalOptions.IconTransp;
 
-			var buttonAlignment = fieldOptions.Alignment ?? generalOptions.Alignment ?? ContentAlignment.TopRight;
-			var buttonMargin = fieldOptions.Margin ?? generalOptions.Margin ?? new Size(2, 2);
+			var buttonAlignment = fieldOptions.Alignment ?? generalOptions.Alignment;
+			var buttonMargin = fieldOptions.Margin ?? generalOptions.Margin;
+			var breaksLayout = fieldOptions.BreaksLayout ?? generalOptions.BreaksLayout;
 
-			return new ButtonLayout(icon, icon.Size, buttonMargin, buttonAlignment, ButtonType.Search);
+			return new ButtonLayout(icon, buttonMargin, buttonAlignment, breaksLayout, ButtonType.Search);
 		}
 
 		public bool IsButtonVisible(FieldControl field)

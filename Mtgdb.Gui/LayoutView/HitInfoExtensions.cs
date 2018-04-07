@@ -7,12 +7,17 @@ namespace Mtgdb.Gui
 	{
 		public static bool IsOverImage(this HitInfo value)
 		{
-			return IsImageField(value.FieldName) && !value.IsSearchButton && !value.IsSortButton;
+			return Str.Equals(value.FieldName, nameof(Card.Image)) && !IsOverButton(value);
 		}
 
-		public static bool IsImageField(string fieldName)
+		public static bool IsOverButton(this HitInfo value)
 		{
-			return Str.Equals(fieldName, nameof(Card.Image));
+			return value.IsSearchButton || value.IsSortButton || value.CustomButtonIndex >= 0;
+		}
+
+		public static bool IsOverText(this HitInfo value)
+		{
+			return !string.IsNullOrEmpty(value.FieldName) && !IsOverButton(value) && !IsOverImage(value);
 		}
 	}
 }

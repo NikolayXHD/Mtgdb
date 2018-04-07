@@ -73,6 +73,7 @@ namespace Mtgdb.Gui
 			endRestoreSettings();
 
 			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchStringSubsystem);
+			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchStringSubsystem);
 
 			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -115,7 +116,6 @@ namespace Mtgdb.Gui
 			_drawingSubsystem = new DrawingSubsystem(
 				_viewCards,
 				_viewDeck,
-				Font,
 				_draggingSubsystem,
 				_searchStringSubsystem,
 				_deckModel,
@@ -249,7 +249,12 @@ namespace Mtgdb.Gui
 			probeCard.ScaleDpi();
 
 			foreach (var field in probeCard.Fields)
+			{
 				field.SearchOptions.Button.Icon = field.SearchOptions.Button.Icon?.HalfResizeDpi();
+
+				foreach (var button in field.CustomButtons)
+					button.Icon = button.Icon?.HalfResizeDpi();
+			}
 
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
 		}
@@ -306,6 +311,7 @@ namespace Mtgdb.Gui
 			_scrollSubsystem.Scrolled += gridScrolled;
 
 			_tooltipViewCards.SubscribeToEvents();
+			_tooltipViewDeck.SubscribeToEvents();
 
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged += quickFiltersChanged;
@@ -388,6 +394,7 @@ namespace Mtgdb.Gui
 
 			_scrollSubsystem.Scrolled -= gridScrolled;
 			_tooltipViewCards.UnsubscribeFromEvents();
+			_tooltipViewDeck.UnsubscribeFromEvents();
 
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged -= quickFiltersChanged;
@@ -482,6 +489,7 @@ namespace Mtgdb.Gui
 		private readonly LayoutView _viewCards;
 		private readonly LayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
+		private readonly LayoutViewTooltip _tooltipViewDeck;
 		private readonly ButtonSubsystem _buttonSubsystem;
 
 		private readonly bool _luceneSearchIndexUpToDate;

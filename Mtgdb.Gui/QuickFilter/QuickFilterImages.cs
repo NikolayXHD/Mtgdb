@@ -23,7 +23,7 @@ namespace Mtgdb.Gui
 			ResourcesFilter.search_20,
 			ResourcesFilter.legality_20,
 			ResourcesFilter.box_20,
-			ResourcesAbilities.draw_a_card
+			ResourcesFilter.deck
 		};
 
 		private static readonly Bitmap[] _manaCost =

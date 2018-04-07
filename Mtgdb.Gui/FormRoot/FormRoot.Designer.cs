@@ -482,7 +482,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
 			this._buttonMenuSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
 			this._buttonMenuSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.draw_a_card_48;
+			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
 			this._buttonMenuSaveDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuSaveDeck.Location = new System.Drawing.Point(2, 74);
 			this._buttonMenuSaveDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -547,7 +547,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.GhostWhite;
 			this._buttonMenuOpenDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.GhostWhite;
 			this._buttonMenuOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.draw_a_card_48;
+			this._buttonMenuOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
 			this._buttonMenuOpenDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuOpenDeck.Location = new System.Drawing.Point(2, 2);
 			this._buttonMenuOpenDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);

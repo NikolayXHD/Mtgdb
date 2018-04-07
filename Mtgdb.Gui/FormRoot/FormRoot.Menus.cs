@@ -303,9 +303,9 @@ namespace Mtgdb.Gui
 					areImagesDoubleSized: true));
 
 			setupButton(_buttonDownload, Resources.update_40, true);
-			setupButton(_buttonMenuOpenDeck, Resources.draw_a_card_48, true);
+			setupButton(_buttonMenuOpenDeck, Resources.deck_48, true);
 			setupButton(_buttonMenuOpenCollection, Resources.box_48, true);
-			setupButton(_buttonMenuSaveDeck, Resources.draw_a_card_48, true);
+			setupButton(_buttonMenuSaveDeck, Resources.deck_48, true);
 			setupButton(_buttonMenuSaveCollection, Resources.box_48, true);
 			setupButton(_buttonOpenWindow, Resources.add_form_32, true);
 

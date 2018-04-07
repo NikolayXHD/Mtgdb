@@ -87,7 +87,6 @@
     <Compile Include="LayoutView\Options\ButtonType.cs" />
     <Compile Include="LayoutView\Options\HighlightOptions.cs" />
     <Compile Include="LayoutView\LayoutControlTypeConverter.cs" />
-    <Compile Include="LayoutView\Options\ILayoutElement.cs" />
     <Compile Include="LayoutView\Options\LayoutOptions.cs" />
     <Compile Include="LayoutView\LayoutViewControl.cs">
       <SubType>UserControl</SubType>

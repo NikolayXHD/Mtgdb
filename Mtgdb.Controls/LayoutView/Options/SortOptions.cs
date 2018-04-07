@@ -15,11 +15,11 @@ namespace Mtgdb.Controls
 		public ButtonLayout GetButtonLayout(FieldControl field)
 		{
 			if (!field.AllowSort || !field.IsSortVisible)
-				return new ButtonLayout(null, Size.Empty, Size.Empty, ContentAlignment.MiddleCenter, ButtonType.Sort);
+				return new ButtonLayout(type: ButtonType.Sort);
 
 			var icon = getIcon(field);
 
-			return new ButtonLayout(icon, icon.Size, ButtonMargin, ButtonAlignment, ButtonType.Sort);
+			return new ButtonLayout(icon, ButtonMargin, ButtonAlignment, breaksLayout: false, type: ButtonType.Sort);
 		}
 
 		private Bitmap getIcon(FieldControl field)

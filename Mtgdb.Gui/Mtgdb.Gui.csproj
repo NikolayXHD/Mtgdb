@@ -136,6 +136,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
+    <Compile Include="LayoutView\DeckEditorButtons.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SearchString\KnutMorrisPrattSubstringSearch.cs" />
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
@@ -158,11 +164,6 @@
     <Compile Include="LayoutView\HitInfoExtensions.cs" />
     <Compile Include="FormMain\LegalitySubsystem.cs" />
     <Compile Include="FormMain\PrintingSubsystem.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="QuickFilter\QuickFilterImages.cs" />
     <Compile Include="FormMain\ScrollSubsystem.cs" />
     <Compile Include="SearchString\SearchStringSubsystem.cs" />
@@ -331,6 +332,8 @@
     <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />
     <None Include="Resources\add_form_32.png" />
+    <None Include="Resources\add_one.png" />
+    <None Include="Resources\add_four.png" />
     <Content Include="Resources\Annihilator.png" />
     <None Include="Resources\any.png" />
     <Content Include="Resources\Attacks each turn.png" />
@@ -347,12 +350,13 @@
     <None Include="Resources\corner_hovered_32.png" />
     <Content Include="Resources\Counter.png" />
     <Content Include="Resources\Deathtouch.png" />
+    <None Include="Resources\deck.png" />
     <Content Include="Resources\Defender.png" />
     <Content Include="Resources\Delirium.png" />
     <Content Include="Resources\Doesnt untap.png" />
     <Content Include="Resources\Double Strike.png" />
     <None Include="Resources\draw_48.png" />
-    <Content Include="Resources\draw_a_card_48.png" />
+    <Content Include="Resources\deck_48.png" />
     <Content Include="Resources\Enchant.png" />
     <Content Include="Resources\Equip.png" />
     <Content Include="Resources\Exile.png" />
@@ -400,6 +404,8 @@
     <Content Include="Resources\Reach.png" />
     <None Include="Resources\redo_16.png" />
     <Content Include="Resources\Regenerate.png" />
+    <None Include="Resources\remove_one.png" />
+    <None Include="Resources\remove_four.png" />
     <Content Include="Resources\Renown.png" />
     <Content Include="Resources\rightclick_48.png" />
     <None Include="Resources\save_16.png" />

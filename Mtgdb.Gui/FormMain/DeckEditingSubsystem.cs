@@ -98,12 +98,10 @@ namespace Mtgdb.Gui
 
 			if (card != null)
 			{
-				bool isOverImage = hitInfo.IsOverImage();
-
 				updateCursor(view.Control,
-					overImage: isOverImage,
-					overText: hitInfo.FieldBounds != null && !isOverImage,
-					overButton: hitInfo.IsSearchButton || hitInfo.IsSortButton);
+					overImage: hitInfo.IsOverImage(),
+					overText: hitInfo.IsOverText(),
+					overButton: hitInfo.IsOverButton());
 			}
 			else
 			{
@@ -140,35 +138,47 @@ namespace Mtgdb.Gui
 			if (card == null)
 				return;
 
-			if (e.Button == MouseButtons.Left)
+			var (countDelta, isDeck) = getChange(hitInfo, e);
+
+			if (countDelta != 0)
 			{
-				zoomCard(card);
+				if (isDeck)
+					_deckModel.Add(card, countDelta);
+				else
+					changeCountInCollection(card, countDelta);
+
 				return;
 			}
 
-			int countDelta;
+			if (e.Button == MouseButtons.Left)
+				zoomCard(card);
+		}
+
+		private static (int CountDelta, bool IsDeck) getChange(HitInfo hitInfo, MouseEventArgs e)
+		{
+			int countDelta = DeckEditorButtons.GetCountDelta(hitInfo.CustomButtonIndex);
+
+			if (countDelta != 0)
+				return (countDelta, DeckEditorButtons.IsDeck(hitInfo.CustomButtonIndex));
+
+			int deltaAbs = (Control.ModifierKeys & Keys.Control) > 0
+				? 4
+				: 1;
+
+			bool isDeck = (Control.ModifierKeys & Keys.Alt) == 0;
 
 			if (e.Button == MouseButtons.Middle)
-				countDelta = -1;
-			else if (e.Button == MouseButtons.Right)
-				countDelta = +1;
-			else
-				return;
+				return (-deltaAbs, isDeck);
+			
+			if (e.Button == MouseButtons.Right)
+				return (+deltaAbs, isDeck);
 
-			if ((Control.ModifierKeys & Keys.Control) > 0)
-				countDelta *= 4;
-
-			if ((Control.ModifierKeys & Keys.Alt) > 0)
-				changeCountInCollection(card, countDelta);
-			else
-				_deckModel.Add(card, countDelta);
+			return (0, true);
 		}
 
 		private static Card getCard(LayoutView view, HitInfo hitInfo)
 		{
-			bool overImage = hitInfo.IsOverImage();
-
-			if (!overImage)
+			if (!hitInfo.IsOverImage() && hitInfo.CustomButtonIndex < 0)
 				return null;
 
 			var card = (Card) view.GetRow(hitInfo.RowHandle);
@@ -200,7 +210,7 @@ namespace Mtgdb.Gui
 
 		private static void selectionStarted(object sender, HitInfo hitInfo, CancelEventArgs cancelArgs)
 		{
-			if (hitInfo.IsOverImage())
+			if (hitInfo.IsOverImage() || hitInfo.CustomButtonIndex >= 0)
 				cancelArgs.Cancel = true;
 		}
 

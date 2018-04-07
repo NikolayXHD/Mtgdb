@@ -16,32 +16,16 @@ namespace Mtgdb.Controls
 				field.IconRecognizer = value;
 		}
 
-		public virtual void CopyTo(LayoutControl other)
+		public virtual void CopyFrom(LayoutControl other)
 		{
-			other.Font = Font;
-			other.Size = Size;
-			other.HighlightOptions = HighlightOptions.Clone();
+			Font = other.Font;
+			Size = other.Size;
+			HighlightOptions = other.HighlightOptions.Clone();
 
-			using (var probeEnumerator = Fields.GetEnumerator())
-			using (var enumerator = other.Fields.GetEnumerator())
-			{
-				while (probeEnumerator.MoveNext())
-				{
-					enumerator.MoveNext();
-
-					var probeField = probeEnumerator.Current;
-					var field = enumerator.Current;
-
-					field.Location = probeField.Location;
-					field.Size = probeField.Size;
-					field.Font = probeField.Font;
-					field.BackColor = probeField.BackColor;
-					field.ForeColor = probeField.ForeColor;
-					field.HorizontalAlignment = probeField.HorizontalAlignment;
-					field.IconRecognizer = probeField.IconRecognizer;
-					field.SearchOptions = probeField.SearchOptions.Clone();
-				}
-			}
+			using (var thisEnumerator = Fields.GetEnumerator())
+			using (var otherEnumerator = other.Fields.GetEnumerator())
+				while (thisEnumerator.MoveNext() && otherEnumerator.MoveNext())
+					thisEnumerator.Current.CopyFrom(otherEnumerator.Current);
 		}
 
 
@@ -56,15 +40,29 @@ namespace Mtgdb.Controls
 		{
 		}
 
-		public virtual IEnumerable<ButtonLayout> GetFieldButtons(FieldControl field, SearchOptions searchOptions, SortOptions sortOptions)
+		public IEnumerable<ButtonLayout> GetFieldButtons(FieldControl field, SearchOptions searchOptions, SortOptions sortOptions)
 		{
-			// the order is reversed because alignment is top-right
+			// usually the visual order will be reversed because default alignment is top-right
 
 			if (field.IsSortVisible)
 				yield return sortOptions.GetButtonLayout(field);
 
 			if (field.IsSearchVisible)
 				yield return searchOptions.GetButtonLayout(field);
+
+			for (int i = 0; i < field.CustomButtons.Count; i++)
+			{
+				var button = field.CustomButtons[i];
+				
+				if (!field.IsHotTracked && (button.ShowOnlyWhenHotTracked ?? true))
+					continue;
+
+				var icon = field.HotTrackedCustomButtonIndex == i
+					? button.Icon
+					: button.IconTransp;
+
+					yield return new ButtonLayout(icon, button.Margin, button.Alignment, button.BreaksLayout);
+			}
 		}
 
 		private void fieldInvalidated(FieldControl field)

@@ -72,7 +72,7 @@ namespace Mtgdb.Gui
 				Show?.Invoke(new TooltipModel
 				{
 					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.sort",
-					ObjectBounds = _layoutView.GetSortButtonBounds(hitInfo),
+					ObjectBounds = hitInfo.ButtonBounds,
 					Control = _layoutView.Control,
 					Title = "Sort by " + hitInfo.FieldName,
 					Text =
@@ -111,10 +111,27 @@ namespace Mtgdb.Gui
 				Show?.Invoke(new TooltipModel
 				{
 					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
-					ObjectBounds = _layoutView.GetSearchButtonBounds(hitInfo),
+					ObjectBounds = hitInfo.ButtonBounds,
 					Control = _layoutView.Control,
 					Title = title,
 					Text = text,
+					Clickable = false
+				});
+			}
+			else if (hitInfo.CustomButtonIndex >= 0)
+			{
+				bool isDeck = DeckEditorButtons.IsDeck(hitInfo.CustomButtonIndex);
+				int delta = DeckEditorButtons.GetCountDelta(hitInfo.CustomButtonIndex);
+				int absDelta = Math.Abs(delta);
+
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.CustomButtonIndex}",
+					ObjectBounds = hitInfo.ButtonBounds,
+					Control = _layoutView.Control,
+					Title = $"{(delta > 0 ? "Add" : "Remove")} {absDelta} card{(absDelta == 1 ? string.Empty : "s")} {(delta > 0 ? "to" : "from")} {(isDeck ? "Deck" : "Collection")}",
+					Text = $"{(absDelta == 1 ? string.Empty : "Ctrl + ")}{(isDeck ? string.Empty : "Alt + ")}{(delta > 0 ? "Right" : "Middle")} " +
+						"mouse clik on card image does the same",
 					Clickable = false
 				});
 			}
