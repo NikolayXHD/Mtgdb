@@ -33,8 +33,8 @@ namespace Mtgdb.Gui
 			DoubleBuffered = true;
 			KeyPreview = true;
 
-			_viewCards = new LayoutView(_layoutViewCards);
-			_viewDeck = new LayoutView(_layoutViewDeck);
+			_viewCards = new MtgLayoutView(_layoutViewCards);
+			_viewDeck = new MtgLayoutView(_layoutViewDeck);
 
 			_luceneSearcher = luceneSearcher;
 			_keywordSearcher = keywordSearcher;
@@ -150,6 +150,7 @@ namespace Mtgdb.Gui
 			};
 
 			setupCheckButtonImages();
+			setupFindExamplesPanel();
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
 			updateShowProhibited();
@@ -487,8 +488,8 @@ namespace Mtgdb.Gui
 		private readonly LuceneSearcher _luceneSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 
-		private readonly LayoutView _viewCards;
-		private readonly LayoutView _viewDeck;
+		private readonly MtgLayoutView _viewCards;
+		private readonly MtgLayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly LayoutViewTooltip _tooltipViewDeck;
 		private readonly ButtonSubsystem _buttonSubsystem;

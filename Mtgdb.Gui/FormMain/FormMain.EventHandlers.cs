@@ -78,7 +78,7 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				updateShowSampleHandButtons();
-				_searchStringSubsystem.ApplyFind();
+				_searchStringSubsystem.Apply();
 				_deckModel.LoadDeck(_cardRepo);
 				_sortSubsystem.Invalidate();
 
@@ -105,7 +105,7 @@ namespace Mtgdb.Gui
 			this.Invoke(delegate
 			{
 				beginRestoreSettings();
-				_searchStringSubsystem.ApplyFind();
+				_searchStringSubsystem.Apply();
 				endRestoreSettings();
 
 				RunRefilterTask();
@@ -238,7 +238,7 @@ namespace Mtgdb.Gui
 		}
 
 
-		private void gridScrolled(LayoutView sender)
+		private void gridScrolled(MtgLayoutView sender)
 		{
 			if (restoringSettings())
 				return;
@@ -321,11 +321,11 @@ namespace Mtgdb.Gui
 			updateViewCards(listChanged, card, FilterGroup.Collection, touchedChanged);
 
 			updateViewDeck(
-				listChanged:false,
+				listChanged: false,
 				countChanged: true,
 				card: card,
 				touchedChanged: touchedChanged);
-			
+
 			if (!_isTabSelected)
 				return;
 
@@ -461,12 +461,12 @@ namespace Mtgdb.Gui
 			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 			{
 				beginRestoreSettings();
-				
+
 				if (_sortSubsystem.IsLanguageDependent)
 					_sortSubsystem.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
-					_searchStringSubsystem.ApplyFind();
+					_searchStringSubsystem.Apply();
 
 				endRestoreSettings();
 
@@ -608,6 +608,66 @@ namespace Mtgdb.Gui
 					null,
 					Resources.book_40_hovered,
 					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupPopup(
+				new Popup(_panelFindExamples,
+					_buttonFindDropDown,
+					HorizontalAlignment.Right,
+					openOnHover: false,
+					borderOnHover: false));
+		}
+
+		private void setupFindExamplesPanel()
+		{
+			var queryRows = Enumerable.Range(0, _panelFindExamples.RowCount)
+				.Select(getFindExampleRow)
+				.Where(r => r.Query != null)
+				.ToList();
+
+			var selectionBackColor = Color.LightBlue;
+
+			foreach (var row in queryRows)
+			{
+				void mouseEnter(object sender, EventArgs args)
+				{
+					row.Query.BackColor = selectionBackColor;
+					row.Comment.BackColor = selectionBackColor;
+				}
+
+				void mouseLeave(object sender, EventArgs args)
+				{
+					row.Query.BackColor = row.BackColor;
+					row.Comment.BackColor = row.BackColor;
+				}
+
+				void mouseClick(object sender, EventArgs args)
+				{
+					_buttonSubsystem.ClosePopup(_panelFindExamples);
+					_searchStringSubsystem.AppliedText = row.Query.Text;
+					_searchStringSubsystem.Apply();
+				}
+
+				row.Query.MouseEnter += mouseEnter;
+				row.Comment.MouseEnter += mouseEnter;
+
+				row.Query.MouseLeave += mouseLeave;
+				row.Comment.MouseLeave += mouseLeave;
+
+				row.Query.MouseClick += mouseClick;
+				row.Comment.MouseClick += mouseClick;
+			}
+		}
+
+		private (Label Query, Label Comment, Color BackColor) getFindExampleRow(int i)
+		{
+			var queryLabel = (Label) _panelFindExamples.GetControlFromPosition(0, i);
+
+			if (queryLabel.TextAlign != ContentAlignment.TopLeft)
+				return (null, null, default(Color));
+
+			var commentLabel = (Label) _panelFindExamples.GetControlFromPosition(1, i);
+
+			return (queryLabel, commentLabel, queryLabel.BackColor);
 		}
 
 
@@ -616,7 +676,7 @@ namespace Mtgdb.Gui
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
-				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				string[] files = (string[]) e.Data.GetData(DataFormats.FileDrop);
 				if (files.Length < 10)
 					e.Effect = DragDropEffects.Copy;
 			}

@@ -165,6 +165,9 @@
     <Compile Include="Tooltip\TooltipModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BorderedTableLayoutPanel.resx">
+      <DependentUpon>BorderedTableLayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\LayoutViewControl.resx">
       <DependentUpon>LayoutViewControl.cs</DependentUpon>
     </EmbeddedResource>

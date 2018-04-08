@@ -11,8 +11,8 @@ namespace Mtgdb.Gui
 	public class DraggingSubsystem: IMessageFilter
 	{
 		public DraggingSubsystem(
-			LayoutView layoutViewDeck,
-			LayoutView layoutViewCards,
+			MtgLayoutView layoutViewDeck,
+			MtgLayoutView layoutViewCards,
 			DeckModel deckModel,
 			FormMain parent,
 			ImageLoader imageLoader,
@@ -198,7 +198,7 @@ namespace Mtgdb.Gui
 			return _deckModel.IsDragging();
 		}
 
-		public void DragBegin(Card card, LayoutView dragFromView)
+		public void DragBegin(Card card, MtgLayoutView dragFromView)
 		{
 			dragFromView.Control.Capture = false;
 			_cardMouseDown = card;
@@ -266,7 +266,7 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.Invalidate();
 		}
 
-		private void updateCardBelowDragged(LayoutView view)
+		private void updateCardBelowDragged(MtgLayoutView view)
 		{
 			var card = getCardBelowDragged(view) ?? _deckModel.CardBelowDragged;
 			setCardBelowDragged(card);
@@ -287,7 +287,7 @@ namespace Mtgdb.Gui
 				cursor;
 		}
 
-		private Card getCardBelowDragged(LayoutView view)
+		private Card getCardBelowDragged(MtgLayoutView view)
 		{
 			var hitInfo = getHitInfo(view, Cursor.Position);
 
@@ -297,7 +297,7 @@ namespace Mtgdb.Gui
 			return null;
 		}
 
-		private static HitInfo getHitInfo(LayoutView view, Point position)
+		private static HitInfo getHitInfo(MtgLayoutView view, Point position)
 		{
 			var clientLocation = view.Control.PointToClient(position);
 			var hitInfo = view.CalcHitInfo(clientLocation);
@@ -337,7 +337,7 @@ namespace Mtgdb.Gui
 
 
 
-		private LayoutView getView(object view)
+		private MtgLayoutView getView(object view)
 		{
 			if (_layoutViewCards.Wraps(view))
 				return _layoutViewCards;
@@ -348,7 +348,7 @@ namespace Mtgdb.Gui
 			throw new Exception(@"wrapper not found");
 		}
 
-		public Card GetCard(LayoutView view, int rowHandle)
+		public Card GetCard(MtgLayoutView view, int rowHandle)
 		{
 			if (view == _layoutViewCards)
 				return (Card)view.GetRow(rowHandle);
@@ -415,9 +415,9 @@ namespace Mtgdb.Gui
 		private Point? _mouseDownLocation;
 		private Card _cardMouseDown;
 
-		private LayoutView _dragFromView;
-		private readonly LayoutView _layoutViewDeck;
-		private readonly LayoutView _layoutViewCards;
+		private MtgLayoutView _dragFromView;
+		private readonly MtgLayoutView _layoutViewDeck;
+		private readonly MtgLayoutView _layoutViewCards;
 		private readonly DeckModel _deckModel;
 		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;

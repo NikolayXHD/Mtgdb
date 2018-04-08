@@ -17,7 +17,7 @@ namespace Mtgdb.Gui
 			nameof(Card.Type)
 		};
 
-		public SortSubsystem(LayoutView layoutViewCards, CardRepository repository, Fields fields, SearchStringSubsystem searchStringSubsystem)
+		public SortSubsystem(MtgLayoutView layoutViewCards, CardRepository repository, Fields fields, SearchStringSubsystem searchStringSubsystem)
 		{
 			_fields = fields;
 			_searchStringSubsystem = searchStringSubsystem;
@@ -170,7 +170,7 @@ namespace Mtgdb.Gui
 
 		private static readonly FieldSortInfo _defaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
 
-		private readonly LayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewCards;
 		private readonly CardRepository _repository;
 		private readonly Fields _fields;
 		private readonly SearchStringSubsystem _searchStringSubsystem;

@@ -396,6 +396,7 @@ namespace Mtgdb.Gui
 			this._menuOpen.BackColor = System.Drawing.Color.White;
 			this._menuOpen.Controls.Add(this._layoutOpen);
 			this._menuOpen.Location = new System.Drawing.Point(349, 287);
+			this._menuOpen.Margin = new System.Windows.Forms.Padding(0);
 			this._menuOpen.Name = "_menuOpen";
 			this._menuOpen.Size = new System.Drawing.Size(272, 425);
 			this._menuOpen.TabIndex = 0;
@@ -681,6 +682,7 @@ namespace Mtgdb.Gui
 			this._menuLanguage.BackColor = System.Drawing.Color.White;
 			this._menuLanguage.Controls.Add(this._layoutLanguage);
 			this._menuLanguage.Location = new System.Drawing.Point(693, 62);
+			this._menuLanguage.Margin = new System.Windows.Forms.Padding(0);
 			this._menuLanguage.Name = "_menuLanguage";
 			this._menuLanguage.Size = new System.Drawing.Size(176, 90);
 			this._menuLanguage.TabIndex = 13;
@@ -934,6 +936,7 @@ namespace Mtgdb.Gui
 			this._menuDonate.BackColor = System.Drawing.Color.White;
 			this._menuDonate.Controls.Add(this._layoutDonate);
 			this._menuDonate.Location = new System.Drawing.Point(35, 62);
+			this._menuDonate.Margin = new System.Windows.Forms.Padding(0);
 			this._menuDonate.Name = "_menuDonate";
 			this._menuDonate.Size = new System.Drawing.Size(245, 195);
 			this._menuDonate.TabIndex = 29;
@@ -1052,6 +1055,7 @@ namespace Mtgdb.Gui
 			this._menuPaste.BackColor = System.Drawing.Color.White;
 			this._menuPaste.Controls.Add(this._layoutPaste);
 			this._menuPaste.Location = new System.Drawing.Point(35, 287);
+			this._menuPaste.Margin = new System.Windows.Forms.Padding(0);
 			this._menuPaste.Name = "_menuPaste";
 			this._menuPaste.Size = new System.Drawing.Size(305, 461);
 			this._menuPaste.TabIndex = 37;

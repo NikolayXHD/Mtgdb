@@ -25,8 +25,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.29 fix case sensitivity on not analyzed fields
-			set => Version = new IndexVersion(value, "0.29");
+			// 0.30 keywords
+			set => Version = new IndexVersion(value, "0.30");
 		}
 
 		public void InvalidateIndex()

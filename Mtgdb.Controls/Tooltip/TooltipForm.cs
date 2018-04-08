@@ -47,7 +47,7 @@ namespace Mtgdb.Controls
 				BackColor = BackColor,
 				BorderStyle = BorderStyle.None,
 				HideSelection = true,
-				Font = new Font(new FontFamily("Tahoma"), 9.75f, FontStyle.Regular),
+				Font = new Font(new FontFamily("Tahoma"), 9.75f, FontStyle.Regular, GraphicsUnit.Point),
 				AutoWordSelection = false
 			};
 

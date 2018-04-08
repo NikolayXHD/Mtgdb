@@ -7,7 +7,14 @@ namespace Mtgdb.Controls
 {
 	public class Popup
 	{
-		public Popup(Control control, ButtonBase owner, HorizontalAlignment alignment = HorizontalAlignment.Left, bool openOnHover = true, bool closeMenuOnClick = false, bool borderOnHover = true, Control container = null)
+		public Popup(
+			Control control,
+			ButtonBase owner,
+			HorizontalAlignment alignment = HorizontalAlignment.Left,
+			bool openOnHover = true,
+			bool closeMenuOnClick = false,
+			bool borderOnHover = true,
+			Control container = null)
 		{
 			Control = control;
 			Container = container ?? control;
@@ -20,7 +27,7 @@ namespace Mtgdb.Controls
 
 		public Control Control { get; }
 		public Control Container { get; }
-		
+
 		public bool Visible => Control.Visible;
 		public void Hide() => Control.Hide();
 
@@ -28,18 +35,25 @@ namespace Mtgdb.Controls
 		{
 			var location = getLocation();
 
-			if (Control is ContextMenuStrip)
-				show((ContextMenuStrip)Control, location);
+			if (Control is ContextMenuStrip strip)
+				show(strip, location);
 			else
-				show(Control, location);
+				show(location);
 		}
 
-		private void show(Control control, Point location)
+		private void show(Point location)
 		{
-			var parent = control.Parent;
-			control.Location = parent.PointToClient(Owner, location);
-			control.BringToFront();
-			control.Show();
+			var parent = Control.Parent;
+			location = parent.PointToClient(Owner, location);
+
+			location = new Point(
+				location.X.WithinRange(Control.Margin.Left, parent.Width - Control.Width - Control.Margin.Right),
+				location.Y.WithinRange(Control.Margin.Top, parent.Height - Control.Height - Control.Margin.Bottom));
+
+			Control.Location = location;
+			Control.BringToFront();
+			Control.Show();
+			Control.Focus();
 		}
 
 		private void show(ContextMenuStrip contextMenuStrip, Point location)
@@ -80,23 +94,19 @@ namespace Mtgdb.Controls
 
 		private Point getLocation()
 		{
-			Point ownerLocation;
+			int top = Owner.Height + Control.Margin.Top;
+
 			switch (_alignment)
 			{
 				case HorizontalAlignment.Left:
-					ownerLocation = new Point(0, Owner.Height);
-					break;
+					return new Point(0, top);
 				case HorizontalAlignment.Right:
-					ownerLocation = new Point(Owner.Width - Control.Width, Owner.Height);
-					break;
+					return new Point(Owner.Width - Control.Width, top);
 				case HorizontalAlignment.Center:
-					ownerLocation = new Point((Owner.Width - Control.Width) / 2, Owner.Height);
-					break;
+					return new Point((Owner.Width - Control.Width) / 2, top);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-
-			return ownerLocation;
 		}
 
 

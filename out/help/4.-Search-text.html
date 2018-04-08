@@ -45,7 +45,7 @@
 </tr>
 <tr>
 <td><code>"llanowar elves"</code></td>
-<td>in contrast yelds the card that contain <em>both words in exactly
+<td>in contrast yelds cards that contain <em>both words in exactly
 same order</em> in <em>some field</em>
 </td>
 </tr>
@@ -55,8 +55,8 @@ same order</em> in <em>some field</em>
 </tr>
 <tr>
 <td><code>llanowar AND elves</code></td>
-<td>requres both words to be present without restricting the order of
-words nor requiring them to appear in the same field</td>
+<td>requires both words to be present without restricting the order
+of words nor requiring them to appear in the same field</td>
 </tr>
 </tbody>
 </table>
@@ -107,7 +107,7 @@ unless you write <code>AND</code> between them.</p>
 </td>
 </tr>
 <tr>
-<td><code>angel OR demon</code></td>
+<td><code>angel</code></td>
 <td>
 <em>will not</em> match words like <code>angelic</code>. Use wildcards <code>*</code> and
 <code>?</code> to search by partial word, e.g. <code>angel*</code>
@@ -139,7 +139,8 @@ compared by <code>Text</code> and <code>GeneratedMana</code> fields.</p>
 </tr>
 <tr>
 <td><code>like: "thalia's lieutenant"</code></td>
-<td>Name containing whitespace must be quoted <code>"</code>.</td>
+<td>Name containing whitespace must be quoted <code>"</code>
+</td>
 </tr>
 <tr>
 <td><code>like: "predator ooze" ~0.75</code></td>
@@ -199,12 +200,12 @@ field</td>
 <td> </td>
 </tr>
 <tr>
-<td>search the entire phrase</td>
+<td>Search the entire phrase</td>
 <td><code>"Llanowar elves"</code></td>
 <td>using quotes</td>
 </tr>
 <tr>
-<td>default operator is OR</td>
+<td>Default operator is OR</td>
 <td><code>Type:(Rogue Rat)</code></td>
 <td>matches any card of types
 Rogue OR Rat</td>
@@ -214,7 +215,7 @@ Rogue OR Rat</td>
 <code>*</code> means 0 or more
 characters</td>
 <td><code>Subtype:(*ngel OR dem*
-OR human NOT rogue)</code></td>
+OR human)</code></td>
 <td>control whether you search by
 word's prefix, suffix or you
 need exact word</td>
@@ -229,29 +230,29 @@ character</td>
 characters</td>
 </tr>
 <tr>
-<td>Search by <strong>regular
-expression</strong>
+<td>Search by <em>regular
+expression</em>
 </td>
 <td><code>nameen:/[ab]nge.{1,2}|demon/</code></td>
 <td>forward slashes <code>/</code> delimit
-regular expression boundaries</td>
+regular expression</td>
 </tr>
 <tr>
-<td>search by approximate
+<td>Search by approximate
 spelling</td>
-<td><code>nevniniral~</code></td>
+<td><code>neviniral~</code></td>
 <td>returns
 Nevin<strong>Y</strong>rral's Disk and
 other cards mentioning
 Nevinyrral in text</td>
 </tr>
 <tr>
-<td>desired minimum
+<td>Desired minimum
 similarity</td>
 <td>
 <div>
-<div><code>nevniniral~0.2</code></div>
-<div><code>nevniniral~0.9</code></div>
+<div><code>neviniral~0.2</code></div>
+<div><code>neviniral~0.9</code></div>
 </div>
 </td>
 <td>default similarity is 0.5
@@ -277,7 +278,7 @@ appear between 1 and 4</td>
 strictly &gt; than 100$</td>
 </tr>
 <tr>
-<td><code>ManaCost:{0 TO 2]</code></td>
+<td><code>Cmc:{0 TO 2]</code></td>
 <td>
 <p>curly brace <code>{</code> makes non-
 inclusive boundary. square
@@ -286,18 +287,18 @@ inclusive boundary. square
 </td>
 </tr>
 <tr>
-<td>range search with text</td>
+<td>Range search with text</td>
 <td><code>Name:[a TO ced]</code></td>
 <td>any word which lies between
 'a' and 'ced' in
 alphanumerical order</td>
 </tr>
 <tr>
-<td>term boosting</td>
+<td>Term boosting</td>
 <td><code>Angel^3 OR Demon</code></td>
-<td>^3 booster to Angel term is
-ignored. Term boosting is
-<em>not</em> supported</td>
+<td>booster affects search result
+order favoring angel matches
+over demon by a factor of 3</td>
 </tr>
 </tbody>
 </table>

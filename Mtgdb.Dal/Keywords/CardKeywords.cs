@@ -7,8 +7,6 @@ namespace Mtgdb.Dal
 {
 	public class CardKeywords
 	{
-		public const string NoneKeyword = "_none_";
-		
 		[JsonProperty]
 		public int IndexInFile { get; set; }
 
@@ -21,35 +19,37 @@ namespace Mtgdb.Dal
 
 			for (int i = 0; i < KeywordDefinitions.Values.Count; i++)
 			{
-				string text = KeywordDefinitions.Getters[i](card);
-
 				string propertyName = KeywordDefinitions.PropertyNames[i];
 
-				if (!string.IsNullOrEmpty(text))
+				foreach (string value in ParseValues(card, i))
+					addKeyword(propertyName, value);
+			}
+		}
+
+		public static IEnumerable<string> ParseValues(Card card, int propertyIndex)
+		{
+			string text = KeywordDefinitions.Getters[propertyIndex](card);
+			var propertyValues = KeywordDefinitions.Values[propertyIndex];
+			var patterns = KeywordDefinitions.Patterns[propertyIndex];
+
+			if (string.IsNullOrEmpty(text))
+				yield break;
+
+			if (propertyIndex == KeywordDefinitions.KeywordsIndex)
+				foreach (var pair in KeywordDefinitions.HarmfulAbilityExplanations)
+					text = text.Replace(pair.Key, pair.Value);
+
+			for (int j = 0; j < propertyValues.Count; j++)
+			{
+				var matches = patterns[j]?.Matches(text)
+					.OfType<Match>()
+					.ToList();
+
+				if (matches?.Count > 0)
 				{
-					if (propertyName == nameof(KeywordDefinitions.Ability))
-						foreach (var pair in KeywordDefinitions.AbilityHarmfulExplanations)
-							text = text.Replace(pair.Key, pair.Value);
-
-					var propertyValues = KeywordDefinitions.Values[i];
-					var propertyValuePatterns = KeywordDefinitions.Patterns[i];
-
-					for (int j = 0; j < propertyValues.Count; j++)
-					{
-						var matches = propertyValuePatterns[j]?.Matches(text)
-							.OfType<Match>()
-							.ToList();
-
-						if (matches?.Count > 0)
-						{
-							string displayText = KeywordRegexUtil.GetKeywordDisplayText(propertyValues[j]);
-							addKeyword(propertyName, displayText);
-						}
-					}
+					string displayText = KeywordRegexUtil.GetKeywordDisplayText(propertyValues[j]);
+					yield return displayText;
 				}
-
-				if (!KeywordsByProperty.ContainsKey(propertyName))
-					KeywordsByProperty.Add(propertyName, new HashSet<string> { NoneKeyword });
 			}
 		}
 

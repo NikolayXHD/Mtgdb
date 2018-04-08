@@ -20,6 +20,7 @@ namespace Mtgdb.Dal.Index
 			: base(matchVersion, f, a)
 		{
 			_repository = repository;
+			FuzzyMinSim = 0.5f;
 		}
 
 		public override Query Parse(string query)
@@ -442,6 +443,7 @@ namespace Mtgdb.Dal.Index
 
 
 		public const string AnyField = "*";
+		public const string AnyValue = "*";
 
 		public const string Like = nameof(Like);
 

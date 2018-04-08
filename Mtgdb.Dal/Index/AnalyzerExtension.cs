@@ -34,7 +34,7 @@ namespace Mtgdb.Dal.Index
 			if (valueTokens.Count == 0)
 				return null;
 
-			if (valueTokens.Count > 1)
+			if (value.Contains(" "))
 				builder.Append('"');
 
 			for (int i = 0; i < valueTokens.Count; i++)
@@ -45,14 +45,15 @@ namespace Mtgdb.Dal.Index
 				{
 					var prevToken = valueTokens[i - 1];
 
-					if (prevToken.Offset + prevToken.Term.Length < token.Offset)
-						builder.Append(' ');
+					int prevEnd = prevToken.Offset + prevToken.Term.Length;
+					if (prevEnd < token.Offset)
+						builder.Append(value.Substring(prevEnd, token.Offset - prevEnd));
 				}
 
 				builder.Append(StringEscaper.Escape(token.Term));
 			}
 
-			if (valueTokens.Count > 1)
+			if (value.Contains(" "))
 				builder.Append('"');
 
 			return builder.ToString();

@@ -15,6 +15,8 @@ namespace Mtgdb.Dal.Index
 		{
 			_langs = CardLocalization.GetAllLanguages().ToList();
 
+			addTextField(nameof(KeywordDefinitions.Keywords), nameof(Card.Text), analyze: false);
+
 			addTextField(nameof(Card.Color));
 
 			addTextField(nameof(Card.SetName));
@@ -37,7 +39,7 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.LegalIn), nameof(Card.Rulings));
 			addTextField(nameof(Card.RestrictedIn), nameof(Card.Rulings));
 			addTextField(nameof(Card.BannedIn), nameof(Card.Rulings));
-			
+
 			addTextField(nameof(Card.Power), analyze: false);
 			addTextField(nameof(Card.Toughness), analyze: false);
 			addTextField(nameof(Card.Loyalty), analyze: false);
@@ -124,9 +126,17 @@ namespace Mtgdb.Dal.Index
 			if (!string.IsNullOrEmpty(card.Artist))
 				doc.addTextField(nameof(card.Artist), card.Artist);
 
-			// Tested
+
 			if (!string.IsNullOrEmpty(card.TextEn))
+			{
+				// Tested
 				doc.addTextField(nameof(card.TextEn), card.TextEn);
+
+				var keywords = CardKeywords.ParseValues(card, KeywordDefinitions.KeywordsIndex);
+
+				foreach (string keyword in keywords)
+					doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
+			}
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.FlavorEn))
@@ -500,7 +510,8 @@ namespace Mtgdb.Dal.Index
 			nameof(Card.Type),
 			nameof(Card.Subtypes),
 			nameof(Card.Color),
-			nameof(Card.ManaCost)
+			nameof(Card.ManaCost),
+			nameof(KeywordDefinitions.Keywords)
 		};
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);

@@ -5,14 +5,14 @@ namespace Mtgdb.Gui
 {
 	public class ScrollSubsystem
 	{
-		public event Action<LayoutView> Scrolled;
+		public event Action<MtgLayoutView> Scrolled;
 
-		private readonly LayoutView _layoutViewDeck;
-		private readonly LayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
+		private readonly MtgLayoutView _layoutViewCards;
 
 		public ScrollSubsystem(
-			LayoutView layoutViewDeck,
-			LayoutView layoutViewCards)
+			MtgLayoutView layoutViewDeck,
+			MtgLayoutView layoutViewCards)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
@@ -41,14 +41,14 @@ namespace Mtgdb.Gui
 
 		
 
-		public int GetPageSize(LayoutView view)
+		public int GetPageSize(MtgLayoutView view)
 		{
 			var visibleColumnsCount = getVisibleColumnsCount(view);
 			var visibleRowsCount = getVisibleRowsCount(view);
 			return visibleColumnsCount*visibleRowsCount;
 		}
 
-		private static int getVisibleColumnsCount(LayoutView view)
+		private static int getVisibleColumnsCount(MtgLayoutView view)
 		{
 			return getVisibleCount(
 				view.Control.Width - view.ScrollWidth,
@@ -58,7 +58,7 @@ namespace Mtgdb.Gui
 				view.AllowPartialCards);
 		}
 
-		private static int getVisibleRowsCount(LayoutView view)
+		private static int getVisibleRowsCount(MtgLayoutView view)
 		{
 			return getVisibleCount(
 				view.Control.Height,
@@ -70,7 +70,7 @@ namespace Mtgdb.Gui
 
 		
 
-		public void EnsureCardVisibility(Card card, LayoutView view)
+		public void EnsureCardVisibility(Card card, MtgLayoutView view)
 		{
 			var index = getIndexInView(card, view);
 
@@ -86,7 +86,7 @@ namespace Mtgdb.Gui
 			view.VisibleRecordIndex = Math.Min(view.RowCount - visibleCardsCount, screenIndex*visibleCardsCount);
 		}
 
-		private static int getIndexInView(Card card, LayoutView view)
+		private static int getIndexInView(Card card, MtgLayoutView view)
 		{
 			var handle = view.FindRow(card);
 			var index = view.GetVisibleIndex(handle);
@@ -108,7 +108,7 @@ namespace Mtgdb.Gui
 
 
 
-		private LayoutView getView(object view)
+		private MtgLayoutView getView(object view)
 		{
 			if (_layoutViewCards.Wraps(view))
 				return _layoutViewCards;

@@ -37,12 +37,12 @@ namespace Mtgdb.Gui
 		public static void SetQuickFilterProperties(FormMain form)
 		{
 			form.FilterManaCost.Properties = KeywordDefinitions.ManaCost;
-			form.FilterAbility.Properties = KeywordDefinitions.Ability.ToKeywordDisplayTexts();
+			form.FilterAbility.Properties = KeywordDefinitions.Keywords.ToKeywordDisplayTexts();
 			form.FilterRarity.Properties = KeywordDefinitions.Rarity;
 			form.FilterType.Properties = KeywordDefinitions.Type;
 			form.FilterCmc.Properties = KeywordDefinitions.Cmc;
 			form.FilterManaAbility.Properties = KeywordDefinitions.ManaAbility;
-			form.FilterGeneratedMana.Properties = KeywordDefinitions.ManaGenerated;
+			form.FilterGeneratedMana.Properties = KeywordDefinitions.GeneratedMana;
 
 			form.FilterManager.Properties = new[]
 			{

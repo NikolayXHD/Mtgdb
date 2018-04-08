@@ -19,6 +19,7 @@ namespace Mtgdb.Gui
 		{
 			HighlightingInProgress = true;
 
+			_findEditor.Parent.SuspendLayout();
 			_findEditor.Visible = false;
 
 			var start = _findEditor.SelectionStart;
@@ -45,6 +46,8 @@ namespace Mtgdb.Gui
 			_findEditor.SelectionLength = len;
 
 			_findEditor.Visible = true;
+			_findEditor.Parent.ResumeLayout(false);
+
 			HighlightingInProgress = false;
 		}
 

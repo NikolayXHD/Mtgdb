@@ -22,8 +22,8 @@ namespace Mtgdb.Gui
 	public class DrawingSubsystem
 	{
 		public DrawingSubsystem(
-			LayoutView layoutViewCards,
-			LayoutView layoutViewDeck,
+			MtgLayoutView layoutViewCards,
+			MtgLayoutView layoutViewDeck,
 			DraggingSubsystem draggingSubsystem,
 			SearchStringSubsystem searchStringSubsystem,
 			DeckModel deckModel,
@@ -402,16 +402,92 @@ namespace Mtgdb.Gui
 		{
 			var searchResult = _searchStringSubsystem.SearchResult;
 
-			addTermMatches(matches, contextMatches, displayField, displayText, searchResult?.HighlightTerms);
-			addPhraseMatches(matches, displayField, displayText, searchResult?.HighlightPhrases);
+			addTermMatches(matches, contextMatches, displayField, displayText, searchResult);
+			addPhraseMatches(matches, displayField, displayText, searchResult);
+		}
+
+		private void addTermMatches(
+			List<TextRange> matches,
+			List<TextRange> contextMatches,
+			string displayField,
+			string displayText,
+			SearchResult searchResult)
+		{
+			var highlightTerms = searchResult?.HighlightTerms;
+
+			if (highlightTerms == null)
+				return;
+
+			foreach (var pair in highlightTerms.Where(term => isRelevantField(displayField, term.Key)))
+			{
+				var terms = pair.Value;
+				var patternsSet = new Dictionary<string, (HashSet<string> TokenFields, Regex Pattern)>();
+				var contextPatternsSet = new Dictionary<string, (HashSet<string> TokenFields, Regex Pattern)>();
+
+				addTextualPatterns(searchResult.Query, terms, patternsSet, contextPatternsSet);
+				addKeywordPatterns(searchResult.Query, terms, patternsSet);
+
+				addMatches(displayText, patternsSet.Values, matches);
+				addMatches(displayText, contextPatternsSet.Values, contextMatches);
+			}
+		}
+
+		private void addTextualPatterns(
+			string query,
+			IReadOnlyList<Token> terms,
+			Dictionary<string, (HashSet<string> TokenFields, Regex Pattern)> patternsSet,
+			Dictionary<string, (HashSet<string> TokenFields, Regex Pattern)> contextPatternsSet)
+		{
+			var textualTokens = terms.Where(t =>
+				t.Type.IsAny(TokenType.FieldValue | TokenType.AnyChar | TokenType.RegexBody) &&
+				!Str.Equals(t.ParentField, nameof(KeywordDefinitions.Keywords)) &&
+				!string.IsNullOrEmpty(t.Value));
+
+			foreach (var token in textualTokens)
+			{
+				getPattern(query, token, out string pattern, out var contextPatterns);
+
+				addPattern(token.ParentField, pattern, patternsSet);
+
+				foreach (string contextPattern in contextPatterns)
+					addPattern(token.ParentField, contextPattern, contextPatternsSet);
+			}
+		}
+
+		private static void addKeywordPatterns(
+			string query,
+			IReadOnlyList<Token> terms,
+			IDictionary<string, (HashSet<string> TokenFields, Regex Pattern)> patternsSet)
+		{
+			var keywordTerms = terms.Where(t => Str.Equals(t.ParentField, nameof(KeywordDefinitions.Keywords)));
+			foreach (var keywordTerm in keywordTerms)
+			{
+				string termText = keywordTerm.GetPhraseText(query);
+
+				if (!KeywordDefinitions.KeywordPatternsByValue.TryGetValue(termText, out var regex))
+					continue;
+
+				string pattern = regex.ToString();
+
+				if (patternsSet.TryGetValue(pattern, out var tokenPattern))
+				{
+					tokenPattern.TokenFields.Add(keywordTerm.ParentField);
+					continue;
+				}
+
+				tokenPattern = (new HashSet<string>(Str.Comparer) { keywordTerm.ParentField }, regex);
+				patternsSet.Add(pattern, tokenPattern);
+			}
 		}
 
 		private void addPhraseMatches(
 			List<TextRange> matches,
 			string displayField,
 			string displayText,
-			Dictionary<string, List<string[]>> highlightPhrases)
+			SearchResult searchResult)
 		{
+			var highlightPhrases = searchResult?.HighlightPhrases;
+
 			if (highlightPhrases == null)
 				return;
 
@@ -423,29 +499,27 @@ namespace Mtgdb.Gui
 
 			foreach (var term in highlightPhrases.Where(term => isRelevantField(displayField, term.Key)))
 			{
-				foreach (var sequence in term.Value)
+				foreach (var tokenValues in term.Value)
 				{
-					var pattern = sequence.Select(StringEscaper.Unescape).ToReadOnlyList();
-
-					if (pattern.Count == 0)
+					if (tokenValues.Count == 0)
 						continue;
 
-					if (pattern.Count == 1)
+					if (tokenValues.Count == 1)
 					{
 						var mathesToAdd = displayTextTokens.Value
-							.Where(token => Str.Comparer.Equals(token.Term, pattern[0]))
+							.Where(token => Str.Comparer.Equals(token.Term, tokenValues[0]))
 							.Select(token => new TextRange(token.Offset, token.Term.Length));
 
 						matches.AddRange(mathesToAdd);
 						continue;
 					}
 
-					var searcher = new KnutMorrisPrattSubstringSearch<string>(pattern, Str.Comparer);
+					var searcher = new KnutMorrisPrattSubstringSearch<string>(tokenValues, Str.Comparer);
 
 					foreach (int index in searcher.FindAll(displayTextValues.Value))
 					{
 						var firstWordMatch = displayTextTokens.Value[index];
-						var lastWordMatch = displayTextTokens.Value[index + pattern.Count - 1];
+						var lastWordMatch = displayTextTokens.Value[index + tokenValues.Count - 1];
 
 						var startIndex = firstWordMatch.Offset;
 						var length = lastWordMatch.Offset + lastWordMatch.Term.Length - startIndex;
@@ -456,78 +530,67 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void addTermMatches(
-			List<TextRange> matches,
-			List<TextRange> contextMatches,
-			string displayField,
-			string displayText,
-			Dictionary<string, Token[]> highlightTerms)
-		{
-			if (highlightTerms == null)
-				return;
-
-			foreach (var term in highlightTerms.Where(term => isRelevantField(displayField, term.Key)))
-			{
-				var patternsSet = new Dictionary<string, Regex>();
-				var contextPatternsSet = new Dictionary<string, Regex>();
-
-				var relevantTokens = term.Value.Where(token =>
-					token.Type.IsAny(TokenType.FieldValue | TokenType.AnyChar | TokenType.RegexBody) &&
-					!string.IsNullOrEmpty(token.Value));
-
-				foreach (var token in relevantTokens)
-				{
-					getPattern(token, out string pattern, out var contextPatterns);
-
-					addPattern(pattern, patternsSet);
-
-					foreach (string contextPattern in contextPatterns)
-						addPattern(contextPattern, contextPatternsSet);
-				}
-
-				addMatches(displayText, displayField, patternsSet.Values, matches);
-				addMatches(displayText, displayField, contextPatternsSet.Values, contextMatches);
-			}
-		}
-
 		private static bool isRelevantField(string displayField, string queryField)
 		{
 			return string.IsNullOrEmpty(queryField) || Str.Equals(queryField, displayField);
 		}
 
-		private void addPattern(string pattern, Dictionary<string, Regex> patternsSet)
+		private void addPattern(string termField, string pattern, IDictionary<string, (HashSet<string> TokenFields, Regex Pattern)> patternsSet)
 		{
 			if (pattern == null)
 				return;
 
-			if (patternsSet.TryGetValue(pattern, out var regex))
-				return;
-
-			if (!_regexCache.TryGetValue(pattern, out regex))
+			if (patternsSet.TryGetValue(pattern, out var tokenPattern))
 			{
-				regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-				_regexCache.Add(pattern, regex);
+				tokenPattern.TokenFields.Add(termField);
+				return;
 			}
 
-			patternsSet.Add(pattern, regex);
+			tokenPattern = (new HashSet<string>(Str.Comparer) { termField }, getRegex(pattern));
+			patternsSet.Add(pattern, tokenPattern);
 		}
 
-		private void addMatches(string displayText, string fieldName, IEnumerable<Regex> patterns, List<TextRange> matches)
+		private Regex getRegex(string pattern)
 		{
-			foreach (Regex findRegex in patterns)
-				foreach (var token in _analyzer.GetTokens(fieldName, displayText))
-				{
-					var toAdd = findRegex.Matches(token.Term)
-						.Cast<Match>()
-						.Where(match => match.Success && match.Length != 0)
-						.Select(match => new TextRange(match.Index + token.Offset, match.Length));
+			if (_regexCache.TryGetValue(pattern, out var regex))
+				return regex;
+			
+			regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			_regexCache.Add(pattern, regex);
 
-					matches.AddRange(toAdd);
-				}
+			return regex;
 		}
 
-		private void getPattern(Token token, out string result, out List<string> contextPatterns)
+		private void addMatches(string displayText, IEnumerable<(HashSet<string> TokenField, Regex Pattern)> tokenPatterns, List<TextRange> matches)
 		{
+			foreach (var (tokenFields, findRegex) in tokenPatterns)
+				foreach (var tokenField in tokenFields)
+					foreach (var token in _analyzer.GetTokens(tokenField, displayText))
+					{
+						var toAdd = findRegex.Matches(token.Term)
+							.Cast<Match>()
+							.Where(match => match.Success && match.Length != 0)
+							.Select(match => new TextRange(match.Index + token.Offset, match.Length));
+
+						matches.AddRange(toAdd);
+					}
+		}
+
+		private void getPattern(string query, Token token, out string result, out List<string> contextPatterns)
+		{
+			if (token.IsPhraseStart)
+			{
+				var patternBuilder = new StringBuilder();
+				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
+			}
+
+			if (token.Type.IsAny(TokenType.RegexBody))
+			{
+				result = token.Value;
+				contextPatterns = new List<string>();
+				return;
+			}
+
 			var prefixTokens = getPrefixTokens(token);
 			var currentTokens = new List<Token> { token };
 			var suffixTokens = getSuffixTokens(token);
@@ -650,45 +713,44 @@ namespace Mtgdb.Gui
 				else if (token.Type.IsAny(TokenType.AnyString))
 					pattern.Append(MtgAplhabet.CharPattern + "*");
 				else if (token.Type.IsAny(TokenType.FieldValue))
-				{
-					var builder = new StringBuilder();
-
-					foreach (var word in _analyzer.GetTokens(token.ParentField, StringEscaper.Unescape(token.Value)))
-						builder.Append(word.Term);
-
-					var luceneUnescaped = builder.ToString();
-
-					foreach (char c in luceneUnescaped)
-					{
-						var equivalents = MtgAplhabet.GetEquivalents(c).ToArray();
-
-						if (equivalents.Length == 0)
-							continue;
-						if (equivalents.Length == 1)
-							pattern.Append(Regex.Escape(new string(equivalents[0], 1)));
-						else
-						{
-							pattern.Append("(");
-
-							pattern.Append(Regex.Escape(new string(equivalents[0], 1)));
-
-							for (int i = 1; i < equivalents.Length; i++)
-							{
-								pattern.Append("|");
-								pattern.Append(Regex.Escape(new string(equivalents[i], 1)));
-							}
-
-							pattern.Append(")");
-						}
-					}
-				}
-				else if (token.Type.IsAny(TokenType.RegexBody))
-				{
-					pattern.Append(token.Value);
-				}
+					appendFieldValuePattern(pattern, token.ParentField, token.Value);
 			}
 
 			return pattern.ToString();
+		}
+
+		private void appendFieldValuePattern(StringBuilder patternBuilder, string tokenField, string tokenValue)
+		{
+			var builder = new StringBuilder();
+
+			foreach (var word in _analyzer.GetTokens(tokenField, StringEscaper.Unescape(tokenValue)))
+				builder.Append(word.Term);
+
+			var luceneUnescaped = builder.ToString();
+
+			foreach (char c in luceneUnescaped)
+			{
+				var equivalents = MtgAplhabet.GetEquivalents(c).ToArray();
+
+				if (equivalents.Length == 0)
+					continue;
+				if (equivalents.Length == 1)
+					patternBuilder.Append(Regex.Escape(new string(equivalents[0], 1)));
+				else
+				{
+					patternBuilder.Append("(");
+
+					patternBuilder.Append(Regex.Escape(new string(equivalents[0], 1)));
+
+					for (int i = 1; i < equivalents.Length; i++)
+					{
+						patternBuilder.Append("|");
+						patternBuilder.Append(Regex.Escape(new string(equivalents[i], 1)));
+					}
+
+					patternBuilder.Append(")");
+				}
+			}
 		}
 
 		private static List<TextRange> getHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
@@ -736,7 +798,7 @@ namespace Mtgdb.Gui
 
 
 
-		private LayoutView getView(object view)
+		private MtgLayoutView getView(object view)
 		{
 			if (_layoutViewCards.Wraps(view))
 				return _layoutViewCards;
@@ -753,8 +815,8 @@ namespace Mtgdb.Gui
 
 		private readonly Dictionary<string, Regex> _regexCache = new Dictionary<string, Regex>();
 
-		private readonly LayoutView _layoutViewCards;
-		private readonly LayoutView _layoutViewDeck;
+		private readonly MtgLayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly SearchStringSubsystem _searchStringSubsystem;
 		private readonly DeckModel _deckModel;

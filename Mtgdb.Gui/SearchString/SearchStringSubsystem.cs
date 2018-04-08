@@ -24,8 +24,8 @@ namespace Mtgdb.Gui
 			Panel panelSearchIcon,
 			ListBox listBoxSuggest,
 			LuceneSearcher searcher,
-			LayoutView viewCards,
-			LayoutView viewDeck)
+			MtgLayoutView viewCards,
+			MtgLayoutView viewDeck)
 		{
 			_parent = parent;
 
@@ -138,7 +138,7 @@ namespace Mtgdb.Gui
 					if (deltaMs > 0)
 						Thread.Sleep(deltaMs + 100);
 					else
-						_findEditor.Invoke(ApplyFind);
+						_findEditor.Invoke(Apply);
 				}
 			}
 			catch (ThreadAbortException)
@@ -247,7 +247,6 @@ namespace Mtgdb.Gui
 			_currentText = _findEditor.Text;
 
 			UpdateSuggestInput();
-
 			_highligter.Highlight();
 			TextChanged?.Invoke();
 		}
@@ -322,7 +321,7 @@ namespace Mtgdb.Gui
 				case Keys.Enter:
 					if (!_listBoxSuggest.Visible)
 					{
-						ApplyFind();
+						Apply();
 					}
 					else
 					{
@@ -441,6 +440,9 @@ namespace Mtgdb.Gui
 
 			if (string.IsNullOrEmpty(text))
 				return;
+
+			if (string.IsNullOrEmpty(text))
+				throw new ArgumentException();
 
 			text = text.Trim();
 
@@ -664,7 +666,7 @@ namespace Mtgdb.Gui
 			_findEditor.SelectionLength = originalSelectionLength;
 		}
 
-		public void ApplyFind()
+		public void Apply()
 		{
 			_appliedText = _currentText;
 
@@ -706,7 +708,7 @@ namespace Mtgdb.Gui
 				pasteText(query, TokenType.None, source, token);
 			}
 
-			ApplyFind();
+			Apply();
 		}
 
 
@@ -806,8 +808,8 @@ namespace Mtgdb.Gui
 		private readonly Panel _panelSearchIcon;
 		private readonly ListBox _listBoxSuggest;
 		private readonly LuceneSearcher _searcher;
-		private readonly LayoutView _viewCards;
-		private readonly LayoutView _viewDeck;
+		private readonly MtgLayoutView _viewCards;
+		private readonly MtgLayoutView _viewDeck;
 		private readonly SearchStringHighlighter _highligter;
 		private readonly MtgAnalyzer _analyzer;
 

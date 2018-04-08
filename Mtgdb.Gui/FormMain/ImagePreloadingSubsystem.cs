@@ -7,8 +7,8 @@ namespace Mtgdb.Gui
 {
 	public class ImagePreloadingSubsystem
 	{
-		private readonly LayoutView _layoutViewCards;
-		private readonly LayoutView _layoutViewDeck;
+		private readonly MtgLayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly ScrollSubsystem _scrollSubsystem;
 		private Thread _preloadImageThread;
 
@@ -16,7 +16,7 @@ namespace Mtgdb.Gui
 		private List<Card> _cardsToPreloadImageStarted;
 		private readonly int _imageCacheCapacity;
 
-		public ImagePreloadingSubsystem(LayoutView layoutViewCards, LayoutView layoutViewDeck, ScrollSubsystem scrollSubsystem, ImageCacheConfig imageCacheConfig)
+		public ImagePreloadingSubsystem(MtgLayoutView layoutViewCards, MtgLayoutView layoutViewDeck, ScrollSubsystem scrollSubsystem, ImageCacheConfig imageCacheConfig)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
@@ -46,7 +46,7 @@ namespace Mtgdb.Gui
 			_preloadImageThread.Abort();
 		}
 
-		private List<Card> getCardsToPreview(LayoutView view)
+		private List<Card> getCardsToPreview(MtgLayoutView view)
 		{
 			var pageSize = _scrollSubsystem.GetPageSize(view);
 			
@@ -75,7 +75,7 @@ namespace Mtgdb.Gui
 			return cardsToPreloadImage;
 		}
 
-		private static bool preload(List<Card> cardsToPreloadImage, LayoutView view, int i)
+		private static bool preload(List<Card> cardsToPreloadImage, MtgLayoutView view, int i)
 		{
 			if (i < 0 || i >= view.RowCount)
 				return false;

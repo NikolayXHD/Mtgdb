@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class ButtonSubsystem
+	public class ButtonSubsystem : IMessageFilter
 	{
 		public void SetupButton(ButtonBase control, ButtonImages buttonImages)
 		{
@@ -28,14 +28,19 @@ namespace Mtgdb.Controls
 				}
 		}
 
-
+		public void ClosePopup(Control popupControl)
+		{
+			var owner = popupControl.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
+			popup.Hide();
+		}
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			if (sender is ButtonBase)
+			if (sender is ButtonBase box)
 			{
-				bool isChecked = (sender as CheckBox)?.Checked == true;
-				setCheckImage((ButtonBase)sender, isChecked, false);
+				bool isChecked = (box as CheckBox)?.Checked == true;
+				setCheckImage(box, isChecked, false);
 			}
 		}
 
@@ -76,8 +81,12 @@ namespace Mtgdb.Controls
 			var popup = _popupsByOwner[owner];
 
 			if (popup.Visible)
+			{
 				popup.Hide();
-			else if (!popup.OpenOnHover)
+				return;
+			}
+
+			if (!popup.OpenOnHover)
 			{
 				popup.Control.SetTag("Owner", popup.Owner);
 				popup.Container.SetTag("Owner", popup.Owner);
@@ -89,10 +98,11 @@ namespace Mtgdb.Controls
 		{
 			var button = (ButtonBase) sender;
 			var popup = _popupsByOwner[button];
+			
 			if (!popup.Visible)
 				return;
 
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
+			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
 				popup.Hide();
 		}
 
@@ -102,8 +112,20 @@ namespace Mtgdb.Controls
 			var owner = control.GetTag<ButtonBase>("Owner");
 			var popup = _popupsByOwner[owner];
 
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
+			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
 				popup.Hide();
+		}
+
+		private void popupKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			if (e.KeyData != Keys.Escape)
+				return;
+
+			var control = (Control) sender;
+			var owner = control.GetTag<ButtonBase>("Owner");
+			var popup = _popupsByOwner[owner];
+
+			popup.Hide();
 		}
 
 
@@ -112,8 +134,8 @@ namespace Mtgdb.Controls
 		{
 			foreach (var control in _images.Keys)
 			{
-				if (control is CheckBox)
-					((CheckBox) control).CheckedChanged += checkedChanged;
+				if (control is CheckBox box)
+					box.CheckedChanged += checkedChanged;
 
 				control.MouseEnter += mouseEnter;
 				control.MouseLeave += mouseLeave;
@@ -135,15 +157,19 @@ namespace Mtgdb.Controls
 
 				popup.Container.MouseLeave += popupMouseLeave;
 				popup.Control.MouseLeave += popupMouseLeave;
+
+				popup.Control.PreviewKeyDown += popupKeyDown;
 			}
+
+			Application.AddMessageFilter(this);
 		}
 
 		public void UnsubscribeFromEvents()
 		{
 			foreach (var control in _images.Keys)
 			{
-				if (control is CheckBox)
-					((CheckBox) control).CheckedChanged -= checkedChanged;
+				if (control is CheckBox box)
+					box.CheckedChanged -= checkedChanged;
 
 				control.MouseEnter -= mouseEnter;
 				control.MouseLeave -= mouseLeave;
@@ -165,7 +191,10 @@ namespace Mtgdb.Controls
 
 				popup.Container.MouseLeave -= popupMouseLeave;
 				popup.Control.MouseLeave -= popupMouseLeave;
+				popup.Control.PreviewKeyDown -= popupKeyDown;
 			}
+
+			Application.RemoveMessageFilter(this);
 		}
 
 
@@ -208,7 +237,7 @@ namespace Mtgdb.Controls
 			if (popup.BorderOnHover && sender is ButtonBase)
 				((ButtonBase) button).FlatAppearance.BorderColor = container.BackColor;
 
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
+			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
 				popup.Hide();
 		}
 
@@ -218,7 +247,26 @@ namespace Mtgdb.Controls
 			control.Image = images.GetImage(isChecked, hovered);
 		}
 
+		public bool PreFilterMessage(ref Message m)
+		{
+			// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN 
+			if (m.Msg == 0x0201 || m.Msg == 0x0207 || m.Msg == 0x0204)
+			{
+				foreach (Popup popup in _popupsByOwner.Values)
+				{
+					if (!popup.Visible)
+						continue;
+
+					if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
+						popup.Hide();
+				}
+			}
+
+			return false;
+		}
+
 		private readonly Dictionary<ButtonBase, ButtonImages> _images = new Dictionary<ButtonBase, ButtonImages>();
+
 		private readonly Dictionary<ButtonBase, Popup> _popupsByOwner = new Dictionary<ButtonBase, Popup>();
 	}
 }

@@ -7,6 +7,7 @@ using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Contrib;
 using Lucene.Net.Util;
+using ReadOnlyCollectionsExtensions;
 using Directory = Lucene.Net.Store.Directory;
 using Token = Lucene.Net.Contrib.Token;
 
@@ -29,8 +30,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.29 fix case sensitivity on not analyzed fields
-			set => Version = new IndexVersion(value, "0.29");
+			// 0.30 keywords
+			set => Version = new IndexVersion(value, "0.30");
 		}
 
 		public void LoadIndexes()
@@ -157,7 +158,7 @@ namespace Mtgdb.Dal.Index
 			}
 			catch (Exception ex)
 			{
-				return new SearchResult(ex.Message, highlightTerms, highlightPhrases);
+				return new SearchResult(queryStr, ex.Message, highlightTerms, highlightPhrases);
 			}
 
 			fixNegativeClauses(query);
@@ -171,7 +172,7 @@ namespace Mtgdb.Dal.Index
 				.GroupBy(d => d.GetId(_searcher))
 				.ToDictionary(gr => gr.Key, gr => gr.First().Score);
 
-			return new SearchResult(relevanceById, highlightTerms, highlightPhrases);
+			return new SearchResult(queryStr, relevanceById, highlightTerms, highlightPhrases);
 		}
 
 		private static void fixNegativeClauses(Query query)
@@ -192,53 +193,60 @@ namespace Mtgdb.Dal.Index
 				boolean.Add(new MatchAllDocsQuery(), Occur.MUST);
 		}
 
-		private (Dictionary<string, Token[]> Terms, Dictionary<string, List<string[]>> Phrases) getHighlightElements(string queryStr)
+		private (Dictionary<string, IReadOnlyList<Token>> Terms, Dictionary<string, IReadOnlyList<IReadOnlyList<string>>> Phrases) getHighlightElements(string queryStr)
 		{
 			var tokenizer = new TolerantTokenizer(queryStr);
 			tokenizer.Parse();
 
-			Dictionary<Token, List<(string Term, int Offset)>> analyzedTokens;
+			Dictionary<Token, IReadOnlyList<string>> analyzedTokens;
 
 			lock (_syncQueryParser)
 			{
-				analyzedTokens = tokenizer.Tokens
-					.Where(_ => _.Type.IsAny(TokenType.FieldValue))
-					.ToDictionary(
-						_ => _,
-						_ => _queryParserAnalyzer.GetTokens(
-							_.ParentField,
-							StringEscaper.Unescape(_.Value)).ToList());
-			}
-
-			string[] getAnalyzedTokens(Token t)
-			{
-				if (t.IsPhraseStart)
-					return t.GetPhraseTokens()
-						.SelectMany(p => analyzedTokens[p].Select(_ => _.Term))
-						.ToArray();
-
-				return analyzedTokens[t].Select(_ => _.Term).ToArray();
+				analyzedTokens = tokenizer.Tokens.ToDictionary(
+					_ => _,
+					_ => getAnalyzedTokens(_, queryStr));
 			}
 
 			var highlightTerms = tokenizer.Tokens
-				.Where(_ => !_.IsPhrase && (
-					_.Type.IsAny(TokenType.FieldValue) && analyzedTokens[_].Count < 2 ||
-					_.Type.IsAny(TokenType.AnyChar | TokenType.RegexBody)))
+				.Where(_ => analyzedTokens[_]?.Count == 1)
 				.GroupBy(getDisplayField, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,
-					gr => gr.ToArray());
+					gr => gr.ToReadOnlyList());
 
 			var highlightPhrases = tokenizer.Tokens
-				.Where(_ => _.IsPhraseStart ||
-					!_.IsPhrase &&
-					_.Type.IsAny(TokenType.FieldValue) &&
-					analyzedTokens[_].Count > 1)
+				.Where(_ => analyzedTokens[_]?.Count > 1)
 				.GroupBy(getDisplayField, Str.Comparer)
-				.ToDictionary(gr => gr.Key, gr => gr.Select(getAnalyzedTokens).ToList());
+				.ToDictionary(
+					gr => gr.Key,
+					gr => gr
+						.Select(_ => analyzedTokens[_])
+						.ToReadOnlyList());
 
 			return (highlightTerms, highlightPhrases);
 		}
+
+		private IReadOnlyList<string> getAnalyzedTokens(Token t, string queryStr)
+		{
+			if (t.IsPhrase && !t.IsPhraseStart)
+				return null;
+
+			if (!t.Type.IsAny(TokenType.FieldValue | TokenType.AnyChar | TokenType.RegexBody))
+				return null;
+
+			if (t.IsPhraseStart && !t.Type.IsAny(TokenType.FieldValue))
+				return null;
+
+			string text = t.GetPhraseText(queryStr);
+
+			var result = _queryParserAnalyzer
+				.GetTokens(t.ParentField, StringEscaper.Unescape(text))
+				.Select(_ => _.Term)
+				.ToReadOnlyList();
+
+			return result;
+		}
+
 
 		private static string getDisplayField(Token token)
 		{

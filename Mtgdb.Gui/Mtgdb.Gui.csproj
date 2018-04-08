@@ -185,7 +185,7 @@
     <Compile Include="LayoutView\CardLayout.Designer.cs">
       <DependentUpon>CardLayout.cs</DependentUpon>
     </Compile>
-    <Compile Include="LayoutView\LayoutView.cs" />
+    <Compile Include="LayoutView\MtgLayoutView.cs" />
     <Compile Include="FormRoot\FormRoot.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -23,8 +23,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.27 after refactoring, to be on the safe side
-			set => _version = new IndexVersion(value, "0.27");
+			// 0.28 refactoring
+			set => _version = new IndexVersion(value, "0.28");
 		}
 
 		public void InvalidateIndex()
@@ -73,35 +73,52 @@ namespace Mtgdb.Dal
 			foreach (var keywordQueryTerm in andTerms)
 				if (keywordQueryTerm.Values != null)
 					foreach (string andValue in keywordQueryTerm.Values)
-						query.Add(new TermQuery(new Term(keywordQueryTerm.FieldName.ToLowerInvariant(), toIndexedValue(andValue))), Occur.MUST);
+					{
+						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+
+						if (string.IsNullOrEmpty(andValue))
+							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT);
+						else
+							query.Add(new TermQuery(new Term(fieldName, andValue.ToLowerInvariant())), Occur.MUST);
+					}
 
 			foreach (var keywordQueryTerm in notTerms)
 				if (keywordQueryTerm.Values != null)
 					foreach (string notValue in keywordQueryTerm.Values)
-						query.Add(new TermQuery(new Term(keywordQueryTerm.FieldName.ToLowerInvariant(), toIndexedValue(notValue))), Occur.MUST_NOT);
+					{
+						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+
+						if (string.IsNullOrEmpty(notValue))
+							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST);
+						else
+							query.Add(new TermQuery(new Term(fieldName, notValue.ToLowerInvariant())), Occur.MUST_NOT);
+					}
 
 			foreach (var keywordQueryTerm in orTerms)
 				if (keywordQueryTerm.Values != null && keywordQueryTerm.Values.Count > 0)
 				{
 					var queryTermOr = new BooleanQuery(disableCoord: true);
 					foreach (string orValue in keywordQueryTerm.Values)
-						queryTermOr.Add(new TermQuery(new Term(keywordQueryTerm.FieldName.ToLowerInvariant(), toIndexedValue(orValue))), Occur.SHOULD);
+					{
+						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+
+						if (string.IsNullOrEmpty(orValue))
+						{
+							var booleanQuery = new BooleanQuery();
+							booleanQuery.Add(new BooleanClause(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT));
+							queryTermOr.Add(booleanQuery, Occur.SHOULD);
+						}
+						else
+							queryTermOr.Add(new TermQuery(new Term(fieldName, orValue.ToLowerInvariant())), Occur.SHOULD);
+					}
 
 					query.Add(queryTermOr, Occur.MUST);
 				}
 
-			if (query.Clauses.All(_ => _.Occur == Occur.MUST_NOT))
-				query.Add(new MatchAllDocsQuery(), Occur.MUST);
+			if (query.Clauses.All(_=>_.IsProhibited))
+				query.Add(new MatchAllDocsQuery(), Occur.SHOULD);
 
 			return query;
-		}
-
-		private static string toIndexedValue(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-				return CardKeywords.NoneKeyword;
-
-			return value.ToLowerInvariant();
 		}
 
 		private RAMDirectory createKeywordsFrom(CardRepository repository)

@@ -399,9 +399,7 @@ namespace Mtgdb.Gui
 
 			bool handled = true;
 
-			if (e.KeyData == Keys.F1)
-				System.Diagnostics.Process.Start(AppDir.Root.AddPath(@"help\\html\\Search_input_keyboard_shortcuts.html"));
-			else if (e.KeyData == (Keys.Control | Keys.F4))
+			if (e.KeyData == (Keys.Control | Keys.F4))
 				CloseTab();
 			else if (e.KeyData == (Keys.Control | Keys.Tab))
 				SelectNextTab();

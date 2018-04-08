@@ -687,7 +687,7 @@ namespace Mtgdb.Gui
 
 			_formRoot.UiModel.LanguageController.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
-			_searchStringSubsystem.ApplyFind();
+			_searchStringSubsystem.Apply();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
 			_formRoot.HideTooltips = settings.HideTooltips;

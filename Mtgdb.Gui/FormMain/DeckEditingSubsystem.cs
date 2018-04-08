@@ -10,8 +10,8 @@ namespace Mtgdb.Gui
 {
 	public class DeckEditingSubsystem
 	{
-		private readonly LayoutView _layoutViewCards;
-		private readonly LayoutView _layoutViewDeck;
+		private readonly MtgLayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly Cursor _cursor;
 		private readonly DeckModel _deckModel;
 		private readonly CollectionModel _collectionModel;
@@ -21,8 +21,8 @@ namespace Mtgdb.Gui
 		private readonly Cursor _textSelectionCursor;
 
 		public DeckEditingSubsystem(
-			LayoutView layoutViewCards,
-			LayoutView layoutViewDeck,
+			MtgLayoutView layoutViewCards,
+			MtgLayoutView layoutViewDeck,
 			DeckModel deckModel,
 			CollectionModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
@@ -176,7 +176,7 @@ namespace Mtgdb.Gui
 			return (0, true);
 		}
 
-		private static Card getCard(LayoutView view, HitInfo hitInfo)
+		private static Card getCard(MtgLayoutView view, HitInfo hitInfo)
 		{
 			if (!hitInfo.IsOverImage() && hitInfo.CustomButtonIndex < 0)
 				return null;
@@ -214,7 +214,7 @@ namespace Mtgdb.Gui
 				cancelArgs.Cancel = true;
 		}
 
-		private LayoutView getView(object view)
+		private MtgLayoutView getView(object view)
 		{
 			if (_layoutViewCards.Wraps(view))
 				return _layoutViewCards;

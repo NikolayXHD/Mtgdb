@@ -8,9 +8,9 @@ using Mtgdb.Controls;
 
 namespace Mtgdb.Gui
 {
-	public class LayoutView
+	public class MtgLayoutView
 	{
-		public LayoutView(LayoutViewControl view)
+		public MtgLayoutView(LayoutViewControl view)
 		{
 			_view = view;
 		}
@@ -136,12 +136,6 @@ namespace Mtgdb.Gui
 			remove => _view.SelectionStarted -= value;
 		}
 
-		public event EventHandler LostFocus
-		{
-			add => _view.LostFocus += value;
-			remove => _view.LostFocus -= value;
-		}
-
 		public object GetRow(int cardIndex)
 		{
 			return _view.FindRow(cardIndex);
@@ -243,22 +237,10 @@ namespace Mtgdb.Gui
 
 		public int ScrollWidth => _view.ScrollWidth;
 
-		public Rectangle GetSearchButtonBounds(HitInfo hitInfo)
-		{
-			return _view.GetSearchButtonBounds(hitInfo);
-		}
-
 		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
 		{
 			return _view.GetAlignButtonBounds(hitInfo);
 		}
-
-		public Rectangle GetSortButtonBounds(HitInfo hitInfo)
-		{
-			return _view.GetSortButtonBounds(hitInfo);
-		}
-
-
 
 		public string GetSelectedText() => _view.GetSelectedText();
 
