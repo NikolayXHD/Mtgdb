@@ -18,13 +18,13 @@ namespace Mtgdb.Test
 			[Values("LEA")] string setcode,
 			[Values("Badlands")] string name,
 			[Values(nameof(KeywordDefinitions.ManaCost))] string field,
-			[Values(null)] string expectedValue)
+			[Values("")] string expectedValue)
 		{
 			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
 			var keywords = new CardKeywords();
 			keywords.Parse(card);
 
-			if (expectedValue == null)
+			if (string.IsNullOrEmpty(expectedValue))
 			{
 				Assert.That(keywords.KeywordsByProperty, Does.Not.ContainKey(field));
 				return;
