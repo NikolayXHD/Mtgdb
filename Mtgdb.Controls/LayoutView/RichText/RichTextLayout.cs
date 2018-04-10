@@ -122,7 +122,7 @@ namespace Mtgdb.Controls
 							(rect, hb, he) =>
 							{
 								var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round());
-								var iconRect = new RectangleF(targetRect.Location.Round(), icon.Size);
+								var iconRect = new RectangleF(rect.Location.Round(), icon.Size);
 
 								printSelection(rect, token);
 								_renderContext.Graphics.DrawImage(icon, iconRect);

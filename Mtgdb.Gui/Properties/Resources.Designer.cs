@@ -93,6 +93,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add_one_collection {
+            get {
+                object obj = ResourceManager.GetObject("add_one_collection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap add_tab_32 {
             get {
                 object obj = ResourceManager.GetObject("add_tab_32", resourceCulture);
@@ -783,6 +793,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap remove_one_collection {
+            get {
+                object obj = ResourceManager.GetObject("remove_one_collection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap rightclick_48 {
             get {
                 object obj = ResourceManager.GetObject("rightclick_48", resourceCulture);
@@ -866,6 +886,16 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap shown_40 {
             get {
                 object obj = ResourceManager.GetObject("shown_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sort_48 {
+            get {
+                object obj = ResourceManager.GetObject("sort_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

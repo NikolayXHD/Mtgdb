@@ -381,7 +381,7 @@ namespace Mtgdb.Test
 					Assert.That(card.ManaCost, Does.Contain(mana).IgnoreCase);
 		}
 
-		[TestCase(@"Rarity:mythic", "mythic rare")]
+		[TestCase("Rarity:\"mythic rare\"", "mythic rare")]
 		public void Search_by_Rarity(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Rarity);

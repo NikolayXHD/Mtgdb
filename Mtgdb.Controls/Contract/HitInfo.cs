@@ -44,7 +44,7 @@ namespace Mtgdb.Controls
 			SetField(field: null, isSortButton: false, isSearchButton: false, customButtonIndex: -1, buttonBounds: null);
 		}
 
-
+		public bool IsSomeButton => IsSearchButton || IsSortButton || CustomButtonIndex >= 0 || AlignButtonDirection.HasValue;
 
 		public bool InBounds { get; set; }
 		public Direction? AlignButtonDirection { get; set; }

@@ -41,6 +41,9 @@
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReadOnlyCollectionsInterfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionInterfaces.1.0.0\lib\NET40-client\ReadOnlyCollectionsInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -51,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgsExt.cs" />
+    <Compile Include="Bitmap\BitmapTransformationChain.cs" />
+    <Compile Include="Bitmap\TransformationChain.cs" />
+    <Compile Include="Collections\ListSegment.cs" />
     <Compile Include="Versioning\AppDir.cs" />
     <Compile Include="Collections\CollectionExtensions.cs" />
     <Compile Include="ComparableExtension.cs" />

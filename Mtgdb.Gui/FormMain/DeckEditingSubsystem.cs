@@ -101,7 +101,7 @@ namespace Mtgdb.Gui
 				updateCursor(view.Control,
 					overImage: hitInfo.IsOverImage(),
 					overText: hitInfo.IsOverText(),
-					overButton: hitInfo.IsOverButton());
+					overButton: hitInfo.IsSomeButton);
 			}
 			else
 			{

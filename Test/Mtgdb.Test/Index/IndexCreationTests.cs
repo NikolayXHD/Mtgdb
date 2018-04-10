@@ -18,9 +18,20 @@ namespace Mtgdb.Test
 
 			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
 
-			_luceneSearcher.FilterSet =
-				_luceneSearcher.Spellchecker.FilterSet =
-					_keywordSearcher.FilterSet = filterSet;
+			_luceneSearcher.FilterSet = _keywordSearcher.FilterSet = filterSet;
+		}
+
+		[Test, Order(0)]
+		public void KeywordSearcher_creates_index()
+		{
+			_keywordSearcher.IndexDirectoryParent += "-test";
+			_keywordSearcher.InvalidateIndex();
+
+			Assert.That(_keywordSearcher.IsUpToDate, Is.Not.True);
+
+			_keywordSearcher.Load(Repo);
+
+			Assert.That(_keywordSearcher.IsUpToDate);
 		}
 
 		[Test, Order(0)]
@@ -47,19 +58,6 @@ namespace Mtgdb.Test
 			_luceneSearcher.LoadSpellcheckerIndex();
 
 			Assert.That(_luceneSearcher.Spellchecker.IsUpToDate);
-		}
-
-		[Test, Order(0)]
-		public void KeywordSearcher_creates_index()
-		{
-			_keywordSearcher.IndexDirectoryParent += "-test";
-			_keywordSearcher.InvalidateIndex();
-
-			Assert.That(_keywordSearcher.IsUpToDate, Is.Not.True);
-
-			_keywordSearcher.Load(Repo);
-
-			Assert.That(_keywordSearcher.IsUpToDate);
 		}
 
 		[Test, Order(1)]
@@ -101,7 +99,9 @@ namespace Mtgdb.Test
 		[Test, Order(2)]
 		public void LuceneSpellchecker_searches()
 		{
-			var suggest = _luceneSearcher.Spellchecker.SuggestValues("vamp", "nameen", "en");
+			string query = "nameen:vampire";
+
+			var suggest = _luceneSearcher.Spellchecker.Suggest("en", query, caret: query.Length).Values;
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
 			Assert.That(suggest, Has.Some.Contains("vampire"));

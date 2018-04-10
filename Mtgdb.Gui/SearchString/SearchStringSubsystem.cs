@@ -45,7 +45,6 @@ namespace Mtgdb.Gui
 			_highligter.Highlight();
 
 			_listBoxSuggest.DataSource = _suggestValues;
-			_analyzer = new MtgAnalyzer();
 		}
 
 		public void SubscribeToEvents()
@@ -56,6 +55,7 @@ namespace Mtgdb.Gui
 			_findEditor.TextChanged += findTextChanged;
 			_findEditor.SelectionChanged += findSelectionChanged;
 			_findEditor.LocationChanged += findLocationChanged;
+			_findEditor.LostFocus += findLostFocus;
 
 			_listBoxSuggest.Click += suggestClick;
 			_listBoxSuggest.KeyUp += suggestKeyUp;
@@ -72,6 +72,7 @@ namespace Mtgdb.Gui
 			_findEditor.TextChanged -= findTextChanged;
 			_findEditor.SelectionChanged -= findSelectionChanged;
 			_findEditor.LocationChanged -= findLocationChanged;
+			_findEditor.LostFocus -= findLostFocus;
 
 			_listBoxSuggest.Click -= suggestClick;
 			_listBoxSuggest.KeyUp -= suggestKeyUp;
@@ -202,7 +203,7 @@ namespace Mtgdb.Gui
 			if (_suggestValues.Count == 0)
 			{
 				_listBoxSuggest.Height = 0;
-				closeSuggest();
+				continueEditingAfterSuggest();
 			}
 			else
 			{
@@ -256,6 +257,14 @@ namespace Mtgdb.Gui
 			updateSuggestLocation();
 		}
 
+		private void findLostFocus(object sender, EventArgs e)
+		{
+			if (!_listBoxSuggest.Focused)
+				closeSuggest();
+		}
+
+
+
 		public void UpdateSuggestInput()
 		{
 			SuggestModel.SearchInputStateCurrent = getSearchInputState();
@@ -305,7 +314,7 @@ namespace Mtgdb.Gui
 						if (_listBoxSuggest.SelectedIndex > 0)
 							_listBoxSuggest.SelectedIndex--;
 						else
-							closeSuggest();
+							continueEditingAfterSuggest();
 					}
 
 					e.Handled = true;
@@ -313,7 +322,7 @@ namespace Mtgdb.Gui
 
 				case Keys.Escape:
 					if (_listBoxSuggest.Visible)
-						closeSuggest();
+						continueEditingAfterSuggest();
 
 					e.Handled = true;
 					break;
@@ -326,7 +335,7 @@ namespace Mtgdb.Gui
 					else
 					{
 						selectSuggest();
-						closeSuggest();
+						continueEditingAfterSuggest();
 					}
 
 					e.Handled = true;
@@ -463,7 +472,10 @@ namespace Mtgdb.Gui
 			if (fieldName != null)
 				return (GetFieldValueQuery(fieldName, fieldValue), TokenType.None);
 
-			return (preProcessArbitraryPastedText(text), TokenType.FieldValue);
+			if (TokenCatalog.TypeByValue.Keys.Any(text.Contains))
+				return (text, TokenType.None);
+
+			return (preProcessFieldValue(text), TokenType.FieldValue);
 		}
 
 		private static string preProcessTextCopiedFromSearchInput(string text)
@@ -471,7 +483,7 @@ namespace Mtgdb.Gui
 			return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
 		}
 
-		private static string preProcessArbitraryPastedText(string text)
+		private static string preProcessFieldValue(string text)
 		{
 			string[] postfixes =
 			{
@@ -484,7 +496,7 @@ namespace Mtgdb.Gui
 				if (text.EndsWith(postfix, Str.Comparison))
 					text = text.Substring(0, text.Length - postfix.Length);
 
-			return text;
+			return getValueExpression(text);
 		}
 
 		private static (string FieldName, string FieldValue) parseCopiedFromTooltip(string text)
@@ -506,49 +518,37 @@ namespace Mtgdb.Gui
 
 		private void pasteText(string value, TokenType type, SearchInputState source, Token token)
 		{
-			int left;
-			int length;
+			int left, length;
+			(Token start, Token end) = (null, null);
 
-			if (token != null && source.SelectionLength == 0)
-			{
-				left = token.Position;
-				length = token.Value.Length;
-			}
+			if (token == null || source.SelectionLength != 0)
+				(left, length) = (source.Caret, source.SelectionLength);
 			else
 			{
-				left = source.Caret;
-				length = source.SelectionLength;
+				if (type == TokenType.FieldValue && token.IsPhrase || value.StartsWith("\"") && value.EndsWith("\""))
+					(start, end) = (token.PhraseOpen, token.PhraseClose);
+				else
+					(start, end) = (token, token);
+
+				(left, length) = (start.Position, end.Position + end.Value.Length - start.Position);
 			}
 
 			string prefix = source.Text.Substring(0, left).Trim();
 			string suffix = source.Text.Substring(left + length).Trim();
 
-			if (type.IsAny(TokenType.Field))
-			{
-				if (suffix.StartsWith(":"))
-					suffix = suffix.Substring(1);
-			}
-			else if (type.IsAny(TokenType.FieldValue))
-			{
-				bool isInsidePhrase = token?.IsPhrase == true || token?.Type.IsAny(TokenType.OpenQuote) == true;
+			if (type.IsAny(TokenType.Field) && suffix.StartsWith(":"))
+				suffix = suffix.Substring(1);
 
-				lock (_syncAnalyzer)
-					value = _analyzer.GetValueExpression(token?.ParentField, value);
-
-				if (isInsidePhrase && value.StartsWith("\"") && value.EndsWith("\""))
-					value = value.Substring(1, value.Length - 2);
-			}
-
-			if (token?.Previous != null && !token.Previous.Type.IsAny(TokenType.AnyOpen))
+			if (start?.Previous?.Type.IsAny(TokenType.AnyOpen) == false)
 				value = " " + value;
 
-			if (token?.Next == null || !token.Next.Type.IsAny(TokenType.AnyClose))
+			if (end?.Next?.Type.IsAny(TokenType.AnyClose) != true)
 				value += " ";
 
 			var replacement = prefix + value + suffix;
 			int caret = left + value.Length;
 
-			setFindText(replacement, caret: caret);
+			setFindText(replacement, caret);
 			updateBackColor();
 		}
 
@@ -559,13 +559,10 @@ namespace Mtgdb.Gui
 			if (fieldName == nameof(Card.Image))
 				fieldName = MtgQueryParser.Like;
 
-			string valueExpression;
-
-			lock (_syncAnalyzer)
-				valueExpression = _analyzer.GetValueExpression(fieldName, fieldValue);
+			string valueExpression = getValueExpression(fieldValue);
 
 			if (string.IsNullOrEmpty(valueExpression))
-				return $"-{fieldName}:*";
+				return $"-{fieldName}: *";
 
 			var builder = new StringBuilder();
 
@@ -573,11 +570,20 @@ namespace Mtgdb.Gui
 				builder.Append('+');
 
 			builder.Append(fieldName);
-			builder.Append(':');
-
+			builder.Append(": ");
 			builder.Append(valueExpression);
 
 			return builder.ToString();
+		}
+
+		private static string getValueExpression(string value)
+		{
+			string escaped = StringEscaper.Escape(value);
+
+			if (!value.Any(char.IsWhiteSpace))
+				return escaped;
+			
+			return $"\"{escaped}\"";
 		}
 
 		private void findKeyUp(object sender, KeyEventArgs e)
@@ -595,28 +601,34 @@ namespace Mtgdb.Gui
 			if (e.KeyCode == Keys.Enter)
 			{
 				selectSuggest();
-				closeSuggest();
+				continueEditingAfterSuggest();
 			}
 			else if (e.KeyCode == Keys.Up && _listBoxSuggest.SelectedIndex == 0)
 				focusSearch();
 			else if (e.KeyCode == Keys.Escape)
-				closeSuggest();
+				continueEditingAfterSuggest();
 		}
 
 		private void suggestClick(object sender, EventArgs e)
 		{
 			selectSuggest();
-			closeSuggest();
+			continueEditingAfterSuggest();
 		}
 
 
-		private void closeSuggest()
+		private void continueEditingAfterSuggest()
 		{
 			if (_listBoxSuggest.Visible)
 			{
 				_listBoxSuggest.Visible = false;
 				focusSearch();
 			}
+		}
+
+		private void closeSuggest()
+		{
+			if (_listBoxSuggest.Visible)
+				_listBoxSuggest.Visible = false;
 		}
 
 		private void selectSuggest()
@@ -645,6 +657,9 @@ namespace Mtgdb.Gui
 
 			if (string.IsNullOrEmpty(value))
 				return;
+
+			if (type.IsAny(TokenType.FieldValue))
+				value = getValueExpression(value);
 
 			pasteText(value, type, source, token);
 		}
@@ -811,9 +826,7 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _viewCards;
 		private readonly MtgLayoutView _viewDeck;
 		private readonly SearchStringHighlighter _highligter;
-		private readonly MtgAnalyzer _analyzer;
 
 		private readonly object _syncSuggest = new object();
-		private readonly object _syncAnalyzer = new object();
 	}
 }

@@ -237,7 +237,7 @@ namespace Mtgdb.Util
 
 					sw.Start();
 
-					var scaledSize = rect.Size.MultiplyBy(factors[f]);
+					var scaledSize = rect.Size.MultiplyBy(factors[f]).Round();
 					for (int p = 0; p < postScaleFilters.Count; p++)
 					{
 						int i = f * postScaleFilters.Count + p;

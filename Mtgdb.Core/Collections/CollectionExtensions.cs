@@ -173,6 +173,9 @@ namespace Mtgdb
 		public static IOrderedEnumerable<TVal> OrderBy<TVal>(this IEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
 			sequence.OrderBy(_ => _, comparer);
 
+		public static IOrderedEnumerable<TVal> ThenBy<TVal>(this IOrderedEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
+			sequence.ThenBy(_ => _, comparer);
+
 		public static void UnionWithNullable<T>(this HashSet<T> set, IEnumerable<T> values)
 		{
 			if (values == null)
@@ -182,5 +185,10 @@ namespace Mtgdb
 		}
 
 		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Enumerable.Repeat(value, 1));
+	}
+
+	public static class Sequence
+	{
+		public static IEnumerable<T> From<T>(params T[] values) => values;
 	}
 }

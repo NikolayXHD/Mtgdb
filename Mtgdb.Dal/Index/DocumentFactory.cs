@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Miscellaneous;
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Lucene.Net.Util;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -13,25 +12,22 @@ namespace Mtgdb.Dal.Index
 	{
 		static DocumentFactory()
 		{
-			_langs = CardLocalization.GetAllLanguages().ToList();
+			addTextField(nameof(KeywordDefinitions.Keywords), nameof(Card.Text));
 
-			addTextField(nameof(KeywordDefinitions.Keywords), nameof(Card.Text), analyze: false);
+			addTextField(nameof(Card.NameEn));
+			addTextField(nameof(Card.TypeEn));
+			addTextField(nameof(Card.TextEn));
+			addTextField(nameof(Card.FlavorEn));
 
 			addTextField(nameof(Card.Color));
 
 			addTextField(nameof(Card.SetName));
-			addTextField(nameof(Card.SetCode), analyze: false);
+			addTextField(nameof(Card.SetCode));
 			addTextField(nameof(Card.Artist));
 
 			addTextField(nameof(Card.OriginalText), nameof(Card.Text));
 			addTextField(nameof(Card.OriginalType), nameof(Card.Type));
 
-			addTextField(nameof(Card.NameEn), nameof(Card.Name));
-			addTextField(nameof(Card.NameEnNa), nameof(Card.Name), analyze: false);
-
-			addTextField(nameof(Card.TextEn), nameof(Card.Text));
-			addTextField(nameof(Card.FlavorEn), nameof(Card.Flavor));
-			addTextField(nameof(Card.TypeEn), nameof(Card.Type));
 			addTextField(nameof(Card.Supertypes), nameof(Card.Type));
 			addTextField(nameof(Card.Types), nameof(Card.Type));
 			addTextField(nameof(Card.Subtypes), nameof(Card.Type));
@@ -40,10 +36,10 @@ namespace Mtgdb.Dal.Index
 			addTextField(nameof(Card.RestrictedIn), nameof(Card.Rulings));
 			addTextField(nameof(Card.BannedIn), nameof(Card.Rulings));
 
-			addTextField(nameof(Card.Power), analyze: false);
-			addTextField(nameof(Card.Toughness), analyze: false);
-			addTextField(nameof(Card.Loyalty), analyze: false);
-			addTextField(nameof(Card.ReleaseDate), analyze: false);
+			addTextField(nameof(Card.Power));
+			addTextField(nameof(Card.Toughness));
+			addTextField(nameof(Card.Loyalty));
+			addTextField(nameof(Card.ReleaseDate));
 			addTextField(nameof(Card.Layout));
 
 			addTextField(nameof(Card.GeneratedMana), nameof(Card.Text));
@@ -62,13 +58,9 @@ namespace Mtgdb.Dal.Index
 			addFloatField(nameof(Card.PricingMid));
 			addFloatField(nameof(Card.PricingHigh));
 
-			foreach (var lang in _langs)
+			foreach (var lang in Languages)
 			{
-				if (Str.Equals(lang, CardLocalization.DefaultLanguage))
-					continue;
-
 				addSpecificTextField(nameof(Card.Name), lang);
-				addSpecificTextField(nameof(Card.NameNa), lang, analyze: false);
 				addSpecificTextField(nameof(Card.Type), lang);
 				addSpecificTextField(nameof(Card.Text), lang);
 				addSpecificTextField(nameof(Card.Flavor), lang);
@@ -76,7 +68,59 @@ namespace Mtgdb.Dal.Index
 
 			NumericFields.UnionWith(FloatFields);
 			NumericFields.UnionWith(IntFields);
+			UserFields.Add(MtgQueryParser.Like);
 		}
+
+		private static void addTextField(string userField, string displayField = null)
+		{
+			_textFields.Add(userField);
+			UserFields.Add(userField);
+
+			if (displayField != null)
+				DisplayFieldByIndexField.Add(userField, displayField);
+
+			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
+				NotAnalyzedFields.Add(userField + SpellcheckerDefinitions.NotAnalyzedSuffix);
+		}
+
+		private static void addSpecificTextField(string userField, string language)
+		{
+			if (language == null)
+				throw new ArgumentNullException(nameof(language));
+
+			UserFields.Add(userField);
+			LocalizedFields.Add(userField);
+
+			userField = userField.ToLowerInvariant();
+
+			var localized = getLocalizedField(userField, language);
+			_textFields.Add(localized);
+
+			DisplayFieldByIndexField.Add(localized, userField);
+
+			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
+				NotAnalyzedFields.Add(localized + SpellcheckerDefinitions.NotAnalyzedSuffix);
+		}
+
+		private static void addFloatField(string userField, string displayFieldName = null)
+		{
+			UserFields.Add(userField);
+			FloatFields.Add(userField);
+
+			if (displayFieldName != null)
+				DisplayFieldByIndexField.Add(userField, displayFieldName);
+		}
+
+		private static void addIntField(string userField, string displayFieldName = null)
+		{
+			UserFields.Add(userField);
+			IntFields.Add(userField);
+
+			if (displayFieldName != null)
+				DisplayFieldByIndexField.Add(userField, displayFieldName);
+		}
+
+
 
 		public static Document ToDocument(this CardKeywords cardKeywords)
 		{
@@ -106,7 +150,6 @@ namespace Mtgdb.Dal.Index
 
 			// Tested
 			doc.addTextField(nameof(card.NameEn), card.NameEn);
-			doc.addTextField(nameof(card.NameEnNa), card.NameEn);
 
 			// Tested
 			doc.addTextField(nameof(card.SetName), card.SetName);
@@ -163,15 +206,10 @@ namespace Mtgdb.Dal.Index
 				// Tested
 				if (Str.Equals(note.Legality, Legality.Legal))
 					doc.addTextField(nameof(card.LegalIn), note.Format);
-
-				// Tested
 				else if (Str.Equals(note.Legality, Legality.Restricted))
 					doc.addTextField(nameof(card.RestrictedIn), note.Format);
-
-				// Tested
 				else if (Str.Equals(note.Legality, Legality.Banned))
 					doc.addTextField(nameof(card.BannedIn), note.Format);
-
 				else
 					throw new NotSupportedException($"Unknown legality {note.Legality}");
 			}
@@ -243,15 +281,12 @@ namespace Mtgdb.Dal.Index
 			if (!string.IsNullOrEmpty(card.Layout))
 				doc.addTextField(nameof(Card.Layout), card.Layout);
 
-			foreach (var lang in _langs)
+			foreach (var lang in Languages)
 			{
 				// Tested
 				string name = card.Localization?.GetName(lang);
 				if (!string.IsNullOrEmpty(name))
-				{
-					doc.addTextField(nameof(Card.Name), name, lang);
-					doc.addTextField(nameof(Card.NameNa), name, lang);
-				}
+					doc.addTextField(nameof(Card.Name), lang, name);
 
 				// Tested
 				string type = card.Localization?.GetType(lang);
@@ -260,22 +295,24 @@ namespace Mtgdb.Dal.Index
 					var typeParts = type.Split(new[] { ' ', '—' }, StringSplitOptions.RemoveEmptyEntries);
 
 					foreach (string typePart in typeParts)
-						doc.addTextField(nameof(Card.Type), typePart, lang);
+						doc.addTextField(nameof(Card.Type), lang, typePart);
 				}
 
 				// Tested
 				string text = card.Localization?.GetAbility(lang);
 				if (!string.IsNullOrEmpty(text))
-					doc.addTextField(nameof(Card.Text), text, lang);
+					doc.addTextField(nameof(Card.Text), lang, text);
 
 				// Tested
 				string flavor = card.Localization?.GetFlavor(lang);
 				if (!string.IsNullOrEmpty(flavor))
-					doc.addTextField(nameof(Card.Flavor), flavor, lang);
+					doc.addTextField(nameof(Card.Flavor), lang, flavor);
 			}
 
 			return doc;
 		}
+
+
 
 		private static void addIdField(this Document doc, string fieldName, int fieldValue)
 		{
@@ -285,135 +322,86 @@ namespace Mtgdb.Dal.Index
 			doc.Add(field);
 		}
 
-		private static void addTextField(this Document doc, string fieldName, string fieldValue)
+
+
+		private static void addTextField(this Document doc, string userField, string fieldValue)
 		{
-			fieldName = fieldName.ToLowerInvariant();
-			addSpecificTextField(doc, fieldName, fieldValue);
+			userField = userField.ToLowerInvariant();
+			addSpecificTextField(doc, userField, userField, fieldValue);
 		}
 
-		private static void addTextField(this Document doc, string fieldName, string fieldValue, string language)
-		{
-			if (language == null)
-				throw new ArgumentNullException(nameof(language));
-
-			fieldName = fieldName.ToLowerInvariant();
-
-			var localizedFieldName = getLocalizedField(fieldName, language);
-			addSpecificTextField(doc, localizedFieldName, fieldValue);
-		}
-
-		private static void addSpecificTextField(Document doc, string fieldName, string fieldValue)
-		{
-			fieldName = fieldName.ToLowerInvariant();
-
-			if (!TextFields.Contains(fieldName))
-				throw new InvalidOperationException($"Text field {fieldName} not intialized");
-
-			TextField field;
-			if (NotAnalyzedFields.Contains(fieldName))
-				field = new TextField(fieldName, new SingleTokenTokenStream(new Token(fieldValue.ToLowerInvariant(), 0, fieldValue.Length)));
-			else
-				field = new TextField(fieldName, fieldValue, Field.Store.NO);
-
-			doc.Add(field);
-		}
-
-		private static void addNumericField(this Document doc, string fieldName, float fieldValue)
-		{
-			fieldName = fieldName.ToLowerInvariant();
-
-			if (!fieldName.IsFloatField())
-				throw new ArgumentException($"Numeric float field {fieldName} not intialized");
-
-			var field = new SingleField(fieldName, fieldValue, Field.Store.NO);
-			doc.Add(field);
-		}
-
-		private static void addNumericField(this Document doc, string fieldName, int fieldValue)
-		{
-			fieldName = fieldName.ToLowerInvariant();
-
-			if (!fieldName.IsIntField())
-				throw new ArgumentException($"Numeric int field {fieldName} not intialized");
-
-			var field = new Int32Field(fieldName, fieldValue, Field.Store.NO);
-			doc.Add(field);
-		}
-
-
-
-		private static void addTextField(string fieldName, string displayField = null, bool analyze = true)
-		{
-			TextFields.Add(fieldName);
-			UserFields.Add(fieldName);
-
-			if (displayField != null)
-				DisplayFieldByIndexField.Add(fieldName, displayField);
-
-			if (!analyze)
-				NotAnalyzedFields.Add(fieldName);
-		}
-
-		private static void addSpecificTextField(string fieldName, string language, bool analyze = true)
+		private static void addTextField(this Document doc, string userField, string language, string fieldValue)
 		{
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
 
-			UserFields.Add(fieldName);
+			userField = userField.ToLowerInvariant();
 
-			fieldName = fieldName.ToLowerInvariant();
-
-			_localizedFields.Add(fieldName);
-
-			var localizedFieldName = getLocalizedField(fieldName, language);
-			TextFields.Add(localizedFieldName);
-
-			DisplayFieldByIndexField.Add(localizedFieldName, fieldName);
-
-			if (!analyze)
-				NotAnalyzedFields.Add(localizedFieldName);
+			var localized = getLocalizedField(userField, language);
+			addSpecificTextField(doc, userField, localized, fieldValue);
 		}
 
-		private static void addFloatField(string fieldName, string displayFieldName = null)
+		private static void addSpecificTextField(Document doc, string userField, string localized, string fieldValue)
 		{
-			UserFields.Add(fieldName);
-			FloatFields.Add(fieldName);
+			localized = localized.ToLowerInvariant();
 
-			if (displayFieldName != null)
-				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
+			if (!_textFields.Contains(localized))
+				throw new InvalidOperationException($"Text field {localized} not intialized");
+
+			doc.Add(new TextField(localized, fieldValue, Field.Store.NO));
+
+			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
+				doc.Add(new TextField(localized + SpellcheckerDefinitions.NotAnalyzedSuffix, fieldValue, Field.Store.NO));
 		}
 
-		private static void addIntField(string fieldName, string displayFieldName = null)
+
+
+		private static void addNumericField(this Document doc, string userField, float fieldValue)
 		{
-			UserFields.Add(fieldName);
-			IntFields.Add(fieldName);
+			userField = userField.ToLowerInvariant();
 
-			if (displayFieldName != null)
-				DisplayFieldByIndexField.Add(fieldName, displayFieldName);
+			if (!userField.IsFloatField())
+				throw new ArgumentException($"Numeric float field {userField} not intialized");
+
+			var field = new SingleField(userField, fieldValue, Field.Store.NO);
+			doc.Add(field);
 		}
 
-		private static string getLocalizedField(string fieldName, string language)
+		private static void addNumericField(this Document doc, string userField, int fieldValue)
+		{
+			userField = userField.ToLowerInvariant();
+
+			if (!userField.IsIntField())
+				throw new ArgumentException($"Numeric int field {userField} not intialized");
+
+			var field = new Int32Field(userField, fieldValue, Field.Store.NO);
+			doc.Add(field);
+		}
+
+
+
+		private static string getLocalizedField(string userField, string language)
 		{
 			if (language == null)
-				throw new InvalidOperationException($"Language must be specified for localized field {fieldName}");
+				throw new InvalidOperationException($"Language must be specified for localized field {userField}");
 
-			if (Str.Equals(language, CardLocalization.DefaultLanguage))
-				return fieldName + CardLocalization.DefaultLanguage;
+			if (LocalizedFields.Contains(userField))
+				return userField + language;
 
-			return fieldName + "_" + language;
+			return userField;
 		}
 
-		public static string Localize(string field, string language)
+
+
+		public static string GetFieldLocalizedIn(this string userField, string language)
 		{
-			field = field.ToLowerInvariant();
+			userField = userField.ToLowerInvariant();
 
-			if (_localizedFields.Contains(field))
-				return getLocalizedField(field, language);
+			if (LocalizedFields.Contains(userField))
+				return getLocalizedField(userField, language);
 
-			return field;
+			return userField;
 		}
-
-
 
 		public static int GetId(this ScoreDoc scoreDoc, IndexSearcher indexSearcher)
 		{
@@ -452,11 +440,6 @@ namespace Mtgdb.Dal.Index
 			return NumericFields.Contains(field);
 		}
 
-		public static bool IsNotAnalyzedField(this string field)
-		{
-			return NotAnalyzedFields.Contains(field);
-		}
-
 		public static bool IsIntField(this string field)
 		{
 			return IntFields.Contains(field);
@@ -467,51 +450,31 @@ namespace Mtgdb.Dal.Index
 			return FloatFields.Contains(field);
 		}
 
-		private static readonly List<string> _langs;
+
+
+		public static readonly IReadOnlyList<string> Languages =
+			CardLocalization.GetAllLanguages()
+				.Where(lang => !Str.Equals(lang, CardLocalization.DefaultLanguage))
+				.ToReadOnlyList();
 
 		public static readonly HashSet<string> IntFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> FloatFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> NumericFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> TextFields = new HashSet<string>(Str.Comparer);
+		private static readonly HashSet<string> _textFields = new HashSet<string>(Str.Comparer);
 
-		private static readonly HashSet<string> _localizedFields = new HashSet<string>(Str.Comparer);
+		public static readonly HashSet<string> LocalizedFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> NotAnalyzedFields = new HashSet<string>(Str.Comparer);
 
-		public static readonly Dictionary<string, Func<Card, string>> LimitedValueGetters =
-			new Dictionary<string, Func<Card, string>>(Str.Comparer)
-			{
-				[nameof(Card.SetName)] = c => c.SetName,
-				[nameof(Card.SetCode)] = c => c.SetCode,
-				[nameof(Card.Artist)] = c => c.Artist,
-				[nameof(Card.Supertypes)] = c => c.Supertypes,
-				[nameof(Card.Types)] = c => c.Types,
-				[nameof(Card.Power)] = c => c.Power,
-				[nameof(Card.Toughness)] = c => c.Toughness,
-				[nameof(Card.Loyalty)] = c => c.Loyalty,
-				[nameof(Card.Rarity)] = c => c.Rarity,
-				[nameof(Card.ReleaseDate)] = c => c.ReleaseDate,
-				[nameof(Card.Layout)] = c => c.Layout
-			};
-
-		public static readonly Dictionary<string, Func<Card, IEnumerable<string>>> CombinatoricValueGetters =
-			new Dictionary<string, Func<Card, IEnumerable<string>>>(Str.Comparer)
-			{
-				[nameof(Card.LegalIn)] = c => c.LegalFormats,
-				[nameof(Card.RestrictedIn)] = c => c.RestrictedFormats,
-				[nameof(Card.BannedIn)] = c => c.BannedFormats,
-				[nameof(Card.GeneratedMana)] = c => c.GeneratedManaArr
-			};
-
-		public static readonly HashSet<string> CombinatoricValueFields = new HashSet<string>
+		public static HashSet<string> NotAnalyzedFields { get; } = new HashSet<string>(Str.Comparer)
 		{
-			nameof(Card.OriginalType),
-			nameof(Card.TypeEn),
-			nameof(Card.Type),
-			nameof(Card.Subtypes),
-			nameof(Card.Color),
-			nameof(Card.ManaCost),
-			nameof(KeywordDefinitions.Keywords)
+			nameof(KeywordDefinitions.Keywords),
+			nameof(Card.SetCode),
+			nameof(Card.Power),
+			nameof(Card.Toughness),
+			nameof(Card.Loyalty),
+			nameof(Card.ReleaseDate),
+			nameof(Card.Rarity),
+			nameof(Card.Layout)
 		};
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);

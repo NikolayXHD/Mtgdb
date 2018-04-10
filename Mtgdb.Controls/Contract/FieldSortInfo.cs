@@ -1,3 +1,4 @@
+﻿using System;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -16,7 +17,21 @@ namespace Mtgdb.Controls
 
 		public override string ToString()
 		{
-			return $"{FieldName} {SortOrder}";
+			string sortGlyph;
+			switch (SortOrder)
+			{
+				case SortOrder.Ascending:
+					sortGlyph = "↑";
+					break;
+				case SortOrder.Descending:
+					sortGlyph = "↓";
+					break;
+				default:
+					sortGlyph = "↕";
+					break;
+			}
+
+			return $"{FieldName} {sortGlyph}";
 		}
 	}
 }

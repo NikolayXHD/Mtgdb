@@ -21,19 +21,20 @@ namespace Mtgdb.Controls
 			return (int) Math.Round(value);
 		}
 
-		public static SizeF ScaleBy(this SizeF original, SizeF scale)
+		public static SizeF MultiplyBy(this SizeF original, SizeF scale)
 		{
 			return new SizeF(
 				original.Width * scale.Width,
 				original.Height * scale.Height);
 		}
 
-		public static Size ScaleBy(this Size original, SizeF scale)
+		public static SizeF MultiplyBy(this Size original, SizeF scale)
 		{
-			return ScaleBy((SizeF) original, scale).ToSize();
+			var product = MultiplyBy((SizeF) original, scale);
+			return product;
 		}
 
-		public static Point ScaleBy(this Point original, SizeF scale)
+		public static Point MultiplyBy(this Point original, SizeF scale)
 		{
 			return new Point(
 				(int) (original.X * scale.Width),
@@ -45,9 +46,14 @@ namespace Mtgdb.Controls
 			return new SizeF(value * size.Width, value * size.Height);
 		}
 
-		public static Size MultiplyBy(this Size size, float value)
+		public static SizeF ToPower(this SizeF size, float value)
 		{
-			return new Size((int) (value * size.Width), (int) (value * size.Height));
+			return new SizeF((float) Math.Pow(size.Width, value), (float) Math.Pow(size.Height, value));
+		}
+
+		public static SizeF MultiplyBy(this Size size, float value)
+		{
+			return new SizeF(value * size.Width, value * size.Height);
 		}
 
 		public static Size MultiplyBy(this Size size, Size value)
@@ -58,6 +64,31 @@ namespace Mtgdb.Controls
 		public static Size MultiplyBy(this Point point, Size value)
 		{
 			return new Size(value.Width * point.X, value.Height * point.Y);
+		}
+
+		public static SizeF DivideBy(this Size size, SizeF value)
+		{
+			return new SizeF(size.Width / value.Width, size.Height / value.Height);
+		}
+
+		public static SizeF DivideBy(this SizeF size, SizeF value)
+		{
+			return new SizeF(size.Width / value.Width, size.Height / value.Height);
+		}
+
+		public static SizeF DivideBy(this SizeF size, float value)
+		{
+			return new SizeF(size.Width / value, size.Height / value);
+		}
+
+		public static float Max(this SizeF size)
+		{
+			return Math.Max(size.Width, size.Height);
+		}
+
+		public static float Min(this SizeF size)
+		{
+			return Math.Min(size.Width, size.Height);
 		}
 
 		public static Rectangle Plus(this Rectangle rect, Point offset)
@@ -94,6 +125,11 @@ namespace Mtgdb.Controls
 		public static SizeF Plus(this SizeF left, SizeF right)
 		{
 			return new SizeF(left.Width + right.Width, left.Height + right.Height);
+		}
+
+		public static SizeF Plus(this SizeF left, float right)
+		{
+			return new SizeF(left.Width + right, left.Height + right);
 		}
 
 		public static Size Plus(this Size left, Size right)

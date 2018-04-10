@@ -1,10 +1,10 @@
 namespace Mtgdb.Dal.Index
 {
-	public interface IStringDistance
+	public interface IStringSimilarity
 	{
 		/// <summary>
 		/// In fact it is not distance, it is similarity
 		/// </summary>
-		float GetDistance(string s1, string s2);
+		float GetSimilarity(string s1, string s2);
 	}
 }

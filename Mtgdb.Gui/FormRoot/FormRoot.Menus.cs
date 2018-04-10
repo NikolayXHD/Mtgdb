@@ -320,6 +320,7 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
 				_buttonLanguage,
 				container: _layoutLanguage,
+				openOnHover: false,
 				closeMenuOnClick: true));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuDonate,
@@ -353,7 +354,7 @@ namespace Mtgdb.Gui
 
 		private void setupButton(ButtonBase button, Bitmap image, bool areImagesDoublesized)
 		{
-			var hoveredImage = image?.TransformColors(1.1f, 1.05f);
+			var hoveredImage = image?.TransformColors(saturation: 1.15f, brightness: 1.2f);
 
 			_buttonSubsystem.SetupButton(button,
 				new ButtonImages(

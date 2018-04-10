@@ -12,7 +12,6 @@ namespace Mtgdb.Gui
 		public SuggestModel(LuceneSearcher searcher)
 		{
 			_spellchecker = searcher.Spellchecker;
-			_spellchecker.MaxCount = 20;
 			_suggestThread = new Thread(_ => suggestThread());
 		}
 
@@ -29,7 +28,7 @@ namespace Mtgdb.Gui
 			var searchState =_searchInputState = SearchInputStateCurrent;
 			_language = Ui.LanguageController.Language;
 
-			var suggest = _spellchecker.Suggest(searchState.Text, searchState.Caret, _language);
+			var suggest = _spellchecker.Suggest(_language, searchState.Text, searchState.Caret);
 
 			if (isSuggestUpToDate())
 				Suggested?.Invoke(suggest, searchState);

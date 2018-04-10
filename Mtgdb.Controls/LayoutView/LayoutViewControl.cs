@@ -522,7 +522,7 @@ namespace Mtgdb.Controls
 
 			var hitInfo = CalcHitInfo(e.Location);
 
-			if (_hitInfo.IsSearchButton || _hitInfo.IsSortButton)
+			if (_hitInfo.IsSomeButton)
 				return;
 
 			var cancelArgs = new CancelEventArgs();
@@ -979,7 +979,7 @@ namespace Mtgdb.Controls
 			var cell = getCornerCardCell(Direction.BottomRight);
 
 			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point)).RightBottom() +
-				LayoutOptions.CardInterval.ScaleBy(new SizeF(0.5f, 0.5f));
+				LayoutOptions.CardInterval.MultiplyBy(0.5f).Round();
 
 			var cardToDisplayRightBottom = getDisplayBounds()
 				.RightBottom()

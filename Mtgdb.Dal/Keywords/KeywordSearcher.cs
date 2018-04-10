@@ -44,7 +44,7 @@ namespace Mtgdb.Dal
 			if (_version.IsUpToDate)
 				_index = new RAMDirectory(FSDirectory.Open(_version.Directory), IOContext.READ_ONCE);
 			else
-				_index = createKeywordsFrom(repository);
+				_index = new RAMDirectory(createKeywordsFrom(repository), IOContext.READ_ONCE);
 
 			_indexReader = DirectoryReader.Open(_index);
 			_searcher = new IndexSearcher(_indexReader);
@@ -121,7 +121,7 @@ namespace Mtgdb.Dal
 			return query;
 		}
 
-		private RAMDirectory createKeywordsFrom(CardRepository repository)
+		private FSDirectory createKeywordsFrom(CardRepository repository)
 		{
 			if (!repository.IsLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must be loaded first");
@@ -160,8 +160,7 @@ namespace Mtgdb.Dal
 
 			_version.SetIsUpToDate();
 
-			var index = new RAMDirectory(fsIndex, IOContext.READ_ONCE);
-			return index;
+			return fsIndex;
 		}
 
 		public Func<Set, bool> FilterSet { get; set; } = set => true;

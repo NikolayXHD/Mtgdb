@@ -21,17 +21,16 @@ namespace Mtgdb.Dal.Index
 
 			_repo = repository;
 			_queryParserAnalyzer = new MtgAnalyzer();
-			var spellcheckerAnalyzer = new MtgAnalyzer();
 
-			Spellchecker = new LuceneSpellchecker(repository, spellcheckerAnalyzer);
+			Spellchecker = new LuceneSpellchecker(repository);
 		}
 
 		public string IndexDirectoryParent
 		{
 			get => Version.Directory.Parent();
 
-			// 0.30 keywords
-			set => Version = new IndexVersion(value, "0.30");
+			// 0.31 fixed double indexing en
+			set => Version = new IndexVersion(value, "0.31");
 		}
 
 		public void LoadIndexes()
@@ -48,7 +47,7 @@ namespace Mtgdb.Dal.Index
 			IsLoading = true;
 
 			if (Version.IsUpToDate)
-				_index = FSDirectory.Open(Version.Directory);
+				_index = new RAMDirectory(FSDirectory.Open(Version.Directory), IOContext.READ_ONCE);
 			else
 				_index = createIndex();
 
@@ -68,28 +67,21 @@ namespace Mtgdb.Dal.Index
 			Spellchecker.LoadIndex(_indexReader);
 		}
 
-		private Directory createIndex()
+		private RAMDirectory createIndex()
 		{
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
 
-			Version.CreateDirectory();
-
-			var index = FSDirectory.Open(Version.Directory);
+			var ramIndex = new RAMDirectory();
 
 			var indexWriterAnalyzer = new MtgAnalyzer();
 
-			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, indexWriterAnalyzer)
+			var config = new IndexWriterConfig(LuceneVersion.LUCENE_48, indexWriterAnalyzer)
 			{
-				OpenMode = OpenMode.CREATE_OR_APPEND,
-				RAMPerThreadHardLimitMB = 512,
-				RAMBufferSizeMB = 512,
-				CheckIntegrityAtMerge = false,
-				MaxBufferedDocs = int.MaxValue,
-				MergePolicy = new LogDocMergePolicy { MergeFactor = 300 }
+				OpenMode = OpenMode.CREATE
 			};
 
-			using (var writer = new IndexWriter(index, indexWriterConfig))
+			using (var writer = new IndexWriter(ramIndex, config))
 				foreach (var set in _repo.SetsByCode.Values)
 				{
 					if (_abort)
@@ -110,9 +102,12 @@ namespace Mtgdb.Dal.Index
 					IndexingProgress?.Invoke();
 				}
 
+			Version.CreateDirectory();
+			ramIndex.SaveTo(Version.Directory);
+
 			Version.SetIsUpToDate();
 
-			return index;
+			return ramIndex;
 		}
 
 		private MtgQueryParser createParser(string language)

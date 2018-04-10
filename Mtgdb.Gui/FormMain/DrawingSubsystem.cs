@@ -582,11 +582,21 @@ namespace Mtgdb.Gui
 			{
 				var patternBuilder = new StringBuilder();
 				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
+				result = patternBuilder.ToString();
+				contextPatterns = new List<string>();
+				return;
 			}
 
 			if (token.Type.IsAny(TokenType.RegexBody))
 			{
 				result = token.Value;
+				contextPatterns = new List<string>();
+				return;
+			}
+
+			if (token.ParentField.IsNumericField())
+			{
+				result = @"\$?" + Regex.Escape(token.Value);
 				contextPatterns = new List<string>();
 				return;
 			}

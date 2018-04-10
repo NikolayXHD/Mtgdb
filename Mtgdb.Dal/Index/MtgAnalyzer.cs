@@ -14,7 +14,7 @@ namespace Mtgdb.Dal.Index
 
 		protected override TokenStreamComponents CreateComponents(string fieldName, TextReader reader)
 		{
-			if (fieldName.IsNumericField() || fieldName.IsNotAnalyzedField())
+			if (fieldName.IsNumericField() || DocumentFactory.NotAnalyzedFields.Contains(fieldName))
 			{
 				var tokenizer = new KeywordTokenizer(reader);
 				var filter = new LowerCaseFilter(LuceneVersion.LUCENE_48, tokenizer);

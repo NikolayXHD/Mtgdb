@@ -62,16 +62,16 @@ namespace Mtgdb
 				return new Tuple<string, int>(null, 0);
 
 			if (value.Length == 0)
-				return new Tuple<string, int>(String.Empty, 0);
+				return new Tuple<string, int>(string.Empty, 0);
 
-			if (!Char.IsDigit(value[value.Length - 1]))
+			if (!char.IsDigit(value[value.Length - 1]))
 				return new Tuple<string, int>(value, 0);
 
 			for (int i = value.Length - 2; i >= 0; i--)
-				if (!Char.IsDigit(value[i]))
-					return new Tuple<string, int>(value.Substring(0, i + 1), Int32.Parse(value.Substring(i + 1)));
+				if (!char.IsDigit(value[i]))
+					return new Tuple<string, int>(value.Substring(0, i + 1), int.Parse(value.Substring(i + 1)));
 
-			return new Tuple<string, int>(String.Empty, 0);
+			return new Tuple<string, int>(string.Empty, 0);
 		}
 
 		public static string NullIfEmpty(this string value)

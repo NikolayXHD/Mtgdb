@@ -88,13 +88,15 @@ namespace Mtgdb.Gui
 			{
 				string text;
 				string title;
+				string query = _searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+
 				if (hitInfo.FieldName == nameof(Card.Image))
 				{
 					title = "Search similar cards";
 					text = "Click to search cards similar to this one.\r\n" +
 						"Similarity is determined by Text and GenearatedMana fields.\r\n\r\n" +
 						"Following term will be added to search text\r\n" +
-						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+						query;
 				}
 				else
 				{
@@ -102,7 +104,7 @@ namespace Mtgdb.Gui
 					text = "Click to EXTEND search result by cards matching this value\r\n" +
 						"Shift+Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
 						"Following term will be added to search text\r\n" +
-						_searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName)) +
+						query +
 						"\r\n\r\n" +
 						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";
 				}

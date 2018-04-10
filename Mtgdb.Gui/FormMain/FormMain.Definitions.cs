@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -166,18 +167,6 @@ namespace Mtgdb.Gui
 			_findBorderedPanel.ScaleDpi();
 			_menuLegalityFormat.ScaleDpi();
 
-			_panelIconSearch.ScaleDpi();
-			_panelIconLegality.ScaleDpi();
-			_panelIconStatusScrollDeck.ScaleDpi();
-			_panelIconStatusScrollCards.ScaleDpi();
-			_panelIconStatusSets.ScaleDpi();
-			_panelIconStatusCollection.ScaleDpi();
-			_panelIconStatusFilterButtons.ScaleDpi();
-			_panelIconStatusSearch.ScaleDpi();
-			_panelIconStatusFilterCollection.ScaleDpi();
-			_panelIconStatusFilterDeck.ScaleDpi();
-			_panelIconStatusFilterLegality.ScaleDpi();
-
 			_buttonShowDuplicates.ScaleDpi();
 			_buttonSampleHandNew.ScaleDpi();
 			_buttonSampleHandDraw.ScaleDpi();
@@ -218,19 +207,18 @@ namespace Mtgdb.Gui
 
 			_layoutViewDeck.Height = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
 
-			scalePanelIcon(_panelIconLegality);
 			scalePanelIcon(_panelIconSearch);
-
-			scalePanelIcon(_panelIconStatusCollection);
-			scalePanelIcon(_panelIconStatusScrollCards);
+			scalePanelIcon(_panelIconLegality);
 			scalePanelIcon(_panelIconStatusScrollDeck);
-			scalePanelIcon(_panelIconStatusSearch);
+			scalePanelIcon(_panelIconStatusScrollCards);
 			scalePanelIcon(_panelIconStatusSets);
-
+			scalePanelIcon(_panelIconStatusCollection);
 			scalePanelIcon(_panelIconStatusFilterButtons);
+			scalePanelIcon(_panelIconStatusSearch);
 			scalePanelIcon(_panelIconStatusFilterCollection);
 			scalePanelIcon(_panelIconStatusFilterDeck);
 			scalePanelIcon(_panelIconStatusFilterLegality);
+			scalePanelIcon(_panelIconStatusSort);
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)
@@ -254,8 +242,15 @@ namespace Mtgdb.Gui
 			{
 				field.SearchOptions.Button.Icon = field.SearchOptions.Button.Icon?.HalfResizeDpi();
 
-				foreach (var button in field.CustomButtons)
-					button.Icon = button.Icon?.HalfResizeDpi();
+				for (int i = 0; i < field.CustomButtons.Count; i++)
+				{
+					var button = field.CustomButtons[i];
+
+					int delta = DeckEditorButtons.GetCountDelta(i);
+					bool isDeck = DeckEditorButtons.IsDeck(i);
+
+					button.Icon = button.Icon?.HalfResizeDpi(preventMoire: isDeck && Math.Abs(delta) == 1);
+				}
 			}
 
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
@@ -263,6 +258,7 @@ namespace Mtgdb.Gui
 
 		private static void scalePanelIcon(BorderedPanel panel)
 		{
+			panel.ScaleDpi();
 			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage).HalfResizeDpi();
 		}
 

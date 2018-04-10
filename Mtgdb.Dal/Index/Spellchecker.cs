@@ -34,104 +34,28 @@ namespace Mtgdb.Dal.Index
 	/// </version>
 	public sealed class Spellchecker : IDisposable
 	{
-		/// <summary> Field name for each word in the ngram index.</summary>
-		public const string FWord = "word";
-
-		/// <summary> the spell index</summary>
-		internal Directory Spellindex;
-
-		/// <summary> Boost value for start and end grams</summary>
-		private static readonly float _bStart = 1.5f;
-
-		private static readonly float _bEnd = 1.5f;
-
-		// don't use this searcher directly - see #swapSearcher()
-		private IndexSearcher _searcher;
-
-		/// <summary>
-		/// this locks all modifications to the current searcher. 
-		/// </summary>
-		private static readonly object _searcherLock = new object();
-
-		/*
-         * this lock synchronizes all possible modifications to the 
-         * current index directory. It should not be possible to try modifying
-         * the same index concurrently. Note: Do not acquire the searcher lock
-         * before acquiring this lock! 
-        */
-		private static readonly object _modifyCurrentIndexLock = new object();
-
-		private volatile bool _closed;
-
-		internal const float MinScore = 0.4f; //LUCENENET-359 Spellchecker accuracy gets overwritten
-
-		private IStringDistance _sd;
-		private IndexWriter _indexWriter;
+		public Spellchecker(IStringSimilarity similarity)
+		{
+			_similarity = similarity;
+		}
 
 		/// <summary>
 		/// Use the given directory as a spell checker index. The directory
 		/// is created if it doesn't exist yet.
 		/// </summary>
 		/// <param name="spellIndex">the spell index directory</param>
-		/// <param name="sd">the <see cref="IStringDistance"/> measurement to use </param>
-		public Spellchecker(Directory spellIndex, IStringDistance sd)
+		public void Load(RAMDirectory spellIndex)
 		{
-			SetSpellIndex(spellIndex);
-			setStringDistance(sd);
+			ensureOpen();
+			swapSearcher(spellIndex);
 		}
 
-		/// <summary>
-		/// Use a different index as the spell checker index or re-open
-		/// the existing index if <c>spellIndex</c> is the same value
-		/// as given in the constructor.
-		/// </summary>
-		/// <param name="spellIndexDir">spellIndexDir the spell directory to use </param>
-		/// <throws>AlreadyClosedException if the Spellchecker is already closed</throws>
-		/// <throws>IOException if spellchecker can not open the directory</throws>
-		public void SetSpellIndex(Directory spellIndexDir)
-		{
-			// this could be the same directory as the current spellIndex
-			// modifications to the directory should be synchronized 
-			lock (_modifyCurrentIndexLock)
-			{
-				ensureOpen();
-				if (!DirectoryReader.IndexExists(spellIndexDir))
-				{
-					var writer = new IndexWriter(spellIndexDir, new IndexWriterConfig(LuceneVersion.LUCENE_48, null));
-					writer.Dispose();
-				}
-				swapSearcher(spellIndexDir);
-			}
-		}
-
-		/// <summary>
-		/// Sets the <see cref="IStringDistance"/> implementation for this
-		/// <see cref="Spellchecker"/> instance.
-		/// </summary>
-		/// <param name="distance">the <see cref="IStringDistance"/> implementation for this
-		/// <see cref="Spellchecker"/> instance.</param>
-		private void setStringDistance(IStringDistance distance)
-		{
-			_sd = distance;
-		}
-
-
-		/// <summary> Suggest similar words (restricted or not to a field of a user index)</summary>
-		/// <param name="word">String the word you want a spell check done on
-		/// </param>
-		/// <param name="numSug">int the number of suggest words
-		/// </param>
-		/// <param name="ir">the indexReader of the user index (can be null see field param)
-		/// </param>
-		/// <param name="field">String the field of the user index: if field is not null, the suggested
-		/// words are restricted to the words present in this field.
-		/// </param>
-		/// <throws>  IOException </throws>
-		/// <returns> String[] the sorted list of the suggest words with this 2 criteria:
-		/// first criteria: the edit distance, second criteria (only if restricted mode): the popularity
-		/// of the suggest words in the field of the user index
-		/// </returns>
-		public IReadOnlyList<string> SuggestSimilar(string word, int numSug, IndexReader ir, string field)
+		public IReadOnlyList<string> SuggestSimilar(
+			string word,
+			int numSug,
+			ICollection<string> discriminators,
+			ICollection<string> fields,
+			IndexReader reader)
 		{
 			// obtainSearcher calls ensureOpen
 			var indexSearcher = obtainSearcher();
@@ -143,68 +67,68 @@ namespace Mtgdb.Dal.Index
 				var query = new BooleanQuery();
 
 				var alreadySeen = new HashSet<string>();
-				for (var ng = getMin(lengthWord); ng <= getMax(lengthWord); ng++)
+				for (var len = getMin(lengthWord); len <= getMax(lengthWord); len++)
 				{
-					string key = "gram" + ng;
+					string key = "gram" + len;
 
-					var grams = formGrams(word, ng);
+					var grams = formGrams(word, len);
 
-					if (grams.Length == 0)
-						continue; // hmm
+					if (BoostStart > 0)
+						add(query, "start" + len, grams[0], BoostStart);
 
-					if (_bStart > 0)
-						// should we boost prefixes?
-						add(query, "start" + ng, grams[0], _bStart); // matches start of word
-
-					if (_bEnd > 0)
+					if (BoostEnd > 0)
 						// should we boost suffixes
-						add(query, "end" + ng, grams[grams.Length - 1], _bEnd); // matches end of word
+						add(query, "end" + len, grams[grams.Length - 1], BoostEnd); // matches end of word
 
 					for (int i = 0; i < grams.Length; i++)
 						add(query, key, grams[i]);
+
+					var filterDiscriminators = new BooleanQuery();
+					foreach (string discriminator in discriminators)
+						filterDiscriminators.Add(new TermQuery(new Term(DiscriminatorField, discriminator)), Occur.SHOULD);
+
+					query.Add(filterDiscriminators, Occur.MUST);
 				}
 
-				int maxHits = 30 * numSug;
+				int maxHits = SearchCountMultiplier * numSug;
 
 				var hits = indexSearcher.Search(query, maxHits).ScoreDocs;
 
-				var sugQueue = new OrderedSet<SuggestWord, float>();
+				var sugQueue = new OrderedSet<SuggestWord, SuggestWord>();
 
 				// go thru more than 'maxr' matches in case the distance filter triggers
 				int stop = Math.Min(hits.Length, maxHits);
 				var sugWord = new SuggestWord();
 				for (int i = 0; i < stop; i++)
 				{
-					sugWord.String = indexSearcher.Doc(hits[i].Doc).Get(FWord); // get orig word
+					sugWord.String = indexSearcher.Doc(hits[i].Doc).Get(WordField); // get orig word
 
 					// edit distance
-					sugWord.Score = _sd.GetDistance(word, sugWord.String);
+					sugWord.Score = _similarity.GetSimilarity(word, sugWord.String);
 
 					if (sugWord.Score < min)
 						continue;
 
-					if (ir != null && field != null)
+					if (reader != null && fields != null)
 					{
-						// use the user index
-						sugWord.Freq = ir.DocFreq(new Term(field, sugWord.String)); // freq in the index
-						// don't suggest a word that is not present in the field
-						if (sugWord.Freq < 1)
+						var matchingField = fields.FirstOrDefault(f => reader.DocFreq(new Term(f.ToLowerInvariant(), sugWord.String)) > 0);
+						if (matchingField == null)
 							continue;
 					}
 
 					if (alreadySeen.Add(sugWord.String) == false) // we already seen this word, no point returning it twice
 						continue;
 
+					sugQueue.TryAdd(sugWord, sugWord);
+
 					if (sugQueue.Count == numSug)
-						// if queue full, maintain the minScore score
 						min = sugQueue.TryRemoveMin().Score;
 
-					sugQueue.TryAdd(sugWord, sugWord.Score);
 					sugWord = new SuggestWord();
 				}
 
 				return sugQueue.Reverse()
-					.Select(_=>_.String)
+					.Select(_ => _.String)
 					.ToReadOnlyList();
 			}
 			finally
@@ -248,16 +172,20 @@ namespace Mtgdb.Dal.Index
 			return res;
 		}
 
-		public void IndexWord(string word)
+		public void IndexWord(string discriminator, string word)
 		{
-			lock (_modifyCurrentIndexLock)
+			lock (_syncModify)
 			{
 				int len = word.Length;
-				if (len == 0)
-					return;
 
 				// ok index the word
-				var doc = createDocument(word, getMin(len), getMax(len));
+				int min = getMin(len);
+				int max = getMax(len);
+
+				if (len < min)
+					return;
+
+				var doc = createDocument(word, min, max, discriminator);
 				_indexWriter.AddDocument(doc);
 			}
 		}
@@ -268,75 +196,73 @@ namespace Mtgdb.Dal.Index
 
 			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())
 			{
-				OpenMode = OpenMode.CREATE_OR_APPEND,
-				RAMPerThreadHardLimitMB = 512,
-				RAMBufferSizeMB = 512,
-				CheckIntegrityAtMerge = false,
-				MaxBufferedDocs = int.MaxValue,
-				MergePolicy = NoMergePolicy.COMPOUND_FILES
+				OpenMode = OpenMode.CREATE
 			};
 
-			_indexWriter = new IndexWriter(Spellindex, indexWriterConfig);
+			_spellcheckerIndex = new RAMDirectory();
+			_indexWriter = new IndexWriter(_spellcheckerIndex, indexWriterConfig);
 		}
 
-		public void EndIndex()
+		public void SaveTo(string directory)
 		{
 			_indexWriter.Flush(triggerMerge: true, applyAllDeletes: false);
 			_indexWriter.Dispose();
+
+			_spellcheckerIndex.SaveTo(directory);
+
 			// also re-open the spell index to see our own changes when the next suggestion
 			// is fetched:
-			swapSearcher(Spellindex);
+			swapSearcher(_spellcheckerIndex);
 		}
 
 		private static int getMin(int l)
 		{
-			if (l <= 3)
-				return 1;
-
-			if (l <= 6)
-				return 2;
-
-			return 3;
+			return 1;
 		}
 
 		private static int getMax(int l)
 		{
-			return Math.Min(l, 5);
+			return Math.Min(l, 4);
 		}
 
 
-		private static Document createDocument(string text, int ng1, int ng2)
+		private static Document createDocument(string text, int minNgram, int maxNgram, string field)
 		{
-			var doc = new Document { new StringField(FWord, text, Field.Store.YES) };
-			// orig term
-			int len = text.Length;
-			for (int ng = ng1; ng <= ng2; ng++)
+			var doc = new Document
 			{
-				string key = "gram" + ng;
+				new StringField(WordField, text, Field.Store.YES),
+				new StringField(DiscriminatorField, field.ToLowerInvariant(), Field.Store.NO)
+			};
+
+			int originalLen = text.Length;
+
+			for (int len = minNgram; len <= maxNgram; len++)
+			{
+				string key = "gram" + len;
 				string end = null;
-				for (int i = 0; i < len - ng + 1; i++)
+
+				for (int i = 0; i < originalLen - len + 1; i++)
 				{
-					string gram = text.Substring(i, ng);
+					string gram = text.Substring(i, len);
 					doc.Add(new StringField(key, gram, Field.Store.NO));
+
 					if (i == 0)
-					{
-						doc.Add(new StringField("start" + ng, gram, Field.Store.NO));
-					}
+						doc.Add(new StringField("start" + len, gram, Field.Store.NO));
+
 					end = gram;
 				}
+
 				if (end != null)
-				{
-					// may not be present if len==ng1
-					doc.Add(new StringField("end" + ng, end, Field.Store.NO));
-				}
+					doc.Add(new StringField("end" + len, end, Field.Store.NO));
 			}
+
 			return doc;
 		}
 
 
 		private IndexSearcher obtainSearcher()
 		{
-			lock (_searcherLock)
+			lock (_syncSearcher)
 			{
 				ensureOpen();
 				_searcher.IndexReader.IncRef();
@@ -359,9 +285,9 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		public void Close()
+		private void close()
 		{
-			lock (_searcherLock)
+			lock (_syncSearcher)
 			{
 				ensureOpen();
 				_closed = true;
@@ -370,25 +296,26 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		private void swapSearcher(Directory dir)
+		private void swapSearcher(RAMDirectory dir)
 		{
 			/*
              * opening a searcher is possibly very expensive.
              * We rather close it again if the Spellchecker was closed during
              * this operation than block access to the current searcher while opening.
              */
-			IndexSearcher indexSearcher = CreateSearcher(dir);
-			lock (_searcherLock)
+			IndexSearcher indexSearcher = createSearcher(dir);
+			lock (_syncSearcher)
 			{
 				if (_closed)
 				{
 					indexSearcher.IndexReader.Dispose();
 					throw new InvalidOperationException("Spellchecker has been closed");
 				}
+
 				_searcher?.IndexReader.Dispose();
 				// set the spellindex in the sync block - ensure consistency.
 				_searcher = indexSearcher;
-				Spellindex = dir;
+				_spellcheckerIndex = dir;
 			}
 		}
 
@@ -397,7 +324,7 @@ namespace Mtgdb.Dal.Index
 		/// </summary>
 		/// <param name="dir">dir the directory used to open the searcher</param>
 		/// <returns>a new read-only IndexSearcher. (throws IOException f there is a low-level IO error)</returns>
-		public IndexSearcher CreateSearcher(Directory dir)
+		private static IndexSearcher createSearcher(Directory dir)
 		{
 			return new IndexSearcher(DirectoryReader.Open(dir));
 		}
@@ -418,8 +345,26 @@ namespace Mtgdb.Dal.Index
 			if (disposeOfManagedResources)
 			{
 				if (!_closed)
-					Close();
+					close();
 			}
 		}
+
+		private float BoostStart { get; } = 2f;
+		private float BoostEnd { get; } = 1.25f;
+
+		private const int SearchCountMultiplier = 5;
+		internal const float MinScore = 0.5f;
+
+		private const string WordField = "word";
+		private const string DiscriminatorField = "discr";
+		private IndexSearcher _searcher;
+		private RAMDirectory _spellcheckerIndex;
+		private IndexWriter _indexWriter;
+		private readonly IStringSimilarity _similarity;
+
+		private volatile bool _closed;
+
+		private static readonly object _syncSearcher = new object();
+		private static readonly object _syncModify = new object();
 	}
 }

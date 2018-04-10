@@ -14,9 +14,38 @@ namespace Mtgdb.Controls
 			return original.FitIn(original.Size.ByDpi());
 		}
 
-		public static Bitmap HalfResizeDpi(this Bitmap original)
+		public static Bitmap HalfResizeDpi(this Bitmap original, bool preventMoire = false)
 		{
-			return original.FitIn(original.Size.HalfByDpi());
+			var originalSize = original.Size;
+			var reducedSize = originalSize.HalfByDpi();
+
+			if (originalSize == reducedSize)
+				return original;
+
+			int stepsCount;
+
+			if (preventMoire)
+			{
+				var originalToReducedRatio = originalSize.DivideBy(reducedSize);
+				float maxRatio = originalToReducedRatio.Max();
+				stepsCount = (int) Math.Round((maxRatio - 1) * 3f);
+			}
+			else
+				stepsCount = 1;
+
+			SizeF delta = originalSize.Minus(reducedSize).DivideBy(
+				reducedSize.MultiplyBy(stepsCount));
+
+			using (var chain = new BitmapTransformationChain(original, reThrow))
+			{
+				for (int k = stepsCount - 1; k >= 0; k--)
+				{
+					Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
+					chain.TransformCopying(bmp => bmp.FitIn(currentSize));
+				}
+
+				return chain.Result;
+			}
 		}
 
 		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default(Size))
@@ -113,9 +142,14 @@ namespace Mtgdb.Controls
 
 		public static Bitmap Transform(this Bitmap value, RotateFlipType transform)
 		{
-			value = (Bitmap)value.Clone();
+			value = (Bitmap) value.Clone();
 			value.RotateFlip(transform);
 			return value;
+		}
+
+		private static void reThrow(Exception ex)
+		{
+			throw new Exception("image transformation failed", ex);
 		}
 	}
 }

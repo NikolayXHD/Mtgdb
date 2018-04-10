@@ -8,5 +8,6 @@ namespace Mtgdb.Dal
 		public List<string> GeneratedMana { get; set; }
 		public bool FlipDuplicate { get; set; }
 		public string MciNumber { get; set; }
+		public string Loyalty { get; set; }
 	}
 }

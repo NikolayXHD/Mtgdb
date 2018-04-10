@@ -400,6 +400,8 @@ namespace Mtgdb.Gui
 
 			_labelStatusFilterLegality.Text = getStatusLegalityFilter(filterManagerStates);
 
+			_labelStatusSort.Text = getStatusSort();
+
 			setTitle(_historySubsystem.DeckName);
 		}
 
@@ -477,6 +479,19 @@ namespace Mtgdb.Gui
 			return
 				_searchStringSubsystem.SearchResult?.RelevanceById != null &&
 				_luceneSearcher.Spellchecker.IsLoaded;
+		}
+
+		private string getStatusSort()
+		{
+			var infos = _sortSubsystem.SortInfo?.ToList() ?? new List<FieldSortInfo>();
+			
+			if (_searchStringSubsystem.SearchResult?.RelevanceById != null)
+				infos.Add(new FieldSortInfo("Relevance", SortOrder.Descending));
+
+			if (infos.Count == 0)
+				return "none";
+
+			return string.Join(" ", infos);
 		}
 
 		private string getStatusLegalityFilter(FilterValueState[] filterManagerStates)

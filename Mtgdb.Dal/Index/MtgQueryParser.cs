@@ -293,6 +293,9 @@ namespace Mtgdb.Dal.Index
 				return result;
 			}
 
+			if (DocumentFactory.NumericFields.Contains(field) && !isValueNumeric(termStr))
+				return _matchNothingQuery;
+
 			field = localize(field);
 			return base.GetWildcardQuery(field, termStr);
 		}
@@ -437,7 +440,7 @@ namespace Mtgdb.Dal.Index
 
 		private string localize(string field)
 		{
-			return DocumentFactory.Localize(field, Language);
+			return field.GetFieldLocalizedIn(Language);
 		}
 
 
@@ -461,7 +464,7 @@ namespace Mtgdb.Dal.Index
 			"?"
 		};
 
-		private static readonly Query _matchNothingQuery = new BooleanQuery();
+		private static readonly Query _matchNothingQuery = new TermQuery(new Term("none", "*"));
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
 			new[] { "a", "an", "the" }.Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),

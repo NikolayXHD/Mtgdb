@@ -2,19 +2,16 @@ using System;
 
 namespace Mtgdb.Dal.Index
 {
-	public class DamerauLevenstineDistance : IStringDistance
+	public class DamerauLevenstineSimilarity : IStringSimilarity
 	{
 		private readonly LevenshteinDistance _editDistance;
 
-		public DamerauLevenstineDistance()
+		public DamerauLevenstineSimilarity()
 		{
 			_editDistance = new LevenshteinDistance();
 		}
 
-		/// <summary>
-		/// In fact it is not distance, it is similarity
-		/// </summary>
-		public float GetDistance(string s1, string s2)
+		public float GetSimilarity(string s1, string s2)
 		{
 			float minDist = float.MaxValue;
 			var prefixes = 1 + Math.Max(0, s2.Length - s1.Length);

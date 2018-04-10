@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Mtgdb.Controls;
 using Mtgdb.Gui.Properties;
 
@@ -45,8 +44,6 @@ namespace Mtgdb.Gui
 				HotTrackOpacityDelta = opacityDelta,
 			});
 
-
-
 			field.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
@@ -58,7 +55,7 @@ namespace Mtgdb.Gui
 			field.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
-				Icon = Resources.remove_one,
+				Icon = Resources.remove_one_collection,
 				Margin = margin,
 				HotTrackOpacityDelta = opacityDelta,
 				BreaksLayout = true
@@ -75,7 +72,7 @@ namespace Mtgdb.Gui
 			field.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
-				Icon = Resources.add_one,
+				Icon = Resources.add_one_collection,
 				Margin = margin,
 				HotTrackOpacityDelta = opacityDelta
 			});

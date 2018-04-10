@@ -415,4 +415,13 @@
   <data name="book_40_hovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\book_40_hovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="add_one_collection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_one_collection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remove_one_collection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\remove_one_collection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sort_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sort_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -33,55 +33,36 @@ namespace Mtgdb.Test
 		}
 
 		[TestCase("PricingMid", @"34", null)]
-		[TestCase("Loyalty", @"3", null)]
+		[TestCase("LoyaltyNum", @"3", null)]
 		public void Suggest_numeric_values(string field, string value, string language)
 		{
 			var list = suggest(field, value, language);
 
-			Assert.That(list.All(v=>float.TryParse(v, out _)));
+			Assert.That(list.All(v => float.TryParse(v, out _)));
 			Assert.That(list.Any(v => v.Contains(value)));
 		}
 
-		[TestCase("en",
-			"text:Gel*demo",
-			"-------------^", "demon")]
-		[TestCase("en",
-			"PricingMid:[",
-			"----------^--", "PricingMid:")]
-		[TestCase("en",
-			"PricingMid:[",
-			"-----------^-", "{float}")]
-		[TestCase("en",
-			"PricingMid:[",
-			"------------^", "{float}")]
-		[TestCase("en",
-			"PricingMid:[0 TO 1] OR",
-			"------------------^----", "{float}")]
-		[TestCase("en",
-			"PricingMid:[0 TO 1] OR",
-			"-------------------^---", "PricingMid:" /*complete field list*/)]
-		[TestCase("en",
-			"PricingMid:[0 TO 1] OR",
-			"--------------------^--", "OR")]
-		[TestCase("en",
-			"PricingMid:[0 TO 1] OR",
-			"---------------------^-", "OR")]
-		[TestCase("en",
-			"PricingMid:[0 TO 1] OR",
-			"----------------------^", "OR")]
-		public void Suggest_by_user_input(string language, string queryStr, string caretIndicator, string expectedSuggest)
+	
+		
+		[TestCaseSource(typeof(IntellisenseCases), nameof(IntellisenseCases.Cases))]
+		public void Suggest_by_user_input(string[] languages, string[] expectedSuggests, string queryWithCaret)
 		{
-			int caret = caretIndicator.IndexOf("^", Str.Comparison);
-
-			var list = suggestByInput(queryStr, caret, language);
-
-			if (expectedSuggest == "{float}")
+			foreach (string language in languages)
 			{
-				Assert.That(list.All(v => float.TryParse(v, out _)));
-			}
-			else if (expectedSuggest != null)
-			{
-				Assert.That(list, Does.Contain(expectedSuggest));
+				int caret = queryWithCaret.IndexOf(IntellisenseCases.CaretIndicator);
+				string queryStr = queryWithCaret.Substring(0, caret) + queryWithCaret.Substring(caret + 1);
+
+				var list = suggestByInput(queryStr, caret, language);
+
+				foreach (string expectedSuggest in expectedSuggests)
+				{
+					if (expectedSuggest == IntellisenseCases.Float)
+						Assert.That(list.All(v => float.TryParse(v, out _)));
+					else if (!string.IsNullOrEmpty(expectedSuggest))
+						Assert.That(list, Does.Contain(expectedSuggest));
+					else
+						Assert.That(list, Is.Empty);
+				}
 			}
 		}
 
@@ -90,7 +71,9 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var list = Spellchecker.SuggestValues(value, field, language);
+			string query = $"{field}:{value}";
+
+			var list = Spellchecker.Suggest(language, query, caret: query.Length).Values;
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -109,7 +92,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var suggest = Spellchecker.Suggest(query, caret, language);
+			var suggest = Spellchecker.Suggest(language, query, caret);
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -119,10 +102,10 @@ namespace Mtgdb.Test
 			var list = suggest.Values;
 
 			Assert.That(list, Is.Not.Null);
-			Assert.That(list, Is.Not.Empty);
-
+			
 			Log.Debug("Token: " + suggest.Token);
 			Log.Debug("Suggest:");
+			
 			foreach (string variant in list)
 				Log.Debug(variant);
 

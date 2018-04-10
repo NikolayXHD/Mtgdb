@@ -83,6 +83,17 @@
 				_labelStatusFilterLegality);
 
 			controller.SetTooltip(this,
+				"Search result Sort order",
+				"Sort buttons are located over textual fields in Search result.\r\n" +
+				"Click sort button to sort by field or change sort direction.\r\n" +
+				"Shift + Click to add field to sort priorities,\r\n" +
+				"Ctrl + Click to remove field from sort priorities.\r\n\r\n" +
+				"When all explicit sort criteria are equal, cards are ordered " +
+				"by relevance to search result, then by order in AllSets-x.json file.",
+				_panelIconStatusSort,
+				_labelStatusSort);
+
+			controller.SetTooltip(this,
 				"Filter by keyword abilities",
 				"Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +

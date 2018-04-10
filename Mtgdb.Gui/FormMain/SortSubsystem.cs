@@ -162,7 +162,7 @@ namespace Mtgdb.Gui
 		public string SortString { get; private set; }
 
 		private List<Card> _sortedCards;
-		private IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
+		public IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
 
 		public bool IsLanguageDependent => SortInfo.Any(_ => _localizableFields.Contains(_.FieldName));
 

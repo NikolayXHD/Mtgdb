@@ -27,17 +27,17 @@ namespace Mtgdb.Controls
 
 		public static Size ByDpi(this Size original)
 		{
-			return original.ScaleBy(_scale);
+			return original.MultiplyBy(_scale).Round();
 		}
 
 		public static SizeF ByDpi(this SizeF original)
 		{
-			return original.ScaleBy(_scale);
+			return original.MultiplyBy(_scale);
 		}
 
 		public static Size HalfByDpi(this Size original)
 		{
-			return original.ScaleBy(_scaleHalf);
+			return original.MultiplyBy(_scaleHalf).Round();
 		}
 
 		private static SizeF getScale()

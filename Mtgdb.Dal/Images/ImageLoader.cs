@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Mtgdb.Controls;
+using NLog;
 
 namespace Mtgdb.Dal
 {
@@ -91,14 +92,14 @@ namespace Mtgdb.Dal
 			frameDetector.Execute();
 			var frame = frameDetector.Frame;
 
-			var chain = new BitmapTransformationChain(original);
+			var chain = new BitmapTransformationChain(original, logException);
 			chain.TransformCopying(_ => resize(_, size, frame));
 			return chain;
 		}
 
 		public BitmapTransformationChain TransformArt(Bitmap original, Size size)
 		{
-			var chain = new BitmapTransformationChain(original);
+			var chain = new BitmapTransformationChain(original, logException);
 
 			if (!original.Size.FitsIn(size))
 				chain.TransformCopying(_ => resize(_, size));
@@ -108,7 +109,7 @@ namespace Mtgdb.Dal
 
 		public BitmapTransformationChain Transform(Bitmap original, Size size)
 		{
-			var chain = new BitmapTransformationChain(original);
+			var chain = new BitmapTransformationChain(original, logException);
 			chain.TransformCopying(_ => resize(_, size));
 			chain.TransformInplace(removeCorners);
 
@@ -175,7 +176,7 @@ namespace Mtgdb.Dal
 			_imagesByPath.Remove(keyToRemove);
 		}
 
-
+		private static void logException(Exception ex) => _logger.Error(ex);
 
 		public event Action CornerRemoved;
 		public event Action FoundInCache;
@@ -197,5 +198,7 @@ namespace Mtgdb.Dal
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
 		public int Capacity { get; }
+
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	}
 }

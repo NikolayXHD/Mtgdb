@@ -334,6 +334,7 @@
     <None Include="Resources\add_form_32.png" />
     <None Include="Resources\add_one.png" />
     <None Include="Resources\add_four.png" />
+    <None Include="Resources\add_one_collection.png" />
     <Content Include="Resources\Annihilator.png" />
     <None Include="Resources\any.png" />
     <Content Include="Resources\Attacks each turn.png" />
@@ -408,6 +409,7 @@
     <Content Include="Resources\Regenerate.png" />
     <None Include="Resources\remove_one.png" />
     <None Include="Resources\remove_four.png" />
+    <None Include="Resources\remove_one_collection.png" />
     <Content Include="Resources\Renown.png" />
     <Content Include="Resources\rightclick_48.png" />
     <None Include="Resources\save_16.png" />
@@ -423,6 +425,7 @@
     <None Include="Resources\text_disabled_40.png" />
     <None Include="Resources\text_enabled_40.png" />
     <None Include="Resources\text_selection_24.png" />
+    <None Include="Resources\sort_48.png" />
     <Content Include="Resources\Trample.png" />
     <Content Include="Resources\Transform.png" />
     <None Include="Resources\trash_16.png" />
