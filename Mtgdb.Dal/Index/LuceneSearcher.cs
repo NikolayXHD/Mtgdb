@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -47,7 +48,7 @@ namespace Mtgdb.Dal.Index
 			IsLoading = true;
 
 			if (Version.IsUpToDate)
-				_index = new RAMDirectory(FSDirectory.Open(Version.Directory), IOContext.READ_ONCE);
+				_index = FSDirectory.Open(Version.Directory);
 			else
 				_index = createIndex();
 
@@ -67,47 +68,46 @@ namespace Mtgdb.Dal.Index
 			Spellchecker.LoadIndex(_indexReader);
 		}
 
-		private RAMDirectory createIndex()
+		private FSDirectory createIndex()
 		{
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
 
-			var ramIndex = new RAMDirectory();
+			Version.CreateDirectory();
+			var index = FSDirectory.Open(Version.Directory);
 
 			var indexWriterAnalyzer = new MtgAnalyzer();
+			var config = IndexUtils.CreateWriterConfig(indexWriterAnalyzer);
 
-			var config = new IndexWriterConfig(LuceneVersion.LUCENE_48, indexWriterAnalyzer)
+			using (var writer = new IndexWriter(index, config))
 			{
-				OpenMode = OpenMode.CREATE
-			};
-
-			using (var writer = new IndexWriter(ramIndex, config))
-				foreach (var set in _repo.SetsByCode.Values)
-				{
-					if (_abort)
-						return null;
-
-					if (!FilterSet(set))
-						continue;
-
-					foreach (var card in set.Cards)
+				Parallel.ForEach(_repo.SetsByCode.Values,
+					set =>
 					{
 						if (_abort)
-							return null;
+							return;
 
-						writer.AddDocument(card.Document);
-					}
+						if (!FilterSet(set))
+							return;
 
-					SetsAddedToIndex++;
-					IndexingProgress?.Invoke();
-				}
+						foreach (var card in set.Cards)
+						{
+							if (_abort)
+								return;
 
-			Version.CreateDirectory();
-			ramIndex.SaveTo(Version.Directory);
+							writer.AddDocument(card.Document);
+						}
+
+						Interlocked.Increment(ref _setsAddedToIndex);
+						IndexingProgress?.Invoke();
+					});
+			}
+
+			if (_abort)
+				return null;
 
 			Version.SetIsUpToDate();
-
-			return ramIndex;
+			return index;
 		}
 
 		private MtgQueryParser createParser(string language)
@@ -188,7 +188,8 @@ namespace Mtgdb.Dal.Index
 				boolean.Add(new MatchAllDocsQuery(), Occur.MUST);
 		}
 
-		private (Dictionary<string, IReadOnlyList<Token>> Terms, Dictionary<string, IReadOnlyList<IReadOnlyList<string>>> Phrases) getHighlightElements(string queryStr)
+		private (Dictionary<string, IReadOnlyList<Token>> Terms, Dictionary<string, IReadOnlyList<IReadOnlyList<string>>> Phrases) getHighlightElements(
+			string queryStr)
 		{
 			var tokenizer = new TolerantTokenizer(queryStr);
 			tokenizer.Parse();
@@ -296,7 +297,8 @@ namespace Mtgdb.Dal.Index
 		public event Action Loaded;
 		public event Action IndexingProgress;
 
-		public int SetsAddedToIndex { get; private set; }
+		public int SetsAddedToIndex => _setsAddedToIndex;
+		private int _setsAddedToIndex;
 
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; private set; }

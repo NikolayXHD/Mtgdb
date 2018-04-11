@@ -202,7 +202,9 @@ namespace Mtgdb.Dal
 
 				if (part.EndsWith("½"))
 				{
-					if (float.TryParse(part.Substring(0, part.Length - 1), NumberStyles.Float, Str.Culture, out partValue))
+					if (part.Length == 1)
+						sum += 0.5f;
+					else if (float.TryParse(part.Substring(0, part.Length - 1), NumberStyles.Float, Str.Culture, out partValue))
 						sum += partValue + 0.5f;
 				}
 				else

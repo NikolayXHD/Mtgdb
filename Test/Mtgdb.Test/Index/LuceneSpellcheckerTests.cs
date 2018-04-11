@@ -42,8 +42,6 @@ namespace Mtgdb.Test
 			Assert.That(list.Any(v => v.Contains(value)));
 		}
 
-	
-		
 		[TestCaseSource(typeof(IntellisenseCases), nameof(IntellisenseCases.Cases))]
 		public void Suggest_by_user_input(string[] languages, string[] expectedSuggests, string queryWithCaret)
 		{

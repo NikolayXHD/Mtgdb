@@ -10,7 +10,8 @@ namespace Mtgdb.Test
 		public static IEnumerable Cases => completeCases(
 			otherCases(),
 			artistCases(),
-			legalityCases()
+			legalityCases(),
+			numericCases()
 		);
 
 		private static IEnumerable<Case> otherCases()
@@ -105,7 +106,7 @@ namespace Mtgdb.Test
 
 				add("RestrictedIn:u■",
 					"un-sets"),
-				
+
 				add("RestrictedIn:v■",
 					"vintage"),
 
@@ -113,6 +114,129 @@ namespace Mtgdb.Test
 			};
 		}
 
+		private static IEnumerable<Case> numericCases()
+		{
+			return new[]
+			{
+				add("Cmc:■",
+					"0",
+					"0.5",
+					"10"),
+
+				add("Cmc:10■",
+					"10",
+					"1000000"),
+
+				add("Cmc:z■"), // empty
+
+
+
+				add("Hand:■",
+					"-4",
+					"3"),
+
+				add("Hand:1■",
+					"-1",
+					"1"),
+
+				add("Hand:z■"), // empty
+
+
+
+				add("Life:■",
+					"-8",
+					"12"),
+
+				add("Life:3■",
+					"-3",
+					"3",
+					"30"),
+
+				add("Life:z■"), // empty
+
+
+
+				add("LoyaltyNum:■",
+					"0",
+					"7"),
+
+				add("LoyaltyNum:2■",
+					"2"),
+
+				add("LoyaltyNum:z■"), // empty
+
+
+
+				add("PowerNum:■",
+					"-1",
+					"0.5",
+					"1.5",
+					"2.5",
+					"3.5",
+					"9",
+					"11"),
+
+				add("PowerNum:9■",
+					"9",
+					"99"),
+
+				add("PowerNum:z■"), // empty
+
+
+
+				add("PricingHigh:■",
+					"0.29",
+					"0.35"),
+
+				add("PricingHigh:1■",
+					"0.51",
+					"1"),
+
+				add("PricingHigh:z■"), // empty
+
+
+
+				add("PricingLow:■",
+					"0.01",
+					"0.15"),
+
+				add("PricingLow:1■",
+					"0.01",
+					"0.1",
+					"1"),
+
+				add("PricingLow:z■"), // empty
+
+
+
+				add("PricingMid:■",
+					"0.14",
+					"0.19"),
+
+				add("PricingMid:2■",
+					"0.2",
+					"0.42"),
+
+				add("PricingMid:z■"), // empty
+
+
+
+				add("ToughnessNum:■",
+					"-1",
+					"0.5",
+					"1.5",
+					"2.5",
+					"3.5",
+					"9"),
+
+				add("ToughnessNum:3■",
+					"3",
+					"3.5",
+					"13"),
+
+				add("ToughnessNum:z■") // empty
+			};
+		}
 
 
 		private static Case add(string queryWithCaret, params string[] expectedValues)

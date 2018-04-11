@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Contrib;
 using Lucene.Net.Store;
@@ -48,7 +49,8 @@ namespace Mtgdb.Dal.Index
 
 		private Spellchecker openSpellchecker()
 		{
-			var spellcheckerIndex = new RAMDirectory(FSDirectory.Open(Version.Directory), IOContext.READ_ONCE);
+			var spellcheckerIndex = FSDirectory.Open(Version.Directory);
+
 			var spellChecker = new Spellchecker(_stringSimilarity);
 			spellChecker.Load(spellcheckerIndex);
 
@@ -69,46 +71,58 @@ namespace Mtgdb.Dal.Index
 					.SelectMany(f => f.GetFieldLanguages().Select(l => (f, l)))
 					.ToReadOnlyList();
 
-			TotalSets = tasks.Count;
+			TotalFields = tasks.Count + 1;
 			var indexedWordsByDiscriminator = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
-			spellchecker.BeginIndex();
+			Version.CreateDirectory();
+			var index = FSDirectory.Open(Version.Directory);
+			spellchecker.BeginIndex(index);
 
-			foreach (var task in tasks)
+			var parallelOptions = new ParallelOptions
 			{
-				if (_abort)
-					break;
+				MaxDegreeOfParallelism = Environment.ProcessorCount - 1
+			};
 
-				var discriminator = task.UserField.GetDiscriminatorIn(task.Language);
-				string spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
-
-				foreach (string value in getValuesCache(spellcheckerField))
+			Parallel.ForEach(tasks,
+				parallelOptions,
+				task =>
 				{
-					if (!indexedWordsByDiscriminator.TryGetValue(discriminator, out var indexedWords))
+					if (_abort)
+						return;
+
+					var discriminator = task.UserField.GetDiscriminatorIn(task.Language);
+					string spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
+
+					foreach (string value in getValuesCache(spellcheckerField))
 					{
-						indexedWords = new HashSet<string>(Str.Comparer);
-						indexedWordsByDiscriminator.Add(discriminator, indexedWords);
+						bool isNewWord;
+						lock (indexedWordsByDiscriminator)
+						{
+							if (!indexedWordsByDiscriminator.TryGetValue(discriminator, out var indexedWords))
+							{
+								indexedWords = new HashSet<string>(Str.Comparer);
+								indexedWordsByDiscriminator.Add(discriminator, indexedWords);
+							}
+
+							isNewWord = indexedWords.Add(value);
+						}
+
+						if (isNewWord)
+							spellchecker.IndexWord(discriminator, value);
 					}
 
-					if (indexedWords.Add(value))
-						spellchecker.IndexWord(discriminator, value);
-				}
-
-				IndexedSets++;
-
-				if (IndexedSets < TotalSets)
+					Interlocked.Increment(ref _indexedFields);
 					IndexingProgress?.Invoke();
-			}
-
-			Version.CreateDirectory();
-			spellchecker.SaveTo(Version.Directory);
+				});
 
 			if (_abort)
 				return null;
 
+			spellchecker.EndIndex();
 			IsLoading = false;
 			Version.SetIsUpToDate();
 
+			_indexedFields++;
 			IndexingProgress?.Invoke();
 
 			return spellchecker;
@@ -148,7 +162,7 @@ namespace Mtgdb.Dal.Index
 				if (!string.IsNullOrEmpty(userField))
 					return new IntellisenseSuggest(token, valueSuggest, _allTokensAreValues);
 
-				var fieldSuggest = suggestFields(valuePart);
+				var fieldSuggest = suggestFields(fieldPart: valuePart);
 
 				var values = fieldSuggest.Concat(valueSuggest).ToReadOnlyList();
 
@@ -160,7 +174,7 @@ namespace Mtgdb.Dal.Index
 			}
 
 			if (token.Type.IsAny(TokenType.Field))
-				return new IntellisenseSuggest(token, suggestAllFields(valuePart), _allTokensAreField);
+				return new IntellisenseSuggest(token, suggestAllFields(fieldPart: valuePart), _allTokensAreField);
 
 			if (token.Type.IsAny(TokenType.Boolean))
 				return new IntellisenseSuggest(token, _booleanOperators, _allTokensAreBoolean);
@@ -205,7 +219,7 @@ namespace Mtgdb.Dal.Index
 				valuesSet.UnionWith(values);
 			}
 
-			return getTextuallySimilarValues(valuesSet.ToReadOnlyList(), value);
+			return getTextuallySimilarValues(valuesSet.ToReadOnlyList(), value, MaxCount);
 		}
 
 		private IReadOnlyList<string> suggestValues(string userField, string language, string value)
@@ -219,7 +233,7 @@ namespace Mtgdb.Dal.Index
 				if (DocumentFactory.NumericFields.Contains(spellcheckerField))
 					return getNumericallySimilarValues(cache, value);
 
-				return getTextuallySimilarValues(cache, value);
+				return getTextuallySimilarValues(cache, value, MaxCount);
 			}
 
 			if (!IsLoaded)
@@ -241,18 +255,19 @@ namespace Mtgdb.Dal.Index
 			return null;
 		}
 
-		private IReadOnlyList<string> getTextuallySimilarValues(IReadOnlyList<string> values, string value)
+		private IReadOnlyList<string> getTextuallySimilarValues(IReadOnlyList<string> values, string value, int maxCount)
 		{
 			if (string.IsNullOrEmpty(value))
-				return new ListSegment<string>(values, 0, MaxCount);
+				return new ListSegment<string>(values, 0, maxCount);
 
 			var similarities = values.Select(_ => _stringSimilarity.GetSimilarity(value, _))
 				.ToArray();
 
 			return Enumerable.Range(0, values.Count)
 				.OrderByDescending(i => similarities[i])
+				.ThenBy(i => values[i], Str.Comparer)
 				.Select(i => values[i])
-				.Take(MaxCount)
+				.Take(maxCount)
 				.ToReadOnlyList();
 		}
 
@@ -353,25 +368,18 @@ namespace Mtgdb.Dal.Index
 			if (string.IsNullOrEmpty(fieldPart))
 				return _userFields;
 
-			var similarities = _userFields.Select(_ => _stringSimilarity.GetSimilarity(fieldPart, _))
-				.ToArray();
-
-			var userFields = Enumerable.Range(0, _userFields.Count)
-				.OrderByDescending(i => similarities[i])
-				.Select(i => _userFields[i])
-				.ToReadOnlyList();
-
-			return userFields;
+			var result = getTextuallySimilarValues(_userFields, fieldPart, int.MaxValue);
+			return result;
 		}
 
-		private static IReadOnlyList<string> suggestFields(string valuePart)
+		private IReadOnlyList<string> suggestFields(string fieldPart)
 		{
 			var fieldSuggest = _userFields
-				.Where(_ => _.IndexOf(valuePart, Str.Comparison) >= 0)
-				.OrderBy(Str.Comparer)
+				.Where(_ => _.IndexOf(fieldPart, Str.Comparison) >= 0)
 				.ToReadOnlyList();
 
-			return fieldSuggest;
+			var ordered = getTextuallySimilarValues(fieldSuggest, fieldPart, int.MaxValue);
+			return ordered;
 		}
 
 		public void Dispose()
@@ -401,8 +409,11 @@ namespace Mtgdb.Dal.Index
 		public bool IsUpToDate => Version.IsUpToDate;
 		public bool IsLoaded { get; private set; }
 		public bool IsLoading { get; private set; }
-		public int IndexedSets { get; private set; }
-		public int TotalSets { get; private set; }
+
+		public int IndexedFields => _indexedFields;
+		private int _indexedFields;
+
+		public int TotalFields { get; private set; }
 
 		public int MaxCount
 		{

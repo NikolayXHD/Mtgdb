@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
+using Lucene.Net.Index;
 using Lucene.Net.Store;
+using Lucene.Net.Util;
 
 namespace Mtgdb.Dal.Index
 {
-	public static class LuceneExtensions
+	public static class IndexUtils
 	{
 		public static IEnumerable<(string Term, int Offset)> GetTokens(this Analyzer analyzer, string field, string value)
 		{
@@ -27,12 +30,19 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		public static void SaveTo(this RAMDirectory ramIndex, string versionDirectory)
+		public static IndexWriterConfig CreateWriterConfig(Analyzer analyzer)
 		{
-			var persistedIndex = FSDirectory.Open(versionDirectory);
+			var config = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer)
+			{
+				OpenMode = OpenMode.CREATE,
+				RAMPerThreadHardLimitMB = 128,
+				RAMBufferSizeMB = 128,
+				MaxBufferedDocs = 1 << 16, //64k
+				UseCompoundFile = false,
+				MaxThreadStates = Environment.ProcessorCount
+			};
 
-			foreach (string file in ramIndex.ListAll())
-				ramIndex.Copy(persistedIndex, file, file, IOContext.READ_ONCE);
+			return config;
 		}
 	}
 }

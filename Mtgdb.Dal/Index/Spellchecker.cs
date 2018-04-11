@@ -6,7 +6,6 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
-using Lucene.Net.Util;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
@@ -44,7 +43,7 @@ namespace Mtgdb.Dal.Index
 		/// is created if it doesn't exist yet.
 		/// </summary>
 		/// <param name="spellIndex">the spell index directory</param>
-		public void Load(RAMDirectory spellIndex)
+		public void Load(FSDirectory spellIndex)
 		{
 			ensureOpen();
 			swapSearcher(spellIndex);
@@ -174,41 +173,33 @@ namespace Mtgdb.Dal.Index
 
 		public void IndexWord(string discriminator, string word)
 		{
-			lock (_syncModify)
-			{
-				int len = word.Length;
+			int len = word.Length;
 
-				// ok index the word
-				int min = getMin(len);
-				int max = getMax(len);
+			// ok index the word
+			int min = getMin(len);
+			int max = getMax(len);
 
-				if (len < min)
-					return;
+			if (len < min)
+				return;
 
-				var doc = createDocument(word, min, max, discriminator);
-				_indexWriter.AddDocument(doc);
-			}
+			var doc = createDocument(word, min, max, discriminator);
+			_indexWriter.AddDocument(doc);
 		}
 
-		public void BeginIndex()
+		public void BeginIndex(FSDirectory index)
 		{
 			ensureOpen();
 
-			var indexWriterConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())
-			{
-				OpenMode = OpenMode.CREATE
-			};
+			var config = IndexUtils.CreateWriterConfig(new KeywordAnalyzer());
 
-			_spellcheckerIndex = new RAMDirectory();
-			_indexWriter = new IndexWriter(_spellcheckerIndex, indexWriterConfig);
+			_spellcheckerIndex = index;
+			_indexWriter = new IndexWriter(_spellcheckerIndex, config);
 		}
 
-		public void SaveTo(string directory)
+		public void EndIndex()
 		{
 			_indexWriter.Flush(triggerMerge: true, applyAllDeletes: false);
 			_indexWriter.Dispose();
-
-			_spellcheckerIndex.SaveTo(directory);
 
 			// also re-open the spell index to see our own changes when the next suggestion
 			// is fetched:
@@ -296,7 +287,7 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		private void swapSearcher(RAMDirectory dir)
+		private void swapSearcher(FSDirectory dir)
 		{
 			/*
              * opening a searcher is possibly very expensive.
@@ -358,13 +349,12 @@ namespace Mtgdb.Dal.Index
 		private const string WordField = "word";
 		private const string DiscriminatorField = "discr";
 		private IndexSearcher _searcher;
-		private RAMDirectory _spellcheckerIndex;
+		private FSDirectory _spellcheckerIndex;
 		private IndexWriter _indexWriter;
 		private readonly IStringSimilarity _similarity;
 
 		private volatile bool _closed;
 
 		private static readonly object _syncSearcher = new object();
-		private static readonly object _syncModify = new object();
 	}
 }
