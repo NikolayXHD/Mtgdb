@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Index;
@@ -30,19 +31,41 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
+		public static void SaveTo(this RAMDirectory index, string directory)
+		{
+			var files = index.ListAll();
+
+			using (var storedIndex = FSDirectory.Open(directory))
+			{
+				foreach (string file in files)
+					index.Copy(storedIndex, file, file, IOContext.READ_ONCE);
+			}
+		}
+
 		public static IndexWriterConfig CreateWriterConfig(Analyzer analyzer)
 		{
 			var config = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer)
 			{
 				OpenMode = OpenMode.CREATE,
 				RAMPerThreadHardLimitMB = 128,
-				RAMBufferSizeMB = 128,
+				RAMBufferSizeMB = 128 * _maxParallelism,
 				MaxBufferedDocs = 1 << 16, //64k
-				UseCompoundFile = false,
-				MaxThreadStates = Environment.ProcessorCount
+				//UseCompoundFile = false,
+				//MaxThreadStates = _maxParallelism
 			};
 
 			return config;
 		}
+
+		private static readonly bool _useParallelism = false;
+
+		private static readonly int _maxParallelism = _useParallelism
+			? Math.Max(Environment.ProcessorCount - 1, 1)
+			: 1;
+
+		public static ParallelOptions ParallelOptions { get; } = new ParallelOptions
+		{
+			MaxDegreeOfParallelism = _maxParallelism
+		};
 	}
 }

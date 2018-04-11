@@ -71,58 +71,58 @@ namespace Mtgdb.Dal.Index
 					.SelectMany(f => f.GetFieldLanguages().Select(l => (f, l)))
 					.ToReadOnlyList();
 
-			TotalFields = tasks.Count + 1;
+			TotalFields = tasks.Count;
 			var indexedWordsByDiscriminator = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
 			Version.CreateDirectory();
-			var index = FSDirectory.Open(Version.Directory);
+			var index = new RAMDirectory();
 			spellchecker.BeginIndex(index);
 
-			var parallelOptions = new ParallelOptions
+			void execute((string UserField, string Language) task)
 			{
-				MaxDegreeOfParallelism = Environment.ProcessorCount - 1
-			};
+				if (_abort)
+					return;
 
-			Parallel.ForEach(tasks,
-				parallelOptions,
-				task =>
+				var discriminator = task.UserField.GetDiscriminatorIn(task.Language);
+				string spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
+
+				foreach (string value in getValuesCache(spellcheckerField))
 				{
-					if (_abort)
-						return;
-
-					var discriminator = task.UserField.GetDiscriminatorIn(task.Language);
-					string spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
-
-					foreach (string value in getValuesCache(spellcheckerField))
+					bool isNewWord;
+					lock (indexedWordsByDiscriminator)
 					{
-						bool isNewWord;
-						lock (indexedWordsByDiscriminator)
+						if (!indexedWordsByDiscriminator.TryGetValue(discriminator, out var indexedWords))
 						{
-							if (!indexedWordsByDiscriminator.TryGetValue(discriminator, out var indexedWords))
-							{
-								indexedWords = new HashSet<string>(Str.Comparer);
-								indexedWordsByDiscriminator.Add(discriminator, indexedWords);
-							}
-
-							isNewWord = indexedWords.Add(value);
+							indexedWords = new HashSet<string>(Str.Comparer);
+							indexedWordsByDiscriminator.Add(discriminator, indexedWords);
 						}
 
-						if (isNewWord)
-							spellchecker.IndexWord(discriminator, value);
+						isNewWord = indexedWords.Add(value);
 					}
 
-					Interlocked.Increment(ref _indexedFields);
-					IndexingProgress?.Invoke();
-				});
+					if (isNewWord)
+						spellchecker.IndexWord(discriminator, value);
+				}
+
+				Interlocked.Increment(ref _indexedFields);
+				IndexingProgress?.Invoke();
+			}
+			
+			var parallelOptions = IndexUtils.ParallelOptions;
+			if (parallelOptions.MaxDegreeOfParallelism > 1)
+				Parallel.ForEach(tasks, parallelOptions, execute);
+			else
+				foreach (var task in tasks)
+					execute(task);
 
 			if (_abort)
 				return null;
 
 			spellchecker.EndIndex();
+			index.SaveTo(Version.Directory);
+
 			IsLoading = false;
 			Version.SetIsUpToDate();
-
-			_indexedFields++;
 			IndexingProgress?.Invoke();
 
 			return spellchecker;

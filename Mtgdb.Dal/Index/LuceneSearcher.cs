@@ -68,45 +68,56 @@ namespace Mtgdb.Dal.Index
 			Spellchecker.LoadIndex(_indexReader);
 		}
 
-		private FSDirectory createIndex()
+		private Directory createIndex()
 		{
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localiztions first");
 
 			Version.CreateDirectory();
-			var index = FSDirectory.Open(Version.Directory);
+			var index = new RAMDirectory();
 
 			var indexWriterAnalyzer = new MtgAnalyzer();
 			var config = IndexUtils.CreateWriterConfig(indexWriterAnalyzer);
 
 			using (var writer = new IndexWriter(index, config))
 			{
-				Parallel.ForEach(_repo.SetsByCode.Values,
-					set =>
+				void indexSet(Set set)
+				{
+					if (_abort)
+						return;
+
+					if (!FilterSet(set))
+						return;
+
+					foreach (var card in set.Cards)
 					{
 						if (_abort)
 							return;
 
-						if (!FilterSet(set))
-							return;
+						writer.AddDocument(card.Document);
+					}
 
-						foreach (var card in set.Cards)
-						{
-							if (_abort)
-								return;
+					Interlocked.Increment(ref _setsAddedToIndex);
+					IndexingProgress?.Invoke();
+				}
 
-							writer.AddDocument(card.Document);
-						}
+				var parallelOptions = IndexUtils.ParallelOptions;
+				if (parallelOptions.MaxDegreeOfParallelism > 1)
+					Parallel.ForEach(_repo.SetsByCode.Values, parallelOptions, indexSet);
+				else
+					foreach (var set in _repo.SetsByCode.Values)
+						indexSet(set);
 
-						Interlocked.Increment(ref _setsAddedToIndex);
-						IndexingProgress?.Invoke();
-					});
+				writer.Flush(triggerMerge: true, applyAllDeletes: false);
+				writer.Commit();
 			}
 
 			if (_abort)
 				return null;
 
+			index.SaveTo(Version.Directory);
 			Version.SetIsUpToDate();
+
 			return index;
 		}
 

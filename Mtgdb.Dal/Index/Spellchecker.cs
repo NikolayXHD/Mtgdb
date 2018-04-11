@@ -186,7 +186,7 @@ namespace Mtgdb.Dal.Index
 			_indexWriter.AddDocument(doc);
 		}
 
-		public void BeginIndex(FSDirectory index)
+		public void BeginIndex(Directory index)
 		{
 			ensureOpen();
 
@@ -213,7 +213,7 @@ namespace Mtgdb.Dal.Index
 
 		private static int getMax(int l)
 		{
-			return Math.Min(l, 4);
+			return Math.Min(l, 3);
 		}
 
 
@@ -287,7 +287,7 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		private void swapSearcher(FSDirectory dir)
+		private void swapSearcher(Directory dir)
 		{
 			/*
              * opening a searcher is possibly very expensive.
@@ -343,13 +343,13 @@ namespace Mtgdb.Dal.Index
 		private float BoostStart { get; } = 2f;
 		private float BoostEnd { get; } = 1.25f;
 
-		private const int SearchCountMultiplier = 5;
+		private const int SearchCountMultiplier = 3;
 		internal const float MinScore = 0.5f;
 
 		private const string WordField = "word";
 		private const string DiscriminatorField = "discr";
 		private IndexSearcher _searcher;
-		private FSDirectory _spellcheckerIndex;
+		private Directory _spellcheckerIndex;
 		private IndexWriter _indexWriter;
 		private readonly IStringSimilarity _similarity;
 
