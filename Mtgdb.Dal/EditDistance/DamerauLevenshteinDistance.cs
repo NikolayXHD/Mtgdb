@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mtgdb.Dal
 {
-	public class LevenshteinDistance
+	public class DamerauLevenshteinDistance
 	{
 		public float GetPrefixDistance(string userStr, string dictStr)
 		{
@@ -13,9 +13,6 @@ namespace Mtgdb.Dal
 
 		public EditDistances GetDistances(string userStr, string dictStr)
 		{
-			userStr = userStr.ToLower(Str.Culture);
-			dictStr = dictStr.ToLower(Str.Culture);
-
 			int userStrLength = userStr.Length;
 			int dictStrLength = dictStr.Length;
 

@@ -4,7 +4,6 @@ using Lucene.Net.Analysis.TokenAttributes;
 
 namespace Mtgdb.Dal.Index
 {
-	/// <summary>Normalizes token text to lower case.</summary>
 	internal sealed class ReplaceFilter : TokenFilter
 	{
 		private readonly IDictionary<char, char> _replacements;
@@ -26,12 +25,8 @@ namespace Mtgdb.Dal.Index
 				int length = _termAtt.Length;
 
 				for (int i = 0; i < length; i++)
-				{
 					if (_replacements.TryGetValue(buffer[i], out char replaced))
 						buffer[i] = replaced;
-					else
-						buffer[i] = char.ToLowerInvariant(buffer[i]);
-				}
 
 				return true;
 			}

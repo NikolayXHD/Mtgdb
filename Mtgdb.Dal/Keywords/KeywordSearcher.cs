@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis.Core;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -23,8 +22,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.28 refactoring
-			set => _version = new IndexVersion(value, "0.28");
+			// 0.29 refactoring
+			set => _version = new IndexVersion(value, "0.29");
 		}
 
 		public void InvalidateIndex()
@@ -74,24 +73,24 @@ namespace Mtgdb.Dal
 				if (keywordQueryTerm.Values != null)
 					foreach (string andValue in keywordQueryTerm.Values)
 					{
-						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(andValue))
 							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT);
 						else
-							query.Add(new TermQuery(new Term(fieldName, andValue.ToLowerInvariant())), Occur.MUST);
+							query.Add(new TermQuery(new Term(fieldName, andValue.ToLower(Str.Culture))), Occur.MUST);
 					}
 
 			foreach (var keywordQueryTerm in notTerms)
 				if (keywordQueryTerm.Values != null)
 					foreach (string notValue in keywordQueryTerm.Values)
 					{
-						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(notValue))
 							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST);
 						else
-							query.Add(new TermQuery(new Term(fieldName, notValue.ToLowerInvariant())), Occur.MUST_NOT);
+							query.Add(new TermQuery(new Term(fieldName, notValue.ToLower(Str.Culture))), Occur.MUST_NOT);
 					}
 
 			foreach (var keywordQueryTerm in orTerms)
@@ -100,7 +99,7 @@ namespace Mtgdb.Dal
 					var queryTermOr = new BooleanQuery(disableCoord: true);
 					foreach (string orValue in keywordQueryTerm.Values)
 					{
-						string fieldName = keywordQueryTerm.FieldName.ToLowerInvariant();
+						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(orValue))
 						{
@@ -109,7 +108,7 @@ namespace Mtgdb.Dal
 							queryTermOr.Add(booleanQuery, Occur.SHOULD);
 						}
 						else
-							queryTermOr.Add(new TermQuery(new Term(fieldName, orValue.ToLowerInvariant())), Occur.SHOULD);
+							queryTermOr.Add(new TermQuery(new Term(fieldName, orValue.ToLower(Str.Culture))), Occur.SHOULD);
 					}
 
 					query.Add(queryTermOr, Occur.MUST);
@@ -151,7 +150,7 @@ namespace Mtgdb.Dal
 			_version.CreateDirectory();
 
 			var fsIndex = FSDirectory.Open(_version.Directory);
-			using (var writer = new IndexWriter(fsIndex, new IndexWriterConfig(LuceneVersion.LUCENE_48, new KeywordAnalyzer())))
+			using (var writer = new IndexWriter(fsIndex, new IndexWriterConfig(LuceneVersion.LUCENE_48, new LowercaseKeywordAnalyzer())))
 				foreach (var keyword in keywordsList)
 				{
 					var doc = keyword.ToDocument();

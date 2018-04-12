@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis.Core;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
@@ -38,172 +37,199 @@ namespace Mtgdb.Dal.Index
 			_similarity = similarity;
 		}
 
-		/// <summary>
-		/// Use the given directory as a spell checker index. The directory
-		/// is created if it doesn't exist yet.
-		/// </summary>
-		/// <param name="spellIndex">the spell index directory</param>
-		public void Load(FSDirectory spellIndex)
+		public void Load(string directory)
 		{
-			ensureOpen();
-			swapSearcher(spellIndex);
+			_index = FSDirectory.Open(directory);
+			_reader = DirectoryReader.Open(_index);
+			_searcher = new IndexSearcher(_reader);
 		}
 
-		public IReadOnlyList<string> SuggestSimilar(
-			string word,
-			int numSug,
-			ICollection<string> discriminators,
-			ICollection<string> fields,
-			IndexReader reader)
+		public void BeginIndex()
 		{
-			// obtainSearcher calls ensureOpen
-			var indexSearcher = obtainSearcher();
-			try
-			{
-				float min = MinScore;
-				int lengthWord = word.Length;
+			var config = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
 
-				var query = new BooleanQuery();
-
-				var alreadySeen = new HashSet<string>();
-				for (var len = getMin(lengthWord); len <= getMax(lengthWord); len++)
-				{
-					string key = "gram" + len;
-
-					var grams = formGrams(word, len);
-
-					if (BoostStart > 0)
-						add(query, "start" + len, grams[0], BoostStart);
-
-					if (BoostEnd > 0)
-						// should we boost suffixes
-						add(query, "end" + len, grams[grams.Length - 1], BoostEnd); // matches end of word
-
-					for (int i = 0; i < grams.Length; i++)
-						add(query, key, grams[i]);
-
-					var filterDiscriminators = new BooleanQuery();
-					foreach (string discriminator in discriminators)
-						filterDiscriminators.Add(new TermQuery(new Term(DiscriminatorField, discriminator)), Occur.SHOULD);
-
-					query.Add(filterDiscriminators, Occur.MUST);
-				}
-
-				int maxHits = SearchCountMultiplier * numSug;
-
-				var hits = indexSearcher.Search(query, maxHits).ScoreDocs;
-
-				var sugQueue = new OrderedSet<SuggestWord, SuggestWord>();
-
-				// go thru more than 'maxr' matches in case the distance filter triggers
-				int stop = Math.Min(hits.Length, maxHits);
-				var sugWord = new SuggestWord();
-				for (int i = 0; i < stop; i++)
-				{
-					sugWord.String = indexSearcher.Doc(hits[i].Doc).Get(WordField); // get orig word
-
-					// edit distance
-					sugWord.Score = _similarity.GetSimilarity(word, sugWord.String);
-
-					if (sugWord.Score < min)
-						continue;
-
-					if (reader != null && fields != null)
-					{
-						var matchingField = fields.FirstOrDefault(f => reader.DocFreq(new Term(f.ToLowerInvariant(), sugWord.String)) > 0);
-						if (matchingField == null)
-							continue;
-					}
-
-					if (alreadySeen.Add(sugWord.String) == false) // we already seen this word, no point returning it twice
-						continue;
-
-					sugQueue.TryAdd(sugWord, sugWord);
-
-					if (sugQueue.Count == numSug)
-						min = sugQueue.TryRemoveMin().Score;
-
-					sugWord = new SuggestWord();
-				}
-
-				return sugQueue.Reverse()
-					.Select(_ => _.String)
-					.ToReadOnlyList();
-			}
-			finally
-			{
-				releaseSearcher(indexSearcher);
-			}
+			_index = new RAMDirectory();
+			_indexWriter = new IndexWriter(_index, config);
 		}
 
-
-		/// <summary> Add a clause to a boolean query.</summary>
-		private static void add(BooleanQuery q, string k, string v, float boost)
-		{
-			Query tq = new TermQuery(new Term(k, v));
-			tq.Boost = boost;
-			q.Add(new BooleanClause(tq, Occur.SHOULD));
-		}
-
-
-		/// <summary> Add a clause to a boolean query.</summary>
-		private static void add(BooleanQuery q, string k, string v)
-		{
-			q.Add(new BooleanClause(new TermQuery(new Term(k, v)), Occur.SHOULD));
-		}
-
-
-		/// <summary> Form all ngrams for a given word.</summary>
-		/// <param name="text">the word to parse
-		/// </param>
-		/// <param name="ng">the ngram length e.g. 3
-		/// </param>
-		/// <returns> an array of all ngrams in the word and note that duplicates are not removed
-		/// </returns>
-		private static string[] formGrams(string text, int ng)
-		{
-			int len = text.Length;
-			string[] res = new string[len - ng + 1];
-
-			for (int i = 0; i < len - ng + 1; i++)
-				res[i] = text.Substring(i, ng);
-
-			return res;
-		}
-
-		public void IndexWord(string discriminator, string word)
-		{
-			int len = word.Length;
-
-			// ok index the word
-			int min = getMin(len);
-			int max = getMax(len);
-
-			if (len < min)
-				return;
-
-			var doc = createDocument(word, min, max, discriminator);
-			_indexWriter.AddDocument(doc);
-		}
-
-		public void BeginIndex(Directory index)
-		{
-			ensureOpen();
-
-			var config = IndexUtils.CreateWriterConfig(new KeywordAnalyzer());
-
-			_spellcheckerIndex = index;
-			_indexWriter = new IndexWriter(_spellcheckerIndex, config);
-		}
-
-		public void EndIndex()
+		public void EndIndex(string directory)
 		{
 			_indexWriter.Flush(triggerMerge: true, applyAllDeletes: false);
 			_indexWriter.Dispose();
 
-			// also re-open the spell index to see our own changes when the next suggestion
-			// is fetched:
-			swapSearcher(_spellcheckerIndex);
+			_index.SaveTo(directory);
+
+			_reader = DirectoryReader.Open(_index);
+			_searcher = new IndexSearcher(_reader);
+		}
+
+		public void Dispose()
+		{
+			if (_searcher == null)
+				return;
+
+			_searcher.IndexReader.Dispose();
+			_searcher = null;
+		}
+
+		public IReadOnlyList<string> ReadAllValuesFrom(string discriminant)
+		{
+			var query = new TermQuery(new Term(DiscriminantField, discriminant));
+
+			var searchResult = _searcher.Search(query, _reader.MaxDoc);
+
+			var result = searchResult.ScoreDocs
+				.Select(_ => _searcher.Doc(_.Doc).Get(WordField))
+				.Distinct()
+				.OrderBy(Str.Comparer)
+				.ToReadOnlyList();
+
+			return result;
+		}
+
+		public IReadOnlyList<string> SuggestSimilar(
+			string word,
+			int maxCount,
+			ICollection<string> discriminants,
+			ICollection<string> fields,
+			IndexReader reader)
+		{
+			word = word.ToLower(Str.Culture);
+
+			float min = MinScore;
+
+			var alreadySeen = new HashSet<string>();
+			var sugQueue = new OrderedSet<SuggestWord, SuggestWord>();
+
+			var nonExclusiveDiscriminants = new List<string>();
+			var exclusiveDiscriminants = new List<string>();
+
+			foreach (string discriminant in discriminants)
+				if (SpellcheckerDefinitions.IsDiscriminantExclusiveToField(discriminant))
+					exclusiveDiscriminants.Add(discriminant);
+				else
+					nonExclusiveDiscriminants.Add(discriminant);
+
+			void add(ICollection<string> discriminantsSubset, bool checkUserIndex)
+			{
+				var query = createQuery(word, discriminantsSubset);
+
+				int maxHits = SearchCountMultiplier * maxCount;
+				var hits = _searcher.Search(query, maxHits).ScoreDocs;
+				int stop = Math.Min(hits.Length, maxHits);
+
+				for (int i = 0; i < stop; i++)
+				{
+					string suggestValue = _searcher.Doc(hits[i].Doc).Get(WordField);
+					float score = _similarity.GetSimilarity(word, suggestValue);
+
+					if (score < min)
+						continue;
+
+					var sugWord = new SuggestWord
+					{
+						String = suggestValue,
+						Score = score
+					};
+
+					if (checkUserIndex && reader != null && fields != null)
+					{
+						var matchingField = fields.FirstOrDefault(f => reader.DocFreq(new Term(f, sugWord.String)) > 0);
+						if (matchingField == null)
+							continue;
+					}
+
+					if (!alreadySeen.Add(sugWord.String))
+						continue;
+
+					sugQueue.TryAdd(sugWord, sugWord);
+
+					if (sugQueue.Count > maxCount)
+						min = sugQueue.TryRemoveMin().Score;
+				}
+			}
+
+			if (exclusiveDiscriminants.Count > 0)
+				add(exclusiveDiscriminants, checkUserIndex: false);
+
+			if (nonExclusiveDiscriminants.Count > 0)
+				add(nonExclusiveDiscriminants, checkUserIndex: true);
+
+			return sugQueue
+				.Reverse()
+				.Select(_ => _.String)
+				.ToReadOnlyList();
+		}
+
+		private static Query createQuery(string word, ICollection<string> discriminants)
+		{
+			var ngramQuery = createNgramQuery(word);
+
+			if (discriminants.Count == 0)
+				return ngramQuery;
+
+			var queryDiscriminant = createDiscriminantQuery(discriminants);
+
+			return new BooleanQuery
+			{
+				{ ngramQuery, Occur.MUST },
+				{ queryDiscriminant, Occur.MUST }
+			};
+		}
+
+		private static Query createDiscriminantQuery(ICollection<string> discriminants)
+		{
+			var filterDiscriminants = new BooleanQuery();
+
+			foreach (string discriminant in discriminants)
+				filterDiscriminants.Add(new TermQuery(new Term(DiscriminantField, discriminant)), Occur.SHOULD);
+
+			return filterDiscriminants;
+		}
+
+		private static Query createNgramQuery(string word)
+		{
+			int min = getMin(word.Length);
+			int max = getMax(word.Length);
+
+			var query = new BooleanQuery();
+			for (var n = min; n <= max; n++)
+			{
+				string gramField = "ng" + n;
+				string startField = "s" + n;
+				string endField = "f" + n;
+
+				int right = word.Length - n;
+
+				for (int i = 0; i <= right; i++)
+				{
+					string ngram = word.Substring(i, n);
+
+					if (i == 0)
+						query.Add(new TermQuery(new Term(startField, ngram)) { Boost = BoostStart }, Occur.SHOULD);
+
+					query.Add(new TermQuery(new Term(gramField, ngram)), Occur.SHOULD);
+
+					if (i == right)
+						query.Add(new TermQuery(new Term(endField, ngram)) { Boost = BoostEnd }, Occur.SHOULD);
+				}
+			}
+
+			return query;
+		}
+
+
+
+		public void IndexWord(string discriminant, string word)
+		{
+			int min = getMin(word.Length);
+			int max = getMax(word.Length);
+
+			if (word.Length < min)
+				return;
+
+			var doc = createDocument(word, min, max, discriminant);
+			_indexWriter.AddDocument(doc);
 		}
 
 		private static int getMin(int l)
@@ -217,144 +243,58 @@ namespace Mtgdb.Dal.Index
 		}
 
 
-		private static Document createDocument(string text, int minNgram, int maxNgram, string field)
+		private static Document createDocument(string text, int minNgram, int maxNgram, string discriminant)
 		{
 			var doc = new Document
 			{
-				new StringField(WordField, text, Field.Store.YES),
-				new StringField(DiscriminatorField, field.ToLowerInvariant(), Field.Store.NO)
+				new Field(WordField, text, new FieldType(StringField.TYPE_STORED) { IsIndexed = false }),
+				new Field(DiscriminantField, discriminant, IndexUtils.StringFieldType)
 			};
 
-			int originalLen = text.Length;
-
-			for (int len = minNgram; len <= maxNgram; len++)
+			for (int n = minNgram; n <= maxNgram; n++)
 			{
-				string key = "gram" + len;
-				string end = null;
+				string gramField = "ng" + n;
+				string startField = "s" + n;
+				string endField = "f" + n;
 
-				for (int i = 0; i < originalLen - len + 1; i++)
+				int right = text.Length - n;
+
+				for (int i = 0; i <= right; i++)
 				{
-					string gram = text.Substring(i, len);
-					doc.Add(new StringField(key, gram, Field.Store.NO));
+					string gram = text.Substring(i, n);
 
 					if (i == 0)
-						doc.Add(new StringField("start" + len, gram, Field.Store.NO));
+					{
+						doc.Add(new Field(startField, gram, IndexUtils.StringFieldType));
+					}
 
-					end = gram;
+					if (i == right)
+						doc.Add(new Field(endField, gram, IndexUtils.StringFieldType));
+
+					doc.Add(new Field(gramField, gram, IndexUtils.StringFieldType));
 				}
-
-				if (end != null)
-					doc.Add(new StringField("end" + len, end, Field.Store.NO));
 			}
 
 			return doc;
 		}
 
 
-		private IndexSearcher obtainSearcher()
-		{
-			lock (_syncSearcher)
-			{
-				ensureOpen();
-				_searcher.IndexReader.IncRef();
-				return _searcher;
-			}
-		}
 
-		private static void releaseSearcher(IndexSearcher aSearcher)
-		{
-			// don't check if open - always decRef 
-			// don't decrement the private searcher - could have been swapped
-			aSearcher.IndexReader.DecRef();
-		}
+		private DirectoryReader _reader;
 
-		private void ensureOpen()
-		{
-			if (_closed)
-			{
-				throw new InvalidOperationException("Spellchecker has been closed");
-			}
-		}
+		private const float BoostStart = 2f;
+		private const float BoostEnd = 1.25f;
+		private const int SearchCountMultiplier = 2;
 
-		private void close()
-		{
-			lock (_syncSearcher)
-			{
-				ensureOpen();
-				_closed = true;
-				_searcher?.IndexReader.Dispose();
-				_searcher = null;
-			}
-		}
-
-		private void swapSearcher(Directory dir)
-		{
-			/*
-             * opening a searcher is possibly very expensive.
-             * We rather close it again if the Spellchecker was closed during
-             * this operation than block access to the current searcher while opening.
-             */
-			IndexSearcher indexSearcher = createSearcher(dir);
-			lock (_syncSearcher)
-			{
-				if (_closed)
-				{
-					indexSearcher.IndexReader.Dispose();
-					throw new InvalidOperationException("Spellchecker has been closed");
-				}
-
-				_searcher?.IndexReader.Dispose();
-				// set the spellindex in the sync block - ensure consistency.
-				_searcher = indexSearcher;
-				_spellcheckerIndex = dir;
-			}
-		}
-
-		/// <summary>
-		/// Creates a new read-only IndexSearcher (for testing purposes)
-		/// </summary>
-		/// <param name="dir">dir the directory used to open the searcher</param>
-		/// <returns>a new read-only IndexSearcher. (throws IOException f there is a low-level IO error)</returns>
-		private static IndexSearcher createSearcher(Directory dir)
-		{
-			return new IndexSearcher(DirectoryReader.Open(dir));
-		}
-
-		~Spellchecker()
-		{
-			dispose(false);
-		}
-
-		public void Dispose()
-		{
-			dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void dispose(bool disposeOfManagedResources)
-		{
-			if (disposeOfManagedResources)
-			{
-				if (!_closed)
-					close();
-			}
-		}
-
-		private float BoostStart { get; } = 2f;
-		private float BoostEnd { get; } = 1.25f;
-
-		private const int SearchCountMultiplier = 3;
-		internal const float MinScore = 0.5f;
+		private const float MinScore = 0.5f;
 
 		private const string WordField = "word";
-		private const string DiscriminatorField = "discr";
+		private const string DiscriminantField = "discr";
+
+		private Directory _index;
 		private IndexSearcher _searcher;
-		private Directory _spellcheckerIndex;
 		private IndexWriter _indexWriter;
+
 		private readonly IStringSimilarity _similarity;
-
-		private volatile bool _closed;
-
-		private static readonly object _syncSearcher = new object();
 	}
 }

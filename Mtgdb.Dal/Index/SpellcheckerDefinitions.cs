@@ -12,23 +12,37 @@ namespace Mtgdb.Dal.Index
 			return DocumentFactory.NotAnalyzedFields.Contains(spellcheckerField);
 		}
 
-		public static string GetDiscriminatorIn(this string userField, string lang)
+		public static string GetDiscriminantIn(this string userField, string lang)
 		{
 			var transformed = transform(userField, lang);
 
-			if (_fieldDiscriminators.TryGetValue(transformed, out var discriminator))
-				return discriminator;
+			if (SpellcheckerValueGetters.ContainsKey(transformed))
+				return userField.GetSpellcheckerFieldIn(lang);
 
-			throw new ArgumentException($"discriminator not found for {transformed}", nameof(userField));
+			var result = _fieldDiscriminants[transformed];
+			return result;
 		}
+
+		public static bool SpellchekFromOriginalIndexIn(this string userField, string lang)
+		{
+			if (DocumentFactory.NumericFields.Contains(userField))
+				return true;
+
+			var transformed = transform(userField, lang);
+			return _fieldDiscriminants.ContainsKey(transformed);
+		}
+
+		public static bool IsDiscriminantExclusiveToField(string discriminant)
+		{
+			return !discriminant.All(char.IsDigit);
+		}
+
+
 
 		public static string GetSpellcheckerFieldIn(this string userField, string lang)
 		{
 			var transformed = transform(userField, lang);
 			string localized = transformed.GetFieldLocalizedIn(lang);
-
-			if (NotAnalyzedDuplicates.Contains(userField))
-				return localized + NotAnalyzedSuffix;
 
 			return localized;
 		}
@@ -59,54 +73,42 @@ namespace Mtgdb.Dal.Index
 			if (DocumentFactory.LocalizedFields.Contains(userField))
 				return DocumentFactory.Languages;
 
-			return Enumerable.Repeat((string) null, 1);
+			return Unit.Sequence((string) null);
 		}
 
-		public const string NotAnalyzedSuffix = "na";
+		public static Dictionary<string, Func<Card, string, IEnumerable<string>>> SpellcheckerValueGetters { get; } =
+			new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
+			{
+				[nameof(Card.Name)] = (c, lang) => Unit.Sequence(c.GetName(lang)),
+				[nameof(Card.NameEn)] = (c, lang) => Unit.Sequence(c.NameEn),
+				[nameof(Card.Artist)] = (c, lang) => Unit.Sequence(c.Artist),
+				[nameof(Card.SetName)] = (c, lang) => Unit.Sequence(c.SetName),
+				[nameof(Card.LegalIn)] = (c, lang) => c.LegalFormats,
+				[nameof(Card.RestrictedIn)] = (c, lang) => c.RestrictedFormats,
+				[nameof(Card.BannedIn)] = (c, lang) => c.BannedFormats
+			};
 
-		public static readonly HashSet<string> NotAnalyzedDuplicates = new HashSet<string>(Str.Comparer)
-		{
-			nameof(Card.Name),
-			nameof(Card.NameEn),
-			nameof(Card.SetName),
-			nameof(Card.Artist),
-
-			nameof(Card.LegalIn),
-			nameof(Card.RestrictedIn),
-			nameof(Card.BannedIn)
-		};
-
-		private static readonly Dictionary<string, string> _fieldDiscriminators = new Dictionary<string, string>(Str.Comparer)
+		private static readonly Dictionary<string, string> _fieldDiscriminants = new Dictionary<string, string>(Str.Comparer)
 		{
 			[nameof(Card.Text)] = "9",
 			[nameof(Card.Flavor)] = "9",
-			[nameof(Card.Name)] = "9",
 			[nameof(Card.Type)] = "9",
 
-			[nameof(Card.NameEn)] = "7",
 			[nameof(Card.TextEn)] = "7",
 			[nameof(Card.FlavorEn)] = "7",
 			[nameof(Card.OriginalText)] = "7",
 
-
-
 			[nameof(Card.TypeEn)] = "3",
 			[nameof(Card.OriginalType)] = "3",
 			[nameof(Card.Subtypes)] = "3",
-			[nameof(Card.Artist)] = "3",
+			[nameof(Card.ReleaseDate)] = "3",
 
 			[nameof(KeywordDefinitions.Keywords)] = "2",
-			[nameof(Card.SetName)] = "2",
 			[nameof(Card.SetCode)] = "2",
-			[nameof(Card.ReleaseDate)] = "2",
-
 
 			[nameof(Card.Color)] = "1",
 			[nameof(Card.Supertypes)] = "1",
 			[nameof(Card.Types)] = "1",
-			[nameof(Card.LegalIn)] = "1",
-			[nameof(Card.RestrictedIn)] = "1",
-			[nameof(Card.BannedIn)] = "1",
 			[nameof(Card.Power)] = "1",
 			[nameof(Card.Toughness)] = "1",
 			[nameof(Card.Loyalty)] = "1",
@@ -114,7 +116,7 @@ namespace Mtgdb.Dal.Index
 			[nameof(Card.Rarity)] = "1",
 			[nameof(Card.GeneratedMana)] = "1",
 			[nameof(Card.ManaCost)] = "1",
-			[nameof(Card.Rarity)] = "1",
+			[nameof(Card.Rarity)] = "1"
 		};
 	}
 }

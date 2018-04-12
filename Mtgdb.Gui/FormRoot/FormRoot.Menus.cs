@@ -174,7 +174,7 @@ namespace Mtgdb.Gui
 		private void languageMenuClick(object sender, EventArgs e)
 		{
 			var button = (ButtonBase) sender;
-			UiModel.LanguageController.Language = button.Text.ToLowerInvariant().Trim();
+			UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture).Trim();
 		}
 
 		private void updateLanguage()

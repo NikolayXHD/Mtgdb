@@ -7,8 +7,7 @@ namespace Mtgdb.Dal.Index
 	{
 		public static IEnumerable<char> GetEquivalents(char c)
 		{
-			return (_equivalents.TryGet(c) ?? Enumerable.Empty<char>())
-				.Concat(Enumerable.Repeat(c, 1));
+			return (_equivalents.TryGet(c) ?? Enumerable.Empty<char>()).Append(c);
 		}
 
 		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("̈+-/_{}²½–—―−∞");

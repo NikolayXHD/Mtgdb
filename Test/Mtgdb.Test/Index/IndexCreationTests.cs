@@ -18,7 +18,9 @@ namespace Mtgdb.Test
 
 			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
 
-			_luceneSearcher.FilterSet = _keywordSearcher.FilterSet = filterSet;
+			_luceneSearcher.Spellchecker.FilterSet =
+				_luceneSearcher.FilterSet =
+					_keywordSearcher.FilterSet = filterSet;
 		}
 
 		[Test, Order(0)]
@@ -77,13 +79,12 @@ namespace Mtgdb.Test
 		{
 			var cardIds = _keywordSearcher.GetCardIds(
 					Enumerable.Empty<KeywordQueryTerm>(),
-					Enumerable.Repeat(new KeywordQueryTerm
-						{
-							FieldName = "Cmc",
-							Patterns = new[] { new Regex("^0$") },
-							Values = new[] { "0" }
-						},
-						1),
+					Unit.Sequence(new KeywordQueryTerm
+					{
+						FieldName = "Cmc",
+						Patterns = new[] { new Regex("^0$") },
+						Values = new[] { "0" }
+					}),
 					Enumerable.Empty<KeywordQueryTerm>())
 				.ToArray();
 
@@ -104,7 +105,7 @@ namespace Mtgdb.Test
 			var suggest = _luceneSearcher.Spellchecker.Suggest("en", query, caret: query.Length).Values;
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
-			Assert.That(suggest, Has.Some.Contains("vampire"));
+			Assert.That(suggest, Has.Some.Contains("vampire").IgnoreCase);
 		}
 
 		private LuceneSearcher _luceneSearcher;

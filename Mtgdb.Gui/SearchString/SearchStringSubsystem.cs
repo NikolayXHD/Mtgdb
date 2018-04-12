@@ -347,34 +347,6 @@ namespace Mtgdb.Gui
 					e.SuppressKeyPress = true;
 					break;
 
-				case Keys.Control | Keys.X:
-				case Keys.Shift | Keys.Delete:
-					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
-					{
-						Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
-
-						var prefix = _findEditor.Text.Substring(0, _findEditor.SelectionStart);
-						int suffixStart = _findEditor.SelectionStart + _findEditor.SelectionLength;
-						var suffix = suffixStart < _findEditor.Text.Length
-							? _findEditor.Text.Substring(suffixStart)
-							: string.Empty;
-
-						setFindText(prefix + suffix, prefix.Length);
-					}
-
-					e.Handled = true;
-					e.SuppressKeyPress = true;
-					break;
-
-				case Keys.Control | Keys.C:
-				case Keys.Control | Keys.Insert:
-					if (!string.IsNullOrEmpty(_findEditor.SelectedText))
-						Clipboard.SetText(SearchStringMark + _findEditor.SelectedText);
-
-					e.Handled = true;
-					e.SuppressKeyPress = true;
-					break;
-
 				case Keys.Control | Keys.V:
 				case Keys.Shift | Keys.Insert:
 					pasteFromClipboard();
@@ -402,26 +374,10 @@ namespace Mtgdb.Gui
 
 					break;
 
-				case Keys.Shift | Keys.Right:
-				case Keys.Shift | Keys.End:
-				case Keys.Shift | Keys.Control | Keys.Right:
-				case Keys.Shift | Keys.Control | Keys.End:
-					if (_findEditor.SelectionStart + _findEditor.SelectionLength == _findEditor.TextLength)
-					{
-						e.Handled = true;
-						e.SuppressKeyPress = true;
-					}
-
-					break;
-
 				case Keys.Left:
 				case Keys.Home:
 				case Keys.Control | Keys.Left:
 				case Keys.Control | Keys.Home:
-				case Keys.Shift | Keys.Left:
-				case Keys.Shift | Keys.Home:
-				case Keys.Shift | Keys.Control | Keys.Left:
-				case Keys.Shift | Keys.Control | Keys.Home:
 					if (_findEditor.SelectionStart == 0)
 					{
 						e.Handled = true;
@@ -464,9 +420,6 @@ namespace Mtgdb.Gui
 
 		private (string PreProcessedText, TokenType Type) classifyPastedText(string text)
 		{
-			if (text.StartsWith(SearchStringMark))
-				return (preProcessTextCopiedFromSearchInput(text), TokenType.None);
-
 			var (fieldName, fieldValue) = parseCopiedFromTooltip(text);
 
 			if (fieldName != null)
@@ -476,11 +429,6 @@ namespace Mtgdb.Gui
 				return (text, TokenType.None);
 
 			return (preProcessFieldValue(text), TokenType.FieldValue);
-		}
-
-		private static string preProcessTextCopiedFromSearchInput(string text)
-		{
-			return _endLineRegex.Replace(text.Substring(SearchStringMark.Length), " ");
 		}
 
 		private static string preProcessFieldValue(string text)
@@ -798,7 +746,6 @@ namespace Mtgdb.Gui
 		public event Action TextApplied;
 		public event Action TextChanged;
 
-		private const string SearchStringMark = "search: ";
 		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
 
 		public SuggestModel SuggestModel { get; set; }

@@ -30,8 +30,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.31 fixed double indexing en
-			set => Version = new IndexVersion(value, "0.31");
+			// 0.32 not double-indexing not analyzed duplicates
+			set => Version = new IndexVersion(value, "0.32");
 		}
 
 		public void LoadIndexes()

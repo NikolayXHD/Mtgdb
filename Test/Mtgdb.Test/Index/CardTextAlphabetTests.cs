@@ -48,7 +48,7 @@ namespace Mtgdb.Test
 				}
 			}
 
-			var chars = alphabet.Select(char.ToLowerInvariant).Distinct().OrderBy(c => c).ToArray();
+			var chars = alphabet.Select(c=> char.ToLower(c, Str.Culture)).Distinct().OrderBy(c => c).ToArray();
 
 			Log.Info(() => new string(chars));
 

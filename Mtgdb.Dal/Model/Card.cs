@@ -146,10 +146,10 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public string[] BannedFormats => _bannedFormats ?? (_bannedFormats = getFormats(Legality.Banned));
 
-		private string[] getFormats(string objB)
+		private string[] getFormats(string legality)
 		{
 			return LegalityByFormat
-				.Where(_ => Str.Equals(_.Value.Legality, objB))
+				.Where(_ => Str.Equals(_.Value.Legality, legality))
 				.Select(_ => _.Key)
 				.ToArray();
 		}

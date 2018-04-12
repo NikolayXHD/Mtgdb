@@ -5,9 +5,9 @@ using Lucene.Net.Util;
 
 namespace Mtgdb.Dal.Index
 {
-	public class SpellcheckerAnalyzer : Analyzer
+	public class LowercaseKeywordAnalyzer : Analyzer
 	{
-		public SpellcheckerAnalyzer()
+		public LowercaseKeywordAnalyzer()
 			:base(GLOBAL_REUSE_STRATEGY)
 		{
 		}

@@ -176,10 +176,9 @@ namespace Mtgdb.Gui
 		{
 			SuspendLayout();
 
-			var controls = _quickFilterControls
-				.Concat(Enumerable.Repeat(FilterManager, 1))
-				.ToArray();
+			var controls = _quickFilterControls.Append(FilterManager);
 
+			// ReSharper disable PossibleMultipleEnumeration
 			foreach (var control in controls)
 				control.SuspendLayout();
 
@@ -191,6 +190,7 @@ namespace Mtgdb.Gui
 				control.ResumeLayout(false);
 				control.PerformLayout();
 			}
+			// ReSharper restore PossibleMultipleEnumeration
 
 			setPanelCostWidth();
 

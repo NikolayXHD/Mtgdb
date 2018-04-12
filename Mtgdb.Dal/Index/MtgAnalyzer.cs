@@ -23,8 +23,10 @@ namespace Mtgdb.Dal.Index
 			else
 			{
 				var tokenizer = new MtgTokenizer(reader);
-				var filter = new ReplaceFilter(tokenizer, MtgAplhabet.Replacements);
-				return new TokenStreamComponents(tokenizer, filter);
+				var lowerCaseFilter = new LowerCaseFilter(LuceneVersion.LUCENE_48, tokenizer);
+				var replacementFilter = new ReplaceFilter(lowerCaseFilter, MtgAplhabet.Replacements);
+
+				return new TokenStreamComponents(tokenizer, replacementFilter);
 			}
 		}
 	}

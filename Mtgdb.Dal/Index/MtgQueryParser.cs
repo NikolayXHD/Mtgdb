@@ -319,18 +319,10 @@ namespace Mtgdb.Dal.Index
 			var result = new DisjunctionMaxQuery(0.1f);
 
 			if (!string.IsNullOrEmpty(card.TextEn))
-				result.Add(createMoreLikeThisQuery(
-					slop,
-					card.TextEn,
-					nameof(card.TextEn),
-					nameof(card.TextEn)));
+				result.Add(createMoreLikeThisQuery(slop, card.TextEn, nameof(card.TextEn)));
 
 			if (!string.IsNullOrEmpty(card.GeneratedMana))
-				result.Add(createMoreLikeThisQuery(
-					slop,
-					card.GeneratedMana,
-					nameof(card.GeneratedMana),
-					nameof(card.GeneratedMana)));
+				result.Add(createMoreLikeThisQuery(slop, card.GeneratedMana, nameof(card.GeneratedMana)));
 
 			if (result.Disjuncts.Count == 0)
 				return _matchNothingQuery;
@@ -338,18 +330,19 @@ namespace Mtgdb.Dal.Index
 			return result;
 		}
 
-		private MoreLikeThisQuery createMoreLikeThisQuery(float slop, string value, string field, params string[] fields)
+		private MoreLikeThisQuery createMoreLikeThisQuery(float slop, string value, string field)
 		{
 			if (slop <= 0f)
 				slop = 0.6f;
 			else if (slop > 1f)
 				slop = 1f;
 
+			field = field.ToLower(Str.Culture);
 			return new MoreLikeThisQuery(
 				value,
-				fields.Select(_ => _.ToLowerInvariant()).ToArray(),
+				new[] { field },
 				Analyzer,
-				field.ToLowerInvariant())
+				field)
 			{
 				PercentTermsToMatch = slop,
 				MaxQueryTerms = 20,

@@ -235,8 +235,8 @@ namespace Mtgdb.Downloader
 					_buttonApp.Tag = _buttonApp.Text;
 
 				int versionDelta = _versionComparer.Compare(
-					appVersionDownloaded.ToLowerInvariant().Replace(".zip", string.Empty),
-					_appVersionInstalled.ToLowerInvariant().Replace(".zip", string.Empty));
+					appVersionDownloaded.ToLower(Str.Culture).Replace(".zip", string.Empty),
+					_appVersionInstalled.ToLower(Str.Culture).Replace(".zip", string.Empty));
 
 				if (versionDelta > 0)
 				{

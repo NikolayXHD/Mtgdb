@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
@@ -183,7 +182,7 @@ namespace Mtgdb.Gui
 
 			_listBoxSuggest.Width = _listBoxSuggest.Width.ByDpiWidth();
 
-			foreach (var qf in _quickFilterControls.Concat(Enumerable.Repeat(FilterManager, 1)))
+			foreach (var qf in _quickFilterControls.Append(FilterManager))
 			{
 				qf.ImageSize = qf.ImageSize.ByDpi();
 				qf.HintTextShift = qf.HintTextShift.ByDpi();

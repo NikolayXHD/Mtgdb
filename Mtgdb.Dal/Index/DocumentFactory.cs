@@ -78,9 +78,6 @@ namespace Mtgdb.Dal.Index
 
 			if (displayField != null)
 				DisplayFieldByIndexField.Add(userField, displayField);
-
-			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
-				NotAnalyzedFields.Add(userField + SpellcheckerDefinitions.NotAnalyzedSuffix);
 		}
 
 		private static void addSpecificTextField(string userField, string language)
@@ -97,9 +94,6 @@ namespace Mtgdb.Dal.Index
 			_textFields.Add(localized);
 
 			DisplayFieldByIndexField.Add(localized, userField);
-
-			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
-				NotAnalyzedFields.Add(localized + SpellcheckerDefinitions.NotAnalyzedSuffix);
 		}
 
 		private static void addFloatField(string userField, string displayFieldName = null)
@@ -129,12 +123,7 @@ namespace Mtgdb.Dal.Index
 
 			foreach (var pair in cardKeywords.KeywordsByProperty)
 				foreach (string value in pair.Value)
-				{
-					doc.Add(new StringField(
-						pair.Key.ToLowerInvariant(),
-						value.ToLowerInvariant(),
-						Field.Store.NO));
-				}
+					doc.Add(new Field(pair.Key.ToLowerInvariant(), value, IndexUtils.StringFieldType));
 
 			return doc;
 		}
@@ -316,8 +305,12 @@ namespace Mtgdb.Dal.Index
 
 		private static void addIdField(this Document doc, string fieldName, int fieldValue)
 		{
-			fieldName = fieldName.ToLowerInvariant();
-			var field = new Int32Field(fieldName, fieldValue, Field.Store.YES);
+			fieldName = fieldName.ToLower(Str.Culture);
+
+			var field = new Int32Field(fieldName, fieldValue, new FieldType(Int32Field.TYPE_STORED)
+			{
+				IsIndexed = false
+			});
 
 			doc.Add(field);
 		}
@@ -326,7 +319,7 @@ namespace Mtgdb.Dal.Index
 
 		private static void addTextField(this Document doc, string userField, string fieldValue)
 		{
-			userField = userField.ToLowerInvariant();
+			userField = userField.ToLower(Str.Culture);
 			addSpecificTextField(doc, userField, userField, fieldValue);
 		}
 
@@ -335,7 +328,7 @@ namespace Mtgdb.Dal.Index
 			if (language == null)
 				throw new ArgumentNullException(nameof(language));
 
-			userField = userField.ToLowerInvariant();
+			userField = userField.ToLower(Str.Culture);
 
 			var localized = getLocalizedField(userField, language);
 			addSpecificTextField(doc, userField, localized, fieldValue);
@@ -343,22 +336,22 @@ namespace Mtgdb.Dal.Index
 
 		private static void addSpecificTextField(Document doc, string userField, string localized, string fieldValue)
 		{
-			localized = localized.ToLowerInvariant();
+			localized = localized.ToLower(Str.Culture);
 
 			if (!_textFields.Contains(localized))
 				throw new InvalidOperationException($"Text field {localized} not intialized");
 
-			doc.Add(new TextField(localized, fieldValue, Field.Store.NO));
-
-			if (SpellcheckerDefinitions.NotAnalyzedDuplicates.Contains(userField))
-				doc.Add(new TextField(localized + SpellcheckerDefinitions.NotAnalyzedSuffix, fieldValue, Field.Store.NO));
+			if (NotAnalyzedFields.Contains(userField))
+				doc.Add(new Field(localized, fieldValue, IndexUtils.StringFieldType));
+			else
+				doc.Add(new TextField(localized, fieldValue, Field.Store.NO));
 		}
 
 
 
 		private static void addNumericField(this Document doc, string userField, float fieldValue)
 		{
-			userField = userField.ToLowerInvariant();
+			userField = userField.ToLower(Str.Culture);
 
 			if (!userField.IsFloatField())
 				throw new ArgumentException($"Numeric float field {userField} not intialized");
@@ -369,7 +362,7 @@ namespace Mtgdb.Dal.Index
 
 		private static void addNumericField(this Document doc, string userField, int fieldValue)
 		{
-			userField = userField.ToLowerInvariant();
+			userField = userField.ToLower(Str.Culture);
 
 			if (!userField.IsIntField())
 				throw new ArgumentException($"Numeric int field {userField} not intialized");
@@ -386,7 +379,7 @@ namespace Mtgdb.Dal.Index
 				throw new InvalidOperationException($"Language must be specified for localized field {userField}");
 
 			if (LocalizedFields.Contains(userField))
-				return userField + language;
+				return string.Intern(userField + language);
 
 			return userField;
 		}
@@ -395,7 +388,7 @@ namespace Mtgdb.Dal.Index
 
 		public static string GetFieldLocalizedIn(this string userField, string language)
 		{
-			userField = userField.ToLowerInvariant();
+			userField = userField.ToLower(Str.Culture);
 
 			if (LocalizedFields.Contains(userField))
 				return getLocalizedField(userField, language);
@@ -406,7 +399,7 @@ namespace Mtgdb.Dal.Index
 		public static int GetId(this ScoreDoc scoreDoc, IndexSearcher indexSearcher)
 		{
 			var doc = indexSearcher.Doc(scoreDoc.Doc);
-			string value = doc.Get(nameof(Card.IndexInFile).ToLowerInvariant());
+			string value = doc.Get(nameof(Card.IndexInFile).ToLower(Str.Culture));
 			return int.Parse(value);
 		}
 

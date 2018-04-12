@@ -47,11 +47,11 @@ namespace Mtgdb.Test
 					var smallPath = small.ImageFile.FullPath;
 					var zoomPath = zooms[0].ImageFile.FullPath;
 
-					smallPath = smallPath.ToLowerInvariant()
+					smallPath = smallPath.ToLower(Str.Culture)
 						.Replace("gatherer.original", "gatherer")
 						.Replace("\\lq\\", string.Empty);
 
-					zoomPath = zoomPath.ToLowerInvariant()
+					zoomPath = zoomPath.ToLower(Str.Culture)
 						.Replace("gatherer.preprocessed", "gatherer")
 						.Replace("\\mq\\", string.Empty);
 

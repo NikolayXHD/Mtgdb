@@ -52,6 +52,9 @@ namespace Mtgdb.Dal
 
 		public static float Get(char c1, char c2)
 		{
+			c1 = char.ToLower(c1, Str.Culture);
+			c2 = char.ToLower(c2, Str.Culture);
+
 			if (c1 == c2)
 				return 0;
 			

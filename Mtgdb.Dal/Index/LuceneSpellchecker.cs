@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Contrib;
-using Lucene.Net.Store;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
@@ -15,7 +14,7 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker(CardRepository repo)
 		{
-			_stringSimilarity = new DamerauLevenstineSimilarity();
+			_stringSimilarity = new DamerauLevenshteinSimilarity();
 			_repo = repo;
 
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
@@ -26,8 +25,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.31 fixed double indexing en
-			set => Version = new IndexVersion(value, "0.31");
+			// 0.32 not double-indexing not analyzed duplicates
+			set => Version = new IndexVersion(value, "0.32");
 		}
 
 		public void InvalidateIndex()
@@ -49,10 +48,8 @@ namespace Mtgdb.Dal.Index
 
 		private Spellchecker openSpellchecker()
 		{
-			var spellcheckerIndex = FSDirectory.Open(Version.Directory);
-
 			var spellChecker = new Spellchecker(_stringSimilarity);
-			spellChecker.Load(spellcheckerIndex);
+			spellChecker.Load(Version.Directory);
 
 			return spellChecker;
 		}
@@ -72,42 +69,44 @@ namespace Mtgdb.Dal.Index
 					.ToReadOnlyList();
 
 			TotalFields = tasks.Count;
-			var indexedWordsByDiscriminator = new Dictionary<string, HashSet<string>>(Str.Comparer);
+			var indexedWordsByDiscriminant = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
 			Version.CreateDirectory();
-			var index = new RAMDirectory();
-			spellchecker.BeginIndex(index);
+			spellchecker.BeginIndex();
 
 			void execute((string UserField, string Language) task)
 			{
 				if (_abort)
 					return;
 
-				var discriminator = task.UserField.GetDiscriminatorIn(task.Language);
-				string spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
+				var discriminant = task.UserField.GetDiscriminantIn(task.Language);
 
-				foreach (string value in getValuesCache(spellcheckerField))
+				var values = task.UserField.SpellchekFromOriginalIndexIn(task.Language)
+					? getValuesCache(task.UserField, task.Language)
+					: getValuesForSpellchecker(task.UserField, task.Language);
+
+				foreach (string value in values)
 				{
 					bool isNewWord;
-					lock (indexedWordsByDiscriminator)
+					lock (indexedWordsByDiscriminant)
 					{
-						if (!indexedWordsByDiscriminator.TryGetValue(discriminator, out var indexedWords))
+						if (!indexedWordsByDiscriminant.TryGetValue(discriminant, out var indexedWords))
 						{
 							indexedWords = new HashSet<string>(Str.Comparer);
-							indexedWordsByDiscriminator.Add(discriminator, indexedWords);
+							indexedWordsByDiscriminant.Add(discriminant, indexedWords);
 						}
 
 						isNewWord = indexedWords.Add(value);
 					}
 
 					if (isNewWord)
-						spellchecker.IndexWord(discriminator, value);
+						spellchecker.IndexWord(discriminant, value);
 				}
 
 				Interlocked.Increment(ref _indexedFields);
 				IndexingProgress?.Invoke();
 			}
-			
+
 			var parallelOptions = IndexUtils.ParallelOptions;
 			if (parallelOptions.MaxDegreeOfParallelism > 1)
 				Parallel.ForEach(tasks, parallelOptions, execute);
@@ -118,8 +117,7 @@ namespace Mtgdb.Dal.Index
 			if (_abort)
 				return null;
 
-			spellchecker.EndIndex();
-			index.SaveTo(Version.Directory);
+			spellchecker.EndIndex(Version.Directory);
 
 			IsLoading = false;
 			Version.SetIsUpToDate();
@@ -145,8 +143,7 @@ namespace Mtgdb.Dal.Index
 			if (!userField.IsAnalyzedIn(language))
 				token = token.PhraseStart ?? token;
 
-			string valuePart = StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position))
-				.ToLowerInvariant();
+			string valuePart = StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position));
 
 			if (token.Type.IsAny(TokenType.FieldValue))
 			{
@@ -186,7 +183,7 @@ namespace Mtgdb.Dal.Index
 		{
 			var valuesSet = new HashSet<string>();
 			var notCachedFields = new HashSet<string>(Str.Comparer);
-			var discriminators = new HashSet<string>(Str.Comparer);
+			var discriminants = new HashSet<string>(Str.Comparer);
 
 			bool valueIsNumeric = isValueNumeric(value);
 
@@ -203,7 +200,7 @@ namespace Mtgdb.Dal.Index
 				{
 					var spellcheckerField = userField.GetSpellcheckerFieldIn(language);
 					notCachedFields.Add(spellcheckerField);
-					discriminators.Add(userField.GetDiscriminatorIn(language));
+					discriminants.Add(userField.GetDiscriminantIn(language));
 				}
 			}
 
@@ -212,7 +209,7 @@ namespace Mtgdb.Dal.Index
 				var values = _spellchecker.SuggestSimilar(
 					value,
 					MaxCount,
-					discriminators,
+					discriminants,
 					notCachedFields,
 					_reader);
 
@@ -240,9 +237,9 @@ namespace Mtgdb.Dal.Index
 				return _emptySuggest.Values;
 
 			var fields = new[] { spellcheckerField };
-			var discriminators = new[] { userField.GetDiscriminatorIn(language) };
+			var discriminants = new[] { userField.GetDiscriminantIn(language) };
 
-			return _spellchecker.SuggestSimilar(value, MaxCount, discriminators, fields, _reader);
+			return _spellchecker.SuggestSimilar(value, MaxCount, discriminants, fields, _reader);
 		}
 
 
@@ -250,7 +247,7 @@ namespace Mtgdb.Dal.Index
 		private IReadOnlyList<string> getValuesCache(string userField, string language, string value)
 		{
 			if (string.IsNullOrEmpty(value) || !userField.IsIndexedInSpellchecker())
-				return getValuesCache(userField.GetSpellcheckerFieldIn(language));
+				return getValuesCache(userField, language);
 
 			return null;
 		}
@@ -276,81 +273,38 @@ namespace Mtgdb.Dal.Index
 			return cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0).Take(MaxCount).ToReadOnlyList();
 		}
 
-		private IReadOnlyList<string> getValuesCache(string spellcheckerField)
+		private IReadOnlyList<string> getValuesCache(string userField, string language)
 		{
-			if (_reader == null)
+			var spellcheckerField = userField.GetSpellcheckerFieldIn(language);
+			IReadOnlyList<string> values;
+
+			lock (_valuesCache)
+				if (_valuesCache.TryGetValue(spellcheckerField, out values))
+					return values;
+
+			values = userField.SpellchekFromOriginalIndexIn(language)
+				? _reader?.ReadAllValuesFrom(spellcheckerField)
+				: _spellchecker?.ReadAllValuesFrom(discriminant: spellcheckerField);
+
+			if (values == null)
 				return _emptySuggest.Values;
 
-			if (_valuesCache.TryGetValue(spellcheckerField, out var values))
-				return values;
+			lock (_valuesCache)
+				_valuesCache[spellcheckerField] = values;
 
-			var enumerable = getValues(spellcheckerField).Distinct();
-
-			if (spellcheckerField.IsFloatField())
-				enumerable = enumerable.OrderBy(float.Parse);
-			else if (spellcheckerField.IsIntField())
-				enumerable = enumerable.OrderBy(int.Parse);
-			else
-				enumerable = enumerable.OrderBy(Str.Comparer);
-
-			values = enumerable.ToReadOnlyList();
-
-			_valuesCache[spellcheckerField] = values;
 			return values;
 		}
 
-		private IEnumerable<string> getValues(string spellcheckerField)
+
+
+		private IEnumerable<string> getValuesForSpellchecker(string userField, string language)
 		{
-			var maxCount = _reader.MaxDoc;
-			int count = 0;
+			if (!_repo.IsLocalizationLoadingComplete)
+				throw new InvalidOperationException();
 
-			var terms = MultiFields.GetTerms(_reader, spellcheckerField);
-
-			if (terms == null)
-				yield break;
-
-			var iterator = terms.GetIterator(reuse: null);
-
-			if (spellcheckerField.IsFloatField())
-			{
-				while (iterator.Next() != null && count <= maxCount)
-				{
-					var value = iterator.Term.TryParseFloat();
-
-					if (value.HasValue)
-					{
-						string result = value.ToString();
-						yield return result;
-						count++;
-					}
-				}
-			}
-			else if (spellcheckerField.IsIntField())
-			{
-				while (iterator.Next() != null && count <= maxCount)
-				{
-					var value = iterator.Term.TryParseInt();
-
-					if (value.HasValue)
-					{
-						string result = value.ToString();
-						yield return result;
-						count++;
-					}
-				}
-			}
-			else
-			{
-				while (iterator.Next() != null && count <= maxCount)
-				{
-					if (iterator.Term == null)
-						continue;
-
-					var value = iterator.Term.Utf8ToString();
-					yield return value;
-					count++;
-				}
-			}
+			return _repo.SetsByCode.Values.Where(FilterSet)
+				.SelectMany(s => s.Cards
+					.SelectMany(c => SpellcheckerDefinitions.SpellcheckerValueGetters[userField](c, language)));
 		}
 
 		private static bool isValueNumeric(string queryText)
@@ -427,7 +381,7 @@ namespace Mtgdb.Dal.Index
 
 		public event Action IndexingProgress;
 
-
+		public Func<Set, bool> FilterSet { get; set; } = set => true;
 
 		private static readonly IReadOnlyList<string> _userFields = DocumentFactory.UserFields
 			.Select(f => f + ":")
@@ -456,7 +410,7 @@ namespace Mtgdb.Dal.Index
 		private DirectoryReader _reader;
 		private Spellchecker _spellchecker;
 
-		private readonly DamerauLevenstineSimilarity _stringSimilarity;
+		private readonly DamerauLevenshteinSimilarity _stringSimilarity;
 		private readonly Dictionary<string, IReadOnlyList<string>> _valuesCache = new Dictionary<string, IReadOnlyList<string>>();
 		private readonly CardRepository _repo;
 	}

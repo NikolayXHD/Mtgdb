@@ -7,7 +7,7 @@ namespace Mtgdb.Controls.Statistics
 	{
 		public Field<TObj, TVal> Get<TVal>(string fieldName, Func<TObj, TVal> getter, string alias = null)
 		{
-			return new Field<TObj, TVal>(getter, fieldName, alias ?? fieldName.FromCamelCase().ToLowerInvariant());
+			return new Field<TObj, TVal>(getter, fieldName, alias ?? fieldName.FromCamelCase().ToLower(Str.Culture));
 		}
 	}
 
@@ -17,7 +17,7 @@ namespace Mtgdb.Controls.Statistics
 
 		public static string FromCamelCase(this string name)
 		{
-			return _camelPattern.Replace(name, "_$1").ToLowerInvariant();
+			return _camelPattern.Replace(name, "_$1").ToLower(Str.Culture);
 		}
 	}
 }

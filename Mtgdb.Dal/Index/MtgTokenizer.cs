@@ -18,14 +18,14 @@ namespace Mtgdb.Dal.Index
 			if (_length == 0)
 				_start = _offset - 1; // start of token
 
-			_buffer[_length++] = char.ToLower(c); // buffer it
+			_buffer[_length++] = c; // buffer it
 		}
 
 		private bool flush()
 		{
 			if (_length == 0)
 				return false;
-			
+
 			_termAtt.CopyBuffer(_buffer, 0, _length);
 			_offsetAtt.SetOffset(CorrectOffset(_start), CorrectOffset(_start + _length));
 			return true;

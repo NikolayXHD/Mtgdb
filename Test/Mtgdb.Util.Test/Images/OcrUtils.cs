@@ -32,7 +32,7 @@ namespace Mtgdb.Util
 				"eng",
 				EngineMode.CubeOnly);
 
-			_distance = new LevenshteinDistance();
+			_distance = new DamerauLevenshteinDistance();
 		}
 
 		[Test]
@@ -279,6 +279,6 @@ namespace Mtgdb.Util
 		private TesseractEngine _engine;
 		private string[] _artists;
 		private float[] _artistDistance;
-		private LevenshteinDistance _distance;
+		private DamerauLevenshteinDistance _distance;
 	}
 }

@@ -14,7 +14,7 @@ namespace Mtgdb.Downloader
 			if (string.IsNullOrEmpty(mciCardNumber))
 				return null;
 
-			string html = DownloadString(MagiccardsUrl + "/" + mciSetCode.ToLowerInvariant() + "/en/" + mciCardNumber + ".html");
+			string html = DownloadString(MagiccardsUrl + "/" + mciSetCode.ToLower(Str.Culture) + "/en/" + mciCardNumber + ".html");
 
 			if (html == null)
 				return null;

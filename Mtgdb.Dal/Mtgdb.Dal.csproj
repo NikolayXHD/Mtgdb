@@ -103,13 +103,13 @@
     <Compile Include="Index\MtgAplhabet.cs" />
     <Compile Include="Index\ReplaceFilter.cs" />
     <Compile Include="Index\Spellchecker.cs" />
-    <Compile Include="Index\SpellcheckerAnalyzer.cs" />
+    <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />
     <Compile Include="Index\SpellcheckerDefinitions.cs" />
     <Compile Include="Index\SuggestWord.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />
-    <Compile Include="Index\DamerauLevenstineSimilarity.cs" />
+    <Compile Include="Index\DamerauLevenshteinSimilarity.cs" />
     <Compile Include="Index\DocumentFactory.cs" />
     <Compile Include="Index\IndexVersion.cs" />
     <Compile Include="Index\LuceneSearcher.cs" />
@@ -148,7 +148,7 @@
     <Compile Include="Model\Patch\CardPatch.cs" />
     <Compile Include="Model\CardLocalization.cs" />
     <Compile Include="CardRepository.cs" />
-    <Compile Include="EditDistance\LevenshteinDistance.cs" />
+    <Compile Include="EditDistance\DamerauLevenshteinDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="Images\ImageLoader.cs" />

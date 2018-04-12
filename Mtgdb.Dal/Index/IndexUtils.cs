@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
+using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -31,7 +34,52 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		public static void SaveTo(this RAMDirectory index, string directory)
+		public static IReadOnlyList<string> ReadAllValuesFrom(this DirectoryReader reader, string field)
+		{
+			var rawValues = reader.getStoredValues(field);
+
+			IEnumerable<string> enumerable;
+
+			if (field.IsFloatField())
+				enumerable = rawValues.Select(term => term.TryParseFloat())
+					.Where(val => val.HasValue)
+					.Select(val => val.Value)
+					.Distinct()
+					.OrderBy(val => val)
+					.Select(val => val.ToString(Str.Culture));
+
+			else if (field.IsIntField())
+				enumerable = rawValues.Select(term => term.TryParseInt())
+					.Where(val => val.HasValue)
+					.Select(val => val.Value)
+					.Distinct()
+					.OrderBy(val => val)
+					.Select(val => val.ToString(Str.Culture));
+			else
+				enumerable = rawValues.Select(term => term.Utf8ToString())
+					.Distinct()
+					.OrderBy(Str.Comparer);
+
+			var result = enumerable.ToReadOnlyList();
+			return result;
+		}
+
+		private static IEnumerable<BytesRef> getStoredValues(this IndexReader reader, string field)
+		{
+			var terms = MultiFields.GetTerms(reader, field);
+
+			if (terms == null)
+				yield break;
+
+			var iterator = terms.GetIterator(reuse: null);
+
+			BytesRef value;
+
+			while ((value = iterator.Next()) != null)
+				yield return value;
+		}
+
+		public static void SaveTo(this Directory index, string directory)
 		{
 			var files = index.ListAll();
 
@@ -57,6 +105,8 @@ namespace Mtgdb.Dal.Index
 			return config;
 		}
 
+
+
 		private static readonly bool _useParallelism = false;
 
 		private static readonly int _maxParallelism = _useParallelism
@@ -67,5 +117,7 @@ namespace Mtgdb.Dal.Index
 		{
 			MaxDegreeOfParallelism = _maxParallelism
 		};
+
+		public static readonly FieldType StringFieldType = new FieldType(StringField.TYPE_NOT_STORED) { IsTokenized = true };
 	}
 }
