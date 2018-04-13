@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Mtgdb.Dal;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Util
 {
 	public class DamerauLevenshteinDistance
 	{

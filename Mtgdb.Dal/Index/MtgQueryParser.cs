@@ -23,6 +23,12 @@ namespace Mtgdb.Dal.Index
 			FuzzyMinSim = 0.5f;
 		}
 
+		public sealed override float FuzzyMinSim
+		{
+			get => base.FuzzyMinSim;
+			set => base.FuzzyMinSim = value;
+		}
+
 		public override Query Parse(string query)
 		{
 			var result = base.Parse(query);
@@ -46,6 +52,9 @@ namespace Mtgdb.Dal.Index
 						result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+
 				return result;
 			}
 
@@ -67,7 +76,8 @@ namespace Mtgdb.Dal.Index
 			if (Str.Equals(Like, field))
 				return getMoreLikeQuery(queryText, 0);
 
-			bool valueIsNumeric = isValueNumeric(queryText);
+			bool valueIsFloat = isValueFloat(queryText);
+			bool valueIsInt = isValueInt(queryText);
 
 			if (string.IsNullOrEmpty(field) || field == AnyField)
 			{
@@ -75,7 +85,10 @@ namespace Mtgdb.Dal.Index
 
 				foreach (var userField in DocumentFactory.UserFields)
 				{
-					if (!valueIsNumeric && userField.IsNumericField())
+					if (!valueIsFloat && userField.IsFloatField())
+						continue;
+
+					if (!valueIsInt && userField.IsIntField())
 						continue;
 
 					var specificFieldQuery = GetFieldQuery(userField, queryText, quoted);
@@ -86,16 +99,19 @@ namespace Mtgdb.Dal.Index
 					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+
 				return result;
 			}
 
 			field = localize(field);
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, queryText, tryParseFloat, NumericRangeQuery.NewSingleRange);
+				return createRangeQuery<float>(field, queryText, IndexUtils.TryParseFloat, NumericRangeQuery.NewSingleRange);
 
 			if (field.IsIntField())
-				return createRangeQuery<int>(field, queryText, tryParseInt, NumericRangeQuery.NewInt32Range);
+				return createRangeQuery<int>(field, queryText, IndexUtils.TryParseInt, NumericRangeQuery.NewInt32Range);
 
 			var tokens = Analyzer.GetTokens(field, queryText).ToList();
 
@@ -114,9 +130,13 @@ namespace Mtgdb.Dal.Index
 
 		protected override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
 		{
-			bool valuesAreNumeric =
-				(isValueNumeric(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
-				(isValueNumeric(part2) || _nonSpecifiedNubmer.Contains(part2));
+			bool valuesAreInt =
+				(isValueInt(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
+				(isValueInt(part2) || _nonSpecifiedNubmer.Contains(part2));
+
+			bool valuesAreFloat =
+				(isValueFloat(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
+				(isValueFloat(part2) || _nonSpecifiedNubmer.Contains(part2));
 
 			if (string.IsNullOrEmpty(field) || field == AnyField)
 			{
@@ -124,7 +144,10 @@ namespace Mtgdb.Dal.Index
 
 				foreach (var userField in DocumentFactory.UserFields)
 				{
-					if (!valuesAreNumeric && userField.IsNumericField())
+					if (userField.IsIntField() && !valuesAreInt)
+						continue;
+
+					if (userField.IsFloatField() && !valuesAreFloat)
 						continue;
 
 					var specificFieldQuery = GetRangeQuery(userField, part1, part2, startInclusive, endInclusive);
@@ -132,6 +155,9 @@ namespace Mtgdb.Dal.Index
 					if (specificFieldQuery != null)
 						result.Add(specificFieldQuery, Occur.SHOULD);
 				}
+
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
 
 				return result;
 			}
@@ -141,10 +167,10 @@ namespace Mtgdb.Dal.Index
 			var query = (TermRangeQuery) base.GetRangeQuery(field, part1, part2, startInclusive, endInclusive);
 
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, query, tryParseFloat, NumericRangeQuery.NewSingleRange);
+				return createRangeQuery<float>(field, query, IndexUtils.TryParseFloat, NumericRangeQuery.NewSingleRange);
 
 			if (field.IsIntField())
-				return createRangeQuery<int>(field, query, tryParseInt, NumericRangeQuery.NewInt32Range);
+				return createRangeQuery<int>(field, query, IndexUtils.TryParseInt, NumericRangeQuery.NewInt32Range);
 
 			return createRangeQuery(field, query);
 		}
@@ -170,6 +196,9 @@ namespace Mtgdb.Dal.Index
 
 					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
+
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
 
 				return result;
 			}
@@ -225,6 +254,9 @@ namespace Mtgdb.Dal.Index
 					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+
 				return result;
 			}
 
@@ -264,6 +296,9 @@ namespace Mtgdb.Dal.Index
 					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+
 				return result;
 			}
 
@@ -290,10 +325,16 @@ namespace Mtgdb.Dal.Index
 					result.Add(specificFieldQuery, Occur.SHOULD);
 				}
 
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+
 				return result;
 			}
 
-			if (DocumentFactory.NumericFields.Contains(field) && !isValueNumeric(termStr))
+			if (field.IsFloatField() && !isValueFloat(termStr))
+				return _matchNothingQuery;
+
+			if (field.IsIntField() && !isValueInt(termStr))
 				return _matchNothingQuery;
 
 			field = localize(field);
@@ -351,30 +392,14 @@ namespace Mtgdb.Dal.Index
 			};
 		}
 
-		private static bool isValueNumeric(string queryText)
+		private static bool isValueFloat(string queryText)
 		{
-			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
-				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
-			return valueIsNumeric;
+			return float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
 		}
 
-		private static bool tryParseInt(BytesRef bytes, out int f)
+		private static bool isValueInt(string queryText)
 		{
-			var s = bytes.Utf8ToString();
-			if (s.StartsWith("$"))
-				return int.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
-
-			return int.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
-		}
-
-		private static bool tryParseFloat(BytesRef bytes, out float f)
-		{
-			var s = bytes.Utf8ToString();
-			if (s.StartsWith("$"))
-				return float.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
-
-			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
+			return int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
 		}
 
 		private static Query createRangeQuery(string field, TermRangeQuery query)

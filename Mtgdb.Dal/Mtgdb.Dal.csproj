@@ -109,7 +109,6 @@
     <Compile Include="Loader.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />
-    <Compile Include="Index\DamerauLevenshteinSimilarity.cs" />
     <Compile Include="Index\DocumentFactory.cs" />
     <Compile Include="Index\IndexVersion.cs" />
     <Compile Include="Index\LuceneSearcher.cs" />
@@ -148,9 +147,6 @@
     <Compile Include="Model\Patch\CardPatch.cs" />
     <Compile Include="Model\CardLocalization.cs" />
     <Compile Include="CardRepository.cs" />
-    <Compile Include="EditDistance\DamerauLevenshteinDistance.cs" />
-    <Compile Include="EditDistance\ReplaceCost.cs" />
-    <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="Images\ImageLoader.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\ForeignName.cs" />

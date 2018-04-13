@@ -49,7 +49,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Layout:after*", "aftermath")]
 		public void Search_by_Layout(string queryStr, string expected)
 		{
-			var cards = search(queryStr, c => c.Layout + ": " + c.OriginalType);
+			var cards = search(queryStr, c => c.Layout + ": " + c.Layout);
 
 			foreach (var card in cards)
 				Assert.That(card.Layout, Is.EqualTo(expected).IgnoreCase);

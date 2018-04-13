@@ -59,7 +59,9 @@ namespace Mtgdb.Gui
 			if (foreColor.HasValue)
 				_findEditor.SelectionColor = foreColor.Value;
 
-			if (underline && !_findEditor.SelectedText.IsCjk())
+			string selectedText = _findEditor.SelectedText;
+
+			if (underline && !selectedText.IsCjk() && selectedText.IndexOf('_') < 0)
 				_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Underline);
 			else
 				_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Regular);

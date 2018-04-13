@@ -30,8 +30,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.32 not double-indexing not analyzed duplicates
-			set => Version = new IndexVersion(value, "0.32");
+			// 0.33 do not store duplicate OriginalXxx fields
+			set => Version = new IndexVersion(value, "0.33");
 		}
 
 		public void LoadIndexes()
@@ -255,15 +255,12 @@ namespace Mtgdb.Dal.Index
 		}
 
 
+
 		private static string getDisplayField(Token token)
 		{
-			if (token.ParentField == null)
-				return string.Empty;
-
-			if (DocumentFactory.DisplayFieldByIndexField.TryGetValue(token.ParentField, out string name))
-				return name;
-
-			return token.ParentField;
+			string field = token.ParentField ?? string.Empty;
+			DocumentFactory.DisplayFieldByIndexField.TryGetValue(field, out string displayField);
+			return displayField ?? field;
 		}
 
 		public LuceneSpellchecker Spellchecker { get; }

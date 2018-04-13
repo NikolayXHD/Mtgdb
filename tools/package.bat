@@ -17,7 +17,7 @@ set targetBin=%target%\bin\v%version%
 set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 set msbuildexe="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
 set nunitconsoleexe=%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe
-set git="C:\Program Files (x86)\Git\bin\git.exe"
+set git="C:\Program Files\Git\bin\git.exe"
 set googledriveexe=%origin%\tools\gdrive-windows-x64.exe
 set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
 

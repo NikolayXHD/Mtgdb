@@ -55,7 +55,19 @@ namespace Mtgdb.Dal
 					?.TryGet(card.Number ?? string.Empty);
 
 				if (translation != null)
-					result.Add(name, translation);
+				{
+					if (Str.Equals(translation.Type, card.TypeEn))
+						translation.Type = null;
+
+					if (Str.Equals(translation.Flavor, card.FlavorEn))
+						translation.Flavor = null;
+
+					if (Str.Equals(translation.Text, card.TextEn))
+						translation.Text = null;
+					
+					if (translation.Text != null || translation.Type != null || translation.Flavor != null)
+						result.Add(card, name, translation);
+				}
 			}
 
 			return result;

@@ -92,7 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\DeckFormattersTests.cs" />
-    <Compile Include="Dal\EditDistanceTests.cs" />
+    <Compile Include="EditDistance\DamerauLevenshteinDistance.cs" />
+    <Compile Include="EditDistance\ReplaceCost.cs" />
+    <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />

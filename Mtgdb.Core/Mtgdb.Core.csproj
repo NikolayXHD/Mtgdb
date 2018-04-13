@@ -57,6 +57,7 @@
     <Compile Include="Bitmap\BitmapTransformationChain.cs" />
     <Compile Include="Bitmap\TransformationChain.cs" />
     <Compile Include="Collections\ListSegment.cs" />
+    <Compile Include="String\MtgStringComparer.cs" />
     <Compile Include="Versioning\AppDir.cs" />
     <Compile Include="Collections\CollectionExtensions.cs" />
     <Compile Include="ComparableExtension.cs" />

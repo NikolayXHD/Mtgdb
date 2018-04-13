@@ -11,15 +11,17 @@ namespace Mtgdb.Dal
 		private readonly Dictionary<string, ForeignName> _names =
 			new Dictionary<string, ForeignName>(Str.Comparer);
 
-		public void Add(ForeignName name, Translation translation)
+		public void Add(Card card, ForeignName name, Translation translation)
 		{
 			var lang = getLang(name.Language);
 			
-			if (_names.ContainsKey(lang))
+			if (_names.ContainsKey(lang) || _translations.ContainsKey(lang))
 				return;
 
 			_translations.Add(lang, translation);
-			_names.Add(lang, name);
+
+			if (!string.IsNullOrEmpty(name.Name) && !Str.Equals(name.Name, card.NameEn))
+				_names.Add(lang, name);
 		}
 
 		private static string getLang(string language)

@@ -151,6 +151,12 @@ namespace Mtgdb.Dal
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
 				? string.Join(" ", card.ColorsArr)
 				: "Colorless";
+
+			if (!string.IsNullOrEmpty(card.OriginalText) && Str.Equals(card.OriginalText, card.TextEn))
+				card.OriginalText = null;
+
+			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
+				card.OriginalType = null;
 		}
 
 		private void patchLegality()

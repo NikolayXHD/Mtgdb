@@ -1,4 +1,4 @@
-namespace Mtgdb.Dal
+namespace Mtgdb.Util
 {
 	internal class Similarity
 	{

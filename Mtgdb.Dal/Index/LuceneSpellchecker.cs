@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,19 +13,18 @@ namespace Mtgdb.Dal.Index
 	{
 		public LuceneSpellchecker(CardRepository repo)
 		{
-			_stringSimilarity = new DamerauLevenshteinSimilarity();
-			_repo = repo;
-
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
 			MaxCount = 20;
+
+			_repo = repo;
 		}
 
 		public string IndexDirectoryParent
 		{
 			get => Version.Directory.Parent();
 
-			// 0.32 not double-indexing not analyzed duplicates
-			set => Version = new IndexVersion(value, "0.32");
+			// 0.33 index score instead of custom similarity
+			set => Version = new IndexVersion(value, "0.33");
 		}
 
 		public void InvalidateIndex()
@@ -48,7 +46,7 @@ namespace Mtgdb.Dal.Index
 
 		private Spellchecker openSpellchecker()
 		{
-			var spellChecker = new Spellchecker(_stringSimilarity);
+			var spellChecker = new Spellchecker();
 			spellChecker.Load(Version.Directory);
 
 			return spellChecker;
@@ -61,7 +59,7 @@ namespace Mtgdb.Dal.Index
 
 			IsLoading = true;
 
-			var spellchecker = new Spellchecker(_stringSimilarity);
+			var spellchecker = new Spellchecker();
 
 			IReadOnlyList<(string UserField, string Language)> tasks =
 				SpellcheckerDefinitions.GetIndexedUserFields()
@@ -69,53 +67,71 @@ namespace Mtgdb.Dal.Index
 					.ToReadOnlyList();
 
 			TotalFields = tasks.Count;
-			var indexedWordsByDiscriminant = new Dictionary<string, HashSet<string>>(Str.Comparer);
+			var indexedWordsByField = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
-			Version.CreateDirectory();
-			spellchecker.BeginIndex();
-
-			void execute((string UserField, string Language) task)
+			void getContentToIndex((string UserField, string Language) task)
 			{
 				if (_abort)
 					return;
 
-				var discriminant = task.UserField.GetDiscriminantIn(task.Language);
+				var values = task.UserField.IsIndexedInSpellchecker(task.Language)
+					? getValuesForSpellchecker(task.UserField, task.Language)
+					: getValuesCache(task.UserField, task.Language);
 
-				var values = task.UserField.SpellchekFromOriginalIndexIn(task.Language)
-					? getValuesCache(task.UserField, task.Language)
-					: getValuesForSpellchecker(task.UserField, task.Language);
+				var spellcheckerField = task.UserField.GetSpellcheckerFieldIn(task.Language);
 
-				foreach (string value in values)
+				HashSet<string> indexedWords;
+
+				lock (indexedWordsByField)
 				{
-					bool isNewWord;
-					lock (indexedWordsByDiscriminant)
+					if (!indexedWordsByField.TryGetValue(spellcheckerField, out indexedWords))
 					{
-						if (!indexedWordsByDiscriminant.TryGetValue(discriminant, out var indexedWords))
-						{
-							indexedWords = new HashSet<string>(Str.Comparer);
-							indexedWordsByDiscriminant.Add(discriminant, indexedWords);
-						}
-
-						isNewWord = indexedWords.Add(value);
+						indexedWords = new HashSet<string>(Str.Comparer);
+						indexedWordsByField.Add(spellcheckerField, indexedWords);
 					}
-
-					if (isNewWord)
-						spellchecker.IndexWord(discriminant, value);
 				}
+
+				lock (indexedWords)
+					foreach (string value in values)
+						indexedWords.Add(value);
 
 				Interlocked.Increment(ref _indexedFields);
 				IndexingProgress?.Invoke();
 			}
 
 			var parallelOptions = IndexUtils.ParallelOptions;
-			if (parallelOptions.MaxDegreeOfParallelism > 1)
-				Parallel.ForEach(tasks, parallelOptions, execute);
-			else
-				foreach (var task in tasks)
-					execute(task);
+			Parallel.ForEach(tasks, parallelOptions, getContentToIndex);
 
 			if (_abort)
 				return null;
+
+			TotalFields = indexedWordsByField.Count;
+			_indexedFields = 0;
+
+			Version.CreateDirectory();
+			spellchecker.BeginIndex();
+
+			void indexField(KeyValuePair<string, HashSet<string>> pair)
+			{
+				if (_abort)
+					return;
+
+				var discriminant = pair.Key;
+				var words = pair.Value.OrderBy(Str.Comparer).ToReadOnlyList();
+
+				foreach (string word in words)
+				{
+					if (_abort)
+						return;
+
+					spellchecker.IndexWord(discriminant, word);
+				}
+
+				Interlocked.Increment(ref _indexedFields);
+				IndexingProgress?.Invoke();
+			}
+
+			Parallel.ForEach(indexedWordsByField, parallelOptions, indexField);
 
 			spellchecker.EndIndex(Version.Directory);
 
@@ -145,12 +161,12 @@ namespace Mtgdb.Dal.Index
 
 			string valuePart = StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position));
 
-			if (token.Type.IsAny(TokenType.FieldValue))
+			if (token.Type.IsAny(TokenType.FieldValue | TokenType.Wildcard))
 			{
 				IReadOnlyList<string> valueSuggest;
 
-				if (isFieldInvalid)
-					valueSuggest = _emptySuggest.Values;
+				if (isFieldInvalid || string.IsNullOrEmpty(userField) && string.IsNullOrEmpty(valuePart))
+					valueSuggest = _emptyList;
 				else if (string.IsNullOrEmpty(userField) || Str.Equals(userField, MtgQueryParser.AnyField))
 					valueSuggest = suggestAllFieldValues(valuePart, language);
 				else
@@ -171,7 +187,7 @@ namespace Mtgdb.Dal.Index
 			}
 
 			if (token.Type.IsAny(TokenType.Field))
-				return new IntellisenseSuggest(token, suggestAllFields(fieldPart: valuePart), _allTokensAreField);
+				return new IntellisenseSuggest(token, suggestFields(fieldPart: valuePart), _allTokensAreField);
 
 			if (token.Type.IsAny(TokenType.Boolean))
 				return new IntellisenseSuggest(token, _booleanOperators, _allTokensAreBoolean);
@@ -181,113 +197,84 @@ namespace Mtgdb.Dal.Index
 
 		private IReadOnlyList<string> suggestAllFieldValues(string value, string language)
 		{
-			var valuesSet = new HashSet<string>();
-			var notCachedFields = new HashSet<string>(Str.Comparer);
-			var discriminants = new HashSet<string>(Str.Comparer);
+			if (string.IsNullOrEmpty(value))
+				throw new ArgumentException($"empty {nameof(value)}", nameof(value));
 
-			bool valueIsNumeric = isValueNumeric(value);
+			var numericValues = new HashSet<string>();
 
-			foreach (var userField in DocumentFactory.UserFields)
-			{
-				if (userField.IsNumericField() && !valueIsNumeric)
-					continue;
+			bool valueIsInt = value.IsInt();
+			bool valueIsFloat = value.IsFloat();
 
-				var cache = getValuesCache(userField, language, value);
-
-				if (cache != null)
-					valuesSet.UnionWith(cache);
-				else
+			if (valueIsInt || valueIsFloat)
+				foreach (var userField in DocumentFactory.UserFields)
 				{
-					var spellcheckerField = userField.GetSpellcheckerFieldIn(language);
-					notCachedFields.Add(spellcheckerField);
-					discriminants.Add(userField.GetDiscriminantIn(language));
+					bool matchesNumericType = userField.IsFloatField() || userField.IsIntField() && valueIsInt;
+
+					if (!matchesNumericType)
+						continue;
+
+					var cache = getValuesCache(userField, language);
+					var similarNumbers = getNumericallySimilarValues(cache, value);
+					numericValues.UnionWith(similarNumbers);
 				}
-			}
 
-			if (notCachedFields.Count > 0 && IsLoaded)
+			var enumerable = numericValues
+				.OrderBy(Str.Comparer)
+				.Take(MaxCount);
+
+			if (IsLoaded)
 			{
-				var values = _spellchecker.SuggestSimilar(
-					value,
-					MaxCount,
-					discriminants,
-					notCachedFields,
-					_reader);
+				var spellcheckerValues = _spellchecker.SuggestSimilar(null, value, MaxCount);
 
-				valuesSet.UnionWith(values);
+				enumerable = enumerable
+					.Concat(spellcheckerValues.Where(v => !numericValues.Contains(v)))
+					.ToReadOnlyList();
 			}
 
-			return getTextuallySimilarValues(valuesSet.ToReadOnlyList(), value, MaxCount);
+			return enumerable.ToReadOnlyList();
 		}
 
 		private IReadOnlyList<string> suggestValues(string userField, string language, string value)
 		{
-			var spellcheckerField = userField.GetSpellcheckerFieldIn(language);
-
-			var cache = getValuesCache(userField, language, value);
-
-			if (cache != null)
+			if (string.IsNullOrEmpty(value))
 			{
-				if (DocumentFactory.NumericFields.Contains(spellcheckerField))
-					return getNumericallySimilarValues(cache, value);
+				var cache = getValuesCache(userField, language);
+				return new ListSegment<string>(cache, 0, MaxCount);
+			}
 
-				return getTextuallySimilarValues(cache, value, MaxCount);
+			if (userField.IsNumericField())
+			{
+				var cache = getValuesCache(userField, language);
+				return getNumericallySimilarValues(cache, value).Take(MaxCount).ToReadOnlyList();
 			}
 
 			if (!IsLoaded)
-				return _emptySuggest.Values;
+				return _emptyList;
 
-			var fields = new[] { spellcheckerField };
-			var discriminants = new[] { userField.GetDiscriminantIn(language) };
-
-			return _spellchecker.SuggestSimilar(value, MaxCount, discriminants, fields, _reader);
-		}
-
-
-
-		private IReadOnlyList<string> getValuesCache(string userField, string language, string value)
-		{
-			if (string.IsNullOrEmpty(value) || !userField.IsIndexedInSpellchecker())
-				return getValuesCache(userField, language);
-
-			return null;
-		}
-
-		private IReadOnlyList<string> getTextuallySimilarValues(IReadOnlyList<string> values, string value, int maxCount)
-		{
-			if (string.IsNullOrEmpty(value))
-				return new ListSegment<string>(values, 0, maxCount);
-
-			var similarities = values.Select(_ => _stringSimilarity.GetSimilarity(value, _))
-				.ToArray();
-
-			return Enumerable.Range(0, values.Count)
-				.OrderByDescending(i => similarities[i])
-				.ThenBy(i => values[i], Str.Comparer)
-				.Select(i => values[i])
-				.Take(maxCount)
-				.ToReadOnlyList();
-		}
-
-		private IReadOnlyList<string> getNumericallySimilarValues(IReadOnlyList<string> cache, string value)
-		{
-			return cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0).Take(MaxCount).ToReadOnlyList();
-		}
-
-		private IReadOnlyList<string> getValuesCache(string userField, string language)
-		{
 			var spellcheckerField = userField.GetSpellcheckerFieldIn(language);
+			return _spellchecker.SuggestSimilar(spellcheckerField, value, MaxCount);
+		}
+
+
+
+		private static IEnumerable<string> getNumericallySimilarValues(IReadOnlyList<string> cache, string value) =>
+			cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
+
+		private IReadOnlyList<string> getValuesCache(string userField, string lang)
+		{
+			var spellcheckerField = userField.GetSpellcheckerFieldIn(lang);
 			IReadOnlyList<string> values;
 
 			lock (_valuesCache)
 				if (_valuesCache.TryGetValue(spellcheckerField, out values))
 					return values;
 
-			values = userField.SpellchekFromOriginalIndexIn(language)
-				? _reader?.ReadAllValuesFrom(spellcheckerField)
-				: _spellchecker?.ReadAllValuesFrom(discriminant: spellcheckerField);
+			values = userField.IsIndexedInSpellchecker(lang)
+				? _spellchecker?.ReadAllValuesFrom(discriminant: spellcheckerField)
+				: _reader?.ReadAllValuesFrom(spellcheckerField);
 
 			if (values == null)
-				return _emptySuggest.Values;
+				return _emptyList;
 
 			lock (_valuesCache)
 				_valuesCache[spellcheckerField] = values;
@@ -307,33 +294,14 @@ namespace Mtgdb.Dal.Index
 					.SelectMany(c => SpellcheckerDefinitions.SpellcheckerValueGetters[userField](c, language)));
 		}
 
-		private static bool isValueNumeric(string queryText)
-		{
-			bool valueIsNumeric =
-				int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _) ||
-				float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
-			return valueIsNumeric;
-		}
-
-
-
-		private IReadOnlyList<string> suggestAllFields(string fieldPart)
-		{
-			if (string.IsNullOrEmpty(fieldPart))
-				return _userFields;
-
-			var result = getTextuallySimilarValues(_userFields, fieldPart, int.MaxValue);
-			return result;
-		}
-
-		private IReadOnlyList<string> suggestFields(string fieldPart)
+		private static IReadOnlyList<string> suggestFields(string fieldPart)
 		{
 			var fieldSuggest = _userFields
 				.Where(_ => _.IndexOf(fieldPart, Str.Comparison) >= 0)
+				.OrderByDescending(_ => _.StartsWith(fieldPart, Str.Comparison))
 				.ToReadOnlyList();
 
-			var ordered = getTextuallySimilarValues(fieldSuggest, fieldPart, int.MaxValue);
-			return ordered;
+			return fieldSuggest;
 		}
 
 		public void Dispose()
@@ -403,15 +371,18 @@ namespace Mtgdb.Dal.Index
 		private IReadOnlyList<TokenType> _allTokensAreValues;
 
 		private readonly IntellisenseSuggest _emptySuggest = new IntellisenseSuggest(null,
-			Enumerable.Empty<string>().ToReadOnlyList(),
+			_emptyList,
 			Enumerable.Empty<TokenType>().ToReadOnlyList());
 
 		private bool _abort;
 		private DirectoryReader _reader;
 		private Spellchecker _spellchecker;
 
-		private readonly DamerauLevenshteinSimilarity _stringSimilarity;
-		private readonly Dictionary<string, IReadOnlyList<string>> _valuesCache = new Dictionary<string, IReadOnlyList<string>>();
+		private readonly Dictionary<string, IReadOnlyList<string>> _valuesCache =
+			new Dictionary<string, IReadOnlyList<string>>();
+
 		private readonly CardRepository _repo;
+
+		private static readonly IReadOnlyList<string> _emptyList = Enumerable.Empty<string>().ToReadOnlyList();
 	}
 }

@@ -170,6 +170,11 @@ namespace Mtgdb
 			return getter(target, param);
 		}
 
+		public static TResult Invoke<TObj, TResult>(this TObj target, Func<TObj, TResult> getter)
+		{
+			return getter(target);
+		}
+
 		public static IOrderedEnumerable<TVal> OrderBy<TVal>(this IEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
 			sequence.OrderBy(_ => _, comparer);
 

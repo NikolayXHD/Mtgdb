@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Lucene.Net.Analysis;
@@ -16,6 +17,9 @@ namespace Mtgdb.Dal.Index
 	{
 		public static IEnumerable<(string Term, int Offset)> GetTokens(this Analyzer analyzer, string field, string value)
 		{
+			if (string.IsNullOrEmpty(value))
+				yield break;
+
 			var tokenStream = analyzer.GetTokenStream(field ?? string.Empty, value);
 
 			using (tokenStream)
@@ -34,37 +38,7 @@ namespace Mtgdb.Dal.Index
 			}
 		}
 
-		public static IReadOnlyList<string> ReadAllValuesFrom(this DirectoryReader reader, string field)
-		{
-			var rawValues = reader.getStoredValues(field);
-
-			IEnumerable<string> enumerable;
-
-			if (field.IsFloatField())
-				enumerable = rawValues.Select(term => term.TryParseFloat())
-					.Where(val => val.HasValue)
-					.Select(val => val.Value)
-					.Distinct()
-					.OrderBy(val => val)
-					.Select(val => val.ToString(Str.Culture));
-
-			else if (field.IsIntField())
-				enumerable = rawValues.Select(term => term.TryParseInt())
-					.Where(val => val.HasValue)
-					.Select(val => val.Value)
-					.Distinct()
-					.OrderBy(val => val)
-					.Select(val => val.ToString(Str.Culture));
-			else
-				enumerable = rawValues.Select(term => term.Utf8ToString())
-					.Distinct()
-					.OrderBy(Str.Comparer);
-
-			var result = enumerable.ToReadOnlyList();
-			return result;
-		}
-
-		private static IEnumerable<BytesRef> getStoredValues(this IndexReader reader, string field)
+		public static IEnumerable<BytesRef> ReadRawValuesFrom(this IndexReader reader, string field)
 		{
 			var terms = MultiFields.GetTerms(reader, field);
 
@@ -105,9 +79,60 @@ namespace Mtgdb.Dal.Index
 			return config;
 		}
 
+		public static bool IsFloat(this string queryText)
+		{
+			return float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
+		}
 
+		public static bool IsInt(this string queryText)
+		{
+			return int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
+		}
 
-		private static readonly bool _useParallelism = false;
+		public static float? TryParseFloat(this BytesRef val)
+		{
+			if (val == null)
+				return null;
+
+			if (val.Length < 6)
+				return null;
+
+			int intVal = NumericUtils.PrefixCodedToInt32(val);
+			float result = NumericUtils.SortableInt32ToSingle(intVal);
+			return result;
+		}
+
+		public static int? TryParseInt(this BytesRef val)
+		{
+			if (val == null)
+				return null;
+
+			if (val.Length < 6)
+				return null;
+
+			int intVal = NumericUtils.PrefixCodedToInt32(val);
+			return intVal;
+		}
+
+		public static bool TryParseInt(BytesRef bytes, out int f)
+		{
+			var s = bytes.Utf8ToString();
+			if (s.StartsWith("$"))
+				return int.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
+
+			return int.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
+		}
+
+		public static bool TryParseFloat(BytesRef bytes, out float f)
+		{
+			var s = bytes.Utf8ToString();
+			if (s.StartsWith("$"))
+				return float.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
+
+			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
+		}
+
+		private static readonly bool _useParallelism = true;
 
 		private static readonly int _maxParallelism = _useParallelism
 			? Math.Max(Environment.ProcessorCount - 1, 1)

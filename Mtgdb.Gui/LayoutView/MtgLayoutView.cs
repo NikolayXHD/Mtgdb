@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
@@ -136,9 +137,9 @@ namespace Mtgdb.Gui
 			remove => _view.SelectionStarted -= value;
 		}
 
-		public object GetRow(int cardIndex)
+		public object GetRow(int rowHandle)
 		{
-			return _view.FindRow(cardIndex);
+			return _view.FindRow(rowHandle);
 		}
 
 		public int GetVisibleIndex(int cardIndex)
@@ -205,9 +206,23 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public string GetFieldText(int cardIndex, string fieldName)
+		public string GetFieldText(int rowHandle, string fieldName)
 		{
-			return _view.GetText(cardIndex, fieldName);
+			return _view.GetText(rowHandle, fieldName);
+		}
+
+		public string GetFieldTooltipText(int rowHandle, string field)
+		{
+			string text = _view.GetText(rowHandle, field);
+
+			var card = (Card) GetRow(rowHandle);
+
+			if (Str.Equals(field, nameof(Card.Text)) && !string.IsNullOrEmpty(card.OriginalText))
+				text += Str.Endl + Str.Endl + nameof(Card.OriginalText) + ":" + Str.Endl + card.OriginalText;
+			else if (Str.Equals(field, nameof(Card.Type)) && !string.IsNullOrEmpty(card.OriginalType))
+				text += Str.Endl + Str.Endl + nameof(Card.OriginalType) + ":" + Str.Endl + card.OriginalType;
+
+			return text;
 		}
 
 		public void SetDataSource(object dataSource)

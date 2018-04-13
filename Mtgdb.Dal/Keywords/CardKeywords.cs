@@ -18,12 +18,8 @@ namespace Mtgdb.Dal
 			KeywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
 			for (int i = 0; i < KeywordDefinitions.Values.Count; i++)
-			{
-				string propertyName = KeywordDefinitions.PropertyNames[i];
-
 				foreach (string value in ParseValues(card, i))
-					addKeyword(propertyName, value);
-			}
+					addKeyword(KeywordDefinitions.PropertyNames[i], value);
 		}
 
 		public static IEnumerable<string> ParseValues(Card card, int propertyIndex)

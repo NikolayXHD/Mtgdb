@@ -83,7 +83,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditDistanceTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />
     <Compile Include="Index\CardTextAlphabetTests.cs" />

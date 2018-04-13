@@ -1,9 +1,7 @@
 # Mtgdb.Gui
 
-[Download link](http://goo.gl/LuC6ce)
-
-[Forum thread](http://goo.gl/VXv71n) to get support or sumbit your feedback
-
+[Download link](http://goo.gl/LuC6ce)  
+[Forum thread](http://goo.gl/VXv71n) to get support or sumbit your feedback  
 [Wiki](https://github.com/NikolayXHD/Mtgdb/wiki)
 
 [![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)
@@ -47,10 +45,8 @@ The query editor **highlights query syntax** and gives you **intellisense** when
 
 [![search intellisense](https://github.com/NikolayXHD/Mtgdb/blob/master/out/help/l/search_intellisense.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/output/help/l/search_intellisense.jpg?raw=true)
 
-## SEO phrases
-
-The phrases below are to make this page more visible to search engines
-
-###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) advanced card search in card database
-###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) deck building and deck analisys
-###### Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) inventory tracking collection management
+## SEO phrases  
+The phrases below are to make this page more visible to search engines  
+Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) advanced card search in card database  
+Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) deck building and deck analisys  
+Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) inventory tracking collection management

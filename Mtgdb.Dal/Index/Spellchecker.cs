@@ -1,52 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Core;
+using Lucene.Net.Analysis.NGram;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
+using Lucene.Net.Search.Similarities;
 using Lucene.Net.Store;
+using Lucene.Net.Support;
+using Lucene.Net.Util;
 using ReadOnlyCollectionsExtensions;
+using Directory = Lucene.Net.Store.Directory;
 
 namespace Mtgdb.Dal.Index
 {
-	/// <summary>  <p>
-	/// Spell Checker class  (Main class) <br/>
-	/// (initially inspired by the David Spencer code).
-	/// </p>
-	/// 
-	/// <p>Example Usage:</p>
-	/// 
-	/// <pre>
-	/// SpellChecker spellchecker = new SpellChecker(spellIndexDirectory);
-	/// // To index a field of a user index:
-	/// spellchecker.indexDictionary(new LuceneDictionary(my_lucene_reader, a_field));
-	/// // To index a file containing words:
-	/// spellchecker.indexDictionary(new PlainTextDictionary(new File("myfile.txt")));
-	/// String[] suggestions = spellchecker.suggestSimilar("misspelt", 5);
-	/// </pre>
-	/// 
-	/// </summary>
-	/// <author>  Nicolas Maisonneuve
-	/// </author>
-	/// <version>  1.0
-	/// </version>
 	public sealed class Spellchecker : IDisposable
 	{
-		public Spellchecker(IStringSimilarity similarity)
-		{
-			_similarity = similarity;
-		}
-
 		public void Load(string directory)
 		{
 			_index = FSDirectory.Open(directory);
+			setSearcher();
+		}
+
+		private void setSearcher()
+		{
 			_reader = DirectoryReader.Open(_index);
-			_searcher = new IndexSearcher(_reader);
+			_searcher = new IndexSearcher(_reader)
+			{
+				Similarity = new SpellcheckerSimilarity()
+			};
 		}
 
 		public void BeginIndex()
 		{
-			var config = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
+			var config = IndexUtils.CreateWriterConfig(new SpellcheckerAnalyzer());
 
 			_index = new RAMDirectory();
 			_indexWriter = new IndexWriter(_index, config);
@@ -58,9 +48,7 @@ namespace Mtgdb.Dal.Index
 			_indexWriter.Dispose();
 
 			_index.SaveTo(directory);
-
-			_reader = DirectoryReader.Open(_index);
-			_searcher = new IndexSearcher(_reader);
+			setSearcher();
 		}
 
 		public void Dispose()
@@ -87,88 +75,56 @@ namespace Mtgdb.Dal.Index
 			return result;
 		}
 
-		public IReadOnlyList<string> SuggestSimilar(
-			string word,
-			int maxCount,
-			ICollection<string> discriminants,
-			ICollection<string> fields,
-			IndexReader reader)
+		public IReadOnlyList<string> SuggestSimilar(string field, string word, int maxCount)
 		{
 			word = word.ToLower(Str.Culture);
-
-			float min = MinScore;
 
 			var alreadySeen = new HashSet<string>();
 			var sugQueue = new OrderedSet<SuggestWord, SuggestWord>();
 
-			var nonExclusiveDiscriminants = new List<string>();
-			var exclusiveDiscriminants = new List<string>();
+			var query = createQuery(word, field);
 
-			foreach (string discriminant in discriminants)
-				if (SpellcheckerDefinitions.IsDiscriminantExclusiveToField(discriminant))
-					exclusiveDiscriminants.Add(discriminant);
-				else
-					nonExclusiveDiscriminants.Add(discriminant);
+			var hits = _searcher.Search(query, maxCount).ScoreDocs;
 
-			void add(ICollection<string> discriminantsSubset, bool checkUserIndex)
+			int stop = Math.Min(hits.Length, maxCount);
+
+			for (int i = 0; i < stop; i++)
 			{
-				var query = createQuery(word, discriminantsSubset);
+				float score = hits[i].Score;
 
-				int maxHits = SearchCountMultiplier * maxCount;
-				var hits = _searcher.Search(query, maxHits).ScoreDocs;
-				int stop = Math.Min(hits.Length, maxHits);
+				if (score < MinScore)
+					continue;
 
-				for (int i = 0; i < stop; i++)
+				string suggestValue = _searcher.Doc(hits[i].Doc).Get(WordField);
+				if (!alreadySeen.Add(suggestValue))
+					continue;
+
+				var sugWord = new SuggestWord
 				{
-					string suggestValue = _searcher.Doc(hits[i].Doc).Get(WordField);
-					float score = _similarity.GetSimilarity(word, suggestValue);
+					String = suggestValue,
+					Score = score
+				};
 
-					if (score < min)
-						continue;
+				sugQueue.TryAdd(sugWord, sugWord);
 
-					var sugWord = new SuggestWord
-					{
-						String = suggestValue,
-						Score = score
-					};
-
-					if (checkUserIndex && reader != null && fields != null)
-					{
-						var matchingField = fields.FirstOrDefault(f => reader.DocFreq(new Term(f, sugWord.String)) > 0);
-						if (matchingField == null)
-							continue;
-					}
-
-					if (!alreadySeen.Add(sugWord.String))
-						continue;
-
-					sugQueue.TryAdd(sugWord, sugWord);
-
-					if (sugQueue.Count > maxCount)
-						min = sugQueue.TryRemoveMin().Score;
-				}
+				if (sugQueue.Count == maxCount)
+					break;
 			}
 
-			if (exclusiveDiscriminants.Count > 0)
-				add(exclusiveDiscriminants, checkUserIndex: false);
-
-			if (nonExclusiveDiscriminants.Count > 0)
-				add(nonExclusiveDiscriminants, checkUserIndex: true);
-
-			return sugQueue
+		return sugQueue
 				.Reverse()
 				.Select(_ => _.String)
 				.ToReadOnlyList();
 		}
 
-		private static Query createQuery(string word, ICollection<string> discriminants)
+		private static Query createQuery(string word, string field)
 		{
-			var ngramQuery = createNgramQuery(word);
+			var ngramQuery = createNgramsQuery(word);
 
-			if (discriminants.Count == 0)
+			if (string.IsNullOrEmpty(field) || field == MtgQueryParser.AnyField)
 				return ngramQuery;
 
-			var queryDiscriminant = createDiscriminantQuery(discriminants);
+			var queryDiscriminant = new TermQuery(new Term(DiscriminantField, field));
 
 			return new BooleanQuery
 			{
@@ -177,103 +133,89 @@ namespace Mtgdb.Dal.Index
 			};
 		}
 
-		private static Query createDiscriminantQuery(ICollection<string> discriminants)
+		private static Query createNgramsQuery(string word)
 		{
-			var filterDiscriminants = new BooleanQuery();
+			var middleTerms = new Dictionary<string, int>();
+			var startTerms = new Dictionary<string, int>();
 
-			foreach (string discriminant in discriminants)
-				filterDiscriminants.Add(new TermQuery(new Term(DiscriminantField, discriminant)), Occur.SHOULD);
+			int max = ((int) Math.Round(word.Length * 0.75)).WithinRange(1, 8);
 
-			return filterDiscriminants;
-		}
+			for (int n = 1; n <= word.Length; n++)
+				startTerms[word.Substring(0, n)] = 1;
 
-		private static Query createNgramQuery(string word)
-		{
-			int min = getMin(word.Length);
-			int max = getMax(word.Length);
-
-			var query = new BooleanQuery();
-			for (var n = min; n <= max; n++)
+			for (int n = 1; n <= max; n++)
 			{
-				string gramField = "ng" + n;
-				string startField = "s" + n;
-				string endField = "f" + n;
-
 				int right = word.Length - n;
+				int step = (int) Math.Ceiling(0.5f * n).WithinRange(1, null);
 
-				for (int i = 0; i <= right; i++)
+				string key;
+				for (int i = 0; i < right; i+= step)
 				{
-					string ngram = word.Substring(i, n);
-
-					if (i == 0)
-						query.Add(new TermQuery(new Term(startField, ngram)) { Boost = BoostStart }, Occur.SHOULD);
-
-					query.Add(new TermQuery(new Term(gramField, ngram)), Occur.SHOULD);
-
-					if (i == right)
-						query.Add(new TermQuery(new Term(endField, ngram)) { Boost = BoostEnd }, Occur.SHOULD);
+					key = word.Substring(i, n);
+					middleTerms[key] = middleTerms.TryGet(key) + 1;
 				}
+
+				key = word.Substring(right, n);
+				middleTerms[key] = middleTerms.TryGet(key) + 1;
 			}
 
+			var query = new BooleanQuery();
+
+			query.Clauses.AddRange(middleTerms.Select(pair =>
+				new BooleanClause(createNgramQuery(pair.Key, boost: pair.Key.Length * pair.Value), Occur.SHOULD)));
+
+			query.Clauses.AddRange(startTerms.Select(pair =>
+				new BooleanClause(createNgramQuery(BeginWordChar + pair.Key, boost: 2f * pair.Key.Length * pair.Value), Occur.SHOULD)));
+
 			return query;
+		}
+
+		private static Query createNgramQuery(string phrase, float boost)
+		{
+			const int maxStoredNgram = 2;
+
+			if (phrase.Length <= maxStoredNgram)
+				return new TermQuery(new Term(GramField, phrase)) { Boost = boost };
+
+			int last = phrase.Length - maxStoredNgram;
+
+			var result = new PhraseQuery { Boost = boost };
+
+			for (int i = 0; i < last; i += maxStoredNgram)
+				result.Add(new Term(GramField, phrase.Substring(i, maxStoredNgram)), i * maxStoredNgram);
+
+			result.Add(new Term(GramField, phrase.Substring(last, maxStoredNgram)), last * maxStoredNgram);
+
+			return result;
 		}
 
 
 
 		public void IndexWord(string discriminant, string word)
 		{
-			int min = getMin(word.Length);
-			int max = getMax(word.Length);
-
-			if (word.Length < min)
+			if (string.IsNullOrEmpty(word))
 				return;
 
-			var doc = createDocument(word, min, max, discriminant);
+			var doc = createDocument(word, discriminant);
 			_indexWriter.AddDocument(doc);
 		}
 
-		private static int getMin(int l)
+		private static Document createDocument(string text, string discriminant)
 		{
-			return 1;
-		}
+			string textWithBorders = BeginWordChar + text;
 
-		private static int getMax(int l)
-		{
-			return Math.Min(l, 3);
-		}
-
-
-		private static Document createDocument(string text, int minNgram, int maxNgram, string discriminant)
-		{
-			var doc = new Document
+			var charFieldType = new FieldType(IndexUtils.StringFieldType)
 			{
-				new Field(WordField, text, new FieldType(StringField.TYPE_STORED) { IsIndexed = false }),
-				new Field(DiscriminantField, discriminant, IndexUtils.StringFieldType)
+				IsTokenized = true,
+				IndexOptions = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS,
 			};
 
-			for (int n = minNgram; n <= maxNgram; n++)
+			var doc = new Document
 			{
-				string gramField = "ng" + n;
-				string startField = "s" + n;
-				string endField = "f" + n;
-
-				int right = text.Length - n;
-
-				for (int i = 0; i <= right; i++)
-				{
-					string gram = text.Substring(i, n);
-
-					if (i == 0)
-					{
-						doc.Add(new Field(startField, gram, IndexUtils.StringFieldType));
-					}
-
-					if (i == right)
-						doc.Add(new Field(endField, gram, IndexUtils.StringFieldType));
-
-					doc.Add(new Field(gramField, gram, IndexUtils.StringFieldType));
-				}
-			}
+				new Field(WordField, text, new FieldType(IndexUtils.StringFieldType) { IsIndexed = false, IsStored = true }),
+				new Field(DiscriminantField, discriminant, IndexUtils.StringFieldType),
+				new Field(GramField, textWithBorders, charFieldType)
+			};
 
 			return doc;
 		}
@@ -282,19 +224,42 @@ namespace Mtgdb.Dal.Index
 
 		private DirectoryReader _reader;
 
-		private const float BoostStart = 2f;
-		private const float BoostEnd = 1.25f;
-		private const int SearchCountMultiplier = 2;
+		private const string WordField = "w";
+		private const string DiscriminantField = "d";
+		private const string GramField = "g";
 
-		private const float MinScore = 0.5f;
-
-		private const string WordField = "word";
-		private const string DiscriminantField = "discr";
+		private const char BeginWordChar = '▶';
 
 		private Directory _index;
 		private IndexSearcher _searcher;
 		private IndexWriter _indexWriter;
 
-		private readonly IStringSimilarity _similarity;
+		private const float MinScore = 0.2f;
+
+		private class SpellcheckerAnalyzer : Analyzer
+		{
+			public SpellcheckerAnalyzer()
+				: base(PER_FIELD_REUSE_STRATEGY)
+			{
+			}
+
+			protected override TokenStreamComponents CreateComponents(string fieldName, TextReader input)
+			{
+				if (fieldName == GramField)
+				{
+					var tokenizer = new NGramTokenizer(LuceneVersion.LUCENE_48, input, 1, 2);
+					var lowercaseFilter = new LowerCaseFilter(LuceneVersion.LUCENE_48, tokenizer);
+					return new TokenStreamComponents(tokenizer, lowercaseFilter);
+				}
+
+				return new TokenStreamComponents(new KeywordTokenizer(input));
+			}
+		}
+
+		private class SpellcheckerSimilarity : DefaultSimilarity
+		{
+			public override float Idf(long docFreq, long numDocs) => 1f;
+			public override float Tf(float freq) => Math.Sign(freq);
+		}
 	}
 }

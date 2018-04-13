@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
-using Lucene.Net.Util;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
@@ -14,10 +13,10 @@ namespace Mtgdb.Dal.Index
 		{
 			addTextField(nameof(KeywordDefinitions.Keywords), nameof(Card.Text));
 
-			addTextField(nameof(Card.NameEn));
-			addTextField(nameof(Card.TypeEn));
-			addTextField(nameof(Card.TextEn));
-			addTextField(nameof(Card.FlavorEn));
+			addTextField(nameof(Card.NameEn), nameof(Card.Name));
+			addTextField(nameof(Card.TypeEn), nameof(Card.Type));
+			addTextField(nameof(Card.TextEn), nameof(Card.Text));
+			addTextField(nameof(Card.FlavorEn), nameof(Card.Flavor));
 
 			addTextField(nameof(Card.Color));
 
@@ -403,31 +402,6 @@ namespace Mtgdb.Dal.Index
 			return int.Parse(value);
 		}
 
-		public static float? TryParseFloat(this BytesRef val)
-		{
-			if (val == null)
-				return null;
-
-			if (val.Length < 6)
-				return null;
-
-			int intVal = NumericUtils.PrefixCodedToInt32(val);
-			float result = NumericUtils.SortableInt32ToSingle(intVal);
-			return result;
-		}
-
-		public static int? TryParseInt(this BytesRef val)
-		{
-			if (val == null)
-				return null;
-
-			if (val.Length < 6)
-				return null;
-
-			int intVal = NumericUtils.PrefixCodedToInt32(val);
-			return intVal;
-		}
-
 		public static bool IsNumericField(this string field)
 		{
 			return NumericFields.Contains(field);
@@ -467,7 +441,10 @@ namespace Mtgdb.Dal.Index
 			nameof(Card.Loyalty),
 			nameof(Card.ReleaseDate),
 			nameof(Card.Rarity),
-			nameof(Card.Layout)
+			nameof(Card.Layout),
+			nameof(Card.LegalIn),
+			nameof(Card.RestrictedIn),
+			nameof(Card.BannedIn)
 		};
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);

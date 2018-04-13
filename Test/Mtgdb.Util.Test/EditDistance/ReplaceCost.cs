@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Mtgdb.Dal;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Util
 {
 	internal static class ReplaceCost
 	{

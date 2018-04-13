@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,163 +36,266 @@ namespace Mtgdb.Test
 
 		// caret positions
 		// ===============
-		[TestCase("■", "Artist:", "Types:")] // all fields
-		[TestCase("PricingMid■:[", "PricingMid:")]
-		[TestCase("PricingMid:■[", Float)]
-		[TestCase("PricingMid:[■", Float)]
-		[TestCase("PricingMid:[0 TO 1■] OR", Float)]
-		[TestCase("PricingMid:[0 TO 1]■ OR", "Artist:", "Types:")] // all fields
-		[TestCase("PricingMid:[0 TO 1] ■OR", "OR", "AND", "NOT")]
-		[TestCase("PricingMid:[0 TO 1] O■R", "OR", "AND", "NOT")]
-		[TestCase("PricingMid:[0 TO 1] OR■", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "■", "Artist:", "Types:")] // all fields
+		[TestCase(EnRu, "PricingMid■:[", "PricingMid:")]
+		[TestCase(EnRu, "PricingMid:■[", Float)]
+		[TestCase(EnRu, "PricingMid:[■", Float)]
+		[TestCase(EnRu, "PricingMid:[0 TO 1■] OR", Float)]
+		[TestCase(EnRu, "PricingMid:[0 TO 1]■ OR", "Artist:", "Types:")] // all fields
+		[TestCase(EnRu, "PricingMid:[0 TO 1] ■OR", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "PricingMid:[0 TO 1] O■R", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "PricingMid:[0 TO 1] OR■", "OR", "AND", "NOT")]
 		// numeric
 		// =======
-		[TestCase("Cmc:■", "0", "0.5", "10")]
-		[TestCase("Cmc:10■", "10", "1000000")]
-		[TestCase("Cmc:z■")] // empty
-		[TestCase("Hand:■", "-4", "3")]
-		[TestCase("Hand:1■", "-1", "1")]
-		[TestCase("Hand:z■")] // empty
-		[TestCase("Life:■", "-8", "12")]
-		[TestCase("Life:3■", "-3", "3", "30")]
-		[TestCase("Life:z■")] // empty
-		[TestCase("LoyaltyNum:■", "0", "7")]
-		[TestCase("LoyaltyNum:2■", "2")]
-		[TestCase("LoyaltyNum:z■")] // empty
-		[TestCase("PowerNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9", "11")]
-		[TestCase("PowerNum:9■", "9", "99")]
-		[TestCase("PowerNum:z■")] // empty
-		[TestCase("PricingHigh:■", "0.29", "0.35")]
-		[TestCase("PricingHigh:1■", "0.51", "1")]
-		[TestCase("PricingHigh:z■")] // empty
-		[TestCase("PricingLow:■", "0.01", "0.15")]
-		[TestCase("PricingLow:1■", "0.01", "0.1", "1")]
-		[TestCase("PricingLow:z■")] // empty
-		[TestCase("PricingMid:■", "0.14", "0.19")]
-		[TestCase("PricingMid:2■", "0.2", "0.42")]
-		[TestCase("PricingMid:z■")] // empty
-		[TestCase("ToughnessNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9")]
-		[TestCase("ToughnessNum:3■", "3", "3.5", "13")]
-		[TestCase("ToughnessNum:z■")] // empty
+		[TestCase(EnRu, "Cmc:■", "0", "0.5", "10")]
+		[TestCase(EnRu, "Cmc:10■", "10", "1000000")]
+		[TestCase(EnRu, "Cmc:z■")] // empty
+		[TestCase(EnRu, "Hand:■", "-4", "3")]
+		[TestCase(EnRu, "Hand:1■", "-1", "1")]
+		[TestCase(EnRu, "Hand:z■")] // empty
+		[TestCase(EnRu, "Life:■", "-8", "12")]
+		[TestCase(EnRu, "Life:3■", "-3", "3", "30")]
+		[TestCase(EnRu, "Life:z■")] // empty
+		[TestCase(EnRu, "LoyaltyNum:■", "0", "7")]
+		[TestCase(EnRu, "LoyaltyNum:2■", "2")]
+		[TestCase(EnRu, "LoyaltyNum:z■")] // empty
+		[TestCase(EnRu, "PowerNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9", "11")]
+		[TestCase(EnRu, "PowerNum:9■", "9", "99")]
+		[TestCase(EnRu, "PowerNum:z■")] // empty
+		[TestCase(EnRu, "PricingHigh:■", "0.29", "0.35")]
+		[TestCase(EnRu, "PricingHigh:1■", "0.51", "1")]
+		[TestCase(EnRu, "PricingHigh:z■")] // empty
+		[TestCase(EnRu, "PricingLow:■", "0.01", "0.15")]
+		[TestCase(EnRu, "PricingLow:1■", "0.01", "0.1", "1")]
+		[TestCase(EnRu, "PricingLow:z■")] // empty
+		[TestCase(EnRu, "PricingMid:■", "0.14", "0.19")]
+		[TestCase(EnRu, "PricingMid:2■", "0.2", "0.42")]
+		[TestCase(EnRu, "PricingMid:z■")] // empty
+		[TestCase(EnRu, "ToughnessNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9")]
+		[TestCase(EnRu, "ToughnessNum:3■", "3", "3.5", "13")]
+		[TestCase(EnRu, "ToughnessNum:z■")] // empty
 		// legality
 		// ========
-		[TestCase("BannedIn:■", "commander", "vintage")]
-		[TestCase("BannedIn:c■", "commander", "legacy", "urza block")]
-		[TestCase("BannedIn:zzzz■")] // empty suggest
-		[TestCase("LegalIn:■", "amonkhet block", "kaladesh block")]
-		[TestCase("LegalIn:a■", "amonkhet block", "ixalan block")]
-		[TestCase("LegalIn:r■", "ravnica block", "mirrodin block")]
-		[TestCase("LegalIn:zzzz■")] // empty suggest
-		[TestCase("RestrictedIn:■", "un-sets", "vintage")]
-		[TestCase("RestrictedIn:u■", "un-sets")]
-		[TestCase("RestrictedIn:v■", "vintage")]
-		[TestCase("RestrictedIn:zzzz■")] // empty suggest
+		[TestCase(EnRu, "BannedIn:■", "commander", "vintage")]
+		[TestCase(EnRu, "BannedIn:c■", "commander", "legacy", "urza block")]
+		[TestCase(EnRu, "BannedIn:zzzz■")] // empty suggest
+		[TestCase(EnRu, "LegalIn:■", "amonkhet block", "kaladesh block")]
+		[TestCase(EnRu, "LegalIn:a■", "amonkhet block", "ixalan block")]
+		[TestCase(EnRu, "LegalIn:r■", "ravnica block", "mirrodin block")]
+		[TestCase(EnRu, "LegalIn:zzzz■")] // empty suggest
+		[TestCase(EnRu, "RestrictedIn:■", "un-sets", "vintage")]
+		[TestCase(EnRu, "RestrictedIn:u■", "un-sets")]
+		[TestCase(EnRu, "RestrictedIn:v■", "vintage")]
+		[TestCase(EnRu, "RestrictedIn:я■")] // empty suggest
 		// limited values
 		// ==============
 		// artist
-		[TestCase("Artist:■", "aaron boyd", "al davidson")]
-		[TestCase("Artist:a■", "alan pollack")]
-		[TestCase("Artist:b■", "bastien l. deharme", "bob petillo")]
-		[TestCase("Artist:wood■", "ash wood", "sam wood", "todd lockwood")]
-		[TestCase("Artist:zzzz■")] // empty suggest
+		[TestCase(EnRu, "Artist:■", "aaron boyd", "al davidson")]
+		[TestCase(EnRu, "Artist:a■", "alan pollack")]
+		[TestCase(EnRu, "Artist:b■", "bastien l. deharme", "bob petillo")]
+		[TestCase(EnRu, "Artist:wood■", "ash wood", "sam wood", "todd lockwood")]
+		[TestCase(EnRu, "Artist:я■")] // empty suggest
 		// color
-		[TestCase("Color:■", "black", "blue", "colorless", "green", "red", "white")]
-		[TestCase("Color:b■", "black", "blue")]
-		[TestCase("Color:z■")] // empty suggest
+		[TestCase(EnRu, "Color:■", "black", "blue", "colorless", "green", "red", "white")]
+		[TestCase(EnRu, "Color:b■", "black", "blue")]
+		[TestCase(EnRu, "Color:я■")] // empty suggest
 		// generated mana
-		[TestCase("GeneratedMana:■", "{any}", "{b}", "{c}", "{e}", "{g}", "{r}", "{s}", "{u}", "{w}")]
-		[TestCase("GeneratedMana:\\{■", "{any}", "{b}", "{c}", "{e}", "{g}", "{r}", "{s}", "{u}", "{w}")]
-		[TestCase("GeneratedMana:a■", "{any}")]
-		[TestCase("GeneratedMana:w\\}■", "{w}")]
-		[TestCase("GeneratedMana:z■")] // empty suggest
+		[TestCase(EnRu, "GeneratedMana:■", "{any}", "{b}", "{c}", "{e}", "{g}", "{r}", "{s}", "{u}", "{w}")]
+		[TestCase(EnRu, "GeneratedMana:\\{■", "{any}", "{b}", "{c}", "{e}", "{g}", "{r}", "{s}", "{u}", "{w}")]
+		[TestCase(EnRu, "GeneratedMana:a■", "{any}")]
+		[TestCase(EnRu, "GeneratedMana:w\\}■", "{w}")]
+		[TestCase(EnRu, "GeneratedMana:я■")] // empty suggest
 		// keywords
-		[TestCase("Keywords:■", "absorb", "awaken")]
-		[TestCase("Keywords:a■", "absorb", "awaken")]
-		[TestCase("Keywords:ack■", "buyback", "flashback", "attack each turn")]
-		[TestCase("Keywords:zzz■")] // empty suggest
+		[TestCase(EnRu, "Keywords:■", "absorb", "awaken")]
+		[TestCase(EnRu, "Keywords:a■", "absorb", "awaken")]
+		[TestCase(EnRu, "Keywords:ack■", "buyback", "flashback", "attack each turn")]
+		[TestCase(EnRu, "Keywords:я■")] // empty suggest
 		// layout
-		[TestCase("Layout:■", "aftermath", "double-faced", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "token", "vanguard")]
-		[TestCase("Layout:v■", "vanguard", "leveler")]
-		[TestCase("Layout:z■")] // empty suggest
+		[TestCase(EnRu, "Layout:■", "aftermath", "double-faced", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "token", "vanguard")]
+		[TestCase(EnRu, "Layout:v■", "vanguard", "leveler")]
+		[TestCase(EnRu, "Layout:z■")] // empty suggest
 		// mana cost
-		[TestCase("ManaCost:■", "{0}", "{1}", "{10}", "{1000000}", "{11}", "{16}", "{2/b}")]
-		[TestCase("ManaCost:0■", "{0}", "{10}", "{1000000}")]
-		[TestCase("ManaCost:0■", "{0}", "{10}", "{1000000}")]
-		[TestCase("ManaCost:9■", "{9}")]
-		[TestCase("ManaCost: \\/■", "{2/b}", "{2/g}", "{2/r}", "{2/u}", "{2/w}", "{b/g}", "{g/p}", "{r/g}", "{u/b}", "{w/b}", "{w/p}")]
-		[TestCase("ManaCost:z■")] // empty suggest
+		[TestCase(EnRu, "ManaCost:■", "{0}", "{1}", "{10}", "{1000000}", "{11}", "{16}", "{2/b}")]
+		[TestCase(EnRu, "ManaCost:0■", "{0}", "{10}", "{1000000}")]
+		[TestCase(EnRu, "ManaCost:0■", "{0}", "{10}", "{1000000}")]
+		[TestCase(EnRu, "ManaCost:9■", "{9}")]
+		[TestCase(EnRu, "ManaCost: \\/■", "{2/b}", "{2/g}", "{2/r}", "{2/u}", "{2/w}", "{b/g}", "{g/p}", "{r/g}", "{u/b}", "{w/b}", "{w/p}")]
+		[TestCase(EnRu, "ManaCost:я■")] // empty suggest
 		// power
-		[TestCase("Power:■", "*", "*²", "+0", "+1", "0", "½", "1", "1½")]
-		[TestCase("Power:1■", "1", "1+*", "10", "1½", "11", "15", "+1", "-1")]
-		[TestCase("Power:9■", "9", "99")]
-		[TestCase("Power:z■")]
+		[TestCase(EnRu, "Power:■", "*", "*²", "+0", "+1", "0", "½", "1", "1½")]
+		[TestCase(EnRu, "Power:\\*■", "*", "1+*", "*²", "2+*")]
+		[TestCase(EnRu, "Power:1■", "1", "1+*", "10", "1½", "11", "15", "+1", "-1")]
+		[TestCase(EnRu, "Power:9■", "9", "99")]
+		[TestCase(EnRu, "Power:я■")]
 		// rarity
-		[TestCase("Rarity:■", "basic land", "common", "mythic rare", "rare", "special", "uncommon")]
-		[TestCase("Rarity:u■", "uncommon")]
-		[TestCase("Rarity:z■")]
+		[TestCase(EnRu, "Rarity:■", "basic land", "common", "mythic rare", "rare", "special", "uncommon")]
+		[TestCase(EnRu, "Rarity:u■", "uncommon")]
+		[TestCase(EnRu, "Rarity:я■")]
 		// release date
-		[TestCase("ReleaseDate:■", "1993-08-05", "1994-08-08", "1996-06-10")]
-		[TestCase("ReleaseDate:6■", "2003-05-26", "2016-08-26")]
-		[TestCase("ReleaseDate:z■")]
+		[TestCase(EnRu, "ReleaseDate:■", "1993-08-05", "1994-08-08", "1996-06-10")]
+		[TestCase(EnRu, "ReleaseDate:6■", "2003-05-26", "2016-08-26")]
+		[TestCase(EnRu, "ReleaseDate: \\-02\\-27■", "2015-02-27")]
+		[TestCase(EnRu, "ReleaseDate:я■")]
 		// set code
-		[TestCase("SetCode:■", "10e", "5ed", "9ed", "aer")]
-		[TestCase("SetCode:1■", "10e", "cm1", "cp1", "e01", "m11", "v11", "c13")]
-		[TestCase("SetCode:gw■", "ogw")]
-		[TestCase("SetCode:z■", "bfz", "zen")]
-		[TestCase("SetCode:zzz■")]
+		[TestCase(EnRu, "SetCode:■", "10e", "5ed", "9ed", "aer")]
+		[TestCase(EnRu, "SetCode:1■", "10e", "cm1", "cp1", "e01", "m11", "v11", "c13")]
+		[TestCase(EnRu, "SetCode:gw■", "ogw")]
+		[TestCase(EnRu, "SetCode:z■", "bfz", "zen")]
+		[TestCase(EnRu, "SetCode:я■")]
 		// set name
-		[TestCase("SetName:■", "15th anniversary", "aether revolt", "amonkhet")]
-		[TestCase("SetName:a■", "aether revolt", "alara reborn", "alliances", "amonkhet")]
-		[TestCase("SetName:drit■", "eldritch moon")]
-		[TestCase("SetName:222■")]
+		[TestCase(EnRu, "SetName:■", "15th anniversary", "aether revolt", "amonkhet")]
+		[TestCase(EnRu, "SetName:a■", "aether revolt", "alara reborn", "alliances", "amonkhet")]
+		[TestCase(EnRu, "SetName:drit■", "eldritch moon")]
+		[TestCase(EnRu, "SetName:я■")]
 		// supertypes
-		[TestCase("Supertypes:■", "basic", "legendary", "ongoing", "snow", "world")]
-		[TestCase("Supertypes:w■", "snow", "world")]
-		[TestCase("Supertypes:z■")]
+		[TestCase(EnRu, "Supertypes:■", "basic", "legendary", "ongoing", "snow", "world")]
+		[TestCase(EnRu, "Supertypes:w■", "snow", "world")]
+		[TestCase(EnRu, "Supertypes:я■")]
+		//types
+		[TestCase(EnRu,
+			"Types:■",
+			"artifact",
+			"conspiracy",
+			"creature",
+			"eaturecray",
+			"enchantment",
+			"ever",
+			"host",
+			"instant",
+			"land",
+			"phenomenon",
+			"plane",
+			"planeswalker",
+			"scariest",
+			"scheme",
+			"see",
+			"sorcery",
+			"tribal",
+			"vanguard")]
+		[TestCase(EnRu, "Types:a■", "artifact", "conspiracy", "vanguard")]
+		[TestCase(EnRu, "Types:aa■", "artifact")]
+		[TestCase(EnRu, "Types:aa■", "artifact")]
+		[TestCase(EnRu, "Types:я■")]
 		// toughness
-		[TestCase("Toughness:■", "*", "*²", "+0", "+1", "0", "-0", "½", "1", "1½")]
-		[TestCase("Toughness:1■", "1", "1+*", "10", "1½", "11", "13", "+1", "-1")]
-		[TestCase("Toughness:9■", "9", "99")]
-		[TestCase("Toughness:z■")]
+		[TestCase(EnRu, "Toughness:■", "*", "*²", "+0", "+1", "0", "-0", "½", "1", "1½")]
+		[TestCase(EnRu, "Toughness:1■", "1", "1+*", "10", "1½", "11", "13", "+1", "-1")]
+		[TestCase(EnRu, "Toughness:9■", "9", "99")]
+		[TestCase(EnRu, "Toughness:я■")]
 		// non-limited-value fields
 		// ========================
 		// flavor
-		[TestCase("FlavorEn:a■", "aaaaaaiiii", "al-abara")]
-		[TestCase("FlavorEn:n■", "naktamun", "nagging")]
-		[TestCase("FlavorEn:xxx■")]
-		[TestCase("NameEn:■", "\"ach! hans, run!\"", "1996 world champion", "abandon hope")]
-		[TestCase("NameEn:a■", "abzan ascendancy")]
-		[TestCase("NameEn:d■", "damping field", "dauthi warlord")]
-		[TestCase("NameEn:disp■", "dispatch", "dispel", "disperse", "displace")]
-		[TestCase("NameEn:evinrral■", "nevinyrral's disk")]
-
-		//[TestCase("Like:■")]
-		//[TestCase("TextEn:■")]
-		//[TestCase("OriginalText:■")]
-		//[TestCase("OriginalType:■")]
-		//[TestCase("Subtypes:■")]
-		//[TestCase("TypeEn:■")]
-		//[TestCase("Types:■")]
-		public void Suggest_output_contains_expected_values(string queryWithCaret, params string[] expectedSuggests)
+		[TestCase(EnRuEn, "FlavorEn:■", "000", "070")]
+		[TestCase(EnRuEn, "FlavorEn:a■", "aaaaaaiiii", "abandon")]
+		[TestCase(EnRuEn, "FlavorEn:disp■", "dispel")]
+		[TestCase(EnRuEn, "FlavorEn:thal■", "thalakos")]
+		[TestCase(EnRuEn, "FlavorEn:n■", "naktamun", "nagging")]
+		[TestCase(EnRuEn, "FlavorEn:я■")]
+		[TestCase(Ru, "Flavor:■", "1", "101", "106")]
+		[TestCase(Ru, "Flavor:а■", "абзан", "абордаж", "аборигены")]
+		[TestCase(Ru, "Flavor:б■", "б", "баан", "бабочку")]
+		[TestCase(Ru, "Flavor:ям■", "ямах", "бурями")]
+		[TestCase(Ru, "Flavor:яя■", "вдохновляя")]
+		[TestCase(Ru, "Flavor:х■", "хаазды")]
+		[TestCase(Ru, "Flavor:ххх■")]
+		// name
+		[TestCase(EnRuEn, "NameEn:■", "1996 world champion", "abandon hope")]
+		[TestCase(EnRuEn, "NameEn:a■", "abzan ascendancy")]
+		[TestCase(EnRuEn, "NameEn:d■", "damping field", "dack fayden")]
+		[TestCase(EnRuEn, "NameEn:disp■", "dispatch", "dispel", "disperse", "displace")]
+		[TestCase(EnRuEn, "NameEn:evinrral■", "nevinyrral's disk")]
+		[TestCase(EnRuEn, "NameEn:я■")]
+		[TestCase(Ru, "Name:■", "Аббат Крепости Керал")]
+		[TestCase(Ru, "Name:а■", "Аббат Крепости Керал", "Абзанская проводница")]
+		[TestCase(Ru, "Name:с■", "с неба", "саблегривая мастикора")]
+		[TestCase(Ru, "Name:сме■", "смельчак с двойным клинком", "смена направления")]
+		[TestCase(Ru, "Name:щ■", "щедрость луксы")]
+		[TestCase(Ru, "Name:щщщ■")]
+		// like
+		[TestCase(EnRu, "Like:■", "1996 world champion", "abandon hope")]
+		[TestCase(EnRu, "Like:a■", "abzan ascendancy")]
+		[TestCase(EnRu, "Like:d■", "damping field", "dack fayden")]
+		[TestCase(EnRu, "Like:disp■", "dispatch", "dispel", "disperse", "displace")]
+		[TestCase(EnRu, "Like:evinrral■", "nevinyrral's disk")]
+		// text
+		[TestCase(EnRuEn, "TextEn:a■", "a", "aaah", "abandon")]
+		[TestCase(EnRuEn, "TextEn:b■", "baboons", "back")]
+		[TestCase(EnRuEn, "TextEn:dis■", "disappear", "disc")]
+		[TestCase(EnRuEn, "TextEn:disp■", "dispatch", "dispeller", "dispute")]
+		[TestCase(EnRuEn, "TextEn:я■")]
+		[TestCase(Ru, "Text:а■", "а", "аббат", "авацина")]
+		[TestCase(Ru, "Text:двиг■", "надвигающегося")]
+		[TestCase(Ru, "Text:пол■", "поле", "полет")]
+		[TestCase(Ru, "Text:ъъъ■")]
+		// type
+		[TestCase(EnRuEn, "TypeEn:a■", "advisor", "aetherborn", "ajani")]
+		[TestCase(EnRuEn, "TypeEn:b■", "baddest", "badger")]
+		[TestCase(EnRuEn, "TypeEn:dis■", "dinosaur", "advisor")]
+		[TestCase(EnRuEn, "TypeEn:z■", "zendikar", "zombie")]
+		[TestCase(EnRuEn, "TypeEn:za■", "lizard", "urza")]
+		[TestCase(EnRuEn, "TypeEn:я■")]
+		[TestCase(Ru, "Type:■", "аватар", "аджани")]
+		[TestCase(Ru, "Type:а■", "аватар", "аджани", "архонт")]
+		[TestCase(Ru, "Type:кры■", "крыса")]
+		[TestCase(Ru, "Type:ъ■")]
+		// original type
+		[TestCase(EnRu, "OriginalType:a■", "abomination", "ajani", "ali")]
+		[TestCase(EnRu, "OriginalType:b■", "baba", "baddest", "bears")]
+		[TestCase(EnRu, "OriginalType:dis■", "dinosaur", "advisor", "advisors")]
+		[TestCase(EnRu, "OriginalType:z■", "zombie", "eldrazi")]
+		[TestCase(EnRu, "OriginalType:za■", "lizard", "wizards")]
+		[TestCase(EnRu, "OriginalType:я■")]
+		// subtypes
+		[TestCase(EnRu, "Subtypes:a■", "advisor", "aetherborn", "ajani")]
+		[TestCase(EnRu, "Subtypes:b■", "baddest", "badger")]
+		[TestCase(EnRu, "Subtypes:dis■", "dinosaur", "advisor")]
+		[TestCase(EnRu, "Subtypes:z■", "zendikar", "zombie")]
+		[TestCase(EnRu, "Subtypes:za■", "lizard", "urza")]
+		[TestCase(EnRu, "Subtypes:я■")]
+		public void Suggest_output_contains_expected_values(string langs, string originalQuery, params string[] expectedSuggests)
 		{
-			var languages = new[] { "en", "ru" };
+			string[] languages;
+			string[] queryLanguageVariants;
 
-			int caret = queryWithCaret.IndexOf(CaretIndicator);
-			string query = queryWithCaret.Substring(0, caret) + queryWithCaret.Substring(caret + 1);
-
-			var boolPattern = new Regex(@"\b(and|or|not)\b");
-
-			var queryVariants = new[]
+			switch (langs)
 			{
-				boolPattern.Replace(query.ToLower(Str.Culture), match => match.Value.ToUpper(Str.Culture)),
-				query.ToUpper(Str.Culture)
-			};
+				case EnRu:
+					languages = new[] { "en", "ru" };
+					queryLanguageVariants = new[] { originalQuery, originalQuery };
+					break;
 
-			foreach (string language in languages)
+				case EnRuEn:
+					languages = new[] { "en", "ru", "en" };
+
+					string queryWithLocalizedField = _enSuffixPattern.Replace(originalQuery, string.Empty);
+					Assert.That(queryWithLocalizedField, Is.Not.EqualTo(originalQuery));
+
+					queryLanguageVariants = new[] { originalQuery, originalQuery, queryWithLocalizedField };
+					break;
+
+				case Ru:
+					languages = new[] { "ru" };
+					queryLanguageVariants = new[] { originalQuery };
+					break;
+
+				default:
+					throw new ArgumentException();
+			}
+
+			for (int i = 0; i < queryLanguageVariants.Length; i++)
 			{
-				foreach (string queryVariant in queryVariants)
+				string queryLanguageVariant = queryLanguageVariants[i];
+				var queryCasingVariants = new[]
 				{
-					var list = suggestByInput(queryVariant, caret, language);
+					_boolOperatorPattern.Replace(queryLanguageVariant.ToLower(Str.Culture), match => match.Value.ToUpper(Str.Culture)),
+					queryLanguageVariant.ToUpper(Str.Culture)
+				};
+
+				foreach (string queryCasingVariant in queryCasingVariants)
+				{
+					int caret = queryCasingVariant.IndexOf(CaretIndicator);
+					string query = queryCasingVariant.Substring(0, caret) + queryCasingVariant.Substring(caret + 1);
+
+					var list = suggestByInput(query, caret, languages[i]);
 
 					foreach (string expectedSuggest in expectedSuggests)
 					{
@@ -254,5 +358,14 @@ namespace Mtgdb.Test
 
 		public const string Float = "{float}";
 		public const char CaretIndicator = '■';
+		private const string EnRu = "en|ru";
+		private const string EnRuEn = "en|ru|en";
+		private const string Ru = "ru";
+
+		private static readonly Regex _enSuffixPattern = new Regex("(?<=\\bname|text|type|flavor)En(?=:)",
+			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+		private static readonly Regex _boolOperatorPattern = new Regex(@"\b(a■?n■?d|o■?r|n■?o■?t)\b",
+			RegexOptions.Compiled);
 	}
 }

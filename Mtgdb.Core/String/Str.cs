@@ -5,8 +5,8 @@ namespace Mtgdb
 {
 	public static class Str
 	{
-		public static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
-		public const StringComparison Comparison = StringComparison.InvariantCultureIgnoreCase;
+		public static readonly StringComparer Comparer = new MtgStringComparer();
+		public const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
 		public static int Compare(string x, string y)
 		{

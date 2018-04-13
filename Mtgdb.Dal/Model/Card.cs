@@ -64,8 +64,6 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public string Supertypes { get; internal set; }
 
-
-
 		[JsonIgnore]
 		public float? PowerNum { get; internal set; }
 
@@ -554,14 +552,18 @@ namespace Mtgdb.Dal
 			if (Namesakes == null)
 				return null;
 
-			if (_namesakeTranslations.TryGetValue((propertyName, language), out string result))
-				return result;
+			string result;
+
+			lock (_namesakeTranslations)
+				if (_namesakeTranslations.TryGetValue((propertyName, language), out result))
+					return result;
 
 			result = Namesakes
 				.Select(namesake => namesake.Localization?.Invoke(getter, language))
 				.FirstOrDefault(transl => transl != null);
 
-			_namesakeTranslations.Add((propertyName, language), result);
+			lock (_namesakeTranslations)
+				_namesakeTranslations[(propertyName, language)] = result;
 
 			return result;
 		}
