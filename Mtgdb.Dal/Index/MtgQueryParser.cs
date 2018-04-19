@@ -381,7 +381,7 @@ namespace Mtgdb.Dal.Index
 			field = field.ToLower(Str.Culture);
 			return new MoreLikeThisQuery(
 				value,
-				new[] { field },
+				Array.From(field),
 				Analyzer,
 				field)
 			{
@@ -485,7 +485,7 @@ namespace Mtgdb.Dal.Index
 		private static readonly Query _matchNothingQuery = new TermQuery(new Term("none", "*"));
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
-			new[] { "a", "an", "the" }.Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
+			Sequence.From("a", "an", "the").Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
 			Str.Comparer);
 
 		private readonly CardRepository _repository;

@@ -53,7 +53,7 @@ namespace Mtgdb
 
 		public static string TrimComment(this string name)
 		{
-			return name.Split(new[] { @"//" }, StringSplitOptions.None)[0].TrimEnd();
+			return name.Split(Array.From(@"//"), StringSplitOptions.None)[0].TrimEnd();
 		}
 
 		public static Tuple<string, int> SplitTalingNumber(this string value)

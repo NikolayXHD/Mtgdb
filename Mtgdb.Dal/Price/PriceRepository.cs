@@ -138,7 +138,7 @@ namespace Mtgdb.Dal
 				File.WriteAllText(file, content);
 			}
 
-			var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			var lines = content.Split(Array.From(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries);
 			return lines;
 		}
 

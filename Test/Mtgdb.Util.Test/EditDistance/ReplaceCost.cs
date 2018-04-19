@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Mtgdb.Dal;
 
 namespace Mtgdb.Util
 {
@@ -35,17 +34,14 @@ namespace Mtgdb.Util
  qwertyuiop[]\
  asdfghjkl;'  
  zxcvbnm,./   ",
-
 			@"~!@#$%^&*()_+ 
  QWERTYUIOP{}|
  ASDFGHJKL:""  
  ZXCVBNM<>?   ",
-
 			@"ё1234567890-= 
  йцукенгшщзхъ\
  фывапролджэ  
  ячсмитьбю.   ",
-
 			@"Ё!""№;%:?*()_+ 
  ЙЦУКЕНГШЩЗХЪ
  ФЫВАПРОЛДЖЭ/  
@@ -58,7 +54,7 @@ namespace Mtgdb.Util
 
 			if (c1 == c2)
 				return 0;
-			
+
 			if (c1 == EndOfWord || c2 == EndOfWord)
 				return Similarity.High;
 
@@ -81,7 +77,7 @@ namespace Mtgdb.Util
 
 			// Даёт Normal, Light
 			var soundCost = soundReplaceCost(c1, c2);
-			
+
 			float result = Math.Min(keyboardCost, soundCost);
 
 			return result;
@@ -183,7 +179,7 @@ namespace Mtgdb.Util
 
 		private static Dictionary<char, HashSet<int>> toGroupByChar(string groups)
 		{
-			var parts = groups.Split(new[] { ',' }, StringSplitOptions.None);
+			var parts = groups.Split(Array.From(','), StringSplitOptions.None);
 			var result = Enumerable.Range(0, parts.Length)
 				.Select(i => new { index = i, chars = parts[i] })
 				.SelectMany(_ => _.chars.Select(c => new { chr = c, _.index }))
@@ -216,7 +212,7 @@ namespace Mtgdb.Util
 				.SelectMany(l =>
 				{
 					var lines = keyboardLayouts[l].Split(
-						new[] { Environment.NewLine },
+						Array.From(Environment.NewLine),
 						StringSplitOptions.RemoveEmptyEntries);
 
 					return Enumerable

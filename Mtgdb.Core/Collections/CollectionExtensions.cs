@@ -189,11 +189,6 @@ namespace Mtgdb
 			set.UnionWith(values);
 		}
 
-		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Unit.Sequence(value));
-	}
-
-	public static class Unit
-	{
-		public static IEnumerable<T> Sequence<T>(T value) => Enumerable.Repeat(value, 1);
+		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Sequence.From(value));
 	}
 }

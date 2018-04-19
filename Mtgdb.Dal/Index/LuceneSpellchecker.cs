@@ -23,8 +23,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.33 index score instead of custom similarity
-			set => Version = new IndexVersion(value, "0.33");
+			// 0.34 dominaria
+			set => Version = new IndexVersion(value, "0.34");
 		}
 
 		public void InvalidateIndex()

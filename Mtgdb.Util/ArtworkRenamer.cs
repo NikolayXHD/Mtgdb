@@ -19,19 +19,18 @@ namespace Mtgdb.Util
 			Console.WriteLine("Press ENTER to continue");
 			Console.ReadLine();
 
-			var imageRepository = new ImageRepository(new ImageLocationsConfig
-			{
-				Directories = new[]
+			var imageRepository = new ImageRepository(
+				new ImageLocationsConfig
 				{
-					new DirectoryConfig
-					{
-						Path = directory,
-						Art = true,
-						ReadMetadataFromAttributes = true,
-						Zoom = "False"
-					}
-				}
-			});
+					Directories = Array.From(
+						new DirectoryConfig
+						{
+							Path = directory,
+							Art = true,
+							ReadMetadataFromAttributes = true,
+							Zoom = "False"
+						})
+				});
 
 			Console.WriteLine("Reading metadata from attributes...");
 
@@ -79,7 +78,7 @@ namespace Mtgdb.Util
 					{
 						string matchValue = propertyMatch.Value;
 						string propertyValue = matchValue.Substring(1, matchValue.Length - 2);
-						
+
 						if (propertyValue.StartsWith("artist "))
 							attribute.artists.AddRange(propertyValue.Substring("artist ".Length).Split(_valueSeparator));
 						else if (propertyValue.StartsWith("set "))
@@ -92,14 +91,14 @@ namespace Mtgdb.Util
 				var artists = attribute.artists
 					.Where(_ => !string.IsNullOrWhiteSpace(_))
 					.Distinct(Str.Comparer)
-					.OrderBy(_=>_)
+					.OrderBy(_ => _)
 					.ToList();
 
 				if (artists.Count > 0)
 					propertiesList.Add("artist " + string.Join(",", artists));
 
 				var sets = attribute.sets
-					.Where(_=>!string.IsNullOrWhiteSpace(_))
+					.Where(_ => !string.IsNullOrWhiteSpace(_))
 					.Distinct(Str.Comparer)
 					.OrderBy(Str.Comparer)
 					.ToList();

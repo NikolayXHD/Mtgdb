@@ -111,12 +111,12 @@ namespace Mtgdb.Util
 				Console.WriteLine("Press ENTER to continue");
 				Console.ReadLine();
 			}
-			
-			integration.Load(enabledImageGroups: new[] { "dev", "xlhq" });
+
+			integration.Load(enabledImageGroups: Array.From("dev", "xlhq"));
 
 			Console.WriteLine("== Exporting card images ==");
 
-			foreach (string setCode in setCodes?.Split(';') ?? new string[] { null })
+			foreach (string setCode in setCodes?.Split(';', ',', '|') ?? new string[] { null })
 				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir);
 
 			if (!silent)
@@ -190,7 +190,7 @@ namespace Mtgdb.Util
 			else if (File.Exists(packagePath))
 			{
 				var metadata = Signer.CreateSignature(packagePath);
-				Signer.WriteToFile(output, new[] { metadata });
+				Signer.WriteToFile(output, Array.From(metadata));
 			}
 			else
 			{

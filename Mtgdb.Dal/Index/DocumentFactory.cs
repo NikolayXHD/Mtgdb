@@ -280,7 +280,7 @@ namespace Mtgdb.Dal.Index
 				string type = card.Localization?.GetType(lang);
 				if (!string.IsNullOrEmpty(type))
 				{
-					var typeParts = type.Split(new[] { ' ', '—' }, StringSplitOptions.RemoveEmptyEntries);
+					var typeParts = type.Split(Array.From(' ', '—'), StringSplitOptions.RemoveEmptyEntries);
 
 					foreach (string typePart in typeParts)
 						doc.addTextField(nameof(Card.Type), lang, typePart);

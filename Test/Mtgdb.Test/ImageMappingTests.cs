@@ -13,7 +13,7 @@ namespace Mtgdb.Test
 		{
 			LoadCards();
 
-			ImgRepo.LoadFiles(new [] {"dev", "xlhq"});
+			ImgRepo.LoadFiles(Sequence.From("dev", "xlhq"));
 			ImgRepo.LoadSmall();
 			ImgRepo.LoadZoom();
 		}
@@ -60,19 +60,21 @@ namespace Mtgdb.Test
 				}
 		}
 
+		[TestCase("UGL", XlhqTorrentsDir, "UGL", "UGL Tokens")]
+		[TestCase("DDE", XlhqTorrentsDir, "DDE", "DDE Tokens")]
 		[TestCase("C17", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
 		[TestCase("IMA", XlhqDir, "IMA - Iconic Masters\\300DPI Cards")]
 		[TestCase("UST", XlhqDir, "UST - Unstable\\300DPI Cards")]
-		[TestCase("CED", XlhqDir, "CED - Collectors\' Edition\\300DPI")]
+		[TestCase("CED", XlhqDir, "CED - Collectors' Edition\\300DPI")]
 		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
-		[TestCase("UGL", XlhqTorrentsDir, "UGL", "UGL Tokens")]
-		[TestCase("DDE", XlhqTorrentsDir, "DDE", "DDE Tokens")]
-		[TestCase("CMA", GathererDir, "CMA")]
-		[TestCase("DDT", GathererDir, "DDT")]
-		[TestCase("E02", GathererDir, "E02")]
-		[TestCase("RIX", GathererDir, "RIX")]
-		[TestCase("V17", GathererDir, "V17")]
-		[TestCase("A25", GathererDir, "A25")]
+		[TestCase("CMA", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
+		[TestCase("DDT", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
+		[TestCase("E02", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
+		[TestCase("RIX", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
+		[TestCase("V17", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
+		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
+		[TestCase("DDU", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
+		[TestCase("DOM", GathererDir, "DOM")]
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs

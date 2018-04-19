@@ -29,7 +29,6 @@
     <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit3-console.exe" />
     <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit3-console.exe.config" />
     <None Include="$(MSBuildThisFileDirectory)package.bat" />
-    <None Include="$(MSBuildThisFileDirectory)pre-process-images.bat" />
     <None Include="$(MSBuildThisFileDirectory)select images.bat" />
     <None Include="$(MSBuildThisFileDirectory)shortcut.vbs" />
     <None Include="$(MSBuildThisFileDirectory)sign images.bat" />

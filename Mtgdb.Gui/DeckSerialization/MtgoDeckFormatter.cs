@@ -54,7 +54,7 @@ namespace Mtgdb.Gui
 		{
 			_sideboardIndicator = getSideboardIndicator(serialized);
 
-			var lines = serialized.Trim().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+			var lines = serialized.Trim().Split(Array.From("\r\n", "\r", "\n"), StringSplitOptions.None);
 
 			var result = new List<string>();
 
@@ -73,7 +73,7 @@ namespace Mtgdb.Gui
 					result.Add(line);
 				else if (line.IndexOf("\t", Str.Comparison) >= 0)
 				{
-					var parts = line.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+					var parts = line.Split(Array.From('\t'), StringSplitOptions.RemoveEmptyEntries);
 
 					for (int i = 0; i < parts.Length; i++)
 					{
@@ -129,13 +129,7 @@ namespace Mtgdb.Gui
 
 		public static string FromMtgoName(string mtgoName)
 		{
-			var separators = new[]
-			{
-				" // ",
-				" / ",
-				"//",
-				"/"
-			};
+			var separators = Array.From(" // ", " / ", "//", "/");
 
 			int separatorIndex = -1;
 
@@ -172,7 +166,7 @@ namespace Mtgdb.Gui
 		public override string ExportDeck(string name, Deck current)
 		{
 			var result = new StringBuilder();
-			
+
 			writeCards(result, current.MainDeck);
 			result.AppendLine();
 			writeCards(result, current.SideDeck);
@@ -223,7 +217,7 @@ namespace Mtgdb.Gui
 		private readonly CardRepository _repository;
 		private Dictionary<string, List<Card>> _cardsByName;
 
-		private static readonly Dictionary<string, string> _mtgoNameByName = 
+		private static readonly Dictionary<string, string> _mtgoNameByName =
 			new Dictionary<string, string>
 			{
 				{ "Jötun Grunt", "Jotun Grunt" },

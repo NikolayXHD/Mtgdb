@@ -18,7 +18,7 @@ namespace Mtgdb.Controls
 		public QuickFilterControl()
 		{
 			init();
-			
+
 			ImageSize = new Size(20, 20);
 			PropertiesCount = 5;
 			_selectionColor = Color.Transparent;
@@ -63,7 +63,7 @@ namespace Mtgdb.Controls
 			if (PropertyImages == null)
 				return;
 
-			_images = 
+			_images =
 				transformImages(Opacity1Enabled, PropertyImages);
 
 			_imagesToEnable =
@@ -98,7 +98,7 @@ namespace Mtgdb.Controls
 		private void setButtonState(StateClick click, FilterValueState[] states)
 		{
 			FilterValueState[] filterValueStates = states;
-			if ((int) filterValueStates[click.ButtonIndex]%2 != (int) click.ClickedState%2)
+			if ((int) filterValueStates[click.ButtonIndex] % 2 != (int) click.ClickedState % 2)
 				applyCheckLogic(click, states);
 			else if (EnableRequiringSome && filterValueStates[click.ButtonIndex] == FilterValueState.Ignored && click.ClickedState == FilterValueState.Ignored)
 				applyCheckLogic(click, states);
@@ -143,7 +143,7 @@ namespace Mtgdb.Controls
 		{
 			bool allAllowed = true;
 			bool allProhibited = true;
-			
+
 			var i = click.ButtonIndex;
 			for (int j = 0; j < states.Length; j++)
 			{
@@ -176,7 +176,7 @@ namespace Mtgdb.Controls
 				{
 					if (i == j || isCostNeutral(j) && !isCostNeutral(i))
 						continue;
-					
+
 					states[j] = FilterValueState.Ignored;
 				}
 			}
@@ -291,8 +291,8 @@ namespace Mtgdb.Controls
 			else
 				statesCount = 3;
 
-			int width = PropertiesCount*cellWidth + Spacing.Width;
-			int height = statesCount*cellHeight + Spacing.Height;
+			int width = PropertiesCount * cellWidth + Spacing.Width;
+			int height = statesCount * cellHeight + Spacing.Height;
 
 			if (IsVertical)
 				return new Size(height, width);
@@ -311,11 +311,11 @@ namespace Mtgdb.Controls
 			// чтобы Allowed был 0 Prohibited сделан -1
 			const int maxStateIndex = 1;
 			// таким образом RequireSome == Allowed для вычисления координат
-			int stateIndex = (int) state%2;
+			int stateIndex = (int) state % 2;
 			int shift = maxStateIndex - stateIndex;
 
-			int x = i*width + Spacing.Width;
-			var y = shift*height + Spacing.Height;
+			int x = i * width + Spacing.Width;
+			var y = shift * height + Spacing.Height;
 
 			if (IsVertical)
 			{
@@ -343,11 +343,11 @@ namespace Mtgdb.Controls
 			var width = ImageSize.Width + Spacing.Width;
 			var height = ImageSize.Height + Spacing.Height;
 
-			int index = (2*x - Spacing.Width)/(width*2);
+			int index = (2 * x - Spacing.Width) / (width * 2);
 			if (index < 0 || index >= PropertiesCount)
 				return null;
 
-			int stateIndex = (2*y - Spacing.Width)/(height*2);
+			int stateIndex = (2 * y - Spacing.Width) / (height * 2);
 
 			switch (stateIndex)
 			{
@@ -504,7 +504,7 @@ namespace Mtgdb.Controls
 				return;
 
 			var property = Properties[command.Value.ButtonIndex] ?? "N/A";
-			
+
 			var font = Font;
 			const int border = 1;
 
@@ -516,12 +516,12 @@ namespace Mtgdb.Controls
 			if (IsVertical)
 			{
 				y = rectangle.Y - rectangle.Height;
-				x = rectangle.X + (rectangle.Width - font.Height/2)/2;
+				x = rectangle.X + (rectangle.Width - font.Height / 2) / 2;
 			}
 			else
 			{
 				x = rectangle.X + rectangle.Width;
-				y = rectangle.Y + (rectangle.Height - font.Height)/2;
+				y = rectangle.Y + (rectangle.Height - font.Height) / 2;
 			}
 
 
@@ -531,7 +531,7 @@ namespace Mtgdb.Controls
 
 			int wordWidth = Math.Max(
 				iconWidth,
-				(int) (property.Length*fontSize * 0.67f) + HintTextShift.Width);
+				(int) (property.Length * fontSize * 0.67f) + HintTextShift.Width);
 
 			if (x + wordWidth > Width)
 				x = Width - wordWidth;
@@ -610,11 +610,11 @@ namespace Mtgdb.Controls
 				if (BorderShape == BorderShape.Ellipse)
 					fillBorder = (c, r, w) =>
 					{
-						r.Inflate(-w/2, -w/2);
+						r.Inflate(-w / 2, -w / 2);
 						e.Graphics.DrawEllipse(new Pen(c, w), r);
 					};
 				else if (BorderShape == BorderShape.Rectangle)
-					fillBorder = (c, r, w) => { e.Graphics.DrawRectangles(new Pen(c, w), new[] { r }); };
+					fillBorder = (c, r, w) => { e.Graphics.DrawRectangles(new Pen(c, w), Array.From(r)); };
 				else
 					throw new NotSupportedException();
 
@@ -715,7 +715,7 @@ namespace Mtgdb.Controls
 		private void init()
 		{
 			SuspendLayout();
-			
+
 			AutoScaleDimensions = new SizeF(6F, 13F);
 			AutoScaleMode = AutoScaleMode.Font;
 			Name = "QuickFilterControl";
@@ -729,7 +729,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings")]
 		public event EventHandler StateChanged;
-		
+
 		[Category("Settings")]
 		[DefaultValue(typeof(Size), "20, 20")]
 		public Size ImageSize

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal
@@ -8,35 +7,37 @@ namespace Mtgdb.Dal
 	{
 		public static void Patch(Card card)
 		{
-			if (tryGetFixedName(card, out string fixedName))
+			if (tryGetName(card.SetCode, card.ImageName, out var name))
+				card.ImageName = name;
+			else if (Str.Equals(card.SetCode, "AKH") && Str.Equals(card.Rarity, "Basic Land"))
 			{
-				card.ImageName = fixedName;
-			}
-			else if (_replacementBySet.TryGetValue(card.SetCode, out var regexReplacement))
-			{
-				var pattern = regexReplacement.Item1;
-				var replacement = regexReplacement.Item2;
-
-				card.ImageName = string.Intern(pattern.Replace(card.ImageName, replacement));
-			}
-			else if (Str.Equals(card.SetCode, "AKH"))
-			{
-				if (Str.Equals(card.Rarity, "Basic Land"))
-				{
-					var parts = card.ImageName.SplitTalingNumber();
-					card.ImageName = string.Intern(
-						parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4));
-				}
+				var parts = card.ImageName.SplitTalingNumber();
+				card.ImageName = string.Intern(parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4));
 			}
 		}
 
-		private static bool tryGetFixedName(Card card, out string fixedName)
+		public static string PatchFileName(string fileName)
 		{
-			if (_fixedNamesBySet[string.Empty].TryGetValue(card.ImageName, out fixedName))
-				return true;
+			if (_imageModelReplacements.TryGetValue(fileName, out string name))
+				return name;
 
-			if (_fixedNamesBySet.TryGetValue(card.SetCode, out var setFixedNames))
-				return setFixedNames.TryGetValue(card.ImageName, out fixedName);
+			return fileName;
+		}
+
+		private static bool tryGetName(string setCode, string imageName, out string name)
+		{
+			if (_fixedNamesBySet[string.Empty].TryGetValue(imageName, out name) ||
+				_fixedNamesBySet.TryGetValue(setCode, out var setFixedNames) &&
+				setFixedNames.TryGetValue(imageName, out name))
+			{
+				return true;
+			}
+
+			if (_replacementBySet.TryGetValue(setCode, out var replacement))
+			{
+				name = string.Intern(replacement.Regex.Replace(imageName, replacement.Evaluator));
+				return true;
+			}
 
 			return false;
 		}
@@ -63,20 +64,20 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		private static readonly Dictionary<string, Tuple<Regex, MatchEvaluator>> _replacementBySet =
-			new Dictionary<string, Tuple<Regex, MatchEvaluator>>(Str.Comparer)
+		private static readonly Dictionary<string, (Regex Regex, MatchEvaluator Evaluator)> _replacementBySet =
+			new Dictionary<string, (Regex Regex, MatchEvaluator Evaluator)>(Str.Comparer)
 			{
-				["UST"] = new Tuple<Regex, MatchEvaluator>(
-					new Regex(
-						@" \((?<num>[a-f])\)$",
-						RegexOptions.Compiled | RegexOptions.IgnoreCase),
-					unstableSetReplacement),
+				["UST"] = (
+				new Regex(
+					@" \((?<num>[a-f])\)$",
+					RegexOptions.Compiled | RegexOptions.IgnoreCase),
+				unstableSetReplacement),
 
-				["ZEN"] = new Tuple<Regex, MatchEvaluator>(
-					new Regex(
-						@"(?<num>[1-4])a$",
-						RegexOptions.Compiled | RegexOptions.IgnoreCase),
-					zendikarSetReplacement)
+				["ZEN"] = (
+				new Regex(
+					@"(?<num>[1-4])a$",
+					RegexOptions.Compiled | RegexOptions.IgnoreCase),
+				zendikarSetReplacement)
 			};
 
 		private static readonly Dictionary<string, Dictionary<string, string>> _fixedNamesBySet = new Dictionary<string, Dictionary<string, string>>(Str.Comparer)
@@ -85,7 +86,7 @@ namespace Mtgdb.Dal
 			{
 				["Sultai Ascendacy"] = "Sultai Ascendancy",
 				["Two-Headed Giant of Foriys"] = "Two headed Giant of Foriys",
-				["Will-O'-The-Wisp"] = "Will O' The Wisp"
+				["Will O' The Wisp"] = "Will-O'-The-Wisp"
 			},
 
 			["DD3_DVD"] = new Dictionary<string, string>(Str.Comparer)
@@ -117,6 +118,11 @@ namespace Mtgdb.Dal
 			{
 				["Rumors of My Death . . ."] = "_Rumors of My Death . . ._"
 			}
+		};
+
+		private static readonly Dictionary<string, string> _imageModelReplacements = new Dictionary<string, string>(Str.Comparer)
+		{
+			["Will O' The Wisp"] = "Will-O'-The-Wisp"
 		};
 	}
 }

@@ -79,11 +79,11 @@ namespace Mtgdb.Test
 		{
 			var cardIds = _keywordSearcher.GetCardIds(
 					Enumerable.Empty<KeywordQueryTerm>(),
-					Unit.Sequence(new KeywordQueryTerm
+					Sequence.From(new KeywordQueryTerm
 					{
 						FieldName = "Cmc",
-						Patterns = new[] { new Regex("^0$") },
-						Values = new[] { "0" }
+						Patterns = Array.From(new Regex("^0$")),
+						Values = Array.From("0")
 					}),
 					Enumerable.Empty<KeywordQueryTerm>())
 				.ToArray();

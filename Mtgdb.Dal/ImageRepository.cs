@@ -76,7 +76,7 @@ namespace Mtgdb.Dal
 		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
 		{
 			return directoryConfigs
-				.Where(c=> filter(c) && Directory.Exists(c.Path))
+				.Where(c => filter(c) && Directory.Exists(c.Path))
 				// use_dir_sorting_to_find_most_nested_root
 				.OrderByDescending(c => c.Path.Length)
 				.ToArray();
@@ -230,7 +230,7 @@ namespace Mtgdb.Dal
 
 				if (part[0] != MetadataBegin || part[part.Length - 1] != MetadataEnd)
 					continue;
-				
+
 				var subparts = part.Substring(1, part.Length - 2).Split(_metadataSeparator, StringSplitOptions.None);
 
 				foreach (string subpart in subparts)
@@ -274,7 +274,7 @@ namespace Mtgdb.Dal
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				int separator = imageFile.Name.IndexOfAny(new[] { '_', '»' });
+				int separator = imageFile.Name.IndexOfAny(Array.From('_', '»'));
 
 				if (separator > 0 && separator < imageFile.Name.Length - 1)
 				{
@@ -342,7 +342,13 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		private static ImageFile getImage(Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant, Func<string, string, string> setCodePreference, string set, string imageNameBase, string imageName, string artist)
+		private static ImageFile getImage(
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant,
+			Func<string, string, string> setCodePreference,
+			string set,
+			string imageNameBase,
+			string imageName,
+			string artist)
 		{
 			lock (modelsByNameBySetByVariant)
 			{
@@ -536,11 +542,11 @@ namespace Mtgdb.Dal
 				return null;
 
 			var result = getImage(_modelsByNameBySetByVariantZoom,
-					setCodePreference,
-					imageFile.SetCode,
-					imageFile.Name,
-					imageFile.ImageName,
-					imageFile.Artist);
+				setCodePreference,
+				imageFile.SetCode,
+				imageFile.Name,
+				imageFile.ImageName,
+				imageFile.Artist);
 
 			if (result != null)
 				return result.NonRotated();

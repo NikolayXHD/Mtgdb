@@ -2,14 +2,16 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Mtgdb.ImageProcessing
+namespace Mtgdb.Util
 {
 	public static class WaifuScaler
 	{
 		public static void Scale(string sourceFile, string targetFile)
 		{
+			int parallelism = Environment.ProcessorCount;
+
 			string exe = AppDir.Root.AddPath(@"..\tools\Waifu2x\waifu2x-converter.exe");
-			string args = $"--jobs 1 --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
+			string args = $"--jobs {parallelism} --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
 			string workingDirectory = Path.GetDirectoryName(exe);
 
 			var process = Process.Start(new ProcessStartInfo(exe, args)

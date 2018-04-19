@@ -2,7 +2,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using Mtgdb.ImageProcessing;
 using Mtgdb.Test;
 using NUnit.Framework;
 
@@ -27,14 +26,15 @@ namespace Mtgdb.Util
 			LoadCards();
 		}
 
-		[TestCase("A25")]
+		[TestCase("DOM")]
+		[TestCase("DDU")]
 		public void DownloadGathererImages(string setCode)
 		{
 			using (var client = new GathererClient())
 			{
 				var set = Repo.SetsByCode[setCode];
 				foreach (var card in set.Cards)
-					client.DownloadCardImage(card, GathererDir);
+					client.DownloadCardImage(card, GathererOriginalDir);
 			}
 		}
 
@@ -48,17 +48,15 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererDir, GathererPreprocessedDir, "A25.large", PublishedDir, "A25")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "DDU png")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "DOM png large")]
 		public void PreProcessImages(
 			string sourceDir,
 			string targetDir,
-			string subdir,
-			string publishedDir,
-			string publishedSubdir)
+			string subdir)
 		{
 			string sourceSubdir = Path.Combine(sourceDir, subdir);
 			string targetSubdir = Path.Combine(targetDir, subdir);
-			string publishSubdir = Path.Combine(PublishedDir, publishedSubdir);
 
 			Directory.CreateDirectory(targetSubdir);
 
@@ -70,22 +68,20 @@ namespace Mtgdb.Util
 
 				if (!File.Exists(targetImage))
 					WaifuScaler.Scale(sourceImage, targetImage);
-
-				convertToJpg(targetImage, publishSubdir);
 			}
 		}
 
-		//[TestCase(GathererPreprocessedDir, "A25.large", "A25")]
-		[TestCase(BackupDir, "A25.png", "A25.jpg")]
-		public void ConvertToJpg(string dir, string sourceSubdir, string targetSubdir)
+		[TestCase(GathererOriginalDir, "DOM png", PublishedSmallDir, "DOM")]
+		[TestCase(GathererPreprocessedDir, "DOM png", PublishedZoomDir, "DOM")]
+		public void ConvertToJpg(string dir, string subdir, string targetDir, string targetSubdir)
 		{
-			var sourceImages = Directory.GetFiles(Path.Combine(dir, sourceSubdir)).ToArray();
+			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();
 
-			var targetDir = Path.Combine(dir, targetSubdir);
-			Directory.CreateDirectory(targetDir);
+			var target = Path.Combine(targetDir, targetSubdir);
+			Directory.CreateDirectory(target);
 
 			foreach (var sourceImage in sourceImages)
-				convertToJpg(sourceImage, targetDir);
+				convertToJpg(sourceImage, target);
 		}
 
 		private void convertToJpg(string sourceImage, string targetDir)
@@ -102,9 +98,10 @@ namespace Mtgdb.Util
 		private ImageCodecInfo _jpegCodec;
 		private EncoderParameters _jpegEncoderParams;
 
-		private const string GathererDir = @"D:\Distrib\games\mtg\Gatherer.Original";
+		private const string GathererOriginalDir = @"D:\Distrib\games\mtg\Gatherer.Original";
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
-		private const string PublishedDir = @"D:\Distrib\games\mtg\Mega\Mtgdb.Pictures\mq";
+		private const string PublishedZoomDir = @"D:\Distrib\games\mtg\Mega\Mtgdb.Pictures\mq";
+		private const string PublishedSmallDir = @"D:\Distrib\games\mtg\Mega\Mtgdb.Pictures\lq";
 		private const string BackupDir = @"D:\Distrib\games\mtg\.bak\Gatherer.Original";
 
 		private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";

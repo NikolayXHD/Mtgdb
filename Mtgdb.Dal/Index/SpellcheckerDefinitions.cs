@@ -49,7 +49,7 @@ namespace Mtgdb.Dal.Index
 			if (DocumentFactory.LocalizedFields.Contains(userField))
 				return DocumentFactory.Languages;
 
-			return Unit.Sequence((string) null);
+			return Sequence.From((string) null);
 		}
 
 		public static IReadOnlyList<string> ReadAllValuesFrom(this DirectoryReader reader, string field)
@@ -86,10 +86,10 @@ namespace Mtgdb.Dal.Index
 		public static Dictionary<string, Func<Card, string, IEnumerable<string>>> SpellcheckerValueGetters { get; } =
 			new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
 			{
-				[nameof(Card.Name)] = (c, lang) => c.Localization?.GetName(lang)?.Invoke(Unit.Sequence) ?? Enumerable.Empty<string>(),
-				[nameof(Card.NameEn)] = (c, lang) => Unit.Sequence(c.NameEn),
-				[nameof(Card.Artist)] = (c, lang) => Unit.Sequence(c.Artist),
-				[nameof(Card.SetName)] = (c, lang) => Unit.Sequence(c.SetName)
+				[nameof(Card.Name)] = (c, lang) => c.Localization?.GetName(lang)?.Invoke(value => Sequence.From(value)) ?? Enumerable.Empty<string>(),
+				[nameof(Card.NameEn)] = (c, lang) => Sequence.From(c.NameEn),
+				[nameof(Card.Artist)] = (c, lang) => Sequence.From(c.Artist),
+				[nameof(Card.SetName)] = (c, lang) => Sequence.From(c.SetName)
 			};
 	}
 }

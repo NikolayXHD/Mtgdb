@@ -19,7 +19,7 @@ namespace Mtgdb.Downloader
 
 			string executableName = AppDir.Update.AddPath(@"7z\7za.exe");
 
-			foreach (string excludedFile in excludedFiles.Concat(new [] { executableName }))
+			foreach (string excludedFile in excludedFiles.Concat(Sequence.From(executableName)))
 			{
 				if (!excludedFile.StartsWith(targetDirectory))
 					throw new ArgumentException($"excluded file {excludedFile} is not in target directory {targetDirectory}");

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,7 +24,7 @@ namespace Mtgdb.Gui
 
 			string anyFormatFilter = $"Any {{type}}|{string.Join(@";", _formatters.Where(_ => _.SupportsImport).Select(f => f.FileNamePattern).Distinct())}";
 
-			_loadFilter = string.Join(@"|", Unit.Sequence(anyFormatFilter).Concat(
+			_loadFilter = string.Join(@"|", Sequence.From(anyFormatFilter).Concat(
 				_formatters.Where(_ => _.SupportsImport).Select(f => $"{f.Description}|{f.FileNamePattern}")));
 
 			_saveFilter = string.Join(@"|",
@@ -270,7 +269,7 @@ namespace Mtgdb.Gui
 			string filterPart = @"*" + extension.ToLower(Str.Culture);
 			var filterParts = filter.Split('|').Select(_=>_.ToLower(Str.Culture)).ToArray();
 
-			var index = Array.IndexOf(filterParts, filterPart);
+			var index = filterParts.IndexOf(filterPart);
 
 			return 1 + index / 2;
 		}

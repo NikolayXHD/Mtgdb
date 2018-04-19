@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 		public virtual Deck ImportDeck(string serialized)
 		{
 			var result = Deck.Create();
-			
+
 			var lines = SplitToLines(serialized);
 
 			var unmatched = new HashSet<string>();
@@ -37,7 +37,7 @@ namespace Mtgdb.Gui
 					unmatched.Add(match.Value);
 					continue;
 				}
-				
+
 				if (isSideboard)
 					add(card, count, result.SideDeck);
 				else
@@ -51,7 +51,7 @@ namespace Mtgdb.Gui
 
 		protected virtual IList<string> SplitToLines(string serialized)
 		{
-			return serialized.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			return serialized.Split(Array.From('\r', '\n'), StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		private static void add(Card card, int count, DeckZone collection)

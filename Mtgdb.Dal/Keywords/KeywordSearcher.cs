@@ -22,8 +22,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.29 refactoring
-			set => _version = new IndexVersion(value, "0.29");
+			// 0.34 dominaria
+			set => _version = new IndexVersion(value, "0.34");
 		}
 
 		public void InvalidateIndex()

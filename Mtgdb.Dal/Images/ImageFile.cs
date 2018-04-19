@@ -22,7 +22,7 @@ namespace Mtgdb.Dal
 
 			FullPath = fileName;
 
-			string[] parts = fileNameWithoutExtension.Split(new[] { '.' }, StringSplitOptions.None);
+			string[] parts = fileNameWithoutExtension.Split(Array.From('.'), StringSplitOptions.None);
 			var lastNamePart = Enumerable.Range(0, parts.Length)
 				.Last(i =>
 					i == 0 ||
@@ -36,9 +36,10 @@ namespace Mtgdb.Dal
 
 			Type = string.Join(".", parts.Skip(1 + lastNamePart));
 
-			ImageName = string.Intern(
-				string.Join(".", parts.Take(1 + lastNamePart))
-					.Replace(" - ", string.Empty));
+			var imageName = string.Join(".", parts.Take(1 + lastNamePart))
+				.Replace(" - ", string.Empty);
+
+			ImageName = string.Intern(ImageNamePatcher.PatchFileName(imageName));
 
 			var nameParts = ImageName.SplitTalingNumber();
 			Name = string.Intern(nameParts.Item1);
