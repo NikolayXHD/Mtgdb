@@ -306,10 +306,12 @@ namespace Mtgdb.Dal.Index
 		{
 			fieldName = fieldName.ToLower(Str.Culture);
 
-			var field = new Int32Field(fieldName, fieldValue, new FieldType(Int32Field.TYPE_STORED)
-			{
-				IsIndexed = false
-			});
+			var field = new Int32Field(fieldName,
+				fieldValue,
+				new FieldType(Int32Field.TYPE_STORED)
+				{
+					IsIndexed = false
+				});
 
 			doc.Add(field);
 		}
@@ -432,21 +434,23 @@ namespace Mtgdb.Dal.Index
 		public static readonly HashSet<string> LocalizedFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> UserFields = new HashSet<string>(Str.Comparer);
 
-		public static HashSet<string> NotAnalyzedFields { get; } = new HashSet<string>(Str.Comparer)
-		{
-			nameof(KeywordDefinitions.Keywords),
-			nameof(Card.SetCode),
-			nameof(Card.Power),
-			nameof(Card.Toughness),
-			nameof(Card.Loyalty),
-			nameof(Card.ReleaseDate),
-			nameof(Card.Rarity),
-			nameof(Card.Layout),
-			nameof(Card.LegalIn),
-			nameof(Card.RestrictedIn),
-			nameof(Card.BannedIn)
-		};
+		public static HashSet<string> NotAnalyzedFields { get; } =
+			new HashSet<string>(Str.Comparer)
+			{
+				nameof(KeywordDefinitions.Keywords),
+				nameof(Card.SetCode),
+				nameof(Card.Power),
+				nameof(Card.Toughness),
+				nameof(Card.Loyalty),
+				nameof(Card.ReleaseDate),
+				nameof(Card.Rarity),
+				nameof(Card.Layout),
+				nameof(Card.LegalIn),
+				nameof(Card.RestrictedIn),
+				nameof(Card.BannedIn)
+			};
 
-		public static readonly Dictionary<string, string> DisplayFieldByIndexField = new Dictionary<string, string>(Str.Comparer);
+		public static readonly Dictionary<string, string> DisplayFieldByIndexField =
+			new Dictionary<string, string>(Str.Comparer);
 	}
 }

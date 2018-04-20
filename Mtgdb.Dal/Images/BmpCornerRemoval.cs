@@ -15,28 +15,28 @@ namespace Mtgdb.Dal
 		{
 			int size = Math.Max(Rect.Width, Rect.Height);
 
-			int margin = (int) Math.Ceiling(size/150f);
+			int margin = (int) Math.Ceiling(size / 150f);
 
-			int leftTop = GetLocation(0, 0);
+			int ltTop = GetLocation(0, 0);
 
-			if (SameColor(leftTop, 0, 0, 0, 0))
+			if (SameColor(ltTop, 0, 0, 0, 0))
 				return;
 
-			int middleTop = GetLocation(Rect.Width/2, margin);
-			int rightTop = GetLocation(Rect.Width - 1, 0);
-			int rightMiddle = GetLocation(Rect.Width - margin, Rect.Height/2);
-			int rightBottom = GetLocation(Rect.Width - 1, Rect.Height - 1);
-			int middleBottom = GetLocation(Rect.Width/2, Rect.Height - margin);
-			int leftBottom = GetLocation(0,Rect.Height - 1);
-			int leftMiddle = GetLocation(margin, Rect.Height/2);
+			int mdTop = GetLocation(Rect.Width / 2, margin);
+			int rtTop = GetLocation(Rect.Width - 1, 0);
+			int rtMdl = GetLocation(Rect.Width - 1 - margin, Rect.Height / 2);
+			int rtBtm = GetLocation(Rect.Width - 1, Rect.Height - 1);
+			int mdBtm = GetLocation(Rect.Width / 2, Rect.Height - 1 - margin);
+			int ltBtm = GetLocation(0, Rect.Height - 1);
+			int ltMdl = GetLocation(margin, Rect.Height / 2);
 
 			bool hasCorner =
-				SameColor(leftTop, rightTop) && SameColor(rightTop, rightBottom) && SameColor(rightBottom, leftBottom) &&
+				SameColor(ltTop, rtTop) && SameColor(rtTop, rtBtm) && SameColor(rtBtm, ltBtm) &&
 				(
-					!SameColor(leftTop, middleTop) ||
-					!SameColor(leftTop, rightMiddle) ||
-					!SameColor(leftTop, middleBottom) ||
-					!SameColor(leftTop, leftMiddle));
+					!SameColor(ltTop, mdTop) ||
+					!SameColor(ltTop, rtMdl) ||
+					!SameColor(ltTop, mdBtm) ||
+					!SameColor(ltTop, ltMdl));
 
 			if (!hasCorner)
 				return;
@@ -44,7 +44,7 @@ namespace Mtgdb.Dal
 			ImageChanged = true;
 
 			double radius = 13f / 370f * size;
-			
+
 			modify(+radius, +radius, 0, 0);
 			modify(+radius, -radius, 0, Rect.Height - 1);
 			modify(-radius, +radius, Rect.Width - 1, 0);
@@ -54,7 +54,7 @@ namespace Mtgdb.Dal
 		private void modify(
 			double radiusX,
 			double radiusY,
-			int left, 
+			int left,
 			int top)
 		{
 			//int modified = 0;
@@ -70,7 +70,7 @@ namespace Mtgdb.Dal
 		{
 			for (int x = 0; x < r + 2; x++)
 			{
-				double maxY = r + 2 - Math.Sqrt(r*r - (x - r)*(x - r));
+				double maxY = r + 2 - Math.Sqrt(r * r - (x - r) * (x - r));
 				for (int y = 0; y < maxY; y++)
 				{
 					int i = left + signX * x;
@@ -90,7 +90,7 @@ namespace Mtgdb.Dal
 
 		private static double getAlphaRel(int x, int y, double r)
 		{
-			double dist = Math.Sqrt((x - r)*(x - r) + (y - r)*(y - r));
+			double dist = Math.Sqrt((x - r) * (x - r) + (y - r) * (y - r));
 
 			double outness = dist - r - 0.5;
 
@@ -101,6 +101,6 @@ namespace Mtgdb.Dal
 			return alphaRel;
 		}
 
-		protected override int ColorSimilarityThreshold => 25;
+		protected override int ColorSimilarityThreshold => 60;
 	}
 }

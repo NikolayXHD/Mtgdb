@@ -95,7 +95,7 @@ namespace Mtgdb.Downloader
 			};
 
 			var existingSignatures = readExistingSignatures(progress)
-				?.ToDictionary(_ => _.Path);
+				?.ToDictionary(_ => _.Path, Str.Comparer);
 
 			if (imagesOnline == null)
 			{

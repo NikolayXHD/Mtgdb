@@ -298,18 +298,19 @@ namespace Mtgdb.Dal
 			"Ante"
 		};
 
-		internal static readonly Dictionary<string, string> HarmfulAbilityExplanations = new Dictionary<string, string>
-		{
-			["can't be blocked, targeted, or dealt damage by"] = "can't be bl*cked, targeted, or dealt damage by",
-			["can't be blocked, targeted, dealt damage, or enchanted by"] = "can't be bl*cked, targeted, dealt damage, or enchanted by",
-			["can't be blocked except by"] = "can't be bl*cked except by",
-			["can't be blocked as long as defending player controls"] = "can't be bl*cked as long as defending player controls",
-			["can't be blocked by creatures with greater power"] = "can't be bl*cked by creatures with greater power",
-			["this spell works on creatures that can't be blocked"] = "this spell works on creatures that can't be bl*cked",
-			["except by creatures with flying or reach"] = "except by creatures with fl*ing or re*ch",
-			["can block creatures with flying"] = "can block creatures with fl*ing",
-			["deals combat damage before creatures without first strike"] = "deals combat damage before creatures without first str*ke"
-		};
+		internal static readonly Dictionary<string, string> HarmfulAbilityExplanations =
+			new Dictionary<string, string>
+			{
+				["can't be blocked, targeted, or dealt damage by"] = "can't be bl*cked, targeted, or dealt damage by",
+				["can't be blocked, targeted, dealt damage, or enchanted by"] = "can't be bl*cked, targeted, dealt damage, or enchanted by",
+				["can't be blocked except by"] = "can't be bl*cked except by",
+				["can't be blocked as long as defending player controls"] = "can't be bl*cked as long as defending player controls",
+				["can't be blocked by creatures with greater power"] = "can't be bl*cked by creatures with greater power",
+				["this spell works on creatures that can't be blocked"] = "this spell works on creatures that can't be bl*cked",
+				["except by creatures with flying or reach"] = "except by creatures with fl*ing or re*ch",
+				["can block creatures with flying"] = "can block creatures with fl*ing",
+				["deals combat damage before creatures without first strike"] = "deals combat damage before creatures without first str*ke"
+			};
 
 		public static readonly string[] Rarity =
 		{

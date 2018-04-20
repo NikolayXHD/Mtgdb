@@ -50,7 +50,7 @@ namespace Mtgdb.Test
 
 			var chars = alphabet.Select(c=> char.ToLower(c, Str.Culture)).Distinct().OrderBy(c => c).ToArray();
 
-			Log.Info(() => new string(chars));
+			Log.Debug(() => new string(chars));
 
 			var specialChars = new List<char>();
 

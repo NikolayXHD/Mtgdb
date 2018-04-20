@@ -18,6 +18,8 @@ namespace Mtgdb.Test
 		[TestCase("V17")]
 		[TestCase("RIX")]
 		[TestCase("A25")]
+		[TestCase("DDU")]
+		[TestCase("DOM")]
 		public void Small_images_have_transparent_corners(string setCode)
 		{
 			int removedCornersCount = 0;

@@ -321,8 +321,8 @@ namespace Mtgdb.Util
 
 		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir)
 		{
-			var exportedSmall = new HashSet<string>();
-			var exportedZoomed = new HashSet<string>();
+			var exportedSmall = new HashSet<string>(Str.Comparer);
+			var exportedZoomed = new HashSet<string>(Str.Comparer);
 
 			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true);
 			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false);

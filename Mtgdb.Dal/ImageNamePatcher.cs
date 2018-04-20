@@ -80,7 +80,8 @@ namespace Mtgdb.Dal
 				zendikarSetReplacement)
 			};
 
-		private static readonly Dictionary<string, Dictionary<string, string>> _fixedNamesBySet = new Dictionary<string, Dictionary<string, string>>(Str.Comparer)
+		private static readonly Dictionary<string, Dictionary<string, string>> _fixedNamesBySet =
+			new Dictionary<string, Dictionary<string, string>>(Str.Comparer)
 		{
 			[string.Empty] = new Dictionary<string, string>(Str.Comparer)
 			{

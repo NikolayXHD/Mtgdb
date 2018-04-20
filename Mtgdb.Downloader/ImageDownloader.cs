@@ -75,8 +75,11 @@ namespace Mtgdb.Downloader
 
 			bool alreadyDownloaded = true;
 			
-			var existingFiles = new HashSet<string>(Directory.GetFiles(targetDirAbsolute, "*.*", SearchOption.AllDirectories));
-			var existingSignatures = new Dictionary<string, FileSignature>();
+			var existingFiles = new HashSet<string>(
+				Directory.GetFiles(targetDirAbsolute, "*.*", SearchOption.AllDirectories),
+				Str.Comparer);
+
+			var existingSignatures = new Dictionary<string, FileSignature>(Str.Comparer);
 
 			foreach (var fileOnline in progress.FilesOnline.Values)
 			{

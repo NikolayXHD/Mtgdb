@@ -199,7 +199,7 @@ namespace Mtgdb.Test
 		[TestCase(Ru, "Flavor:ххх■")]
 		// name
 		[TestCase(EnRuEn, "NameEn:■", "1996 world champion", "abandon hope")]
-		[TestCase(EnRuEn, "NameEn:a■", "abzan ascendancy")]
+		[TestCase(EnRuEn, "NameEn:a■", "abandon reason")]
 		[TestCase(EnRuEn, "NameEn:d■", "damping field", "dack fayden")]
 		[TestCase(EnRuEn, "NameEn:disp■", "dispatch", "dispel", "disperse", "displace")]
 		[TestCase(EnRuEn, "NameEn:evinrral■", "nevinyrral's disk")]
@@ -212,7 +212,7 @@ namespace Mtgdb.Test
 		[TestCase(Ru, "Name:щщщ■")]
 		// like
 		[TestCase(EnRu, "Like:■", "1996 world champion", "abandon hope")]
-		[TestCase(EnRu, "Like:a■", "abzan ascendancy")]
+		[TestCase(EnRu, "Like:a■", "abandon reason")]
 		[TestCase(EnRu, "Like:d■", "damping field", "dack fayden")]
 		[TestCase(EnRu, "Like:disp■", "dispatch", "dispel", "disperse", "displace")]
 		[TestCase(EnRu, "Like:evinrral■", "nevinyrral's disk")]
