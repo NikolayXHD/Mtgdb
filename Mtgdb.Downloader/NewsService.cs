@@ -80,8 +80,8 @@ namespace Mtgdb.Downloader
 
 			try
 			{
-				using (var webClient = new WebClientBase())
-					webClient.DownloadFile(_appSourceConfig.NewsUrl, _newsArchive);
+				var webClient = new WebClientBase();
+				webClient.DownloadFile(_appSourceConfig.NewsUrl, _newsArchive);
 
 				Console.WriteLine("done");
 			}

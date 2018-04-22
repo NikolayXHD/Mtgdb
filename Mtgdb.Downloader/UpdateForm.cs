@@ -17,7 +17,6 @@ namespace Mtgdb.Downloader
 		public UpdateForm()
 		{
 			InitializeComponent();
-
 			scale();
 		}
 
@@ -386,7 +385,7 @@ namespace Mtgdb.Downloader
 			{
 				var quality = pair.Key;
 				var totalDirs = pair.Value.Count;
-				var downloadedDirs = pair.Value.Where(_ => _.MayBeComplete).Select(_ => _.MegaDir.Subdirectory).ToArray();
+				var downloadedDirs = pair.Value.Where(_ => _.MayBeComplete).Select(_ => _.Dir.Subdirectory).ToArray();
 				var downloadedDirsCount = downloadedDirs.Length;
 				var totalFiles = pair.Value.Sum(_ => _.FilesOnline?.Count ?? 0);
 				var downloadedFiles = pair.Value.Sum(_ => _.FilesDownloaded?.Count);

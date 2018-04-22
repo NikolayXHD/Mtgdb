@@ -30,22 +30,18 @@ namespace Mtgdb.Util
 		[TestCase("DDU")]
 		public void DownloadGathererImages(string setCode)
 		{
-			using (var client = new GathererClient())
-			{
-				var set = Repo.SetsByCode[setCode];
-				foreach (var card in set.Cards)
-					client.DownloadCardImage(card, GathererOriginalDir);
-			}
+			var client = new GathererClient();
+			var set = Repo.SetsByCode[setCode];
+			foreach (var card in set.Cards)
+				client.DownloadCardImage(card, GathererOriginalDir);
 		}
 
 		[TestCase("xln")]
 		public void DownloadMagicspoilerImages(string setCode)
 		{
-			using (var client = new MagicspoilerClient())
-			{
-				var set = Repo.SetsByCode[setCode];
-				client.DownloadSet(set, MagicspoilerDir);
-			}
+			var client = new MagicspoilerClient();
+			var set = Repo.SetsByCode[setCode];
+			client.DownloadSet(set, MagicspoilerDir);
 		}
 
 		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "DDU png")]

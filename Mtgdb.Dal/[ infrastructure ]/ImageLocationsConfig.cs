@@ -13,7 +13,7 @@ namespace Mtgdb.Dal
 		public IList<DirectoryConfig> GetEnabledDirectories(IEnumerable<string> enabledGroups = null)
 		{
 			foreach (var directory in Directories)
-				directory.Path = AppDir.GetRootPath(directory.Path);
+				directory.Path = directory.Path.ToAppRootedPath();
 
 			if (EnabledGroups == null)
 				return Directories;

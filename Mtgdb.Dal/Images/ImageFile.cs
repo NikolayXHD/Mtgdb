@@ -45,7 +45,7 @@ namespace Mtgdb.Dal
 			Name = string.Intern(nameParts.Item1);
 			VariantNumber = nameParts.Item2;
 
-			rootPath = AppDir.GetRootPath(rootPath);
+			rootPath = rootPath.ToAppRootedPath();
 
 			if (!rootPath.EndsWith("\\"))
 				rootPath = rootPath + "\\";

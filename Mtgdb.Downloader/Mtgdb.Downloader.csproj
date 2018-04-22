@@ -69,8 +69,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WebClient\GdriveWebClient.cs" />
     <Compile Include="NewsService.cs" />
-    <Compile Include="WebClientBase.cs" />
+    <Compile Include="WebClient\WebClientBase.cs" />
     <Compile Include="PriceDownloader.cs" />
     <Compile Include="PriceClient.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -80,11 +81,8 @@
     </Compile>
     <Compile Include="SevenZip.cs" />
     <Compile Include="StreamExt.cs" />
-    <Compile Include="WebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="[ infrastructure ]\QualityGroupConfig.cs" />
-    <Compile Include="[ infrastructure ]\MegaDirConfig.cs" />
+    <Compile Include="[ infrastructure ]\ImageDirConfig.cs" />
     <Compile Include="[ infrastructure ]\ImageSourcesConfig.cs" />
     <Compile Include="[ infrastructure ]\MtgjsonSourceConfig.cs" />
     <Compile Include="ImageDownloader.cs" />
@@ -181,6 +179,7 @@
   <ItemGroup>
     <None Include="Resources\mailbox_26.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

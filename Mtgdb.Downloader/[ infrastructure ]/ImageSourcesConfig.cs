@@ -11,6 +11,10 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "QualityGroup")]
 		public QualityGroupConfig[] QualityGroups { get; set; }
 
+		public string MegaPrefix { get; set; }
+
+		public string GdrivePrefix { get; set; }
+
 		public void Combine(ICombiner combiner, ImageSourcesConfig other)
 		{
 			var resultGroups = new List<QualityGroupConfig>();
@@ -22,7 +26,7 @@ namespace Mtgdb.Downloader
 			{
 				var otherGroup = entry.Value;
 
-				if (groupsByType.TryGetValue(entry.Key, out var @group))
+				if (groupsByType.TryGetValue(entry.Key, out var group))
 				{
 					var combined = combiner.Combine(group, otherGroup);
 					resultGroups.Add(combined);

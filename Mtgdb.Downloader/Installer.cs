@@ -29,7 +29,7 @@ namespace Mtgdb.Downloader
 
 			AppDownloadedSignature = getAppDownloadedSignature();
 
-			_webClient = new WebClient();
+			_webClient = new WebClientBase();
 			_megatools = new Megatools();
 
 			_protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
@@ -48,7 +48,7 @@ namespace Mtgdb.Downloader
 			
 			try
 			{
-				var responseStream = _webClient.OpenRead(_mtgjsonSourceConfig.Url);
+				var responseStream = _webClient.DownloadStream(_mtgjsonSourceConfig.Url);
 				if (responseStream == null)
 				{
 					Console.WriteLine("Failed to send request to mtgjson.com: empty response");
@@ -106,9 +106,10 @@ namespace Mtgdb.Downloader
 		public void DownloadAppSignature()
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
-			_megatools.Download("current version signature",
+			_megatools.Download(
 				_appSourceConfig.FileListUrl,
 				_updateAppDir,
+				"current version signature",
 				silent: true);
 
 			AppOnlineSignature = getAppOnlineSignature();
@@ -121,7 +122,7 @@ namespace Mtgdb.Downloader
 			var appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
 			ensureFileDeleted(appOnline);
 
-			_megatools.Download(expectedSignature.Path, _appSourceConfig.ZipUrl, _updateAppDir);
+			_megatools.Download(_appSourceConfig.ZipUrl, _updateAppDir, expectedSignature.Path);
 		}
 
 		public bool ValidateDownloadedApp()
@@ -180,7 +181,7 @@ namespace Mtgdb.Downloader
 
 			BeginInstall?.Invoke();
 
-			if (new SevenZip().Extract(appDownloaded, AppDir.Root, _protectedFiles))
+			if (new SevenZip(silent: false).Extract(appDownloaded, AppDir.Root, _protectedFiles))
 			{
 				EndInstall?.Invoke();
 				writeInstalledVersion(expectedSignature.Path);
@@ -276,7 +277,6 @@ namespace Mtgdb.Downloader
 			{
 				shortcut.Arguments = "";
 				shortcut.TargetPath = exePath;
-				// not sure about what this is for
 				shortcut.WindowStyle = 1;
 
 				shortcut.Description = "Application to search MTG cards and build decks";
@@ -309,7 +309,7 @@ namespace Mtgdb.Downloader
 		private readonly string _appInstalledVersionFile;
 		public FileSignature AppOnlineSignature { get; private set; }
 		public FileSignature AppDownloadedSignature { get; private set; }
-		private readonly WebClient _webClient;
+		private readonly WebClientBase _webClient;
 		private readonly Megatools _megatools;
 	}
 }

@@ -10,10 +10,13 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "TargetDirectory")]
 		public string TargetDirectory { get; set; }
 
-		[DataMember(Name = "FileListUrl")]
-		public string FileListUrl { get; set; }
+		[DataMember(Name = "FileListGdriveId")]
+		public string FileListGdriveId { get; set; }
 
-		[DataMember(Name = "MegaDir")]
-		public MegaDirConfig[] MegaDirs { get; set; }
+		[DataMember(Name = "FileListMegaId")]
+		public string FileListMegaId { get; set; }
+
+		[DataMember(Name = "Dir")]
+		public ImageDirConfig[] Dirs { get; set; }
 	}
 }

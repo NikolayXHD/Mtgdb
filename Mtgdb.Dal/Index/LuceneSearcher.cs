@@ -30,8 +30,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.34 dominaria
-			set => Version = new IndexVersion(value, "0.34");
+			// 0.35 dominaria translations
+			set => Version = new IndexVersion(value, "0.35");
 		}
 
 		public void LoadIndexes()

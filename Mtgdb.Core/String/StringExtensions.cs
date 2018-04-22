@@ -19,6 +19,9 @@ namespace Mtgdb
 
 		public static string AddPath(this string original, string dir)
 		{
+			if (string.IsNullOrEmpty(dir))
+				return original;
+
 			return Path.Combine(original, dir);
 		}
 

@@ -37,7 +37,7 @@ namespace Mtgdb.Controls
 
 		public static void Invoke(this Control value, Action method)
 		{
-			if (value.IsDisposed || value.Disposing)
+			if (value.IsDisposed || value.Disposing || !value.IsHandleCreated)
 				return;
 
 			try

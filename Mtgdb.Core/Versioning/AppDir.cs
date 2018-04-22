@@ -38,7 +38,7 @@ namespace Mtgdb
 			return dllPath;
 		}
 
-		public static string GetRootPath(string path)
+		public static string ToAppRootedPath(this string path)
 		{
 			if (Path.IsPathRooted(path))
 				return path;
