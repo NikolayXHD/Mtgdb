@@ -1,8 +1,8 @@
 # Mtgdb.Gui
 
-[Download link](http://goo.gl/LuC6ce)  
-[Forum thread](http://goo.gl/VXv71n) to get support or sumbit your feedback  
-[Wiki](https://github.com/NikolayXHD/Mtgdb/wiki)
+[Download link](https://py3j9.app.goo.gl/dl)  
+[Forum thread](https://py3j9.app.goo.gl/frm) to get support or sumbit your feedback  
+[Wiki](https://py3j9.app.goo.gl/wiki)
 
 [![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)
 
