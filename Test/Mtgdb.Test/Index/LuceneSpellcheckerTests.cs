@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Mtgdb.Dal;
+using Mtgdb.Dal.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -94,6 +96,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Artist:a■", "alan pollack")]
 		[TestCase(EnRu, "Artist:b■", "bastien l. deharme", "bob petillo")]
 		[TestCase(EnRu, "Artist:wood■", "ash wood", "sam wood", "todd lockwood")]
+		[TestCase(EnRu, "Artist:\"sam w■\"", "sam wood")]
 		[TestCase(EnRu, "Artist:я■")] // empty suggest
 		// color
 		[TestCase(EnRu, "Color:■", "black", "blue", "colorless", "green", "red", "white")]
@@ -109,6 +112,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Keywords:■", "absorb", "awaken")]
 		[TestCase(EnRu, "Keywords:a■", "absorb", "awaken")]
 		[TestCase(EnRu, "Keywords:ack■", "buyback", "flashback", "attack each turn")]
+		[TestCase(EnRu, "Keywords:\"attack e■\"", "attack each turn")]
 		[TestCase(EnRu, "Keywords:я■")] // empty suggest
 		// layout
 		[TestCase(EnRu, "Layout:■", "aftermath", "double-faced", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "token", "vanguard")]
@@ -316,7 +320,7 @@ namespace Mtgdb.Test
 
 			string query = $"{field}:{value}";
 
-			var list = Spellchecker.Suggest(language, query, caret: query.Length).Values;
+			var list = Spellchecker.Suggest(language, new TextInputState(query, query.Length, selectionLength: 0)).Values;
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -335,7 +339,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var suggest = Spellchecker.Suggest(language, query, caret);
+			var suggest = Spellchecker.Suggest(language, new TextInputState(query, caret, selectionLength: 0));
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");

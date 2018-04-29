@@ -162,12 +162,11 @@ namespace Mtgdb.Dal.Index
 			{
 				// Tested
 				doc.addTextField(nameof(card.TextEn), card.TextEn);
+			}
 
-				var keywords = CardKeywords.ParseValues(card, KeywordDefinitions.KeywordsIndex);
-
+			if (card.GetKeywords().KeywordsByProperty.TryGetValue(nameof(KeywordDefinitions.Keywords), out var keywords))
 				foreach (string keyword in keywords)
 					doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
-			}
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.FlavorEn))

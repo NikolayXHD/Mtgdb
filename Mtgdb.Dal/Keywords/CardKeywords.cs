@@ -1,28 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
 {
 	public class CardKeywords
 	{
-		[JsonProperty]
-		public int IndexInFile { get; set; }
-
-		[JsonProperty]
-		public Dictionary<string, HashSet<string>> KeywordsByProperty { get; set; }
-
-		public void Parse(Card card)
+		public CardKeywords(Card card)
 		{
+			IndexInFile = card.IndexInFile;
+
 			KeywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
 
-			for (int i = 0; i < KeywordDefinitions.Values.Count; i++)
-				foreach (string value in ParseValues(card, i))
-					addKeyword(KeywordDefinitions.PropertyNames[i], value);
+			if (!string.IsNullOrEmpty(card.TextEn))
+				for (int i = 0; i < KeywordDefinitions.Values.Count; i++)
+					foreach (string value in parseValues(card, i))
+						addKeyword(KeywordDefinitions.PropertyNames[i], value);
 		}
 
-		public static IEnumerable<string> ParseValues(Card card, int propertyIndex)
+		private static IEnumerable<string> parseValues(Card card, int propertyIndex)
 		{
 			string text = KeywordDefinitions.Getters[propertyIndex](card);
 			var propertyValues = KeywordDefinitions.Values[propertyIndex];
@@ -30,10 +26,6 @@ namespace Mtgdb.Dal
 
 			if (string.IsNullOrEmpty(text))
 				yield break;
-
-			if (propertyIndex == KeywordDefinitions.KeywordsIndex)
-				foreach (var pair in KeywordDefinitions.HarmfulAbilityExplanations)
-					text = text.Replace(pair.Key, pair.Value);
 
 			for (int j = 0; j < propertyValues.Count; j++)
 			{
@@ -59,5 +51,11 @@ namespace Mtgdb.Dal
 
 			keywords.Add(value);
 		}
+
+
+
+		public int IndexInFile { get; }
+
+		public Dictionary<string, HashSet<string>> KeywordsByProperty { get; }
 	}
 }

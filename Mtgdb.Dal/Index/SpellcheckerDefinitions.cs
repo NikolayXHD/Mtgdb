@@ -11,7 +11,7 @@ namespace Mtgdb.Dal.Index
 		public static bool IsAnalyzedIn(this string userField, string lang)
 		{
 			var spellcheckerField = userField.GetSpellcheckerFieldIn(lang);
-			return DocumentFactory.NotAnalyzedFields.Contains(spellcheckerField);
+			return !DocumentFactory.NotAnalyzedFields.Contains(spellcheckerField);
 		}
 
 		public static bool IsIndexedInSpellchecker(this string userField, string lang)

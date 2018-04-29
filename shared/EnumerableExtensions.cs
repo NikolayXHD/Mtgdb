@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ReadOnlyCollectionsExtensions;
 
-namespace Mtgdb.Controls
+namespace Mtgdb
 {
 	internal static class EnumerableExtensions
 	{
@@ -15,6 +16,19 @@ namespace Mtgdb.Controls
 			if (list.Count == 0)
 				return -1;
 
+			return binarySearchFirstIndex(list.AsReadOnlyList(), predicate, 0, list.Count);
+		}
+
+		/// <summary>
+		/// Выполняет бинарный поиск первого элемента массива, удовлетворяющего некоторому критерию.
+		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех последующих элементов массива.
+		/// </summary>
+		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
+		public static int BinarySearchFirstIndexOf<T>(this IReadOnlyList<T> list, Func<T, bool> predicate)
+		{
+			if (list.Count == 0)
+				return -1;
+
 			return binarySearchFirstIndex(list, predicate, 0, list.Count);
 		}
 
@@ -23,7 +37,7 @@ namespace Mtgdb.Controls
 		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех предыдущих элементов массива.
 		/// </summary>
 		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
-		public static int BinarySearchLastIndexOf<T>(this IList<T> list, Func<T, bool> predicate)
+		public static int BinarySearchLastIndexOf<T>(this IReadOnlyList<T> list, Func<T, bool> predicate)
 		{
 			var predicateStopsBeingTrueAt = BinarySearchFirstIndexOf(list, _ => !predicate(_));
 			if (predicateStopsBeingTrueAt == -1)
@@ -32,7 +46,7 @@ namespace Mtgdb.Controls
 			return predicateStopsBeingTrueAt - 1;
 		}
 
-		private static int binarySearchFirstIndex<T>(this IList<T> list, Func<T, bool> predicate, int left, int count)
+		private static int binarySearchFirstIndex<T>(this IReadOnlyList<T> list, Func<T, bool> predicate, int left, int count)
 		{
 			if (predicate(list[left]))
 				return left;

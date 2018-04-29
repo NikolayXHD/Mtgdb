@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Lucene.Net.Index;
 using Lucene.Net.Contrib;
+using Lucene.Net.Index;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
@@ -23,8 +23,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.35 dominaria translations
-			set => Version = new IndexVersion(value, "0.35");
+			// 0.36 keyword definitions
+			set => Version = new IndexVersion(value, "0.36");
 		}
 
 		public void InvalidateIndex()
@@ -142,8 +142,11 @@ namespace Mtgdb.Dal.Index
 			return spellchecker;
 		}
 
-		public IntellisenseSuggest Suggest(string language, string query, int caret)
+		public IntellisenseSuggest Suggest(string language, TextInputState input)
 		{
+			string query = input.Text;
+			int caret = input.Caret;
+
 			var token = EditedTokenLocator.GetEditedToken(query, caret);
 
 			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
@@ -193,6 +196,57 @@ namespace Mtgdb.Dal.Index
 				return new IntellisenseSuggest(token, _booleanOperators, _allTokensAreBoolean);
 
 			return _emptySuggest;
+		}
+
+		public IntellisenseSuggest CycleValue(string language, TextInputState input, bool backward)
+		{
+			string query = input.Text;
+			int caret = input.Caret;
+
+			var token = EditedTokenLocator.GetEditedToken(query, caret);
+
+			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
+				return null;
+
+			string userField = token.ParentField ?? string.Empty;
+
+			bool isFieldInvalid =
+				!string.IsNullOrEmpty(userField) &&
+				!Str.Equals(MtgQueryParser.AnyField, userField) &&
+				!DocumentFactory.UserFields.Contains(userField);
+
+			if (isFieldInvalid)
+				return null;
+
+			string currentValue;
+
+			if (!userField.IsAnalyzedIn(language))
+			{
+				token = token.PhraseStart ?? token;
+				currentValue = StringEscaper.Unescape(token.GetPhraseText(query));
+			}
+			else
+			{
+				currentValue = StringEscaper.Unescape(token.Value);
+			}
+
+			var allValues = getValuesCache(userField, language);
+
+			if (allValues.Count == 0)
+				return null;
+
+			var currentIndex = allValues.BinarySearchLastIndexOf(str => Str.Comparer.Compare(str, currentValue) <= 0);
+
+			int increment = backward ? -1 : 1;
+			var nextIndex = currentIndex + increment;
+
+			if (nextIndex == allValues.Count)
+				nextIndex = 0;
+			else if (nextIndex == -1)
+				nextIndex = allValues.Count - 1;
+
+			var nextValue = allValues[nextIndex];
+			return new IntellisenseSuggest(token, ReadOnlyList.From(nextValue), _allTokensAreValues);
 		}
 
 		private IReadOnlyList<string> suggestAllFieldValues(string value, string language)

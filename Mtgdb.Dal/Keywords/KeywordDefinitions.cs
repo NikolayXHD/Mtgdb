@@ -1,12 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal
 {
 	public static class KeywordDefinitions
 	{
+		private static string positiveLookbehind([JetBrains.Annotations.RegexPattern] string pattern)
+		{
+			return "(?<=" + pattern + ")";
+		}
+
+		private static string negativeLookbehind([JetBrains.Annotations.RegexPattern] string pattern)
+		{
+			return "(?<!" + pattern + ")";
+		}
+
+		private static string positiveLookahead([JetBrains.Annotations.RegexPattern] string pattern)
+		{
+			return "(?=" + pattern + ")";
+		}
+
+		private static string negativeLookahead([JetBrains.Annotations.RegexPattern] string pattern)
+		{
+			return "(?!" + pattern + ")";
+		}
+
+		private static string pattern(
+			string name,
+			string pattern = null,
+			string then = null,
+			string unlessBefore = null,
+			string unlessBeforeRaw = null,
+			string unlessAfter = null)
+		{
+			pattern = pattern ?? name;
+
+			var result = new StringBuilder();
+
+			result.Append(@"/\b");
+
+			if (unlessAfter != null)
+				result.Append(negativeLookbehind("\\b" + unlessAfter + " "));
+
+			result
+				.Append(pattern)
+				.Append(@"\b");
+
+			if (unlessBefore != null)
+				result.Append(negativeLookahead(' ' + unlessBefore + "\\b"));
+
+			if (unlessBeforeRaw != null)
+				result.Append(negativeLookahead(unlessBeforeRaw));
+
+			if (then != null)
+				result.Append(positiveLookahead(' ' + then + "\\b"));
+
+			result.Append("/ ")
+				.Append(name);
+
+			return result.ToString();
+		}
+
 		private static Func<string, Regex>[] PatternFactories { get; } =
 		{
 			KeywordRegexUtil.CreateContainsRegex,
@@ -128,189 +185,197 @@ namespace Mtgdb.Dal
 
 		public static readonly string[] Keywords =
 		{
-			"Annihilator",
-			@"/\battacks? each (combat|turn) if able\b/ Attack each turn",
-			"Awaken",
-			"Can't be blocked",
+			hasCount("Annihilator"),
+			pattern("Attack each turn", "attacks? each (combat|turn)", "if able"),
+			hasCount("Awaken"),
+			pattern("Can't be blocked", unlessAfter: "this spell works on creatures that"),
+			"Can't be countered",
 			"Can't block",
-			"Cohort",
-			"Copy",
-			"Counter target",
+			hasCost("Cohort"),
+			pattern("Copy", "cop(y|ies)"),
+			pattern("Counter",
+				@"(?<!\bcan't be )countered|counters?(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
 			"Deathtouch",
 			"Defender",
 			"Delirium",
-			"Discard a card",
-			"Doesn't untap",
+			pattern("Discard",
+				"discards?",
+				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness"),
+			pattern("Doesn't untap", "(doesn|can|don)'t untap"),
 			"Double Strike",
-			"Draw a card",
+			pattern("Draw", "draws?", @"[\P{P}]*\bcards?", unlessAfter: "when you", unlessBefore: "step"),
 			"Enchant",
-			"Equip",
-			"Exile",
-			"First Strike",
+			hasCost("Equip"),
+			pattern("Exile", "exiles?"),
+			pattern("First Strike", unlessAfter: "deals combat damage before creatures without"),
 			"Flash",
-			"Flying",
-			"Gain control",
+			pattern("Flying", unlessAfter: "(can block|except by) creatures with"),
+			pattern("Gain control", "gains? control"),
 			"Haste",
 			"Hexproof",
-			"Indestructible",
+			pattern("Indestructible", unlessBefore: "can't be destroyed by damage"),
 			"Ingest",
-			"Intimidate",
+			pattern("Intimidate", unlessBefore: "can't be blocked except"),
 			"Lifelink",
-			"Madness",
+			hasCost("Madness"),
 			"Menace",
 			"Prowess",
-			"Rally",
-			"Reach",
+			pattern("Rally", then: "—"),
+			pattern("Reach", unlessAfter: "except by creatures with flying or"),
 			"Regenerate",
-			"Renown",
-			"Scry",
+			hasCount("Renown"),
+			hasCount("Scry"),
 			"Shroud",
-			"Skulk",
-			"Surge",
+			pattern("Skulk", unlessBeforeRaw: @"\bpit-"),
+			hasCost("Surge"),
 			"Trample",
 			"Transform",
-			"Undying",
+			pattern("Undying", unlessBefore: "(beast|rage|flames|partisan)"),
 			"Vigilance",
 			null,
-			"Absorb",
-			"Affinity",
-			"Afflict",
+			hasCount("Absorb"),
+			pattern("Affinity", then: "for"),
+			hasCount("Afflict"),
 			"Aftermath",
-			"Amplify",
+			hasCount("Amplify"),
 			"Ascend",
-			"Aura Swap",
-			"Banding",
+			hasCost("Aura Swap"),
+			pattern("Banding", unlessAfter: "any creatures with"),
 			"Battle Cry",
-			"Bestow",
-			"Bloodthirst",
-			"Bushido",
-			"Buyback",
-			"Cascade",
-			@"/\bchampion an?\b/ Champion",
+			hasCost("Bestow"),
+			pattern("Bloodrush", then: "—"),
+			hasCount("Bloodthirst"),
+			hasCount("Bushido"),
+			hasCost("Buyback"),
+			pattern("Cascade", unlessAfter: "skyline"),
+			pattern("Champion", then: "an?"),
 			"Changeling",
 			"Cipher",
 			"Conspire",
 			"Convoke",
-			@"/\bcrew \d+\b/ Crew",
-			"Cumulative Upkeep",
-			"Cycling",
-			"Dash",
+			hasCount("Crew"),
+			hasCost("Cumulative Upkeep"),
+			hasCost("Cycling", @"\w*cycling"),
+			hasCost("Dash"),
 			"Delve",
 			"Dethrone",
 			"Devoid",
-			"Devour",
-			"Dredge",
-			"Echo",
-			"Embalm",
-			"Emerge",
-			"Entwine",
-			"Epic",
-			"Escalate",
-			"Eternalize",
-			"Evoke",
+			hasCount("Devour"),
+			hasCount("Dredge"),
+			hasCost("Echo"),
+			hasCost("Embalm"),
+			hasCost("Emerge"),
+			hasCost("Entwine"),
+			pattern("Epic", unlessAfter: "copy this spell except for its"),
+			hasCost("Escalate"),
+			hasCost("Eternalize"),
+			hasCost("Evoke"),
 			"Evolve",
-			"Exalted",
+			pattern("Exalted", unlessAfter: "instances? of", unlessBefore: "dragon"),
 			"Exploit",
 			"Extort",
-			"Fabricate",
-			@"/\bfading \d+\b/ Fading",
+			hasCount("Fabricate"),
+			hasCount("Fading"),
 			"Fear",
-			"Flanking",
-			"Flashback",
-			"Forecast",
-			"Fortify",
-			"Frenzy",
-			@"/\bfuse (?!counter)/ Fuse",
-			@"/\bgraft \d+\b/ Graft",
+			pattern("Flanking", unlessBefore: "troops", unlessAfter: "whenever a creature without"),
+			pattern("Flashback", unlessBefore: "cost"),
+			hasCost("Forecast"),
+			pattern("Fortify", unlessBefore: "only as a sorcery"),
+			hasCount("Frenzy"),
+			pattern("Fuse", unlessBefore: "counters?"),
+			hasCount("Graft"),
 			"Gravestorm",
 			"Haunt",
 			"Hidden Agenda",
 			"Hideaway",
-			"Horsemanship",
+			pattern("Horsemanship", unlessAfter: "can't be blocked except by creatures with"),
 			"Improvise",
-			"Infect",
-			"Kicker",
-			@"/\b(land|denim|plains|forest|swamp|mountain|island)walk\b/ Landwalk",
+			pattern("Infect", unlessAfter: "damage dealt by sources without", unlessBefore: "deal damage to creatures in the form"),
+			hasCost("Kicker"),
+			pattern("Landwalk", "(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
 			"Mountainwalk",
 			"Islandwalk",
-			"Level Up",
+			pattern("Level Up", unlessBefore: "only as a sorcery"),
 			"Living Weapon",
-			"Melee",
-			"Miracle",
-			"Modular",
-			"Morph",
-			"Myriad",
-			"Ninjutsu",
-			"Offering",
-			"Outlast",
-			"Overload",
-			"Partner",
+			pattern("Melee", unlessAfter: "cast"),
+			hasCost("Miracle"),
+			hasCount("Modular"),
+			hasCost("Morph"),
+			pattern("Myriad", unlessBefore: "landscape"),
+			hasCost("Ninjutsu"),
+			pattern("Offering", unlessAfter: "(volcanic|yawgmoth's vile|death pit)"),
+			hasCost("Outlast"),
+			hasCost("Overload"),
+			pattern("Partner", unlessAfter: "if both have"),
 			"Persist",
 			"Phasing",
-			"Poisonous",
-			"Protection",
+			hasCount("Poisonous"),
+			pattern("Protection", unlessAfter: "Circle of"),
 			"Provoke",
-			"Prowl",
-			"Rampage",
+			hasCost("Prowl"),
+			hasCount("Rampage"),
 			"Rebound",
-			"Recover",
-			"Reinforce",
-			"Replicate",
+			hasCost("Recover"),
+			hasCount("Reinforce"),
+			pattern("Replicate", unlessBefore: "cost"),
 			"Retrace",
-			"Ripple",
-			"Scavenge",
-			"Shadow",
+			hasCount("Ripple"),
+			pattern("Scavenge", unlessBefore: "(only as a sorcery|cost)"),
+			pattern("Shadow",
+				unlessAfter: "(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)",
+				unlessBefore: "guildmage"),
 			"Soulbond",
-			"Soulshift",
-			"Splice",
+			hasCount("Soulshift"),
+			hasCost("Splice onto Arcane"),
 			"Split Second",
-			"Storm",
+			pattern("Storm",
+				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)",
+				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)"),
 			"Sunburst",
 			"Suspend",
 			"Totem Armor",
-			"Transfigure",
-			"Transmute",
-			"Tribute",
+			hasCost("Transfigure"),
+			hasCost("Transmute"),
+			hasCount("Tribute"),
 			"Undaunted",
-			"Unearth",
+			hasCost("Unearth"),
 			"Unleash",
-			"Vanishing",
+			pattern("Vanishing", unlessBefore: "touch"),
 			"Wither",
 
-			"Activate",
-			"Attach",
-			"Cast",
-			"Create",
-			"Destroy",
-			"Exchange",
-			"Fight",
-			"Play",
-			"Reveal",
-			"Sacrifice",
-			"Search",
-			"Shuffle",
-			"Tap",
-			"Untap",
-			"Bury",
-			"Ante"
+			pattern("Activate", "activates?"),
+			pattern("Attach", "attach(es)?"),
+			pattern("Cast", "casts?"),
+			pattern("Create", "creates?"),
+			pattern("Destroy", "destroys?"),
+			pattern("Exchange", "exchanges?"),
+			pattern("Fight", "fights?"),
+			pattern("Play", "plays?"),
+			pattern("Reveal", "reveals?"),
+			pattern("Sacrifice", "sacrifices?"),
+			pattern("Search", "search(es)?"),
+			pattern("Shuffle", "shuffles?"),
+			pattern("Tap", "taps?"),
+			pattern("Untap", "untaps?"),
+			pattern("Bury", "bur(y|ies)"),
+			pattern("Ante", "antes?")
 		};
 
-		internal static readonly Dictionary<string, string> HarmfulAbilityExplanations =
-			new Dictionary<string, string>
-			{
-				["can't be blocked, targeted, or dealt damage by"] = "can't be bl*cked, targeted, or dealt damage by",
-				["can't be blocked, targeted, dealt damage, or enchanted by"] = "can't be bl*cked, targeted, dealt damage, or enchanted by",
-				["can't be blocked except by"] = "can't be bl*cked except by",
-				["can't be blocked as long as defending player controls"] = "can't be bl*cked as long as defending player controls",
-				["can't be blocked by creatures with greater power"] = "can't be bl*cked by creatures with greater power",
-				["this spell works on creatures that can't be blocked"] = "this spell works on creatures that can't be bl*cked",
-				["except by creatures with flying or reach"] = "except by creatures with fl*ing or re*ch",
-				["can block creatures with flying"] = "can block creatures with fl*ing",
-				["deals combat damage before creatures without first strike"] = "deals combat damage before creatures without first str*ke"
-			};
+		private static string hasCost(string name, string customPattern = null)
+		{
+			customPattern = customPattern ?? name;
+			var costKeywordPattern = $"({customPattern}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{customPattern})";
+			return pattern(name, costKeywordPattern);
+		}
+
+		private static string hasCount(string name)
+		{
+			var countKeywordDefinition = $"({name}{positiveLookahead(@" (\d+|x)\b")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{name})";
+			return pattern(name, countKeywordDefinition);
+		}
 
 		public static readonly string[] Rarity =
 		{

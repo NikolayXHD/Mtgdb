@@ -473,8 +473,7 @@ namespace Mtgdb.Gui
 			}
 			else
 			{
-				if (!e.Modifiers.Equals(Keys.Alt))
-					handled = false;
+				handled = false;
 			}
 
 			e.Handled = handled;

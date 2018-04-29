@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
@@ -175,7 +174,7 @@ namespace Mtgdb.Gui
 
 
 
-		private void suggested(IntellisenseSuggest suggest, SearchInputState source)
+		private void suggested(IntellisenseSuggest suggest, TextInputState source)
 		{
 			if (!_parent.Visible)
 				return;
@@ -183,7 +182,7 @@ namespace Mtgdb.Gui
 			_parent.Invoke(delegate { updateSuggestListBox(suggest, source); });
 		}
 
-		private void updateSuggestListBox(IntellisenseSuggest suggest, SearchInputState source)
+		private void updateSuggestListBox(IntellisenseSuggest suggest, TextInputState source)
 		{
 			lock (_syncSuggest)
 			{
@@ -267,10 +266,10 @@ namespace Mtgdb.Gui
 
 		public void UpdateSuggestInput()
 		{
-			SuggestModel.SearchInputStateCurrent = getSearchInputState();
+			SuggestModel.TextInputStateCurrent = getSearchInputState();
 		}
 
-		private SearchInputState getSearchInputState() => new SearchInputState(
+		private TextInputState getSearchInputState() => new TextInputState(
 			_currentText,
 			_findEditor.SelectionStart,
 			_findEditor.SelectionLength);
@@ -317,6 +316,18 @@ namespace Mtgdb.Gui
 							continueEditingAfterSuggest();
 					}
 
+					e.Handled = true;
+					break;
+
+				case Keys.Control | Keys.Down:
+				case Keys.Alt | Keys.Down:
+					cycleValue(backward: false);
+					e.Handled = true;
+					break;
+
+				case Keys.Control | Keys.Up:
+				case Keys.Alt | Keys.Up:
+					cycleValue(backward: true);
 					e.Handled = true;
 					break;
 
@@ -388,6 +399,27 @@ namespace Mtgdb.Gui
 			}
 		}
 
+		private void cycleValue(bool backward)
+		{
+			if (!_searcher.Spellchecker.IsLoaded)
+				return;
+
+			var currentState = SuggestModel.TextInputStateCurrent;
+			var cycleSuggest = _searcher.Spellchecker.CycleValue(SuggestModel.Language, currentState, backward);
+
+			if (cycleSuggest == null)
+				return;
+
+			var type = cycleSuggest.Types[0];
+			
+			string value = type.IsAny(TokenType.FieldValue)
+				? getValueExpression(cycleSuggest.Values[0])
+				: cycleSuggest.Values[0];
+
+			pasteText(value, type, currentState, cycleSuggest.Token, positionCaretToNextValue: false);
+			Apply();
+		}
+
 
 
 		private void pasteFromClipboard()
@@ -415,7 +447,7 @@ namespace Mtgdb.Gui
 
 			var source = getSearchInputState();
 			var token = EditedTokenLocator.GetTokenForArbitraryInsertion(source.Text, source.Caret);
-			pasteText(preProcessedText, type, source, token);
+			pasteText(preProcessedText, type, source, token, positionCaretToNextValue: false);
 		}
 
 		private (string PreProcessedText, TokenType Type) classifyPastedText(string text)
@@ -464,16 +496,18 @@ namespace Mtgdb.Gui
 			return (fieldName, fieldValue);
 		}
 
-		private void pasteText(string value, TokenType type, SearchInputState source, Token token)
+		private void pasteText(string value, TokenType type, TextInputState source, Token token, bool positionCaretToNextValue)
 		{
 			int left, length;
 			(Token start, Token end) = (null, null);
+
+			bool isValuePhrase = value.StartsWith("\"") && value.EndsWith("\"");
 
 			if (token == null || source.SelectionLength != 0)
 				(left, length) = (source.Caret, source.SelectionLength);
 			else
 			{
-				if (type == TokenType.FieldValue && token.IsPhrase || value.StartsWith("\"") && value.EndsWith("\""))
+				if (type == TokenType.FieldValue && token.IsPhrase || isValuePhrase)
 					(start, end) = (token.PhraseOpen, token.PhraseClose);
 				else
 					(start, end) = (token, token);
@@ -481,8 +515,13 @@ namespace Mtgdb.Gui
 				(left, length) = (start.Position, end.Position + end.Value.Length - start.Position);
 			}
 
+			bool appendSpace = positionCaretToNextValue && end?.Next?.Type.IsAny(TokenType.AnyClose) != true;
+
 			string prefix = source.Text.Substring(0, left).Trim();
-			string suffix = source.Text.Substring(left + length).Trim();
+			string suffix = source.Text.Substring(left + length);
+			
+			if (appendSpace)
+				suffix = suffix.TrimStart();
 
 			if (type.IsAny(TokenType.Field) && suffix.StartsWith(":"))
 				suffix = suffix.Substring(1);
@@ -490,11 +529,14 @@ namespace Mtgdb.Gui
 			if (start?.Previous?.Type.IsAny(TokenType.AnyOpen) == false)
 				value = " " + value;
 
-			if (end?.Next?.Type.IsAny(TokenType.AnyClose) != true)
+			if (appendSpace)
 				value += " ";
 
 			var replacement = prefix + value + suffix;
-			int caret = left + value.Length;
+			int caret = prefix.Length + value.Length;
+
+			if (!positionCaretToNextValue && isValuePhrase)
+				caret--;
 
 			setFindText(replacement, caret);
 			updateBackColor();
@@ -581,7 +623,7 @@ namespace Mtgdb.Gui
 
 		private void selectSuggest()
 		{
-			SearchInputState source;
+			TextInputState source;
 			string value;
 			TokenType type;
 			Token token;
@@ -590,7 +632,7 @@ namespace Mtgdb.Gui
 			{
 				source = _suggestSource;
 
-				if (!source.Equals(SuggestModel.SearchInputStateCurrent))
+				if (!source.Equals(SuggestModel.TextInputStateCurrent))
 					return;
 
 				int selectedIndex = _listBoxSuggest.SelectedIndex;
@@ -609,14 +651,20 @@ namespace Mtgdb.Gui
 			if (type.IsAny(TokenType.FieldValue))
 				value = getValueExpression(value);
 
-			pasteText(value, type, source, token);
+			pasteText(value, type, source, token, positionCaretToNextValue: true);
 		}
 
 		private void setFindText(string text, int caret)
 		{
+			_findEditor.Parent.SuspendLayout();
+			_findEditor.Visible = false;
+
 			_findEditor.Text = text;
 			_findEditor.SelectionStart = caret;
 			_findEditor.SelectionLength = 0;
+
+			_findEditor.Visible = true;
+			_findEditor.Parent.ResumeLayout(false);
 		}
 
 		private void focusSearch()
@@ -668,7 +716,7 @@ namespace Mtgdb.Gui
 			else
 			{
 				var token = EditedTokenLocator.GetTokenForTermInsertion(source.Text, source.Caret);
-				pasteText(query, TokenType.None, source, token);
+				pasteText(query, TokenType.None, source, token, positionCaretToNextValue: true);
 			}
 
 			Apply();
@@ -676,7 +724,7 @@ namespace Mtgdb.Gui
 
 
 
-		private void removeQueryFromInput(int queryStartIndex, string query, SearchInputState source)
+		private void removeQueryFromInput(int queryStartIndex, string query, TextInputState source)
 		{
 			string sourceText = source.Text;
 			int caret = source.Caret;
@@ -746,8 +794,6 @@ namespace Mtgdb.Gui
 		public event Action TextApplied;
 		public event Action TextChanged;
 
-		private static readonly Regex _endLineRegex = new Regex(@"\r\n|\r|\n", RegexOptions.Compiled | RegexOptions.Singleline);
-
 		public SuggestModel SuggestModel { get; set; }
 
 		public UiModel Ui { get; set; }
@@ -760,7 +806,7 @@ namespace Mtgdb.Gui
 
 		private string _currentText = string.Empty;
 
-		private SearchInputState _suggestSource;
+		private TextInputState _suggestSource;
 		private readonly BindingList<string> _suggestValues = new BindingList<string>();
 		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
 		private Token _suggestToken;

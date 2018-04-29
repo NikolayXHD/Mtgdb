@@ -106,6 +106,7 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Attacks_each_turn,
 			ResourcesAbilities.awake,
 			ResourcesAbilities.Cant_be_blocked,
+			ResourcesAbilities.Cant_be_countered,
 			ResourcesAbilities.Cant_block,
 			ResourcesAbilities.Cohort,
 			ResourcesAbilities.Copy,

@@ -102,7 +102,7 @@ namespace Mtgdb.Test
 		{
 			string query = "nameen:vampire";
 
-			var suggest = _luceneSearcher.Spellchecker.Suggest("en", query, caret: query.Length).Values;
+			var suggest = _luceneSearcher.Spellchecker.Suggest("en", new TextInputState(query, query.Length, selectionLength: 0)).Values;
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
 			Assert.That(suggest, Has.Some.Contains("vampire").IgnoreCase);

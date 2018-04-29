@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -22,8 +23,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.34 dominaria
-			set => _version = new IndexVersion(value, "0.34");
+			// 0.36 keyword definitions
+			set => _version = new IndexVersion(value, "0.36");
 		}
 
 		public void InvalidateIndex()
@@ -125,23 +126,21 @@ namespace Mtgdb.Dal
 			if (!repository.IsLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must be loaded first");
 
-			var keywordsList = new List<CardKeywords>();
+			var keywordsList = new List<CardKeywords>(repository.Cards.Count);
 
 			foreach (var set in repository.SetsByCode.Values)
 			{
 				if (!FilterSet(set))
 					continue;
 
-				foreach (var card in set.Cards)
-				{
-					var keywords = new CardKeywords
-					{
-						IndexInFile = card.IndexInFile
-					};
+				var setKeywords = new CardKeywords[set.Cards.Count];
 
-					keywords.Parse(card);
-					keywordsList.Add(keywords);
-				}
+				Parallel.For(0,
+					set.Cards.Count,
+					IndexUtils.ParallelOptions,
+					i => setKeywords[i] = set.Cards[i].GetKeywords());
+				
+				keywordsList.AddRange(setKeywords);
 
 				SetsCount++;
 				LoadingProgress?.Invoke();

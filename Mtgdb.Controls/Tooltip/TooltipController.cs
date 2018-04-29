@@ -296,7 +296,7 @@ namespace Mtgdb.Controls
 		public int ShowCounter { get; private set; }
 		public int HideCounter { get; private set; }
 
-		private static bool Alt => Control.ModifierKeys == Keys.Alt;
+		private static bool Alt => Control.ModifierKeys == Keys.Alt || Control.ModifierKeys == Keys.Control;
 
 		private TooltipModel Tooltip { get; set; } = new TooltipModel();
 

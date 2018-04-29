@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Dal.Index
 {
-	public class SearchInputState : IEquatable<SearchInputState>
+	public class TextInputState : IEquatable<TextInputState>
 	{
-		public SearchInputState(string text, int caret, int selectionLength)
+		public TextInputState(string text, int caret, int selectionLength)
 		{
 			Text = text;
 			Caret = caret;
@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 		public int Caret { get; }
 		public int SelectionLength { get; }
 
-		public bool Equals(SearchInputState other)
+		public bool Equals(TextInputState other)
 		{
 			return other != null && string.Equals(Text, other.Text) && Caret == other.Caret && SelectionLength == other.SelectionLength;
 		}

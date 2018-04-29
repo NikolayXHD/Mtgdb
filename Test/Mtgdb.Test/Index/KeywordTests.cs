@@ -21,8 +21,7 @@ namespace Mtgdb.Test
 			[Values("")] string expectedValue)
 		{
 			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
-			var keywords = new CardKeywords();
-			keywords.Parse(card);
+			var keywords = card.GetKeywords();
 
 			if (string.IsNullOrEmpty(expectedValue))
 			{

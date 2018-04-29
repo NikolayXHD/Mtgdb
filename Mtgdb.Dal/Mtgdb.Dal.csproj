@@ -106,6 +106,7 @@
     <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />
     <Compile Include="Index\SpellcheckerDefinitions.cs" />
     <Compile Include="Index\SuggestWord.cs" />
+    <Compile Include="Index\TextInputState.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />

@@ -212,6 +212,7 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public float? PriceHigh => PricingHigh ?? PricingMid ?? PricingLow;
 
+		public CardKeywords GetKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
 
 
 		/// <summary>
@@ -703,11 +704,17 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		private Document _document;
 
+		[JsonIgnore]
 		private ImageModel _imageModel;
 
+		[JsonIgnore]
 		private bool _imageModelSelected;
 
+		[JsonIgnore]
 		private readonly Dictionary<(string PropertyName, string Language), string> _namesakeTranslations =
 			new Dictionary<(string PropertyName, string Language), string>();
+
+		[JsonIgnore]
+		private CardKeywords _keywords;
 	}
 }
