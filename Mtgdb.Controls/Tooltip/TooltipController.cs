@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 			control.MouseLeave += mouseLeave;
 			control.GotFocus += gotFocus;
 			control.MouseDown += gotFocus;
-			control.KeyDown += gotFocus;
+			control.KeyUp += gotFocus;
 		}
 
 		private void subscribeCustomTooltipEvents(ICustomTooltip customClient)
@@ -110,7 +110,7 @@ namespace Mtgdb.Controls
 			control.MouseLeave -= mouseLeave;
 			control.GotFocus -= gotFocus;
 			control.MouseDown -= gotFocus;
-			control.KeyDown -= gotFocus;
+			control.KeyUp -= gotFocus;
 		}
 
 		private void unsubscribeCustomTooltipEvents(ICustomTooltip customClient)
@@ -139,7 +139,7 @@ namespace Mtgdb.Controls
 				_active = value;
 
 				if (!value)
-					Tooltip = new TooltipModel();
+					Tooltip = _emptyTooltip;
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace Mtgdb.Controls
 
 						hide(prev);
 
-						_tooltip = new TooltipModel();
+						_tooltip = _emptyTooltip;
 					}
 
 					var curr = Tooltip;
@@ -242,7 +242,7 @@ namespace Mtgdb.Controls
 
 		private void mouseEnter(object sender, EventArgs e)
 		{
-			if (Active && Alt || !Active && !Alt)
+			if (!IsActive)
 				return;
 
 			var control = (Control) sender;
@@ -250,11 +250,11 @@ namespace Mtgdb.Controls
 			var settgins = _staticTooltips[control];
 
 			var locationControl = settgins.Controls[0];
-			if (locationControl == Tooltip?.Control)
+			if (locationControl == Tooltip.Control)
 				return;
 
 			if (settgins.IsEmpty)
-				Tooltip = new TooltipModel();
+				Tooltip = _emptyTooltip;
 			else
 				Tooltip = new TooltipModel
 				{
@@ -269,19 +269,19 @@ namespace Mtgdb.Controls
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			Tooltip = new TooltipModel();
+			Tooltip = _emptyTooltip;
 		}
 
 		private void gotFocus(object sender, EventArgs e)
 		{
-			Tooltip = new TooltipModel();
+			Tooltip = _emptyTooltip;
 		}
 
 
 
 		private void customTooltipShow(TooltipModel tooltip)
 		{
-			if (Active && Alt || !Active && !Alt)
+			if (!IsActive)
 				return;
 			
 			Tooltip = tooltip;
@@ -289,16 +289,17 @@ namespace Mtgdb.Controls
 
 		private void customTooltipHide()
 		{
-			Tooltip = new TooltipModel();
+			Tooltip = _emptyTooltip;
 		}
 
 
 		public int ShowCounter { get; private set; }
 		public int HideCounter { get; private set; }
 
+		private bool IsActive => Active != Alt;
 		private static bool Alt => Control.ModifierKeys == Keys.Alt || Control.ModifierKeys == Keys.Control;
 
-		private TooltipModel Tooltip { get; set; } = new TooltipModel();
+		private TooltipModel Tooltip { get; set; } = _emptyTooltip;
 
 
 		private const int DelayMs = 150;
@@ -311,10 +312,10 @@ namespace Mtgdb.Controls
 
 		private TooltipModel _tooltip;
 
-
-
 		private readonly TooltipForm _tooltipForm;
 		private bool _active = true;
 		private readonly Thread _thread;
+
+		private static readonly TooltipModel _emptyTooltip = new TooltipModel();
 	}
 }

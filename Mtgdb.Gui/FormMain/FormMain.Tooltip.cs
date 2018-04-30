@@ -189,7 +189,7 @@
 			controller.SetTooltip(this,
 				() => _searchStringSubsystem.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
-					: "Search string",
+					: "Search text",
 				() => _searchStringSubsystem.SearchResult?.ParseErrorMessage ??
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
@@ -199,6 +199,12 @@
 				_findBorderedPanel,
 				_findEditor,
 				_panelIconSearch);
+
+			controller.SetTooltip(this,
+				"Search text examples",
+				"Opens menu with search text examples.\r\n" +
+				"Same menu is opened by pressing F1.",
+				_buttonFindExamplesDropDown);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",

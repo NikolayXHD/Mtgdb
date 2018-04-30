@@ -923,34 +923,23 @@ namespace Mtgdb.Gui
 			Text = deckName;
 		}
 
-		public void ButtonUndo()
-		{
-			historyUndo();
-		}
 
-		public void ButtonRedo()
-		{
-			historyRedo();
-		}
 
-		public void ButtonPivot()
-		{
-			var formPivot = new FormChart(_cardRepo, _formRoot.UiModel, _fields);
-			formPivot.Show();
-		}
+		public void ButtonUndo() => historyUndo();
+
+		public void ButtonRedo() => historyRedo();
+
+		public void ButtonPivot() => new FormChart(_cardRepo, _formRoot.UiModel, _fields).Show();
 
 		public void ButtonPrint()
 		{
-			if (!_cardRepo.IsLoadingComplete)
-				return;
-
-			_printingSubsystem.ShowPrintingDialog(_deckModel, _historySubsystem.DeckName);
+			if (_cardRepo.IsLoadingComplete)
+				_printingSubsystem.ShowPrintingDialog(_deckModel, _historySubsystem.DeckName);
 		}
 
-		public void FocusSearch()
-		{
-			_searchStringSubsystem.FocusSearch();
-		}
+		public void FocusSearch() => _searchStringSubsystem.FocusSearch();
+
+		public void ShowFindExamples() => _searchStringSubsystem.ShowFindExamples();
 
 
 

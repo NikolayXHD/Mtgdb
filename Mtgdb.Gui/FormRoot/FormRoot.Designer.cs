@@ -95,6 +95,7 @@ namespace Mtgdb.Gui
 			this._buttonFilterPanels = new Mtgdb.Controls.CustomCheckBox();
 			this._flowTitleLeft = new System.Windows.Forms.FlowLayoutPanel();
 			this._buttonOpenWindow = new Mtgdb.Controls.CustomCheckBox();
+			this._labelModifierKeysStatus = new System.Windows.Forms.Label();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._layoutOpen.SuspendLayout();
@@ -1213,13 +1214,15 @@ namespace Mtgdb.Gui
 			this._layoutTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutTitle.ColumnCount = 3;
+			this._layoutTitle.ColumnCount = 4;
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutTitle.Controls.Add(this._flowTitleRight, 2, 0);
+			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._layoutTitle.Controls.Add(this._flowTitleRight, 3, 0);
 			this._layoutTitle.Controls.Add(this._flowTitleLeft, 0, 0);
 			this._layoutTitle.Controls.Add(this._tabs, 1, 0);
+			this._layoutTitle.Controls.Add(this._labelModifierKeysStatus, 2, 0);
 			this._layoutTitle.Location = new System.Drawing.Point(1, 1);
 			this._layoutTitle.Margin = new System.Windows.Forms.Padding(1);
 			this._layoutTitle.Name = "_layoutTitle";
@@ -1307,6 +1310,19 @@ namespace Mtgdb.Gui
 			this._buttonOpenWindow.TabIndex = 20;
 			this._buttonOpenWindow.TabStop = false;
 			this._buttonOpenWindow.UseVisualStyleBackColor = true;
+			// 
+			// _labelModifierKeysStatus
+			// 
+			this._labelModifierKeysStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelModifierKeysStatus.AutoSize = true;
+			this._labelModifierKeysStatus.Location = new System.Drawing.Point(153, 0);
+			this._labelModifierKeysStatus.Margin = new System.Windows.Forms.Padding(3, 0, 3, 1);
+			this._labelModifierKeysStatus.Name = "_labelModifierKeysStatus";
+			this._labelModifierKeysStatus.Size = new System.Drawing.Size(56, 27);
+			this._labelModifierKeysStatus.TabIndex = 5;
+			this._labelModifierKeysStatus.Text = "Alt + Shift";
+			this._labelModifierKeysStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// FormRoot
 			// 
@@ -1419,5 +1435,6 @@ namespace Mtgdb.Gui
 		private CustomCheckBox _buttonMenuCopyCollection;
 		private CustomCheckBox _buttonFilterPanels;
 		private CustomCheckBox _buttonOpenWindow;
+		private System.Windows.Forms.Label _labelModifierKeysStatus;
 	}
 }

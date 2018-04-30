@@ -30,13 +30,13 @@ namespace Mtgdb.Dal
 
 		private static string pattern(
 			string name,
-			string pattern = null,
-			string then = null,
 			string unlessBefore = null,
 			string unlessBeforeRaw = null,
+			string custom = null,
+			string then = null,
 			string unlessAfter = null)
 		{
-			pattern = pattern ?? name;
+			custom = custom ?? name;
 
 			var result = new StringBuilder();
 
@@ -46,7 +46,7 @@ namespace Mtgdb.Dal
 				result.Append(negativeLookbehind("\\b" + unlessAfter + " "));
 
 			result
-				.Append(pattern)
+				.Append(custom)
 				.Append(@"\b");
 
 			if (unlessBefore != null)
@@ -186,31 +186,31 @@ namespace Mtgdb.Dal
 		public static readonly string[] Keywords =
 		{
 			hasCount("Annihilator"),
-			pattern("Attack each turn", "attacks? each (combat|turn)", "if able"),
+			pattern("Attack each turn", custom: "attacks? each (combat|turn)", then: "if able"),
 			hasCount("Awaken"),
 			pattern("Can't be blocked", unlessAfter: "this spell works on creatures that"),
 			"Can't be countered",
 			"Can't block",
 			hasCost("Cohort"),
-			pattern("Copy", "cop(y|ies)"),
+			pattern("Copy", custom: "cop(y|ies)"),
 			pattern("Counter",
-				@"(?<!\bcan't be )countered|counters?(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
+				custom: @"(?<!\bcan't be )countered|counters?(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
 			"Deathtouch",
-			"Defender",
+			pattern("Defender", unlessBefore: "(en\\-vec|of the order)", unlessAfter: "(shu|sworn)"),
 			"Delirium",
 			pattern("Discard",
-				"discards?",
-				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness"),
-			pattern("Doesn't untap", "(doesn|can|don)'t untap"),
+				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness",
+				custom: "discards?"),
+			pattern("Doesn't untap", custom: "(doesn|can|don)'t untap"),
 			"Double Strike",
-			pattern("Draw", "draws?", @"[\P{P}]*\bcards?", unlessAfter: "when you", unlessBefore: "step"),
+			pattern("Draw", unlessBefore: "step", custom: "draws?", then: @"[^\.]*\bcards?"),
 			"Enchant",
 			hasCost("Equip"),
-			pattern("Exile", "exiles?"),
+			pattern("Exile", unlessBefore: "into darkness", custom: "exiles?", unlessAfter: "tel\\-jilad"),
 			pattern("First Strike", unlessAfter: "deals combat damage before creatures without"),
-			"Flash",
+			pattern("Flash", unlessBefore: "(conscription|foliage|of Insight)", unlessAfter: "aether"),
 			pattern("Flying", unlessAfter: "(can block|except by) creatures with"),
-			pattern("Gain control", "gains? control"),
+			pattern("Gain control", custom: "gains? control"),
 			"Haste",
 			"Hexproof",
 			pattern("Indestructible", unlessBefore: "can't be destroyed by damage"),
@@ -271,7 +271,7 @@ namespace Mtgdb.Dal
 			hasCost("Eternalize"),
 			hasCost("Evoke"),
 			"Evolve",
-			pattern("Exalted", unlessAfter: "instances? of", unlessBefore: "dragon"),
+			pattern("Exalted", unlessBefore: "dragon", unlessAfter: "instances? of"),
 			"Exploit",
 			"Extort",
 			hasCount("Fabricate"),
@@ -290,9 +290,9 @@ namespace Mtgdb.Dal
 			"Hideaway",
 			pattern("Horsemanship", unlessAfter: "can't be blocked except by creatures with"),
 			"Improvise",
-			pattern("Infect", unlessAfter: "damage dealt by sources without", unlessBefore: "deal damage to creatures in the form"),
+			pattern("Infect", unlessBefore: "deal damage to creatures in the form", unlessAfter: "damage dealt by sources without"),
 			hasCost("Kicker"),
-			pattern("Landwalk", "(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
+			pattern("Landwalk", custom: "(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
@@ -325,15 +325,15 @@ namespace Mtgdb.Dal
 			hasCount("Ripple"),
 			pattern("Scavenge", unlessBefore: "(only as a sorcery|cost)"),
 			pattern("Shadow",
-				unlessAfter: "(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)",
-				unlessBefore: "guildmage"),
+				unlessBefore: "guildmage",
+				unlessAfter: "(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)"),
 			"Soulbond",
 			hasCount("Soulshift"),
 			hasCost("Splice onto Arcane"),
 			"Split Second",
 			pattern("Storm",
-				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)",
-				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)"),
+				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",
+				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)"),
 			"Sunburst",
 			"Suspend",
 			"Totem Armor",
@@ -346,35 +346,35 @@ namespace Mtgdb.Dal
 			pattern("Vanishing", unlessBefore: "touch"),
 			"Wither",
 
-			pattern("Activate", "activates?"),
-			pattern("Attach", "attach(es)?"),
-			pattern("Cast", "casts?"),
-			pattern("Create", "creates?"),
-			pattern("Destroy", "destroys?"),
-			pattern("Exchange", "exchanges?"),
-			pattern("Fight", "fights?"),
-			pattern("Play", "plays?"),
-			pattern("Reveal", "reveals?"),
-			pattern("Sacrifice", "sacrifices?"),
-			pattern("Search", "search(es)?"),
-			pattern("Shuffle", "shuffles?"),
-			pattern("Tap", "taps?"),
-			pattern("Untap", "untaps?"),
-			pattern("Bury", "bur(y|ies)"),
-			pattern("Ante", "antes?")
+			pattern("Activate", custom: "activates?"),
+			pattern("Attach", custom: "attach(es)?"),
+			pattern("Cast", custom: "casts?"),
+			pattern("Create", custom: "creates?"),
+			pattern("Destroy", custom: "destroys?"),
+			pattern("Exchange", custom: "exchanges?"),
+			pattern("Fight", custom: "fights?"),
+			pattern("Play", custom: "plays?"),
+			pattern("Reveal", custom: "reveals?"),
+			pattern("Sacrifice", custom: "sacrifices?"),
+			pattern("Search", custom: "search(es)?"),
+			pattern("Shuffle", custom: "shuffles?"),
+			pattern("Tap", custom: "taps?"),
+			pattern("Untap", custom: "untaps?"),
+			pattern("Bury", custom: "bur(y|ies)"),
+			pattern("Ante", custom: "antes?")
 		};
 
 		private static string hasCost(string name, string customPattern = null)
 		{
 			customPattern = customPattern ?? name;
 			var costKeywordPattern = $"({customPattern}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{customPattern})";
-			return pattern(name, costKeywordPattern);
+			return pattern(name, custom: costKeywordPattern);
 		}
 
 		private static string hasCount(string name)
 		{
 			var countKeywordDefinition = $"({name}{positiveLookahead(@" (\d+|x)\b")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{name})";
-			return pattern(name, countKeywordDefinition);
+			return pattern(name, custom: countKeywordDefinition);
 		}
 
 		public static readonly string[] Rarity =

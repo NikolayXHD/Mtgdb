@@ -471,13 +471,27 @@ namespace Mtgdb.Gui
 				else
 					form.SelectAllText();
 			}
+			else if (e.KeyData == Keys.F1)
+				form.ShowFindExamples();
 			else
-			{
 				handled = false;
-			}
 
 			e.Handled = handled;
 			e.SuppressKeyPress = handled;
+
+			updateModifierKeysLabel();
+		}
+
+		private void formKeyUp(object sender, KeyEventArgs e)
+		{
+			updateModifierKeysLabel();
+		}
+
+		private void updateModifierKeysLabel()
+		{
+			_labelModifierKeysStatus.Text = ModifierKeys == Keys.None
+				? string.Empty
+				: ModifierKeys.ToString().Replace(", ", " + ");
 		}
 
 		private void unsubsribeButtonEvents()

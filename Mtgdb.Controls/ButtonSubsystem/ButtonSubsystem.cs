@@ -28,10 +28,15 @@ namespace Mtgdb.Controls
 				}
 		}
 
-		public void ClosePopup(Control popupControl)
+		public void OpenPopup(ButtonBase popupButton)
 		{
-			var owner = popupControl.GetTag<ButtonBase>("Owner");
-			var popup = _popupsByOwner[owner];
+			var popup = _popupsByOwner[popupButton];
+			show(popup);
+		}
+
+		public void ClosePopup(ButtonBase popupButton)
+		{
+			var popup = _popupsByOwner[popupButton];
 			popup.Hide();
 		}
 
@@ -68,11 +73,7 @@ namespace Mtgdb.Controls
 			var popup = _popupsByOwner[owner];
 
 			if (popup.OpenOnHover && !popup.Visible)
-			{
-				popup.Control.SetTag("Owner", popup.Owner);
-				popup.Container.SetTag("Owner", popup.Owner);
-				popup.Show();
-			}
+				show(popup);
 		}
 
 		private void popupOwnerClick(object sender, EventArgs e)
@@ -87,11 +88,14 @@ namespace Mtgdb.Controls
 			}
 
 			if (!popup.OpenOnHover)
-			{
-				popup.Control.SetTag("Owner", popup.Owner);
-				popup.Container.SetTag("Owner", popup.Owner);
-				popup.Show();
-			}
+				show(popup);
+		}
+
+		private static void show(Popup popup)
+		{
+			popup.Control.SetTag("Owner", popup.Owner);
+			popup.Container.SetTag("Owner", popup.Owner);
+			popup.Show();
 		}
 
 		private void popupOwnerMouseLeave(object sender, EventArgs e)

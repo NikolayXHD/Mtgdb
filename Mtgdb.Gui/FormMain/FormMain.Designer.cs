@@ -76,7 +76,7 @@
 			this._findBorderedPanel = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._panelIconSearch = new Mtgdb.Controls.BorderedPanel();
 			this._findEditor = new Mtgdb.Controls.FixedRichTextBox();
-			this._buttonFindDropDown = new System.Windows.Forms.CheckBox();
+			this._buttonFindExamplesDropDown = new System.Windows.Forms.CheckBox();
 			this._panelIconLegality = new Mtgdb.Controls.BorderedPanel();
 			this._menuLegalityFormat = new System.Windows.Forms.ComboBox();
 			this._buttonLegalityAllowLegal = new Mtgdb.Controls.CustomCheckBox();
@@ -655,7 +655,7 @@
 			this._findBorderedPanel.BackColor = System.Drawing.Color.White;
 			this._findBorderedPanel.Controls.Add(this._panelIconSearch);
 			this._findBorderedPanel.Controls.Add(this._findEditor);
-			this._findBorderedPanel.Controls.Add(this._buttonFindDropDown);
+			this._findBorderedPanel.Controls.Add(this._buttonFindExamplesDropDown);
 			this._findBorderedPanel.Location = new System.Drawing.Point(0, 0);
 			this._findBorderedPanel.Margin = new System.Windows.Forms.Padding(0);
 			this._findBorderedPanel.Name = "_findBorderedPanel";
@@ -695,21 +695,21 @@
 			// 
 			// _buttonFindDropDown
 			// 
-			this._buttonFindDropDown.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonFindDropDown.BackColor = System.Drawing.Color.Transparent;
-			this._buttonFindDropDown.FlatAppearance.BorderSize = 0;
-			this._buttonFindDropDown.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonFindDropDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonFindDropDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonFindDropDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonFindDropDown.Image = global::Mtgdb.Gui.Properties.Resources.book_40;
-			this._buttonFindDropDown.Location = new System.Drawing.Point(463, 1);
-			this._buttonFindDropDown.Margin = new System.Windows.Forms.Padding(1);
-			this._buttonFindDropDown.Name = "_buttonFindDropDown";
-			this._buttonFindDropDown.Size = new System.Drawing.Size(22, 22);
-			this._buttonFindDropDown.TabIndex = 22;
-			this._buttonFindDropDown.TabStop = false;
-			this._buttonFindDropDown.UseVisualStyleBackColor = false;
+			this._buttonFindExamplesDropDown.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonFindExamplesDropDown.BackColor = System.Drawing.Color.Transparent;
+			this._buttonFindExamplesDropDown.FlatAppearance.BorderSize = 0;
+			this._buttonFindExamplesDropDown.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonFindExamplesDropDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonFindExamplesDropDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonFindExamplesDropDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonFindExamplesDropDown.Image = global::Mtgdb.Gui.Properties.Resources.book_40;
+			this._buttonFindExamplesDropDown.Location = new System.Drawing.Point(463, 1);
+			this._buttonFindExamplesDropDown.Margin = new System.Windows.Forms.Padding(1);
+			this._buttonFindExamplesDropDown.Name = "_buttonFindExamplesDropDown";
+			this._buttonFindExamplesDropDown.Size = new System.Drawing.Size(22, 22);
+			this._buttonFindExamplesDropDown.TabIndex = 22;
+			this._buttonFindExamplesDropDown.TabStop = false;
+			this._buttonFindExamplesDropDown.UseVisualStyleBackColor = false;
 			// 
 			// _panelIconLegality
 			// 
@@ -1927,7 +1927,7 @@
 		private Controls.CustomCheckBox _buttonHideText;
 		private System.Windows.Forms.TableLayoutPanel _layoutRight;
 		private System.Windows.Forms.TableLayoutPanel _layoutRoot;
-		private System.Windows.Forms.CheckBox _buttonFindDropDown;
+		private System.Windows.Forms.CheckBox _buttonFindExamplesDropDown;
 		private Controls.BorderedTableLayoutPanel _panelFindExamples;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label9;

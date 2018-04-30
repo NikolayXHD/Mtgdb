@@ -59,8 +59,13 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
+			_buttonSubsystem = new ButtonSubsystem();
+
 			_searchStringSubsystem = new SearchStringSubsystem(
 				this,
+				_buttonSubsystem,
+				_panelFindExamples,
+				_buttonFindExamplesDropDown,
 				_findEditor,
 				_panelIconSearch,
 				_listBoxSuggest,
@@ -126,7 +131,6 @@ namespace Mtgdb.Gui
 
 			_printingSubsystem = new PrintingSubsystem(imageRepo, _cardRepo);
 
-			_buttonSubsystem = new ButtonSubsystem();
 			DeckZone = Zone.Main;
 
 			scale();
@@ -150,7 +154,6 @@ namespace Mtgdb.Gui
 			};
 
 			setupCheckButtonImages();
-			setupFindExamplesPanel();
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
 			updateShowProhibited();
@@ -173,7 +176,7 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
 			_buttonHideText.ScaleDpi();
-			_buttonFindDropDown.ScaleDpi();
+			_buttonFindExamplesDropDown.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
