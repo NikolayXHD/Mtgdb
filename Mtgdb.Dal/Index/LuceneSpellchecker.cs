@@ -159,7 +159,7 @@ namespace Mtgdb.Dal.Index
 				!Str.Equals(MtgQueryParser.AnyField, userField) &&
 				!DocumentFactory.UserFields.Contains(userField);
 
-			if (!userField.IsAnalyzedIn(language))
+			if (!userField.IsSuggestAnalyzedIn(language))
 				token = token.PhraseStart ?? token;
 
 			string valuePart = StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position));
@@ -220,7 +220,7 @@ namespace Mtgdb.Dal.Index
 
 			string currentValue;
 
-			if (!userField.IsAnalyzedIn(language))
+			if (!userField.IsSuggestAnalyzedIn(language))
 			{
 				token = token.PhraseStart ?? token;
 				currentValue = StringEscaper.Unescape(token.GetPhraseText(query));

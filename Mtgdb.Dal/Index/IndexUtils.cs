@@ -132,7 +132,7 @@ namespace Mtgdb.Dal.Index
 			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
 		}
 
-		private static readonly bool _useParallelism = true;
+		private static readonly bool _useParallelism = false;
 
 		private static readonly int _maxParallelism = _useParallelism
 			? Math.Max(Environment.ProcessorCount - 1, 1)

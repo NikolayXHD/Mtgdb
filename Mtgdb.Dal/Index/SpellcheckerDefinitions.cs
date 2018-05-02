@@ -8,10 +8,12 @@ namespace Mtgdb.Dal.Index
 {
 	public static class SpellcheckerDefinitions
 	{
-		public static bool IsAnalyzedIn(this string userField, string lang)
+		public static bool IsSuggestAnalyzedIn(this string userField, string lang)
 		{
 			var spellcheckerField = userField.GetSpellcheckerFieldIn(lang);
-			return !DocumentFactory.NotAnalyzedFields.Contains(spellcheckerField);
+			return 
+				!DocumentFactory.NotAnalyzedFields.Contains(spellcheckerField) && 
+				!SpellcheckerValueGetters.ContainsKey(spellcheckerField);
 		}
 
 		public static bool IsIndexedInSpellchecker(this string userField, string lang)
@@ -86,7 +88,7 @@ namespace Mtgdb.Dal.Index
 		public static Dictionary<string, Func<Card, string, IEnumerable<string>>> SpellcheckerValueGetters { get; } =
 			new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
 			{
-				[nameof(Card.Name)] = (c, lang) => c.Localization?.GetName(lang)?.Invoke(value => Sequence.From(value)) ?? Enumerable.Empty<string>(),
+				[nameof(Card.Name)] = (c, lang) => c.Localization?.GetName(lang)?.Invoke(Sequence.From) ?? Enumerable.Empty<string>(),
 				[nameof(Card.NameEn)] = (c, lang) => Sequence.From(c.NameEn),
 				[nameof(Card.Artist)] = (c, lang) => Sequence.From(c.Artist),
 				[nameof(Card.SetName)] = (c, lang) => Sequence.From(c.SetName)

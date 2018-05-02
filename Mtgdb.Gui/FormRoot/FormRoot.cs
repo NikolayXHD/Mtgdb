@@ -59,8 +59,6 @@ namespace Mtgdb.Gui
 			RegisterDragControl(_layoutTitle);
 			RegisterDragControl(_flowTitleLeft);
 			RegisterDragControl(_flowTitleRight);
-
-			_labelModifierKeysStatus.Text = string.Empty;
 		}
 
 		private void scale()
@@ -164,7 +162,6 @@ namespace Mtgdb.Gui
 			FormClosing += formClosing;
 
 			KeyDown += formKeyDown;
-			KeyUp += formKeyUp;
 
 			_newsService.NewsFetched += newsFetched;
 			_newsService.NewsDisplayed += newsDisplayed;

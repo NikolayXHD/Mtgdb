@@ -141,7 +141,12 @@ namespace Mtgdb.Dal.Index
 			int max = ((int) Math.Round(word.Length * 0.75)).WithinRange(1, 8);
 
 			for (int n = 1; n <= word.Length; n++)
-				startTerms[word.Substring(0, n)] = 1;
+			{
+				string key = word.Substring(0, n);
+
+				//if (!key.Contains(' '))
+				startTerms[key] = 1;
+			}
 
 			for (int n = 1; n <= max; n++)
 			{
@@ -152,10 +157,14 @@ namespace Mtgdb.Dal.Index
 				for (int i = 0; i < right; i+= step)
 				{
 					key = word.Substring(i, n);
+
+					//if (!key.Contains(' '))
 					middleTerms[key] = middleTerms.TryGet(key) + 1;
 				}
 
 				key = word.Substring(right, n);
+
+				//if (!key.Contains(' '))
 				middleTerms[key] = middleTerms.TryGet(key) + 1;
 			}
 

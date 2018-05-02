@@ -478,20 +478,6 @@ namespace Mtgdb.Gui
 
 			e.Handled = handled;
 			e.SuppressKeyPress = handled;
-
-			updateModifierKeysLabel();
-		}
-
-		private void formKeyUp(object sender, KeyEventArgs e)
-		{
-			updateModifierKeysLabel();
-		}
-
-		private void updateModifierKeysLabel()
-		{
-			_labelModifierKeysStatus.Text = ModifierKeys == Keys.None
-				? string.Empty
-				: ModifierKeys.ToString().Replace(", ", " + ");
 		}
 
 		private void unsubsribeButtonEvents()
