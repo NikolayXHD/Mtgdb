@@ -8,6 +8,64 @@ namespace Mtgdb.Dal
 {
 	public static class KeywordDefinitions
 	{
+		private static string hasCost(string name, string pattern = null, string customPattern = null)
+		{
+			var costKeywordPattern = $"({pattern ?? name}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? pattern ?? name}|{customPattern ?? pattern ?? name}{positiveLookahead(KeywordOutroducers)})";
+			return define(name, custom: costKeywordPattern);
+		}
+
+		private static string hasCount(string name, string customPattern = null)
+		{
+			customPattern = customPattern ?? name;
+
+			var countKeywordDefinition = $"({name}{positiveLookahead(ThenCount)}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? name})";
+			return define(name, custom: countKeywordDefinition);
+		}
+
+		private static string define(
+			string name,
+			string custom = null,
+			string unlessBefore = null,
+			string unlessBeforeRaw = null,
+			string then = null,
+			string unlessAfter = null)
+		{
+			custom = custom ?? name;
+
+			return $"/{pattern(body: custom, unlessBefore: unlessBefore, unlessBeforeRaw: unlessBeforeRaw, then: then, unlessAfter: unlessAfter)}/ {name}";
+		}
+
+		private static string pattern(
+			string body = null,
+			string unlessBefore = null,
+			string unlessBeforeRaw = null,
+			string then = null,
+			string unlessAfter = null)
+		{
+			var result = new StringBuilder();
+
+			result.Append("\\b");
+			if (unlessAfter != null)
+				result.Append(negativeLookbehind("\\b" + unlessAfter + " "));
+
+			result
+				.Append(body)
+				.Append(@"\b");
+
+			if (unlessBefore != null)
+				result.Append(negativeLookahead(' ' + unlessBefore + "\\b"));
+
+			if (unlessBeforeRaw != null)
+				result.Append(negativeLookahead(unlessBeforeRaw));
+
+			if (then != null)
+				result.Append(positiveLookahead(' ' + then + "\\b"));
+
+			return result.ToString();
+		}
+
+
+
 		private static string positiveLookbehind([JetBrains.Annotations.RegexPattern] string pattern)
 		{
 			return "(?<=" + pattern + ")";
@@ -28,41 +86,7 @@ namespace Mtgdb.Dal
 			return "(?!" + pattern + ")";
 		}
 
-		private static string pattern(
-			string name,
-			string unlessBefore = null,
-			string unlessBeforeRaw = null,
-			string custom = null,
-			string then = null,
-			string unlessAfter = null)
-		{
-			custom = custom ?? name;
 
-			var result = new StringBuilder();
-
-			result.Append(@"/\b");
-
-			if (unlessAfter != null)
-				result.Append(negativeLookbehind("\\b" + unlessAfter + " "));
-
-			result
-				.Append(custom)
-				.Append(@"\b");
-
-			if (unlessBefore != null)
-				result.Append(negativeLookahead(' ' + unlessBefore + "\\b"));
-
-			if (unlessBeforeRaw != null)
-				result.Append(negativeLookahead(unlessBeforeRaw));
-
-			if (then != null)
-				result.Append(positiveLookahead(' ' + then + "\\b"));
-
-			result.Append("/ ")
-				.Append(name);
-
-			return result.ToString();
-		}
 
 		private static Func<string, Regex>[] PatternFactories { get; } =
 		{
@@ -186,196 +210,184 @@ namespace Mtgdb.Dal
 		public static readonly string[] Keywords =
 		{
 			hasCount("Annihilator"),
-			pattern("Attack each turn", custom: "attacks? each (combat|turn)", then: "if able"),
+			define("Attack each turn", custom: "attacks? each (combat|turn)", then: "if able"),
 			hasCount("Awaken"),
-			pattern("Can't be blocked", unlessAfter: "this spell works on creatures that"),
+			define("Can't be blocked", unlessAfter: "this spell works on creatures that"),
 			"Can't be countered",
+			"Can't be regenerated",
 			"Can't block",
 			hasCost("Cohort"),
-			pattern("Copy", custom: "cop(y|ies)"),
-			pattern("Counter",
+			define("Copy", custom: "cop(y|ies)"),
+			define("Counter",
 				custom: @"(?<!\bcan't be )countered|counters?(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
 			"Deathtouch",
-			pattern("Defender", unlessBefore: "(en\\-vec|of the order)", unlessAfter: "(shu|sworn)"),
+			define("Defender", unlessBefore: "(en\\-vec|of the order)", unlessAfter: "(shu|sworn)"),
 			"Delirium",
-			pattern("Discard",
-				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness",
-				custom: "discards?"),
-			pattern("Doesn't untap", custom: "(doesn|can|don)'t untap"),
+			define("Discard",
+				custom: "discards?",
+				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness"),
+			define("Doesn't untap", custom: "(doesn|can|don)'t untap"),
 			"Double Strike",
-			pattern("Draw", unlessBefore: "step", custom: "draws?", then: @"[^\.]*\bcards?"),
+			define("Draw", custom: "draws?", unlessBefore: "step", then: @"[^\.]*\bcards?"),
 			"Enchant",
 			hasCost("Equip"),
-			pattern("Exile", unlessBefore: "into darkness", custom: "exiles?", unlessAfter: "tel\\-jilad"),
-			pattern("First Strike", unlessAfter: "deals combat damage before creatures without"),
-			pattern("Flash", unlessBefore: "(conscription|foliage|of Insight)", unlessAfter: "aether"),
-			pattern("Flying", unlessAfter: "(can block|except by) creatures with"),
-			pattern("Gain control", custom: "gains? control"),
+			define("Exile", custom: "exiles?", unlessBefore: "into darkness", unlessAfter: "tel\\-jilad"),
+			define("First Strike", unlessAfter: "deals combat damage before creatures without"),
+			define("Flash", unlessBefore: "(conscription|foliage|of Insight)", unlessAfter: "aether"),
+			define("Flying", unlessAfter: "(can block|except by) creatures with"),
+			define("Gain control", custom: "gains? control"),
 			"Haste",
 			"Hexproof",
-			pattern("Indestructible", unlessBefore: "can't be destroyed by damage"),
+			define("Indestructible", unlessBefore: "can't be destroyed by damage"),
 			"Ingest",
-			pattern("Intimidate", unlessBefore: "can't be blocked except"),
+			define("Intimidate", unlessBefore: "can't be blocked except"),
 			"Lifelink",
 			hasCost("Madness"),
 			"Menace",
 			"Prowess",
-			pattern("Rally", then: "—"),
-			pattern("Reach", unlessAfter: "except by creatures with flying or"),
+			define("Rally", then: "— ?"),
+			define("Reach", unlessBefore: "of Branches", unlessAfter: "(except by creatures with flying or|geier|myojin of night's)"),
 			"Regenerate",
-			hasCount("Renown"),
-			hasCount("Scry"),
+			hasCount("Renown", customPattern: pattern(body: "renowned", unlessBefore: "weaver", unlessAfter: "if it isn't")),
+			"Scry",
 			"Shroud",
-			pattern("Skulk", unlessBeforeRaw: @"\bpit-"),
+			define("Skulk", unlessBeforeRaw: @"\bpit-"),
 			hasCost("Surge"),
 			"Trample",
-			"Transform",
-			pattern("Undying", unlessBefore: "(beast|rage|flames|partisan)"),
+			define("Transform", custom: "transform(s|ed)?"),
+			define("Undying", unlessBefore: "(beast|rage|flames|partisan)"),
 			"Vigilance",
 			null,
 			hasCount("Absorb"),
-			pattern("Affinity", then: "for"),
+			define("Affinity", then: "for"),
 			hasCount("Afflict"),
 			"Aftermath",
 			hasCount("Amplify"),
 			"Ascend",
 			hasCost("Aura Swap"),
-			pattern("Banding", unlessAfter: "any creatures with"),
+			define("Banding", unlessAfter: "any creatures with"),
 			"Battle Cry",
 			hasCost("Bestow"),
-			pattern("Bloodrush", then: "—"),
+			define("Bloodrush", then: "—"),
 			hasCount("Bloodthirst"),
 			hasCount("Bushido"),
-			hasCost("Buyback"),
-			pattern("Cascade", unlessAfter: "skyline"),
-			pattern("Champion", then: "an?"),
+			"Buyback",
+			define("Cascade", unlessAfter: "skyline"),
+			define("Champion", then: "an?"),
 			"Changeling",
 			"Cipher",
 			"Conspire",
 			"Convoke",
-			hasCount("Crew"),
+			define("Crew", custom: $@"\b(crews?(?={ThenCount}|( a)? vehicles?)\b)\b"),
 			hasCost("Cumulative Upkeep"),
-			hasCost("Cycling", @"\w*cycling"),
+			hasCost("Cycling", pattern: @"(\bbasic )?\w*cycling"),
 			hasCost("Dash"),
 			"Delve",
 			"Dethrone",
 			"Devoid",
-			hasCount("Devour"),
+			hasCount("Devour", customPattern: "devoured"),
 			hasCount("Dredge"),
 			hasCost("Echo"),
 			hasCost("Embalm"),
 			hasCost("Emerge"),
 			hasCost("Entwine"),
-			pattern("Epic", unlessAfter: "copy this spell except for its"),
+			define("Epic", unlessAfter: "copy this spell except for its"),
 			hasCost("Escalate"),
 			hasCost("Eternalize"),
 			hasCost("Evoke"),
 			"Evolve",
-			pattern("Exalted", unlessBefore: "dragon", unlessAfter: "instances? of"),
+			define("Exalted", unlessBefore: "(dragon|angel)", unlessAfter: "instances? of"),
 			"Exploit",
 			"Extort",
 			hasCount("Fabricate"),
 			hasCount("Fading"),
-			"Fear",
-			pattern("Flanking", unlessBefore: "troops", unlessAfter: "whenever a creature without"),
-			pattern("Flashback", unlessBefore: "cost"),
+			define("Fear", unlessAfter: "Shinen of"),
+			define("Flanking", unlessBefore: "troops", unlessAfter: "whenever a creature without"),
+			define("Flashback", unlessBefore: "cost"),
 			hasCost("Forecast"),
-			pattern("Fortify", unlessBefore: "only as a sorcery"),
+			define("Fortify", unlessBefore: "only as a sorcery"),
 			hasCount("Frenzy"),
-			pattern("Fuse", unlessBefore: "counters?"),
+			define("Fuse", unlessBefore: "counters?"),
 			hasCount("Graft"),
 			"Gravestorm",
 			"Haunt",
 			"Hidden Agenda",
 			"Hideaway",
-			pattern("Horsemanship", unlessAfter: "can't be blocked except by creatures with"),
+			define("Horsemanship", unlessAfter: "can't be blocked except by creatures with"),
 			"Improvise",
-			pattern("Infect", unlessBefore: "deal damage to creatures in the form", unlessAfter: "damage dealt by sources without"),
-			hasCost("Kicker"),
-			pattern("Landwalk", custom: "(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
+			define("Infect", unlessBefore: "deal damage to creatures in the form", unlessAfter: "damage dealt by sources without"),
+			hasCost("Kicker", pattern: "(multi)?kick(er|ed|s)"),
+			define("Landwalk", custom: "((snow(\\-covered)?|(non)?basic|legendary) )?(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
 			"Mountainwalk",
 			"Islandwalk",
-			pattern("Level Up", unlessBefore: "only as a sorcery"),
+			define("Level Up", custom: "level (up|counter)", unlessBefore: "only as a sorcery"),
 			"Living Weapon",
-			pattern("Melee", unlessAfter: "cast"),
+			define("Melee", unlessAfter: "cast"),
 			hasCost("Miracle"),
 			hasCount("Modular"),
-			hasCost("Morph"),
-			pattern("Myriad", unlessBefore: "landscape"),
+			hasCost("Morph", pattern:"(mega)?morph"),
+			define("Myriad", unlessBefore: "landscape"),
 			hasCost("Ninjutsu"),
-			pattern("Offering", unlessAfter: "(volcanic|yawgmoth's vile|death pit)"),
+			define("Offering", unlessAfter: "(volcanic|yawgmoth's vile|death pit|burnt)"),
 			hasCost("Outlast"),
 			hasCost("Overload"),
-			pattern("Partner", unlessAfter: "if both have"),
+			define("Partner", unlessAfter: "if both have"),
 			"Persist",
 			"Phasing",
 			hasCount("Poisonous"),
-			pattern("Protection", unlessAfter: "Circle of"),
+			define("Protection", unlessAfter: "(circle of|teferi's)"),
 			"Provoke",
 			hasCost("Prowl"),
 			hasCount("Rampage"),
 			"Rebound",
 			hasCost("Recover"),
 			hasCount("Reinforce"),
-			pattern("Replicate", unlessBefore: "cost"),
+			define("Replicate", unlessBefore: "cost"),
 			"Retrace",
 			hasCount("Ripple"),
-			pattern("Scavenge", unlessBefore: "(only as a sorcery|cost)"),
-			pattern("Shadow",
+			define("Scavenge", unlessBefore: "(only as a sorcery|cost)"),
+			define("Shadow",
 				unlessBefore: "guildmage",
 				unlessAfter: "(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)"),
 			"Soulbond",
 			hasCount("Soulshift"),
-			hasCost("Splice onto Arcane"),
+			hasCost("Splice onto Arcane", customPattern: "splice(d|s) onto"),
 			"Split Second",
-			pattern("Storm",
+			define("Storm",
 				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",
 				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)"),
 			"Sunburst",
-			"Suspend",
+			define("Suspend", custom: "suspend(s|ed)?"),
 			"Totem Armor",
 			hasCost("Transfigure"),
 			hasCost("Transmute"),
 			hasCount("Tribute"),
 			"Undaunted",
-			hasCost("Unearth"),
+			hasCost("Unearth", pattern: "unearth(s|ed)?"),
 			"Unleash",
-			pattern("Vanishing", unlessBefore: "touch"),
+			define("Vanishing", unlessBefore: "touch"),
 			"Wither",
 
-			pattern("Activate", custom: "activates?"),
-			pattern("Attach", custom: "attach(es)?"),
-			pattern("Cast", custom: "casts?"),
-			pattern("Create", custom: "creates?"),
-			pattern("Destroy", custom: "destroys?"),
-			pattern("Exchange", custom: "exchanges?"),
-			pattern("Fight", custom: "fights?"),
-			pattern("Play", custom: "plays?"),
-			pattern("Reveal", custom: "reveals?"),
-			pattern("Sacrifice", custom: "sacrifices?"),
-			pattern("Search", custom: "search(es)?"),
-			pattern("Shuffle", custom: "shuffles?"),
-			pattern("Tap", custom: "taps?"),
-			pattern("Untap", custom: "untaps?"),
-			pattern("Bury", custom: "bur(y|ies)"),
-			pattern("Ante", custom: "antes?")
+			define("Activate", custom: "activate(s|d)?"),
+			define("Attach", custom: "attach(es|ed)?"),
+			define("Cast", custom: "casts?"),
+			define("Create", custom: "create(s|d)?"),
+			define("Destroy", custom: "destroy(s|ed)?"),
+			define("Exchange", custom: "exchange(s|d)?"),
+			define("Fight", custom: "fight(s|ed)?"),
+			define("Play", custom: "play(s|ed)?"),
+			define("Reveal", custom: "reveal(s|ed)?"),
+			define("Sacrifice", custom: "sacrifice(s|d)?"),
+			define("Search", custom: "search(es|ed)?"),
+			define("Shuffle", custom: "shuffle(s|d)?"),
+			define("Tap", custom: "tap(s|ped)?"),
+			define("Untap", custom: "untap(s|ped)?"),
+			define("Bury", custom: "bur(y|ies|ied)"),
+			define("Ante", custom: "ante(s|d)?")
 		};
-
-		private static string hasCost(string name, string customPattern = null)
-		{
-			customPattern = customPattern ?? name;
-			var costKeywordPattern = $"({customPattern}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{customPattern})";
-			return pattern(name, custom: costKeywordPattern);
-		}
-
-		private static string hasCount(string name)
-		{
-			var countKeywordDefinition = $"({name}{positiveLookahead(@" (\d+|x)\b")}|{positiveLookbehind("(has|have|gains?|activate|with) ")}{name})";
-			return pattern(name, custom: countKeywordDefinition);
-		}
 
 		public static readonly string[] Rarity =
 		{
@@ -424,8 +436,11 @@ namespace Mtgdb.Dal
 			nameof(GeneratedMana)
 		};
 
-		public static readonly int KeywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
+		private const string KeywordIntroducers = @"\b(player|was|were|is|are|it's|they're|ha(s|d|ve)|gain(s|ed)?|activate(s|d)?|with) ";
+		private const string KeywordOutroducers = @" (abilit(y|ies)|costs?|(a|any|this|these|that|those)?(spells?|permanents?))\b";
+		private const string ThenCount = @"( (\d+|x)| ?— ?sunburst)\b";
 
-		public static Dictionary<string, Regex> KeywordPatternsByValue => PatternsByDisplayText[KeywordsIndex];
+		private static readonly int _keywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
+		public static Dictionary<string, Regex> KeywordPatternsByValue => PatternsByDisplayText[_keywordsIndex];
 	}
 }

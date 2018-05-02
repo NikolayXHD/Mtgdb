@@ -925,7 +925,11 @@ namespace Mtgdb.Gui
 
 
 
-		public void ButtonUndo() => historyUndo();
+		public void ButtonUndo()
+		{
+			_searchStringSubsystem.ApplyDirtyText();
+			historyUndo();
+		}
 
 		public void ButtonRedo() => historyRedo();
 

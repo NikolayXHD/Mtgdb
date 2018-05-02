@@ -325,6 +325,7 @@ namespace Mtgdb.Gui
 			{
 				var formMain = getTab(i);
 				formMain.SaveHistory(_formManager.GetHistoryFile(Id, i));
+				formMain.Close();
 			}
 
 			_formManager.Remove(this);

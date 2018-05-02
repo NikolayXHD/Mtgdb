@@ -175,7 +175,7 @@
 			this._panelFilters.Location = new System.Drawing.Point(0, 0);
 			this._panelFilters.Margin = new System.Windows.Forms.Padding(0);
 			this._panelFilters.Name = "_panelFilters";
-			this._panelFilters.Size = new System.Drawing.Size(1454, 46);
+			this._panelFilters.Size = new System.Drawing.Size(1476, 46);
 			this._panelFilters.TabIndex = 0;
 			// 
 			// FilterAbility
@@ -185,16 +185,16 @@
 			this.FilterAbility.HideProhibit = true;
 			this.FilterAbility.Location = new System.Drawing.Point(0, 0);
 			this.FilterAbility.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
-			this.FilterAbility.MinimumSize = new System.Drawing.Size(970, 46);
+			this.FilterAbility.MinimumSize = new System.Drawing.Size(992, 46);
 			this.FilterAbility.Name = "FilterAbility";
 			this.FilterAbility.ProhibitedColor = System.Drawing.Color.OrangeRed;
-			this.FilterAbility.PropertiesCount = 44;
+			this.FilterAbility.PropertiesCount = 45;
 			this.FilterAbility.PropertyImages = null;
 			this.FilterAbility.SelectionBorder = 1.75F;
 			this.FilterAbility.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterAbility.SelectionColor = System.Drawing.SystemColors.Window;
 			this.FilterAbility.ShowValueHint = true;
-			this.FilterAbility.Size = new System.Drawing.Size(970, 46);
+			this.FilterAbility.Size = new System.Drawing.Size(992, 46);
 			this.FilterAbility.Spacing = new System.Drawing.Size(2, 2);
 			this.FilterAbility.TabIndex = 13;
 			this.FilterAbility.TabStop = false;
@@ -204,7 +204,7 @@
 			this.FilterType.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
 			this.FilterType.EnableCostBehavior = true;
 			this.FilterType.HideProhibit = true;
-			this.FilterType.Location = new System.Drawing.Point(990, 0);
+			this.FilterType.Location = new System.Drawing.Point(1012, 0);
 			this.FilterType.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this.FilterType.MinimumSize = new System.Drawing.Size(178, 46);
 			this.FilterType.Name = "FilterType";
@@ -226,7 +226,7 @@
 			this.FilterRarity.EnableCostBehavior = true;
 			this.FilterRarity.EnableMutuallyExclusive = true;
 			this.FilterRarity.HideProhibit = true;
-			this.FilterRarity.Location = new System.Drawing.Point(1188, 0);
+			this.FilterRarity.Location = new System.Drawing.Point(1210, 0);
 			this.FilterRarity.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this.FilterRarity.MinimumSize = new System.Drawing.Size(134, 46);
 			this.FilterRarity.Name = "FilterRarity";
@@ -248,7 +248,7 @@
 			this.FilterManager.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
 			this.FilterManager.EnableRequiringSome = true;
 			this.FilterManager.HideProhibit = true;
-			this.FilterManager.Location = new System.Drawing.Point(1342, 0);
+			this.FilterManager.Location = new System.Drawing.Point(1364, 0);
 			this.FilterManager.Margin = new System.Windows.Forms.Padding(0);
 			this.FilterManager.MinimumSize = new System.Drawing.Size(112, 46);
 			this.FilterManager.Name = "FilterManager";
@@ -693,7 +693,7 @@
 			this._findEditor.Text = "";
 			this._findEditor.WordWrap = false;
 			// 
-			// _buttonFindDropDown
+			// _buttonFindExamplesDropDown
 			// 
 			this._buttonFindExamplesDropDown.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonFindExamplesDropDown.BackColor = System.Drawing.Color.Transparent;

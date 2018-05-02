@@ -395,6 +395,14 @@ namespace Mtgdb.Gui
 				case Keys.Escape:
 					if (_listBoxSuggest.Visible)
 						continueEditingAfterSuggest();
+					else if (_appliedText != _findEditor.Text)
+					{
+						var appliedText = _appliedText;
+						ApplyDirtyText();
+
+						setFindText(appliedText, appliedText.Length);
+						Apply();
+					}
 
 					e.Handled = true;
 					break;
@@ -458,6 +466,12 @@ namespace Mtgdb.Gui
 
 					break;
 			}
+		}
+
+		public void ApplyDirtyText()
+		{
+			if (_appliedText != _findEditor.Text)
+				Apply();
 		}
 
 		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_examplesButton);
@@ -579,21 +593,25 @@ namespace Mtgdb.Gui
 			}
 
 			bool appendSpace = positionCaretToNextValue && end?.Next?.Type.IsAny(TokenType.AnyClose) != true;
+			bool prependSpace = positionCaretToNextValue && start?.Previous?.Type.IsAny(TokenType.AnyOpen) == false;
 
-			string prefix = source.Text.Substring(0, left).Trim();
+			string prefix = source.Text.Substring(0, left);
 			string suffix = source.Text.Substring(left + length);
-			
+
+			if (prependSpace)
+			{
+				prefix = prefix.TrimEnd();
+				value = " " + value;
+			}
+
 			if (appendSpace)
+			{
 				suffix = suffix.TrimStart();
+				value += " ";
+			}
 
 			if (type.IsAny(TokenType.Field) && suffix.StartsWith(":"))
 				suffix = suffix.Substring(1);
-
-			if (start?.Previous?.Type.IsAny(TokenType.AnyOpen) == false)
-				value = " " + value;
-
-			if (appendSpace)
-				value += " ";
 
 			var replacement = prefix + value + suffix;
 			int caret = prefix.Length + value.Length;

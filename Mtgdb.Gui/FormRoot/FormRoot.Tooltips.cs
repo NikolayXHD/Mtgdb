@@ -84,7 +84,8 @@ namespace Mtgdb.Gui
 				"Use it to tell the program where to find your custom card images or tweak some other settings.\r\n" +
 				"\r\n" +
 				"Configuration file is opened by whatever application you have associated with *.xml files. " +
-				"If it's Internet Explorer, you need to assign *.xml extension to a text editor instead. " +
+				"If it's Internet Explorer, you need to assign *.xml extension to a text editor instead, " +
+				"because Internet Explorer only displays the file without allowing to edit." +
 				"I recommend using an editor with XML syntax highlighting e.g. Notepad++.\r\n" +
 				"\r\n" +
 				"To apply your changes save the modified configuration file and restart the program.",
