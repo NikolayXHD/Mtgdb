@@ -93,6 +93,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Block_if_able {
+            get {
+                object obj = ResourceManager.GetObject("Block_if_able", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Cant_be_blocked {
             get {
                 object obj = ResourceManager.GetObject("Cant_be_blocked", resourceCulture);

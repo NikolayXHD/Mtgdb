@@ -190,5 +190,11 @@ namespace Mtgdb
 		}
 
 		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Sequence.From(value));
+
+		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence) => 
+			new HashSet<T>(sequence);
+
+		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer) => 
+			new HashSet<T>(sequence, comparer);
 	}
 }

@@ -105,6 +105,7 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Annihilator,
 			ResourcesAbilities.Attacks_each_turn,
 			ResourcesAbilities.Awake,
+			ResourcesAbilities.Block_if_able,
 			ResourcesAbilities.Cant_be_blocked,
 			ResourcesAbilities.Cant_be_countered,
 			ResourcesAbilities.Cant_be_regenerated,

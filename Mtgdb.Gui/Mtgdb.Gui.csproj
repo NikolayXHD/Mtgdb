@@ -339,6 +339,7 @@
     <Content Include="Resources\Attacks each turn.png" />
     <None Include="Resources\book_40.png" />
     <None Include="Resources\book_40_hovered.png" />
+    <None Include="Resources\block_if_able.png" />
     <Content Include="Resources\Box_48.png" />
     <Content Include="Resources\Cant be blocked.png" />
     <Content Include="Resources\Cant block.png" />

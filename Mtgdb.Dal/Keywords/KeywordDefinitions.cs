@@ -10,8 +10,9 @@ namespace Mtgdb.Dal
 	{
 		private static string hasCost(string name, string pattern = null, string customPattern = null)
 		{
-			var costKeywordPattern = $"({pattern ?? name}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? pattern ?? name}|{customPattern ?? pattern ?? name}{positiveLookahead(KeywordOutroducers)})";
-			return define(name, custom: costKeywordPattern);
+			var costKeywordPattern =
+				$"({pattern ?? name}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? pattern ?? name}|{customPattern ?? pattern ?? name}{positiveLookahead(KeywordOutroducers)})";
+			return define(name, costKeywordPattern);
 		}
 
 		private static string hasCount(string name, string customPattern = null)
@@ -19,7 +20,7 @@ namespace Mtgdb.Dal
 			customPattern = customPattern ?? name;
 
 			var countKeywordDefinition = $"({name}{positiveLookahead(ThenCount)}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? name})";
-			return define(name, custom: countKeywordDefinition);
+			return define(name, countKeywordDefinition);
 		}
 
 		private static string define(
@@ -32,7 +33,9 @@ namespace Mtgdb.Dal
 		{
 			custom = custom ?? name;
 
-			return $"/{pattern(body: custom, unlessBefore: unlessBefore, unlessBeforeRaw: unlessBeforeRaw, then: then, unlessAfter: unlessAfter)}/ {name}";
+			string result = $"/{pattern(body: custom, unlessBefore: unlessBefore, unlessBeforeRaw: unlessBeforeRaw, then: then, unlessAfter: unlessAfter)}/ {name}";
+
+			return result;
 		}
 
 		private static string pattern(
@@ -64,7 +67,13 @@ namespace Mtgdb.Dal
 			return result.ToString();
 		}
 
+		private static string interval(string open, string close, params string[] interrupt)
+		{
+			string separator = @"[\s\p{P}]+";
+			string word = @"[^\s\p{P}]+";
 
+			return $@"{open}(?(?={separator}({string.Join("|", interrupt.Append(open).Append(close))}))(?!)|{separator}{word})*{separator}{close}";
+		}
 
 		private static string positiveLookbehind([JetBrains.Annotations.RegexPattern] string pattern)
 		{
@@ -210,14 +219,22 @@ namespace Mtgdb.Dal
 		public static readonly string[] Keywords =
 		{
 			hasCount("Annihilator"),
-			define("Attack each turn", custom: "attacks? each (combat|turn)", then: "if able"),
+			define("Attack if able", interval(@"(?<!\bcan't )attacks?( or blocks?)?\b", "if able", @"block(s|ed)?\b")),
 			hasCount("Awaken"),
+			define("Block if able",
+				"(" +
+				"must be blocked" +
+				"|" +
+				interval(@"able to block\b", "do (it|so)") +
+				"|" +
+				interval(@"(?<!\bcan't )(attacks? or )?block(s|ed)?\b", "if able", @"attacks?\b") +
+				")"),
 			define("Can't be blocked", unlessAfter: "this spell works on creatures that"),
 			"Can't be countered",
 			"Can't be regenerated",
 			"Can't block",
 			hasCost("Cohort"),
-			define("Copy", custom: "cop(y|ies)"),
+			define("Copy", "cop(y|ies)"),
 			define("Counter",
 				custom: @"(?<!\bcan't be )countered|counters?(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
 			"Deathtouch",
@@ -226,16 +243,16 @@ namespace Mtgdb.Dal
 			define("Discard",
 				custom: "discards?",
 				unlessBefore: @"(this card\, discard )?it into exile\. when you do\, cast it for its madness"),
-			define("Doesn't untap", custom: "(doesn|can|don)'t untap"),
+			define("Doesn't untap", "(doesn|can|don)'t untap"),
 			"Double Strike",
-			define("Draw", custom: "draws?", unlessBefore: "step", then: @"[^\.]*\bcards?"),
+			define("Draw", "draws?", unlessBefore: "step", then: @"[^\.]*\bcards?"),
 			"Enchant",
 			hasCost("Equip"),
-			define("Exile", custom: "exiles?", unlessBefore: "into darkness", unlessAfter: "tel\\-jilad"),
+			define("Exile", "exiles?", unlessBefore: "into darkness", unlessAfter: "tel\\-jilad"),
 			define("First Strike", unlessAfter: "deals combat damage before creatures without"),
 			define("Flash", unlessBefore: "(conscription|foliage|of Insight)", unlessAfter: "aether"),
 			define("Flying", unlessAfter: "(can block|except by) creatures with"),
-			define("Gain control", custom: "gains? control"),
+			define("Gain control", "gains? control"),
 			"Haste",
 			"Hexproof",
 			define("Indestructible", unlessBefore: "can't be destroyed by damage"),
@@ -254,7 +271,7 @@ namespace Mtgdb.Dal
 			define("Skulk", unlessBeforeRaw: @"\bpit-"),
 			hasCost("Surge"),
 			"Trample",
-			define("Transform", custom: "transform(s|ed)?"),
+			define("Transform", "transform(s|ed)?"),
 			define("Undying", unlessBefore: "(beast|rage|flames|partisan)"),
 			"Vigilance",
 			null,
@@ -278,7 +295,7 @@ namespace Mtgdb.Dal
 			"Cipher",
 			"Conspire",
 			"Convoke",
-			define("Crew", custom: $@"\b(crews?(?={ThenCount}|( a)? vehicles?)\b)\b"),
+			define("Crew", $@"\b(crews?(?={ThenCount}|( a)? vehicles?)\b)\b"),
 			hasCost("Cumulative Upkeep"),
 			hasCost("Cycling", pattern: @"(\bbasic )?\w*cycling"),
 			hasCost("Dash"),
@@ -308,6 +325,7 @@ namespace Mtgdb.Dal
 			define("Fortify", unlessBefore: "only as a sorcery"),
 			hasCount("Frenzy"),
 			define("Fuse", unlessBefore: "counters?"),
+			define("Goad", "goad(s|ed)?"),
 			hasCount("Graft"),
 			"Gravestorm",
 			"Haunt",
@@ -317,18 +335,18 @@ namespace Mtgdb.Dal
 			"Improvise",
 			define("Infect", unlessBefore: "deal damage to creatures in the form", unlessAfter: "damage dealt by sources without"),
 			hasCost("Kicker", pattern: "(multi)?kick(er|ed|s)"),
-			define("Landwalk", custom: "((snow(\\-covered)?|(non)?basic|legendary) )?(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
+			define("Landwalk", "((snow(\\-covered)?|(non)?basic|legendary) )?(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
 			"Mountainwalk",
 			"Islandwalk",
-			define("Level Up", custom: "level (up|counter)", unlessBefore: "only as a sorcery"),
+			define("Level Up", "level (up|counter)", unlessBefore: "only as a sorcery"),
 			"Living Weapon",
 			define("Melee", unlessAfter: "cast"),
 			hasCost("Miracle"),
 			hasCount("Modular"),
-			hasCost("Morph", pattern:"(mega)?morph"),
+			hasCost("Morph", pattern: "(mega)?morph"),
 			define("Myriad", unlessBefore: "landscape"),
 			hasCost("Ninjutsu"),
 			define("Offering", unlessAfter: "(volcanic|yawgmoth's vile|death pit|burnt)"),
@@ -360,7 +378,7 @@ namespace Mtgdb.Dal
 				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",
 				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)"),
 			"Sunburst",
-			define("Suspend", custom: "suspend(s|ed)?"),
+			define("Suspend", "suspend(s|ed)?"),
 			"Totem Armor",
 			hasCost("Transfigure"),
 			hasCost("Transmute"),
@@ -371,22 +389,23 @@ namespace Mtgdb.Dal
 			define("Vanishing", unlessBefore: "touch"),
 			"Wither",
 
-			define("Activate", custom: "activate(s|d)?"),
-			define("Attach", custom: "attach(es|ed)?"),
-			define("Cast", custom: "casts?"),
-			define("Create", custom: "create(s|d)?"),
-			define("Destroy", custom: "destroy(s|ed)?"),
-			define("Exchange", custom: "exchange(s|d)?"),
-			define("Fight", custom: "fight(s|ed)?"),
-			define("Play", custom: "play(s|ed)?"),
-			define("Reveal", custom: "reveal(s|ed)?"),
-			define("Sacrifice", custom: "sacrifice(s|d)?"),
-			define("Search", custom: "search(es|ed)?"),
-			define("Shuffle", custom: "shuffle(s|d)?"),
-			define("Tap", custom: "tap(s|ped)?"),
-			define("Untap", custom: "untap(s|ped)?"),
-			define("Bury", custom: "bur(y|ies|ied)"),
-			define("Ante", custom: "ante(s|d)?")
+			define("Activate", "activat(e(s|d)?|i(ng|on))"),
+			define("Attach", "attach(es|ed)?"),
+			define("Unattach", "unattach(es|ed)?"),
+			define("Cast", "cast(s|ing)?"),
+			define("Create", "create(s|d)?"),
+			define("Destroy", "destroy(s|ed)?"),
+			define("Exchange", "exchange(s|d)?"),
+			define("Fight", "fight(s|ed)?"),
+			define("Play", "play(s|ed)?"),
+			define("Reveal", "reveal(s|ed)?"),
+			define("Sacrifice", "sacrifice(s|d)?"),
+			define("Search", "search(es|ed)?"),
+			define("Shuffle", "shuffle(s|d)?"),
+			define("Tap", "tap(s|ped)?"),
+			define("Untap", "untap(s|ped)?"),
+			define("Bury", "bur(y|ies|ied)", unlessBefore: "ruin"),
+			define("Ante", "ante(s|d)?")
 		};
 
 		public static readonly string[] Rarity =

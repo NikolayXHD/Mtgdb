@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Lucene.Net.Contrib;
 using Lucene.Net.Index;
 using ReadOnlyCollectionsExtensions;
@@ -23,8 +22,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.37 fix dom legality
-			set => Version = new IndexVersion(value, "0.37");
+			// 0.38 add Dominaria Block
+			set => Version = new IndexVersion(value, "0.38");
 		}
 
 		public void InvalidateIndex()
@@ -130,7 +129,7 @@ namespace Mtgdb.Dal.Index
 				IndexingProgress?.Invoke();
 			}
 
-			IndexUtils.ForEach(indexedWordsByField, indexField);
+			IndexUtils.ForEach(indexedWordsByField, indexField, suppressParallelism: true);
 
 			spellchecker.EndIndex(Version.Directory);
 

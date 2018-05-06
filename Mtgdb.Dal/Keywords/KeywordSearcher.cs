@@ -22,8 +22,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.37 fix dom legality
-			set => _version = new IndexVersion(value, "0.37");
+			// 0.38 add Dominaria Block
+			set => _version = new IndexVersion(value, "0.38");
 		}
 
 		public void InvalidateIndex()

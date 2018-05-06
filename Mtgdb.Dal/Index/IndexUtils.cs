@@ -141,22 +141,18 @@ namespace Mtgdb.Dal.Index
 					action(i);
 		}
 
-		public static void ForEach<T>(IEnumerable<T> elements, Action<T> action)
+		public static void ForEach<T>(IEnumerable<T> elements, Action<T> action, bool suppressParallelism = false)
 		{
 			var options = ParallelOptions;
 
-			if (options.MaxDegreeOfParallelism > 1)
+			if (options.MaxDegreeOfParallelism > 1 && !suppressParallelism)
 				Parallel.ForEach(elements, options, action);
 			else
 				foreach (var el in elements)
 					action(el);
 		}
 
-		private static readonly bool _useParallelism = false;
-
-		private static readonly int _maxParallelism = _useParallelism
-			? Math.Max(Environment.ProcessorCount - 1, 1)
-			: 1;
+		private static readonly int _maxParallelism = Math.Max(Environment.ProcessorCount - 1, 1);
 
 		private static ParallelOptions ParallelOptions => new ParallelOptions
 		{
