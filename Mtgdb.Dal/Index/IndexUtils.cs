@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
@@ -9,7 +8,6 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -17,10 +15,10 @@ namespace Mtgdb.Dal.Index
 	{
 		public static IEnumerable<(string Term, int Offset)> GetTokens(this Analyzer analyzer, string field, string value)
 		{
-			if (string.IsNullOrEmpty(value))
+			if (String.IsNullOrEmpty(value))
 				yield break;
 
-			var tokenStream = analyzer.GetTokenStream(field ?? string.Empty, value);
+			var tokenStream = analyzer.GetTokenStream(field ?? String.Empty, value);
 
 			using (tokenStream)
 			{
@@ -81,12 +79,12 @@ namespace Mtgdb.Dal.Index
 
 		public static bool IsFloat(this string queryText)
 		{
-			return float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
+			return Single.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
 		}
 
 		public static bool IsInt(this string queryText)
 		{
-			return int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
+			return Int32.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
 		}
 
 		public static float? TryParseFloat(this BytesRef val)
@@ -118,18 +116,40 @@ namespace Mtgdb.Dal.Index
 		{
 			var s = bytes.Utf8ToString();
 			if (s.StartsWith("$"))
-				return int.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
+				return Int32.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
 
-			return int.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
+			return Int32.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
 		}
 
 		public static bool TryParseFloat(BytesRef bytes, out float f)
 		{
 			var s = bytes.Utf8ToString();
 			if (s.StartsWith("$"))
-				return float.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
+				return Single.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
 
-			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
+			return Single.TryParse(s, NumberStyles.Float, Str.Culture, out f);
+		}
+
+		public static void For(int min, int max, Action<int> action)
+		{
+			var options = ParallelOptions;
+
+			if (options.MaxDegreeOfParallelism > 1)
+				Parallel.For(min, max, options, action);
+			else
+				for (int i = min; i < max; i++)
+					action(i);
+		}
+
+		public static void ForEach<T>(IEnumerable<T> elements, Action<T> action)
+		{
+			var options = ParallelOptions;
+
+			if (options.MaxDegreeOfParallelism > 1)
+				Parallel.ForEach(elements, options, action);
+			else
+				foreach (var el in elements)
+					action(el);
 		}
 
 		private static readonly bool _useParallelism = false;
@@ -138,7 +158,7 @@ namespace Mtgdb.Dal.Index
 			? Math.Max(Environment.ProcessorCount - 1, 1)
 			: 1;
 
-		public static ParallelOptions ParallelOptions { get; } = new ParallelOptions
+		private static ParallelOptions ParallelOptions => new ParallelOptions
 		{
 			MaxDegreeOfParallelism = _maxParallelism
 		};

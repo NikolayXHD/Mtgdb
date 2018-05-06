@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -23,8 +22,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.36 keyword definitions
-			set => _version = new IndexVersion(value, "0.36");
+			// 0.37 fix dom legality
+			set => _version = new IndexVersion(value, "0.37");
 		}
 
 		public void InvalidateIndex()
@@ -66,7 +65,10 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		private static BooleanQuery toLuceneQuery(IEnumerable<KeywordQueryTerm> andTerms, IEnumerable<KeywordQueryTerm> orTerms, IEnumerable<KeywordQueryTerm> notTerms)
+		private static BooleanQuery toLuceneQuery(
+			IEnumerable<KeywordQueryTerm> andTerms,
+			IEnumerable<KeywordQueryTerm> orTerms,
+			IEnumerable<KeywordQueryTerm> notTerms)
 		{
 			var query = new BooleanQuery(disableCoord: true);
 
@@ -115,7 +117,7 @@ namespace Mtgdb.Dal
 					query.Add(queryTermOr, Occur.MUST);
 				}
 
-			if (query.Clauses.All(_=>_.IsProhibited))
+			if (query.Clauses.All(_ => _.IsProhibited))
 				query.Add(new MatchAllDocsQuery(), Occur.SHOULD);
 
 			return query;
@@ -135,11 +137,8 @@ namespace Mtgdb.Dal
 
 				var setKeywords = new CardKeywords[set.Cards.Count];
 
-				Parallel.For(0,
-					set.Cards.Count,
-					IndexUtils.ParallelOptions,
-					i => setKeywords[i] = set.Cards[i].GetKeywords());
-				
+				IndexUtils.For(0, set.Cards.Count, i => setKeywords[i] = set.Cards[i].GetKeywords());
+
 				keywordsList.AddRange(setKeywords);
 
 				SetsCount++;
@@ -150,11 +149,15 @@ namespace Mtgdb.Dal
 
 			var fsIndex = FSDirectory.Open(_version.Directory);
 			using (var writer = new IndexWriter(fsIndex, new IndexWriterConfig(LuceneVersion.LUCENE_48, new LowercaseKeywordAnalyzer())))
-				foreach (var keyword in keywordsList)
-				{
-					var doc = keyword.ToDocument();
-					writer.AddDocument(doc);
-				}
+			{
+				IndexUtils.ForEach(keywordsList,
+					keyword =>
+					{
+						var doc = keyword.ToDocument();
+						// ReSharper disable once AccessToDisposedClosure
+						writer.AddDocument(doc);
+					});
+			}
 
 			_version.SetIsUpToDate();
 

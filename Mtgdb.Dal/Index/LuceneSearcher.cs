@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -30,8 +29,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.36 keyword definitions
-			set => Version = new IndexVersion(value, "0.36");
+			// 0.37 fix dom legality
+			set => Version = new IndexVersion(value, "0.37");
 		}
 
 		public void LoadIndexes()
@@ -101,12 +100,7 @@ namespace Mtgdb.Dal.Index
 					IndexingProgress?.Invoke();
 				}
 
-				var parallelOptions = IndexUtils.ParallelOptions;
-				if (parallelOptions.MaxDegreeOfParallelism > 1)
-					Parallel.ForEach(_repo.SetsByCode.Values, parallelOptions, indexSet);
-				else
-					foreach (var set in _repo.SetsByCode.Values)
-						indexSet(set);
+				IndexUtils.ForEach(_repo.SetsByCode.Values, indexSet);
 
 				writer.Flush(triggerMerge: true, applyAllDeletes: false);
 				writer.Commit();
@@ -120,6 +114,8 @@ namespace Mtgdb.Dal.Index
 
 			return index;
 		}
+
+		
 
 		private MtgQueryParser createParser(string language)
 		{

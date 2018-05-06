@@ -109,6 +109,15 @@ namespace Mtgdb.Dal
 
 			ImageNamePatcher.Patch(card);
 
+			if (_patch.Cards.TryGetValue(card.SetCode, out var patch))
+				card.PatchCard(patch);
+
+			if (_patch.Cards.TryGetValue(card.NameEn, out patch))
+				card.PatchCard(patch);
+
+			if (_patch.Cards.TryGetValue(card.Id, out patch))
+				card.PatchCard(patch);
+
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
 			else
@@ -123,15 +132,6 @@ namespace Mtgdb.Dal
 				card.Supertypes = string.Intern(string.Join(" ", card.SupertypesArr));
 			else
 				card.Supertypes = string.Empty;
-
-			if (_patch.Cards.TryGetValue(card.SetCode, out var patch))
-				card.PatchCard(patch);
-
-			if (_patch.Cards.TryGetValue(card.NameEn, out patch))
-				card.PatchCard(patch);
-
-			if (_patch.Cards.TryGetValue(card.Id, out patch))
-				card.PatchCard(patch);
 
 			card.PowerNum = getPower(card.Power);
 			card.ToughnessNum = getPower(card.Toughness);

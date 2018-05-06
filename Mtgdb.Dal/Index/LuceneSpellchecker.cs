@@ -23,8 +23,8 @@ namespace Mtgdb.Dal.Index
 		{
 			get => Version.Directory.Parent();
 
-			// 0.36 keyword definitions
-			set => Version = new IndexVersion(value, "0.36");
+			// 0.37 fix dom legality
+			set => Version = new IndexVersion(value, "0.37");
 		}
 
 		public void InvalidateIndex()
@@ -99,8 +99,7 @@ namespace Mtgdb.Dal.Index
 				IndexingProgress?.Invoke();
 			}
 
-			var parallelOptions = IndexUtils.ParallelOptions;
-			Parallel.ForEach(tasks, parallelOptions, getContentToIndex);
+			IndexUtils.ForEach(tasks, getContentToIndex);
 
 			if (_abort)
 				return null;
@@ -131,7 +130,7 @@ namespace Mtgdb.Dal.Index
 				IndexingProgress?.Invoke();
 			}
 
-			Parallel.ForEach(indexedWordsByField, parallelOptions, indexField);
+			IndexUtils.ForEach(indexedWordsByField, indexField);
 
 			spellchecker.EndIndex(Version.Directory);
 

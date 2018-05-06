@@ -571,25 +571,37 @@ namespace Mtgdb.Dal
 
 
 
-		internal void PatchCard(CardPatch cardPatch)
+		internal void PatchCard(CardPatch patch)
 		{
-			if (cardPatch.Text != null)
+			if (patch.Text != null)
 			{
 				_textDeltaApplied = true;
-				TextEn = cardPatch.Text;
+				TextEn = patch.Text;
 			}
 
-			if (cardPatch.GeneratedMana != null)
-				GeneratedManaArr = cardPatch.GeneratedMana;
+			if (patch.GeneratedMana != null)
+				GeneratedManaArr = patch.GeneratedMana;
 
-			if (cardPatch.FlipDuplicate)
+			if (patch.FlipDuplicate)
 				Remove = TextEn != OriginalText;
 
-			if (cardPatch.MciNumber != null)
-				MciNumber = cardPatch.MciNumber;
+			if (patch.MciNumber != null)
+				MciNumber = patch.MciNumber;
 
-			if (cardPatch.Loyalty != null)
-				Loyalty = cardPatch.Loyalty;
+			if (patch.Loyalty != null)
+				Loyalty = patch.Loyalty;
+
+			if (patch.Type != null)
+				TypeEn = patch.Type;
+
+			if (patch.OriginalType != null)
+				OriginalType = patch.OriginalType;
+
+			if (patch.Types != null)
+				TypesArr = patch.Types;
+
+			if (patch.Subtypes != null)
+				SubtypesArr = patch.Subtypes;
 		}
 
 
