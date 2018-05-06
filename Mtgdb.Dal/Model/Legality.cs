@@ -22,6 +22,7 @@ namespace Mtgdb.Dal
 			"Un-Sets",
 			"Amonkhet Block",
 			"Battle for Zendikar Block",
+			"Dominaria Block",
 			"Ice Age Block",
 			"Innistrad Block",
 			"Ixalan Block",

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
@@ -515,62 +516,11 @@ namespace Mtgdb.Gui
 			if (string.IsNullOrEmpty(text))
 				return;
 
-			if (string.IsNullOrEmpty(text))
-				throw new ArgumentException();
-
-			text = text.Trim();
-
-			var (preProcessedText, type) = classifyPastedText(text);
+			var preProcessedText = _whitespacePattern.Replace(text, " ");
 
 			var source = getSearchInputState();
 			var token = EditedTokenLocator.GetTokenForArbitraryInsertion(source.Text, source.Caret);
-			pasteText(preProcessedText, type, source, token, positionCaretToNextValue: false);
-		}
-
-		private (string PreProcessedText, TokenType Type) classifyPastedText(string text)
-		{
-			var (fieldName, fieldValue) = parseCopiedFromTooltip(text);
-
-			if (fieldName != null)
-				return (GetFieldValueQuery(fieldName, fieldValue), TokenType.None);
-
-			if (TokenCatalog.TypeByValue.Keys.Any(text.Contains))
-				return (text, TokenType.None);
-
-			return (preProcessFieldValue(text), TokenType.FieldValue);
-		}
-
-		private static string preProcessFieldValue(string text)
-		{
-			string[] postfixes =
-			{
-				".jpg",
-				".xlhq",
-				".full"
-			};
-
-			foreach (var postfix in postfixes)
-				if (text.EndsWith(postfix, Str.Comparison))
-					text = text.Substring(0, text.Length - postfix.Length);
-
-			return getValueExpression(text);
-		}
-
-		private static (string FieldName, string FieldValue) parseCopiedFromTooltip(string text)
-		{
-			int endOfLine = text.IndexOf('\n');
-
-			if (endOfLine < 0)
-				return (null, null);
-
-			string fieldName = text.Substring(0, endOfLine).Trim();
-
-			if (!DocumentFactory.UserFields.Contains(fieldName))
-				return (null, null);
-
-			string fieldValue = text.Substring(endOfLine);
-
-			return (fieldName, fieldValue);
+			pasteText(preProcessedText, TokenType.None, source, token, positionCaretToNextValue: false);
 		}
 
 		private void pasteText(string value, TokenType type, TextInputState source, Token token, bool positionCaretToNextValue)
@@ -903,6 +853,8 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _viewCards;
 		private readonly MtgLayoutView _viewDeck;
 		private readonly SearchStringHighlighter _highligter;
+
+		private static readonly Regex _whitespacePattern = new Regex(@"\s+", RegexOptions.Compiled);
 
 		private readonly object _syncSuggest = new object();
 	}
