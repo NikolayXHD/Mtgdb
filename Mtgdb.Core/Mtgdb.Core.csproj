@@ -60,6 +60,8 @@
     <Compile Include="Bitmap\BitmapTransformationChain.cs" />
     <Compile Include="Bitmap\TransformationChain.cs" />
     <Compile Include="Collections\Array.cs" />
+    <Compile Include="Collections\Empty.cs" />
+    <Compile Include="Collections\F.cs" />
     <Compile Include="Collections\ListSegment.cs" />
     <Compile Include="Collections\ReadOnlyList.cs" />
     <Compile Include="Collections\Sequence.cs" />

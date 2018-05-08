@@ -78,5 +78,12 @@ namespace Mtgdb
 
 			return searchLeftResult;
 		}
+
+		public static IEnumerable<T> Enumerate<T>(this IEnumerator<T> enumerator)
+		{
+			using (enumerator)
+				while (enumerator.MoveNext())
+					yield return enumerator.Current;
+		}
 	}
 }

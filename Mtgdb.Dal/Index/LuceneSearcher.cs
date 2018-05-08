@@ -115,16 +115,10 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		
 
-		private MtgQueryParser createParser(string language)
-		{
-			return new MtgQueryParser(LuceneVersion.LUCENE_48, "*", _queryParserAnalyzer, _repo)
-			{
-				AllowLeadingWildcard = true,
-				Language = language
-			};
-		}
+
+		private MtgQueryParser createParser(string language) =>
+			new MtgQueryParser(LuceneVersion.LUCENE_48, "*", _queryParserAnalyzer, _repo, language);
 
 		/// <summary>
 		/// For test
@@ -137,6 +131,14 @@ namespace Mtgdb.Dal.Index
 			lock (_syncQueryParser)
 				query = parser.Parse(queryStr);
 
+			return SearchCards(query);
+		}
+
+		/// <summary>
+		/// For test
+		/// </summary>
+		internal IEnumerable<Card> SearchCards(Query query)
+		{
 			var searchResult = _searcher.Search(query, _indexReader.MaxDoc);
 
 			foreach (var scoreDoc in searchResult.ScoreDocs)
@@ -231,14 +233,14 @@ namespace Mtgdb.Dal.Index
 
 		private IReadOnlyList<string> getAnalyzedTokens(Token t, string queryStr)
 		{
-			if (t.IsPhrase && !t.IsPhraseStart)
+			if (t.Type.IsAny(TokenType.RegexBody))
+				return ReadOnlyList.From(t.Value);
+				
+			if (!t.Type.IsAny(TokenType.FieldValue))
 				return null;
 
-			if (!t.Type.IsAny(TokenType.FieldValue | TokenType.AnyChar | TokenType.RegexBody))
-				return null;
-
-			if (t.IsPhraseStart && !t.Type.IsAny(TokenType.FieldValue))
-				return null;
+			if (!t.IsPhrase || t.IsPhraseComplex || t.PhraseHasSlop)
+				return ReadOnlyList.From(StringEscaper.Unescape(t.Value));
 
 			string text = t.GetPhraseText(queryStr);
 

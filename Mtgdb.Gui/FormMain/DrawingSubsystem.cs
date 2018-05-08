@@ -445,8 +445,9 @@ namespace Mtgdb.Gui
 
 			foreach (var token in textualTokens)
 			{
-				getPattern(query, token, out string pattern, out var contextPatterns);
-
+				if (!getPattern(query, token, out string pattern, out var contextPatterns))
+					continue;
+				
 				addPattern(token.ParentField, pattern, patternsSet);
 
 				foreach (string contextPattern in contextPatterns)
@@ -576,29 +577,30 @@ namespace Mtgdb.Gui
 					}
 		}
 
-		private void getPattern(string query, Token token, out string result, out List<string> contextPatterns)
+		private bool getPattern(string query, Token token, out string result, out List<string> contextPatterns)
 		{
-			if (token.IsPhraseStart)
+			if (token.IsPhraseStart && !token.IsPhraseComplex)
 			{
 				var patternBuilder = new StringBuilder();
 				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
+				
 				result = patternBuilder.ToString();
 				contextPatterns = new List<string>();
-				return;
+				return true;
 			}
 
 			if (token.Type.IsAny(TokenType.RegexBody))
 			{
 				result = token.Value;
 				contextPatterns = new List<string>();
-				return;
+				return isValidRegex(result);
 			}
 
 			if (token.ParentField.IsNumericField())
 			{
 				result = @"\$?" + Regex.Escape(token.Value);
 				contextPatterns = new List<string>();
-				return;
+				return true;
 			}
 
 			var prefixTokens = getPrefixTokens(token);
@@ -645,6 +647,21 @@ namespace Mtgdb.Gui
 					tokenGroup.Skip(prefixTokens.Count + currentTokens.Count));
 
 				contextPatterns.Add(getPattern(prefixTokens, currentTokens, suffixTokens));
+			}
+
+			return true;
+		}
+
+		private static bool isValidRegex(string result)
+		{
+			try
+			{
+				var regex = new Regex(result);
+				return true;
+			}
+			catch (ArgumentException)
+			{
+				return false;
 			}
 		}
 

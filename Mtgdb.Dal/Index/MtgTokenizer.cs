@@ -56,10 +56,11 @@ namespace Mtgdb.Dal.Index
 				}
 
 				char c = _ioBuffer[_bufferIndex++];
+				bool isSignletoneWordChar = false;
 
-				if (c == '}')
+				if (MtgAplhabet.RightDelimitersSet.Contains(c))
 					return terminateToken(c);
-				else if (c == '{')
+				else if (MtgAplhabet.LeftDelimitersSet.Contains(c))
 				{
 					if (_length > 0)
 						return terminatePreviousToken();
@@ -70,9 +71,12 @@ namespace Mtgdb.Dal.Index
 							return flush();
 					}
 				}
-				else if (char.IsLetterOrDigit(c) || MtgAplhabet.WordCharsSet.Contains(c) || MtgAplhabet.SingletoneWordChars.Contains(c))
+				else if (
+					char.IsLetterOrDigit(c) || 
+					MtgAplhabet.WordCharsSet.Contains(c) || 
+					(isSignletoneWordChar = MtgAplhabet.IsSingletoneWordChar(c)))
 				{
-					if (c.IsCj() || MtgAplhabet.SingletoneWordChars.Contains(c))
+					if (isSignletoneWordChar)
 					{
 						if (_length > 0)
 							return terminatePreviousToken();

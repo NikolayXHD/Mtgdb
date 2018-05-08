@@ -346,6 +346,7 @@
     <None Include="Resources\chart_16.png" />
     <None Include="Resources\cant_be_countered.png" />
     <None Include="Resources\cant_be_regenerated.png" />
+    <None Include="Resources\cant_attack.png" />
     <Content Include="Resources\clone_32.png" />
     <Content Include="Resources\cmc6.png" />
     <Content Include="Resources\Cohort.png" />

@@ -82,6 +82,12 @@ namespace Mtgdb.Test
 				if (MtgAplhabet.WordCharsSet.Contains(c))
 					continue;
 
+				if (MtgAplhabet.LeftDelimitersSet.Contains(c))
+					continue;
+
+				if (MtgAplhabet.RightDelimitersSet.Contains(c))
+					continue;
+
 				if (MtgAplhabet.SingletoneWordChars.Contains(c))
 					continue;
 

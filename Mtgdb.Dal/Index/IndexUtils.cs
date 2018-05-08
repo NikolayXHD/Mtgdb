@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
@@ -15,10 +16,10 @@ namespace Mtgdb.Dal.Index
 	{
 		public static IEnumerable<(string Term, int Offset)> GetTokens(this Analyzer analyzer, string field, string value)
 		{
-			if (String.IsNullOrEmpty(value))
+			if (string.IsNullOrEmpty(value))
 				yield break;
 
-			var tokenStream = analyzer.GetTokenStream(field ?? String.Empty, value);
+			var tokenStream = analyzer.GetTokenStream(field ?? string.Empty, value);
 
 			using (tokenStream)
 			{
@@ -34,6 +35,14 @@ namespace Mtgdb.Dal.Index
 
 				tokenStream.End();
 			}
+		}
+
+		public static (string Term, int Offset, bool IsWildcard) ToUnescapedToken((string Term, int Offset) v) =>
+			(Term: v.Term, Offset: v.Offset, IsWildcard: false);
+
+		public static IEnumerable<(string Term, int Offset, bool IsWildcard)> GetUnescapedTokens(this Analyzer analyzer, string field, string escapedValue)
+		{
+			return GetTokens(analyzer, field, escapedValue).Select(ToUnescapedToken);
 		}
 
 		public static IEnumerable<BytesRef> ReadRawValuesFrom(this IndexReader reader, string field)
@@ -79,12 +88,12 @@ namespace Mtgdb.Dal.Index
 
 		public static bool IsFloat(this string queryText)
 		{
-			return Single.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
+			return float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
 		}
 
 		public static bool IsInt(this string queryText)
 		{
-			return Int32.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
+			return int.TryParse(queryText, NumberStyles.Integer, Str.Culture, out _);
 		}
 
 		public static float? TryParseFloat(this BytesRef val)
@@ -116,18 +125,18 @@ namespace Mtgdb.Dal.Index
 		{
 			var s = bytes.Utf8ToString();
 			if (s.StartsWith("$"))
-				return Int32.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
+				return int.TryParse(s.Substring(1), NumberStyles.Integer, Str.Culture, out f);
 
-			return Int32.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
+			return int.TryParse(s, NumberStyles.Integer, Str.Culture, out f);
 		}
 
 		public static bool TryParseFloat(BytesRef bytes, out float f)
 		{
 			var s = bytes.Utf8ToString();
 			if (s.StartsWith("$"))
-				return Single.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
+				return float.TryParse(s.Substring(1), NumberStyles.Float, Str.Culture, out f);
 
-			return Single.TryParse(s, NumberStyles.Float, Str.Culture, out f);
+			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
 		}
 
 		public static void For(int min, int max, Action<int> action)

@@ -10,9 +10,14 @@ namespace Mtgdb.Dal.Index
 			return (_equivalents.TryGet(c) ?? Enumerable.Empty<char>()).Append(c);
 		}
 
-		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("̈+-/_{}²½–—―−∞");
+		public static readonly HashSet<char> RightDelimitersSet = new HashSet<char>("}");
+		public static readonly HashSet<char> LeftDelimitersSet = new HashSet<char>("{");
+		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("²½_");
 
-		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>("!\"#$%&'()*:<=>?@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
+		public static bool IsSingletoneWordChar(char c) =>
+			SingletoneWordChars.Contains(c) || c.IsCj();
+
+		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>("+/∞-‑—–―−!\"#$%&'()*:<=>?@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
 
 		public const string CharPattern = ".";
 
@@ -22,9 +27,9 @@ namespace Mtgdb.Dal.Index
 
 			{ '‑', '-' },
 			{ '–', '-' },
+			{ '−', '-' },
 			{ '—', '-' },
 			{ '―', '-' },
-			{ '−', '-' },
 
 			{ 'µ', 'm' },
 			{ 'π', 'p' },
