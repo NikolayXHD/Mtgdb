@@ -40,20 +40,6 @@ namespace Mtgdb.Test
 			Assert.That(values, Does.Contain(expectedValue));
 		}
 
-		[Test]
-		public void TestSpanQuery()
-		{
-			var queries = new SpanQuery[]
-			{
-				new SpanTermQuery(new Term("texten", "energy")),
-				new SpanMultiTermQueryWrapper<WildcardQuery>(new WildcardQuery(new Term("texten", "counter*")))
-			};
-
-			var query = new SpanNearQuery(queries, 1, true);
-
-			var cards = Searcher.SearchCards(query).ToList();
-		}
-
 		[TestCase(@"Text: *absorb* AND NOT Keywords: absorb")]
 		[TestCase(@"Text: *activat* AND NOT Keywords: activate")]
 		[TestCase(@"Text: *affinity* AND NOT Keywords: affinity")]
@@ -65,8 +51,13 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *ascend* AND NOT Keywords: ascend AND NOT Name: (ascendant OR ascending OR ascendancy)")]
 		[TestCase(@"Text: (*attach* AND NOT unattach*) AND NOT Keywords: attach")]
 		[TestCase(@"Text: (*unattach*) AND NOT Keywords: unattach")]
+		
 		[TestCase(@"Text: (""/attacks?/ if able""~10 AND NOT ""/attacks?/ /block(s|ed)?/ if able""~10) AND NOT Keywords: ""attack if able""")]
+		[TestCase(@"Keywords: ""attack if able"" AND Text: (NOT (""/attacks?/ if able""~3 OR ""/attacks?/ (this OR next OR each) (turn OR combat) if able""~11))")]
+
 		[TestCase(@"Text: (""/block(s|ed)?/ if able""~10 OR ""able to block"" OR ""must be blocked""~3 OR ""must block""~3) AND NOT Keywords: ""block if able""")]
+		[TestCase(@"Keywords: ""block if able"" AND NOT Text: (""must be blocked"" OR ""/blocks?/ (if OR do) (able OR so)""~6)")]
+
 		[TestCase(@"Text: (aura* AND swap*) AND NOT Keywords: ""aura swap""")]
 		[TestCase(@"Text: *awaken* AND NOT Keywords: awaken AND NOT Name: ""Awaken the Sky Tyrant""")]
 		[TestCase(@"Text: *banding* AND NOT Keywords: banding")]
@@ -91,9 +82,15 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (*conspir* AND NOT conspiracy) AND NOT Keywords: conspire")]
 		[TestCase(@"Text: *convok* AND NOT Keywords: convoke")]
 		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia) AND NOT Keywords: copy")]
-		[TestCase("Text: (counter* AND NOT (counterclockwise OR \"can\'t be countered\" OR \"/counters?/ (from OR on OR put OR aren't)\" OR \"(\\+1\\/\\+1 OR \\-1\\/\\-1 OR \\-2\\/\\-1 OR get OR more OR crank OR get OR lore OR poison OR experience OR energy) /counters?/\")) AND NOT Keywords: counter")]
+		
+		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""counter* (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(\+ OR \-) /[0-9]/ /counters?/"" OR ""can't be countered"" OR ""(poison OR energy OR experience OR lore) /counters?/"")) AND NOT keywords: counter")]
+		[TestCase(@"Keywords: counter AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (/spells?/ OR /abilit(y|ies)/ OR instant OR creature)""~3) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
+
 		[TestCase(@"Text: (*creat* AND NOT *creature*) AND NOT Keywords: create")]
+		
 		[TestCase(@"Text: *crew* AND NOT Keywords: crew AND NOT Name: *crew*")]
+		[TestCase(@"Keywords: crew AND NOT Text: (""crew /[0-9]/"" OR ""crews a vehicle"")")]
+
 		[TestCase(@"Text: (cumulativ* AND upkeep*) AND NOT Keywords: ""cumulative upkeep""")]
 		[TestCase(@"Text: (*cycl* AND NOT (cyclo*)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler)")]
 		[TestCase(@"Text: *dash* AND NOT Keywords: dash AND NOT Name: (dash OR dasher)")]
@@ -106,10 +103,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *devoid* AND NOT Keywords: devoid")]
 		[TestCase(@"Text: *devour* AND NOT Keywords: devour AND NOT Name: devour*")]
 		[TestCase(@"Text: *discard* AND NOT Keywords: discard")]
-		[TestCase(@"")]
-		[TestCase(@"")]
-		[TestCase(@"")]
-		[TestCase(@"")]
+
 		[TestCase(@"")]
 		[TestCase(@"")]
 		[TestCase(@"")]

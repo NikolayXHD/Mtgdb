@@ -36,50 +36,113 @@ namespace Mtgdb.Dal.Index
 			return result;
 		}
 
-		protected override Query HandleQuotedTerm(string field, Token term, Token fuzzySlop)
+		protected override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
 		{
-			float slop = parseSlop(fuzzySlop);
-			string unquotedTerm = term.Image.Substring(1, term.Image.Length - 2);
+			string termImage = termToken.Image.Substring(1, termToken.Image.Length - 2);
 
-			if (Str.Equals(Like, field))
+			Query moreLikeFactory() => getMoreLikeQuery(termImage, slopToken);
+			(bool IsFloat, bool IsInt) numericTypeGetter() => getNumericTypes(termImage);
+			Query queryFactory(string fld, bool analyzed)
 			{
-				string unescapedTerm = StringEscaper.Unescape(unquotedTerm);
-				return getMoreLikeQuery(unescapedTerm, slop);
+				if (analyzed)
+					return base.HandleQuotedTerm(fld, termToken, slopToken);
+
+				var notAnalyzedQuery = GetFieldQuery(fld, termToken.Image.Substring(1, termToken.Image.Length - 2), true);
+				return notAnalyzedQuery;
 			}
 
-			return base.HandleQuotedTerm(localize(field), term, fuzzySlop);
+			var result = resolveField(field, moreLikeFactory, numericTypeGetter, queryFactory);
+			return result;
 		}
 
-		protected override Query HandleBareTokenQuery(string field, Token term, Token slop, bool prefix, bool wildcard, bool fuzzy, bool regexp)
-			=> base.HandleBareTokenQuery(localize(field), term, slop, prefix, wildcard, fuzzy, regexp);
+		protected override Query HandleBareTokenQuery(
+			string field,
+			Token termToken,
+			Token slopToken,
+			bool prefix,
+			bool wildcard,
+			bool fuzzy,
+			bool regexp)
+		{
+			(bool IsFloat, bool IsInt) numericTypesGetter()
+			{
+				if (prefix || wildcard || regexp || fuzzy)
+					return (false, false);
+
+				return getNumericTypes(termToken.Image);
+			}
+
+			Query moreLikeFactory()
+			{
+				if (prefix || wildcard || regexp || fuzzy)
+					return _matchNothingQuery;
+
+				return getMoreLikeQuery(termToken.Image, slopToken);
+			}
+
+			Query queryFactory(string fld, bool anazyed) => base.HandleBareTokenQuery(fld, termToken, slopToken, prefix, wildcard, fuzzy, regexp);
+
+			var result = resolveField(field, moreLikeFactory, numericTypesGetter, queryFactory);
+			return result;
+		}
+
+		protected override Query HandleBareFuzzy(string field, Token slopToken, string termImage)
+		{
+			Query moreLikeFactory() => _matchNothingQuery;
+			(bool IsFloat, bool IsInt) numericTypeGetter() => (false, false);
+			Query queryFactory(string fld, bool anazyed) => base.HandleBareFuzzy(fld, slopToken, termImage);
+
+			var result = resolveField(field, moreLikeFactory, numericTypeGetter, queryFactory);
+			return result;
+		}
+
+		protected override Query GetRangeQuery(
+			string field,
+			string part1,
+			string part2,
+			bool startInclusive,
+			bool endInclusive)
+		{
+			(bool IsFloat, bool IsInt) numericTypeGetter()
+			{
+				bool isFloat = 
+					(isValueFloat(part1) || _nonSpecifiedNubmer.Contains(part1)) && 
+					(isValueFloat(part2) || _nonSpecifiedNubmer.Contains(part2));
+
+				bool isInt = 
+					(isValueInt(part1) || _nonSpecifiedNubmer.Contains(part1)) && 
+					(isValueInt(part2) || _nonSpecifiedNubmer.Contains(part2));
+
+				return (isFloat, isInt);
+			}
+
+			Query moreLikeFactory() => _matchNothingQuery;
+			Query queryFactory(string fld, bool anazyed) => base.GetRangeQuery(fld, part1, part2, startInclusive, endInclusive);
+
+			var result = resolveField(field, moreLikeFactory, numericTypeGetter, queryFactory);
+			return result;
+		}
+
+		protected override Query NewRangeQuery(string field, string v1, string v2, bool v1Incl, bool v2Incl)
+		{
+			var query = (TermRangeQuery) base.NewRangeQuery(field, v1, v2, v1Incl, v2Incl);
+
+			if (field.IsFloatField())
+				return createRangeQuery<float>(field, query, IndexUtils.TryParseFloat,
+					NumericRangeQuery.NewSingleRange);
+
+			if (field.IsIntField())
+				return createRangeQuery<int>(field, query, IndexUtils.TryParseInt,
+					NumericRangeQuery.NewInt32Range);
+
+			return createRangeQuery(field, query);
+		}
+
 
 		protected override Query GetRegexpQuery(string field, string value)
 		{
-			if (string.IsNullOrEmpty(field) || field == AnyField)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in DocumentFactory.UserFields)
-				{
-					if (userField.IsNumericField())
-						continue;
-
-					var specificFieldQuery = GetRegexpQuery(userField, value);
-
-					if (specificFieldQuery != null)
-						result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
-
-				return result;
-			}
-
-			field = localize(field);
-
 			if (field.IsNumericField())
-				return null;
+				return _matchNothingQuery;
 
 			return base.GetRegexpQuery(field, value);
 		}
@@ -87,161 +150,46 @@ namespace Mtgdb.Dal.Index
 		protected override Query NewRegexpQuery(Term regexp) =>
 			new MtgRegexpQuery(regexp);
 
+
+
+		protected override Query GetComplexPhraseQuery(string field, Token fuzzySlop, string phrase)
+		{
+			if (field.IsNumericField())
+				return _matchNothingQuery;
+
+			return base.GetComplexPhraseQuery(field, fuzzySlop, phrase);
+		}
+
 		protected override Query GetFieldQuery(string field, string value, bool quoted)
 		{
-			if (Str.Equals(Like, field))
-				return getMoreLikeQuery(value, 0);
-
-			bool valueIsFloat = isValueFloat(value);
-			bool valueIsInt = isValueInt(value);
-
-			if (string.IsNullOrEmpty(field) || field == AnyField)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in DocumentFactory.UserFields)
-				{
-					if (!valueIsFloat && userField.IsFloatField())
-						continue;
-
-					if (!valueIsInt && userField.IsIntField())
-						continue;
-
-					var specificFieldQuery = GetFieldQuery(userField, value, quoted);
-
-					if (specificFieldQuery == null)
-						continue;
-
-					result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
-
-				return result;
-			}
-
 			if (field.IsFloatField())
-				return createRangeQuery<float>(field, value, IndexUtils.TryParseFloat, NumericRangeQuery.NewSingleRange);
+				return createRangeQuery<float>(field, value, IndexUtils.TryParseFloat,
+					NumericRangeQuery.NewSingleRange);
 
 			if (field.IsIntField())
-				return createRangeQuery<int>(field, value, IndexUtils.TryParseInt, NumericRangeQuery.NewInt32Range);
+				return createRangeQuery<int>(field, value, IndexUtils.TryParseInt,
+					NumericRangeQuery.NewInt32Range);
 
-			return base.GetFieldQuery(localize(field), value, quoted);
+			return base.GetFieldQuery(field, value, quoted);
 		}
 
 		protected override Query GetFieldQuery(string field, string value, int slop)
 		{
-			if (string.IsNullOrEmpty(field) || field == AnyField)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in DocumentFactory.UserFields)
-				{
-					if (userField.IsNumericField())
-						continue;
-
-					var specificFieldQuery = GetFieldQuery(userField, value, slop);
-
-					if (specificFieldQuery == null)
-						continue;
-
-					result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
-
-				return result;
-			}
-
-			return base.GetFieldQuery(localize(field), value, slop);
+			var result = base.GetFieldQuery(field, value, slop);
+			return result;
 		}
 
 
 
 		protected override Query GetFuzzyQuery(string field, string value, float minSimilarity)
 		{
-			if (Str.Equals(Like, field))
-				return getMoreLikeQuery(value, minSimilarity);
-
-			if (string.IsNullOrEmpty(field) || field == AnyField)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in DocumentFactory.UserFields)
-				{
-					if (userField.IsNumericField())
-						continue;
-
-					var specificFieldQuery = GetFuzzyQuery(userField, value, minSimilarity);
-
-					if (specificFieldQuery == null)
-						continue;
-
-					result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
-
-				return result;
-			}
-
 			minSimilarity = minSimilarity.WithinRange(0.001f, 0.999f);
-			return base.GetFuzzyQuery(localize(field), value, minSimilarity);
-		}
-
-		protected override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
-		{
-			bool valuesAreInt =
-				(isValueInt(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
-				(isValueInt(part2) || _nonSpecifiedNubmer.Contains(part2));
-
-			bool valuesAreFloat =
-				(isValueFloat(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
-				(isValueFloat(part2) || _nonSpecifiedNubmer.Contains(part2));
-
-			if (string.IsNullOrEmpty(field) || field == AnyField)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in DocumentFactory.UserFields)
-				{
-					if (userField.IsIntField() && !valuesAreInt)
-						continue;
-
-					if (userField.IsFloatField() && !valuesAreFloat)
-						continue;
-
-					var specificFieldQuery = GetRangeQuery(userField, part1, part2, startInclusive, endInclusive);
-
-					if (specificFieldQuery != null)
-						result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
-
-				return result;
-			}
-
-			var localizedField = localize(field);
-
-			var query = (TermRangeQuery) base.GetRangeQuery(localizedField, part1, part2, startInclusive, endInclusive);
-
-			if (localizedField.IsFloatField())
-				return createRangeQuery<float>(localizedField, query, IndexUtils.TryParseFloat, NumericRangeQuery.NewSingleRange);
-
-			if (localizedField.IsIntField())
-				return createRangeQuery<int>(localizedField, query, IndexUtils.TryParseInt, NumericRangeQuery.NewInt32Range);
-
-			return createRangeQuery(localizedField, query);
+			return base.GetFuzzyQuery(field, value, minSimilarity);
 		}
 
 		protected override Query GetPrefixQuery(string field, string value)
 		{
-			if (string.IsNullOrEmpty(field) || field == AnyField)
+			if (IsAnyField(field) && !IsPass2ResolvingPhrases)
 			{
 				var result = new BooleanQuery(disableCoord: true);
 
@@ -250,7 +198,7 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					var specificFieldQuery = GetPrefixQuery(userField, value);
+					var specificFieldQuery = base.GetPrefixQuery(userField, value);
 
 					if (specificFieldQuery == null)
 						continue;
@@ -264,12 +212,12 @@ namespace Mtgdb.Dal.Index
 				return result;
 			}
 
-			return base.GetPrefixQuery(localize(field), value);
+			return base.GetPrefixQuery(field, value);
 		}
 
 		protected override Query GetWildcardQuery(string field, string escapedValue)
 		{
-			if (string.IsNullOrEmpty(field) || field == AnyField)
+			if (IsAnyField(field) && !IsPass2ResolvingPhrases)
 			{
 				var result = new BooleanQuery(disableCoord: true);
 
@@ -278,7 +226,7 @@ namespace Mtgdb.Dal.Index
 					if (userField.IsNumericField())
 						continue;
 
-					var specificFieldQuery = GetWildcardQuery(userField, escapedValue);
+					var specificFieldQuery = base.GetWildcardQuery(userField, escapedValue);
 
 					if (specificFieldQuery == null)
 						continue;
@@ -300,33 +248,66 @@ namespace Mtgdb.Dal.Index
 			if (field.IsIntField() && !isValueInt(value))
 				return _matchNothingQuery;
 
-			return base.GetWildcardQuery(localize(field), escapedValue);
+			return base.GetWildcardQuery(field, escapedValue);
 		}
 
 
 
-		private static float parseSlop(Token fuzzySlop)
+		private Query resolveField(
+			string field,
+			Func<Query> moreLikeFactory,
+			Func<(bool IsFloat, bool IsInt)> numericTypeGetter,
+			QueryFactory queryFactory)
 		{
-			if (fuzzySlop == null)
-				return 0f;
+			if (Str.Equals(Like, field))
+				return moreLikeFactory();
 
-			if (fuzzySlop.Image.Length <= 1)
-				return 0f;
+			bool isAnalyzed(string userField) =>
+				!DocumentFactory.NotAnalyzedFields.Contains(userField);
 
-			float.TryParse(fuzzySlop.Image.Substring(1), NumberStyles.Float, Str.Culture, out var slop);
+			if (IsAnyField(field))
+			{
+				(bool valueIsFloat, bool valueIsInt) = numericTypeGetter();
 
-			return slop;
+				var result = new BooleanQuery(disableCoord: true);
+
+				foreach (var userField in DocumentFactory.UserFields)
+				{
+					if (!valueIsFloat && userField.IsFloatField())
+						continue;
+
+					if (!valueIsInt && userField.IsIntField())
+						continue;
+
+					var specificFieldQuery = queryFactory(localize(userField), isAnalyzed(userField));
+
+					if (specificFieldQuery == null)
+						continue;
+
+					result.Add(specificFieldQuery, Occur.SHOULD);
+				}
+
+				if (result.Clauses.Count == 0)
+					return _matchNothingQuery;
+				
+				return result;
+			}
+
+			return queryFactory(localize(field), isAnalyzed(field));
 		}
 
-		private Query getMoreLikeQuery(string queryText, float slop)
+		private Query getMoreLikeQuery(string termImage, Token slopToken)
 		{
-			if (string.IsNullOrEmpty(queryText))
+			string unescaped = StringEscaper.Unescape(termImage);
+			float slop = parseSlop(slopToken);
+
+			if (string.IsNullOrEmpty(unescaped))
 				return _matchNothingQuery;
 
 			if (!_repository.IsLoadingComplete)
 				return _matchNothingQuery;
 
-			string cardName = queryText.RemoveDiacritics();
+			string cardName = unescaped.RemoveDiacritics();
 			if (!_repository.CardsByName.TryGetValue(cardName, out var cards))
 				return _matchNothingQuery;
 
@@ -344,6 +325,19 @@ namespace Mtgdb.Dal.Index
 				return _matchNothingQuery;
 
 			return result;
+		}
+
+		private static float parseSlop(Token fuzzySlop)
+		{
+			if (fuzzySlop == null)
+				return 0f;
+
+			if (fuzzySlop.Image.Length <= 1)
+				return 0f;
+
+			float.TryParse(fuzzySlop.Image.Substring(1), NumberStyles.Float, Str.Culture, out var slop);
+
+			return slop;
 		}
 
 		private MoreLikeThisQuery createMoreLikeThisQuery(float slop, string value, string field)
@@ -367,6 +361,17 @@ namespace Mtgdb.Dal.Index
 			};
 		}
 
+
+
+		private static (bool IsFloat, bool IsInt) getNumericTypes(string termImage)
+		{
+			string value = StringEscaper.Unescape(termImage);
+			bool isFloat = isValueFloat(value);
+			bool isInt = isValueInt(value);
+
+			return (isFloat, isInt);
+		}
+
 		private static bool isValueFloat(string queryText)
 		{
 			return float.TryParse(queryText, NumberStyles.Float, Str.Culture, out _);
@@ -381,20 +386,32 @@ namespace Mtgdb.Dal.Index
 		{
 			var lowerValue = getRangeValue(query.LowerTerm);
 			var upperValue = getRangeValue(query.UpperTerm);
-			var result = TermRangeQuery.NewStringRange(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
+			var result = TermRangeQuery.NewStringRange(field, lowerValue, upperValue, query.IncludesLower,
+				query.IncludesUpper);
 			return result;
 		}
 
-		private static Query createRangeQuery<TVal>(string field, TermRangeQuery query, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory)
+
+
+		private static Query createRangeQuery<TVal>(
+			string field,
+			TermRangeQuery query,
+			Parser<TVal> parser,
+			RangeQueryFactory<TVal> rangeQueryFactory)
 			where TVal : struct, IComparable<TVal>
 		{
 			var lowerValue = getRangeValue(field, parser, query.LowerTerm);
 			var upperValue = getRangeValue(field, parser, query.UpperTerm);
-			var result = rangeQueryFactory(field, lowerValue, upperValue, query.IncludesLower, query.IncludesUpper);
+			var result = rangeQueryFactory(field, lowerValue, upperValue, query.IncludesLower,
+				query.IncludesUpper);
 			return result;
 		}
 
-		private static Query createRangeQuery<TVal>(string field, string queryText, Parser<TVal> parser, RangeQueryFactory<TVal> rangeQueryFactory)
+		private static Query createRangeQuery<TVal>(
+			string field,
+			string queryText,
+			Parser<TVal> parser,
+			RangeQueryFactory<TVal> rangeQueryFactory)
 			where TVal : struct, IComparable<TVal>
 		{
 			var value = getRangeValue(field, parser, new BytesRef(queryText));
@@ -436,9 +453,12 @@ namespace Mtgdb.Dal.Index
 			return field.GetFieldLocalizedIn(Language);
 		}
 
+		public static bool IsAnyField(string field)
+			=> string.IsNullOrEmpty(field) || field == AnyField;
 
 
-		public const string AnyField = "*";
+
+		private const string AnyField = "*";
 		public const string AnyValue = "*";
 
 		public const string Like = nameof(Like);
@@ -448,8 +468,15 @@ namespace Mtgdb.Dal.Index
 		private delegate bool Parser<TVal>(BytesRef value, out TVal result)
 			where TVal : struct;
 
-		private delegate Query RangeQueryFactory<TVal>(string field, TVal? lower, TVal? upper, bool includeLower, bool includeUpper)
+		private delegate Query RangeQueryFactory<TVal>(
+			string field,
+			TVal? lower,
+			TVal? upper,
+			bool includeLower,
+			bool includeUpper)
 			where TVal : struct, IComparable<TVal>;
+
+		private delegate Query QueryFactory(string field, bool isAnalyzed);
 
 		private static readonly HashSet<string> _nonSpecifiedNubmer = new HashSet<string>
 		{
@@ -460,7 +487,8 @@ namespace Mtgdb.Dal.Index
 		private static readonly Query _matchNothingQuery = new TermQuery(new Term("none", "*"));
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
-			Sequence.From("a", "an", "the").Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
+			Sequence.From("a", "an", "the")
+				.Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
 			Str.Comparer);
 
 		private readonly CardRepository _repository;

@@ -10,82 +10,82 @@ namespace Mtgdb.Dal
 	{
 		private static string cost(string name, string pattern = null, string customPattern = null)
 		{
-			var costKeywordPattern =
-				$"({pattern ?? name}{positiveLookahead(@" ?[\{—]")}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? pattern ?? name}|{customPattern ?? pattern ?? name}{positiveLookahead(KeywordOutroducers)})";
+			string normalForm = pattern ?? name;
+			string modifiedForm = customPattern ?? normalForm;
+
+			var costKeywordPattern = or(
+				before(normalForm, @" ?[\{—]"),
+				after(KeywordIntroducers, modifiedForm),
+				before(modifiedForm, KeywordOutroducers));
+
 			return custom(name, costKeywordPattern);
 		}
 
-		private static string count(string name, string customPattern = null)
+		private static string count(string name, string pattern = null, string customPattern = null)
 		{
-			customPattern = customPattern ?? name;
+			string normalForm = pattern ?? name;
+			string modifiedForm = customPattern ?? normalForm;
 
-			var countKeywordDefinition = $"({name}{positiveLookahead(ThenCount)}|{positiveLookbehind(KeywordIntroducers)}{customPattern ?? name})";
-			return custom(name, countKeywordDefinition);
+			var countKeywordPattern = or(
+				before(normalForm, CountSuffix),
+				after(KeywordIntroducers, modifiedForm),
+				before(modifiedForm, KeywordOutroducers));
+
+			return custom(name, countKeywordPattern);
 		}
 
-		private static string custom(
-			string name,
-			string custom = null,
-			string unlessBefore = null,
-			string unlessBeforeRaw = null,
-			string then = null,
-			string unlessAfter = null)
-		{
-			custom = custom ?? name;
+		private static string custom(string name, string pattern)
+			=> $"/{pattern}/ {name}";
 
-			string result = $"/{pattern(body: custom, unlessBefore: unlessBefore, unlessBeforeRaw: unlessBeforeRaw, then: then, unlessAfter: unlessAfter)}/ {name}";
-
-			return result;
-		}
-
-		private static string pattern(
-			string body = null,
-			string unlessBefore = null,
-			string unlessBeforeRaw = null,
-			string then = null,
-			string unlessAfter = null)
+		private static string bound(
+			string body,
+			string notBefore = null,
+			string before = null,
+			string notAfter = null)
 		{
 			var result = new StringBuilder();
 
-			result.Append("\\b");
-			if (unlessAfter != null)
-				result.Append(negativeLookbehind("\\b" + unlessAfter + " "));
+			if (notAfter != null)
+				result.Append("(?<!\\b").Append(notAfter).Append(" )");
 
-			result
-				.Append(body)
-				.Append(@"\b");
+			result.Append("\\b").Append(body).Append("\\b");
 
-			if (unlessBefore != null)
-				result.Append(negativeLookahead(' ' + unlessBefore + "\\b"));
+			if (notBefore != null)
+				result.Append("(?! ").Append(notBefore).Append("\\b)");
 
-			if (unlessBeforeRaw != null)
-				result.Append(negativeLookahead(unlessBeforeRaw));
-
-			if (then != null)
-				result.Append(positiveLookahead(' ' + then + "\\b"));
+			if (before != null)
+				result.Append("(?= ").Append(before).Append("\\b)");
 
 			return result.ToString();
 		}
 
 		private static string cant(params string[] patterns) =>
-			sequence(Sequence.From("can't").Concat(patterns), without: Array.From("can", "unless"));
+			sequence(Sequence.From("can't").Concat(patterns), without: "can|unless");
 
 		private static string or(params string[] patterns)
-		{
-			return "(" + string.Join("|", patterns) + ")";
-		}
+			=> "(" + string.Join("|", patterns) + ")";
+
+		private static string optional(string pattern)
+			=> $"({pattern})?";
 
 		private static string sequence(params string[] patterns) =>
-			sequence(patterns, Array.Empty<string>());
+			sequence(patterns, null);
 
-		private static string sequence(IEnumerable<string> patterns, string[] without)
+		private static string sequenceWithout(string without, params string[] patterns) =>
+			sequence(patterns, without);
+
+		private static string sequence(IEnumerable<string> patterns, string without)
 		{
 			string separator = @"[\s\p{P}-[\.]]+";
 			string word = @"[^\s\p{P}]+";
 
 			var patternsArr = patterns.ToArray();
+			var notFillers = (IEnumerable<string>) patternsArr;
 
-			string notFiller = string.Join("|", patternsArr.Concat(without));
+			if (without != null)
+				notFillers = notFillers.Append(without);
+
+			string notFiller = string.Join("|", notFillers);
 			string fillers = $"(?(?={separator}({notFiller}))(?!)|{separator}{word})*";
 
 			var builder = new StringBuilder();
@@ -99,26 +99,17 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		private static string positiveLookbehind(string pattern)
-		{
-			return "(?<=" + pattern + ")";
-		}
+		private static string after(string condition, string pattern)
+			=> $"(?<={condition}){pattern}";
 
-		private static string negativeLookbehind(string pattern)
-		{
-			return "(?<!" + pattern + ")";
-		}
+		private static string notAfter(string condition, string pattern)
+			=> $"(?<!{condition}){pattern}";
 
-		private static string positiveLookahead(string pattern)
-		{
-			return "(?=" + pattern + ")";
-		}
+		private static string before(string pattern, string condition)
+			=> $"{pattern}(?={condition})";
 
-		private static string negativeLookahead(string pattern)
-		{
-			return "(?!" + pattern + ")";
-		}
-
+		private static string notBefore(string pattern, string condition)
+			=> $"{pattern}(?!{condition})";
 
 
 		private static Func<string, Regex>[] PatternFactories { get; } =
@@ -243,104 +234,99 @@ namespace Mtgdb.Dal
 		public static readonly string[] Keywords =
 		{
 			count("Annihilator"),
-
-			custom("Attack if able", sequence(
-				Sequence.From(@"(?<!\bcan't )attacks?( or blocks?)?\b", "if able"),
-				without: Array.From(@"block(s|ed)?\b"))),
-
+			custom("Attack if able",
+				bound(sequenceWithout(@"block(s|ed)?\b",
+					@"(?<!\bcan't )attacks?( or blocks?)?\b", "if able"))),
 			count("Awaken"),
-
 			custom("Block if able",
-				"(" +
-				"must be blocked" +
-				"|" +
-				sequence("able to\\b", "block\\b", "do (it|so)") +
-				"|" +
-				sequence(
-					Sequence.From(@"(?<!\bcan't )(attacks? or )?block(s|ed)?\b", "if able"),
-					without: Array.From(@"attacks?\b")) +
-				")"),
-
-			custom("Can't attack", or(cant("attack"), cant("be", "attacked"))),
-			custom("Can't be blocked", cant("be", "blocked"), unlessAfter: "this spell works on creatures that"),
-			custom("Can't be countered", cant("be", "countered")),
-			custom("Can't be regenerated", cant("be", "regenerated")),
-			custom("Can't block", cant("block")),
-
+				bound(or(
+					sequenceWithout(@"attacks?\b",
+						@"(?<!\bcan't )(attacks? or )?block(s|ed)?\b", "if able"),
+					sequence("able to\\b", "block\\b", "do (it|so)"),
+					"must be blocked"))),
+			custom("Can't attack", bound(or(cant("attack"), cant("be", "attacked")))),
+			custom("Can't be blocked", bound(cant("be", "blocked"),
+				notAfter: "this spell works on creatures that")),
+			custom("Can't be countered", bound(cant("be", "countered"))),
+			custom("Can't be regenerated", bound(cant("be", "regenerated"))),
+			custom("Can't block", bound(cant("block"))),
 			cost("Cohort"),
-
-			custom("Copy", "cop(y|ies)"),
-
-			custom("Counter", custom: 
-				@"(?<!\bcan't be )countered|counters?(?! (from|on|put|aren't)\b)(?= (it|target|phantasmagorian|temporal extortion|brain gorgers|[^\.]*\b(spells?|abilit(y|ies)))\b)"),
-
-			custom("Deathtouch", "(un)?deathtouch"),
-
-			custom("Defender", unlessBefore: "(en\\-vec|of the order)", unlessAfter: "(shu|sworn)"),
-			
+			custom("Copy", bound("cop(y|ies)")),
+			custom("Counter", bound(or(
+				notAfter(@"""|(\-|\+)\d ", or(
+					sequenceWithout(
+						@"(cop(y|ies)|activates?|casts?|plays?|search(es)?)\b",
+						notBefore("counters?", " on"), "(spells?|abilit(y|ies))"),
+					before("counters?", " (it|phantasmagorian|temporal extortion|brain gorgers)"))),
+				notAfter("can't be ", "countered")))),
+			custom("Deathtouch", bound("(un)?deathtouch")),
+			custom("Defender", bound("defender",
+				notBefore: "(en\\-vec|of the order)",
+				notAfter: "(shu|sworn)")),
 			"Delirium",
-			
-			custom("Discard",
-				custom: "discard(s|ed|ing)?",
-				unlessBefore: @"it into exile"),
-			
-			custom("Doesn't untap", "(doesn|can|don)'t untap"),
-			
+			custom("Discard", bound("discard(s|ed|ing)?", notBefore: @"it into exile")),
+			custom("Doesn't untap", bound("(doesn|can|don)'t untap")),
 			"Double Strike",
-			
-			custom("Draw", "draws?", unlessBefore: "step", then: @"[^\.]*\bcards?"),
-			
+			custom("Draw", bound("draws?", notBefore: "step", before: @"[^\.]*\bcards?")),
 			"Enchant",
-			
 			cost("Equip"),
-			custom("Exile", "exiles?", unlessBefore: "into darkness", unlessAfter: "tel\\-jilad"),
-			custom("First Strike", unlessAfter: "deals combat damage before creatures without"),
-			custom("Flash", unlessBefore: "(conscription|foliage|of Insight)", unlessAfter: "aether"),
-			custom("Flying", unlessAfter: "(can block|except by) creatures with"),
-			custom("Gain control", "gains? control"),
+			custom("Exile", bound("exiles?", notBefore: "into darkness", notAfter: "tel\\-jilad")),
+			custom("First Strike", bound("first strike",
+				notAfter: "deals combat damage before creatures without")),
+			custom("Flash", bound("flash",
+				notBefore: "(conscription|foliage|of Insight)",
+				notAfter: "aether")),
+			custom("Flying", bound("Flying", notAfter: "(can block|except by) creatures with")),
+			custom("Gain control", bound("gains? control")),
 			"Haste",
 			"Hexproof",
-			custom("Indestructible", unlessBefore: "can't be destroyed by damage"),
+			custom("Indestructible", bound("indestructible", notBefore: "can't be destroyed by damage")),
 			"Ingest",
-			custom("Intimidate", unlessBefore: "can't be blocked except"),
+			custom("Intimidate", bound("intimidate", notBefore: "can't be blocked except")),
 			"Lifelink",
 			cost("Madness"),
 			"Menace",
 			"Prowess",
-			custom("Rally", then: "— ?"),
-			custom("Reach", unlessBefore: "of Branches", unlessAfter: "(except by creatures with flying or|geier|myojin of night's)"),
+			custom("Rally", bound("rally", before: "— ?")),
+			custom("Reach", bound("reach",
+				notBefore: "of Branches",
+				notAfter: "(except by creatures with flying or|geier|myojin of night's)")),
 			"Regenerate",
-			count("Renown", customPattern: pattern(body: "renowned", unlessBefore: "weaver", unlessAfter: "if it isn't")),
+			count("Renown", customPattern: bound("renowned",
+				notBefore: "weaver",
+				notAfter: "if it isn't")),
 			"Scry",
 			"Shroud",
-			custom("Skulk", unlessBeforeRaw: @"\bpit-"),
+			custom("Skulk", bound("skulk", notAfter: "pit-")),
 			cost("Surge"),
 			"Trample",
-			custom("Transform", "transform(s|ed)?"),
-			custom("Undying", unlessBefore: "(beast|rage|flames|partisan)"),
+			custom("Transform", bound("transform(s|ed)?")),
+			custom("Undying", bound("undying", notBefore: "(beast|rage|flames|partisan)")),
 			"Vigilance",
+
 			null,
+
 			count("Absorb"),
-			custom("Affinity", then: "for"),
+			custom("Affinity", bound("affinity", before: "for")),
 			count("Afflict"),
 			"Aftermath",
 			count("Amplify"),
 			"Ascend",
 			cost("Aura Swap"),
-			custom("Banding", unlessAfter: "any creatures with"),
+			custom("Banding", bound("banding", notAfter: "any creatures with")),
 			"Battle Cry",
 			cost("Bestow"),
-			custom("Bloodrush", then: "—"),
+			custom("Bloodrush", bound("bloodrush", before: "—")),
 			count("Bloodthirst"),
 			count("Bushido"),
 			"Buyback",
-			custom("Cascade", unlessAfter: "skyline"),
-			custom("Champion", then: "an?"),
+			custom("Cascade", bound("cascade", notAfter: "skyline")),
+			custom("Champion", bound("champion", before: "an?")),
 			"Changeling",
 			"Cipher",
 			"Conspire",
 			"Convoke",
-			custom("Crew", $@"\b(crews?(?={ThenCount}|( a)? vehicles?)\b)\b"),
+			count("crew", customPattern: "crews?"),
 			cost("Cumulative Upkeep"),
 			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
 			cost("Dash"),
@@ -353,77 +339,86 @@ namespace Mtgdb.Dal
 			cost("Embalm"),
 			cost("Emerge"),
 			cost("Entwine"),
-			custom("Epic", unlessAfter: "copy this spell except for its"),
+			custom("Epic", bound("epic", notAfter: "copy this spell except for its")),
 			cost("Escalate"),
 			cost("Eternalize"),
 			cost("Evoke"),
 			"Evolve",
-			custom("Exalted", unlessBefore: "(dragon|angel)", unlessAfter: "instances? of"),
+			custom("Exalted", bound("exalted", notBefore: "(dragon|angel)", notAfter: "instances? of")),
 			"Exploit",
 			"Extort",
 			count("Fabricate"),
 			count("Fading"),
-			custom("Fear", unlessAfter: "Shinen of"),
-			custom("Flanking", unlessBefore: "troops", unlessAfter: "whenever a creature without"),
-			custom("Flashback", unlessBefore: "cost"),
+			custom("Fear", bound("fear", notAfter: "Shinen of")),
+			custom("Flanking", bound("flanking",
+				notBefore: "troops",
+				notAfter: "whenever a creature without")),
+			custom("Flashback", bound("flashback", notBefore: "cost")),
 			cost("Forecast"),
-			custom("Fortify", unlessBefore: "only as a sorcery"),
+			custom("Fortify", bound("fortify", notBefore: "only as a sorcery")),
 			count("Frenzy"),
-			custom("Fuse", unlessBefore: "counters?"),
-			custom("Goad", "goad(s|ed)?"),
+			custom("Fuse", bound("fuse", notBefore: "counters?")),
+			custom("Goad", bound("goad(s|ed)?")),
 			count("Graft"),
 			"Gravestorm",
 			"Haunt",
 			"Hidden Agenda",
 			"Hideaway",
-			custom("Horsemanship", unlessAfter: "can't be blocked except by creatures with"),
+			custom("Horsemanship", bound("horsemanship",
+				notAfter: "can't be blocked except by creatures with")),
 			"Improvise",
-			custom("Infect", unlessBefore: "deal damage to creatures in the form", unlessAfter: "damage dealt by sources without"),
+			custom("Infect", bound("infect",
+				notBefore: "deal damage to creatures in the form",
+				notAfter: "damage dealt by sources without")),
 			cost("Kicker", pattern: "(multi)?kick(er|ed|s)"),
-			custom("Landwalk", "((snow(\\-covered)?|(non)?basic|legendary) )?(land|denim|desert|plains|forest|swamp|mountain|island)walk"),
+			custom("Landwalk", bound(
+				optional("(snow(\\-covered)?|(non)?basic|legendary) ") +
+				"(land|denim|desert|plains|forest|swamp|mountain|island)walk")),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
 			"Mountainwalk",
 			"Islandwalk",
-			custom("Level Up", "level (up|counter)", unlessBefore: "only as a sorcery"),
+			custom("Level Up", bound("level (up|counter)", notBefore: "only as a sorcery")),
 			"Living Weapon",
-			custom("Melee", unlessAfter: "cast"),
+			custom("Melee", bound("melee", notAfter: "cast")),
 			cost("Miracle"),
 			count("Modular"),
 			cost("Morph", pattern: "(mega)?morph"),
-			custom("Myriad", unlessBefore: "landscape"),
+			custom("Myriad", bound("myriad", notBefore: "landscape")),
 			cost("Ninjutsu"),
-			custom("Offering", unlessAfter: "(volcanic|yawgmoth's vile|death pit|burnt)"),
+			custom("Offering", bound("offering", notAfter: "(volcanic|yawgmoth's vile|death pit|burnt)")),
 			cost("Outlast"),
 			cost("Overload"),
-			custom("Partner", unlessAfter: "if both have"),
+			custom("Partner", bound("partner", notAfter: "if both have")),
 			"Persist",
 			"Phasing",
 			count("Poisonous"),
-			custom("Protection", unlessAfter: "(circle of|teferi's)"),
+			custom("Protection", bound("protection", notAfter: "(circle of|teferi's)")),
 			"Provoke",
 			cost("Prowl"),
 			count("Rampage"),
 			"Rebound",
 			cost("Recover"),
 			count("Reinforce"),
-			custom("Replicate", unlessBefore: "cost"),
+			custom("Replicate", bound("replicate", notBefore: "cost")),
 			"Retrace",
 			count("Ripple"),
-			custom("Scavenge", unlessBefore: "(only as a sorcery|cost)"),
-			custom("Shadow",
-				unlessBefore: "guildmage",
-				unlessAfter: "(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)"),
+			custom("Scavenge", bound("scavenge", notBefore: "(only as a sorcery|cost)")),
+			custom("Shadow", bound("shadow",
+				notBefore: "guildmage",
+				notAfter:
+				"(can block or be blocked by only creatures with|nether|shifting|dragon|perilous|death's|elves of deep)")),
 			"Soulbond",
 			count("Soulshift"),
 			cost("Splice onto Arcane", customPattern: "splice(d|s) onto"),
 			"Split Second",
-			custom("Storm",
-				unlessBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",
-				unlessAfter: "(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)"),
+			custom("Storm", bound("storm",
+				notBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",
+				notAfter:
+				"(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)")),
 			"Sunburst",
-			custom("Suspend", "suspend(s|ed)?"),
+			custom("Suspend", bound("suspend(s|ed)?")),
 			"Totem Armor",
 			cost("Transfigure"),
 			cost("Transmute"),
@@ -431,26 +426,25 @@ namespace Mtgdb.Dal
 			"Undaunted",
 			cost("Unearth", pattern: "unearth(s|ed)?"),
 			"Unleash",
-			custom("Vanishing", unlessBefore: "touch"),
+			custom("Vanishing", bound("vanishing", notBefore: "touch")),
 			"Wither",
-
-			custom("Activate", "activat(e(s|d)?|i(ng|on))"),
-			custom("Attach", "attach(es|ed)?"),
-			custom("Unattach", "unattach(es|ed)?"),
-			custom("Cast", "cast(s|ing)?"),
-			custom("Create", "create(s|d)?"),
-			custom("Destroy", "destroy(s|ed)?"),
-			custom("Exchange", "exchange(s|d)?"),
-			custom("Fight", "fight(s|ed)?"),
-			custom("Play", "play(s|ed)?"),
-			custom("Reveal", "reveal(s|ed)?"),
-			custom("Sacrifice", "sacrifice(s|d)?"),
-			custom("Search", "search(es|ed)?"),
-			custom("Shuffle", "shuffle(s|d)?"),
-			custom("Tap", "tap(s|ped)?"),
-			custom("Untap", "untap(s|ped)?"),
-			custom("Bury", "bur(y|ies|ied)", unlessBefore: "ruin"),
-			custom("Ante", "ante(s|d)?")
+			custom("Activate", bound("activat(e(s|d)?|i(ng|on))")),
+			custom("Attach", bound("attach(es|ed)?")),
+			custom("Unattach", bound("unattach(es|ed)?")),
+			custom("Cast", bound("cast(s|ing)?")),
+			custom("Create", bound("create(s|d)?")),
+			custom("Destroy", bound("destroy(s|ed)?")),
+			custom("Exchange", bound("exchange(s|d)?")),
+			custom("Fight", bound("fight(s|ed)?")),
+			custom("Play", bound("play(s|ed)?")),
+			custom("Reveal", bound("reveal(s|ed)?")),
+			custom("Sacrifice", bound("sacrifice(s|d)?")),
+			custom("Search", bound("search(es|ed)?")),
+			custom("Shuffle", bound("shuffle(s|d)?")),
+			custom("Tap", bound("tap(s|ped)?")),
+			custom("Untap", bound("untap(s|ped)?")),
+			custom("Bury", bound("bur(y|ies|ied)", notBefore: "ruin")),
+			custom("Ante", bound("ante(s|d)?"))
 		};
 
 		public static readonly string[] Rarity =
@@ -500,11 +494,17 @@ namespace Mtgdb.Dal
 			nameof(GeneratedMana)
 		};
 
-		private const string KeywordIntroducers = @"\b(you|teammate|opponent|player|was|were|is|are|it's|they're|ha(s|d|ve)|gain(s|ed)?|can't|activate(s|d)?|with) ";
-		private const string KeywordOutroducers = @" (abilit(y|ies)|costs?|(a|any|this|these|that|those)?(spells?|permanents?))\b";
-		private const string ThenCount = @"( (\d+|x)| ?— ?sunburst)\b";
+		private const string KeywordIntroducers =
+			@"\b(you|teammate|opponent|player|was|were|is|are|it's|they're|ha(s|d|ve)|gain(s|ed)?|can't|activate(s|d)?|with) ";
+
+		private const string KeywordOutroducers =
+			@" (abilit(y|ies)|costs?|(a|any|this|these|that|those)? (spells?|permanents?|vehicles?))\b";
+
+		private const string CountSuffix = @"( (\d+|x)\b| ?— ?sunburst)";
 
 		private static readonly int _keywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
-		public static Dictionary<string, Regex> KeywordPatternsByValue => PatternsByDisplayText[_keywordsIndex];
+
+		public static Dictionary<string, Regex> KeywordPatternsByValue
+			=> PatternsByDisplayText[_keywordsIndex];
 	}
 }

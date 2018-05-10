@@ -121,7 +121,7 @@ namespace Mtgdb.Dal.Index
 		{
 			var ngramQuery = createNgramsQuery(word);
 
-			if (string.IsNullOrEmpty(field) || field == MtgQueryParser.AnyField)
+			if (MtgQueryParser.IsAnyField(field))
 				return ngramQuery;
 
 			var queryDiscriminant = new TermQuery(new Term(DiscriminantField, field));

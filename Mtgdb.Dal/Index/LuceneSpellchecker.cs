@@ -153,14 +153,14 @@ namespace Mtgdb.Dal.Index
 			string userField = token.ParentField ?? string.Empty;
 
 			bool isFieldInvalid =
-				!string.IsNullOrEmpty(userField) &&
-				!Str.Equals(MtgQueryParser.AnyField, userField) &&
+				!MtgQueryParser.IsAnyField(userField) &&
 				!DocumentFactory.UserFields.Contains(userField);
 
 			if (!userField.IsSuggestAnalyzedIn(language))
 				token = token.PhraseStart ?? token;
 
-			string valuePart = StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position));
+			string valuePart =
+				StringEscaper.Unescape(query.Substring(token.Position, caret - token.Position));
 
 			if (token.Type.IsAny(TokenType.FieldValue | TokenType.Wildcard))
 			{
@@ -168,7 +168,7 @@ namespace Mtgdb.Dal.Index
 
 				if (isFieldInvalid || string.IsNullOrEmpty(userField) && string.IsNullOrEmpty(valuePart))
 					valueSuggest = _emptyList;
-				else if (string.IsNullOrEmpty(userField) || Str.Equals(userField, MtgQueryParser.AnyField))
+				else if (MtgQueryParser.IsAnyField(userField))
 					valueSuggest = suggestAllFieldValues(valuePart, language);
 				else
 					valueSuggest = suggestValues(userField, language, valuePart);
@@ -209,8 +209,7 @@ namespace Mtgdb.Dal.Index
 			string userField = token.ParentField ?? string.Empty;
 
 			bool isFieldInvalid =
-				!string.IsNullOrEmpty(userField) &&
-				!Str.Equals(MtgQueryParser.AnyField, userField) &&
+				!MtgQueryParser.IsAnyField(userField) &&
 				!DocumentFactory.UserFields.Contains(userField);
 
 			if (isFieldInvalid)
@@ -233,7 +232,8 @@ namespace Mtgdb.Dal.Index
 			if (allValues.Count == 0)
 				return null;
 
-			var currentIndex = allValues.BinarySearchLastIndexOf(str => Str.Comparer.Compare(str, currentValue) <= 0);
+			var currentIndex =
+				allValues.BinarySearchLastIndexOf(str => Str.Comparer.Compare(str, currentValue) <= 0);
 
 			int increment = backward ? -1 : 1;
 			var nextIndex = currentIndex + increment;
@@ -309,7 +309,9 @@ namespace Mtgdb.Dal.Index
 
 
 
-		private static IEnumerable<string> getNumericallySimilarValues(IReadOnlyList<string> cache, string value) =>
+		private static IEnumerable<string> getNumericallySimilarValues(
+			IReadOnlyList<string> cache,
+			string value) =>
 			cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
 
 		private IReadOnlyList<string> getValuesCache(string userField, string lang)
@@ -392,7 +394,8 @@ namespace Mtgdb.Dal.Index
 		public int MaxCount
 		{
 			get => _allTokensAreValues.Count;
-			set => _allTokensAreValues = Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToReadOnlyList();
+			set => _allTokensAreValues =
+				Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToReadOnlyList();
 		}
 
 		internal IndexVersion Version { get; set; }
@@ -435,6 +438,7 @@ namespace Mtgdb.Dal.Index
 
 		private readonly CardRepository _repo;
 
-		private static readonly IReadOnlyList<string> _emptyList = Enumerable.Empty<string>().ToReadOnlyList();
+		private static readonly IReadOnlyList<string> _emptyList =
+			Enumerable.Empty<string>().ToReadOnlyList();
 	}
 }
