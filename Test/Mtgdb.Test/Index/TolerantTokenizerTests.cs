@@ -1,4 +1,5 @@
 using Lucene.Net.Contrib;
+using Mtgdb.Dal.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -32,7 +33,7 @@ namespace Mtgdb.Test
 		{
 			Log.Debug(queryStr);
 
-			var parser = new TolerantTokenizer(queryStr);
+			var parser = new MtgTolerantTokenizer(queryStr);
 			parser.Parse();
 
 			if (parser.SyntaxErrors.Count > 0)

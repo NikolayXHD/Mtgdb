@@ -17,7 +17,7 @@ namespace Mtgdb.Dal.Index
 		public static bool IsSingletoneWordChar(char c) =>
 			SingletoneWordChars.Contains(c) || c.IsCj();
 
-		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>("+/∞-‑—–―−!\"#$%&'()*:<=>?@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
+		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>(".?!:;+/∞-‑—–―−\"#$%&'()*=@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
 
 		public const string CharPattern = ".";
 

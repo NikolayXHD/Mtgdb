@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
+using Mtgdb.Dal.Index;
 
 namespace Mtgdb.Gui
 {
@@ -25,7 +26,7 @@ namespace Mtgdb.Gui
 			var start = _findEditor.SelectionStart;
 			var len = _findEditor.SelectionLength;
 			
-			var tokenizer = new TolerantTokenizer(_findEditor.Text);
+			var tokenizer = new MtgTolerantTokenizer(_findEditor.Text);
 			tokenizer.Parse();
 
 			setColor(0, _findEditor.TextLength, Color.Black, false);

@@ -160,6 +160,11 @@ namespace Mtgdb.Dal.Index
 			return base.GetComplexPhraseQuery(field, fuzzySlop, phrase);
 		}
 
+		protected override ComplexPhraseQuery NewComplexPhraseQuery(string qfield, string phrase, int slop, bool inOrder)
+		{
+			return new RewriteableComplexPhraseQuery(qfield, phrase, slop, inOrder);
+		}
+
 		protected override Query GetFieldQuery(string field, string value, bool quoted)
 		{
 			if (field.IsFloatField())

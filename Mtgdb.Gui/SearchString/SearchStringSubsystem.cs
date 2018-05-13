@@ -519,7 +519,7 @@ namespace Mtgdb.Gui
 			var preProcessedText = _whitespacePattern.Replace(text, " ");
 
 			var source = getSearchInputState();
-			var token = EditedTokenLocator.GetTokenForArbitraryInsertion(source.Text, source.Caret);
+			var token = new MtgTolerantTokenizer(source.Text).GetTokenForArbitraryInsertion(source.Caret);
 			pasteText(preProcessedText, TokenType.None, source, token, positionCaretToNextValue: false);
 		}
 
@@ -534,7 +534,7 @@ namespace Mtgdb.Gui
 				(left, length) = (source.Caret, source.SelectionLength);
 			else
 			{
-				if (type == TokenType.FieldValue && token.IsPhrase || isValuePhrase)
+				if (type == TokenType.FieldValue && token.IsPhrase && !token.ParentField.IsSuggestAnalyzedIn(getLanguage()) || isValuePhrase)
 					(start, end) = (token.PhraseOpen, token.PhraseClose);
 				else
 					(start, end) = (token, token);
@@ -746,7 +746,7 @@ namespace Mtgdb.Gui
 				removeQueryFromInput(queryStartIndex, query, source);
 			else
 			{
-				var token = EditedTokenLocator.GetTokenForTermInsertion(source.Text, source.Caret);
+				var token = new MtgTolerantTokenizer(source.Text).GetTokenForTermInsertion(source.Caret);
 				pasteText(query, TokenType.None, source, token, positionCaretToNextValue: true);
 			}
 

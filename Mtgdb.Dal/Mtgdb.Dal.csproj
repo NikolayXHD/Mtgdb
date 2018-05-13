@@ -102,6 +102,8 @@
     <Compile Include="Index\MtgRegexpQuery.cs" />
     <Compile Include="Index\MtgTokenizer.cs" />
     <Compile Include="Index\MtgAplhabet.cs" />
+    <Compile Include="Index\Query\RewriteableComplexPhraseQuery.cs" />
+    <Compile Include="Index\Query\RewriteableSpanNearQuery.cs" />
     <Compile Include="Index\ReplaceFilter.cs" />
     <Compile Include="Index\Spellchecker.cs" />
     <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="Index\IndexVersion.cs" />
     <Compile Include="Index\LuceneSearcher.cs" />
     <Compile Include="Index\LuceneSpellchecker.cs" />
-    <Compile Include="Index\MtgQueryParser.cs" />
+    <Compile Include="Index\Query\MtgQueryParser.cs" />
     <Compile Include="Index\SearchResult.cs" />
     <Compile Include="Index\IntellisenseSuggest.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />

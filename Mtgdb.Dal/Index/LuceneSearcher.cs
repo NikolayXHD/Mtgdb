@@ -197,10 +197,11 @@ namespace Mtgdb.Dal.Index
 				boolean.Add(new MatchAllDocsQuery(), Occur.MUST);
 		}
 
-		private (Dictionary<string, IReadOnlyList<Token>> Terms, Dictionary<string, IReadOnlyList<IReadOnlyList<string>>> Phrases) getHighlightElements(
-			string queryStr)
+		private (Dictionary<string, IReadOnlyList<Token>> Terms,
+			Dictionary<string, IReadOnlyList<IReadOnlyList<string>>> Phrases) getHighlightElements(
+				string queryStr)
 		{
-			var tokenizer = new TolerantTokenizer(queryStr);
+			var tokenizer = new MtgTolerantTokenizer(queryStr);
 			tokenizer.Parse();
 
 			Dictionary<Token, IReadOnlyList<string>> analyzedTokens;
@@ -235,14 +236,13 @@ namespace Mtgdb.Dal.Index
 		{
 			if (t.Type.IsAny(TokenType.RegexBody))
 				return ReadOnlyList.From(t.Value);
-				
+
 			if (!t.Type.IsAny(TokenType.FieldValue))
 				return null;
 
-			if (!t.IsPhrase || t.IsPhraseComplex || t.PhraseHasSlop)
-				return ReadOnlyList.From(StringEscaper.Unescape(t.Value));
-
-			string text = t.GetPhraseText(queryStr);
+			string text = !t.IsPhrase || t.IsPhraseComplex || t.PhraseHasSlop
+				? t.Value
+				: t.GetPhraseText(queryStr);
 
 			var result = _queryParserAnalyzer
 				.GetTokens(t.ParentField, StringEscaper.Unescape(text))
@@ -320,5 +320,13 @@ namespace Mtgdb.Dal.Index
 		private readonly object _syncQueryParser = new object();
 		private readonly MtgAnalyzer _queryParserAnalyzer;
 		private readonly CardRepository _repo;
+	}
+
+	public class MtgTolerantTokenizer : TolerantTokenizer
+	{
+		public MtgTolerantTokenizer(string query)
+			:base(query, '>')
+		{
+		}
 	}
 }

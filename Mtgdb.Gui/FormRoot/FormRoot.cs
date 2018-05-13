@@ -150,6 +150,8 @@ namespace Mtgdb.Gui
 			_downloaderSubsystem = downloaderSubsystem;
 			_newsService = newsService;
 
+			_tabs.AddNewTabsToTheLeft = true;
+
 			_tabs.TabAdded += tabCreated;
 			_tabs.TabRemoving += tabClosing;
 			_tabs.TabRemoved += tabClosed;
@@ -215,7 +217,7 @@ namespace Mtgdb.Gui
 
 			if (hoveredIndex == _tabs.AddButtonIndex)
 			{
-				_tabs.AddTab();
+				_tabs.AddTab(insertToTheLeft: false);
 				return;
 			}
 

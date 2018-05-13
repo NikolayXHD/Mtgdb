@@ -145,7 +145,7 @@ namespace Mtgdb.Dal.Index
 			string query = input.Text;
 			int caret = input.Caret;
 
-			var token = EditedTokenLocator.GetEditedToken(query, caret);
+			var token = new MtgTolerantTokenizer(query).GetEditedToken(caret);
 
 			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
 				return _emptySuggest;
@@ -201,7 +201,7 @@ namespace Mtgdb.Dal.Index
 			string query = input.Text;
 			int caret = input.Caret;
 
-			var token = EditedTokenLocator.GetEditedToken(query, caret);
+			var token = new MtgTolerantTokenizer(query).GetEditedToken(caret);
 
 			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
 				return null;

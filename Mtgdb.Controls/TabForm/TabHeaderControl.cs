@@ -25,7 +25,7 @@ namespace Mtgdb.Controls
 			InitializeComponent();
 
 			clearTabs();
-			
+
 			Paint += paint;
 			Layout += layout;
 			MouseMove += mouseMove;
@@ -49,7 +49,7 @@ namespace Mtgdb.Controls
 				var indices = TabIds.Select(id => other.TabIds.IndexOf(id))
 					.ToArray();
 
-				if (indices.Any(i=>i < 0 || i >= Count))
+				if (indices.Any(i => i < 0 || i >= Count))
 					return;
 
 				Texts = Enumerable.Range(0, Count).Select(i => Texts[indices[i]]).ToList();
@@ -137,7 +137,7 @@ namespace Mtgdb.Controls
 			clearTabs();
 
 			for (int i = 0; i < tabIds.Count; i++)
-				AddTab(tabIds[i], GetDefaultText(i), _defaultIcon);
+				AddTab(tabIds[i], GetDefaultText(i), _defaultIcon, insertToTheLeft: false);
 
 			OnLayout(new LayoutEventArgs(this, null));
 			Invalidate();
@@ -155,8 +155,12 @@ namespace Mtgdb.Controls
 				Widths.RemoveAt(index);
 				Icons.RemoveAt(index);
 
-				if (SelectedIndex >= index)
-					SelectedIndex--;
+				var selectedIndex = SelectedIndex >= index
+					? SelectedIndex - 1
+					: SelectedIndex;
+
+				selectedIndex = getValidIndex(selectedIndex);
+				setSelectedIndex(selectedIndex);
 			}
 
 			OnLayout(new LayoutEventArgs(this, null));
@@ -165,24 +169,31 @@ namespace Mtgdb.Controls
 			TabRemoved?.Invoke(this);
 		}
 
-		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null)
+		public void AddTab(
+			object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null)
 		{
 			lock (_syncRoot)
 			{
 				tabText = tabText ?? GetDefaultText(Count);
 				var tabIcon = icon ?? DefaultIcon;
+				int width = getTabWidth(tabText, tabIcon, CloseIcon);
 
 				TabIds.Add(tabId);
 				Texts.Add(tabText);
 				Icons.Add(tabIcon);
-				Widths.Add(getTabWidth(tabText, tabIcon, CloseIcon));
+				Widths.Add(width);
 			}
 
 			OnLayout(new LayoutEventArgs(this, null));
 			Invalidate();
 
-			TabAdded?.Invoke(this, Count - 1);
-			SelectedIndex = Count - 1;
+			int index = Count - 1;
+
+			TabAdded?.Invoke(this, index);
+			SelectedIndex = index;
+
+			if ((insertToTheLeft ?? AddNewTabsToTheLeft) && index != 0)
+				RelocateTab(index, 0, selectRelocated: true);
 		}
 
 		public void RelocateTab(int fromIndex, int toIndex, bool selectRelocated)
@@ -236,7 +247,8 @@ namespace Mtgdb.Controls
 			{
 				int draggingIndex = DraggingIndex.Value;
 				_dragCurrentX = e.Location.X;
-				int draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, draggingIndex);
+				int draggingOverIndex =
+					getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, draggingIndex);
 
 				RelocateTab(draggingIndex, draggingOverIndex, selectRelocated: true);
 
@@ -284,7 +296,8 @@ namespace Mtgdb.Controls
 			else if (IsDragging())
 			{
 				_dragCurrentX = e.X;
-				_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
+				_draggingOverIndex =
+					getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
 				Invalidate();
 			}
 			else
@@ -411,7 +424,8 @@ namespace Mtgdb.Controls
 			_dragCurrentX = x;
 
 			SelectedIndex = HoveredIndex = DraggingIndex.Value;
-			_draggingOverIndex = getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
+			_draggingOverIndex =
+				getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
 		}
 
 		public bool IsDragging()
@@ -422,7 +436,7 @@ namespace Mtgdb.Controls
 		public void AbortDrag()
 		{
 			_dragStartedX =
-			_dragCurrentX = null;
+				_dragCurrentX = null;
 
 			DraggingIndex = null;
 			_draggingOverIndex = null;
@@ -453,7 +467,7 @@ namespace Mtgdb.Controls
 				if (isTabHit(Count, location, out hoveredClose))
 					hoveredIndex = Count;
 		}
-		 
+
 		private bool isTabHit(int i, Point location, out bool closeHovered)
 		{
 			closeHovered = false;
@@ -485,16 +499,17 @@ namespace Mtgdb.Controls
 
 		private void layout(object sender, LayoutEventArgs e)
 		{
-			var width = SlopeSize.Width*(Count + 1) + Widths.Sum();
+			var width = SlopeSize.Width * (Count + 1) + Widths.Sum();
 
 			if (AllowAddingTabs)
-				width = width - SlopeSize.Width + 2*AddButtonSlopeSize.Width + AddButtonWidth;
+				width = width - SlopeSize.Width + 2 * AddButtonSlopeSize.Width + AddButtonWidth;
 
 			Width = width;
 		}
 
-		
-		private void paintTab(int i, Graphics g, IList<string> texts, IList<int> widths, IList<Bitmap> icons)
+
+		private void paintTab(
+			int i, Graphics g, IList<string> texts, IList<int> widths, IList<Bitmap> icons)
 		{
 			var color = getTabColor(i);
 			var closeIcon = getCloseIcon(i);
@@ -523,26 +538,27 @@ namespace Mtgdb.Controls
 				paintAddButtonElements(g, points, AddIcon);
 		}
 
-		private void paintTabElements(Graphics g, Point[] points, Bitmap icon, string text, Bitmap closeIcon)
+		private void paintTabElements(
+			Graphics g, Point[] points, Bitmap icon, string text, Bitmap closeIcon)
 		{
 			int left = points[1].X;
 
 			if (icon != null)
 			{
-				var iconTop = Height - (icon.Height + SlopeSize.Height)/2;
+				var iconTop = Height - (icon.Height + SlopeSize.Height) / 2;
 				g.DrawImage(icon, new Rectangle(left, iconTop, icon.Width, icon.Height));
 			}
 
 			int iconWidth = icon?.Width ?? 0;
 
-			var textSize = !string.IsNullOrEmpty(text) 
+			var textSize = !string.IsNullOrEmpty(text)
 				? measureText(text)
 				: new Size(0, 0);
 
 			if (!string.IsNullOrEmpty(text))
 			{
 				int textLeft = left + TextPadding + iconWidth;
-				var textTop = Height - (textSize.Height + SlopeSize.Height)/2;
+				var textTop = Height - (textSize.Height + SlopeSize.Height) / 2;
 				var textBounds = new Rectangle(new Point(textLeft, textTop), textSize);
 
 				TextRenderer.DrawText(g, text, Font, textBounds, ForeColor, _textFormatFlags);
@@ -551,7 +567,7 @@ namespace Mtgdb.Controls
 			if (closeIcon != null)
 			{
 				int closeLeft = left + iconWidth + TextPadding + textSize.Width + TextPadding;
-				var closeTop = Height - (closeIcon.Height + SlopeSize.Height)/2;
+				var closeTop = Height - (closeIcon.Height + SlopeSize.Height) / 2;
 				g.DrawImage(closeIcon, new Rectangle(closeLeft, closeTop, closeIcon.Width, closeIcon.Height));
 			}
 		}
@@ -592,13 +608,15 @@ namespace Mtgdb.Controls
 			throw new ArgumentOutOfRangeException();
 		}
 
-		private Point[] getTabPolygon(int i, Size slopeSize, int width, IList<int> widths, Size addButtonSlopeSize)
+		private Point[] getTabPolygon(
+			int i, Size slopeSize, int width, IList<int> widths, Size addButtonSlopeSize)
 		{
 			int x1;
 			if (!isDraggedOver(i))
 				x1 = getTabLeft(i, slopeSize, widths);
 			else
-				x1 = getTabLeft(DraggingIndex.Value, slopeSize, Widths) + _dragCurrentX.Value - _dragStartedX.Value;
+				x1 = getTabLeft(DraggingIndex.Value, slopeSize, Widths) + _dragCurrentX.Value -
+					_dragStartedX.Value;
 
 			int x2;
 			if (i < widths.Count)
@@ -669,7 +687,7 @@ namespace Mtgdb.Controls
 
 		private static int getTabLeft(int i, Size slopeSize, IList<int> widths)
 		{
-			return slopeSize.Width*i + widths.Take(i).Sum();
+			return slopeSize.Width * i + widths.Take(i).Sum();
 		}
 
 		private Color getTabColor(int i)
@@ -696,7 +714,8 @@ namespace Mtgdb.Controls
 
 		private int getTabWidth(string tabText, Image icon, Image closeIcon)
 		{
-			return measureText(tabText).Width + TextPadding*2 + (icon?.Width ?? 0) + Convert.ToInt32(AllowRemovingTabs)*(closeIcon?.Width ?? 0);
+			return measureText(tabText).Width + TextPadding * 2 + (icon?.Width ?? 0) +
+				Convert.ToInt32(AllowRemovingTabs) * (closeIcon?.Width ?? 0);
 		}
 
 		private Size measureText(string text)
@@ -730,7 +749,8 @@ namespace Mtgdb.Controls
 
 		protected bool IsLayoutSuspended()
 		{
-			var property = typeof(Control).GetProperty("IsLayoutSuspended", BindingFlags.NonPublic | BindingFlags.Instance);
+			var property = typeof(Control).GetProperty("IsLayoutSuspended",
+				BindingFlags.NonPublic | BindingFlags.Instance);
 			bool result = (bool) property.GetValue(this, null);
 			return result;
 		}
@@ -775,17 +795,29 @@ namespace Mtgdb.Controls
 			get => _selectedIndex;
 			set
 			{
-				if (value >= Count)
-					value = Count - 1;
+				value = getValidIndex(value);
 
 				if (_selectedIndex != value)
-				{
-					SelectedIndexChanging?.Invoke(this, _selectedIndex);
-					_selectedIndex = value;
-					Invalidate();
-					SelectedIndexChanged?.Invoke(this, value);
-				}
+					setSelectedIndex(value);
 			}
+		}
+
+		private int getValidIndex(int value)
+		{
+			if (value >= Count)
+				value = Count - 1;
+
+			else if (value < 0)
+				value = 0;
+			return value;
+		}
+
+		private void setSelectedIndex(int value)
+		{
+			SelectedIndexChanging?.Invoke(this, _selectedIndex);
+			_selectedIndex = value;
+			Invalidate();
+			SelectedIndexChanged?.Invoke(this, value);
 		}
 
 		[Category("Settings"), DefaultValue(-1)]
@@ -989,7 +1021,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-
+		[Category("Settings"), DefaultValue(false)]
+		public bool AddNewTabsToTheLeft { get; set; }
 
 		[Browsable(false)]
 		public List<object> TabIds { get; private set; }
@@ -1021,7 +1054,7 @@ namespace Mtgdb.Controls
 
 		[Browsable(false)]
 		public int AddButtonIndex => Count;
-		
+
 
 
 		private List<int> Widths { get; set; }
@@ -1058,6 +1091,7 @@ namespace Mtgdb.Controls
 		private bool _allowRemovingTabs = true;
 		private Bitmap _addIcon;
 
-		private static readonly TextFormatFlags _textFormatFlags = new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
+		private static readonly TextFormatFlags _textFormatFlags =
+			new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
 	}
 }
