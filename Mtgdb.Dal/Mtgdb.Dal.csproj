@@ -102,6 +102,8 @@
     <Compile Include="Index\MtgRegexpQuery.cs" />
     <Compile Include="Index\MtgTokenizer.cs" />
     <Compile Include="Index\MtgAplhabet.cs" />
+    <Compile Include="Index\Query\EmptyPhraseSpanQuery.cs" />
+    <Compile Include="Index\Query\EmptyPhraseQuery.cs" />
     <Compile Include="Index\Query\RewriteableComplexPhraseQuery.cs" />
     <Compile Include="Index\Query\RewriteableSpanNearQuery.cs" />
     <Compile Include="Index\ReplaceFilter.cs" />

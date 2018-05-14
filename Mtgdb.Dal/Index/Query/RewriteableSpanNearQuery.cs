@@ -23,23 +23,6 @@ namespace Mtgdb.Dal.Index
 
 				var clauses = ((SpanOrQuery) m_clauses[i]).GetClauses();
 
-				// in query  text:"(> or target) creature"
-				// (> or target) is parsed as SpanOr with 1 clause
-				if (clauses.Length == 1 && m_clauses.Count > 1)
-				{
-					var skippedOrClause = m_clauses.ToList();
-					skippedOrClause.RemoveAt(i);
-
-					var nonSkippedOrClause = m_clauses.ToList();
-					nonSkippedOrClause[i] = clauses[0];
-
-					return new BooleanQuery(disableCoord: true)
-					{
-						{new RewriteableSpanNearQuery(skippedOrClause.ToArray(), Slop, IsInOrder), Occur.SHOULD},
-						{new RewriteableSpanNearQuery(nonSkippedOrClause.ToArray(), Slop, IsInOrder), Occur.SHOULD}
-					};
-				}
-
 				var spanLengths = clauses.Select(getSpanLength).ToArray();
 
 				if (spanLengths.All(F.IsNotNull) && spanLengths.Skip(1).All(l => l == spanLengths[0]))
@@ -53,13 +36,24 @@ namespace Mtgdb.Dal.Index
 				var spansByLength = Enumerable.Range(0, clauses.Length)
 					.Where(j => spanLengths[j] != null)
 					.GroupBy(j => spanLengths[j])
-					.ToDictionary(gr => gr.Key, gr => gr.Select(j => clauses[j]).ToArray());
+					.Select(gr => new KeyValuePair<int?, SpanQuery[]>(gr.Key, gr.Select(j => clauses[j]).ToArray()))
+					.ToList();
 
 				var boost = m_clauses[i].Boost;
 				var result = new BooleanQuery(disableCoord: true);
 
+				if (spansByLength.Any(p => p.Key == 0))
+				{
+					var clausesCopy = m_clauses.ToList();
+					clausesCopy.RemoveAt(i);
+					result.Add(new RewriteableSpanNearQuery(clausesCopy.ToArray(), Slop, IsInOrder), Occur.SHOULD);
+				}
+
 				foreach (var pair in spansByLength)
 				{
+					if (pair.Key == 0)
+						continue;
+
 					var clausesCopy = m_clauses.ToArray();
 					clausesCopy[i] = getClause(pair.Value, boost);
 					result.Add(new RewriteableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
@@ -98,6 +92,9 @@ namespace Mtgdb.Dal.Index
 
 		private static int? getSpanLength(SpanQuery c)
 		{
+			if (c is EmptyPhraseSpanQuery)
+				return 0;
+
 			if (c is SpanTermQuery || c is SpanMultiTermQueryWrapper<MultiTermQuery> || c is SpanNotQuery)
 				return 1;
 

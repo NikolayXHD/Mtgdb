@@ -256,7 +256,13 @@ namespace Mtgdb.Dal.Index
 			return base.GetWildcardQuery(field, escapedValue);
 		}
 
+		protected override void AddClause(IList<BooleanClause> clauses, int conj, int mods, Query q)
+		{
+			if (q == null)
+				base.AddClause(clauses, conj, mods, new EmptyPhraseQuery(Field));
 
+			base.AddClause(clauses, conj, mods, q);
+		}
 
 		private Query resolveField(
 			string field,
