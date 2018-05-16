@@ -56,7 +56,7 @@ namespace Mtgdb.Test
 						.Replace("\\mq\\", string.Empty);
 
 					if (!Str.Equals(smallPath, zoomPath))
-						Assert.Fail(smallPath + Environment.NewLine + zoomPath);
+						Assert.Fail(smallPath + Str.Endl + zoomPath);
 				}
 		}
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -213,16 +214,39 @@ namespace Mtgdb.Gui
 
 		public string GetFieldTooltipText(int rowHandle, string field)
 		{
-			string text = _view.GetText(rowHandle, field);
+			var text = new StringBuilder(_view.GetText(rowHandle, field));
 
 			var card = (Card) GetRow(rowHandle);
 
-			if (Str.Equals(field, nameof(Card.Text)) && !string.IsNullOrEmpty(card.OriginalText))
-				text += Str.Endl + Str.Endl + nameof(Card.OriginalText) + ":" + Str.Endl + card.OriginalText;
-			else if (Str.Equals(field, nameof(Card.Type)) && !string.IsNullOrEmpty(card.OriginalType))
-				text += Str.Endl + Str.Endl + nameof(Card.OriginalType) + ":" + Str.Endl + card.OriginalType;
+			if (Str.Equals(field, nameof(Card.Text)))
+			{
+				if (!string.IsNullOrEmpty(card.OriginalText))
+					text
+						.AppendLine()
+						.AppendLine()
+						.Append(nameof(Card.OriginalText)).Append(":")
+						.AppendLine()
+						.Append(card.OriginalText);
 
-			return text;
+				var keywords = card.GetKeywords();
+
+				if (keywords.Count > 0)
+					text
+						.AppendLine()
+						.AppendLine()
+						.Append(nameof(KeywordDefinitions.Keywords)).Append(":")
+						.AppendLine()
+						.Append(string.Join(", ", keywords));
+			}
+			else if (Str.Equals(field, nameof(Card.Type)) && !string.IsNullOrEmpty(card.OriginalType))
+				text
+					.AppendLine()
+					.AppendLine()
+					.Append(nameof(Card.OriginalType)).Append(":")
+					.AppendLine()
+					.Append(card.OriginalType);
+
+			return text.ToString();
 		}
 
 		public void SetDataSource(object dataSource)

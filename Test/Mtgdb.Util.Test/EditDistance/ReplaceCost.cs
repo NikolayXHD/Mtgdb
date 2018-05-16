@@ -212,7 +212,7 @@ namespace Mtgdb.Util
 				.SelectMany(l =>
 				{
 					var lines = keyboardLayouts[l].Split(
-						Array.From(Environment.NewLine),
+						Array.From(Str.Endl),
 						StringSplitOptions.RemoveEmptyEntries);
 
 					return Enumerable

@@ -212,8 +212,9 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public float? PriceHigh => PricingHigh ?? PricingMid ?? PricingLow;
 
-		public CardKeywords GetKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
+		public CardKeywords GetAllKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
 
+		public ICollection<string> GetKeywords() => GetAllKeywords().TextKeywords;
 
 		/// <summary>
 		/// A unique id for this card. It is made up by doing an SHA1 hash of

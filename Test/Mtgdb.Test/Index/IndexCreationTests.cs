@@ -14,7 +14,7 @@ namespace Mtgdb.Test
 			LoadTranslations();
 
 			_luceneSearcher = new LuceneSearcher(Repo);
-			_keywordSearcher = new KeywordSearcher();
+			_keywordSearcher = new KeywordSearcher(Repo);
 
 			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
 
@@ -31,7 +31,7 @@ namespace Mtgdb.Test
 
 			Assert.That(_keywordSearcher.IsUpToDate, Is.Not.True);
 
-			_keywordSearcher.Load(Repo);
+			_keywordSearcher.Load();
 
 			Assert.That(_keywordSearcher.IsUpToDate);
 		}

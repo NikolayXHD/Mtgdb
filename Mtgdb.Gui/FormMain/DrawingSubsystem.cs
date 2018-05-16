@@ -465,7 +465,7 @@ namespace Mtgdb.Gui
 			{
 				string termText = keywordTerm.GetPhraseText(query);
 
-				if (!KeywordDefinitions.KeywordPatternsByValue.TryGetValue(termText, out var regex))
+				if (!KeywordDefinitions.KeywordPatternsByDisplayText.TryGetValue(termText, out var regex))
 					continue;
 
 				string pattern = regex.ToString();

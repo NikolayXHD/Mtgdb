@@ -164,9 +164,8 @@ namespace Mtgdb.Dal.Index
 				doc.addTextField(nameof(card.TextEn), card.TextEn);
 			}
 
-			if (card.GetKeywords().KeywordsByProperty.TryGetValue(nameof(KeywordDefinitions.Keywords), out var keywords))
-				foreach (string keyword in keywords)
-					doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
+			foreach (string keyword in card.GetKeywords())
+				doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.FlavorEn))

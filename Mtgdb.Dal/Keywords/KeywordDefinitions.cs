@@ -259,11 +259,15 @@ namespace Mtgdb.Dal
 						notBefore("counters?", " on"), "(spells?|abilit(y|ies))"),
 					before("counters?", " (it|phantasmagorian|temporal extortion|brain gorgers)"))),
 				notAfter("can't be ", "countered")))),
+			custom("Create token", bound("create(s|d)?")),
+			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
+			custom("Deal damage", bound(@"deals? \d+ damage")),
 			custom("Deathtouch", bound("(un)?deathtouch")),
 			custom("Defender", bound("defender",
 				notBefore: "(en\\-vec|of the order)",
 				notAfter: "(shu|sworn)")),
 			"Delirium",
+			custom("Destroy", bound("destroy(s|ed)?")),
 			custom("Discard", bound("discard(s|ed|ing)?", notBefore: @"it into exile")),
 			custom("Doesn't untap", bound(or(
 				"(doesn|can|don|won)'t untap",
@@ -273,11 +277,13 @@ namespace Mtgdb.Dal
 			"Enchant",
 			cost("Equip"),
 			custom("Exile", bound("exiles?", notBefore: "into darkness", notAfter: "tel\\-jilad")),
+			custom("Fear", bound("fear", notAfter: "Shinen of")),
 			custom("First Strike", bound("first strike",
 				notAfter: "deals combat damage before creatures without")),
 			custom("Flash", bound("flash",
 				notBefore: "(conscription|foliage|of Insight)",
 				notAfter: "aether")),
+			custom("Flashback", bound("flashback", notBefore: "cost")),
 			custom("Flying", bound("Flying", notAfter: "(can block|except by) creatures with")),
 			custom("Gain control", bound("gains? control")),
 			"Haste",
@@ -285,9 +291,15 @@ namespace Mtgdb.Dal
 			custom("Indestructible", bound("indestructible", notBefore: "can't be destroyed by damage")),
 			"Ingest",
 			custom("Intimidate", bound("intimidate", notBefore: "can't be blocked except")),
+			custom("Landwalk", bound(
+				optional("(snow(\\-covered)?|(non)?basic|legendary) ") +
+				"(land|denim|desert|plains|forest|swamp|mountain|island)walk")),
 			"Lifelink",
 			cost("Madness"),
 			"Menace",
+			cost("Morph", pattern: notBefore("(mega)?morph", " cost")),
+			custom("Phasing", bound("phas(ing|es?)( (in|out))?")),
+			custom("Protection", bound("protection", notAfter: "(circle of|teferi's)")),
 			"Prowess",
 			custom("Rally", bound("rally", before: "— ?")),
 			custom("Reach", bound("reach",
@@ -297,7 +309,9 @@ namespace Mtgdb.Dal
 			count("Renown", customPattern: bound("renowned",
 				notBefore: "weaver",
 				notAfter: "if it isn't")),
+			custom("Sacrifice", bound("sacrifice(s|d)?")),
 			"Scry",
+			custom("Search", bound("search(es|ed)?")),
 			"Shroud",
 			custom("Skulk", bound("skulk", notAfter: "pit-")),
 			cost("Surge"),
@@ -328,9 +342,8 @@ namespace Mtgdb.Dal
 			"Cipher",
 			"Conspire",
 			"Convoke",
-			count("crew", customPattern: "crews?"),
+			count("Crew", customPattern: "crews?"),
 			cost("Cumulative Upkeep"),
-			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
 			cost("Dash"),
 			"Delve",
 			"Dethrone",
@@ -349,13 +362,12 @@ namespace Mtgdb.Dal
 			custom("Exalted", bound("exalted", notBefore: "(dragon|angel)", notAfter: "instances? of")),
 			"Exploit",
 			"Extort",
+			"Extra turn",
 			count("Fabricate"),
 			count("Fading"),
-			custom("Fear", bound("fear", notAfter: "Shinen of")),
 			custom("Flanking", bound("flanking",
 				notBefore: "troops",
 				notAfter: "whenever a creature without")),
-			custom("Flashback", bound("flashback", notBefore: "cost")),
 			cost("Forecast"),
 			custom("Fortify", bound("fortify", notBefore: "only as a sorcery")),
 			count("Frenzy"),
@@ -373,9 +385,6 @@ namespace Mtgdb.Dal
 				notBefore: "deal damage to creatures in the form",
 				notAfter: "damage dealt by sources without")),
 			cost("Kicker", pattern: "(multi)?kick(er|ed|s)"),
-			custom("Landwalk", bound(
-				optional("(snow(\\-covered)?|(non)?basic|legendary) ") +
-				"(land|denim|desert|plains|forest|swamp|mountain|island)walk")),
 			"Plainswalk",
 			"Forestwalk",
 			"Swampwalk",
@@ -386,7 +395,6 @@ namespace Mtgdb.Dal
 			custom("Melee", bound("melee", notAfter: "cast")),
 			cost("Miracle"),
 			count("Modular"),
-			cost("Morph", pattern: "(mega)?morph"),
 			custom("Myriad", bound("myriad", notBefore: "landscape")),
 			cost("Ninjutsu"),
 			custom("Offering", bound("offering", notAfter: "(volcanic|yawgmoth's vile|death pit|burnt)")),
@@ -394,9 +402,7 @@ namespace Mtgdb.Dal
 			cost("Overload"),
 			custom("Partner", bound("partner", notAfter: "if both have")),
 			"Persist",
-			custom("Phasing", bound("phas(ing|es)( (in|out))?")),
 			count("Poisonous"),
-			custom("Protection", bound("protection", notAfter: "(circle of|teferi's)")),
 			"Provoke",
 			cost("Prowl"),
 			count("Rampage"),
@@ -430,21 +436,22 @@ namespace Mtgdb.Dal
 			"Unleash",
 			custom("Vanishing", bound("vanishing", notBefore: "touch")),
 			"Wither",
+
+			
+			custom("Fight", bound("fight(s|ed)?")),
+			
+			
+
 			custom("Activate", bound("activat(e(s|d)?|i(ng|on))")),
 			custom("Attach", bound("attach(es|ed)?")),
 			custom("Unattach", bound("unattach(es|ed)?")),
 			custom("Cast", bound("cast(s|ing)?")),
-			custom("Create", bound("create(s|d)?")),
-			custom("Destroy", bound("destroy(s|ed)?")),
 			custom("Exchange", bound("exchange(s|d)?")),
-			custom("Fight", bound("fight(s|ed)?")),
 			custom("Play", bound("play(s|ed)?")),
 			custom("Reveal", bound("reveal(s|ed)?")),
-			custom("Sacrifice", bound("sacrifice(s|d)?")),
-			custom("Search", bound("search(es|ed)?")),
 			custom("Shuffle", bound("shuffle(s|d)?")),
 			custom("Tap", bound("tap(s|ped)?")),
-			custom("Untap", bound("untap(s|ped)?")),
+			custom("Untap", bound("untap(s|ped)?", notAfter: "skips? (their|the|your)( next)?")),
 			custom("Bury", bound("bur(y|ies|ied)", notBefore: "ruin")),
 			custom("Ante", bound("ante(s|d)?"))
 		};
@@ -506,7 +513,7 @@ namespace Mtgdb.Dal
 
 		private static readonly int _keywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
 
-		public static Dictionary<string, Regex> KeywordPatternsByValue
+		public static Dictionary<string, Regex> KeywordPatternsByDisplayText
 			=> PatternsByDisplayText[_keywordsIndex];
 	}
 }

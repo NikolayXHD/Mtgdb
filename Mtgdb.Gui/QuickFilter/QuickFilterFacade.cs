@@ -104,8 +104,9 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			var cardIds = _searcher.GetCardIds(Required, RequiredSome, Prohibited);
-			_matchingCardIds = new HashSet<int>(cardIds);
+			_matchingCardIds = _searcher
+				.GetCardIds(Required, RequiredSome, Prohibited)
+				.ToHashSet();
 		}
 
 		private KeywordQueryTerm[] Required { get; }

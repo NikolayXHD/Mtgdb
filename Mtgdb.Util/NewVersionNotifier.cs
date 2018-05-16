@@ -36,7 +36,7 @@ namespace Mtgdb.Util
 				.ToList();
 
 			Console.WriteLine();
-			Console.WriteLine(string.Join(Environment.NewLine, content));
+			Console.WriteLine(string.Join(Str.Endl, content));
 			Console.WriteLine();
 
 			File.WriteAllLines(Path.Combine(@"f:\Repo\Git\Mtgdb.Notifications", lines[0] + ".txt"), content);

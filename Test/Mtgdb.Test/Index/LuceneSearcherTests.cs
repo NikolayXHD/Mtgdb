@@ -85,7 +85,7 @@ namespace Mtgdb.Test
 		[TestCase(@"TextEn:embalm", "embalm")]
 		public void Search_by_TextEn(string queryStr, string expected)
 		{
-			var cards = search(queryStr, c => c.TextEn + Environment.NewLine);
+			var cards = search(queryStr, c => c.TextEn + Str.Endl);
 
 			foreach (var card in cards)
 				Assert.That(card.TextEn, Contains.Substring(expected).IgnoreCase);
@@ -94,7 +94,7 @@ namespace Mtgdb.Test
 		[TestCase(@"FlavorEn:angel", "angel")]
 		public void Search_by_FlavorEn(string queryStr, string expected)
 		{
-			var cards = search(queryStr, c => c.FlavorEn + Environment.NewLine);
+			var cards = search(queryStr, c => c.FlavorEn + Str.Endl);
 
 			foreach (var card in cards)
 				Assert.That(card.FlavorEn, Contains.Substring(expected).IgnoreCase);

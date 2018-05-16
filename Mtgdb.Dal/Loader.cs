@@ -67,7 +67,7 @@ namespace Mtgdb.Dal
 						_luceneSearcher.LoadIndexes();
 
 					if (_keywordSearcher.IsUpToDate)
-						_keywordSearcher.Load(_repository);
+						_keywordSearcher.Load();
 
 					_priceRepository.Load();
 				},
@@ -93,7 +93,7 @@ namespace Mtgdb.Dal
 					_localizationRepository.Clear();
 
 					if (!_keywordSearcher.IsUpToDate)
-						_keywordSearcher.Load(_repository);
+						_keywordSearcher.Load();
 
 					if (!_indexesUpToDate)
 						_luceneSearcher.LoadIndexes();

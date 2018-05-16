@@ -52,7 +52,16 @@ namespace Mtgdb.Dal
 			keywords.Add(value);
 		}
 
+		internal ICollection<string> TextKeywords
+		{
+			get
+			{
+				if (!KeywordsByProperty.TryGetValue(nameof(KeywordDefinitions.Keywords), out var keywords))
+					return Array.Empty<string>();
 
+				return keywords;
+			}
+		}
 
 		public int IndexInFile { get; }
 

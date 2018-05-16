@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Mtgdb.Dal;
 using NUnit.Framework;
 
@@ -15,6 +17,54 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
+		public void Popular_keywords_come_first()
+		{
+			var keywords = KeywordDefinitions.KeywordPatternsByDisplayText.Keys;
+
+			var boringKeywords = keywords.SkipWhile(F.IsNotEqualTo("Activate"))
+				.ToHashSet(Str.Comparer);
+
+			var popularity = keywords
+				.Where(F.IsNotNull)
+				.Select(kw => (Keyword: kw, Count: KeywordSearcher.GetCardIds(nameof(KeywordDefinitions.Keywords), kw).Count))
+				.OrderBy(p => boringKeywords.Contains(p.Keyword))
+				.ThenByDescending(p => p.Count)
+				.ToArray();
+
+			var popularityByKeyword = popularity.ToDictionary(p => p.Keyword, p => p.Count);
+
+			var displayKeywords = keywords
+				.TakeWhile(F.IsNotEqualTo("Absorb"))
+				.ToHashSet(Str.Comparer);
+
+			var mostPopular = popularity
+				.Take(displayKeywords.Count)
+				.ToArray();
+
+			var notDisplayedPopular = mostPopular
+				.Where(p => !displayKeywords.Contains(p.Keyword))
+				.ToArray();
+
+			if (notDisplayedPopular.Length > 0)
+			{
+				var toReplace = displayKeywords
+					.OrderBy(kw => popularityByKeyword[kw])
+					.Take(notDisplayedPopular.Length)
+					.ToArray();
+
+				var message = new StringBuilder($"Non displayed frequently used keywords ({notDisplayedPopular.Length}):")
+					.AppendLine()
+					.Append(string.Join(Str.Endl, notDisplayedPopular.Select(p => $"{p.Count}: {p.Keyword}")))
+					.AppendLine()
+					.AppendLine("Shoud replace following keywords:")
+					.Append(string.Join(Str.Endl, toReplace.Select(kw => $"{popularityByKeyword[kw]}: {kw}")))
+					.ToString();
+
+				Log.Info(message);
+			}
+		}
+
+		[Test]
 		public void Card_keywords_contain_expected_value(
 			[Values("LEA")] string setcode,
 			[Values("Badlands")] string name,
@@ -23,7 +73,7 @@ namespace Mtgdb.Test
 			[Values("")] string expectedValue)
 		{
 			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
-			var keywords = card.GetKeywords();
+			var keywords = card.GetAllKeywords();
 
 			if (string.IsNullOrEmpty(expectedValue))
 			{
@@ -118,8 +168,8 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *discard* AND NOT Keywords: discard")]
 		[TestCase(@"")]
 		[TestCase(@"")]
-		[TestCase(@"")]
-		[TestCase(@"")]
+		[TestCase(@"Text: (extra AND turn) AND NOT Keywords: ""extra turn""")]
+		[TestCase(@"Keywords: ""extra turn"" AND NOT Text: ""extra turn""")]
 		[TestCase(@"")]
 		[TestCase(@"")]
 		[TestCase(@"")]

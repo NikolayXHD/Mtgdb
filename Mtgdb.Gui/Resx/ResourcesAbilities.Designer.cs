@@ -183,6 +183,36 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Create {
+            get {
+                object obj = ResourceManager.GetObject("Create", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Cycling {
+            get {
+                object obj = ResourceManager.GetObject("Cycling", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Deal_damage {
+            get {
+                object obj = ResourceManager.GetObject("Deal_damage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Deathtouch {
             get {
                 object obj = ResourceManager.GetObject("Deathtouch", resourceCulture);
@@ -206,6 +236,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Delirium {
             get {
                 object obj = ResourceManager.GetObject("Delirium", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Destroy {
+            get {
+                object obj = ResourceManager.GetObject("Destroy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -283,6 +323,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Fear {
+            get {
+                object obj = ResourceManager.GetObject("Fear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap First_strike {
             get {
                 object obj = ResourceManager.GetObject("First_strike", resourceCulture);
@@ -296,6 +346,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Flash {
             get {
                 object obj = ResourceManager.GetObject("Flash", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Flashback {
+            get {
+                object obj = ResourceManager.GetObject("Flashback", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -373,6 +433,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Landwalk {
+            get {
+                object obj = ResourceManager.GetObject("Landwalk", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Lifelink {
             get {
                 object obj = ResourceManager.GetObject("Lifelink", resourceCulture);
@@ -396,6 +466,36 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Menace {
             get {
                 object obj = ResourceManager.GetObject("Menace", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Morph {
+            get {
+                object obj = ResourceManager.GetObject("Morph", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Phasing {
+            get {
+                object obj = ResourceManager.GetObject("Phasing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Protection {
+            get {
+                object obj = ResourceManager.GetObject("Protection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -453,9 +553,29 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Sacrifice {
+            get {
+                object obj = ResourceManager.GetObject("Sacrifice", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Scry {
             get {
                 object obj = ResourceManager.GetObject("Scry", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Search {
+            get {
+                object obj = ResourceManager.GetObject("Search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

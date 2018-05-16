@@ -127,18 +127,18 @@ namespace Mtgdb.Dal
 		{
 			var content = File.ReadAllText(file);
 
-			if (!content.EndsWith(Environment.NewLine))
+			if (!content.EndsWith(Str.Endl))
 			{
-				var index = content.LastIndexOf(Environment.NewLine, StringComparison.Ordinal);
+				var index = content.LastIndexOf(Str.Endl, StringComparison.Ordinal);
 				if (index < 0)
 					content = string.Empty;
 				else
-					content = content.Substring(0, index + Environment.NewLine.Length);
+					content = content.Substring(0, index + Str.Endl.Length);
 
 				File.WriteAllText(file, content);
 			}
 
-			var lines = content.Split(Array.From(Environment.NewLine), StringSplitOptions.RemoveEmptyEntries);
+			var lines = content.Split(Array.From(Str.Endl), StringSplitOptions.RemoveEmptyEntries);
 			return lines;
 		}
 

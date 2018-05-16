@@ -39,8 +39,7 @@ namespace Mtgdb.Util
 					mapped.Add(set.Code, matched[0]);
 			}
 
-			var mappedReport = string.Join(Environment.NewLine,
-				mapped.Select(pair => $"{pair.Value.Code}\t{pair.Key}"));
+			var mappedReport = string.Join(Str.Endl, mapped.Select(pair => $"{pair.Value.Code}\t{pair.Key}"));
 
 			Log.Debug(mappedReport);
 		}
@@ -69,7 +68,7 @@ namespace Mtgdb.Util
 				.ToArray();
 
 			var notMappedReport =
-				string.Join(Environment.NewLine,
+				string.Join(Str.Endl,
 					notMappedSets.Select(code => Repo.SetsByCode[code])
 						.OrderByDescending(set => set.ReleaseDate)
 						.Select(set => $"{set.ReleaseDate}\t{set.Code}\t{set.Name}\t{set.MkmName}")
@@ -80,7 +79,7 @@ namespace Mtgdb.Util
 
 			var tcgSets = tcgParser.ParseSets();
 
-			var notMappedTcgSetsReport = string.Join(Environment.NewLine,
+			var notMappedTcgSetsReport = string.Join(Str.Endl,
 				tcgSets
 					.Where(s => !mappedTcgCodes.Contains(s.Code))
 					.Select(s => $"{s.Code}\t{s.Name}")

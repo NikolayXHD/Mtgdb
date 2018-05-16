@@ -11,8 +11,9 @@ namespace Mtgdb.Dal
 {
 	public class KeywordSearcher
 	{
-		public KeywordSearcher()
+		public KeywordSearcher(CardRepository repo)
 		{
+			_repo = repo;
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("keywords");
 		}
 
@@ -33,7 +34,7 @@ namespace Mtgdb.Dal
 
 		public bool IsUpToDate => _version.IsUpToDate;
 
-		public void Load(CardRepository repository)
+		public void Load()
 		{
 			if (IsLoaded || IsLoading)
 				return;
@@ -43,7 +44,7 @@ namespace Mtgdb.Dal
 			if (_version.IsUpToDate)
 				_index = new RAMDirectory(FSDirectory.Open(_version.Directory), IOContext.READ_ONCE);
 			else
-				_index = new RAMDirectory(createKeywordsFrom(repository), IOContext.READ_ONCE);
+				_index = new RAMDirectory(createKeywordsFrom(_repo), IOContext.READ_ONCE);
 
 			_indexReader = DirectoryReader.Open(_index);
 			_searcher = new IndexSearcher(_indexReader);
@@ -63,6 +64,14 @@ namespace Mtgdb.Dal
 				var id = scoreDoc.GetId(_searcher);
 				yield return id;
 			}
+		}
+
+		internal IList<int> GetCardIds(string keywordName, string value)
+		{
+			var query = new TermQuery(new Term(keywordName.ToLower(Str.Culture), value.ToLower(Str.Culture)));
+			var searchResult = _searcher.Search(query, filter: null, n: _indexReader.MaxDoc);
+			var result = searchResult.ScoreDocs.Select(d => d.GetId(_searcher)).ToArray();
+			return result;
 		}
 
 		private static BooleanQuery toLuceneQuery(
@@ -137,7 +146,7 @@ namespace Mtgdb.Dal
 
 				var setKeywords = new CardKeywords[set.Cards.Count];
 
-				IndexUtils.For(0, set.Cards.Count, i => setKeywords[i] = set.Cards[i].GetKeywords());
+				IndexUtils.For(0, set.Cards.Count, i => setKeywords[i] = set.Cards[i].GetAllKeywords());
 
 				keywordsList.AddRange(setKeywords);
 
@@ -179,5 +188,7 @@ namespace Mtgdb.Dal
 		private RAMDirectory _index;
 		private IndexSearcher _searcher;
 		private DirectoryReader _indexReader;
+
+		private readonly CardRepository _repo;
 	}
 }

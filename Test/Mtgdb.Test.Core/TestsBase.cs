@@ -93,28 +93,26 @@ namespace Mtgdb.Test
 			LoadTranslations();
 
 			Searcher = Kernel.Get<LuceneSearcher>();
+			
+			var sw = new Stopwatch();
+			
+			sw.Start();
+			Searcher.LoadIndex();
+			sw.Stop();
+			_log.Info($"Searcher index loaded in {sw.ElapsedMilliseconds} ms");
 
-			if (!Searcher.IsUpToDate)
-			{
-				var sw = new Stopwatch();
-				sw.Restart();
-				Searcher.LoadIndexes();
-				sw.Stop();
-
-				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
-			}
-			else
-			{
-				var sw = new Stopwatch();
-				sw.Start();
-
-				Searcher.LoadIndexes();
-
-				sw.Stop();
-				_log.Debug($"Index created in {sw.ElapsedMilliseconds} ms");
-			}
+			sw.Start();
+			Searcher.LoadSpellcheckerIndex();
+			sw.Stop();
+			_log.Info($"Spellchecker index loaded in {sw.ElapsedMilliseconds} ms");
 
 			Spellchecker = Searcher.Spellchecker;
+
+			sw.Start();
+			KeywordSearcher = Kernel.Get<KeywordSearcher>();
+			KeywordSearcher.Load();
+			sw.Stop();
+			_log.Info($"Keyword searcher index loaded in {sw.ElapsedMilliseconds} ms");
 
 			LogManager.Flush();
 
@@ -128,6 +126,7 @@ namespace Mtgdb.Test
 
 		protected static LuceneSearcher Searcher;
 		protected static LuceneSpellchecker Spellchecker;
+		protected static KeywordSearcher KeywordSearcher;
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;
