@@ -49,8 +49,9 @@ namespace Mtgdb.Gui
 
 			_fields = new Fields();
 
-			QuickFilterImages.SetImages(this);
 			QuickFilterSetup.SetQuickFilterProperties(this);
+			QuickFilterImages.SetImages(this);
+			//QuickFilterImages.SetPropertiesCount(this);
 
 			_quickFilterFacade = new QuickFilterFacade(
 				KeywordDefinitions.Patterns,

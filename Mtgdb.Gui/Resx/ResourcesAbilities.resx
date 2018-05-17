@@ -295,4 +295,61 @@
   <data name="Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Extra_turn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\extra_turn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Suspend" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\suspend.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Shadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shadow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Infect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\infect.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Crew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Crew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Aftermath" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aftermath.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ascend" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ascend.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exalted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\exalted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wither" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Wither.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fuse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fuse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bestow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bestow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Persist" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Persist.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rebound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Rebound.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Soulbound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Soulbound.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Unearth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Unearth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cascade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cascade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cipher" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cipher.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Split_second" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Split_second.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

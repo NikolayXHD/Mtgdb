@@ -17,44 +17,79 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Popular_keywords_come_first()
+		public void Interesting_keywords_Are_displayed_in_button_filter()
 		{
-			var keywords = KeywordDefinitions.KeywordPatternsByDisplayText.Keys;
-
-			var boringKeywords = keywords.SkipWhile(F.IsNotEqualTo("Activate"))
+			var keywords = KeywordDefinitions.KeywordPatternsByDisplayText.Keys
 				.ToHashSet(Str.Comparer);
+
+			var boringKeywords = new HashSet<string>(Str.Comparer)
+			{
+				"Devoid",
+				"Echo",
+				"Evoke",
+				"Kicker",
+				"Plainswalk",
+				"Forestwalk",
+				"Swampwalk",
+				"Mountainwalk",
+				"Islandwalk",
+				"Cumulative Upkeep",
+				"Can't be regenerated"
+			};
+
+			boringKeywords.UnionWith(keywords.SkipWhile(F.IsNotEqualTo("Activate")));
+
+			var interestingKeywords = new HashSet<string>(Str.Comparer)
+			{
+				//"Undying",
+				//"Annihilator",
+				//"Renown",
+				//"Extra turn",
+				//"Crew"
+			};
 
 			var popularity = keywords
 				.Where(F.IsNotNull)
-				.Select(kw => (Keyword: kw, Count: KeywordSearcher.GetCardIds(nameof(KeywordDefinitions.Keywords), kw).Count))
+				.Select(kw =>
+				{
+					var cardIds = KeywordSearcher
+						.GetCardIds(nameof(KeywordDefinitions.Keywords), kw);
+
+					return (
+						Keyword: kw,
+						Count: getLegalCount(cardIds, "modern"));
+				})
 				.OrderBy(p => boringKeywords.Contains(p.Keyword))
+				.ThenByDescending(p => interestingKeywords.Contains(p.Keyword))
 				.ThenByDescending(p => p.Count)
 				.ToArray();
 
-			var popularityByKeyword = popularity.ToDictionary(p => p.Keyword, p => p.Count);
+			var popularityIndexByKeyword = Enumerable.Range(0, popularity.Length)
+				.ToDictionary(i => popularity[i].Keyword, i => i);
+
+			var popularityByKeyword = popularity
+				.ToDictionary(p => p.Keyword, p => p.Count);
 
 			var displayKeywords = keywords
 				.TakeWhile(F.IsNotEqualTo("Absorb"))
 				.ToHashSet(Str.Comparer);
 
-			var mostPopular = popularity
-				.Take(displayKeywords.Count)
-				.ToArray();
-
-			var notDisplayedPopular = mostPopular
-				.Where(p => !displayKeywords.Contains(p.Keyword))
+			var notDisplayedPopular = keywords
+				.OrderBy(kw => popularityIndexByKeyword[kw])
+				.Take(displayKeywords.Count + 30)
+				.Where(F.Not<string>(displayKeywords.Contains))
 				.ToArray();
 
 			if (notDisplayedPopular.Length > 0)
 			{
 				var toReplace = displayKeywords
-					.OrderBy(kw => popularityByKeyword[kw])
+					.OrderByDescending(kw => popularityIndexByKeyword[kw])
 					.Take(notDisplayedPopular.Length)
 					.ToArray();
 
 				var message = new StringBuilder($"Non displayed frequently used keywords ({notDisplayedPopular.Length}):")
 					.AppendLine()
-					.Append(string.Join(Str.Endl, notDisplayedPopular.Select(p => $"{p.Count}: {p.Keyword}")))
+					.Append(string.Join(Str.Endl, notDisplayedPopular.Select(kw => $"{popularityByKeyword[kw]}: {kw}")))
 					.AppendLine()
 					.AppendLine("Shoud replace following keywords:")
 					.Append(string.Join(Str.Endl, toReplace.Select(kw => $"{popularityByKeyword[kw]}: {kw}")))
@@ -62,6 +97,14 @@ namespace Mtgdb.Test
 
 				Log.Info(message);
 			}
+		}
+
+		private static int getLegalCount(IList<int> cardIds, string format)
+		{
+			return cardIds
+				.Select(i => Repo.Cards[i])
+				.GroupBy(c => c.NameEn)
+				.Count(gr => gr.First().IsLegalIn(format));
 		}
 
 		[Test]
