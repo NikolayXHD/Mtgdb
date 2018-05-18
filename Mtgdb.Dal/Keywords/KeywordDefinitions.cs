@@ -8,6 +8,27 @@ namespace Mtgdb.Dal
 {
 	public static class KeywordDefinitions
 	{
+		static KeywordDefinitions()
+		{
+			Patterns = Enumerable.Range(0, Values.Count)
+				.Select(i => Values[i].Select(PatternFactories[i]).ToList())
+				.Cast<IList<Regex>>()
+				.ToList();
+
+			PatternsByDisplayText =
+				Enumerable.Range(0, Values.Count)
+					.Select(i => Enumerable.Range(0, Patterns[i].Count)
+						.Where(j => Values[i][j] != null)
+						.ToDictionary(
+							j => KeywordRegexUtil.GetKeywordDisplayText(Values[i][j]),
+							j => Patterns[i][j],
+							Str.Comparer))
+					.ToList();
+
+			KeywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
+			CastKeywordsIndex = PropertyNames.IndexOf(nameof(CastKeywords));
+		}
+
 		private static string cost(string name, string pattern = null, string customPattern = null)
 		{
 			string normalForm = pattern ?? name;
@@ -112,38 +133,6 @@ namespace Mtgdb.Dal
 			=> $"{pattern}(?!{condition})";
 
 
-		private static Func<string, Regex>[] PatternFactories { get; } =
-		{
-			KeywordRegexUtil.CreateContainsRegex,
-			KeywordRegexUtil.CreateContainsRegex,
-			KeywordRegexUtil.CreateEqualsRegex,
-			KeywordRegexUtil.CreateContainsRegex,
-			KeywordRegexUtil.CreateEqualsRegex,
-			KeywordRegexUtil.CreateContainsRegex,
-			KeywordRegexUtil.CreateContainsRegex
-		};
-
-		public static Func<Card, string>[] Getters { get; } =
-		{
-			c => c.ManaCost,
-			c => c.TypeEn,
-			c => c.Rarity,
-			c => c.TextEn,
-			c => c.Cmc.ToString(Str.Culture),
-			c => c.TextEn,
-			c => c.GeneratedMana
-		};
-
-		public static readonly IList<string> PropertyNamesDisplay = new[]
-		{
-			nameof(Card.ManaCost),
-			nameof(Card.Type),
-			nameof(Card.Rarity),
-			nameof(Card.Text),
-			nameof(Card.Cmc),
-			nameof(Card.Text),
-			nameof(Card.Text)
-		};
 
 		public static readonly string[] ManaCost =
 		{
@@ -231,16 +220,37 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] Keywords =
+		public static readonly string[] CastKeywords =
 		{
 			"Aftermath",
+			count("Awaken"),
+			cost("Bestow", bound("bestow", notBefore: "cost")),
+			custom("Can't be countered", bound(cant("be", "countered"))),
+			custom("Cascade", bound("cascade", notAfter: "skyline")),
+			"Cipher",
+			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
+			custom("Flash", bound("flash",
+				notBefore: "(conscription|foliage|of Insight)",
+				notAfter: "aether")),
+			custom("Flashback", bound("flashback", notBefore: "cost")),
+			custom("Fuse", bound("fuse", notBefore: "counters?")),
+			cost("Madness"),
+			cost("Morph", bound("(mega)?morph", notBefore: "cost")),
+			"Rebound",
+			"Soulbond",
+			"Split Second",
+			cost("Surge", bound("surge", notAfter: "cast this spell for its")),
+			custom("Suspend", bound("suspend(s|ed)?")),
+			cost("Unearth", pattern: "unearth(s|ed)?")
+		};
+
+		public static readonly string[] Keywords =
+		{
 			count("Annihilator"),
 			"Ascend",
 			custom("Attack if able",
 				bound(sequenceWithout(@"block(s|ed)?\b",
 					@"(?<!\bcan't )attacks?( or blocks?)?\b", "if able"))),
-			count("Awaken"),
-			cost("Bestow", bound("bestow", notBefore: "cost")),
 			custom("Block if able",
 				bound(or(
 					sequenceWithout(@"attacks?\b",
@@ -250,10 +260,8 @@ namespace Mtgdb.Dal
 			custom("Can't attack", bound(or(cant("attack"), cant("be", "attacked")))),
 			custom("Can't be blocked", bound(cant("be", "blocked"),
 				notAfter: "this spell works on creatures that")),
-			custom("Can't be countered", bound(cant("be", "countered"))),
+			custom("Can't be regenerated", bound(cant("be", "regenerated"))),
 			custom("Can't block", bound(cant("block"))),
-			custom("Cascade", bound("cascade", notAfter: "skyline")),
-			"Cipher",
 			cost("Cohort"),
 			custom("Copy", bound("cop(y|ies)")),
 			custom("Counter", bound(or(
@@ -265,7 +273,6 @@ namespace Mtgdb.Dal
 				notAfter("can't be ", "countered")))),
 			custom("Create token", bound("create(s|d)?")),
 			count("Crew", customPattern: "crews?"),
-			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
 			custom("Deal damage", bound(@"deals? \d+ damage")),
 			custom("Deathtouch", bound("(un)?deathtouch")),
 			custom("Defender", bound("defender",
@@ -288,12 +295,7 @@ namespace Mtgdb.Dal
 			custom("Fight", bound("fight(s|ed)?")),
 			custom("First Strike", bound("first strike",
 				notAfter: "deals combat damage before creatures without")),
-			custom("Flash", bound("flash",
-				notBefore: "(conscription|foliage|of Insight)",
-				notAfter: "aether")),
-			custom("Flashback", bound("flashback", notBefore: "cost")),
 			custom("Flying", bound("Flying", notAfter: "(can block|except by) creatures with")),
-			custom("Fuse", bound("fuse", notBefore: "counters?")),
 			custom("Gain control", bound("gains? control")),
 			"Haste",
 			"Hexproof",
@@ -301,22 +303,21 @@ namespace Mtgdb.Dal
 			custom("Infect", bound("infect",
 				notBefore: "deal damage to creatures in the form",
 				notAfter: "damage dealt by sources without")),
+			"Ingest",
 			custom("Intimidate", bound("intimidate", notBefore: "can't be blocked except")),
 			custom("Landwalk", bound(
 				optional("(snow(\\-covered)?|(non)?basic|legendary) ") +
 				"(land|denim|desert|plains|forest|swamp|mountain|island)walk")),
 			"Lifelink",
-			cost("Madness"),
 			"Menace",
-			cost("Morph", pattern: notBefore("(mega)?morph", " cost")),
 			"Persist",
+			custom("Phasing", bound(or("phasing", "phases? (in|out)"))),
 			custom("Protection", bound("protection", notAfter: "(circle of|teferi's)")),
 			"Prowess",
+			custom("Rally", bound("rally", before: "— ?")),
 			custom("Reach", bound("reach",
 				notBefore: "of Branches",
 				notAfter: "(except by creatures with flying or|geier|myojin of night's)")),
-			custom("Rally", bound("rally", before: "— ?")),
-			"Rebound",
 			"Regenerate",
 			count("Renown", customPattern: bound("renowned",
 				notBefore: "weaver",
@@ -330,18 +331,14 @@ namespace Mtgdb.Dal
 				"(can block or be blocked by only creatures with|nether|feral|shifting|dragon|perilous|death's|elves of deep)")),
 			"Shroud",
 			custom("Skulk", bound("skulk", notAfter: "pit-")),
-			"Soulbond",
-			"Split Second",
-			custom("Suspend", bound("suspend(s|ed)?")),
 			"Trample",
-			custom("Transform", bound("transform(s|ed)?")),
 			custom("Undying", bound("undying", notBefore: "(beast|rage|flames|partisan)")),
-			cost("Unearth", pattern: "unearth(s|ed)?"),
 			"Vigilance",
 			"Wither",
 
 			null,
 
+			custom("Transform", bound("transform(s|ed)?")),
 			count("Absorb"),
 			custom("Affinity", bound("affinity", before: "for")),
 			count("Afflict"),
@@ -353,7 +350,6 @@ namespace Mtgdb.Dal
 			count("Bloodthirst"),
 			count("Bushido"),
 			"Buyback",
-			custom("Can't be regenerated", bound(cant("be", "regenerated"))),
 			custom("Champion", bound("champion", before: "an?")),
 			"Changeling",
 			"Conspire",
@@ -398,7 +394,6 @@ namespace Mtgdb.Dal
 			custom("Horsemanship", bound("horsemanship",
 				notAfter: "can't be blocked except by creatures with")),
 			"Improvise",
-			"Ingest",
 			cost("Kicker", pattern: "(multi)?kick(er|ed|s)"),
 			custom("Level Up", bound("level (up|counter)", notBefore: "only as a sorcery")),
 			"Living Weapon",
@@ -411,7 +406,6 @@ namespace Mtgdb.Dal
 			cost("Outlast"),
 			cost("Overload"),
 			custom("Partner", bound("partner", notAfter: "if both have")),
-			custom("Phasing", bound(or("phasing", "phases? (in|out)"))),
 			count("Poisonous"),
 			"Provoke",
 			cost("Prowl"),
@@ -429,7 +423,6 @@ namespace Mtgdb.Dal
 				notAfter:
 				"(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)")),
 			"Sunburst",
-			cost("Surge"),
 			"Totem Armor",
 			cost("Transfigure"),
 			cost("Transmute"),
@@ -449,7 +442,7 @@ namespace Mtgdb.Dal
 			custom("Tap", bound("tap(s|ped)?")),
 			custom("Untap", bound("untap(s|ped)?", notAfter: "skips? (their|the|your)( next)?")),
 			custom("Bury", bound("bur(y|ies|ied)", notBefore: "ruin")),
-			custom("Ante", bound("ante(s|d)?")),
+			custom("Ante", bound("ante(s|d)?"))
 		};
 
 		public static readonly string[] Rarity =
@@ -462,6 +455,64 @@ namespace Mtgdb.Dal
 			null /*, "marketing", "double faced"*/
 		};
 
+		public static readonly string[] Layout =
+		{
+			"Normal",
+			"Aftermath",
+			"Split",
+			"Meld",
+			"Leveler",
+			"Double-faced",
+			"Flip",
+			"Phenomenon",
+			"Plane",
+			"Scheme",
+			"Vanguard",
+			"Token",
+			null
+		};
+
+
+
+		private static Func<string, Regex>[] PatternFactories { get; } =
+		{
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
+		};
+
+		public static Func<Card, string>[] Getters { get; } =
+		{
+			c => c.ManaCost,
+			c => c.TypeEn,
+			c => c.Rarity,
+			c => c.TextEn,
+			c => c.Cmc.ToString(Str.Culture),
+			c => c.TextEn,
+			c => c.GeneratedMana,
+			c => c.Layout,
+			c => c.TextEn,
+		};
+
+		public static readonly IList<string> PropertyNamesDisplay = new[]
+		{
+			nameof(Card.ManaCost),
+			nameof(Card.Type),
+			nameof(Card.Rarity),
+			nameof(Card.Text),
+			nameof(Card.Cmc),
+			nameof(Card.Text),
+			nameof(Card.Text),
+			nameof(Card.Layout),
+			nameof(Card.Text),
+		};
+
 		public static readonly IList<IList<string>> Values = new IList<string>[]
 		{
 			ManaCost,
@@ -470,23 +521,10 @@ namespace Mtgdb.Dal
 			Keywords,
 			Cmc,
 			ManaAbility,
-			GeneratedMana
+			GeneratedMana,
+			Layout,
+			CastKeywords,
 		};
-
-		public static IList<IList<Regex>> Patterns { get; } = Enumerable.Range(0, Values.Count)
-			.Select(i => Values[i].Select(PatternFactories[i]).ToList())
-			.Cast<IList<Regex>>()
-			.ToList();
-
-		public static IList<Dictionary<string, Regex>> PatternsByDisplayText { get; } =
-			Enumerable.Range(0, Values.Count)
-				.Select(i => Enumerable.Range(0, Patterns[i].Count)
-					.Where(j => Values[i][j] != null)
-					.ToDictionary(
-						j => KeywordRegexUtil.GetKeywordDisplayText(Values[i][j]),
-						j => Patterns[i][j],
-						Str.Comparer))
-				.ToList();
 
 		public static readonly IList<string> PropertyNames = new[]
 		{
@@ -496,8 +534,18 @@ namespace Mtgdb.Dal
 			nameof(Keywords),
 			nameof(Cmc),
 			nameof(ManaAbility),
-			nameof(GeneratedMana)
+			nameof(GeneratedMana),
+			nameof(Layout),
+			nameof(CastKeywords)
 		};
+
+
+		public static IList<IList<Regex>> Patterns { get; }
+
+		public static IList<Dictionary<string, Regex>> PatternsByDisplayText { get; }
+
+		public static readonly int KeywordsIndex;
+		public static readonly int CastKeywordsIndex;
 
 		private const string KeywordIntroducers =
 			@"\b(you|teammate|opponent|player|was|were|is|are|it's|they're|ha(s|d|ve)|gain(s|ed)?|can't|activate(s|d)?|with) ";
@@ -506,10 +554,5 @@ namespace Mtgdb.Dal
 			@" (abilit(y|ies)|costs?|(a|any|this|these|that|those)? (spells?|permanents?|vehicles?))\b";
 
 		private const string CountSuffix = @"( (\d+|x)\b| ?— ?sunburst)";
-
-		private static readonly int _keywordsIndex = PropertyNames.IndexOf(nameof(Keywords));
-
-		public static Dictionary<string, Regex> KeywordPatternsByDisplayText
-			=> PatternsByDisplayText[_keywordsIndex];
 	}
 }

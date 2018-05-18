@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Mtgdb.Dal
 {
@@ -8,14 +8,36 @@ namespace Mtgdb.Dal
 	{
 		public CardKeywords(Card card)
 		{
+			_card = card;
 			IndexInFile = card.IndexInFile;
+			_keywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
+		}
 
-			KeywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
+		internal HashSet<string> GetPropertyValues(string propertyName)
+		{
+			var index = KeywordDefinitions.PropertyNames.IndexOf(propertyName, Str.Comparer);
+			
+			if (index < 0)
+				throw new ArgumentException();
 
-			if (!string.IsNullOrEmpty(card.TextEn))
-				for (int i = 0; i < KeywordDefinitions.Values.Count; i++)
-					foreach (string value in parseValues(card, i))
-						addKeyword(KeywordDefinitions.PropertyNames[i], value);
+			string name = KeywordDefinitions.PropertyNames[index];
+
+			lock (_sync)
+			{
+				if (_keywordsByProperty.TryGetValue(name, out var values))
+					return values;
+
+				values = parseValues(_card, index).ToHashSet(Str.Comparer);
+
+				_keywordsByProperty.Add(name, values);
+				return values;
+			}
+		}
+
+		internal IEnumerable<(string PropertyName, HashSet<string> Values)> GetAllValues()
+		{
+			return KeywordDefinitions.PropertyNames
+				.Select(propertyName => (propertyName, GetPropertyValues(propertyName)));
 		}
 
 		private static IEnumerable<string> parseValues(Card card, int propertyIndex)
@@ -29,11 +51,10 @@ namespace Mtgdb.Dal
 
 			for (int j = 0; j < propertyValues.Count; j++)
 			{
-				var matches = patterns[j]?.Matches(text)
-					.OfType<Match>()
-					.ToList();
+				if (patterns[j] == null)
+					continue;
 
-				if (matches?.Count > 0)
+				if (patterns[j].IsMatch(text))
 				{
 					string displayText = KeywordRegexUtil.GetKeywordDisplayText(propertyValues[j]);
 					yield return displayText;
@@ -41,30 +62,18 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		private void addKeyword(string propertyName, string value)
-		{
-			if (!KeywordsByProperty.TryGetValue(propertyName, out var keywords))
-			{
-				keywords = new HashSet<string>(Str.Comparer);
-				KeywordsByProperty.Add(propertyName, keywords);
-			}
 
-			keywords.Add(value);
-		}
-
-		internal ICollection<string> TextKeywords
-		{
-			get
-			{
-				if (!KeywordsByProperty.TryGetValue(nameof(KeywordDefinitions.Keywords), out var keywords))
-					return Array.Empty<string>();
-
-				return keywords;
-			}
-		}
 
 		public int IndexInFile { get; }
 
-		public Dictionary<string, HashSet<string>> KeywordsByProperty { get; }
+		internal ICollection<string> OtherKeywords => 
+			GetPropertyValues(nameof(KeywordDefinitions.Keywords));
+
+		internal ICollection<string> CastKeywords =>
+			GetPropertyValues(nameof(KeywordDefinitions.CastKeywords));
+
+		private readonly Card _card;
+		private readonly Dictionary<string, HashSet<string>> _keywordsByProperty;
+		private readonly object _sync = new object();
 	}
 }

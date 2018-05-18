@@ -16,7 +16,9 @@ namespace Mtgdb.Gui
 				form.FilterType,
 				form.FilterCmc,
 				form.FilterManaAbility,
-				form.FilterGeneratedMana
+				form.FilterGeneratedMana,
+				form.FilterLayout,
+				form.FilterCastKeyword
 			};
 		}
 
@@ -30,7 +32,9 @@ namespace Mtgdb.Gui
 				form.FilterAbility.States,
 				form.FilterCmc.States,
 				form.FilterManaAbility.States,
-				form.FilterGeneratedMana.States
+				form.FilterGeneratedMana.States,
+				form.FilterLayout.States,
+				form.FilterCastKeyword.States,
 			};
 		}
 
@@ -38,11 +42,13 @@ namespace Mtgdb.Gui
 		{
 			form.FilterManaCost.Properties = KeywordDefinitions.ManaCost;
 			form.FilterAbility.Properties = KeywordDefinitions.Keywords.ToKeywordDisplayTexts();
+			form.FilterCastKeyword.Properties = KeywordDefinitions.CastKeywords.ToKeywordDisplayTexts();
 			form.FilterRarity.Properties = KeywordDefinitions.Rarity;
 			form.FilterType.Properties = KeywordDefinitions.Type;
 			form.FilterCmc.Properties = KeywordDefinitions.Cmc;
 			form.FilterManaAbility.Properties = KeywordDefinitions.ManaAbility;
 			form.FilterGeneratedMana.Properties = KeywordDefinitions.GeneratedMana;
+			form.FilterLayout.Properties = KeywordDefinitions.Layout;
 
 			form.FilterManager.Properties = new[]
 			{

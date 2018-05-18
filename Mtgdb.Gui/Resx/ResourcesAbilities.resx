@@ -259,7 +259,7 @@
   <data name="Cant_attack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cant_attack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Create_token" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\create.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Cycling" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -351,5 +351,23 @@
   </data>
   <data name="Split_second" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Split_second.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Meld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\meld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Normal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\normal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Phenomenon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\phenomenon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Plane" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\plane.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scheme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vanguard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Vanguard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

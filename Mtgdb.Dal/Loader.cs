@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Mtgdb.Dal.Index;
 using NLog;
+using ThreadState = System.Threading.ThreadState;
 
 namespace Mtgdb.Dal
 {
@@ -54,6 +56,7 @@ namespace Mtgdb.Dal
 		{
 			var loadingDelegates = new List<Action>
 			{
+				warmKeywordRegexes,
 				() =>
 				{
 					_repository.LoadFile();
@@ -105,6 +108,25 @@ namespace Mtgdb.Dal
 			};
 
 			return loadingDelegates;
+		}
+
+		private void warmKeywordRegexes()
+		{
+			var sw = new Stopwatch();
+			sw.Start();
+			
+			var patterns = KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.KeywordsIndex].Values
+					.Concat(KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.CastKeywordsIndex].Values);
+
+			int matchCount = 0;
+
+			foreach (var pattern in patterns)
+				if (pattern.IsMatch("Search your library for a host card or a card with augment, reveal it, put it into your hand, then shuffle your library."))
+					matchCount++;
+
+			sw.Stop();
+
+			_log.Info($"{nameof(warmKeywordRegexes)} completed in {sw.ElapsedMilliseconds} ms {matchCount}");
 		}
 
 		private static Thread createLoadingThread(Action action)

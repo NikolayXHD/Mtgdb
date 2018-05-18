@@ -7,7 +7,8 @@ namespace Mtgdb.Gui
 	{
 		public static void SetImages(FormMain formMain)
 		{
-			formMain.FilterAbility.PropertyImages = _ability;
+			formMain.FilterAbility.PropertyImages = _keywords;
+			formMain.FilterCastKeyword.PropertyImages = _castKeywords;
 			formMain.FilterCmc.PropertyImages = _cmc;
 			formMain.FilterGeneratedMana.PropertyImages = _manaGenerated;
 			formMain.FilterManaAbility.PropertyImages = _manaAbility;
@@ -15,6 +16,7 @@ namespace Mtgdb.Gui
 			formMain.FilterManager.PropertyImages = _filterManager;
 			formMain.FilterRarity.PropertyImages = _rarity;
 			formMain.FilterType.PropertyImages = _type;
+			formMain.FilterLayout.PropertyImages = _layout;
 		}
 
 		private static readonly Bitmap[] _filterManager =
@@ -100,27 +102,43 @@ namespace Mtgdb.Gui
 			ResourcesCost.na
 		};
 
-		private static readonly Bitmap[] _ability =
+		private static readonly Bitmap[] _castKeywords =
 		{
 			ResourcesAbilities.Aftermath,
+			ResourcesAbilities.Awake,
+			ResourcesAbilities.Bestow,
+			ResourcesAbilities.Cant_be_countered,
+			ResourcesAbilities.Cascade,
+			ResourcesAbilities.Cipher,
+			ResourcesAbilities.Cycling,
+			ResourcesAbilities.Flash,
+			ResourcesAbilities.Flashback,
+			ResourcesAbilities.Fuse,
+			ResourcesAbilities.Madness,
+			ResourcesAbilities.Morph,
+			ResourcesAbilities.Rebound,
+			ResourcesAbilities.Soulbound,
+			ResourcesAbilities.Split_second,
+			ResourcesAbilities.Surge,
+			ResourcesAbilities.Suspend,
+			ResourcesAbilities.Unearth
+		};
+
+		private static readonly Bitmap[] _keywords =
+		{
 			ResourcesAbilities.Annihilator,
 			ResourcesAbilities.Ascend,
 			ResourcesAbilities.Attacks_each_turn,
-			ResourcesAbilities.Awake,
-			ResourcesAbilities.Bestow,
 			ResourcesAbilities.Block_if_able,
 			ResourcesAbilities.Cant_attack,
 			ResourcesAbilities.Cant_be_blocked,
-			ResourcesAbilities.Cant_be_countered,
+			ResourcesAbilities.Cant_be_regenerated,
 			ResourcesAbilities.Cant_block,
-			ResourcesAbilities.Cascade,
-			ResourcesAbilities.Cipher,
 			ResourcesAbilities.Cohort,
 			ResourcesAbilities.Copy,
 			ResourcesAbilities.Counter,
-			ResourcesAbilities.Create,
+			ResourcesAbilities.Create_token,
 			ResourcesAbilities.Crew,
-			ResourcesAbilities.Cycling,
 			ResourcesAbilities.Deal_damage,
 			ResourcesAbilities.Deathtouch,
 			ResourcesAbilities.Defender,
@@ -138,27 +156,23 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Fear,
 			ResourcesAbilities.Fight,
 			ResourcesAbilities.First_strike,
-			ResourcesAbilities.Flash,
-			ResourcesAbilities.Flashback,
 			ResourcesAbilities.Flying,
-			ResourcesAbilities.Fuse,
 			ResourcesAbilities.Gain_control,
 			ResourcesAbilities.Haste,
 			ResourcesAbilities.Hexproof,
 			ResourcesAbilities.Indestructible,
 			ResourcesAbilities.Infect,
+			ResourcesAbilities.Ingest,
 			ResourcesAbilities.Intimidate,
 			ResourcesAbilities.Landwalk,
 			ResourcesAbilities.Lifelink,
-			ResourcesAbilities.Madness,
 			ResourcesAbilities.Menace,
-			ResourcesAbilities.Morph,
 			ResourcesAbilities.Persist,
+			ResourcesAbilities.Phasing,
 			ResourcesAbilities.Protection,
 			ResourcesAbilities.Prowess,
 			ResourcesAbilities.Rally,
 			ResourcesAbilities.Reach,
-			ResourcesAbilities.Rebound,
 			ResourcesAbilities.Regenerate,
 			ResourcesAbilities.Renown,
 			ResourcesAbilities.Sacrifice,
@@ -167,13 +181,8 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Shadow,
 			ResourcesAbilities.Shroud,
 			ResourcesAbilities.Skulk,
-			ResourcesAbilities.Soulbound,
-			ResourcesAbilities.Split_second,
-			ResourcesAbilities.Suspend,
 			ResourcesAbilities.Trample,
-			ResourcesAbilities.Transform,
 			ResourcesAbilities.Undying,
-			ResourcesAbilities.Unearth,
 			ResourcesAbilities.Vigilance,
 			ResourcesAbilities.Wither
 		};
@@ -197,6 +206,23 @@ namespace Mtgdb.Gui
 			ResourcesRarity.rare2,
 			ResourcesRarity.mythic2,
 			ResourcesType.land,
+			ResourcesCost.na
+		};
+
+		private static readonly Bitmap[] _layout =
+		{
+			ResourcesAbilities.Normal,
+			ResourcesAbilities.Aftermath,
+			ResourcesAbilities.Fuse,
+			ResourcesAbilities.Meld,
+			ResourcesAbilities.Renown,
+			ResourcesAbilities.Transform,
+			ResourcesAbilities.Cycling,
+			ResourcesAbilities.Phenomenon,
+			ResourcesAbilities.Plane,
+			ResourcesAbilities.Scheme,
+			ResourcesAbilities.Vanguard,
+			ResourcesAbilities.Create_token,
 			ResourcesCost.na
 		};
 	}

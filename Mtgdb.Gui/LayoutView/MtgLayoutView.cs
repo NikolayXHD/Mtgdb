@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -228,7 +229,14 @@ namespace Mtgdb.Gui
 						.AppendLine()
 						.Append(card.OriginalText);
 
-				var keywords = card.GetKeywords();
+				text
+					.AppendLine()
+					.AppendLine()
+					.Append(nameof(KeywordDefinitions.Layout)).Append(": ").Append(card.Layout);
+
+				var keywords = card.GetKeywords()
+					.Concat(card.GetCastKeywords())
+					.ToHashSet(Str.Comparer);
 
 				if (keywords.Count > 0)
 					text

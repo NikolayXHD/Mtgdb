@@ -102,6 +102,14 @@
 				FilterAbility);
 
 			controller.SetTooltip(this,
+				"Filter by CAST RELATED keyword abilities",
+				"Use Middle mouse click to RESET.\r\n\r\n" +
+				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
+				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
+				"Keyword examples: Cascade, Flashback, Madness, ...",
+				FilterCastKeyword);
+
+			controller.SetTooltip(this,
 				"Filter by spell Type",
 				"Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use BOTTOM row to PROHIBIT any UNCHECKED types in a card.\r\n" +
@@ -109,15 +117,6 @@
 				"Example: to see all artifacts check artifact in TOP row.\r\n\r\n" +
 				"N/A means any Type different from values in this filter.",
 				FilterType);
-
-			controller.SetTooltip(this,
-				"Filter by Rarity",
-				"Use Middle mouse click to RESET.\r\n\r\n" +
-				"Use BOTTOM row to PROHIBIT any UNCHECKED value.\r\n" +
-				"The card cannot have more than 1 Rarity value so there is no\r\n" +
-				"point in using the TOP row.\r\n\r\n" +
-				"N/A means any Rarity different from values in this filter.",
-				FilterRarity);
 
 			controller.SetTooltip(this,
 				"Filter Manager",
@@ -132,6 +131,15 @@
 				"Use BOTTOM row set OR mode.\r\n" +
 				"Uncheck the source in both rows to set DISABLED mode.",
 				FilterManager);
+
+			controller.SetTooltip(this,
+				"Filter by Rarity",
+				"Use Middle mouse click to RESET.\r\n\r\n" +
+				"Use LEFT row to PROHIBIT any UNCHECKED value.\r\n" +
+				"The card cannot have more than 1 Rarity value so there is no\r\n" +
+				"point in using the RIGHT row.\r\n\r\n" +
+				"N/A means any Rarity different from values in this filter.",
+				FilterRarity);
 
 			controller.SetTooltip(this,
 				"Filter by Mana symbol in card Text",
@@ -165,8 +173,16 @@
 				"Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Converted Mana Cost value\r\n" +
-				"so there is no point in using the RIGHT row.",
+				"so there is NO point in using the RIGHT row.",
 				FilterCmc);
+
+			controller.SetTooltip(this,
+				"Filter by Layout",
+				"Use Middle mouse click to RESET.\r\n\r\n" +
+				"Use LEFT row to REQUIRE ANY checked value\r\n" +
+				"The card cannot have more than 1 Layout value\r\n" +
+				"so there is NO point in using the RIGHT row.",
+				FilterLayout);
 
 			controller.SetTooltip(this,
 				"Visibility of Prohibiting buttons",

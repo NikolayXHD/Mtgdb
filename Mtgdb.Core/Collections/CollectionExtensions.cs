@@ -196,5 +196,14 @@ namespace Mtgdb
 
 		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer) => 
 			new HashSet<T>(sequence, comparer);
+
+		public static int IndexOf<T>(this IList<T> list, T value, IEqualityComparer<T> comparer)
+		{
+			for (int i = 0; i < list.Count; i++)
+				if (comparer.Equals(list[i], value))
+					return i;
+
+			return -1;
+		}
 	}
 }

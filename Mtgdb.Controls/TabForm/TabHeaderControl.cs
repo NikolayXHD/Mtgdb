@@ -34,12 +34,15 @@ namespace Mtgdb.Controls
 			MouseUp += mouseUp;
 			MouseLeave += mouseLeave;
 
+
 			SetStyle(
 				ControlStyles.UserPaint |
 				ControlStyles.AllPaintingInWmPaint |
 				ControlStyles.DoubleBuffer |
 				ControlStyles.ResizeRedraw,
 				true);
+
+			_graphics = CreateGraphics();
 		}
 
 		public void ApplyOrderFrom(TabHeaderControl other)
@@ -169,8 +172,7 @@ namespace Mtgdb.Controls
 			TabRemoved?.Invoke(this);
 		}
 
-		public void AddTab(
-			object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null)
+		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null)
 		{
 			lock (_syncRoot)
 			{
@@ -508,8 +510,7 @@ namespace Mtgdb.Controls
 		}
 
 
-		private void paintTab(
-			int i, Graphics g, IList<string> texts, IList<int> widths, IList<Bitmap> icons)
+		private void paintTab(int i, Graphics g, IList<string> texts, IList<int> widths, IList<Bitmap> icons)
 		{
 			var color = getTabColor(i);
 			var closeIcon = getCloseIcon(i);
@@ -538,8 +539,7 @@ namespace Mtgdb.Controls
 				paintAddButtonElements(g, points, AddIcon);
 		}
 
-		private void paintTabElements(
-			Graphics g, Point[] points, Bitmap icon, string text, Bitmap closeIcon)
+		private void paintTabElements(Graphics g, Point[] points, Bitmap icon, string text, Bitmap closeIcon)
 		{
 			int left = points[1].X;
 
@@ -561,7 +561,7 @@ namespace Mtgdb.Controls
 				var textTop = Height - (textSize.Height + SlopeSize.Height) / 2;
 				var textBounds = new Rectangle(new Point(textLeft, textTop), textSize);
 
-				TextRenderer.DrawText(g, text, Font, textBounds, ForeColor, _textFormatFlags);
+				g.DrawText(text, Font, textBounds, ForeColor);
 			}
 
 			if (closeIcon != null)
@@ -720,12 +720,8 @@ namespace Mtgdb.Controls
 
 		private Size measureText(string text)
 		{
-			var image = new Bitmap(100, 100);
-			var g = Graphics.FromImage(image);
-
-			var size = TextRenderer.MeasureText(g, text, Font, new Size(1024, 100), _textFormatFlags);
-
-			return size;
+			var result = _graphics.MeasureText(text, Font);
+			return result;
 		}
 
 		public string GetDefaultText(int i)
@@ -1090,8 +1086,6 @@ namespace Mtgdb.Controls
 		private Bitmap _defaultIcon;
 		private bool _allowRemovingTabs = true;
 		private Bitmap _addIcon;
-
-		private static readonly TextFormatFlags _textFormatFlags =
-			new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
+		private Graphics _graphics;
 	}
 }

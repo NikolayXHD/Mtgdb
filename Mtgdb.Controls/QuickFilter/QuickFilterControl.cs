@@ -10,17 +10,14 @@ namespace Mtgdb.Controls
 {
 	public class QuickFilterControl : UserControl
 	{
-		private const float OpacityEnabled = 1.00f;
-		private const float OpacityToEnable = 0.90f;
-		private const float OpacityToDisable = 0.30f;
-		private const float OpacityDisabled = 0.24f;
-
 		public QuickFilterControl()
 		{
 			init();
 
 			ImageSize = new Size(20, 20);
-			PropertiesCount = 5;
+			PropertiesCount = DefaultPropertiesCount;
+			NullPropertyText = DefaultNullPropertyText;
+
 			_selectionColor = Color.Transparent;
 			_selectionBorderColor = Color.Transparent;
 			_prohibitedColor = Color.Transparent;
@@ -124,6 +121,7 @@ namespace Mtgdb.Controls
 						states[click.ButtonIndex] = FilterValueState.Ignored;
 					else
 						states[click.ButtonIndex] = FilterValueState.Prohibited;
+
 					break;
 
 				case FilterValueState.Prohibited:
@@ -284,12 +282,7 @@ namespace Mtgdb.Controls
 			int cellWidth = _imageSize.Width + Spacing.Width;
 			int cellHeight = _imageSize.Height + Spacing.Height;
 
-			int statesCount;
-
-			if (HideProhibit)
-				statesCount = 2;
-			else
-				statesCount = 3;
+			int statesCount = StatesCount;
 
 			int width = PropertiesCount * cellWidth + Spacing.Width;
 			int height = statesCount * cellHeight + Spacing.Height;
@@ -312,6 +305,10 @@ namespace Mtgdb.Controls
 			const int maxStateIndex = 1;
 			// таким образом RequireSome == Allowed для вычисления координат
 			int stateIndex = (int) state % 2;
+
+			if (EnableMutuallyExclusive)
+				stateIndex++;
+
 			int shift = maxStateIndex - stateIndex;
 
 			int x = i * width + Spacing.Width;
@@ -323,7 +320,7 @@ namespace Mtgdb.Controls
 				swap(ref imageWidth, ref imageHeight);
 
 				if (IsFlipped)
-					x = Width - x - (imageWidth - 1);
+					x = Width - x - imageWidth;
 			}
 
 			var result = new Rectangle(x, y, imageWidth, imageHeight);
@@ -335,7 +332,7 @@ namespace Mtgdb.Controls
 			if (IsVertical)
 			{
 				if (IsFlipped)
-					x = Width - 1 - x;
+					x = Width - x;
 
 				swap(ref x, ref y);
 			}
@@ -349,6 +346,9 @@ namespace Mtgdb.Controls
 
 			int stateIndex = (2 * y - Spacing.Width) / (height * 2);
 
+			if (EnableMutuallyExclusive)
+				stateIndex++;
+
 			switch (stateIndex)
 			{
 				case 0:
@@ -358,6 +358,7 @@ namespace Mtgdb.Controls
 				case 2:
 					if (HideProhibit)
 						return null;
+
 					return new StateClick(index, FilterValueState.Prohibited, button);
 				default:
 					return null;
@@ -503,20 +504,28 @@ namespace Mtgdb.Controls
 			if (!command.HasValue)
 				return;
 
-			var property = Properties[command.Value.ButtonIndex] ?? "N/A";
+			var property = Properties[command.Value.ButtonIndex] ?? NullPropertyText;
 
 			var font = Font;
-			const int border = 1;
 
 			var rectangle = getPaintingRectangle(command.Value.ButtonIndex, command.Value.ClickedState);
+			bool rotateText = IsVertical && EnableMutuallyExclusive;
 
 			int x;
 			int y;
 
 			if (IsVertical)
 			{
-				y = rectangle.Y - rectangle.Height;
-				x = rectangle.X + (rectangle.Width - font.Height / 2) / 2;
+				if (rotateText)
+				{
+					x = rectangle.Y + rectangle.Height;
+					y = -(rectangle.X + (rectangle.Width + font.Height / 2) / 2);
+				}
+				else
+				{
+					x = rectangle.X + (rectangle.Width - font.Height / 2) / 2;
+					y = rectangle.Y - rectangle.Height;
+				}
 			}
 			else
 			{
@@ -524,24 +533,30 @@ namespace Mtgdb.Controls
 				y = rectangle.Y + (rectangle.Height - font.Height) / 2;
 			}
 
-
 			int iconWidth = HintIcon?.Width ?? 0;
 
-			float fontSize = font.SizeInPixels();
+			var textSize = e.Graphics.MeasureText(property, font);
+			int textWidth = textSize.Width;
+			int wordWidth = Math.Max(iconWidth, textWidth);
 
-			int wordWidth = Math.Max(
-				iconWidth,
-				(int) (property.Length * fontSize * 0.67f) + HintTextShift.Width);
-
-			if (x + wordWidth > Width)
+			if (rotateText)
+			{
+				if (x + wordWidth > Height)
+					x = Height - wordWidth;
+			}
+			else if (x + wordWidth > Width)
 				x = Width - wordWidth;
 
-			int wordHeight =
-				(int) (fontSize - HintTextShift.Height);
+			int wordHeight = textSize.Height - HintTextShift.Height;
 
 			if (IsVertical)
 			{
-				if (y - wordHeight < 0)
+				if (rotateText)
+				{
+					if (-y - wordHeight > 0)
+						y = -wordHeight;
+				}
+				else if (y - wordHeight < 0)
 					y = wordHeight;
 			}
 			else
@@ -557,23 +572,13 @@ namespace Mtgdb.Controls
 			int tx = x + HintTextShift.Width;
 			int ty = y + HintTextShift.Height;
 
-			for (int i = -border; i < border + 1; i++)
-				for (int j = -border; j < border + 1; j++)
-				{
-					e.Graphics.DrawString(
-						property,
-						font,
-						new SolidBrush(Color.White),
-						tx + i,
-						ty + j);
-				}
+			if (rotateText)
+				e.Graphics.RotateTransform(90f);
 
-			e.Graphics.DrawString(
-				property,
-				font,
-				new SolidBrush(Color.Black),
-				tx,
-				ty);
+			e.Graphics.DrawText(property, font, Color.Black, Color.White, 1f, 3f, new Rectangle(new Point(tx, ty), textSize));
+
+			if (rotateText)
+				e.Graphics.RotateTransform(-90f);
 		}
 
 		private void paintSelection(PaintEventArgs e)
@@ -756,7 +761,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(5)]
+		[DefaultValue(DefaultPropertiesCount)]
 		public int PropertiesCount
 		{
 			get => _propertiesCount;
@@ -797,6 +802,10 @@ namespace Mtgdb.Controls
 			{
 				_propertyImages = value;
 				createDerivedImages();
+
+				if (value != null)
+					PropertiesCount = value.Count;
+
 				Invalidate();
 			}
 		}
@@ -1004,7 +1013,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
-
+		[Category("Settings")]
+		[DefaultValue(DefaultNullPropertyText)]
+		public string NullPropertyText { get; set; }
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FilterValueState[] StatesDefault { get; set; }
@@ -1038,6 +1049,31 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IList<string> Properties { get; set; }
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		private int StatesCount
+		{
+			get
+			{
+				int statesCount = 1;
+
+				if (!EnableMutuallyExclusive)
+					statesCount++;
+
+				if (!HideProhibit)
+					statesCount++;
+
+				return statesCount;
+			}
+		}
+
+
+
+		private const float OpacityEnabled = 1.00f;
+		private const float OpacityToEnable = 0.90f;
+		private const float OpacityToDisable = 0.30f;
+		private const float OpacityDisabled = 0.24f;
+		private const string DefaultNullPropertyText = "N/A";
+		private const int DefaultPropertiesCount = 5;
 
 		private IList<Bitmap> _images;
 		private IList<Bitmap> _imagesToDisable;

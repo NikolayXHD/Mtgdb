@@ -120,9 +120,12 @@ namespace Mtgdb.Dal.Index
 			var doc = new Document();
 			doc.addIdField(nameof(CardKeywords.IndexInFile), cardKeywords.IndexInFile);
 
-			foreach (var pair in cardKeywords.KeywordsByProperty)
-				foreach (string value in pair.Value)
-					doc.Add(new Field(pair.Key.ToLowerInvariant(), value, IndexUtils.StringFieldType));
+			foreach (var pair in cardKeywords.GetAllValues())
+			{
+				string fieldName = pair.PropertyName.ToLowerInvariant();
+				foreach (string value in pair.Values)
+					doc.Add(new Field(fieldName, value, IndexUtils.StringFieldType));
+			}
 
 			return doc;
 		}
@@ -165,6 +168,9 @@ namespace Mtgdb.Dal.Index
 			}
 
 			foreach (string keyword in card.GetKeywords())
+				doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
+
+			foreach (string keyword in card.GetCastKeywords())
 				doc.addTextField(nameof(KeywordDefinitions.Keywords), keyword);
 
 			// Tested

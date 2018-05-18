@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -154,12 +153,11 @@ namespace Mtgdb.Gui
 			var rect = getLegalityWarningRectangle(e);
 			const int size = 18;
 			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
-			var brush = new SolidBrush(Color.FromArgb(192, Color.OrangeRed));
 
-			var lineSize = e.Graphics.MeasureString(legalityWarning, font);
+			var lineSize = e.Graphics.MeasureText(legalityWarning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
-
-			e.Graphics.DrawString(legalityWarning, font, brush, rect, StringFormat.GenericDefault);
+			
+			e.Graphics.DrawText(legalityWarning, font, rect, Color.FromArgb(224, Color.OrangeRed));
 		}
 
 		private void drawCountWarning(CustomDrawArgs e, Card card)
@@ -208,11 +206,10 @@ namespace Mtgdb.Gui
 			const int size = 16;
 			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
 
-			var brush = new SolidBrush(Color.FromArgb(224, color));
-			var lineSize = e.Graphics.MeasureString(warning, font);
+			var lineSize = e.Graphics.MeasureText(warning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-			e.Graphics.DrawString(warning, font, brush, rect, StringFormat.GenericDefault);
+			e.Graphics.DrawText(warning, font, rect, Color.FromArgb(224, color));
 		}
 
 		private void drawSelection(CustomDrawArgs e, Color borderColor, Color foreColor, int opacity)
@@ -243,15 +240,17 @@ namespace Mtgdb.Gui
 				new Point(rect.Left - cornerOffset, rect.Top - cornerOffset + cornerYSize)
 			};
 
-			rect.Inflate(-3, -7);
+			var gradientRect = rect;
+			gradientRect.Inflate((int) (-rect.Width * 0.33f), (int) (-rect.Height * 0.16f));
 
 			var brush = new LinearGradientBrush(
-				rect,
+				gradientRect,
 				Color.FromArgb(opacity, borderColor),
 				Color.FromArgb(opacity, foreColor),
 				LinearGradientMode.BackwardDiagonal);
 
-			e.Graphics.FillClosedCurve(brush, points);
+			brush.SetBlendTriangularShape(0.99f, 1f);
+			e.Graphics.FillClosedCurve(brush, points, FillMode.Alternate, 0.05f);
 		}
 
 		private void drawCount(object sender, CustomDrawArgs e, Card card)
@@ -263,14 +262,8 @@ namespace Mtgdb.Gui
 			var rect = getSelectionRectangle(e);
 
 			var font = new Font("Arial Black", 18.ByDpiHeight(), GraphicsUnit.Pixel);
-			var textFormatFlags = new StringFormat(default(StringFormatFlags)).ToTextFormatFlags();
 
-			var textSize = TextRenderer.MeasureText(
-				e.Graphics,
-				countText,
-				font,
-				new Size((int) (rect.Width * 1.5f), rect.Height),
-				textFormatFlags);
+			var textSize = e.Graphics.MeasureText(countText, font);
 
 			var targetRect = new Rectangle(
 				(int) Math.Ceiling(rect.Left + 0.5f * (rect.Width - textSize.Width)),
@@ -281,13 +274,7 @@ namespace Mtgdb.Gui
 			targetRect.Inflate(1, 0);
 			targetRect.Offset(2, 0);
 
-			TextRenderer.DrawText(
-				e.Graphics,
-				countText,
-				font,
-				targetRect,
-				Color.Black,
-				textFormatFlags);
+			e.Graphics.DrawText(countText, font, targetRect, Color.Black);
 		}
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)
@@ -447,7 +434,7 @@ namespace Mtgdb.Gui
 			{
 				if (!getPattern(query, token, out string pattern, out var contextPatterns))
 					continue;
-				
+
 				addPattern(token.ParentField, pattern, patternsSet);
 
 				foreach (string contextPattern in contextPatterns)
@@ -465,7 +452,8 @@ namespace Mtgdb.Gui
 			{
 				string termText = keywordTerm.GetPhraseText(query);
 
-				if (!KeywordDefinitions.KeywordPatternsByDisplayText.TryGetValue(termText, out var regex))
+				if (!KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.KeywordsIndex].TryGetValue(termText, out var regex) &&
+					!KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.CastKeywordsIndex].TryGetValue(termText, out regex))
 					continue;
 
 				string pattern = regex.ToString();
@@ -555,7 +543,7 @@ namespace Mtgdb.Gui
 		{
 			if (_regexCache.TryGetValue(pattern, out var regex))
 				return regex;
-			
+
 			regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 			_regexCache.Add(pattern, regex);
 
@@ -583,7 +571,7 @@ namespace Mtgdb.Gui
 			{
 				var patternBuilder = new StringBuilder();
 				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
-				
+
 				result = patternBuilder.ToString();
 				contextPatterns = new List<string>();
 				return true;
@@ -691,6 +679,7 @@ namespace Mtgdb.Gui
 					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
 					// тогда это уже другой термин
 					break;
+
 				if (token.Next.Type.IsAny(TokenType.Wildcard | TokenType.FieldValue))
 					suffixTokens.Add(token.Next);
 				else
@@ -761,6 +750,7 @@ namespace Mtgdb.Gui
 
 				if (equivalents.Length == 0)
 					continue;
+
 				if (equivalents.Length == 1)
 					patternBuilder.Append(Regex.Escape(new string(equivalents[0], 1)));
 				else

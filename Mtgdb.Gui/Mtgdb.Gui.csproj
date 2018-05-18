@@ -407,12 +407,14 @@
     <None Include="Resources\landwalk.png" />
     <Content Include="Resources\legality_48.png" />
     <Content Include="Resources\Lifelink.png" />
+    <None Include="Resources\meld.png" />
     <Content Include="Resources\Menace.png" />
     <None Include="Resources\morph.png" />
     <Content Include="Resources\mtg_48.png" />
     <None Include="Resources\mulligan_48.png" />
     <Content Include="Resources\mythic.png" />
     <None Include="Resources\open_16.png" />
+    <None Include="Resources\normal.png" />
     <Content Include="Resources\open_32.png" />
     <None Include="Resources\paste_16.png" />
     <None Include="Resources\paste_32.png" />
@@ -421,6 +423,8 @@
     <None Include="Resources\partial_card_disabled_40.png" />
     <None Include="Resources\phasing.png" />
     <None Include="Resources\Persist.png" />
+    <None Include="Resources\phenomenon.png" />
+    <None Include="Resources\plane.png" />
     <Content Include="Resources\print_32.png" />
     <None Include="Resources\properties_16.png" />
     <Content Include="Resources\properties_32.png" />
@@ -440,6 +444,7 @@
     <Content Include="Resources\rightclick_48.png" />
     <None Include="Resources\save_16.png" />
     <None Include="Resources\sacrifice.png" />
+    <None Include="Resources\Scheme.png" />
     <Content Include="Resources\scroll_48.png" />
     <Content Include="Resources\Scry.png" />
     <None Include="Resources\search.png" />
@@ -465,6 +470,7 @@
     <None Include="Resources\undo_16.png" />
     <Content Include="Resources\Undying.png" />
     <None Include="Resources\Unearth.png" />
+    <None Include="Resources\Vanguard.png" />
     <Content Include="Resources\Vigilance.png" />
     <None Include="Resources\Wither.png" />
     <Content Include="Resources\zoom_48.png" />

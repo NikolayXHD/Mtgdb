@@ -19,7 +19,7 @@ namespace Mtgdb.Test
 		[Test]
 		public void Interesting_keywords_Are_displayed_in_button_filter()
 		{
-			var keywords = KeywordDefinitions.KeywordPatternsByDisplayText.Keys
+			var keywords = KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.KeywordsIndex].Keys
 				.ToHashSet(Str.Comparer);
 
 			var boringKeywords = new HashSet<string>(Str.Comparer)
@@ -120,14 +120,13 @@ namespace Mtgdb.Test
 
 			if (string.IsNullOrEmpty(expectedValue))
 			{
-				Assert.That(keywords.KeywordsByProperty, Does.Not.ContainKey(field));
+				Assert.That(keywords.GetPropertyValues(field), Is.Empty);
 				return;
 			}
 
-			var values = keywords.KeywordsByProperty[field];
-
+			var values = keywords.GetPropertyValues(field);
 			Assert.That(values, Is.Not.Null);
-			Assert.That(values, Does.Contain(expectedValue));
+			Assert.That(values, Does.Contain(expectedValue).IgnoreCase);
 		}
 
 

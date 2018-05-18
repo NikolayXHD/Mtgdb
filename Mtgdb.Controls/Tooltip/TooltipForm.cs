@@ -357,8 +357,7 @@ namespace Mtgdb.Controls
 			else
 				measuredContentText = tooltip.Text;
 
-			var formatFlags =
-				TextFormatFlags.GlyphOverhangPadding |
+			const TextFormatFlags formatFlags = TextFormatFlags.GlyphOverhangPadding |
 				TextFormatFlags.NoPadding |
 				TextFormatFlags.Left |
 				TextFormatFlags.TextBoxControl |
@@ -370,8 +369,7 @@ namespace Mtgdb.Controls
 			if (string.IsNullOrEmpty(tooltip.Title))
 				titleSize = new Size(0, 0);
 			else
-				titleSize = TextRenderer.MeasureText(
-					graphics,
+				titleSize = graphics.MeasureText(
 					tooltip.Title,
 					new Font(_tooltipTextbox.Font, FontStyle.Bold),
 					_tooltipTextbox.Size,
@@ -382,8 +380,7 @@ namespace Mtgdb.Controls
 				contentSize = new Size(0, 0);
 			else
 			{
-				contentSize = TextRenderer.MeasureText(
-					graphics,
+				contentSize = graphics.MeasureText(
 					measuredContentText,
 					_tooltipTextbox.Font,
 					_tooltipTextbox.Size,

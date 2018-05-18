@@ -135,7 +135,7 @@ namespace Mtgdb.Gui
 			DeckZone = Zone.Main;
 
 			scale();
-			setPanelCostWidth();
+			setRightPanelsWidth();
 
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
@@ -203,7 +203,8 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaCost.Margin = _buttonExcludeManaAbility.Margin =
 				new Padding(0, 0, modeButtonSize.Width, 0);
 
-			_layoutRight.RowStyles[0].Height = _layoutRight.RowStyles[1].Height = modeButtonSize.Height;
+			_layoutRight.RowStyles[0].Height = 
+				_layoutRight.RowStyles[1].Height = modeButtonSize.Height;
 
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);

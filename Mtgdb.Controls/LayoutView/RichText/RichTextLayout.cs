@@ -85,13 +85,7 @@ namespace Mtgdb.Controls
 								rect.Inflate(1, 0);
 								rect.Offset(1, 0);
 
-								TextRenderer.DrawText(
-									_renderContext.Graphics,
-									tokenText,
-									_renderContext.Font,
-									rect.Round(),
-									foreColor,
-									_renderContext.StringFormat.ToTextFormatFlags());
+								_renderContext.Graphics.DrawText(tokenText, _renderContext.Font, rect.Round(), foreColor);
 							});
 					}
 				}
@@ -255,23 +249,8 @@ namespace Mtgdb.Controls
 			return delta;
 		}
 
-		private SizeF getLineSize(string tokenText)
-		{
-			var textFormatFlags = _renderContext.StringFormat.ToTextFormatFlags();
-
-			var area = _renderContext.Rect.Size.ToSize();
-
-			var size = TextRenderer.MeasureText(
-				_renderContext.Graphics,
-				tokenText,
-				_renderContext.Font,
-				new Size((int) (area.Width * 1.2f), area.Height),
-				textFormatFlags);
-
-			return size;
-		}
-
-
+		private SizeF getLineSize(string tokenText) =>
+			_renderContext.Graphics.MeasureText(tokenText, _renderContext.Font);
 
 		private bool printSelection(RectangleF rectangle, RichTextToken token)
 		{

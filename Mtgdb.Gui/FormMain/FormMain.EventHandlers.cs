@@ -92,11 +92,21 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				beginRestoreSettings();
-				_sortSubsystem.Invalidate();
-				endRestoreSettings();
+				if (_sortSubsystem.IsLanguageDependent)
+				{
+					beginRestoreSettings();
+					_sortSubsystem.Invalidate();
+					endRestoreSettings();
+				}
 
-				RunRefilterTask();
+				if (_formRoot.UiModel.LanguageController.Language != CardLocalization.DefaultLanguage &&
+					!string.IsNullOrEmpty(_searchStringSubsystem.AppliedText))
+				{
+					beginRestoreSettings();
+					_searchStringSubsystem.Apply();
+					endRestoreSettings();
+					RunRefilterTask();
+				}
 			});
 		}
 
@@ -104,11 +114,14 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				beginRestoreSettings();
-				_searchStringSubsystem.Apply();
-				endRestoreSettings();
+				if (!string.IsNullOrEmpty(_searchStringSubsystem.AppliedText))
+				{
+					beginRestoreSettings();
+					_searchStringSubsystem.Apply();
+					endRestoreSettings();
 
-				RunRefilterTask();
+					RunRefilterTask();
+				}
 			});
 		}
 
@@ -224,17 +237,24 @@ namespace Mtgdb.Gui
 
 		private void rightLayoutChanged(object sender, EventArgs e)
 		{
-			setPanelCostWidth();
+			setRightPanelsWidth();
 		}
 
-		private void setPanelCostWidth()
+		private void setRightPanelsWidth()
 		{
-			var cell = _layoutRight.GetCellPosition(_panelCostLeft);
-			var preferredSize = _panelCostLeft.GetPreferredSize(new Size(int.MaxValue, _panelCostLeft.Height));
-			_layoutRight.ColumnStyles[cell.Column].Width =
-				preferredSize.Width +
-				_panelCostLeft.Margin.Right +
-				_panelCostLeft.Margin.Left;
+			setColumnWidth(_panelCostRight);
+			setColumnWidth(_panelRight);
+			setColumnWidth(FilterManaCost);
+		}
+
+		private void setColumnWidth(Control panel)
+		{
+			var cell = _layoutRight.GetCellPosition(panel);
+			
+			var preferredSize = panel.GetPreferredSize(new Size(int.MaxValue, panel.Height));
+			int preferredWidth = preferredSize.Width + panel.Margin.Right + panel.Margin.Left;
+
+			_layoutRight.ColumnStyles[cell.Column].Width = preferredWidth;
 		}
 
 

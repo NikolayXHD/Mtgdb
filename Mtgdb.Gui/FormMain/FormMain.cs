@@ -174,7 +174,9 @@ namespace Mtgdb.Gui
 
 		private void updateShowProhibited()
 		{
-			SuspendLayout();
+			_layoutRoot.SuspendLayout();
+			_layoutRight.SuspendLayout();
+			_layoutMain.SuspendLayout();
 
 			var controls = _quickFilterControls.Append(FilterManager);
 
@@ -192,12 +194,16 @@ namespace Mtgdb.Gui
 			}
 			// ReSharper restore PossibleMultipleEnumeration
 
-			setPanelCostWidth();
+			setRightPanelsWidth();
 
-			ResumeLayout(false);
-			PerformLayout();
+			_layoutRight.ResumeLayout(false);
+			_layoutRight.PerformLayout();
 
-			Refresh();
+			_layoutMain.ResumeLayout(false);
+			_layoutMain.PerformLayout();
+
+			_layoutRoot.ResumeLayout(false);
+			_layoutRoot.PerformLayout();
 		}
 
 		public void ButtonTooltip()
@@ -630,12 +636,14 @@ namespace Mtgdb.Gui
 			{
 				Find = _searchStringSubsystem.AppliedText,
 				FilterAbility = FilterAbility.States,
+				FilterCastKeyword = FilterCastKeyword.States,
 				FilterMana = FilterManaCost.States,
 				FilterManaAbility = FilterManaAbility.States,
 				FilterManaGenerated = FilterGeneratedMana.States,
 				FilterRarity = FilterRarity.States,
 				FilterType = FilterType.States,
 				FilterCmc = FilterCmc.States,
+				FilterLayout = FilterLayout.States,
 				FilterGrid = FilterManager.States,
 				Language = _formRoot.UiModel.LanguageController.Language,
 				MainDeckCount = _deckModel.MainDeck.CountById.ToDictionary(),
@@ -675,6 +683,9 @@ namespace Mtgdb.Gui
 			if (settings.FilterAbility == null || settings.FilterAbility.Length == FilterAbility.PropertiesCount)
 				FilterAbility.States = settings.FilterAbility;
 
+			if (settings.FilterCastKeyword == null || settings.FilterCastKeyword.Length == FilterCastKeyword.PropertiesCount)
+				FilterCastKeyword.States = settings.FilterCastKeyword;
+
 			if (settings.FilterMana == null || settings.FilterMana.Length == FilterManaCost.PropertiesCount)
 				FilterManaCost.States = settings.FilterMana;
 
@@ -692,6 +703,9 @@ namespace Mtgdb.Gui
 
 			if (settings.FilterCmc == null || settings.FilterCmc.Length == FilterCmc.PropertiesCount)
 				FilterCmc.States = settings.FilterCmc;
+
+			if (settings.FilterLayout == null || settings.FilterLayout.Length == FilterLayout.PropertiesCount)
+				FilterLayout.States = settings.FilterLayout;
 
 			if (settings.FilterGrid == null || settings.FilterGrid.Length == FilterManager.PropertiesCount)
 				FilterManager.States = settings.FilterGrid;

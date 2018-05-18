@@ -214,7 +214,8 @@ namespace Mtgdb.Dal
 
 		public CardKeywords GetAllKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
 
-		public ICollection<string> GetKeywords() => GetAllKeywords().TextKeywords;
+		public ICollection<string> GetKeywords() => GetAllKeywords().OtherKeywords;
+		public ICollection<string> GetCastKeywords() => GetAllKeywords().CastKeywords;
 
 		/// <summary>
 		/// A unique id for this card. It is made up by doing an SHA1 hash of
