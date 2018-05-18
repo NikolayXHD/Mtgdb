@@ -14,6 +14,7 @@ namespace Mtgdb.Test
 		{
 			LoadTranslations();
 			LoadIndexes();
+			LoadPrices();
 		}
 
 		[Test]
@@ -33,20 +34,10 @@ namespace Mtgdb.Test
 				"Swampwalk",
 				"Mountainwalk",
 				"Islandwalk",
-				"Cumulative Upkeep",
-				"Can't be regenerated"
+				"Cumulative Upkeep"
 			};
 
 			boringKeywords.UnionWith(keywords.SkipWhile(F.IsNotEqualTo("Activate")));
-
-			var interestingKeywords = new HashSet<string>(Str.Comparer)
-			{
-				//"Undying",
-				//"Annihilator",
-				//"Renown",
-				//"Extra turn",
-				//"Crew"
-			};
 
 			var popularity = keywords
 				.Where(F.IsNotNull)
@@ -57,18 +48,17 @@ namespace Mtgdb.Test
 
 					return (
 						Keyword: kw,
-						Count: getLegalCount(cardIds, "modern"));
+						TopPrice: getTopPriceInFormat(cardIds, "modern"));
 				})
 				.OrderBy(p => boringKeywords.Contains(p.Keyword))
-				.ThenByDescending(p => interestingKeywords.Contains(p.Keyword))
-				.ThenByDescending(p => p.Count)
+				.ThenByDescending(p => p.TopPrice)
 				.ToArray();
 
 			var popularityIndexByKeyword = Enumerable.Range(0, popularity.Length)
 				.ToDictionary(i => popularity[i].Keyword, i => i);
 
 			var popularityByKeyword = popularity
-				.ToDictionary(p => p.Keyword, p => p.Count);
+				.ToDictionary(p => p.Keyword, p => p.TopPrice);
 
 			var displayKeywords = keywords
 				.TakeWhile(F.IsNotEqualTo("Absorb"))
@@ -76,7 +66,7 @@ namespace Mtgdb.Test
 
 			var notDisplayedPopular = keywords
 				.OrderBy(kw => popularityIndexByKeyword[kw])
-				.Take(displayKeywords.Count + 30)
+				.Take(displayKeywords.Count)
 				.Where(F.Not<string>(displayKeywords.Contains))
 				.ToArray();
 
@@ -99,12 +89,16 @@ namespace Mtgdb.Test
 			}
 		}
 
-		private static int getLegalCount(IList<int> cardIds, string format)
+		private static float getTopPriceInFormat(IList<int> cardIds, string format)
 		{
 			return cardIds
 				.Select(i => Repo.Cards[i])
-				.GroupBy(c => c.NameEn)
-				.Count(gr => gr.First().IsLegalIn(format));
+				.Where(c => c.IsLegalIn(format) || c.IsRestrictedIn(format))
+				.Select(c=> c.PriceMid)
+				.Where(F.IsNotNull)
+				.DefaultIfEmpty(0f)
+				.Cast<float>()
+				.Max();
 		}
 
 		[Test]

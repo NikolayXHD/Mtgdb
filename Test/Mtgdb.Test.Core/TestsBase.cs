@@ -61,6 +61,27 @@ namespace Mtgdb.Test
 			_loadedCards = true;
 		}
 
+		protected static void LoadPrices()
+		{
+			if (_loadedPrices)
+				return;
+
+			LoadCards();
+
+			var sw = new Stopwatch();
+			sw.Start();
+
+			var priceRepo = Kernel.Get<PriceRepository>();
+			priceRepo.Load();
+
+			Repo.SetPrices(priceRepo);
+
+			sw.Stop();
+			_log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
+
+			_loadedPrices = true;
+		}
+
 		protected static void LoadTranslations()
 		{
 			if (_loadedTranslations)
@@ -130,6 +151,7 @@ namespace Mtgdb.Test
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;
+		private static bool _loadedPrices;
 		private static bool _loadedTranslations;
 		private static bool _loadedIndexes;
 
