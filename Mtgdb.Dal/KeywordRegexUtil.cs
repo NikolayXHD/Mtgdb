@@ -15,7 +15,7 @@ namespace Mtgdb.Dal
 			if (isRegexLiteral(value))
 			{
 				return new Regex(getRegexLiteralValue(value),
-					RegexOptions.Compiled | RegexOptions.IgnoreCase);
+					/*RegexOptions.Compiled |*/ RegexOptions.IgnoreCase);
 			}
 
 			var builder = new StringBuilder();
@@ -28,7 +28,7 @@ namespace Mtgdb.Dal
 				builder.Append("\\b");
 
 			var result = new Regex(builder.ToString(),
-				RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				/*RegexOptions.Compiled |*/ RegexOptions.IgnoreCase);
 
 			return result;
 		}
@@ -41,11 +41,11 @@ namespace Mtgdb.Dal
 			if (isRegexLiteral(value))
 			{
 				return new Regex(getRegexLiteralValue(value),
-					RegexOptions.Compiled | RegexOptions.IgnoreCase);
+					/*RegexOptions.Compiled |*/ RegexOptions.IgnoreCase);
 			}
 
 			var result = new Regex($@"^{Regex.Escape(value)}$",
-				RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				/*RegexOptions.Compiled |*/ RegexOptions.IgnoreCase);
 
 			return result;
 		}

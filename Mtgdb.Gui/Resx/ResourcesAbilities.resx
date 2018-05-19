@@ -370,4 +370,70 @@
   <data name="Vanguard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Vanguard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Affinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Affinity.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Buyback" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Buyback.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Champion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Champion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Changeling" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Changeling.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Conspire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Conspire.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Convoke" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Convoke.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Delve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Delve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dredge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dredge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Embalm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Embalm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Eternalize" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Eternalize.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Improvise" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Improvise.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Miracle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Miracle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Modular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Modular.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Retrace" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Retrace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scavenge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scavenge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Soulshift" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Soulshift.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Splice_onto_arcane" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Splice_onto_arcane.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Totem_armor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Totem_armor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Emerge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Emerge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Transmute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Transmute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

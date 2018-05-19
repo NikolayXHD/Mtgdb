@@ -217,17 +217,25 @@ namespace Mtgdb.Controls
 
 		private void paintRequireButton(PaintEventArgs e, FilterValueState state, FilterValueState statePreview, int i)
 		{
-			paintButton(e, state, statePreview, FilterValueState.Required, ImageRequired ?? _imagesDisabled[i], i);
+			var value = FilterValueState.Required;
+
+			if (state != value && statePreview != value && _lastClickPreview?.ButtonIndex != i)
+				return;
+
+			paintButton(e, state, statePreview, value, ImageRequired ?? _imagesDisabled[i], i);
 		}
 
 		private void paintAllowButton(PaintEventArgs e, FilterValueState state, FilterValueState statePreview, int i)
 		{
-			FilterValueState filterValueState =
+			FilterValueState value =
 				EnableRequiringSome
 					? FilterValueState.RequiredSome
 					: FilterValueState.Ignored;
 
-			paintButton(e, state, statePreview, filterValueState, _imagesDisabled[i], i);
+			if ((state == FilterValueState.Required || state == FilterValueState.Prohibited && !HideProhibit) && statePreview != value && _lastClickPreview?.ButtonIndex != i)
+				return;
+
+			paintButton(e, state, statePreview, value, _imagesDisabled[i], i);
 		}
 
 		private void paintProhibitButton(PaintEventArgs e, FilterValueState state, FilterValueState statePreview, int i)
@@ -235,7 +243,12 @@ namespace Mtgdb.Controls
 			if (HideProhibit)
 				return;
 
-			paintButton(e, state, statePreview, FilterValueState.Prohibited, _imagesDisabled[i], i);
+			var value = FilterValueState.Prohibited;
+
+			if (state != value && statePreview != value && _lastClickPreview?.ButtonIndex != i)
+				return;
+
+			paintButton(e, state, statePreview, value, _imagesDisabled[i], i);
 		}
 
 		private void paintButton(
@@ -279,13 +292,21 @@ namespace Mtgdb.Controls
 
 		private Size getSize()
 		{
-			int cellWidth = _imageSize.Width + Spacing.Width;
-			int cellHeight = _imageSize.Height + Spacing.Height;
-
 			int statesCount = StatesCount;
 
-			int width = PropertiesCount * cellWidth + Spacing.Width;
-			int height = statesCount * cellHeight + Spacing.Height;
+			int border = Border;
+
+			int propertiesCount = PropertiesCount;
+
+			int width =
+				propertiesCount * _imageSize.Width +
+				(propertiesCount - 1) * Spacing.Width +
+				2 * border;
+
+			int height =
+				statesCount * _imageSize.Height +
+				(statesCount - 1) * _spacing.Height +
+				2 * border;
 
 			if (IsVertical)
 				return new Size(height, width);
@@ -298,9 +319,6 @@ namespace Mtgdb.Controls
 			int imageWidth = ImageSize.Width;
 			var imageHeight = ImageSize.Height;
 
-			int width = imageWidth + Spacing.Width;
-			int height = imageHeight + Spacing.Height;
-
 			// чтобы Allowed был 0 Prohibited сделан -1
 			const int maxStateIndex = 1;
 			// таким образом RequireSome == Allowed для вычисления координат
@@ -311,8 +329,10 @@ namespace Mtgdb.Controls
 
 			int shift = maxStateIndex - stateIndex;
 
-			int x = i * width + Spacing.Width;
-			var y = shift * height + Spacing.Height;
+			int border = Border;
+
+			int x = border + i * (imageWidth + Spacing.Width);
+			var y = border + shift * (imageHeight + Spacing.Height);
 
 			if (IsVertical)
 			{
@@ -329,6 +349,8 @@ namespace Mtgdb.Controls
 
 		private StateClick? getCommand(int x, int y, MouseButtons button)
 		{
+			var border = Border;
+
 			if (IsVertical)
 			{
 				if (IsFlipped)
@@ -337,14 +359,18 @@ namespace Mtgdb.Controls
 				swap(ref x, ref y);
 			}
 
-			var width = ImageSize.Width + Spacing.Width;
-			var height = ImageSize.Height + Spacing.Height;
+			int index = (x - border + Spacing.Width / 2) / (ImageSize.Width + Spacing.Width);
 
-			int index = (2 * x - Spacing.Width) / (width * 2);
+			if (index >= PropertiesCount)
+				index = (x - border + Spacing.Width) / (ImageSize.Width + Spacing.Width);
+
 			if (index < 0 || index >= PropertiesCount)
 				return null;
 
-			int stateIndex = (2 * y - Spacing.Width) / (height * 2);
+			int stateIndex = (y - border + Spacing.Height / 2) / (ImageSize.Height + Spacing.Height);
+
+			if (stateIndex == StatesCount)
+				stateIndex = (y - border + Spacing.Height) / (ImageSize.Height + Spacing.Height);
 
 			if (EnableMutuallyExclusive)
 				stateIndex++;
@@ -391,10 +417,7 @@ namespace Mtgdb.Controls
 			}
 
 			setButtonState(command.Value, _states);
-
-			/**/
-			Invalidate();
-			Application.DoEvents();
+			Refresh();
 
 			StateChanged?.Invoke(this, null);
 		}
@@ -415,7 +438,9 @@ namespace Mtgdb.Controls
 			for (int i = 0; i < PropertiesCount; i++)
 			{
 				var state = _states?[i] ?? FilterValueState.Ignored;
-				var statePreview = _statesPreview?[i] ?? FilterValueState.Ignored;
+				var statePreview = _showPreview
+					? _statesPreview?[i] ?? FilterValueState.Ignored
+					: state;
 
 				if (_images == null || i >= _images.Count)
 					return;
@@ -437,7 +462,11 @@ namespace Mtgdb.Controls
 			for (int i = 0; i < PropertiesCount; i++)
 			{
 				var rectangle = (RectangleF) getPaintingRectangle(i, FilterValueState.Prohibited);
-				//rectangle.Inflate(new SizeF(Spacing.Width/2f, Spacing.Height/2f));
+
+				if (IsVertical)
+					rectangle.Offset(Spacing.Height, 0);
+				else
+					rectangle.Offset(0, -Spacing.Height);
 
 				var color = Color.FromArgb(30, ProhibitedColor);
 				var color2 = Color.FromArgb(0, ProhibitedColor);
@@ -448,7 +477,7 @@ namespace Mtgdb.Controls
 
 				if (IsVertical)
 				{
-					rectangle.Inflate(new SizeF(0, Spacing.Height / 2f));
+					rectangle.Inflate(new SizeF(0, Spacing.Width / 2f));
 
 					if (IsFlipped)
 					{
@@ -658,8 +687,9 @@ namespace Mtgdb.Controls
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			_showPreview = false;
 			_mouseInside = false;
+			_showPreview = false;
+			_lastClickPreview = null;
 			Invalidate();
 		}
 
@@ -671,18 +701,20 @@ namespace Mtgdb.Controls
 			if (!ClientRectangle.Contains(e.Location))
 				return;
 
-			if (_mouseMoveCounter > 15)
-				return;
-
 			_mouseLocation = e.Location;
-			//if (!this.ClientRectangle.Contains(new Point(e.X, e.Y)))
-			//	return;
 
 			var commandPreview = getCommand(e.X, e.Y, MouseButtons.Left);
-			if (!commandPreview.HasValue)
-				return;
+			if (commandPreview == null)
+			{
+				if (_lastClickPreview != null)
+				{
+					_statesPreview = _states.ToArray();
+					_lastClickPreview = null;
+					Refresh();
+				}
 
-			_mouseMoveCounter++;
+				return;
+			}
 
 			if (commandPreview != _lastClick)
 				_lastClick = null;
@@ -698,13 +730,9 @@ namespace Mtgdb.Controls
 					_statesPreview = _states.ToArray();
 					setButtonState(commandPreview.Value, _statesPreview);
 
-					/**/
 					Invalidate();
-					Application.DoEvents();
 				}
 			}
-
-			_mouseMoveCounter--;
 		}
 
 
@@ -866,6 +894,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_selectionBorder = value;
+				updateSize();
 				Invalidate();
 			}
 		}
@@ -1066,6 +1095,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int Border => (int) Math.Ceiling(SelectionBorder);
 
 
 		private const float OpacityEnabled = 1.00f;
@@ -1086,7 +1117,6 @@ namespace Mtgdb.Controls
 		private bool _showPreview;
 		private bool _mouseInside;
 		private Point _mouseLocation;
-		private int _mouseMoveCounter;
 
 		private FilterValueState[] _states;
 		private int _propertiesCount;

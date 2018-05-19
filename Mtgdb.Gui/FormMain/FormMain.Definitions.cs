@@ -51,7 +51,6 @@ namespace Mtgdb.Gui
 
 			QuickFilterSetup.SetQuickFilterProperties(this);
 			QuickFilterImages.SetImages(this);
-			//QuickFilterImages.SetPropertiesCount(this);
 
 			_quickFilterFacade = new QuickFilterFacade(
 				KeywordDefinitions.Patterns,
@@ -193,15 +192,17 @@ namespace Mtgdb.Gui
 				qf.HintIcon = qf.HintIcon?.ResizeDpi();
 			}
 
+			int border = FilterManaCost.Border;
+
 			var modeButtonSize = new Size(
-				FilterManaCost.ImageSize.Width + FilterManaCost.Spacing.Width * 2,
-				FilterManaCost.ImageSize.Height + FilterManaCost.Spacing.Height * 2);
+				FilterManaCost.ImageSize.Width + border * 2,
+				FilterManaCost.ImageSize.Height + border * 2);
 
 			_buttonExcludeManaAbility.Size = _buttonExcludeManaCost.Size = _buttonShowProhibit.Size =
 				modeButtonSize;
 
 			_buttonExcludeManaCost.Margin = _buttonExcludeManaAbility.Margin =
-				new Padding(0, 0, modeButtonSize.Width, 0);
+				new Padding(0, 0, FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width, 0);
 
 			_layoutRight.RowStyles[0].Height = 
 				_layoutRight.RowStyles[1].Height = modeButtonSize.Height;
