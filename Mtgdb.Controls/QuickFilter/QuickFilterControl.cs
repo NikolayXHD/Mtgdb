@@ -16,7 +16,6 @@ namespace Mtgdb.Controls
 
 			ImageSize = new Size(20, 20);
 			PropertiesCount = DefaultPropertiesCount;
-			NullPropertyText = DefaultNullPropertyText;
 
 			_selectionColor = Color.Transparent;
 			_selectionBorderColor = Color.Transparent;
@@ -219,7 +218,7 @@ namespace Mtgdb.Controls
 		{
 			var value = FilterValueState.Required;
 
-			if (state != value && statePreview != value && _lastClickPreview?.ButtonIndex != i)
+			if (EnableMutuallyExclusive || state != value && statePreview != value && _lastClickPreview?.ButtonIndex != i)
 				return;
 
 			paintButton(e, state, statePreview, value, ImageRequired ?? _imagesDisabled[i], i);
@@ -445,13 +444,28 @@ namespace Mtgdb.Controls
 				if (_images == null || i >= _images.Count)
 					return;
 
-				paintRequireButton(e, state, statePreview, i);
-				paintAllowButton(e, state, statePreview, i);
-				paintProhibitButton(e, state, statePreview, i);
+				if (_lastClickPreview?.ClickedState == FilterValueState.Required)
+				{
+					paintProhibitButton(e, state, statePreview, i);
+					paintAllowButton(e, state, statePreview, i);
+					paintRequireButton(e, state, statePreview, i);
+				}
+				else if (_lastClickPreview?.ClickedState == FilterValueState.Prohibited)
+				{
+					paintRequireButton(e, state, statePreview, i);
+					paintAllowButton(e, state, statePreview, i);
+					paintProhibitButton(e, state, statePreview, i);
+				}
+				else
+				{
+					paintRequireButton(e, state, statePreview, i);
+					paintProhibitButton(e, state, statePreview, i);
+					paintAllowButton(e, state, statePreview, i);
+				}
 			}
 
 			if (_mouseInside && ShowValueHint)
-				paintTooltip(e);
+				paintValueHint(e);
 		}
 
 		private void paintProhibitZone(PaintEventArgs e)
@@ -523,7 +537,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void paintTooltip(PaintEventArgs e)
+		private void paintValueHint(PaintEventArgs e)
 		{
 			if (Properties == null)
 				return;
@@ -533,12 +547,19 @@ namespace Mtgdb.Controls
 			if (!command.HasValue)
 				return;
 
-			var property = Properties[command.Value.ButtonIndex] ?? NullPropertyText;
+			var property = Properties[command.Value.ButtonIndex];
+
+			if (string.IsNullOrEmpty(property))
+				return;
 
 			var font = Font;
+			var border = Border;
 
-			var rectangle = getPaintingRectangle(command.Value.ButtonIndex, command.Value.ClickedState);
-			bool rotateText = IsVertical && EnableMutuallyExclusive;
+			var location = getPaintingRectangle(command.Value.ButtonIndex, command.Value.ClickedState)
+				.Location;
+
+			var textSize = e.Graphics.MeasureText(property, font);
+			bool rotateText = IsVertical && textSize.Width > Width;
 
 			int x;
 			int y;
@@ -547,64 +568,55 @@ namespace Mtgdb.Controls
 			{
 				if (rotateText)
 				{
-					x = rectangle.Y + rectangle.Height;
-					y = -(rectangle.X + (rectangle.Width + font.Height / 2) / 2);
+					x = HintTextShift.Height + location.Y + ImageSize.Height + border;
+					y = -(HintTextShift.Width + location.X + ImageSize.Width - (ImageSize.Width - font.Height) / 2);
 				}
 				else
 				{
-					x = rectangle.X + (rectangle.Width - font.Height / 2) / 2;
-					y = rectangle.Y - rectangle.Height;
+					x = HintTextShift.Width + location.X;
+					y = HintTextShift.Height + location.Y + ImageSize.Height + border;
 				}
 			}
 			else
 			{
-				x = rectangle.X + rectangle.Width;
-				y = rectangle.Y + (rectangle.Height - font.Height) / 2;
+				x = HintTextShift.Width + location.X + ImageSize.Width + border;
+				y = HintTextShift.Height + location.Y + (ImageSize.Height - font.Height) / 2;
 			}
-
-			int iconWidth = HintIcon?.Width ?? 0;
-
-			var textSize = e.Graphics.MeasureText(property, font);
-			int textWidth = textSize.Width;
-			int wordWidth = Math.Max(iconWidth, textWidth);
 
 			if (rotateText)
 			{
-				if (x + wordWidth > Height)
-					x = Height - wordWidth;
-			}
-			else if (x + wordWidth > Width)
-				x = Width - wordWidth;
+				if (x < 0)
+					x = 0;
+				else if (x + textSize.Width > Height)
+					x = Height - textSize.Width;
 
-			int wordHeight = textSize.Height - HintTextShift.Height;
-
-			if (IsVertical)
-			{
-				if (rotateText)
-				{
-					if (-y - wordHeight > 0)
-						y = -wordHeight;
-				}
-				else if (y - wordHeight < 0)
-					y = wordHeight;
+				if (-y < 0)
+					y = 0;
+				else if (-(y + textSize.Height) > Width)
+					y = -(Width - textSize.Height);
 			}
 			else
 			{
-				if (y + wordHeight > Height)
-					y = Height - wordHeight;
+				if (x < 0)
+					x = 0;
+				else if (x + textSize.Width > Width)
+					x = Width - textSize.Width;
+
+				if (y < 0)
+					y = 0;
+				else if (y + textSize.Height > Height)
+					y = Height - textSize.Height;
 			}
-
-
-			if (HintIcon != null)
-				e.Graphics.DrawImage(HintIcon, new Point(x, y));
-
-			int tx = x + HintTextShift.Width;
-			int ty = y + HintTextShift.Height;
 
 			if (rotateText)
 				e.Graphics.RotateTransform(90f);
 
-			e.Graphics.DrawText(property, font, Color.Black, Color.White, 1f, 3f, new Rectangle(new Point(tx, ty), textSize));
+			var textLocation = new Point(x, y);
+
+			if (HintIcon != null)
+				e.Graphics.DrawImage(HintIcon, textLocation.Plus(HintIconShift).Minus(HintTextShift));
+
+			e.Graphics.DrawText(property, font, Color.Black, Color.White, 1f, 3f, new Rectangle(textLocation, textSize));
 
 			if (rotateText)
 				e.Graphics.RotateTransform(-90f);
@@ -821,6 +833,10 @@ namespace Mtgdb.Controls
 		[Category("Settings")]
 		[DefaultValue(typeof(Size), "0, 0")]
 		public Size HintTextShift { get; set; }
+
+		[Category("Settings")]
+		[DefaultValue(typeof(Size), "0, 0")]
+		public Size HintIconShift { get; set; }
 
 		[Category("Settings")]
 		public IList<Bitmap> PropertyImages
@@ -1042,10 +1058,6 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(DefaultNullPropertyText)]
-		public string NullPropertyText { get; set; }
-
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FilterValueState[] StatesDefault { get; set; }
 
@@ -1103,7 +1115,6 @@ namespace Mtgdb.Controls
 		private const float OpacityToEnable = 0.90f;
 		private const float OpacityToDisable = 0.30f;
 		private const float OpacityDisabled = 0.24f;
-		private const string DefaultNullPropertyText = "N/A";
 		private const int DefaultPropertiesCount = 5;
 
 		private IList<Bitmap> _images;

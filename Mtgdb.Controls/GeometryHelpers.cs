@@ -117,6 +117,11 @@ namespace Mtgdb.Controls
 			return new Point(left.X - right.X, left.Y - right.Y);
 		}
 
+		public static Point Minus(this Point left, Size right)
+		{
+			return new Point(left.X - right.Width, left.Y - right.Height);
+		}
+
 		public static PointF Minus(this PointF left, SizeF right)
 		{
 			return new PointF(left.X - right.Width, left.Y - right.Height);

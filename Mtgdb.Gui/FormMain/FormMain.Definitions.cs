@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 			_imageLoader = imageLoader;
 			_collectionModel = collectionModel;
 			_deckSerializationSubsystem = new DeckSerializationSubsystem(_cardRepo, forgeSetRepo);
-			
+
 			beginRestoreSettings();
 
 			_fields = new Fields();
@@ -198,14 +198,15 @@ namespace Mtgdb.Gui
 				FilterManaCost.ImageSize.Width + border * 2,
 				FilterManaCost.ImageSize.Height + border * 2);
 
-			_buttonExcludeManaAbility.Size = _buttonExcludeManaCost.Size = _buttonShowProhibit.Size =
-				modeButtonSize;
+			_buttonExcludeManaAbility.Size =
+				_buttonExcludeManaCost.Size =
+					_buttonShowProhibit.Size = modeButtonSize;
 
-			_buttonExcludeManaCost.Margin = _buttonExcludeManaAbility.Margin =
-				new Padding(0, 0, FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width, 0);
+			int rightMargin = FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width;
 
-			_layoutRight.RowStyles[0].Height = 
-				_layoutRight.RowStyles[1].Height = modeButtonSize.Height;
+			_buttonExcludeManaCost.Margin =
+				_buttonExcludeManaAbility.Margin =
+					new Padding(0, 0, rightMargin, 0);
 
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
@@ -271,13 +272,13 @@ namespace Mtgdb.Gui
 		{
 			Load += formLoad;
 			FormClosing += formClosing;
-			
+
 			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown += resetExcludeManaAbility;
 			_buttonShowDuplicates.CheckedChanged += showDuplicatesCheckedChanged;
 
 			_draggingSubsystem.SubscribeToEvents();
-			
+
 			_drawingSubsystem.SetupDrawingCardEvent();
 			_draggingSubsystem.SetupDrawingDraggingMarkEvent();
 
@@ -364,7 +365,7 @@ namespace Mtgdb.Gui
 		{
 			Load -= formLoad;
 			FormClosing -= formClosing;
-			
+
 			_buttonExcludeManaCost.MouseDown -= resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
 			_buttonShowDuplicates.CheckedChanged -= showDuplicatesCheckedChanged;
@@ -439,8 +440,8 @@ namespace Mtgdb.Gui
 
 		private Zone DeckZone
 		{
-			get => (Zone)_tabHeadersDeck.SelectedIndex;
-			set => _tabHeadersDeck.SelectedIndex = (int)value;
+			get => (Zone) _tabHeadersDeck.SelectedIndex;
+			set => _tabHeadersDeck.SelectedIndex = (int) value;
 		}
 
 		private IFormRoot _formRoot;
@@ -480,6 +481,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditingSubsystem _deckEditingSubsystem;
 		private readonly DrawingSubsystem _drawingSubsystem;
 		private readonly DraggingSubsystem _draggingSubsystem;
+
 		private readonly SortSubsystem _sortSubsystem;
 		// ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 

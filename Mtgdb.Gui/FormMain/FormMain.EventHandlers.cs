@@ -242,19 +242,20 @@ namespace Mtgdb.Gui
 
 		private void setRightPanelsWidth()
 		{
-			setColumnWidth(_panelCostRight);
-			setColumnWidth(_panelRight);
-			setColumnWidth(FilterManaCost);
+			setColumnWidth(_panelRightCost);
+			setColumnWidth(_panelRightNarrow);
+			setColumnWidth(_panelRightManaCost);
 		}
 
-		private void setColumnWidth(Control panel)
+		private static void setColumnWidth(Control panel)
 		{
-			var cell = _layoutRight.GetCellPosition(panel);
+			var tableLayout = (TableLayoutPanel) panel.Parent;
+			var cell = tableLayout.GetCellPosition(panel);
 			
 			var preferredSize = panel.GetPreferredSize(new Size(int.MaxValue, panel.Height));
 			int preferredWidth = preferredSize.Width + panel.Margin.Right + panel.Margin.Left;
 
-			_layoutRight.ColumnStyles[cell.Column].Width = preferredWidth;
+			tableLayout.ColumnStyles[cell.Column].Width = preferredWidth;
 		}
 
 
