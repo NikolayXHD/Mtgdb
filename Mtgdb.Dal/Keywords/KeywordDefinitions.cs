@@ -553,7 +553,7 @@ namespace Mtgdb.Dal
 			@"\b(you|teammate|opponent|player|was|were|is|are|it's|they're|ha(s|d|ve)|gain(s|ed)?|can't|activate(s|d)?|with) ";
 
 		private const string KeywordOutroducers =
-			@" (abilit(y|ies)|costs?|(a|any|this|these|that|those)? (spells?|permanents?|vehicles?))\b";
+			@" ((a|any|this|these|that|those|target) )?(it|abilit(y|ies)|costs?|spells?|permanents?|vehicles?)\b";
 
 		private const string CountSuffix = @"( (\d+|x)\b| ?— ?sunburst)";
 	}

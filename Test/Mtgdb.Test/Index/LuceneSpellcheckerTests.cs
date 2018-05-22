@@ -111,8 +111,8 @@ namespace Mtgdb.Test
 		// keywords
 		[TestCase(EnRu, "Keywords:■", "absorb", "awaken")]
 		[TestCase(EnRu, "Keywords:a■", "absorb", "awaken")]
-		[TestCase(EnRu, "Keywords:ack■", "buyback", "flashback", "attack each turn")]
-		[TestCase(EnRu, "Keywords:\"attack e■\"", "attack each turn")]
+		[TestCase(EnRu, "Keywords:ack■", "buyback", "flashback", "attack if able")]
+		[TestCase(EnRu, "Keywords:\"attack e■\"", "attack if able")]
 		[TestCase(EnRu, "Keywords:я■")] // empty suggest
 		// layout
 		[TestCase(EnRu, "Layout:■", "aftermath", "double-faced", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "token", "vanguard")]

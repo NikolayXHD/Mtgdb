@@ -160,9 +160,7 @@
     <Folder Include="$(MSBuildThisFileDirectory)images\XLHQ Promos\" />
     <Folder Include="$(MSBuildThisFileDirectory)images\XLHQ-Sets-Torrent\" />
     <Folder Include="$(MSBuildThisFileDirectory)update\app\" />
-    <Folder Include="$(MSBuildThisFileDirectory)update\notifications\archive\Notifications-master\" />
-    <Folder Include="$(MSBuildThisFileDirectory)update\notifications\new\" />
-    <Folder Include="$(MSBuildThisFileDirectory)update\notifications\read\" />
+    <Folder Include="$(MSBuildThisFileDirectory)update\notifications\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)update\7z\7za.exe" />
