@@ -23,10 +23,10 @@ namespace Mtgdb.Controls.Statistics
 		public IOrderedEnumerable<TObj> OrderBy(IEnumerable<TObj> val, SortOrder order)
 		{
 			if (order == SortOrder.Ascending)
-				return val.OrderByDescending(_ => _getter(_) != null).ThenBy(_getter);
+				return val.OrderBy(_ => _getter(_) == null).ThenBy(_getter);
 
 			if (order == SortOrder.Descending)
-				return val.OrderBy(_ => _getter(_) != null).ThenByDescending(_getter);
+				return val.OrderBy(_ => _getter(_) == null).ThenByDescending(_getter);
 
 			throw new ArgumentOutOfRangeException(nameof(order));
 		}
@@ -34,10 +34,10 @@ namespace Mtgdb.Controls.Statistics
 		public IOrderedEnumerable<TObj> ThenOrderBy(IOrderedEnumerable<TObj> val, SortOrder order)
 		{
 			if (order == SortOrder.Ascending)
-				return val.ThenByDescending(_ => _getter(_) != null).ThenBy(_getter);
+				return val.ThenBy(_ => _getter(_) == null).ThenBy(_getter);
 
 			if (order == SortOrder.Descending)
-				return val.ThenBy(_ => _getter(_) != null).ThenByDescending(_getter);
+				return val.ThenBy(_ => _getter(_) == null).ThenByDescending(_getter);
 
 			throw new ArgumentOutOfRangeException(nameof(order));
 		}

@@ -117,4 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label58.Text" xml:space="preserve">
+    <value>Filter buttons above do the same, but provide less keywords.
+
+Use intellisense to see available keywords:
+- type keywords:
+- hit Ctrl + Space
+- begin typing keyword part
+
+Cycle keyword alphabetically without opening intellisense:
+- move input caret to a keyword
+- hit Ctrl + Down or Ctrl+Up</value>
+  </data>
+  <data name="label33.Text" xml:space="preserve">
+    <value>Will not search cards with name shivan dragon because the query is equivalent to 
+  name: shivan OR *:dragon
+where * means any field.
+
+Unquoted words are separate terms joined by OR unless there is AND in between. Correct queries would be
+  name: "shivan dragon"
+  name:(shivan OR dragon)</value>
+  </data>
 </root>

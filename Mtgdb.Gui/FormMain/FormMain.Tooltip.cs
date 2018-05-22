@@ -93,12 +93,19 @@
 				_panelIconStatusSort,
 				_labelStatusSort);
 
+			var keywordHint = "Search text lets you search by keywords too. It provides much more keyword values.\r\n" +
+				"Use intellisense to see available values:\r\n" +
+				"- type `keywords:`\r\n" +
+				"- hit Ctrl+Space\r\n" +
+				"- begin typing keyword";
+
 			controller.SetTooltip(this,
 				"Filter by keyword abilities",
 				"Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
-				"Keyword examples: Flying, First Strike, Haste, ...",
+				"Keyword examples: Flying, First Strike, Haste, ...\r\n\r\n"
+				+ keywordHint,
 				FilterAbility);
 
 			controller.SetTooltip(this,
@@ -106,7 +113,8 @@
 				"Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
-				"Keyword examples: Cascade, Flashback, Madness, ...",
+				"Keyword examples: Cascade, Flashback, Madness, ...\r\n\r\n" +
+				keywordHint,
 				FilterCastKeyword);
 
 			controller.SetTooltip(this,
@@ -212,15 +220,15 @@
 					"Ctrl+Backspace to delete one word\r\n" +
 					"F1 to learn searh string syntax\r\n\r\n" +
 					"Ctrl+F to focus search input",
-				_findBorderedPanel,
-				_findEditor,
+				_panelSearch,
+				_searchEditor,
 				_panelIconSearch);
 
 			controller.SetTooltip(this,
 				"Search text examples",
 				"Opens menu with search text examples.\r\n" +
 				"Same menu is opened by pressing F1.",
-				_buttonFindExamplesDropDown);
+				_buttonSearchExamplesDropDown);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",

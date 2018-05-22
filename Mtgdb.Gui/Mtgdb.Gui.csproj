@@ -136,6 +136,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
+    <Compile Include="FormMain\SearchExamplesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
+      <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -246,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain\SearchExamplesPanel.resx">
+      <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\DeckLayout.resx">
       <DependentUpon>DeckLayout.cs</DependentUpon>
@@ -377,6 +386,7 @@
     <Content Include="Resources\Delirium.png" />
     <None Include="Resources\destroy.png" />
     <None Include="Resources\Delve.png" />
+    <None Include="Resources\Devour.png" />
     <Content Include="Resources\Doesnt untap.png" />
     <Content Include="Resources\Double Strike.png" />
     <None Include="Resources\draw_48.png" />
@@ -417,6 +427,7 @@
     <None Include="Resources\index_16.png" />
     <None Include="Resources\infect.png" />
     <Content Include="Resources\Ingest.png" />
+    <None Include="Resources\Ingest_processor.png" />
     <Content Include="Resources\Intimidate.png" />
     <None Include="Resources\landwalk.png" />
     <Content Include="Resources\legality_48.png" />
@@ -431,6 +442,7 @@
     <Content Include="Resources\mythic.png" />
     <None Include="Resources\open_16.png" />
     <None Include="Resources\normal.png" />
+    <None Include="Resources\Ninjutsu.png" />
     <Content Include="Resources\open_32.png" />
     <None Include="Resources\paste_16.png" />
     <None Include="Resources\paste_32.png" />
@@ -441,6 +453,7 @@
     <None Include="Resources\Persist.png" />
     <None Include="Resources\phenomenon.png" />
     <None Include="Resources\plane.png" />
+    <None Include="Resources\Overload.png" />
     <Content Include="Resources\print_32.png" />
     <None Include="Resources\properties_16.png" />
     <Content Include="Resources\properties_32.png" />

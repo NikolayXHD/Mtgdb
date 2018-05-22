@@ -4,7 +4,7 @@ namespace Mtgdb.Dal
 	{
 		public static int MaxCountInDeck(this Card c)
 		{
-			if (Str.Equals(c.Rarity, "Basic Land"))
+			if (Str.Equals(c.Rarity, "Basic Land") || Str.Equals(c.NameEn, "Relentless Rats"))
 				return int.MaxValue;
 
 			return 4;

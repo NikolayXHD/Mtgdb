@@ -23,7 +23,7 @@ namespace Mtgdb.Gui
 
 		private void formLoad(object sender, EventArgs e)
 		{
-			_findEditor.Focus();
+			_searchEditor.Focus();
 			startThreads();
 
 			subscribeCardRepoEvents();
@@ -256,6 +256,13 @@ namespace Mtgdb.Gui
 			int preferredWidth = preferredSize.Width + panel.Margin.Right + panel.Margin.Left;
 
 			tableLayout.ColumnStyles[cell.Column].Width = preferredWidth;
+		}
+
+		private static void setRowHeight(Control panel)
+		{
+			var tableLayout = (TableLayoutPanel) panel.Parent;
+			var cell = tableLayout.GetCellPosition(panel);
+			tableLayout.RowStyles[cell.Row].Height = panel.Height;
 		}
 
 
@@ -622,7 +629,7 @@ namespace Mtgdb.Gui
 					Resources.text_disabled_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonFindExamplesDropDown,
+			_buttonSubsystem.SetupButton(_buttonSearchExamplesDropDown,
 				new ButtonImages(
 					null,
 					Resources.book_40,

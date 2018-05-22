@@ -63,15 +63,14 @@ namespace Mtgdb.Gui
 
 			_searchStringSubsystem = new SearchStringSubsystem(
 				this,
-				_buttonSubsystem,
-				_panelFindExamples,
-				_buttonFindExamplesDropDown,
-				_findEditor,
+				_searchEditor,
 				_panelIconSearch,
 				_listBoxSuggest,
 				luceneSearcher,
 				_viewCards,
 				_viewDeck);
+
+			_panelSearchExamples.Setup(_searchStringSubsystem, _buttonSubsystem, _buttonSearchExamplesDropDown);
 
 			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchStringSubsystem);
 
@@ -140,7 +139,7 @@ namespace Mtgdb.Gui
 			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
 			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
 
-			_findEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_findEditor);
+			_searchEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_searchEditor);
 
 			_historySubsystem = new HistorySubsystem(undoConfig);
 
@@ -166,7 +165,9 @@ namespace Mtgdb.Gui
 			_viewCards.PartialCardSize = _viewCards.PartialCardSize.ByDpi();
 			_viewDeck.PartialCardSize = _viewDeck.PartialCardSize.ByDpi();
 
-			_findBorderedPanel.ScaleDpi();
+			_panelSearch.ScaleDpi();
+			_panelSearchExamples.ScaleDpi();
+
 			_menuLegalityFormat.ScaleDpi();
 
 			_buttonShowDuplicates.ScaleDpi();
@@ -176,7 +177,7 @@ namespace Mtgdb.Gui
 			_buttonHideDeck.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
 			_buttonHideText.ScaleDpi();
-			_buttonFindExamplesDropDown.ScaleDpi();
+			_buttonSearchExamplesDropDown.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
@@ -201,6 +202,8 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaAbility.Size =
 				_buttonExcludeManaCost.Size =
 					_buttonShowProhibit.Size = modeButtonSize;
+
+			setRowHeight(_buttonShowProhibit);
 
 			int rightMargin = FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width;
 
@@ -343,7 +346,7 @@ namespace Mtgdb.Gui
 			_buttonSampleHandMulligan.Click += sampleHandMulligan;
 			_buttonSampleHandDraw.Click += sampleHandDraw;
 
-			_findEditorSelectionSubsystem.SubsribeToEvents();
+			_searchEditorSelectionSubsystem.SubsribeToEvents();
 
 			_buttonHideDeck.CheckedChanged += buttonDeckHideChanged;
 			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
@@ -422,7 +425,7 @@ namespace Mtgdb.Gui
 			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
 			_buttonSampleHandDraw.Click -= sampleHandDraw;
 
-			_findEditorSelectionSubsystem.UnsubsribeFromEvents();
+			_searchEditorSelectionSubsystem.UnsubsribeFromEvents();
 
 			_buttonHideDeck.CheckedChanged -= buttonDeckHideChanged;
 			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
@@ -499,6 +502,6 @@ namespace Mtgdb.Gui
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
-		private readonly RichTextBoxSelectionSubsystem _findEditorSelectionSubsystem;
+		private readonly RichTextBoxSelectionSubsystem _searchEditorSelectionSubsystem;
 	}
 }

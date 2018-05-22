@@ -393,6 +393,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Devour {
+            get {
+                object obj = ResourceManager.GetObject("Devour", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Discard {
             get {
                 object obj = ResourceManager.GetObject("Discard", resourceCulture);
@@ -673,6 +683,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Ingest_processor {
+            get {
+                object obj = ResourceManager.GetObject("Ingest_processor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Intimidate {
             get {
                 object obj = ResourceManager.GetObject("Intimidate", resourceCulture);
@@ -763,9 +783,29 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Ninjutsu {
+            get {
+                object obj = ResourceManager.GetObject("Ninjutsu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Normal {
             get {
                 object obj = ResourceManager.GetObject("Normal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Overload {
+            get {
+                object obj = ResourceManager.GetObject("Overload", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

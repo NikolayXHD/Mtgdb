@@ -436,4 +436,16 @@
   <data name="Transmute" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Transmute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Ingest_processor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ingest_processor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Devour" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Devour.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ninjutsu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ninjutsu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Overload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Overload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

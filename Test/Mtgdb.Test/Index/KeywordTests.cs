@@ -26,15 +26,13 @@ namespace Mtgdb.Test
 			var boringKeywords = new HashSet<string>(Str.Comparer)
 			{
 				"Devoid",
-				"Echo",
-				"Evoke",
-				"Kicker",
 				"Plainswalk",
 				"Forestwalk",
 				"Swampwalk",
 				"Mountainwalk",
 				"Islandwalk",
-				"Cumulative Upkeep"
+				"Cumulative Upkeep",
+				"Level Up"
 			};
 
 			boringKeywords.UnionWith(keywords.SkipWhile(F.IsNotEqualTo("Activate")));
@@ -91,14 +89,21 @@ namespace Mtgdb.Test
 
 		private static float getTopPriceInFormat(IList<int> cardIds, string format)
 		{
-			return cardIds
+			var list = cardIds
 				.Select(i => Repo.Cards[i])
 				.Where(c => c.IsLegalIn(format) || c.IsRestrictedIn(format))
-				.Select(c=> c.PriceMid)
-				.Where(F.IsNotNull)
+				.GroupBy(c => c.NameEn)
+				.Select(c => c.First().Namesakes
+					.Select(cn => cn.PriceMid)
+					.Where(_=>_.HasValue && _.Value != 0f)
+					.Cast<float>()
+					.DefaultIfEmpty(0f)
+					.Min())
 				.DefaultIfEmpty(0f)
-				.Cast<float>()
-				.Max();
+				.OrderByDescending(f=>f)
+				.ToList();
+
+			return list[list.Count / 10];
 		}
 
 		[Test]

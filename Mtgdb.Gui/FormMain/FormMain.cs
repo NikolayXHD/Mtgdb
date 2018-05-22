@@ -124,7 +124,7 @@ namespace Mtgdb.Gui
 
 			if (IsHandleCreated)
 			{
-				_findEditor.Focus();
+				_searchEditor.Focus();
 				startThreads();
 			}
 		}
@@ -545,7 +545,7 @@ namespace Mtgdb.Gui
 
 		private bool isSearchStringModified()
 		{
-			return _historySubsystem != null && _findEditor.Text != (_historySubsystem.Current.Find ?? string.Empty);
+			return _historySubsystem != null && _searchEditor.Text != (_historySubsystem.Current.Find ?? string.Empty);
 		}
 
 		private static string getFilterStatusText(
@@ -957,7 +957,7 @@ namespace Mtgdb.Gui
 
 		public void FocusSearch() => _searchStringSubsystem.FocusSearch();
 
-		public void ShowFindExamples() => _searchStringSubsystem.ShowFindExamples();
+		public void ShowFindExamples() => _panelSearchExamples.ShowFindExamples();
 
 
 

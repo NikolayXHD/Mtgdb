@@ -20,9 +20,6 @@ namespace Mtgdb.Gui
 	{
 		public SearchStringSubsystem(
 			Form parent,
-			ButtonSubsystem buttonSubsystem,
-			TableLayoutPanel panelExamples,
-			ButtonBase examplesButton,
 			RichTextBox findEditor,
 			Panel panelSearchIcon,
 			ListBox listBoxSuggest,
@@ -31,10 +28,6 @@ namespace Mtgdb.Gui
 			MtgLayoutView viewDeck)
 		{
 			_parent = parent;
-			_panelExamples = panelExamples;
-			_examplesButton = examplesButton;
-			_buttonSubsystem = buttonSubsystem;
-
 			_findEditor = findEditor;
 			_panelSearchIcon = panelSearchIcon;
 
@@ -51,8 +44,6 @@ namespace Mtgdb.Gui
 			_highligter.Highlight();
 
 			_listBoxSuggest.DataSource = _suggestValues;
-
-			setupFindExamplesPanel();
 		}
 
 		public void SubscribeToEvents()
@@ -96,68 +87,6 @@ namespace Mtgdb.Gui
 		public void UnsubscribeSuggestModelEvents()
 		{
 			SuggestModel.Suggested -= suggested;
-		}
-
-
-
-		private void setupFindExamplesPanel()
-		{
-			_buttonSubsystem.SetupPopup(
-				new Popup(_panelExamples,
-					_examplesButton,
-					HorizontalAlignment.Right,
-					openOnHover: false,
-					borderOnHover: false));
-
-			var queryRows = Enumerable.Range(0, _panelExamples.RowCount)
-				.Select(getFindExampleRow)
-				.Where(r => r.Query != null)
-				.ToList();
-
-			var selectionBackColor = Color.LightBlue;
-
-			foreach (var row in queryRows)
-			{
-				void mouseEnter(object sender, EventArgs args)
-				{
-					row.Query.BackColor = selectionBackColor;
-					row.Comment.BackColor = selectionBackColor;
-				}
-
-				void mouseLeave(object sender, EventArgs args)
-				{
-					row.Query.BackColor = row.BackColor;
-					row.Comment.BackColor = row.BackColor;
-				}
-
-				void mouseClick(object sender, EventArgs args)
-				{
-					_buttonSubsystem.ClosePopup(_examplesButton);
-					setFindText(row.Query.Text, row.Query.Text.Length);
-					Apply();
-				}
-
-				row.Query.MouseEnter += mouseEnter;
-				row.Comment.MouseEnter += mouseEnter;
-
-				row.Query.MouseLeave += mouseLeave;
-				row.Comment.MouseLeave += mouseLeave;
-
-				row.Query.MouseClick += mouseClick;
-				row.Comment.MouseClick += mouseClick;
-			}
-		}
-
-		private (Label Query, Label Comment, Color BackColor) getFindExampleRow(int i)
-		{
-			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
-
-			if (queryLabel.TextAlign != ContentAlignment.TopLeft)
-				return (null, null, default(Color));
-
-			var commentLabel = (Label) _panelExamples.GetControlFromPosition(1, i);
-
-			return (queryLabel, commentLabel, queryLabel.BackColor);
 		}
 
 		private string getLanguage()
@@ -285,6 +214,7 @@ namespace Mtgdb.Gui
 
 			updateSuggestLocation();
 			_listBoxSuggest.Visible = true;
+			_listBoxSuggest.BringToFront();
 		}
 
 		private void updateSuggestLocation()
@@ -474,8 +404,6 @@ namespace Mtgdb.Gui
 			if (_appliedText != _findEditor.Text)
 				Apply();
 		}
-
-		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_examplesButton);
 
 		private void cycleValue(bool backward)
 		{
@@ -843,9 +771,6 @@ namespace Mtgdb.Gui
 		private Token _suggestToken;
 
 		private readonly Form _parent;
-		private readonly TableLayoutPanel _panelExamples;
-		private readonly ButtonBase _examplesButton;
-		private readonly ButtonSubsystem _buttonSubsystem;
 		private readonly RichTextBox _findEditor;
 		private readonly Panel _panelSearchIcon;
 		private readonly ListBox _listBoxSuggest;

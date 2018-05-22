@@ -567,7 +567,7 @@ namespace Mtgdb.Gui
 
 		private bool getPattern(string query, Token token, out string result, out List<string> contextPatterns)
 		{
-			if (token.IsPhraseStart && !token.IsPhraseComplex)
+			if (token.IsPhraseStart && !token.IsPhraseComplex && !token.PhraseHasSlop)
 			{
 				var patternBuilder = new StringBuilder();
 				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
