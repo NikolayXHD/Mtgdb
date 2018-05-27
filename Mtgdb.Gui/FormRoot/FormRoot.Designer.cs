@@ -54,13 +54,13 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._labelMtgo = new System.Windows.Forms.Label();
 			this._buttonMenuOpenDeck = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonVisitMtgo = new System.Windows.Forms.LinkLabel();
-			this._buttonVisitCockatrice = new System.Windows.Forms.LinkLabel();
-			this._buttonVisitDotP2014 = new System.Windows.Forms.LinkLabel();
+			this._buttonVisitMtgo = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonVisitCockatrice = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonVisitDotP2014 = new Mtgdb.Controls.CustomCheckBox();
 			this._labelFormats = new System.Windows.Forms.Label();
-			this._buttonVisitForge = new System.Windows.Forms.LinkLabel();
-			this._buttonVisitXMage = new System.Windows.Forms.LinkLabel();
-			this._buttonVisitMagarena = new System.Windows.Forms.LinkLabel();
+			this._buttonVisitForge = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonVisitXMage = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonVisitMagarena = new Mtgdb.Controls.CustomCheckBox();
 			this._menuLanguage = new Mtgdb.Controls.BorderedPanel();
 			this._layoutLanguage = new System.Windows.Forms.TableLayoutPanel();
 			this._buttonPT = new Mtgdb.Controls.CustomCheckBox();
@@ -398,7 +398,7 @@ namespace Mtgdb.Gui
 			this._menuOpen.Location = new System.Drawing.Point(349, 287);
 			this._menuOpen.Margin = new System.Windows.Forms.Padding(0);
 			this._menuOpen.Name = "_menuOpen";
-			this._menuOpen.Size = new System.Drawing.Size(272, 425);
+			this._menuOpen.Size = new System.Drawing.Size(272, 445);
 			this._menuOpen.TabIndex = 0;
 			this._menuOpen.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -439,7 +439,7 @@ namespace Mtgdb.Gui
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.Size = new System.Drawing.Size(270, 423);
+			this._layoutOpen.Size = new System.Drawing.Size(270, 443);
 			this._layoutOpen.TabIndex = 0;
 			// 
 			// _buttonMenuSaveCollection
@@ -466,7 +466,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelMagarena.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelMagarena, 2);
-			this._labelMagarena.Location = new System.Drawing.Point(104, 367);
+			this._labelMagarena.Location = new System.Drawing.Point(104, 387);
 			this._labelMagarena.Margin = new System.Windows.Forms.Padding(3);
 			this._labelMagarena.Name = "_labelMagarena";
 			this._labelMagarena.Size = new System.Drawing.Size(163, 25);
@@ -498,7 +498,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelDotP2.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelDotP2, 2);
-			this._labelDotP2.Location = new System.Drawing.Point(104, 302);
+			this._labelDotP2.Location = new System.Drawing.Point(104, 308);
 			this._labelDotP2.Margin = new System.Windows.Forms.Padding(3);
 			this._labelDotP2.Name = "_labelDotP2";
 			this._labelDotP2.Size = new System.Drawing.Size(163, 36);
@@ -530,7 +530,7 @@ namespace Mtgdb.Gui
 			// 
 			this._labelMtgo.BackColor = System.Drawing.Color.Transparent;
 			this._layoutOpen.SetColumnSpan(this._labelMtgo, 2);
-			this._labelMtgo.Location = new System.Drawing.Point(104, 220);
+			this._labelMtgo.Location = new System.Drawing.Point(104, 226);
 			this._labelMtgo.Margin = new System.Windows.Forms.Padding(3);
 			this._labelMtgo.Name = "_labelMtgo";
 			this._labelMtgo.Size = new System.Drawing.Size(162, 76);
@@ -561,54 +561,72 @@ namespace Mtgdb.Gui
 			// 
 			// _buttonVisitMtgo
 			// 
-			this._buttonVisitMtgo.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMtgo.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitMtgo.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitMtgo.BackColor = System.Drawing.Color.White;
+			this._buttonVisitMtgo.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitMtgo.FlatAppearance.BorderSize = 0;
+			this._buttonVisitMtgo.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitMtgo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitMtgo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitMtgo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitMtgo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitMtgo.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitMtgo.Image = global::Mtgdb.Gui.Properties.Resources.mtgo_32;
 			this._buttonVisitMtgo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitMtgo.LinkArea = new System.Windows.Forms.LinkArea(0, 26);
-			this._buttonVisitMtgo.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMtgo.Location = new System.Drawing.Point(3, 220);
-			this._buttonVisitMtgo.Margin = new System.Windows.Forms.Padding(3);
+			this._buttonVisitMtgo.Location = new System.Drawing.Point(3, 226);
 			this._buttonVisitMtgo.Name = "_buttonVisitMtgo";
 			this._buttonVisitMtgo.Size = new System.Drawing.Size(95, 59);
 			this._buttonVisitMtgo.TabIndex = 32;
-			this._buttonVisitMtgo.TabStop = true;
+			this._buttonVisitMtgo.TabStop = false;
 			this._buttonVisitMtgo.Text = "Magic The Gathering Online";
 			this._buttonVisitMtgo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitMtgo.UseVisualStyleBackColor = false;
 			// 
 			// _buttonVisitCockatrice
 			// 
-			this._buttonVisitCockatrice.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitCockatrice.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitCockatrice.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitCockatrice.BackColor = System.Drawing.Color.White;
+			this._buttonVisitCockatrice.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitCockatrice.FlatAppearance.BorderSize = 0;
+			this._buttonVisitCockatrice.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitCockatrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitCockatrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitCockatrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitCockatrice.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitCockatrice.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitCockatrice.Image = global::Mtgdb.Gui.Properties.Resources.cockatrice_32;
 			this._buttonVisitCockatrice.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitCockatrice.LinkArea = new System.Windows.Forms.LinkArea(0, 10);
-			this._buttonVisitCockatrice.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitCockatrice.Location = new System.Drawing.Point(3, 367);
-			this._buttonVisitCockatrice.Margin = new System.Windows.Forms.Padding(3);
+			this._buttonVisitCockatrice.Location = new System.Drawing.Point(3, 387);
 			this._buttonVisitCockatrice.Name = "_buttonVisitCockatrice";
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(95, 53);
 			this._buttonVisitCockatrice.TabIndex = 3;
-			this._buttonVisitCockatrice.TabStop = true;
+			this._buttonVisitCockatrice.TabStop = false;
 			this._buttonVisitCockatrice.Text = "Cockatrice";
 			this._buttonVisitCockatrice.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitCockatrice.UseVisualStyleBackColor = false;
 			// 
 			// _buttonVisitDotP2014
 			// 
-			this._buttonVisitDotP2014.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitDotP2014.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitDotP2014.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitDotP2014.BackColor = System.Drawing.Color.White;
+			this._buttonVisitDotP2014.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitDotP2014.FlatAppearance.BorderSize = 0;
+			this._buttonVisitDotP2014.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitDotP2014.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitDotP2014.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitDotP2014.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitDotP2014.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitDotP2014.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitDotP2014.Image = global::Mtgdb.Gui.Properties.Resources.dot_p2014_32;
 			this._buttonVisitDotP2014.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitDotP2014.LinkArea = new System.Windows.Forms.LinkArea(0, 30);
-			this._buttonVisitDotP2014.LinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitDotP2014.Location = new System.Drawing.Point(3, 302);
-			this._buttonVisitDotP2014.Margin = new System.Windows.Forms.Padding(3);
+			this._buttonVisitDotP2014.Location = new System.Drawing.Point(3, 308);
 			this._buttonVisitDotP2014.Name = "_buttonVisitDotP2014";
-			this._buttonVisitDotP2014.Size = new System.Drawing.Size(95, 59);
+			this._buttonVisitDotP2014.Size = new System.Drawing.Size(95, 73);
 			this._buttonVisitDotP2014.TabIndex = 4;
-			this._buttonVisitDotP2014.TabStop = true;
+			this._buttonVisitDotP2014.TabStop = false;
 			this._buttonVisitDotP2014.Text = "Riiak\'s DotP 2014 Deck Builder";
 			this._buttonVisitDotP2014.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitDotP2014.UseVisualStyleBackColor = false;
 			// 
 			// _labelFormats
 			// 
@@ -626,54 +644,73 @@ namespace Mtgdb.Gui
 			// 
 			// _buttonVisitForge
 			// 
-			this._buttonVisitForge.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitForge.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitForge.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitForge.BackColor = System.Drawing.Color.White;
+			this._buttonVisitForge.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitForge.FlatAppearance.BorderSize = 0;
+			this._buttonVisitForge.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitForge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitForge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitForge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitForge.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitForge.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitForge.Image = global::Mtgdb.Gui.Properties.Resources.forge_32;
 			this._buttonVisitForge.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitForge.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
-			this._buttonVisitForge.LinkColor = System.Drawing.Color.Blue;
 			this._buttonVisitForge.Location = new System.Drawing.Point(3, 167);
-			this._buttonVisitForge.Margin = new System.Windows.Forms.Padding(3);
 			this._buttonVisitForge.Name = "_buttonVisitForge";
-			this._buttonVisitForge.Size = new System.Drawing.Size(95, 47);
+			this._buttonVisitForge.Size = new System.Drawing.Size(95, 53);
 			this._buttonVisitForge.TabIndex = 0;
-			this._buttonVisitForge.TabStop = true;
+			this._buttonVisitForge.TabStop = false;
 			this._buttonVisitForge.Text = "Forge";
 			this._buttonVisitForge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitForge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+			this._buttonVisitForge.UseVisualStyleBackColor = false;
 			// 
 			// _buttonVisitXMage
 			// 
-			this._buttonVisitXMage.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitXMage.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitXMage.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitXMage.BackColor = System.Drawing.Color.White;
+			this._buttonVisitXMage.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitXMage.FlatAppearance.BorderSize = 0;
+			this._buttonVisitXMage.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitXMage.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitXMage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitXMage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitXMage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitXMage.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitXMage.Image = global::Mtgdb.Gui.Properties.Resources.xmage_32;
 			this._buttonVisitXMage.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitXMage.LinkArea = new System.Windows.Forms.LinkArea(0, 5);
-			this._buttonVisitXMage.LinkColor = System.Drawing.Color.Blue;
 			this._buttonVisitXMage.Location = new System.Drawing.Point(104, 167);
-			this._buttonVisitXMage.Margin = new System.Windows.Forms.Padding(3);
 			this._buttonVisitXMage.Name = "_buttonVisitXMage";
-			this._buttonVisitXMage.Size = new System.Drawing.Size(56, 47);
+			this._buttonVisitXMage.Size = new System.Drawing.Size(56, 53);
 			this._buttonVisitXMage.TabIndex = 1;
-			this._buttonVisitXMage.TabStop = true;
+			this._buttonVisitXMage.TabStop = false;
 			this._buttonVisitXMage.Text = "XMage";
 			this._buttonVisitXMage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitXMage.UseVisualStyleBackColor = false;
 			// 
 			// _buttonVisitMagarena
 			// 
-			this._buttonVisitMagarena.ActiveLinkColor = System.Drawing.Color.Blue;
-			this._buttonVisitMagarena.BackColor = System.Drawing.Color.Transparent;
+			this._buttonVisitMagarena.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonVisitMagarena.BackColor = System.Drawing.Color.White;
+			this._buttonVisitMagarena.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitMagarena.FlatAppearance.BorderSize = 0;
+			this._buttonVisitMagarena.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
+			this._buttonVisitMagarena.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+			this._buttonVisitMagarena.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+			this._buttonVisitMagarena.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonVisitMagarena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitMagarena.ForeColor = System.Drawing.Color.Blue;
 			this._buttonVisitMagarena.Image = global::Mtgdb.Gui.Properties.Resources.magarena_32;
 			this._buttonVisitMagarena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-			this._buttonVisitMagarena.LinkArea = new System.Windows.Forms.LinkArea(0, 8);
-			this._buttonVisitMagarena.LinkColor = System.Drawing.Color.Blue;
 			this._buttonVisitMagarena.Location = new System.Drawing.Point(166, 167);
-			this._buttonVisitMagarena.Margin = new System.Windows.Forms.Padding(3);
 			this._buttonVisitMagarena.Name = "_buttonVisitMagarena";
-			this._buttonVisitMagarena.Size = new System.Drawing.Size(63, 47);
+			this._buttonVisitMagarena.Size = new System.Drawing.Size(63, 53);
 			this._buttonVisitMagarena.TabIndex = 2;
-			this._buttonVisitMagarena.TabStop = true;
+			this._buttonVisitMagarena.TabStop = false;
 			this._buttonVisitMagarena.Text = "Magarena";
 			this._buttonVisitMagarena.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this._buttonVisitMagarena.UseVisualStyleBackColor = false;
 			// 
 			// _menuLanguage
 			// 
@@ -1371,11 +1408,11 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonTooltips;
 		private Controls.TabHeaderControl _tabs;
 		Mtgdb.Controls.BorderedPanel _menuOpen;
-		private System.Windows.Forms.LinkLabel _buttonVisitForge;
-		private System.Windows.Forms.LinkLabel _buttonVisitXMage;
-		private System.Windows.Forms.LinkLabel _buttonVisitMagarena;
-		private System.Windows.Forms.LinkLabel _buttonVisitCockatrice;
-		private System.Windows.Forms.LinkLabel _buttonVisitDotP2014;
+		private Mtgdb.Controls.CustomCheckBox _buttonVisitForge;
+		private Mtgdb.Controls.CustomCheckBox _buttonVisitXMage;
+		private Mtgdb.Controls.CustomCheckBox _buttonVisitMagarena;
+		private Mtgdb.Controls.CustomCheckBox _buttonVisitCockatrice;
+		private Mtgdb.Controls.CustomCheckBox _buttonVisitDotP2014;
 		private System.Windows.Forms.Label _labelFormats;
 		private System.Windows.Forms.Label _labelMagarena;
 		private System.Windows.Forms.Label _labelDotP2;
@@ -1398,7 +1435,7 @@ namespace Mtgdb.Gui
 		private System.Windows.Forms.Label _labelDonate;
 		private Controls.CustomCheckBox _buttonMenuOpenDeck;
 		private Controls.CustomCheckBox _buttonMenuOpenCollection;
-		private System.Windows.Forms.LinkLabel _buttonVisitMtgo;
+		private Controls.CustomCheckBox _buttonVisitMtgo;
 		private Controls.CustomCheckBox _buttonMenuSaveDeck;
 		private Controls.CustomCheckBox _buttonMenuSaveCollection;
 		private System.Windows.Forms.Label _labelMtgo;

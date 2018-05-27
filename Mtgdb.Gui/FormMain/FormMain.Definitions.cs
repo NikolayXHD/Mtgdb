@@ -61,7 +61,7 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem = new ButtonSubsystem();
 
-			_searchStringSubsystem = new SearchStringSubsystem(
+			_searchSubsystem = new SearchStringSubsystem(
 				this,
 				_searchEditor,
 				_panelIconSearch,
@@ -70,14 +70,14 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_viewDeck);
 
-			_panelSearchExamples.Setup(_searchStringSubsystem, _buttonSubsystem, _buttonSearchExamplesDropDown);
+			_panelSearchExamples.Setup(_searchSubsystem, _buttonSubsystem, _buttonSearchExamplesDropDown);
 
-			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchStringSubsystem);
+			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchSubsystem);
 
 			endRestoreSettings();
 
-			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchStringSubsystem);
-			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchStringSubsystem);
+			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchSubsystem);
+			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchSubsystem);
 
 			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -121,7 +121,7 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_viewDeck,
 				_draggingSubsystem,
-				_searchStringSubsystem,
+				_searchSubsystem,
 				_deckModel,
 				_quickFilterFacade,
 				_legalitySubsystem,
@@ -203,7 +203,7 @@ namespace Mtgdb.Gui
 				_buttonExcludeManaCost.Size =
 					_buttonShowProhibit.Size = modeButtonSize;
 
-			setRowHeight(_buttonShowProhibit);
+			setRowHeight(_buttonShowProhibit, modeButtonSize);
 
 			int rightMargin = FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width;
 
@@ -359,9 +359,10 @@ namespace Mtgdb.Gui
 
 			_historySubsystem.Loaded += historyLoaded;
 
-			_searchStringSubsystem.SubscribeToEvents();
+			_searchSubsystem.SubscribeToEvents();
 
 			SizeChanged += sizeChanged;
+			PreviewKeyDown += previewKeyDown;
 		}
 
 		private void unsubscribeFromEvents()
@@ -436,9 +437,10 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_historySubsystem.Loaded -= historyLoaded;
 
-			_searchStringSubsystem.UnsubscribeFromEvents();
+			_searchSubsystem.UnsubscribeFromEvents();
 
 			SizeChanged -= sizeChanged;
+			PreviewKeyDown -= previewKeyDown;
 		}
 
 		private Zone DeckZone
@@ -478,7 +480,7 @@ namespace Mtgdb.Gui
 		private readonly ImagePreloadingSubsystem _imagePreloadingSubsystem;
 		private readonly ScrollSubsystem _scrollSubsystem;
 		private readonly CollectionModel _collectionModel;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
+		private readonly SearchStringSubsystem _searchSubsystem;
 
 		// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 		private readonly DeckEditingSubsystem _deckEditingSubsystem;

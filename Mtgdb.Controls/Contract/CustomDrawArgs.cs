@@ -14,6 +14,6 @@ namespace Mtgdb.Controls
 		public HorizontalAlignment HAlignment { get; set; }
 		public Font Font { get; set; }
 		public Color ForeColor { get; set; }
-		public SelectionState Selection { get; set; }
+		public RectangularSelection Selection { get; set; }
 	}
 }

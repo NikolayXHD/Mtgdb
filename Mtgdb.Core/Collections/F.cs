@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Mtgdb
 {
@@ -31,5 +32,11 @@ namespace Mtgdb
 
 		public static Func<T, bool> IsNotEqualTo<T>(T val) =>
 			elem => !Equals(elem, val);
+
+		public static Func<T, bool> IsGreaterThan<T>(T val) =>
+			elem => Comparer<T>.Default.Compare(elem, val) > 0;
+
+		public static Func<T, bool> IsLessThan<T>(T val) =>
+			elem => Comparer<T>.Default.Compare(elem, val) < 0;
 	}
 }

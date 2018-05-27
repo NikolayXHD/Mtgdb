@@ -109,10 +109,11 @@
     </Compile>
     <Compile Include="LayoutView\Options\SearchOptions.cs" />
     <Compile Include="LayoutView\Options\SelectionOptions.cs" />
-    <Compile Include="LayoutView\SelectionState.cs" />
+    <Compile Include="LayoutView\RectangularSelection.cs" />
     <Compile Include="LayoutView\SelectionStateChanged.cs" />
     <Compile Include="LayoutView\Options\SortOptions.cs" />
     <Compile Include="LayoutView\EventFiringMap.cs" />
+    <Compile Include="LayoutView\RichText\TextSelection.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

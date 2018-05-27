@@ -11,16 +11,16 @@ namespace Mtgdb.Controls
 			_nonShadowedIcons = nonShadowedIcons;
 		}
 
-		public IList<RichTextToken> Recognize(RichTextToken richTextToken, string text)
+		public IList<RichTextToken> Recognize(RichTextToken originalToken, string text)
 		{
 			var result = new List<RichTextToken>();
 
 			int iconStart = -1;
-			int iconEnd = richTextToken.Index - 1;
+			int iconEnd = originalToken.Index - 1;
 
-			for (int i = richTextToken.Index; i <= richTextToken.Index + richTextToken.Length; i++)
+			for (int i = originalToken.Index; i <= originalToken.Index + originalToken.Length; i++)
 			{
-				bool tokenEnded = i == richTextToken.Index + richTextToken.Length;
+				bool tokenEnded = i == originalToken.Index + originalToken.Length;
 
 				char c;
 				if (tokenEnded)
@@ -36,14 +36,9 @@ namespace Mtgdb.Controls
 					if (length > 0)
 					{
 						result.Add(
-							new RichTextToken
+							new RichTextToken(originalToken, index, length)
 							{
-								IconName = null,
-								Index = index,
-								Length = length,
-								Type = richTextToken.Type,
-								IsHighlighted = richTextToken.IsHighlighted,
-								IsContext = richTextToken.IsContext
+								IconName = null
 							});
 
 						iconEnd = index + length - 1;
@@ -54,24 +49,17 @@ namespace Mtgdb.Controls
 					iconEnd = i;
 					int length = i + 1 - iconStart;
 
-					var textToken = new RichTextToken
-					{
-						Index = iconStart,
-						Length = length,
-						Type = richTextToken.Type,
-						IsHighlighted = richTextToken.IsHighlighted,
-						IsContext = richTextToken.IsContext
-					};
+					var token = new RichTextToken(originalToken, iconStart, length);
 
 					string symbol = text.Substring(iconStart + 1, length - 2);
 
 					if (_imageByText.TryGetValue(symbol, out var icon))
 					{
-						textToken.IconName = symbol;
-						textToken.IconNeedsShadow = icon.Width == icon.Height && !_nonShadowedIcons.Contains(symbol);
+						token.IconName = symbol;
+						token.IconNeedsShadow = icon.Width == icon.Height && !_nonShadowedIcons.Contains(symbol);
 					}
 
-					result.Add(textToken);
+					result.Add(token);
 
 					iconStart = -1;
 				}

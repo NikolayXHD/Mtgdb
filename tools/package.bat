@@ -56,6 +56,7 @@ del /q %target%\update\filelist.txt
 
 del /q /s %target%\images\*.jpg
 del /q /s %target%\images\*.txt
+del /q /s %targetBin%\*.xml
 rmdir /q /s %target%\data\index\keywords-test
 rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test

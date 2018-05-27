@@ -211,10 +211,10 @@
 				_buttonExcludeManaCost);
 
 			controller.SetTooltip(this,
-				() => _searchStringSubsystem.SearchResult?.ParseErrorMessage != null
+				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
 					: "Search text",
-				() => _searchStringSubsystem.SearchResult?.ParseErrorMessage ??
+				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +

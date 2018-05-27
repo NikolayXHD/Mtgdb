@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -77,6 +78,8 @@ namespace Mtgdb.Controls
 							targetRect,
 							(rect, hb, he) =>
 							{
+								_renderContext.TextSelection.PrintedTokens.Add((token, rect));
+
 								var foreColor = _renderContext.ForeColor;
 
 								if (printSelection(rect, token))
@@ -96,6 +99,8 @@ namespace Mtgdb.Controls
 						printBatch.Add(targetRect,
 							(rect, hb, he) =>
 							{
+								_renderContext.TextSelection.PrintedTokens.Add((token, rect));
+
 								var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round() - 1);
 								var iconRect = new RectangleF(rect.Location.Round(), icon.Size);
 
@@ -115,6 +120,8 @@ namespace Mtgdb.Controls
 						printBatch.Add(targetRect,
 							(rect, hb, he) =>
 							{
+								_renderContext.TextSelection.PrintedTokens.Add((token, rect));
+
 								var icon = _iconRecognizer.GetIcon(token.IconName, _lineHeight.Round());
 								var iconRect = new RectangleF(rect.Location.Round(), icon.Size);
 
@@ -195,7 +202,11 @@ namespace Mtgdb.Controls
 				if (space.IsHighlighted)
 					printHighlight(targetRect, printBatch, space.IsContext);
 
-				printBatch.Add(targetRect, (rect, hb, he) => printSelection(rect, space));
+				printBatch.Add(targetRect, (rect, hb, he) =>
+				{
+					_renderContext.TextSelection.PrintedTokens.Add((space, rect));
+					printSelection(rect, space);
+				});
 
 				_lineQueue.Add(printBatch);
 
@@ -210,7 +221,7 @@ namespace Mtgdb.Controls
 		{
 			Flush();
 
-			_y += _lineHeight * 4 / 3;
+			_y += _lineHeight * 4f / 3f;
 			_x = _renderContext.Rect.Left;
 
 			return _y + _lineHeight * HeightPart < _renderContext.Rect.Bottom;
@@ -252,49 +263,109 @@ namespace Mtgdb.Controls
 		private SizeF getLineSize(string tokenText) =>
 			_renderContext.Graphics.MeasureText(tokenText, _renderContext.Font);
 
-		private bool printSelection(RectangleF rectangle, RichTextToken token)
+		private bool printSelection(RectangleF tokenRect, RichTextToken token)
 		{
-			if (!_renderContext.RectSelected)
+			var textSelection = _renderContext.TextSelection;
+
+			if (!_renderContext.Selecting && textSelection.IsEmpty)
 				return false;
 
-			if (_renderContext.SelectionStartIndex < 0)
-			{
-				if (!isSelectionStart(rectangle))
-					return false;
+			int tokenRight = token.Index + token.Length;
 
-				_renderContext.SelectionStartIndex = token.Index;
-				_renderContext.SelectionLength = token.Length;
+			bool isSelected =
+				textSelection.Start < tokenRight && 
+				textSelection.Start + textSelection.Length > token.Index;
+
+			bool result = true;
+			if (textSelection.IsEmpty)
+			{
+				var (isStart, isRightToLeft) = isRectSelectionStart(tokenRect);
+
+				result = isStart;
+				if (result)
+				{
+					if (isRightToLeft)
+					{
+						textSelection.Begin = tokenRight;
+						textSelection.End = token.Index;
+					}
+					else
+					{
+						textSelection.Begin = token.Index;
+						textSelection.End = tokenRight;
+					}
+				}
 			}
+			else if (!isSelected)
+			{
+				result = isRectSelectionContinuation(tokenRect);
+				if (result)
+				{
+					if (textSelection.IsRightToLeft)
+						textSelection.Begin = tokenRight;
+					else
+						textSelection.End = tokenRight;
+				}
+			}
+
+			var roundedRect = tokenRect.Round();
+			
+			if (result)
+			{
+				RectangleF selectionRect = roundedRect;
+				selectionRect.Offset(-0.5f, -0.5f);
+
+				_renderContext.Graphics.FillRectangle(_selectionBrush, selectionRect);
+			}
+
+			printCaret(token, roundedRect);
+			return result;
+		}
+
+		private void printCaret(RichTextToken token, Rectangle roundedRect)
+		{
+			if (_renderContext.Selecting)
+				return;
+
+			int x;
+			if (token.Right == _renderContext.TextSelection.End)
+				x = roundedRect.Right - 1;
+			else if (token.Index == _renderContext.TextSelection.End
+				/*&& (token.Index == 0 || _renderContext.Text[token.Index - 1] == '\n')*/)
+				x = roundedRect.Left - 1;
 			else
+				return;
+
+			float top = roundedRect.Top - 0.5f;
+			var bottom = roundedRect.Bottom - 0.5f;
+
+			var penWh = new Pen(_renderContext.SelectionForeColor, 1f);
+			var penBl = new Pen(_renderContext.ForeColor, 1f)
 			{
-				if (!isSelectionContinuation(rectangle))
-					return false;
+				DashStyle = DashStyle.Dot
+			};
 
-				_renderContext.SelectionLength = token.Index + token.Length - _renderContext.SelectionStartIndex;
-			}
-
-			rectangle = rectangle.Round();
-
-			rectangle.Offset(-0.5f, -0.5f);
-
-			_renderContext.Graphics.FillRectangle(_selectionBrush, rectangle);
-
-			return true;
+			_renderContext.Graphics.DrawLine(penWh, x, top, x, bottom);
+			_renderContext.Graphics.DrawLine(penBl, x, top, x, bottom);
 		}
 
-		private bool isSelectionStart(RectangleF tokenFromLine)
+		private (bool IsStart, bool IsRightToLeft) isRectSelectionStart(RectangleF tokenRect)
 		{
-			if (_renderContext.SelectionIsAll)
-				return true;
+			var (selectionStartX, selectionEndX) = getSelectionDelimitersForLine(tokenRect);
+			bool isStart = tokenRect.Right > selectionStartX && tokenRect.Left <= selectionEndX;
 
-			var (selectionStartX, selectionEndX) = getSelectionDelimitersForLine(tokenFromLine);
+			bool isMultiline = selectionStartX == int.MinValue || selectionEndX == int.MaxValue;
+			
+			bool isRightToLeft =
+				isMultiline && _renderContext.SelectionStart.Y > _renderContext.SelectionEnd.Y ||
+				!isMultiline && _renderContext.SelectionStart.X > _renderContext.SelectionEnd.X;
 
-			return tokenFromLine.Right - 1 >= selectionStartX && tokenFromLine.Left <= selectionEndX;
+			return (isStart, isRightToLeft);
 		}
 
-		private bool isSelectionContinuation(RectangleF rectangle)
+		private bool isRectSelectionContinuation(RectangleF rectangle)
 		{
-			return _renderContext.SelectionIsAll || rectangle.Left <= getSelectionDelimitersForLine(rectangle).SelectionEndX;
+			return rectangle.Left <= getSelectionDelimitersForLine(rectangle).SelectionEndX;
 		}
 
 		private (int SelectionStartX, int SelectionEndX) getSelectionDelimitersForLine(RectangleF tokenFromLine)

@@ -76,9 +76,9 @@ namespace Mtgdb.Dal.Index
 			var config = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer)
 			{
 				OpenMode = OpenMode.CREATE,
-				RAMPerThreadHardLimitMB = 128,
-				RAMBufferSizeMB = 128 * _maxParallelism,
-				MaxBufferedDocs = 1 << 16, //64k
+				RAMPerThreadHardLimitMB = 512,
+				RAMBufferSizeMB = 512 * _maxParallelism,
+				MaxBufferedDocs = 1 << 24 //64k
 				//UseCompoundFile = false,
 				//MaxThreadStates = _maxParallelism
 			};

@@ -40,7 +40,7 @@ namespace Mtgdb.Gui
 			_buttonConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 			_buttonFilterPanels.CheckedChanged += filterPanelsChecked;
-			
+
 			_buttonPaste.Click += pasteClick;
 			_buttonOpenWindow.Click += openWindowClick;
 			_buttonMenuPasteDeck.Click += pasteClick;
@@ -76,7 +76,7 @@ namespace Mtgdb.Gui
 			_formManager.CreateForm();
 		}
 
-		private void configClick(object sender, EventArgs e)
+		private static void configClick(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
 		}
@@ -97,7 +97,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void helpClick(object sender, EventArgs e)
+		private static void helpClick(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start(AppDir.Root.AddPath("help\\home.html"));
 		}
@@ -202,16 +202,16 @@ namespace Mtgdb.Gui
 			_buttonVisitForge.Click += buttonVisitClick;
 
 			_buttonVisitXMage.SetTag(@"http://www.xmage.de");
-			_buttonVisitXMage.LinkClicked += buttonVisitClick;
+			_buttonVisitXMage.Click += buttonVisitClick;
 
 			_buttonVisitMagarena.SetTag(@"https://www.slightlymagic.net/forum/viewforum.php?f=82");
-			_buttonVisitMagarena.LinkClicked += buttonVisitClick;
+			_buttonVisitMagarena.Click += buttonVisitClick;
 
 			_buttonVisitCockatrice.SetTag(@"https://cockatrice.github.io/");
-			_buttonVisitCockatrice.LinkClicked += buttonVisitClick;
+			_buttonVisitCockatrice.Click += buttonVisitClick;
 
 			_buttonVisitDotP2014.SetTag(@"https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467");
-			_buttonVisitDotP2014.LinkClicked += buttonVisitClick;
+			_buttonVisitDotP2014.Click += buttonVisitClick;
 
 			_buttonDonatePayPal.SetTag(@"http://paypal.me/nidalgo");
 			_buttonDonatePayPal.Click += buttonVisitClick;
@@ -392,6 +392,11 @@ namespace Mtgdb.Gui
 					useDoubleSizedImage));
 		}
 
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			e.IsInputKey = true;
+		}
+
 		private void formKeyDown(object sender, KeyEventArgs e)
 		{
 			var form = SelectedTab;
@@ -418,8 +423,6 @@ namespace Mtgdb.Gui
 			{
 				if (form.IsDraggingCard)
 					form.StopDragging();
-				else if (!form.IsSearchFocused() && form.GetSelectedText() != null)
-					form.ResetSelectedText();
 				else
 					handled = false;
 			}
@@ -437,10 +440,10 @@ namespace Mtgdb.Gui
 				form.PasteDeck(append: true);
 			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
 			{
-				if (form.IsSearchFocused())
-					handled = false;
-				else
+				if (form.IsSearchResultFocused())
 					form.PasteDeck(append: false);
+				else
+					handled = false;
 			}
 			else if (e.KeyData == (Keys.Alt | Keys.Shift | Keys.V))
 				form.PasteCollection(append: true);
@@ -448,28 +451,17 @@ namespace Mtgdb.Gui
 				form.PasteCollection(append: false);
 			else if (e.KeyData == (Keys.Control | Keys.C))
 			{
-				string selectedText;
-
-				if (form.IsSearchFocused())
-					handled = false;
-				else if (!string.IsNullOrEmpty(selectedText = form.GetSelectedText()))
-					Clipboard.SetText(selectedText);
-				else
+				if (form.IsSearchResultFocused())
 					form.CopyDeck();
+
+				handled = false;
 			}
 			else if (e.KeyData == (Keys.Alt | Keys.C))
 			{
-				if (form.IsSearchFocused())
-					handled = false;
-				else
+				if (form.IsSearchResultFocused())
 					form.CopyCollection();
-			}
-			else if (e.KeyData == (Keys.Control | Keys.A))
-			{
-				if (form.IsSearchFocused())
-					handled = false;
 				else
-					form.SelectAllText();
+					handled = false;
 			}
 			else if (e.KeyData == Keys.F1)
 				form.ShowFindExamples();

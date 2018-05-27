@@ -59,6 +59,7 @@ namespace Mtgdb.Gui
 			RegisterDragControl(_layoutTitle);
 			RegisterDragControl(_flowTitleLeft);
 			RegisterDragControl(_flowTitleRight);
+			RegisterDragControl(_tabs);
 		}
 
 		private void scale()
@@ -132,38 +133,35 @@ namespace Mtgdb.Gui
 			TooltipController = tooltipController;
 			UiModel = uiModel;
 			SuggestModel = suggestModel;
-
 			SuggestModel.Ui = UiModel;
-
 			_formManager = formManager;
-
 			_repo = repo;
-			_repo.LoadingComplete += repositoryLoaded;
-
 			_buttonSubsystem = new ButtonSubsystem();
-			RegisterDragControl(_tabs);
-			QueryHandleDrag += queryHandleDrag;
-			Load += load;
-			Closed += closed;
-
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
 			_newsService = newsService;
 
-			_tabs.AddNewTabsToTheLeft = true;
+			KeyPreview = true;
+			PreviewKeyDown += previewKeyDown;
+			KeyDown += formKeyDown;
 
+			_repo.LoadingComplete += repositoryLoaded;
+
+			QueryHandleDrag += queryHandleDrag;
+			Load += load;
+			Closed += closed;
+
+			_tabs.AllowDrop = true;
+			_tabs.AddNewTabsToTheLeft = true;
 			_tabs.TabAdded += tabCreated;
 			_tabs.TabRemoving += tabClosing;
 			_tabs.TabRemoved += tabClosed;
 			_tabs.SelectedIndexChanging += selectedTabChanging;
 			_tabs.SelectedIndexChanged += selectedTabChanged;
-			_tabs.AllowDrop = true;
 			_tabs.DragOver += tabsDragOver;
 			_tabs.MouseMove += tabMouseMove;
 
 			FormClosing += formClosing;
-
-			KeyDown += formKeyDown;
 
 			_newsService.NewsFetched += newsFetched;
 			_newsService.NewsDisplayed += newsDisplayed;

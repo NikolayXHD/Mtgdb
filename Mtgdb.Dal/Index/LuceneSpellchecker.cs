@@ -114,7 +114,6 @@ namespace Mtgdb.Dal.Index
 				if (_abort)
 					return;
 
-				var discriminant = pair.Key;
 				var words = pair.Value.OrderBy(Str.Comparer).ToReadOnlyList();
 
 				foreach (string word in words)
@@ -122,7 +121,7 @@ namespace Mtgdb.Dal.Index
 					if (_abort)
 						return;
 
-					spellchecker.IndexWord(discriminant, word);
+					spellchecker.IndexWord(pair.Key, word);
 				}
 
 				Interlocked.Increment(ref _indexedFields);

@@ -78,7 +78,7 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				updateShowSampleHandButtons();
-				_searchStringSubsystem.Apply();
+				_searchSubsystem.Apply();
 				_deckModel.LoadDeck(_cardRepo);
 				_sortSubsystem.Invalidate();
 
@@ -100,10 +100,10 @@ namespace Mtgdb.Gui
 				}
 
 				if (_formRoot.UiModel.LanguageController.Language != CardLocalization.DefaultLanguage &&
-					!string.IsNullOrEmpty(_searchStringSubsystem.AppliedText))
+					!string.IsNullOrEmpty(_searchSubsystem.AppliedText))
 				{
 					beginRestoreSettings();
-					_searchStringSubsystem.Apply();
+					_searchSubsystem.Apply();
 					endRestoreSettings();
 					RunRefilterTask();
 				}
@@ -114,10 +114,10 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				if (!string.IsNullOrEmpty(_searchStringSubsystem.AppliedText))
+				if (!string.IsNullOrEmpty(_searchSubsystem.AppliedText))
 				{
 					beginRestoreSettings();
-					_searchStringSubsystem.Apply();
+					_searchSubsystem.Apply();
 					endRestoreSettings();
 
 					RunRefilterTask();
@@ -258,11 +258,11 @@ namespace Mtgdb.Gui
 			tableLayout.ColumnStyles[cell.Column].Width = preferredWidth;
 		}
 
-		private static void setRowHeight(Control panel)
+		private static void setRowHeight(Control panel, Size size)
 		{
 			var tableLayout = (TableLayoutPanel) panel.Parent;
 			var cell = tableLayout.GetCellPosition(panel);
-			tableLayout.RowStyles[cell.Row].Height = panel.Height;
+			tableLayout.RowStyles[cell.Row].Height = size.Height;
 		}
 
 
@@ -494,7 +494,7 @@ namespace Mtgdb.Gui
 					_sortSubsystem.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
-					_searchStringSubsystem.Apply();
+					_searchSubsystem.Apply();
 
 				endRestoreSettings();
 
@@ -653,10 +653,6 @@ namespace Mtgdb.Gui
 				e.Effect = DragDropEffects.Copy;
 			}
 		}
-
-		public bool IsSearchFocused() => _searchStringSubsystem.IsSearchFocused();
-
-
 
 		public void PasteDeck(bool append)
 		{
@@ -853,6 +849,11 @@ namespace Mtgdb.Gui
 		private void sizeChanged(object sender, EventArgs e)
 		{
 			_layoutRight.PerformLayout();
+		}
+
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			e.IsInputKey = true;
 		}
 	}
 }

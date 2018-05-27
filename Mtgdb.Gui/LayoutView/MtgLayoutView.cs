@@ -18,15 +18,11 @@ namespace Mtgdb.Gui
 			_view = view;
 		}
 
-		public bool Wraps(object view)
-		{
-			return ReferenceEquals(_view, view);
-		}
+		public bool Wraps(object view) =>
+			ReferenceEquals(_view, view);
 
-		public HitInfo CalcHitInfo(Point clientLocation)
-		{
-			return _view.CalcHitInfo(clientLocation);
-		}
+		public HitInfo CalcHitInfo(Point clientLocation) =>
+			_view.CalcHitInfo(clientLocation);
 
 		public List<FieldSortInfo> SortInfo
 		{
@@ -139,10 +135,8 @@ namespace Mtgdb.Gui
 			remove => _view.SelectionStarted -= value;
 		}
 
-		public object GetRow(int rowHandle)
-		{
-			return _view.FindRow(rowHandle);
-		}
+		public object GetRow(int rowHandle) => 
+			_view.FindRow(rowHandle);
 
 		public int GetVisibleIndex(int cardIndex)
 		{
@@ -152,10 +146,8 @@ namespace Mtgdb.Gui
 			return cardIndex;
 		}
 
-		public int FindRow(object row)
-		{
-			return _view.FindRow(row);
-		}
+		public int FindRow(object row) => 
+			_view.FindRow(row);
 
 		public int GetVisibleRowHandle(int rowVisibleIndex)
 		{
@@ -165,25 +157,17 @@ namespace Mtgdb.Gui
 			return rowVisibleIndex;
 		}
 
-		public void Focus()
-		{
+		public void Focus() => 
 			_view.Focus();
-		}
 
-		public void Invalidate()
-		{
+		public void Invalidate() => 
 			_view.Invalidate();
-		}
 
-		public void InvalidateCard(object row)
-		{
+		public void InvalidateCard(object row) => 
 			_view.InvalidateCard(row);
-		}
 
-		public void RefreshData()
-		{
+		public void RefreshData() => 
 			_view.RefreshData();
-		}
 
 		public bool TextualFieldsVisible
 		{
@@ -208,10 +192,8 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public string GetFieldText(int rowHandle, string fieldName)
-		{
-			return _view.GetText(rowHandle, fieldName);
-		}
+		public string GetFieldText(int rowHandle, string fieldName) => 
+			_view.GetText(rowHandle, fieldName);
 
 		public string GetFieldTooltipText(int rowHandle, string field)
 		{
@@ -257,47 +239,28 @@ namespace Mtgdb.Gui
 			return text.ToString();
 		}
 
-		public void SetDataSource(object dataSource)
-		{
+		public void SetDataSource(object dataSource) =>
 			_view.DataSource = (IList) dataSource;
-		}
 
-		public void SetIconRecognizer(IconRecognizer recognizer)
-		{
+		public void SetIconRecognizer(IconRecognizer recognizer) => 
 			_view.IconRecognizer = recognizer;
-		}
 
-		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName)
-		{
+		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName) => 
 			_view.SetHighlihgtTextRanges(ranges, rowHandle, fieldName);
-		}
 
-		public IList<TextRange> GetHiglightRanges(int rowHandle, string fieldName)
-		{
-			return _view.GetHighlihgtTextRanges(rowHandle, fieldName);
-		}
+		public IList<TextRange> GetHiglightRanges(int rowHandle, string fieldName) => 
+			_view.GetHighlihgtTextRanges(rowHandle, fieldName);
 
-		public HighlightOptions GetHighlightSettings()
-		{
-			return _view.ProbeCard.HighlightOptions;
-		}
+		public HighlightOptions GetHighlightSettings() =>
+			_view.ProbeCard.HighlightOptions;
 
 		public int ScrollWidth => _view.ScrollWidth;
 
-		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
-		{
-			return _view.GetAlignButtonBounds(hitInfo);
-		}
+		public Rectangle GetAlignButtonBounds(HitInfo hitInfo) =>
+			_view.GetAlignButtonBounds(hitInfo);
 
-		public string GetSelectedText() => _view.GetSelectedText();
-
-		public void ResetSelectedText() => _view.ResetSelectedText();
-
-		public bool IsSelectingText() => _view.IsSelectingText();
-
-		public void SelectAllText() => _view.SelectAllTextInField();
-
-
+		public bool IsSelectingText() =>
+			_view.IsSelectingText();
 
 		private readonly LayoutViewControl _view;
 	}

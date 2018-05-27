@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -42,8 +41,6 @@ namespace Mtgdb.Gui
 
 			_highligter = new SearchStringHighlighter(_findEditor);
 			_highligter.Highlight();
-
-			_listBoxSuggest.DataSource = _suggestValues;
 		}
 
 		public void SubscribeToEvents()
@@ -188,14 +185,19 @@ namespace Mtgdb.Gui
 
 				_listBoxSuggest.BeginUpdate();
 
-				_suggestValues.Clear();
-				foreach (string sugg in suggest.Values)
-					_suggestValues.Add(sugg);
+				var index = _listBoxSuggest.SelectedIndex;
+
+				_listBoxSuggest.Items.Clear();
+
+				foreach (string value in suggest.Values)
+					_listBoxSuggest.Items.Add(value);
+
+				_listBoxSuggest.SelectedIndex = index.WithinRange(-1, suggest.Values.Count - 1);
 
 				_listBoxSuggest.EndUpdate();
 			}
 
-			if (_suggestValues.Count == 0)
+			if (suggest.Values.Count == 0)
 			{
 				_listBoxSuggest.Height = 0;
 				continueEditingAfterSuggest();
@@ -209,7 +211,7 @@ namespace Mtgdb.Gui
 
 		private void showSuggest()
 		{
-			if (_suggestValues.Count == 0)
+			if (_listBoxSuggest.Items.Count == 0)
 				return;
 
 			updateSuggestLocation();
@@ -290,7 +292,7 @@ namespace Mtgdb.Gui
 				case Keys.Down:
 					if (_listBoxSuggest.Visible)
 					{
-						if (_listBoxSuggest.SelectedIndex < _suggestValues.Count - 1)
+						if (_listBoxSuggest.SelectedIndex < _listBoxSuggest.Items.Count - 1)
 							_listBoxSuggest.SelectedIndex++;
 					}
 					else
@@ -599,7 +601,7 @@ namespace Mtgdb.Gui
 				if (selectedIndex < 0)
 					return;
 
-				value = _suggestValues[selectedIndex];
+				value = (string) _listBoxSuggest.Items[selectedIndex];
 				type = _suggestTypes[selectedIndex];
 				token = _suggestToken;
 			}
@@ -766,7 +768,6 @@ namespace Mtgdb.Gui
 		private string _currentText = string.Empty;
 
 		private TextInputState _suggestSource;
-		private readonly BindingList<string> _suggestValues = new BindingList<string>();
 		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
 		private Token _suggestToken;
 

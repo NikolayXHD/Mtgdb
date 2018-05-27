@@ -237,31 +237,6 @@ namespace Mtgdb.Controls
 
 
 
-		public Rectangle GetSearchButtonBounds(HitInfo hitInfo) =>
-			getButtonBounds(hitInfo.Card, hitInfo.Field, ButtonType.Search);
-
-		public Rectangle GetSortButtonBounds(HitInfo hitInfo) =>
-			getButtonBounds(hitInfo.Card, hitInfo.Field, ButtonType.Sort);
-
-		private Rectangle getButtonBounds(LayoutControl card, FieldControl field, ButtonType buttonType)
-		{
-			if (card == null || field == null)
-				return Rectangle.Empty;
-
-			var buttons = card.GetFieldButtons(field, SearchOptions, SortOptions).ToList();
-			var button = buttons.FirstOrDefault(_ => _.Type == buttonType);
-
-			if (button == null)
-				return Rectangle.Empty;
-
-			var bounds = getFieldBounds(field, card);
-			buttons.LayOutIn(bounds);
-
-			return new Rectangle(button.Location, button.Size);
-		}
-
-
-
 		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
 		{
 			if (!hitInfo.AlignButtonDirection.HasValue)
@@ -296,6 +271,7 @@ namespace Mtgdb.Controls
 			int largeChange = Math.Max(
 				Math.Max(2, pageSize),
 				(int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))));
+
 			int maximum = Math.Max(0, PageCount + largeChange - 2);
 			int value = CardIndex / pageSize;
 
@@ -311,6 +287,7 @@ namespace Mtgdb.Controls
 			_scrollBar.Scroll += scrolled;
 			MouseWheel += mouseWheel;
 			KeyDown += keyDown;
+			PreviewKeyDown += previewKeyDown;
 
 			MouseDown += mouseDown;
 			MouseMove += mouseMove;
@@ -388,31 +365,90 @@ namespace Mtgdb.Controls
 		private void scrolled(object sender, EventArgs e)
 		{
 			int pageSize = getRowsCount() * getColumnsCount();
-			CardIndex = _scrollBar.Value * pageSize;
+			int cardIndex = _scrollBar.Value * pageSize;
+
+			if (cardIndex == CardIndex)
+				return;
+
+			CardIndex = cardIndex;
 			ApplyCardIndex();
+		}
+
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			e.IsInputKey = true;
 		}
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
-			if (!this.IsUnderMouse())
-				return;
-
-			e.SuppressKeyPress = true;
-			e.Handled = true;
+			bool handled = true;
 
 			if (e.KeyData == Keys.PageDown)
-				scrollAdd(getRowsCount() * getColumnsCount());
-			else if (e.KeyData == Keys.PageUp)
-				scrollAdd(-(getRowsCount() * getColumnsCount()));
-			else if (e.KeyData == Keys.End)
-				scrollAdd(Count);
-			else if (e.KeyData == Keys.Home)
-				scrollAdd(-Count);
-			else
 			{
-				e.SuppressKeyPress = false;
-				e.Handled = false;
+				if (this.IsUnderMouse())
+					scrollAdd(getRowsCount() * getColumnsCount());
+				else
+					handled = false;
 			}
+			else if (e.KeyData == Keys.PageUp)
+			{
+				if (this.IsUnderMouse())
+					scrollAdd(-(getRowsCount() * getColumnsCount()));
+				else
+					handled = false;
+			}
+			else if (e.KeyData == Keys.End)
+			{
+				if (this.IsUnderMouse())
+					scrollAdd(Count);
+				else
+					handled = false;
+			}
+			else if (e.KeyData == Keys.Home)
+			{
+				if (this.IsUnderMouse())
+					scrollAdd(-Count);
+				else
+					handled = false;
+			}
+			else if (e.KeyData == Keys.Escape)
+				getNonEmptySelection()?.Clear();
+			else if (e.KeyData == Keys.Right)
+				getNonEmptySelection()?.MoveSelectionRight();
+			else if (e.KeyData == Keys.Left)
+				getNonEmptySelection()?.MoveSelectionLeft();
+			else if (e.KeyData == Keys.Up)
+				getNonEmptySelection()?.MoveSelectionUp();
+			else if (e.KeyData == Keys.Down)
+				getNonEmptySelection()?.MoveSelectionDown();
+			else if (e.KeyData == (Keys.Shift | Keys.Right) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Right))
+				getNonEmptySelection()?.ShiftSelectionRight();
+			else if (e.KeyData == (Keys.Shift | Keys.Left) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Left))
+				getNonEmptySelection()?.ShiftSelectionLeft();
+			else if (e.KeyData == (Keys.Shift | Keys.Up) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Up))
+				getNonEmptySelection()?.ShiftSelectionUp();
+			else if (e.KeyData == (Keys.Shift | Keys.Down) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Down))
+				getNonEmptySelection()?.ShiftSelectionDown();
+			else if (e.KeyData == (Keys.Shift | Keys.Home))
+				getNonEmptySelection()?.ShiftSelectionToStart();
+			else if (e.KeyData == (Keys.Shift | Keys.End))
+				getNonEmptySelection()?.ShiftSelectionToEnd();
+			else if (e.KeyData == (Keys.Control | Keys.A))
+				getNonEmptySelection()?.SelectAll();
+			else if (e.KeyData == (Keys.Control | Keys.C))
+			{
+				string selectedText = getNonEmptySelection()?.SelectedText;
+
+				if (!string.IsNullOrEmpty(selectedText))
+					Clipboard.SetText(selectedText);
+				else
+					handled = false;
+			}
+			else
+				handled = false;
+
+			e.Handled = handled;
+			e.SuppressKeyPress = handled;
 		}
 
 		private void mouseWheel(object sender, MouseEventArgs e)
@@ -531,7 +567,7 @@ namespace Mtgdb.Controls
 			if (cancelArgs.Cancel)
 				return;
 
-			_selection.StartSelectionAt(e.Location);
+			_selection.StartAt(e.Location);
 			hideButtons();
 		}
 
@@ -539,7 +575,7 @@ namespace Mtgdb.Controls
 		{
 			if (SelectionOptions.Enabled && _selection.Selecting && e.Button == MouseButtons.Left)
 			{
-				_selection.MoveSelectionTo(e.Location);
+				_selection.MoveTo(e.Location);
 				_selection.EndSelection();
 
 				var hitInfo = CalcHitInfo(e.Location);
@@ -551,7 +587,7 @@ namespace Mtgdb.Controls
 		{
 			if (SelectionOptions.Enabled && _selection.Selecting)
 			{
-				_selection.MoveSelectionTo(e.Location);
+				_selection.MoveTo(e.Location);
 				hideButtons();
 			}
 			else
@@ -810,7 +846,7 @@ namespace Mtgdb.Controls
 			buttons.LayOutIn(bounds);
 
 			ButtonLayout button = null;
-			bool isSortButton = SortOptions.Allow && field.AllowSort && 
+			bool isSortButton = SortOptions.Allow && field.AllowSort &&
 				(button = buttons.FirstOrDefault(b => b.Type == ButtonType.Sort && b.Bounds.Contains(location))) != null;
 
 			bool isSearchButton = button == null && SearchOptions.Allow && field.SearchOptions.Allow &&
@@ -837,7 +873,7 @@ namespace Mtgdb.Controls
 					return (i - firstCustomButtonIndex, buttons[i]);
 			}
 
-			return  (-1, null);
+			return (-1, null);
 		}
 
 		private int getCardIndex(Point location)
@@ -1037,7 +1073,7 @@ namespace Mtgdb.Controls
 		public void ApplyCardIndex()
 		{
 			if (!_selection.Selecting)
-				_selection.ResetSelection();
+				_selection.Reset();
 
 			int columnsCount = getColumnsCount();
 			int rowsCount = getRowsCount();
@@ -1146,50 +1182,14 @@ namespace Mtgdb.Controls
 
 
 
-		public void ResetSelectedText() => _selection.ResetSelection();
+		public bool IsSelectingText() =>
+			_selection.Selecting;
 
-		public bool IsSelectingText() => _selection.Selecting;
-
-		public string GetSelectedText()
-		{
-			foreach (var card in Cards)
-			{
-				if (!card.Visible)
-					continue;
-
-				foreach (var field in card.Fields)
-				{
-					if (field.SelectedText != null)
-						return field.SelectedText;
-				}
-			}
-
-			return null;
-		}
-
-		public void SelectAllTextInField()
-		{
-			foreach (var card in Cards)
-			{
-				if (!card.Visible)
-					continue;
-
-				foreach (var field in card.Fields)
-				{
-					if (field.IsHotTracked)
-					{
-						_selection.ResetSelection();
-						_selection.StartSelectionAt(card.Location.Plus(field.Location));
-						_selection.EndSelection();
-						_selection.SelectAll = true;
-
-						invalidateField(field, card);
-						return;
-					}
-				}
-			}
-		}
-
+		private TextSelection getNonEmptySelection() =>
+			Cards
+				.Where(c => c.Visible)
+				.SelectMany(c => c.Fields.Select(f => f.TextSelection))
+				.FirstOrDefault(s => !s.IsEmpty);
 
 		[Category("Settings")]
 		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
@@ -1340,7 +1340,7 @@ namespace Mtgdb.Controls
 
 		private HitInfo _hitInfo;
 
-		private readonly SelectionState _selection = new SelectionState();
+		private readonly RectangularSelection _selection = new RectangularSelection();
 
 		#region mouse wheel without focus
 

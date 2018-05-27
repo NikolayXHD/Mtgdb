@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace Mtgdb.Controls
 {
-	public class SelectionState
+	public class RectangularSelection
 	{
-		public void ResetSelection()
+		public void Reset()
 		{
 			var previousStart = Start;
 			var previousRect = Rectangle;
@@ -15,12 +15,11 @@ namespace Mtgdb.Controls
 			Start = Point.Empty;
 			End = Point.Empty;
 			Selecting = false;
-			SelectAll = false;
 
 			onChanged(previousRect, previousStart, previousSelecting);
 		}
 
-		public void StartSelectionAt(Point location)
+		public void StartAt(Point location)
 		{
 			var previousStart = Start;
 			var previousRect = Rectangle;
@@ -30,12 +29,11 @@ namespace Mtgdb.Controls
 			Start = location;
 			End = location;
 			Selecting = true;
-			SelectAll = false;
 
 			onChanged(previousRect, previousStart, previousSelecting);
 		}
 
-		public void MoveSelectionTo(Point location)
+		public void MoveTo(Point location)
 		{
 			var previousRect = Rectangle;
 
@@ -61,7 +59,6 @@ namespace Mtgdb.Controls
 
 			Rectangle = new Rectangle(x, y, width, height);
 			End = location;
-			SelectAll = false;
 
 			onChanged(previousRect, Start, Selecting);
 		}
@@ -156,7 +153,5 @@ namespace Mtgdb.Controls
 		public Point End { get; private set; } = Point.Empty;
 		public Rectangle Rectangle { get; private set; } = Rectangle.Empty;
 		public bool Selecting { get; private set; }
-
-		public bool SelectAll { get; set; }
 	}
 }

@@ -16,6 +16,7 @@ namespace Mtgdb.Controls
 		{
 			init();
 			Paint += paint;
+			TextSelection.Changed += selectionChanged;
 		}
 
 		private void paint(object sender, PaintEventArgs e)
@@ -45,7 +46,7 @@ namespace Mtgdb.Controls
 			Graphics graphics,
 			Point parentLocation,
 			HighlightOptions highlightOptions,
-			SelectionState selection,
+			RectangularSelection selection,
 			SelectionOptions selectionOptions)
 		{
 			var contentArea = getArea(parentLocation, Padding);
@@ -60,20 +61,21 @@ namespace Mtgdb.Controls
 			if (string.IsNullOrEmpty(Text))
 				return;
 
+			_paintInProgress = true;
+
+			if (selection.Selecting && !TextSelection.IsEmpty)
+				TextSelection.Clear();
+
 			var context = new RichTextRenderContext
 			{
 				Text = Text,
+				TextSelection = TextSelection.Clone(),
 				HighlightRanges = HighlightRanges,
 				Graphics = graphics,
 				Rect = contentArea,
 				HorizAlignment = HorizontalAlignment,
-				StringFormat = new StringFormat(default(StringFormatFlags)),
 				Font = Font,
 				ForeColor = ForeColor,
-
-				BackColor = IsHotTracked
-					? selectionOptions.HotTrackBackColor
-					: BackColor,
 
 				HighlightContextColor = highlightOptions.HighlightContextColor,
 				HighlightColor = highlightOptions.HighlightColor,
@@ -81,21 +83,23 @@ namespace Mtgdb.Controls
 				HighlightBorderWidth = 1f
 			};
 
-			if (completeArea.Contains(selection.Start))
+			if (selection.Selecting && completeArea.Contains(selection.Start))
 			{
-				context.RectSelected = true;
-
-				context.SelectionEnd = selection.End;
+				context.Selecting = true;
 				context.SelectionStart = selection.Start;
-				context.SelectionIsAll = selection.SelectAll;
-
-				context.SelectionBackColor = selectionOptions.BackColor;
-				context.SelectionForeColor = selectionOptions.ForeColor;
-				context.SelectionAlpha = selectionOptions.Alpha;
+				context.SelectionEnd = selection.End;
 			}
 
+			context.SelectionBackColor = selectionOptions.BackColor;
+			context.SelectionForeColor = selectionOptions.ForeColor;
+			context.SelectionAlpha = selectionOptions.Alpha;
+
 			RichTextRenderer.Render(context, _iconRecognizer);
-			SelectedText = context.SelectedText;
+
+			if (selection.Selecting)
+				TextSelection.SetSelection(context.TextSelection);
+
+			_paintInProgress = false;
 		}
 
 		public void CopyFrom(FieldControl other)
@@ -137,6 +141,16 @@ namespace Mtgdb.Controls
 			ResumeLayout(false);
 		}
 
+
+
+		private void selectionChanged(TextSelection obj)
+		{
+			if (_paintInProgress)
+				return;
+
+			Invalid?.Invoke(this);
+		}
+
 		[Category("Settings"), DefaultValue(typeof(HorizontalAlignment), "Left")]
 		public HorizontalAlignment HorizontalAlignment
 		{
@@ -171,11 +185,13 @@ namespace Mtgdb.Controls
 			get => base.Text;
 			set
 			{
-				if (base.Text != value)
-				{
-					base.Text = value;
-					Invalid?.Invoke(this);
-				}
+				base.Text = value;
+				TextSelection.Text = value;
+				
+				if (!TextSelection.IsEmpty)
+					TextSelection.Clear();
+
+				Invalid?.Invoke(this);
 			}
 		}
 
@@ -315,9 +331,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public string SelectedText { get; private set; }
-
-
+		public TextSelection TextSelection { get; } = new TextSelection();
 
 		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;
@@ -334,5 +348,6 @@ namespace Mtgdb.Controls
 
 		private SortOrder _sortOrder;
 		private int _hotTrackedCustomButtonIndex = -1;
+		private bool _paintInProgress;
 	}
 }

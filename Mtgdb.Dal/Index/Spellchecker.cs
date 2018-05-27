@@ -213,17 +213,14 @@ namespace Mtgdb.Dal.Index
 		{
 			string textWithBorders = BeginWordChar + text;
 
-			var charFieldType = new FieldType(IndexUtils.StringFieldType)
-			{
-				IsTokenized = true,
-				IndexOptions = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS,
-			};
-
 			var doc = new Document
 			{
 				new Field(WordField, text, new FieldType(IndexUtils.StringFieldType) { IsIndexed = false, IsStored = true }),
-				new Field(DiscriminantField, discriminant, IndexUtils.StringFieldType),
-				new Field(GramField, textWithBorders, charFieldType)
+				new Field(DiscriminantField, discriminant, new FieldType(IndexUtils.StringFieldType) { IsTokenized = false }),
+				new Field(GramField, textWithBorders, new FieldType(IndexUtils.StringFieldType)
+				{
+					IndexOptions = IndexOptions.DOCS_AND_FREQS_AND_POSITIONS
+				})
 			};
 
 			return doc;
