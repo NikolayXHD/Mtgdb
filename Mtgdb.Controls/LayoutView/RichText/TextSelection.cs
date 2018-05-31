@@ -17,7 +17,8 @@ namespace Mtgdb.Controls
 			{
 				Text = Text,
 				Begin = Begin,
-				End = End
+				End = End,
+				IsCaretVisible = IsCaretVisible
 			};
 		}
 
@@ -276,6 +277,23 @@ namespace Mtgdb.Controls
 
 			return null;
 		}
+
+		public void Tick()
+		{
+			IsCaretVisible = !IsCaretVisible;
+			Changed?.Invoke(this);
+		}
+
+		public void Hide()
+		{
+			if (!IsCaretVisible)
+				return;
+
+			IsCaretVisible = false;
+			Changed?.Invoke(this);
+		}
+
+		public bool IsCaretVisible { get; private set; }
 
 		public string SelectedText =>
 			Start < 0

@@ -33,6 +33,21 @@ namespace Mtgdb.Controls
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
 			scaleScrollbar();
+
+			_timer = new Timer
+			{
+				Interval = 500
+			};
+
+			_timer.Tick += tick;
+		}
+
+		private void tick(object sender, EventArgs e)
+		{
+			if (Focused)
+				getNonEmptySelection()?.Tick();
+			else
+				getNonEmptySelection()?.Hide();
 		}
 
 		private void scaleScrollbar()
@@ -299,10 +314,13 @@ namespace Mtgdb.Controls
 			_selection.Changed += selectionChanged;
 
 			Application.AddMessageFilter(this);
+
+			_timer.Start();
 		}
 
 		private void disposed(object sender, EventArgs e)
 		{
+			_timer.Stop();
 			Application.RemoveMessageFilter(this);
 		}
 
@@ -1341,6 +1359,8 @@ namespace Mtgdb.Controls
 		private HitInfo _hitInfo;
 
 		private readonly RectangularSelection _selection = new RectangularSelection();
+
+		private readonly Timer _timer;
 
 		#region mouse wheel without focus
 

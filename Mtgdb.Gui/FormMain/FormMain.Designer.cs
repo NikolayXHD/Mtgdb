@@ -1146,8 +1146,8 @@
 			searchOptions1.Button = buttonOptions1;
 			this._layoutViewCards.SearchOptions = searchOptions1;
 			selectionOptions1.Alpha = ((byte)(192));
-			selectionOptions1.BackColor = System.Drawing.Color.MediumBlue;
-			selectionOptions1.ForeColor = System.Drawing.Color.White;
+			selectionOptions1.BackColor = System.Drawing.Color.LightSkyBlue;
+			selectionOptions1.ForeColor = System.Drawing.Color.Black;
 			selectionOptions1.HotTrackBackColor = System.Drawing.Color.WhiteSmoke;
 			selectionOptions1.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
 			selectionOptions1.RectAlpha = ((byte)(16));

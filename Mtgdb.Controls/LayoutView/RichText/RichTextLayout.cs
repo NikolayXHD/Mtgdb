@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -85,10 +84,12 @@ namespace Mtgdb.Controls
 								if (printSelection(rect, token))
 									foreColor = _renderContext.SelectionForeColor;
 
-								rect.Inflate(1, 0);
-								rect.Offset(1, 0);
+								var textRect = rect;
+								textRect.Inflate(1, 0);
+								textRect.Offset(1, 0);
 
-								_renderContext.Graphics.DrawText(tokenText, _renderContext.Font, rect.Round(), foreColor);
+								_renderContext.Graphics.DrawText(tokenText, _renderContext.Font, textRect.Round(), foreColor);
+								printCaret(rect, token);
 							});
 					}
 				}
@@ -113,6 +114,7 @@ namespace Mtgdb.Controls
 								_renderContext.Graphics.FillEllipse(_shadowBrush, shadowRect);
 
 								_renderContext.Graphics.DrawImage(icon, iconRect);
+								printCaret(rect, token);
 							});
 					}
 					else
@@ -127,6 +129,7 @@ namespace Mtgdb.Controls
 
 								printSelection(rect, token);
 								_renderContext.Graphics.DrawImage(icon, iconRect);
+								printCaret(rect, token);
 							});
 					}
 				}
@@ -206,6 +209,7 @@ namespace Mtgdb.Controls
 				{
 					_renderContext.TextSelection.PrintedTokens.Add((space, rect));
 					printSelection(rect, space);
+					printCaret(rect, space);
 				});
 
 				_lineQueue.Add(printBatch);
@@ -273,80 +277,68 @@ namespace Mtgdb.Controls
 			int tokenRight = token.Index + token.Length;
 
 			bool isSelected =
-				textSelection.Start < tokenRight && 
+				textSelection.Start < tokenRight &&
 				textSelection.Start + textSelection.Length > token.Index;
 
-			bool result = true;
 			if (textSelection.IsEmpty)
 			{
 				var (isStart, isRightToLeft) = isRectSelectionStart(tokenRect);
 
-				result = isStart;
-				if (result)
+				if (!isStart)
+					return false;
+
+				if (isRightToLeft)
 				{
-					if (isRightToLeft)
-					{
-						textSelection.Begin = tokenRight;
-						textSelection.End = token.Index;
-					}
-					else
-					{
-						textSelection.Begin = token.Index;
-						textSelection.End = tokenRight;
-					}
+					textSelection.Begin = tokenRight;
+					textSelection.End = token.Index;
+				}
+				else
+				{
+					textSelection.Begin = token.Index;
+					textSelection.End = tokenRight;
 				}
 			}
 			else if (!isSelected)
 			{
-				result = isRectSelectionContinuation(tokenRect);
-				if (result)
-				{
-					if (textSelection.IsRightToLeft)
-						textSelection.Begin = tokenRight;
-					else
-						textSelection.End = tokenRight;
-				}
+				if (!isRectSelectionContinuation(tokenRect))
+					return false;
+
+				if (textSelection.IsRightToLeft)
+					textSelection.Begin = tokenRight;
+				else
+					textSelection.End = tokenRight;
 			}
 
-			var roundedRect = tokenRect.Round();
-			
-			if (result)
-			{
-				RectangleF selectionRect = roundedRect;
-				selectionRect.Offset(-0.5f, -0.5f);
+			RectangleF selectionRect = tokenRect.Round();
+			selectionRect.Offset(-0.5f, -0.5f);
 
-				_renderContext.Graphics.FillRectangle(_selectionBrush, selectionRect);
-			}
+			_renderContext.Graphics.FillRectangle(_selectionBrush, selectionRect);
 
-			printCaret(token, roundedRect);
-			return result;
+			return true;
 		}
 
-		private void printCaret(RichTextToken token, Rectangle roundedRect)
+		private void printCaret(RectangleF rect, RichTextToken token)
 		{
 			if (_renderContext.Selecting)
 				return;
 
+			if (!_renderContext.TextSelection.IsCaretVisible)
+				return;
+
+			var roundedRect = rect.Round();
+
 			int x;
 			if (token.Right == _renderContext.TextSelection.End)
 				x = roundedRect.Right - 1;
-			else if (token.Index == _renderContext.TextSelection.End
-				/*&& (token.Index == 0 || _renderContext.Text[token.Index - 1] == '\n')*/)
+			else if (token.Index == _renderContext.TextSelection.End)
 				x = roundedRect.Left - 1;
 			else
 				return;
 
-			float top = roundedRect.Top - 0.5f;
-			var bottom = roundedRect.Bottom - 0.5f;
+			float top = roundedRect.Top;
+			var bottom = roundedRect.Bottom - 1f;
 
-			var penWh = new Pen(_renderContext.SelectionForeColor, 1f);
-			var penBl = new Pen(_renderContext.ForeColor, 1f)
-			{
-				DashStyle = DashStyle.Dot
-			};
-
-			_renderContext.Graphics.DrawLine(penWh, x, top, x, bottom);
-			_renderContext.Graphics.DrawLine(penBl, x, top, x, bottom);
+			_renderContext.Graphics.DrawLine(new Pen(_renderContext.SelectionForeColor, 1f), x, top, x, bottom);
 		}
 
 		private (bool IsStart, bool IsRightToLeft) isRectSelectionStart(RectangleF tokenRect)
