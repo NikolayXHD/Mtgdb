@@ -60,6 +60,7 @@ namespace Mtgdb.Gui
 		public bool? ShowPartialCards { get; set; }
 
 		public bool? ShowFilterPanels { get; set; }
+		public bool? ShowScroll { get; set; }
 
 		public Direction? WindowSnapDirection { get; set; }
 		public Rectangle? WindowArea { get; set; }

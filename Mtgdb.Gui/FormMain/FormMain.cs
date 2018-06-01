@@ -604,6 +604,7 @@ namespace Mtgdb.Gui
 		private void updateFormSettings()
 		{
 			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
+			_formRoot.ShowScroll = !_buttonHideScroll.Checked;
 			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
 			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
 
@@ -615,6 +616,7 @@ namespace Mtgdb.Gui
 			settings.ShowDeck = _formRoot.ShowDeck;
 			settings.ShowPartialCards = _formRoot.ShowPartialCards;
 			settings.ShowTextualFields = _formRoot.ShowTextualFields;
+			settings.ShowScroll = _formRoot.ShowScroll;
 
 			settings.ShowFilterPanels = _formRoot.ShowFilterPanels;
 			settings.HideTooltips = _formRoot.HideTooltips;
@@ -659,9 +661,10 @@ namespace Mtgdb.Gui
 				DeckName = _historySubsystem.DeckName,
 				SearchResultScroll = _viewCards.VisibleRecordIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
+				ShowScroll = !_buttonHideScroll.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
-				ShowFilterPanels = _formRoot.ShowFilterPanels,
+				ShowFilterPanels = _formRoot.ShowFilterPanels
 			};
 
 			historyUpdateFormPosition(settings);
@@ -733,9 +736,12 @@ namespace Mtgdb.Gui
 			_requiredScroll = settings.SearchResultScroll;
 
 			_buttonHideDeck.Checked = settings.ShowDeck == false;
+			_buttonHideScroll.Checked = settings.ShowScroll == false;
 			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
 			_buttonHideText.Checked = settings.ShowTextualFields == false;
 			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
+			
+
 			applyShowFilterPanels();
 
 			endRestoreSettings();

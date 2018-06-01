@@ -28,6 +28,7 @@ namespace Mtgdb.Gui
 		bool ShowTextualFields { get; set; }
 		bool ShowDeck { get; set; }
 		bool ShowPartialCards { get; set; }
+		bool ShowScroll { get; set; }
 
 		SuggestModel SuggestModel { get; }
 		TooltipController TooltipController { get; }

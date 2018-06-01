@@ -26,11 +26,26 @@ namespace Mtgdb.Controls
 			get => _cardInterval;
 			set
 			{
-				if (value != _cardInterval)
-				{
-					_cardInterval = value;
-					Changed?.Invoke();
-				}
+				if (value == _cardInterval)
+					return;
+
+				_cardInterval = value;
+				Changed?.Invoke();
+			}
+		}
+
+		[Category("Settings")]
+		[DefaultValue(false)]
+		public bool HideScroll
+		{
+			get => _hideScroll;
+			set
+			{
+				if (value == _hideScroll)
+					return;
+
+				_hideScroll = value;
+				Changed?.Invoke();
 			}
 		}
 
@@ -41,11 +56,11 @@ namespace Mtgdb.Controls
 			get => _allowPartialCards;
 			set
 			{
-				if (value != _allowPartialCards)
-				{
-					_allowPartialCards = value;
-					Changed?.Invoke();
-				}
+				if (value == _allowPartialCards)
+					return;
+
+				_allowPartialCards = value;
+				Changed?.Invoke();
 			}
 		}
 
@@ -56,11 +71,11 @@ namespace Mtgdb.Controls
 			get => _partialCardsThreshold;
 			set
 			{
-				if (value != _partialCardsThreshold)
-				{
-					_partialCardsThreshold = value;
-					Changed?.Invoke();
-				}
+				if (value == _partialCardsThreshold)
+					return;
+
+				_partialCardsThreshold = value;
+				Changed?.Invoke();
 			}
 		}
 
@@ -71,11 +86,11 @@ namespace Mtgdb.Controls
 			get => _alignment;
 			set
 			{
-				if (value != _alignment)
-				{
-					_alignment = value;
-					Changed?.Invoke();
-				}
+				if (value == _alignment)
+					return;
+
+				_alignment = value;
+				Changed?.Invoke();
 			}
 		}
 
@@ -128,6 +143,7 @@ namespace Mtgdb.Controls
 		private Bitmap _alignTopLeftHoveredIcon;
 		private Bitmap _alignTopLeftIcon;
 		private bool _allowPartialCards;
+		private bool _hideScroll;
 		private Size _cardInterval;
 		private Size _partialCardsThreshold;
 		private Direction _alignment = DefaultDirection;

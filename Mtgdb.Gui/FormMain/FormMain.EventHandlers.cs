@@ -193,7 +193,7 @@ namespace Mtgdb.Gui
 
 
 
-		private void buttonDeckHideChanged(object sender, EventArgs eventArgs)
+		private void buttonHideDeckChanged(object sender, EventArgs eventArgs)
 		{
 			updateFormSettings();
 
@@ -203,6 +203,18 @@ namespace Mtgdb.Gui
 
 			ResumeLayout(false);
 			PerformLayout();
+
+			if (!restoringSettings())
+				historyUpdate();
+		}
+
+		private void buttonHideScrollChanged(object sender, EventArgs eventArgs)
+		{
+			updateFormSettings();
+
+			_layoutViewCards.LayoutOptions.HideScroll =
+				_layoutViewDeck.LayoutOptions.HideScroll =
+					_buttonHideScroll.Checked;
 
 			if (!restoringSettings())
 				historyUpdate();
@@ -611,6 +623,14 @@ namespace Mtgdb.Gui
 					Resources.hidden_40,
 					Resources.shown_40.TransformColors(brightness: 0.1f),
 					Resources.hidden_40.TransformColors(brightness: 0.1f),
+					areImagesDoubleSized: true));
+
+			_buttonSubsystem.SetupButton(_buttonHideScroll,
+				new ButtonImages(
+					Resources.scroll_shown_40,
+					Resources.scroll_hidden_40,
+					Resources.scroll_shown_40.TransformColors(brightness: 1.05f),
+					Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
 					areImagesDoubleSized: true));
 
 			_buttonSubsystem.SetupButton(_buttonHidePartialCards,

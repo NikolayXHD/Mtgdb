@@ -63,7 +63,7 @@ namespace Mtgdb.Controls
 
 			_paintInProgress = true;
 
-			if (selection.Selecting && !TextSelection.IsEmpty)
+			if (selection.Selecting)
 				TextSelection.Clear();
 
 			var context = new RichTextRenderContext
@@ -171,11 +171,11 @@ namespace Mtgdb.Controls
 			get => _image;
 			set
 			{
-				if (_image != value)
-				{
-					_image = value;
-					Invalid?.Invoke(this);
-				}
+				if (_image == value)
+					return;
+
+				_image = value;
+				Invalid?.Invoke(this);
 			}
 		}
 
@@ -185,11 +185,12 @@ namespace Mtgdb.Controls
 			get => base.Text;
 			set
 			{
+				if (base.Text == value)
+					return;
+
 				base.Text = value;
 				TextSelection.Text = value;
-				
-				if (!TextSelection.IsEmpty)
-					TextSelection.Clear();
+				TextSelection.Clear();
 
 				Invalid?.Invoke(this);
 			}

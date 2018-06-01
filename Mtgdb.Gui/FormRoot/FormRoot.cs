@@ -589,6 +589,7 @@ namespace Mtgdb.Gui
 		public bool ShowTextualFields { get; set; }
 		public bool ShowDeck { get; set; }
 		public bool ShowPartialCards { get; set; }
+		public bool ShowScroll { get; set; }
 		public bool LoadedGuiSettings { get; set; }
 
 		private int Id => _formManager.GetId(this);

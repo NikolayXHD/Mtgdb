@@ -153,6 +153,7 @@ namespace Mtgdb.Gui
 			};
 
 			setupCheckButtonImages();
+			
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
 			updateShowProhibited();
@@ -175,6 +176,7 @@ namespace Mtgdb.Gui
 			_buttonSampleHandDraw.ScaleDpi();
 			_buttonSampleHandMulligan.ScaleDpi();
 			_buttonHideDeck.ScaleDpi();
+			_buttonHideScroll.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
 			_buttonHideText.ScaleDpi();
 			_buttonSearchExamplesDropDown.ScaleDpi();
@@ -348,7 +350,8 @@ namespace Mtgdb.Gui
 
 			_searchEditorSelectionSubsystem.SubsribeToEvents();
 
-			_buttonHideDeck.CheckedChanged += buttonDeckHideChanged;
+			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
+			_buttonHideScroll.CheckedChanged += buttonHideScrollChanged;
 			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged += buttonHideTextChanged;
 
@@ -428,7 +431,8 @@ namespace Mtgdb.Gui
 
 			_searchEditorSelectionSubsystem.UnsubsribeFromEvents();
 
-			_buttonHideDeck.CheckedChanged -= buttonDeckHideChanged;
+			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
+			_buttonHideScroll.CheckedChanged -= buttonHideScrollChanged;
 			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
 

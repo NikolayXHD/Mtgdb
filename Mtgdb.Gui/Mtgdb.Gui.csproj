@@ -478,6 +478,8 @@
     <None Include="Resources\Scheme.png" />
     <None Include="Resources\Scavenge.png" />
     <Content Include="Resources\scroll_48.png" />
+    <None Include="Resources\scroll_hidden_40.png" />
+    <None Include="Resources\scroll_shown_40.png" />
     <Content Include="Resources\Scry.png" />
     <None Include="Resources\search.png" />
     <Content Include="Resources\search_48.png" />

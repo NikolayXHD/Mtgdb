@@ -24,9 +24,13 @@ namespace Mtgdb.Controls
 
 		public void Clear()
 		{
+			if (IsEmpty)
+				return;
+
 			Begin = -1;
 			End = -1;
 
+			IsCaretVisible = false;
 			Changed?.Invoke(this);
 		}
 
@@ -38,7 +42,8 @@ namespace Mtgdb.Controls
 
 			PrintedTokens.Clear();
 			PrintedTokens.AddRange(copy.PrintedTokens);
-			Changed?.Invoke(this);
+
+			onChanged();
 		}
 
 		public void SelectAll()
@@ -46,7 +51,7 @@ namespace Mtgdb.Controls
 			Begin = 0;
 			End = Text.Length;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionLeft()
@@ -63,7 +68,7 @@ namespace Mtgdb.Controls
 				.DefaultIfEmpty(0)
 				.Last();
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionRight()
@@ -80,7 +85,7 @@ namespace Mtgdb.Controls
 				.DefaultIfEmpty(Text.Length)
 				.First();
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionUp()
@@ -103,7 +108,7 @@ namespace Mtgdb.Controls
 			var tokenAbove = getTokenAbove(new PointF(rect.Right, rect.Top));
 			End = tokenAbove?.Index ?? 0;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionDown()
@@ -126,7 +131,7 @@ namespace Mtgdb.Controls
 			var tokenBelow = getTokenBelow(rect.Location);
 			End = tokenBelow?.Right ?? Text.Length;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionToStart()
@@ -139,7 +144,7 @@ namespace Mtgdb.Controls
 
 			End = 0;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void ShiftSelectionToEnd()
@@ -152,7 +157,7 @@ namespace Mtgdb.Controls
 
 			End = Text.Length;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void MoveSelectionDown()
@@ -173,7 +178,7 @@ namespace Mtgdb.Controls
 			Begin = End =
 				tokenBelow?.Right ?? Text.Length;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void MoveSelectionUp()
@@ -194,7 +199,7 @@ namespace Mtgdb.Controls
 			Begin = End =
 				tokenAbove?.Index ?? 0;
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void MoveSelectionRight()
@@ -209,7 +214,7 @@ namespace Mtgdb.Controls
 					.DefaultIfEmpty(Text.Length)
 					.First();
 
-			Changed?.Invoke(this);
+			onChanged();
 		}
 
 		public void MoveSelectionLeft()
@@ -224,6 +229,12 @@ namespace Mtgdb.Controls
 					.DefaultIfEmpty(0)
 					.Last();
 
+			onChanged();
+		}
+
+		public void Tick()
+		{
+			_isCaretVisible = !_isCaretVisible;
 			Changed?.Invoke(this);
 		}
 
@@ -278,22 +289,27 @@ namespace Mtgdb.Controls
 			return null;
 		}
 
-		public void Tick()
+		private void onChanged()
 		{
-			IsCaretVisible = !IsCaretVisible;
+			IsCaretVisible = true;
 			Changed?.Invoke(this);
 		}
 
-		public void Hide()
-		{
-			if (!IsCaretVisible)
-				return;
-
+		public void Hide() =>
 			IsCaretVisible = false;
-			Changed?.Invoke(this);
-		}
 
-		public bool IsCaretVisible { get; private set; }
+		public bool IsCaretVisible
+		{
+			get => _isCaretVisible;
+			private set
+			{
+				if (_isCaretVisible == value)
+					return;
+
+				_isCaretVisible = value;
+				Changed?.Invoke(this);
+			}
+		}
 
 		public string SelectedText =>
 			Start < 0
@@ -313,5 +329,7 @@ namespace Mtgdb.Controls
 			= new List<(RichTextToken Token, RectangleF Rect)>();
 
 		public bool IsEmpty => Begin < 0;
+
+		private bool _isCaretVisible;
 	}
 }

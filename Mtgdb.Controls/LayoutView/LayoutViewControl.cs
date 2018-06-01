@@ -34,18 +34,23 @@ namespace Mtgdb.Controls
 
 			scaleScrollbar();
 
-			_timer = new Timer
+			_selectionCaretTimer = new Timer
 			{
 				Interval = 500
 			};
 
-			_timer.Tick += tick;
+			_selectionCaretTimer.Tick += tick;
 		}
 
 		private void tick(object sender, EventArgs e)
 		{
 			if (Focused)
-				getNonEmptySelection()?.Tick();
+			{
+				if (_selectionCaretTimerSkip)
+					_selectionCaretTimerSkip = false;
+				else
+					getNonEmptySelection()?.Tick();
+			}
 			else
 				getNonEmptySelection()?.Hide();
 		}
@@ -315,12 +320,12 @@ namespace Mtgdb.Controls
 
 			Application.AddMessageFilter(this);
 
-			_timer.Start();
+			_selectionCaretTimer.Start();
 		}
 
 		private void disposed(object sender, EventArgs e)
 		{
-			_timer.Stop();
+			_selectionCaretTimer.Stop();
 			Application.RemoveMessageFilter(this);
 		}
 
@@ -367,7 +372,7 @@ namespace Mtgdb.Controls
 		}
 
 		private int getColumnsCount() => LayoutUtil.GetVisibleCardsCount(
-			Width - _scrollBar.Width,
+			Width - ScrollWidth,
 			CardSize.Width,
 			LayoutOptions.CardInterval.Width,
 			LayoutOptions.PartialCardsThreshold.Width,
@@ -399,6 +404,9 @@ namespace Mtgdb.Controls
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
+			void resetTimer() =>
+				_selectionCaretTimerSkip = true;
+
 			bool handled = true;
 
 			if (e.KeyData == Keys.PageDown)
@@ -432,27 +440,60 @@ namespace Mtgdb.Controls
 			else if (e.KeyData == Keys.Escape)
 				getNonEmptySelection()?.Clear();
 			else if (e.KeyData == Keys.Right)
+			{
 				getNonEmptySelection()?.MoveSelectionRight();
+				resetTimer();
+			}
 			else if (e.KeyData == Keys.Left)
+			{
 				getNonEmptySelection()?.MoveSelectionLeft();
+				resetTimer();
+			}
 			else if (e.KeyData == Keys.Up)
+			{
 				getNonEmptySelection()?.MoveSelectionUp();
+				resetTimer();
+			}
 			else if (e.KeyData == Keys.Down)
+			{
 				getNonEmptySelection()?.MoveSelectionDown();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.Right) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Right))
+			{
 				getNonEmptySelection()?.ShiftSelectionRight();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.Left) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Left))
+			{
 				getNonEmptySelection()?.ShiftSelectionLeft();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.Up) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Up))
+			{
 				getNonEmptySelection()?.ShiftSelectionUp();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.Down) || e.KeyData == (Keys.Control | Keys.Shift | Keys.Down))
+			{
 				getNonEmptySelection()?.ShiftSelectionDown();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.Home))
+			{
 				getNonEmptySelection()?.ShiftSelectionToStart();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Shift | Keys.End))
+			{
 				getNonEmptySelection()?.ShiftSelectionToEnd();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Control | Keys.A))
+			{
 				getNonEmptySelection()?.SelectAll();
+				resetTimer();
+			}
 			else if (e.KeyData == (Keys.Control | Keys.C))
 			{
 				string selectedText = getNonEmptySelection()?.SelectedText;
@@ -1245,20 +1286,21 @@ namespace Mtgdb.Controls
 			get => _layoutOptions;
 			set
 			{
-				if (value != _layoutOptions)
-				{
-					if (_layoutOptions != null)
-						_layoutOptions.Changed -= layoutOptionsChanged;
+				if (value == _layoutOptions)
+					return;
 
-					_layoutOptions = value;
-					layoutOptionsChanged();
-					_layoutOptions.Changed += layoutOptionsChanged;
-				}
+				if (_layoutOptions != null)
+					_layoutOptions.Changed -= layoutOptionsChanged;
+
+				_layoutOptions = value;
+				layoutOptionsChanged();
+				_layoutOptions.Changed += layoutOptionsChanged;
 			}
 		}
 
 		private void layoutOptionsChanged()
 		{
+			_scrollBar.Visible = !_layoutOptions.HideScroll;
 			Invalidate();
 			OnLayout(new LayoutEventArgs(this, nameof(LayoutOptions)));
 		}
@@ -1299,7 +1341,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Browsable(false)]
-		public int ScrollWidth => _scrollBar.Width;
+		public int ScrollWidth => _layoutOptions.HideScroll ? 0 : _scrollBar.Width;
 
 		[Browsable(false)]
 		public int Count => DataSource?.Count ?? 0;
@@ -1360,7 +1402,8 @@ namespace Mtgdb.Controls
 
 		private readonly RectangularSelection _selection = new RectangularSelection();
 
-		private readonly Timer _timer;
+		private readonly Timer _selectionCaretTimer;
+		private bool _selectionCaretTimerSkip;
 
 		#region mouse wheel without focus
 
