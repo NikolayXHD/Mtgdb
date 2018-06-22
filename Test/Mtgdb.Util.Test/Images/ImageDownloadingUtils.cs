@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using Mtgdb.Bitmaps;
 using Mtgdb.Test;
 using NUnit.Framework;
 
@@ -26,8 +27,8 @@ namespace Mtgdb.Util
 			LoadCards();
 		}
 
-		[TestCase("DOM")]
-		[TestCase("DDU")]
+		[TestCase("cm2")]
+		[TestCase("gs1")]
 		public void DownloadGathererImages(string setCode)
 		{
 			var client = new GathererClient();
@@ -67,8 +68,10 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererOriginalDir, "DOM png", PublishedSmallDir, "DOM")]
-		[TestCase(GathererPreprocessedDir, "DOM png", PublishedZoomDir, "DOM")]
+		[TestCase(GathererOriginalDir, "bbd", PublishedSmallDir, "BBD")]
+		[TestCase(GathererOriginalDir, "cm2", PublishedSmallDir, "CM2")]
+		[TestCase(GathererOriginalDir, "ss1", PublishedSmallDir, "SS1")]
+		[TestCase(GathererOriginalDir, "gs1", PublishedSmallDir, "GS1")]
 		public void ConvertToJpg(string dir, string subdir, string targetDir, string targetSubdir)
 		{
 			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();
@@ -87,7 +90,13 @@ namespace Mtgdb.Util
 			if (File.Exists(targetImage))
 				return;
 
-			new Bitmap(sourceImage).Save(targetImage, _jpegCodec, _jpegEncoderParams);
+			using (var original = new Bitmap(sourceImage))
+			{
+				new BmpAlphaToBackgroundColorTransformation(original, Color.White)
+					.Execute();
+
+				original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
+			}
 		}
 
 
@@ -96,8 +105,8 @@ namespace Mtgdb.Util
 
 		private const string GathererOriginalDir = @"D:\Distrib\games\mtg\Gatherer.Original";
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
-		private const string PublishedZoomDir = @"D:\Distrib\games\mtg\Mega\Mtgdb.Pictures\mq";
-		private const string PublishedSmallDir = @"D:\Distrib\games\mtg\Mega\Mtgdb.Pictures\lq";
+		private const string PublishedZoomDir = @"D:\Distrib\games\mtg\Mtgdb.Pictures\mq";
+		private const string PublishedSmallDir = @"D:\Distrib\games\mtg\Mtgdb.Pictures\lq";
 		private const string BackupDir = @"D:\Distrib\games\mtg\.bak\Gatherer.Original";
 
 		private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";

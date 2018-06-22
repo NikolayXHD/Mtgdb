@@ -140,7 +140,7 @@ namespace Mtgdb.Test
 
 		private static string getFailedListFile(string resultDir)
 		{
-			return Path.Combine(resultDir, "failed");
+			return Path.Combine(Path.GetDirectoryName(resultDir), "failed");
 		}
 
 		private int[] getMultiverseIds()

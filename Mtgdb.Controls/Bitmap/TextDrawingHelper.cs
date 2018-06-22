@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
+using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Controls
 {
@@ -23,7 +24,7 @@ namespace Mtgdb.Controls
 			{
 				gb.Clear(borderColor);
 				TextRenderer.DrawText(gb, text, font, new Point(dw, dw), color, borderColor, _textFormatFlags);
-				new BackgroundTransparentizer(bmp, borderColor, opaqueBorder, fadeBorder).Execute();
+				new SemiTransparentShadowTransformation(bmp, borderColor, opaqueBorder, fadeBorder).Execute();
 				g.DrawImageUnscaled(bmp, rect.X - dw, rect.Y - dw);
 			}
 		}

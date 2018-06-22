@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Drawing;
+using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Controls
 {
-	public class BackgroundTransparentizer : BmpProcessor
+	public class SemiTransparentShadowTransformation : BmpProcessor
 	{
-		public BackgroundTransparentizer(Bitmap bmp, Color backColor, float opaqueBorder, float fadeBorder) : base(bmp)
+		public SemiTransparentShadowTransformation(Bitmap bmp, Color backColor, float opaqueBorder, float fadeBorder) : base(bmp)
 		{
 			_backColor = backColor;
 			_opaqueBorder = opaqueBorder;
@@ -20,7 +21,7 @@ namespace Mtgdb.Controls
 				for (int y = 0; y < Rect.Height; ++y)
 				{
 					var d = nearestFeatureDist(x, y);
-					opacityMask[x, y] = 1f - ((d - _opaqueBorder) / (_fadeBorder - _opaqueBorder)).WithinRange(0f, 1f);
+					opacityMask[x, y] = Math.Max(0, Math.Min(1, 1f - (d - _opaqueBorder) / (_fadeBorder - _opaqueBorder)));
 				}
 
 			for (int x = 0; x < Rect.Width; ++x)

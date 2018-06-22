@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Cj.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComparableExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShadowCopy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SolutionInfo.cs" />

@@ -68,7 +68,6 @@
     <Compile Include="String\MtgStringComparer.cs" />
     <Compile Include="Versioning\AppDir.cs" />
     <Compile Include="Collections\CollectionExtensions.cs" />
-    <Compile Include="ComparableExtension.cs" />
     <Compile Include="Collections\CustomComparer.cs" />
     <Compile Include="Versioning\FileSignature.cs" />
     <Compile Include="Collections\LinkedListExtension.cs" />

@@ -118,6 +118,10 @@
     <Compile Include="Images\SaturationFilter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Bitmap\Mtgdb.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Controls</Name>

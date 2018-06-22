@@ -23,8 +23,8 @@ namespace Mtgdb.Dal
 		{
 			get => _version.Directory.Parent();
 
-			// 0.38 add Dominaria Block
-			set => _version = new IndexVersion(value, "0.38");
+			// 0.39 bbd
+			set => _version = new IndexVersion(value, "0.39");
 		}
 
 		public void InvalidateIndex()

@@ -1,7 +1,7 @@
 using System.Drawing;
-using Mtgdb.Controls;
+using Mtgdb.Bitmaps;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Util
 {
 	public class BwFilter : BmpProcessor
 	{

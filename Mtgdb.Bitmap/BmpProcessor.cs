@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Bitmaps
 {
 	public abstract class BmpProcessor
 	{

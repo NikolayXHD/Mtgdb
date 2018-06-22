@@ -1,8 +1,8 @@
 using System.Drawing;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Bitmaps
 {
-	class GrayscaleBmpProcessor : BmpProcessor
+	public class GrayscaleBmpProcessor : BmpProcessor
 	{
 		public GrayscaleBmpProcessor(Bitmap bmp, float opacity)
 			: base(bmp)

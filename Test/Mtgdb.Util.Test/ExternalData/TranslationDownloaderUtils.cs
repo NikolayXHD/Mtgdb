@@ -12,9 +12,9 @@ namespace Mtgdb.Test
 			LoadCards();
 		}
 
-		private const string DownloadedDir = @"D:\temp\gatherer-downloaded";
-		private const string ParsedDir = @"D:\temp\gatherer-parsed";
-		private const string ResultDir = @"D:\temp\gatherer-result";
+		private const string DownloadedDir = @"D:\temp\gatherer\downloaded";
+		private const string ParsedDir = @"D:\temp\gatherer\parsed";
+		private const string ResultDir = @"D:\temp\gatherer\result";
 
 		[Test]
 		public void Update_translations()

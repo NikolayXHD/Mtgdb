@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Bitmaps
 {
 	public class BmpScaler : BmpProcessor
 	{
@@ -98,10 +98,8 @@ namespace Mtgdb.Controls
 				}
 		}
 
-		private static byte toByte(float r)
-		{
-			return (byte) Math.Round(r).WithinRange(0, 255);
-		}
+		private static byte toByte(float r) =>
+			(byte) Math.Max(0, Math.Min(255, Math.Round(r)));
 
 		private readonly Bitmap _original;
 		private readonly Rectangle _sourceRect;

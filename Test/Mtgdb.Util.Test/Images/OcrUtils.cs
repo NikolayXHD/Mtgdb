@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Mtgdb.Bitmaps;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Test;
@@ -156,7 +157,7 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("DOM", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\DOM.large")]
+		[TestCase("ss1", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\ss1.large")]
 		public void RenameImagesToMatchCardNames(string setCode, string unnamedImagesDirectory)
 		{
 			var fileNames =

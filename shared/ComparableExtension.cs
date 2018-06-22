@@ -2,7 +2,7 @@ using System;
 
 namespace Mtgdb
 {
-	public static class ComparableExtension
+	internal static class ComparableExtension
 	{
 		public static TVal WithinRange<TVal>(this TVal value, TVal? min, TVal? max)
 			where TVal : struct, IComparable<TVal>

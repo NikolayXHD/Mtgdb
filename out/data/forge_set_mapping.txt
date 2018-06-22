@@ -1,0 +1,116 @@
+12	OV9	Oversized 9x12
+10E	10E	Core Set - Tenth Edition
+4E	4ED	Fourth Edition
+4EA	4EA	Fourth Edition (Alternate)
+5E	5ED	Fifth Edition
+6E	6ED	Classic (Sixth Edition)
+7E	7ED	Seventh Edition
+8E	8ED	Core Set - Eighth Edition
+9E	9ED	Core Set - Ninth Edition
+A	LEA	Limited Edition Alpha
+AL	ALL	Alliances
+ALA	ALA	Shards of Alara
+AN	ARN	Arabian Nights
+AP	APC	Apocalypse
+APL	APL	Asia Pacific Land Program
+AQ	ATQ	Antiquities
+ARC	ARC	Armada Comics Promos
+ARE	ARE	Promo – Arena League
+AS	AST	Astral
+AT	ATH	Anthologies
+B	LEB	Limited Edition Beta
+BCE	BCE	Collector's Edition
+BD	BTD	Beatdown
+BOK	BOK	Betrayers of Kamigawa
+BR	BRB	Battle Royale
+BT8	BT8	Box Toppers 8E
+BTP	BTP	Box Toppers Promo
+CFX	CON	Conflux
+CH	CHR	Chronicles
+CHK	CHK	Champions of Kamigawa
+CHP	CHP	Promo – Champs
+CS	CSP	Coldsnap
+CST	CST	Coldsnap Theme Decks
+DC	SDC	Dreamcast (Sega)
+DIS	DIS	Dissension
+DK	DRK	The Dark
+DLM	DLM	DCI Legend Membership
+DM	DKM	Deckmasters
+DRB	FVD	From the Vault: Dragons
+DS	DST	Darksteel
+EUL	EUL	European Land Program
+EVE	EVE	Eventide
+EVG	EVG	Duel Decks: Elves vs. Goblins
+EX	EXO	Exodus
+FD	5DN	Fifth Dawn
+FE	FEM	Fallen Empires
+FI	FIL	Filler Cards
+FNM	FNM	Promo – Friday Night Magic
+FUT	FUT	Future Sight
+GP	GPT	Guildpact
+GTW	GTW	Promo – Gateway
+GUR	GUR	Guru Lands
+HHL	HHL	Happy Holidays Promos
+HL	HML	Homelands
+HPB	HPB	Harper Prism Books Promos
+I2P	I2P	Introductory Two Player: Kazz & Zakk
+IA	ICE	Ice Age
+IN	INV	Invasion
+JGC	JGC	Promo – Judge Gift Cards
+JSS	JSS	Promo – Junior Super Series, Junior Series, Junior APAC Series, Magic Scholarship Series
+JU	JUD	Judgment
+JVC	JVC	Duel Decks: Jace vs. Chandra
+LE	LGN	Legions
+LG	LEG	Legends
+LRW	LRW	Lorwyn
+ME2	ME2	Masters Edition II
+MED	MED	Masters Edition
+MI	MIR	Mirage
+MM	MMQ	Mercadian Masques
+MOR	MOR	Morningtide
+MPS	XXX	Magic Premiere Shop Lands
+MPS_KLD	MPS	Masterpiece Series: Kaladesh Inventions
+MR	MRD	Mirrodin
+MV	MUV	Multiverse
+NE	NMS	Nemesis
+OD	ODY	Odyssey
+ON	ONS	Onslaught
+OV	OV6	Oversized 6x9
+P2	P02	Portal Second Age
+P3	PTK	Portal Three Kingdoms
+PLC	PLC	Planar Chaos
+PR	PRO	Other Promos
+PRE	PRE	Promo – Prerelease
+PS	PLS	Planeshift
+PT	POR	Portal
+PY	PCY	Prophecy
+R	3ED	Revised Edition
+RAV	RAV	Ravnica: City of Guilds
+REL	REL	Promo – Release
+REW	REW	Promo – Magic Player Rewards
+S2K	S00	Starter 2000
+SC	SCG	Scourge
+SH	STH	Stronghold
+SHM	SHM	Shadowmoor
+SM	SMM	Summer Magic
+SOK	SOK	Saviors of Kamigawa
+ST	S99	Starter 1999
+SUM	SUM	Summer of Magic Promos
+TE	TMP	Tempest
+THG	THG	Two-Headed Giant
+TK	TKN	Tokens
+TO	TOR	Torment
+TP	TPR	Test Prints
+TSB	TSB	Time Spiral Timeshifted
+TSP	TSP	Time Spiral
+U	2ED	Unlimited
+UD	UDS	Urza's Destiny
+UG	UGL	Unglued
+UL	ULG	Urza's Legacy
+UNH	UNH	Unhinged
+US	USG	Urza's Saga
+VG	VGD	Vanguard
+VGM	VGM	Vanguard (MTGO)
+VI	VIS	Visions
+WL	WTH	Weatherlight
+WP	WPM	Misprints-Wrong Pics

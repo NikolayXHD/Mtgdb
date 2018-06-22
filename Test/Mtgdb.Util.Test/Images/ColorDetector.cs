@@ -1,7 +1,7 @@
 using System.Drawing;
-using Mtgdb.Controls;
+using Mtgdb.Bitmaps;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	public class ColorDetector : BmpProcessor
 	{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using Mtgdb.Bitmaps;
 using Mtgdb.Controls;
 using NLog;
 
@@ -88,7 +89,7 @@ namespace Mtgdb.Dal
 
 		public BitmapTransformationChain TransformForgeImage(Bitmap original, Size size)
 		{
-			var frameDetector = new BmpFrameDetector(original);
+			var frameDetector = new BmpFrameDetector(original, SizeCropped);
 			frameDetector.Execute();
 			var frame = frameDetector.Frame;
 

@@ -96,6 +96,8 @@
     <Compile Include="ExtremumFinder.cs" />
     <Compile Include="Forge\ForgeSetRepository.cs" />
     <Compile Include="ImageNamePatcher.cs" />
+    <Compile Include="Images\BmpCornerRemoval.cs" />
+    <Compile Include="Images\BmpFrameDetector.cs" />
     <Compile Include="Index\IndexUtils.cs" />
     <Compile Include="Index\IStringSimilarity.cs" />
     <Compile Include="Index\MtgAnalyzer.cs" />
@@ -144,10 +146,8 @@
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
-    <Compile Include="Images\BmpFrameDetector.cs" />
     <Compile Include="Images\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
-    <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="ImageRepository.cs" />
     <Compile Include="Keywords\KeywordDefinitions.cs" />
     <Compile Include="Model\Patch\CardPatch.cs" />
@@ -184,6 +184,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Bitmap\Mtgdb.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Controls</Name>

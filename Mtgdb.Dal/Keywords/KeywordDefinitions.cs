@@ -369,6 +369,7 @@ namespace Mtgdb.Dal
 			count("Afflict"),
 			count("Amplify"),
 			cost("Aura Swap"),
+			"Assist",
 			custom("Banding", bound("banding", notAfter: "any creatures with")),
 			"Battle Cry",
 			custom("Bloodrush", bound("bloodrush", before: "—")),
