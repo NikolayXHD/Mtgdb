@@ -348,6 +348,8 @@
     <Content Include="Resources\Annihilator.png" />
     <None Include="Resources\any.png" />
     <None Include="Resources\ascend.png" />
+    <None Include="Resources\art_32.png" />
+    <None Include="Resources\art_64.png" />
     <Content Include="Resources\Attacks each turn.png" />
     <None Include="Resources\book_40.png" />
     <None Include="Resources\book_40_hovered.png" />

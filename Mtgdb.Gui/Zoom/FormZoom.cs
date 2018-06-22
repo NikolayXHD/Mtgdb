@@ -14,22 +14,6 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormZoom : Form
 	{
-		private readonly CardRepository _cardRepository;
-		private readonly ImageRepository _imageRepository;
-		private readonly ImageLoader _imageLoader;
-		private int _imageIndex;
-		private Bitmap _image;
-
-		private readonly List<Bitmap> _images = new List<Bitmap>();
-		private readonly List<ImageModel> _models = new List<ImageModel>();
-
-		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
-		private Card _card;
-
-		private Thread _imageLoadingThread;
-		private List<Card> _cardForms;
-		private Point _location;
-
 		public FormZoom()
 		{
 			InitializeComponent();
@@ -64,19 +48,32 @@ namespace Mtgdb.Gui
 				? Resources.open_32.HalfResizeDpi()
 				: Resources.open_16.ResizeDpi();
 
+			_showArtButton.Image = Dpi.ScalePercent > 100
+				? Resources.art_64.HalfResizeDpi()
+				: Resources.art_32.ResizeDpi();
+
 			var cloneImg = Resources.clone_48.HalfResizeDpi();
 
 			_showDuplicatesButton.Image = cloneImg;
 			_showOtherSetsButton.Image = cloneImg;
+
+			_showArtButton.CheckedChanged += showArtChanged;
+			updateShowArt();
 		}
 
 		public void LoadImages(Card card, UiModel ui)
 		{
 			_location = Cursor.Position;
-			_imageLoadingThread?.Abort();
+			loadImages(card, ui);
+		}
 
-			_cardForms = _cardRepository.GetForms(card, ui);
+		private void loadImages(Card card, UiModel ui)
+		{
 			_card = card;
+			_ui = ui;
+
+			_imageLoadingThread?.Abort();
+			_cardForms = _cardRepository.GetForms(card, ui);
 
 			foreach (var oldImg in _images)
 				oldImg.Dispose();
@@ -91,6 +88,17 @@ namespace Mtgdb.Gui
 			while (_images.Count == 0)
 				Thread.Sleep(50);
 		}
+
+		private void showArtChanged(object sender, EventArgs e)
+		{
+			updateShowArt();
+			loadImages(_card, _ui);
+			updateImage();
+			applyZoom();
+		}
+
+		private void updateShowArt() =>
+			_showArt = _showArtButton.Checked;
 
 		public void ShowImages()
 		{
@@ -134,23 +142,24 @@ namespace Mtgdb.Gui
 			int index = 0;
 			for (int j = 0; j < _cardForms.Count; j++)
 			{
-				foreach (var model in _cardRepository.GetImagesArt(_cardForms[j], _imageRepository))
-				{
-					while (index > _imageIndex + 10)
-						Thread.Sleep(100);
+				if (_showArt)
+					foreach (var model in _cardRepository.GetImagesArt(_cardForms[j], _imageRepository))
+					{
+						while (index > _imageIndex + 10)
+							Thread.Sleep(100);
 
-					var size = model.ImageFile.IsArt
-						? getSizeArt()
-						: _imageLoader.ZoomedCardSize;
+						var size = model.ImageFile.IsArt
+							? getSizeArt()
+							: _imageLoader.ZoomedCardSize;
 
-					var image = _imageLoader.LoadImage(model, size);
+						var image = _imageLoader.LoadImage(model, size);
 
-					if (image == null)
-						continue;
+						if (image == null)
+							continue;
 
-					add(index, model, image);
-					index++;
-				}
+						add(index, model, image);
+						index++;
+					}
 
 				foreach (var model in _cardRepository.GetZoomImages(_cardForms[j], _imageRepository))
 				{
@@ -338,5 +347,25 @@ namespace Mtgdb.Gui
 			string fullPath = _models[_imageIndex].ImageFile.FullPath;
 			Process.Start(new ProcessStartInfo(fullPath));
 		}
+
+
+
+		private readonly CardRepository _cardRepository;
+		private readonly ImageRepository _imageRepository;
+		private readonly ImageLoader _imageLoader;
+		private int _imageIndex;
+		private Bitmap _image;
+
+		private readonly List<Bitmap> _images = new List<Bitmap>();
+		private readonly List<ImageModel> _models = new List<ImageModel>();
+
+		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
+		private Card _card;
+
+		private Thread _imageLoadingThread;
+		private List<Card> _cardForms;
+		private Point _location;
+		private bool _showArt;
+		private UiModel _ui;
 	}
 }

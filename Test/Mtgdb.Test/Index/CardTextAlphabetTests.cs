@@ -57,7 +57,7 @@ namespace Mtgdb.Test
 			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
 			var cyrillic = new HashSet<char>("абвгдежзийклмнопрстуфхцчшщьыъэюя");
 			var numbers = new HashSet<char>("01234567890");
-			var knownSpecialChars = new HashSet<char>("ºß");
+			var knownSpecialChars = new HashSet<char>("ºß林泰玄");
 
 			foreach (char c in chars)
 			{

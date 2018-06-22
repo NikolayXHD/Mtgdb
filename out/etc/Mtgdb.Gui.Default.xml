@@ -27,6 +27,12 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1bdRQRiQxHZQU0TDgbBGhb9rHYM79E_Mj" >
+
+			<Dir Subdir="BBD"        GdriveId="1Lc8yGbKIkFZPJQxjgml--PfpnPHae2i3" />
+			<Dir Subdir="CM2"        GdriveId="1aAzvTN11sqH9ue8XBphrNUqaW0dDdTEt" />
+			<Dir Subdir="GS1"        GdriveId="1a-STBNhO9eQtPiA2RkCxmFjqAZZbUAFW" />
+			<Dir Subdir="SS1"        GdriveId="1oimnmEE6Tf7mr_Ul2pbSadG7fZUX1M7D" />
+
 			<Dir Subdir="2ED"        GdriveId="1aqWY5-wjqyxzidt0K8xEQa4qHLK9jkqf" />
 			<Dir Subdir="3ED"        GdriveId="11YiZ58y8M0ijiT0vdUhOL08-oddIh0Z3" />
 			<Dir Subdir="4ED"        GdriveId="1vIQ_ugmuLJZ0P7Hxy4b7yyxW1OIL8fN3" />
@@ -253,6 +259,12 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1AXQgeGrshNEJVFUTwjE8N5cIsrzRncbW">
+
+			<Dir Subdir="BBD"        GdriveId="1ChSaIKgL1zvOs41uyluKxhgE5HC-6AHt" />
+			<Dir Subdir="CM2"        GdriveId="1lfgRxM-8D8oMAQa_bQDt5Gmnzjsb68Ud" />
+			<Dir Subdir="GS1"        GdriveId="1oA-gB_vWc5jbYP7Gb7Zoz9_pi80Niw2q" />
+			<Dir Subdir="SS1"        GdriveId="1m4W6dMMGRl7r_c7rkqkdgjjqKH73kSPK" />
+
 			<Dir Subdir="2ED"        GdriveId="1ic74ZKdXxF0GoqT7pajwjuJa4cqaAZxf" />
 			<Dir Subdir="3ED"        GdriveId="1lMrvG2wCKEWN2x1Li9anu85Z39uGYtY4" />
 			<Dir Subdir="4ED"        GdriveId="1d3DjEmkLu0_ozQK3Bv6JpSmPvWGTxfqV" />

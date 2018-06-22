@@ -157,6 +157,20 @@ namespace Mtgdb.Dal
 
 			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
 				card.OriginalType = null;
+
+			if (Str.Equals(card.SetCode, "BBD"))
+			{
+				if (card.Number.EndsWith("b", Str.Comparison))
+					card.Remove = true;
+				else if (card.Number.EndsWith("a", Str.Comparison))
+				{
+					card.Number = card.Number.Substring(card.Number.Length - 1);
+					card.Names = null;
+				}
+
+				if (Str.Equals(card.Layout, "flip"))
+					card.Layout = "normal";
+			}
 		}
 
 		private void patchLegality()

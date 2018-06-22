@@ -27,8 +27,10 @@ namespace Mtgdb.Util
 			LoadCards();
 		}
 
+		[TestCase("bbd")]
 		[TestCase("cm2")]
 		[TestCase("gs1")]
+		[TestCase("ss1")]
 		public void DownloadGathererImages(string setCode)
 		{
 			var client = new GathererClient();
@@ -68,10 +70,14 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererOriginalDir, "bbd", PublishedSmallDir, "BBD")]
+		//[TestCase(GathererOriginalDir, "bbd", PublishedSmallDir, "BBD")]
+		//[TestCase(GathererPreprocessedDir, "bbd", PublishedZoomDir, "BBD")]
+		//[TestCase(GathererOriginalDir, "gs1", PublishedSmallDir, "GS1")]
+		//[TestCase(GathererPreprocessedDir, "gs1", PublishedZoomDir, "GS1")]
+		//[TestCase(GathererOriginalDir, "ss1", PublishedSmallDir, "SS1")]
+		//[TestCase(GathererPreprocessedDir, "ss1", PublishedZoomDir, "SS1")]
 		[TestCase(GathererOriginalDir, "cm2", PublishedSmallDir, "CM2")]
-		[TestCase(GathererOriginalDir, "ss1", PublishedSmallDir, "SS1")]
-		[TestCase(GathererOriginalDir, "gs1", PublishedSmallDir, "GS1")]
+		[TestCase(GathererPreprocessedDir, "cm2", PublishedZoomDir, "CM2")]
 		public void ConvertToJpg(string dir, string subdir, string targetDir, string targetSubdir)
 		{
 			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();

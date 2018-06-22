@@ -157,7 +157,9 @@ namespace Mtgdb.Dal
 			_version.CreateDirectory();
 
 			var fsIndex = FSDirectory.Open(_version.Directory);
-			using (var writer = new IndexWriter(fsIndex, new IndexWriterConfig(LuceneVersion.LUCENE_48, new LowercaseKeywordAnalyzer())))
+			var indexWriterConfig = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
+
+			using (var writer = new IndexWriter(fsIndex, indexWriterConfig))
 			{
 				IndexUtils.ForEach(keywordsList,
 					keyword =>

@@ -34,6 +34,7 @@
 			this._openFileButton = new System.Windows.Forms.ToolStripMenuItem();
 			this._showOtherSetsButton = new System.Windows.Forms.ToolStripMenuItem();
 			this._showDuplicatesButton = new System.Windows.Forms.ToolStripMenuItem();
+			this._showArtButton = new System.Windows.Forms.ToolStripMenuItem();
 			this._hintButton = new System.Windows.Forms.ToolStripMenuItem();
 			this._pictureBox = new System.Windows.Forms.PictureBox();
 			this._contextMenu.SuspendLayout();
@@ -48,17 +49,18 @@
             this._openFileButton,
             this._showOtherSetsButton,
             this._showDuplicatesButton,
+            this._showArtButton,
             this._hintButton});
 			this._contextMenu.Name = "_contextMenu";
 			this._contextMenu.ShowCheckMargin = true;
-			this._contextMenu.Size = new System.Drawing.Size(393, 227);
+			this._contextMenu.Size = new System.Drawing.Size(283, 254);
 			// 
 			// _showInExplorerButton
 			// 
 			this._showInExplorerButton.Image = global::Mtgdb.Gui.Properties.Resources.open_32;
 			this._showInExplorerButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._showInExplorerButton.Name = "_showInExplorerButton";
-			this._showInExplorerButton.Size = new System.Drawing.Size(392, 38);
+			this._showInExplorerButton.Size = new System.Drawing.Size(282, 38);
 			this._showInExplorerButton.Text = "Show in explorer";
 			this._showInExplorerButton.ToolTipText = "Opens the image directory in explorer with current image selected.\r\nSome times se" +
     "lecting fails. This is Microsoft\'s bug, not mine :)";
@@ -69,7 +71,7 @@
 			this._openFileButton.Image = global::Mtgdb.Gui.Properties.Resources.image_file_32;
 			this._openFileButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._openFileButton.Name = "_openFileButton";
-			this._openFileButton.Size = new System.Drawing.Size(392, 38);
+			this._openFileButton.Size = new System.Drawing.Size(282, 38);
 			this._openFileButton.Text = "Open file";
 			this._openFileButton.ToolTipText = "Open the image file by your default image viewer";
 			this._openFileButton.Click += new System.EventHandler(this.openFileClick);
@@ -82,7 +84,7 @@
 			this._showOtherSetsButton.Image = global::Mtgdb.Gui.Properties.Resources.clone_32;
 			this._showOtherSetsButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._showOtherSetsButton.Name = "_showOtherSetsButton";
-			this._showOtherSetsButton.Size = new System.Drawing.Size(392, 38);
+			this._showOtherSetsButton.Size = new System.Drawing.Size(282, 38);
 			this._showOtherSetsButton.Text = "Show variants from other sets";
 			this._showOtherSetsButton.ToolTipText = "When checked you will be able to cycle between this card\'s images from other sets" +
     " too.";
@@ -95,18 +97,29 @@
 			this._showDuplicatesButton.Image = global::Mtgdb.Gui.Properties.Resources.clone_32;
 			this._showDuplicatesButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._showDuplicatesButton.Name = "_showDuplicatesButton";
-			this._showDuplicatesButton.Size = new System.Drawing.Size(392, 38);
+			this._showDuplicatesButton.Size = new System.Drawing.Size(282, 38);
 			this._showDuplicatesButton.Text = "Show variants from same set";
 			this._showDuplicatesButton.ToolTipText = "Some cards have different images event within the same set.\r\nThis mostly relates " +
     "to basic lands.\r\nWhen checked you will be able to cycle through all card image v" +
     "aritants within a given set.";
+			// 
+			// _showArtButton
+			// 
+			this._showArtButton.Checked = true;
+			this._showArtButton.CheckOnClick = true;
+			this._showArtButton.CheckState = System.Windows.Forms.CheckState.Checked;
+			this._showArtButton.Image = global::Mtgdb.Gui.Properties.Resources.art_32;
+			this._showArtButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this._showArtButton.Name = "_showArtButton";
+			this._showArtButton.Size = new System.Drawing.Size(282, 38);
+			this._showArtButton.Text = "Show artworks";
 			// 
 			// _hintButton
 			// 
 			this._hintButton.Enabled = false;
 			this._hintButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this._hintButton.Name = "_hintButton";
-			this._hintButton.Size = new System.Drawing.Size(392, 38);
+			this._hintButton.Size = new System.Drawing.Size(282, 38);
 			this._hintButton.Text = "* Scroll to cycle between images";
 			// 
 			// _pictureBox
@@ -145,5 +158,6 @@
 		private System.Windows.Forms.ToolStripMenuItem _showDuplicatesButton;
 		private System.Windows.Forms.ToolStripMenuItem _showOtherSetsButton;
 		private System.Windows.Forms.ToolStripMenuItem _hintButton;
+		private System.Windows.Forms.ToolStripMenuItem _showArtButton;
 	}
 }

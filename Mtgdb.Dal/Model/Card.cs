@@ -684,7 +684,7 @@ namespace Mtgdb.Dal
 		public ICollection<Card> Namesakes { get; internal set; }
 
 		[JsonIgnore]
-		internal bool Remove { get; private set; }
+		internal bool Remove { get; set; }
 
 		[JsonIgnore]
 		private bool _generatedManaParsed;

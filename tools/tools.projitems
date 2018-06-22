@@ -9,6 +9,7 @@
     <Import_RootNamespace>tools</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)7z\7za.exe" />
     <None Include="$(MSBuildThisFileDirectory)gdrive-windows-x64.exe" />
     <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit-project-loader.dll" />
     <None Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\addins\nunit-v2-result-writer.dll" />
@@ -32,6 +33,7 @@
     <None Include="$(MSBuildThisFileDirectory)select images.bat" />
     <None Include="$(MSBuildThisFileDirectory)shortcut.vbs" />
     <None Include="$(MSBuildThisFileDirectory)sign images.bat" />
+    <None Include="$(MSBuildThisFileDirectory)subdir-util.bat" />
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.bigrams" />
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.fold" />
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.lm" />
