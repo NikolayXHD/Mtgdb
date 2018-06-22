@@ -76,7 +76,7 @@ namespace Mtgdb.Dal
 		private static readonly Regex[] _specificPatterns =
 		{
 			new Regex(
-				@"\b(adds?|produces?) (an amount of |([^ ]+ )?mana in any combination of |that much )?(((?<w>\{w\})|(?<u>\{[u]\})|(?<b>\{[b]\})|(?<r>\{[r]\})|(?<g>\{[g]\})|(?<c>\{[c1-9]\}|colorless mana))( and/or |, or |, | or )?)+",
+				@"\b(adds?|produces?) (an amount of |an additional |([^ ]+ |that much )?mana in any combination of |that much )?(((?<w>\{w\})|(?<u>\{[u]\})|(?<b>\{[b]\})|(?<r>\{[r]\})|(?<g>\{[g]\})|(?<c>\{[c1-9]\}|colorless mana))( and\/or |, or |, | or )?)+",
 				RegexOptions.Compiled | RegexOptions.IgnoreCase)
 		};
 

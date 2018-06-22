@@ -428,6 +428,7 @@ namespace Mtgdb.Dal
 				notAfter:
 				"(aether|cinder|comet|lava|hail|needle|wing|tropical|arrow|meteor|possibility|lightning|ion|captain lannery|primal|eye of the|yamabushi's)")),
 			"Sunburst",
+			count("Support"),
 			cost("Transfigure"),
 			count("Tribute", bound("tribute")),
 			"Undaunted",

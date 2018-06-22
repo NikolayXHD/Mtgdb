@@ -146,7 +146,7 @@
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Standard": {
-			"Sets": { "Add": ["RIX", "DOM"], "Remove": [] },
+			"Sets": { "Add": ["RIX", "DOM", "GS1"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
@@ -156,17 +156,17 @@
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Commander": {
-			"Sets": { "Add": ["DOM"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "BBD"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Legacy": {
-			"Sets": { "Add": ["DOM"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "BBD", "GS1"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Vintage": {
-			"Sets": { "Add": ["DOM"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "BBD", "GS1"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		}

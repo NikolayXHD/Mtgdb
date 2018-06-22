@@ -32,11 +32,11 @@ Images
 ------
 
 download new gatherer images by using ImageDownloadingUtils tests
-  
+
 verify new images are used by adding test case to Set_images_are_from_expected_directory
-  
+
 visually inspect set images by running Mtgdb.Gui
-  
+
 use select images.bat and sign images.bat
 
 create new MEGA directories

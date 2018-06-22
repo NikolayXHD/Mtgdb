@@ -216,6 +216,11 @@ namespace Mtgdb.Gui
 					.AppendLine()
 					.Append(nameof(KeywordDefinitions.Layout)).Append(": ").Append(card.Layout);
 
+				text
+					.AppendLine()
+					.AppendLine()
+					.Append(nameof(Card.GeneratedMana)).Append(": ").Append(card.GeneratedMana);
+
 				var keywords = card.GetKeywords()
 					.Concat(card.GetCastKeywords())
 					.ToHashSet(Str.Comparer);
@@ -224,8 +229,7 @@ namespace Mtgdb.Gui
 					text
 						.AppendLine()
 						.AppendLine()
-						.Append(nameof(KeywordDefinitions.Keywords)).Append(":")
-						.AppendLine()
+						.Append(nameof(KeywordDefinitions.Keywords)).Append(": ")
 						.Append(string.Join(", ", keywords));
 			}
 			else if (Str.Equals(field, nameof(Card.Type)) && !string.IsNullOrEmpty(card.OriginalType))

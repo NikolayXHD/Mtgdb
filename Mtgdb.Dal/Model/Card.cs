@@ -113,7 +113,14 @@ namespace Mtgdb.Dal
 						resultBuilder.Add($"{ruling.Date}: {ruling.Text}");
 
 				if (!string.IsNullOrEmpty(LegalIn))
-					resultBuilder.Add($"legal: {LegalIn}");
+				{
+					const string chinaOnlyStandardLegalSet = "GS1";
+
+					if (Str.Equals(SetCode, chinaOnlyStandardLegalSet) && (Printings == null || Printings.Count == 0 || Printings.Count == 1 && Str.Equals(Printings[0], chinaOnlyStandardLegalSet)))
+						resultBuilder.Add($"legal: {LegalIn.Replace("Standard", "Standard (China only)")}");
+					else
+						resultBuilder.Add($"legal: {LegalIn}");
+				}
 
 				if (!string.IsNullOrEmpty(RestrictedIn))
 					resultBuilder.Add($"restricted: {RestrictedIn}");
