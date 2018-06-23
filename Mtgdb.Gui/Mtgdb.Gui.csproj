@@ -85,7 +85,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -93,7 +92,6 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
@@ -311,6 +309,14 @@
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.Core.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
       <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>

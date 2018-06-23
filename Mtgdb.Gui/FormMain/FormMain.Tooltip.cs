@@ -258,6 +258,24 @@
 				"Basic lands are released in multiple variants.",
 				_buttonShowDuplicates);
 
+			controller.SetTooltip(this,
+				null,
+				"Deck panel visibility",
+				_buttonHideDeck);
+
+			controller.SetTooltip(this,
+				"Partial cards visibility",
+				"Depending on window size displayed cards may lack some horizontal or vertical " +
+				"space at window borders.\r\n\r\n" +
+				"Enable partial cards to display more cards.\r\n" +
+				"Disable partial cards to completely display card image and text whenever possible.",
+				_buttonHidePartialCards);
+
+			controller.SetTooltip(this,
+				null,
+				"Card text visiblity",
+				_buttonHideText);
+
 			controller.SetCustomTooltip(_tooltipViewCards);
 			controller.SetCustomTooltip(_tooltipViewDeck);
 

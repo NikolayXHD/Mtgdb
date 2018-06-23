@@ -10,7 +10,7 @@ namespace Mtgdb.Downloader
 	{
 		public PriceDownloader(
 			CardRepository repo,
-			DownloaderPriceRepository priceRepository)
+			PriceDownloaderRepository priceRepository)
 		{
 			_repo = repo;
 			_client = new PriceClient();
@@ -144,7 +144,7 @@ namespace Mtgdb.Downloader
 		private bool _downloading;
 
 		private readonly CardRepository _repo;
-		private readonly DownloaderPriceRepository _priceRepository;
+		private readonly PriceDownloaderRepository _priceRepository;
 		private readonly PriceClient _client;
 	}
 }

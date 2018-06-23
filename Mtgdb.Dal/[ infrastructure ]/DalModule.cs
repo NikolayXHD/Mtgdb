@@ -45,7 +45,7 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<DownloaderPriceRepository>()
+			Kernel.Bind<PriceDownloaderRepository>()
 				.ToSelf()
 				.InSingletonScope();
 

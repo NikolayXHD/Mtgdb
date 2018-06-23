@@ -1,5 +1,4 @@
-﻿using Mtgdb.Gui;
-using NConfiguration;
+﻿using NConfiguration;
 using NConfiguration.Joining;
 using NConfiguration.Xml;
 using Ninject.Activation;

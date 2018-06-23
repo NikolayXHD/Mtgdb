@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4FE226AC-EC61-451F-A602-C79DA136CE25}</ProjectGuid>
+    <ProjectGuid>{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mtgdb</RootNamespace>
-    <AssemblyName>Mtgdb.Core</AssemblyName>
+    <AssemblyName>Mtgdb.Core.Utils</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,46 +28,41 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NConfiguration, Version=2.4.0.0, Culture=neutral, PublicKeyToken=bfc22cf7cdd506d6, processorArchitecture=MSIL">
-      <HintPath>..\packages\NConfiguration.2.5.0\lib\net40\NConfiguration.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ReadOnlyCollectionsExtensions, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionExtensions.1.3.0\lib\NET40-client\ReadOnlyCollectionsExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ReadOnlyCollectionsInterfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionInterfaces.1.0.0\lib\NET40-client\ReadOnlyCollectionsInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppDir.cs" />
-    <Compile Include="ApplicationCulture.cs" />
-    <Compile Include="ShadowCopy.cs" />
-    <Compile Include="Versioning\FileSignature.cs" />
-    <Compile Include="[ infrastructure ]\CoreModule.cs" />
-    <Compile Include="NinjectExt.cs" />
+    <Compile Include="Collection\ExtremumFinderFactory.cs" />
+    <Compile Include="Collection\ExtremumFinder.cs" />
+    <Compile Include="String\ArgsExt.cs" />
+    <Compile Include="Collection\Array.cs" />
+    <Compile Include="Collection\BinarySearch.cs" />
+    <Compile Include="Collection\CollectionExtensions.cs" />
+    <Compile Include="ComparableExtension.cs" />
+    <Compile Include="CustomComparer.cs" />
+    <Compile Include="Collection\Empty.cs" />
+    <Compile Include="F.cs" />
+    <Compile Include="Collection\LinkedListExtension.cs" />
+    <Compile Include="Collection\ListSegment.cs" />
+    <Compile Include="String\MtgStringComparer.cs" />
+    <Compile Include="Collection\OrderedSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Versioning\Signer.cs" />
-    <Compile Include="Versioning\VersionComparer.cs" />
+    <Compile Include="Collection\ReadOnlyList.cs" />
+    <Compile Include="Collection\Sequence.cs" />
+    <Compile Include="String\Str.cs" />
+    <Compile Include="String\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

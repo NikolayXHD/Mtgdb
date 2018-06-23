@@ -37,9 +37,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
     <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
@@ -48,10 +45,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.Analysis.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net.Misc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.Misc.dll</HintPath>
-    </Reference>
     <Reference Include="Lucene.Net.Queries, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.Queries.dll</HintPath>
@@ -59,10 +52,6 @@
     <Reference Include="Lucene.Net.QueryParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.QueryParser.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Sandbox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -92,10 +81,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumerableExtension.cs" />
-    <Compile Include="ExtremumFinder.cs" />
     <Compile Include="Forge\ForgeSetRepository.cs" />
-    <Compile Include="ImageNamePatcher.cs" />
+    <Compile Include="Model\Image\ImageModel.cs" />
+    <Compile Include="Model\Image\ImageNamePatcher.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="Images\BmpFrameDetector.cs" />
     <Compile Include="Index\IndexUtils.cs" />
@@ -126,22 +114,22 @@
     <Compile Include="Index\IntellisenseSuggest.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CardExtensions.cs" />
-    <Compile Include="Model\CollectionModel.cs" />
-    <Compile Include="Model\Deck.cs" />
-    <Compile Include="Model\DeckChangedEventHandler.cs" />
-    <Compile Include="Model\DeckZone.cs" />
-    <Compile Include="Model\InternedStringArrayConverter.cs" />
-    <Compile Include="Model\InternedStringConverter.cs" />
-    <Compile Include="Model\IntToInternedStringConverter.cs" />
-    <Compile Include="Model\LanguageController.cs" />
+    <Compile Include="Model\Ui\CollectionModel.cs" />
+    <Compile Include="Model\Ui\Deck.cs" />
+    <Compile Include="Model\Ui\DeckChangedEventHandler.cs" />
+    <Compile Include="Model\Ui\DeckZone.cs" />
+    <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
+    <Compile Include="Model\Serialization\InternedStringConverter.cs" />
+    <Compile Include="Model\Serialization\IntToInternedStringConverter.cs" />
+    <Compile Include="Model\Ui\LanguageController.cs" />
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />
     <Compile Include="Model\Patch\Patch.cs" />
-    <Compile Include="Model\Zone.cs" />
-    <Compile Include="Price\DownloaderPriceRepository.cs" />
-    <Compile Include="Price\PriceId.cs" />
-    <Compile Include="Price\PriceRepository.cs" />
-    <Compile Include="Price\PriceValues.cs" />
+    <Compile Include="Model\Ui\Zone.cs" />
+    <Compile Include="PriceDownloaderRepository.cs" />
+    <Compile Include="Model\Price\PriceId.cs" />
+    <Compile Include="PriceRepository.cs" />
+    <Compile Include="Model\Price\PriceValues.cs" />
     <Compile Include="KeywordRegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
@@ -154,15 +142,15 @@
     <Compile Include="Model\CardLocalization.cs" />
     <Compile Include="CardRepository.cs" />
     <Compile Include="Images\ImageLoader.cs" />
-    <Compile Include="Model\Card.cs" />
-    <Compile Include="Model\ForeignName.cs" />
-    <Compile Include="Images\ImageFile.cs" />
+    <Compile Include="Model\Mtgjson\Card.cs" />
+    <Compile Include="Model\Mtgjson\ForeignName.cs" />
+    <Compile Include="Model\Image\ImageFile.cs" />
     <Compile Include="Model\GeneratedManaParser.cs" />
-    <Compile Include="Model\ICardCollection.cs" />
-    <Compile Include="Model\LegalityNote.cs" />
-    <Compile Include="Model\Ruling.cs" />
-    <Compile Include="Model\Set.cs" />
-    <Compile Include="Model\UiModel.cs" />
+    <Compile Include="Model\Ui\ICardCollection.cs" />
+    <Compile Include="Model\Mtgjson\LegalityNote.cs" />
+    <Compile Include="Model\Mtgjson\Ruling.cs" />
+    <Compile Include="Model\Mtgjson\Set.cs" />
+    <Compile Include="Model\Ui\UiModel.cs" />
     <Compile Include="[ infrastructure ]\DalModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translations\LocalizationRepository.cs" />
@@ -184,13 +172,21 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Bitmap\Mtgdb.Bitmaps.csproj">
+    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
       <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
-      <Name>Mtgdb.Bitmaps</Name>
+      <Name>Mtgdb.Core.Bitmaps</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.Core.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
@@ -202,7 +198,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

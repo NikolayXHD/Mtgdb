@@ -61,7 +61,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ButtonSubsystem\Popup.cs" />
-    <Compile Include="Cjk.cs" />
     <Compile Include="Contract\CustomDrawArgs.cs" />
     <Compile Include="Contract\FieldSortInfo.cs" />
     <Compile Include="Contract\HitInfo.cs" />
@@ -190,17 +189,20 @@
     <Content Include="Resources\selectable_transp_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Bitmap\Mtgdb.Bitmaps.csproj">
+    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
       <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
-      <Name>Mtgdb.Bitmaps</Name>
+      <Name>Mtgdb.Core.Bitmaps</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
-      <Name>Mtgdb.Core</Name>
+    <ProjectReference Include="..\Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.Core.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

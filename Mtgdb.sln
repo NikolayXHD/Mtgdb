@@ -45,19 +45,19 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "tools", "tools\tools.shproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleUtil", "Test\ScaleUtil\ScaleUtil.csproj", "{75A32A3C-3D56-412A-BA31-ABD33ABDD054}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Bitmaps", "Mtgdb.Bitmap\Mtgdb.Bitmaps.csproj", "{24C593F8-E50B-4765-AEA9-B152C68EBDBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Bitmaps", "Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj", "{24C593F8-E50B-4765-AEA9-B152C68EBDBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Utils", "Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj", "{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Localization", "Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj", "{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		shared\shared.projitems*{3229ca82-875d-4154-92b7-2f7c47678010}*SharedItemsImports = 4
 		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13
-		shared\shared.projitems*{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}*SharedItemsImports = 4
-		shared\shared.projitems*{4fe226ac-ec61-451f-a602-c79da136ce25}*SharedItemsImports = 4
 		shared\shared.projitems*{56661dad-10a7-41ef-8672-f417f15923cb}*SharedItemsImports = 4
 		shared\shared.projitems*{97545c6d-acd6-4a2c-84dd-cd91293cfbb6}*SharedItemsImports = 4
 		tools\tools.projitems*{b1c7f4d9-46ba-4d18-92a0-2e8214973929}*SharedItemsImports = 13
 		shared\shared.projitems*{c2763956-008b-4e6b-8ac7-b634d8741c3b}*SharedItemsImports = 13
-		shared\shared.projitems*{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +112,14 @@ Global
 		{24C593F8-E50B-4765-AEA9-B152C68EBDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24C593F8-E50B-4765-AEA9-B152C68EBDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24C593F8-E50B-4765-AEA9-B152C68EBDBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,10 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -72,9 +68,9 @@
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
-      <Name>Mtgdb.Core</Name>
+    <ProjectReference Include="..\..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>

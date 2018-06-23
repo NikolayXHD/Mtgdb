@@ -2,7 +2,6 @@ using System.Diagnostics;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Downloader;
-using Mtgdb.Gui;
 using Ninject;
 using NLog;
 using NUnit.Framework;

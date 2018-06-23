@@ -55,6 +55,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
       <Name>Mtgdb.Core</Name>

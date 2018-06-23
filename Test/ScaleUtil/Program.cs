@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using Mtgdb.Bitmaps;
+using Mtgdb;
 
 namespace ScaleUtil
 {
