@@ -158,12 +158,12 @@ namespace Mtgdb.Gui
 			bool enabled = _cardRepo.IsLoadingComplete;
 
 			_buttonSampleHandNew.Visible = isSampleHand;
-			_buttonSampleHandDraw.Visible = isSampleHand;
 			_buttonSampleHandMulligan.Visible = isSampleHand;
+			_buttonSampleHandDraw.Visible = isSampleHand;
 
 			_buttonSampleHandNew.Enabled = enabled;
-			_buttonSampleHandDraw.Enabled = enabled;
 			_buttonSampleHandMulligan.Enabled = enabled;
+			_buttonSampleHandDraw.Enabled = enabled;
 		}
 
 		private void updateShowProhibited()
@@ -378,14 +378,17 @@ namespace Mtgdb.Gui
 
 		private void updateFormStatus()
 		{
+			_panelStatus.SuspendLayout();
+
 			_labelStatusSets.Text = _cardRepo.SetsByCode.Count.ToString();
 			_labelStatusScrollCards.Text = $"{_viewCards.VisibleRecordIndex}/{_searchResultCards.Count}";
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
-				{ 0, new TabSettings($"main deck: {_deckModel.MainDeckSize}/60") },
-				{ 1, new TabSettings($"sideboard: {_deckModel.SideDeckSize}/15") },
-				{ 2, new TabSettings($"sample hand: {_deckModel.SampleHandSize}") }
+				{ (int) Zone.Main, new TabSettings($"main deck: {_deckModel.MainDeckSize}/60") },
+				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckModel.SideDeckSize}/15") },
+				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckModel.SampleHandSize}") },
+				{ DeckListTabIndex, new TabSettings("deck list") }
 			});
 
 			_labelStatusScrollDeck.Text = $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}";
@@ -403,6 +406,9 @@ namespace Mtgdb.Gui
 			_labelStatusSort.Text = getStatusSort();
 
 			setTitle(_historySubsystem.DeckName);
+
+			_panelStatus.ResumeLayout(false);
+			_panelStatus.PerformLayout();
 		}
 
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)

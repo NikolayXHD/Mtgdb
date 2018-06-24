@@ -158,6 +158,7 @@ namespace Mtgdb.Gui
 			updateExcludeManaCost();
 			updateShowProhibited();
 			updateShowSampleHandButtons();
+			updateDeckListVisibility();
 			subscribeToEvents();
 		}
 
@@ -172,9 +173,11 @@ namespace Mtgdb.Gui
 			_menuLegalityFormat.ScaleDpi();
 
 			_buttonShowDuplicates.ScaleDpi();
+			
 			_buttonSampleHandNew.ScaleDpi();
-			_buttonSampleHandDraw.ScaleDpi();
 			_buttonSampleHandMulligan.ScaleDpi();
+			_buttonSampleHandDraw.ScaleDpi();
+			
 			_buttonHideDeck.ScaleDpi();
 			_buttonHideScroll.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
@@ -216,7 +219,7 @@ namespace Mtgdb.Gui
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
-			_layoutViewDeck.Height = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
+			_panelDeck.Height = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
 
 			scalePanelIcon(_panelIconSearch);
 			scalePanelIcon(_panelIconLegality);
@@ -449,7 +452,16 @@ namespace Mtgdb.Gui
 
 		private Zone DeckZone
 		{
-			get => (Zone) _tabHeadersDeck.SelectedIndex;
+			get
+			{
+				int zoneIndex = _tabHeadersDeck.SelectedIndex;
+
+				if (zoneIndex > MaxZoneIndex)
+					return default(Zone);
+
+				return (Zone) zoneIndex;
+			}
+
 			set => _tabHeadersDeck.SelectedIndex = (int) value;
 		}
 
@@ -509,5 +521,8 @@ namespace Mtgdb.Gui
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
 		private readonly RichTextBoxSelectionSubsystem _searchEditorSelectionSubsystem;
+
+		private const int MaxZoneIndex = (int) Zone.SampleHand;
+		private const int DeckListTabIndex = MaxZoneIndex + 1;
 	}
 }

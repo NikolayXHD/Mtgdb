@@ -199,7 +199,7 @@ namespace Mtgdb.Gui
 
 			SuspendLayout();
 
-			_viewDeck.Control.Visible = !_buttonHideDeck.Checked;
+			_panelDeck.Visible = !_buttonHideDeck.Checked;
 
 			ResumeLayout(false);
 			PerformLayout();
@@ -325,14 +325,39 @@ namespace Mtgdb.Gui
 
 		private void deckZoneChanged(TabHeaderControl sender, int selected)
 		{
-			beginRestoreSettings();
+			updateDeckListVisibility();
 
-			_deckModel.SetZone(DeckZone, _cardRepo);
+			if (_deckModel.Zone != DeckZone)
+			{
+				beginRestoreSettings();
+				_deckModel.SetZone(DeckZone, _cardRepo);
+				endRestoreSettings();
 
-			endRestoreSettings();
+				updateFormStatus();
+				updateShowSampleHandButtons();
+			}
+		}
 
-			updateFormStatus();
-			updateShowSampleHandButtons();
+		private void updateDeckListVisibility()
+		{
+			bool showDeckList = _tabHeadersDeck.SelectedIndex == DeckListTabIndex;
+
+			float deckListHeight = showDeckList ? 100 : 0;
+			float deckHeight = 100 - deckListHeight;
+
+			_panelDeck.SuspendLayout();
+
+			int deckListIndex = _panelDeck.GetRow(_deckListControl);
+			int deckIndex = _panelDeck.GetRow(_layoutViewDeck);
+
+			_panelDeck.RowStyles[deckListIndex].SizeType = SizeType.Percent;
+			_panelDeck.RowStyles[deckListIndex].Height = deckListHeight;
+
+			_panelDeck.RowStyles[deckIndex].SizeType = SizeType.Percent;
+			_panelDeck.RowStyles[deckIndex].Height = deckHeight;
+			
+			_panelDeck.ResumeLayout(false);
+			_panelDeck.PerformLayout();
 		}
 
 
@@ -437,7 +462,7 @@ namespace Mtgdb.Gui
 
 			var hoveredIndex = _tabHeadersDeck.HoveredIndex;
 
-			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= _tabHeadersDeck.Count)
+			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex > MaxZoneIndex)
 				return;
 
 			_tabHeadersDeck.SelectedIndex = hoveredIndex;
@@ -449,7 +474,7 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.GetTabIndex(location, out int hoveredIndex, out _);
 
-			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= _tabHeadersDeck.Count)
+			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= MaxZoneIndex)
 				return;
 
 			_tabHeadersDeck.SelectedIndex = hoveredIndex;

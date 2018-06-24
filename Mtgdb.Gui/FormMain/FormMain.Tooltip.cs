@@ -7,10 +7,10 @@
 			var controller = formRoot.TooltipController;
 
 			controller.SetTooltip(this,
-				"Deck areas",
-				"Use right/middle mouse click to add/remove card.\r\n" +
-				"Use Ctrl+Click or Ctrl+drag-n-drop to change quantity by 4.\r\n" +
-				"Drag the card here to change deck area before dropping card.",
+				"Deck zones",
+				"Drag the card here to change deck area before dropping it.\r\n" +
+				"Right/middle mouse click a card to add/remove it.\r\n" +
+				"Ctrl+Click or Ctrl+drag-n-drop a card to change its quantity by 4.",
 				_tabHeadersDeck);
 
 			controller.SetTooltip(this,
