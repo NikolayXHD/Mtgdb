@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 			_cardRepository = cardRepository;
 		}
 
-		public void ShowPrintingDialog(DeckModel deckModel, string fileName)
+		public void ShowPrintingDialog(DeckEditorModel deckEditorModel, string fileName)
 		{
 			var dlg = new SaveFileDialog
 			{
@@ -45,10 +45,10 @@ namespace Mtgdb.Gui
 			};
 
 			if (dlg.ShowDialog() == DialogResult.OK)
-				ThreadPool.QueueUserWorkItem(_ => { print(deckModel, dlg.FileName); });
+				ThreadPool.QueueUserWorkItem(_ => { print(deckEditorModel, dlg.FileName); });
 		}
 
-		private void print(DeckModel deckModel, string fileName)
+		private void print(DeckEditorModel deckEditorModel, string fileName)
 		{
 			var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
 			var dir = Path.GetDirectoryName(fileName);
@@ -63,7 +63,7 @@ namespace Mtgdb.Gui
 			int pageNum = 0;
 			bool pageSaved = true;
 
-			var decks = new[] { deckModel.MainDeck, deckModel.SideDeck };
+			var decks = new[] { deckEditorModel.MainDeck, deckEditorModel.SideDeck };
 
 			foreach (var deck in decks)
 				foreach (string cardsId in deck.CardsIds)

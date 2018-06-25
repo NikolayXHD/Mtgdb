@@ -128,6 +128,10 @@
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
+      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
+      <Name>Mtgdb.Core.Index</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Core.Utils</Name>

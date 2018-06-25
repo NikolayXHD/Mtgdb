@@ -65,6 +65,8 @@ namespace Mtgdb.Gui
 		public Direction? WindowSnapDirection { get; set; }
 		public Rectangle? WindowArea { get; set; }
 
+		public FilterByDeckMode? FilterByDeckMode { get; set; }
+
 		[JsonIgnore]
 		public Deck Deck
 		{

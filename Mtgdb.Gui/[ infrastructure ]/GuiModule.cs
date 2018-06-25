@@ -1,5 +1,4 @@
 using Mtgdb.Controls;
-using Mtgdb.Dal;
 using Ninject.Modules;
 
 namespace Mtgdb.Gui
@@ -20,8 +19,19 @@ namespace Mtgdb.Gui
 
 			Kernel.BindFunc<FormMain>();
 
-			Kernel.Bind<SuggestModel>()
+			Kernel.Bind<CardSuggestModel>()
 				.ToSelf();
+
+			Kernel.Bind<DeckSearcher>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<DeckSuggestModel>()
+				.ToSelf();
+
+			Kernel.Bind<DeckDocumentAdapter>()
+				.ToSelf()
+				.InSingletonScope();
 
 			Kernel.Bind<FormRoot>()
 				.ToSelf();
@@ -40,6 +50,10 @@ namespace Mtgdb.Gui
 				.InSingletonScope();
 
 			Kernel.Bind<FormManager>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<DeckListModel>()
 				.ToSelf()
 				.InSingletonScope();
 		}

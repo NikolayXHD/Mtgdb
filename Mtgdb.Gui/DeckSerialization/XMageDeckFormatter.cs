@@ -74,7 +74,7 @@ namespace Mtgdb.Gui
 			result.AppendLine(Header + name);
 
 			writeCards(result, current.MainDeck, string.Empty);
-			writeCards(result, current.SideDeck, @"SB: ");
+			writeCards(result, current.Sideboard, @"SB: ");
 
 			return result.ToString();
 		}

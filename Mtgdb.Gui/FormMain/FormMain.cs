@@ -18,9 +18,10 @@ namespace Mtgdb.Gui
 
 			if (_formRoot != null)
 			{
-				_searchSubsystem.UnsubscribeSuggestModelEvents();
-				_searchSubsystem.TextApplied -= searchStringApplied;
-				_searchSubsystem.TextChanged -= searchStringChanged;
+				_cardSearchSubsystem.UnsubscribeSuggestModelEvents();
+
+				_cardSearchSubsystem.TextApplied -= cardSearchStringApplied;
+				_cardSearchSubsystem.TextChanged -= cardSearchStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
 				_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
@@ -31,7 +32,7 @@ namespace Mtgdb.Gui
 
 			if (formRoot != null)
 			{
-				_searchSubsystem.Ui =
+				_cardSearchSubsystem.Ui =
 					_deckEditingSubsystem.Ui =
 						_imagePreloadingSubsystem.Ui =
 							_printingSubsystem.Ui =
@@ -39,16 +40,21 @@ namespace Mtgdb.Gui
 									_drawingSubsystem.Ui =
 										_fields.Ui = _formRoot.UiModel;
 
-				_searchSubsystem.SuggestModel = _formRoot.SuggestModel;
+				_cardSearchSubsystem.SuggestModel = _formRoot.CardSuggestModel;
 
-				_searchSubsystem.SubscribeSuggestModelEvents();
+				_deckListControl.SetUi(_formRoot.UiModel, _formRoot.TooltipController, _formRoot.DeckSuggestModel);
 
-				_searchSubsystem.TextApplied += searchStringApplied;
-				_searchSubsystem.TextChanged += searchStringChanged;
+				_cardSearchSubsystem.SubscribeSuggestModelEvents();
+
+				_cardSearchSubsystem.TextApplied += cardSearchStringApplied;
+				_cardSearchSubsystem.TextChanged += cardSearchStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
 				_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
-				setupTooltips(_formRoot);
+				
+				setupTooltips();
+
+				_formRoot.TooltipController.SubscribeToEvents();
 
 				// calls probeCardCreating handler
 				resetLayouts();
@@ -56,10 +62,20 @@ namespace Mtgdb.Gui
 		}
 
 		private bool evalFilterBySearchText(Card c) =>
-			_searchSubsystem.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
+			_cardSearchSubsystem.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
 
-		private bool evalFilterByDeck(Card c) =>
-			c.DeckCount(_formRoot.UiModel) > 0;
+		private bool evalFilterByDeck(Card c)
+		{
+			switch (_deckListControl.FilterByDeckMode)
+			{
+				case FilterByDeckMode.CurrentDeck:
+					return c.DeckCount(_formRoot.UiModel) > 0;
+				case FilterByDeckMode.FilteredSavedDecks:
+					return _deckListControl.AnyFilteredDeckContains(c);
+				default:
+					throw new NotSupportedException();
+			}
+		}
 
 		private bool evalFilterByCollection(Card c) =>
 			c.CollectionCount(_formRoot.UiModel) > 0;
@@ -86,9 +102,9 @@ namespace Mtgdb.Gui
 			lock (_searchResultCards)
 				updateIsSearchResult();
 
-			_formRoot.UiModel.Deck = _deckModel;
+			_formRoot.UiModel.Deck = _deckEditorModel;
 
-			_searchSubsystem.UpdateSuggestInput();
+			_cardSearchSubsystem.UpdateSuggestInput();
 
 			bool isFirstTime = !_formRoot.LoadedGuiSettings;
 
@@ -154,7 +170,7 @@ namespace Mtgdb.Gui
 
 		private void updateShowSampleHandButtons()
 		{
-			bool isSampleHand = _deckModel.Zone == Zone.SampleHand;
+			bool isSampleHand = _deckEditorModel.Zone == Zone.SampleHand;
 			bool enabled = _cardRepo.IsLoadingComplete;
 
 			_buttonSampleHandNew.Visible = isSampleHand;
@@ -229,7 +245,7 @@ namespace Mtgdb.Gui
 
 		private void resetTouchedCard()
 		{
-			_deckModel.TouchedCard = null;
+			_deckEditorModel.TouchedCard = null;
 		}
 
 		public void RunRefilterTask(Action onFinished = null)
@@ -239,7 +255,7 @@ namespace Mtgdb.Gui
 
 		private void refilter(Action onFinished)
 		{
-			var touchedCard = _deckModel.TouchedCard;
+			var touchedCard = _deckEditorModel.TouchedCard;
 			bool showDuplicates = _buttonShowDuplicates.Checked;
 			var filterManagerStates = FilterManager.States;
 
@@ -385,13 +401,17 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
-				{ (int) Zone.Main, new TabSettings($"main deck: {_deckModel.MainDeckSize}/60") },
-				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckModel.SideDeckSize}/15") },
-				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckModel.SampleHandSize}") },
-				{ DeckListTabIndex, new TabSettings("deck list") }
+				{ (int) Zone.Main, new TabSettings($"main deck: {_deckEditorModel.MainDeckSize}/60") },
+				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckEditorModel.SideDeckSize}/15") },
+				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckEditorModel.SampleHandSize}") },
+				{ DeckListTabIndex, new TabSettings($"deck list: {_deckListControl.FilteredDecksCount}") }
 			});
 
-			_labelStatusScrollDeck.Text = $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}";
+			if (IsDeckListSelected)
+				_labelStatusScrollDeck.Text = $"{_deckListControl.ScrollPosition}/{_deckListControl.MaxScroll}";
+			else
+				_labelStatusScrollDeck.Text = $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}";
+
 			_labelStatusCollection.Text = _collectionModel.CollectionSize.ToString();
 
 			var filterManagerStates = FilterManager.States;
@@ -431,9 +451,20 @@ namespace Mtgdb.Gui
 			return status;
 		}
 
-		private static string getStatusDeckOnly(FilterValueState[] filterManagerStates)
+		private string getStatusDeckOnly(FilterValueState[] filterManagerStates)
 		{
-			var status = getFilterStatusText(filterManagerStates, FilterGroup.Deck, true, "empty");
+			var status = getFilterStatusText(filterManagerStates, FilterGroup.Deck, true, null);
+
+			switch (_deckListControl.FilterByDeckMode)
+			{
+				case FilterByDeckMode.CurrentDeck:
+					status += ", current deck";
+					break;
+				case FilterByDeckMode.FilteredSavedDecks:
+					status += ", filtered saved decks";
+					break;
+			}
+
 			return status;
 		}
 
@@ -450,23 +481,23 @@ namespace Mtgdb.Gui
 
 			string noInputText;
 
-			if (!_luceneSearcher.IsLoading && !_luceneSearcher.IsLoaded && !_luceneSearcher.Spellchecker.IsLoading && !_luceneSearcher.Spellchecker.IsLoaded)
+			if (!_cardSearcher.IsLoading && !_cardSearcher.IsLoaded && !_cardSearcher.Spellchecker.IsLoading && !_cardSearcher.Spellchecker.IsLoaded)
 				noInputText = "pending index load…";
-			else if (_luceneSearcher.IsLoading)
+			else if (_cardSearcher.IsLoading)
 			{
 				if (_luceneSearchIndexUpToDate)
 					noInputText = "loading search index…";
 				else
-					noInputText = $"indexing search {_luceneSearcher.SetsAddedToIndex} / {_cardRepo.SetsByCode.Count} sets…";
+					noInputText = $"indexing search {_cardSearcher.SetsAddedToIndex} / {_cardRepo.SetsByCode.Count} sets…";
 			}
-			else if (_luceneSearcher.Spellchecker.IsLoading)
+			else if (_cardSearcher.Spellchecker.IsLoading)
 			{
 				if (_spellcheckerIndexUpToDate)
 					noInputText = "loading intellisense…";
 				else
-					noInputText = $"indexing intellisense {_luceneSearcher.Spellchecker.IndexedFields} / {_luceneSearcher.Spellchecker.TotalFields} fields…";
+					noInputText = $"indexing intellisense {_cardSearcher.Spellchecker.IndexedFields} / {_cardSearcher.Spellchecker.TotalFields} fields…";
 			}
-			else if (_searchSubsystem.SearchResult?.ParseErrorMessage != null)
+			else if (_cardSearchSubsystem.SearchResult?.ParseErrorMessage != null)
 				noInputText = "syntax error";
 			else
 				noInputText = "empty";
@@ -483,15 +514,15 @@ namespace Mtgdb.Gui
 		private bool isSearchStringApplied()
 		{
 			return
-				_searchSubsystem.SearchResult?.RelevanceById != null &&
-				_luceneSearcher.Spellchecker.IsLoaded;
+				_cardSearchSubsystem.SearchResult?.RelevanceById != null &&
+				_cardSearcher.Spellchecker.IsLoaded;
 		}
 
 		private string getStatusSort()
 		{
 			var infos = _sortSubsystem.SortInfo?.ToList() ?? new List<FieldSortInfo>();
 			
-			if (_searchSubsystem.SearchResult?.RelevanceById != null)
+			if (_cardSearchSubsystem.SearchResult?.RelevanceById != null)
 				infos.Add(new FieldSortInfo("Relevance", SortOrder.Descending));
 
 			if (infos.Count == 0)
@@ -543,10 +574,8 @@ namespace Mtgdb.Gui
 		}
 
 
-		private bool isSearchStringModified()
-		{
-			return _historySubsystem != null && _searchEditor.Text != (_historySubsystem.Current.Find ?? string.Empty);
-		}
+		private bool isSearchStringModified() => 
+			_searchEditor.Text != (_historySubsystem?.Current?.Find ?? string.Empty);
 
 		private static string getFilterStatusText(
 			FilterValueState[] filterManagerStates,
@@ -636,7 +665,7 @@ namespace Mtgdb.Gui
 
 			var settings = new GuiSettings
 			{
-				Find = _searchSubsystem.AppliedText,
+				Find = _cardSearchSubsystem.AppliedText,
 				FilterAbility = FilterAbility.States,
 				FilterCastKeyword = FilterCastKeyword.States,
 				FilterMana = FilterManaCost.States,
@@ -648,10 +677,10 @@ namespace Mtgdb.Gui
 				FilterLayout = FilterLayout.States,
 				FilterGrid = FilterManager.States,
 				Language = _formRoot.UiModel.LanguageController.Language,
-				MainDeckCount = _deckModel.MainDeck.CountById.ToDictionary(),
-				MainDeckOrder = _deckModel.MainDeck.CardsIds.ToList(),
-				SideDeckCount = _deckModel.SideDeck.CountById.ToDictionary(),
-				SideDeckOrder = _deckModel.SideDeck.CardsIds.ToList(),
+				MainDeckCount = _deckEditorModel.MainDeck.CountById.ToDictionary(),
+				MainDeckOrder = _deckEditorModel.MainDeck.CardsIds.ToList(),
+				SideDeckCount = _deckEditorModel.SideDeck.CountById.ToDictionary(),
+				SideDeckOrder = _deckEditorModel.SideDeck.CardsIds.ToList(),
 				Collection = _collectionModel.CountById.ToDictionary(),
 				ShowDuplicates = _buttonShowDuplicates.Checked,
 				HideTooltips = !_formRoot.TooltipController.Active,
@@ -670,7 +699,8 @@ namespace Mtgdb.Gui
 				ShowScroll = !_buttonHideScroll.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
-				ShowFilterPanels = _formRoot.ShowFilterPanels
+				ShowFilterPanels = _formRoot.ShowFilterPanels,
+				FilterByDeckMode = _deckListControl.FilterByDeckMode
 			};
 
 			historyUpdateFormPosition(settings);
@@ -713,13 +743,15 @@ namespace Mtgdb.Gui
 			if (settings.FilterGrid == null || settings.FilterGrid.Length == FilterManager.PropertiesCount)
 				FilterManager.States = settings.FilterGrid;
 
+			updateFilterByDeckMode();
+
 			updateTerms();
 
-			_searchSubsystem.AppliedText = settings.Find ?? string.Empty;
+			_cardSearchSubsystem.AppliedText = settings.Find ?? string.Empty;
 
 			_formRoot.UiModel.LanguageController.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
-			_searchSubsystem.Apply();
+			_cardSearchSubsystem.Apply();
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
 			_formRoot.HideTooltips = settings.HideTooltips;
@@ -746,9 +778,13 @@ namespace Mtgdb.Gui
 			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
 			_buttonHideText.Checked = settings.ShowTextualFields == false;
 			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
-			
 
 			applyShowFilterPanels();
+
+			_deckListControl.FilterByDeckMode = settings.FilterByDeckMode ??
+			(isFilterGroupEnabled(FilterGroup.Deck)
+				? FilterByDeckMode.CurrentDeck
+				: FilterByDeckMode.Ignored);
 
 			endRestoreSettings();
 
@@ -831,7 +867,8 @@ namespace Mtgdb.Gui
 			}
 
 			_imagePreloadingSubsystem.StartThread();
-			_searchSubsystem.StartThread();
+			_cardSearchSubsystem.StartThread();
+			_deckListControl.SearchSubsystem.StartThread();
 		}
 
 		private void stopThreads()
@@ -845,16 +882,22 @@ namespace Mtgdb.Gui
 			}
 
 			_imagePreloadingSubsystem.AbortThread();
-			_searchSubsystem.AbortThread();
+			_cardSearchSubsystem.AbortThread();
+			_deckListControl.SearchSubsystem.AbortThread();
 		}
 
 
 		public void ButtonClearDeck()
 		{
-			_historySubsystem.DeckFile = null;
-			_historySubsystem.DeckName = null;
 			resetTouchedCard();
-			_deckModel.Clear();
+
+			if (_deckEditorModel.Zone == Zone.Main)
+			{
+				_historySubsystem.DeckFile = null;
+				_historySubsystem.DeckName = null;
+			}
+
+			_deckEditorModel.Clear();
 		}
 
 		public void ButtonSaveDeck()
@@ -947,7 +990,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonUndo()
 		{
-			_searchSubsystem.ApplyDirtyText();
+			_cardSearchSubsystem.ApplyDirtyText();
 			historyUndo();
 		}
 
@@ -958,10 +1001,10 @@ namespace Mtgdb.Gui
 		public void ButtonPrint()
 		{
 			if (_cardRepo.IsLoadingComplete)
-				_printingSubsystem.ShowPrintingDialog(_deckModel, _historySubsystem.DeckName);
+				_printingSubsystem.ShowPrintingDialog(_deckEditorModel, _historySubsystem.DeckName);
 		}
 
-		public void FocusSearch() => _searchSubsystem.FocusSearch();
+		public void FocusSearch() => _cardSearchSubsystem.FocusSearch();
 
 		public void ShowFindExamples() => _panelSearchExamples.ShowFindExamples();
 
@@ -980,11 +1023,11 @@ namespace Mtgdb.Gui
 
 		public bool IsDraggingCard => _draggingSubsystem.IsDragging();
 
-		public Card DraggedCard => _deckModel.DraggedCard;
+		public Card DraggedCard => _deckEditorModel.DraggedCard;
 
 		public void StopDragging() => _draggingSubsystem.DragAbort();
 
-		public bool IsSearchResultFocused() => !_searchSubsystem.IsSearchFocused();
+		public bool IsSearchResultFocused() => !_cardSearchSubsystem.IsSearchFocused();
 
 		private void beginRestoreSettings()
 		{

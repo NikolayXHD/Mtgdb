@@ -96,12 +96,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeckList\DeckListControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DeckList\DeckListControl.Designer.cs">
-      <DependentUpon>DeckListControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
     <Compile Include="DeckSerialization\DeckFile.cs" />
     <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
@@ -124,7 +118,7 @@
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
     <Compile Include="FormMain\DeckEditingSubsystem.cs" />
-    <Compile Include="FormMain\DeckModel.cs" />
+    <Compile Include="FormMain\DeckEditorModel.cs" />
     <Compile Include="FormMain\DrawingSubsystem.cs" />
     <Compile Include="FormMain\Evaluators.cs" />
     <Compile Include="FormMain\FilterGroup.cs" />
@@ -154,7 +148,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SearchString\KnutMorrisPrattSubstringSearch.cs" />
+    <Compile Include="FormMain\KnutMorrisPrattSubstringSearch.cs" />
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,9 +172,8 @@
     <Compile Include="FormMain\PrintingSubsystem.cs" />
     <Compile Include="QuickFilter\QuickFilterImages.cs" />
     <Compile Include="FormMain\ScrollSubsystem.cs" />
-    <Compile Include="SearchString\SearchStringSubsystem.cs" />
+    <Compile Include="SearchString\CardSearchSubsystem.cs" />
     <Compile Include="FormMain\SortSubsystem.cs" />
-    <Compile Include="SearchString\SearchStringHighlighter.cs" />
     <Compile Include="FormMain\HistorySubsystem.cs" />
     <Compile Include="FormMain\HistoryState.cs" />
     <Compile Include="FormRoot\DownloaderSubsystem.cs" />
@@ -208,7 +201,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="[ infrastructure ]\GuiModule.cs" />
-    <Compile Include="FormMain\SuggestModel.cs" />
+    <Compile Include="FormMain\CardSuggestModel.cs" />
     <Compile Include="Resx\ResourcesAbilities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -314,9 +307,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj">
+      <Project>{6fac0808-416a-4605-a1e7-042f7a270bb3}</Project>
+      <Name>Mtgdb.Controls.DeckList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
+      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
+      <Name>Mtgdb.Core.Index</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj">
       <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
@@ -349,7 +350,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\05.png" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\100.png" />
     <None Include="Resources\1000000.png" />
     <Content Include="Resources\7+.png" />

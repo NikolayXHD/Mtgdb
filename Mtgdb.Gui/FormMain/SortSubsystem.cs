@@ -17,10 +17,10 @@ namespace Mtgdb.Gui
 			nameof(Card.Type)
 		};
 
-		public SortSubsystem(MtgLayoutView layoutViewCards, CardRepository repository, Fields fields, SearchStringSubsystem searchStringSubsystem)
+		public SortSubsystem(MtgLayoutView layoutViewCards, CardRepository repository, Fields fields, CardSearchSubsystem cardSearchSubsystem)
 		{
 			_fields = fields;
-			_searchStringSubsystem = searchStringSubsystem;
+			_cardSearchSubsystem = cardSearchSubsystem;
 			_layoutViewCards = layoutViewCards;
 			_repository = repository;
 
@@ -65,7 +65,7 @@ namespace Mtgdb.Gui
 
 		private List<Card> sort(IEnumerable<Card> cards, IList<FieldSortInfo> sortInfo)
 		{
-			var relevanceById = _searchStringSubsystem?.SearchResult?.RelevanceById;
+			var relevanceById = _cardSearchSubsystem?.SearchResult?.RelevanceById;
 
 			float getRelevance(Card c) => 
 				relevanceById?.TryGet(c.IndexInFile, int.MaxValue) ?? 0f;
@@ -173,6 +173,6 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly CardRepository _repository;
 		private readonly Fields _fields;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
+		private readonly CardSearchSubsystem _cardSearchSubsystem;
 	}
 }

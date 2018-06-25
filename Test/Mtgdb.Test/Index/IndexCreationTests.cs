@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
+using Mtgdb.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -13,13 +14,13 @@ namespace Mtgdb.Test
 		{
 			LoadTranslations();
 
-			_luceneSearcher = new LuceneSearcher(Repo);
+			_cardSearcher = new CardSearcher(Repo, new CardDocumentAdapter());
 			_keywordSearcher = new KeywordSearcher(Repo);
 
 			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
 
-			_luceneSearcher.Spellchecker.FilterSet =
-				_luceneSearcher.FilterSet =
+			_cardSearcher.Spellchecker.FilterSet =
+				_cardSearcher.FilterSet =
 					_keywordSearcher.FilterSet = filterSet;
 		}
 
@@ -39,33 +40,33 @@ namespace Mtgdb.Test
 		[Test, Order(0)]
 		public void LuceneSearcher_creates_index()
 		{
-			_luceneSearcher.IndexDirectoryParent += "-test";
-			_luceneSearcher.InvalidateIndex();
+			_cardSearcher.IndexDirectoryParent += "-test";
+			_cardSearcher.InvalidateIndex();
 
-			Assert.That(_luceneSearcher.IsUpToDate, Is.Not.True);
+			Assert.That(_cardSearcher.IsUpToDate, Is.Not.True);
 
-			_luceneSearcher.LoadIndex();
+			_cardSearcher.LoadIndex();
 
-			Assert.That(_luceneSearcher.IsUpToDate);
+			Assert.That(_cardSearcher.IsUpToDate);
 		}
 
 		[Test, Order(1)]
 		public void LuceneSpellchecker_creates_index()
 		{
-			_luceneSearcher.Spellchecker.IndexDirectoryParent += "-test";
-			_luceneSearcher.Spellchecker.InvalidateIndex();
+			_cardSearcher.Spellchecker.IndexDirectoryParent += "-test";
+			_cardSearcher.Spellchecker.InvalidateIndex();
 
-			Assert.That(_luceneSearcher.Spellchecker.IsUpToDate, Is.Not.True);
+			Assert.That(_cardSearcher.Spellchecker.IsUpToDate, Is.Not.True);
 
-			_luceneSearcher.LoadSpellcheckerIndex();
+			_cardSearcher.LoadSpellcheckerIndex();
 
-			Assert.That(_luceneSearcher.Spellchecker.IsUpToDate);
+			Assert.That(_cardSearcher.Spellchecker.IsUpToDate);
 		}
 
 		[Test, Order(1)]
 		public void LuceneSearcher_searches()
 		{
-			var cards = _luceneSearcher.SearchCards("nameen:vampire", "en")
+			var cards = _cardSearcher.SearchCards("nameen:vampire", "en")
 				.ToArray();
 
 			Assert.That(cards, Is.Not.Null.And.Not.Empty);
@@ -102,13 +103,13 @@ namespace Mtgdb.Test
 		{
 			string query = "nameen:vampire";
 
-			var suggest = _luceneSearcher.Spellchecker.Suggest("en", new TextInputState(query, query.Length, selectionLength: 0)).Values;
+			var suggest = _cardSearcher.Spellchecker.Suggest("en", new TextInputState(query, query.Length, selectionLength: 0)).Values;
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
 			Assert.That(suggest, Has.Some.Contains("vampire").IgnoreCase);
 		}
 
-		private LuceneSearcher _luceneSearcher;
+		private CardSearcher _cardSearcher;
 		private KeywordSearcher _keywordSearcher;
 	}
 }

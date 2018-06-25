@@ -191,6 +191,8 @@ namespace Mtgdb
 
 		public static IEnumerable<T> Append<T>(this IEnumerable<T> sequence, T value) => sequence.Concat(Sequence.From(value));
 
+		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> sequence, T value) => Sequence.From(value).Concat(sequence);
+
 		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence) => 
 			new HashSet<T>(sequence);
 

@@ -11,11 +11,11 @@ namespace Mtgdb.Gui
 		public event Action<TooltipModel> Show;
 		public event Action Hide;
 
-		public LayoutViewTooltip(object owner, MtgLayoutView layoutView, SearchStringSubsystem searchStringSubsystem)
+		public LayoutViewTooltip(object owner, MtgLayoutView layoutView, CardSearchSubsystem cardSearchSubsystem)
 		{
 			Owner = owner;
 			_layoutView = layoutView;
-			_searchStringSubsystem = searchStringSubsystem;
+			_cardSearchSubsystem = cardSearchSubsystem;
 		}
 
 		public void SubscribeToEvents()
@@ -94,7 +94,7 @@ namespace Mtgdb.Gui
 				{
 					string text;
 					string title;
-					string query = _searchStringSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+					string query = _cardSearchSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
 
 					if (hitInfo.FieldName == nameof(Card.Image))
 					{
@@ -178,7 +178,7 @@ namespace Mtgdb.Gui
 		}
 
 		private readonly MtgLayoutView _layoutView;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
+		private readonly CardSearchSubsystem _cardSearchSubsystem;
 
 		public object Owner { get; }
 	}

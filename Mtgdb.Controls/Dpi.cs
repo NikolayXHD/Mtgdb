@@ -25,7 +25,17 @@ namespace Mtgdb.Controls
 			return (int)(height * _scale.Height);
 		}
 
+		public static float ByDpiHeight(this float height)
+		{
+			return (int)(height * _scale.Height);
+		}
+
 		public static Size ByDpi(this Size original)
+		{
+			return original.MultiplyBy(_scale).Round();
+		}
+
+		public static Point ByDpi(this Point original)
 		{
 			return original.MultiplyBy(_scale).Round();
 		}

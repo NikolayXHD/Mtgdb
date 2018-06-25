@@ -37,7 +37,7 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<LuceneSearcher>()
+			Kernel.Bind<CardSearcher>()
 				.ToSelf()
 				.InSingletonScope();
 
@@ -59,6 +59,10 @@ namespace Mtgdb.Dal
 
 			Kernel.Bind<UiModel>()
 				.ToSelf();
+
+			Kernel.Bind<CardDocumentAdapter>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

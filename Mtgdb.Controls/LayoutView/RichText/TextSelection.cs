@@ -9,7 +9,8 @@ namespace Mtgdb.Controls
 	{
 		public event Action<TextSelection> Changed;
 
-
+		public TextSelection() =>
+			Clear();
 
 		public TextSelection Clone()
 		{
@@ -271,6 +272,9 @@ namespace Mtgdb.Controls
 			{
 				if (PrintedTokens[i].Rect.Y <= point.Y)
 					continue;
+
+				if (i == PrintedTokens.Count - 1)
+					return null;
 
 				var jMin = i + 1;
 				var y = PrintedTokens[jMin].Rect.Y;

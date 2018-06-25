@@ -134,7 +134,7 @@ namespace Mtgdb.Dal
 
 
 
-		public static readonly string[] ManaCost =
+		public static readonly IList<string> ManaCost = new[]
 		{
 			"{W}",
 			"{U}",
@@ -166,7 +166,7 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] ManaAbility =
+		public static readonly IList<string> ManaAbility = new[]
 		{
 			"{W}",
 			"{U}",
@@ -182,7 +182,7 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] GeneratedMana =
+		public static readonly IList<string> GeneratedMana = new[]
 		{
 			"{W}",
 			"{U}",
@@ -196,7 +196,7 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] Cmc =
+		public static readonly IList<string> Cmc = new[]
 		{
 			"0",
 			"1",
@@ -208,7 +208,7 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] Type =
+		public static readonly IList<string> Type = new[]
 		{
 			"Creature",
 			"Instant",
@@ -220,7 +220,7 @@ namespace Mtgdb.Dal
 			null
 		};
 
-		public static readonly string[] CastKeywords =
+		public static readonly IList<string> CastKeywords = new[]
 		{
 			"Aftermath",
 			custom("Affinity", bound("affinity", before: "for")),
@@ -262,7 +262,7 @@ namespace Mtgdb.Dal
 			cost("Unearth", pattern: "unearth(s|ed)?")
 		};
 
-		public static readonly string[] Keywords =
+		public static readonly IList<string> Keywords = new[]
 		{
 			count("Annihilator"),
 			"Ascend",
@@ -449,7 +449,7 @@ namespace Mtgdb.Dal
 			custom("Ante", bound("ante(s|d)?"))
 		};
 
-		public static readonly string[] Rarity =
+		public static readonly IList<string> Rarity = new[]
 		{
 			"Common",
 			"Uncommon",
@@ -459,7 +459,7 @@ namespace Mtgdb.Dal
 			null /*, "marketing", "double faced"*/
 		};
 
-		public static readonly string[] Layout =
+		public static readonly IList<string> Layout = new[]
 		{
 			"Normal",
 			"Aftermath",
@@ -517,7 +517,7 @@ namespace Mtgdb.Dal
 			nameof(Card.Text),
 		};
 
-		public static readonly IList<IList<string>> Values = new IList<string>[]
+		public static readonly IList<IList<string>> Values = new[]
 		{
 			ManaCost,
 			Type,

@@ -169,7 +169,7 @@ namespace Mtgdb.Gui
 
 			writeCards(result, current.MainDeck);
 			result.AppendLine();
-			writeCards(result, current.SideDeck);
+			writeCards(result, current.Sideboard);
 
 			return result.ToString();
 		}

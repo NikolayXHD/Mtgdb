@@ -430,18 +430,17 @@ namespace Mtgdb.Controls
 				getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
 		}
 
-		public bool IsDragging()
-		{
-			return _dragStartedX.HasValue;
-		}
+		public bool IsDragging() =>
+			_draggingOverIndex.HasValue;
 
 		public void AbortDrag()
 		{
+			_draggingOverIndex = null;
+
 			_dragStartedX =
 				_dragCurrentX = null;
 
 			DraggingIndex = null;
-			_draggingOverIndex = null;
 
 			Invalidate();
 		}

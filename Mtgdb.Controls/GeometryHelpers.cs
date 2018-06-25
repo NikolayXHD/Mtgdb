@@ -34,12 +34,14 @@ namespace Mtgdb.Controls
 			return product;
 		}
 
-		public static Point MultiplyBy(this Point original, SizeF scale)
+		public static PointF MultiplyBy(this Point original, SizeF scale)
 		{
-			return new Point(
-				(int) (original.X * scale.Width),
-				(int) (original.Y * scale.Height));
+			return new PointF(
+				original.X * scale.Width,
+				original.Y * scale.Height);
 		}
+
+
 
 		public static SizeF MultiplyBy(this SizeF size, float value)
 		{

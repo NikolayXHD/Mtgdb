@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 		{
 			var cardIds = new HashSet<string>();
 			cardIds.UnionWith(deck.MainDeck.Order);
-			cardIds.UnionWith(deck.SideDeck.Order);
+			cardIds.UnionWith(deck.Sideboard.Order);
 
 			var releaseDate = cardIds.Max(
 				cardId => _repo.CardsById[cardId].Printings.Min(

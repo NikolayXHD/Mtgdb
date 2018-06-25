@@ -2,9 +2,9 @@
 {
 	partial class FormMain
 	{
-		private void setupTooltips(IFormRoot formRoot)
+		private void setupTooltips()
 		{
-			var controller = formRoot.TooltipController;
+			var controller = _formRoot.TooltipController;
 
 			controller.SetTooltip(this,
 				"Deck zones",
@@ -69,7 +69,14 @@
 			controller.SetTooltip(this,
 				"Filter by Deck mode",
 				"When filtering by Deck, Search result only shows\r\n" +
-				"cards present in your Deck\r\n\r\n" +
+				"cards present in your current Deck.\r\n\r\n" +
+				"Alternatively you can search cards present in any of your decks shown in `deck list` " +
+				"tab. To do this\r\n" +
+				"- open `deck list` tab (it's next to `main deck` / `sideboard` / `sample hand` tabs)\r\n" +
+				"- if nesessary narrow down the list of visible saved decks by using search text input " +
+				"in `deck list` tab\r\n" +
+				"- change selected value in `filter by deck` menu located in top right " +
+				"of `deck list` panel.\r\n\r\n" +
 				"Filtering by Deck can be enabled or disabled using Filter manager - " +
 				"the rightmost buttons group in top panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n",
@@ -211,10 +218,12 @@
 				_buttonExcludeManaCost);
 
 			controller.SetTooltip(this,
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
+				() => _cardSearchSubsystem.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
 					: "Search text",
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
+				() => _cardSearchSubsystem.SearchResult?.ParseErrorMessage ??
+					"Narrows down the list of cards below based on a query you type. Example query:\r\n" +
+					"TextEn: \"counter target spell\"\r\n\r\n" +
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +
@@ -278,8 +287,6 @@
 
 			controller.SetCustomTooltip(_tooltipViewCards);
 			controller.SetCustomTooltip(_tooltipViewDeck);
-
-			controller.SubscribeToEvents();
 		}
 	}
 }

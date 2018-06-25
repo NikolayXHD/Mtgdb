@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace Mtgdb.Dal
 					Count = new Dictionary<string, int>()
 				},
 
-				SideDeck = new DeckZone
+				Sideboard = new DeckZone
 				{
 					Order = new List<string>(),
 					Count = new Dictionary<string, int>()
@@ -39,7 +40,7 @@ namespace Mtgdb.Dal
 					Order = mainOrder ?? new List<string>()
 				},
 
-				SideDeck = new DeckZone
+				Sideboard = new DeckZone
 				{
 					Count = sideCountById ?? new Dictionary<string, int>(),
 					Order = sideOrder ?? new List<string>()
@@ -49,11 +50,30 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
+		public Deck Copy()
+		{
+			var result = Create(
+				MainDeck.Count.ToDictionary(),
+				MainDeck.Order.ToList(),
+				Sideboard.Count.ToDictionary(),
+				Sideboard.Order.ToList());
+
+			result.Name = Name;
+			result.File = File;
+			result.Error = Error;
+			result.Id = Id;
+
+			return result;
+		}
+
 		public void Replace(Dictionary<string, string> replacements)
 		{
 			MainDeck = replace(MainDeck, replacements);
-			SideDeck = replace(SideDeck, replacements);
+			Sideboard = replace(Sideboard, replacements);
 		}
+
+		public bool Contains(Card c) =>
+			MainDeck.Count.ContainsKey(c.Id) || Sideboard.Count.ContainsKey(c.Id);
 
 		public Deck()
 		{
@@ -78,9 +98,23 @@ namespace Mtgdb.Dal
 			};
 		}
 
-		public DeckZone MainDeck { get; private set; }
-		public DeckZone SideDeck { get; private set; }
+		public DeckZone MainDeck { get; set; }
+		public DeckZone Sideboard { get; set; }
 
+		public DeckZone GetZone(Zone zone)
+		{
+			switch (zone)
+			{
+				case Zone.Main:
+					return MainDeck;
+				case Zone.Side:
+					return Sideboard;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
+			}
+		}
+
+		public int Id { get; set; }
 		public string Name { get; set; }
 		public string File { get; set; }
 		public string Error { get; set; }

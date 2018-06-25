@@ -13,14 +13,14 @@ namespace Mtgdb.Gui
 		public DraggingSubsystem(
 			MtgLayoutView layoutViewDeck,
 			MtgLayoutView layoutViewCards,
-			DeckModel deckModel,
+			DeckEditorModel deckEditorModel,
 			FormMain parent,
 			ImageLoader imageLoader,
 			FormManager formManager)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
-			_deckModel = deckModel;
+			_deckEditorModel = deckEditorModel;
 			_parent = parent;
 			_imageLoader = imageLoader;
 			_formManager = formManager;
@@ -102,7 +102,7 @@ namespace Mtgdb.Gui
 		{
 			var view = getView(sender);
 
-			if (_deckModel.IsDragging())
+			if (_deckEditorModel.IsDragging())
 			{
 				if (view == _layoutViewDeck)
 					updateCardBelowDragged(view);
@@ -125,28 +125,28 @@ namespace Mtgdb.Gui
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			if (!_deckModel.IsDragging())
+			if (!_deckEditorModel.IsDragging())
 				return;
 
-			var draggedCard = _deckModel.DraggedCard;
-			var cardBelowDragged = _deckModel.CardBelowDragged;
+			var draggedCard = _deckEditorModel.DraggedCard;
+			var cardBelowDragged = _deckEditorModel.CardBelowDragged;
 
 			var cardHitInfo = getHitInfo(_layoutViewCards, cursorPosition);
 			var deckHitInfo = getHitInfo(_layoutViewDeck, cursorPosition);
 			
 			if (cardHitInfo.InBounds)
 			{
-				if (_deckModel.IsDraggingFromZone.HasValue)
-					DragRemoved?.Invoke(draggedCard, _deckModel.IsDraggingFromZone.Value);
+				if (_deckEditorModel.IsDraggingFromZone.HasValue)
+					DragRemoved?.Invoke(draggedCard, _deckEditorModel.IsDraggingFromZone.Value);
 				else
 					handleDraggedLikeClick(cardHitInfo);
 			}
 			else if (deckHitInfo.InBounds)
 			{
-				if (_deckModel.IsDraggingFromZone != _deckModel.Zone)
-					DragAdded?.Invoke(draggedCard, _deckModel.IsDraggingFromZone);
+				if (_deckEditorModel.IsDraggingFromZone != _deckEditorModel.Zone)
+					DragAdded?.Invoke(draggedCard, _deckEditorModel.IsDraggingFromZone);
 				else if (cardBelowDragged != draggedCard)
-					_deckModel.ApplyReorder(draggedCard, cardBelowDragged);
+					_deckEditorModel.ApplyReorder(draggedCard, cardBelowDragged);
 				else
 					handleDraggedLikeClick(deckHitInfo);
 			}
@@ -167,7 +167,7 @@ namespace Mtgdb.Gui
 
 		private void deckScrolled(object sender)
 		{
-			if (!_deckModel.IsDragging())
+			if (!_deckEditorModel.IsDragging())
 				return;
 
 			updateCardBelowDragged(_layoutViewDeck);
@@ -175,7 +175,7 @@ namespace Mtgdb.Gui
 
 		private void mouseEnter(object sender, EventArgs e)
 		{
-			if (!_deckModel.IsDragging())
+			if (!_deckEditorModel.IsDragging())
 				return;
 
 			updateCursor();
@@ -187,15 +187,15 @@ namespace Mtgdb.Gui
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			if (_deckModel.IsDragging())
-				setCardBelowDragged(_deckModel.DraggedCard);
+			if (_deckEditorModel.IsDragging())
+				setCardBelowDragged(_deckEditorModel.DraggedCard);
 		}
 
 
 
 		public bool IsDragging()
 		{
-			return _deckModel.IsDragging();
+			return _deckEditorModel.IsDragging();
 		}
 
 		public void DragBegin(Card card, MtgLayoutView dragFromView)
@@ -206,7 +206,7 @@ namespace Mtgdb.Gui
 			
 			_dragStartedTime = DateTime.Now;
 
-			_deckModel.DragStart(card, fromDeck: dragFromView == _layoutViewDeck);
+			_deckEditorModel.DragStart(card, fromDeck: dragFromView == _layoutViewDeck);
 
 			createDragCursor(card);
 			updateCursor();
@@ -246,11 +246,11 @@ namespace Mtgdb.Gui
 
 		public void DragAbort()
 		{
-			var draggedCard = _deckModel.DraggedCard;
+			var draggedCard = _deckEditorModel.DraggedCard;
 			
 			_mouseDownLocation = null;
 			_dragStartedTime = null;
-			_deckModel.DragAbort();
+			_deckEditorModel.DragAbort();
 			updateCursor();
 
 			// потому что больше нет отметки на карте, которую мы тащим
@@ -260,15 +260,15 @@ namespace Mtgdb.Gui
 
 		private void setCardBelowDragged(Card card)
 		{
-			if (_deckModel.CardBelowDragged != card)
-				_deckModel.CardBelowDragged = card;
+			if (_deckEditorModel.CardBelowDragged != card)
+				_deckEditorModel.CardBelowDragged = card;
 
 			_layoutViewDeck.Invalidate();
 		}
 
 		private void updateCardBelowDragged(MtgLayoutView view)
 		{
-			var card = getCardBelowDragged(view) ?? _deckModel.CardBelowDragged;
+			var card = getCardBelowDragged(view) ?? _deckEditorModel.CardBelowDragged;
 			setCardBelowDragged(card);
 		}
 
@@ -276,7 +276,7 @@ namespace Mtgdb.Gui
 		{
 			Cursor cursor;
 
-			if (_deckModel.IsDragging())
+			if (_deckEditorModel.IsDragging())
 				cursor = _dragCursor;
 			else
 				cursor = Cursors.Default;
@@ -315,7 +315,7 @@ namespace Mtgdb.Gui
 			if (e.FieldName != nameof(Card.Image))
 				return;
 			
-			if (card == _deckModel.DraggedCard)
+			if (card == _deckEditorModel.DraggedCard)
 				drawDraggingMark(e);
 		}
 
@@ -361,7 +361,7 @@ namespace Mtgdb.Gui
 			if (visibleIndex < 0)
 				return null;
 
-			return _deckModel.GetVisibleCards()[visibleIndex];
+			return _deckEditorModel.GetVisibleCards()[visibleIndex];
 		}
 
 
@@ -418,7 +418,7 @@ namespace Mtgdb.Gui
 		private MtgLayoutView _dragFromView;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly MtgLayoutView _layoutViewCards;
-		private readonly DeckModel _deckModel;
+		private readonly DeckEditorModel _deckEditorModel;
 		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;
 		private readonly FormManager _formManager;

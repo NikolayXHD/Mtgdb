@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 
 		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_trigger);
 
-		public void Setup(SearchStringSubsystem searchStringSubsystem, ButtonSubsystem buttonSubsystem, ButtonBase trigger)
+		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, ButtonBase trigger)
 		{
 			_trigger = trigger;
 			_buttonSubsystem = buttonSubsystem;
@@ -51,8 +51,8 @@ namespace Mtgdb.Gui
 				void mouseClick(object sender, EventArgs args)
 				{
 					buttonSubsystem.ClosePopup(trigger);
-					searchStringSubsystem.AppliedText = row.Query.Text;
-					searchStringSubsystem.Apply();
+					cardSearchSubsystem.AppliedText = row.Query.Text;
+					cardSearchSubsystem.Apply();
 				}
 
 				row.Query.MouseEnter += mouseEnter;

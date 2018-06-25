@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
@@ -119,11 +120,12 @@ namespace Mtgdb.Gui
 				titleButton.ScaleDpi();
 		}
 
-		// ReSharper disable once UnusedMember.Global
+		[UsedImplicitly]
 		public FormRoot(Func<FormMain> formMainFactory,
 			DownloaderSubsystem downloaderSubsystem,
 			NewsService newsService,
-			SuggestModel suggestModel,
+			CardSuggestModel cardSuggestModel,
+			DeckSuggestModel deckSuggestModel,
 			TooltipController tooltipController,
 			CardRepository repo,
 			UiModel uiModel,
@@ -132,8 +134,13 @@ namespace Mtgdb.Gui
 		{
 			TooltipController = tooltipController;
 			UiModel = uiModel;
-			SuggestModel = suggestModel;
-			SuggestModel.Ui = UiModel;
+
+			DeckSuggestModel = deckSuggestModel;
+			DeckSuggestModel.Ui = UiModel;
+
+			CardSuggestModel = cardSuggestModel;
+			CardSuggestModel.Ui = UiModel;
+			
 			_formManager = formManager;
 			_repo = repo;
 			_buttonSubsystem = new ButtonSubsystem();
@@ -191,7 +198,8 @@ namespace Mtgdb.Gui
 			updateDeckButtons();
 
 			Application.AddMessageFilter(this);
-			SuggestModel.StartSuggestThread();
+			CardSuggestModel.StartSuggestThread();
+			DeckSuggestModel.StartSuggestThread();
 		}
 
 		private void repositoryLoaded()
@@ -370,7 +378,8 @@ namespace Mtgdb.Gui
 		private void closed(object sender, EventArgs e)
 		{
 			unsubsribeButtonEvents();
-			SuggestModel.AbortSuggestThread();
+			CardSuggestModel.AbortSuggestThread();
+			DeckSuggestModel.AbortSuggestThread();
 		}
 
 		private void queryHandleDrag(object sender, MouseEventArgs e, CancelEventArgs cancelArgs)
@@ -550,7 +559,8 @@ namespace Mtgdb.Gui
 
 		public IEnumerable<FormMain> Tabs => _tabs.TabIds.Cast<FormMain>();
 
-		public SuggestModel SuggestModel { get; }
+		public CardSuggestModel CardSuggestModel { get; }
+		public DeckSuggestModel DeckSuggestModel { get; }
 		public UiModel UiModel { get; }
 
 		public Direction? SnapDirection

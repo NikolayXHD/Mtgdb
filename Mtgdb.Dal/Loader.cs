@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Mtgdb.Dal.Index;
@@ -15,28 +14,26 @@ namespace Mtgdb.Dal
 			CardRepository repository,
 			ImageRepository imageRepository,
 			LocalizationRepository localizationRepository,
-			LuceneSearcher luceneSearcher,
+			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher,
 			PriceRepository priceRepository)
 		{
 			_repository = repository;
 			_imageRepository = imageRepository;
 			_localizationRepository = localizationRepository;
-			_luceneSearcher = luceneSearcher;
+			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
 			_priceRepository = priceRepository;
 
 			_loadingActions = createLoadingActions();
 		}
 
-		public void Add(Action a)
-		{
+		public void Add(Action a) =>
 			_loadingActions.Add(a);
-		}
 
 		public void Run()
 		{
-			_indexesUpToDate = _luceneSearcher.IsUpToDate && _luceneSearcher.Spellchecker.IsUpToDate;
+			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
 
 			_loadingThreads = _loadingActions.Select(createLoadingThread)
 				.ToList();
@@ -66,7 +63,7 @@ namespace Mtgdb.Dal
 					_imageRepository.LoadZoom();
 
 					if (_indexesUpToDate)
-						_luceneSearcher.LoadIndexes();
+						_cardSearcher.LoadIndexes();
 
 					if (_keywordSearcher.IsUpToDate)
 						_keywordSearcher.Load();
@@ -98,7 +95,7 @@ namespace Mtgdb.Dal
 						_keywordSearcher.Load();
 
 					if (!_indexesUpToDate)
-						_luceneSearcher.LoadIndexes();
+						_cardSearcher.LoadIndexes();
 
 					_imageRepository.LoadArt();
 
@@ -136,7 +133,7 @@ namespace Mtgdb.Dal
 		private readonly CardRepository _repository;
 		private readonly ImageRepository _imageRepository;
 		private readonly LocalizationRepository _localizationRepository;
-		private readonly LuceneSearcher _luceneSearcher;
+		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 		private readonly PriceRepository _priceRepository;
 		private bool _indexesUpToDate;

@@ -39,7 +39,7 @@ namespace Mtgdb.Gui
 				}
 
 				if (isSideboard)
-					add(card, count, result.SideDeck);
+					add(card, count, result.Sideboard);
 				else
 					add(card, count, result.MainDeck);
 			}

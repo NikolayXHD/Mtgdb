@@ -35,10 +35,10 @@ namespace Mtgdb.Controls
 			control.Size = control.Size.ByDpi();
 		}
 
-		public static void Invoke(this Control value, Action method)
+		public static bool Invoke(this Control value, Action method)
 		{
 			if (value.IsDisposed || value.Disposing || !value.IsHandleCreated)
-				return;
+				return false;
 
 			try
 			{
@@ -47,6 +47,8 @@ namespace Mtgdb.Controls
 			catch (ObjectDisposedException)
 			{
 			}
+
+			return true;
 		}
 
 

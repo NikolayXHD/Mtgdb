@@ -117,7 +117,7 @@ namespace Mtgdb.Gui
 
 
 
-		public GuiSettings Current => _settingsHistory[_settingsIndex];
+		public GuiSettings Current => _settingsHistory?[_settingsIndex];
 
 		public bool CanRedo
 		{

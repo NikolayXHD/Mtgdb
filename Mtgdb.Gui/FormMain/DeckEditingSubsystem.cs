@@ -13,7 +13,7 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly Cursor _cursor;
-		private readonly DeckModel _deckModel;
+		private readonly DeckEditorModel _deckEditorModel;
 		private readonly CollectionModel _collectionModel;
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly FormZoom _formZoom;
@@ -23,7 +23,7 @@ namespace Mtgdb.Gui
 		public DeckEditingSubsystem(
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
-			DeckModel deckModel,
+			DeckEditorModel deckEditorModel,
 			CollectionModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
 			Cursor cursor,
@@ -32,7 +32,7 @@ namespace Mtgdb.Gui
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_cursor = cursor;
-			_deckModel = deckModel;
+			_deckEditorModel = deckEditorModel;
 			_collectionModel = collectionModel;
 			_draggingSubsystem = draggingSubsystem;
 			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
@@ -53,17 +53,17 @@ namespace Mtgdb.Gui
 		private void dragRemoved(Card card, Zone fromDeckZone)
 		{
 			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
-			_deckModel.Add(card, -count, fromDeckZone);
+			_deckEditorModel.Add(card, -count, fromDeckZone);
 		}
 
 		private void dragAdded(Card card, Zone? fromDeckZone)
 		{
 			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
 
-			if (fromDeckZone.HasValue && _deckModel.Zone != Zone.SampleHand)
-				_deckModel.Add(card, -count, zone: fromDeckZone, changeTerminatesBatch: false);
+			if (fromDeckZone.HasValue && _deckEditorModel.Zone != Zone.SampleHand)
+				_deckEditorModel.Add(card, -count, zone: fromDeckZone, changeTerminatesBatch: false);
 
-			_deckModel.Add(card, +count);
+			_deckEditorModel.Add(card, +count);
 		}
 
 		public void SubscribeToEvents()
@@ -80,7 +80,7 @@ namespace Mtgdb.Gui
 
 		private void gridMouseLeave(object sender, EventArgs e)
 		{
-			if (_deckModel.IsDragging())
+			if (_deckEditorModel.IsDragging())
 				return;
 
 			updateCursor(getView(sender).Control, outside: true);
@@ -90,7 +90,7 @@ namespace Mtgdb.Gui
 		{
 			var view = getView(sender);
 
-			if (_deckModel.IsDragging())
+			if (_deckEditorModel.IsDragging())
 				return;
 
 			var hitInfo = view.CalcHitInfo(e.Location);
@@ -143,7 +143,7 @@ namespace Mtgdb.Gui
 			if (countDelta != 0)
 			{
 				if (isDeck)
-					_deckModel.Add(card, countDelta);
+					_deckEditorModel.Add(card, countDelta);
 				else
 					changeCountInCollection(card, countDelta);
 

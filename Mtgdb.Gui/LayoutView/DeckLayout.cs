@@ -27,7 +27,7 @@ namespace Mtgdb.Gui
 			var card = (Card) dataSource;
 
 			_fieldImage.Image = card?.Image(Ui);
-			_fieldImage.Text = card?.NameEn;
+			_fieldImage.DataText = card?.NameEn;
 		}
 	}
 }

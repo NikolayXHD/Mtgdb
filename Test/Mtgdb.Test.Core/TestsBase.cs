@@ -112,7 +112,7 @@ namespace Mtgdb.Test
 
 			LoadTranslations();
 
-			Searcher = Kernel.Get<LuceneSearcher>();
+			Searcher = Kernel.Get<CardSearcher>();
 			
 			var sw = new Stopwatch();
 			
@@ -144,8 +144,8 @@ namespace Mtgdb.Test
 		protected static ImageRepository ImgRepo;
 		protected static UiModel Ui;
 
-		protected static LuceneSearcher Searcher;
-		protected static LuceneSpellchecker Spellchecker;
+		protected static CardSearcher Searcher;
+		protected static CardSpellchecker Spellchecker;
 		protected static KeywordSearcher KeywordSearcher;
 
 		private static bool _loadedModules;

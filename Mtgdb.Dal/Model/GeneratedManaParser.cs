@@ -6,20 +6,27 @@ namespace Mtgdb.Dal
 {
 	internal static class GeneratedManaParser
 	{
-		public static IList<string> ParseGeneratedMana(Card c)
+		public static (IList<string> Normal, IList<string> AnyColorExpanded) ParseGeneratedMana(Card c)
 		{
 			var text = c.TextEn;
 
 			if (string.IsNullOrEmpty(text))
-				return _empty;
+				return (_empty, _empty);
 
 			foreach (string harmfulExplanation in _harmfulExplanations)
 				text = text.Replace(harmfulExplanation, string.Empty);
 
+			bool[] matchedExpanded = new bool[_symbols.Length];
 			bool[] matched = new bool[_symbols.Length];
 
 			if (_anyPatterns.Any(_ => _.IsMatch(text)))
-				matched[0] = matched[1] = matched[2] = matched[3] = matched[4] = matched[6] = true;
+				matchedExpanded[0] =
+					matchedExpanded[1] =
+						matchedExpanded[2] =
+							matchedExpanded[3] =
+								matchedExpanded[4] =
+									matchedExpanded[6] =
+										matched[6] = true;
 
 			foreach (var pattern in _specificPatterns)
 			{
@@ -28,31 +35,37 @@ namespace Mtgdb.Dal
 				foreach (Match match in matches)
 				{
 					if (match.Groups["w"].Success)
-						matched[0] = true;
+						matched[0] = matchedExpanded[0] = true;
 					if (match.Groups["u"].Success)
-						matched[1] = true;
+						matched[1] = matchedExpanded[1] = true;
 					if (match.Groups["b"].Success)
-						matched[2] = true;
+						matched[2] = matchedExpanded[2] = true;
 					if (match.Groups["r"].Success)
-						matched[3] = true;
+						matched[3] = 	matchedExpanded[3] = true;
 					if (match.Groups["g"].Success)
-						matched[4] = true;
+						matched[4] = matchedExpanded[4] = true;
 					if (match.Groups["c"].Success)
-						matched[5] = true;
+						matched[5] = matchedExpanded[5] = true;
 				}
 			}
 
-			if (matched.Contains(true))
-				matched[7] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
+			if (matchedExpanded.Contains(true))
+				matched[7] = matchedExpanded[7] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
 
 			if (_ePatterns.Any(_ => _.IsMatch(text)))
-				matched[8] = true;
+				matched[8] = matchedExpanded[8] = true;
+			
+			var resultExpanded = 
+				Enumerable.Range(0, matchedExpanded.Length)
+					.Where(i => matchedExpanded[i])
+					.Select(i => _symbols[i]).ToList();
+
 			var result = 
 				Enumerable.Range(0, matched.Length)
 					.Where(i => matched[i])
 					.Select(i => _symbols[i]).ToList();
 
-			return result;
+			return (result, resultExpanded);
 		}
 
 		private static readonly string[] _harmfulExplanations = 

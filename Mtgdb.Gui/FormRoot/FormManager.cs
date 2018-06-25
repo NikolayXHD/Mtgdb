@@ -110,9 +110,9 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private IEnumerable<int> getSavedTabIds(int formId)
+		private static IEnumerable<int> getSavedTabIds(int formId)
 		{
-			return Directory.GetFiles(GetHistoryDirectory(formId))
+			return Directory.GetFiles(getHistoryDirectory(formId))
 				.Where(f => Str.Equals(Path.GetExtension(f), ".json"))
 				.Select(Path.GetFileNameWithoutExtension)
 				.Where(n => n.All(c => '0' <= c && c <= '9'))
@@ -120,7 +120,7 @@ namespace Mtgdb.Gui
 		}
 
 		public string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.json");
-		public string GetHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
+		private static string getHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
 
 		public FormMain FindCardDraggingForm()
 		{

@@ -79,39 +79,26 @@
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\portable-net40+sl4+win8+wp8\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forge\ForgeSetRepository.cs" />
+    <Compile Include="Index\CardDocumentAdapter.cs" />
+    <Compile Include="Index\CardQueryParser.cs" />
+    <Compile Include="Index\SearchStringHighlighter.cs" />
     <Compile Include="Model\Image\ImageModel.cs" />
     <Compile Include="Model\Image\ImageNamePatcher.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="Images\BmpFrameDetector.cs" />
-    <Compile Include="Index\IndexUtils.cs" />
     <Compile Include="Index\IStringSimilarity.cs" />
-    <Compile Include="Index\MtgAnalyzer.cs" />
-    <Compile Include="Index\MtgRegexpQuery.cs" />
-    <Compile Include="Index\MtgTokenizer.cs" />
-    <Compile Include="Index\MtgAplhabet.cs" />
-    <Compile Include="Index\Query\EmptyPhraseSpanQuery.cs" />
-    <Compile Include="Index\Query\EmptyPhraseQuery.cs" />
-    <Compile Include="Index\Query\RewriteableComplexPhraseQuery.cs" />
-    <Compile Include="Index\Query\RewriteableSpanNearQuery.cs" />
-    <Compile Include="Index\ReplaceFilter.cs" />
-    <Compile Include="Index\Spellchecker.cs" />
     <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />
-    <Compile Include="Index\SpellcheckerDefinitions.cs" />
-    <Compile Include="Index\SuggestWord.cs" />
-    <Compile Include="Index\TextInputState.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />
     <Compile Include="Index\DocumentFactory.cs" />
     <Compile Include="Index\IndexVersion.cs" />
-    <Compile Include="Index\LuceneSearcher.cs" />
-    <Compile Include="Index\LuceneSpellchecker.cs" />
-    <Compile Include="Index\Query\MtgQueryParser.cs" />
-    <Compile Include="Index\SearchResult.cs" />
-    <Compile Include="Index\IntellisenseSuggest.cs" />
+    <Compile Include="Index\CardSearcher.cs" />
+    <Compile Include="Index\CardSpellchecker.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CardExtensions.cs" />
     <Compile Include="Model\Ui\CollectionModel.cs" />
@@ -179,6 +166,10 @@
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
+      <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
+      <Name>Mtgdb.Core.Index</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj">
       <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>

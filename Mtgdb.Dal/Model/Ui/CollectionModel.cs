@@ -15,7 +15,7 @@ namespace Mtgdb.Dal
 					? CountById
 					: Enumerable.Empty<KeyValuePair<string, int>>())
 				.Concat(deck.MainDeck.Count)
-				.Concat(deck.SideDeck.Count)
+				.Concat(deck.Sideboard.Count)
 				.GroupBy(_ => _.Key)
 				.ToDictionary(
 					gr => gr.Key,

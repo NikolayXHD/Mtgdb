@@ -13,6 +13,7 @@ using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Gui.Resx;
+using Mtgdb.Index;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
@@ -24,8 +25,9 @@ namespace Mtgdb.Gui
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
 			DraggingSubsystem draggingSubsystem,
-			SearchStringSubsystem searchStringSubsystem,
-			DeckModel deckModel,
+			CardSearchSubsystem cardSearchSubsystem,
+			CardDocumentAdapter adapter,
+			DeckEditorModel deckEditorModel,
 			QuickFilterFacade quickFilterFacade,
 			LegalitySubsystem legalitySubsystem,
 			ImageLoader imageLoader)
@@ -33,16 +35,17 @@ namespace Mtgdb.Gui
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_draggingSubsystem = draggingSubsystem;
-			_searchStringSubsystem = searchStringSubsystem;
-			_deckModel = deckModel;
+			_cardSearchSubsystem = cardSearchSubsystem;
+			_adapter = adapter;
+			_deckEditorModel = deckEditorModel;
 			_quickFilterFacade = quickFilterFacade;
 			_legalitySubsystem = legalitySubsystem;
 			_imageLoader = imageLoader;
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
-			_layoutViewCards.SetIconRecognizer(createIconRecognizer());
+			_layoutViewCards.SetIconRecognizer(IconRecognizer);
 
-			_analyzer = new MtgAnalyzer();
+			_analyzer = new MtgAnalyzer(adapter);
 		}
 
 		private static IconRecognizer createIconRecognizer()
@@ -83,7 +86,7 @@ namespace Mtgdb.Gui
 			if (name == "i")
 				return new[] { "∞", "oo" };
 
-			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "100" || name == "1000000" || name == "chaos")
+			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "100" || name == "1000000" || name == "chaos" || name == "any")
 				return new[] { name };
 
 			if (name.Length == 2)
@@ -118,7 +121,7 @@ namespace Mtgdb.Gui
 				e.Graphics.DrawImage(image, bounds);
 			}
 
-			if (card == _deckModel.TouchedCard)
+			if (card == _deckEditorModel.TouchedCard)
 				drawSelection(e, Color.LightSkyBlue, Color.LightCyan, 236);
 			else
 			{
@@ -162,8 +165,8 @@ namespace Mtgdb.Gui
 
 		private void drawCountWarning(CustomDrawArgs e, Card card)
 		{
-			int countInMain = _deckModel.MainDeck.GetCount(card.Id);
-			int countInSideboard = _deckModel.SideDeck.GetCount(card.Id);
+			int countInMain = _deckEditorModel.MainDeck.GetCount(card.Id);
+			int countInSideboard = _deckEditorModel.SideDeck.GetCount(card.Id);
 
 			if (countInMain == 0 || countInSideboard == 0)
 				// the excessive count is not due to main + side sum
@@ -321,7 +324,7 @@ namespace Mtgdb.Gui
 
 			int collectionCount = card.CollectionCount(Ui);
 
-			if (collectionCount > 0 && (_deckModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
+			if (collectionCount > 0 && (_deckEditorModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
 				countText.AppendFormat(@" / {0}", collectionCount);
 
 			string countTextStr = countText.ToString();
@@ -387,7 +390,7 @@ namespace Mtgdb.Gui
 
 		private void addSearchStringMatches(List<TextRange> matches, List<TextRange> contextMatches, string displayField, string displayText)
 		{
-			var searchResult = _searchStringSubsystem.SearchResult;
+			var searchResult = _cardSearchSubsystem.SearchResult;
 
 			addTermMatches(matches, contextMatches, displayField, displayText, searchResult);
 			addPhraseMatches(matches, displayField, displayText, searchResult);
@@ -398,7 +401,7 @@ namespace Mtgdb.Gui
 			List<TextRange> contextMatches,
 			string displayField,
 			string displayText,
-			SearchResult searchResult)
+			SearchResult<int> searchResult)
 		{
 			var highlightTerms = searchResult?.HighlightTerms;
 
@@ -473,7 +476,7 @@ namespace Mtgdb.Gui
 			List<TextRange> matches,
 			string displayField,
 			string displayText,
-			SearchResult searchResult)
+			SearchResult<int> searchResult)
 		{
 			var highlightPhrases = searchResult?.HighlightPhrases;
 
@@ -584,7 +587,7 @@ namespace Mtgdb.Gui
 				return isValidRegex(result);
 			}
 
-			if (token.ParentField.IsNumericField())
+			if (_adapter.IsNumericField(token.ParentField))
 			{
 				result = @"\$?" + Regex.Escape(token.Value);
 				contextPatterns = new List<string>();
@@ -835,11 +838,14 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly DraggingSubsystem _draggingSubsystem;
-		private readonly SearchStringSubsystem _searchStringSubsystem;
-		private readonly DeckModel _deckModel;
+		private readonly CardSearchSubsystem _cardSearchSubsystem;
+		private readonly CardDocumentAdapter _adapter;
+		private readonly DeckEditorModel _deckEditorModel;
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;
 		private readonly ImageLoader _imageLoader;
 		private readonly MtgAnalyzer _analyzer;
+
+		public IconRecognizer IconRecognizer { get; } = createIconRecognizer();
 	}
 }

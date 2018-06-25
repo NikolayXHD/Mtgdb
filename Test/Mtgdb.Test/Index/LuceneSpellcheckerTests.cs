@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
+using Mtgdb.Index;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

@@ -4,35 +4,21 @@ using System.Linq;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
-using Lucene.Net.Util;
 using Mtgdb.Dal.Index;
+using Mtgdb.Index;
 
 namespace Mtgdb.Dal
 {
 	public class KeywordSearcher
 	{
+		// 0.39 bbd
+		private const string IndexVerision = "0.39";
+
 		public KeywordSearcher(CardRepository repo)
 		{
 			_repo = repo;
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("keywords");
 		}
-
-		public string IndexDirectory => _version.Directory;
-
-		public string IndexDirectoryParent
-		{
-			get => _version.Directory.Parent();
-
-			// 0.39 bbd
-			set => _version = new IndexVersion(value, "0.39");
-		}
-
-		public void InvalidateIndex()
-		{
-			_version.Invalidate();
-		}
-
-		public bool IsUpToDate => _version.IsUpToDate;
 
 		public void Load()
 		{
@@ -61,16 +47,27 @@ namespace Mtgdb.Dal
 
 			foreach (var scoreDoc in searchResult.ScoreDocs)
 			{
-				var id = scoreDoc.GetId(_searcher);
+				var id = getId(scoreDoc);
 				yield return id;
 			}
+		}
+
+		private int getId(ScoreDoc scoreDoc)
+		{
+			var doc = _searcher.Doc(scoreDoc.Doc);
+			string value = doc.Get(nameof(Card.IndexInFile).ToLower(Str.Culture));
+			return int.Parse(value);
 		}
 
 		internal IList<int> GetCardIds(string keywordName, string value)
 		{
 			var query = new TermQuery(new Term(keywordName.ToLower(Str.Culture), value.ToLower(Str.Culture)));
 			var searchResult = _searcher.Search(query, filter: null, n: _indexReader.MaxDoc);
-			var result = searchResult.ScoreDocs.Select(d => d.GetId(_searcher)).ToArray();
+
+			var result = searchResult.ScoreDocs
+				.Select(getId)
+				.ToArray();
+
 			return result;
 		}
 
@@ -88,7 +85,7 @@ namespace Mtgdb.Dal
 						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(andValue))
-							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT);
+							query.Add(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST_NOT);
 						else
 							query.Add(new TermQuery(new Term(fieldName, andValue.ToLower(Str.Culture))), Occur.MUST);
 					}
@@ -100,7 +97,7 @@ namespace Mtgdb.Dal
 						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(notValue))
-							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST);
+							query.Add(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST);
 						else
 							query.Add(new TermQuery(new Term(fieldName, notValue.ToLower(Str.Culture))), Occur.MUST_NOT);
 					}
@@ -116,7 +113,7 @@ namespace Mtgdb.Dal
 						if (string.IsNullOrEmpty(orValue))
 						{
 							var booleanQuery = new BooleanQuery();
-							booleanQuery.Add(new BooleanClause(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT));
+							booleanQuery.Add(new BooleanClause(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST_NOT));
 							queryTermOr.Add(booleanQuery, Occur.SHOULD);
 						}
 						else
@@ -174,6 +171,24 @@ namespace Mtgdb.Dal
 
 			return fsIndex;
 		}
+
+
+
+		public string IndexDirectory => _version.Directory;
+
+		public string IndexDirectoryParent
+		{
+			get => _version.Directory.Parent();
+			set => _version = new IndexVersion(value, IndexVerision);
+		}
+
+		public void InvalidateIndex()
+		{
+			_version.Invalidate();
+		}
+
+		public bool IsUpToDate => _version.IsUpToDate;
+
 
 		public Func<Set, bool> FilterSet { get; set; } = set => true;
 

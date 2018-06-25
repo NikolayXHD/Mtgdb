@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FAC0808-416A-4605-A1E7-042F7A270BB3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mtgdb.Controls</RootNamespace>
+    <AssemblyName>Mtgdb.Controls.DeckList</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.QueryParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.QueryParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\portable-net40+sl4+win8+wp8\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="ReadOnlyCollectionsExtensions, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionExtensions.1.3.0\lib\NET40-client\ReadOnlyCollectionsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="ReadOnlyCollectionsInterfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReadOnlyCollectionInterfaces.1.0.0\lib\NET40-client\ReadOnlyCollectionsInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DeckDocumentAdapter.cs" />
+    <Compile Include="DeckQueryParser.cs" />
+    <Compile Include="DeckSearcher.cs" />
+    <Compile Include="DeckSpellchecker.cs" />
+    <Compile Include="FilterByDeckMode.cs" />
+    <Compile Include="Model\DeckListModel.cs" />
+    <Compile Include="Model\DeckAggregateCache.cs" />
+    <Compile Include="DeckListLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DeckListLayout.Designer.cs">
+      <DependentUpon>DeckListLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeckListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DeckListControl.Designer.cs">
+      <DependentUpon>DeckListControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DeckModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DeckSearchSubsystem.cs" />
+    <Compile Include="DeckSuggestModel.cs" />
+    <Compile Include="ViewDeckListTooltips.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DeckListLayout.resx">
+      <DependentUpon>DeckListLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeckListControl.resx">
+      <DependentUpon>DeckListControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
+      <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
+      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
+      <Name>Mtgdb.Core.Index</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
+      <Project>{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}</Project>
+      <Name>Mtgdb.Core.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+      <Project>{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}</Project>
+      <Name>EditedTokenLocator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\Add_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rename_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rename_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search_40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\creature.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\instant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\land.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\deckbox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\corner_hovered_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\corner_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\deckbox_opened.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_16.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

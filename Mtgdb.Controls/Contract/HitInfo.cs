@@ -60,6 +60,6 @@ namespace Mtgdb.Controls
 		public string FieldName { get; private set; }
 		public bool IsSortButton { get; private set; }
 		public bool IsSearchButton { get; private set; }
-		public int CustomButtonIndex { get; set; }
+		public int CustomButtonIndex { get; set; } = -1;
 	}
 }

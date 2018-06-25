@@ -30,7 +30,9 @@ namespace Mtgdb.Gui
 		bool ShowPartialCards { get; set; }
 		bool ShowScroll { get; set; }
 
-		SuggestModel SuggestModel { get; }
+		CardSuggestModel CardSuggestModel { get; }
+		DeckSuggestModel DeckSuggestModel { get; }
+
 		TooltipController TooltipController { get; }
 
 		UiModel UiModel { get; }

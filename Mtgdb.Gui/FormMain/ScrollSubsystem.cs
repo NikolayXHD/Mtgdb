@@ -27,8 +27,6 @@ namespace Mtgdb.Gui
 
 		public void UnsubscribeFromEvents()
 		{
-			
-
 			_layoutViewCards.VisibleRecordIndexChanged -= visibleRecordIndexChanged;
 			_layoutViewDeck.VisibleRecordIndexChanged -= visibleRecordIndexChanged;
 		}

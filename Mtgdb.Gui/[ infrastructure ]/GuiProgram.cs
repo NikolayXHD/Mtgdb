@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 
 		private static void mtgjsonFileUpdated()
 		{
-			var luceneSearcher = _kernel.Get<LuceneSearcher>();
+			var luceneSearcher = _kernel.Get<CardSearcher>();
 			var keywordSearcher = _kernel.Get<KeywordSearcher>();
 
 			luceneSearcher.InvalidateIndex();
@@ -75,7 +75,7 @@ namespace Mtgdb.Gui
 
 		private static void pricesDownloaded()
 		{
-			_kernel.Get<LuceneSearcher>().InvalidateIndex();
+			_kernel.Get<CardSearcher>().InvalidateIndex();
 		}
 
 		private static void threadException(object sender, ThreadExceptionEventArgs e)

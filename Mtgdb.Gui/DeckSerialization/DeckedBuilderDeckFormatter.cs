@@ -38,7 +38,7 @@ namespace Mtgdb.Gui
 
 			writeDeckZone(result, current.MainDeck, prefix: string.Empty);
 			result.AppendLine();
-			writeDeckZone(result, current.SideDeck, prefix: SideboardPrefix);
+			writeDeckZone(result, current.Sideboard, prefix: SideboardPrefix);
 
 			return result.ToString();
 		}

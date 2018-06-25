@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Controls
 {
@@ -10,9 +9,9 @@ namespace Mtgdb.Controls
 	{
 		public static Func<Bitmap, Rectangle, Size, Bitmap> CustomScaleStrategy { get; set; }
 
-		public static Bitmap ResizeDpi(this Bitmap original)
+		public static Bitmap ResizeDpi(this Bitmap original, float multiplier = 1f)
 		{
-			return original.FitIn(original.Size.ByDpi());
+			return original.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round());
 		}
 
 		public static Bitmap HalfResizeDpi(this Bitmap original, bool preventMoire = false)

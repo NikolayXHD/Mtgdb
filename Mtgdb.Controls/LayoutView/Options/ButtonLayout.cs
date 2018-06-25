@@ -18,8 +18,8 @@ namespace Mtgdb.Controls
 
 		public Bitmap Icon { get; }
 		
-		public Size Size { get; }
-		public Size Margin { get; }
+		public Size Size { get; set; }
+		public Size Margin { get; set; }
 		public ContentAlignment Alignment { get; }
 		public bool BreaksLayout { get; }
 

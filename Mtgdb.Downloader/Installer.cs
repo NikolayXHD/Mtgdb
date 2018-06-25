@@ -16,7 +16,7 @@ namespace Mtgdb.Downloader
 		public Installer(
 			AppSourceConfig appSourceConfig, 
 			MtgjsonSourceConfig mtgjsonSourceConfig,
-			LuceneSearcher luceneSearcher,
+			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher)
 		{
 			_appSourceConfig = appSourceConfig;
@@ -36,8 +36,8 @@ namespace Mtgdb.Downloader
 			{
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
-				luceneSearcher.IndexDirectory.AddPath("*.*"),
-				luceneSearcher.Spellchecker.IndexDirectory.AddPath("*.*"),
+				cardSearcher.IndexDirectory.AddPath("*.*"),
+				cardSearcher.Spellchecker.IndexDirectory.AddPath("*.*"),
 				keywordSearcher.IndexDirectory.AddPath("*.*")
 			};
 		}

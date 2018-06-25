@@ -24,9 +24,12 @@ namespace Mtgdb.Gui
 			ImageCacheConfig imageCacheConfig,
 			ImageLoader imageLoader,
 			CollectionModel collectionModel,
-			LuceneSearcher luceneSearcher,
+			CardSearcher cardSearcher,
+			CardDocumentAdapter cardAdapter,
 			KeywordSearcher keywordSearcher,
 			ForgeSetRepository forgeSetRepo,
+			DeckListModel deckListModel,
+			DeckSearcher deckSearcher,
 			FormManager formManager)
 			: this()
 		{
@@ -36,7 +39,7 @@ namespace Mtgdb.Gui
 			_viewCards = new MtgLayoutView(_layoutViewCards);
 			_viewDeck = new MtgLayoutView(_layoutViewDeck);
 
-			_luceneSearcher = luceneSearcher;
+			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
@@ -61,23 +64,24 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem = new ButtonSubsystem();
 
-			_searchSubsystem = new SearchStringSubsystem(
+			_cardSearchSubsystem = new CardSearchSubsystem(
 				this,
 				_searchEditor,
 				_panelIconSearch,
 				_listBoxSuggest,
-				luceneSearcher,
+				cardSearcher,
+				cardAdapter,
 				_viewCards,
 				_viewDeck);
 
-			_panelSearchExamples.Setup(_searchSubsystem, _buttonSubsystem, _buttonSearchExamplesDropDown);
+			_panelSearchExamples.Setup(_cardSearchSubsystem, _buttonSubsystem, _buttonSearchExamplesDropDown);
 
-			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _searchSubsystem);
+			_sortSubsystem = new SortSubsystem(_viewCards, _cardRepo, _fields, _cardSearchSubsystem);
 
 			endRestoreSettings();
 
-			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchSubsystem);
-			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchSubsystem);
+			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _cardSearchSubsystem);
+			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _cardSearchSubsystem);
 
 			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -89,12 +93,12 @@ namespace Mtgdb.Gui
 				_scrollSubsystem,
 				imageCacheConfig);
 
-			_deckModel = new DeckModel();
+			_deckEditorModel = new DeckEditorModel();
 
 			_draggingSubsystem = new DraggingSubsystem(
 				_viewDeck,
 				_viewCards,
-				_deckModel,
+				_deckEditorModel,
 				this,
 				_imageLoader,
 				formManager);
@@ -102,13 +106,13 @@ namespace Mtgdb.Gui
 			_deckEditingSubsystem = new DeckEditingSubsystem(
 				_viewCards,
 				_viewDeck,
-				_deckModel,
+				_deckEditorModel,
 				_collectionModel,
 				_draggingSubsystem,
 				Cursor,
 				formZoomCard);
 
-			_viewDeck.SetDataSource(_deckModel.DataSource);
+			_viewDeck.SetDataSource(_deckEditorModel.DataSource);
 			_viewCards.SetDataSource(_searchResultCards);
 
 			_legalitySubsystem = new LegalitySubsystem(
@@ -121,8 +125,9 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_viewDeck,
 				_draggingSubsystem,
-				_searchSubsystem,
-				_deckModel,
+				_cardSearchSubsystem,
+				cardAdapter,
+				_deckEditorModel,
 				_quickFilterFacade,
 				_legalitySubsystem,
 				_imageLoader);
@@ -136,8 +141,8 @@ namespace Mtgdb.Gui
 			setRightPanelsWidth();
 
 			_keywordsIndexUpToDate = _keywordSearcher.IsUpToDate;
-			_luceneSearchIndexUpToDate = _luceneSearcher.IsUpToDate;
-			_spellcheckerIndexUpToDate = _luceneSearcher.Spellchecker.IsUpToDate;
+			_luceneSearchIndexUpToDate = _cardSearcher.IsUpToDate;
+			_spellcheckerIndexUpToDate = _cardSearcher.Spellchecker.IsUpToDate;
 
 			_searchEditorSelectionSubsystem = new RichTextBoxSelectionSubsystem(_searchEditor);
 
@@ -152,13 +157,16 @@ namespace Mtgdb.Gui
 				{ 1, evalFilterBySearchText }
 			};
 
+			_deckListControl.Init(deckListModel, _drawingSubsystem.IconRecognizer, deckSearcher, this);
+
 			setupCheckButtonImages();
-			
+
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
 			updateShowProhibited();
 			updateShowSampleHandButtons();
-			updateDeckListVisibility();
+			updateDeckVisibility();
+
 			subscribeToEvents();
 		}
 
@@ -219,7 +227,10 @@ namespace Mtgdb.Gui
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
-			_panelDeck.Height = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
+			int deckHeight = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
+
+			_layoutViewDeck.Height = deckHeight;
+			_deckListControl.Height = deckHeight;
 
 			scalePanelIcon(_panelIconSearch);
 			scalePanelIcon(_panelIconLegality);
@@ -233,6 +244,8 @@ namespace Mtgdb.Gui
 			scalePanelIcon(_panelIconStatusFilterDeck);
 			scalePanelIcon(_panelIconStatusFilterLegality);
 			scalePanelIcon(_panelIconStatusSort);
+
+			_deckListControl.Scale();
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)
@@ -298,7 +311,7 @@ namespace Mtgdb.Gui
 			_legalitySubsystem.SubscribeToEvents();
 			_legalitySubsystem.FilterChanged += legalityFilterChanged;
 
-			_deckModel.DeckChanged += deckChanged;
+			_deckEditorModel.DeckChanged += deckChanged;
 			_collectionModel.CollectionChanged += collectionChanged;
 
 			_sortSubsystem.SubscribeToEvents();
@@ -311,10 +324,10 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.SelectedIndexChanged += deckZoneChanged;
 			_tabHeadersDeck.MouseMove += deckZoneHover;
 
-			_luceneSearcher.IndexingProgress += luceneSearcherIndexingProgress;
-			_luceneSearcher.Spellchecker.IndexingProgress += luceneSearcherIndexingProgress;
-			_luceneSearcher.Loaded += luceneSearcherLoaded;
-			_luceneSearcher.Disposed += luceneSearcherDisposed;
+			_cardSearcher.IndexingProgress += cardSearcherIndexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress += cardSearcherIndexingProgress;
+			_cardSearcher.Loaded += cardSearcherLoaded;
+			_cardSearcher.Disposed += cardSearcherDisposed;
 
 
 			_keywordSearcher.Loaded += keywordSearcherLoaded;
@@ -365,10 +378,16 @@ namespace Mtgdb.Gui
 
 			_historySubsystem.Loaded += historyLoaded;
 
-			_searchSubsystem.SubscribeToEvents();
+			_cardSearchSubsystem.SubscribeToEvents();
 
 			SizeChanged += sizeChanged;
 			PreviewKeyDown += previewKeyDown;
+
+			_deckListControl.Scrolled += deckListScrolled;
+			_deckListControl.Refreshed += deckListRefreshed;
+			_deckListControl.DeckOpened += deckListOpenedDeck;
+			_deckListControl.DeckRenamed += deckListRenamedDeck;
+			_deckListControl.FilterByDeckModeChanged += filterByDeckModeChanged;
 		}
 
 		private void unsubscribeFromEvents()
@@ -385,7 +404,7 @@ namespace Mtgdb.Gui
 			_scrollSubsystem.UnsubscribeFromEvents();
 
 			_legalitySubsystem.FilterChanged -= legalityFilterChanged;
-			_deckModel.DeckChanged -= deckChanged;
+			_deckEditorModel.DeckChanged -= deckChanged;
 			_collectionModel.CollectionChanged -= collectionChanged;
 
 			_sortSubsystem.UnsubscribeFromEvents();
@@ -398,10 +417,10 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.SelectedIndexChanged -= deckZoneChanged;
 			_tabHeadersDeck.MouseMove -= deckZoneHover;
 
-			_luceneSearcher.IndexingProgress -= luceneSearcherIndexingProgress;
-			_luceneSearcher.Spellchecker.IndexingProgress -= luceneSearcherIndexingProgress;
-			_luceneSearcher.Loaded -= luceneSearcherLoaded;
-			_luceneSearcher.Disposed -= luceneSearcherDisposed;
+			_cardSearcher.IndexingProgress -= cardSearcherIndexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress -= cardSearcherIndexingProgress;
+			_cardSearcher.Loaded -= cardSearcherLoaded;
+			_cardSearcher.Disposed -= cardSearcherDisposed;
 
 			_keywordSearcher.Loaded -= keywordSearcherLoaded;
 			_keywordSearcher.LoadingProgress -= keywordSearcherLoadingProgress;
@@ -444,26 +463,35 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_historySubsystem.Loaded -= historyLoaded;
 
-			_searchSubsystem.UnsubscribeFromEvents();
+			_cardSearchSubsystem.UnsubscribeFromEvents();
 
 			SizeChanged -= sizeChanged;
 			PreviewKeyDown -= previewKeyDown;
+
+			_deckListControl.Scrolled -= deckListScrolled;
+			_deckListControl.Refreshed -= deckListRefreshed;
+			_deckListControl.DeckOpened -= deckListOpenedDeck;
+			_deckListControl.DeckRenamed -= deckListRenamedDeck;
+			_deckListControl.FilterByDeckModeChanged -= filterByDeckModeChanged;
 		}
 
-		private Zone DeckZone
+		private Zone? DeckZone
 		{
 			get
 			{
 				int zoneIndex = _tabHeadersDeck.SelectedIndex;
 
 				if (zoneIndex > MaxZoneIndex)
-					return default(Zone);
+					return null;
 
 				return (Zone) zoneIndex;
 			}
 
 			set => _tabHeadersDeck.SelectedIndex = (int) value;
 		}
+
+		private bool IsDeckListSelected =>
+			_tabHeadersDeck.SelectedIndex == DeckListTabIndex;
 
 		private IFormRoot _formRoot;
 
@@ -492,11 +520,11 @@ namespace Mtgdb.Gui
 
 		private readonly HistorySubsystem _historySubsystem;
 		private readonly DeckSerializationSubsystem _deckSerializationSubsystem;
-		private readonly DeckModel _deckModel;
+		private readonly DeckEditorModel _deckEditorModel;
 		private readonly ImagePreloadingSubsystem _imagePreloadingSubsystem;
 		private readonly ScrollSubsystem _scrollSubsystem;
 		private readonly CollectionModel _collectionModel;
-		private readonly SearchStringSubsystem _searchSubsystem;
+		private readonly CardSearchSubsystem _cardSearchSubsystem;
 
 		// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 		private readonly DeckEditingSubsystem _deckEditingSubsystem;
@@ -509,7 +537,7 @@ namespace Mtgdb.Gui
 		private readonly QuickFilterControl[] _quickFilterControls;
 		private readonly PrintingSubsystem _printingSubsystem;
 		private readonly LegalitySubsystem _legalitySubsystem;
-		private readonly LuceneSearcher _luceneSearcher;
+		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 
 		private readonly MtgLayoutView _viewCards;

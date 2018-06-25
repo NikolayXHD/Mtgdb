@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -28,7 +29,16 @@ namespace Mtgdb.Controls
 					thisEnumerator.Current.CopyFrom(otherEnumerator.Current);
 		}
 
+		public void PaintSelf(Graphics graphics, Point parentLocation, Color parentBg)
+		{
+			var cardArea = new Rectangle(parentLocation, this.Size);
 
+			if (!parentBg.Equals(BackColor) && !BackColor.Equals(Color.Transparent))
+				graphics.FillRectangle(new SolidBrush(BackColor), cardArea);
+
+			if (BackgroundImage != null)
+				graphics.DrawImage(BackgroundImage, cardArea);
+		}
 
 		protected void SubscribeToFieldEvents()
 		{
@@ -50,10 +60,16 @@ namespace Mtgdb.Controls
 			if (field.IsSearchVisible)
 				yield return searchOptions.GetButtonLayout(field);
 
+			foreach (var buttonLayout in GetCustomButtons(field))
+				yield return buttonLayout;
+		}
+
+		public virtual IEnumerable<ButtonLayout> GetCustomButtons(FieldControl field)
+		{
 			for (int i = 0; i < field.CustomButtons.Count; i++)
 			{
 				var button = field.CustomButtons[i];
-				
+
 				if (!field.IsHotTracked && (button.ShowOnlyWhenHotTracked ?? true))
 					continue;
 
@@ -61,16 +77,12 @@ namespace Mtgdb.Controls
 					? button.Icon
 					: button.IconTransp;
 
-					yield return new ButtonLayout(icon, button.Margin, button.Alignment, button.BreaksLayout);
+				yield return new ButtonLayout(icon, button.Margin, button.Alignment, button.BreaksLayout);
 			}
 		}
 
-		private void fieldInvalidated(FieldControl field)
-		{
-			var rectangle = field.Bounds;
-			rectangle.Offset(field.Location);
+		private void fieldInvalidated(FieldControl field) =>
 			Invalid?.Invoke(this, field);
-		}
 
 
 
@@ -88,6 +100,7 @@ namespace Mtgdb.Controls
 			{
 				_dataSource = value;
 				LoadData(_dataSource);
+				Invalid?.Invoke(this, null);
 			}
 		}
 

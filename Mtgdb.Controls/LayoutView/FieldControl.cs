@@ -23,8 +23,9 @@ namespace Mtgdb.Controls
 		{
 			var graphics = e.Graphics;
 
-			var area = getArea(new Point(0, 0), new Padding(0));
-			var contentArea = getArea(new Point(0, 0), Padding);
+			var zeroPoint = Point.Empty;
+			var area = getArea(zeroPoint, zeroPoint, new Padding(0));
+			var contentArea = getArea(zeroPoint, zeroPoint, Padding);
 
 			Pen borderPen = new Pen(Color.Black)
 			{
@@ -40,6 +41,20 @@ namespace Mtgdb.Controls
 				new Rectangle(
 					contentArea.Location,
 					new Size(contentArea.Width - 1, contentArea.Height - 1)));
+
+			if (Image != null)
+				paintImage(graphics, contentArea);
+
+			if (!string.IsNullOrEmpty(DataText) && contentArea.Width > 0 && contentArea.Height > 0)
+			{
+				paintText(
+					graphics,
+					new HighlightOptions(),
+					new RectangularSelection(),
+					new SelectionOptions(),
+					contentArea,
+					isTextSelecting: false);
+			}
 		}
 
 		public void PaintSelf(
@@ -49,18 +64,52 @@ namespace Mtgdb.Controls
 			RectangularSelection selection,
 			SelectionOptions selectionOptions)
 		{
-			var contentArea = getArea(parentLocation, Padding);
-			var completeArea = getArea(parentLocation, new Padding(0));
+			var contentArea = getArea(parentLocation, Location, Padding);
+			var completeArea = getArea(parentLocation, Location, new Padding(0));
 
 			if (Image != null)
+				paintImage(graphics, contentArea);
+
+			if (!string.IsNullOrEmpty(DataText) && contentArea.Width > 0 && contentArea.Height > 0)
 			{
-				graphics.DrawImage(Image, Image.Size.FitIn(contentArea));
-				return;
+				bool isTextSelecting = selection.Selecting && completeArea.Contains(selection.Start);
+
+				paintText(
+					graphics,
+					highlightOptions,
+					selection,
+					selectionOptions,
+					contentArea,
+					isTextSelecting);
+			}
+		}
+
+		private void paintImage(Graphics graphics, Rectangle contentArea)
+		{
+			var imageArea = Image.Size.FitIn(contentArea);
+
+			switch (HorizontalAlignment)
+			{
+				case HorizontalAlignment.Right:
+					imageArea.Offset(contentArea.Width - imageArea.Width, 0);
+					break;
+
+				case HorizontalAlignment.Center:
+					imageArea.Offset((contentArea.Width - imageArea.Width) / 2, 0);
+					break;
 			}
 
-			if (string.IsNullOrEmpty(Text))
-				return;
+			graphics.DrawImage(Image, imageArea);
+		}
 
+		private void paintText(
+			Graphics graphics, 
+			HighlightOptions highlightOptions, 
+			RectangularSelection selection, 
+			SelectionOptions selectionOptions, 
+			Rectangle contentArea,
+			bool isTextSelecting)
+		{
 			_paintInProgress = true;
 
 			if (selection.Selecting)
@@ -68,7 +117,7 @@ namespace Mtgdb.Controls
 
 			var context = new RichTextRenderContext
 			{
-				Text = Text,
+				Text = DataText,
 				TextSelection = TextSelection.Clone(),
 				HighlightRanges = HighlightRanges,
 				Graphics = graphics,
@@ -83,7 +132,7 @@ namespace Mtgdb.Controls
 				HighlightBorderWidth = 1f
 			};
 
-			if (selection.Selecting && completeArea.Contains(selection.Start))
+			if (isTextSelecting)
 			{
 				context.Selecting = true;
 				context.SelectionStart = selection.Start;
@@ -115,12 +164,12 @@ namespace Mtgdb.Controls
 			CustomButtons = other.CustomButtons.Select(_ => _.Clone()).ToList();
 		}
 
-		private Rectangle getArea(Point parentLocation, Padding padding)
+		private Rectangle getArea(Point parentLocation, Point location, Padding padding)
 		{
 			return new Rectangle(
 				new Point(
-					parentLocation.X + Location.X + padding.Left,
-					parentLocation.Y + Location.Y + padding.Top),
+					parentLocation.X + location.X + padding.Left,
+					parentLocation.Y + location.Y + padding.Top),
 				new Size(
 					Size.Width - padding.Horizontal,
 					Size.Height - padding.Vertical));
@@ -161,9 +210,14 @@ namespace Mtgdb.Controls
 				{
 					_horizontalAlignment = value;
 					Invalid?.Invoke(this);
+					Invalidate();
 				}
 			}
 		}
+
+		[Category("Settings"), DefaultValue(true)]
+		public bool AllowHotTrack { get; set; } = true;
+		
 
 		[Category("Settings"), DefaultValue(null)]
 		public Image Image
@@ -176,23 +230,25 @@ namespace Mtgdb.Controls
 
 				_image = value;
 				Invalid?.Invoke(this);
+				Invalidate();
 			}
 		}
 
 		[Category("Settings"), DefaultValue(null)]
-		public override string Text
+		public string DataText
 		{
-			get => base.Text;
+			get => Text;
 			set
 			{
-				if (base.Text == value)
+				if (Text == value)
 					return;
 
-				base.Text = value;
+				Text = value;
 				TextSelection.Text = value;
 				TextSelection.Clear();
 
 				Invalid?.Invoke(this);
+				Invalidate();
 			}
 		}
 
@@ -206,10 +262,10 @@ namespace Mtgdb.Controls
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
 
-		[Category("Settings")]
+
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<ButtonOptions> CustomButtons { get; set; } = new List<ButtonOptions>();
-
-
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int HotTrackedCustomButtonIndex
@@ -231,6 +287,9 @@ namespace Mtgdb.Controls
 			get => _isHotTracked;
 			set
 			{
+				if (!AllowHotTrack && value)
+					return;
+
 				if (_isHotTracked != value)
 				{
 					_isHotTracked = value;

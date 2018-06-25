@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lucene.Net.Documents;
-using Lucene.Net.Search;
+using Mtgdb.Index;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
@@ -65,9 +65,7 @@ namespace Mtgdb.Dal.Index
 				addSpecificTextField(nameof(Card.Flavor), lang);
 			}
 
-			NumericFields.UnionWith(FloatFields);
-			NumericFields.UnionWith(IntFields);
-			UserFields.Add(MtgQueryParser.Like);
+			UserFields.Add(CardQueryParser.Like);
 		}
 
 		private static void addTextField(string userField, string displayField = null)
@@ -89,7 +87,7 @@ namespace Mtgdb.Dal.Index
 
 			userField = userField.ToLowerInvariant();
 
-			var localized = getLocalizedField(userField, language);
+			var localized = GetLocalizedField(userField, language);
 			_textFields.Add(localized);
 
 			DisplayFieldByIndexField.Add(localized, userField);
@@ -242,7 +240,7 @@ namespace Mtgdb.Dal.Index
 			doc.addNumericField(nameof(card.Cmc), card.Cmc);
 
 			// Tested
-			foreach (var mana in card.GeneratedManaArr)
+			foreach (var mana in card.GeneratedManaArrExpanded)
 				doc.addTextField(nameof(card.GeneratedMana), mana);
 
 			// Tested
@@ -335,7 +333,7 @@ namespace Mtgdb.Dal.Index
 
 			userField = userField.ToLower(Str.Culture);
 
-			var localized = getLocalizedField(userField, language);
+			var localized = GetLocalizedField(userField, language);
 			addSpecificTextField(doc, userField, localized, fieldValue);
 		}
 
@@ -358,7 +356,7 @@ namespace Mtgdb.Dal.Index
 		{
 			userField = userField.ToLower(Str.Culture);
 
-			if (!userField.IsFloatField())
+			if (!FloatFields.Contains(userField))
 				throw new ArgumentException($"Numeric float field {userField} not intialized");
 
 			var field = new SingleField(userField, fieldValue, Field.Store.NO);
@@ -369,7 +367,7 @@ namespace Mtgdb.Dal.Index
 		{
 			userField = userField.ToLower(Str.Culture);
 
-			if (!userField.IsIntField())
+			if (!IntFields.Contains(userField))
 				throw new ArgumentException($"Numeric int field {userField} not intialized");
 
 			var field = new Int32Field(userField, fieldValue, Field.Store.NO);
@@ -378,7 +376,7 @@ namespace Mtgdb.Dal.Index
 
 
 
-		private static string getLocalizedField(string userField, string language)
+		public static string GetLocalizedField(string userField, string language)
 		{
 			if (language == null)
 				throw new InvalidOperationException($"Language must be specified for localized field {userField}");
@@ -391,40 +389,6 @@ namespace Mtgdb.Dal.Index
 
 
 
-		public static string GetFieldLocalizedIn(this string userField, string language)
-		{
-			userField = userField.ToLower(Str.Culture);
-
-			if (LocalizedFields.Contains(userField))
-				return getLocalizedField(userField, language);
-
-			return userField;
-		}
-
-		public static int GetId(this ScoreDoc scoreDoc, IndexSearcher indexSearcher)
-		{
-			var doc = indexSearcher.Doc(scoreDoc.Doc);
-			string value = doc.Get(nameof(Card.IndexInFile).ToLower(Str.Culture));
-			return int.Parse(value);
-		}
-
-		public static bool IsNumericField(this string field)
-		{
-			return NumericFields.Contains(field);
-		}
-
-		public static bool IsIntField(this string field)
-		{
-			return IntFields.Contains(field);
-		}
-
-		public static bool IsFloatField(this string field)
-		{
-			return FloatFields.Contains(field);
-		}
-
-
-
 		public static readonly IReadOnlyList<string> Languages =
 			CardLocalization.GetAllLanguages()
 				.Where(lang => !Str.Equals(lang, CardLocalization.DefaultLanguage))
@@ -432,7 +396,7 @@ namespace Mtgdb.Dal.Index
 
 		public static readonly HashSet<string> IntFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> FloatFields = new HashSet<string>(Str.Comparer);
-		public static readonly HashSet<string> NumericFields = new HashSet<string>(Str.Comparer);
+
 		private static readonly HashSet<string> _textFields = new HashSet<string>(Str.Comparer);
 
 		public static readonly HashSet<string> LocalizedFields = new HashSet<string>(Str.Comparer);

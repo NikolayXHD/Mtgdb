@@ -74,19 +74,29 @@ namespace Mtgdb.Dal
 		public int? LoyaltyNum { get; internal set; }
 
 		[JsonIgnore]
-		public string GeneratedMana => _generatedMana ?? (_generatedMana = string.Concat(GeneratedManaArr));
+		public string GeneratedMana => _generatedMana ?? (_generatedMana = string.Concat(GeneratedManaArrExpanded));
+
+		[JsonIgnore]
+		public IList<string> GeneratedManaArrExpanded
+		{
+			get
+			{
+				parseGeneratedManaOnce();
+				return _generatedManaArrExpanded;
+			}
+			private set
+			{
+				_generatedManaParsed = true;
+				_generatedManaArrExpanded = value;
+			}
+		}
 
 		[JsonIgnore]
 		public IList<string> GeneratedManaArr
 		{
 			get
 			{
-				if (!_generatedManaParsed)
-				{
-					_generatedManaArr = GeneratedManaParser.ParseGeneratedMana(this);
-					_generatedManaParsed = true;
-				}
-
+				parseGeneratedManaOnce();
 				return _generatedManaArr;
 			}
 			private set
@@ -94,6 +104,15 @@ namespace Mtgdb.Dal
 				_generatedManaParsed = true;
 				_generatedManaArr = value;
 			}
+		}
+
+		private void parseGeneratedManaOnce()
+		{
+			if (_generatedManaParsed)
+				return;
+
+			(_generatedManaArr, _generatedManaArrExpanded) = GeneratedManaParser.ParseGeneratedMana(this);
+			_generatedManaParsed = true;
 		}
 
 		public Document Document => _document ?? (_document = this.ToDocument());
@@ -589,7 +608,10 @@ namespace Mtgdb.Dal
 			}
 
 			if (patch.GeneratedMana != null)
+			{
+				GeneratedManaArrExpanded = patch.GeneratedMana;
 				GeneratedManaArr = patch.GeneratedMana;
+			}
 
 			if (patch.FlipDuplicate)
 				Remove = TextEn != OriginalText;
@@ -693,6 +715,8 @@ namespace Mtgdb.Dal
 		private string _generatedMana;
 
 		[JsonIgnore]
+		private IList<string> _generatedManaArrExpanded;
+
 		private IList<string> _generatedManaArr;
 
 		[JsonIgnore]

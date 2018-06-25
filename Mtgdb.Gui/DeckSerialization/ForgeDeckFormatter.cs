@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 			writeCards(result, current.MainDeck);
 
 			result.AppendLine(@"[Sideboard]");
-			writeCards(result, current.SideDeck);
+			writeCards(result, current.Sideboard);
 
 			return result.ToString();
 		}

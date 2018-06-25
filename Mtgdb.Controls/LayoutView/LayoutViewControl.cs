@@ -140,8 +140,7 @@ namespace Mtgdb.Controls
 				if (!clipRectangle.IntersectsWith(cardArea))
 					continue;
 
-				if (!card.BackColor.Equals(BackColor) && !card.BackColor.Equals(Color.Transparent))
-					actions.Back.Add(e => e.Graphics.FillRectangle(new SolidBrush(card.BackColor), cardArea));
+				actions.Back.Add(e => card.PaintSelf(e.Graphics, card.Location, BackColor));
 
 				foreach (var field in card.Fields)
 				{
@@ -159,16 +158,17 @@ namespace Mtgdb.Controls
 
 		private void paintFieldBg(PaintEventArgs e, FieldControl field, Rectangle fieldArea, SolidBrush hotTrackBgBrush, Pen hotTrackBgPen)
 		{
+			var rect = new Rectangle(fieldArea.Location, new Size(fieldArea.Width - 1, fieldArea.Height - 1));
+
 			if (field.IsHotTracked)
 			{
-				e.Graphics.FillRectangle(hotTrackBgBrush, fieldArea);
-				e.Graphics.DrawRectangle(hotTrackBgPen,
-					new Rectangle(fieldArea.Location, new Size(fieldArea.Width - 1, fieldArea.Height - 1)));
+				e.Graphics.FillRectangle(hotTrackBgBrush, rect);
+				e.Graphics.DrawRectangle(hotTrackBgPen, rect);
 			}
 			else if (!field.BackColor.Equals(BackColor) && !field.BackColor.Equals(Color.Transparent))
 			{
 				var bgBrush = new SolidBrush(field.BackColor);
-				e.Graphics.FillRectangle(bgBrush, fieldArea);
+				e.Graphics.FillRectangle(bgBrush, rect);
 			}
 		}
 
@@ -185,7 +185,7 @@ namespace Mtgdb.Controls
 					Handled = false,
 					Font = field.Font,
 					ForeColor = field.ForeColor,
-					DisplayText = field.Text,
+					DisplayText = field.DataText,
 					HAlignment = field.HorizontalAlignment,
 					Selection = _selection
 				};
@@ -358,7 +358,7 @@ namespace Mtgdb.Controls
 
 		private void updateSort(FieldControl field)
 		{
-			if (_sortIndexByField.TryGetValue(field.FieldName, out int sortIndex))
+			if (field.FieldName != null && _sortIndexByField.TryGetValue(field.FieldName, out int sortIndex))
 				field.SortOrder = _sortInfos[sortIndex].SortOrder;
 			else
 				field.SortOrder = SortOrder.None;
@@ -366,8 +366,16 @@ namespace Mtgdb.Controls
 
 		private void cardInvalidated(LayoutControl layoutControl, FieldControl fieldControl)
 		{
-			var rect = fieldControl.Bounds;
-			rect.Offset(layoutControl.Location);
+			Rectangle rect;
+
+			if (fieldControl != null)
+			{
+				rect = fieldControl.Bounds;
+				rect.Offset(layoutControl.Location);
+			}
+			else
+				rect = layoutControl.Bounds;
+
 			Invalidate(rect);
 		}
 
@@ -1236,7 +1244,7 @@ namespace Mtgdb.Controls
 				return null;
 
 			ProbeCard.DataSource = dataObject;
-			return field.Text;
+			return field.DataText;
 		}
 
 

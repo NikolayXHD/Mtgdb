@@ -57,26 +57,26 @@ namespace Mtgdb.Gui
 			var card = (Card) dataSource;
 
 			_fieldImage.Image = card?.Image(Ui);
-			_fieldImage.Text = card?.NameEn;
+			_fieldImage.DataText = card?.NameEn;
 
-			_fieldName.Text = card?.Name(Ui);
-			_fieldManaCost.Text = card?.ManaCost;
-			_fieldType.Text = card?.Type(Ui);
-			_fieldCmc.Text = card?.Cmc.ToString(Str.Culture);
-			_fieldSetCode.Text = card?.SetCode;
-			_fieldSetName.Text = card?.SetName;
-			_fieldText.Text = card?.Text(Ui);
-			_fieldFlavor.Text = card?.Flavor(Ui);
-			_fieldArtist.Text = card?.Artist;
-			_fieldReleaseDate.Text = card?.ReleaseDate;
-			_fieldRarity.Text = card?.Rarity;
-			_fieldPricingLow.Text = card?.PricingLow?.ToString(@"$0.##");
-			_fieldPricingMid.Text = card?.PricingMid?.ToString(@"$0.##");
-			_fieldPricingHigh.Text = card?.PricingHigh?.ToString(@"$0.##");
-			_fieldLoyalty.Text = card?.Loyalty;
-			_fieldPower.Text = card?.Power;
-			_fieldToughness.Text = card?.Toughness;
-			_fieldRulings.Text = card?.Rulings;
+			_fieldName.DataText = card?.Name(Ui);
+			_fieldManaCost.DataText = card?.ManaCost;
+			_fieldType.DataText = card?.Type(Ui);
+			_fieldCmc.DataText = card?.Cmc.ToString(Str.Culture);
+			_fieldSetCode.DataText = card?.SetCode;
+			_fieldSetName.DataText = card?.SetName;
+			_fieldText.DataText = card?.Text(Ui);
+			_fieldFlavor.DataText = card?.Flavor(Ui);
+			_fieldArtist.DataText = card?.Artist;
+			_fieldReleaseDate.DataText = card?.ReleaseDate;
+			_fieldRarity.DataText = card?.Rarity;
+			_fieldPricingLow.DataText = card?.PricingLow?.ToString(@"$0.##");
+			_fieldPricingMid.DataText = card?.PricingMid?.ToString(@"$0.##");
+			_fieldPricingHigh.DataText = card?.PricingHigh?.ToString(@"$0.##");
+			_fieldLoyalty.DataText = card?.Loyalty;
+			_fieldPower.DataText = card?.Power;
+			_fieldToughness.DataText = card?.Toughness;
+			_fieldRulings.DataText = card?.Rulings;
 		}
 
 		public override IEnumerable<FieldControl> Fields => _layout.Controls.Cast<FieldControl>();
