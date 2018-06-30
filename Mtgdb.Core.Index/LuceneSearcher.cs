@@ -220,7 +220,8 @@ namespace Mtgdb.Index
 
 		protected TId GetId(ScoreDoc d) => Adapter.GetId(_searcher.Doc(d.Doc));
 
-		protected TopDocs SearchIndex(Query query) => _searcher.Search(query, _indexReader.MaxDoc);
+		protected TopDocs SearchIndex(Query query) =>
+			_searcher.SearchWrapper(query, _indexReader.MaxDoc);
 
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; protected set; }

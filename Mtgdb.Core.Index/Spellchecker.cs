@@ -66,7 +66,7 @@ namespace Mtgdb.Index
 		{
 			var query = new TermQuery(new Term(DiscriminantField, discriminant));
 
-			var searchResult = _searcher.Search(query, _reader.MaxDoc);
+			var searchResult = _searcher.SearchWrapper(query, _reader.MaxDoc);
 
 			var result = searchResult.ScoreDocs
 				.Select(_ => _searcher.Doc(_.Doc).Get(WordField))
@@ -86,7 +86,7 @@ namespace Mtgdb.Index
 
 			var query = createQuery(word, field);
 
-			var hits = _searcher.Search(query, maxCount).ScoreDocs;
+			var hits = _searcher.SearchWrapper(query, maxCount).ScoreDocs;
 
 			int stop = Math.Min(hits.Length, maxCount);
 

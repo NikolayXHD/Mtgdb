@@ -23,10 +23,10 @@ namespace Mtgdb.Controls
 			Sequence.From((string) null);
 
 		public bool IsIntField(string userField) => 
-			userField.EndsWith("count", Str.Comparison);
+			userField != null && userField.EndsWith("count", Str.Comparison);
 
-		public bool IsFloatField(string userField) => 
-			userField.EndsWith("price", Str.Comparison) || userField.EndsWith("percent", Str.Comparison);
+		public bool IsFloatField(string userField) =>
+			userField != null && (userField.EndsWith("price", Str.Comparison) || userField.EndsWith("percent", Str.Comparison));
 
 		public bool IsIndexedInSpellchecker(string userField) =>
 			!this.IsNumericField(userField);

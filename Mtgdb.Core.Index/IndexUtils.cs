@@ -6,6 +6,7 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.TokenAttributes;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
+using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Lucene.Net.Util;
 
@@ -129,6 +130,15 @@ namespace Mtgdb.Index
 
 			return float.TryParse(s, NumberStyles.Float, Str.Culture, out f);
 		}
+
+		public static TopDocs SearchWrapper(this IndexSearcher searcher, Query query, int maxHits)
+		{
+			if (maxHits == 0)
+				return new TopDocs(0, Array.Empty<ScoreDoc>(), 0f);
+
+			return searcher.Search(query, maxHits);
+		}
+
 
 		public static void For(int min, int max, Action<int> action)
 		{
