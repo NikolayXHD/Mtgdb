@@ -89,7 +89,6 @@
     <Compile Include="LayoutView\LayoutViewControl.Designer.cs">
       <DependentUpon>LayoutViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Contract\TextRange.cs" />
     <Compile Include="LayoutView\LayoutControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

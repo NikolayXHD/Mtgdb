@@ -26,10 +26,12 @@ namespace Mtgdb.Gui
 			CollectionModel collectionModel,
 			CardSearcher cardSearcher,
 			CardDocumentAdapter cardAdapter,
+			DeckDocumentAdapter deckAdapter,
 			KeywordSearcher keywordSearcher,
 			ForgeSetRepository forgeSetRepo,
 			DeckListModel deckListModel,
 			DeckSearcher deckSearcher,
+			IconRecognizer iconRecognizer,
 			FormManager formManager)
 			: this()
 		{
@@ -130,7 +132,8 @@ namespace Mtgdb.Gui
 				_deckEditorModel,
 				_quickFilterFacade,
 				_legalitySubsystem,
-				_imageLoader);
+				_imageLoader,
+				iconRecognizer);
 
 
 			_printingSubsystem = new PrintingSubsystem(imageRepo, _cardRepo);
@@ -157,7 +160,12 @@ namespace Mtgdb.Gui
 				{ 1, evalFilterBySearchText }
 			};
 
-			_deckListControl.Init(deckListModel, _drawingSubsystem.IconRecognizer, deckSearcher, this);
+			_deckListControl.Init(
+				deckListModel,
+				iconRecognizer,
+				deckSearcher,
+				deckAdapter,
+				this);
 
 			setupCheckButtonImages();
 

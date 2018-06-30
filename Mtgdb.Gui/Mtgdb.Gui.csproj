@@ -135,7 +135,9 @@
     <Compile Include="FormMain\FormMain.Tooltip.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormMain\IconRecognizerFactory.cs" />
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
+    <Compile Include="FormMain\KeywordHighlighter.cs" />
     <Compile Include="FormMain\SearchExamplesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -148,7 +150,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="FormMain\KnutMorrisPrattSubstringSearch.cs" />
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
     </Compile>

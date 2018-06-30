@@ -16,7 +16,7 @@ using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
-	public class CardSearchSubsystem
+	public class CardSearchSubsystem : ISearchSubsystem<int>
 	{
 		public CardSearchSubsystem(
 			Form parent,

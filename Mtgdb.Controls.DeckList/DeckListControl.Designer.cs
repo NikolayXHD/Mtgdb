@@ -39,7 +39,7 @@ namespace Mtgdb.Controls
 			this._panelSearch = new Mtgdb.Controls.BorderedPanel();
 			this._panelSearchIcon = new Mtgdb.Controls.BorderedPanel();
 			this._textBoxSearch = new Mtgdb.Controls.FixedRichTextBox();
-			this._viewDecks = new Mtgdb.Controls.LayoutViewControl();
+			this._viewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._labelFilterByDeckMode = new System.Windows.Forms.Label();
 			this._menuFilterByDeckMode = new System.Windows.Forms.ComboBox();
 			this._textBoxName = new System.Windows.Forms.TextBox();
@@ -58,7 +58,7 @@ namespace Mtgdb.Controls
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelLayout.Controls.Add(this._panelSearch, 0, 0);
-			this._panelLayout.Controls.Add(this._viewDecks, 0, 1);
+			this._panelLayout.Controls.Add(this._viewDeck, 0, 1);
 			this._panelLayout.Controls.Add(this._labelFilterByDeckMode, 1, 0);
 			this._panelLayout.Controls.Add(this._menuFilterByDeckMode, 2, 0);
 			this._panelLayout.Location = new System.Drawing.Point(0, 0);
@@ -117,23 +117,23 @@ namespace Mtgdb.Controls
 			// 
 			// _viewDecks
 			// 
-			this._viewDecks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._viewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._viewDecks.BackColor = System.Drawing.Color.White;
-			this._panelLayout.SetColumnSpan(this._viewDecks, 3);
+			this._viewDeck.BackColor = System.Drawing.Color.White;
+			this._panelLayout.SetColumnSpan(this._viewDeck, 3);
 			layoutOptions3.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
 			layoutOptions3.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
 			layoutOptions3.AllowPartialCards = true;
 			layoutOptions3.CardInterval = new System.Drawing.Size(2, 0);
 			layoutOptions3.PartialCardsThreshold = new System.Drawing.Size(150, 0);
-			this._viewDecks.LayoutOptions = layoutOptions3;
-			this._viewDecks.Location = new System.Drawing.Point(0, 24);
-			this._viewDecks.Margin = new System.Windows.Forms.Padding(0);
-			this._viewDecks.Name = "_viewDecks";
+			this._viewDeck.LayoutOptions = layoutOptions3;
+			this._viewDeck.Location = new System.Drawing.Point(0, 24);
+			this._viewDeck.Margin = new System.Windows.Forms.Padding(0);
+			this._viewDeck.Name = "_viewDeck";
 			searchOptions3.Allow = false;
 			searchOptions3.Button = buttonOptions3;
-			this._viewDecks.SearchOptions = searchOptions3;
+			this._viewDeck.SearchOptions = searchOptions3;
 			selectionOptions3.Alpha = ((byte)(192));
 			selectionOptions3.BackColor = System.Drawing.Color.LightSkyBlue;
 			selectionOptions3.ForeColor = System.Drawing.Color.Black;
@@ -142,10 +142,10 @@ namespace Mtgdb.Controls
 			selectionOptions3.RectAlpha = ((byte)(16));
 			selectionOptions3.RectBorderColor = System.Drawing.Color.MediumBlue;
 			selectionOptions3.RectFillColor = System.Drawing.Color.RoyalBlue;
-			this._viewDecks.SelectionOptions = selectionOptions3;
-			this._viewDecks.Size = new System.Drawing.Size(732, 287);
-			this._viewDecks.SortOptions = sortOptions3;
-			this._viewDecks.TabIndex = 2;
+			this._viewDeck.SelectionOptions = selectionOptions3;
+			this._viewDeck.Size = new System.Drawing.Size(732, 287);
+			this._viewDeck.SortOptions = sortOptions3;
+			this._viewDeck.TabIndex = 2;
 			// 
 			// _labelFilterByDeckMode
 			// 
@@ -220,7 +220,7 @@ namespace Mtgdb.Controls
 		private System.Windows.Forms.TableLayoutPanel _panelLayout;
 		private BorderedPanel _panelSearch;
 		private FixedRichTextBox _textBoxSearch;
-		private LayoutViewControl _viewDecks;
+		private LayoutViewControl _viewDeck;
 		private BorderedPanel _panelSearchIcon;
 		private System.Windows.Forms.TextBox _textBoxName;
 		private System.Windows.Forms.ListBox _listBoxSuggest;

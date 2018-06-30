@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeckDocumentAdapter.cs" />
+    <Compile Include="DeckKeywordHighlighter.cs" />
     <Compile Include="DeckQueryParser.cs" />
     <Compile Include="DeckSearcher.cs" />
     <Compile Include="DeckSpellchecker.cs" />
@@ -87,6 +88,7 @@
     </Compile>
     <Compile Include="DeckSearchSubsystem.cs" />
     <Compile Include="DeckSuggestModel.cs" />
+    <Compile Include="SearchResultHiglightSubsystem.cs" />
     <Compile Include="ViewDeckListTooltips.cs" />
   </ItemGroup>
   <ItemGroup>

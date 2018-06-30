@@ -59,6 +59,7 @@
     <Compile Include="Collection\Sequence.cs" />
     <Compile Include="String\Str.cs" />
     <Compile Include="String\StringExtensions.cs" />
+    <Compile Include="String\TextRange.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

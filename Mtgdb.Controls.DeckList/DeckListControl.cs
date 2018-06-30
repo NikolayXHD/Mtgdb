@@ -25,61 +25,71 @@ namespace Mtgdb.Controls
 			DeckListModel decks,
 			IconRecognizer recognizer,
 			DeckSearcher searcher,
+			DeckDocumentAdapter adapter,
 			Control tooltipOwner)
 		{
 			_deckListModel = decks;
 			_tooltipOwner = tooltipOwner;
 
-			_viewDecks.IconRecognizer = recognizer;
-			_viewDecks.LayoutControlType = typeof(DeckListLayout);
-			_viewDecks.DataSource = _filteredModels;
+			_viewDeck.IconRecognizer = recognizer;
+			_viewDeck.LayoutControlType = typeof(DeckListLayout);
+			_viewDeck.DataSource = _filteredModels;
 
 			_textBoxName.Visible = false;
 			
-			_customTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDecks);
+			_customTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 
-			SearchSubsystem = new DeckSearchSubsystem(
+			_searchSubsystem = new DeckSearchSubsystem(
 				this,
 				_textBoxSearch,
 				_panelSearchIcon,
 				_listBoxSuggest,
 				searcher,
-				_viewDecks);
+				_viewDeck);
 
 			_menuFilterByDeckMode.SelectedIndex = 0;
 
-			_viewDecks.MouseClicked += viewDeckClicked;
-			_viewDecks.RowDataLoaded += viewDeckRowDataLoaded;
-			_viewDecks.CardIndexChanged += viewScrolled;
+			_viewDeck.MouseClicked += viewDeckClicked;
+			_viewDeck.RowDataLoaded += viewDeckRowDataLoaded;
+			_viewDeck.CardIndexChanged += viewScrolled;
 
 			_textBoxName.LostFocus += nameLostFocus;
 			_textBoxName.KeyDown += nameKeyDown;
 
 			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
 
-			SearchSubsystem.TextApplied += applySearchResult;
+			_searchSubsystem.TextApplied += applySearchResult;
 
-			SearchSubsystem.SubscribeToEvents();
+			_searchSubsystem.SubscribeToEvents();
 			_customTooltip.SubscribeToEvents();
+
+			_higlightSubsystem = new SearchResultHiglightSubsystem(_viewDeck, _searchSubsystem, adapter);
+			_higlightSubsystem.SubscribeToEvents();
 		}
 
 		public void SetUi(UiModel ui, TooltipController controller, DeckSuggestModel suggestModel)
 		{
 			_ui = ui;
 
-			if (SearchSubsystem.SuggestModel != null)
-				SearchSubsystem.UnsubscribeSuggestModelEvents();
+			if (_searchSubsystem.SuggestModel != null)
+				_searchSubsystem.UnsubscribeSuggestModelEvents();
 
-			SearchSubsystem.SuggestModel = suggestModel;
-			SearchSubsystem.Ui = ui;
-			SearchSubsystem.SubscribeSuggestModelEvents();
+			_searchSubsystem.SuggestModel = suggestModel;
+			_searchSubsystem.Ui = ui;
+			_searchSubsystem.SubscribeSuggestModelEvents();
 
 			setupTooltips(controller);
 
-			SearchSubsystem.UpdateSuggestInput();
+			_searchSubsystem.UpdateSuggestInput();
 
 			initModels();
 		}
+
+		public void StartThread() =>
+			_searchSubsystem.StartThread();
+
+		public void AbortThread() =>
+			_searchSubsystem.AbortThread();
 
 		private void initModels()
 		{
@@ -93,7 +103,7 @@ namespace Mtgdb.Controls
 				_models.Add(model);
 			}
 
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 		public void PriceLoaded()
@@ -101,13 +111,13 @@ namespace Mtgdb.Controls
 			foreach (var model in _models)
 				model.DeckChanged();
 
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 		public void DeckChanged(Deck deck)
 		{
 			_model.Deck = deck;
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 		public void CollectionChanged()
@@ -115,7 +125,7 @@ namespace Mtgdb.Controls
 			foreach (var model in _models)
 				model.CollectionChanged();
 
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 
@@ -128,10 +138,10 @@ namespace Mtgdb.Controls
 				_textBoxName);
 
 			controller.SetTooltip(_tooltipOwner,
-				() => SearchSubsystem.SearchResult?.ParseErrorMessage != null
+				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
 					: "Search decks",
-				() => SearchSubsystem.SearchResult?.ParseErrorMessage ??
+				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
 					"Type some query to narrow down the list of decks below\r\n" +
 					"Example queries:\r\n" +
 					"name: affin*\r\n" +
@@ -182,7 +192,7 @@ namespace Mtgdb.Controls
 
 		private void applySearchResult()
 		{
-			var searchResult = SearchSubsystem?.SearchResult?.RelevanceById;
+			var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
 
 			_filteredModels.Clear();
 			_filteredModels.Add(_model);
@@ -197,7 +207,7 @@ namespace Mtgdb.Controls
 				_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
 			}
 			
-			_viewDecks.RefreshData();
+			_viewDeck.RefreshData();
 			Refreshed?.Invoke(this);
 		}
 
@@ -216,7 +226,7 @@ namespace Mtgdb.Controls
 			_deckListModel.Insert(0, copy);
 			_models.Insert(0, copyModel);
 
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 		private void removeDeck(DeckModel deckModel)
@@ -224,7 +234,7 @@ namespace Mtgdb.Controls
 			_models.Remove(deckModel);
 			_deckListModel.Remove(deckModel.Deck);
 
-			SearchSubsystem.ModelChanged();
+			_searchSubsystem.ModelChanged();
 		}
 
 		private void openDeck(DeckModel deckModel) =>
@@ -257,7 +267,7 @@ namespace Mtgdb.Controls
 		{
 			_renamedModel = model;
 
-			fieldBounds.Offset(_viewDecks.Location);
+			fieldBounds.Offset(_viewDeck.Location);
 			_textBoxName.Bounds = fieldBounds;
 			_textBoxName.Text = model.Deck.Name;
 			_textBoxName.SelectAll();
@@ -282,7 +292,7 @@ namespace Mtgdb.Controls
 
 			if (commit)
 			{
-				SearchSubsystem.ModelChanged();
+				_searchSubsystem.ModelChanged();
 
 				if (renamedModel.IsCurrent)
 					DeckRenamed?.Invoke(this, renamedModel.Deck);
@@ -298,7 +308,7 @@ namespace Mtgdb.Controls
 			_panelSearch.Height = _panelSearch.Height.ByDpiHeight();
 			_menuFilterByDeckMode.ScaleDpi();
 
-			scaleLayoutView(_viewDecks);
+			scaleLayoutView(_viewDeck);
 		}
 
 		private static void scalePanelIcon(BorderedPanel panel)
@@ -346,34 +356,19 @@ namespace Mtgdb.Controls
 		public bool AnyFilteredDeckContains(Card c) =>
 			_cardIdsInFilteredDecks.Contains(c.Id);
 
+
+
 		public bool HideScroll
 		{
-			get => _viewDecks.LayoutOptions.HideScroll;
-			set => _viewDecks.LayoutOptions.HideScroll = value;
+			get => _viewDeck.LayoutOptions.HideScroll;
+			set => _viewDeck.LayoutOptions.HideScroll = value;
 		}
 
 		public bool AllowPartialCard
 		{
-			get => _viewDecks.LayoutOptions.AllowPartialCards;
-			set => _viewDecks.LayoutOptions.AllowPartialCards = value;
+			get => _viewDeck.LayoutOptions.AllowPartialCards;
+			set => _viewDeck.LayoutOptions.AllowPartialCards = value;
 		}
-
-		public int ScrollPosition => _viewDecks.CardIndex;
-		public int MaxScroll => _viewDecks.Count;
-		public int FilteredDecksCount => _viewDecks.Count - 1;
-
-		private DeckModel _model;
-		private readonly List<DeckModel> _models = new List<DeckModel>();
-		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
-
-		private object _tooltipOwner;
-
-		private UiModel _ui;
-		private DeckListModel _deckListModel;
-
-		private DeckModel _renamedModel;
-		private ViewDeckListTooltips _customTooltip;
-		public DeckSearchSubsystem SearchSubsystem { get; private set; }
 
 		public FilterByDeckMode FilterByDeckMode
 		{
@@ -388,7 +383,26 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
+		public int ScrollPosition => _viewDeck.CardIndex;
+		public int MaxScroll => _viewDeck.Count;
+		public int FilteredDecksCount => _viewDeck.Count - 1;
+
+		private DeckModel _model;
+
+		private object _tooltipOwner;
+
+		private UiModel _ui;
+		private DeckListModel _deckListModel;
+
+		private DeckModel _renamedModel;
+		private ViewDeckListTooltips _customTooltip;
+		private DeckSearchSubsystem _searchSubsystem;
+
 		private FilterByDeckMode _filterByDeckMode;
+		private SearchResultHiglightSubsystem _higlightSubsystem;
+
+		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
+		private readonly List<DeckModel> _models = new List<DeckModel>();
+		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
 	}
 }

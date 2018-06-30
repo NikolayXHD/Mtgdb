@@ -1185,7 +1185,7 @@ namespace Mtgdb.Controls
 				card.SetIconRecognizer(IconRecognizer);
 		}
 
-		public void SetHighlihgtTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName)
+		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName)
 		{
 			var card = Cards[getDisplayIndex(rowHandle)];
 			var field = card.Fields.Single(_ => _.FieldName == fieldName);
@@ -1379,10 +1379,8 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public LayoutControl ProbeCard { get; private set; }
 
-		public IEnumerable<string> FieldNames
-		{
-			get { return ProbeCard.Fields.Select(_ => _.FieldName); }
-		}
+		public IEnumerable<string> FieldNames => 
+			ProbeCard.Fields.Select(_ => _.FieldName).Where(F.IsNotNull);
 
 
 

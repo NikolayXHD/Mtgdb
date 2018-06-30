@@ -868,7 +868,7 @@ namespace Mtgdb.Gui
 
 			_imagePreloadingSubsystem.StartThread();
 			_cardSearchSubsystem.StartThread();
-			_deckListControl.SearchSubsystem.StartThread();
+			_deckListControl.StartThread();
 		}
 
 		private void stopThreads()
@@ -883,7 +883,7 @@ namespace Mtgdb.Gui
 
 			_imagePreloadingSubsystem.AbortThread();
 			_cardSearchSubsystem.AbortThread();
-			_deckListControl.SearchSubsystem.AbortThread();
+			_deckListControl.AbortThread();
 		}
 
 

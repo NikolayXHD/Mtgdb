@@ -261,7 +261,7 @@ namespace Mtgdb.Gui
 			_view.IconRecognizer = recognizer;
 
 		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName) => 
-			_view.SetHighlihgtTextRanges(ranges, rowHandle, fieldName);
+			_view.SetHighlightTextRanges(ranges, rowHandle, fieldName);
 
 		public IList<TextRange> GetHiglightRanges(int rowHandle, string fieldName) => 
 			_view.GetHighlihgtTextRanges(rowHandle, fieldName);

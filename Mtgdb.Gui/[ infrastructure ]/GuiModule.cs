@@ -56,6 +56,10 @@ namespace Mtgdb.Gui
 			Kernel.Bind<DeckListModel>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<IconRecognizer>()
+				.ToMethod(ctx => IconRecognizerFactory.Create())
+				.InSingletonScope();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Index
 {
 	public class KnutMorrisPrattSubstringSearch<T>
 	{

@@ -10,12 +10,13 @@ using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
+using Mtgdb.Gui;
 using Mtgdb.Index;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
-	public class DeckSearchSubsystem
+	public class DeckSearchSubsystem: ISearchSubsystem<int>
 	{
 		public DeckSearchSubsystem(
 			Control parent,
