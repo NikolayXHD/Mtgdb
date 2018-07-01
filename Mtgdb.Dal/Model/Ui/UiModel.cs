@@ -8,7 +8,7 @@ namespace Mtgdb.Dal
 			ImageLoader imageLoader,
 			ImageRepository imageRepo,
 			CardRepository cardRepo,
-			[Optional] CollectionModel collection)
+			[Optional] CollectionEditorModel collection)
 		{
 			CardRepo = cardRepo;
 			Collection = collection;

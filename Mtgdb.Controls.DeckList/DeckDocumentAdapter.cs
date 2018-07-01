@@ -47,8 +47,7 @@ namespace Mtgdb.Controls
 			!IsNotAnalyzed(userField) && 
 			!_spellcheckerValues.ContainsKey(userField);
 
-		public bool IsNotAnalyzed(string userField) =>
-			false;
+		public bool IsNotAnalyzed(string userField) => Str.Equals(userField, nameof(DeckModel.Saved));
 
 		public IEnumerable<string> GetSpellcheckerValues(DeckModel obj, string userField, string language) =>
 			_spellcheckerValues[userField](obj);
@@ -67,8 +66,14 @@ namespace Mtgdb.Controls
 			if (!string.IsNullOrEmpty(deck.Mana))
 				addTextField(doc, nameof(DeckModel.Mana), deck.Mana);
 
+			if (deck.Saved.HasValue)
+				addTextField(doc, nameof(DeckModel.Saved), Format(deck.Saved.Value));
+
 			return doc;
 		}
+
+		public static string Format(DateTime savedValue) =>
+			savedValue.ToString("yyyy-MM-dd HH:mm:ss");
 
 		private static void addIdField(Document doc, string fieldName, int fieldValue)
 		{
@@ -97,13 +102,14 @@ namespace Mtgdb.Controls
 		private static readonly HashSet<string> _userFields = new HashSet<string>(Str.Comparer)
 		{
 			nameof(DeckModel.Name),
-			nameof(DeckModel.Mana)
+			nameof(DeckModel.Mana),
+			nameof(DeckModel.Saved)
 		};
 
 		private readonly Dictionary<string, Func<DeckModel, IEnumerable<string>>> _spellcheckerValues
 			= new Dictionary<string, Func<DeckModel, IEnumerable<string>>>(Str.Comparer)
 			{
-				[nameof(DeckModel.Name)] = d => Sequence.From(d.Name),
+				[nameof(DeckModel.Name)] = d => Sequence.From(d.Name)
 			};
 
 		private const string AnyField = "*";

@@ -134,6 +134,7 @@ namespace Mtgdb.Gui
 			this._tabs.ColorUnselected = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(196)))), ((int)(((byte)(196)))));
 			this._tabs.ColorUnselectedHovered = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
 			this._tabs.DrawBottomBorder = true;
+			this._tabs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._tabs.Location = new System.Drawing.Point(108, 1);
 			this._tabs.Margin = new System.Windows.Forms.Padding(0);
 			this._tabs.Name = "_tabs";
@@ -556,7 +557,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenDeck.Size = new System.Drawing.Size(266, 34);
 			this._buttonMenuOpenDeck.TabIndex = 30;
 			this._buttonMenuOpenDeck.TabStop = false;
-			this._buttonMenuOpenDeck.Text = "              Load deck from file: Ctrl+O";
+			this._buttonMenuOpenDeck.Text = "              Load deck(s) from file(s): Ctrl+O";
 			this._buttonMenuOpenDeck.UseVisualStyleBackColor = true;
 			// 
 			// _buttonVisitMtgo

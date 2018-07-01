@@ -60,6 +60,10 @@ namespace Mtgdb.Gui
 			Kernel.Bind<IconRecognizer>()
 				.ToMethod(ctx => IconRecognizerFactory.Create())
 				.InSingletonScope();
+
+			Kernel.Bind<DeckSerializationSubsystem>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

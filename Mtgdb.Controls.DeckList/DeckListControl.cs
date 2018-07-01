@@ -12,9 +12,10 @@ namespace Mtgdb.Controls
 	{
 		public event Action<object> Refreshed;
 		public event Action<object> Scrolled;
-		public event Action<object, Deck> DeckOpened;
+		public event Action<object, Deck, bool> DeckOpened;
 		public event Action<object, Deck> DeckRenamed;
 		public event Action<object> FilterByDeckModeChanged;
+		public event Action<object> DeckAdded;
 
 		public DeckListControl()
 		{
@@ -28,7 +29,7 @@ namespace Mtgdb.Controls
 			DeckDocumentAdapter adapter,
 			Control tooltipOwner)
 		{
-			_deckListModel = decks;
+			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
 
 			_viewDeck.IconRecognizer = recognizer;
@@ -36,7 +37,7 @@ namespace Mtgdb.Controls
 			_viewDeck.DataSource = _filteredModels;
 
 			_textBoxName.Visible = false;
-			
+
 			_customTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 
 			_searchSubsystem = new DeckSearchSubsystem(
@@ -67,6 +68,8 @@ namespace Mtgdb.Controls
 			_higlightSubsystem.SubscribeToEvents();
 		}
 
+
+
 		public void SetUi(UiModel ui, TooltipController controller, DeckSuggestModel suggestModel)
 		{
 			_ui = ui;
@@ -93,40 +96,29 @@ namespace Mtgdb.Controls
 
 		private void initModels()
 		{
-			_model = new DeckModel(Deck.Create(), _ui) { Id = -1, IsCurrent = true };
-			
-			var models = _deckListModel.GetModels(_ui);
-
-			foreach (var model in models)
+			_model = new DeckModel(Deck.Create(), _ui)
 			{
-				model.Id = _models.Count;
-				_models.Add(model);
-			}
+				Id = -1,
+				IsCurrent = true,
+				Saved = DateTime.MinValue
+			};
 
 			_searchSubsystem.ModelChanged();
 		}
 
-		public void PriceLoaded()
-		{
-			foreach (var model in _models)
-				model.DeckChanged();
-
+		public void PriceLoaded() =>
 			_searchSubsystem.ModelChanged();
-		}
 
 		public void DeckChanged(Deck deck)
 		{
 			_model.Deck = deck;
-			_searchSubsystem.ModelChanged();
+
+			_viewDeck.RefreshData();
+			Refreshed?.Invoke(this);
 		}
 
-		public void CollectionChanged()
-		{
-			foreach (var model in _models)
-				model.CollectionChanged();
-
+		public void CollectionChanged() =>
 			_searchSubsystem.ModelChanged();
-		}
 
 
 
@@ -174,14 +166,25 @@ namespace Mtgdb.Controls
 
 		private void viewDeckClicked(object view, HitInfo hitInfo, MouseEventArgs mouseArgs)
 		{
-			if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonAdd)
-				saveCurrentDeck();
-			else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRemove)
-				removeDeck((DeckModel) hitInfo.RowDataSource);
-			else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
-				openDeck((DeckModel) hitInfo.RowDataSource);
-			else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRename)
-				beginRenaming((DeckModel) hitInfo.RowDataSource, hitInfo.FieldBounds.Value);
+			switch (mouseArgs.Button)
+			{
+				case MouseButtons.Left:
+					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonAdd)
+						saveCurrentDeck();
+					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRemove)
+						removeDeck((DeckModel) hitInfo.RowDataSource);
+					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: false);
+					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRename)
+						beginRenaming((DeckModel) hitInfo.RowDataSource, hitInfo.FieldBounds.Value);
+
+					break;
+
+				case MouseButtons.Middle:
+					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: true);
+					break;
+			}
 		}
 
 		private void viewDeckRowDataLoaded(object view, int rowHandle) =>
@@ -197,8 +200,12 @@ namespace Mtgdb.Controls
 			_filteredModels.Clear();
 			_filteredModels.Add(_model);
 
-			var models = _models.Where(m => searchResult == null || searchResult.ContainsKey(m.Id));
-			
+			var models = _listModel.GetModels(_ui)
+				.Reverse()
+				.Where(m => searchResult == null || searchResult.ContainsKey(m.Id));
+
+			_cardIdsInFilteredDecks.Clear();
+
 			foreach (var model in models)
 			{
 				_filteredModels.Add(model);
@@ -206,7 +213,7 @@ namespace Mtgdb.Controls
 				_cardIdsInFilteredDecks.UnionWith(model.Deck.MainDeck.Order);
 				_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
 			}
-			
+
 			_viewDeck.RefreshData();
 			Refreshed?.Invoke(this);
 		}
@@ -220,25 +227,58 @@ namespace Mtgdb.Controls
 
 		private void saveCurrentDeck()
 		{
-			var copy = _model.Deck.Copy();
-			var copyModel = new DeckModel(copy, _ui) { Id = _models.Count };
+			BeginLoadingDecks(count: 1);
+			AddDeck(_model.Deck.Copy());
+			EndLoadingDecks();
+		}
 
-			_deckListModel.Insert(0, copy);
-			_models.Insert(0, copyModel);
+		public void BeginLoadingDecks(int count)
+		{
+			if (count <= 0)
+				throw new ArgumentException($"{nameof(count)}: {count}", nameof(count));
+
+			DecksToAddCount = count;
+			_saved = DateTime.Now;
+		}
+
+		public void ContinueLoadingDecks(int count) =>
+			DecksToAddCount = count;
+
+		public void AddDeck(Deck deck)
+		{
+			if (_saved.HasValue)
+				deck.Saved = _saved.Value;
+
+			_listModel.Add(deck);
+
+			DecksAddedCount++;
+			DeckAdded?.Invoke(this);
+		}
+
+		public void EndLoadingDecks()
+		{
+			bool changed = DecksAddedCount > 0;
+
+			DecksToAddCount = 0;
+			DecksAddedCount = 0;
+			_saved = null;
+
+			if (!changed)
+				return;
 
 			_searchSubsystem.ModelChanged();
+			_listModel.Save();
 		}
 
 		private void removeDeck(DeckModel deckModel)
 		{
-			_models.Remove(deckModel);
-			_deckListModel.Remove(deckModel.Deck);
-
+			_listModel.Remove(deckModel.Deck);
+			_listModel.Save();
 			_searchSubsystem.ModelChanged();
 		}
 
-		private void openDeck(DeckModel deckModel) =>
-			DeckOpened?.Invoke(this, deckModel.Deck);
+		private void openDeck(DeckModel deckModel, bool inNewTab) =>
+			DeckOpened?.Invoke(this, deckModel.Deck, inNewTab);
 
 
 
@@ -284,7 +324,10 @@ namespace Mtgdb.Controls
 			var renamedModel = _renamedModel;
 
 			if (commit)
-				_deckListModel.Rename(renamedModel.Deck, _textBoxName.Text);
+			{
+				_listModel.Rename(renamedModel.Deck, _textBoxName.Text);
+				_listModel.Save();
+			}
 
 			_renamedModel = null;
 			_textBoxName.Visible = false;
@@ -383,16 +426,23 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		public LayoutViewControl DeckListView => _viewDeck;
 		public int ScrollPosition => _viewDeck.CardIndex;
 		public int MaxScroll => _viewDeck.Count;
 		public int FilteredDecksCount => _viewDeck.Count - 1;
+
+		public bool IsAddingDecks => _saved.HasValue;
+		public int DecksAddedCount { get; private set; }
+		public int DecksToAddCount { get; private set; }
+
+		private DateTime? _saved;
 
 		private DeckModel _model;
 
 		private object _tooltipOwner;
 
 		private UiModel _ui;
-		private DeckListModel _deckListModel;
+		private DeckListModel _listModel;
 
 		private DeckModel _renamedModel;
 		private ViewDeckListTooltips _customTooltip;
@@ -402,7 +452,6 @@ namespace Mtgdb.Controls
 		private SearchResultHiglightSubsystem _higlightSubsystem;
 
 		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
-		private readonly List<DeckModel> _models = new List<DeckModel>();
 		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
 	}
 }

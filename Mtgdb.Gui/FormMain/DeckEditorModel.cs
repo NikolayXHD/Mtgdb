@@ -435,6 +435,10 @@ namespace Mtgdb.Gui
 			return cardRepository.CardsById[id];
 		}
 
+
+		public string DeckFile { get; set; }
+		public string DeckName { get; set; }
+
 		private static readonly Random _random = new Random();
 		private List<string> _library;
 	}

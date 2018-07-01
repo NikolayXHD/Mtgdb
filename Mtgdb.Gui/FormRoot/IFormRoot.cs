@@ -18,11 +18,13 @@ namespace Mtgdb.Gui
 		void SelectNextTab();
 		void SelectPreviousTab();
 
-		void AddTab(Action<object> onCreated);
+		void AddTab();
 
 		void CloseTab();
 
 		int TabsCount { get; }
+
+		void OpenDeckInNewTab(Deck deck);
 
 		bool LoadedGuiSettings { get; set; }
 		bool ShowTextualFields { get; set; }

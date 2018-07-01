@@ -219,6 +219,16 @@ namespace Mtgdb.Controls
 			return true;
 		}
 
+		public static Rectangle GetBoundingRectangle(this Point[] poly)
+		{
+			int left = poly.Min(_ => _.X);
+			int top = poly.Min(_ => _.Y);
+			int right = poly.Max(_ => _.X);
+			int bottom = poly.Max(_ => _.Y);
+
+			return new Rectangle(left, top, right - left, bottom - top);
+		}
+
 		public static Point ProjectTo(this Point desiredLocation, Rectangle rect)
 		{
 			int x = desiredLocation.X;

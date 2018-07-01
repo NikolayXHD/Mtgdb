@@ -18,17 +18,6 @@ namespace Mtgdb.Gui
 				_buttonRedo);
 
 			TooltipController.SetTooltip(this,
-				"Tabbed Document Interface (TDI)",
-				"Add tab: Ctrl+T, click '+' button\r\n" +
-				"Remove tab: Ctrl+F4, click 'x' button, Middle mouse click\r\n" +
-				"Select next tab: Ctrl+Tab\r\n" +
-				"Drag tab headers to reorder tabs\r\n" +
-				"Move the tab to another window by dragging it to another window title\r\n" +
-				"\r\n" +
-				"Drag the card here to select or create another tab where you want to drop the card.",
-				_tabs);
-
-			TooltipController.SetTooltip(this,
 				"Deck statistics",
 				"Opens a Pivot report window. Use it to view \r\n" +
 				"mana curve, price breakdown, or create \r\n" +
@@ -96,6 +85,11 @@ namespace Mtgdb.Gui
 				"Open new window",
 				"You can drag-n-drop Cards and Tabs between windows.",
 				_buttonOpenWindow);
+
+			var tabHeadersTooltip = new TabHeadersTooltip(_tabs, this);
+			tabHeadersTooltip.SubscribeToEvents();
+
+			TooltipController.SetCustomTooltip(tabHeadersTooltip);
 
 			Load += loadTooltips;
 			Closing += closeTooltips;

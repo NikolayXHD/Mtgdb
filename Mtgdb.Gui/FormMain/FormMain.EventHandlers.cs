@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -69,12 +68,8 @@ namespace Mtgdb.Gui
 
 		private void cardRepoSetAdded()
 		{
-			if (_cardRepo.SetsByCode.Count % 3 == 0)
-				this.Invoke(delegate
-				{
-					updateFormStatus();
-					Application.DoEvents();
-				});
+			if (_cardRepo.SetsByCode.Count % 9 == 0)
+				this.Invoke(updateFormStatus);
 		}
 
 		private void repoLoadingComplete()
@@ -84,9 +79,9 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				updateShowSampleHandButtons();
-				_cardSearchSubsystem.Apply();
-				_deckEditorModel.LoadDeck(_cardRepo);
-				_sortSubsystem.Invalidate();
+				_cardSearch.Apply();
+				_deckEditor.LoadDeck(_cardRepo);
+				_sort.Invalidate();
 
 				endRestoreSettings();
 
@@ -98,18 +93,18 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				if (_sortSubsystem.IsLanguageDependent)
+				if (_sort.IsLanguageDependent)
 				{
 					beginRestoreSettings();
-					_sortSubsystem.Invalidate();
+					_sort.Invalidate();
 					endRestoreSettings();
 				}
 
 				if (_formRoot.UiModel.LanguageController.Language != CardLocalization.DefaultLanguage &&
-					!string.IsNullOrEmpty(_cardSearchSubsystem.AppliedText))
+					!string.IsNullOrEmpty(_cardSearch.AppliedText))
 				{
 					beginRestoreSettings();
-					_cardSearchSubsystem.Apply();
+					_cardSearch.Apply();
 					endRestoreSettings();
 					RunRefilterTask();
 				}
@@ -128,10 +123,10 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				if (!string.IsNullOrEmpty(_cardSearchSubsystem.AppliedText))
+				if (!string.IsNullOrEmpty(_cardSearch.AppliedText))
 				{
 					beginRestoreSettings();
-					_cardSearchSubsystem.Apply();
+					_cardSearch.Apply();
 					endRestoreSettings();
 
 					RunRefilterTask();
@@ -299,10 +294,10 @@ namespace Mtgdb.Gui
 
 			if (sender == _viewCards)
 			{
-				_imagePreloadingSubsystem.Reset();
+				_imagePreloading.Reset();
 
 				if (_cardRepo.IsLoadingComplete)
-					_historySubsystem.Current.SearchResultScroll = _viewCards.VisibleRecordIndex;
+					_history.Current.SearchResultScroll = _viewCards.VisibleRecordIndex;
 			}
 
 			updateFormStatus();
@@ -323,36 +318,26 @@ namespace Mtgdb.Gui
 			RunRefilterTask();
 		}
 
-		private void deckListOpenedDeck(object sender, Deck deck) =>
-			deckLoaded(deck);
+		private void deckListOpenedDeck(object sender, Deck deck, bool inNewTab)
+		{
+			if (inNewTab)
+				_formRoot.OpenDeckInNewTab(deck);
+			else
+				LoadDeck(deck);
+		}
+
+
 
 		private void deckListRenamedDeck(object sender, Deck deck)
 		{
-			_historySubsystem.DeckName = deck.Name;
+			_deckEditor.DeckName = deck.Name;
 			updateFormStatus();
 		}
 
-		private void filterByDeckModeChanged(object sender)
+		private void deckListAdded(object sender)
 		{
-			_viewCards.Focus();
-
-			if (restoringSettings())
-				return;
-
-			bool filterGroupEnabled = isFilterGroupEnabled(FilterGroup.Deck);
-			bool mustBeEnabled = _deckListControl.FilterByDeckMode != FilterByDeckMode.Ignored;
-
-			if (mustBeEnabled != filterGroupEnabled)
-			{
-				if (mustBeEnabled)
-					setFilterManagerState(FilterGroup.Deck, FilterValueState.Required);
-				else
-					setFilterManagerState(FilterGroup.Deck, FilterValueState.Ignored);
-			}
-
-			resetTouchedCard();
-			RunRefilterTask();
-			historyUpdate();
+			if (_deckListControl.DecksAddedCount % 89 == 0)
+				this.Invoke(updateFormStatus);
 		}
 
 		private void updateFilterByDeckMode()
@@ -382,10 +367,52 @@ namespace Mtgdb.Gui
 			historyUpdate();
 		}
 
+		private void filterByDeckModeChanged(object sender)
+		{
+			_viewCards.Focus();
+
+			if (restoringSettings())
+				return;
+
+			bool filterGroupEnabled = isFilterGroupEnabled(FilterGroup.Deck);
+			bool mustBeEnabled = _deckListControl.FilterByDeckMode != FilterByDeckMode.Ignored;
+
+			if (mustBeEnabled != filterGroupEnabled)
+			{
+				beginRestoreSettings();
+
+				if (mustBeEnabled)
+					setFilterManagerState(FilterGroup.Deck, FilterValueState.Required);
+				else
+					setFilterManagerState(FilterGroup.Deck, FilterValueState.Ignored);
+
+				endRestoreSettings();
+			}
+
+			resetTouchedCard();
+			RunRefilterTask();
+			historyUpdate();
+		}
+
 		private void quickFilterManagerChanged(object sender, EventArgs e)
 		{
 			if (restoringSettings())
 				return;
+
+			bool filterGroupEnabled = isFilterGroupEnabled(FilterGroup.Deck);
+			bool mustBeEnabled = _deckListControl.FilterByDeckMode != FilterByDeckMode.Ignored;
+
+			if (mustBeEnabled != filterGroupEnabled)
+			{
+				beginRestoreSettings();
+
+				if (filterGroupEnabled)
+					_deckListControl.FilterByDeckMode = FilterByDeckMode.CurrentDeck;
+				else
+					_deckListControl.FilterByDeckMode = FilterByDeckMode.Ignored;
+
+				endRestoreSettings();
+			}
 
 			resetTouchedCard();
 			RunRefilterTask();
@@ -400,10 +427,10 @@ namespace Mtgdb.Gui
 
 			var zone = DeckZone ?? Zone.Main;
 
-			if (_deckEditorModel.Zone != zone)
+			if (_deckEditor.Zone != zone)
 			{
 				beginRestoreSettings();
-				_deckEditorModel.SetZone(zone, _cardRepo);
+				_deckEditor.SetZone(zone, _cardRepo);
 				endRestoreSettings();
 			}
 
@@ -428,7 +455,7 @@ namespace Mtgdb.Gui
 			if (!zone.HasValue)
 				throw new ArgumentNullException(nameof(zone));
 
-			if (zone == _deckEditorModel.Zone)
+			if (zone == _deckEditor.Zone)
 			{
 				updateViewCards(listChanged, card, FilterGroup.Deck, touchedChanged);
 				updateViewDeck(listChanged, countChanged, card, touchedChanged);
@@ -443,7 +470,7 @@ namespace Mtgdb.Gui
 					historyUpdate();
 
 			if (isActualDeckChange)
-				_deckListControl.DeckChanged(copyDeck());
+				_deckListControl.DeckChanged(_copyPaste.GetDeckCopy());
 
 			if (!restoringSettings())
 				updateFormStatus();
@@ -484,8 +511,8 @@ namespace Mtgdb.Gui
 				if (restoringSettings())
 					return;
 
-				if (touchedChanged && _deckEditorModel.TouchedCard != null)
-					RunRefilterTask(() => _scrollSubsystem.EnsureCardVisibility(_deckEditorModel.TouchedCard, _viewCards));
+				if (touchedChanged && _deckEditor.TouchedCard != null)
+					RunRefilterTask(() => _scroll.EnsureCardVisibility(_deckEditor.TouchedCard, _viewCards));
 				else
 					RunRefilterTask();
 			}
@@ -503,8 +530,8 @@ namespace Mtgdb.Gui
 			if (listChanged)
 				_viewDeck.RefreshData();
 
-			if (touchedChanged && _deckEditorModel.TouchedCard != null)
-				_scrollSubsystem.EnsureCardVisibility(_deckEditorModel.TouchedCard, _viewDeck);
+			if (touchedChanged && _deckEditor.TouchedCard != null)
+				_scroll.EnsureCardVisibility(_deckEditor.TouchedCard, _viewDeck);
 
 			if (listChanged)
 				_viewDeck.Invalidate();
@@ -512,17 +539,6 @@ namespace Mtgdb.Gui
 				_viewDeck.Invalidate();
 			else if (card != null)
 				_viewDeck.InvalidateCard(card);
-		}
-
-
-
-		private void loadDeck(Deck deck)
-		{
-			_historySubsystem.DeckFile = deck.File;
-			_historySubsystem.DeckName = deck.Name;
-
-			_deckEditorModel.SetDeck(deck, _cardRepo);
-			_deckEditorModel.Shuffle();
 		}
 
 
@@ -595,15 +611,15 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (_sortSubsystem.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
+			if (_sort.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 			{
 				beginRestoreSettings();
 
-				if (_sortSubsystem.IsLanguageDependent)
-					_sortSubsystem.Invalidate();
+				if (_sort.IsLanguageDependent)
+					_sort.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
-					_cardSearchSubsystem.Apply();
+					_cardSearch.Apply();
 
 				endRestoreSettings();
 
@@ -621,7 +637,7 @@ namespace Mtgdb.Gui
 		private void cardSearchStringApplied()
 		{
 			beginRestoreSettings();
-			_sortSubsystem.Invalidate();
+			_sort.Invalidate();
 			endRestoreSettings();
 
 			if (restoringSettings())
@@ -658,7 +674,7 @@ namespace Mtgdb.Gui
 
 			float sampleHandOpacity = 0.6f;
 
-			_buttonSubsystem.SetupButton(_buttonSampleHandNew,
+			_buttons.SetupButton(_buttonSampleHandNew,
 				new ButtonImages(
 					null,
 					Resources.hand_48.SetOpacity(sampleHandOpacity),
@@ -666,7 +682,7 @@ namespace Mtgdb.Gui
 					Resources.hand_48,
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonSampleHandDraw,
+			_buttons.SetupButton(_buttonSampleHandDraw,
 				new ButtonImages(
 					null,
 					Resources.draw_48.SetOpacity(sampleHandOpacity),
@@ -674,7 +690,7 @@ namespace Mtgdb.Gui
 					Resources.draw_48,
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonSampleHandMulligan,
+			_buttons.SetupButton(_buttonSampleHandMulligan,
 				new ButtonImages(
 					null,
 					Resources.mulligan_48.SetOpacity(sampleHandOpacity),
@@ -682,7 +698,7 @@ namespace Mtgdb.Gui
 					Resources.mulligan_48,
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonShowDuplicates,
+			_buttons.SetupButton(_buttonShowDuplicates,
 				new ButtonImages(
 					Resources.clone_48.TransformColors(saturation: 0f),
 					Resources.clone_48,
@@ -690,7 +706,7 @@ namespace Mtgdb.Gui
 					Resources.clone_48.TransformColors(saturation: 2.5f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonShowProhibit,
+			_buttons.SetupButton(_buttonShowProhibit,
 				new ButtonImages(
 					Resources.exclude_hidden_24,
 					Resources.exclude_shown_24,
@@ -698,7 +714,7 @@ namespace Mtgdb.Gui
 					Resources.exclude_shown_24.TransformColors(sat, 1.2f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonExcludeManaAbility,
+			_buttons.SetupButton(_buttonExcludeManaAbility,
 				new ButtonImages(
 					Resources.include_plus_24,
 					Resources.exclude_minus_24,
@@ -706,7 +722,7 @@ namespace Mtgdb.Gui
 					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonExcludeManaCost,
+			_buttons.SetupButton(_buttonExcludeManaCost,
 				new ButtonImages(
 					Resources.include_plus_24,
 					Resources.exclude_minus_24,
@@ -714,7 +730,7 @@ namespace Mtgdb.Gui
 					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonHideDeck,
+			_buttons.SetupButton(_buttonHideDeck,
 				new ButtonImages(
 					Resources.shown_40,
 					Resources.hidden_40,
@@ -722,7 +738,7 @@ namespace Mtgdb.Gui
 					Resources.hidden_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonHideScroll,
+			_buttons.SetupButton(_buttonHideScroll,
 				new ButtonImages(
 					Resources.scroll_shown_40,
 					Resources.scroll_hidden_40,
@@ -730,7 +746,7 @@ namespace Mtgdb.Gui
 					Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonHidePartialCards,
+			_buttons.SetupButton(_buttonHidePartialCards,
 				new ButtonImages(
 					Resources.partial_card_enabled_40,
 					Resources.partial_card_disabled_40,
@@ -738,7 +754,7 @@ namespace Mtgdb.Gui
 					Resources.partial_card_disabled_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonHideText,
+			_buttons.SetupButton(_buttonHideText,
 				new ButtonImages(
 					Resources.text_enabled_40,
 					Resources.text_disabled_40,
@@ -746,7 +762,7 @@ namespace Mtgdb.Gui
 					Resources.text_disabled_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
 
-			_buttonSubsystem.SetupButton(_buttonSearchExamplesDropDown,
+			_buttons.SetupButton(_buttonSearchExamplesDropDown,
 				new ButtonImages(
 					null,
 					Resources.book_40,
@@ -757,193 +773,13 @@ namespace Mtgdb.Gui
 
 
 
-		private static void deckDragEnter(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-			{
-				string[] files = (string[]) e.Data.GetData(DataFormats.FileDrop);
-				if (files.Length < 10)
-					e.Effect = DragDropEffects.Copy;
-			}
-			else if (e.Data.GetFormats().Contains(DataFormats.Text))
-			{
-				e.Effect = DragDropEffects.Copy;
-			}
-		}
-
-		public void PasteDeck(bool append)
-		{
-			if (!_cardRepo.IsLoadingComplete)
-				return;
-
-			var text = Clipboard.GetText();
-			if (string.IsNullOrWhiteSpace(text))
-				return;
-
-			pasteDeckFromText(text, append);
-		}
-
-		public void PasteCollection(bool append)
-		{
-			if (!_cardRepo.IsLoadingComplete)
-				return;
-
-			var text = Clipboard.GetText();
-			if (string.IsNullOrWhiteSpace(text))
-				return;
-
-			pasteCollectionFromText(text, append);
-		}
-
-		public void CopyCollection()
-		{
-			var deck = Deck.Create(
-				_collectionModel.CountById?.ToDictionary(),
-				_collectionModel.CountById?.Keys.OrderBy(_ => _cardRepo.CardsById[_].NameEn).ToList(),
-				null,
-				null);
-
-			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
-			Clipboard.SetText(serialized);
-		}
-
-		public void CopyDeck()
-		{
-			Deck deck;
-
-			switch (DeckZone)
-			{
-				case Zone.SampleHand:
-					deck = copyMainDeck();
-					break;
-				case Zone.Side:
-					deck = copuSideDeck();
-					break;
-				case Zone.Main:
-					deck = copyDeck();
-					break;
-				default:
-					return;
-			}
-
-			var serialized = _deckSerializationSubsystem.SaveSerialized("*.txt", deck);
-			Clipboard.SetText(serialized);
-		}
-
-		private Deck copyMainDeck() =>
-			Deck.Create(
-				_deckEditorModel.SampleHand.CountById.ToDictionary(),
-				_deckEditorModel.SampleHand.CardsIds.ToList(),
-				null,
-				null);
-
-		private Deck copuSideDeck() =>
-			Deck.Create(
-				_deckEditorModel.SideDeck.CountById.ToDictionary(),
-				_deckEditorModel.SideDeck.CardsIds.ToList(),
-				null,
-				null);
-
-		private Deck copyDeck()
-		{
-			var result = Deck.Create(
-				_deckEditorModel.MainDeck.CountById.ToDictionary(),
-				_deckEditorModel.MainDeck.CardsIds.ToList(),
-				_deckEditorModel.SideDeck.CountById.ToDictionary(),
-				_deckEditorModel.SideDeck.CardsIds.ToList());
-
-			result.Name = _historySubsystem.Current.DeckName;
-			result.File = _historySubsystem.Current.DeckFile;
-
-			return result;
-		}
-
-		private void pasteDeckFromText(string text, bool append)
-		{
-			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
-
-			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-				_deckEditorModel.Paste(deck, append, _cardRepo);
-		}
+		public void ScheduleOpeningDeck(Deck deck) =>
+			_requiredDeck = deck;
 
 		private void hideSampleHand()
 		{
 			if (DeckZone == Zone.SampleHand)
 				DeckZone = Zone.Main;
-		}
-
-		private void pasteCollectionFromText(string text, bool append)
-		{
-			var deck = _deckSerializationSubsystem.LoadSerialized("*.txt", text);
-
-			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-				_collectionModel.LoadCollection(deck, append);
-		}
-
-		private void deckDragDropped(object sender, DragEventArgs e)
-		{
-			if (_cardRepo.IsLoadingComplete)
-			{
-				dragDropped(e.Data);
-				return;
-			}
-
-			_cardRepo.LoadingComplete += () => { this.Invoke(delegate { dragDropped(e.Data); }); };
-
-			MessageBox.Show(this,
-				"Mtgdb.Gui is loading cards.\r\n" +
-				"When completed, the deck(s) will be opened.",
-				"Opening deck(s) delayed",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Information);
-		}
-
-		private void dragDropped(IDataObject dragData)
-		{
-			if (dragData.GetDataPresent(DataFormats.FileDrop))
-			{
-				var files = (string[]) dragData.GetData(DataFormats.FileDrop);
-
-				var decks = files.Select(f => _deckSerializationSubsystem.LoadFile(f))
-					.ToArray();
-
-				var failedDecks = decks.Where(d => d.Error != null).ToArray();
-				var loadedDecks = decks.Where(d => d.Error == null).ToArray();
-
-				if (failedDecks.Length > 0)
-				{
-					var message = string.Join(Str.Endl,
-						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
-
-					MessageBox.Show(message);
-				}
-
-				if (loadedDecks.Length > 0)
-					deckLoaded(loadedDecks[0]);
-
-				for (int i = 1; i < loadedDecks.Length; i++)
-				{
-					var deck = loadedDecks[i];
-					_formRoot.AddTab(form => ((FormMain) form)._requiredDeck = deck);
-				}
-			}
-			else if (dragData.GetFormats().Contains(DataFormats.Text))
-			{
-				string text = (string) dragData.GetData(DataFormats.Text, autoConvert: true);
-
-				if (ModifierKeys == Keys.Alt)
-					pasteCollectionFromText(text, append: false);
-				else if (ModifierKeys == (Keys.Alt | Keys.Shift))
-					pasteCollectionFromText(text, append: true);
-				else if (ModifierKeys == Keys.None)
-					pasteDeckFromText(text, append: false);
-				else if (ModifierKeys == Keys.Shift)
-					pasteDeckFromText(text, append: true);
-			}
 		}
 
 
@@ -953,7 +789,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsLoadingComplete)
 				return;
 
-			_deckEditorModel.NewSampleHand(_cardRepo);
+			_deckEditor.NewSampleHand(_cardRepo);
 		}
 
 		private void sampleHandMulligan(object sender, EventArgs e)
@@ -961,7 +797,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsLoadingComplete)
 				return;
 
-			_deckEditorModel.Mulligan(_cardRepo);
+			_deckEditor.Mulligan(_cardRepo);
 		}
 
 		private void sampleHandDraw(object sender, EventArgs e)
@@ -969,7 +805,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsLoadingComplete)
 				return;
 
-			_deckEditorModel.Draw(_cardRepo);
+			_deckEditor.Draw(_cardRepo);
 		}
 
 

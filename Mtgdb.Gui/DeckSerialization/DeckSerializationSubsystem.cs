@@ -2,12 +2,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
 	public class DeckSerializationSubsystem
 	{
+		[UsedImplicitly]
 		public DeckSerializationSubsystem(
 			CardRepository cardRepository,
 			ForgeSetRepository forgeSetRepo)
@@ -84,28 +86,13 @@ namespace Mtgdb.Gui
 			return deck;
 		}
 
-		public Deck LoadDeck()
-		{
-			return loadFile("deck");
-		}
-
 		public Deck LoadCollection()
 		{
-			return loadFile("collection");
+			var file = selectFilesToOpen("collection", allowMultiple: false).SingleOrDefault();
+			return file?.Invoke(Deserialize);
 		}
 
-		private Deck loadFile(string fileType)
-		{
-			var fileToOpen = selectFileToOpen(fileType);
-
-			if (fileToOpen == null)
-				return null;
-
-			var deck = LoadFile(fileToOpen);
-			return deck;
-		}
-
-		public Deck LoadFile(string file)
+		public Deck Deserialize(string file)
 		{
 			State.LastLoadedFile = file;
 
@@ -229,7 +216,10 @@ namespace Mtgdb.Gui
 			return new DeckFile(dlg.FileName, dlg.FilterIndex - 1);
 		}
 
-		private string selectFileToOpen(string fileType)
+		public string[] SelectDeckFiles() =>
+			selectFilesToOpen("deck", allowMultiple: true);
+
+		private string[] selectFilesToOpen(string fileType, bool allowMultiple)
 		{
 			var dlg = new OpenFileDialog
 			{
@@ -237,13 +227,14 @@ namespace Mtgdb.Gui
 				Filter = _loadFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = LoadFilterIndex,
-				Title = @"Select a file to load " + fileType
+				Title = $"Select {(allowMultiple ? "one or more" : "a")} file to load " + fileType,
+				Multiselect = allowMultiple
 			};
 
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return null;
 
-			return dlg.FileName;
+			return dlg.FileNames;
 		}
 
 
@@ -274,6 +265,19 @@ namespace Mtgdb.Gui
 			return 1 + index / 2;
 		}
 
+
+		public string GetShortDisplayName(string deckName)
+		{
+			if (deckName == null)
+				return NoDeck;
+
+			const int maxLength = 30;
+
+			if (deckName.Length > maxLength)
+				return $"…{deckName.Substring(deckName.Length - maxLength)}";
+
+			return deckName;
+		}
 
 
 		private readonly string _loadFilter;

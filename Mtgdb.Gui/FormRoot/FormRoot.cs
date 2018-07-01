@@ -128,6 +128,7 @@ namespace Mtgdb.Gui
 			DeckSuggestModel deckSuggestModel,
 			TooltipController tooltipController,
 			CardRepository repo,
+			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
 			FormManager formManager)
 			:this()
@@ -143,6 +144,7 @@ namespace Mtgdb.Gui
 			
 			_formManager = formManager;
 			_repo = repo;
+			_serialization = serialization;
 			_buttonSubsystem = new ButtonSubsystem();
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
@@ -525,20 +527,9 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndex = nextPageIndex;
 		}
 
-		public void AddTab(Action<object> onCreated = null)
+		public void AddTab()
 		{
-			if (onCreated != null)
-			{
-				void onTabCreated(TabHeaderControl c, int i) => onCreated(getTab(i));
-
-				_tabs.TabAdded += onTabCreated;
-				_tabs.AddTab();
-				_tabs.TabAdded -= onTabCreated;
-			}
-			else
-			{
-				_tabs.AddTab();
-			}
+			_tabs.AddTab();
 		}
 
 		private void addTab(FormMain form) => _tabs.AddTab(form);
@@ -547,6 +538,20 @@ namespace Mtgdb.Gui
 		{
 			_tabs.RemoveTab(_tabs.SelectedIndex);
 		}
+
+		public void OpenDeckInNewTab(Deck deck)
+		{
+			void onTabCreated(TabHeaderControl c, int i)
+			{
+				var form = getTab(i);
+				form.ScheduleOpeningDeck(deck);
+			}
+
+			_tabs.TabAdded += onTabCreated;
+			_tabs.AddTab(select: false, tabText: _serialization.GetShortDisplayName(deck.Name));
+			_tabs.TabAdded -= onTabCreated;
+		}
+
 
 
 		private FormMain SelectedTab => (FormMain)_tabs.SelectedTabId;
@@ -619,5 +624,6 @@ namespace Mtgdb.Gui
 		private readonly NewsService _newsService;
 		private readonly FormManager _formManager;
 		private readonly CardRepository _repo;
+		private readonly DeckSerializationSubsystem _serialization;
 	}
 }

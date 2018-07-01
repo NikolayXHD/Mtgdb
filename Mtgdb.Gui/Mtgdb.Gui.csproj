@@ -114,10 +114,11 @@
     <Compile Include="FormChart\Fields.cs" />
     <Compile Include="FormChart\FieldsExtension.cs" />
     <Compile Include="FormMain\CustomConverter.cs" />
+    <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\DeckZoneModel.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
-    <Compile Include="FormMain\DeckEditingSubsystem.cs" />
+    <Compile Include="FormMain\DeckEditorUi.cs" />
     <Compile Include="FormMain\DeckEditorModel.cs" />
     <Compile Include="FormMain\DrawingSubsystem.cs" />
     <Compile Include="FormMain\Evaluators.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRoot\TabHeadersTooltip.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

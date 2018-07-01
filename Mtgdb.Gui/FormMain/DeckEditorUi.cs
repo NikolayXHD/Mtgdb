@@ -8,23 +8,23 @@ using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
-	public class DeckEditingSubsystem
+	public class DeckEditorUi
 	{
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly Cursor _cursor;
 		private readonly DeckEditorModel _deckEditorModel;
-		private readonly CollectionModel _collectionModel;
+		private readonly CollectionEditorModel _collectionModel;
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly FormZoom _formZoom;
 		private readonly Cursor _zoomCursor;
 		private readonly Cursor _textSelectionCursor;
 
-		public DeckEditingSubsystem(
+		public DeckEditorUi(
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
 			DeckEditorModel deckEditorModel,
-			CollectionModel collectionModel,
+			CollectionEditorModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
 			Cursor cursor,
 			FormZoom formZoom)

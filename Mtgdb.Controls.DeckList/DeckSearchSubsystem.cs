@@ -122,7 +122,7 @@ namespace Mtgdb.Controls
 					if (deltaMs > 0)
 						Thread.Sleep(deltaMs + 100);
 					else
-						_findEditor.Invoke(Apply);
+						_findEditor.Invoke(apply);
 				}
 			}
 			catch (ThreadAbortException)
@@ -317,7 +317,7 @@ namespace Mtgdb.Controls
 						ApplyDirtyText();
 
 						setFindText(appliedText, appliedText.Length);
-						Apply();
+						apply();
 					}
 
 					e.Handled = true;
@@ -326,7 +326,7 @@ namespace Mtgdb.Controls
 				case Keys.Enter:
 					if (!_listBoxSuggest.Visible)
 					{
-						Apply();
+						apply();
 					}
 					else
 					{
@@ -387,7 +387,7 @@ namespace Mtgdb.Controls
 		public void ApplyDirtyText()
 		{
 			if (_appliedText != _findEditor.Text)
-				Apply();
+				apply();
 		}
 
 		private void cycleValue(bool backward)
@@ -408,7 +408,7 @@ namespace Mtgdb.Controls
 				: cycleSuggest.Values[0];
 
 			pasteText(value, type, currentState, cycleSuggest.Token, positionCaretToNextValue: false);
-			Apply();
+			apply();
 		}
 
 
@@ -622,10 +622,10 @@ namespace Mtgdb.Controls
 		public void ModelChanged()
 		{
 			_searcher.ModelChanged();
-			Apply();
+			apply();
 		}
 
-		public void Apply()
+		private void apply()
 		{
 			_appliedText = _currentText;
 
@@ -673,7 +673,7 @@ namespace Mtgdb.Controls
 				pasteText(query, TokenType.None, source, token, positionCaretToNextValue: true);
 			}
 
-			Apply();
+			apply();
 		}
 
 

@@ -218,10 +218,10 @@
 				_buttonExcludeManaCost);
 
 			controller.SetTooltip(this,
-				() => _cardSearchSubsystem.SearchResult?.ParseErrorMessage != null
+				() => _cardSearch.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
 					: "Search text",
-				() => _cardSearchSubsystem.SearchResult?.ParseErrorMessage ??
+				() => _cardSearch.SearchResult?.ParseErrorMessage ??
 					"Narrows down the list of cards below based on a query you type. Example query:\r\n" +
 					"TextEn: \"counter target spell\"\r\n\r\n" +
 					"Ctrl+SPACE to get intellisense\r\n" +

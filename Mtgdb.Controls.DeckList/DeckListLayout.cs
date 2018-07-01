@@ -59,28 +59,30 @@ namespace Mtgdb.Controls
 			_fieldSideCollectedUnknownPrice.FieldName = nameof(DeckModel.SideOwnedUnknownPriceCount);
 			_fieldSideCollectedUnknownPricePercent.FieldName = nameof(DeckModel.SideOwnedUnknownPricePercent);
 
-			_fieldName.CustomButtons.Add(new ButtonOptions
+			_fieldSaved.Name = nameof(DeckModel.Saved);
+
+			_fieldSaved.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomLeft,
 				Icon = Resources.Remove_16,
 				ShowOnlyWhenHotTracked = false
 			});
 
-			_fieldName.CustomButtons.Add(new ButtonOptions
+			_fieldSaved.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
 				Icon = Resources.Open_16,
 				ShowOnlyWhenHotTracked = false
 			});
 
-			_fieldName.CustomButtons.Add(new ButtonOptions
+			_fieldSaved.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
 				Icon = Resources.Add_16,
 				ShowOnlyWhenHotTracked = false
 			});
 
-			_fieldName.CustomButtons.Add(new ButtonOptions
+			_fieldSaved.CustomButtons.Add(new ButtonOptions
 			{
 				Alignment = ContentAlignment.BottomRight,
 				Icon = Resources.Rename_16,
@@ -101,6 +103,8 @@ namespace Mtgdb.Controls
 			_fieldName.DataText = deck?.Name.NullIfEmpty() ?? "[no name]";
 			_fieldGeneratedMana.DataText = deck?.Mana;
 
+
+
 			_fieldLandCount.DataText = deck?.LandCount.ToString(Str.Culture);
 			_fieldCreatureCount.DataText = deck?.CreatureCount.ToString(Str.Culture);
 			_fieldOtherCount.DataText = deck?.OtherSpellCount.ToString(Str.Culture);
@@ -112,6 +116,7 @@ namespace Mtgdb.Controls
 			_fieldSideCount.DataText = deck?.Count(Zone.Side).ToString(Str.Culture);
 			_fieldSideCollectedCount.DataText = deck?.SideOwnedCount.ToString(Str.Culture);
 			_fieldSideCollectedCountPercent.DataText = deck?.SideOwnedCountPercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+
 
 
 			_fieldLandPrice.DataText = deck?.LandPrice.ToString(formatPrice, Str.Culture);
@@ -139,6 +144,12 @@ namespace Mtgdb.Controls
 			_fieldSideUnknownPrice.DataText = deck?.UnknownPriceCount(Zone.Side).ToString(Str.Culture);
 			_fieldSideCollectedUnknownPrice.DataText = deck?.SideOwnedUnknownPriceCount.ToString(Str.Culture);
 			_fieldSideCollectedUnknownPricePercent.DataText = deck?.SideOwnedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+
+			var saved = deck?.Saved?.Invoke(DeckDocumentAdapter.Format);
+			
+			_fieldSaved.DataText = saved != null
+				? "saved\n" + saved
+				: null;
 		}
 
 		public override IEnumerable<FieldControl> Fields => _panelLayout.Controls.Cast<FieldControl>();
@@ -149,7 +160,7 @@ namespace Mtgdb.Controls
 
 			var baseResult = base.GetCustomButtons(field);
 
-			if (field != _fieldName)
+			if (field != _fieldSaved)
 				return baseResult;
 
 			var list = baseResult.ToList();

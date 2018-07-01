@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mtgdb.Dal
 {
-	public class CollectionModel : ICardCollection
+	public class CollectionEditorModel : ICardCollection
 	{
 		public event DeckChangedEventHandler CollectionChanged;
 

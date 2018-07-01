@@ -116,13 +116,13 @@ namespace Mtgdb.Controls
 					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
 					{
 						tooltip.Id += "open";
-						tooltip.Title = "Open this deck";
-						tooltip.Text = "Relaces currently opened deck with this one";
+						tooltip.Title = "Open deck";
+						tooltip.Text = "Left-click to open in this tab, currently opened deck will be " +
+							"replaced.\r\n" +
+							"Middle-click to open in new tab.";
 					}
 					else
-					{
-						throw new NotSupportedException();
-					}
+						return;
 
 					Show?.Invoke(tooltip);
 				}

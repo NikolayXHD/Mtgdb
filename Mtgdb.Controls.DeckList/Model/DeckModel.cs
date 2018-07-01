@@ -9,9 +9,6 @@ namespace Mtgdb.Controls
 	{
 		public DeckModel(Deck deck, UiModel ui)
 		{
-			Ui = ui;
-			Deck = deck;
-
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
 			int countOwned(Card c, int countInDeck) => Math.Min(countInDeck, c.CollectionCount(Ui));
@@ -99,6 +96,9 @@ namespace Mtgdb.Controls
 			_filterIsLandAndPriceIsUnknown = c => _filterIsLand(c) && _filterPriceIsUnknown(c);
 			_filterIsCreatureAndPriceIsUnknown = c => _filterIsCreature(c) && _filterPriceIsUnknown(c);
 			_filterIsOtherSpellAndPriceIsUnknown = c => _filterIsOtherSpell(c) && _filterPriceIsUnknown(c);
+
+			_deck = deck;
+			_ui = ui;
 		}
 
 		public void CollectionChanged()
@@ -228,6 +228,12 @@ namespace Mtgdb.Controls
 		{
 			get => _deck.Id;
 			set => _deck.Id = value;
+		}
+
+		public DateTime? Saved
+		{
+			get => _deck.Saved;
+			set => _deck.Saved = value;
 		}
 
 		public Deck Deck

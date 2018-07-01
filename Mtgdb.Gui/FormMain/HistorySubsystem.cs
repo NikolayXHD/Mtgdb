@@ -18,15 +18,20 @@ namespace Mtgdb.Gui
 			_maxDepth = undoConfig.MaxDepth ?? 100;
 		}
 
-		public void LoadHistory(string historyFile)
+		public void LoadHistory(string file)
 		{
-			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
+			string directory = Path.GetDirectoryName(file);
 
-			if (File.Exists(historyFile))
+			if (string.IsNullOrEmpty(directory))
+				throw new ArgumentException($"parent directory not found for path: {file}", nameof(file));
+
+			Directory.CreateDirectory(directory);
+
+			if (File.Exists(file))
 			{
 				HistoryState state;
 
-				using (var fileReader = File.OpenText(historyFile))
+				using (var fileReader = File.OpenText(file))
 				using (var jsonReader = new JsonTextReader(fileReader))
 					state = _serializer.Deserialize<HistoryState>(jsonReader);
 
@@ -78,13 +83,18 @@ namespace Mtgdb.Gui
 			return false;
 		}
 
-		public void Save(string historyFile)
+		public void Save(string file)
 		{
-			Directory.CreateDirectory(Path.GetDirectoryName(historyFile));
+			string directory = Path.GetDirectoryName(file);
+
+			if (string.IsNullOrEmpty(directory))
+				throw new ArgumentException($"Parent directory not found for path: {file}", nameof(file));
+
+			Directory.CreateDirectory(directory);
 
 			var state = getState();
 
-			using (var writer = File.CreateText(historyFile))
+			using (var writer = File.CreateText(file))
 			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
 				_serializer.Serialize(jsonWriter, state);
 		}
@@ -136,9 +146,6 @@ namespace Mtgdb.Gui
 				return _settingsIndex > 0;
 			}
 		}
-
-		public string DeckFile { get; set; }
-		public string DeckName { get; set; }
 
 		public event Action Loaded;
 		public bool IsLoaded { get; private set; }

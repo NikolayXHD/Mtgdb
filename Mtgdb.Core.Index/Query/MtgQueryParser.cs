@@ -31,16 +31,17 @@ namespace Mtgdb.Index
 
 		protected override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
 		{
-			string termImage = termToken.Image.Substring(1, termToken.Image.Length - 2);
+			string image = termToken.Image.Substring(1, termToken.Image.Length - 2);
+			string value = StringEscaper.Unescape(image);
 
-			(bool IsFloat, bool IsInt) numericTypeGetter() => getNumericTypes(termImage);
+			(bool IsFloat, bool IsInt) numericTypeGetter() => getNumericTypes(value);
 
 			Query queryFactory(string fld, bool analyzed)
 			{
 				if (analyzed)
 					return base.HandleQuotedTerm(fld, termToken, slopToken);
 
-				var notAnalyzedQuery = GetFieldQuery(fld, termToken.Image.Substring(1, termToken.Image.Length - 2), true);
+				var notAnalyzedQuery = GetFieldQuery(fld, value, quoted: true);
 				return notAnalyzedQuery;
 			}
 

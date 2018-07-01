@@ -53,7 +53,7 @@ namespace Mtgdb.Dal
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<CollectionModel>()
+			Kernel.Bind<CollectionEditorModel>()
 				.ToSelf()
 				.InSingletonScope();
 

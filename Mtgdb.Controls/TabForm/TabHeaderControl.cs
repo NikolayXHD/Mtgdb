@@ -15,6 +15,7 @@ namespace Mtgdb.Controls
 
 		public event Action<TabHeaderControl, int> SelectedIndexChanging;
 		public event Action<TabHeaderControl, int> SelectedIndexChanged;
+		public event Action<TabHeaderControl, int> HoveredIndexChanged;
 		public event Action<TabHeaderControl, int> TabAdded;
 		public event Action<TabHeaderControl, int> TabRemoving;
 		public event Action<TabHeaderControl> TabRemoved;
@@ -172,7 +173,7 @@ namespace Mtgdb.Controls
 			TabRemoved?.Invoke(this);
 		}
 
-		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null)
+		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null, bool select = true)
 		{
 			lock (_syncRoot)
 			{
@@ -192,14 +193,18 @@ namespace Mtgdb.Controls
 			int index = Count - 1;
 
 			TabAdded?.Invoke(this, index);
-			SelectedIndex = index;
+
+			if (select)
+				SelectedIndex = index;
 
 			if ((insertToTheLeft ?? AddNewTabsToTheLeft) && index != 0)
-				RelocateTab(index, 0, selectRelocated: true);
+				RelocateTab(index, 0, selectRelocated: select);
 		}
 
 		public void RelocateTab(int fromIndex, int toIndex, bool selectRelocated)
 		{
+			object selectedId = TabIds[SelectedIndex];
+
 			if (fromIndex != toIndex && toIndex >= 0 && toIndex < Count)
 				lock (_syncRoot)
 				{
@@ -211,6 +216,8 @@ namespace Mtgdb.Controls
 
 			if (selectRelocated)
 				SelectedIndex = toIndex;
+			else
+				SelectedIndex = TabIds.IndexOf(selectedId);
 
 			TabReordered?.Invoke(this);
 		}
@@ -469,6 +476,9 @@ namespace Mtgdb.Controls
 					hoveredIndex = Count;
 		}
 
+		public Point[] GetTabPolygon(int index) =>
+			getTabPolygon(index, Widths);
+
 		private bool isTabHit(int i, Point location, out bool closeHovered)
 		{
 			closeHovered = false;
@@ -551,7 +561,7 @@ namespace Mtgdb.Controls
 			int iconWidth = icon?.Width ?? 0;
 
 			var textSize = !string.IsNullOrEmpty(text)
-				? measureText(text)
+				? g.MeasureText(text, Font)
 				: new Size(0, 0);
 
 			if (!string.IsNullOrEmpty(text))
@@ -717,11 +727,8 @@ namespace Mtgdb.Controls
 				Convert.ToInt32(AllowRemovingTabs) * (closeIcon?.Width ?? 0);
 		}
 
-		private Size measureText(string text)
-		{
-			var result = _graphics.MeasureText(text, Font);
-			return result;
-		}
+		private Size measureText(string text) =>
+			_graphics.MeasureText(text, Font);
 
 		public string GetDefaultText(int i)
 		{
@@ -742,13 +749,8 @@ namespace Mtgdb.Controls
 			OnLayout(new LayoutEventArgs(this, null));
 		}
 
-		protected bool IsLayoutSuspended()
-		{
-			var property = typeof(Control).GetProperty("IsLayoutSuspended",
-				BindingFlags.NonPublic | BindingFlags.Instance);
-			bool result = (bool) property.GetValue(this, null);
-			return result;
-		}
+		protected bool IsLayoutSuspended() =>
+			(bool) _layoutSuspendedProperty.GetValue(this, null);
 
 
 		[Category("Settings"), DefaultValue(typeof(Size), "15, 21")]
@@ -825,6 +827,7 @@ namespace Mtgdb.Controls
 				{
 					_hoveredIndex = value;
 					Invalidate();
+					HoveredIndexChanged?.Invoke(this, value);
 				}
 			}
 		}
@@ -1085,6 +1088,9 @@ namespace Mtgdb.Controls
 		private Bitmap _defaultIcon;
 		private bool _allowRemovingTabs = true;
 		private Bitmap _addIcon;
-		private Graphics _graphics;
+		private readonly Graphics _graphics;
+
+		private static readonly PropertyInfo _layoutSuspendedProperty =
+			typeof(Control).GetProperty("IsLayoutSuspended", BindingFlags.NonPublic | BindingFlags.Instance);
 	}
 }

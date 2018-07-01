@@ -62,9 +62,13 @@ namespace Mtgdb.Dal
 			result.File = File;
 			result.Error = Error;
 			result.Id = Id;
+			result.Saved = Saved;
 
 			return result;
 		}
+
+		public bool IsEquivalentTo(Deck other) =>
+			MainDeck.IsEquivalentTo(other.MainDeck) && Sideboard.IsEquivalentTo(other.Sideboard);
 
 		public void Replace(Dictionary<string, string> replacements)
 		{
@@ -118,5 +122,6 @@ namespace Mtgdb.Dal
 		public string Name { get; set; }
 		public string File { get; set; }
 		public string Error { get; set; }
+		public DateTime? Saved { get; set; }
 	}
 }
