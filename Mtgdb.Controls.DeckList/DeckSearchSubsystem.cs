@@ -16,7 +16,7 @@ using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
-	public class DeckSearchSubsystem: ISearchSubsystem<int>
+	public class DeckSearchSubsystem : ISearchSubsystem<int>
 	{
 		public DeckSearchSubsystem(
 			Control parent,
@@ -153,6 +153,7 @@ namespace Mtgdb.Controls
 				requiredColor = Color.FromArgb(0xF0, 0xF0, 0xF0);
 			else
 				requiredColor = _panelSearchIcon.BackColor = Color.White;
+
 			return requiredColor;
 		}
 
@@ -255,15 +256,6 @@ namespace Mtgdb.Controls
 			_currentText,
 			_findEditor.SelectionStart,
 			_findEditor.SelectionLength);
-
-		public void FocusSearch()
-		{
-			if (IsSearchFocused())
-				return;
-
-			_findEditor.SelectionStart = _findEditor.TextLength;
-			focusSearch();
-		}
 
 		private void findKeyDown(object sender, KeyEventArgs e)
 		{
@@ -402,7 +394,7 @@ namespace Mtgdb.Controls
 				return;
 
 			var type = cycleSuggest.Types[0];
-			
+
 			string value = type.IsAny(TokenType.FieldValue)
 				? getValueExpression(cycleSuggest.Values[0])
 				: cycleSuggest.Values[0];
@@ -517,7 +509,7 @@ namespace Mtgdb.Controls
 
 			if (!value.Any(char.IsWhiteSpace))
 				return escaped;
-			
+
 			return $"\"{escaped}\"";
 		}
 
@@ -646,18 +638,13 @@ namespace Mtgdb.Controls
 				_findEditor.ForeColor = Color.DarkRed;
 		}
 
-		private void updateSearchResult()
-		{
-			if (!string.IsNullOrWhiteSpace(_currentText))
-				SearchResult = _searcher.Search(_currentText, Ui);
-			else
-				SearchResult = null;
-		}
+		private void updateSearchResult() =>
+			SearchResult = string.IsNullOrWhiteSpace(_currentText)
+				? null
+				: _searcher.Search(_currentText, Ui);
 
-		public bool IsSearchFocused()
-		{
-			return _findEditor.ContainsFocus;
-		}
+		public bool IsSearchFocused() =>
+			_findEditor.ContainsFocus;
 
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{

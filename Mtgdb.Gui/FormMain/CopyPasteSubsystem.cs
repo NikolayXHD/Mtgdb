@@ -251,14 +251,15 @@ namespace Mtgdb.Gui
 
 			switch (_targetForm.DeckZone)
 			{
-				case Zone.SampleHand:
-					deck = copyMainDeck();
+				case Zone.Main:
+				case null when _targetForm.IsDeckListSelected:
+					deck = GetDeckCopy();
 					break;
 				case Zone.Side:
 					deck = copySideDeck();
 					break;
-				case Zone.Main:
-					deck = GetDeckCopy();
+				case Zone.SampleHand:
+					deck = copyMainDeck();
 					break;
 				default:
 					return;

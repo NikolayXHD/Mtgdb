@@ -399,6 +399,9 @@ namespace Mtgdb.Controls
 		public bool AnyFilteredDeckContains(Card c) =>
 			_cardIdsInFilteredDecks.Contains(c.Id);
 
+		public bool IsSearchFocused() =>
+			_searchSubsystem.IsSearchFocused();
+
 
 
 		public bool HideScroll
@@ -426,12 +429,21 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public LayoutViewControl DeckListView => _viewDeck;
-		public int ScrollPosition => _viewDeck.CardIndex;
-		public int MaxScroll => _viewDeck.Count;
-		public int FilteredDecksCount => _viewDeck.Count - 1;
+		public LayoutViewControl DeckListView =>
+			_viewDeck;
 
-		public bool IsAddingDecks => _saved.HasValue;
+		public int ScrollPosition =>
+			_viewDeck.CardIndex;
+		
+		public int MaxScroll =>
+			_viewDeck.Count;
+
+		public int FilteredDecksCount =>
+			_viewDeck.Count - 1;
+
+		public bool IsAddingDecks =>
+			_saved.HasValue;
+
 		public int DecksAddedCount { get; private set; }
 		public int DecksToAddCount { get; private set; }
 

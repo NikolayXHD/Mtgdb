@@ -24,8 +24,8 @@
 
 		private void InitializeComponent()
 		{
-			Mtgdb.Controls.SearchOptions searchOptions42 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions42 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions43 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions43 = new Mtgdb.Controls.ButtonOptions();
 			Mtgdb.Controls.SearchOptions searchOptions3 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.ButtonOptions buttonOptions3 = new Mtgdb.Controls.ButtonOptions();
 			Mtgdb.Controls.SearchOptions searchOptions4 = new Mtgdb.Controls.SearchOptions();
@@ -108,6 +108,8 @@
 			Mtgdb.Controls.ButtonOptions buttonOptions40 = new Mtgdb.Controls.ButtonOptions();
 			Mtgdb.Controls.SearchOptions searchOptions41 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.ButtonOptions buttonOptions41 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions42 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions42 = new Mtgdb.Controls.ButtonOptions();
 			this._fieldName = new Mtgdb.Controls.FieldControl();
 			this._fieldMainCount = new Mtgdb.Controls.FieldControl();
 			this._fieldSideCount = new Mtgdb.Controls.FieldControl();
@@ -151,6 +153,7 @@
 			this._fieldSideCollectedCountPercent = new Mtgdb.Controls.FieldControl();
 			this._fieldGeneratedMana = new Mtgdb.Controls.FieldControl();
 			this._fieldSaved = new Mtgdb.Controls.FieldControl();
+			this._fieldLegality = new Mtgdb.Controls.FieldControl();
 			this._panelLayout.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -161,15 +164,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.SetColumnSpan(this._fieldName, 4);
 			this._fieldName.DataText = "";
-			this._fieldName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._fieldName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldName.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldName.Location = new System.Drawing.Point(10, 40);
-			this._fieldName.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
+			this._fieldName.Location = new System.Drawing.Point(5, 37);
+			this._fieldName.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this._fieldName.Name = "_fieldName";
-			this._fieldName.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			searchOptions42.Button = buttonOptions42;
-			this._fieldName.SearchOptions = searchOptions42;
-			this._fieldName.Size = new System.Drawing.Size(203, 66);
+			searchOptions43.Button = buttonOptions43;
+			this._fieldName.SearchOptions = searchOptions43;
+			this._fieldName.Size = new System.Drawing.Size(213, 46);
 			this._fieldName.TabIndex = 0;
 			// 
 			// _fieldMainCount
@@ -180,7 +182,7 @@
 			this._fieldMainCount.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainCount.DataText = "";
 			this._fieldMainCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCount.Location = new System.Drawing.Point(66, 196);
+			this._fieldMainCount.Location = new System.Drawing.Point(66, 198);
 			this._fieldMainCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCount.Name = "_fieldMainCount";
 			searchOptions3.Button = buttonOptions3;
@@ -195,7 +197,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCount.DataText = "";
 			this._fieldSideCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCount.Location = new System.Drawing.Point(66, 238);
+			this._fieldSideCount.Location = new System.Drawing.Point(66, 240);
 			this._fieldSideCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCount.Name = "_fieldSideCount";
 			searchOptions4.Button = buttonOptions4;
@@ -210,7 +212,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandCount.DataText = "";
 			this._fieldLandCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldLandCount.Location = new System.Drawing.Point(66, 154);
+			this._fieldLandCount.Location = new System.Drawing.Point(66, 156);
 			this._fieldLandCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLandCount.Name = "_fieldLandCount";
 			searchOptions1.Button = buttonOptions1;
@@ -226,7 +228,7 @@
 			this._fieldCreatureCount.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldCreatureCount.DataText = "";
 			this._fieldCreatureCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldCreatureCount.Location = new System.Drawing.Point(66, 168);
+			this._fieldCreatureCount.Location = new System.Drawing.Point(66, 170);
 			this._fieldCreatureCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCreatureCount.Name = "_fieldCreatureCount";
 			searchOptions2.Button = buttonOptions2;
@@ -241,7 +243,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherCount.DataText = "";
 			this._fieldOtherCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldOtherCount.Location = new System.Drawing.Point(66, 182);
+			this._fieldOtherCount.Location = new System.Drawing.Point(66, 184);
 			this._fieldOtherCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldOtherCount.Name = "_fieldOtherCount";
 			searchOptions5.Button = buttonOptions5;
@@ -257,66 +259,68 @@
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-			this._panelLayout.Controls.Add(this._fieldLandCount, 1, 4);
-			this._panelLayout.Controls.Add(this._fieldCreatureCount, 1, 5);
-			this._panelLayout.Controls.Add(this._fieldMainCount, 1, 7);
-			this._panelLayout.Controls.Add(this._fieldSideCount, 1, 10);
-			this._panelLayout.Controls.Add(this._fieldOtherCount, 1, 6);
-			this._panelLayout.Controls.Add(this._labelOtherSpell, 0, 6);
-			this._panelLayout.Controls.Add(this._labelCreature, 0, 5);
-			this._panelLayout.Controls.Add(this._labelLand, 0, 4);
-			this._panelLayout.Controls.Add(this._labelCount, 1, 3);
-			this._panelLayout.Controls.Add(this._labelMain, 0, 7);
-			this._panelLayout.Controls.Add(this._labelMainCollected, 0, 8);
-			this._panelLayout.Controls.Add(this._labelMainPercent, 0, 9);
-			this._panelLayout.Controls.Add(this._labelSideCollected, 0, 11);
-			this._panelLayout.Controls.Add(this._labelSide, 0, 10);
-			this._panelLayout.Controls.Add(this._fieldMainPrice, 2, 7);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedCount, 1, 8);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedPrice, 2, 8);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedUnknownPrice, 3, 8);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedCountPercent, 1, 9);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedPricePercent, 2, 9);
-			this._panelLayout.Controls.Add(this._fieldMainCollectedUnknownPricePercent, 3, 9);
-			this._panelLayout.Controls.Add(this._fieldSidePrice, 2, 10);
-			this._panelLayout.Controls.Add(this._fieldSideUnknownPrice, 3, 10);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedCount, 1, 11);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedPrice, 2, 11);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedUnknownPrice, 3, 11);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedUnknownPricePercent, 3, 12);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedPricePercent, 2, 12);
-			this._panelLayout.Controls.Add(this._labelSidePercent, 0, 12);
-			this._panelLayout.Controls.Add(this._fieldMainUnknownPrice, 3, 7);
-			this._panelLayout.Controls.Add(this._labelPrice, 2, 3);
-			this._panelLayout.Controls.Add(this._labelCountUnknown, 3, 3);
-			this._panelLayout.Controls.Add(this._fieldCreaturePrice, 2, 5);
-			this._panelLayout.Controls.Add(this._fieldCreatureUnknownPrice, 3, 5);
-			this._panelLayout.Controls.Add(this._fieldLandPrice, 2, 4);
-			this._panelLayout.Controls.Add(this._fieldLandUnknownPrice, 3, 4);
-			this._panelLayout.Controls.Add(this._fieldOtherPrice, 2, 6);
-			this._panelLayout.Controls.Add(this._fieldOtherUnknownPrice, 3, 6);
-			this._panelLayout.Controls.Add(this._fieldSideCollectedCountPercent, 1, 12);
+			this._panelLayout.Controls.Add(this._fieldLandCount, 1, 5);
+			this._panelLayout.Controls.Add(this._fieldCreatureCount, 1, 6);
+			this._panelLayout.Controls.Add(this._fieldMainCount, 1, 8);
+			this._panelLayout.Controls.Add(this._fieldSideCount, 1, 11);
+			this._panelLayout.Controls.Add(this._fieldOtherCount, 1, 7);
+			this._panelLayout.Controls.Add(this._labelOtherSpell, 0, 7);
+			this._panelLayout.Controls.Add(this._labelCreature, 0, 6);
+			this._panelLayout.Controls.Add(this._labelLand, 0, 5);
+			this._panelLayout.Controls.Add(this._labelCount, 1, 4);
+			this._panelLayout.Controls.Add(this._labelMain, 0, 8);
+			this._panelLayout.Controls.Add(this._labelMainCollected, 0, 9);
+			this._panelLayout.Controls.Add(this._labelMainPercent, 0, 10);
+			this._panelLayout.Controls.Add(this._labelSideCollected, 0, 12);
+			this._panelLayout.Controls.Add(this._labelSide, 0, 11);
+			this._panelLayout.Controls.Add(this._fieldMainPrice, 2, 8);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedCount, 1, 9);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedPrice, 2, 9);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedUnknownPrice, 3, 9);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedCountPercent, 1, 10);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedPricePercent, 2, 10);
+			this._panelLayout.Controls.Add(this._fieldMainCollectedUnknownPricePercent, 3, 10);
+			this._panelLayout.Controls.Add(this._fieldSidePrice, 2, 11);
+			this._panelLayout.Controls.Add(this._fieldSideUnknownPrice, 3, 11);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedCount, 1, 12);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedPrice, 2, 12);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedUnknownPrice, 3, 12);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedUnknownPricePercent, 3, 13);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedPricePercent, 2, 13);
+			this._panelLayout.Controls.Add(this._labelSidePercent, 0, 13);
+			this._panelLayout.Controls.Add(this._fieldMainUnknownPrice, 3, 8);
+			this._panelLayout.Controls.Add(this._labelPrice, 2, 4);
+			this._panelLayout.Controls.Add(this._labelCountUnknown, 3, 4);
+			this._panelLayout.Controls.Add(this._fieldCreaturePrice, 2, 6);
+			this._panelLayout.Controls.Add(this._fieldCreatureUnknownPrice, 3, 6);
+			this._panelLayout.Controls.Add(this._fieldLandPrice, 2, 5);
+			this._panelLayout.Controls.Add(this._fieldLandUnknownPrice, 3, 5);
+			this._panelLayout.Controls.Add(this._fieldOtherPrice, 2, 7);
+			this._panelLayout.Controls.Add(this._fieldOtherUnknownPrice, 3, 7);
+			this._panelLayout.Controls.Add(this._fieldSideCollectedCountPercent, 1, 13);
 			this._panelLayout.Controls.Add(this._fieldGeneratedMana, 0, 0);
+			this._panelLayout.Controls.Add(this._fieldSaved, 0, 3);
 			this._panelLayout.Controls.Add(this._fieldName, 0, 1);
-			this._panelLayout.Controls.Add(this._fieldSaved, 0, 2);
+			this._panelLayout.Controls.Add(this._fieldLegality, 0, 2);
 			this._panelLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._panelLayout.Location = new System.Drawing.Point(0, 0);
 			this._panelLayout.Margin = new System.Windows.Forms.Padding(0);
 			this._panelLayout.Name = "_panelLayout";
-			this._panelLayout.RowCount = 13;
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.00054F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.00089F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.82045F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
-			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.117815F));
+			this._panelLayout.RowCount = 14;
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
 			this._panelLayout.Size = new System.Drawing.Size(223, 288);
 			this._panelLayout.TabIndex = 6;
 			// 
@@ -330,7 +334,7 @@
 			this._labelOtherSpell.DataText = "";
 			this._labelOtherSpell.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelOtherSpell.Image = global::Mtgdb.Controls.Properties.Resources.instant;
-			this._labelOtherSpell.Location = new System.Drawing.Point(10, 182);
+			this._labelOtherSpell.Location = new System.Drawing.Point(10, 184);
 			this._labelOtherSpell.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelOtherSpell.Name = "_labelOtherSpell";
 			searchOptions6.Allow = false;
@@ -350,7 +354,7 @@
 			this._labelCreature.DataText = "";
 			this._labelCreature.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelCreature.Image = global::Mtgdb.Controls.Properties.Resources.creature;
-			this._labelCreature.Location = new System.Drawing.Point(10, 168);
+			this._labelCreature.Location = new System.Drawing.Point(10, 170);
 			this._labelCreature.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelCreature.Name = "_labelCreature";
 			searchOptions7.Allow = false;
@@ -369,7 +373,7 @@
 			this._labelLand.DataText = "";
 			this._labelLand.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelLand.Image = global::Mtgdb.Controls.Properties.Resources.land;
-			this._labelLand.Location = new System.Drawing.Point(10, 154);
+			this._labelLand.Location = new System.Drawing.Point(10, 156);
 			this._labelLand.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelLand.Name = "_labelLand";
 			searchOptions8.Allow = false;
@@ -387,7 +391,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelCount.DataText = "count";
 			this._labelCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._labelCount.Location = new System.Drawing.Point(66, 140);
+			this._labelCount.Location = new System.Drawing.Point(66, 142);
 			this._labelCount.Margin = new System.Windows.Forms.Padding(0);
 			this._labelCount.Name = "_labelCount";
 			searchOptions9.Allow = false;
@@ -406,7 +410,7 @@
 			this._labelMain.BackColor = System.Drawing.Color.AliceBlue;
 			this._labelMain.DataText = "main deck";
 			this._labelMain.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelMain.Location = new System.Drawing.Point(10, 196);
+			this._labelMain.Location = new System.Drawing.Point(10, 198);
 			this._labelMain.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMain.Name = "_labelMain";
 			searchOptions10.Allow = false;
@@ -424,7 +428,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelMainCollected.DataText = "collected";
 			this._labelMainCollected.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelMainCollected.Location = new System.Drawing.Point(10, 210);
+			this._labelMainCollected.Location = new System.Drawing.Point(10, 212);
 			this._labelMainCollected.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMainCollected.Name = "_labelMainCollected";
 			searchOptions11.Allow = false;
@@ -443,7 +447,7 @@
 			this._labelMainPercent.BackColor = System.Drawing.Color.AliceBlue;
 			this._labelMainPercent.DataText = "%";
 			this._labelMainPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelMainPercent.Location = new System.Drawing.Point(10, 224);
+			this._labelMainPercent.Location = new System.Drawing.Point(10, 226);
 			this._labelMainPercent.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMainPercent.Name = "_labelMainPercent";
 			searchOptions12.Allow = false;
@@ -462,7 +466,7 @@
 			this._labelSideCollected.BackColor = System.Drawing.Color.AliceBlue;
 			this._labelSideCollected.DataText = "collected";
 			this._labelSideCollected.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelSideCollected.Location = new System.Drawing.Point(10, 252);
+			this._labelSideCollected.Location = new System.Drawing.Point(10, 254);
 			this._labelSideCollected.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelSideCollected.Name = "_labelSideCollected";
 			searchOptions13.Allow = false;
@@ -480,7 +484,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelSide.DataText = "sideboard";
 			this._labelSide.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelSide.Location = new System.Drawing.Point(10, 238);
+			this._labelSide.Location = new System.Drawing.Point(10, 240);
 			this._labelSide.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelSide.Name = "_labelSide";
 			searchOptions14.Allow = false;
@@ -497,7 +501,7 @@
 			this._fieldMainPrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainPrice.DataText = "";
 			this._fieldMainPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainPrice.Location = new System.Drawing.Point(110, 196);
+			this._fieldMainPrice.Location = new System.Drawing.Point(110, 198);
 			this._fieldMainPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainPrice.Name = "_fieldMainPrice";
 			searchOptions15.Button = buttonOptions15;
@@ -512,7 +516,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedCount.DataText = "";
 			this._fieldMainCollectedCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedCount.Location = new System.Drawing.Point(66, 210);
+			this._fieldMainCollectedCount.Location = new System.Drawing.Point(66, 212);
 			this._fieldMainCollectedCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedCount.Name = "_fieldMainCollectedCount";
 			searchOptions16.Button = buttonOptions16;
@@ -527,7 +531,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedPrice.DataText = "";
 			this._fieldMainCollectedPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedPrice.Location = new System.Drawing.Point(110, 210);
+			this._fieldMainCollectedPrice.Location = new System.Drawing.Point(110, 212);
 			this._fieldMainCollectedPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedPrice.Name = "_fieldMainCollectedPrice";
 			searchOptions17.Button = buttonOptions17;
@@ -542,7 +546,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedUnknownPrice.DataText = "";
 			this._fieldMainCollectedUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedUnknownPrice.Location = new System.Drawing.Point(154, 210);
+			this._fieldMainCollectedUnknownPrice.Location = new System.Drawing.Point(154, 212);
 			this._fieldMainCollectedUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainCollectedUnknownPrice.Name = "_fieldMainCollectedUnknownPrice";
 			searchOptions18.Button = buttonOptions18;
@@ -558,7 +562,7 @@
 			this._fieldMainCollectedCountPercent.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainCollectedCountPercent.DataText = "";
 			this._fieldMainCollectedCountPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedCountPercent.Location = new System.Drawing.Point(66, 224);
+			this._fieldMainCollectedCountPercent.Location = new System.Drawing.Point(66, 226);
 			this._fieldMainCollectedCountPercent.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedCountPercent.Name = "_fieldMainCollectedCountPercent";
 			searchOptions19.Button = buttonOptions19;
@@ -574,7 +578,7 @@
 			this._fieldMainCollectedPricePercent.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainCollectedPricePercent.DataText = "";
 			this._fieldMainCollectedPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedPricePercent.Location = new System.Drawing.Point(110, 224);
+			this._fieldMainCollectedPricePercent.Location = new System.Drawing.Point(110, 226);
 			this._fieldMainCollectedPricePercent.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedPricePercent.Name = "_fieldMainCollectedPricePercent";
 			searchOptions20.Button = buttonOptions20;
@@ -590,7 +594,7 @@
 			this._fieldMainCollectedUnknownPricePercent.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainCollectedUnknownPricePercent.DataText = "";
 			this._fieldMainCollectedUnknownPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 224);
+			this._fieldMainCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 226);
 			this._fieldMainCollectedUnknownPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainCollectedUnknownPricePercent.Name = "_fieldMainCollectedUnknownPricePercent";
 			searchOptions21.Button = buttonOptions21;
@@ -605,7 +609,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSidePrice.DataText = "";
 			this._fieldSidePrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSidePrice.Location = new System.Drawing.Point(110, 238);
+			this._fieldSidePrice.Location = new System.Drawing.Point(110, 240);
 			this._fieldSidePrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSidePrice.Name = "_fieldSidePrice";
 			searchOptions22.Button = buttonOptions22;
@@ -620,7 +624,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideUnknownPrice.DataText = "";
 			this._fieldSideUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideUnknownPrice.Location = new System.Drawing.Point(154, 238);
+			this._fieldSideUnknownPrice.Location = new System.Drawing.Point(154, 240);
 			this._fieldSideUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldSideUnknownPrice.Name = "_fieldSideUnknownPrice";
 			searchOptions23.Button = buttonOptions23;
@@ -636,7 +640,7 @@
 			this._fieldSideCollectedCount.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldSideCollectedCount.DataText = "";
 			this._fieldSideCollectedCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedCount.Location = new System.Drawing.Point(66, 252);
+			this._fieldSideCollectedCount.Location = new System.Drawing.Point(66, 254);
 			this._fieldSideCollectedCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCollectedCount.Name = "_fieldSideCollectedCount";
 			searchOptions24.Button = buttonOptions24;
@@ -652,7 +656,7 @@
 			this._fieldSideCollectedPrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldSideCollectedPrice.DataText = "";
 			this._fieldSideCollectedPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedPrice.Location = new System.Drawing.Point(110, 252);
+			this._fieldSideCollectedPrice.Location = new System.Drawing.Point(110, 254);
 			this._fieldSideCollectedPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCollectedPrice.Name = "_fieldSideCollectedPrice";
 			searchOptions25.Button = buttonOptions25;
@@ -668,7 +672,7 @@
 			this._fieldSideCollectedUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldSideCollectedUnknownPrice.DataText = "";
 			this._fieldSideCollectedUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedUnknownPrice.Location = new System.Drawing.Point(154, 252);
+			this._fieldSideCollectedUnknownPrice.Location = new System.Drawing.Point(154, 254);
 			this._fieldSideCollectedUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldSideCollectedUnknownPrice.Name = "_fieldSideCollectedUnknownPrice";
 			searchOptions26.Button = buttonOptions26;
@@ -683,12 +687,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedUnknownPricePercent.DataText = "";
 			this._fieldSideCollectedUnknownPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 266);
-			this._fieldSideCollectedUnknownPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 10, 10);
+			this._fieldSideCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 268);
+			this._fieldSideCollectedUnknownPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 10, 5);
 			this._fieldSideCollectedUnknownPricePercent.Name = "_fieldSideCollectedUnknownPricePercent";
 			searchOptions27.Button = buttonOptions27;
 			this._fieldSideCollectedUnknownPricePercent.SearchOptions = searchOptions27;
-			this._fieldSideCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 12);
+			this._fieldSideCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 15);
 			this._fieldSideCollectedUnknownPricePercent.TabIndex = 41;
 			// 
 			// _fieldSideCollectedPricePercent
@@ -698,12 +702,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedPricePercent.DataText = "";
 			this._fieldSideCollectedPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedPricePercent.Location = new System.Drawing.Point(110, 266);
-			this._fieldSideCollectedPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
+			this._fieldSideCollectedPricePercent.Location = new System.Drawing.Point(110, 268);
+			this._fieldSideCollectedPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this._fieldSideCollectedPricePercent.Name = "_fieldSideCollectedPricePercent";
 			searchOptions28.Button = buttonOptions28;
 			this._fieldSideCollectedPricePercent.SearchOptions = searchOptions28;
-			this._fieldSideCollectedPricePercent.Size = new System.Drawing.Size(44, 12);
+			this._fieldSideCollectedPricePercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedPricePercent.TabIndex = 42;
 			// 
 			// _labelSidePercent
@@ -715,13 +719,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelSidePercent.DataText = "%";
 			this._labelSidePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._labelSidePercent.Location = new System.Drawing.Point(10, 266);
-			this._labelSidePercent.Margin = new System.Windows.Forms.Padding(10, 0, 0, 10);
+			this._labelSidePercent.Location = new System.Drawing.Point(10, 268);
+			this._labelSidePercent.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 			this._labelSidePercent.Name = "_labelSidePercent";
 			searchOptions29.Allow = false;
 			searchOptions29.Button = buttonOptions29;
 			this._labelSidePercent.SearchOptions = searchOptions29;
-			this._labelSidePercent.Size = new System.Drawing.Size(56, 12);
+			this._labelSidePercent.Size = new System.Drawing.Size(56, 15);
 			this._labelSidePercent.TabIndex = 27;
 			// 
 			// _fieldMainUnknownPrice
@@ -732,7 +736,7 @@
 			this._fieldMainUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldMainUnknownPrice.DataText = "";
 			this._fieldMainUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldMainUnknownPrice.Location = new System.Drawing.Point(154, 196);
+			this._fieldMainUnknownPrice.Location = new System.Drawing.Point(154, 198);
 			this._fieldMainUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainUnknownPrice.Name = "_fieldMainUnknownPrice";
 			searchOptions30.Button = buttonOptions30;
@@ -749,7 +753,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelPrice.DataText = "price $";
 			this._labelPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._labelPrice.Location = new System.Drawing.Point(110, 140);
+			this._labelPrice.Location = new System.Drawing.Point(110, 142);
 			this._labelPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._labelPrice.Name = "_labelPrice";
 			searchOptions31.Allow = false;
@@ -767,7 +771,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelCountUnknown.DataText = "$ unknown";
 			this._labelCountUnknown.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._labelCountUnknown.Location = new System.Drawing.Point(154, 140);
+			this._labelCountUnknown.Location = new System.Drawing.Point(154, 142);
 			this._labelCountUnknown.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._labelCountUnknown.Name = "_labelCountUnknown";
 			searchOptions32.Allow = false;
@@ -784,7 +788,7 @@
 			this._fieldCreaturePrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldCreaturePrice.DataText = "";
 			this._fieldCreaturePrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldCreaturePrice.Location = new System.Drawing.Point(110, 168);
+			this._fieldCreaturePrice.Location = new System.Drawing.Point(110, 170);
 			this._fieldCreaturePrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCreaturePrice.Name = "_fieldCreaturePrice";
 			searchOptions33.Button = buttonOptions33;
@@ -800,7 +804,7 @@
 			this._fieldCreatureUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
 			this._fieldCreatureUnknownPrice.DataText = "";
 			this._fieldCreatureUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldCreatureUnknownPrice.Location = new System.Drawing.Point(154, 168);
+			this._fieldCreatureUnknownPrice.Location = new System.Drawing.Point(154, 170);
 			this._fieldCreatureUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldCreatureUnknownPrice.Name = "_fieldCreatureUnknownPrice";
 			searchOptions34.Button = buttonOptions34;
@@ -815,7 +819,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandPrice.DataText = "";
 			this._fieldLandPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldLandPrice.Location = new System.Drawing.Point(110, 154);
+			this._fieldLandPrice.Location = new System.Drawing.Point(110, 156);
 			this._fieldLandPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLandPrice.Name = "_fieldLandPrice";
 			searchOptions35.Button = buttonOptions35;
@@ -830,7 +834,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandUnknownPrice.DataText = "";
 			this._fieldLandUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldLandUnknownPrice.Location = new System.Drawing.Point(154, 154);
+			this._fieldLandUnknownPrice.Location = new System.Drawing.Point(154, 156);
 			this._fieldLandUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldLandUnknownPrice.Name = "_fieldLandUnknownPrice";
 			searchOptions36.Button = buttonOptions36;
@@ -845,7 +849,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherPrice.DataText = "";
 			this._fieldOtherPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldOtherPrice.Location = new System.Drawing.Point(110, 182);
+			this._fieldOtherPrice.Location = new System.Drawing.Point(110, 184);
 			this._fieldOtherPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldOtherPrice.Name = "_fieldOtherPrice";
 			searchOptions37.Button = buttonOptions37;
@@ -860,7 +864,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherUnknownPrice.DataText = "";
 			this._fieldOtherUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldOtherUnknownPrice.Location = new System.Drawing.Point(154, 182);
+			this._fieldOtherUnknownPrice.Location = new System.Drawing.Point(154, 184);
 			this._fieldOtherUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldOtherUnknownPrice.Name = "_fieldOtherUnknownPrice";
 			searchOptions38.Button = buttonOptions38;
@@ -875,12 +879,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedCountPercent.DataText = "";
 			this._fieldSideCollectedCountPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSideCollectedCountPercent.Location = new System.Drawing.Point(66, 266);
-			this._fieldSideCollectedCountPercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
+			this._fieldSideCollectedCountPercent.Location = new System.Drawing.Point(66, 268);
+			this._fieldSideCollectedCountPercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this._fieldSideCollectedCountPercent.Name = "_fieldSideCollectedCountPercent";
 			searchOptions39.Button = buttonOptions39;
 			this._fieldSideCollectedCountPercent.SearchOptions = searchOptions39;
-			this._fieldSideCollectedCountPercent.Size = new System.Drawing.Size(44, 12);
+			this._fieldSideCollectedCountPercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedCountPercent.TabIndex = 43;
 			// 
 			// _fieldGeneratedMana
@@ -892,12 +896,13 @@
 			this._fieldGeneratedMana.DataText = "";
 			this._fieldGeneratedMana.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldGeneratedMana.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldGeneratedMana.Location = new System.Drawing.Point(10, 10);
-			this._fieldGeneratedMana.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+			this._fieldGeneratedMana.Location = new System.Drawing.Point(5, 5);
+			this._fieldGeneratedMana.Margin = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this._fieldGeneratedMana.Name = "_fieldGeneratedMana";
+			this._fieldGeneratedMana.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			searchOptions40.Button = buttonOptions40;
 			this._fieldGeneratedMana.SearchOptions = searchOptions40;
-			this._fieldGeneratedMana.Size = new System.Drawing.Size(203, 30);
+			this._fieldGeneratedMana.Size = new System.Drawing.Size(213, 32);
 			this._fieldGeneratedMana.TabIndex = 6;
 			// 
 			// _fieldSaved
@@ -910,13 +915,30 @@
 			this._fieldSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldSaved.ForeColor = System.Drawing.Color.DarkGray;
 			this._fieldSaved.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSaved.Location = new System.Drawing.Point(10, 106);
-			this._fieldSaved.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
+			this._fieldSaved.Location = new System.Drawing.Point(5, 108);
+			this._fieldSaved.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this._fieldSaved.Name = "_fieldSaved";
 			searchOptions41.Button = buttonOptions41;
 			this._fieldSaved.SearchOptions = searchOptions41;
-			this._fieldSaved.Size = new System.Drawing.Size(203, 34);
+			this._fieldSaved.Size = new System.Drawing.Size(213, 34);
 			this._fieldSaved.TabIndex = 51;
+			// 
+			// _fieldLegality
+			// 
+			this._fieldLegality.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._panelLayout.SetColumnSpan(this._fieldLegality, 4);
+			this._fieldLegality.DataText = "";
+			this._fieldLegality.ForeColor = System.Drawing.Color.Gray;
+			this._fieldLegality.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+			this._fieldLegality.Location = new System.Drawing.Point(5, 83);
+			this._fieldLegality.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+			this._fieldLegality.Name = "_fieldLegality";
+			searchOptions42.Button = buttonOptions42;
+			this._fieldLegality.SearchOptions = searchOptions42;
+			this._fieldLegality.Size = new System.Drawing.Size(213, 25);
+			this._fieldLegality.TabIndex = 52;
 			// 
 			// DeckListLayout
 			// 
@@ -975,5 +997,6 @@
 		private FieldControl _fieldOtherPrice;
 		private FieldControl _fieldOtherUnknownPrice;
 		private FieldControl _fieldSaved;
+		private FieldControl _fieldLegality;
 	}
 }

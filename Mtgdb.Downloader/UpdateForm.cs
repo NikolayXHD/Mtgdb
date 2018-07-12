@@ -202,10 +202,9 @@ namespace Mtgdb.Downloader
 
 			setButtonsEnabled(false);
 
-			_installer.Install();
+			_installer.Install(() => _appVersionInstalled = getAppVersionInstalled());
 			
 			setButtonsEnabled(true);
-			_appVersionInstalled = getAppVersionInstalled();
 			suggestCheckAppVersionOnline();
 
 			Console.WriteLine();

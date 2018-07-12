@@ -174,7 +174,7 @@ namespace Mtgdb.Downloader
 			File.Delete(file);
 		}
 
-		public void Install()
+		public void Install(Action onComplete)
 		{
 			var expectedSignature = AppOnlineSignature;
 			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
@@ -188,6 +188,8 @@ namespace Mtgdb.Downloader
 				CreateApplicationShortcut(AppDir.Root);
 				updateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 				Console.WriteLine();
+
+				onComplete?.Invoke();
 
 				Console.WriteLine("Upgrade complete!");
 				Console.WriteLine("Restart Mtgdb.Gui to enjoy new version immediately :)");

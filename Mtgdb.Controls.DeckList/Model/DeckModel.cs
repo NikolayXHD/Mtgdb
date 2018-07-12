@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mtgdb.Dal;
 using System.Linq;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -121,6 +122,7 @@ namespace Mtgdb.Controls
 			_countTotalCache?.Clear();
 
 			_generatedManaCache?.Clear();
+			_legalFormatsCache = null;
 		}
 
 		public bool IsCurrent { get; set; }
@@ -214,6 +216,35 @@ namespace Mtgdb.Controls
 		public float SideOwnedUnknownPricePercent =>
 			(float) SideOwnedUnknownPriceCount / UnknownPriceCount(Zone.Side);
 
+
+
+		public IReadOnlyList<string> Legal
+		{
+			get
+			{
+				if (_legalFormatsCache != null)
+					return _legalFormatsCache;
+
+				if (!_ui.CardRepo.IsLoadingComplete)
+					return ReadOnlyList.Empty<string>();
+
+				bool isAllowedIn(string format, string id, int count)
+				{
+					var c = _ui.CardRepo.CardsById[id];
+					return c.IsLegalIn(format) || c.IsRestrictedIn(format) && count <= 1;
+				}
+
+				_legalFormatsCache = Legality.Formats
+					.Where(format => Deck.MainDeck.Count
+						.All(_ => isAllowedIn(format, id: _.Key, count: _.Value)))
+					.ToReadOnlyList();
+
+				return _legalFormatsCache;
+			}
+		}
+
+
+
 		public UiModel Ui
 		{
 			get => _ui;
@@ -264,6 +295,8 @@ namespace Mtgdb.Controls
 		private readonly DeckAggregateCache<float, float, float> _priceOwnedSideCache;
 		private readonly DeckAggregateCache<int, int, int> _countOwnedSideCache;
 		private readonly DeckAggregateCache<IList<string>, Dictionary<string, int>, string> _generatedManaCache;
+
+		private IReadOnlyList<string> _legalFormatsCache;
 
 		private UiModel _ui;
 		private Deck _deck;

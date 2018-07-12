@@ -47,7 +47,9 @@ namespace Mtgdb.Controls
 			!IsNotAnalyzed(userField) && 
 			!_spellcheckerValues.ContainsKey(userField);
 
-		public bool IsNotAnalyzed(string userField) => Str.Equals(userField, nameof(DeckModel.Saved));
+		public bool IsNotAnalyzed(string userField) =>
+			Str.Equals(userField, nameof(DeckModel.Saved)) ||
+			Str.Equals(userField, nameof(DeckModel.Legal));
 
 		public IEnumerable<string> GetSpellcheckerValues(DeckModel obj, string userField, string language) =>
 			_spellcheckerValues[userField](obj);
@@ -68,6 +70,9 @@ namespace Mtgdb.Controls
 
 			if (deck.Saved.HasValue)
 				addTextField(doc, nameof(DeckModel.Saved), Format(deck.Saved.Value));
+
+			foreach (string format in deck.Legal)
+				addTextField(doc, nameof(DeckModel.Legal), format);
 
 			return doc;
 		}
@@ -103,7 +108,8 @@ namespace Mtgdb.Controls
 		{
 			nameof(DeckModel.Name),
 			nameof(DeckModel.Mana),
-			nameof(DeckModel.Saved)
+			nameof(DeckModel.Saved),
+			nameof(DeckModel.Legal)
 		};
 
 		private readonly Dictionary<string, Func<DeckModel, IEnumerable<string>>> _spellcheckerValues

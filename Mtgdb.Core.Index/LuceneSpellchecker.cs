@@ -26,7 +26,7 @@ namespace Mtgdb.Index
 				.ToReadOnlyList();
 		}
 
-		internal void LoadIndex(DirectoryReader indexReader)
+		public virtual void LoadIndex(DirectoryReader indexReader)
 		{
 			_reader = indexReader;
 
@@ -215,8 +215,8 @@ namespace Mtgdb.Index
 			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, lang);
 			IReadOnlyList<string> values;
 
-			lock (_valuesCache)
-				if (_valuesCache.TryGetValue(spellcheckerField, out values))
+			lock (ValuesCache)
+				if (ValuesCache.TryGetValue(spellcheckerField, out values))
 					return values;
 
 			values = _adapter.IsStoredInSpellchecker(userField, lang)
@@ -226,8 +226,8 @@ namespace Mtgdb.Index
 			if (values == null)
 				return ReadOnlyList.Empty<string>();
 
-			lock (_valuesCache)
-				_valuesCache[spellcheckerField] = values;
+			lock (ValuesCache)
+				ValuesCache[spellcheckerField] = values;
 
 			return values;
 		}
@@ -368,7 +368,7 @@ namespace Mtgdb.Index
 		public int IndexedFields =>
 			_indexedFields;
 
-		public bool IsLoaded { get; private set; }
+		public bool IsLoaded { get; protected set; }
 		public bool IsLoading { get; private set; }
 		public int TotalFields { get; private set; }
 
@@ -382,7 +382,7 @@ namespace Mtgdb.Index
 		private readonly IReadOnlyList<TokenType> _allTokensAreField;
 		private readonly IDocumentAdapter<TId, TObj> _adapter;
 
-		private readonly Dictionary<string, IReadOnlyList<string>> _valuesCache =
+		protected readonly Dictionary<string, IReadOnlyList<string>> ValuesCache =
 			new Dictionary<string, IReadOnlyList<string>>();
 	}
 }

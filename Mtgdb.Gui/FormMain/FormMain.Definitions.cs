@@ -505,7 +505,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private bool IsDeckListSelected =>
+		public bool IsDeckListSelected =>
 			_tabHeadersDeck.SelectedIndex == DeckListTabIndex;
 
 		private IFormRoot _formRoot;

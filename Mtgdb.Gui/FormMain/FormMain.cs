@@ -1012,11 +1012,14 @@ namespace Mtgdb.Gui
 
 		public bool IsDraggingCard => _dragging.IsDragging();
 
-		public Card DraggedCard => _deckEditor.DraggedCard;
+		public Card DraggedCard =>
+			_deckEditor.DraggedCard;
 
-		public void StopDragging() => _dragging.DragAbort();
+		public void StopDragging() =>
+			_dragging.DragAbort();
 
-		public bool IsSearchResultFocused() => !_cardSearch.IsSearchFocused();
+		public bool IsTextInputFocused() =>
+			_cardSearch.IsSearchFocused() || _deckListControl.IsSearchFocused();
 
 		public void PasteDeck(bool append) =>
 			_copyPaste.PasteDeck(append);

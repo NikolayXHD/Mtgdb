@@ -28,7 +28,7 @@ namespace Mtgdb.Index
 			LoadSpellcheckerIndex();
 		}
 
-		public void LoadIndex()
+		public virtual void LoadIndex()
 		{
 			if (IsLoaded || IsLoading)
 				return;
@@ -49,10 +49,8 @@ namespace Mtgdb.Index
 			Loaded?.Invoke();
 		}
 
-		public void LoadSpellcheckerIndex()
-		{
+		public void LoadSpellcheckerIndex() =>
 			LuceneSpellchecker.LoadIndex(_indexReader);
-		}
 
 		public SearchResult<TId> Search(string queryStr, string language)
 		{

@@ -440,10 +440,10 @@ namespace Mtgdb.Gui
 				form.PasteDeck(append: true);
 			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
 			{
-				if (form.IsSearchResultFocused())
-					form.PasteDeck(append: false);
-				else
+				if (form.IsTextInputFocused())
 					handled = false;
+				else
+					form.PasteDeck(append: false);
 			}
 			else if (e.KeyData == (Keys.Alt | Keys.Shift | Keys.V))
 				form.PasteCollection(append: true);
@@ -451,17 +451,17 @@ namespace Mtgdb.Gui
 				form.PasteCollection(append: false);
 			else if (e.KeyData == (Keys.Control | Keys.C))
 			{
-				if (form.IsSearchResultFocused())
+				if (!form.IsTextInputFocused())
 					form.CopyDeck();
 
 				handled = false;
 			}
 			else if (e.KeyData == (Keys.Alt | Keys.C))
 			{
-				if (form.IsSearchResultFocused())
-					form.CopyCollection();
-				else
+				if (form.IsTextInputFocused())
 					handled = false;
+				else
+					form.CopyCollection();
 			}
 			else if (e.KeyData == Keys.F1)
 				form.ShowFindExamples();

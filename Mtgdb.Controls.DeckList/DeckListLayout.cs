@@ -59,7 +59,9 @@ namespace Mtgdb.Controls
 			_fieldSideCollectedUnknownPrice.FieldName = nameof(DeckModel.SideOwnedUnknownPriceCount);
 			_fieldSideCollectedUnknownPricePercent.FieldName = nameof(DeckModel.SideOwnedUnknownPricePercent);
 
-			_fieldSaved.Name = nameof(DeckModel.Saved);
+			_fieldLegality.FieldName = nameof(DeckModel.Legal);
+
+			_fieldSaved.FieldName = nameof(DeckModel.Saved);
 
 			_fieldSaved.CustomButtons.Add(new ButtonOptions
 			{
@@ -144,6 +146,8 @@ namespace Mtgdb.Controls
 			_fieldSideUnknownPrice.DataText = deck?.UnknownPriceCount(Zone.Side).ToString(Str.Culture);
 			_fieldSideCollectedUnknownPrice.DataText = deck?.SideOwnedUnknownPriceCount.ToString(Str.Culture);
 			_fieldSideCollectedUnknownPricePercent.DataText = deck?.SideOwnedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+
+			_fieldLegality.DataText = deck?.Legal.Invoke2(string.Join, ", ");
 
 			var saved = deck?.Saved?.Invoke(DeckDocumentAdapter.Format);
 			

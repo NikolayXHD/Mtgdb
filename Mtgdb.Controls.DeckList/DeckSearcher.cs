@@ -58,9 +58,13 @@ namespace Mtgdb.Controls
 				return Spellchecker.CycleValue(null, input, backward);
 		}
 
-		public void ModelChanged()
-		{
+		public void ModelChanged() =>
 			_modelUpdatedTime = DateTime.UtcNow;
+
+		public override void LoadIndex()
+		{
+			IsLoaded = false;
+			base.LoadIndex();
 		}
 
 		private void ensureIndexIsUpToDate(UiModel ui)
