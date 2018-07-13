@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Lucene.Net.Documents;
+using Mtgdb.Dal;
 using Mtgdb.Index;
 
 namespace Mtgdb.Controls
@@ -74,7 +75,68 @@ namespace Mtgdb.Controls
 			foreach (string format in deck.Legal)
 				addTextField(doc, nameof(DeckModel.Legal), format);
 
+			addNumericField(doc, nameof(DeckModel.LandCount), deck.LandCount);
+			addNumericField(doc, nameof(DeckModel.CreatureCount), deck.CreatureCount);
+			addNumericField(doc, nameof(DeckModel.OtherSpellCount), deck.OtherSpellCount);
+
+			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.Count), deck.Count(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainOwnedCount), deck.MainOwnedCount);
+			addNumericField(doc, nameof(DeckModel.MainOwnedCountPercent), deck.MainOwnedCountPercent);
+
+			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.Count), deck.Count(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SideOwnedCount), deck.SideOwnedCount);
+			addNumericField(doc, nameof(DeckModel.SideOwnedCountPercent), deck.SideOwnedCountPercent);
+
+			addNumericField(doc, nameof(DeckModel.LandPrice), deck.LandPrice);
+			addNumericField(doc, nameof(DeckModel.CreaturePrice), deck.CreaturePrice);
+			addNumericField(doc, nameof(DeckModel.OtherSpellPrice), deck.OtherSpellPrice);
+
+			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.Price), deck.Price(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainOwnedPrice), deck.MainOwnedPrice);
+			addNumericField(doc, nameof(DeckModel.MainOwnedPricePercent), deck.MainOwnedPricePercent);
+
+			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.Price), deck.Price(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SideOwnedPrice), deck.SideOwnedPrice);
+			addNumericField(doc, nameof(DeckModel.SideOwnedPricePercent), deck.SideOwnedPricePercent);
+
+			addNumericField(doc, nameof(DeckModel.LandUnknownPriceCount), deck.LandUnknownPriceCount);
+			addNumericField(doc, nameof(DeckModel.CreatureUnknownPriceCount), deck.CreatureUnknownPriceCount);
+			addNumericField(doc, nameof(DeckModel.OtherSpellUnknownPriceCount), deck.OtherSpellUnknownPriceCount);
+
+			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.UnknownPriceCount), deck.UnknownPriceCount(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainOwnedUnknownPriceCount), deck.MainOwnedUnknownPriceCount);
+			addNumericField(doc, nameof(DeckModel.MainOwnedUnknownPricePercent), deck.MainOwnedUnknownPricePercent);
+
+			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.UnknownPriceCount), deck.UnknownPriceCount(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SideOwnedUnknownPriceCount), deck.SideOwnedUnknownPriceCount);
+			addNumericField(doc, nameof(DeckModel.SideOwnedUnknownPricePercent), deck.SideOwnedUnknownPricePercent);
+
 			return doc;
+		}
+
+		private void addNumericField(Document doc, string userField, float fieldValue)
+		{
+			if (float.IsNaN(fieldValue))
+				return;
+
+			userField = userField.ToLower(Str.Culture);
+
+			if (!IsFloatField(userField))
+				throw new ArgumentException($"{userField} is not float");
+
+			var field = new SingleField(userField, fieldValue, Field.Store.NO);
+			doc.Add(field);
+		}
+
+		private void addNumericField(Document doc, string userField, int fieldValue)
+		{
+			userField = userField.ToLower(Str.Culture);
+
+			if (!IsIntField(userField))
+				throw new ArgumentException($"{userField} is not int");
+
+			var field = new Int32Field(userField, fieldValue, Field.Store.NO);
+			doc.Add(field);
 		}
 
 		public static string Format(DateTime savedValue) =>
@@ -109,7 +171,43 @@ namespace Mtgdb.Controls
 			nameof(DeckModel.Name),
 			nameof(DeckModel.Mana),
 			nameof(DeckModel.Saved),
-			nameof(DeckModel.Legal)
+			nameof(DeckModel.Legal),
+
+			nameof(DeckModel.LandCount),
+			nameof(DeckModel.CreatureCount),
+			nameof(DeckModel.OtherSpellCount),
+
+			nameof(Zone.Main) + nameof(DeckModel.Count),
+			nameof(DeckModel.MainOwnedCount),
+			nameof(DeckModel.MainOwnedCountPercent),
+
+			nameof(Zone.Side) + nameof(DeckModel.Count),
+			nameof(DeckModel.SideOwnedCount),
+			nameof(DeckModel.SideOwnedCountPercent),
+
+			nameof(DeckModel.LandPrice),
+			nameof(DeckModel.CreaturePrice),
+			nameof(DeckModel.OtherSpellPrice),
+
+			nameof(Zone.Main) + nameof(DeckModel.Price),
+			nameof(DeckModel.MainOwnedPrice),
+			nameof(DeckModel.MainOwnedPricePercent),
+
+			nameof(Zone.Side) + nameof(DeckModel.Price),
+			nameof(DeckModel.SideOwnedPrice),
+			nameof(DeckModel.SideOwnedPricePercent),
+
+			nameof(DeckModel.LandUnknownPriceCount),
+			nameof(DeckModel.CreatureUnknownPriceCount),
+			nameof(DeckModel.OtherSpellUnknownPriceCount),
+
+			nameof(Zone.Main) + nameof(DeckModel.UnknownPriceCount),
+			nameof(DeckModel.MainOwnedUnknownPriceCount),
+			nameof(DeckModel.MainOwnedUnknownPricePercent),
+
+			nameof(Zone.Side) + nameof(DeckModel.UnknownPriceCount),
+			nameof(DeckModel.SideOwnedUnknownPriceCount),
+			nameof(DeckModel.SideOwnedUnknownPricePercent)
 		};
 
 		private readonly Dictionary<string, Func<DeckModel, IEnumerable<string>>> _spellcheckerValues
