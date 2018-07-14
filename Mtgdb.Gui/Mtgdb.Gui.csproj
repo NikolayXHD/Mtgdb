@@ -315,8 +315,12 @@
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
-      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
       <Name>Mtgdb.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Core.Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
       <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>

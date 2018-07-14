@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Index;
 
-namespace Mtgdb.Dal.Index
+namespace Mtgdb.Controls
 {
 	public class SearchStringHighlighter
 	{
@@ -15,8 +15,6 @@ namespace Mtgdb.Dal.Index
 		public void Highlight()
 		{
 			bool hasFocus = _findEditor.Focused;
-
-			HighlightingInProgress = true;
 
 			_findEditor.Parent.SuspendLayout();
 			_findEditor.Visible = false;
@@ -49,11 +47,8 @@ namespace Mtgdb.Dal.Index
 
 			if (hasFocus)
 				_findEditor.Focus();
-
-			HighlightingInProgress = false;
 		}
 
-		public bool HighlightingInProgress { get; private set; }
 		private readonly RichTextBox _findEditor;
 
 		private void setColor(int from, int len, Color? foreColor, bool underline)

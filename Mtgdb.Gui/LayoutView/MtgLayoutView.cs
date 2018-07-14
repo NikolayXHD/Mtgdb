@@ -135,7 +135,7 @@ namespace Mtgdb.Gui
 			remove => _view.SelectionStarted -= value;
 		}
 
-		public object GetRow(int rowHandle) => 
+		public object FindRow(int rowHandle) => 
 			_view.FindRow(rowHandle);
 
 		public int GetVisibleIndex(int cardIndex)
@@ -199,7 +199,7 @@ namespace Mtgdb.Gui
 		{
 			var text = new StringBuilder(_view.GetText(rowHandle, field));
 
-			var card = (Card) GetRow(rowHandle);
+			var card = (Card) FindRow(rowHandle);
 
 			if (Str.Equals(field, nameof(Card.Text)))
 			{

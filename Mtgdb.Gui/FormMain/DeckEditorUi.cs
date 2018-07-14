@@ -94,7 +94,7 @@ namespace Mtgdb.Gui
 				return;
 
 			var hitInfo = view.CalcHitInfo(e.Location);
-			var card = (Card) view.GetRow(hitInfo.RowHandle);
+			var card = (Card) view.FindRow(hitInfo.RowHandle);
 
 			if (card != null)
 			{
@@ -181,7 +181,7 @@ namespace Mtgdb.Gui
 			if (!hitInfo.IsOverImage() && hitInfo.CustomButtonIndex < 0)
 				return null;
 
-			var card = (Card) view.GetRow(hitInfo.RowHandle);
+			var card = (Card) view.FindRow(hitInfo.RowHandle);
 			return card;
 		}
 

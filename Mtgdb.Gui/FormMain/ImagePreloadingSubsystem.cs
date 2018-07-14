@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 				return false;
 
 			int handle = view.GetVisibleRowHandle(i);
-			var card = (Card) view.GetRow(handle);
+			var card = (Card) view.FindRow(handle);
 
 			if (card == null)
 				return false;

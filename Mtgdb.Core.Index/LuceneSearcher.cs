@@ -19,7 +19,7 @@ namespace Mtgdb.Index
 		protected LuceneSearcher(LuceneSpellchecker<TId, TObj> spellchecker, IDocumentAdapter<TId, TObj> adapter)
 		{
 			Adapter = adapter;
-			LuceneSpellchecker = spellchecker;
+			Spellchecker = spellchecker;
 		}
 
 		public void LoadIndexes()
@@ -50,7 +50,7 @@ namespace Mtgdb.Index
 		}
 
 		public void LoadSpellcheckerIndex() =>
-			LuceneSpellchecker.LoadIndex(_indexReader);
+			Spellchecker.LoadIndex(_indexReader);
 
 		public SearchResult<TId> Search(string queryStr, string language)
 		{
@@ -162,7 +162,7 @@ namespace Mtgdb.Index
 		public virtual void Dispose()
 		{
 			// Сначала Spellchecker, потому что он использует _index
-			LuceneSpellchecker.Dispose();
+			Spellchecker.Dispose();
 
 			_indexReader.Dispose();
 			_index.Dispose();
@@ -226,8 +226,8 @@ namespace Mtgdb.Index
 
 		protected int GroupsAddedToIndex;
 
-		protected readonly LuceneSpellchecker<TId, TObj> LuceneSpellchecker;
-		
+		public readonly LuceneSpellchecker<TId, TObj> Spellchecker;
+
 		protected readonly IDocumentAdapter<TId, TObj> Adapter;
 
 		public event Action IndexingProgress;

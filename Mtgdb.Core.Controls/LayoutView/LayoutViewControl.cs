@@ -106,16 +106,20 @@ namespace Mtgdb.Controls
 				return;
 
 			byte alpha = SelectionOptions.RectAlpha;
+
+			if (alpha == 0)
+				return;
+
 			var rectangle = new Rectangle(_selection.Rectangle.Location, _selection.Rectangle.Size.Minus(new Size(1, 1)));
 
-			if (SelectionOptions.RectFillColor != Color.Transparent && alpha > 0)
+			if (SelectionOptions.RectFillColor != Color.Transparent)
 			{
 				e.Graphics.FillRectangle(
 					new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor)),
 					rectangle);
 			}
 
-			if (SelectionOptions.RectBorderColor != Color.Transparent && alpha > 0)
+			if (SelectionOptions.RectBorderColor != Color.Transparent)
 			{
 				e.Graphics.DrawRectangle(
 					new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor)),

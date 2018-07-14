@@ -1,5 +1,4 @@
 using System.Drawing;
-using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Util
 {

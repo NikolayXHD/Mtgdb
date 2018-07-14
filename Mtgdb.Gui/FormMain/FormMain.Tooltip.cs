@@ -15,18 +15,6 @@
 
 			controller.SetTooltip(this,
 				null,
-				"Deck scroll position",
-				_labelStatusScrollDeck,
-				_panelIconStatusScrollDeck);
-
-			controller.SetTooltip(this,
-				null,
-				"Search result scroll position",
-				_labelStatusScrollCards,
-				_panelIconStatusScrollCards);
-
-			controller.SetTooltip(this,
-				null,
 				"Sets count",
 				_panelIconStatusSets,
 				_labelStatusSets);
@@ -271,6 +259,28 @@
 				null,
 				"Deck panel visibility",
 				_buttonHideDeck);
+
+			const string hideScrollText = "Click to toggle scrollbar visibility";
+
+			controller.SetTooltip(this,
+				null,
+				hideScrollText,
+				_buttonHideScrollCards);
+
+			controller.SetTooltip(this,
+				null,
+				hideScrollText,
+				_buttonHideScrollDeck);
+
+			controller.SetTooltip(this,
+				null,
+				"Deck panel scroll position",
+				_labelStatusScrollDeck);
+
+			controller.SetTooltip(this,
+				null,
+				"Search result scroll position",
+				_labelStatusScrollCards);
 
 			controller.SetTooltip(this,
 				"Partial cards visibility",

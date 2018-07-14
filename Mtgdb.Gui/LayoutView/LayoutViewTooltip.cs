@@ -60,7 +60,7 @@ namespace Mtgdb.Gui
 			var cursorPosition = _layoutView.Control.PointToClient(position);
 			var hitInfo = _layoutView.CalcHitInfo(cursorPosition);
 
-			var card = (Card) _layoutView.GetRow(hitInfo.RowHandle);
+			var card = (Card) _layoutView.FindRow(hitInfo.RowHandle);
 			if (!hitInfo.AlignButtonDirection.HasValue && (card == null || hitInfo.IsOverImage() || !hitInfo.FieldBounds.HasValue))
 			{
 				Hide?.Invoke();

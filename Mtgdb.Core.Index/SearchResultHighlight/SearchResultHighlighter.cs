@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
-using Mtgdb.Gui;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Index

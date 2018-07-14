@@ -214,15 +214,25 @@ namespace Mtgdb.Gui
 
 		private void buttonHideScrollChanged(object sender, EventArgs eventArgs)
 		{
-			updateFormSettings();
+			if (_updatingButtonHideScroll)
+				return;
+
+			_updatingButtonHideScroll = true;
+
+			var value = ((CheckBox) sender).Checked;
 
 			_layoutViewCards.LayoutOptions.HideScroll =
 				_layoutViewDeck.LayoutOptions.HideScroll =
 					_deckListControl.HideScroll =
-					_buttonHideScroll.Checked;
+						_buttonHideScrollDeck.Checked =
+							_buttonHideScrollCards.Checked = value;
+
+			updateFormSettings();
 
 			if (!restoringSettings())
 				historyUpdate();
+
+			_updatingButtonHideScroll = false;
 		}
 
 		private void buttonHideTextChanged(object sender, EventArgs e)
@@ -738,13 +748,15 @@ namespace Mtgdb.Gui
 					Resources.hidden_40.TransformColors(brightness: 0.1f),
 					areImagesDoubleSized: true));
 
-			_buttons.SetupButton(_buttonHideScroll,
-				new ButtonImages(
-					Resources.scroll_shown_40,
-					Resources.scroll_hidden_40,
-					Resources.scroll_shown_40.TransformColors(brightness: 1.05f),
-					Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
-					areImagesDoubleSized: true));
+			var scrollImages = new ButtonImages(
+				Resources.scroll_shown_40,
+				Resources.scroll_hidden_40,
+				Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
+				Resources.scroll_shown_40.TransformColors(brightness: 1.05f),
+				areImagesDoubleSized: true);
+
+			_buttons.SetupButton(_buttonHideScrollCards, scrollImages);
+			_buttons.SetupButton(_buttonHideScrollDeck, scrollImages);
 
 			_buttons.SetupButton(_buttonHidePartialCards,
 				new ButtonImages(

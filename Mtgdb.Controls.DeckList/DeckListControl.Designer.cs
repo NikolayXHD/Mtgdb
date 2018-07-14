@@ -30,11 +30,11 @@ namespace Mtgdb.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			Mtgdb.Controls.LayoutOptions layoutOptions3 = new Mtgdb.Controls.LayoutOptions();
-			Mtgdb.Controls.SearchOptions searchOptions3 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions3 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SelectionOptions selectionOptions3 = new Mtgdb.Controls.SelectionOptions();
-			Mtgdb.Controls.SortOptions sortOptions3 = new Mtgdb.Controls.SortOptions();
+			Mtgdb.Controls.LayoutOptions layoutOptions1 = new Mtgdb.Controls.LayoutOptions();
+			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SelectionOptions selectionOptions1 = new Mtgdb.Controls.SelectionOptions();
+			Mtgdb.Controls.SortOptions sortOptions1 = new Mtgdb.Controls.SortOptions();
 			this._panelLayout = new System.Windows.Forms.TableLayoutPanel();
 			this._panelSearch = new Mtgdb.Controls.BorderedPanel();
 			this._panelSearchIcon = new Mtgdb.Controls.BorderedPanel();
@@ -115,36 +115,36 @@ namespace Mtgdb.Controls
 			this._textBoxSearch.Text = "";
 			this._textBoxSearch.WordWrap = false;
 			// 
-			// _viewDecks
+			// _viewDeck
 			// 
 			this._viewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._viewDeck.BackColor = System.Drawing.Color.White;
 			this._panelLayout.SetColumnSpan(this._viewDeck, 3);
-			layoutOptions3.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
-			layoutOptions3.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
-			layoutOptions3.AllowPartialCards = true;
-			layoutOptions3.CardInterval = new System.Drawing.Size(2, 0);
-			layoutOptions3.PartialCardsThreshold = new System.Drawing.Size(150, 0);
-			this._viewDeck.LayoutOptions = layoutOptions3;
+			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
+			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
+			layoutOptions1.AllowPartialCards = true;
+			layoutOptions1.CardInterval = new System.Drawing.Size(2, 0);
+			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(150, 0);
+			this._viewDeck.LayoutOptions = layoutOptions1;
 			this._viewDeck.Location = new System.Drawing.Point(0, 24);
 			this._viewDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._viewDeck.Name = "_viewDeck";
-			searchOptions3.Allow = false;
-			searchOptions3.Button = buttonOptions3;
-			this._viewDeck.SearchOptions = searchOptions3;
-			selectionOptions3.Alpha = ((byte)(192));
-			selectionOptions3.BackColor = System.Drawing.Color.LightSkyBlue;
-			selectionOptions3.ForeColor = System.Drawing.Color.Black;
-			selectionOptions3.HotTrackBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
-			selectionOptions3.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			selectionOptions3.RectAlpha = ((byte)(16));
-			selectionOptions3.RectBorderColor = System.Drawing.Color.MediumBlue;
-			selectionOptions3.RectFillColor = System.Drawing.Color.RoyalBlue;
-			this._viewDeck.SelectionOptions = selectionOptions3;
+			searchOptions1.Allow = false;
+			searchOptions1.Button = buttonOptions1;
+			this._viewDeck.SearchOptions = searchOptions1;
+			selectionOptions1.Alpha = ((byte)(192));
+			selectionOptions1.BackColor = System.Drawing.Color.LightSkyBlue;
+			selectionOptions1.ForeColor = System.Drawing.Color.Black;
+			selectionOptions1.HotTrackBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+			selectionOptions1.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			selectionOptions1.RectAlpha = ((byte)(0));
+			selectionOptions1.RectBorderColor = System.Drawing.Color.MediumBlue;
+			selectionOptions1.RectFillColor = System.Drawing.Color.RoyalBlue;
+			this._viewDeck.SelectionOptions = selectionOptions1;
 			this._viewDeck.Size = new System.Drawing.Size(732, 287);
-			this._viewDeck.SortOptions = sortOptions3;
+			this._viewDeck.SortOptions = sortOptions1;
 			this._viewDeck.TabIndex = 2;
 			// 
 			// _labelFilterByDeckMode

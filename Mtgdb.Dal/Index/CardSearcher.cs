@@ -90,7 +90,7 @@ namespace Mtgdb.Dal.Index
 					.Select(Adapter.ToDocument));
 		}
 
-		public CardSpellchecker Spellchecker => (CardSpellchecker) LuceneSpellchecker;
+		public CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
 
 		protected override QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
 			new CardQueryParser((MtgAnalyzer) analyzer, _repo, _adapter, language);

@@ -34,8 +34,8 @@ namespace Mtgdb.Controls
 		public Color ForeColor { get; set; }
 
 		[Category("Settings")]
-		[DefaultValue(255)]
-		public byte RectAlpha { get; set; } = 255;
+		[DefaultValue(0)]
+		public byte RectAlpha { get; set; }
 
 		[Category("Settings")]
 		[DefaultValue(255)]

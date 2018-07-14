@@ -1,9 +1,11 @@
+using JetBrains.Annotations;
 using Ninject;
 
 namespace Mtgdb.Dal
 {
 	public class UiModel
 	{
+		[UsedImplicitly]
 		public UiModel(
 			ImageLoader imageLoader,
 			ImageRepository imageRepo,

@@ -127,10 +127,6 @@ namespace Mtgdb.Dal
 
 				var resultBuilder = new List<string>();
 
-				if (RulingsList != null)
-					foreach (var ruling in RulingsList)
-						resultBuilder.Add($"{ruling.Date}: {ruling.Text}");
-
 				if (!string.IsNullOrEmpty(LegalIn))
 				{
 					const string chinaOnlyStandardLegalSet = "GS1";
@@ -146,6 +142,10 @@ namespace Mtgdb.Dal
 
 				if (!string.IsNullOrEmpty(BannedIn))
 					resultBuilder.Add($"banned: {BannedIn}");
+
+				if (RulingsList != null)
+					foreach (var ruling in RulingsList)
+						resultBuilder.Add($"{ruling.Date}: {ruling.Text}");
 
 				_rulings = string.Intern(string.Join("\n", resultBuilder));
 				return _rulings;

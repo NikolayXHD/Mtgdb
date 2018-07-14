@@ -288,7 +288,7 @@ namespace Mtgdb.Gui
 			if (!view.TextualFieldsVisible)
 				return;
 
-			var card = (Card) view.GetRow(rowHandle);
+			var card = (Card) view.FindRow(rowHandle);
 
 			if (card == null)
 				return;

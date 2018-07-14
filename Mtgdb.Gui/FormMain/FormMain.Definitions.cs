@@ -74,8 +74,8 @@ namespace Mtgdb.Gui
 				_listBoxSuggest,
 				cardSearcher,
 				cardAdapter,
-				_viewCards,
-				_viewDeck);
+				_layoutViewCards,
+				_layoutViewDeck);
 
 			_panelSearchExamples.Setup(_cardSearch, _buttons, _buttonSearchExamplesDropDown);
 
@@ -208,7 +208,8 @@ namespace Mtgdb.Gui
 			_buttonSampleHandDraw.ScaleDpi();
 			
 			_buttonHideDeck.ScaleDpi();
-			_buttonHideScroll.ScaleDpi();
+			_buttonHideScrollCards.ScaleDpi();
+			_buttonHideScrollDeck.ScaleDpi();
 			_buttonHidePartialCards.ScaleDpi();
 			_buttonHideText.ScaleDpi();
 			_buttonSearchExamplesDropDown.ScaleDpi();
@@ -255,8 +256,6 @@ namespace Mtgdb.Gui
 
 			scalePanelIcon(_panelIconSearch);
 			scalePanelIcon(_panelIconLegality);
-			scalePanelIcon(_panelIconStatusScrollDeck);
-			scalePanelIcon(_panelIconStatusScrollCards);
 			scalePanelIcon(_panelIconStatusSets);
 			scalePanelIcon(_panelIconStatusCollection);
 			scalePanelIcon(_panelIconStatusFilterButtons);
@@ -377,7 +376,8 @@ namespace Mtgdb.Gui
 			_searchTextSelection.SubsribeToEvents();
 
 			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
-			_buttonHideScroll.CheckedChanged += buttonHideScrollChanged;
+			_buttonHideScrollCards.CheckedChanged += buttonHideScrollChanged;
+			_buttonHideScrollDeck.CheckedChanged += buttonHideScrollChanged;
 			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged += buttonHideTextChanged;
 
@@ -458,7 +458,8 @@ namespace Mtgdb.Gui
 			_searchTextSelection.UnsubsribeFromEvents();
 
 			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
-			_buttonHideScroll.CheckedChanged -= buttonHideScrollChanged;
+			_buttonHideScrollCards.CheckedChanged -= buttonHideScrollChanged;
+			_buttonHideScrollDeck.CheckedChanged -= buttonHideScrollChanged;
 			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
 			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
 
@@ -516,6 +517,8 @@ namespace Mtgdb.Gui
 
 		private Deck _requiredDeck;
 		private int? _requiredScroll;
+
+		private bool _updatingButtonHideScroll;
 
 		/// <summary>
 		/// Предотвращает реакцию на изменения состояния формы и её контролов.

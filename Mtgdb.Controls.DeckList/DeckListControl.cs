@@ -36,6 +36,10 @@ namespace Mtgdb.Controls
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
 			_viewDeck.DataSource = _filteredModels;
 
+			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
+			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
+			_textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
+
 			_textBoxName.Visible = false;
 
 			_customTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
@@ -46,6 +50,7 @@ namespace Mtgdb.Controls
 				_panelSearchIcon,
 				_listBoxSuggest,
 				searcher,
+				adapter,
 				_viewDeck);
 
 			_menuFilterByDeckMode.SelectedIndex = 0;
@@ -66,8 +71,38 @@ namespace Mtgdb.Controls
 
 			_higlightSubsystem = new SearchResultHiglightSubsystem(_viewDeck, _searchSubsystem, adapter);
 			_higlightSubsystem.SubscribeToEvents();
+
+			_viewDeck.MouseMove += deckMouseMove;
 		}
 
+		private void deckMouseMove(object sender, MouseEventArgs e)
+		{
+			var hitInfo = _viewDeck.CalcHitInfo(e.Location);
+			var model = (DeckModel) _viewDeck.FindRow(hitInfo.RowHandle);
+
+			if (model != null)
+			{
+				updateCursor(_viewDeck,
+					overText: hitInfo.FieldName != null,
+					overButton: hitInfo.IsSomeButton);
+			}
+			else
+			{
+				updateCursor(_viewDeck);
+			}
+		}
+
+		private void updateCursor(Control control, bool overText = false, bool overButton = false, bool outside = false)
+		{
+			if (outside)
+				control.Cursor = Cursor;
+			else if (overButton)
+				control.Cursor = Cursors.Default;
+			else if (overText)
+				control.Cursor = _textSelectionCursor;
+			else
+				control.Cursor = Cursors.Default;
+		}
 
 
 		public void SetUi(UiModel ui, TooltipController controller, DeckSuggestModel suggestModel)
@@ -99,8 +134,7 @@ namespace Mtgdb.Controls
 			_model = new DeckModel(Deck.Create(), _ui)
 			{
 				Id = -1,
-				IsCurrent = true,
-				Saved = DateTime.MinValue
+				IsCurrent = true
 			};
 
 			_searchSubsystem.ModelChanged();
@@ -465,5 +499,6 @@ namespace Mtgdb.Controls
 
 		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
 		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
+		private Cursor _textSelectionCursor;
 	}
 }

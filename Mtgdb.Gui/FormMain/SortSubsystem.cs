@@ -45,7 +45,9 @@ namespace Mtgdb.Gui
 
 		public void Invalidate()
 		{
-			_sortedCards = null;
+			_sortedCardsByDefaultSort[_sortFromNewestToOldest].Clear();
+			_sortedCardsByDefaultSort[_sortByIndexInFile].Clear();
+
 			SortChanged?.Invoke();
 		}
 
@@ -63,7 +65,7 @@ namespace Mtgdb.Gui
 			Invalidate();
 		}
 
-		private List<Card> sort(IEnumerable<Card> cards, IList<FieldSortInfo> sortInfo)
+		private List<Card> sort(IEnumerable<Card> cards, IList<FieldSortInfo> sortInfo, FieldSortInfo defaultSort)
 		{
 			var relevanceById = _cardSearchSubsystem?.SearchResult?.RelevanceById;
 
@@ -74,7 +76,7 @@ namespace Mtgdb.Gui
 			{
 				return cards
 					.OrderByDescending(getRelevance)
-					.ThenBy(_defaultSort, _fields)
+					.ThenBy(defaultSort, _fields)
 					.ToList();
 			}
 
@@ -89,7 +91,7 @@ namespace Mtgdb.Gui
 
 				cardsOrdered = cardsOrdered
 					.ThenByDescending(getRelevance)
-					.ThenBy(_defaultSort, _fields);
+					.ThenBy(defaultSort, _fields);
 
 				var result = cardsOrdered.ToList();
 				return result;
@@ -141,34 +143,50 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public List<Card> SortedCards
+		public List<Card> SortedCards =>
+			getSortedCards(defaultSort: _sortByIndexInFile);
+
+		public List<Card> DuplicateAwareSortedCards =>
+			getSortedCards(defaultSort: _sortFromNewestToOldest);
+
+		private List<Card> getSortedCards(FieldSortInfo defaultSort)
 		{
-			get
-			{
-				if (_sortedCards != null)
-					return _sortedCards;
+			var result = _sortedCardsByDefaultSort[defaultSort];
 
-				var cards = _repository.IsLoadingComplete
-					? _repository.Cards
-					: Enumerable.Empty<Card>();
+			if (result.Count > 0)
+				return result;
 
-				_sortedCards = sort(cards, SortInfo);
-				_sortedCards.Capacity = _sortedCards.Count;
+			var cards = _repository.IsLoadingComplete
+				? _repository.Cards
+				: Enumerable.Empty<Card>();
 
-				return _sortedCards;
-			}
+			result.AddRange(sort(cards, SortInfo, defaultSort: defaultSort));
+			result.Capacity = result.Count;
+
+			return result;
 		}
+
 
 		public string SortString { get; private set; }
 
-		private List<Card> _sortedCards;
+		private readonly Dictionary<FieldSortInfo, List<Card>> _sortedCardsByDefaultSort =
+			new Dictionary<FieldSortInfo, List<Card>>
+			{
+				[_sortByIndexInFile] = new List<Card>(),
+				[_sortFromNewestToOldest] = new List<Card>()
+			};
+
 		public IList<FieldSortInfo> SortInfo { get; set; } = new List<FieldSortInfo>();
 
 		public bool IsLanguageDependent => SortInfo.Any(_ => _localizableFields.Contains(_.FieldName));
 
 
 
-		private static readonly FieldSortInfo _defaultSort = new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
+		private static readonly FieldSortInfo _sortByIndexInFile =
+			new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
+
+		private static readonly FieldSortInfo _sortFromNewestToOldest =
+			new FieldSortInfo(nameof(Card.ReleaseDate), SortOrder.Descending);
 
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly CardRepository _repository;

@@ -44,18 +44,15 @@ namespace Mtgdb.Controls
 			ensureIndexIsUpToDate(ui);
 
 			lock (_sync)
-				return Spellchecker.Suggest(language: null, input: searchState);
+				return ((DeckSpellchecker) Spellchecker).Suggest(language: null, input: searchState);
 		}
-
-		public DeckSpellchecker Spellchecker =>
-			(DeckSpellchecker) LuceneSpellchecker;
 
 		public IntellisenseSuggest CycleValue(TextInputState input, bool backward, UiModel ui)
 		{
 			ensureIndexIsUpToDate(ui);
 
 			lock (_sync)
-				return Spellchecker.CycleValue(null, input, backward);
+				return ((DeckSpellchecker) Spellchecker).CycleValue(null, input, backward);
 		}
 
 		public void ModelChanged() =>
@@ -77,7 +74,7 @@ namespace Mtgdb.Controls
 			lock (_sync)
 			{
 				_ui = ui;
-				Spellchecker.SetUi(ui);
+				((DeckSpellchecker) Spellchecker).SetUi(ui);
 
 				LoadIndexes();
 			}

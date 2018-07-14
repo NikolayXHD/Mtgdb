@@ -88,7 +88,7 @@ namespace Mtgdb.Gui
 			if (!hitInfo.IsOverImage())
 				return;
 
-			var card = (Card)view.GetRow(hitInfo.RowHandle);
+			var card = (Card)view.FindRow(hitInfo.RowHandle);
 
 			if (card == null)
 				return;
@@ -292,7 +292,7 @@ namespace Mtgdb.Gui
 			var hitInfo = getHitInfo(view, Cursor.Position);
 
 			if (hitInfo.IsOverImage())
-				return (Card) _layoutViewDeck.GetRow(hitInfo.RowHandle);
+				return (Card) _layoutViewDeck.FindRow(hitInfo.RowHandle);
 
 			return null;
 		}
@@ -351,7 +351,7 @@ namespace Mtgdb.Gui
 		public Card GetCard(MtgLayoutView view, int rowHandle)
 		{
 			if (view == _layoutViewCards)
-				return (Card)view.GetRow(rowHandle);
+				return (Card)view.FindRow(rowHandle);
 
 			if (view != _layoutViewDeck)
 				throw new ArgumentOutOfRangeException();

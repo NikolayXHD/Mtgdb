@@ -1,9 +1,7 @@
-﻿using Mtgdb.Index;
-
-namespace Mtgdb.Gui
+﻿namespace Mtgdb.Index
 {
 	public interface ISearchSubsystem<TId>
 	{
-		SearchResult<int> SearchResult { get; }
+		SearchResult<TId> SearchResult { get; }
 	}
 }

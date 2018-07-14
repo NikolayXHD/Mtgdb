@@ -268,7 +268,9 @@ namespace Mtgdb.Gui
 				var searchResultCards = new List<Card>();
 				var filteredCards = new List<Card>();
 
-				var allCards = _sort.SortedCards;
+				var allCards = showDuplicates 
+					? _sort.SortedCards
+					: _sort.DuplicateAwareSortedCards;
 
 				if (showDuplicates)
 				{
@@ -299,26 +301,8 @@ namespace Mtgdb.Gui
 
 						var card = allCards[i];
 
-						if (fit(card, filterManagerStates))
-						{
-							bool isCurrentCardMoreRecent;
-
-							if (!cardsByName.TryGetValue(card.NameNormalized, out var otherCard))
-								isCurrentCardMoreRecent = true;
-							else
-							{
-								var dateCompare = Str.Compare(card.ReleaseDate, otherCard.ReleaseDate);
-								if (dateCompare > 0)
-									isCurrentCardMoreRecent = true;
-								else if (dateCompare == 0)
-									isCurrentCardMoreRecent = card.IndexInFile < otherCard.IndexInFile;
-								else
-									isCurrentCardMoreRecent = false;
-							}
-
-							if (isCurrentCardMoreRecent)
-								cardsByName[card.NameNormalized] = card;
-						}
+						if (!cardsByName.ContainsKey(card.NameNormalized) && fit(card, filterManagerStates))
+							cardsByName[card.NameNormalized] = card;
 					}
 
 					for (int i = 0; i < allCards.Count; i++)
@@ -348,7 +332,7 @@ namespace Mtgdb.Gui
 				_filteredCards.Clear();
 				_filteredCards.UnionWith(filteredCards);
 
-				updateIsSearchResult();
+				updateIsSearchResult(allCards);
 			}
 
 			this.Invoke(delegate
@@ -359,9 +343,12 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private void updateIsSearchResult()
+		private void updateIsSearchResult() =>
+			updateIsSearchResult(_sort.SortedCards);
+
+		private void updateIsSearchResult(List<Card> sortedCards)
 		{
-			foreach (var card in _sort.SortedCards)
+			foreach (var card in sortedCards)
 				card.IsSearchResult = _filteredCards.Contains(card);
 		}
 
@@ -646,7 +633,7 @@ namespace Mtgdb.Gui
 		private void updateFormSettings()
 		{
 			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
-			_formRoot.ShowScroll = !_buttonHideScroll.Checked;
+			_formRoot.ShowScroll = !_buttonHideScrollCards.Checked;
 			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
 			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
 
@@ -703,7 +690,7 @@ namespace Mtgdb.Gui
 				DeckName = _deckEditor.DeckName,
 				SearchResultScroll = _viewCards.VisibleRecordIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
-				ShowScroll = !_buttonHideScroll.Checked,
+				ShowScroll = !_buttonHideScrollCards.Checked,
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
 				ShowFilterPanels = _formRoot.ShowFilterPanels,
@@ -781,7 +768,7 @@ namespace Mtgdb.Gui
 			_requiredScroll = settings.SearchResultScroll;
 
 			_buttonHideDeck.Checked = settings.ShowDeck == false;
-			_buttonHideScroll.Checked = settings.ShowScroll == false;
+			_buttonHideScrollCards.Checked = settings.ShowScroll == false;
 			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
 			_buttonHideText.Checked = settings.ShowTextualFields == false;
 			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
