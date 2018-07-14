@@ -210,8 +210,11 @@ namespace Mtgdb.Index
 
 
 
-		protected virtual IReadOnlyList<string> GetValuesCache(string userField, string lang)
+		protected IReadOnlyList<string> GetValuesCache(string userField, string lang)
 		{
+			if (_abort)
+				return ReadOnlyList.Empty<string>();
+
 			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, lang);
 			IReadOnlyList<string> values;
 
@@ -273,8 +276,9 @@ namespace Mtgdb.Index
 			return fieldSuggest;
 		}
 
-		public virtual void Dispose()
+		public void Dispose()
 		{
+			abortLoading();
 			IsLoaded = false;
 			_reader?.Dispose();
 		}
@@ -341,15 +345,38 @@ namespace Mtgdb.Index
 
 		protected abstract IEnumerable<TObj> GetObjectsToIndex();
 
-		protected virtual void IndexField(KeyValuePair<string, HashSet<string>> pair)
+		protected void IndexField(KeyValuePair<string, HashSet<string>> pair)
 		{
+			if (_abort)
+				return;
+
 			var words = pair.Value.OrderBy(Str.Comparer).ToReadOnlyList();
 
 			foreach (string word in words)
+			{
+				if (_abort)
+					return;
+
 				Spellchecker.IndexWord(pair.Key, word);
+			}
 
 			Interlocked.Increment(ref _indexedFields);
 			IndexingProgress?.Invoke();
+		}
+
+
+
+		private void abortLoading()
+		{
+			if (!IsLoading)
+				return;
+
+			_abort = true;
+
+			while (IsLoading)
+				Thread.Sleep(100);
+
+			_abort = false;
 		}
 
 
@@ -373,6 +400,8 @@ namespace Mtgdb.Index
 		public int TotalFields { get; private set; }
 
 		protected Spellchecker Spellchecker;
+
+		private bool _abort;
 
 		private IReadOnlyList<TokenType> _allTokensAreValues;
 		private DirectoryReader _reader;

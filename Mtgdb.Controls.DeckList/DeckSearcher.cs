@@ -23,7 +23,8 @@ namespace Mtgdb.Controls
 		}
 
 		protected override IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex() =>
-			Sequence.From(_deckList.GetModels(_ui).Select(Adapter.ToDocument));
+			Sequence.From(_deckList.GetModels(_ui)
+				.Select(Adapter.ToDocument));
 
 		protected override Analyzer CreateAnalyzer() =>
 			new MtgAnalyzer(Adapter);

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
@@ -71,7 +70,7 @@ namespace Mtgdb.Dal.Index
 			
 			var index = base.CreateIndex();
 
-			if (_abort)
+			if (index == null)
 				return null;
 
 			index.SaveTo(_version.Directory);
@@ -80,52 +79,21 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		protected override IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex()
-		{
-			return _repo.SetsByCode.Values
-				.TakeWhile(_ => !_abort)
-				.Where(FilterSet)
-				.Select(set => set.Cards
-					.TakeWhile(_ => !_abort)
-					.Select(Adapter.ToDocument));
-		}
+		protected override IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex() =>
+			_repo.SetsByCode.Values
+			.Where(FilterSet)
+			.Select(set => set.Cards
+				.Select(Adapter.ToDocument));
 
-		public CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
+		public new CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
 
 		protected override QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
 			new CardQueryParser((MtgAnalyzer) analyzer, _repo, _adapter, language);
 
 
 
-		public override void Dispose()
-		{
-			abortLoading();
-			IsLoaded = false;
-
-			base.Dispose();
-
-			Disposed?.Invoke();
-		}
-
 		public void InvalidateIndex() =>
 			_version.Invalidate();
-
-		private void abortLoading()
-		{
-			if (!IsLoading)
-				return;
-
-			_abort = true;
-
-			while (IsLoading)
-				Thread.Sleep(100);
-
-			_abort = false;
-		}
-
-		public event Action Disposed;
-
-		private bool _abort;
 
 		public string IndexDirectoryParent
 		{

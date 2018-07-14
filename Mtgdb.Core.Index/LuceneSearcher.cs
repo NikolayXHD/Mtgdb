@@ -159,13 +159,18 @@ namespace Mtgdb.Index
 		private string getDisplayField(Token token) =>
 			GetDisplayField(token.ParentField ?? string.Empty);
 
-		public virtual void Dispose()
+		public void Dispose()
 		{
+			abortLoading();
+			IsLoaded = false;
+
 			// Сначала Spellchecker, потому что он использует _index
 			Spellchecker.Dispose();
 
 			_indexReader.Dispose();
 			_index.Dispose();
+
+			Disposed?.Invoke();
 		}
 
 		protected abstract IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex();
@@ -182,8 +187,16 @@ namespace Mtgdb.Index
 			{
 				void indexDocumentGroup(IEnumerable<Document> documents)
 				{
+					if (_aborted)
+						return;
+
 					foreach (var doc in documents)
+					{
+						if (_aborted)
+							return;
+
 						writer.AddDocument(doc);
+					}
 
 					Interlocked.Increment(ref GroupsAddedToIndex);
 					IndexingProgress?.Invoke();
@@ -191,14 +204,16 @@ namespace Mtgdb.Index
 
 				IndexUtils.ForEach(GetDocumentGroupsToIndex(), indexDocumentGroup);
 
+				if (_aborted)
+					return null;
+
 				writer.Flush(triggerMerge: true, applyAllDeletes: false);
 				writer.Commit();
 			}
 
 			return index;
 		}
-		
-		
+
 		protected Query ParseQuery(string queryStr, string language)
 		{
 			Query query;
@@ -221,6 +236,20 @@ namespace Mtgdb.Index
 		protected TopDocs SearchIndex(Query query) =>
 			_searcher.SearchWrapper(query, _indexReader.MaxDoc);
 
+
+		private void abortLoading()
+		{
+			if (!IsLoading)
+				return;
+
+			_aborted = true;
+
+			while (IsLoading)
+				Thread.Sleep(100);
+
+			_aborted = false;
+		}
+
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; protected set; }
 
@@ -230,13 +259,14 @@ namespace Mtgdb.Index
 
 		protected readonly IDocumentAdapter<TId, TObj> Adapter;
 
+		private bool _aborted;
+
 		public event Action IndexingProgress;
 		public event Action Loaded;
+		public event Action Disposed;
 
 		private Directory _index;
 		private IndexSearcher _searcher;
-
-
 
 		private DirectoryReader _indexReader;
 

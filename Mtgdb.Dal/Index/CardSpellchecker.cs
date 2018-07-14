@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Lucene.Net.Store;
 using Mtgdb.Index;
 
@@ -28,24 +27,7 @@ namespace Mtgdb.Dal.Index
 
 			return _repo.SetsByCode.Values
 				.Where(FilterSet)
-				.SelectMany(s => s.Cards)
-				.TakeWhile(c => !_abort);
-		}
-
-		protected override IReadOnlyList<string> GetValuesCache(string userField, string lang)
-		{
-			if (_abort)
-				return ReadOnlyList.Empty<string>();
-
-			return base.GetValuesCache(userField, lang);
-		}
-
-		protected override void IndexField(KeyValuePair<string, HashSet<string>> pair)
-		{
-			if (_abort)
-				return;
-
-			base.IndexField(pair);
+				.SelectMany(s => s.Cards);
 		}
 
 		protected override Directory LoadSpellcheckerIndex()
@@ -76,25 +58,6 @@ namespace Mtgdb.Dal.Index
 			_version.Invalidate();
 
 
-		public override void Dispose()
-		{
-			abortLoading();
-			base.Dispose();
-		}
-
-		private void abortLoading()
-		{
-			if (!IsLoading)
-				return;
-
-			_abort = true;
-
-			while (IsLoading)
-				Thread.Sleep(100);
-
-			_abort = false;
-		}
-
 
 		public string IndexDirectoryParent
 		{
@@ -108,7 +71,5 @@ namespace Mtgdb.Dal.Index
 
 		private IndexVersion _version;
 		private readonly CardRepository _repo;
-
-		private bool _abort;
 	}
 }
