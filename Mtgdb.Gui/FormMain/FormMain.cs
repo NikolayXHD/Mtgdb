@@ -384,7 +384,6 @@ namespace Mtgdb.Gui
 			_panelStatus.SuspendLayout();
 
 			_labelStatusSets.Text = _cardRepo.SetsByCode.Count.ToString();
-			_labelStatusScrollCards.Text = $"{_viewCards.VisibleRecordIndex}/{_searchResultCards.Count}";
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
@@ -394,10 +393,14 @@ namespace Mtgdb.Gui
 				{ DeckListTabIndex, new TabSettings(getDeckListStatus()) }
 			});
 
-			if (IsDeckListSelected)
-				_labelStatusScrollDeck.Text = $"{_deckListControl.ScrollPosition}/{_deckListControl.MaxScroll}";
-			else
-				_labelStatusScrollDeck.Text = $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}";
+			setScrollStatus($"{_viewCards.VisibleRecordIndex}/{_searchResultCards.Count}",
+				_labelStatusScrollCards);
+
+			setScrollStatus(
+				IsDeckListSelected
+					? $"{_deckListControl.ScrollPosition}/{_deckListControl.MaxScroll}"
+					: $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}",
+				_labelStatusScrollDeck);
 
 			_labelStatusCollection.Text = _collectionEditor.CollectionSize.ToString();
 
@@ -416,6 +419,14 @@ namespace Mtgdb.Gui
 
 			_panelStatus.ResumeLayout(false);
 			_panelStatus.PerformLayout();
+		}
+
+		private static void setScrollStatus(string scrollCardsStatus, Label label)
+		{
+			if (label.Text == scrollCardsStatus)
+				return;
+
+			label.Text = scrollCardsStatus;
 		}
 
 		private string getDeckListStatus() =>

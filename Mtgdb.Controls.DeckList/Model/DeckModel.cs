@@ -99,15 +99,7 @@ namespace Mtgdb.Controls
 			_filterIsOtherSpellAndPriceIsUnknown = c => _filterIsOtherSpell(c) && _filterPriceIsUnknown(c);
 
 			_deck = deck;
-			_ui = ui;
-		}
-
-		public void CollectionChanged()
-		{
-			_priceOwnedCache?.Clear();
-			_countOwnedCache?.Clear();
-			_priceOwnedSideCache?.Clear();
-			_countOwnedSideCache?.Clear();
+			Ui = ui;
 		}
 
 		public void DeckChanged()
@@ -225,12 +217,12 @@ namespace Mtgdb.Controls
 				if (_legalFormatsCache != null)
 					return _legalFormatsCache;
 
-				if (!_ui.CardRepo.IsLoadingComplete)
+				if (!Ui.CardRepo.IsLoadingComplete)
 					return ReadOnlyList.Empty<string>();
 
 				bool isAllowedIn(string format, string id, int count)
 				{
-					var c = _ui.CardRepo.CardsById[id];
+					var c = Ui.CardRepo.CardsById[id];
 					return c.IsLegalIn(format) || c.IsRestrictedIn(format) && count <= 1;
 				}
 
@@ -245,15 +237,7 @@ namespace Mtgdb.Controls
 
 
 
-		public UiModel Ui
-		{
-			get => _ui;
-			set
-			{
-				CollectionChanged();
-				_ui = value;
-			}
-		}
+		public UiModel Ui { get; set; }
 
 		public int Id
 		{
@@ -298,7 +282,6 @@ namespace Mtgdb.Controls
 
 		private IReadOnlyList<string> _legalFormatsCache;
 
-		private UiModel _ui;
 		private Deck _deck;
 	}
 }

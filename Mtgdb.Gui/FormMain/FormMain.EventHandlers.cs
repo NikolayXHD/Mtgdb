@@ -37,11 +37,6 @@ namespace Mtgdb.Gui
 				repoLoadingComplete();
 			else
 				_cardRepo.LoadingComplete += repoLoadingComplete;
-
-			if (_cardRepo.IsPriceLoadingComplete)
-				priceLoadingComplete();
-			else
-				_cardRepo.PriceLoadingComplete += priceLoadingComplete;
 		}
 
 		private void unsubscribeCardRepoEvents()
@@ -49,7 +44,6 @@ namespace Mtgdb.Gui
 			_cardRepo.SetAdded -= cardRepoSetAdded;
 			_cardRepo.LoadingComplete -= repoLoadingComplete;
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
-			_cardRepo.PriceLoadingComplete -= priceLoadingComplete;
 		}
 
 		private void formClosing(object sender, FormClosingEventArgs e)
@@ -108,14 +102,6 @@ namespace Mtgdb.Gui
 					endRestoreSettings();
 					RunRefilterTask();
 				}
-			});
-		}
-
-		private void priceLoadingComplete()
-		{
-			this.Invoke(delegate
-			{
-				_deckListControl.PriceLoaded();
 			});
 		}
 

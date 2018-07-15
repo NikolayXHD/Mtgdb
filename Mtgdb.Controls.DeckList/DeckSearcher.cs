@@ -7,6 +7,7 @@ using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
 using Mtgdb.Dal;
 using Mtgdb.Index;
+using NLog;
 
 namespace Mtgdb.Controls
 {
@@ -34,7 +35,7 @@ namespace Mtgdb.Controls
 
 		public SearchResult<int> Search(string query, UiModel ui)
 		{
-			ensureIndexIsUpToDate(ui);
+			LoadIndexes(ui);
 
 			lock (_sync)
 				return Search(query, language: null);
@@ -42,7 +43,7 @@ namespace Mtgdb.Controls
 
 		public IntellisenseSuggest Suggest(TextInputState searchState, UiModel ui)
 		{
-			ensureIndexIsUpToDate(ui);
+			LoadIndexes(ui);
 
 			lock (_sync)
 				return ((DeckSpellchecker) Spellchecker).Suggest(language: null, input: searchState);
@@ -50,7 +51,7 @@ namespace Mtgdb.Controls
 
 		public IntellisenseSuggest CycleValue(TextInputState input, bool backward, UiModel ui)
 		{
-			ensureIndexIsUpToDate(ui);
+			LoadIndexes(ui);
 
 			lock (_sync)
 				return ((DeckSpellchecker) Spellchecker).CycleValue(null, input, backward);
@@ -59,28 +60,32 @@ namespace Mtgdb.Controls
 		public void ModelChanged() =>
 			_modelUpdatedTime = DateTime.UtcNow;
 
-		public override void LoadIndex()
+		protected override void LoadIndex()
 		{
+			_log.Info($"Begin {nameof(LoadIndex)}");
+
 			IsLoaded = false;
 			base.LoadIndex();
+
+			_log.Info($"End {nameof(LoadIndex)}");
 		}
 
-		private void ensureIndexIsUpToDate(UiModel ui)
+		public void LoadIndexes(UiModel ui)
 		{
-			var modelUpdatedTime = _modelUpdatedTime;
-
-			if (_indexUpdatedTime == modelUpdatedTime)
-				return;
-
 			lock (_sync)
 			{
+				var modelUpdatedTime = _modelUpdatedTime;
+
+				if (_indexUpdatedTime == modelUpdatedTime)
+					return;
+
 				_ui = ui;
 				((DeckSpellchecker) Spellchecker).SetUi(ui);
 
 				LoadIndexes();
-			}
 
-			_indexUpdatedTime = modelUpdatedTime;
+				_indexUpdatedTime = modelUpdatedTime;
+			}
 		}
 
 		private UiModel _ui;
@@ -90,5 +95,7 @@ namespace Mtgdb.Controls
 
 		private readonly DeckListModel _deckList;
 		private readonly object _sync = new object();
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

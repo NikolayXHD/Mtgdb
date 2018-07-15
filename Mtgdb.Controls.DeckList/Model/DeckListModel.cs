@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Newtonsoft.Json;
 
@@ -8,6 +10,11 @@ namespace Mtgdb.Controls
 {
 	public class DeckListModel
 	{
+		[UsedImplicitly]
+		public DeckListModel()
+		{
+		}
+
 		public void Add(Deck deck)
 		{
 			var duplicate = findDupliate(deck);
@@ -15,14 +22,14 @@ namespace Mtgdb.Controls
 				duplicate.Saved = deck.Saved;
 			else
 			{
-				Decks.Add(deck);
+				_decks.Add(deck);
 				addDeckByName(deck);
 			}
 		}
 
 		public void Remove(Deck deck)
 		{
-			Decks.Remove(deck);
+			_decks.Remove(deck);
 			removeDeckByName(deck);
 		}
 
@@ -40,30 +47,31 @@ namespace Mtgdb.Controls
 
 		public void Save()
 		{
-			var serialized = JsonConvert.SerializeObject(Decks, Formatting.Indented);
+			var serialized = JsonConvert.SerializeObject(_decks, Formatting.Indented);
 			File.WriteAllText(_fileName, serialized);
 		}
 
 		public void Load()
 		{
-			if (!File.Exists(_fileName))
-			{
-				Decks = new List<Deck>();
-				_decksByName = new Dictionary<string, List<Deck>>(Str.Comparer);
-			}
-			else
+			if (File.Exists(_fileName))
 			{
 				var serialized = File.ReadAllText(_fileName);
-				Decks = JsonConvert.DeserializeObject<List<Deck>>(serialized);
+				_decks = JsonConvert.DeserializeObject<List<Deck>>(serialized);
 
-				_decksByName = Decks
+				_decksByName = _decks
 					.GroupBy(_ => _.Name, Str.Comparer)
-					.ToDictionary(_ => _.Key, _ => _.ToList());
+					.ToDictionary(_ => _.Key, _ => _.ToList(), Str.Comparer);
 			}
+
+			IsLoaded = true;
+			Loaded?.Invoke();
 		}
 
+		public bool IsLoaded { get; private set; }
+		public event Action Loaded;
+
 		public IEnumerable<DeckModel> GetModels(UiModel ui) =>
-			Decks.Select((d, i) => new DeckModel(d, ui)
+			_decks.Select((d, i) => new DeckModel(d, ui)
 			{
 				Id = i
 			});
@@ -97,10 +105,11 @@ namespace Mtgdb.Controls
 			return duplicate;
 		}
 
-		public List<Deck> Decks { get; set; }
+		private List<Deck> _decks = new List<Deck>();
 
 		[JsonIgnore]
-		private Dictionary<string, List<Deck>> _decksByName;
+		private Dictionary<string, List<Deck>> _decksByName =
+			new Dictionary<string, List<Deck>>(Str.Comparer);
 
 		private static readonly string _fileName = AppDir.History.AddPath("decks.json");
 	}

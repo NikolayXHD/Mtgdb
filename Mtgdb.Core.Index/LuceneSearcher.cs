@@ -28,7 +28,7 @@ namespace Mtgdb.Index
 			LoadSpellcheckerIndex();
 		}
 
-		public virtual void LoadIndex()
+		protected internal virtual void LoadIndex()
 		{
 			if (IsLoaded || IsLoading)
 				return;
@@ -49,7 +49,7 @@ namespace Mtgdb.Index
 			Loaded?.Invoke();
 		}
 
-		public void LoadSpellcheckerIndex() =>
+		internal void LoadSpellcheckerIndex() =>
 			Spellchecker.LoadIndex(_indexReader);
 
 		public SearchResult<TId> Search(string queryStr, string language)

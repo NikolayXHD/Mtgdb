@@ -95,12 +95,10 @@ namespace Mtgdb.Gui
 			this.FilterCmc = new Mtgdb.Controls.QuickFilterControl();
 			this._listBoxSuggest = new System.Windows.Forms.ListBox();
 			this._layoutMain = new System.Windows.Forms.TableLayoutPanel();
+			this._buttonHideScrollCards = new Mtgdb.Controls.CustomCheckBox();
 			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
 			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._deckListControl = new Mtgdb.Controls.DeckListControl();
-			this._panelScrollCards = new System.Windows.Forms.FlowLayoutPanel();
-			this._buttonHideScrollCards = new Mtgdb.Controls.CustomCheckBox();
-			this._panelScrollDeck = new System.Windows.Forms.FlowLayoutPanel();
 			this._layoutRight = new System.Windows.Forms.TableLayoutPanel();
 			this._buttonShowProhibit = new Mtgdb.Controls.CustomCheckBox();
 			this._panelRightNarrow = new System.Windows.Forms.FlowLayoutPanel();
@@ -117,8 +115,6 @@ namespace Mtgdb.Gui
 			this._panelRightCost.SuspendLayout();
 			this._panelManaAbility.SuspendLayout();
 			this._layoutMain.SuspendLayout();
-			this._panelScrollCards.SuspendLayout();
-			this._panelScrollDeck.SuspendLayout();
 			this._layoutRight.SuspendLayout();
 			this._panelRightNarrow.SuspendLayout();
 			this._panelRightManaCost.SuspendLayout();
@@ -129,7 +125,7 @@ namespace Mtgdb.Gui
 			// 
 			this._panelFilters.AutoSize = true;
 			this._panelFilters.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutMain.SetColumnSpan(this._panelFilters, 2);
+			this._layoutMain.SetColumnSpan(this._panelFilters, 3);
 			this._panelFilters.Controls.Add(this.FilterAbility);
 			this._panelFilters.Controls.Add(this.FilterCastKeyword);
 			this._panelFilters.Location = new System.Drawing.Point(0, 0);
@@ -599,16 +595,18 @@ namespace Mtgdb.Gui
 			// 
 			// _labelStatusScrollDeck
 			// 
+			this._labelStatusScrollDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelStatusScrollDeck.AutoSize = true;
-			this._labelStatusScrollDeck.Location = new System.Drawing.Point(0, 6);
-			this._labelStatusScrollDeck.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
+			this._labelStatusScrollDeck.Location = new System.Drawing.Point(996, 162);
+			this._labelStatusScrollDeck.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
 			this._labelStatusScrollDeck.Name = "_labelStatusScrollDeck";
 			this._labelStatusScrollDeck.Size = new System.Drawing.Size(36, 13);
 			this._labelStatusScrollDeck.TabIndex = 35;
 			this._labelStatusScrollDeck.Text = "63/60";
 			// 
-			// _buttonStatusScrollDeck
+			// _buttonHideScrollDeck
 			// 
+			this._buttonHideScrollDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonHideScrollDeck.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonHideScrollDeck.BackColor = System.Drawing.Color.Transparent;
 			this._buttonHideScrollDeck.FlatAppearance.BorderSize = 0;
@@ -617,7 +615,7 @@ namespace Mtgdb.Gui
 			this._buttonHideScrollDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonHideScrollDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonHideScrollDeck.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
-			this._buttonHideScrollDeck.Location = new System.Drawing.Point(36, 0);
+			this._buttonHideScrollDeck.Location = new System.Drawing.Point(1032, 154);
 			this._buttonHideScrollDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonHideScrollDeck.Name = "_buttonHideScrollDeck";
 			this._buttonHideScrollDeck.Size = new System.Drawing.Size(18, 24);
@@ -627,9 +625,10 @@ namespace Mtgdb.Gui
 			// 
 			// _labelStatusScrollCards
 			// 
+			this._labelStatusScrollCards.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelStatusScrollCards.AutoSize = true;
-			this._labelStatusScrollCards.Location = new System.Drawing.Point(0, 6);
-			this._labelStatusScrollCards.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
+			this._labelStatusScrollCards.Location = new System.Drawing.Point(960, 100);
+			this._labelStatusScrollCards.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
 			this._labelStatusScrollCards.Name = "_labelStatusScrollCards";
 			this._labelStatusScrollCards.Size = new System.Drawing.Size(72, 13);
 			this._labelStatusScrollCards.TabIndex = 37;
@@ -956,17 +955,20 @@ namespace Mtgdb.Gui
 			this._layoutMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutMain.ColumnCount = 2;
+			this._layoutMain.ColumnCount = 3;
 			this._layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._layoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._layoutMain.Controls.Add(this._labelStatusScrollCards, 1, 1);
+			this._layoutMain.Controls.Add(this._buttonHideScrollDeck, 2, 3);
+			this._layoutMain.Controls.Add(this._labelStatusScrollDeck, 1, 3);
+			this._layoutMain.Controls.Add(this._buttonHideScrollCards, 2, 1);
 			this._layoutMain.Controls.Add(this._layoutViewCards, 0, 2);
 			this._layoutMain.Controls.Add(this._panelFilters, 0, 0);
 			this._layoutMain.Controls.Add(this._panelMenu, 0, 1);
 			this._layoutMain.Controls.Add(this._panelStatus, 0, 3);
 			this._layoutMain.Controls.Add(this._layoutViewDeck, 0, 4);
 			this._layoutMain.Controls.Add(this._deckListControl, 0, 5);
-			this._layoutMain.Controls.Add(this._panelScrollCards, 1, 1);
-			this._layoutMain.Controls.Add(this._panelScrollDeck, 1, 3);
 			this._layoutMain.Location = new System.Drawing.Point(0, 0);
 			this._layoutMain.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutMain.Name = "_layoutMain";
@@ -980,13 +982,32 @@ namespace Mtgdb.Gui
 			this._layoutMain.Size = new System.Drawing.Size(1050, 800);
 			this._layoutMain.TabIndex = 44;
 			// 
+			// _buttonHideScrollCards
+			// 
+			this._buttonHideScrollCards.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonHideScrollCards.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonHideScrollCards.BackColor = System.Drawing.Color.Transparent;
+			this._buttonHideScrollCards.FlatAppearance.BorderSize = 0;
+			this._buttonHideScrollCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideScrollCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideScrollCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+			this._buttonHideScrollCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonHideScrollCards.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
+			this._buttonHideScrollCards.Location = new System.Drawing.Point(1032, 92);
+			this._buttonHideScrollCards.Margin = new System.Windows.Forms.Padding(0);
+			this._buttonHideScrollCards.Name = "_buttonHideScrollCards";
+			this._buttonHideScrollCards.Size = new System.Drawing.Size(18, 24);
+			this._buttonHideScrollCards.TabIndex = 51;
+			this._buttonHideScrollCards.TabStop = false;
+			this._buttonHideScrollCards.UseVisualStyleBackColor = false;
+			// 
 			// _layoutViewCards
 			// 
 			this._layoutViewCards.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._layoutViewCards.BackColor = System.Drawing.Color.White;
-			this._layoutMain.SetColumnSpan(this._layoutViewCards, 2);
+			this._layoutMain.SetColumnSpan(this._layoutViewCards, 3);
 			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
 			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
 			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
@@ -1027,7 +1048,7 @@ namespace Mtgdb.Gui
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._layoutViewDeck.BackColor = System.Drawing.Color.White;
-			this._layoutMain.SetColumnSpan(this._layoutViewDeck, 2);
+			this._layoutMain.SetColumnSpan(this._layoutViewDeck, 3);
 			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
 			layoutOptions2.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
 			layoutOptions2.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
@@ -1066,7 +1087,7 @@ namespace Mtgdb.Gui
 			this._deckListControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutMain.SetColumnSpan(this._deckListControl, 2);
+			this._layoutMain.SetColumnSpan(this._deckListControl, 3);
 			this._deckListControl.FilterByDeckMode = Mtgdb.Controls.FilterByDeckMode.Ignored;
 			this._deckListControl.HideScroll = false;
 			this._deckListControl.Location = new System.Drawing.Point(0, 489);
@@ -1075,52 +1096,6 @@ namespace Mtgdb.Gui
 			this._deckListControl.Size = new System.Drawing.Size(1050, 311);
 			this._deckListControl.TabIndex = 43;
 			this._deckListControl.TabStop = false;
-			// 
-			// _panelScrollCards
-			// 
-			this._panelScrollCards.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelScrollCards.AutoSize = true;
-			this._panelScrollCards.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._panelScrollCards.Controls.Add(this._labelStatusScrollCards);
-			this._panelScrollCards.Controls.Add(this._buttonHideScrollCards);
-			this._panelScrollCards.Location = new System.Drawing.Point(960, 92);
-			this._panelScrollCards.Margin = new System.Windows.Forms.Padding(0);
-			this._panelScrollCards.Name = "_panelScrollCards";
-			this._panelScrollCards.Size = new System.Drawing.Size(90, 24);
-			this._panelScrollCards.TabIndex = 51;
-			this._panelScrollCards.WrapContents = false;
-			// 
-			// _buttonHideScroll
-			// 
-			this._buttonHideScrollCards.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonHideScrollCards.BackColor = System.Drawing.Color.Transparent;
-			this._buttonHideScrollCards.FlatAppearance.BorderSize = 0;
-			this._buttonHideScrollCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideScrollCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideScrollCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-			this._buttonHideScrollCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHideScrollCards.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
-			this._buttonHideScrollCards.Location = new System.Drawing.Point(72, 0);
-			this._buttonHideScrollCards.Margin = new System.Windows.Forms.Padding(0);
-			this._buttonHideScrollCards.Name = "_buttonHideScrollCards";
-			this._buttonHideScrollCards.Size = new System.Drawing.Size(18, 24);
-			this._buttonHideScrollCards.TabIndex = 51;
-			this._buttonHideScrollCards.TabStop = false;
-			this._buttonHideScrollCards.UseVisualStyleBackColor = false;
-			// 
-			// _panelScrollDeck
-			// 
-			this._panelScrollDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelScrollDeck.AutoSize = true;
-			this._panelScrollDeck.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._panelScrollDeck.Controls.Add(this._labelStatusScrollDeck);
-			this._panelScrollDeck.Controls.Add(this._buttonHideScrollDeck);
-			this._panelScrollDeck.Location = new System.Drawing.Point(996, 154);
-			this._panelScrollDeck.Margin = new System.Windows.Forms.Padding(0);
-			this._panelScrollDeck.Name = "_panelScrollDeck";
-			this._panelScrollDeck.Size = new System.Drawing.Size(54, 24);
-			this._panelScrollDeck.TabIndex = 51;
-			this._panelScrollDeck.WrapContents = false;
 			// 
 			// _layoutRight
 			// 
@@ -1287,10 +1262,6 @@ namespace Mtgdb.Gui
 			this._panelManaAbility.ResumeLayout(false);
 			this._layoutMain.ResumeLayout(false);
 			this._layoutMain.PerformLayout();
-			this._panelScrollCards.ResumeLayout(false);
-			this._panelScrollCards.PerformLayout();
-			this._panelScrollDeck.ResumeLayout(false);
-			this._panelScrollDeck.PerformLayout();
 			this._layoutRight.ResumeLayout(false);
 			this._layoutRight.PerformLayout();
 			this._panelRightNarrow.ResumeLayout(false);
@@ -1373,7 +1344,5 @@ namespace Mtgdb.Gui
 		private System.Windows.Forms.FlowLayoutPanel _panelManaAbility;
 		private Controls.CustomCheckBox _buttonHideScrollCards;
 		private DeckListControl _deckListControl;
-		private FlowLayoutPanel _panelScrollCards;
-		private FlowLayoutPanel _panelScrollDeck;
 	}
 }

@@ -73,7 +73,20 @@ namespace Mtgdb.Controls
 			_higlightSubsystem.SubscribeToEvents();
 
 			_viewDeck.MouseMove += deckMouseMove;
+
+			if (_listModel.IsLoaded)
+				listModelLoaded();
+			else
+				_listModel.Loaded += listModelLoaded;
+
+			_model = new DeckModel(Deck.Create(), _ui)
+			{
+				IsCurrent = true
+			};
 		}
+
+		private void listModelLoaded() =>
+			_tooltipOwner.Invoke(_searchSubsystem.ModelChanged);
 
 		private void deckMouseMove(object sender, MouseEventArgs e)
 		{
@@ -120,7 +133,7 @@ namespace Mtgdb.Controls
 
 			_searchSubsystem.UpdateSuggestInput();
 
-			initModels();
+			_model.Ui = _ui;
 		}
 
 		public void StartThread() =>
@@ -128,20 +141,6 @@ namespace Mtgdb.Controls
 
 		public void AbortThread() =>
 			_searchSubsystem.AbortThread();
-
-		private void initModels()
-		{
-			_model = new DeckModel(Deck.Create(), _ui)
-			{
-				Id = -1,
-				IsCurrent = true
-			};
-
-			_searchSubsystem.ModelChanged();
-		}
-
-		public void PriceLoaded() =>
-			_searchSubsystem.ModelChanged();
 
 		public void DeckChanged(Deck deck)
 		{
@@ -229,6 +228,9 @@ namespace Mtgdb.Controls
 
 		private void applySearchResult()
 		{
+			if (_ui == null)
+				return;
+
 			var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
 
 			_filteredModels.Clear();
@@ -485,7 +487,7 @@ namespace Mtgdb.Controls
 
 		private DeckModel _model;
 
-		private object _tooltipOwner;
+		private Control _tooltipOwner;
 
 		private UiModel _ui;
 		private DeckListModel _listModel;

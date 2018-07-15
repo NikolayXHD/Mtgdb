@@ -1,3 +1,4 @@
+using System.Threading;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
@@ -10,24 +11,31 @@ namespace Mtgdb.Gui
 			Loader loader,
 			NewsService newsService,
 			DownloaderSubsystem downloaderSubsystem,
-			DeckListModel deckListModel)
+			DeckListModel deckListModel,
+			DeckSearcher deckSearcher,
+			CardRepository repo,
+			UiModel ui)
 		{
 			_loader = loader;
-			_deckListModel = deckListModel;
 
 			_loader.Add(newsService.FetchNews);
 			_loader.Add(downloaderSubsystem.CalculateProgress);
+			_loader.Add(() =>
+			{
+				deckListModel.Load();
+
+				while (!repo.IsPriceLoadingComplete)
+					Thread.Sleep(100);
+
+				deckSearcher.LoadIndexes(ui);
+			});
 		}
 
-		public void Run()
-		{
+		public void Run() =>
 			_loader.Run();
-			_deckListModel.Load();
-		}
 
 		public void Abort() => _loader.Abort();
 
 		private readonly Loader _loader;
-		private readonly DeckListModel _deckListModel;
 	}
 }
