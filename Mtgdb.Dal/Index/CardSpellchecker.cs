@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Mtgdb.Index;
 
@@ -8,8 +9,8 @@ namespace Mtgdb.Dal.Index
 {
 	public class CardSpellchecker : LuceneSpellchecker<int, Card>
 	{
-		// 0.39 bbd
-		private const string IndexVerision = "0.39";
+		// analyze legality fields
+		private const string IndexVerision = "0.40";
 
 		public CardSpellchecker(CardRepository repo, CardDocumentAdapter adapter)
 			: base(adapter)
@@ -17,8 +18,6 @@ namespace Mtgdb.Dal.Index
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
 			_repo = repo;
 		}
-
-
 
 		protected override IEnumerable<Card> GetObjectsToIndex()
 		{
@@ -30,14 +29,21 @@ namespace Mtgdb.Dal.Index
 				.SelectMany(s => s.Cards);
 		}
 
-		protected override Directory LoadSpellcheckerIndex()
+		protected override Directory CreateIndex(DirectoryReader reader)
 		{
 			Directory index;
 
 			if (_version.IsUpToDate)
 			{
-				index = FSDirectory.Open(_version.Directory);
-				Spellchecker.Load(index);
+				using (var fsDirectory = FSDirectory.Open(_version.Directory))
+					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
+
+				var spellchecker = CreateSpellchecker();
+				spellchecker.Load(index);
+
+				var state = CreateState(reader, spellchecker, loaded: true);
+				Update(state);
+
 				return index;
 			}
 
@@ -45,8 +51,10 @@ namespace Mtgdb.Dal.Index
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();
+			index = base.CreateIndex(reader);
 
-			index = base.LoadSpellcheckerIndex();
+			if (index == null)
+				return null;
 
 			index.SaveTo(_version.Directory);
 			_version.SetIsUpToDate();

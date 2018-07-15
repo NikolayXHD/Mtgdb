@@ -117,14 +117,9 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			
 			sw.Start();
-			Searcher.LoadIndex();
+			Searcher.LoadIndexes();
 			sw.Stop();
-			_log.Info($"Searcher index loaded in {sw.ElapsedMilliseconds} ms");
-
-			sw.Start();
-			Searcher.LoadSpellcheckerIndex();
-			sw.Stop();
-			_log.Info($"Spellchecker index loaded in {sw.ElapsedMilliseconds} ms");
+			_log.Info($"Searcher indexes loaded in {sw.ElapsedMilliseconds} ms");
 
 			Spellchecker = Searcher.Spellchecker;
 

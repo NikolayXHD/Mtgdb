@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
-using Lucene.Net.QueryParsers.Classic;
-using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Mtgdb.Index;
 
@@ -12,14 +9,13 @@ namespace Mtgdb.Dal.Index
 {
 	public class CardSearcher : LuceneSearcher<int, Card>
 	{
-		// 0.39 bbd
-		private const string IndexVerision = "0.39";
+		// analyze legality fields
+		private const string IndexVerision = "0.40";
 
 		public CardSearcher(CardRepository repository, CardDocumentAdapter adapter)
 			: base(new CardSpellchecker(repository, adapter), adapter)
 		{
 			_repo = repository;
-			_adapter = adapter;
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("search");
 		}
 
@@ -28,26 +24,9 @@ namespace Mtgdb.Dal.Index
 		/// </summary>
 		internal IEnumerable<Card> SearchCards(string queryStr, string language)
 		{
-			var query = ParseQuery(queryStr, language);
-			return SearchCards(query);
+			var result =  Search(queryStr, language);
+			return result.RelevanceById.Keys.Select(_ => _repo.Cards[_]);
 		}
-
-		/// <summary>
-		/// For test
-		/// </summary>
-		internal IEnumerable<Card> SearchCards(Query query)
-		{
-			var searchResult = SearchIndex(query);
-
-			foreach (var scoreDoc in searchResult.ScoreDocs)
-			{
-				var id = GetId(scoreDoc);
-				var card = _repo.Cards[id];
-				yield return card;
-			}
-		}
-
-
 
 		protected override string GetDisplayField(string field)
 		{
@@ -55,27 +34,30 @@ namespace Mtgdb.Dal.Index
 			return displayField ?? field;
 		}
 
-		protected override Analyzer CreateAnalyzer() =>
-			new MtgAnalyzer(_adapter);
-
-		protected override Directory CreateIndex()
+		protected override Directory CreateIndex(SearcherState<int, Card> state)
 		{
+			Directory index;
+
 			if (_version.IsUpToDate)
-				return FSDirectory.Open(_version.Directory);
+			{
+				using (var fsDirectory = FSDirectory.Open(_version.Directory))
+					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
+
+				return index;
+			}
 
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();
-			
-			var index = base.CreateIndex();
+			index = base.CreateIndex(state);
 
 			if (index == null)
 				return null;
 
 			index.SaveTo(_version.Directory);
-
 			_version.SetIsUpToDate();
+
 			return index;
 		}
 
@@ -87,11 +69,6 @@ namespace Mtgdb.Dal.Index
 
 		public new CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
 
-		protected override QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
-			new CardQueryParser((MtgAnalyzer) analyzer, _repo, _adapter, language);
-
-
-
 		public void InvalidateIndex() =>
 			_version.Invalidate();
 
@@ -100,15 +77,13 @@ namespace Mtgdb.Dal.Index
 			get => _version.Directory.Parent();
 			set => _version = new IndexVersion(value, IndexVerision);
 		}
+
 		public Func<Set, bool> FilterSet { get; set; } = set => true;
 		public string IndexDirectory => _version.Directory;
 		public bool IsUpToDate => _version.IsUpToDate;
 		public int SetsAddedToIndex => GroupsAddedToIndex;
 
-
-
 		private readonly CardRepository _repo;
-		private readonly CardDocumentAdapter _adapter;
 		private IndexVersion _version;
 	}
 }

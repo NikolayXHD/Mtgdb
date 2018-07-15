@@ -27,10 +27,17 @@ namespace Mtgdb.Controls
 			IconRecognizer recognizer,
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
+			UiModelSnapshotFactory uiFactory,
 			Control tooltipOwner)
 		{
 			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
+			_uiFactory = uiFactory;
+
+			_model = new DeckModel(Deck.Create(), _uiFactory.Snapshot())
+			{
+				IsCurrent = true
+			};
 
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
@@ -64,7 +71,7 @@ namespace Mtgdb.Controls
 
 			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
 
-			_searchSubsystem.TextApplied += applySearchResult;
+			_searchSubsystem.TextApplied += updateSearchResult;
 
 			_searchSubsystem.SubscribeToEvents();
 			_customTooltip.SubscribeToEvents();
@@ -79,14 +86,17 @@ namespace Mtgdb.Controls
 			else
 				_listModel.Loaded += listModelLoaded;
 
-			_model = new DeckModel(Deck.Create(), _ui)
-			{
-				IsCurrent = true
-			};
+			searcher.Loaded += searcherLoaded;
+
+			if (searcher.IsLoaded)
+				_searchSubsystem.Apply();
 		}
 
+		private void searcherLoaded() =>
+			_tooltipOwner.Invoke(_searchSubsystem.Apply);
+
 		private void listModelLoaded() =>
-			_tooltipOwner.Invoke(_searchSubsystem.ModelChanged);
+			_searchSubsystem.ModelChanged();
 
 		private void deckMouseMove(object sender, MouseEventArgs e)
 		{
@@ -118,22 +128,17 @@ namespace Mtgdb.Controls
 		}
 
 
-		public void SetUi(UiModel ui, TooltipController controller, DeckSuggestModel suggestModel)
+		public void SetUi(TooltipController controller, DeckSuggestModel suggestModel)
 		{
-			_ui = ui;
-
 			if (_searchSubsystem.SuggestModel != null)
 				_searchSubsystem.UnsubscribeSuggestModelEvents();
 
 			_searchSubsystem.SuggestModel = suggestModel;
-			_searchSubsystem.Ui = ui;
 			_searchSubsystem.SubscribeSuggestModelEvents();
 
 			setupTooltips(controller);
 
 			_searchSubsystem.UpdateSuggestInput();
-
-			_model.Ui = _ui;
 		}
 
 		public void StartThread() =>
@@ -150,8 +155,11 @@ namespace Mtgdb.Controls
 			Refreshed?.Invoke(this);
 		}
 
-		public void CollectionChanged() =>
+		public void CollectionChanged()
+		{
+			_model.Ui = _uiFactory.Snapshot();
 			_searchSubsystem.ModelChanged();
+		}
 
 
 
@@ -226,9 +234,9 @@ namespace Mtgdb.Controls
 		private void viewScrolled(object obj) =>
 			Scrolled?.Invoke(this);
 
-		private void applySearchResult()
+		private void updateSearchResult()
 		{
-			if (_ui == null)
+			if (_uiFactory == null)
 				return;
 
 			var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
@@ -236,7 +244,9 @@ namespace Mtgdb.Controls
 			_filteredModels.Clear();
 			_filteredModels.Add(_model);
 
-			var models = _listModel.GetModels(_ui)
+			var ui = _uiFactory.Snapshot();
+
+			var models = _listModel.GetModels(ui)
 				.Reverse()
 				.Where(m => searchResult == null || searchResult.ContainsKey(m.Id));
 
@@ -480,6 +490,12 @@ namespace Mtgdb.Controls
 		public bool IsAddingDecks =>
 			_saved.HasValue;
 
+		public bool IsSearcherLoaded =>
+			_searchSubsystem.IsLoaded;
+
+		public bool IsSearcherUpdating =>
+			_searchSubsystem.IsUpdating;
+
 		public int DecksAddedCount { get; private set; }
 		public int DecksToAddCount { get; private set; }
 
@@ -489,7 +505,7 @@ namespace Mtgdb.Controls
 
 		private Control _tooltipOwner;
 
-		private UiModel _ui;
+		private UiModelSnapshotFactory _uiFactory;
 		private DeckListModel _listModel;
 
 		private DeckModel _renamedModel;

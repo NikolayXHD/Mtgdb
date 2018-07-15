@@ -31,8 +31,7 @@ namespace Mtgdb.Gui
 			Ui.LanguageController.Language;
 
 		protected override IntellisenseSuggest CycleValue(TextInputState currentState, bool backward) =>
-			((CardSearcher) Searcher).Spellchecker.CycleValue(
-				((CardSuggestModel) SuggestModel).Language, currentState, backward);
+			((CardSearcher) Searcher).Spellchecker.CycleValue(currentState, backward, ((CardSuggestModel) SuggestModel).Language);
 
 		protected override SearchResult<int> Search(string query) =>
 			Searcher.Search(query, GetLanguage());

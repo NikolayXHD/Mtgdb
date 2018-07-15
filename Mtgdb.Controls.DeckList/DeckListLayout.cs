@@ -24,12 +24,12 @@ namespace Mtgdb.Controls
 			_fieldOtherCount.FieldName = nameof(DeckModel.OtherSpellCount);
 
 			_fieldMainCount.FieldName = nameof(Zone.Main) + nameof(DeckModel.Count);
-			_fieldMainCollectedCount.FieldName = nameof(DeckModel.MainOwnedCount);
-			_fieldMainCollectedCountPercent.FieldName = nameof(DeckModel.MainOwnedCountPercent);
+			_fieldMainCollectedCount.FieldName = nameof(DeckModel.MainCollectedCount);
+			_fieldMainCollectedCountPercent.FieldName = nameof(DeckModel.MainCollectedCountPercent);
 
 			_fieldSideCount.FieldName = nameof(Zone.Side) + nameof(DeckModel.Count);
-			_fieldSideCollectedCount.FieldName = nameof(DeckModel.SideOwnedCount);
-			_fieldSideCollectedCountPercent.FieldName = nameof(DeckModel.SideOwnedCountPercent);
+			_fieldSideCollectedCount.FieldName = nameof(DeckModel.SideCollectedCount);
+			_fieldSideCollectedCountPercent.FieldName = nameof(DeckModel.SideCollectedCountPercent);
 
 
 
@@ -38,12 +38,12 @@ namespace Mtgdb.Controls
 			_fieldOtherPrice.FieldName = nameof(DeckModel.OtherSpellPrice);
 
 			_fieldMainPrice.FieldName = nameof(Zone.Main) + nameof(DeckModel.Price);
-			_fieldMainCollectedPrice.FieldName = nameof(DeckModel.MainOwnedPrice);
-			_fieldMainCollectedPricePercent.FieldName = nameof(DeckModel.MainOwnedPricePercent);
+			_fieldMainCollectedPrice.FieldName = nameof(DeckModel.MainCollectedPrice);
+			_fieldMainCollectedPricePercent.FieldName = nameof(DeckModel.MainCollectedPricePercent);
 
 			_fieldSidePrice.FieldName = nameof(Zone.Side) + nameof(DeckModel.Price);
-			_fieldSideCollectedPrice.FieldName = nameof(DeckModel.SideOwnedPrice);
-			_fieldSideCollectedPricePercent.FieldName = nameof(DeckModel.SideOwnedPricePercent);
+			_fieldSideCollectedPrice.FieldName = nameof(DeckModel.SideCollectedPrice);
+			_fieldSideCollectedPricePercent.FieldName = nameof(DeckModel.SideCollectedPricePercent);
 
 
 
@@ -52,12 +52,12 @@ namespace Mtgdb.Controls
 			_fieldOtherUnknownPrice.FieldName = nameof(DeckModel.OtherSpellUnknownPriceCount);
 
 			_fieldMainUnknownPrice.FieldName = nameof(Zone.Main) + nameof(DeckModel.UnknownPriceCount);
-			_fieldMainCollectedUnknownPrice.FieldName = nameof(DeckModel.MainOwnedUnknownPriceCount);
-			_fieldMainCollectedUnknownPricePercent.FieldName = nameof(DeckModel.MainOwnedUnknownPricePercent);
+			_fieldMainCollectedUnknownPrice.FieldName = nameof(DeckModel.MainCollectedUnknownPriceCount);
+			_fieldMainCollectedUnknownPricePercent.FieldName = nameof(DeckModel.MainCollectedUnknownPricePercent);
 
 			_fieldSideUnknownPrice.FieldName = nameof(Zone.Side) + nameof(DeckModel.UnknownPriceCount);
-			_fieldSideCollectedUnknownPrice.FieldName = nameof(DeckModel.SideOwnedUnknownPriceCount);
-			_fieldSideCollectedUnknownPricePercent.FieldName = nameof(DeckModel.SideOwnedUnknownPricePercent);
+			_fieldSideCollectedUnknownPrice.FieldName = nameof(DeckModel.SideCollectedUnknownPriceCount);
+			_fieldSideCollectedUnknownPricePercent.FieldName = nameof(DeckModel.SideCollectedUnknownPricePercent);
 
 			_fieldLegality.FieldName = nameof(DeckModel.Legal);
 
@@ -112,12 +112,12 @@ namespace Mtgdb.Controls
 			_fieldOtherCount.DataText = deck?.OtherSpellCount.ToString(Str.Culture);
 
 			_fieldMainCount.DataText = deck?.Count(Zone.Main).ToString(Str.Culture);
-			_fieldMainCollectedCount.DataText = deck?.MainOwnedCount.ToString(Str.Culture);
-			_fieldMainCollectedCountPercent.DataText = deck?.MainOwnedCountPercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldMainCollectedCount.DataText = deck?.MainCollectedCount.ToString(Str.Culture);
+			_fieldMainCollectedCountPercent.DataText = deck?.MainCollectedCountPercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 			_fieldSideCount.DataText = deck?.Count(Zone.Side).ToString(Str.Culture);
-			_fieldSideCollectedCount.DataText = deck?.SideOwnedCount.ToString(Str.Culture);
-			_fieldSideCollectedCountPercent.DataText = deck?.SideOwnedCountPercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldSideCollectedCount.DataText = deck?.SideCollectedCount.ToString(Str.Culture);
+			_fieldSideCollectedCountPercent.DataText = deck?.SideCollectedCountPercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 
 
@@ -126,12 +126,12 @@ namespace Mtgdb.Controls
 			_fieldOtherPrice.DataText = deck?.OtherSpellPrice.ToString(formatPrice, Str.Culture);
 
 			_fieldMainPrice.DataText = deck?.Price(Zone.Main).ToString(formatPrice, Str.Culture);
-			_fieldMainCollectedPrice.DataText = deck?.MainOwnedPrice.ToString(formatPrice, Str.Culture);
-			_fieldMainCollectedPricePercent.DataText = deck?.MainOwnedPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldMainCollectedPrice.DataText = deck?.MainCollectedPrice.ToString(formatPrice, Str.Culture);
+			_fieldMainCollectedPricePercent.DataText = deck?.MainCollectedPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 			_fieldSidePrice.DataText = deck?.Price(Zone.Side).ToString(formatPrice, Str.Culture);
-			_fieldSideCollectedPrice.DataText = deck?.SideOwnedPrice.ToString(formatPrice, Str.Culture);
-			_fieldSideCollectedPricePercent.DataText = deck?.SideOwnedPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldSideCollectedPrice.DataText = deck?.SideCollectedPrice.ToString(formatPrice, Str.Culture);
+			_fieldSideCollectedPricePercent.DataText = deck?.SideCollectedPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 
 
@@ -140,12 +140,12 @@ namespace Mtgdb.Controls
 			_fieldOtherUnknownPrice.DataText = deck?.OtherSpellUnknownPriceCount.ToString(Str.Culture);
 
 			_fieldMainUnknownPrice.DataText = deck?.UnknownPriceCount(Zone.Main).ToString(Str.Culture);
-			_fieldMainCollectedUnknownPrice.DataText = deck?.MainOwnedUnknownPriceCount.ToString(Str.Culture);
-			_fieldMainCollectedUnknownPricePercent.DataText = deck?.MainOwnedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldMainCollectedUnknownPrice.DataText = deck?.MainCollectedUnknownPriceCount.ToString(Str.Culture);
+			_fieldMainCollectedUnknownPricePercent.DataText = deck?.MainCollectedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 			_fieldSideUnknownPrice.DataText = deck?.UnknownPriceCount(Zone.Side).ToString(Str.Culture);
-			_fieldSideCollectedUnknownPrice.DataText = deck?.SideOwnedUnknownPriceCount.ToString(Str.Culture);
-			_fieldSideCollectedUnknownPricePercent.DataText = deck?.SideOwnedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
+			_fieldSideCollectedUnknownPrice.DataText = deck?.SideCollectedUnknownPriceCount.ToString(Str.Culture);
+			_fieldSideCollectedUnknownPricePercent.DataText = deck?.SideCollectedUnknownPricePercent.ToString(formatPercent, Str.Culture).Replace("NaN", "-");
 
 			_fieldLegality.DataText = deck?.Legal.Invoke2(string.Join, ", ");
 

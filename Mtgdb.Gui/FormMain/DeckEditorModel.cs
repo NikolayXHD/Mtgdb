@@ -285,7 +285,6 @@ namespace Mtgdb.Gui
 			return Deck.GetCount(c.Id);
 		}
 
-
 		public void Paste(Deck deck, bool append, CardRepository repo)
 		{
 			var operations = new Dictionary<DeckZone, DeckZoneModel>();

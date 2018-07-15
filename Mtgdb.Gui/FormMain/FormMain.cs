@@ -42,7 +42,7 @@ namespace Mtgdb.Gui
 
 				_cardSearch.SuggestModel = _formRoot.CardSuggestModel;
 
-				_deckListControl.SetUi(_formRoot.UiModel, _formRoot.TooltipController, _formRoot.DeckSuggestModel);
+				_deckListControl.SetUi(_formRoot.TooltipController, _formRoot.DeckSuggestModel);
 
 				_cardSearch.SubscribeSuggestModelEvents();
 
@@ -429,10 +429,19 @@ namespace Mtgdb.Gui
 			label.Text = scrollCardsStatus;
 		}
 
-		private string getDeckListStatus() =>
-			_deckListControl.IsAddingDecks
-				? $"deck list: {_deckListControl.FilteredDecksCount}, loading {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}"
-				: $"deck list: {_deckListControl.FilteredDecksCount}";
+		private string getDeckListStatus()
+		{
+			if (!_deckListControl.IsSearcherLoaded)
+				return "deck list: loading…";
+
+			if (_deckListControl.IsSearcherUpdating)
+				return "deck list: updating…";
+
+			if (_deckListControl.IsAddingDecks)
+				return $"deck list: {_deckListControl.FilteredDecksCount}, adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}";
+
+			return $"deck list: {_deckListControl.FilteredDecksCount}";
+		}
 
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)
 		{

@@ -60,6 +60,8 @@ del /q /s %targetBin%\*.xml
 rmdir /q /s %target%\data\index\keywords-test
 rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test
+rmdir /q /s %target%\data\index\deck\search
+rmdir /q /s %target%\data\index\deck\suggest
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 

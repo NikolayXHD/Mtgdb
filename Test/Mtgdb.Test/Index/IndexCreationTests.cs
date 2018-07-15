@@ -14,7 +14,7 @@ namespace Mtgdb.Test
 		{
 			LoadTranslations();
 
-			_cardSearcher = new CardSearcher(Repo, new CardDocumentAdapter());
+			_cardSearcher = new CardSearcher(Repo, new CardDocumentAdapter(Repo));
 			_keywordSearcher = new KeywordSearcher(Repo);
 
 			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
@@ -45,7 +45,8 @@ namespace Mtgdb.Test
 
 			Assert.That(_cardSearcher.IsUpToDate, Is.Not.True);
 
-			_cardSearcher.LoadIndex();
+			var state = _cardSearcher.CreateState();
+			_cardSearcher.LoadIndex(state);
 
 			Assert.That(_cardSearcher.IsUpToDate);
 		}
@@ -58,7 +59,7 @@ namespace Mtgdb.Test
 
 			Assert.That(_cardSearcher.Spellchecker.IsUpToDate, Is.Not.True);
 
-			_cardSearcher.LoadSpellcheckerIndex();
+			_cardSearcher.Spellchecker.LoadIndex(_cardSearcher.State);
 
 			Assert.That(_cardSearcher.Spellchecker.IsUpToDate);
 		}
@@ -103,7 +104,7 @@ namespace Mtgdb.Test
 		{
 			string query = "nameen:vampire";
 
-			var suggest = _cardSearcher.Spellchecker.Suggest("en", new TextInputState(query, query.Length, selectionLength: 0)).Values;
+			var suggest = _cardSearcher.Spellchecker.Suggest(new TextInputState(query, query.Length, selectionLength: 0), "en").Values;
 
 			Assert.That(suggest, Is.Not.Null.And.Not.Empty);
 			Assert.That(suggest, Has.Some.Contains("vampire").IgnoreCase);

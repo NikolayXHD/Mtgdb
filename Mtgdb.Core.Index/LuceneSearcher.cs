@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Lucene.Net.Analysis;
 using Lucene.Net.Contrib;
 using Lucene.Net.Documents;
-using Lucene.Net.Index;
-using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using ReadOnlyCollectionsExtensions;
@@ -14,9 +11,9 @@ using Token = Lucene.Net.Contrib.Token;
 
 namespace Mtgdb.Index
 {
-	public abstract class LuceneSearcher<TId, TObj> : IDisposable
+	public abstract class LuceneSearcher<TId, TDoc> : IDisposable
 	{
-		protected LuceneSearcher(LuceneSpellchecker<TId, TObj> spellchecker, IDocumentAdapter<TId, TObj> adapter)
+		protected LuceneSearcher(LuceneSpellchecker<TId, TDoc> spellchecker, IDocumentAdapter<TId, TDoc> adapter)
 		{
 			Adapter = adapter;
 			Spellchecker = spellchecker;
@@ -24,33 +21,39 @@ namespace Mtgdb.Index
 
 		public void LoadIndexes()
 		{
-			LoadIndex();
-			LoadSpellcheckerIndex();
+			var newState = CreateState();
+
+			LoadIndex(newState);
+
+			if (newState.IsLoaded)
+				Spellchecker.LoadIndex(newState);
 		}
 
-		protected internal virtual void LoadIndex()
+		internal SearcherState<TId, TDoc> CreateState() =>
+			new SearcherState<TId, TDoc>(Adapter, GetDocumentGroupsToIndex);
+
+		internal void LoadIndex(SearcherState<TId, TDoc> state)
 		{
-			if (IsLoaded || IsLoading)
+			bool stateExisted = State != null;
+
+			if (!stateExisted)
+				State = state;
+
+			var index = CreateIndex(state);
+
+			if (index == null)
 				return;
 
-			IsLoading = true;
+			state.Load(index);
 
-			_index = CreateIndex();
-
-			if (_index == null)
-				return;
-
-			_indexReader = DirectoryReader.Open(_index);
-			_searcher = new IndexSearcher(_indexReader);
-
-			IsLoaded = true;
-			IsLoading = false;
+			if (stateExisted)
+			{
+				State.Dispose();
+				State = state;
+			}
 
 			Loaded?.Invoke();
 		}
-
-		internal void LoadSpellcheckerIndex() =>
-			Spellchecker.LoadIndex(_indexReader);
 
 		public SearchResult<TId> Search(string queryStr, string language)
 		{
@@ -60,7 +63,7 @@ namespace Mtgdb.Index
 
 			try
 			{
-				query = ParseQuery(queryStr, language);
+				query = parseQuery(queryStr, language);
 			}
 			catch (Exception ex)
 			{
@@ -72,14 +75,12 @@ namespace Mtgdb.Index
 			if (!IsLoaded)
 				return SearchResult<TId>.IndexNotBuiltResult;
 
-			var searchResult = SearchIndex(query);
-
-			var relevanceById = searchResult.ScoreDocs
-				.GroupBy(GetId)
-				.ToDictionary(gr => gr.Key, gr => gr.First().Score);
+			var relevanceById = State.Search(query);
 
 			return new SearchResult<TId>(queryStr, relevanceById, highlightTerms, highlightPhrases);
 		}
+
+
 
 		private static void fixNegativeClauses(Query query)
 		{
@@ -161,63 +162,31 @@ namespace Mtgdb.Index
 
 		public void Dispose()
 		{
-			abortLoading();
-			IsLoaded = false;
-
 			// Сначала Spellchecker, потому что он использует _index
 			Spellchecker.Dispose();
-
-			_indexReader.Dispose();
-			_index.Dispose();
+			State?.Dispose();
 
 			Disposed?.Invoke();
 		}
 
 		protected abstract IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex();
-		protected abstract Analyzer CreateAnalyzer();
 
-		protected virtual Directory CreateIndex()
+		protected virtual Directory CreateIndex(SearcherState<TId, TDoc> state)
 		{
-			var index = new RAMDirectory();
+			void progressHandler() =>
+				IndexingProgress?.Invoke();
 
-			var indexWriterAnalyzer = CreateAnalyzer();
-			var config = IndexUtils.CreateWriterConfig(indexWriterAnalyzer);
+			state.IndexingProgress += progressHandler;
+			var result = state.CreateIndex();
+			state.IndexingProgress -= progressHandler;
 
-			using (var writer = new IndexWriter(index, config))
-			{
-				void indexDocumentGroup(IEnumerable<Document> documents)
-				{
-					if (_aborted)
-						return;
-
-					foreach (var doc in documents)
-					{
-						if (_aborted)
-							return;
-
-						writer.AddDocument(doc);
-					}
-
-					Interlocked.Increment(ref GroupsAddedToIndex);
-					IndexingProgress?.Invoke();
-				}
-
-				IndexUtils.ForEach(GetDocumentGroupsToIndex(), indexDocumentGroup);
-
-				if (_aborted)
-					return null;
-
-				writer.Flush(triggerMerge: true, applyAllDeletes: false);
-				writer.Commit();
-			}
-
-			return index;
+			return result;
 		}
 
-		protected Query ParseQuery(string queryStr, string language)
+		private Query parseQuery(string queryStr, string language)
 		{
 			Query query;
-			var parser = CreateQueryParser(language, QueryParserAnalyzer);
+			var parser = Adapter.CreateQueryParser(language, QueryParserAnalyzer);
 
 			lock (_syncQueryParser)
 				query = parser.Parse(queryStr);
@@ -225,53 +194,25 @@ namespace Mtgdb.Index
 			return query;
 		}
 
-		protected abstract QueryParser CreateQueryParser(string language, Analyzer analyzer);
-
-
-
 		protected virtual string GetDisplayField(string field) => field;
 
-		protected TId GetId(ScoreDoc d) => Adapter.GetId(_searcher.Doc(d.Doc));
-
-		protected TopDocs SearchIndex(Query query) =>
-			_searcher.SearchWrapper(query, _indexReader.MaxDoc);
 
 
-		private void abortLoading()
-		{
-			if (!IsLoading)
-				return;
-
-			_aborted = true;
-
-			while (IsLoading)
-				Thread.Sleep(100);
-
-			_aborted = false;
-		}
-
-		public bool IsLoading { get; private set; }
-		public bool IsLoaded { get; protected set; }
-
-		protected int GroupsAddedToIndex;
-
-		public readonly LuceneSpellchecker<TId, TObj> Spellchecker;
-
-		protected readonly IDocumentAdapter<TId, TObj> Adapter;
-
-		private bool _aborted;
+		public bool IsLoading => State?.IsLoading ?? false;
+		public bool IsLoaded => State?.IsLoaded ?? false;
+		protected int GroupsAddedToIndex => State?.GroupsAddedToIndex ?? 0;
 
 		public event Action IndexingProgress;
+
+		public readonly LuceneSpellchecker<TId, TDoc> Spellchecker;
+		protected readonly IDocumentAdapter<TId, TDoc> Adapter;
+		internal SearcherState<TId, TDoc> State { get; private set; }
+
 		public event Action Loaded;
 		public event Action Disposed;
 
-		private Directory _index;
-		private IndexSearcher _searcher;
-
-		private DirectoryReader _indexReader;
-
 		private Analyzer QueryParserAnalyzer =>
-			_queryParserAnalyzer ?? (_queryParserAnalyzer = CreateAnalyzer());
+			_queryParserAnalyzer ?? (_queryParserAnalyzer = Adapter.CreateAnalyzer());
 
 		private Analyzer _queryParserAnalyzer;
 

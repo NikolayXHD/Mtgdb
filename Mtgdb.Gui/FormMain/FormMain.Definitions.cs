@@ -30,6 +30,7 @@ namespace Mtgdb.Gui
 			KeywordSearcher keywordSearcher,
 			ForgeSetRepository forgeSetRepo,
 			DeckListModel deckListModel,
+			UiModelSnapshotFactory uiFactory,
 			DeckSearcher deckSearcher,
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
@@ -166,6 +167,7 @@ namespace Mtgdb.Gui
 				iconRecognizer,
 				deckSearcher,
 				deckAdapter,
+				uiFactory,
 				this);
 
 			_copyPaste = new CopyPasteSubsystem(

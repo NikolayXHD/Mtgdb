@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Lucene.Net.Analysis;
+using Lucene.Net.QueryParsers.Classic;
 
 namespace Mtgdb.Index
 {
@@ -17,5 +19,8 @@ namespace Mtgdb.Index
 		bool IsAnyField(string field);
 		bool IsSuggestAnalyzedIn(string userField, string lang);
 		bool IsNotAnalyzed(string userField);
+
+		Analyzer CreateAnalyzer();
+		QueryParser CreateQueryParser(string language, Analyzer analyzer);
 	}
 }

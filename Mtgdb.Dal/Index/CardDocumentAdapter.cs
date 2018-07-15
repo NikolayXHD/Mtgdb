@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
+using Lucene.Net.QueryParsers.Classic;
 using Mtgdb.Index;
 
 namespace Mtgdb.Dal.Index
 {
 	public class CardDocumentAdapter : IDocumentAdapter<int, Card>
 	{
+		public CardDocumentAdapter(CardRepository repo)
+		{
+			_repo = repo;
+		}
+
 		public bool IsSuggestAnalyzedIn(string userField, string lang)
 		{
 			var spellcheckerField = GetSpellcheckerFieldIn(userField, lang);
@@ -90,7 +97,11 @@ namespace Mtgdb.Dal.Index
 			return Sequence.From((string) null);
 		}
 
+		public Analyzer CreateAnalyzer() =>
+			new MtgAnalyzer(this);
 
+		public QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
+			new CardQueryParser((MtgAnalyzer) analyzer, _repo, this, language);
 
 		private readonly Dictionary<string, Func<Card, string, IEnumerable<string>>> _spellcheckerValues
 			= new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
@@ -100,9 +111,14 @@ namespace Mtgdb.Dal.Index
 
 			[nameof(Card.NameEn)] = (c, lang) => Sequence.From(c.NameEn),
 			[nameof(Card.Artist)] = (c, lang) => Sequence.From(c.Artist),
-			[nameof(Card.SetName)] = (c, lang) => Sequence.From(c.SetName)
+			[nameof(Card.SetName)] = (c, lang) => Sequence.From(c.SetName),
+
+			[nameof(Card.LegalIn)] = (c, lang) => c.LegalFormats,
+			[nameof(Card.RestrictedIn)] = (c, lang) => c.RestrictedFormats,
+			[nameof(Card.BannedIn)] = (c, lang) => c.BannedFormats
 		};
 
 		private const string AnyField = "*";
+		private readonly CardRepository _repo;
 	}
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Lucene.Net.Contrib;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
@@ -9,9 +8,9 @@ using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Index
 {
-	public abstract class LuceneSpellchecker<TId, TObj> : IDisposable
+	public abstract class LuceneSpellchecker<TId, TDoc> : IDisposable
 	{
-		protected LuceneSpellchecker(IDocumentAdapter<TId, TObj> adapter)
+		protected LuceneSpellchecker(IDocumentAdapter<TId, TDoc> adapter)
 		{
 			_adapter = adapter;
 			MaxCount = 20;
@@ -26,19 +25,15 @@ namespace Mtgdb.Index
 				.ToReadOnlyList();
 		}
 
-		public virtual void LoadIndex(DirectoryReader indexReader)
+		public void LoadIndex(SearcherState<TId, TDoc> searcherState)
 		{
-			_reader = indexReader;
+			if (!searcherState.IsLoaded)
+				throw new InvalidOperationException();
 
-			Spellchecker = new Spellchecker(_adapter.IsAnyField);
-			LoadSpellcheckerIndex();
-
-			IsLoaded = true;
+			CreateIndex(searcherState.Reader);
 		}
 
-
-
-		public IntellisenseSuggest Suggest(string language, TextInputState input)
+		public IntellisenseSuggest Suggest(TextInputState input, string language)
 		{
 			string query = input.Text;
 			int caret = input.Caret;
@@ -64,10 +59,13 @@ namespace Mtgdb.Index
 
 				if (isFieldInvalid || string.IsNullOrEmpty(userField) && string.IsNullOrEmpty(valuePart))
 					valueSuggest = ReadOnlyList.Empty<string>();
-				else if (_adapter.IsAnyField(userField))
-					valueSuggest = suggestAllFieldValues(valuePart, language);
 				else
-					valueSuggest = suggestValues(userField, language, valuePart);
+				{
+					if (_adapter.IsAnyField(userField))
+						valueSuggest = State.SuggestAllFieldValues(valuePart, language);
+					else
+						valueSuggest = State.SuggestValues(userField, language, valuePart);
+				}
 
 				if (!string.IsNullOrEmpty(userField))
 					return new IntellisenseSuggest(token, valueSuggest, _allTokensAreValues);
@@ -92,7 +90,7 @@ namespace Mtgdb.Index
 			return LuceneSpellcheckerConstants.EmptySuggest;
 		}
 
-		public IntellisenseSuggest CycleValue(string language, TextInputState input, bool backward)
+		public IntellisenseSuggest CycleValue(TextInputState input, bool backward, string language)
 		{
 			string query = input.Text;
 			int caret = input.Caret;
@@ -121,7 +119,8 @@ namespace Mtgdb.Index
 				currentValue = StringEscaper.Unescape(token.Value);
 			}
 
-			var allValues = GetValuesCache(userField, language);
+			var snapshot = State;
+			var allValues = snapshot.GetValuesCache(userField, language);
 
 			if (allValues.Count == 0)
 				return null;
@@ -143,129 +142,6 @@ namespace Mtgdb.Index
 
 
 
-		private IReadOnlyList<string> suggestAllFieldValues(string value, string language)
-		{
-			if (string.IsNullOrEmpty(value))
-				throw new ArgumentException($"empty {nameof(value)}", nameof(value));
-
-			var numericValues = new HashSet<string>();
-
-			bool valueIsInt = value.IsInt();
-			bool valueIsFloat = value.IsFloat();
-
-			if (valueIsInt || valueIsFloat)
-				foreach (var userField in _adapter.GetUserFields())
-				{
-					bool matchesNumericType = _adapter.IsFloatField(userField) || _adapter.IsIntField(userField) && valueIsInt;
-
-					if (!matchesNumericType)
-						continue;
-
-					var cache = GetValuesCache(userField, language);
-					var similarNumbers = getNumericallySimilarValues(cache, value);
-					numericValues.UnionWith(similarNumbers);
-				}
-
-			var enumerable = numericValues
-				.OrderBy(Str.Comparer)
-				.Take(MaxCount);
-
-			if (IsLoaded)
-			{
-				var spellcheckerValues = Spellchecker.SuggestSimilar(null, value, MaxCount);
-
-				enumerable = enumerable
-					.Concat(spellcheckerValues.Where(v => !numericValues.Contains(v)))
-					.ToReadOnlyList();
-			}
-
-			return enumerable.ToReadOnlyList();
-		}
-
-		private IReadOnlyList<string> suggestValues(string userField, string language, string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				var cache = GetValuesCache(userField, language);
-				return new ListSegment<string>(cache, 0, MaxCount);
-			}
-
-			if (_adapter.IsNumericField(userField))
-			{
-				var cache = GetValuesCache(userField, language);
-				return getNumericallySimilarValues(cache, value).Take(MaxCount).ToReadOnlyList();
-			}
-
-			if (!IsLoaded)
-				return ReadOnlyList.Empty<string>();
-
-			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, language);
-			return Spellchecker.SuggestSimilar(spellcheckerField, value, MaxCount);
-		}
-
-		private static IEnumerable<string> getNumericallySimilarValues(
-			IReadOnlyList<string> cache,
-			string value) =>
-			cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
-
-
-
-		protected IReadOnlyList<string> GetValuesCache(string userField, string lang)
-		{
-			if (_abort)
-				return ReadOnlyList.Empty<string>();
-
-			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, lang);
-			IReadOnlyList<string> values;
-
-			lock (ValuesCache)
-				if (ValuesCache.TryGetValue(spellcheckerField, out values))
-					return values;
-
-			values = _adapter.IsStoredInSpellchecker(userField, lang)
-				? Spellchecker?.ReadAllValuesFrom(discriminant: spellcheckerField)
-				: _reader?.Invoke(readAllValuesFrom, spellcheckerField);
-
-			if (values == null)
-				return ReadOnlyList.Empty<string>();
-
-			lock (ValuesCache)
-				ValuesCache[spellcheckerField] = values;
-
-			return values;
-		}
-
-		private IReadOnlyList<string> readAllValuesFrom(DirectoryReader reader, string field)
-		{
-			var rawValues = reader.ReadRawValuesFrom(field);
-
-			IEnumerable<string> enumerable;
-
-			if (_adapter.IsFloatField(field))
-				enumerable = rawValues.Select(term => term.TryParseFloat())
-					.Where(val => val.HasValue)
-					.Select(val => val.Value)
-					.Distinct()
-					.OrderBy(val => val)
-					.Select(val => val.ToString(Str.Culture));
-
-			else if (_adapter.IsIntField(field))
-				enumerable = rawValues.Select(term => term.TryParseInt())
-					.Where(val => val.HasValue)
-					.Select(val => val.Value)
-					.Distinct()
-					.OrderBy(val => val)
-					.Select(val => val.ToString(Str.Culture));
-
-			else
-				enumerable = rawValues.Select(term => term.Utf8ToString())
-					.Distinct()
-					.OrderBy(Str.Comparer);
-
-			var result = enumerable.ToReadOnlyList();
-			return result;
-		}
-
 		private IReadOnlyList<string> suggestFields(string fieldPart)
 		{
 			var fieldSuggest = _userFields
@@ -276,114 +152,53 @@ namespace Mtgdb.Index
 			return fieldSuggest;
 		}
 
-		public void Dispose()
+		public void Dispose() =>
+			State?.Dispose();
+
+		protected virtual Directory CreateIndex(DirectoryReader reader)
 		{
-			abortLoading();
-			IsLoaded = false;
-			_reader?.Dispose();
-		}
+			var spellchecker = CreateSpellchecker();
+			var state = CreateState(reader, spellchecker, loaded: false);
 
-		protected virtual Directory LoadSpellcheckerIndex()
-		{
-			var index = new RAMDirectory();
+			bool stateExisted = State != null;
 
-			IsLoading = true;
+			if (!stateExisted)
+				State = state;
 
-			IReadOnlyList<(string UserField, string Language)> tasks =
-				_adapter.GetUserFields()
-					.Where(_adapter.IsIndexedInSpellchecker)
-					.SelectMany(f => _adapter.GetFieldLanguages(f).Select(l => (f, l)))
-					.ToReadOnlyList();
-
-			TotalFields = tasks.Count;
-			var indexedWordsByField = new Dictionary<string, HashSet<string>>(Str.Comparer);
-
-			void getContentToIndex((string UserField, string Language) task)
-			{
-				var values = _adapter.IsStoredInSpellchecker(task.UserField, task.Language)
-					? GetObjectsToIndex().SelectMany(c => 
-						_adapter.GetSpellcheckerValues(c, task.UserField, task.Language))
-					: GetValuesCache(task.UserField, task.Language);
-
-				var spellcheckerField = _adapter.GetSpellcheckerFieldIn(task.UserField, task.Language);
-
-				HashSet<string> indexedWords;
-
-				lock (indexedWordsByField)
-				{
-					if (!indexedWordsByField.TryGetValue(spellcheckerField, out indexedWords))
-					{
-						indexedWords = new HashSet<string>(Str.Comparer);
-						indexedWordsByField.Add(spellcheckerField, indexedWords);
-					}
-				}
-
-				lock (indexedWords)
-					foreach (string value in values)
-						indexedWords.Add(value);
-
-				Interlocked.Increment(ref _indexedFields);
+			void progressHandler() =>
 				IndexingProgress?.Invoke();
-			}
 
-			IndexUtils.ForEach(tasks, getContentToIndex);
+			state.IndexingProgress += progressHandler;
+			var result = state.CreateIndex();
+			state.IndexingProgress -= progressHandler;
 
-			TotalFields = indexedWordsByField.Count;
-			_indexedFields = 0;
-
-			Spellchecker.BeginIndex(index);
-
-			IndexUtils.ForEach(indexedWordsByField, IndexField, suppressParallelism: true);
-
-			Spellchecker.EndIndex();
-
-			IsLoading = false;
-			IndexingProgress?.Invoke();
-
-			return index;
-		}
-
-		protected abstract IEnumerable<TObj> GetObjectsToIndex();
-
-		protected void IndexField(KeyValuePair<string, HashSet<string>> pair)
-		{
-			if (_abort)
-				return;
-
-			var words = pair.Value.OrderBy(Str.Comparer).ToReadOnlyList();
-
-			foreach (string word in words)
+			if (stateExisted)
 			{
-				if (_abort)
-					return;
-
-				Spellchecker.IndexWord(pair.Key, word);
+				State.Dispose();
+				State = state;
 			}
 
-			Interlocked.Increment(ref _indexedFields);
-			IndexingProgress?.Invoke();
+			return result;
 		}
 
+		protected Spellchecker CreateSpellchecker() =>
+			new Spellchecker(_adapter.IsAnyField);
 
-
-		private void abortLoading()
+		protected void Update(SpellcheckerState<TId, TDoc> state)
 		{
-			if (!IsLoading)
-				return;
+			var oldState = State;
+			var newState = state;
 
-			_abort = true;
-
-			while (IsLoading)
-				Thread.Sleep(100);
-
-			_abort = false;
+			State = newState;
+			oldState?.Dispose();
 		}
 
+		protected SpellcheckerState<TId, TDoc> CreateState(DirectoryReader reader, Spellchecker spellchecker, bool loaded) =>
+			new SpellcheckerState<TId, TDoc>(spellchecker, reader, _adapter, MaxCount, GetObjectsToIndex, loaded);
 
+		protected abstract IEnumerable<TDoc> GetObjectsToIndex();
 
 		public event Action IndexingProgress;
-
-
 
 		public int MaxCount
 		{
@@ -392,26 +207,16 @@ namespace Mtgdb.Index
 				Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToReadOnlyList();
 		}
 
-		public int IndexedFields =>
-			_indexedFields;
+		public bool IsLoaded => State?.IsLoaded ?? false;
+		public bool IsLoading => State?.IsLoading ?? false;
+		public int TotalFields => State?.TotalFields ?? 0;
+		public int IndexedFields => State?.IndexedFields ?? 0;
 
-		public bool IsLoaded { get; protected set; }
-		public bool IsLoading { get; private set; }
-		public int TotalFields { get; private set; }
-
-		protected Spellchecker Spellchecker;
-
-		private bool _abort;
-
+		private SpellcheckerState<TId, TDoc> State { get; set; }
 		private IReadOnlyList<TokenType> _allTokensAreValues;
-		private DirectoryReader _reader;
-		private int _indexedFields;
 
 		private readonly IReadOnlyList<string> _userFields;
 		private readonly IReadOnlyList<TokenType> _allTokensAreField;
-		private readonly IDocumentAdapter<TId, TObj> _adapter;
-
-		protected readonly Dictionary<string, IReadOnlyList<string>> ValuesCache =
-			new Dictionary<string, IReadOnlyList<string>>();
+		private readonly IDocumentAdapter<TId, TDoc> _adapter;
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using Mtgdb.Dal;
 using Mtgdb.Index;
 
 namespace Mtgdb.Controls
@@ -29,17 +28,18 @@ namespace Mtgdb.Controls
 			null;
 
 		protected override IntellisenseSuggest CycleValue(TextInputState currentState, bool backward) =>
-			((DeckSearcher) Searcher).CycleValue(currentState, backward, Ui);
+			((DeckSearcher) Searcher).CycleValue(currentState, backward);
 
 		protected override SearchResult<int> Search(string query) =>
-			((DeckSearcher) Searcher).Search(query, Ui);
+			((DeckSearcher) Searcher).Search(query);
 
-		public void ModelChanged()
-		{
+		public void ModelChanged() =>
 			((DeckSearcher) Searcher).ModelChanged();
-			Apply();
-		}
 
-		public UiModel Ui { get; set; }
+		public bool IsLoaded =>
+			Searcher.IsLoaded;
+
+		public bool IsUpdating =>
+			((DeckSearcher) Searcher).IsUpdating;
 	}
 }

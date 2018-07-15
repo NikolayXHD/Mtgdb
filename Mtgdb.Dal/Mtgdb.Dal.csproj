@@ -104,8 +104,10 @@
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CardExtensions.cs" />
     <Compile Include="Model\Ui\CollectionEditorModel.cs" />
+    <Compile Include="Model\Ui\CollectionSnapshot.cs" />
     <Compile Include="Model\Ui\Deck.cs" />
     <Compile Include="Model\Ui\DeckChangedEventHandler.cs" />
+    <Compile Include="Model\Ui\DeckListUiModel.cs" />
     <Compile Include="Model\Ui\DeckZone.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />

@@ -412,10 +412,7 @@ namespace Mtgdb.Dal.Index
 				nameof(Card.Loyalty),
 				nameof(Card.ReleaseDate),
 				nameof(Card.Rarity),
-				nameof(Card.Layout),
-				nameof(Card.LegalIn),
-				nameof(Card.RestrictedIn),
-				nameof(Card.BannedIn)
+				nameof(Card.Layout)
 			};
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField =

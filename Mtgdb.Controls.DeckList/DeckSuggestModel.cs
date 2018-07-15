@@ -13,7 +13,7 @@ namespace Mtgdb.Controls
 		}
 
 		protected override IntellisenseSuggest Suggest(TextInputState searchState) =>
-			((DeckSearcher) Searcher).Suggest(searchState, Ui);
+			((DeckSearcher) Searcher).Suggest(searchState);
 
 		public UiModel Ui { get; set; }
 	}

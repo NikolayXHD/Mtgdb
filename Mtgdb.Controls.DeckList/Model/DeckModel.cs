@@ -12,12 +12,12 @@ namespace Mtgdb.Controls
 		{
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
-			int countOwned(Card c, int countInDeck) => Math.Min(countInDeck, c.CollectionCount(Ui));
-			int countOwnedSide(Card c, int countInDeck) => (c.CollectionCount(Ui) - countInMain(c)).WithinRange(0, countInDeck);
+			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, c.CollectionCount(Ui));
+			int countCollectedSide(Card c, int countInDeck) => (c.CollectionCount(Ui) - countInMain(c)).WithinRange(0, countInDeck);
 
 			float priceTotal(Card c, int countInDeck) => countInDeck * (c.PriceMid ?? 0f);
-			float priceOwned(Card c, int countInDeck) => countOwned(c, countInDeck) * (c.PriceMid ?? 0f);
-			float priceOwnedSide(Card c, int countInDeck) => countOwnedSide(c, countInDeck) * (c.PriceMid ?? 0f);
+			float priceCollected(Card c, int countInDeck) => countCollected(c, countInDeck) * (c.PriceMid ?? 0f);
+			float priceCollectedSide(Card c, int countInDeck) => countCollectedSide(c, countInDeck) * (c.PriceMid ?? 0f);
 
 			IList<string> generatedMana(Card c, int countInDeck) => c.GeneratedManaArr;
 
@@ -37,36 +37,36 @@ namespace Mtgdb.Controls
 				countTotal,
 				a => a);
 
-			_priceOwnedCache = new DeckAggregateCache<float, float, float>(
+			_priceCollectedCache = new DeckAggregateCache<float, float, float>(
 				() => Ui,
 				() => Deck,
 				() => 0f,
 				(a, b) => a + b,
-				priceOwned,
+				priceCollected,
 				a => a);
 
-			_countOwnedCache = new DeckAggregateCache<int, int, int>(
+			_countCollectedCache = new DeckAggregateCache<int, int, int>(
 				() => Ui,
 				() => Deck,
 				() => 0,
 				(a, b) => a + b,
-				countOwned,
+				countCollected,
 				a => a);
 
-			_priceOwnedSideCache = new DeckAggregateCache<float, float, float>(
+			_priceCollectedSideCache = new DeckAggregateCache<float, float, float>(
 				() => Ui,
 				() => Deck,
 				() => 0f,
 				(a, b) => a + b,
-				priceOwnedSide,
+				priceCollectedSide,
 				a => a);
 
-			_countOwnedSideCache = new DeckAggregateCache<int, int, int>(
+			_countCollectedSideCache = new DeckAggregateCache<int, int, int>(
 				() => Ui,
 				() => Deck,
 				() => 0,
 				(a, b) => a + b,
-				countOwnedSide,
+				countCollectedSide,
 				a => a);
 
 			_generatedManaCache = new DeckAggregateCache<IList<string>, Dictionary<string, int>, string>(
@@ -102,13 +102,13 @@ namespace Mtgdb.Controls
 			Ui = ui;
 		}
 
-		public void DeckChanged()
+		public void Invalidate()
 		{
-			_priceOwnedCache?.Clear();
-			_countOwnedCache?.Clear();
+			_priceCollectedCache?.Clear();
+			_countCollectedCache?.Clear();
 			
-			_priceOwnedSideCache?.Clear();
-			_countOwnedSideCache?.Clear();
+			_priceCollectedSideCache?.Clear();
+			_countCollectedSideCache?.Clear();
 			
 			_priceTotalCache?.Clear();
 			_countTotalCache?.Clear();
@@ -170,43 +170,43 @@ namespace Mtgdb.Controls
 
 
 
-		public int MainOwnedCount =>
-			_countOwnedCache.GetAggregate(Zone.Main, _filterNone);
+		public int MainCollectedCount =>
+			_countCollectedCache.GetAggregate(Zone.Main, _filterNone);
 
-		public int SideOwnedCount =>
-			_countOwnedSideCache.GetAggregate(Zone.Side, _filterNone);
+		public int SideCollectedCount =>
+			_countCollectedSideCache.GetAggregate(Zone.Side, _filterNone);
 
-		public float MainOwnedPrice =>
-			_priceOwnedCache.GetAggregate(Zone.Main, _filterNone);
+		public float MainCollectedPrice =>
+			_priceCollectedCache.GetAggregate(Zone.Main, _filterNone);
 
-		public float SideOwnedPrice =>
-			_priceOwnedSideCache.GetAggregate(Zone.Side, _filterNone);
+		public float SideCollectedPrice =>
+			_priceCollectedSideCache.GetAggregate(Zone.Side, _filterNone);
 
-		public int MainOwnedUnknownPriceCount =>
-			_countOwnedCache.GetAggregate(Zone.Main, _filterPriceIsUnknown);
+		public int MainCollectedUnknownPriceCount =>
+			_countCollectedCache.GetAggregate(Zone.Main, _filterPriceIsUnknown);
 
-		public int SideOwnedUnknownPriceCount =>
-			_countOwnedSideCache.GetAggregate(Zone.Side, _filterPriceIsUnknown);
+		public int SideCollectedUnknownPriceCount =>
+			_countCollectedSideCache.GetAggregate(Zone.Side, _filterPriceIsUnknown);
 
 
 
-		public float MainOwnedPricePercent =>
-			MainOwnedPrice / Price(Zone.Main);
+		public float MainCollectedPricePercent =>
+			MainCollectedPrice / Price(Zone.Main);
 
-		public float SideOwnedPricePercent =>
-			SideOwnedPrice / Price(Zone.Side);
+		public float SideCollectedPricePercent =>
+			SideCollectedPrice / Price(Zone.Side);
 
-		public float MainOwnedCountPercent =>
-			(float) MainOwnedCount / Count(Zone.Main);
+		public float MainCollectedCountPercent =>
+			(float) MainCollectedCount / Count(Zone.Main);
 
-		public float SideOwnedCountPercent =>
-			(float) SideOwnedCount / Count(Zone.Side);
+		public float SideCollectedCountPercent =>
+			(float) SideCollectedCount / Count(Zone.Side);
 
-		public float MainOwnedUnknownPricePercent =>
-			(float) MainOwnedUnknownPriceCount / UnknownPriceCount(Zone.Main);
+		public float MainCollectedUnknownPricePercent =>
+			(float) MainCollectedUnknownPriceCount / UnknownPriceCount(Zone.Main);
 
-		public float SideOwnedUnknownPricePercent =>
-			(float) SideOwnedUnknownPriceCount / UnknownPriceCount(Zone.Side);
+		public float SideCollectedUnknownPricePercent =>
+			(float) SideCollectedUnknownPriceCount / UnknownPriceCount(Zone.Side);
 
 
 
@@ -235,10 +235,6 @@ namespace Mtgdb.Controls
 			}
 		}
 
-
-
-		public UiModel Ui { get; set; }
-
 		public int Id
 		{
 			get => _deck.Id;
@@ -251,13 +247,25 @@ namespace Mtgdb.Controls
 			set => _deck.Saved = value;
 		}
 
+
+
+		public UiModel Ui
+		{
+			get => _ui;
+			set
+			{
+				_ui = value;
+				Invalidate();
+			}
+		}
+
 		public Deck Deck
 		{
 			get => _deck;
 			set
 			{
 				_deck = value;
-				DeckChanged();
+				Invalidate();
 			}
 		}
 
@@ -274,14 +282,15 @@ namespace Mtgdb.Controls
 
 		private readonly DeckAggregateCache<float, float, float> _priceTotalCache;
 		private readonly DeckAggregateCache<int, int, int> _countTotalCache;
-		private readonly DeckAggregateCache<float, float, float> _priceOwnedCache;
-		private readonly DeckAggregateCache<int, int, int> _countOwnedCache;
-		private readonly DeckAggregateCache<float, float, float> _priceOwnedSideCache;
-		private readonly DeckAggregateCache<int, int, int> _countOwnedSideCache;
+		private readonly DeckAggregateCache<float, float, float> _priceCollectedCache;
+		private readonly DeckAggregateCache<int, int, int> _countCollectedCache;
+		private readonly DeckAggregateCache<float, float, float> _priceCollectedSideCache;
+		private readonly DeckAggregateCache<int, int, int> _countCollectedSideCache;
 		private readonly DeckAggregateCache<IList<string>, Dictionary<string, int>, string> _generatedManaCache;
 
 		private IReadOnlyList<string> _legalFormatsCache;
 
+		private UiModel _ui;
 		private Deck _deck;
 	}
 }

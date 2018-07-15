@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Mtgdb.Dal.Index
 {
-	internal class IndexVersion
+	public class IndexVersion
 	{
 		public string Directory { get; }
 

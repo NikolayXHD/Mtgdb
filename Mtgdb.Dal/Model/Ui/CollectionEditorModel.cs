@@ -76,8 +76,6 @@ namespace Mtgdb.Dal
 			return count;
 		}
 
-
-
 		public int CollectionSize
 		{
 			get
@@ -87,9 +85,7 @@ namespace Mtgdb.Dal
 			}
 		}
 
-
-
-		public Dictionary<string, int> CountById { get; private set; } = new Dictionary<string, int>();
+		public Dictionary<string, int> CountById { get; private set; } = new Dictionary<string, int>(Str.Comparer);
 		public bool IsLoaded { get; private set; }
 	}
 }

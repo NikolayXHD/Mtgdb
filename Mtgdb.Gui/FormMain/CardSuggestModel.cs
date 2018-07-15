@@ -17,7 +17,7 @@ namespace Mtgdb.Gui
 		protected override IntellisenseSuggest Suggest(TextInputState searchState)
 		{
 			_language = Language;
-			return Searcher.Spellchecker.Suggest(_language, searchState);
+			return Searcher.Spellchecker.Suggest(searchState, _language);
 		}
 
 		protected override bool IsSuggestUpToDate() =>

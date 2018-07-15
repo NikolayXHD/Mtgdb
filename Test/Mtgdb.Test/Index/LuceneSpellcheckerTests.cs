@@ -321,7 +321,7 @@ namespace Mtgdb.Test
 
 			string query = $"{field}:{value}";
 
-			var list = Spellchecker.Suggest(language, new TextInputState(query, query.Length, selectionLength: 0)).Values;
+			var list = Spellchecker.Suggest(new TextInputState(query, query.Length, selectionLength: 0), language).Values;
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");
@@ -340,7 +340,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var suggest = Spellchecker.Suggest(language, new TextInputState(query, caret, selectionLength: 0));
+			var suggest = Spellchecker.Suggest(new TextInputState(query, caret, selectionLength: 0), language);
 
 			sw.Stop();
 			Log.Debug($"Suggest retrieved in {sw.ElapsedMilliseconds} ms");

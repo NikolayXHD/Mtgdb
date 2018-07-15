@@ -1,41 +1,72 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 using Lucene.Net.Index;
-using Mtgdb.Dal;
+using Lucene.Net.Store;
+using Mtgdb.Dal.Index;
 using Mtgdb.Index;
-using NLog;
 
 namespace Mtgdb.Controls
 {
 	public class DeckSpellchecker : LuceneSpellchecker<int, DeckModel>
 	{
+		private const string IndexVerision = "0";
+
 		[UsedImplicitly]
-		public DeckSpellchecker(DeckListModel deckList, DeckDocumentAdapter adapter)
+		public DeckSpellchecker(DeckDocumentAdapter adapter)
 			: base(adapter)
 		{
-			_deckList = deckList;
+			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("suggest");
 		}
-
-		public void SetUi(UiModel ui) =>
-			_ui = ui;
 
 		protected override IEnumerable<DeckModel> GetObjectsToIndex() =>
-			_deckList.GetModels(_ui);
+			Models;
 
-		public override void LoadIndex(DirectoryReader indexReader)
+		protected override Directory CreateIndex(DirectoryReader reader)
 		{
-			_log.Info($"Begin {nameof(LoadIndex)}");
+			Directory index;
 
-			IsLoaded = false;
-			ValuesCache.Clear();
-			base.LoadIndex(indexReader);
+			if (!_indexCreated && _version.IsUpToDate)
+			{
+				lock (_syncDirectory)
+					using (var fsDirectory = FSDirectory.Open(_version.Directory))
+						index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
 
-			_log.Info($"End {nameof(LoadIndex)}");
+				var spellchecker = CreateSpellchecker();
+				spellchecker.Load(index);
+
+				var state = CreateState(reader, spellchecker, loaded: true);
+				Update(state);
+
+				_indexCreated = true;
+				return index;
+			}
+
+			index = base.CreateIndex(reader);
+
+			if (index == null)
+				return null;
+
+			lock (_syncDirectory)
+				_version.CreateDirectory();
+
+			index.SaveTo(_version.Directory);
+			_version.SetIsUpToDate();
+
+			_indexCreated = true;
+			return index;
 		}
 
-		private readonly DeckListModel _deckList;
-		private UiModel _ui;
+		public IReadOnlyList<DeckModel> Models { get; set; }
 
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+		public string IndexDirectoryParent
+		{
+			get => _version.Directory.Parent();
+			set => _version = new IndexVersion(value, IndexVerision);
+		}
+
+		private IndexVersion _version;
+		private bool _indexCreated;
+
+		private readonly object _syncDirectory = new object();
 	}
 }

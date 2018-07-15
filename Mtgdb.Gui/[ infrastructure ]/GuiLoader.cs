@@ -12,9 +12,7 @@ namespace Mtgdb.Gui
 			NewsService newsService,
 			DownloaderSubsystem downloaderSubsystem,
 			DeckListModel deckListModel,
-			DeckSearcher deckSearcher,
-			CardRepository repo,
-			UiModel ui)
+			DeckSearcher deckSearcher)
 		{
 			_loader = loader;
 
@@ -23,11 +21,7 @@ namespace Mtgdb.Gui
 			_loader.Add(() =>
 			{
 				deckListModel.Load();
-
-				while (!repo.IsPriceLoadingComplete)
-					Thread.Sleep(100);
-
-				deckSearcher.LoadIndexes(ui);
+				deckSearcher.LoadIndexes();
 			});
 		}
 

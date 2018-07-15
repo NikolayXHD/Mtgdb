@@ -60,6 +60,10 @@ namespace Mtgdb.Dal
 			Kernel.Bind<UiModel>()
 				.ToSelf();
 
+			Kernel.Bind<UiModelSnapshotFactory>()
+				.ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<CardDocumentAdapter>()
 				.ToSelf()
 				.InSingletonScope();

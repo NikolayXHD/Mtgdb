@@ -11,13 +11,18 @@ namespace Mtgdb.Dal
 			ImageRepository imageRepo,
 			CardRepository cardRepo,
 			[Optional] CollectionEditorModel collection)
+			: this(cardRepo, collection)
 		{
-			CardRepo = cardRepo;
-			Collection = collection;
 			ImageLoader = imageLoader;
 			ImageRepo = imageRepo;
 
 			LanguageController = new LanguageController(CardLocalization.DefaultLanguage);
+		}
+
+		public UiModel(CardRepository repo, ICardCollection collection)
+		{
+			CardRepo = repo;
+			Collection = collection;
 		}
 
 		public LanguageController LanguageController { get; }
