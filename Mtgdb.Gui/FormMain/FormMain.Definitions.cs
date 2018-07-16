@@ -54,7 +54,7 @@ namespace Mtgdb.Gui
 
 			beginRestoreSettings();
 
-			_fields = new Fields();
+			_fields = new CardFields();
 
 			QuickFilterSetup.SetQuickFilterProperties(this);
 			QuickFilterImages.SetImages(this);
@@ -80,7 +80,7 @@ namespace Mtgdb.Gui
 
 			_panelSearchExamples.Setup(_cardSearch, _buttons, _buttonSearchExamplesDropDown);
 
-			_sort = new SortSubsystem(_viewCards, _cardRepo, _fields, _cardSearch);
+			_cardSort = new CardSortSubsystem(_layoutViewCards, _cardRepo, _fields, _cardSearch);
 
 			endRestoreSettings();
 
@@ -336,8 +336,8 @@ namespace Mtgdb.Gui
 			_deckEditor.DeckChanged += deckChanged;
 			_collectionEditor.CollectionChanged += collectionChanged;
 
-			_sort.SubscribeToEvents();
-			_sort.SortChanged += sortChanged;
+			_cardSort.SubscribeToEvents();
+			_cardSort.SortChanged += cardSortChanged;
 
 			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
@@ -420,8 +420,8 @@ namespace Mtgdb.Gui
 			_deckEditor.DeckChanged -= deckChanged;
 			_collectionEditor.CollectionChanged -= collectionChanged;
 
-			_sort.UnsubscribeFromEvents();
-			_sort.SortChanged -= sortChanged;
+			_cardSort.UnsubscribeFromEvents();
+			_cardSort.SortChanged -= cardSortChanged;
 
 			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
 			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
@@ -528,7 +528,7 @@ namespace Mtgdb.Gui
 		private int _restoringGuiSettings;
 
 		private readonly Evaluators _evaluators;
-		private readonly Fields _fields;
+		private readonly CardFields _fields;
 		private readonly bool _keywordsIndexUpToDate;
 
 		private readonly CardRepository _cardRepo;
@@ -551,7 +551,7 @@ namespace Mtgdb.Gui
 		private readonly DrawingSubsystem _drawing;
 		private readonly DraggingSubsystem _dragging;
 
-		private readonly SortSubsystem _sort;
+		private readonly CardSortSubsystem _cardSort;
 		// ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
 
 		private readonly QuickFilterControl[] _quickFilterControls;

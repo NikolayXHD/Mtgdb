@@ -269,8 +269,8 @@ namespace Mtgdb.Gui
 				var filteredCards = new List<Card>();
 
 				var allCards = showDuplicates 
-					? _sort.SortedCards
-					: _sort.DuplicateAwareSortedCards;
+					? _cardSort.SortedCards
+					: _cardSort.DuplicateAwareSortedCards;
 
 				if (showDuplicates)
 				{
@@ -344,7 +344,7 @@ namespace Mtgdb.Gui
 		}
 
 		private void updateIsSearchResult() =>
-			updateIsSearchResult(_sort.SortedCards);
+			updateIsSearchResult(_cardSort.SortedCards);
 
 		private void updateIsSearchResult(List<Card> sortedCards)
 		{
@@ -432,10 +432,10 @@ namespace Mtgdb.Gui
 		private string getDeckListStatus()
 		{
 			if (!_deckListControl.IsSearcherLoaded)
-				return "deck list: loading…";
+				return "deck list: loading index…";
 
 			if (_deckListControl.IsSearcherUpdating)
-				return "deck list: updating…";
+				return "deck list: updating index…";
 
 			if (_deckListControl.IsAddingDecks)
 				return $"deck list: {_deckListControl.FilteredDecksCount}, adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}";
@@ -532,7 +532,7 @@ namespace Mtgdb.Gui
 
 		private string getStatusSort()
 		{
-			var infos = _sort.SortInfo?.ToList() ?? new List<FieldSortInfo>();
+			var infos = _cardSort.SortInfo?.ToList() ?? new List<FieldSortInfo>();
 
 			if (_cardSearch.SearchResult?.RelevanceById != null)
 				infos.Add(new FieldSortInfo("Relevance", SortOrder.Descending));
@@ -701,7 +701,7 @@ namespace Mtgdb.Gui
 				ExcludeManaAbilities = _buttonExcludeManaAbility.Checked,
 				ExcludeManaCost = _buttonExcludeManaCost.Checked,
 				ShowProhibit = _buttonShowProhibit.Checked,
-				Sort = _sort.SortString,
+				Sort = _cardSort.SortString,
 				LegalityFilterFormat = _legality.FilterFormat,
 				LegalityAllowLegal = _legality.AllowLegal,
 				LegalityAllowRestricted = _legality.AllowRestricted,
@@ -773,7 +773,7 @@ namespace Mtgdb.Gui
 			_buttonExcludeManaAbility.Checked = settings.ExcludeManaAbilities;
 			_buttonExcludeManaCost.Checked = settings.ExcludeManaCost != false;
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
-			_sort.ApplySort(settings.Sort);
+			_cardSort.ApplySort(settings.Sort);
 
 			hideSampleHand();
 

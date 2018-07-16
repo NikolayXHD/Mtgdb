@@ -75,7 +75,7 @@ namespace Mtgdb.Gui
 				updateShowSampleHandButtons();
 				_cardSearch.Apply();
 				_deckEditor.LoadDeck(_cardRepo);
-				_sort.Invalidate();
+				_cardSort.Invalidate();
 
 				endRestoreSettings();
 
@@ -87,10 +87,10 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				if (_sort.IsLanguageDependent)
+				if (_cardSort.IsLanguageDependent)
 				{
 					beginRestoreSettings();
-					_sort.Invalidate();
+					_cardSort.Invalidate();
 					endRestoreSettings();
 				}
 
@@ -607,12 +607,12 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			if (_sort.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
+			if (_cardSort.IsLanguageDependent || isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 			{
 				beginRestoreSettings();
 
-				if (_sort.IsLanguageDependent)
-					_sort.Invalidate();
+				if (_cardSort.IsLanguageDependent)
+					_cardSort.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
 					_cardSearch.Apply();
@@ -633,7 +633,7 @@ namespace Mtgdb.Gui
 		private void cardSearchStringApplied()
 		{
 			beginRestoreSettings();
-			_sort.Invalidate();
+			_cardSort.Invalidate();
 			endRestoreSettings();
 
 			if (restoringSettings())
@@ -653,7 +653,7 @@ namespace Mtgdb.Gui
 			updateFormStatus();
 		}
 
-		private void sortChanged()
+		private void cardSortChanged()
 		{
 			if (restoringSettings())
 				return;

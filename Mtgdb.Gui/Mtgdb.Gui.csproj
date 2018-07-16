@@ -111,6 +111,7 @@
     <Compile Include="FormChart\ChartTypeMetadata.cs" />
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
+    <Compile Include="FormChart\CardFields.cs" />
     <Compile Include="FormChart\Fields.cs" />
     <Compile Include="FormChart\FieldsExtension.cs" />
     <Compile Include="FormMain\CustomConverter.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormMain\SortSubsystem.cs" />
     <Compile Include="FormRoot\TabHeadersTooltip.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -176,7 +178,7 @@
     <Compile Include="QuickFilter\QuickFilterImages.cs" />
     <Compile Include="FormMain\ScrollSubsystem.cs" />
     <Compile Include="SearchString\CardSearchSubsystem.cs" />
-    <Compile Include="FormMain\SortSubsystem.cs" />
+    <Compile Include="FormMain\CardSortSubsystem.cs" />
     <Compile Include="FormMain\HistorySubsystem.cs" />
     <Compile Include="FormMain\HistoryState.cs" />
     <Compile Include="FormRoot\DownloaderSubsystem.cs" />

@@ -126,7 +126,7 @@ namespace Mtgdb.Gui
 			this.PerformLayout();
 		}
 
-		public FormChart(CardRepository repository, UiModel ui, Fields fields)
+		public FormChart(CardRepository repository, UiModel ui, CardFields fields)
 			: this()
 		{
 			_ui = ui;
@@ -1179,7 +1179,7 @@ namespace Mtgdb.Gui
 		private readonly Button[] _buttons;
 		private readonly ComboBox[] _menus;
 
-		private readonly Fields _fields;
+		private readonly CardFields _fields;
 		private readonly UiModel _ui;
 	}
 }

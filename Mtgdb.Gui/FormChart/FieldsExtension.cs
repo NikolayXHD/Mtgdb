@@ -1,20 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
 	public static class FieldsExtension
 	{
-		public static IOrderedEnumerable<Card> OrderBy(this IEnumerable<Card> cards, FieldSortInfo fieldSortInfo, Fields fields)
-		{
-			return fields.ByName[fieldSortInfo.FieldName].OrderBy(cards, fieldSortInfo.SortOrder);
-		}
+		public static IOrderedEnumerable<TDoc> OrderBy<TDoc>(this IEnumerable<TDoc> docs, FieldSortInfo fieldSortInfo, Fields<TDoc> fields) =>
+			fields.ByName[fieldSortInfo.FieldName].OrderBy(docs, fieldSortInfo.SortOrder);
 
-		public static IOrderedEnumerable<Card> ThenBy(this IOrderedEnumerable<Card> cardsOrdered, FieldSortInfo fieldSortInfo, Fields fields)
-		{
-			return fields.ByName[fieldSortInfo.FieldName].ThenOrderBy(cardsOrdered, fieldSortInfo.SortOrder);
-		}
+		public static IOrderedEnumerable<TDoc> ThenBy<TDoc>(this IOrderedEnumerable<TDoc> docsOrdered, FieldSortInfo fieldSortInfo, Fields<TDoc> fields) =>
+			fields.ByName[fieldSortInfo.FieldName].ThenOrderBy(docsOrdered, fieldSortInfo.SortOrder);
 	}
 }
