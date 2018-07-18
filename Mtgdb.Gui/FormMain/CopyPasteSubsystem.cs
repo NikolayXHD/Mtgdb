@@ -259,7 +259,7 @@ namespace Mtgdb.Gui
 					deck = copySideDeck();
 					break;
 				case Zone.SampleHand:
-					deck = copyMainDeck();
+					deck = copySampleHand();
 					break;
 				default:
 					return;
@@ -269,7 +269,7 @@ namespace Mtgdb.Gui
 			Clipboard.SetText(serialized);
 		}
 
-		private Deck copyMainDeck() =>
+		private Deck copySampleHand() =>
 			Deck.Create(
 				_deckEditor.SampleHand.CountById.ToDictionary(),
 				_deckEditor.SampleHand.CardsIds.ToList(),

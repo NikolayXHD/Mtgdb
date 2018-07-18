@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
-using Mtgdb.Dal;
 using Mtgdb.Index;
 
 namespace Mtgdb.Controls
@@ -80,11 +79,11 @@ namespace Mtgdb.Controls
 			addNumericField(doc, nameof(DeckModel.CreatureCount), deck.CreatureCount);
 			addNumericField(doc, nameof(DeckModel.OtherSpellCount), deck.OtherSpellCount);
 
-			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.Count), deck.Count(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainCount), deck.MainCount);
 			addNumericField(doc, nameof(DeckModel.MainCollectedCount), deck.MainCollectedCount);
 			addNumericField(doc, nameof(DeckModel.MainCollectedCountPercent), deck.MainCollectedCountPercent);
 
-			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.Count), deck.Count(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SideCount), deck.SideCount);
 			addNumericField(doc, nameof(DeckModel.SideCollectedCount), deck.SideCollectedCount);
 			addNumericField(doc, nameof(DeckModel.SideCollectedCountPercent), deck.SideCollectedCountPercent);
 
@@ -92,11 +91,11 @@ namespace Mtgdb.Controls
 			addNumericField(doc, nameof(DeckModel.CreaturePrice), deck.CreaturePrice);
 			addNumericField(doc, nameof(DeckModel.OtherSpellPrice), deck.OtherSpellPrice);
 
-			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.Price), deck.Price(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainPrice), deck.MainPrice);
 			addNumericField(doc, nameof(DeckModel.MainCollectedPrice), deck.MainCollectedPrice);
 			addNumericField(doc, nameof(DeckModel.MainCollectedPricePercent), deck.MainCollectedPricePercent);
 
-			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.Price), deck.Price(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SidePrice), deck.SidePrice);
 			addNumericField(doc, nameof(DeckModel.SideCollectedPrice), deck.SideCollectedPrice);
 			addNumericField(doc, nameof(DeckModel.SideCollectedPricePercent), deck.SideCollectedPricePercent);
 
@@ -104,11 +103,11 @@ namespace Mtgdb.Controls
 			addNumericField(doc, nameof(DeckModel.CreatureUnknownPriceCount), deck.CreatureUnknownPriceCount);
 			addNumericField(doc, nameof(DeckModel.OtherSpellUnknownPriceCount), deck.OtherSpellUnknownPriceCount);
 
-			addNumericField(doc, nameof(Zone.Main) + nameof(DeckModel.UnknownPriceCount), deck.UnknownPriceCount(Zone.Main));
+			addNumericField(doc, nameof(DeckModel.MainUnknownPriceCount), deck.MainUnknownPriceCount);
 			addNumericField(doc, nameof(DeckModel.MainCollectedUnknownPriceCount), deck.MainCollectedUnknownPriceCount);
 			addNumericField(doc, nameof(DeckModel.MainCollectedUnknownPricePercent), deck.MainCollectedUnknownPricePercent);
 
-			addNumericField(doc, nameof(Zone.Side) + nameof(DeckModel.UnknownPriceCount), deck.UnknownPriceCount(Zone.Side));
+			addNumericField(doc, nameof(DeckModel.SideUnknownPriceCount), deck.SideUnknownPriceCount);
 			addNumericField(doc, nameof(DeckModel.SideCollectedUnknownPriceCount), deck.SideCollectedUnknownPriceCount);
 			addNumericField(doc, nameof(DeckModel.SideCollectedUnknownPricePercent), deck.SideCollectedUnknownPricePercent);
 
@@ -184,11 +183,11 @@ namespace Mtgdb.Controls
 			nameof(DeckModel.CreatureCount),
 			nameof(DeckModel.OtherSpellCount),
 
-			nameof(Zone.Main) + nameof(DeckModel.Count),
+			nameof(DeckModel.MainCount),
 			nameof(DeckModel.MainCollectedCount),
 			nameof(DeckModel.MainCollectedCountPercent),
 
-			nameof(Zone.Side) + nameof(DeckModel.Count),
+			nameof(DeckModel.SideCount),
 			nameof(DeckModel.SideCollectedCount),
 			nameof(DeckModel.SideCollectedCountPercent),
 
@@ -196,11 +195,11 @@ namespace Mtgdb.Controls
 			nameof(DeckModel.CreaturePrice),
 			nameof(DeckModel.OtherSpellPrice),
 
-			nameof(Zone.Main) + nameof(DeckModel.Price),
+			nameof(DeckModel.MainPrice),
 			nameof(DeckModel.MainCollectedPrice),
 			nameof(DeckModel.MainCollectedPricePercent),
 
-			nameof(Zone.Side) + nameof(DeckModel.Price),
+			nameof(DeckModel.SidePrice),
 			nameof(DeckModel.SideCollectedPrice),
 			nameof(DeckModel.SideCollectedPricePercent),
 
@@ -208,11 +207,11 @@ namespace Mtgdb.Controls
 			nameof(DeckModel.CreatureUnknownPriceCount),
 			nameof(DeckModel.OtherSpellUnknownPriceCount),
 
-			nameof(Zone.Main) + nameof(DeckModel.UnknownPriceCount),
+			nameof(DeckModel.MainUnknownPriceCount),
 			nameof(DeckModel.MainCollectedUnknownPriceCount),
 			nameof(DeckModel.MainCollectedUnknownPricePercent),
 
-			nameof(Zone.Side) + nameof(DeckModel.UnknownPriceCount),
+			nameof(DeckModel.MainUnknownPriceCount),
 			nameof(DeckModel.SideCollectedUnknownPriceCount),
 			nameof(DeckModel.SideCollectedUnknownPricePercent)
 		};

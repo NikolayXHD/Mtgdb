@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Mtgdb.Controls;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Controls
 {
 	public abstract class SortSubsystem<TId, TDoc>
 	{
@@ -138,7 +137,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public List<TDoc> SortedCards =>
+		public List<TDoc> SortedRecords =>
 			getSortedCards(GetDefaultSort(duplicateAware: false));
 
 		protected abstract FieldSortInfo GetDefaultSort(bool duplicateAware);
@@ -169,6 +168,18 @@ namespace Mtgdb.Gui
 		public bool IsLanguageDependent =>
 			SortInfo.Any(_ => IsLocalizable(_.FieldName));
 
+		public string GetTextualStatus()
+		{
+			var infos = SortInfo?.ToList() ?? new List<FieldSortInfo>();
+
+			if (_searchSubsystem.SearchResult?.RelevanceById != null)
+				infos.Add(new FieldSortInfo("Relevance", SortOrder.Descending));
+
+			if (infos.Count == 0)
+				return "none";
+
+			return string.Join(" ", infos);
+		}
 
 
 		protected abstract bool IsLocalizable(string fieldName);

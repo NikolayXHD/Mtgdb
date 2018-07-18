@@ -135,21 +135,6 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "2, 2")]
 		public Size ButtonMargin { get; set; } = new Size(2, 2);
 
-		[Category("Settings")]
-		[DefaultValue(0.15f)]
-		public float HotTrackOpacityDelta
-		{
-			get => _hotTrackOpacityDelta;
-			set
-			{
-				_hotTrackOpacityDelta = value;
-
-				updateIconTransp(_icon);
-				updateAscIconTransp(_ascIcon);
-				updateDescIconTransp(_descIcon);
-			}
-		}
-
 		private Bitmap _icon;
 		private Bitmap _ascIcon;
 		private Bitmap _descIcon;

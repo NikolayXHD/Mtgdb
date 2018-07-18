@@ -159,14 +159,23 @@ namespace Mtgdb.Controls
 
 
 
-		public int Count(Zone zone) =>
-			_countTotalCache.GetAggregate(zone, _filterNone);
+		public int MainCount =>
+			_countTotalCache.GetAggregate(Zone.Main, _filterNone);
 
-		public float Price(Zone zone) =>
-			_priceTotalCache.GetAggregate(zone, _filterNone);
+		public int SideCount =>
+			_countTotalCache.GetAggregate(Zone.Side, _filterNone);
 
-		public int UnknownPriceCount(Zone zone) =>
-			_countTotalCache.GetAggregate(zone, _filterPriceIsUnknown);
+		public float MainPrice =>
+			_priceTotalCache.GetAggregate(Zone.Main, _filterNone);
+
+		public float SidePrice =>
+			_priceTotalCache.GetAggregate(Zone.Side, _filterNone);
+
+		public int MainUnknownPriceCount =>
+			_countTotalCache.GetAggregate(Zone.Main, _filterPriceIsUnknown);
+
+		public int SideUnknownPriceCount =>
+			_countTotalCache.GetAggregate(Zone.Side, _filterPriceIsUnknown);
 
 
 
@@ -191,22 +200,22 @@ namespace Mtgdb.Controls
 
 
 		public float MainCollectedPricePercent =>
-			MainCollectedPrice / Price(Zone.Main);
+			MainCollectedPrice / MainPrice;
 
 		public float SideCollectedPricePercent =>
-			SideCollectedPrice / Price(Zone.Side);
+			SideCollectedPrice / SidePrice;
 
 		public float MainCollectedCountPercent =>
-			(float) MainCollectedCount / Count(Zone.Main);
+			(float) MainCollectedCount / MainCount;
 
 		public float SideCollectedCountPercent =>
-			(float) SideCollectedCount / Count(Zone.Side);
+			(float) SideCollectedCount / SideCount;
 
 		public float MainCollectedUnknownPricePercent =>
-			(float) MainCollectedUnknownPriceCount / UnknownPriceCount(Zone.Main);
+			(float) MainCollectedUnknownPriceCount / MainUnknownPriceCount;
 
 		public float SideCollectedUnknownPricePercent =>
-			(float) SideCollectedUnknownPriceCount / UnknownPriceCount(Zone.Side);
+			(float) SideCollectedUnknownPriceCount / SideUnknownPriceCount;
 
 
 

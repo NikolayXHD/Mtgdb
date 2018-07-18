@@ -69,7 +69,7 @@ namespace Mtgdb.Gui
 			switch (_deckListControl.FilterByDeckMode)
 			{
 				case FilterByDeckMode.CurrentDeck:
-					return c.DeckCount(_formRoot.UiModel) > 0;
+					return c.DeckCount(_uiSnapshot) > 0;
 				case FilterByDeckMode.FilteredSavedDecks:
 					return _deckListControl.AnyFilteredDeckContains(c);
 				default:
@@ -78,7 +78,7 @@ namespace Mtgdb.Gui
 		}
 
 		private bool evalFilterByCollection(Card c) =>
-			c.CollectionCount(_formRoot.UiModel) > 0;
+			c.CollectionCount(_uiSnapshot) > 0;
 
 		public void LoadHistory(string historyFile)
 		{
@@ -170,7 +170,7 @@ namespace Mtgdb.Gui
 
 		private void updateShowSampleHandButtons()
 		{
-			bool isSampleHand = _deckEditor.Zone == Zone.SampleHand;
+			bool isSampleHand = _deckEditor.CurrentZone == Zone.SampleHand;
 			bool enabled = _cardRepo.IsLoadingComplete;
 
 			_buttonSampleHandNew.Visible = isSampleHand;
@@ -263,13 +263,18 @@ namespace Mtgdb.Gui
 
 			lock (_searchResultCards)
 			{
+				_uiSnapshot = new UiModel(
+					_cardRepo,
+					new CollectionSnapshot(_collectionEditor),
+					new DeckSnapshot(_deckEditor));
+
 				_breakRefreshing = false;
 
 				var searchResultCards = new List<Card>();
 				var filteredCards = new List<Card>();
 
 				var allCards = showDuplicates 
-					? _cardSort.SortedCards
+					? _cardSort.SortedRecords
 					: _cardSort.DuplicateAwareSortedCards;
 
 				if (showDuplicates)
@@ -344,7 +349,7 @@ namespace Mtgdb.Gui
 		}
 
 		private void updateIsSearchResult() =>
-			updateIsSearchResult(_cardSort.SortedCards);
+			updateIsSearchResult(_cardSort.SortedRecords);
 
 		private void updateIsSearchResult(List<Card> sortedCards)
 		{
@@ -413,7 +418,7 @@ namespace Mtgdb.Gui
 
 			_labelStatusFilterLegality.Text = getStatusLegalityFilter(filterManagerStates);
 
-			_labelStatusSort.Text = getStatusSort();
+			_labelStatusSort.Text = _cardSort.GetTextualStatus();
 
 			DeckName =_deckEditor.DeckName;
 
@@ -435,10 +440,10 @@ namespace Mtgdb.Gui
 				return "deck list: loading index…";
 
 			if (_deckListControl.IsSearcherUpdating)
-				return "deck list: updating index…";
+				return $"deck list: {_deckListControl.FilteredDecksCount}, updating index…";
 
 			if (_deckListControl.IsAddingDecks)
-				return $"deck list: {_deckListControl.FilteredDecksCount}, adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}";
+				return $"deck list: {_deckListControl.FilteredDecksCount}, adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}…";
 
 			return $"deck list: {_deckListControl.FilteredDecksCount}";
 		}
@@ -528,19 +533,6 @@ namespace Mtgdb.Gui
 			return
 				_cardSearch.SearchResult?.RelevanceById != null &&
 				_cardSearcher.Spellchecker.IsLoaded;
-		}
-
-		private string getStatusSort()
-		{
-			var infos = _cardSort.SortInfo?.ToList() ?? new List<FieldSortInfo>();
-
-			if (_cardSearch.SearchResult?.RelevanceById != null)
-				infos.Add(new FieldSortInfo("Relevance", SortOrder.Descending));
-
-			if (infos.Count == 0)
-				return "none";
-
-			return string.Join(" ", infos);
 		}
 
 		private string getStatusLegalityFilter(FilterValueState[] filterManagerStates)
@@ -906,7 +898,7 @@ namespace Mtgdb.Gui
 		{
 			resetTouchedCard();
 
-			if (_deckEditor.Zone == Zone.Main)
+			if (_deckEditor.CurrentZone == Zone.Main)
 			{
 				_deckEditor.DeckFile = null;
 				_deckEditor.DeckName = null;
@@ -992,7 +984,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonRedo() => historyRedo();
 
-		public void ButtonPivot() => new FormChart(_cardRepo, _formRoot.UiModel, _fields).Show();
+		public void ButtonPivot() => new FormChart(_cardRepo, _uiSnapshot, _fields).Show();
 
 		public void ButtonPrint()
 		{

@@ -34,6 +34,7 @@ namespace Mtgdb.Gui
 			DeckSearcher deckSearcher,
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
+			DeckListAsnycUpdateSubsystem deckListUpdate,
 			FormManager formManager)
 			: this()
 		{
@@ -168,6 +169,7 @@ namespace Mtgdb.Gui
 				deckSearcher,
 				deckAdapter,
 				uiFactory,
+				deckListUpdate,
 				this);
 
 			_copyPaste = new CopyPasteSubsystem(
@@ -272,9 +274,7 @@ namespace Mtgdb.Gui
 
 		private static void scaleLayoutView(LayoutViewControl view)
 		{
-			var sortIcon = view.SortOptions.Icon;
-
-			view.SortOptions.Icon = sortIcon.HalfResizeDpi();
+			view.SortOptions.Icon = view.SortOptions.Icon.HalfResizeDpi();
 			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
 			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
 			view.SearchOptions.Button.Icon = view.SearchOptions.Button.Icon?.HalfResizeDpi();
@@ -570,7 +570,9 @@ namespace Mtgdb.Gui
 		private readonly bool _spellcheckerIndexUpToDate;
 		private readonly RichTextBoxSelectionSubsystem _searchTextSelection;
 		private readonly CopyPasteSubsystem _copyPaste;
+
 		private string _deckName;
+		private UiModel _uiSnapshot;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

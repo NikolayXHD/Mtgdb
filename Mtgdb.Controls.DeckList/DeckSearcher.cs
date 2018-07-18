@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using JetBrains.Annotations;
 using Lucene.Net.Documents;
 using Lucene.Net.Store;
-using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Index;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -18,19 +15,22 @@ namespace Mtgdb.Controls
 
 		[UsedImplicitly]
 		public DeckSearcher(
-			DeckListModel deckList,
+			DeckListAsnycUpdateSubsystem updateSubsystem,
 			DeckSpellchecker spellchecker,
-			DeckDocumentAdapter adapter,
-			UiModelSnapshotFactory uiFactory)
+			DeckDocumentAdapter adapter)
 			: base(spellchecker, adapter)
 		{
-			_deckList = deckList;
-			_uiFactory = uiFactory;
+			_updateSubsystem = updateSubsystem;
+			_updateSubsystem.HandleModelsUpdated += handleModelsUpdated;
+
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("search");
 		}
 
-		protected override IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex() =>
-			Sequence.From(Models.Select(Adapter.ToDocument));
+		protected override Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex()
+		{
+			var models = _models;
+			return () => Sequence.From(models.Select(Adapter.ToDocument));
+		}
 
 		public SearchResult<int> Search(string query) =>
 			Search(query, language: null);
@@ -41,34 +41,16 @@ namespace Mtgdb.Controls
 		public IntellisenseSuggest CycleValue(TextInputState input, bool backward) =>
 			((DeckSpellchecker) Spellchecker).CycleValue(input, backward, language: null);
 
-		public void ModelChanged()
-		{
-			_modelUpdatedTime = DateTime.UtcNow;
-
-			ThreadPool.QueueUserWorkItem(_ =>
-			{
-				lock (_sync)
-				{
-					var modelUpdatedTime = _modelUpdatedTime;
-
-					if (_indexUpdatedTime == modelUpdatedTime)
-						return;
-
-					updateModels();
-					LoadIndexes();
-
-					_indexUpdatedTime = modelUpdatedTime;
-				}
-			});
-		}
-
 		protected override Directory CreateIndex(SearcherState<int, DeckModel> state)
 		{
 			Directory index;
 
 			if (!_indexCreated)
 			{
-				updateModels();
+				var models = _updateSubsystem.GetModels();
+
+				_models = models;
+				((DeckSpellchecker) Spellchecker).Models = models;
 
 				if (_version.IsUpToDate)
 					lock (_syncDirectory)
@@ -100,13 +82,12 @@ namespace Mtgdb.Controls
 			return index;
 		}
 
-		private void updateModels()
+		private void handleModelsUpdated(IReadOnlyList<DeckModel> models)
 		{
-			var ui = _uiFactory.Snapshot();
-			var models = _deckList.GetModels(ui).ToReadOnlyList();
-
-			Models = models;
+			_models = models;
 			((DeckSpellchecker) Spellchecker).Models = models;
+
+			LoadIndexes();
 		}
 
 		private string IndexDirectoryParent
@@ -115,20 +96,14 @@ namespace Mtgdb.Controls
 			set => _version = new IndexVersion(value, IndexVerision);
 		}
 
-		private DateTime? _indexUpdatedTime;
-		private DateTime _modelUpdatedTime = DateTime.UtcNow;
-
-		private IReadOnlyList<DeckModel> Models { get; set; }
-
-		private readonly UiModelSnapshotFactory _uiFactory;
-		private readonly DeckListModel _deckList;
-		private readonly object _sync = new object();
+		private IReadOnlyList<DeckModel> _models;
 
 		private IndexVersion _version;
 		private bool _indexCreated;
 
 		public bool IsUpdating { get; private set; }
 
+		private readonly DeckListAsnycUpdateSubsystem _updateSubsystem;
 		private static readonly object _syncDirectory = new object();
 	}
 }

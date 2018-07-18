@@ -143,7 +143,7 @@ namespace Mtgdb.Gui
 			}
 			else if (deckHitInfo.InBounds)
 			{
-				if (_deckEditorModel.IsDraggingFromZone != _deckEditorModel.Zone)
+				if (_deckEditorModel.IsDraggingFromZone != _deckEditorModel.CurrentZone)
 					DragAdded?.Invoke(draggedCard, _deckEditorModel.IsDraggingFromZone);
 				else if (cardBelowDragged != draggedCard)
 					_deckEditorModel.ApplyReorder(draggedCard, cardBelowDragged);

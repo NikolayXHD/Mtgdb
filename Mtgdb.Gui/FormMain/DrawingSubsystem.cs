@@ -274,7 +274,7 @@ namespace Mtgdb.Gui
 
 			int collectionCount = card.CollectionCount(Ui);
 
-			if (collectionCount > 0 && (_deckEditorModel.Zone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
+			if (collectionCount > 0 && (_deckEditorModel.CurrentZone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
 				countText.AppendFormat(@" / {0}", collectionCount);
 
 			string countTextStr = countText.ToString();

@@ -58,9 +58,7 @@ namespace Mtgdb.Gui
 			return count;
 		}
 
-		public bool Contains(Card c)
-		{
-			return CountById.ContainsKey(c.Id);
-		}
+		public bool Contains(Card c) =>
+			CountById.ContainsKey(c.Id);
 	}
 }

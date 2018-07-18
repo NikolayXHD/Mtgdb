@@ -15,16 +15,18 @@ namespace Mtgdb.Controls
 		{
 		}
 
-		public void Add(Deck deck)
+		public bool Add(Deck deck)
 		{
 			var duplicate = findDupliate(deck);
 			if (duplicate != null)
-				duplicate.Saved = deck.Saved;
-			else
 			{
-				_decks.Add(deck);
-				addDeckByName(deck);
+				duplicate.Saved = deck.Saved;
+				return false;
 			}
+
+			_decks.Add(deck);
+			addDeckByName(deck);
+			return true;
 		}
 
 		public void Remove(Deck deck)

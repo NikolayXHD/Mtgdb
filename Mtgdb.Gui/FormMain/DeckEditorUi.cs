@@ -60,7 +60,7 @@ namespace Mtgdb.Gui
 		{
 			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
 
-			if (fromDeckZone.HasValue && _deckEditorModel.Zone != Zone.SampleHand)
+			if (fromDeckZone.HasValue && _deckEditorModel.CurrentZone != Zone.SampleHand)
 				_deckEditorModel.Add(card, -count, zone: fromDeckZone, changeTerminatesBatch: false);
 
 			_deckEditorModel.Add(card, +count);

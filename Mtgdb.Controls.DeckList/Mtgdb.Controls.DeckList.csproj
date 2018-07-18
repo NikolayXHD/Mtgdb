@@ -63,9 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeckDocumentAdapter.cs" />
+    <Compile Include="DeckFields.cs" />
     <Compile Include="DeckKeywordHighlighter.cs" />
+    <Compile Include="DeckListAsnycUpdateSubsystem.cs" />
     <Compile Include="DeckQueryParser.cs" />
     <Compile Include="DeckSearcher.cs" />
+    <Compile Include="DeckSortSubsystem.cs" />
     <Compile Include="DeckSpellchecker.cs" />
     <Compile Include="FilterByDeckMode.cs" />
     <Compile Include="Model\DeckListModel.cs" />
@@ -188,6 +191,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\text_selection_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sort_asc_hovered.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sort_desc_hovered.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sort_none_hovered.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sort_48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

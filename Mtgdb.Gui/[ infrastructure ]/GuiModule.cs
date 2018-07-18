@@ -64,6 +64,10 @@ namespace Mtgdb.Gui
 			Kernel.Bind<DeckSerializationSubsystem>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<DeckListAsnycUpdateSubsystem>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

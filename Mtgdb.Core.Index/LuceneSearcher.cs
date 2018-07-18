@@ -30,7 +30,7 @@ namespace Mtgdb.Index
 		}
 
 		internal SearcherState<TId, TDoc> CreateState() =>
-			new SearcherState<TId, TDoc>(Adapter, GetDocumentGroupsToIndex);
+			new SearcherState<TId, TDoc>(Adapter, GetDocumentGroupsToIndex());
 
 		internal void LoadIndex(SearcherState<TId, TDoc> state)
 		{
@@ -169,7 +169,7 @@ namespace Mtgdb.Index
 			Disposed?.Invoke();
 		}
 
-		protected abstract IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex();
+		protected abstract Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex();
 
 		protected virtual Directory CreateIndex(SearcherState<TId, TDoc> state)
 		{

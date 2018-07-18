@@ -33,9 +33,6 @@ namespace Mtgdb.Controls
 		protected override SearchResult<int> Search(string query) =>
 			((DeckSearcher) Searcher).Search(query);
 
-		public void ModelChanged() =>
-			((DeckSearcher) Searcher).ModelChanged();
-
 		public bool IsLoaded =>
 			Searcher.IsLoaded;
 

@@ -107,11 +107,14 @@
     <Compile Include="Model\Ui\CollectionSnapshot.cs" />
     <Compile Include="Model\Ui\Deck.cs" />
     <Compile Include="Model\Ui\DeckChangedEventHandler.cs" />
+    <Compile Include="Model\Ui\DeckEditorModel.cs" />
     <Compile Include="Model\Ui\DeckListUiModel.cs" />
+    <Compile Include="Model\Ui\DeckSnapshot.cs" />
     <Compile Include="Model\Ui\DeckZone.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />
     <Compile Include="Model\Serialization\IntToInternedStringConverter.cs" />
+    <Compile Include="Model\Ui\DeckZoneModel.cs" />
     <Compile Include="Model\Ui\LanguageController.cs" />
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />

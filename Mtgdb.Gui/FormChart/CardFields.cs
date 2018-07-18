@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Mtgdb.Controls;
 using Mtgdb.Controls.Statistics;
 using Mtgdb.Dal;
 
@@ -58,45 +59,45 @@ namespace Mtgdb.Gui
 
 				Builder.Get(string.Empty, c => string.Empty, "")
 			}.ToDictionary(_ => _.Name);
-
-			ChartFields = new List<string>
-			{
-				nameof(Card.ManaCost),
-				nameof(Card.Cmc),
-				nameof(Card.SetCode),
-				nameof(Card.SetName),
-				nameof(Card.Artist),
-				nameof(Card.ReleaseDate),
-				nameof(Card.ReleaseMonth),
-				nameof(Card.ReleaseYear),
-				nameof(Card.Rarity),
-				nameof(Card.Loyalty),
-				nameof(Card.Power),
-				nameof(Card.Toughness),
-				nameof(Card.NameEn),
-				nameof(Card.TypeEn),
-				nameof(Card.Supertypes),
-				nameof(Card.Types),
-				nameof(Card.Subtypes),
-
-				nameof(Card.PriceLow),
-				nameof(Card.PriceMid),
-				nameof(Card.PriceHigh),
-				nameof(Card.DeckCount),
-				nameof(Card.DeckTotalLow),
-				nameof(Card.DeckTotalMid),
-				nameof(Card.DeckTotalHigh),
-				nameof(Card.CollectionCount),
-				nameof(Card.CollectionTotalLow),
-				nameof(Card.CollectionTotalMid),
-				nameof(Card.CollectionTotalHigh),
-
-				nameof(Card.Color),
-				nameof(Card.IsSearchResult),
-				nameof(Card.HasImage)
-			};
 		}
 
 		public UiModel Ui { get; set; }
+
+		public List<string> ChartFields { get; } = new List<string>
+		{
+			nameof(Card.ManaCost),
+			nameof(Card.Cmc),
+			nameof(Card.SetCode),
+			nameof(Card.SetName),
+			nameof(Card.Artist),
+			nameof(Card.ReleaseDate),
+			nameof(Card.ReleaseMonth),
+			nameof(Card.ReleaseYear),
+			nameof(Card.Rarity),
+			nameof(Card.Loyalty),
+			nameof(Card.Power),
+			nameof(Card.Toughness),
+			nameof(Card.NameEn),
+			nameof(Card.TypeEn),
+			nameof(Card.Supertypes),
+			nameof(Card.Types),
+			nameof(Card.Subtypes),
+
+			nameof(Card.PriceLow),
+			nameof(Card.PriceMid),
+			nameof(Card.PriceHigh),
+			nameof(Card.DeckCount),
+			nameof(Card.DeckTotalLow),
+			nameof(Card.DeckTotalMid),
+			nameof(Card.DeckTotalHigh),
+			nameof(Card.CollectionCount),
+			nameof(Card.CollectionTotalLow),
+			nameof(Card.CollectionTotalMid),
+			nameof(Card.CollectionTotalHigh),
+
+			nameof(Card.Color),
+			nameof(Card.IsSearchResult),
+			nameof(Card.HasImage)
+		};
 	}
 }

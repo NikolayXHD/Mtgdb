@@ -421,15 +421,18 @@ namespace Mtgdb.Gui
 		{
 			updateDeckVisibility();
 
-			var zone = DeckZone ?? Zone.Main;
+			var zone = DeckZone;
 
-			if (_deckEditor.Zone != zone)
+			if (_deckEditor.CurrentZone != zone)
 			{
 				beginRestoreSettings();
 				_deckEditor.SetZone(zone, _cardRepo);
 				endRestoreSettings();
 			}
 
+			if (isFilterGroupEnabled(FilterGroup.Deck))
+				RunRefilterTask();
+			
 			updateFormStatus();
 			updateShowSampleHandButtons();
 		}
@@ -448,18 +451,14 @@ namespace Mtgdb.Gui
 
 		private void deckChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone, bool changeTerminatesBatch)
 		{
-			if (!zone.HasValue)
-				throw new ArgumentNullException(nameof(zone));
-
-			if (zone == _deckEditor.Zone)
+			if (zone == _deckEditor.CurrentZone)
 			{
 				updateViewCards(listChanged, card, FilterGroup.Deck, touchedChanged);
 				updateViewDeck(listChanged, countChanged, card, touchedChanged);
 			}
 
 			bool isActualDeckChange = zone != Zone.SampleHand &&
-				(countChanged || listChanged) &&
-				changeTerminatesBatch;
+				(countChanged || listChanged) && changeTerminatesBatch;
 
 			if (!restoringSettings())
 				if (isActualDeckChange)
@@ -507,8 +506,10 @@ namespace Mtgdb.Gui
 				if (restoringSettings())
 					return;
 
-				if (touchedChanged && _deckEditor.TouchedCard != null)
-					RunRefilterTask(() => _scroll.EnsureCardVisibility(_deckEditor.TouchedCard, _viewCards));
+				var touchedCard = _deckEditor.TouchedCard;
+
+				if (touchedChanged && touchedCard != null)
+					RunRefilterTask(() => _scroll.EnsureCardVisibility(touchedCard, _viewCards));
 				else
 					RunRefilterTask();
 			}

@@ -28,11 +28,13 @@ namespace Mtgdb.Controls
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
 			UiModelSnapshotFactory uiFactory,
+			DeckListAsnycUpdateSubsystem updateSubsystem,
 			Control tooltipOwner)
 		{
 			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
 			_uiFactory = uiFactory;
+			_updateSubsystem = updateSubsystem;
 
 			_model = new DeckModel(Deck.Create(), _uiFactory.Snapshot())
 			{
@@ -60,6 +62,9 @@ namespace Mtgdb.Controls
 				adapter,
 				_viewDeck);
 
+			_searchSubsystem.TextApplied += updateSearchResult;
+			_searchSubsystem.SubscribeToEvents();
+
 			_menuFilterByDeckMode.SelectedIndex = 0;
 
 			_viewDeck.MouseClicked += viewDeckClicked;
@@ -71,15 +76,16 @@ namespace Mtgdb.Controls
 
 			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
 
-			_searchSubsystem.TextApplied += updateSearchResult;
-
-			_searchSubsystem.SubscribeToEvents();
 			_customTooltip.SubscribeToEvents();
 
 			_higlightSubsystem = new SearchResultHiglightSubsystem(_viewDeck, _searchSubsystem, adapter);
 			_higlightSubsystem.SubscribeToEvents();
 
 			_viewDeck.MouseMove += deckMouseMove;
+
+			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, updateSubsystem);
+			_deckSort.SortChanged += sortChanged;
+			_deckSort.SubscribeToEvents();
 
 			if (_listModel.IsLoaded)
 				listModelLoaded();
@@ -95,8 +101,17 @@ namespace Mtgdb.Controls
 		private void searcherLoaded() =>
 			_tooltipOwner.Invoke(_searchSubsystem.Apply);
 
+		private void sortChanged()
+		{
+			_tooltipOwner.Invoke(delegate
+			{
+				updateSearchResult();
+				_labelSortStatus.Text = _deckSort.GetTextualStatus();
+			});
+		}
+
 		private void listModelLoaded() =>
-			_searchSubsystem.ModelChanged();
+			_updateSubsystem.ModelChanged();
 
 		private void deckMouseMove(object sender, MouseEventArgs e)
 		{
@@ -158,7 +173,7 @@ namespace Mtgdb.Controls
 		public void CollectionChanged()
 		{
 			_model.Ui = _uiFactory.Snapshot();
-			_searchSubsystem.ModelChanged();
+			_updateSubsystem.ModelChanged();
 		}
 
 
@@ -186,6 +201,17 @@ namespace Mtgdb.Controls
 				_panelSearchIcon,
 				_panelSearch,
 				_textBoxSearch);
+
+			controller.SetTooltip(_tooltipOwner,
+				"Deck list sort order",
+				"Sort buttons are located over textual fields of decks.\r\n" +
+				"Click sort button to sort by field or change sort direction.\r\n" +
+				"Shift + Click to add field to sort priorities,\r\n" +
+				"Ctrl + Click to remove field from sort priorities.\r\n\r\n" +
+				"When all explicit sort criteria are equal, decks are ordered " +
+				"by relevance to search result, then by order they were created.\r\n\r\n" +
+				"NOTE: currently opened deck is is allways first in the list",
+				_labelSortStatus);
 
 			string filterMode(FilterByDeckMode mode) =>
 				_menuFilterByDeckMode.Items[(int) mode].ToString();
@@ -224,6 +250,7 @@ namespace Mtgdb.Controls
 				case MouseButtons.Middle:
 					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
 						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: true);
+
 					break;
 			}
 		}
@@ -236,18 +263,12 @@ namespace Mtgdb.Controls
 
 		private void updateSearchResult()
 		{
-			if (_uiFactory == null)
-				return;
-
 			var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
 
 			_filteredModels.Clear();
 			_filteredModels.Add(_model);
 
-			var ui = _uiFactory.Snapshot();
-
-			var models = _listModel.GetModels(ui)
-				.Reverse()
+			var models = _deckSort.SortedRecords
 				.Where(m => searchResult == null || searchResult.ContainsKey(m.Id));
 
 			_cardIdsInFilteredDecks.Clear();
@@ -273,9 +294,19 @@ namespace Mtgdb.Controls
 
 		private void saveCurrentDeck()
 		{
+			var copy = _model.Deck.Copy();
+
+			if (string.IsNullOrEmpty(copy.Name))
+				copy.Name = "[no name]";
+
 			BeginLoadingDecks(count: 1);
-			AddDeck(_model.Deck.Copy());
+			AddDeck(copy);
+
+			bool wasDuplicate = DecksAddedCount == 0;
 			EndLoadingDecks();
+
+			if (wasDuplicate)
+				MessageBox.Show("Saving cancelled because the deck was not modified");
 		}
 
 		public void BeginLoadingDecks(int count)
@@ -295,9 +326,9 @@ namespace Mtgdb.Controls
 			if (_saved.HasValue)
 				deck.Saved = _saved.Value;
 
-			_listModel.Add(deck);
+			if (_listModel.Add(deck))
+				DecksAddedCount++;
 
-			DecksAddedCount++;
 			DeckAdded?.Invoke(this);
 		}
 
@@ -312,15 +343,15 @@ namespace Mtgdb.Controls
 			if (!changed)
 				return;
 
-			_searchSubsystem.ModelChanged();
+			_updateSubsystem.ModelChanged();
 			_listModel.Save();
 		}
 
 		private void removeDeck(DeckModel deckModel)
 		{
 			_listModel.Remove(deckModel.Deck);
+			_updateSubsystem.ModelChanged();
 			_listModel.Save();
-			_searchSubsystem.ModelChanged();
 		}
 
 		private void openDeck(DeckModel deckModel, bool inNewTab) =>
@@ -381,7 +412,7 @@ namespace Mtgdb.Controls
 
 			if (commit)
 			{
-				_searchSubsystem.ModelChanged();
+				_updateSubsystem.ModelChanged();
 
 				if (renamedModel.IsCurrent)
 					DeckRenamed?.Invoke(this, renamedModel.Deck);
@@ -393,6 +424,7 @@ namespace Mtgdb.Controls
 		public void Scale()
 		{
 			scalePanelIcon(_panelSearchIcon);
+			scalePanelIcon(_panelSortIcon);
 
 			_panelSearch.Height = _panelSearch.Height.ByDpiHeight();
 			_menuFilterByDeckMode.ScaleDpi();
@@ -408,9 +440,7 @@ namespace Mtgdb.Controls
 
 		private static void scaleLayoutView(LayoutViewControl view)
 		{
-			var sortIcon = view.SortOptions.Icon;
-
-			view.SortOptions.Icon = sortIcon?.HalfResizeDpi();
+			view.SortOptions.Icon = view.SortOptions.Icon?.HalfResizeDpi();
 			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
 			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
 			view.SearchOptions.Button.Icon = view.SearchOptions.Button.Icon?.HalfResizeDpi();
@@ -480,7 +510,7 @@ namespace Mtgdb.Controls
 
 		public int ScrollPosition =>
 			_viewDeck.CardIndex;
-		
+
 		public int MaxScroll =>
 			_viewDeck.Count;
 
@@ -518,5 +548,7 @@ namespace Mtgdb.Controls
 		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
 		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
 		private Cursor _textSelectionCursor;
+		private DeckListAsnycUpdateSubsystem _updateSubsystem;
+		private DeckSortSubsystem _deckSort;
 	}
 }

@@ -24,7 +24,7 @@ namespace Mtgdb.Dal.Index
 		/// </summary>
 		internal IEnumerable<Card> SearchCards(string queryStr, string language)
 		{
-			var result =  Search(queryStr, language);
+			var result = Search(queryStr, language);
 			return result.RelevanceById.Keys.Select(_ => _repo.Cards[_]);
 		}
 
@@ -61,11 +61,10 @@ namespace Mtgdb.Dal.Index
 			return index;
 		}
 
-		protected override IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex() =>
-			_repo.SetsByCode.Values
-			.Where(FilterSet)
-			.Select(set => set.Cards
-				.Select(Adapter.ToDocument));
+		protected override Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex() =>
+			() => _repo.SetsByCode.Values
+				.Where(FilterSet)
+				.Select(set => set.Cards.Select(Adapter.ToDocument));
 
 		public new CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
 

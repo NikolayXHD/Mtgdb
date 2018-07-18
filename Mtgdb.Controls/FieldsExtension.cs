@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Mtgdb.Controls;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Controls
 {
 	public static class FieldsExtension
 	{

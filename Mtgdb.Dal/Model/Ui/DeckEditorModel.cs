@@ -20,15 +20,15 @@ namespace Mtgdb.Gui
 		public DeckZoneModel SideDeck { get; }
 		public DeckZoneModel SampleHand { get; }
 
-		public Zone Zone { get; private set; }
+		public Zone? CurrentZone { get; private set; }
 
-		public void SetZone(Zone value, CardRepository repo)
+		public void SetZone(Zone? value, CardRepository repo)
 		{
-			Zone = value;
+			CurrentZone = value;
 			LoadDeck(repo);
 		}
 
-		public DeckZoneModel Deck => getDeckZone(Zone);
+		public DeckZoneModel Deck => getDeckZone(CurrentZone ?? Zone.Main);
 
 		private DeckZoneModel getDeckZone(Zone zone)
 		{
@@ -51,7 +51,7 @@ namespace Mtgdb.Gui
 
 		public IList<Card> GetVisibleCards()
 		{
-			if (IsDraggingFromZone == Zone)
+			if (IsDraggingFromZone == CurrentZone)
 				return getReorderedCards(DraggedCard, CardBelowDragged);
 
 			lock (DataSource)
@@ -85,7 +85,14 @@ namespace Mtgdb.Gui
 			lock (DataSource)
 			{
 				DataSource.Clear();
-				DataSource.AddRange(Deck.CardsIds.Select(id => cardRepository.CardsById[id]));
+
+				Card transform(string id) =>
+					cardRepository.CardsById[id];
+
+				if (CurrentZone.HasValue)
+					DataSource.AddRange(Deck.CardsIds.Select(transform));
+				else
+					DataSource.AddRange(MainDeck.CardsIds.Union(SideDeck.CardsIds).Select(transform));
 			}
 
 			DeckChanged?.Invoke(
@@ -93,13 +100,13 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone,
+				changedZone: CurrentZone,
 				changeTerminatesBatch: true);
 		}
 
 		public void Add(Card card, int increment, Zone? zone = null, bool changeTerminatesBatch = true)
 		{
-			var specificZone = zone ?? Zone;
+			var specificZone = zone ?? CurrentZone ?? Zone.Main;
 			var deckZone = getDeckZone(specificZone);
 
 			int previousCount = deckZone.GetCount(card.Id);
@@ -131,7 +138,7 @@ namespace Mtgdb.Gui
 				countChanged,
 				card,
 				touchedChanged,
-				Zone,
+				CurrentZone,
 				changeTerminatesBatch);
 		}
 
@@ -139,7 +146,7 @@ namespace Mtgdb.Gui
 		{
 			getDeckZone(zone).Remove(card.Id, newCount);
 
-			if (zone != Zone)
+			if (zone != CurrentZone)
 				return;
 
 			if (newCount == 0)
@@ -151,7 +158,7 @@ namespace Mtgdb.Gui
 		{
 			getDeckZone(zone).Add(card.Id, newCount);
 
-			if (zone != Zone)
+			if (zone != CurrentZone)
 				return;
 
 			lock (DataSource)
@@ -162,7 +169,7 @@ namespace Mtgdb.Gui
 
 		public void Clear()
 		{
-			switch (Zone)
+			switch (CurrentZone)
 			{
 				case Zone.SampleHand:
 					SampleHand.Clear();
@@ -186,7 +193,7 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone,
+				changedZone: CurrentZone,
 				changeTerminatesBatch: true);
 		}
 
@@ -258,14 +265,14 @@ namespace Mtgdb.Gui
 				countChanged: false,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone,
+				changedZone: CurrentZone,
 				changeTerminatesBatch: true);
 		}
 
 		public void DragStart(Card card, bool fromDeck)
 		{
 			DraggedCard = CardBelowDragged = card;
-			IsDraggingFromZone = fromDeck ? Zone : (Zone?) null;
+			IsDraggingFromZone = fromDeck ? CurrentZone : null;
 		}
 
 		public bool IsDragging()
@@ -280,16 +287,14 @@ namespace Mtgdb.Gui
 			IsDraggingFromZone = null;
 		}
 
-		public int GetCount(Card c)
-		{
-			return Deck.GetCount(c.Id);
-		}
+		public int GetCount(Card c) =>
+			Deck.GetCount(c.Id);
 
 		public void Paste(Deck deck, bool append, CardRepository repo)
 		{
 			var operations = new Dictionary<DeckZone, DeckZoneModel>();
 
-			switch (Zone)
+			switch (CurrentZone)
 			{
 				case Zone.Main:
 					operations.Add(deck.MainDeck, MainDeck);
@@ -306,7 +311,7 @@ namespace Mtgdb.Gui
 					return;
 			}
 
-			if (!append && (Zone == Zone.Main || Zone == Zone.Side))
+			if (!append && (CurrentZone == Zone.Main || CurrentZone == Zone.Side))
 				lock (DataSource)
 					DataSource.Clear();
 
@@ -334,7 +339,7 @@ namespace Mtgdb.Gui
 
 		public void NewSampleHand(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
 				return;
 
 			createSampleHand(7, cardRepository);
@@ -342,7 +347,7 @@ namespace Mtgdb.Gui
 
 		public void Mulligan(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
 				return;
 
 			int count = getMulliganCount();
@@ -351,7 +356,7 @@ namespace Mtgdb.Gui
 
 		public void Draw(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || Zone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
 				return;
 
 			var drawn = draw(cardRepository);
@@ -370,7 +375,7 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: drawn,
 				touchedChanged: true,
-				changedZone: Zone,
+				changedZone: CurrentZone,
 				changeTerminatesBatch: true);
 		}
 
@@ -405,7 +410,7 @@ namespace Mtgdb.Gui
 				countChanged: true,
 				card: null,
 				touchedChanged: false,
-				changedZone: Zone,
+				changedZone: CurrentZone,
 				changeTerminatesBatch: true);
 		}
 
