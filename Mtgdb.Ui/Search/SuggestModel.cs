@@ -2,7 +2,7 @@
 using System.Threading;
 using Mtgdb.Index;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	public abstract class SuggestModel<TId, TObj>
 	{

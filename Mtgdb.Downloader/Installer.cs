@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
-using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using File = System.IO.File;

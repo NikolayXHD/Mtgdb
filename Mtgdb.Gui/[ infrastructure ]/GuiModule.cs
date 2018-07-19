@@ -1,4 +1,7 @@
 using Mtgdb.Controls;
+using Mtgdb.Dal;
+using Mtgdb.Ui;
+using Ninject;
 using Ninject.Modules;
 
 namespace Mtgdb.Gui
@@ -61,11 +64,23 @@ namespace Mtgdb.Gui
 				.ToMethod(ctx => IconRecognizerFactory.Create())
 				.InSingletonScope();
 
+			Kernel.Bind<ICardCollection>()
+				.ToMethod(ctx => ctx.Kernel.Get<CollectionEditorModel>())
+				.Named("collection");
+
+			Kernel.Bind<CollectionEditorModel>()
+				.ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<DeckSerializationSubsystem>()
 				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<DeckListAsnycUpdateSubsystem>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<UiModelSnapshotFactory>()
 				.ToSelf()
 				.InSingletonScope();
 		}

@@ -10,7 +10,7 @@ namespace Mtgdb.Dal
 			ImageLoader imageLoader,
 			ImageRepository imageRepo,
 			CardRepository cardRepo,
-			[Optional] CollectionEditorModel collection)
+			[Optional, Named("collection")] ICardCollection collection)
 		{
 			CardRepo = cardRepo;
 			Collection = collection;
@@ -20,14 +20,14 @@ namespace Mtgdb.Dal
 			LanguageController = new LanguageController(CardLocalization.DefaultLanguage);
 		}
 
-		public UiModel(CardRepository repo, CollectionSnapshot collection, DeckSnapshot deck)
+		public UiModel(CardRepository repo, ICardCollection collection, ICardCollection deck)
 		{
 			CardRepo = repo;
 			Collection = collection;
 			Deck = deck;
 		}
 
-		public UiModel(CardRepository repo, CollectionSnapshot collection)
+		public UiModel(CardRepository repo, ICardCollection collection)
 		{
 			CardRepo = repo;
 			Collection = collection;

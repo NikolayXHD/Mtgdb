@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	internal static class RegexUtil
 	{

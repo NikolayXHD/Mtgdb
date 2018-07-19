@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
 using System.Linq;
-using Mtgdb.Dal;
 using Mtgdb.Util;
 using NUnit.Framework;
 

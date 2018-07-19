@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
 using ImageMagick;
-using Mtgdb.Controls;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

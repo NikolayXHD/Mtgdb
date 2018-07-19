@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Mtgdb.Dal;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Ui
 {
 	public class CollectionEditorModel : ICardCollection
 	{

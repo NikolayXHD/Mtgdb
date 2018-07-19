@@ -311,10 +311,6 @@
       <Project>{6fac0808-416a-4605-a1e7-042f7a270bb3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
-      <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Core.Controls</Name>
@@ -342,6 +338,10 @@
     <ProjectReference Include="..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
       <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
       <Name>Mtgdb.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Ui\Mtgdb.Ui.csproj">
+      <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
+      <Name>Mtgdb.Ui</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>

@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Mtgdb.Index;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {

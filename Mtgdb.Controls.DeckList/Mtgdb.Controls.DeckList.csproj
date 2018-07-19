@@ -111,10 +111,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
-      <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Core.Controls</Name>
@@ -134,6 +130,10 @@
     <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
       <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Ui\Mtgdb.Ui.csproj">
+      <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
+      <Name>Mtgdb.Ui</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}</Project>

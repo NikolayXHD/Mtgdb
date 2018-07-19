@@ -55,7 +55,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls.DeckList", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Index", "Mtgdb.Core.Index\Mtgdb.Core.Index.csproj", "{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls", "Mtgdb.Controls\Mtgdb.Controls.csproj", "{65731F8B-3FD8-4893-B35F-371F69C9734D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Ui", "Mtgdb.Ui\Mtgdb.Ui.csproj", "{65731F8B-3FD8-4893-B35F-371F69C9734D}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

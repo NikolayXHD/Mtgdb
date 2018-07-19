@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
+using Mtgdb.Dal;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Ui
 {
 	public class UiModelSnapshotFactory
 	{

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

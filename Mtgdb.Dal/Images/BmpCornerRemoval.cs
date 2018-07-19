@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Dal
 {

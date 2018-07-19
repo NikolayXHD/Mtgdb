@@ -2,7 +2,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using Mtgdb.Bitmaps;
 using Mtgdb.Test;
 using NUnit.Framework;
 

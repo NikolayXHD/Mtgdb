@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Mtgdb.Dal;
 using Mtgdb.Gui;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Ui
 {
 	public class DeckSnapshot: ICardCollection
 	{

@@ -11,14 +11,14 @@ namespace Mtgdb.Dal
 
 		public string Language
 		{
-			get { return _language; }
+			get => _language;
 			set
 			{
-				if (!Str.Equals(value, _language))
-				{
-					_language = value;
-					LanguageChanged?.Invoke();
-				}
+				if (Str.Equals(value, _language))
+					return;
+
+				_language = value;
+				LanguageChanged?.Invoke();
 			}
 		}
 

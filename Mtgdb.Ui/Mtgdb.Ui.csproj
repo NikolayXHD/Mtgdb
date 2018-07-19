@@ -7,8 +7,8 @@
     <ProjectGuid>{65731F8B-3FD8-4893-B35F-371F69C9734D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mtgdb.Controls</RootNamespace>
-    <AssemblyName>Mtgdb.Controls</AssemblyName>
+    <RootNamespace>Mtgdb.Ui</RootNamespace>
+    <AssemblyName>Mtgdb.Ui</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="ReadOnlyCollectionsExtensions, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ReadOnlyCollectionExtensions.1.3.0\lib\NET40-client\ReadOnlyCollectionsExtensions.dll</HintPath>
     </Reference>
@@ -45,14 +48,24 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collection\CollectionEditorModel.cs" />
+    <Compile Include="Collection\CollectionSnapshot.cs" />
+    <Compile Include="Deck\Deck.cs" />
+    <Compile Include="Deck\DeckChangedEventHandler.cs" />
+    <Compile Include="Deck\DeckEditorModel.cs" />
+    <Compile Include="Deck\DeckZone.cs" />
+    <Compile Include="Deck\DeckZoneModel.cs" />
+    <Compile Include="Deck\Zone.cs" />
+    <Compile Include="Search\UiModelSnapshotFactory.cs" />
+    <Compile Include="Deck\DeckSnapshot.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="FieldsExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexUtil.cs" />
-    <Compile Include="SearchStringHighlighter.cs" />
-    <Compile Include="SearchSubsystem.cs" />
+    <Compile Include="Search\SearchStringHighlighter.cs" />
+    <Compile Include="Search\SearchSubsystem.cs" />
     <Compile Include="SortSubsystem.cs" />
-    <Compile Include="SuggestModel.cs" />
+    <Compile Include="Search\SuggestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
@@ -71,6 +84,10 @@
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Dal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}</Project>
       <Name>EditedTokenLocator</Name>
@@ -79,5 +96,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Index;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	public class SearchStringHighlighter
 	{

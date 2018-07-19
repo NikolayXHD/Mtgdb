@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {

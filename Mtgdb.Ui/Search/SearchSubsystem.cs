@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
+using Mtgdb.Controls;
 using Mtgdb.Index;
 using ReadOnlyCollectionsExtensions;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	public abstract class SearchSubsystem<TId, TObj> : ISearchSubsystem<TId>
 	{

@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	public abstract class SortSubsystem<TId, TDoc>
 	{

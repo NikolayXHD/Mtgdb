@@ -128,9 +128,9 @@
       <Project>{6FAC0808-416A-4605-A1E7-042F7A270BB3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Controls\Mtgdb.Controls.csproj">
+    <ProjectReference Include="..\Mtgdb.Ui\Mtgdb.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Controls</Name>
+      <Name>Mtgdb.Ui</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
-using Mtgdb.Controls;
 
 namespace Mtgdb.Gui
 {

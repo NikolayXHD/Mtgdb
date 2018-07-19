@@ -1,5 +1,4 @@
 using Lucene.Net.Contrib;
-using Mtgdb.Dal.Index;
 using Mtgdb.Index;
 using NUnit.Framework;
 

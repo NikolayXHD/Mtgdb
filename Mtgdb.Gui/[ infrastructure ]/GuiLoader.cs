@@ -1,4 +1,3 @@
-using System.Threading;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;

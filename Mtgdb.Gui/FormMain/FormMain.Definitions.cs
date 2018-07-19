@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
@@ -28,7 +29,6 @@ namespace Mtgdb.Gui
 			CardDocumentAdapter cardAdapter,
 			DeckDocumentAdapter deckAdapter,
 			KeywordSearcher keywordSearcher,
-			ForgeSetRepository forgeSetRepo,
 			DeckListModel deckListModel,
 			UiModelSnapshotFactory uiFactory,
 			DeckSearcher deckSearcher,
@@ -206,11 +206,11 @@ namespace Mtgdb.Gui
 			_menuLegalityFormat.ScaleDpi();
 
 			_buttonShowDuplicates.ScaleDpi();
-			
+
 			_buttonSampleHandNew.ScaleDpi();
 			_buttonSampleHandMulligan.ScaleDpi();
 			_buttonSampleHandDraw.ScaleDpi();
-			
+
 			_buttonHideDeck.ScaleDpi();
 			_buttonHideScrollCards.ScaleDpi();
 			_buttonHideScrollDeck.ScaleDpi();

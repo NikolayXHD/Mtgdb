@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Mtgdb.Dal;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Ui
 {
 	public class CollectionSnapshot : ICardCollection
 	{

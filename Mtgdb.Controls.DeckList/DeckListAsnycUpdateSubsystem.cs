@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Mtgdb.Dal;
+using Mtgdb.Ui;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
