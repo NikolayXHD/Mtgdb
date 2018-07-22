@@ -14,7 +14,7 @@ namespace Mtgdb.Index
 			Spellchecker spellchecker,
 			DirectoryReader reader,
 			IDocumentAdapter<TId, TDoc> adapter,
-			int maxCount,
+			Func<int> maxCount,
 			Func<IEnumerable<TDoc>> getObjectsToIndex, 
 			bool loaded)
 		{
@@ -52,11 +52,11 @@ namespace Mtgdb.Index
 
 			var enumerable = numericValues
 				.OrderBy(Str.Comparer)
-				.Take(_maxCount);
+				.Take(_maxCount());
 
 			if (IsLoaded)
 			{
-				var spellcheckerValues = _spellchecker.SuggestSimilar(null, value, _maxCount);
+				var spellcheckerValues = _spellchecker.SuggestSimilar(null, value, _maxCount());
 
 				enumerable = enumerable
 					.Concat(spellcheckerValues.Where(v => !numericValues.Contains(v)))
@@ -71,20 +71,20 @@ namespace Mtgdb.Index
 			if (string.IsNullOrEmpty(value))
 			{
 				var cache = GetValuesCache(userField, language);
-				return new ListSegment<string>(cache, 0, _maxCount);
+				return new ListSegment<string>(cache, 0, _maxCount());
 			}
 
 			if (_adapter.IsNumericField(userField))
 			{
 				var cache = GetValuesCache(userField, language);
-				return getNumericallySimilarValues(cache, value).Take(_maxCount).ToReadOnlyList();
+				return getNumericallySimilarValues(cache, value).Take(_maxCount()).ToReadOnlyList();
 			}
 
 			if (!IsLoaded)
 				return ReadOnlyList.Empty<string>();
 
 			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, language);
-			return _spellchecker.SuggestSimilar(spellcheckerField, value, _maxCount);
+			return _spellchecker.SuggestSimilar(spellcheckerField, value, _maxCount());
 		}
 
 		public IReadOnlyList<string> GetValuesCache(string userField,  string lang)
@@ -255,7 +255,7 @@ namespace Mtgdb.Index
 		private int _indexedFields;
 		private bool _abort;
 
-		private readonly int _maxCount;
+		private readonly Func<int> _maxCount;
 		private readonly Func<IEnumerable<TDoc>> _getObjectsToIndex;
 		private readonly Spellchecker _spellchecker;
 		private readonly DirectoryReader _reader;

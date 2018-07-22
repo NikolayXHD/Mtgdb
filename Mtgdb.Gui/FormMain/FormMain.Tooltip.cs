@@ -230,7 +230,8 @@
 			controller.SetTooltip(this,
 				"Filter by Legality",
 				"Select format",
-				_menuLegalityFormat);
+				_menuLegalityFormat,
+				_panelIconLegality);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",

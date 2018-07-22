@@ -155,7 +155,7 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("gs1", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\g")]
+		[TestCase("M19", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\M19")]
 		public void RenameImagesToMatchCardNames(string setCode, string unnamedImagesDirectory)
 		{
 			var fileNames =

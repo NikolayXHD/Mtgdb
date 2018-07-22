@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Mtgdb.Dal;
 using Ninject;
 
@@ -45,8 +47,9 @@ namespace Mtgdb.Util
 			directory = args.GetParam("-sign");
 			if (directory != null)
 			{
+				string setCodes = args.GetParam("-set");
 				var output = args.GetParam("-output") ?? AppDir.Root.AddPath("filelist.txt");
-				sign(directory, output);
+				sign(directory, output, setCodes);
 				return;
 			}
 
@@ -56,7 +59,7 @@ namespace Mtgdb.Util
 				bool silent = args.GetFlag("-silent");
 				bool small = args.GetFlag("-small");
 				bool zoomed = args.GetFlag("-zoomed");
-				string setCode = args.GetParam("-set");
+				string setCodes = args.GetParam("-set");
 
 				string smallSubdir;
 				string zoomedSubdir;
@@ -74,7 +77,7 @@ namespace Mtgdb.Util
 
 
 				if (Directory.Exists(directory))
-					exportImages(small, zoomed, setCode, directory, silent, smallSubdir, zoomedSubdir);
+					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir);
 				else
 					printUsage();
 
@@ -163,7 +166,7 @@ namespace Mtgdb.Util
 			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small subdirectory_small -zoomed subdirectory_zoomed");
 			Console.WriteLine("\t- export small images to directory\\subdirectory_small and zoomed images to directory\\subdirectory_zoomed");
 
-			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name]");
+			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name] [-set setcode1;setcode2;...]");
 			Console.WriteLine("\t- create a list of files with corresponding md5 hashes");
 
 			Console.WriteLine("Mtgdb.Util.exe -update_help");
@@ -173,7 +176,7 @@ namespace Mtgdb.Util
 			Console.ReadLine();
 		}
 
-		private static void sign(string packagePath, string output)
+		private static void sign(string packagePath, string output, string setCodes)
 		{
 			string parentDir = output.Parent();
 			if (!Directory.Exists(parentDir))
@@ -184,7 +187,15 @@ namespace Mtgdb.Util
 
 			if (Directory.Exists(packagePath))
 			{
-				var signatures = Signer.CreateSignatures(packagePath);
+				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
+
+				var prevSignatureByPath = sets != null && File.Exists(output)
+					? Signer.ReadFromFile(output)
+						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
+						.ToDictionary(_ => _.Path)
+					: new Dictionary<string, FileSignature>();
+
+				var signatures = Signer.CreateSignatures(packagePath, precalculated: prevSignatureByPath);
 				Signer.WriteToFile(output, signatures);
 			}
 			else if (File.Exists(packagePath))

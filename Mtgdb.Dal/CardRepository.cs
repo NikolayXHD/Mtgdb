@@ -164,12 +164,19 @@ namespace Mtgdb.Dal
 					card.Remove = true;
 				else if (card.Number.EndsWith("a", Str.Comparison))
 				{
-					card.Number = card.Number.Substring(card.Number.Length - 1);
+					card.Number = card.Number.Substring(0, card.Number.Length - 1);
 					card.Names = null;
-				}
 
-				if (Str.Equals(card.Layout, "flip"))
-					card.Layout = "normal";
+					if (Str.Equals(card.ImageName, "will kenrith4"))
+						card.ImageName = "will kenrith2";
+					else if (Str.Equals(card.ImageName, "rowan kenrith2"))
+						card.ImageName = "rowan kenrith1";
+					else if (Str.Equals(card.ImageName, "rowan kenrith1"))
+						card.ImageName = "rowan kenrith2";
+
+					if (Str.Equals(card.Layout, "flip"))
+						card.Layout = "normal";
+				}
 			}
 		}
 

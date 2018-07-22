@@ -10,10 +10,17 @@ namespace ScaleUtil
 	{
 		static void Main(string[] args)
 		{
+			if (args.Length < 4 || !int.TryParse(args[3], out var processorCount))
+			{
+				Console.WriteLine("Usage:");
+				string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+				Console.WriteLine($"	{name}.exe <path to waifu2x-converter.exe> <source directory> <target directory> <threads count>");
+				return;
+			}
+
 			string waifuPath = args[0];
 			string sourceDir = args[1];
 			string targetDir = args[2];
-			int processorCount = int.Parse(args[3]);
 
 			scaleDir(sourceDir, targetDir, waifuPath, processorCount);
 		}

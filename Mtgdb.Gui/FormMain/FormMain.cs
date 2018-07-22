@@ -552,29 +552,14 @@ namespace Mtgdb.Gui
 				result.Append(' ');
 				result.Append(_legality.FilterFormat);
 
-				const string allowed = @" +";
-				const string notAllowed = @" -";
-
 				if (_legality.AllowLegal)
-					result.Append(allowed);
-				else
-					result.Append(notAllowed);
-
-				result.Append(Legality.Legal);
+					result.Append(Legality.Legal);
 
 				if (_legality.AllowRestricted)
-					result.Append(allowed);
-				else
-					result.Append(notAllowed);
-
-				result.Append(Legality.Restricted);
+					result.Append(Legality.Restricted);
 
 				if (_legality.AllowBanned)
-					result.Append(allowed);
-				else
-					result.Append(notAllowed);
-
-				result.Append(Legality.Banned);
+					result.Append(Legality.Banned);
 			}
 
 			return result.ToString();

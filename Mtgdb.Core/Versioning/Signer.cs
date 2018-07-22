@@ -10,7 +10,10 @@ namespace Mtgdb
 	{
 		public const string SignaturesFile = "filelist.txt";
 
-		public static IList<FileSignature> CreateSignatures(string path, string pattern = "*.*")
+		public static IList<FileSignature> CreateSignatures(
+			string path,
+			string pattern = "*.*",
+			Dictionary<string, FileSignature> precalculated = null)
 		{
 			var files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories);
 			var result = new List<FileSignature>(files.Length);
@@ -21,11 +24,18 @@ namespace Mtgdb
 					if (Str.Equals(files[i].LastPathSegment(), SignaturesFile))
 						continue;
 
-					result.Add(new FileSignature
+					string relativePath = files[i].Substring(path.Length + 1);
+
+					if (precalculated == null || !precalculated.TryGetValue(relativePath, out var signature))
 					{
-						Path = files[i].Substring(path.Length + 1),
-						Md5Hash = getMd5Hash(md5, File.ReadAllBytes(files[i]))
-					});
+						signature = new FileSignature
+						{
+							Path = relativePath,
+							Md5Hash = getMd5Hash(md5, File.ReadAllBytes(files[i]))
+						};
+					}
+
+					result.Add(signature);
 				}
 
 			return result;

@@ -18,10 +18,8 @@ namespace Mtgdb.Controls
 			_tooltipForm = form;
 		}
 
-		public void SetTooltip(object owner, string title, string tooltip, params Control[] controls)
-		{
+		public void SetTooltip(object owner, string title, string tooltip, params Control[] controls) =>
 			SetTooltip(owner, () => title, () => tooltip, controls);
-		}
 
 		public void SetTooltip(object owner, Func<string> title, Func<string> tooltip, params Control[] controls)
 		{
@@ -249,8 +247,7 @@ namespace Mtgdb.Controls
 
 			var settgins = _staticTooltips[control];
 
-			var locationControl = settgins.Controls[0];
-			if (locationControl == Tooltip.Control)
+			if (control == Tooltip.Control)
 				return;
 
 			if (settgins.IsEmpty)
@@ -258,9 +255,9 @@ namespace Mtgdb.Controls
 			else
 				Tooltip = new TooltipModel
 				{
-					Id = locationControl,
-					Control = locationControl,
-					ObjectBounds = locationControl.ClientRectangle,
+					Id = settgins.Controls[0],
+					Control = control,
+					ObjectBounds = control.ClientRectangle,
 
 					Title = settgins.Title(),
 					Text = settgins.Text()

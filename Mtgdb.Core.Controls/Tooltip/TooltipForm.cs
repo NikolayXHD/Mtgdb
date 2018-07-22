@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -190,24 +189,6 @@ namespace Mtgdb.Controls
 			var cursor = Cursor.Position;
 			var workingArea = Screen.FromPoint(cursor).WorkingArea;
 			var bounds = selectTooltipBounds(size, target, workingArea, cursor);
-			bounds = fitTooltipBounds(bounds, workingArea);
-			return bounds;
-		}
-
-		private static Rectangle fitTooltipBounds(Rectangle bounds, Rectangle workingArea)
-		{
-			if (bounds.Right > workingArea.Right)
-				bounds.X = workingArea.Right - bounds.Width;
-
-			if (bounds.X < workingArea.Left)
-				bounds.X = workingArea.Left;
-
-			if (bounds.Bottom > workingArea.Bottom)
-				bounds.Y = workingArea.Bottom - bounds.Height;
-
-			if (bounds.Y < workingArea.Top)
-				bounds.Y = workingArea.Top;
-
 			return bounds;
 		}
 
@@ -221,102 +202,58 @@ namespace Mtgdb.Controls
 			if (bounds.Height > workingArea.Height)
 				bounds.Height = workingArea.Height;
 
-			var candidates = new List<TooltipPosition>();
+			int atTop = target.Top - size.Height;
+			int atBtm = target.Bottom;
+			int atRht = target.Right;
+			int atLft = target.Left - size.Width;
 
-			Rectangle currentBounds;
+			int byTop = target.Top;
+			int byMid = cursor.Y - size.Height / 2;
+			int byBtm = target.Bottom - size.Height;
 
-			currentBounds = new Rectangle(new Point(target.Left, target.Bottom), size);
-			candidates.Add(new TooltipPosition
+			int byRht = target.Right - size.Width;
+			int byCtr = cursor.X - size.Width / 2;
+			int byLft = target.Left;
+
+			var toBtm = new Point(0, TooltipMargin);
+			var toTop = new Point(0, -TooltipMargin);
+			var toRht = new Point(TooltipMargin, 0);
+			var toLft = new Point(-TooltipMargin, 0);
+
+			var candidates = new List<TooltipPosition>
 			{
-				Bounds = currentBounds,
-				Offset = new Point(0, TooltipMargin),
-				IsNearCursor = target.Bottom - cursor.Y < target.Width,
-				IsAlongCursor = target.Left + size.Width > cursor.X,
-			});
+				new TooltipPosition(size, byLft, atBtm, toBtm),
+				new TooltipPosition(size, byCtr, atBtm, toBtm),
+				new TooltipPosition(size, byRht, atBtm, toBtm),
 
+				new TooltipPosition(size, byLft, atTop, toTop),
+				new TooltipPosition(size, byCtr, atTop, toTop),
+				new TooltipPosition(size, byRht, atTop, toTop),
 
-			currentBounds = new Rectangle(new Point(cursor.X - size.Width / 2, target.Bottom), size);
-			candidates.Add(new TooltipPosition
+				new TooltipPosition(size, atRht, byTop, toRht),
+				new TooltipPosition(size, atRht, byMid, toRht),
+				new TooltipPosition(size, atRht, byBtm, toRht),
+
+				new TooltipPosition(size, atLft, byTop, toLft),
+				new TooltipPosition(size, atLft, byMid, toLft),
+				new TooltipPosition(size, atLft, byBtm, toLft)
+			};
+
+			for (int i = 0; i < candidates.Count; i++)
 			{
-				Bounds = currentBounds,
-				Offset = new Point(0, TooltipMargin),
-				IsNearCursor = target.Bottom - cursor.Y < target.Width,
-				IsAlongCursor = true,
-			});
+				var c = candidates[i];
 
-			currentBounds = new Rectangle(new Point(target.Right, target.Top), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(TooltipMargin, 0),
-				IsNearCursor = target.Right - cursor.X < target.Height,
-				IsAlongCursor = target.Top + size.Height > cursor.Y,
-			});
-
-			currentBounds = new Rectangle(new Point(target.Right, cursor.Y - size.Height / 2), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(TooltipMargin, 0),
-				IsNearCursor = target.Right - cursor.X < target.Height,
-				IsAlongCursor = true,
-			});
-
-			currentBounds = new Rectangle(new Point(target.Left - size.Width, target.Top), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(-TooltipMargin, 0),
-				IsNearCursor = cursor.X - target.Left < target.Height,
-				IsAlongCursor = target.Top + size.Height > cursor.Y,
-			});
-
-			currentBounds = new Rectangle(new Point(target.Left - size.Width, cursor.Y - size.Height / 2), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(-TooltipMargin, 0),
-				IsNearCursor = cursor.X - target.Left < target.Height,
-				IsAlongCursor = true,
-			});
-
-			currentBounds = new Rectangle(new Point(target.Left, target.Top - size.Height), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(0, -TooltipMargin),
-				IsNearCursor = cursor.Y - target.Top < target.Width,
-				IsAlongCursor = target.Left + size.Width > cursor.X,
-			});
-
-			currentBounds = new Rectangle(new Point(cursor.X - size.Width / 2, target.Top - size.Height), size);
-			candidates.Add(new TooltipPosition
-			{
-				Bounds = currentBounds,
-				Offset = new Point(0, -TooltipMargin),
-				IsNearCursor = cursor.Y - target.Top < target.Width,
-				IsAlongCursor = true
-			});
-
-			foreach (var c in candidates)
-			{
-				c.IsWithinScreen = workingArea.Contains(c.Bounds);
+				c.Bounds = c.Bounds.OffsetInto(workingArea);
 				c.IntersectsTarget = target.IntersectsWith(c.Bounds);
+				c.DistanceToCursor = cursor.Minus(c.Bounds.Center()).SquareNorm();
 			}
 
 			var candidate = candidates
-				.OrderByDescending(_ => _.IsAlongCursor && !_.IntersectsTarget)
-				.ThenByDescending(_=>_.IsAlongCursor)
-				.ThenByDescending(_=>_.IntersectsTarget)
-				.ThenByDescending(_ => _.IsNearCursor && _.IsWithinScreen)
-				.ThenByDescending(_ => _.IsWithinScreen)
-				.ThenByDescending(_ => _.IsNearCursor)
-				.First();
+				.AtMin(_ => _.IntersectsTarget)
+				.ThenAtMin(_ => _.DistanceToCursor)
+				.Find();
 
-			var rectangle = candidate.Bounds;
-			rectangle.Offset(candidate.Offset);
-
-			return rectangle;
+			return candidate.Bounds;
 		}
 
 		private Size measureTooltip(TooltipModel tooltip)
@@ -459,7 +396,7 @@ namespace Mtgdb.Controls
 
 		public bool Clickable
 		{
-			get { return _clickable; }
+			get => _clickable;
 
 			private set
 			{
@@ -478,13 +415,15 @@ namespace Mtgdb.Controls
 
 		private class TooltipPosition
 		{
-			public Rectangle Bounds { get; set; }
-			public Point Offset { get; set; }
+			public TooltipPosition(Size size, int left, int top, Point offset)
+			{
+				Bounds = new Rectangle(left + offset.X, top + offset.Y, size.Width, size.Height);
+			}
 
-			public bool IsNearCursor { get; set; }
-			public bool IsAlongCursor { get; set; }
-			public bool IsWithinScreen { get; set; }
-			public bool IntersectsTarget {get; set; }
+			public Rectangle Bounds { get; set; }
+
+			public float DistanceToCursor { get; set; }
+			public bool IntersectsTarget { get; set; }
 		}
 	}
 }

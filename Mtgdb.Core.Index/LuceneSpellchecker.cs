@@ -13,7 +13,7 @@ namespace Mtgdb.Index
 		protected LuceneSpellchecker(IDocumentAdapter<TId, TDoc> adapter)
 		{
 			_adapter = adapter;
-			MaxCount = 20;
+			MaxCount = 25;
 
 			_userFields = _adapter.GetUserFields()
 				.Select(f => f + ":")
@@ -194,7 +194,7 @@ namespace Mtgdb.Index
 		}
 
 		protected SpellcheckerState<TId, TDoc> CreateState(DirectoryReader reader, Spellchecker spellchecker, bool loaded) =>
-			new SpellcheckerState<TId, TDoc>(spellchecker, reader, _adapter, MaxCount, GetObjectsToIndex, loaded);
+			new SpellcheckerState<TId, TDoc>(spellchecker, reader, _adapter, () => MaxCount, GetObjectsToIndex, loaded);
 
 		protected abstract IEnumerable<TDoc> GetObjectsToIndex();
 

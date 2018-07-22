@@ -11,8 +11,8 @@ namespace Mtgdb.Dal
 {
 	public class KeywordSearcher
 	{
-		// 0.39 bbd
-		private const string IndexVerision = "0.39";
+		// Core M19
+		private const string IndexVerision = "0.41";
 
 		public KeywordSearcher(CardRepository repo)
 		{
@@ -85,7 +85,7 @@ namespace Mtgdb.Dal
 						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(andValue))
-							query.Add(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST_NOT);
+							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT);
 						else
 							query.Add(new TermQuery(new Term(fieldName, andValue.ToLower(Str.Culture))), Occur.MUST);
 					}
@@ -97,7 +97,7 @@ namespace Mtgdb.Dal
 						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(notValue))
-							query.Add(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST);
+							query.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST);
 						else
 							query.Add(new TermQuery(new Term(fieldName, notValue.ToLower(Str.Culture))), Occur.MUST_NOT);
 					}
@@ -111,19 +111,18 @@ namespace Mtgdb.Dal
 						string fieldName = keywordQueryTerm.FieldName.ToLower(Str.Culture);
 
 						if (string.IsNullOrEmpty(orValue))
-						{
-							var booleanQuery = new BooleanQuery();
-							booleanQuery.Add(new BooleanClause(new WildcardQuery(new Term(fieldName, CardQueryParser.AnyValue)), Occur.MUST_NOT));
-							queryTermOr.Add(booleanQuery, Occur.SHOULD);
-						}
+							queryTermOr.Add(new WildcardQuery(new Term(fieldName, MtgQueryParser.AnyValue)), Occur.MUST_NOT);
 						else
 							queryTermOr.Add(new TermQuery(new Term(fieldName, orValue.ToLower(Str.Culture))), Occur.SHOULD);
 					}
 
+					if (queryTermOr.Clauses.All(_ => _.IsProhibited))
+						queryTermOr.Add(new MatchAllDocsQuery(), Occur.SHOULD);
+
 					query.Add(queryTermOr, Occur.MUST);
 				}
 
-			if (query.Clauses.All(_ => _.IsProhibited))
+			if (query.Clauses.Count > 0 && query.Clauses.All(_ => _.IsProhibited))
 				query.Add(new MatchAllDocsQuery(), Occur.SHOULD);
 
 			return query;

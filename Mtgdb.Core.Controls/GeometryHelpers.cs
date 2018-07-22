@@ -247,6 +247,29 @@ namespace Mtgdb.Controls
 			return desiredLocation;
 		}
 
+		public static Rectangle OffsetInto(this Rectangle bounds, Rectangle target)
+		{
+			if (bounds.Right > target.Right)
+				bounds.X = target.Right - bounds.Width;
+
+			if (bounds.X < target.Left)
+				bounds.X = target.Left;
+
+			if (bounds.Bottom > target.Bottom)
+				bounds.Y = target.Bottom - bounds.Height;
+
+			if (bounds.Y < target.Top)
+				bounds.Y = target.Top;
+
+			return bounds;
+		}
+
+		public static float SquareNorm(this Point point) =>
+			point.X * point.X + point.Y * point.Y;
+
+		public static Point Center(this Rectangle rect) =>
+			new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+
 		public static Rectangle Round(this RectangleF rect)
 		{
 			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));

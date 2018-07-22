@@ -238,6 +238,12 @@ namespace Mtgdb.Gui
 						.Append(nameof(Card.Number)).Append(": ")
 						.Append(card.Number);
 
+				if (!string.IsNullOrEmpty(card.ImageName))
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.ImageName)).Append(": ")
+						.Append(card.ImageName);
+
 				if (additionalFields.Length > 0)
 					text
 						.AppendLine()

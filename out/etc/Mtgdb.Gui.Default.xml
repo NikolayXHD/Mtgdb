@@ -27,7 +27,7 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1bdRQRiQxHZQU0TDgbBGhb9rHYM79E_Mj" >
-
+			<Dir Subdir="M19"        GdriveId="139z8rZvgjVjYOMQ0kR0cxe7wpsL4GQAF" />
 			<Dir Subdir="BBD"        GdriveId="1Lc8yGbKIkFZPJQxjgml--PfpnPHae2i3" />
 			<Dir Subdir="CM2"        GdriveId="1aAzvTN11sqH9ue8XBphrNUqaW0dDdTEt" />
 			<Dir Subdir="GS1"        GdriveId="1a-STBNhO9eQtPiA2RkCxmFjqAZZbUAFW" />
@@ -259,7 +259,7 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1AXQgeGrshNEJVFUTwjE8N5cIsrzRncbW">
-
+			<Dir Subdir="M19"        GdriveId="1KpxBr-s4VPntBKa18GrnkmzKBkyJIoFu" />
 			<Dir Subdir="BBD"        GdriveId="1ChSaIKgL1zvOs41uyluKxhgE5HC-6AHt" />
 			<Dir Subdir="CM2"        GdriveId="1lfgRxM-8D8oMAQa_bQDt5Gmnzjsb68Ud" />
 			<Dir Subdir="GS1"        GdriveId="1oA-gB_vWc5jbYP7Gb7Zoz9_pi80Niw2q" />

@@ -181,6 +181,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Types:я■")]
 		// toughness
 		[TestCase(EnRu, "Toughness:■", "*", "*²", "+0", "+1", "0", "-0", "½", "1", "1½")]
+		[TestCase(EnRu, "Toughness:\\*■", "*", "1+*", "*²", "2+*")]
 		[TestCase(EnRu, "Toughness:1■", "1", "1+*", "10", "1½", "11", "13", "+1", "-1")]
 		[TestCase(EnRu, "Toughness:9■", "9", "99")]
 		[TestCase(EnRu, "Toughness:я■")]

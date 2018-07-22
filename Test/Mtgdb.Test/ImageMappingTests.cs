@@ -66,14 +66,22 @@ namespace Mtgdb.Test
 		[TestCase("UST", XlhqDir, "UST - Unstable\\300DPI Cards")]
 		[TestCase("CED", XlhqDir, "CED - Collectors' Edition\\300DPI")]
 		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
+
+		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
 		[TestCase("CMA", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
 		[TestCase("DDT", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
+		[TestCase("DDU", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
 		[TestCase("E02", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
 		[TestCase("RIX", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
 		[TestCase("V17", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
-		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
-		[TestCase("DDU", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
-		[TestCase("DOM", GathererDir, "DOM")]
+
+		[TestCase("BBD", XlhqDir, "BBD - Battlebond\\300DPI Cards")]
+		[TestCase("DOM", XlhqDir, "DOM - Dominaria\\300DPI Cards")]
+		[TestCase("GS1", XlhqDir, "GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
+		[TestCase("M19", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
+		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
+
+		[TestCase("CM2", GathererDir, "CM2")]
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs

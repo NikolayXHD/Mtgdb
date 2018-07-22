@@ -597,7 +597,10 @@ namespace Mtgdb.Gui
 		{
 			_layoutRight.Visible =
 				_panelFilters.Visible =
-					_panelMenu.Visible = _formRoot.ShowFilterPanels;
+					_panelMenu.Visible =
+						_buttonHideScrollCards.Visible =
+							_labelStatusScrollCards.Visible =
+						_formRoot.ShowFilterPanels;
 		}
 
 		private void languageChanged()
