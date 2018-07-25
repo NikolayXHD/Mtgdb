@@ -4,7 +4,7 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {
-	public class DeckSearchSubsystem : SearchSubsystem<int, DeckModel>
+	public class DeckSearchSubsystem : SearchSubsystem<long, DeckModel>
 	{
 		public DeckSearchSubsystem(
 			Control parent,
@@ -31,7 +31,7 @@ namespace Mtgdb.Controls
 		protected override IntellisenseSuggest CycleValue(TextInputState currentState, bool backward) =>
 			((DeckSearcher) Searcher).CycleValue(currentState, backward);
 
-		protected override SearchResult<int> Search(string query) =>
+		protected override SearchResult<long> Search(string query) =>
 			((DeckSearcher) Searcher).Search(query);
 
 		public bool IsLoaded =>

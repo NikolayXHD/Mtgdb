@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Dal;
@@ -13,6 +14,9 @@ namespace Mtgdb.Gui
 
 		public void Transform(Deck deck)
 		{
+			if (!_repo.IsLoadingComplete)
+				throw new InvalidOperationException();
+
 			var cardIds = new HashSet<string>();
 			cardIds.UnionWith(deck.MainDeck.Order);
 			cardIds.UnionWith(deck.Sideboard.Order);

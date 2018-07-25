@@ -440,11 +440,14 @@ namespace Mtgdb.Gui
 			if (!_deckListControl.IsSearcherLoaded)
 				return "deck list: loading index…";
 
+			if (_deckListControl.IsTransformingDecks)
+				return $"deck list: transforming {_deckListControl.DecksTransformedCount}/{_deckListControl.DecksToTransformCount}…";
+
 			if (_deckListControl.IsSearcherUpdating)
 				return $"deck list: {_deckListControl.FilteredDecksCount}, updating index…";
 
 			if (_deckListControl.IsAddingDecks)
-				return $"deck list: {_deckListControl.FilteredDecksCount}, adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}…";
+				return $"deck list: adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}…";
 
 			return $"deck list: {_deckListControl.FilteredDecksCount}";
 		}

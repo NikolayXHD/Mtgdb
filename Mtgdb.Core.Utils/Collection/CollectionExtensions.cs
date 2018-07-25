@@ -208,5 +208,32 @@ namespace Mtgdb
 
 			return -1;
 		}
+
+		public static MultiDictionary<TKey, TSource> ToMultiDictionary<TKey, TSource>(
+			this IEnumerable<TSource> vals,
+			Func<TSource, TKey> keySelector,
+			IEqualityComparer<TKey> keyComparer = null,
+			IEqualityComparer<TSource> valComparer = null) =>
+			ToMultiDictionary(vals, keySelector, val => val, keyComparer, valComparer);
+
+		public static MultiDictionary<TKey, TVal> ToMultiDictionary<TKey, TVal, TSource>(
+			this IEnumerable<TSource> vals,
+			Func<TSource, TKey> keySelector,
+			Func<TSource, TVal> valSelector,
+			IEqualityComparer<TKey> keyComparer = null,
+			IEqualityComparer<TVal> valComparer = null)
+		{
+			var result = new MultiDictionary<TKey, TVal>(keyComparer, valComparer);
+
+			foreach (var srcVal in vals)
+			{
+				var key = keySelector(srcVal);
+				var val = valSelector(srcVal);
+
+				result.Add(key, val);
+			}
+
+			return result;
+		}
 	}
 }

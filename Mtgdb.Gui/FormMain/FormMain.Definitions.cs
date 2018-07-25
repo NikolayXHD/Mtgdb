@@ -30,7 +30,6 @@ namespace Mtgdb.Gui
 			DeckDocumentAdapter deckAdapter,
 			KeywordSearcher keywordSearcher,
 			DeckListModel deckListModel,
-			UiModelSnapshotFactory uiFactory,
 			DeckSearcher deckSearcher,
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
@@ -163,12 +162,11 @@ namespace Mtgdb.Gui
 				{ 1, evalFilterBySearchText }
 			};
 
-			_deckListControl.Init(
-				deckListModel,
+			_deckListControl.Init(deckListModel,
 				iconRecognizer,
 				deckSearcher,
 				deckAdapter,
-				uiFactory,
+				collectionEditor,
 				deckListUpdate,
 				this);
 
@@ -401,6 +399,7 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckRenamed += deckListRenamedDeck;
 			_deckListControl.FilterByDeckModeChanged += filterByDeckModeChanged;
 			_deckListControl.DeckAdded += deckListAdded;
+			_deckListControl.DeckTransformed += deckListTransformed;
 		}
 
 		private void unsubscribeFromEvents()
@@ -481,6 +480,7 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckRenamed -= deckListRenamedDeck;
 			_deckListControl.FilterByDeckModeChanged -= filterByDeckModeChanged;
 			_deckListControl.DeckAdded -= deckListAdded;
+			_deckListControl.DeckTransformed += deckListTransformed;
 		}
 
 		public Zone? DeckZone

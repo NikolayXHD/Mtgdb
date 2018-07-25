@@ -137,7 +137,6 @@ namespace Mtgdb.Gui
 			UiModel = uiModel;
 
 			DeckSuggestModel = deckSuggestModel;
-			DeckSuggestModel.Ui = UiModel;
 
 			CardSuggestModel = cardSuggestModel;
 			CardSuggestModel.Ui = UiModel;

@@ -7,14 +7,14 @@ namespace Mtgdb.Controls
 	public class DeckAggregateCache<TVal, TAggr, TResult>
 	{
 		public DeckAggregateCache(
-			Func<UiModel> ui,
+			CardRepository repo,
 			Func<Deck> deck,
 			Func<TAggr> aggregationSeed,
 			Func<TAggr, TVal, TAggr> add,
 			Func<Card, int, TVal> value,
 			Func<TAggr, TResult> transform)
 		{
-			_ui = ui;
+			_repo = repo;
 			_deck = deck;
 			_aggregationSeed = aggregationSeed;
 			_add = add;
@@ -38,7 +38,7 @@ namespace Mtgdb.Controls
 			{
 				var id = pair.Key;
 
-				if (!_ui().CardRepo.CardsById.TryGetValue(id, out var card))
+				if (!_repo.CardsById.TryGetValue(id, out var card))
 					continue;
 
 				if (!filter(card))
@@ -58,7 +58,7 @@ namespace Mtgdb.Controls
 		private readonly Dictionary<(Zone Zone, Func<Card, bool> Filter), TResult> _cache =
 			new Dictionary<(Zone Zone, Func<Card, bool> Filter), TResult>();
 
-		private readonly Func<UiModel> _ui;
+		private readonly CardRepository _repo;
 		private readonly Func<Deck> _deck;
 		private readonly Func<TAggr> _aggregationSeed;
 		private readonly Func<TAggr, TVal, TAggr> _add;

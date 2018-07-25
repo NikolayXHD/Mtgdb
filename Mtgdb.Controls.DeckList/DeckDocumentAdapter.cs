@@ -8,7 +8,7 @@ using Mtgdb.Index;
 
 namespace Mtgdb.Controls
 {
-	public class DeckDocumentAdapter : IDocumentAdapter<int, DeckModel>
+	public class DeckDocumentAdapter : IDocumentAdapter<long, DeckModel>
 	{
 		[UsedImplicitly]
 		public DeckDocumentAdapter()
@@ -55,8 +55,8 @@ namespace Mtgdb.Controls
 		public IEnumerable<string> GetSpellcheckerValues(DeckModel obj, string userField, string language) =>
 			_spellcheckerValues[userField](obj);
 
-		public int GetId(Document doc) => 
-			int.Parse(doc.Get(nameof(DeckModel.Id).ToLower(Str.Culture)));
+		public long GetId(Document doc) => 
+			long.Parse(doc.Get(nameof(DeckModel.Id).ToLower(Str.Culture)));
 
 		public Document ToDocument(DeckModel deck)
 		{
@@ -148,13 +148,13 @@ namespace Mtgdb.Controls
 		public QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
 			new DeckQueryParser((MtgAnalyzer) analyzer, this);
 
-		private static void addIdField(Document doc, string fieldName, int fieldValue)
+		private static void addIdField(Document doc, string fieldName, long fieldValue)
 		{
 			fieldName = fieldName.ToLower(Str.Culture);
 
-			var field = new Int32Field(fieldName,
+			var field = new Int64Field(fieldName,
 				fieldValue,
-				new FieldType(Int32Field.TYPE_STORED)
+				new FieldType(Int64Field.TYPE_STORED)
 				{
 					IsIndexed = false
 				});

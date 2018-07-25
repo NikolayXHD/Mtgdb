@@ -151,9 +151,9 @@ namespace Mtgdb.Ui
 			if (_sortedDocsByDefaultSort.TryGetValue(defaultSort, out var result))
 				return result;
 
-			var cards = GetDocuments();
+			var docs = GetDocuments();
 
-			result = new List<TDoc>(sort(cards, SortInfo, defaultSort: defaultSort));
+			result = new List<TDoc>(sort(docs, SortInfo, defaultSort: defaultSort));
 			_sortedDocsByDefaultSort.Add(defaultSort, result);
 
 			return result;

@@ -10,6 +10,7 @@ using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Index;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

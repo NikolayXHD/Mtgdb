@@ -1,19 +1,40 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Ui
 {
 	public class CollectionSnapshot : ICardCollection
 	{
-		public CollectionSnapshot(CollectionEditorModel original) =>
-			_countById = original.CountById.ToDictionary(Str.Comparer);
-
-		public int GetCount(Card c)
+		[UsedImplicitly] // when deserializing
+		public CollectionSnapshot()
 		{
-			_countById.TryGetValue(c.Id, out int count);
-			return count;
 		}
 
-		private readonly Dictionary<string, int> _countById;
+		public CollectionSnapshot(CollectionEditorModel original) =>
+			CountById = original.CountById.ToDictionary(Str.Comparer);
+
+		public int GetCount(Card c) =>
+			CountById.TryGet(c.Id);
+
+		public HashSet<string> GetAffectedCardIds(CollectionSnapshot previousSnapshot)
+		{
+			if (previousSnapshot == null)
+				return CountById.Keys.ToHashSet(Str.Comparer);
+
+			var result = new HashSet<string>(Str.Comparer);
+
+			foreach (var currentPair in CountById)
+				if (!previousSnapshot.CountById.TryGetValue(currentPair.Key, out var previousCount) || previousCount != currentPair.Value)
+					result.Add(currentPair.Key);
+
+			foreach (var oldPair in previousSnapshot.CountById)
+				if (!CountById.TryGetValue(oldPair.Key, out var currentCount) || currentCount != oldPair.Value)
+					result.Add(oldPair.Key);
+
+			return result;
+		}
+
+		public Dictionary<string, int> CountById { get; set; }
 	}
 }

@@ -336,6 +336,12 @@ namespace Mtgdb.Gui
 				this.Invoke(updateFormStatus);
 		}
 
+		private void deckListTransformed(object sender)
+		{
+			if (_deckListControl.DecksTransformedCount % 89 == 0)
+				this.Invoke(updateFormStatus);
+		}
+
 		private void updateFilterByDeckMode()
 		{
 			if (isFilterGroupEnabled(FilterGroup.Deck))
@@ -471,15 +477,15 @@ namespace Mtgdb.Gui
 				updateFormStatus();
 		}
 
-		private void collectionChanged(bool listChanged, bool countChanged, Card card, bool touchedChanged, Zone? zone, bool changeTerminatesBatch)
+		private void collectionChanged(bool listChanged, bool countChanged, Card card)
 		{
-			updateViewCards(listChanged, card, FilterGroup.Collection, touchedChanged);
+			updateViewCards(listChanged, card, FilterGroup.Collection, touchedChanged: false);
 
 			updateViewDeck(
 				listChanged: false,
 				countChanged: true,
 				card: card,
-				touchedChanged: touchedChanged);
+				touchedChanged: false);
 
 			if (!_isTabSelected)
 				return;

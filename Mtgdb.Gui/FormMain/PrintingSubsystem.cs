@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

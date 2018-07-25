@@ -6,7 +6,7 @@ namespace Mtgdb.Ui
 {
 	public class CollectionEditorModel : ICardCollection
 	{
-		public event DeckChangedEventHandler CollectionChanged;
+		public event CollectionChangedEventHandler CollectionChanged;
 
 		public void LoadCollection(Deck deck, bool append)
 		{
@@ -24,13 +24,7 @@ namespace Mtgdb.Ui
 
 			CountById = modified;
 
-			CollectionChanged?.Invoke(
-				listChanged: true,
-				countChanged: true,
-				touchedChanged: false,
-				card: null,
-				changedZone: null,
-				changeTerminatesBatch: true);
+			CollectionChanged?.Invoke(listChanged: true, countChanged: true, card: null);
 		}
 
 		public void Add(Card card, int increment)
@@ -49,13 +43,7 @@ namespace Mtgdb.Ui
 			bool listChanged = countBefore == 0 || GetCount(card) == 0;
 			bool countChanged = countBefore != GetCount(card);
 
-			CollectionChanged?.Invoke(
-				listChanged,
-				countChanged,
-				card,
-				touchedChanged: false,
-				changedZone: null,
-				changeTerminatesBatch: true);
+			CollectionChanged?.Invoke(listChanged, countChanged, card);
 		}
 
 		private void remove(Card card, int newCount)
@@ -71,11 +59,8 @@ namespace Mtgdb.Ui
 			CountById[card.Id] = newCount;
 		}
 
-		public int GetCount(Card c)
-		{
-			CountById.TryGetValue(c.Id, out int count);
-			return count;
-		}
+		public int GetCount(Card c) =>
+			CountById.TryGet(c.Id);
 
 		public int CollectionSize
 		{

@@ -8,12 +8,12 @@ namespace Mtgdb.Controls
 {
 	public class DeckModel
 	{
-		public DeckModel(Deck deck, UiModel ui)
+		public DeckModel(Deck deck, CardRepository repo, ICardCollection collection, IDeckTransformation transformation)
 		{
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
-			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, c.CollectionCount(Ui));
-			int countCollectedSide(Card c, int countInDeck) => (c.CollectionCount(Ui) - countInMain(c)).WithinRange(0, countInDeck);
+			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, _collection.GetCount(c));
+			int countCollectedSide(Card c, int countInDeck) => (_collection.GetCount(c) - countInMain(c)).WithinRange(0, countInDeck);
 
 			float priceTotal(Card c, int countInDeck) => countInDeck * (c.PriceMid ?? 0f);
 			float priceCollected(Card c, int countInDeck) => countCollected(c, countInDeck) * (c.PriceMid ?? 0f);
@@ -22,7 +22,7 @@ namespace Mtgdb.Controls
 			IList<string> generatedMana(Card c, int countInDeck) => c.GeneratedManaArr;
 
 			_priceTotalCache = new DeckAggregateCache<float, float, float>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0f,
 				(a, b) => a + b,
@@ -30,7 +30,7 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_countTotalCache = new DeckAggregateCache<int, int, int>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0,
 				(a, b) => a + b,
@@ -38,7 +38,7 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_priceCollectedCache = new DeckAggregateCache<float, float, float>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0f,
 				(a, b) => a + b,
@@ -46,7 +46,7 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_countCollectedCache = new DeckAggregateCache<int, int, int>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0,
 				(a, b) => a + b,
@@ -54,7 +54,7 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_priceCollectedSideCache = new DeckAggregateCache<float, float, float>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0f,
 				(a, b) => a + b,
@@ -62,7 +62,7 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_countCollectedSideCache = new DeckAggregateCache<int, int, int>(
-				() => Ui,
+				repo,
 				() => Deck,
 				() => 0,
 				(a, b) => a + b,
@@ -70,8 +70,8 @@ namespace Mtgdb.Controls
 				a => a);
 
 			_generatedManaCache = new DeckAggregateCache<IList<string>, Dictionary<string, int>, string>(
-				() => Ui,
-				() => Deck,
+				repo,
+				() => OriginalDeck,
 				() => new Dictionary<string, int>(Str.Comparer),
 				(a, b) =>
 				{
@@ -98,18 +98,20 @@ namespace Mtgdb.Controls
 			_filterIsCreatureAndPriceIsUnknown = c => _filterIsCreature(c) && _filterPriceIsUnknown(c);
 			_filterIsOtherSpellAndPriceIsUnknown = c => _filterIsOtherSpell(c) && _filterPriceIsUnknown(c);
 
-			_deck = deck;
-			Ui = ui;
+			_collection = collection;
+			_repo = repo;
+			_transformation = transformation;
+			OriginalDeck = deck;
 		}
 
-		public void Invalidate()
+		private void clearCaches()
 		{
 			_priceCollectedCache?.Clear();
 			_countCollectedCache?.Clear();
-			
+
 			_priceCollectedSideCache?.Clear();
 			_countCollectedSideCache?.Clear();
-			
+
 			_priceTotalCache?.Clear();
 			_countTotalCache?.Clear();
 
@@ -119,7 +121,11 @@ namespace Mtgdb.Controls
 
 		public bool IsCurrent { get; set; }
 
-		public string Name => Deck.Name;
+		public string Name
+		{
+			get => OriginalDeck.Name;
+			set => OriginalDeck.Name = value;
+		}
 
 		public string Mana =>
 			_generatedManaCache.GetAggregate(Zone.Main, _filterNone);
@@ -226,17 +232,17 @@ namespace Mtgdb.Controls
 				if (_legalFormatsCache != null)
 					return _legalFormatsCache;
 
-				if (!Ui.CardRepo.IsLoadingComplete)
+				if (!_repo.IsLoadingComplete)
 					return ReadOnlyList.Empty<string>();
 
 				bool isAllowedIn(string format, string id, int count)
 				{
-					var c = Ui.CardRepo.CardsById[id];
+					var c = _repo.CardsById[id];
 					return c.IsLegalIn(format) || c.IsRestrictedIn(format) && count <= 1;
 				}
 
 				_legalFormatsCache = Legality.Formats
-					.Where(format => Deck.MainDeck.Count
+					.Where(format => OriginalDeck.MainDeck.Count
 						.All(_ => isAllowedIn(format, id: _.Key, count: _.Value)))
 					.ToReadOnlyList();
 
@@ -244,41 +250,75 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public int Id
+		public long Id
 		{
-			get => _deck.Id;
-			set => _deck.Id = value;
+			get => OriginalDeck.Id;
+			set => OriginalDeck.Id = value;
 		}
 
 		public DateTime? Saved
 		{
-			get => _deck.Saved;
-			set => _deck.Saved = value;
+			get => OriginalDeck.Saved;
+			set => OriginalDeck.Saved = value;
 		}
 
 
-
-		public UiModel Ui
+		public ICardCollection Collection
 		{
-			get => _ui;
+			get => _collection;
 			set
 			{
-				_ui = value;
-				Invalidate();
+				_collection = value;
+				_isDeckUpToDate = false;
 			}
 		}
 
 		public Deck Deck
 		{
-			get => _deck;
-			set
+			get
 			{
-				_deck = value;
-				Invalidate();
+				UpdateTransformedDeck();
+				return _deck;
 			}
 		}
 
+		public void ResetTransformedDeck()
+		{
+			_isDeckUpToDate = false;
+			clearCaches();
+		}
 
+		public void UpdateTransformedDeck()
+		{
+			lock (_sync)
+			{
+				if (_isDeckUpToDate)
+					return;
+
+				var prevValue = _deck;
+				var newValue = _transformation?.Transform(OriginalDeck, _collection) ?? OriginalDeck;
+
+				if (prevValue == null || !prevValue.IsEquivalentTo(newValue))
+				{
+					_deck = _transformation?.Transform(OriginalDeck, _collection) ?? OriginalDeck;
+					clearCaches();
+				}
+
+				_isDeckUpToDate = true;
+			}
+		}
+
+		public bool MayContainCardNames(HashSet<string> cardNameEns)
+		{
+			if (_cardNames == null)
+				return true;
+
+			var result = _cardNames.Overlaps(cardNameEns);
+			return result;
+		}
+
+		public bool IsEquivalentTo(Deck other) =>
+			OriginalDeck.IsEquivalentTo(other);
 
 		private readonly Func<Card, bool> _filterNone;
 		private readonly Func<Card, bool> _filterPriceIsUnknown;
@@ -299,7 +339,37 @@ namespace Mtgdb.Controls
 
 		private IReadOnlyList<string> _legalFormatsCache;
 
-		private UiModel _ui;
+		private ICardCollection _collection;
+
+		public Deck OriginalDeck
+		{
+			get => _originalDeck;
+			set
+			{
+				_originalDeck = value;
+
+				ResetTransformedDeck();
+
+				bool isRepoLoaded = _repo.IsLoadingComplete;
+				if (_cardNames == null && isRepoLoaded)
+					_cardNames = new HashSet<string>(Str.Comparer);
+
+				if (!isRepoLoaded)
+					return;
+
+				_cardNames.Clear();
+				_cardNames.UnionWith(value.MainDeck.Order.Select(_ => _repo.CardsById[_].NameEn));
+				_cardNames.UnionWith(value.Sideboard.Order.Select(_ => _repo.CardsById[_].NameEn));
+			}
+		}
+
+		private readonly CardRepository _repo;
+		private readonly IDeckTransformation _transformation;
+
+		private bool _isDeckUpToDate;
 		private Deck _deck;
+		private HashSet<string> _cardNames;
+		private readonly object _sync = new object();
+		private Deck _originalDeck;
 	}
 }

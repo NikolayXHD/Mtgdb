@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Collection\ExtremumFinderFactory.cs" />
     <Compile Include="Collection\ExtremumFinder.cs" />
+    <Compile Include="Collection\MultiDictionary.cs" />
     <Compile Include="String\ArgsExt.cs" />
     <Compile Include="Collection\Array.cs" />
     <Compile Include="Collection\BinarySearch.cs" />

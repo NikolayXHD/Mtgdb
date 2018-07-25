@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Dal;
+using Mtgdb.Gui;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public class DeckEditorModel : ICardCollection
 	{

@@ -7,7 +7,7 @@ using Mtgdb.Index;
 
 namespace Mtgdb.Controls
 {
-	public class DeckSpellchecker : LuceneSpellchecker<int, DeckModel>
+	public class DeckSpellchecker : LuceneSpellchecker<long, DeckModel>
 	{
 		private const string IndexVerision = "0";
 

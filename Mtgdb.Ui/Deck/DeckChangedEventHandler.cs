@@ -1,4 +1,6 @@
-namespace Mtgdb.Dal
+using Mtgdb.Dal;
+
+namespace Mtgdb.Ui
 {
 	public delegate void DeckChangedEventHandler(
 		bool listChanged,

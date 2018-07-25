@@ -118,7 +118,7 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public int Id { get; set; }
+		public long Id { get; set; }
 		public string Name { get; set; }
 		public string File { get; set; }
 		public string Error { get; set; }

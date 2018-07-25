@@ -9,20 +9,19 @@ using Mtgdb.Index;
 
 namespace Mtgdb.Controls
 {
-	public class DeckSearcher : LuceneSearcher<int, DeckModel>
+	public class DeckSearcher : LuceneSearcher<long, DeckModel>
 	{
 		private const string IndexVerision = "0";
 
 		[UsedImplicitly]
 		public DeckSearcher(
-			DeckListAsnycUpdateSubsystem updateSubsystem,
+			DeckListModel deckListModel,
 			DeckSpellchecker spellchecker,
 			DeckDocumentAdapter adapter)
 			: base(spellchecker, adapter)
 		{
-			_updateSubsystem = updateSubsystem;
-			_updateSubsystem.HandleModelsUpdated += handleModelsUpdated;
-
+			_deckListModel = deckListModel;
+			_deckListModel.HandleModelsUpdated += handleModelsUpdated;
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("search");
 		}
 
@@ -32,7 +31,7 @@ namespace Mtgdb.Controls
 			return () => Sequence.From(models.Select(Adapter.ToDocument));
 		}
 
-		public SearchResult<int> Search(string query) =>
+		public SearchResult<long> Search(string query) =>
 			Search(query, language: null);
 
 		public IntellisenseSuggest Suggest(TextInputState searchState) =>
@@ -41,15 +40,15 @@ namespace Mtgdb.Controls
 		public IntellisenseSuggest CycleValue(TextInputState input, bool backward) =>
 			((DeckSpellchecker) Spellchecker).CycleValue(input, backward, language: null);
 
-		protected override Directory CreateIndex(SearcherState<int, DeckModel> state)
+		protected override Directory CreateIndex(SearcherState<long, DeckModel> state)
 		{
 			Directory index;
 
 			if (!_indexCreated)
 			{
-				var models = _updateSubsystem.GetModels();
-
+				var models = _deckListModel.GetModels();
 				_models = models;
+
 				((DeckSpellchecker) Spellchecker).Models = models;
 
 				if (_version.IsUpToDate)
@@ -103,7 +102,7 @@ namespace Mtgdb.Controls
 
 		public bool IsUpdating { get; private set; }
 
-		private readonly DeckListAsnycUpdateSubsystem _updateSubsystem;
+		private readonly DeckListModel _deckListModel;
 		private static readonly object _syncDirectory = new object();
 	}
 }

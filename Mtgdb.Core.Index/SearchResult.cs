@@ -3,7 +3,7 @@ using Lucene.Net.Contrib;
 
 namespace Mtgdb.Index
 {
-	public class SearchResult<TId>
+	public class SearchResult<TId> : ISearchResultBase
 	{
 		public SearchResult(
 			string query,

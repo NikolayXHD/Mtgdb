@@ -61,7 +61,9 @@
     <Compile Include="IDocumentAdapterBase.cs" />
     <Compile Include="IndexUtils.cs" />
     <Compile Include="IntellisenseSuggest.cs" />
+    <Compile Include="ISearchResultBase.cs" />
     <Compile Include="ISearchSubsystem.cs" />
+    <Compile Include="ISearchSubsystemBase.cs" />
     <Compile Include="LuceneSearcher.cs" />
     <Compile Include="LuceneSpellchecker.cs" />
     <Compile Include="LuceneSpellcheckerConstants.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="SearchResult.cs" />
     <Compile Include="SearchResultHighlight\IKeywordHighlighter.cs" />
     <Compile Include="SearchResultHighlight\KnutMorrisPrattSubstringSearch.cs" />
+    <Compile Include="SearchResultHighlight\RegexCache.cs" />
     <Compile Include="SearchResultHighlight\SearchResultHighlighter.cs" />
     <Compile Include="Spellchecker.cs" />
     <Compile Include="SpellcheckerState.cs" />

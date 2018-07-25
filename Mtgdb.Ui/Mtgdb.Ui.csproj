@@ -50,13 +50,13 @@
   <ItemGroup>
     <Compile Include="Collection\CollectionEditorModel.cs" />
     <Compile Include="Collection\CollectionSnapshot.cs" />
+    <Compile Include="Deck\CollectionChangedEventHandler.cs" />
     <Compile Include="Deck\Deck.cs" />
     <Compile Include="Deck\DeckChangedEventHandler.cs" />
     <Compile Include="Deck\DeckEditorModel.cs" />
     <Compile Include="Deck\DeckZone.cs" />
     <Compile Include="Deck\DeckZoneModel.cs" />
     <Compile Include="Deck\Zone.cs" />
-    <Compile Include="Search\UiModelSnapshotFactory.cs" />
     <Compile Include="Deck\DeckSnapshot.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="FieldsExtension.cs" />

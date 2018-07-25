@@ -12,7 +12,7 @@ namespace Mtgdb.Index
 	public class SearchResultHighlighter
 	{
 		public SearchResultHighlighter(
-			ISearchSubsystem<int> searchSubsystem,
+			ISearchSubsystemBase searchSubsystem,
 			IDocumentAdapterBase adapter,
 			IKeywordHighlighter keywordHighlighter)
 		{
@@ -82,7 +82,7 @@ namespace Mtgdb.Index
 			List<TextRange> contextMatches,
 			string displayField,
 			string displayText,
-			SearchResult<int> searchResult)
+			ISearchResultBase searchResult)
 		{
 			var highlightTerms = searchResult?.HighlightTerms;
 
@@ -134,7 +134,7 @@ namespace Mtgdb.Index
 			List<TextRange> matches,
 			string displayField,
 			string displayText,
-			SearchResult<int> searchResult)
+			ISearchResultBase searchResult)
 		{
 			var highlightPhrases = searchResult?.HighlightPhrases;
 
@@ -196,19 +196,8 @@ namespace Mtgdb.Index
 				return;
 			}
 
-			tokenPattern = (new HashSet<string>(Str.Comparer) { termField }, getRegex(pattern));
+			tokenPattern = (new HashSet<string>(Str.Comparer) { termField }, RegexCache.Get(pattern));
 			patternsSet.Add(pattern, tokenPattern);
-		}
-
-		private static Regex getRegex(string pattern)
-		{
-			if (_regexCache.TryGetValue(pattern, out var regex))
-				return regex;
-
-			regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-			_regexCache.Add(pattern, regex);
-
-			return regex;
 		}
 
 		private void addMatches(string displayText, IEnumerable<(HashSet<string> TokenField, Regex Pattern)> tokenPatterns, List<TextRange> matches)
@@ -431,9 +420,9 @@ namespace Mtgdb.Index
 			}
 		}
 
-		private static readonly Dictionary<string, Regex> _regexCache = new Dictionary<string, Regex>();
+		
 
-		private readonly ISearchSubsystem<int> _searchSubsystem;
+		private readonly ISearchSubsystemBase _searchSubsystem;
 		private readonly IDocumentAdapterBase _adapter;
 		private readonly IKeywordHighlighter _keywordHighlighter;
 		private readonly MtgAnalyzer _analyzer;

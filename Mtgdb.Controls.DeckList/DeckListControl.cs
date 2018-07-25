@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls.Properties;
 using Mtgdb.Dal;
@@ -12,6 +13,7 @@ namespace Mtgdb.Controls
 	public partial class DeckListControl : UserControl
 	{
 		public event Action<object> Refreshed;
+		public event Action<object> DeckTransformed;
 		public event Action<object> Scrolled;
 		public event Action<object, Deck, bool> DeckOpened;
 		public event Action<object, Deck> DeckRenamed;
@@ -28,19 +30,14 @@ namespace Mtgdb.Controls
 			IconRecognizer recognizer,
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
-			UiModelSnapshotFactory uiFactory,
+			CollectionEditorModel collection,
 			DeckListAsnycUpdateSubsystem updateSubsystem,
 			Control tooltipOwner)
 		{
 			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
-			_uiFactory = uiFactory;
+			_collection = collection;
 			_updateSubsystem = updateSubsystem;
-
-			_model = new DeckModel(Deck.Create(), _uiFactory.Snapshot())
-			{
-				IsCurrent = true
-			};
 
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
@@ -63,7 +60,7 @@ namespace Mtgdb.Controls
 				adapter,
 				_viewDeck);
 
-			_searchSubsystem.TextApplied += updateSearchResult;
+			_searchSubsystem.TextApplied += searchTextApplied;
 			_searchSubsystem.SubscribeToEvents();
 
 			_menuFilterByDeckMode.SelectedIndex = 0;
@@ -86,7 +83,11 @@ namespace Mtgdb.Controls
 
 			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, updateSubsystem);
 			_deckSort.SortChanged += sortChanged;
+			_deckSort.DeckTransformed += deckTransformed;
 			_deckSort.SubscribeToEvents();
+
+			_model = _listModel.CreateModel(Deck.Create());
+			_model.IsCurrent = true;
 
 			if (_listModel.IsLoaded)
 				listModelLoaded();
@@ -102,17 +103,22 @@ namespace Mtgdb.Controls
 		private void searcherLoaded() =>
 			_tooltipOwner.Invoke(_searchSubsystem.Apply);
 
-		private void sortChanged()
+		private void searchTextApplied() =>
+			runRefreshSearchResultTask(onComplete: null);
+
+		private void sortChanged() =>
+			runRefreshSearchResultTask(onComplete: () =>
+				_tooltipOwner.Invoke(delegate { _labelSortStatus.Text = _deckSort.GetTextualStatus(); }));
+
+		private void deckTransformed(int count, int total)
 		{
-			_tooltipOwner.Invoke(delegate
-			{
-				updateSearchResult();
-				_labelSortStatus.Text = _deckSort.GetTextualStatus();
-			});
+			DecksTransformedCount = count;
+			DecksToTransformCount = total;
+			DeckTransformed?.Invoke(this);
 		}
 
 		private void listModelLoaded() =>
-			_updateSubsystem.ModelChanged();
+			runRefreshSearchResultTask(onComplete: null);
 
 		private void deckMouseMove(object sender, MouseEventArgs e)
 		{
@@ -165,19 +171,15 @@ namespace Mtgdb.Controls
 
 		public void DeckChanged(Deck deck)
 		{
-			_model.Deck = deck;
-
-			_viewDeck.RefreshData();
-			Refreshed?.Invoke(this);
+			_model.OriginalDeck = deck;
+			refreshData();
 		}
 
 		public void CollectionChanged()
 		{
-			_model.Ui = _uiFactory.Snapshot();
-			_updateSubsystem.ModelChanged();
+			_model.Collection = new CollectionSnapshot(_collection);
+			refreshData();
 		}
-
-
 
 		private void setupTooltips(TooltipController controller)
 		{
@@ -262,28 +264,46 @@ namespace Mtgdb.Controls
 		private void viewScrolled(object obj) =>
 			Scrolled?.Invoke(this);
 
-		private void updateSearchResult()
+		private void runRefreshSearchResultTask(Action onComplete)
 		{
-			var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
-
-			_filteredModels.Clear();
-			_filteredModels.Add(_model);
-
-			var models = _deckSort.SortedRecords
-				.Where(m => searchResult == null || searchResult.ContainsKey(m.Id));
-
-			_cardIdsInFilteredDecks.Clear();
-
-			foreach (var model in models)
+			ThreadPool.QueueUserWorkItem(_ =>
 			{
-				_filteredModels.Add(model);
+				_aborted = true;
+				lock (_sync)
+				{
+					_aborted = false;
 
-				_cardIdsInFilteredDecks.UnionWith(model.Deck.MainDeck.Order);
-				_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
-			}
+					_deckSort.TransformDecks(() => _aborted);
 
-			_viewDeck.RefreshData();
-			Refreshed?.Invoke(this);
+					if (_aborted)
+						return;
+
+					var searchResult = _searchSubsystem?.SearchResult?.RelevanceById;
+
+					var models = _deckSort.SortedRecords
+						.Where(m => searchResult == null || searchResult.ContainsKey(m.Id))
+						.ToList();
+
+					_filteredModels.Clear();
+					_filteredModels.Add(_model);
+
+					_cardIdsInFilteredDecks.Clear();
+
+					foreach (var model in models)
+					{
+						_filteredModels.Add(model);
+
+						_cardIdsInFilteredDecks.UnionWith(model.Deck.MainDeck.Order);
+						_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
+					}
+
+					_tooltipOwner.Invoke(delegate
+					{
+						refreshData();
+						onComplete?.Invoke();
+					});
+				}
+			});
 		}
 
 		private void filterByDeckModeChanged(object sender, EventArgs e)
@@ -295,7 +315,7 @@ namespace Mtgdb.Controls
 
 		private void saveCurrentDeck()
 		{
-			var copy = _model.Deck.Copy();
+			var copy = _model.OriginalDeck.Copy();
 
 			if (string.IsNullOrEmpty(copy.Name))
 				copy.Name = "[no name]";
@@ -328,7 +348,7 @@ namespace Mtgdb.Controls
 				deck.Saved = _saved.Value;
 
 			if (_listModel.Add(deck))
-				DecksAddedCount++;
+				_decksAdded.Add(deck);
 
 			DeckAdded?.Invoke(this);
 		}
@@ -338,20 +358,17 @@ namespace Mtgdb.Controls
 			bool changed = DecksAddedCount > 0;
 
 			DecksToAddCount = 0;
-			DecksAddedCount = 0;
 			_saved = null;
 
-			if (!changed)
-				return;
+			if (changed)
+				_listModel.Save();
 
-			_updateSubsystem.ModelChanged();
-			_listModel.Save();
+			_decksAdded.Clear();
 		}
 
 		private void removeDeck(DeckModel deckModel)
 		{
-			_listModel.Remove(deckModel.Deck);
-			_updateSubsystem.ModelChanged();
+			_listModel.Remove(deckModel);
 			_listModel.Save();
 		}
 
@@ -387,7 +404,7 @@ namespace Mtgdb.Controls
 
 			fieldBounds.Offset(_viewDeck.Location);
 			_textBoxName.Bounds = fieldBounds;
-			_textBoxName.Text = model.Deck.Name;
+			_textBoxName.Text = model.Name;
 			_textBoxName.SelectAll();
 
 			_textBoxName.Visible = true;
@@ -401,9 +418,9 @@ namespace Mtgdb.Controls
 
 			var renamedModel = _renamedModel;
 
-			if (commit)
+			if (commit && !renamedModel.IsCurrent)
 			{
-				_listModel.Rename(renamedModel.Deck, _textBoxName.Text);
+				_listModel.Rename(renamedModel, _textBoxName.Text);
 				_listModel.Save();
 			}
 
@@ -413,10 +430,10 @@ namespace Mtgdb.Controls
 
 			if (commit)
 			{
-				_updateSubsystem.ModelChanged();
-
 				if (renamedModel.IsCurrent)
-					DeckRenamed?.Invoke(this, renamedModel.Deck);
+					DeckRenamed?.Invoke(this, renamedModel.OriginalDeck);
+
+				refreshData();
 			}
 		}
 
@@ -479,6 +496,11 @@ namespace Mtgdb.Controls
 		public bool IsSearchFocused() =>
 			_searchSubsystem.IsSearchFocused();
 
+		private void refreshData()
+		{
+			_viewDeck.RefreshData();
+			Refreshed?.Invoke(this);
+		}
 
 
 		public bool HideScroll
@@ -527,29 +549,35 @@ namespace Mtgdb.Controls
 		public bool IsSearcherUpdating =>
 			_searchSubsystem.IsUpdating;
 
-		public int DecksAddedCount { get; private set; }
+		public int DecksAddedCount => _decksAdded.Count;
 		public int DecksToAddCount { get; private set; }
 
-		private DateTime? _saved;
+		public bool IsTransformingDecks => DecksTransformedCount < DecksToTransformCount;
+		public int DecksToTransformCount { get; private set; }
+		public int DecksTransformedCount { get; private set; }
 
 		private DeckModel _model;
-
-		private Control _tooltipOwner;
-
-		private UiModelSnapshotFactory _uiFactory;
 		private DeckListModel _listModel;
-
 		private DeckModel _renamedModel;
+		private readonly HashSet<Deck> _decksAdded = new HashSet<Deck>();
+		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
+		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
+
+		private DateTime? _saved;
+		private Control _tooltipOwner;
+		private CollectionEditorModel _collection;
+
 		private ViewDeckListTooltips _customTooltip;
 		private DeckSearchSubsystem _searchSubsystem;
 
 		private FilterByDeckMode _filterByDeckMode;
 		private SearchResultHiglightSubsystem _higlightSubsystem;
 
-		private readonly HashSet<string> _cardIdsInFilteredDecks = new HashSet<string>(Str.Comparer);
-		private readonly List<DeckModel> _filteredModels = new List<DeckModel>();
 		private Cursor _textSelectionCursor;
 		private DeckListAsnycUpdateSubsystem _updateSubsystem;
 		private DeckSortSubsystem _deckSort;
+
+		private bool _aborted;
+		private readonly object _sync = new object();
 	}
 }

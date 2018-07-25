@@ -13,7 +13,7 @@ using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Ui
 {
-	public abstract class SearchSubsystem<TId, TObj> : ISearchSubsystem<TId>
+	public abstract class SearchSubsystem<TId, TObj> : ISearchSubsystem<TId>, ISearchSubsystemBase
 	{
 		protected SearchSubsystem(
 			Control parent,
@@ -743,6 +743,7 @@ namespace Mtgdb.Ui
 		public SuggestModel<TId, TObj> SuggestModel { get; set; }
 
 		public SearchResult<TId> SearchResult { get; private set; }
+		ISearchResultBase ISearchSubsystemBase.SearchResult => SearchResult;
 
 		private string _appliedText;
 		private DateTime? _lastUserInput;
