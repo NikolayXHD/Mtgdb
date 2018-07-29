@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AppDir.cs" />
     <Compile Include="ApplicationCulture.cs" />
+    <Compile Include="SevenZip.cs" />
     <Compile Include="ShadowCopy.cs" />
     <Compile Include="Versioning\FileSignature.cs" />
     <Compile Include="[ infrastructure ]\CoreModule.cs" />

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Mtgdb.Dal;
+using NLog;
 
 namespace Mtgdb.Gui
 {
@@ -10,7 +12,6 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly ScrollSubsystem _scrollSubsystem;
-		private Thread _preloadImageThread;
 
 		private List<Card> _cardsToPreloadImage;
 		private List<Card> _cardsToPreloadImageStarted;
@@ -34,17 +35,37 @@ namespace Mtgdb.Gui
 
 		public void StartThread()
 		{
-			if (_preloadImageThread?.ThreadState == ThreadState.Running)
+			if (_cts != null && !_cts.IsCancellationRequested)
 				throw new InvalidOperationException("Already started");
 
-			_preloadImageThread = new Thread(_ => preloadImageThread());
-			_preloadImageThread.Start();
+			var cts = new CancellationTokenSource();
+			TaskEx.Run(async () =>
+			{
+				while (!cts.IsCancellationRequested)
+				{
+					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted)
+					{
+						await TaskEx.Delay(200);
+						continue;
+					}
+
+					_cardsToPreloadImageStarted = _cardsToPreloadImage;
+
+					foreach (var card in _cardsToPreloadImageStarted)
+					{
+						if (_cardsToPreloadImage != _cardsToPreloadImageStarted)
+							break;
+
+						card.PreloadImage(Ui);
+					}
+				}
+			});
+
+			_cts = cts;
 		}
 
-		public void AbortThread()
-		{
-			_preloadImageThread.Abort();
-		}
+		public void AbortThread() =>
+			_cts?.Cancel();
 
 		private List<Card> getCardsToPreview(MtgLayoutView view)
 		{
@@ -90,37 +111,7 @@ namespace Mtgdb.Gui
 			return true;
 		}
 
-		private void preloadImageLoopIteration()
-		{
-			if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted)
-			{
-				Thread.Sleep(200);
-				return;
-			}
-
-			_cardsToPreloadImageStarted = _cardsToPreloadImage;
-
-			foreach (var card in _cardsToPreloadImageStarted)
-			{
-				if (_cardsToPreloadImage != _cardsToPreloadImageStarted)
-					break;
-
-				card.PreloadImage(Ui);
-			}
-		}
-
-		private void preloadImageThread()
-		{
-			try
-			{
-				while (true)
-					preloadImageLoopIteration();
-			}
-			catch (ThreadAbortException)
-			{
-			}
-		}
-
 		public UiModel Ui { get; set; }
+		private CancellationTokenSource _cts;
 	}
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Mtgdb.Controls;
+using Mtgdb.Ui;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Gui
@@ -10,7 +12,12 @@ namespace Mtgdb.Gui
 		static HistorySubsystem()
 		{
 			_serializer = new JsonSerializer();
-			_serializer.Converters.Add(new CustomConverter());
+
+			_serializer.Converters.Add(
+				new UnformattedJsonConverter(objectType =>
+					typeof(IEnumerable<FilterValueState>).IsAssignableFrom(objectType) ||
+					typeof(IDictionary<string, int>).IsAssignableFrom(objectType) ||
+					typeof(IEnumerable<string>).IsAssignableFrom(objectType)));
 		}
 
 		public HistorySubsystem(UndoConfig undoConfig)

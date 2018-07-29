@@ -34,6 +34,8 @@ namespace Mtgdb.Index
 
 		internal void LoadIndex(SearcherState<TId, TDoc> state)
 		{
+			BeginLoad?.Invoke();
+
 			bool stateExisted = State != null;
 
 			if (!stateExisted)
@@ -208,6 +210,7 @@ namespace Mtgdb.Index
 		protected readonly IDocumentAdapter<TId, TDoc> Adapter;
 		internal SearcherState<TId, TDoc> State { get; private set; }
 
+		public event Action BeginLoad;
 		public event Action Loaded;
 		public event Action Disposed;
 

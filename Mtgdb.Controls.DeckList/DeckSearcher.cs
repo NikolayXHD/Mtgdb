@@ -21,7 +21,6 @@ namespace Mtgdb.Controls
 			: base(spellchecker, adapter)
 		{
 			_deckListModel = deckListModel;
-			_deckListModel.HandleModelsUpdated += handleModelsUpdated;
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("search");
 		}
 
@@ -46,9 +45,9 @@ namespace Mtgdb.Controls
 
 			if (!_indexCreated)
 			{
-				var models = _deckListModel.GetModels();
-				_models = models;
+				var models = _deckListModel.GetModelCopies();
 
+				_models = models;
 				((DeckSpellchecker) Spellchecker).Models = models;
 
 				if (_version.IsUpToDate)
@@ -68,10 +67,11 @@ namespace Mtgdb.Controls
 			if (index != null)
 			{
 				lock (_syncDirectory)
+				{
 					_version.CreateDirectory();
-
-				index.SaveTo(_version.Directory);
-				_version.SetIsUpToDate();
+					index.SaveTo(_version.Directory);
+					_version.SetIsUpToDate();
+				}
 
 				_indexCreated = true;
 			}
@@ -81,19 +81,13 @@ namespace Mtgdb.Controls
 			return index;
 		}
 
-		private void handleModelsUpdated(IReadOnlyList<DeckModel> models)
-		{
-			_models = models;
-			((DeckSpellchecker) Spellchecker).Models = models;
-
-			LoadIndexes();
-		}
-
 		private string IndexDirectoryParent
 		{
 			get => _version.Directory.Parent();
 			set => _version = new IndexVersion(value, IndexVerision);
 		}
+
+		public bool IsIndexSaved => _version.IsUpToDate;
 
 		private IReadOnlyList<DeckModel> _models;
 

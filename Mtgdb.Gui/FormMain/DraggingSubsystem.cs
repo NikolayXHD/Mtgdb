@@ -17,14 +17,14 @@ namespace Mtgdb.Gui
 			DeckEditorModel deckEditorModel,
 			FormMain parent,
 			ImageLoader imageLoader,
-			FormManager formManager)
+			Application application)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
 			_deckEditorModel = deckEditorModel;
 			_parent = parent;
 			_imageLoader = imageLoader;
-			_formManager = formManager;
+			_application = application;
 		}
 
 
@@ -48,7 +48,7 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.MouseLeave += mouseLeave;
 			_layoutViewCards.MouseLeave += mouseLeave;
 
-			Application.AddMessageFilter(this);
+			System.Windows.Forms.Application.AddMessageFilter(this);
 		}
 
 		public void UnsubscribeFromEvents()
@@ -70,7 +70,7 @@ namespace Mtgdb.Gui
 			_layoutViewDeck.MouseLeave -= mouseLeave;
 			_layoutViewCards.MouseLeave -= mouseLeave;
 
-			Application.RemoveMessageFilter(this);
+			System.Windows.Forms.Application.RemoveMessageFilter(this);
 		}
 
 		public void SetupDrawingDraggingMarkEvent()
@@ -388,7 +388,7 @@ namespace Mtgdb.Gui
 			if (!underMouse)
 				return;
 
-			var draggingForm = _formManager.FindCardDraggingForm();
+			var draggingForm = _application.FindCardDraggingForm();
 
 			if (draggingForm == null || draggingForm == _parent)
 				return;
@@ -422,7 +422,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;
-		private readonly FormManager _formManager;
+		private readonly Application _application;
 		private Cursor _dragCursor;
 	}
 }

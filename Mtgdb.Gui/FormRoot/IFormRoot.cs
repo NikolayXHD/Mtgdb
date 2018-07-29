@@ -2,6 +2,7 @@
 using System.Drawing;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

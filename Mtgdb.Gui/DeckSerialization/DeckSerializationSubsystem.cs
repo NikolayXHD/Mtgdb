@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

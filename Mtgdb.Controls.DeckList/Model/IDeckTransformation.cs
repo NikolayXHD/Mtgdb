@@ -1,4 +1,5 @@
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {

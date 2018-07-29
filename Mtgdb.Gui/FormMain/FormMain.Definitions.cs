@@ -33,8 +33,7 @@ namespace Mtgdb.Gui
 			DeckSearcher deckSearcher,
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
-			DeckListAsnycUpdateSubsystem deckListUpdate,
-			FormManager formManager)
+			Application application)
 			: this()
 		{
 			DoubleBuffered = true;
@@ -105,7 +104,7 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_imageLoader,
-				formManager);
+				application);
 
 			_deckEditorUi = new DeckEditorUi(
 				_viewCards,
@@ -114,7 +113,8 @@ namespace Mtgdb.Gui
 				_collectionEditor,
 				_dragging,
 				Cursor,
-				formZoomCard);
+				formZoomCard,
+				this);
 
 			_viewDeck.SetDataSource(_deckEditor.DataSource);
 			_viewCards.SetDataSource(_searchResultCards);
@@ -162,12 +162,12 @@ namespace Mtgdb.Gui
 				{ 1, evalFilterBySearchText }
 			};
 
+			_deckSearcher = deckSearcher;
 			_deckListControl.Init(deckListModel,
 				iconRecognizer,
-				deckSearcher,
+				_deckSearcher,
 				deckAdapter,
 				collectionEditor,
-				deckListUpdate,
 				this);
 
 			_copyPaste = new CopyPasteSubsystem(
@@ -364,7 +364,7 @@ namespace Mtgdb.Gui
 			FilterManager.StateChanged += quickFilterManagerChanged;
 			_buttons.SubscribeToEvents();
 
-			Application.ApplicationExit += applicationExit;
+			System.Windows.Forms.Application.ApplicationExit += applicationExit;
 
 			_copyPaste.SubscribeToEvents();
 			_tabHeadersDeck.DragOver += deckZoneDrag;
@@ -392,6 +392,8 @@ namespace Mtgdb.Gui
 
 			SizeChanged += sizeChanged;
 			PreviewKeyDown += previewKeyDown;
+
+			_deckSearcher.BeginLoad += beginUpdateDeckIndex;
 
 			_deckListControl.Scrolled += deckListScrolled;
 			_deckListControl.Refreshed += deckListRefreshed;
@@ -447,7 +449,7 @@ namespace Mtgdb.Gui
 			FilterManager.StateChanged -= quickFilterManagerChanged;
 			_buttons.UnsubscribeFromEvents();
 
-			Application.ApplicationExit -= applicationExit;
+			System.Windows.Forms.Application.ApplicationExit -= applicationExit;
 
 			_copyPaste.UnsubscribeFromEvents();
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
@@ -473,6 +475,8 @@ namespace Mtgdb.Gui
 
 			SizeChanged -= sizeChanged;
 			PreviewKeyDown -= previewKeyDown;
+
+			_deckSearcher.BeginLoad -= beginUpdateDeckIndex;
 
 			_deckListControl.Scrolled -= deckListScrolled;
 			_deckListControl.Refreshed -= deckListRefreshed;
@@ -573,6 +577,7 @@ namespace Mtgdb.Gui
 
 		private string _deckName;
 		private UiModel _uiSnapshot;
+		private readonly DeckSearcher _deckSearcher;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

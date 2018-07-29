@@ -689,38 +689,57 @@ namespace Mtgdb.Controls
 			var prevHitInfo = _hitInfo;
 			_hitInfo = hitInfo;
 
-			if (prevHitInfo?.Field != null && prevHitInfo.Field != _hitInfo.Field)
-			{
-				prevHitInfo.Field.IsHotTracked = false;
-				prevHitInfo.Field.IsSortHotTracked = false;
-				prevHitInfo.Field.IsSearchHotTracked = false;
-				prevHitInfo.Field.HotTrackedCustomButtonIndex = -1;
-			}
-
-			if (_hitInfo.Field != null)
-			{
-				_hitInfo.Field.IsHotTracked = true;
-				_hitInfo.Field.IsSortHotTracked = _hitInfo.IsSortButton;
-				_hitInfo.Field.IsSearchHotTracked = _hitInfo.IsSearchButton;
-				_hitInfo.Field.HotTrackedCustomButtonIndex = _hitInfo.CustomButtonIndex;
-			}
-
-			var card = _hitInfo.Card;
-
-			if (prevHitInfo?.Card != null && prevHitInfo.Card != card)
-				foreach (var field in prevHitInfo.Card.Fields)
-				{
-					field.IsSortVisible = false;
-					field.IsSearchVisible = false;
-				}
+			var prevField = prevHitInfo?.Field;
+			var newField = _hitInfo.Field;
+			var prevCard = prevHitInfo?.Card;
+			var newCard = _hitInfo.Card;
 
 			bool suppressed = ModifierKeys == Keys.Alt;
 
-			if (card != null)
-				foreach (var field in card.Fields)
-				{
-					field.IsSortVisible = !suppressed && SortOptions.IsButtonVisible(field);
+			if (prevField != null && prevField != newField)
+			{
+				prevField.IsHotTracked = false;
+				prevField.IsSortHotTracked = false;
+				prevField.IsSearchHotTracked = false;
+				prevField.HotTrackedCustomButtonIndex = -1;
+			}
+
+			if (newField != null)
+			{
+				newField.IsHotTracked = true;
+				newField.IsSortHotTracked = _hitInfo.IsSortButton;
+				newField.IsSearchHotTracked = _hitInfo.IsSearchButton;
+				newField.HotTrackedCustomButtonIndex = _hitInfo.CustomButtonIndex;
+			}
+
+			if (prevCard != null && prevCard != newCard)
+			{
+				prevCard.IsHotTracked = false;
+				foreach (var field in prevCard.Fields)
+					field.IsSearchVisible = false;
+			}
+
+			if (newCard != null)
+			{
+				newCard.IsHotTracked = true;
+				foreach (var field in newCard.Fields)
 					field.IsSearchVisible = !suppressed && SearchOptions.IsButtonVisible(field);
+			}
+
+			int columnsCount = getColumnsCount();
+			int rowsCount = getRowsCount();
+
+			for (int j = 0; j < rowsCount; j++)
+				for (int i = 0; i < columnsCount; i++)
+				{
+					int index = getCardIndex(i, j, columnsCount);
+
+					var card = Cards[index];
+					if (index >= Cards.Count || !card.Visible)
+						continue;
+
+					foreach (var field in card.Fields)
+						field.IsSortVisible = !suppressed && SortOptions.IsButtonVisible(card, field);
 				}
 
 			foreach (var direction in getAlignDirections())

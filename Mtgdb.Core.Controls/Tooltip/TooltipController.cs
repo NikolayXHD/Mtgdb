@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -14,7 +15,6 @@ namespace Mtgdb.Controls
 		public TooltipController(TooltipForm form)
 		{
 			HideCounter = 0;
-			_thread = new Thread(updateTooltipLoop);
 			_tooltipForm = form;
 		}
 
@@ -121,13 +121,17 @@ namespace Mtgdb.Controls
 
 		public void StartThread()
 		{
-			_thread.Start();
+			if (_cts != null && !_cts.IsCancellationRequested)
+				throw new InvalidOperationException("Already started");
+
+			var cts = new CancellationTokenSource();
+			TaskEx.Run(async () => { await updateTooltipLoop(cts.Token); });
+
+			_cts = cts;
 		}
 
-		public void AbortThread()
-		{
-			_thread.Abort();
-		}
+		public void AbortThread() =>
+			_cts?.Cancel();
 
 		public bool Active
 		{
@@ -143,65 +147,59 @@ namespace Mtgdb.Controls
 
 
 
-		private void updateTooltipLoop()
+		private async Task updateTooltipLoop(CancellationToken token)
 		{
-			try
-			{
-				_tooltip = Tooltip;
+			_tooltip = Tooltip;
 
-				while (true)
+			while (!token.IsCancellationRequested)
+			{
+				if (isTooltipUpdateSuspended())
 				{
-					if (isTooltipUpdateSuspended())
+					await TaskEx.Delay(IntervalMs);
+					continue;
+				}
+
+				var prev = _tooltip;
+				if (prev.Id != null)
+				{
+					if (prev.Id.Equals(Tooltip.Id))
 					{
-						Thread.Sleep(IntervalMs);
+						prev.Abandoned = null;
+						await TaskEx.Delay(DelayMs + IntervalMs);
 						continue;
 					}
 
-					var prev = _tooltip;
-					if (prev.Id != null)
+					prev.Abandoned = prev.Abandoned ?? DateTime.Now;
+
+					int elapsedMs = (int) (DateTime.Now - prev.Abandoned.Value).TotalMilliseconds;
+					if (elapsedMs < DelayMs)
 					{
-						if (prev.Id.Equals(Tooltip.Id))
-						{
-							prev.Abandoned = null;
-							Thread.Sleep(DelayMs + IntervalMs);
-							continue;
-						}
-
-						prev.Abandoned = prev.Abandoned ?? DateTime.Now;
-
-						int elapsedMs = (int) (DateTime.Now - prev.Abandoned.Value).TotalMilliseconds;
-						if (elapsedMs < DelayMs)
-						{
-							Thread.Sleep(DelayMs - elapsedMs + IntervalMs);
-							continue;
-						}
-
-						hide(prev);
-
-						_tooltip = _emptyTooltip;
+						await TaskEx.Delay(DelayMs - elapsedMs + IntervalMs);
+						continue;
 					}
 
-					var curr = Tooltip;
+					hide(prev);
 
-					if (curr.Id != null && !curr.Id.Equals(prev.Id))
-					{
-						int elapsedMs = (int) (DateTime.Now - curr.Created).TotalMilliseconds;
-						if (elapsedMs < DelayMs)
-						{
-							Thread.Sleep(DelayMs - elapsedMs + IntervalMs);
-							continue;
-						}
-
-						show(curr);
-
-						_tooltip = curr;
-					}
-
-					Thread.Sleep(IntervalMs);
+					_tooltip = _emptyTooltip;
 				}
-			}
-			catch (ThreadAbortException)
-			{
+
+				var curr = Tooltip;
+
+				if (curr.Id != null && !curr.Id.Equals(prev.Id))
+				{
+					int elapsedMs = (int) (DateTime.Now - curr.Created).TotalMilliseconds;
+					if (elapsedMs < DelayMs)
+					{
+						await TaskEx.Delay(DelayMs - elapsedMs + IntervalMs);
+						continue;
+					}
+
+					show(curr);
+
+					_tooltip = curr;
+				}
+
+				await TaskEx.Delay(IntervalMs);
 			}
 		}
 
@@ -311,8 +309,9 @@ namespace Mtgdb.Controls
 
 		private readonly TooltipForm _tooltipForm;
 		private bool _active = true;
-		private readonly Thread _thread;
 
 		private static readonly TooltipModel _emptyTooltip = new TooltipModel();
+
+		private CancellationTokenSource _cts;
 	}
 }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Mtgdb.Downloader
+namespace Mtgdb
 {
 	public class SevenZip
 	{

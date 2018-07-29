@@ -84,7 +84,11 @@ namespace Mtgdb.Controls
 		private void fieldInvalidated(FieldControl field) =>
 			Invalid?.Invoke(this, field);
 
+		public virtual bool ShowSortButton(FieldControl field) =>
+			IsHotTracked && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool IsHotTracked { get; set; }
 
 		public virtual IEnumerable<FieldControl> Fields => Controls.Cast<FieldControl>();
 

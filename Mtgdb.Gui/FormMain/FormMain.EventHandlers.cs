@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
@@ -125,10 +126,8 @@ namespace Mtgdb.Gui
 			this.Invoke(updateFormStatus);
 		}
 
-		private void cardSearcherIndexingProgress()
-		{
+		private void cardSearcherIndexingProgress() =>
 			this.Invoke(updateFormStatus);
-		}
 
 
 
@@ -336,11 +335,8 @@ namespace Mtgdb.Gui
 				this.Invoke(updateFormStatus);
 		}
 
-		private void deckListTransformed(object sender)
-		{
-			if (_deckListControl.DecksTransformedCount % 89 == 0)
-				this.Invoke(updateFormStatus);
-		}
+		private void deckListTransformed(object sender) =>
+			this.Invoke(updateFormStatus);
 
 		private void updateFilterByDeckMode()
 		{
@@ -832,5 +828,8 @@ namespace Mtgdb.Gui
 		{
 			e.IsInputKey = true;
 		}
+
+		private void beginUpdateDeckIndex() =>
+			this.Invoke(updateFormStatus);
 	}
 }

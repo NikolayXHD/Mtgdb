@@ -7,10 +7,8 @@ namespace Mtgdb.Controls
 {
 	public class SortOptions
 	{
-		public bool IsButtonVisible(FieldControl field)
-		{
-			return Allow && field.AllowSort && (field.IsHotTracked || field.SortOrder != SortOrder.None);
-		}
+		public bool IsButtonVisible(LayoutControl card, FieldControl field) =>
+			Allow && card.ShowSortButton(field);
 
 		public ButtonLayout GetButtonLayout(FieldControl field)
 		{

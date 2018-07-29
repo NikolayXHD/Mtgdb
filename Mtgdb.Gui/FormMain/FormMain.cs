@@ -438,13 +438,13 @@ namespace Mtgdb.Gui
 		private string getDeckListStatus()
 		{
 			if (!_deckListControl.IsSearcherLoaded)
-				return "deck list: loading index…";
+				return "deck list: loading…";
 
 			if (_deckListControl.IsTransformingDecks)
-				return $"deck list: transforming {_deckListControl.DecksTransformedCount}/{_deckListControl.DecksToTransformCount}…";
+				return "deck list: transforming…";
 
 			if (_deckListControl.IsSearcherUpdating)
-				return $"deck list: {_deckListControl.FilteredDecksCount}, updating index…";
+				return $"deck list: {_deckListControl.FilteredDecksCount}, indexing…";
 
 			if (_deckListControl.IsAddingDecks)
 				return $"deck list: adding {_deckListControl.DecksAddedCount} / {_deckListControl.DecksToAddCount}…";

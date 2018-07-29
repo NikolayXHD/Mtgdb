@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Mtgdb.Controls.Statistics;
 
-namespace Mtgdb.Controls
+namespace Mtgdb.Ui
 {
 	public abstract class Fields<TDoc>
 	{

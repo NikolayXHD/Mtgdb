@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
-	public class FormManager : ApplicationContext
+	public class Application : ApplicationContext, IApplication
 	{
-		public FormManager(Func<FormRoot> formFactory)
+		public Application(Func<FormRoot> formFactory)
 		{
 			_formFactory = formFactory;
 		}
@@ -131,7 +133,13 @@ namespace Mtgdb.Gui
 
 		public IEnumerable<FormRoot> Forms => _instances;
 
+		public void Cancel() => _cts.Cancel();
+
+		public CancellationToken CancellationToken => _cts.Token;
+
 		private readonly List<FormRoot> _instances = new List<FormRoot>();
 		private readonly Func<FormRoot> _formFactory;
+
+		private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 	}
 }

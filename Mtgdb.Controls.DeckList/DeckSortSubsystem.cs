@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Mtgdb.Dal;
@@ -10,37 +9,21 @@ namespace Mtgdb.Controls
 	{
 		public DeckSortSubsystem(
 			LayoutViewControl layoutView, 
-			DeckFields fields, 
+			DeckFields fields,
 			DeckSearchSubsystem searchSubsystem,
-			DeckListAsnycUpdateSubsystem updateSubsystem)
+			DeckListModel deckListModel)
 			: base(layoutView, fields, searchSubsystem)
 		{
-			_updateSubsystem = updateSubsystem;
-			_updateSubsystem.ModelsUpdated += modelsUpdated;
+			_deckListModel = deckListModel;
+			_deckListModel.Loaded += deckListLoaded;
+			_deckListModel.Changed += deckListChanged;
 		}
 
-		public void TransformDecks(Func<bool> interrupt)
-		{
-			if (_models == null)
-				return;
-
-			for (int i = 0; i < _models.Count; i++)
-			{
-				var model = _models[i];
-
-				if (interrupt())
-					return;
-
-				model.UpdateTransformedDeck();
-				DeckTransformed?.Invoke(i + 1, _models.Count);
-			}
-		}
-
-		private void modelsUpdated(IReadOnlyList<DeckModel> models)
-		{
-			_models = models;
+		private void deckListLoaded() =>
 			Invalidate();
-		}
+
+		private void deckListChanged() =>
+			Invalidate();
 
 		protected override long GetId(DeckModel doc) =>
 			doc.Id;
@@ -52,15 +35,13 @@ namespace Mtgdb.Controls
 			_sortFromNewestToOldest;
 
 		protected override IEnumerable<DeckModel> GetDocuments() =>
-			_models ?? Empty<DeckModel>.Sequence;
-
-		private IReadOnlyList<DeckModel> _models;
-
-		private readonly DeckListAsnycUpdateSubsystem _updateSubsystem;
-
-		public event Action<int, int> DeckTransformed;
+			_deckListModel.IsLoaded
+				? _deckListModel.GetModels()
+				: Empty<DeckModel>.Sequence;
 
 		private static readonly FieldSortInfo _sortFromNewestToOldest =
-			new FieldSortInfo(nameof(Deck.Id), SortOrder.Descending);
+			new FieldSortInfo(nameof(Deck.Saved), SortOrder.Descending);
+
+		private readonly DeckListModel _deckListModel;
 	}
 }

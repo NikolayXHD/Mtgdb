@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {
@@ -27,6 +28,9 @@ namespace Mtgdb.Controls
 
 		public TResult GetAggregate(Zone zone, Func<Card, bool> filter)
 		{
+			if (!_repo.IsLoadingComplete)
+				return _transform(_aggregationSeed());
+
 			var key = (zone, filter);
 
 			if (_cache.TryGetValue(key, out var result))

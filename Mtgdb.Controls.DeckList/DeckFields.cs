@@ -1,5 +1,6 @@
 using System.Linq;
 using Mtgdb.Controls.Statistics;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {

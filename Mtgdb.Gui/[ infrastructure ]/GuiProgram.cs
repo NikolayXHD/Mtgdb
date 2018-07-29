@@ -21,14 +21,14 @@ namespace Mtgdb.Gui
 
 		private static void main(string[] args)
 		{
-			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+			System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			AppDomain.CurrentDomain.UnhandledException += unhandledException;
-			Application.ThreadException += threadException;
+			System.Windows.Forms.Application.ThreadException += threadException;
 
 			Dpi.Initialize();
 
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+			System.Windows.Forms.Application.EnableVisualStyles();
+			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 			
 			_kernel.Load<CoreModule>();
 			_kernel.Load<DalModule>();
@@ -46,13 +46,13 @@ namespace Mtgdb.Gui
 			var loader = _kernel.Get<GuiLoader>();
 			loader.Run();
 
-			var formManager = _kernel.Get<FormManager>();
-			formManager.MigrateHistoryFiles();
-			formManager.CreateForm();
+			var application = _kernel.Get<Application>();
+			application.MigrateHistoryFiles();
+			application.CreateForm();
 
-			Application.Run(formManager);
+			System.Windows.Forms.Application.Run(application);
 
-			loader.Abort();
+			application.Cancel();
 		}
 
 		private static void mtgjsonFileUpdated()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -11,16 +12,6 @@ namespace Mtgdb.Gui
 {
 	public class DeckEditorUi
 	{
-		private readonly MtgLayoutView _layoutViewCards;
-		private readonly MtgLayoutView _layoutViewDeck;
-		private readonly Cursor _cursor;
-		private readonly DeckEditorModel _deckEditorModel;
-		private readonly CollectionEditorModel _collectionModel;
-		private readonly DraggingSubsystem _draggingSubsystem;
-		private readonly FormZoom _formZoom;
-		private readonly Cursor _zoomCursor;
-		private readonly Cursor _textSelectionCursor;
-
 		public DeckEditorUi(
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
@@ -28,7 +19,8 @@ namespace Mtgdb.Gui
 			CollectionEditorModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
 			Cursor cursor,
-			FormZoom formZoom)
+			FormZoom formZoom,
+			Control parent)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
@@ -42,6 +34,7 @@ namespace Mtgdb.Gui
 			_layoutViewCards.SelectionStarted += selectionStarted;
 
 			_formZoom = formZoom;
+			_parent = parent;
 
 			var hotSpot = Size.Empty.ByDpi();
 			_zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
@@ -191,8 +184,11 @@ namespace Mtgdb.Gui
 			if (!card.HasImage(Ui))
 				return;
 
-			_formZoom.LoadImages(card, Ui);
-			_formZoom.ShowImages();
+			TaskEx.Run(async () =>
+			{
+				await _formZoom.LoadImages(card, Ui);
+				_parent.Invoke(delegate { _formZoom.ShowImages(); });
+			});
 		}
 
 		private void changeCountInCollection(Card card, int increment)
@@ -226,8 +222,19 @@ namespace Mtgdb.Gui
 			throw new Exception(@"wrapper not found");
 		}
 
-
-
 		public UiModel Ui { get; set; }
+
+
+
+		private readonly MtgLayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
+		private readonly Cursor _cursor;
+		private readonly DeckEditorModel _deckEditorModel;
+		private readonly CollectionEditorModel _collectionModel;
+		private readonly DraggingSubsystem _draggingSubsystem;
+		private readonly FormZoom _formZoom;
+		private readonly Control _parent;
+		private readonly Cursor _zoomCursor;
+		private readonly Cursor _textSelectionCursor;
 	}
 }

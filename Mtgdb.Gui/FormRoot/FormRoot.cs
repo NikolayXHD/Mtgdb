@@ -9,6 +9,7 @@ using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
 using Mtgdb.Gui.Properties;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
@@ -130,7 +131,7 @@ namespace Mtgdb.Gui
 			CardRepository repo,
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
-			FormManager formManager)
+			Application application)
 			:this()
 		{
 			TooltipController = tooltipController;
@@ -141,7 +142,7 @@ namespace Mtgdb.Gui
 			CardSuggestModel = cardSuggestModel;
 			CardSuggestModel.Ui = UiModel;
 			
-			_formManager = formManager;
+			_application = application;
 			_repo = repo;
 			_serialization = serialization;
 			_buttonSubsystem = new ButtonSubsystem();
@@ -198,7 +199,7 @@ namespace Mtgdb.Gui
 			updateDownloadButton();
 			updateDeckButtons();
 
-			Application.AddMessageFilter(this);
+			System.Windows.Forms.Application.AddMessageFilter(this);
 			CardSuggestModel.StartSuggestThread();
 			DeckSuggestModel.StartSuggestThread();
 		}
@@ -247,7 +248,7 @@ namespace Mtgdb.Gui
 
 			if (creatingNewForm)
 			{
-				form.LoadHistory(_formManager.GetHistoryFile(Id, i));
+				form.LoadHistory(_application.GetHistoryFile(Id, i));
 				_tabs.TabIds[i] = form;
 			}
 		}
@@ -313,7 +314,7 @@ namespace Mtgdb.Gui
 
 			var lastTabId = _tabs.Count - 1;
 
-			formMain.SaveHistory(_formManager.GetHistoryFile(Id, lastTabId));
+			formMain.SaveHistory(_application.GetHistoryFile(Id, lastTabId));
 			formMain.Close();
 		}
 
@@ -325,18 +326,18 @@ namespace Mtgdb.Gui
 
 		private void formClosing(object sender, EventArgs e)
 		{
-			_formManager.MoveFormHistoryToEnd(this);
+			_application.MoveFormHistoryToEnd(this);
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
 				var formMain = getTab(i);
-				formMain.SaveHistory(_formManager.GetHistoryFile(Id, i));
+				formMain.SaveHistory(_application.GetHistoryFile(Id, i));
 				formMain.Close();
 			}
 
-			_formManager.Remove(this);
+			_application.Remove(this);
 
-			Application.RemoveMessageFilter(this);
+			System.Windows.Forms.Application.RemoveMessageFilter(this);
 		}
 
 
@@ -408,7 +409,7 @@ namespace Mtgdb.Gui
 
 		private void tabMouseMove(object sender, MouseEventArgs e)
 		{
-			var draggingFromTab = _formManager.FindCardDraggingForm();
+			var draggingFromTab = _application.FindCardDraggingForm();
 
 			if (draggingFromTab == null)
 				return;
@@ -438,7 +439,7 @@ namespace Mtgdb.Gui
 			if (!_tabs.IsUnderMouse())
 				return;
 
-			var tabDraggingForm = _formManager.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
+			var tabDraggingForm = _application.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
 
 			if (tabDraggingForm == this)
 				return;
@@ -466,7 +467,7 @@ namespace Mtgdb.Gui
 
 			dragSourceTabs.RemoveTab(draggedIndex);
 
-			_formManager.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
+			_application.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
 
 			addTab(formMain);
 
@@ -606,7 +607,7 @@ namespace Mtgdb.Gui
 		public bool ShowScroll { get; set; }
 		public bool LoadedGuiSettings { get; set; }
 
-		private int Id => _formManager.GetId(this);
+		private int Id => _application.GetId(this);
 
 		public sealed override string Text
 		{
@@ -621,7 +622,7 @@ namespace Mtgdb.Gui
 		private readonly Func<FormMain> _formMainFactory;
 		private readonly DownloaderSubsystem _downloaderSubsystem;
 		private readonly NewsService _newsService;
-		private readonly FormManager _formManager;
+		private readonly Application _application;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 	}

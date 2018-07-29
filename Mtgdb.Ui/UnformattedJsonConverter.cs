@@ -1,19 +1,17 @@
 using System;
-using System.Collections.Generic;
-using Mtgdb.Controls;
 using Newtonsoft.Json;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
-	internal class CustomConverter : JsonConverter
+	public class UnformattedJsonConverter : JsonConverter
 	{
-		public override bool CanConvert(Type objectType)
+		public UnformattedJsonConverter(Func<Type, bool> canConvert)
 		{
-			return
-				typeof (IEnumerable<FilterValueState>).IsAssignableFrom(objectType) ||
-				typeof (IDictionary<string, int>).IsAssignableFrom(objectType) ||
-				typeof (IEnumerable<string>).IsAssignableFrom(objectType);
+			_canConvert = canConvert;
 		}
+
+		public override bool CanConvert(Type objectType) =>
+			_canConvert(objectType);
 
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
@@ -25,6 +23,9 @@ namespace Mtgdb.Gui
 			writer.WriteRawValue(JsonConvert.SerializeObject(value, Formatting.None));
 		}
 
+
 		public override bool CanRead => false;
+
+		private readonly Func<Type, bool> _canConvert;
 	}
 }

@@ -31,13 +31,12 @@ namespace Mtgdb.Controls
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
 			CollectionEditorModel collection,
-			DeckListAsnycUpdateSubsystem updateSubsystem,
 			Control tooltipOwner)
 		{
 			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
 			_collection = collection;
-			_updateSubsystem = updateSubsystem;
+			searcher.Loaded += indexLoaded;
 
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
@@ -81,9 +80,8 @@ namespace Mtgdb.Controls
 
 			_viewDeck.MouseMove += deckMouseMove;
 
-			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, updateSubsystem);
+			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
 			_deckSort.SortChanged += sortChanged;
-			_deckSort.DeckTransformed += deckTransformed;
 			_deckSort.SubscribeToEvents();
 
 			_model = _listModel.CreateModel(Deck.Create());
@@ -100,6 +98,9 @@ namespace Mtgdb.Controls
 				_searchSubsystem.Apply();
 		}
 
+		private void indexLoaded() =>
+			runRefreshSearchResultTask(onComplete: null);
+
 		private void searcherLoaded() =>
 			_tooltipOwner.Invoke(_searchSubsystem.Apply);
 
@@ -109,13 +110,6 @@ namespace Mtgdb.Controls
 		private void sortChanged() =>
 			runRefreshSearchResultTask(onComplete: () =>
 				_tooltipOwner.Invoke(delegate { _labelSortStatus.Text = _deckSort.GetTextualStatus(); }));
-
-		private void deckTransformed(int count, int total)
-		{
-			DecksTransformedCount = count;
-			DecksToTransformCount = total;
-			DeckTransformed?.Invoke(this);
-		}
 
 		private void listModelLoaded() =>
 			runRefreshSearchResultTask(onComplete: null);
@@ -175,11 +169,8 @@ namespace Mtgdb.Controls
 			refreshData();
 		}
 
-		public void CollectionChanged()
-		{
+		public void CollectionChanged() =>
 			_model.Collection = new CollectionSnapshot(_collection);
-			refreshData();
-		}
 
 		private void setupTooltips(TooltipController controller)
 		{
@@ -273,7 +264,13 @@ namespace Mtgdb.Controls
 				{
 					_aborted = false;
 
-					_deckSort.TransformDecks(() => _aborted);
+					IsTransformingDecks = true;
+					DeckTransformed?.Invoke(this);
+
+					_listModel.TransformDecks(() => _aborted);
+
+					IsTransformingDecks = false;
+					DeckTransformed?.Invoke(this);
 
 					if (_aborted)
 						return;
@@ -296,13 +293,14 @@ namespace Mtgdb.Controls
 						_cardIdsInFilteredDecks.UnionWith(model.Deck.MainDeck.Order);
 						_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
 					}
-
-					_tooltipOwner.Invoke(delegate
-					{
-						refreshData();
-						onComplete?.Invoke();
-					});
 				}
+
+				_tooltipOwner.Invoke(delegate
+				{
+					refreshData();
+					onComplete?.Invoke();
+				});
+
 			});
 		}
 
@@ -323,11 +321,7 @@ namespace Mtgdb.Controls
 			BeginLoadingDecks(count: 1);
 			AddDeck(copy);
 
-			bool wasDuplicate = DecksAddedCount == 0;
 			EndLoadingDecks();
-
-			if (wasDuplicate)
-				MessageBox.Show("Saving cancelled because the deck was not modified");
 		}
 
 		public void BeginLoadingDecks(int count)
@@ -364,6 +358,8 @@ namespace Mtgdb.Controls
 				_listModel.Save();
 
 			_decksAdded.Clear();
+
+			runRefreshSearchResultTask(onComplete: null);
 		}
 
 		private void removeDeck(DeckModel deckModel)
@@ -552,9 +548,7 @@ namespace Mtgdb.Controls
 		public int DecksAddedCount => _decksAdded.Count;
 		public int DecksToAddCount { get; private set; }
 
-		public bool IsTransformingDecks => DecksTransformedCount < DecksToTransformCount;
-		public int DecksToTransformCount { get; private set; }
-		public int DecksTransformedCount { get; private set; }
+		public bool IsTransformingDecks { get; private set; }
 
 		private DeckModel _model;
 		private DeckListModel _listModel;
@@ -574,10 +568,10 @@ namespace Mtgdb.Controls
 		private SearchResultHiglightSubsystem _higlightSubsystem;
 
 		private Cursor _textSelectionCursor;
-		private DeckListAsnycUpdateSubsystem _updateSubsystem;
 		private DeckSortSubsystem _deckSort;
 
 		private bool _aborted;
 		private readonly object _sync = new object();
+		private DeckIndexUpdateSubsystem _indexUpdateSubsystem;
 	}
 }

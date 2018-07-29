@@ -56,10 +56,8 @@ namespace Mtgdb.Downloader
 		}
 
 
-		public void FetchNews()
-		{
+		public void FetchNews() =>
 			FetchNews(repeatViewed: false);
-		}
 
 		public void FetchNews(bool repeatViewed)
 		{

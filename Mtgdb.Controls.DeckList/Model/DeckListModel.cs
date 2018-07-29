@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
 	public class DeckListModel
 	{
+		public event Action Changed;
+
+		static DeckListModel()
+		{
+			_serializer = new JsonSerializer();
+
+			_serializer.Converters.Add(
+				new UnformattedJsonConverter(type =>
+					typeof(IEnumerable<int>).IsAssignableFrom(type)));
+		}
+
 		[UsedImplicitly]
 		public DeckListModel(
 			CardRepository repo,
@@ -24,27 +37,56 @@ namespace Mtgdb.Controls
 
 			_collectionEditor.CollectionChanged += collectionChanged;
 			_state.Collection = new CollectionSnapshot(_collectionEditor);
+			_repo.PriceLoadingComplete += priceLoadingComplete;
+		}
+
+		private void priceLoadingComplete()
+		{
+			lock (_syncModels)
+				foreach (var model in _deckModels)
+				{
+					model.FillCardNames();
+					model.ClearCaches();
+				}
 		}
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card)
 		{
-			var snapshot = new CollectionSnapshot(_collectionEditor);
+			if (!listChanged && !countChanged)
+				return;
 
-			if (_repo.IsLoadingComplete)
+			ThreadPool.QueueUserWorkItem(_ =>
 			{
-				var affectedCardIds = snapshot.GetAffectedCardIds(_state.Collection);
-				var affectedNames = affectedCardIds
-					.Select(id => _repo.CardsById[id].NameEn)
-					.ToHashSet(Str.Comparer);
-
-				foreach (var model in _deckModels)
+				_abort = true;
+				lock (_syncCollection)
 				{
-					if (model.MayContainCardNames(affectedNames))
-						model.Collection = snapshot;
-				}
-			}
+					_abort = false;
 
-			_state.Collection = snapshot;
+					var snapshot = new CollectionSnapshot(_collectionEditor);
+
+					var affectedCardIds = snapshot.GetAffectedCardIds(_state.Collection);
+
+					if (affectedCardIds.Count == 0)
+						return;
+
+					var affectedNames = affectedCardIds
+						.Select(id => _repo.CardsById[id].NameEn)
+						.ToHashSet(Str.Comparer);
+
+					lock (_syncModels)
+						foreach (var model in _deckModels)
+						{
+							if (_abort)
+								return;
+
+							if (model.MayContainCardNames(affectedNames))
+								model.Collection = snapshot;
+						}
+
+					_state.Collection = snapshot;
+					Save();
+				}
+			});
 		}
 
 		public bool Add(Deck deck)
@@ -58,11 +100,14 @@ namespace Mtgdb.Controls
 
 			var model = CreateModel(deck);
 			var index = _deckModels.Count;
-			deck.Id = Interlocked.Increment(ref _state.Id);
 
-			_deckModels.Add(model);
-			_indexByDeck.Add(model, index);
-			_decksByName.Add(deck.Name, model);
+			lock (_syncModels)
+			{
+				deck.Id = Interlocked.Increment(ref _state.Id);
+				_deckModels.Add(model);
+				_indexByDeck.Add(model, index);
+				_decksByName.Add(deck.Name, model);
+			}
 
 			return true;
 		}
@@ -72,55 +117,127 @@ namespace Mtgdb.Controls
 
 		public void Remove(DeckModel deck)
 		{
-			_deckModels.RemoveAt(_indexByDeck[deck]);
-			_indexByDeck.Remove(deck);
-			_decksByName.Remove(deck.Name, deck);
+			lock (_syncModels)
+			{
+				_deckModels.RemoveAt(_indexByDeck[deck]);
+				_indexByDeck.Remove(deck);
+				_decksByName.Remove(deck.Name, deck);
+			}
 		}
 
 		public void Rename(DeckModel deck, string name)
 		{
-			_decksByName.Remove(deck.Name, deck);
+			lock (_syncModels)
+			{
+				_decksByName.Remove(deck.Name, deck);
 
-			deck.Name = name;
-			var duplicate = findDupliate(deck.OriginalDeck);
-			if (duplicate != null)
-				duplicate.Saved = deck.Saved;
-			else
-				_decksByName.Add(deck.Name, deck);
+				deck.Name = name;
+				var duplicate = findDupliate(deck.OriginalDeck);
+				if (duplicate != null)
+					duplicate.Saved = deck.Saved;
+				else
+					_decksByName.Add(deck.Name, deck);
+			}
 		}
 
+		public IReadOnlyList<DeckModel> GetModelCopies()
+		{
+			lock (_syncModels)
+				return _state.Decks.Select(CreateModel).ToReadOnlyList();
+		}
+
+		public IEnumerable<DeckModel> GetModels()
+		{
+			lock (_syncModels)
+				foreach (var model in _deckModels)
+					yield return model;
+		}
 
 
 		public void Save()
 		{
-			_state.Decks = _deckModels.Select(_ => _.Deck).ToList();
-			var serialized = JsonConvert.SerializeObject(_state, Formatting.Indented);
-			File.WriteAllText(_fileName, serialized);
+			Changed?.Invoke();
+
+			var serialized = new StringBuilder();
+
+			lock (_syncModels)
+			{
+				_state.Decks = _deckModels.Select(_ => _.OriginalDeck).ToList();
+				
+				using(var writer = new StringWriter(serialized))
+				using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
+					_serializer.Serialize(jsonWriter, _state);
+			}
+			
+			File.WriteAllText(_fileName, serialized.ToString());
 		}
 
 		public void Load()
 		{
 			if (File.Exists(_fileName))
 			{
-				var serialized = File.ReadAllText(_fileName);
-				_state = JsonConvert.DeserializeObject<State>(serialized);
+				string serialized = File.ReadAllText(_fileName);
 
-				_deckModels = _state.Decks
-					.Select(d => new DeckModel(d, _repo, _collectionEditor, _transformation))
-					.ToList();
+				var deserialized = deserialize(serialized);
 
-				_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
+				lock (_syncModels)
+				{
+					_state = deserialized;
 
-				_indexByDeck = Enumerable.Range(0, _deckModels.Count)
-					.ToDictionary(i => _deckModels[i]);
+					_deckModels = _state.Decks
+						.Select(d => new DeckModel(d, _repo, _collectionEditor, _transformation))
+						.ToList();
+
+					_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
+
+					_indexByDeck = Enumerable.Range(0, _deckModels.Count)
+						.ToDictionary(i => _deckModels[i]);
+				}
 			}
 
 			IsLoaded = true;
 			Loaded?.Invoke();
 		}
 
+		private State deserialize(string serialized)
+		{
+			try
+			{
+				return JsonConvert.DeserializeObject<State>(serialized);
+			}
+			catch (JsonException)
+			{
+				var decks = JsonConvert.DeserializeObject<List<Deck>>(serialized);
+				return new State
+				{
+					Collection = _state.Collection,
+					Decks = decks,
+					IdCounter = decks.Max(_=>_.Id)
+				};
+			}
+		}
+
 		public bool IsLoaded { get; private set; }
 		public event Action Loaded;
+
+		public void TransformDecks(Func<bool> interrupt)
+		{
+			if (!IsLoaded)
+				return;
+
+			lock (_syncModels)
+			{
+				var count = _deckModels.Count;
+
+				for (int i = 0; i < count; i++)
+				{
+					if (interrupt())
+						return;
+
+					_deckModels[i].UpdateTransformedDeck();
+				}
+			}
+		}
 
 		private DeckModel findDupliate(Deck deck)
 		{
@@ -146,12 +263,15 @@ namespace Mtgdb.Controls
 		private static readonly string _fileName = AppDir.History.AddPath("decks.json");
 		private State _state = new State();
 
-		private class State
+		private readonly object _syncCollection = new object();
+		private readonly object _syncModels = new object();
+		private bool _abort;
+
+		public class State
 		{
 			[JsonIgnore]
 			public long Id;
 
-			[UsedImplicitly] // when deserializing
 			public long IdCounter
 			{
 				get => Id;
@@ -160,5 +280,7 @@ namespace Mtgdb.Controls
 			public CollectionSnapshot Collection { get; set; }
 			public List<Deck> Decks { get; set; } = new List<Deck>();
 		}
+
+		private static readonly JsonSerializer _serializer;
 	}
 }

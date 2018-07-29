@@ -12,11 +12,6 @@ namespace Mtgdb.Dal
 			Kernel.BindConfig<SuggestImageDownloaderConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException
-
-			Kernel.Bind<Loader>()
-				.ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<CardRepository>()
 				.ToSelf()
 				.InSingletonScope();

@@ -13,7 +13,7 @@ namespace Mtgdb.Index
 		protected LuceneSpellchecker(IDocumentAdapter<TId, TDoc> adapter)
 		{
 			_adapter = adapter;
-			MaxCount = 25;
+			MaxCount = 20;
 
 			_userFields = _adapter.GetUserFields()
 				.Select(f => f + ":")

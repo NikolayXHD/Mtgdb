@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Dal;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public class DeckZoneModel
 	{

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {
@@ -15,7 +16,7 @@ namespace Mtgdb.Controls
 		public Deck Transform(Deck original, ICardCollection collection)
 		{
 			if (!_repo.IsLoadingComplete)
-				return original.Copy();
+				return original;
 
 			var target = Deck.Create();
 

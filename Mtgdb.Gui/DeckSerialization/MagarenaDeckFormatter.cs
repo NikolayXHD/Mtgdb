@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {

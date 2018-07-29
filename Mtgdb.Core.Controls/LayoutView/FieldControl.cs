@@ -175,14 +175,6 @@ namespace Mtgdb.Controls
 					Size.Height - padding.Vertical));
 		}
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-				components?.Dispose();
-
-			base.Dispose(disposing);
-		}
-
 		private void init()
 		{
 			SuspendLayout();
@@ -393,7 +385,6 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public TextSelection TextSelection { get; } = new TextSelection();
 
-		private readonly IContainer components = null;
 		private IconRecognizer _iconRecognizer;
 		private Image _image;
 		private IList<TextRange> _highlightRanges;

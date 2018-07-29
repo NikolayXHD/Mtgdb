@@ -52,8 +52,12 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<FormManager>()
+			Kernel.Bind<Application>()
 				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<IApplication>()
+				.ToMethod(ctx => ctx.Kernel.Get<Application>())
 				.InSingletonScope();
 
 			Kernel.Bind<DeckListModel>()
@@ -76,12 +80,16 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<DeckListAsnycUpdateSubsystem>()
+			Kernel.Bind<IDeckTransformation>()
+				.To<CollectedCardsDeckTransformation>()
+				.InSingletonScope();
+
+			Kernel.Bind<DeckIndexUpdateSubsystem>()
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<IDeckTransformation>()
-				.To<CollectedCardsDeckTransformation>()
+			Kernel.Bind<Loader>()
+				.ToSelf()
 				.InSingletonScope();
 		}
 	}

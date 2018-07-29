@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mtgdb.Dal
+namespace Mtgdb.Ui
 {
 	public class Deck
 	{
@@ -75,9 +75,6 @@ namespace Mtgdb.Dal
 			MainDeck = replace(MainDeck, replacements);
 			Sideboard = replace(Sideboard, replacements);
 		}
-
-		public bool Contains(Card c) =>
-			MainDeck.Count.ContainsKey(c.Id) || Sideboard.Count.ContainsKey(c.Id);
 
 		public Deck()
 		{

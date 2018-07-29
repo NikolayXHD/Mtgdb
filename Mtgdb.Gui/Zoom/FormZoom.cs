@@ -5,7 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
@@ -14,6 +16,7 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormZoom : Form
 	{
+		[UsedImplicitly] // by WinForms designer
 		public FormZoom()
 		{
 			InitializeComponent();
@@ -61,18 +64,19 @@ namespace Mtgdb.Gui
 			updateShowArt();
 		}
 
-		public void LoadImages(Card card, UiModel ui)
+		public async Task LoadImages(Card card, UiModel ui)
 		{
 			_location = Cursor.Position;
-			loadImages(card, ui);
+			await runLoadImagesTask(card, ui);
 		}
 
-		private void loadImages(Card card, UiModel ui)
+		private async Task runLoadImagesTask(Card card, UiModel ui)
 		{
 			_card = card;
 			_ui = ui;
 
-			_imageLoadingThread?.Abort();
+			_cts?.Cancel();
+
 			_cardForms = _cardRepository.GetForms(card, ui);
 
 			foreach (var oldImg in _images)
@@ -82,19 +86,38 @@ namespace Mtgdb.Gui
 			_models.Clear();
 			_imageIndex = 0;
 
-			_imageLoadingThread = new Thread(loadImages);
-			_imageLoadingThread.Start();
+			var cts = new CancellationTokenSource();
+			TaskEx.Run(async () =>
+			{
+				await loadImages(cts.Token);
+				cts.Cancel();
+			});
 
-			while (_images.Count == 0)
-				Thread.Sleep(50);
+			await someImageLoaded(cts.Token);
+
+			_cts = cts;
+		}
+
+		private async Task someImageLoaded(CancellationToken token)
+		{
+			while (_images.Count == 0 && !token.IsCancellationRequested)
+				await TaskEx.Delay(50);
 		}
 
 		private void showArtChanged(object sender, EventArgs e)
 		{
 			updateShowArt();
-			loadImages(_card, _ui);
-			updateImage();
-			applyZoom();
+
+			TaskEx.Run(async () =>
+			{
+				await runLoadImagesTask(_card, _ui);
+
+				this.Invoke(delegate
+				{
+					updateImage();
+					applyZoom();
+				});
+			});
 		}
 
 		private void updateShowArt() =>
@@ -105,31 +128,25 @@ namespace Mtgdb.Gui
 			updateImage();
 			applyZoom();
 
-			Application.DoEvents();
+			System.Windows.Forms.Application.DoEvents();
 
 			Show();
 			Focus();
 		}
 
 
-		private void loadImages()
+		private async Task loadImages(CancellationToken token)
 		{
-			try
-			{
-				bool repoLoadingComplete = isRepoLoadingComplete();
-				load();
+			bool repoLoadingComplete = isRepoLoadingComplete();
+			await load(token);
 
-				if (repoLoadingComplete)
-					return;
+			if (repoLoadingComplete)
+				return;
 
-				while (!isRepoLoadingComplete())
-					Thread.Sleep(100);
+			while (!isRepoLoadingComplete())
+				await TaskEx.Delay(100);
 
-				load();
-			}
-			catch (ThreadAbortException)
-			{
-			}
+			await load(token);
 		}
 
 		private bool isRepoLoadingComplete()
@@ -137,16 +154,22 @@ namespace Mtgdb.Gui
 			return _imageRepository.IsLoadingArtComplete && _imageRepository.IsLoadingZoomComplete;
 		}
 
-		private void load()
+		private async Task load(CancellationToken token)
 		{
 			int index = 0;
 			for (int j = 0; j < _cardForms.Count; j++)
 			{
+				if (token.IsCancellationRequested)
+					return;
+
 				if (_showArt)
 					foreach (var model in _cardRepository.GetImagesArt(_cardForms[j], _imageRepository))
 					{
-						while (index > _imageIndex + 10)
-							Thread.Sleep(100);
+						while (index > _imageIndex + 10 && !token.IsCancellationRequested)
+							await TaskEx.Delay(100);
+
+						if (token.IsCancellationRequested)
+							return;
 
 						var size = model.ImageFile.IsArt
 							? getSizeArt()
@@ -163,8 +186,11 @@ namespace Mtgdb.Gui
 
 				foreach (var model in _cardRepository.GetZoomImages(_cardForms[j], _imageRepository))
 				{
-					while (index > _imageIndex + 10)
-						Thread.Sleep(100);
+					while (index > _imageIndex + 10 && !token.IsCancellationRequested)
+						await TaskEx.Delay(100);
+
+					if (token.IsCancellationRequested)
+						return;
 
 					var size = model.ImageFile.IsArt
 						? getSizeArt()
@@ -226,7 +252,7 @@ namespace Mtgdb.Gui
 			{
 				updateImage();
 				applyZoom();
-				Application.DoEvents();
+				System.Windows.Forms.Application.DoEvents();
 			}
 		}
 
@@ -321,9 +347,10 @@ namespace Mtgdb.Gui
 
 		private void hideImage()
 		{
-			_imageLoadingThread?.Abort();
+			_cts?.Cancel();
+			
 			_pictureBox.Image = null;
-			Application.DoEvents();
+			System.Windows.Forms.Application.DoEvents();
 			Hide();
 		}
 
@@ -362,10 +389,11 @@ namespace Mtgdb.Gui
 		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
 		private Card _card;
 
-		private Thread _imageLoadingThread;
 		private List<Card> _cardForms;
 		private Point _location;
 		private bool _showArt;
 		private UiModel _ui;
+
+		private CancellationTokenSource _cts;
 	}
 }

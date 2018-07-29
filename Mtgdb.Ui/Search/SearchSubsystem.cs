@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
@@ -95,25 +96,15 @@ namespace Mtgdb.Ui
 
 		public void StartThread()
 		{
-			if (_idleInputMonitoringThread?.ThreadState == ThreadState.Running)
+			if (_cts != null && !_cts.IsCancellationRequested)
 				throw new InvalidOperationException("Already started");
 
-			_idleInputMonitoringThread = new Thread(idleInputMonitoringThread);
-			_idleInputMonitoringThread.Start();
-		}
-
-		public void AbortThread()
-		{
-			_idleInputMonitoringThread.Abort();
-		}
-
-		private void idleInputMonitoringThread()
-		{
-			const int delay = 1000;
-
-			try
+			var cts = new CancellationTokenSource();
+			TaskEx.Run(async () =>
 			{
-				while (true)
+				const int delay = 1000;
+
+				while (!cts.IsCancellationRequested)
 				{
 					updateBackColor();
 
@@ -124,15 +115,17 @@ namespace Mtgdb.Ui
 						deltaMs = delay - (int) (DateTime.Now - _lastUserInput.Value).TotalMilliseconds;
 
 					if (deltaMs > 0)
-						Thread.Sleep(deltaMs + 100);
+						await TaskEx.Delay(deltaMs + 100);
 					else
 						_findEditor.Invoke(Apply);
 				}
-			}
-			catch (ThreadAbortException)
-			{
-			}
+			});
+
+			_cts = cts;
 		}
+
+		public void AbortThread() =>
+			_cts?.Cancel();
 
 		private void updateBackColor()
 		{
@@ -747,7 +740,6 @@ namespace Mtgdb.Ui
 
 		private string _appliedText;
 		private DateTime? _lastUserInput;
-		private Thread _idleInputMonitoringThread;
 
 		private string _currentText = string.Empty;
 
@@ -764,6 +756,7 @@ namespace Mtgdb.Ui
 		private readonly LayoutViewControl[] _views;
 		private readonly SearchStringHighlighter _highligter;
 
+		private CancellationTokenSource _cts;
 		private readonly object _syncSuggest = new object();
 	}
 }

@@ -90,7 +90,16 @@ namespace Mtgdb.Dal
 					Str.Comparer);
 
 			for (int i = 0; i < Cards.Count; i++)
-				Cards[i].IndexInFile = i;
+			{
+				var card = Cards[i];
+
+				card.IndexInFile = i;
+
+				card.Namesakes = CardsByName[card.NameNormalized]
+					.Where(c => c != card)
+					.OrderByDescending(c => c.ReleaseDate)
+					.ToArray();
+			}
 
 			patchLegality();
 
@@ -331,11 +340,6 @@ namespace Mtgdb.Dal
 				//{
 				//	generatedManaMismatchCards.Add(card);
 				//}
-
-				card.Namesakes = CardsByName[card.NameNormalized]
-					.Where(c => c != card)
-					.OrderByDescending(c => c.ReleaseDate)
-					.ToArray();
 			}
 
 			IsLocalizationLoadingComplete = true;

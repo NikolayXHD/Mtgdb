@@ -73,7 +73,7 @@ namespace Mtgdb.Gui
 
 		private void openWindowClick(object sender, EventArgs e)
 		{
-			_formManager.CreateForm();
+			_application.CreateForm();
 		}
 
 		private static void configClick(object sender, EventArgs e)

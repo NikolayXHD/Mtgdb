@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Mtgdb.Dal;
 using System.Linq;
+using Mtgdb.Ui;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
 	public class DeckModel
 	{
-		public DeckModel(Deck deck, CardRepository repo, ICardCollection collection, IDeckTransformation transformation)
+		public DeckModel(Deck originalDeck, CardRepository repo, ICardCollection collection, IDeckTransformation transformation)
 		{
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
@@ -21,53 +22,31 @@ namespace Mtgdb.Controls
 
 			IList<string> generatedMana(Card c, int countInDeck) => c.GeneratedManaArr;
 
-			_priceTotalCache = new DeckAggregateCache<float, float, float>(
-				repo,
-				() => Deck,
-				() => 0f,
-				(a, b) => a + b,
-				priceTotal,
-				a => a);
+			float f0() => 0f;
+			int i0() => 0;
+			float fSum(float a, float b) => a + b;
+			int iSum(int a, int b) => a + b;
+			float fE(float a) => a;
+			int iE(int a) => a;
+			Deck deck() => Deck;
 
-			_countTotalCache = new DeckAggregateCache<int, int, int>(
-				repo,
-				() => Deck,
-				() => 0,
-				(a, b) => a + b,
-				countTotal,
-				a => a);
+			_priceTotalCache =
+				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceTotal, fE);
 
-			_priceCollectedCache = new DeckAggregateCache<float, float, float>(
-				repo,
-				() => Deck,
-				() => 0f,
-				(a, b) => a + b,
-				priceCollected,
-				a => a);
+			_countTotalCache =
+				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countTotal, iE);
 
-			_countCollectedCache = new DeckAggregateCache<int, int, int>(
-				repo,
-				() => Deck,
-				() => 0,
-				(a, b) => a + b,
-				countCollected,
-				a => a);
+			_priceCollectedCache =
+				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceCollected, fE);
 
-			_priceCollectedSideCache = new DeckAggregateCache<float, float, float>(
-				repo,
-				() => Deck,
-				() => 0f,
-				(a, b) => a + b,
-				priceCollectedSide,
-				a => a);
+			_countCollectedCache =
+				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countCollected, iE);
 
-			_countCollectedSideCache = new DeckAggregateCache<int, int, int>(
-				repo,
-				() => Deck,
-				() => 0,
-				(a, b) => a + b,
-				countCollectedSide,
-				a => a);
+			_priceCollectedSideCache =
+				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceCollectedSide, fE);
+
+			_countCollectedSideCache =
+				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countCollectedSide, iE);
 
 			_generatedManaCache = new DeckAggregateCache<IList<string>, Dictionary<string, int>, string>(
 				repo,
@@ -101,7 +80,7 @@ namespace Mtgdb.Controls
 			_collection = collection;
 			_repo = repo;
 			_transformation = transformation;
-			OriginalDeck = deck;
+			OriginalDeck = originalDeck;
 		}
 
 		private void clearCaches()
@@ -282,7 +261,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public void ResetTransformedDeck()
+		public void ClearCaches()
 		{
 			_isDeckUpToDate = false;
 			clearCaches();
@@ -295,14 +274,8 @@ namespace Mtgdb.Controls
 				if (_isDeckUpToDate)
 					return;
 
-				var prevValue = _deck;
-				var newValue = _transformation?.Transform(OriginalDeck, _collection) ?? OriginalDeck;
-
-				if (prevValue == null || !prevValue.IsEquivalentTo(newValue))
-				{
-					_deck = _transformation?.Transform(OriginalDeck, _collection) ?? OriginalDeck;
-					clearCaches();
-				}
+				_deck = _transformation.Transform(OriginalDeck, _collection);
+				clearCaches();
 
 				_isDeckUpToDate = true;
 			}
@@ -348,19 +321,24 @@ namespace Mtgdb.Controls
 			{
 				_originalDeck = value;
 
-				ResetTransformedDeck();
-
-				bool isRepoLoaded = _repo.IsLoadingComplete;
-				if (_cardNames == null && isRepoLoaded)
-					_cardNames = new HashSet<string>(Str.Comparer);
-
-				if (!isRepoLoaded)
-					return;
-
-				_cardNames.Clear();
-				_cardNames.UnionWith(value.MainDeck.Order.Select(_ => _repo.CardsById[_].NameEn));
-				_cardNames.UnionWith(value.Sideboard.Order.Select(_ => _repo.CardsById[_].NameEn));
+				ClearCaches();
+				FillCardNames();
 			}
+		}
+
+		public void FillCardNames()
+		{
+			bool isRepoLoaded = _repo.IsLoadingComplete;
+
+			if (_cardNames == null && isRepoLoaded)
+				_cardNames = new HashSet<string>(Str.Comparer);
+
+			if (!isRepoLoaded)
+				return;
+
+			_cardNames.Clear();
+			_cardNames.UnionWith(OriginalDeck.MainDeck.Order.Select(_ => _repo.CardsById[_].NameEn));
+			_cardNames.UnionWith(OriginalDeck.Sideboard.Order.Select(_ => _repo.CardsById[_].NameEn));
 		}
 
 		private readonly CardRepository _repo;

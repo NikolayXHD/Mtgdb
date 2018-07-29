@@ -12,9 +12,11 @@ namespace Mtgdb.Ui
 		{
 			IsLoaded = true;
 
-			var modified = (append
-					? CountById
-					: Enumerable.Empty<KeyValuePair<string, int>>())
+			var pairs = append
+				? CountById
+				: Enumerable.Empty<KeyValuePair<string, int>>();
+
+			var modified = pairs
 				.Concat(deck.MainDeck.Count)
 				.Concat(deck.Sideboard.Count)
 				.GroupBy(_ => _.Key)
@@ -22,9 +24,14 @@ namespace Mtgdb.Ui
 					gr => gr.Key,
 					gr => gr.Sum(_ => _.Value));
 
-			CountById = modified;
 
-			CollectionChanged?.Invoke(listChanged: true, countChanged: true, card: null);
+
+			bool changed = !modified.IsEqualTo(CountById);
+
+			if (changed)
+				CountById = modified;
+
+			CollectionChanged?.Invoke(listChanged: changed, countChanged: changed, card: null);
 		}
 
 		public void Add(Card card, int increment)

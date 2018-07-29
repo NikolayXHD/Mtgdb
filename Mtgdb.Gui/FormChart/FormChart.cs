@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Mtgdb.Controls;
@@ -74,7 +74,7 @@ namespace Mtgdb.Gui
 
 		private void scale()
 		{
-			this.SuspendLayout();
+			SuspendLayout();
 
 			TitleHeight = TitleHeight.ByDpiHeight();
 
@@ -122,8 +122,8 @@ namespace Mtgdb.Gui
 				ResourcesFilter.max_hovered.HalfResizeDpi()
 			};
 
-			this.ResumeLayout(false);
-			this.PerformLayout();
+			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		public FormChart(CardRepository repository, UiModel ui, CardFields fields)
@@ -916,7 +916,7 @@ namespace Mtgdb.Gui
 			if (!isCustom || modified)
 				display(settings);
 
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(async () =>
 			{
 				while (!ready())
 				{
@@ -941,7 +941,7 @@ namespace Mtgdb.Gui
 						return;
 					}
 
-					Thread.Sleep(500);
+					await TaskEx.Delay(500);
 				}
 
 				this.Invoke(delegate

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Mtgdb.Index;
 
 namespace Mtgdb.Ui
@@ -9,15 +10,6 @@ namespace Mtgdb.Ui
 		protected SuggestModel(LuceneSearcher<TId, TObj> searcher)
 		{
 			Searcher = searcher;
-			_suggestThread = new Thread(_ => suggestThread());
-		}
-
-		private void suggestLoopIteration()
-		{
-			if (!Searcher.Spellchecker.IsLoaded || TextInputStateCurrent == null || IsSuggestUpToDate())
-				Thread.Sleep(100);
-			else
-				suggest();
 		}
 
 		private void suggest()
@@ -48,23 +40,31 @@ namespace Mtgdb.Ui
 			return _textInputState.Equals(TextInputStateCurrent);
 		}
 
-		public void StartSuggestThread() =>
-			_suggestThread.Start();
+		public void StartSuggestThread()
+		{
+			if (_cts != null && !_cts.IsCancellationRequested)
+				throw new InvalidOperationException("Already started");
+
+			var cts = new CancellationTokenSource();
+
+			TaskEx.Run(async () =>
+			{
+				while (!cts.IsCancellationRequested)
+				{
+					if (!Searcher.Spellchecker.IsLoaded || TextInputStateCurrent == null || IsSuggestUpToDate())
+						await TaskEx.Delay(100);
+					else
+						suggest();
+				}
+			});
+
+			_cts = cts;
+		}
 
 		public void AbortSuggestThread() =>
-			_suggestThread.Abort();
+			_cts?.Cancel();
 
-		private void suggestThread()
-		{
-			try
-			{
-				while (true)
-					suggestLoopIteration();
-			}
-			catch (ThreadAbortException)
-			{
-			}
-		}
+
 
 		public TextInputState TextInputStateCurrent { get; set; }
 
@@ -73,6 +73,7 @@ namespace Mtgdb.Ui
 		private TextInputState _textInputState;
 
 		protected readonly LuceneSearcher<TId, TObj> Searcher;
-		private readonly Thread _suggestThread;
+
+		private CancellationTokenSource _cts;
 	}
 }
