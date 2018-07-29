@@ -86,21 +86,25 @@ namespace Mtgdb.Gui
 			_models.Clear();
 			_imageIndex = 0;
 
-			var cts = new CancellationTokenSource();
+			var loadingCancellation = new CancellationTokenSource();
+			var waitingCancellation = new CancellationTokenSource();
+
+#pragma warning disable 4014
 			TaskEx.Run(async () =>
+#pragma warning restore 4014
 			{
-				await loadImages(cts.Token);
-				cts.Cancel();
+				await loadImages(loadingCancellation.Token);
+				waitingCancellation.Cancel();
 			});
 
-			await someImageLoaded(cts.Token);
+			await someImageLoaded(waitingCancellation.Token);
 
-			_cts = cts;
+			_cts = loadingCancellation;
 		}
 
-		private async Task someImageLoaded(CancellationToken token)
+		private async Task someImageLoaded(CancellationToken cancellation)
 		{
-			while (_images.Count == 0 && !token.IsCancellationRequested)
+			while (_images.Count == 0 && !cancellation.IsCancellationRequested)
 				await TaskEx.Delay(50);
 		}
 

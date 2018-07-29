@@ -96,30 +96,38 @@ namespace Mtgdb.Controls
 						Clickable = false
 					};
 
-					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonAdd)
+					if (hitInfo.IsAddButton())
 					{
 						tooltip.Id += "add";
 						tooltip.Text = "Save this deck";
 					}
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRemove)
+					else if (hitInfo.IsRemoveButton())
 					{
 						tooltip.Id += "remove";
 						tooltip.Title = "Remove this deck";
 						tooltip.Text = "Removes this deck from the list.\r\n" +
 							"NOTE: be careful, you cannot undo this.";
 					}
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRename)
+					else if (hitInfo.IsRenameButton())
 					{
 						tooltip.Id += "rename";
 						tooltip.Text = "Rename this deck";
 					}
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
+					else if (hitInfo.IsOpenButton())
 					{
 						tooltip.Id += "open";
 						tooltip.Title = "Open deck";
-						tooltip.Text = "Left-click to open in this tab, currently opened deck will be " +
-							"replaced.\r\n" +
-							"Middle-click to open in new tab.";
+						tooltip.Text = "Open the deck in it's original form as it was edited and saved.\r\n\r\n" +
+							"Left-click to open in this tab, currently opened deck will be replaced.\r\n" +
+							"Middle-click to open in new tab.\r\n\r\n";
+					}
+					else if (hitInfo.IsOpenTransformedButton())
+					{
+						tooltip.Id += "open_transformed";
+						tooltip.Title = "Open transformed deck";
+						tooltip.Text = "In transformed deck card variants from your collection and with known price are used whenever possible.\r\n\r\n" +
+							"Left-click to open in this tab, currently opened deck will be replaced.\r\n" +
+							"Middle-click to open in new tab.\r\n\r\n";
 					}
 					else
 						return;

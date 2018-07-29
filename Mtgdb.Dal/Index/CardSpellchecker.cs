@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Mtgdb.Index;
 
@@ -19,17 +16,7 @@ namespace Mtgdb.Dal.Index
 			_repo = repo;
 		}
 
-		protected override IEnumerable<Card> GetObjectsToIndex()
-		{
-			if (!_repo.IsLocalizationLoadingComplete)
-				throw new InvalidOperationException();
-
-			return _repo.SetsByCode.Values
-				.Where(FilterSet)
-				.SelectMany(s => s.Cards);
-		}
-
-		protected override Directory CreateIndex(DirectoryReader reader)
+		protected override Directory CreateIndex(LuceneSearcherState<int, Card> searcherState)
 		{
 			Directory index;
 
@@ -41,7 +28,7 @@ namespace Mtgdb.Dal.Index
 				var spellchecker = CreateSpellchecker();
 				spellchecker.Load(index);
 
-				var state = CreateState(reader, spellchecker, loaded: true);
+				var state = CreateState(searcherState, spellchecker, loaded: true);
 				Update(state);
 
 				return index;
@@ -51,7 +38,7 @@ namespace Mtgdb.Dal.Index
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();
-			index = base.CreateIndex(reader);
+			index = base.CreateIndex(searcherState);
 
 			if (index == null)
 				return null;
@@ -61,6 +48,15 @@ namespace Mtgdb.Dal.Index
 
 			return index;
 		}
+
+		protected override LuceneSpellcheckerState<int, Card> CreateState(LuceneSearcherState<int, Card> searcherState, Spellchecker spellchecker, bool loaded) =>
+			new CardSpellcheckerState(
+				_repo,
+				FilterSet,
+				spellchecker,
+				(CardSearcherState) searcherState, (CardDocumentAdapter) Adapter,
+				() => MaxCount,
+				loaded);
 
 		public void InvalidateIndex() =>
 			_version.Invalidate();

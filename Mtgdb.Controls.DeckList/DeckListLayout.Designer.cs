@@ -110,7 +110,7 @@
 			Mtgdb.Controls.ButtonOptions buttonOptions41 = new Mtgdb.Controls.ButtonOptions();
 			Mtgdb.Controls.SearchOptions searchOptions42 = new Mtgdb.Controls.SearchOptions();
 			Mtgdb.Controls.ButtonOptions buttonOptions42 = new Mtgdb.Controls.ButtonOptions();
-			this._fieldName = new Mtgdb.Controls.FieldControl();
+			this.FieldName = new Mtgdb.Controls.FieldControl();
 			this._fieldMainCount = new Mtgdb.Controls.FieldControl();
 			this._fieldSideCount = new Mtgdb.Controls.FieldControl();
 			this._fieldLandCount = new Mtgdb.Controls.FieldControl();
@@ -152,27 +152,27 @@
 			this._fieldOtherUnknownPrice = new Mtgdb.Controls.FieldControl();
 			this._fieldSideCollectedCountPercent = new Mtgdb.Controls.FieldControl();
 			this._fieldGeneratedMana = new Mtgdb.Controls.FieldControl();
-			this._fieldSaved = new Mtgdb.Controls.FieldControl();
+			this.FieldSaved = new Mtgdb.Controls.FieldControl();
 			this._fieldLegality = new Mtgdb.Controls.FieldControl();
 			this._panelLayout.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _fieldName
 			// 
-			this._fieldName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.FieldName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelLayout.SetColumnSpan(this._fieldName, 4);
-			this._fieldName.DataText = "";
-			this._fieldName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldName.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldName.Location = new System.Drawing.Point(5, 37);
-			this._fieldName.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-			this._fieldName.Name = "_fieldName";
+			this._panelLayout.SetColumnSpan(this.FieldName, 4);
+			this.FieldName.DataText = "";
+			this.FieldName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.FieldName.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+			this.FieldName.Location = new System.Drawing.Point(5, 37);
+			this.FieldName.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+			this.FieldName.Name = "FieldName";
 			searchOptions43.Button = buttonOptions43;
-			this._fieldName.SearchOptions = searchOptions43;
-			this._fieldName.Size = new System.Drawing.Size(213, 46);
-			this._fieldName.TabIndex = 0;
+			this.FieldName.SearchOptions = searchOptions43;
+			this.FieldName.Size = new System.Drawing.Size(213, 46);
+			this.FieldName.TabIndex = 0;
 			// 
 			// _fieldMainCount
 			// 
@@ -299,8 +299,8 @@
 			this._panelLayout.Controls.Add(this._fieldOtherUnknownPrice, 3, 7);
 			this._panelLayout.Controls.Add(this._fieldSideCollectedCountPercent, 1, 13);
 			this._panelLayout.Controls.Add(this._fieldGeneratedMana, 0, 0);
-			this._panelLayout.Controls.Add(this._fieldSaved, 0, 3);
-			this._panelLayout.Controls.Add(this._fieldName, 0, 1);
+			this._panelLayout.Controls.Add(this.FieldSaved, 0, 3);
+			this._panelLayout.Controls.Add(this.FieldName, 0, 1);
 			this._panelLayout.Controls.Add(this._fieldLegality, 0, 2);
 			this._panelLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._panelLayout.Location = new System.Drawing.Point(0, 0);
@@ -907,21 +907,21 @@
 			// 
 			// _fieldSaved
 			// 
-			this._fieldSaved.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.FieldSaved.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelLayout.SetColumnSpan(this._fieldSaved, 4);
-			this._fieldSaved.DataText = "";
-			this._fieldSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldSaved.ForeColor = System.Drawing.Color.DarkGray;
-			this._fieldSaved.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
-			this._fieldSaved.Location = new System.Drawing.Point(5, 108);
-			this._fieldSaved.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-			this._fieldSaved.Name = "_fieldSaved";
+			this._panelLayout.SetColumnSpan(this.FieldSaved, 4);
+			this.FieldSaved.DataText = "";
+			this.FieldSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.FieldSaved.ForeColor = System.Drawing.Color.DarkGray;
+			this.FieldSaved.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+			this.FieldSaved.Location = new System.Drawing.Point(5, 108);
+			this.FieldSaved.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+			this.FieldSaved.Name = "FieldSaved";
 			searchOptions41.Button = buttonOptions41;
-			this._fieldSaved.SearchOptions = searchOptions41;
-			this._fieldSaved.Size = new System.Drawing.Size(213, 34);
-			this._fieldSaved.TabIndex = 51;
+			this.FieldSaved.SearchOptions = searchOptions41;
+			this.FieldSaved.Size = new System.Drawing.Size(213, 34);
+			this.FieldSaved.TabIndex = 51;
 			// 
 			// _fieldLegality
 			// 
@@ -954,7 +954,7 @@
 
 		#endregion
 
-		private FieldControl _fieldName;
+		internal FieldControl FieldName;
 		private FieldControl _fieldMainCount;
 		private FieldControl _fieldSideCount;
 		private FieldControl _fieldLandCount;
@@ -996,7 +996,7 @@
 		private FieldControl _fieldLandUnknownPrice;
 		private FieldControl _fieldOtherPrice;
 		private FieldControl _fieldOtherUnknownPrice;
-		private FieldControl _fieldSaved;
+		internal FieldControl FieldSaved;
 		private FieldControl _fieldLegality;
 	}
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
-using Lucene.Net.Documents;
+﻿using JetBrains.Annotations;
 using Lucene.Net.Store;
 using Mtgdb.Dal.Index;
 using Mtgdb.Index;
@@ -24,12 +20,6 @@ namespace Mtgdb.Controls
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("search");
 		}
 
-		protected override Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex()
-		{
-			var models = _models;
-			return () => Sequence.From(models.Select(Adapter.ToDocument));
-		}
-
 		public SearchResult<long> Search(string query) =>
 			Search(query, language: null);
 
@@ -39,26 +29,21 @@ namespace Mtgdb.Controls
 		public IntellisenseSuggest CycleValue(TextInputState input, bool backward) =>
 			((DeckSpellchecker) Spellchecker).CycleValue(input, backward, language: null);
 
-		protected override Directory CreateIndex(SearcherState<long, DeckModel> state)
+		protected override LuceneSearcherState<long, DeckModel> CreateState() =>
+			new DeckSearcherState((DeckDocumentAdapter) Adapter, _deckListModel.GetModelCopies());
+
+		protected override Directory CreateIndex(LuceneSearcherState<long, DeckModel> state)
 		{
 			Directory index;
 
-			if (!_indexCreated)
-			{
-				var models = _deckListModel.GetModelCopies();
-
-				_models = models;
-				((DeckSpellchecker) Spellchecker).Models = models;
-
-				if (_version.IsUpToDate)
-					lock (_syncDirectory)
-						using (var fsDirectory = FSDirectory.Open(_version.Directory))
-						{
-							index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
-							_indexCreated = true;
-							return index;
-						}
-			}
+			if (!_indexCreated && _version.IsUpToDate)
+				lock (_syncDirectory)
+					using (var fsDirectory = FSDirectory.Open(_version.Directory))
+					{
+						index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
+						_indexCreated = true;
+						return index;
+					}
 
 			IsUpdating = true;
 
@@ -88,8 +73,6 @@ namespace Mtgdb.Controls
 		}
 
 		public bool IsIndexSaved => _version.IsUpToDate;
-
-		private IReadOnlyList<DeckModel> _models;
 
 		private IndexVersion _version;
 		private bool _indexCreated;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
@@ -55,11 +56,13 @@ namespace Mtgdb.Controls
 			if (!listChanged && !countChanged)
 				return;
 
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(async () =>
 			{
 				_abort = true;
-				lock (_syncCollection)
+
+				try
 				{
+					await _syncCollection.WaitAsync();
 					_abort = false;
 
 					var snapshot = new CollectionSnapshot(_collectionEditor);
@@ -68,6 +71,9 @@ namespace Mtgdb.Controls
 
 					if (affectedCardIds.Count == 0)
 						return;
+
+					while (!_repo.IsLoadingComplete)
+						await TaskEx.Delay(100);
 
 					var affectedNames = affectedCardIds
 						.Select(id => _repo.CardsById[id].NameEn)
@@ -85,6 +91,10 @@ namespace Mtgdb.Controls
 
 					_state.Collection = snapshot;
 					Save();
+				}
+				finally
+				{
+					_syncCollection.Release();
 				}
 			});
 		}
@@ -263,7 +273,7 @@ namespace Mtgdb.Controls
 		private static readonly string _fileName = AppDir.History.AddPath("decks.json");
 		private State _state = new State();
 
-		private readonly object _syncCollection = new object();
+		private readonly AsyncSemaphore _syncCollection = new AsyncSemaphore(1);
 		private readonly object _syncModels = new object();
 		private bool _abort;
 

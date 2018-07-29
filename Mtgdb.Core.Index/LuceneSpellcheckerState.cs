@@ -8,24 +8,24 @@ using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Index
 {
-	public class SpellcheckerState<TId, TDoc> : IDisposable
+	public abstract class LuceneSpellcheckerState<TId, TDoc> : IDisposable
 	{
-		public SpellcheckerState(
+		protected LuceneSpellcheckerState(
 			Spellchecker spellchecker,
-			DirectoryReader reader,
+			LuceneSearcherState<TId, TDoc> searcherState,
 			IDocumentAdapter<TId, TDoc> adapter,
 			Func<int> maxCount,
-			Func<IEnumerable<TDoc>> getObjectsToIndex, 
 			bool loaded)
 		{
 			_spellchecker = spellchecker;
-			_reader = reader;
+			_reader = searcherState.Reader;
 			_adapter = adapter;
 			_maxCount = maxCount;
-			_getObjectsToIndex = getObjectsToIndex;
 
 			IsLoaded = loaded;
 		}
+
+		protected abstract IEnumerable<TDoc> GetObjectsToIndex();
 
 		public IReadOnlyList<string> SuggestAllFieldValues(string value, string language)
 		{
@@ -133,7 +133,7 @@ namespace Mtgdb.Index
 			void getContentToIndex((string UserField, string Language) task)
 			{
 				var values = _adapter.IsStoredInSpellchecker(task.UserField, task.Language)
-					? _getObjectsToIndex().SelectMany(c => 
+					? GetObjectsToIndex().SelectMany(c => 
 						_adapter.GetSpellcheckerValues(c, task.UserField, task.Language))
 					: GetValuesCache(task.UserField, task.Language);
 
@@ -256,7 +256,6 @@ namespace Mtgdb.Index
 		private bool _abort;
 
 		private readonly Func<int> _maxCount;
-		private readonly Func<IEnumerable<TDoc>> _getObjectsToIndex;
 		private readonly Spellchecker _spellchecker;
 		private readonly DirectoryReader _reader;
 		private readonly IDocumentAdapter<TId, TDoc> _adapter;

@@ -9,14 +9,11 @@ using Lucene.Net.Store;
 
 namespace Mtgdb.Index
 {
-	public class SearcherState<TId, TDoc> : IDisposable
+	public abstract class LuceneSearcherState<TId, TDoc> : IDisposable
 	{
-		public SearcherState(
-			IDocumentAdapter<TId, TDoc> adapter,
-			Func<IEnumerable<IEnumerable<Document>>> getDocumentGroupsToIndex)
+		protected LuceneSearcherState(IDocumentAdapter<TId, TDoc> adapter)
 		{
-			_adapter = adapter;
-			_getDocumentGroupsToIndex = getDocumentGroupsToIndex;
+			Adapter = adapter;
 		}
 
 		public Directory CreateIndex()
@@ -28,7 +25,7 @@ namespace Mtgdb.Index
 
 			var index = new RAMDirectory();
 
-			var indexWriterAnalyzer = _adapter.CreateAnalyzer();
+			var indexWriterAnalyzer = Adapter.CreateAnalyzer();
 			var config = IndexUtils.CreateWriterConfig(indexWriterAnalyzer);
 
 			using (var writer = new IndexWriter(index, config))
@@ -50,7 +47,7 @@ namespace Mtgdb.Index
 					IndexingProgress?.Invoke();
 				}
 
-				IndexUtils.ForEach(_getDocumentGroupsToIndex(), indexDocumentGroup);
+				IndexUtils.ForEach(GetDocumentGroupsToIndex(), indexDocumentGroup);
 
 				if (_aborted)
 					return null;
@@ -78,7 +75,7 @@ namespace Mtgdb.Index
 			var searchResult = SearchIndex(query);
 
 			var relevanceById = searchResult.ScoreDocs
-				.GroupBy(d=> _adapter.GetId(Doc(d.Doc)))
+				.GroupBy(d=> Adapter.GetId(Doc(d.Doc)))
 				.ToDictionary(gr => gr.Key, gr => gr.First().Score);
 
 			return relevanceById;
@@ -106,8 +103,8 @@ namespace Mtgdb.Index
 
 		public DirectoryReader Reader { get; private set; }
 
-		private readonly IDocumentAdapter<TId, TDoc> _adapter;
-		private readonly Func<IEnumerable<IEnumerable<Document>>> _getDocumentGroupsToIndex;
+		protected readonly IDocumentAdapter<TId, TDoc> Adapter;
+		protected abstract IEnumerable<IEnumerable<Document>> GetDocumentGroupsToIndex();
 
 		public int GroupsAddedToIndex;
 

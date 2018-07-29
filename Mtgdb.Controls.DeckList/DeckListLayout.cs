@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -14,11 +13,11 @@ namespace Mtgdb.Controls
 		{
 			InitializeComponent();
 
-			_fieldName.FieldName = nameof(DeckModel.Name);
+			FieldName.FieldName = nameof(DeckModel.Name);
 			_fieldGeneratedMana.FieldName = nameof(DeckModel.Mana);
 
 			_fieldLegality.FieldName = nameof(DeckModel.Legal);
-			_fieldSaved.FieldName = nameof(DeckModel.Saved);
+			FieldSaved.FieldName = nameof(DeckModel.Saved);
 
 
 
@@ -62,34 +61,7 @@ namespace Mtgdb.Controls
 			_fieldSideCollectedUnknownPrice.FieldName = nameof(DeckModel.SideCollectedUnknownPriceCount);
 			_fieldSideCollectedUnknownPricePercent.FieldName = nameof(DeckModel.SideCollectedUnknownPricePercent);
 
-			_fieldSaved.CustomButtons.Add(new ButtonOptions
-			{
-				Alignment = ContentAlignment.BottomLeft,
-				Icon = Resources.Remove_16,
-				ShowOnlyWhenHotTracked = false
-			});
-
-			_fieldSaved.CustomButtons.Add(new ButtonOptions
-			{
-				Alignment = ContentAlignment.BottomRight,
-				Icon = Resources.Open_16,
-				ShowOnlyWhenHotTracked = false
-			});
-
-			_fieldSaved.CustomButtons.Add(new ButtonOptions
-			{
-				Alignment = ContentAlignment.BottomRight,
-				Icon = Resources.Add_16,
-				ShowOnlyWhenHotTracked = false
-			});
-
-			_fieldSaved.CustomButtons.Add(new ButtonOptions
-			{
-				Alignment = ContentAlignment.BottomRight,
-				Icon = Resources.Rename_16,
-				Margin = new Size(8, 0),
-				ShowOnlyWhenHotTracked = false
-			});
+			DeckListLayoutCustomButtons.SetCustomButtons(this);
 
 			SubscribeToFieldEvents();
 		}
@@ -101,13 +73,13 @@ namespace Mtgdb.Controls
 
 			var deck = (DeckModel) dataSource;
 
-			_fieldName.DataText = deck?.Name.NullIfEmpty() ?? "[no name]";
+			FieldName.DataText = deck?.Name.NullIfEmpty() ?? "[no name]";
 			_fieldGeneratedMana.DataText = deck?.Mana;
 
 			var saved = deck?.Saved?.Invoke(DeckDocumentAdapter.Format);
 
 			_fieldLegality.DataText = deck?.Legal.Invoke2(string.Join, ", ");
-			_fieldSaved.DataText = saved != null
+			FieldSaved.DataText = saved != null
 				? "saved\n" + saved
 				: null;
 
@@ -154,30 +126,11 @@ namespace Mtgdb.Controls
 
 		public override IEnumerable<FieldControl> Fields => _panelLayout.Controls.Cast<FieldControl>();
 
-		public override IEnumerable<ButtonLayout> GetCustomButtons(FieldControl field)
-		{
-			var deckModel = (DeckModel) DataSource;
-
-			var baseResult = base.GetCustomButtons(field);
-
-			if (field != _fieldSaved)
-				return baseResult;
-
-			var list = baseResult.ToList();
-
-			if (deckModel.IsCurrent)
-			{
-				//foreach (var btn in list)
-				//	btn.Margin = new Size(24, 0);
-
-				list[CustomButtonRemove].Size = Size.Empty;
-				list[CustomButtonOpen].Size = Size.Empty;
-			}
-			else
-				list[CustomButtonAdd].Size = Size.Empty;
-
-			return list;
-		}
+		public override IEnumerable<ButtonLayout> GetCustomButtons(FieldControl field) =>
+			DeckListLayoutCustomButtons.GetCustomButtons(
+				base.GetCustomButtons(field),
+				field,
+				(DeckModel) DataSource);
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Image ImageDeckBoxOpened { get; set; }
@@ -204,10 +157,5 @@ namespace Mtgdb.Controls
 
 		public override bool ShowSortButton(FieldControl field) =>
 			field.IsHotTracked && field.AllowSort || field.SortOrder != SortOrder.None;
-
-		public const int CustomButtonRemove = 0;
-		public const int CustomButtonOpen = 1;
-		public const int CustomButtonAdd = 2;
-		public const int CustomButtonRename = 3;
 	}
 }

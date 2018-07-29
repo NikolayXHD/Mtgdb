@@ -89,9 +89,9 @@ namespace Mtgdb.Ui
 
 		private int getHeight(string text)
 		{
-			var fontSize = _findEditor.Font.SizeInPixels();
+			var fontSize = _listBoxSuggest.Font.SizeInPixels();
 			int linesCount = 1 + text.Count(_ => _ == '\n');
-			return (int) (fontSize * 1.1f * linesCount);
+			return (int) (fontSize * 1.25f * linesCount);
 		}
 
 		public void StartThread()
@@ -166,6 +166,10 @@ namespace Mtgdb.Ui
 
 		private void updateSuggestListBox(IntellisenseSuggest suggest, TextInputState source)
 		{
+			var values = suggest.Values.ToList();
+			for (int i = 0; i < values.Count; i++)
+				values[i] = values[i].Replace(Environment.NewLine, " ");
+
 			lock (_syncSuggest)
 			{
 				_suggestSource = source;
@@ -178,22 +182,22 @@ namespace Mtgdb.Ui
 
 				_listBoxSuggest.Items.Clear();
 
-				foreach (string value in suggest.Values)
+				foreach (string value in values)
 					_listBoxSuggest.Items.Add(value);
 
-				_listBoxSuggest.SelectedIndex = index.WithinRange(-1, suggest.Values.Count - 1);
+				_listBoxSuggest.SelectedIndex = index.WithinRange(-1, values.Count - 1);
 
 				_listBoxSuggest.EndUpdate();
 			}
 
-			if (suggest.Values.Count == 0)
+			if (values.Count == 0)
 			{
 				_listBoxSuggest.Height = 0;
 				continueEditingAfterSuggest();
 			}
 			else
 			{
-				int contentHeight = suggest.Values.Sum(getHeight);
+				int contentHeight = values.Sum(getHeight);
 				_listBoxSuggest.Height = 2 + contentHeight;
 				updateSuggestLocation();
 			}

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
-using Lucene.Net.Index;
+﻿using JetBrains.Annotations;
 using Lucene.Net.Store;
 using Mtgdb.Dal.Index;
 using Mtgdb.Index;
@@ -18,10 +16,7 @@ namespace Mtgdb.Controls
 			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("suggest");
 		}
 
-		protected override IEnumerable<DeckModel> GetObjectsToIndex() =>
-			Models;
-
-		protected override Directory CreateIndex(DirectoryReader reader)
+		protected override Directory CreateIndex(LuceneSearcherState<long, DeckModel> searcherState)
 		{
 			Directory index;
 
@@ -34,14 +29,14 @@ namespace Mtgdb.Controls
 				var spellchecker = CreateSpellchecker();
 				spellchecker.Load(index);
 
-				var state = CreateState(reader, spellchecker, loaded: true);
+				var state = CreateState(searcherState, spellchecker, loaded: true);
 				Update(state);
 
 				_indexCreated = true;
 				return index;
 			}
 
-			index = base.CreateIndex(reader);
+			index = base.CreateIndex(searcherState);
 
 			if (index == null)
 				return null;
@@ -56,7 +51,16 @@ namespace Mtgdb.Controls
 			return index;
 		}
 
-		public IReadOnlyList<DeckModel> Models { get; set; }
+		protected override LuceneSpellcheckerState<long, DeckModel> CreateState(
+			LuceneSearcherState<long, DeckModel> searcherState,
+			Spellchecker spellchecker,
+			bool loaded) =>
+			new DeckSpellcheckerState(
+				spellchecker,
+				(DeckSearcherState) searcherState,
+				(DeckDocumentAdapter) Adapter,
+				() => MaxCount,
+				loaded);
 
 		public string IndexDirectoryParent
 		{

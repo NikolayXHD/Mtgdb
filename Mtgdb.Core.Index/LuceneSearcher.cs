@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Lucene.Net.Analysis;
 using Lucene.Net.Contrib;
-using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using ReadOnlyCollectionsExtensions;
@@ -29,10 +28,9 @@ namespace Mtgdb.Index
 				Spellchecker.LoadIndex(newState);
 		}
 
-		internal SearcherState<TId, TDoc> CreateState() =>
-			new SearcherState<TId, TDoc>(Adapter, GetDocumentGroupsToIndex());
+		protected internal abstract LuceneSearcherState<TId, TDoc> CreateState();
 
-		internal void LoadIndex(SearcherState<TId, TDoc> state)
+		internal void LoadIndex(LuceneSearcherState<TId, TDoc> state)
 		{
 			BeginLoad?.Invoke();
 
@@ -171,9 +169,7 @@ namespace Mtgdb.Index
 			Disposed?.Invoke();
 		}
 
-		protected abstract Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex();
-
-		protected virtual Directory CreateIndex(SearcherState<TId, TDoc> state)
+		protected virtual Directory CreateIndex(LuceneSearcherState<TId, TDoc> state)
 		{
 			void progressHandler() =>
 				IndexingProgress?.Invoke();
@@ -208,7 +204,7 @@ namespace Mtgdb.Index
 
 		public readonly LuceneSpellchecker<TId, TDoc> Spellchecker;
 		protected readonly IDocumentAdapter<TId, TDoc> Adapter;
-		internal SearcherState<TId, TDoc> State { get; private set; }
+		internal LuceneSearcherState<TId, TDoc> State { get; private set; }
 
 		public event Action BeginLoad;
 		public event Action Loaded;

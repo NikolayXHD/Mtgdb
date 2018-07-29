@@ -30,22 +30,22 @@ namespace Mtgdb.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			Mtgdb.Controls.LayoutOptions layoutOptions2 = new Mtgdb.Controls.LayoutOptions();
-			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions2 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SelectionOptions selectionOptions2 = new Mtgdb.Controls.SelectionOptions();
-			Mtgdb.Controls.SortOptions sortOptions2 = new Mtgdb.Controls.SortOptions();
+			Mtgdb.Controls.LayoutOptions layoutOptions1 = new Mtgdb.Controls.LayoutOptions();
+			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SelectionOptions selectionOptions1 = new Mtgdb.Controls.SelectionOptions();
+			Mtgdb.Controls.SortOptions sortOptions1 = new Mtgdb.Controls.SortOptions();
 			this._panelLayout = new System.Windows.Forms.TableLayoutPanel();
-			this._labelFilterByDeckMode = new System.Windows.Forms.Label();
-			this._menuFilterByDeckMode = new System.Windows.Forms.ComboBox();
-			this._textBoxName = new System.Windows.Forms.TextBox();
-			this._listBoxSuggest = new System.Windows.Forms.ListBox();
-			this._labelSortStatus = new System.Windows.Forms.Label();
 			this._panelSearch = new Mtgdb.Controls.BorderedPanel();
 			this._panelSearchIcon = new Mtgdb.Controls.BorderedPanel();
 			this._textBoxSearch = new Mtgdb.Controls.FixedRichTextBox();
 			this._viewDeck = new Mtgdb.Controls.LayoutViewControl();
+			this._menuFilterByDeckMode = new System.Windows.Forms.ComboBox();
+			this._labelSortStatus = new System.Windows.Forms.Label();
+			this._labelFilterByDeckMode = new System.Windows.Forms.Label();
 			this._panelSortIcon = new Mtgdb.Controls.BorderedPanel();
+			this._textBoxName = new System.Windows.Forms.TextBox();
+			this._listBoxSuggest = new System.Windows.Forms.ListBox();
 			this._panelLayout.SuspendLayout();
 			this._panelSearch.SuspendLayout();
 			this.SuspendLayout();
@@ -75,69 +75,6 @@ namespace Mtgdb.Controls
 			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelLayout.Size = new System.Drawing.Size(732, 311);
 			this._panelLayout.TabIndex = 0;
-			// 
-			// _labelFilterByDeckMode
-			// 
-			this._labelFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this._labelFilterByDeckMode.AutoSize = true;
-			this._labelFilterByDeckMode.Location = new System.Drawing.Point(437, 0);
-			this._labelFilterByDeckMode.Name = "_labelFilterByDeckMode";
-			this._labelFilterByDeckMode.Size = new System.Drawing.Size(102, 24);
-			this._labelFilterByDeckMode.TabIndex = 3;
-			this._labelFilterByDeckMode.Text = "Filter cards by deck:";
-			this._labelFilterByDeckMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// _menuFilterByDeckMode
-			// 
-			this._menuFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._menuFilterByDeckMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._menuFilterByDeckMode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuFilterByDeckMode.FormattingEnabled = true;
-			this._menuFilterByDeckMode.Items.AddRange(new object[] {
-            "Ignored",
-            "Cards in currently open deck",
-            "Cards in saved decks matching filter"});
-			this._menuFilterByDeckMode.Location = new System.Drawing.Point(542, 1);
-			this._menuFilterByDeckMode.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this._menuFilterByDeckMode.Name = "_menuFilterByDeckMode";
-			this._menuFilterByDeckMode.Size = new System.Drawing.Size(190, 21);
-			this._menuFilterByDeckMode.TabIndex = 4;
-			// 
-			// _textBoxName
-			// 
-			this._textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._textBoxName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._textBoxName.Location = new System.Drawing.Point(24, 51);
-			this._textBoxName.Margin = new System.Windows.Forms.Padding(10, 2, 0, 0);
-			this._textBoxName.Multiline = true;
-			this._textBoxName.Name = "_textBoxName";
-			this._textBoxName.Size = new System.Drawing.Size(177, 20);
-			this._textBoxName.TabIndex = 3;
-			this._textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
-			// _listBoxSuggest
-			// 
-			this._listBoxSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this._listBoxSuggest.Location = new System.Drawing.Point(209, 30);
-			this._listBoxSuggest.Margin = new System.Windows.Forms.Padding(0);
-			this._listBoxSuggest.Name = "_listBoxSuggest";
-			this._listBoxSuggest.Size = new System.Drawing.Size(250, 93);
-			this._listBoxSuggest.TabIndex = 4;
-			// 
-			// _labelSortStatus
-			// 
-			this._labelSortStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this._labelSortStatus.AutoSize = true;
-			this._labelSortStatus.Location = new System.Drawing.Point(387, 0);
-			this._labelSortStatus.Name = "_labelSortStatus";
-			this._labelSortStatus.Size = new System.Drawing.Size(44, 24);
-			this._labelSortStatus.TabIndex = 5;
-			this._labelSortStatus.Text = "Name ^";
-			this._labelSortStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// _panelSearch
 			// 
@@ -191,35 +128,75 @@ namespace Mtgdb.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._viewDeck.BackColor = System.Drawing.Color.White;
 			this._panelLayout.SetColumnSpan(this._viewDeck, 5);
-			layoutOptions2.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
-			layoutOptions2.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
-			layoutOptions2.AllowPartialCards = true;
-			layoutOptions2.CardInterval = new System.Drawing.Size(2, 0);
-			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(150, 0);
-			this._viewDeck.LayoutOptions = layoutOptions2;
+			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
+			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
+			layoutOptions1.AllowPartialCards = true;
+			layoutOptions1.CardInterval = new System.Drawing.Size(2, 0);
+			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(150, 0);
+			this._viewDeck.LayoutOptions = layoutOptions1;
 			this._viewDeck.Location = new System.Drawing.Point(0, 24);
 			this._viewDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._viewDeck.Name = "_viewDeck";
-			searchOptions2.Allow = false;
-			searchOptions2.Button = buttonOptions2;
-			this._viewDeck.SearchOptions = searchOptions2;
-			selectionOptions2.Alpha = ((byte)(192));
-			selectionOptions2.BackColor = System.Drawing.Color.LightSkyBlue;
-			selectionOptions2.ForeColor = System.Drawing.Color.Black;
-			selectionOptions2.HotTrackBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
-			selectionOptions2.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
-			selectionOptions2.RectAlpha = ((byte)(0));
-			selectionOptions2.RectBorderColor = System.Drawing.Color.MediumBlue;
-			selectionOptions2.RectFillColor = System.Drawing.Color.RoyalBlue;
-			this._viewDeck.SelectionOptions = selectionOptions2;
+			searchOptions1.Allow = false;
+			searchOptions1.Button = buttonOptions1;
+			this._viewDeck.SearchOptions = searchOptions1;
+			selectionOptions1.Alpha = ((byte)(192));
+			selectionOptions1.BackColor = System.Drawing.Color.LightSkyBlue;
+			selectionOptions1.ForeColor = System.Drawing.Color.Black;
+			selectionOptions1.HotTrackBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
+			selectionOptions1.HotTrackBorderColor = System.Drawing.Color.Gainsboro;
+			selectionOptions1.RectAlpha = ((byte)(0));
+			selectionOptions1.RectBorderColor = System.Drawing.Color.MediumBlue;
+			selectionOptions1.RectFillColor = System.Drawing.Color.RoyalBlue;
+			this._viewDeck.SelectionOptions = selectionOptions1;
 			this._viewDeck.Size = new System.Drawing.Size(732, 287);
-			sortOptions2.Allow = true;
-			sortOptions2.AscIcon = global::Mtgdb.Controls.Properties.Resources.sort_asc_hovered;
-			sortOptions2.ButtonMargin = new System.Drawing.Size(0, 0);
-			sortOptions2.DescIcon = global::Mtgdb.Controls.Properties.Resources.sort_desc_hovered;
-			sortOptions2.Icon = global::Mtgdb.Controls.Properties.Resources.sort_none_hovered;
-			this._viewDeck.SortOptions = sortOptions2;
+			sortOptions1.Allow = true;
+			sortOptions1.AscIcon = global::Mtgdb.Controls.Properties.Resources.sort_asc_hovered;
+			sortOptions1.ButtonMargin = new System.Drawing.Size(0, 0);
+			sortOptions1.DescIcon = global::Mtgdb.Controls.Properties.Resources.sort_desc_hovered;
+			sortOptions1.Icon = global::Mtgdb.Controls.Properties.Resources.sort_none_hovered;
+			this._viewDeck.SortOptions = sortOptions1;
 			this._viewDeck.TabIndex = 2;
+			// 
+			// _menuFilterByDeckMode
+			// 
+			this._menuFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._menuFilterByDeckMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this._menuFilterByDeckMode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this._menuFilterByDeckMode.FormattingEnabled = true;
+			this._menuFilterByDeckMode.Items.AddRange(new object[] {
+            "Ignored",
+            "Cards in currently open deck",
+            "Cards in saved decks matching filter"});
+			this._menuFilterByDeckMode.Location = new System.Drawing.Point(542, 1);
+			this._menuFilterByDeckMode.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
+			this._menuFilterByDeckMode.Name = "_menuFilterByDeckMode";
+			this._menuFilterByDeckMode.Size = new System.Drawing.Size(190, 21);
+			this._menuFilterByDeckMode.TabIndex = 4;
+			// 
+			// _labelSortStatus
+			// 
+			this._labelSortStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelSortStatus.AutoSize = true;
+			this._labelSortStatus.Location = new System.Drawing.Point(387, 0);
+			this._labelSortStatus.Name = "_labelSortStatus";
+			this._labelSortStatus.Size = new System.Drawing.Size(44, 24);
+			this._labelSortStatus.TabIndex = 5;
+			this._labelSortStatus.Text = "Name ^";
+			this._labelSortStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// _labelFilterByDeckMode
+			// 
+			this._labelFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelFilterByDeckMode.AutoSize = true;
+			this._labelFilterByDeckMode.Location = new System.Drawing.Point(437, 0);
+			this._labelFilterByDeckMode.Name = "_labelFilterByDeckMode";
+			this._labelFilterByDeckMode.Size = new System.Drawing.Size(102, 24);
+			this._labelFilterByDeckMode.TabIndex = 3;
+			this._labelFilterByDeckMode.Text = "Filter cards by deck:";
+			this._labelFilterByDeckMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// _panelSortIcon
 			// 
@@ -230,6 +207,29 @@ namespace Mtgdb.Controls
 			this._panelSortIcon.Size = new System.Drawing.Size(20, 24);
 			this._panelSortIcon.TabIndex = 6;
 			this._panelSortIcon.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			// 
+			// _textBoxName
+			// 
+			this._textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._textBoxName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._textBoxName.Location = new System.Drawing.Point(24, 51);
+			this._textBoxName.Margin = new System.Windows.Forms.Padding(10, 2, 0, 0);
+			this._textBoxName.Multiline = true;
+			this._textBoxName.Name = "_textBoxName";
+			this._textBoxName.Size = new System.Drawing.Size(177, 20);
+			this._textBoxName.TabIndex = 3;
+			this._textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// _listBoxSuggest
+			// 
+			this._listBoxSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._listBoxSuggest.Location = new System.Drawing.Point(435, 74);
+			this._listBoxSuggest.Margin = new System.Windows.Forms.Padding(0);
+			this._listBoxSuggest.Name = "_listBoxSuggest";
+			this._listBoxSuggest.Size = new System.Drawing.Size(250, 93);
+			this._listBoxSuggest.TabIndex = 4;
 			// 
 			// DeckListControl
 			// 

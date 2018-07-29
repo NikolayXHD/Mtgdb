@@ -48,7 +48,7 @@ namespace Mtgdb.Controls
 
 			_textBoxName.Visible = false;
 
-			_customTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
+			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 
 			_searchSubsystem = new DeckSearchSubsystem(
 				this,
@@ -73,7 +73,7 @@ namespace Mtgdb.Controls
 
 			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
 
-			_customTooltip.SubscribeToEvents();
+			_layoutViewTooltip.SubscribeToEvents();
 
 			_higlightSubsystem = new SearchResultHiglightSubsystem(_viewDeck, _searchSubsystem, adapter);
 			_higlightSubsystem.SubscribeToEvents();
@@ -96,6 +96,8 @@ namespace Mtgdb.Controls
 
 			if (searcher.IsLoaded)
 				_searchSubsystem.Apply();
+
+			updateSortLabel();
 		}
 
 		private void indexLoaded() =>
@@ -108,8 +110,10 @@ namespace Mtgdb.Controls
 			runRefreshSearchResultTask(onComplete: null);
 
 		private void sortChanged() =>
-			runRefreshSearchResultTask(onComplete: () =>
-				_tooltipOwner.Invoke(delegate { _labelSortStatus.Text = _deckSort.GetTextualStatus(); }));
+			runRefreshSearchResultTask(onComplete: () => _tooltipOwner.Invoke(updateSortLabel));
+
+		private void updateSortLabel() =>
+			_labelSortStatus.Text = _deckSort.GetTextualStatus();
 
 		private void listModelLoaded() =>
 			runRefreshSearchResultTask(onComplete: null);
@@ -222,7 +226,7 @@ namespace Mtgdb.Controls
 				"saved decks on the left",
 				_menuFilterByDeckMode);
 
-			controller.SetCustomTooltip(_customTooltip);
+			controller.SetCustomTooltip(_layoutViewTooltip);
 		}
 
 		private void viewDeckClicked(object view, HitInfo hitInfo, MouseEventArgs mouseArgs)
@@ -230,20 +234,24 @@ namespace Mtgdb.Controls
 			switch (mouseArgs.Button)
 			{
 				case MouseButtons.Left:
-					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonAdd)
+					if (hitInfo.IsAddButton())
 						saveCurrentDeck();
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRemove)
+					else if (hitInfo.IsRemoveButton())
 						removeDeck((DeckModel) hitInfo.RowDataSource);
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
-						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: false);
-					else if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonRename)
+					else if (hitInfo.IsOpenButton())
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: false, transformed: false);
+					else if (hitInfo.IsOpenTransformedButton())
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: false, transformed: true);
+					else if (hitInfo.IsRenameButton())
 						beginRenaming((DeckModel) hitInfo.RowDataSource, hitInfo.FieldBounds.Value);
 
 					break;
 
 				case MouseButtons.Middle:
-					if (hitInfo.CustomButtonIndex == DeckListLayout.CustomButtonOpen)
-						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: true);
+					if (hitInfo.IsOpenButton())
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: true, transformed: false);
+					else if (hitInfo.IsOpenTransformedButton())
+						openDeck((DeckModel) hitInfo.RowDataSource, inNewTab: true, transformed: true);
 
 					break;
 			}
@@ -368,8 +376,14 @@ namespace Mtgdb.Controls
 			_listModel.Save();
 		}
 
-		private void openDeck(DeckModel deckModel, bool inNewTab) =>
-			DeckOpened?.Invoke(this, deckModel.Deck, inNewTab);
+		private void openDeck(DeckModel deckModel, bool inNewTab, bool transformed)
+		{
+			var deck = transformed
+				? deckModel.Deck
+				: deckModel.OriginalDeck;
+
+			DeckOpened?.Invoke(this, deck, inNewTab);
+		}
 
 
 
@@ -534,7 +548,7 @@ namespace Mtgdb.Controls
 			_viewDeck.Count;
 
 		public int FilteredDecksCount =>
-			_viewDeck.Count - 1;
+			Math.Max(_filteredModels.Count - 1, 0);
 
 		public bool IsAddingDecks =>
 			_saved.HasValue;
@@ -561,7 +575,7 @@ namespace Mtgdb.Controls
 		private Control _tooltipOwner;
 		private CollectionEditorModel _collection;
 
-		private ViewDeckListTooltips _customTooltip;
+		private ViewDeckListTooltips _layoutViewTooltip;
 		private DeckSearchSubsystem _searchSubsystem;
 
 		private FilterByDeckMode _filterByDeckMode;
@@ -572,6 +586,5 @@ namespace Mtgdb.Controls
 
 		private bool _aborted;
 		private readonly object _sync = new object();
-		private DeckIndexUpdateSubsystem _indexUpdateSubsystem;
 	}
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -5,6 +7,7 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
@@ -25,9 +28,13 @@ namespace Mtgdb.Gui
 				new MtgoDeckFormatter(cardRepository)
 			};
 
-			string anyFormatFilter = $"Any {{type}}|{string.Join(@";", _formatters.Where(_ => _.SupportsImport).Select(f => f.FileNamePattern).Distinct())}";
+			ImportedFilePatterns = _formatters
+				.Where(_ => _.SupportsImport)
+				.Select(f => f.FileNamePattern)
+				.Distinct()
+				.ToReadOnlyList();
 
-			_loadFilter = string.Join(@"|", Sequence.From(anyFormatFilter).Concat(
+			_loadFilter = string.Join(@"|", Sequence.From($"Any {{type}}|{string.Join(@";", ImportedFilePatterns)}").Concat(
 				_formatters.Where(_ => _.SupportsImport).Select(f => $"{f.Description}|{f.FileNamePattern}")));
 
 			_saveFilter = string.Join(@"|",
@@ -35,8 +42,6 @@ namespace Mtgdb.Gui
 
 			Directory.CreateDirectory(AppDir.Save);
 		}
-
-
 
 		public Deck SaveDeck(Deck deck)
 		{
@@ -90,10 +95,10 @@ namespace Mtgdb.Gui
 		public Deck LoadCollection()
 		{
 			var file = selectFilesToOpen("collection", allowMultiple: false).SingleOrDefault();
-			return file?.Invoke(Deserialize);
+			return file?.Invoke(f => Deserialize(f, null));
 		}
 
-		public Deck Deserialize(string file)
+		public Deck Deserialize(string file, string dir)
 		{
 			State.LastLoadedFile = file;
 
@@ -135,7 +140,19 @@ namespace Mtgdb.Gui
 			deck.File = file;
 
 			if (deck.Name == null)
-				deck.Name = Path.GetFileNameWithoutExtension(file);
+			{
+				string getNestedFileName() =>
+					(Path.GetFileName(dir) + Path.DirectorySeparatorChar + file.Substring(dir.Length + 1 /*separator*/))
+					.Replace(new string(Path.DirectorySeparatorChar, 1), Environment.NewLine);
+
+				var extension = Path.GetExtension(file);
+
+				string nameBase = dir == null
+					? Path.GetFileName(file)
+					: getNestedFileName();
+
+				deck.Name = nameBase.Substring(0, nameBase.Length - extension.Length);
+			}
 
 			return deck;
 		}
@@ -285,6 +302,7 @@ namespace Mtgdb.Gui
 		private readonly string _saveFilter;
 
 		private readonly IDeckFormatter[] _formatters;
+		public IReadOnlyList<string> ImportedFilePatterns { get; }
 		public FileDialogState State { get; } = new FileDialogState();
 
 		/// <summary>

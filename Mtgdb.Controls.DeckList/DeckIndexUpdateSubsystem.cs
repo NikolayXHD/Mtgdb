@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Mtgdb.Dal;
 
 namespace Mtgdb.Controls
 {
 	public class DeckIndexUpdateSubsystem
 	{
 		[UsedImplicitly] // in GuiLoader
-		public DeckIndexUpdateSubsystem(DeckSearcher searcher, DeckListModel listModel)
+		public DeckIndexUpdateSubsystem(
+			DeckSearcher searcher,
+			CardRepository repo,
+			DeckListModel listModel)
 		{
 			_searcher = searcher;
+			_repo = repo;
 			_listModel = listModel;
 			_listModel.Changed += modelChanged;
 		}
-
-		public void Start() =>
-			_started = true;
 
 		private void modelChanged()
 		{
@@ -25,7 +27,7 @@ namespace Mtgdb.Controls
 
 		private async Task handleModelChanged()
 		{
-			while (!_started)
+			while (!_repo.IsPriceLoadingComplete)
 				await TaskEx.Delay(100);
 
 			lock (_sync)
@@ -45,7 +47,7 @@ namespace Mtgdb.Controls
 		
 		private readonly DeckSearcher _searcher;
 		private readonly DeckListModel _listModel;
+		private readonly CardRepository _repo;
 		private readonly object _sync = new object();
-		private bool _started;
 	}
 }

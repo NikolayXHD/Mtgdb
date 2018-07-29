@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lucene.Net.Documents;
 using Lucene.Net.Store;
 using Mtgdb.Index;
 
@@ -34,7 +33,10 @@ namespace Mtgdb.Dal.Index
 			return displayField ?? field;
 		}
 
-		protected override Directory CreateIndex(SearcherState<int, Card> state)
+		protected override LuceneSearcherState<int, Card> CreateState() =>
+			new CardSearcherState((CardDocumentAdapter) Adapter, _repo, FilterSet);
+
+		protected override Directory CreateIndex(LuceneSearcherState<int, Card> state)
 		{
 			Directory index;
 
@@ -60,11 +62,6 @@ namespace Mtgdb.Dal.Index
 
 			return index;
 		}
-
-		protected override Func<IEnumerable<IEnumerable<Document>>> GetDocumentGroupsToIndex() =>
-			() => _repo.SetsByCode.Values
-				.Where(FilterSet)
-				.Select(set => set.Cards.Select(Adapter.ToDocument));
 
 		public new CardSpellchecker Spellchecker => (CardSpellchecker) base.Spellchecker;
 

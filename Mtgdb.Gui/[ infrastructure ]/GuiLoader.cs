@@ -21,7 +21,6 @@ namespace Mtgdb.Gui
 		{
 			_loader = loader;
 			_repo = repo;
-			_deckIndexUpdateSubsystem = deckIndexUpdateSubsystem;
 
 			_loader.AddAction(newsService.FetchNews);
 			_loader.AddAction(downloaderSubsystem.CalculateProgress);
@@ -30,12 +29,7 @@ namespace Mtgdb.Gui
 				deckListModel.Load();
 
 				if (deckSearcher.IsIndexSaved)
-				{
 					deckSearcher.LoadIndexes();
-
-					while (!_repo.IsPriceLoadingComplete)
-						await TaskEx.Delay(100);
-				}
 				else
 				{
 					while (!_repo.IsPriceLoadingComplete)
@@ -43,8 +37,6 @@ namespace Mtgdb.Gui
 
 					deckSearcher.LoadIndexes();
 				}
-
-				_deckIndexUpdateSubsystem.Start();
 			});
 		}
 
@@ -53,6 +45,5 @@ namespace Mtgdb.Gui
 
 		private readonly Loader _loader;
 		private readonly CardRepository _repo;
-		private readonly DeckIndexUpdateSubsystem _deckIndexUpdateSubsystem;
 	}
 }

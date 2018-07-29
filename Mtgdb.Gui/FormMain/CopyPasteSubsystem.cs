@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -96,7 +97,7 @@ namespace Mtgdb.Gui
 
 		public void PasteDecks(string[] files)
 		{
-			bool tryGetFile(int i, out string file)
+			bool tryGetFile(int i, out (string File, string Dir) file)
 			{
 				lock (_sync)
 				{
@@ -105,7 +106,7 @@ namespace Mtgdb.Gui
 						_filesToLoad.Clear();
 						_filesToLoadDistinct.Clear();
 
-						file = null;
+						file = (null, null);
 						return false;
 					}
 
@@ -121,9 +122,25 @@ namespace Mtgdb.Gui
 				{
 					bool inProgress = _filesToLoad.Count > 0;
 
-					foreach (string file in toAdd)
-						if (_filesToLoadDistinct.Add(file))
-							_filesToLoad.Add(file);
+					foreach (string path in toAdd)
+					{
+						IEnumerable<(string File, string Dir)> actualFiles;
+
+						if (File.Exists(path))
+							actualFiles = Sequence.From<(string File, string Dir)>((path, null));
+						else if (Directory.Exists(path))
+							actualFiles = _serialization.ImportedFilePatterns
+								.SelectMany(pattern => Directory.GetFiles(path, pattern))
+								.Select(file => (file, path));
+						else
+							actualFiles = Empty<(string File, string Dir)>.Sequence;
+
+						foreach (var file in actualFiles)
+						{
+							if (_filesToLoadDistinct.Add(file))
+								_filesToLoad.Add(file);
+						}
+					}
 
 					if (inProgress)
 						_deckListControl.ContinueLoadingDecks(_filesToLoad.Count);
@@ -150,10 +167,10 @@ namespace Mtgdb.Gui
 					if (_abort)
 						break;
 
-					if (!tryGetFile(i, out string file))
+					if (!tryGetFile(i, out var file))
 						break;
 
-					var deck = _serialization.Deserialize(file);
+					var deck = _serialization.Deserialize(file.File, file.Dir);
 
 					if (deck.Error != null)
 						failedDecks.Add(deck);
@@ -188,7 +205,7 @@ namespace Mtgdb.Gui
 		}
 
 		public void Abort() =>
-			_abort = false;
+			_abort = true;
 
 		private void pasteCollectionFromText(string text, bool append)
 		{
@@ -310,8 +327,8 @@ namespace Mtgdb.Gui
 
 		private bool _abort;
 
-		private readonly HashSet<string> _filesToLoadDistinct = new HashSet<string>();
-		private readonly List<string> _filesToLoad = new List<string>();
+		private readonly HashSet<(string File, string Dir)> _filesToLoadDistinct = new HashSet<(string, string)>();
+		private readonly List<(string File, string Dir)> _filesToLoad = new List<(string, string)>();
 
 		private readonly object _sync = new object();
 

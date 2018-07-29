@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lucene.Net.Contrib;
-using Lucene.Net.Index;
 using Lucene.Net.Store;
 using ReadOnlyCollectionsExtensions;
 
@@ -12,10 +11,10 @@ namespace Mtgdb.Index
 	{
 		protected LuceneSpellchecker(IDocumentAdapter<TId, TDoc> adapter)
 		{
-			_adapter = adapter;
+			Adapter = adapter;
 			MaxCount = 20;
 
-			_userFields = _adapter.GetUserFields()
+			_userFields = Adapter.GetUserFields()
 				.Select(f => f + ":")
 				.OrderBy(Str.Comparer)
 				.ToReadOnlyList();
@@ -25,12 +24,12 @@ namespace Mtgdb.Index
 				.ToReadOnlyList();
 		}
 
-		public void LoadIndex(SearcherState<TId, TDoc> searcherState)
+		public void LoadIndex(LuceneSearcherState<TId, TDoc> searcherState)
 		{
 			if (!searcherState.IsLoaded)
 				throw new InvalidOperationException();
 
-			CreateIndex(searcherState.Reader);
+			CreateIndex(searcherState);
 		}
 
 		public IntellisenseSuggest Suggest(TextInputState input, string language)
@@ -45,9 +44,9 @@ namespace Mtgdb.Index
 
 			string userField = token.ParentField ?? string.Empty;
 
-			bool isFieldInvalid = !_adapter.IsAnyField(userField) && !_adapter.IsUserField(userField);
+			bool isFieldInvalid = !Adapter.IsAnyField(userField) && !Adapter.IsUserField(userField);
 
-			if (!_adapter.IsSuggestAnalyzedIn(userField, language))
+			if (!Adapter.IsSuggestAnalyzedIn(userField, language))
 				token = token.PhraseStart ?? token;
 
 			string valuePart =
@@ -61,7 +60,7 @@ namespace Mtgdb.Index
 					valueSuggest = ReadOnlyList.Empty<string>();
 				else
 				{
-					if (_adapter.IsAnyField(userField))
+					if (Adapter.IsAnyField(userField))
 						valueSuggest = State.SuggestAllFieldValues(valuePart, language);
 					else
 						valueSuggest = State.SuggestValues(userField, language, valuePart);
@@ -102,14 +101,14 @@ namespace Mtgdb.Index
 
 			string userField = token.ParentField ?? string.Empty;
 
-			bool isFieldInvalid = !_adapter.IsAnyField(userField) && !_adapter.IsUserField(userField);
+			bool isFieldInvalid = !Adapter.IsAnyField(userField) && !Adapter.IsUserField(userField);
 
 			if (isFieldInvalid)
 				return null;
 
 			string currentValue;
 
-			if (!_adapter.IsSuggestAnalyzedIn(userField, language))
+			if (!Adapter.IsSuggestAnalyzedIn(userField, language))
 			{
 				token = token.PhraseStart ?? token;
 				currentValue = StringEscaper.Unescape(token.GetPhraseText(query));
@@ -155,10 +154,10 @@ namespace Mtgdb.Index
 		public void Dispose() =>
 			State?.Dispose();
 
-		protected virtual Directory CreateIndex(DirectoryReader reader)
+		protected virtual Directory CreateIndex(LuceneSearcherState<TId, TDoc> searcherState)
 		{
 			var spellchecker = CreateSpellchecker();
-			var state = CreateState(reader, spellchecker, loaded: false);
+			var state = CreateState(searcherState, spellchecker, loaded: false);
 
 			bool stateExisted = State != null;
 
@@ -182,9 +181,9 @@ namespace Mtgdb.Index
 		}
 
 		protected Spellchecker CreateSpellchecker() =>
-			new Spellchecker(_adapter.IsAnyField);
+			new Spellchecker(Adapter.IsAnyField);
 
-		protected void Update(SpellcheckerState<TId, TDoc> state)
+		protected void Update(LuceneSpellcheckerState<TId, TDoc> state)
 		{
 			var oldState = State;
 			var newState = state;
@@ -193,10 +192,7 @@ namespace Mtgdb.Index
 			oldState?.Dispose();
 		}
 
-		protected SpellcheckerState<TId, TDoc> CreateState(DirectoryReader reader, Spellchecker spellchecker, bool loaded) =>
-			new SpellcheckerState<TId, TDoc>(spellchecker, reader, _adapter, () => MaxCount, GetObjectsToIndex, loaded);
-
-		protected abstract IEnumerable<TDoc> GetObjectsToIndex();
+		protected abstract LuceneSpellcheckerState<TId, TDoc> CreateState(LuceneSearcherState<TId, TDoc> searcherState, Spellchecker spellchecker, bool loaded);
 
 		public event Action IndexingProgress;
 
@@ -212,11 +208,11 @@ namespace Mtgdb.Index
 		public int TotalFields => State?.TotalFields ?? 0;
 		public int IndexedFields => State?.IndexedFields ?? 0;
 
-		private SpellcheckerState<TId, TDoc> State { get; set; }
+		private LuceneSpellcheckerState<TId, TDoc> State { get; set; }
 		private IReadOnlyList<TokenType> _allTokensAreValues;
 
 		private readonly IReadOnlyList<string> _userFields;
 		private readonly IReadOnlyList<TokenType> _allTokensAreField;
-		private readonly IDocumentAdapter<TId, TDoc> _adapter;
+		protected readonly IDocumentAdapter<TId, TDoc> Adapter;
 	}
 }

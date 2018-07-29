@@ -84,14 +84,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncSemaphore.cs" />
     <Compile Include="DeckDocumentAdapter.cs" />
     <Compile Include="DeckFields.cs" />
     <Compile Include="DeckKeywordHighlighter.cs" />
     <Compile Include="DeckIndexUpdateSubsystem.cs" />
+    <Compile Include="DeckListLayoutCustomButtons.cs" />
     <Compile Include="DeckQueryParser.cs" />
     <Compile Include="DeckSearcher.cs" />
+    <Compile Include="DeckSearcherState.cs" />
     <Compile Include="DeckSortSubsystem.cs" />
     <Compile Include="DeckSpellchecker.cs" />
+    <Compile Include="DeckSpellcheckerState.cs" />
     <Compile Include="FilterByDeckMode.cs" />
     <Compile Include="Model\CollectedCardsDeckTransformation.cs" />
     <Compile Include="Model\DeckListModel.cs" />
@@ -132,6 +136,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +233,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\sort_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_transformed_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open_transformed_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

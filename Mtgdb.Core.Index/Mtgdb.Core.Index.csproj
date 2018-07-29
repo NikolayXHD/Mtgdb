@@ -79,18 +79,19 @@
     <Compile Include="Query\RewriteableComplexPhraseQuery.cs" />
     <Compile Include="Query\RewriteableSpanNearQuery.cs" />
     <Compile Include="ReplaceFilter.cs" />
-    <Compile Include="SearcherState.cs" />
+    <Compile Include="LuceneSearcherState.cs" />
     <Compile Include="SearchResult.cs" />
     <Compile Include="SearchResultHighlight\IKeywordHighlighter.cs" />
     <Compile Include="SearchResultHighlight\KnutMorrisPrattSubstringSearch.cs" />
     <Compile Include="SearchResultHighlight\RegexCache.cs" />
     <Compile Include="SearchResultHighlight\SearchResultHighlighter.cs" />
     <Compile Include="Spellchecker.cs" />
-    <Compile Include="SpellcheckerState.cs" />
+    <Compile Include="LuceneSpellcheckerState.cs" />
     <Compile Include="SuggestWord.cs" />
     <Compile Include="TextInputState.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
