@@ -89,9 +89,9 @@ namespace Mtgdb.Gui
 			var loadingCancellation = new CancellationTokenSource();
 			var waitingCancellation = new CancellationTokenSource();
 
-#pragma warning disable 4014
+			#pragma warning disable 4014
 			TaskEx.Run(async () =>
-#pragma warning restore 4014
+			#pragma warning restore 4014
 			{
 				await loadImages(loadingCancellation.Token);
 				waitingCancellation.Cancel();

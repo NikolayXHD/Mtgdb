@@ -9,12 +9,12 @@ namespace Mtgdb.Controls
 {
 	public class DeckModel
 	{
-		public DeckModel(Deck originalDeck, CardRepository repo, ICardCollection collection, IDeckTransformation transformation)
+		public DeckModel(Deck originalDeck, CardRepository repo, CollectionSnapshot collection, CollectedCardsDeckTransformation transformation)
 		{
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
-			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, _collection.GetCount(c));
-			int countCollectedSide(Card c, int countInDeck) => (_collection.GetCount(c) - countInMain(c)).WithinRange(0, countInDeck);
+			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, Collection.GetCount(c));
+			int countCollectedSide(Card c, int countInDeck) => (Collection.GetCount(c) - countInMain(c)).WithinRange(0, countInDeck);
 
 			float priceTotal(Card c, int countInDeck) => countInDeck * (c.PriceMid ?? 0f);
 			float priceCollected(Card c, int countInDeck) => countCollected(c, countInDeck) * (c.PriceMid ?? 0f);
@@ -77,7 +77,7 @@ namespace Mtgdb.Controls
 			_filterIsCreatureAndPriceIsUnknown = c => _filterIsCreature(c) && _filterPriceIsUnknown(c);
 			_filterIsOtherSpellAndPriceIsUnknown = c => _filterIsOtherSpell(c) && _filterPriceIsUnknown(c);
 
-			_collection = collection;
+			Collection = collection;
 			_repo = repo;
 			_transformation = transformation;
 			OriginalDeck = originalDeck;
@@ -242,13 +242,18 @@ namespace Mtgdb.Controls
 		}
 
 
-		public ICardCollection Collection
+		public CollectionSnapshot Collection { get; private set; }
+
+		public void UpdateCollection(CollectionSnapshot value, HashSet<string> affectedNames)
 		{
-			get => _collection;
-			set
+			if (affectedNames?.InvokeMethod(mayContainCardNames) == false)
+				return;
+
+			lock (_sync)
 			{
-				_collection = value;
+				Collection = value;
 				_isDeckUpToDate = false;
+				_affectedNames = affectedNames;
 			}
 		}
 
@@ -274,19 +279,35 @@ namespace Mtgdb.Controls
 				if (_isDeckUpToDate)
 					return;
 
-				_deck = _transformation.Transform(OriginalDeck, _collection);
+				_deck = _transformation.Transform(OriginalDeck, Collection, _deck, _affectedNames);
 				clearCaches();
 
 				_isDeckUpToDate = true;
 			}
 		}
 
-		public bool MayContainCardNames(HashSet<string> cardNameEns)
+		private bool mayContainCardNames(HashSet<string> otherCardNames)
 		{
-			if (_cardNames == null)
+			var cardNames = _cardNames;
+
+			if (cardNames == null)
 				return true;
 
-			var result = _cardNames.Overlaps(cardNameEns);
+			HashSet<string> smaller;
+			HashSet<string> larger;
+
+			if (otherCardNames.Count < cardNames.Count)
+			{
+				smaller = otherCardNames;
+				larger = cardNames;
+			}
+			else
+			{
+				smaller = cardNames;
+				larger = otherCardNames;
+			}
+
+			var result = larger.Overlaps(smaller);
 			return result;
 		}
 
@@ -312,14 +333,14 @@ namespace Mtgdb.Controls
 
 		private IReadOnlyList<string> _legalFormatsCache;
 
-		private ICardCollection _collection;
-
 		public Deck OriginalDeck
 		{
 			get => _originalDeck;
 			set
 			{
 				_originalDeck = value;
+				_deck = null;
+				_isDeckUpToDate = false;
 
 				ClearCaches();
 				FillCardNames();
@@ -342,12 +363,13 @@ namespace Mtgdb.Controls
 		}
 
 		private readonly CardRepository _repo;
-		private readonly IDeckTransformation _transformation;
+		private readonly CollectedCardsDeckTransformation _transformation;
 
 		private bool _isDeckUpToDate;
 		private Deck _deck;
 		private HashSet<string> _cardNames;
 		private readonly object _sync = new object();
 		private Deck _originalDeck;
+		private HashSet<string> _affectedNames;
 	}
 }

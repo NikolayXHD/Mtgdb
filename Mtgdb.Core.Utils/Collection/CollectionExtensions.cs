@@ -171,7 +171,7 @@ namespace Mtgdb
 		public static TResult Invoke2<TObj, TParam, TResult>(this TObj target, Func<TParam, TObj, TResult> getter, TParam param) =>
 			getter(param, target);
 
-		public static TResult Invoke<TObj, TResult>(this TObj target, Func<TObj, TResult> getter)
+		public static TResult InvokeMethod<TObj, TResult>(this TObj target, Func<TObj, TResult> getter)
 		{
 			return getter(target);
 		}

@@ -80,8 +80,8 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<IDeckTransformation>()
-				.To<CollectedCardsDeckTransformation>()
+			Kernel.Bind<CollectedCardsDeckTransformation>()
+				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<DeckIndexUpdateSubsystem>()

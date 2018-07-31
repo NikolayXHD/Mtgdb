@@ -170,11 +170,12 @@ namespace Mtgdb.Controls
 		public void DeckChanged(Deck deck)
 		{
 			_model.OriginalDeck = deck;
+			_model.UpdateTransformedDeck();
 			refreshData();
 		}
 
 		public void CollectionChanged() =>
-			_model.Collection = new CollectionSnapshot(_collection);
+			_model.UpdateCollection(new CollectionSnapshot(_collection), affectedNames: null);
 
 		private void setupTooltips(TooltipController controller)
 		{

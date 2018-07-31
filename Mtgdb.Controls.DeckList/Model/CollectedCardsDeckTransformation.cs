@@ -6,14 +6,14 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
 {
-	public class CollectedCardsDeckTransformation : IDeckTransformation
+	public class CollectedCardsDeckTransformation
 	{
 		public CollectedCardsDeckTransformation(CardRepository repo)
 		{
 			_repo = repo;
 		}
 
-		public Deck Transform(Deck original, ICardCollection collection)
+		public Deck Transform(Deck original, ICardCollection collection, Deck previousTransformed, HashSet<string> affectedNames)
 		{
 			if (!_repo.IsLoadingComplete)
 				return original;
@@ -40,39 +40,63 @@ namespace Mtgdb.Controls
 				return count;
 			}
 
-			void add(Card card, int count, DeckZone targetZone)
+			void transform(Card card, int count, DeckZone targetZone)
 			{
 				var candidates = card.Namesakes.Prepend(card)
-					.Select(c => (Card: c, CollectedCount: collection.GetCount(c) - getUsedCount(c)))
-					.OrderBy(_ => _.CollectedCount <= 0)
-					.ThenBy(_ => _.Card != card)
+					.Select(c => (Card: c, AvailableCount: collection.GetCount(c) - getUsedCount(c)))
+					.OrderBy(_ => _.AvailableCount <= 0)
 					.ThenBy(_ => _.Card.PriceMid == null)
-					.ThenBy(_ => _.Card.PriceMid);
+					.ThenBy(_ => _.Card.PriceMid)
+					.ToList();
 
-				foreach (var candidate in candidates)
+				for (int i = 0; i < candidates.Count; i++)
 				{
-					int countTaken = candidate.CollectedCount > 0
-						? Math.Min(count, candidate.CollectedCount)
-						: count;
+					var candidate = candidates[i];
+					if (candidate.AvailableCount <= 0)
+					{
+						var bestNotCollectedCandidate = candidates
+							.AtMin(_ => _.Card.PriceMid == null)
+							.ThenAtMin(_ => _.Card.PriceMid ?? 0)
+							.Find();
 
-					count -= countTaken;
-					use(candidate.Card, countTaken, targetZone);
+						use(bestNotCollectedCandidate.Card, count, targetZone);
+						return;
+					}
+
+					int takeCount = Math.Min(count, candidate.AvailableCount);
+
+					count -= takeCount;
+					use(candidate.Card, takeCount, targetZone);
 
 					if (count == 0)
-						break;
+						return;
 				}
 			}
 
 			var zones = new[] { original.MainDeck, original.Sideboard };
+			var previousZones = new[] { previousTransformed?.MainDeck, previousTransformed?.Sideboard };
 			var resultZones = new[] { target.MainDeck, target.Sideboard };
 
 			for (int i = 0; i < zones.Length; i++)
 			{
-				var zone = zones[i];
+				bool transformPrevious = previousTransformed != null && affectedNames != null;
+
+				var zone = transformPrevious
+					? previousZones[i]
+					: zones[i];
+
 				var targetZone = resultZones[i];
 
 				foreach (string id in zone.Order)
-					add(_repo.CardsById[id], zone.Count[id], targetZone);
+				{
+					var card = _repo.CardsById[id];
+					int count = zone.Count[id];
+
+					if (transformPrevious && !affectedNames.Contains(card.NameEn))
+						use(card, count, targetZone);
+					else
+						transform(card, count, targetZone);
+				}
 			}
 
 			return target;

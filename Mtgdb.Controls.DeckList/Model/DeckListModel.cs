@@ -29,7 +29,7 @@ namespace Mtgdb.Controls
 		[UsedImplicitly]
 		public DeckListModel(
 			CardRepository repo,
-			IDeckTransformation transformation,
+			CollectedCardsDeckTransformation transformation,
 			CollectionEditorModel collection)
 		{
 			_repo = repo;
@@ -85,8 +85,7 @@ namespace Mtgdb.Controls
 							if (_abort)
 								return;
 
-							if (model.MayContainCardNames(affectedNames))
-								model.Collection = snapshot;
+							model.UpdateCollection(snapshot, affectedNames);
 						}
 
 					_state.Collection = snapshot;
@@ -195,7 +194,7 @@ namespace Mtgdb.Controls
 					_state = deserialized;
 
 					_deckModels = _state.Decks
-						.Select(d => new DeckModel(d, _repo, _collectionEditor, _transformation))
+						.Select(d => new DeckModel(d, _repo, _state.Collection, _transformation))
 						.ToList();
 
 					_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
@@ -267,7 +266,7 @@ namespace Mtgdb.Controls
 			new Dictionary<DeckModel, int>();
 
 		private readonly CardRepository _repo;
-		private readonly IDeckTransformation _transformation;
+		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
 		private static readonly string _fileName = AppDir.History.AddPath("decks.json");
