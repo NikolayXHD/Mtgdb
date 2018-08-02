@@ -83,6 +83,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj">
+      <Project>{6FAC0808-416A-4605-A1E7-042F7A270BB3}</Project>
+      <Name>Mtgdb.Controls.DeckList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Ui\Mtgdb.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
       <Name>Mtgdb.Ui</Name>
@@ -113,6 +117,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeckTransformationTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />
     <Compile Include="Index\CardTextAlphabetTests.cs" />

@@ -27,6 +27,9 @@ namespace Mtgdb
 		public static bool False(bool val) => !val;
 		public static bool True(bool val) => val;
 
+		public static Func<T, bool> IsEqualTo<T>(T val, IEqualityComparer<T> cmp) =>
+			elem => cmp.Equals(elem, val);
+
 		public static Func<T, bool> IsEqualTo<T>(T val) =>
 			elem => Equals(elem, val);
 

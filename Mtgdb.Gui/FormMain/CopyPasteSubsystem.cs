@@ -271,7 +271,7 @@ namespace Mtgdb.Gui
 			{
 				case Zone.Main:
 				case null when _targetForm.IsDeckListSelected:
-					deck = GetDeckCopy();
+					deck = _deckEditor.Snapshot();
 					break;
 				case Zone.Side:
 					deck = copySideDeck();
@@ -300,20 +300,6 @@ namespace Mtgdb.Gui
 				_deckEditor.SideDeck.CardsIds.ToList(),
 				null,
 				null);
-
-		public Deck GetDeckCopy()
-		{
-			var result = Deck.Create(
-				_deckEditor.MainDeck.CountById.ToDictionary(),
-				_deckEditor.MainDeck.CardsIds.ToList(),
-				_deckEditor.SideDeck.CountById.ToDictionary(),
-				_deckEditor.SideDeck.CardsIds.ToList());
-
-			result.Name = _deckEditor.DeckName;
-			result.File = _deckEditor.DeckFile;
-
-			return result;
-		}
 
 		public void LoadDeck(Deck deck)
 		{

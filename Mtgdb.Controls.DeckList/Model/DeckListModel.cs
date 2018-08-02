@@ -37,7 +37,7 @@ namespace Mtgdb.Controls
 			_collectionEditor = collection;
 
 			_collectionEditor.CollectionChanged += collectionChanged;
-			_state.Collection = new CollectionSnapshot(_collectionEditor);
+			_state.Collection = _collectionEditor.Snapshot();
 			_repo.PriceLoadingComplete += priceLoadingComplete;
 		}
 
@@ -65,7 +65,7 @@ namespace Mtgdb.Controls
 					await _syncCollection.WaitAsync();
 					_abort = false;
 
-					var snapshot = new CollectionSnapshot(_collectionEditor);
+					var snapshot = _collectionEditor.Snapshot();
 
 					var affectedCardIds = snapshot.GetAffectedCardIds(_state.Collection);
 

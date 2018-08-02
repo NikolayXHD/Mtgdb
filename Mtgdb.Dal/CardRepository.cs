@@ -37,15 +37,22 @@ namespace Mtgdb.Dal
 
 				while (true)
 				{
-					// пропустить имя сета
 					jsonReader.Read();
 
 					if (jsonReader.TokenType == JsonToken.EndObject)
 						// сеты кончились, весь json прочитан
 						break;
 
+					var setCode = (string) jsonReader.Value;
+
 					// пропустить имя сета
 					jsonReader.Read();
+
+					if (!FilterSetCode(setCode))
+					{
+						jsonReader.Skip();
+						continue;
+					}
 
 					var set = serializer.Deserialize<Set>(jsonReader);
 
@@ -348,7 +355,7 @@ namespace Mtgdb.Dal
 
 		private static readonly Regex _mciNumberRegex = new Regex(@"(?<id>[\w\d]+).html", RegexOptions.Compiled);
 
-		public void SetPrices(PriceRepository priceRepository)
+		public void FillPrices(PriceRepository priceRepository)
 		{
 			foreach (var card in Cards)
 				card.PricesValues = priceRepository.GetPrice(card);
@@ -371,6 +378,8 @@ namespace Mtgdb.Dal
 
 		private string SetsFile { get; }
 		private string BannedAndRestrictedFile { get; }
+
+		public Func<string, bool> FilterSetCode { get; set; } = _ => true;
 
 		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);

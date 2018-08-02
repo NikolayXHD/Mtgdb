@@ -9,7 +9,6 @@ namespace Mtgdb.Dal.Index
 	{
 		public CardSpellcheckerState(
 			CardRepository repo,
-			Func<Set, bool> filterSet,
 			Spellchecker spellchecker,
 			CardSearcherState searcherState,
 			IDocumentAdapter<int, Card> adapter,
@@ -18,7 +17,6 @@ namespace Mtgdb.Dal.Index
 			base(spellchecker, searcherState, adapter, maxCount, loaded)
 		{
 			_repo = repo;
-			_filterSet = filterSet;
 		}
 
 		protected override IEnumerable<Card> GetObjectsToIndex()
@@ -26,10 +24,9 @@ namespace Mtgdb.Dal.Index
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException();
 
-			return _repo.SetsByCode.Values.Where(_filterSet).SelectMany(_ => _.Cards);
+			return _repo.SetsByCode.Values.SelectMany(_ => _.Cards);
 		}
 
 		private readonly CardRepository _repo;
-		private readonly Func<Set, bool> _filterSet;
 	}
 }

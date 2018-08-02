@@ -266,15 +266,15 @@ namespace Mtgdb.Gui
 			{
 				_uiSnapshot = new UiModel(
 					_cardRepo,
-					new CollectionSnapshot(_collectionEditor),
-					new DeckSnapshot(_deckEditor));
+					_collectionEditor.Snapshot(),
+					_deckEditor.SnapshotZone());
 
 				_breakRefreshing = false;
 
 				var searchResultCards = new List<Card>();
 				var filteredCards = new List<Card>();
 
-				var allCards = showDuplicates 
+				var allCards = showDuplicates
 					? _cardSort.SortedRecords
 					: _cardSort.DuplicateAwareSortedCards;
 
@@ -421,7 +421,7 @@ namespace Mtgdb.Gui
 
 			_labelStatusSort.Text = _cardSort.GetTextualStatus();
 
-			DeckName =_deckEditor.DeckName;
+			DeckName = _deckEditor.DeckName;
 
 			_panelStatus.ResumeLayout(false);
 			_panelStatus.PerformLayout();

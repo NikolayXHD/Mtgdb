@@ -73,7 +73,7 @@ namespace Mtgdb.Test
 			var priceRepo = Kernel.Get<PriceRepository>();
 			priceRepo.Load();
 
-			Repo.SetPrices(priceRepo);
+			Repo.FillPrices(priceRepo);
 
 			sw.Stop();
 			_log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
@@ -113,9 +113,9 @@ namespace Mtgdb.Test
 			LoadTranslations();
 
 			Searcher = Kernel.Get<CardSearcher>();
-			
+
 			var sw = new Stopwatch();
-			
+
 			sw.Start();
 			Searcher.LoadIndexes();
 			sw.Stop();
@@ -135,13 +135,13 @@ namespace Mtgdb.Test
 		}
 
 		protected static IKernel Kernel;
-		protected static CardRepository Repo;
-		protected static ImageRepository ImgRepo;
-		protected static UiModel Ui;
+		protected static CardRepository Repo { get; set; }
+		protected static ImageRepository ImgRepo { get; set; }
+		protected static UiModel Ui { get; set; }
 
-		protected static CardSearcher Searcher;
-		protected static CardSpellchecker Spellchecker;
-		protected static KeywordSearcher KeywordSearcher;
+		protected static CardSearcher Searcher { get; set; }
+		protected static CardSpellchecker Spellchecker { get; set; }
+		protected static KeywordSearcher KeywordSearcher { get; set; }
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;

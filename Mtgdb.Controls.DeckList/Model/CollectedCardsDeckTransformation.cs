@@ -13,7 +13,7 @@ namespace Mtgdb.Controls
 			_repo = repo;
 		}
 
-		public Deck Transform(Deck original, ICardCollection collection, Deck previousTransformed, HashSet<string> affectedNames)
+		public Deck Transform(Deck original, CollectionSnapshot collection, Deck previousTransformed = null, HashSet<string> affectedNames = null)
 		{
 			if (!_repo.IsLoadingComplete)
 				return original;

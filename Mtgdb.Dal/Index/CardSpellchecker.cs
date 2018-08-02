@@ -52,7 +52,6 @@ namespace Mtgdb.Dal.Index
 		protected override LuceneSpellcheckerState<int, Card> CreateState(LuceneSearcherState<int, Card> searcherState, Spellchecker spellchecker, bool loaded) =>
 			new CardSpellcheckerState(
 				_repo,
-				FilterSet,
 				spellchecker,
 				(CardSearcherState) searcherState, (CardDocumentAdapter) Adapter,
 				() => MaxCount,
@@ -71,7 +70,6 @@ namespace Mtgdb.Dal.Index
 
 		public string IndexDirectory => _version.Directory;
 		public bool IsUpToDate => _version.IsUpToDate;
-		public Func<Set, bool> FilterSet { get; set; } = set => true;
 
 		private IndexVersion _version;
 		private readonly CardRepository _repo;

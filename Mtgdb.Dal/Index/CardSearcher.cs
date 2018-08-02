@@ -34,7 +34,7 @@ namespace Mtgdb.Dal.Index
 		}
 
 		protected override LuceneSearcherState<int, Card> CreateState() =>
-			new CardSearcherState((CardDocumentAdapter) Adapter, _repo, FilterSet);
+			new CardSearcherState((CardDocumentAdapter) Adapter, _repo);
 
 		protected override Directory CreateIndex(LuceneSearcherState<int, Card> state)
 		{
@@ -74,7 +74,6 @@ namespace Mtgdb.Dal.Index
 			set => _version = new IndexVersion(value, IndexVerision);
 		}
 
-		public Func<Set, bool> FilterSet { get; set; } = set => true;
 		public string IndexDirectory => _version.Directory;
 		public bool IsUpToDate => _version.IsUpToDate;
 		public int SetsAddedToIndex => GroupsAddedToIndex;

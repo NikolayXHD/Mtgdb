@@ -137,9 +137,6 @@ namespace Mtgdb.Dal
 
 			foreach (var set in repository.SetsByCode.Values)
 			{
-				if (!FilterSet(set))
-					continue;
-
 				var setKeywords = new CardKeywords[set.Cards.Count];
 
 				IndexUtils.For(0, set.Cards.Count, i => setKeywords[i] = set.Cards[i].GetAllKeywords());
@@ -188,8 +185,6 @@ namespace Mtgdb.Dal
 
 		public bool IsUpToDate => _version.IsUpToDate;
 
-
-		public Func<Set, bool> FilterSet { get; set; } = set => true;
 
 		public bool IsLoading { get; private set; }
 		public bool IsLoaded { get; private set; }

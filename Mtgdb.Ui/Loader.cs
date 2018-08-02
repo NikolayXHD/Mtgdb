@@ -106,7 +106,7 @@ namespace Mtgdb.Ui
 				while (!_priceRepository.IsLoadingComplete)
 					await TaskEx.Delay(50);
 
-				_repository.SetPrices(_priceRepository);
+				_repository.FillPrices(_priceRepository);
 
 				_localizationRepository.LoadFile();
 				_localizationRepository.Load();

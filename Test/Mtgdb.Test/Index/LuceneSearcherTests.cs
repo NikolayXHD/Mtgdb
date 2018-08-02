@@ -21,7 +21,7 @@ namespace Mtgdb.Test
 			sw.Start();
 
 			priceRepo.Load();
-			Repo.SetPrices(priceRepo);
+			Repo.FillPrices(priceRepo);
 
 			sw.Stop();
 			Log.Debug($"Prices loaded in {sw.ElapsedMilliseconds} ms");

@@ -12,16 +12,22 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			LoadTranslations();
+			_repo = new CardRepository
+			{
+				FilterSetCode = F.IsEqualTo("ISD", Str.Comparer)
+			};
 
-			_cardSearcher = new CardSearcher(Repo, new CardDocumentAdapter(Repo));
-			_keywordSearcher = new KeywordSearcher(Repo);
+			_localizationRepo = new LocalizationRepository();
+			_cardSearcher = new CardSearcher(_repo, new CardDocumentAdapter(_repo));
+			_keywordSearcher = new KeywordSearcher(_repo);
 
-			bool filterSet(Set set) => Str.Equals(set.Code, "ISD");
+			_repo.LoadFile();
+			_repo.Load();
 
-			_cardSearcher.Spellchecker.FilterSet =
-				_cardSearcher.FilterSet =
-					_keywordSearcher.FilterSet = filterSet;
+			_localizationRepo.LoadFile();
+			_localizationRepo.Load();
+
+			_repo.FillLocalizations(_localizationRepo);
 		}
 
 		[Test, Order(0)]
@@ -94,7 +100,7 @@ namespace Mtgdb.Test
 
 			foreach (var id in cardIds)
 			{
-				var card = Repo.Cards[id];
+				var card = _repo.Cards[id];
 				Assert.That(card.Cmc, Is.EqualTo(0));
 			}
 		}
@@ -110,6 +116,8 @@ namespace Mtgdb.Test
 			Assert.That(suggest, Has.Some.Contains("vampire").IgnoreCase);
 		}
 
+		private CardRepository _repo;
+		private LocalizationRepository _localizationRepo;
 		private CardSearcher _cardSearcher;
 		private KeywordSearcher _keywordSearcher;
 	}

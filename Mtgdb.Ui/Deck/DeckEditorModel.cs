@@ -425,6 +425,23 @@ namespace Mtgdb.Ui
 			_library = library;
 		}
 
+		public Deck Snapshot()
+		{
+			var result = Ui.Deck.Create(
+				MainDeck.CountById.ToDictionary(),
+				MainDeck.CardsIds.ToList(),
+				SideDeck.CountById.ToDictionary(),
+				SideDeck.CardsIds.ToList());
+
+			result.Name = DeckName;
+			result.File = DeckFile;
+
+			return result;
+		}
+
+		public DeckZoneSnapshot SnapshotZone() =>
+			new DeckZoneSnapshot(this);
+
 		private Card draw(CardRepository cardRepository)
 		{
 			if (_library == null || _library.Count == 0)

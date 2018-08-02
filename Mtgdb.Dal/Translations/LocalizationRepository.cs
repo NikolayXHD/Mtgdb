@@ -12,7 +12,6 @@ namespace Mtgdb.Dal
 
 		private Dictionary<int, Dictionary<string, Translation>> _cardsByMultiverseIdByNumber =
 			new Dictionary<int, Dictionary<string, Translation>>();
-			
 
 		private string _serailized;
 

@@ -467,7 +467,7 @@ namespace Mtgdb.Gui
 					historyUpdate();
 
 			if (isActualDeckChange)
-				_deckListControl.DeckChanged(_copyPaste.GetDeckCopy());
+				_deckListControl.DeckChanged(_deckEditor.Snapshot());
 
 			if (!restoringSettings())
 				updateFormStatus();

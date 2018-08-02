@@ -82,7 +82,7 @@
     <Compile Include="Deck\DeckZone.cs" />
     <Compile Include="Deck\DeckZoneModel.cs" />
     <Compile Include="Deck\Zone.cs" />
-    <Compile Include="Deck\DeckSnapshot.cs" />
+    <Compile Include="Deck\DeckZoneSnapshot.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="FieldsExtension.cs" />
     <Compile Include="IApplication.cs" />

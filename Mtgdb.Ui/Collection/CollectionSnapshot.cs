@@ -35,6 +35,6 @@ namespace Mtgdb.Ui
 			return result;
 		}
 
-		public Dictionary<string, int> CountById { get; set; }
+		private Dictionary<string, int> CountById { get; }
 	}
 }

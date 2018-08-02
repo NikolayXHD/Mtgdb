@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -10,6 +11,7 @@ namespace Mtgdb.Ui
 		{
 		}
 
+		[Browsable(false)]
 		public bool ShouldSerializeCount() => false;
 		public Dictionary<string, int> Count { get; set; }
 

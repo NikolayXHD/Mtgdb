@@ -175,7 +175,7 @@ namespace Mtgdb.Controls
 		}
 
 		public void CollectionChanged() =>
-			_model.UpdateCollection(new CollectionSnapshot(_collection), affectedNames: null);
+			_model.UpdateCollection(_collection.Snapshot(), affectedNames: null);
 
 		private void setupTooltips(TooltipController controller)
 		{

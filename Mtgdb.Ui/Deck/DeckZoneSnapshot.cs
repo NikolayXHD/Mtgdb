@@ -3,9 +3,9 @@ using Mtgdb.Dal;
 
 namespace Mtgdb.Ui
 {
-	public class DeckSnapshot: ICardCollection
+	public class DeckZoneSnapshot: ICardCollection
 	{
-		public DeckSnapshot(DeckEditorModel original) =>
+		public DeckZoneSnapshot(DeckEditorModel original) =>
 			_countById = original.Deck.CountById.ToDictionary(Str.Comparer);
 
 		public int GetCount(Card c) =>
