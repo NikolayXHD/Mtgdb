@@ -32,7 +32,7 @@ namespace Mtgdb.Util
 			if (args.GetFlag("-update_help"))
 			{
 				Console.Write("Updating local help...");
-				new HelpDownloader().UpdateLocalHelp();
+				HelpDownloader.UpdateLocalHelp();
 				Console.WriteLine(" Done");
 				return;
 			}

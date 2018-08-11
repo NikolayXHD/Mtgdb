@@ -6,8 +6,8 @@ namespace Mtgdb.Dal.Index
 {
 	public class CardSpellchecker : LuceneSpellchecker<int, Card>
 	{
-		// Core M19
-		private const string IndexVerision = "0.41";
+		// C18
+		private const string IndexVerision = "0.42";
 
 		public CardSpellchecker(CardRepository repo, CardDocumentAdapter adapter)
 			: base(adapter)

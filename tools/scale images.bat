@@ -1,1 +1,1 @@
-ScaleUtil\ScaleUtil.exe Waifu2x\waifu2x-converter.exe D:\Distrib\games\mtg\Gatherer.Original\M19.large D:\Distrib\games\mtg\Gatherer.Original\M19.zoom 2
+ScaleUtil\ScaleUtil.exe Waifu2x\waifu2x-converter.exe D:\Distrib\games\mtg\Gatherer.Original\C18.large.png D:\Distrib\games\mtg\Gatherer.PreProcessed\C18.zoom 2

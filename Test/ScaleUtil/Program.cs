@@ -14,7 +14,7 @@ namespace ScaleUtil
 			{
 				Console.WriteLine("Usage:");
 				string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-				Console.WriteLine($"	{name}.exe <path to waifu2x-converter.exe> <source directory> <target directory> <threads count>");
+				Console.WriteLine($"	{name}.exe <path to waifu2x-converter-cpp.exe> <source directory> <target directory> <threads count>");
 				return;
 			}
 
@@ -30,7 +30,12 @@ namespace ScaleUtil
 			Console.WriteLine("Source: " + sourceDir);
 			Console.WriteLine("Target: " + targetDir);
 
-			foreach (string sourceFile in Directory.GetFiles(sourceDir, "*.png", SearchOption.AllDirectories))
+			scaleFiles(sourceDir, targetDir, waifuPath, processorCount, "*.png");
+		}
+
+		private static void scaleFiles(string sourceDir, string targetDir, string waifuPath, int processorCount, string searchPattern)
+		{
+			foreach (string sourceFile in Directory.GetFiles(sourceDir, searchPattern, SearchOption.AllDirectories))
 			{
 				var targetFile = targetDir + sourceFile.Substring(sourceDir.Length);
 
@@ -67,7 +72,7 @@ namespace ScaleUtil
 			{
 				process.Kill();
 				File.Delete(tempFile);
-				throw new TimeoutException("waifu2x-converter.exe timeout");
+				throw new TimeoutException("waifu2x-converter-cpp.exe timeout");
 			}
 
 			File.Delete(tempFile);

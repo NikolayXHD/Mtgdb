@@ -9,9 +9,9 @@ using Mtgdb.Downloader;
 
 namespace Mtgdb.Util
 {
-	public class HelpDownloader
+	public static class HelpDownloader
 	{
-		public void UpdateLocalHelp()
+		public static void UpdateLocalHelp()
 		{
 			var helpFileNames = getHelpFileNames();
 
@@ -132,8 +132,11 @@ namespace Mtgdb.Util
 			var menuBuilder = new StringBuilder();
 			foreach (string file in mdFiles)
 			{
-				string pageName = getPageName(file);
 				string pageTitle = getPageTitle(file);
+				if (ObsoletePages.Contains(pageTitle))
+					continue;
+
+				string pageName = getPageName(file);
 
 				string aClass = Str.Equals(mdFile, file) ? "selected" : "";
 				menuBuilder.AppendFormat("<li class=\"{0}\"><a href=\"{1}.html\">{2}</a></li>",
@@ -164,6 +167,13 @@ namespace Mtgdb.Util
 		{
 			"wiki/",
 			"../raw/master/out/help/"
+		};
+
+		private static readonly HashSet<string> ObsoletePages = new HashSet<string>(Str.Comparer)
+		{
+			"_Sidebar",
+			"2.1 Drag n drop or paste from Clipboard to import decks from websites",
+			"4. Search text"
 		};
 	}
 }

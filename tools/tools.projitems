@@ -48,11 +48,6 @@
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.cube.word-freq" />
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.tesseract_cube.nn" />
     <None Include="$(MSBuildThisFileDirectory)tessdata\eng.traineddata" />
-    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_core300.dll" />
-    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_features2d300.dll" />
-    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_imgcodecs300.dll" />
-    <None Include="$(MSBuildThisFileDirectory)Waifu2x\opencv_imgproc300.dll" />
-    <None Include="$(MSBuildThisFileDirectory)Waifu2x\waifu2x-converter.exe" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\COMPONENTS.txt" />
@@ -60,11 +55,5 @@
     <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\NOTICES.txt" />
     <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.engine.api.xml" />
     <Content Include="$(MSBuildThisFileDirectory)NUnit.Console-3.7.0\nunit.ico" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\LICENSE.txt" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\noise1_model.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\noise2_model.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\models\scale2.0x_model.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\Readme.RU.txt" />
-    <Content Include="$(MSBuildThisFileDirectory)Waifu2x\README.txt" />
   </ItemGroup>
 </Project>

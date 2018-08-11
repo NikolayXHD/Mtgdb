@@ -15,7 +15,7 @@
 	<div class="page-content">
 		<div class="navigation">
 			<ul class="internal">
-				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class="selected"><a href="2.1-Drag-n-drop-or-paste-from-Clipboard-to-import-decks-from-websites.html">2.1 Drag n drop or paste from Clipboard to import decks from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-text.html">4. Search text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Statistics-charts.html">7. Statistics charts</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="License.html">License</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
+				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class=""><a href="2.1.1-Mass-import-from-files.html">2.1.1 Mass import from files</a></li><li class=""><a href="2.1.2-Paste-menu-&-clipboard.html">2.1.2 Paste menu & clipboard</a></li><li class=""><a href="2.1.3-Paste-from-Forge.html">2.1.3 Paste from Forge</a></li><li class=""><a href="2.1.4-Paste-from-websites.html">2.1.4 Paste from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="2.4.-Deck-list.html">2.4. Deck list</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-bar.html">4. Search bar</a></li><li class=""><a href="4.1-Search-button-over-card-text.html">4.1 Search button over card text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Diagrams.html">7. Diagrams</a></li><li class=""><a href="7.1-Custom-diagrams.html">7.1 Custom diagrams</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
 			</ul>
 			<ul class="external">
 				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
@@ -28,103 +28,32 @@
 			</h1>
 		</div>
 		<div class="markdown-body">
-          <a name="user-content-paste-menu-in-window-header"></a>
+          <a name="user-content-drag-n-drop-files-or-folders"></a>
 <h2>
-<a id="paste-menu-in-window-header" class="anchor" href="#paste-menu-in-window-header" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code>Paste</code> menu in window header</h2>
-<p>Some MTG webistes let you download a deck in <code>*.txt</code> format. Then you can open it as MTGO .txt
-deck. However the website <code>download deck</code> button is not always easy to find, and sometimes there
-is none. Also it's not that fast to locate the downloaded file in <code>Load deck</code> dialog.</p>
-<p>I implemented Copy-paste &amp; Drag-n-drop deck text features to cut down the hassle as much as I
-can.</p>
-<a href="l/chart-paste-collection.jpg"><img alt="l/chart-paste-collection.jpg" src="l/chart-paste-collection.jpg"></a>
-<table>
-<colgroup>
-<col width="52%">
-<col width="48%">
-</colgroup>
-<thead valign="bottom">
-<tr>
-<th>result</th>
-<th>action</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr>
-<td>Create new deck from Clipboard or dragged text</td>
-<td>
-<code>Ctrl</code> + <code>V</code>, <code>drag-n-drop</code>
-</td>
-</tr>
-<tr>
-<td>Add Clipboard or dragged text to Deck</td>
-<td>
-<code>Ctrl</code> + <code>Shift</code> + <code>V</code>,
-<code>Shift</code> + <code>drag-n-drop</code>
-</td>
-</tr>
-<tr>
-<td>Create collection from Clipboard or dragged text</td>
-<td>
-<code>Alt</code> + <code>V</code>
-<code>Alt</code> + <code>Drag-n-drop</code>
-</td>
-</tr>
-<tr>
-<td>Add Clipboard or dragged text to Collection</td>
-<td>
-<code>Alt</code> + <code>Shift</code> + <code>V</code>
-<code>Alt</code> + <code>Shift</code> + <code>Drag-n-drop</code>
-</td>
-</tr>
-<tr>
-<td>Copy Deck to clipboard</td>
-<td>
-<code>Ctrl</code> + <code>C</code>
-</td>
-</tr>
-<tr>
-<td>Copy Collection to clipboard</td>
-<td>
-<code>Alt</code> + <code>C</code>
-</td>
-</tr>
-</tbody>
-</table>
-<a name="user-content-paste-from-forge"></a>
+<a id="drag-n-drop-files-or-folders" class="anchor" href="#drag-n-drop-files-or-folders" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Drag-n-drop files or folders</h2>
+<p>The fastest way to import a lot of decks is <code>drag-n-drop</code> some files or directories from
+Windows Explorer.</p>
+<a href="l/drag-n-drop-deck-files.jpg"><img alt="s/drag-n-drop-deck-files.jpg" src="s/drag-n-drop-deck-files.jpg"></a>
+<div>
+<div><br></div>
+<div>Another (less flexible) way is to select multiple deck files in <code>Load deck(s) from from file(s)</code>
+</div>
+</div>
+<p>dialog.</p>
+<a name="user-content-drag-n-drop-from-websites"></a>
 <h2>
-<a id="paste-from-forge" class="anchor" href="#paste-from-forge" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Paste from Forge</h2>
-<p>Suppose you are playing Sealed Deck match in Forge. The first step is to build your deck from 90
-cards in Forge deck editor. Forge developers took care for all of us by supporting <code>Ctrl</code> + <code>C</code>
-to copy selected cards in List View mode from Deck editor. Now I took care too so you can <code>paste</code>
-selected cards as <strong>Collection</strong> in Mtgdb.Gui. The next step is to enable <code>Filter by Collection</code>
-and voila - you are working with the 90 cards from Sealed deck boosters to build your deck.</p>
+<a id="drag-n-drop-from-websites" class="anchor" href="#drag-n-drop-from-websites" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Drag-n-drop from websites</h2>
+<p>The simplest and fastest way to import a bunch of cards into your collection or current deck is to
+simply select the text using mouse and then</p>
 <ul>
-<li>
-<p>In Forge select and copy (<code>Ctrl</code> + <code>C</code>) cards in List View mode.</p>
-<a href="l/chart-copy-forge.jpg"><img alt="l/chart-copy-forge.jpg" src="l/chart-copy-forge.jpg"></a>
-</li>
-<li>
-<p>In Mtgdb.Gui</p>
-<ul>
-<li>press <code>Alt</code> + <code>V</code> or pick <code>Paste collection from Clipboard</code> in <code>Paste menu</code>
-</li>
-<li>filter by cards in collection</li>
+<li>Drag-n-drop it into Mtgdb.Gui or</li>
+<li>Copy (<code>Ctrl</code> + <code>C</code>)  and Paste (<a href="2.1.2-Paste-menu-&amp;-clipboard.html#paste-menu-in-window-header">see details</a>)</li>
 </ul>
-</li>
-</ul>
-<p>Now you can effectively build your deck from 90 cards available to you in Forge Deck editor.
-For example you can quickly estimate color distribution within available cards:</p>
-<a href="l/chart-collection-all.jpg"><img alt="l/chart-collection-all.jpg" src="l/chart-collection-all.jpg"></a>
-<p>You can further estimate color distribution within the cards that have the synergy you are looking
-for:</p>
-<a href="l/chart-filter-collection.jpg"><img alt="l/chart-filter-collection.jpg" src="l/chart-filter-collection.jpg"></a>
-<a href="l/chart-collection-filtered.jpg"><img alt="l/chart-collection-filtered.jpg" src="l/chart-collection-filtered.jpg"></a>
-<p>Unfortunately there is a last-moment issue: Forge version 1.6.4-r-1 failed to import
-result to Deck editor in Sealed Deck mode.</p>
-<p>The bug was fixed in Forge release 1.6.6.</p>
-<a name="user-content-paste-from-various-websites"></a>
-<h2>
-<a id="paste-from-various-websites" class="anchor" href="#paste-from-various-websites" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Paste from various websites</h2>
+<p>The screenshots below demostrate drag-n-drop approach.</p>
+<p>NOTE: Some MTG webistes let you download a deck in <code>*.txt</code> format. Then you can open it as MTGO .txt
+deck. See for example <cite>this webpage &lt;https://magic.wizards.com/en/articles/archive/top-decks/what-we-
+learned-world-championship-2017-10-12&gt;_</cite>. If you try hard enough you will find a download button next to
+<code>twitter</code> and <code>facebook</code> buttons in Deck title.</p>
 <table>
 <colgroup>
 <col width="37%">

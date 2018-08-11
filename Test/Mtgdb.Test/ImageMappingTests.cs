@@ -55,7 +55,7 @@ namespace Mtgdb.Test
 						.Replace("\\mq\\", string.Empty);
 
 					if (!Str.Equals(smallPath, zoomPath))
-						Assert.Fail(smallPath + Str.Endl + zoomPath);
+						Assert.Fail($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
 				}
 		}
 
@@ -82,6 +82,7 @@ namespace Mtgdb.Test
 		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
 
 		[TestCase("CM2", GathererDir, "CM2")]
+		[TestCase("C18", GathererDir, "C18")]
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs

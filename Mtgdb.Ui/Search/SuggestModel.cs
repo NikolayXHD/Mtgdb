@@ -12,19 +12,21 @@ namespace Mtgdb.Ui
 			Searcher = searcher;
 		}
 
-		private void suggest()
+		private bool trySuggest()
 		{
 			var searchState =_textInputState = TextInputStateCurrent;
 
 			var suggest = Suggest(searchState);
 
 			if (!IsSuggestUpToDate())
-				return;
+				return false;
 
 			var handled = Suggested?.Invoke(suggest, searchState);
 
 			if (handled == false)
 				_textInputState = null;
+
+			return handled == true;
 		}
 
 		protected abstract IntellisenseSuggest Suggest(TextInputState state);
@@ -51,10 +53,10 @@ namespace Mtgdb.Ui
 			{
 				while (!cts.IsCancellationRequested)
 				{
-					if (!Searcher.Spellchecker.IsLoaded || TextInputStateCurrent == null || IsSuggestUpToDate())
-						await TaskEx.Delay(100);
-					else
-						suggest();
+					if (Searcher.Spellchecker.IsLoaded && TextInputStateCurrent != null && !IsSuggestUpToDate() && trySuggest())
+						continue;
+
+					await TaskEx.Delay(100);
 				}
 			});
 

@@ -110,7 +110,7 @@ namespace Mtgdb.Test
 			var cardCollectedUnknownPrice = _repo.CardsByName[name][1];
 
 			_collectionEditor.Add(cardCollectedUnknownPrice, 1);
-			_deckEditor.Add(cardKnownPrice, 2);
+			_deckEditor.Add(cardKnownPrice, 3);
 
 			var deck = _deckEditor.Snapshot();
 			var collection = _collectionEditor.Snapshot();
@@ -119,7 +119,7 @@ namespace Mtgdb.Test
 			{
 				var transformed = _transformation.Transform(deck, collection);
 
-				Assert.That(transformed.MainDeck.Count[cardKnownPrice.Id], Is.EqualTo(1));
+				Assert.That(transformed.MainDeck.Count[cardKnownPrice.Id], Is.EqualTo(2));
 				Assert.That(transformed.MainDeck.Count[cardCollectedUnknownPrice.Id], Is.EqualTo(1));
 			}
 		}

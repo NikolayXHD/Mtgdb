@@ -19,11 +19,6 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			LoadCards();
-
-			ImgRepo.LoadFiles();
-			ImgRepo.LoadZoom();
-
 			string tessdataPath = TestContext.CurrentContext.TestDirectory.AddPath(@"..\..\..\tools\tessdata");
 
 			_engine = new TesseractEngine(
@@ -34,9 +29,23 @@ namespace Mtgdb.Util
 			_distance = new DamerauLevenshteinDistance();
 		}
 
+		private void setup()
+		{
+			if (_isSetup)
+				return;
+
+			LoadCards();
+			ImgRepo.LoadFiles();
+			ImgRepo.LoadZoom();
+
+			_isSetup = true;
+		}
+
 		[Test]
 		public void DetectArtist()
 		{
+			setup();
+
 			string[] setCodes =
 			{
 				"AKH",
@@ -156,8 +165,10 @@ namespace Mtgdb.Util
 		}
 
 		[TestCase("M19", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\M19")]
-		public void RenameImagesToMatchCardNames(string setCode, string unnamedImagesDirectory)
+		public void RenameSetImages(string setCode, string unnamedImagesDirectory)
 		{
+			setup();
+
 			var fileNames =
 				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
 					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
@@ -170,7 +181,7 @@ namespace Mtgdb.Util
 			foreach (var fileName in fileNames)
 			{
 				var extension = Path.GetExtension(fileName);
-				var directry = Path.GetDirectoryName(fileName);
+				var directory = Path.GetDirectoryName(fileName);
 
 				var name = ocr(fileName, new Rectangle(20, 20, 170, 17));
 
@@ -183,7 +194,43 @@ namespace Mtgdb.Util
 
 				var matchedName = cardNames[matchedNameIndex];
 				var imageName = cardsByName[matchedName][0].ImageName;
-				string renamed = Path.Combine(directry, imageName + extension);
+				string renamed = Path.Combine(directory, imageName + extension);
+
+				try
+				{
+					File.Move(fileName, renamed);
+				}
+				catch (IOException)
+				{
+				}
+			}
+		}
+
+		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\C18")]
+		public void RenameImages(string unnamedImagesDirectory)
+		{
+			var fileNames =
+				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
+					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
+
+			foreach (var fileName in fileNames)
+			{
+				var extension = Path.GetExtension(fileName);
+				var directory = Path.GetDirectoryName(fileName);
+
+				var name = ocr(fileName, new Rectangle(20, 20, 170, 17));
+
+				var nameClear = new StringBuilder();
+
+				foreach (char n in name)
+				{
+					if (Path.GetInvalidFileNameChars().Contains(n))
+						nameClear.Append("_");
+					else
+						nameClear.Append(n);
+				}
+
+				string renamed = Path.Combine(directory, nameClear + extension);
 
 				try
 				{
@@ -279,5 +326,6 @@ namespace Mtgdb.Util
 		private string[] _artists;
 		private float[] _artistDistance;
 		private DamerauLevenshteinDistance _distance;
+		private bool _isSetup;
 	}
 }

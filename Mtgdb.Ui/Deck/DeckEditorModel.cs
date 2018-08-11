@@ -7,28 +7,20 @@ namespace Mtgdb.Ui
 {
 	public class DeckEditorModel : ICardCollection
 	{
-		public event DeckChangedEventHandler DeckChanged;
+		public DeckEditorModel()
+		{
+			MainDeck = new DeckZoneModel();
+			SideDeck = new DeckZoneModel();
+			SampleHand = new DeckZoneModel();
 
-		public readonly List<Card> DataSource = new List<Card>();
-
-		public Card DraggedCard { get; set; }
-		public Card CardBelowDragged { get; set; }
-		public Card TouchedCard { get; set; }
-		public Zone? IsDraggingFromZone { get; set; }
-
-		public DeckZoneModel MainDeck { get; }
-		public DeckZoneModel SideDeck { get; }
-		public DeckZoneModel SampleHand { get; }
-
-		public Zone? CurrentZone { get; private set; }
+			CurrentZone = Zone.Main;
+		}
 
 		public void SetZone(Zone? value, CardRepository repo)
 		{
 			CurrentZone = value;
 			LoadDeck(repo);
 		}
-
-		public DeckZoneModel Deck => getDeckZone(CurrentZone ?? Zone.Main);
 
 		private DeckZoneModel getDeckZone(Zone zone)
 		{
@@ -45,10 +37,6 @@ namespace Mtgdb.Ui
 			}
 		}
 
-		public int MainDeckSize => MainDeck.CountById.Values.Sum();
-		public int SideDeckSize => SideDeck.CountById.Values.Sum();
-		public int SampleHandSize => SampleHand.CountById.Values.Sum();
-
 		public IList<Card> GetVisibleCards()
 		{
 			if (IsDraggingFromZone == CurrentZone)
@@ -58,13 +46,6 @@ namespace Mtgdb.Ui
 				return DataSource.ToList();
 		}
 
-
-		public DeckEditorModel()
-		{
-			MainDeck = new DeckZoneModel();
-			SideDeck = new DeckZoneModel();
-			SampleHand = new DeckZoneModel();
-		}
 
 		public void SetDeck(Deck deck, CardRepository repo)
 		{
@@ -456,6 +437,27 @@ namespace Mtgdb.Ui
 			return cardRepository.CardsById[id];
 		}
 
+
+		public event DeckChangedEventHandler DeckChanged;
+
+		public readonly List<Card> DataSource = new List<Card>();
+
+		public DeckZoneModel Deck => getDeckZone(CurrentZone ?? Zone.Main);
+
+		public int MainDeckSize => MainDeck.CountById.Values.Sum();
+		public int SideDeckSize => SideDeck.CountById.Values.Sum();
+		public int SampleHandSize => SampleHand.CountById.Values.Sum();
+
+		public Card DraggedCard { get; set; }
+		public Card CardBelowDragged { get; set; }
+		public Card TouchedCard { get; set; }
+		public Zone? IsDraggingFromZone { get; set; }
+
+		public DeckZoneModel MainDeck { get; }
+		public DeckZoneModel SideDeck { get; }
+		public DeckZoneModel SampleHand { get; }
+
+		public Zone? CurrentZone { get; private set; }
 
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }

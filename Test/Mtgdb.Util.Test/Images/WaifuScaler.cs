@@ -10,7 +10,7 @@ namespace Mtgdb.Util
 		{
 			int parallelism = Environment.ProcessorCount;
 
-			string exe = AppDir.Root.AddPath(@"..\tools\Waifu2x\waifu2x-converter.exe");
+			string exe = AppDir.Root.AddPath(@"..\tools\Waifu2x\waifu2x-converter-cpp.exe");
 			string args = $"--jobs {parallelism} --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
 			string workingDirectory = Path.GetDirectoryName(exe);
 
@@ -26,6 +26,9 @@ namespace Mtgdb.Util
 
 			if (!process.WaitForExit(180_000))
 				throw new TimeoutException("waifu2x-converter.exe timeout");
+
+			string outputFileNameDueToBug = targetFile + ".png";
+			File.Move(outputFileNameDueToBug, targetFile);
 		}
 	}
 }

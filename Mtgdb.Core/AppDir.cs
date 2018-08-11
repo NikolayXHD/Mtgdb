@@ -47,9 +47,7 @@ namespace Mtgdb
 			return result;
 		}
 
-		public static string GetVersion()
-		{
-			return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-		}
+		public static string GetVersion() =>
+			Assembly.GetExecutingAssembly().GetName().Version.ToString();
 	}
 }
