@@ -36,6 +36,8 @@ namespace Mtgdb.Gui
 			return sideboardIndicator;
 		}
 
+
+
 		public override Card GetCard(Match match)
 		{
 			string name = match.Groups["name"].Value;
@@ -70,8 +72,10 @@ namespace Mtgdb.Gui
 				}
 				else if (isSideboardIndicator(line))
 					result.Add(line);
-				else if (match.Success && isKnownMtgoName(match.Groups["name"].Value))
+				else if (match.Success)
 					result.Add(line);
+				else if (isKnownMtgoName(line.Trim()))
+					result.Add("1 " + line.Trim());
 				else if (line.IndexOf("\t", Str.Comparison) >= 0)
 				{
 					var parts = line.Split(Array.From('\t'), StringSplitOptions.RemoveEmptyEntries);
@@ -101,7 +105,9 @@ namespace Mtgdb.Gui
 					for (int i = 0; i < splits.Count - 1; i++)
 					{
 						string substring = line.Substring(splits[i], splits[i + 1] - splits[i]).TrimEnd();
-						if (LineRegex.IsMatch(substring))
+
+						var substringMatch = LineRegex.Match(substring);
+						if (substringMatch.Success)
 							result.Add(substring);
 					}
 				}
@@ -193,11 +199,7 @@ namespace Mtgdb.Gui
 			return lines.Count != 0;
 		}
 
-		public override Regex LineRegex { get; } = new Regex(
-			@"^(?<count>\d+)\s+(?<name>.+)$",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-		private static readonly Regex _splitterRegex = new Regex(@"\b(?<count>\d+)\s+\b", RegexOptions.Compiled);
+		public override Regex LineRegex { get; } = _lineRegex;
 
 		private void ensureLoaded()
 		{
@@ -228,5 +230,11 @@ namespace Mtgdb.Gui
 
 		private static readonly Dictionary<string, string> _nameByMtgoName =
 			_mtgoNameByName.ToDictionary(_ => _.Value, _ => _.Key);
+
+		private static readonly Regex _splitterRegex =
+			new Regex(@"\b(?<count>\d+)\s+\b", RegexOptions.Compiled);
+
+		private static readonly Regex _lineRegex =
+			new Regex(@"^(?<count>\d+)\s+(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	}
 }

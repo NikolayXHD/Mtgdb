@@ -153,15 +153,12 @@ namespace Mtgdb.Dal
 			card.ToughnessNum = getPower(card.Toughness);
 			card.LoyaltyNum = getLoyalty(card.Loyalty);
 
-			if (card.TextEn != null)
-				card.TextEn = LocalizationRepository.IncompleteChaosPattern.Replace(card.TextEn, "{CHAOS}");
-
-			if (card.FlavorEn != null)
-				card.FlavorEn = LocalizationRepository.IncompleteChaosPattern.Replace(card.FlavorEn, "{CHAOS}");
+			card.TextEn = card.TextEn?.Invoke(LocalizationRepository.IncompleteChaosPattern.Replace, "{CHAOS}");
+			card.FlavorEn = card.FlavorEn?.Invoke(LocalizationRepository.IncompleteChaosPattern.Replace, "{CHAOS}");
 
 			if (card.MciNumber == null)
 				card.MciNumber = card.Number;
-			else if (card.MciNumber?.EndsWith(".html") == true)
+			else if (card.MciNumber.EndsWith(".html"))
 				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
 
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
