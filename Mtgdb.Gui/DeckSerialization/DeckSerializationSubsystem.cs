@@ -290,11 +290,22 @@ namespace Mtgdb.Gui
 				return NoDeck;
 
 			const int maxLength = 30;
+			const int maxLines = 2;
 
-			if (deckName.Length > maxLength)
-				return $"…{deckName.Substring(deckName.Length - maxLength)}";
+			var lines = deckName.Split(Array.From('\r', '\n'), StringSplitOptions.RemoveEmptyEntries);
+			var builder = new StringBuilder();
 
-			return deckName;
+			for (int i = Math.Max(0, lines.Length - maxLines); i < lines.Length; i++)
+			{
+				var line = lines[i];
+
+				if (line.Length <= maxLength)
+					builder.AppendLine(line);
+				else
+					builder.AppendLine($"…{line.Substring(line.Length - maxLength)}");
+			}
+
+			return builder.ToString();
 		}
 
 
