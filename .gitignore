@@ -1,6 +1,6 @@
 *.user
 *.suo
-*.DotSettings
+*.DotSettings.user
 Bin/
 obj/
 TestResults
