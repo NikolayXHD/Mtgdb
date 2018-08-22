@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -374,7 +375,7 @@ namespace Mtgdb.Controls
 
 			IEnumerable<int> widths;
 			int deltaAbs = Math.Abs(delta);
-			int signum = Math.Sign(delta);
+			int sign = Math.Sign(delta);
 
 			int passedCount = 0;
 
@@ -390,7 +391,7 @@ namespace Mtgdb.Controls
 				int totalWidth = width + SlopeSize.Width;
 				if (totalWidth <= deltaAbs)
 				{
-					passedCount += signum;
+					passedCount += sign;
 					deltaAbs -= totalWidth;
 				}
 				else
@@ -911,6 +912,7 @@ namespace Mtgdb.Controls
 		public int TabBorderWidth
 		{
 			get => _tabBorderWidth;
+			[UsedImplicitly]
 			set
 			{
 				_tabBorderWidth = value;

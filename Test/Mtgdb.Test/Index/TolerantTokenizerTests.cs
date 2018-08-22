@@ -11,6 +11,7 @@ namespace Mtgdb.Test
 		[TestCase(@"\""""angelic demon""")]
 		[TestCase(@"""\""angelic demon""")]
 		[TestCase(@"ManaCost:*E?")]
+		// ReSharper disable once StringLiteralTypo
 		[TestCase(@"NameEn:(NOT(angel OR demon NOT ""angelic demon"") OR [Animal TO Clan]) AND nofield")]
 		[TestCase(@"NameEn:/.{1,2}nge.*/")]
 		public void When_query_is_correct_detected_errors_count_is_0(string queryStr)

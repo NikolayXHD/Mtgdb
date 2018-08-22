@@ -198,8 +198,8 @@ namespace Mtgdb.Gui
 
 		private void draggedLikeClick(Card card)
 		{
-			// клик с нечаянным микродвижением мышкой был воспринят системой как запуск drag-n-drop
-			// для дружелюбия отреагируем, как на нормальный клик - покажем увеличение карты
+			// a click with unintended mouse micro-movement was considered as starting drag-n-drop
+			// for greater user friendliness lets handle it as a normal click - show zoomed card
 
 			if (card != null)
 				zoomCard(card);

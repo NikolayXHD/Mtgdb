@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -9,11 +10,16 @@ namespace Mtgdb.Controls
 	{
 		public struct IconInfo
 		{
-			public bool fIcon;
-			public int xHotspot;
-			public int yHotspot;
-			public IntPtr hbmMask;
-			public IntPtr hbmColor;
+			[UsedImplicitly]
+			public bool FIcon;
+			[UsedImplicitly]
+			public int XHotspot;
+			[UsedImplicitly]
+			public int YHotspot;
+			[UsedImplicitly]
+			public IntPtr HbmMask;
+			[UsedImplicitly]
+			public IntPtr HbmColor;
 		}
 
 		[DllImport("user32.dll")]
@@ -33,9 +39,9 @@ namespace Mtgdb.Controls
 			IntPtr ptr = bmp.GetHicon();
 			IconInfo tmp = new IconInfo();
 			GetIconInfo(ptr, ref tmp);
-			tmp.xHotspot = xHotSpot;
-			tmp.yHotspot = yHotSpot;
-			tmp.fIcon = false;
+			tmp.XHotspot = xHotSpot;
+			tmp.YHotspot = yHotSpot;
+			tmp.FIcon = false;
 			ptr = CreateIconIndirect(ref tmp);
 			return new Cursor(ptr);
 		}

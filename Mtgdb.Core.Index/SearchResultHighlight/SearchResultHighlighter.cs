@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Lucene.Net.Contrib;
-using Mtgdb.Controls;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Index
@@ -22,14 +21,14 @@ namespace Mtgdb.Index
 			_analyzer = new MtgAnalyzer(adapter);
 		}
 
-		public List<TextRange> GetHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMathes)
+		public List<TextRange> GetHighlightRanges(IList<TextRange> matches, IList<TextRange> contextMatches)
 		{
 			var result = new List<TextRange>();
 
-			foreach (var match in contextMathes)
+			foreach (var match in contextMatches)
 				match.IsContext = true;
 
-			var orderedMatches = matches.Union(contextMathes)
+			var orderedMatches = matches.Union(contextMatches)
 				.OrderBy(_ => _.Index)
 				.ThenByDescending(_ => _.Length);
 
@@ -156,11 +155,11 @@ namespace Mtgdb.Index
 
 					if (tokenValues.Count == 1)
 					{
-						var mathesToAdd = displayTextTokens.Value
+						var matchesToAdd = displayTextTokens.Value
 							.Where(token => Str.Comparer.Equals(token.Term, tokenValues[0]))
 							.Select(token => new TextRange(token.Offset, token.Term.Length));
 
-						matches.AddRange(mathesToAdd);
+						matches.AddRange(matchesToAdd);
 						continue;
 					}
 
@@ -250,8 +249,7 @@ namespace Mtgdb.Index
 			else
 				result = null;
 
-			// создадим по 1 паттерну контекста для каждой группы следующих непрерывно wildcard токенов
-
+			// let's create 1 context pattern for each group of uninterrupted wildcard tokens sequence
 			var tokenGroup = new List<Token>();
 
 			tokenGroup.AddRange(prefixTokens);
@@ -294,7 +292,7 @@ namespace Mtgdb.Index
 		{
 			try
 			{
-				var regex = new Regex(result);
+				var unused = new Regex(result);
 				return true;
 			}
 			catch (ArgumentException)
@@ -326,8 +324,8 @@ namespace Mtgdb.Index
 						!token.Next.TouchesCaret(token.Position + token.Value.Length) ||
 						token.Type.IsAny(TokenType.FieldValue) && token.Value[token.Value.Length - 1].IsCj() ||
 						token.Next.Type.IsAny(TokenType.FieldValue) && token.Next.Value[0].IsCj())
-					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
-					// тогда это уже другой термин
+					// A value adjacent to a wildcard is its continuation, in contrast with the case when there is a whitespace in-between,
+					// then it is another term
 					break;
 
 				if (token.Next.Type.IsAny(TokenType.Wildcard | TokenType.FieldValue))
@@ -354,8 +352,8 @@ namespace Mtgdb.Index
 						!token.Previous.TouchesCaret(token.Position) ||
 						token.Type.IsAny(TokenType.FieldValue) && token.Value[0].IsCj() ||
 						token.Previous.Type.IsAny(TokenType.FieldValue) && token.Previous.Value[token.Previous.Value.Length - 1].IsCj())
-					// Вплотную прилегающее к wildcard значение является его продолжением в отличие от случая, если между ними есть пробел,
-					// тогда это уже другой термин
+					// A value adjacent to a wildcard is its continuation, in contrast with the case when there is a whitespace in-between,
+					// then it is another term
 					break;
 
 				if (token.Previous.Type.IsAny(TokenType.Wildcard | TokenType.FieldValue))
@@ -375,9 +373,9 @@ namespace Mtgdb.Index
 			foreach (var token in tokens)
 			{
 				if (token.Type.IsAny(TokenType.AnyChar))
-					pattern.Append(MtgAplhabet.CharPattern);
+					pattern.Append(MtgAlphabet.CharPattern);
 				else if (token.Type.IsAny(TokenType.AnyString))
-					pattern.Append(MtgAplhabet.CharPattern + "*");
+					pattern.Append(MtgAlphabet.CharPattern + "*");
 				else if (token.Type.IsAny(TokenType.FieldValue))
 					appendFieldValuePattern(pattern, token.ParentField, token.Value);
 			}
@@ -396,7 +394,7 @@ namespace Mtgdb.Index
 
 			foreach (char c in luceneUnescaped)
 			{
-				var equivalents = MtgAplhabet.GetEquivalents(c).ToArray();
+				var equivalents = MtgAlphabet.GetEquivalents(c).ToArray();
 
 				if (equivalents.Length == 0)
 					continue;

@@ -15,7 +15,7 @@ namespace Mtgdb.Util
 		{
 			var helpFileNames = getHelpFileNames();
 
-			var htmlTemplate = File.ReadAllText(AppDir.Root.AddPath("help\\template.html"));
+			var htmlTemplate = File.ReadAllText(Path.Combine(AppDir.Root, "help", "template.html"));
 
 			foreach (string helpFileName in helpFileNames)
 			{
@@ -133,7 +133,7 @@ namespace Mtgdb.Util
 			foreach (string file in mdFiles)
 			{
 				string pageTitle = getPageTitle(file);
-				if (ObsoletePages.Contains(pageTitle))
+				if (_obsoletePages.Contains(pageTitle))
 					continue;
 
 				string pageName = getPageName(file);
@@ -169,7 +169,7 @@ namespace Mtgdb.Util
 			"../raw/master/out/help/"
 		};
 
-		private static readonly HashSet<string> ObsoletePages = new HashSet<string>(Str.Comparer)
+		private static readonly HashSet<string> _obsoletePages = new HashSet<string>(Str.Comparer)
 		{
 			"_Sidebar",
 			"2.1 Drag n drop or paste from Clipboard to import decks from websites",

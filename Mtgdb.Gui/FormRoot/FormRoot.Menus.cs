@@ -472,7 +472,7 @@ namespace Mtgdb.Gui
 			e.SuppressKeyPress = handled;
 		}
 
-		private void unsubsribeButtonEvents()
+		private void unsubscribeButtonEvents()
 		{
 			_buttonSubsystem.UnsubscribeFromEvents();
 		}

@@ -138,7 +138,7 @@ namespace Mtgdb.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Size AlignIconSize => _alignmentIconsByDirection.TryGet(DefaultDirection)?.Size ?? default(Size);
+		public Size AlignIconSize => _alignmentIconsByDirection.TryGet(DefaultDirection)?.Size ?? default;
 
 		private Bitmap _alignTopLeftHoveredIcon;
 		private Bitmap _alignTopLeftIcon;

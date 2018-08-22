@@ -25,7 +25,7 @@ namespace Mtgdb.Controls
 			var previousRect = Rectangle;
 			var previousSelecting = Selecting;
 
-			Rectangle = new Rectangle(location, default(Size));
+			Rectangle = new Rectangle(location, size: default);
 			Start = location;
 			End = location;
 			Selecting = true;

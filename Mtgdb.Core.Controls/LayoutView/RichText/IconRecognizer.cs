@@ -24,7 +24,7 @@ namespace Mtgdb.Controls
 
 				char c;
 				if (tokenEnded)
-					c = default(char);
+					c = default;
 				else
 					c = text[i];
 

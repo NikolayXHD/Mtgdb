@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+// ReSharper disable StringLiteralTypo
 
 namespace Mtgdb.Dal
 {
@@ -488,7 +489,7 @@ namespace Mtgdb.Dal
 			KeywordRegexUtil.CreateContainsRegex,
 			KeywordRegexUtil.CreateContainsRegex,
 			KeywordRegexUtil.CreateEqualsRegex,
-			KeywordRegexUtil.CreateContainsRegex,
+			KeywordRegexUtil.CreateContainsRegex
 		};
 
 		public static Func<Card, string>[] Getters { get; } =
@@ -501,7 +502,7 @@ namespace Mtgdb.Dal
 			c => c.TextEn,
 			c => c.GeneratedMana,
 			c => c.Layout,
-			c => c.TextEn,
+			c => c.TextEn
 		};
 
 		public static readonly IList<string> PropertyNamesDisplay = new[]
@@ -514,7 +515,7 @@ namespace Mtgdb.Dal
 			nameof(Card.Text),
 			nameof(Card.Text),
 			nameof(Card.Layout),
-			nameof(Card.Text),
+			nameof(Card.Text)
 		};
 
 		public static readonly IList<IList<string>> Values = new[]
@@ -527,7 +528,7 @@ namespace Mtgdb.Dal
 			ManaAbility,
 			GeneratedMana,
 			Layout,
-			CastKeywords,
+			CastKeywords
 		};
 
 		public static readonly IList<string> PropertyNames = new[]

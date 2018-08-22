@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Index;
 using NUnit.Framework;
+// ReSharper disable StringLiteralTypo
 
 namespace Mtgdb.Test
 {

@@ -11,6 +11,7 @@
     <AssemblyName>Mtgdb.Core.Index</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,7 +69,7 @@
     <Compile Include="LuceneSpellchecker.cs" />
     <Compile Include="LuceneSpellcheckerConstants.cs" />
     <Compile Include="MtgAnalyzer.cs" />
-    <Compile Include="MtgAplhabet.cs" />
+    <Compile Include="MtgAlphabet.cs" />
     <Compile Include="MtgTokenizer.cs" />
     <Compile Include="Query\MtgQueryParser.cs" />
     <Compile Include="Query\MtgRegexpQuery.cs" />
@@ -76,8 +77,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\EmptyPhraseQuery.cs" />
     <Compile Include="Query\EmptyPhraseSpanQuery.cs" />
-    <Compile Include="Query\RewriteableComplexPhraseQuery.cs" />
-    <Compile Include="Query\RewriteableSpanNearQuery.cs" />
+    <Compile Include="Query\RewritableComplexPhraseQuery.cs" />
+    <Compile Include="Query\RewritableSpanNearQuery.cs" />
     <Compile Include="ReplaceFilter.cs" />
     <Compile Include="LuceneSearcherState.cs" />
     <Compile Include="SearchResult.cs" />

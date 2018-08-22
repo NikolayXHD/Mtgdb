@@ -11,14 +11,14 @@ namespace Mtgdb.Controls
 			SelectionEnabled = true;
 		}
 
-		public void SubsribeToEvents()
+		public void SubscribeToEvents()
 		{
 			_textbox.MouseDown += text_MouseDown;
 			_textbox.MouseUp += text_MouseUp;
 			_textbox.MouseMove += text_MouseMove;
 		}
 
-		public void UnsubsribeFromEvents()
+		public void UnsubscribeFromEvents()
 		{
 			_textbox.MouseDown -= text_MouseDown;
 			_textbox.MouseUp -= text_MouseUp;

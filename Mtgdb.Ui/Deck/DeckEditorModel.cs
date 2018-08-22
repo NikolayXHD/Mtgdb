@@ -103,8 +103,8 @@ namespace Mtgdb.Ui
 				remove(card, newCount: count, zone: specificZone);
 
 			var previousTouchedCard = TouchedCard;
-			
-			// уменьшение количества карты, которой в колоде уже 0 приводит к снятию отметки о последнем прикосновении
+
+			// reducing the amount of cards in deck when there is already 0 leads to removing last touched mark from card
 			if (previousCount == 0 && increment < 0)
 				TouchedCard = null;
 			else

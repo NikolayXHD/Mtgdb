@@ -3,12 +3,14 @@ using System.IO;
 using ImageMagick;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class DownsamplingTests
 	{
+		// ReSharper disable StringLiteralTypo
 		[TestCase(@"D:\Distrib\games\mtg\Mega\XLHQ\XLN - Ixalan\300DPI Cards\Adanto, the First Fort.xlhq.jpg")]
+		// ReSharper restore StringLiteralTypo
 		public void Resample(string file)
 		{
 			string name = Path.GetFileNameWithoutExtension(file);
@@ -46,7 +48,7 @@ namespace Mtgdb.Test
 				g.RotateTransform(-90f);
 			}
 
-			image.Save("d:\\temp\\transform.bmp");
+			image.Save(Path.Combine("d:", "temp", "transform.bmp"));
 		}
 	}
 }

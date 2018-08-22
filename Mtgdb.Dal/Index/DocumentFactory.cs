@@ -342,7 +342,7 @@ namespace Mtgdb.Dal.Index
 			localized = localized.ToLower(Str.Culture);
 
 			if (!_textFields.Contains(localized))
-				throw new InvalidOperationException($"Text field {localized} not intialized");
+				throw new InvalidOperationException($"Text field {localized} not initialized");
 
 			if (NotAnalyzedFields.Contains(userField))
 				doc.Add(new Field(localized, fieldValue, IndexUtils.StringFieldType));
@@ -357,7 +357,7 @@ namespace Mtgdb.Dal.Index
 			userField = userField.ToLower(Str.Culture);
 
 			if (!FloatFields.Contains(userField))
-				throw new ArgumentException($"Numeric float field {userField} not intialized");
+				throw new ArgumentException($"Numeric float field {userField} not initialized");
 
 			var field = new SingleField(userField, fieldValue, Field.Store.NO);
 			doc.Add(field);
@@ -368,7 +368,7 @@ namespace Mtgdb.Dal.Index
 			userField = userField.ToLower(Str.Culture);
 
 			if (!IntFields.Contains(userField))
-				throw new ArgumentException($"Numeric int field {userField} not intialized");
+				throw new ArgumentException($"Numeric int field {userField} not initialized");
 
 			var field = new Int32Field(userField, fieldValue, Field.Store.NO);
 			doc.Add(field);

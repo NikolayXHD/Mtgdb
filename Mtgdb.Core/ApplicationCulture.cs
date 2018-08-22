@@ -8,11 +8,11 @@ namespace Mtgdb
 	{
 		public static void SetCulture(CultureInfo culture)
 		{
-			var userDefaltCultureProperty = typeof(CultureInfo).GetField("s_userDefaultCulture", BindingFlags.Static | BindingFlags.NonPublic);
-			var userDefaltUICultureProperty = typeof(CultureInfo).GetField("s_userDefaultUICulture", BindingFlags.Static | BindingFlags.NonPublic);
+			var userDefaultCultureProperty = typeof(CultureInfo).GetField("s_userDefaultCulture", BindingFlags.Static | BindingFlags.NonPublic);
+			var userDefaultUICultureProperty = typeof(CultureInfo).GetField("s_userDefaultUICulture", BindingFlags.Static | BindingFlags.NonPublic);
 
-			userDefaltCultureProperty.SetValue(null, culture);
-			userDefaltUICultureProperty.SetValue(null, culture);
+			userDefaultCultureProperty.SetValue(null, culture);
+			userDefaultUICultureProperty.SetValue(null, culture);
 
 			Thread.CurrentThread.CurrentCulture = culture;
 			Thread.CurrentThread.CurrentUICulture = culture;

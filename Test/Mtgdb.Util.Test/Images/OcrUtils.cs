@@ -19,7 +19,7 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			string tessdataPath = TestContext.CurrentContext.TestDirectory.AddPath(@"..\..\..\tools\tessdata");
+			string tessdataPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", "tools", "tessdata");
 
 			_engine = new TesseractEngine(
 				tessdataPath,
@@ -99,7 +99,7 @@ namespace Mtgdb.Util
 				new Func<Bitmap, BmpProcessor>[]
 				{
 					scaled => new BwFilter(scaled, 0.55f),
-					scaled => new BwFilter(scaled, 0.6f),
+					scaled => new BwFilter(scaled, 0.6f)
 				}
 			};
 
@@ -273,7 +273,7 @@ namespace Mtgdb.Util
 				};
 
 				string[] texts = new string[factors.Length * postScaleFilters.Count];
-				float[] textConfs = new float[texts.Length];
+				float[] textConfidences = new float[texts.Length];
 
 				var sw = new Stopwatch();
 
@@ -296,7 +296,7 @@ namespace Mtgdb.Util
 						using (var page = _engine.Process(scaled, PageSegMode.SingleLine))
 						{
 							texts[i] = page.GetText();
-							textConfs[i] = page.GetMeanConfidence();
+							textConfidences[i] = page.GetMeanConfidence();
 						}
 					}
 
@@ -305,9 +305,9 @@ namespace Mtgdb.Util
 					long elapsedOcr = sw.ElapsedMilliseconds;
 				}
 
-				int textIndex = Enumerable.Range(0, textConfs.Length)
+				int textIndex = Enumerable.Range(0, textConfidences.Length)
 					.AtMax(i => texts[i].Trim().Count(char.IsLetter) > 2)
-					.ThenAtMax(i => textConfs[i])
+					.ThenAtMax(i => textConfidences[i])
 					.Find();
 
 				return texts[textIndex];

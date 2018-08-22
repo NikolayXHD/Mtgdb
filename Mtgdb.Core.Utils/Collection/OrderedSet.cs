@@ -60,7 +60,7 @@ namespace Mtgdb
 			lock (_sync)
 			{
 				if (_values.Count == 0)
-					return default(TValue);
+					return default;
 
 				var key = _values.Min;
 

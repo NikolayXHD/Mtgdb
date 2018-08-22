@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Updater;
 
 namespace Mtgdb.Downloader
 {
@@ -63,7 +62,7 @@ namespace Mtgdb.Downloader
 			_buttonImgLq.Click += imgLqClick;
 			_buttonImgMq.Click += imgMqClick;
 			_buttonImgArt.Click += imgArtClick;
-			_buttonsMtgjson.Click += mtgsonClick;
+			_buttonsMtgjson.Click += mtgjsonClick;
 			_buttonPrices.Click += pricesClick;
 			_buttonEditConfig.Click += editConfigClick;
 			_buttonNotifications.Click += notificationsClick;
@@ -113,7 +112,7 @@ namespace Mtgdb.Downloader
 			System.Diagnostics.Process.Start(AppDir.GeneralConfigXml);
 		}
 
-		private void mtgsonClick(object sender, EventArgs e)
+		private void mtgjsonClick(object sender, EventArgs e)
 		{
 			ThreadPool.QueueUserWorkItem(_ =>
 			{
@@ -399,7 +398,7 @@ namespace Mtgdb.Downloader
 		{
 			if (Dpi.ScalePercent > 100)
 			{
-				var dlgResult = MessageBox.Show($@"Your scren DPI is {Dpi.ScalePercent}% from default. Small images will look blurry on your screen.
+				var dlgResult = MessageBox.Show($@"Your screen DPI is {Dpi.ScalePercent}% from default. Small images will look blurry on your screen.
 It is recommended to download zoom images only.
 
 Are you sure you need small images? (Recommended answer is NO)",

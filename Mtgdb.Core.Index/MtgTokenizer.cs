@@ -56,11 +56,11 @@ namespace Mtgdb.Index
 				}
 
 				char c = _ioBuffer[_bufferIndex++];
-				bool isSignletoneWordChar = false;
+				bool isSingletoneWordChar = false;
 
-				if (MtgAplhabet.RightDelimitersSet.Contains(c))
+				if (MtgAlphabet.RightDelimitersSet.Contains(c))
 					return terminateToken(c);
-				else if (MtgAplhabet.LeftDelimitersSet.Contains(c))
+				else if (MtgAlphabet.LeftDelimitersSet.Contains(c))
 				{
 					if (_length > 0)
 						return terminatePreviousToken();
@@ -73,10 +73,10 @@ namespace Mtgdb.Index
 				}
 				else if (
 					char.IsLetterOrDigit(c) || 
-					MtgAplhabet.WordCharsSet.Contains(c) || 
-					(isSignletoneWordChar = MtgAplhabet.IsSingletoneWordChar(c)))
+					MtgAlphabet.WordCharsSet.Contains(c) || 
+					(isSingletoneWordChar = MtgAlphabet.IsSingletoneWordChar(c)))
 				{
-					if (isSignletoneWordChar)
+					if (isSingletoneWordChar)
 					{
 						if (_length > 0)
 							return terminatePreviousToken();

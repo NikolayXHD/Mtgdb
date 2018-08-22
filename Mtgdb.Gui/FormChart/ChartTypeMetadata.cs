@@ -7,14 +7,14 @@ namespace Mtgdb.Gui
 {
 	public class ChartTypeMetadata
 	{
-		private static readonly Type[] PointChartTypes =
+		private static readonly Type[] _pointChartTypes =
 		{
 			findChartType(SeriesChartType.Point),
 			findChartType(SeriesChartType.FastLine),
 			findChartType(SeriesChartType.FastPoint)
 		};
 
-		private static readonly Type[] PieChartTypes =
+		private static readonly Type[] _pieChartTypes =
 		{
 			findChartType(SeriesChartType.Pie)
 		};
@@ -42,8 +42,8 @@ namespace Mtgdb.Gui
 				HundredPercent = (bool) type.GetProperty("HundredPercent").GetValue(instance, null),
 
 				YValuesPerPoint = (int) type.GetProperty("YValuesPerPoint").GetValue(instance, null),
-				IsPointChart = PointChartTypes.Any(_ => _.IsAssignableFrom(type)),
-				IsPieChart = PieChartTypes.Any(_ => _.IsAssignableFrom(type))
+				IsPointChart = _pointChartTypes.Any(_ => _.IsAssignableFrom(type)),
+				IsPieChart = _pieChartTypes.Any(_ => _.IsAssignableFrom(type))
 			};
 
 			result.CanDisplayMultipleSeries = result.SideBySideSeries || result.Stacked || result.IsPointChart && chartType != SeriesChartType.Kagi;

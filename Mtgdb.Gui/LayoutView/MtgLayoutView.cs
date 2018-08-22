@@ -24,12 +24,6 @@ namespace Mtgdb.Gui
 		public HitInfo CalcHitInfo(Point clientLocation) =>
 			_view.CalcHitInfo(clientLocation);
 
-		public List<FieldSortInfo> SortInfo
-		{
-			get => _view.SortInfo;
-			set => _view.SortInfo = value;
-		}
-
 		public Control Control => _view;
 		public Size CardMinSize => _view.CardSize;
 		public int CardHorzInterval => _view.LayoutOptions.CardInterval.Width;
@@ -79,18 +73,6 @@ namespace Mtgdb.Gui
 		{
 			add => _view.RowDataLoaded += value;
 			remove => _view.RowDataLoaded -= value;
-		}
-
-		public event Action<object> SortChanged
-		{
-			add => _view.SortChanged += value;
-			remove => _view.SortChanged -= value;
-		}
-
-		public event Action<object, SearchArgs> SearchClicked
-		{
-			add => _view.SearchClicked += value;
-			remove => _view.SearchClicked -= value;
 		}
 
 		public event MouseEventHandler MouseDown
@@ -269,8 +251,8 @@ namespace Mtgdb.Gui
 		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName) => 
 			_view.SetHighlightTextRanges(ranges, rowHandle, fieldName);
 
-		public IList<TextRange> GetHiglightRanges(int rowHandle, string fieldName) => 
-			_view.GetHighlihgtTextRanges(rowHandle, fieldName);
+		public IList<TextRange> GetHighlightRanges(int rowHandle, string fieldName) => 
+			_view.GetHighlightTextRanges(rowHandle, fieldName);
 
 		public HighlightOptions GetHighlightSettings() =>
 			_view.ProbeCard.HighlightOptions;

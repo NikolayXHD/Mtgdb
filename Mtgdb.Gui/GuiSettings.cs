@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
 

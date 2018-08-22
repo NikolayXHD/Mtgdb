@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
 using System.IO;
 using System.Linq;
-using Mtgdb.Util;
+using Mtgdb.Test;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class ImageMappingUtils : TestsBase

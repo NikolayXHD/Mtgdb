@@ -40,12 +40,12 @@ namespace Mtgdb.Dal
 					jsonReader.Read();
 
 					if (jsonReader.TokenType == JsonToken.EndObject)
-						// сеты кончились, весь json прочитан
+						// sets are over, all json was read
 						break;
 
 					var setCode = (string) jsonReader.Value;
 
-					// пропустить имя сета
+					// skip set name
 					jsonReader.Read();
 
 					if (!FilterSetCode(setCode))
@@ -68,7 +68,7 @@ namespace Mtgdb.Dal
 						if (set.Cards[i].Remove)
 							set.Cards.RemoveAt(i);
 
-					// после preProcessCard, чтобы было заполено поле NameNormalized
+					// after preProcessCard, to have NameNormalized field set non empty
 					set.CardsByName = set.Cards.GroupBy(_ => _.NameNormalized)
 						.ToDictionary(
 							gr => gr.Key,
@@ -113,7 +113,7 @@ namespace Mtgdb.Dal
 			IsLoadingComplete = true;
 			LoadingComplete?.Invoke();
 
-			// освободить память
+			// release RAM
 			_streamContent = null;
 			_patch = null;
 			Cards.Capacity = Cards.Count;
@@ -285,10 +285,10 @@ namespace Mtgdb.Dal
 
 		public string GetReleaseDateSimilarity(string cardSet, string setCode)
 		{
-			var cardReleasDate = parseReleaseDate(SetsByCode.TryGet(cardSet)?.ReleaseDate);
+			var cardReleaseDate = parseReleaseDate(SetsByCode.TryGet(cardSet)?.ReleaseDate);
 			var setReleaseDate = parseReleaseDate(SetsByCode.TryGet(setCode)?.ReleaseDate);
 
-			var n = (setReleaseDate - cardReleasDate).TotalDays;
+			var n = (setReleaseDate - cardReleaseDate).TotalDays;
 
 			if (n < 0)
 				n = 1000000 + n;

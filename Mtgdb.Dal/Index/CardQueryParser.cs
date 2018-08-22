@@ -26,7 +26,7 @@ namespace Mtgdb.Dal.Index
 			if (Str.Equals(Like, field))
 			{
 				if (prefix || wildcard || regexp || fuzzy)
-					return _matchNothingQuery;
+					return MatchNothingQuery;
 
 				return getMoreLikeQuery(termToken.Image, slopToken);
 			}
@@ -53,14 +53,14 @@ namespace Mtgdb.Dal.Index
 			float slop = parseSlop(slopToken);
 
 			if (string.IsNullOrEmpty(unescaped))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			if (!_repository.IsLoadingComplete)
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			string cardName = unescaped.RemoveDiacritics();
 			if (!_repository.CardsByName.TryGetValue(cardName, out var cards))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			var card = cards[0];
 
@@ -73,7 +73,7 @@ namespace Mtgdb.Dal.Index
 				result.Add(createMoreLikeThisQuery(slop, card.GeneratedMana, nameof(card.GeneratedMana)));
 
 			if (result.Disjuncts.Count == 0)
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			return result;
 		}
@@ -118,7 +118,7 @@ namespace Mtgdb.Dal.Index
 
 		private static readonly ISet<string> _moreLikeStopWords = new HashSet<string>(
 			Sequence.From("a", "an", "the")
-				.Concat(MtgAplhabet.SingletoneWordChars.Select(c => new string(c, 1))),
+				.Concat(MtgAlphabet.SingletoneWordChars.Select(c => new string(c, 1))),
 			Str.Comparer);
 
 		public const string Like = nameof(Like);

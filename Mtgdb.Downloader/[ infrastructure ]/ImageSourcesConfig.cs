@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using NConfiguration.Combination;
 
 namespace Mtgdb.Downloader
@@ -11,9 +12,9 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "QualityGroup")]
 		public QualityGroupConfig[] QualityGroups { get; set; }
 
-		public string MegaPrefix { get; set; }
+		public string MegaPrefix { get; [UsedImplicitly] set; }
 
-		public string GdrivePrefix { get; set; }
+		public string GdrivePrefix { get; [UsedImplicitly] set; }
 
 		public void Combine(ICombiner combiner, ImageSourcesConfig other)
 		{

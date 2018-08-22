@@ -1,32 +1,16 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public class LayoutControlTypeConverter : TypeConverter
 	{
-		//private readonly StandardValuesCollection _knownLayoutControlTypes;
-
+		[UsedImplicitly]
 		public LayoutControlTypeConverter()
 		{
-			//_knownLayoutControlTypes = new StandardValuesCollection(
-			//	AppDomain.CurrentDomain
-			//		.GetAssemblies()
-			//		.SelectMany(a => a.GetExportedTypes())
-			//		.Where(t => t.IsSubclassOf(typeof (LayoutControl)))
-			//		.ToArray());
 		}
-
-		//public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
-		//{
-		//	return true;
-		//}
-
-		//public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-		//{
-		//	return _knownLayoutControlTypes;
-		//}
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
 		{
@@ -40,16 +24,16 @@ namespace Mtgdb.Controls
 
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
-			if (value is string)
-				return Type.GetType((string) value);
+			if (value is string s)
+				return Type.GetType(s);
 
 			return base.ConvertFrom(context, culture, value);
 		}
 
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
-			if (value is Type)
-				return ((Type) value).AssemblyQualifiedName;
+			if (value is Type type)
+				return type.AssemblyQualifiedName;
 
 			return base.ConvertTo(context, culture, value, destinationType);
 		}

@@ -45,7 +45,7 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Wnen_new_positive_state_is_greater_than_old_Then_delta_is_right_and_bottom_increments()
+		public void When_new_positive_state_is_greater_than_old_Then_delta_is_right_and_bottom_increments()
 		{
 			IEnumerable<Rectangle> delta = null;
 			var state = new RectangularSelection();
@@ -65,7 +65,7 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Wnen_new_positive_state_is_less_than_old_Then_delta_is_right_and_bottom_increments()
+		public void When_new_positive_state_is_less_than_old_Then_delta_is_right_and_bottom_increments()
 		{
 			IEnumerable<Rectangle> delta = null;
 			var state = new RectangularSelection();
@@ -193,7 +193,7 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Wnen_new_negative_state_is_greater_than_old_Then_delta_is_left_and_top_increments()
+		public void When_new_negative_state_is_greater_than_old_Then_delta_is_left_and_top_increments()
 		{
 			IEnumerable<Rectangle> delta = null;
 			var state = new RectangularSelection();
@@ -212,7 +212,7 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Wnen_new_negative_state_is_less_than_old_Then_delta_is_left_and_top_increments()
+		public void When_new_negative_state_is_less_than_old_Then_delta_is_left_and_top_increments()
 		{
 			IEnumerable<Rectangle> delta = null;
 			var state = new RectangularSelection();

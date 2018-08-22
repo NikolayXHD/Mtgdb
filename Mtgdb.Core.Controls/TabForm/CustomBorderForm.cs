@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -17,7 +18,7 @@ namespace Mtgdb.Controls
 
 			Paint += paint;
 			Click += click;
-			
+
 			RegisterDragControl(this);
 			RegisterDragControl(_panelHeader);
 
@@ -25,7 +26,7 @@ namespace Mtgdb.Controls
 			Layout += layout;
 
 			SizeBeforeMaximized = Size;
-			_panelHeader.BackColor = _titleBackroundColor;
+			_panelHeader.BackColor = _titleBackgroundColor;
 
 			SetStyle(
 				ControlStyles.UserPaint |
@@ -54,7 +55,7 @@ namespace Mtgdb.Controls
 			else
 			{
 				headerBounds = new Rectangle(Border, Border, Width - controlBoxRect.Width - Border, TitleHeight - Border);
-				clientBounds = new Rectangle(Border, TitleHeight, Width - 2*Border, Height - TitleHeight - Border);
+				clientBounds = new Rectangle(Border, TitleHeight, Width - 2 * Border, Height - TitleHeight - Border);
 			}
 
 			_panelClient.Bounds = clientBounds;
@@ -73,7 +74,7 @@ namespace Mtgdb.Controls
 
 		private void drawBorderInterior(Graphics g, Rectangle titleRect)
 		{
-			if (BorderInteriorColor != TitleBackroundColor)
+			if (BorderInteriorColor != TitleBackgroundColor)
 			{
 				var pen = new Pen(BorderInteriorColor);
 
@@ -109,20 +110,20 @@ namespace Mtgdb.Controls
 
 		private void paintBorders(Graphics g, Rectangle clipRectangle, Rectangle controlBox)
 		{
-			var directions = Enum.GetValues(typeof (Direction));
+			var directions = Enum.GetValues(typeof(Direction));
 			foreach (Direction direction in directions)
 			{
 				if (IsMaximized && (direction & Direction.North) == 0)
-					// верхняя граница есть всегда, другое дело что она не работает как изменялка размера
-					// поэтому верхнюю границу рисуем всегда.
+					// there is always the top border, it doesn't always function as size changed though
+					// therefore we always paint the top border
 					continue;
 
 				var areas = getBorders(direction);
 
 				foreach (var border in areas)
 				{
-					if (IsMaximized && border.Bottom > Border) 
-						// вертикальные куски границы верхних углов
+					if (IsMaximized && border.Bottom > Border)
+						// vertical parts of top borders
 						continue;
 
 					if (clipRectangle.IntersectsWith(border))
@@ -145,7 +146,7 @@ namespace Mtgdb.Controls
 									new Size(current.Width, current.Bottom - controlBox.Bottom));
 						}
 
-						g.FillRectangle(new SolidBrush(TitleBackroundColor), current);
+						g.FillRectangle(new SolidBrush(TitleBackgroundColor), current);
 					}
 				}
 			}
@@ -160,7 +161,7 @@ namespace Mtgdb.Controls
 				titleRectangle.Height - controlBox.Top);
 
 			if (clipRectangle.IntersectsWith(titleRectangle))
-				g.FillRectangle(new SolidBrush(TitleBackroundColor), titleRectangle);
+				g.FillRectangle(new SolidBrush(TitleBackgroundColor), titleRectangle);
 
 			if (clipRectangle.IntersectsWith(controlBox))
 			{
@@ -332,7 +333,7 @@ namespace Mtgdb.Controls
 			bool isForcedSize =
 				WindowState == FormWindowState.Minimized ||
 				WindowState == FormWindowState.Maximized ||
-				Enum.GetValues(typeof (Direction))
+				Enum.GetValues(typeof(Direction))
 					.Cast<Direction>()
 					.Where(_ => _ != Direction.None)
 					.Any(IsSnappedTo);
@@ -409,50 +410,50 @@ namespace Mtgdb.Controls
 				return new Rectangle(
 					screenBounds.X,
 					screenBounds.Y,
-					screenBounds.Width/2,
+					screenBounds.Width / 2,
 					screenBounds.Height);
 
 			if (snapDirection == Direction.NorthWest)
 				return new Rectangle(
 					screenBounds.X,
 					screenBounds.Y,
-					screenBounds.Width/2,
-					screenBounds.Height/2);
+					screenBounds.Width / 2,
+					screenBounds.Height / 2);
 
 			if (snapDirection == Direction.SouthWest)
 				return new Rectangle(
 					screenBounds.X,
-					screenBounds.Bottom - screenBounds.Height/2,
-					screenBounds.Width/2,
-					screenBounds.Height/2);
+					screenBounds.Bottom - screenBounds.Height / 2,
+					screenBounds.Width / 2,
+					screenBounds.Height / 2);
 
 
 			if (snapDirection == Direction.East)
 				return new Rectangle(
-					screenBounds.Right - screenBounds.Width/2,
+					screenBounds.Right - screenBounds.Width / 2,
 					screenBounds.Y,
-					screenBounds.Width/2,
+					screenBounds.Width / 2,
 					screenBounds.Height);
 
 			if (snapDirection == Direction.NorthEast)
 				return new Rectangle(
-					screenBounds.Right - screenBounds.Width/2,
+					screenBounds.Right - screenBounds.Width / 2,
 					screenBounds.Y,
-					screenBounds.Width/2,
-					screenBounds.Height/2);
+					screenBounds.Width / 2,
+					screenBounds.Height / 2);
 
 			if (snapDirection == Direction.SouthEast)
 				return new Rectangle(
-					screenBounds.Right - screenBounds.Width/2,
-					screenBounds.Bottom - screenBounds.Height/2,
-					screenBounds.Width/2,
-					screenBounds.Height/2);
+					screenBounds.Right - screenBounds.Width / 2,
+					screenBounds.Bottom - screenBounds.Height / 2,
+					screenBounds.Width / 2,
+					screenBounds.Height / 2);
 
 
 			if (snapDirection == Direction.None)
 				return new Rectangle(
-					screenBounds.Left + (screenBounds.Width - SizeBeforeMaximized.Width)/2,
-					screenBounds.Top + (screenBounds.Height - SizeBeforeMaximized.Height)/2,
+					screenBounds.Left + (screenBounds.Width - SizeBeforeMaximized.Width) / 2,
+					screenBounds.Top + (screenBounds.Height - SizeBeforeMaximized.Height) / 2,
 					SizeBeforeMaximized.Width,
 					SizeBeforeMaximized.Height);
 
@@ -468,7 +469,7 @@ namespace Mtgdb.Controls
 
 			if (snapDirection == Direction.North)
 				return WindowState == FormWindowState.Maximized;
-			
+
 			return WindowState == FormWindowState.Normal;
 		}
 
@@ -477,11 +478,11 @@ namespace Mtgdb.Controls
 			Rectangle snapRectangle;
 
 			IList<Screen> screens = Screen.AllScreens;
-			
+
 			if (IsSnappedTo(snapDirection) && screens.Count > 1)
 			{
 				var screen = Screen.FromPoint(PointToScreen(new Point(0, 0)));
-				var nextScreen = screens[(screens.IndexOf(screen) + 1)%screens.Count];
+				var nextScreen = screens[(screens.IndexOf(screen) + 1) % screens.Count];
 				snapRectangle = getSnappingRectangle(nextScreen.Bounds.Location, snapDirection);
 			}
 			else
@@ -526,7 +527,7 @@ namespace Mtgdb.Controls
 				draggedLocation.Y,
 				SizeBeforeMaximized.Width,
 				SizeBeforeMaximized.Height);
-			
+
 			setBounds(targetBounds);
 			IsMaximized = false;
 		}
@@ -534,7 +535,7 @@ namespace Mtgdb.Controls
 		private Point getDraggedFormLocation(Point screenPosition)
 		{
 			var desiredLocation = new Point(
-				_dragFromLocation.Value.X * Width / Math.Max(1, _dragFromSize.Value.Width), 
+				_dragFromLocation.Value.X * Width / Math.Max(1, _dragFromSize.Value.Width),
 				_dragFromLocation.Value.Y);
 
 			var controlBox = getControlBoxRectangle();
@@ -569,7 +570,7 @@ namespace Mtgdb.Controls
 
 		private static int getSnappingCornerDistance(Rectangle screenBounds)
 		{
-			return screenBounds.Height/10;
+			return screenBounds.Height / 10;
 		}
 
 		private static Rectangle getScreenBounds(Point cursorPosition)
@@ -581,17 +582,14 @@ namespace Mtgdb.Controls
 
 
 
-		private Rectangle getTitleRectangle()
-		{
-			if (IsMaximized)
-				return new Rectangle(0, 0, Bounds.Width, TitleHeight - Border);
-			else
-				return new Rectangle(0, 0, Bounds.Width, TitleHeight);
-		}
+		private Rectangle getTitleRectangle() =>
+			IsMaximized
+				? new Rectangle(0, 0, Bounds.Width, TitleHeight - Border)
+				: new Rectangle(0, 0, Bounds.Width, TitleHeight);
 
 		private Rectangle getControlBoxRectangle()
 		{
-			var images = getControlBoxImages(default(Point), out _, out _, out _);
+			var images = getControlBoxImages(clientLocation: default, out _, out _, out _);
 
 			var width = images.Count > 0
 				? images.Sum(_ => _.Width)
@@ -613,32 +611,40 @@ namespace Mtgdb.Controls
 				case Direction.None:
 					yield break;
 				case Direction.North:
-					yield return new Rectangle(Corner, 0, bounds.Width - 2*Corner, Border);
+					yield return new Rectangle(Corner, 0, bounds.Width - 2 * Corner, Border);
+
 					break;
 				case Direction.NorthEast:
 					yield return new Rectangle(bounds.Width - Corner, 0, Corner, Border);
 					yield return new Rectangle(bounds.Width - Border, 0, Border, Corner);
+
 					break;
 				case Direction.East:
-					yield return new Rectangle(bounds.Width - Border, Corner, Border, bounds.Height - 2*Corner);
+					yield return new Rectangle(bounds.Width - Border, Corner, Border, bounds.Height - 2 * Corner);
+
 					break;
 				case Direction.SouthEast:
 					yield return new Rectangle(bounds.Width - Border, bounds.Height - Corner, Border, Corner);
 					yield return new Rectangle(bounds.Width - Corner, bounds.Height - Border, Corner, Border);
+
 					break;
 				case Direction.South:
-					yield return new Rectangle(Corner, bounds.Height - Border, bounds.Width - 2*Corner, Border);
+					yield return new Rectangle(Corner, bounds.Height - Border, bounds.Width - 2 * Corner, Border);
+
 					break;
 				case Direction.SouthWest:
 					yield return new Rectangle(0, bounds.Height - Border, Corner, Border);
 					yield return new Rectangle(0, bounds.Height - Corner, Border, Corner);
+
 					break;
 				case Direction.West:
-					yield return new Rectangle(0, Corner, Border, bounds.Height - 2*Corner);
+					yield return new Rectangle(0, Corner, Border, bounds.Height - 2 * Corner);
+
 					break;
 				case Direction.NorthWest:
 					yield return new Rectangle(0, 0, Border, Corner);
 					yield return new Rectangle(0, 0, Corner, Border);
+
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
@@ -744,7 +750,7 @@ namespace Mtgdb.Controls
 					out bool hoveredMinimize);
 
 				if (!hoveredMinimize && !hoveredMaximize && !hoveredClose)
-					foreach (Direction direction in Enum.GetValues(typeof (Direction)))
+					foreach (Direction direction in Enum.GetValues(typeof(Direction)))
 						foreach (var border in getBorders(direction))
 							if (border.Contains(clientLocation))
 							{
@@ -874,13 +880,14 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(24)]
 		public int Corner { get; set; } = 24;
 
-		[Category("Settings"), DefaultValue(typeof (Color), "210, 210, 220")]
-		public Color TitleBackroundColor
+		[Category("Settings"), DefaultValue(typeof(Color), "210, 210, 220")]
+		public Color TitleBackgroundColor
 		{
-			get => _titleBackroundColor;
+			get => _titleBackgroundColor;
+			[UsedImplicitly]
 			set
 			{
-				_titleBackroundColor = value;
+				_titleBackgroundColor = value;
 				_panelHeader.BackColor = value;
 				Invalidate();
 			}
@@ -927,7 +934,7 @@ namespace Mtgdb.Controls
 		private bool _showMaximizeButton = true;
 		private int _titleHeight = 24;
 		private int _border = 4;
-		private Color _titleBackroundColor = Color.FromArgb(210, 210, 220);
+		private Color _titleBackgroundColor = Color.FromArgb(210, 210, 220);
 
 		private readonly HashSet<Keys> _downKeys = new HashSet<Keys>();
 

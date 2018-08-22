@@ -223,9 +223,13 @@ namespace Mtgdb.Gui
 		private static readonly Dictionary<string, string> _mtgoNameByName =
 			new Dictionary<string, string>
 			{
+				// ReSharper disable StringLiteralTypo
+				
 				{ "Jötun Grunt", "Jotun Grunt" },
 				{ "Jötun Owl Keeper", "Jotun Owl Keeper" },
 				{ "Bösium Strip", "Bosium Strip" }
+				
+				// ReSharper restore StringLiteralTypo
 			};
 
 		private static readonly Dictionary<string, string> _nameByMtgoName =

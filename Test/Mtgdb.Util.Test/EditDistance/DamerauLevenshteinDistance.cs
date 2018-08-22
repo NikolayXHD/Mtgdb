@@ -18,8 +18,7 @@ namespace Mtgdb.Util
 
 			fillTrace(userStr, dictStr, userStrLength, dictStr.Length);
 
-			// Возьмем минимальное
-			// префиксное расстояние
+			// take minimal prefix distance
 			float minPrefixDist = _trace[userStrLength, 0];
 			
 			for (int i = 1; i <= dictStrLength; i++)
@@ -44,16 +43,16 @@ namespace Mtgdb.Util
 			for (int j = 1; j <= dictLength; j++)
 				for (int i = 1; i <= userLength; i++)
 				{
-					// Учтем вставки, удаления и замены
-					float rcost = replaceCostCached(userStr[i - 1], dictStr[j - 1]);
+					// Consider insertions, removals and replacements
+					float rCost = replaceCostCached(userStr[i - 1], dictStr[j - 1]);
 
 					float dist0 = _trace[i - 1, j] + 2;
 					float dist1 = _trace[i, j - 1] + 2;
-					float dist2 = _trace[i - 1, j - 1] + rcost;
+					float dist2 = _trace[i - 1, j - 1] + rCost;
 
 					_trace[i, j] = Math.Min(dist0, Math.Min(dist1, dist2));
 
-					// Учтем обмен
+					// consider exchange
 					if (i > 1 && j > 1 && userStr[i - 1] == dictStr[j - 2] && userStr[i - 2] == dictStr[j - 1])
 						_trace[i, j] = Math.Min(_trace[i, j], _trace[i - 2, j - 2] + 1);
 				}

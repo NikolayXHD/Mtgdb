@@ -108,6 +108,7 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pGTW;pWPN" Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2008" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2009" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2010" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2011" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2012" />
 		<Directory Group="xlhq" Zoom="Any" Set="pGPX"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Grand Prix" />

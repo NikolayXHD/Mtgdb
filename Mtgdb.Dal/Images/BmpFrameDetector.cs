@@ -31,7 +31,7 @@ namespace Mtgdb.Dal
 			int frameHeight = 0;
 			int frameWidth = 0;
 
-			// Более чем двухкратный запас. На практике /25
+			// More than x2 reserve. On practice /25
 			int cornerSize = Rect.Width / 10;
 			int maxFrame = Rect.Width / 5;
 

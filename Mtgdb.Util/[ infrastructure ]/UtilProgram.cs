@@ -141,7 +141,7 @@ namespace Mtgdb.Util
 			Console.ReadLine();
 			integration.Load();
 
-			Console.WriteLine("== Start overridng Forge pictures ==");
+			Console.WriteLine("== Start overriding Forge pictures ==");
 			integration.OverrideForgePictures(setCode);
 
 			Console.WriteLine("Replacing done. Press ENTER to exit");
@@ -153,7 +153,7 @@ namespace Mtgdb.Util
 			Console.WriteLine("Usage:");
 
 			Console.WriteLine("Mtgdb.Util.exe -rename_artworks directory");
-			Console.WriteLine("\t- rename artwork images moving artist and tags file attribute to name like cardname.[set soi,abc][artist Jonh Doe].jpg");
+			Console.WriteLine("\t- rename artwork images moving artist and tags file attribute to name like cardname.[set soi,abc][artist John Doe].jpg");
 
 			Console.WriteLine("Mtgdb.Util.exe -forge [-set setcode]");
 			Console.WriteLine("\t- replace images in Forge image directory");

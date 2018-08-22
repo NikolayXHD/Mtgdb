@@ -59,6 +59,7 @@ namespace Mtgdb.Test
 				}
 		}
 
+		// ReSharper disable StringLiteralTypo
 		[TestCase("UGL", XlhqTorrentsDir, "UGL", "UGL Tokens")]
 		[TestCase("DDE", XlhqTorrentsDir, "DDE", "DDE Tokens")]
 		[TestCase("C17", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
@@ -83,6 +84,7 @@ namespace Mtgdb.Test
 
 		[TestCase("CM2", GathererDir, "CM2")]
 		[TestCase("C18", GathererDir, "C18")]
+		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs

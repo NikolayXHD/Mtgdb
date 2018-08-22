@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Ui
@@ -12,6 +13,7 @@ namespace Mtgdb.Ui
 
 		public IList<string> CardsIds => Order;
 
+		[UsedImplicitly] // to find usages in IDE
 		public DeckZoneModel()
 		{
 		}

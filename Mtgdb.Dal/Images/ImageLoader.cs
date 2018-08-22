@@ -78,8 +78,8 @@ namespace Mtgdb.Dal
 			}
 			catch
 			{
-				// Некорректный файл изображения.
-				// Штатная ситуация из за возможного прерывания скачивания файла.
+				// Incorrect image file.
+				// This is expected to happen due to interrupting file download.
 				return null;
 			}
 		}
@@ -118,9 +118,9 @@ namespace Mtgdb.Dal
 
 
 
-		private static Bitmap resize(Bitmap original, Size requiredSize, Size frame = default(Size))
+		private static Bitmap resize(Bitmap original, Size requiredSize, Size frame = default)
 		{
-			if (frame == default(Size) && original.Size == requiredSize)
+			if (frame == default && original.Size == requiredSize)
 				return original;
 
 			return original.FitIn(requiredSize, frame);
@@ -191,8 +191,8 @@ namespace Mtgdb.Dal
 
 
 		public static readonly Size SizeCropped = new Size(470, 659);
-		private Size _cardSize = new Size(223, 311);
-		private Size _zoomedCardSize = new Size(446, 622);
+		private readonly Size _cardSize = new Size(223, 311);
+		private readonly Size _zoomedCardSize = new Size(446, 622);
 
 		public Size CardSize => _cardSize.ByDpi();
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();

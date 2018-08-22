@@ -32,7 +32,7 @@ namespace Mtgdb.Controls
 		{
 			if (ReferenceEquals(null, obj))
 				return false;
-			return obj is StateClick && Equals((StateClick) obj);
+			return obj is StateClick click && Equals(click);
 		}
 
 		public override int GetHashCode()

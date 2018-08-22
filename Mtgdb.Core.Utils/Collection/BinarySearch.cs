@@ -6,11 +6,6 @@ namespace Mtgdb
 {
 	public static class BinarySearch
 	{
-		/// <summary>
-		/// Выполняет бинарный поиск первого элемента массива, удовлетворяющего некоторому критерию.
-		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех последующих элементов массива.
-		/// </summary>
-		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
 		public static int BinarySearchFirstIndexOf<T>(this IList<T> list, Func<T, bool> predicate)
 		{
 			if (list.Count == 0)
@@ -19,11 +14,6 @@ namespace Mtgdb
 			return binarySearchFirstIndex(list.AsReadOnlyList(), predicate, 0, list.Count);
 		}
 
-		/// <summary>
-		/// Выполняет бинарный поиск первого элемента массива, удовлетворяющего некоторому критерию.
-		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех последующих элементов массива.
-		/// </summary>
-		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
 		public static int BinarySearchFirstIndexOf<T>(this IReadOnlyList<T> list, Func<T, bool> predicate)
 		{
 			if (list.Count == 0)
@@ -32,11 +22,6 @@ namespace Mtgdb
 			return binarySearchFirstIndex(list, predicate, 0, list.Count);
 		}
 
-		/// <summary>
-		/// Выполняет бинарный поиск последнего элемента массива, удовлетворяющего некоторому критерию.
-		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех предыдущих элементов массива.
-		/// </summary>
-		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
 		public static int BinarySearchLastIndexOf<T>(this IReadOnlyList<T> list, Func<T, bool> predicate)
 		{
 			var predicateStopsBeingTrueAt = BinarySearchFirstIndexOf(list, _ => !predicate(_));
@@ -77,13 +62,6 @@ namespace Mtgdb
 				return middle;
 
 			return searchLeftResult;
-		}
-
-		public static IEnumerable<T> Enumerate<T>(this IEnumerator<T> enumerator)
-		{
-			using (enumerator)
-				while (enumerator.MoveNext())
-					yield return enumerator.Current;
 		}
 	}
 }

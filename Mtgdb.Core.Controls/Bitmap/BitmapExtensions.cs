@@ -48,7 +48,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default(Size))
+		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default)
 		{
 			var croppedSize = new Size(
 				original.Width - 2 * frame.Width,
@@ -56,7 +56,7 @@ namespace Mtgdb.Controls
 
 			size = croppedSize.FitIn(size);
 
-			if (size == original.Size && frame == default(Size))
+			if (size == original.Size && frame == default)
 				return (Bitmap) original.Clone();
 
 			var sourceRect = new Rectangle(new Point(frame), croppedSize);
@@ -101,23 +101,23 @@ namespace Mtgdb.Controls
 
 		public static Bitmap TransformColors(this Bitmap image, float saturation = 1f, float brightness = 1f)
 		{
-			const float rwgt = 0.3086f;
-			const float gwgt = 0.6094f;
-			const float bwgt = 0.0820f;
+			const float rWgt = 0.3086f;
+			const float gWgt = 0.6094f;
+			const float bWgt = 0.0820f;
 
 			var colorMatrix = new ColorMatrix();
 
 			float baseSat = 1.0f - saturation;
 
-			colorMatrix[0, 0] = baseSat * rwgt + saturation;
-			colorMatrix[0, 1] = baseSat * rwgt;
-			colorMatrix[0, 2] = baseSat * rwgt;
-			colorMatrix[1, 0] = baseSat * gwgt;
-			colorMatrix[1, 1] = baseSat * gwgt + saturation;
-			colorMatrix[1, 2] = baseSat * gwgt;
-			colorMatrix[2, 0] = baseSat * bwgt;
-			colorMatrix[2, 1] = baseSat * bwgt;
-			colorMatrix[2, 2] = baseSat * bwgt + saturation;
+			colorMatrix[0, 0] = baseSat * rWgt + saturation;
+			colorMatrix[0, 1] = baseSat * rWgt;
+			colorMatrix[0, 2] = baseSat * rWgt;
+			colorMatrix[1, 0] = baseSat * gWgt;
+			colorMatrix[1, 1] = baseSat * gWgt + saturation;
+			colorMatrix[1, 2] = baseSat * gWgt;
+			colorMatrix[2, 0] = baseSat * bWgt;
+			colorMatrix[2, 1] = baseSat * bWgt;
+			colorMatrix[2, 2] = baseSat * bWgt + saturation;
 
 			float adjustedBrightness = brightness - 1f;
 

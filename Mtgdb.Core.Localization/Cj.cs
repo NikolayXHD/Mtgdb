@@ -5,8 +5,7 @@ namespace Mtgdb
 	public static class Cj
 	{
 		/// <summary>
-		/// Символ является иероглифом.
-		/// Аббревиатура CJ в названии расшифровывается как chinese japanese
+		/// chinese japanese
 		/// </summary>
 		public static bool IsCj(this char c)
 		{
@@ -22,11 +21,7 @@ namespace Mtgdb
 		}
 
 		/// <summary>
-		/// Диапазоны иероглифов.
-		/// Аббревиатура CJ в названии расшифровывается как chinese japanese.
 		/// https://en.wikipedia.org/wiki/Unicode_block
-		/// 
-		/// Диапазоны упорядочены по-возрастанию для оптимизации поиска
 		/// </summary>
 		private static readonly List<CharRange> _cjCharacterRanges = new List<CharRange>
 		{
@@ -40,7 +35,7 @@ namespace Mtgdb
 			new CharRange('\u3400', '\u4dbf'), // CJK Unified Ideographs ExtensionA
 			new CharRange('\u4e00', '\u9fff'), // CJK Unified Ideographs
 			new CharRange('\uf900', '\ufaff'), // CJK Compatibility Ideographs
-			new CharRange('\uff65', '\uff9f'), // Halfwidth and Fullwidth Forms (Non Korean)
+			new CharRange('\uff65', '\uff9f') // Halfwidth and Fullwidth Forms (Non Korean)
 		};
 
 		private struct CharRange

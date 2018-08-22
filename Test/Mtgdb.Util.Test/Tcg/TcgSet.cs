@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	public class TcgSet
 	{

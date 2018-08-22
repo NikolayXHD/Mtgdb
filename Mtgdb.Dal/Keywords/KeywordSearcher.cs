@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 	public class KeywordSearcher
 	{
 		// C18
-		private const string IndexVerision = "0.42";
+		private const string IndexVersion = "0.42";
 
 		public KeywordSearcher(CardRepository repo)
 		{
@@ -175,7 +175,7 @@ namespace Mtgdb.Dal
 		public string IndexDirectoryParent
 		{
 			get => _version.Directory.Parent();
-			set => _version = new IndexVersion(value, IndexVerision);
+			set => _version = new IndexVersion(value, IndexVersion);
 		}
 
 		public void InvalidateIndex()

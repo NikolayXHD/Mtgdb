@@ -49,7 +49,7 @@ namespace Mtgdb.Controls
 				if (!_subscribed.Add(control))
 					continue;
 
-				subsribeStaticTooltipEvents(control);
+				subscribeStaticTooltipEvents(control);
 			}
 
 			foreach (var customClient in _customTooltips)
@@ -61,7 +61,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void subsribeStaticTooltipEvents(Control control)
+		private void subscribeStaticTooltipEvents(Control control)
 		{
 			control.MouseEnter += mouseEnter;
 			control.MouseLeave += mouseLeave;
@@ -87,7 +87,7 @@ namespace Mtgdb.Controls
 
 			foreach (var control in staticTooltipsToRemove)
 			{
-				unsubsribeStaticTooltipEvents(control);
+				unsubscribeStaticTooltipEvents(control);
 				_staticTooltips.Remove(control);
 			}
 
@@ -102,7 +102,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void unsubsribeStaticTooltipEvents(Control control)
+		private void unsubscribeStaticTooltipEvents(Control control)
 		{
 			control.MouseEnter -= mouseEnter;
 			control.MouseLeave -= mouseLeave;
@@ -243,22 +243,22 @@ namespace Mtgdb.Controls
 
 			var control = (Control) sender;
 
-			var settgins = _staticTooltips[control];
+			var settings = _staticTooltips[control];
 
 			if (control == Tooltip.Control)
 				return;
 
-			if (settgins.IsEmpty)
+			if (settings.IsEmpty)
 				Tooltip = _emptyTooltip;
 			else
 				Tooltip = new TooltipModel
 				{
-					Id = settgins.Controls[0],
+					Id = settings.Controls[0],
 					Control = control,
 					ObjectBounds = control.ClientRectangle,
 
-					Title = settgins.Title(),
-					Text = settgins.Text()
+					Title = settings.Title(),
+					Text = settings.Text()
 				};
 		}
 

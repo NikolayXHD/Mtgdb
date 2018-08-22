@@ -100,7 +100,7 @@ namespace Mtgdb.Gui
 					{
 						title = "Search similar cards";
 						text = "Click to search cards similar to this one.\r\n" +
-							"Similarity is determined by Text and GenearatedMana fields.\r\n" +
+							"Similarity is determined by Text and GeneratedMana fields.\r\n" +
 							"\r\n" +
 							"Following term will be added to search text\r\n" +
 							query;
@@ -141,7 +141,7 @@ namespace Mtgdb.Gui
 						Control = _layoutView.Control,
 						Title = $"{(delta > 0 ? "Add" : "Remove")} {absDelta} card{(absDelta == 1 ? string.Empty : "s")} {(delta > 0 ? "to" : "from")} {(isDeck ? "Deck" : "Collection")}",
 						Text = $"{(absDelta == 1 ? string.Empty : "Ctrl + ")}{(isDeck ? string.Empty : "Alt + ")}{(delta > 0 ? "Right" : "Middle")} " +
-							"mouse clik on card image does the same",
+							"mouse click on card image does the same",
 						Clickable = false
 					});
 				}
@@ -169,7 +169,7 @@ namespace Mtgdb.Gui
 						Control = _layoutView.Control,
 						Title = hitInfo.FieldName,
 						Text = _layoutView.GetFieldTooltipText(hitInfo.RowHandle, hitInfo.FieldName),
-						HighlightRanges = _layoutView.GetHiglightRanges(hitInfo.RowHandle, hitInfo.FieldName),
+						HighlightRanges = _layoutView.GetHighlightRanges(hitInfo.RowHandle, hitInfo.FieldName),
 						HighlightOptions = _layoutView.GetHighlightSettings(),
 						Clickable = true
 					});

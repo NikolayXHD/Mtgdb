@@ -9,19 +9,19 @@ namespace Mtgdb.Gui
 {
 	public static class ChartPalettes
 	{
-		private static readonly Type ChartPaletteColorsType = typeof (SeriesChartType).Assembly.GetType(
+		private static readonly Type _chartPaletteColorsType = typeof (SeriesChartType).Assembly.GetType(
 			"System.Windows.Forms.DataVisualization.Charting.Utilities.ChartPaletteColors");
 
-		private static readonly MethodInfo GetPaletteColorsMethod = ChartPaletteColorsType.GetMethod("GetPaletteColors");
+		private static readonly MethodInfo _getPaletteColorsMethod = _chartPaletteColorsType.GetMethod("GetPaletteColors");
 
-		public static Dictionary<ChartColorPalette, Color[]> ByName = Enum.GetValues(typeof (ChartColorPalette))
+		public static readonly Dictionary<ChartColorPalette, Color[]> ByName = Enum.GetValues(typeof (ChartColorPalette))
 			.Cast<ChartColorPalette>()
 			.Where(_ => _ != ChartColorPalette.None)
 			.ToDictionary(p => p, getPalette);
 
 		private static Color[] getPalette(ChartColorPalette palette)
 		{
-			var result = (Color[]) GetPaletteColorsMethod.Invoke(null, new object[] { palette });
+			var result = (Color[]) _getPaletteColorsMethod.Invoke(null, new object[] { palette });
 			return result;
 		}
 	}

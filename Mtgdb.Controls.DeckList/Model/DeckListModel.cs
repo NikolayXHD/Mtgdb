@@ -100,7 +100,7 @@ namespace Mtgdb.Controls
 
 		public bool Add(Deck deck)
 		{
-			var duplicate = findDupliate(deck);
+			var duplicate = findDuplicate(deck);
 			if (duplicate != null)
 			{
 				duplicate.Saved = deck.Saved;
@@ -141,7 +141,7 @@ namespace Mtgdb.Controls
 				_decksByName.Remove(deck.Name, deck);
 
 				deck.Name = name;
-				var duplicate = findDupliate(deck.OriginalDeck);
+				var duplicate = findDuplicate(deck.OriginalDeck);
 				if (duplicate != null)
 					duplicate.Saved = deck.Saved;
 				else
@@ -248,7 +248,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private DeckModel findDupliate(Deck deck)
+		private DeckModel findDuplicate(Deck deck)
 		{
 			if (!_decksByName.TryGetValues(deck.Name, out var decks))
 				return null;
@@ -283,6 +283,7 @@ namespace Mtgdb.Controls
 
 			public long IdCounter
 			{
+				[UsedImplicitly] // by serializer
 				get => Id;
 				set => Id = value;
 			}

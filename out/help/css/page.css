@@ -5,7 +5,7 @@
 }
 
 body {
-	font-family: "Segoe UI";
+	font-family: "Segoe UI", serif;
 	color:#303030;
 }
 
@@ -33,7 +33,4 @@ div.navigation {
 div.markdown-body, div.page-title {
 	max-width: 560pt;
 	padding-right: 215pt;
-}
-
-div.markdown-body {
 }

@@ -18,8 +18,8 @@ namespace Mtgdb.Util
 		{
 			ImageChanged = true;
 
-			int apetureMin = -_size / 2;
-			int apetureMax = _size / 2;
+			int apertureMin = -_size / 2;
+			int apertureMax = _size / 2;
 
 			var changed = new byte[RgbValues.Length];
 
@@ -30,13 +30,13 @@ namespace Mtgdb.Util
 					_gValues.Clear();
 					_bValues.Clear();
 
-					for (int dx = apetureMin; dx < apetureMax; ++dx)
+					for (int dx = apertureMin; dx < apertureMax; ++dx)
 					{
 						int x2 = x + dx;
 						if (x2 < 0 || x2 >= Rect.Width)
 							continue;
 
-						for (int dy = apetureMin; dy < apetureMax; ++dy)
+						for (int dy = apertureMin; dy < apertureMax; ++dy)
 						{
 							int y2 = y + dy;
 

@@ -162,7 +162,7 @@ namespace Mtgdb.Index
 
 		public void Dispose()
 		{
-			// Сначала Spellchecker, потому что он использует _index
+			// Spellchecker first, because it uses _index
 			Spellchecker.Dispose();
 			State?.Dispose();
 

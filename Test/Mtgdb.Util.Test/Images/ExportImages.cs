@@ -1,10 +1,9 @@
 ﻿using Mtgdb.Controls;
 using Mtgdb.Dal;
-using Mtgdb.Util;
 using Ninject;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class ExportImages

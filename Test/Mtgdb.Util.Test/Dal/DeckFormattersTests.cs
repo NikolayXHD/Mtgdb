@@ -2,10 +2,11 @@
 using System.Linq;
 using Mtgdb.Dal;
 using Mtgdb.Gui;
+using Mtgdb.Test;
 using Ninject;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class DeckFormattersTests : TestsBase
@@ -23,6 +24,7 @@ namespace Mtgdb.Test
 		}
 
 		[TestCase(@"D:\Games\Forge\res\quest\world")]
+		// ReSharper disable once StringLiteralTypo
 		[TestCase(@"C:\Users\Kolia\AppData\Roaming\Forge\decks")]
 		public void Forge(string decksLocation)
 		{
@@ -61,11 +63,9 @@ namespace Mtgdb.Test
 					string line = gr.Key;
 					var match = formatter.LineRegex.Match(line);
 
-					Card card;
-					if (match.Success)
-						card = formatter.GetCard(match);
-					else
-						card = null;
+					var card = match.Success 
+						? formatter.GetCard(match) 
+						: null;
 
 					return new { match, card, files = gr.Select(_ => _.file).ToArray() };
 				})

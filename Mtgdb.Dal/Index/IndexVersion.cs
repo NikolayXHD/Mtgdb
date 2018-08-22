@@ -7,14 +7,14 @@ namespace Mtgdb.Dal.Index
 		public string Directory { get; }
 
 		private readonly string _completionLabelFile;
-		private readonly string _indexVerision;
+		private readonly string _indexVersion;
 
-		public bool IsUpToDate => File.Exists(_completionLabelFile) && File.ReadAllText(_completionLabelFile) == _indexVerision;
+		public bool IsUpToDate => File.Exists(_completionLabelFile) && File.ReadAllText(_completionLabelFile) == _indexVersion;
 
-		public IndexVersion(string directory, string indexVerision)
+		public IndexVersion(string directory, string indexVersion)
 		{
-			Directory = Path.Combine(directory, indexVerision);
-			_indexVerision = indexVerision;
+			Directory = Path.Combine(directory, indexVersion);
+			_indexVersion = indexVersion;
 			_completionLabelFile = Directory.AddPath("indexing.done");
 		}
 
@@ -28,7 +28,7 @@ namespace Mtgdb.Dal.Index
 
 		public void SetIsUpToDate()
 		{
-			File.WriteAllText(_completionLabelFile, _indexVerision);
+			File.WriteAllText(_completionLabelFile, _indexVersion);
 		}
 
 		public void Invalidate()

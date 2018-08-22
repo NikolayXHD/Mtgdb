@@ -39,8 +39,11 @@ namespace Mtgdb.Controls
 		{
 			switch (value)
 			{
+				// ReSharper disable CommentTypo
+
 				case Direction.None:
 					return 1; // HTCLIENT
+				
 
 				case Direction.North:
 					return 12; // HTTOP
@@ -65,7 +68,9 @@ namespace Mtgdb.Controls
 
 				case Direction.NorthWest:
 					return 13; //HTTOPLEFT
-
+				
+				// ReSharper restore CommentTypo
+				
 				default:
 					throw new ArgumentOutOfRangeException(nameof(value), value, null);
 			}

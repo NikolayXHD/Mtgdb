@@ -323,9 +323,9 @@ namespace Mtgdb.Gui
 			_drawing.SetupDrawingCardEvent();
 			_dragging.SetupDrawingDraggingMarkEvent();
 
-			// После _deckDraggingSubsystem.SubscribeToEvents(), чтобы тот перезхватил клик при драг-дропе раньше
+			// After _deckDraggingSubsystem.SubscribeToEvents(), so that it would recapture the click on drag-n-drop before
 			_deckEditorUi.SubscribeToEvents();
-			// После _deckEditingSubsystem, чтобы показывать зум раньше перемещения образанной карточки
+			// After _deckEditingSubsystem, to show zoom before moving the card
 			_scroll.SubscribeToEvents();
 
 			_legality.SubscribeToEvents();
@@ -373,7 +373,7 @@ namespace Mtgdb.Gui
 			_buttonSampleHandMulligan.Click += sampleHandMulligan;
 			_buttonSampleHandDraw.Click += sampleHandDraw;
 
-			_searchTextSelection.SubsribeToEvents();
+			_searchTextSelection.SubscribeToEvents();
 
 			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
 			_buttonHideScrollCards.CheckedChanged += buttonHideScrollChanged;
@@ -458,7 +458,7 @@ namespace Mtgdb.Gui
 			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
 			_buttonSampleHandDraw.Click -= sampleHandDraw;
 
-			_searchTextSelection.UnsubsribeFromEvents();
+			_searchTextSelection.UnsubscribeFromEvents();
 
 			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
 			_buttonHideScrollCards.CheckedChanged -= buttonHideScrollChanged;
@@ -527,7 +527,7 @@ namespace Mtgdb.Gui
 		private bool _updatingButtonHideScroll;
 
 		/// <summary>
-		/// Предотвращает реакцию на изменения состояния формы и её контролов.
+		/// Prevents handling the changes in the state of form or its controls
 		/// </summary>
 		private int _restoringGuiSettings;
 

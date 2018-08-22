@@ -43,11 +43,6 @@ namespace Mtgdb
 			}
 		}
 
-		/// <summary>
-		/// Выполняет некоторую обработку изображения.
-		/// Это может быть анализ и сохранение его результата в свойство класса,
-		/// а может быть преобразование изображения.
-		/// </summary>
 		protected abstract void ExecuteRaw();
 
 		protected bool SameColor(int first, int second)

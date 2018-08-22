@@ -9,7 +9,7 @@ namespace Mtgdb
 		public static TVal TryGet<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key)
 		{
 			if (key == null)
-				return default(TVal);
+				return default;
 
 			dict.TryGetValue(key, out var val);
 
@@ -29,7 +29,7 @@ namespace Mtgdb
 		public static TVal TryPeek<TVal>(this Stack<TVal> stack)
 		{
 			if (stack.Count == 0)
-				return default(TVal);
+				return default;
 
 			return stack.Peek();
 		}
@@ -65,7 +65,7 @@ namespace Mtgdb
 		public static TVal TryGetLast<TVal>(this IList<TVal> list)
 		{
 			if (list.Count == 0)
-				return default(TVal);
+				return default;
 
 			return list[list.Count - 1];
 		}
@@ -95,7 +95,7 @@ namespace Mtgdb
 		public static TVal TryGet<TVal>(this IList<TVal> list, int index)
 		{
 			if (index < 0 || index >= list.Count)
-				return default(TVal);
+				return default;
 
 			return list[index];
 		}

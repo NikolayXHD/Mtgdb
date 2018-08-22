@@ -6,6 +6,7 @@ using Mtgdb.Dal;
 using Ninject;
 using NLog;
 using NUnit.Framework;
+// ReSharper disable StringLiteralTypo
 
 namespace Mtgdb.Test
 {
@@ -102,15 +103,15 @@ namespace Mtgdb.Test
 
 		[TestCase(@"SetName:""Battle for""", "battle", "for")]
 		[TestCase(@"SetName:""Battle zendikar""~1", "battle", "zendikar")]
-		public void Search_by_SetName(string queryStr, params string[] allEexpected)
+		public void Search_by_SetName(string queryStr, params string[] allExpected)
 		{
 			var cards = search(queryStr, c => c.SetName);
 
-			Assert.That(allEexpected, Is.Not.Null);
-			Assert.That(allEexpected, Is.Not.Empty);
+			Assert.That(allExpected, Is.Not.Null);
+			Assert.That(allExpected, Is.Not.Empty);
 
 			foreach (var card in cards)
-				foreach (string name in allEexpected)
+				foreach (string name in allExpected)
 					Assert.That(card.SetName, Contains.Substring(name).IgnoreCase);
 		}
 
@@ -146,12 +147,12 @@ namespace Mtgdb.Test
 
 		[TestCase(@"TypeEn:Human", "Human")]
 		[TestCase(@"TypeEn:""Legendary Human""~2", "Legendary", "Human")]
-		public void Search_by_TypeEn(string queryStr, params string[] allEexpected)
+		public void Search_by_TypeEn(string queryStr, params string[] allExpected)
 		{
 			var cards = search(queryStr, c => c.TypeEn);
 
 			foreach (var card in cards)
-				foreach (string name in allEexpected)
+				foreach (string name in allExpected)
 					Assert.That(card.TypeEn, Contains.Substring(name).IgnoreCase);
 		}
 

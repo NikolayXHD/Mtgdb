@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	public static class Json
 	{

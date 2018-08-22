@@ -9,7 +9,7 @@ namespace Mtgdb.Controls
 
 		public TVal this[TKey key]
 		{
-			get { return _visibilityByDirection.TryGet(key); }
+			get => _visibilityByDirection.TryGet(key);
 			set
 			{
 				var prevValue = _visibilityByDirection.TryGet(key);

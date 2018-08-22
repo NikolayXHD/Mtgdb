@@ -222,7 +222,7 @@ namespace Mtgdb.Gui
 			ResourcesCost.cmc4,
 			ResourcesCost.cmc5,
 			ResourcesCost.cmc6,
-			ResourcesCost.cmc7,
+			ResourcesCost.cmc7
 		};
 
 		private static readonly Bitmap[] _rarity =

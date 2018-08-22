@@ -298,8 +298,8 @@ namespace Mtgdb.Gui
 			while (true)
 			{
 				index = (index + 1) % _aggregateIconsOrder.Count;
-				var aggreate = _aggregatesOrder[index];
-				if (field.IsNumeric || aggreate == Aggregates.Count || aggreate == Aggregates.CountDistinct)
+				var aggregate = _aggregatesOrder[index];
+				if (field.IsNumeric || aggregate == Aggregates.Count || aggregate == Aggregates.CountDistinct)
 					break;
 			}
 
@@ -539,7 +539,7 @@ namespace Mtgdb.Gui
 			var sortedArgumentTotals = applySort(argumentTotals, sortedArgumentIndices);
 
 			var sortedValues = values
-				.Select(serie => applySort(serie, sortedArgumentIndices))
+				.Select(_ => applySort(_, sortedArgumentIndices))
 				.ToList();
 
 			populateData(sortedArguments, series, sortedValues, sortedArgumentTotals, seriesTotals, settings);

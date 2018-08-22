@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Mtgdb.Dal;
-using NLog;
 
 namespace Mtgdb.Gui
 {

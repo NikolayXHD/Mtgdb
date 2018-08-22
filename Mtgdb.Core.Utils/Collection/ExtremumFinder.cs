@@ -50,7 +50,7 @@ namespace Mtgdb
 			using (var enumerator = _sequence.GetEnumerator())
 			{
 				if (!enumerator.MoveNext())
-					return default(TElement);
+					return default;
 
 				TElement result = enumerator.Current;
 				_searcher.Compare(result);

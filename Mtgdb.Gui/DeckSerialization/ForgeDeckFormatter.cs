@@ -63,6 +63,7 @@ namespace Mtgdb.Gui
 
 		private static string fromForgeName(string forgeName)
 		{
+			// ReSharper disable once StringLiteralTypo
 			if (Str.Equals(forgeName, @"Seal of Cleansings"))
 				return @"Seal of Cleansing";
 

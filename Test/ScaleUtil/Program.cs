@@ -6,11 +6,11 @@ using Mtgdb;
 
 namespace ScaleUtil
 {
-	class Program
+	internal static class Program
 	{
-		static void Main(string[] args)
+		internal static void Main(string[] args)
 		{
-			if (args.Length < 4 || !int.TryParse(args[3], out var processorCount))
+			if (args.Length < 4 || !int.TryParse(args[3], out int processorCount))
 			{
 				Console.WriteLine("Usage:");
 				string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;

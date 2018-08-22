@@ -42,7 +42,7 @@ namespace Mtgdb.Dal
 
 
 		[JsonIgnore]
-		public string ImageNameBase => ImageName.SplitTalingNumber().Item1;
+		public string ImageNameBase => ImageName.SplitTailingNumber().Item1;
 
 		[JsonIgnore]
 		public string NameNormalized { get; internal set; }

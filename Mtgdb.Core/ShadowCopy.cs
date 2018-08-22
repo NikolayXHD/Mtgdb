@@ -67,23 +67,23 @@ namespace Mtgdb
 				return null;
 
 			StringBuilder arguments = new StringBuilder();
-			for (int carg = 0; carg < args.Length; carg++)
+			for (int i = 0; i < args.Length; i++)
 			{
-				if (args[carg] == null)
-					throw new ArgumentNullException("args[" + carg + "]");
+				if (args[i] == null)
+					throw new ArgumentNullException("args[" + i + "]");
 
-				if (_invalidChar.IsMatch(args[carg]))
-					throw new ArgumentOutOfRangeException("args[" + carg + "]");
+				if (_invalidChar.IsMatch(args[i]))
+					throw new ArgumentOutOfRangeException("args[" + i + "]");
 
-				if (args[carg] == string.Empty)
+				if (args[i] == string.Empty)
 					arguments.Append("\"\"");
-				else if (!_needsQuotes.IsMatch(args[carg]))
-					arguments.Append(args[carg]);
+				else if (!_needsQuotes.IsMatch(args[i]))
+					arguments.Append(args[i]);
 				else
 				{
 					arguments.Append('"');
 
-					arguments.Append(_escapeQuote.Replace(args[carg],
+					arguments.Append(_escapeQuote.Replace(args[i],
 						m =>
 							m.Groups[1].Value + m.Groups[1].Value +
 							(m.Groups[2].Value == "\"" ? "\\\"" : "")
@@ -92,7 +92,7 @@ namespace Mtgdb
 					arguments.Append('"');
 				}
 
-				if (carg + 1 < args.Length)
+				if (i + 1 < args.Length)
 					arguments.Append(' ');
 			}
 

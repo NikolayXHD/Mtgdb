@@ -54,10 +54,12 @@ namespace Mtgdb.Test
 
 			var specialChars = new List<char>();
 
+			// ReSharper disable StringLiteralTypo
 			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
 			var cyrillic = new HashSet<char>("абвгдежзийклмнопрстуфхцчшщьыъэюя");
 			var numbers = new HashSet<char>("01234567890");
 			var knownSpecialChars = new HashSet<char>("ºß林泰玄");
+			// ReSharper restore StringLiteralTypo
 
 			foreach (char c in chars)
 			{
@@ -76,19 +78,19 @@ namespace Mtgdb.Test
 				if (c == '\r')
 					continue;
 
-				if (MtgAplhabet.Replacements.ContainsKey(c))
+				if (MtgAlphabet.Replacements.ContainsKey(c))
 					continue;
 
-				if (MtgAplhabet.WordCharsSet.Contains(c))
+				if (MtgAlphabet.WordCharsSet.Contains(c))
 					continue;
 
-				if (MtgAplhabet.LeftDelimitersSet.Contains(c))
+				if (MtgAlphabet.LeftDelimitersSet.Contains(c))
 					continue;
 
-				if (MtgAplhabet.RightDelimitersSet.Contains(c))
+				if (MtgAlphabet.RightDelimitersSet.Contains(c))
 					continue;
 
-				if (MtgAplhabet.SingletoneWordChars.Contains(c))
+				if (MtgAlphabet.SingletoneWordChars.Contains(c))
 					continue;
 
 				if (knownSpecialChars.Contains(c))

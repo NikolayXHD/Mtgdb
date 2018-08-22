@@ -1,4 +1,3 @@
-using Mtgdb.Dal;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui

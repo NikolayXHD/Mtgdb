@@ -3,9 +3,9 @@ using Mtgdb.Index;
 
 namespace Mtgdb.Controls
 {
-	public class SearchResultHiglightSubsystem
+	public class SearchResultHighlightSubsystem
 	{
-		public SearchResultHiglightSubsystem(
+		public SearchResultHighlightSubsystem(
 			LayoutViewControl view,
 			DeckSearchSubsystem searchSubsystem,
 			DeckDocumentAdapter adapter)

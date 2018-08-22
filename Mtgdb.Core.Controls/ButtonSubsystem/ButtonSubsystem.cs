@@ -253,7 +253,12 @@ namespace Mtgdb.Controls
 
 		public bool PreFilterMessage(ref Message m)
 		{
+			// ReSharper disable CommentTypo
+
 			// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN 
+
+			// ReSharper restore CommentTypo
+			
 			if (m.Msg == 0x0201 || m.Msg == 0x0207 || m.Msg == 0x0204)
 			{
 				foreach (Popup popup in _popupsByOwner.Values)

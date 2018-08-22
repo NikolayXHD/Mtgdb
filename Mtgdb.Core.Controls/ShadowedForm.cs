@@ -1,42 +1,38 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public class ShadowedForm : Form
 	{
-		//[DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-		//private static extern IntPtr CreateRoundRectRgn
-		//(
-		//	int nLeftRect, // x-coordinate of upper-left corner
-		//	int nTopRect, // y-coordinate of upper-left corner
-		//	int nRightRect, // x-coordinate of lower-right corner
-		//	int nBottomRect, // y-coordinate of lower-right corner
-		//	int nWidthEllipse, // height of ellipse
-		//	int nHeightEllipse // width of ellipse
-		// );
+		[DllImport("dwmapi.dll")]
+		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMarInset);
 
 		[DllImport("dwmapi.dll")]
-		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
-
-		[DllImport("dwmapi.dll")]
-		private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+		private static extern int DwmSetWindowAttribute(IntPtr hWnd, int attr, ref int attrValue, int attrSize);
 
 		[DllImport("dwmapi.dll")]
 		public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
 
 		private bool _aeroEnabled = true; // variables for box shadow
-		private const int CS_DROPSHADOW = 0x00020000;
-		private const int WM_NCPAINT = 0x0085;
-		//private const int WM_ACTIVATEAPP = 0x001C;
+		private const int CsDropshadow = 0x00020000;
+		private const int WmNcpaint = 0x0085;
 
-		private struct MARGINS // struct for box shadow
+		private struct Margins // struct for box shadow
 		{
-			public int leftWidth;
-			public int rightWidth;
-			public int topHeight;
-			public int bottomHeight;
+			[UsedImplicitly]
+			public int LeftWidth;
+
+			[UsedImplicitly]
+			public int RightWidth;
+
+			[UsedImplicitly]
+			public int TopHeight;
+
+			[UsedImplicitly]
+			public int BottomHeight;
 		}
 
 		protected override CreateParams CreateParams
@@ -47,7 +43,7 @@ namespace Mtgdb.Controls
 
 				var result = base.CreateParams;
 				if (!_aeroEnabled)
-					result.ClassStyle |= CS_DROPSHADOW;
+					result.ClassStyle |= CsDropshadow;
 
 				return result;
 			}
@@ -67,7 +63,7 @@ namespace Mtgdb.Controls
 
 		protected override void WndProc(ref Message m)
 		{
-			if (m.Msg == WM_NCPAINT)
+			if (m.Msg == WmNcpaint)
 				setShadow();
 
 			base.WndProc(ref m);
@@ -86,12 +82,12 @@ namespace Mtgdb.Controls
 
 			var v = 2;
 			DwmSetWindowAttribute(Handle, 2, ref v, 4);
-			var margins = new MARGINS
+			var margins = new Margins
 			{
-				bottomHeight = 1,
-				leftWidth = 1,
-				rightWidth = 1,
-				topHeight = 1
+				BottomHeight = 1,
+				LeftWidth = 1,
+				RightWidth = 1,
+				TopHeight = 1
 			};
 
 			DwmExtendFrameIntoClientArea(Handle, ref margins);

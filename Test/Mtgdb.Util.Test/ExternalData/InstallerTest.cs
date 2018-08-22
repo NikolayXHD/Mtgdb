@@ -1,7 +1,7 @@
 ﻿using Mtgdb.Downloader;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class InstallerTest

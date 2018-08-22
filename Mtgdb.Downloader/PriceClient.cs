@@ -34,7 +34,7 @@ namespace Mtgdb.Downloader
 
 			var result = new PriceValues
 			{
-				Sid = priceId.Sid,
+				Sid = priceId.Sid
 			};
 
 			if (script == null)

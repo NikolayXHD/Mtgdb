@@ -455,7 +455,7 @@ namespace Mtgdb.Gui
 		private string getStatusFilterButtons(FilterValueState[] filterManagerStates)
 		{
 			if (!_keywordSearcher.IsLoading && !_keywordSearcher.IsLoaded)
-				return "pending keywod search…";
+				return "pending keyword search…";
 
 			if (_keywordsIndexUpToDate && _keywordSearcher.IsLoading)
 				return "loading keywords…";
@@ -498,7 +498,7 @@ namespace Mtgdb.Gui
 		private string getStatusSearch(FilterValueState[] filterManagerStates)
 		{
 			if (isSearchStringModified())
-				return "receving user input";
+				return "receiving user input";
 
 			string noInputText;
 

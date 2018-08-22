@@ -59,7 +59,7 @@ namespace Mtgdb
 			return name.Split(Array.From(@"//"), StringSplitOptions.None)[0].TrimEnd();
 		}
 
-		public static Tuple<string, int> SplitTalingNumber(this string value)
+		public static Tuple<string, int> SplitTailingNumber(this string value)
 		{
 			if (value == null)
 				return new Tuple<string, int>(null, 0);

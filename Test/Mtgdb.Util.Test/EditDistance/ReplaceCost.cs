@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+// ReSharper disable StringLiteralTypo
 
 namespace Mtgdb.Util
 {
@@ -58,24 +59,24 @@ namespace Mtgdb.Util
 			if (c1 == EndOfWord || c2 == EndOfWord)
 				return Similarity.High;
 
-			// Даёт High
+			// Produces High
 
-			// пока индекс не учитывает такую возможность, в этом нет смысла
+			// until index takes this into account, there is no point in this
 			//var translitCost = translitReplaceCost(c1, c2);
 			//if (translitCost <= Similarity.High)
 			//	return translitCost;
 
-			// Даёт High, Light
+			// Produces High, Light
 			var keyboardCost = keyboardReplaceCost(c1, c2);
 			if (keyboardCost <= Similarity.Normal)
 				return keyboardCost;
 
-			// Даёт Normal
+			// Produces Normal
 			var opticalCost = opticalReplaceCost(c1, c2);
 			if (opticalCost <= Similarity.Normal)
 				return opticalCost;
 
-			// Даёт Normal, Light
+			// Produces Normal, Light
 			var soundCost = soundReplaceCost(c1, c2);
 
 			float result = Math.Min(keyboardCost, soundCost);
@@ -99,11 +100,11 @@ namespace Mtgdb.Util
 			if (!soundGroupsByChar.TryGetValue(c2, out var c2Groups))
 				return Similarity.None;
 
-			// Входят в одну фонетическую группу
+			// Share the same phonetic group
 			if (c1Groups.Overlaps(c2Groups))
 				return Similarity.Normal;
 
-			// Входят в соседние фонетические группы
+			// Belong to the neighbouring phonetic groups
 			if (c1Groups.Any(gr1 => c2Groups.Any(gr2 => Math.Abs(gr1 - gr2) <= 1)))
 				return Similarity.Light;
 
@@ -118,7 +119,7 @@ namespace Mtgdb.Util
 			if (!_opticalGroupsByChar.TryGetValue(c2, out var c2Groups))
 				return Similarity.None;
 
-			// Входят в одну оптическую группу
+			// Share the same optical / visual group
 			if (c1Groups.Overlaps(c2Groups))
 				return Similarity.Normal;
 

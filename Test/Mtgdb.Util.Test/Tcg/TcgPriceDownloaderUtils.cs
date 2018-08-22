@@ -172,6 +172,7 @@ namespace Mtgdb.Util
 		{
 			var name = card.NameEn;
 
+			// ReSharper disable once CommentTypo
 			// Sauté
 			name = name.RemoveDiacritics();
 
@@ -237,6 +238,7 @@ namespace Mtgdb.Util
 		}
 
 		private readonly Regex _preProcessRegex = new Regex(
+			// ReSharper disable once StringLiteralTypo
 			@" ?((?:\[[^\]]+\] ?)+|(?:\([^\)]+\) ?)+|- ?full art|\(?SDCC \d* EXCLUSIVE\)?)$",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	}

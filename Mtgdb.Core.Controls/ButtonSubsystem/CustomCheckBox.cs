@@ -14,8 +14,8 @@ namespace Mtgdb.Controls
 
 		public sealed override Color BackColor
 		{
-			get { return base.BackColor; }
-			set { base.BackColor = value; }
+			get => base.BackColor;
+			set => base.BackColor = value;
 		}
 
 		protected override bool ShowFocusCues => false;

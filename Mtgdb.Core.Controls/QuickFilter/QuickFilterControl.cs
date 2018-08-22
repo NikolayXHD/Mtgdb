@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Controls
@@ -158,8 +159,8 @@ namespace Mtgdb.Controls
 
 			if (allAllowed && !isCostNeutral(i))
 			{
-				// Оставить разрешёнными только кликнутое требование и его более слабую версию
-				// Например, {W} и {W/P}
+				// Leave allowed only the clicked required value and it's weaker version
+				// For example {W} и {W/P}
 				for (int j = 0; j < states.Length; j++)
 				{
 					if (i == j || isCostNeutral(j) || isWeakerRequirement(i, j))
@@ -319,9 +320,9 @@ namespace Mtgdb.Controls
 			int imageWidth = ImageSize.Width;
 			var imageHeight = ImageSize.Height;
 
-			// чтобы Allowed был 0 Prohibited сделан -1
+			// to make Allowed 0 Prohibited was made -1
 			const int maxStateIndex = 1;
-			// таким образом RequireSome == Allowed для вычисления координат
+			// in this way RequireSome == Allowed for the purpose of coordinate calculation
 			int stateIndex = (int) state % 2;
 
 			if (EnableMutuallyExclusive)
@@ -732,7 +733,7 @@ namespace Mtgdb.Controls
 			if (commandPreview != _lastClick)
 				_lastClick = null;
 
-			// _lastClick != null => состояние после клика уже прорисовано
+			// _lastClick != null => the state after the click is already painted
 			if (_lastClick == null)
 			{
 				if (commandPreview != _lastClickPreview)
@@ -820,6 +821,7 @@ namespace Mtgdb.Controls
 		public Image ImageRequired
 		{
 			get => _imageRequired;
+			[UsedImplicitly]
 			set
 			{
 				_imageRequired = value;
@@ -944,7 +946,7 @@ namespace Mtgdb.Controls
 				updateSize();
 
 				if (value && EnableRequiringSome)
-					// В режиме EnableRequiringSome невозможно визуально отличить запрещённые значения от игнорируемых
+					// Because in EnableRequiringSome mode it is impossible to distinguish prohibited values from ignored
 					makeProhibitedValuesIgnored();
 
 				Invalidate();
@@ -952,11 +954,11 @@ namespace Mtgdb.Controls
 		}
 
 		/// <summary>
-		/// <para>Позволяет указывать желаемые занчения через или, то есть включает возможность выбора состояния RequiredSome.</para>
-		/// <para>Состояние RequiredSome отображается на месте Ignored</para>
-		/// <para>Состояние Ignored не отображается</para>
-		/// <para>При отключении кнопки в состоянии RequiredSome она переходит в Ignored</para>
-		/// <para>Включить состояние Prohibited при скрытых кнопках данного состояния становится невозможно</para>
+		/// <para>Allows setting values to search joined by OR, i.e. enables setting values to RequiredSome state</para>
+		/// <para>RequiredSome state is displayed in place of Ignored state</para>
+		/// <para>Ignored state becomes not displayed</para>
+		/// <para>When unchecking the button in RequiredSome state it becomes Ignored</para>
+		/// <para>Setting the value to Prohibited state with hidden Prohibit buttons becomes impossible</para>
 		/// </summary>
 		[Category("Settings"), DefaultValue(false)]
 		public bool EnableRequiringSome
@@ -984,6 +986,7 @@ namespace Mtgdb.Controls
 		public float Opacity1Enabled
 		{
 			get => _opacityEnabled;
+			[UsedImplicitly]
 			set
 			{
 				_opacityEnabled = value;
@@ -997,6 +1000,7 @@ namespace Mtgdb.Controls
 		public float Opacity4Disabled
 		{
 			get => _opacityDisabled;
+			[UsedImplicitly]
 			set
 			{
 				_opacityDisabled = value;
@@ -1010,6 +1014,7 @@ namespace Mtgdb.Controls
 		public float Opacity3ToDisable
 		{
 			get => _opacityToDisable;
+			[UsedImplicitly]
 			set
 			{
 				_opacityToDisable = value;
@@ -1023,6 +1028,7 @@ namespace Mtgdb.Controls
 		public float Opacity2ToEnable
 		{
 			get => _opacityToEnable;
+			[UsedImplicitly]
 			set
 			{
 				_opacityToEnable = value;

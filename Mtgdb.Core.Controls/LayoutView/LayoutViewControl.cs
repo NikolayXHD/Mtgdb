@@ -1104,7 +1104,7 @@ namespace Mtgdb.Controls
 		{
 			var cell = getCornerCardCell(Direction.BottomRight);
 
-			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default(Point)).RightBottom() +
+			var cardLogicalBounds = getCardBounds(cell.X, cell.Y, alignmentShift: default).RightBottom() +
 				LayoutOptions.CardInterval.MultiplyBy(0.5f).Round();
 
 			var cardToDisplayRightBottom = getDisplayBounds()
@@ -1232,7 +1232,7 @@ namespace Mtgdb.Controls
 			return CardIndex + displayIndex;
 		}
 
-		public IList<TextRange> GetHighlihgtTextRanges(int rowHandle, string fieldName)
+		public IList<TextRange> GetHighlightTextRanges(int rowHandle, string fieldName)
 		{
 			var card = Cards[getDisplayIndex(rowHandle)];
 			var field = card.Fields.Single(_ => _.FieldName == fieldName);
@@ -1453,7 +1453,7 @@ namespace Mtgdb.Controls
 			}
 
 			if (!Focused && this.IsUnderMouse())
-				// Отправить событие в данный контрол
+				// send the event to this control
 				ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 
 			return false;
@@ -1461,8 +1461,8 @@ namespace Mtgdb.Controls
 
 		private static readonly int[] _navigationKeys =
 		{
-			0x21, // pgup
-			0x22, // pgdn
+			0x21, // pgUp
+			0x22, // pgDn
 			0x23, // end
 			0x24 //  home
 		};

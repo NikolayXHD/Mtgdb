@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Mtgdb.Dal;
 using NUnit.Framework;
+// ReSharper disable StringLiteralTypo
 
 namespace Mtgdb.Test
 {

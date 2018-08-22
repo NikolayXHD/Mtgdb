@@ -38,8 +38,8 @@ namespace Mtgdb.Ui
 			_listBoxSuggest.Visible = false;
 			_listBoxSuggest.Height = 0;
 
-			_highligter = new SearchStringHighlighter(_findEditor);
-			_highligter.Highlight();
+			_highlighter = new SearchStringHighlighter(_findEditor);
+			_highlighter.Highlight();
 		}
 
 		public void SubscribeToEvents()
@@ -487,7 +487,7 @@ namespace Mtgdb.Ui
 			setFindText(replacement, caret);
 			updateBackColor();
 
-			_highligter.Highlight();
+			_highlighter.Highlight();
 		}
 
 
@@ -625,7 +625,7 @@ namespace Mtgdb.Ui
 			updateBackColor();
 			updateForeColor();
 
-			_highligter.Highlight();
+			_highlighter.Highlight();
 
 			TextApplied?.Invoke();
 		}
@@ -758,7 +758,7 @@ namespace Mtgdb.Ui
 		protected readonly LuceneSearcher<TId, TObj> Searcher;
 		private readonly IDocumentAdapter<TId, TObj> _adapter;
 		private readonly LayoutViewControl[] _views;
-		private readonly SearchStringHighlighter _highligter;
+		private readonly SearchStringHighlighter _highlighter;
 
 		private CancellationTokenSource _cts;
 		private readonly object _syncSuggest = new object();

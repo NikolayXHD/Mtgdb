@@ -4,24 +4,25 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public static class ControlHelpers
 	{
-		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, Point pt)
+		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, System.Drawing.Point pt)
 		{
-			POINT wpt = new POINT(pt.X, pt.Y);
-			int index = (int)SendMessage(new HandleRef(rtb, rtb.Handle), EM_CHARFROMPOS, 0, wpt);
+			Point wpt = new Point(pt.X, pt.Y);
+			int index = (int)SendMessage(new HandleRef(rtb, rtb.Handle), EmCharFromPos, 0, wpt);
 
 			return index;
 		}
 
 		[DllImport("User32.dll", EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
-		private static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, POINT lParam);
+		private static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, Point lParam);
 
 		[DllImport("user32.dll")]
-		public static extern IntPtr WindowFromPoint(Point pt);
+		public static extern IntPtr WindowFromPoint(System.Drawing.Point pt);
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -69,7 +70,7 @@ namespace Mtgdb.Controls
 
 
 
-		public static Point PointToClient(this Control control, Control targetControl, Point targetLocation)
+		public static System.Drawing.Point PointToClient(this Control control, Control targetControl, System.Drawing.Point targetLocation)
 		{
 			targetLocation = targetControl.PointToScreen(targetLocation);
 			targetLocation = control.PointToClient(targetLocation);
@@ -99,7 +100,7 @@ namespace Mtgdb.Controls
 			var dict = (Dictionary<string, object>)control.Tag;
 
 			if (!dict.TryGetValue(key, out var result))
-				return default(TValue);
+				return default;
 
 			return (TValue) result;
 		}
@@ -115,7 +116,7 @@ namespace Mtgdb.Controls
 			var pen = new Pen(borderColor);
 
 			if (c.BackgroundImage != null)
-				graphics.DrawImage(c.BackgroundImage, new Rectangle(Point.Empty, c.BackgroundImage.Size));
+				graphics.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
 
 			if ((borders & AnchorStyles.Top) > 0)
 				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
@@ -155,15 +156,17 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private const int EM_CHARFROMPOS = 0x00D7;
+		private const int EmCharFromPos = 0x00D7;
 
 		[StructLayout(LayoutKind.Sequential)]
-		private class POINT
+		private class Point
 		{
+			[UsedImplicitly]
 			public int x;
+			[UsedImplicitly]
 			public int y;
 
-			public POINT(int x, int y)
+			public Point(int x, int y)
 			{
 				this.x = x;
 				this.y = y;

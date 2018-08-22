@@ -7,7 +7,7 @@ namespace Mtgdb.Controls
 {
 	public class DeckSearcher : LuceneSearcher<long, DeckModel>
 	{
-		private const string IndexVerision = "0";
+		private const string IndexVersion = "0";
 
 		[UsedImplicitly]
 		public DeckSearcher(
@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 		private string IndexDirectoryParent
 		{
 			get => _version.Directory.Parent();
-			set => _version = new IndexVersion(value, IndexVerision);
+			set => _version = new IndexVersion(value, IndexVersion);
 		}
 
 		public bool IsIndexSaved => _version.IsUpToDate;

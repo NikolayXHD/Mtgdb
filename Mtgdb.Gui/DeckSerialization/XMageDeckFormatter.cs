@@ -60,12 +60,16 @@ namespace Mtgdb.Gui
 
 		private static string fromXMageName(string xMageName)
 		{
+			// ReSharper disable StringLiteralTypo
+
 			if (Str.Equals(xMageName, @"Mindbreaker Demon"))
 				return @"Mindwrack Demon";
 
 			if (Str.Equals(xMageName, @"Kongming, 'Sleeping Dragon'"))
 				return @"Kongming, ""Sleeping Dragon""";
 
+			// ReSharper restore StringLiteralTypo
+			
 			return xMageName;
 		}
 

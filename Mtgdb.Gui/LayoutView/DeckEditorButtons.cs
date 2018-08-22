@@ -41,7 +41,7 @@ namespace Mtgdb.Gui
 				Alignment = ContentAlignment.BottomLeft,
 				Icon = Resources.add_one,
 				Margin = margin,
-				HotTrackOpacityDelta = opacityDelta,
+				HotTrackOpacityDelta = opacityDelta
 			});
 
 			field.CustomButtons.Add(new ButtonOptions

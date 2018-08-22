@@ -379,7 +379,7 @@ namespace Mtgdb.Gui
 
 		private void closed(object sender, EventArgs e)
 		{
-			unsubsribeButtonEvents();
+			unsubscribeButtonEvents();
 			CardSuggestModel.AbortSuggestThread();
 			DeckSuggestModel.AbortSuggestThread();
 		}

@@ -10,7 +10,7 @@ using Mtgdb.Downloader;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	public class GathererClient : WebClientBase
 	{
@@ -227,7 +227,9 @@ namespace Mtgdb.Test
 			content = content.Replace(GamerFlavor, _gamerFlavorEncoded);
 			content = _ampFixRegex.Replace(content, "&amp;");
 			content = content.Replace("\"class=\"", "\" class=\"");
-			content = content.Replace("\"><< Les elfes ont raison", "\">« Les elfes ont raison");
+			// ReSharper disable StringLiteralTypo
+			content = content.Replace("\"><< Les elfes ont raison", "\">Â« Les elfes ont raison");
+			// ReSharper restore StringLiteralTypo
 			content = content.Replace("<i>", string.Empty).Replace("</i>", string.Empty);
 
 			var tdElement = XElement.Parse(content);

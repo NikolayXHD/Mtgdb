@@ -66,7 +66,7 @@ namespace Mtgdb.Index
 				return getNumericTypes(termToken.Image);
 			}
 
-			Query queryFactory(string fld, bool anazyed) =>
+			Query queryFactory(string fld, bool analyzed) =>
 				base.HandleBareTokenQuery(fld, termToken, slopToken, prefix, wildcard, fuzzy, regexp);
 
 			var result = resolveField(field, numericTypeGetter, queryFactory);
@@ -76,7 +76,7 @@ namespace Mtgdb.Index
 		protected override Query HandleBareFuzzy(string field, Token slopToken, string termImage)
 		{
 			(bool IsFloat, bool IsInt) numericTypeGetter() => (false, false);
-			Query queryFactory(string fld, bool anazyed) => base.HandleBareFuzzy(fld, slopToken, termImage);
+			Query queryFactory(string fld, bool analyzed) => base.HandleBareFuzzy(fld, slopToken, termImage);
 
 			var result = resolveField(field, numericTypeGetter, queryFactory);
 			return result;
@@ -92,17 +92,17 @@ namespace Mtgdb.Index
 			(bool IsFloat, bool IsInt) numericTypeGetter()
 			{
 				bool isFloat =
-					(isValueFloat(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
-					(isValueFloat(part2) || _nonSpecifiedNubmer.Contains(part2));
+					(isValueFloat(part1) || _nonSpecifiedNumber.Contains(part1)) &&
+					(isValueFloat(part2) || _nonSpecifiedNumber.Contains(part2));
 
 				bool isInt =
-					(isValueInt(part1) || _nonSpecifiedNubmer.Contains(part1)) &&
-					(isValueInt(part2) || _nonSpecifiedNubmer.Contains(part2));
+					(isValueInt(part1) || _nonSpecifiedNumber.Contains(part1)) &&
+					(isValueInt(part2) || _nonSpecifiedNumber.Contains(part2));
 
 				return (isFloat, isInt);
 			}
 
-			Query queryFactory(string fld, bool anazyed) => base.GetRangeQuery(fld, part1, part2, startInclusive, endInclusive);
+			Query queryFactory(string fld, bool analyzed) => base.GetRangeQuery(fld, part1, part2, startInclusive, endInclusive);
 
 			var result = resolveField(field, numericTypeGetter, queryFactory);
 			return result;
@@ -127,7 +127,7 @@ namespace Mtgdb.Index
 		protected override Query GetRegexpQuery(string field, string value)
 		{
 			if (_adapter.IsNumericField(field))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			return base.GetRegexpQuery(field, value);
 		}
@@ -140,14 +140,14 @@ namespace Mtgdb.Index
 		protected override Query GetComplexPhraseQuery(string field, Token fuzzySlop, string phrase)
 		{
 			if (_adapter.IsNumericField(field))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			return base.GetComplexPhraseQuery(field, fuzzySlop, phrase);
 		}
 
-		protected override ComplexPhraseQuery NewComplexPhraseQuery(string qfield, string phrase, int slop, bool inOrder)
+		protected override ComplexPhraseQuery NewComplexPhraseQuery(string field, string phrase, int slop, bool inOrder)
 		{
-			return new RewriteableComplexPhraseQuery(qfield, phrase, slop, inOrder);
+			return new RewritableComplexPhraseQuery(field, phrase, slop, inOrder);
 		}
 
 		protected override Query GetFieldQuery(string field, string value, bool quoted)
@@ -197,7 +197,7 @@ namespace Mtgdb.Index
 				}
 
 				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
+					return MatchNothingQuery;
 
 				return result;
 			}
@@ -225,7 +225,7 @@ namespace Mtgdb.Index
 				}
 
 				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
+					return MatchNothingQuery;
 
 				return result;
 			}
@@ -233,10 +233,10 @@ namespace Mtgdb.Index
 			var value = StringEscaper.Unescape(escapedValue);
 
 			if (_adapter.IsFloatField(field) && !isValueFloat(value))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			if (_adapter.IsIntField(field) && !isValueInt(value))
-				return _matchNothingQuery;
+				return MatchNothingQuery;
 
 			return base.GetWildcardQuery(field, escapedValue);
 		}
@@ -280,7 +280,7 @@ namespace Mtgdb.Index
 				}
 
 				if (result.Clauses.Count == 0)
-					return _matchNothingQuery;
+					return MatchNothingQuery;
 
 				return result;
 			}
@@ -375,7 +375,7 @@ namespace Mtgdb.Index
 				return false;
 
 			var str = term.Utf8ToString();
-			return !string.IsNullOrEmpty(str) && !_nonSpecifiedNubmer.Contains(str);
+			return !string.IsNullOrEmpty(str) && !_nonSpecifiedNumber.Contains(str);
 		}
 
 
@@ -412,13 +412,13 @@ namespace Mtgdb.Index
 
 		public const string AnyValue = "*";
 
-		private static readonly HashSet<string> _nonSpecifiedNubmer = new HashSet<string>
+		private static readonly HashSet<string> _nonSpecifiedNumber = new HashSet<string>
 		{
 			"*",
 			"?"
 		};
 
-		protected static readonly Query _matchNothingQuery = new TermQuery(new Term("none", "*"));
+		protected static readonly Query MatchNothingQuery = new TermQuery(new Term("none", "*"));
 
 		private readonly IDocumentAdapterBase _adapter;
 	}

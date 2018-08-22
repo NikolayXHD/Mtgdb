@@ -7,9 +7,9 @@ using Lucene.Net.Search.Spans;
 
 namespace Mtgdb.Index
 {
-	public class RewriteableSpanNearQuery : SpanNearQuery
+	public class RewritableSpanNearQuery : SpanNearQuery
 	{
-		public RewriteableSpanNearQuery(SpanQuery[] clauses, int slop, bool inOrder) : base(clauses, slop,
+		public RewritableSpanNearQuery(SpanQuery[] clauses, int slop, bool inOrder) : base(clauses, slop,
 			inOrder)
 		{
 		}
@@ -46,7 +46,7 @@ namespace Mtgdb.Index
 				{
 					var clausesCopy = m_clauses.ToList();
 					clausesCopy.RemoveAt(i);
-					result.Add(new RewriteableSpanNearQuery(clausesCopy.ToArray(), Slop, IsInOrder), Occur.SHOULD);
+					result.Add(new RewritableSpanNearQuery(clausesCopy.ToArray(), Slop, IsInOrder), Occur.SHOULD);
 				}
 
 				foreach (var pair in spansByLength)
@@ -56,14 +56,14 @@ namespace Mtgdb.Index
 
 					var clausesCopy = m_clauses.ToArray();
 					clausesCopy[i] = getClause(pair.Value, boost);
-					result.Add(new RewriteableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
+					result.Add(new RewritableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
 				}
 
 				foreach (var span in nonFixedLengthSpans)
 				{
 					var clausesCopy = m_clauses.ToArray();
 					clausesCopy[i] = span;
-					result.Add(new RewriteableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
+					result.Add(new RewritableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
 				}
 
 				return result;

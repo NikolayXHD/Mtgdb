@@ -5,11 +5,6 @@ namespace Mtgdb
 {
 	internal static class BinarySearch
 	{
-		/// <summary>
-		/// Выполняет бинарный поиск первого элемента массива, удовлетворяющего некоторому критерию.
-		/// Предполагается, что если условие выполняется для некоторого элемента, то оно выполняется для всех последующих элементов массива.
-		/// </summary>
-		/// <returns>Индекс найденного элемента или -1, если ни один элемент массива не удовлетворяет критерию.</returns>
 		public static int BinarySearchFirstIndexOf<T>(this IList<T> list, Func<T, bool> predicate)
 		{
 			if (list.Count == 0)

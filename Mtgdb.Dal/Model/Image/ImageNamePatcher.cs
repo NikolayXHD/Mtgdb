@@ -11,7 +11,7 @@ namespace Mtgdb.Dal
 				card.ImageName = name;
 			else if (Str.Equals(card.SetCode, "AKH") && Str.Equals(card.Rarity, "Basic Land"))
 			{
-				var parts = card.ImageName.SplitTalingNumber();
+				var parts = card.ImageName.SplitTailingNumber();
 				card.ImageName = string.Intern(parts.Item1 + (1 + (parts.Item2 - 1 + 3) % 4));
 			}
 		}
@@ -85,6 +85,7 @@ namespace Mtgdb.Dal
 		{
 			[string.Empty] = new Dictionary<string, string>(Str.Comparer)
 			{
+				// ReSharper disable once StringLiteralTypo
 				["Sultai Ascendacy"] = "Sultai Ascendancy",
 				["Two-Headed Giant of Foriys"] = "Two headed Giant of Foriys",
 				["Will O' The Wisp"] = "Will-O'-The-Wisp"
@@ -104,12 +105,14 @@ namespace Mtgdb.Dal
 				["b.f.m. (big furry monster, right side)1"] = "b.f.m. 2",
 				["b.f.m. (big furry monster, right side)2"] = "b.f.m. 2",
 
+				// ReSharper disable once StringLiteralTypo
 				["the ultimate nightmare of wizards of the coastr customer service"] = "The Ultimate Nightmare of Wizards of the Coast Customer Service"
 			},
 
 			["UNH"] = new Dictionary<string, string>(Str.Comparer)
 			{
 				["curse of the fire penguin creature"] = "curse of the fire penguin",
+				// ReSharper disable once StringLiteralTypo
 				["whowhatwhenwherewhy"] = "who what when where why",
 				["richard garfield, ph.d."] = "richard garfield, ph.d",
 				["our market research shows that players like really long card names so we made"] = "Our Market Research..."

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -59,7 +60,7 @@ namespace Mtgdb.Controls
 			_panel.Controls.Add(_tooltipTextbox);
 
 			_selectionSubsystem = new RichTextBoxSelectionSubsystem(_tooltipTextbox);
-			_selectionSubsystem.SubsribeToEvents();
+			_selectionSubsystem.SubscribeToEvents();
 
 			_tooltipFocusTarget = new Control
 			{
@@ -81,7 +82,7 @@ namespace Mtgdb.Controls
 					MouseOverBackColor = Color.Transparent,
 					MouseDownBackColor = Color.Transparent,
 					CheckedBackColor = Color.Transparent,
-					// присвоение Color.Transparent приводит к исключению
+					// setting Color.Transparent would lead to an exception
 					BorderColor = Color.FromArgb(0, 255, 255, 255)
 				}
 			};
@@ -296,7 +297,7 @@ namespace Mtgdb.Controls
 
 			int contentWidth = Math.Max(titleSize.Width, contentSize.Width);
 
-			// строки из иероглифов недополучают при измерении
+			// ideographic strings are under-measured
 			int cjkTermH = tooltip.Text.IsCjk() ? 32 : 0;
 
 			if (Clickable)
@@ -364,17 +365,17 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(Color), "White")]
 		public sealed override Color BackColor
 		{
-			get { return base.BackColor; }
-			set { base.BackColor = value; }
+			get => base.BackColor;
+			set => base.BackColor = value;
 		}
 
 		[Category("Settings"), DefaultValue(typeof(Color), "Gray")]
-		public Color BorderColor { get; set; } = Color.Gray;
+		public Color BorderColor { get; [UsedImplicitly] set; } = Color.Gray;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool UserInteracted
 		{
-			get { return _userInteracted; }
+			get => _userInteracted;
 			private set
 			{
 				_userInteracted = value;

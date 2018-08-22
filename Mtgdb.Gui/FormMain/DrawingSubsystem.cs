@@ -121,7 +121,7 @@ namespace Mtgdb.Gui
 
 			if (countInMain == 0 || countInSideboard == 0)
 				// the excessive count is not due to main + side sum
-				// therefore it is obvious, warning is not neseccary
+				// therefore it is obvious, warning is not necessary
 				return;
 
 			var totalCount = countInMain + countInSideboard;

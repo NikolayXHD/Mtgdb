@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Ui
 {
@@ -76,6 +77,7 @@ namespace Mtgdb.Ui
 			Sideboard = replace(Sideboard, replacements);
 		}
 
+		[UsedImplicitly]  // to find usages in IDE
 		public Deck()
 		{
 		}

@@ -26,7 +26,7 @@ namespace Mtgdb.Index
 			{
 				var tokenizer = new MtgTokenizer(reader);
 				var lowerCaseFilter = new LowerCaseFilter(LuceneVersion.LUCENE_48, tokenizer);
-				var replacementFilter = new ReplaceFilter(lowerCaseFilter, MtgAplhabet.Replacements);
+				var replacementFilter = new ReplaceFilter(lowerCaseFilter, MtgAlphabet.Replacements);
 
 				return new TokenStreamComponents(tokenizer, replacementFilter);
 			}

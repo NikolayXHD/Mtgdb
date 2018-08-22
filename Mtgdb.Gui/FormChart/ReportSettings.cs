@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Gui
 {
 	public class ReportSettings
 	{
+		[UsedImplicitly] // to find usages in IDE
 		public ReportSettings()
 		{
 		}
@@ -47,7 +49,7 @@ namespace Mtgdb.Gui
 
 		private bool removeDuplicateSummaries()
 		{
-			bool modifled = false;
+			bool modified = false;
 
 			for (int k = SummaryFields.Count - 1; k >= 0; k--)
 			{
@@ -59,11 +61,11 @@ namespace Mtgdb.Gui
 					SummaryFunctions.RemoveAt(k);
 					SummarySort.RemoveAt(k);
 
-					modifled = true;
+					modified = true;
 				}
 			}
 
-			return modifled;
+			return modified;
 		}
 
 		private static bool ensureNonEmpty(List<string> fields, List<SortOrder> order, string emptyValue)

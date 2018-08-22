@@ -7,7 +7,7 @@ namespace Mtgdb.Controls
 {
 	public class DeckSpellchecker : LuceneSpellchecker<long, DeckModel>
 	{
-		private const string IndexVerision = "0";
+		private const string IndexVersion = "0";
 
 		[UsedImplicitly]
 		public DeckSpellchecker(DeckDocumentAdapter adapter)
@@ -65,7 +65,7 @@ namespace Mtgdb.Controls
 		public string IndexDirectoryParent
 		{
 			get => _version.Directory.Parent();
-			set => _version = new IndexVersion(value, IndexVerision);
+			set => _version = new IndexVersion(value, IndexVersion);
 		}
 
 		private IndexVersion _version;

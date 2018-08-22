@@ -3,7 +3,7 @@ using System.Text;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 
-namespace Mtgdb.Updater
+namespace Mtgdb.Downloader
 {
 	public class RichTextBoxWriter : TextWriter
 	{

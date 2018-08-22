@@ -41,7 +41,7 @@ namespace Mtgdb.Dal
 
 			ImageName = string.Intern(ImageNamePatcher.PatchFileName(imageName));
 
-			var nameParts = ImageName.SplitTalingNumber();
+			var nameParts = ImageName.SplitTailingNumber();
 			Name = string.Intern(nameParts.Item1);
 			VariantNumber = nameParts.Item2;
 

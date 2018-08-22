@@ -75,8 +75,8 @@ namespace Mtgdb.Controls
 
 			_layoutViewTooltip.SubscribeToEvents();
 
-			_higlightSubsystem = new SearchResultHiglightSubsystem(_viewDeck, _searchSubsystem, adapter);
-			_higlightSubsystem.SubscribeToEvents();
+			_highlightSubsystem = new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter);
+			_highlightSubsystem.SubscribeToEvents();
 
 			_viewDeck.MouseMove += deckMouseMove;
 
@@ -191,12 +191,13 @@ namespace Mtgdb.Controls
 				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
 					"Type some query to narrow down the list of decks below\r\n" +
 					"Example queries:\r\n" +
+					// ReSharper disable once StringLiteralTypo
 					"name: affin*\r\n" +
 					"mana: \\{w\\} AND \\{u\\}\r\n\r\n" +
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +
-					"F1 to learn searh string syntax\r\n\r\n",
+					"F1 to learn search string syntax\r\n\r\n",
 				_panelSearchIcon,
 				_panelSearch,
 				_textBoxSearch);
@@ -209,7 +210,7 @@ namespace Mtgdb.Controls
 				"Ctrl + Click to remove field from sort priorities.\r\n\r\n" +
 				"When all explicit sort criteria are equal, decks are ordered " +
 				"by relevance to search result, then by order they were created.\r\n\r\n" +
-				"NOTE: currently opened deck is is allways first in the list",
+				"NOTE: currently opened deck is is always first in the list",
 				_labelSortStatus);
 
 			string filterMode(FilterByDeckMode mode) =>
@@ -580,7 +581,7 @@ namespace Mtgdb.Controls
 		private DeckSearchSubsystem _searchSubsystem;
 
 		private FilterByDeckMode _filterByDeckMode;
-		private SearchResultHiglightSubsystem _higlightSubsystem;
+		private SearchResultHighlightSubsystem _highlightSubsystem;
 
 		private Cursor _textSelectionCursor;
 		private DeckSortSubsystem _deckSort;

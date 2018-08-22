@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	public class MagicspoilerClient : WebClientBase
 	{

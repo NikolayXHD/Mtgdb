@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,7 +119,7 @@
     <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />
-    <Compile Include="ExternalData\PriceDownloadeUtils.cs" />
+    <Compile Include="ExternalData\PriceDownloadUtils.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />
     <Compile Include="Tcg\TcgCard.cs" />
     <Compile Include="Tcg\TcgParser.cs" />

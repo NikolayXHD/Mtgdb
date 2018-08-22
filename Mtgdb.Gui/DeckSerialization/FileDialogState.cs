@@ -6,7 +6,7 @@ namespace Mtgdb.Gui
 
 		public string LastSavedFile
 		{
-			get { return _lastSavedFile ?? LastFile; }
+			get => _lastSavedFile ?? LastFile;
 
 			set
 			{
@@ -17,7 +17,7 @@ namespace Mtgdb.Gui
 
 		public string LastLoadedFile
 		{
-			get { return _lastLoadedFile ?? LastFile; }
+			get => _lastLoadedFile ?? LastFile;
 
 			set
 			{

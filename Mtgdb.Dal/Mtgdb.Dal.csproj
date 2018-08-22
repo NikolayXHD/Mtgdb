@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,7 +114,6 @@
     <Compile Include="Model\Image\ImageNamePatcher.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="Images\BmpFrameDetector.cs" />
-    <Compile Include="Index\IStringSimilarity.cs" />
     <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />
     <Compile Include="Keywords\KeywordSearcher.cs" />
     <Compile Include="Keywords\CardKeywords.cs" />

@@ -302,7 +302,7 @@ namespace Mtgdb.Dal
 				modelsBySet.Add(imageFile.SetCode, modelsByImageVariant);
 			}
 
-			// Для каждого номера варианта выберем представителя с наилучшим качеством
+			// For each number select the representative with best quality 
 			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out var currentImageFile) || currentImageFile.Quality < imageFile.Quality)
 				modelsByImageVariant[imageFile.VariantNumber] = imageFile;
 		}
@@ -466,7 +466,7 @@ namespace Mtgdb.Dal
 
 
 		/// <summary>
-		/// Сначала совпадающий сет
+		/// First the matching set
 		/// </summary>
 		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority1(string set)
 		{
@@ -474,7 +474,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// Далее сеты, в которых есть вариант с совпадающим артистом
+		/// Then the sets that have a variant with matching artist
 		/// </summary>
 		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority2(string artist)
 		{
@@ -482,7 +482,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// Остальные сеты пойдут от новых к старым
+		/// Other sets go from new to old
 		/// </summary>
 		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, string> setPriority3(Func<string, string, string> setCodePreference, string set)
 		{
@@ -490,7 +490,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// В совпадающем сете покажем сначала карту с совпадающим номером варианта
+		/// In matching set let's show first the card with matching variant number
 		/// </summary>
 		private static Func<ImageFile, bool> cardPriority1(string set, string imageName)
 		{
@@ -500,7 +500,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// далее карту с совпадающим артистом
+		/// then the card with matching artist
 		/// </summary>
 		private static Func<ImageFile, bool> cardPriority2(string set, string artist)
 		{
@@ -510,7 +510,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// В остальных сетах сначала карту с совпадающим артистом
+		/// In other sets first the card with matching artist
 		/// </summary>
 		private static Func<ImageFile, bool> cardPriority3(string artist)
 		{
@@ -518,7 +518,7 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// Далее совпадающим номером
+		/// Then matching number
 		/// </summary>
 		private static Func<ImageFile, bool> cardPriority4(string imageName)
 		{
@@ -526,7 +526,8 @@ namespace Mtgdb.Dal
 		}
 
 		/// <summary>
-		/// прочие по возрастанию номера варианта
+		/// Others by variant number ascending
+		
 		/// </summary>
 		/// <returns></returns>
 		private static Func<ImageFile, int> cardUnpriority5()

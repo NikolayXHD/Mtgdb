@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using Mtgdb.Test;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class TranslationDownloaderUtils : TestsBase

@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 				form.FilterManaAbility.States,
 				form.FilterGeneratedMana.States,
 				form.FilterLayout.States,
-				form.FilterCastKeyword.States,
+				form.FilterCastKeyword.States
 			};
 		}
 

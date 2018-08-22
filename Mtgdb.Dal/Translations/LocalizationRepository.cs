@@ -13,28 +13,28 @@ namespace Mtgdb.Dal
 		private Dictionary<int, Dictionary<string, Translation>> _cardsByMultiverseIdByNumber =
 			new Dictionary<int, Dictionary<string, Translation>>();
 
-		private string _serailized;
+		private string _serialized;
 
 		public void LoadFile()
 		{
-			_serailized = File.ReadAllText(AppDir.Data.AddPath(TranslationsFile));
+			_serialized = File.ReadAllText(AppDir.Data.AddPath(TranslationsFile));
 		}
 
 		public void Load()
 		{
-			var translations = JsonConvert.DeserializeObject<List<Translation>>(_serailized);
+			var translations = JsonConvert.DeserializeObject<List<Translation>>(_serialized);
 
 			_cardsByMultiverseIdByNumber = translations.GroupBy(_ => _.Id)
 				.ToDictionary(
 					gr => gr.Key,
 					gr => gr.ToDictionary(_ => _.CardNumber ?? string.Empty));
 
-			// освободить память
-			_serailized = null;
+			// release RAM
+			_serialized = null;
 		}
 
 		/// <summary>
-		/// Освободить память
+		/// release RAM
 		/// </summary>
 		public void Clear()
 		{

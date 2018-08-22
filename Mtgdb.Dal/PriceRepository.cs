@@ -87,7 +87,7 @@ namespace Mtgdb.Dal
 				throw new ArgumentException("card is not defined", nameof(card));
 
 			if (sid.Set != card.Set.MagicCardsInfoCode || sid.Card != card.MciNumber)
-				throw new ArgumentException("sid doesnt match the card");
+				throw new ArgumentException("sid doesn't match the card");
 
 			if (!_sidsBySetByCard.TryGetValue(card.Set.MagicCardsInfoCode, out var ids))
 			{

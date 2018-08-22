@@ -111,7 +111,7 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			// двойной клик приводит к пустому mousemove
+			// double click leads to an empty mousemove
 			if (!_mouseDownLocation.HasValue || _mouseDownLocation == e.Location)
 				return;
 
@@ -212,7 +212,7 @@ namespace Mtgdb.Gui
 			createDragCursor(card);
 			updateCursor();
 
-			// Потому что появилась отметка на карте, которую мы тащим
+			// Because the card we are dragging received a mark
 			_layoutViewCards.InvalidateCard(card);
 			_layoutViewDeck.InvalidateCard(card);
 		}
@@ -254,7 +254,7 @@ namespace Mtgdb.Gui
 			_deckEditorModel.DragAbort();
 			updateCursor();
 
-			// потому что больше нет отметки на карте, которую мы тащим
+			// because there is no more mark on the card we are dragging
 			_layoutViewCards.InvalidateCard(draggedCard);
 			_layoutViewDeck.Invalidate();
 		}

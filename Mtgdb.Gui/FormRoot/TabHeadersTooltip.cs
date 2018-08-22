@@ -35,19 +35,19 @@ namespace Mtgdb.Gui
 			var model = new TooltipModel
 			{
 				Id = "tab",
-				Control = _control
+				Control = _control,
+				Text = "Add tab: Ctrl+T or click '+' button\r\n" +
+					"Remove tab: Ctrl + F4 or click 'x' button or Middle mouse click\r\n" +
+					"Select next tab: Ctrl + Tab\r\n\r\n" +
+					"Drag tab headers to reorder tabs.\r\n\r\n" +
+					"Move the tab to another window by dragging it to another window title.\r\n\r\n" +
+					"Drag the card here to select or create another tab where you want to drop the card."
 			};
 
-			model.Text = "Add tab: Ctrl+T or click '+' button\r\n" +
-				"Remove tab: Ctrl + F4 or click 'x' button or Middle mouse click\r\n" +
-				"Select next tab: Ctrl + Tab\r\n\r\n" +
-				"Drag tab headers to reorder tabs.\r\n\r\n" +
-				"Move the tab to another window by dragging it to another window title.\r\n\r\n" +
-				"Drag the card here to select or create another tab where you want to drop the card.";
 
 			if ((hoveredIndex < 0 || hoveredIndex >= _control.Count) && hoveredIndex != _control.AddButtonIndex)
 			{
-				model.ObjectBounds = new Rectangle(default(Point), _control.Size);
+				model.ObjectBounds = new Rectangle(default, _control.Size);
 
 				model.Id += ".none";
 				model.Title = "Tabbed Document Interface (TDI)";

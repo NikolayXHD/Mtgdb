@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mtgdb.Index
 {
-	public static class MtgAplhabet
+	public static class MtgAlphabet
 	{
 		public static IEnumerable<char> GetEquivalents(char c)
 		{
@@ -81,7 +81,7 @@ namespace Mtgdb.Index
 			{ '“', '\'' },
 			{ '”', '\'' },
 			{ '„', '\'' },
-			{ '"', '\'' },
+			{ '"', '\'' }
 		};
 
 		private static readonly Dictionary<char, List<char>> _equivalents =

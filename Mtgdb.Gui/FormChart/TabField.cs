@@ -1,10 +1,13 @@
-﻿namespace Mtgdb.Gui
+﻿using JetBrains.Annotations;
+
+namespace Mtgdb.Gui
 {
 	/// <summary>
-	/// Позволяет идентифицировать одинаковые строки как разные объекты
+	/// Helps identifying identical strings as different objects
 	/// </summary>
 	internal class TabField
 	{
+		[UsedImplicitly]  // to find usages in IDE
 		public TabField()
 		{
 		}

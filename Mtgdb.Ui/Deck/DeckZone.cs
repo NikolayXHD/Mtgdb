@@ -7,6 +7,7 @@ namespace Mtgdb.Ui
 {
 	public class DeckZone
 	{
+		[UsedImplicitly] // to find usages in IDE
 		public DeckZone()
 		{
 		}

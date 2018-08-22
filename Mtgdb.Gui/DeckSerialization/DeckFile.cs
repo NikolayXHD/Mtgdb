@@ -8,7 +8,7 @@ namespace Mtgdb.Gui
 			FormatIndex = formatIndex;
 		}
 
-		public string File { get; private set; }
-		public int FormatIndex { get; private set; }
+		public string File { get; }
+		public int FormatIndex { get; }
 	}
 }

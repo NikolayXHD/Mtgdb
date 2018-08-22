@@ -176,6 +176,7 @@ namespace Mtgdb.Util
 				if (removeExtension(ref fileName, ".xlhq"))
 					continue;
 
+				// ReSharper disable once StringLiteralTypo
 				if (removeExtension(ref fileName, ".xhlq"))
 					continue;
 
@@ -241,7 +242,7 @@ namespace Mtgdb.Util
 			if (bytes.Length == new FileInfo(imageFile.FullPath).Length)
 			{
 				if (_verbose)
-					Console.WriteLine($"\tSkippng identical {replacementModel.ImageFile.FullPath}");
+					Console.WriteLine($"\tSkipping identical {replacementModel.ImageFile.FullPath}");
 
 				return;
 			}
@@ -433,7 +434,7 @@ namespace Mtgdb.Util
 			}
 			catch (DirectoryNotFoundException)
 			{
-				// CON является недопустимым именем файла/папки
+				// CON is banned as file / folder name in Windows
 				smallSet += " escape";
 				Directory.CreateDirectory(smallSet);
 			}

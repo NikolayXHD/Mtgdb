@@ -31,7 +31,7 @@ namespace Mtgdb.Controls
 
 		public void PaintSelf(Graphics graphics, Point parentLocation, Color parentBg)
 		{
-			var cardArea = new Rectangle(parentLocation, this.Size);
+			var cardArea = new Rectangle(parentLocation, Size);
 
 			if (!parentBg.Equals(BackColor) && !BackColor.Equals(Color.Transparent))
 				graphics.FillRectangle(new SolidBrush(BackColor), cardArea);

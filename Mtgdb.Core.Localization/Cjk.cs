@@ -11,30 +11,25 @@ namespace Mtgdb
 		}
 
 		/// <summary>
-		/// Символ является иероглифом.
-		/// Аббревиатура CJK в названии расшифровывается как chinese japanese korean
+		/// chinese japanese korean
 		/// </summary>
 		public static bool IsCjk(this char c)
 		{
-			var rangeIndex = CjkCharacterRanges.BinarySearchFirstIndexOf(r => r.Max >= c);
+			var rangeIndex = _cjkCharacterRanges.BinarySearchFirstIndexOf(r => r.Max >= c);
 
 			if (rangeIndex < 0)
 				return false;
 
-			if (CjkCharacterRanges[rangeIndex].Min <= c)
+			if (_cjkCharacterRanges[rangeIndex].Min <= c)
 				return true;
 
 			return false;
 		}
 
 		/// <summary>
-		/// Диапазоны иероглифов.
-		/// Аббревиатура CJK в названии расшифровывается как chinese japanese korean.
 		/// https://en.wikipedia.org/wiki/Unicode_block
-		/// 
-		/// Диапазоны упорядочены по-возрастанию для оптимизации поиска
 		/// </summary>
-		private static readonly List<CharRange> CjkCharacterRanges = new List<CharRange>
+		private static readonly List<CharRange> _cjkCharacterRanges = new List<CharRange>
 		{
 			new CharRange('\u1100', '\u11FF'), // Hangul Jamo
 			new CharRange('\u2E80', '\u2EFF'), // CJK Radicals Supplement
@@ -53,13 +48,13 @@ namespace Mtgdb
 			// new CharRange('\u3400', '\u4DBF'), // CJK Unified Ideographs ExtensionA
 			// new CharRange('\u4DC0', '\u4DFF'), // Yijing Hexagram Symbols
 			// new CharRange('\u4E00', '\u9FFF'), // CJK Unified Ideographs
-			new CharRange('\u3000', '\u9FFF'), // слиты 14 подряд идущих диапазонов выше
+			new CharRange('\u3000', '\u9FFF'), // merged 14 adjacent spans from above
 			
 			new CharRange('\uA960', '\uA97F'), // Hangul Jamo Extended-A
 
 			// new CharRange('\uAC00', '\uD7AF'), // Hangul Syllables
 			// new CharRange('\uD7B0', '\uD7FF'), // Hangul Jamo Extended-B
-			new CharRange('\uAC00', '\uD7FF'), // слиты 2 подряд идущих диапазона выше
+			new CharRange('\uAC00', '\uD7FF'), // merged 2 adjacent spans from above
 
 
 			new CharRange('\uF900', '\uFAFF'), // CJK Compatibility Ideographs
