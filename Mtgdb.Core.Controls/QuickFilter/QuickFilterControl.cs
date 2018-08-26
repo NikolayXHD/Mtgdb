@@ -751,14 +751,6 @@ namespace Mtgdb.Controls
 
 
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-				components?.Dispose();
-
-			base.Dispose(disposing);
-		}
-
 		private void init()
 		{
 			SuspendLayout();
@@ -850,9 +842,7 @@ namespace Mtgdb.Controls
 				_propertyImages = value;
 				createDerivedImages();
 
-				if (value != null)
-					PropertiesCount = value.Count;
-
+				PropertiesCount = value?.Count ?? 0;
 				Invalidate();
 			}
 		}
@@ -1095,7 +1085,15 @@ namespace Mtgdb.Controls
 		public HashSet<string> CostNeutralValues { get; set; }
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public IList<string> Properties { get; set; }
+		public IList<string> Properties
+		{
+			get => _properties;
+			set
+			{
+				_properties = value;
+				PropertiesCount = value?.Count ?? 0;
+			}
+		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		private int StatesCount
@@ -1156,7 +1154,6 @@ namespace Mtgdb.Controls
 		private float _opacityToEnable;
 		private bool _isVertical;
 		private bool _isFlipped;
-
-		private readonly IContainer components = null;
+		private IList<string> _properties;
 	}
 }

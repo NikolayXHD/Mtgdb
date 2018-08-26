@@ -343,6 +343,7 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.SelectedIndexChanged += deckZoneChanged;
 			_tabHeadersDeck.MouseMove += deckZoneHover;
+			_tabHeadersDeck.Click += deckZoneClick;
 
 			_cardSearcher.IndexingProgress += cardSearcherIndexingProgress;
 			_cardSearcher.Spellchecker.IndexingProgress += cardSearcherIndexingProgress;
@@ -430,6 +431,7 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.SelectedIndexChanged -= deckZoneChanged;
 			_tabHeadersDeck.MouseMove -= deckZoneHover;
+			_tabHeadersDeck.Click -= deckZoneClick;
 
 			_cardSearcher.IndexingProgress -= cardSearcherIndexingProgress;
 			_cardSearcher.Spellchecker.IndexingProgress -= cardSearcherIndexingProgress;

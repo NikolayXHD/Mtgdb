@@ -540,7 +540,11 @@ namespace Mtgdb.Gui
 				_viewDeck.InvalidateCard(card);
 		}
 
-
+		private void deckZoneClick(object sender, EventArgs e)
+		{
+			if (_buttonHideDeck.Checked)
+				_buttonHideDeck.Checked = false;
+		}
 
 		private void deckZoneHover(object sender, EventArgs e)
 		{
