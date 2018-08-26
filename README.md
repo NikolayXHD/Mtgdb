@@ -38,7 +38,7 @@ it and reuse in your projects. What's there:
 To get an idea of what these controls look like and what they can I suggest seeing [wiki](https://github.com/NikolayXHD/Mtgdb/wiki)
 for screenshots.
 
-## Search text input
+## Search bar
 The search functionality in Mtgdb.Gui is quite advanced.
 You type a search query in [Lucene query language](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html).
 The query editor **highlights query syntax** and gives you **intellisense** when hitting `Ctrl`+`Space`
