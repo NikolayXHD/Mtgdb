@@ -15,7 +15,7 @@
 	<div class="page-content">
 		<div class="navigation">
 			<ul class="internal">
-				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class=""><a href="2.1.1-Mass-import-from-files.html">2.1.1 Mass import from files</a></li><li class=""><a href="2.1.2-Paste-menu-&-clipboard.html">2.1.2 Paste menu & clipboard</a></li><li class="selected"><a href="2.1.3-Paste-from-Forge.html">2.1.3 Paste from Forge</a></li><li class=""><a href="2.1.4-Paste-from-websites.html">2.1.4 Paste from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="2.4.-Deck-list.html">2.4. Deck list</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-bar.html">4. Search bar</a></li><li class=""><a href="4.1-Search-button-over-card-text.html">4.1 Search button over card text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Diagrams.html">7. Diagrams</a></li><li class=""><a href="7.1-Custom-diagrams.html">7.1 Custom diagrams</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
+				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class=""><a href="2.1.1-Mass-import-from-files.html">2.1.1 Mass import from files</a></li><li class=""><a href="2.1.2-Paste-menu-&-clipboard.html">2.1.2 Paste menu & clipboard</a></li><li class=""><a href="2.1.2.1-Import-from-tables-.csv,-.xlsx,-….html">2.1.2.1 Import from tables .csv, .xlsx, …</a></li><li class="selected"><a href="2.1.3-Paste-from-Forge.html">2.1.3 Paste from Forge</a></li><li class=""><a href="2.1.4-Paste-from-websites.html">2.1.4 Paste from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="2.4.-Deck-list.html">2.4. Deck list</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-bar.html">4. Search bar</a></li><li class=""><a href="4.1-Search-button-over-card-text.html">4.1 Search button over card text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Diagrams.html">7. Diagrams</a></li><li class=""><a href="7.1-Custom-diagrams.html">7.1 Custom diagrams</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
 			</ul>
 			<ul class="external">
 				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
@@ -28,26 +28,38 @@
 			</h1>
 		</div>
 		<div class="markdown-body">
-          <p>Suppose you are playing a <em>Sealed Deck</em> match in Forge. The first step is to build your deck from 90
-cards in Forge deck editor. Forge developers took care for all of us by supporting <code>Ctrl</code> + <code>C</code>
-to copy selected cards in <em>List View</em> mode from Deck editor. Now I took care too so you can <code>paste</code>
-selected cards as <em>Collection</em> in Mtgdb.Gui. The next step is to enable <code>Filter by Collection</code>
-and voila - you are working with the 90 cards from Sealed deck boosters to build your deck.</p>
-<ul>
-<li>
-<p>In Forge select and copy (<code>Ctrl</code> + <code>C</code>) cards in List View mode.</p>
+          <h1>
+<a id="import-decks" class="anchor" href="#import-decks" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Import decks</h1>
+<p>Forge stores its <cite>*.dck</cite> deck files in following locations</p>
+<pre>
+C:\Users\&lt;username&gt;\AppData\Roaming\Forge\decks
+</pre>
+<pre>
+&lt;forge installation directory&gt;\res\quest\world\&lt;subdirectories&gt;
+</pre>
+<p>Deck files can be opened by using <code>Load</code> button from <a href="2.3.-Window-header-buttons.html#buttons-in-the-window-header-right-side">window header</a>.
+You can also <a href="2.1.1-Mass-import-from-files.html">drag-n-drop</a> files and folders
+with deck files into Mtgdb.Gui</p>
+<a name="user-content-import-sealed-deck-cards-as-mtgdb-gui-collection"></a>
+<h2>
+<a id="import-sealed-deck-cards-as-mtgdbgui-collection" class="anchor" href="#import-sealed-deck-cards-as-mtgdbgui-collection" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Import sealed deck cards as Mtgdb.Gui collection</h2>
+<p>Suppose you are playing a <em>Sealed Deck</em> match in Forge. Before playing the match you build a deck
+from 90 cards in Forge deck editor.</p>
+<p>What if you want to build the deck in Mtgdb.Gui instead? Forge developers took care, so it's possible.</p>
+<p>The list of cards available to you when building the deck in Forge can be copied to clipboard.
+Switch the list of available cards to <em>List View</em> mode, select all cards in it and copy them by hitting
+<code>Ctrl</code> + <code>C</code>.</p>
 <a href="l/chart-copy-forge.jpg"><img alt="l/chart-copy-forge.jpg" src="l/chart-copy-forge.jpg"></a>
-</li>
-<li>
-<p>In Mtgdb.Gui</p>
-<ul>
-<li>press <code>Alt</code> + <code>V</code> or pick <code>Paste collection from Clipboard</code> in <code>Paste menu</code>
-</li>
-<li>filter by cards in collection</li>
-</ul>
-</li>
-</ul>
-<p>Now you can effectively build your deck from 90 cards available to you in Forge Deck editor.
+<p><em>Paste</em> selected cards as <em>Collection</em> in Mtgdb.Gui, to do this
+press <code>Alt</code> + <code>V</code> or pick <code>Paste collection from Clipboard</code> in <code>Paste menu</code></p>
+<a href="l/chart-paste-collection.jpg"><img alt="l/chart-paste-collection.jpg" src="l/chart-paste-collection.jpg"></a>
+<p>The next step is to enable <code>Filter by Collection</code>
+and voila - you are working with the 90 cards from Sealed deck boosters to build your deck.</p>
+<a href="l/filter_manager.jpg"><img alt="l/filter_manager.jpg" src="l/filter_manager.jpg"></a>
+<a name="user-content-benefits"></a>
+<h3>
+<a id="benefits" class="anchor" href="#benefits" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Benefits</h3>
+<p>You get access to all Mtgdb.Gui features while building your deck to play a <em>sealed deck</em> match in Forge.
 For example you can quickly estimate color distribution within available cards:</p>
 <a href="l/chart-collection-all.jpg"><img alt="l/chart-collection-all.jpg" src="l/chart-collection-all.jpg"></a>
 <p>You can further estimate color distribution within the cards that have the synergy you are looking

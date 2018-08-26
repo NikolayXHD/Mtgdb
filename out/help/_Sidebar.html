@@ -15,7 +15,7 @@
 	<div class="page-content">
 		<div class="navigation">
 			<ul class="internal">
-				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class=""><a href="2.1.1-Mass-import-from-files.html">2.1.1 Mass import from files</a></li><li class=""><a href="2.1.2-Paste-menu-&-clipboard.html">2.1.2 Paste menu & clipboard</a></li><li class=""><a href="2.1.3-Paste-from-Forge.html">2.1.3 Paste from Forge</a></li><li class=""><a href="2.1.4-Paste-from-websites.html">2.1.4 Paste from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="2.4.-Deck-list.html">2.4. Deck list</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-bar.html">4. Search bar</a></li><li class=""><a href="4.1-Search-button-over-card-text.html">4.1 Search button over card text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Diagrams.html">7. Diagrams</a></li><li class=""><a href="7.1-Custom-diagrams.html">7.1 Custom diagrams</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
+				<li class=""><a href="Home.html">Home</a></li><li class=""><a href="1.-Get-started.html">1. Get started</a></li><li class=""><a href="2.-Deck-and-Collection-Editor.html">2. Deck and Collection Editor</a></li><li class=""><a href="2.1.1-Mass-import-from-files.html">2.1.1 Mass import from files</a></li><li class=""><a href="2.1.2-Paste-menu-&-clipboard.html">2.1.2 Paste menu & clipboard</a></li><li class=""><a href="2.1.2.1-Import-from-tables-.csv,-.xlsx,-….html">2.1.2.1 Import from tables .csv, .xlsx, …</a></li><li class=""><a href="2.1.3-Paste-from-Forge.html">2.1.3 Paste from Forge</a></li><li class=""><a href="2.1.4-Paste-from-websites.html">2.1.4 Paste from websites</a></li><li class=""><a href="2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online.html">2.2 Import collection & decks from Magic The Gathering Online</a></li><li class=""><a href="2.3.-Window-header-buttons.html">2.3. Window header buttons</a></li><li class=""><a href="2.4.-Deck-list.html">2.4. Deck list</a></li><li class=""><a href="3.-Filter-buttons.html">3. Filter buttons</a></li><li class=""><a href="4.-Search-bar.html">4. Search bar</a></li><li class=""><a href="4.1-Search-button-over-card-text.html">4.1 Search button over card text</a></li><li class=""><a href="5.-Sort.html">5. Sort</a></li><li class=""><a href="6.-Zoom.html">6. Zoom</a></li><li class=""><a href="7.-Diagrams.html">7. Diagrams</a></li><li class=""><a href="7.1-Custom-diagrams.html">7.1 Custom diagrams</a></li><li class=""><a href="9.-Using-custom-images.html">9. Using custom images</a></li><li class=""><a href="Release-notes.html">Release notes</a></li>
 			</ul>
 			<ul class="external">
 				<li><a href="https://www.slightlymagic.net/forum/viewtopic.php?f=62&t=19299&sid=49dee3bc947e6f421808b81002fbd3fd">Thread on www.slightlymagic.net</a></li>
@@ -149,9 +149,8 @@ so on.</p>
 </tr>
 <tr>
 <td>
-<p>Search by text in <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html" rel="nofollow">Lucene
-query language</a>. Search string
-supports <em>syntax highlighting</em>
+<p>Textual <em>search bar</em> with <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html" rel="nofollow">Lucene syntax</a>.</p>
+<p>Supports <em>syntax highlighting</em>
 and <em>intellisense</em>.</p>
 <p>Search for <em>similar cards</em> shows you cards
 with similar <em>text</em> and / or
@@ -160,6 +159,18 @@ with similar <em>text</em> and / or
 </td>
 <td>
 <a href="l/search_intellisense.jpg"><img alt="s/search_intellisense.jpg" src="s/search_intellisense.jpg"></a>
+</td>
+</tr>
+<tr>
+<td>
+<p>Search bar in <em>deck list</em> lets you <em>find
+decks</em> by their properties e.g. <code>LandCount</code></p>
+<p>You can also <em>find cards</em> that belong to the
+decks you've found.</p>
+<p><a href="2.4.-Deck-list.html">details</a></p>
+</td>
+<td>
+<a href="l/filter_by_deck.jpg"><img alt="s/filter_by_deck.jpg" src="s/filter_by_deck.jpg"></a>
 </td>
 </tr>
 <tr>
@@ -173,7 +184,7 @@ with similar <em>text</em> and / or
 <td>Filter by cards in your <em>collection</em>
 </td>
 <td rowspan="3">
-<a href="l/filter_manager.jpg"><img alt="s/filter_manager.jpg" src="s/filter_manager.jpg"></a>
+<a href="l/filter_manager.jpg"><img alt="l/filter_manager.jpg" src="l/filter_manager.jpg"></a>
 </td>
 </tr>
 <tr>
@@ -186,13 +197,13 @@ operators to combine filters</td>
 </tr>
 <tr>
 <td>
-<p>Show or hide card
-<em>duplicates</em> in search
-result. Namesakes can be
-confusing when creating a deck
-or building some statistics.
-But sometimes you want to put
-into your deck a specific
+<p>Show or hide card <em>duplicates</em> in search
+result.</p>
+<p>Namesakes can be confusing when creating a
+deck or analyzing some deck or collection
+-related statistics.</p>
+<p>However sometimes you need duplicates so
+that you can put into your deck a specific
 version of a beautiful island.</p>
 <p>Check <code>Show duplicates</code>
 button to show all variants of
@@ -245,7 +256,7 @@ and starting it again.</p>
 <p><a href="2.3.-Window-header-buttons.html#undo--redo-buttons">details</a></p>
 </td>
 <td>
-<a href="l/undo.jpg"><img alt="s/undo.jpg" src="s/undo.jpg"></a>
+<a href="l/undo.jpg"><img alt="l/undo.jpg" src="l/undo.jpg"></a>
 </td>
 </tr>
 <tr>
@@ -254,7 +265,7 @@ languages supported by
 Gatherer. Including russian,
 spanish, portugal and etc.</td>
 <td>
-<a href="l/translations.jpg"><img alt="s/translations.jpg" src="s/translations.jpg"></a>
+<a href="l/translations.jpg"><img alt="l/translations.jpg" src="l/translations.jpg"></a>
 </td>
 </tr>
 <tr>
@@ -276,14 +287,19 @@ spanish, portugal and etc.</td>
 </td>
 </tr>
 <tr>
-<td>Using images from Mtgdb.Gui in
+<td>
+<p>Using images from Mtgdb.Gui in
 <em>Forge</em>. With High Quality images
-anything gets prettier :)</td>
+anything gets prettier :)</p>
+<p>UPDATE: as for year 2018 Forge's native
+card images have become way better rendering
+this feature obsolete.</p>
+</td>
 <td><a href="9.-Using-custom-images.html#export-images-to-forge">details</a></td>
 </tr>
 <tr>
-<td>Using card images you already
-have with Mtgdb.Gui</td>
+<td>Using card <em>images you already
+have</em> with Mtgdb.Gui</td>
 <td><a href="9.-Using-custom-images.html#i-already-have-card-images-somewhere-on-my-pc-how-do-i-make-mtgdbgui-use-them">details</a></td>
 </tr>
 <tr>
