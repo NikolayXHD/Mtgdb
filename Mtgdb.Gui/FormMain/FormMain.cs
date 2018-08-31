@@ -264,10 +264,7 @@ namespace Mtgdb.Gui
 
 			lock (_searchResultCards)
 			{
-				_uiSnapshot = new UiModel(
-					_cardRepo,
-					_collectionEditor.Snapshot(),
-					_deckEditor.SnapshotZone());
+				_uiSnapshot = getUISnapshot();
 
 				_breakRefreshing = false;
 
@@ -347,6 +344,14 @@ namespace Mtgdb.Gui
 				refreshData();
 				onFinished?.Invoke();
 			});
+		}
+
+		private UiModel getUISnapshot()
+		{
+			return new UiModel(
+				_cardRepo,
+				_collectionEditor.Snapshot(),
+				_deckEditor.SnapshotZone());
 		}
 
 		private void updateIsSearchResult() =>
@@ -973,7 +978,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonRedo() => historyRedo();
 
-		public void ButtonPivot() => new FormChart(_cardRepo, _uiSnapshot, _fields).Show();
+		public void ButtonPivot() => new FormChart(_cardRepo, getUISnapshot(), _fields).Show();
 
 		public void ButtonPrint()
 		{

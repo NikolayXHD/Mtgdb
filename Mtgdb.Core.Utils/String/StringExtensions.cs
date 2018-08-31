@@ -72,7 +72,15 @@ namespace Mtgdb
 
 			for (int i = value.Length - 2; i >= 0; i--)
 				if (!char.IsDigit(value[i]))
-					return new Tuple<string, int>(value.Substring(0, i + 1), int.Parse(value.Substring(i + 1)));
+				{
+					string name = value.Substring(0, i + 1);
+
+					string numberStr = value.Substring(i + 1);
+					if (!int.TryParse(numberStr, out int number))
+						return new Tuple<string, int>(value, 0);
+
+					return new Tuple<string, int>(name, number);
+				}
 
 			return new Tuple<string, int>(string.Empty, 0);
 		}

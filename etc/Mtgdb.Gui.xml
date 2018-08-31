@@ -3,9 +3,9 @@
 	<WatchFile Mode="Auto" />
 
 	<SuggestImageDownloader Enabled="False" />
-	
+
 	<AppSource NewsUrl="https://github.com/NikolayXHD/Notifications/archive/master.zip" />
-	
+
 	<ImageLocations EnabledGroups="prod-dev" >
 
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
@@ -19,13 +19,13 @@
 		<Directory Group="dev" Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
 		<Directory Group="dev" Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
 		<Directory Group="dev" Zoom="Any"   Path="D:\Distrib\games\mtg\Patch" />
-		
+
 		<Directory Group="xlhq" Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\games\mtg\Mega\XLHQ" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_DVD"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_EVG"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_GVL"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_JVC"                                               Path="D:\Distrib\games\mtg\Mega\XLHQ\DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
-		
+
 		<Directory Group="xlhq" Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\games\mtg\Mega\XLHQ\Digital Sets" />
 		<Directory Group="xlhq" Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\games\mtg\Mega\XLHQ\Digital Tokens" />
 		<Directory Group="xlhq" Zoom="Any" Set="MPS_AKH" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="D:\Distrib\games\mtg\Mega\XLHQ\Masterpiece Series\Amonkhet Invocations" />
