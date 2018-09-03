@@ -488,15 +488,7 @@ namespace Mtgdb.Controls
 			card.ScaleDpi();
 
 			foreach (var field in card.Fields)
-			{
 				field.Image = ((Bitmap) field.Image)?.HalfResizeDpi();
-
-				for (int i = 0; i < field.CustomButtons.Count; i++)
-				{
-					var button = field.CustomButtons[i];
-					button.Icon = button.Icon?.ResizeDpi();
-				}
-			}
 
 			card.ImageDeckBox = Resources.deckbox.ResizeDpi();
 			card.ImageDeckBoxOpened = Resources.deckbox_opened.ResizeDpi();

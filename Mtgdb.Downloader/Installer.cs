@@ -191,8 +191,7 @@ namespace Mtgdb.Downloader
 
 				onComplete?.Invoke();
 
-				Console.WriteLine("Upgrade complete!");
-				Console.WriteLine("Restart Mtgdb.Gui to enjoy new version immediately :)");
+				Console.WriteLine("To try new version you need to restart.");
 				Console.WriteLine();
 			}
 			else

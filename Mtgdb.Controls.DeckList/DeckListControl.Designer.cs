@@ -36,7 +36,7 @@ namespace Mtgdb.Controls
 			Mtgdb.Controls.SelectionOptions selectionOptions1 = new Mtgdb.Controls.SelectionOptions();
 			Mtgdb.Controls.SortOptions sortOptions1 = new Mtgdb.Controls.SortOptions();
 			this._panelLayout = new System.Windows.Forms.TableLayoutPanel();
-			this._panelSearch = new Mtgdb.Controls.BorderedPanel();
+			this._panelSearch = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._panelSearchIcon = new Mtgdb.Controls.BorderedPanel();
 			this._textBoxSearch = new Mtgdb.Controls.FixedRichTextBox();
 			this._viewDeck = new Mtgdb.Controls.LayoutViewControl();
@@ -57,7 +57,7 @@ namespace Mtgdb.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.ColumnCount = 5;
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -81,12 +81,17 @@ namespace Mtgdb.Controls
 			this._panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelSearch.BackColor = System.Drawing.Color.White;
-			this._panelSearch.Controls.Add(this._panelSearchIcon);
-			this._panelSearch.Controls.Add(this._textBoxSearch);
+			this._panelSearch.ColumnCount = 2;
+			this._panelSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._panelSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._panelSearch.Controls.Add(this._panelSearchIcon, 0, 0);
+			this._panelSearch.Controls.Add(this._textBoxSearch, 1, 0);
 			this._panelSearch.Location = new System.Drawing.Point(0, 0);
 			this._panelSearch.Margin = new System.Windows.Forms.Padding(0);
 			this._panelSearch.Name = "_panelSearch";
 			this._panelSearch.Size = new System.Drawing.Size(364, 24);
+			this._panelSearch.RowCount = 1;
+			this._panelSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelSearch.TabIndex = 1;
 			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -94,7 +99,7 @@ namespace Mtgdb.Controls
 			// 
 			// _panelSearchIcon
 			// 
-			this._panelSearchIcon.BackgroundImage = global::Mtgdb.Controls.Properties.Resources.search_40;
+			this._panelSearchIcon.BackgroundImage = global::Mtgdb.Controls.Properties.Resources.search_48;
 			this._panelSearchIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this._panelSearchIcon.Location = new System.Drawing.Point(1, 1);
 			this._panelSearchIcon.Margin = new System.Windows.Forms.Padding(1);
@@ -111,8 +116,8 @@ namespace Mtgdb.Controls
 			this._textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this._textBoxSearch.DetectUrls = false;
 			this._textBoxSearch.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._textBoxSearch.Location = new System.Drawing.Point(25, 5);
-			this._textBoxSearch.Margin = new System.Windows.Forms.Padding(1, 5, 1, 1);
+			this._textBoxSearch.Location = new System.Drawing.Point(31, 6);
+			this._textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 6, 1, 1);
 			this._textBoxSearch.Multiline = false;
 			this._textBoxSearch.Name = "_textBoxSearch";
 			this._textBoxSearch.Size = new System.Drawing.Size(338, 18);
@@ -160,7 +165,8 @@ namespace Mtgdb.Controls
 			// 
 			// _menuFilterByDeckMode
 			// 
-			this._menuFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._menuFilterByDeckMode.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Bottom |
+            System.Windows.Forms.AnchorStyles.Left);
 			this._menuFilterByDeckMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuFilterByDeckMode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuFilterByDeckMode.FormattingEnabled = true;
@@ -176,8 +182,7 @@ namespace Mtgdb.Controls
 			// 
 			// _labelSortStatus
 			// 
-			this._labelSortStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelSortStatus.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelSortStatus.AutoSize = true;
 			this._labelSortStatus.Location = new System.Drawing.Point(387, 0);
 			this._labelSortStatus.Name = "_labelSortStatus";
@@ -188,8 +193,7 @@ namespace Mtgdb.Controls
 			// 
 			// _labelFilterByDeckMode
 			// 
-			this._labelFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelFilterByDeckMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelFilterByDeckMode.AutoSize = true;
 			this._labelFilterByDeckMode.Location = new System.Drawing.Point(437, 0);
 			this._labelFilterByDeckMode.Name = "_labelFilterByDeckMode";
@@ -233,8 +237,6 @@ namespace Mtgdb.Controls
 			// 
 			// DeckListControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._listBoxSuggest);
 			this.Controls.Add(this._textBoxName);
 			this.Controls.Add(this._panelLayout);
@@ -251,7 +253,7 @@ namespace Mtgdb.Controls
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel _panelLayout;
-		private BorderedPanel _panelSearch;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _panelSearch;
 		private FixedRichTextBox _textBoxSearch;
 		private LayoutViewControl _viewDeck;
 		private BorderedPanel _panelSearchIcon;

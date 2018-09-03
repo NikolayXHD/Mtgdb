@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -7,8 +8,17 @@ namespace Mtgdb.Downloader
 {
 	public class WebClientBase
 	{
-		static WebClientBase() =>
-			ServicePointManager.SecurityProtocol |= (SecurityProtocolType) 3072;
+		static WebClientBase()
+		{
+			try
+			{
+				ServicePointManager.SecurityProtocol |= (SecurityProtocolType) 3072;
+			}
+			catch (NotSupportedException ex)
+			{
+				_log.Warn(ex, "Failed to setup HTTPS");
+			}
+		}
 
 		public void DownloadFile(string downloadUrl, string downloadTarget)
 		{
