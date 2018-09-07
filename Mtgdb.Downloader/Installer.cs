@@ -197,10 +197,10 @@ namespace Mtgdb.Downloader
 			else
 			{
 				Console.WriteLine($"Failed to extract new version files from {appDownloaded}.");
-				Console.WriteLine("I apologize. I hoped it will never happen, but here we are :(");
+				Console.WriteLine("It should never happen, but here we are :(");
 				Console.WriteLine();
 				Console.WriteLine("However you should be able to run the current version normally.");
-				Console.WriteLine("If it's not the case you can");
+				Console.WriteLine("If you can't:");
 				Console.WriteLine("\t* Re-download and manually install Mtgdb.Gui");
 				Console.WriteLine("\t* Report the problem and get help at https://www.slightlymagic.net/forum/viewtopic.php?f=15&t=19298&sid=02dfce1282b368b1b8f40d452ac0af18");
 				Console.WriteLine();
