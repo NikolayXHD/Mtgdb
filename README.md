@@ -1,14 +1,6 @@
-# Mtgdb.Gui
+## Mtgdb.Gui Overview
 
-[Download link](https://py3j9.app.goo.gl/dl)  
-[Forum thread](https://py3j9.app.goo.gl/frm) to get support or sumbit your feedback  
-[Wiki](https://py3j9.app.goo.gl/wiki)
-
-[![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)
-
-## Overview
-
-**Mtgdb.Gui** is a *free* and *opensource* **Windows** application to help **Magic the Gathering** players build
+**Mtgdb.Gui** is a free and opensource *Windows* application to help *Magic the Gathering* players build
 decks. Card search features are well-thought, powerful and intutive. Users may limit the search to the cards
 from their own collection. Search for *similar cards* shows you cards with similar *text* and / or *generated mana*.
 
@@ -22,6 +14,15 @@ The simplest example of a diagram is *mana curve*.
 
 You can analyze your deck or collection from different angles by *building your own diagram*. 
 It is conceptually the same as building *pivot table* or *pivot diagram* in Excel.
+
+### User interface
+
+[![Mtgdb.Gui user interface](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/Ixalan_small.jpg)
+
+### Links
+[Download](https://py3j9.app.goo.gl/dl)  
+[Support & feedback](https://py3j9.app.goo.gl/frm)  
+[Wiki](https://py3j9.app.goo.gl/wiki)
 
 ## Mtgdb.Controls project
 Most non-standard WinForms controls used in Mtgdb.Gui were separated into a
