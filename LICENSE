@@ -1,3 +1,29 @@
+Mtgdb.Gui - application to search MTG cards, build decks and track collection
+Copyright (C) 2017 Nikolay Idalgo Dias
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or (at your option) any later 
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY 
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+Mtgdb.Gui is not affiliated an any way with Wizars of The Coast. All MTG 
+related data and images are copyrighted by Wizards of the Coast LLC.
+
+Data and images are provided to users in accordance with Articles 1273-1280 of 
+the Civil Code of the Russian Federation authorizing the free use of works for 
+the purpose of training, access to knowledge and information, provided, 
+pursuant to paragraph 5 of Article 1229, that they do not unduly damage the 
+normal use of the results of intellectual activity or means of 
+individualization and do not infringe on the lawful interests of rightholders 
+in an unreasonable manner.
+
+If you wish to use the data or images for other purposes, you must obtain 
+permission from the copyright owner.
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
