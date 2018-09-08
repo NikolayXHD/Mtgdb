@@ -116,6 +116,7 @@
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
+    <Compile Include="ExternalData\HelpDownloaderTest.cs" />
     <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />

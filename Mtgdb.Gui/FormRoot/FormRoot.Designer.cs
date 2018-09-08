@@ -95,6 +95,7 @@ namespace Mtgdb.Gui
 			this._buttonFilterPanels = new Mtgdb.Controls.CustomCheckBox();
 			this._flowTitleLeft = new System.Windows.Forms.FlowLayoutPanel();
 			this._buttonOpenWindow = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSupport = new Mtgdb.Controls.CustomCheckBox();
 			this._panelHeader.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._layoutOpen.SuspendLayout();
@@ -186,13 +187,13 @@ namespace Mtgdb.Gui
 			this._buttonDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
 			this._buttonDonate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
 			this._buttonDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDonate.Location = new System.Drawing.Point(470, 3);
-			this._buttonDonate.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
+			this._buttonDonate.Location = new System.Drawing.Point(593, 3);
+			this._buttonDonate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonDonate.Name = "_buttonDonate";
 			this._buttonDonate.Size = new System.Drawing.Size(50, 24);
 			this._buttonDonate.TabIndex = 7;
 			this._buttonDonate.TabStop = false;
-			this._buttonDonate.Text = "donate";
+			this._buttonDonate.Text = "Donate";
 			this._buttonDonate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDonate.UseVisualStyleBackColor = true;
 			// 
@@ -1285,11 +1286,12 @@ namespace Mtgdb.Gui
 			this._flowTitleRight.Controls.Add(this._buttonConfig);
 			this._flowTitleRight.Controls.Add(this._buttonLanguage);
 			this._flowTitleRight.Controls.Add(this._buttonDownload);
+			this._flowTitleRight.Controls.Add(this._buttonSupport);
 			this._flowTitleRight.Controls.Add(this._buttonDonate);
-			this._flowTitleRight.Location = new System.Drawing.Point(268, 0);
+			this._flowTitleRight.Location = new System.Drawing.Point(157, 0);
 			this._flowTitleRight.Margin = new System.Windows.Forms.Padding(0);
 			this._flowTitleRight.Name = "_flowTitleRight";
-			this._flowTitleRight.Size = new System.Drawing.Size(532, 27);
+			this._flowTitleRight.Size = new System.Drawing.Size(643, 27);
 			this._flowTitleRight.TabIndex = 1;
 			this._flowTitleRight.WrapContents = false;
 			// 
@@ -1346,6 +1348,26 @@ namespace Mtgdb.Gui
 			this._buttonOpenWindow.TabIndex = 20;
 			this._buttonOpenWindow.TabStop = false;
 			this._buttonOpenWindow.UseVisualStyleBackColor = true;
+			// 
+			// _buttonSupport
+			// 
+			this._buttonSupport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonSupport.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonSupport.FlatAppearance.BorderSize = 0;
+			this._buttonSupport.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(220)))));
+			this._buttonSupport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(235)))));
+			this._buttonSupport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonSupport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSupport.Location = new System.Drawing.Point(470, 3);
+			this._buttonSupport.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
+			this._buttonSupport.Name = "_buttonSupport";
+			this._buttonSupport.Size = new System.Drawing.Size(111, 24);
+			this._buttonSupport.TabIndex = 21;
+			this._buttonSupport.TabStop = false;
+			this._buttonSupport.Text = "Support & feedback";
+			this._buttonSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this._buttonSupport.UseMnemonic = false;
+			this._buttonSupport.UseVisualStyleBackColor = true;
 			// 
 			// FormRoot
 			// 
@@ -1458,5 +1480,6 @@ namespace Mtgdb.Gui
 		private CustomCheckBox _buttonMenuCopyCollection;
 		private CustomCheckBox _buttonFilterPanels;
 		private CustomCheckBox _buttonOpenWindow;
+		private CustomCheckBox _buttonSupport;
 	}
 }

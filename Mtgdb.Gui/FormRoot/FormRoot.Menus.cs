@@ -221,6 +221,9 @@ namespace Mtgdb.Gui
 
 			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
 			_buttonVisitMtgo.Click += buttonVisitClick;
+
+			_buttonSupport.SetTag("https://py3j9.app.goo.gl/frm");
+			_buttonSupport.Click += buttonVisitClick;
 		}
 
 		private static void buttonVisitClick(object sender, EventArgs e)
@@ -314,6 +317,7 @@ namespace Mtgdb.Gui
 				setupButton(langButton, _languageIcons[langButton.Text.Trim()], true);
 
 			setupButton(_buttonDonate, null, false);
+			setupButton(_buttonSupport, null, false);
 			setupButton(_buttonDonateYandexMoney, Resources.yandex_money_32, false);
 			setupButton(_buttonDonatePayPal, Resources.paypal_32, false);
 

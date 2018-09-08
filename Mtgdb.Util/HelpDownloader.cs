@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Mtgdb.Downloader;
@@ -31,6 +30,7 @@ namespace Mtgdb.Util
 				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
 
 			return helpFiles.OrderByDescending(f => Str.Equals("home", Path.GetFileNameWithoutExtension(f)))
+				.Where(f => !_obsoletePages.Contains(getPageTitle(f)))
 				.ToArray();
 		}
 
@@ -41,14 +41,17 @@ namespace Mtgdb.Util
 
 		private static string getHtmlPage(string helpFileName, string htmlTemplate, IList<string> helpFileNames)
 		{
-			string htmlContent = getOnlineHelpContent(helpFileName);
-			htmlContent = trimSeoSectionFrom(htmlContent);
+			string completePageContent = getHelpPage(helpFileName);
+			string helpContent = getMainSectionContent(completePageContent);
+
+			helpContent = trimSeoSectionFrom(helpContent);
 
 			foreach (string imgDirUrl in _imgDirUrls)
-				htmlContent = htmlContent
+				helpContent = helpContent
 					.Replace(imgDirUrl, string.Empty);
 
-			htmlContent = htmlContent.Replace("id=\"user-content-", "id=\"");
+			helpContent = helpContent
+				.Replace("id=\"user-content-", "id=\"");
 
 			var hrefRegex = new Regex(
 				"(?<prefix>href=\"[^\"]*)(?<name>" +
@@ -56,17 +59,18 @@ namespace Mtgdb.Util
 				")(?<postfix>[^\"]*\")",
 				RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-			htmlContent = hrefRegex.Replace(htmlContent, "${prefix}${name}.html${postfix}");
+			helpContent = hrefRegex.Replace(helpContent, "${prefix}${name}.html${postfix}");
 			
 			string title = getPageTitle(helpFileName);
 
-			var navigationItems = getNavigationItems(helpFileName, helpFileNames);
+			var navigationItems = getNavigationItems(helpFileName, completePageContent);
 
 			var htmlPage = htmlTemplate
 				.Replace("<!--Header-->", $"Mtgdb.Gui help - {title}")
 				.Replace("<!--Navigation-->", navigationItems)
 				.Replace("<!--Title-->", title)
-				.Replace("<!--Content-->", htmlContent);
+				.Replace("<!--Content-->", helpContent);
+
 			return htmlPage;
 		}
 
@@ -93,14 +97,22 @@ namespace Mtgdb.Util
 			return result;
 		}
 
-		private static string getOnlineHelpContent(string helpFileName)
+		private static string getHelpPage(string helpFileName)
 		{
 			var client = new WebClientBase();
 			string name = Path.GetFileNameWithoutExtension(helpFileName);
-
 			var pageContent = client.DownloadString("https://github.com/NikolayXHD/Mtgdb/wiki/" + name);
+			return pageContent;
+		}
 
+		private static string getMainSectionContent(string pageContent)
+		{
 			var startIndex = pageContent.IndexOf(HelpContentOpenElement, Str.Comparison);
+			return getTagContent(pageContent, startIndex);
+		}
+
+		private static string getTagContent(string pageContent, int startIndex)
+		{
 			var contentPrefix = pageContent.Substring(startIndex);
 
 			var openers = new Regex("<div").Matches(contentPrefix);
@@ -127,25 +139,56 @@ namespace Mtgdb.Util
 			throw new FormatException();
 		}
 
-		private static string getNavigationItems(string mdFile, IList<string> mdFiles)
+		private static string getNavigationItems(string mdFile, string pageContent)
 		{
-			var menuBuilder = new StringBuilder();
-			foreach (string file in mdFiles)
-			{
-				string pageTitle = getPageTitle(file);
-				if (_obsoletePages.Contains(pageTitle))
-					continue;
+			int sidebarPosition = findSidebarDiv(pageContent);
+			string sidebarDiv = getTagContent(pageContent, sidebarPosition);
+			string sidebarContent = getNestedContent(sidebarDiv);
 
-				string pageName = getPageName(file);
+			string pageName = Path.GetFileNameWithoutExtension(mdFile);
 
-				string aClass = Str.Equals(mdFile, file) ? "selected" : "";
-				menuBuilder.AppendFormat("<li class=\"{0}\"><a href=\"{1}.html\">{2}</a></li>",
-					aClass,
-					pageName,
-					pageTitle);
-			}
+			var anchorRegex = new Regex("(?:<a href=\"(?!https?://))(?:wiki/)?(?<url>[^\"]+)\"");
+			var preProcessedAnchors = anchorRegex.Replace(sidebarContent, match => 
+				HttpUtility.HtmlDecode(match.Groups["url"].Value).Equals(pageName)
+					? $"<a class=\"selected\" href=\"{match.Groups["url"]}.html\""
+					: $"<a href=\"{match.Groups["url"]}.html\"");
 
-			return menuBuilder.ToString();
+			return preProcessedAnchors;
+		}
+
+		private static string getNestedContent(string tagContent)
+		{
+			var openers = new Regex("<div[^>]*>").Matches(tagContent);
+			var closers = new Regex("</div>").Matches(tagContent);
+
+			if (openers.Count == 0)
+				throw new FormatException();
+
+			if (closers.Count == 0)
+				throw new FormatException();
+
+			int start = openers[0].Length;
+			int end = closers[closers.Count - 1].Index;
+
+			string result = tagContent.Substring(start, end - start);
+			return result;
+		}
+
+		private static int findSidebarDiv(string pageContent)
+		{
+			int classIndex = pageContent.IndexOf("wiki-custom-sidebar", Str.Comparison);
+
+			if (classIndex < 0)
+				throw new FormatException();
+
+			string prefix = pageContent.Substring(0, classIndex);
+
+			int containerIndex = prefix.LastIndexOf("<div ", Str.Comparison);
+
+			if (containerIndex < 0)
+				throw new FormatException();
+
+			return containerIndex;
 		}
 
 		private static string getPageTitle(string helpFile)
