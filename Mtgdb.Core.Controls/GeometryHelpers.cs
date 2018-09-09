@@ -267,6 +267,12 @@ namespace Mtgdb.Controls
 		public static float SquareNorm(this Point point) =>
 			point.X * point.X + point.Y * point.Y;
 
+		public static Point MultiplyIfNegative(this Point point, PointF q) =>
+			new Point(point.X.multiplyIfNegative(q.X), point.Y.multiplyIfNegative(q.Y));
+
+		private static int multiplyIfNegative(this int val, float q) =>
+			val > 0 ? val : (int) (val * q);
+
 		public static Point Center(this Rectangle rect) =>
 			new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
 

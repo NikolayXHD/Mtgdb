@@ -434,7 +434,7 @@ namespace Mtgdb.Gui
 
 			if (isFilterGroupEnabled(FilterGroup.Deck))
 				RunRefilterTask();
-			
+
 			updateFormStatus();
 			updateShowSampleHandButtons();
 		}
@@ -818,22 +818,24 @@ namespace Mtgdb.Gui
 
 
 
-		private void historyLoaded()
-		{
+		private void historyLoaded() =>
 			updateFormStatus();
-		}
 
-		private void sizeChanged(object sender, EventArgs e)
-		{
+		private void sizeChanged(object sender, EventArgs e) =>
 			_layoutRight.PerformLayout();
-		}
 
-		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
-		{
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e) =>
 			e.IsInputKey = true;
-		}
 
 		private void beginUpdateDeckIndex() =>
 			this.Invoke(updateFormStatus);
+
+		private void zoomSettingsChanged()
+		{
+			updateFormSettings();
+
+			if (!restoringSettings())
+				_history.Current.Zoom = _formZoom.Settings;
+		}
 	}
 }

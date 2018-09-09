@@ -23,7 +23,7 @@ namespace Mtgdb.Gui
 		}
 
 		public FormZoom(
-			CardRepository cardRepository, 
+			CardRepository cardRepository,
 			ImageRepository imageRepository,
 			ImageLoader imageLoader)
 			: this()
@@ -61,6 +61,9 @@ namespace Mtgdb.Gui
 			_showOtherSetsButton.Image = cloneImg;
 
 			_showArtButton.CheckedChanged += showArtChanged;
+			_showDuplicatesButton.CheckedChanged += (x, y) => onSettingsChanged();
+			_showOtherSetsButton.CheckedChanged += (x, y) => onSettingsChanged();
+
 			updateShowArt();
 		}
 
@@ -111,7 +114,6 @@ namespace Mtgdb.Gui
 		private void showArtChanged(object sender, EventArgs e)
 		{
 			updateShowArt();
-
 			TaskEx.Run(async () =>
 			{
 				await runLoadImagesTask(_card, _ui);
@@ -122,6 +124,8 @@ namespace Mtgdb.Gui
 					applyZoom();
 				});
 			});
+
+			onSettingsChanged();
 		}
 
 		private void updateShowArt() =>
@@ -317,7 +321,7 @@ namespace Mtgdb.Gui
 
 			if (formArea.Bottom > workingArea.Bottom)
 				formArea.Offset(0, workingArea.Bottom -formArea.Bottom);
-				
+
 			if (formArea.Right > workingArea.Right)
 				formArea.Offset(workingArea.Right - formArea.Right, 0);
 
@@ -352,7 +356,7 @@ namespace Mtgdb.Gui
 		private void hideImage()
 		{
 			_cts?.Cancel();
-			
+
 			_pictureBox.Image = null;
 			System.Windows.Forms.Application.DoEvents();
 			Hide();
@@ -380,6 +384,30 @@ namespace Mtgdb.Gui
 		}
 
 
+		public GuiSettings.ZoomSettings Settings
+		{
+			get => new GuiSettings.ZoomSettings
+			{
+				ShowArt = _showArtButton.Checked,
+				ShowVariants = _showDuplicatesButton.Checked,
+				ShowOtherSet = _showOtherSetsButton.Checked
+			};
+
+			set
+			{
+				if (value == null)
+					return;
+
+				_showArtButton.Checked = value.ShowArt;
+				_showDuplicatesButton.Checked = value.ShowOtherSet;
+				_showOtherSetsButton.Checked = value.ShowOtherSet;
+			}
+		}
+
+		private void onSettingsChanged() =>
+			SettingsChanged?.Invoke();
+
+		public event Action SettingsChanged;
 
 		private readonly CardRepository _cardRepository;
 		private readonly ImageRepository _imageRepository;

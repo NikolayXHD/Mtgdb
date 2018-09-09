@@ -102,7 +102,7 @@ namespace Mtgdb.Gui
 						text = "Click to search cards similar to this one.\r\n" +
 							"Similarity is determined by Text and GeneratedMana fields.\r\n" +
 							"\r\n" +
-							"Following term will be added to search text\r\n" +
+							"Following term will be added to search bar\r\n" +
 							query;
 					}
 					else
@@ -111,7 +111,7 @@ namespace Mtgdb.Gui
 						text = "Click to EXTEND search result by cards matching this value\r\n" +
 							"Shift+Click to NARROW DOWN search result by cards matching this value\r\n" +
 							"\r\n" +
-							"Following term will be added to search text\r\n" +
+							"Following term will be added to search bar\r\n" +
 							query + "\r\n" +
 							"\r\n" +
 							"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";

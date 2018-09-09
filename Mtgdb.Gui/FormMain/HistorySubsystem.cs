@@ -17,7 +17,8 @@ namespace Mtgdb.Gui
 				new UnformattedJsonConverter(objectType =>
 					typeof(IEnumerable<FilterValueState>).IsAssignableFrom(objectType) ||
 					typeof(IDictionary<string, int>).IsAssignableFrom(objectType) ||
-					typeof(IEnumerable<string>).IsAssignableFrom(objectType)));
+					typeof(IEnumerable<string>).IsAssignableFrom(objectType) ||
+					objectType == typeof(GuiSettings.ZoomSettings)));
 		}
 
 		public HistorySubsystem(UndoConfig undoConfig)

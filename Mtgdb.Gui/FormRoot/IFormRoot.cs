@@ -32,6 +32,7 @@ namespace Mtgdb.Gui
 		bool ShowDeck { get; set; }
 		bool ShowPartialCards { get; set; }
 		bool ShowScroll { get; set; }
+		GuiSettings.ZoomSettings ZoomSettings { get; set; }
 
 		CardSuggestModel CardSuggestModel { get; }
 		DeckSuggestModel DeckSuggestModel { get; }

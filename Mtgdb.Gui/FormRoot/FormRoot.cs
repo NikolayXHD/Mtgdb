@@ -131,7 +131,8 @@ namespace Mtgdb.Gui
 			CardRepository repo,
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
-			Application application)
+			Application application,
+			AppSourceConfig appSourceConfig)
 			:this()
 		{
 			TooltipController = tooltipController;
@@ -141,8 +142,9 @@ namespace Mtgdb.Gui
 
 			CardSuggestModel = cardSuggestModel;
 			CardSuggestModel.Ui = UiModel;
-			
+
 			_application = application;
+			_appSourceConfig = appSourceConfig;
 			_repo = repo;
 			_serialization = serialization;
 			_buttonSubsystem = new ButtonSubsystem();
@@ -231,7 +233,7 @@ namespace Mtgdb.Gui
 
 			if (hoveredIndex < 0 || hoveredIndex == _tabs.SelectedIndex || hoveredIndex >= _tabs.Count)
 				return;
-			
+
 			_tabs.SelectedIndex = hoveredIndex;
 		}
 
@@ -605,7 +607,9 @@ namespace Mtgdb.Gui
 		public bool ShowDeck { get; set; }
 		public bool ShowPartialCards { get; set; }
 		public bool ShowScroll { get; set; }
+		public GuiSettings.ZoomSettings ZoomSettings { get; set; }
 		public bool LoadedGuiSettings { get; set; }
+
 
 		private int Id => _application.GetId(this);
 
@@ -623,6 +627,7 @@ namespace Mtgdb.Gui
 		private readonly DownloaderSubsystem _downloaderSubsystem;
 		private readonly NewsService _newsService;
 		private readonly Application _application;
+		private readonly AppSourceConfig _appSourceConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 	}

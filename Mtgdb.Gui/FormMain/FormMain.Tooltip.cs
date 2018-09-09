@@ -63,7 +63,7 @@ namespace Mtgdb.Gui
 				"Alternatively you can search cards present in any of your decks shown in `deck list` " +
 				"tab. To do this\r\n" +
 				"- open `deck list` tab (it's next to `main deck` / `sideboard` / `sample hand` tabs)\r\n" +
-				"- if necessary narrow down the list of visible saved decks by using search text input " +
+				"- if necessary narrow down the list of visible saved decks by using search bar " +
 				"in `deck list` tab\r\n" +
 				"- change selected value in `filter by deck` menu located in top right " +
 				"of `deck list` panel.\r\n\r\n" +
@@ -113,7 +113,7 @@ namespace Mtgdb.Gui
 			controller.SetTooltip(this,
 				() => _cardSearch.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
-					: "Search text",
+					: "Search bar",
 				() => _cardSearch.SearchResult?.ParseErrorMessage ??
 					"Narrows down the list of cards below based on a query you type. Example query:\r\n" +
 					"TextEn: \"counter target spell\"\r\n\r\n" +
@@ -127,8 +127,8 @@ namespace Mtgdb.Gui
 				_panelIconSearch);
 
 			controller.SetTooltip(this,
-				"Search text examples",
-				"Opens menu with search text examples.\r\n" +
+				"Search query examples",
+				"Opens menu with search query examples.\r\n" +
 				"Same menu is opened by pressing F1.",
 				_buttonSearchExamplesDropDown);
 
@@ -231,7 +231,7 @@ namespace Mtgdb.Gui
 				"Filter Manager", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Filter manager selects between AND / OR mode or DISABLES the following filter sources:\r\n" +
 				"  * Filter buttons\r\n" +
-				"  * Search text\r\n" +
+				"  * Search bar\r\n" +
 				"  * Legality filter\r\n" +
 				"  * Filter to cards present in your collection\r\n" +
 				"  * Filter to cards present in your deck\r\n\r\n" +
@@ -285,7 +285,7 @@ namespace Mtgdb.Gui
 			if (isKeyword)
 			{
 				description += "\r\n\r\n" +
-					"Search text lets you search by keywords too. It provides much more keyword values.\r\n" +
+					"Search bar lets you search by keywords too. It provides much more keyword values.\r\n" +
 					"Use intellisense to see available values:\r\n" +
 					"- type keywords:\r\n" +
 					"- hit Ctrl + Space\r\n" +

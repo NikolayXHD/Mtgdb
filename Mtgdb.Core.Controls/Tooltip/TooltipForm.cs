@@ -246,7 +246,9 @@ namespace Mtgdb.Controls
 
 				c.Bounds = c.Bounds.OffsetInto(workingArea);
 				c.IntersectsTarget = target.IntersectsWith(c.Bounds);
-				c.DistanceToCursor = cursor.Minus(c.Bounds.Center()).SquareNorm();
+				c.DistanceToCursor = c.Bounds.Center().Minus(cursor)
+					.MultiplyIfNegative(new PointF(1.5f, 1.5f)) // prefer bottom right
+					.SquareNorm();
 			}
 
 			var candidate = candidates

@@ -222,7 +222,7 @@ namespace Mtgdb.Gui
 			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
 			_buttonVisitMtgo.Click += buttonVisitClick;
 
-			_buttonSupport.SetTag("https://py3j9.app.goo.gl/frm");
+			_buttonSupport.SetTag(_appSourceConfig.ForumUrl);
 			_buttonSupport.Click += buttonVisitClick;
 		}
 

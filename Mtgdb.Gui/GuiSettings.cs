@@ -67,6 +67,8 @@ namespace Mtgdb.Gui
 
 		public FilterByDeckMode? FilterByDeckMode { get; set; }
 
+		public ZoomSettings Zoom { get; set; }
+
 		[JsonIgnore]
 		public Deck Deck
 		{
@@ -83,5 +85,12 @@ namespace Mtgdb.Gui
 
 		[JsonIgnore]
 		public Deck CollectionModel => Deck.Create(Collection, Collection?.Keys.ToList(), null, null);
+
+		public class ZoomSettings
+		{
+			public bool ShowArt { get; set; }
+			public bool ShowVariants { get; set; }
+			public bool ShowOtherSet { get; set; }
+		}
 	}
 }

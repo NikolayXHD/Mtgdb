@@ -116,7 +116,7 @@ namespace Mtgdb.Gui
 			}
 			else
 			{
-				readFormSettingsTo(_history.Current);
+				writeFormSettingsTo(_history.Current);
 			}
 
 			if (_collectionEditor.IsLoaded)
@@ -642,11 +642,12 @@ namespace Mtgdb.Gui
 			_formRoot.ShowScroll = !_buttonHideScrollCards.Checked;
 			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
 			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
+			_formRoot.ZoomSettings = _formZoom.Settings;
 
 			_formRoot.LoadedGuiSettings = true;
 		}
 
-		private void readFormSettingsTo(GuiSettings settings)
+		private void writeFormSettingsTo(GuiSettings settings)
 		{
 			settings.ShowDeck = _formRoot.ShowDeck;
 			settings.ShowPartialCards = _formRoot.ShowPartialCards;
@@ -656,6 +657,7 @@ namespace Mtgdb.Gui
 			settings.ShowFilterPanels = _formRoot.ShowFilterPanels;
 			settings.HideTooltips = _formRoot.HideTooltips;
 			settings.Language = _formRoot.UiModel.LanguageController.Language;
+			settings.Zoom = _formRoot.ZoomSettings;
 		}
 
 		private void historyUpdate()
@@ -700,7 +702,8 @@ namespace Mtgdb.Gui
 				ShowPartialCards = !_buttonHidePartialCards.Checked,
 				ShowTextualFields = !_buttonHideText.Checked,
 				ShowFilterPanels = _formRoot.ShowFilterPanels,
-				FilterByDeckMode = _deckListControl.FilterByDeckMode
+				FilterByDeckMode = _deckListControl.FilterByDeckMode,
+				Zoom = _formZoom.Settings
 			};
 
 			historyUpdateFormPosition(settings);
@@ -786,7 +789,10 @@ namespace Mtgdb.Gui
 				? FilterByDeckMode.CurrentDeck
 				: FilterByDeckMode.Ignored);
 
+			_formZoom.Settings = settings.Zoom;
+
 			endRestoreSettings();
+
 
 			resetTouchedCard();
 			RunRefilterTask();

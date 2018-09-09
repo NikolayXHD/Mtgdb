@@ -13,5 +13,8 @@ namespace Mtgdb.Downloader
 
 		[DataMember(Name = "NewsUrl")]
 		public string NewsUrl { get; set; }
+
+		[DataMember(Name = "ForumUrl")]
+		public string ForumUrl { get; set; }
 	}
 }

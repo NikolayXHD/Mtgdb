@@ -7,13 +7,13 @@
 		For your changes there is is a separate file
 		* etc\Mtgdb.Gui.xml
 	-->
-	
+
 	<SuggestImageDownloader Enabled="True" />
-	
+
 	<Undo MaxDepth="100" />
-	
+
 	<ImageCache CacheCapacity ="900"/>
-	
+
 	<ImageLocations>
 		<Directory Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
@@ -498,6 +498,7 @@
 	<AppSource
 		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
 		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
-		NewsUrl=    "https://py3j9.app.goo.gl/run" />
+		NewsUrl=    "https://py3j9.app.goo.gl/run"
+		ForumUrl=   "https://py3j9.app.goo.gl/frm" />
 
 </configuration>

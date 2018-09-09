@@ -4,7 +4,9 @@
 
 	<SuggestImageDownloader Enabled="False" />
 
-	<AppSource NewsUrl="https://github.com/NikolayXHD/Notifications/archive/master.zip" />
+	<AppSource
+		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
+		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
 	<ImageLocations EnabledGroups="prod-dev" >
 
@@ -123,8 +125,8 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
 
 		<!-- non-set codes -->
-			<!-- 
-			
+			<!--
+
 			E:\Distrib\games\mtg\Mega\XLHQ
 			Foreign Sets
 			Other
@@ -141,11 +143,11 @@
 				..
 				WC99-04
 			-->
-		
+
 		<!-- Not mapped
-		
+
 		D:\Distrib\games\mtg\XLHQ Promos
-		
+
 		"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
 		"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Dengeki Character Festival"
 		"D:\Distrib\games\mtg\XLHQ Promos\Tokens\Magic Tenth Anniversary"
@@ -179,9 +181,9 @@
 		"D:\Distrib\games\mtg\XLHQ Promos\Extras\WotC Poker Deck"
 		"D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\Japanese Sixth Anniversary"
 		"D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\SDCC"
-		
+
 		-->
-		
+
 	</ImageLocations>
 
 	<!--<ImageSources>

@@ -86,7 +86,7 @@ namespace Mtgdb.Gui
 			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _cardSearch);
 			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _cardSearch);
 
-			var formZoomCard = new FormZoom(_cardRepo, imageRepo, _imageLoader);
+			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
 			_scroll = new ScrollSubsystem(_viewDeck, _viewCards);
 
@@ -113,7 +113,7 @@ namespace Mtgdb.Gui
 				_collectionEditor,
 				_dragging,
 				Cursor,
-				formZoomCard,
+				_formZoom,
 				this);
 
 			_viewDeck.SetDataSource(_deckEditor.DataSource);
@@ -403,6 +403,8 @@ namespace Mtgdb.Gui
 			_deckListControl.FilterByDeckModeChanged += filterByDeckModeChanged;
 			_deckListControl.DeckAdded += deckListAdded;
 			_deckListControl.DeckTransformed += deckListTransformed;
+
+			_formZoom.SettingsChanged += zoomSettingsChanged;
 		}
 
 		private void unsubscribeFromEvents()
@@ -486,7 +488,9 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckRenamed -= deckListRenamedDeck;
 			_deckListControl.FilterByDeckModeChanged -= filterByDeckModeChanged;
 			_deckListControl.DeckAdded -= deckListAdded;
-			_deckListControl.DeckTransformed += deckListTransformed;
+			_deckListControl.DeckTransformed -= deckListTransformed;
+
+			_formZoom.SettingsChanged -= zoomSettingsChanged;
 		}
 
 		public Zone? DeckZone
@@ -576,6 +580,7 @@ namespace Mtgdb.Gui
 		private readonly bool _spellcheckerIndexUpToDate;
 		private readonly RichTextBoxSelectionSubsystem _searchTextSelection;
 		private readonly CopyPasteSubsystem _copyPaste;
+		private readonly FormZoom _formZoom;
 
 		private string _deckName;
 		private UiModel _uiSnapshot;
