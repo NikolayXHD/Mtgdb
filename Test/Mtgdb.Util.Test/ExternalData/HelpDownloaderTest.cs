@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Mtgdb.Util.ExternalData
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class HelpDownloaderUtil

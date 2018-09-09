@@ -60,10 +60,9 @@ namespace Mtgdb.Util
 				RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 			helpContent = hrefRegex.Replace(helpContent, "${prefix}${name}.html${postfix}");
-			
-			string title = getPageTitle(helpFileName);
 
-			var navigationItems = getNavigationItems(helpFileName, completePageContent);
+			var navigationItems = getNavigationItems(helpFileName, completePageContent, out string selectedItemName);
+			string title = selectedItemName ?? getPageTitle(helpFileName);
 
 			var htmlPage = htmlTemplate
 				.Replace("<!--Header-->", $"Mtgdb.Gui help - {title}")
@@ -111,12 +110,39 @@ namespace Mtgdb.Util
 			return getTagContent(pageContent, startIndex);
 		}
 
-		private static string getTagContent(string pageContent, int startIndex)
+		private static string getNavigationItems(string mdFile, string pageContent, out string selectedItemName)
+		{
+			int sidebarPosition = findSidebarDiv(pageContent);
+			string sidebarDiv = getTagContent(pageContent, sidebarPosition);
+			string sidebarContent = getNestedContent(sidebarDiv);
+
+			string pageName = Path.GetFileNameWithoutExtension(mdFile);
+			string selectedAnchorName = null;
+
+			var anchorRegex = new Regex("(?:<a href=\"(?!https?://))(?:wiki/)?(?<url>[^\"]+)\"");
+			var preProcessedAnchors = anchorRegex.Replace(sidebarContent, match =>
+			{
+				string fileName = HttpUtility.HtmlDecode(match.Groups["url"].Value);
+				if (fileName.Equals(pageName, Str.Comparison))
+				{
+					string anchor = getTagContent(sidebarContent, match.Index, "a");
+					selectedAnchorName = getNestedContent(anchor, "a");
+					return $"<a class=\"selected\" href=\"{match.Groups["url"]}.html\"";
+				}
+
+				return $"<a href=\"{match.Groups["url"]}.html\"";
+			});
+
+			selectedItemName = selectedAnchorName;
+			return preProcessedAnchors;
+		}
+
+		private static string getTagContent(string pageContent, int startIndex, string tagName = "div")
 		{
 			var contentPrefix = pageContent.Substring(startIndex);
 
-			var openers = new Regex("<div").Matches(contentPrefix);
-			var closers = new Regex("</div>").Matches(contentPrefix);
+			var openers = getOpenTagRegex(tagName).Matches(contentPrefix);
+			var closers = getCloseTagRegex(tagName).Matches(contentPrefix);
 
 			var tags = openers.Cast<Match>()
 				.Select(m => new { index = m.Index, length = m.Length, open = true })
@@ -139,27 +165,10 @@ namespace Mtgdb.Util
 			throw new FormatException();
 		}
 
-		private static string getNavigationItems(string mdFile, string pageContent)
+		private static string getNestedContent(string tagContent, string tagName = "div")
 		{
-			int sidebarPosition = findSidebarDiv(pageContent);
-			string sidebarDiv = getTagContent(pageContent, sidebarPosition);
-			string sidebarContent = getNestedContent(sidebarDiv);
-
-			string pageName = Path.GetFileNameWithoutExtension(mdFile);
-
-			var anchorRegex = new Regex("(?:<a href=\"(?!https?://))(?:wiki/)?(?<url>[^\"]+)\"");
-			var preProcessedAnchors = anchorRegex.Replace(sidebarContent, match => 
-				HttpUtility.HtmlDecode(match.Groups["url"].Value).Equals(pageName)
-					? $"<a class=\"selected\" href=\"{match.Groups["url"]}.html\""
-					: $"<a href=\"{match.Groups["url"]}.html\"");
-
-			return preProcessedAnchors;
-		}
-
-		private static string getNestedContent(string tagContent)
-		{
-			var openers = new Regex("<div[^>]*>").Matches(tagContent);
-			var closers = new Regex("</div>").Matches(tagContent);
+			var openers = getOpenTagRegex(tagName).Matches(tagContent);
+			var closers = getCloseTagRegex(tagName).Matches(tagContent);
 
 			if (openers.Count == 0)
 				throw new FormatException();
@@ -173,6 +182,12 @@ namespace Mtgdb.Util
 			string result = tagContent.Substring(start, end - start);
 			return result;
 		}
+
+		private static Regex getOpenTagRegex(string tagName) =>
+			new Regex($"<{tagName}(?:\\s[^>]*)?>", RegexOptions.IgnoreCase);
+
+		private static Regex getCloseTagRegex(string tagName) =>
+			new Regex($"</{tagName}>", RegexOptions.IgnoreCase);
 
 		private static int findSidebarDiv(string pageContent)
 		{
