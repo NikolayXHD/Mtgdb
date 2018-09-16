@@ -18,14 +18,19 @@ namespace Mtgdb.Gui
 			CardRepository cardRepository,
 			ForgeSetRepository forgeSetRepo)
 		{
-			_formatters = new IDeckFormatter[]
+			MtgArenaFormatter = new MtgArenaFormatter(cardRepository);
+			MtgoFormatter = new MtgoDeckFormatter(cardRepository);
+
+			_formatters = new[]
 			{
 				new JsonDeckFormatter(),
 				new ForgeDeckFormatter(cardRepository, forgeSetRepo),
 				new MagarenaDeckFormatter(cardRepository),
 				new DeckedBuilderDeckFormatter(cardRepository),
 				new XMageDeckFormatter(cardRepository),
-				new MtgoDeckFormatter(cardRepository)
+				MtgArenaFormatter,
+				// must be after MtgArenaFormatter for correct format resolution
+				MtgoFormatter
 			};
 
 			ImportedFilePatterns = _formatters
@@ -35,10 +40,10 @@ namespace Mtgdb.Gui
 				.ToReadOnlyList();
 
 			_loadFilter = string.Join(@"|", Sequence.From($"Any {{type}}|{string.Join(@";", ImportedFilePatterns)}").Concat(
-				_formatters.Where(_ => _.SupportsImport).Select(f => $"{f.Description}|{f.FileNamePattern}")));
+				_formatters.Where(_ => _.SupportsImport && _.SupportsFile).Select(f => $"{f.Description}|{f.FileNamePattern}")));
 
 			_saveFilter = string.Join(@"|",
-				_formatters.Where(_ => _.SupportsExport).Select(f => $"{f.Description}|{f.FileNamePattern}"));
+				_formatters.Where(_ => _.SupportsExport && _.SupportsFile).Select(f => $"{f.Description}|{f.FileNamePattern}"));
 
 			Directory.CreateDirectory(AppDir.Save);
 		}
@@ -124,7 +129,7 @@ namespace Mtgdb.Gui
 				deck.Error = ex.Message;
 				return deck;
 			}
-			
+
 			var format = @"*" + Path.GetExtension(file);
 
 			var formatter = getFormatter(format, serialized);
@@ -161,15 +166,19 @@ namespace Mtgdb.Gui
 		{
 			var formatter = _formatters.FirstOrDefault(f =>
 				Str.Equals(f.FileNamePattern, format) &&
-				f.ValidateFormat(serialized)
+				f.
+					ValidateFormat(serialized)
 			);
 
 			return formatter;
 		}
 
-		public string SaveSerialized(string format, Deck deck)
+		public string SaveSerialized(Deck deck, IDeckFormatter formatter = null, string format = null)
 		{
-			var formatter = _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
+			if (formatter == null && format == null)
+				throw new ArgumentException($"either {nameof(format)} or {nameof(formatter)} must be specified");
+
+			formatter = formatter ?? _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
 			var result = formatter.ExportDeck(deck.Name, deck);
 			return result;
 		}
@@ -302,7 +311,7 @@ namespace Mtgdb.Gui
 				if (line.Length <= maxLength)
 					builder.AppendLine(line);
 				else
-					builder.AppendLine($"…{line.Substring(line.Length - maxLength)}");
+					builder.AppendLine($"â€¦{line.Substring(line.Length - maxLength)}");
 			}
 
 			return builder.ToString();
@@ -321,5 +330,8 @@ namespace Mtgdb.Gui
 		/// when setting form text to null or empty
 		/// </summary>
 		public const string NoDeck = " ";
+
+		public IDeckFormatter MtgArenaFormatter { get; }
+		public IDeckFormatter MtgoFormatter { get; }
 	}
 }

@@ -211,8 +211,6 @@ namespace Mtgdb.Gui
 
 		public override string Description => "Magic The Gathering Online {type}";
 		public override string FileNamePattern => @"*.txt";
-		public override bool SupportsExport => true;
-		public override bool SupportsImport => true;
 
 		private bool _isSideboard;
 		private string _sideboardIndicator;
@@ -224,11 +222,11 @@ namespace Mtgdb.Gui
 			new Dictionary<string, string>
 			{
 				// ReSharper disable StringLiteralTypo
-				
+
 				{ "Jötun Grunt", "Jotun Grunt" },
 				{ "Jötun Owl Keeper", "Jotun Owl Keeper" },
 				{ "Bösium Strip", "Bosium Strip" }
-				
+
 				// ReSharper restore StringLiteralTypo
 			};
 

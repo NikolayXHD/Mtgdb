@@ -112,10 +112,6 @@ namespace Mtgdb.Gui
 
 		public override string Description => "Forge {type}";
 		public override string FileNamePattern => @"*.dck";
-		public override bool SupportsExport => true;
-		public override bool SupportsImport => true;
-
-
 
 		private const string SideboardMark = @"[sideboard]";
 		private const string Header = @"[metadata]";

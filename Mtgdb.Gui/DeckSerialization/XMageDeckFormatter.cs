@@ -108,7 +108,5 @@ namespace Mtgdb.Gui
 		
 		public override string Description => "XMage {type}";
 		public override string FileNamePattern => @"*.dck";
-		public override bool SupportsExport => true;
-		public override bool SupportsImport => true;
 	}
 }

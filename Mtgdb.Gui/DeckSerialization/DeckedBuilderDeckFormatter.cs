@@ -65,8 +65,6 @@ namespace Mtgdb.Gui
 
 		public const string SideboardPrefix = "SB: ";
 
-		public override bool SupportsExport => true;
-		public override bool SupportsImport => true;
 		public override string Description => "Decked builder {type}";
 		public override string FileNamePattern => "*.dec";
 

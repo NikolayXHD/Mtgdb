@@ -251,7 +251,7 @@ namespace Mtgdb.Gui
 			pasteCollectionFromText(text, append);
 		}
 
-		public void CopyCollection()
+		public void CopyCollection(IDeckFormatter formatter)
 		{
 			var deck = Deck.Create(
 				_collection.CountById?.ToDictionary(),
@@ -259,11 +259,11 @@ namespace Mtgdb.Gui
 				null,
 				null);
 
-			var serialized = _serialization.SaveSerialized("*.txt", deck);
+			var serialized = _serialization.SaveSerialized(deck, formatter);
 			Clipboard.SetText(serialized);
 		}
 
-		public void CopyDeck()
+		public void CopyDeck(IDeckFormatter formatter)
 		{
 			Deck deck;
 
@@ -283,7 +283,7 @@ namespace Mtgdb.Gui
 					return;
 			}
 
-			var serialized = _serialization.SaveSerialized("*.txt", deck);
+			var serialized = _serialization.SaveSerialized(deck, formatter);
 			Clipboard.SetText(serialized);
 		}
 

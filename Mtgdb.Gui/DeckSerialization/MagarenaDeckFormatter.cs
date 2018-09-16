@@ -100,8 +100,6 @@ namespace Mtgdb.Gui
 
 		public override string Description => "Magarena {type}";
 		public override string FileNamePattern => "*.dec";
-		public override bool SupportsExport => true;
-		public override bool SupportsImport => true;
 
 		private readonly CardRepository _cardRepo;
 	}

@@ -16,8 +16,8 @@ namespace Mtgdb.Gui
 			_buttonFilterPanels.Checked = true;
 			_buttonDownload.Enabled = false;
 
-			foreach (var button in _saveLoadButtons)
-				button.MouseEnter += saveLoadMouseEnter;
+			foreach (var state in _saveLoadMenuModes)
+				state.TitleButton.MouseEnter += saveLoadMouseEnter;
 
 			_buttonDownload.Click += downloadClick;
 
@@ -49,6 +49,7 @@ namespace Mtgdb.Gui
 			_buttonMenuPasteCollectionAppend.Click += pasteClick;
 			_buttonMenuCopyCollection.Click += pasteClick;
 			_buttonMenuCopyDeck.Click += pasteClick;
+			_buttonImportExportToMtgArena.Click += buttonImportExportToMtgArenaClick;
 		}
 
 		private void pasteClick(object sender, EventArgs e)
@@ -69,6 +70,18 @@ namespace Mtgdb.Gui
 				form.CopyDeck();
 			else if (sender == _buttonMenuCopyCollection)
 				form.CopyCollection();
+		}
+
+		private void buttonImportExportToMtgArenaClick(object sender, EventArgs e)
+		{
+			var form = SelectedTab;
+			if (form == null)
+				return;
+
+			if (SaveLoadMenuMode.IsMtgArenaPaste)
+				form.PasteDeck(append: false);
+			else
+				form.CopyDeckInMtgArenaFormat();
 		}
 
 		private void openWindowClick(object sender, EventArgs e)
@@ -224,6 +237,12 @@ namespace Mtgdb.Gui
 
 			_buttonSupport.SetTag(_appSourceConfig.ForumUrl);
 			_buttonSupport.Click += buttonVisitClick;
+
+			_buttonVisitMtgArena.SetTag(@"https://magic.wizards.com/en/mtgarena");
+			_buttonVisitMtgArena.Click += buttonVisitClick;
+
+			_buttonVisitDeckedBuilder.SetTag(@"http://www.deckedbuilder.com/");
+			_buttonVisitDeckedBuilder.Click += buttonVisitClick;
 		}
 
 		private static void buttonVisitClick(object sender, EventArgs e)
@@ -238,13 +257,16 @@ namespace Mtgdb.Gui
 		private void saveLoadMouseEnter(object sender, EventArgs e)
 		{
 			_layoutOpen.SuspendLayout();
-			for (int i = 0; i < _saveLoadButtons.Length; i++)
-			{
-				bool visible = sender == _saveLoadButtons[i];
-				var menuButtons = _saveLoadMenuButtons[i];
 
-				for (int j = 0; j < menuButtons.Length; j++)
-					menuButtons[j].Visible = visible;
+			foreach (var state in _saveLoadMenuModes)
+			{
+				state.IsCurrent = state.TitleButton == sender;
+
+				if (state.IsCurrent)
+					_buttonImportExportToMtgArena.Text = state.MtgArenaButtonText;
+
+				foreach (var menuButton in state.MenuButtons)
+					menuButton.Visible = state.IsCurrent;
 			}
 
 			_layoutOpen.ResumeLayout(false);
@@ -482,10 +504,12 @@ namespace Mtgdb.Gui
 		}
 
 		private readonly ButtonBase[] _deckButtons;
-
 		private readonly ButtonSubsystem _buttonSubsystem;
-		private readonly CheckBox[] _saveLoadButtons;
-		private readonly CheckBox[][] _saveLoadMenuButtons;
 		private readonly Dictionary<string, Bitmap> _languageIcons;
+
+		private readonly List<SaveLoadMenuMode> _saveLoadMenuModes;
+
+		private SaveLoadMenuMode SaveLoadMenuMode =>
+			_saveLoadMenuModes.First(_ => _.IsCurrent);
 	}
 }

@@ -303,6 +303,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap decked_builder {
+            get {
+                object obj = ResourceManager.GetObject("decked_builder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap dot_p2014_32 {
             get {
                 object obj = ResourceManager.GetObject("dot_p2014_32", resourceCulture);
@@ -596,6 +606,16 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap mtg_48 {
             get {
                 object obj = ResourceManager.GetObject("mtg_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MTGArena_32 {
+            get {
+                object obj = ResourceManager.GetObject("MTGArena_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1027,10 +1027,17 @@ namespace Mtgdb.Gui
 			_copyPaste.PasteCollection(append);
 
 		public void CopyCollection() =>
-			_copyPaste.CopyCollection();
+			_copyPaste.CopyCollection(_serialization.MtgoFormatter);
 
 		public void CopyDeck() =>
-			_copyPaste.CopyDeck();
+			_copyPaste.CopyDeck(_serialization.MtgoFormatter);
+
+		public void CopyDeckInMtgArenaFormat()
+		{
+			_copyPaste.CopyDeck(_serialization.MtgArenaFormatter);
+			MessageBox.Show("Deck was saved to Clipboard in MTGArena format.\r\n\r\n" +
+				"To proceed use 'import' button in MTGArena.", "Export deck to MTGArena");
+		}
 
 		private void beginRestoreSettings()
 		{

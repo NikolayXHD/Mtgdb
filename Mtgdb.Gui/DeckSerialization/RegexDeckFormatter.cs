@@ -70,8 +70,10 @@ namespace Mtgdb.Gui
 		public abstract string Description { get; }
 		public abstract string FileNamePattern { get; }
 		public abstract bool ValidateFormat(string serialized);
-		public abstract bool SupportsExport { get; }
-		public abstract bool SupportsImport { get; }
+
+		public virtual bool SupportsExport => true;
+		public virtual bool SupportsImport => true;
+		public virtual bool SupportsFile => true;
 		public virtual bool UseBom => false;
 		public virtual string FormatHint => null;
 

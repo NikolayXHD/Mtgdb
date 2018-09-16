@@ -44,16 +44,23 @@ namespace Mtgdb.Gui
 				_buttonPaste
 			};
 
-			_saveLoadButtons = new CheckBox[]
+			_saveLoadMenuModes = new List<SaveLoadMenuMode>
 			{
-				_buttonOpenDeck,
-				_buttonSaveDeck
-			};
-
-			_saveLoadMenuButtons = new[]
-			{
-				new CheckBox[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
-				new CheckBox[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection }
+				new SaveLoadMenuMode
+				{
+					TitleButton = _buttonOpenDeck,
+					MenuButtons = new ButtonBase[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
+					MtgArenaButtonText = "Import deck from MTGArena\r\n" +
+						"(Export from MTGArena first)",
+					IsMtgArenaPaste = true
+				},
+				new SaveLoadMenuMode
+				{
+					TitleButton = _buttonSaveDeck,
+					MenuButtons = new ButtonBase[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
+					MtgArenaButtonText = "Export deck to MTGArena",
+					IsMtgArenaPaste = false
+				}
 			};
 
 			scale();
@@ -98,6 +105,8 @@ namespace Mtgdb.Gui
 			_buttonVisitMtgo.ScaleDpi();
 			_buttonVisitDotP2014.ScaleDpi();
 			_buttonVisitCockatrice.ScaleDpi();
+			_buttonVisitMtgArena.ScaleDpi();
+			_buttonVisitDeckedBuilder.ScaleDpi();
 			_labelMtgo.ScaleDpi();
 			_labelMagarena.ScaleDpi();
 			_labelDotP2.ScaleDpi();

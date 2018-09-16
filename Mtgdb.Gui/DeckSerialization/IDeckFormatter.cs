@@ -14,6 +14,8 @@ namespace Mtgdb.Gui
 
 		bool SupportsExport { get; }
 		bool SupportsImport { get; }
+		bool SupportsFile { get; }
+
 		bool UseBom { get; }
 		string FormatHint { get; }
 	}
