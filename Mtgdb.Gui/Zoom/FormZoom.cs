@@ -114,16 +114,20 @@ namespace Mtgdb.Gui
 		private void showArtChanged(object sender, EventArgs e)
 		{
 			updateShowArt();
-			TaskEx.Run(async () =>
-			{
-				await runLoadImagesTask(_card, _ui);
 
-				this.Invoke(delegate
+			if (_card != null)
+			{
+				TaskEx.Run(async () =>
 				{
-					updateImage();
-					applyZoom();
+					await runLoadImagesTask(_card, _ui);
+
+					this.Invoke(delegate
+					{
+						updateImage();
+						applyZoom();
+					});
 				});
-			});
+			}
 
 			onSettingsChanged();
 		}
