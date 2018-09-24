@@ -190,9 +190,16 @@ namespace Mtgdb.Controls
 			return zoomed;
 		}
 
-		public static Rectangle FitIn(this Size original, Rectangle viewPort)
+		public static Rectangle FitIn(this Size original, Rectangle viewPort) =>
+			new Rectangle(viewPort.Location, original.FitIn(viewPort.Size));
+
+		public static Rectangle CenterIn(this Rectangle original, Rectangle viewPort)
 		{
-			return new Rectangle(viewPort.Location, original.FitIn(viewPort.Size));
+			var originalSize = original.Size;
+
+			var result = new Rectangle(viewPort.Location, originalSize);
+			result.Offset(viewPort.Size.Minus(originalSize).MultiplyBy(0.5f).ToPointF().Round());
+			return result;
 		}
 
 		public static bool FitsIn(this Size value, Size size)

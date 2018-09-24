@@ -70,13 +70,19 @@ namespace Mtgdb.Gui
 			RegisterDragControl(_flowTitleRight);
 			RegisterDragControl(_tabs);
 
-			_tabs.ColorTabBorder = BorderInteriorColor;
-			_layoutTitle.BorderColor = BorderInteriorColor;
+			updateFormBorderColor();
+			SystemColorsChanged += (s, e) => updateFormBorderColor();
 
 			_layoutTitle.PaintBackground =
 				_flowTitleLeft.PaintBackground =
 					_flowTitleRight.PaintBackground =
 						_tabs.PaintBackground = false;
+		}
+
+		private void updateFormBorderColor()
+		{
+			_tabs.ColorTabBorder = _panelCaption.BorderColor;
+			_layoutTitle.BorderColor = _panelCaption.BorderColor;
 		}
 
 		private void scale()

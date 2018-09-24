@@ -77,6 +77,7 @@
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ColorHelper.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />

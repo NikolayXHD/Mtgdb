@@ -154,9 +154,8 @@ namespace Mtgdb.Controls
 			this._panelSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelSearch.Size = new System.Drawing.Size(364, 24);
 			this._panelSearch.TabIndex = 1;
-			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Right));
 			//
 			// _panelSearchIcon
 			//

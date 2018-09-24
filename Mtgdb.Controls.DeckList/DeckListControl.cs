@@ -33,78 +33,71 @@ namespace Mtgdb.Controls
 			CollectionEditorModel collection,
 			Control tooltipOwner)
 		{
-			_listModel = decks;
-			_tooltipOwner = tooltipOwner;
-			_collection = collection;
-			searcher.Loaded += indexLoaded;
+			_textBoxName.Visible = false;
 
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
 			_viewDeck.DataSource = _filteredModels;
 
-			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-			_textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
-
-			_textBoxName.Visible = false;
-
-			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
-
-			_searchSubsystem = new DeckSearchSubsystem(
-				this,
-				_textBoxSearch,
-				_panelSearchIcon,
-				_listBoxSuggest,
-				searcher,
-				adapter,
-				_viewDeck);
-
-			_searchSubsystem.TextApplied += searchTextApplied;
-			_searchSubsystem.SubscribeToEvents();
-
 			_menuFilterByDeckMode.SelectedIndex = 0;
 
-			_viewDeck.MouseClicked += viewDeckClicked;
-			_viewDeck.RowDataLoaded += viewDeckRowDataLoaded;
-			_viewDeck.CardIndexChanged += viewScrolled;
+			_listModel = decks;
+			_tooltipOwner = tooltipOwner;
+			_collection = collection;
+			_textSelectionCursor = createTextSelectionCursor();
+
+			_searchSubsystem = new DeckSearchSubsystem(this, _textBoxSearch, _panelSearchIcon, _listBoxSuggest, searcher, adapter, _viewDeck);
+			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
+			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
+			_highlightSubsystem = new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter);
+
+			_model = _listModel.CreateModel(Deck.Create());
+			_model.IsCurrent = true;
+
+			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
+
+			_searchSubsystem.SubscribeToEvents();
+			_deckSort.SubscribeToEvents();
+			_layoutViewTooltip.SubscribeToEvents();
+			_highlightSubsystem.SubscribeToEvents();
+
+			_searchSubsystem.TextApplied += searchTextApplied;
+			_deckSort.SortChanged += sortChanged;
 
 			_textBoxName.LostFocus += nameLostFocus;
 			_textBoxName.KeyDown += nameKeyDown;
 
-			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
-
-			_layoutViewTooltip.SubscribeToEvents();
-
-			_highlightSubsystem = new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter);
-			_highlightSubsystem.SubscribeToEvents();
-
+			_viewDeck.MouseClicked += viewDeckClicked;
+			_viewDeck.RowDataLoaded += viewDeckRowDataLoaded;
+			_viewDeck.CardIndexChanged += viewScrolled;
 			_viewDeck.MouseMove += deckMouseMove;
-
-			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
-			_deckSort.SortChanged += sortChanged;
-			_deckSort.SubscribeToEvents();
-
-			_model = _listModel.CreateModel(Deck.Create());
-			_model.IsCurrent = true;
 
 			if (_listModel.IsLoaded)
 				listModelLoaded();
 			else
 				_listModel.Loaded += listModelLoaded;
 
-			searcher.Loaded += searcherLoaded;
-
 			if (searcher.IsLoaded)
-				_searchSubsystem.Apply();
+				searcherLoaded();
+			else
+				searcher.Loaded += searcherLoaded;
 
 			updateSortLabel();
 		}
 
-		private void indexLoaded() =>
-			runRefreshSearchResultTask(onComplete: null);
+		private static Cursor createTextSelectionCursor()
+		{
+			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
+			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
+			var textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
+			return textSelectionCursor;
+		}
 
-		private void searcherLoaded() =>
+		private void searcherLoaded()
+		{
+			runRefreshSearchResultTask(onComplete: null);
 			_tooltipOwner.Invoke(_searchSubsystem.Apply);
+		}
 
 		private void searchTextApplied() =>
 			runRefreshSearchResultTask(onComplete: null);

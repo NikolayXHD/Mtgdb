@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using JetBrains.Annotations;
+using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -21,12 +23,12 @@ namespace Mtgdb.Controls
 			Click += click;
 
 			RegisterDragControl(this);
-			RegisterDragControl(_panelHeader);
+			RegisterDragControl(_panelCaption);
 
 			Resize += resize;
 			Layout += layout;
-			GotFocus += focusChanged;
-			LostFocus += focusChanged;
+			Activated += focusChanged;
+			Deactivate += focusChanged;
 
 			SizeBeforeMaximized = Size;
 
@@ -45,6 +47,9 @@ namespace Mtgdb.Controls
 			CaptionHeight = 31.ByDpiHeight();
 			Border = new Size(6, 6).ByDpi();
 			ControlBoxButtonSize = new Size(31, 17).ByDpi();
+
+			applySystemColors();
+			SystemColorsChanged += (s, e) => applySystemColors();
 		}
 
 		protected override bool FixShadowTransparency => true;
@@ -85,22 +90,230 @@ namespace Mtgdb.Controls
 			}
 
 			_panelClient.Bounds = client;
-			_panelHeader.Bounds = Rectangle.FromLTRB(client.Left, headerTop, controlBoxRect.Left, client.Top);
+			_panelCaption.Bounds = Rectangle.FromLTRB(client.Left, headerTop, controlBoxRect.Left, client.Top);
 		}
 
-		private void paint(object sender, PaintEventArgs e)
+		private void paint(object sender, PaintEventArgs e) =>
+			PaintSelf(e.Graphics, e.ClipRectangle);
+
+		public void PaintSelf(Graphics g, Rectangle clipRectangle)
 		{
 			var title = getTitleRectangle();
 			var controlBox = getControlBoxRectangle();
 
-			paintTitle(e.Graphics, e.ClipRectangle, controlBox, title);
-			paintBorders(e.Graphics, e.ClipRectangle, controlBox);
-			drawBorderInterior(e.Graphics, title);
+			paintCaption(g, clipRectangle, title);
+			paintControlBox(g, clipRectangle, controlBox);
+			paintBorders(g, clipRectangle);
+			paintBorderInterior(g, title);
 		}
 
-		private void drawBorderInterior(Graphics g, Rectangle titleRect)
+		private void paintCaption(Graphics g, Rectangle clipRectangle, Rectangle titleRect)
 		{
-			var pen = new Pen(BorderInteriorColor);
+			if (!clipRectangle.IntersectsWith(titleRect))
+				return;
+
+			var renderer = getCaptionRenderer();
+			if (renderer != null)
+				renderer.DrawBackground(g, titleRect, clipRectangle);
+			else
+				g.FillRectangle(getCaptionBrush(titleRect), titleRect);
+
+			VisualStyleRenderer getCaptionRenderer()
+			{
+				if (!_isVisualStyleSupported)
+					return null;
+
+				var element = getCaptionElement();
+				if (!VisualStyleRenderer.IsElementDefined(element))
+					return null;
+
+				return new VisualStyleRenderer(element);
+
+				VisualStyleElement getCaptionElement()
+				{
+					if (ContainsFocus)
+						switch (IsMaximized)
+						{
+							case true: return VisualStyleElement.Window.MaxCaption.Active;
+							default: return VisualStyleElement.Window.Caption.Active;
+						}
+
+					switch (IsMaximized)
+					{
+						case true: return VisualStyleElement.Window.MaxCaption.Inactive;
+						default: return VisualStyleElement.Window.Caption.Inactive;
+					}
+				}
+			}
+		}
+
+		private Brush getCaptionBrush(Rectangle titleRect)
+		{
+			if (ContainsFocus)
+				return new LinearGradientBrush(titleRect, SystemColors.ActiveCaption, SystemColors.GradientActiveCaption, LinearGradientMode.Horizontal);
+
+			return new LinearGradientBrush(titleRect, SystemColors.InactiveCaption, SystemColors.GradientInactiveCaption, LinearGradientMode.Horizontal);
+		}
+
+		private void paintControlBox(Graphics g, Rectangle clipRectangle, Rectangle controlBoxRect)
+		{
+			if (!clipRectangle.IntersectsWith(controlBoxRect))
+				return;
+
+			var clientLocation = PointToClient(Cursor.Position);
+			var images = getControlBoxImages(clientLocation);
+
+			for (int i = images.Count - 1; i >= 0; i--)
+			{
+				var img = images[i];
+				if (img.Bounds == default)
+					continue;
+
+				var renderer = getCaptionButtonRenderer(i, img);
+				if (renderer != null)
+					renderer.DrawBackground(g, img.Bounds);
+				else
+				{
+					if (img.IsHovered)
+						g.FillRectangle(getCaptionButtonBrush(i), img.Bounds);
+
+					var bmp = _captionButtonImages[i];
+					var centered = bmp.Size.FitIn(img.Bounds).CenterIn(img.Bounds);
+					g.DrawImage(bmp, centered);
+				}
+			}
+
+			Brush getCaptionButtonBrush(int i)
+			{
+				if (ContainsFocus)
+					switch (i)
+					{
+						case CaptionButtonCloseIndex : return SystemBrushes.ActiveCaption;
+						default: return SystemBrushes.GradientActiveCaption;
+					}
+
+				switch (i)
+				{
+					case CaptionButtonCloseIndex : return SystemBrushes.InactiveCaption;
+					default: return SystemBrushes.GradientInactiveCaption;
+				}
+			}
+
+			VisualStyleRenderer getCaptionButtonRenderer(int i, (bool IsHovered, Rectangle Bounds) img)
+			{
+				if (!_isVisualStyleSupported)
+					return null;
+
+				var element = getCaptionButtonElement();
+				if (!VisualStyleRenderer.IsElementDefined(element))
+					return null;
+
+				return new VisualStyleRenderer(element);
+
+				VisualStyleElement getCaptionButtonElement()
+				{
+					if (img.IsHovered)
+						switch (i)
+						{
+							case CaptionButtonCloseIndex: return VisualStyleElement.Window.CloseButton.Hot;
+							case CaptionButtonRestoreIndex: return VisualStyleElement.Window.RestoreButton.Hot;
+							case CaptionButtonMaximizeIndex: return VisualStyleElement.Window.MaxButton.Hot;
+							case CaptionButtonMinimizeIndex: return VisualStyleElement.Window.MinButton.Hot;
+						}
+
+					switch (i)
+					{
+						case CaptionButtonCloseIndex: return VisualStyleElement.Window.CloseButton.Normal;
+						case CaptionButtonRestoreIndex: return VisualStyleElement.Window.RestoreButton.Normal;
+						case CaptionButtonMaximizeIndex: return VisualStyleElement.Window.MaxButton.Normal;
+						case CaptionButtonMinimizeIndex: return VisualStyleElement.Window.MinButton.Normal;
+					}
+
+					throw new ArgumentException();
+				}
+			}
+		}
+
+		private void paintBorders(Graphics g, Rectangle clipRectangle)
+		{
+			foreach (Direction direction in getBorderDirections())
+			{
+				if (IsMaximized && (direction & Direction.Top) == 0)
+					// there is always the top border, it doesn't always function as size changed though
+					// therefore we always paint the top border
+					continue;
+
+				var borderRenderer = getBorderRenderer(direction);
+
+				var areas = getBorders(direction);
+				foreach (var border in areas)
+				{
+					if (!clipRectangle.IntersectsWith(border))
+						continue;
+
+					if (borderRenderer != null)
+						borderRenderer.DrawBackground(g, border);
+					else
+						g.FillRectangle(getBorderBrush(direction, border), border);
+				}
+			}
+
+			VisualStyleRenderer getBorderRenderer(Direction d)
+			{
+				if (!_isVisualStyleSupported)
+					return null;
+
+				var element = getBorderElement();
+				if (!VisualStyleRenderer.IsElementDefined(element))
+					return null;
+
+				return new VisualStyleRenderer(element);
+
+				VisualStyleElement getBorderElement()
+				{
+					if (ContainsFocus)
+						switch (d)
+						{
+							case Direction.Left: return VisualStyleElement.Window.FrameLeft.Active;
+							case Direction.Right: return VisualStyleElement.Window.FrameRight.Active;
+							case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Active;
+						}
+
+					switch (d)
+					{
+						case Direction.Left: return VisualStyleElement.Window.FrameLeft.Inactive;
+						case Direction.Right: return VisualStyleElement.Window.FrameRight.Inactive;
+						case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Inactive;
+					}
+
+					throw new ArgumentException();
+				}
+			}
+
+			Brush getBorderBrush(Direction d, Rectangle rect)
+			{
+				if (ContainsFocus)
+					switch (d)
+					{
+						case Direction.Left: return SystemBrushes.ActiveCaption;
+						case Direction.Right: return SystemBrushes.GradientActiveCaption;
+						case Direction.Bottom: return getCaptionBrush(rect);
+					}
+
+				switch (d)
+				{
+					case Direction.Left: return SystemBrushes.InactiveCaption;
+					case Direction.Right: return SystemBrushes.GradientInactiveCaption;
+					case Direction.Bottom: return getCaptionBrush(rect);
+				}
+
+				throw new ArgumentException();
+			}
+		}
+
+		private void paintBorderInterior(Graphics g, Rectangle titleRect)
+		{
+			var pen = new Pen(_panelCaption.BorderColor);
 
 			int left = Border.Width - 1;
 			int top = titleRect.Height - 1;
@@ -128,116 +341,6 @@ namespace Mtgdb.Controls
 				g.DrawLine(pen, points[1], points[2]);
 				g.DrawLine(pen, points[2], points[3]);
 				g.DrawLine(pen, points[3], points[0]);
-			}
-		}
-
-		private void paintBorders(Graphics g, Rectangle clipRectangle, Rectangle controlBox)
-		{
-			foreach (Direction direction in getBorderDirections())
-			{
-				if (IsMaximized && (direction & Direction.Top) == 0)
-					// there is always the top border, it doesn't always function as size changed though
-					// therefore we always paint the top border
-					continue;
-
-				var borderElement = getBorderElement(direction);
-				if (borderElement == null)
-					continue;
-
-				var areas = getBorders(direction);
-				
-				foreach (var border in areas)
-				{
-					if (!clipRectangle.IntersectsWith(border))
-						continue;
-
-					new VisualStyleRenderer(borderElement).DrawBackground(g, border);
-				}
-			}
-
-			VisualStyleElement getBorderElement(Direction d)
-			{
-				if (Focused)
-					switch (d)
-					{
-						case Direction.Left: return VisualStyleElement.Window.FrameLeft.Active;
-						case Direction.Right: return VisualStyleElement.Window.FrameRight.Active;
-						case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Active;
-						case Direction.BottomLeft: return VisualStyleElement.Window.FrameLeftSizingTemplate.Normal;
-						default: return null;
-					}
-
-				switch (d)
-				{
-					case Direction.Left: return VisualStyleElement.Window.FrameLeft.Inactive;
-					case Direction.Right: return VisualStyleElement.Window.FrameRight.Inactive;
-					case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Inactive;
-					default: return null;
-				}
-			}
-		}
-
-		private void paintTitle(Graphics g, Rectangle clipRectangle, Rectangle controlBox, Rectangle titleRectangle)
-		{
-			if (clipRectangle.IntersectsWith(titleRectangle))
-			{
-				var element = getCaptionElement();
-				var rect = titleRectangle;
-				new VisualStyleRenderer(element).DrawBackground(g, rect, clipRectangle);
-			}
-
-			if (clipRectangle.IntersectsWith(controlBox))
-			{
-				var clientLocation = PointToClient(Cursor.Position);
-				var images = getControlBoxImages(clientLocation);
-
-				for (int i = images.Count - 1; i >= 0; i--)
-				{
-					var img = images[i];
-					if (img.Bounds == default)
-						continue;
-
-					var element = getControlBoxElement(i, img);
-					new VisualStyleRenderer(element).DrawBackground(g, img.Bounds);
-				}
-
-				VisualStyleElement getControlBoxElement(int i, (bool IsHovered, Rectangle Bounds) img)
-				{
-					if (img.IsHovered)
-						switch (i)
-						{
-							case ControlBoxIndexClose: return VisualStyleElement.Window.CloseButton.Hot;
-							case ControlBoxIndexRestore: return VisualStyleElement.Window.RestoreButton.Hot;
-							case ControlBoxIndexMaximize: return VisualStyleElement.Window.MaxButton.Hot;
-							case ControlBoxIndexMinimize: return VisualStyleElement.Window.MinButton.Hot;
-							default: throw new ArgumentException();
-						}
-					
-					switch (i)
-					{
-						case ControlBoxIndexClose: return VisualStyleElement.Window.CloseButton.Normal;
-						case ControlBoxIndexRestore: return VisualStyleElement.Window.RestoreButton.Normal;
-						case ControlBoxIndexMaximize: return VisualStyleElement.Window.MaxButton.Normal;
-						case ControlBoxIndexMinimize: return VisualStyleElement.Window.MinButton.Normal;
-						default: throw new ArgumentException();
-					}
-				}
-			}
-
-			VisualStyleElement getCaptionElement()
-			{
-				if (Focused)
-					switch (IsMaximized)
-					{
-						case true: return VisualStyleElement.Window.MaxCaption.Active;
-						default: return VisualStyleElement.Window.Caption.Active;
-					}
-
-				switch (IsMaximized)
-				{
-					case true: return VisualStyleElement.Window.MaxCaption.Inactive;
-					default: return VisualStyleElement.Window.Caption.Inactive;
-				}
 			}
 		}
 
@@ -290,8 +393,6 @@ namespace Mtgdb.Controls
 			void addEmpty() =>
 				result.Add((default, default));
 		}
-
-
 
 		private void mouseDown(object sender, MouseEventArgs e)
 		{
@@ -588,8 +689,11 @@ namespace Mtgdb.Controls
 			invalidateBorders();
 		}
 
-		private void invalidateCaption() =>
+		private void invalidateCaption()
+		{
 			Invalidate(getTitleRectangle());
+			_panelCaption.Invalidate(true);
+		}
 
 		private void invalidateControlBox() =>
 			Invalidate(getControlBoxRectangle());
@@ -598,7 +702,9 @@ namespace Mtgdb.Controls
 		{
 			foreach (Direction direction in getBorderDirections())
 				foreach (var rectangle in getBorders(direction))
+				{
 					Invalidate(rectangle);
+				}
 		}
 
 		private static IEnumerable<Direction> getBorderDirections()
@@ -765,11 +871,11 @@ namespace Mtgdb.Controls
 
 			var images = getControlBoxImages(PointToClient(screenLocation));
 
-			if (images[ControlBoxIndexClose].IsHovered)
+			if (images[CaptionButtonCloseIndex].IsHovered)
 				Close();
-			else if (images[ControlBoxIndexMaximize].IsHovered || images[ControlBoxIndexRestore].IsHovered)
+			else if (images[CaptionButtonMaximizeIndex].IsHovered || images[CaptionButtonRestoreIndex].IsHovered)
 				toggleMaximize();
-			else if (images[ControlBoxIndexMinimize].IsHovered)
+			else if (images[CaptionButtonMinimizeIndex].IsHovered)
 				minimize();
 		}
 
@@ -910,18 +1016,6 @@ namespace Mtgdb.Controls
 		private Size Border { get; }
 		private Size ControlBoxButtonSize { get; }
 
-		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
-		public Color BorderInteriorColor
-		{
-			get => _panelHeader.BorderColor;
-			[UsedImplicitly]
-			set
-			{
-				_panelHeader.BorderColor = value;
-				Invalidate();
-			}
-		}
-
 		[Browsable(false)]
 		private bool IsMaximized
 		{
@@ -935,6 +1029,35 @@ namespace Mtgdb.Controls
 					Invalidate(getControlBoxRectangle());
 				}
 			}
+		}
+
+		private void applySystemColors()
+		{
+			_isVisualStyleSupported = VisualStyleRenderer.IsSupported;
+
+			_captionButtonImages = new[]
+			{
+				Resources.minimize,
+				Resources.maximize,
+				Resources.normalize,
+				Resources.close
+			};
+
+			foreach (var image in _captionButtonImages)
+				new AdaptBrightnessTransformation(image).Execute();
+
+			if (_isVisualStyleSupported)
+			{
+				TransparencyKey = Color.FromArgb(254, 247, 253);
+				BackColor = Color.FromArgb(254, 247, 253);
+			}
+			else
+			{
+				TransparencyKey = Color.Empty;
+				BackColor = SystemColors.Control;
+			}
+
+			_panelCaption.BorderColor = ColorHelper.DistinctSystemBorder;
 		}
 
 		private Size SizeBeforeMaximized { get; set; }
@@ -957,11 +1080,14 @@ namespace Mtgdb.Controls
 			Keys.RWin
 		};
 
-		private const int ControlBoxIndexMinimize = 0;
-		private const int ControlBoxIndexMaximize = 1;
-		private const int ControlBoxIndexRestore = 2;
-		private const int ControlBoxIndexClose = 3;
+		private const int CaptionButtonMinimizeIndex = 0;
+		private const int CaptionButtonMaximizeIndex = 1;
+		private const int CaptionButtonRestoreIndex = 2;
+		private const int CaptionButtonCloseIndex = 3;
+
+		private Bitmap[] _captionButtonImages;
 
 		private bool _dragEnabledUnmaximizeThreshold;
+		private bool _isVisualStyleSupported;
 	}
 }

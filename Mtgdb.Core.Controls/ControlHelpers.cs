@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
@@ -13,7 +14,7 @@ namespace Mtgdb.Controls
 		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, System.Drawing.Point pt)
 		{
 			Point wpt = new Point(pt.X, pt.Y);
-			int index = (int)SendMessage(new HandleRef(rtb, rtb.Handle), EmCharFromPos, 0, wpt);
+			int index = (int) SendMessage(new HandleRef(rtb, rtb.Handle), EmCharFromPos, 0, wpt);
 
 			return index;
 		}
@@ -87,17 +88,15 @@ namespace Mtgdb.Controls
 			dict[key] = value;
 		}
 
-		public static void SetTag<TValue>(this Control control, TValue value)
-		{
+		public static void SetTag<TValue>(this Control control, TValue value) =>
 			SetTag(control, typeof(TValue).FullName, value);
-		}
 
 		public static TValue GetTag<TValue>(this Control control, string key)
 		{
 			if (control.Tag == null)
 				control.Tag = new Dictionary<string, object>();
 
-			var dict = (Dictionary<string, object>)control.Tag;
+			var dict = (Dictionary<string, object>) control.Tag;
 
 			if (!dict.TryGetValue(key, out var result))
 				return default;
@@ -105,10 +104,8 @@ namespace Mtgdb.Controls
 			return (TValue) result;
 		}
 
-		public static TValue GetTag<TValue>(this Control control)
-		{
-			return GetTag<TValue>(control, typeof(TValue).FullName);
-		}
+		public static TValue GetTag<TValue>(this Control control) =>
+			GetTag<TValue>(control, typeof(TValue).FullName);
 
 		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
 		{
@@ -129,25 +126,23 @@ namespace Mtgdb.Controls
 				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
 		}
 
-		public static void PaintPanelBack(this Control c, Graphics graphics, Rectangle clipRect, bool paintBack)
+		public static void PaintPanelBack(this Control c, Graphics g, Rectangle clipRect, bool paintBack)
 		{
 			if (!paintBack || c.BackColor.A < byte.MaxValue)
-				ButtonRenderer.DrawParentBackground(graphics, clipRect, c);
+				ButtonRenderer.DrawParentBackground(g, clipRect, c);
 
-			if (!paintBack)
+			if (!paintBack && VisualStyleRenderer.IsSupported)
 				return;
 
 			if (c.BackColor != Color.Empty && c.BackColor != Color.Transparent)
-				graphics.Clear(c.BackColor);
+				g.FillRectangle(new SolidBrush(c.BackColor), c.ClientRectangle);
 
 			if (c.BackgroundImage != null)
-				graphics.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
+				g.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
 		}
 
-		public static bool IsUnderMouse(this Control c)
-		{
-			return c.Handle.Equals(WindowFromPoint(Cursor.Position));
-		}
+		public static bool IsUnderMouse(this Control c) =>
+			c.Handle.Equals(WindowFromPoint(Cursor.Position));
 
 		public static bool IsChildUnderMouse(this Control c)
 		{
@@ -176,6 +171,7 @@ namespace Mtgdb.Controls
 		{
 			[UsedImplicitly]
 			public int x;
+
 			[UsedImplicitly]
 			public int y;
 

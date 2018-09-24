@@ -241,9 +241,7 @@ namespace Mtgdb.Gui
 			_viewCards.AllowPartialCards =
 				_viewDeck.AllowPartialCards =
 					_deckListControl.AllowPartialCard =
-				!_buttonShowPartialCards.Checked;
-
-
+						_buttonShowPartialCards.Checked;
 
 			_viewCards.RefreshData();
 			_viewDeck.RefreshData();

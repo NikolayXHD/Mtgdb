@@ -59,7 +59,7 @@ namespace Mtgdb.Downloader
 			// 
 			// _panelHeader
 			// 
-			this._panelHeader.Size = new System.Drawing.Size(730, 18);
+			this._panelCaption.Size = new System.Drawing.Size(730, 18);
 			// 
 			// _buttonApp
 			// 

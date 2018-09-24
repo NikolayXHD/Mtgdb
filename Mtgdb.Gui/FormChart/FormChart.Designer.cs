@@ -71,7 +71,7 @@
 			this._buttonCollectionColors = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDeckColors = new Mtgdb.Controls.CustomCheckBox();
 			this._panelClient.SuspendLayout();
-			this._panelHeader.SuspendLayout();
+			this._panelCaption.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._chart)).BeginInit();
 			this._panelFields.SuspendLayout();
 			this._panelMenu.SuspendLayout();
@@ -79,21 +79,21 @@
 			this._panelFlags.SuspendLayout();
 			this._layoutTitle.SuspendLayout();
 			this.SuspendLayout();
-			// 
+			//
 			// _panelClient
-			// 
+			//
 			this._panelClient.Controls.Add(this._panelTable);
 			this._panelClient.Location = new System.Drawing.Point(4, 57);
 			this._panelClient.Size = new System.Drawing.Size(1213, 677);
-			// 
+			//
 			// _panelHeader
-			// 
-			this._panelHeader.Controls.Add(this._layoutTitle);
-			this._panelHeader.Padding = new System.Windows.Forms.Padding(1);
-			this._panelHeader.Size = new System.Drawing.Size(1112, 53);
-			// 
+			//
+			this._panelCaption.Controls.Add(this._layoutTitle);
+			this._panelCaption.Padding = new System.Windows.Forms.Padding(1);
+			this._panelCaption.Size = new System.Drawing.Size(1112, 53);
+			//
 			// _chart
-			// 
+			//
 			this._chart.Dock = System.Windows.Forms.DockStyle.Fill;
 			legend1.Name = "Legend1";
 			this._chart.Legends.Add(legend1);
@@ -102,9 +102,9 @@
 			this._chart.Name = "_chart";
 			this._chart.Size = new System.Drawing.Size(1213, 557);
 			this._chart.TabIndex = 0;
-			// 
+			//
 			// _buttonManaCurveType
-			// 
+			//
 			this._buttonManaCurveType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonManaCurveType.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonManaCurveType.BackColor = System.Drawing.Color.Transparent;
@@ -124,9 +124,9 @@
 			this._buttonManaCurveType.Text = "Deck\r\nmana curve\r\n/ type";
 			this._buttonManaCurveType.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonManaCurveType.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonDeckPrice
-			// 
+			//
 			this._buttonDeckPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonDeckPrice.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonDeckPrice.BackColor = System.Drawing.Color.Transparent;
@@ -146,9 +146,9 @@
 			this._buttonDeckPrice.Text = "Deck\r\nprice";
 			this._buttonDeckPrice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDeckPrice.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _tabCols
-			// 
+			//
 			this._tabCols.AddButtonWidth = 24;
 			this._tabCols.AllowAddingTabs = false;
 			this._tabCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -161,9 +161,9 @@
 			this._tabCols.SlopeSize = new System.Drawing.Size(4, 24);
 			this._tabCols.TabIndex = 1;
 			this._tabCols.TextPadding = 4;
-			// 
+			//
 			// _buttonApply
-			// 
+			//
 			this._buttonApply.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonApply.Location = new System.Drawing.Point(604, 0);
@@ -173,9 +173,9 @@
 			this._buttonApply.TabIndex = 28;
 			this._buttonApply.Text = "Build!";
 			this._buttonApply.UseVisualStyleBackColor = false;
-			// 
+			//
 			// _menuFields
-			// 
+			//
 			this._menuFields.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuFields.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuFields.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -187,9 +187,9 @@
 			this._menuFields.Size = new System.Drawing.Size(132, 21);
 			this._menuFields.TabIndex = 40;
 			this._menuFields.TabStop = false;
-			// 
+			//
 			// _buttonAddCol
-			// 
+			//
 			this._buttonAddCol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -198,9 +198,9 @@
 			this._buttonAddCol.TabIndex = 41;
 			this._buttonAddCol.Text = "+ argument";
 			this._buttonAddCol.UseVisualStyleBackColor = false;
-			// 
+			//
 			// _panelFields
-			// 
+			//
 			this._panelFields.AutoSize = true;
 			this._panelFields.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._panelFields.Controls.Add(this._labelCols);
@@ -216,9 +216,9 @@
 			this._panelFields.Name = "_panelFields";
 			this._panelFields.Size = new System.Drawing.Size(310, 24);
 			this._panelFields.TabIndex = 42;
-			// 
+			//
 			// _labelCols
-			// 
+			//
 			this._labelCols.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelCols.AutoSize = true;
 			this._labelCols.Location = new System.Drawing.Point(4, 5);
@@ -227,9 +227,9 @@
 			this._labelCols.Size = new System.Drawing.Size(60, 13);
 			this._labelCols.TabIndex = 2;
 			this._labelCols.Text = "Arguments:";
-			// 
+			//
 			// _labelRows
-			// 
+			//
 			this._labelRows.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelRows.AutoSize = true;
 			this._labelRows.Location = new System.Drawing.Point(76, 5);
@@ -238,9 +238,9 @@
 			this._labelRows.Size = new System.Drawing.Size(39, 13);
 			this._labelRows.TabIndex = 0;
 			this._labelRows.Text = "Series:";
-			// 
+			//
 			// _tabRows
-			// 
+			//
 			this._tabRows.AddButtonWidth = 24;
 			this._tabRows.AllowAddingTabs = false;
 			this._tabRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -253,9 +253,9 @@
 			this._tabRows.SlopeSize = new System.Drawing.Size(4, 24);
 			this._tabRows.TabIndex = 3;
 			this._tabRows.TextPadding = 4;
-			// 
+			//
 			// _labelSum
-			// 
+			//
 			this._labelSum.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelSum.AutoSize = true;
 			this._labelSum.Location = new System.Drawing.Point(127, 5);
@@ -264,9 +264,9 @@
 			this._labelSum.Size = new System.Drawing.Size(64, 13);
 			this._labelSum.TabIndex = 4;
 			this._labelSum.Text = "Aggregates:";
-			// 
+			//
 			// _tabSumm
-			// 
+			//
 			this._tabSumm.AddButtonWidth = 24;
 			this._tabSumm.AllowAddingTabs = false;
 			this._tabSumm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -279,9 +279,9 @@
 			this._tabSumm.SlopeSize = new System.Drawing.Size(4, 24);
 			this._tabSumm.TabIndex = 5;
 			this._tabSumm.TextPadding = 4;
-			// 
+			//
 			// _labelSummarySort
-			// 
+			//
 			this._labelSummarySort.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelSummarySort.AutoSize = true;
 			this._labelSummarySort.Location = new System.Drawing.Point(203, 5);
@@ -290,9 +290,9 @@
 			this._labelSummarySort.Size = new System.Drawing.Size(99, 13);
 			this._labelSummarySort.TabIndex = 6;
 			this._labelSummarySort.Text = "Sort by aggregates:";
-			// 
+			//
 			// _tabSummSort
-			// 
+			//
 			this._tabSummSort.AddButtonWidth = 24;
 			this._tabSummSort.AllowAddingTabs = false;
 			this._tabSummSort.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
@@ -304,9 +304,9 @@
 			this._tabSummSort.SlopeSize = new System.Drawing.Size(4, 24);
 			this._tabSummSort.TabIndex = 7;
 			this._tabSummSort.TextPadding = 4;
-			// 
+			//
 			// _progressBar
-			// 
+			//
 			this._progressBar.Location = new System.Drawing.Point(686, 0);
 			this._progressBar.Margin = new System.Windows.Forms.Padding(32, 0, 0, 0);
 			this._progressBar.Maximum = 10;
@@ -315,9 +315,9 @@
 			this._progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this._progressBar.TabIndex = 55;
 			this._progressBar.Visible = false;
-			// 
+			//
 			// _buttonArgumentTotals
-			// 
+			//
 			this._buttonArgumentTotals.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonArgumentTotals.AutoSize = true;
 			this._buttonArgumentTotals.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
@@ -329,9 +329,9 @@
 			this._buttonArgumentTotals.TabIndex = 56;
 			this._buttonArgumentTotals.Text = "Show argument total";
 			this._buttonArgumentTotals.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonSeriesTotal
-			// 
+			//
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSeriesTotal.AutoSize = true;
 			this._buttonSeriesTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
@@ -343,9 +343,9 @@
 			this._buttonSeriesTotal.TabIndex = 57;
 			this._buttonSeriesTotal.Text = "Show series total";
 			this._buttonSeriesTotal.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonExplainTotal
-			// 
+			//
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonExplainTotal.AutoSize = true;
 			this._buttonExplainTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
@@ -357,9 +357,9 @@
 			this._buttonExplainTotal.TabIndex = 58;
 			this._buttonExplainTotal.Text = "Explain total";
 			this._buttonExplainTotal.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonApplyFilter
-			// 
+			//
 			this._buttonApplyFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonApplyFilter.AutoSize = true;
 			this._buttonApplyFilter.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
@@ -371,9 +371,9 @@
 			this._buttonApplyFilter.TabIndex = 59;
 			this._buttonApplyFilter.Text = "Filter by search result";
 			this._buttonApplyFilter.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonAddRow
-			// 
+			//
 			this._buttonAddRow.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddRow.Location = new System.Drawing.Point(293, 0);
@@ -383,9 +383,9 @@
 			this._buttonAddRow.TabIndex = 42;
 			this._buttonAddRow.Text = "+ series";
 			this._buttonAddRow.UseVisualStyleBackColor = false;
-			// 
+			//
 			// _buttonAddSum
-			// 
+			//
 			this._buttonAddSum.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddSum.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddSum.Location = new System.Drawing.Point(369, 0);
@@ -395,10 +395,10 @@
 			this._buttonAddSum.TabIndex = 43;
 			this._buttonAddSum.Text = "+ aggregate";
 			this._buttonAddSum.UseVisualStyleBackColor = false;
-			// 
+			//
 			// _panelMenu
-			// 
-			this._panelMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._panelMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelMenu.AutoSize = true;
 			this._panelMenu.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -418,9 +418,9 @@
 			this._panelMenu.Name = "_panelMenu";
 			this._panelMenu.Size = new System.Drawing.Size(1213, 24);
 			this._panelMenu.TabIndex = 43;
-			// 
+			//
 			// _labelField
-			// 
+			//
 			this._labelField.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelField.AutoSize = true;
 			this._labelField.Location = new System.Drawing.Point(8, 5);
@@ -429,9 +429,9 @@
 			this._labelField.Size = new System.Drawing.Size(37, 13);
 			this._labelField.TabIndex = 50;
 			this._labelField.Text = "Fields:";
-			// 
+			//
 			// _labelDataElement
-			// 
+			//
 			this._labelDataElement.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDataElement.AutoSize = true;
 			this._labelDataElement.Location = new System.Drawing.Point(497, 5);
@@ -440,9 +440,9 @@
 			this._labelDataElement.Size = new System.Drawing.Size(58, 13);
 			this._labelDataElement.TabIndex = 46;
 			this._labelDataElement.Text = "Data label:";
-			// 
+			//
 			// _menuLabelDataElement
-			// 
+			//
 			this._menuLabelDataElement.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuLabelDataElement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuLabelDataElement.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -453,9 +453,9 @@
 			this._menuLabelDataElement.Size = new System.Drawing.Size(132, 21);
 			this._menuLabelDataElement.TabIndex = 47;
 			this._menuLabelDataElement.TabStop = false;
-			// 
+			//
 			// _labelDataSource
-			// 
+			//
 			this._labelDataSource.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDataSource.AutoSize = true;
 			this._labelDataSource.Location = new System.Drawing.Point(707, 5);
@@ -464,9 +464,9 @@
 			this._labelDataSource.Size = new System.Drawing.Size(44, 13);
 			this._labelDataSource.TabIndex = 45;
 			this._labelDataSource.Text = "Source:";
-			// 
+			//
 			// _menuDataSource
-			// 
+			//
 			this._menuDataSource.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuDataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuDataSource.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -477,9 +477,9 @@
 			this._menuDataSource.Size = new System.Drawing.Size(132, 21);
 			this._menuDataSource.TabIndex = 44;
 			this._menuDataSource.TabStop = false;
-			// 
+			//
 			// _labelChartType
-			// 
+			//
 			this._labelChartType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelChartType.AutoSize = true;
 			this._labelChartType.Location = new System.Drawing.Point(903, 5);
@@ -488,9 +488,9 @@
 			this._labelChartType.Size = new System.Drawing.Size(58, 13);
 			this._labelChartType.TabIndex = 48;
 			this._labelChartType.Text = "Chart type:";
-			// 
+			//
 			// _menuChartType
-			// 
+			//
 			this._menuChartType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuChartType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuChartType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -502,9 +502,9 @@
 			this._menuChartType.Size = new System.Drawing.Size(132, 21);
 			this._menuChartType.TabIndex = 49;
 			this._menuChartType.TabStop = false;
-			// 
+			//
 			// _panelTable
-			// 
+			//
 			this._panelTable.BackColor = System.Drawing.SystemColors.Control;
 			this._panelTable.ColumnCount = 1;
 			this._panelTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -523,9 +523,9 @@
 			this._panelTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelTable.Size = new System.Drawing.Size(1213, 677);
 			this._panelTable.TabIndex = 44;
-			// 
+			//
 			// _panelFlags
-			// 
+			//
 			this._panelFlags.AutoSize = true;
 			this._panelFlags.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._panelFlags.Controls.Add(this._buttonArgumentTotals);
@@ -539,9 +539,9 @@
 			this._panelFlags.Name = "_panelFlags";
 			this._panelFlags.Size = new System.Drawing.Size(986, 24);
 			this._panelFlags.TabIndex = 44;
-			// 
+			//
 			// _menuPrice
-			// 
+			//
 			this._menuPrice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPrice.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuPrice.IntegralHeight = false;
@@ -551,21 +551,21 @@
 			this._menuPrice.Size = new System.Drawing.Size(96, 21);
 			this._menuPrice.TabIndex = 51;
 			this._menuPrice.TabStop = false;
-			// 
+			//
 			// _menuPriceChartType
-			// 
+			//
 			this._menuPriceChartType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPriceChartType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuPriceChartType.IntegralHeight = false;
-			this._menuPriceChartType.Location = new System.Drawing.Point(4, 29);
-			this._menuPriceChartType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+			this._menuPriceChartType.Location = new System.Drawing.Point(4, 27);
+			this._menuPriceChartType.Margin = new System.Windows.Forms.Padding(4, 2, 4, 0);
 			this._menuPriceChartType.Name = "_menuPriceChartType";
 			this._menuPriceChartType.Size = new System.Drawing.Size(96, 21);
 			this._menuPriceChartType.TabIndex = 52;
 			this._menuPriceChartType.TabStop = false;
-			// 
+			//
 			// _buttonArtistsPerYear
-			// 
+			//
 			this._buttonArtistsPerYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonArtistsPerYear.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonArtistsPerYear.BackColor = System.Drawing.Color.Transparent;
@@ -585,9 +585,9 @@
 			this._buttonArtistsPerYear.Text = "Customization example: Artists per year";
 			this._buttonArtistsPerYear.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonArtistsPerYear.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonCollectionPrice
-			// 
+			//
 			this._buttonCollectionPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonCollectionPrice.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonCollectionPrice.BackColor = System.Drawing.Color.Transparent;
@@ -607,9 +607,9 @@
 			this._buttonCollectionPrice.Text = "Collection\r\nprice";
 			this._buttonCollectionPrice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonCollectionPrice.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _layoutTitle
-			// 
+			//
 			this._layoutTitle.AutoSize = true;
 			this._layoutTitle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._layoutTitle.BackColor = System.Drawing.SystemColors.Control;
@@ -641,9 +641,9 @@
 			this._layoutTitle.Size = new System.Drawing.Size(814, 50);
 			this._layoutTitle.TabIndex = 56;
 			this._layoutTitle.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
+			//
 			// _buttonManaCurveManacost
-			// 
+			//
 			this._buttonManaCurveManacost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonManaCurveManacost.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonManaCurveManacost.BackColor = System.Drawing.Color.Transparent;
@@ -663,9 +663,9 @@
 			this._buttonManaCurveManacost.Text = "Deck\r\nmana curve\r\n/ color";
 			this._buttonManaCurveManacost.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonManaCurveManacost.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonCollectionColors
-			// 
+			//
 			this._buttonCollectionColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonCollectionColors.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonCollectionColors.BackColor = System.Drawing.Color.Transparent;
@@ -685,9 +685,9 @@
 			this._buttonCollectionColors.Text = "Collection\r\ncolor\r\n/ type";
 			this._buttonCollectionColors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonCollectionColors.UseVisualStyleBackColor = true;
-			// 
+			//
 			// _buttonDeckColors
-			// 
+			//
 			this._buttonDeckColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonDeckColors.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonDeckColors.BackColor = System.Drawing.Color.Transparent;
@@ -707,9 +707,9 @@
 			this._buttonDeckColors.Text = "Deck\r\ncolor\r\n/ type";
 			this._buttonDeckColors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDeckColors.UseVisualStyleBackColor = true;
-			// 
+			//
 			// FormChart
-			// 
+			//
 			this.CaptionHeight = 57;
 			this.ClientSize = new System.Drawing.Size(1221, 738);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -718,8 +718,8 @@
 			this.Name = "FormChart";
 			this.Text = "Deck statistics";
 			this._panelClient.ResumeLayout(false);
-			this._panelHeader.ResumeLayout(false);
-			this._panelHeader.PerformLayout();
+			this._panelCaption.ResumeLayout(false);
+			this._panelCaption.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this._chart)).EndInit();
 			this._panelFields.ResumeLayout(false);
 			this._panelFields.PerformLayout();
