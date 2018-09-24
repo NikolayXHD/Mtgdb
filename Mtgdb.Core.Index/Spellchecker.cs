@@ -153,7 +153,7 @@ namespace Mtgdb.Index
 			for (int n = 1; n <= max; n++)
 			{
 				int right = word.Length - n;
-				int step = (int) Math.Ceiling(0.5f * n).WithinRange(1, null);
+				int step = (int) Math.Ceiling(0.5f * n).AtLeast(1);
 
 				string key;
 				for (int i = 0; i < right; i+= step)

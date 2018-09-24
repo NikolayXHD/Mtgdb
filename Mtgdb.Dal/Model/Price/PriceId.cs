@@ -4,13 +4,10 @@ namespace Mtgdb.Dal
 {
 	public class PriceId
 	{
-		[JsonProperty("s")]
-		public string Set { get; set; }
+		[JsonProperty("m")]
+		public int MultiverseId { get; set; }
 
-		[JsonProperty("c")]
-		public string Card { get; set; }
-
-		[JsonProperty("id")]
+		[JsonProperty("t")]
 		public string Sid { get; set; }
 	}
 }

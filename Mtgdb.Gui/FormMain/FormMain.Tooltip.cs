@@ -38,8 +38,8 @@ namespace Mtgdb.Gui
 				_labelStatusFilterButtons);
 
 			controller.SetTooltip(this,
-				"Search string mode",
-				"Search string is a wide text input in top panel.\r\n" +
+				"Search bar mode",
+				"Search bar is a wide text input in top panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n" +
 				"To select between modes use Filter manager - the rightmost " +
 				"buttons group in top panel.",
@@ -120,8 +120,8 @@ namespace Mtgdb.Gui
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +
-					"F1 to learn search string syntax\r\n\r\n" +
-					"Ctrl+F to focus search input",
+					"F1 to learn search bar query syntax\r\n\r\n" +
+					"Ctrl+F to focus search bar",
 				_panelSearch,
 				_searchEditor,
 				_panelIconSearch);
@@ -171,12 +171,12 @@ namespace Mtgdb.Gui
 			controller.SetTooltip(this,
 				null,
 				hideScrollText,
-				_buttonHideScrollCards);
+				_buttonShowScrollCards);
 
 			controller.SetTooltip(this,
 				null,
 				hideScrollText,
-				_buttonHideScrollDeck);
+				_buttonShowScrollDeck);
 
 			controller.SetTooltip(this,
 				null,
@@ -194,12 +194,12 @@ namespace Mtgdb.Gui
 				"space at window borders.\r\n\r\n" +
 				"Enable partial cards to display more cards.\r\n" +
 				"Disable partial cards to completely display card image and text whenever possible.",
-				_buttonHidePartialCards);
+				_buttonShowPartialCards);
 
 			controller.SetTooltip(this,
 				null,
 				"Card text visibility",
-				_buttonHideText);
+				_buttonShowText);
 
 			controller.SetCustomTooltip(_tooltipViewCards);
 			controller.SetCustomTooltip(_tooltipViewDeck);
@@ -262,7 +262,7 @@ namespace Mtgdb.Gui
 				"  + mode: REQUIRE ANY checked value\r\n\r\n" +
 				"N/A means the card has NONE of the symbols from this filter.");
 
-			setFilterButtonTooltip(controller, FilterGeneratedMana, 
+			setFilterButtonTooltip(controller, FilterGeneratedMana,
 				"Filter by Generated Mana", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value");
@@ -299,7 +299,7 @@ namespace Mtgdb.Gui
 					"become checked or unchecked automatically.\r\n\r\n" +
 					"Right-click the button to avoid auto checking / unchecking other buttons.";
 			}
-			
+
 			controller.SetTooltip(this,
 				name,
 				description,

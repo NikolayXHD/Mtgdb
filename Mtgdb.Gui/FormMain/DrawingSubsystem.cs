@@ -39,9 +39,9 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(iconRecognizer);
-			
+
 			_highlightSubsystem = new SearchResultHighlighter(
-				cardSearchSubsystem, 
+				cardSearchSubsystem,
 				adapter,
 				new KeywordHighlighter());
 		}
@@ -73,22 +73,20 @@ namespace Mtgdb.Gui
 			}
 
 			if (card == _deckEditorModel.TouchedCard)
-				drawSelection(e, Color.LightSkyBlue, Color.LightCyan, 236);
+				drawSelection(e, SystemColors.MenuHighlight, SystemColors.MenuHighlight, 255 - 48);
 			else
 			{
 				int deckCount = card.DeckCount(Ui);
 				int collectionCount = card.CollectionCount(Ui);
 
 				if (deckCount == 0 && collectionCount > 0)
-					drawSelection(e, Color.Lavender, Color.White, 96);
+					drawSelection(e, SystemColors.Control, SystemColors.Window, 127 - 32);
 				else if (deckCount > 0)
-					drawSelection(e, Color.Lavender, Color.White, 236);
+					drawSelection(e, SystemColors.Control, SystemColors.Window, 255 - 32);
 			}
 
 			drawLegalityWarning(e, sender, card);
-
 			drawCountWarning(e, card);
-
 			drawCount(sender, e, card);
 		}
 
@@ -110,8 +108,12 @@ namespace Mtgdb.Gui
 
 			var lineSize = e.Graphics.MeasureText(legalityWarning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
-			
-			e.Graphics.DrawText(legalityWarning, font, rect, Color.FromArgb(224, Color.OrangeRed));
+
+			e.Graphics.DrawText(legalityWarning, font, rect,
+				Color.FromArgb(255 - 16,
+					SystemColors.Highlight.TransformHsv(
+						h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
+			);
 		}
 
 		private void drawCountWarning(CustomDrawArgs e, Card card)
@@ -132,7 +134,8 @@ namespace Mtgdb.Gui
 			if (totalCount > card.MaxCountInDeck())
 			{
 				maxCount = card.MaxCountInDeck();
-				color = Color.Crimson;
+				color = SystemColors.HotTrack.TransformHsv(
+					h: _ => _ + Color.Blue.RotationTo(Color.Crimson));
 			}
 			else
 			{
@@ -141,7 +144,7 @@ namespace Mtgdb.Gui
 				if (totalCount > collectionCount && collectionCount > 0)
 				{
 					maxCount = collectionCount;
-					color = Color.Blue;
+					color = SystemColors.HotTrack;
 				}
 				else
 					return;
@@ -228,7 +231,11 @@ namespace Mtgdb.Gui
 			targetRect.Inflate(1, 0);
 			targetRect.Offset(2, 0);
 
-			e.Graphics.DrawText(countText, font, targetRect, Color.Black);
+			var color = card == _deckEditorModel.TouchedCard
+				? SystemColors.HighlightText
+				: SystemColors.WindowText;
+
+			e.Graphics.DrawText(countText, font, targetRect, color);
 		}
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)
@@ -356,7 +363,7 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
 		private readonly DraggingSubsystem _draggingSubsystem;
-		
+
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;

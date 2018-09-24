@@ -293,7 +293,7 @@ namespace Mtgdb.Dal
 		public IList<string> TypesArr { get; set; }
 
 		/// <summary>
-		/// The supertypes of the card. These appear to the far left of the card type. Example values: Basic, Legendary, Snow, World, Ongoing 
+		/// The supertypes of the card. These appear to the far left of the card type. Example values: Basic, Legendary, Snow, World, Ongoing
 		/// </summary>
 		[JsonProperty("supertypes")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
@@ -447,18 +447,18 @@ namespace Mtgdb.Dal
 		public IList<string> Printings { get; set; }
 
 		/*
-		
-		
+
+
 		/// <summary>
 		/// This is created reading all card color information and costs. It is the same for double-sided cards (if they have different colors, the identity will have both colors). It also identifies all mana symbols in the card (cost and text). Mostly used on commander decks.
 		/// </summary>
 		public List<string> ColorIdentity { get; set; }
-		
+
 		/// <summary>
 		/// If a card has alternate art (for example, 4 different Forests, or the 2 Brothers Yamazaki) then each other variation's multiverseid will be listed here, NOT including the current card's multiverseid. NOTE: Only present for sets that exist on Gatherer.
 		/// </summary>
 		public List<int> Variations { get; set; }
-		
+
 		/// <summary>
 		/// The watermark on the card. Note: Split cards don't currently have this field set, despite having a watermark on each side of the split card.
 		/// </summary>
@@ -483,7 +483,7 @@ namespace Mtgdb.Dal
 		/// The date this card was released. This is only set for promo cards. The date may not be accurate to an exact day and month, thus only a partial date may be set (YYYY-MM-DD or YYYY-MM or YYYY). Some promo cards do not have a known release date.
 		/// </summary>
 		public string ReleaseDate { get; set; }
-		
+
 		/// <summary>
 		/// Set to true if this card was only released as part of a core box set. These are technically part of the core sets and are tournament legal despite not being available in boosters.
 		/// </summary>
@@ -569,7 +569,7 @@ namespace Mtgdb.Dal
 		private string getLocalizedField(string propertyName, string language, Func<CardLocalization, string, string> getter, Func<Card, string> defaultGetter)
 		{
 			string result =
-				Localization?.Invoke(getter, language) ??
+				Localization?.Invoke1(getter, language) ??
 				findNamesakeTranslation(propertyName, language, getter) ??
 				defaultGetter(this);
 
@@ -588,7 +588,7 @@ namespace Mtgdb.Dal
 					return result;
 
 			result = Namesakes
-				.Select(namesake => namesake.Localization?.Invoke(getter, language))
+				.Select(namesake => namesake.Localization?.Invoke1(getter, language))
 				.FirstOrDefault(transl => transl != null);
 
 			lock (_namesakeTranslations)

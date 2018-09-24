@@ -142,16 +142,18 @@ namespace Mtgdb.Ui
 
 		private Color getBackColor()
 		{
-			Color requiredColor;
-
 			if (SearchResult?.ParseErrorMessage != null)
-				requiredColor = Color.LavenderBlush;
-			else if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
-				requiredColor = Color.FromArgb(0xF0, 0xF0, 0xF0);
-			else
-				requiredColor = _panelSearchIcon.BackColor = Color.White;
+			{
+				var result = SystemColors.Info.TransformHsv(
+					h: _ => _ + Color.BlanchedAlmond.RotationTo(Color.LavenderBlush));
 
-			return requiredColor;
+				return result;
+			}
+
+			if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
+				return SystemColors.ControlLight;
+
+			return  _panelSearchIcon.BackColor = SystemColors.Window;
 		}
 
 
@@ -635,7 +637,8 @@ namespace Mtgdb.Ui
 			if (SearchResult?.ParseErrorMessage == null)
 				_findEditor.ResetForeColor();
 			else
-				_findEditor.ForeColor = Color.DarkRed;
+				_findEditor.ForeColor = SystemColors.HotTrack.TransformHsv(
+					h: _ => _ + Color.Blue.RotationTo(Color.DarkRed));
 		}
 
 		private void updateSearchResult() =>

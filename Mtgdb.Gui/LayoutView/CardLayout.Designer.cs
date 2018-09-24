@@ -48,6 +48,44 @@ namespace Mtgdb.Gui
 
 		private void InitializeComponent()
 		{
+			Mtgdb.Controls.SearchOptions searchOptions19 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions19 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions2 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions4 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions4 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions6 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions6 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions8 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions8 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions12 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions12 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions10 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions10 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions14 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions14 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions16 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions16 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions18 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions18 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions17 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions17 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions15 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions15 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions13 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions13 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions11 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions11 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions9 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions9 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions7 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions7 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions5 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions5 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions3 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions3 = new Mtgdb.Controls.ButtonOptions();
+			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
 			this._fieldImage = new Mtgdb.Controls.FieldControl();
 			this._fieldName = new Mtgdb.Controls.FieldControl();
 			this._fieldManaCost = new Mtgdb.Controls.FieldControl();
@@ -73,216 +111,293 @@ namespace Mtgdb.Gui
 			// 
 			// _fieldImage
 			// 
+			this._fieldImage.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldImage.DataText = "";
 			this._fieldImage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";
 			this._layout.SetRowSpan(this._fieldImage, 8);
+			searchOptions19.Button = buttonOptions19;
+			this._fieldImage.SearchOptions = searchOptions19;
 			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
 			// 
 			// _fieldName
 			// 
+			this._fieldName.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldName, 3);
+			this._fieldName.DataText = "";
 			this._fieldName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldName.Location = new System.Drawing.Point(223, 0);
+			this._fieldName.Location = new System.Drawing.Point(225, 0);
 			this._fieldName.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldName.Name = "_fieldName";
 			this._fieldName.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldName.Size = new System.Drawing.Size(114, 19);
+			searchOptions2.Button = buttonOptions2;
+			this._fieldName.SearchOptions = searchOptions2;
+			this._fieldName.Size = new System.Drawing.Size(111, 19);
 			this._fieldName.TabIndex = 1;
 			// 
 			// _fieldManaCost
 			// 
+			this._fieldManaCost.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldManaCost, 3);
+			this._fieldManaCost.DataText = "";
 			this._fieldManaCost.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldManaCost.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldManaCost.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._fieldManaCost.Location = new System.Drawing.Point(337, 0);
+			this._fieldManaCost.Location = new System.Drawing.Point(336, 0);
 			this._fieldManaCost.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldManaCost.Name = "_fieldManaCost";
 			this._fieldManaCost.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldManaCost.Size = new System.Drawing.Size(111, 19);
+			searchOptions4.Button = buttonOptions4;
+			this._fieldManaCost.SearchOptions = searchOptions4;
+			this._fieldManaCost.Size = new System.Drawing.Size(110, 19);
 			this._fieldManaCost.TabIndex = 2;
 			// 
 			// _fieldCmc
 			// 
+			this._fieldCmc.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldCmc.DataText = "";
 			this._fieldCmc.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldCmc.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
-			this._fieldCmc.Location = new System.Drawing.Point(411, 19);
+			this._fieldCmc.Location = new System.Drawing.Point(408, 19);
 			this._fieldCmc.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCmc.Name = "_fieldCmc";
 			this._fieldCmc.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldCmc.Size = new System.Drawing.Size(37, 19);
+			searchOptions6.Button = buttonOptions6;
+			this._fieldCmc.SearchOptions = searchOptions6;
+			this._fieldCmc.Size = new System.Drawing.Size(38, 19);
 			this._fieldCmc.TabIndex = 3;
 			// 
 			// _fieldType
 			// 
+			this._fieldType.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldType, 5);
+			this._fieldType.DataText = "";
 			this._fieldType.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldType.Location = new System.Drawing.Point(223, 19);
+			this._fieldType.Location = new System.Drawing.Point(225, 19);
 			this._fieldType.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldType.Name = "_fieldType";
 			this._fieldType.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldType.Size = new System.Drawing.Size(188, 19);
+			searchOptions8.Button = buttonOptions8;
+			this._fieldType.SearchOptions = searchOptions8;
+			this._fieldType.Size = new System.Drawing.Size(183, 19);
 			this._fieldType.TabIndex = 4;
 			// 
 			// _fieldSetName
 			// 
+			this._fieldSetName.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldSetName, 5);
+			this._fieldSetName.DataText = "";
 			this._fieldSetName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldSetName.Location = new System.Drawing.Point(260, 38);
+			this._fieldSetName.Location = new System.Drawing.Point(259, 38);
 			this._fieldSetName.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSetName.Name = "_fieldSetName";
 			this._fieldSetName.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldSetName.Size = new System.Drawing.Size(188, 19);
+			searchOptions12.Button = buttonOptions12;
+			this._fieldSetName.SearchOptions = searchOptions12;
+			this._fieldSetName.Size = new System.Drawing.Size(187, 19);
 			this._fieldSetName.TabIndex = 5;
 			// 
 			// _fieldSetCode
 			// 
+			this._fieldSetCode.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldSetCode.DataText = "";
 			this._fieldSetCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldSetCode.Location = new System.Drawing.Point(223, 38);
+			this._fieldSetCode.Location = new System.Drawing.Point(225, 38);
 			this._fieldSetCode.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldSetCode.Name = "_fieldSetCode";
 			this._fieldSetCode.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldSetCode.Size = new System.Drawing.Size(37, 19);
+			searchOptions10.Button = buttonOptions10;
+			this._fieldSetCode.SearchOptions = searchOptions10;
+			this._fieldSetCode.Size = new System.Drawing.Size(34, 19);
 			this._fieldSetCode.TabIndex = 6;
 			// 
 			// _fieldText
 			// 
+			this._fieldText.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldText, 6);
+			this._fieldText.DataText = "";
 			this._fieldText.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldText.Location = new System.Drawing.Point(223, 57);
+			this._fieldText.Location = new System.Drawing.Point(225, 57);
 			this._fieldText.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldText.Name = "_fieldText";
 			this._fieldText.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldText.Size = new System.Drawing.Size(225, 130);
+			searchOptions14.Button = buttonOptions14;
+			this._fieldText.SearchOptions = searchOptions14;
+			this._fieldText.Size = new System.Drawing.Size(221, 130);
 			this._fieldText.TabIndex = 7;
 			// 
 			// _fieldFlavor
 			// 
+			this._fieldFlavor.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldFlavor, 6);
+			this._fieldFlavor.DataText = "";
 			this._fieldFlavor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldFlavor.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldFlavor.Location = new System.Drawing.Point(223, 187);
+			this._fieldFlavor.Location = new System.Drawing.Point(225, 187);
 			this._fieldFlavor.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldFlavor.Name = "_fieldFlavor";
 			this._fieldFlavor.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldFlavor.Size = new System.Drawing.Size(225, 40);
+			searchOptions16.Button = buttonOptions16;
+			this._fieldFlavor.SearchOptions = searchOptions16;
+			this._fieldFlavor.Size = new System.Drawing.Size(221, 40);
 			this._fieldFlavor.TabIndex = 8;
 			// 
 			// _fieldArtist
 			// 
+			this._fieldArtist.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldArtist, 2);
+			this._fieldArtist.DataText = "";
 			this._fieldArtist.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldArtist.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldArtist.Location = new System.Drawing.Point(223, 227);
+			this._fieldArtist.Location = new System.Drawing.Point(225, 227);
 			this._fieldArtist.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldArtist.Name = "_fieldArtist";
 			this._fieldArtist.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldArtist.Size = new System.Drawing.Size(77, 19);
+			searchOptions18.Button = buttonOptions18;
+			this._fieldArtist.SearchOptions = searchOptions18;
+			this._fieldArtist.Size = new System.Drawing.Size(75, 19);
 			this._fieldArtist.TabIndex = 9;
 			// 
 			// _fieldReleaseDate
 			// 
+			this._fieldReleaseDate.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldReleaseDate, 2);
+			this._fieldReleaseDate.DataText = "";
 			this._fieldReleaseDate.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldReleaseDate.Location = new System.Drawing.Point(300, 227);
 			this._fieldReleaseDate.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldReleaseDate.Name = "_fieldReleaseDate";
 			this._fieldReleaseDate.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldReleaseDate.Size = new System.Drawing.Size(74, 19);
+			searchOptions17.Button = buttonOptions17;
+			this._fieldReleaseDate.SearchOptions = searchOptions17;
+			this._fieldReleaseDate.Size = new System.Drawing.Size(72, 19);
 			this._fieldReleaseDate.TabIndex = 10;
 			// 
 			// _fieldRarity
 			// 
+			this._fieldRarity.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldRarity, 2);
+			this._fieldRarity.DataText = "";
 			this._fieldRarity.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldRarity.Location = new System.Drawing.Point(374, 227);
+			this._fieldRarity.Location = new System.Drawing.Point(372, 227);
 			this._fieldRarity.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldRarity.Name = "_fieldRarity";
 			this._fieldRarity.Padding = new System.Windows.Forms.Padding(2);
+			searchOptions15.Button = buttonOptions15;
+			this._fieldRarity.SearchOptions = searchOptions15;
 			this._fieldRarity.Size = new System.Drawing.Size(74, 19);
 			this._fieldRarity.TabIndex = 11;
 			// 
 			// _fieldPricingLow
 			// 
+			this._fieldPricingLow.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldPricingLow.DataText = "";
 			this._fieldPricingLow.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingLow.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldPricingLow.Location = new System.Drawing.Point(223, 246);
+			this._fieldPricingLow.Location = new System.Drawing.Point(225, 246);
 			this._fieldPricingLow.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldPricingLow.Name = "_fieldPricingLow";
 			this._fieldPricingLow.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldPricingLow.Size = new System.Drawing.Size(37, 19);
+			searchOptions13.Button = buttonOptions13;
+			this._fieldPricingLow.SearchOptions = searchOptions13;
+			this._fieldPricingLow.Size = new System.Drawing.Size(34, 19);
 			this._fieldPricingLow.TabIndex = 12;
 			// 
 			// _fieldPricingMid
 			// 
+			this._fieldPricingMid.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldPricingMid.DataText = "";
 			this._fieldPricingMid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldPricingMid.Location = new System.Drawing.Point(260, 246);
+			this._fieldPricingMid.Location = new System.Drawing.Point(259, 246);
 			this._fieldPricingMid.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingMid.Name = "_fieldPricingMid";
 			this._fieldPricingMid.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldPricingMid.Size = new System.Drawing.Size(40, 19);
+			searchOptions11.Button = buttonOptions11;
+			this._fieldPricingMid.SearchOptions = searchOptions11;
+			this._fieldPricingMid.Size = new System.Drawing.Size(41, 19);
 			this._fieldPricingMid.TabIndex = 13;
 			// 
 			// _fieldPricingHigh
 			// 
+			this._fieldPricingHigh.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldPricingHigh.DataText = "";
 			this._fieldPricingHigh.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingHigh.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._fieldPricingHigh.Location = new System.Drawing.Point(300, 246);
 			this._fieldPricingHigh.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingHigh.Name = "_fieldPricingHigh";
 			this._fieldPricingHigh.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldPricingHigh.Size = new System.Drawing.Size(37, 19);
+			searchOptions9.Button = buttonOptions9;
+			this._fieldPricingHigh.SearchOptions = searchOptions9;
+			this._fieldPricingHigh.Size = new System.Drawing.Size(36, 19);
 			this._fieldPricingHigh.TabIndex = 14;
 			// 
 			// _fieldLoyalty
 			// 
+			this._fieldLoyalty.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldLoyalty.DataText = "";
 			this._fieldLoyalty.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldLoyalty.Location = new System.Drawing.Point(337, 246);
+			this._fieldLoyalty.Location = new System.Drawing.Point(336, 246);
 			this._fieldLoyalty.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLoyalty.Name = "_fieldLoyalty";
 			this._fieldLoyalty.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldLoyalty.Size = new System.Drawing.Size(37, 19);
+			searchOptions7.Button = buttonOptions7;
+			this._fieldLoyalty.SearchOptions = searchOptions7;
+			this._fieldLoyalty.Size = new System.Drawing.Size(36, 19);
 			this._fieldLoyalty.TabIndex = 15;
 			// 
 			// _fieldPower
 			// 
+			this._fieldPower.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldPower.DataText = "";
 			this._fieldPower.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldPower.Location = new System.Drawing.Point(374, 246);
+			this._fieldPower.Location = new System.Drawing.Point(372, 246);
 			this._fieldPower.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPower.Name = "_fieldPower";
 			this._fieldPower.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldPower.Size = new System.Drawing.Size(37, 19);
+			searchOptions5.Button = buttonOptions5;
+			this._fieldPower.SearchOptions = searchOptions5;
+			this._fieldPower.Size = new System.Drawing.Size(36, 19);
 			this._fieldPower.TabIndex = 16;
 			// 
 			// _fieldToughness
 			// 
+			this._fieldToughness.BackColor = System.Drawing.SystemColors.Window;
+			this._fieldToughness.DataText = "";
 			this._fieldToughness.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._fieldToughness.Location = new System.Drawing.Point(411, 246);
+			this._fieldToughness.Location = new System.Drawing.Point(408, 246);
 			this._fieldToughness.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldToughness.Name = "_fieldToughness";
 			this._fieldToughness.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldToughness.Size = new System.Drawing.Size(37, 19);
+			searchOptions3.Button = buttonOptions3;
+			this._fieldToughness.SearchOptions = searchOptions3;
+			this._fieldToughness.Size = new System.Drawing.Size(38, 19);
 			this._fieldToughness.TabIndex = 17;
 			// 
 			// _fieldRulings
 			// 
+			this._fieldRulings.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.SetColumnSpan(this._fieldRulings, 6);
+			this._fieldRulings.DataText = "";
 			this._fieldRulings.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldRulings.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldRulings.ForeColor = System.Drawing.Color.Gray;
-			this._fieldRulings.Location = new System.Drawing.Point(223, 265);
+			this._fieldRulings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this._fieldRulings.Location = new System.Drawing.Point(225, 265);
 			this._fieldRulings.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldRulings.Name = "_fieldRulings";
 			this._fieldRulings.Padding = new System.Windows.Forms.Padding(2);
-			this._fieldRulings.Size = new System.Drawing.Size(225, 46);
+			searchOptions1.Button = buttonOptions1;
+			this._fieldRulings.SearchOptions = searchOptions1;
+			this._fieldRulings.Size = new System.Drawing.Size(221, 46);
 			this._fieldRulings.TabIndex = 18;
 			// 
 			// _layout
 			// 
+			this._layout.BackColor = System.Drawing.SystemColors.Window;
 			this._layout.ColumnCount = 7;
 			this._layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this._layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.139535F));
@@ -328,7 +443,7 @@ namespace Mtgdb.Gui
 			// 
 			// CardLayout
 			// 
-			this.BackColor = System.Drawing.Color.White;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this._layout);
 			this.Name = "CardLayout";
 			this.Size = new System.Drawing.Size(446, 311);

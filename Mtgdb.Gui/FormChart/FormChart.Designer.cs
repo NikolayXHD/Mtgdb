@@ -28,11 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChart));
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-			this._buttonManaCurveType = new System.Windows.Forms.CheckBox();
-			this._buttonDeckPrice = new System.Windows.Forms.CheckBox();
+			this._buttonManaCurveType = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonDeckPrice = new Mtgdb.Controls.CustomCheckBox();
 			this._tabCols = new Mtgdb.Controls.TabHeaderControl();
 			this._buttonApply = new System.Windows.Forms.Button();
 			this._menuFields = new System.Windows.Forms.ComboBox();
@@ -64,12 +64,12 @@
 			this._panelFlags = new System.Windows.Forms.FlowLayoutPanel();
 			this._menuPrice = new System.Windows.Forms.ComboBox();
 			this._menuPriceChartType = new System.Windows.Forms.ComboBox();
-			this._buttonArtistsPerYear = new System.Windows.Forms.CheckBox();
-			this._buttonCollectionPrice = new System.Windows.Forms.CheckBox();
-			this._layoutTitle = new System.Windows.Forms.TableLayoutPanel();
-			this._buttonManaCurveManacost = new System.Windows.Forms.CheckBox();
-			this._buttonCollectionColors = new System.Windows.Forms.CheckBox();
-			this._buttonDeckColors = new System.Windows.Forms.CheckBox();
+			this._buttonArtistsPerYear = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonCollectionPrice = new Mtgdb.Controls.CustomCheckBox();
+			this._layoutTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
+			this._buttonManaCurveManacost = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonCollectionColors = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonDeckColors = new Mtgdb.Controls.CustomCheckBox();
 			this._panelClient.SuspendLayout();
 			this._panelHeader.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._chart)).BeginInit();
@@ -90,13 +90,13 @@
 			// 
 			this._panelHeader.Controls.Add(this._layoutTitle);
 			this._panelHeader.Padding = new System.Windows.Forms.Padding(1);
-			this._panelHeader.Size = new System.Drawing.Size(1023, 53);
+			this._panelHeader.Size = new System.Drawing.Size(1112, 53);
 			// 
 			// _chart
 			// 
 			this._chart.Dock = System.Windows.Forms.DockStyle.Fill;
-			legend2.Name = "Legend1";
-			this._chart.Legends.Add(legend2);
+			legend1.Name = "Legend1";
+			this._chart.Legends.Add(legend1);
 			this._chart.Location = new System.Drawing.Point(0, 120);
 			this._chart.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this._chart.Name = "_chart";
@@ -107,11 +107,13 @@
 			// 
 			this._buttonManaCurveType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonManaCurveType.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonManaCurveType.BackColor = System.Drawing.Color.Transparent;
 			this._buttonManaCurveType.FlatAppearance.BorderSize = 0;
-			this._buttonManaCurveType.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonManaCurveType.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonManaCurveType.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonManaCurveType.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonManaCurveType.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonManaCurveType.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonManaCurveType.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonManaCurveType.Location = new System.Drawing.Point(304, 0);
 			this._buttonManaCurveType.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonManaCurveType.Name = "_buttonManaCurveType";
@@ -127,11 +129,13 @@
 			// 
 			this._buttonDeckPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonDeckPrice.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonDeckPrice.BackColor = System.Drawing.Color.Transparent;
 			this._buttonDeckPrice.FlatAppearance.BorderSize = 0;
-			this._buttonDeckPrice.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonDeckPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonDeckPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonDeckPrice.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonDeckPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonDeckPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonDeckPrice.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonDeckPrice.Location = new System.Drawing.Point(104, 0);
 			this._buttonDeckPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDeckPrice.Name = "_buttonDeckPrice";
@@ -150,9 +154,6 @@
 			this._tabCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._tabCols.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
 			this._tabCols.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
-			this._tabCols.ColorTabBorder = System.Drawing.Color.LightGray;
-			this._tabCols.ColorUnselected = System.Drawing.Color.WhiteSmoke;
-			this._tabCols.ColorUnselectedHovered = System.Drawing.Color.White;
 			this._tabCols.Location = new System.Drawing.Point(68, 0);
 			this._tabCols.Margin = new System.Windows.Forms.Padding(0);
 			this._tabCols.Name = "_tabCols";
@@ -164,9 +165,6 @@
 			// _buttonApply
 			// 
 			this._buttonApply.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonApply.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonApply.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonApply.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
 			this._buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonApply.Location = new System.Drawing.Point(604, 0);
 			this._buttonApply.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -192,9 +190,6 @@
 			// 
 			// _buttonAddCol
 			// 
-			this._buttonAddCol.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonAddCol.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonAddCol.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
 			this._buttonAddCol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -251,9 +246,6 @@
 			this._tabRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._tabRows.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
 			this._tabRows.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
-			this._tabRows.ColorTabBorder = System.Drawing.Color.LightGray;
-			this._tabRows.ColorUnselected = System.Drawing.Color.WhiteSmoke;
-			this._tabRows.ColorUnselectedHovered = System.Drawing.Color.White;
 			this._tabRows.Location = new System.Drawing.Point(119, 0);
 			this._tabRows.Margin = new System.Windows.Forms.Padding(0);
 			this._tabRows.Name = "_tabRows";
@@ -280,9 +272,6 @@
 			this._tabSumm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._tabSumm.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
 			this._tabSumm.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
-			this._tabSumm.ColorTabBorder = System.Drawing.Color.LightGray;
-			this._tabSumm.ColorUnselected = System.Drawing.Color.WhiteSmoke;
-			this._tabSumm.ColorUnselectedHovered = System.Drawing.Color.White;
 			this._tabSumm.Location = new System.Drawing.Point(195, 0);
 			this._tabSumm.Margin = new System.Windows.Forms.Padding(0);
 			this._tabSumm.Name = "_tabSumm";
@@ -308,9 +297,6 @@
 			this._tabSummSort.AllowAddingTabs = false;
 			this._tabSummSort.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
 			this._tabSummSort.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
-			this._tabSummSort.ColorTabBorder = System.Drawing.Color.LightGray;
-			this._tabSummSort.ColorUnselected = System.Drawing.Color.WhiteSmoke;
-			this._tabSummSort.ColorUnselectedHovered = System.Drawing.Color.White;
 			this._tabSummSort.Location = new System.Drawing.Point(306, 0);
 			this._tabSummSort.Margin = new System.Windows.Forms.Padding(0);
 			this._tabSummSort.Name = "_tabSummSort";
@@ -334,10 +320,7 @@
 			// 
 			this._buttonArgumentTotals.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonArgumentTotals.AutoSize = true;
-			this._buttonArgumentTotals.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonArgumentTotals.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonArgumentTotals.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonArgumentTotals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonArgumentTotals.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonArgumentTotals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonArgumentTotals.Location = new System.Drawing.Point(3, 3);
 			this._buttonArgumentTotals.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -351,10 +334,7 @@
 			// 
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSeriesTotal.AutoSize = true;
-			this._buttonSeriesTotal.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonSeriesTotal.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonSeriesTotal.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonSeriesTotal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonSeriesTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonSeriesTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSeriesTotal.Location = new System.Drawing.Point(123, 3);
 			this._buttonSeriesTotal.Margin = new System.Windows.Forms.Padding(0);
@@ -368,10 +348,7 @@
 			// 
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonExplainTotal.AutoSize = true;
-			this._buttonExplainTotal.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonExplainTotal.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonExplainTotal.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonExplainTotal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonExplainTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonExplainTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonExplainTotal.Location = new System.Drawing.Point(226, 3);
 			this._buttonExplainTotal.Margin = new System.Windows.Forms.Padding(0);
@@ -385,10 +362,7 @@
 			// 
 			this._buttonApplyFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonApplyFilter.AutoSize = true;
-			this._buttonApplyFilter.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonApplyFilter.FlatAppearance.CheckedBackColor = System.Drawing.Color.White;
-			this._buttonApplyFilter.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonApplyFilter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonApplyFilter.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonApplyFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonApplyFilter.Location = new System.Drawing.Point(466, 3);
 			this._buttonApplyFilter.Margin = new System.Windows.Forms.Padding(160, 0, 0, 0);
@@ -400,9 +374,7 @@
 			// 
 			// _buttonAddRow
 			// 
-			this._buttonAddRow.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonAddRow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonAddRow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonAddRow.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddRow.Location = new System.Drawing.Point(293, 0);
 			this._buttonAddRow.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -414,9 +386,7 @@
 			// 
 			// _buttonAddSum
 			// 
-			this._buttonAddSum.FlatAppearance.BorderColor = System.Drawing.Color.DarkGray;
-			this._buttonAddSum.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-			this._buttonAddSum.FlatAppearance.MouseOverBackColor = System.Drawing.Color.WhiteSmoke;
+			this._buttonAddSum.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddSum.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonAddSum.Location = new System.Drawing.Point(369, 0);
 			this._buttonAddSum.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -535,6 +505,7 @@
 			// 
 			// _panelTable
 			// 
+			this._panelTable.BackColor = System.Drawing.SystemColors.Control;
 			this._panelTable.ColumnCount = 1;
 			this._panelTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelTable.Controls.Add(this._panelMenu, 0, 0);
@@ -597,11 +568,13 @@
 			// 
 			this._buttonArtistsPerYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonArtistsPerYear.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonArtistsPerYear.BackColor = System.Drawing.Color.Transparent;
 			this._buttonArtistsPerYear.FlatAppearance.BorderSize = 0;
-			this._buttonArtistsPerYear.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonArtistsPerYear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonArtistsPerYear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonArtistsPerYear.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonArtistsPerYear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonArtistsPerYear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonArtistsPerYear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonArtistsPerYear.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonArtistsPerYear.Location = new System.Drawing.Point(724, 0);
 			this._buttonArtistsPerYear.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonArtistsPerYear.Name = "_buttonArtistsPerYear";
@@ -617,11 +590,13 @@
 			// 
 			this._buttonCollectionPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonCollectionPrice.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonCollectionPrice.BackColor = System.Drawing.Color.Transparent;
 			this._buttonCollectionPrice.FlatAppearance.BorderSize = 0;
-			this._buttonCollectionPrice.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonCollectionPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonCollectionPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonCollectionPrice.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonCollectionPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonCollectionPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonCollectionPrice.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonCollectionPrice.Location = new System.Drawing.Point(174, 0);
 			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 0, 60, 0);
 			this._buttonCollectionPrice.Name = "_buttonCollectionPrice";
@@ -637,6 +612,7 @@
 			// 
 			this._layoutTitle.AutoSize = true;
 			this._layoutTitle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this._layoutTitle.BackColor = System.Drawing.SystemColors.Control;
 			this._layoutTitle.ColumnCount = 8;
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -658,21 +634,25 @@
 			this._layoutTitle.Location = new System.Drawing.Point(1, 1);
 			this._layoutTitle.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
 			this._layoutTitle.Name = "_layoutTitle";
+			this._layoutTitle.PaintBackground = false;
 			this._layoutTitle.RowCount = 2;
 			this._layoutTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this._layoutTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this._layoutTitle.Size = new System.Drawing.Size(814, 50);
 			this._layoutTitle.TabIndex = 56;
+			this._layoutTitle.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// _buttonManaCurveManacost
 			// 
 			this._buttonManaCurveManacost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonManaCurveManacost.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonManaCurveManacost.BackColor = System.Drawing.Color.Transparent;
 			this._buttonManaCurveManacost.FlatAppearance.BorderSize = 0;
-			this._buttonManaCurveManacost.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonManaCurveManacost.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonManaCurveManacost.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonManaCurveManacost.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonManaCurveManacost.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonManaCurveManacost.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveManacost.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonManaCurveManacost.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonManaCurveManacost.Location = new System.Drawing.Point(404, 0);
 			this._buttonManaCurveManacost.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonManaCurveManacost.Name = "_buttonManaCurveManacost";
@@ -688,11 +668,13 @@
 			// 
 			this._buttonCollectionColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonCollectionColors.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonCollectionColors.BackColor = System.Drawing.Color.Transparent;
 			this._buttonCollectionColors.FlatAppearance.BorderSize = 0;
-			this._buttonCollectionColors.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonCollectionColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonCollectionColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonCollectionColors.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonCollectionColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonCollectionColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonCollectionColors.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonCollectionColors.Location = new System.Drawing.Point(594, 0);
 			this._buttonCollectionColors.Margin = new System.Windows.Forms.Padding(0, 0, 60, 0);
 			this._buttonCollectionColors.Name = "_buttonCollectionColors";
@@ -708,11 +690,13 @@
 			// 
 			this._buttonDeckColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonDeckColors.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonDeckColors.BackColor = System.Drawing.Color.Transparent;
 			this._buttonDeckColors.FlatAppearance.BorderSize = 0;
-			this._buttonDeckColors.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(240)))));
-			this._buttonDeckColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-			this._buttonDeckColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
+			this._buttonDeckColors.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonDeckColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonDeckColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonDeckColors.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
 			this._buttonDeckColors.Location = new System.Drawing.Point(504, 0);
 			this._buttonDeckColors.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonDeckColors.Name = "_buttonDeckColors";
@@ -726,17 +710,13 @@
 			// 
 			// FormChart
 			// 
+			this.CaptionHeight = 57;
 			this.ClientSize = new System.Drawing.Size(1221, 738);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.ImageClose = global::Mtgdb.Gui.Properties.Resources.close;
-			this.ImageMaximize = global::Mtgdb.Gui.Properties.Resources.maximize;
-			this.ImageMinimize = global::Mtgdb.Gui.Properties.Resources.minimize;
-			this.ImageNormalize = global::Mtgdb.Gui.Properties.Resources.normalize;
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "FormChart";
 			this.Text = "Deck statistics";
-			this.TitleHeight = 57;
 			this._panelClient.ResumeLayout(false);
 			this._panelHeader.ResumeLayout(false);
 			this._panelHeader.PerformLayout();
@@ -757,8 +737,8 @@
 		#endregion
 
 		private System.Windows.Forms.DataVisualization.Charting.Chart _chart;
-		private System.Windows.Forms.CheckBox _buttonManaCurveType;
-		private System.Windows.Forms.CheckBox _buttonDeckPrice;
+		private Mtgdb.Controls.CustomCheckBox _buttonManaCurveType;
+		private Mtgdb.Controls.CustomCheckBox _buttonDeckPrice;
 		private Controls.TabHeaderControl _tabCols;
 		private System.Windows.Forms.Button _buttonApply;
 		private System.Windows.Forms.ComboBox _menuFields;
@@ -784,17 +764,17 @@
 		private System.Windows.Forms.TableLayoutPanel _panelTable;
 		private System.Windows.Forms.ComboBox _menuPrice;
 		private System.Windows.Forms.ComboBox _menuPriceChartType;
-		private System.Windows.Forms.CheckBox _buttonArtistsPerYear;
+		private Mtgdb.Controls.CustomCheckBox _buttonArtistsPerYear;
 		private System.Windows.Forms.ProgressBar _progressBar;
 		private System.Windows.Forms.CheckBox _buttonArgumentTotals;
 		private System.Windows.Forms.CheckBox _buttonSeriesTotal;
 		private System.Windows.Forms.CheckBox _buttonExplainTotal;
-		private System.Windows.Forms.CheckBox _buttonCollectionPrice;
+		private Mtgdb.Controls.CustomCheckBox _buttonCollectionPrice;
 		private System.Windows.Forms.CheckBox _buttonApplyFilter;
 		private System.Windows.Forms.FlowLayoutPanel _panelFlags;
-		private System.Windows.Forms.TableLayoutPanel _layoutTitle;
-		private System.Windows.Forms.CheckBox _buttonDeckColors;
-		private System.Windows.Forms.CheckBox _buttonCollectionColors;
-		private System.Windows.Forms.CheckBox _buttonManaCurveManacost;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _layoutTitle;
+		private Mtgdb.Controls.CustomCheckBox _buttonDeckColors;
+		private Mtgdb.Controls.CustomCheckBox _buttonCollectionColors;
+		private Mtgdb.Controls.CustomCheckBox _buttonManaCurveManacost;
 	}
 }

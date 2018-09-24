@@ -4,28 +4,16 @@ namespace Mtgdb
 {
 	public static class ComparableExtension
 	{
-		public static TVal WithinRange<TVal>(this TVal value, TVal? min, TVal? max)
-			where TVal : struct, IComparable<TVal>
-		{
-			if (min.HasValue && value.CompareTo(min.Value) < 0)
-				return min.Value;
+		public static TVal WithinRange<TVal>(this TVal value, TVal min, TVal max) where TVal : IComparable<TVal> =>
+			value.AtLeast(min).AtMost(max);
 
-			if (max.HasValue && value.CompareTo(max.Value) > 0)
-				return max.Value;
+		public static TVal AtLeast<TVal>(this TVal value, TVal min) where TVal : IComparable<TVal> =>
+			value.CompareTo(min) < 0 ? min : value;
 
-			return value;
-		}
+		public static TVal AtMost<TVal>(this TVal value, TVal max) where TVal : IComparable<TVal> =>
+			value.CompareTo(max) > 0 ? max : value;
 
-		public static bool IsWithin<TVal>(this TVal value, TVal min, TVal max)
-			where TVal : struct, IComparable<TVal>
-		{
-			if (min.CompareTo(value) > 0)
-				return false;
-
-			if (max.CompareTo(value) < 0)
-				return false;
-
-			return true;
-		}
+		public static bool IsWithin<TVal>(this TVal value, TVal min, TVal max) where TVal : IComparable<TVal> =>
+			min.CompareTo(value) < 0 && 0 < max.CompareTo(value);
 	}
 }

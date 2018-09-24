@@ -36,7 +36,7 @@ namespace Mtgdb.Controls
 
 			_selectionCaretTimer = new Timer
 			{
-				Interval = 500
+				Interval = SystemInformation.CaretBlinkTime
 			};
 
 			_selectionCaretTimer.Tick += tick;

@@ -76,13 +76,7 @@ namespace Mtgdb.Gui
 		{
 			SuspendLayout();
 
-			TitleHeight = TitleHeight.ByDpiHeight();
-
-			ImageMinimize = ImageMinimize.HalfResizeDpi();
-			ImageMaximize = ImageMaximize.HalfResizeDpi();
-			ImageNormalize = ImageNormalize.HalfResizeDpi();
-			ImageClose = ImageClose.HalfResizeDpi();
-
+			CaptionHeight = CaptionHeight.ByDpiHeight();
 			foreach (var tab in _tabs)
 			{
 				tab.Height = tab.Height.ByDpiHeight();
@@ -139,9 +133,12 @@ namespace Mtgdb.Gui
 			Load += load;
 
 			foreach (var button in _headerButtons)
+			{
+				button.AutoCheck = false;
 				button.Click += buttonClick;
+			}
 
-			SnapTo(Direction.North, System.Windows.Forms.Cursor.Position);
+			SnapTo(Direction.Top, System.Windows.Forms.Cursor.Position);
 
 			_tabByButton = Enumerable.Range(0, _buttons.Length)
 				.ToDictionary(i => _buttons[i], i => _tabs[i]);
@@ -371,7 +368,21 @@ namespace Mtgdb.Gui
 			area.AxisX.MajorGrid.LineWidth = 0;
 			area.AxisX.MinorGrid.LineWidth = 0;
 			area.AxisX.Interval = 1;
-			area.AxisY.MajorGrid.LineColor = Color.DarkGray;
+
+			area.BackColor = SystemColors.Window;
+			area.BorderColor = SystemColors.ActiveBorder;
+			area.BackSecondaryColor = SystemColors.Control;
+
+			foreach (var ax in area.Axes)
+			{
+				ax.TitleForeColor = SystemColors.WindowText;
+				ax.LineColor = SystemColors.WindowText;
+				ax.MajorTickMark.LineColor = SystemColors.WindowText;
+				ax.MinorTickMark.LineColor = SystemColors.WindowText;
+				ax.InterlacedColor = SystemColors.WindowText;
+				ax.LabelStyle.ForeColor = SystemColors.WindowText;
+				ax.MajorGrid.LineColor = SystemColors.ActiveBorder;
+			}
 
 			return area;
 		}
@@ -668,8 +679,13 @@ namespace Mtgdb.Gui
 			_chart.Series.Clear();
 			_chart.Legends.Clear();
 
+			_chart.BackColor = SystemColors.Control;
+			_chart.ForeColor = SystemColors.ControlText;
+			_chart.BorderColor = SystemColors.ActiveBorder;
+			_chart.BorderlineColor = SystemColors.ActiveBorder;
+
 			if (metadata.CanDisplayMultipleSeries)
-				_chart.Legends.Add(new Legend());
+				_chart.Legends.Add(createLegend());
 
 			ChartArea area = null;
 			Series[] seriesList = null;
@@ -711,7 +727,11 @@ namespace Mtgdb.Gui
 						var chartSeries = new Series
 						{
 							ChartType = settings.ChartType,
-							ChartArea = area.Name
+							ChartArea = area.Name,
+
+							LabelForeColor = SystemColors.WindowText,
+							BorderColor = SystemColors.ActiveBorder,
+							MarkerColor = SystemColors.ControlText
 						};
 
 						if (settings.LabelDataElement == DataElement.None)
@@ -825,11 +845,10 @@ namespace Mtgdb.Gui
 
 				if ((settings.ShowSeriesTotal || settings.ShowArgumentTotal) && !metadata.CanDisplayMultipleSeries)
 				{
-					var legend = new Legend
-					{
-						DockedToChartArea = area.Name,
-						IsDockedInsideChartArea = false
-					};
+					var legend = createLegend();
+
+					legend.DockedToChartArea = area.Name;
+					legend.IsDockedInsideChartArea = false;
 
 					if (settings.ShowSeriesTotal)
 						for (int j = 0; j < seriesSummaryLegend.Length; j++)
@@ -842,7 +861,7 @@ namespace Mtgdb.Gui
 						for (int i = 0; i < argumentSummaryLegends.Length; i++)
 						{
 							var argumentLegend = argumentSummaryLegends[i];
-							legend.CustomItems.Add(Color.DimGray, argumentLegend[0]);
+							legend.CustomItems.Add(SystemColors.ActiveBorder, argumentLegend[0]);
 						}
 
 					_chart.Legends.Add(legend);
@@ -868,6 +887,20 @@ namespace Mtgdb.Gui
 			setupScrollbar(metadata);
 		}
 
+		private static Legend createLegend()
+		{
+			var legend = new Legend
+			{
+				BackColor = SystemColors.Control,
+				ForeColor = SystemColors.ControlText,
+				TitleForeColor = SystemColors.ActiveCaptionText,
+				TitleBackColor = SystemColors.ActiveCaption,
+				BorderColor = SystemColors.ActiveBorder
+			};
+
+			return legend;
+		}
+
 		private void setupScrollbar(ChartTypeMetadata metadata)
 		{
 			if (metadata.RequireAxes)
@@ -891,9 +924,10 @@ namespace Mtgdb.Gui
 					scrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
 					scrollBar.IsPositionedInside = false;
 					scrollBar.Enabled = true;
-					scrollBar.BackColor = Color.FromArgb(235, 235, 235);
-					scrollBar.ButtonColor = Color.Gainsboro;
-					scrollBar.LineColor = Color.DarkGray;
+
+					scrollBar.BackColor = SystemColors.ScrollBar;
+					scrollBar.ButtonColor = SystemColors.ButtonFace;
+					scrollBar.LineColor = SystemColors.ButtonFace;
 
 					scrollAxis.ScaleView.Zoom(0, 40);
 				}
@@ -1153,7 +1187,7 @@ namespace Mtgdb.Gui
 
 		private readonly CardRepository _repository;
 		private bool _applyingSettings;
-		private readonly CheckBox[] _headerButtons;
+		private readonly CustomCheckBox[] _headerButtons;
 
 		private static readonly string[] _priceFields =
 		{

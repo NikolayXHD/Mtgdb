@@ -76,7 +76,7 @@ namespace Mtgdb.Controls
 			FieldName.DataText = deck?.Name.NullIfEmpty() ?? "[no name]";
 			_fieldGeneratedMana.DataText = deck?.Mana;
 
-			var saved = deck?.Saved?.InvokeMethod(DeckDocumentAdapter.Format);
+			var saved = deck?.Saved?.Invoke0(DeckDocumentAdapter.Format);
 
 			_fieldLegality.DataText = deck?.Legal.Invoke2(string.Join, ", ");
 			FieldSaved.DataText = saved != null

@@ -28,7 +28,6 @@ namespace Mtgdb.Controls
 
 			clearTabs();
 
-			Paint += paint;
 			Layout += layout;
 			MouseMove += mouseMove;
 			MouseClick += mouseClick;
@@ -46,6 +45,57 @@ namespace Mtgdb.Controls
 
 			_graphics = CreateGraphics();
 		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			lock (_syncRoot)
+			{
+				e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+				IList<string> texts = Texts;
+				IList<int> widths = Widths;
+				IList<Bitmap> icons = Icons;
+
+				if (DrawBottomBorder)
+					e.Graphics.DrawLine(new Pen(ColorTabBorder), 0, Height - 1, Width - 1, Height - 1);
+
+				if (IsDragging())
+				{
+					texts = texts.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
+					widths = widths.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
+					icons = icons.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
+
+					for (int i = widths.Count - 1; i >= 0; i--)
+					{
+						if (isDraggedOver(i))
+							continue;
+
+						paintTab(i, e.Graphics, texts, widths, icons);
+					}
+
+					paintTab(_draggingOverIndex.Value, e.Graphics, texts, widths, icons);
+				}
+				else
+				{
+					if (AllowAddingTabs)
+						paintTab(widths.Count, e.Graphics, texts, widths, icons);
+
+					for (int i = widths.Count - 1; i >= 0; i--)
+					{
+						if (isSelected(i))
+							continue;
+
+						paintTab(i, e.Graphics, texts, widths, icons);
+					}
+
+					if (SelectedIndex >= 0)
+						paintTab(SelectedIndex, e.Graphics, texts, widths, icons);
+				}
+			}
+		}
+
+		protected override void OnPaintBackground(PaintEventArgs e) =>
+			this.PaintPanelBack(e.Graphics, e.ClipRectangle, PaintBackground);
 
 		public void ApplyOrderFrom(TabHeaderControl other)
 		{
@@ -315,55 +365,6 @@ namespace Mtgdb.Controls
 				GetTabIndex(e.Location, out int hoveredIndex, out bool hoveredClose);
 				HoveredIndex = hoveredIndex;
 				HoveredCloseIndex = hoveredClose ? hoveredIndex : -1;
-			}
-		}
-
-		private void paint(object sender, PaintEventArgs e)
-		{
-			lock (_syncRoot)
-			{
-				e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-				e.Graphics.Clear(BackColor);
-
-				IList<string> texts = Texts;
-				IList<int> widths = Widths;
-				IList<Bitmap> icons = Icons;
-
-				if (DrawBottomBorder)
-					e.Graphics.DrawLine(new Pen(ColorTabBorder), 0, Height - 1, Width - 1, Height - 1);
-
-				if (IsDragging())
-				{
-					texts = texts.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
-					widths = widths.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
-					icons = icons.Reorder(DraggingIndex.Value, _draggingOverIndex.Value);
-
-					for (int i = widths.Count - 1; i >= 0; i--)
-					{
-						if (isDraggedOver(i))
-							continue;
-
-						paintTab(i, e.Graphics, texts, widths, icons);
-					}
-
-					paintTab(_draggingOverIndex.Value, e.Graphics, texts, widths, icons);
-				}
-				else
-				{
-					if (AllowAddingTabs)
-						paintTab(widths.Count, e.Graphics, texts, widths, icons);
-
-					for (int i = widths.Count - 1; i >= 0; i--)
-					{
-						if (isSelected(i))
-							continue;
-
-						paintTab(i, e.Graphics, texts, widths, icons);
-					}
-
-					if (SelectedIndex >= 0)
-						paintTab(SelectedIndex, e.Graphics, texts, widths, icons);
-				}
 			}
 		}
 
@@ -848,7 +849,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "232, 232, 232")]
+		[DefaultValue(typeof(Color), "ControlLight")]
 		public Color ColorUnselected
 		{
 			get => _colorUnselected;
@@ -860,7 +861,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "WhiteSmoke")]
+		[DefaultValue(typeof(Color), "Control")]
 		public Color ColorSelected
 		{
 			get => _colorSelected;
@@ -872,7 +873,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "WhiteSmoke")]
+		[DefaultValue(typeof(Color), "ControlLightLight")]
 		public Color ColorUnselectedHovered
 		{
 			get => _colorUnselectedHovered;
@@ -884,7 +885,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "White")]
+		[DefaultValue(typeof(Color), "ControlLightLight")]
 		public Color ColorSelectedHovered
 		{
 			get => _colorSelectedHovered;
@@ -896,7 +897,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "DarkGray")]
+		[DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color ColorTabBorder
 		{
 			get => _colorTabBorder;
@@ -1024,6 +1025,9 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(false)]
 		public bool AddNewTabsToTheLeft { get; set; }
 
+		[Category("Settings"), DefaultValue(true)]
+		public bool PaintBackground { get; set; } = true;
+
 		[Browsable(false)]
 		public List<object> TabIds { get; private set; }
 
@@ -1073,11 +1077,11 @@ namespace Mtgdb.Controls
 		private int _hoveredIndex = -1;
 		private int _hoveredCloseIndex = -1;
 
-		private Color _colorUnselected = Color.FromArgb(232, 232, 232);
-		private Color _colorSelected = Color.WhiteSmoke;
-		private Color _colorUnselectedHovered = Color.WhiteSmoke;
-		private Color _colorSelectedHovered = Color.White;
-		private Color _colorTabBorder = Color.DarkGray;
+		private Color _colorUnselected = SystemColors.ControlLight;
+		private Color _colorSelected = SystemColors.Control;
+		private Color _colorUnselectedHovered = SystemColors.ControlLightLight;
+		private Color _colorSelectedHovered = SystemColors.ControlLightLight;
+		private Color _colorTabBorder = SystemColors.ActiveBorder;
 		private int _tabBorderWidth = 1;
 		private int _textPadding = 6;
 		private bool _allowAddingTabs = true;

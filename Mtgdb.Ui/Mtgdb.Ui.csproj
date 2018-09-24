@@ -97,6 +97,10 @@
     <Compile Include="UnformattedJsonConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Core.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
       <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
       <Name>Mtgdb.Core.Controls</Name>

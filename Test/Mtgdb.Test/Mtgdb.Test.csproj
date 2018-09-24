@@ -88,6 +88,10 @@
       <Project>{6FAC0808-416A-4605-A1E7-042F7A270BB3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Core.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Ui\Mtgdb.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
       <Name>Mtgdb.Ui</Name>
@@ -118,6 +122,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorTransformationTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />

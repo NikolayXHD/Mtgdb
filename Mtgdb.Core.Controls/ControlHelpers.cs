@@ -110,14 +110,12 @@ namespace Mtgdb.Controls
 			return GetTag<TValue>(control, typeof(TValue).FullName);
 		}
 
-		public static void PaintPanel(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
+		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
 		{
-			graphics.Clear(c.BackColor);
+			if (borderColor == Color.Transparent || borderColor == Color.Empty)
+				return;
+
 			var pen = new Pen(borderColor);
-
-			if (c.BackgroundImage != null)
-				graphics.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
-
 			if ((borders & AnchorStyles.Top) > 0)
 				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
 
@@ -129,6 +127,21 @@ namespace Mtgdb.Controls
 
 			if ((borders & AnchorStyles.Right) > 0)
 				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
+		}
+
+		public static void PaintPanelBack(this Control c, Graphics graphics, Rectangle clipRect, bool paintBack)
+		{
+			if (!paintBack || c.BackColor.A < byte.MaxValue)
+				ButtonRenderer.DrawParentBackground(graphics, clipRect, c);
+
+			if (!paintBack)
+				return;
+
+			if (c.BackColor != Color.Empty && c.BackColor != Color.Transparent)
+				graphics.Clear(c.BackColor);
+
+			if (c.BackgroundImage != null)
+				graphics.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
 		}
 
 		public static bool IsUnderMouse(this Control c)

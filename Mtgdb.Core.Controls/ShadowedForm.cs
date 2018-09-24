@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
-	public class ShadowedForm : Form
+	public abstract class ShadowedForm : Form
 	{
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMarInset);
@@ -20,7 +20,7 @@ namespace Mtgdb.Controls
 		private const int CsDropshadow = 0x00020000;
 		private const int WmNcpaint = 0x0085;
 
-		private struct Margins // struct for box shadow
+		protected struct Margins // struct for box shadow
 		{
 			[UsedImplicitly]
 			public int LeftWidth;
@@ -75,19 +75,23 @@ namespace Mtgdb.Controls
 			base.OnSizeChanged(e);
 		}
 
+		protected virtual bool FixShadowTransparency => false;
+
 		private void setShadow()
 		{
 			if (!_aeroEnabled)
 				return;
 
-			var v = 2;
+			int v = 2;
 			DwmSetWindowAttribute(Handle, 2, ref v, 4);
+
+			int marginVal = FixShadowTransparency ? -1 : 1;
 			var margins = new Margins
 			{
-				BottomHeight = 1,
-				LeftWidth = 1,
-				RightWidth = 1,
-				TopHeight = 1
+				BottomHeight = marginVal,
+				LeftWidth = marginVal,
+				RightWidth = marginVal,
+				TopHeight = marginVal,
 			};
 
 			DwmExtendFrameIntoClientArea(Handle, ref margins);

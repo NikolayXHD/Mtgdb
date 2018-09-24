@@ -11,7 +11,7 @@ namespace Mtgdb.Controls
 	{
 		public TooltipForm()
 		{
-			BackColor = Color.White;
+			BackColor = SystemColors.Window;
 			FormBorderStyle = FormBorderStyle.None;
 
 			_tooltipSize = new Size(400, 300).ByDpi();
@@ -364,15 +364,15 @@ namespace Mtgdb.Controls
 		}
 
 
-		[Category("Settings"), DefaultValue(typeof(Color), "White")]
+		[Category("Settings"), DefaultValue(typeof(Color), "Window")]
 		public sealed override Color BackColor
 		{
 			get => base.BackColor;
 			set => base.BackColor = value;
 		}
 
-		[Category("Settings"), DefaultValue(typeof(Color), "Gray")]
-		public Color BorderColor { get; [UsedImplicitly] set; } = Color.Gray;
+		[Category("Settings"), DefaultValue(typeof(Color), "InactiveBorder")]
+		public Color BorderColor { get; [UsedImplicitly] set; } = SystemColors.InactiveBorder;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool UserInteracted

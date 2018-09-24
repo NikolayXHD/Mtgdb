@@ -5,32 +5,17 @@ namespace Mtgdb.Controls
 	[Flags]
 	public enum Direction
 	{
-		None = 0,
-		MiddleCenter = None,
+		MiddleCenter = 0,
 
-		North = 1 << 0,
-		Top = North,
+		Left = 1 << 0,
+		Top = 1 << 1,
+		Right = 1 << 2,
+		Bottom = 1 << 3,
 
-		NorthEast = North | East,
-		TopRight = NorthEast,
-
-		East = 1 << 1,
-		Right = East,
-
-		SouthEast = East | South,
-		BottomRight = SouthEast,
-
-		South = 1 << 2,
-		Bottom = South,
-
-		SouthWest = South | West,
-		BottomLeft = SouthWest,
-
-		West = 1 << 3,
-		Left = West,
-
-		NorthWest = North | West,
-		TopLeft = NorthWest
+		TopRight = Top | Right,
+		BottomRight = Bottom | Right,
+		BottomLeft = Bottom | Left,
+		TopLeft = Top | Left,
 	}
 
 	public static class DirectionExtension
@@ -41,32 +26,32 @@ namespace Mtgdb.Controls
 			{
 				// ReSharper disable CommentTypo
 
-				case Direction.None:
+				case Direction.MiddleCenter:
 					return 1; // HTCLIENT
 				
 
-				case Direction.North:
+				case Direction.Top:
 					return 12; // HTTOP
 
-				case Direction.NorthEast:
+				case Direction.TopRight:
 					return 14; //HTTOPRIGHT
 
-				case Direction.East:
+				case Direction.Right:
 					return 11; // HTRIGHT
 
-				case Direction.SouthEast:
+				case Direction.BottomRight:
 					return 17; // HTBOTTOMRIGHT
 
-				case Direction.South:
+				case Direction.Bottom:
 					return 15; // HTBOTTOM
 
-				case Direction.SouthWest:
+				case Direction.BottomLeft:
 					return 16; // HTBOTTOMLEFT
 
-				case Direction.West:
+				case Direction.Left:
 					return 10; // HTLEFT
 
-				case Direction.NorthWest:
+				case Direction.TopLeft:
 					return 13; //HTTOPLEFT
 				
 				// ReSharper restore CommentTypo
@@ -78,12 +63,12 @@ namespace Mtgdb.Controls
 
 		public static bool IsVertical(this Direction value)
 		{
-			return value.HasFlag(Direction.North) | value.HasFlag(Direction.South);
+			return value.HasFlag(Direction.Top) || value.HasFlag(Direction.Bottom);
 		}
 
 		public static bool IsHorizontal(this Direction value)
 		{
-			return value.HasFlag(Direction.East) | value.HasFlag(Direction.West);
+			return value.HasFlag(Direction.Top) || value.HasFlag(Direction.Bottom);
 		}
 	}
 }

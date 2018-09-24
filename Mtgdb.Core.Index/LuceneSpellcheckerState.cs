@@ -101,7 +101,7 @@ namespace Mtgdb.Index
 
 			values = _adapter.IsStoredInSpellchecker(userField, lang)
 				? _spellchecker?.ReadAllValuesFrom(discriminant: spellcheckerField)
-				: _reader?.Invoke(readAllValuesFrom, spellcheckerField);
+				: _reader?.Invoke1(readAllValuesFrom, spellcheckerField);
 
 			if (values == null)
 				return ReadOnlyList.Empty<string>();

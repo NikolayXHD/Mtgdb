@@ -246,7 +246,7 @@ namespace Mtgdb.Controls
 
 		public void UpdateCollection(CollectionSnapshot value, HashSet<string> affectedNames)
 		{
-			if (affectedNames?.InvokeMethod(mayContainCardNames) == false)
+			if (affectedNames?.Invoke0(mayContainCardNames) == false)
 				return;
 
 			lock (_sync)

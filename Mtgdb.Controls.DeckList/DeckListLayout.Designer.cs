@@ -2,12 +2,12 @@
 {
 	partial class DeckListLayout
 	{
-		/// <summary> 
+		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
+		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -156,11 +156,11 @@
 			this._fieldLegality = new Mtgdb.Controls.FieldControl();
 			this._panelLayout.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// _fieldName
-			// 
-			this.FieldName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			// FieldName
+			//
+			this.FieldName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.SetColumnSpan(this.FieldName, 4);
 			this.FieldName.DataText = "";
@@ -173,13 +173,13 @@
 			this.FieldName.SearchOptions = searchOptions43;
 			this.FieldName.Size = new System.Drawing.Size(213, 46);
 			this.FieldName.TabIndex = 0;
-			// 
+			//
 			// _fieldMainCount
-			// 
-			this._fieldMainCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCount.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainCount.DataText = "";
 			this._fieldMainCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCount.Location = new System.Drawing.Point(66, 198);
@@ -189,11 +189,11 @@
 			this._fieldMainCount.SearchOptions = searchOptions3;
 			this._fieldMainCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCount.TabIndex = 1;
-			// 
+			//
 			// _fieldSideCount
-			// 
-			this._fieldSideCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCount.DataText = "";
 			this._fieldSideCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -204,11 +204,11 @@
 			this._fieldSideCount.SearchOptions = searchOptions4;
 			this._fieldSideCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCount.TabIndex = 2;
-			// 
+			//
 			// _fieldLandCount
-			// 
-			this._fieldLandCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldLandCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandCount.DataText = "";
 			this._fieldLandCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -219,13 +219,13 @@
 			this._fieldLandCount.SearchOptions = searchOptions1;
 			this._fieldLandCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldLandCount.TabIndex = 3;
-			// 
+			//
 			// _fieldCreatureCount
-			// 
-			this._fieldCreatureCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldCreatureCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreatureCount.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldCreatureCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldCreatureCount.DataText = "";
 			this._fieldCreatureCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreatureCount.Location = new System.Drawing.Point(66, 170);
@@ -235,11 +235,11 @@
 			this._fieldCreatureCount.SearchOptions = searchOptions2;
 			this._fieldCreatureCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldCreatureCount.TabIndex = 4;
-			// 
+			//
 			// _fieldOtherCount
-			// 
-			this._fieldOtherCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldOtherCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherCount.DataText = "";
 			this._fieldOtherCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -250,10 +250,10 @@
 			this._fieldOtherCount.SearchOptions = searchOptions5;
 			this._fieldOtherCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldOtherCount.TabIndex = 5;
-			// 
+			//
 			// _panelLayout
-			// 
-			this._panelLayout.BackColor = System.Drawing.Color.White;
+			//
+			this._panelLayout.BackColor = System.Drawing.SystemColors.Window;
 			this._panelLayout.ColumnCount = 4;
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -323,13 +323,13 @@
 			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
 			this._panelLayout.Size = new System.Drawing.Size(223, 288);
 			this._panelLayout.TabIndex = 6;
-			// 
+			//
 			// _labelOtherSpell
-			// 
+			//
 			this._labelOtherSpell.AllowHotTrack = false;
 			this._labelOtherSpell.AllowSort = false;
-			this._labelOtherSpell.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelOtherSpell.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelOtherSpell.DataText = "";
 			this._labelOtherSpell.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -342,15 +342,15 @@
 			this._labelOtherSpell.SearchOptions = searchOptions6;
 			this._labelOtherSpell.Size = new System.Drawing.Size(56, 14);
 			this._labelOtherSpell.TabIndex = 18;
-			// 
+			//
 			// _labelCreature
-			// 
+			//
 			this._labelCreature.AllowHotTrack = false;
 			this._labelCreature.AllowSort = false;
-			this._labelCreature.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelCreature.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelCreature.BackColor = System.Drawing.Color.AliceBlue;
+			this._labelCreature.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._labelCreature.DataText = "";
 			this._labelCreature.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelCreature.Image = global::Mtgdb.Controls.Properties.Resources.creature;
@@ -362,13 +362,13 @@
 			this._labelCreature.SearchOptions = searchOptions7;
 			this._labelCreature.Size = new System.Drawing.Size(56, 14);
 			this._labelCreature.TabIndex = 17;
-			// 
+			//
 			// _labelLand
-			// 
+			//
 			this._labelLand.AllowHotTrack = false;
 			this._labelLand.AllowSort = false;
-			this._labelLand.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelLand.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelLand.DataText = "";
 			this._labelLand.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -381,13 +381,13 @@
 			this._labelLand.SearchOptions = searchOptions8;
 			this._labelLand.Size = new System.Drawing.Size(56, 14);
 			this._labelLand.TabIndex = 16;
-			// 
+			//
 			// _labelCount
-			// 
+			//
 			this._labelCount.AllowHotTrack = false;
 			this._labelCount.AllowSort = false;
-			this._labelCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelCount.DataText = "count";
 			this._labelCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -399,15 +399,15 @@
 			this._labelCount.SearchOptions = searchOptions9;
 			this._labelCount.Size = new System.Drawing.Size(44, 14);
 			this._labelCount.TabIndex = 19;
-			// 
+			//
 			// _labelMain
-			// 
+			//
 			this._labelMain.AllowHotTrack = false;
 			this._labelMain.AllowSort = false;
-			this._labelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelMain.BackColor = System.Drawing.Color.AliceBlue;
+			this._labelMain.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._labelMain.DataText = "main deck";
 			this._labelMain.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelMain.Location = new System.Drawing.Point(10, 198);
@@ -418,13 +418,13 @@
 			this._labelMain.SearchOptions = searchOptions10;
 			this._labelMain.Size = new System.Drawing.Size(56, 14);
 			this._labelMain.TabIndex = 22;
-			// 
+			//
 			// _labelMainCollected
-			// 
+			//
 			this._labelMainCollected.AllowHotTrack = false;
 			this._labelMainCollected.AllowSort = false;
-			this._labelMainCollected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelMainCollected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelMainCollected.DataText = "collected";
 			this._labelMainCollected.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -436,15 +436,15 @@
 			this._labelMainCollected.SearchOptions = searchOptions11;
 			this._labelMainCollected.Size = new System.Drawing.Size(56, 14);
 			this._labelMainCollected.TabIndex = 23;
-			// 
+			//
 			// _labelMainPercent
-			// 
+			//
 			this._labelMainPercent.AllowHotTrack = false;
 			this._labelMainPercent.AllowSort = false;
-			this._labelMainPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelMainPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelMainPercent.BackColor = System.Drawing.Color.AliceBlue;
+			this._labelMainPercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._labelMainPercent.DataText = "%";
 			this._labelMainPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelMainPercent.Location = new System.Drawing.Point(10, 226);
@@ -455,15 +455,15 @@
 			this._labelMainPercent.SearchOptions = searchOptions12;
 			this._labelMainPercent.Size = new System.Drawing.Size(56, 14);
 			this._labelMainPercent.TabIndex = 24;
-			// 
+			//
 			// _labelSideCollected
-			// 
+			//
 			this._labelSideCollected.AllowHotTrack = false;
 			this._labelSideCollected.AllowSort = false;
-			this._labelSideCollected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelSideCollected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelSideCollected.BackColor = System.Drawing.Color.AliceBlue;
+			this._labelSideCollected.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._labelSideCollected.DataText = "collected";
 			this._labelSideCollected.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelSideCollected.Location = new System.Drawing.Point(10, 254);
@@ -474,13 +474,13 @@
 			this._labelSideCollected.SearchOptions = searchOptions13;
 			this._labelSideCollected.Size = new System.Drawing.Size(56, 14);
 			this._labelSideCollected.TabIndex = 25;
-			// 
+			//
 			// _labelSide
-			// 
+			//
 			this._labelSide.AllowHotTrack = false;
 			this._labelSide.AllowSort = false;
-			this._labelSide.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelSide.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelSide.DataText = "sideboard";
 			this._labelSide.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -492,13 +492,13 @@
 			this._labelSide.SearchOptions = searchOptions14;
 			this._labelSide.Size = new System.Drawing.Size(56, 14);
 			this._labelSide.TabIndex = 26;
-			// 
+			//
 			// _fieldMainPrice
-			// 
-			this._fieldMainPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainPrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainPrice.DataText = "";
 			this._fieldMainPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainPrice.Location = new System.Drawing.Point(110, 198);
@@ -508,11 +508,11 @@
 			this._fieldMainPrice.SearchOptions = searchOptions15;
 			this._fieldMainPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainPrice.TabIndex = 28;
-			// 
+			//
 			// _fieldMainCollectedCount
-			// 
-			this._fieldMainCollectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedCount.DataText = "";
 			this._fieldMainCollectedCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -523,11 +523,11 @@
 			this._fieldMainCollectedCount.SearchOptions = searchOptions16;
 			this._fieldMainCollectedCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedCount.TabIndex = 30;
-			// 
+			//
 			// _fieldMainCollectedPrice
-			// 
-			this._fieldMainCollectedPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedPrice.DataText = "";
 			this._fieldMainCollectedPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -538,11 +538,11 @@
 			this._fieldMainCollectedPrice.SearchOptions = searchOptions17;
 			this._fieldMainCollectedPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedPrice.TabIndex = 31;
-			// 
+			//
 			// _fieldMainCollectedUnknownPrice
-			// 
-			this._fieldMainCollectedUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldMainCollectedUnknownPrice.DataText = "";
 			this._fieldMainCollectedUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -553,13 +553,13 @@
 			this._fieldMainCollectedUnknownPrice.SearchOptions = searchOptions18;
 			this._fieldMainCollectedUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainCollectedUnknownPrice.TabIndex = 32;
-			// 
+			//
 			// _fieldMainCollectedCountPercent
-			// 
-			this._fieldMainCollectedCountPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedCountPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedCountPercent.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainCollectedCountPercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainCollectedCountPercent.DataText = "";
 			this._fieldMainCollectedCountPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedCountPercent.Location = new System.Drawing.Point(66, 226);
@@ -569,13 +569,13 @@
 			this._fieldMainCollectedCountPercent.SearchOptions = searchOptions19;
 			this._fieldMainCollectedCountPercent.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedCountPercent.TabIndex = 33;
-			// 
+			//
 			// _fieldMainCollectedPricePercent
-			// 
-			this._fieldMainCollectedPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedPricePercent.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainCollectedPricePercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainCollectedPricePercent.DataText = "";
 			this._fieldMainCollectedPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedPricePercent.Location = new System.Drawing.Point(110, 226);
@@ -585,13 +585,13 @@
 			this._fieldMainCollectedPricePercent.SearchOptions = searchOptions20;
 			this._fieldMainCollectedPricePercent.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedPricePercent.TabIndex = 34;
-			// 
+			//
 			// _fieldMainCollectedUnknownPricePercent
-			// 
-			this._fieldMainCollectedUnknownPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainCollectedUnknownPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedUnknownPricePercent.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainCollectedUnknownPricePercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainCollectedUnknownPricePercent.DataText = "";
 			this._fieldMainCollectedUnknownPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 226);
@@ -601,11 +601,11 @@
 			this._fieldMainCollectedUnknownPricePercent.SearchOptions = searchOptions21;
 			this._fieldMainCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainCollectedUnknownPricePercent.TabIndex = 35;
-			// 
+			//
 			// _fieldSidePrice
-			// 
-			this._fieldSidePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSidePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSidePrice.DataText = "";
 			this._fieldSidePrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -616,11 +616,11 @@
 			this._fieldSidePrice.SearchOptions = searchOptions22;
 			this._fieldSidePrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldSidePrice.TabIndex = 36;
-			// 
+			//
 			// _fieldSideUnknownPrice
-			// 
-			this._fieldSideUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideUnknownPrice.DataText = "";
 			this._fieldSideUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -631,13 +631,13 @@
 			this._fieldSideUnknownPrice.SearchOptions = searchOptions23;
 			this._fieldSideUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldSideUnknownPrice.TabIndex = 37;
-			// 
+			//
 			// _fieldSideCollectedCount
-			// 
-			this._fieldSideCollectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedCount.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldSideCollectedCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldSideCollectedCount.DataText = "";
 			this._fieldSideCollectedCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedCount.Location = new System.Drawing.Point(66, 254);
@@ -647,13 +647,13 @@
 			this._fieldSideCollectedCount.SearchOptions = searchOptions24;
 			this._fieldSideCollectedCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCollectedCount.TabIndex = 38;
-			// 
+			//
 			// _fieldSideCollectedPrice
-			// 
-			this._fieldSideCollectedPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedPrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldSideCollectedPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldSideCollectedPrice.DataText = "";
 			this._fieldSideCollectedPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedPrice.Location = new System.Drawing.Point(110, 254);
@@ -663,13 +663,13 @@
 			this._fieldSideCollectedPrice.SearchOptions = searchOptions25;
 			this._fieldSideCollectedPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCollectedPrice.TabIndex = 39;
-			// 
+			//
 			// _fieldSideCollectedUnknownPrice
-			// 
-			this._fieldSideCollectedUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldSideCollectedUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldSideCollectedUnknownPrice.DataText = "";
 			this._fieldSideCollectedUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedUnknownPrice.Location = new System.Drawing.Point(154, 254);
@@ -679,11 +679,11 @@
 			this._fieldSideCollectedUnknownPrice.SearchOptions = searchOptions26;
 			this._fieldSideCollectedUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldSideCollectedUnknownPrice.TabIndex = 40;
-			// 
+			//
 			// _fieldSideCollectedUnknownPricePercent
-			// 
-			this._fieldSideCollectedUnknownPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedUnknownPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedUnknownPricePercent.DataText = "";
 			this._fieldSideCollectedUnknownPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -694,11 +694,11 @@
 			this._fieldSideCollectedUnknownPricePercent.SearchOptions = searchOptions27;
 			this._fieldSideCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 15);
 			this._fieldSideCollectedUnknownPricePercent.TabIndex = 41;
-			// 
+			//
 			// _fieldSideCollectedPricePercent
-			// 
-			this._fieldSideCollectedPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedPricePercent.DataText = "";
 			this._fieldSideCollectedPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -709,13 +709,13 @@
 			this._fieldSideCollectedPricePercent.SearchOptions = searchOptions28;
 			this._fieldSideCollectedPricePercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedPricePercent.TabIndex = 42;
-			// 
+			//
 			// _labelSidePercent
-			// 
+			//
 			this._labelSidePercent.AllowHotTrack = false;
 			this._labelSidePercent.AllowSort = false;
-			this._labelSidePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelSidePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelSidePercent.DataText = "%";
 			this._labelSidePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -727,13 +727,13 @@
 			this._labelSidePercent.SearchOptions = searchOptions29;
 			this._labelSidePercent.Size = new System.Drawing.Size(56, 15);
 			this._labelSidePercent.TabIndex = 27;
-			// 
+			//
 			// _fieldMainUnknownPrice
-			// 
-			this._fieldMainUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldMainUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldMainUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldMainUnknownPrice.DataText = "";
 			this._fieldMainUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainUnknownPrice.Location = new System.Drawing.Point(154, 198);
@@ -743,13 +743,13 @@
 			this._fieldMainUnknownPrice.SearchOptions = searchOptions30;
 			this._fieldMainUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainUnknownPrice.TabIndex = 29;
-			// 
+			//
 			// _labelPrice
-			// 
+			//
 			this._labelPrice.AllowHotTrack = false;
 			this._labelPrice.AllowSort = false;
-			this._labelPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelPrice.DataText = "price $";
 			this._labelPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -761,13 +761,13 @@
 			this._labelPrice.SearchOptions = searchOptions31;
 			this._labelPrice.Size = new System.Drawing.Size(44, 14);
 			this._labelPrice.TabIndex = 20;
-			// 
+			//
 			// _labelCountUnknown
-			// 
+			//
 			this._labelCountUnknown.AllowHotTrack = false;
 			this._labelCountUnknown.AllowSort = false;
-			this._labelCountUnknown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._labelCountUnknown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._labelCountUnknown.DataText = "$ unknown";
 			this._labelCountUnknown.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -779,13 +779,13 @@
 			this._labelCountUnknown.SearchOptions = searchOptions32;
 			this._labelCountUnknown.Size = new System.Drawing.Size(59, 14);
 			this._labelCountUnknown.TabIndex = 21;
-			// 
+			//
 			// _fieldCreaturePrice
-			// 
-			this._fieldCreaturePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldCreaturePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreaturePrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldCreaturePrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldCreaturePrice.DataText = "";
 			this._fieldCreaturePrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreaturePrice.Location = new System.Drawing.Point(110, 170);
@@ -795,13 +795,13 @@
 			this._fieldCreaturePrice.SearchOptions = searchOptions33;
 			this._fieldCreaturePrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldCreaturePrice.TabIndex = 45;
-			// 
+			//
 			// _fieldCreatureUnknownPrice
-			// 
-			this._fieldCreatureUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldCreatureUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreatureUnknownPrice.BackColor = System.Drawing.Color.AliceBlue;
+			this._fieldCreatureUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
 			this._fieldCreatureUnknownPrice.DataText = "";
 			this._fieldCreatureUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreatureUnknownPrice.Location = new System.Drawing.Point(154, 170);
@@ -811,11 +811,11 @@
 			this._fieldCreatureUnknownPrice.SearchOptions = searchOptions34;
 			this._fieldCreatureUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldCreatureUnknownPrice.TabIndex = 46;
-			// 
+			//
 			// _fieldLandPrice
-			// 
-			this._fieldLandPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldLandPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandPrice.DataText = "";
 			this._fieldLandPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -826,11 +826,11 @@
 			this._fieldLandPrice.SearchOptions = searchOptions35;
 			this._fieldLandPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldLandPrice.TabIndex = 47;
-			// 
+			//
 			// _fieldLandUnknownPrice
-			// 
-			this._fieldLandUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldLandUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldLandUnknownPrice.DataText = "";
 			this._fieldLandUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -841,11 +841,11 @@
 			this._fieldLandUnknownPrice.SearchOptions = searchOptions36;
 			this._fieldLandUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldLandUnknownPrice.TabIndex = 48;
-			// 
+			//
 			// _fieldOtherPrice
-			// 
-			this._fieldOtherPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldOtherPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherPrice.DataText = "";
 			this._fieldOtherPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -856,11 +856,11 @@
 			this._fieldOtherPrice.SearchOptions = searchOptions37;
 			this._fieldOtherPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldOtherPrice.TabIndex = 49;
-			// 
+			//
 			// _fieldOtherUnknownPrice
-			// 
-			this._fieldOtherUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldOtherUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldOtherUnknownPrice.DataText = "";
 			this._fieldOtherUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -871,11 +871,11 @@
 			this._fieldOtherUnknownPrice.SearchOptions = searchOptions38;
 			this._fieldOtherUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldOtherUnknownPrice.TabIndex = 50;
-			// 
+			//
 			// _fieldSideCollectedCountPercent
-			// 
-			this._fieldSideCollectedCountPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldSideCollectedCountPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._fieldSideCollectedCountPercent.DataText = "";
 			this._fieldSideCollectedCountPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
@@ -886,11 +886,11 @@
 			this._fieldSideCollectedCountPercent.SearchOptions = searchOptions39;
 			this._fieldSideCollectedCountPercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedCountPercent.TabIndex = 43;
-			// 
+			//
 			// _fieldGeneratedMana
-			// 
-			this._fieldGeneratedMana.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldGeneratedMana.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.SetColumnSpan(this._fieldGeneratedMana, 4);
 			this._fieldGeneratedMana.DataText = "";
@@ -904,16 +904,16 @@
 			this._fieldGeneratedMana.SearchOptions = searchOptions40;
 			this._fieldGeneratedMana.Size = new System.Drawing.Size(213, 32);
 			this._fieldGeneratedMana.TabIndex = 6;
-			// 
-			// _fieldSaved
-			// 
-			this.FieldSaved.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			// FieldSaved
+			//
+			this.FieldSaved.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.SetColumnSpan(this.FieldSaved, 4);
 			this.FieldSaved.DataText = "";
 			this.FieldSaved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.FieldSaved.ForeColor = System.Drawing.Color.DarkGray;
+			this.FieldSaved.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.FieldSaved.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this.FieldSaved.Location = new System.Drawing.Point(5, 108);
 			this.FieldSaved.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
@@ -922,15 +922,15 @@
 			this.FieldSaved.SearchOptions = searchOptions41;
 			this.FieldSaved.Size = new System.Drawing.Size(213, 34);
 			this.FieldSaved.TabIndex = 51;
-			// 
+			//
 			// _fieldLegality
-			// 
-			this._fieldLegality.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._fieldLegality.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.SetColumnSpan(this._fieldLegality, 4);
 			this._fieldLegality.DataText = "";
-			this._fieldLegality.ForeColor = System.Drawing.Color.Gray;
+			this._fieldLegality.ForeColor = System.Drawing.SystemColors.GrayText;
 			this._fieldLegality.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldLegality.Location = new System.Drawing.Point(5, 83);
 			this._fieldLegality.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
@@ -939,10 +939,10 @@
 			this._fieldLegality.SearchOptions = searchOptions42;
 			this._fieldLegality.Size = new System.Drawing.Size(213, 25);
 			this._fieldLegality.TabIndex = 52;
-			// 
+			//
 			// DeckListLayout
-			// 
-			this.BackColor = System.Drawing.Color.White;
+			//
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this._panelLayout);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.Name = "DeckListLayout";

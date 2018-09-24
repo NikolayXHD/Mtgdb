@@ -93,7 +93,7 @@ namespace Mtgdb.Dal
 			var frame = frameDetector.Frame;
 
 			var chain = new BitmapTransformationChain(original, logException);
-			chain.TransformCopying(_ => resize(_, size, frame));
+			chain.ReplaceBy(_ => resize(_, size, frame));
 			return chain;
 		}
 
@@ -102,7 +102,7 @@ namespace Mtgdb.Dal
 			var chain = new BitmapTransformationChain(original, logException);
 
 			if (!original.Size.FitsIn(size))
-				chain.TransformCopying(_ => resize(_, size));
+				chain.ReplaceBy(_ => resize(_, size));
 
 			return chain;
 		}
@@ -110,8 +110,8 @@ namespace Mtgdb.Dal
 		public BitmapTransformationChain Transform(Bitmap original, Size size)
 		{
 			var chain = new BitmapTransformationChain(original, logException);
-			chain.TransformCopying(_ => resize(_, size));
-			chain.TransformInplace(removeCorners);
+			chain.ReplaceBy(_ => resize(_, size));
+			chain.Update(removeCorners);
 
 			return chain;
 		}

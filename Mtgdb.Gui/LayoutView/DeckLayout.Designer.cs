@@ -28,21 +28,26 @@ namespace Mtgdb.Gui
 
 		private void InitializeComponent()
 		{
+			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
+			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
 			this._fieldImage = new Mtgdb.Controls.FieldControl();
 			this.SuspendLayout();
 			// 
 			// _fieldImage
 			// 
+			this._fieldImage.DataText = "";
 			this._fieldImage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";
+			searchOptions1.Button = buttonOptions1;
+			this._fieldImage.SearchOptions = searchOptions1;
 			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
 			// 
 			// DeckLayout
 			// 
-			this.BackColor = System.Drawing.Color.White;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this._fieldImage);
 			this.Name = "DeckLayout";
 			this.Size = new System.Drawing.Size(223, 311);

@@ -197,7 +197,7 @@ namespace Mtgdb.Gui
 				historyUpdate();
 		}
 
-		private void buttonHideScrollChanged(object sender, EventArgs eventArgs)
+		private void buttonShowScrollChanged(object sender, EventArgs eventArgs)
 		{
 			if (_updatingButtonHideScroll)
 				return;
@@ -208,9 +208,10 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.LayoutOptions.HideScroll =
 				_layoutViewDeck.LayoutOptions.HideScroll =
-					_deckListControl.HideScroll =
-						_buttonHideScrollDeck.Checked =
-							_buttonHideScrollCards.Checked = value;
+					_deckListControl.HideScroll = !value;
+
+			_buttonShowScrollDeck.Checked =
+				_buttonShowScrollCards.Checked = value;
 
 			updateFormSettings();
 
@@ -225,7 +226,7 @@ namespace Mtgdb.Gui
 			updateFormSettings();
 
 			_viewCards.TextualFieldsVisible =
-				!_buttonHideText.Checked;
+				!_buttonShowText.Checked;
 
 			_viewCards.RefreshData();
 
@@ -240,7 +241,7 @@ namespace Mtgdb.Gui
 			_viewCards.AllowPartialCards =
 				_viewDeck.AllowPartialCards =
 					_deckListControl.AllowPartialCard =
-				!_buttonHidePartialCards.Checked;
+				!_buttonShowPartialCards.Checked;
 
 
 
@@ -604,7 +605,7 @@ namespace Mtgdb.Gui
 			_layoutRight.Visible =
 				_panelFilters.Visible =
 					_panelMenu.Visible =
-						_buttonHideScrollCards.Visible =
+						_buttonShowScrollCards.Visible =
 							_labelStatusScrollCards.Visible =
 						_formRoot.ShowFilterPanels;
 		}
@@ -706,10 +707,10 @@ namespace Mtgdb.Gui
 
 			_buttons.SetupButton(_buttonShowDuplicates,
 				new ButtonImages(
-					Resources.clone_48.TransformColors(saturation: 0f),
 					Resources.clone_48,
-					Resources.clone_48.TransformColors(saturation: 0.9f),
-					Resources.clone_48.TransformColors(saturation: 2.5f),
+					null,
+					null,
+					null,
 					areImagesDoubleSized: true));
 
 			_buttons.SetupButton(_buttonShowProhibit,
@@ -745,37 +746,37 @@ namespace Mtgdb.Gui
 					areImagesDoubleSized: true));
 
 			var scrollImages = new ButtonImages(
-				Resources.scroll_shown_40,
 				Resources.scroll_hidden_40,
+				Resources.scroll_shown_40,
 				Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
 				Resources.scroll_shown_40.TransformColors(brightness: 1.05f),
 				areImagesDoubleSized: true);
 
-			_buttons.SetupButton(_buttonHideScrollCards, scrollImages);
-			_buttons.SetupButton(_buttonHideScrollDeck, scrollImages);
+			_buttons.SetupButton(_buttonShowScrollCards, scrollImages);
+			_buttons.SetupButton(_buttonShowScrollDeck, scrollImages);
 
-			_buttons.SetupButton(_buttonHidePartialCards,
+			_buttons.SetupButton(_buttonShowPartialCards,
 				new ButtonImages(
 					Resources.partial_card_enabled_40,
-					Resources.partial_card_disabled_40,
-					Resources.partial_card_enabled_40.TransformColors(brightness: 0.1f),
-					Resources.partial_card_disabled_40.TransformColors(brightness: 0.1f),
+					null,
+					null,
+					null,
 					areImagesDoubleSized: true));
 
-			_buttons.SetupButton(_buttonHideText,
+			_buttons.SetupButton(_buttonShowText,
 				new ButtonImages(
 					Resources.text_enabled_40,
-					Resources.text_disabled_40,
-					Resources.text_enabled_40.TransformColors(brightness: 0.1f),
-					Resources.text_disabled_40.TransformColors(brightness: 0.1f),
+					null,
+					null,
+					null,
 					areImagesDoubleSized: true));
 
 			_buttons.SetupButton(_buttonSearchExamplesDropDown,
 				new ButtonImages(
-					null,
 					Resources.book_40,
 					null,
-					Resources.book_40_hovered,
+					null,
+					null,
 					areImagesDoubleSized: true));
 		}
 

@@ -6,12 +6,12 @@ namespace Mtgdb.Controls
 	public class SelectionOptions
 	{
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color HotTrackBackColor { get; set; }
+		[DefaultValue(typeof(Color), "Control")]
+		public Color HotTrackBackColor { get; set; } = SystemColors.Control;
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color HotTrackBorderColor { get; set; }
+		[DefaultValue(typeof(Color), "ActiveBorder")]
+		public Color HotTrackBorderColor { get; set; } = SystemColors.ActiveBorder;
 
 		[Category("Settings")]
 		[DefaultValue(true)]
@@ -26,12 +26,12 @@ namespace Mtgdb.Controls
 		public Color RectFillColor { get; set; }
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color BackColor { get; set; }
+		[DefaultValue(typeof(Color), "Highlight")]
+		public Color BackColor { get; set; } = SystemColors.Highlight;
 
 		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Transparent")]
-		public Color ForeColor { get; set; }
+		[DefaultValue(typeof(Color), "WindowText")]
+		public Color ForeColor { get; set; } = SystemColors.HighlightText;
 
 		[Category("Settings")]
 		[DefaultValue(0)]

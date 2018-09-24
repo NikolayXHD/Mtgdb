@@ -165,17 +165,6 @@ namespace Mtgdb
 			return value;
 		}
 
-		public static TResult Invoke<TObj, TParam, TResult>(this TObj target, Func<TObj, TParam, TResult> getter, TParam param) =>
-			getter(target, param);
-
-		public static TResult Invoke2<TObj, TParam, TResult>(this TObj target, Func<TParam, TObj, TResult> getter, TParam param) =>
-			getter(param, target);
-
-		public static TResult InvokeMethod<TObj, TResult>(this TObj target, Func<TObj, TResult> getter)
-		{
-			return getter(target);
-		}
-
 		public static IOrderedEnumerable<TVal> OrderBy<TVal>(this IEnumerable<TVal> sequence, IComparer<TVal> comparer) =>
 			sequence.OrderBy(_ => _, comparer);
 
@@ -194,10 +183,10 @@ namespace Mtgdb
 
 		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> sequence, T value) => Sequence.From(value).Concat(sequence);
 
-		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence) => 
+		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence) =>
 			new HashSet<T>(sequence);
 
-		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer) => 
+		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer) =>
 			new HashSet<T>(sequence, comparer);
 
 		public static int IndexOf<T>(this IList<T> list, T value, IEqualityComparer<T> comparer)

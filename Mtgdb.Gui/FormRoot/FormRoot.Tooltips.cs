@@ -56,7 +56,7 @@ namespace Mtgdb.Gui
 			TooltipController.SetTooltip(this,
 				"Show / hide filter panels",
 				"filter panels are located on top and right edges of the window.",
-				_buttonFilterPanels);
+				_buttonShowFilterPanels);
 
 			TooltipController.SetTooltip(this,
 				"Update",

@@ -69,16 +69,19 @@ namespace Mtgdb.Gui
 			RegisterDragControl(_flowTitleLeft);
 			RegisterDragControl(_flowTitleRight);
 			RegisterDragControl(_tabs);
+
+			_tabs.ColorTabBorder = BorderInteriorColor;
+			_layoutTitle.BorderColor = BorderInteriorColor;
+
+			_layoutTitle.PaintBackground =
+				_flowTitleLeft.PaintBackground =
+					_flowTitleRight.PaintBackground =
+						_tabs.PaintBackground = false;
 		}
 
 		private void scale()
 		{
-			TitleHeight = TitleHeight.ByDpiHeight();
-
-			ImageMinimize = ImageMinimize.HalfResizeDpi();
-			ImageMaximize = ImageMaximize.HalfResizeDpi();
-			ImageNormalize = ImageNormalize.HalfResizeDpi();
-			ImageClose = ImageClose.HalfResizeDpi();
+			CaptionHeight = CaptionHeight.ByDpiHeight();
 
 			_buttonDonateYandexMoney.ScaleDpi();
 			_buttonDonatePayPal.ScaleDpi();
@@ -195,7 +198,7 @@ namespace Mtgdb.Gui
 			setupTooltips();
 
 			if (!DesignMode)
-				SnapTo(Direction.North, default(Point));
+				SnapTo(Direction.Top, default(Point));
 
 			foreach (var button in _deckButtons)
 				button.Enabled = false;
@@ -488,8 +491,8 @@ namespace Mtgdb.Gui
 
 		public bool ShowFilterPanels
 		{
-			get => _buttonFilterPanels.Checked;
-			set => _buttonFilterPanels.Checked = value;
+			get => _buttonShowFilterPanels.Checked;
+			set => _buttonShowFilterPanels.Checked = value;
 		}
 
 		public event Action ShowFilterPanelsChanged;

@@ -21,13 +21,6 @@ namespace Mtgdb.Downloader
 
 		private void scale()
 		{
-			TitleHeight = TitleHeight.ByDpiHeight();
-
-			ImageMinimize = ImageMinimize.HalfResizeDpi();
-			ImageMaximize = ImageMaximize.HalfResizeDpi();
-			ImageNormalize = ImageNormalize.HalfResizeDpi();
-			ImageClose = ImageClose.HalfResizeDpi();
-
 			_progressBar.Height = _progressBar.Height.ByDpiHeight();
 
 			this.ScaleDpi();

@@ -37,33 +37,34 @@
 			this._panelClient.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelClient.Location = new System.Drawing.Point(4, 24);
+			this._panelClient.Location = new System.Drawing.Point(8, 28);
 			this._panelClient.Margin = new System.Windows.Forms.Padding(0);
 			this._panelClient.Name = "_panelClient";
-			this._panelClient.Size = new System.Drawing.Size(792, 572);
+			this._panelClient.Size = new System.Drawing.Size(784, 564);
 			this._panelClient.TabIndex = 3;
 			// 
 			// _panelHeader
 			// 
 			this._panelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelHeader.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166)))));
-			this._panelHeader.Location = new System.Drawing.Point(4, 4);
+			this._panelHeader.Location = new System.Drawing.Point(8, 8);
 			this._panelHeader.Margin = new System.Windows.Forms.Padding(0);
 			this._panelHeader.Name = "_panelHeader";
-			this._panelHeader.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-			this._panelHeader.Size = new System.Drawing.Size(792, 20);
+			this._panelHeader.PaintBackground = false;
+			this._panelHeader.Size = new System.Drawing.Size(784, 20);
 			this._panelHeader.TabIndex = 4;
 			this._panelHeader.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
 			// 
 			// CustomBorderForm
 			// 
+			this.BackColor = System.Drawing.Color.Magenta;
 			this.ClientSize = new System.Drawing.Size(800, 600);
 			this.ControlBox = false;
 			this.Controls.Add(this._panelHeader);
 			this.Controls.Add(this._panelClient);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "CustomBorderForm";
+			this.TransparencyKey = System.Drawing.Color.Magenta;
 			this.ResumeLayout(false);
 
 		}

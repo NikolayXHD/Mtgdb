@@ -197,7 +197,7 @@ namespace Mtgdb.Controls
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +
-					"F1 to learn search string syntax\r\n\r\n",
+					"F1 to learn search bar query syntax\r\n\r\n",
 				_panelSearchIcon,
 				_panelSearch,
 				_textBoxSearch);

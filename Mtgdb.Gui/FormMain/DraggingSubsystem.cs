@@ -134,7 +134,7 @@ namespace Mtgdb.Gui
 
 			var cardHitInfo = getHitInfo(_layoutViewCards, cursorPosition);
 			var deckHitInfo = getHitInfo(_layoutViewDeck, cursorPosition);
-			
+
 			if (cardHitInfo.InBounds)
 			{
 				if (_deckEditorModel.IsDraggingFromZone.HasValue)
@@ -204,7 +204,7 @@ namespace Mtgdb.Gui
 			dragFromView.Control.Capture = false;
 			_cardMouseDown = card;
 			_dragFromView = dragFromView;
-			
+
 			_dragStartedTime = DateTime.Now;
 
 			_deckEditorModel.DragStart(card, fromDeck: dragFromView == _layoutViewDeck);
@@ -229,7 +229,7 @@ namespace Mtgdb.Gui
 				var bitmap = card?.Image(Ui);
 
 				if (bitmap == null)
-					g.DrawRectangle(new Pen(Color.Black, width: 2), new Rectangle(Point.Empty, cardIconSize));
+					g.DrawRectangle(new Pen(SystemColors.WindowText, width: 2), new Rectangle(Point.Empty, cardIconSize));
 				else
 					g.DrawImage(bitmap, new Rectangle(Point.Empty, cardIconSize));
 
@@ -248,7 +248,7 @@ namespace Mtgdb.Gui
 		public void DragAbort()
 		{
 			var draggedCard = _deckEditorModel.DraggedCard;
-			
+
 			_mouseDownLocation = null;
 			_dragStartedTime = null;
 			_deckEditorModel.DragAbort();
@@ -315,22 +315,22 @@ namespace Mtgdb.Gui
 
 			if (e.FieldName != nameof(Card.Image))
 				return;
-			
+
 			if (card == _deckEditorModel.DraggedCard)
 				drawDraggingMark(e);
 		}
 
 		private void drawDraggingMark(CustomDrawArgs e)
 		{
-			const int opacity = 66;
+			const int opacity = 127 - 32;
 
 			var gradientRectangle = e.Bounds;
 			gradientRectangle.Inflate(new Size(-70, -30).ByDpi());
 
 			var brush = new LinearGradientBrush(
 				gradientRectangle,
-				Color.FromArgb(opacity, Color.LightBlue),
-				Color.FromArgb(opacity, Color.AliceBlue),
+				Color.FromArgb(opacity, SystemColors.GradientInactiveCaption),
+				Color.FromArgb(opacity, SystemColors.InactiveBorder),
 				LinearGradientMode.BackwardDiagonal);
 
 			e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageLoader.CardSize));
@@ -407,7 +407,7 @@ namespace Mtgdb.Gui
 		public event Action<Card> DraggedLikeClick;
 		public event Action<Card, Zone> DragRemoved;
 		public event Action<Card, Zone?> DragAdded;
-		
+
 
 		public UiModel Ui { get; set; }
 

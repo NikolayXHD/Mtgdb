@@ -210,10 +210,10 @@ namespace Mtgdb.Gui
 			_buttonSampleHandDraw.ScaleDpi();
 
 			_buttonHideDeck.ScaleDpi();
-			_buttonHideScrollCards.ScaleDpi();
-			_buttonHideScrollDeck.ScaleDpi();
-			_buttonHidePartialCards.ScaleDpi();
-			_buttonHideText.ScaleDpi();
+			_buttonShowScrollCards.ScaleDpi();
+			_buttonShowScrollDeck.ScaleDpi();
+			_buttonShowPartialCards.ScaleDpi();
+			_buttonShowText.ScaleDpi();
 			_buttonSearchExamplesDropDown.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
@@ -377,10 +377,10 @@ namespace Mtgdb.Gui
 			_searchTextSelection.SubscribeToEvents();
 
 			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
-			_buttonHideScrollCards.CheckedChanged += buttonHideScrollChanged;
-			_buttonHideScrollDeck.CheckedChanged += buttonHideScrollChanged;
-			_buttonHidePartialCards.CheckedChanged += buttonPartialCardsChanged;
-			_buttonHideText.CheckedChanged += buttonHideTextChanged;
+			_buttonShowScrollCards.CheckedChanged += buttonShowScrollChanged;
+			_buttonShowScrollDeck.CheckedChanged += buttonShowScrollChanged;
+			_buttonShowPartialCards.CheckedChanged += buttonPartialCardsChanged;
+			_buttonShowText.CheckedChanged += buttonHideTextChanged;
 
 			_layoutRight.SizeChanged += rightLayoutChanged;
 
@@ -465,10 +465,10 @@ namespace Mtgdb.Gui
 			_searchTextSelection.UnsubscribeFromEvents();
 
 			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
-			_buttonHideScrollCards.CheckedChanged -= buttonHideScrollChanged;
-			_buttonHideScrollDeck.CheckedChanged -= buttonHideScrollChanged;
-			_buttonHidePartialCards.CheckedChanged -= buttonPartialCardsChanged;
-			_buttonHideText.CheckedChanged -= buttonHideTextChanged;
+			_buttonShowScrollCards.CheckedChanged -= buttonShowScrollChanged;
+			_buttonShowScrollDeck.CheckedChanged -= buttonShowScrollChanged;
+			_buttonShowPartialCards.CheckedChanged -= buttonPartialCardsChanged;
+			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
 
 			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_layoutViewCards.ProbeCardCreating -= probeCardCreating;

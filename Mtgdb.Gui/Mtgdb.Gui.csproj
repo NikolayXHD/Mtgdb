@@ -276,6 +276,9 @@
     <EmbeddedResource Include="FormMain\SearchExamplesPanel.resx">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LayoutView\CardLayoutControlBase.resx">
+      <DependentUpon>CardLayoutControlBase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\DeckLayout.resx">
       <DependentUpon>DeckLayout.cs</DependentUpon>
     </EmbeddedResource>
@@ -332,6 +335,10 @@
       <Project>{6fac0808-416a-4605-a1e7-042f7a270bb3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Core.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
       <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
       <Name>Mtgdb.Core.Controls</Name>
@@ -374,8 +381,6 @@
     <Content Include="mtg64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\MTGArena_32.png" />
-    <None Include="Resources\decked_builder.png" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -400,7 +405,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources" />
+  </ItemGroup>
   <Import Project="..\shared\shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

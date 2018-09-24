@@ -42,10 +42,12 @@
 			// 
 			// LayoutViewControl
 			// 
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this._scrollBar);
 			this.DoubleBuffered = true;
 			this.Name = "LayoutViewControl";
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion

@@ -264,6 +264,18 @@ namespace Mtgdb.Controls
 			return bounds;
 		}
 
+		public static Point TopLeft(this Rectangle rect) =>
+			rect.Location;
+
+		public static Point TopRight(this Rectangle rect) =>
+			new Point(rect.Right, rect.Top);
+
+		public static Point BottomRight(this Rectangle rect) =>
+			new Point(rect.Right, rect.Bottom);
+
+		public static Point BottomLeft(this Rectangle rect) =>
+			new Point(rect.Left, rect.Bottom);
+
 		public static float SquareNorm(this Point point) =>
 			point.X * point.X + point.Y * point.Y;
 

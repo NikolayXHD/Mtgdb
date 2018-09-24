@@ -11,7 +11,12 @@ namespace Mtgdb.Controls
 
 		public static Bitmap ResizeDpi(this Bitmap original, float multiplier = 1f)
 		{
-			return original.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round());
+			using (var chain = new BitmapTransformationChain(original, reThrow))
+			{
+				chain.ReplaceBy(bmp => bmp.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round()));
+				chain.Update(bmp => new AdaptBrightnessTransformation(bmp).Execute());
+				return chain.Result;
+			}
 		}
 
 		public static Bitmap HalfResizeDpi(this Bitmap original, bool preventMoire = false)
@@ -41,8 +46,10 @@ namespace Mtgdb.Controls
 				for (int k = stepsCount - 1; k >= 0; k--)
 				{
 					Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
-					chain.TransformCopying(bmp => bmp.FitIn(currentSize));
+					chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
 				}
+
+				chain.Update(bmp => new AdaptBrightnessTransformation(bmp).Execute());
 
 				return chain.Result;
 			}

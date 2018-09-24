@@ -85,8 +85,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "LegalIn:a■", "amonkhet block", "ixalan block")]
 		[TestCase(EnRu, "LegalIn:r■", "ravnica block", "mirrodin block")]
 		[TestCase(EnRu, "LegalIn:zzzz■")] // empty suggest
-		[TestCase(EnRu, "RestrictedIn:■", "un-sets", "vintage")]
-		[TestCase(EnRu, "RestrictedIn:u■", "un-sets")]
+		[TestCase(EnRu, "RestrictedIn:■", "vintage")]
 		[TestCase(EnRu, "RestrictedIn:v■", "vintage")]
 		[TestCase(EnRu, "RestrictedIn:я■")] // empty suggest
 		// limited values
@@ -289,7 +288,7 @@ namespace Mtgdb.Test
 			for (int i = 0; i < queryLanguageVariants.Length; i++)
 			{
 				string queryLanguageVariant = queryLanguageVariants[i];
-				
+
 				var queryCasingVariants = Array.From(
 					_boolOperatorPattern.Replace(queryLanguageVariant.ToLower(Str.Culture), match => match.Value.ToUpper(Str.Culture)),
 					queryLanguageVariant.ToUpper(Str.Culture));

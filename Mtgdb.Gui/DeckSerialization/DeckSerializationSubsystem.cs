@@ -100,7 +100,7 @@ namespace Mtgdb.Gui
 		public Deck LoadCollection()
 		{
 			var file = selectFilesToOpen("collection", allowMultiple: false).SingleOrDefault();
-			return file?.InvokeMethod(f => Deserialize(f, null));
+			return file?.Invoke0(f => Deserialize(f, null));
 		}
 
 		public Deck Deserialize(string file, string dir)

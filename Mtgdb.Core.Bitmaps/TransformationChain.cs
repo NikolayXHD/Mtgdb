@@ -14,7 +14,7 @@ namespace Mtgdb
 			_inplace.Add(null);
 		}
 
-		public void TransformCopying(Func<TValue, TValue> copying)
+		public void ReplaceBy(Func<TValue, TValue> copying)
 		{
 			TValue transformed;
 
@@ -36,11 +36,11 @@ namespace Mtgdb
 			_inplace.Add(null);
 		}
 
-		public void TransformInplace(Action<TValue> inplace)
+		public void Update(Action<TValue> inplace)
 		{
 			if (!HasPrevious)
 			{
-				TransformCopying(toCopying(inplace));
+				ReplaceBy(toCopying(inplace));
 				return;
 			}
 

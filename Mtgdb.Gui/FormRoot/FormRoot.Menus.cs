@@ -13,7 +13,7 @@ namespace Mtgdb.Gui
 		private void setupButtonClicks()
 		{
 			_buttonTooltips.Checked = true;
-			_buttonFilterPanels.Checked = true;
+			_buttonShowFilterPanels.Checked = true;
 			_buttonDownload.Enabled = false;
 
 			foreach (var state in _saveLoadMenuModes)
@@ -39,7 +39,7 @@ namespace Mtgdb.Gui
 
 			_buttonConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
-			_buttonFilterPanels.CheckedChanged += filterPanelsChecked;
+			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
 			_buttonPaste.Click += pasteClick;
 			_buttonOpenWindow.Click += openWindowClick;
@@ -319,12 +319,12 @@ namespace Mtgdb.Gui
 				Resources.tooltip_16,
 				Resources.tooltip_32);
 
-			_buttonSubsystem.SetupButton(_buttonFilterPanels,
+			_buttonSubsystem.SetupButton(_buttonShowFilterPanels,
 				new ButtonImages(
-					Resources.filters_hide_32,
 					Resources.filters_show_32,
-					Resources.filters_hide_hovered_32,
-					Resources.filters_show_hovered_32,
+					null,
+					null,
+					null,
 					areImagesDoubleSized: true));
 
 			setupButton(_buttonDownload, Resources.update_40, true);

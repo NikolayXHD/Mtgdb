@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
@@ -14,7 +15,7 @@ namespace Mtgdb.Test
 		{
 			_repo = new CardRepository
 			{
-				FilterSetCode = F.IsEqualTo("ISD", Str.Comparer)
+				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer)
 			};
 
 			_repo.LoadFile();
@@ -60,7 +61,7 @@ namespace Mtgdb.Test
 		[Test]
 		public void Collected_cards_are_preferred()
 		{
-			const string name = "plains";
+			const string name = "Plains";
 			const int count = 1;
 
 			var cardCollected = _repo.CardsByName[name][0];
@@ -81,11 +82,14 @@ namespace Mtgdb.Test
 		[Test]
 		public void Known_price_is_preferred()
 		{
-			const string name = "plains";
+			const string name = "Snow-Covered Plains";
 			const int count = 1;
 
-			var cardKnownPrice = _repo.CardsByName[name][0];
-			var cardUnknownPrice = _repo.CardsByName[name][1];
+			var cardVariants = _repo.CardsByName[name];
+
+			var cardKnownPrice = cardVariants.First(c => c.PricingMid.HasValue);
+			var cardUnknownPrice = cardVariants.FirstOrDefault(c => !c.PriceMid.HasValue) ??
+				cardVariants.First(c => c != cardKnownPrice);
 
 			_deckEditor.Add(cardUnknownPrice, count);
 
@@ -96,6 +100,7 @@ namespace Mtgdb.Test
 			{
 				var transformed = _transformation.Transform(deck, collection);
 
+				Assert.That(transformed.MainDeck.Count.ContainsKey(cardKnownPrice.Id));
 				Assert.That(transformed.MainDeck.Count[cardKnownPrice.Id], Is.EqualTo(count));
 				Assert.That(transformed.MainDeck.Count.ContainsKey(cardUnknownPrice.Id), Is.False);
 			}
@@ -104,10 +109,13 @@ namespace Mtgdb.Test
 		[Test]
 		public void Collected_is_preferred_over_Known_price()
 		{
-			const string name = "plains";
+			const string name = "Snow-Covered Plains";
 
-			var cardKnownPrice = _repo.CardsByName[name][0];
-			var cardCollectedUnknownPrice = _repo.CardsByName[name][1];
+			var cardVariants = _repo.CardsByName[name];
+
+			var cardKnownPrice = cardVariants.First(c => c.PricingMid.HasValue);
+			var cardCollectedUnknownPrice = cardVariants.FirstOrDefault(c => !c.PriceMid.HasValue) ??
+				cardVariants.First(c => c != cardKnownPrice);
 
 			_collectionEditor.Add(cardCollectedUnknownPrice, 1);
 			_deckEditor.Add(cardKnownPrice, 3);

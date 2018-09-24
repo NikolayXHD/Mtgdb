@@ -71,8 +71,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bitmap\AdaptBrightnessTransformation.cs" />
     <Compile Include="Bitmap\SemiTransparentShadowTransformation.cs" />
     <Compile Include="Bitmap\BitmapExtensions.cs" />
+    <Compile Include="BorderedFlowLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
@@ -180,6 +184,9 @@
   <ItemGroup>
     <EmbeddedResource Include="BorderedTableLayoutPanel.resx">
       <DependentUpon>BorderedTableLayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LayoutView\LayoutControl.resx">
+      <DependentUpon>LayoutControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\LayoutViewControl.resx">
       <DependentUpon>LayoutViewControl.cs</DependentUpon>

@@ -54,11 +54,12 @@ namespace Mtgdb.Downloader
 			// _panelClient
 			// 
 			this._panelClient.Controls.Add(this._tableLayoutRoot);
-			this._panelClient.Size = new System.Drawing.Size(831, 427);
+			this._panelClient.Location = new System.Drawing.Point(4, 22);
+			this._panelClient.Size = new System.Drawing.Size(831, 429);
 			// 
 			// _panelHeader
 			// 
-			this._panelHeader.Size = new System.Drawing.Size(738, 20);
+			this._panelHeader.Size = new System.Drawing.Size(730, 18);
 			// 
 			// _buttonApp
 			// 
@@ -87,7 +88,7 @@ namespace Mtgdb.Downloader
 			this._textBoxLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 0);
 			this._textBoxLog.Name = "_textBoxLog";
 			this._textBoxLog.ReadOnly = true;
-			this._textBoxLog.Size = new System.Drawing.Size(823, 262);
+			this._textBoxLog.Size = new System.Drawing.Size(823, 271);
 			this._textBoxLog.TabIndex = 0;
 			this._textBoxLog.Text = "";
 			// 
@@ -198,7 +199,7 @@ namespace Mtgdb.Downloader
 			// 
 			this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._progressBar.Location = new System.Drawing.Point(4, 268);
+			this._progressBar.Location = new System.Drawing.Point(4, 277);
 			this._progressBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 0);
 			this._progressBar.Name = "_progressBar";
 			this._progressBar.Size = new System.Drawing.Size(823, 25);
@@ -209,16 +210,17 @@ namespace Mtgdb.Downloader
 			// _labelProgress
 			// 
 			this._labelProgress.AutoSize = true;
-			this._labelProgress.Location = new System.Drawing.Point(4, 296);
+			this._labelProgress.Location = new System.Drawing.Point(4, 305);
 			this._labelProgress.Margin = new System.Windows.Forms.Padding(4, 3, 0, 0);
 			this._labelProgress.Name = "_labelProgress";
-			this._labelProgress.Size = new System.Drawing.Size(216, 20);
+			this._labelProgress.Size = new System.Drawing.Size(145, 13);
 			this._labelProgress.TabIndex = 9;
 			this._labelProgress.Text = "121 / 10030 files ready";
 			this._labelProgress.Visible = false;
 			// 
 			// _tableLayoutRoot
 			// 
+			this._tableLayoutRoot.BackColor = System.Drawing.SystemColors.Control;
 			this._tableLayoutRoot.ColumnCount = 1;
 			this._tableLayoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._tableLayoutRoot.Controls.Add(this._labelProgress, 0, 2);
@@ -234,7 +236,7 @@ namespace Mtgdb.Downloader
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._tableLayoutRoot.Size = new System.Drawing.Size(831, 427);
+			this._tableLayoutRoot.Size = new System.Drawing.Size(831, 429);
 			this._tableLayoutRoot.TabIndex = 10;
 			// 
 			// _tableLayoutButtons
@@ -242,6 +244,7 @@ namespace Mtgdb.Downloader
 			this._tableLayoutButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this._tableLayoutButtons.BackColor = System.Drawing.SystemColors.Control;
 			this._tableLayoutButtons.ColumnCount = 7;
 			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
 			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.923077F));
@@ -259,7 +262,7 @@ namespace Mtgdb.Downloader
 			this._tableLayoutButtons.Controls.Add(this._buttonEditConfig, 0, 0);
 			this._tableLayoutButtons.Controls.Add(this._buttonDesktopShortcut, 0, 1);
 			this._tableLayoutButtons.Controls.Add(this._buttonNotifications, 2, 1);
-			this._tableLayoutButtons.Location = new System.Drawing.Point(4, 319);
+			this._tableLayoutButtons.Location = new System.Drawing.Point(4, 321);
 			this._tableLayoutButtons.Margin = new System.Windows.Forms.Padding(4, 3, 0, 0);
 			this._tableLayoutButtons.Name = "_tableLayoutButtons";
 			this._tableLayoutButtons.RowCount = 2;
@@ -307,10 +310,6 @@ namespace Mtgdb.Downloader
 			this.ClientSize = new System.Drawing.Size(839, 455);
 			this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.ImageClose = global::Mtgdb.Downloader.Properties.Resources.close;
-			this.ImageMaximize = global::Mtgdb.Downloader.Properties.Resources.maximize;
-			this.ImageMinimize = global::Mtgdb.Downloader.Properties.Resources.minimize;
-			this.ImageNormalize = global::Mtgdb.Downloader.Properties.Resources.normalize;
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "UpdateForm";

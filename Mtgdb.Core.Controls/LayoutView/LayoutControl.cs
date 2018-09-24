@@ -109,5 +109,17 @@ namespace Mtgdb.Controls
 		}
 
 		private object _dataSource;
+
+		private void InitializeComponent()
+		{
+			this.SuspendLayout();
+			// 
+			// LayoutControl
+			// 
+			this.BackColor = System.Drawing.SystemColors.Window;
+			this.Name = "LayoutControl";
+			this.ResumeLayout(false);
+
+		}
 	}
 }

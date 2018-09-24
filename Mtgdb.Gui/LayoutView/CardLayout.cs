@@ -43,10 +43,6 @@ namespace Mtgdb.Gui
 			_fieldImage.SearchOptions.Button.Icon = Properties.Resources.search_like_hovered_32;
 			_fieldImage.SearchOptions.Button.Margin = new Size(4, 4);
 
-			HighlightOptions.HighlightBorderColor = Color.CadetBlue;
-			HighlightOptions.HighlightColor = Color.LightBlue;
-			HighlightOptions.HighlightContextColor = Color.LightCyan;
-
 			DeckEditorButtons.SetupButtons(_fieldImage);
 
 			SubscribeToFieldEvents();

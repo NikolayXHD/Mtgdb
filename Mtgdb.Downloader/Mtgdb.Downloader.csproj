@@ -180,45 +180,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\close.png" />
+    <Folder Include="Resources" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\maximize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\minimize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\normalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\properties_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\mtg_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\price_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\card_img_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\art_24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\card_data_20.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\card_img_24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\update.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\mailbox_26.png" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

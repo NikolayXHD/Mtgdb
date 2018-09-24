@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Mtgdb.Dal;
 using Newtonsoft.Json;
 
@@ -26,7 +28,7 @@ namespace Mtgdb.Downloader
 		{
 			if (!_repo.IsLoadingComplete)
 				throw new InvalidOperationException("Card repository is not loaded");
-			
+
 			if (!_priceRepository.IsLoadingComplete)
 				throw new InvalidOperationException("Price repository is not loaded");
 
@@ -60,26 +62,30 @@ namespace Mtgdb.Downloader
 			using (var stream = _priceRepository.AppendPriceIdStream())
 			using (var writer = new StreamWriter(stream))
 				foreach (var set in sets)
-					foreach (var card in set.Cards)
+					Parallel.ForEach(set.Cards, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, card =>
 					{
-						if (_aborted)
+						lock (_sync)
+						{
+							if (_aborted)
+								return;
+
+							if (!_priceRepository.IsDefined(card) || _priceRepository.ContainsSid(card))
+								return;
+						}
+
+						var sid = _client.DownloadSid(card);
+						if (sid == null)
 							return;
 
-						if (!_priceRepository.IsDefined(card) || _priceRepository.ContainsSid(card))
-							continue;
+						var serialized = JsonConvert.SerializeObject(sid, Formatting.None);
 
-						var sid = _client.DownloadSid(set.MagicCardsInfoCode, card.MciNumber);
-
-						if (sid == null)
-							continue;
-
-						_priceRepository.AddSid(card, sid);
-
-						SidAdded?.Invoke();
-
-						var serialized = JsonConvert.SerializeObject(_priceRepository.GetPriceId(card), Formatting.None);
-						writer.WriteLine(serialized);
-					}
+						lock (_sync)
+						{
+							_priceRepository.AddSid(card, sid);
+							SidAdded?.Invoke();
+							writer.WriteLine(serialized);
+						}
+					});
 		}
 
 		private void downloadPrices()
@@ -89,31 +95,45 @@ namespace Mtgdb.Downloader
 			using (var stream = _priceRepository.AppendPriceInProgressStream())
 			using (var writer = new StreamWriter(stream))
 				foreach (var set in sets)
-					foreach (var card in set.Cards)
+					Parallel.ForEach(set.Cards, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, card =>
 					{
-						if (_aborted)
+						PriceId sid;
+						lock (_sync)
+						{
+							if (_aborted)
+								return;
+
+							if (!_priceRepository.IsDefined(card))
+								return;
+
+							sid = _priceRepository.GetPriceId(card);
+
+							if (sid == null)
+								return;
+
+							if (_priceRepository.ContainsPrice(sid))
+								return;
+						}
+
+						PriceValues price;
+						try
+						{
+							price = _client.DownloadPrice(sid);
+						}
+						catch (WebException)
+						{
 							return;
+						}
 
-						if (!_priceRepository.IsDefined(card))
-							continue;
+						var serialized = JsonConvert.SerializeObject(price, Formatting.None);
 
-						var sid = _priceRepository.GetPriceId(card);
-
-						if (sid == null)
-							continue;
-
-						if (_priceRepository.ContainsPrice(sid))
-							continue;
-
-						var price = _client.DownloadPrice(sid);
-
-						_priceRepository.AddPrice(sid, price);
-
-						PriceAdded?.Invoke();
-
-						var serialized = JsonConvert.SerializeObject(_priceRepository.GetPrice(sid), Formatting.None);
-						writer.WriteLine(serialized);
-					}
+						lock (_sync)
+						{
+							_priceRepository.AddPrice(sid, price);
+							writer.WriteLine(serialized);
+							PriceAdded?.Invoke();
+						}
+					});
 		}
 
 		public event Action PriceAdded;
@@ -146,5 +166,9 @@ namespace Mtgdb.Downloader
 		private readonly CardRepository _repo;
 		private readonly PriceDownloaderRepository _priceRepository;
 		private readonly PriceClient _client;
+
+		private const int Parallelism = 1;
+
+		private readonly object _sync = new object();
 	}
 }

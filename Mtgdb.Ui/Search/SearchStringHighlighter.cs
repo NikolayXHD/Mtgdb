@@ -25,18 +25,18 @@ namespace Mtgdb.Ui
 			var tokenizer = new MtgTolerantTokenizer(_findEditor.Text);
 			tokenizer.Parse();
 
-			setColor(0, _findEditor.TextLength, Color.Black, false);
+			setColor(0, _findEditor.TextLength, SystemColors.WindowText, false);
 
 			foreach (var token in tokenizer.Tokens)
 			{
 				if (token.Type.IsAny(TokenType.FieldValue))
 					setColor(token.Position, token.Value.Length, null, true);
 				else if (token.Type.IsAny(TokenType.Field | TokenType.Colon))
-					setColor(token.Position, token.Value.Length, Color.Teal, false);
+					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkCyan)), false);
 				else if (token.Type.IsAny(TokenType.RegexBody))
-					setColor(token.Position, token.Value.Length, Color.DarkRed, false);
+					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkRed)), false);
 				else
-					setColor(token.Position, token.Value.Length, Color.MediumBlue, false);
+					setColor(token.Position, token.Value.Length, SystemColors.Highlight, false);
 			}
 
 			_findEditor.SelectionStart = start;

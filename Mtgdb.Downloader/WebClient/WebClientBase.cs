@@ -90,12 +90,12 @@ namespace Mtgdb.Downloader
 			}
 			catch (WebException ex)
 			{
-				_log.Error(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
+				_log.Info(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
 				throw;
 			}
 			catch (ProtocolViolationException ex)
 			{
-				_log.Error(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
+				_log.Info(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
 				throw;
 			}
 
@@ -105,7 +105,6 @@ namespace Mtgdb.Downloader
 		protected static HttpWebRequest CreateRequest(string url)
 		{
 			var request = (HttpWebRequest) WebRequest.Create(url);
-
 			request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
 			return request;
 		}

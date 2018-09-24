@@ -26,14 +26,11 @@ namespace Mtgdb.Dal
 			IsLoadingComplete = false;
 
 			if (File.Exists(idFile))
-				_sidsBySetByCard = readJsonLines(idFile)
+				_sidsByMultiverseId = readJsonLines(idFile)
 					.Select(JsonConvert.DeserializeObject<PriceId>)
-					.GroupBy(_ => _.Set)
-					.ToDictionary(
-						gr => gr.Key,
-						gr => gr.ToDictionary(_ => _.Card));
+					.ToDictionary(_ => _.MultiverseId);
 			else
-				_sidsBySetByCard = new Dictionary<string, Dictionary<string, PriceId>>();
+				_sidsByMultiverseId = new Dictionary<int, PriceId>();
 
 			if (File.Exists(priceFile))
 			{
@@ -44,58 +41,32 @@ namespace Mtgdb.Dal
 			else
 				_priceBySid = new Dictionary<string, PriceValues>();
 
-			SidCount = _sidsBySetByCard.SelectMany(_ => _.Value.Values).Count();
+			SidCount = _sidsByMultiverseId.Count;
 
 			IsLoadingComplete = true;
 		}
 
-		public bool IsDefined(Card c)
-		{
-			return !string.IsNullOrEmpty(c.MciNumber) && !string.IsNullOrEmpty(c.Set.MagicCardsInfoCode);
-		}
+		public bool IsDefined(Card c) =>
+			c.MultiverseId.HasValue;
 
-		public bool ContainsSid(Card c)
-		{
-			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out var sidsByCard))
-				return false;
+		public bool ContainsSid(Card c) =>
+			c.MultiverseId.HasValue && _sidsByMultiverseId.ContainsKey(c.MultiverseId.Value);
 
-			return sidsByCard.ContainsKey(c.MciNumber);
-		}
+		public bool ContainsPrice(PriceId priceId) =>
+			priceId.Sid == null || _priceBySid.ContainsKey(priceId.Sid);
 
-		public bool ContainsPrice(PriceId priceId)
-		{
-			return priceId.Sid == null || _priceBySid.ContainsKey(priceId.Sid);
-		}
-
-		public PriceId GetPriceId(Card c)
-		{
-			if (string.IsNullOrEmpty(c.MciNumber) || string.IsNullOrEmpty(c.Set.MagicCardsInfoCode))
-				return null;
-
-			if (!_sidsBySetByCard.TryGetValue(c.Set.MagicCardsInfoCode, out var sidsByCard))
-				return null;
-
-			if (!sidsByCard.TryGetValue(c.MciNumber, out var sid))
-				return null;
-
-			return sid;
-		}
+		public PriceId GetPriceId(Card c) =>
+			c.MultiverseId?.Invoke2(CollectionExtensions.TryGet, _sidsByMultiverseId);
 
 		public void AddSid(Card card, PriceId sid)
 		{
 			if (!IsDefined(card))
 				throw new ArgumentException("card is not defined", nameof(card));
 
-			if (sid.Set != card.Set.MagicCardsInfoCode || sid.Card != card.MciNumber)
+			if (sid.MultiverseId != card.MultiverseId.Value)
 				throw new ArgumentException("sid doesn't match the card");
 
-			if (!_sidsBySetByCard.TryGetValue(card.Set.MagicCardsInfoCode, out var ids))
-			{
-				ids = new Dictionary<string, PriceId>();
-				_sidsBySetByCard.Add(card.Set.MagicCardsInfoCode, ids);
-			}
-			
-			ids.Add(card.MciNumber, sid);
+			_sidsByMultiverseId.Add(card.MultiverseId.Value, sid);
 
 			SidCount++;
 		}
@@ -146,9 +117,9 @@ namespace Mtgdb.Dal
 
 		public int PricesCount => _priceBySid.Count;
 
-		private Dictionary<string, Dictionary<string, PriceId>> _sidsBySetByCard;
+		private Dictionary<int, PriceId> _sidsByMultiverseId;
 		private Dictionary<string, PriceValues> _priceBySid;
-		
+
 		protected readonly string PriceFile;
 		protected readonly string IdFile;
 

@@ -144,23 +144,22 @@ namespace Mtgdb.Gui
 
 		private void updateFormPosition()
 		{
-			if (_history.Current.WindowArea.HasValue)
-			{
+			if (_history.Current.WindowSnapDirection.HasValue)
+				_formRoot.SnapDirection = _history.Current.WindowSnapDirection.Value;
+			else if (_history.Current.WindowArea.HasValue)
 				_formRoot.WindowArea = _history.Current.WindowArea.Value;
-
-				if (_history.Current.WindowSnapDirection.HasValue)
-					_formRoot.SnapDirection = _history.Current.WindowSnapDirection.Value;
-			}
 			else
-			{
-				_formRoot.SnapDirection = Direction.North;
-			}
+				_formRoot.SnapDirection = Direction.Top;
 		}
 
 		private void historyUpdateFormPosition(GuiSettings settings)
 		{
-			settings.WindowArea = _formRoot.WindowArea;
 			settings.WindowSnapDirection = _formRoot.SnapDirection;
+
+			if (_formRoot.SnapDirection?.Equals(Direction.MiddleCenter) != false)
+				settings.WindowArea = _formRoot.WindowArea;
+			else
+				settings.WindowArea = null;
 		}
 
 		public void OnTabUnselected()
@@ -639,9 +638,9 @@ namespace Mtgdb.Gui
 		private void updateFormSettings()
 		{
 			_formRoot.ShowDeck = !_buttonHideDeck.Checked;
-			_formRoot.ShowScroll = !_buttonHideScrollCards.Checked;
-			_formRoot.ShowPartialCards = !_buttonHidePartialCards.Checked;
-			_formRoot.ShowTextualFields = !_buttonHideText.Checked;
+			_formRoot.ShowScroll = _buttonShowScrollCards.Checked;
+			_formRoot.ShowPartialCards = _buttonShowPartialCards.Checked;
+			_formRoot.ShowTextualFields = _buttonShowText.Checked;
 			_formRoot.ZoomSettings = _formZoom.Settings;
 
 			_formRoot.LoadedGuiSettings = true;
@@ -698,9 +697,9 @@ namespace Mtgdb.Gui
 				DeckName = _deckEditor.DeckName,
 				SearchResultScroll = _viewCards.VisibleRecordIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
-				ShowScroll = !_buttonHideScrollCards.Checked,
-				ShowPartialCards = !_buttonHidePartialCards.Checked,
-				ShowTextualFields = !_buttonHideText.Checked,
+				ShowScroll = _buttonShowScrollCards.Checked,
+				ShowPartialCards = _buttonShowPartialCards.Checked,
+				ShowTextualFields = _buttonShowText.Checked,
 				ShowFilterPanels = _formRoot.ShowFilterPanels,
 				FilterByDeckMode = _deckListControl.FilterByDeckMode,
 				Zoom = _formZoom.Settings
@@ -777,9 +776,9 @@ namespace Mtgdb.Gui
 			_requiredScroll = settings.SearchResultScroll;
 
 			_buttonHideDeck.Checked = settings.ShowDeck == false;
-			_buttonHideScrollCards.Checked = settings.ShowScroll == false;
-			_buttonHidePartialCards.Checked = settings.ShowPartialCards == false;
-			_buttonHideText.Checked = settings.ShowTextualFields == false;
+			_buttonShowScrollCards.Checked = settings.ShowScroll != false;
+			_buttonShowPartialCards.Checked = settings.ShowPartialCards != false;
+			_buttonShowText.Checked = settings.ShowTextualFields != false;
 			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
 
 			applyShowFilterPanels();

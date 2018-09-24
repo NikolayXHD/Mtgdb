@@ -1,36 +1,49 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mtgdb.Downloader
 {
 	public class PriceClient : WebClientBase
 	{
-		public PriceId DownloadSid(string mciSetCode, string mciCardNumber)
+		public PriceId DownloadSid(Card c)
 		{
-			if (string.IsNullOrEmpty(mciSetCode))
-				return null;
+			int multiverseId = c.MultiverseId.Value;
 
-			if (string.IsNullOrEmpty(mciCardNumber))
-				return null;
+			string json = DownloadString("https://api.scryfall.com/cards/multiverse/" + multiverseId);
 
-			string html = DownloadString(MagiccardsUrl + "/" + mciSetCode.ToLower(Str.Culture) + "/en/" + mciCardNumber + ".html");
-
-			if (html == null)
-				return null;
-
-			var sidMatch = _sidRegex.Match(html);
-
-			return new PriceId
+			try
 			{
-				Set = mciSetCode,
-				Card = mciCardNumber,
-				Sid = sidMatch.Success ? sidMatch.Groups["sid"].Value : null
-			};
+				var jObj = JsonConvert.DeserializeObject<JObject>(json);
+				var urisToken = jObj["purchase_uris"];
+				var tcgplayerToken = urisToken["tcgplayer"];
+				string url = tcgplayerToken.Value<string>();
+				string sid = url.Split('/').Last();
+
+				if (sid.StartsWith("show"))
+					sid = null;
+
+				return new PriceId
+				{
+					MultiverseId = multiverseId,
+					Sid = sid
+				};
+			}
+			catch
+			{
+				return new PriceId
+				{
+					MultiverseId = multiverseId,
+					Sid = null
+				};
+			}
 		}
 
 		public PriceValues DownloadPrice(PriceId priceId)
 		{
-			string script = DownloadString(MagiccardsUrl + "/tcgplayer/hl?sid=" + priceId.Sid);
+			string script = DownloadString("http://partner.tcgplayer.com/x3/mcpl.ashx?pk=MAGCINFO&sid=" + priceId.Sid);
 
 			var result = new PriceValues
 			{
@@ -40,14 +53,19 @@ namespace Mtgdb.Downloader
 			if (script == null)
 				return result;
 
-			var priceMatch = _priceRegex.Match(script);
-			if (!priceMatch.Success)
-				return result;
+			var priceMatches = _priceRegex.Matches(script);
 
+			foreach (Match match in priceMatches)
+			{
+				if (match.Groups["low"].Success)
+					result.Low = parsePrice(match.Groups["low"].Value);
 
-			result.Low = parsePrice(priceMatch.Groups["low"].Value);
-			result.Mid = parsePrice(priceMatch.Groups["mid"].Value);
-			result.High = parsePrice(priceMatch.Groups["hig"].Value);
+				if (match.Groups["mid"].Success)
+					result.Mid = parsePrice(match.Groups["mid"].Value);
+
+				if (match.Groups["high"].Success)
+					result.High = parsePrice(match.Groups["high"].Value);
+			}
 
 			return result;
 		}
@@ -60,9 +78,8 @@ namespace Mtgdb.Downloader
 			return null;
 		}
 
-		private const string MagiccardsUrl = "https://magiccards.info";
-		private static readonly Regex _sidRegex = new Regex(@"[\?\&]sid=(?<sid>[\w\d]+)", RegexOptions.Compiled);
-		private static readonly Regex _priceRegex = new Regex(@"L:.+>(?<low>NA|\$\d+(?:\.\d\d?)?)<.+M:.+>(?<mid>NA|\$\d+(?:\.\d\d?)?)<.+H:.+>(?<hig>NA|\$\d+(?:\.\d\d?)?)<",
+		private static readonly Regex _priceRegex = new Regex(
+			@"(?<=TCGPPriceLow\\'><[^>]+>)(?<low>[^<]+)(?=<)|(?<=TCGPPriceMid\\'><[^>]+>)(?<mid>[^<]+)(?=<)|(?<=TCGPPriceHigh\\'><[^>]+>)(?<high>[^<]+)(?=<)",
 			RegexOptions.Compiled);
 	}
 }

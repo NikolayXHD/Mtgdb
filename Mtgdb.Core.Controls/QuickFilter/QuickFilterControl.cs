@@ -35,8 +35,12 @@ namespace Mtgdb.Controls
 			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
 			MouseMove += mouseMove;
+
+			SystemColorsChanged += systemColorsChanged;
 		}
 
+		private void systemColorsChanged(object sender, EventArgs e) =>
+			createDerivedImages();
 
 		private void makeProhibitedValuesIgnored()
 		{
@@ -86,7 +90,11 @@ namespace Mtgdb.Controls
 			for (int i = 0; i < imagesTransformed.Length; i++)
 			{
 				imagesTransformed[i] = imageCollection[i].FitIn(ImageSize);
+
 				new GrayscaleBmpProcessor(imagesTransformed[i], opacity)
+					.Execute();
+				
+				new AdaptBrightnessTransformation(imagesTransformed[i])
 					.Execute();
 			}
 
@@ -618,7 +626,7 @@ namespace Mtgdb.Controls
 			if (HintIcon != null)
 				e.Graphics.DrawImage(HintIcon, textLocation.Plus(HintIconShift).Minus(HintTextShift));
 
-			e.Graphics.DrawText(property, font, Color.Black, Color.White, 1f, 3f, new Rectangle(textLocation, textSize));
+			e.Graphics.DrawText(property, font, SystemColors.WindowText, SystemColors.Window, 1f, 3f, new Rectangle(textLocation, textSize));
 
 			if (rotateText)
 				e.Graphics.RotateTransform(-90f);
@@ -851,7 +859,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionColor
 		{
-			get => _selectionColor;
+			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_selectionColor) : _selectionColor;
 			set
 			{
 				_selectionColor = value;
@@ -863,7 +871,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionBorderColor
 		{
-			get => _selectionBorderColor;
+			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_selectionBorderColor) : _selectionBorderColor;
 			set
 			{
 				_selectionBorderColor = value;
@@ -875,7 +883,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color ProhibitedColor
 		{
-			get => _prohibitedColor;
+			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_prohibitedColor) : _prohibitedColor;
 			set
 			{
 				_prohibitedColor = value;
