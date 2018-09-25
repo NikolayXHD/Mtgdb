@@ -5,16 +5,26 @@ namespace Mtgdb.Controls
 {
 	public class ButtonImages
 	{
+		public ButtonImages(Bitmap image, bool x2)
+			:this(image, null, null, null, x2)
+		{
+		}
+
+		public ButtonImages(Bitmap uncheckedImage, Bitmap checkedImage, bool x2)
+			:this(uncheckedImage, checkedImage, null, null, x2)
+		{
+		}
+
 		public ButtonImages(
 			Bitmap uncheckedImage,
 			Bitmap checkedImage,
 			Bitmap uncheckedHoveredImage,
 			Bitmap checkedHoveredImage,
-			bool areImagesDoubleSized)
+			bool x2)
 		{
 			Func<Bitmap, Bitmap> scale;
 
-			if (areImagesDoubleSized)
+			if (x2)
 				scale = bitmap => bitmap?.HalfResizeDpi();
 			else
 				scale = bitmap => bitmap?.ResizeDpi();

@@ -226,7 +226,7 @@ namespace Mtgdb.Gui
 			updateFormSettings();
 
 			_viewCards.TextualFieldsVisible =
-				!_buttonShowText.Checked;
+				_buttonShowText.Checked;
 
 			_viewCards.RefreshData();
 
@@ -675,107 +675,42 @@ namespace Mtgdb.Gui
 
 		private void setupCheckButtonImages()
 		{
-			const float sat = 2f;
-
-			float sampleHandOpacity = 0.6f;
-
 			_buttons.SetupButton(_buttonSampleHandNew,
-				new ButtonImages(
-					null,
-					Resources.hand_48.SetOpacity(sampleHandOpacity),
-					null,
-					Resources.hand_48,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.hand_48, x2: true));
 
 			_buttons.SetupButton(_buttonSampleHandDraw,
-				new ButtonImages(
-					null,
-					Resources.draw_48.SetOpacity(sampleHandOpacity),
-					null,
-					Resources.draw_48,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.draw_48, x2: true));
 
 			_buttons.SetupButton(_buttonSampleHandMulligan,
-				new ButtonImages(
-					null,
-					Resources.mulligan_48.SetOpacity(sampleHandOpacity),
-					null,
-					Resources.mulligan_48,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.mulligan_48, x2: true));
 
 			_buttons.SetupButton(_buttonShowDuplicates,
-				new ButtonImages(
-					Resources.clone_48,
-					null,
-					null,
-					null,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.clone_48, x2: true));
 
 			_buttons.SetupButton(_buttonShowProhibit,
-				new ButtonImages(
-					Resources.exclude_hidden_24,
-					Resources.exclude_shown_24,
-					Resources.exclude_hidden_24.TransformColors(sat, 1.2f),
-					Resources.exclude_shown_24.TransformColors(sat, 1.2f),
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.exclude_minus_24, x2: true));
 
 			_buttons.SetupButton(_buttonExcludeManaAbility,
-				new ButtonImages(
-					Resources.include_plus_24,
-					Resources.exclude_minus_24,
-					Resources.include_plus_24.TransformColors(sat, 1f),
-					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.include_plus_24, Resources.exclude_minus_24, x2: true));
 
 			_buttons.SetupButton(_buttonExcludeManaCost,
-				new ButtonImages(
-					Resources.include_plus_24,
-					Resources.exclude_minus_24,
-					Resources.include_plus_24.TransformColors(sat, 1f),
-					Resources.exclude_minus_24.TransformColors(sat, 1.2f),
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.include_plus_24, Resources.exclude_minus_24, x2: true));
 
 			_buttons.SetupButton(_buttonHideDeck,
-				new ButtonImages(
-					Resources.shown_40,
-					Resources.hidden_40,
-					Resources.shown_40.TransformColors(brightness: 0.1f),
-					Resources.hidden_40.TransformColors(brightness: 0.1f),
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.shown_40, Resources.hidden_40, x2: true));
 
-			var scrollImages = new ButtonImages(
-				Resources.scroll_hidden_40,
-				Resources.scroll_shown_40,
-				Resources.scroll_hidden_40.TransformColors(brightness: 1.05f),
-				Resources.scroll_shown_40.TransformColors(brightness: 1.05f),
-				areImagesDoubleSized: true);
-
+			var scrollImages = new ButtonImages(Resources.scroll_hidden_40, Resources.scroll_shown_40, x2: true);
 			_buttons.SetupButton(_buttonShowScrollCards, scrollImages);
 			_buttons.SetupButton(_buttonShowScrollDeck, scrollImages);
 
 			_buttons.SetupButton(_buttonShowPartialCards,
-				new ButtonImages(
-					Resources.partial_card_enabled_40,
-					null,
-					null,
-					null,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.partial_card_enabled_40, x2: true));
 
 			_buttons.SetupButton(_buttonShowText,
-				new ButtonImages(
-					Resources.text_enabled_40,
-					null,
-					null,
-					null,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.text_enabled_40, x2: true));
 
 			_buttons.SetupButton(_buttonSearchExamplesDropDown,
-				new ButtonImages(
-					Resources.book_40,
-					null,
-					null,
-					null,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.book_40, x2: true));
 		}
 
 

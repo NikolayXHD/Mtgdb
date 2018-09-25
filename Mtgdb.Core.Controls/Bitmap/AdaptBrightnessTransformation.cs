@@ -4,7 +4,7 @@ namespace Mtgdb.Controls
 {
 	public class AdaptBrightnessTransformation : BmpProcessor
 	{
-		private const float MaxSaturation = 0.075f;
+		private const float MaxSaturation = 0.05f;
 		private const float MinValue = 0.35f;
 
 		public AdaptBrightnessTransformation(Bitmap bmp) : base(bmp)
@@ -50,6 +50,9 @@ namespace Mtgdb.Controls
 
 		public static Color Transform(Color c)
 		{
+			if (c.IsSystemColor)
+				return c;
+
 			if (!isTransformationNecessary())
 				return c;
 

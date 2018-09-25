@@ -199,7 +199,7 @@ namespace Mtgdb.Gui
 
 			_buttonLanguage.Image = menuItem.Image;
 			_buttonLanguage.Text = language.ToUpperInvariant();
-			setupButton(_buttonLanguage, _languageIcons[language], true);
+			_buttonSubsystem.SetupButton(_buttonLanguage, new ButtonImages(_languageIcons[language], true));
 		}
 
 		private IEnumerable<ButtonBase> getLanguageMenuItems()
@@ -320,28 +320,37 @@ namespace Mtgdb.Gui
 				Resources.tooltip_32);
 
 			_buttonSubsystem.SetupButton(_buttonShowFilterPanels,
-				new ButtonImages(
-					Resources.filters_show_32,
-					null,
-					null,
-					null,
-					areImagesDoubleSized: true));
+				new ButtonImages(Resources.filters_show_32, x2: true));
 
-			setupButton(_buttonDownload, Resources.update_40, true);
-			setupButton(_buttonMenuOpenDeck, Resources.deck_48, true);
-			setupButton(_buttonMenuOpenCollection, Resources.box_48, true);
-			setupButton(_buttonMenuSaveDeck, Resources.deck_48, true);
-			setupButton(_buttonMenuSaveCollection, Resources.box_48, true);
-			setupButton(_buttonOpenWindow, Resources.add_form_32, true);
+			_buttonSubsystem.SetupButton(_buttonDownload,
+				new ButtonImages(Resources.update_40, x2: true));
 
-			setupButton(_buttonLanguage, Resources.en, true);
+			_buttonSubsystem.SetupButton(_buttonMenuOpenDeck,
+				new ButtonImages(Resources.deck_48, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonMenuOpenCollection,
+				new ButtonImages(Resources.box_48, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonMenuSaveDeck,
+				new ButtonImages(Resources.deck_48, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonMenuSaveCollection,
+				new ButtonImages(Resources.box_48, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonOpenWindow,
+				new ButtonImages(Resources.add_form_32, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonLanguage,
+				new ButtonImages(Resources.en, x2: true));
+
 			foreach (var langButton in getLanguageMenuItems())
-				setupButton(langButton, _languageIcons[langButton.Text.Trim()], true);
+				_buttonSubsystem.SetupButton(langButton,
+					new ButtonImages(_languageIcons[langButton.Text.Trim()], x2: true));
 
-			setupButton(_buttonDonate, null, false);
-			setupButton(_buttonSupport, null, false);
-			setupButton(_buttonDonateYandexMoney, Resources.yandex_money_32, false);
-			setupButton(_buttonDonatePayPal, Resources.paypal_32, false);
+			_buttonSubsystem.SetupButton(_buttonDonate, new ButtonImages(null, x2: false));
+			_buttonSubsystem.SetupButton(_buttonSupport, new ButtonImages(null, x2: false));
+			_buttonSubsystem.SetupButton(_buttonDonateYandexMoney, new ButtonImages(Resources.yandex_money_32, x2: false));
+			_buttonSubsystem.SetupButton(_buttonDonatePayPal, new ButtonImages(Resources.paypal_32, x2: false));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
 				_buttonLanguage,
@@ -378,44 +387,11 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SubscribeToEvents();
 		}
 
-		private void setupButton(ButtonBase button, Bitmap image, bool areImagesDoublesized)
-		{
-			var hoveredImage = image?.TransformColors(saturation: 1.15f, brightness: 1.2f);
-
-			_buttonSubsystem.SetupButton(button,
-				new ButtonImages(
-					image,
-					image,
-					hoveredImage,
-					hoveredImage,
-					areImagesDoublesized));
-		}
-
 		private void setupButton(ButtonBase button, Bitmap image, Bitmap imageDouble)
 		{
-			bool useDoubleSizedImage = Dpi.ScalePercent > 100;
-
-			Bitmap normal;
-			Bitmap hovered;
-
-			if (useDoubleSizedImage)
-			{
-				hovered = imageDouble?.TransformColors(1.1f, 1.05f);
-				normal = imageDouble;
-			}
-			else
-			{
-				hovered = image?.TransformColors(1.1f, 1.05f);
-				normal = image;
-			}
-
-			_buttonSubsystem.SetupButton(button,
-				new ButtonImages(
-					normal,
-					normal,
-					hovered,
-					hovered,
-					useDoubleSizedImage));
+			bool x2 = Dpi.ScalePercent > 100;
+			var bmp = x2 ? imageDouble : image;
+			_buttonSubsystem.SetupButton(button, new ButtonImages(bmp, x2));
 		}
 
 		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)

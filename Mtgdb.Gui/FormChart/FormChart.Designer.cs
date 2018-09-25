@@ -113,7 +113,7 @@
 			this._buttonManaCurveType.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveType.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonManaCurveType.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonManaCurveType.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonManaCurveType.Location = new System.Drawing.Point(304, 0);
 			this._buttonManaCurveType.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonManaCurveType.Name = "_buttonManaCurveType";
@@ -135,7 +135,7 @@
 			this._buttonDeckPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDeckPrice.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDeckPrice.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDeckPrice.Location = new System.Drawing.Point(104, 0);
 			this._buttonDeckPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDeckPrice.Name = "_buttonDeckPrice";
@@ -574,7 +574,7 @@
 			this._buttonArtistsPerYear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonArtistsPerYear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonArtistsPerYear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonArtistsPerYear.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonArtistsPerYear.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonArtistsPerYear.Location = new System.Drawing.Point(724, 0);
 			this._buttonArtistsPerYear.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonArtistsPerYear.Name = "_buttonArtistsPerYear";
@@ -596,7 +596,7 @@
 			this._buttonCollectionPrice.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonCollectionPrice.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonCollectionPrice.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonCollectionPrice.Location = new System.Drawing.Point(174, 0);
 			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 0, 60, 0);
 			this._buttonCollectionPrice.Name = "_buttonCollectionPrice";
@@ -652,7 +652,7 @@
 			this._buttonManaCurveManacost.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveManacost.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveManacost.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonManaCurveManacost.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonManaCurveManacost.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonManaCurveManacost.Location = new System.Drawing.Point(404, 0);
 			this._buttonManaCurveManacost.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonManaCurveManacost.Name = "_buttonManaCurveManacost";
@@ -674,7 +674,7 @@
 			this._buttonCollectionColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonCollectionColors.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonCollectionColors.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonCollectionColors.Location = new System.Drawing.Point(594, 0);
 			this._buttonCollectionColors.Margin = new System.Windows.Forms.Padding(0, 0, 60, 0);
 			this._buttonCollectionColors.Name = "_buttonCollectionColors";
@@ -696,7 +696,7 @@
 			this._buttonDeckColors.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDeckColors.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDeckColors.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDeckColors.Location = new System.Drawing.Point(504, 0);
 			this._buttonDeckColors.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonDeckColors.Name = "_buttonDeckColors";

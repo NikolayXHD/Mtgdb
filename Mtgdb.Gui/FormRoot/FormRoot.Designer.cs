@@ -152,7 +152,7 @@ namespace Mtgdb.Gui
 			this._buttonUndo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonUndo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonUndo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonUndo.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonUndo.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonUndo.Image = global::Mtgdb.Gui.Properties.Resources.undo_16;
 			this._buttonUndo.Location = new System.Drawing.Point(0, 3);
 			this._buttonUndo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -172,7 +172,7 @@ namespace Mtgdb.Gui
 			this._buttonRedo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonRedo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonRedo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonRedo.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonRedo.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonRedo.Image = global::Mtgdb.Gui.Properties.Resources.redo_16;
 			this._buttonRedo.Location = new System.Drawing.Point(32, 3);
 			this._buttonRedo.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -193,7 +193,7 @@ namespace Mtgdb.Gui
 			this._buttonDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDonate.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDonate.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDonate.Location = new System.Drawing.Point(593, 3);
 			this._buttonDonate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonDonate.Name = "_buttonDonate";
@@ -215,7 +215,7 @@ namespace Mtgdb.Gui
 			this._buttonDownload.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDownload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDownload.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDownload.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDownload.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
 			this._buttonDownload.Location = new System.Drawing.Point(426, 3);
 			this._buttonDownload.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
@@ -236,13 +236,11 @@ namespace Mtgdb.Gui
 			this._buttonLanguage.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonLanguage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonLanguage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonLanguage.HighlightBackColor = System.Drawing.SystemColors.Window;
-			this._buttonLanguage.HighlightOpacity = 255;
+			this._buttonLanguage.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonLanguage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonLanguage.Location = new System.Drawing.Point(356, 3);
 			this._buttonLanguage.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
-			this._buttonLanguage.MouseoverOpacity = 255;
 			this._buttonLanguage.Name = "_buttonLanguage";
 			this._buttonLanguage.Size = new System.Drawing.Size(58, 22);
 			this._buttonLanguage.TabIndex = 9;
@@ -262,7 +260,7 @@ namespace Mtgdb.Gui
 			this._buttonConfig.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonConfig.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonConfig.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_16;
 			this._buttonConfig.Location = new System.Drawing.Point(324, 3);
 			this._buttonConfig.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -284,7 +282,7 @@ namespace Mtgdb.Gui
 			this._buttonHelp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonHelp.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonHelp.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_16;
 			this._buttonHelp.Location = new System.Drawing.Point(228, 3);
 			this._buttonHelp.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -306,7 +304,7 @@ namespace Mtgdb.Gui
 			this._buttonClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonClear.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonClear.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_16;
 			this._buttonClear.Location = new System.Drawing.Point(184, 3);
 			this._buttonClear.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
@@ -327,7 +325,7 @@ namespace Mtgdb.Gui
 			this._buttonPrint.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPrint.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonPrint.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonPrint.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonPrint.Image = global::Mtgdb.Gui.Properties.Resources.print_16;
 			this._buttonPrint.Location = new System.Drawing.Point(120, 3);
 			this._buttonPrint.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -348,7 +346,7 @@ namespace Mtgdb.Gui
 			this._buttonStat.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonStat.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonStat.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonStat.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonStat.Image = global::Mtgdb.Gui.Properties.Resources.chart_16;
 			this._buttonStat.Location = new System.Drawing.Point(152, 3);
 			this._buttonStat.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -370,7 +368,7 @@ namespace Mtgdb.Gui
 			this._buttonSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSaveDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonSaveDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSaveDeck.Location = new System.Drawing.Point(76, 3);
 			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
@@ -392,7 +390,7 @@ namespace Mtgdb.Gui
 			this._buttonOpenDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonOpenDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonOpenDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonOpenDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonOpenDeck.Location = new System.Drawing.Point(44, 3);
 			this._buttonOpenDeck.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -414,7 +412,7 @@ namespace Mtgdb.Gui
 			this._buttonTooltips.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonTooltips.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonTooltips.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonTooltips.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonTooltips.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_16;
 			this._buttonTooltips.Location = new System.Drawing.Point(260, 3);
 			this._buttonTooltips.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -495,7 +493,7 @@ namespace Mtgdb.Gui
 			this._buttonImportExportToMtgArena.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonImportExportToMtgArena.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonImportExportToMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._buttonImportExportToMtgArena.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonImportExportToMtgArena.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonImportExportToMtgArena.Image = global::Mtgdb.Gui.Properties.Resources.paste_32;
 			this._buttonImportExportToMtgArena.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this._buttonImportExportToMtgArena.Location = new System.Drawing.Point(81, 241);
@@ -517,7 +515,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuSaveCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuSaveCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuSaveCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuSaveCollection.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuSaveCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuSaveCollection.Image = global::Mtgdb.Gui.Properties.Resources.box_48;
 			this._buttonMenuSaveCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuSaveCollection.Location = new System.Drawing.Point(2, 110);
@@ -550,7 +548,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuSaveDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuSaveDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuSaveDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuSaveDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
 			this._buttonMenuSaveDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuSaveDeck.Location = new System.Drawing.Point(2, 74);
@@ -583,7 +581,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuOpenCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuOpenCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuOpenCollection.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuOpenCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuOpenCollection.Image = global::Mtgdb.Gui.Properties.Resources.box_48;
 			this._buttonMenuOpenCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuOpenCollection.Location = new System.Drawing.Point(2, 38);
@@ -617,7 +615,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuOpenDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuOpenDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuOpenDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
 			this._buttonMenuOpenDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuOpenDeck.Location = new System.Drawing.Point(2, 2);
@@ -642,7 +640,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitMtgo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitMtgo.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitMtgo.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitMtgo.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitMtgo.Image = global::Mtgdb.Gui.Properties.Resources.mtgo_32;
 			this._buttonVisitMtgo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMtgo.Location = new System.Drawing.Point(3, 303);
@@ -667,7 +665,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitCockatrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitCockatrice.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitCockatrice.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitCockatrice.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitCockatrice.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitCockatrice.Image = global::Mtgdb.Gui.Properties.Resources.cockatrice_32;
 			this._buttonVisitCockatrice.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitCockatrice.Location = new System.Drawing.Point(3, 459);
@@ -692,7 +690,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitDotP2014.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitDotP2014.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitDotP2014.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitDotP2014.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitDotP2014.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitDotP2014.Image = global::Mtgdb.Gui.Properties.Resources.dot_p2014_32;
 			this._buttonVisitDotP2014.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitDotP2014.Location = new System.Drawing.Point(3, 381);
@@ -730,7 +728,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitXMage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitXMage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitXMage.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitXMage.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitXMage.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitXMage.Image = global::Mtgdb.Gui.Properties.Resources.xmage_32;
 			this._buttonVisitXMage.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitXMage.Location = new System.Drawing.Point(81, 167);
@@ -755,7 +753,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMagarena.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitMagarena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitMagarena.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitMagarena.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitMagarena.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitMagarena.Image = global::Mtgdb.Gui.Properties.Resources.magarena_32;
 			this._buttonVisitMagarena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMagarena.Location = new System.Drawing.Point(141, 167);
@@ -780,7 +778,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitDeckedBuilder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitDeckedBuilder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitDeckedBuilder.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitDeckedBuilder.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitDeckedBuilder.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitDeckedBuilder.Image = global::Mtgdb.Gui.Properties.Resources.decked_builder;
 			this._buttonVisitDeckedBuilder.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitDeckedBuilder.Location = new System.Drawing.Point(211, 167);
@@ -805,7 +803,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitForge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitForge.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitForge.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitForge.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitForge.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitForge.Image = global::Mtgdb.Gui.Properties.Resources.forge_32;
 			this._buttonVisitForge.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitForge.Location = new System.Drawing.Point(3, 167);
@@ -830,7 +828,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgArena.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonVisitMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonVisitMtgArena.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitMtgArena.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonVisitMtgArena.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitMtgArena.Image = global::Mtgdb.Gui.Properties.Resources.MTGArena_32;
 			this._buttonVisitMtgArena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMtgArena.Location = new System.Drawing.Point(3, 241);
@@ -896,7 +894,7 @@ namespace Mtgdb.Gui
 			this._buttonPT.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonPT.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonPT.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonPT.Image = global::Mtgdb.Gui.Properties.Resources.pt;
 			this._buttonPT.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonPT.Location = new System.Drawing.Point(58, 66);
@@ -917,7 +915,7 @@ namespace Mtgdb.Gui
 			this._buttonDE.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDE.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDE.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDE.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDE.Image = global::Mtgdb.Gui.Properties.Resources.de;
 			this._buttonDE.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonDE.Location = new System.Drawing.Point(116, 22);
@@ -938,7 +936,7 @@ namespace Mtgdb.Gui
 			this._buttonCN.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCN.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonCN.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonCN.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonCN.Image = global::Mtgdb.Gui.Properties.Resources.cn;
 			this._buttonCN.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonCN.Location = new System.Drawing.Point(0, 0);
@@ -959,7 +957,7 @@ namespace Mtgdb.Gui
 			this._buttonEN.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonEN.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonEN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonEN.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonEN.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonEN.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonEN.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonEN.Location = new System.Drawing.Point(116, 0);
@@ -980,7 +978,7 @@ namespace Mtgdb.Gui
 			this._buttonTW.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonTW.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonTW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonTW.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonTW.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonTW.Image = global::Mtgdb.Gui.Properties.Resources.tw;
 			this._buttonTW.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonTW.Location = new System.Drawing.Point(0, 66);
@@ -1001,7 +999,7 @@ namespace Mtgdb.Gui
 			this._buttonIT.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonIT.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonIT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonIT.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonIT.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonIT.Image = global::Mtgdb.Gui.Properties.Resources.it;
 			this._buttonIT.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonIT.Location = new System.Drawing.Point(58, 44);
@@ -1022,7 +1020,7 @@ namespace Mtgdb.Gui
 			this._buttonJP.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonJP.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonJP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonJP.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonJP.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonJP.Image = global::Mtgdb.Gui.Properties.Resources.jp;
 			this._buttonJP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonJP.Location = new System.Drawing.Point(0, 22);
@@ -1043,7 +1041,7 @@ namespace Mtgdb.Gui
 			this._buttonKR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonKR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonKR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonKR.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonKR.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonKR.Image = global::Mtgdb.Gui.Properties.Resources.kr;
 			this._buttonKR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonKR.Location = new System.Drawing.Point(0, 44);
@@ -1064,7 +1062,7 @@ namespace Mtgdb.Gui
 			this._buttonFR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonFR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonFR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonFR.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonFR.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonFR.Image = global::Mtgdb.Gui.Properties.Resources.fr;
 			this._buttonFR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonFR.Location = new System.Drawing.Point(58, 22);
@@ -1085,7 +1083,7 @@ namespace Mtgdb.Gui
 			this._buttonES.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonES.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonES.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonES.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonES.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonES.Image = global::Mtgdb.Gui.Properties.Resources.es;
 			this._buttonES.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonES.Location = new System.Drawing.Point(58, 0);
@@ -1106,7 +1104,7 @@ namespace Mtgdb.Gui
 			this._buttonRU.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonRU.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonRU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonRU.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonRU.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonRU.Image = global::Mtgdb.Gui.Properties.Resources.ru;
 			this._buttonRU.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonRU.Location = new System.Drawing.Point(116, 44);
@@ -1164,7 +1162,7 @@ namespace Mtgdb.Gui
 			this._buttonDonateYandexMoney.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonateYandexMoney.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonateYandexMoney.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDonateYandexMoney.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDonateYandexMoney.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDonateYandexMoney.Image = global::Mtgdb.Gui.Properties.Resources.yandex_money_32;
 			this._buttonDonateYandexMoney.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonDonateYandexMoney.Location = new System.Drawing.Point(2, 157);
@@ -1198,7 +1196,7 @@ namespace Mtgdb.Gui
 			this._buttonDonatePayPal.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonatePayPal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDonatePayPal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDonatePayPal.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonDonatePayPal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDonatePayPal.Image = global::Mtgdb.Gui.Properties.Resources.paypal_32;
 			this._buttonDonatePayPal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonDonatePayPal.Location = new System.Drawing.Point(2, 121);
@@ -1232,7 +1230,7 @@ namespace Mtgdb.Gui
 			this._buttonPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonPaste.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonPaste.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonPaste.Image = global::Mtgdb.Gui.Properties.Resources.paste_16;
 			this._buttonPaste.Location = new System.Drawing.Point(0, 3);
 			this._buttonPaste.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
@@ -1293,7 +1291,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuCopyCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuCopyCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuCopyCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuCopyCollection.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuCopyCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuCopyCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuCopyCollection.Location = new System.Drawing.Point(2, 182);
 			this._buttonMenuCopyCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1313,7 +1311,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuCopyDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuCopyDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuCopyDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuCopyDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuCopyDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuCopyDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuCopyDeck.Location = new System.Drawing.Point(2, 146);
 			this._buttonMenuCopyDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1333,7 +1331,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuPasteCollectionAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteCollectionAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteCollectionAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPasteCollectionAppend.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuPasteCollectionAppend.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuPasteCollectionAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuPasteCollectionAppend.Location = new System.Drawing.Point(2, 110);
 			this._buttonMenuPasteCollectionAppend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1353,7 +1351,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuPasteCollection.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteCollection.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPasteCollection.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuPasteCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuPasteCollection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuPasteCollection.Location = new System.Drawing.Point(2, 74);
 			this._buttonMenuPasteCollection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1383,7 +1381,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuPasteDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPasteDeck.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuPasteDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuPasteDeck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuPasteDeck.Location = new System.Drawing.Point(2, 2);
 			this._buttonMenuPasteDeck.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1403,7 +1401,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuPasteDeckAppend.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteDeckAppend.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMenuPasteDeckAppend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonMenuPasteDeckAppend.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonMenuPasteDeckAppend.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuPasteDeckAppend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this._buttonMenuPasteDeckAppend.Location = new System.Drawing.Point(2, 38);
 			this._buttonMenuPasteDeckAppend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -1475,7 +1473,7 @@ namespace Mtgdb.Gui
 			this._buttonShowFilterPanels.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowFilterPanels.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowFilterPanels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowFilterPanels.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonShowFilterPanels.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowFilterPanels.Image = global::Mtgdb.Gui.Properties.Resources.filters_show_32;
 			this._buttonShowFilterPanels.Location = new System.Drawing.Point(292, 3);
 			this._buttonShowFilterPanels.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -1496,7 +1494,7 @@ namespace Mtgdb.Gui
 			this._buttonSupport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSupport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSupport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSupport.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonSupport.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSupport.Location = new System.Drawing.Point(470, 3);
 			this._buttonSupport.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonSupport.Name = "_buttonSupport";
@@ -1537,7 +1535,7 @@ namespace Mtgdb.Gui
 			this._buttonOpenWindow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonOpenWindow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonOpenWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonOpenWindow.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonOpenWindow.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonOpenWindow.Image = global::Mtgdb.Gui.Properties.Resources.add_form_32;
 			this._buttonOpenWindow.Location = new System.Drawing.Point(64, 3);
 			this._buttonOpenWindow.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);

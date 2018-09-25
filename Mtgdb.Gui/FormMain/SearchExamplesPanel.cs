@@ -32,7 +32,7 @@ namespace Mtgdb.Gui
 				.Where(r => r.Query != null)
 				.ToList();
 
-			var selectionBackColor = Color.LightBlue;
+			var selectionBackColor = SystemColors.MenuHighlight;
 
 			foreach (var row in queryRows)
 			{

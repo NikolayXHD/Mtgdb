@@ -13,9 +13,9 @@ namespace Mtgdb.Controls
 			BackColor = Color.Transparent;
 			FlatStyle = FlatStyle.Flat;
 			FlatAppearance.BorderColor = SystemColors.ActiveBorder;
-			FlatAppearance.CheckedBackColor = Color.Transparent;
 			FlatAppearance.MouseOverBackColor = Color.Transparent;
 			FlatAppearance.MouseDownBackColor = Color.Transparent;
+			FlatAppearance.CheckedBackColor = Color.Transparent;
 
 			HighlightBackColor = Color.Transparent;
 			SystemColorsChanged += systemColorsChanged;
@@ -27,29 +27,43 @@ namespace Mtgdb.Controls
 		private void systemColorsChanged(object sender, EventArgs e) =>
 			updateHighlightColor();
 
-		[DefaultValue(48), Category("Settings")]
-		public int HighlightOpacity
+		[DefaultValue(32), Category("Settings")]
+		public int HighlightMouseoverOpacity
 		{
-			get => _highlightOpacity;
+			get => _highlightMouseoverOpacity;
 			set
 			{
-				if (_highlightOpacity != value)
+				if (_highlightMouseoverOpacity != value)
 				{
-					_highlightOpacity = value;
+					_highlightMouseoverOpacity = value;
 					updateHighlightColor();
 				}
 			}
 		}
 
-		[DefaultValue(32), Category("Settings")]
-		public int MouseoverOpacity
+		[DefaultValue(40), Category("Settings")]
+		public int HighlightMouseDownOpacity
 		{
-			get => _mouseoverOpacity;
+			get => _highlightMouseDownOpacity;
 			set
 			{
-				if (_mouseoverOpacity != value)
+				if (_highlightMouseDownOpacity != value)
 				{
-					_mouseoverOpacity = value;
+					_highlightMouseDownOpacity = value;
+					updateHighlightColor();
+				}
+			}
+		}
+
+		[DefaultValue(48), Category("Settings")]
+		public int HighlightCheckedOpacity
+		{
+			get => _highlightCheckedOpacity;
+			set
+			{
+				if (_highlightCheckedOpacity != value)
+				{
+					_highlightCheckedOpacity = value;
 					updateHighlightColor();
 				}
 			}
@@ -71,15 +85,20 @@ namespace Mtgdb.Controls
 
 		private void updateHighlightColor()
 		{
-			FlatAppearance.CheckedBackColor = FlatAppearance.MouseDownBackColor =
-				Color.FromArgb(_highlightOpacity * _highlightBackColor.A / 255, _highlightBackColor);
-
 			FlatAppearance.MouseOverBackColor =
-				Color.FromArgb(_mouseoverOpacity * _highlightBackColor.A / 255, _highlightBackColor);
+				Color.FromArgb(_highlightMouseoverOpacity * _highlightBackColor.A / 255, _highlightBackColor);
+
+			FlatAppearance.MouseDownBackColor =
+				Color.FromArgb(_highlightMouseDownOpacity * _highlightBackColor.A / 255, _highlightBackColor);
+
+			FlatAppearance.CheckedBackColor =
+				Color.FromArgb(_highlightCheckedOpacity * _highlightBackColor.A / 255, _highlightBackColor);
 		}
 
-		private int _highlightOpacity = 48;
-		private int _mouseoverOpacity = 32;
+		private int _highlightMouseoverOpacity = 32;
+		private int _highlightMouseDownOpacity = 40;
+		private int _highlightCheckedOpacity = 48;
+
 		private Color _highlightBackColor;
 	}
 }

@@ -312,6 +312,8 @@
 			this._buttonHideDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonHideDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonHideDeck.Image = global::Mtgdb.Gui.Properties.Resources.shown_40;
+			this._buttonHideDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonHideDeck.HighlightCheckedOpacity = 0;
 			this._buttonHideDeck.Location = new System.Drawing.Point(2, 0);
 			this._buttonHideDeck.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonHideDeck.Name = "_buttonHideDeck";
@@ -331,7 +333,7 @@
 			this._buttonShowPartialCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowPartialCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowPartialCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowPartialCards.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonShowPartialCards.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowPartialCards.Image = global::Mtgdb.Gui.Properties.Resources.partial_card_enabled_40;
 			this._buttonShowPartialCards.Location = new System.Drawing.Point(28, 0);
 			this._buttonShowPartialCards.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -352,7 +354,7 @@
 			this._buttonShowText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowText.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonShowText.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowText.Image = global::Mtgdb.Gui.Properties.Resources.text_enabled_40;
 			this._buttonShowText.Location = new System.Drawing.Point(54, 0);
 			this._buttonShowText.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -388,6 +390,7 @@
 			this._buttonSampleHandNew.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonSampleHandNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSampleHandNew.Image = global::Mtgdb.Gui.Properties.Resources.hand_48;
+			this._buttonSampleHandNew.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSampleHandNew.Location = new System.Drawing.Point(375, 0);
 			this._buttonSampleHandNew.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonSampleHandNew.Name = "_buttonSampleHandNew";
@@ -407,6 +410,7 @@
 			this._buttonSampleHandMulligan.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonSampleHandMulligan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSampleHandMulligan.Image = global::Mtgdb.Gui.Properties.Resources.mulligan_48;
+			this._buttonSampleHandMulligan.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSampleHandMulligan.Location = new System.Drawing.Point(437, 0);
 			this._buttonSampleHandMulligan.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonSampleHandMulligan.Name = "_buttonSampleHandMulligan";
@@ -426,6 +430,7 @@
 			this._buttonSampleHandDraw.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonSampleHandDraw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSampleHandDraw.Image = global::Mtgdb.Gui.Properties.Resources.draw_48;
+			this._buttonSampleHandDraw.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSampleHandDraw.Location = new System.Drawing.Point(487, 0);
 			this._buttonSampleHandDraw.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonSampleHandDraw.Name = "_buttonSampleHandDraw";
@@ -629,6 +634,8 @@
 			this._buttonShowScrollDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonShowScrollDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowScrollDeck.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
+			this._buttonShowScrollDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonShowScrollDeck.HighlightCheckedOpacity = 0;
 			this._buttonShowScrollDeck.Location = new System.Drawing.Point(1216, 221);
 			this._buttonShowScrollDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonShowScrollDeck.Name = "_buttonShowScrollDeck";
@@ -838,7 +845,7 @@
 			this._buttonShowDuplicates.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowDuplicates.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowDuplicates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonShowDuplicates.HighlightBackColor = System.Drawing.SystemColors.MenuHighlight;
+			this._buttonShowDuplicates.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowDuplicates.Image = global::Mtgdb.Gui.Properties.Resources.clone_48;
 			this._buttonShowDuplicates.Location = new System.Drawing.Point(1113, 0);
 			this._buttonShowDuplicates.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -937,6 +944,8 @@
 			this._buttonExcludeManaAbility.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonExcludeManaAbility.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonExcludeManaAbility.Image = global::Mtgdb.Gui.Properties.Resources.include_plus_24;
+			this._buttonExcludeManaAbility.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonExcludeManaAbility.HighlightCheckedOpacity = 0;
 			this._buttonExcludeManaAbility.Location = new System.Drawing.Point(0, 2);
 			this._buttonExcludeManaAbility.Margin = new System.Windows.Forms.Padding(0, 0, 22, 0);
 			this._buttonExcludeManaAbility.Name = "_buttonExcludeManaAbility";
@@ -1022,6 +1031,8 @@
 			this._buttonShowScrollCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonShowScrollCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowScrollCards.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
+			this._buttonShowScrollCards.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonShowScrollCards.HighlightCheckedOpacity = 0;
 			this._buttonShowScrollCards.Location = new System.Drawing.Point(1216, 34);
 			this._buttonShowScrollCards.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonShowScrollCards.Name = "_buttonShowScrollCards";
@@ -1156,6 +1167,7 @@
 			this._buttonShowProhibit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonShowProhibit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowProhibit.Image = global::Mtgdb.Gui.Properties.Resources.exclude_hidden_24;
+			this._buttonShowProhibit.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowProhibit.Location = new System.Drawing.Point(88, 797);
 			this._buttonShowProhibit.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonShowProhibit.Name = "_buttonShowProhibit";
@@ -1232,6 +1244,8 @@
 			this._buttonExcludeManaCost.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
 			this._buttonExcludeManaCost.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonExcludeManaCost.Image = global::Mtgdb.Gui.Properties.Resources.exclude_minus_24;
+			this._buttonExcludeManaCost.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonExcludeManaCost.HighlightCheckedOpacity = 0;
 			this._buttonExcludeManaCost.Location = new System.Drawing.Point(0, 2);
 			this._buttonExcludeManaCost.Margin = new System.Windows.Forms.Padding(0, 0, 22, 0);
 			this._buttonExcludeManaCost.Name = "_buttonExcludeManaCost";
