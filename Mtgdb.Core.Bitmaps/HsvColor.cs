@@ -27,6 +27,9 @@ namespace Mtgdb
 			return v;
 		}
 
+		public float DistanceTo(HsvColor other, float wH = 1f, float wS = 1f, float wV = 1f) =>
+			modulo(H - other.H, 360) / 360f * wH + Math.Abs(S - other.S) * wS + Math.Abs(V - other.V) * wV;
+
 		public bool Equals(HsvColor other) =>
 			H.Equals(other.H) && S.Equals(other.S) && V.Equals(other.V);
 

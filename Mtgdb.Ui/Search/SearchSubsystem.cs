@@ -144,14 +144,14 @@ namespace Mtgdb.Ui
 		{
 			if (SearchResult?.ParseErrorMessage != null)
 			{
-				var result = SystemColors.Info.TransformHsv(
-					h: _ => _ + Color.BlanchedAlmond.RotationTo(Color.LavenderBlush));
+				var result = SystemColors.GradientInactiveCaption.TransformHsv(
+					h: _ => _ + Color.LightSteelBlue.RotationTo(Color.LavenderBlush));
 
 				return result;
 			}
 
 			if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
-				return SystemColors.ControlLight;
+				return SystemColors.Control;
 
 			return  _panelSearchIcon.BackColor = SystemColors.Window;
 		}

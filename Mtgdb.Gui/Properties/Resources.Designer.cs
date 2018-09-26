@@ -253,6 +253,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap color_swatch_32 {
+            get {
+                object obj = ResourceManager.GetObject("color_swatch_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap corner_32 {
             get {
                 object obj = ResourceManager.GetObject("corner_32", resourceCulture);

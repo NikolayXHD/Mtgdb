@@ -77,7 +77,8 @@
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ColorHelper.cs" />
+    <Compile Include="ColorScheme\ColorSchemeController.cs" />
+    <Compile Include="ColorScheme\ColorSchemeEditorForm.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
@@ -228,8 +229,11 @@
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Core.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Subrepo\DrawingEx\DrawingEx.csproj">
+      <Project>{a6441560-3cc8-4ac3-ae4a-d092b424719f}</Project>
+      <Name>DrawingEx</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

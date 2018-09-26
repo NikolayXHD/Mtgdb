@@ -36,10 +36,10 @@ namespace Mtgdb.Controls
 			MouseLeave += mouseLeave;
 			MouseMove += mouseMove;
 
-			SystemColorsChanged += systemColorsChanged;
+			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
 
-		private void systemColorsChanged(object sender, EventArgs e) =>
+		private void systemColorsChanging() =>
 			createDerivedImages();
 
 		private void makeProhibitedValuesIgnored()
@@ -93,7 +93,7 @@ namespace Mtgdb.Controls
 
 				new GrayscaleBmpProcessor(imagesTransformed[i], opacity)
 					.Execute();
-				
+
 				new AdaptBrightnessTransformation(imagesTransformed[i])
 					.Execute();
 			}

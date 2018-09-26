@@ -329,8 +329,8 @@ namespace Mtgdb.Gui
 
 			var brush = new LinearGradientBrush(
 				gradientRectangle,
-				Color.FromArgb(opacity, SystemColors.GradientInactiveCaption),
-				Color.FromArgb(opacity, SystemColors.InactiveBorder),
+				Color.FromArgb(opacity, SystemColors.GradientActiveCaption),
+				Color.FromArgb(opacity, SystemColors.ActiveCaption),
 				LinearGradientMode.BackwardDiagonal);
 
 			e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageLoader.CardSize));

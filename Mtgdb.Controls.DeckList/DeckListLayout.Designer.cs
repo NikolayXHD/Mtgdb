@@ -179,7 +179,7 @@
 			this._fieldMainCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainCount.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainCount.DataText = "";
 			this._fieldMainCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCount.Location = new System.Drawing.Point(66, 198);
@@ -225,7 +225,7 @@
 			this._fieldCreatureCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreatureCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldCreatureCount.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldCreatureCount.DataText = "";
 			this._fieldCreatureCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreatureCount.Location = new System.Drawing.Point(66, 170);
@@ -350,7 +350,7 @@
 			this._labelCreature.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelCreature.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._labelCreature.BackColor = System.Drawing.SystemColors.Control;
 			this._labelCreature.DataText = "";
 			this._labelCreature.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelCreature.Image = global::Mtgdb.Controls.Properties.Resources.creature;
@@ -407,7 +407,7 @@
 			this._labelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelMain.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._labelMain.BackColor = System.Drawing.SystemColors.Control;
 			this._labelMain.DataText = "main deck";
 			this._labelMain.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelMain.Location = new System.Drawing.Point(10, 198);
@@ -444,7 +444,7 @@
 			this._labelMainPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelMainPercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._labelMainPercent.BackColor = System.Drawing.SystemColors.Control;
 			this._labelMainPercent.DataText = "%";
 			this._labelMainPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelMainPercent.Location = new System.Drawing.Point(10, 226);
@@ -463,7 +463,7 @@
 			this._labelSideCollected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelSideCollected.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._labelSideCollected.BackColor = System.Drawing.SystemColors.Control;
 			this._labelSideCollected.DataText = "collected";
 			this._labelSideCollected.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
 			this._labelSideCollected.Location = new System.Drawing.Point(10, 254);
@@ -498,7 +498,7 @@
 			this._fieldMainPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainPrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainPrice.DataText = "";
 			this._fieldMainPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainPrice.Location = new System.Drawing.Point(110, 198);
@@ -559,7 +559,7 @@
 			this._fieldMainCollectedCountPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedCountPercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainCollectedCountPercent.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainCollectedCountPercent.DataText = "";
 			this._fieldMainCollectedCountPercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedCountPercent.Location = new System.Drawing.Point(66, 226);
@@ -575,7 +575,7 @@
 			this._fieldMainCollectedPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedPricePercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainCollectedPricePercent.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainCollectedPricePercent.DataText = "";
 			this._fieldMainCollectedPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedPricePercent.Location = new System.Drawing.Point(110, 226);
@@ -591,7 +591,7 @@
 			this._fieldMainCollectedUnknownPricePercent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainCollectedUnknownPricePercent.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainCollectedUnknownPricePercent.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainCollectedUnknownPricePercent.DataText = "";
 			this._fieldMainCollectedUnknownPricePercent.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 226);
@@ -637,7 +637,7 @@
 			this._fieldSideCollectedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedCount.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldSideCollectedCount.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldSideCollectedCount.DataText = "";
 			this._fieldSideCollectedCount.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedCount.Location = new System.Drawing.Point(66, 254);
@@ -653,7 +653,7 @@
 			this._fieldSideCollectedPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldSideCollectedPrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldSideCollectedPrice.DataText = "";
 			this._fieldSideCollectedPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedPrice.Location = new System.Drawing.Point(110, 254);
@@ -669,7 +669,7 @@
 			this._fieldSideCollectedUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldSideCollectedUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldSideCollectedUnknownPrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldSideCollectedUnknownPrice.DataText = "";
 			this._fieldSideCollectedUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldSideCollectedUnknownPrice.Location = new System.Drawing.Point(154, 254);
@@ -733,7 +733,7 @@
 			this._fieldMainUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldMainUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldMainUnknownPrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldMainUnknownPrice.DataText = "";
 			this._fieldMainUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldMainUnknownPrice.Location = new System.Drawing.Point(154, 198);
@@ -785,7 +785,7 @@
 			this._fieldCreaturePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreaturePrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldCreaturePrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldCreaturePrice.DataText = "";
 			this._fieldCreaturePrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreaturePrice.Location = new System.Drawing.Point(110, 170);
@@ -801,7 +801,7 @@
 			this._fieldCreatureUnknownPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._fieldCreatureUnknownPrice.BackColor = System.Drawing.SystemColors.InactiveBorder;
+			this._fieldCreatureUnknownPrice.BackColor = System.Drawing.SystemColors.Control;
 			this._fieldCreatureUnknownPrice.DataText = "";
 			this._fieldCreatureUnknownPrice.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 			this._fieldCreatureUnknownPrice.Location = new System.Drawing.Point(154, 170);

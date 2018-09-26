@@ -6,12 +6,12 @@ namespace Mtgdb.Gui
 {
 	partial class CardLayout
 	{
-		/// <summary> 
+		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary> 
+		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -108,10 +108,9 @@ namespace Mtgdb.Gui
 			this._layout = new System.Windows.Forms.TableLayoutPanel();
 			this._layout.SuspendLayout();
 			this.SuspendLayout();
-			// 
+			//
 			// _fieldImage
-			// 
-			this._fieldImage.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldImage.DataText = "";
 			this._fieldImage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldImage.Location = new System.Drawing.Point(0, 0);
@@ -122,10 +121,9 @@ namespace Mtgdb.Gui
 			this._fieldImage.SearchOptions = searchOptions19;
 			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
-			// 
+			//
 			// _fieldName
-			// 
-			this._fieldName.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldName, 3);
 			this._fieldName.DataText = "";
 			this._fieldName.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -137,10 +135,9 @@ namespace Mtgdb.Gui
 			this._fieldName.SearchOptions = searchOptions2;
 			this._fieldName.Size = new System.Drawing.Size(111, 19);
 			this._fieldName.TabIndex = 1;
-			// 
+			//
 			// _fieldManaCost
-			// 
-			this._fieldManaCost.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldManaCost, 3);
 			this._fieldManaCost.DataText = "";
 			this._fieldManaCost.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -154,10 +151,9 @@ namespace Mtgdb.Gui
 			this._fieldManaCost.SearchOptions = searchOptions4;
 			this._fieldManaCost.Size = new System.Drawing.Size(110, 19);
 			this._fieldManaCost.TabIndex = 2;
-			// 
+			//
 			// _fieldCmc
-			// 
-			this._fieldCmc.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldCmc.DataText = "";
 			this._fieldCmc.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldCmc.HorizontalAlignment = System.Windows.Forms.HorizontalAlignment.Right;
@@ -169,10 +165,9 @@ namespace Mtgdb.Gui
 			this._fieldCmc.SearchOptions = searchOptions6;
 			this._fieldCmc.Size = new System.Drawing.Size(38, 19);
 			this._fieldCmc.TabIndex = 3;
-			// 
+			//
 			// _fieldType
-			// 
-			this._fieldType.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldType, 5);
 			this._fieldType.DataText = "";
 			this._fieldType.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -184,10 +179,9 @@ namespace Mtgdb.Gui
 			this._fieldType.SearchOptions = searchOptions8;
 			this._fieldType.Size = new System.Drawing.Size(183, 19);
 			this._fieldType.TabIndex = 4;
-			// 
+			//
 			// _fieldSetName
-			// 
-			this._fieldSetName.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldSetName, 5);
 			this._fieldSetName.DataText = "";
 			this._fieldSetName.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -199,10 +193,9 @@ namespace Mtgdb.Gui
 			this._fieldSetName.SearchOptions = searchOptions12;
 			this._fieldSetName.Size = new System.Drawing.Size(187, 19);
 			this._fieldSetName.TabIndex = 5;
-			// 
+			//
 			// _fieldSetCode
-			// 
-			this._fieldSetCode.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldSetCode.DataText = "";
 			this._fieldSetCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldSetCode.Location = new System.Drawing.Point(225, 38);
@@ -213,10 +206,9 @@ namespace Mtgdb.Gui
 			this._fieldSetCode.SearchOptions = searchOptions10;
 			this._fieldSetCode.Size = new System.Drawing.Size(34, 19);
 			this._fieldSetCode.TabIndex = 6;
-			// 
+			//
 			// _fieldText
-			// 
-			this._fieldText.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldText, 6);
 			this._fieldText.DataText = "";
 			this._fieldText.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -228,10 +220,9 @@ namespace Mtgdb.Gui
 			this._fieldText.SearchOptions = searchOptions14;
 			this._fieldText.Size = new System.Drawing.Size(221, 130);
 			this._fieldText.TabIndex = 7;
-			// 
+			//
 			// _fieldFlavor
-			// 
-			this._fieldFlavor.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldFlavor, 6);
 			this._fieldFlavor.DataText = "";
 			this._fieldFlavor.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -244,10 +235,9 @@ namespace Mtgdb.Gui
 			this._fieldFlavor.SearchOptions = searchOptions16;
 			this._fieldFlavor.Size = new System.Drawing.Size(221, 40);
 			this._fieldFlavor.TabIndex = 8;
-			// 
+			//
 			// _fieldArtist
-			// 
-			this._fieldArtist.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldArtist, 2);
 			this._fieldArtist.DataText = "";
 			this._fieldArtist.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -260,10 +250,9 @@ namespace Mtgdb.Gui
 			this._fieldArtist.SearchOptions = searchOptions18;
 			this._fieldArtist.Size = new System.Drawing.Size(75, 19);
 			this._fieldArtist.TabIndex = 9;
-			// 
+			//
 			// _fieldReleaseDate
-			// 
-			this._fieldReleaseDate.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldReleaseDate, 2);
 			this._fieldReleaseDate.DataText = "";
 			this._fieldReleaseDate.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -275,10 +264,9 @@ namespace Mtgdb.Gui
 			this._fieldReleaseDate.SearchOptions = searchOptions17;
 			this._fieldReleaseDate.Size = new System.Drawing.Size(72, 19);
 			this._fieldReleaseDate.TabIndex = 10;
-			// 
+			//
 			// _fieldRarity
-			// 
-			this._fieldRarity.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldRarity, 2);
 			this._fieldRarity.DataText = "";
 			this._fieldRarity.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -290,10 +278,9 @@ namespace Mtgdb.Gui
 			this._fieldRarity.SearchOptions = searchOptions15;
 			this._fieldRarity.Size = new System.Drawing.Size(74, 19);
 			this._fieldRarity.TabIndex = 11;
-			// 
+			//
 			// _fieldPricingLow
-			// 
-			this._fieldPricingLow.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldPricingLow.DataText = "";
 			this._fieldPricingLow.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingLow.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -305,10 +292,9 @@ namespace Mtgdb.Gui
 			this._fieldPricingLow.SearchOptions = searchOptions13;
 			this._fieldPricingLow.Size = new System.Drawing.Size(34, 19);
 			this._fieldPricingLow.TabIndex = 12;
-			// 
+			//
 			// _fieldPricingMid
-			// 
-			this._fieldPricingMid.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldPricingMid.DataText = "";
 			this._fieldPricingMid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -320,10 +306,9 @@ namespace Mtgdb.Gui
 			this._fieldPricingMid.SearchOptions = searchOptions11;
 			this._fieldPricingMid.Size = new System.Drawing.Size(41, 19);
 			this._fieldPricingMid.TabIndex = 13;
-			// 
+			//
 			// _fieldPricingHigh
-			// 
-			this._fieldPricingHigh.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldPricingHigh.DataText = "";
 			this._fieldPricingHigh.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPricingHigh.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -335,10 +320,9 @@ namespace Mtgdb.Gui
 			this._fieldPricingHigh.SearchOptions = searchOptions9;
 			this._fieldPricingHigh.Size = new System.Drawing.Size(36, 19);
 			this._fieldPricingHigh.TabIndex = 14;
-			// 
+			//
 			// _fieldLoyalty
-			// 
-			this._fieldLoyalty.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldLoyalty.DataText = "";
 			this._fieldLoyalty.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldLoyalty.Location = new System.Drawing.Point(336, 246);
@@ -349,10 +333,9 @@ namespace Mtgdb.Gui
 			this._fieldLoyalty.SearchOptions = searchOptions7;
 			this._fieldLoyalty.Size = new System.Drawing.Size(36, 19);
 			this._fieldLoyalty.TabIndex = 15;
-			// 
+			//
 			// _fieldPower
-			// 
-			this._fieldPower.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldPower.DataText = "";
 			this._fieldPower.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldPower.Location = new System.Drawing.Point(372, 246);
@@ -363,10 +346,9 @@ namespace Mtgdb.Gui
 			this._fieldPower.SearchOptions = searchOptions5;
 			this._fieldPower.Size = new System.Drawing.Size(36, 19);
 			this._fieldPower.TabIndex = 16;
-			// 
+			//
 			// _fieldToughness
-			// 
-			this._fieldToughness.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._fieldToughness.DataText = "";
 			this._fieldToughness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldToughness.Location = new System.Drawing.Point(408, 246);
@@ -377,15 +359,13 @@ namespace Mtgdb.Gui
 			this._fieldToughness.SearchOptions = searchOptions3;
 			this._fieldToughness.Size = new System.Drawing.Size(38, 19);
 			this._fieldToughness.TabIndex = 17;
-			// 
+			//
 			// _fieldRulings
-			// 
-			this._fieldRulings.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this._layout.SetColumnSpan(this._fieldRulings, 6);
 			this._fieldRulings.DataText = "";
 			this._fieldRulings.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._fieldRulings.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._fieldRulings.ForeColor = System.Drawing.SystemColors.GrayText;
 			this._fieldRulings.Location = new System.Drawing.Point(225, 265);
 			this._fieldRulings.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldRulings.Name = "_fieldRulings";
@@ -394,10 +374,10 @@ namespace Mtgdb.Gui
 			this._fieldRulings.SearchOptions = searchOptions1;
 			this._fieldRulings.Size = new System.Drawing.Size(221, 46);
 			this._fieldRulings.TabIndex = 18;
-			// 
+			//
 			// _layout
-			// 
-			this._layout.BackColor = System.Drawing.SystemColors.Window;
+			//
+			this._layout.BackColor = System.Drawing.Color.Transparent;
 			this._layout.ColumnCount = 7;
 			this._layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this._layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.139535F));
@@ -440,16 +420,14 @@ namespace Mtgdb.Gui
 			this._layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.86174F));
 			this._layout.Size = new System.Drawing.Size(446, 311);
 			this._layout.TabIndex = 19;
-			// 
+			//
 			// CardLayout
-			// 
-			this.BackColor = System.Drawing.SystemColors.Window;
+			//
 			this.Controls.Add(this._layout);
 			this.Name = "CardLayout";
 			this.Size = new System.Drawing.Size(446, 311);
 			this._layout.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion

@@ -91,6 +91,14 @@ namespace Mtgdb.Gui
 			Kernel.Bind<Loader>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<ColorSchemeController>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<ColorSchemeEditorForm>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

@@ -6,92 +6,62 @@ namespace Mtgdb.Controls
 {
 	public static class GeometryHelpers
 	{
-		public static Point Round(this PointF location)
-		{
-			return new Point((int) Math.Round(location.X), (int) Math.Round(location.Y));
-		}
+		public static Point Round(this PointF location) =>
+			new Point((int) Math.Round(location.X), (int) Math.Round(location.Y));
 
-		public static Size Round(this SizeF size)
-		{
-			return new Size((int) Math.Round(size.Width), (int) Math.Round(size.Height));
-		}
+		public static Size Round(this SizeF size) =>
+			new Size((int) Math.Round(size.Width), (int) Math.Round(size.Height));
 
-		public static int Round(this float value)
-		{
-			return (int) Math.Round(value);
-		}
+		public static int Round(this float value) =>
+			(int) Math.Round(value);
 
-		public static SizeF MultiplyBy(this SizeF original, SizeF scale)
-		{
-			return new SizeF(
+		public static SizeF MultiplyBy(this SizeF original, SizeF scale) =>
+			new SizeF(
 				original.Width * scale.Width,
 				original.Height * scale.Height);
-		}
 
-		public static SizeF MultiplyBy(this Size original, SizeF scale)
-		{
-			var product = MultiplyBy((SizeF) original, scale);
-			return product;
-		}
+		public static SizeF MultiplyBy(this Size original, SizeF scale) =>
+			MultiplyBy((SizeF) original, scale);
 
-		public static PointF MultiplyBy(this Point original, SizeF scale)
-		{
-			return new PointF(
+		public static PointF MultiplyBy(this Point original, SizeF scale) =>
+			new PointF(
 				original.X * scale.Width,
 				original.Y * scale.Height);
-		}
 
 
 
-		public static SizeF MultiplyBy(this SizeF size, float value)
-		{
-			return new SizeF(value * size.Width, value * size.Height);
-		}
+		public static SizeF MultiplyBy(this SizeF size, float value) =>
+			new SizeF(value * size.Width, value * size.Height);
 
-		public static SizeF ToPower(this SizeF size, float value)
-		{
-			return new SizeF((float) Math.Pow(size.Width, value), (float) Math.Pow(size.Height, value));
-		}
+		public static SizeF ToPower(this SizeF size, float value) =>
+			new SizeF((float) Math.Pow(size.Width, value), (float) Math.Pow(size.Height, value));
 
-		public static SizeF MultiplyBy(this Size size, float value)
-		{
-			return new SizeF(value * size.Width, value * size.Height);
-		}
+		public static Size MultiplyBy(this Size size, int value) =>
+			new Size(value * size.Width, value * size.Height);
 
-		public static Size MultiplyBy(this Size size, Size value)
-		{
-			return new Size(value.Width * size.Width, value.Height * size.Height);
-		}
+		public static SizeF MultiplyBy(this Size size, float value) =>
+			new SizeF(value * size.Width, value * size.Height);
 
-		public static Size MultiplyBy(this Point point, Size value)
-		{
-			return new Size(value.Width * point.X, value.Height * point.Y);
-		}
+		public static Size MultiplyBy(this Size size, Size value) =>
+			new Size(value.Width * size.Width, value.Height * size.Height);
 
-		public static SizeF DivideBy(this Size size, SizeF value)
-		{
-			return new SizeF(size.Width / value.Width, size.Height / value.Height);
-		}
+		public static Size MultiplyBy(this Point point, Size value) =>
+			new Size(value.Width * point.X, value.Height * point.Y);
 
-		public static SizeF DivideBy(this SizeF size, SizeF value)
-		{
-			return new SizeF(size.Width / value.Width, size.Height / value.Height);
-		}
+		public static SizeF DivideBy(this Size size, SizeF value) =>
+			new SizeF(size.Width / value.Width, size.Height / value.Height);
 
-		public static SizeF DivideBy(this SizeF size, float value)
-		{
-			return new SizeF(size.Width / value, size.Height / value);
-		}
+		public static SizeF DivideBy(this SizeF size, SizeF value) =>
+			new SizeF(size.Width / value.Width, size.Height / value.Height);
 
-		public static float Max(this SizeF size)
-		{
-			return Math.Max(size.Width, size.Height);
-		}
+		public static SizeF DivideBy(this SizeF size, float value) =>
+			new SizeF(size.Width / value, size.Height / value);
 
-		public static float Min(this SizeF size)
-		{
-			return Math.Min(size.Width, size.Height);
-		}
+		public static float Max(this SizeF size) =>
+			Math.Max(size.Width, size.Height);
+
+		public static float Min(this SizeF size) =>
+			Math.Min(size.Width, size.Height);
 
 		public static Rectangle Plus(this Rectangle rect, Point offset)
 		{
@@ -99,70 +69,44 @@ namespace Mtgdb.Controls
 			return rect;
 		}
 
-		public static Point RightBottom(this Rectangle rect)
-		{
-			return new Point(rect.Right, rect.Bottom);
-		}
+		public static Point RightBottom(this Rectangle rect) =>
+			new Point(rect.Right, rect.Bottom);
 
-		public static Point Plus(this Point left, Point right)
-		{
-			return new Point(left.X + right.X, left.Y + right.Y);
-		}
+		public static Point Plus(this Point left, Point right) =>
+			new Point(left.X + right.X, left.Y + right.Y);
 
-		public static Point Plus(this Point left, Size right)
-		{
-			return new Point(left.X + right.Width, left.Y + right.Height);
-		}
+		public static Point Plus(this Point left, Size right) =>
+			new Point(left.X + right.Width, left.Y + right.Height);
 
-		public static Point Minus(this Point left, Point right)
-		{
-			return new Point(left.X - right.X, left.Y - right.Y);
-		}
+		public static Point Minus(this Point left, Point right) =>
+			new Point(left.X - right.X, left.Y - right.Y);
 
-		public static Point Minus(this Point left, Size right)
-		{
-			return new Point(left.X - right.Width, left.Y - right.Height);
-		}
+		public static Point Minus(this Point left, Size right) =>
+			new Point(left.X - right.Width, left.Y - right.Height);
 
-		public static PointF Minus(this PointF left, SizeF right)
-		{
-			return new PointF(left.X - right.Width, left.Y - right.Height);
-		}
+		public static PointF Minus(this PointF left, SizeF right) =>
+			new PointF(left.X - right.Width, left.Y - right.Height);
 
-		public static SizeF Plus(this SizeF left, SizeF right)
-		{
-			return new SizeF(left.Width + right.Width, left.Height + right.Height);
-		}
+		public static SizeF Plus(this SizeF left, SizeF right) =>
+			new SizeF(left.Width + right.Width, left.Height + right.Height);
 
-		public static SizeF Plus(this SizeF left, float right)
-		{
-			return new SizeF(left.Width + right, left.Height + right);
-		}
+		public static SizeF Plus(this SizeF left, float right) =>
+			new SizeF(left.Width + right, left.Height + right);
 
-		public static Size Plus(this Size left, Size right)
-		{
-			return new Size(left.Width + right.Width, left.Height + right.Height);
-		}
+		public static Size Plus(this Size left, Size right) =>
+			new Size(left.Width + right.Width, left.Height + right.Height);
 
-		public static Size Minus(this Size left, Size right)
-		{
-			return new Size(left.Width - right.Width, left.Height - right.Height);
-		}
+		public static Size Minus(this Size left, Size right) =>
+			new Size(left.Width - right.Width, left.Height - right.Height);
 
-		public static Size ToSize(this Point value)
-		{
-			return new Size(value);
-		}
+		public static Size ToSize(this Point value) =>
+			new Size(value);
 
-		public static PointF MultiplyBy(this PointF location, float value)
-		{
-			return new PointF(value * location.X, value * location.Y);
-		}
+		public static PointF MultiplyBy(this PointF location, float value) =>
+			new PointF(value * location.X, value * location.Y);
 
-		public static int SizeInPixels(this Font font)
-		{
-			return ((int) (font.SizeInPoints * 96 / 72)).ByDpiWidth();
-		}
+		public static int SizeInPixels(this Font font) =>
+			((int) (font.SizeInPoints * 96 / 72)).ByDpiWidth();
 
 		public static Size FitIn(this Size originalSize, Size viewPortSize)
 		{
@@ -202,10 +146,8 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		public static bool FitsIn(this Size value, Size size)
-		{
-			return value.Width <= size.Width && value.Height <= size.Height;
-		}
+		public static bool FitsIn(this Size value, Size size) =>
+			value.Width <= size.Width && value.Height <= size.Height;
 
 		public static bool ContainsPoint(this Point[] poly, Point point)
 		{
@@ -295,14 +237,10 @@ namespace Mtgdb.Controls
 		public static Point Center(this Rectangle rect) =>
 			new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
 
-		public static Rectangle Round(this RectangleF rect)
-		{
-			return new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
-		}
+		public static Rectangle Round(this RectangleF rect) =>
+			new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
 
-		private static int strongRound(double value)
-		{
-			return Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
-		}
+		private static int strongRound(double value) =>
+			Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
 	}
 }

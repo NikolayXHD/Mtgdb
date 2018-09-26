@@ -358,6 +358,7 @@ namespace Mtgdb.Controls
 				_dragCurrentX = e.X;
 				_draggingOverIndex =
 					getDraggingOverIndex(_dragCurrentX.Value, _dragStartedX.Value, DraggingIndex.Value);
+
 				Invalidate();
 			}
 			else
@@ -754,7 +755,28 @@ namespace Mtgdb.Controls
 		protected bool IsLayoutSuspended() =>
 			(bool) _layoutSuspendedProperty.GetValue(this, null);
 
+		private int getValidIndex(int value)
+		{
+			if (value >= Count)
+				value = Count - 1;
 
+			else if (value < 0)
+				value = 0;
+
+			return value;
+		}
+
+		private void setSelectedIndex(int value)
+		{
+			SelectedIndexChanging?.Invoke(this, _selectedIndex);
+			_selectedIndex = value;
+			Invalidate();
+			SelectedIndexChanged?.Invoke(this, value);
+		}
+
+
+
+		private Size _slopeSize = new Size(15, 21);
 		[Category("Settings"), DefaultValue(typeof(Size), "15, 21")]
 		public Size SlopeSize
 		{
@@ -766,6 +788,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private Size _addButtonSlopeSize = new Size(10, 14);
 		[Category("Settings"), DefaultValue(typeof(Size), "10, 14")]
 		public Size AddButtonSlopeSize
 		{
@@ -777,7 +800,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings"), DefaultValue(30)]
+		private int _addButtonWidth = 24;
+		[Category("Settings"), DefaultValue(24)]
 		public int AddButtonWidth
 		{
 			get => _addButtonWidth;
@@ -788,6 +812,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private int _selectedIndex = -1;
 		[Category("Settings"), DefaultValue(-1)]
 		public int SelectedIndex
 		{
@@ -801,24 +826,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private int getValidIndex(int value)
-		{
-			if (value >= Count)
-				value = Count - 1;
-
-			else if (value < 0)
-				value = 0;
-			return value;
-		}
-
-		private void setSelectedIndex(int value)
-		{
-			SelectedIndexChanging?.Invoke(this, _selectedIndex);
-			_selectedIndex = value;
-			Invalidate();
-			SelectedIndexChanged?.Invoke(this, value);
-		}
-
+		private int _hoveredIndex = -1;
 		[Category("Settings"), DefaultValue(-1)]
 		public int HoveredIndex
 		{
@@ -834,7 +842,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings"), DefaultValue(false)]
+		private int _hoveredCloseIndex = -1;
+		[Category("Settings"), DefaultValue(-1)]
 		public int HoveredCloseIndex
 		{
 			get => _hoveredCloseIndex;
@@ -848,8 +857,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "ControlLight")]
+		private Color _colorUnselected = SystemColors.InactiveCaption;
+		[Category("Settings"), DefaultValue(typeof(Color), "InactiveCaption")]
 		public Color ColorUnselected
 		{
 			get => _colorUnselected;
@@ -860,20 +869,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "Control")]
-		public Color ColorSelected
-		{
-			get => _colorSelected;
-			set
-			{
-				_colorSelected = value;
-				Invalidate();
-			}
-		}
-
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "ControlLightLight")]
+		private Color _colorUnselectedHovered = SystemColors.GradientInactiveCaption;
+		[Category("Settings"), DefaultValue(typeof(Color), "GradientInactiveCaption")]
 		public Color ColorUnselectedHovered
 		{
 			get => _colorUnselectedHovered;
@@ -884,8 +881,20 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "ControlLightLight")]
+		private Color _colorSelected = SystemColors.Control;
+		[Category("Settings"), DefaultValue(typeof(Color), "Control")]
+		public Color ColorSelected
+		{
+			get => _colorSelected;
+			set
+			{
+				_colorSelected = value;
+				Invalidate();
+			}
+		}
+
+		private Color _colorSelectedHovered = SystemColors.Control;
+		[Category("Settings"), DefaultValue(typeof(Color), "Control")]
 		public Color ColorSelectedHovered
 		{
 			get => _colorSelectedHovered;
@@ -896,8 +905,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "ActiveBorder")]
+		private Color _colorTabBorder = SystemColors.ActiveBorder;
+		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color ColorTabBorder
 		{
 			get => _colorTabBorder;
@@ -908,8 +917,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(1)]
+		private int _tabBorderWidth = 1;
+		[Category("Settings"), DefaultValue(1)]
 		public int TabBorderWidth
 		{
 			get => _tabBorderWidth;
@@ -921,8 +930,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(true)]
+		private bool _allowAddingTabs = true;
+		[Category("Settings"), DefaultValue(true)]
 		public bool AllowAddingTabs
 		{
 			get => _allowAddingTabs;
@@ -934,8 +943,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(true)]
+		private bool _allowRemovingTabs = true;
+		[Category("Settings"), DefaultValue(true)]
 		public bool AllowRemovingTabs
 		{
 			get => _allowRemovingTabs;
@@ -947,10 +956,10 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(true)]
+		[Category("Settings"), DefaultValue(true)]
 		public bool AllowReorderTabs { get; set; } = true;
 
+		private int _textPadding = 6;
 		[Category("Settings"), DefaultValue(6)]
 		public int TextPadding
 		{
@@ -973,6 +982,7 @@ namespace Mtgdb.Controls
 			set => setIds(Enumerable.Range(0, value).Cast<object>().ToList());
 		}
 
+		private bool _drawBottomBorder;
 		[Category("Settings"), DefaultValue(false)]
 		public bool DrawBottomBorder
 		{
@@ -984,6 +994,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private Bitmap _closeIcon;
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap CloseIcon
 		{
@@ -999,6 +1010,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap CloseIconHovered { get; set; }
 
+		private Bitmap _addIcon;
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap AddIcon
 		{
@@ -1010,6 +1022,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private Bitmap _defaultIcon;
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap DefaultIcon
 		{
@@ -1062,38 +1075,15 @@ namespace Mtgdb.Controls
 
 
 		private List<int> Widths { get; set; }
-
 		private List<string> Texts { get; set; }
-
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<Bitmap> Icons { get; set; }
-
 		public int? DraggingIndex { get; private set; }
-
-		private Size _slopeSize = new Size(15, 21);
-		private Size _addButtonSlopeSize = new Size(10, 14);
-		private int _addButtonWidth = 24;
-		private int _selectedIndex = -1;
-		private int _hoveredIndex = -1;
-		private int _hoveredCloseIndex = -1;
-
-		private Color _colorUnselected = SystemColors.ControlLight;
-		private Color _colorSelected = SystemColors.Control;
-		private Color _colorUnselectedHovered = SystemColors.ControlLightLight;
-		private Color _colorSelectedHovered = SystemColors.ControlLightLight;
-		private Color _colorTabBorder = SystemColors.ActiveBorder;
-		private int _tabBorderWidth = 1;
-		private int _textPadding = 6;
-		private bool _allowAddingTabs = true;
 
 		private int? _draggingOverIndex;
 		private int? _dragStartedX;
 		private int? _dragCurrentX;
-		private bool _drawBottomBorder;
-		private Bitmap _closeIcon;
-		private Bitmap _defaultIcon;
-		private bool _allowRemovingTabs = true;
-		private Bitmap _addIcon;
+
 		private readonly Graphics _graphics;
 
 		private static readonly PropertyInfo _layoutSuspendedProperty =

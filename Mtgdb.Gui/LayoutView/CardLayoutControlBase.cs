@@ -12,17 +12,5 @@ namespace Mtgdb.Gui
 			base.CopyFrom(other);
 			Ui = ((CardLayoutControlBase) other).Ui;
 		}
-
-		private void InitializeComponent()
-		{
-			this.SuspendLayout();
-			// 
-			// CardLayoutControlBase
-			// 
-			this.BackColor = System.Drawing.SystemColors.Window;
-			this.Name = "CardLayoutControlBase";
-			this.ResumeLayout(false);
-
-		}
 	}
 }

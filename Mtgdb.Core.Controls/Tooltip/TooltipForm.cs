@@ -27,7 +27,6 @@ namespace Mtgdb.Controls
 
 			_panel = new BorderedPanel
 			{
-				BorderColor = BorderColor,
 				BackColor = BackColor,
 				Dock = DockStyle.Fill
 			};
@@ -370,9 +369,6 @@ namespace Mtgdb.Controls
 			get => base.BackColor;
 			set => base.BackColor = value;
 		}
-
-		[Category("Settings"), DefaultValue(typeof(Color), "InactiveBorder")]
-		public Color BorderColor { get; [UsedImplicitly] set; } = SystemColors.InactiveBorder;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool UserInteracted

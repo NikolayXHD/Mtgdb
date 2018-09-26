@@ -9,7 +9,7 @@ namespace Mtgdb.Test
 		[Test]
 		public void When_transforming_h_Then_s_and_v_remain_unchanged()
 		{
-			var source = SystemColors.InactiveBorder;
+			var source = Color.Gray;
 			var result = source.TransformHsv(
 				h: _ => _ + Color.LightBlue.RotationTo(Color.LavenderBlush));
 

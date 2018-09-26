@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 			RegisterDragControl(_tabs);
 
 			updateFormBorderColor();
-			SystemColorsChanged += (s, e) => updateFormBorderColor();
+			ColorSchemeController.SystemColorsChanging += updateFormBorderColor;
 
 			_layoutTitle.PaintBackground =
 				_flowTitleLeft.PaintBackground =
@@ -149,6 +149,7 @@ namespace Mtgdb.Gui
 			CardRepository repo,
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
+			ColorSchemeEditorForm colorSchemeEditorForm,
 			Application application,
 			AppSourceConfig appSourceConfig)
 			:this()
@@ -165,6 +166,9 @@ namespace Mtgdb.Gui
 			_appSourceConfig = appSourceConfig;
 			_repo = repo;
 			_serialization = serialization;
+			_colorSchemeEditorForm = colorSchemeEditorForm;
+			_colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
+
 			_buttonSubsystem = new ButtonSubsystem();
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
@@ -648,5 +652,6 @@ namespace Mtgdb.Gui
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
+		private readonly ColorSchemeEditorForm _colorSchemeEditorForm;
 	}
 }

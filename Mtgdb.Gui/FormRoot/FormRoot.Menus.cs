@@ -50,6 +50,16 @@ namespace Mtgdb.Gui
 			_buttonMenuCopyCollection.Click += pasteClick;
 			_buttonMenuCopyDeck.Click += pasteClick;
 			_buttonImportExportToMtgArena.Click += buttonImportExportToMtgArenaClick;
+			_buttonColorScheme.Click += buttonColorSchemeClick;
+		}
+
+		private void buttonColorSchemeClick(object sender, EventArgs e)
+		{
+			if (!_colorSchemeEditorForm.Visible)
+				_colorSchemeEditorForm.Show();
+
+			if (!_colorSchemeEditorForm.Focused)
+				_colorSchemeEditorForm.Focus();
 		}
 
 		private void pasteClick(object sender, EventArgs e)
@@ -342,6 +352,9 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem.SetupButton(_buttonLanguage,
 				new ButtonImages(Resources.en, x2: true));
+
+			_buttonSubsystem.SetupButton(_buttonColorScheme,
+				new ButtonImages(Resources.color_swatch_32, x2: true));
 
 			foreach (var langButton in getLanguageMenuItems())
 				_buttonSubsystem.SetupButton(langButton,

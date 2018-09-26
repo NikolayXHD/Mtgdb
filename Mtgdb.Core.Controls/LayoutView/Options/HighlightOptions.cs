@@ -5,41 +5,22 @@ namespace Mtgdb.Controls
 {
 	public class HighlightOptions
 	{
-		[Category("Settings")]
-		public Color HighlightContextColor
-		{
-			get => _highlightContextColor ?? SystemColors.Info.TransformHsv(h: _ =>
-				_ + Color.LightGoldenrodYellow.RotationTo(Color.Aqua));
-			set => _highlightContextColor = value;
-		}
+		[Category("Settings"), DefaultValue(typeof(Color), "GradientInactiveCaption")]
+		public Color HighlightContextColor { get; set; } = SystemColors.GradientInactiveCaption;
 
-		[Category("Settings")]
-		public Color HighlightColor
-		{
-			get => _highlightColor ?? SystemColors.Info.TransformHsv(h: _ =>
-				_ + Color.LightGoldenrodYellow.RotationTo(Color.Blue));
-			set => _highlightColor = value;
-		}
+		[Category("Settings"), DefaultValue(typeof(Color), "GradientActiveCaption")]
+		public Color HighlightColor { get; set; } = SystemColors.GradientActiveCaption;
 
-		[Category("Settings")]
-		[DefaultValue(typeof(Color), "HotTrack")]
-		public Color HighlightBorderColor
-		{
-			get => _highlightBorderColor ?? SystemColors.HotTrack;
-			set => _highlightBorderColor = value;
-		}
-
-		private Color? _highlightColor;
-		private Color? _highlightContextColor;
-		private Color? _highlightBorderColor;
+		[Category("Settings"), DefaultValue(typeof(Color), "HotTrack")]
+		public Color HighlightBorderColor { get; set; } = SystemColors.HotTrack;
 
 		public HighlightOptions Clone()
 		{
 			return new HighlightOptions
 			{
-				_highlightBorderColor = _highlightBorderColor,
-				_highlightColor = _highlightColor,
-				_highlightContextColor = _highlightContextColor
+				HighlightBorderColor = HighlightBorderColor,
+				HighlightColor = HighlightColor,
+				HighlightContextColor = HighlightContextColor
 			};
 		}
 	}

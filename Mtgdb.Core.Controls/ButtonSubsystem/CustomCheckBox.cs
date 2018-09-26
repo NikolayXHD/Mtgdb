@@ -18,15 +18,16 @@ namespace Mtgdb.Controls
 			FlatAppearance.CheckedBackColor = Color.Transparent;
 
 			HighlightBackColor = Color.Transparent;
-			SystemColorsChanged += systemColorsChanged;
+			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
 
 		protected override bool ShowFocusCues => false;
 		protected override bool ShowKeyboardCues => false;
 
-		private void systemColorsChanged(object sender, EventArgs e) =>
+		private void systemColorsChanging() =>
 			updateHighlightColor();
 
+		private int _highlightMouseoverOpacity = 32;
 		[DefaultValue(32), Category("Settings")]
 		public int HighlightMouseoverOpacity
 		{
@@ -41,6 +42,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private int _highlightMouseDownOpacity = 40;
 		[DefaultValue(40), Category("Settings")]
 		public int HighlightMouseDownOpacity
 		{
@@ -55,6 +57,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private int _highlightCheckedOpacity = 48;
 		[DefaultValue(48), Category("Settings")]
 		public int HighlightCheckedOpacity
 		{
@@ -69,6 +72,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private Color _highlightBackColor = Color.Transparent;
 		[Category("Settings"), DefaultValue(typeof(Color), "Transparent")]
 		public Color HighlightBackColor
 		{
@@ -94,11 +98,5 @@ namespace Mtgdb.Controls
 			FlatAppearance.CheckedBackColor =
 				Color.FromArgb(_highlightCheckedOpacity * _highlightBackColor.A / 255, _highlightBackColor);
 		}
-
-		private int _highlightMouseoverOpacity = 32;
-		private int _highlightMouseDownOpacity = 40;
-		private int _highlightCheckedOpacity = 48;
-
-		private Color _highlightBackColor;
 	}
 }

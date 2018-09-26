@@ -1,0 +1,12 @@
+Control: 0xfff0f0f0
+Window: 0xffffffff
+WindowText: 0xff000000
+GrayText: 0xff6d6d6d
+HotTrack: 0xff0066cc
+Highlight: 0xff3399ff
+HighlightText: 0xffffffff
+ActiveCaption: 0xff99b4d1
+GradientActiveCaption: 0xffb9d1ea
+InactiveCaption: 0xffbfcddb
+GradientInactiveCaption: 0xffd7e4f2
+ActiveBorder: 0xffb4b4b4

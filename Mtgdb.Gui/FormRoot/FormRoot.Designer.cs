@@ -99,6 +99,7 @@ namespace Mtgdb.Gui
 			this._buttonSupport = new Mtgdb.Controls.CustomCheckBox();
 			this._flowTitleLeft = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._buttonOpenWindow = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonColorScheme = new Mtgdb.Controls.CustomCheckBox();
 			this._panelCaption.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._layoutOpen.SuspendLayout();
@@ -1447,9 +1448,10 @@ namespace Mtgdb.Gui
 			this._flowTitleRight.Controls.Add(this._buttonHelp);
 			this._flowTitleRight.Controls.Add(this._buttonTooltips);
 			this._flowTitleRight.Controls.Add(this._buttonShowFilterPanels);
-			this._flowTitleRight.Controls.Add(this._buttonConfig);
 			this._flowTitleRight.Controls.Add(this._buttonLanguage);
 			this._flowTitleRight.Controls.Add(this._buttonDownload);
+			this._flowTitleRight.Controls.Add(this._buttonConfig);
+			this._flowTitleRight.Controls.Add(this._buttonColorScheme);
 			this._flowTitleRight.Controls.Add(this._buttonSupport);
 			this._flowTitleRight.Controls.Add(this._buttonDonate);
 			this._flowTitleRight.Location = new System.Drawing.Point(260, 5);
@@ -1482,6 +1484,21 @@ namespace Mtgdb.Gui
 			this._buttonShowFilterPanels.TabIndex = 20;
 			this._buttonShowFilterPanels.TabStop = false;
 			this._buttonShowFilterPanels.UseVisualStyleBackColor = false;
+			//
+			// _buttonColorScheme
+			//
+			this._buttonColorScheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonColorScheme.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonColorScheme.AutoCheck = false;
+			this._buttonColorScheme.BackColor = System.Drawing.Color.Transparent;
+			this._buttonColorScheme.FlatAppearance.BorderSize = 0;
+			this._buttonColorScheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonColorScheme.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonColorScheme.Image = global::Mtgdb.Gui.Properties.Resources.color_swatch_32;
+			this._buttonColorScheme.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._buttonColorScheme.Size = new System.Drawing.Size(32, 24);
+			this._buttonColorScheme.TabStop = false;
+			this._buttonColorScheme.UseVisualStyleBackColor = false;
 			//
 			// _buttonSupport
 			//
@@ -1655,5 +1672,6 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonVisitDeckedBuilder;
 		private Mtgdb.Controls.CustomCheckBox _buttonVisitMtgArena;
 		private Mtgdb.Controls.CustomCheckBox _buttonImportExportToMtgArena;
+		private Mtgdb.Controls.CustomCheckBox _buttonColorScheme;
 	}
 }

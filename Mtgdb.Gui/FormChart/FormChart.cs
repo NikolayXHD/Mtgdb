@@ -679,8 +679,8 @@ namespace Mtgdb.Gui
 			_chart.Series.Clear();
 			_chart.Legends.Clear();
 
-			_chart.BackColor = SystemColors.Control;
-			_chart.ForeColor = SystemColors.ControlText;
+			_chart.BackColor = SystemColors.Window;
+			_chart.ForeColor = SystemColors.WindowText;
 			_chart.BorderColor = SystemColors.ActiveBorder;
 			_chart.BorderlineColor = SystemColors.ActiveBorder;
 
@@ -731,7 +731,7 @@ namespace Mtgdb.Gui
 
 							LabelForeColor = SystemColors.WindowText,
 							BorderColor = SystemColors.ActiveBorder,
-							MarkerColor = SystemColors.ControlText
+							MarkerColor = SystemColors.ActiveBorder
 						};
 
 						if (settings.LabelDataElement == DataElement.None)
@@ -891,10 +891,10 @@ namespace Mtgdb.Gui
 		{
 			var legend = new Legend
 			{
-				BackColor = SystemColors.Control,
-				ForeColor = SystemColors.ControlText,
-				TitleForeColor = SystemColors.ActiveCaptionText,
-				TitleBackColor = SystemColors.ActiveCaption,
+				BackColor = SystemColors.Window,
+				ForeColor = SystemColors.WindowText,
+				TitleForeColor = SystemColors.WindowText,
+				TitleBackColor = SystemColors.Window,
 				BorderColor = SystemColors.ActiveBorder
 			};
 
@@ -925,9 +925,9 @@ namespace Mtgdb.Gui
 					scrollBar.IsPositionedInside = false;
 					scrollBar.Enabled = true;
 
-					scrollBar.BackColor = SystemColors.ScrollBar;
-					scrollBar.ButtonColor = SystemColors.ButtonFace;
-					scrollBar.LineColor = SystemColors.ButtonFace;
+					scrollBar.BackColor = SystemColors.Window;
+					scrollBar.ButtonColor = SystemColors.Control;
+					scrollBar.LineColor = SystemColors.Control;
 
 					scrollAxis.ScaleView.Zoom(0, 40);
 				}

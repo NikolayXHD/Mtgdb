@@ -17,6 +17,8 @@ namespace Mtgdb.Controls
 			init();
 			Paint += paint;
 			TextSelection.Changed += selectionChanged;
+			BackColor = SystemColors.Window;
+			ForeColor = SystemColors.WindowText;
 		}
 
 		private void paint(object sender, PaintEventArgs e)
@@ -103,10 +105,10 @@ namespace Mtgdb.Controls
 		}
 
 		private void paintText(
-			Graphics graphics, 
-			HighlightOptions highlightOptions, 
-			RectangularSelection selection, 
-			SelectionOptions selectionOptions, 
+			Graphics graphics,
+			HighlightOptions highlightOptions,
+			RectangularSelection selection,
+			SelectionOptions selectionOptions,
 			Rectangle contentArea,
 			bool isTextSelecting)
 		{
@@ -209,7 +211,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings"), DefaultValue(true)]
 		public bool AllowHotTrack { get; set; } = true;
-		
+
 
 		[Category("Settings"), DefaultValue(null)]
 		public Image Image
@@ -254,7 +256,17 @@ namespace Mtgdb.Controls
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
 
+		[Category("Settings"), DefaultValue(typeof(Color), "Window")]
+		public override Color BackColor {
+			get => base.BackColor;
+			set => base.BackColor = value;
+		}
 
+		[Category("Settings"), DefaultValue(typeof(Color), "WindowText")]
+		public override Color ForeColor {
+			get => base.ForeColor;
+			set => base.ForeColor = value;
+		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<ButtonOptions> CustomButtons { get; set; } = new List<ButtonOptions>();

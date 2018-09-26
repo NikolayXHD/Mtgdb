@@ -6,7 +6,6 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using JetBrains.Annotations;
 using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
@@ -49,7 +48,7 @@ namespace Mtgdb.Controls
 			ControlBoxButtonSize = new Size(31, 17).ByDpi();
 
 			applySystemColors();
-			SystemColorsChanged += (s, e) => applySystemColors();
+			ColorSchemeController.SystemColorsChanging += applySystemColors;
 		}
 
 		protected override bool FixShadowTransparency => true;
@@ -171,7 +170,9 @@ namespace Mtgdb.Controls
 
 				var renderer = getCaptionButtonRenderer(i, img);
 				if (renderer != null)
+				{
 					renderer.DrawBackground(g, img.Bounds);
+				}
 				else
 				{
 					if (img.IsHovered)
@@ -1013,7 +1014,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private Size Border { get; }
+		protected Size Border { get; }
 		private Size ControlBoxButtonSize { get; }
 
 		[Browsable(false)]
@@ -1057,7 +1058,11 @@ namespace Mtgdb.Controls
 				BackColor = SystemColors.Control;
 			}
 
-			_panelCaption.BorderColor = ColorHelper.DistinctSystemBorder;
+			_panelCaption.BorderColor = SystemColors.ActiveBorder;
+
+			Invalidate();
+			_panelCaption.Invalidate(true);
+			_panelClient.Invalidate(true);
 		}
 
 		private Size SizeBeforeMaximized { get; set; }

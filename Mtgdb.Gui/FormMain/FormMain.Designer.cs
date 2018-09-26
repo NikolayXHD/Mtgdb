@@ -370,6 +370,10 @@
 			this._tabHeadersDeck.AllowAddingTabs = false;
 			this._tabHeadersDeck.AllowRemovingTabs = false;
 			this._tabHeadersDeck.AllowReorderTabs = false;
+			this._tabHeadersDeck.ColorSelected = System.Drawing.SystemColors.Window;
+			this._tabHeadersDeck.ColorSelectedHovered = System.Drawing.SystemColors.Window;
+			this._tabHeadersDeck.ColorUnselected = System.Drawing.SystemColors.Control;
+			this._tabHeadersDeck.ColorUnselectedHovered = System.Drawing.SystemColors.Window;
 			this._tabHeadersDeck.Count = 4;
 			this._tabHeadersDeck.Location = new System.Drawing.Point(78, 0);
 			this._tabHeadersDeck.Margin = new System.Windows.Forms.Padding(0);

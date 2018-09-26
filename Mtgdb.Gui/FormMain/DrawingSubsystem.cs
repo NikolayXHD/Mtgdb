@@ -73,16 +73,19 @@ namespace Mtgdb.Gui
 			}
 
 			if (card == _deckEditorModel.TouchedCard)
-				drawSelection(e, SystemColors.MenuHighlight, SystemColors.MenuHighlight, 255 - 48);
+				drawSelection(e, SystemColors.ActiveCaption, SystemColors.GradientActiveCaption, 255 - 48);
 			else
 			{
 				int deckCount = card.DeckCount(Ui);
 				int collectionCount = card.CollectionCount(Ui);
 
+				var colorSelection = SystemColors.InactiveCaption;
+				var colorSelectionGradient = SystemColors.GradientInactiveCaption;
+
 				if (deckCount == 0 && collectionCount > 0)
-					drawSelection(e, SystemColors.Control, SystemColors.Window, 127 - 32);
+					drawSelection(e, colorSelection, colorSelectionGradient, 127 - 32);
 				else if (deckCount > 0)
-					drawSelection(e, SystemColors.Control, SystemColors.Window, 255 - 32);
+					drawSelection(e, colorSelection, colorSelectionGradient, 255 - 32);
 			}
 
 			drawLegalityWarning(e, sender, card);
@@ -231,11 +234,7 @@ namespace Mtgdb.Gui
 			targetRect.Inflate(1, 0);
 			targetRect.Offset(2, 0);
 
-			var color = card == _deckEditorModel.TouchedCard
-				? SystemColors.HighlightText
-				: SystemColors.WindowText;
-
-			e.Graphics.DrawText(countText, font, targetRect, color);
+			e.Graphics.DrawText(countText, font, targetRect, SystemColors.WindowText);
 		}
 
 		private Rectangle getSelectionRectangle(CustomDrawArgs e)

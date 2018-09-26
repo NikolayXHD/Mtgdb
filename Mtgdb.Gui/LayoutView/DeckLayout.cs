@@ -9,6 +9,7 @@ namespace Mtgdb.Gui
 		{
 			InitializeComponent();
 
+			BackColor = SystemColors.Window;
 			_fieldImage.FieldName = nameof(Card.Image);
 
 			_fieldImage.AllowSort = false;

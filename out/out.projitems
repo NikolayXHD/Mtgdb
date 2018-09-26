@@ -26,4 +26,7 @@
     <Content Include="$(MSBuildThisFileDirectory)help\css\table.css" />
     <Content Include="$(MSBuildThisFileDirectory)help\template.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)color-schemes" />
+  </ItemGroup>
 </Project>
