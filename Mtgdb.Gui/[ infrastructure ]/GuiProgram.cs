@@ -29,7 +29,7 @@ namespace Mtgdb.Gui
 
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-			
+
 			_kernel.Load<CoreModule>();
 			_kernel.Load<DalModule>();
 			_kernel.Load<DownloaderModule>();
@@ -45,6 +45,10 @@ namespace Mtgdb.Gui
 
 			var loader = _kernel.Get<GuiLoader>();
 			loader.Run();
+
+			var colorSchemeEditorForm = _kernel.Get<ColorSchemeEditorForm>();
+			colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
+			colorSchemeEditorForm.LoadCurrentColorScheme();
 
 			var application = _kernel.Get<Application>();
 			application.MigrateHistoryFiles();

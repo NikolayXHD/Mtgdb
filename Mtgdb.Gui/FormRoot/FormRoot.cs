@@ -167,7 +167,6 @@ namespace Mtgdb.Gui
 			_repo = repo;
 			_serialization = serialization;
 			_colorSchemeEditorForm = colorSchemeEditorForm;
-			_colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
 
 			_buttonSubsystem = new ButtonSubsystem();
 			_formMainFactory = formMainFactory;

@@ -33,8 +33,7 @@ namespace Mtgdb.Controls
 			foreach (KnownColor colorName in _controller.KnownColors)
 				_layoutPanel.Controls.Add(createColorCell(colorName));
 
-			addResetAllButton();
-			addSaveLoadButtons();
+			addButtons();
 
 			Closing += (s, e) =>
 			{
@@ -55,44 +54,21 @@ namespace Mtgdb.Controls
 			SizeChanged += moved;
 		}
 
-		private void addSaveLoadButtons()
-		{
-			string ext = ".colors";
-			string filter = $"Mtgdb.Gui color scheme (*{ext})|*{ext}";
-			string format = "{0}: 0x{1:x8}";
-			var pattern = new Regex(@"^(?<name>\w+): 0x(?<argb>[\da-f]{8})$", RegexOptions.IgnoreCase);
+		public void LoadCurrentColorScheme() =>
+			load(currentColorsFile(), quiet: true);
 
+		private void addButtons()
+		{
 			addButton("Save", (s, e) =>
 			{
-				var dlg = new SaveFileDialog
-				{
-					DefaultExt = ext,
-					InitialDirectory = SaveDirectory,
-					AddExtension = true,
-					Filter = filter,
-					Title = "Save color scheme",
-					CheckPathExists = true
-				};
-
-				if (dlg.ShowDialog() != DialogResult.OK)
-					return;
-
-				var saved = _controller.Save();
-				string serialized = string.Join(Str.Endl, saved.Select(_ => string.Format(format, (KnownColor) _.Key, _.Value)));
-				try
-				{
-					File.WriteAllText(dlg.FileName, serialized);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show("Failed to write file: " + dlg.FileName + Str.Endl + ex.Message);
-				}
+				if (save())
+					saveTo(currentColorsFile());
 			});
 
 			addButton("Load", (s, e) =>
 			{
-				if (trySelectFile(out string selectedFile) && tryReadFile(selectedFile, out string serialized) && tryDeserialize(serialized, out var deserialized))
-					_controller.Load(deserialized);
+				if (trySelectFile(out string selectedFile) && load(selectedFile, quiet: false))
+					saveTo(currentColorsFile());
 
 				bool trySelectFile(out string result)
 				{
@@ -100,10 +76,10 @@ namespace Mtgdb.Controls
 
 					var dlg = new OpenFileDialog
 					{
-						DefaultExt = ext,
+						DefaultExt = Ext,
 						InitialDirectory = SaveDirectory,
 						AddExtension = true,
-						Filter = filter,
+						Filter = _filter,
 						Title = "Load color scheme",
 						CheckFileExists = true
 					};
@@ -114,74 +90,8 @@ namespace Mtgdb.Controls
 					result = dlg.FileName;
 					return true;
 				}
-
-				bool tryReadFile(string fileName, out string result)
-				{
-					result = null;
-					var fileInfo = new FileInfo(fileName);
-					if (fileInfo.Length > 1024 * 1024)
-					{
-						warnOnInvalidContent("File too large");
-						return false;
-					}
-
-					try
-					{
-						result = File.ReadAllText(fileName);
-						return true;
-					}
-					catch (Exception ex)
-					{
-						warnOnInvalidContent(ex.Message);
-						return false;
-					}
-				}
-
-				bool tryDeserialize(string input, out IReadOnlyDictionary<int, int> result)
-				{
-					result = null;
-					var lines = input.Split(Array.From(Str.Endl), StringSplitOptions.None);
-					var map = new Dictionary<int, int>();
-
-					for (int i = 0; i < lines.Length; i++)
-					{
-						string line = lines[i];
-						var match = pattern.Match(line);
-						if (!match.Success)
-						{
-							warnOnInvalidContent($"Invalid format of line {i + 1}: {line}");
-							return false;
-						}
-
-						string name = match.Groups["name"].Value;
-						string rgbaStr = match.Groups["argb"].Value;
-
-						if (!Enum.TryParse(name, out KnownColor colorName) || !_controller.KnownColors.Contains(colorName))
-						{
-							warnOnInvalidContent($"Invalid color name at line {i + 1}: {name}");
-							return false;
-						}
-
-						if (!int.TryParse(rgbaStr, NumberStyles.HexNumber, Str.Culture, out int rgba))
-						{
-							warnOnInvalidContent($"Invalid color value at line {i + 1}: {rgbaStr}");
-							return false;
-						}
-
-						map.Add((int) colorName, rgba);
-					}
-
-					result = map.AsReadOnlyDictionary();
-					return true;
-				}
-
-				void warnOnInvalidContent(string message) =>
-					MessageBox.Show("Failed to read color scheme from file: " + selectedFile + Str.Endl + message);
 			});
-		}
 
-		private void addResetAllButton()
-		{
 			bool resetting = false;
 			addButton("Reset all", (s, e) =>
 			{
@@ -190,9 +100,127 @@ namespace Mtgdb.Controls
 
 				resetting = true;
 				_controller.ResetAll();
+
+				if (File.Exists(currentColorsFile()))
+					File.Delete(currentColorsFile());
+
 				resetting = false;
 			});
+
+			bool save()
+			{
+				var dlg = new SaveFileDialog
+				{
+					DefaultExt = Ext,
+					InitialDirectory = SaveDirectory,
+					AddExtension = true,
+					Filter = _filter,
+					Title = "Save color scheme",
+					CheckPathExists = true
+				};
+
+				if (dlg.ShowDialog() != DialogResult.OK)
+					return false;
+
+				return saveTo(dlg.FileName);
+			}
+
+			bool saveTo(string file)
+			{
+				var saved = _controller.Save();
+				string serialized = string.Join(Str.Endl, saved.Select(_ => string.Format(Format, (KnownColor) _.Key, _.Value)));
+				try
+				{
+					File.WriteAllText(file, serialized);
+					return true;
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Failed to write file: " + file + Str.Endl + ex.Message);
+					return false;
+				}
+			}
 		}
+
+		private bool load(string file, bool quiet)
+		{
+			if (tryReadFile(file, out string serialized) && tryDeserialize(serialized, out var deserialized))
+			{
+				_controller.Load(deserialized);
+				return true;
+			}
+
+			return false;
+
+			bool tryReadFile(string fileName, out string result)
+			{
+				result = null;
+				var fileInfo = new FileInfo(fileName);
+				if (fileInfo.Length > 1024 * 1024)
+				{
+					warnOnInvalidContent("File too large");
+					return false;
+				}
+
+				try
+				{
+					result = File.ReadAllText(fileName);
+					return true;
+				}
+				catch (Exception ex)
+				{
+					warnOnInvalidContent(ex.Message);
+					return false;
+				}
+			}
+
+			bool tryDeserialize(string input, out IReadOnlyDictionary<int, int> result)
+			{
+				result = null;
+				var lines = input.Split(Array.From(Str.Endl), StringSplitOptions.None);
+				var map = new Dictionary<int, int>();
+
+				for (int i = 0; i < lines.Length; i++)
+				{
+					string line = lines[i];
+					var match = _pattern.Match(line);
+					if (!match.Success)
+					{
+						warnOnInvalidContent($"Invalid format of line {i + 1}: {line}");
+						return false;
+					}
+
+					string name = match.Groups["name"].Value;
+					string rgbaStr = match.Groups["argb"].Value;
+
+					if (!Enum.TryParse(name, out KnownColor colorName) || !_controller.KnownColors.Contains(colorName))
+					{
+						warnOnInvalidContent($"Invalid color name at line {i + 1}: {name}");
+						return false;
+					}
+
+					if (!int.TryParse(rgbaStr, NumberStyles.HexNumber, Str.Culture, out int rgba))
+					{
+						warnOnInvalidContent($"Invalid color value at line {i + 1}: {rgbaStr}");
+						return false;
+					}
+
+					map.Add((int) colorName, rgba);
+				}
+
+				result = map.AsReadOnlyDictionary();
+				return true;
+			}
+
+			void warnOnInvalidContent(string message)
+			{
+				if (!quiet)
+					MessageBox.Show("Failed to read color scheme from file: " + file + Str.Endl + message);
+			}
+		}
+
+		private string currentColorsFile() =>
+			SaveDirectory.AddPath("current" + Ext);
 
 		private void moved(object s, EventArgs e)
 		{
@@ -338,6 +366,11 @@ namespace Mtgdb.Controls
 		}
 
 		public string SaveDirectory { get; set; }
+
+		private const string Ext = ".colors";
+		private const string Format = "{0}: 0x{1:x8}";
+		private static readonly string _filter = $"Mtgdb.Gui color scheme (*{Ext})|*{Ext}";
+		private static readonly Regex _pattern = new Regex(@"^(?<name>\w+): 0x(?<argb>[\da-f]{8})$", RegexOptions.IgnoreCase);
 
 		private readonly Size _cellSize = new Size(128, 36).ByDpi();
 		private readonly Padding _cellMargin = new Padding(3.ByDpiWidth());
