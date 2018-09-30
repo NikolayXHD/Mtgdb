@@ -959,10 +959,10 @@ namespace Mtgdb.Gui
 			this._buttonExcludeManaAbility.Image = global::Mtgdb.Gui.Properties.Resources.include_plus_24;
 			this._buttonExcludeManaAbility.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonExcludeManaAbility.HighlightCheckedOpacity = 0;
-			this._buttonExcludeManaAbility.Location = new System.Drawing.Point(0, 2);
-			this._buttonExcludeManaAbility.Margin = new System.Windows.Forms.Padding(0, 0, 22, 0);
+			this._buttonExcludeManaAbility.Location = new System.Drawing.Point(0, 0);
+			this._buttonExcludeManaAbility.Margin = new System.Windows.Forms.Padding(0, 0, 20, 0);
 			this._buttonExcludeManaAbility.Name = "_buttonExcludeManaAbility";
-			this._buttonExcludeManaAbility.Size = new System.Drawing.Size(22, 20);
+			this._buttonExcludeManaAbility.Size = new System.Drawing.Size(24, 24);
 			this._buttonExcludeManaAbility.TabIndex = 41;
 			this._buttonExcludeManaAbility.TabStop = false;
 			this._buttonExcludeManaAbility.UseVisualStyleBackColor = false;

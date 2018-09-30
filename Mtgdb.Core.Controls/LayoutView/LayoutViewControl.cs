@@ -305,16 +305,21 @@ namespace Mtgdb.Controls
 			int pageSize = getRowsCount() * getColumnsCount();
 			_scrollBar.Enabled = Count > pageSize;
 
-			int largeChange = Math.Max(
-				Math.Max(2, pageSize),
-				(int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))));
+			int largeChange = ((int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))))
+				.WithinRange(1, PageCount).AtLeast(1);
 
-			int maximum = Math.Max(0, PageCount + largeChange - 1);
+			int maximum = Math.Max(0, PageCount - 1);
 			int value = CardIndex / pageSize;
 
+			_updatingScrollValue = true;
+
+			_scrollBar.SmallChange = 1;
 			_scrollBar.LargeChange = largeChange;
+			_scrollBar.Minimum = 0;
 			_scrollBar.Maximum = maximum;
 			_scrollBar.Value = value;
+
+			_updatingScrollValue = false;
 		}
 
 		private void load(object sender, EventArgs e)
@@ -322,8 +327,6 @@ namespace Mtgdb.Controls
 			ApplyIconRecognizer();
 
 			_scrollBar.Scroll += scrolled;
-
-			_scrollBar.MouseWheel += mouseWheel;
 			MouseWheel += mouseWheel;
 			KeyDown += keyDown;
 			PreviewKeyDown += previewKeyDown;
@@ -414,6 +417,9 @@ namespace Mtgdb.Controls
 
 		private void scrolled(object sender, EventArgs e)
 		{
+			if (_updatingScrollValue)
+				return;
+
 			int pageSize = getRowsCount() * getColumnsCount();
 			int cardIndex = _scrollBar.Value * pageSize;
 
@@ -1471,6 +1477,8 @@ namespace Mtgdb.Controls
 		private readonly Timer _selectionCaretTimer;
 		private bool _selectionCaretTimerSkip;
 
+		private bool _updatingScrollValue;
+
 		#region mouse wheel without focus
 
 		public bool PreFilterMessage(ref Message m)
@@ -1497,7 +1505,7 @@ namespace Mtgdb.Controls
 					return false;
 			}
 
-			if (!Focused && IsUnderMouse)
+			if (!ContainsFocus && IsUnderMouse)
 				// send the event to this control
 				ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 

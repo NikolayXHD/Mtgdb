@@ -234,22 +234,26 @@ namespace Mtgdb.Gui
 			}
 
 			int border = FilterManaCost.Border;
+			var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
+			int rightMargin = FilterManaCost.Width - modeButtonSize.Width;
 
-			var modeButtonSize = new Size(
-				FilterManaCost.ImageSize.Width + border * 2,
-				FilterManaCost.ImageSize.Height + border * 2);
+			var modeButtons = new[]
+			{
+				_buttonExcludeManaAbility,
+				_buttonExcludeManaCost,
+				_buttonShowProhibit
+			};
 
-			_buttonExcludeManaAbility.Size =
-				_buttonExcludeManaCost.Size =
-					_buttonShowProhibit.Size = modeButtonSize;
+			foreach (var button in modeButtons)
+				button.Size = modeButtonSize;
 
 			setRowHeight(_buttonShowProhibit, modeButtonSize);
-
-			int rightMargin = FilterManaCost.Margin.Right + FilterManaCost.Width - modeButtonSize.Width;
 
 			_buttonExcludeManaCost.Margin =
 				_buttonExcludeManaAbility.Margin =
 					new Padding(0, 0, rightMargin, 0);
+
+			_buttonShowProhibit.Margin = new Padding(0);
 
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);

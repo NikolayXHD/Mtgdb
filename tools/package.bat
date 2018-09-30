@@ -43,6 +43,7 @@ xcopy /q /r /i /e %output%\etc %target%\etc
 xcopy /q /r /i /e %output%\images %target%\images
 xcopy /q /r /i /e %output%\update %target%\update
 xcopy /q /r /i /e %output%\help %target%\help
+xcopy /q /r /i /e %output%\color-schemes %target%\color-schemes
 xcopy /q %output%\..\LICENSE %target%
 
 del /q /s %target%\update\app\*

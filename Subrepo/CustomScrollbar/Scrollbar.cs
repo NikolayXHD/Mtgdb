@@ -34,44 +34,44 @@ namespace CustomScrollbar
 			ThumbTopSpanImage = Resource.ThumbSpanTop;
 			ThumbMiddleImage = Resource.ThumbMiddle;
 
-			Width = UpArrowImage.Width + 2;
-			MinimumSize = new Size(
-				UpArrowImage.Width + 2,
-				UpArrowImage.Height + DownArrowImage.Height + getThumbHeight());
+			Width = UpArrowImage.Width;
 		}
 
-		private int getSpanHeight() =>
-			(getThumbHeight() - (ThumbMiddleImage.Height + ThumbTopImage.Height + ThumbBottomImage.Height)) / 2;
+		private int getVerticalRange() => getTrackHeight() - getThumbHeight();
 
-		private int getValueRange() =>
-			Maximum - Minimum - LargeChange;
-
-		private int getVerticalRange() =>
-			getTrackHeight() - getThumbHeight();
-
-		private Rectangle getUpRect() =>
-			new Rectangle(1, 0, Width - 2, UpArrowImage.Height);
-
-		private Rectangle getDownRect() =>
-			new Rectangle(1, Bottom - DownArrowImage.Height, Width - 2, DownArrowImage.Height);
-
-		private Rectangle getThumbRect()
-		{
-			int top = _thumbTop + UpArrowImage.Height;
-			return new Rectangle(1, top, Width - 2, getThumbHeight());
-		}
-
+		private int getTrackHeight() => Height - getUpRect().Height - getDownRect().Height;
 		private int getThumbHeight()
 		{
-			int trackH = getTrackHeight();
-			return Math.Min(Math.Max(ThumbMiddleImage.Height * 14 / 10, trackH * LargeChange / Maximum), trackH);
+			int trackHeight = getTrackHeight();
+
+			if (Maximum == Minimum)
+				return trackHeight;
+
+			return Math.Min(Math.Max(
+				ThumbMiddleImage.Height + ThumbTopSpanImage.Height + ThumbTopImage.Height + ThumbBottomSpanImage.Height + ThumbBottomImage.Height,
+				trackHeight * LargeChange / (LargeChange + Maximum - Minimum)),
+				trackHeight);
 		}
 
-		private int getTrackHeight() =>
-			Height - (UpArrowImage.Height + DownArrowImage.Height);
+		private Rectangle getThumbRect() => new Rectangle(0, getThumbRectTop(), Width, getThumbHeight());
+		private int getThumbRectTop() => ThumbTop + getUpRect().Height;
 
-		private int getValue() =>
-			_thumbTop * (Maximum - LargeChange) / getVerticalRange();
+		private Rectangle getUpRect()
+		{
+			if (Height >= UpArrowImage.Height + DownArrowImage.Height)
+				return new Rectangle(0, 0, Width, UpArrowImage.Height);
+
+			return new Rectangle(0, 0, Width, Height * UpArrowImage.Height / (UpArrowImage.Height + DownArrowImage.Height));
+		}
+
+		private Rectangle getDownRect()
+		{
+			if (Height >= UpArrowImage.Height + DownArrowImage.Height)
+				return new Rectangle(0, Bottom - DownArrowImage.Height, Width, DownArrowImage.Height);
+
+			var h = Height - Height * UpArrowImage.Height / (UpArrowImage.Height + DownArrowImage.Height);
+			return new Rectangle(0, Bottom - h, Width, h);
+		}
 
 
 
@@ -81,20 +81,45 @@ namespace CustomScrollbar
 			get => _value;
 			set
 			{
+				value = Math.Min(Math.Max(Minimum, value), Maximum);
+
+				if (_value == value)
+					return;
+
 				_value = value;
 
-				int valueRange = getValueRange();
+				if (Maximum == Minimum)
+					_thumbTop = 0;
+				else
+					_thumbTop = getVerticalRange() * (value - Minimum) / (Maximum - Minimum);
 
-				float percent = 0.0f;
-				if (valueRange != 0)
-					percent = value / (float) valueRange;
-
-				_thumbTop = (int) (percent * getVerticalRange());
-
-				Invalidate();
+				Refresh();
+				ValueChanged?.Invoke(this, new EventArgs());
+				Scroll?.Invoke(this, new EventArgs());
 			}
 		}
 
+		private int ThumbTop
+		{
+			get => _thumbTop;
+			set
+			{
+				int verticalRange = getVerticalRange();
+
+				value = Math.Min(Math.Max(0, value), verticalRange);
+
+				if (_thumbTop == value)
+					return;
+
+				_thumbTop = value;
+
+				var prevValue = Value;
+				Value = Minimum + value * (Maximum - Minimum) / verticalRange;
+
+				if (Value == prevValue)
+					Refresh();
+			}
+		}
 
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -107,31 +132,46 @@ namespace CustomScrollbar
 			e.Graphics.DrawImage(UpArrowImage, getUpRect());
 			e.Graphics.DrawImage(DownArrowImage, getDownRect());
 
-			int width = Width - 2;
-			int top = getThumbRect().Top;
-			int left = 1;
+			int top = getThumbRectTop();
+
+			int thumbHeight = getThumbHeight();
+			if (thumbHeight <= 0)
+				return;
+
+			int fullSpan = Math.Max(0, thumbHeight - ThumbMiddleImage.Height - ThumbTopImage.Height - ThumbBottomImage.Height);
+			int topSpan = fullSpan / 2;
+			int bottomSpan = fullSpan - topSpan;
+			int middleHeight = thumbHeight - ThumbBottomImage.Height - ThumbTopImage.Height - fullSpan;
 
 			// draw top
-			var rect = new Rectangle(left, top, width, ThumbTopImage.Height);
+			var rect = new Rectangle(0, top, Width, ThumbTopImage.Height);
 			e.Graphics.DrawImage(ThumbTopImage, rect);
 			top += rect.Height;
 
-			int spanHeight = getSpanHeight();
-			rect = new Rectangle(left, top, width, spanHeight);
-			e.Graphics.DrawImage(ThumbTopSpanImage, makeDoubleHeight(rect));
-			top += rect.Height;
+			if (topSpan > 0)
+			{
+				rect = new Rectangle(0, top, Width, topSpan);
+				e.Graphics.DrawImage(ThumbTopSpanImage, makeDoubleHeight(rect));
+				top += rect.Height;
+			}
 
-			//draw middle
-			rect = new Rectangle(left, top, width, ThumbMiddleImage.Height);
-			e.Graphics.DrawImage(ThumbMiddleImage, rect);
-			top += rect.Height;
+			if (middleHeight > 0)
+			{
+				//draw middle
+				rect = new Rectangle(0, top, Width, Math.Min(ThumbMiddleImage.Height, middleHeight));
+				e.Graphics.DrawImage(ThumbMiddleImage, rect);
+				top += rect.Height;
+			}
 
-			rect = new Rectangle(left, top, width, spanHeight);
-			e.Graphics.DrawImage(ThumbBottomSpanImage, makeDoubleHeight(rect));
-			top += rect.Height;
+			if (bottomSpan > 0)
+			{
+				rect = new Rectangle(0, top, Width, bottomSpan);
+				e.Graphics.DrawImage(ThumbBottomSpanImage, makeDoubleHeight(rect));
+				top += rect.Height;
+			}
 
 			//draw bottom
-			rect = new Rectangle(left, top, width, ThumbBottomImage.Height);
+			rect = new Rectangle(0, top, Width, ThumbBottomImage.Height);
 			e.Graphics.DrawImage(ThumbBottomImage, rect);
 
 			// workaround the NearestNeighbor consequence that bottom half is left transparent
@@ -141,76 +181,44 @@ namespace CustomScrollbar
 
 		private void mouseDown(object sender, MouseEventArgs e)
 		{
-			var cursor = PointToClient(Cursor.Position);
-			if (!ClientRectangle.Contains(cursor))
+			if (!ClientRectangle.Contains(e.Location))
 				return;
 
 			var thumbRect = getThumbRect();
-			thumbRect.Inflate(1, 0);
-
-			if (thumbRect.Contains(cursor))
+			if (thumbRect.Contains(e.Location))
 			{
-				_clickValue = cursor.Y - thumbRect.Top;
+				_clickThumbY = e.Y - ThumbTop;
 				_thumbDown = true;
-				return;
 			}
-
-			int vertRange = getVerticalRange();
-			if (vertRange <= 0)
-				return;
-
-			var upRect = getUpRect();
-			upRect.Inflate(1, 0);
-
-			var downRect = getDownRect();
-			downRect.Inflate(1, 0);
-
-			if (upRect.Contains(cursor))
-				_thumbTop = Math.Max(0, _thumbTop - SmallChange);
-			else if (downRect.Contains(cursor))
-				_thumbTop = Math.Min(vertRange, _thumbTop + SmallChange);
-			else if (cursor.Y <= thumbRect.Top)
-				_thumbTop = Math.Max(0, _thumbTop - LargeChange);
-			else if (cursor.Y > thumbRect.Bottom)
-				_thumbTop = Math.Min(vertRange, _thumbTop + LargeChange);
 			else
-				return;
+			{
+				var upRect = getUpRect();
+				var downRect = getDownRect();
+				int delta;
 
-			_value = getValue();
-			Refresh();
-			ValueChanged?.Invoke(this, new EventArgs());
-			Scroll?.Invoke(this, new EventArgs());
+				if (upRect.Contains(e.Location))
+					delta = -SmallChange;
+				else if (downRect.Contains(e.Location))
+					delta = SmallChange;
+				else if (e.Location.Y < thumbRect.Top)
+					delta = -LargeChange;
+				else if (e.Location.Y >= thumbRect.Bottom)
+					delta = LargeChange;
+				else
+					return;
+
+				Value += delta;
+			}
 		}
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
 			if (_thumbDown)
-				_thumbDragging = true;
-
-			if (!_thumbDragging)
-				return;
-
-			int valueInterval = Maximum - Minimum;
-			int vertRange = getVerticalRange();
-
-			if (_thumbDown && valueInterval > 0 && vertRange > 0)
-			{
-				_thumbTop = Math.Min(Math.Max(0, e.Y - (UpArrowImage.Height + _clickValue)), vertRange);
-
-				_value = getValue();
-				Refresh();
-				ValueChanged?.Invoke(this, new EventArgs());
-				Scroll?.Invoke(this, new EventArgs());
-			}
+				ThumbTop = e.Y - _clickThumbY;
 		}
 
-		private void mouseUp(object sender, MouseEventArgs e)
-		{
+		private void mouseUp(object sender, MouseEventArgs e) =>
 			_thumbDown = false;
-			_thumbDragging = false;
-		}
-
-
 
 		public override bool AutoSize
 		{
@@ -219,7 +227,7 @@ namespace CustomScrollbar
 			{
 				base.AutoSize = value;
 				if (value)
-					Width = UpArrowImage.Width + 2;
+					Width = UpArrowImage.Width;
 			}
 		}
 
@@ -300,9 +308,8 @@ namespace CustomScrollbar
 		private int _maximum = 100;
 		private int _value;
 
-		private int _clickValue;
+		private int _clickThumbY;
 		private int _thumbTop;
 		private bool _thumbDown;
-		private bool _thumbDragging;
 	}
 }
