@@ -57,10 +57,23 @@ namespace Mtgdb.Controls
 
 		private void scaleScrollbar()
 		{
+			_scrollBar.ChannelColor = SystemColors.Control;
+			_scrollBar.BorderColor = SystemColors.Control;
+
 			int scrollbarWidth = _scrollBar.Width.ByDpiWidth();
 
 			_scrollBar.Left = _scrollBar.Right - scrollbarWidth;
 			_scrollBar.Width = scrollbarWidth;
+
+			_scrollBar.UpArrowImage = ((Bitmap) _scrollBar.UpArrowImage)?.ResizeDpi();
+			_scrollBar.ThumbTopImage = ((Bitmap) _scrollBar.ThumbTopImage)?.ResizeDpi();
+			_scrollBar.ThumbTopSpanImage = ((Bitmap) _scrollBar.ThumbTopSpanImage)?.ResizeDpi();
+
+			_scrollBar.ThumbMiddleImage = ((Bitmap) _scrollBar.ThumbMiddleImage)?.ResizeDpi();
+
+			_scrollBar.ThumbBottomSpanImage = ((Bitmap) _scrollBar.ThumbBottomSpanImage)?.ResizeDpi();
+			_scrollBar.ThumbBottomImage = ((Bitmap) _scrollBar.ThumbBottomImage)?.ResizeDpi();
+			_scrollBar.DownArrowImage = ((Bitmap) _scrollBar.DownArrowImage)?.ResizeDpi();
 		}
 
 		private void layout(object sender, LayoutEventArgs e)
@@ -296,7 +309,7 @@ namespace Mtgdb.Controls
 				Math.Max(2, pageSize),
 				(int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))));
 
-			int maximum = Math.Max(0, PageCount + largeChange - 2);
+			int maximum = Math.Max(0, PageCount + largeChange - 1);
 			int value = CardIndex / pageSize;
 
 			_scrollBar.LargeChange = largeChange;
@@ -309,6 +322,8 @@ namespace Mtgdb.Controls
 			ApplyIconRecognizer();
 
 			_scrollBar.Scroll += scrolled;
+
+			_scrollBar.MouseWheel += mouseWheel;
 			MouseWheel += mouseWheel;
 			KeyDown += keyDown;
 			PreviewKeyDown += previewKeyDown;
@@ -423,28 +438,28 @@ namespace Mtgdb.Controls
 
 			if (e.KeyData == Keys.PageDown)
 			{
-				if (this.IsUnderMouse())
+				if (IsUnderMouse)
 					scrollAdd(getRowsCount() * getColumnsCount());
 				else
 					handled = false;
 			}
 			else if (e.KeyData == Keys.PageUp)
 			{
-				if (this.IsUnderMouse())
+				if (IsUnderMouse)
 					scrollAdd(-(getRowsCount() * getColumnsCount()));
 				else
 					handled = false;
 			}
 			else if (e.KeyData == Keys.End)
 			{
-				if (this.IsUnderMouse())
+				if (IsUnderMouse)
 					scrollAdd(Count);
 				else
 					handled = false;
 			}
 			else if (e.KeyData == Keys.Home)
 			{
-				if (this.IsUnderMouse())
+				if (IsUnderMouse)
 					scrollAdd(-Count);
 				else
 					handled = false;
@@ -524,7 +539,7 @@ namespace Mtgdb.Controls
 
 		private void mouseWheel(object sender, MouseEventArgs e)
 		{
-			if (!this.IsUnderMouse())
+			if (!IsUnderMouse)
 				return;
 
 			if (e.Delta < 0)
@@ -1281,6 +1296,27 @@ namespace Mtgdb.Controls
 				.SelectMany(c => c.Fields.Select(f => f.TextSelection))
 				.FirstOrDefault(s => !s.IsEmpty);
 
+
+		public void TransformIcons(Func<Bitmap, Bitmap> transformation)
+		{
+			SortOptions.Icon = SortOptions.Icon?.Invoke0(transformation);
+			SortOptions.AscIcon = SortOptions.AscIcon?.Invoke0(transformation);
+			SortOptions.DescIcon = SortOptions.DescIcon?.Invoke0(transformation);
+
+			SortOptions.IconTransp = SortOptions.IconTransp?.Invoke0(transformation);
+			SortOptions.AscIconTransp = SortOptions.AscIconTransp?.Invoke0(transformation);
+			SortOptions.DescIconTransp = SortOptions.DescIconTransp?.Invoke0(transformation);
+
+			SearchOptions.Button.Icon = SearchOptions.Button.Icon?.Invoke0(transformation);
+			SearchOptions.Button.IconTransp = SearchOptions.Button.IconTransp?.Invoke0(transformation);
+
+			foreach (var pair in LayoutOptions.AlignmentIconsByDirection.ToArray())
+				LayoutOptions.AlignmentIconsByDirection[pair.Key] = pair.Value?.Invoke0(transformation);
+
+			foreach (var pair in LayoutOptions.AlignmentHoveredIconsByDirection.ToArray())
+				LayoutOptions.AlignmentHoveredIconsByDirection[pair.Key] = pair.Value?.Invoke0(transformation);
+		}
+
 		[Category("Settings")]
 		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
 		public Type LayoutControlType
@@ -1402,10 +1438,11 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public LayoutControl ProbeCard { get; private set; }
 
-		public IEnumerable<string> FieldNames => 
+		public IEnumerable<string> FieldNames =>
 			ProbeCard.Fields.Select(_ => _.FieldName).Where(F.IsNotNull);
 
-
+		private bool IsUnderMouse =>
+			this.IsUnderMouse() || _scrollBar.IsUnderMouse();
 
 		public event Action<object> CardIndexChanged;
 		public event Action<object, CustomDrawArgs> CustomDrawField;
@@ -1447,25 +1484,25 @@ namespace Mtgdb.Controls
 
 			if (m.Msg == 0x0100)
 			{
+				int[] navigationKeys =
+				{
+					0x21, // pgUp
+					0x22, // pgDn
+					0x23, // end
+					0x24 //  home
+				};
+
 				var keyCode = m.WParam.ToInt32();
-				if (keyCode < _navigationKeys[0] || keyCode > _navigationKeys[_navigationKeys.Length - 1])
+				if (keyCode < navigationKeys[0] || keyCode > navigationKeys[navigationKeys.Length - 1])
 					return false;
 			}
 
-			if (!Focused && this.IsUnderMouse())
+			if (!Focused && IsUnderMouse)
 				// send the event to this control
 				ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 
 			return false;
 		}
-
-		private static readonly int[] _navigationKeys =
-		{
-			0x21, // pgUp
-			0x22, // pgDn
-			0x23, // end
-			0x24 //  home
-		};
 
 		#endregion
 	}

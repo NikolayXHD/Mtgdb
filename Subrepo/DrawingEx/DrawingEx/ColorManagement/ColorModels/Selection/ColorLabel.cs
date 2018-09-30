@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace DrawingEx.ColorManagement
 {
 	/// <summary>
-	/// Zusammenfassung für ColorLabel.
+	/// Zusammenfassung fÃ¼r ColorLabel.
 	/// </summary>
 	[ToolboxItem(false)]
 	public class ColorLabel:Control

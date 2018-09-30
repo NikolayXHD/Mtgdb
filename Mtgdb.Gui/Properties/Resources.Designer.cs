@@ -103,16 +103,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap add_tab_32 {
-            get {
-                object obj = ResourceManager.GetObject("add_tab_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap art_32 {
             get {
                 object obj = ResourceManager.GetObject("art_32", resourceCulture);
@@ -206,26 +196,6 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap clone_48 {
             get {
                 object obj = ResourceManager.GetObject("clone_48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap close_tab_32 {
-            get {
-                object obj = ResourceManager.GetObject("close_tab_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap close_tab_hovered_32 {
-            get {
-                object obj = ResourceManager.GetObject("close_tab_hovered_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

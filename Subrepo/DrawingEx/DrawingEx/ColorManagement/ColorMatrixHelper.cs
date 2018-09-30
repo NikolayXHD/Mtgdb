@@ -12,7 +12,7 @@ namespace DrawingEx.ColorManagement
 		/// <summary>
 		/// returns a given hsl transformation matrix
 		/// of the specified angle. specify only
-		/// degrees (0° - 360°), no relative values.
+		/// degrees (0Â° - 360Â°), no relative values.
 		/// </summary>
 		private static ColorMatrix GetHSLMatrix(int degrees)
 		{

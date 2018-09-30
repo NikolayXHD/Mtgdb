@@ -5,7 +5,7 @@ using System.IO;
 namespace DrawingEx.IconEncoder
 {
 	/// <summary>
-	/// Zusammenfassung für IconCollection.
+	/// Zusammenfassung fÃ¼r IconCollection.
 	/// </summary>
 	public class IconCollection:CollectionBase
 	{

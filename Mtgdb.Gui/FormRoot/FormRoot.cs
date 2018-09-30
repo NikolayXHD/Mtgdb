@@ -125,10 +125,6 @@ namespace Mtgdb.Gui
 			_tabs.AddButtonSlopeSize = _tabs.AddButtonSlopeSize.ByDpi();
 			_tabs.AddButtonWidth = _tabs.AddButtonWidth.ByDpiWidth();
 
-			_tabs.CloseIcon = _tabs.CloseIcon.HalfResizeDpi();
-			_tabs.CloseIconHovered = _tabs.CloseIconHovered.HalfResizeDpi();
-			_tabs.AddIcon = _tabs.AddIcon.HalfResizeDpi();
-
 			foreach (var langButton in getLanguageMenuItems())
 				langButton.ScaleDpi();
 
@@ -149,7 +145,7 @@ namespace Mtgdb.Gui
 			CardRepository repo,
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
-			ColorSchemeEditorForm colorSchemeEditorForm,
+			ColorSchemeEditor colorSchemeEditor,
 			Application application,
 			AppSourceConfig appSourceConfig)
 			:this()
@@ -166,7 +162,7 @@ namespace Mtgdb.Gui
 			_appSourceConfig = appSourceConfig;
 			_repo = repo;
 			_serialization = serialization;
-			_colorSchemeEditorForm = colorSchemeEditorForm;
+			_colorSchemeEditor = colorSchemeEditor;
 
 			_buttonSubsystem = new ButtonSubsystem();
 			_formMainFactory = formMainFactory;
@@ -184,7 +180,6 @@ namespace Mtgdb.Gui
 			Closed += closed;
 
 			_tabs.AllowDrop = true;
-			_tabs.AddNewTabsToTheLeft = true;
 			_tabs.TabAdded += tabCreated;
 			_tabs.TabRemoving += tabClosing;
 			_tabs.TabRemoved += tabClosed;
@@ -651,6 +646,6 @@ namespace Mtgdb.Gui
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
-		private readonly ColorSchemeEditorForm _colorSchemeEditorForm;
+		private readonly ColorSchemeEditor _colorSchemeEditor;
 	}
 }

@@ -71,14 +71,15 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitmap\AdaptBrightnessTransformation.cs" />
+    <Compile Include="Bitmap\ColorSchemeTransformation.cs" />
     <Compile Include="Bitmap\SemiTransparentShadowTransformation.cs" />
     <Compile Include="Bitmap\BitmapExtensions.cs" />
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
-    <Compile Include="ColorScheme\ColorSchemeEditorForm.cs" />
+    <Compile Include="ColorScheme\ColorSchemeEditor.cs" />
+    <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
@@ -228,6 +229,10 @@
     <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Core.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Subrepo\CustomScrollbar\CustomScrollbar.csproj">
+      <Project>{5b85e2d7-2005-4496-b5d7-59c68a1ec91d}</Project>
+      <Name>CustomScrollbar</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\DrawingEx\DrawingEx.csproj">
       <Project>{a6441560-3cc8-4ac3-ae4a-d092b424719f}</Project>

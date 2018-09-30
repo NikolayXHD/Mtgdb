@@ -169,9 +169,6 @@
   <data name="manatext_25" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\manatext_25.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="add_tab_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add_tab_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="sort_asc_hovered" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sort_asc_hovered.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -292,9 +289,6 @@
   <data name="hidden_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hidden_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="close_tab_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\close_tab_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="jp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\jp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -372,9 +366,6 @@
   </data>
   <data name="shown_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shown_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="close_tab_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\close_tab_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="deck_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\deck_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

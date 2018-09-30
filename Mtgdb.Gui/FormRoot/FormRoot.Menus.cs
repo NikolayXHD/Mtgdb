@@ -55,11 +55,11 @@ namespace Mtgdb.Gui
 
 		private void buttonColorSchemeClick(object sender, EventArgs e)
 		{
-			if (!_colorSchemeEditorForm.Visible)
-				_colorSchemeEditorForm.Show();
+			if (!_colorSchemeEditor.Visible)
+				_colorSchemeEditor.Show();
 
-			if (!_colorSchemeEditorForm.Focused)
-				_colorSchemeEditorForm.Focus();
+			if (!_colorSchemeEditor.Focused)
+				_colorSchemeEditor.Focus();
 		}
 
 		private void pasteClick(object sender, EventArgs e)
@@ -187,11 +187,26 @@ namespace Mtgdb.Gui
 
 		private void setupLanguageMenu()
 		{
+			setup(_buttonLanguage);
+
 			updateLanguage();
 			UiModel.LanguageController.LanguageChanged += updateLanguage;
 
 			foreach (var langMenuItem in getLanguageMenuItems())
+			{
+				setup(langMenuItem);
 				langMenuItem.Click += languageMenuClick;
+			}
+
+			void setup(CustomCheckBox button)
+			{
+				button.AutoCheck = false;
+				button.BackColor = SystemColors.Window;
+				button.HighlightBackColor = SystemColors.Control;
+
+				button.HighlightMouseOverOpacity = 64;
+				button.HighlightMouseDownOpacity = 128;
+			}
 		}
 
 		private void languageMenuClick(object sender, EventArgs e)
@@ -212,10 +227,8 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonLanguage, new ButtonImages(_languageIcons[language], true));
 		}
 
-		private IEnumerable<ButtonBase> getLanguageMenuItems()
-		{
-			return _layoutLanguage.Controls.OfType<ButtonBase>();
-		}
+		private IEnumerable<CustomCheckBox> getLanguageMenuItems() =>
+			_layoutLanguage.Controls.OfType<CustomCheckBox>();
 
 
 
@@ -364,6 +377,8 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonSupport, new ButtonImages(null, x2: false));
 			_buttonSubsystem.SetupButton(_buttonDonateYandexMoney, new ButtonImages(Resources.yandex_money_32, x2: false));
 			_buttonSubsystem.SetupButton(_buttonDonatePayPal, new ButtonImages(Resources.paypal_32, x2: false));
+
+			_buttonSubsystem.SetupButton(_buttonImportExportToMtgArena, new ButtonImages(Resources.paste_32, x2: false));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
 				_buttonLanguage,

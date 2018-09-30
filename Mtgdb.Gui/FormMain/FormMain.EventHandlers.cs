@@ -675,6 +675,10 @@ namespace Mtgdb.Gui
 
 		private void setupCheckButtonImages()
 		{
+			_buttons.SetupButton(_buttonLegalityAllowLegal, new ButtonImages(null, x2: false));
+			_buttons.SetupButton(_buttonLegalityAllowRestricted, new ButtonImages(null, x2: false));
+			_buttons.SetupButton(_buttonLegalityAllowBanned, new ButtonImages(null, x2: false));
+
 			_buttons.SetupButton(_buttonSampleHandNew,
 				new ButtonImages(Resources.hand_48, x2: true));
 
@@ -711,6 +715,8 @@ namespace Mtgdb.Gui
 
 			_buttons.SetupButton(_buttonSearchExamplesDropDown,
 				new ButtonImages(Resources.book_40, x2: true));
+
+			_buttons.SetupComboBox(_menuLegalityFormat);
 		}
 
 
@@ -770,6 +776,17 @@ namespace Mtgdb.Gui
 
 			if (!restoringSettings())
 				_history.Current.Zoom = _formZoom.Settings;
+		}
+
+		private void systemColorsChanging()
+		{
+			var color = _menuLegalityFormat.BackColor;
+			_menuLegalityFormat.BackColor = Color.Black;
+			_menuLegalityFormat.BackColor = color;
+
+			color = _menuLegalityFormat.ForeColor;
+			_menuLegalityFormat.ForeColor = Color.Black;
+			_menuLegalityFormat.ForeColor = color;
 		}
 	}
 }

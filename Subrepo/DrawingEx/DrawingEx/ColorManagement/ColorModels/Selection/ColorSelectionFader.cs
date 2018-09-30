@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace DrawingEx.ColorManagement.ColorModels.Selection
 {
 	/// <summary>
-	/// Zusammenfassung für ColorSelectionFader.
+	/// Zusammenfassung fÃ¼r ColorSelectionFader.
 	/// </summary>
 	[System.ComponentModel.ToolboxItem(false)]
 	public class ColorSelectionFader:Control

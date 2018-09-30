@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace DrawingEx.IconEncoder
 {
 	/// <summary>
-	/// Zusammenfassung für Icon.
+	/// Zusammenfassung fÃ¼r Icon.
 	/// </summary>
 	[Serializable(),
 	System.ComponentModel.Editor(typeof(IconEditor),

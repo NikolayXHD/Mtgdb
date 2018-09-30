@@ -2,16 +2,18 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using System.Runtime.Serialization;
-
+using System.Text.RegularExpressions;
 using DrawingEx.ColorManagement.ColorModels;
 using DrawingEx.ColorManagement.ColorModels.Selection;
 
 namespace DrawingEx.ColorManagement
 {
 	/// <summary>
-	/// Zusammenfassung fьr Form1.
+	/// Zusammenfassung für Form1.
 	/// </summary>
 	public sealed class ColorPicker : System.Windows.Forms.Form
 	{
@@ -45,6 +47,7 @@ namespace DrawingEx.ColorManagement
 		private System.Windows.Forms.MenuItem separator1;
 		private System.Windows.Forms.MenuItem ctxPrevColor;
 		private System.Windows.Forms.MenuItem ctxCopy;
+		private System.Windows.Forms.MenuItem ctxPaste;
 		private ToolTip toolTip;
 		private IContainer components;
 
@@ -60,7 +63,12 @@ namespace DrawingEx.ColorManagement
 			filter=new ShiftKeyFilter();
 			filter.ShiftStateChanged+=new EventHandler(filter_ShiftStateChanged);
 			Application.AddMessageFilter(filter);
+
+			KeyPreview = true;
+			KeyDown += keyDown;
+			Closing += closing;
 		}
+
 		/// <summary>
 		/// Die verwendeten Ressourcen bereinigen.
 		/// </summary>
@@ -82,8 +90,8 @@ namespace DrawingEx.ColorManagement
 		}
 		#region Vom Windows Form-Designer generierter Code
 		/// <summary>
-		/// Erforderliche Methode fьr die Designerunterstьtzung.
-		/// Der Inhalt der Methode darf nicht mit dem Code-Editor geдndert werden.
+		/// Erforderliche Methode für die Designerunterstützung.
+		/// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
 		/// </summary>
 		private void InitializeComponent()
 		{
@@ -98,6 +106,7 @@ namespace DrawingEx.ColorManagement
 			this.separator1 = new System.Windows.Forms.MenuItem();
 			this.ctxPrevColor = new System.Windows.Forms.MenuItem();
 			this.ctxCopy = new System.Windows.Forms.MenuItem();
+			this.ctxPaste = new System.Windows.Forms.MenuItem();
 			this.rdHSV_H = new System.Windows.Forms.RadioButton();
 			this.rdHSV_S = new System.Windows.Forms.RadioButton();
 			this.rdHSV_V = new System.Windows.Forms.RadioButton();
@@ -166,7 +175,9 @@ namespace DrawingEx.ColorManagement
             this.ctxHSV_LAB,
             this.separator1,
             this.ctxPrevColor,
-            this.ctxCopy});
+            this.ctxCopy,
+            this.ctxPaste
+			});
 			//
 			// ctxHSV_RGB
 			//
@@ -200,10 +211,16 @@ namespace DrawingEx.ColorManagement
 			this.ctxCopy.Text = "Copy to Clipboard";
 			this.ctxCopy.Click += new System.EventHandler(this.ctxOptions_Click);
 			//
+			// ctxCopy
+			//
+			this.ctxPaste.Index = 5;
+			this.ctxPaste.Text = "Paste from Clipboard";
+			this.ctxPaste.Click += new System.EventHandler(this.ctxOptions_Click);
+			//
 			// rdHSV_H
 			//
 			this.rdHSV_H.Checked = true;
-			this.rdHSV_H.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdHSV_H.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdHSV_H.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdHSV_H.Location = new System.Drawing.Point(200, 8);
 			this.rdHSV_H.Name = "rdHSV_H";
@@ -215,7 +232,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// rdHSV_S
 			//
-			this.rdHSV_S.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdHSV_S.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdHSV_S.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdHSV_S.Location = new System.Drawing.Point(200, 32);
 			this.rdHSV_S.Name = "rdHSV_S";
@@ -226,7 +243,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// rdHSV_V
 			//
-			this.rdHSV_V.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdHSV_V.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdHSV_V.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdHSV_V.Location = new System.Drawing.Point(200, 56);
 			this.rdHSV_V.Name = "rdHSV_V";
@@ -237,7 +254,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// rdSecond_1
 			//
-			this.rdSecond_1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdSecond_1.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdSecond_1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdSecond_1.Location = new System.Drawing.Point(200, 88);
 			this.rdSecond_1.Name = "rdSecond_1";
@@ -248,7 +265,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// rdSecond_2
 			//
-			this.rdSecond_2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdSecond_2.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdSecond_2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdSecond_2.Location = new System.Drawing.Point(200, 112);
 			this.rdSecond_2.Name = "rdSecond_2";
@@ -259,7 +276,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// rdSecond_3
 			//
-			this.rdSecond_3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.rdSecond_3.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.rdSecond_3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.rdSecond_3.Location = new System.Drawing.Point(200, 136);
 			this.rdSecond_3.Name = "rdSecond_3";
@@ -270,6 +287,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbHSV_H
 			//
+			this.tbHSV_H.BackColor = System.Drawing.SystemColors.Window;
 			this.tbHSV_H.Location = new System.Drawing.Point(232, 8);
 			this.tbHSV_H.MaxLength = 6;
 			this.tbHSV_H.Name = "tbHSV_H";
@@ -281,6 +299,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbHSV_S
 			//
+			this.tbHSV_S.BackColor = System.Drawing.SystemColors.Window;
 			this.tbHSV_S.Location = new System.Drawing.Point(232, 32);
 			this.tbHSV_S.MaxLength = 6;
 			this.tbHSV_S.Name = "tbHSV_S";
@@ -292,6 +311,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbHSV_V
 			//
+			this.tbHSV_V.BackColor = System.Drawing.SystemColors.Window;
 			this.tbHSV_V.Location = new System.Drawing.Point(232, 56);
 			this.tbHSV_V.MaxLength = 6;
 			this.tbHSV_V.Name = "tbHSV_V";
@@ -303,6 +323,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbSecond_1
 			//
+			this.tbSecond_1.BackColor = System.Drawing.SystemColors.Window;
 			this.tbSecond_1.Location = new System.Drawing.Point(232, 88);
 			this.tbSecond_1.MaxLength = 6;
 			this.tbSecond_1.Name = "tbSecond_1";
@@ -314,6 +335,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbSecond_2
 			//
+			this.tbSecond_2.BackColor = System.Drawing.SystemColors.Window;
 			this.tbSecond_2.Location = new System.Drawing.Point(232, 112);
 			this.tbSecond_2.MaxLength = 6;
 			this.tbSecond_2.Name = "tbSecond_2";
@@ -325,6 +347,7 @@ namespace DrawingEx.ColorManagement
 			//
 			// tbSecond_3
 			//
+			this.tbSecond_3.BackColor = System.Drawing.SystemColors.Window;
 			this.tbSecond_3.Location = new System.Drawing.Point(232, 136);
 			this.tbSecond_3.MaxLength = 6;
 			this.tbSecond_3.Name = "tbSecond_3";
@@ -630,6 +653,13 @@ namespace DrawingEx.ColorManagement
 				catch{}
 				return;
 			}
+			else if (sender == ctxPaste)
+			{
+				if (tryGetClipboardColor(out var xyz))
+					Color = xyz;
+
+				return;
+			}
 			//read checkbox
 			else if(sender==ctxHSV_RGB)
 				newmode=Mode.HSV_RGB;
@@ -867,20 +897,84 @@ namespace DrawingEx.ColorManagement
 
 		private void ok_Click(object sender, EventArgs e)
 		{
-			if (Modal)
-				return;
-
-			DialogResult = DialogResult.OK;
-			Close();
+			if (!Modal)
+			{
+				DialogResult = DialogResult.OK;
+				Close();
+			}
 		}
 
 		private void cancel_Click(object sender, EventArgs e)
 		{
-			if (Modal)
-				return;
-
-			DialogResult = DialogResult.Cancel;
-			Close();
+			if (!Modal)
+			{
+				DialogResult = DialogResult.Cancel;
+				Close();
+			}
 		}
+
+		private void closing(object sender, CancelEventArgs e)
+		{
+			if (!Modal)
+			{
+				Hide();
+				e.Cancel = true;
+			}
+		}
+
+		private void keyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Control | Keys.V:
+				case Keys.Shift | Keys.Insert:
+					if (Controls.OfType<TextBoxBase>().Any(c => c.Focused))
+						return;
+
+					if (tryGetClipboardColor(out var xyz))
+					{
+						e.Handled = true;
+						Color = xyz;
+					}
+
+					break;
+
+				case Keys.Enter:
+					ok_Click(null, null);
+					break;
+
+				case Keys.Escape:
+					cancel_Click(null, null);
+					break;
+			}
+		}
+
+		private static bool tryGetClipboardColor(out XYZ color)
+		{
+			color = default;
+
+			if (!Clipboard.ContainsText())
+				return false;
+
+			var text = Clipboard.GetText();
+			var match = _hexColorPattern.Match(text);
+
+			if (!match.Success)
+				return false;
+
+
+			var value = match.Groups["argb"].Value;
+
+			if (value.Length == 6)
+				value = "ff" + value;
+
+			int argb = int.Parse(value, NumberStyles.HexNumber);
+			var rgb = new RGB(System.Drawing.Color.FromArgb(argb));
+
+			color = XYZ.FromRGB(rgb);
+			return true;
+		}
+
+		private static readonly Regex _hexColorPattern = new Regex(@"(?:\b|#)(?<argb>[\da-f]{6}|[\da-f]{8})\b", RegexOptions.IgnoreCase);
 	}
 }

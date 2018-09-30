@@ -86,6 +86,12 @@ namespace Mtgdb.Gui
 				"You can drag-n-drop Cards and Tabs between windows.",
 				_buttonOpenWindow);
 
+			TooltipController.SetTooltip(this,
+				"Color scheme",
+				"Select Mtgdb.Gui color scheme.\r\n\r\n" +
+				"NOTE: you will see some remnants of previous colors until you restart Mtgdb.Gui",
+				_buttonColorScheme);
+
 			var tabHeadersTooltip = new TabHeadersTooltip(_tabs, this);
 			tabHeadersTooltip.SubscribeToEvents();
 

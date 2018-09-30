@@ -42,18 +42,18 @@ namespace Mtgdb
 						for (int iOr = iOrMin; iOr < iOrMax; iOr++)
 						{
 							float wX = Math.Min(right, iOr + 1) - Math.Max(left, iOr);
-							
+
 							for (int jOr = jOrMin; jOr < jOrMax; jOr++)
 							{
 								float wY = Math.Min(bottom, jOr + 1) - Math.Max(top, jOr);
 
 								var lOr = original.GetLocation(iOr, jOr);
-								var valuesOr = original.RgbValues;
+								var valuesOr = original.BgraValues;
 
-								byte dr = valuesOr[lOr];
-								byte dg = valuesOr[lOr + 1];
-								byte db = valuesOr[lOr + 2];
-								byte da = valuesOr[lOr + 3];
+								byte db = valuesOr[lOr + B];
+								byte dg = valuesOr[lOr + G];
+								byte dr = valuesOr[lOr + R];
+								byte da = valuesOr[lOr + A];
 
 								float dw = wX * wY;
 								float dwc = dw * da;
@@ -61,45 +61,45 @@ namespace Mtgdb
 								w += dw;
 								wc += dwc;
 
-								a += dw * da;
-								r += dwc * dr;
 								g += dwc * dg;
 								b += dwc * db;
-								
+								r += dwc * dr;
+								a += dw * da;
+
 								if (wc.Equals(0f))
 								{
-									nr += dr * dw;
-									ng += dg * dw;
 									nb += db * dw;
+									ng += dg * dw;
+									nr += dr * dw;
 								}
 							}
 						}
 
 						if (wc.Equals(0f))
 						{
-							r = nr / w;
-							g = ng / w;
 							b = nb / w;
+							g = ng / w;
+							r = nr / w;
 						}
 						else
 						{
-							r /= wc;
 							g /= wc;
 							b /= wc;
+							r /= wc;
 						}
 
 						a /= w;
 
-						RgbValues[l] = toByte(r);
-						RgbValues[l + 1] = toByte(g);
-						RgbValues[l + 2] = toByte(b);
-						RgbValues[l + 3] = toByte(a);
+						BgraValues[l + B] = toByte(b);
+						BgraValues[l + G] = toByte(g);
+						BgraValues[l + R] = toByte(r);
+						BgraValues[l + A] = toByte(a);
 					}
 				}
 		}
 
 		private static byte toByte(float r) =>
-			(byte) Math.Max(0, Math.Min(255, Math.Round(r)));
+			(byte) Math.Round(r).WithinRange(0, 255);
 
 		private readonly Bitmap _original;
 		private readonly Rectangle _sourceRect;

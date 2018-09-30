@@ -14,23 +14,23 @@ namespace Mtgdb
 				{
 					var location = GetLocation(i, j);
 
-					int alphaIndex = location + 3;
+					int alphaIndex = location + A;
 
-					byte a = RgbValues[alphaIndex];
+					byte a = BgraValues[alphaIndex];
 					int bgProportion = byte.MaxValue - a;
 
 					if (bgProportion == 0)
 						continue;
 
 					ImageChanged = true;
-					
-					RgbValues[alphaIndex] = byte.MaxValue;
+
+					BgraValues[alphaIndex] = byte.MaxValue;
 
 					for (int c = 0; c < 3; c++)
 					{
-						RgbValues[location + c] = (byte) ((
+						BgraValues[location + c] = (byte) ((
 								_bg[c] * bgProportion +
-								RgbValues[location + c] * (byte.MaxValue - bgProportion)) /
+								BgraValues[location + c] * (byte.MaxValue - bgProportion)) /
 							byte.MaxValue);
 					}
 				}

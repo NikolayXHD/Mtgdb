@@ -83,6 +83,8 @@ namespace Mtgdb.Controls
 				searcher.Loaded += searcherLoaded;
 
 			updateSortLabel();
+
+			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode);
 		}
 
 		private static Cursor createTextSelectionCursor()
@@ -463,14 +465,8 @@ namespace Mtgdb.Controls
 
 		private static void scaleLayoutView(LayoutViewControl view)
 		{
-			view.SortOptions.Icon = view.SortOptions.Icon?.HalfResizeDpi();
-			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
-			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
-			view.SearchOptions.Button.Icon = view.SearchOptions.Button.Icon?.HalfResizeDpi();
-
-			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
-			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
-
+			view.TransformIcons(bmp => bmp.HalfResizeDpi());
+			view.LayoutOptions.PartialCardsThreshold = view.LayoutOptions.PartialCardsThreshold.ByDpi();
 			view.ProbeCardCreating += probeCardCreating;
 		}
 
@@ -570,6 +566,7 @@ namespace Mtgdb.Controls
 
 		private Cursor _textSelectionCursor;
 		private DeckSortSubsystem _deckSort;
+		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
 
 		private bool _aborted;
 		private readonly object _sync = new object();

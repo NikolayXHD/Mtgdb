@@ -21,7 +21,7 @@ namespace Mtgdb.Util
 			int apertureMin = -_size / 2;
 			int apertureMax = _size / 2;
 
-			var changed = new byte[RgbValues.Length];
+			var changed = new byte[BgraValues.Length];
 
 			for (int x = 0; x < Rect.Width; ++x)
 				for (int y = 0; y < Rect.Height; ++y)
@@ -44,29 +44,29 @@ namespace Mtgdb.Util
 								continue;
 
 							int l2 = GetLocation(x2, y2);
-							_rValues.Add(RgbValues[l2]);
-							_gValues.Add(RgbValues[l2 + 1]);
-							_bValues.Add(RgbValues[l2 + 2]);
+							_bValues.Add(BgraValues[l2 + B]);
+							_gValues.Add(BgraValues[l2 + G]);
+							_rValues.Add(BgraValues[l2 + R]);
 						}
 					}
 
-					_rValues.Sort();
-					_gValues.Sort();
 					_bValues.Sort();
+					_gValues.Sort();
+					_rValues.Sort();
 
 					int l = GetLocation(x, y);
-					changed[l] = _rValues[_rValues.Count / 2];
-					changed[l + 1] = _gValues[_gValues.Count / 2];
-					changed[l + 2] = _bValues[_bValues.Count / 2];
-					changed[l + 3] = RgbValues[l + 3];
+					changed[l + B] = _bValues[_bValues.Count / 2];
+					changed[l + G] = _gValues[_gValues.Count / 2];
+					changed[l + R] = _rValues[_rValues.Count / 2];
+					changed[l + A] = BgraValues[l + A];
 				}
 
-			changed.CopyTo(RgbValues, 0);
+			changed.CopyTo(BgraValues, 0);
 		}
 
 		private readonly int _size;
-		private readonly List<byte> _rValues;
-		private readonly List<byte> _gValues;
 		private readonly List<byte> _bValues;
+		private readonly List<byte> _gValues;
+		private readonly List<byte> _rValues;
 	}
 }

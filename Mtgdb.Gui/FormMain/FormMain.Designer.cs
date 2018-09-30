@@ -1,4 +1,7 @@
-﻿namespace Mtgdb.Gui
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace Mtgdb.Gui
 {
 	sealed partial class FormMain
 	{
@@ -769,11 +772,11 @@
 			// _menuLegalityFormat
 			//
 			this._menuLegalityFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this._menuLegalityFormat.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this._menuLegalityFormat.DropDownWidth = 150;
 			this._menuLegalityFormat.IntegralHeight = false;
 			this._menuLegalityFormat.Location = new System.Drawing.Point(28, 2);
 			this._menuLegalityFormat.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
-			this._menuLegalityFormat.MaxDropDownItems = 35;
+			this._menuLegalityFormat.MaxDropDownItems = 50;
 			this._menuLegalityFormat.Name = "_menuLegalityFormat";
 			this._menuLegalityFormat.Size = new System.Drawing.Size(121, 21);
 			this._menuLegalityFormat.TabIndex = 39;
@@ -781,63 +784,69 @@
 			//
 			// _buttonLegalityAllowLegal
 			//
-			this._buttonLegalityAllowLegal.AutoSize = true;
+			this._buttonLegalityAllowLegal.Appearance = Appearance.Button;
 			this._buttonLegalityAllowLegal.BackColor = System.Drawing.Color.Transparent;
 			this._buttonLegalityAllowLegal.Checked = true;
 			this._buttonLegalityAllowLegal.CheckState = System.Windows.Forms.CheckState.Checked;
 			this._buttonLegalityAllowLegal.Enabled = false;
+			this._buttonLegalityAllowLegal.FlatAppearance.BorderSize = 0;
 			this._buttonLegalityAllowLegal.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowLegal.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowLegal.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowLegal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonLegalityAllowLegal.HighlightBackColor = System.Drawing.Color.Empty;
-			this._buttonLegalityAllowLegal.Location = new System.Drawing.Point(153, 4);
-			this._buttonLegalityAllowLegal.Margin = new System.Windows.Forms.Padding(4, 4, 0, 0);
+			this._buttonLegalityAllowLegal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonLegalityAllowLegal.Location = new System.Drawing.Point(153, 0);
+			this._buttonLegalityAllowLegal.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
 			this._buttonLegalityAllowLegal.Name = "_buttonLegalityAllowLegal";
-			this._buttonLegalityAllowLegal.Size = new System.Drawing.Size(45, 17);
+			this._buttonLegalityAllowLegal.Size = new System.Drawing.Size(40, 24);
 			this._buttonLegalityAllowLegal.TabIndex = 36;
 			this._buttonLegalityAllowLegal.TabStop = false;
 			this._buttonLegalityAllowLegal.Text = "legal";
+			this._buttonLegalityAllowLegal.TextAlign = ContentAlignment.MiddleCenter;
 			this._buttonLegalityAllowLegal.UseVisualStyleBackColor = true;
 			//
 			// _buttonLegalityAllowRestricted
 			//
-			this._buttonLegalityAllowRestricted.AutoSize = true;
+			this._buttonLegalityAllowRestricted.Appearance = Appearance.Button;
 			this._buttonLegalityAllowRestricted.BackColor = System.Drawing.Color.Transparent;
 			this._buttonLegalityAllowRestricted.Checked = true;
 			this._buttonLegalityAllowRestricted.CheckState = System.Windows.Forms.CheckState.Checked;
 			this._buttonLegalityAllowRestricted.Enabled = false;
+			this._buttonLegalityAllowRestricted.FlatAppearance.BorderSize = 0;
 			this._buttonLegalityAllowRestricted.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowRestricted.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowRestricted.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowRestricted.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonLegalityAllowRestricted.HighlightBackColor = System.Drawing.Color.Empty;
-			this._buttonLegalityAllowRestricted.Location = new System.Drawing.Point(198, 4);
-			this._buttonLegalityAllowRestricted.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this._buttonLegalityAllowRestricted.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonLegalityAllowRestricted.Location = new System.Drawing.Point(198, 0);
+			this._buttonLegalityAllowRestricted.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
 			this._buttonLegalityAllowRestricted.Name = "_buttonLegalityAllowRestricted";
-			this._buttonLegalityAllowRestricted.Size = new System.Drawing.Size(66, 17);
+			this._buttonLegalityAllowRestricted.Size = new System.Drawing.Size(66, 24);
 			this._buttonLegalityAllowRestricted.TabIndex = 37;
 			this._buttonLegalityAllowRestricted.TabStop = false;
 			this._buttonLegalityAllowRestricted.Text = "restricted";
+			this._buttonLegalityAllowRestricted.TextAlign = ContentAlignment.MiddleCenter;
 			this._buttonLegalityAllowRestricted.UseVisualStyleBackColor = true;
 			//
 			// _buttonLegalityAllowBanned
 			//
-			this._buttonLegalityAllowBanned.AutoSize = true;
+			this._buttonLegalityAllowBanned.Appearance = Appearance.Button;
 			this._buttonLegalityAllowBanned.BackColor = System.Drawing.Color.Transparent;
 			this._buttonLegalityAllowBanned.Enabled = false;
+			this._buttonLegalityAllowBanned.FlatAppearance.BorderSize = 0;
 			this._buttonLegalityAllowBanned.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowBanned.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowBanned.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this._buttonLegalityAllowBanned.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonLegalityAllowBanned.HighlightBackColor = System.Drawing.Color.Empty;
-			this._buttonLegalityAllowBanned.Location = new System.Drawing.Point(264, 4);
-			this._buttonLegalityAllowBanned.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this._buttonLegalityAllowBanned.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonLegalityAllowBanned.Location = new System.Drawing.Point(264, 0);
+			this._buttonLegalityAllowBanned.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
 			this._buttonLegalityAllowBanned.Name = "_buttonLegalityAllowBanned";
-			this._buttonLegalityAllowBanned.Size = new System.Drawing.Size(59, 17);
+			this._buttonLegalityAllowBanned.Size = new System.Drawing.Size(56, 24);
 			this._buttonLegalityAllowBanned.TabIndex = 38;
 			this._buttonLegalityAllowBanned.TabStop = false;
 			this._buttonLegalityAllowBanned.Text = "banned";
+			this._buttonLegalityAllowBanned.TextAlign = ContentAlignment.MiddleCenter;
 			this._buttonLegalityAllowBanned.UseVisualStyleBackColor = true;
 			//
 			// _buttonShowDuplicates
@@ -852,7 +861,7 @@
 			this._buttonShowDuplicates.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowDuplicates.Image = global::Mtgdb.Gui.Properties.Resources.clone_48;
 			this._buttonShowDuplicates.Location = new System.Drawing.Point(1113, 0);
-			this._buttonShowDuplicates.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
+			this._buttonShowDuplicates.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
 			this._buttonShowDuplicates.Name = "_buttonShowDuplicates";
 			this._buttonShowDuplicates.Size = new System.Drawing.Size(24, 24);
 			this._buttonShowDuplicates.TabIndex = 40;
@@ -1062,7 +1071,6 @@
 			this._layoutViewCards.Location = new System.Drawing.Point(0, 58);
 			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewCards.Name = "_layoutViewCards";
-			buttonOptions1.HotTrackOpacityDelta = 0.4F;
 			buttonOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
 			buttonOptions1.Margin = new System.Drawing.Size(0, 0);
 			searchOptions1.Button = buttonOptions1;
@@ -1100,7 +1108,6 @@
 			this._layoutViewDeck.Location = new System.Drawing.Point(0, 245);
 			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewDeck.Name = "_layoutViewDeck";
-			buttonOptions2.HotTrackOpacityDelta = 0.4F;
 			searchOptions2.Button = buttonOptions2;
 			this._layoutViewDeck.SearchOptions = searchOptions2;
 			selectionOptions2.Alpha = ((byte)(255));

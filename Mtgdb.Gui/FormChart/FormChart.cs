@@ -82,9 +82,6 @@ namespace Mtgdb.Gui
 				tab.Height = tab.Height.ByDpiHeight();
 				tab.SlopeSize = tab.SlopeSize.ByDpi();
 				tab.AddButtonSlopeSize = tab.SlopeSize.ByDpi();
-
-				tab.CloseIcon = tab.CloseIcon.HalfResizeDpi();
-				tab.CloseIconHovered = tab.CloseIconHovered.HalfResizeDpi();
 			}
 
 			_buttonApply.ScaleDpi();
@@ -214,6 +211,9 @@ namespace Mtgdb.Gui
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
 			_buttonApplyFilter.CheckedChanged += applyFilterChanged;
+
+			foreach (var menu in _menus)
+				_buttonSubsystem.SetupComboBox(menu);
 		}
 
 
@@ -1215,5 +1215,6 @@ namespace Mtgdb.Gui
 
 		private readonly CardFields _fields;
 		private readonly UiModel _ui;
+		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
 	}
 }

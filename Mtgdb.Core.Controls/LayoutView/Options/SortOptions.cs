@@ -52,23 +52,6 @@ namespace Mtgdb.Controls
 
 
 
-		private void updateIconTransp(Bitmap value)
-		{
-			IconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
-		}
-
-		private void updateAscIconTransp(Bitmap value)
-		{
-			AscIconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
-		}
-
-		private void updateDescIconTransp(Bitmap value)
-		{
-			DescIconTransp = value?.SetOpacity(1f - _hotTrackOpacityDelta);
-		}
-
-
-
 		[Category("Settings")]
 		[DefaultValue(false)]
 		public bool Allow { get; set; }
@@ -77,15 +60,15 @@ namespace Mtgdb.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap IconTransp { get; private set; }
+		public Bitmap IconTransp { get; set; }
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap AscIconTransp { get; private set; }
+		public Bitmap AscIconTransp { get; set; }
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Bitmap DescIconTransp { get; private set; }
+		public Bitmap DescIconTransp { get; set; }
 
 
 
@@ -97,7 +80,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_icon = value;
-				updateIconTransp(value);
+				IconTransp = IconTransp ?? deriveTranspIcon(value);
 			}
 		}
 
@@ -109,7 +92,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_ascIcon = value;
-				updateAscIconTransp(value);
+				AscIconTransp = AscIconTransp ?? deriveTranspIcon(value);
 			}
 		}
 
@@ -121,9 +104,12 @@ namespace Mtgdb.Controls
 			set
 			{
 				_descIcon = value;
-				updateDescIconTransp(value);
+				DescIconTransp = DescIconTransp ?? deriveTranspIcon(value);
 			}
 		}
+
+		private static Bitmap deriveTranspIcon(Bitmap value) =>
+			value?.SetOpacity(1f - HotTrackOpacityDelta);
 
 		[Category("Settings")]
 		[DefaultValue(typeof(ContentAlignment), "TopRight")]
@@ -133,9 +119,11 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "2, 2")]
 		public Size ButtonMargin { get; set; } = new Size(2, 2);
 
+
+
 		private Bitmap _icon;
 		private Bitmap _ascIcon;
 		private Bitmap _descIcon;
-		private float _hotTrackOpacityDelta = 0.15f;
+		private const float HotTrackOpacityDelta = 0.15f;
 	}
 }

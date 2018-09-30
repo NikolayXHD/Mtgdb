@@ -32,7 +32,7 @@ namespace Mtgdb.Controls
 					if (opacity != 1f)
 					{
 						ImageChanged = true;
-						RgbValues[l + 3] = (byte)(RgbValues[l + 3] * opacity);
+						BgraValues[l + A] = (byte)(BgraValues[l + A] * opacity);
 					}
 				}
 		}
@@ -63,10 +63,18 @@ namespace Mtgdb.Controls
 
 					int l = GetLocation(x, y);
 
-					if (RgbValues[l] == _backColor.R && RgbValues[l + 1] == _backColor.G && RgbValues[l + 2] == _backColor.B && RgbValues[l + 3] == _backColor.A)
+					if (
+						BgraValues[l + B] == _backColor.B &&
+						BgraValues[l + G] == _backColor.G &&
+						BgraValues[l + R] == _backColor.R &&
+						BgraValues[l + A] == _backColor.A)
 						continue;
 
-					if (RgbValues[l] == 0 && RgbValues[l + 1] == 0 && RgbValues[l + 2] == 0 && RgbValues[l + 3] == 0)
+					if (
+						BgraValues[l + B] == 0 &&
+						BgraValues[l + G] == 0 &&
+						BgraValues[l + R] == 0 &&
+						BgraValues[l + A] == 0)
 						continue;
 
 					if (d < result)

@@ -15,12 +15,12 @@ namespace Mtgdb
 		}
 
 
-		public static void ToRgb(this HsvColor c, byte[] rgbArr, int i)
+		public static void ToBgra(this HsvColor c, byte[] rgbArr, int i)
 		{
 			var rgb = c.toRgb();
-			rgbArr[i] = rgb.R;
-			rgbArr[i + 1] = rgb.G;
-			rgbArr[i + 2] = rgb.B;
+			rgbArr[i + BmpProcessor.B] = rgb.B;
+			rgbArr[i + BmpProcessor.G] = rgb.G;
+			rgbArr[i + BmpProcessor.R] = rgb.R;
 		}
 
 		private static (byte R, byte G, byte B) toRgb(this HsvColor c)
@@ -119,8 +119,8 @@ namespace Mtgdb
 		public static HsvColor ToHsv(this Color c) =>
 			toHsv(c.R, c.G, c.B);
 
-		public static HsvColor ToHsv(this byte[] rgbArr, int i) =>
-			toHsv(rgbArr[i], rgbArr[i + 1], rgbArr[i + 2]);
+		public static HsvColor ToHsv(this byte[] bgraArr, int i) =>
+			toHsv(bgraArr[i + BmpProcessor.R], bgraArr[i + BmpProcessor.G], bgraArr[i + BmpProcessor.B]);
 
 		private static HsvColor toHsv(int rB, int gB, int bB)
 		{

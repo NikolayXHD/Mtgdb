@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace DrawingEx.ColorManagement
 {
 	/// <summary>
-	/// Zusammenfassung fьr ColorButton.
+	/// Zusammenfassung für ColorButton.
 	/// </summary>
 	public class ColorButton:Button
 	{

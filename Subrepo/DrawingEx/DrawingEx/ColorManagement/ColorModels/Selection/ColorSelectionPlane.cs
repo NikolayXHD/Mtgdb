@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace DrawingEx.ColorManagement.ColorModels.Selection
 {
 	/// <summary>
-	/// Zusammenfassung für ColorSelectionPlane.
+	/// Zusammenfassung fÃ¼r ColorSelectionPlane.
 	/// </summary>
 	public class ColorSelectionPlane:Control
 	{

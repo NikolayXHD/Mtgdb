@@ -46,7 +46,7 @@ namespace Mtgdb.Gui
 			var loader = _kernel.Get<GuiLoader>();
 			loader.Run();
 
-			var colorSchemeEditorForm = _kernel.Get<ColorSchemeEditorForm>();
+			var colorSchemeEditorForm = _kernel.Get<ColorSchemeEditor>();
 			colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
 			colorSchemeEditorForm.LoadCurrentColorScheme();
 

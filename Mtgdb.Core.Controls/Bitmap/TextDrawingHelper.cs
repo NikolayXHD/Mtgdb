@@ -12,8 +12,8 @@ namespace Mtgdb.Controls
 		public static Size MeasureText(this Graphics g, string text, Font font, Size size, TextFormatFlags flags) =>
 			TextRenderer.MeasureText(g, text, font, size, flags);
 
-		public static void DrawText(this Graphics g, string text, Font font, Rectangle rect, Color color) =>
-			TextRenderer.DrawText(g, text, font, rect, color, _textFormatFlags);
+		public static void DrawText(this Graphics g, string text, Font font, Rectangle rect, Color color, TextFormatFlags? flags = null) =>
+			TextRenderer.DrawText(g, text, font, rect, color, flags ?? _textFormatFlags);
 
 		public static void DrawText(this Graphics g, string text, Font font, Color color, Color borderColor, float opaqueBorder, float fadeBorder, Rectangle rect)
 		{

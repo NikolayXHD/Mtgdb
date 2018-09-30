@@ -23,7 +23,10 @@ namespace Mtgdb.Controls
 			_colorTable = readColorTable();
 			SystemEvents.UserPreferenceChanging += userPreferenceChanging;
 
-			OriginalColors = Save();
+			OriginalColors = _colorTable.ToArray();
+			KnownOriginalColors = KnownColors.Cast<int>()
+				.ToDictionary(i => i, i => OriginalColors[i])
+				.AsReadOnlyDictionary();
 		}
 
 		private void userPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
@@ -44,21 +47,11 @@ namespace Mtgdb.Controls
 			SystemColorsChanging?.Invoke();
 		}
 
-		private void setColor(KnownColor knownColor, int argb)
-		{
-			if (!KnownColors.Contains(knownColor))
-				throw new ArgumentException();
-
+		private void setColor(KnownColor knownColor, int argb) =>
 			_colorTable[(int) knownColor] = argb;
-		}
 
-		public int GetOriginalColor(KnownColor knownColor)
-		{
-			if (!KnownColors.Contains(knownColor))
-				throw new ArgumentException();
-
-			return OriginalColors[(int) knownColor];
-		}
+		public int GetOriginalColor(KnownColor knownColor) =>
+			OriginalColors[(int) knownColor];
 
 		public int GetColor(KnownColor knownColor)
 		{
@@ -85,12 +78,13 @@ namespace Mtgdb.Controls
 			SetColor(color, OriginalColors[(int) color]);
 
 		public void ResetAll() =>
-			Load(OriginalColors);
+			Load(KnownOriginalColors);
 
 		public readonly HashSet<KnownColor> KnownColors = new HashSet<KnownColor>(
 			new[]
 			{
 				SystemColors.Control,
+				SystemColors.ControlText,
 
 				SystemColors.Window,
 				SystemColors.WindowText,
@@ -110,9 +104,10 @@ namespace Mtgdb.Controls
 			}.Select(_ => _.ToKnownColor())
 		);
 
+		private int[] OriginalColors { get; }
+		private IReadOnlyDictionary<int, int> KnownOriginalColors { get; }
+
 		private int[] _colorTable;
 		private readonly FieldInfo _colorTableField;
-
-		private IReadOnlyDictionary<int, int> OriginalColors { get; }
 	}
 }

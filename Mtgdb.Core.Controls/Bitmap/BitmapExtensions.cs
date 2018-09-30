@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace Mtgdb.Controls
 {
 	public static class BitmapExtensions
 	{
+		static BitmapExtensions()
+		{
+			_imageNativeImageField = typeof(Image).GetField("nativeImage", BindingFlags.Instance | BindingFlags.NonPublic);
+		}
+
 		public static Func<Bitmap, Rectangle, Size, Bitmap> CustomScaleStrategy { get; set; }
 
 		public static Bitmap ResizeDpi(this Bitmap original, float multiplier = 1f)
@@ -14,9 +21,14 @@ namespace Mtgdb.Controls
 			using (var chain = new BitmapTransformationChain(original, reThrow))
 			{
 				chain.ReplaceBy(bmp => bmp.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round()));
-				chain.Update(bmp => new AdaptBrightnessTransformation(bmp).Execute());
-				return chain.Result;
+				return chain.Result.ApplyColorScheme();
 			}
+		}
+
+		public static bool IsDisposed(this Bitmap bmp)
+		{
+			var nativeImage = (IntPtr) _imageNativeImageField.GetValue(bmp);
+			return nativeImage == IntPtr.Zero;
 		}
 
 		public static Bitmap HalfResizeDpi(this Bitmap original, bool preventMoire = false)
@@ -49,9 +61,36 @@ namespace Mtgdb.Controls
 					chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
 				}
 
-				chain.Update(bmp => new AdaptBrightnessTransformation(bmp).Execute());
+				return chain.Result.ApplyColorScheme();
+			}
+		}
 
-				return chain.Result;
+		public static Bitmap ApplyColorScheme(this Bitmap bmp)
+		{
+			Bitmap transform()
+			{
+				if (bmp.IsDisposed())
+					return bmp;
+
+				var clone = (Bitmap) bmp.Clone();
+				new ColorSchemeTransformation(clone).Execute();
+				return clone;
+			}
+
+			var result = transform();
+			ColorSchemeController.SystemColorsChanging += handler;
+			return result;
+
+			void handler()
+			{
+				if (bmp.IsDisposed())
+				{
+					ColorSchemeController.SystemColorsChanging -= handler;
+					return;
+				}
+
+				using (var transformed = transform())
+					new BmpOverwrite(result, transformed).Execute();
 			}
 		}
 
@@ -147,8 +186,11 @@ namespace Mtgdb.Controls
 			return output;
 		}
 
-		public static Bitmap Transform(this Bitmap value, RotateFlipType transform)
+		public static Bitmap RotateFlipClone(this Bitmap value, RotateFlipType transform)
 		{
+			if (value == null)
+				return null;
+
 			value = (Bitmap) value.Clone();
 			value.RotateFlip(transform);
 			return value;
@@ -158,5 +200,7 @@ namespace Mtgdb.Controls
 		{
 			throw new Exception("image transformation failed", ex);
 		}
+
+		private static readonly FieldInfo _imageNativeImageField;
 	}
 }

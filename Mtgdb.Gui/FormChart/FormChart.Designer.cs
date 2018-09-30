@@ -152,8 +152,6 @@
 			this._tabCols.AddButtonWidth = 24;
 			this._tabCols.AllowAddingTabs = false;
 			this._tabCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._tabCols.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
-			this._tabCols.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
 			this._tabCols.Location = new System.Drawing.Point(68, 0);
 			this._tabCols.Margin = new System.Windows.Forms.Padding(0);
 			this._tabCols.Name = "_tabCols";
@@ -244,8 +242,6 @@
 			this._tabRows.AddButtonWidth = 24;
 			this._tabRows.AllowAddingTabs = false;
 			this._tabRows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._tabRows.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
-			this._tabRows.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
 			this._tabRows.Location = new System.Drawing.Point(119, 0);
 			this._tabRows.Margin = new System.Windows.Forms.Padding(0);
 			this._tabRows.Name = "_tabRows";
@@ -270,8 +266,6 @@
 			this._tabSumm.AddButtonWidth = 24;
 			this._tabSumm.AllowAddingTabs = false;
 			this._tabSumm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._tabSumm.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
-			this._tabSumm.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
 			this._tabSumm.Location = new System.Drawing.Point(195, 0);
 			this._tabSumm.Margin = new System.Windows.Forms.Padding(0);
 			this._tabSumm.Name = "_tabSumm";
@@ -295,8 +289,6 @@
 			//
 			this._tabSummSort.AddButtonWidth = 24;
 			this._tabSummSort.AllowAddingTabs = false;
-			this._tabSummSort.CloseIcon = global::Mtgdb.Gui.Properties.Resources.close_tab_32;
-			this._tabSummSort.CloseIconHovered = global::Mtgdb.Gui.Properties.Resources.close_tab_hovered_32;
 			this._tabSummSort.Location = new System.Drawing.Point(306, 0);
 			this._tabSummSort.Margin = new System.Windows.Forms.Padding(0);
 			this._tabSummSort.Name = "_tabSummSort";

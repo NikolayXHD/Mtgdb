@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -94,8 +93,21 @@ namespace Mtgdb.Controls
 			setCloseEnabled(false);
 
 			Resize += resize;
+			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
+
 
 			Show();
+		}
+
+		private void systemColorsChanging()
+		{
+			var color = _tooltipTextbox.BackColor;
+			_tooltipTextbox.BackColor = Color.Black;
+			_tooltipTextbox.BackColor = color;
+
+			color = _tooltipTextbox.ForeColor;
+			_tooltipTextbox.ForeColor = Color.Black;
+			_tooltipTextbox.ForeColor = color;
 		}
 
 		private void setCloseEnabled(bool value)

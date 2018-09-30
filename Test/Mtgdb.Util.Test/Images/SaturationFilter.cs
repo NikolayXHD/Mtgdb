@@ -13,22 +13,22 @@ namespace Mtgdb.Util
 		{
 			ImageChanged = true;
 
-			var rgb = new List<byte>(3);
+			var bgr = new List<byte>(3);
 
 			for (int x = 0; x < Rect.Width; ++x)
 				for (int y = 0; y < Rect.Height; ++y)
 				{
 					int l = GetLocation(x, y);
 
-					rgb.Clear();
-					rgb.Add(RgbValues[l]);
-					rgb.Add(RgbValues[l + 1]);
-					rgb.Add(RgbValues[l + 2]);
-					
-					rgb.Sort();
+					bgr.Clear();
+					bgr.Add(BgraValues[l + B]);
+					bgr.Add(BgraValues[l + G]);
+					bgr.Add(BgraValues[l + R]);
 
-					RgbValues[l] = RgbValues[l + 1] = RgbValues[l + 2] =
-						(byte) ((rgb[2] * 2 - rgb[1] - rgb[0]) / 2);
+					bgr.Sort();
+
+					BgraValues[l + B] = BgraValues[l + G] = BgraValues[l + R] =
+						(byte) ((bgr[2] * 2 - bgr[1] - bgr[0]) / 2);
 				}
 		}
 	}

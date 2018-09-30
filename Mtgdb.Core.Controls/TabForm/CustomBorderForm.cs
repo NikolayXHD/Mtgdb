@@ -51,7 +51,8 @@ namespace Mtgdb.Controls
 			ColorSchemeController.SystemColorsChanging += applySystemColors;
 		}
 
-		protected override bool FixShadowTransparency => true;
+		protected override bool FixShadowTransparency =>
+			true;
 
 		private void focusChanged(object sender, EventArgs e)
 		{
@@ -111,39 +112,7 @@ namespace Mtgdb.Controls
 			if (!clipRectangle.IntersectsWith(titleRect))
 				return;
 
-			var renderer = getCaptionRenderer();
-			if (renderer != null)
-				renderer.DrawBackground(g, titleRect, clipRectangle);
-			else
-				g.FillRectangle(getCaptionBrush(titleRect), titleRect);
-
-			VisualStyleRenderer getCaptionRenderer()
-			{
-				if (!_isVisualStyleSupported)
-					return null;
-
-				var element = getCaptionElement();
-				if (!VisualStyleRenderer.IsElementDefined(element))
-					return null;
-
-				return new VisualStyleRenderer(element);
-
-				VisualStyleElement getCaptionElement()
-				{
-					if (ContainsFocus)
-						switch (IsMaximized)
-						{
-							case true: return VisualStyleElement.Window.MaxCaption.Active;
-							default: return VisualStyleElement.Window.Caption.Active;
-						}
-
-					switch (IsMaximized)
-					{
-						case true: return VisualStyleElement.Window.MaxCaption.Inactive;
-						default: return VisualStyleElement.Window.Caption.Inactive;
-					}
-				}
-			}
+			g.FillRectangle(getCaptionBrush(titleRect), titleRect);
 		}
 
 		private Brush getCaptionBrush(Rectangle titleRect)
@@ -168,69 +137,20 @@ namespace Mtgdb.Controls
 				if (img.Bounds == default)
 					continue;
 
-				var renderer = getCaptionButtonRenderer(i, img);
-				if (renderer != null)
-				{
-					renderer.DrawBackground(g, img.Bounds);
-				}
-				else
-				{
-					if (img.IsHovered)
-						g.FillRectangle(getCaptionButtonBrush(i), img.Bounds);
+				if (img.IsHovered)
+					g.FillRectangle(getCaptionButtonBrush(), img.Bounds);
 
-					var bmp = _captionButtonImages[i];
-					var centered = bmp.Size.FitIn(img.Bounds).CenterIn(img.Bounds);
-					g.DrawImage(bmp, centered);
-				}
+				var bmp = _captionButtonImages[i];
+				var centered = bmp.Size.FitIn(img.Bounds).CenterIn(img.Bounds);
+				g.DrawImage(bmp, centered);
 			}
 
-			Brush getCaptionButtonBrush(int i)
+			Brush getCaptionButtonBrush()
 			{
-				if (ContainsFocus)
-					switch (i)
-					{
-						case CaptionButtonCloseIndex : return SystemBrushes.ActiveCaption;
-						default: return SystemBrushes.GradientActiveCaption;
-					}
-
-				switch (i)
+				switch (ContainsFocus)
 				{
-					case CaptionButtonCloseIndex : return SystemBrushes.InactiveCaption;
-					default: return SystemBrushes.GradientInactiveCaption;
-				}
-			}
-
-			VisualStyleRenderer getCaptionButtonRenderer(int i, (bool IsHovered, Rectangle Bounds) img)
-			{
-				if (!_isVisualStyleSupported)
-					return null;
-
-				var element = getCaptionButtonElement();
-				if (!VisualStyleRenderer.IsElementDefined(element))
-					return null;
-
-				return new VisualStyleRenderer(element);
-
-				VisualStyleElement getCaptionButtonElement()
-				{
-					if (img.IsHovered)
-						switch (i)
-						{
-							case CaptionButtonCloseIndex: return VisualStyleElement.Window.CloseButton.Hot;
-							case CaptionButtonRestoreIndex: return VisualStyleElement.Window.RestoreButton.Hot;
-							case CaptionButtonMaximizeIndex: return VisualStyleElement.Window.MaxButton.Hot;
-							case CaptionButtonMinimizeIndex: return VisualStyleElement.Window.MinButton.Hot;
-						}
-
-					switch (i)
-					{
-						case CaptionButtonCloseIndex: return VisualStyleElement.Window.CloseButton.Normal;
-						case CaptionButtonRestoreIndex: return VisualStyleElement.Window.RestoreButton.Normal;
-						case CaptionButtonMaximizeIndex: return VisualStyleElement.Window.MaxButton.Normal;
-						case CaptionButtonMinimizeIndex: return VisualStyleElement.Window.MinButton.Normal;
-					}
-
-					throw new ArgumentException();
+					case true: return SystemBrushes.ActiveCaption;
+					default: return new SolidBrush(SystemColors.GradientInactiveCaption);
 				}
 			}
 		}
@@ -244,50 +164,13 @@ namespace Mtgdb.Controls
 					// therefore we always paint the top border
 					continue;
 
-				var borderRenderer = getBorderRenderer(direction);
-
 				var areas = getBorders(direction);
 				foreach (var border in areas)
 				{
 					if (!clipRectangle.IntersectsWith(border))
 						continue;
 
-					if (borderRenderer != null)
-						borderRenderer.DrawBackground(g, border);
-					else
-						g.FillRectangle(getBorderBrush(direction, border), border);
-				}
-			}
-
-			VisualStyleRenderer getBorderRenderer(Direction d)
-			{
-				if (!_isVisualStyleSupported)
-					return null;
-
-				var element = getBorderElement();
-				if (!VisualStyleRenderer.IsElementDefined(element))
-					return null;
-
-				return new VisualStyleRenderer(element);
-
-				VisualStyleElement getBorderElement()
-				{
-					if (ContainsFocus)
-						switch (d)
-						{
-							case Direction.Left: return VisualStyleElement.Window.FrameLeft.Active;
-							case Direction.Right: return VisualStyleElement.Window.FrameRight.Active;
-							case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Active;
-						}
-
-					switch (d)
-					{
-						case Direction.Left: return VisualStyleElement.Window.FrameLeft.Inactive;
-						case Direction.Right: return VisualStyleElement.Window.FrameRight.Inactive;
-						case Direction.Bottom: return VisualStyleElement.Window.FrameBottom.Inactive;
-					}
-
-					throw new ArgumentException();
+					g.FillRectangle(getBorderBrush(direction, border), border);
 				}
 			}
 
@@ -296,15 +179,15 @@ namespace Mtgdb.Controls
 				if (ContainsFocus)
 					switch (d)
 					{
-						case Direction.Left: return SystemBrushes.ActiveCaption;
-						case Direction.Right: return SystemBrushes.GradientActiveCaption;
+						case Direction.Left: return new SolidBrush(SystemColors.ActiveCaption);
+						case Direction.Right: return new SolidBrush(SystemColors.GradientActiveCaption);
 						case Direction.Bottom: return getCaptionBrush(rect);
 					}
 
 				switch (d)
 				{
-					case Direction.Left: return SystemBrushes.InactiveCaption;
-					case Direction.Right: return SystemBrushes.GradientInactiveCaption;
+					case Direction.Left: return new SolidBrush(SystemColors.InactiveCaption);
+					case Direction.Right: return new SolidBrush(SystemColors.GradientInactiveCaption);
 					case Direction.Bottom: return getCaptionBrush(rect);
 				}
 
@@ -814,38 +697,46 @@ namespace Mtgdb.Controls
 			{
 				case Direction.Left:
 					yield return Rectangle.FromLTRB(0, CaptionHeight, Border.Width, bounds.Bottom - Border.Height);
+
 					break;
 
 				case Direction.Top:
 					yield return Rectangle.FromLTRB(0, 0, bounds.Right, Border.Height);
+
 					break;
 
 				case Direction.Right:
 					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, CaptionHeight, bounds.Right, bounds.Bottom - Border.Height);
+
 					break;
 
 				case Direction.Bottom:
 					yield return Rectangle.FromLTRB(bounds.Left, bounds.Bottom - Border.Height, bounds.Right, bounds.Bottom);
+
 					break;
 
 				case Direction.TopLeft:
 					yield return Rectangle.FromLTRB(0, 0, CaptionHeight, Border.Height);
 					yield return Rectangle.FromLTRB(0, 0, Border.Width, CaptionHeight);
+
 					break;
 
 				case Direction.TopRight:
 					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, 0, Bounds.Right, Border.Height);
 					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, 0, Bounds.Right, CaptionHeight);
+
 					break;
 
 				case Direction.BottomRight:
 					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, bounds.Bottom - Border.Height, Bounds.Right, bounds.Bottom);
 					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, bounds.Bottom - CaptionHeight, Bounds.Right, bounds.Bottom);
+
 					break;
 
 				case Direction.BottomLeft:
 					yield return Rectangle.FromLTRB(0, bounds.Bottom - Border.Height, CaptionHeight, bounds.Bottom);
 					yield return Rectangle.FromLTRB(0, bounds.Bottom - CaptionHeight, Border.Width, bounds.Bottom);
+
 					break;
 			}
 		}
@@ -929,7 +820,10 @@ namespace Mtgdb.Controls
 			c.MouseDown += mouseDown;
 			c.MouseUp += mouseUp;
 			c.MouseMove += mouseMove;
-			c.MouseDoubleClick += doubleClick;
+
+			if (c == this || c == _panelCaption)
+				c.MouseDoubleClick += doubleClick;
+
 			c.MouseLeave += mouseLeave;
 		}
 
@@ -1045,12 +939,12 @@ namespace Mtgdb.Controls
 			};
 
 			foreach (var image in _captionButtonImages)
-				new AdaptBrightnessTransformation(image).Execute();
+				new ColorSchemeTransformation(image).Execute();
 
 			if (_isVisualStyleSupported)
 			{
-				TransparencyKey = Color.FromArgb(254, 247, 253);
-				BackColor = Color.FromArgb(254, 247, 253);
+				TransparencyKey = Color.FromArgb(253, 247, 254);
+				BackColor = Color.FromArgb(253, 247, 254);
 			}
 			else
 			{

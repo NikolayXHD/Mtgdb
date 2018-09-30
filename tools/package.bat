@@ -54,6 +54,7 @@ del /q /s %target%\update\notifications\read\*
 del /q /s %target%\update\notifications\archive\*
 del /q %target%\update\filelist.txt
 
+del /q /s %target%\color-schemes\current.colors
 del /q /s %target%\images\*.jpg
 del /q /s %target%\images\*.txt
 del /q /s %targetBin%\*.xml

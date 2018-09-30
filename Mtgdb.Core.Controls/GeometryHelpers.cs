@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
@@ -98,6 +99,24 @@ namespace Mtgdb.Controls
 
 		public static Size Minus(this Size left, Size right) =>
 			new Size(left.Width - right.Width, left.Height - right.Height);
+
+		public static Padding AddTopLeft(this Padding padding, Size value)
+		{
+			int dl = value.Width / 2;
+			int dr = value.Width - dl;
+			int dt = value.Height / 2;
+			int db = value.Height - dt;
+			return new Padding(padding.Left + dl + dr, padding.Top + dt + db, padding.Right, padding.Bottom);
+		}
+
+		public static Padding Add(this Padding padding, Size value)
+		{
+			int dl = value.Width / 2;
+			int dr = value.Width - dl;
+			int dt = value.Height / 2;
+			int db = value.Height - dt;
+			return new Padding(padding.Left + dl, padding.Top + dt, padding.Right + dr, padding.Bottom + db);
+		}
 
 		public static Size ToSize(this Point value) =>
 			new Size(value);

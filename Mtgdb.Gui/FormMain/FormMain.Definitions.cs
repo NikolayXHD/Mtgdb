@@ -195,13 +195,16 @@ namespace Mtgdb.Gui
 
 		private void scale()
 		{
-			_viewCards.PartialCardSize = _viewCards.PartialCardSize.ByDpi();
-			_viewDeck.PartialCardSize = _viewDeck.PartialCardSize.ByDpi();
-
 			_panelSearch.ScaleDpi();
 			_panelSearchExamples.ScaleDpi();
 
 			_menuLegalityFormat.ScaleDpi();
+			_menuLegalityFormat.DropDownWidth = _menuLegalityFormat.DropDownWidth.ByDpiWidth();
+
+			_buttonLegalityAllowLegal.ScaleDpi();
+			_buttonLegalityAllowRestricted.ScaleDpi();
+			_buttonLegalityAllowBanned.ScaleDpi();
+
 
 			_buttonShowDuplicates.ScaleDpi();
 
@@ -270,15 +273,11 @@ namespace Mtgdb.Gui
 			_deckListControl.Scale();
 		}
 
-		private static void scaleLayoutView(LayoutViewControl view)
+		private void scaleLayoutView(LayoutViewControl view)
 		{
-			view.SortOptions.Icon = view.SortOptions.Icon.HalfResizeDpi();
-			view.SortOptions.AscIcon = view.SortOptions.AscIcon?.HalfResizeDpi();
-			view.SortOptions.DescIcon = view.SortOptions.DescIcon?.HalfResizeDpi();
-			view.SearchOptions.Button.Icon = view.SearchOptions.Button.Icon?.HalfResizeDpi();
-
-			view.LayoutOptions.AlignTopLeftIcon = view.LayoutOptions.AlignTopLeftIcon?.HalfResizeDpi();
-			view.LayoutOptions.AlignTopLeftHoveredIcon = view.LayoutOptions.AlignTopLeftHoveredIcon?.HalfResizeDpi();
+			view.TransformIcons(bmp => bmp.HalfResizeDpi());
+			view.LayoutOptions.PartialCardsThreshold = view.LayoutOptions.PartialCardsThreshold.ByDpi();
+			view.ProbeCardCreating += probeCardCreating;
 		}
 
 		private void probeCardCreating(object view, LayoutControl probeCard)
@@ -297,6 +296,7 @@ namespace Mtgdb.Gui
 					bool isDeck = DeckEditorButtons.IsDeck(i);
 
 					button.Icon = button.Icon?.HalfResizeDpi(preventMoire: isDeck && Math.Abs(delta) == 1);
+					button.IconTransp = button.IconTransp?.HalfResizeDpi();
 				}
 			}
 
@@ -384,9 +384,6 @@ namespace Mtgdb.Gui
 
 			_layoutRight.SizeChanged += rightLayoutChanged;
 
-			_layoutViewCards.ProbeCardCreating += probeCardCreating;
-			_layoutViewDeck.ProbeCardCreating += probeCardCreating;
-
 			_history.Loaded += historyLoaded;
 
 			_cardSearch.SubscribeToEvents();
@@ -405,6 +402,8 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckTransformed += deckListTransformed;
 
 			_formZoom.SettingsChanged += zoomSettingsChanged;
+
+			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
 
 		private void unsubscribeFromEvents()
@@ -471,8 +470,6 @@ namespace Mtgdb.Gui
 			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
 
 			_layoutRight.SizeChanged -= rightLayoutChanged;
-			_layoutViewCards.ProbeCardCreating -= probeCardCreating;
-			_layoutViewDeck.ProbeCardCreating -= probeCardCreating;
 			_history.Loaded -= historyLoaded;
 
 			_cardSearch.UnsubscribeFromEvents();
@@ -491,6 +488,8 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckTransformed -= deckListTransformed;
 
 			_formZoom.SettingsChanged -= zoomSettingsChanged;
+
+			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
 
 		public Zone? DeckZone

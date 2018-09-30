@@ -8,37 +8,32 @@ namespace Mtgdb
 	public abstract class BmpProcessor
 	{
 		protected Rectangle Rect { get; }
-		protected byte[] RgbValues { get; private set; }
+		protected byte[] BgraValues { get; private set; }
 		public bool ImageChanged { get; protected set; }
 
 		protected BmpProcessor(Bitmap bmp)
 		{
 			_bmp = bmp;
-			Rect = new Rectangle(Point.Empty, _bmp.Size);
+			Rect = new Rectangle(location: default, size: _bmp?.Size ?? default);
 		}
 
 		public void Execute()
 		{
-			const PixelFormat format = PixelFormat.Format32bppArgb;
-			var bmpData = _bmp.LockBits(Rect, ImageLockMode.ReadWrite, format);
+			var bmpData = _bmp.LockBits(Rect, ImageLockMode.ReadWrite, PixelFormat);
 
 			try
 			{
-				// Declare an array to hold the bytes of the bitmap. 
 				int numBytes = bmpData.Stride * bmpData.Height;
-				RgbValues = new byte[numBytes];
-
-				Marshal.Copy(bmpData.Scan0, RgbValues, 0, numBytes);
+				BgraValues = new byte[numBytes];
+				Marshal.Copy(bmpData.Scan0, BgraValues, 0, numBytes);
 
 				ExecuteRaw();
 
 				if (ImageChanged)
-					// Copy the RGB values back to the bitmap
-					Marshal.Copy(RgbValues, 0, bmpData.Scan0, numBytes);
+					Marshal.Copy(BgraValues, 0, bmpData.Scan0, numBytes);
 			}
 			finally
 			{
-				// Unlock the bits.
 				_bmp.UnlockBits(bmpData);
 			}
 		}
@@ -48,31 +43,36 @@ namespace Mtgdb
 		protected bool SameColor(int first, int second)
 		{
 			int delta =
-				Math.Abs(RgbValues[first] - RgbValues[second + 0]) +
-				Math.Abs(RgbValues[first + 1] - RgbValues[second + 1]) +
-				Math.Abs(RgbValues[first + 2] - RgbValues[second + 2]);
+				Math.Abs(BgraValues[first + B] - BgraValues[second + B]) +
+				Math.Abs(BgraValues[first + G] - BgraValues[second + G]) +
+				Math.Abs(BgraValues[first + R] - BgraValues[second + R]);
 
 			return delta < ColorSimilarityThreshold;
 		}
 
-		protected bool SameColor(int location, byte r, byte g, byte b, byte a)
+		protected bool SameColor(int location, byte b, byte g, byte r, byte a)
 		{
 			int delta =
-				Math.Abs(RgbValues[location] - r) +
-				Math.Abs(RgbValues[location + 1] - g) +
-				Math.Abs(RgbValues[location + 2] - b) +
-				Math.Abs(RgbValues[location + 3] - a);
+				Math.Abs(BgraValues[location + B] - b) +
+				Math.Abs(BgraValues[location + G] - g) +
+				Math.Abs(BgraValues[location + R] - r) +
+				Math.Abs(BgraValues[location + A] - a);
 
 			return delta < ColorSimilarityThreshold;
 		}
 
-		protected int GetLocation(int x, int y)
-		{
-			return ByesPerPixel * (Rect.Width * y + x);
-		}
+		protected int GetLocation(int x, int y) =>
+			BytesPerPixel * (Rect.Width * y + x);
 
-		private const int ByesPerPixel = 4;
 		protected virtual int ColorSimilarityThreshold => 20;
 		private readonly Bitmap _bmp;
+
+		public const int BytesPerPixel = 4;
+		public const int B = 0;
+		public const int G = 1;
+		public const int R = 2;
+		public const int A = 3;
+
+		public const PixelFormat PixelFormat = System.Drawing.Imaging.PixelFormat.Format32bppArgb;
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using Mtgdb.Test;
@@ -56,8 +57,7 @@ namespace Mtgdb.Util
 		{
 			var zoomImages = ImgRepo.GetAllZooms().ToList();
 
-			var detectedColors = new bool[0x1000000];
-
+			var detectedColors = new BitArray(1 << 24);
 			for (int i = 0; i < zoomImages.Count; i++)
 			{
 				var img = new Bitmap(zoomImages[i].FullPath);
@@ -65,16 +65,16 @@ namespace Mtgdb.Util
 			}
 
 			int color = Enumerable.Range(0, detectedColors.Length)
-				.Where(i => !detectedColors[i])
+				.Where(i => !detectedColors.Get(i))
 				.AtMax(getBrightness)
 				.Find();
 
-			Log.Debug($"R: {color / 0x10000} G: {color % 0x10000 / 0x100} B: {color % 0x100}");
+			Log.Debug($"R: {color << 16 >> 16} G: {color << 8 >> 16} B: {color >> 16}");
 		}
 
-		private static int getBrightness(int color)
-		{
-			return color / 0x10000 + color % 0x10000 / 0x100 + color % 0x100;
-		}
+		private static int getBrightness(int color) =>
+			color << 16 >> 16 +
+			color << 8 >> 16 +
+			color >> 16;
 	}
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using JetBrains.Annotations;
+using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -44,6 +45,10 @@ namespace Mtgdb.Controls
 				true);
 
 			_graphics = CreateGraphics();
+
+			CloseIconHovered = Resources.close_tab_hovered_32.HalfResizeDpi();
+			CloseIcon = Resources.close_tab_32.HalfResizeDpi();
+			AddIcon = Resources.add_tab_32.HalfResizeDpi();
 		}
 
 		protected override void OnPaint(PaintEventArgs e)

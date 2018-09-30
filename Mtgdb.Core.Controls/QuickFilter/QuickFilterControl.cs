@@ -35,12 +35,7 @@ namespace Mtgdb.Controls
 			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
 			MouseMove += mouseMove;
-
-			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
-
-		private void systemColorsChanging() =>
-			createDerivedImages();
 
 		private void makeProhibitedValuesIgnored()
 		{
@@ -94,8 +89,7 @@ namespace Mtgdb.Controls
 				new GrayscaleBmpProcessor(imagesTransformed[i], opacity)
 					.Execute();
 
-				new AdaptBrightnessTransformation(imagesTransformed[i])
-					.Execute();
+				imagesTransformed[i] = imagesTransformed[i].ApplyColorScheme();
 			}
 
 			return imagesTransformed;
@@ -859,7 +853,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionColor
 		{
-			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_selectionColor) : _selectionColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_selectionColor) : _selectionColor;
 			set
 			{
 				_selectionColor = value;
@@ -871,7 +865,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionBorderColor
 		{
-			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_selectionBorderColor) : _selectionBorderColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_selectionBorderColor) : _selectionBorderColor;
 			set
 			{
 				_selectionBorderColor = value;
@@ -883,7 +877,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color ProhibitedColor
 		{
-			get => !DesignMode ? AdaptBrightnessTransformation.Transform(_prohibitedColor) : _prohibitedColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_prohibitedColor) : _prohibitedColor;
 			set
 			{
 				_prohibitedColor = value;

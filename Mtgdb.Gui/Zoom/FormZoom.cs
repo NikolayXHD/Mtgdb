@@ -422,7 +422,7 @@ namespace Mtgdb.Gui
 		private readonly List<Bitmap> _images = new List<Bitmap>();
 		private readonly List<ImageModel> _models = new List<ImageModel>();
 
-		private static readonly Color _defaultBgColor = Color.FromArgb(254, 247, 253);
+		private static readonly Color _defaultBgColor = Color.FromArgb(253, 247, 254);
 		private Card _card;
 
 		private List<Card> _cardForms;

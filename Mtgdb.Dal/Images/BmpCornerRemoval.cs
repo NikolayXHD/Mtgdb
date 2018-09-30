@@ -82,7 +82,7 @@ namespace Mtgdb.Dal
 						continue;
 
 					byte alpha = (byte) (255 * alphaRel);
-					RgbValues[counter + 3] = alpha;
+					BgraValues[counter + A] = alpha;
 				}
 			}
 		}

@@ -14,10 +14,8 @@ namespace Mtgdb.Bitmaps
 		{
 			ImageChanged = true;
 
-			for (int counter = 0; counter < RgbValues.Length; counter += 4)
-			{
-				RgbValues[counter + 3] = (byte) (RgbValues[counter + 3] * _opacity);
-			}
+			for (int counter = 0; counter < BgraValues.Length; counter += BytesPerPixel)
+				BgraValues[counter + A] = (byte) (BgraValues[counter + A] * _opacity);
 		}
 
 		private readonly float _opacity;

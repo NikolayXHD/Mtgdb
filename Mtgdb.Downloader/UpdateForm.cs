@@ -55,7 +55,7 @@ namespace Mtgdb.Downloader
 			_buttonImgLq.Click += imgLqClick;
 			_buttonImgMq.Click += imgMqClick;
 			_buttonImgArt.Click += imgArtClick;
-			_buttonsMtgjson.Click += mtgjsonClick;
+			_buttonMtgjson.Click += mtgjsonClick;
 			_buttonPrices.Click += pricesClick;
 			_buttonEditConfig.Click += editConfigClick;
 			_buttonNotifications.Click += notificationsClick;
@@ -86,11 +86,11 @@ namespace Mtgdb.Downloader
 				Console.WriteLine("To edit configuration click 'Edit configuration' button...");
 				Console.WriteLine();
 			}
-			
+
 			_appVersionInstalled = getAppVersionInstalled();
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
-			
+
 			_newsService.DisplayNews();
 		}
 
@@ -195,7 +195,7 @@ namespace Mtgdb.Downloader
 			setButtonsEnabled(false);
 
 			_installer.Install(() => _appVersionInstalled = getAppVersionInstalled());
-			
+
 			setButtonsEnabled(true);
 			suggestCheckAppVersionOnline();
 
@@ -244,7 +244,7 @@ namespace Mtgdb.Downloader
 						"Currently installed version {0} is newer than downloaded {1}. To install older version press 'Downgrade'...",
 						_appVersionInstalled,
 						appVersionDownloaded);
-					
+
 					_buttonApp.Text = "Downgrade";
 				}
 			});
@@ -330,7 +330,7 @@ namespace Mtgdb.Downloader
 					Console.WriteLine("Looking up downloaded images...");
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
 					write(ImageDownloadProgress);
-					
+
 					Console.Write("Reloading images...");
 
 					switch (quality)
@@ -453,11 +453,11 @@ Are you sure you need small images? (Recommended answer is NO)",
 			this.Invoke(delegate
 			{
 				_buttonApp.Enabled =
-				_buttonsMtgjson.Enabled =
+				_buttonMtgjson.Enabled =
 				_buttonPrices.Enabled =
 				_buttonImgArt.Enabled =
 				_buttonImgLq.Enabled =
-				_buttonImgMq.Enabled = 
+				_buttonImgMq.Enabled =
 				_buttonNotifications.Enabled = enabled;
 			});
 		}
@@ -502,7 +502,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 				{
 					setButtonsEnabled(false);
 					suggestAbortPriceDownloading();
-					
+
 					Console.WriteLine("Downloading prices ...");
 
 					_priceDownloader.LoadPendingProgress();
@@ -545,7 +545,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 				_downloadingPrices = false;
 				_progressBar.Visible = false;
 				_labelProgress.Visible = false;
-				
+
 				button.Text = (string)button.Tag;
 			});
 		}

@@ -8,7 +8,7 @@ using System.Windows.Forms.Design;
 namespace DrawingEx.IconEncoder
 {
 	/// <summary>
-	/// Zusammenfassung für IconEditor.
+	/// Zusammenfassung fÃ¼r IconEditor.
 	/// </summary>
 	public class IconEditor:UITypeEditor
 	{

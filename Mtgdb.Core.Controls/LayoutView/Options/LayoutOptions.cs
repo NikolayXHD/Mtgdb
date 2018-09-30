@@ -13,8 +13,8 @@ namespace Mtgdb.Controls
 		public Bitmap GetAlignIcon(Direction direction, bool hovered)
 		{
 			var iconsByDirection = hovered
-				? _alignmentHoveredIconsByDirection ?? _alignmentIconsByDirection
-				: _alignmentIconsByDirection;
+				? AlignmentHoveredIconsByDirection ?? AlignmentIconsByDirection
+				: AlignmentIconsByDirection;
 
 			return iconsByDirection.TryGet(direction);
 		}
@@ -98,57 +98,47 @@ namespace Mtgdb.Controls
 		[DefaultValue(null)]
 		public Bitmap AlignTopLeftIcon
 		{
-			get => _alignTopLeftIcon;
-			set
-			{
-				_alignTopLeftIcon = value;
-				setAlignIcons(_alignmentIconsByDirection, value);
-			}
+			get => AlignmentIconsByDirection[Direction.TopLeft];
+			set => setAlignIcons(AlignmentIconsByDirection, value);
 		}
 
 		[Category("Settings")]
 		[DefaultValue(null)]
 		public Bitmap AlignTopLeftHoveredIcon
 		{
-			get => _alignTopLeftHoveredIcon;
-			set
-			{
-				_alignTopLeftHoveredIcon = value;
-				setAlignIcons(_alignmentHoveredIconsByDirection, value);
-			}
+			get => AlignmentHoveredIconsByDirection[Direction.TopLeft];
+			set => setAlignIcons(AlignmentHoveredIconsByDirection, value);
 		}
 
 		private static void setAlignIcons(Dictionary<Direction, Bitmap> iconsByDirection, Bitmap value)
 		{
 			iconsByDirection[Direction.TopLeft] = value;
 
-			value = value.Transform(RotateFlipType.RotateNoneFlipX);
+			value = value.RotateFlipClone(RotateFlipType.RotateNoneFlipX);
 			iconsByDirection[Direction.TopRight] = value;
 
-			value = value.Transform(RotateFlipType.RotateNoneFlipY);
+			value = value.RotateFlipClone(RotateFlipType.RotateNoneFlipY);
 			iconsByDirection[Direction.BottomRight] = value;
 
-			value = value.Transform(RotateFlipType.RotateNoneFlipX);
+			value = value.RotateFlipClone(RotateFlipType.RotateNoneFlipX);
 			iconsByDirection[Direction.BottomLeft] = value;
 		}
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool HasAlignIcons => _alignmentIconsByDirection.Count > 0;
+		public bool HasAlignIcons => AlignmentIconsByDirection.Count > 0;
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Size AlignIconSize => _alignmentIconsByDirection.TryGet(DefaultDirection)?.Size ?? default;
+		public Size AlignIconSize => AlignmentIconsByDirection.TryGet(DefaultDirection)?.Size ?? default;
 
-		private Bitmap _alignTopLeftHoveredIcon;
-		private Bitmap _alignTopLeftIcon;
 		private bool _allowPartialCards;
 		private bool _hideScroll;
 		private Size _cardInterval;
 		private Size _partialCardsThreshold;
 		private Direction _alignment = DefaultDirection;
 
-		private readonly Dictionary<Direction, Bitmap> _alignmentIconsByDirection = new Dictionary<Direction, Bitmap>();
-		private readonly Dictionary<Direction, Bitmap> _alignmentHoveredIconsByDirection = new Dictionary<Direction, Bitmap>();
+		internal readonly Dictionary<Direction, Bitmap> AlignmentIconsByDirection = new Dictionary<Direction, Bitmap>();
+		internal readonly Dictionary<Direction, Bitmap> AlignmentHoveredIconsByDirection = new Dictionary<Direction, Bitmap>();
 	}
 }

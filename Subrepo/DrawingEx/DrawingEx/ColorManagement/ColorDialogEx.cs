@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace DrawingEx.ColorManagement
 {
 	/// <summary>
-	/// Zusammenfassung für ColorDialogEx.
+	/// Zusammenfassung fÃ¼r ColorDialogEx.
 	/// </summary>
 	public class ColorDialogEx:Component
 	{

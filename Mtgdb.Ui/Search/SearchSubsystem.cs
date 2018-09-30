@@ -57,6 +57,8 @@ namespace Mtgdb.Ui
 
 			foreach (var view in _views)
 				view.SearchClicked += gridSearchClicked;
+
+			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -73,6 +75,8 @@ namespace Mtgdb.Ui
 
 			foreach (var view in _views)
 				view.SearchClicked -= gridSearchClicked;
+
+			ColorSchemeController.SystemColorsChanging -= systemColorsChanged;
 		}
 
 		public void SubscribeSuggestModelEvents()
@@ -83,6 +87,13 @@ namespace Mtgdb.Ui
 		public void UnsubscribeSuggestModelEvents()
 		{
 			SuggestModel.Suggested -= suggested;
+		}
+
+		private void systemColorsChanged()
+		{
+			updateBackColor();
+			updateForeColor();
+			_highlighter.Highlight();
 		}
 
 		protected abstract string GetLanguage();
@@ -133,10 +144,13 @@ namespace Mtgdb.Ui
 			{
 				var color = getBackColor();
 
-				if (_findEditor.BackColor != color)
-					_findEditor.BackColor =
-						_findEditor.Parent.BackColor =
-							_panelSearchIcon.BackColor = color;
+				_findEditor.Parent.BackColor =
+					_panelSearchIcon.BackColor = color;
+
+				// otherwise the change is not applied
+				// probably there is some internal cache of RGB values
+				_findEditor.BackColor = Color.Black;
+				_findEditor.BackColor = color;
 			});
 		}
 
@@ -153,7 +167,7 @@ namespace Mtgdb.Ui
 			if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
 				return SystemColors.Control;
 
-			return  _panelSearchIcon.BackColor = SystemColors.Window;
+			return SystemColors.Window;
 		}
 
 
@@ -255,10 +269,11 @@ namespace Mtgdb.Ui
 			SuggestModel.TextInputStateCurrent = getSearchInputState();
 		}
 
-		private TextInputState getSearchInputState() => new TextInputState(
-			_currentText,
-			_findEditor.SelectionStart,
-			_findEditor.SelectionLength);
+		private TextInputState getSearchInputState() =>
+			new TextInputState(
+				_currentText,
+				_findEditor.SelectionStart,
+				_findEditor.SelectionLength);
 
 		public void FocusSearch()
 		{
@@ -743,7 +758,9 @@ namespace Mtgdb.Ui
 		public SuggestModel<TId, TObj> SuggestModel { get; set; }
 
 		public SearchResult<TId> SearchResult { get; private set; }
-		ISearchResultBase ISearchSubsystemBase.SearchResult => SearchResult;
+
+		ISearchResultBase ISearchSubsystemBase.SearchResult =>
+			SearchResult;
 
 		private string _appliedText;
 		private DateTime? _lastUserInput;

@@ -182,7 +182,7 @@ namespace DrawingEx.Drawing3D
 				return Angle.FromRadiants(double.Parse(text,NumberStyles.Float,culture));
 			}
 			//parse degree
-			else if(text.EndsWith("°"))
+			else if(text.EndsWith("Â°"))
 			{
 				text=text.Remove(text.Length-1,1);
 				text=text.Trim();
@@ -208,7 +208,7 @@ namespace DrawingEx.Drawing3D
 					throw new ArgumentNullException("destinationType");
 				else if(destinationType==typeof(string))
 					//string representation in degree
-					return angle.ToDegree().ToString()+"°";
+					return angle.ToDegree().ToString()+"Â°";
 				else if (destinationType==typeof(InstanceDescriptor))
 				{
 					//get constructor for property grid

@@ -102,7 +102,7 @@ namespace Mtgdb.Controls
 		{
 			var button = (ButtonBase) sender;
 			var popup = _popupsByOwner[button];
-			
+
 			if (!popup.Visible)
 				return;
 
@@ -133,6 +133,27 @@ namespace Mtgdb.Controls
 		}
 
 
+		public void SetupComboBox(ComboBox menu)
+		{
+			const TextFormatFlags textFormat =
+				TextFormatFlags.NoClipping |
+				TextFormatFlags.NoPrefix |
+				TextFormatFlags.VerticalCenter |
+				TextFormatFlags.TextBoxControl;
+
+			menu.DrawMode = DrawMode.OwnerDrawVariable;
+			menu.FlatStyle = FlatStyle.Flat;
+
+			menu.MeasureItem += (s, e) =>
+				e.Graphics.MeasureText((string) menu.Items[e.Index], menu.Font, menu.Size, textFormat);
+
+			menu.DrawItem += (s, e) =>
+			{
+				e.DrawBackground();
+				e.Graphics.DrawText((string)menu.Items[e.Index], menu.Font, e.Bounds, menu.ForeColor, textFormat);
+				e.DrawFocusRectangle();
+			};
+		}
 
 		public void SubscribeToEvents()
 		{
@@ -149,7 +170,7 @@ namespace Mtgdb.Controls
 			{
 				popup.Owner.MouseEnter += popupOwnerHover;
 				popup.Owner.Click += popupOwnerClick;
-				
+
 				popup.Owner.MouseLeave += popupOwnerMouseLeave;
 
 				foreach (Control button in popup.Container.Controls)
@@ -255,10 +276,10 @@ namespace Mtgdb.Controls
 		{
 			// ReSharper disable CommentTypo
 
-			// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN 
+			// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN
 
 			// ReSharper restore CommentTypo
-			
+
 			if (m.Msg == 0x0201 || m.Msg == 0x0207 || m.Msg == 0x0204)
 			{
 				foreach (Popup popup in _popupsByOwner.Values)
