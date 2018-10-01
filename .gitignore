@@ -11,6 +11,7 @@ TestResult.xml
 packages/
 .vs
 .idea
+out/color-schemes/current.colors
 out/update/app/
 out/update/*.txt
 out/update/*.zip

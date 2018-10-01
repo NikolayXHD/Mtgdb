@@ -20,6 +20,8 @@ namespace Mtgdb.Gui
 		public FormZoom()
 		{
 			InitializeComponent();
+			_contextMenu.ForeColor = SystemColors.ControlText;
+			_contextMenu.BackColor = SystemColors.Control;
 		}
 
 		public FormZoom(
