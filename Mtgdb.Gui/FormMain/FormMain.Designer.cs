@@ -75,12 +75,12 @@ namespace Mtgdb.Gui
 			this._labelStatusScrollDeck = new System.Windows.Forms.Label();
 			this._buttonShowScrollDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._labelStatusScrollCards = new System.Windows.Forms.Label();
-			this._panelMenu = new System.Windows.Forms.FlowLayoutPanel();
+			this._panelMenu = new System.Windows.Forms.TableLayoutPanel();
 			this._panelSearch = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonSearchExamplesDropDown = new System.Windows.Forms.CheckBox();
 			this._searchEditor = new Mtgdb.Controls.FixedRichTextBox();
 			this._panelIconSearch = new Mtgdb.Controls.BorderedPanel();
-			this._panelLegality = new System.Windows.Forms.FlowLayoutPanel();
+			this._panelMenuRightSubpanel = new System.Windows.Forms.FlowLayoutPanel();
 			this._panelIconLegality = new Mtgdb.Controls.BorderedPanel();
 			this._menuLegalityFormat = new System.Windows.Forms.ComboBox();
 			this._buttonLegalityAllowLegal = new Mtgdb.Controls.CustomCheckBox();
@@ -111,7 +111,7 @@ namespace Mtgdb.Gui
 			this._panelStatus.SuspendLayout();
 			this._panelMenu.SuspendLayout();
 			this._panelSearch.SuspendLayout();
-			this._panelLegality.SuspendLayout();
+			this._panelMenuRightSubpanel.SuspendLayout();
 			this._panelRightCost.SuspendLayout();
 			this._panelManaAbility.SuspendLayout();
 			this._layoutMain.SuspendLayout();
@@ -667,19 +667,25 @@ namespace Mtgdb.Gui
 			//
 			// _panelMenu
 			//
+			this._panelMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelMenu.AutoSize = true;
 			this._panelMenu.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._panelMenu.Controls.Add(this._panelSearch);
-			this._panelMenu.Controls.Add(this._panelLegality);
-			this._panelMenu.Controls.Add(this._buttonShowDuplicates);
+			this._panelMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._panelMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._panelMenu.Controls.Add(this._panelSearch, 0, 0);
+			this._panelMenu.Controls.Add(this._panelMenuRightSubpanel, 1, 0);
 			this._panelMenu.Location = new System.Drawing.Point(0, 34);
 			this._panelMenu.Margin = new System.Windows.Forms.Padding(0);
 			this._panelMenu.Name = "_panelMenu";
-			this._panelMenu.Size = new System.Drawing.Size(1137, 24);
+			this._panelMenu.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelMenu.Size = new System.Drawing.Size(1168, 24);
 			this._panelMenu.TabIndex = 10;
 			//
 			// _panelSearch
 			//
+			this._panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelSearch.BackColor = System.Drawing.SystemColors.Window;
 			this._panelSearch.ColumnCount = 3;
 			this._panelSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -693,11 +699,11 @@ namespace Mtgdb.Gui
 			this._panelSearch.Name = "_panelSearch";
 			this._panelSearch.RowCount = 1;
 			this._panelSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._panelSearch.Size = new System.Drawing.Size(788, 24);
+			this._panelSearch.Size = new System.Drawing.Size(798, 24);
 			this._panelSearch.TabIndex = 42;
-			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Right));
-			//
+			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonSearchExamplesDropDown
 			//
 			this._buttonSearchExamplesDropDown.Appearance = System.Windows.Forms.Appearance.Button;
@@ -741,23 +747,24 @@ namespace Mtgdb.Gui
 			this._panelIconSearch.Size = new System.Drawing.Size(22, 22);
 			this._panelIconSearch.TabIndex = 21;
 			this._panelIconSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			//
-			// _panelLegality
-			//
-			this._panelLegality.AutoSize = true;
-			this._panelLegality.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._panelLegality.Controls.Add(this._panelIconLegality);
-			this._panelLegality.Controls.Add(this._menuLegalityFormat);
-			this._panelLegality.Controls.Add(this._buttonLegalityAllowLegal);
-			this._panelLegality.Controls.Add(this._buttonLegalityAllowRestricted);
-			this._panelLegality.Controls.Add(this._buttonLegalityAllowBanned);
-			this._panelLegality.Location = new System.Drawing.Point(788, 0);
-			this._panelLegality.Margin = new System.Windows.Forms.Padding(0);
-			this._panelLegality.Name = "_panelLegality";
-			this._panelLegality.Size = new System.Drawing.Size(323, 24);
-			this._panelLegality.TabIndex = 41;
-			this._panelLegality.WrapContents = false;
-			//
+			// 
+			// _panelMenuRightSubpanel
+			// 
+			this._panelMenuRightSubpanel.AutoSize = true;
+			this._panelMenuRightSubpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this._panelMenuRightSubpanel.Controls.Add(this._panelIconLegality);
+			this._panelMenuRightSubpanel.Controls.Add(this._menuLegalityFormat);
+			this._panelMenuRightSubpanel.Controls.Add(this._buttonLegalityAllowLegal);
+			this._panelMenuRightSubpanel.Controls.Add(this._buttonLegalityAllowRestricted);
+			this._panelMenuRightSubpanel.Controls.Add(this._buttonLegalityAllowBanned);
+			this._panelMenuRightSubpanel.Controls.Add(this._buttonShowDuplicates);
+			this._panelMenuRightSubpanel.Location = new System.Drawing.Point(798, 0);
+			this._panelMenuRightSubpanel.Margin = new System.Windows.Forms.Padding(0);
+			this._panelMenuRightSubpanel.Name = "_panelMenuRightSubpanel";
+			this._panelMenuRightSubpanel.Size = new System.Drawing.Size(370, 24);
+			this._panelMenuRightSubpanel.TabIndex = 41;
+			this._panelMenuRightSubpanel.WrapContents = false;
+			// 
 			// _panelIconLegality
 			//
 			this._panelIconLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
@@ -1303,8 +1310,7 @@ namespace Mtgdb.Gui
 			this._panelMenu.ResumeLayout(false);
 			this._panelMenu.PerformLayout();
 			this._panelSearch.ResumeLayout(false);
-			this._panelLegality.ResumeLayout(false);
-			this._panelLegality.PerformLayout();
+			this._panelMenuRightSubpanel.ResumeLayout(false);
 			this._panelRightCost.ResumeLayout(false);
 			this._panelRightCost.PerformLayout();
 			this._panelManaAbility.ResumeLayout(false);
@@ -1338,7 +1344,7 @@ namespace Mtgdb.Gui
 
 		private System.Windows.Forms.ListBox _listBoxSuggest;
 		private Mtgdb.Controls.CustomCheckBox _buttonShowProhibit;
-		private System.Windows.Forms.FlowLayoutPanel _panelMenu;
+		private System.Windows.Forms.TableLayoutPanel _panelMenu;
 		private Mtgdb.Controls.FixedRichTextBox _searchEditor;
 		private System.Windows.Forms.ComboBox _menuLegalityFormat;
 		private Mtgdb.Controls.CustomCheckBox _buttonLegalityAllowLegal;
@@ -1387,7 +1393,7 @@ namespace Mtgdb.Gui
 		public Controls.QuickFilterControl FilterCastKeyword;
 		private System.Windows.Forms.FlowLayoutPanel _panelRightNarrow;
 		private System.Windows.Forms.FlowLayoutPanel _panelRightManaCost;
-		private System.Windows.Forms.FlowLayoutPanel _panelLegality;
+		private System.Windows.Forms.FlowLayoutPanel _panelMenuRightSubpanel;
 		private Controls.BorderedTableLayoutPanel _panelSearch;
 		private System.Windows.Forms.FlowLayoutPanel _panelManaAbility;
 		private Controls.CustomCheckBox _buttonShowScrollCards;
