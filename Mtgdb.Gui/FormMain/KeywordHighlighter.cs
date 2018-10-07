@@ -18,7 +18,7 @@ namespace Mtgdb.Gui
 
 			foreach (var keywordTerm in keywordTerms)
 			{
-				string termText = keywordTerm.GetPhraseText(query);
+				string termText = StringEscaper.Unescape(keywordTerm.GetPhraseText(query));
 
 				if (!KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.KeywordsIndex].TryGetValue(termText, out var regex) &&
 					!KeywordDefinitions.PatternsByDisplayText[KeywordDefinitions.CastKeywordsIndex].TryGetValue(termText, out regex))

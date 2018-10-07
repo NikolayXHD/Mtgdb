@@ -82,15 +82,16 @@ namespace Mtgdb.Test
 		[TestCase("M19", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
 		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
 
-		[TestCase("CM2", GathererDir, "CM2")]
-		[TestCase("C18", GathererDir, "C18")]
+		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
+		[TestCase("C18", XlhqDir, "C18 - Commander 2018\\300DPI Cards")]
+		[TestCase("GRN", GathererDir, "GRN")]
 		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs
 				.Select(_ => Path.Combine(baseDir, _))
 				.ToList();
-				
+
 			var set = Repo.SetsByCode[setCode];
 			foreach (var card in set.Cards)
 			{

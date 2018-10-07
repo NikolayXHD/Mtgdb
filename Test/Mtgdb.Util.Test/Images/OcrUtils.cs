@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
+using Mtgdb.Dal;
 using Mtgdb.Test;
 using NUnit.Framework;
 using Tesseract;
@@ -206,12 +207,21 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\C18")]
-		public void RenameImages(string unnamedImagesDirectory)
+		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\GRN.png", "GRN")]
+		public void RenameImages(string unnamedImagesDirectory, string setCode)
 		{
 			var fileNames =
 				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
 					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
+
+			var repo = new CardRepository();
+			repo.FilterSetCode = code => code == setCode;
+
+			repo.LoadFile();
+			repo.Load();
+
+			var cardNames = repo.Cards.Select(c => c.NameEn).Distinct().ToArray();
+			float[] distances = new float[cardNames.Length];
 
 			foreach (var fileName in fileNames)
 			{
@@ -220,17 +230,18 @@ namespace Mtgdb.Util
 
 				var name = ocr(fileName, new Rectangle(20, 20, 170, 17));
 
-				var nameClear = new StringBuilder();
+				for (int i = 0; i < cardNames.Length; i++)
+					distances[i] = _distance.GetPrefixDistance(name, cardNames[i]);
 
-				foreach (char n in name)
-				{
-					if (Path.GetInvalidFileNameChars().Contains(n))
-						nameClear.Append("_");
-					else
-						nameClear.Append(n);
-				}
+				var mostSimilarName = cardNames[Enumerable.Range(0, cardNames.Length).AtMin(i => distances[i]).Find()];
 
-				string renamed = Path.Combine(directory, nameClear + extension);
+				string renamed = Path.Combine(directory, mostSimilarName + extension);
+
+				if (Str.Equals(renamed, fileName))
+					continue;
+
+				while (File.Exists(renamed))
+					renamed = Path.Combine(directory, Path.GetFileNameWithoutExtension(renamed) + '-' + extension);
 
 				try
 				{
@@ -310,7 +321,7 @@ namespace Mtgdb.Util
 					.ThenAtMax(i => textConfidences[i])
 					.Find();
 
-				return texts[textIndex];
+				return texts[textIndex].Trim();
 			}
 		}
 

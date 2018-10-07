@@ -135,40 +135,47 @@
 	},
 
 	"Legality": {
-		"Dominaria Block": {
-			"Sets": { "Add": ["DOM"], "Remove": [] },
-			"Banned": { "Add": [], "Remove": [] },
-			"Restricted": { "Add": [], "Remove": [] }
-		},
 		"Ixalan Block": {
-			"Sets": { "Add": [], "Remove": [] },
+			"Sets": { "Add": ["XLN", "RIX"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Standard": {
-			"Sets": { "Add": ["RIX", "DOM", "GS1", "M19"], "Remove": [] },
+			"Sets": { "Add": ["RIX", "DOM", "GS1", "M19", "GRN"], "Remove": ["KLD", "AER"] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
+		},
+		"Brawl": {
+		 "Sets": { "Add": ["AKH", "HOU", "XLN", "RIX", "DOM", "GS1", "M19", "GRN"], "Remove": [] },
+		 "Banned": {
+			"Add": [
+			 "Baral, Chief of Compliance",
+			 "Smuggler's Copter",
+			 "Sorcerous Spyglass"
+			],
+			"Remove": []
+		 },
+		 "Restricted": { "Add": [], "Remove": [] }
 		},
 		"Modern": {
-			"Sets": { "Add": ["DOM", "M19"], "Remove": [] },
-			"Banned": { "Add": [], "Remove": [] },
-			"Restricted": { "Add": [], "Remove": [] }
-		},
-		"Commander": {
-			"Sets": { "Add": ["DOM", "BBD", "M19"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "M19", "GRN"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Legacy": {
-			"Sets": { "Add": ["DOM", "BBD", "GS1", "M19"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "BBD", "GS1", "M19", "GRN"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Vintage": {
-			"Sets": { "Add": ["DOM", "BBD", "GS1", "M19"], "Remove": [] },
+			"Sets": { "Add": ["DOM", "BBD", "GS1", "M19", "GRN"], "Remove": [] },
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
-		}
+		},
+	 "Commander": {
+		"Sets": { "Add": ["DOM", "BBD", "M19", "GRN"], "Remove": [] },
+		"Banned": { "Add": [], "Remove": [] },
+		"Restricted": { "Add": [], "Remove": [] }
+	 }
 	}
 }

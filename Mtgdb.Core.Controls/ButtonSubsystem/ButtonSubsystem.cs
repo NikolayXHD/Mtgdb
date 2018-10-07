@@ -8,10 +8,10 @@ namespace Mtgdb.Controls
 {
 	public class ButtonSubsystem : IMessageFilter
 	{
-		public void SetupButton(ButtonBase control, ButtonImages buttonImages)
+		public void SetupButton(CustomCheckBox control, ButtonImages buttonImages)
 		{
 			_images[control] = buttonImages;
-			setCheckImage(control, (control as CheckBox)?.Checked ?? false, false);
+			setCheckImage(control, control.Checked);
 		}
 
 		public void SetupPopup(Popup popup)
@@ -40,29 +40,10 @@ namespace Mtgdb.Controls
 			popup.Hide();
 		}
 
-		private void mouseLeave(object sender, EventArgs e)
-		{
-			if (sender is ButtonBase box)
-			{
-				bool isChecked = (box as CheckBox)?.Checked == true;
-				setCheckImage(box, isChecked, false);
-			}
-		}
-
-		private void mouseEnter(object sender, EventArgs e)
-		{
-			bool isChecked = (sender as CheckBox)?.Checked == true;
-			setCheckImage((ButtonBase)sender, isChecked, true);
-		}
-
-
-
 		private void checkedChanged(object sender, EventArgs e)
 		{
-			var cursorPosition = Cursor.Position;
 			var checkButton = (CheckBox)sender;
-			bool hovered = checkButton.ClientRectangle.Contains(checkButton.PointToClient(cursorPosition));
-			setCheckImage(checkButton, checkButton.Checked, hovered);
+			setCheckImage(checkButton, checkButton.Checked);
 		}
 
 
@@ -161,9 +142,6 @@ namespace Mtgdb.Controls
 			{
 				if (control is CheckBox box)
 					box.CheckedChanged += checkedChanged;
-
-				control.MouseEnter += mouseEnter;
-				control.MouseLeave += mouseLeave;
 			}
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
@@ -195,9 +173,6 @@ namespace Mtgdb.Controls
 			{
 				if (control is CheckBox box)
 					box.CheckedChanged -= checkedChanged;
-
-				control.MouseEnter -= mouseEnter;
-				control.MouseLeave -= mouseLeave;
 			}
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
@@ -266,11 +241,8 @@ namespace Mtgdb.Controls
 				popup.Hide();
 		}
 
-		private void setCheckImage(ButtonBase control, bool isChecked, bool hovered)
-		{
-			var images = _images[control];
-			control.Image = images.GetImage(isChecked, hovered);
-		}
+		private void setCheckImage(ButtonBase control, bool isChecked) =>
+			control.Image = _images[control]?.GetImage(isChecked);
 
 		public bool PreFilterMessage(ref Message m)
 		{

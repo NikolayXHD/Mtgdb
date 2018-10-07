@@ -65,8 +65,8 @@ namespace Mtgdb.Index
 		}
 
 		public void AddSearchStringMatches(
-			List<TextRange> matches, 
-			List<TextRange> contextMatches, 
+			List<TextRange> matches,
+			List<TextRange> contextMatches,
 			string displayField,
 			string displayText)
 		{
@@ -125,7 +125,7 @@ namespace Mtgdb.Index
 			}
 		}
 
-		
+
 
 
 
@@ -219,7 +219,7 @@ namespace Mtgdb.Index
 			if (token.IsPhraseStart && !token.IsPhraseComplex && !token.PhraseHasSlop)
 			{
 				var patternBuilder = new StringBuilder();
-				appendFieldValuePattern(patternBuilder, token.ParentField, token.GetPhraseText(query));
+				appendFieldValuePattern(patternBuilder, token.ParentField, StringEscaper.Unescape(token.GetPhraseText(query)));
 
 				result = patternBuilder.ToString();
 				contextPatterns = new List<string>();
@@ -377,17 +377,17 @@ namespace Mtgdb.Index
 				else if (token.Type.IsAny(TokenType.AnyString))
 					pattern.Append(MtgAlphabet.CharPattern + "*");
 				else if (token.Type.IsAny(TokenType.FieldValue))
-					appendFieldValuePattern(pattern, token.ParentField, token.Value);
+					appendFieldValuePattern(pattern, token.ParentField, StringEscaper.Unescape(token.Value));
 			}
 
 			return pattern.ToString();
 		}
 
-		private void appendFieldValuePattern(StringBuilder patternBuilder, string tokenField, string tokenValue)
+		private void appendFieldValuePattern(StringBuilder patternBuilder, string tokenField, string escapedTokenValue)
 		{
 			var builder = new StringBuilder();
 
-			foreach (var word in _analyzer.GetTokens(tokenField, StringEscaper.Unescape(tokenValue)))
+			foreach (var word in _analyzer.GetTokens(tokenField, escapedTokenValue))
 				builder.Append(word.Term);
 
 			var luceneUnescaped = builder.ToString();
@@ -418,7 +418,7 @@ namespace Mtgdb.Index
 			}
 		}
 
-		
+
 
 		private readonly ISearchSubsystemBase _searchSubsystem;
 		private readonly IDocumentAdapterBase _adapter;

@@ -343,39 +343,9 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap filters_hide_32 {
-            get {
-                object obj = ResourceManager.GetObject("filters_hide_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap filters_hide_hovered_32 {
-            get {
-                object obj = ResourceManager.GetObject("filters_hide_hovered_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap filters_show_32 {
             get {
                 object obj = ResourceManager.GetObject("filters_show_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap filters_show_hovered_32 {
-            get {
-                object obj = ResourceManager.GetObject("filters_show_hovered_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -603,16 +573,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap partial_card_disabled_40 {
-            get {
-                object obj = ResourceManager.GetObject("partial_card_disabled_40", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap partial_card_enabled_40 {
             get {
                 object obj = ResourceManager.GetObject("partial_card_enabled_40", resourceCulture);
@@ -813,26 +773,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap scroll_48 {
-            get {
-                object obj = ResourceManager.GetObject("scroll_48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap scroll_hidden_40 {
-            get {
-                object obj = ResourceManager.GetObject("scroll_hidden_40", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap scroll_shown_40 {
             get {
                 object obj = ResourceManager.GetObject("scroll_shown_40", resourceCulture);
@@ -916,16 +856,6 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap sort_none_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_none_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap text_disabled_40 {
-            get {
-                object obj = ResourceManager.GetObject("text_disabled_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

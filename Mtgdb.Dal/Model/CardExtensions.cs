@@ -13,9 +13,11 @@ namespace Mtgdb.Dal
 			return 4;
 		}
 
-		public static int MinCountInDeck(this Card c)
-		{
-			return 0;
-		}
+		public static int MinCountInDeck(this Card c) => 0;
+
+		public static bool IsFlipped(this Card c) =>
+			Str.Equals(c.Layout, "flip")
+			&& c.Names?.Count == 2 &&
+			Str.Equals(c.NameEn, c.Names[1]);
 	}
 }

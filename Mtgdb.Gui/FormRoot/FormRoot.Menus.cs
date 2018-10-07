@@ -415,7 +415,7 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SubscribeToEvents();
 		}
 
-		private void setupButton(ButtonBase button, Bitmap image, Bitmap imageDouble)
+		private void setupButton(CustomCheckBox button, Bitmap image, Bitmap imageDouble)
 		{
 			bool x2 = Dpi.ScalePercent > 100;
 			var bmp = x2 ? imageDouble : image;

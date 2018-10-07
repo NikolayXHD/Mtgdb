@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Gui", "Mtgdb.Gui\Mtgd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Downloader", "Mtgdb.Downloader\Mtgdb.Downloader.csproj", "{3229CA82-875D-4154-92B7-2F7C47678010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mtgdb.Util.csproj", "{56661DAD-10A7-41EF-8672-F417F15923CB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{106FC38B-1268-47D8-A527-E4376709F683}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
@@ -61,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingEx", "Subrepo\Drawin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomScrollbar", "Subrepo\CustomScrollbar\CustomScrollbar.csproj", "{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mtgdb.Util.csproj", "{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13
@@ -91,10 +91,6 @@ Global
 		{3229CA82-875D-4154-92B7-2F7C47678010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3229CA82-875D-4154-92B7-2F7C47678010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3229CA82-875D-4154-92B7-2F7C47678010}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56661DAD-10A7-41EF-8672-F417F15923CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56661DAD-10A7-41EF-8672-F417F15923CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56661DAD-10A7-41EF-8672-F417F15923CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56661DAD-10A7-41EF-8672-F417F15923CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FE226AC-EC61-451F-A602-C79DA136CE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -151,6 +147,10 @@ Global
 		{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

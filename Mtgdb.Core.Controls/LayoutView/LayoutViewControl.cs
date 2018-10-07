@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -529,12 +530,7 @@ namespace Mtgdb.Controls
 			}
 			else if (e.KeyData == (Keys.Control | Keys.C))
 			{
-				string selectedText = getNonEmptySelection()?.SelectedText;
-
-				if (!string.IsNullOrEmpty(selectedText))
-					Clipboard.SetText(selectedText);
-				else
-					handled = false;
+				handled = getNonEmptySelection()?.SelectedText.TryCopyToClipboard() == true;
 			}
 			else
 				handled = false;

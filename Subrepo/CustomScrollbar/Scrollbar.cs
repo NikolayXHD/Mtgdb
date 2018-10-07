@@ -14,13 +14,13 @@ namespace CustomScrollbar
 
 		public Scrollbar()
 		{
-			MouseDown += mouseDown;
 			MouseMove += mouseMove;
 			MouseUp += mouseUp;
 
 			SetStyle(ControlStyles.ResizeRedraw, true);
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.DoubleBuffer, true);
+			SetStyle(ControlStyles.Selectable, false);
 
 			ChannelColor = SystemColors.ScrollBar;
 			BorderColor = SystemColors.Control;
@@ -36,6 +36,8 @@ namespace CustomScrollbar
 
 			Width = UpArrowImage.Width;
 		}
+
+
 
 		private int getVerticalRange() => getTrackHeight() - getThumbHeight();
 
@@ -179,9 +181,15 @@ namespace CustomScrollbar
 				new Rectangle(src.Location, new Size(src.Width, src.Height * 2));
 		}
 
-		private void mouseDown(object sender, MouseEventArgs e)
+		protected override void OnMouseDown(MouseEventArgs e)
 		{
+			// base.OnMouseDown is not called intentionally
+			// to prevent stealing focus from container
+
 			if (!ClientRectangle.Contains(e.Location))
+				return;
+
+			if (!Enabled)
 				return;
 
 			var thumbRect = getThumbRect();
@@ -213,6 +221,9 @@ namespace CustomScrollbar
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
+			if (!Enabled)
+				return;
+
 			if (_thumbDown)
 				ThumbTop = e.Y - _clickThumbY;
 		}

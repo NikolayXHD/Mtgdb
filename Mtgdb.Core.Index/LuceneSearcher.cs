@@ -144,11 +144,11 @@ namespace Mtgdb.Index
 				return null;
 
 			string text = !t.IsPhrase || t.IsPhraseComplex || t.PhraseHasSlop
-				? t.Value
-				: t.GetPhraseText(queryStr);
+				? StringEscaper.Unescape(t.Value)
+				: StringEscaper.Unescape(t.GetPhraseText(queryStr));
 
 			var result = QueryParserAnalyzer
-				.GetTokens(t.ParentField, StringEscaper.Unescape(text))
+				.GetTokens(t.ParentField, text)
 				.Select(_ => _.Term)
 				.ToReadOnlyList();
 

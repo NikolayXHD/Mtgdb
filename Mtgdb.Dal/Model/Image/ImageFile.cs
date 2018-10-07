@@ -89,11 +89,7 @@ namespace Mtgdb.Dal
 			if (zoom && Str.Equals(card.Layout, "split"))
 				return rotateRight();
 
-			bool isFlip = Str.Equals(card.Layout, "flip")
-				&& card.Names?.Count == 2 &&
-				Str.Equals(card.NameEn, card.Names[1]);
-
-			if (isFlip)
+			if (card.IsFlipped())
 				return rotate180();
 
 			return NonRotated();

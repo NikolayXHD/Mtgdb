@@ -77,7 +77,7 @@ namespace Mtgdb.Gui
 			this._labelStatusScrollCards = new System.Windows.Forms.Label();
 			this._panelMenu = new System.Windows.Forms.TableLayoutPanel();
 			this._panelSearch = new Mtgdb.Controls.BorderedTableLayoutPanel();
-			this._buttonSearchExamplesDropDown = new System.Windows.Forms.CheckBox();
+			this._buttonSearchExamplesDropDown = new Mtgdb.Controls.CustomCheckBox();
 			this._searchEditor = new Mtgdb.Controls.FixedRichTextBox();
 			this._panelIconSearch = new Mtgdb.Controls.BorderedPanel();
 			this._panelMenuRightSubpanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -332,9 +332,6 @@ namespace Mtgdb.Gui
 			this._buttonShowPartialCards.Checked = true;
 			this._buttonShowPartialCards.CheckState = System.Windows.Forms.CheckState.Checked;
 			this._buttonShowPartialCards.FlatAppearance.BorderSize = 0;
-			this._buttonShowPartialCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this._buttonShowPartialCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this._buttonShowPartialCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonShowPartialCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowPartialCards.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowPartialCards.Image = global::Mtgdb.Gui.Properties.Resources.partial_card_enabled_40;
@@ -636,17 +633,13 @@ namespace Mtgdb.Gui
 			this._buttonShowScrollDeck.Checked = true;
 			this._buttonShowScrollDeck.CheckState = System.Windows.Forms.CheckState.Checked;
 			this._buttonShowScrollDeck.FlatAppearance.BorderSize = 0;
-			this._buttonShowScrollDeck.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this._buttonShowScrollDeck.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this._buttonShowScrollDeck.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonShowScrollDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowScrollDeck.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
 			this._buttonShowScrollDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonShowScrollDeck.HighlightCheckedOpacity = 0;
 			this._buttonShowScrollDeck.Location = new System.Drawing.Point(1216, 221);
 			this._buttonShowScrollDeck.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonShowScrollDeck.Name = "_buttonShowScrollDeck";
-			this._buttonShowScrollDeck.Size = new System.Drawing.Size(18, 24);
+			this._buttonShowScrollDeck.Size = new System.Drawing.Size(17, 24);
 			this._buttonShowScrollDeck.TabIndex = 31;
 			this._buttonShowScrollDeck.TabStop = false;
 			this._buttonShowScrollDeck.UseVisualStyleBackColor = false;
@@ -667,7 +660,7 @@ namespace Mtgdb.Gui
 			//
 			// _panelMenu
 			//
-			this._panelMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this._panelMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelMenu.AutoSize = true;
 			this._panelMenu.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -684,7 +677,7 @@ namespace Mtgdb.Gui
 			//
 			// _panelSearch
 			//
-			this._panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this._panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelSearch.BackColor = System.Drawing.SystemColors.Window;
 			this._panelSearch.ColumnCount = 3;
@@ -701,9 +694,9 @@ namespace Mtgdb.Gui
 			this._panelSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelSearch.Size = new System.Drawing.Size(798, 24);
 			this._panelSearch.TabIndex = 42;
-			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._panelSearch.VisibleBorders = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
+			//
 			// _buttonSearchExamplesDropDown
 			//
 			this._buttonSearchExamplesDropDown.Appearance = System.Windows.Forms.Appearance.Button;
@@ -747,9 +740,9 @@ namespace Mtgdb.Gui
 			this._panelIconSearch.Size = new System.Drawing.Size(22, 22);
 			this._panelIconSearch.TabIndex = 21;
 			this._panelIconSearch.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			// 
+			//
 			// _panelMenuRightSubpanel
-			// 
+			//
 			this._panelMenuRightSubpanel.AutoSize = true;
 			this._panelMenuRightSubpanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._panelMenuRightSubpanel.Controls.Add(this._panelIconLegality);
@@ -764,7 +757,7 @@ namespace Mtgdb.Gui
 			this._panelMenuRightSubpanel.Size = new System.Drawing.Size(370, 24);
 			this._panelMenuRightSubpanel.TabIndex = 41;
 			this._panelMenuRightSubpanel.WrapContents = false;
-			// 
+			//
 			// _panelIconLegality
 			//
 			this._panelIconLegality.BackgroundImage = global::Mtgdb.Gui.Properties.Resources.legality_48;
@@ -1046,17 +1039,13 @@ namespace Mtgdb.Gui
 			this._buttonShowScrollCards.Checked = true;
 			this._buttonShowScrollCards.CheckState = System.Windows.Forms.CheckState.Checked;
 			this._buttonShowScrollCards.FlatAppearance.BorderSize = 0;
-			this._buttonShowScrollCards.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this._buttonShowScrollCards.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this._buttonShowScrollCards.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this._buttonShowScrollCards.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowScrollCards.Image = global::Mtgdb.Gui.Properties.Resources.scroll_shown_40;
 			this._buttonShowScrollCards.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonShowScrollCards.HighlightCheckedOpacity = 0;
 			this._buttonShowScrollCards.Location = new System.Drawing.Point(1216, 34);
 			this._buttonShowScrollCards.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonShowScrollCards.Name = "_buttonShowScrollCards";
-			this._buttonShowScrollCards.Size = new System.Drawing.Size(18, 24);
+			this._buttonShowScrollCards.Size = new System.Drawing.Size(17, 24);
 			this._buttonShowScrollCards.TabIndex = 51;
 			this._buttonShowScrollCards.TabStop = false;
 			this._buttonShowScrollCards.UseVisualStyleBackColor = false;
@@ -1385,7 +1374,7 @@ namespace Mtgdb.Gui
 		private Controls.CustomCheckBox _buttonShowText;
 		private System.Windows.Forms.TableLayoutPanel _layoutRight;
 		private System.Windows.Forms.TableLayoutPanel _layoutRoot;
-		private System.Windows.Forms.CheckBox _buttonSearchExamplesDropDown;
+		private Mtgdb.Controls.CustomCheckBox _buttonSearchExamplesDropDown;
 		private SearchExamplesPanel _panelSearchExamples;
 		private Controls.BorderedPanel _panelIconStatusSort;
 		private System.Windows.Forms.Label _labelStatusSort;

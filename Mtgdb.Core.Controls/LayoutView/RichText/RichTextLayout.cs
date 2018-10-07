@@ -167,7 +167,7 @@ namespace Mtgdb.Controls
 							top,
 							left,
 							bottom);
-					
+
 					if (he)
 						_renderContext.Graphics.DrawLine(_pen,
 							right,
@@ -338,7 +338,7 @@ namespace Mtgdb.Controls
 			float top = roundedRect.Top;
 			var bottom = roundedRect.Bottom - 1f;
 
-			_renderContext.Graphics.DrawLine(new Pen(_renderContext.SelectionForeColor, 1f), x, top, x, bottom);
+			_renderContext.Graphics.DrawLine(new Pen(_renderContext.ForeColor, 1f), x, top, x, bottom);
 		}
 
 		private (bool IsStart, bool IsRightToLeft) isRectSelectionStart(RectangleF tokenRect)
@@ -347,7 +347,7 @@ namespace Mtgdb.Controls
 			bool isStart = tokenRect.Right > selectionStartX && tokenRect.Left <= selectionEndX;
 
 			bool isMultiline = selectionStartX == int.MinValue || selectionEndX == int.MaxValue;
-			
+
 			bool isRightToLeft =
 				isMultiline && _renderContext.SelectionStart.Y > _renderContext.SelectionEnd.Y ||
 				!isMultiline && _renderContext.SelectionStart.X > _renderContext.SelectionEnd.X;

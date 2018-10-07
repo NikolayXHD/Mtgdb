@@ -15,14 +15,14 @@ namespace Mtgdb.Dal
 		public static readonly IReadOnlyList<string> Formats = new[]
 		{
 			"Standard",
+			"Brawl",
 			"Modern",
-			"Commander",
 			"Legacy",
 			"Vintage",
+			"Commander",
 			"Un-Sets",
 			"Amonkhet Block",
 			"Battle for Zendikar Block",
-			"Dominaria Block",
 			"Ice Age Block",
 			"Innistrad Block",
 			"Ixalan Block",

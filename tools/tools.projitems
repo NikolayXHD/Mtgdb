@@ -10,10 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)package.bat" />
-    <None Include="$(MSBuildThisFileDirectory)scale images.bat" />
-    <None Include="$(MSBuildThisFileDirectory)select images.bat" />
+    <None Include="$(MSBuildThisFileDirectory)select-images.bat" />
     <None Include="$(MSBuildThisFileDirectory)shortcut.vbs" />
-    <None Include="$(MSBuildThisFileDirectory)sign images.bat" />
+    <None Include="$(MSBuildThisFileDirectory)sign-images.bat" />
     <None Include="$(MSBuildThisFileDirectory)subdir-util.bat" />
   </ItemGroup>
 </Project>

@@ -260,7 +260,7 @@ namespace Mtgdb.Gui
 				null);
 
 			var serialized = _serialization.SaveSerialized(deck, formatter);
-			Clipboard.SetText(serialized);
+			serialized.TryCopyToClipboard();
 		}
 
 		public void CopyDeck(IDeckFormatter formatter)
@@ -284,7 +284,7 @@ namespace Mtgdb.Gui
 			}
 
 			var serialized = _serialization.SaveSerialized(deck, formatter);
-			Clipboard.SetText(serialized);
+			serialized.TryCopyToClipboard();
 		}
 
 		private Deck copySampleHand() =>

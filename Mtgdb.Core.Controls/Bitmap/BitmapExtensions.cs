@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Reflection;
+using CustomScrollbar;
 
 namespace Mtgdb.Controls
 {
@@ -194,6 +194,19 @@ namespace Mtgdb.Controls
 			value = (Bitmap) value.Clone();
 			value.RotateFlip(transform);
 			return value;
+		}
+
+		public static Bitmap Shift(this Bitmap original, Point shift)
+		{
+			if (shift == default)
+				return original;
+
+			var result = new Bitmap(original.Width, original.Height);
+
+			using(var g = Graphics.FromImage(result))
+				g.DrawImage(original, new Rectangle(shift, original.Size), original.GetRect(), GraphicsUnit.Pixel);
+
+			return result;
 		}
 
 		private static void reThrow(Exception ex)

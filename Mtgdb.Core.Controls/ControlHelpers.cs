@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -162,6 +163,23 @@ namespace Mtgdb.Controls
 
 				c = child;
 			}
+		}
+
+		public static bool TryCopyToClipboard(this string selectedText)
+		{
+			if (!string.IsNullOrEmpty(selectedText))
+			{
+				try
+				{
+					Clipboard.SetText(selectedText);
+					return true;
+				}
+				catch (ExternalException)
+				{
+				}
+			}
+
+			return false;
 		}
 
 		private const int EmCharFromPos = 0x00D7;

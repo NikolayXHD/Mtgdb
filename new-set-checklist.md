@@ -6,10 +6,6 @@ Data
 
 Download new mtgjson.com file
 
-Download new translations from gatherer.wizards.com
-
-Download new prices
-
 Increase index versions for LuceneSearcher, LuceneSpellchecker, KeywordsSearcher
 
 Legalities
@@ -20,6 +16,12 @@ verify modern and standard legalities in data file
 if necessary fix the legalities using patch.json
 
 add new item XXX_block to legality dropdown if new set opens a new block
+
+New keywords
+------------
+
+Add new keywords to KeywordDefinitions.cs,
+keywords can be found at mtg.gamepedia.com
 
 Generated mana
 --------------
@@ -45,4 +47,18 @@ add them to config
 
 upload new images to mega storage
 
-create update notification for users
+Additional data
+---------------
+
+Download new translations from gatherer.wizards.com
+
+Download new prices
+
+Increase index versions for LuceneSearcher, LuceneSpellchecker, KeywordsSearcher
+
+Publish
+-------
+
+update release notes at https://github.com/NikolayXHD/Mtgdb/wiki/Release-notes
+
+run package.bat

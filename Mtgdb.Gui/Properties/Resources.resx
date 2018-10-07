@@ -127,9 +127,6 @@
   <data name="book_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\book_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="text_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\text_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="remove_one_collection" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\remove_one_collection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -202,9 +199,6 @@
   <data name="scroll_shown_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\scroll_shown_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="partial_card_disabled_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\partial_card_disabled_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="properties_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\properties_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -232,9 +226,6 @@
   <data name="remove_four" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\remove_four.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="scroll_hidden_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\scroll_hidden_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="undo_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\undo_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -246,9 +237,6 @@
   </data>
   <data name="legality_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Legality_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="filters_hide_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_hide_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="box_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Box_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -334,9 +322,6 @@
   <data name="cn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="filters_hide_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_hide_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="properties_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\properties_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -399,12 +384,6 @@
   </data>
   <data name="corner_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\corner_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="scroll_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\scroll_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="filters_show_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filters_show_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="art_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\art_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

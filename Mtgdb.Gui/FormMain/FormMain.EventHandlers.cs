@@ -675,9 +675,9 @@ namespace Mtgdb.Gui
 
 		private void setupCheckButtonImages()
 		{
-			_buttons.SetupButton(_buttonLegalityAllowLegal, new ButtonImages(null, x2: false));
-			_buttons.SetupButton(_buttonLegalityAllowRestricted, new ButtonImages(null, x2: false));
-			_buttons.SetupButton(_buttonLegalityAllowBanned, new ButtonImages(null, x2: false));
+			_buttons.SetupButton(_buttonLegalityAllowLegal, buttonImages: null);
+			_buttons.SetupButton(_buttonLegalityAllowRestricted, buttonImages: null);
+			_buttons.SetupButton(_buttonLegalityAllowBanned, buttonImages: null);
 
 			_buttons.SetupButton(_buttonSampleHandNew,
 				new ButtonImages(Resources.hand_48, x2: true));
@@ -703,7 +703,7 @@ namespace Mtgdb.Gui
 			_buttons.SetupButton(_buttonHideDeck,
 				new ButtonImages(Resources.shown_40, Resources.hidden_40, x2: true));
 
-			var scrollImages = new ButtonImages(Resources.scroll_hidden_40, Resources.scroll_shown_40, x2: true);
+			var scrollImages = new ButtonImages(Resources.scroll_shown_40, x2: true);
 			_buttons.SetupButton(_buttonShowScrollCards, scrollImages);
 			_buttons.SetupButton(_buttonShowScrollDeck, scrollImages);
 
