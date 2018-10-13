@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
 	public class LayoutOptions
 	{
+		public LayoutOptions()
+		{
+			AlignTopLeftIcon = Resources.corner_32;
+			AlignTopLeftHoveredIcon = Resources.corner_hovered_32;
+		}
+
 		private const Direction DefaultDirection = Direction.TopLeft;
 		public event Action Changed;
 

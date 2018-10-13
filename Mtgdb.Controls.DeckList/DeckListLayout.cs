@@ -64,6 +64,34 @@ namespace Mtgdb.Controls
 			DeckListLayoutCustomButtons.SetCustomButtons(this);
 
 			SubscribeToFieldEvents();
+
+			var labels = new[]
+			{
+				_labelCreature,
+				_labelLand,
+				_labelOtherSpell,
+
+				_labelMain,
+				_labelMainCollected,
+				_labelMainPercent,
+
+				_labelSide,
+				_labelSideCollected,
+				_labelSidePercent,
+
+				_labelPrice,
+				_labelCount,
+				_labelCountUnknown
+			};
+
+			foreach (var label in labels)
+				setupLabel(label);
+
+			void setupLabel(FieldControl label)
+			{
+				label.SearchOptions.Allow = false;
+				label.AllowSort = false;
+			}
 		}
 
 		protected override void LoadData(object dataSource)

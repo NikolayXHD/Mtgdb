@@ -7,6 +7,13 @@ namespace Mtgdb.Controls
 {
 	public class SortOptions
 	{
+		public SortOptions()
+		{
+			Icon = Properties.Resources.sort_none;
+			AscIcon = Properties.Resources.sort_asc;
+			DescIcon = Properties.Resources.sort_desc;
+		}
+
 		public bool IsButtonVisible(LayoutControl card, FieldControl field) =>
 			Allow && card.ShowSortButton(field);
 
@@ -72,8 +79,8 @@ namespace Mtgdb.Controls
 
 
 
-		[Category("Settings")]
-		[DefaultValue(null)]
+		private Bitmap _icon;
+		[Category("Settings"), DefaultValue(null)]
 		public Bitmap Icon
 		{
 			get => _icon;
@@ -84,8 +91,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(null)]
+		private Bitmap _ascIcon;
+		[Category("Settings"), DefaultValue(null)]
 		public Bitmap AscIcon
 		{
 			get => _ascIcon;
@@ -96,8 +103,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(null)]
+		private Bitmap _descIcon;
+		[Category("Settings"), DefaultValue(null)]
 		public Bitmap DescIcon
 		{
 			get => _descIcon;
@@ -119,11 +126,6 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Size), "2, 2")]
 		public Size ButtonMargin { get; set; } = new Size(2, 2);
 
-
-
-		private Bitmap _icon;
-		private Bitmap _ascIcon;
-		private Bitmap _descIcon;
 		private const float HotTrackOpacityDelta = 0.15f;
 	}
 }

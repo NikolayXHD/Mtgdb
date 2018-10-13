@@ -1058,8 +1058,6 @@ namespace Mtgdb.Gui
 			this._layoutViewCards.BackColor = System.Drawing.SystemColors.Window;
 			this._layoutMain.SetColumnSpan(this._layoutViewCards, 3);
 			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
-			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
-			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
 			layoutOptions1.AllowPartialCards = true;
 			layoutOptions1.CardInterval = new System.Drawing.Size(4, 2);
 			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(327, 209);
@@ -1067,7 +1065,6 @@ namespace Mtgdb.Gui
 			this._layoutViewCards.Location = new System.Drawing.Point(0, 58);
 			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
 			this._layoutViewCards.Name = "_layoutViewCards";
-			buttonOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.search_hovered;
 			buttonOptions1.Margin = new System.Drawing.Size(0, 0);
 			searchOptions1.Button = buttonOptions1;
 			this._layoutViewCards.SearchOptions = searchOptions1;
@@ -1079,10 +1076,6 @@ namespace Mtgdb.Gui
 			this._layoutViewCards.SelectionOptions = selectionOptions1;
 			this._layoutViewCards.Size = new System.Drawing.Size(1234, 163);
 			sortOptions1.Allow = true;
-			sortOptions1.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions1.ButtonMargin = new System.Drawing.Size(0, 0);
-			sortOptions1.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions1.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
 			this._layoutViewCards.SortOptions = sortOptions1;
 			this._layoutViewCards.TabIndex = 19;
 			this._layoutViewCards.TabStop = false;
@@ -1095,8 +1088,6 @@ namespace Mtgdb.Gui
 			this._layoutViewDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._layoutMain.SetColumnSpan(this._layoutViewDeck, 3);
 			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
-			layoutOptions2.AlignTopLeftHoveredIcon = global::Mtgdb.Gui.Properties.Resources.corner_hovered_32;
-			layoutOptions2.AlignTopLeftIcon = global::Mtgdb.Gui.Properties.Resources.corner_32;
 			layoutOptions2.AllowPartialCards = true;
 			layoutOptions2.CardInterval = new System.Drawing.Size(2, 0);
 			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(150, 209);
@@ -1115,9 +1106,6 @@ namespace Mtgdb.Gui
 			this._layoutViewDeck.SelectionOptions = selectionOptions2;
 			this._layoutViewDeck.Size = new System.Drawing.Size(1234, 311);
 			sortOptions2.Allow = true;
-			sortOptions2.AscIcon = global::Mtgdb.Gui.Properties.Resources.sort_asc_hovered;
-			sortOptions2.DescIcon = global::Mtgdb.Gui.Properties.Resources.sort_desc_hovered;
-			sortOptions2.Icon = global::Mtgdb.Gui.Properties.Resources.sort_none_hovered;
 			this._layoutViewDeck.SortOptions = sortOptions2;
 			this._layoutViewDeck.TabIndex = 42;
 			this._layoutViewDeck.TabStop = false;

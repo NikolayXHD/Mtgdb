@@ -143,16 +143,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap book_40_hovered {
-            get {
-                object obj = ResourceManager.GetObject("book_40_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap box_48 {
             get {
                 object obj = ResourceManager.GetObject("box_48", resourceCulture);
@@ -216,26 +206,6 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap color_swatch_32 {
             get {
                 object obj = ResourceManager.GetObject("color_swatch_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap corner_32 {
-            get {
-                object obj = ResourceManager.GetObject("corner_32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap corner_hovered_32 {
-            get {
-                object obj = ResourceManager.GetObject("corner_hovered_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -793,16 +763,6 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap search_hovered {
-            get {
-                object obj = ResourceManager.GetObject("search_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap search_like_hovered_32 {
             get {
                 object obj = ResourceManager.GetObject("search_like_hovered_32", resourceCulture);
@@ -826,36 +786,6 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap sort_48 {
             get {
                 object obj = ResourceManager.GetObject("sort_48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_asc_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_asc_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_desc_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_desc_hovered", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sort_none_hovered {
-            get {
-                object obj = ResourceManager.GetObject("sort_none_hovered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

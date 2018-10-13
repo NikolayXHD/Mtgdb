@@ -98,9 +98,9 @@ namespace Mtgdb.Gui
 
 			_sortIconsOrder = new[]
 			{
-				Resources.sort_none_hovered.HalfResizeDpi(),
-				Resources.sort_asc_hovered.HalfResizeDpi(),
-				Resources.sort_desc_hovered.HalfResizeDpi()
+				LayoutControlBitmaps.SortNone.HalfResizeDpi(),
+				LayoutControlBitmaps.SortAsc.HalfResizeDpi(),
+				LayoutControlBitmaps.SortDesc.HalfResizeDpi()
 			};
 
 			_aggregateIconsOrder = new[]

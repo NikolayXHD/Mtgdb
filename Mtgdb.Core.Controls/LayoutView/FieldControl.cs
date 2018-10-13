@@ -252,8 +252,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool AllowSort { get; set; } = true;
 
-		[Category("Settings")]
-		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SearchOptions SearchOptions { get; set; } = new SearchOptions();
 
 		[Category("Settings"), DefaultValue(typeof(Color), "Window")]

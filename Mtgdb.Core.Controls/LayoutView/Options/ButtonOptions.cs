@@ -23,6 +23,7 @@ namespace Mtgdb.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap IconTransp { get; set; }
 
+		private Bitmap _icon;
 		[Category("Settings")]
 		[DefaultValue(null)]
 		public Bitmap Icon
@@ -50,7 +51,6 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public bool? ShowOnlyWhenHotTracked { get; set; }
 
-		private Bitmap _icon;
-		private const float HotTrackOpacityDelta = 0.3f;
+		private const float HotTrackOpacityDelta = 0.2f;
 	}
 }

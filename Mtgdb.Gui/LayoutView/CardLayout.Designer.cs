@@ -48,44 +48,6 @@ namespace Mtgdb.Gui
 
 		private void InitializeComponent()
 		{
-			Mtgdb.Controls.SearchOptions searchOptions19 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions19 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions2 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions4 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions4 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions6 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions6 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions8 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions8 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions12 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions12 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions10 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions10 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions14 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions14 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions16 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions16 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions18 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions18 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions17 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions17 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions15 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions15 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions13 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions13 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions11 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions11 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions9 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions9 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions7 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions7 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions5 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions5 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions3 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions3 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
 			this._fieldImage = new Mtgdb.Controls.FieldControl();
 			this._fieldName = new Mtgdb.Controls.FieldControl();
 			this._fieldManaCost = new Mtgdb.Controls.FieldControl();
@@ -117,8 +79,6 @@ namespace Mtgdb.Gui
 			this._fieldImage.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldImage.Name = "_fieldImage";
 			this._layout.SetRowSpan(this._fieldImage, 8);
-			searchOptions19.Button = buttonOptions19;
-			this._fieldImage.SearchOptions = searchOptions19;
 			this._fieldImage.Size = new System.Drawing.Size(223, 311);
 			this._fieldImage.TabIndex = 0;
 			//
@@ -131,8 +91,6 @@ namespace Mtgdb.Gui
 			this._fieldName.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldName.Name = "_fieldName";
 			this._fieldName.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions2.Button = buttonOptions2;
-			this._fieldName.SearchOptions = searchOptions2;
 			this._fieldName.Size = new System.Drawing.Size(111, 19);
 			this._fieldName.TabIndex = 1;
 			//
@@ -147,8 +105,6 @@ namespace Mtgdb.Gui
 			this._fieldManaCost.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldManaCost.Name = "_fieldManaCost";
 			this._fieldManaCost.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions4.Button = buttonOptions4;
-			this._fieldManaCost.SearchOptions = searchOptions4;
 			this._fieldManaCost.Size = new System.Drawing.Size(110, 19);
 			this._fieldManaCost.TabIndex = 2;
 			//
@@ -161,8 +117,6 @@ namespace Mtgdb.Gui
 			this._fieldCmc.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCmc.Name = "_fieldCmc";
 			this._fieldCmc.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions6.Button = buttonOptions6;
-			this._fieldCmc.SearchOptions = searchOptions6;
 			this._fieldCmc.Size = new System.Drawing.Size(38, 19);
 			this._fieldCmc.TabIndex = 3;
 			//
@@ -175,8 +129,6 @@ namespace Mtgdb.Gui
 			this._fieldType.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldType.Name = "_fieldType";
 			this._fieldType.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions8.Button = buttonOptions8;
-			this._fieldType.SearchOptions = searchOptions8;
 			this._fieldType.Size = new System.Drawing.Size(183, 19);
 			this._fieldType.TabIndex = 4;
 			//
@@ -189,8 +141,6 @@ namespace Mtgdb.Gui
 			this._fieldSetName.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSetName.Name = "_fieldSetName";
 			this._fieldSetName.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions12.Button = buttonOptions12;
-			this._fieldSetName.SearchOptions = searchOptions12;
 			this._fieldSetName.Size = new System.Drawing.Size(187, 19);
 			this._fieldSetName.TabIndex = 5;
 			//
@@ -202,8 +152,6 @@ namespace Mtgdb.Gui
 			this._fieldSetCode.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldSetCode.Name = "_fieldSetCode";
 			this._fieldSetCode.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions10.Button = buttonOptions10;
-			this._fieldSetCode.SearchOptions = searchOptions10;
 			this._fieldSetCode.Size = new System.Drawing.Size(34, 19);
 			this._fieldSetCode.TabIndex = 6;
 			//
@@ -216,8 +164,6 @@ namespace Mtgdb.Gui
 			this._fieldText.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldText.Name = "_fieldText";
 			this._fieldText.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions14.Button = buttonOptions14;
-			this._fieldText.SearchOptions = searchOptions14;
 			this._fieldText.Size = new System.Drawing.Size(221, 130);
 			this._fieldText.TabIndex = 7;
 			//
@@ -231,8 +177,6 @@ namespace Mtgdb.Gui
 			this._fieldFlavor.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldFlavor.Name = "_fieldFlavor";
 			this._fieldFlavor.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions16.Button = buttonOptions16;
-			this._fieldFlavor.SearchOptions = searchOptions16;
 			this._fieldFlavor.Size = new System.Drawing.Size(221, 40);
 			this._fieldFlavor.TabIndex = 8;
 			//
@@ -246,8 +190,6 @@ namespace Mtgdb.Gui
 			this._fieldArtist.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldArtist.Name = "_fieldArtist";
 			this._fieldArtist.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions18.Button = buttonOptions18;
-			this._fieldArtist.SearchOptions = searchOptions18;
 			this._fieldArtist.Size = new System.Drawing.Size(75, 19);
 			this._fieldArtist.TabIndex = 9;
 			//
@@ -260,8 +202,6 @@ namespace Mtgdb.Gui
 			this._fieldReleaseDate.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldReleaseDate.Name = "_fieldReleaseDate";
 			this._fieldReleaseDate.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions17.Button = buttonOptions17;
-			this._fieldReleaseDate.SearchOptions = searchOptions17;
 			this._fieldReleaseDate.Size = new System.Drawing.Size(72, 19);
 			this._fieldReleaseDate.TabIndex = 10;
 			//
@@ -274,8 +214,6 @@ namespace Mtgdb.Gui
 			this._fieldRarity.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldRarity.Name = "_fieldRarity";
 			this._fieldRarity.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions15.Button = buttonOptions15;
-			this._fieldRarity.SearchOptions = searchOptions15;
 			this._fieldRarity.Size = new System.Drawing.Size(74, 19);
 			this._fieldRarity.TabIndex = 11;
 			//
@@ -288,8 +226,6 @@ namespace Mtgdb.Gui
 			this._fieldPricingLow.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldPricingLow.Name = "_fieldPricingLow";
 			this._fieldPricingLow.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions13.Button = buttonOptions13;
-			this._fieldPricingLow.SearchOptions = searchOptions13;
 			this._fieldPricingLow.Size = new System.Drawing.Size(34, 19);
 			this._fieldPricingLow.TabIndex = 12;
 			//
@@ -302,8 +238,6 @@ namespace Mtgdb.Gui
 			this._fieldPricingMid.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingMid.Name = "_fieldPricingMid";
 			this._fieldPricingMid.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions11.Button = buttonOptions11;
-			this._fieldPricingMid.SearchOptions = searchOptions11;
 			this._fieldPricingMid.Size = new System.Drawing.Size(41, 19);
 			this._fieldPricingMid.TabIndex = 13;
 			//
@@ -316,8 +250,6 @@ namespace Mtgdb.Gui
 			this._fieldPricingHigh.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPricingHigh.Name = "_fieldPricingHigh";
 			this._fieldPricingHigh.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions9.Button = buttonOptions9;
-			this._fieldPricingHigh.SearchOptions = searchOptions9;
 			this._fieldPricingHigh.Size = new System.Drawing.Size(36, 19);
 			this._fieldPricingHigh.TabIndex = 14;
 			//
@@ -329,8 +261,6 @@ namespace Mtgdb.Gui
 			this._fieldLoyalty.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLoyalty.Name = "_fieldLoyalty";
 			this._fieldLoyalty.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions7.Button = buttonOptions7;
-			this._fieldLoyalty.SearchOptions = searchOptions7;
 			this._fieldLoyalty.Size = new System.Drawing.Size(36, 19);
 			this._fieldLoyalty.TabIndex = 15;
 			//
@@ -342,8 +272,6 @@ namespace Mtgdb.Gui
 			this._fieldPower.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldPower.Name = "_fieldPower";
 			this._fieldPower.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions5.Button = buttonOptions5;
-			this._fieldPower.SearchOptions = searchOptions5;
 			this._fieldPower.Size = new System.Drawing.Size(36, 19);
 			this._fieldPower.TabIndex = 16;
 			//
@@ -355,8 +283,6 @@ namespace Mtgdb.Gui
 			this._fieldToughness.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldToughness.Name = "_fieldToughness";
 			this._fieldToughness.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions3.Button = buttonOptions3;
-			this._fieldToughness.SearchOptions = searchOptions3;
 			this._fieldToughness.Size = new System.Drawing.Size(38, 19);
 			this._fieldToughness.TabIndex = 17;
 			//
@@ -370,8 +296,6 @@ namespace Mtgdb.Gui
 			this._fieldRulings.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._fieldRulings.Name = "_fieldRulings";
 			this._fieldRulings.Padding = new System.Windows.Forms.Padding(2);
-			searchOptions1.Button = buttonOptions1;
-			this._fieldRulings.SearchOptions = searchOptions1;
 			this._fieldRulings.Size = new System.Drawing.Size(221, 46);
 			this._fieldRulings.TabIndex = 18;
 			//

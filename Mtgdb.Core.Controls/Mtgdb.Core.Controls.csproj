@@ -80,6 +80,7 @@
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
     <Compile Include="ColorScheme\ColorSchemeEditor.cs" />
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
+    <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />

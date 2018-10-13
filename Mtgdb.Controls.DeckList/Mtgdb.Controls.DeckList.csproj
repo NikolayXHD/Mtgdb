@@ -172,73 +172,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Resources\Add_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Add_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Remove_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Remove_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Rename_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Rename_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\search_40.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\creature.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\instant.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\land.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\deckbox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\corner_hovered_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\corner_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\deckbox_opened.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\text_selection_24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sort_asc_hovered.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sort_desc_hovered.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sort_none_hovered.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sort_48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_transformed_16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open_transformed_32.png" />
+    <Folder Include="Resources" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

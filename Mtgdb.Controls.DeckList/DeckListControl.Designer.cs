@@ -193,8 +193,6 @@ namespace Mtgdb.Controls
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._viewDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._panelLayout.SetColumnSpan(this._viewDeck, 5);
-			layoutOptions1.AlignTopLeftHoveredIcon = global::Mtgdb.Controls.Properties.Resources.corner_hovered_32;
-			layoutOptions1.AlignTopLeftIcon = global::Mtgdb.Controls.Properties.Resources.corner_32;
 			layoutOptions1.AllowPartialCards = true;
 			layoutOptions1.CardInterval = new System.Drawing.Size(2, 0);
 			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(150, 0);
@@ -208,10 +206,7 @@ namespace Mtgdb.Controls
 			this._viewDeck.SelectionOptions = selectionOptions1;
 			this._viewDeck.Size = new System.Drawing.Size(732, 287);
 			sortOptions1.Allow = true;
-			sortOptions1.AscIcon = global::Mtgdb.Controls.Properties.Resources.sort_asc_hovered;
 			sortOptions1.ButtonMargin = new System.Drawing.Size(0, 0);
-			sortOptions1.DescIcon = global::Mtgdb.Controls.Properties.Resources.sort_desc_hovered;
-			sortOptions1.Icon = global::Mtgdb.Controls.Properties.Resources.sort_none_hovered;
 			this._viewDeck.SortOptions = sortOptions1;
 			this._viewDeck.TabIndex = 2;
 			//

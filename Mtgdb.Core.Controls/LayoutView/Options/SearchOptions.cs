@@ -4,6 +4,14 @@ namespace Mtgdb.Controls
 {
 	public class SearchOptions
 	{
+		public SearchOptions()
+		{
+			Button = new ButtonOptions
+			{
+				Icon = Properties.Resources.search
+			};
+		}
+
 		public SearchOptions Clone()
 		{
 			return new SearchOptions
@@ -19,7 +27,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
-		public ButtonOptions Button { get; set; } = new ButtonOptions();
+		public ButtonOptions Button { get; set; }
 
 		public ButtonLayout GetButtonLayout(FieldControl field)
 		{

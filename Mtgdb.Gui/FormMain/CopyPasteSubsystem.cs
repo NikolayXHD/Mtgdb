@@ -116,7 +116,7 @@ namespace Mtgdb.Gui
 				return true;
 			}
 
-			bool wereAddedToCurrentLoadingProcess(string[] toAdd)
+			(bool LoadingInProgress, bool Added) addFilesToLoad(string[] toAdd)
 			{
 				lock (_sync)
 				{
@@ -130,8 +130,8 @@ namespace Mtgdb.Gui
 							actualFiles = Sequence.From<(string File, string Dir)>((path, null));
 						else if (Directory.Exists(path))
 							actualFiles = _serialization.ImportedFilePatterns
-								.SelectMany(pattern => Directory.GetFiles(path, pattern))
-								.Select(file => (file, path));
+								.SelectMany(pattern => Directory.GetFiles(path, pattern, SearchOption.AllDirectories))
+								.Select(file => (file, Path.GetDirectoryName(file)));
 						else
 							actualFiles = Empty<(string File, string Dir)>.Sequence;
 
@@ -142,16 +142,21 @@ namespace Mtgdb.Gui
 						}
 					}
 
-					if (inProgress)
-						_deckListControl.ContinueLoadingDecks(_filesToLoad.Count);
-					else
-						_deckListControl.BeginLoadingDecks(_filesToLoad.Count);
+					if (_filesToLoad.Count > 0)
+					{
+						if (inProgress)
+							_deckListControl.ContinueLoadingDecks(_filesToLoad.Count);
+						else
+							_deckListControl.BeginLoadingDecks(_filesToLoad.Count);
+					}
 
-					return inProgress;
+					return (inProgress, _filesToLoad.Count > 0);
 				}
 			}
 
-			if (wereAddedToCurrentLoadingProcess(files))
+			var (loadingInProgress, added) = addFilesToLoad(files);
+
+			if (loadingInProgress || !added)
 				return;
 
 			ThreadPool.QueueUserWorkItem(_ =>

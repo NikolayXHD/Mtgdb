@@ -24,92 +24,6 @@
 
 		private void InitializeComponent()
 		{
-			Mtgdb.Controls.SearchOptions searchOptions43 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions43 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions3 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions3 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions4 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions4 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions1 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions1 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions2 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions2 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions5 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions5 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions6 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions6 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions7 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions7 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions8 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions8 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions9 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions9 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions10 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions10 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions11 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions11 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions12 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions12 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions13 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions13 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions14 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions14 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions15 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions15 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions16 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions16 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions17 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions17 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions18 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions18 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions19 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions19 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions20 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions20 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions21 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions21 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions22 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions22 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions23 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions23 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions24 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions24 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions25 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions25 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions26 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions26 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions27 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions27 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions28 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions28 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions29 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions29 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions30 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions30 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions31 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions31 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions32 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions32 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions33 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions33 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions34 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions34 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions35 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions35 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions36 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions36 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions37 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions37 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions38 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions38 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions39 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions39 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions40 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions40 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions41 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions41 = new Mtgdb.Controls.ButtonOptions();
-			Mtgdb.Controls.SearchOptions searchOptions42 = new Mtgdb.Controls.SearchOptions();
-			Mtgdb.Controls.ButtonOptions buttonOptions42 = new Mtgdb.Controls.ButtonOptions();
 			this.FieldName = new Mtgdb.Controls.FieldControl();
 			this._fieldMainCount = new Mtgdb.Controls.FieldControl();
 			this._fieldSideCount = new Mtgdb.Controls.FieldControl();
@@ -169,8 +83,6 @@
 			this.FieldName.Location = new System.Drawing.Point(5, 37);
 			this.FieldName.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this.FieldName.Name = "FieldName";
-			searchOptions43.Button = buttonOptions43;
-			this.FieldName.SearchOptions = searchOptions43;
 			this.FieldName.Size = new System.Drawing.Size(213, 46);
 			this.FieldName.TabIndex = 0;
 			//
@@ -185,8 +97,6 @@
 			this._fieldMainCount.Location = new System.Drawing.Point(66, 198);
 			this._fieldMainCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCount.Name = "_fieldMainCount";
-			searchOptions3.Button = buttonOptions3;
-			this._fieldMainCount.SearchOptions = searchOptions3;
 			this._fieldMainCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCount.TabIndex = 1;
 			//
@@ -200,8 +110,6 @@
 			this._fieldSideCount.Location = new System.Drawing.Point(66, 240);
 			this._fieldSideCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCount.Name = "_fieldSideCount";
-			searchOptions4.Button = buttonOptions4;
-			this._fieldSideCount.SearchOptions = searchOptions4;
 			this._fieldSideCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCount.TabIndex = 2;
 			//
@@ -215,8 +123,6 @@
 			this._fieldLandCount.Location = new System.Drawing.Point(66, 156);
 			this._fieldLandCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLandCount.Name = "_fieldLandCount";
-			searchOptions1.Button = buttonOptions1;
-			this._fieldLandCount.SearchOptions = searchOptions1;
 			this._fieldLandCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldLandCount.TabIndex = 3;
 			//
@@ -231,8 +137,6 @@
 			this._fieldCreatureCount.Location = new System.Drawing.Point(66, 170);
 			this._fieldCreatureCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCreatureCount.Name = "_fieldCreatureCount";
-			searchOptions2.Button = buttonOptions2;
-			this._fieldCreatureCount.SearchOptions = searchOptions2;
 			this._fieldCreatureCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldCreatureCount.TabIndex = 4;
 			//
@@ -246,8 +150,6 @@
 			this._fieldOtherCount.Location = new System.Drawing.Point(66, 184);
 			this._fieldOtherCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldOtherCount.Name = "_fieldOtherCount";
-			searchOptions5.Button = buttonOptions5;
-			this._fieldOtherCount.SearchOptions = searchOptions5;
 			this._fieldOtherCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldOtherCount.TabIndex = 5;
 			//
@@ -337,9 +239,6 @@
 			this._labelOtherSpell.Location = new System.Drawing.Point(10, 184);
 			this._labelOtherSpell.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelOtherSpell.Name = "_labelOtherSpell";
-			searchOptions6.Allow = false;
-			searchOptions6.Button = buttonOptions6;
-			this._labelOtherSpell.SearchOptions = searchOptions6;
 			this._labelOtherSpell.Size = new System.Drawing.Size(56, 14);
 			this._labelOtherSpell.TabIndex = 18;
 			//
@@ -357,9 +256,6 @@
 			this._labelCreature.Location = new System.Drawing.Point(10, 170);
 			this._labelCreature.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelCreature.Name = "_labelCreature";
-			searchOptions7.Allow = false;
-			searchOptions7.Button = buttonOptions7;
-			this._labelCreature.SearchOptions = searchOptions7;
 			this._labelCreature.Size = new System.Drawing.Size(56, 14);
 			this._labelCreature.TabIndex = 17;
 			//
@@ -376,9 +272,6 @@
 			this._labelLand.Location = new System.Drawing.Point(10, 156);
 			this._labelLand.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelLand.Name = "_labelLand";
-			searchOptions8.Allow = false;
-			searchOptions8.Button = buttonOptions8;
-			this._labelLand.SearchOptions = searchOptions8;
 			this._labelLand.Size = new System.Drawing.Size(56, 14);
 			this._labelLand.TabIndex = 16;
 			//
@@ -394,9 +287,6 @@
 			this._labelCount.Location = new System.Drawing.Point(66, 142);
 			this._labelCount.Margin = new System.Windows.Forms.Padding(0);
 			this._labelCount.Name = "_labelCount";
-			searchOptions9.Allow = false;
-			searchOptions9.Button = buttonOptions9;
-			this._labelCount.SearchOptions = searchOptions9;
 			this._labelCount.Size = new System.Drawing.Size(44, 14);
 			this._labelCount.TabIndex = 19;
 			//
@@ -413,9 +303,6 @@
 			this._labelMain.Location = new System.Drawing.Point(10, 198);
 			this._labelMain.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMain.Name = "_labelMain";
-			searchOptions10.Allow = false;
-			searchOptions10.Button = buttonOptions10;
-			this._labelMain.SearchOptions = searchOptions10;
 			this._labelMain.Size = new System.Drawing.Size(56, 14);
 			this._labelMain.TabIndex = 22;
 			//
@@ -431,9 +318,6 @@
 			this._labelMainCollected.Location = new System.Drawing.Point(10, 212);
 			this._labelMainCollected.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMainCollected.Name = "_labelMainCollected";
-			searchOptions11.Allow = false;
-			searchOptions11.Button = buttonOptions11;
-			this._labelMainCollected.SearchOptions = searchOptions11;
 			this._labelMainCollected.Size = new System.Drawing.Size(56, 14);
 			this._labelMainCollected.TabIndex = 23;
 			//
@@ -450,9 +334,6 @@
 			this._labelMainPercent.Location = new System.Drawing.Point(10, 226);
 			this._labelMainPercent.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelMainPercent.Name = "_labelMainPercent";
-			searchOptions12.Allow = false;
-			searchOptions12.Button = buttonOptions12;
-			this._labelMainPercent.SearchOptions = searchOptions12;
 			this._labelMainPercent.Size = new System.Drawing.Size(56, 14);
 			this._labelMainPercent.TabIndex = 24;
 			//
@@ -469,9 +350,6 @@
 			this._labelSideCollected.Location = new System.Drawing.Point(10, 254);
 			this._labelSideCollected.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelSideCollected.Name = "_labelSideCollected";
-			searchOptions13.Allow = false;
-			searchOptions13.Button = buttonOptions13;
-			this._labelSideCollected.SearchOptions = searchOptions13;
 			this._labelSideCollected.Size = new System.Drawing.Size(56, 14);
 			this._labelSideCollected.TabIndex = 25;
 			//
@@ -487,9 +365,6 @@
 			this._labelSide.Location = new System.Drawing.Point(10, 240);
 			this._labelSide.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this._labelSide.Name = "_labelSide";
-			searchOptions14.Allow = false;
-			searchOptions14.Button = buttonOptions14;
-			this._labelSide.SearchOptions = searchOptions14;
 			this._labelSide.Size = new System.Drawing.Size(56, 14);
 			this._labelSide.TabIndex = 26;
 			//
@@ -504,8 +379,6 @@
 			this._fieldMainPrice.Location = new System.Drawing.Point(110, 198);
 			this._fieldMainPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainPrice.Name = "_fieldMainPrice";
-			searchOptions15.Button = buttonOptions15;
-			this._fieldMainPrice.SearchOptions = searchOptions15;
 			this._fieldMainPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainPrice.TabIndex = 28;
 			//
@@ -519,8 +392,6 @@
 			this._fieldMainCollectedCount.Location = new System.Drawing.Point(66, 212);
 			this._fieldMainCollectedCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedCount.Name = "_fieldMainCollectedCount";
-			searchOptions16.Button = buttonOptions16;
-			this._fieldMainCollectedCount.SearchOptions = searchOptions16;
 			this._fieldMainCollectedCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedCount.TabIndex = 30;
 			//
@@ -534,8 +405,6 @@
 			this._fieldMainCollectedPrice.Location = new System.Drawing.Point(110, 212);
 			this._fieldMainCollectedPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedPrice.Name = "_fieldMainCollectedPrice";
-			searchOptions17.Button = buttonOptions17;
-			this._fieldMainCollectedPrice.SearchOptions = searchOptions17;
 			this._fieldMainCollectedPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedPrice.TabIndex = 31;
 			//
@@ -549,8 +418,6 @@
 			this._fieldMainCollectedUnknownPrice.Location = new System.Drawing.Point(154, 212);
 			this._fieldMainCollectedUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainCollectedUnknownPrice.Name = "_fieldMainCollectedUnknownPrice";
-			searchOptions18.Button = buttonOptions18;
-			this._fieldMainCollectedUnknownPrice.SearchOptions = searchOptions18;
 			this._fieldMainCollectedUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainCollectedUnknownPrice.TabIndex = 32;
 			//
@@ -565,8 +432,6 @@
 			this._fieldMainCollectedCountPercent.Location = new System.Drawing.Point(66, 226);
 			this._fieldMainCollectedCountPercent.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedCountPercent.Name = "_fieldMainCollectedCountPercent";
-			searchOptions19.Button = buttonOptions19;
-			this._fieldMainCollectedCountPercent.SearchOptions = searchOptions19;
 			this._fieldMainCollectedCountPercent.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedCountPercent.TabIndex = 33;
 			//
@@ -581,8 +446,6 @@
 			this._fieldMainCollectedPricePercent.Location = new System.Drawing.Point(110, 226);
 			this._fieldMainCollectedPricePercent.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldMainCollectedPricePercent.Name = "_fieldMainCollectedPricePercent";
-			searchOptions20.Button = buttonOptions20;
-			this._fieldMainCollectedPricePercent.SearchOptions = searchOptions20;
 			this._fieldMainCollectedPricePercent.Size = new System.Drawing.Size(44, 14);
 			this._fieldMainCollectedPricePercent.TabIndex = 34;
 			//
@@ -597,8 +460,6 @@
 			this._fieldMainCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 226);
 			this._fieldMainCollectedUnknownPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainCollectedUnknownPricePercent.Name = "_fieldMainCollectedUnknownPricePercent";
-			searchOptions21.Button = buttonOptions21;
-			this._fieldMainCollectedUnknownPricePercent.SearchOptions = searchOptions21;
 			this._fieldMainCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainCollectedUnknownPricePercent.TabIndex = 35;
 			//
@@ -612,8 +473,6 @@
 			this._fieldSidePrice.Location = new System.Drawing.Point(110, 240);
 			this._fieldSidePrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSidePrice.Name = "_fieldSidePrice";
-			searchOptions22.Button = buttonOptions22;
-			this._fieldSidePrice.SearchOptions = searchOptions22;
 			this._fieldSidePrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldSidePrice.TabIndex = 36;
 			//
@@ -627,8 +486,6 @@
 			this._fieldSideUnknownPrice.Location = new System.Drawing.Point(154, 240);
 			this._fieldSideUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldSideUnknownPrice.Name = "_fieldSideUnknownPrice";
-			searchOptions23.Button = buttonOptions23;
-			this._fieldSideUnknownPrice.SearchOptions = searchOptions23;
 			this._fieldSideUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldSideUnknownPrice.TabIndex = 37;
 			//
@@ -643,8 +500,6 @@
 			this._fieldSideCollectedCount.Location = new System.Drawing.Point(66, 254);
 			this._fieldSideCollectedCount.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCollectedCount.Name = "_fieldSideCollectedCount";
-			searchOptions24.Button = buttonOptions24;
-			this._fieldSideCollectedCount.SearchOptions = searchOptions24;
 			this._fieldSideCollectedCount.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCollectedCount.TabIndex = 38;
 			//
@@ -659,8 +514,6 @@
 			this._fieldSideCollectedPrice.Location = new System.Drawing.Point(110, 254);
 			this._fieldSideCollectedPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldSideCollectedPrice.Name = "_fieldSideCollectedPrice";
-			searchOptions25.Button = buttonOptions25;
-			this._fieldSideCollectedPrice.SearchOptions = searchOptions25;
 			this._fieldSideCollectedPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldSideCollectedPrice.TabIndex = 39;
 			//
@@ -675,8 +528,6 @@
 			this._fieldSideCollectedUnknownPrice.Location = new System.Drawing.Point(154, 254);
 			this._fieldSideCollectedUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldSideCollectedUnknownPrice.Name = "_fieldSideCollectedUnknownPrice";
-			searchOptions26.Button = buttonOptions26;
-			this._fieldSideCollectedUnknownPrice.SearchOptions = searchOptions26;
 			this._fieldSideCollectedUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldSideCollectedUnknownPrice.TabIndex = 40;
 			//
@@ -690,8 +541,6 @@
 			this._fieldSideCollectedUnknownPricePercent.Location = new System.Drawing.Point(154, 268);
 			this._fieldSideCollectedUnknownPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 10, 5);
 			this._fieldSideCollectedUnknownPricePercent.Name = "_fieldSideCollectedUnknownPricePercent";
-			searchOptions27.Button = buttonOptions27;
-			this._fieldSideCollectedUnknownPricePercent.SearchOptions = searchOptions27;
 			this._fieldSideCollectedUnknownPricePercent.Size = new System.Drawing.Size(59, 15);
 			this._fieldSideCollectedUnknownPricePercent.TabIndex = 41;
 			//
@@ -705,8 +554,6 @@
 			this._fieldSideCollectedPricePercent.Location = new System.Drawing.Point(110, 268);
 			this._fieldSideCollectedPricePercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this._fieldSideCollectedPricePercent.Name = "_fieldSideCollectedPricePercent";
-			searchOptions28.Button = buttonOptions28;
-			this._fieldSideCollectedPricePercent.SearchOptions = searchOptions28;
 			this._fieldSideCollectedPricePercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedPricePercent.TabIndex = 42;
 			//
@@ -722,9 +569,6 @@
 			this._labelSidePercent.Location = new System.Drawing.Point(10, 268);
 			this._labelSidePercent.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
 			this._labelSidePercent.Name = "_labelSidePercent";
-			searchOptions29.Allow = false;
-			searchOptions29.Button = buttonOptions29;
-			this._labelSidePercent.SearchOptions = searchOptions29;
 			this._labelSidePercent.Size = new System.Drawing.Size(56, 15);
 			this._labelSidePercent.TabIndex = 27;
 			//
@@ -739,8 +583,6 @@
 			this._fieldMainUnknownPrice.Location = new System.Drawing.Point(154, 198);
 			this._fieldMainUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldMainUnknownPrice.Name = "_fieldMainUnknownPrice";
-			searchOptions30.Button = buttonOptions30;
-			this._fieldMainUnknownPrice.SearchOptions = searchOptions30;
 			this._fieldMainUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldMainUnknownPrice.TabIndex = 29;
 			//
@@ -756,9 +598,6 @@
 			this._labelPrice.Location = new System.Drawing.Point(110, 142);
 			this._labelPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._labelPrice.Name = "_labelPrice";
-			searchOptions31.Allow = false;
-			searchOptions31.Button = buttonOptions31;
-			this._labelPrice.SearchOptions = searchOptions31;
 			this._labelPrice.Size = new System.Drawing.Size(44, 14);
 			this._labelPrice.TabIndex = 20;
 			//
@@ -774,9 +613,6 @@
 			this._labelCountUnknown.Location = new System.Drawing.Point(154, 142);
 			this._labelCountUnknown.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._labelCountUnknown.Name = "_labelCountUnknown";
-			searchOptions32.Allow = false;
-			searchOptions32.Button = buttonOptions32;
-			this._labelCountUnknown.SearchOptions = searchOptions32;
 			this._labelCountUnknown.Size = new System.Drawing.Size(59, 14);
 			this._labelCountUnknown.TabIndex = 21;
 			//
@@ -791,8 +627,6 @@
 			this._fieldCreaturePrice.Location = new System.Drawing.Point(110, 170);
 			this._fieldCreaturePrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldCreaturePrice.Name = "_fieldCreaturePrice";
-			searchOptions33.Button = buttonOptions33;
-			this._fieldCreaturePrice.SearchOptions = searchOptions33;
 			this._fieldCreaturePrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldCreaturePrice.TabIndex = 45;
 			//
@@ -807,8 +641,6 @@
 			this._fieldCreatureUnknownPrice.Location = new System.Drawing.Point(154, 170);
 			this._fieldCreatureUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldCreatureUnknownPrice.Name = "_fieldCreatureUnknownPrice";
-			searchOptions34.Button = buttonOptions34;
-			this._fieldCreatureUnknownPrice.SearchOptions = searchOptions34;
 			this._fieldCreatureUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldCreatureUnknownPrice.TabIndex = 46;
 			//
@@ -822,8 +654,6 @@
 			this._fieldLandPrice.Location = new System.Drawing.Point(110, 156);
 			this._fieldLandPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldLandPrice.Name = "_fieldLandPrice";
-			searchOptions35.Button = buttonOptions35;
-			this._fieldLandPrice.SearchOptions = searchOptions35;
 			this._fieldLandPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldLandPrice.TabIndex = 47;
 			//
@@ -837,8 +667,6 @@
 			this._fieldLandUnknownPrice.Location = new System.Drawing.Point(154, 156);
 			this._fieldLandUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldLandUnknownPrice.Name = "_fieldLandUnknownPrice";
-			searchOptions36.Button = buttonOptions36;
-			this._fieldLandUnknownPrice.SearchOptions = searchOptions36;
 			this._fieldLandUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldLandUnknownPrice.TabIndex = 48;
 			//
@@ -852,8 +680,6 @@
 			this._fieldOtherPrice.Location = new System.Drawing.Point(110, 184);
 			this._fieldOtherPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._fieldOtherPrice.Name = "_fieldOtherPrice";
-			searchOptions37.Button = buttonOptions37;
-			this._fieldOtherPrice.SearchOptions = searchOptions37;
 			this._fieldOtherPrice.Size = new System.Drawing.Size(44, 14);
 			this._fieldOtherPrice.TabIndex = 49;
 			//
@@ -867,8 +693,6 @@
 			this._fieldOtherUnknownPrice.Location = new System.Drawing.Point(154, 184);
 			this._fieldOtherUnknownPrice.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
 			this._fieldOtherUnknownPrice.Name = "_fieldOtherUnknownPrice";
-			searchOptions38.Button = buttonOptions38;
-			this._fieldOtherUnknownPrice.SearchOptions = searchOptions38;
 			this._fieldOtherUnknownPrice.Size = new System.Drawing.Size(59, 14);
 			this._fieldOtherUnknownPrice.TabIndex = 50;
 			//
@@ -882,8 +706,6 @@
 			this._fieldSideCollectedCountPercent.Location = new System.Drawing.Point(66, 268);
 			this._fieldSideCollectedCountPercent.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this._fieldSideCollectedCountPercent.Name = "_fieldSideCollectedCountPercent";
-			searchOptions39.Button = buttonOptions39;
-			this._fieldSideCollectedCountPercent.SearchOptions = searchOptions39;
 			this._fieldSideCollectedCountPercent.Size = new System.Drawing.Size(44, 15);
 			this._fieldSideCollectedCountPercent.TabIndex = 43;
 			//
@@ -900,8 +722,6 @@
 			this._fieldGeneratedMana.Margin = new System.Windows.Forms.Padding(5, 5, 5, 0);
 			this._fieldGeneratedMana.Name = "_fieldGeneratedMana";
 			this._fieldGeneratedMana.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			searchOptions40.Button = buttonOptions40;
-			this._fieldGeneratedMana.SearchOptions = searchOptions40;
 			this._fieldGeneratedMana.Size = new System.Drawing.Size(213, 32);
 			this._fieldGeneratedMana.TabIndex = 6;
 			//
@@ -918,8 +738,6 @@
 			this.FieldSaved.Location = new System.Drawing.Point(5, 108);
 			this.FieldSaved.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this.FieldSaved.Name = "FieldSaved";
-			searchOptions41.Button = buttonOptions41;
-			this.FieldSaved.SearchOptions = searchOptions41;
 			this.FieldSaved.Size = new System.Drawing.Size(213, 34);
 			this.FieldSaved.TabIndex = 51;
 			//
@@ -935,8 +753,6 @@
 			this._fieldLegality.Location = new System.Drawing.Point(5, 83);
 			this._fieldLegality.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this._fieldLegality.Name = "_fieldLegality";
-			searchOptions42.Button = buttonOptions42;
-			this._fieldLegality.SearchOptions = searchOptions42;
 			this._fieldLegality.Size = new System.Drawing.Size(213, 25);
 			this._fieldLegality.TabIndex = 52;
 			//
@@ -962,6 +778,7 @@
 		private FieldControl _fieldOtherCount;
 		private System.Windows.Forms.TableLayoutPanel _panelLayout;
 		private FieldControl _fieldGeneratedMana;
+
 		private FieldControl _labelOtherSpell;
 		private FieldControl _labelCreature;
 		private FieldControl _labelLand;
