@@ -125,7 +125,7 @@ namespace Mtgdb.Controls
 					{
 						tooltip.Id += "open_transformed";
 						tooltip.Title = "Open transformed deck";
-						tooltip.Text = "In transformed deck card variants from your collection and with known price are used whenever possible.\r\n\r\n" +
+						tooltip.Text = "Transformed deck uses cards from your collection and cards with known price whenever possible.\r\n\r\n" +
 							"Left-click to open in this tab, currently opened deck will be replaced.\r\n" +
 							"Middle-click to open in new tab.\r\n\r\n";
 					}

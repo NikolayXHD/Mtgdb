@@ -20,6 +20,8 @@ namespace Mtgdb.Controls
 
 			var target = Deck.Create();
 
+			target.Name = original.Name + " transformed";
+
 			var usedCountById = new Dictionary<string, int>();
 
 			void use(Card card, int count, DeckZone targetZone)
