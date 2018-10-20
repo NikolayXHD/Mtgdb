@@ -46,6 +46,7 @@ xcopy /q /r /i /e %output%\help %target%\help
 xcopy /q /r /i /e %output%\color-schemes %target%\color-schemes
 xcopy /q %output%\..\LICENSE %target%
 
+del /q %target%\data\allSets.json
 del /q /s %target%\update\app\*
 del /q /s %target%\update\*.bak
 del /q /s %target%\update\*.zip
