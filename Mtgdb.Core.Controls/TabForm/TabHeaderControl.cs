@@ -46,9 +46,16 @@ namespace Mtgdb.Controls
 
 			_graphics = CreateGraphics();
 
-			CloseIconHovered = Resources.close_tab_hovered_32.HalfResizeDpi();
-			CloseIcon = Resources.close_tab_32.HalfResizeDpi();
-			AddIcon = Resources.add_tab_32.HalfResizeDpi();
+			CloseIconHovered = _defaultCloseIconHovered;
+			_closeIcon = _defaultCloseIcon;
+			_addIcon = _defaultAddIcon;
+
+			if (!DesignMode)
+			{
+				CloseIconHovered = CloseIconHovered.HalfResizeDpi();
+				_closeIcon = _closeIcon.HalfResizeDpi();
+				_addIcon = _addIcon.HalfResizeDpi();
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -1003,26 +1010,31 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap CloseIcon
 		{
-			get => _closeIcon;
+			get => DesignMode && _closeIcon == _defaultCloseIcon ? null : _closeIcon;
 			set
 			{
-				_closeIcon = value;
+				_closeIcon = value ?? _defaultCloseIcon;
 				OnLayout(new LayoutEventArgs(this, nameof(CloseIcon)));
 				Invalidate();
 			}
 		}
 
+		private Bitmap _closeIconHovered;
 		[Category("Settings"), DefaultValue(null)]
-		public Bitmap CloseIconHovered { get; set; }
+		public Bitmap CloseIconHovered
+		{
+			get => DesignMode && _closeIconHovered == _defaultCloseIconHovered ? null : _closeIconHovered;
+			set => _closeIconHovered = value ?? _defaultCloseIconHovered;
+		}
 
 		private Bitmap _addIcon;
 		[Category("Settings"), DefaultValue(null)]
 		public Bitmap AddIcon
 		{
-			get => _addIcon;
+			get => DesignMode && _addIcon == _defaultAddIcon ? null : _addIcon;
 			set
 			{
-				_addIcon = value;
+				_addIcon = value ?? _defaultAddIcon;
 				Invalidate();
 			}
 		}
@@ -1093,5 +1105,9 @@ namespace Mtgdb.Controls
 
 		private static readonly PropertyInfo _layoutSuspendedProperty =
 			typeof(Control).GetProperty("IsLayoutSuspended", BindingFlags.NonPublic | BindingFlags.Instance);
+
+		private static readonly Bitmap _defaultCloseIconHovered = Resources.close_tab_hovered_32;
+		private static readonly Bitmap _defaultCloseIcon = Resources.close_tab_32;
+		private static readonly Bitmap _defaultAddIcon = Resources.add_tab_32;
 	}
 }

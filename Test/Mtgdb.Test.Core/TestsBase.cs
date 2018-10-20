@@ -28,8 +28,8 @@ namespace Mtgdb.Test
 				return;
 
 			Kernel = new StandardKernel();
-			Kernel.Load<CoreModule>();
 			Kernel.Load<DalModule>();
+			Kernel.Load<CoreModule>();
 			Kernel.Load<DownloaderModule>();
 
 			Repo = Kernel.Get<CardRepository>();

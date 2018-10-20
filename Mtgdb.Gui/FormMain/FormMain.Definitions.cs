@@ -33,6 +33,7 @@ namespace Mtgdb.Gui
 			DeckSearcher deckSearcher,
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
+			MtgArenaIntegration mtgArenaIntegration,
 			Application application)
 			: this()
 		{
@@ -50,6 +51,7 @@ namespace Mtgdb.Gui
 			_imageLoader = imageLoader;
 			_collectionEditor = collectionEditor;
 			_serialization = serialization;
+			_mtgArenaIntegration = mtgArenaIntegration;
 
 			beginRestoreSettings();
 
@@ -553,6 +555,7 @@ namespace Mtgdb.Gui
 
 		private readonly HistorySubsystem _history;
 		private readonly DeckSerializationSubsystem _serialization;
+		private readonly MtgArenaIntegration _mtgArenaIntegration;
 		private readonly DeckEditorModel _deckEditor;
 		private readonly ImagePreloadingSubsystem _imagePreloading;
 		private readonly ScrollSubsystem _scroll;

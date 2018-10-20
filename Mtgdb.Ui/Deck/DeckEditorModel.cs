@@ -271,26 +271,10 @@ namespace Mtgdb.Ui
 		public int GetCount(Card c) =>
 			Deck.GetCount(c.Id);
 
-		public void Paste(Deck deck, bool append, CardRepository repo)
+		public void Paste(Dictionary<DeckZone, DeckZoneModel> operations, bool append, CardRepository repo)
 		{
-			var operations = new Dictionary<DeckZone, DeckZoneModel>();
-
-			switch (CurrentZone)
-			{
-				case Zone.Main:
-					operations.Add(deck.MainDeck, MainDeck);
-					if (deck.Sideboard.Order.Count > 0)
-						operations.Add(deck.Sideboard, SideDeck);
-					break;
-				case Zone.Side:
-					operations.Add(deck.MainDeck, SideDeck);
-					break;
-				case Zone.SampleHand:
-					operations.Add(deck.MainDeck, SampleHand);
-					break;
-				default:
-					return;
-			}
+			if (operations.Count == 0)
+				return;
 
 			if (!append && (CurrentZone == Zone.Main || CurrentZone == Zone.Side))
 				lock (DataSource)

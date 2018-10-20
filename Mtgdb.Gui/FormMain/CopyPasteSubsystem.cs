@@ -229,7 +229,31 @@ namespace Mtgdb.Gui
 			if (deck.Error != null)
 				MessageBox.Show(deck.Error);
 			else
-				_deckEditor.Paste(deck, append, _cardRepo);
+				_deckEditor.Paste(getPasteOperations(), append, _cardRepo);
+
+			Dictionary<DeckZone, DeckZoneModel> getPasteOperations()
+			{
+				var operations = new Dictionary<DeckZone, DeckZoneModel>();
+
+				switch (_targetForm.DeckZone)
+				{
+					case Zone.Main:
+					case null when _targetForm.IsDeckListSelected:
+						operations.Add(deck.MainDeck, _deckEditor.MainDeck);
+						if (deck.Sideboard.Order.Count > 0)
+							operations.Add(deck.Sideboard, _deckEditor.SideDeck);
+
+						break;
+					case Zone.Side:
+						operations.Add(deck.MainDeck, _deckEditor.SideDeck);
+						break;
+					case Zone.SampleHand:
+						operations.Add(deck.MainDeck, _deckEditor.SampleHand);
+						break;
+				}
+
+				return operations;
+			}
 		}
 
 		public void PasteDeck(bool append)

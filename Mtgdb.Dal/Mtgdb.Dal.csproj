@@ -130,6 +130,7 @@
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />
     <Compile Include="Model\Patch\Patch.cs" />
+    <Compile Include="MtgArenaIntegration.cs" />
     <Compile Include="PriceDownloaderRepository.cs" />
     <Compile Include="Model\Price\PriceId.cs" />
     <Compile Include="PriceRepository.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="KeywordRegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
+    <Compile Include="[ infrastructure ]\MtgaIntegrationConfig.cs" />
     <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
     <Compile Include="Images\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />

@@ -54,6 +54,10 @@ namespace Mtgdb.Dal
 			Kernel.Bind<CardDocumentAdapter>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.BindConfig<MtgaIntegrationConfig>();
+			Kernel.Bind<MtgArenaIntegration>().ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

@@ -92,6 +92,10 @@
       <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
       <Name>Mtgdb.Core.Bitmaps</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Ui\Mtgdb.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
       <Name>Mtgdb.Ui</Name>
@@ -133,6 +137,7 @@
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
+    <Compile Include="MtgaIntegrationTests.cs" />
     <Compile Include="SelectionStateTests.cs" />
   </ItemGroup>
   <ItemGroup>

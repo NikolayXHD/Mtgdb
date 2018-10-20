@@ -1038,6 +1038,29 @@ namespace Mtgdb.Gui
 				"To proceed use 'import' button in MTGArena.", "Export deck to MTGArena");
 		}
 
+		public void ImportMtgArenaCollection()
+		{
+			if (!_mtgArenaIntegration.MtgaInstallationFound)
+			{
+				MessageBox.Show("MTGArena installation was not detected.\r\n\r\nIf you have MTGA installed in custom location edit <MtgaIntegration> tag in etc\\Mtgdb.Gui.xml");
+				return;
+			}
+
+			var countById = MtgArenaFormatter.ImportCollection(_mtgArenaIntegration, _cardRepo);
+			if (countById.Count == 0)
+			{
+				MessageBox.Show("Unable to read collection from MTGA installation.\r\n\r\n" +
+					"Make sure you are not running MTGArena right now. Otherwise data files cannot be read.\r\n\r\n" +
+					"See logs\\error.log for details.");
+				return;
+			}
+
+			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null);
+			_collectionEditor.LoadCollection(deck, append: false);
+
+			MessageBox.Show($"Imported collection of {countById.Values.Sum()} cards, {countById.Count} distinct.");
+		}
+
 		private void beginRestoreSettings()
 		{
 			Interlocked.Increment(ref _restoringGuiSettings);

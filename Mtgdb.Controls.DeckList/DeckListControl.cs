@@ -425,10 +425,17 @@ namespace Mtgdb.Controls
 
 			var renamedModel = _renamedModel;
 
-			if (commit && !renamedModel.IsCurrent)
+			if (commit)
 			{
-				_listModel.Rename(renamedModel, _textBoxName.Text);
-				_listModel.Save();
+				if (renamedModel.IsCurrent)
+				{
+					renamedModel.Name = _textBoxName.Text;
+				}
+				else
+				{
+					_listModel.Rename(renamedModel, _textBoxName.Text);
+					_listModel.Save();
+				}
 			}
 
 			_renamedModel = null;

@@ -28,7 +28,17 @@
 		The maximum number of undo/redo operations saved to history
 	-->
 	<Undo MaxDepth="1000" />
-	
+
+
+	<!-- === Magic The Gathering Arena files location ===
+		These files are used to import Collection from MTGA.
+		Edit this if you have MTGArena installed in custom location.
+	-->
+	<MtgaIntegration
+		CardLibraryFile="%ProgramFiles(x86)%\Wizards of the Coast\MTGA\MTGA_Data\Downloads\AssetBundle\data_cards_[guid].mtga"
+		LogFile="%UserProfile%\AppData\LocalLow\Wizards Of The Coast\MTGA\output_log.txt"
+	/>
+
 	<!-- === Directories with card images. Path can either be relative to application directory or absolute.
 		When you edit this, set the Path in a way that it's first subdirectory begins with set code.
 		The program will use it to correctly assign a picture to a card when there are matching images in different sets.

@@ -129,7 +129,8 @@ namespace Mtgdb.Controls
 			lock (_syncModels)
 			{
 				_deckModels.RemoveAt(_indexByDeck[deck]);
-				_indexByDeck.Remove(deck);
+				_indexByDeck = Enumerable.Range(0, _deckModels.Count)
+					.ToDictionary(i => _deckModels[i]);
 				_decksByName.Remove(deck.Name, deck);
 			}
 		}
@@ -172,12 +173,12 @@ namespace Mtgdb.Controls
 			lock (_syncModels)
 			{
 				_state.Decks = _deckModels.Select(_ => _.OriginalDeck).ToList();
-				
+
 				using(var writer = new StringWriter(serialized))
 				using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
 					_serializer.Serialize(jsonWriter, _state);
 			}
-			
+
 			File.WriteAllText(_fileName, serialized.ToString());
 		}
 

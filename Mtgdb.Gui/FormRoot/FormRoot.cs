@@ -49,16 +49,15 @@ namespace Mtgdb.Gui
 				new SaveLoadMenuMode
 				{
 					TitleButton = _buttonOpenDeck,
-					MenuButtons = new ButtonBase[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection },
-					MtgArenaButtonText = "Import deck from MTGArena\r\n" +
-						"(Export from MTGArena first)",
+					MenuButtons = new ButtonBase[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
+					MtgArenaButtonText = "Import MTGArena deck",
 					IsMtgArenaPaste = true
 				},
 				new SaveLoadMenuMode
 				{
 					TitleButton = _buttonSaveDeck,
 					MenuButtons = new ButtonBase[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
-					MtgArenaButtonText = "Export deck to MTGArena",
+					MtgArenaButtonText = "Export MTGArena deck",
 					IsMtgArenaPaste = false
 				}
 			};
@@ -119,6 +118,9 @@ namespace Mtgdb.Gui
 			_labelMtgo.ScaleDpi();
 			_labelMagarena.ScaleDpi();
 			_labelDotP2.ScaleDpi();
+
+			_buttonImportMtgArenaCollection.Height = _buttonImportMtgArenaCollection.Height.ByDpiHeight();
+			_buttonImportExportToMtgArena.Height = _buttonImportExportToMtgArena.Height.ByDpiHeight();
 
 			_tabs.Height = _tabs.Height.ByDpiHeight();
 			_tabs.SlopeSize = _tabs.SlopeSize.ByDpi();

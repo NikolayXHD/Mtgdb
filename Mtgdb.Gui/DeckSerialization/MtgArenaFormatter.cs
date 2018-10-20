@@ -15,6 +15,30 @@ namespace Mtgdb.Gui
 			_repo = repo;
 		}
 
+		public static Dictionary<string, int> ImportCollection(MtgArenaIntegration integration, CardRepository repo)
+		{
+			var collectionData = integration.ImportCollection();
+			var countById = new Dictionary<string, int>();
+
+			if (collectionData == null)
+				return countById;
+
+			foreach (var data in collectionData)
+			{
+				if (!repo.SetsByCode.TryGetValue(data.Set, out var set))
+					continue;
+
+				var card = set.Cards.FirstOrDefault(c => Str.Equals(c.Number, data.Number));
+
+				if (card == null)
+					continue;
+
+				countById.Add(card.Id, data.Count);
+			}
+
+			return countById;
+		}
+
 		public override Deck ImportDeck(string serialized)
 		{
 			_isSideboard = false;

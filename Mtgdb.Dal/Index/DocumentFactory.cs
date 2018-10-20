@@ -13,6 +13,8 @@ namespace Mtgdb.Dal.Index
 		{
 			addTextField(nameof(KeywordDefinitions.Keywords), nameof(Card.Text));
 
+			addTextField(nameof(Card.Number));
+
 			addTextField(nameof(Card.NameEn), nameof(Card.Name));
 			addTextField(nameof(Card.TypeEn), nameof(Card.Type));
 			addTextField(nameof(Card.TextEn), nameof(Card.Text));
@@ -131,6 +133,9 @@ namespace Mtgdb.Dal.Index
 		public static Document ToDocument(this Card card)
 		{
 			var doc = new Document();
+
+			if (!string.IsNullOrEmpty(card.Number))
+				doc.addTextField(nameof(Card.Number), card.Number);
 
 			// Tested
 			doc.addIdField(nameof(card.IndexInFile), card.IndexInFile);
@@ -412,7 +417,8 @@ namespace Mtgdb.Dal.Index
 				nameof(Card.Loyalty),
 				nameof(Card.ReleaseDate),
 				nameof(Card.Rarity),
-				nameof(Card.Layout)
+				nameof(Card.Layout),
+				nameof(Card.Number)
 			};
 
 		public static readonly Dictionary<string, string> DisplayFieldByIndexField =

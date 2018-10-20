@@ -295,7 +295,7 @@ namespace Mtgdb.Gui
 
 		public string GetShortDisplayName(string deckName)
 		{
-			if (deckName == null)
+			if (string.IsNullOrEmpty(deckName))
 				return NoDeck;
 
 			const int maxLength = 30;
