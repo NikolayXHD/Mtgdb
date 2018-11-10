@@ -355,7 +355,7 @@ namespace Mtgdb.Gui
 				formMain.Close();
 			}
 
-			_application.Remove(this);
+			_application.RemoveForm(this);
 
 			System.Windows.Forms.Application.RemoveMessageFilter(this);
 		}

@@ -4,12 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Ui;
+using NLog;
 
 namespace Mtgdb.Gui
 {
 	public class Application : ApplicationContext, IApplication
 	{
+		[UsedImplicitly]
 		public Application(Func<FormRoot> formFactory)
 		{
 			_formFactory = formFactory;
@@ -30,6 +33,8 @@ namespace Mtgdb.Gui
 
 		public void CreateForm()
 		{
+			_log.Info($"{nameof(CreateForm)}");
+
 			var form = _formFactory();
 
 			form.AddTab();
@@ -48,8 +53,10 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		public void Remove(FormRoot form)
+		public void RemoveForm(FormRoot form)
 		{
+			_log.Info($"{nameof(RemoveForm)}");
+
 			_instances.Remove(form);
 
 			if (_instances.Count == 0)
@@ -141,5 +148,7 @@ namespace Mtgdb.Gui
 		private readonly Func<FormRoot> _formFactory;
 
 		private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }
