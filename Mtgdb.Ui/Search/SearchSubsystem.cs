@@ -448,7 +448,7 @@ namespace Mtgdb.Ui
 			if (string.IsNullOrEmpty(text))
 				return;
 
-			var preProcessedText = RegexUtil.WhitespacePattern.Replace(text, " ");
+			var preProcessedText = removeExtraWhitespaces(text);
 
 			var source = getSearchInputState();
 			var token = new MtgTolerantTokenizer(source.Text).GetTokenForArbitraryInsertion(source.Caret);
@@ -458,12 +458,15 @@ namespace Mtgdb.Ui
 		private void pasteText(string value, TokenType type, TextInputState source, Token token, bool positionCaretToNextValue)
 		{
 			int left, length;
-			(Token start, Token end) = (null, null);
+			Token start, end;
 
 			bool isValuePhrase = value.StartsWith("\"") && value.EndsWith("\"");
 
 			if (token == null || source.SelectionLength != 0)
+			{
+				(start, end) = (null, null);
 				(left, length) = (source.Caret, source.SelectionLength);
+			}
 			else
 			{
 				if (type == TokenType.FieldValue && token.IsPhrase && !_adapter.IsSuggestAnalyzedIn(token.ParentField, GetLanguage()) || isValuePhrase)
@@ -506,6 +509,9 @@ namespace Mtgdb.Ui
 
 			_highlighter.Highlight();
 		}
+
+		private static string removeExtraWhitespaces(string text) =>
+			RegexUtil.WhitespacePattern.Replace(text, " ");
 
 
 
