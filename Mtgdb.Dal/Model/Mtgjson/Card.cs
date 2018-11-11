@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Lucene.Net.Documents;
@@ -243,6 +244,13 @@ namespace Mtgdb.Dal
 		public ICollection<string> GetKeywords() => GetAllKeywords().OtherKeywords;
 		public ICollection<string> GetCastKeywords() => GetAllKeywords().CastKeywords;
 
+		private string _imageName;
+		public string ImageName
+		{
+			get => _imageName ?? ImageNameOriginal;
+			set => _imageName = value;
+		}
+
 		/// <summary>
 		/// A unique id for this card. It is made up by doing an SHA1 hash of
 		/// setCode + cardName + cardImageName
@@ -398,7 +406,7 @@ namespace Mtgdb.Dal
 		/// </summary>
 		[JsonConverter(typeof(InternedStringConverter))]
 		[JsonProperty("imageName")]
-		public string ImageName { get; internal set; }
+		public string ImageNameOriginal { get; internal set; }
 
 		[JsonConverter(typeof(InternedStringConverter))]
 		[JsonProperty("layout")]
@@ -601,6 +609,9 @@ namespace Mtgdb.Dal
 
 		internal void PatchCard(CardPatch patch)
 		{
+			if (patch.Name != null)
+				NameEn = patch.Name;
+
 			if (patch.Text != null)
 			{
 				_textDeltaApplied = true;
@@ -633,6 +644,9 @@ namespace Mtgdb.Dal
 
 			if (patch.Subtypes != null)
 				SubtypesArr = patch.Subtypes;
+
+			if (patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}"))
+				Remove = true;
 		}
 
 
@@ -761,5 +775,7 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private CardKeywords _keywords;
+
+		private static readonly HashSet<string> _foundDuplicates = new HashSet<string>(Str.Comparer);
 	}
 }

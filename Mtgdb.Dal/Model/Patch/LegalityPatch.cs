@@ -12,6 +12,13 @@ namespace Mtgdb.Dal
 
 		public Operation Restricted { get; [UsedImplicitly] set; }
 
+		public void IgnoreCase()
+		{
+			Sets?.IgnoreCase();
+			Banned?.IgnoreCase();
+			Restricted?.IgnoreCase();
+		}
+
 		public class Operation
 		{
 			[JsonConverter(typeof(InternedStringArrayConverter))]
@@ -19,6 +26,12 @@ namespace Mtgdb.Dal
 
 			[JsonConverter(typeof(InternedStringArrayConverter))]
 			public HashSet<string> Remove { get; [UsedImplicitly] set; }
+
+			public void IgnoreCase()
+			{
+				Add = Add?.ToHashSet(Str.Comparer);
+				Remove = Remove?.ToHashSet(Str.Comparer);
+			}
 		}
 	}
 }

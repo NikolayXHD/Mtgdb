@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 
 			if (reader.TokenType == JsonToken.Integer || reader.TokenType == JsonToken.Float)
 				return string.Intern(reader.Value.ToString());
-			
+
 			return null;
 		}
 

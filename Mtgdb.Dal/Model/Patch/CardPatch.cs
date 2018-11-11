@@ -5,9 +5,11 @@ namespace Mtgdb.Dal
 {
 	internal class CardPatch
 	{
+		public string Name { get; [UsedImplicitly] set; }
 		public string Text { get; [UsedImplicitly] set; }
 		public List<string> GeneratedMana { get; [UsedImplicitly] set; }
 		public bool FlipDuplicate { get; [UsedImplicitly] set; }
+		public bool FullDuplicate { get; [UsedImplicitly] set; }
 		public string MciNumber { get; [UsedImplicitly] set; }
 		public string Loyalty { get; [UsedImplicitly] set; }
 		public string Type { get; [UsedImplicitly] set; }

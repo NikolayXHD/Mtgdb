@@ -1,137 +1,44 @@
 ﻿{
 	"Cards": {
-		"Plains": {
-			"Text": "{T}: Add {W} to your mana pool."
-		},
-		"Island": {
-			"Text": "{T}: Add {U} to your mana pool."
-		},
-		"Swamp": {
-			"Text": "{T}: Add {B} to your mana pool."
-		},
-		"Mountain": {
-			"Text": "{T}: Add {R} to your mana pool."
-		},
-		"Forest": {
-			"Text": "{T}: Add {G} to your mana pool."
-		},
-		"Wastes": {
-			"Text": "{T}: Add {C} to your mana pool."
-		},
-		"Snow-Covered Plains": {
-			"Text": "{T}: Add {W} to your mana pool."
-		},
-		"Snow-Covered Island": {
-			"Text": "{T}: Add {U} to your mana pool."
-		},
-		"Snow-Covered Swamp": {
-			"Text": "{T}: Add {B} to your mana pool."
-		},
-		"Snow-Covered Mountain": {
-			"Text": "{T}: Add {R} to your mana pool."
-		},
-		"Snow-Covered Forest": {
-			"Text": "{T}: Add {G} to your mana pool."
-		},
-		"Snow-Covered Wastes": {
-			"Text": "{T}: Add {C} to your mana pool."
-		},
-		"Doubling Cube": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Elemental Resonance": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Ice Cauldron": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Jeweled Amulet": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Mana Reflection": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Drain Power": {
-			"GeneratedMana": [
-				"{W}",
-				"{U}",
-				"{B}",
-				"{R}",
-				"{G}",
-				"{C}",
-				"{any}"
-			]
-		},
-		"Urborg, Tomb of Yawgmoth": {
-			"GeneratedMana": ["{B}"]
-		},
-		"Mons's Goblin Waiters": {
-			"GeneratedMana": ["{R}"]
-		},
-		"Kruphix, God of Horizons": {
-			"GeneratedMana": ["{C}"]
-		},
-		"Jaraku the Interloper": {
-			"FlipDuplicate": true
-		},
-		"Scarmaker": {
-			"FlipDuplicate": true
-		},
-		"Nissa, Steward of Elements": {
-			"Loyalty": "X"
-		},
+		"Plains": { "Text": "{T}: Add {W} to your mana pool." },
+		"Island": { "Text": "{T}: Add {U} to your mana pool." },
+		"Swamp": { "Text": "{T}: Add {B} to your mana pool." },
+		"Mountain": { "Text": "{T}: Add {R} to your mana pool." },
+		"Forest": { "Text": "{T}: Add {G} to your mana pool." },
+		"Wastes": { "Text": "{T}: Add {C} to your mana pool." },
+		"Snow-Covered Plains": { "Text": "{T}: Add {W} to your mana pool." },
+		"Snow-Covered Island": { "Text": "{T}: Add {U} to your mana pool." },
+		"Snow-Covered Swamp": { "Text": "{T}: Add {B} to your mana pool." },
+		"Snow-Covered Mountain": { "Text": "{T}: Add {R} to your mana pool." },
+		"Snow-Covered Forest": { "Text": "{T}: Add {G} to your mana pool." },
+		"Snow-Covered Wastes": { "Text": "{T}: Add {C} to your mana pool." },
+		"Doubling Cube": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Elemental Resonance": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Ice Cauldron": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Jeweled Amulet": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Mana Reflection": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Drain Power": { "GeneratedMana": ["{W}", "{U}", "{B}", "{R}", "{G}", "{C}", "{any}"] },
+		"Urborg, Tomb of Yawgmoth": { "GeneratedMana": ["{B}"] },
+		"Mons's Goblin Waiters": { "GeneratedMana": ["{R}"] },
+		"Kruphix, God of Horizons": { "GeneratedMana": ["{C}"] },
+		"Jaraku the Interloper": { "FlipDuplicate": true },
+		"Scarmaker": { "FlipDuplicate": true },
+		"Nissa, Steward of Elements": { "Loyalty": "X" },
 		"B.F.M. (Big Furry Monster)": {
 			"Type": "The Biggest, Baddest, Nastiest,",
 			"Types": ["The", "Biggest", "Baddest", "Nastiest"],
 			"Subtypes": ["The", "Biggest", "Baddest", "Nastiest"],
-			"OriginalType": "Summon — The Biggest, Baddest, Nastiest,"
+			"OriginalType": "Summon — The Biggest, Baddest, Nastiest,",
+			"FullDuplicate": true
 		},
 		"B.F.M. (Big Furry Monster, Right Side)": {
 			"Type": "Scariest Creature You’ll Ever See",
 			"Types": ["Scariest", "Creature", "You’ll", "Ever", "See"],
 			"Subtypes": ["Scariest", "Creature", "You’ll", "Ever", "See"],
-			"OriginalType": "Scariest Creature You’ll Ever See"
-		}
+			"OriginalType": "Scariest Creature You’ll Ever See",
+			"FullDuplicate": true
+		},
+		"Sultai Ascendacy": { "Name": "Sultai Ascendancy" }
 	},
 
 	"Legality": {
@@ -146,16 +53,9 @@
 			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Brawl": {
-		 "Sets": { "Add": ["AKH", "HOU", "XLN", "RIX", "DOM", "GS1", "M19", "GRN"], "Remove": [] },
-		 "Banned": {
-			"Add": [
-			 "Baral, Chief of Compliance",
-			 "Smuggler's Copter",
-			 "Sorcerous Spyglass"
-			],
-			"Remove": []
-		 },
-		 "Restricted": { "Add": [], "Remove": [] }
+			"Sets": { "Add": ["AKH", "HOU", "XLN", "RIX", "DOM", "GS1", "M19", "GRN"], "Remove": [] },
+			"Banned": { "Add": ["Baral, Chief of Compliance", "Smuggler's Copter", "Sorcerous Spyglass"], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
 		},
 		"Modern": {
 			"Sets": { "Add": ["DOM", "M19", "GRN"], "Remove": [] },
@@ -172,10 +72,271 @@
 			"Banned": { "Add": [], "Remove": [] },
 			"Restricted": { "Add": [], "Remove": [] }
 		},
-	 "Commander": {
-		"Sets": { "Add": ["DOM", "BBD", "M19", "GRN"], "Remove": [] },
-		"Banned": { "Add": [], "Remove": [] },
-		"Restricted": { "Add": [], "Remove": [] }
-	 }
+		"Commander": {
+			"Sets": { "Add": ["DOM", "BBD", "M19", "GRN"], "Remove": [] },
+			"Banned": { "Add": [], "Remove": [] },
+			"Restricted": { "Add": [], "Remove": [] }
+		}
+	},
+
+	"ImageOrder": {
+		"UNH": {
+			"our market research shows that players like really long card names so we made this card to have the absolute longest card name ever elemental": {
+				"imageName": "Our Market Research...",
+				"improved": true
+			},
+			"curse of the fire penguin": { "improved": true }
+		},
+		"UGL": {
+			"B.F.M. (Big Furry Monster)": { "imageName": "b.f.m. 1" },
+			"B.F.M. (Big Furry Monster, Right Side)": { "imageName": "b.f.m. 2" },
+			"The Ultimate Nightmare of Wizards of the Coast® Customer Service": {
+				"imageName": "The Ultimate Nightmare of Wizards of the Coast Customer Service",
+				"improved": true
+			}
+		},
+		"UST": {
+			"amateur auteur": { "improved": true },
+			"novellamental": { "improved": true },
+			"extremely slow zombie": { "improved": true },
+			"target minotaur": { "improved": true },
+			"beast in show": { "improved": true },
+			"secret base": { "order": [2, 1, 3, 4, 5], "improved": true }
+		},
+		"POR": {
+			"mountain": { "order": [1, 3, 2, 4] }
+		},
+		"PO2": {
+			"plains": { "order": [3, 2, 1] },
+			"swamp": { "order": [2, 3, 1] },
+			"forest": { "order": [3, 1, 2] }
+		},
+		"ME4": {
+			"urza's mine": { "order": [1, 3, 2, 4], "improved": true },
+			"urza's power plant": { "order": [2, 4, 3, 1], "improved": true },
+			"urza's tower": { "order": [3, 2, 4, 1], "improved": true }
+		},
+		"TMP": {
+			"swamp": { "order": [3, 1, 4, 2] },
+			"forest": { "order": [3, 2, 1, 4] },
+			"mountain": { "order": [2, 3, 1, 4] },
+			"island": { "order": [1, 3, 2, 4] }
+		},
+		"S00": {
+			"forest": {"order": [2, 1]}
+		},
+		"OGW": {
+			"wastes": { "improved": true }
+		},
+		"MIR": {
+			"forest": { "order": [4, 2, 3, 1] },
+			"mountain": { "order": [4, 2, 3, 1] },
+			"island": { "order": [4, 2, 3, 1] },
+			"plains": { "order": [1, 3, 2, 4] }
+		},
+		"LEB": {
+			"swamp": { "improved": true },
+			"forest": { "improved": true },
+			"mountain": { "order": [3, 2, 1], "improved": true },
+			"island": { "improved": true }
+		},
+		"LEA": {
+			"forest": { "improved": true },
+			"island": { "improved": true }
+		},
+		"ICE": {
+			"swamp": { "order": [2, 1, 3] },
+			"forest": { "order": [2, 3, 1] },
+			"mountain": { "order": [1, 3, 2] },
+			"island": { "order": [2, 1, 3] },
+			"plains": { "order": [2, 3, 1] }
+		},
+		"ZEN": {
+			"swamp": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
+			"forest": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
+			"mountain": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
+			"island": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
+			"plains": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true }
+		},
+		"BBD": {
+			"Will Kenrith": { "improved": true },
+			"Rowan Kenrith": { "improved": true }
+		},
+		"pMEI": {
+			"Liliana Vess": { "improved": true },
+			"Chandra, Pyromaster": { "improved": true }
+		},
+		"pJGP": {
+			"Wasteland": { "improved": true }
+		},
+		"pELP": {
+			"swamp": { "improved": true },
+			"forest": { "improved": true },
+			"mountain": { "improved": true },
+			"island": { "improved": true },
+			"plains": { "improved": true }
+		},
+		"pARL": {
+			"swamp": { "improved": true },
+			"forest": { "improved": true },
+			"mountain": { "improved": true },
+			"island": { "improved": true },
+			"plains": { "improved": true }
+		},
+		"pALP": {
+			"swamp": { "improved": true },
+			"forest": { "improved": true },
+			"mountain": { "improved": true },
+			"island": { "improved": true },
+			"plains": { "improved": true }
+		},
+		"CP2": {
+			"Sultai Ascendancy": { "improved": true }
+		},
+		"E01": {
+			"Plains": { "improved": true },
+			"Island": { "improved": true },
+			"Swamp": { "improved": true }
+		},
+		"CN2": {
+			"Kaya, Ghost Assassin": { "improved": true }
+		},
+		"VAN" : {
+			"Birds of Paradise Avatar": { "improved": true },
+			"Royal Assassin Avatar": { "improved": true },
+			"Platinum Angel Avatar": { "improved": true },
+			"Rith, the Awakener Avatar": { "improved": true },
+			"Tradewind Rider Avatar": { "improved": true }
+		},
+		"HML": {
+			"Sengir Bats": { "order": [2, 1] },
+			"Dark Maze": { "order": [2, 1] },
+			"Labyrinth Minotaur": { "order": [2, 1] },
+			"Reef Pirates": { "order": [2, 1] },
+			"Folk of An-Havva": { "order": [2, 1] },
+			"Ambush Party": { "order": [2, 1] },
+			"Anaba Shaman": { "order": [2, 1] },
+			"Mesa Falcon": { "order": [2, 1] },
+			"Samite Alchemist": { "improved": true }
+		},
+		"FEM": {
+			"Armor Thrull": { "order": [3, 4, 2, 1] },
+			"Basal Thrull": { "order": [1, 3, 2, 4] },
+			"Hymn to Tourach": { "order": [2, 1, 3, 4] },
+			"Initiates of the Ebon Hand": { "order": [3, 2, 1] },
+			"Mindstab Thrull": { "order": [2, 1, 3] },
+			"Necrite": { "order": [2, 1, 3] },
+			"Order of the Ebon Hand": { "order": [2, 1, 3] },
+			"High Tide": { "order": [2, 1, 3] },
+			"Homarid Warrior": { "order": [2, 1, 3] },
+			"Merseine": { "order": [1, 2, 4, 3] },
+			"Vodalian Mage": { "order": [1, 3, 2] },
+			"Vodalian Soldiers": { "order": [1, 3, 2, 4] },
+			"Elven Fortress": { "order": [2, 1, 3, 4] },
+			"Elvish Hunter": { "order": [3, 1, 2] },
+			"Elvish Scout": { "order": [2, 1, 3] },
+			"Night Soil": { "order": [2, 1, 3] },
+			"Spore Cloud": { "order": [1, 3, 2] },
+			"Thallid": { "order": [1, 4, 2, 3] },
+			"Brassclaw Orcs": { "order": [3, 2, 4, 1] },
+			"Orcish Veteran": { "order": [3, 4, 2, 1] },
+			"Dwarven Soldier": { "order": [2, 1, 3] },
+			"Goblin Chirurgeon": { "order": [3, 1, 2] },
+			"Goblin War Drums": { "order": [1, 3, 2, 4] },
+			"Orcish Spy": { "order": [2, 1, 3] },
+			"Combat Medic": { "order": [3, 1, 2, 4] },
+			"Farrel's Zealot": { "order": [3, 2, 1] },
+			"Icatian Javelineers": { "order": [2, 1, 3] },
+			"Icatian Scout": { "order": [1, 4, 3, 2] },
+			"Order of Leitbur": { "order": [2, 1, 3] }
+		},
+		"CHR": {
+			"Urza's Mine": { "order": [2, 1, 3, 4], "improved": true },
+			"Urza's Power Plant": { "order": [3, 2, 4, 1], "improved": true },
+			"Urza's Tower": { "order": [1, 3, 2, 4] , "improved": true}
+		},
+		"BRB": {
+			"mountain": { "improved": true },
+			"forest": { "improved": true },
+			"island": { "improved": true },
+			"plains": { "improved": true },
+			"swamp": { "improved": true }
+		},
+		"BFZ": {
+			"Plains": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
+			"Island": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10], "improved": true },
+			"Swamp": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
+			"Mountain": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
+			"Forest": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10], "improved": true }
+		},
+		"ATQ": {
+			"Mishra's Factory": { "order": [3, 1, 2, 4], "improved": true },
+			"Strip Mine": { "order": [4, 2, 1, 3], "improved": true },
+			"Urza's Mine" : { "order": [3, 2, 1, 4], "improved": true },
+			"Urza's Power Plant": { "order": [3, 2, 1, 4], "improved": true },
+			"Urza's Tower": { "order": [1, 4, 3, 2] }
+		},
+		"ARN": {
+			"Giant Tortoise":  { "improved": true },
+			"Bird Maiden":  { "improved": true },
+			"Rukh Egg":  { "improved": true },
+			"Army of Allah":  { "improved": true },
+			"Piety":  { "improved": true }
+		},
+		"ALL": {
+			"Astrolabe": { "order": [2, 1] },
+			"Soldevi Sentry": { "order": [2, 1] },
+			"Feast or Famine": { "order": [2, 1] },
+			"Lim-Dul's High Guard": { "order": [2, 1] },
+			"Phantasmal Fiend": { "order": [2, 1] },
+			"Phyrexian Boon": { "order": [2, 1] },
+			"Stench of Decay": { "order": [2, 1] },
+			"Swamp Mosquito": { "order": [2, 1] },
+			"Benthic Explorers": { "order": [2, 1] },
+			"False Demise": { "order": [2, 1] },
+			"Lat-Nam's Legacy": { "order": [2, 1] },
+			"Soldevi Heretic": { "order": [2, 1] },
+			"Soldevi Sage": { "order": [2, 1] },
+			"Viscerid Armor": { "order": [2, 1] },
+			"Elvish Ranger": { "order": [2, 1] },
+			"Fyndhorn Druid": { "order": [2, 1] },
+			"Gorilla Chieftain": { "order": [2, 1] },
+			"Taste of Paradise": { "order": [2, 1] },
+			"Bestial Fury": { "order": [2, 1] },
+			"Guerrilla Tactics": { "order": [2, 1] },
+			"Storm Shaman": { "order": [2, 1] },
+			"Varchild's Crusader": { "order": [2, 1] },
+			"Veteran's Voice": { "order": [2, 1] },
+			"Carrier Pigeons": { "order": [2, 1] },
+			"Errand of Duty": { "order": [2, 1] },
+			"Kjeldoran Escort": { "order": [2, 1] },
+			"Noble Steeds": { "order": [2, 1] },
+			"Reinforcements": { "order": [2, 1] },
+			"Royal Herbalist": { "order": [2, 1] },
+			"Wild Aesthir": { "order": [2, 1] }
+		},
+		"5ED": {
+			"Swamp": { "order": [3, 2, 1, 4] },
+			"Plains": { "order": [4, 1, 3, 2] }
+		},
+		"4ED": {
+			"Swamp": { "order": [3, 1, 2] },
+			"Mountain": { "order": [2, 3, 1] },
+			"Plains": { "order": [3, 2, 1] },
+			"Island": { "order": [2, 1, 3] }
+		},
+		"3ED": {
+			"Swamp": { "improved": true },
+			"Forest": { "improved": true },
+			"Mountain": { "improved": true },
+			"Plains": { "improved": true },
+			"Island": { "improved": true }
+		},
+		"2ED": {
+			"Swamp": { "order": [2, 1, 3], "improved": true },
+			"Forest": { "order": [3, 1, 2], "improved": true },
+			"Mountain": { "improved": true },
+			"Island": { "order": [3, 2, 1], "improved": true }
+		}
 	}
 }

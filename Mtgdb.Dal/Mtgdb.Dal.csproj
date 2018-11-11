@@ -123,6 +123,7 @@
     <Compile Include="Index\CardSpellchecker.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CardExtensions.cs" />
+    <Compile Include="Model\Patch\ImageNamePatch.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />
     <Compile Include="Model\Serialization\IntToInternedStringConverter.cs" />

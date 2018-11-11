@@ -13,14 +13,16 @@ namespace Mtgdb.Dal
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
-			BannedAndRestrictedFile = AppDir.Data.AddPath("patch.json");
+			PatchFile = AppDir.Data.AddPath("patch.json");
 			Cards = new List<Card>();
 		}
 
 		public void LoadFile()
 		{
 			_streamContent = File.ReadAllBytes(SetsFile);
-			_patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(BannedAndRestrictedFile));
+			Patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(PatchFile));
+			Patch.IgnoreCase();
+
 			IsFileLoadingComplete = true;
 		}
 
@@ -115,24 +117,24 @@ namespace Mtgdb.Dal
 
 			// release RAM
 			_streamContent = null;
-			_patch = null;
+			Patch = null;
 			Cards.Capacity = Cards.Count;
 		}
 
 		private void preProcessCard(Card card)
 		{
-			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
-
 			ImageNamePatcher.Patch(card);
 
-			if (_patch.Cards.TryGetValue(card.SetCode, out var patch))
+			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);
 
-			if (_patch.Cards.TryGetValue(card.NameEn, out patch))
+			if (Patch.Cards.TryGetValue(card.NameEn, out patch))
 				card.PatchCard(patch);
 
-			if (_patch.Cards.TryGetValue(card.Id, out patch))
+			if (Patch.Cards.TryGetValue(card.Id, out patch))
 				card.PatchCard(patch);
+
+			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
 
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
@@ -180,13 +182,6 @@ namespace Mtgdb.Dal
 					card.Number = card.Number.Substring(0, card.Number.Length - 1);
 					card.Names = null;
 
-					if (Str.Equals(card.ImageName, "will kenrith4"))
-						card.ImageName = "will kenrith2";
-					else if (Str.Equals(card.ImageName, "rowan kenrith2"))
-						card.ImageName = "rowan kenrith1";
-					else if (Str.Equals(card.ImageName, "rowan kenrith1"))
-						card.ImageName = "rowan kenrith2";
-
 					if (Str.Equals(card.Layout, "flip"))
 						card.Layout = "normal";
 				}
@@ -195,10 +190,10 @@ namespace Mtgdb.Dal
 
 		private void patchLegality()
 		{
-			if (_patch.Legality == null)
+			if (Patch.Legality == null)
 				return;
 
-			foreach (var pair in _patch.Legality)
+			foreach (var pair in Patch.Legality)
 			{
 				string format = pair.Key;
 				var patch = pair.Value;
@@ -374,7 +369,7 @@ namespace Mtgdb.Dal
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
 		private string SetsFile { get; }
-		private string BannedAndRestrictedFile { get; }
+		private string PatchFile { get; }
 
 		public Func<string, bool> FilterSetCode { get; set; } = _ => true;
 
@@ -384,6 +379,6 @@ namespace Mtgdb.Dal
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
 
 		private byte[] _streamContent;
-		private Patch _patch;
+		internal Patch Patch { get; private set; }
 	}
 }

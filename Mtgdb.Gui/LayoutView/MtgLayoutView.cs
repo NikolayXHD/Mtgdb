@@ -117,7 +117,7 @@ namespace Mtgdb.Gui
 			remove => _view.SelectionStarted -= value;
 		}
 
-		public object FindRow(int rowHandle) => 
+		public object FindRow(int rowHandle) =>
 			_view.FindRow(rowHandle);
 
 		public int GetVisibleIndex(int cardIndex)
@@ -128,7 +128,7 @@ namespace Mtgdb.Gui
 			return cardIndex;
 		}
 
-		public int FindRow(object row) => 
+		public int FindRow(object row) =>
 			_view.FindRow(row);
 
 		public int GetVisibleRowHandle(int rowVisibleIndex)
@@ -139,16 +139,16 @@ namespace Mtgdb.Gui
 			return rowVisibleIndex;
 		}
 
-		public void Focus() => 
+		public void Focus() =>
 			_view.Focus();
 
-		public void Invalidate() => 
+		public void Invalidate() =>
 			_view.Invalidate();
 
-		public void InvalidateCard(object row) => 
+		public void InvalidateCard(object row) =>
 			_view.InvalidateCard(row);
 
-		public void RefreshData() => 
+		public void RefreshData() =>
 			_view.RefreshData();
 
 		public bool TextualFieldsVisible
@@ -174,7 +174,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public string GetFieldText(int rowHandle, string fieldName) => 
+		public string GetFieldText(int rowHandle, string fieldName) =>
 			_view.GetText(rowHandle, fieldName);
 
 		public string GetFieldTooltipText(int rowHandle, string field)
@@ -220,6 +220,12 @@ namespace Mtgdb.Gui
 						.Append(nameof(Card.Number)).Append(": ")
 						.Append(card.Number);
 
+				if (card.MultiverseId.HasValue)
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.MultiverseId)).Append(": ")
+						.Append(card.MultiverseId);
+
 				if (!string.IsNullOrEmpty(card.ImageName))
 					additionalFields
 						.AppendLine()
@@ -245,13 +251,13 @@ namespace Mtgdb.Gui
 		public void SetDataSource(object dataSource) =>
 			_view.DataSource = (IList) dataSource;
 
-		public void SetIconRecognizer(IconRecognizer recognizer) => 
+		public void SetIconRecognizer(IconRecognizer recognizer) =>
 			_view.IconRecognizer = recognizer;
 
-		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName) => 
+		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName) =>
 			_view.SetHighlightTextRanges(ranges, rowHandle, fieldName);
 
-		public IList<TextRange> GetHighlightRanges(int rowHandle, string fieldName) => 
+		public IList<TextRange> GetHighlightRanges(int rowHandle, string fieldName) =>
 			_view.GetHighlightTextRanges(rowHandle, fieldName);
 
 		public HighlightOptions GetHighlightSettings() =>

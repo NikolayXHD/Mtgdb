@@ -8,7 +8,7 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-	<ImageLocations EnabledGroups="prod-dev" >
+	<ImageLocations EnabledGroups="dev,xlhq" >
 
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
@@ -46,6 +46,8 @@
 		<Directory Group="xlhq" Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Extras" />
 		<Directory Group="xlhq" Zoom="Any" Set="CON"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CFX Tokens" />
 		<Directory Group="xlhq" Zoom="Any" Set="MD1"       Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\MED" />
+		<Directory Group="xlhq" Zoom="Any" Set="ME4;CHR"   Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\CHR" />
+		<Directory Group="xlhq" Zoom="Any" Set="6ED;S00"   Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked\6ED" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Path="D:\Distrib\games\mtg\XLHQ Promos" />
 		<Directory Group="xlhq" Zoom="Any" Set="pDRC"      Path="D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\DragonCon" />
@@ -100,7 +102,6 @@
 		<Directory Group="xlhq" Zoom="Any" Set="TSP"       Path="D:\Distrib\games\mtg\XLHQ Promos\Tokens\Time Spiral Bonus Program" />
 		<Directory Group="xlhq" Zoom="Any" Set="p15A"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\15th Anniversary" />
 		<Directory Group="xlhq" Zoom="Any" Set="pALP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\APAC Lands" />
-		<Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League" />
 		<Directory Group="xlhq" Zoom="Any" Set="pCMP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Champs" />
 		<Directory Group="xlhq" Zoom="Any" Set="pLGM"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\DCI Legend" />
 		<Directory Group="xlhq" Zoom="Any" Set="pELP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Euro Lands" />
@@ -123,6 +124,9 @@
 		<Directory Group="xlhq" Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
+
+		<!-- Moved to D:\Distrib\games\mtg\Patch to merge basic land image numbers across subdirectories -->
+		<!-- <Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League" /> -->
 
 		<!-- non-set codes -->
 			<!--

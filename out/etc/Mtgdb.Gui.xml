@@ -4,10 +4,10 @@
 
 	<!--
 		NOTE: To apply the changes made here save your changes and restart the program.
-	
+
 		NOTE: Be careful editing this. If you break XML syntax the application will fail to start.
 		To avoid this I suggest using notepad++ or any other syntax-enabled text editor.
-		
+
 		If this file gets broken for any reason you have 3 options:
 		* remove (better rename) this file.
 		* replace this file with the original from most resent downloaded version you have.
@@ -17,13 +17,13 @@
 			* attach a copy of the broken config file
 			* attach a .zip with files from \logs directory
 	-->
-	
+
 	<!-- === Suggest downloading images on program startup ===
 		On startup the program will check whether your images are up-to-date.
 		If not, it will open update window. To turn this off set Enabled="False"
 	-->
 	<SuggestImageDownloader Enabled="True" />
-	
+
 	<!--
 		The maximum number of undo/redo operations saved to history
 	-->
@@ -48,23 +48,23 @@
 		Path -> ^^^^^^^^^^^^^^^^^^^^ ^^^ <- Set code
 	-->
 	<ImageLocations>
-		<!-- LQ images in search result look blurry with high DPI enabled in 
+		<!-- LQ images in search result look blurry with high DPI enabled in
 			Control Panel\All Control Panel Items\Display
 			Uncomment the next directory to use MQ images instead.
 		-->
-		
+
 		<!--
 		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="Any" />
 		-->
-		
+
 		<!--
 			High quality images for modern sets
 			Total size: 3.76 GB
 			https://mega.nz/#F!p8RBBT6Y!ksgSGJbMsKU0HX_ho-QS5g
 		-->
-		
+
 		<!--
-		
+
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega" />
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Sets" />
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Tokens" />
@@ -74,18 +74,18 @@
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos" />
 		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos\Pre-Release Promos" />
 		<Directory Zoom="Any" Set="VMA"                                                   Path="images\XLHQ Mega\Other\Vintage Champs 300DPI" />
-		
+
 		-->
-		
+
 		<!--
 			High quality images for promo sets
 			Total size: 1.35 GB
 			use the following magnet link to download with torrent client
 			magnet:?xt=urn:btih:e9b27add0a5a0f53f3c46c39eb9c27f02899cb32&dn=XLHQ%20Promos&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
 		-->
-		
+
 		<!--
-		
+
 		<Directory Zoom="Any"                 Path="images\XLHQ Promos" />
 		<Directory Zoom="Any" Set="pDRC"      Path="images\XLHQ Promos\Convention Promos\DragonCon" />
 		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Convention Promos\www.magicthegathering.com" />
@@ -160,13 +160,13 @@
 		<Directory Zoom="Any" Set="p2HG"      Path="images\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Zoom="Any" Set="pWCQ"      Path="images\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Zoom="Any" Set="pWOR"      Path="images\XLHQ Promos\Tournament and Program Promos\Worlds" />
-		
+
 		-->
-		
+
 		<!--
-			High quality images for older sets. 
+			High quality images for older sets.
 			Unzip downloaded .zip files. 2ED.zip must be unzipped to 2ED directory and so on.
-			
+
 			Total size: 13.6 GB
 			use the following magnet link to download with torrent client
 			magnet:?xt=urn:btih:b07f3c3b288b20d49f5bbedcdf73214045abcce5&dn=XLHQ-Sets-Torrent&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
@@ -183,19 +183,19 @@
 		<Directory Zoom="Any" Set="MD1"       Path="images\XLHQ-Sets-Torrent\MED" />
 		-->
 	</ImageLocations>
-	
+
 	<!-- === Transparent corners for non-zoomed images ===
 		Disabling transparent corners can increase scrolling speed due to faster image loading,
 		but some old images having non-white corners will be looking ugly on white background.
-		
+
 		Images from images\Mtgdb.Pictures have no black corners. For them the setting is not applied.
 		Zoomed images are allways shown with transparent corners.
-		
+
 		=== Cache capacity ===
 		Decreasing CacheCapacity can reduce memory consumption at a cost of slowing down scrolling speed.
 		Zoomed images are not cached.
 	-->
-	
+
 	<ImageCache CacheCapacity ="900"/>
 
 </configuration>
