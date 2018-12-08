@@ -60,6 +60,7 @@ del /q /s %target%\color-schemes\current.colors
 del /q /s %target%\images\*.jpg
 del /q /s %target%\images\*.txt
 del /q /s %targetBin%\*.xml
+del /q /s %targetBin%\*.pdb
 rmdir /q /s %target%\data\index\keywords-test
 rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test
