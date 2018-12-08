@@ -90,75 +90,67 @@
 	"ImageOrder": {
 		"UNH": {
 			"our market research shows that players like really long card names so we made this card to have the absolute longest card name ever elemental": {
-				"imageName": "Our Market Research...",
-				"improved": true
+				"imageName": "Our Market Research..."
 			},
-			"curse of the fire penguin": { "improved": true },
-			"curse of the fire penguin creature": { "imageName": "curse of the fire penguin", "improved": true },
-			"who": { "imageName": "who what when where why", "improved": true },
-			"what": { "imageName": "who what when where why", "improved": true },
-			"when": { "imageName": "who what when where why", "improved": true },
-			"where": { "imageName": "who what when where why", "improved": true },
-			"why": { "imageName": "who what when where why", "improved": true }
+			"curse of the fire penguin creature": { "imageName": "curse of the fire penguin" },
+			"who": { "imageName": "who what when where why" },
+			"what": { "imageName": "who what when where why" },
+			"when": { "imageName": "who what when where why" },
+			"where": { "imageName": "who what when where why" },
+			"why": { "imageName": "who what when where why" }
 		},
 		"UGL": {
 			"B.F.M. (Big Furry Monster)": { "imageName": "b.f.m. 1" },
 			"B.F.M. (Big Furry Monster, Right Side)": { "imageName": "b.f.m. 2" },
 			"The Ultimate Nightmare of Wizards of the Coast® Customer Service": {
-				"imageName": "The Ultimate Nightmare of Wizards of the Coast Customer Service",
-				"improved": true
+				"imageName": "The Ultimate Nightmare of Wizards of the Coast Customer Service"
 			}
 		},
 		"UST": {
-			"amateur auteur": { "improved": true },
-			"novellamental": { "improved": true },
-			"extremely slow zombie": { "improved": true },
-			"target minotaur": { "improved": true },
-			"beast in show": { "improved": true },
-			"secret base": { "order": [2, 1, 3, 4, 5], "improved": true },
-			"\"Rumors of My Death . . .\"": { "imageName": "_Rumors of My Death . . ._", "improved": true },
+			"secret base": { "order": [2, 1, 3, 4, 5] },
+			"\"Rumors of My Death . . .\"": { "imageName": "_Rumors of My Death . . ._" },
 
-			"Knight of the Kitchen Sink (a)": { "imageName": "Knight of the Kitchen Sink1", "improved": true },
-			"Knight of the Kitchen Sink (b)": { "imageName": "Knight of the Kitchen Sink2", "improved": true },
-			"Knight of the Kitchen Sink (c)": { "imageName": "Knight of the Kitchen Sink3", "improved": true },
-			"Knight of the Kitchen Sink (d)": { "imageName": "Knight of the Kitchen Sink4", "improved": true },
-			"Knight of the Kitchen Sink (e)": { "imageName": "Knight of the Kitchen Sink5", "improved": true },
-			"Knight of the Kitchen Sink (f)": { "imageName": "Knight of the Kitchen Sink6", "improved": true },
+			"Knight of the Kitchen Sink (a)": { "imageName": "Knight of the Kitchen Sink1" },
+			"Knight of the Kitchen Sink (b)": { "imageName": "Knight of the Kitchen Sink2" },
+			"Knight of the Kitchen Sink (c)": { "imageName": "Knight of the Kitchen Sink3" },
+			"Knight of the Kitchen Sink (d)": { "imageName": "Knight of the Kitchen Sink4" },
+			"Knight of the Kitchen Sink (e)": { "imageName": "Knight of the Kitchen Sink5" },
+			"Knight of the Kitchen Sink (f)": { "imageName": "Knight of the Kitchen Sink6" },
 
-			"Very Cryptic Command (a)": { "imageName": "Very Cryptic Command1", "improved": true },
-			"Very Cryptic Command (b)": { "imageName": "Very Cryptic Command2", "improved": true },
-			"Very Cryptic Command (c)": { "imageName": "Very Cryptic Command3", "improved": true },
-			"Very Cryptic Command (d)": { "imageName": "Very Cryptic Command4", "improved": true },
-			"Very Cryptic Command (e)": { "imageName": "Very Cryptic Command5", "improved": true },
-			"Very Cryptic Command (f)": { "imageName": "Very Cryptic Command6", "improved": true },
+			"Very Cryptic Command (a)": { "imageName": "Very Cryptic Command1" },
+			"Very Cryptic Command (b)": { "imageName": "Very Cryptic Command2" },
+			"Very Cryptic Command (c)": { "imageName": "Very Cryptic Command3" },
+			"Very Cryptic Command (d)": { "imageName": "Very Cryptic Command4" },
+			"Very Cryptic Command (e)": { "imageName": "Very Cryptic Command5" },
+			"Very Cryptic Command (f)": { "imageName": "Very Cryptic Command6" },
 
-			"Sly spy (a)": { "imageName": "Sly spy1", "improved": true },
-			"Sly spy (b)": { "imageName": "Sly spy2", "improved": true },
-			"Sly spy (c)": { "imageName": "Sly spy3", "improved": true },
-			"Sly spy (d)": { "imageName": "Sly spy4", "improved": true },
-			"Sly spy (e)": { "imageName": "Sly spy5", "improved": true },
-			"Sly spy (f)": { "imageName": "Sly spy6", "improved": true },
+			"Sly spy (a)": { "imageName": "Sly spy1" },
+			"Sly spy (b)": { "imageName": "Sly spy2" },
+			"Sly spy (c)": { "imageName": "Sly spy3" },
+			"Sly spy (d)": { "imageName": "Sly spy4" },
+			"Sly spy (e)": { "imageName": "Sly spy5" },
+			"Sly spy (f)": { "imageName": "Sly spy6" },
 
-			"Garbage Elemental (a)": { "imageName": "Garbage Elemental1", "improved": true },
-			"Garbage Elemental (b)": { "imageName": "Garbage Elemental2", "improved": true },
-			"Garbage Elemental (c)": { "imageName": "Garbage Elemental3", "improved": true },
-			"Garbage Elemental (d)": { "imageName": "Garbage Elemental4", "improved": true },
-			"Garbage Elemental (e)": { "imageName": "Garbage Elemental5", "improved": true },
-			"Garbage Elemental (f)": { "imageName": "Garbage Elemental6", "improved": true },
+			"Garbage Elemental (a)": { "imageName": "Garbage Elemental1" },
+			"Garbage Elemental (b)": { "imageName": "Garbage Elemental2" },
+			"Garbage Elemental (c)": { "imageName": "Garbage Elemental3" },
+			"Garbage Elemental (d)": { "imageName": "Garbage Elemental4" },
+			"Garbage Elemental (e)": { "imageName": "Garbage Elemental5" },
+			"Garbage Elemental (f)": { "imageName": "Garbage Elemental6" },
 
-			"Ineffable Blessing (a)": { "imageName": "Ineffable Blessing1", "improved": true },
-			"Ineffable Blessing (b)": { "imageName": "Ineffable Blessing2", "improved": true },
-			"Ineffable Blessing (c)": { "imageName": "Ineffable Blessing3", "improved": true },
-			"Ineffable Blessing (d)": { "imageName": "Ineffable Blessing4", "improved": true },
-			"Ineffable Blessing (e)": { "imageName": "Ineffable Blessing5", "improved": true },
-			"Ineffable Blessing (f)": { "imageName": "Ineffable Blessing6", "improved": true },
+			"Ineffable Blessing (a)": { "imageName": "Ineffable Blessing1" },
+			"Ineffable Blessing (b)": { "imageName": "Ineffable Blessing2" },
+			"Ineffable Blessing (c)": { "imageName": "Ineffable Blessing3" },
+			"Ineffable Blessing (d)": { "imageName": "Ineffable Blessing4" },
+			"Ineffable Blessing (e)": { "imageName": "Ineffable Blessing5" },
+			"Ineffable Blessing (f)": { "imageName": "Ineffable Blessing6" },
 
-			"Everythingamajig (a)": { "imageName": "Everythingamajig1", "improved": true },
-			"Everythingamajig (b)": { "imageName": "Everythingamajig2", "improved": true },
-			"Everythingamajig (c)": { "imageName": "Everythingamajig3", "improved": true },
-			"Everythingamajig (d)": { "imageName": "Everythingamajig4", "improved": true },
-			"Everythingamajig (e)": { "imageName": "Everythingamajig5", "improved": true },
-			"Everythingamajig (f)": { "imageName": "Everythingamajig6", "improved": true }
+			"Everythingamajig (a)": { "imageName": "Everythingamajig1" },
+			"Everythingamajig (b)": { "imageName": "Everythingamajig2" },
+			"Everythingamajig (c)": { "imageName": "Everythingamajig3" },
+			"Everythingamajig (d)": { "imageName": "Everythingamajig4" },
+			"Everythingamajig (e)": { "imageName": "Everythingamajig5" },
+			"Everythingamajig (f)": { "imageName": "Everythingamajig6" }
 		},
 		"POR": {
 			"mountain": { "order": [1, 3, 2, 4] }
@@ -169,9 +161,9 @@
 			"forest": { "order": [3, 1, 2] }
 		},
 		"ME4": {
-			"urza's mine": { "order": [1, 3, 2, 4], "improved": true },
-			"urza's power plant": { "order": [2, 4, 3, 1], "improved": true },
-			"urza's tower": { "order": [3, 2, 4, 1], "improved": true }
+			"urza's mine": { "order": [1, 3, 2, 4] },
+			"urza's power plant": { "order": [2, 4, 3, 1] },
+			"urza's tower": { "order": [3, 2, 4, 1] }
 		},
 		"TMP": {
 			"swamp": { "order": [3, 1, 4, 2] },
@@ -182,9 +174,6 @@
 		"S00": {
 			"forest": {"order": [2, 1]}
 		},
-		"OGW": {
-			"wastes": { "improved": true }
-		},
 		"MIR": {
 			"forest": { "order": [4, 2, 3, 1] },
 			"mountain": { "order": [4, 2, 3, 1] },
@@ -192,14 +181,7 @@
 			"plains": { "order": [1, 3, 2, 4] }
 		},
 		"LEB": {
-			"swamp": { "improved": true },
-			"forest": { "improved": true },
-			"mountain": { "order": [3, 2, 1], "improved": true },
-			"island": { "improved": true }
-		},
-		"LEA": {
-			"forest": { "improved": true },
-			"island": { "improved": true }
+			"mountain": { "order": [3, 2, 1] }
 		},
 		"ICE": {
 			"swamp": { "order": [2, 1, 3] },
@@ -209,61 +191,11 @@
 			"plains": { "order": [2, 3, 1] }
 		},
 		"ZEN": {
-			"swamp": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
-			"forest": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
-			"mountain": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
-			"island": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true },
-			"plains": { "order": [1, 5, 2, 6, 3, 7, 4, 8], "improved": true }
-		},
-		"BBD": {
-			"Will Kenrith": { "improved": true },
-			"Rowan Kenrith": { "improved": true }
-		},
-		"pMEI": {
-			"Liliana Vess": { "improved": true },
-			"Chandra, Pyromaster": { "improved": true }
-		},
-		"pJGP": {
-			"Wasteland": { "improved": true }
-		},
-		"pELP": {
-			"swamp": { "improved": true },
-			"forest": { "improved": true },
-			"mountain": { "improved": true },
-			"island": { "improved": true },
-			"plains": { "improved": true }
-		},
-		"pARL": {
-			"swamp": { "improved": true },
-			"forest": { "improved": true },
-			"mountain": { "improved": true },
-			"island": { "improved": true },
-			"plains": { "improved": true }
-		},
-		"pALP": {
-			"swamp": { "improved": true },
-			"forest": { "improved": true },
-			"mountain": { "improved": true },
-			"island": { "improved": true },
-			"plains": { "improved": true }
-		},
-		"CP2": {
-			"Sultai Ascendancy": { "improved": true }
-		},
-		"E01": {
-			"Plains": { "improved": true },
-			"Island": { "improved": true },
-			"Swamp": { "improved": true }
-		},
-		"CN2": {
-			"Kaya, Ghost Assassin": { "improved": true }
-		},
-		"VAN" : {
-			"Birds of Paradise Avatar": { "improved": true },
-			"Royal Assassin Avatar": { "improved": true },
-			"Platinum Angel Avatar": { "improved": true },
-			"Rith, the Awakener Avatar": { "improved": true },
-			"Tradewind Rider Avatar": { "improved": true }
+			"swamp": { "order": [1, 5, 2, 6, 3, 7, 4, 8] },
+			"forest": { "order": [1, 5, 2, 6, 3, 7, 4, 8] },
+			"mountain": { "order": [1, 5, 2, 6, 3, 7, 4, 8] },
+			"island": { "order": [1, 5, 2, 6, 3, 7, 4, 8] },
+			"plains": { "order": [1, 5, 2, 6, 3, 7, 4, 8] }
 		},
 		"HML": {
 			"Sengir Bats": { "order": [2, 1] },
@@ -273,8 +205,7 @@
 			"Folk of An-Havva": { "order": [2, 1] },
 			"Ambush Party": { "order": [2, 1] },
 			"Anaba Shaman": { "order": [2, 1] },
-			"Mesa Falcon": { "order": [2, 1] },
-			"Samite Alchemist": { "improved": true }
+			"Mesa Falcon": { "order": [2, 1] }
 		},
 		"FEM": {
 			"Armor Thrull": { "order": [3, 4, 2, 1] },
@@ -308,37 +239,23 @@
 			"Order of Leitbur": { "order": [2, 1, 3] }
 		},
 		"CHR": {
-			"Urza's Mine": { "order": [2, 1, 3, 4], "improved": true },
-			"Urza's Power Plant": { "order": [3, 2, 4, 1], "improved": true },
-			"Urza's Tower": { "order": [1, 3, 2, 4] , "improved": true}
-		},
-		"BRB": {
-			"mountain": { "improved": true },
-			"forest": { "improved": true },
-			"island": { "improved": true },
-			"plains": { "improved": true },
-			"swamp": { "improved": true }
+			"Urza's Mine": { "order": [2, 1, 3, 4] },
+			"Urza's Power Plant": { "order": [3, 2, 4, 1] },
+			"Urza's Tower": { "order": [1, 3, 2, 4] }
 		},
 		"BFZ": {
 			"Plains": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
-			"Island": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10], "improved": true },
+			"Island": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
 			"Swamp": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
 			"Mountain": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] },
-			"Forest": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10], "improved": true }
+			"Forest": { "order": [1, 6, 2, 7, 3, 8, 4, 9, 5, 10] }
 		},
 		"ATQ": {
-			"Mishra's Factory": { "order": [3, 1, 2, 4], "improved": true },
-			"Strip Mine": { "order": [4, 2, 1, 3], "improved": true },
-			"Urza's Mine" : { "order": [3, 2, 1, 4], "improved": true },
-			"Urza's Power Plant": { "order": [3, 2, 1, 4], "improved": true },
+			"Mishra's Factory": { "order": [3, 1, 2, 4] },
+			"Strip Mine": { "order": [4, 2, 1, 3] },
+			"Urza's Mine" : { "order": [3, 2, 1, 4] },
+			"Urza's Power Plant": { "order": [3, 2, 1, 4] },
 			"Urza's Tower": { "order": [1, 4, 3, 2] }
-		},
-		"ARN": {
-			"Giant Tortoise":  { "improved": true },
-			"Bird Maiden":  { "improved": true },
-			"Rukh Egg":  { "improved": true },
-			"Army of Allah":  { "improved": true },
-			"Piety":  { "improved": true }
 		},
 		"ALL": {
 			"Astrolabe": { "order": [2, 1] },
@@ -382,28 +299,20 @@
 			"Plains": { "order": [3, 2, 1] },
 			"Island": { "order": [2, 1, 3] }
 		},
-		"3ED": {
-			"Swamp": { "improved": true },
-			"Forest": { "improved": true },
-			"Mountain": { "improved": true },
-			"Plains": { "improved": true },
-			"Island": { "improved": true }
-		},
 		"2ED": {
-			"Swamp": { "order": [2, 1, 3], "improved": true },
-			"Forest": { "order": [3, 1, 2], "improved": true },
-			"Mountain": { "improved": true },
-			"Island": { "order": [3, 2, 1], "improved": true }
+			"Swamp": { "order": [2, 1, 3] },
+			"Forest": { "order": [3, 1, 2] },
+			"Island": { "order": [3, 2, 1] }
 		},
 		"AKH": {
-			"Swamp": { "order": [4, 1, 2, 3], "improved": true },
-			"Forest": { "order": [4, 1, 2, 3], "improved": true },
-			"Mountain": { "order": [4, 1, 2, 3], "improved": true},
-			"Plains": { "order": [4, 1, 2, 3], "improved": true },
-			"Island": { "order": [4, 1, 2, 3], "improved": true }
+			"Swamp": { "order": [4, 1, 2, 3] },
+			"Forest": { "order": [4, 1, 2, 3] },
+			"Mountain": { "order": [4, 1, 2, 3]},
+			"Plains": { "order": [4, 1, 2, 3] },
+			"Island": { "order": [4, 1, 2, 3] }
 		},
 		"DD3_DVD": {
-			"Swamp": { "order": [1, 2, 4, 3], "improved": true}
+			"Swamp": { "order": [1, 2, 4, 3]}
 		}
 	}
 }
