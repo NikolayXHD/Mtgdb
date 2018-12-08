@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -32,14 +33,15 @@ namespace Mtgdb.Dal
 					parts[i].Length <= 1 ||
 					// Sarpadian Empires, Vol. VII.xlhq.jpg
 					// Но Thoughtseize.[Size 16x20].jpg
-					!(parts[i].StartsWith("[") && parts[i].EndsWith("]")) && parts[i].Contains(' '));
+					parts[i].Contains(' ') && !(parts[i].StartsWith("[") && parts[i].EndsWith("]")));
 
 			Type = string.Join(".", parts.Skip(1 + lastNamePart));
 
 			var imageName = string.Join(".", parts.Take(1 + lastNamePart))
 				.Replace(" - ", string.Empty);
 
-			ImageName = string.Intern(ImageNamePatcher.PatchFileName(imageName));
+			var replacedName = _nameReplacements.TryGet(imageName) ?? imageName;
+			ImageName = string.Intern(replacedName);
 
 			var nameParts = ImageName.SplitTailingNumber();
 			Name = string.Intern(nameParts.Item1);
@@ -147,5 +149,12 @@ namespace Mtgdb.Dal
 		{
 			return $"{SetCode} {Name} #{VariantNumber} q{Quality}";
 		}
+
+		private static readonly Dictionary<string, string> _nameReplacements = new Dictionary<string, string>(Str.Comparer)
+		{
+			["Will O' The Wisp"] = "Will-O'-The-Wisp",
+			["Two Headed Giant of Foriys"] = "Two-Headed Giant of Foriys",
+			["Richard Garfield, Ph.D"] = "Richard Garfield, Ph.D."
+		};
 	}
 }

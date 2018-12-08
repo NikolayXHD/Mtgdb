@@ -77,6 +77,8 @@ namespace Mtgdb.Dal
 							gr => gr.ToList(),
 							Str.Comparer);
 
+					ImageNameCalculator.CalculateImageNames(set, Patch);
+
 					lock (SetsByCode)
 						SetsByCode.Add(set.Code, set);
 
@@ -123,8 +125,6 @@ namespace Mtgdb.Dal
 
 		private void preProcessCard(Card card)
 		{
-			ImageNamePatcher.Patch(card);
-
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);
 

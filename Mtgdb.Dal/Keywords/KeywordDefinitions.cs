@@ -386,6 +386,7 @@ namespace Mtgdb.Dal
 			cost("Evoke"),
 			"Evolve",
 			"Exploit",
+			custom("Explore", bound("explores")),
 			"Extort",
 			count("Fabricate"),
 			count("Fading"),

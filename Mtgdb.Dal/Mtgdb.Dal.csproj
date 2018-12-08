@@ -111,7 +111,7 @@
     <Compile Include="Index\CardSearcherState.cs" />
     <Compile Include="Index\CardSpellcheckerState.cs" />
     <Compile Include="Model\Image\ImageModel.cs" />
-    <Compile Include="Model\Image\ImageNamePatcher.cs" />
+    <Compile Include="Model\Image\ImageNameCalculator.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />
     <Compile Include="Images\BmpFrameDetector.cs" />
     <Compile Include="Index\LowercaseKeywordAnalyzer.cs" />

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Dal;
-using Newtonsoft.Json;
 using Ninject;
 using NUnit.Framework;
 
@@ -39,10 +37,10 @@ namespace Mtgdb.Test
 					if (correction?.Improved == true)
 						continue;
 
-					var cards = reOrderCards(pair.Value, correction);
+					var cards = ImageNameCalculator.ReOrderCards(pair.Value, correction);
 
 					var calculatedImageNames = Enumerable.Range(0, cards.Count)
-						.Select(i => calculateImageName(cards[i], i, cards.Count, correction))
+						.Select(i => ImageNameCalculator.CalculateImageName(cards[i], i, cards.Count, correction))
 						.ToList();
 
 					if (cards.Count == 1 && Str.Equals(cards[0].ImageNameOriginal, calculatedImageNames[0] + "1"))
@@ -80,12 +78,15 @@ namespace Mtgdb.Test
 						}
 				}
 
-			File.WriteAllText("D:\\temp\\CustomImageOrder.json", JsonConvert.SerializeObject(customOrderBySetByName, Formatting.Indented)
-				.Replace("\",\r\n      \"", "\", \"").Replace("[\r\n      \"", "[\"").Replace("\"\r\n    ]", "\"]"));
-
-			File.WriteAllText("D:\\temp\\ImageMismatches.json", JsonConvert.SerializeObject(mismatches, Formatting.Indented));
+			// File.WriteAllText("D:\\temp\\CustomImageOrder.json", JsonConvert.SerializeObject(customOrderBySetByName, Formatting.Indented)
+			// 	.Replace("\",\r\n      \"", "\", \"").Replace("[\r\n      \"", "[\"").Replace("\"\r\n    ]", "\"]"));
+			//
+			// File.WriteAllText("D:\\temp\\ImageMismatches.json", JsonConvert.SerializeObject(mismatches, Formatting.Indented));
 
 			Assert.That(mismatches, Is.Empty);
+			foreach (var orderByName in customOrderBySetByName.Values)
+				foreach (var order in orderByName.Values)
+					Assert.That(order, Is.Empty);
 
 			Dictionary<string, string[]> getSetCustomOrders(Set set)
 			{
@@ -98,59 +99,6 @@ namespace Mtgdb.Test
 				return setCustomOrders;
 			}
 		}
-
-		private static List<Card> reOrderCards(List<Card> cardNamesakes, ImageNamePatch correction)
-		{
-			var reordered = cardNamesakes
-				.OrderBy(n =>
-				{
-					if (n.Number == null)
-						return int.MinValue;
-
-					var digits = new string(n.Number.TakeWhile(char.IsDigit).ToArray());
-					if (digits.Length == 0)
-						return int.MaxValue;
-
-					return int.Parse(digits);
-				})
-				.ThenBy(_ => _.Number)
-				.ThenBy(_ => _.MultiverseId)
-
-				.ToList();
-
-			if (correction?.Order != null)
-			{
-				if (correction.Order.Length != reordered.Count)
-					throw new ArgumentException();
-
-				reordered = Enumerable.Range(0, reordered.Count).OrderBy(i => correction.Order[i])
-					.Select(i => reordered[i]).ToList();
-			}
-
-			return reordered;
-		}
-
-		private static string calculateImageName(Card card, int i, int count, ImageNamePatch correction)
-		{
-			if (correction?.ImageName != null)
-				return correction.ImageName;
-
-			string imageName = Str.Equals(card.Layout, "split")
-				? string.Concat(card.Names)
-				: card.NameEn;
-
-			var normalizedImageName = imageName.RemoveDiacritics().Replace("/", " ");
-			var clearedImageName = _removedSubstringPattern.Replace(normalizedImageName, string.Empty);
-
-
-			var result = count > 1
-				? clearedImageName + (i + 1)
-				: clearedImageName;
-
-			return result;
-		}
-
-		private static readonly Regex _removedSubstringPattern = new Regex(@"[:?""®]| token card");
 
 		private CardRepository _repo;
 		private Dictionary<string, Dictionary<string, ImageNamePatch>> _corrections;
