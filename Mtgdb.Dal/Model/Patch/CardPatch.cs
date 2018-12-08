@@ -16,5 +16,7 @@ namespace Mtgdb.Dal
 		public List<string> Types { get; [UsedImplicitly] set; }
 		public List<string> Subtypes { get; [UsedImplicitly] set; }
 		public string OriginalType { get; [UsedImplicitly] set; }
+		public string Layout { get; [UsedImplicitly] set; }
+		public string[] Names { get; [UsedImplicitly] set; }
 	}
 }

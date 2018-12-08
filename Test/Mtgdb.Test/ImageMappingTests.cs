@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -20,23 +21,26 @@ namespace Mtgdb.Test
 		[Test, Order(1)]
 		public void No_cards_without_image()
 		{
+			var messages = new List<string>();
+
 			foreach (var set in Repo.SetsByCode)
 				foreach (var card in set.Value.Cards)
 				{
 					var small = Repo.GetSmallImage(card, ImgRepo);
 					var zooms = Repo.GetZoomImages(card, ImgRepo);
 
-					string message = $"{card.SetCode} {card.ImageName}";
-
-					Assert.That(small, Is.Not.Null, message);
-					Assert.That(zooms, Is.Not.Null, message);
-					Assert.That(zooms, Is.Not.Empty, message);
+					if (small == null || zooms == null || zooms.Count == 0)
+						messages.Add($"{card.SetCode} {card.ImageName}");
 				}
+
+			Assert.That(messages, Is.Empty);
 		}
 
 		[Test, Order(2)]
 		public void Zoom_images_match_small_ones()
 		{
+			var messages = new List<string>();
+
 			foreach (var set in Repo.SetsByCode)
 				foreach (var card in set.Value.Cards)
 				{
@@ -55,8 +59,10 @@ namespace Mtgdb.Test
 						.Replace("\\mq\\", string.Empty);
 
 					if (!Str.Equals(smallPath, zoomPath))
-						Assert.Fail($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
+						messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
 				}
+
+			Assert.That(messages, Is.Empty);
 		}
 
 		// ReSharper disable StringLiteralTypo

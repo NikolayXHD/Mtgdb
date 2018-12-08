@@ -8,7 +8,7 @@ namespace Mtgdb.Dal.Index
 {
 	public class CardSearcher : LuceneSearcher<int, Card>
 	{
-		private const string IndexVersion = "0.46";
+		private const string IndexVersion = "0.47";
 
 		public CardSearcher(CardRepository repository, CardDocumentAdapter adapter)
 			: base(new CardSpellchecker(repository, adapter), adapter)

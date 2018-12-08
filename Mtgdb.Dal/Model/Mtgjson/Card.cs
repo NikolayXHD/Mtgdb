@@ -645,6 +645,12 @@ namespace Mtgdb.Dal
 			if (patch.Subtypes != null)
 				SubtypesArr = patch.Subtypes;
 
+			if (patch.Layout != null)
+				Layout = patch.Layout;
+
+			if (patch.Names != null)
+				Names = patch.Names;
+
 			if (patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}"))
 				Remove = true;
 		}

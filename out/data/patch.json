@@ -38,7 +38,15 @@
 			"OriginalType": "Scariest Creature You’ll Ever See",
 			"FullDuplicate": true
 		},
-		"Sultai Ascendacy": { "Name": "Sultai Ascendancy" }
+		"Sultai Ascendacy": { "Name": "Sultai Ascendancy" },
+		"curse of the fire penguin": {
+			"Layout": "flip",
+			"Names": ["curse of the fire penguin", "curse of the fire penguin creature"]
+		},
+		"curse of the fire penguin creature": {
+			"Layout": "flip",
+			"Names": ["curse of the fire penguin", "curse of the fire penguin creature"]
+		}
 	},
 
 	"Legality": {
@@ -86,6 +94,7 @@
 				"improved": true
 			},
 			"curse of the fire penguin": { "improved": true },
+			"curse of the fire penguin creature": { "imageName": "curse of the fire penguin", "improved": true },
 			"who": { "imageName": "who what when where why", "improved": true },
 			"what": { "imageName": "who what when where why", "improved": true },
 			"when": { "imageName": "who what when where why", "improved": true },
