@@ -66,6 +66,9 @@ rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test
 rmdir /q /s %target%\data\index\deck\search
 rmdir /q /s %target%\data\index\deck\suggest
+rmdir /q /s %target%\data\index\keywords\1.00
+rmdir /q /s %target%\data\index\search\1.00
+rmdir /q /s %target%\data\index\suggest\1.00
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 
