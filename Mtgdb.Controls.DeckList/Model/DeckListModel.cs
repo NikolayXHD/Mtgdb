@@ -270,7 +270,7 @@ namespace Mtgdb.Controls
 		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
-		private static readonly string _fileName = AppDir.History.AddPath("decks.json");
+		private static readonly string _fileName = AppDir.History.AddPath("decks.v2.json");
 		private State _state = new State();
 
 		private readonly AsyncSemaphore _syncCollection = new AsyncSemaphore(1);

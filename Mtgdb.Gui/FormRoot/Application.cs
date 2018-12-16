@@ -128,7 +128,7 @@ namespace Mtgdb.Gui
 				.Select(int.Parse);
 		}
 
-		public string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.json");
+		public string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v2.json");
 		private static string getHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
 
 		public FormMain FindCardDraggingForm()

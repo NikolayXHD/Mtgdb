@@ -125,7 +125,8 @@ namespace Mtgdb.Gui
 				_menuLegalityFormat,
 				_buttonLegalityAllowLegal,
 				_buttonLegalityAllowRestricted,
-				_buttonLegalityAllowBanned);
+				_buttonLegalityAllowBanned,
+				_buttonLegalityAllowFuture);
 
 			_drawing = new DrawingSubsystem(
 				_viewCards,
@@ -206,6 +207,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.ScaleDpi();
 			_buttonLegalityAllowRestricted.ScaleDpi();
 			_buttonLegalityAllowBanned.ScaleDpi();
+			_buttonLegalityAllowFuture.ScaleDpi();
 
 
 			_buttonShowDuplicates.ScaleDpi();

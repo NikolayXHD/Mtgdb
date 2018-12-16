@@ -19,6 +19,14 @@
 
 	<ImageCache CacheCapacity ="900"/>
 
+	<MtgjsonSource Url="https://mtgjson.com/v4/json/AllSets.json" />
+
+	<AppSource
+		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
+		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
+		NewsUrl=    "https://py3j9.app.goo.gl/run"
+		ForumUrl=   "https://py3j9.app.goo.gl/frm" />
+
 	<ImageLocations>
 		<Directory Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
@@ -499,13 +507,5 @@
 			<Dir Subdir="ZEN"        GdriveId="14PcNE110REpQ4ZlgR5Kg5O1yLpcEk51V" />
 		</QualityGroup>
 	</ImageSources>
-
-	<MtgjsonSource Url="http://www.mtgjson.com/json/AllSets-x.json.zip" />
-
-	<AppSource
-		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
-		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
-		NewsUrl=    "https://py3j9.app.goo.gl/run"
-		ForumUrl=   "https://py3j9.app.goo.gl/frm" />
 
 </configuration>

@@ -54,6 +54,7 @@ namespace Mtgdb.Gui
 		public bool? LegalityAllowLegal { get; set; }
 		public bool? LegalityAllowRestricted { get; set; }
 		public bool? LegalityAllowBanned { get; set; }
+		public bool? LegalityAllowFuture { get; set; }
 
 		public string DeckFile { get; set; }
 		public string DeckName { get; set; }

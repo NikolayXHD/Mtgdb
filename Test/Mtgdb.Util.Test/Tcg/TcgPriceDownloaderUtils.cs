@@ -27,9 +27,8 @@ namespace Mtgdb.Util
 
 			foreach (var set in tcgSets)
 			{
-				var matched = Repo.SetsByCode.Values.Where(_ =>
-						Str.Equals(_.Name, set.Name) ||
-						Str.Equals(_.MkmName, set.Name))
+				var matched = Repo.SetsByCode.Values
+					.Where(_ => Str.Equals(_.Name, set.Name))
 					.ToArray();
 
 				if (matched.Length != 1)
@@ -70,7 +69,7 @@ namespace Mtgdb.Util
 				string.Join(Str.Endl,
 					notMappedSets.Select(code => Repo.SetsByCode[code])
 						.OrderByDescending(set => set.ReleaseDate)
-						.Select(set => $"{set.ReleaseDate}\t{set.Code}\t{set.Name}\t{set.MkmName}")
+						.Select(set => $"{set.ReleaseDate}\t{set.Code}\t{set.Name}")
 						.ToArray());
 
 			Log.Debug("Not mapped sets:");

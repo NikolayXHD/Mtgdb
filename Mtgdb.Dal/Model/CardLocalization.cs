@@ -31,8 +31,10 @@ namespace Mtgdb.Dal
 				case "French":
 					return "fr";
 				case "Chinese Simplified":
+				case "Simplified Chinese":
 					return "cn";
 				case "Chinese Traditional":
+				case "Traditional Chinese":
 					return "tw";
 				case "German":
 					return "de";
@@ -43,6 +45,7 @@ namespace Mtgdb.Dal
 				case "Korean":
 					return "kr";
 				case "Portuguese (Brazil)":
+				case "Portuguese":
 					return "pt";
 				case "Russian":
 					return "ru";

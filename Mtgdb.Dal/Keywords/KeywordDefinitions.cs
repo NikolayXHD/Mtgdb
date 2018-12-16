@@ -234,6 +234,7 @@ namespace Mtgdb.Dal
 			"Cipher",
 			"Conspire",
 			"Convoke",
+
 			custom("Counter", bound(or(
 				notAfter(@"""|(\-|\+)\d ", or(
 					sequenceWithout(
@@ -241,6 +242,7 @@ namespace Mtgdb.Dal
 						notBefore("counters?", " on"), "(spells?|abilit(y|ies))"),
 					before("counters?", " (it|phantasmagorian|temporal extortion|brain gorgers)"))),
 				notAfter("can't be ", "countered")))),
+
 			cost("Cycling", pattern: @"(basic )?\w*cycling", customPattern: "\\w*cycl(ing|e(s|d)?)"),
 			cost("Dash", bound("dash", notAfter: "you may cast this spell for its")),
 			"Delve",
@@ -462,7 +464,7 @@ namespace Mtgdb.Dal
 			"Common",
 			"Uncommon",
 			"Rare",
-			"Mythic rare",
+			"Mythic",
 			"Basic land",
 			null /*, "marketing", "double faced"*/
 		};
@@ -474,13 +476,12 @@ namespace Mtgdb.Dal
 			"Split",
 			"Meld",
 			"Leveler",
-			"Double-faced",
+			"Transform",
 			"Flip",
 			"Phenomenon",
 			"Plane",
 			"Scheme",
 			"Vanguard",
-			"Token",
 			null
 		};
 

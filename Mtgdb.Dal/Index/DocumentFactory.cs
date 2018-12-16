@@ -196,17 +196,22 @@ namespace Mtgdb.Dal.Index
 			if (!string.IsNullOrEmpty(card.Subtypes))
 				doc.addTextField(nameof(card.Subtypes), card.Subtypes);
 
-			foreach (var note in card.LegalityByFormat.Values)
+			foreach (var pair in card.LegalityByFormat)
 			{
 				// Tested
-				if (Str.Equals(note.Legality, Legality.Legal))
-					doc.addTextField(nameof(card.LegalIn), note.Format);
-				else if (Str.Equals(note.Legality, Legality.Restricted))
-					doc.addTextField(nameof(card.RestrictedIn), note.Format);
-				else if (Str.Equals(note.Legality, Legality.Banned))
-					doc.addTextField(nameof(card.BannedIn), note.Format);
+				var legality = pair.Value;
+				var format = pair.Key;
+
+				if (Str.Equals(legality, Legality.Legal))
+					doc.addTextField(nameof(card.LegalIn), format);
+				else if (Str.Equals(legality, Legality.Restricted))
+					doc.addTextField(nameof(card.RestrictedIn), format);
+				else if (Str.Equals(legality, Legality.Banned))
+					doc.addTextField(nameof(card.BannedIn), format);
+				else if (Str.Equals(legality, Legality.Future))
+					doc.addTextField(nameof(card.FutureIn), format);
 				else
-					throw new NotSupportedException($"Unknown legality {note.Legality}");
+					throw new NotSupportedException($"Unknown legality {legality}");
 			}
 
 			// Tested

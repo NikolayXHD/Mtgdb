@@ -772,6 +772,7 @@ namespace Mtgdb.Gui
 			_legality.SetAllowLegal(settings.LegalityAllowLegal != false);
 			_legality.SetAllowRestricted(settings.LegalityAllowRestricted != false);
 			_legality.SetAllowBanned(settings.LegalityAllowBanned == true);
+			_legality.SetAllowFuture(settings.LegalityAllowFuture != false);
 
 			_requiredScroll = settings.SearchResultScroll;
 

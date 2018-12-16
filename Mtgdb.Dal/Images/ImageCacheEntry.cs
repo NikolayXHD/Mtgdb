@@ -13,7 +13,6 @@ namespace Mtgdb.Dal
 		}
 
 		public Bitmap Image { get; }
-
 		public LinkedListNode<Tuple<string, RotateFlipType>> RatingEntry { get; }
 	}
 }

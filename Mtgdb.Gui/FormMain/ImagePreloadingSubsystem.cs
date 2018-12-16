@@ -26,8 +26,9 @@ namespace Mtgdb.Gui
 
 		public void Reset()
 		{
-			var cardsToPreloadImage = getCardsToPreview(_layoutViewDeck);
-			cardsToPreloadImage.AddRange(getCardsToPreview(_layoutViewCards));
+			var cardsToPreloadImage = new List<Card>();
+			addCardsToPreview(_layoutViewDeck, cardsToPreloadImage);
+			addCardsToPreview(_layoutViewCards, cardsToPreloadImage);
 
 			_cardsToPreloadImage = cardsToPreloadImage;
 		}
@@ -66,13 +67,11 @@ namespace Mtgdb.Gui
 		public void AbortThread() =>
 			_cts?.Cancel();
 
-		private List<Card> getCardsToPreview(MtgLayoutView view)
+		private void addCardsToPreview(MtgLayoutView view, List<Card> cardsToPreloadImage)
 		{
 			var pageSize = _scrollSubsystem.GetPageSize(view);
 			
 			int visibleRecordIndex = view.VisibleRecordIndex;
-
-			var cardsToPreloadImage = new List<Card>();
 
 			bool endReached = false;
 			bool startReached = false;
@@ -81,33 +80,32 @@ namespace Mtgdb.Gui
 			while (true)
 			{
 				if (startReached && endReached)
-					break;
+					return;
 
-				if (cardsToPreloadImage.Count > _imageCacheCapacity - pageSize)
-					break;
+				int maxPreload = Math.Min(_imageCacheCapacity * 3 / 4 - pageSize, pageSize * 10);
+				if (cardsToPreloadImage.Count > maxPreload)
+					return;
 
-				startReached = startReached || !preload(cardsToPreloadImage, view, visibleRecordIndex - i - 1);
-				endReached = endReached || !preload(cardsToPreloadImage, view, visibleRecordIndex + pageSize + i);
+				startReached |= !add(visibleRecordIndex - i - 1);
+				endReached |= !add(visibleRecordIndex + pageSize + i);
 
 				i++;
 			}
 
-			return cardsToPreloadImage;
-		}
+			bool add(int j)
+			{
+				if (j < 0 || j >= view.RowCount)
+					return false;
 
-		private static bool preload(List<Card> cardsToPreloadImage, MtgLayoutView view, int i)
-		{
-			if (i < 0 || i >= view.RowCount)
-				return false;
+				int handle = view.GetVisibleRowHandle(j);
+				var card = (Card) view.FindRow(handle);
 
-			int handle = view.GetVisibleRowHandle(i);
-			var card = (Card) view.FindRow(handle);
+				if (card == null)
+					return false;
 
-			if (card == null)
-				return false;
-
-			cardsToPreloadImage.Add(card);
-			return true;
+				cardsToPreloadImage.Add(card);
+				return true;
+			}
 		}
 
 		public UiModel Ui { get; set; }

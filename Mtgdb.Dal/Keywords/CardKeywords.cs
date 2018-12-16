@@ -9,7 +9,6 @@ namespace Mtgdb.Dal
 		public CardKeywords(Card card)
 		{
 			_card = card;
-			IndexInFile = card.IndexInFile;
 			_keywordsByProperty = new Dictionary<string, HashSet<string>>(Str.Comparer);
 		}
 
@@ -64,7 +63,8 @@ namespace Mtgdb.Dal
 
 
 
-		public int IndexInFile { get; }
+		public int IndexInFile =>
+			_card.IndexInFile;
 
 		internal ICollection<string> OtherKeywords => 
 			GetPropertyValues(nameof(KeywordDefinitions.Keywords));

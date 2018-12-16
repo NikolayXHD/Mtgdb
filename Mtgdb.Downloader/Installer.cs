@@ -14,7 +14,7 @@ namespace Mtgdb.Downloader
 	public class Installer
 	{
 		public Installer(
-			AppSourceConfig appSourceConfig, 
+			AppSourceConfig appSourceConfig,
 			MtgjsonSourceConfig mtgjsonSourceConfig,
 			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher)
@@ -22,7 +22,7 @@ namespace Mtgdb.Downloader
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
 			_updateAppDir = AppDir.Update.AddPath("app");
-			
+
 			_appOnlineSignatureFile = Path.Combine(_updateAppDir, Signer.SignaturesFile);
 			_appDownloadedSignatureFile = AppDir.Update.AddPath(Signer.SignaturesFile);
 			_appInstalledVersionFile = AppDir.Update.AddPath("version.txt");
@@ -45,7 +45,7 @@ namespace Mtgdb.Downloader
 		public void DownloadMtgjson()
 		{
 			Console.WriteLine("GET {0}", _mtgjsonSourceConfig.Url);
-			
+
 			try
 			{
 				var responseStream = _webClient.DownloadStream(_mtgjsonSourceConfig.Url);
@@ -77,7 +77,7 @@ namespace Mtgdb.Downloader
 
 					MtgjsonFileUpdated?.Invoke();
 
-					Console.WriteLine("Done. On next start new cards will be loaded and full-text index will be rebuilt.");
+					Console.WriteLine("Done. New data will be available after restart.");
 					Console.WriteLine();
 				}
 			}
@@ -139,7 +139,7 @@ namespace Mtgdb.Downloader
 				Console.WriteLine("Failed to download {0}", expectedSignature.Path);
 				return false;
 			}
-			
+
 			var signature = Signer.CreateSignature(appOnline);
 			bool signatureMatch = signature.Md5Hash == expectedSignature.Md5Hash;
 
@@ -216,7 +216,7 @@ namespace Mtgdb.Downloader
 			}
 
 			var fileList = Signer.ReadFromFile(_appOnlineSignatureFile);
-			
+
 			// may be empty if downloading signature failed
 			var lastMetadata = fileList.LastOrDefault();
 			return lastMetadata;
@@ -231,7 +231,7 @@ namespace Mtgdb.Downloader
 			var lastMetadata = fileList[fileList.Length - 1];
 			return lastMetadata;
 		}
-		
+
 		private void writeInstalledVersion(string version)
 		{
 			File.WriteAllText(_appInstalledVersionFile, version);

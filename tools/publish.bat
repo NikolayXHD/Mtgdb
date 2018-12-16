@@ -66,11 +66,10 @@ rmdir /q /s %target%\data\index\suggest-test
 rmdir /q /s %target%\data\index\deck\search
 rmdir /q /s %target%\data\index\deck\suggest
 
-del /q %target%\data\allSets.json
-del /q %target%\data\patch.v2.json
-rmdir /q /s %target%\data\index\keywords\1.00
-rmdir /q /s %target%\data\index\search\1.00
-rmdir /q /s %target%\data\index\suggest\1.00
+del /q %target%\data\allSets-x.json
+rmdir /q /s %target%\data\index\keywords\0.47
+rmdir /q /s %target%\data\index\search\0.47
+rmdir /q /s %target%\data\index\suggest\0.47
 
 cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 

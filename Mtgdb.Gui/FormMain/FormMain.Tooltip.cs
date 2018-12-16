@@ -159,6 +159,11 @@ namespace Mtgdb.Gui
 				_buttonLegalityAllowBanned);
 
 			controller.SetTooltip(this,
+				"Filter by Legality",
+				"Show cards which will SOON BECOME LEGAL in selected format",
+				_buttonLegalityAllowFuture);
+
+			controller.SetTooltip(this,
 				"Show duplicates",
 				"Card duplicates have the same name and by rules\r\n" +
 				"they are considered to be the same card.\r\n\r\n" +

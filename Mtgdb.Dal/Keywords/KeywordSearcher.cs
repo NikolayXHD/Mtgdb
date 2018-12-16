@@ -11,7 +11,7 @@ namespace Mtgdb.Dal
 {
 	public class KeywordSearcher
 	{
-		private const string IndexVersion = "0.47";
+		private const string IndexVersion = "1.00";
 
 		public KeywordSearcher(CardRepository repo)
 		{

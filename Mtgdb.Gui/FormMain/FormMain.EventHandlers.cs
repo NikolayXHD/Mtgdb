@@ -678,6 +678,7 @@ namespace Mtgdb.Gui
 			_buttons.SetupButton(_buttonLegalityAllowLegal, buttonImages: null);
 			_buttons.SetupButton(_buttonLegalityAllowRestricted, buttonImages: null);
 			_buttons.SetupButton(_buttonLegalityAllowBanned, buttonImages: null);
+			_buttons.SetupButton(_buttonLegalityAllowFuture, buttonImages: null);
 
 			_buttons.SetupButton(_buttonSampleHandNew,
 				new ButtonImages(Resources.hand_48, x2: true));

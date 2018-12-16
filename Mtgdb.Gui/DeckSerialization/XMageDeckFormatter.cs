@@ -33,7 +33,7 @@ namespace Mtgdb.Gui
 				?.OrderByDescending(_ => _.ReleaseDate)
 				.ThenByDescending(_ => Str.Equals(id, getCardId(_)))
 				.FirstOrDefault();
-			
+
 			return card;
 		}
 
@@ -46,12 +46,10 @@ namespace Mtgdb.Gui
 
 		private static string getCardId(Card card)
 		{
-			var number = card.Number ?? card.MciNumber;
-
-			if (number == null)
+			if (card.Number == null)
 				return null;
 
-			var match = _idRegex.Match(number);
+			var match = _idRegex.Match(card.Number);
 			if (!match.Success)
 				return null;
 
@@ -69,7 +67,7 @@ namespace Mtgdb.Gui
 				return @"Kongming, ""Sleeping Dragon""";
 
 			// ReSharper restore StringLiteralTypo
-			
+
 			return xMageName;
 		}
 
@@ -105,7 +103,7 @@ namespace Mtgdb.Gui
 		public override Regex LineRegex { get; } = new Regex(
 			@"^(?<sb>SB: )?(?<count>\d+) \[(?<set>[^:]+):(?<id>\d+)\] (?<name>.*)$",
 			RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		
+
 		public override string Description => "XMage {type}";
 		public override string FileNamePattern => @"*.dck";
 	}

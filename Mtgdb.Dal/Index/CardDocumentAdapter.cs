@@ -20,7 +20,7 @@ namespace Mtgdb.Dal.Index
 			var spellcheckerField = GetSpellcheckerFieldIn(userField, lang);
 
 			return
-				!IsNotAnalyzed(spellcheckerField) && 
+				!IsNotAnalyzed(spellcheckerField) &&
 				!_spellcheckerValues.ContainsKey(spellcheckerField);
 		}
 
@@ -33,7 +33,7 @@ namespace Mtgdb.Dal.Index
 			return _spellcheckerValues.ContainsKey(transformed);
 		}
 
-		public IEnumerable<string> GetSpellcheckerValues(Card obj, string userField, string language) => 
+		public IEnumerable<string> GetSpellcheckerValues(Card obj, string userField, string language) =>
 			_spellcheckerValues[userField](obj, language);
 
 		public Document ToDocument(Card card) =>
@@ -80,7 +80,7 @@ namespace Mtgdb.Dal.Index
 		public bool IsFloatField(string userField) =>
 			DocumentFactory.FloatFields.Contains(userField);
 
-		public bool IsNotAnalyzed(string userField) => 
+		public bool IsNotAnalyzed(string userField) =>
 			DocumentFactory.NotAnalyzedFields.Contains(userField);
 
 		public int GetId(Document doc) =>
@@ -106,7 +106,7 @@ namespace Mtgdb.Dal.Index
 		private readonly Dictionary<string, Func<Card, string, IEnumerable<string>>> _spellcheckerValues
 			= new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
 		{
-			[nameof(Card.Name)] = (c, lang) => 
+			[nameof(Card.Name)] = (c, lang) =>
 				c.Localization?.GetName(lang)?.Invoke0(Sequence.From) ?? Enumerable.Empty<string>(),
 
 			[nameof(Card.NameEn)] = (c, lang) => Sequence.From(c.NameEn),
@@ -115,7 +115,8 @@ namespace Mtgdb.Dal.Index
 
 			[nameof(Card.LegalIn)] = (c, lang) => c.LegalFormats,
 			[nameof(Card.RestrictedIn)] = (c, lang) => c.RestrictedFormats,
-			[nameof(Card.BannedIn)] = (c, lang) => c.BannedFormats
+			[nameof(Card.BannedIn)] = (c, lang) => c.BannedFormats,
+			[nameof(Card.FutureIn)] = (c, lang) => c.FutureFormats
 		};
 
 		private const string AnyField = "*";

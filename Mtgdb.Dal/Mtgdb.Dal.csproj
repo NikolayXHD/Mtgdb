@@ -154,7 +154,6 @@
     <Compile Include="Model\Image\ImageFile.cs" />
     <Compile Include="Model\GeneratedManaParser.cs" />
     <Compile Include="Model\Ui\ICardCollection.cs" />
-    <Compile Include="Model\Mtgjson\LegalityNote.cs" />
     <Compile Include="Model\Mtgjson\Ruling.cs" />
     <Compile Include="Model\Mtgjson\Set.cs" />
     <Compile Include="Model\Ui\UiModel.cs" />

@@ -178,8 +178,8 @@ namespace Mtgdb.Dal
 
 		private static void logException(Exception ex) => _logger.Error(ex);
 
-		public event Action CornerRemoved;
-		public event Action FoundInCache;
+		internal event Action CornerRemoved;
+		internal event Action FoundInCache;
 
 		public static readonly object SyncRoot = new object();
 

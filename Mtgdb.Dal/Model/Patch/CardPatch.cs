@@ -10,7 +10,6 @@ namespace Mtgdb.Dal
 		public List<string> GeneratedMana { get; [UsedImplicitly] set; }
 		public bool FlipDuplicate { get; [UsedImplicitly] set; }
 		public bool FullDuplicate { get; [UsedImplicitly] set; }
-		public string MciNumber { get; [UsedImplicitly] set; }
 		public string Loyalty { get; [UsedImplicitly] set; }
 		public string Type { get; [UsedImplicitly] set; }
 		public List<string> Types { get; [UsedImplicitly] set; }
@@ -18,5 +17,8 @@ namespace Mtgdb.Dal
 		public string OriginalType { get; [UsedImplicitly] set; }
 		public string Layout { get; [UsedImplicitly] set; }
 		public string[] Names { get; [UsedImplicitly] set; }
+
+		public int? Hand;
+		public int? Life;
 	}
 }

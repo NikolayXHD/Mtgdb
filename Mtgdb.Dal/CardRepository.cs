@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 	{
 		public CardRepository()
 		{
-			SetsFile = AppDir.Data.AddPath("AllSets-x.json");
+			SetsFile = AppDir.Data.AddPath("AllSets.json");
 			PatchFile = AppDir.Data.AddPath("patch.json");
 			Cards = new List<Card>();
 		}
@@ -125,6 +125,29 @@ namespace Mtgdb.Dal
 
 		private void preProcessCard(Card card)
 		{
+			if (String.IsNullOrEmpty(card.Layout))
+				card.Layout = "Normal";
+			else if (Str.Equals(card.Layout, "Split") && card.GetCastKeywords().Contains("Aftermath"))
+				card.Layout = "Aftermath";
+			else if (Str.Equals(card.Layout, "Planar"))
+			{
+				if (card.TypesArr.Contains("Phenomenon", Str.Comparer))
+					card.Layout = "Phenomenon";
+				else if (card.TypesArr.Contains("Plane"))
+					card.Layout = "Plane";
+			}
+
+			const string timeshifted = "Timeshifted ";
+			if (Card.BasicLandNames.Contains(card.NameEn))
+				card.Rarity = "Basic land";
+			else if (card.Rarity.StartsWith(timeshifted, Str.Comparison))
+				card.Rarity = string.Intern(card.Rarity.Substring(timeshifted.Length));
+
+			if (card.LegalityByFormat != null)
+				card.LegalityByFormat = card.LegalityByFormat.ToDictionary(
+					pair => string.Intern(pair.Key),
+					pair => string.Intern(pair.Value));
+
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);
 
@@ -157,11 +180,6 @@ namespace Mtgdb.Dal
 
 			card.TextEn = card.TextEn?.Invoke1(LocalizationRepository.IncompleteChaosPattern.Replace, "{CHAOS}");
 			card.FlavorEn = card.FlavorEn?.Invoke1(LocalizationRepository.IncompleteChaosPattern.Replace, "{CHAOS}");
-
-			if (card.MciNumber == null)
-				card.MciNumber = card.Number;
-			else if (card.MciNumber.EndsWith(".html"))
-				card.MciNumber = _mciNumberRegex.Match(card.MciNumber).Groups["id"].Value;
 
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
 				? string.Join(" ", card.ColorsArr)

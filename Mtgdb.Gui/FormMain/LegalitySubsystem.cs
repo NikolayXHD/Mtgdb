@@ -12,7 +12,8 @@ namespace Mtgdb.Gui
 			ComboBox menuLegalityFormat,
 			CheckBox buttonLegalityAllowLegal,
 			CheckBox buttonLegalityAllowRestricted,
-			CheckBox buttonLegalityAllowBanned)
+			CheckBox buttonLegalityAllowBanned,
+			CheckBox buttonLegalityAllowFuture)
 		{
 			_menuLegalityFormat = menuLegalityFormat;
 
@@ -24,6 +25,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal = buttonLegalityAllowLegal;
 			_buttonLegalityAllowRestricted = buttonLegalityAllowRestricted;
 			_buttonLegalityAllowBanned = buttonLegalityAllowBanned;
+			_buttonLegalityAllowFuture = buttonLegalityAllowFuture;
 		}
 
 		public void SubscribeToEvents()
@@ -34,6 +36,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.CheckedChanged += handleLegalityControlChanged;
 			_buttonLegalityAllowRestricted.CheckedChanged += handleLegalityControlChanged;
 			_buttonLegalityAllowBanned.CheckedChanged += handleLegalityControlChanged;
+			_buttonLegalityAllowFuture.CheckedChanged += handleLegalityControlChanged;
 
 			_buttonLegalityAllowLegal.MouseUp += handleMouseClick;
 			_buttonLegalityAllowRestricted.MouseUp += handleMouseClick;
@@ -52,7 +55,8 @@ namespace Mtgdb.Gui
 			if (_menuLegalityFormat.SelectedIndex == 0 &&
 				_buttonLegalityAllowLegal.Checked &&
 				_buttonLegalityAllowRestricted.Checked &&
-				!_buttonLegalityAllowBanned.Checked)
+				!_buttonLegalityAllowBanned.Checked &&
+				_buttonLegalityAllowFuture.Checked)
 			{
 				return false;
 			}
@@ -63,6 +67,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.Checked = true;
 			_buttonLegalityAllowRestricted.Checked = true;
 			_buttonLegalityAllowBanned.Checked = false;
+			_buttonLegalityAllowFuture.Checked = true;
 
 			_resetting = false;
 
@@ -84,6 +89,7 @@ namespace Mtgdb.Gui
 			AllowLegal = _buttonLegalityAllowLegal.Checked;
 			AllowRestricted = _buttonLegalityAllowRestricted.Checked;
 			AllowBanned = _buttonLegalityAllowBanned.Checked;
+			AllowFuture = _buttonLegalityAllowFuture.Checked;
 
 			updateLegalitySelectorEnabled();
 			FilterChanged?.Invoke();
@@ -94,6 +100,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.Enabled =
 				_buttonLegalityAllowRestricted.Enabled =
 					_buttonLegalityAllowBanned.Enabled =
+						_buttonLegalityAllowFuture.Enabled =
 						!string.IsNullOrEmpty(FilterFormat);
 		}
 
@@ -112,6 +119,10 @@ namespace Mtgdb.Gui
 
 			if (AllowBanned)
 				if (c.IsBannedIn(FilterFormat))
+					return true;
+
+			if (AllowFuture)
+				if (c.IsFutureIn(FilterFormat))
 					return true;
 
 			return false;
@@ -147,6 +158,7 @@ namespace Mtgdb.Gui
 		public bool AllowLegal { get; private set;}
 		public bool AllowRestricted { get; private set; }
 		public bool AllowBanned { get; private set; }
+		public bool AllowFuture { get; private set; }
 
 		public void SetFilterFormat(string value)
 		{
@@ -175,7 +187,12 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowBanned.Checked = value;
 		}
 
-		public string FilterFormat { get; private set; }
+		public void SetAllowFuture(bool value)
+		{
+			_buttonLegalityAllowFuture.Checked = value;
+		}
+
+		public string FilterFormat { get; private set; } 
 
 		private bool _resetting;
 
@@ -183,5 +200,6 @@ namespace Mtgdb.Gui
 		private readonly CheckBox _buttonLegalityAllowLegal;
 		private readonly CheckBox _buttonLegalityAllowRestricted;
 		private readonly CheckBox _buttonLegalityAllowBanned;
+		private readonly CheckBox _buttonLegalityAllowFuture;
 	}
 }

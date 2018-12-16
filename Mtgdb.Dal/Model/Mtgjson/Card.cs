@@ -1,21 +1,272 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Lucene.Net.Documents;
 using Mtgdb.Dal.Index;
 using Newtonsoft.Json;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal
 {
 	/// <summary>
-	/// http://www.mtgjson.com/documentation.html
+	/// https://mtgjson.com/v4/docs.html
 	/// </summary>
 	[JsonObject]
 	public class Card
 	{
+		/// <summary>
+		/// Name of artist.
+		/// </summary>
+		[JsonProperty("artist")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Artist { get; set; }
+
+		/// <summary>
+		/// List of all colors in card’s mana cost and any color indicator. Some cards are special (such as Devoid cards or other cards with certain rules text).
+		/// </summary>
+		[JsonProperty("colors")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> ColorsArr { get; set; }
+
+		/// <summary>
+		/// The converted mana cost of the card.
+		/// </summary>
+		[JsonProperty("convertedManaCost")]
+		public float Cmc { get; set; }
+
+		/// <summary>
+		/// Italicized text found below the rules text that has no game function.
+		/// </summary>
+		[JsonProperty("flavorText")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string FlavorEn { get; set; }
+
+		/// <summary>
+		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.
+		/// </summary>
+		[JsonProperty("foreignData")]
+		public List<ForeignName> ForeignNames { get; set; }
+
+		/// <summary>
+		/// Type of card. Can be normal, split, flip, transform, meld, leveler, saga, planar, scheme, vanguard, token, double_faced_token, emblem, augment, or host. (If normal, it is usually omitted.)
+		/// </summary>
+		[JsonConverter(typeof(InternedStringConverter))]
+		[JsonProperty("layout")]
+		public string Layout { get; set; }
+
+		/// <summary>
+		/// Keys are Magic play formats. Can be 1v1, brawl, commander, duel, frontier, legacy, modern, standard, or vintage. Values can be Legal, Restricted, Banned, or Future. (“Future” is used for a revision of the format in which the card will be legal soon. If the format is not listed, it is assumed the card is not legal in that format.)
+		/// </summary>
+		[JsonProperty("legalities")]
+		public Dictionary<string, string> LegalityByFormat { get; set; }
+
+		/// <summary>
+		/// Planeswalker loyalty value.
+		/// </summary>
+		[JsonProperty("loyalty")]
+		[JsonConverter(typeof(IntToInternedStringConverter))]
+		public string Loyalty { get; set; }
+
+		/// <summary>
+		/// Mana cost of the card.
+		/// </summary>
+		[JsonProperty("manaCost")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string ManaCost { get; set; }
+
+		/// <summary>
+		/// An integer most cards have which Wizards uses as a card identifier.
+		/// </summary>
+		[JsonProperty("multiverseId")]
+		public int? MultiverseId { get; set; }
+
+		/// <summary>
+		/// Name of the card. (If the card is in an Un-set and has multiple printings, a space and letter enclosed in parentheses, starting with (b), follows the name.)
+		/// </summary>
+		[JsonProperty("name")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string NameEn { get; set; }
+
+		/// <summary>
+		/// Names of each face on the card. Meld cards are listed in the order of CardA, Meld, CardB.
+		/// </summary>
+		[JsonProperty("names")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> Names { get; set; }
+
+		/// <summary>
+		/// Number of the card.
+		/// </summary>
+		[JsonProperty("number")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Number { get; set; }
+
+		/// <summary>
+		/// Text on the card as originally printed.
+		/// </summary>
+		[JsonProperty("originalText")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string OriginalText { get; set; }
+
+		/// <summary>
+		/// Type as originally printed. Includes any supertypes and subtypes.
+		/// </summary>
+		[JsonProperty("originalType")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string OriginalType { get; set; }
+
+		/// <summary>
+		/// List of sets the card was printed in, in uppercase.
+		/// </summary>
+		[JsonProperty("printings")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> Printings { get; set; }
+
+		/// <summary>
+		/// Power of the creature.
+		/// </summary>
+		[JsonProperty("power")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Power { get; set; }
+
+		/// <summary>
+		/// Rarity. Can be common, uncommon, rare, or mythic
+		/// </summary>
+		[JsonProperty("rarity")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Rarity { get; set; }
+
+		/// <summary>
+		/// The rulings for the card. An array of objects, each object having 'date' and 'text' keys.
+		/// </summary>
+		[JsonProperty("rulings")]
+		public List<Ruling> RulingsList { get; set; }
+
+		/// <summary>
+		/// List of card subtypes found after em-dash.
+		/// </summary>
+		[JsonProperty("subtypes")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> SubtypesArr { get; set; }
+
+		/// <summary>
+		/// List of card supertypes found before em-dash.
+		/// </summary>
+		[JsonProperty("supertypes")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> SupertypesArr { get; set; }
+
+		/// <summary>
+		/// Rules text of the card.
+		/// </summary>
+		[JsonProperty("text")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string TextEn { get; set; }
+
+		/// <summary>
+		/// Toughness of the creature.
+		/// </summary>
+		[JsonProperty("toughness")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Toughness { get; set; }
+
+		/// <summary>
+		/// Type of the card. Includes any supertypes and subtypes.
+		/// </summary>
+		[JsonProperty("type")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string TypeEn { get; set; }
+
+		/// <summary>
+		/// List of types of the card.
+		/// </summary>
+		[JsonProperty("types")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
+		public IList<string> TypesArr { get; set; }
+
+		/// <summary>
+		/// A universal unique id generated for the card.
+		/// </summary>
+		[JsonProperty("uuid")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Id { get; set; }
+
+		/*
+
+		/// <summary>
+		/// Color of the border. Can be black, borderless, gold, silver, or white.
+		/// </summary>
+		public string BorderColor { get; set; }
+
+		/// <summary>
+		/// List of all colors in card’s mana cost, rules text and any color indicator.
+		/// </summary>
+		public List<string> ColorIdentity { get; set; }
+
+		/// <summary>
+		/// List of all colors in card’s color indicator. Usually found only on cards without mana costs and other special cards.
+		/// </summary>
+		public List<string> ColorIndicator { get; set; }
+
+		/// <summary>
+		/// The converted mana cost of the face (half, or part) of the card.
+		/// </summary>
+		[JsonProperty("faceConvertedManaCost")]
+		public float FaceCmc { get; set; }
+
+		/// <summary>Style of the card frame. Can be 1993, 1997, 2003, 2015, or future.</summary>
+		[JsonProperty("frameVersion")]
+		public string FrameVersion { get; set; }
+
+		/// <summary>Can the card be found in foil? Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("hasFoil")]
+		public bool hasFoil { get; set; }
+
+		/// <summary>Can the card be found in foil? Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("hasFoil")]
+		public bool HasFoil { get; set; }
+
+		/// <summary>Can the card be found in non-foil? Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("hasNoFoil")]
+		public bool HasNoFoil { get; set; }
+
+		/// <summary>Can the card only be found in foil? true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("isFoilOnly")]
+		public bool IsFoilOnly { get; set; }
+
+		/// <summary>Is the card only available online? Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("isOnlineOnly")]
+		public bool IsOnlineOnly { get; set; }
+
+		/// <summary>Is the card oversized? Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("isOversized")]
+		public bool IsOversized { get; set; }
+
+		/// <summary>Is the card on the Reserved List? Can be true or false. (If false, isReserved is usually omitted.)</summary>
+		[JsonProperty("isReserved")]
+		public bool IsReserved { get; set; }
+
+		/// <summary>Card is “timeshifted”, a feature from Time Spiral block. Can be true or false. (If false, it is usually omitted.)</summary>
+		[JsonProperty("isTimeshifted")]
+		public bool IsTimeshifted { get; set; }
+
+		/// <summary>
+		/// UUIDs of cards with alternate printings with the same set code (excluding Un-sets).
+		/// </summary>
+		[JsonProperty("variations")]
+		public List<string> Variations { get; set; }
+
+		/// <summary>
+		/// Name of the watermark on the card. Can be one of many different values, including a guild name, clan name, or wotc for the shooting star. (If there isn’t one, it can be an empty string, but it is usually omitted.)
+		/// </summary>
+		[JsonProperty("watermark")]
+		public string Watermark { get; set; }
+		*/
+
+
+
 		[JsonIgnore]
 		public Set Set { get; set; }
 
@@ -41,6 +292,20 @@ namespace Mtgdb.Dal
 		public string ReleaseYear => Set?.ReleaseDate?.Substring(0, 4);
 
 
+		[JsonIgnore]
+		public string Color { get; set; }
+
+		/// <summary>
+		/// Maximum hand size modifier. Only exists for Vanguard cards.
+		/// </summary>
+		[JsonIgnore]
+		public int? Hand { get; set; }
+
+		/// <summary>
+		/// Starting life total modifier. Only exists for Vanguard cards.
+		/// </summary>
+		[JsonIgnore]
+		public int? Life { get; set; }
 
 		[JsonIgnore]
 		public string ImageNameBase => ImageName.SplitTailingNumber().Item1;
@@ -163,6 +428,9 @@ namespace Mtgdb.Dal
 		public string BannedIn => _bannedIn ?? (_bannedIn = string.Intern(string.Join(@", ", BannedFormats)));
 
 		[JsonIgnore]
+		public string FutureIn => _futureIn ?? (_futureIn = string.Intern(string.Join(@", ", FutureFormats)));
+
+		[JsonIgnore]
 		public string[] LegalFormats => _legalFormats ?? (_legalFormats = getFormats(Legality.Legal));
 
 		[JsonIgnore]
@@ -171,32 +439,15 @@ namespace Mtgdb.Dal
 		[JsonIgnore]
 		public string[] BannedFormats => _bannedFormats ?? (_bannedFormats = getFormats(Legality.Banned));
 
+		[JsonIgnore]
+		public string[] FutureFormats => _futureFormats ?? (_futureFormats = getFormats(Legality.Future));
+
 		private string[] getFormats(string legality)
 		{
 			return LegalityByFormat
-				.Where(_ => Str.Equals(_.Value.Legality, legality))
+				.Where(_ => Str.Equals(_.Value, legality))
 				.Select(_ => _.Key)
 				.ToArray();
-		}
-
-		[JsonIgnore]
-		public Dictionary<string, LegalityNote> LegalityByFormat
-		{
-			get
-			{
-				if (_legalityByFormat != null)
-					return _legalityByFormat;
-
-				if (LegalitiesList == null)
-					_legalityByFormat = new Dictionary<string, LegalityNote>(Str.Comparer);
-				else
-					_legalityByFormat = LegalitiesList
-						//it was retired in June 12, when Vintage was introduced into Magic Online
-						.Where(_ => !Str.Equals(_.Format, "classic"))
-						.ToDictionary(_ => _.Format, Str.Comparer);
-
-				return _legalityByFormat;
-			}
 		}
 
 		internal void SetLegality(string format, string legality)
@@ -204,15 +455,7 @@ namespace Mtgdb.Dal
 			if (Str.Equals(legality, Legality.Illegal))
 				LegalityByFormat.Remove(format);
 			else
-			{
-				if (LegalityByFormat.TryGetValue(format, out var note))
-					note.Legality = legality;
-				else
-				{
-					note = new LegalityNote { Format = format, Legality = legality };
-					LegalityByFormat.Add(format, note);
-				}
-			}
+				LegalityByFormat[format] = legality;
 		}
 
 		[JsonIgnore]
@@ -244,266 +487,8 @@ namespace Mtgdb.Dal
 		public ICollection<string> GetKeywords() => GetAllKeywords().OtherKeywords;
 		public ICollection<string> GetCastKeywords() => GetAllKeywords().CastKeywords;
 
-		private string _imageName;
-		public string ImageName
-		{
-			get => _imageName ?? ImageNameOriginal;
-			set => _imageName = value;
-		}
-
-		/// <summary>
-		/// A unique id for this card. It is made up by doing an SHA1 hash of
-		/// setCode + cardName + cardImageName
-		/// </summary>
-		[JsonProperty("id")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Id { get; set; }
-
-		/// <summary>
-		/// The card name. For split, double-faced and flip cards, just the name of one side of the card. Basically each 'sub-card' has its own record.
-		/// </summary>
-		[JsonProperty("name")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string NameEn { get; set; }
-
-		/// <summary>
-		/// Only used for split, flip, double-faced, and meld cards. Will contain all the names on this card, front or back. For meld cards, the first name is the card with the meld ability, which has the top half on its back, the second name is the card with the reminder text, and the third name is the melded back face.
-		/// </summary>
-		[JsonProperty("names")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> Names { get; set; }
-
-		/// <summary>
-		/// The mana cost of this card. Consists of one or more mana symbols.
-		/// </summary>
-		[JsonProperty("manaCost")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string ManaCost { get; set; }
-
-		/// <summary>
-		/// Converted mana cost. Always a number. NOTE: cmc may have a decimal point as cards from unhinged may contain "half mana" (such as 'Little Girl' with a cmc of 0.5). Cards without this field have an implied cmc of zero as per rule 202.3a
-		/// </summary>
-		[JsonProperty("cmc")]
-		public float Cmc { get; set; }
-
-		/// <summary>
-		/// The card type. This is the type you would see on the card if printed today. Note: The dash is a UTF8 'long dash' as per the MTG rules
-		/// </summary>
-		[JsonProperty("type")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string TypeEn { get; set; }
-
-		/// <summary>
-		/// The types of the card. These appear to the left of the dash in a card type. Example values: Instant, Sorcery, Artifact, Creature, Enchantment, Land, Planeswalker
-		/// </summary>
-		[JsonProperty("types")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> TypesArr { get; set; }
-
-		/// <summary>
-		/// The supertypes of the card. These appear to the far left of the card type. Example values: Basic, Legendary, Snow, World, Ongoing
-		/// </summary>
-		[JsonProperty("supertypes")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> SupertypesArr { get; set; }
-
-		/// <summary>
-		/// The subtypes of the card. These appear to the right of the dash in a card type. Usually each word is its own subtype. Example values: Trap, Arcane, Equipment, Aura, Human, Rat, Squirrel, etc.
-		/// </summary>
-		[JsonProperty("subtypes")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> SubtypesArr { get; set; }
-
-		/// <summary>
-		/// The rarity of the card. Examples: Common, Uncommon, Rare, Mythic Rare, Special, Basic Land
-		/// </summary>
-		[JsonProperty("rarity")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Rarity { get; set; }
-
-		/// <summary>
-		/// The text of the card. May contain mana symbols and other symbols.
-		/// </summary>
-		[JsonProperty("text")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string TextEn { get; set; }
-
-		[JsonProperty("originalText")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string OriginalText { get; set; }
-
-		/// <summary>
-		/// The original type on the card at the time it was printed. This field is not available for promo cards.
-		/// </summary>
-		[JsonProperty("originalType")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string OriginalType { get; set; }
-
-		/// <summary>
-		/// The flavor text of the card.
-		/// </summary>
-		[JsonProperty("flavor")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string FlavorEn { get; set; }
-
-		/// <summary>
-		/// The artist of the card. This may not match what is on the card as MTGJSON corrects many card misprints.
-		/// </summary>
-		[JsonProperty("artist")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Artist { get; set; }
-
-		/// <summary>
-		/// The power of the card. This is only present for creatures. This is a string, not an integer, because some cards have powers like: "1+*"
-		/// </summary>
-		[JsonProperty("power")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Power { get; set; }
-
-		/// <summary>
-		/// The toughness of the card. This is only present for creatures. This is a string, not an integer, because some cards have toughness like: "1+*"
-		/// </summary>
-		[JsonProperty("toughness")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Toughness { get; set; }
-
-		/// <summary>
-		/// The loyalty of the card. This is only present for planeswalkers.
-		/// </summary>
-		[JsonProperty("loyalty")]
-		[JsonConverter(typeof(IntToInternedStringConverter))]
-		public string Loyalty { get; set; }
-
-		/// <summary>
-		/// The rulings for the card. An array of objects, each object having 'date' and 'text' keys.
-		/// </summary>
-		[JsonProperty("rulings")]
-		public List<Ruling> RulingsList { get; set; }
-
-		/// <summary>
-		/// Which formats this card is legal, restricted or banned in. An array of objects, each object having 'format' and 'legality'. A 'condition' key may be added in the future if Gatherer decides to utilize it again.
-		/// </summary>
-		[JsonProperty("legalities")]
-		// ReSharper disable once UnusedAutoPropertyAccessor.Local
-		public List<LegalityNote> LegalitiesList { get; set; }
-
-		/// <summary>
-		/// The card number. This is printed at the bottom-center of the card in small text. This is a string, not an integer, because some cards have letters in their numbers.
-		/// </summary>
-		[JsonProperty("number")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string Number { get; set; }
-
-		/// <summary>
-		/// Number used by MagicCards.info for their indexing URLs (Most often it is the card number in the set)
-		/// </summary>
-		[JsonProperty("mciNumber")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string MciNumber { get; set; }
-
-		/// <summary>
-		/// This used to refer to the mtgimage.com file name for this card. mtgimage.com has been SHUT DOWN by Wizards of the Coast. This field will continue to be set correctly and is now only useful for UID purposes.
-		/// </summary>
-		[JsonConverter(typeof(InternedStringConverter))]
-		[JsonProperty("imageName")]
-		public string ImageNameOriginal { get; internal set; }
-
-		[JsonConverter(typeof(InternedStringConverter))]
-		[JsonProperty("layout")]
-		public string Layout { get; set; }
-
-		/// <summary>
-		/// The multiverseid of the card on Wizard's Gatherer web page. Cards from sets that do not exist on Gatherer will NOT have a multiverseid. Sets not on Gatherer are: ATH, ITP, DKM, RQS, DPA and all sets with a 4 letter code that starts with a lowercase 'p'.
-		/// </summary>
-		[JsonProperty("multiverseId")]
-		public int? MultiverseId { get; set; }
-
-		/// <summary>
-		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.
-		/// </summary>
-		[JsonProperty("foreignNames")]
-		public List<ForeignName> ForeignNames { get; set; }
-
-		/// <summary>
-		/// Maximum hand size modifier. Only exists for Vanguard cards.
-		/// </summary>
-		[JsonProperty("hand")]
-		public int? Hand { get; set; }
-
-		/// <summary>
-		/// Starting life total modifier. Only exists for Vanguard cards.
-		/// </summary>
-		[JsonProperty("life")]
-		public int? Life { get; set; }
-
-		/// <summary>
-		/// The card colors. Usually this is derived from the casting cost,
-		/// but some cards are special (like the back of double-faced cards and Ghostfire).
-		/// </summary>
-		[JsonProperty("colors")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> ColorsArr { get; set; }
-
 		[JsonIgnore]
-		public string Color { get; set; }
-
-		/// <summary>
-		/// The sets that this card was printed in, expressed as an array of set codes.
-		/// </summary>
-		[JsonProperty("printings")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> Printings { get; set; }
-
-		/*
-
-
-		/// <summary>
-		/// This is created reading all card color information and costs. It is the same for double-sided cards (if they have different colors, the identity will have both colors). It also identifies all mana symbols in the card (cost and text). Mostly used on commander decks.
-		/// </summary>
-		public List<string> ColorIdentity { get; set; }
-
-		/// <summary>
-		/// If a card has alternate art (for example, 4 different Forests, or the 2 Brothers Yamazaki) then each other variation's multiverseid will be listed here, NOT including the current card's multiverseid. NOTE: Only present for sets that exist on Gatherer.
-		/// </summary>
-		public List<int> Variations { get; set; }
-
-		/// <summary>
-		/// The watermark on the card. Note: Split cards don't currently have this field set, despite having a watermark on each side of the split card.
-		/// </summary>
-		public string Watermark { get; set; }
-
-		/// <summary>
-		/// If the border for this specific card is DIFFERENT than the border specified in the top level set JSON, then it will be specified here. (Example: Unglued has silver borders, except for the lands which are black bordered)
-		/// </summary>
-		public string Border { get; set; }
-
-		/// <summary>
-		/// If this card was a timeshifted card in the set.
-		/// </summary>
-		public bool Timeshifted { get; set; }
-
-		/// <summary>
-		/// Set to true if this card is reserved by Wizards Official Reprint Policy
-		/// </summary>
-		public bool Reserved { get; set; }
-
-		/// <summary>
-		/// The date this card was released. This is only set for promo cards. The date may not be accurate to an exact day and month, thus only a partial date may be set (YYYY-MM-DD or YYYY-MM or YYYY). Some promo cards do not have a known release date.
-		/// </summary>
-		public string ReleaseDate { get; set; }
-
-		/// <summary>
-		/// Set to true if this card was only released as part of a core box set. These are technically part of the core sets and are tournament legal despite not being available in boosters.
-		/// </summary>
-		public bool Starter { get; set; }
-
-		/// <summary>
-		/// For promo cards, this is where this card was originally obtained. For box sets that are theme decks, this is which theme deck the card is from. For clash packs, this is which deck it is from.
-		/// </summary>
-		public string Source { get; set; }
-		*/
-
-
+		public string ImageName { get; set; }
 
 		public override string ToString()
 		{
@@ -541,7 +526,7 @@ namespace Mtgdb.Dal
 		public bool IsLegalIn(string format)
 		{
 			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality.Legality, Legality.Legal);
+				return Str.Equals(legality, Legality.Legal);
 
 			return false;
 		}
@@ -549,7 +534,7 @@ namespace Mtgdb.Dal
 		public bool IsRestrictedIn(string format)
 		{
 			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality.Legality, Legality.Restricted);
+				return Str.Equals(legality, Legality.Restricted);
 
 			return false;
 		}
@@ -557,7 +542,15 @@ namespace Mtgdb.Dal
 		public bool IsBannedIn(string format)
 		{
 			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality.Legality, Legality.Banned);
+				return Str.Equals(legality, Legality.Banned);
+
+			return false;
+		}
+
+		public bool IsFutureIn(string format)
+		{
+			if (LegalityByFormat.TryGetValue(format, out var legality))
+				return Str.Equals(legality, Legality.Future);
 
 			return false;
 		}
@@ -627,9 +620,6 @@ namespace Mtgdb.Dal
 			if (patch.FlipDuplicate)
 				Remove = TextEn != OriginalText;
 
-			if (patch.MciNumber != null)
-				MciNumber = patch.MciNumber;
-
 			if (patch.Loyalty != null)
 				Loyalty = patch.Loyalty;
 
@@ -653,6 +643,12 @@ namespace Mtgdb.Dal
 
 			if (patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}"))
 				Remove = true;
+
+			if (patch.Life != null)
+				Life = patch.Life;
+
+			if (patch.Hand != null)
+				Hand = patch.Hand;
 		}
 
 
@@ -740,9 +736,6 @@ namespace Mtgdb.Dal
 		private IList<string> _generatedManaArr;
 
 		[JsonIgnore]
-		private Dictionary<string, LegalityNote> _legalityByFormat;
-
-		[JsonIgnore]
 		private string _rulings;
 
 		[JsonIgnore]
@@ -755,6 +748,9 @@ namespace Mtgdb.Dal
 		private string _bannedIn;
 
 		[JsonIgnore]
+		private string _futureIn;
+
+		[JsonIgnore]
 		private string[] _legalFormats;
 
 		[JsonIgnore]
@@ -762,6 +758,9 @@ namespace Mtgdb.Dal
 
 		[JsonIgnore]
 		private string[] _bannedFormats;
+
+		[JsonIgnore]
+		private string[] _futureFormats;
 
 		[JsonIgnore]
 		private bool _textDeltaApplied;

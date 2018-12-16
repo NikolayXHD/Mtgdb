@@ -248,7 +248,6 @@ namespace Mtgdb.Gui
 			ResourcesAbilities.Plane,
 			ResourcesAbilities.Scheme,
 			ResourcesAbilities.Vanguard,
-			ResourcesAbilities.Create_token,
 			ResourcesCost.na
 		};
 	}

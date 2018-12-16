@@ -24,11 +24,14 @@
 	-->
 	<SuggestImageDownloader Enabled="True" />
 
-	<!--
-		The maximum number of undo/redo operations saved to history
-	-->
+	<!-- The maximum number of undo/redo operations saved to history -->
 	<Undo MaxDepth="1000" />
 
+	<!-- === Cache capacity ===
+		Decreasing CacheCapacity can reduce memory consumption at a cost of slowing down scrolling speed.
+		Zoomed images are not cached.
+	-->
+	<ImageCache CacheCapacity ="900"/>
 
 	<!-- === Magic The Gathering Arena files location ===
 		These files are used to import Collection from MTGA.
@@ -183,19 +186,5 @@
 		<Directory Zoom="Any" Set="MD1"       Path="images\XLHQ-Sets-Torrent\MED" />
 		-->
 	</ImageLocations>
-
-	<!-- === Transparent corners for non-zoomed images ===
-		Disabling transparent corners can increase scrolling speed due to faster image loading,
-		but some old images having non-white corners will be looking ugly on white background.
-
-		Images from images\Mtgdb.Pictures have no black corners. For them the setting is not applied.
-		Zoomed images are allways shown with transparent corners.
-
-		=== Cache capacity ===
-		Decreasing CacheCapacity can reduce memory consumption at a cost of slowing down scrolling speed.
-		Zoomed images are not cached.
-	-->
-
-	<ImageCache CacheCapacity ="900"/>
 
 </configuration>
