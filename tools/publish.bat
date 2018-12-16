@@ -46,7 +46,6 @@ xcopy /q /r /i /e %output%\help %target%\help
 xcopy /q /r /i /e %output%\color-schemes %target%\color-schemes
 xcopy /q %output%\..\LICENSE %target%
 
-del /q %target%\data\allSets.json
 del /q /s %target%\update\app\*
 del /q /s %target%\update\*.bak
 del /q /s %target%\update\*.zip
@@ -66,6 +65,9 @@ rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test
 rmdir /q /s %target%\data\index\deck\search
 rmdir /q /s %target%\data\index\deck\suggest
+
+del /q %target%\data\allSets.json
+del /q %target%\data\patch.v2.json
 rmdir /q /s %target%\data\index\keywords\1.00
 rmdir /q /s %target%\data\index\search\1.00
 rmdir /q /s %target%\data\index\suggest\1.00
