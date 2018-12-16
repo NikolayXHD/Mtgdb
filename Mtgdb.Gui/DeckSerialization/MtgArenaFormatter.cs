@@ -79,15 +79,18 @@ namespace Mtgdb.Gui
 
 		public override Card GetCard(Match match)
 		{
+			string setCode = match.Groups["set"].Value;
+			string actualSetCode = _setCodesByMtga.TryGet(setCode) ?? setCode;
+
 			if (_repo.CardsByName.TryGetValue(match.Groups["name"].Value.RemoveDiacritics(), out var cards))
 			{
 				return cards
-					.AtMax(c => Str.Equals(c.SetCode, match.Groups["set"].Value))
+					.AtMax(c => Str.Equals(c.SetCode, actualSetCode))
 					.ThenAtMax(c => Str.Equals(c.Number, match.Groups["num"].Value))
 					.Find();
 			}
 
-			return _repo.SetsByCode.TryGet(match.Groups["set"].Value)?.Cards
+			return _repo.SetsByCode.TryGet(actualSetCode)?.Cards
 				.FirstOrDefault(c => Str.Equals(c.Number, match.Groups["num"].Value));
 		}
 
@@ -109,7 +112,23 @@ namespace Mtgdb.Gui
 				var count = deckZone.Count[cardId];
 				var card = _repo.CardsById[cardId];
 
-				result.AppendLine($"{count} {card.NameEn} ({card.SetCode}) {card.Number}");
+				string name = card.NameEn;
+				string number = card.Number;
+				if (DoubleFacedLayouts.Contains(card.Layout))
+				{
+					bool deckContainsOtherSide = deckZone.Order.Any(
+						otherId => card.Names.Contains(_repo.CardsById[otherId].NameEn, Str.Comparer));
+
+					if (deckContainsOtherSide && card.Names.Count == 2 && Str.Equals(card.NameEn, card.Names[1]))
+						continue;
+
+					name = card.Names[0];
+					if (number.EndsWith("a", Str.Comparison))
+						number = number.Substring(0, number.Length - 1);
+				}
+
+				string setCode = _mtgaSetCodes.TryGet(card.SetCode) ?? card.SetCode;
+				result.AppendLine($"{count} {name} ({setCode}) {number}");
 			}
 		}
 
@@ -118,14 +137,35 @@ namespace Mtgdb.Gui
 
 		public override Regex LineRegex { get; } = _lineRegex;
 
-		public override bool SupportsFile => false;
-		public override string Description => "MTGArena {type}";
-		public override string FileNamePattern => "*.txt";
+		public override bool SupportsFile =>
+			false;
+
+		public override string Description =>
+			"MTGArena {type}";
+
+		public override string FileNamePattern =>
+			"*.txt";
 
 		private bool _isSideboard;
 		private readonly CardRepository _repo;
+
 		private static readonly Regex _lineRegex = new Regex(
 			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\) (?<num>\d+\w*)$",
 			RegexOptions.IgnoreCase);
+
+		private static readonly Dictionary<string, string> _mtgaSetCodes =
+			new Dictionary<string, string>(Str.Comparer)
+			{
+				["DOM"] = "DAR"
+			};
+
+		private static readonly Dictionary<string, string> _setCodesByMtga =
+			_mtgaSetCodes.ToDictionary(pair => pair.Value, pair => pair.Key, Str.Comparer);
+
+		private static readonly HashSet<string> DoubleFacedLayouts =
+			new HashSet<string>(Str.Comparer)
+			{
+				"Aftermath", "Split", "Double-faced", "Flip"
+			};
 	}
 }

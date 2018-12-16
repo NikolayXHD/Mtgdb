@@ -556,17 +556,16 @@ namespace Mtgdb.Gui
 
 			if (!string.IsNullOrEmpty(_legality.FilterFormat))
 			{
-				result.Append(' ');
-				result.Append(_legality.FilterFormat);
+				result.Append(' ').Append(_legality.FilterFormat);
 
 				if (_legality.AllowLegal)
-					result.Append(Legality.Legal);
+					result.Append(' ').Append(Legality.Legal);
 
 				if (_legality.AllowRestricted)
-					result.Append(Legality.Restricted);
+					result.Append(' ').Append(Legality.Restricted);
 
 				if (_legality.AllowBanned)
-					result.Append(Legality.Banned);
+					result.Append(' ').Append(Legality.Banned);
 			}
 
 			return result.ToString();
