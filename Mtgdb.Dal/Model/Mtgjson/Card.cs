@@ -783,5 +783,18 @@ namespace Mtgdb.Dal
 		private CardKeywords _keywords;
 
 		private static readonly HashSet<string> _foundDuplicates = new HashSet<string>(Str.Comparer);
+
+		public static readonly HashSet<string> ColoredBasicLandNames =
+			new HashSet<string>(Str.Comparer)
+			{
+				"swamp",
+				"forest",
+				"mountain",
+				"island",
+				"plains"
+			};
+
+		public static readonly HashSet<string> BasicLandNames =
+			new HashSet<string>(ColoredBasicLandNames.Append("wastes"), Str.Comparer);
 	}
 }

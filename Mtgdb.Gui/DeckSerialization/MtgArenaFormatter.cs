@@ -23,6 +23,8 @@ namespace Mtgdb.Gui
 			if (collectionData == null)
 				return countById;
 
+			collectionData = addBasicLands(repo, collectionData);
+
 			foreach (var data in collectionData)
 			{
 				if (!repo.SetsByCode.TryGetValue(data.Set, out var set))
@@ -37,6 +39,23 @@ namespace Mtgdb.Gui
 			}
 
 			return countById;
+		}
+
+		private static IEnumerable<(string Set, string Number, int Count)> addBasicLands(CardRepository repo, IEnumerable<(string Set, string Number, int Count)> collectionData)
+		{
+			const int basicLandsCount = 40;
+
+			var latestSet = repo.SetsByCode.Values
+				.Where(s => !string.IsNullOrEmpty(s.ReleaseDate) && Card.ColoredBasicLandNames.All(s.CardsByName.ContainsKey))
+				.AtMax(s => s.ReleaseDate)
+				.Find();
+
+			var basicLands = Card.ColoredBasicLandNames.Select(land => (
+				latestSet.Code,
+				latestSet.CardsByName[land].First().Number,
+				basicLandsCount));
+
+			return collectionData.Concat(basicLands);
 		}
 
 		public override Deck ImportDeck(string serialized)
