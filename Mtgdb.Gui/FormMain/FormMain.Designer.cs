@@ -713,6 +713,7 @@ namespace Mtgdb.Gui
 			//
 			// _searchEditor
 			//
+			this._searchEditor.AcceptsTab = true;
 			this._searchEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
