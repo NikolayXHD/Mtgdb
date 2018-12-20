@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,6 +19,8 @@ namespace Mtgdb.Controls
 
 			HighlightBackColor = Color.Transparent;
 			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
+
+			EnabledChanged += enabledChanged;
 		}
 
 		protected override bool ShowFocusCues => false;
@@ -25,6 +28,46 @@ namespace Mtgdb.Controls
 
 		private void systemColorsChanging() =>
 			updateHighlightColor();
+
+		private void enabledChanged(object sender, EventArgs e) =>
+			updateHighlightColor();
+
+		private void updateHighlightColor()
+		{
+			if (DesignMode)
+				return;
+
+			bool enabled = Enabled;
+
+			FlatAppearance.MouseOverBackColor = getBlendedBgColor(_highlightMouseOverOpacity, enabled);
+			FlatAppearance.MouseDownBackColor = getBlendedBgColor(_highlightMouseDownOpacity, enabled);
+			FlatAppearance.CheckedBackColor = getBlendedBgColor(_highlightCheckedOpacity, enabled);
+		}
+
+		private Color getBlendedBgColor(int o2, bool enabled)
+		{
+			Color bg = enabled
+				? BackColor
+				: blend(BackColor, SystemColors.Control, 128);
+
+			return blend(bg, _highlightBackColor, o2);
+		}
+
+		private static Color blend(Color bg, Color fore, int foreOpacity)
+		{
+			if (bg == Color.Empty || bg == Color.Transparent)
+				return Color.FromArgb(foreOpacity, fore);
+
+			byte o1 = bg.A;
+			return Color.FromArgb(
+				blendBytes(o1, (byte) foreOpacity),
+				blendBytes(bg.R, fore.R),
+				blendBytes(bg.G, fore.G),
+				blendBytes(bg.B, fore.B));
+
+			int blendBytes(byte b1, byte b2) =>
+				(b2 * foreOpacity * 255 + b1 * o1 * (255 - foreOpacity)) / (255 * 255);
+		}
 
 		private int _highlightMouseOverOpacity = 64;
 		[DefaultValue(64), Category("Settings")]
@@ -84,35 +127,6 @@ namespace Mtgdb.Controls
 					updateHighlightColor();
 				}
 			}
-		}
-
-		private void updateHighlightColor()
-		{
-			if (DesignMode)
-				return;
-
-			FlatAppearance.MouseOverBackColor = applyOpacity(_highlightMouseOverOpacity);
-			FlatAppearance.MouseDownBackColor = applyOpacity(_highlightMouseDownOpacity);
-			FlatAppearance.CheckedBackColor = applyOpacity(_highlightCheckedOpacity);
-		}
-
-		private Color applyOpacity(int o2)
-		{
-			var c1 = BackColor;
-			var c2 = _highlightBackColor;
-
-			if (c1 == Color.Empty || c1 == Color.Transparent)
-				return Color.FromArgb(o2, c2);
-
-			byte o1 = c1.A;
-			return Color.FromArgb(
-				blendBytes(o1, (byte) o2),
-				blendBytes(c1.R, c2.R),
-				blendBytes(c1.G, c2.G),
-				blendBytes(c1.B, c2.B));
-
-			int blendBytes(byte b1, byte b2) =>
-				(b2 * o2 * 255 + b1 * (255 - o2) * o1) / (255 * 255);
 		}
 	}
 }
