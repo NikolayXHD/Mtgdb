@@ -220,6 +220,7 @@ namespace Mtgdb.Gui
 			_buttonShowPartialCards.ScaleDpi();
 			_buttonShowText.ScaleDpi();
 			_buttonSearchExamplesDropDown.ScaleDpi();
+			_buttonResetFilters.ScaleDpi();
 
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
@@ -387,6 +388,7 @@ namespace Mtgdb.Gui
 			_buttonShowScrollDeck.CheckedChanged += buttonShowScrollChanged;
 			_buttonShowPartialCards.CheckedChanged += buttonPartialCardsChanged;
 			_buttonShowText.CheckedChanged += buttonHideTextChanged;
+			_buttonResetFilters.Click += resetFiltersClick;
 
 			_layoutRight.SizeChanged += rightLayoutChanged;
 
@@ -474,6 +476,7 @@ namespace Mtgdb.Gui
 			_buttonShowScrollDeck.CheckedChanged -= buttonShowScrollChanged;
 			_buttonShowPartialCards.CheckedChanged -= buttonPartialCardsChanged;
 			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
+			_buttonResetFilters.Click -= resetFiltersClick;
 
 			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_history.Loaded -= historyLoaded;

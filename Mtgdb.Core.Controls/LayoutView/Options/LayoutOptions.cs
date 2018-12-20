@@ -101,16 +101,16 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings")]
-		[DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap AlignTopLeftIcon
 		{
 			get => AlignmentIconsByDirection[Direction.TopLeft];
 			set => setAlignIcons(AlignmentIconsByDirection, value);
 		}
 
-		[Category("Settings")]
-		[DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap AlignTopLeftHoveredIcon
 		{
 			get => AlignmentHoveredIconsByDirection[Direction.TopLeft];

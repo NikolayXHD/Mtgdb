@@ -80,7 +80,8 @@ namespace Mtgdb.Controls
 
 
 		private Bitmap _icon;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap Icon
 		{
 			get => _icon;
@@ -92,7 +93,8 @@ namespace Mtgdb.Controls
 		}
 
 		private Bitmap _ascIcon;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap AscIcon
 		{
 			get => _ascIcon;
@@ -104,7 +106,8 @@ namespace Mtgdb.Controls
 		}
 
 		private Bitmap _descIcon;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap DescIcon
 		{
 			get => _descIcon;

@@ -182,17 +182,17 @@ namespace Mtgdb.Controls
 			controller.SetTooltip(_tooltipOwner,
 				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
-					: "Search decks",
+					: "Search bar for decks",
 				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
-					"Type some query to narrow down the list of decks below\r\n" +
-					"Example queries:\r\n" +
+					"Filter decks, example queries:\r\n" +
 					// ReSharper disable once StringLiteralTypo
-					"name: affin*\r\n" +
-					"mana: \\{w\\} AND \\{u\\}\r\n\r\n" +
+					"\tname: affin*\r\n" +
+					"\tmana: \\{w\\} AND \\{u\\}\r\n\r\n" +
 					"Ctrl+SPACE to get intellisense\r\n" +
 					"Enter to apply\r\n" +
-					"Ctrl+Backspace to delete one word\r\n" +
-					"F1 to learn search bar query syntax\r\n\r\n",
+					"Ctrl+Backspace to delete one word\r\n\r\n" +
+					"F1 to learn search bar query syntax\r\n" +
+					"Middle mouse click to clear",
 				_panelSearchIcon,
 				_panelSearch,
 				_textBoxSearch);

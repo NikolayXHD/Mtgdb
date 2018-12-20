@@ -10,6 +10,11 @@ namespace Mtgdb.Gui
 	[JsonObject]
 	public class GuiSettings
 	{
+		public GuiSettings()
+		{
+			ShowDuplicates = true;
+		}
+
 		public string Find { get; set; }
 
 		public FilterValueState[] FilterMana { get; set; }

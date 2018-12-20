@@ -716,6 +716,9 @@ namespace Mtgdb.Gui
 			_buttons.SetupButton(_buttonSearchExamplesDropDown,
 				new ButtonImages(Resources.book_40, x2: true));
 
+			_buttons.SetupButton(_buttonResetFilters,
+				new ButtonImages(Resources.erase, x2: true));
+
 			_buttons.SetupComboBox(_menuLegalityFormat);
 		}
 
@@ -787,6 +790,38 @@ namespace Mtgdb.Gui
 			color = _menuLegalityFormat.ForeColor;
 			_menuLegalityFormat.ForeColor = Color.Black;
 			_menuLegalityFormat.ForeColor = color;
+		}
+
+		private void resetFiltersClick(object sender, EventArgs e)
+		{
+			bool modified = false;
+
+			beginRestoreSettings();
+
+			foreach (var filterControl in _quickFilterControls.Append(FilterManager))
+				modified |= filterControl.Reset();
+
+			modified |= _legality.Reset();
+			modified |= _cardSearch.ResetText();
+			modified |= resetShowDuplicates();
+
+			endRestoreSettings();
+
+			if (modified)
+			{
+				resetTouchedCard();
+				RunRefilterTask();
+				historyUpdate();
+			}
+		}
+
+		private bool resetShowDuplicates()
+		{
+			if (_buttonShowDuplicates.Checked)
+				return false;
+
+			_buttonShowDuplicates.Checked = true;
+			return true;
 		}
 	}
 }

@@ -246,22 +246,17 @@ namespace Mtgdb.Controls
 
 		public bool PreFilterMessage(ref Message m)
 		{
-			// ReSharper disable CommentTypo
-
-			// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN
-
-			// ReSharper restore CommentTypo
-
-			if (m.Msg == 0x0201 || m.Msg == 0x0207 || m.Msg == 0x0204)
+			switch (m.Msg)
 			{
-				foreach (Popup popup in _popupsByOwner.Values)
-				{
-					if (!popup.Visible)
-						continue;
+				// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN
+				case 0x0201:
+				case 0x0207:
+				case 0x0204:
+					foreach (var popup in _popupsByOwner.Values)
+						if (popup.Visible && !popup.IsCursorInPopup() && !popup.IsCursorInButton())
+							popup.Hide();
 
-					if (!popup.IsCursorInPopup() && !popup.IsCursorInButton())
-						popup.Hide();
-				}
+					break;
 			}
 
 			return false;

@@ -59,6 +59,28 @@ namespace Mtgdb.Ui
 				view.SearchClicked += gridSearchClicked;
 
 			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
+
+			_findEditor.MouseUp += handleMouseClick;
+			_findEditor.Parent.MouseUp += handleMouseClick;
+			_panelSearchIcon.MouseUp += handleMouseClick;
+
+			_findEditor.Parent.Cursor = Cursors.IBeam;
+		}
+
+		private void handleMouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Middle)
+				ResetText();
+		}
+
+		public bool ResetText()
+		{
+			if (string.IsNullOrEmpty(AppliedText))
+				return false;
+
+			AppliedText = string.Empty;
+			Apply();
+			return true;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -77,6 +99,10 @@ namespace Mtgdb.Ui
 				view.SearchClicked -= gridSearchClicked;
 
 			ColorSchemeController.SystemColorsChanging -= systemColorsChanged;
+
+			_findEditor.MouseUp -= handleMouseClick;
+			_panelSearchIcon.MouseUp -= handleMouseClick;
+			_findEditor.Parent.MouseUp -= handleMouseClick;
 		}
 
 		public void SubscribeSuggestModelEvents()

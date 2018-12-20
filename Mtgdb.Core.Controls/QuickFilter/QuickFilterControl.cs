@@ -415,7 +415,7 @@ namespace Mtgdb.Controls
 
 			if (e.Button == MouseButtons.Middle)
 			{
-				States = null;
+				Reset();
 				return;
 			}
 
@@ -425,7 +425,14 @@ namespace Mtgdb.Controls
 			StateChanged?.Invoke(this, null);
 		}
 
+		public bool Reset()
+		{
+			if (StatesDefault?.SequenceEqual(States) ?? States.All(s => s == default))
+				return false;
 
+			States = null;
+			return true;
+		}
 
 		private void controlPaint(object sender, PaintEventArgs e)
 		{

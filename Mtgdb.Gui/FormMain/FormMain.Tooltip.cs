@@ -121,7 +121,8 @@ namespace Mtgdb.Gui
 					"Enter to apply\r\n" +
 					"Ctrl+Backspace to delete one word\r\n" +
 					"F1 to learn search bar query syntax\r\n\r\n" +
-					"Ctrl+F to focus search bar",
+					"Ctrl+F to focus search bar\r\n" +
+					"Middle mouse click to clear",
 				_panelSearch,
 				_searchEditor,
 				_panelIconSearch);
@@ -134,23 +135,27 @@ namespace Mtgdb.Gui
 
 			controller.SetTooltip(this,
 				"Filter by Legality",
-				"Select format",
+				"Select format\r\n\r\n" +
+				"Middle mouse click to reset filter by legality",
 				_menuLegalityFormat,
 				_panelIconLegality);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",
-				"Show cards LEGAL in selected format",
+				"Show cards LEGAL in selected format\r\n\r\n" +
+				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowLegal);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",
-				"Show cards RESTRICTED in selected format",
+				"Show cards RESTRICTED in selected format\r\n\r\n" +
+				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowRestricted);
 
 			controller.SetTooltip(this,
 				"Filter by Legality",
-				"Show cards BANNED in selected format",
+				"Show cards BANNED in selected format\r\n\r\n" +
+				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowBanned);
 
 			controller.SetTooltip(this,
@@ -200,6 +205,12 @@ namespace Mtgdb.Gui
 				null,
 				"Card text visibility",
 				_buttonShowText);
+
+			controller.SetTooltip(this, 
+				"Reset all filters",
+				"Resets all search / filter controls to their default state " +
+				"in order to begin new search from scratch.",
+				_buttonResetFilters);
 
 			controller.SetCustomTooltip(_tooltipViewCards);
 			controller.SetCustomTooltip(_tooltipViewDeck);

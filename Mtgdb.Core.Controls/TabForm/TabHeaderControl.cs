@@ -1007,7 +1007,8 @@ namespace Mtgdb.Controls
 		}
 
 		private Bitmap _closeIcon;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap CloseIcon
 		{
 			get => DesignMode && _closeIcon == _defaultCloseIcon ? null : _closeIcon;
@@ -1020,7 +1021,8 @@ namespace Mtgdb.Controls
 		}
 
 		private Bitmap _closeIconHovered;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap CloseIconHovered
 		{
 			get => DesignMode && _closeIconHovered == _defaultCloseIconHovered ? null : _closeIconHovered;
@@ -1028,7 +1030,8 @@ namespace Mtgdb.Controls
 		}
 
 		private Bitmap _addIcon;
-		[Category("Settings"), DefaultValue(null)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Bitmap AddIcon
 		{
 			get => DesignMode && _addIcon == _defaultAddIcon ? null : _addIcon;

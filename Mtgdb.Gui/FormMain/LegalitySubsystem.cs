@@ -6,11 +6,6 @@ namespace Mtgdb.Gui
 {
 	public class LegalitySubsystem
 	{
-		private readonly ComboBox _menuLegalityFormat;
-		private readonly CheckBox _buttonLegalityAllowLegal;
-		private readonly CheckBox _buttonLegalityAllowRestricted;
-		private readonly CheckBox _buttonLegalityAllowBanned;
-
 		public event Action FilterChanged;
 
 		public LegalitySubsystem(
@@ -35,13 +30,55 @@ namespace Mtgdb.Gui
 		{
 			updateLegalitySelectorEnabled();
 
-			_menuLegalityFormat.SelectedIndexChanged += legalityChanged;
-			_buttonLegalityAllowLegal.CheckedChanged += legalityChanged;
-			_buttonLegalityAllowRestricted.CheckedChanged += legalityChanged;
-			_buttonLegalityAllowBanned.CheckedChanged += legalityChanged;
+			_menuLegalityFormat.SelectedIndexChanged += handleLegalityControlChanged;
+			_buttonLegalityAllowLegal.CheckedChanged += handleLegalityControlChanged;
+			_buttonLegalityAllowRestricted.CheckedChanged += handleLegalityControlChanged;
+			_buttonLegalityAllowBanned.CheckedChanged += handleLegalityControlChanged;
+
+			_buttonLegalityAllowLegal.MouseUp += handleMouseClick;
+			_buttonLegalityAllowRestricted.MouseUp += handleMouseClick;
+			_buttonLegalityAllowBanned.MouseUp += handleMouseClick;
+			_menuLegalityFormat.MouseUp += handleMouseClick;
 		}
 
-		private void legalityChanged(object sender, EventArgs e)
+		private void handleMouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Middle)
+				Reset();
+		}
+
+		public bool Reset()
+		{
+			if (_menuLegalityFormat.SelectedIndex == 0 &&
+				_buttonLegalityAllowLegal.Checked &&
+				_buttonLegalityAllowRestricted.Checked &&
+				!_buttonLegalityAllowBanned.Checked)
+			{
+				return false;
+			}
+
+			_resetting = true;
+
+			_menuLegalityFormat.SelectedIndex = 0;
+			_buttonLegalityAllowLegal.Checked = true;
+			_buttonLegalityAllowRestricted.Checked = true;
+			_buttonLegalityAllowBanned.Checked = false;
+
+			_resetting = false;
+
+			handleLegalityChanged();
+			return true;
+		}
+
+		private void handleLegalityControlChanged(object sender, EventArgs e)
+		{
+			if (_resetting)
+				return;
+
+			handleLegalityChanged();
+		}
+
+		private void handleLegalityChanged()
 		{
 			FilterFormat = getFilterFormat();
 			AllowLegal = _buttonLegalityAllowLegal.Checked;
@@ -138,6 +175,13 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowBanned.Checked = value;
 		}
 
-		public string FilterFormat { get; private set; } 
+		public string FilterFormat { get; private set; }
+
+		private bool _resetting;
+
+		private readonly ComboBox _menuLegalityFormat;
+		private readonly CheckBox _buttonLegalityAllowLegal;
+		private readonly CheckBox _buttonLegalityAllowRestricted;
+		private readonly CheckBox _buttonLegalityAllowBanned;
 	}
 }

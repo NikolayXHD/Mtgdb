@@ -748,11 +748,12 @@ namespace Mtgdb.Gui
 
 			updateTerms();
 
-			_cardSearch.AppliedText = settings.Find ?? string.Empty;
 
 			_formRoot.UiModel.LanguageController.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
+			_cardSearch.AppliedText = settings.Find ?? string.Empty;
 			_cardSearch.Apply();
+
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
 			_formRoot.HideTooltips = settings.HideTooltips;
