@@ -104,7 +104,7 @@ namespace Mtgdb.Gui
 						!string.IsNullOrEmpty(FilterFormat);
 		}
 
-		public bool IsAllowedInFormat(Card c)
+		public bool MatchesLegalityFilter(Card c)
 		{
 			if (FilterFormat == null)
 				return true;
@@ -151,8 +151,7 @@ namespace Mtgdb.Gui
 				return null;
 
 			var selectedItem = _menuLegalityFormat.Items[_menuLegalityFormat.SelectedIndex];
-			string selectedFormat = (string) selectedItem;
-			return selectedFormat;
+			return (string) selectedItem;
 		}
 
 		public bool AllowLegal { get; private set;}

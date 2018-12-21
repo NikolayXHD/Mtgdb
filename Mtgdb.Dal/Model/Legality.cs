@@ -13,15 +13,23 @@ namespace Mtgdb.Dal
 
 		public const string AnyFormat = "[ any format ]";
 
-		public static readonly IReadOnlyList<string> Formats = new[]
+		public static readonly IList<string> Formats = new[]
 		{
 			"Standard",
 			"Modern",
 			"Legacy",
 			"Vintage",
+
 			"Commander",
+			"1v1",
 			"Brawl",
-			"1v1"
-		}.AsReadOnlyList();
+
+			"Frontier",
+
+			"Pauper",
+			"Penny",
+			"Future",
+			"Duel"
+		};
 	}
 }

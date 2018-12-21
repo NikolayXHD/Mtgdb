@@ -158,7 +158,7 @@ namespace Mtgdb.Gui
 
 			_evaluators = new Evaluators
 			{
-				{ 2, _legality.IsAllowedInFormat },
+				{ 2, _legality.MatchesLegalityFilter },
 				{ 3, evalFilterByCollection },
 				{ 4, evalFilterByDeck },
 				{ 0, _quickFilterFacade.Evaluate },

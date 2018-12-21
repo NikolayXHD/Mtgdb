@@ -56,7 +56,11 @@ namespace Mtgdb.Dal
 		public string Layout { get; set; }
 
 		/// <summary>
-		/// Keys are Magic play formats. Can be 1v1, brawl, commander, duel, frontier, legacy, modern, standard, or vintage. Values can be Legal, Restricted, Banned, or Future. (“Future” is used for a revision of the format in which the card will be legal soon. If the format is not listed, it is assumed the card is not legal in that format.)
+		/// Keys are Magic play formats. Can be
+		/// 1v1, brawl, commander, duel, frontier, future, legacy, modern, pauper, penny, standard, or vintage.
+		/// Values can be Legal, Restricted, Banned, or Future.
+		/// “Future” is used for a revision of the format in which the card will be legal soon.
+		/// If the format is not listed, it is assumed the card is not legal in that format.
 		/// </summary>
 		[JsonProperty("legalities")]
 		public Dictionary<string, string> LegalityByFormat { get; set; }
@@ -446,6 +450,7 @@ namespace Mtgdb.Dal
 			return LegalityByFormat
 				.Where(_ => Str.Equals(_.Value, legality))
 				.Select(_ => _.Key)
+				.OrderBy(_ => Legality.Formats.IndexOf(_, Str.Comparer))
 				.ToArray();
 		}
 
@@ -522,39 +527,21 @@ namespace Mtgdb.Dal
 
 
 
-		public bool IsLegalIn(string format)
-		{
-			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality, Legality.Legal);
+		public bool IsLegalIn(string format) =>
+			hasLegalityValueIn(format, Legality.Legal);
 
-			return false;
-		}
+		public bool IsRestrictedIn(string format) =>
+			hasLegalityValueIn(format, Legality.Restricted);
 
-		public bool IsRestrictedIn(string format)
-		{
-			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality, Legality.Restricted);
+		public bool IsBannedIn(string format) =>
+			hasLegalityValueIn(format, Legality.Banned);
 
-			return false;
-		}
+		public bool IsFutureIn(string format) =>
+			hasLegalityValueIn(format, Legality.Future);
 
-		public bool IsBannedIn(string format)
-		{
-			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality, Legality.Banned);
-
-			return false;
-		}
-
-		public bool IsFutureIn(string format)
-		{
-			if (LegalityByFormat.TryGetValue(format, out var legality))
-				return Str.Equals(legality, Legality.Future);
-
-			return false;
-		}
-
-
+		private bool hasLegalityValueIn(string format, string legalityValue) =>
+			LegalityByFormat.TryGetValue(format, out var legality) &&
+			Str.Equals(legality, legalityValue);
 
 		public string GetName(string language) => getLocalizedField(nameof(NameEn), language, (loc, lang) => loc.GetName(lang), c => c.NameEn);
 

@@ -165,7 +165,8 @@ namespace Mtgdb.Dal
 			if (card.LegalityByFormat != null)
 				card.LegalityByFormat = card.LegalityByFormat.ToDictionary(
 					pair => string.Intern(pair.Key),
-					pair => string.Intern(pair.Value));
+					pair => string.Intern(pair.Value),
+					Str.Comparer);
 
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);

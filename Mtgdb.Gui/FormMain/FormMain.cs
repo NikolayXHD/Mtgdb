@@ -566,6 +566,9 @@ namespace Mtgdb.Gui
 
 				if (_legality.AllowBanned)
 					result.Append(' ').Append(Legality.Banned);
+
+				if (_legality.AllowFuture)
+					result.Append(' ').Append(Legality.Future);
 			}
 
 			return result.ToString();
