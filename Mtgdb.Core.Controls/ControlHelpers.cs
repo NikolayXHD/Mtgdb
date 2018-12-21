@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -108,12 +109,16 @@ namespace Mtgdb.Controls
 		public static TValue GetTag<TValue>(this Control control) =>
 			GetTag<TValue>(control, typeof(TValue).FullName);
 
-		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor)
+		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor, DashStyle dashStyle)
 		{
 			if (borderColor == Color.Transparent || borderColor == Color.Empty)
 				return;
 
-			var pen = new Pen(borderColor);
+			var pen = new Pen(borderColor)
+			{
+				DashStyle = dashStyle
+			};
+
 			if ((borders & AnchorStyles.Top) > 0)
 				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
 

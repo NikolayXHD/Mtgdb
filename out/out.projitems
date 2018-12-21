@@ -12,6 +12,7 @@
     <Content Include="$(MSBuildThisFileDirectory)data\AllSets-x.json" />
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
     <Content Include="$(MSBuildThisFileDirectory)data\patch.json" />
+    <Folder Include="$(MSBuildThisFileDirectory)charts\" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\keywords" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\search" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\suggest" />

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
-	public abstract class ShadowedForm : Form
+	public class ShadowedForm : Form
 	{
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins pMarInset);

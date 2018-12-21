@@ -16,6 +16,7 @@ namespace Mtgdb
 		public static string Save => Root.AddPath("save");
 		public static string ColorSchemes => Root.AddPath("color-schemes");
 		public static string History => Root.AddPath("history");
+		public static string Charts => Root.AddPath("charts");
 
 		public static string Etc => Root.AddPath("etc");
 		public static string GeneralConfigXml => Root.AddPath("etc").AddPath("Mtgdb.Gui.xml");

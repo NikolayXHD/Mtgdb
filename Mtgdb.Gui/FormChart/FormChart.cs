@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Mtgdb.Controls;
@@ -14,7 +13,7 @@ using Mtgdb.Gui.Resx;
 namespace Mtgdb.Gui
 {
 	[Localizable(false)]
-	public partial class FormChart : CustomBorderForm
+	public partial class FormChart : CustomBorderForm, IFormChart
 	{
 		public FormChart()
 		{
@@ -45,9 +44,7 @@ namespace Mtgdb.Gui
 				_buttonManaCurveType,
 				_buttonManaCurveManacost,
 				_buttonDeckColors,
-				_buttonCollectionColors,
-
-				_buttonArtistsPerYear
+				_buttonCollectionColors
 			};
 
 			_tabs = new[]
@@ -64,12 +61,14 @@ namespace Mtgdb.Gui
 				_tabSummSort
 			};
 
-			RegisterDragControl(_layoutTitle);
+			RegisterDragControl(_flowTitle);
 
 			foreach (var button in _headerButtons)
 				RegisterDragControl(button);
 
 			scale();
+
+			_labelName.Text = string.Empty;
 		}
 
 		private void scale()
@@ -84,14 +83,16 @@ namespace Mtgdb.Gui
 				tab.AddButtonSlopeSize = tab.SlopeSize.ByDpi();
 			}
 
-			_buttonApply.ScaleDpi();
-			_progressBar.ScaleDpi();
+			_buttonApply.ScaleDpi();			
 
 			foreach (var button in _buttons)
 				button.ScaleDpi();
 
 			foreach (var button in _headerButtons)
 				button.ScaleDpi();
+
+			_buttonSave.ScaleDpi();
+			_buttonLoad.ScaleDpi();
 
 			foreach (var menu in _menus)
 				menu.ScaleDpi();
@@ -210,13 +211,23 @@ namespace Mtgdb.Gui
 			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
-			_buttonApplyFilter.CheckedChanged += applyFilterChanged;
 
 			foreach (var menu in _menus)
 				_buttonSubsystem.SetupComboBox(menu);
+
+			_buttonSubsystem.SetupButton(_buttonSave, new ButtonImages(Resources.save_32, x2: false));
+			_buttonSubsystem.SetupButton(_buttonLoad, new ButtonImages(Resources.open_32, x2: false));
+
+			_filesSubsystem = new ChartFilesSubsystem(this);
+			_buttonSave.Click += handleSaveClick;
+			_buttonLoad.Click += handleLoadClick;
 		}
 
+		private void handleSaveClick(object s, EventArgs e) =>
+			_filesSubsystem.SaveChart();
 
+		private void handleLoadClick(object s, EventArgs e) =>
+			_filesSubsystem.LoadChart();
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
 		{
@@ -229,29 +240,20 @@ namespace Mtgdb.Gui
 			if (_applyingSettings)
 				return;
 
-			buildCustomChart();
-		}
-
-		private void applyFilterChanged(object sender, EventArgs e)
-		{
-			if (_applyingSettings)
-				return;
-
-			buildCustomChart();
+			BuildCustomChart(ReadSettings());
 		}
 
 		private void buttonApplyClick(object sender, EventArgs e)
 		{
-			buildCustomChart();
+			BuildCustomChart(ReadSettings());
 		}
 
-		private void buildCustomChart()
+		public void BuildCustomChart(ReportSettings settings)
 		{
 			foreach (var checkBox in _headerButtons)
 				checkBox.Checked = false;
 
-			var settings = readSettings();
-			loadWhenReady(null, () => _repository.IsLocalizationLoadingComplete, settings, true);
+			loadWhenReady(settings, true);
 		}
 
 		private void tabAxisClick(object sender, EventArgs e)
@@ -403,7 +405,7 @@ namespace Mtgdb.Gui
 
 		private void buttonClick(object sender, EventArgs e)
 		{
-			foreach (CheckBox button in _headerButtons)
+			foreach (CustomCheckBox button in _headerButtons)
 				button.Checked = button == sender;
 
 			var checkBox = (CheckBox) sender;
@@ -413,7 +415,6 @@ namespace Mtgdb.Gui
 		private void loadReport(CheckBox button)
 		{
 			ReportSettings settings = null;
-			Func<bool> isReady = () => _repository.IsLocalizationLoadingComplete;
 
 			if (button == _buttonManaCurveType || button == _buttonManaCurveManacost)
 			{
@@ -434,24 +435,6 @@ namespace Mtgdb.Gui
 					settings.SeriesFields = new List<string> { nameof(Card.Types) };
 				else if (button == _buttonManaCurveManacost)
 					settings.SeriesFields = new List<string> { nameof(Card.Color) };
-
-				isReady = () => _repository.IsLoadingComplete;
-			}
-			else if (button == _buttonArtistsPerYear)
-			{
-				settings = new ReportSettings
-				{
-					DataSource = DataSource.AllCards,
-					ColumnFields = new List<string> { nameof(Card.ReleaseYear) },
-					ColumnFieldsSort = new List<SortOrder> { SortOrder.Ascending },
-					SummaryFields = new List<string> { nameof(Card.Artist) },
-					SummaryFunctions = new List<string> { Aggregates.CountDistinct },
-					ChartType = SeriesChartType.Spline,
-					LabelDataElement = DataElement.Values,
-					ExplainTotal = true
-				};
-
-				isReady = () => _repository.IsLoadingComplete;
 			}
 			else if (button == _buttonDeckPrice || button == _buttonCollectionPrice)
 			{
@@ -510,12 +493,13 @@ namespace Mtgdb.Gui
 					settings.SummaryFields = new List<string> { nameof(Card.CollectionCount) };
 					settings.DataSource = DataSource.Collection;
 				}
-
-				isReady = () => _repository.IsLoadingComplete;
 			}
 
 			if (settings != null)
-				loadWhenReady(button, isReady, settings, false);
+			{
+				Title = button.Text;
+				loadWhenReady(settings, isCustom: false);
+			}
 		}
 
 		private List<string> getPriceSummaryFields(string[] totalFields)
@@ -943,52 +927,14 @@ namespace Mtgdb.Gui
 				.ToList();
 		}
 
-		private void loadWhenReady(CheckBox button, Func<bool> ready, ReportSettings settings, bool isCustom)
+		private void loadWhenReady(ReportSettings settings, bool isCustom)
 		{
 			bool modified = settings.EnsureDefaults();
 
 			if (!isCustom || modified)
 				display(settings);
 
-			TaskEx.Run(async () =>
-			{
-				while (!ready())
-				{
-					this.Invoke(delegate
-					{
-						_progressBar.Visible = true;
-
-						if (_progressBar.Value == _progressBar.Maximum)
-							_progressBar.Value = _progressBar.Minimum;
-						else
-							_progressBar.Value++;
-					});
-
-					if (button?.Checked == false)
-					{
-						this.Invoke(delegate
-						{
-							_progressBar.Value = 1;
-							_progressBar.Visible = false;
-						});
-
-						return;
-					}
-
-					await TaskEx.Delay(500);
-				}
-
-				this.Invoke(delegate
-				{
-					_progressBar.Value = 0;
-					_progressBar.Visible = false;
-
-					if (button?.Checked == false)
-						return;
-
-					buildReport(settings);
-				});
-			});
+			buildReport(settings);
 		}
 
 		private IEnumerable<Card> getCards(DataSource source, bool applyFilter)
@@ -1076,7 +1022,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private ReportSettings readSettings()
+		public ReportSettings ReadSettings()
 		{
 			var result = new ReportSettings
 			{
@@ -1099,6 +1045,16 @@ namespace Mtgdb.Gui
 			};
 
 			return result;
+		}
+
+		public string Title
+		{
+			get => _labelName.Text;
+			set
+			{
+				_labelName.Text = value;
+				Text = string.IsNullOrEmpty(value) ? " " : value;
+			}
 		}
 
 		private static List<string> readFields(TabHeaderControl tab)
@@ -1216,5 +1172,6 @@ namespace Mtgdb.Gui
 		private readonly CardFields _fields;
 		private readonly UiModel _ui;
 		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
+		private readonly ChartFilesSubsystem _filesSubsystem;
 	}
 }

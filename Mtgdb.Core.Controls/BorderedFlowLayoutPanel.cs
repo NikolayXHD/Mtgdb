@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -17,7 +18,7 @@ namespace Mtgdb.Controls
 		}
 
 		protected override void OnPaint(PaintEventArgs e) =>
-			this.PaintBorder(e.Graphics, VisibleBorders, BorderColor);
+			this.PaintBorder(e.Graphics, VisibleBorders, BorderColor, BorderDashStyle);
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
 			this.PaintPanelBack(e.Graphics, e.ClipRectangle, PaintBackground);
@@ -30,5 +31,8 @@ namespace Mtgdb.Controls
 
 		[Category("Settings"), DefaultValue(true)]
 		public bool PaintBackground { get; set; } = true;
+
+		[Category("Settings"), DefaultValue(typeof(DashStyle), "Solid")]
+		public DashStyle BorderDashStyle { get; set; } = DashStyle.Solid;
 	}
 }

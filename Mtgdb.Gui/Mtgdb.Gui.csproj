@@ -128,11 +128,13 @@
     <Compile Include="DeckSerialization\XitaxDeckTransformation.cs" />
     <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
     <Compile Include="FormChart\Aggregates.cs" />
+    <Compile Include="FormChart\ChartFilesSubsystem.cs" />
     <Compile Include="FormChart\ChartPalettes.cs" />
     <Compile Include="FormChart\ChartTypeMetadata.cs" />
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\CardFields.cs" />
+    <Compile Include="FormChart\IFormChart.cs" />
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
