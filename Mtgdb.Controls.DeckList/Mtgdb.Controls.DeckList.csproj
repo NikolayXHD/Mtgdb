@@ -99,6 +99,7 @@
     <Compile Include="DeckSpellcheckerState.cs" />
     <Compile Include="FilterByDeckMode.cs" />
     <Compile Include="Model\CollectedCardsDeckTransformation.cs" />
+    <Compile Include="Model\DeckListLegacyConverter.cs" />
     <Compile Include="Model\DeckListModel.cs" />
     <Compile Include="Model\DeckAggregateCache.cs" />
     <Compile Include="DeckListLayout.cs">

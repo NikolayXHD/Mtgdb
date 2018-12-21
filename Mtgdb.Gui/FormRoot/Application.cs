@@ -128,7 +128,8 @@ namespace Mtgdb.Gui
 				.Select(int.Parse);
 		}
 
-		public string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v2.json");
+		public static string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v2.json");
+
 		private static string getHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
 
 		public FormMain FindCardDraggingForm()
@@ -146,7 +147,6 @@ namespace Mtgdb.Gui
 
 		private readonly List<FormRoot> _instances = new List<FormRoot>();
 		private readonly Func<FormRoot> _formFactory;
-
 		private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

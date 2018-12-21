@@ -17,6 +17,7 @@ namespace Mtgdb.Dal
 		public string OriginalType { get; [UsedImplicitly] set; }
 		public string Layout { get; [UsedImplicitly] set; }
 		public string[] Names { get; [UsedImplicitly] set; }
+		public string Number { get;  [UsedImplicitly] set; }
 
 		public int? Hand;
 		public int? Life;

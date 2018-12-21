@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -44,7 +45,8 @@ namespace Mtgdb.Gui
 			_kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
 
 			var loader = _kernel.Get<GuiLoader>();
-			loader.Run();
+			loader.AsyncRun();
+			TaskEx.Run(loader.AsyncConvertLegacyCardId).Wait();
 
 			var colorSchemeEditorForm = _kernel.Get<ColorSchemeEditor>();
 			colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;

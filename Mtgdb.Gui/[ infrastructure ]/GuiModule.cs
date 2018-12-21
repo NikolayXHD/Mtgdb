@@ -60,6 +60,18 @@ namespace Mtgdb.Gui
 				.ToMethod(ctx => ctx.Kernel.Get<Application>())
 				.InSingletonScope();
 
+			Kernel.Bind<HistoryLegacyConverter>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<DeckListLegacyConverter>()
+				.ToSelf()
+				.InSingletonScope();
+
+			Kernel.Bind<DeckLegacyConverter>()
+				.ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<DeckListModel>()
 				.ToSelf()
 				.InSingletonScope();

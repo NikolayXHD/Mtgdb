@@ -67,10 +67,10 @@ namespace Mtgdb.Ui
 				}
 			};
 
-		public void Run()
+		public Task AsyncRun()
 		{
 			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
-			TaskEx.WhenAll(_loadingTasks.Select(TaskEx.Run).Concat(_loadingActions.Select(TaskEx.Run)));
+			return TaskEx.WhenAll(_loadingTasks.Select(TaskEx.Run).Concat(_loadingActions.Select(TaskEx.Run)));
 		}
 
 		private void createLoadingActions()

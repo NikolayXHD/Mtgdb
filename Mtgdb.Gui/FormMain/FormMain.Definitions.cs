@@ -414,6 +414,11 @@ namespace Mtgdb.Gui
 			_formZoom.SettingsChanged += zoomSettingsChanged;
 
 			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
+
+			// _searchEditor.LostFocus += (s, e) =>
+			// {
+			//
+			// };
 		}
 
 		private void unsubscribeFromEvents()

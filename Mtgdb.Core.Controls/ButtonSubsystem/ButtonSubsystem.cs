@@ -131,7 +131,10 @@ namespace Mtgdb.Controls
 			menu.DrawItem += (s, e) =>
 			{
 				e.DrawBackground();
-				e.Graphics.DrawText((string)menu.Items[e.Index], menu.Font, e.Bounds, menu.ForeColor, textFormat);
+
+				if (e.Index >= 0 && e.Index < menu.Items.Count)
+					e.Graphics.DrawText((string) menu.Items[e.Index], menu.Font, e.Bounds, menu.ForeColor, textFormat);
+
 				e.DrawFocusRectangle();
 			};
 		}

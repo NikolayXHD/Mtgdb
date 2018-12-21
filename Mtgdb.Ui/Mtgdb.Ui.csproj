@@ -80,6 +80,7 @@
     <Compile Include="Deck\Deck.cs" />
     <Compile Include="Deck\DeckChangedEventHandler.cs" />
     <Compile Include="Deck\DeckEditorModel.cs" />
+    <Compile Include="Deck\DeckLegacyConverter.cs" />
     <Compile Include="Deck\DeckZone.cs" />
     <Compile Include="Deck\DeckZoneModel.cs" />
     <Compile Include="Deck\Zone.cs" />

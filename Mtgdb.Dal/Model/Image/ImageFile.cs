@@ -154,7 +154,8 @@ namespace Mtgdb.Dal
 		{
 			["Will O' The Wisp"] = "Will-O'-The-Wisp",
 			["Two Headed Giant of Foriys"] = "Two-Headed Giant of Foriys",
-			["Richard Garfield, Ph.D"] = "Richard Garfield, Ph.D."
+			["Richard Garfield, Ph.D"] = "Richard Garfield, Ph.D.",
+			["Tough of the Horned God"] = "Touch of the Horned God"
 		};
 	}
 }

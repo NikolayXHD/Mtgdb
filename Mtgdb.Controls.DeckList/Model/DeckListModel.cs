@@ -17,15 +17,6 @@ namespace Mtgdb.Controls
 	{
 		public event Action Changed;
 
-		static DeckListModel()
-		{
-			_serializer = new JsonSerializer();
-
-			_serializer.Converters.Add(
-				new UnformattedJsonConverter(type =>
-					typeof(IEnumerable<int>).IsAssignableFrom(type)));
-		}
-
 		[UsedImplicitly]
 		public DeckListModel(
 			CardRepository repo,
@@ -39,6 +30,12 @@ namespace Mtgdb.Controls
 			_collectionEditor.CollectionChanged += collectionChanged;
 			_state.Collection = _collectionEditor.Snapshot();
 			_repo.PriceLoadingComplete += priceLoadingComplete;
+
+			Serializer = new JsonSerializer();
+
+			Serializer.Converters.Add(
+				new UnformattedJsonConverter(type =>
+					typeof(IEnumerable<int>).IsAssignableFrom(type)));
 		}
 
 		private void priceLoadingComplete()
@@ -168,27 +165,33 @@ namespace Mtgdb.Controls
 		{
 			Changed?.Invoke();
 
-			var serialized = new StringBuilder();
-
+			string serialized;
 			lock (_syncModels)
 			{
 				_state.Decks = _deckModels.Select(_ => _.OriginalDeck).ToList();
-
-				using(var writer = new StringWriter(serialized))
-				using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
-					_serializer.Serialize(jsonWriter, _state);
+				serialized = Serialize(_state);
 			}
 
-			File.WriteAllText(_fileName, serialized.ToString());
+			File.WriteAllText(FileName, serialized);
+		}
+
+		internal string Serialize(State state)
+		{
+			var result = new StringBuilder();
+			using (var writer = new StringWriter(result))
+			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
+				Serializer.Serialize(jsonWriter, state);
+
+			return result.ToString();
 		}
 
 		public void Load()
 		{
-			if (File.Exists(_fileName))
+			if (File.Exists(FileName))
 			{
-				string serialized = File.ReadAllText(_fileName);
+				string serialized = File.ReadAllText(FileName);
 
-				var deserialized = deserialize(serialized);
+				var deserialized = Deserialize(serialized);
 
 				lock (_syncModels)
 				{
@@ -209,7 +212,7 @@ namespace Mtgdb.Controls
 			Loaded?.Invoke();
 		}
 
-		private State deserialize(string serialized)
+		internal State Deserialize(string serialized)
 		{
 			try
 			{
@@ -270,7 +273,7 @@ namespace Mtgdb.Controls
 		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
-		private static readonly string _fileName = AppDir.History.AddPath("decks.v2.json");
+		internal readonly string FileName = AppDir.History.AddPath("decks.v2.json");
 		private State _state = new State();
 
 		private readonly AsyncSemaphore _syncCollection = new AsyncSemaphore(1);
@@ -292,6 +295,6 @@ namespace Mtgdb.Controls
 			public List<Deck> Decks { get; set; } = new List<Deck>();
 		}
 
-		private static readonly JsonSerializer _serializer;
+		internal readonly JsonSerializer Serializer;
 	}
 }

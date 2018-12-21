@@ -141,6 +141,7 @@
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
+    <Compile Include="LegacyCardMappingTests.cs" />
     <Compile Include="MtgaIntegrationTests.cs" />
     <Compile Include="SelectionStateTests.cs" />
   </ItemGroup>

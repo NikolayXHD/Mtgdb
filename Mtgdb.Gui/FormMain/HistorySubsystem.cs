@@ -37,11 +37,7 @@ namespace Mtgdb.Gui
 
 			if (File.Exists(file))
 			{
-				HistoryState state;
-
-				using (var fileReader = File.OpenText(file))
-				using (var jsonReader = new JsonTextReader(fileReader))
-					state = _serializer.Deserialize<HistoryState>(jsonReader);
+				var state = ReadHistory(file);
 
 				_settingsHistory = state.SettingsHistory;
 				_settingsIndex = state.SettingsIndex;
@@ -57,7 +53,22 @@ namespace Mtgdb.Gui
 			Loaded?.Invoke();
 		}
 
+		internal static HistoryState ReadHistory(string file)
+		{
+			using (var fileReader = File.OpenText(file))
+			using (var jsonReader = new JsonTextReader(fileReader))
+			{
+				var state = _serializer.Deserialize<HistoryState>(jsonReader);
+				return state;
+			}
+		}
 
+		internal static void WriteHistory(string file, HistoryState state)
+		{
+			using (var writer = File.CreateText(file))
+			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
+				_serializer.Serialize(jsonWriter, state);
+		}
 
 		public void Add(GuiSettings settings)
 		{
@@ -102,9 +113,7 @@ namespace Mtgdb.Gui
 
 			var state = getState();
 
-			using (var writer = File.CreateText(file))
-			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
-				_serializer.Serialize(jsonWriter, state);
+			WriteHistory(file, state);
 		}
 
 		private HistoryState getState()

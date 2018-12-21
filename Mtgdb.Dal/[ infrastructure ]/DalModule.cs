@@ -58,6 +58,10 @@ namespace Mtgdb.Dal
 			Kernel.BindConfig<MtgaIntegrationConfig>();
 			Kernel.Bind<MtgArenaIntegration>().ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<CardRepositoryLegacy>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

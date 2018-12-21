@@ -268,7 +268,8 @@ namespace Mtgdb.Gui
 
 			if (creatingNewForm)
 			{
-				form.LoadHistory(_application.GetHistoryFile(Id, i));
+				string historyFile = Application.GetHistoryFile(Id, i);
+				form.LoadHistory(historyFile);
 				_tabs.TabIds[i] = form;
 			}
 		}
@@ -334,7 +335,7 @@ namespace Mtgdb.Gui
 
 			var lastTabId = _tabs.Count - 1;
 
-			formMain.SaveHistory(_application.GetHistoryFile(Id, lastTabId));
+			formMain.SaveHistory(Application.GetHistoryFile(Id, lastTabId));
 			formMain.Close();
 		}
 
@@ -351,7 +352,7 @@ namespace Mtgdb.Gui
 			for (int i = 0; i < _tabs.Count; i++)
 			{
 				var formMain = getTab(i);
-				formMain.SaveHistory(_application.GetHistoryFile(Id, i));
+				formMain.SaveHistory(Application.GetHistoryFile(Id, i));
 				formMain.Close();
 			}
 

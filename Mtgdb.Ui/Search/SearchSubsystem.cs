@@ -63,8 +63,6 @@ namespace Mtgdb.Ui
 			_findEditor.MouseUp += handleMouseClick;
 			_findEditor.Parent.MouseUp += handleMouseClick;
 			_panelSearchIcon.MouseUp += handleMouseClick;
-
-			_findEditor.Parent.Cursor = Cursors.IBeam;
 		}
 
 		private void handleMouseClick(object sender, MouseEventArgs e)
@@ -488,7 +486,7 @@ namespace Mtgdb.Ui
 
 			bool isValuePhrase = value.StartsWith("\"") && value.EndsWith("\"");
 
-			if (token == null || source.SelectionLength != 0)
+			if (token == null || source.SelectionLength > 0 || type == TokenType.None)
 			{
 				(start, end) = (null, null);
 				(left, length) = (source.Caret, source.SelectionLength);
@@ -527,7 +525,7 @@ namespace Mtgdb.Ui
 			var replacement = prefix + value + suffix;
 			int caret = prefix.Length + value.Length;
 
-			if (!positionCaretToNextValue && isValuePhrase)
+			if (!positionCaretToNextValue && isValuePhrase && type != TokenType.None)
 				caret--;
 
 			setFindText(replacement, caret);

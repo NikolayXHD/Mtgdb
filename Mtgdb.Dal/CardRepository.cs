@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
@@ -13,7 +12,7 @@ namespace Mtgdb.Dal
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets.json");
-			PatchFile = AppDir.Data.AddPath("patch.json");
+			PatchFile = AppDir.Data.AddPath("patch.v2.json");
 			Cards = new List<Card>();
 		}
 
@@ -60,10 +59,8 @@ namespace Mtgdb.Dal
 
 					for (int i = 0; i < set.Cards.Count; i++)
 					{
-						var card = set.Cards[i];
-						card.Set = set;
-
-						preProcessCard(card);
+						set.Cards[i].Set = set;
+						preProcessCard(set.Cards[i]);
 					}
 
 					for (int i = set.Cards.Count - 1; i >= 0; i--)
@@ -76,6 +73,9 @@ namespace Mtgdb.Dal
 							gr => gr.Key,
 							gr => gr.ToList(),
 							Str.Comparer);
+
+					for (int i = 0; i < set.Cards.Count; i++)
+						postProcessCard(set.Cards[i]);
 
 					ImageNameCalculator.CalculateImageNames(set, Patch);
 
@@ -100,6 +100,11 @@ namespace Mtgdb.Dal
 					gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
 					Str.Comparer);
 
+			CardsByMultiverseId = Cards
+				.Where(c => c.MultiverseId.HasValue)
+				.GroupBy(c => c.MultiverseId.Value)
+				.ToDictionary(gr => gr.Key, gr => (IList<Card>) gr.ToList());
+
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
@@ -121,14 +126,25 @@ namespace Mtgdb.Dal
 			_streamContent = null;
 			Patch = null;
 			Cards.Capacity = Cards.Count;
+
+			foreach (var namesakeList in CardsByName.Values)
+				namesakeList.Capacity = namesakeList.Count;
 		}
 
-		private void preProcessCard(Card card)
+		private void postProcessCard(Card card)
 		{
 			if (String.IsNullOrEmpty(card.Layout))
 				card.Layout = "Normal";
-			else if (Str.Equals(card.Layout, "Split") && card.GetCastKeywords().Contains("Aftermath"))
-				card.Layout = "Aftermath";
+			else if (Str.Equals(card.Layout, "Split"))
+			{
+				if (card.GetCastKeywords().Contains("Aftermath"))
+				{
+					card.Layout = "Aftermath";
+
+					foreach (var rotatedCard in card.Set.CardsByName[card.Names[0].RemoveDiacritics()])
+						rotatedCard.Layout = "Aftermath";
+				}
+			}
 			else if (Str.Equals(card.Layout, "Planar"))
 			{
 				if (card.TypesArr.Contains("Phenomenon", Str.Comparer))
@@ -142,7 +158,10 @@ namespace Mtgdb.Dal
 				card.Rarity = "Basic land";
 			else if (card.Rarity.StartsWith(timeshifted, Str.Comparison))
 				card.Rarity = string.Intern(card.Rarity.Substring(timeshifted.Length));
+		}
 
+		private void preProcessCard(Card card)
+		{
 			if (card.LegalityByFormat != null)
 				card.LegalityByFormat = card.LegalityByFormat.ToDictionary(
 					pair => string.Intern(pair.Key),
@@ -190,20 +209,6 @@ namespace Mtgdb.Dal
 
 			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
 				card.OriginalType = null;
-
-			if (Str.Equals(card.SetCode, "BBD"))
-			{
-				if (card.Number.EndsWith("b", Str.Comparison))
-					card.Remove = true;
-				else if (card.Number.EndsWith("a", Str.Comparison))
-				{
-					card.Number = card.Number.Substring(0, card.Number.Length - 1);
-					card.Names = null;
-
-					if (Str.Equals(card.Layout, "flip"))
-						card.Layout = "normal";
-				}
-			}
 		}
 
 		private void patchLegality()
@@ -363,8 +368,6 @@ namespace Mtgdb.Dal
 			LocalizationLoadingComplete?.Invoke();
 		}
 
-		private static readonly Regex _mciNumberRegex = new Regex(@"(?<id>[\w\d]+).html", RegexOptions.Compiled);
-
 		public void FillPrices(PriceRepository priceRepository)
 		{
 			foreach (var card in Cards)
@@ -395,6 +398,7 @@ namespace Mtgdb.Dal
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
+		public IDictionary<int, IList<Card>> CardsByMultiverseId { get; private set; }
 
 		private byte[] _streamContent;
 		internal Patch Patch { get; private set; }

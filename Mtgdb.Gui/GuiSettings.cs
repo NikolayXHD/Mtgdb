@@ -87,10 +87,22 @@ namespace Mtgdb.Gui
 
 				return deck;
 			}
+
+			set
+			{
+				MainDeckCount = value.MainDeck.Count;
+				MainDeckOrder = value.MainDeck.Order;
+				SideDeckCount = value.Sideboard.Count;
+				SideDeckOrder = value.Sideboard.Order;
+			}
 		}
 
 		[JsonIgnore]
-		public Deck CollectionModel => Deck.Create(Collection, Collection?.Keys.ToList(), null, null);
+		public Deck CollectionModel
+		{
+			get => Deck.Create(Collection, Collection?.Keys.ToList(), null, null);
+			set => Collection = value.MainDeck.Count;
+		}
 
 		public class ZoomSettings
 		{

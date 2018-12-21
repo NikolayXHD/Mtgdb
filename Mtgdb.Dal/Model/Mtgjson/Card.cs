@@ -6,7 +6,6 @@ using System.Text;
 using Lucene.Net.Documents;
 using Mtgdb.Dal.Index;
 using Newtonsoft.Json;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal
 {
@@ -640,6 +639,9 @@ namespace Mtgdb.Dal
 
 			if (patch.Names != null)
 				Names = patch.Names;
+
+			if (patch.Number != null)
+				Number = patch.Number;
 
 			if (patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}"))
 				Remove = true;

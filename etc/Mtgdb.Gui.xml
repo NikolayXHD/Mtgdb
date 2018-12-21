@@ -124,9 +124,7 @@
 		<Directory Group="xlhq" Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
-
-		<!-- Moved to D:\Distrib\games\mtg\Patch to merge basic land image numbers across subdirectories -->
-		<!-- <Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League" /> -->
+		<Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League" />
 
 		<!-- non-set codes -->
 			<!--

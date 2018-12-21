@@ -162,6 +162,7 @@
     <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\TabHeadersTooltip.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />

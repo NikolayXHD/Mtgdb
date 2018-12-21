@@ -14,13 +14,13 @@ namespace Mtgdb.Ui
 				MainDeck = new DeckZone
 				{
 					Order = new List<string>(),
-					Count = new Dictionary<string, int>()
+					Count = new Dictionary<string, int>(Str.Comparer)
 				},
 
 				Sideboard = new DeckZone
 				{
 					Order = new List<string>(),
-					Count = new Dictionary<string, int>()
+					Count = new Dictionary<string, int>(Str.Comparer)
 				}
 			};
 
@@ -37,13 +37,13 @@ namespace Mtgdb.Ui
 			{
 				MainDeck = new DeckZone
 				{
-					Count = mainCountById ?? new Dictionary<string, int>(),
+					Count = mainCountById ?? new Dictionary<string, int>(Str.Comparer),
 					Order = mainOrder ?? new List<string>()
 				},
 
 				Sideboard = new DeckZone
 				{
-					Count = sideCountById ?? new Dictionary<string, int>(),
+					Count = sideCountById ?? new Dictionary<string, int>(Str.Comparer),
 					Order = sideOrder ?? new List<string>()
 				}
 			};
