@@ -678,7 +678,7 @@
 			this._labelName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelName.AutoSize = true;
 			this._labelName.BackColor = System.Drawing.Color.Transparent;
-			this._labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._labelName.Location = new System.Drawing.Point(6, 20);
 			this._labelName.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this._labelName.Name = "_labelName";

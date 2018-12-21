@@ -13,7 +13,7 @@ using Mtgdb.Gui.Resx;
 namespace Mtgdb.Gui
 {
 	[Localizable(false)]
-	public partial class FormChart : CustomBorderForm, IFormChart
+	public partial class FormChart : CustomBorderForm
 	{
 		public FormChart()
 		{
@@ -83,7 +83,7 @@ namespace Mtgdb.Gui
 				tab.AddButtonSlopeSize = tab.SlopeSize.ByDpi();
 			}
 
-			_buttonApply.ScaleDpi();			
+			_buttonApply.ScaleDpi();
 
 			foreach (var button in _buttons)
 				button.ScaleDpi();
@@ -199,13 +199,7 @@ namespace Mtgdb.Gui
 
 			_menuPriceChartType.SelectedIndex = 0;
 
-			_menuPrice.Items.AddRange(new object[]
-			{
-				@"Low",
-				@"Mid",
-				@"High"
-			});
-
+			_menuPrice.Items.AddRange(new object[] { "Low", "Mid", "High" });
 			_menuPrice.SelectedIndex = 1;
 
 			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
@@ -240,20 +234,28 @@ namespace Mtgdb.Gui
 			if (_applyingSettings)
 				return;
 
-			BuildCustomChart(ReadSettings());
+			buildChartFromUi();
 		}
 
 		private void buttonApplyClick(object sender, EventArgs e)
 		{
-			BuildCustomChart(ReadSettings());
+			buildChartFromUi();
 		}
 
-		public void BuildCustomChart(ReportSettings settings)
+		private void buildChartFromUi()
 		{
 			foreach (var checkBox in _headerButtons)
 				checkBox.Checked = false;
 
-			loadWhenReady(settings, true);
+			buildChart();
+		}
+
+		public void LoadSavedChart(ReportSettings settings)
+		{
+			foreach (var checkBox in _headerButtons)
+				checkBox.Checked = false;
+
+			buildChart(settings);
 		}
 
 		private void tabAxisClick(object sender, EventArgs e)
@@ -498,7 +500,7 @@ namespace Mtgdb.Gui
 			if (settings != null)
 			{
 				Title = button.Text;
-				loadWhenReady(settings, isCustom: false);
+				buildChart(settings);
 			}
 		}
 
@@ -513,7 +515,7 @@ namespace Mtgdb.Gui
 			return summaryFields;
 		}
 
-		private void buildReport(ReportSettings settings)
+		private void buildChartData(ReportSettings settings)
 		{
 			var cards = getCards(settings.DataSource, settings.ApplyFilter)
 				.ToArray();
@@ -927,14 +929,21 @@ namespace Mtgdb.Gui
 				.ToList();
 		}
 
-		private void loadWhenReady(ReportSettings settings, bool isCustom)
+		private void buildChart(ReportSettings settings = null)
 		{
-			bool modified = settings.EnsureDefaults();
-
-			if (!isCustom || modified)
+			if (settings == null)
+			{
+				settings = ReadUiSettings();
+				if (settings.SetDefaultValues())
+					display(settings);
+			}
+			else
+			{
+				settings.SetDefaultValues();
 				display(settings);
+			}
 
-			buildReport(settings);
+			buildChartData(settings);
 		}
 
 		private IEnumerable<Card> getCards(DataSource source, bool applyFilter)
@@ -1022,7 +1031,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public ReportSettings ReadSettings()
+		public ReportSettings ReadUiSettings()
 		{
 			var result = new ReportSettings
 			{

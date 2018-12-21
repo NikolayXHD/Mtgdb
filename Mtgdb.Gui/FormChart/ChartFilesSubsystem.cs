@@ -8,7 +8,7 @@ namespace Mtgdb.Gui
 {
 	public class ChartFilesSubsystem
 	{
-		public ChartFilesSubsystem(IFormChart formChart)
+		public ChartFilesSubsystem(FormChart formChart)
 		{
 			_formChart = formChart;
 		}
@@ -29,7 +29,7 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return;
 
-			var settings = _formChart.ReadSettings();
+			var settings = _formChart.ReadUiSettings();
 			var serialized = JsonConvert.SerializeObject(settings, Formatting.Indented);
 
 			try
@@ -87,7 +87,7 @@ namespace Mtgdb.Gui
 			}
 
 			_formChart.Title = Path.GetFileNameWithoutExtension(dlg.FileName);
-			_formChart.BuildCustomChart(settings);
+			_formChart.LoadSavedChart(settings);
 		}
 
 		private const string Ext = ".chart";
@@ -98,6 +98,6 @@ namespace Mtgdb.Gui
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
-		private readonly IFormChart _formChart;
+		private readonly FormChart _formChart;
 	}
 }

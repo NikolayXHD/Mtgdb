@@ -28,7 +28,7 @@ namespace Mtgdb.Gui
 		public bool ShowSeriesTotal { get; set; } = true;
 		public bool ExplainTotal { get; set; }
 
-		public bool EnsureDefaults()
+		public bool SetDefaultValues()
 		{
 			bool modified = false;
 			modified |= ensureNonEmpty(SeriesFields, SeriesFieldsSort, string.Empty);
