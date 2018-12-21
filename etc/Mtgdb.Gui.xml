@@ -124,7 +124,16 @@
 		<Directory Group="xlhq" Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWCQ"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWOR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Worlds" />
-		<Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pARL"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\1996" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal99"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\1999" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal00"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal01"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal02"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal03"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal04"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal05"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal06"     Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Arena League\2006" />
 
 		<!-- non-set codes -->
 			<!--
