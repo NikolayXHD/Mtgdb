@@ -118,7 +118,19 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pGRU"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Guru" />
 		<Directory Group="xlhq" Zoom="Any" Set="pJGP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge" />
 		<Directory Group="xlhq" Zoom="Any" Set="pSUS"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series" />
-		<Directory Group="xlhq" Zoom="Any" Set="pMPR"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="mpr"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="pr2"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="p03"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="p04"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="p05"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="p06"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="p07"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="p08"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="p09"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="p10"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="p11"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2011" />
+
 		<Directory Group="xlhq" Zoom="Any" Set="pPRO"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Pro Tour" />
 		<Directory Group="xlhq" Zoom="Any" Set="pSUM"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Summer of Magic" />
 		<Directory Group="xlhq" Zoom="Any" Set="p2HG"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
