@@ -117,7 +117,11 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pGPX"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Grand Prix" />
 		<Directory Group="xlhq" Zoom="Any" Set="pGRU"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Guru" />
 		<Directory Group="xlhq" Zoom="Any" Set="pJGP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge" />
-		<Directory Group="xlhq" Zoom="Any" Set="pSUS"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pjas"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\APAC Junior Series" />
+		<Directory Group="xlhq" Zoom="Any" Set="pjjt"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\Japan Junior Tournament" />
+		<Directory Group="xlhq" Zoom="Any" Set="pjse"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\Junior Series (Europe)" />
+		<Directory Group="xlhq" Zoom="Any" Set="psus"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\Junior Super Series and Magic Scholarship Series (US)" />
 
 		<Directory Group="xlhq" Zoom="Any" Set="mpr"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2001" />
 		<Directory Group="xlhq" Zoom="Any" Set="pr2"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards\2002" />
