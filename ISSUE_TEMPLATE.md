@@ -28,4 +28,4 @@ Example:
 
 Result: the application crashes
 
-Expected result: Upate window is shown
+Expected result: Update window is shown
