@@ -1,30 +1,30 @@
 {
-  "DataSource": 0,
+  "DataSource": 2,
   "ApplyFilter": true,
   "SeriesFields": [
-    "Types"
+    "SetName"
   ],
   "SeriesFieldsSort": [
-    1
+    0
   ],
   "ColumnFields": [
-    "Cmc"
+    "SetCode"
   ],
   "ColumnFieldsSort": [
-    1
+    0
   ],
   "SummaryFields": [
-    "DeckCount"
+    "NameEn"
   ],
   "SummaryFunctions": [
-    "Sum"
+    "Count"
   ],
   "SummarySort": [
     0
   ],
-  "ChartType": 11,
+  "ChartType": 9,
   "LabelDataElement": 3,
   "ShowArgumentTotal": true,
-  "ShowSeriesTotal": true,
+  "ShowSeriesTotal": false,
   "ExplainTotal": false
 }

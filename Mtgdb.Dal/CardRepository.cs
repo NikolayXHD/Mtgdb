@@ -74,6 +74,9 @@ namespace Mtgdb.Dal
 							gr => gr.ToList(),
 							Str.Comparer);
 
+					foreach (var card in set.Cards)
+						CardsById[card.Id] = card;
+
 					for (int i = 0; i < set.Cards.Count; i++)
 						postProcessCard(set.Cards[i]);
 
@@ -85,9 +88,6 @@ namespace Mtgdb.Dal
 					lock (Cards)
 						foreach (var card in set.Cards)
 							Cards.Add(card);
-
-					foreach (var card in set.Cards)
-						CardsById[card.Id] = card;
 
 					SetAdded?.Invoke();
 				}
@@ -141,7 +141,7 @@ namespace Mtgdb.Dal
 				{
 					card.Layout = "Aftermath";
 
-					foreach (var rotatedCard in card.Set.CardsByName[card.Names[0].RemoveDiacritics()])
+					foreach (var rotatedCard in card.Set.CardsByName[card.Names[0]])
 						rotatedCard.Layout = "Aftermath";
 				}
 			}
@@ -178,6 +178,7 @@ namespace Mtgdb.Dal
 				card.PatchCard(patch);
 
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
+			card.Names = card.Names?.Select(_ => string.Intern(_.RemoveDiacritics())).ToList();
 
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
