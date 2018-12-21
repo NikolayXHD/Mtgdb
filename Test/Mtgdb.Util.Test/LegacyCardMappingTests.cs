@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mtgdb.Dal;
+using Mtgdb.Test;
 using Mtgdb.Ui;
 using Ninject;
 using NUnit.Framework;
 
-namespace Mtgdb.Test
+namespace Mtgdb.Util
 {
 	[TestFixture]
 	public class LegacyCardMappingTests: TestsBase
