@@ -3,7 +3,7 @@
 	<WatchFile Mode="Auto" />
 
 	<!-- === DEFAULT APPLICATION CONFIGURATION ===
-		Do not edit this. It's useless because your changes will not survive installing new version.
+		Do not edit this, because your changes will not survive installing new version.
 		For your changes there is is a separate file
 		* etc\Mtgdb.Gui.xml
 	-->

@@ -163,26 +163,13 @@ namespace Mtgdb.Gui
 
 		private void setupLanguageMenu()
 		{
-			setup(_buttonLanguage);
+			_buttonLanguage.AutoCheck = false;
 
 			updateLanguage();
 			UiModel.LanguageController.LanguageChanged += updateLanguage;
 
 			foreach (var langMenuItem in getLanguageMenuItems())
-			{
-				setup(langMenuItem);
 				langMenuItem.Click += languageMenuClick;
-			}
-
-			void setup(CustomCheckBox button)
-			{
-				button.AutoCheck = false;
-				button.BackColor = SystemColors.Window;
-				button.HighlightBackColor = SystemColors.Control;
-
-				button.HighlightMouseOverOpacity = 64;
-				button.HighlightMouseDownOpacity = 128;
-			}
 		}
 
 		private void languageMenuClick(object sender, EventArgs e)
@@ -204,7 +191,7 @@ namespace Mtgdb.Gui
 		}
 
 		private IEnumerable<CustomCheckBox> getLanguageMenuItems() =>
-			_layoutLanguage.Controls.OfType<CustomCheckBox>();
+			_menuLanguage.Controls.OfType<CustomCheckBox>();
 
 
 
@@ -253,7 +240,7 @@ namespace Mtgdb.Gui
 
 		private void setMenuMode(ButtonBase sender)
 		{
-			_layoutOpen.SuspendLayout();
+			_menuOpen.SuspendLayout();
 
 			foreach (var state in _saveLoadMenuModes)
 			{
@@ -266,8 +253,8 @@ namespace Mtgdb.Gui
 					menuButton.Visible = state.IsCurrent;
 			}
 
-			_layoutOpen.ResumeLayout(false);
-			_layoutOpen.PerformLayout();
+			_menuOpen.ResumeLayout(false);
+			_menuOpen.PerformLayout();
 		}
 
 		private void setupButtons()
@@ -303,25 +290,18 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonDonateYandexMoney, new ButtonImages(Resources.yandex_money_32, x2: false));
 			_buttonSubsystem.SetupButton(_buttonDonatePayPal, new ButtonImages(Resources.paypal_32, x2: false));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage, container: _layoutLanguage));
+			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
+			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuDonate,
-				_buttonDonate,
-				HorizontalAlignment.Center,
-				container: _layoutDonate));
-
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
-				_buttonOpenDeck,
-				container: _layoutOpen,
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck,
 				beforeShow: () => setMenuMode(_buttonOpenDeck)));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
-				_buttonSaveDeck,
-				container: _layoutOpen,
+			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck,
 				beforeShow: () => setMenuMode(_buttonSaveDeck)));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste, container: _layoutPaste));
-			_buttonSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme, beforeShow: updateMenuColors));
+			_buttonSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste));
+			_buttonSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme,
+				beforeShow: updateMenuColors));
 
 			_buttonSubsystem.SubscribeToEvents();
 		}

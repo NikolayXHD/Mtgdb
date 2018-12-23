@@ -46,8 +46,7 @@ namespace Mtgdb.Gui
 			this._buttonSaveDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonOpenDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonTooltips = new Mtgdb.Controls.CustomCheckBox();
-			this._menuOpen = new Mtgdb.Controls.BorderedPanel();
-			this._layoutOpen = new System.Windows.Forms.TableLayoutPanel();
+			this._menuOpen = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonImportExportToMtgArena = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuSaveCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._labelMagarena = new System.Windows.Forms.Label();
@@ -66,8 +65,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitForge = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonVisitMtgArena = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonImportMtgArenaCollection = new Mtgdb.Controls.CustomCheckBox();
-			this._menuLanguage = new Mtgdb.Controls.BorderedPanel();
-			this._layoutLanguage = new System.Windows.Forms.TableLayoutPanel();
+			this._menuLanguage = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonPT = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDE = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonCN = new Mtgdb.Controls.CustomCheckBox();
@@ -79,15 +77,13 @@ namespace Mtgdb.Gui
 			this._buttonFR = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonES = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonRU = new Mtgdb.Controls.CustomCheckBox();
-			this._menuDonate = new Mtgdb.Controls.BorderedPanel();
-			this._layoutDonate = new System.Windows.Forms.TableLayoutPanel();
+			this._menuDonate = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonDonateYandexMoney = new Mtgdb.Controls.CustomCheckBox();
 			this._panelAva = new Mtgdb.Controls.BorderedPanel();
 			this._buttonDonatePayPal = new Mtgdb.Controls.CustomCheckBox();
 			this._labelDonate = new System.Windows.Forms.Label();
 			this._buttonPaste = new Mtgdb.Controls.CustomCheckBox();
-			this._menuPaste = new Mtgdb.Controls.BorderedPanel();
-			this._layoutPaste = new System.Windows.Forms.TableLayoutPanel();
+			this._menuPaste = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonMenuCopyCollection = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuCopyDeck = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonMenuPasteCollectionAppend = new Mtgdb.Controls.CustomCheckBox();
@@ -103,16 +99,12 @@ namespace Mtgdb.Gui
 			this._flowTitleLeft = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._buttonOpenWindow = new Mtgdb.Controls.CustomCheckBox();
 			this._menuColors = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.editColorSchemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._menuItemEditColorScheme = new System.Windows.Forms.ToolStripMenuItem();
 			this._panelCaption.SuspendLayout();
 			this._menuOpen.SuspendLayout();
-			this._layoutOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
-			this._layoutLanguage.SuspendLayout();
 			this._menuDonate.SuspendLayout();
-			this._layoutDonate.SuspendLayout();
 			this._menuPaste.SuspendLayout();
-			this._layoutPaste.SuspendLayout();
 			this._layoutTitle.SuspendLayout();
 			this._flowTitleRight.SuspendLayout();
 			this._flowTitleLeft.SuspendLayout();
@@ -220,7 +212,7 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonLanguage.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonLanguage.BackColor = System.Drawing.Color.Transparent;
+			this._buttonLanguage.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonLanguage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonLanguage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -388,60 +380,49 @@ namespace Mtgdb.Gui
 			this._menuOpen.AutoSize = true;
 			this._menuOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuOpen.BackColor = System.Drawing.SystemColors.Window;
-			this._menuOpen.Controls.Add(this._layoutOpen);
-			this._menuOpen.Location = new System.Drawing.Point(349, 240);
-			this._menuOpen.Margin = new System.Windows.Forms.Padding(0);
+			this._menuOpen.ColumnCount = 4;
+			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuOpen.Controls.Add(this._buttonImportExportToMtgArena, 1, 6);
+			this._menuOpen.Controls.Add(this._buttonMenuSaveCollection, 0, 3);
+			this._menuOpen.Controls.Add(this._labelMagarena, 1, 10);
+			this._menuOpen.Controls.Add(this._buttonMenuSaveDeck, 0, 2);
+			this._menuOpen.Controls.Add(this._labelDotP2, 1, 9);
+			this._menuOpen.Controls.Add(this._buttonMenuOpenCollection, 0, 1);
+			this._menuOpen.Controls.Add(this._labelMtgo, 1, 8);
+			this._menuOpen.Controls.Add(this._buttonMenuOpenDeck, 0, 0);
+			this._menuOpen.Controls.Add(this._buttonVisitMtgo, 0, 8);
+			this._menuOpen.Controls.Add(this._buttonVisitCockatrice, 0, 10);
+			this._menuOpen.Controls.Add(this._buttonVisitDotP2014, 0, 9);
+			this._menuOpen.Controls.Add(this._labelFormats, 0, 4);
+			this._menuOpen.Controls.Add(this._buttonVisitXMage, 1, 5);
+			this._menuOpen.Controls.Add(this._buttonVisitMagarena, 2, 5);
+			this._menuOpen.Controls.Add(this._buttonVisitDeckedBuilder, 3, 5);
+			this._menuOpen.Controls.Add(this._buttonVisitForge, 0, 5);
+			this._menuOpen.Controls.Add(this._buttonVisitMtgArena, 0, 6);
+			this._menuOpen.Controls.Add(this._buttonImportMtgArenaCollection, 1, 7);
+			this._menuOpen.Location = new System.Drawing.Point(525, 227);
+			this._menuOpen.Margin = new System.Windows.Forms.Padding(1);
 			this._menuOpen.Name = "_menuOpen";
-			this._menuOpen.Size = new System.Drawing.Size(275, 523);
+			this._menuOpen.RowCount = 11;
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.Size = new System.Drawing.Size(273, 521);
 			this._menuOpen.TabIndex = 0;
 			this._menuOpen.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _layoutOpen
-			// 
-			this._layoutOpen.AutoSize = true;
-			this._layoutOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutOpen.ColumnCount = 4;
-			this._layoutOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutOpen.Controls.Add(this._buttonImportExportToMtgArena, 1, 6);
-			this._layoutOpen.Controls.Add(this._buttonMenuSaveCollection, 0, 3);
-			this._layoutOpen.Controls.Add(this._labelMagarena, 1, 10);
-			this._layoutOpen.Controls.Add(this._buttonMenuSaveDeck, 0, 2);
-			this._layoutOpen.Controls.Add(this._labelDotP2, 1, 9);
-			this._layoutOpen.Controls.Add(this._buttonMenuOpenCollection, 0, 1);
-			this._layoutOpen.Controls.Add(this._labelMtgo, 1, 8);
-			this._layoutOpen.Controls.Add(this._buttonMenuOpenDeck, 0, 0);
-			this._layoutOpen.Controls.Add(this._buttonVisitMtgo, 0, 8);
-			this._layoutOpen.Controls.Add(this._buttonVisitCockatrice, 0, 10);
-			this._layoutOpen.Controls.Add(this._buttonVisitDotP2014, 0, 9);
-			this._layoutOpen.Controls.Add(this._labelFormats, 0, 4);
-			this._layoutOpen.Controls.Add(this._buttonVisitXMage, 1, 5);
-			this._layoutOpen.Controls.Add(this._buttonVisitMagarena, 2, 5);
-			this._layoutOpen.Controls.Add(this._buttonVisitDeckedBuilder, 3, 5);
-			this._layoutOpen.Controls.Add(this._buttonVisitForge, 0, 5);
-			this._layoutOpen.Controls.Add(this._buttonVisitMtgArena, 0, 6);
-			this._layoutOpen.Controls.Add(this._buttonImportMtgArenaCollection, 1, 7);
-			this._layoutOpen.Location = new System.Drawing.Point(1, 1);
-			this._layoutOpen.Margin = new System.Windows.Forms.Padding(1);
-			this._layoutOpen.Name = "_layoutOpen";
-			this._layoutOpen.RowCount = 11;
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutOpen.Size = new System.Drawing.Size(273, 521);
-			this._layoutOpen.TabIndex = 0;
 			// 
 			// _buttonImportExportToMtgArena
 			// 
@@ -450,7 +431,7 @@ namespace Mtgdb.Gui
 			this._buttonImportExportToMtgArena.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonImportExportToMtgArena.AutoCheck = false;
 			this._buttonImportExportToMtgArena.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonImportExportToMtgArena, 3);
+			this._menuOpen.SetColumnSpan(this._buttonImportExportToMtgArena, 3);
 			this._buttonImportExportToMtgArena.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonImportExportToMtgArena.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonImportExportToMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -470,7 +451,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuSaveCollection.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonMenuSaveCollection.AutoCheck = false;
 			this._buttonMenuSaveCollection.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonMenuSaveCollection, 4);
+			this._menuOpen.SetColumnSpan(this._buttonMenuSaveCollection, 4);
 			this._buttonMenuSaveCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMenuSaveCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuSaveCollection.Image = global::Mtgdb.Gui.Properties.Resources.box_48;
@@ -486,7 +467,7 @@ namespace Mtgdb.Gui
 			// 
 			// _labelMagarena
 			// 
-			this._layoutOpen.SetColumnSpan(this._labelMagarena, 3);
+			this._menuOpen.SetColumnSpan(this._labelMagarena, 3);
 			this._labelMagarena.Location = new System.Drawing.Point(81, 464);
 			this._labelMagarena.Margin = new System.Windows.Forms.Padding(3);
 			this._labelMagarena.Name = "_labelMagarena";
@@ -500,7 +481,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuSaveDeck.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonMenuSaveDeck.AutoCheck = false;
 			this._buttonMenuSaveDeck.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonMenuSaveDeck, 4);
+			this._menuOpen.SetColumnSpan(this._buttonMenuSaveDeck, 4);
 			this._buttonMenuSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMenuSaveDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
@@ -516,7 +497,7 @@ namespace Mtgdb.Gui
 			// 
 			// _labelDotP2
 			// 
-			this._layoutOpen.SetColumnSpan(this._labelDotP2, 3);
+			this._menuOpen.SetColumnSpan(this._labelDotP2, 3);
 			this._labelDotP2.Location = new System.Drawing.Point(81, 386);
 			this._labelDotP2.Margin = new System.Windows.Forms.Padding(3);
 			this._labelDotP2.Name = "_labelDotP2";
@@ -530,7 +511,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenCollection.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonMenuOpenCollection.AutoCheck = false;
 			this._buttonMenuOpenCollection.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonMenuOpenCollection, 4);
+			this._menuOpen.SetColumnSpan(this._buttonMenuOpenCollection, 4);
 			this._buttonMenuOpenCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMenuOpenCollection.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuOpenCollection.Image = global::Mtgdb.Gui.Properties.Resources.box_48;
@@ -546,7 +527,7 @@ namespace Mtgdb.Gui
 			// 
 			// _labelMtgo
 			// 
-			this._layoutOpen.SetColumnSpan(this._labelMtgo, 3);
+			this._menuOpen.SetColumnSpan(this._labelMtgo, 3);
 			this._labelMtgo.Location = new System.Drawing.Point(81, 308);
 			this._labelMtgo.Margin = new System.Windows.Forms.Padding(3);
 			this._labelMtgo.Name = "_labelMtgo";
@@ -561,7 +542,7 @@ namespace Mtgdb.Gui
 			this._buttonMenuOpenDeck.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonMenuOpenDeck.AutoCheck = false;
 			this._buttonMenuOpenDeck.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonMenuOpenDeck, 4);
+			this._menuOpen.SetColumnSpan(this._buttonMenuOpenDeck, 4);
 			this._buttonMenuOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMenuOpenDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonMenuOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.deck_48;
@@ -644,7 +625,7 @@ namespace Mtgdb.Gui
 			// _labelFormats
 			// 
 			this._labelFormats.AutoSize = true;
-			this._layoutOpen.SetColumnSpan(this._labelFormats, 3);
+			this._menuOpen.SetColumnSpan(this._labelFormats, 3);
 			this._labelFormats.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._labelFormats.Location = new System.Drawing.Point(3, 147);
 			this._labelFormats.Margin = new System.Windows.Forms.Padding(3);
@@ -757,7 +738,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgArena.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this._buttonVisitMtgArena.Location = new System.Drawing.Point(3, 241);
 			this._buttonVisitMtgArena.Name = "_buttonVisitMtgArena";
-			this._layoutOpen.SetRowSpan(this._buttonVisitMtgArena, 2);
+			this._menuOpen.SetRowSpan(this._buttonVisitMtgArena, 2);
 			this._buttonVisitMtgArena.Size = new System.Drawing.Size(72, 58);
 			this._buttonVisitMtgArena.TabIndex = 38;
 			this._buttonVisitMtgArena.TabStop = false;
@@ -772,7 +753,7 @@ namespace Mtgdb.Gui
 			this._buttonImportMtgArenaCollection.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonImportMtgArenaCollection.AutoCheck = false;
 			this._buttonImportMtgArenaCollection.BackColor = System.Drawing.Color.Transparent;
-			this._layoutOpen.SetColumnSpan(this._buttonImportMtgArenaCollection, 3);
+			this._menuOpen.SetColumnSpan(this._buttonImportMtgArenaCollection, 3);
 			this._buttonImportMtgArenaCollection.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonImportMtgArenaCollection.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonImportMtgArenaCollection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -792,55 +773,47 @@ namespace Mtgdb.Gui
 			this._menuLanguage.AutoSize = true;
 			this._menuLanguage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuLanguage.BackColor = System.Drawing.SystemColors.Window;
-			this._menuLanguage.Controls.Add(this._layoutLanguage);
-			this._menuLanguage.Location = new System.Drawing.Point(693, 62);
+			this._menuLanguage.ColumnCount = 3;
+			this._menuLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuLanguage.Controls.Add(this._buttonPT, 1, 3);
+			this._menuLanguage.Controls.Add(this._buttonDE, 2, 1);
+			this._menuLanguage.Controls.Add(this._buttonCN, 0, 0);
+			this._menuLanguage.Controls.Add(this._buttonEN, 2, 0);
+			this._menuLanguage.Controls.Add(this._buttonTW, 0, 3);
+			this._menuLanguage.Controls.Add(this._buttonIT, 1, 2);
+			this._menuLanguage.Controls.Add(this._buttonJP, 0, 1);
+			this._menuLanguage.Controls.Add(this._buttonKR, 0, 2);
+			this._menuLanguage.Controls.Add(this._buttonFR, 1, 1);
+			this._menuLanguage.Controls.Add(this._buttonES, 1, 0);
+			this._menuLanguage.Controls.Add(this._buttonRU, 2, 2);
+			this._menuLanguage.Location = new System.Drawing.Point(349, 62);
 			this._menuLanguage.Margin = new System.Windows.Forms.Padding(0);
 			this._menuLanguage.Name = "_menuLanguage";
+			this._menuLanguage.Padding = new System.Windows.Forms.Padding(1);
+			this._menuLanguage.RowCount = 4;
+			this._menuLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuLanguage.Size = new System.Drawing.Size(176, 90);
-			this._menuLanguage.TabIndex = 13;
+			this._menuLanguage.TabIndex = 38;
 			this._menuLanguage.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _layoutLanguage
-			// 
-			this._layoutLanguage.AutoSize = true;
-			this._layoutLanguage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutLanguage.ColumnCount = 3;
-			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutLanguage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutLanguage.Controls.Add(this._buttonPT, 1, 3);
-			this._layoutLanguage.Controls.Add(this._buttonDE, 2, 1);
-			this._layoutLanguage.Controls.Add(this._buttonCN, 0, 0);
-			this._layoutLanguage.Controls.Add(this._buttonEN, 2, 0);
-			this._layoutLanguage.Controls.Add(this._buttonTW, 0, 3);
-			this._layoutLanguage.Controls.Add(this._buttonIT, 1, 2);
-			this._layoutLanguage.Controls.Add(this._buttonJP, 0, 1);
-			this._layoutLanguage.Controls.Add(this._buttonKR, 0, 2);
-			this._layoutLanguage.Controls.Add(this._buttonFR, 1, 1);
-			this._layoutLanguage.Controls.Add(this._buttonES, 1, 0);
-			this._layoutLanguage.Controls.Add(this._buttonRU, 2, 2);
-			this._layoutLanguage.Location = new System.Drawing.Point(1, 1);
-			this._layoutLanguage.Margin = new System.Windows.Forms.Padding(1);
-			this._layoutLanguage.Name = "_layoutLanguage";
-			this._layoutLanguage.RowCount = 4;
-			this._layoutLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutLanguage.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutLanguage.Size = new System.Drawing.Size(174, 88);
-			this._layoutLanguage.TabIndex = 38;
 			// 
 			// _buttonPT
 			// 
 			this._buttonPT.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonPT.AutoCheck = false;
 			this._buttonPT.BackColor = System.Drawing.Color.Transparent;
+			this._buttonPT.FlatAppearance.BorderSize = 0;
 			this._buttonPT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonPT.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonPT.Image = global::Mtgdb.Gui.Properties.Resources.pt;
 			this._buttonPT.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonPT.Location = new System.Drawing.Point(58, 66);
+			this._buttonPT.Location = new System.Drawing.Point(59, 67);
 			this._buttonPT.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonPT.Name = "_buttonPT";
 			this._buttonPT.Size = new System.Drawing.Size(58, 22);
@@ -854,10 +827,12 @@ namespace Mtgdb.Gui
 			this._buttonDE.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonDE.AutoCheck = false;
 			this._buttonDE.BackColor = System.Drawing.Color.Transparent;
+			this._buttonDE.FlatAppearance.BorderSize = 0;
 			this._buttonDE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonDE.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDE.Image = global::Mtgdb.Gui.Properties.Resources.de;
 			this._buttonDE.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonDE.Location = new System.Drawing.Point(116, 22);
+			this._buttonDE.Location = new System.Drawing.Point(117, 23);
 			this._buttonDE.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDE.Name = "_buttonDE";
 			this._buttonDE.Size = new System.Drawing.Size(58, 22);
@@ -871,10 +846,12 @@ namespace Mtgdb.Gui
 			this._buttonCN.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonCN.AutoCheck = false;
 			this._buttonCN.BackColor = System.Drawing.Color.Transparent;
+			this._buttonCN.FlatAppearance.BorderSize = 0;
 			this._buttonCN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonCN.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonCN.Image = global::Mtgdb.Gui.Properties.Resources.cn;
 			this._buttonCN.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonCN.Location = new System.Drawing.Point(0, 0);
+			this._buttonCN.Location = new System.Drawing.Point(1, 1);
 			this._buttonCN.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonCN.Name = "_buttonCN";
 			this._buttonCN.Size = new System.Drawing.Size(58, 22);
@@ -888,10 +865,12 @@ namespace Mtgdb.Gui
 			this._buttonEN.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonEN.AutoCheck = false;
 			this._buttonEN.BackColor = System.Drawing.Color.Transparent;
+			this._buttonEN.FlatAppearance.BorderSize = 0;
 			this._buttonEN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonEN.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonEN.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonEN.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonEN.Location = new System.Drawing.Point(116, 0);
+			this._buttonEN.Location = new System.Drawing.Point(117, 1);
 			this._buttonEN.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonEN.Name = "_buttonEN";
 			this._buttonEN.Size = new System.Drawing.Size(58, 22);
@@ -905,10 +884,12 @@ namespace Mtgdb.Gui
 			this._buttonTW.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonTW.AutoCheck = false;
 			this._buttonTW.BackColor = System.Drawing.Color.Transparent;
+			this._buttonTW.FlatAppearance.BorderSize = 0;
 			this._buttonTW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonTW.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonTW.Image = global::Mtgdb.Gui.Properties.Resources.tw;
 			this._buttonTW.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonTW.Location = new System.Drawing.Point(0, 66);
+			this._buttonTW.Location = new System.Drawing.Point(1, 67);
 			this._buttonTW.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonTW.Name = "_buttonTW";
 			this._buttonTW.Size = new System.Drawing.Size(58, 22);
@@ -922,10 +903,12 @@ namespace Mtgdb.Gui
 			this._buttonIT.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonIT.AutoCheck = false;
 			this._buttonIT.BackColor = System.Drawing.Color.Transparent;
+			this._buttonIT.FlatAppearance.BorderSize = 0;
 			this._buttonIT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonIT.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonIT.Image = global::Mtgdb.Gui.Properties.Resources.it;
 			this._buttonIT.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonIT.Location = new System.Drawing.Point(58, 44);
+			this._buttonIT.Location = new System.Drawing.Point(59, 45);
 			this._buttonIT.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonIT.Name = "_buttonIT";
 			this._buttonIT.Size = new System.Drawing.Size(58, 22);
@@ -939,10 +922,12 @@ namespace Mtgdb.Gui
 			this._buttonJP.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonJP.AutoCheck = false;
 			this._buttonJP.BackColor = System.Drawing.Color.Transparent;
+			this._buttonJP.FlatAppearance.BorderSize = 0;
 			this._buttonJP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonJP.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonJP.Image = global::Mtgdb.Gui.Properties.Resources.jp;
 			this._buttonJP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonJP.Location = new System.Drawing.Point(0, 22);
+			this._buttonJP.Location = new System.Drawing.Point(1, 23);
 			this._buttonJP.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonJP.Name = "_buttonJP";
 			this._buttonJP.Size = new System.Drawing.Size(58, 22);
@@ -956,10 +941,12 @@ namespace Mtgdb.Gui
 			this._buttonKR.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonKR.AutoCheck = false;
 			this._buttonKR.BackColor = System.Drawing.Color.Transparent;
+			this._buttonKR.FlatAppearance.BorderSize = 0;
 			this._buttonKR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonKR.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonKR.Image = global::Mtgdb.Gui.Properties.Resources.kr;
 			this._buttonKR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonKR.Location = new System.Drawing.Point(0, 44);
+			this._buttonKR.Location = new System.Drawing.Point(1, 45);
 			this._buttonKR.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonKR.Name = "_buttonKR";
 			this._buttonKR.Size = new System.Drawing.Size(58, 22);
@@ -973,10 +960,12 @@ namespace Mtgdb.Gui
 			this._buttonFR.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonFR.AutoCheck = false;
 			this._buttonFR.BackColor = System.Drawing.Color.Transparent;
+			this._buttonFR.FlatAppearance.BorderSize = 0;
 			this._buttonFR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonFR.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonFR.Image = global::Mtgdb.Gui.Properties.Resources.fr;
 			this._buttonFR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonFR.Location = new System.Drawing.Point(58, 22);
+			this._buttonFR.Location = new System.Drawing.Point(59, 23);
 			this._buttonFR.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonFR.Name = "_buttonFR";
 			this._buttonFR.Size = new System.Drawing.Size(58, 22);
@@ -990,10 +979,12 @@ namespace Mtgdb.Gui
 			this._buttonES.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonES.AutoCheck = false;
 			this._buttonES.BackColor = System.Drawing.Color.Transparent;
+			this._buttonES.FlatAppearance.BorderSize = 0;
 			this._buttonES.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonES.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonES.Image = global::Mtgdb.Gui.Properties.Resources.es;
 			this._buttonES.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonES.Location = new System.Drawing.Point(58, 0);
+			this._buttonES.Location = new System.Drawing.Point(59, 1);
 			this._buttonES.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonES.Name = "_buttonES";
 			this._buttonES.Size = new System.Drawing.Size(58, 22);
@@ -1007,10 +998,12 @@ namespace Mtgdb.Gui
 			this._buttonRU.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonRU.AutoCheck = false;
 			this._buttonRU.BackColor = System.Drawing.Color.Transparent;
+			this._buttonRU.FlatAppearance.BorderSize = 0;
 			this._buttonRU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonRU.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonRU.Image = global::Mtgdb.Gui.Properties.Resources.ru;
 			this._buttonRU.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonRU.Location = new System.Drawing.Point(116, 44);
+			this._buttonRU.Location = new System.Drawing.Point(117, 45);
 			this._buttonRU.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonRU.Name = "_buttonRU";
 			this._buttonRU.Size = new System.Drawing.Size(58, 22);
@@ -1024,43 +1017,32 @@ namespace Mtgdb.Gui
 			this._menuDonate.AutoSize = true;
 			this._menuDonate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuDonate.BackColor = System.Drawing.SystemColors.Window;
-			this._menuDonate.Controls.Add(this._layoutDonate);
+			this._menuDonate.ColumnCount = 2;
+			this._menuDonate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuDonate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuDonate.Controls.Add(this._buttonDonateYandexMoney, 0, 2);
+			this._menuDonate.Controls.Add(this._panelAva, 0, 0);
+			this._menuDonate.Controls.Add(this._buttonDonatePayPal, 0, 1);
+			this._menuDonate.Controls.Add(this._labelDonate, 1, 0);
 			this._menuDonate.Location = new System.Drawing.Point(35, 62);
-			this._menuDonate.Margin = new System.Windows.Forms.Padding(0);
+			this._menuDonate.Margin = new System.Windows.Forms.Padding(1);
 			this._menuDonate.Name = "_menuDonate";
-			this._menuDonate.Size = new System.Drawing.Size(245, 195);
-			this._menuDonate.TabIndex = 29;
+			this._menuDonate.RowCount = 3;
+			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuDonate.Size = new System.Drawing.Size(243, 193);
+			this._menuDonate.TabIndex = 0;
 			this._menuDonate.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _layoutDonate
-			// 
-			this._layoutDonate.AutoSize = true;
-			this._layoutDonate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutDonate.ColumnCount = 2;
-			this._layoutDonate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutDonate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutDonate.Controls.Add(this._buttonDonateYandexMoney, 0, 2);
-			this._layoutDonate.Controls.Add(this._panelAva, 0, 0);
-			this._layoutDonate.Controls.Add(this._buttonDonatePayPal, 0, 1);
-			this._layoutDonate.Controls.Add(this._labelDonate, 1, 0);
-			this._layoutDonate.Location = new System.Drawing.Point(1, 1);
-			this._layoutDonate.Margin = new System.Windows.Forms.Padding(1);
-			this._layoutDonate.Name = "_layoutDonate";
-			this._layoutDonate.RowCount = 3;
-			this._layoutDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutDonate.Size = new System.Drawing.Size(243, 193);
-			this._layoutDonate.TabIndex = 0;
 			// 
 			// _buttonDonateYandexMoney
 			// 
 			this._buttonDonateYandexMoney.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonDonateYandexMoney.AutoCheck = false;
 			this._buttonDonateYandexMoney.BackColor = System.Drawing.Color.Transparent;
-			this._layoutDonate.SetColumnSpan(this._buttonDonateYandexMoney, 2);
+			this._menuDonate.SetColumnSpan(this._buttonDonateYandexMoney, 2);
 			this._buttonDonateYandexMoney.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDonateYandexMoney.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDonateYandexMoney.Image = global::Mtgdb.Gui.Properties.Resources.yandex_money_32;
@@ -1091,7 +1073,7 @@ namespace Mtgdb.Gui
 			this._buttonDonatePayPal.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonDonatePayPal.AutoCheck = false;
 			this._buttonDonatePayPal.BackColor = System.Drawing.Color.Transparent;
-			this._layoutDonate.SetColumnSpan(this._buttonDonatePayPal, 2);
+			this._menuDonate.SetColumnSpan(this._buttonDonatePayPal, 2);
 			this._buttonDonatePayPal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDonatePayPal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonDonatePayPal.Image = global::Mtgdb.Gui.Properties.Resources.paypal_32;
@@ -1139,42 +1121,31 @@ namespace Mtgdb.Gui
 			this._menuPaste.AutoSize = true;
 			this._menuPaste.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuPaste.BackColor = System.Drawing.SystemColors.Window;
-			this._menuPaste.Controls.Add(this._layoutPaste);
-			this._menuPaste.Location = new System.Drawing.Point(35, 287);
-			this._menuPaste.Margin = new System.Windows.Forms.Padding(0);
+			this._menuPaste.ColumnCount = 1;
+			this._menuPaste.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuPaste.Controls.Add(this._buttonMenuCopyCollection, 0, 5);
+			this._menuPaste.Controls.Add(this._buttonMenuCopyDeck, 0, 4);
+			this._menuPaste.Controls.Add(this._buttonMenuPasteCollectionAppend, 0, 3);
+			this._menuPaste.Controls.Add(this._buttonMenuPasteCollection, 0, 2);
+			this._menuPaste.Controls.Add(this._labelPasteInfo, 0, 6);
+			this._menuPaste.Controls.Add(this._buttonMenuPasteDeck, 0, 0);
+			this._menuPaste.Controls.Add(this._buttonMenuPasteDeckAppend, 0, 1);
+			this._menuPaste.Location = new System.Drawing.Point(35, 289);
+			this._menuPaste.Margin = new System.Windows.Forms.Padding(1);
 			this._menuPaste.Name = "_menuPaste";
-			this._menuPaste.Size = new System.Drawing.Size(305, 461);
-			this._menuPaste.TabIndex = 37;
+			this._menuPaste.RowCount = 7;
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuPaste.Size = new System.Drawing.Size(303, 459);
+			this._menuPaste.TabIndex = 0;
 			this._menuPaste.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _layoutPaste
-			// 
-			this._layoutPaste.AutoSize = true;
-			this._layoutPaste.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._layoutPaste.ColumnCount = 1;
-			this._layoutPaste.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutPaste.Controls.Add(this._buttonMenuCopyCollection, 0, 5);
-			this._layoutPaste.Controls.Add(this._buttonMenuCopyDeck, 0, 4);
-			this._layoutPaste.Controls.Add(this._buttonMenuPasteCollectionAppend, 0, 3);
-			this._layoutPaste.Controls.Add(this._buttonMenuPasteCollection, 0, 2);
-			this._layoutPaste.Controls.Add(this._labelPasteInfo, 0, 6);
-			this._layoutPaste.Controls.Add(this._buttonMenuPasteDeck, 0, 0);
-			this._layoutPaste.Controls.Add(this._buttonMenuPasteDeckAppend, 0, 1);
-			this._layoutPaste.Location = new System.Drawing.Point(1, 1);
-			this._layoutPaste.Margin = new System.Windows.Forms.Padding(1);
-			this._layoutPaste.Name = "_layoutPaste";
-			this._layoutPaste.RowCount = 7;
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._layoutPaste.Size = new System.Drawing.Size(303, 459);
-			this._layoutPaste.TabIndex = 0;
 			// 
 			// _buttonMenuCopyCollection
 			// 
@@ -1435,23 +1406,23 @@ namespace Mtgdb.Gui
 			// _menuColors
 			// 
 			this._menuColors.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editColorSchemeToolStripMenuItem});
+            this._menuItemEditColorScheme});
 			this._menuColors.Name = "_menuColors";
-			this._menuColors.Size = new System.Drawing.Size(181, 48);
+			this._menuColors.Size = new System.Drawing.Size(169, 26);
 			// 
-			// editColorSchemeToolStripMenuItem
+			// _menuItemEditColorScheme
 			// 
-			this.editColorSchemeToolStripMenuItem.Name = "editColorSchemeToolStripMenuItem";
-			this.editColorSchemeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.editColorSchemeToolStripMenuItem.Text = "Edit color scheme";
+			this._menuItemEditColorScheme.Name = "_menuItemEditColorScheme";
+			this._menuItemEditColorScheme.Size = new System.Drawing.Size(168, 22);
+			this._menuItemEditColorScheme.Text = "Edit color scheme";
 			// 
 			// FormRoot
 			// 
 			this.CaptionHeight = 37;
 			this.ClientSize = new System.Drawing.Size(1024, 800);
+			this.Controls.Add(this._menuPaste);
 			this.Controls.Add(this._menuOpen);
 			this.Controls.Add(this._menuLanguage);
-			this.Controls.Add(this._menuPaste);
 			this.Controls.Add(this._menuDonate);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1459,25 +1430,17 @@ namespace Mtgdb.Gui
 			this.Name = "FormRoot";
 			this.Text = "FormTabbed";
 			this.Controls.SetChildIndex(this._panelClient, 0);
-			this.Controls.SetChildIndex(this._menuDonate, 0);
-			this.Controls.SetChildIndex(this._menuPaste, 0);
 			this.Controls.SetChildIndex(this._panelCaption, 0);
+			this.Controls.SetChildIndex(this._menuDonate, 0);
 			this.Controls.SetChildIndex(this._menuLanguage, 0);
 			this.Controls.SetChildIndex(this._menuOpen, 0);
+			this.Controls.SetChildIndex(this._menuPaste, 0);
 			this._panelCaption.ResumeLayout(false);
 			this._menuOpen.ResumeLayout(false);
 			this._menuOpen.PerformLayout();
-			this._layoutOpen.ResumeLayout(false);
-			this._layoutOpen.PerformLayout();
 			this._menuLanguage.ResumeLayout(false);
-			this._menuLanguage.PerformLayout();
-			this._layoutLanguage.ResumeLayout(false);
 			this._menuDonate.ResumeLayout(false);
-			this._menuDonate.PerformLayout();
-			this._layoutDonate.ResumeLayout(false);
 			this._menuPaste.ResumeLayout(false);
-			this._menuPaste.PerformLayout();
-			this._layoutPaste.ResumeLayout(false);
 			this._layoutTitle.ResumeLayout(false);
 			this._layoutTitle.PerformLayout();
 			this._flowTitleRight.ResumeLayout(false);
@@ -1503,7 +1466,6 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonClear;
 		private Mtgdb.Controls.CustomCheckBox _buttonTooltips;
 		private Controls.TabHeaderControl _tabs;
-		private Mtgdb.Controls.BorderedPanel _menuOpen;
 		private Mtgdb.Controls.CustomCheckBox _buttonVisitForge;
 		private Mtgdb.Controls.CustomCheckBox _buttonVisitXMage;
 		private Mtgdb.Controls.CustomCheckBox _buttonVisitMagarena;
@@ -1512,7 +1474,6 @@ namespace Mtgdb.Gui
 		private System.Windows.Forms.Label _labelFormats;
 		private System.Windows.Forms.Label _labelMagarena;
 		private System.Windows.Forms.Label _labelDotP2;
-		private Controls.BorderedPanel _menuLanguage;
 		private Mtgdb.Controls.CustomCheckBox _buttonPT;
 		private Mtgdb.Controls.CustomCheckBox _buttonTW;
 		private Mtgdb.Controls.CustomCheckBox _buttonRU;
@@ -1524,7 +1485,6 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonEN;
 		private Mtgdb.Controls.CustomCheckBox _buttonES;
 		private Mtgdb.Controls.CustomCheckBox _buttonCN;
-		private Controls.BorderedPanel _menuDonate;
 		private Mtgdb.Controls.BorderedPanel _panelAva;
 		private Mtgdb.Controls.CustomCheckBox _buttonDonatePayPal;
 		private Mtgdb.Controls.CustomCheckBox _buttonDonateYandexMoney;
@@ -1536,14 +1496,13 @@ namespace Mtgdb.Gui
 		private Controls.CustomCheckBox _buttonMenuSaveCollection;
 		private System.Windows.Forms.Label _labelMtgo;
 		private Controls.CustomCheckBox _buttonPaste;
-		private Controls.BorderedPanel _menuPaste;
 		private System.Windows.Forms.Label _labelPasteInfo;
 		private Controls.CustomCheckBox _buttonMenuPasteDeckAppend;
 		private Controls.CustomCheckBox _buttonMenuPasteDeck;
-		private System.Windows.Forms.TableLayoutPanel _layoutOpen;
-		private System.Windows.Forms.TableLayoutPanel _layoutPaste;
-		private System.Windows.Forms.TableLayoutPanel _layoutDonate;
-		private System.Windows.Forms.TableLayoutPanel _layoutLanguage;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _menuOpen;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _menuPaste;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _menuDonate;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _menuLanguage;
 		private Mtgdb.Controls.BorderedTableLayoutPanel _layoutTitle;
 		private Mtgdb.Controls.BorderedFlowLayoutPanel _flowTitleLeft;
 		private Mtgdb.Controls.BorderedFlowLayoutPanel _flowTitleRight;
@@ -1560,6 +1519,6 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonColorScheme;
 		private Controls.CustomCheckBox _buttonImportMtgArenaCollection;
 		private ContextMenuStrip _menuColors;
-		private ToolStripMenuItem editColorSchemeToolStripMenuItem;
+		private ToolStripMenuItem _menuItemEditColorScheme;
 	}
 }

@@ -26,8 +26,6 @@ namespace Mtgdb.Gui
 			AppDomain.CurrentDomain.UnhandledException += unhandledException;
 			System.Windows.Forms.Application.ThreadException += threadException;
 
-			Dpi.Initialize();
-
 			System.Windows.Forms.Application.EnableVisualStyles();
 			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
@@ -35,6 +33,8 @@ namespace Mtgdb.Gui
 			_kernel.Load<DalModule>();
 			_kernel.Load<DownloaderModule>();
 			_kernel.Load<GuiModule>();
+
+			Dpi.Initialize();
 
 			var installer = _kernel.Get<Installer>();
 

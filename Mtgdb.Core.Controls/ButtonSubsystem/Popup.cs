@@ -12,22 +12,16 @@ namespace Mtgdb.Controls
 			ButtonBase owner,
 			HorizontalAlignment alignment = HorizontalAlignment.Left,
 			bool closeMenuOnClick = true,
-			bool borderOnHover = true,
-			Control container = null,
 			Action beforeShow = null)
 		{
 			MenuControl = menuControl;
-			Container = container ?? menuControl;
 			CloseMenuOnClick = closeMenuOnClick;
-			BorderOnHover = borderOnHover;
 			Owner = owner;
 			_alignment = alignment;
 			_beforeShow = beforeShow;
 		}
 
 		public Control MenuControl { get; }
-		public Control Container { get; }
-
 		public bool Shown { get; private set; }
 
 		public void Show()
@@ -56,7 +50,7 @@ namespace Mtgdb.Controls
 
 			if (MenuControl is ContextMenuStrip)
 			{
-				var screenRect = new Rectangle(_screenLocation.Value, Container.Size);
+				var screenRect = new Rectangle(_screenLocation.Value, MenuControl.Size);
 				return screenRect.Contains(cursorPosition);
 			}
 			else
@@ -121,7 +115,6 @@ namespace Mtgdb.Controls
 
 
 		public bool CloseMenuOnClick { get; }
-		public bool BorderOnHover { get; }
 		public ButtonBase Owner { get; }
 		private readonly HorizontalAlignment _alignment;
 		private readonly Action _beforeShow;
