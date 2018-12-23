@@ -10,10 +10,10 @@ namespace Mtgdb.Downloader
 		private readonly ImageSourcesConfig _config;
 		private readonly Megatools _megatools;
 
-		public ImageDownloadProgressReader(ImageSourcesConfig config)
+		public ImageDownloadProgressReader(ImageSourcesConfig config, Megatools megatools)
 		{
 			_config = config;
-			_megatools = new Megatools();
+			_megatools = megatools;
 		}
 
 		public void DownloadSignatures(string quality)

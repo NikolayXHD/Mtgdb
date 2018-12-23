@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="WebClient\GdriveWebClient.cs" />
     <Compile Include="NewsService.cs" />
+    <Compile Include="WebClient\GdriveWebClientExtension.cs" />
     <Compile Include="WebClient\WebClientBase.cs" />
     <Compile Include="PriceDownloader.cs" />
     <Compile Include="PriceClient.cs" />

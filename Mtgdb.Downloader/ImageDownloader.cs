@@ -13,10 +13,10 @@ namespace Mtgdb.Downloader
 	public class ImageDownloader
 	{
 		[UsedImplicitly]
-		public ImageDownloader(CardRepository repository)
+		public ImageDownloader(CardRepository repository, Megatools megatools)
 		{
 			_repository = repository;
-			_megatools = new Megatools();
+			_megatools = megatools;
 		}
 
 		public void Download(string quality, IList<ImageDownloadProgress> allProgress)
@@ -152,54 +152,17 @@ namespace Mtgdb.Downloader
 		private void downloadFromGdrive(ImageDownloadProgress task, GdriveWebClient webClient)
 		{
 			string fileName = task.Dir.Subdirectory + ".7z";
-			string archiveFileName = task.TargetDirectory.AddPath(fileName);
+			string targetDirectory = task.TargetDirectory;
+			string gdriveUrl = task.GdriveUrl;
 
 			lock (_syncOutput)
-				Console.WriteLine($"Downloading {task.Dir.Subdirectory} from {task.GdriveUrl}");
+				Console.WriteLine($"Downloading {task.Dir.Subdirectory} from {gdriveUrl}");
 
-			if (File.Exists(archiveFileName))
-			{
-				try
-				{
-					File.Delete(archiveFileName);
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine($"Failed to remove {archiveFileName}: {ex.Message}");
-					return;
-				}
-			}
-
-			try
-			{
-				webClient.DownloadFromGdrive(task.GdriveUrl, task.TargetDirectory);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Error downloading {archiveFileName} from {task.GdriveUrl}: {ex.Message}");
+			if (!webClient.DownloadAndExtract(gdriveUrl, targetDirectory, fileName))
 				return;
-			}
-
-			if (!File.Exists(archiveFileName))
-			{
-				Console.WriteLine($"Failed to download {archiveFileName} from {task.GdriveUrl}");
-				return;
-			}
-
-			var sevenZip = new SevenZip(silent: true);
-			sevenZip.Extract(archiveFileName, task.TargetDirectory, Enumerable.Empty<string>());
 
 			Interlocked.Add(ref _countInDownloadedDirs, task.FilesOnline.Count - task.FilesDownloaded.Count);
 			ProgressChanged?.Invoke();
-
-			try
-			{
-				File.Delete(archiveFileName);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Failed to remove {archiveFileName}: {ex.Message}");
-			}
 		}
 
 		private string getReleaseDate(ImageDownloadProgress progress)

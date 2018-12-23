@@ -55,6 +55,7 @@ del /q /s %target%\update\notifications\new\*
 del /q /s %target%\update\notifications\read\*
 del /q /s %target%\update\notifications\archive\*
 del /q %target%\update\filelist.txt
+rmdir /q /s %target%\update\megatools-1.9.98-win32
 
 del /q /s %target%\color-schemes\current.colors
 del /q /s %target%\images\*.jpg

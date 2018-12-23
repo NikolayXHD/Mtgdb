@@ -22,10 +22,12 @@
 	<MtgjsonSource Url="https://mtgjson.com/v4/json/AllSets.json" />
 
 	<AppSource
-		FileListUrl="https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
-		ZipUrl=     "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
-		NewsUrl=    "https://py3j9.app.goo.gl/run"
-		ForumUrl=   "https://py3j9.app.goo.gl/frm" />
+		FileListUrl= "https://mega.nz/#F!NgVTUCJa!IRIERTle5sMt33zgz9c2Og"
+		ZipUrl=      "https://mega.nz/#F!90cWlJKK!dxjVmKagUok1WBgr6irTeg"
+		NewsUrl=     "https://py3j9.app.goo.gl/run"
+		ForumUrl=    "https://py3j9.app.goo.gl/frm"
+		MegatoolsUrl="https://drive.google.com/uc?export=download&amp;id=15xQpkAxz33w1LpP1MLUIAMfljNL05VJp"
+	/>
 
 	<ImageLocations>
 		<Directory Path="images\Mtgdb.Pictures\LQ" />

@@ -17,7 +17,8 @@ namespace Mtgdb.Downloader
 			AppSourceConfig appSourceConfig,
 			MtgjsonSourceConfig mtgjsonSourceConfig,
 			CardSearcher cardSearcher,
-			KeywordSearcher keywordSearcher)
+			KeywordSearcher keywordSearcher,
+			Megatools megatools)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
@@ -30,7 +31,7 @@ namespace Mtgdb.Downloader
 			AppDownloadedSignature = getAppDownloadedSignature();
 
 			_webClient = new WebClientBase();
-			_megatools = new Megatools();
+			_megatools = megatools;
 
 			_protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
 			{

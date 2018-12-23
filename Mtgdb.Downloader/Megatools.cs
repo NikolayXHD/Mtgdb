@@ -1,11 +1,17 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
+		public Megatools(AppSourceConfig config)
+		{
+			_megatoolsUrl = config.MegatoolsUrl;
+		}
+
 		public void Download(string storageUrl, string targetDirectory, string name, bool silent = false, int? timeoutSec = null)
 		{
 			if (_process != null)
@@ -13,9 +19,14 @@ namespace Mtgdb.Downloader
 
 			_silent = silent;
 
-			DownloadedCount = 0;
+			lock (_syncSelfdownload)
+				if (!File.Exists(MegadlExePath))
+				{
+					var webClient = new GdriveWebClient();
+					webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, "megatools.7z");
+				}
 
-			var megadlExePath = AppDir.Update.AddPath(@"megatools-1.9.98-win32\megadl.exe");
+			DownloadedCount = 0;
 
 			string arguments;
 
@@ -26,7 +37,7 @@ namespace Mtgdb.Downloader
 
 			_process = new Process
 			{
-				StartInfo = new ProcessStartInfo(megadlExePath, arguments)
+				StartInfo = new ProcessStartInfo(MegadlExePath, arguments)
 				{
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
@@ -108,11 +119,18 @@ namespace Mtgdb.Downloader
 			Console.WriteLine(e.Data);
 		}
 
+
+
+		private static string MegadlExePath =>
+			AppDir.Update.AddPath(@"megatools-1.9.98-win32\megadl.exe");
+
 		public int DownloadedCount { get; private set; }
 
 		public event Action FileDownloaded;
 
 		private Process _process;
 		private bool _silent;
+		private string _megatoolsUrl;
+		private static object _syncSelfdownload = new object();
 	}
 }
