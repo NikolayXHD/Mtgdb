@@ -53,7 +53,7 @@ namespace Mtgdb.Controls
 			var owner = (ButtonBase) sender;
 			var popup = _popupsByOwner[owner];
 
-			if (popup.OpenOnHover && !popup.Visible)
+			if (popup.OpenOnHover && !popup.Shown)
 				show(popup);
 		}
 
@@ -62,7 +62,7 @@ namespace Mtgdb.Controls
 			var owner = (ButtonBase)sender;
 			var popup = _popupsByOwner[owner];
 
-			if (popup.Visible)
+			if (popup.Shown)
 			{
 				popup.Hide();
 				return;
@@ -84,7 +84,7 @@ namespace Mtgdb.Controls
 			var button = (ButtonBase) sender;
 			var popup = _popupsByOwner[button];
 
-			if (!popup.Visible)
+			if (!popup.Shown)
 				return;
 
 			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
@@ -201,6 +201,7 @@ namespace Mtgdb.Controls
 		}
 
 
+
 		private void popupItemClick(object sender, EventArgs e)
 		{
 			if (!(sender is ButtonBase))
@@ -256,7 +257,7 @@ namespace Mtgdb.Controls
 				case 0x0207:
 				case 0x0204:
 					foreach (var popup in _popupsByOwner.Values)
-						if (popup.Visible && !popup.IsCursorInPopup() && !popup.IsCursorInButton())
+						if (popup.Shown && !popup.IsCursorInPopup() && !popup.IsCursorInButton())
 							popup.Hide();
 
 					break;

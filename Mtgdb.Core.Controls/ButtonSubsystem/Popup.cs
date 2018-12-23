@@ -14,7 +14,8 @@ namespace Mtgdb.Controls
 			bool openOnHover = true,
 			bool closeMenuOnClick = false,
 			bool borderOnHover = true,
-			Control container = null)
+			Control container = null,
+			Action beforeShow = null)
 		{
 			Control = control;
 			Container = container ?? control;
@@ -23,13 +24,13 @@ namespace Mtgdb.Controls
 			BorderOnHover = borderOnHover;
 			Owner = owner;
 			_alignment = alignment;
+			_beforeShow = beforeShow;
 		}
 
 		public Control Control { get; }
 		public Control Container { get; }
 
-		public bool Visible => Control.Visible;
-		public void Hide() => Control.Hide();
+		public bool Shown { get; private set; }
 
 		public void Show()
 		{
@@ -39,32 +40,14 @@ namespace Mtgdb.Controls
 				show(strip, location);
 			else
 				show(location);
+			
+			Shown = true;
 		}
 
-		private void show(Point location)
+		public void Hide()
 		{
-			var parent = Control.Parent;
-			location = parent.PointToClient(Owner, location);
-
-			location = new Point(
-				location.X.WithinRange(Control.Margin.Left, parent.Width - Control.Width - Control.Margin.Right),
-				location.Y.WithinRange(Control.Margin.Top, parent.Height - Control.Height - Control.Margin.Bottom));
-
-			Control.Location = location;
-			Control.BringToFront();
-			Control.Show();
-			Control.Focus();
-		}
-
-		private void show(ContextMenuStrip contextMenuStrip, Point location)
-		{
-			ControlHelpers.SetForegroundWindow(
-				new HandleRef(
-					Control,
-					Control.Handle));
-
-			_screenLocation = Owner.PointToScreen(location);
-			contextMenuStrip.Show(_screenLocation.Value);
+			Control.Hide();
+			Shown = false;
 		}
 
 		public bool IsCursorInPopup()
@@ -92,6 +75,34 @@ namespace Mtgdb.Controls
 
 
 
+		private void show(Point location)
+		{
+			_beforeShow?.Invoke();
+
+			var parent = Control.Parent;
+			location = parent.PointToClient(Owner, location);
+
+			location = new Point(
+				location.X.WithinRange(Control.Margin.Left, parent.Width - Control.Width - Control.Margin.Right),
+				location.Y.WithinRange(Control.Margin.Top, parent.Height - Control.Height - Control.Margin.Bottom));
+
+			Control.Location = location;
+			Control.BringToFront();
+			Control.Show();
+			Control.Focus();
+		}
+
+		private void show(ContextMenuStrip contextMenuStrip, Point location)
+		{
+			ControlHelpers.SetForegroundWindow(
+				new HandleRef(
+					Control,
+					Control.Handle));
+
+			_screenLocation = Owner.PointToScreen(location);
+			contextMenuStrip.Show(_screenLocation.Value);
+		}
+
 		private Point getLocation()
 		{
 			int top = Owner.Height + Control.Margin.Top;
@@ -110,11 +121,13 @@ namespace Mtgdb.Controls
 		}
 
 
+
 		public bool OpenOnHover { get; }
 		public bool CloseMenuOnClick { get; }
 		public bool BorderOnHover { get; }
 		public ButtonBase Owner { get; }
 		private readonly HorizontalAlignment _alignment;
+		private readonly Action _beforeShow;
 		private Point? _screenLocation;
 	}
 }

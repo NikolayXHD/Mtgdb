@@ -92,6 +92,21 @@ namespace Mtgdb.Gui
 				"NOTE: you will see some remnants of previous colors until you restart Mtgdb.Gui",
 				_buttonColorScheme);
 
+			TooltipController.SetTooltip(this,
+				null,
+				"Clipboard operations menu",
+				_buttonPaste);
+
+			TooltipController.SetTooltip(this,
+				null,
+				"Open file menu",
+				_buttonOpenDeck);
+
+			TooltipController.SetTooltip(this,
+				null,
+				"Save to file menu",
+				_buttonSaveDeck);
+
 			var tabHeadersTooltip = new TabHeadersTooltip(_tabs, this);
 			tabHeadersTooltip.SubscribeToEvents();
 

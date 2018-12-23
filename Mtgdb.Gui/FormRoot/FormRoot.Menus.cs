@@ -16,14 +16,9 @@ namespace Mtgdb.Gui
 			_buttonShowFilterPanels.Checked = true;
 			_buttonDownload.Enabled = false;
 
-			foreach (var state in _saveLoadMenuModes)
-				state.TitleButton.MouseEnter += saveLoadMouseEnter;
-
 			_buttonDownload.Click += downloadClick;
 
-			_buttonOpenDeck.Click += openDeckClick;
 			_buttonMenuOpenDeck.Click += openDeckClick;
-			_buttonSaveDeck.Click += saveDeckClick;
 			_buttonMenuSaveDeck.Click += saveDeckClick;
 
 			_buttonMenuOpenCollection.Click += openCollectionClick;
@@ -41,7 +36,6 @@ namespace Mtgdb.Gui
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
-			_buttonPaste.Click += pasteClick;
 			_buttonOpenWindow.Click += openWindowClick;
 			_buttonMenuPasteDeck.Click += pasteClick;
 			_buttonMenuPasteDeckAppend.Click += pasteClick;
@@ -96,29 +90,17 @@ namespace Mtgdb.Gui
 				form.CopyDeckInMtgArenaFormat();
 		}
 
-		private void buttonImportMtgArenaCollectionClick(object sender, EventArgs e)
-		{
-			var form = SelectedTab;
-			if (form == null)
-				return;
+		private void buttonImportMtgArenaCollectionClick(object sender, EventArgs e) =>
+			SelectedTab?.ImportMtgArenaCollection();
 
-			form.ImportMtgArenaCollection();
-		}
-
-		private void openWindowClick(object sender, EventArgs e)
-		{
+		private void openWindowClick(object sender, EventArgs e) =>
 			_application.CreateForm();
-		}
 
-		private static void configClick(object sender, EventArgs e)
-		{
+		private static void configClick(object sender, EventArgs e) =>
 			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
-		}
 
-		private void filterPanelsChecked(object sender, EventArgs e)
-		{
+		private void filterPanelsChecked(object sender, EventArgs e) =>
 			ShowFilterPanelsChanged?.Invoke();
-		}
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
@@ -131,10 +113,8 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private static void helpClick(object sender, EventArgs e)
-		{
+		private static void helpClick(object sender, EventArgs e) =>
 			System.Diagnostics.Process.Start(AppDir.Root.AddPath("help\\home.html"));
-		}
 
 		private void redoClick(object sender, EventArgs e)
 		{
@@ -156,45 +136,29 @@ namespace Mtgdb.Gui
 			_undoingOrRedoing = false;
 		}
 
-		private void clearClick(object sender, EventArgs e)
-		{
+		private void clearClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonClearDeck();
-		}
 
-		private void printClick(object sender, EventArgs e)
-		{
+		private void printClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonPrint();
-		}
 
-		private void statClick(object sender, EventArgs e)
-		{
+		private void statClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonPivot();
-		}
 
-		private void saveDeckClick(object sender, EventArgs e)
-		{
+		private void saveDeckClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonSaveDeck();
-		}
 
-		private void openDeckClick(object sender, EventArgs e)
-		{
+		private void openDeckClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonLoadDeck();
-		}
 
-		private void saveCollectionClick(object sender, EventArgs e)
-		{
+		private void saveCollectionClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonSaveCollection();
-		}
 
-		private void openCollectionClick(object sender, EventArgs e)
-		{
+		private void openCollectionClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonLoadCollection();
-		}
 
-		private void downloadClick(object sender, EventArgs e)
-		{
+		private void downloadClick(object sender, EventArgs e) =>
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
-		}
 
 		private void setupLanguageMenu()
 		{
@@ -286,9 +250,7 @@ namespace Mtgdb.Gui
 			System.Diagnostics.Process.Start(url);
 		}
 
-
-
-		private void saveLoadMouseEnter(object sender, EventArgs e)
+		private void setMenuMode(ButtonBase sender)
 		{
 			_layoutOpen.SuspendLayout();
 
@@ -357,20 +319,25 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
 				_buttonOpenDeck,
 				container: _layoutOpen,
+				openOnHover: false,
+				closeMenuOnClick: true,
 				borderOnHover: false,
-				closeMenuOnClick: true));
+				beforeShow: () => setMenuMode(_buttonOpenDeck)));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
 				_buttonSaveDeck,
 				container: _layoutOpen,
+				openOnHover: false,
+				closeMenuOnClick: true,
 				borderOnHover: false,
-				closeMenuOnClick: true));
+				beforeShow: () => setMenuMode(_buttonSaveDeck)));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuPaste,
 				_buttonPaste,
 				container: _layoutPaste,
-				borderOnHover: false,
-				closeMenuOnClick: true));
+				openOnHover: false,
+				closeMenuOnClick: true,
+				borderOnHover: false));
 
 			_buttonSubsystem.SubscribeToEvents();
 		}
@@ -382,10 +349,8 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(button, new ButtonImages(bmp, x2));
 		}
 
-		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
-		{
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e) =>
 			e.IsInputKey = true;
-		}
 
 		private void formKeyDown(object sender, KeyEventArgs e)
 		{

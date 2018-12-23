@@ -26,50 +26,6 @@ namespace Mtgdb
 			return val;
 		}
 
-		public static TVal TryPeek<TVal>(this Stack<TVal> stack)
-		{
-			if (stack.Count == 0)
-				return default;
-
-			return stack.Peek();
-		}
-
-		public static TVal Get<TVal>(this HashSet<TVal> collection, TVal value)
-		{
-			var result = collection.First(_ => collection.Comparer.Equals(_, value));
-			return result;
-		}
-
-		public static bool Contains<TVal>(this HashSet<TVal> collection, TVal? value)
-			where TVal : struct
-		{
-			return value.HasValue && collection.Contains(value.Value);
-		}
-
-		public static char? TryGetFirst(this string value)
-		{
-			if (string.IsNullOrEmpty(value))
-				return null;
-
-			return value[0];
-		}
-
-		public static char? TryGetLast(this string value)
-		{
-			if (string.IsNullOrEmpty(value))
-				return null;
-
-			return value[value.Length - 1];
-		}
-
-		public static TVal TryGetLast<TVal>(this IList<TVal> list)
-		{
-			if (list.Count == 0)
-				return default;
-
-			return list[list.Count - 1];
-		}
-
 		public static List<TVal> SkipFirst<TVal>(this List<TVal> list, int countToSkip)
 		{
 			if (countToSkip <= 0)
@@ -98,6 +54,14 @@ namespace Mtgdb
 				return default;
 
 			return list[index];
+		}
+
+		public static TVal TryGetLast<TVal>(this IList<TVal> list)
+		{
+			if (list.Count == 0)
+				return default;
+
+			return list[list.Count - 1];
 		}
 
 		public static Dictionary<TKey, TVal> ToDictionary<TKey, TVal>(
@@ -136,30 +100,6 @@ namespace Mtgdb
 		public static string Non(this string value, string empty)
 		{
 			if (value == empty)
-				return null;
-
-			return value;
-		}
-
-		public static IList<TVal> NonEmpty<TVal>(this IList<TVal> value)
-		{
-			if (value.Count == 0)
-				return null;
-
-			return value;
-		}
-
-		public static ICollection<TVal> NonEmpty<TVal>(this ICollection<TVal> value)
-		{
-			if (value.Count == 0)
-				return null;
-
-			return value;
-		}
-
-		public static List<TVal> NonEmpty<TVal>(this List<TVal> value)
-		{
-			if (value.Count == 0)
 				return null;
 
 			return value;
@@ -223,6 +163,17 @@ namespace Mtgdb
 			}
 
 			return result;
+		}
+
+		public static void Add<TKey, TValue>(this IDictionary<TKey, List<TValue>> multiDict, TKey key, TValue val)
+		{
+			if (!multiDict.TryGetValue(key, out var list))
+			{
+				list = new List<TValue>();
+				multiDict.Add(key, list);
+			}
+
+			list.Add(val);
 		}
 	}
 }
