@@ -5,6 +5,13 @@ namespace Mtgdb.Controls
 {
 	public class ButtonImages
 	{
+		private static bool x2() => Dpi.ScalePercent > 100;
+
+		public ButtonImages(Bitmap image, Bitmap imageDouble)
+			: this(x2() ? imageDouble : image, x2())
+		{
+		}
+
 		public ButtonImages(Bitmap image, bool x2)
 			: this(image, null, x2)
 		{

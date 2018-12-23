@@ -28,17 +28,18 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChart));
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDeckPrice = new Mtgdb.Controls.CustomCheckBox();
-			this._tabCols = new Mtgdb.Controls.TabHeaderControl();
 			this._buttonApply = new System.Windows.Forms.Button();
 			this._menuFields = new System.Windows.Forms.ComboBox();
 			this._buttonAddCol = new System.Windows.Forms.Button();
 			this._panelFields = new System.Windows.Forms.FlowLayoutPanel();
 			this._labelCols = new System.Windows.Forms.Label();
+			this._tabCols = new Mtgdb.Controls.TabHeaderControl();
 			this._labelRows = new System.Windows.Forms.Label();
 			this._tabRows = new Mtgdb.Controls.TabHeaderControl();
 			this._labelSum = new System.Windows.Forms.Label();
@@ -65,14 +66,17 @@
 			this._menuPriceChartType = new System.Windows.Forms.ComboBox();
 			this._buttonCollectionPrice = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonManaCurveManacost = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonSave = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonCollectionColors = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDeckColors = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonLoad = new Mtgdb.Controls.CustomCheckBox();
 			this._labelName = new System.Windows.Forms.Label();
 			this._flowTitle = new System.Windows.Forms.FlowLayoutPanel();
+			this._flowFileMenu = new Mtgdb.Controls.BorderedFlowLayoutPanel();
+			this._buttonMruFiles = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonLoad = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSave = new Mtgdb.Controls.CustomCheckBox();
 			this._flowPriceReports = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._flowDropdowns = new System.Windows.Forms.FlowLayoutPanel();
+			this._menuMruFiles = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._panelClient.SuspendLayout();
 			this._panelCaption.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._chart)).BeginInit();
@@ -81,6 +85,7 @@
 			this._panelTable.SuspendLayout();
 			this._panelFlags.SuspendLayout();
 			this._flowTitle.SuspendLayout();
+			this._flowFileMenu.SuspendLayout();
 			this._flowPriceReports.SuspendLayout();
 			this._flowDropdowns.SuspendLayout();
 			this.SuspendLayout();
@@ -119,7 +124,7 @@
 			this._buttonManaCurveType.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonManaCurveType.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonManaCurveType.Location = new System.Drawing.Point(365, 8);
+			this._buttonManaCurveType.Location = new System.Drawing.Point(356, 8);
 			this._buttonManaCurveType.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this._buttonManaCurveType.Name = "_buttonManaCurveType";
 			this._buttonManaCurveType.Size = new System.Drawing.Size(76, 40);
@@ -140,7 +145,7 @@
 			this._buttonDeckPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDeckPrice.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonDeckPrice.Location = new System.Drawing.Point(72, 5);
+			this._buttonDeckPrice.Location = new System.Drawing.Point(6, 5);
 			this._buttonDeckPrice.Margin = new System.Windows.Forms.Padding(6, 3, 0, 3);
 			this._buttonDeckPrice.Name = "_buttonDeckPrice";
 			this._buttonDeckPrice.Size = new System.Drawing.Size(50, 40);
@@ -149,18 +154,6 @@
 			this._buttonDeckPrice.Text = "deck\r\nprice";
 			this._buttonDeckPrice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDeckPrice.UseVisualStyleBackColor = true;
-			// 
-			// _tabCols
-			// 
-			this._tabCols.AllowAddingTabs = false;
-			this._tabCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._tabCols.Location = new System.Drawing.Point(68, 0);
-			this._tabCols.Margin = new System.Windows.Forms.Padding(0);
-			this._tabCols.Name = "_tabCols";
-			this._tabCols.Size = new System.Drawing.Size(4, 24);
-			this._tabCols.SlopeSize = new System.Drawing.Size(4, 24);
-			this._tabCols.TabIndex = 1;
-			this._tabCols.TextPadding = 4;
 			// 
 			// _buttonApply
 			// 
@@ -227,6 +220,18 @@
 			this._labelCols.Size = new System.Drawing.Size(60, 13);
 			this._labelCols.TabIndex = 2;
 			this._labelCols.Text = "Arguments:";
+			// 
+			// _tabCols
+			// 
+			this._tabCols.AllowAddingTabs = false;
+			this._tabCols.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._tabCols.Location = new System.Drawing.Point(68, 0);
+			this._tabCols.Margin = new System.Windows.Forms.Padding(0);
+			this._tabCols.Name = "_tabCols";
+			this._tabCols.Size = new System.Drawing.Size(4, 24);
+			this._tabCols.SlopeSize = new System.Drawing.Size(4, 24);
+			this._tabCols.TabIndex = 1;
+			this._tabCols.TextPadding = 4;
 			// 
 			// _labelRows
 			// 
@@ -556,8 +561,8 @@
 			this._buttonCollectionPrice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonCollectionPrice.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonCollectionPrice.Location = new System.Drawing.Point(122, 5);
-			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 3, 6, 3);
+			this._buttonCollectionPrice.Location = new System.Drawing.Point(56, 5);
+			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this._buttonCollectionPrice.Name = "_buttonCollectionPrice";
 			this._buttonCollectionPrice.Size = new System.Drawing.Size(60, 40);
 			this._buttonCollectionPrice.TabIndex = 55;
@@ -577,7 +582,7 @@
 			this._buttonManaCurveManacost.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonManaCurveManacost.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonManaCurveManacost.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonManaCurveManacost.Location = new System.Drawing.Point(441, 8);
+			this._buttonManaCurveManacost.Location = new System.Drawing.Point(432, 8);
 			this._buttonManaCurveManacost.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonManaCurveManacost.Name = "_buttonManaCurveManacost";
 			this._buttonManaCurveManacost.Size = new System.Drawing.Size(76, 40);
@@ -586,28 +591,6 @@
 			this._buttonManaCurveManacost.Text = "mana curve\r\n/ color";
 			this._buttonManaCurveManacost.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonManaCurveManacost.UseVisualStyleBackColor = true;
-			// 
-			// _buttonSave
-			// 
-			this._buttonSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonSave.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonSave.AutoCheck = false;
-			this._buttonSave.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSave.FlatAppearance.BorderSize = 0;
-			this._buttonSave.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this._buttonSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this._buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this._buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonSave.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_32;
-			this._buttonSave.Location = new System.Drawing.Point(115, 8);
-			this._buttonSave.Margin = new System.Windows.Forms.Padding(0);
-			this._buttonSave.Name = "_buttonSave";
-			this._buttonSave.Size = new System.Drawing.Size(50, 40);
-			this._buttonSave.TabIndex = 57;
-			this._buttonSave.TabStop = false;
-			this._buttonSave.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this._buttonSave.UseVisualStyleBackColor = true;
 			// 
 			// _buttonCollectionColors
 			// 
@@ -620,7 +603,7 @@
 			this._buttonCollectionColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonCollectionColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonCollectionColors.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonCollectionColors.Location = new System.Drawing.Point(593, 8);
+			this._buttonCollectionColors.Location = new System.Drawing.Point(584, 8);
 			this._buttonCollectionColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonCollectionColors.Name = "_buttonCollectionColors";
 			this._buttonCollectionColors.Size = new System.Drawing.Size(90, 40);
@@ -641,7 +624,7 @@
 			this._buttonDeckColors.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonDeckColors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDeckColors.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonDeckColors.Location = new System.Drawing.Point(517, 8);
+			this._buttonDeckColors.Location = new System.Drawing.Point(508, 8);
 			this._buttonDeckColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDeckColors.Name = "_buttonDeckColors";
 			this._buttonDeckColors.Size = new System.Drawing.Size(76, 40);
@@ -650,6 +633,82 @@
 			this._buttonDeckColors.Text = "deck color\r\n/ type";
 			this._buttonDeckColors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDeckColors.UseVisualStyleBackColor = true;
+			// 
+			// _labelName
+			// 
+			this._labelName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelName.AutoSize = true;
+			this._labelName.BackColor = System.Drawing.Color.Transparent;
+			this._labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._labelName.Location = new System.Drawing.Point(6, 0);
+			this._labelName.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this._labelName.Name = "_labelName";
+			this._labelName.Size = new System.Drawing.Size(45, 50);
+			this._labelName.TabIndex = 59;
+			this._labelName.Text = "Name";
+			this._labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// _flowTitle
+			// 
+			this._flowTitle.AutoSize = true;
+			this._flowTitle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this._flowTitle.BackColor = System.Drawing.Color.Transparent;
+			this._flowTitle.Controls.Add(this._flowFileMenu);
+			this._flowTitle.Controls.Add(this._flowPriceReports);
+			this._flowTitle.Controls.Add(this._buttonManaCurveType);
+			this._flowTitle.Controls.Add(this._buttonManaCurveManacost);
+			this._flowTitle.Controls.Add(this._buttonDeckColors);
+			this._flowTitle.Controls.Add(this._buttonCollectionColors);
+			this._flowTitle.Location = new System.Drawing.Point(0, 0);
+			this._flowTitle.Margin = new System.Windows.Forms.Padding(0);
+			this._flowTitle.Name = "_flowTitle";
+			this._flowTitle.Size = new System.Drawing.Size(674, 56);
+			this._flowTitle.TabIndex = 57;
+			this._flowTitle.WrapContents = false;
+			// 
+			// _flowFileMenu
+			// 
+			this._flowFileMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this._flowFileMenu.AutoSize = true;
+			this._flowFileMenu.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this._flowFileMenu.BorderColor = System.Drawing.SystemColors.ControlText;
+			this._flowFileMenu.BorderDashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+			this._flowFileMenu.Controls.Add(this._labelName);
+			this._flowFileMenu.Controls.Add(this._buttonMruFiles);
+			this._flowFileMenu.Controls.Add(this._buttonLoad);
+			this._flowFileMenu.Controls.Add(this._buttonSave);
+			this._flowFileMenu.Location = new System.Drawing.Point(3, 3);
+			this._flowFileMenu.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+			this._flowFileMenu.Name = "_flowFileMenu";
+			this._flowFileMenu.Size = new System.Drawing.Size(153, 50);
+			this._flowFileMenu.TabIndex = 63;
+			this._flowFileMenu.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// _buttonMruFiles
+			// 
+			this._buttonMruFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonMruFiles.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonMruFiles.AutoCheck = false;
+			this._buttonMruFiles.BackColor = System.Drawing.Color.Transparent;
+			this._buttonMruFiles.FlatAppearance.BorderSize = 0;
+			this._buttonMruFiles.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonMruFiles.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonMruFiles.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonMruFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonMruFiles.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
+			this._buttonMruFiles.Location = new System.Drawing.Point(51, 13);
+			this._buttonMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
+			this._buttonMruFiles.Name = "_buttonMruFiles";
+			this._buttonMruFiles.Size = new System.Drawing.Size(24, 24);
+			this._buttonMruFiles.TabIndex = 62;
+			this._buttonMruFiles.TabStop = false;
+			this._buttonMruFiles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this._buttonMruFiles.UseVisualStyleBackColor = true;
 			// 
 			// _buttonLoad
 			// 
@@ -663,48 +722,37 @@
 			this._buttonLoad.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLoad.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_32;
-			this._buttonLoad.Location = new System.Drawing.Point(65, 8);
-			this._buttonLoad.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
+			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
+			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
 			this._buttonLoad.Name = "_buttonLoad";
-			this._buttonLoad.Size = new System.Drawing.Size(50, 40);
+			this._buttonLoad.Size = new System.Drawing.Size(24, 24);
 			this._buttonLoad.TabIndex = 58;
 			this._buttonLoad.TabStop = false;
 			this._buttonLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonLoad.UseVisualStyleBackColor = true;
 			// 
-			// _labelName
+			// _buttonSave
 			// 
-			this._labelName.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._labelName.AutoSize = true;
-			this._labelName.BackColor = System.Drawing.Color.Transparent;
-			this._labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._labelName.Location = new System.Drawing.Point(6, 20);
-			this._labelName.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this._labelName.Name = "_labelName";
-			this._labelName.Size = new System.Drawing.Size(49, 16);
-			this._labelName.TabIndex = 59;
-			this._labelName.Text = "Name";
-			// 
-			// _flowTitle
-			// 
-			this._flowTitle.AutoSize = true;
-			this._flowTitle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._flowTitle.BackColor = System.Drawing.Color.Transparent;
-			this._flowTitle.Controls.Add(this._labelName);
-			this._flowTitle.Controls.Add(this._buttonLoad);
-			this._flowTitle.Controls.Add(this._buttonSave);
-			this._flowTitle.Controls.Add(this._flowPriceReports);
-			this._flowTitle.Controls.Add(this._buttonManaCurveType);
-			this._flowTitle.Controls.Add(this._buttonManaCurveManacost);
-			this._flowTitle.Controls.Add(this._buttonDeckColors);
-			this._flowTitle.Controls.Add(this._buttonCollectionColors);
-			this._flowTitle.Location = new System.Drawing.Point(0, 0);
-			this._flowTitle.Margin = new System.Windows.Forms.Padding(0);
-			this._flowTitle.Name = "_flowTitle";
-			this._flowTitle.Size = new System.Drawing.Size(683, 56);
-			this._flowTitle.TabIndex = 57;
-			this._flowTitle.WrapContents = false;
+			this._buttonSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonSave.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonSave.AutoCheck = false;
+			this._buttonSave.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSave.FlatAppearance.BorderSize = 0;
+			this._buttonSave.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this._buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSave.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
+			this._buttonSave.Location = new System.Drawing.Point(123, 13);
+			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);
+			this._buttonSave.Name = "_buttonSave";
+			this._buttonSave.Size = new System.Drawing.Size(24, 24);
+			this._buttonSave.TabIndex = 57;
+			this._buttonSave.TabStop = false;
+			this._buttonSave.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this._buttonSave.UseVisualStyleBackColor = true;
 			// 
 			// _flowPriceReports
 			// 
@@ -712,10 +760,10 @@
 			this._flowPriceReports.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._flowPriceReports.BorderColor = System.Drawing.SystemColors.ControlText;
 			this._flowPriceReports.BorderDashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-			this._flowPriceReports.Controls.Add(this._flowDropdowns);
 			this._flowPriceReports.Controls.Add(this._buttonDeckPrice);
 			this._flowPriceReports.Controls.Add(this._buttonCollectionPrice);
-			this._flowPriceReports.Location = new System.Drawing.Point(171, 3);
+			this._flowPriceReports.Controls.Add(this._flowDropdowns);
+			this._flowPriceReports.Location = new System.Drawing.Point(162, 3);
 			this._flowPriceReports.Margin = new System.Windows.Forms.Padding(6, 3, 0, 3);
 			this._flowPriceReports.Name = "_flowPriceReports";
 			this._flowPriceReports.Size = new System.Drawing.Size(188, 50);
@@ -731,12 +779,17 @@
 			this._flowDropdowns.Controls.Add(this._menuPrice);
 			this._flowDropdowns.Controls.Add(this._menuPriceChartType);
 			this._flowDropdowns.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this._flowDropdowns.Location = new System.Drawing.Point(6, 3);
-			this._flowDropdowns.Margin = new System.Windows.Forms.Padding(6, 3, 0, 3);
+			this._flowDropdowns.Location = new System.Drawing.Point(122, 3);
+			this._flowDropdowns.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
 			this._flowDropdowns.Name = "_flowDropdowns";
 			this._flowDropdowns.Size = new System.Drawing.Size(60, 44);
 			this._flowDropdowns.TabIndex = 60;
 			this._flowDropdowns.WrapContents = false;
+			// 
+			// _menuMruFiles
+			// 
+			this._menuMruFiles.Name = "_menuMruFiles";
+			this._menuMruFiles.Size = new System.Drawing.Size(61, 4);
 			// 
 			// FormChart
 			// 
@@ -747,6 +800,8 @@
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "FormChart";
 			this.Text = "Deck statistics";
+			this.Controls.SetChildIndex(this._panelClient, 0);
+			this.Controls.SetChildIndex(this._panelCaption, 0);
 			this._panelClient.ResumeLayout(false);
 			this._panelCaption.ResumeLayout(false);
 			this._panelCaption.PerformLayout();
@@ -761,6 +816,8 @@
 			this._panelFlags.PerformLayout();
 			this._flowTitle.ResumeLayout(false);
 			this._flowTitle.PerformLayout();
+			this._flowFileMenu.ResumeLayout(false);
+			this._flowFileMenu.PerformLayout();
 			this._flowPriceReports.ResumeLayout(false);
 			this._flowPriceReports.PerformLayout();
 			this._flowDropdowns.ResumeLayout(false);
@@ -813,5 +870,8 @@
 		private System.Windows.Forms.FlowLayoutPanel _flowTitle;
 		private System.Windows.Forms.FlowLayoutPanel _flowDropdowns;
 		private Controls.BorderedFlowLayoutPanel _flowPriceReports;
+		private Controls.CustomCheckBox _buttonMruFiles;
+		private System.Windows.Forms.ContextMenuStrip _menuMruFiles;
+		private Controls.BorderedFlowLayoutPanel _flowFileMenu;
 	}
 }

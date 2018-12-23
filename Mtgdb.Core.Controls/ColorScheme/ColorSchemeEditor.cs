@@ -364,10 +364,19 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private string currentColorsFile() =>
-			SaveDirectory.AddPath("current" + Ext);
+		private string currentColorsFile()
+		{
+			return SaveDirectory.AddPath(CurrentSchemeName + Ext);
+		}
 
+		public IEnumerable<string> GetSavedSchemeNames() =>
+			Directory
+				.GetFiles(SaveDirectory, "*" + Ext, SearchOption.TopDirectoryOnly)
+				.Select(Path.GetFileNameWithoutExtension)
+				.Where(n => !Str.Equals(n, CurrentSchemeName));
 
+		public void LoadSavedScheme(string name) =>
+			load(SaveDirectory.AddPath(name + Ext));
 
 		private void moved(object s, EventArgs e) =>
 			_colorPicker.Location =
@@ -384,6 +393,7 @@ namespace Mtgdb.Controls
 
 		public string SaveDirectory { get; set; }
 
+		private const string CurrentSchemeName = "current";
 		private const string Ext = ".colors";
 		private const string Format = "{0}: {1:x8}";
 		private static readonly string _filter = $"Mtgdb.Gui color scheme (*{Ext})|*{Ext}";

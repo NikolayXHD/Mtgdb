@@ -224,6 +224,9 @@ namespace Mtgdb.Gui
 			_buttonSearchExamplesDropDown.ScaleDpi();
 			_buttonResetFilters.ScaleDpi();
 
+			_labelStatusScrollCards.ScaleDpi();
+			_labelStatusScrollDeck.ScaleDpi();
+
 			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
 			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
 			_tabHeadersDeck.AddButtonSlopeSize = _tabHeadersDeck.AddButtonSlopeSize.ByDpi();

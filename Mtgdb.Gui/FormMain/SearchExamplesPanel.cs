@@ -20,12 +20,7 @@ namespace Mtgdb.Gui
 			_trigger = trigger;
 			_buttonSubsystem = buttonSubsystem;
 
-			buttonSubsystem.SetupPopup(
-				new Popup(this,
-					trigger,
-					HorizontalAlignment.Right,
-					openOnHover: false,
-					borderOnHover: false));
+			buttonSubsystem.SetupPopup(new Popup(this, trigger, HorizontalAlignment.Right));
 
 			var queryRows = Enumerable.Range(0, _panelExamples.RowCount)
 				.Select(getFindExampleRow)
@@ -50,7 +45,6 @@ namespace Mtgdb.Gui
 
 				void mouseClick(object sender, EventArgs args)
 				{
-					buttonSubsystem.ClosePopup(trigger);
 					cardSearchSubsystem.AppliedText = row.Query.Text;
 					cardSearchSubsystem.Apply();
 				}

@@ -44,7 +44,8 @@ namespace Mtgdb.Gui
 			_buttonMenuCopyCollection.Click += pasteClick;
 			_buttonMenuCopyDeck.Click += pasteClick;
 			_buttonImportExportToMtgArena.Click += buttonImportExportToMtgArenaClick;
-			_buttonColorScheme.Click += buttonColorSchemeClick;
+			
+			_menuColors.Items[0].Click += buttonColorSchemeClick;
 
 			_buttonImportMtgArenaCollection.Click += buttonImportMtgArenaCollectionClick;
 		}
@@ -275,18 +276,18 @@ namespace Mtgdb.Gui
 				_buttonSubsystem.SetupButton(langButton,
 					new ButtonImages(_languageIcons[langButton.Text.Trim()], x2: true));
 
-			setupButton(_buttonUndo, Resources.undo_16, Resources.undo_32);
-			setupButton(_buttonRedo, Resources.redo_16, Resources.redo_32);
-			setupButton(_buttonSaveDeck, Resources.save_16, Resources.save_32);
-			setupButton(_buttonOpenDeck, Resources.open_16, Resources.open_32);
-			setupButton(_buttonStat, Resources.chart_16, Resources.chart_32);
-			setupButton(_buttonPrint, Resources.print_16, Resources.print_32);
-			setupButton(_buttonClear, Resources.trash_16, Resources.trash_32);
-			setupButton(_buttonPaste, Resources.paste_16, Resources.paste_32);
-			setupButton(_buttonHelp, Resources.index_16, Resources.index_32);
-			setupButton(_buttonConfig, Resources.properties_16, Resources.properties_32);
-			setupButton(_buttonTooltips, Resources.tooltip_16, Resources.tooltip_32);
-			setupButton(_buttonImportExportToMtgArena, Resources.paste_16, Resources.paste_32);
+			_buttonSubsystem.SetupButton(_buttonUndo, new ButtonImages(Resources.undo_16, Resources.undo_32));
+			_buttonSubsystem.SetupButton(_buttonRedo, new ButtonImages(Resources.redo_16, Resources.redo_32));
+			_buttonSubsystem.SetupButton(_buttonSaveDeck, new ButtonImages(Resources.save_16, Resources.save_32));
+			_buttonSubsystem.SetupButton(_buttonOpenDeck, new ButtonImages(Resources.open_16, Resources.open_32));
+			_buttonSubsystem.SetupButton(_buttonStat, new ButtonImages(Resources.chart_16, Resources.chart_32));
+			_buttonSubsystem.SetupButton(_buttonPrint, new ButtonImages(Resources.print_16, Resources.print_32));
+			_buttonSubsystem.SetupButton(_buttonClear, new ButtonImages(Resources.trash_16, Resources.trash_32));
+			_buttonSubsystem.SetupButton(_buttonPaste, new ButtonImages(Resources.paste_16, Resources.paste_32));
+			_buttonSubsystem.SetupButton(_buttonHelp, new ButtonImages(Resources.index_16, Resources.index_32));
+			_buttonSubsystem.SetupButton(_buttonConfig, new ButtonImages(Resources.properties_16, Resources.properties_32));
+			_buttonSubsystem.SetupButton(_buttonTooltips, new ButtonImages(Resources.tooltip_16, Resources.tooltip_32));
+			_buttonSubsystem.SetupButton(_buttonImportExportToMtgArena, new ButtonImages(Resources.paste_16, Resources.paste_32));
 
 			_buttonSubsystem.SetupButton(_buttonShowFilterPanels, new ButtonImages(Resources.filters_show_32, x2: true));
 			_buttonSubsystem.SetupButton(_buttonDownload, new ButtonImages(Resources.update_40, x2: true));
@@ -302,52 +303,50 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonDonateYandexMoney, new ButtonImages(Resources.yandex_money_32, x2: false));
 			_buttonSubsystem.SetupButton(_buttonDonatePayPal, new ButtonImages(Resources.paypal_32, x2: false));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage,
-				_buttonLanguage,
-				container: _layoutLanguage,
-				openOnHover: false,
-				closeMenuOnClick: true));
+			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage, container: _layoutLanguage));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuDonate,
 				_buttonDonate,
-				container: _layoutDonate,
-				alignment: HorizontalAlignment.Center,
-				openOnHover: false,
-				closeMenuOnClick: true,
-				borderOnHover: false));
+				HorizontalAlignment.Center,
+				container: _layoutDonate));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
 				_buttonOpenDeck,
 				container: _layoutOpen,
-				openOnHover: false,
-				closeMenuOnClick: true,
-				borderOnHover: false,
 				beforeShow: () => setMenuMode(_buttonOpenDeck)));
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuOpen,
 				_buttonSaveDeck,
 				container: _layoutOpen,
-				openOnHover: false,
-				closeMenuOnClick: true,
-				borderOnHover: false,
 				beforeShow: () => setMenuMode(_buttonSaveDeck)));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuPaste,
-				_buttonPaste,
-				container: _layoutPaste,
-				openOnHover: false,
-				closeMenuOnClick: true,
-				borderOnHover: false));
+			_buttonSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste, container: _layoutPaste));
+			_buttonSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme, beforeShow: updateMenuColors));
 
 			_buttonSubsystem.SubscribeToEvents();
 		}
 
-		private void setupButton(CustomCheckBox button, Bitmap image, Bitmap imageDouble)
+		private void updateMenuColors()
 		{
-			bool x2 = Dpi.ScalePercent > 100;
-			var bmp = x2 ? imageDouble : image;
-			_buttonSubsystem.SetupButton(button, new ButtonImages(bmp, x2));
+			for (int i = _menuColors.Items.Count - 1; i > 0; i--)
+			{
+				_menuColors.Items[i].Click -= menuColorsClick;
+				_menuColors.Items.RemoveAt(i);
+			}
+
+			const int maxSchemesCount = 16;
+			foreach (var schemeName in _colorSchemeEditor.GetSavedSchemeNames().Take(maxSchemesCount))
+			{
+				var item = new ToolStripMenuItem(schemeName);
+				item.Click += menuColorsClick;
+				_menuColors.Items.Add(item);
+			}
 		}
+
+		private void menuColorsClick(object s, EventArgs e) =>
+			_colorSchemeEditor.LoadSavedScheme(((ToolStripMenuItem) s).Text);
+
+
 
 		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e) =>
 			e.IsInputKey = true;
@@ -427,10 +426,8 @@ namespace Mtgdb.Gui
 			e.SuppressKeyPress = handled;
 		}
 
-		private void unsubscribeButtonEvents()
-		{
+		private void unsubscribeButtonEvents() =>
 			_buttonSubsystem.UnsubscribeFromEvents();
-		}
 
 		private readonly ButtonBase[] _deckButtons;
 		private readonly ButtonSubsystem _buttonSubsystem;

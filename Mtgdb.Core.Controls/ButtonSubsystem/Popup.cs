@@ -8,18 +8,16 @@ namespace Mtgdb.Controls
 	public class Popup
 	{
 		public Popup(
-			Control control,
+			Control menuControl,
 			ButtonBase owner,
 			HorizontalAlignment alignment = HorizontalAlignment.Left,
-			bool openOnHover = true,
-			bool closeMenuOnClick = false,
+			bool closeMenuOnClick = true,
 			bool borderOnHover = true,
 			Control container = null,
 			Action beforeShow = null)
 		{
-			Control = control;
-			Container = container ?? control;
-			OpenOnHover = openOnHover;
+			MenuControl = menuControl;
+			Container = container ?? menuControl;
 			CloseMenuOnClick = closeMenuOnClick;
 			BorderOnHover = borderOnHover;
 			Owner = owner;
@@ -27,16 +25,18 @@ namespace Mtgdb.Controls
 			_beforeShow = beforeShow;
 		}
 
-		public Control Control { get; }
+		public Control MenuControl { get; }
 		public Control Container { get; }
 
 		public bool Shown { get; private set; }
 
 		public void Show()
 		{
+			_beforeShow?.Invoke();
+
 			var location = getLocation();
 
-			if (Control is ContextMenuStrip strip)
+			if (MenuControl is ContextMenuStrip strip)
 				show(strip, location);
 			else
 				show(location);
@@ -46,7 +46,7 @@ namespace Mtgdb.Controls
 
 		public void Hide()
 		{
-			Control.Hide();
+			MenuControl.Hide();
 			Shown = false;
 		}
 
@@ -54,15 +54,15 @@ namespace Mtgdb.Controls
 		{
 			var cursorPosition = Cursor.Position;
 
-			if (Control is ContextMenuStrip)
+			if (MenuControl is ContextMenuStrip)
 			{
 				var screenRect = new Rectangle(_screenLocation.Value, Container.Size);
 				return screenRect.Contains(cursorPosition);
 			}
 			else
 			{
-				var clientPosition = Control.PointToClient(cursorPosition);
-				return Control.ClientRectangle.Contains(clientPosition);
+				var clientPosition = MenuControl.PointToClient(cursorPosition);
+				return MenuControl.ClientRectangle.Contains(clientPosition);
 			}
 		}
 
@@ -77,27 +77,25 @@ namespace Mtgdb.Controls
 
 		private void show(Point location)
 		{
-			_beforeShow?.Invoke();
-
-			var parent = Control.Parent;
+			var parent = MenuControl.Parent;
 			location = parent.PointToClient(Owner, location);
 
 			location = new Point(
-				location.X.WithinRange(Control.Margin.Left, parent.Width - Control.Width - Control.Margin.Right),
-				location.Y.WithinRange(Control.Margin.Top, parent.Height - Control.Height - Control.Margin.Bottom));
+				location.X.WithinRange(MenuControl.Margin.Left, parent.Width - MenuControl.Width - MenuControl.Margin.Right),
+				location.Y.WithinRange(MenuControl.Margin.Top, parent.Height - MenuControl.Height - MenuControl.Margin.Bottom));
 
-			Control.Location = location;
-			Control.BringToFront();
-			Control.Show();
-			Control.Focus();
+			MenuControl.Location = location;
+			MenuControl.BringToFront();
+			MenuControl.Show();
+			MenuControl.Focus();
 		}
 
 		private void show(ContextMenuStrip contextMenuStrip, Point location)
 		{
 			ControlHelpers.SetForegroundWindow(
 				new HandleRef(
-					Control,
-					Control.Handle));
+					MenuControl,
+					MenuControl.Handle));
 
 			_screenLocation = Owner.PointToScreen(location);
 			contextMenuStrip.Show(_screenLocation.Value);
@@ -105,16 +103,16 @@ namespace Mtgdb.Controls
 
 		private Point getLocation()
 		{
-			int top = Owner.Height + Control.Margin.Top;
+			int top = Owner.Height + MenuControl.Margin.Top;
 
 			switch (_alignment)
 			{
 				case HorizontalAlignment.Left:
 					return new Point(0, top);
 				case HorizontalAlignment.Right:
-					return new Point(Owner.Width - Control.Width, top);
+					return new Point(Owner.Width - MenuControl.Width, top);
 				case HorizontalAlignment.Center:
-					return new Point((Owner.Width - Control.Width) / 2, top);
+					return new Point((Owner.Width - MenuControl.Width) / 2, top);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -122,7 +120,6 @@ namespace Mtgdb.Controls
 
 
 
-		public bool OpenOnHover { get; }
 		public bool CloseMenuOnClick { get; }
 		public bool BorderOnHover { get; }
 		public ButtonBase Owner { get; }

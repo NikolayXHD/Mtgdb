@@ -132,6 +132,10 @@ NOTE: Many websites and applications support downloading deck in *.txt file. You
 NOTE: When Search result contains selected text, Ctrl + C will copy selected text instead of Deck.
 To clear selection press ESC.</value>
   </data>
+  <metadata name="_menuColors.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAQEAAAAEAIAAoQgAAFgAAACgAAABAAAAAgAAAAAEAIAAAAAAAAEAAAMIOAADCDgAAAAAAAAAA

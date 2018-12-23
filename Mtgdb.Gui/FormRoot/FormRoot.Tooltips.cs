@@ -87,9 +87,8 @@ namespace Mtgdb.Gui
 				_buttonOpenWindow);
 
 			TooltipController.SetTooltip(this,
-				"Color scheme",
-				"Select Mtgdb.Gui color scheme.\r\n\r\n" +
-				"NOTE: you will see some remnants of previous colors until you restart Mtgdb.Gui",
+				"Color scheme menu",
+				"NOTE: restart Mtgdb.Gui to fully apply a newly selected scheme",
 				_buttonColorScheme);
 
 			TooltipController.SetTooltip(this,

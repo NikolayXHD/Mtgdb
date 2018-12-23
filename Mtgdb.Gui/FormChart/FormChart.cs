@@ -209,19 +209,12 @@ namespace Mtgdb.Gui
 			foreach (var menu in _menus)
 				_buttonSubsystem.SetupComboBox(menu);
 
-			_buttonSubsystem.SetupButton(_buttonSave, new ButtonImages(Resources.save_32, x2: false));
-			_buttonSubsystem.SetupButton(_buttonLoad, new ButtonImages(Resources.open_32, x2: false));
+			_buttonSubsystem.SetupButton(_buttonSave, new ButtonImages(Resources.save_16, Resources.save_32));
+			_buttonSubsystem.SetupButton(_buttonLoad, new ButtonImages(Resources.open_16, Resources.open_32));
+			_buttonSubsystem.SetupButton(_buttonMruFiles, new ButtonImages(Resources.down_32, x2: true));
 
-			_filesSubsystem = new ChartFilesSubsystem(this);
-			_buttonSave.Click += handleSaveClick;
-			_buttonLoad.Click += handleLoadClick;
+			_filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _buttonMruFiles, _menuMruFiles);
 		}
-
-		private void handleSaveClick(object s, EventArgs e) =>
-			_filesSubsystem.SaveChart();
-
-		private void handleLoadClick(object s, EventArgs e) =>
-			_filesSubsystem.LoadChart();
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
 		{

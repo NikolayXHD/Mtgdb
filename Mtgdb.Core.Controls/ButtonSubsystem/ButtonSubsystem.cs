@@ -18,13 +18,13 @@ namespace Mtgdb.Controls
 		{
 			_popupsByOwner[popup.Owner] = popup;
 
-			popup.Control.Visible = false;
+			popup.MenuControl.Visible = false;
 
 			if (popup.BorderOnHover)
 				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
 				{
 					button.SetTag(button.FlatAppearance.BorderColor);
-					button.FlatAppearance.BorderColor = popup.Control.BackColor;
+					button.FlatAppearance.BorderColor = popup.MenuControl.BackColor;
 				}
 		}
 
@@ -48,57 +48,21 @@ namespace Mtgdb.Controls
 
 
 
-		private void popupOwnerHover(object sender, EventArgs e)
-		{
-			var owner = (ButtonBase) sender;
-			var popup = _popupsByOwner[owner];
-
-			if (popup.OpenOnHover && !popup.Shown)
-				show(popup);
-		}
-
 		private void popupOwnerClick(object sender, EventArgs e)
 		{
-			var owner = (ButtonBase)sender;
-			var popup = _popupsByOwner[owner];
+			var popup = _popupsByOwner[(ButtonBase)sender];
 
 			if (popup.Shown)
-			{
 				popup.Hide();
-				return;
-			}
-
-			if (!popup.OpenOnHover)
+			else
 				show(popup);
 		}
 
 		private static void show(Popup popup)
 		{
-			popup.Control.SetTag("Owner", popup.Owner);
+			popup.MenuControl.SetTag("Owner", popup.Owner);
 			popup.Container.SetTag("Owner", popup.Owner);
 			popup.Show();
-		}
-
-		private void popupOwnerMouseLeave(object sender, EventArgs e)
-		{
-			var button = (ButtonBase) sender;
-			var popup = _popupsByOwner[button];
-
-			if (!popup.Shown)
-				return;
-
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
-				popup.Hide();
-		}
-
-		private void popupMouseLeave(object sender, EventArgs e)
-		{
-			var control = (Control) sender;
-			var owner = control.GetTag<ButtonBase>("Owner");
-			var popup = _popupsByOwner[owner];
-
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
-				popup.Hide();
 		}
 
 		private void popupKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -149,10 +113,7 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.MouseEnter += popupOwnerHover;
 				popup.Owner.Click += popupOwnerClick;
-
-				popup.Owner.MouseLeave += popupOwnerMouseLeave;
 
 				foreach (Control button in popup.Container.Controls)
 				{
@@ -161,10 +122,7 @@ namespace Mtgdb.Controls
 					button.MouseLeave += popupItemMouseLeave;
 				}
 
-				popup.Container.MouseLeave += popupMouseLeave;
-				popup.Control.MouseLeave += popupMouseLeave;
-
-				popup.Control.PreviewKeyDown += popupKeyDown;
+				popup.MenuControl.PreviewKeyDown += popupKeyDown;
 			}
 
 			Application.AddMessageFilter(this);
@@ -180,10 +138,7 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.MouseEnter -= popupOwnerHover;
 				popup.Owner.Click -= popupOwnerClick;
-
-				popup.Owner.MouseLeave -= popupOwnerMouseLeave;
 
 				foreach (var button in popup.Container.Controls.OfType<ButtonBase>())
 				{
@@ -192,9 +147,7 @@ namespace Mtgdb.Controls
 					button.MouseLeave -= popupItemMouseLeave;
 				}
 
-				popup.Container.MouseLeave -= popupMouseLeave;
-				popup.Control.MouseLeave -= popupMouseLeave;
-				popup.Control.PreviewKeyDown -= popupKeyDown;
+				popup.MenuControl.PreviewKeyDown -= popupKeyDown;
 			}
 
 			Application.RemoveMessageFilter(this);
@@ -240,9 +193,6 @@ namespace Mtgdb.Controls
 
 			if (popup.BorderOnHover && sender is ButtonBase)
 				((ButtonBase) button).FlatAppearance.BorderColor = container.BackColor;
-
-			if (!popup.IsCursorInPopup() && !popup.IsCursorInButton() && popup.OpenOnHover)
-				popup.Hide();
 		}
 
 		private void setCheckImage(ButtonBase control, bool isChecked) =>
