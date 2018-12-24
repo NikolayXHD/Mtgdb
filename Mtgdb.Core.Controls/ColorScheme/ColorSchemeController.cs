@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -17,7 +18,9 @@ namespace Mtgdb.Controls
 			// force init color table
 			byte unused = SystemColors.Window.R;
 
-			_colorTableField = typeof(Color).Assembly.GetType("System.Drawing.KnownColorTable")
+			var systemDrawingAssembly = typeof(Color).Assembly;
+
+			_colorTableField = systemDrawingAssembly.GetType("System.Drawing.KnownColorTable")
 				.GetField("colorTable", BindingFlags.Static | BindingFlags.NonPublic);
 
 			_colorTable = readColorTable();
@@ -27,6 +30,18 @@ namespace Mtgdb.Controls
 			KnownOriginalColors = KnownColors.Cast<int>()
 				.ToDictionary(i => i, i => OriginalColors[i])
 				.AsReadOnlyDictionary();
+
+			_threadDataProperty = systemDrawingAssembly.GetType("System.Drawing.SafeNativeMethods")
+				.GetNestedType("Gdip", BindingFlags.NonPublic)
+				.GetProperty("ThreadData", BindingFlags.Static | BindingFlags.NonPublic);
+
+			SystemBrushesKey = typeof(SystemBrushes)
+				.GetField("SystemBrushesKey", BindingFlags.Static | BindingFlags.NonPublic)
+				.GetValue(null);
+
+			SystemPensKey = typeof(SystemPens)
+				.GetField("SystemPensKey", BindingFlags.Static | BindingFlags.NonPublic)
+				.GetValue(null);
 		}
 
 		private void userPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
@@ -44,6 +59,9 @@ namespace Mtgdb.Controls
 		public void SetColor(KnownColor knownColor, int argb)
 		{
 			setColor(knownColor, argb);
+
+			ThreadData[SystemBrushesKey] = null;
+			ThreadData[SystemPensKey] = null;
 			SystemColorsChanging?.Invoke();
 		}
 
@@ -71,6 +89,8 @@ namespace Mtgdb.Controls
 			foreach (var pair in saved)
 				setColor((KnownColor) pair.Key, pair.Value);
 
+			ThreadData[SystemBrushesKey] = null;
+			ThreadData[SystemPensKey] = null;
 			SystemColorsChanging?.Invoke();
 		}
 
@@ -80,11 +100,18 @@ namespace Mtgdb.Controls
 		public void ResetAll() =>
 			Load(KnownOriginalColors);
 
+		private IDictionary ThreadData =>
+			(IDictionary) _threadDataProperty.GetValue(null, null);
+
+		private object SystemBrushesKey { get; set; }
+		private object SystemPensKey { get; set; }
+
 		public readonly HashSet<KnownColor> KnownColors = new HashSet<KnownColor>(
 			new[]
 			{
 				SystemColors.Control,
 				SystemColors.ControlText,
+				SystemColors.ControlDark,
 
 				SystemColors.Window,
 				SystemColors.WindowText,
@@ -109,5 +136,6 @@ namespace Mtgdb.Controls
 
 		private int[] _colorTable;
 		private readonly FieldInfo _colorTableField;
+		private readonly PropertyInfo _threadDataProperty;
 	}
 }
