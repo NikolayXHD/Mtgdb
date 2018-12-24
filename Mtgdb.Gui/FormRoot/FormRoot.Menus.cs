@@ -32,7 +32,7 @@ namespace Mtgdb.Gui
 
 			_buttonHelp.Click += helpClick;
 
-			_buttonConfig.Click += configClick;
+			_buttonEditConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
@@ -160,6 +160,24 @@ namespace Mtgdb.Gui
 
 		private void downloadClick(object sender, EventArgs e) =>
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
+
+		private void setupUiScaleMenu()
+		{
+			var menuItemTexts = _uiConfig.UiScaleValues
+				.Select(scale => scale.ToString(Str.Culture) + " %")
+				.ToArray();
+
+			_menuUiScale.Items.AddRange(menuItemTexts);
+			_menuUiScale.SelectedIndex = _uiConfig.UiScaleValues.IndexOf(_uiConfig.Config.UiScalePercent);
+
+			_menuUiScale.SelectedIndexChanged += (s, e) =>
+			{
+				_uiConfig.Config.UiScalePercent = _uiConfig.UiScaleValues[_menuUiScale.SelectedIndex];
+				_uiConfig.Save();
+
+				MessageBox.Show("Restart Mtgdb.Gui to apply new UI scale factor");
+			};
+		}
 
 		private void setupLanguageMenu()
 		{
@@ -303,7 +321,11 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme,
 				beforeShow: updateMenuColors));
 
+			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
+
 			_buttonSubsystem.SubscribeToEvents();
+
+			_buttonSubsystem.SetupComboBox(_menuUiScale);
 		}
 
 		private void updateMenuColors()

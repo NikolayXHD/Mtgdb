@@ -78,9 +78,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
-    <Compile Include="ColorScheme\ColorSchemeEditor.cs" />
+    <Compile Include="ColorScheme\ColorSchemeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
+    <Compile Include="LayoutView\LayoutControlExtensions.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
@@ -169,6 +172,7 @@
     <Compile Include="TabForm\TabHeaderControl.Designer.cs">
       <DependentUpon>TabHeaderControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="TabForm\TabHeaderControlExtension.cs" />
     <Compile Include="TabForm\TabSettings.cs" />
     <Compile Include="Tooltip\FixedRichTextBox.cs">
       <SubType>Component</SubType>

@@ -76,6 +76,89 @@ namespace Mtgdb.Gui
 				_flowTitleLeft.PaintBackground =
 					_flowTitleRight.PaintBackground =
 						_tabs.PaintBackground = false;
+
+			_menuColors.BackColor = SystemColors.Control;
+			_menuColors.ForeColor = SystemColors.ControlText;
+		}
+
+		[UsedImplicitly]
+		public FormRoot(Func<FormMain> formMainFactory,
+			DownloaderSubsystem downloaderSubsystem,
+			NewsService newsService,
+			CardSuggestModel cardSuggestModel,
+			DeckSuggestModel deckSuggestModel,
+			TooltipController tooltipController,
+			CardRepository repo,
+			DeckSerializationSubsystem serialization,
+			UiModel uiModel,
+			ColorSchemeEditor colorSchemeEditor,
+			Application application,
+			AppSourceConfig appSourceConfig,
+			UiConfigSubsystem uiConfig)
+			:this()
+		{
+			TooltipController = tooltipController;
+			UiModel = uiModel;
+
+			DeckSuggestModel = deckSuggestModel;
+
+			CardSuggestModel = cardSuggestModel;
+			CardSuggestModel.Ui = UiModel;
+
+			_application = application;
+			_appSourceConfig = appSourceConfig;
+			_uiConfig = uiConfig;
+			_repo = repo;
+			_serialization = serialization;
+			_colorSchemeEditor = colorSchemeEditor;
+
+			_buttonSubsystem = new ButtonSubsystem();
+			_formMainFactory = formMainFactory;
+			_downloaderSubsystem = downloaderSubsystem;
+			_newsService = newsService;
+
+			KeyPreview = true;
+			PreviewKeyDown += previewKeyDown;
+			KeyDown += formKeyDown;
+
+			_repo.LoadingComplete += repositoryLoaded;
+
+			QueryHandleDrag += queryHandleDrag;
+			Load += load;
+			Closed += closed;
+
+			_tabs.AllowDrop = true;
+			_tabs.TabAdded += tabCreated;
+			_tabs.TabRemoving += tabClosing;
+			_tabs.TabRemoved += tabClosed;
+			_tabs.SelectedIndexChanging += selectedTabChanging;
+			_tabs.SelectedIndexChanged += selectedTabChanged;
+			_tabs.DragOver += tabsDragOver;
+			_tabs.MouseMove += tabMouseMove;
+
+			FormClosing += formClosing;
+
+			_newsService.NewsFetched += newsFetched;
+			_newsService.NewsDisplayed += newsDisplayed;
+			_downloaderSubsystem.ProgressCalculated += downloaderProgressCalculated;
+
+			setupButtons();
+
+			setupExternalLinks();
+			setupButtonClicks();
+			setupLanguageMenu();
+			setupUiScaleMenu();
+			setupTooltips();
+
+			foreach (var button in _deckButtons)
+				button.Enabled = false;
+
+			if (!DesignMode)
+				SnapTo(Direction.Top, default(Point));
+
+			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
+
+			WindowState = FormWindowState.Minimized;
 		}
 
 		private void updateFormBorderColor()
@@ -122,10 +205,7 @@ namespace Mtgdb.Gui
 			_buttonImportMtgArenaCollection.Height = _buttonImportMtgArenaCollection.Height.ByDpiHeight();
 			_buttonImportExportToMtgArena.Height = _buttonImportExportToMtgArena.Height.ByDpiHeight();
 
-			_tabs.Height = _tabs.Height.ByDpiHeight();
-			_tabs.SlopeSize = _tabs.SlopeSize.ByDpi();
-			_tabs.AddButtonSlopeSize = _tabs.AddButtonSlopeSize.ByDpi();
-			_tabs.AddButtonWidth = _tabs.AddButtonWidth.ByDpiWidth();
+			_tabs.ScaleDpi();
 
 			foreach (var langButton in getLanguageMenuItems())
 				langButton.ScaleDpi();
@@ -135,83 +215,17 @@ namespace Mtgdb.Gui
 
 			foreach (var titleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
 				titleButton.ScaleDpi();
-		}
 
-		[UsedImplicitly]
-		public FormRoot(Func<FormMain> formMainFactory,
-			DownloaderSubsystem downloaderSubsystem,
-			NewsService newsService,
-			CardSuggestModel cardSuggestModel,
-			DeckSuggestModel deckSuggestModel,
-			TooltipController tooltipController,
-			CardRepository repo,
-			DeckSerializationSubsystem serialization,
-			UiModel uiModel,
-			ColorSchemeEditor colorSchemeEditor,
-			Application application,
-			AppSourceConfig appSourceConfig)
-			:this()
-		{
-			TooltipController = tooltipController;
-			UiModel = uiModel;
+			_labelUiScale.ScaleDpi();
+			_menuUiScale.ScaleDpi();
+			_buttonEditConfig.Height = _buttonEditConfig.Height.ByDpiHeight();
+			_buttonEditConfig.ScaleDpiFont();
 
-			DeckSuggestModel = deckSuggestModel;
+			_buttonImportMtgArenaCollection.ScaleDpiFont();
+			_buttonImportExportToMtgArena.ScaleDpiFont();
+			_menuColors.ScaleDpiFont();
 
-			CardSuggestModel = cardSuggestModel;
-			CardSuggestModel.Ui = UiModel;
-
-			_application = application;
-			_appSourceConfig = appSourceConfig;
-			_repo = repo;
-			_serialization = serialization;
-			_colorSchemeEditor = colorSchemeEditor;
-
-			_buttonSubsystem = new ButtonSubsystem();
-			_formMainFactory = formMainFactory;
-			_downloaderSubsystem = downloaderSubsystem;
-			_newsService = newsService;
-
-			KeyPreview = true;
-			PreviewKeyDown += previewKeyDown;
-			KeyDown += formKeyDown;
-
-			_repo.LoadingComplete += repositoryLoaded;
-
-			QueryHandleDrag += queryHandleDrag;
-			Load += load;
-			Closed += closed;
-
-			_tabs.AllowDrop = true;
-			_tabs.TabAdded += tabCreated;
-			_tabs.TabRemoving += tabClosing;
-			_tabs.TabRemoved += tabClosed;
-			_tabs.SelectedIndexChanging += selectedTabChanging;
-			_tabs.SelectedIndexChanged += selectedTabChanged;
-			_tabs.DragOver += tabsDragOver;
-			_tabs.MouseMove += tabMouseMove;
-
-			FormClosing += formClosing;
-
-			_newsService.NewsFetched += newsFetched;
-			_newsService.NewsDisplayed += newsDisplayed;
-			_downloaderSubsystem.ProgressCalculated += downloaderProgressCalculated;
-
-			setupButtons();
-
-			setupExternalLinks();
-			setupButtonClicks();
-			setupLanguageMenu();
-			setupTooltips();
-
-			if (!DesignMode)
-				SnapTo(Direction.Top, default(Point));
-
-			foreach (var button in _deckButtons)
-				button.Enabled = false;
-
-			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
-
-			WindowState = FormWindowState.Minimized;
+			_labelFormats.ScaleDpiFont();
 		}
 
 		private void load(object sender, EventArgs e)
@@ -647,6 +661,7 @@ namespace Mtgdb.Gui
 		private readonly NewsService _newsService;
 		private readonly Application _application;
 		private readonly AppSourceConfig _appSourceConfig;
+		private readonly UiConfigSubsystem _uiConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 		private readonly ColorSchemeEditor _colorSchemeEditor;

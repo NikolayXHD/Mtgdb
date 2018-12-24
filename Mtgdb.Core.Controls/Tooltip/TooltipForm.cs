@@ -13,10 +13,6 @@ namespace Mtgdb.Controls
 			BackColor = SystemColors.Window;
 			FormBorderStyle = FormBorderStyle.None;
 
-			_tooltipSize = new Size(400, 300).ByDpi();
-			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
-			_selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
-
 			ControlBox = false;
 			ShowInTaskbar = false;
 			StartPosition = FormStartPosition.Manual;
@@ -90,25 +86,24 @@ namespace Mtgdb.Controls
 			_panel.Controls.Add(_buttonClose);
 			_buttonClose.BringToFront();
 
-			setCloseEnabled(false);
-
 			Resize += resize;
 			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 
-
-			Show();
+			scale();
+			setCloseEnabled(false);
 		}
 
-		private void systemColorsChanging()
+		private void scale()
 		{
-			var color = _tooltipTextbox.BackColor;
-			_tooltipTextbox.BackColor = Color.Black;
-			_tooltipTextbox.BackColor = color;
+			_tooltipTextbox.ScaleDpiFont();
 
-			color = _tooltipTextbox.ForeColor;
-			_tooltipTextbox.ForeColor = Color.Black;
-			_tooltipTextbox.ForeColor = color;
+			_tooltipSize = new Size(400, 300).ByDpi();
+			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
+			_selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
 		}
+
+		private void systemColorsChanging() =>
+			_tooltipTextbox.TouchColorProperties();
 
 		private void setCloseEnabled(bool value)
 		{
@@ -398,7 +393,7 @@ namespace Mtgdb.Controls
 		private const int TextPadding = 6;
 		private const int TooltipMargin = 12;
 
-		private readonly Size _tooltipSize;
+		private Size _tooltipSize;
 
 		private readonly RichTextBoxSelectionSubsystem _selectionSubsystem;
 		private readonly FixedRichTextBox _tooltipTextbox;
@@ -420,8 +415,8 @@ namespace Mtgdb.Controls
 		private TooltipModel _tooltip;
 		private readonly BorderedPanel _panel;
 		private bool _closeEnabled;
-		private readonly Bitmap _closeIcon;
-		private readonly Bitmap _selectableTextIcon;
+		private Bitmap _closeIcon;
+		private Bitmap _selectableTextIcon;
 		private bool _clickable;
 
 		private class TooltipPosition

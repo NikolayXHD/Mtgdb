@@ -36,7 +36,11 @@ namespace Mtgdb.Controls
 		public static void ScaleDpi(this Control control)
 		{
 			control.Size = control.Size.ByDpi();
+			ScaleDpiFont(control);
 		}
+
+		public static void ScaleDpiFont(this Control control) =>
+			control.Font = control.Font.ByDpi();
 
 		public static bool Invoke(this Control value, Action method)
 		{
@@ -54,7 +58,16 @@ namespace Mtgdb.Controls
 			return true;
 		}
 
+		public static void TouchColorProperties(this Control control)
+		{
+			var color = control.BackColor;
+			control.BackColor = Color.Black;
+			control.BackColor = color;
 
+			color = control.ForeColor;
+			control.ForeColor = Color.Black;
+			control.ForeColor = color;
+		}
 
 		public static List<T> Reorder<T>(this IList<T> originalArray, int fromIndex, int toIndex)
 		{

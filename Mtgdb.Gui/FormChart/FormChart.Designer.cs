@@ -49,7 +49,7 @@
 			this._buttonArgumentTotals = new System.Windows.Forms.CheckBox();
 			this._buttonSeriesTotal = new System.Windows.Forms.CheckBox();
 			this._buttonExplainTotal = new System.Windows.Forms.CheckBox();
-			this._buttonApplyFilter = new System.Windows.Forms.CheckBox();
+			this._buttonFilterBySearchResult = new System.Windows.Forms.CheckBox();
 			this._buttonAddRow = new System.Windows.Forms.Button();
 			this._buttonAddSum = new System.Windows.Forms.Button();
 			this._panelMenu = new System.Windows.Forms.FlowLayoutPanel();
@@ -68,14 +68,14 @@
 			this._buttonManaCurveManacost = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonCollectionColors = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDeckColors = new Mtgdb.Controls.CustomCheckBox();
-			this._labelName = new System.Windows.Forms.Label();
-			this._flowTitle = new System.Windows.Forms.FlowLayoutPanel();
+			this._labelTitle = new System.Windows.Forms.Label();
+			this._flowTitle = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._flowFileMenu = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._buttonMruFiles = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonLoad = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonSave = new Mtgdb.Controls.CustomCheckBox();
 			this._flowPriceReports = new Mtgdb.Controls.BorderedFlowLayoutPanel();
-			this._flowDropdowns = new System.Windows.Forms.FlowLayoutPanel();
+			this._flowDropdowns = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._menuMruFiles = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._panelClient.SuspendLayout();
 			this._panelCaption.SuspendLayout();
@@ -159,7 +159,7 @@
 			// 
 			this._buttonApply.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonApply.Location = new System.Drawing.Point(604, 0);
+			this._buttonApply.Location = new System.Drawing.Point(504, 0);
 			this._buttonApply.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonApply.Name = "_buttonApply";
 			this._buttonApply.Size = new System.Drawing.Size(50, 24);
@@ -343,19 +343,19 @@
 			this._buttonExplainTotal.Text = "Explain total";
 			this._buttonExplainTotal.UseVisualStyleBackColor = true;
 			// 
-			// _buttonApplyFilter
+			// _buttonFilterBySearchResult
 			// 
-			this._buttonApplyFilter.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonApplyFilter.AutoSize = true;
-			this._buttonApplyFilter.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
-			this._buttonApplyFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonApplyFilter.Location = new System.Drawing.Point(466, 3);
-			this._buttonApplyFilter.Margin = new System.Windows.Forms.Padding(160, 0, 0, 0);
-			this._buttonApplyFilter.Name = "_buttonApplyFilter";
-			this._buttonApplyFilter.Size = new System.Drawing.Size(122, 17);
-			this._buttonApplyFilter.TabIndex = 59;
-			this._buttonApplyFilter.Text = "Filter by search result";
-			this._buttonApplyFilter.UseVisualStyleBackColor = true;
+			this._buttonFilterBySearchResult.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonFilterBySearchResult.AutoSize = true;
+			this._buttonFilterBySearchResult.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+			this._buttonFilterBySearchResult.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonFilterBySearchResult.Location = new System.Drawing.Point(366, 3);
+			this._buttonFilterBySearchResult.Margin = new System.Windows.Forms.Padding(60, 0, 0, 0);
+			this._buttonFilterBySearchResult.Name = "_buttonFilterBySearchResult";
+			this._buttonFilterBySearchResult.Size = new System.Drawing.Size(122, 17);
+			this._buttonFilterBySearchResult.TabIndex = 59;
+			this._buttonFilterBySearchResult.Text = "Filter by search result";
+			this._buttonFilterBySearchResult.UseVisualStyleBackColor = true;
 			// 
 			// _buttonAddRow
 			// 
@@ -516,17 +516,17 @@
 			this._panelFlags.Controls.Add(this._buttonArgumentTotals);
 			this._panelFlags.Controls.Add(this._buttonSeriesTotal);
 			this._panelFlags.Controls.Add(this._buttonExplainTotal);
-			this._panelFlags.Controls.Add(this._buttonApplyFilter);
+			this._panelFlags.Controls.Add(this._buttonFilterBySearchResult);
 			this._panelFlags.Controls.Add(this._buttonApply);
 			this._panelFlags.Location = new System.Drawing.Point(0, 84);
 			this._panelFlags.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this._panelFlags.Name = "_panelFlags";
-			this._panelFlags.Size = new System.Drawing.Size(654, 24);
+			this._panelFlags.Size = new System.Drawing.Size(554, 24);
 			this._panelFlags.TabIndex = 44;
 			// 
 			// _menuPrice
 			// 
-			this._menuPrice.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuPrice.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPrice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPrice.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuPrice.IntegralHeight = false;
@@ -539,7 +539,7 @@
 			// 
 			// _menuPriceChartType
 			// 
-			this._menuPriceChartType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuPriceChartType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPriceChartType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPriceChartType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this._menuPriceChartType.IntegralHeight = false;
@@ -634,20 +634,20 @@
 			this._buttonDeckColors.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDeckColors.UseVisualStyleBackColor = true;
 			// 
-			// _labelName
+			// _labelTitle
 			// 
-			this._labelName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._labelTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this._labelName.AutoSize = true;
-			this._labelName.BackColor = System.Drawing.Color.Transparent;
-			this._labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._labelName.Location = new System.Drawing.Point(6, 0);
-			this._labelName.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this._labelName.Name = "_labelName";
-			this._labelName.Size = new System.Drawing.Size(45, 50);
-			this._labelName.TabIndex = 59;
-			this._labelName.Text = "Name";
-			this._labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._labelTitle.AutoSize = true;
+			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
+			this._labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._labelTitle.Location = new System.Drawing.Point(6, 0);
+			this._labelTitle.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+			this._labelTitle.Name = "_labelTitle";
+			this._labelTitle.Size = new System.Drawing.Size(45, 50);
+			this._labelTitle.TabIndex = 59;
+			this._labelTitle.Text = "Name";
+			this._labelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// _flowTitle
 			// 
@@ -665,6 +665,7 @@
 			this._flowTitle.Name = "_flowTitle";
 			this._flowTitle.Size = new System.Drawing.Size(674, 56);
 			this._flowTitle.TabIndex = 57;
+			this._flowTitle.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			this._flowTitle.WrapContents = false;
 			// 
 			// _flowFileMenu
@@ -675,7 +676,7 @@
 			this._flowFileMenu.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._flowFileMenu.BorderColor = System.Drawing.SystemColors.ControlText;
 			this._flowFileMenu.BorderDashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-			this._flowFileMenu.Controls.Add(this._labelName);
+			this._flowFileMenu.Controls.Add(this._labelTitle);
 			this._flowFileMenu.Controls.Add(this._buttonMruFiles);
 			this._flowFileMenu.Controls.Add(this._buttonLoad);
 			this._flowFileMenu.Controls.Add(this._buttonSave);
@@ -700,7 +701,7 @@
 			this._buttonMruFiles.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMruFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMruFiles.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
+			this._buttonMruFiles.Image = ((System.Drawing.Image)(resources.GetObject("_buttonMruFiles.Image")));
 			this._buttonMruFiles.Location = new System.Drawing.Point(51, 13);
 			this._buttonMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
 			this._buttonMruFiles.Name = "_buttonMruFiles";
@@ -722,7 +723,7 @@
 			this._buttonLoad.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLoad.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
+			this._buttonLoad.Image = ((System.Drawing.Image)(resources.GetObject("_buttonLoad.Image")));
 			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
 			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
 			this._buttonLoad.Name = "_buttonLoad";
@@ -744,7 +745,7 @@
 			this._buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSave.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
+			this._buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("_buttonSave.Image")));
 			this._buttonSave.Location = new System.Drawing.Point(123, 13);
 			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);
 			this._buttonSave.Name = "_buttonSave";
@@ -774,6 +775,7 @@
 			// 
 			// _flowDropdowns
 			// 
+			this._flowDropdowns.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._flowDropdowns.AutoSize = true;
 			this._flowDropdowns.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._flowDropdowns.Controls.Add(this._menuPrice);
@@ -784,6 +786,7 @@
 			this._flowDropdowns.Name = "_flowDropdowns";
 			this._flowDropdowns.Size = new System.Drawing.Size(60, 44);
 			this._flowDropdowns.TabIndex = 60;
+			this._flowDropdowns.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			this._flowDropdowns.WrapContents = false;
 			// 
 			// _menuMruFiles
@@ -859,16 +862,16 @@
 		private System.Windows.Forms.CheckBox _buttonSeriesTotal;
 		private System.Windows.Forms.CheckBox _buttonExplainTotal;
 		private Mtgdb.Controls.CustomCheckBox _buttonCollectionPrice;
-		private System.Windows.Forms.CheckBox _buttonApplyFilter;
+		private System.Windows.Forms.CheckBox _buttonFilterBySearchResult;
 		private System.Windows.Forms.FlowLayoutPanel _panelFlags;
 		private Mtgdb.Controls.CustomCheckBox _buttonDeckColors;
 		private Mtgdb.Controls.CustomCheckBox _buttonCollectionColors;
 		private Mtgdb.Controls.CustomCheckBox _buttonManaCurveManacost;
 		private Controls.CustomCheckBox _buttonSave;
 		private Controls.CustomCheckBox _buttonLoad;
-		private System.Windows.Forms.Label _labelName;
-		private System.Windows.Forms.FlowLayoutPanel _flowTitle;
-		private System.Windows.Forms.FlowLayoutPanel _flowDropdowns;
+		private System.Windows.Forms.Label _labelTitle;
+		private Controls.BorderedFlowLayoutPanel _flowTitle;
+		private Controls.BorderedFlowLayoutPanel _flowDropdowns;
 		private Controls.BorderedFlowLayoutPanel _flowPriceReports;
 		private Controls.CustomCheckBox _buttonMruFiles;
 		private System.Windows.Forms.ContextMenuStrip _menuMruFiles;

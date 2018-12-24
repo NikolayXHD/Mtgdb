@@ -25,6 +25,10 @@ namespace Mtgdb.Gui
 			_menuMruFiles = menuMruFiles;
 
 			_buttonSubsystem.SetupPopup(new Popup(_menuMruFiles, _buttonMruFiles, beforeShow: updateMruFilesMenu));
+		}
+
+		public void SubscribeToEvents()
+		{
 			_buttonSubsystem.SubscribeToEvents();
 
 			_buttonSave.Click += handleSaveClick;

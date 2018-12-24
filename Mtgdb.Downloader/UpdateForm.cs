@@ -28,6 +28,8 @@ namespace Mtgdb.Downloader
 
 			foreach (var button in _tableLayoutButtons.Controls.Cast<Button>())
 				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
+
+			_textBoxLog.ScaleDpiFont();
 		}
 
 		[UsedImplicitly]

@@ -6,49 +6,47 @@ namespace Mtgdb.Controls
 {
 	public static class Dpi
 	{
-		public static void Initialize()
+		public static void Initialize(int uiScalePercent = 100)
 		{
 			if (Environment.OSVersion.Version.Major >= 6)
 				SetProcessDPIAware();
 
-			_scale = getScale();
+			_uiScalePercent = uiScalePercent;
+			_scale = getScale().MultiplyBy(_uiScalePercent / 100f);
 			_scaleHalf = _scale.MultiplyBy(0.5f);
 		}
 
-		public static int ByDpiWidth(this int width)
+		public static Font ByDpi(this Font font)
 		{
-			return (int) (width * _scale.Width);
+			if (_uiScalePercent == 100)
+				return font;
+
+			return new Font(
+				font.FontFamily,
+				font.Size * _uiScalePercent / 100f,
+				font.Style,
+				font.Unit,
+				font.GdiCharSet,
+				font.GdiVerticalFont);
 		}
 
-		public static int ByDpiHeight(this int height)
-		{
-			return (int)(height * _scale.Height);
-		}
+		public static int ByDpiWidth(this int width) =>
+			(width * _scale.Width).Round();
 
-		public static float ByDpiHeight(this float height)
-		{
-			return (int)(height * _scale.Height);
-		}
+		public static int ByDpiHeight(this int height) =>
+			(height * _scale.Height).Round();
 
-		public static Size ByDpi(this Size original)
-		{
-			return original.MultiplyBy(_scale).Round();
-		}
+		public static Size ByDpi(this Size original) =>
+			original.MultiplyBy(_scale).Round();
 
-		public static Point ByDpi(this Point original)
-		{
-			return original.MultiplyBy(_scale).Round();
-		}
+		public static Point ByDpi(this Point original) =>
+			original.MultiplyBy(_scale).Round();
 
-		public static SizeF ByDpi(this SizeF original)
-		{
-			return original.MultiplyBy(_scale);
-		}
+		public static SizeF ByDpi(this SizeF original) =>
+			original.MultiplyBy(_scale);
 
-		public static Size HalfByDpi(this Size original)
-		{
-			return original.MultiplyBy(_scaleHalf).Round();
-		}
+		public static Size HalfByDpi(this Size original) =>
+			original.MultiplyBy(_scaleHalf).Round();
 
 		private static SizeF getScale()
 		{
@@ -63,6 +61,7 @@ namespace Mtgdb.Controls
 		}
 
 		public static int ScalePercent => (int)Math.Ceiling(100 * Math.Max(_scale.Width, _scale.Height));
+		private static int _uiScalePercent;
 
 		[DllImport("user32.dll")]
 		private static extern bool SetProcessDPIAware();

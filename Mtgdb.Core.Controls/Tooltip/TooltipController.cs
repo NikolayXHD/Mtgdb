@@ -16,6 +16,7 @@ namespace Mtgdb.Controls
 		{
 			HideCounter = 0;
 			_tooltipForm = form;
+			_tooltipForm.Show();
 		}
 
 		public void SetTooltip(object owner, string title, string tooltip, params Control[] controls) =>

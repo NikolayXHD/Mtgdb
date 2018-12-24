@@ -68,20 +68,18 @@ namespace Mtgdb.Gui
 
 			scale();
 
-			_labelName.Text = string.Empty;
+			_labelTitle.Text = string.Empty;
+
+			_menuMruFiles.ForeColor = SystemColors.ControlText;
+			_menuMruFiles.BackColor = SystemColors.Control;
 		}
 
 		private void scale()
 		{
-			SuspendLayout();
-
 			CaptionHeight = CaptionHeight.ByDpiHeight();
+
 			foreach (var tab in _tabs)
-			{
-				tab.Height = tab.Height.ByDpiHeight();
-				tab.SlopeSize = tab.SlopeSize.ByDpi();
-				tab.AddButtonSlopeSize = tab.SlopeSize.ByDpi();
-			}
+				tab.ScaleDpi();
 
 			_buttonApply.ScaleDpi();
 
@@ -95,7 +93,10 @@ namespace Mtgdb.Gui
 			_buttonLoad.ScaleDpi();
 
 			foreach (var menu in _menus)
+			{
 				menu.ScaleDpi();
+				menu.Height = menu.Height.ByDpiHeight();
+			}
 
 			_sortIconsOrder = new[]
 			{
@@ -114,8 +115,36 @@ namespace Mtgdb.Gui
 				ResourcesFilter.max_hovered.HalfResizeDpi()
 			};
 
-			ResumeLayout(false);
-			PerformLayout();
+			_chart.ScaleDpiFont();
+
+			var labels = new[]
+			{
+				_labelField,
+				_labelDataElement,
+				_labelDataSource,
+				_labelChartType,
+				_labelCols,
+				_labelRows,
+				_labelSum,
+				_labelSummarySort
+			};
+
+			foreach (var label in labels)
+				label.ScaleDpiFont();
+
+			var checkBoxes = new[]
+			{
+				_buttonArgumentTotals,
+				_buttonSeriesTotal,
+				_buttonExplainTotal,
+				_buttonFilterBySearchResult
+			};
+
+			foreach (var checkBox in checkBoxes)
+				checkBox.ScaleDpiFont();
+
+			_menuMruFiles.ScaleDpiFont();
+			_labelTitle.ScaleDpiFont();
 		}
 
 		public FormChart(CardRepository repository, UiModel ui, CardFields fields)
@@ -214,6 +243,7 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonMruFiles, new ButtonImages(Resources.down_32, x2: true));
 
 			_filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _buttonMruFiles, _menuMruFiles);
+			_filesSubsystem.SubscribeToEvents();
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
@@ -379,6 +409,8 @@ namespace Mtgdb.Gui
 				ax.InterlacedColor = SystemColors.WindowText;
 				ax.LabelStyle.ForeColor = SystemColors.WindowText;
 				ax.MajorGrid.LineColor = SystemColors.ActiveBorder;
+
+				ax.TitleFont = ax.TitleFont.ByDpi();
 			}
 
 			return area;
@@ -713,6 +745,8 @@ namespace Mtgdb.Gui
 							MarkerColor = SystemColors.ActiveBorder
 						};
 
+						chartSeries.Font = chartSeries.Font.ByDpi();
+
 						if (settings.LabelDataElement == DataElement.None)
 						{
 							chartSeries.IsValueShownAsLabel = false;
@@ -877,6 +911,9 @@ namespace Mtgdb.Gui
 				BorderColor = SystemColors.ActiveBorder
 			};
 
+			legend.Font = legend.Font.ByDpi();
+			legend.TitleFont = legend.TitleFont.ByDpi();
+
 			return legend;
 		}
 
@@ -994,7 +1031,7 @@ namespace Mtgdb.Gui
 			}
 
 			_menuDataSource.SelectedIndex = (int) settings.DataSource;
-			_buttonApplyFilter.Checked = settings.ApplyFilter;
+			_buttonFilterBySearchResult.Checked = settings.ApplyFilter;
 			_menuLabelDataElement.SelectedIndex = (int) settings.LabelDataElement;
 			_menuChartType.SelectedIndex = _menuChartType.Items.IndexOf(settings.ChartType.ToString());
 
@@ -1029,7 +1066,7 @@ namespace Mtgdb.Gui
 			var result = new ReportSettings
 			{
 				DataSource = (DataSource) Enum.Parse(typeof(DataSource), (string) _menuDataSource.SelectedItem),
-				ApplyFilter = _buttonApplyFilter.Checked,
+				ApplyFilter = _buttonFilterBySearchResult.Checked,
 				LabelDataElement = (DataElement) Enum.Parse(typeof(DataElement), (string) _menuLabelDataElement.SelectedItem),
 				ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), (string) _menuChartType.SelectedItem),
 				ColumnFields = readFields(_tabCols),
@@ -1051,10 +1088,10 @@ namespace Mtgdb.Gui
 
 		public string Title
 		{
-			get => _labelName.Text;
+			get => _labelTitle.Text;
 			set
 			{
-				_labelName.Text = value;
+				_labelTitle.Text = value;
 				Text = string.IsNullOrEmpty(value) ? " " : value;
 			}
 		}

@@ -6,8 +6,8 @@ GrayText: ff7f807f
 HotTrack: ff3f5873
 Highlight: ff707070
 HighlightText: ffffffff
-ActiveCaption: ff424f66
-GradientActiveCaption: ff5b6d8c
-InactiveCaption: ff242b33
-GradientInactiveCaption: ff38424d
+ActiveCaption: ff242b33
+GradientActiveCaption: ff38424d
+InactiveCaption: ff323b4d
+GradientInactiveCaption: ff424f66
 ActiveBorder: ff656665

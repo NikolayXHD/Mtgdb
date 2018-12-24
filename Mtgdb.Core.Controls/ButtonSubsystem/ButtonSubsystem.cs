@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -84,10 +85,14 @@ namespace Mtgdb.Controls
 
 			menu.DrawItem += (s, e) =>
 			{
-				e.DrawBackground();
+				bool isHighlighted = (e.State & (DrawItemState.HotLight | DrawItemState.Focus)) > 0;
+				var backColor = isHighlighted ? SystemColors.Highlight : menu.BackColor;
+				var foreColor = isHighlighted ? SystemColors.HighlightText : menu.ForeColor;
+
+				e.Graphics.FillRectangle(new SolidBrush(backColor), e.Bounds);
 
 				if (e.Index >= 0 && e.Index < menu.Items.Count)
-					e.Graphics.DrawText((string) menu.Items[e.Index], menu.Font, e.Bounds, menu.ForeColor, textFormat);
+					e.Graphics.DrawText((string) menu.Items[e.Index], menu.Font, e.Bounds, foreColor, textFormat);
 
 				e.DrawFocusRectangle();
 			};

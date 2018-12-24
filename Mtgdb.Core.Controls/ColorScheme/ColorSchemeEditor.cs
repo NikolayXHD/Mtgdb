@@ -22,6 +22,7 @@ namespace Mtgdb.Controls
 			ShowIcon = false;
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Color scheme editor";
+			this.ScaleDpiFont();
 		}
 
 		[UsedImplicitly]
@@ -146,6 +147,18 @@ namespace Mtgdb.Controls
 
 		private void addButtons()
 		{
+			bool resetting = false;
+			createButton("Reset all colors", (s, e) =>
+			{
+				if (resetting)
+					return;
+
+				resetting = true;
+				_controller.ResetAll();
+				saveCurrentColorScheme();
+				resetting = false;
+			});
+
 			createButton("Save", (s, e) =>
 			{
 				if (saveDialog())
@@ -179,18 +192,6 @@ namespace Mtgdb.Controls
 				}
 			});
 
-			bool resetting = false;
-			createButton("Reset all", (s, e) =>
-			{
-				if (resetting)
-					return;
-
-				resetting = true;
-				_controller.ResetAll();
-				saveCurrentColorScheme();
-				resetting = false;
-			});
-
 			bool saveDialog()
 			{
 				var dlg = new SaveFileDialog
@@ -212,17 +213,19 @@ namespace Mtgdb.Controls
 
 		private void createButton(string text, EventHandler clickHandler)
 		{
-			var deltaSize = _cellSize.MultiplyBy(0.1125f).Round();
+			Size deltaSize = _cellSize.MultiplyBy(/*0.1125f*/ 0f).Round();
 
-			var control = new Label
+			var control = new CustomCheckBox
 			{
 				AutoSize = false,
+				AutoCheck = false,
+				Appearance = Appearance.Button,
 				Size = _cellSize.Minus(deltaSize),
 				Margin = _cellMargin.Add(deltaSize),
 				BackColor = SystemColors.Control,
 				ForeColor = SystemColors.ControlText,
 				TextAlign = ContentAlignment.MiddleCenter,
-				BorderStyle = BorderStyle.Fixed3D,
+				HighlightBackColor = SystemColors.HotTrack,
 				Text = text,
 				Font = new Font(Font.FontFamily, Font.Size * 9f / 8f, FontStyle.Bold, Font.Unit)
 			};
@@ -375,8 +378,11 @@ namespace Mtgdb.Controls
 				.Select(Path.GetFileNameWithoutExtension)
 				.Where(n => !Str.Equals(n, CurrentSchemeName));
 
-		public void LoadSavedScheme(string name) =>
-			load(SaveDirectory.AddPath(name + Ext));
+		public void LoadSavedScheme(string name)
+		{
+			if (load(SaveDirectory.AddPath(name + Ext)))
+				saveCurrentColorScheme();
+		}
 
 		private void moved(object s, EventArgs e) =>
 			_colorPicker.Location =

@@ -227,10 +227,16 @@ namespace Mtgdb.Gui
 			_labelStatusScrollCards.ScaleDpi();
 			_labelStatusScrollDeck.ScaleDpi();
 
-			_tabHeadersDeck.Height = _tabHeadersDeck.Height.ByDpiHeight();
-			_tabHeadersDeck.SlopeSize = _tabHeadersDeck.SlopeSize.ByDpi();
-			_tabHeadersDeck.AddButtonSlopeSize = _tabHeadersDeck.AddButtonSlopeSize.ByDpi();
-			_tabHeadersDeck.AddButtonWidth = _tabHeadersDeck.AddButtonWidth.ByDpiWidth();
+			_labelStatusSets.ScaleDpi();
+			_labelStatusCollection.ScaleDpi();
+			_labelStatusFilterButtons.ScaleDpi();
+			_labelStatusSearch.ScaleDpi();
+			_labelStatusFilterCollection.ScaleDpi();
+			_labelStatusFilterDeck.ScaleDpi();
+			_labelStatusFilterLegality.ScaleDpi();
+			_labelStatusSort.ScaleDpi();
+
+			_tabHeadersDeck.ScaleDpi();
 
 			_listBoxSuggest.Width = _listBoxSuggest.Width.ByDpiWidth();
 
@@ -283,6 +289,11 @@ namespace Mtgdb.Gui
 			scalePanelIcon(_panelIconStatusSort);
 
 			_deckListControl.Scale();
+
+			foreach (var filterButtonsControl in _quickFilterControls.Append(FilterManager))
+				filterButtonsControl.ScaleDpiFont();
+
+			_searchEditor.ScaleDpiFont();
 		}
 
 		private void scaleLayoutView(LayoutViewControl view)

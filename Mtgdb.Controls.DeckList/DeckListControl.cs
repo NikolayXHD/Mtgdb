@@ -462,6 +462,11 @@ namespace Mtgdb.Controls
 			_menuFilterByDeckMode.ScaleDpi();
 
 			scaleLayoutView(_viewDeck);
+
+			_textBoxSearch.ScaleDpiFont();
+
+			_labelSortStatus.ScaleDpiFont();
+			_labelFilterByDeckMode.ScaleDpiFont();
 		}
 
 		private static void scalePanelIcon(BorderedPanel panel)
