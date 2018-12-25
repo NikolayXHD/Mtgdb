@@ -183,6 +183,12 @@ namespace Mtgdb.Controls
 			ImageDeckBoxOpened = ((DeckListLayout) other).ImageDeckBoxOpened;
 		}
 
+		protected override void CopyField(FieldControl thisField, FieldControl otherField)
+		{
+			base.CopyField(thisField, otherField);
+			thisField.Image = otherField.Image;
+		}
+
 		public override bool ShowSortButton(FieldControl field) =>
 			field.IsHotTracked && field.AllowSort || field.SortOrder != SortOrder.None;
 	}

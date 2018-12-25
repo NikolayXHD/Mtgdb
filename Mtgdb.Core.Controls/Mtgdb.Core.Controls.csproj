@@ -84,6 +84,7 @@
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="LayoutView\LayoutControlExtensions.cs" />
+    <Compile Include="LayoutView\LayoutViewControlExtensions.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />

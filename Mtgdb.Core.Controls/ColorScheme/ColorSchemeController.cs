@@ -111,7 +111,6 @@ namespace Mtgdb.Controls
 			{
 				SystemColors.Control,
 				SystemColors.ControlText,
-				SystemColors.ControlDark,
 
 				SystemColors.Window,
 				SystemColors.WindowText,

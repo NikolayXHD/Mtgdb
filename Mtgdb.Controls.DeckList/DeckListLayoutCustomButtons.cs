@@ -46,13 +46,10 @@ namespace Mtgdb.Controls
 			});
 		}
 
-		private static Bitmap selectBitmap(Bitmap defaultSized, Bitmap doubleSized)
-		{
-			if (Dpi.ScalePercent > 100)
-				return doubleSized.HalfResizeDpi();
-
-			return defaultSized.ResizeDpi();
-		}
+		private static Bitmap selectBitmap(Bitmap defaultSized, Bitmap doubleSized) =>
+			Dpi.ScalePercent > 100
+				? doubleSized
+				: defaultSized;
 
 		public static bool IsRemoveButton(this HitInfo info) =>
 			Str.Equals(info.FieldName, nameof(DeckModel.Saved)) && info.CustomButtonIndex == CustomButtonRemove;

@@ -478,16 +478,24 @@ namespace Mtgdb.Controls
 		private static void scaleLayoutView(LayoutViewControl view)
 		{
 			view.TransformIcons(bmp => bmp.HalfResizeDpi());
+
+			view.TransformFieldIcons(
+				customButtonIcon: (bmp, field, i) => Dpi.ScalePercent > 100
+					? bmp.HalfResizeDpi()
+					: bmp.ResizeDpi(),
+				searchIcon: bmp => bmp.HalfResizeDpi());
+
 			view.LayoutOptions.PartialCardsThreshold = view.LayoutOptions.PartialCardsThreshold.ByDpi();
 			view.ProbeCardCreating += probeCardCreating;
 		}
 
 		private static void probeCardCreating(object view, LayoutControl probeCard)
 		{
+			probeCard.ScaleDpi();
+
 			var card = (DeckListLayout) probeCard;
 
-			card.ScaleDpi();
-
+			// it is here because DeckListLayout field images are static
 			foreach (var field in card.Fields)
 				field.Image = ((Bitmap) field.Image)?.HalfResizeDpi();
 

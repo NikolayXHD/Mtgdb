@@ -299,6 +299,16 @@ namespace Mtgdb.Gui
 		private void scaleLayoutView(LayoutViewControl view)
 		{
 			view.TransformIcons(bmp => bmp.HalfResizeDpi());
+			view.TransformFieldIcons(
+				customButtonIcon: (bmp, field, i) =>
+				{
+					int delta = DeckEditorButtons.GetCountDelta(i);
+					bool isDeck = DeckEditorButtons.IsDeck(i);
+					return bmp.HalfResizeDpi(preventMoire: isDeck && Math.Abs(delta) == 1);
+				},
+				searchIcon: bmp => bmp.HalfResizeDpi()
+			);
+
 			view.LayoutOptions.PartialCardsThreshold = view.LayoutOptions.PartialCardsThreshold.ByDpi();
 			view.ProbeCardCreating += probeCardCreating;
 		}
@@ -306,23 +316,6 @@ namespace Mtgdb.Gui
 		private void probeCardCreating(object view, LayoutControl probeCard)
 		{
 			probeCard.ScaleDpi();
-
-			foreach (var field in probeCard.Fields)
-			{
-				field.SearchOptions.Button.Icon = field.SearchOptions.Button.Icon?.HalfResizeDpi();
-
-				for (int i = 0; i < field.CustomButtons.Count; i++)
-				{
-					var button = field.CustomButtons[i];
-
-					int delta = DeckEditorButtons.GetCountDelta(i);
-					bool isDeck = DeckEditorButtons.IsDeck(i);
-
-					button.Icon = button.Icon?.HalfResizeDpi(preventMoire: isDeck && Math.Abs(delta) == 1);
-					button.IconTransp = button.IconTransp?.HalfResizeDpi();
-				}
-			}
-
 			((CardLayoutControlBase) probeCard).Ui = _formRoot.UiModel;
 		}
 

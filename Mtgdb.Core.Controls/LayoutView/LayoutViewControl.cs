@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -382,7 +381,7 @@ namespace Mtgdb.Controls
 		private void updateSort(FieldControl field)
 		{
 			if (field.FieldName != null && _sortIndexByField.TryGetValue(field.FieldName, out int sortIndex))
-				field.SortOrder = _sortInfos[sortIndex].SortOrder;
+				field.SortOrder = _sortInfo[sortIndex].SortOrder;
 			else
 				field.SortOrder = SortOrder.None;
 		}
@@ -804,26 +803,26 @@ namespace Mtgdb.Controls
 				sortInfo = null;
 			}
 			else
-				sortInfo = _sortInfos[sortIndex];
+				sortInfo = _sortInfo[sortIndex];
 
 
 			if (ModifierKeys == Keys.None)
 			{
-				_sortInfos.Clear();
+				_sortInfo.Clear();
 				_sortIndexByField.Clear();
 
 				if (sortInfo == null)
 				{
 					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
 
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					_sortInfo.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfo.Count - 1);
 				}
 				else if (sortInfo.SortOrder == SortOrder.Ascending)
 				{
 					sortInfo.SortOrder = SortOrder.Descending;
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					_sortInfo.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfo.Count - 1);
 				}
 
 				updateSort();
@@ -834,8 +833,8 @@ namespace Mtgdb.Controls
 				if (sortInfo == null)
 				{
 					sortInfo = new FieldSortInfo(hitInfo.FieldName, SortOrder.Ascending);
-					_sortInfos.Add(sortInfo);
-					_sortIndexByField.Add(hitInfo.FieldName, _sortInfos.Count - 1);
+					_sortInfo.Add(sortInfo);
+					_sortIndexByField.Add(hitInfo.FieldName, _sortInfo.Count - 1);
 				}
 				else if (sortInfo.SortOrder == SortOrder.Ascending)
 				{
@@ -843,7 +842,7 @@ namespace Mtgdb.Controls
 				}
 				else if (sortInfo.SortOrder == SortOrder.Descending)
 				{
-					_sortInfos.RemoveAt(sortIndex);
+					_sortInfo.RemoveAt(sortIndex);
 					_sortIndexByField.Remove(hitInfo.FieldName);
 				}
 
@@ -854,7 +853,7 @@ namespace Mtgdb.Controls
 			{
 				if (sortInfo != null)
 				{
-					_sortInfos.RemoveAt(sortIndex);
+					_sortInfo.RemoveAt(sortIndex);
 					_sortIndexByField.Remove(hitInfo.FieldName);
 
 					updateSort();
@@ -870,8 +869,8 @@ namespace Mtgdb.Controls
 
 		private void updateSort()
 		{
-			_sortIndexByField = Enumerable.Range(0, _sortInfos.Count)
-				.ToDictionary(i => _sortInfos[i].FieldName);
+			_sortIndexByField = Enumerable.Range(0, _sortInfo.Count)
+				.ToDictionary(i => _sortInfo[i].FieldName);
 
 			foreach (var card in Cards)
 				foreach (var field in card.Fields)
@@ -1299,26 +1298,7 @@ namespace Mtgdb.Controls
 				.FirstOrDefault(s => !s.IsEmpty);
 
 
-		public void TransformIcons(Func<Bitmap, Bitmap> transformation)
-		{
-			SortOptions.Icon = SortOptions.Icon?.Invoke0(transformation);
-			SortOptions.AscIcon = SortOptions.AscIcon?.Invoke0(transformation);
-			SortOptions.DescIcon = SortOptions.DescIcon?.Invoke0(transformation);
-
-			SortOptions.IconTransp = SortOptions.IconTransp?.Invoke0(transformation);
-			SortOptions.AscIconTransp = SortOptions.AscIconTransp?.Invoke0(transformation);
-			SortOptions.DescIconTransp = SortOptions.DescIconTransp?.Invoke0(transformation);
-
-			SearchOptions.Button.Icon = SearchOptions.Button.Icon?.Invoke0(transformation);
-			SearchOptions.Button.IconTransp = SearchOptions.Button.IconTransp?.Invoke0(transformation);
-
-			foreach (var pair in LayoutOptions.AlignmentIconsByDirection.ToArray())
-				LayoutOptions.AlignmentIconsByDirection[pair.Key] = pair.Value?.Invoke0(transformation);
-
-			foreach (var pair in LayoutOptions.AlignmentHoveredIconsByDirection.ToArray())
-				LayoutOptions.AlignmentHoveredIconsByDirection[pair.Key] = pair.Value?.Invoke0(transformation);
-		}
-
+		private Type _layoutControlType;
 		[Category("Settings")]
 		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
 		public Type LayoutControlType
@@ -1347,7 +1327,6 @@ namespace Mtgdb.Controls
 		public SelectionOptions SelectionOptions { get; set; } = new SelectionOptions();
 
 		private LayoutOptions _layoutOptions = new LayoutOptions();
-
 		[Category("Settings")]
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		public LayoutOptions LayoutOptions
@@ -1374,6 +1353,7 @@ namespace Mtgdb.Controls
 			OnLayout(new LayoutEventArgs(this, nameof(LayoutOptions)));
 		}
 
+		private int _cardIndex;
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int CardIndex
 		{
@@ -1394,15 +1374,16 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IList DataSource { get; set; }
 
+		private readonly List<FieldSortInfo> _sortInfo = new List<FieldSortInfo>();
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<FieldSortInfo> SortInfo
 		{
-			get => _sortInfos.ToList();
+			get => _sortInfo.ToList();
 
 			set
 			{
-				_sortInfos.Clear();
-				_sortInfos.AddRange(value);
+				_sortInfo.Clear();
+				_sortInfo.AddRange(value);
 
 				updateSort();
 				SortChanged?.Invoke(this);
@@ -1446,37 +1427,9 @@ namespace Mtgdb.Controls
 		private bool IsUnderMouse =>
 			this.IsUnderMouse() || _scrollBar.IsUnderMouse();
 
-		public event Action<object> CardIndexChanged;
-		public event Action<object, CustomDrawArgs> CustomDrawField;
-		public event Action<object, int> RowDataLoaded;
-		public event Action<object> SortChanged;
-		public event Action<object, SearchArgs> SearchClicked;
-		public event Action<object, LayoutControl> ProbeCardCreating;
-		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
-		public event Action<object, HitInfo, CancelEventArgs> SelectionStarted;
-
-
-		private Type _layoutControlType;
-		private int _cardIndex;
-
-		private readonly Dictionary<object, int> _rowHandleByObject = new Dictionary<object, int>();
-		private readonly List<FieldSortInfo> _sortInfos = new List<FieldSortInfo>();
-		private Dictionary<string, int> _sortIndexByField = new Dictionary<string, int>();
-
-		private readonly EventFiringMap<Direction, bool> _alignButtonVisible = new EventFiringMap<Direction, bool>();
-		private readonly EventFiringMap<Direction, bool> _alignButtonHotTracked = new EventFiringMap<Direction, bool>();
-
-		private HitInfo _hitInfo;
-
-		private readonly RectangularSelection _selection = new RectangularSelection();
-
-		private readonly Timer _selectionCaretTimer;
-		private bool _selectionCaretTimerSkip;
-
-		private bool _updatingScrollValue;
-
-		#region mouse wheel without focus
-
+		/// <summary>
+		/// mouse wheel without focus
+		/// </summary>
 		public bool PreFilterMessage(ref Message m)
 		{
 			if (Disposing || IsDisposed)
@@ -1508,6 +1461,26 @@ namespace Mtgdb.Controls
 			return false;
 		}
 
-		#endregion
+		public event Action<object> CardIndexChanged;
+		public event Action<object, CustomDrawArgs> CustomDrawField;
+		public event Action<object, int> RowDataLoaded;
+		public event Action<object> SortChanged;
+		public event Action<object, SearchArgs> SearchClicked;
+		public event Action<object, LayoutControl> ProbeCardCreating;
+		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
+		public event Action<object, HitInfo, CancelEventArgs> SelectionStarted;
+
+
+		private readonly RectangularSelection _selection = new RectangularSelection();
+		private readonly Timer _selectionCaretTimer;
+
+		private readonly Dictionary<object, int> _rowHandleByObject = new Dictionary<object, int>();
+		private readonly EventFiringMap<Direction, bool> _alignButtonVisible = new EventFiringMap<Direction, bool>();
+		private readonly EventFiringMap<Direction, bool> _alignButtonHotTracked = new EventFiringMap<Direction, bool>();
+
+		private Dictionary<string, int> _sortIndexByField = new Dictionary<string, int>();
+		private HitInfo _hitInfo;
+		private bool _selectionCaretTimerSkip;
+		private bool _updatingScrollValue;
 	}
 }

@@ -35,7 +35,7 @@ namespace Mtgdb
 			elem => Equals(elem, val);
 
 		public static Func<string, bool> IsWithin(IEnumerable<string> values, StringComparer comparer) =>
-			elem => values.Any(F.IsEqualTo(elem, comparer));
+			elem => values.Any(IsEqualTo(elem, comparer));
 
 		public static Func<T, bool> IsNotEqualTo<T>(T val) =>
 			elem => !Equals(elem, val);
@@ -46,13 +46,15 @@ namespace Mtgdb
 		public static Func<T, bool> IsLessThan<T>(T val) =>
 			elem => Comparer<T>.Default.Compare(elem, val) < 0;
 
-
-
 		public static TResult Invoke0<TObj, TResult>(this TObj target, Func<TObj, TResult> getter) =>
 			getter(target);
 
 		public static TResult Invoke1<TObj, TParam, TResult>(this TObj target, Func<TObj, TParam, TResult> getter, TParam param) =>
 			getter(target, param);
+
+		public static TResult Invoke1<TObj, TParam1, TParam2, TResult>(
+			this TObj target, Func<TObj, TParam1, TParam2, TResult> getter, TParam1 param1, TParam2 param2) =>
+			getter(target, param1, param2);
 
 		public static TResult Invoke2<TObj, TParam, TResult>(this TObj target, Func<TParam, TObj, TResult> getter, TParam param) =>
 			getter(param, target);

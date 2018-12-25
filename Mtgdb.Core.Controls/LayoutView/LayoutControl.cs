@@ -26,8 +26,11 @@ namespace Mtgdb.Controls
 			using (var thisEnumerator = Fields.GetEnumerator())
 			using (var otherEnumerator = other.Fields.GetEnumerator())
 				while (thisEnumerator.MoveNext() && otherEnumerator.MoveNext())
-					thisEnumerator.Current.CopyFrom(otherEnumerator.Current);
+					CopyField(thisEnumerator.Current, otherEnumerator.Current);
 		}
+
+		protected virtual void CopyField(FieldControl thisField, FieldControl otherField) =>
+			thisField.CopyFrom(otherField);
 
 		public void PaintSelf(Graphics graphics, Point parentLocation, Color parentBg)
 		{
