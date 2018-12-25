@@ -102,7 +102,23 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pCMP"      Root="PTour" Path="Champs" />
 		<Directory Group="xlhq" Zoom="Any" Set="pLGM"      Root="PTour" Path="DCI Legend" />
 		<Directory Group="xlhq" Zoom="Any" Set="pELP"      Root="PTour" Path="Euro Lands" />
-		<Directory Group="xlhq" Zoom="Any" Set="pFNM"      Root="PTour" Path="Friday Night Magic" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="fnm"      Root="PTour" Path="Friday Night Magic\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="f01"      Root="PTour" Path="Friday Night Magic\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="f02"      Root="PTour" Path="Friday Night Magic\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="f03"      Root="PTour" Path="Friday Night Magic\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="f04"      Root="PTour" Path="Friday Night Magic\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="f05"      Root="PTour" Path="Friday Night Magic\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="f06"      Root="PTour" Path="Friday Night Magic\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="f07"      Root="PTour" Path="Friday Night Magic\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="f08"      Root="PTour" Path="Friday Night Magic\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="f09"      Root="PTour" Path="Friday Night Magic\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="f10"      Root="PTour" Path="Friday Night Magic\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="f11"      Root="PTour" Path="Friday Night Magic\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="f12"      Root="PTour" Path="Friday Night Magic\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="f13"      Root="PTour" Path="Friday Night Magic\2013" />
+		<Directory Group="xlhq" Zoom="Any" Set="f14"      Root="PTour" Path="Friday Night Magic\2014" />
+		<Directory Group="xlhq" Zoom="Any" Set="f15"      Root="PTour" Path="Friday Night Magic\2015" />
 
 		<Directory Group="xlhq" Zoom="Any" Set="pgtw"      Root="PTour" Path="Gateway and Wizards Play Network\2006" />
 		<Directory Group="xlhq" Zoom="Any" Set="pg07"      Root="PTour" Path="Gateway and Wizards Play Network\2007" />
