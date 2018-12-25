@@ -3,11 +3,11 @@ ControlText: ffafb1b3
 Window: ff2b2b2b
 WindowText: ffa9b7c6
 GrayText: ff808080
-HotTrack: ff214283
+HotTrack: ff4b6eaf
 Highlight: ff4b6eaf
 HighlightText: ffc3c3c3
-ActiveCaption: ff191a19
-GradientActiveCaption: ff191a19
-InactiveCaption: ff323232
-GradientInactiveCaption: ff323232
-ActiveBorder: ff323232
+ActiveCaption: ff3b4754
+GradientActiveCaption: ff3b4754
+InactiveCaption: ff3c3f41
+GradientInactiveCaption: ff3c3f41
+ActiveBorder: ff5e6060

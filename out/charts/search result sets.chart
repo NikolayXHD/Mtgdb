@@ -2,16 +2,18 @@
   "DataSource": 2,
   "ApplyFilter": true,
   "SeriesFields": [
+    "SetCode",
     "SetName"
   ],
   "SeriesFieldsSort": [
+    0,
     0
   ],
   "ColumnFields": [
-    "SetCode"
+    "SetName"
   ],
   "ColumnFieldsSort": [
-    0
+    1
   ],
   "SummaryFields": [
     "NameEn"
@@ -22,9 +24,9 @@
   "SummarySort": [
     0
   ],
-  "ChartType": 9,
+  "ChartType": 33,
   "LabelDataElement": 3,
-  "ShowArgumentTotal": true,
+  "ShowArgumentTotal": false,
   "ShowSeriesTotal": false,
   "ExplainTotal": false
 }

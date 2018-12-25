@@ -74,79 +74,6 @@ namespace Mtgdb.Gui
 			_menuMruFiles.BackColor = SystemColors.Control;
 		}
 
-		private void scale()
-		{
-			CaptionHeight = CaptionHeight.ByDpiHeight();
-
-			foreach (var tab in _tabs)
-				tab.ScaleDpi();
-
-			_buttonApply.ScaleDpi();
-
-			foreach (var button in _buttons)
-				button.ScaleDpi();
-
-			foreach (var button in _headerButtons)
-				button.ScaleDpi();
-
-			_buttonSave.ScaleDpi();
-			_buttonLoad.ScaleDpi();
-
-			foreach (var menu in _menus)
-			{
-				menu.ScaleDpi();
-				menu.Height = menu.Height.ByDpiHeight();
-			}
-
-			_sortIconsOrder = new[]
-			{
-				LayoutControlBitmaps.SortNone.HalfResizeDpi(),
-				LayoutControlBitmaps.SortAsc.HalfResizeDpi(),
-				LayoutControlBitmaps.SortDesc.HalfResizeDpi()
-			};
-
-			_aggregateIconsOrder = new[]
-			{
-				ResourcesFilter.sum_hovered.HalfResizeDpi(),
-				ResourcesFilter.count_hovered.HalfResizeDpi(),
-				ResourcesFilter.count_distinct_hovered.HalfResizeDpi(),
-				ResourcesFilter.min_hovered.HalfResizeDpi(),
-				ResourcesFilter.avg_hovered.HalfResizeDpi(),
-				ResourcesFilter.max_hovered.HalfResizeDpi()
-			};
-
-			_chart.ScaleDpiFont();
-
-			var labels = new[]
-			{
-				_labelField,
-				_labelDataElement,
-				_labelDataSource,
-				_labelChartType,
-				_labelCols,
-				_labelRows,
-				_labelSum,
-				_labelSummarySort
-			};
-
-			foreach (var label in labels)
-				label.ScaleDpiFont();
-
-			var checkBoxes = new[]
-			{
-				_buttonArgumentTotals,
-				_buttonSeriesTotal,
-				_buttonExplainTotal,
-				_buttonFilterBySearchResult
-			};
-
-			foreach (var checkBox in checkBoxes)
-				checkBox.ScaleDpiFont();
-
-			_menuMruFiles.ScaleDpiFont();
-			_labelTitle.ScaleDpiFont();
-		}
-
 		public FormChart(CardRepository repository, UiModel ui, CardFields fields)
 			: this()
 		{
@@ -244,6 +171,79 @@ namespace Mtgdb.Gui
 
 			_filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _buttonMruFiles, _menuMruFiles);
 			_filesSubsystem.SubscribeToEvents();
+		}
+
+		private void scale()
+		{
+			CaptionHeight = CaptionHeight.ByDpiHeight();
+
+			foreach (var tab in _tabs)
+				tab.ScaleDpi();
+
+			_buttonApply.ScaleDpi();
+
+			foreach (var button in _buttons)
+				button.ScaleDpi();
+
+			foreach (var button in _headerButtons)
+				button.ScaleDpi();
+
+			_buttonSave.ScaleDpi();
+			_buttonLoad.ScaleDpi();
+
+			foreach (var menu in _menus)
+			{
+				menu.ScaleDpi();
+				menu.Height = menu.Height.ByDpiHeight();
+			}
+
+			_sortIconsOrder = new[]
+			{
+				LayoutControlBitmaps.SortNone.HalfResizeDpi(),
+				LayoutControlBitmaps.SortAsc.HalfResizeDpi(),
+				LayoutControlBitmaps.SortDesc.HalfResizeDpi()
+			};
+
+			_aggregateIconsOrder = new[]
+			{
+				ResourcesFilter.sum_hovered.HalfResizeDpi(),
+				ResourcesFilter.count_hovered.HalfResizeDpi(),
+				ResourcesFilter.count_distinct_hovered.HalfResizeDpi(),
+				ResourcesFilter.min_hovered.HalfResizeDpi(),
+				ResourcesFilter.avg_hovered.HalfResizeDpi(),
+				ResourcesFilter.max_hovered.HalfResizeDpi()
+			};
+
+			_chart.ScaleDpiFont();
+
+			var labels = new[]
+			{
+				_labelField,
+				_labelDataElement,
+				_labelDataSource,
+				_labelChartType,
+				_labelCols,
+				_labelRows,
+				_labelSum,
+				_labelSummarySort
+			};
+
+			foreach (var label in labels)
+				label.ScaleDpiFont();
+
+			var checkBoxes = new[]
+			{
+				_buttonArgumentTotals,
+				_buttonSeriesTotal,
+				_buttonExplainTotal,
+				_buttonFilterBySearchResult
+			};
+
+			foreach (var checkBox in checkBoxes)
+				checkBox.ScaleDpiFont();
+
+			_menuMruFiles.ScaleDpiFont();
+			_labelTitle.ScaleDpiFont();
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
