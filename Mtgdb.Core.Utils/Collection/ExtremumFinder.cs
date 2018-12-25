@@ -141,7 +141,18 @@ namespace Mtgdb
 					return 1;
 				}
 
-				int compare = value.CompareTo(_max);
+				int compare;
+				if (value == null)
+				{
+					if (_max == null)
+						compare = 0;
+					else
+						compare = -_max.CompareTo(value);
+				}
+				else
+				{
+					compare = value.CompareTo(_max);
+				}
 
 				compare *= _sign;
 
