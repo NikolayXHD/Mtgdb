@@ -11,29 +11,15 @@ using Mtgdb.Dal;
 
 namespace Mtgdb.Downloader
 {
-	public sealed partial class UpdateForm : CustomBorderForm
+	public sealed partial class FormUpdate : CustomBorderForm
 	{
-		public UpdateForm()
+		public FormUpdate()
 		{
 			InitializeComponent();
-			scale();
-		}
-
-		private void scale()
-		{
-			_progressBar.Height = _progressBar.Height.ByDpiHeight();
-
-			this.ScaleDpi();
-			_tableLayoutButtons.ScaleDpi();
-
-			foreach (var button in _tableLayoutButtons.Controls.Cast<Button>())
-				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
-
-			_textBoxLog.ScaleDpiFont();
 		}
 
 		[UsedImplicitly]
-		public UpdateForm(
+		public FormUpdate(
 			Installer installer,
 			ImageDownloader imageDownloader,
 			ImageDownloadProgressReader imageDownloadProgressReader,
@@ -69,7 +55,27 @@ namespace Mtgdb.Downloader
 			_imageDownloader.ProgressChanged += downloadImageProgressChanged;
 			_priceDownloader.SidAdded += downloadPricesProgressChanged;
 			_priceDownloader.PriceAdded += downloadPricesProgressChanged;
+
+			scale();
+
+			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
 		}
+
+		private void scale()
+		{
+			_progressBar.Height = _progressBar.Height.ByDpiHeight();
+
+			this.ScaleDpi();
+			_tableLayoutButtons.ScaleDpi();
+
+			foreach (var button in _tableLayoutButtons.Controls.Cast<Button>())
+				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
+
+			_textBoxLog.ScaleDpiFont();
+		}
+
+		private void systemColorsChanged() =>
+			_textBoxLog.TouchColorProperties();
 
 		public void CalculateProgress()
 		{

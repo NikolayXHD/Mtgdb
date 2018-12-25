@@ -62,8 +62,13 @@ namespace Mtgdb.Ui
 		{
 			var relevanceById = _searchSubsystem?.SearchResult?.RelevanceById;
 
-			float getRelevance(TDoc c) =>
-				relevanceById?.TryGet(GetId(c), int.MaxValue) ?? 0f;
+			float getRelevance(TDoc c)
+			{
+				var id = GetId(c);
+				return id == null
+					? int.MaxValue
+					: relevanceById?.TryGet(id) ?? 0f;
+			}
 
 			if (sortInfo.Count == 0)
 			{

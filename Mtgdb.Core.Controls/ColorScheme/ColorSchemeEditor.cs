@@ -69,8 +69,11 @@ namespace Mtgdb.Controls
 				Margin = _cellMargin,
 				BackColor = Color.FromKnownColor(color),
 				TextAlign = ContentAlignment.MiddleCenter,
-				BorderStyle = BorderStyle.Fixed3D
+				BorderStyle = BorderStyle.None
 			};
+
+			control.MouseEnter += (s, e) => { selectForeColor(control, hover: true); };
+			control.MouseLeave += (s, e) => { selectForeColor(control, hover: false); };
 
 			updateText();
 			ColorSchemeController.SystemColorsChanging += updateText;
@@ -213,15 +216,13 @@ namespace Mtgdb.Controls
 
 		private void createButton(string text, EventHandler clickHandler)
 		{
-			Size deltaSize = _cellSize.MultiplyBy(/*0.1125f*/ 0f).Round();
-
 			var control = new CustomCheckBox
 			{
 				AutoSize = false,
 				AutoCheck = false,
 				Appearance = Appearance.Button,
-				Size = _cellSize.Minus(deltaSize),
-				Margin = _cellMargin.Add(deltaSize),
+				Size = _cellSize,
+				Margin = _cellMargin,
 				BackColor = SystemColors.Control,
 				ForeColor = SystemColors.ControlText,
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -237,17 +238,25 @@ namespace Mtgdb.Controls
 
 		private static void bindForeColor(Control c)
 		{
-			selectForeColor();
-			ColorSchemeController.SystemColorsChanging += selectForeColor;
-
-			void selectForeColor()
-			{
-				c.ForeColor = c.BackColor.TransformHsv(v: _ => (1f - (float) Math.Round(_)).WithinRange(0.3f, 0.7f));
-				c.Invalidate();
-			}
+			selectForeColor(c);
+			ColorSchemeController.SystemColorsChanging += () => selectForeColor(c);
 		}
 
+		private static void selectForeColor(Control c, bool hover = false)
+		{
+			float invert(float _) =>
+				(1f - (float) Math.Round(_)).WithinRange(0.3f, 0.7f);
 
+			float shift(float _) =>
+				(_ + 0.4f * Math.Sign(_ - 0.5f)).Modulo(1);
+
+			if (hover)
+				c.ForeColor = c.BackColor.TransformHsv(v: invert).TransformHsv(h: _ => _ + 60f, s: invert, v: shift);
+			else
+				c.ForeColor = c.BackColor.TransformHsv(v: invert);
+
+			c.Invalidate();
+		}
 
 		private void saveCurrentColorScheme()
 		{
@@ -325,7 +334,7 @@ namespace Mtgdb.Controls
 			bool tryDeserialize(string input, out IReadOnlyDictionary<int, int> result)
 			{
 				result = null;
-				var lines = input.Split(Array.From(Str.Endl), StringSplitOptions.None);
+				var lines = input.Split(Array.From(Str.Endl), StringSplitOptions.RemoveEmptyEntries);
 				var map = new Dictionary<int, int>();
 
 				for (int i = 0; i < lines.Length; i++)
@@ -341,11 +350,14 @@ namespace Mtgdb.Controls
 					string name = match.Groups["name"].Value;
 					string rgbaStr = match.Groups["argb"].Value;
 
-					if (!Enum.TryParse(name, out KnownColor colorName) || !_controller.KnownColors.Contains(colorName))
+					if (!Enum.TryParse(name, out KnownColor colorName))
 					{
 						warnOnInvalidContent($"Invalid color name at line {i + 1}: {name}");
 						return false;
 					}
+
+					if (!_controller.KnownColors.Contains(colorName))
+						continue;
 
 					if (!int.TryParse(rgbaStr, NumberStyles.HexNumber, Str.Culture, out int rgba))
 					{
@@ -376,7 +388,8 @@ namespace Mtgdb.Controls
 			Directory
 				.GetFiles(SaveDirectory, "*" + Ext, SearchOption.TopDirectoryOnly)
 				.Select(Path.GetFileNameWithoutExtension)
-				.Where(n => !Str.Equals(n, CurrentSchemeName));
+				.Where(n => !Str.Equals(n, CurrentSchemeName))
+				.OrderByDescending(n => Str.Equals(n, "system default"));
 
 		public void LoadSavedScheme(string name)
 		{

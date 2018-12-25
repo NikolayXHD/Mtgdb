@@ -12,17 +12,17 @@ namespace Mtgdb.Gui
 
 		public DownloaderSubsystem(
 			SuggestImageDownloaderConfig config,
-			UpdateForm updateForm)
+			FormUpdate formUpdate)
 		{
 			_config = config;
-			_updateForm = updateForm;
+			_formUpdate = formUpdate;
 		}
 
 		public void CalculateProgress()
 		{
-			_updateForm.CalculateProgress();
+			_formUpdate.CalculateProgress();
 
-			var progress = _updateForm.ImageDownloadProgress
+			var progress = _formUpdate.ImageDownloadProgress
 				.Where(p => !Str.Equals(p.QualityGroup.Quality, "Art"))
 				.ToArray();
 
@@ -50,24 +50,24 @@ namespace Mtgdb.Gui
 				_wasAutoShown = true;
 			}
 
-			_updateForm.IsShownAutomatically = auto;
+			_formUpdate.IsShownAutomatically = auto;
 
-			_updateForm.SetWindowLocation(owner);
+			_formUpdate.SetWindowLocation(owner);
 
-			if (!_updateForm.Visible)
-				_updateForm.Show(owner);
+			if (!_formUpdate.Visible)
+				_formUpdate.Show(owner);
 
-			if (!_updateForm.Focused)
-				_updateForm.Focus();
+			if (!_formUpdate.Focused)
+				_formUpdate.Focus();
 		}
 
-		public bool IsProgressCalculated => _updateForm.IsProgressCalculated;
+		public bool IsProgressCalculated => _formUpdate.IsProgressCalculated;
 
 		public event Action ProgressCalculated;
 
 		private bool _wasAutoShown;
 
 		private readonly SuggestImageDownloaderConfig _config;
-		private readonly UpdateForm _updateForm;
+		private readonly FormUpdate _formUpdate;
 	}
 }

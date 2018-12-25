@@ -16,12 +16,10 @@ namespace Mtgdb
 			return val;
 		}
 
-		public static TVal TryGet<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key, TVal defaultValue)
+		public static TVal TryGet<TKey, TVal>(this IReadOnlyDictionary<TKey, TVal> dict, TKey key, TVal defaultValue)
 		{
-			if (key == null)
+			if (key == null || !dict.TryGetValue(key, out var val))
 				return defaultValue;
-
-			dict.TryGetValue(key, out var val);
 
 			return val;
 		}

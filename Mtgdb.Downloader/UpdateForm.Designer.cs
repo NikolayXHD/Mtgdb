@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Downloader
 {
-	sealed partial class UpdateForm
+	sealed partial class FormUpdate
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -31,7 +31,7 @@ namespace Mtgdb.Downloader
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUpdate));
 			this._buttonApp = new System.Windows.Forms.Button();
 			this._textBoxLog = new System.Windows.Forms.RichTextBox();
 			this._buttonImgArt = new System.Windows.Forms.Button();
@@ -330,7 +330,7 @@ namespace Mtgdb.Downloader
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.Name = "UpdateForm";
+			this.Name = "FormUpdate";
 			this.Text = "Mtgdb.Gui updater";
 			this._panelClient.ResumeLayout(false);
 			this._tableLayoutRoot.ResumeLayout(false);

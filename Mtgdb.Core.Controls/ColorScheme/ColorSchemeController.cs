@@ -86,8 +86,11 @@ namespace Mtgdb.Controls
 
 		public void Load(IReadOnlyDictionary<int, int> saved)
 		{
-			foreach (var pair in saved)
-				setColor((KnownColor) pair.Key, pair.Value);
+			foreach (var color in KnownColors)
+			{
+				var value = saved.TryGet((int) color, KnownOriginalColors[(int) color]);
+				setColor(color, value);
+			}
 
 			ThreadData[SystemBrushesKey] = null;
 			ThreadData[SystemPensKey] = null;
@@ -103,8 +106,8 @@ namespace Mtgdb.Controls
 		private IDictionary ThreadData =>
 			(IDictionary) _threadDataProperty.GetValue(null, null);
 
-		private object SystemBrushesKey { get; set; }
-		private object SystemPensKey { get; set; }
+		private object SystemBrushesKey { get; }
+		private object SystemPensKey { get; }
 
 		public readonly HashSet<KnownColor> KnownColors = new HashSet<KnownColor>(
 			new[]
