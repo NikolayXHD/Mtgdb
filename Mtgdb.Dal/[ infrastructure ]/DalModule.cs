@@ -62,6 +62,10 @@ namespace Mtgdb.Dal
 			Kernel.Bind<CardRepositoryLegacy>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.Bind<UiConfigRepository>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 			_kernel.Load<DownloaderModule>();
 			_kernel.Load<GuiModule>();
 
-			Dpi.Initialize(_kernel.Get<UiConfigSubsystem>().Config.UiScalePercent);
+			Dpi.Initialize(_kernel.Get<UiConfigRepository>().Config.UiScalePercent);
 
 			var installer = _kernel.Get<Installer>();
 

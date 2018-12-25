@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 			_buttonMenuCopyCollection.Click += pasteClick;
 			_buttonMenuCopyDeck.Click += pasteClick;
 			_buttonImportExportToMtgArena.Click += buttonImportExportToMtgArenaClick;
-			
+
 			_menuColors.Items[0].Click += buttonColorSchemeClick;
 
 			_buttonImportMtgArenaCollection.Click += buttonImportMtgArenaCollectionClick;
@@ -161,23 +161,7 @@ namespace Mtgdb.Gui
 		private void downloadClick(object sender, EventArgs e) =>
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
 
-		private void setupUiScaleMenu()
-		{
-			var menuItemTexts = _uiConfig.UiScaleValues
-				.Select(scale => scale.ToString(Str.Culture) + " %")
-				.ToArray();
 
-			_menuUiScale.Items.AddRange(menuItemTexts);
-			_menuUiScale.SelectedIndex = _uiConfig.UiScaleValues.IndexOf(_uiConfig.Config.UiScalePercent);
-
-			_menuUiScale.SelectedIndexChanged += (s, e) =>
-			{
-				_uiConfig.Config.UiScalePercent = _uiConfig.UiScaleValues[_menuUiScale.SelectedIndex];
-				_uiConfig.Save();
-
-				MessageBox.Show("Restart Mtgdb.Gui to apply new UI scale factor");
-			};
-		}
 
 		private void setupLanguageMenu()
 		{
@@ -325,7 +309,8 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem.SubscribeToEvents();
 
-			_buttonSubsystem.SetupComboBox(_menuUiScale);
+			_buttonSubsystem.SetupComboBox(_menuUiScale, allowScroll: false);
+			_buttonSubsystem.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
 		}
 
 		private void updateMenuColors()

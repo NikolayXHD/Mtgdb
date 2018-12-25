@@ -10,8 +10,10 @@ namespace Mtgdb.Dal
 			ImageLoader imageLoader,
 			ImageRepository imageRepo,
 			CardRepository cardRepo,
+			UiConfigRepository uiConfigRepository,
 			[Optional, Named("collection")] ICardCollection collection)
 		{
+			UIConfigRepository = uiConfigRepository;
 			CardRepo = cardRepo;
 			Collection = collection;
 			ImageLoader = imageLoader;
@@ -41,5 +43,8 @@ namespace Mtgdb.Dal
 		public ImageRepository ImageRepo { get; }
 
 		public ICardCollection Deck { get; set; }
+		public UiConfig Config => UIConfigRepository.Config;
+
+		private UiConfigRepository UIConfigRepository { get; }
 	}
 }

@@ -8,19 +8,17 @@ namespace Mtgdb.Gui
 {
 	public class ImagePreloadingSubsystem
 	{
-		private readonly MtgLayoutView _layoutViewCards;
-		private readonly MtgLayoutView _layoutViewDeck;
-		private readonly ScrollSubsystem _scrollSubsystem;
-
-		private List<Card> _cardsToPreloadImage;
-		private List<Card> _cardsToPreloadImageStarted;
-		private readonly int _imageCacheCapacity;
-
-		public ImagePreloadingSubsystem(MtgLayoutView layoutViewCards, MtgLayoutView layoutViewDeck, ScrollSubsystem scrollSubsystem, ImageCacheConfig imageCacheConfig)
+		public ImagePreloadingSubsystem(
+			MtgLayoutView layoutViewCards,
+			MtgLayoutView layoutViewDeck,
+			ScrollSubsystem scrollSubsystem,
+			ImageCacheConfig imageCacheConfig,
+			UiConfigRepository uiConfigRepository)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_scrollSubsystem = scrollSubsystem;
+			_uiConfigRepository = uiConfigRepository;
 			_imageCacheCapacity = imageCacheConfig.GetCacheCapacity();
 		}
 
@@ -43,7 +41,7 @@ namespace Mtgdb.Gui
 			{
 				while (!cts.IsCancellationRequested)
 				{
-					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted)
+					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted || !_uiConfigRepository.Config.DisplaySmallImages)
 					{
 						await TaskEx.Delay(200);
 						continue;
@@ -53,7 +51,7 @@ namespace Mtgdb.Gui
 
 					foreach (var card in _cardsToPreloadImageStarted)
 					{
-						if (_cardsToPreloadImage != _cardsToPreloadImageStarted)
+						if (_cardsToPreloadImage != _cardsToPreloadImageStarted || !_uiConfigRepository.Config.DisplaySmallImages)
 							break;
 
 						card.PreloadImage(Ui);
@@ -110,5 +108,14 @@ namespace Mtgdb.Gui
 
 		public UiModel Ui { get; set; }
 		private CancellationTokenSource _cts;
+
+		private readonly MtgLayoutView _layoutViewCards;
+		private readonly MtgLayoutView _layoutViewDeck;
+		private readonly ScrollSubsystem _scrollSubsystem;
+		private readonly UiConfigRepository _uiConfigRepository;
+
+		private List<Card> _cardsToPreloadImage;
+		private List<Card> _cardsToPreloadImageStarted;
+		private readonly int _imageCacheCapacity;
 	}
 }

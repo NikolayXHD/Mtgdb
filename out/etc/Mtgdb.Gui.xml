@@ -51,15 +51,6 @@
 		Path -> ^^^^^^^^^^^^^^^^^^^^ ^^^ <- Set code
 	-->
 	<ImageLocations>
-		<!-- LQ images in search result look blurry with high DPI enabled in
-			Control Panel\All Control Panel Items\Display
-			Uncomment the next directory to use MQ images instead.
-		-->
-
-		<!--
-		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="Any" />
-		-->
-
 		<!--
 			High quality images for modern sets
 			Total size: 3.76 GB

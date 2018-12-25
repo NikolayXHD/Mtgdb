@@ -94,7 +94,7 @@ namespace Mtgdb.Gui
 			ColorSchemeEditor colorSchemeEditor,
 			Application application,
 			AppSourceConfig appSourceConfig,
-			UiConfigSubsystem uiConfig)
+			UiConfigRepository uiConfigRepository)
 			:this()
 		{
 			TooltipController = tooltipController;
@@ -107,7 +107,6 @@ namespace Mtgdb.Gui
 
 			_application = application;
 			_appSourceConfig = appSourceConfig;
-			_uiConfig = uiConfig;
 			_repo = repo;
 			_serialization = serialization;
 			_colorSchemeEditor = colorSchemeEditor;
@@ -147,7 +146,10 @@ namespace Mtgdb.Gui
 			setupExternalLinks();
 			setupButtonClicks();
 			setupLanguageMenu();
-			setupUiScaleMenu();
+
+			_uiConfigMenuSubsystem = new UiConfigMenuSubsystem(_menuUiScale, _menuUiSmallImageQuality, uiConfigRepository);
+			_uiConfigMenuSubsystem.SetupMenu();
+
 			setupTooltips();
 
 			foreach (var button in _deckButtons)
@@ -217,7 +219,12 @@ namespace Mtgdb.Gui
 				titleButton.ScaleDpi();
 
 			_labelUiScale.ScaleDpi();
+			_labelUiScaleHint.ScaleDpi();
+			_labelUiUseSmallImages.ScaleDpi();
+			_labelUiUseSmallImagesHint.ScaleDpi();
+
 			_menuUiScale.ScaleDpi();
+			_menuUiSmallImageQuality.ScaleDpi();
 			_buttonEditConfig.Height = _buttonEditConfig.Height.ByDpiHeight();
 			_buttonEditConfig.ScaleDpiFont();
 
@@ -661,9 +668,9 @@ namespace Mtgdb.Gui
 		private readonly NewsService _newsService;
 		private readonly Application _application;
 		private readonly AppSourceConfig _appSourceConfig;
-		private readonly UiConfigSubsystem _uiConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 		private readonly ColorSchemeEditor _colorSchemeEditor;
+		private readonly UiConfigMenuSubsystem _uiConfigMenuSubsystem;
 	}
 }

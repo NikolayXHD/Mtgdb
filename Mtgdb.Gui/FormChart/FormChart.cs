@@ -236,7 +236,7 @@ namespace Mtgdb.Gui
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
 
 			foreach (var menu in _menus)
-				_buttonSubsystem.SetupComboBox(menu);
+				_buttonSubsystem.SetupComboBox(menu, allowScroll: true);
 
 			_buttonSubsystem.SetupButton(_buttonSave, new ButtonImages(Resources.save_16, Resources.save_32));
 			_buttonSubsystem.SetupButton(_buttonLoad, new ButtonImages(Resources.open_16, Resources.open_32));

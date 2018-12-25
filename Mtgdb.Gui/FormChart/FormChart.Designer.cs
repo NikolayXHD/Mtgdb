@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChart));
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.CustomCheckBox();
@@ -105,8 +105,8 @@
 			// _chart
 			// 
 			this._chart.Dock = System.Windows.Forms.DockStyle.Fill;
-			legend3.Name = "Legend1";
-			this._chart.Legends.Add(legend3);
+			legend1.Name = "Legend1";
+			this._chart.Legends.Add(legend1);
 			this._chart.Location = new System.Drawing.Point(0, 120);
 			this._chart.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this._chart.Name = "_chart";
@@ -701,7 +701,7 @@
 			this._buttonMruFiles.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonMruFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonMruFiles.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonMruFiles.Image = ((System.Drawing.Image)(resources.GetObject("_buttonMruFiles.Image")));
+			this._buttonMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
 			this._buttonMruFiles.Location = new System.Drawing.Point(51, 13);
 			this._buttonMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
 			this._buttonMruFiles.Name = "_buttonMruFiles";
@@ -723,7 +723,7 @@
 			this._buttonLoad.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLoad.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonLoad.Image = ((System.Drawing.Image)(resources.GetObject("_buttonLoad.Image")));
+			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
 			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
 			this._buttonLoad.Name = "_buttonLoad";
@@ -745,7 +745,7 @@
 			this._buttonSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(51)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this._buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSave.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("_buttonSave.Image")));
+			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSave.Location = new System.Drawing.Point(123, 13);
 			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);
 			this._buttonSave.Name = "_buttonSave";

@@ -24,6 +24,7 @@ namespace Mtgdb.Gui
 			ImageRepository imageRepo,
 			ImageCacheConfig imageCacheConfig,
 			ImageLoader imageLoader,
+			UiConfigRepository uiConfigRepository,
 			CollectionEditorModel collectionEditor,
 			CardSearcher cardSearcher,
 			CardDocumentAdapter cardAdapter,
@@ -96,7 +97,8 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_viewDeck,
 				_scroll,
-				imageCacheConfig);
+				imageCacheConfig,
+				uiConfigRepository);
 
 			_deckEditor = new DeckEditorModel();
 
@@ -419,13 +421,6 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckTransformed += deckListTransformed;
 
 			_formZoom.SettingsChanged += zoomSettingsChanged;
-
-			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
-
-			// _searchEditor.LostFocus += (s, e) =>
-			// {
-			//
-			// };
 		}
 
 		private void unsubscribeFromEvents()
@@ -511,8 +506,6 @@ namespace Mtgdb.Gui
 			_deckListControl.DeckTransformed -= deckListTransformed;
 
 			_formZoom.SettingsChanged -= zoomSettingsChanged;
-
-			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 		}
 
 		public Zone? DeckZone

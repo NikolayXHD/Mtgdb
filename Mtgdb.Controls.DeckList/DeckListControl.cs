@@ -84,7 +84,7 @@ namespace Mtgdb.Controls
 
 			updateSortLabel();
 
-			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode);
+			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
 		}
 
 		private static Cursor createTextSelectionCursor()

@@ -166,8 +166,7 @@
     <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\TabHeadersTooltip.cs" />
-    <Compile Include="FormRoot\UiConfig.cs" />
-    <Compile Include="FormRoot\UiConfigSubsystem.cs" />
+    <Compile Include="FormRoot\UiConfigMenuSubsystem.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

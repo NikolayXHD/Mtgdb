@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 		}
 
 
-		public void SetupComboBox(ComboBox menu)
+		public void SetupComboBox(ComboBox menu, bool allowScroll)
 		{
 			const TextFormatFlags textFormat =
 				TextFormatFlags.NoClipping |
@@ -96,6 +96,12 @@ namespace Mtgdb.Controls
 
 				e.DrawFocusRectangle();
 			};
+
+			if (!allowScroll)
+				menu.MouseWheel += (s, e) =>
+				{
+					((HandledMouseEventArgs) e).Handled = true;
+				};
 		}
 
 		public void SubscribeToEvents()

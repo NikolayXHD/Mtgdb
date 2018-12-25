@@ -135,6 +135,8 @@
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />
     <Compile Include="Model\Patch\Patch.cs" />
+    <Compile Include="Model\Ui\UiConfig.cs" />
+    <Compile Include="Model\Ui\UiConfigRepository.cs" />
     <Compile Include="MtgArenaIntegration.cs" />
     <Compile Include="PriceDownloaderRepository.cs" />
     <Compile Include="Model\Price\PriceId.cs" />

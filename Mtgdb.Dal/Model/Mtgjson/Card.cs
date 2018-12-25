@@ -654,6 +654,13 @@ namespace Mtgdb.Dal
 
 		public ImageModel ImageModel(UiModel ui)
 		{
+			return ui.Config.DisplaySmallImages 
+				? getImageModel(ui) 
+				: getZoomImageModel(ui);
+		}
+
+		private ImageModel getImageModel(UiModel ui)
+		{
 			if (!_imageModelSelected)
 			{
 				if (!ui.ImageRepo.IsLoadingSmallComplete)
@@ -664,6 +671,20 @@ namespace Mtgdb.Dal
 			}
 
 			return _imageModel;
+		}
+
+		private ImageModel getZoomImageModel(UiModel ui)
+		{
+			if (!_zoomImageModelSelected)
+			{
+				if (!ui.ImageRepo.IsLoadingZoomComplete)
+					return null;
+
+				_zoomImageModel = ui.CardRepo.GetZoomImages(this, ui.ImageRepo).FirstOrDefault();
+				_zoomImageModelSelected = true;
+			}
+
+			return _zoomImageModel;
 		}
 
 		public void ResetImageModel()
@@ -761,7 +782,13 @@ namespace Mtgdb.Dal
 		private ImageModel _imageModel;
 
 		[JsonIgnore]
+		private ImageModel _zoomImageModel;
+
+		[JsonIgnore]
 		private bool _imageModelSelected;
+
+		[JsonIgnore]
+		private bool _zoomImageModelSelected;
 
 		[JsonIgnore]
 		private readonly Dictionary<(string PropertyName, string Language), string> _namesakeTranslations =

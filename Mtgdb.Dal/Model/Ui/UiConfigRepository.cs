@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Dal
 {
-	public class UiConfigSubsystem
+	public class UiConfigRepository
 	{
 		private UiConfig _config;
 		public UiConfig Config => _config ?? (_config = readConfig());

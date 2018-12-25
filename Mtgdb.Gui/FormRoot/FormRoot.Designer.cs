@@ -101,9 +101,13 @@ namespace Mtgdb.Gui
 			this._menuColors = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._menuItemEditColorScheme = new System.Windows.Forms.ToolStripMenuItem();
 			this._menuConfig = new Mtgdb.Controls.BorderedTableLayoutPanel();
+			this._labelUiUseSmallImagesHint = new System.Windows.Forms.Label();
 			this._labelUiScale = new System.Windows.Forms.Label();
 			this._menuUiScale = new System.Windows.Forms.ComboBox();
 			this._buttonEditConfig = new Mtgdb.Controls.CustomCheckBox();
+			this._labelUiScaleHint = new System.Windows.Forms.Label();
+			this._labelUiUseSmallImages = new System.Windows.Forms.Label();
+			this._menuUiSmallImageQuality = new System.Windows.Forms.ComboBox();
 			this._panelCaption.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
@@ -333,7 +337,7 @@ namespace Mtgdb.Gui
 			this._buttonSaveDeck.FlatAppearance.BorderSize = 0;
 			this._buttonSaveDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSaveDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonSaveDeck.Image = ((System.Drawing.Image)(resources.GetObject("_buttonSaveDeck.Image")));
+			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSaveDeck.Location = new System.Drawing.Point(76, 3);
 			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
 			this._buttonSaveDeck.Name = "_buttonSaveDeck";
@@ -352,7 +356,7 @@ namespace Mtgdb.Gui
 			this._buttonOpenDeck.FlatAppearance.BorderSize = 0;
 			this._buttonOpenDeck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonOpenDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonOpenDeck.Image = ((System.Drawing.Image)(resources.GetObject("_buttonOpenDeck.Image")));
+			this._buttonOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonOpenDeck.Location = new System.Drawing.Point(44, 3);
 			this._buttonOpenDeck.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonOpenDeck.Name = "_buttonOpenDeck";
@@ -408,7 +412,7 @@ namespace Mtgdb.Gui
 			this._menuOpen.Controls.Add(this._buttonVisitForge, 0, 5);
 			this._menuOpen.Controls.Add(this._buttonVisitMtgArena, 0, 6);
 			this._menuOpen.Controls.Add(this._buttonImportMtgArenaCollection, 1, 7);
-			this._menuOpen.Location = new System.Drawing.Point(525, 227);
+			this._menuOpen.Location = new System.Drawing.Point(349, 269);
 			this._menuOpen.Margin = new System.Windows.Forms.Padding(1);
 			this._menuOpen.Name = "_menuOpen";
 			this._menuOpen.RowCount = 11;
@@ -1429,40 +1433,61 @@ namespace Mtgdb.Gui
 			this._menuConfig.ColumnCount = 2;
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuConfig.Controls.Add(this._labelUiUseSmallImagesHint, 0, 3);
 			this._menuConfig.Controls.Add(this._labelUiScale, 0, 0);
 			this._menuConfig.Controls.Add(this._menuUiScale, 1, 0);
-			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 1);
-			this._menuConfig.Location = new System.Drawing.Point(546, 62);
+			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 4);
+			this._menuConfig.Controls.Add(this._labelUiScaleHint, 0, 1);
+			this._menuConfig.Controls.Add(this._labelUiUseSmallImages, 0, 2);
+			this._menuConfig.Controls.Add(this._menuUiSmallImageQuality, 1, 2);
+			this._menuConfig.Location = new System.Drawing.Point(653, 62);
 			this._menuConfig.Name = "_menuConfig";
-			this._menuConfig.RowCount = 2;
+			this._menuConfig.RowCount = 5;
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this._menuConfig.Size = new System.Drawing.Size(178, 69);
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.Size = new System.Drawing.Size(200, 265);
 			this._menuConfig.TabIndex = 39;
 			this._menuConfig.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			// 
+			// _labelUiUseSmallImagesHint
+			// 
+			this._labelUiUseSmallImagesHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuConfig.SetColumnSpan(this._labelUiUseSmallImagesHint, 2);
+			this._labelUiUseSmallImagesHint.Location = new System.Drawing.Point(3, 103);
+			this._labelUiUseSmallImagesHint.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
+			this._labelUiUseSmallImagesHint.Name = "_labelUiUseSmallImagesHint";
+			this._labelUiUseSmallImagesHint.Size = new System.Drawing.Size(194, 114);
+			this._labelUiUseSmallImagesHint.TabIndex = 40;
+			this._labelUiUseSmallImagesHint.Text = "NOTE: select \"High (MQ)\" to prevent image blurness\r\n\r\n- if you set \"User interfac" +
+    "e scale\" setting above more than 100% \r\n\r\n- if you have Windows DPI setting more" +
+    " than default 96 dots per inch\r\n\r\n";
+			// 
 			// _labelUiScale
 			// 
-			this._labelUiScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._labelUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiScale.AutoSize = true;
 			this._labelUiScale.Location = new System.Drawing.Point(3, 7);
 			this._labelUiScale.Name = "_labelUiScale";
-			this._labelUiScale.Size = new System.Drawing.Size(106, 13);
+			this._labelUiScale.Size = new System.Drawing.Size(108, 13);
 			this._labelUiScale.TabIndex = 35;
-			this._labelUiScale.Text = "User interface scale:";
+			this._labelUiScale.Text = "User Interface scale:";
 			// 
 			// _menuUiScale
 			// 
 			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuUiScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiScale.FormattingEnabled = true;
-			this._menuUiScale.Location = new System.Drawing.Point(115, 3);
+			this._menuUiScale.IntegralHeight = false;
+			this._menuUiScale.Location = new System.Drawing.Point(117, 3);
 			this._menuUiScale.Name = "_menuUiScale";
-			this._menuUiScale.Size = new System.Drawing.Size(60, 21);
+			this._menuUiScale.Size = new System.Drawing.Size(80, 21);
 			this._menuUiScale.TabIndex = 36;
+			this._menuUiScale.TabStop = false;
 			// 
 			// _buttonEditConfig
 			// 
@@ -1474,14 +1499,47 @@ namespace Mtgdb.Gui
 			this._buttonEditConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonEditConfig.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonEditConfig.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonEditConfig.Location = new System.Drawing.Point(2, 33);
-			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(2, 6, 2, 2);
+			this._buttonEditConfig.Location = new System.Drawing.Point(2, 229);
+			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(2, 0, 2, 2);
 			this._buttonEditConfig.Name = "_buttonEditConfig";
-			this._buttonEditConfig.Size = new System.Drawing.Size(174, 34);
+			this._buttonEditConfig.Size = new System.Drawing.Size(196, 34);
 			this._buttonEditConfig.TabIndex = 34;
 			this._buttonEditConfig.TabStop = false;
 			this._buttonEditConfig.Text = "Edit configuration file";
 			this._buttonEditConfig.UseVisualStyleBackColor = false;
+			// 
+			// _labelUiScaleHint
+			// 
+			this._labelUiScaleHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuConfig.SetColumnSpan(this._labelUiScaleHint, 2);
+			this._labelUiScaleHint.Location = new System.Drawing.Point(3, 30);
+			this._labelUiScaleHint.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
+			this._labelUiScaleHint.Name = "_labelUiScaleHint";
+			this._labelUiScaleHint.Size = new System.Drawing.Size(194, 31);
+			this._labelUiScaleHint.TabIndex = 37;
+			this._labelUiScaleHint.Text = "NOTE: restart is needed to apply new UI scale";
+			// 
+			// _labelUiUseSmallImages
+			// 
+			this._labelUiUseSmallImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this._labelUiUseSmallImages.AutoSize = true;
+			this._labelUiUseSmallImages.Location = new System.Drawing.Point(10, 80);
+			this._labelUiUseSmallImages.Name = "_labelUiUseSmallImages";
+			this._labelUiUseSmallImages.Size = new System.Drawing.Size(101, 13);
+			this._labelUiUseSmallImages.TabIndex = 38;
+			this._labelUiUseSmallImages.Text = "Small image quality:";
+			// 
+			// _menuUiSmallImageQuality
+			// 
+			this._menuUiSmallImageQuality.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiSmallImageQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this._menuUiSmallImageQuality.FormattingEnabled = true;
+			this._menuUiSmallImageQuality.IntegralHeight = false;
+			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(117, 76);
+			this._menuUiSmallImageQuality.Name = "_menuUiSmallImageQuality";
+			this._menuUiSmallImageQuality.Size = new System.Drawing.Size(80, 21);
+			this._menuUiSmallImageQuality.TabIndex = 39;
+			this._menuUiSmallImageQuality.TabStop = false;
 			// 
 			// FormRoot
 			// 
@@ -1595,5 +1653,9 @@ namespace Mtgdb.Gui
 		private Controls.CustomCheckBox _buttonEditConfig;
 		private Label _labelUiScale;
 		private ComboBox _menuUiScale;
+		private Label _labelUiScaleHint;
+		private Label _labelUiUseSmallImages;
+		private ComboBox _menuUiSmallImageQuality;
+		private Label _labelUiUseSmallImagesHint;
 	}
 }

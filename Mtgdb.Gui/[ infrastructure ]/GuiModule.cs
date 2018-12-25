@@ -111,10 +111,6 @@ namespace Mtgdb.Gui
 			Kernel.Bind<ColorSchemeEditor>()
 				.ToSelf()
 				.InSingletonScope();
-
-			Kernel.Bind<UiConfigSubsystem>()
-				.ToSelf()
-				.InSingletonScope();
 		}
 	}
 }

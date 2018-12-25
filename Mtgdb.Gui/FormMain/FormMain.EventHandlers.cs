@@ -366,8 +366,6 @@ namespace Mtgdb.Gui
 
 		private void filterByDeckModeChanged(object sender)
 		{
-			_viewCards.Focus();
-
 			if (restoringSettings())
 				return;
 
@@ -582,7 +580,6 @@ namespace Mtgdb.Gui
 
 			RunRefilterTask();
 			historyUpdate();
-			_viewCards.Focus();
 		}
 
 		private void showFilterPanelsChanged()
@@ -720,7 +717,7 @@ namespace Mtgdb.Gui
 			_buttons.SetupButton(_buttonResetFilters,
 				new ButtonImages(Resources.erase, x2: true));
 
-			_buttons.SetupComboBox(_menuLegalityFormat);
+			_buttons.SetupComboBox(_menuLegalityFormat, allowScroll: false);
 		}
 
 
@@ -780,17 +777,6 @@ namespace Mtgdb.Gui
 
 			if (!restoringSettings())
 				_history.Current.Zoom = _formZoom.Settings;
-		}
-
-		private void systemColorsChanging()
-		{
-			var color = _menuLegalityFormat.BackColor;
-			_menuLegalityFormat.BackColor = Color.Black;
-			_menuLegalityFormat.BackColor = color;
-
-			color = _menuLegalityFormat.ForeColor;
-			_menuLegalityFormat.ForeColor = Color.Black;
-			_menuLegalityFormat.ForeColor = color;
 		}
 
 		private void resetFiltersClick(object sender, EventArgs e)
