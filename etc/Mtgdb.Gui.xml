@@ -116,7 +116,24 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pWPN"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2012" />
 		<Directory Group="xlhq" Zoom="Any" Set="pGPX"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Grand Prix" />
 		<Directory Group="xlhq" Zoom="Any" Set="pGRU"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Guru" />
-		<Directory Group="xlhq" Zoom="Any" Set="pJGP"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="jgp"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\1998" />
+		<Directory Group="xlhq" Zoom="Any" Set="g99"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\1999" />
+		<Directory Group="xlhq" Zoom="Any" Set="g00"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="g01"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="g03"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="g04"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="g05"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="g06"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="g07"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="g08"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="g09"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="g10"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="g11"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="j12"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="j13"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2013" />
+		<Directory Group="xlhq" Zoom="Any" Set="j14"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2014" />
+		<Directory Group="xlhq" Zoom="Any" Set="j15"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Judge\2015" />
 
 		<Directory Group="xlhq" Zoom="Any" Set="pjas"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\APAC Junior Series" />
 		<Directory Group="xlhq" Zoom="Any" Set="pjjt"      Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Junior Series\Japan Junior Tournament" />
