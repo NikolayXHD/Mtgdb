@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -10,10 +11,20 @@ namespace Mtgdb.Dal
 		[DataMember(Name = "Directory")]
 		public DirectoryConfig[] Directories { get; set; }
 
+		[DataMember(Name = "Root")]
+		public RootConfig[] Roots { get; set; }
+
 		public IList<DirectoryConfig> GetEnabledDirectories(IEnumerable<string> enabledGroups = null)
 		{
+			var rootsByName = Roots.ToDictionary(_ => _.Name, Str.Comparer);
+
 			foreach (var directory in Directories)
+			{
+				if (!string.IsNullOrEmpty(directory.Root))
+					directory.Path = Path.Combine(rootsByName[directory.Root].Path, directory.Path);
+
 				directory.Path = directory.Path.ToAppRootedPath();
+			}
 
 			if (EnabledGroups == null)
 				return Directories;
@@ -32,6 +43,9 @@ namespace Mtgdb.Dal
 	[DataContract]
 	public class DirectoryConfig
 	{
+		[DataMember(Name = "Root")]
+		public string Root { get; set; }
+
 		[DataMember(Name = "Path")]
 		public string Path { get; set; }
 
@@ -52,6 +66,15 @@ namespace Mtgdb.Dal
 
 		[DataMember(Name = "Group")]
 		public string Group { get; set; }
+	}
+
+	public class RootConfig
+	{
+		[DataMember(Name = "Name")]
+		public string Name { get; set; }
+
+		[DataMember(Name = "Path")]
+		public string Path { get; set; }
 	}
 
 	public static class ImageType
