@@ -1,19 +1,15 @@
 {
   "DataSource": 2,
   "ApplyFilter": true,
-  "SeriesFields": [
-    "SetCode",
-    "SetName"
-  ],
-  "SeriesFieldsSort": [
-    0,
-    0
-  ],
+  "SeriesFields": [],
+  "SeriesFieldsSort": [],
   "ColumnFields": [
-    "SetName"
+    "SetName",
+    "SetCode"
   ],
   "ColumnFieldsSort": [
-    1
+    1,
+    0
   ],
   "SummaryFields": [
     "NameEn"
@@ -24,8 +20,8 @@
   "SummarySort": [
     0
   ],
-  "ChartType": 33,
-  "LabelDataElement": 3,
+  "ChartType": 8,
+  "LabelDataElement": 0,
   "ShowArgumentTotal": false,
   "ShowSeriesTotal": false,
   "ExplainTotal": false
