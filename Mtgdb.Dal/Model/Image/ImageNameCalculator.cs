@@ -11,15 +11,38 @@ namespace Mtgdb.Dal
 		{
 			foreach (var pair in set.CardsByName)
 			{
-				var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(pair.Key);
-				var cards = ReOrderCards(pair.Value, customImageOrder);
+				var cards = pair.Value;
+				if (cards.First().IsFlipped())
+				{
+					var unflippedCardName = cards.First().Names[0];
 
-				for (int i = 0; i < cards.Count; i++)
-					cards[i].ImageName = CalculateImageName(cards[i], i, cards.Count, customImageOrder);
+					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(unflippedCardName);
+					string imageName = customImageOrder?.ImageName ?? unflippedCardName;
+
+					for (int i = 0; i < cards.Count; i++)
+						cards[i].ImageName = calculateImageName(imageName, i, cards.Count);
+				}
+				else
+				{
+					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(pair.Key);
+					cards = reOrderCards(pair.Value, customImageOrder);
+
+					for (int i = 0; i < cards.Count; i++)
+					{
+						var card = cards[i];
+
+						string imageName = customImageOrder?.ImageName ?? (
+							Str.Equals(card.Layout, "split")
+								? string.Concat(card.Names)
+								: card.NameEn);
+
+						card.ImageName = calculateImageName(imageName, i, cards.Count);
+					}
+				}
 			}
 		}
 
-		internal static List<Card> ReOrderCards(List<Card> cardNamesakes, ImageNamePatch correction)
+		private static List<Card> reOrderCards(List<Card> cardNamesakes, ImageNamePatch correction)
 		{
 			var reordered = cardNamesakes
 				.OrderBy(n =>
@@ -49,18 +72,10 @@ namespace Mtgdb.Dal
 			return reordered;
 		}
 
-		internal static string CalculateImageName(Card card, int i, int count, ImageNamePatch correction)
+		private static string calculateImageName(string name, int i, int count)
 		{
-			if (correction?.ImageName != null)
-				return correction.ImageName;
-
-			string imageName = Str.Equals(card.Layout, "split")
-				? string.Concat(card.Names)
-				: card.NameEn;
-
-			var normalizedImageName = imageName.RemoveDiacritics().Replace("/", " ");
+			var normalizedImageName = name.RemoveDiacritics().Replace("/", " ");
 			var clearedImageName = _removedSubstringPattern.Replace(normalizedImageName, string.Empty);
-
 
 			if (count == 1)
 				return clearedImageName;

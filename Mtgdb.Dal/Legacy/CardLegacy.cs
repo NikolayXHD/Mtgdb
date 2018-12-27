@@ -93,10 +93,6 @@ namespace Mtgdb.Dal
 		[JsonProperty("imageName")]
 		public string ImageNameOriginal { get; internal set; }
 
-		[JsonConverter(typeof(InternedStringConverter))]
-		[JsonProperty("layout")]
-		public string Layout { get; set; }
-
 		/// <summary>
 		/// The multiverseid of the card on Wizard's Gatherer web page. Cards from sets that do not exist on Gatherer will NOT have a multiverseid. Sets not on Gatherer are: ATH, ITP, DKM, RQS, DPA and all sets with a 4 letter code that starts with a lowercase 'p'.
 		/// </summary>
@@ -122,9 +118,6 @@ namespace Mtgdb.Dal
 
 			if (patch.Type != null)
 				TypeEn = patch.Type;
-
-			if (patch.Layout != null)
-				Layout = patch.Layout;
 
 			if (patch.Names != null)
 				Names = patch.Names;

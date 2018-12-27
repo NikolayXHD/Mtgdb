@@ -132,9 +132,6 @@ namespace Mtgdb.Dal
 				{
 					card.Number = card.Number.Substring(0, card.Number.Length - 1);
 					card.Names = null;
-
-					if (Str.Equals(card.Layout, "flip"))
-						card.Layout = "normal";
 				}
 			}
 		}
