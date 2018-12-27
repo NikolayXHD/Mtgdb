@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Ninject;
 
@@ -33,6 +34,21 @@ namespace Mtgdb.Dal
 		{
 			CardRepo = repo;
 			Collection = collection;
+		}
+
+		public ImageModel GetSmallImage(Card card)
+		{
+			return ImageRepo.GetSmallImage(card, CardRepo.GetReleaseDateSimilarity);
+		}
+
+		public List<ImageModel> GetZoomImages(Card card)
+		{
+			return ImageRepo.GetZooms(card, CardRepo.GetReleaseDateSimilarity);
+		}
+
+		public IReadOnlyList<ImageModel> GetImagesArt(Card card)
+		{
+			return ImageRepo.GetArts(card, CardRepo.GetReleaseDateSimilarity);
 		}
 
 		public LanguageController LanguageController { get; }

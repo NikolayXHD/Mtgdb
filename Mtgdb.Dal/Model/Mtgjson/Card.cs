@@ -666,7 +666,7 @@ namespace Mtgdb.Dal
 				if (!ui.ImageRepo.IsLoadingSmallComplete)
 					return null;
 
-				_imageModel = ui.CardRepo.GetSmallImage(this, ui.ImageRepo);
+				_imageModel = ui.GetSmallImage(this);
 				_imageModelSelected = true;
 			}
 
@@ -680,7 +680,7 @@ namespace Mtgdb.Dal
 				if (!ui.ImageRepo.IsLoadingZoomComplete)
 					return null;
 
-				_zoomImageModel = ui.CardRepo.GetZoomImages(this, ui.ImageRepo).FirstOrDefault();
+				_zoomImageModel = ui.GetZoomImages(this).FirstOrDefault();
 				_zoomImageModelSelected = true;
 			}
 

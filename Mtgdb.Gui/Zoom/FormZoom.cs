@@ -177,7 +177,7 @@ namespace Mtgdb.Gui
 					return;
 
 				if (_showArt)
-					foreach (var model in _cardRepository.GetImagesArt(_cardForms[j], _imageRepository))
+					foreach (var model in _ui.GetImagesArt(_cardForms[j]))
 					{
 						while (index > _imageIndex + 10 && !token.IsCancellationRequested)
 							await TaskEx.Delay(100);
@@ -198,7 +198,7 @@ namespace Mtgdb.Gui
 						index++;
 					}
 
-				foreach (var model in _cardRepository.GetZoomImages(_cardForms[j], _imageRepository))
+				foreach (var model in _ui.GetZoomImages(_cardForms[j]))
 				{
 					while (index > _imageIndex + 10 && !token.IsCancellationRequested)
 						await TaskEx.Delay(100);

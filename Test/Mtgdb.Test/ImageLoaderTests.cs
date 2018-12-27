@@ -38,7 +38,7 @@ namespace Mtgdb.Test
 				isCornerRemoved = false;
 				isFoundInCache = false;
 
-				var model = Repo.GetSmallImage(card, ImgRepo);
+				var model = Ui.GetSmallImage(card);
 				imageLoader.GetSmallImage(model);
 
 				string message = $"{card.SetCode} {model.ImageFile.FullPath}";

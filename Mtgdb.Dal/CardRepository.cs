@@ -288,21 +288,6 @@ namespace Mtgdb.Dal
 			return 0;
 		}
 
-		public ImageModel GetSmallImage(Card card, ImageRepository repository)
-		{
-			return repository.GetSmallImage(card, GetReleaseDateSimilarity);
-		}
-
-		public List<ImageModel> GetZoomImages(Card card, ImageRepository repository)
-		{
-			return repository.GetZooms(card, GetReleaseDateSimilarity);
-		}
-
-		public List<ImageModel> GetImagesArt(Card card, ImageRepository repository)
-		{
-			return repository.GetArts(card, GetReleaseDateSimilarity) ?? new List<ImageModel>();
-		}
-
 		public string GetReleaseDateSimilarity(string cardSet, string setCode)
 		{
 			var cardReleaseDate = parseReleaseDate(SetsByCode.TryGet(cardSet)?.ReleaseDate);

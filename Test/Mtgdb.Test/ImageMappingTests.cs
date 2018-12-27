@@ -26,8 +26,8 @@ namespace Mtgdb.Test
 			foreach (var set in Repo.SetsByCode)
 				foreach (var card in set.Value.Cards)
 				{
-					var small = Repo.GetSmallImage(card, ImgRepo);
-					var zooms = Repo.GetZoomImages(card, ImgRepo);
+					var small = Ui.GetSmallImage(card);
+					var zooms = Ui.GetZoomImages(card);
 
 					if (small == null || zooms == null || zooms.Count == 0)
 						messages.Add($"{card.SetCode} {card.ImageName}");
@@ -44,8 +44,8 @@ namespace Mtgdb.Test
 			foreach (var set in Repo.SetsByCode)
 				foreach (var card in set.Value.Cards)
 				{
-					var small = Repo.GetSmallImage(card, ImgRepo);
-					var zooms = Repo.GetZoomImages(card, ImgRepo);
+					var small = Ui.GetSmallImage(card);
+					var zooms = Ui.GetZoomImages(card);
 
 					var smallPath = small.ImageFile.FullPath;
 					var zoomPath = zooms[0].ImageFile.FullPath;
@@ -101,7 +101,7 @@ namespace Mtgdb.Test
 			var set = Repo.SetsByCode[setCode];
 			foreach (var card in set.Cards)
 			{
-				var imageModel = Repo.GetSmallImage(card, ImgRepo);
+				var imageModel = Ui.GetSmallImage(card);
 				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
 				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, card.ImageName);
 			}

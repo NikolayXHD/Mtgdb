@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ReadOnlyCollectionsExtensions;
 using Shell32;
 
 namespace Mtgdb.Dal
@@ -392,17 +393,20 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		public List<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
+		public IReadOnlyList<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
 			if (!IsLoadingArtComplete)
-				return null;
+				return Empty<ImageModel>.ReadOnlyList;
 
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
 
-			var distinctModels = models?
+			if (models == null)
+				return Empty<ImageModel>.ReadOnlyList;
+
+			var distinctModels = models
 				.GroupBy(_ => _.ImageFile.FullPath)
 				.Select(_ => _.First().ImageFile.NonRotated())
-				.ToList();
+				.ToReadOnlyList();
 
 			return distinctModels;
 		}
