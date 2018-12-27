@@ -33,6 +33,9 @@ namespace Mtgdb.Controls
 		public static int ByDpiWidth(this int width) =>
 			(width * _scale.Width).Round();
 
+		public static int ByDpiWidth(this float width) =>
+			(width * _scale.Width).Round();
+
 		public static int ByDpiHeight(this int height) =>
 			(height * _scale.Height).Round();
 

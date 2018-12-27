@@ -247,6 +247,7 @@ namespace Mtgdb.Gui
 				qf.ImageSize = qf.ImageSize.ByDpi();
 				qf.HintTextShift = qf.HintTextShift.ByDpi();
 				qf.HintIcon = qf.HintIcon?.ResizeDpi();
+				qf.SelectionBorder = qf.SelectionBorder.ByDpiWidth();
 			}
 
 			int border = FilterManaCost.Border;
