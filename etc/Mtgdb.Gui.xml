@@ -49,6 +49,11 @@
 			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\Pre-Release Promos" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="XLHQ" Path="Other\Vintage Champs 300DPI" />
 
+		<Directory Group="xlhq" Zoom="Any" Set="pmps10"
+			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmps11"
+			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2012" />
+
 		<Directory Group="xlhq" Zoom="Any"                 Root="Torrent" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="MMA"       Root="Torrent" Path="MM1" />
 		<Directory Group="xlhq" Zoom="Any" Set="RQS;ITP"   Root="Torrent" Path="I2P" />
@@ -75,13 +80,11 @@
 		<Directory Group="xlhq" Zoom="Any" Set="pCEL"  Root="Promo" Path="Other\Richard Garfield" />
 		<Directory Group="xlhq" Zoom="Any" Set="pWOS"  Root="Promo" Path="Other\WotC Online Store" />
 		<Directory Group="xlhq" Zoom="Any" Set="s99"   Root="Promo" Path="Oversized\6x9\Starter" />
-		<Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition" />
-		<Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition Promos" />
-		<Directory Group="xlhq" Zoom="Any" Set="9ED"   Root="Promo" Path="Oversized\Boxtoppers\Ninth Edition" />
-		<Directory Group="xlhq" Zoom="Any" Set="CMD"   Root="Promo" Path="Oversized\Commanders\Commander 2011 Launch Party" />
-
-		<Directory Group="xlhq" Zoom="Any" Set="phel"   Root="Promo" Path="Oversized\Commanders\Helvault" />
+		<Directory Group="xlhq" Zoom="Any" Set="ocmd"  Root="Promo" Path="Oversized\Commanders\Commander 2011 Launch Party" />
+		<Directory Group="xlhq" Zoom="Any" Set="phel"  Root="Promo" Path="Oversized\Commanders\Helvault" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"   Root="Promo" Path="Oversized\Vintage Championship" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="prel"  Root="Promo" Path="Oversized\6x9\Release Events" />
 		<Directory Group="xlhq" Zoom="Any" Set="pdd2"  Root="Promo" Path="Set Promos\Jace vs Chandra Anime" />
 		<Directory Group="xlhq" Zoom="Any" Set="ppre"  Root="Promo" Path="Set Promos\Prerelease" />
 		<Directory Group="xlhq" Zoom="Any" Set="prel"  Root="Promo" Path="Set Promos\Release and Launch Party\2003" />
@@ -202,6 +205,12 @@
 		<!-- redundant ?
 
 		<Directory Group="xlhq" Zoom="Any" Set="mpr;pr2;p03;p04;p05;p06;p07;p08;p09;p10;p11" Root="Promo" Path="Oversized\Magic Player Rewards" />
+		<Directory Group="xlhq" Zoom="Any" Set="9ED"   Root="Promo" Path="Oversized\Boxtoppers\Ninth Edition" />
+		<Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition" />
+		<Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition Promos" />
+
+		"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
+			moved to \patch and split by year
 
 		-->
 
@@ -227,16 +236,12 @@
 
 		<!-- Not mapped
 
-		<Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
-
-		D:\Distrib\games\mtg\XLHQ Promos
-
-		"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
 		"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Dengeki Character Festival"
 		"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Prerelease Pack Promos"
 		"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Hero's Path"
 		"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Duels of the Planeswalkers Reward Cards"
 
+		<Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
 		<Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Duels of the Planeswalkers Reward Cards" />
 		<Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Buy-a-Box" />
 		<Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
