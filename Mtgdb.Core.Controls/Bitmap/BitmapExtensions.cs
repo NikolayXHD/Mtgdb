@@ -18,10 +18,15 @@ namespace Mtgdb.Controls
 
 		public static Bitmap ResizeDpi(this Bitmap original, float multiplier = 1f)
 		{
-			using (var chain = new BitmapTransformationChain(original, reThrow))
+			return resizeDpi().ApplyColorScheme();
+
+			Bitmap resizeDpi()
 			{
-				chain.ReplaceBy(bmp => bmp.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round()));
-				return chain.Result.ApplyColorScheme();
+				using (var chain = new BitmapTransformationChain(original, reThrow))
+				{
+					chain.ReplaceBy(bmp => bmp.FitIn(original.Size.MultiplyBy(multiplier).ByDpi().Round()));
+					return chain.Result;
+				}
 			}
 		}
 
@@ -33,35 +38,40 @@ namespace Mtgdb.Controls
 
 		public static Bitmap HalfResizeDpi(this Bitmap original, bool preventMoire = false)
 		{
-			var originalSize = original.Size;
-			var reducedSize = originalSize.HalfByDpi();
+			return halfResizeDpi().ApplyColorScheme();
 
-			if (originalSize == reducedSize)
-				return original;
-
-			int stepsCount;
-
-			if (preventMoire)
+			Bitmap halfResizeDpi()
 			{
-				var originalToReducedRatio = originalSize.DivideBy(reducedSize);
-				float maxRatio = originalToReducedRatio.Max();
-				stepsCount = (int) Math.Round((maxRatio - 1) * 3f);
-			}
-			else
-				stepsCount = 1;
+				var originalSize = original.Size;
+				var reducedSize = originalSize.HalfByDpi();
 
-			SizeF delta = originalSize.Minus(reducedSize).DivideBy(
-				reducedSize.MultiplyBy(stepsCount));
+				if (originalSize == reducedSize)
+					return original;
 
-			using (var chain = new BitmapTransformationChain(original, reThrow))
-			{
-				for (int k = stepsCount - 1; k >= 0; k--)
+				int stepsCount;
+
+				if (preventMoire)
 				{
-					Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
-					chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
+					var originalToReducedRatio = originalSize.DivideBy(reducedSize);
+					float maxRatio = originalToReducedRatio.Max();
+					stepsCount = (int) Math.Round((maxRatio - 1) * 3f);
 				}
+				else
+					stepsCount = 1;
 
-				return chain.Result.ApplyColorScheme();
+				SizeF delta = originalSize.Minus(reducedSize).DivideBy(
+					reducedSize.MultiplyBy(stepsCount));
+
+				using (var chain = new BitmapTransformationChain(original, reThrow))
+				{
+					for (int k = stepsCount - 1; k >= 0; k--)
+					{
+						Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
+						chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
+					}
+
+					return chain.Result;
+				}
 			}
 		}
 
