@@ -79,9 +79,9 @@
 		<Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition Promos" />
 		<Directory Group="xlhq" Zoom="Any" Set="9ED"   Root="Promo" Path="Oversized\Boxtoppers\Ninth Edition" />
 		<Directory Group="xlhq" Zoom="Any" Set="CMD"   Root="Promo" Path="Oversized\Commanders\Commander 2011 Launch Party" />
+
 		<Directory Group="xlhq" Zoom="Any" Set="phel"   Root="Promo" Path="Oversized\Commanders\Helvault" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"   Root="Promo" Path="Oversized\Vintage Championship" />
-
 		<Directory Group="xlhq" Zoom="Any" Set="pdd2"  Root="Promo" Path="Set Promos\Jace vs Chandra Anime" />
 		<Directory Group="xlhq" Zoom="Any" Set="ppre"  Root="Promo" Path="Set Promos\Prerelease" />
 		<Directory Group="xlhq" Zoom="Any" Set="prel"  Root="Promo" Path="Set Promos\Release and Launch Party\2003" />

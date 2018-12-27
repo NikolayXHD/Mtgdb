@@ -12,7 +12,7 @@ namespace Mtgdb.Gui
 {
 	public sealed partial class FormMain : Form
 	{
-		public void SetFormRoot(IFormRoot formRoot)
+		public void SetFormRoot(FormRoot formRoot)
 		{
 			if (formRoot == _formRoot)
 				return;
@@ -144,22 +144,27 @@ namespace Mtgdb.Gui
 
 		private void updateFormPosition()
 		{
-			if (_history.Current.WindowSnapDirection.HasValue)
-				_formRoot.SnapDirection = _history.Current.WindowSnapDirection.Value;
-			else if (_history.Current.WindowArea.HasValue)
-				_formRoot.WindowArea = _history.Current.WindowArea.Value;
+			var snapDirection = _history.Current.WindowSnapDirection ?? Direction.Top;
+			var windowArea = _history.Current.WindowArea;
+
+			if (snapDirection != Direction.MiddleCenter)
+			{
+				if (windowArea.HasValue)
+					_formRoot.Location = windowArea.Value.TopLeft();
+			}
 			else
-				_formRoot.SnapDirection = Direction.Top;
+			{
+				if (windowArea.HasValue)
+					_formRoot.WindowArea = windowArea.Value;
+			}
+
+			_formRoot.SnapDirection = snapDirection;
 		}
 
 		private void historyUpdateFormPosition(GuiSettings settings)
 		{
 			settings.WindowSnapDirection = _formRoot.SnapDirection;
-
-			if (_formRoot.SnapDirection?.Equals(Direction.MiddleCenter) != false)
-				settings.WindowArea = _formRoot.WindowArea;
-			else
-				settings.WindowArea = null;
+			settings.WindowArea = _formRoot.WindowArea;
 		}
 
 		public void OnTabUnselected()

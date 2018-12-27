@@ -552,6 +552,11 @@ namespace Mtgdb.Controls
 			if (maximize)
 			{
 				IsMaximized = true;
+
+				var screenBounds = Screen.FromPoint(snapRectangle.TopLeft()).Bounds;
+				snapRectangle.Offset(-screenBounds.Left, -screenBounds.Top);
+				MaximizedBounds = snapRectangle;
+
 				if (WindowState != FormWindowState.Maximized)
 					WindowState = FormWindowState.Maximized;
 			}

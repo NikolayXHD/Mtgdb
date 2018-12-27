@@ -26,7 +26,7 @@ namespace Mtgdb.Dal
 			return config;
 		}
 
-		private static readonly string _fileName = AppDir.History.AddPath("UI.config");
+		private static readonly string _fileName = AppDir.History.AddPath("ui.json");
 		private static readonly int[] _uiScaleValues = { UiConfig.DefaultUiScalePercent, 125, 150, 200 };
 	}
 }

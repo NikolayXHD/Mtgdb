@@ -13,7 +13,7 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
-	public partial class FormRoot : CustomBorderForm, IFormRoot, IMessageFilter
+	public partial class FormRoot : CustomBorderForm, IMessageFilter
 	{
 		public FormRoot()
 		{
@@ -155,12 +155,7 @@ namespace Mtgdb.Gui
 			foreach (var button in _deckButtons)
 				button.Enabled = false;
 
-			if (!DesignMode)
-				SnapTo(Direction.Top, default(Point));
-
 			Text = $"Mtgdb.Gui v{AppDir.GetVersion()}";
-
-			WindowState = FormWindowState.Minimized;
 		}
 
 		private void updateFormBorderColor()
@@ -631,8 +626,6 @@ namespace Mtgdb.Gui
 			get => DesktopBounds;
 			set
 			{
-				//WindowState = FormWindowState.Normal;
-
 				SnapTo(Direction.MiddleCenter);
 
 				var nearestScreenArea = Screen.GetWorkingArea(value);
