@@ -90,20 +90,17 @@
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="Promo" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="pDRC"      Root="Promo" Path="Convention Promos\DragonCon" />
-		<Directory Group="xlhq" Zoom="Any" Set="pMEI"      Root="Promo" Path="Convention Promos\www.magicthegathering.com" />
 		<Directory Group="xlhq" Zoom="Any" Set="mgb"       Root="Promo" Path="Major Set Variants\Multiverse Box Set" />
 		<Directory Group="xlhq" Zoom="Any" Set="pPOD"      Root="Promo" Path="Major Set Variants\Portal Demogame" />
 		<Directory Group="xlhq" Zoom="Any" Set="S00"       Root="Promo" Path="Major Set Variants\Starter 2000 Sampler" />
 		<Directory Group="xlhq" Zoom="Any" Set="pSUS"      Root="Promo" Path="Major Set Variants\Summer Magic (Partial)" />
 		<Directory Group="xlhq" Zoom="Any" Set="10E"       Root="Promo" Path="Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
-		<Directory Group="xlhq" Zoom="Any" Set="pmei"      Root="Promo" Path="Media Inserts" />
 		<Directory Group="xlhq" Zoom="Any" Set="pHHO"      Root="Promo" Path="Other\Happy Holidays" />
-		<Directory Group="xlhq" Zoom="Any" Set="pMEI"      Root="Promo" Path="Other\Resale Reward" />
-		<Directory Group="xlhq" Zoom="Any" Set="pCEL"      Root="Promo" Path="Other\Richard Garfield" />
-		<Directory Group="xlhq" Zoom="Any" Set="pWOS"      Root="Promo" Path="Other\WotC Online Store" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pcel"      Root="Promo" Path="Other\Richard Garfield" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwos"      Root="Promo" Path="Other\WotC Online Store" />
 		<Directory Group="xlhq" Zoom="Any" Set="parc"      Root="Promo" Path="Other\Schemes - Promotional" />
 		<Directory Group="xlhq" Zoom="Any" Set="phop"      Root="Promo" Path="Other\Planes - Promotional" />
-		<Directory Group="xlhq" Zoom="Any" Set="s99"       Root="Promo" Path="Oversized\6x9\Starter" />
 		<Directory Group="xlhq" Zoom="Any" Set="ocmd"      Root="Promo" Path="Oversized\Commanders\Commander 2011 Launch Party" />
 		<Directory Group="xlhq" Zoom="Any" Set="phel"      Root="Promo" Path="Oversized\Commanders\Helvault" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="Promo" Path="Oversized\Vintage Championship" />
@@ -124,6 +121,7 @@
 		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2013" />
 		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2014" />
 		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2015" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmei"      Root="Promo" Path="Media Inserts\RPG Magazine" />
 		<Directory Group="xlhq" Zoom="Any" Set="ptkdf"     Root="Promo" Path="Set Promos\Tarkir Dragonfury" />
 		<Directory Group="xlhq" Zoom="Any" Set="ugin"      Root="Promo" Path="Set Promos\Ugin's Fate" />
 
@@ -231,6 +229,7 @@
 <Directory Group="xlhq" Zoom="Any" Set="9ED"   Root="Promo" Path="Oversized\Boxtoppers\Ninth Edition" />
 <Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition" />
 <Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition Promos" />
+<Directory Group="xlhq" Zoom="Any" Set="s99"   Root="Promo" Path="Oversized\6x9\Starter" />
 
 "D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
 	moved to \patch and split by year
@@ -257,9 +256,10 @@ Other
 <Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Duels of the Planeswalkers Reward Cards" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Buy-a-Box" />
-<Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Holiday Gift Box" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Intro Packs" />
+<Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Convention Promos\www.magicthegathering.com" />
+<Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Other\Resale Reward" />
 
 "D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Arena"
 "D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Armada"

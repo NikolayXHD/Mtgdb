@@ -39,7 +39,6 @@ namespace Mtgdb.Dal
 
 			string imageNameRaw = string.Join(".", parts.Take(1 + lastNamePart));
 			var imageName = _patternToRemove.Replace(imageNameRaw, string.Empty);
-
 			var replacedName = _nameReplacements.TryGet(imageName) ?? imageName;
 			ImageName = string.Intern(replacedName);
 
