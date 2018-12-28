@@ -37,8 +37,8 @@ namespace Mtgdb.Dal
 
 			Type = string.Join(".", parts.Skip(1 + lastNamePart));
 
-			var imageName = string.Join(".", parts.Take(1 + lastNamePart))
-				.Replace(" - ", string.Empty);
+			string imageNameRaw = string.Join(".", parts.Take(1 + lastNamePart));
+			var imageName = _patternToRemove.Replace(imageNameRaw, string.Empty);
 
 			var replacedName = _nameReplacements.TryGet(imageName) ?? imageName;
 			ImageName = string.Intern(replacedName);
@@ -149,6 +149,9 @@ namespace Mtgdb.Dal
 		{
 			return $"{SetCode} {Name} #{VariantNumber} q{Quality}";
 		}
+
+		// -S.xlhq.jpg marks image with artist signature
+		private static readonly Regex _patternToRemove = new Regex("\" - \"|-S$| - S$", RegexOptions.IgnoreCase);
 
 		private static readonly Dictionary<string, string> _nameReplacements = new Dictionary<string, string>(Str.Comparer)
 		{
