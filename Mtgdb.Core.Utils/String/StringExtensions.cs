@@ -85,12 +85,9 @@ namespace Mtgdb
 			return new Tuple<string, int>(string.Empty, 0);
 		}
 
-		public static string NullIfEmpty(this string value)
-		{
-			if (value == string.Empty)
-				return null;
-
-			return value;
-		}
+		public static string NullIfEmpty(this string value) =>
+			value == string.Empty
+				? null
+				: value;
 	}
 }

@@ -10,9 +10,9 @@
 
 	<ImageLocations EnabledGroups="dev,xlhq" >
 
-		<Root Name="XLHQ"    Path="D:\Distrib\games\mtg\Mega\XLHQ" />
+		<Root Name="XLHQ"    Path="D:\Distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
 		<Root Name="Promo"   Path="D:\Distrib\games\mtg\XLHQ Promos" />
-		<Root Name="PTour"    Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
+		<Root Name="PTour"   Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
 		<Root Name="Torrent" Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
 
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
@@ -27,65 +27,54 @@
 		<Directory Group="dev" Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
 		<Directory Group="dev" Zoom="Any"   Path="D:\Distrib\games\mtg\Patch" />
 
-		<Directory Group="xlhq" Zoom="Any"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_DVD"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_EVG"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_GVL"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any" Set="DD3_JVC"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
-		<Directory Group="xlhq" Zoom="Any"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Digital Sets" />
-		<Directory Group="xlhq" Zoom="Any"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Digital Tokens" />
-		<Directory Group="xlhq" Zoom="Any" Set="MPS_AKH"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Masterpiece Series\Amonkhet Invocations" />
-		<Directory Group="xlhq" Zoom="Any" Set="MPS"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Masterpiece Series\Kaladesh Inventions" />
-		<Directory Group="xlhq" Zoom="Any" Set="EXP"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Masterpiece Series\Zendikar Expeditions" />
-		<Directory Group="xlhq" Zoom="Any"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos" />
-		<Directory Group="xlhq" Zoom="Any"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\Pre-Release Promos" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Sets" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Tokens" />
+		<Directory Group="xlhq" Zoom="Any" Set="MPS_AKH"   Root="XLHQ" Path="Masterpiece Series\Amonkhet Invocations" />
+		<Directory Group="xlhq" Zoom="Any" Set="MPS"       Root="XLHQ" Path="Masterpiece Series\Kaladesh Inventions" />
+		<Directory Group="xlhq" Zoom="Any" Set="EXP"       Root="XLHQ" Path="Masterpiece Series\Zendikar Expeditions" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos\Pre-Release Promos" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="XLHQ" Path="Other\Vintage Champs 300DPI" />
-
-		<Directory Group="xlhq" Zoom="Any" Set="pmps10"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2011" />
-		<Directory Group="xlhq" Zoom="Any" Set="pmps11"
-			Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmps10"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmps11"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2012" />
 		<Directory Group="xlhq" Zoom="Any" Set="ptc"       Root="XLHQ" Path="PTD - Pro Tour Decks" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-01\WC00-01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-02\WC00-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-03\WC00-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-04\WC00-04 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-01\300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-02\300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-03\300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-04\300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-01\WC02-D01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-02\WC02-D02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-03\WC02-D03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-04\WC02-D04 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-01\300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-02\WC03-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-03\WC03-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-04\WC03-04 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-01\WC04-01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-02\WC04-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-03\WC04-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-04\WC04-04 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-01\WC97-01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-02\WC97-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-03\WC97-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-04\WC97-04 300 DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-01\WC98-01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-02\WC98-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-03\WC98-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-04\WC98-04 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-01\WC99-01 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-02\WC99-02 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-03\WC99-03 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-04\WC99-04 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-04" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="Torrent" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="MMA"       Root="Torrent" Path="MM1" />

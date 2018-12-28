@@ -680,7 +680,7 @@ namespace Mtgdb.Dal
 				if (!ui.ImageRepo.IsLoadingZoomComplete)
 					return null;
 
-				_zoomImageModel = ui.GetZoomImages(this).FirstOrDefault();
+				_zoomImageModel = ui.GetZoomImages(this)?.FirstOrDefault();
 				_zoomImageModelSelected = true;
 			}
 

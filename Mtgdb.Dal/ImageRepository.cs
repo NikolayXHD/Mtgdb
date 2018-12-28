@@ -87,7 +87,7 @@ namespace Mtgdb.Dal
 		{
 			foreach (var directory in directories)
 			{
-				var excludes = directory.Exclude?.Split(';');
+				var excludes = directory.Exclude?.Split(Array.From(';'), StringSplitOptions.RemoveEmptyEntries);
 
 				foreach (string file in getDirectoryFiles(filesByDirCache, directory.Path))
 				{
@@ -377,9 +377,9 @@ namespace Mtgdb.Dal
 			}
 		}
 
-		public List<ImageModel> GetZooms(Card card, Func<string, string, string> setCodePreference)
+		public IReadOnlyList<ImageModel> GetZooms(Card card, Func<string, string, string> setCodePreference)
 		{
-			List<ImageModel> result;
+			IReadOnlyList<ImageModel> result;
 
 			if (IsLoadingZoomComplete)
 			{
@@ -396,15 +396,11 @@ namespace Mtgdb.Dal
 		public IReadOnlyList<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
 			if (!IsLoadingArtComplete)
-				return Empty<ImageModel>.ReadOnlyList;
+				return null;
 
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
 
-			if (models == null)
-				return Empty<ImageModel>.ReadOnlyList;
-
-			var distinctModels = models
-				.GroupBy(_ => _.ImageFile.FullPath)
+			var distinctModels = models?.GroupBy(_ => _.ImageFile.FullPath)
 				.Select(_ => _.First().ImageFile.NonRotated())
 				.ToReadOnlyList();
 
@@ -427,7 +423,7 @@ namespace Mtgdb.Dal
 						yield return model;
 		}
 
-		private static List<ImageModel> getImageModels(
+		private static IReadOnlyList<ImageModel> getImageModels(
 			Card card,
 			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant)
@@ -450,7 +446,7 @@ namespace Mtgdb.Dal
 				if (models.Count == 0)
 					return null;
 
-				return models.Select(m => m.ApplyRotation(card, zoom: true)).ToList();
+				return models.Select(m => m.ApplyRotation(card, zoom: true)).ToReadOnlyList();
 			}
 		}
 

@@ -21,7 +21,13 @@ namespace Mtgdb.Dal
 			foreach (var directory in Directories)
 			{
 				if (!string.IsNullOrEmpty(directory.Root))
-					directory.Path = Path.Combine(rootsByName[directory.Root].Path, directory.Path);
+				{
+					directory.Path = Path.Combine(rootsByName[directory.Root].Path, directory.Path).NullIfEmpty();
+
+					directory.Exclude = string.Join(";",
+						Sequence.From(rootsByName[directory.Root].Exclude, directory.Exclude)
+							.Where(exclude => !string.IsNullOrEmpty(exclude)));
+				}
 
 				directory.Path = directory.Path.ToAppRootedPath();
 			}
@@ -75,6 +81,9 @@ namespace Mtgdb.Dal
 
 		[DataMember(Name = "Path")]
 		public string Path { get; set; }
+
+		[DataMember(Name = "Exclude")]
+		public string Exclude { get; set; }
 	}
 
 	public static class ImageType
