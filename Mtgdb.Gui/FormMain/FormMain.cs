@@ -992,7 +992,12 @@ namespace Mtgdb.Gui
 
 		public void ButtonRedo() => historyRedo();
 
-		public void ButtonPivot() => new FormChart(_cardRepo, getUISnapshot(), _fields).Show();
+		public void ButtonPivot()
+		{
+			var formChart = new FormChart(_cardRepo, getUISnapshot(), _fields);
+			formChart.SnapTo(Direction.Top, _formRoot.Location);
+			formChart.Show();
+		}
 
 		public void ButtonPrint()
 		{

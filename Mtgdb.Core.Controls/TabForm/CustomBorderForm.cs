@@ -525,7 +525,7 @@ namespace Mtgdb.Controls
 			return WindowState == FormWindowState.Normal;
 		}
 
-		protected void SnapTo(Direction snapDirection, Point? cursorPosition = null)
+		public void SnapTo(Direction snapDirection, Point? cursorPosition = null)
 		{
 			Rectangle snapRectangle;
 
@@ -556,6 +556,7 @@ namespace Mtgdb.Controls
 				var screenBounds = Screen.FromPoint(snapRectangle.TopLeft()).Bounds;
 				snapRectangle.Offset(-screenBounds.Left, -screenBounds.Top);
 				MaximizedBounds = snapRectangle;
+				Location = screenBounds.TopLeft();
 
 				if (WindowState != FormWindowState.Maximized)
 					WindowState = FormWindowState.Maximized;

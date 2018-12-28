@@ -92,8 +92,6 @@ namespace Mtgdb.Gui
 				button.Click += buttonClick;
 			}
 
-			SnapTo(Direction.Top, System.Windows.Forms.Cursor.Position);
-
 			_tabByButton = Enumerable.Range(0, _buttons.Length)
 				.ToDictionary(i => _buttons[i], i => _tabs[i]);
 
