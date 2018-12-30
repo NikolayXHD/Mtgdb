@@ -95,7 +95,7 @@
 		<Directory Group="xlhq" Zoom="Any" Set="S00"       Root="Promo" Path="Major Set Variants\Starter 2000 Sampler" />
 		<Directory Group="xlhq" Zoom="Any" Set="pSUS"      Root="Promo" Path="Major Set Variants\Summer Magic (Partial)" />
 		<Directory Group="xlhq" Zoom="Any" Set="10E"       Root="Promo" Path="Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
-		<Directory Group="xlhq" Zoom="Any" Set="pHHO"      Root="Promo" Path="Other\Happy Holidays" />
+		<Directory Group="xlhq" Zoom="Any" Set="hho"       Root="Promo" Path="Other\Happy Holidays" />
 
 		<Directory Group="xlhq" Zoom="Any" Set="pcel"      Root="Promo" Path="Other\Richard Garfield" />
 		<Directory Group="xlhq" Zoom="Any" Set="pwos"      Root="Promo" Path="Other\WotC Online Store" />
