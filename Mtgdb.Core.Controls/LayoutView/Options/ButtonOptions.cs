@@ -1,23 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public class ButtonOptions
 	{
-		public ButtonOptions Clone()
+		[UsedImplicitly] // to search usages in IDE
+		public ButtonOptions()
 		{
-			return new ButtonOptions
-			{
-				Icon = Icon,
-				Alignment = Alignment,
-				Margin = Margin,
-				ShowOnlyWhenHotTracked = ShowOnlyWhenHotTracked,
-				BreaksLayout = BreaksLayout
-			};
 		}
-
-
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -32,7 +24,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_icon = value;
-				IconTransp = IconTransp ?? value?.SetOpacity(1f - HotTrackOpacityDelta);
+				IconTransp = value?.SetOpacity(1 - HotTrackOpacityDelta);
 			}
 		}
 

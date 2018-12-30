@@ -1482,7 +1482,6 @@ namespace Mtgdb.Gui
 			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuUiScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiScale.FormattingEnabled = true;
-			this._menuUiScale.IntegralHeight = false;
 			this._menuUiScale.Location = new System.Drawing.Point(117, 3);
 			this._menuUiScale.Name = "_menuUiScale";
 			this._menuUiScale.Size = new System.Drawing.Size(80, 21);
@@ -1534,7 +1533,6 @@ namespace Mtgdb.Gui
 			this._menuUiSmallImageQuality.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuUiSmallImageQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiSmallImageQuality.FormattingEnabled = true;
-			this._menuUiSmallImageQuality.IntegralHeight = false;
 			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(117, 76);
 			this._menuUiSmallImageQuality.Name = "_menuUiSmallImageQuality";
 			this._menuUiSmallImageQuality.Size = new System.Drawing.Size(80, 21);

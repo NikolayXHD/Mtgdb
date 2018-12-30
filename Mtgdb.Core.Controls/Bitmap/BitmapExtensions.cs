@@ -219,10 +219,8 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		private static void reThrow(Exception ex)
-		{
-			throw new Exception("image transformation failed", ex);
-		}
+		private static void reThrow(Exception ex) =>
+			throw new ApplicationException("image transformation failed", ex);
 
 		private static readonly FieldInfo _imageNativeImageField;
 	}

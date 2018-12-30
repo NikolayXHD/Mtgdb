@@ -159,7 +159,7 @@ namespace Mtgdb.Controls
 						Title = hitInfo.FieldName,
 						Text = _view.GetText(hitInfo.RowHandle, hitInfo.FieldName),
 						HighlightRanges = _view.GetHighlightTextRanges(hitInfo.RowHandle, hitInfo.FieldName),
-						HighlightOptions = _view.ProbeCard.HighlightOptions,
+						HighlightOptions = _view.HighlightOptions,
 						Clickable = true
 					});
 				}

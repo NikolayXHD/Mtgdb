@@ -10,9 +10,9 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
-	public class DeckEditorUi
+	public class DeckEditorSubsystem: IComponent
 	{
-		public DeckEditorUi(
+		public DeckEditorSubsystem(
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
 			DeckEditorModel deckEditorModel,
@@ -35,13 +35,19 @@ namespace Mtgdb.Gui
 
 			_formZoom = formZoom;
 			_parent = parent;
+		}
 
-			var hotSpot = Size.Empty.ByDpi();
-			_zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
+		public void Scale()
+		{
+			new DpiScaler<DeckEditorSubsystem>(s =>
+			{
+				var hotSpot = Size.Empty.ByDpi();
+				s._zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
 
-			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-			_textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
+				var iBeamIcon = Resources.text_selection_24.ResizeDpi();
+				var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
+				s._textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
+			}).Setup(this);
 		}
 
 		private void dragRemoved(Card card, Zone fromDeckZone)
@@ -234,7 +240,19 @@ namespace Mtgdb.Gui
 		private readonly DraggingSubsystem _draggingSubsystem;
 		private readonly FormZoom _formZoom;
 		private readonly Control _parent;
-		private readonly Cursor _zoomCursor;
-		private readonly Cursor _textSelectionCursor;
+
+		private Cursor _textSelectionCursor;
+		private Cursor _zoomCursor;
+
+		public void Dispose() =>
+			Disposed?.Invoke(this, EventArgs.Empty);
+
+		public ISite Site
+		{
+			get => throw new NotSupportedException();
+			set => throw new NotSupportedException();
+		}
+
+		public event EventHandler Disposed;
 	}
 }

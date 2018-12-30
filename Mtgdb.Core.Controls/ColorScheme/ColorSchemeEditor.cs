@@ -22,7 +22,7 @@ namespace Mtgdb.Controls
 			ShowIcon = false;
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Color scheme editor";
-			this.ScaleDpiFont();
+			this.ScaleDpi();
 		}
 
 		[UsedImplicitly]
@@ -48,7 +48,7 @@ namespace Mtgdb.Controls
 
 			var cellCount = new Size(columnsCount, rowsCount);
 
-			Size = Border.MultiplyBy(new Size(2, 1))
+			Size = BorderSize.MultiplyBy(new Size(2, 1))
 				.Plus(new Size(0, CaptionHeight))
 				.Plus(_layoutPanel.Margin.Size)
 				.Plus(_cellMargin.Size.MultiplyBy(cellCount))

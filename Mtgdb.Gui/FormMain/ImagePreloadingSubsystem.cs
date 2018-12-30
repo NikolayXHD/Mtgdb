@@ -41,7 +41,7 @@ namespace Mtgdb.Gui
 			{
 				while (!cts.IsCancellationRequested)
 				{
-					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted || !_uiConfigRepository.Config.DisplaySmallImages)
+					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted)
 					{
 						await TaskEx.Delay(200);
 						continue;
@@ -51,7 +51,7 @@ namespace Mtgdb.Gui
 
 					foreach (var card in _cardsToPreloadImageStarted)
 					{
-						if (_cardsToPreloadImage != _cardsToPreloadImageStarted || !_uiConfigRepository.Config.DisplaySmallImages)
+						if (_cardsToPreloadImage != _cardsToPreloadImageStarted)
 							break;
 
 						card.PreloadImage(Ui);

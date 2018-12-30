@@ -60,17 +60,17 @@ namespace Mtgdb.Gui
 		{
 			var card = (Card) dataSource;
 
-			_fieldImage.Image = card?.Image(Ui);
+			_fieldImage.Image = card?.Image(Ui());
 			_fieldImage.DataText = card?.NameEn;
 
-			_fieldName.DataText = card?.Name(Ui);
+			_fieldName.DataText = card?.Name(Ui());
 			_fieldManaCost.DataText = card?.ManaCost;
-			_fieldType.DataText = card?.Type(Ui);
+			_fieldType.DataText = card?.Type(Ui());
 			_fieldCmc.DataText = card?.Cmc.ToString(Str.Culture);
 			_fieldSetCode.DataText = card?.SetCode;
 			_fieldSetName.DataText = card?.SetName;
-			_fieldText.DataText = card?.Text(Ui);
-			_fieldFlavor.DataText = card?.Flavor(Ui);
+			_fieldText.DataText = card?.Text(Ui());
+			_fieldFlavor.DataText = card?.Flavor(Ui());
 			_fieldArtist.DataText = card?.Artist;
 			_fieldReleaseDate.DataText = card?.ReleaseDate;
 			_fieldRarity.DataText = card?.Rarity;

@@ -14,6 +14,11 @@ namespace Mtgdb.Gui
 
 		private static readonly MethodInfo _getPaletteColorsMethod = _chartPaletteColorsType.GetMethod("GetPaletteColors");
 
+		public static readonly Dictionary<ChartColorPalette, Color[]> OriginalByName = Enum.GetValues(typeof (ChartColorPalette))
+			.Cast<ChartColorPalette>()
+			.Where(_ => _ != ChartColorPalette.None)
+			.ToDictionary(p => p, p => getPalette(p).ToArray());
+
 		public static readonly Dictionary<ChartColorPalette, Color[]> ByName = Enum.GetValues(typeof (ChartColorPalette))
 			.Cast<ChartColorPalette>()
 			.Where(_ => _ != ChartColorPalette.None)

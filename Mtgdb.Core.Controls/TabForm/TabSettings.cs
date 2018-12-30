@@ -25,6 +25,8 @@ namespace Mtgdb.Controls
 			Icon = icon;
 		}
 
+		public object Tag { get; set; }
+
 		public string Text { get; }
 		public bool HasText { get; }
 

@@ -136,6 +136,18 @@ namespace Mtgdb
 			return -1;
 		}
 
+		public static int IndexOf<T>(this IReadOnlyList<T> list, T value) =>
+			list.IndexOf(value, EqualityComparer<T>.Default);
+
+		public static int IndexOf<T>(this IReadOnlyList<T> list, T value, IEqualityComparer<T> comparer)
+		{
+			for (int i = 0; i < list.Count; i++)
+				if (comparer.Equals(list[i], value))
+					return i;
+
+			return -1;
+		}
+
 		public static MultiDictionary<TKey, TSource> ToMultiDictionary<TKey, TSource>(
 			this IEnumerable<TSource> vals,
 			Func<TSource, TKey> keySelector,
@@ -161,6 +173,12 @@ namespace Mtgdb
 			}
 
 			return result;
+		}
+
+		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+		{
+			foreach (var element in source)
+				action(element);
 		}
 
 		public static void Add<TKey, TValue>(this IDictionary<TKey, List<TValue>> multiDict, TKey key, TValue val)

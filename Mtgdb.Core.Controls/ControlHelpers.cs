@@ -33,15 +33,6 @@ namespace Mtgdb.Controls
 		[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
 		public static extern bool SetForegroundWindow(HandleRef hWnd);
 
-		public static void ScaleDpi(this Control control)
-		{
-			control.Size = control.Size.ByDpi();
-			ScaleDpiFont(control);
-		}
-
-		public static void ScaleDpiFont(this Control control) =>
-			control.Font = control.Font.ByDpi();
-
 		public static bool Invoke(this Control value, Action method)
 		{
 			if (value.IsDisposed || value.Disposing || !value.IsHandleCreated)

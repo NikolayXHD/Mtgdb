@@ -10,12 +10,6 @@ namespace Mtgdb.Gui
 {
 	partial class FormMain
 	{
-		private void resetLayouts()
-		{
-			_layoutViewCards.LayoutControlType = _layoutViewCards.LayoutControlType;
-			_layoutViewDeck.LayoutControlType = _layoutViewDeck.LayoutControlType;
-		}
-
 		private void applicationExit(object sender, EventArgs e)
 		{
 			shutdown();
@@ -57,6 +51,8 @@ namespace Mtgdb.Gui
 			stopThreads();
 			unsubscribeFromEvents();
 			unsubscribeCardRepoEvents();
+			_deckEditorSubsystem.Dispose();
+			_deckListControl.UnsubscribeFromEvents();
 		}
 
 
@@ -666,58 +662,6 @@ namespace Mtgdb.Gui
 
 			RunRefilterTask();
 			historyUpdate();
-		}
-
-
-
-		private void setupCheckButtonImages()
-		{
-			_buttons.SetupButton(_buttonLegalityAllowLegal, buttonImages: null);
-			_buttons.SetupButton(_buttonLegalityAllowRestricted, buttonImages: null);
-			_buttons.SetupButton(_buttonLegalityAllowBanned, buttonImages: null);
-			_buttons.SetupButton(_buttonLegalityAllowFuture, buttonImages: null);
-
-			_buttons.SetupButton(_buttonSampleHandNew,
-				new ButtonImages(Resources.hand_48, x2: true));
-
-			_buttons.SetupButton(_buttonSampleHandDraw,
-				new ButtonImages(Resources.draw_48, x2: true));
-
-			_buttons.SetupButton(_buttonSampleHandMulligan,
-				new ButtonImages(Resources.mulligan_48, x2: true));
-
-			_buttons.SetupButton(_buttonShowDuplicates,
-				new ButtonImages(Resources.clone_48, x2: true));
-
-			_buttons.SetupButton(_buttonShowProhibit,
-				new ButtonImages(Resources.exclude_minus_24, x2: true));
-
-			_buttons.SetupButton(_buttonExcludeManaAbility,
-				new ButtonImages(Resources.include_plus_24, Resources.exclude_minus_24, x2: true));
-
-			_buttons.SetupButton(_buttonExcludeManaCost,
-				new ButtonImages(Resources.include_plus_24, Resources.exclude_minus_24, x2: true));
-
-			_buttons.SetupButton(_buttonHideDeck,
-				new ButtonImages(Resources.shown_40, Resources.hidden_40, x2: true));
-
-			var scrollImages = new ButtonImages(Resources.scroll_shown_40, x2: true);
-			_buttons.SetupButton(_buttonShowScrollCards, scrollImages);
-			_buttons.SetupButton(_buttonShowScrollDeck, scrollImages);
-
-			_buttons.SetupButton(_buttonShowPartialCards,
-				new ButtonImages(Resources.partial_card_enabled_40, x2: true));
-
-			_buttons.SetupButton(_buttonShowText,
-				new ButtonImages(Resources.text_enabled_40, x2: true));
-
-			_buttons.SetupButton(_buttonSearchExamplesDropDown,
-				new ButtonImages(Resources.book_40, x2: true));
-
-			_buttons.SetupButton(_buttonResetFilters,
-				new ButtonImages(Resources.erase, x2: true));
-
-			_buttons.SetupComboBox(_menuLegalityFormat, allowScroll: false);
 		}
 
 

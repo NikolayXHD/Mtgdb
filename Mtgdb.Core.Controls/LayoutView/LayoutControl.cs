@@ -17,21 +17,6 @@ namespace Mtgdb.Controls
 				field.IconRecognizer = value;
 		}
 
-		public virtual void CopyFrom(LayoutControl other)
-		{
-			Font = other.Font;
-			Size = other.Size;
-			HighlightOptions = other.HighlightOptions.Clone();
-
-			using (var thisEnumerator = Fields.GetEnumerator())
-			using (var otherEnumerator = other.Fields.GetEnumerator())
-				while (thisEnumerator.MoveNext() && otherEnumerator.MoveNext())
-					CopyField(thisEnumerator.Current, otherEnumerator.Current);
-		}
-
-		protected virtual void CopyField(FieldControl thisField, FieldControl otherField) =>
-			thisField.CopyFrom(otherField);
-
 		public void PaintSelf(Graphics graphics, Point parentLocation, Color parentBg)
 		{
 			var cardArea = new Rectangle(parentLocation, Size);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -151,19 +150,6 @@ namespace Mtgdb.Controls
 				TextSelection.SetSelection(context.TextSelection);
 
 			_paintInProgress = false;
-		}
-
-		public void CopyFrom(FieldControl other)
-		{
-			Location = other.Location;
-			Size = other.Size;
-			Font = other.Font;
-			BackColor = other.BackColor;
-			ForeColor = other.ForeColor;
-			HorizontalAlignment = other.HorizontalAlignment;
-			IconRecognizer = other.IconRecognizer;
-			SearchOptions = other.SearchOptions.Clone();
-			CustomButtons = other.CustomButtons.Select(_ => _.Clone()).ToList();
 		}
 
 		private Rectangle getArea(Point parentLocation, Point location, Padding padding)

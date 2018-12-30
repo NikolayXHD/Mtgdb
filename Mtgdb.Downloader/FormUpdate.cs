@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Downloader
 {
@@ -56,22 +57,20 @@ namespace Mtgdb.Downloader
 			_priceDownloader.SidAdded += downloadPricesProgressChanged;
 			_priceDownloader.PriceAdded += downloadPricesProgressChanged;
 
-			scale();
-
 			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
+
+			scale();
 		}
 
 		private void scale()
 		{
-			_progressBar.Height = _progressBar.Height.ByDpiHeight();
-
 			this.ScaleDpi();
+
+			_progressBar.ScaleDpiHeight();
 			_tableLayoutButtons.ScaleDpi();
-
-			foreach (var button in _tableLayoutButtons.Controls.Cast<Button>())
-				button.Image = ((Bitmap)button.Image).HalfResizeDpi();
-
 			_textBoxLog.ScaleDpiFont();
+
+			_buttonImagesScaler.Setup(this);
 		}
 
 		private void systemColorsChanged() =>
@@ -584,6 +583,34 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 		public bool IsProgressCalculated => ImageDownloadProgress != null;
 
+		private bool _downloadingImages;
+		private bool _downloadingPrices;
+		private bool _appVersionOnlineChecked;
+		private string _appVersionInstalled;
+		private string _appVersionOnline;
+		private string _appVersionDownloaded;
+
+		private static readonly DpiScaler<FormUpdate, IReadOnlyList<Bitmap>> _buttonImagesScaler =
+			new DpiScaler<FormUpdate, IReadOnlyList<Bitmap>>(
+
+				f => f._tableLayoutButtons.Controls
+					.Cast<Button>()
+					.Select(b => b.Image)
+					.Cast<Bitmap>()
+					.ToReadOnlyList(),
+				// materialize to correctly remember the initial state
+				// the remembered IEnumerable would return modified values on second Scale() call
+
+				(f, bitmaps) => f._tableLayoutButtons.Controls
+					.Cast<Button>()
+					.Zip(bitmaps, (btn, bmp) => (btn, bmp))
+					.ForEach(
+						_ => _.btn.Image = _.bmp),
+
+				bitmaps => bitmaps
+					.Select(bmp => bmp.HalfResizeDpi())
+					.ToReadOnlyList());
+
 		private readonly Installer _installer;
 		private readonly ImageDownloader _imageDownloader;
 		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
@@ -593,12 +620,5 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly ImageRepository _imageRepository;
 		private readonly CardRepository _cardRepository;
 		private readonly VersionComparer _versionComparer = new VersionComparer();
-
-		private bool _downloadingImages;
-		private bool _downloadingPrices;
-		private bool _appVersionOnlineChecked;
-		private string _appVersionInstalled;
-		private string _appVersionOnline;
-		private string _appVersionDownloaded;
 	}
 }

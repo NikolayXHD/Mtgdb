@@ -769,7 +769,6 @@ namespace Mtgdb.Gui
 			// 
 			this._menuLegalityFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuLegalityFormat.DropDownWidth = 150;
-			this._menuLegalityFormat.IntegralHeight = false;
 			this._menuLegalityFormat.Location = new System.Drawing.Point(28, 2);
 			this._menuLegalityFormat.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this._menuLegalityFormat.MaxDropDownItems = 50;

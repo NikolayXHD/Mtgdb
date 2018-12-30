@@ -6,14 +6,20 @@ namespace Mtgdb.Controls
 {
 	public static class Dpi
 	{
+		public static event Action Changed;
+
 		public static void Initialize(int uiScalePercent = 100)
 		{
-			if (Environment.OSVersion.Version.Major >= 6)
+			if (!_initialized && Environment.OSVersion.Version.Major >= 6)
 				SetProcessDPIAware();
+
+			_initialized = true;
 
 			_uiScalePercent = uiScalePercent;
 			_scale = getScale().MultiplyBy(_uiScalePercent / 100f);
 			_scaleHalf = _scale.MultiplyBy(0.5f);
+
+			Changed?.Invoke();
 		}
 
 		public static Font ByDpi(this Font font)
@@ -74,5 +80,6 @@ namespace Mtgdb.Controls
 
 		private static SizeF _scale = new SizeF(1f, 1f);
 		private static SizeF _scaleHalf = new SizeF(0.5f, 0.5f);
+		private static bool _initialized;
 	}
 }

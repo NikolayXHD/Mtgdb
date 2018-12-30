@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 			if (formRoot != null)
 			{
 				_cardSearch.Ui =
-					_deckEditorUi.Ui =
+					_deckEditorSubsystem.Ui =
 						_imagePreloading.Ui =
 							_printing.Ui =
 								_dragging.Ui =
@@ -57,8 +57,9 @@ namespace Mtgdb.Gui
 
 				_formRoot.TooltipController.SubscribeToEvents();
 
-				// calls probeCardCreating handler
-				resetLayouts();
+				// calls cardCreating handler
+				_layoutViewCards.ResetLayout();
+				_layoutViewDeck.ResetLayout();
 			}
 		}
 
@@ -994,7 +995,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPivot()
 		{
-			var formChart = new FormChart(_cardRepo, getUISnapshot(), _fields);
+			var formChart = new FormChart(_cardRepo, getUISnapshot, _fields);
 			formChart.SnapTo(Direction.Top, _formRoot.Location);
 			formChart.Show();
 		}

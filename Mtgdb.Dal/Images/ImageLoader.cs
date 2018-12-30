@@ -12,6 +12,16 @@ namespace Mtgdb.Dal
 		public ImageLoader(ImageCacheConfig config)
 		{
 			Capacity = config.GetCacheCapacity();
+			Dpi.Changed += clearCache;
+		}
+
+		private void clearCache()
+		{
+			lock (_sync)
+			{
+				_imagesByPath.Clear();
+				_ratings.Clear();
+			}
 		}
 
 		public Bitmap GetSmallImage(ImageModel model)
@@ -20,7 +30,7 @@ namespace Mtgdb.Dal
 				return null;
 
 			Bitmap image;
-			lock (_imagesByPath)
+			lock (_sync)
 				image = tryGetFromCache(model.ImageFile.FullPath, model.Rotation);
 
 			if (image != null)
@@ -34,7 +44,7 @@ namespace Mtgdb.Dal
 
 			image = LoadImage(model, CardSize);
 
-			lock (_imagesByPath)
+			lock (_sync)
 				if (addFirst(model.ImageFile.FullPath, model.Rotation, image))
 					if (_ratings.Count >= Capacity)
 						removeLast();
@@ -66,7 +76,7 @@ namespace Mtgdb.Dal
 			{
 				byte[] bytes;
 
-				lock (SyncRoot)
+				lock (SyncIo)
 					bytes = File.ReadAllBytes(model.ImageFile.FullPath);
 
 				var result = new Bitmap(new MemoryStream(bytes));
@@ -181,7 +191,8 @@ namespace Mtgdb.Dal
 		internal event Action CornerRemoved;
 		internal event Action FoundInCache;
 
-		public static readonly object SyncRoot = new object();
+		public static readonly object SyncIo = new object();
+		private static readonly object _sync = new object();
 
 		private readonly Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry> _imagesByPath =
 			new Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry>();

@@ -46,7 +46,7 @@ namespace Mtgdb.Controls
 					Transform(BgraValues, GetLocation(i, j));
 		}
 
-		public Color Transform(Color c)
+		public Color TransformColor(Color c)
 		{
 			if (c.IsSystemColor)
 				return c;

@@ -357,23 +357,11 @@ namespace Mtgdb.Controls
 		{
 			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 
-			result.CopyFrom(ProbeCard);
-
-			foreach (var field in result.Fields)
-				updateSort(field);
-
-			result.Invalid += cardInvalidated;
-
-			return result;
-		}
-
-		private LayoutControl createProbeCard()
-		{
-			var result = (LayoutControl) Activator.CreateInstance(LayoutControlType);
 			result.SetIconRecognizer(IconRecognizer);
 			result.Font = Font;
+			result.HighlightOptions = HighlightOptions;
 
-			ProbeCardCreating?.Invoke(this, result);
+			CardCreating?.Invoke(this, result);
 
 			return result;
 		}
@@ -572,7 +560,7 @@ namespace Mtgdb.Controls
 
 					int index = getCardIndex(i, j, columnsCount);
 					if (index == Cards.Count)
-						Cards.Add(createCard());
+						Cards.Add(setupCard());
 
 					Cards[index].Location = location;
 					Cards[index].Visible = Cards[index].DataSource != null;
@@ -580,6 +568,17 @@ namespace Mtgdb.Controls
 
 			for (int index = rowsCount * columnsCount; index < Cards.Count; index++)
 				Cards[index].Visible = false;
+
+			LayoutControl setupCard()
+			{
+				var result = createCard();
+
+				foreach (var field in result.Fields)
+					updateSort(field);
+
+				result.Invalid += cardInvalidated;
+				return result;
+			}
 		}
 
 
@@ -1298,7 +1297,16 @@ namespace Mtgdb.Controls
 				.FirstOrDefault(s => !s.IsEmpty);
 
 
+		public void ResetLayout()
+		{
+			ProbeCard = createCard();
+			Cards.Clear();
+			Invalidate();
+			OnLayout(new LayoutEventArgs(this, nameof(LayoutControlType)));
+		}
+
 		private Type _layoutControlType;
+
 		[Category("Settings")]
 		[DefaultValue(typeof(LayoutControl)), TypeConverter(typeof(LayoutControlTypeConverter))]
 		public Type LayoutControlType
@@ -1307,10 +1315,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_layoutControlType = value;
-				ProbeCard = createProbeCard();
-				Cards.Clear();
-				Invalidate();
-				OnLayout(new LayoutEventArgs(this, nameof(LayoutControlType)));
+				ResetLayout();
 			}
 		}
 
@@ -1416,10 +1421,13 @@ namespace Mtgdb.Controls
 		public Size CardSize => ProbeCard.Size;
 
 		[Browsable(false)]
+		public HighlightOptions HighlightOptions { get; } = new HighlightOptions();
+
+		[Browsable(false)]
 		private IList<LayoutControl> Cards { get; }
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public LayoutControl ProbeCard { get; private set; }
+		private LayoutControl ProbeCard { get; set; }
 
 		public IEnumerable<string> FieldNames =>
 			ProbeCard.Fields.Select(_ => _.FieldName).Where(F.IsNotNull);
@@ -1466,7 +1474,7 @@ namespace Mtgdb.Controls
 		public event Action<object, int> RowDataLoaded;
 		public event Action<object> SortChanged;
 		public event Action<object, SearchArgs> SearchClicked;
-		public event Action<object, LayoutControl> ProbeCardCreating;
+		public event Action<object, LayoutControl> CardCreating;
 		public event Action<object, HitInfo, MouseEventArgs> MouseClicked;
 		public event Action<object, HitInfo, CancelEventArgs> SelectionStarted;
 

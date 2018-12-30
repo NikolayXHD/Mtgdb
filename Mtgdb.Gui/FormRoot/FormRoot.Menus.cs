@@ -189,7 +189,7 @@ namespace Mtgdb.Gui
 
 			_buttonLanguage.Image = menuItem.Image;
 			_buttonLanguage.Text = language.ToUpperInvariant();
-			_buttonSubsystem.SetupButton(_buttonLanguage, new ButtonImages(_languageIcons[language], true));
+			_buttonSubsystem.SetupButton(_buttonLanguage, ButtonImages.ScaleDpi((null, _languageIcons[language])));
 		}
 
 		private IEnumerable<CustomCheckBox> getLanguageMenuItems() =>
@@ -261,37 +261,6 @@ namespace Mtgdb.Gui
 
 		private void setupButtons()
 		{
-			foreach (var langButton in getLanguageMenuItems())
-				_buttonSubsystem.SetupButton(langButton,
-					new ButtonImages(_languageIcons[langButton.Text.Trim()], x2: true));
-
-			_buttonSubsystem.SetupButton(_buttonUndo, new ButtonImages(Resources.undo_16, Resources.undo_32));
-			_buttonSubsystem.SetupButton(_buttonRedo, new ButtonImages(Resources.redo_16, Resources.redo_32));
-			_buttonSubsystem.SetupButton(_buttonSaveDeck, new ButtonImages(Resources.save_16, Resources.save_32));
-			_buttonSubsystem.SetupButton(_buttonOpenDeck, new ButtonImages(Resources.open_16, Resources.open_32));
-			_buttonSubsystem.SetupButton(_buttonStat, new ButtonImages(Resources.chart_16, Resources.chart_32));
-			_buttonSubsystem.SetupButton(_buttonPrint, new ButtonImages(Resources.print_16, Resources.print_32));
-			_buttonSubsystem.SetupButton(_buttonClear, new ButtonImages(Resources.trash_16, Resources.trash_32));
-			_buttonSubsystem.SetupButton(_buttonPaste, new ButtonImages(Resources.paste_16, Resources.paste_32));
-			_buttonSubsystem.SetupButton(_buttonHelp, new ButtonImages(Resources.index_16, Resources.index_32));
-			_buttonSubsystem.SetupButton(_buttonConfig, new ButtonImages(Resources.properties_16, Resources.properties_32));
-			_buttonSubsystem.SetupButton(_buttonTooltips, new ButtonImages(Resources.tooltip_16, Resources.tooltip_32));
-			_buttonSubsystem.SetupButton(_buttonImportExportToMtgArena, new ButtonImages(Resources.paste_16, Resources.paste_32));
-
-			_buttonSubsystem.SetupButton(_buttonShowFilterPanels, new ButtonImages(Resources.filters_show_32, x2: true));
-			_buttonSubsystem.SetupButton(_buttonDownload, new ButtonImages(Resources.update_40, x2: true));
-			_buttonSubsystem.SetupButton(_buttonMenuOpenDeck, new ButtonImages(Resources.deck_48, x2: true));
-			_buttonSubsystem.SetupButton(_buttonMenuOpenCollection, new ButtonImages(Resources.box_48, x2: true));
-			_buttonSubsystem.SetupButton(_buttonMenuSaveDeck, new ButtonImages(Resources.deck_48, x2: true));
-			_buttonSubsystem.SetupButton(_buttonMenuSaveCollection, new ButtonImages(Resources.box_48, x2: true));
-			_buttonSubsystem.SetupButton(_buttonOpenWindow, new ButtonImages(Resources.add_form_32, x2: true));
-			_buttonSubsystem.SetupButton(_buttonLanguage, new ButtonImages(Resources.en, x2: true));
-			_buttonSubsystem.SetupButton(_buttonColorScheme, new ButtonImages(Resources.color_swatch_32, x2: true));
-			_buttonSubsystem.SetupButton(_buttonDonate, new ButtonImages(null, x2: false));
-			_buttonSubsystem.SetupButton(_buttonSupport, new ButtonImages(null, x2: false));
-			_buttonSubsystem.SetupButton(_buttonDonateYandexMoney, new ButtonImages(Resources.yandex_money_32, x2: false));
-			_buttonSubsystem.SetupButton(_buttonDonatePayPal, new ButtonImages(Resources.paypal_32, x2: false));
-
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
 			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
 

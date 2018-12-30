@@ -32,7 +32,7 @@ namespace Mtgdb.Test
 
 			var transformation = new ColorSchemeTransformation(c1.ToHsv(), c2.ToHsv());
 			var sourceColor = Color.FromArgb(unchecked((int) 0xFF_00_00_00));
-			var transformed = transformation.Transform(sourceColor);
+			var transformed = transformation.TransformColor(sourceColor);
 
 			Assert.That(transformed.ToArgb(), Is.EqualTo(unchecked((int) 0xFF_FF_FF_00)));
 		}

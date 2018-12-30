@@ -41,32 +41,42 @@ namespace Mtgdb.Gui
 			MouseWheel += mouseWheel;
 			DoubleBuffered = true;
 
-			var hotSpot = new Size(14, 8).ByDpi();
-			var cursorImage = Resources.rightclick_48.HalfResizeDpi();
-			Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
-
-			_openFileButton.Image = Dpi.ScalePercent > 100
-				? Resources.image_file_32.HalfResizeDpi()
-				: Resources.image_file_16.ResizeDpi();
-
-			_showInExplorerButton.Image = Dpi.ScalePercent > 100
-				? Resources.open_32.HalfResizeDpi()
-				: Resources.open_16.ResizeDpi();
-
-			_showArtButton.Image = Dpi.ScalePercent > 100
-				? Resources.art_64.HalfResizeDpi()
-				: Resources.art_32.ResizeDpi();
-
-			var cloneImg = Resources.clone_48.HalfResizeDpi();
-
-			_showDuplicatesButton.Image = cloneImg;
-			_showOtherSetsButton.Image = cloneImg;
+			scale();
 
 			_showArtButton.CheckedChanged += showArtChanged;
 			_showDuplicatesButton.CheckedChanged += (x, y) => onSettingsChanged();
 			_showOtherSetsButton.CheckedChanged += (x, y) => onSettingsChanged();
 
 			updateShowArt();
+		}
+
+		private void scale()
+		{
+			new DpiScaler<FormZoom>(form =>
+			{
+				var hotSpot = new Size(14, 8).ByDpi();
+				var cursorImage = Resources.rightclick_48.HalfResizeDpi();
+				form.Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
+
+				bool useLargeIcon = Dpi.ScalePercent > 100;
+
+				form._openFileButton.Image = useLargeIcon
+					? Resources.image_file_32.HalfResizeDpi()
+					: Resources.image_file_16.ResizeDpi();
+
+				form._showInExplorerButton.Image = useLargeIcon
+					? Resources.open_32.HalfResizeDpi()
+					: Resources.open_16.ResizeDpi();
+
+				form._showArtButton.Image = useLargeIcon
+					? Resources.art_64.HalfResizeDpi()
+					: Resources.art_32.ResizeDpi();
+
+				var cloneImg = Resources.clone_48.HalfResizeDpi();
+
+				form._showDuplicatesButton.Image = cloneImg;
+				form._showOtherSetsButton.Image = cloneImg;
+			}).Setup(this);
 		}
 
 		public async Task LoadImages(Card card, UiModel ui)

@@ -90,6 +90,8 @@
     <Compile Include="DeckFields.cs" />
     <Compile Include="DeckKeywordHighlighter.cs" />
     <Compile Include="DeckIndexUpdateSubsystem.cs" />
+    <Compile Include="DeckListControl.Scale.cs" />
+    <Compile Include="DeckListControl.Tooltips.cs" />
     <Compile Include="DeckListLayoutCustomButtons.cs" />
     <Compile Include="DeckQueryParser.cs" />
     <Compile Include="DeckSearcher.cs" />

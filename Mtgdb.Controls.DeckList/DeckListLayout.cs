@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -65,7 +66,7 @@ namespace Mtgdb.Controls
 
 			SubscribeToFieldEvents();
 
-			var labels = new[]
+			new[]
 			{
 				_labelCreature,
 				_labelLand,
@@ -82,16 +83,16 @@ namespace Mtgdb.Controls
 				_labelPrice,
 				_labelCount,
 				_labelCountUnknown
-			};
-
-			foreach (var label in labels)
-				setupLabel(label);
+			}.ForEach(setupLabel);
 
 			void setupLabel(FieldControl label)
 			{
 				label.SearchOptions.Allow = false;
 				label.AllowSort = false;
 			}
+
+			ImageDeckBoxOpened = Resources.deckbox_opened;
+			ImageDeckBox = Resources.deckbox;
 		}
 
 		protected override void LoadData(object dataSource)
@@ -174,19 +175,6 @@ namespace Mtgdb.Controls
 					: ImageDeckBox;
 
 			set => throw new NotSupportedException();
-		}
-
-		public override void CopyFrom(LayoutControl other)
-		{
-			base.CopyFrom(other);
-			ImageDeckBox = ((DeckListLayout) other).ImageDeckBox;
-			ImageDeckBoxOpened = ((DeckListLayout) other).ImageDeckBoxOpened;
-		}
-
-		protected override void CopyField(FieldControl thisField, FieldControl otherField)
-		{
-			base.CopyField(thisField, otherField);
-			thisField.Image = otherField.Image;
 		}
 
 		public override bool ShowSortButton(FieldControl field) =>

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Mtgdb.Controls.Properties;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
 
@@ -23,6 +22,7 @@ namespace Mtgdb.Controls
 		public DeckListControl()
 		{
 			InitializeComponent();
+			_viewDeck.LayoutControlType = typeof(DeckListLayout);
 		}
 
 		public void Init(
@@ -33,10 +33,10 @@ namespace Mtgdb.Controls
 			CollectionEditorModel collection,
 			Control tooltipOwner)
 		{
+			_searcher = searcher;
 			_textBoxName.Visible = false;
 
 			_viewDeck.IconRecognizer = recognizer;
-			_viewDeck.LayoutControlType = typeof(DeckListLayout);
 			_viewDeck.DataSource = _filteredModels;
 
 			_menuFilterByDeckMode.SelectedIndex = 0;
@@ -44,9 +44,8 @@ namespace Mtgdb.Controls
 			_listModel = decks;
 			_tooltipOwner = tooltipOwner;
 			_collection = collection;
-			_textSelectionCursor = createTextSelectionCursor();
 
-			_searchSubsystem = new DeckSearchSubsystem(this, _textBoxSearch, _panelSearchIcon, _listBoxSuggest, searcher, adapter, _viewDeck);
+			_searchSubsystem = new DeckSearchSubsystem(this, _textBoxSearch, _panelSearchIcon, _listBoxSuggest, _searcher, adapter, _viewDeck);
 			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
 			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 			_highlightSubsystem = new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter);
@@ -54,6 +53,15 @@ namespace Mtgdb.Controls
 			_model = _listModel.CreateModel(Deck.Create());
 			_model.IsCurrent = true;
 
+			subscribeToEvents();
+
+			updateSortLabel();
+
+			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
+		}
+
+		private void subscribeToEvents()
+		{
 			_menuFilterByDeckMode.SelectedIndexChanged += filterByDeckModeChanged;
 
 			_searchSubsystem.SubscribeToEvents();
@@ -77,22 +85,36 @@ namespace Mtgdb.Controls
 			else
 				_listModel.Loaded += listModelLoaded;
 
-			if (searcher.IsLoaded)
+			if (_searcher.IsLoaded)
 				searcherLoaded();
 			else
-				searcher.Loaded += searcherLoaded;
-
-			updateSortLabel();
-
-			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
+				_searcher.Loaded += searcherLoaded;
 		}
 
-		private static Cursor createTextSelectionCursor()
+		public void UnsubscribeFromEvents()
 		{
-			var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-			var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-			var textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
-			return textSelectionCursor;
+			_menuFilterByDeckMode.SelectedIndexChanged -= filterByDeckModeChanged;
+
+			_searchSubsystem.UnsubscribeFromEvents();
+			_deckSort.UnsubscribeFromEvents();
+
+			_searchSubsystem.TextApplied -= searchTextApplied;
+			_deckSort.SortChanged -= sortChanged;
+
+			_textBoxName.LostFocus -= nameLostFocus;
+			_textBoxName.KeyDown -= nameKeyDown;
+
+			_viewDeck.MouseClicked -= viewDeckClicked;
+			_viewDeck.RowDataLoaded -= viewDeckRowDataLoaded;
+			_viewDeck.CardIndexChanged -= viewScrolled;
+			_viewDeck.MouseMove -= deckMouseMove;
+
+			_listModel.Loaded -= listModelLoaded;
+
+			if (_searcher.IsLoaded)
+				searcherLoaded();
+			else
+				_searcher.Loaded += searcherLoaded;
 		}
 
 		private void searcherLoaded()
@@ -171,60 +193,6 @@ namespace Mtgdb.Controls
 
 		public void CollectionChanged() =>
 			_model.UpdateCollection(_collection.Snapshot(), affectedNames: null);
-
-		private void setupTooltips(TooltipController controller)
-		{
-			controller.SetTooltip(_tooltipOwner, "Deck name", "Type deck name.\r\n" +
-				"press Enter to apply\r\n" +
-				"press Esc to cancel",
-				_textBoxName);
-
-			controller.SetTooltip(_tooltipOwner,
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
-					? "Syntax error"
-					: "Search bar for decks",
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
-					"Filter decks, example queries:\r\n" +
-					// ReSharper disable once StringLiteralTypo
-					"\tname: affin*\r\n" +
-					"\tmana: \\{w\\} AND \\{u\\}\r\n\r\n" +
-					"Ctrl+SPACE to get intellisense\r\n" +
-					"Enter to apply\r\n" +
-					"Ctrl+Backspace to delete one word\r\n\r\n" +
-					"F1 to learn search bar query syntax\r\n" +
-					"Middle mouse click to clear",
-				_panelSearchIcon,
-				_panelSearch,
-				_textBoxSearch);
-
-			controller.SetTooltip(_tooltipOwner,
-				"Deck list sort order",
-				"Sort buttons are located over textual fields of decks.\r\n" +
-				"Click sort button to sort by field or change sort direction.\r\n" +
-				"Shift + Click to add field to sort priorities,\r\n" +
-				"Ctrl + Click to remove field from sort priorities.\r\n\r\n" +
-				"When all explicit sort criteria are equal, decks are ordered " +
-				"by relevance to search result, then by order they were created.\r\n\r\n" +
-				"NOTE: currently opened deck is is always first in the list",
-				_labelSortStatus);
-
-			string filterMode(FilterByDeckMode mode) =>
-				_menuFilterByDeckMode.Items[(int) mode].ToString();
-
-			controller.SetTooltip(_tooltipOwner,
-				"Filter by deck mode",
-				"Controls how search result of cards is affected by decks.\r\n\r\n" +
-				$"- {filterMode(FilterByDeckMode.Ignored)}\r\n" +
-				"    decks do not affect search result of cards\r\n" +
-				$"- {filterMode(FilterByDeckMode.CurrentDeck)}\r\n" +
-				"    show cards present in currently opened deck\r\n" +
-				$"- {filterMode(FilterByDeckMode.FilteredSavedDecks)}\r\n" +
-				"    show cards present in any saved deck from list below matching search criteria for " +
-				"saved decks on the left",
-				_menuFilterByDeckMode);
-
-			controller.SetCustomTooltip(_layoutViewTooltip);
-		}
 
 		private void viewDeckClicked(object view, HitInfo hitInfo, MouseEventArgs mouseArgs)
 		{
@@ -453,56 +421,6 @@ namespace Mtgdb.Controls
 
 
 
-		public void Scale()
-		{
-			scalePanelIcon(_panelSearchIcon);
-			scalePanelIcon(_panelSortIcon);
-
-			_panelSearch.Height = _panelSearch.Height.ByDpiHeight();
-			_menuFilterByDeckMode.ScaleDpi();
-
-			scaleLayoutView(_viewDeck);
-
-			_textBoxSearch.ScaleDpiFont();
-
-			_labelSortStatus.ScaleDpiFont();
-			_labelFilterByDeckMode.ScaleDpiFont();
-		}
-
-		private static void scalePanelIcon(BorderedPanel panel)
-		{
-			panel.ScaleDpi();
-			panel.BackgroundImage = ((Bitmap) panel.BackgroundImage).HalfResizeDpi();
-		}
-
-		private static void scaleLayoutView(LayoutViewControl view)
-		{
-			view.TransformIcons(bmp => bmp.HalfResizeDpi());
-
-			view.TransformFieldIcons(
-				customButtonIcon: (bmp, field, i) => Dpi.ScalePercent > 100
-					? bmp.HalfResizeDpi()
-					: bmp.ResizeDpi(),
-				searchIcon: bmp => bmp.HalfResizeDpi());
-
-			view.LayoutOptions.PartialCardsThreshold = view.LayoutOptions.PartialCardsThreshold.ByDpi();
-			view.ProbeCardCreating += probeCardCreating;
-		}
-
-		private static void probeCardCreating(object view, LayoutControl probeCard)
-		{
-			probeCard.ScaleDpi();
-
-			var card = (DeckListLayout) probeCard;
-
-			// it is here because DeckListLayout field images are static
-			foreach (var field in card.Fields)
-				field.Image = ((Bitmap) field.Image)?.HalfResizeDpi();
-
-			card.ImageDeckBox = Resources.deckbox.ResizeDpi();
-			card.ImageDeckBoxOpened = Resources.deckbox_opened.ResizeDpi();
-		}
-
 		public bool AnyFilteredDeckContains(Card c) =>
 			_cardIdsInFilteredDecks.Contains(c.Id);
 
@@ -514,7 +432,6 @@ namespace Mtgdb.Controls
 			_viewDeck.RefreshData();
 			Refreshed?.Invoke(this);
 		}
-
 
 		public bool HideScroll
 		{
@@ -590,5 +507,6 @@ namespace Mtgdb.Controls
 
 		private bool _aborted;
 		private readonly object _sync = new object();
+		private DeckSearcher _searcher;
 	}
 }

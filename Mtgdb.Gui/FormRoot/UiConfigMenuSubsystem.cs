@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
 	public class UiConfigMenuSubsystem
 	{
-		public UiConfigMenuSubsystem(ComboBox menuUiScale, ComboBox menuUiSmallImageQuality, UiConfigRepository uiConfig)
+		public UiConfigMenuSubsystem(ComboBox menuUiScale, ComboBox menuUiSmallImageQuality, UiConfigRepository configRepo)
 		{
 			_menuUiScale = menuUiScale;
 			_menuUiSmallImageQuality = menuUiSmallImageQuality;
-			_uiConfig = uiConfig;
+			_configRepo = configRepo;
 		}
 
 		public void SetupMenu()
 		{
-			var menuItemTexts = _uiConfig.UiScaleValues
+			var menuItemTexts = _configRepo.UiScaleValues
 				.Select(scale => scale.ToString(Str.Culture) + " %")
 				.Cast<object>()
 				.ToArray();
 
 			_menuUiScale.Items.AddRange(menuItemTexts);
-			UiScalePercent = _uiConfig.Config.UiScalePercent;
+			UiScalePercent = _configRepo.Config.UiScalePercent;
 
 			_menuUiSmallImageQuality.Items.AddRange(new object[] { "Normal (LQ)", "High (MQ)" });
-			UseSmallImages = _uiConfig.Config.DisplaySmallImages;
+			UseSmallImages = _configRepo.Config.DisplaySmallImages;
 
 			_menuUiSmallImageQuality.SelectedIndexChanged += handleUiSmallImageQualityChanged;
 			_menuUiScale.SelectedIndexChanged += handleUiScalePercentChanged;
@@ -39,7 +40,7 @@ namespace Mtgdb.Gui
 			if (UiScalePercent > 100)
 				UseSmallImages = false;
 
-			saveConfig();
+			handleConfigChanged();
 		}
 
 		private void handleUiSmallImageQualityChanged(object sender, EventArgs e)
@@ -47,16 +48,16 @@ namespace Mtgdb.Gui
 			if (_updatingMenuValues)
 				return;
 
-			saveConfig();
+			handleConfigChanged();
 		}
 
 		private int UiScalePercent
 		{
-			get => _uiConfig.UiScaleValues[_menuUiScale.SelectedIndex];
+			get => _configRepo.UiScaleValues[_menuUiScale.SelectedIndex];
 			set
 			{
 				_updatingMenuValues = true;
-				_menuUiScale.SelectedIndex = _uiConfig.UiScaleValues.IndexOf(value);
+				_menuUiScale.SelectedIndex = _configRepo.UiScaleValues.IndexOf(value);
 				_updatingMenuValues = false;
 			}
 		}
@@ -72,17 +73,19 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void saveConfig()
+		private void handleConfigChanged()
 		{
-			_uiConfig.Config.UiScalePercent = UiScalePercent;
-			_uiConfig.Config.DisplaySmallImages = UseSmallImages;
-			_uiConfig.Save();
+			_configRepo.Config.UiScalePercent = UiScalePercent;
+			_configRepo.Config.DisplaySmallImages = UseSmallImages;
+			_configRepo.Save();
+
+			Dpi.Initialize(_configRepo.Config.UiScalePercent);
 		}
 
 		private bool _updatingMenuValues;
 
 		private readonly ComboBox _menuUiScale;
 		private readonly ComboBox _menuUiSmallImageQuality;
-		private readonly UiConfigRepository _uiConfig;
+		private readonly UiConfigRepository _configRepo;
 	}
 }

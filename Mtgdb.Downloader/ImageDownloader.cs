@@ -209,7 +209,7 @@ namespace Mtgdb.Downloader
 					alreadyDownloaded = false;
 					Console.WriteLine("Deleting modified or corrupted file {0}", filePath);
 
-					lock (ImageLoader.SyncRoot)
+					lock (ImageLoader.SyncIo)
 					{
 						try
 						{

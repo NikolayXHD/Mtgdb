@@ -137,7 +137,7 @@
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
-    <Compile Include="FormMain\DeckEditorUi.cs" />
+    <Compile Include="FormMain\DeckEditorSubsystem.cs" />
     <Compile Include="FormMain\DrawingSubsystem.cs" />
     <Compile Include="FormMain\Evaluators.cs" />
     <Compile Include="FormMain\FilterGroup.cs" />

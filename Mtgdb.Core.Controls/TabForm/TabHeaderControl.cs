@@ -49,13 +49,6 @@ namespace Mtgdb.Controls
 			CloseIconHovered = _defaultCloseIconHovered;
 			_closeIcon = _defaultCloseIcon;
 			_addIcon = _defaultAddIcon;
-
-			if (!DesignMode)
-			{
-				CloseIconHovered = CloseIconHovered.HalfResizeDpi();
-				_closeIcon = _closeIcon.HalfResizeDpi();
-				_addIcon = _addIcon.HalfResizeDpi();
-			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -123,6 +116,7 @@ namespace Mtgdb.Controls
 				TabIds = Enumerable.Range(0, Count).Select(i => TabIds[indices[i]]).ToList();
 				Widths = Enumerable.Range(0, Count).Select(i => Widths[indices[i]]).ToList();
 				Icons = Enumerable.Range(0, Count).Select(i => Icons[indices[i]]).ToList();
+				Tags = Enumerable.Range(0, Count).Select(i => Tags[indices[i]]).ToList();
 			}
 
 			Invalidate();
@@ -146,13 +140,28 @@ namespace Mtgdb.Controls
 						if (setting.HasIcon)
 							Icons[i] = setting.Icon;
 					}
-
-					Widths[i] = getTabWidth(Texts[i], Icons[i], CloseIcon);
 				}
+
+				recalculateWidths();
 			}
 
 			OnLayout(new LayoutEventArgs(this, null));
 			Invalidate();
+		}
+
+		public void RecalculateWidths()
+		{
+			lock (_syncRoot)
+				recalculateWidths();
+
+			OnLayout(new LayoutEventArgs(this, null));
+			Invalidate();
+		}
+
+		private void recalculateWidths()
+		{
+			for (int i = 0; i < Count; i++)
+				Widths[i] = getTabWidth(Texts[i], Icons[i], CloseIcon);
 		}
 
 		public void SetTabSetting(object tabId, TabSettings settings)
@@ -169,9 +178,10 @@ namespace Mtgdb.Controls
 							Icons[i] = settings.Icon;
 
 						Widths[i] = getTabWidth(Texts[i], Icons[i], CloseIcon);
+
+						Tags[i] = settings.Tag;
 					}
 			}
-
 
 			OnLayout(new LayoutEventArgs(this, null));
 			Invalidate();
@@ -184,7 +194,8 @@ namespace Mtgdb.Controls
 
 			return new TabSettings(Texts[i], Icons[i])
 			{
-				TabId = TabIds[i]
+				TabId = TabIds[i],
+				Tag = Tags[i]
 			};
 		}
 
@@ -196,6 +207,7 @@ namespace Mtgdb.Controls
 				Texts = new List<string>();
 				Widths = new List<int>();
 				Icons = new List<Bitmap>();
+				Tags = new List<object>();
 			}
 		}
 
@@ -221,6 +233,7 @@ namespace Mtgdb.Controls
 				TabIds.RemoveAt(index);
 				Widths.RemoveAt(index);
 				Icons.RemoveAt(index);
+				Tags.RemoveAt(index);
 
 				var selectedIndex = SelectedIndex >= index
 					? SelectedIndex - 1
@@ -236,7 +249,7 @@ namespace Mtgdb.Controls
 			TabRemoved?.Invoke(this);
 		}
 
-		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null, bool? insertToTheLeft = null, bool select = true)
+		public void AddTab(object tabId = null, string tabText = null, Bitmap icon = null, object tag = null, bool? insertToTheLeft = null, bool select = true)
 		{
 			lock (_syncRoot)
 			{
@@ -248,6 +261,7 @@ namespace Mtgdb.Controls
 				Texts.Add(tabText);
 				Icons.Add(tabIcon);
 				Widths.Add(width);
+				Tags.Add(tag);
 			}
 
 			OnLayout(new LayoutEventArgs(this, null));
@@ -275,6 +289,7 @@ namespace Mtgdb.Controls
 					TabIds = TabIds.Reorder(fromIndex, toIndex);
 					Widths = Widths.Reorder(fromIndex, toIndex);
 					Icons = Icons.Reorder(fromIndex, toIndex);
+					Tags = Tags.Reorder(fromIndex, toIndex);
 				}
 
 			if (selectRelocated)
@@ -1056,7 +1071,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings"), DefaultValue(false)]
-		public bool AddNewTabsToTheLeft { get; set; }
+		public bool AddNewTabsToTheLeft { get; [UsedImplicitly] set; }
 
 		[Category("Settings"), DefaultValue(true)]
 		public bool PaintBackground { get; set; } = true;
@@ -1097,7 +1112,10 @@ namespace Mtgdb.Controls
 		private List<int> Widths { get; set; }
 		private List<string> Texts { get; set; }
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public List<Bitmap> Icons { get; set; }
+		private List<Bitmap> Icons { get; set; }
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public List<object> Tags { get; set; }
+
 		public int? DraggingIndex { get; private set; }
 
 		private int? _draggingOverIndex;

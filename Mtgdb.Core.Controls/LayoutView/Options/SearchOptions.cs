@@ -12,15 +12,6 @@ namespace Mtgdb.Controls
 			};
 		}
 
-		public SearchOptions Clone()
-		{
-			return new SearchOptions
-			{
-				Allow = Allow,
-				Button = Button.Clone()
-			};
-		}
-
 		[Category("Settings")]
 		[DefaultValue(true)]
 		public bool Allow { get; set; } = true;

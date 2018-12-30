@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChart));
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.CustomCheckBox();
@@ -105,8 +104,6 @@
 			// _chart
 			// 
 			this._chart.Dock = System.Windows.Forms.DockStyle.Fill;
-			legend1.Name = "Legend1";
-			this._chart.Legends.Add(legend1);
 			this._chart.Location = new System.Drawing.Point(0, 120);
 			this._chart.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this._chart.Name = "_chart";
@@ -172,7 +169,6 @@
 			this._menuFields.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuFields.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuFields.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuFields.IntegralHeight = false;
 			this._menuFields.Location = new System.Drawing.Point(49, 1);
 			this._menuFields.Margin = new System.Windows.Forms.Padding(0);
 			this._menuFields.MaxDropDownItems = 34;
@@ -431,7 +427,6 @@
 			this._menuLabelDataElement.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuLabelDataElement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuLabelDataElement.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuLabelDataElement.IntegralHeight = false;
 			this._menuLabelDataElement.Location = new System.Drawing.Point(559, 1);
 			this._menuLabelDataElement.Margin = new System.Windows.Forms.Padding(0);
 			this._menuLabelDataElement.Name = "_menuLabelDataElement";
@@ -455,7 +450,6 @@
 			this._menuDataSource.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuDataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuDataSource.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuDataSource.IntegralHeight = false;
 			this._menuDataSource.Location = new System.Drawing.Point(755, 1);
 			this._menuDataSource.Margin = new System.Windows.Forms.Padding(0);
 			this._menuDataSource.Name = "_menuDataSource";
@@ -479,7 +473,6 @@
 			this._menuChartType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuChartType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuChartType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuChartType.IntegralHeight = false;
 			this._menuChartType.Location = new System.Drawing.Point(965, 1);
 			this._menuChartType.Margin = new System.Windows.Forms.Padding(0);
 			this._menuChartType.MaxDropDownItems = 34;
@@ -529,7 +522,6 @@
 			this._menuPrice.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPrice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPrice.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuPrice.IntegralHeight = false;
 			this._menuPrice.Location = new System.Drawing.Point(0, 0);
 			this._menuPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._menuPrice.Name = "_menuPrice";
@@ -542,7 +534,6 @@
 			this._menuPriceChartType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPriceChartType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuPriceChartType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this._menuPriceChartType.IntegralHeight = false;
 			this._menuPriceChartType.Location = new System.Drawing.Point(0, 23);
 			this._menuPriceChartType.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this._menuPriceChartType.Name = "_menuPriceChartType";

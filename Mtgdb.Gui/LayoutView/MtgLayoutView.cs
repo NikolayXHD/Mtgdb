@@ -169,7 +169,7 @@ namespace Mtgdb.Gui
 				var threshold = _view.LayoutOptions.PartialCardsThreshold;
 
 				_view.LayoutOptions.PartialCardsThreshold = new Size(
-					_view.ProbeCard.Width * threshold.Height / _view.ProbeCard.Height,
+					_view.CardSize.Width * threshold.Height / _view.CardSize.Height,
 					threshold.Height);
 			}
 		}
@@ -261,7 +261,7 @@ namespace Mtgdb.Gui
 			_view.GetHighlightTextRanges(rowHandle, fieldName);
 
 		public HighlightOptions GetHighlightSettings() =>
-			_view.ProbeCard.HighlightOptions;
+			_view.HighlightOptions;
 
 		public int ScrollWidth => _view.ScrollWidth;
 

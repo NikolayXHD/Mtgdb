@@ -860,7 +860,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionColor
 		{
-			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_selectionColor) : _selectionColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).TransformColor(_selectionColor) : _selectionColor;
 			set
 			{
 				_selectionColor = value;
@@ -872,7 +872,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color SelectionBorderColor
 		{
-			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_selectionBorderColor) : _selectionBorderColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).TransformColor(_selectionBorderColor) : _selectionBorderColor;
 			set
 			{
 				_selectionBorderColor = value;
@@ -884,7 +884,7 @@ namespace Mtgdb.Controls
 		[DefaultValue(typeof(Color), "Transparent")]
 		public Color ProhibitedColor
 		{
-			get => !DesignMode ? new ColorSchemeTransformation(null).Transform(_prohibitedColor) : _prohibitedColor;
+			get => !DesignMode ? new ColorSchemeTransformation(null).TransformColor(_prohibitedColor) : _prohibitedColor;
 			set
 			{
 				_prohibitedColor = value;

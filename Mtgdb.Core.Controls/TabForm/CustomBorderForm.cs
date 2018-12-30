@@ -43,9 +43,9 @@ namespace Mtgdb.Controls
 			KeyDown += keyDown;
 			KeyUp += keyUp;
 
-			CaptionHeight = 31.ByDpiHeight();
-			Border = new Size(6, 6).ByDpi();
-			ControlBoxButtonSize = new Size(31, 17).ByDpi();
+			CaptionHeight = 31;
+			BorderSize = new Size(6, 6);
+			ControlBoxButtonSize = new Size(31, 17);
 
 			applySystemColors();
 			ColorSchemeController.SystemColorsChanging += applySystemColors;
@@ -72,7 +72,7 @@ namespace Mtgdb.Controls
 			{
 				client = Rectangle.FromLTRB(
 					rect.Left,
-					CaptionHeight - Border.Height,
+					CaptionHeight - BorderSize.Height,
 					rect.Right,
 					rect.Bottom);
 
@@ -81,12 +81,12 @@ namespace Mtgdb.Controls
 			else
 			{
 				client = Rectangle.FromLTRB(
-					rect.Left + Border.Width,
+					rect.Left + BorderSize.Width,
 					CaptionHeight,
-					rect.Right - Border.Width,
-					rect.Bottom - Border.Height);
+					rect.Right - BorderSize.Width,
+					rect.Bottom - BorderSize.Height);
 
-				headerTop = rect.Top + Border.Height;
+				headerTop = rect.Top + BorderSize.Height;
 			}
 
 			_panelClient.Bounds = client;
@@ -140,7 +140,7 @@ namespace Mtgdb.Controls
 				if (img.IsHovered)
 					g.FillRectangle(getCaptionButtonBrush(), img.Bounds);
 
-				var bmp = _captionButtonImages[i];
+				var bmp = CaptionButtonImages[i];
 				var centered = bmp.Size.FitIn(img.Bounds).CenterIn(img.Bounds);
 				g.DrawImage(bmp, centered);
 			}
@@ -150,7 +150,7 @@ namespace Mtgdb.Controls
 				switch (ContainsFocus)
 				{
 					case true: return SystemBrushes.ActiveCaption;
-					default: return new SolidBrush(SystemColors.GradientInactiveCaption);
+					default: return SystemBrushes.InactiveCaption;
 				}
 			}
 		}
@@ -199,10 +199,10 @@ namespace Mtgdb.Controls
 		{
 			var pen = new Pen(_panelCaption.BorderColor);
 
-			int left = Border.Width - 1;
+			int left = BorderSize.Width - 1;
 			int top = titleRect.Height - 1;
-			int right = Width - Border.Width;
-			int bottom = Height - Border.Height;
+			int right = Width - BorderSize.Width;
+			int bottom = Height - BorderSize.Height;
 
 			if (IsMaximized)
 			{
@@ -231,7 +231,7 @@ namespace Mtgdb.Controls
 		private IList<(bool IsHovered, Rectangle Bounds)> getControlBoxImages(Point clientLocation)
 		{
 			int x = Width;
-			int y = Border.Height;
+			int y = BorderSize.Height;
 
 			var result = new List<(bool IsHovered, Rectangle Bounds)>();
 
@@ -269,7 +269,7 @@ namespace Mtgdb.Controls
 
 			void add(Point location)
 			{
-				x -= ControlBoxButtonSize.Width + Border.Width;
+				x -= ControlBoxButtonSize.Width + BorderSize.Width;
 				var rect = new Rectangle(x, y, ControlBoxButtonSize.Width, ControlBoxButtonSize.Height);
 				result.Add((rect.Contains(location), rect));
 			}
@@ -649,12 +649,12 @@ namespace Mtgdb.Controls
 
 		private int getVerticalSnapHeight()
 		{
-			return (CaptionHeight - Border.Height) / 4;
+			return (CaptionHeight - BorderSize.Height) / 4;
 		}
 
 		private int getHorizontalSnapWidth()
 		{
-			return CaptionHeight - Border.Height;
+			return CaptionHeight - BorderSize.Height;
 		}
 
 		private static int getSnappingCornerDistance(Rectangle screenBounds)
@@ -673,7 +673,7 @@ namespace Mtgdb.Controls
 
 		private Rectangle getTitleRectangle() =>
 			IsMaximized
-				? new Rectangle(0, 0, Bounds.Width, CaptionHeight - Border.Height)
+				? new Rectangle(0, 0, Bounds.Width, CaptionHeight - BorderSize.Height)
 				: new Rectangle(0, 0, Bounds.Width, CaptionHeight);
 
 		private Rectangle getControlBoxRectangle()
@@ -702,46 +702,46 @@ namespace Mtgdb.Controls
 			switch (direction)
 			{
 				case Direction.Left:
-					yield return Rectangle.FromLTRB(0, CaptionHeight, Border.Width, bounds.Bottom - Border.Height);
+					yield return Rectangle.FromLTRB(0, CaptionHeight, BorderSize.Width, bounds.Bottom - BorderSize.Height);
 
 					break;
 
 				case Direction.Top:
-					yield return Rectangle.FromLTRB(0, 0, bounds.Right, Border.Height);
+					yield return Rectangle.FromLTRB(0, 0, bounds.Right, BorderSize.Height);
 
 					break;
 
 				case Direction.Right:
-					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, CaptionHeight, bounds.Right, bounds.Bottom - Border.Height);
+					yield return Rectangle.FromLTRB(bounds.Right - BorderSize.Width, CaptionHeight, bounds.Right, bounds.Bottom - BorderSize.Height);
 
 					break;
 
 				case Direction.Bottom:
-					yield return Rectangle.FromLTRB(bounds.Left, bounds.Bottom - Border.Height, bounds.Right, bounds.Bottom);
+					yield return Rectangle.FromLTRB(bounds.Left, bounds.Bottom - BorderSize.Height, bounds.Right, bounds.Bottom);
 
 					break;
 
 				case Direction.TopLeft:
-					yield return Rectangle.FromLTRB(0, 0, CaptionHeight, Border.Height);
-					yield return Rectangle.FromLTRB(0, 0, Border.Width, CaptionHeight);
+					yield return Rectangle.FromLTRB(0, 0, CaptionHeight, BorderSize.Height);
+					yield return Rectangle.FromLTRB(0, 0, BorderSize.Width, CaptionHeight);
 
 					break;
 
 				case Direction.TopRight:
-					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, 0, Bounds.Right, Border.Height);
-					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, 0, Bounds.Right, CaptionHeight);
+					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, 0, Bounds.Right, BorderSize.Height);
+					yield return Rectangle.FromLTRB(bounds.Right - BorderSize.Width, 0, Bounds.Right, CaptionHeight);
 
 					break;
 
 				case Direction.BottomRight:
-					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, bounds.Bottom - Border.Height, Bounds.Right, bounds.Bottom);
-					yield return Rectangle.FromLTRB(bounds.Right - Border.Width, bounds.Bottom - CaptionHeight, Bounds.Right, bounds.Bottom);
+					yield return Rectangle.FromLTRB(bounds.Right - CaptionHeight, bounds.Bottom - BorderSize.Height, Bounds.Right, bounds.Bottom);
+					yield return Rectangle.FromLTRB(bounds.Right - BorderSize.Width, bounds.Bottom - CaptionHeight, Bounds.Right, bounds.Bottom);
 
 					break;
 
 				case Direction.BottomLeft:
-					yield return Rectangle.FromLTRB(0, bounds.Bottom - Border.Height, CaptionHeight, bounds.Bottom);
-					yield return Rectangle.FromLTRB(0, bounds.Bottom - CaptionHeight, Border.Width, bounds.Bottom);
+					yield return Rectangle.FromLTRB(0, bounds.Bottom - BorderSize.Height, CaptionHeight, bounds.Bottom);
+					yield return Rectangle.FromLTRB(0, bounds.Bottom - CaptionHeight, BorderSize.Width, bounds.Bottom);
 
 					break;
 			}
@@ -914,8 +914,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		protected Size Border { get; }
-		private Size ControlBoxButtonSize { get; }
+		public Size BorderSize { get; set; }
+		public Size ControlBoxButtonSize { get; set; }
 
 		[Browsable(false)]
 		private bool IsMaximized
@@ -935,17 +935,6 @@ namespace Mtgdb.Controls
 		private void applySystemColors()
 		{
 			_isVisualStyleSupported = VisualStyleRenderer.IsSupported;
-
-			_captionButtonImages = new[]
-			{
-				Resources.minimize,
-				Resources.maximize,
-				Resources.normalize,
-				Resources.close
-			};
-
-			foreach (var image in _captionButtonImages)
-				new ColorSchemeTransformation(image).Execute();
 
 			if (_isVisualStyleSupported)
 			{
@@ -990,7 +979,13 @@ namespace Mtgdb.Controls
 		private const int CaptionButtonRestoreIndex = 2;
 		private const int CaptionButtonCloseIndex = 3;
 
-		private Bitmap[] _captionButtonImages;
+		public Bitmap[] CaptionButtonImages { get; set; } =
+		{
+			Resources.minimize,
+			Resources.maximize,
+			Resources.normalize,
+			Resources.close
+		};
 
 		private bool _dragEnabledUnmaximizeThreshold;
 		private bool _isVisualStyleSupported;

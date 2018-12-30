@@ -82,9 +82,16 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
+    <Compile Include="Dpi\BorderedPanelScaler.cs" />
+    <Compile Include="Dpi\CustomBorderFormScaler.cs" />
+    <Compile Include="Dpi\Dpi.cs" />
+    <Compile Include="Dpi\DpiScaler.cs" />
+    <Compile Include="Dpi\ControlScaler.cs" />
+    <Compile Include="Dpi\LayoutViewControlScaler.cs" />
+    <Compile Include="Dpi\QuickFilterControlScaler.cs" />
+    <Compile Include="Dpi\Scalers.cs" />
+    <Compile Include="Dpi\TabHeaderControlScaler.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
-    <Compile Include="LayoutView\LayoutControlExtensions.cs" />
-    <Compile Include="LayoutView\LayoutViewControlExtensions.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
@@ -104,7 +111,6 @@
     <Compile Include="BorderedTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dpi.cs" />
     <Compile Include="GeometryHelpers.cs" />
     <Compile Include="LayoutView\Options\ButtonLayout.cs" />
     <Compile Include="LayoutView\Options\ButtonOptions.cs" />
@@ -173,7 +179,6 @@
     <Compile Include="TabForm\TabHeaderControl.Designer.cs">
       <DependentUpon>TabHeaderControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="TabForm\TabHeaderControlExtension.cs" />
     <Compile Include="TabForm\TabSettings.cs" />
     <Compile Include="Tooltip\FixedRichTextBox.cs">
       <SubType>Component</SubType>
