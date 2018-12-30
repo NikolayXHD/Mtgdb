@@ -28,15 +28,15 @@
 		<Directory Group="dev" Zoom="Any"   Path="D:\Distrib\games\mtg\Patch" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />
-		<Directory Group="xlhq" Zoom="Any" Set="DD3_DVD"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="DD3_EVG"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="DD3_GVL"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
-		<Directory Group="xlhq" Zoom="Any" Set="DD3_JVC"   Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="dvd"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="evg"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="gvl"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="jvc"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Sets" />
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Tokens" />
-		<Directory Group="xlhq" Zoom="Any" Set="MPS_AKH"   Root="XLHQ" Path="Masterpiece Series\Amonkhet Invocations" />
-		<Directory Group="xlhq" Zoom="Any" Set="MPS"       Root="XLHQ" Path="Masterpiece Series\Kaladesh Inventions" />
-		<Directory Group="xlhq" Zoom="Any" Set="EXP"       Root="XLHQ" Path="Masterpiece Series\Zendikar Expeditions" />
+		<Directory Group="xlhq" Zoom="Any" Set="mp2"       Root="XLHQ" Path="Masterpiece Series\Amonkhet Invocations" />
+		<Directory Group="xlhq" Zoom="Any" Set="mps"       Root="XLHQ" Path="Masterpiece Series\Kaladesh Inventions" />
+		<Directory Group="xlhq" Zoom="Any" Set="exp"       Root="XLHQ" Path="Masterpiece Series\Zendikar Expeditions" />
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos" />
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos\Pre-Release Promos" />
 		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="XLHQ" Path="Other\Vintage Champs 300DPI" />
@@ -77,24 +77,24 @@
 		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-04" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="Torrent" Path="" />
-		<Directory Group="xlhq" Zoom="Any" Set="MMA"       Root="Torrent" Path="MM1" />
-		<Directory Group="xlhq" Zoom="Any" Set="RQS;ITP"   Root="Torrent" Path="I2P" />
-		<Directory Group="xlhq" Zoom="Any" Set="NMS"       Root="Torrent" Path="NEM" />
-		<Directory Group="xlhq" Zoom="Any" Set="CST"       Root="Torrent" Path="CTD" />
-		<Directory Group="xlhq" Zoom="Any" Set="CON"       Root="Torrent" Path="CFX" />
-		<Directory Group="xlhq" Zoom="Any" Set="CON"       Root="Torrent" Path="CFX Extras" />
-		<Directory Group="xlhq" Zoom="Any" Set="CON"       Root="Torrent" Path="CFX Tokens" />
-		<Directory Group="xlhq" Zoom="Any" Set="MD1"       Root="Torrent" Path="MED" />
-		<Directory Group="xlhq" Zoom="Any" Set="ME4;CHR"   Root="Torrent" Path="CHR" />
-		<Directory Group="xlhq" Zoom="Any" Set="6ED;S00"   Root="Torrent" Path="6ED" />
+		<Directory Group="xlhq" Zoom="Any" Set="mma"       Root="Torrent" Path="MM1" />
+		<Directory Group="xlhq" Zoom="Any" Set="rqs;itp"   Root="Torrent" Path="I2P" />
+		<Directory Group="xlhq" Zoom="Any" Set="nem"       Root="Torrent" Path="NEM" />
+		<Directory Group="xlhq" Zoom="Any" Set="cst"       Root="Torrent" Path="CTD" />
+		<Directory Group="xlhq" Zoom="Any" Set="con"       Root="Torrent" Path="CFX" />
+		<Directory Group="xlhq" Zoom="Any" Set="con"       Root="Torrent" Path="CFX Extras" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="md1"       Root="Torrent" Path="MED" />
+		<Directory Group="xlhq" Zoom="Any" Set="me4;chr"   Root="Torrent" Path="CHR" />
+		<Directory Group="xlhq" Zoom="Any" Set="6ed;s00"   Root="Torrent" Path="6ED" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="Promo" Path="" />
-		<Directory Group="xlhq" Zoom="Any" Set="pDRC"      Root="Promo" Path="Convention Promos\DragonCon" />
+		<Directory Group="xlhq" Zoom="Any" Set="pdrc"      Root="Promo" Path="Convention Promos\DragonCon" />
 		<Directory Group="xlhq" Zoom="Any" Set="mgb"       Root="Promo" Path="Major Set Variants\Multiverse Box Set" />
-		<Directory Group="xlhq" Zoom="Any" Set="pPOD"      Root="Promo" Path="Major Set Variants\Portal Demogame" />
-		<Directory Group="xlhq" Zoom="Any" Set="S00"       Root="Promo" Path="Major Set Variants\Starter 2000 Sampler" />
-		<Directory Group="xlhq" Zoom="Any" Set="pSUS"      Root="Promo" Path="Major Set Variants\Summer Magic (Partial)" />
-		<Directory Group="xlhq" Zoom="Any" Set="10E"       Root="Promo" Path="Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
+		<Directory Group="xlhq" Zoom="Any" Set="ppod"      Root="Promo" Path="Major Set Variants\Portal Demogame" />
+		<Directory Group="xlhq" Zoom="Any" Set="s00"       Root="Promo" Path="Major Set Variants\Starter 2000 Sampler" />
+		<Directory Group="xlhq" Zoom="Any" Set="psum"      Root="Promo" Path="Major Set Variants\Summer Magic (Partial)" />
+		<Directory Group="xlhq" Zoom="Any" Set="p10e"      Root="Promo" Path="Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
 		<Directory Group="xlhq" Zoom="Any" Set="hho"       Root="Promo" Path="Other\Happy Holidays" />
 
 		<Directory Group="xlhq" Zoom="Any" Set="pcel"      Root="Promo" Path="Other\Richard Garfield" />
@@ -221,6 +221,7 @@
 <Directory Group="xlhq" Zoom="Any" Set="CSP"       Root="Promo" Path="Tokens\Release Events" />
 <Directory Group="xlhq" Zoom="Any" Set="TSP"       Root="Promo" Path="Tokens\Time Spiral Bonus Program" />
                                                                      "Tokens\Magic Tenth Anniversary"
+<Directory Group="xlhq" Zoom="Any" Set="CON"       Root="Torrent" Path="CFX Tokens" />
 -->
 
 <!-- redundant
