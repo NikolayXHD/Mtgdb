@@ -200,156 +200,6 @@ namespace Mtgdb.Gui
 			subscribeToEvents();
 		}
 
-		private void scale()
-		{
-			_deckEditorSubsystem.Scale();
-
-			_panelSearch.ScaleDpi();
-			_panelSearchExamples.ScaleDpi();
-			_menuLegalityFormat.ScaleDpi();
-
-			_buttonLegalityAllowLegal.ScaleDpi();
-			_buttonLegalityAllowRestricted.ScaleDpi();
-			_buttonLegalityAllowBanned.ScaleDpi();
-			_buttonLegalityAllowFuture.ScaleDpi();
-
-
-			_buttonShowDuplicates.ScaleDpi();
-
-			_buttonSampleHandNew.ScaleDpi();
-			_buttonSampleHandMulligan.ScaleDpi();
-			_buttonSampleHandDraw.ScaleDpi();
-
-			_buttonHideDeck.ScaleDpi();
-			_buttonShowScrollCards.ScaleDpi();
-			_buttonShowScrollDeck.ScaleDpi();
-			_buttonShowPartialCards.ScaleDpi();
-			_buttonShowText.ScaleDpi();
-			_buttonSearchExamplesDropDown.ScaleDpi();
-			_buttonResetFilters.ScaleDpi();
-
-			_labelStatusScrollCards.ScaleDpi();
-			_labelStatusScrollDeck.ScaleDpi();
-
-			_labelStatusSets.ScaleDpi();
-			_labelStatusCollection.ScaleDpi();
-			_labelStatusFilterButtons.ScaleDpi();
-			_labelStatusSearch.ScaleDpi();
-			_labelStatusFilterCollection.ScaleDpi();
-			_labelStatusFilterDeck.ScaleDpi();
-			_labelStatusFilterLegality.ScaleDpi();
-			_labelStatusSort.ScaleDpi();
-
-			_tabHeadersDeck.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-
-			_listBoxSuggest.ScaleDpiWidth();
-
-			scaleLayoutView(_layoutViewCards);
-			scaleLayoutView(_layoutViewDeck);
-
-			foreach (var qf in _quickFilterControls.Append(FilterManager))
-				qf.ScaleDpi();
-
-			_panelIconSearch.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconLegality.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusSets.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusCollection.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusFilterButtons.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusSearch.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusFilterCollection.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusFilterDeck.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusFilterLegality.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelIconStatusSort.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-
-			_deckListControl.Scale();
-
-			foreach (var filterButtonsControl in _quickFilterControls.Append(FilterManager))
-				filterButtonsControl.ScaleDpiFont();
-
-			_searchEditor.ScaleDpiFont();
-
-			new DpiScaler<FormMain>(
-				form =>
-				{
-					form._buttons.SetupButton(form._buttonSampleHandNew,
-						ButtonImages.ScaleDpi((null, Resources.hand_48)));
-
-					form._buttons.SetupButton(form._buttonSampleHandDraw,
-						ButtonImages.ScaleDpi((null, Resources.draw_48)));
-
-					form._buttons.SetupButton(form._buttonSampleHandMulligan,
-						ButtonImages.ScaleDpi((null, Resources.mulligan_48)));
-
-					form._buttons.SetupButton(form._buttonShowDuplicates,
-						ButtonImages.ScaleDpi((null, Resources.clone_48)));
-
-					form._buttons.SetupButton(form._buttonShowProhibit,
-						ButtonImages.ScaleDpi((null, Resources.exclude_minus_24)));
-
-					form._buttons.SetupButton(form._buttonExcludeManaAbility,
-						ButtonImages.ScaleDpi((null, Resources.include_plus_24), (null, Resources.exclude_minus_24)));
-
-					form._buttons.SetupButton(form._buttonExcludeManaCost,
-						ButtonImages.ScaleDpi((null, Resources.include_plus_24), (null, Resources.exclude_minus_24)));
-
-					form._buttons.SetupButton(form._buttonHideDeck,
-						ButtonImages.ScaleDpi((null, Resources.shown_40), (null, Resources.hidden_40)));
-
-					var scrollImages = ButtonImages.ScaleDpi((null, Resources.scroll_shown_40));
-					form._buttons.SetupButton(form._buttonShowScrollCards, scrollImages);
-					form._buttons.SetupButton(form._buttonShowScrollDeck, scrollImages);
-
-					form._buttons.SetupButton(form._buttonShowPartialCards,
-						ButtonImages.ScaleDpi((null, Resources.partial_card_enabled_40)));
-
-					form._buttons.SetupButton(form._buttonShowText,
-						ButtonImages.ScaleDpi((null, Resources.text_enabled_40)));
-
-					form._buttons.SetupButton(form._buttonSearchExamplesDropDown,
-						ButtonImages.ScaleDpi((null, Resources.book_40)));
-
-					form._buttons.SetupButton(form._buttonResetFilters,
-						ButtonImages.ScaleDpi((null, Resources.erase)));
-
-					int border = FilterManaCost.Border;
-					var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
-					int rightMargin = FilterManaCost.Width - modeButtonSize.Width;
-
-					new[]
-					{
-						_buttonExcludeManaAbility,
-						_buttonExcludeManaCost,
-						_buttonShowProhibit
-					}.ForEach(button => button.Size = modeButtonSize);
-
-					setRowHeight(_buttonShowProhibit, modeButtonSize);
-
-					_buttonExcludeManaCost.Margin =
-						_buttonExcludeManaAbility.Margin =
-							new Padding(0, 0, rightMargin, 0);
-
-					_buttonShowProhibit.Margin = new Padding(0);
-
-					int deckHeight = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
-
-					_layoutViewDeck.Height = deckHeight;
-					_deckListControl.Height = deckHeight;
-
-				}).Setup(this);
-		}
-
-		private void scaleLayoutView(LayoutViewControl view)
-		{
-			view.ScaleDpi(
-				bmp => bmp.HalfResizeDpi(),
-				transformSearchIcon: bmp => bmp.HalfResizeDpi(), transformCustomButtonIcon: (bmp, field, i) =>
-				{
-					int delta = DeckEditorButtons.GetCountDelta(i);
-					bool isDeck = DeckEditorButtons.IsDeck(i);
-					return bmp.HalfResizeDpi(preventMoire: isDeck && Math.Abs(delta) == 1);
-				});
-		}
-
 		private void cardCreating(object view, LayoutControl probeCard) =>
 			((CardLayoutControlBase) probeCard).Ui = () => _formRoot.UiModel;
 
@@ -450,6 +300,9 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.CardCreating += cardCreating;
 			_layoutViewDeck.CardCreating += cardCreating;
+
+			Dpi.BeforeChanged += beforeDpiChanged;
+			Dpi.AfterChanged += afterDpiChanged;
 		}
 
 		private void unsubscribeFromEvents()
@@ -538,6 +391,9 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.CardCreating -= cardCreating;
 			_layoutViewDeck.CardCreating -= cardCreating;
+
+			Dpi.BeforeChanged -= beforeDpiChanged;
+			Dpi.AfterChanged -= afterDpiChanged;
 		}
 
 		public Zone? DeckZone

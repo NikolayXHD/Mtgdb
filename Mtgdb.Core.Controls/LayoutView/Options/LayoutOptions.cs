@@ -145,7 +145,7 @@ namespace Mtgdb.Controls
 		private Size _partialCardsThreshold;
 		private Direction _alignment = DefaultDirection;
 
-		internal readonly Dictionary<Direction, Bitmap> AlignmentIconsByDirection = new Dictionary<Direction, Bitmap>();
-		internal readonly Dictionary<Direction, Bitmap> AlignmentHoveredIconsByDirection = new Dictionary<Direction, Bitmap>();
+		internal Dictionary<Direction, Bitmap> AlignmentIconsByDirection = new Dictionary<Direction, Bitmap>();
+		internal Dictionary<Direction, Bitmap> AlignmentHoveredIconsByDirection = new Dictionary<Direction, Bitmap>();
 	}
 }

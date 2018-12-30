@@ -151,6 +151,7 @@
     <Compile Include="FormMain\FormMain.EventHandlers.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormMain\FormMain.Scale.cs" />
     <Compile Include="FormMain\FormMain.Tooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +164,7 @@
     <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRoot\FormRoot.Scale.cs" />
     <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\TabHeadersTooltip.cs" />

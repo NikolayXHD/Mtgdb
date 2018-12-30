@@ -6,7 +6,9 @@ namespace Mtgdb.Controls
 {
 	public static class Dpi
 	{
+		public static event Action BeforeChanged;
 		public static event Action Changed;
+		public static event Action AfterChanged;
 
 		public static void Initialize(int uiScalePercent = 100)
 		{
@@ -19,7 +21,9 @@ namespace Mtgdb.Controls
 			_scale = getScale().MultiplyBy(_uiScalePercent / 100f);
 			_scaleHalf = _scale.MultiplyBy(0.5f);
 
+			BeforeChanged?.Invoke();
 			Changed?.Invoke();
+			AfterChanged?.Invoke();
 		}
 
 		public static Font ByDpi(this Font font)
