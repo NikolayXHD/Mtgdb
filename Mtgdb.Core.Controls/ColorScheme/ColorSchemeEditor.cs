@@ -19,11 +19,15 @@ namespace Mtgdb.Controls
 		public ColorSchemeEditor()
 		{
 			_panelClient.Controls.Add(_layoutPanel);
+
 			ShowIcon = false;
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Color scheme editor";
-			this.ScaleDpi();
+
+			scale();
 		}
+
+
 
 		[UsedImplicitly]
 		public ColorSchemeEditor(ColorSchemeController controller)
@@ -43,8 +47,20 @@ namespace Mtgdb.Controls
 				e.Cancel = true;
 			};
 
+			updateFormSize();
+
+			_colorPicker = createColorPicker();
+
+			LocationChanged += moved;
+			SizeChanged += moved;
+		}
+
+		private void updateFormSize()
+		{
 			int columnsCount = (int) Math.Ceiling(Math.Sqrt(_layoutPanel.Controls.Count));
-			int rowsCount = (int) Math.Ceiling((float) _layoutPanel.Controls.Count / columnsCount);
+			int rowsCount = columnsCount != 0
+				? (int) Math.Ceiling((float) _layoutPanel.Controls.Count / columnsCount)
+				: 0;
 
 			var cellCount = new Size(columnsCount, rowsCount);
 
@@ -53,11 +69,23 @@ namespace Mtgdb.Controls
 				.Plus(_layoutPanel.Margin.Size)
 				.Plus(_cellMargin.Size.MultiplyBy(cellCount))
 				.Plus(_cellSize.MultiplyBy(cellCount));
+		}
 
-			_colorPicker = createColorPicker();
+		private void scale()
+		{
+			new DpiScaler<ColorSchemeEditor>(f =>
+			{
+				f._cellSize = new Size(128, 36).ByDpi();
+				f._cellMargin = new Padding(3.ByDpiWidth());
 
-			LocationChanged += moved;
-			SizeChanged += moved;
+				foreach (Control control in f._layoutPanel.Controls)
+				{
+					control.Size = f._cellSize;
+					control.Margin = f._cellMargin;
+				}
+
+				f.updateFormSize();
+			}).Setup(this);
 		}
 
 		private Control createColorCell(KnownColor color)
@@ -418,8 +446,8 @@ namespace Mtgdb.Controls
 		private static readonly string _filter = $"Mtgdb.Gui color scheme (*{Ext})|*{Ext}";
 		private static readonly Regex _pattern = new Regex(@"^(?<name>\w+): (?<argb>[\da-f]{8})$", RegexOptions.IgnoreCase);
 
-		private readonly Size _cellSize = new Size(128, 36).ByDpi();
-		private readonly Padding _cellMargin = new Padding(3.ByDpiWidth());
+		private Size _cellSize;
+		private Padding _cellMargin;
 		private readonly ColorSchemeController _controller;
 		private readonly ColorPicker _colorPicker;
 	}
