@@ -212,7 +212,6 @@ namespace Mtgdb.Gui
 				titleButton.ScaleDpi();
 
 			_labelUiScale.ScaleDpi();
-			_labelUiScaleHint.ScaleDpi();
 			_labelUiUseSmallImages.ScaleDpi();
 			_labelUiUseSmallImagesHint.ScaleDpi();
 
