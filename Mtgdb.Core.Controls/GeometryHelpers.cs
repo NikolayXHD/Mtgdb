@@ -124,6 +124,9 @@ namespace Mtgdb.Controls
 		public static PointF MultiplyBy(this PointF location, float value) =>
 			new PointF(value * location.X, value * location.Y);
 
+		public static Size Transpose(this Size value) =>
+			new Size(value.Height, value.Width);
+
 		public static int SizeInPixels(this Font font) =>
 			((int) (font.SizeInPoints * 96 / 72)).ByDpiWidth();
 

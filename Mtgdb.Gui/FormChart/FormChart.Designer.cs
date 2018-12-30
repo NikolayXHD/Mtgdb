@@ -301,7 +301,6 @@
 			// 
 			this._buttonArgumentTotals.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonArgumentTotals.AutoSize = true;
-			this._buttonArgumentTotals.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonArgumentTotals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonArgumentTotals.Location = new System.Drawing.Point(3, 3);
 			this._buttonArgumentTotals.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -315,7 +314,6 @@
 			// 
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSeriesTotal.AutoSize = true;
-			this._buttonSeriesTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonSeriesTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSeriesTotal.Location = new System.Drawing.Point(123, 3);
 			this._buttonSeriesTotal.Margin = new System.Windows.Forms.Padding(0);
@@ -329,7 +327,6 @@
 			// 
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonExplainTotal.AutoSize = true;
-			this._buttonExplainTotal.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonExplainTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonExplainTotal.Location = new System.Drawing.Point(226, 3);
 			this._buttonExplainTotal.Margin = new System.Windows.Forms.Padding(0);

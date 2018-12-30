@@ -167,7 +167,7 @@ namespace Mtgdb.Gui
 			if (repoLoadingComplete)
 				return;
 
-			while (!isRepoLoadingComplete())
+			while (!isRepoLoadingComplete() && !token.IsCancellationRequested)
 				await TaskEx.Delay(100);
 
 			await load(token);
@@ -218,7 +218,9 @@ namespace Mtgdb.Gui
 
 					var size = model.ImageFile.IsArt
 						? getSizeArt()
-						: _imageLoader.ZoomedCardSize;
+						: model.Rotation == RotateFlipType.Rotate270FlipNone || model.Rotation == RotateFlipType.Rotate90FlipNone
+							? _imageLoader.ZoomedCardSize.Transpose()
+							: _imageLoader.ZoomedCardSize;
 
 					var image = _imageLoader.LoadImage(model, size);
 

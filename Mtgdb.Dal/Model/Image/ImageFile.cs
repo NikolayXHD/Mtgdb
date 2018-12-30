@@ -150,7 +150,7 @@ namespace Mtgdb.Dal
 		}
 
 		// -S.xlhq.jpg marks image with artist signature
-		private static readonly Regex _patternToRemove = new Regex("\" - \"|-S$| - S$", RegexOptions.IgnoreCase);
+		private static readonly Regex _patternToRemove = new Regex(" - |-S$| - S$", RegexOptions.IgnoreCase);
 
 		private static readonly Dictionary<string, string> _nameReplacements = new Dictionary<string, string>(Str.Comparer)
 		{
