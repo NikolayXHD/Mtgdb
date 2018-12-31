@@ -25,6 +25,6 @@ out/update/notifications/
 out/data/index/
 out/data/AllSets-x.json
 out/data/AllSets.json
-out/data/price.id.json
-out/data/price.json
 out/data/translations.json
+out/data/price.inprogress.json
+out/data/price.id.inprogress.json
