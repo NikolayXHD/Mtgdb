@@ -30,7 +30,7 @@ namespace Mtgdb.Util
 
 			Assert.That(sid, Is.Not.Null);
 
-			var result = client.DownloadPrice(sid);
+			var result = client.DownloadPrice(sid.Sid);
 
 			Assert.That(result, Is.Not.Null);
 

@@ -95,26 +95,19 @@ namespace Mtgdb.Downloader
 			using (var stream = _priceRepository.AppendPriceInProgressStream())
 			using (var writer = new StreamWriter(stream))
 				foreach (var set in sets)
-					Parallel.ForEach(set.Cards, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, card =>
+				{
+					var sids = set.Cards
+						.Where(_priceRepository.IsDefined)
+						.Select(_priceRepository.GetPriceId)
+						.Where(F.IsNotNull)
+						.Select(_ => _.Sid)
+						.Where(F.IsNotNull)
+						.Where(sid => !_priceRepository.ContainsPrice(sid))
+						.Distinct()
+						.ToArray();
+
+					Parallel.ForEach(sids, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, sid =>
 					{
-						PriceId sid;
-						lock (_sync)
-						{
-							if (_aborted)
-								return;
-
-							if (!_priceRepository.IsDefined(card))
-								return;
-
-							sid = _priceRepository.GetPriceId(card);
-
-							if (sid == null)
-								return;
-
-							if (_priceRepository.ContainsPrice(sid))
-								return;
-						}
-
 						PriceValues price;
 						try
 						{
@@ -134,6 +127,7 @@ namespace Mtgdb.Downloader
 							PriceAdded?.Invoke();
 						}
 					});
+				}
 		}
 
 		public event Action PriceAdded;

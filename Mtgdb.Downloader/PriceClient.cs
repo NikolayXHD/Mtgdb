@@ -41,13 +41,13 @@ namespace Mtgdb.Downloader
 			}
 		}
 
-		public PriceValues DownloadPrice(PriceId priceId)
+		public PriceValues DownloadPrice(string sid)
 		{
-			string script = DownloadString("http://partner.tcgplayer.com/x3/mcpl.ashx?pk=MAGCINFO&sid=" + priceId.Sid);
+			string script = DownloadString("http://partner.tcgplayer.com/x3/mcpl.ashx?pk=MAGCINFO&sid=" + sid);
 
 			var result = new PriceValues
 			{
-				Sid = priceId.Sid
+				Sid = sid
 			};
 
 			if (script == null)

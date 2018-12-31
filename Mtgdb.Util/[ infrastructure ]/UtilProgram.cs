@@ -79,7 +79,7 @@ namespace Mtgdb.Util
 				if (Directory.Exists(directory))
 					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir);
 				else
-					printUsage();
+					Console.WriteLine($"directory not found: {directory}");
 
 				return;
 			}

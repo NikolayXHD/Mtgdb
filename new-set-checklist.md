@@ -14,8 +14,6 @@ verify modern and standard legalities in data file
 
 if necessary fix the legalities using patch.json
 
-add new item XXX_block to legality dropdown if new set opens a new block
-
 New keywords
 ============
 
@@ -43,18 +41,19 @@ visually inspect set images by running Mtgdb.Gui
 
 use select images.bat and sign images.bat
 
-create new MEGA directories
+create .7z for new / modified image directories by using subdir-util.bat 
 
-add them to config
+add new directories to config (see `Mass import gdrive links` below)
 
-upload new images to mega storage
+upload new images to gdrive
 
 check new XLHQ images for cases when *split* cards are named like *aftermath*
-
 search pattern for everything app
+```
 D:\Distrib\games\mtg\Mega\XLHQ\ » !.xrop !200DPI !100DPI !GRN
-only aftermath and flip and *no* split cards should appear in search result
-
+```
+only aftermath and flip and *no* split cards should appear in result  
+  
 Additional data
 ===============
 

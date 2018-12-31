@@ -52,8 +52,8 @@ namespace Mtgdb.Dal
 		public bool ContainsSid(Card c) =>
 			c.MultiverseId.HasValue && _sidsByMultiverseId.ContainsKey(c.MultiverseId.Value);
 
-		public bool ContainsPrice(PriceId priceId) =>
-			priceId.Sid == null || _priceBySid.ContainsKey(priceId.Sid);
+		public bool ContainsPrice(string sid) =>
+			_priceBySid.ContainsKey(sid);
 
 		public PriceId GetPriceId(Card c) =>
 			c.MultiverseId?.Invoke2(CollectionExtensions.TryGet, _sidsByMultiverseId);
@@ -71,10 +71,8 @@ namespace Mtgdb.Dal
 			SidCount++;
 		}
 
-		public void AddPrice(PriceId priceId, PriceValues priceValues)
-		{
-			_priceBySid.Add(priceId.Sid, priceValues);
-		}
+		public void AddPrice(string sid, PriceValues priceValues) =>
+			_priceBySid.Add(sid, priceValues);
 
 		public PriceValues GetPrice(Card c)
 		{
