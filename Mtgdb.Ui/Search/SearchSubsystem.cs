@@ -122,13 +122,6 @@ namespace Mtgdb.Ui
 
 		protected abstract string GetLanguage();
 
-		private int getHeight(string text)
-		{
-			var fontSize = _listBoxSuggest.Font.SizeInPixels();
-			int linesCount = 1 + text.Count(_ => _ == '\n');
-			return (int) (fontSize * 1.25f * linesCount);
-		}
-
 		public void StartThread()
 		{
 			if (_cts != null && !_cts.IsCancellationRequested)
@@ -230,17 +223,12 @@ namespace Mtgdb.Ui
 				_listBoxSuggest.EndUpdate();
 			}
 
+			_listBoxSuggest.SetHeightByContent();
+
 			if (values.Count == 0)
-			{
-				_listBoxSuggest.Height = 0;
 				continueEditingAfterSuggest();
-			}
 			else
-			{
-				int contentHeight = values.Sum(getHeight);
-				_listBoxSuggest.Height = 2 + contentHeight;
 				updateSuggestLocation();
-			}
 		}
 
 		private void showSuggest()

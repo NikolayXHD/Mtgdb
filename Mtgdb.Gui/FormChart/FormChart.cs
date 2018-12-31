@@ -151,7 +151,7 @@ namespace Mtgdb.Gui
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
 
 			foreach (var menu in _menus)
-				_buttonSubsystem.SetupComboBox(menu, allowScroll: true);
+				ManualMenuPainter.SetupComboBox(menu, allowScroll: true);
 
 			_filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _buttonMruFiles, _menuMruFiles);
 			_filesSubsystem.SubscribeToEvents();

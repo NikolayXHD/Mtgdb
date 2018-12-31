@@ -278,8 +278,8 @@ namespace Mtgdb.Gui
 
 			_buttonSubsystem.SubscribeToEvents();
 
-			_buttonSubsystem.SetupComboBox(_menuUiScale, allowScroll: false);
-			_buttonSubsystem.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
 		}
 
 		private void updateMenuColors()

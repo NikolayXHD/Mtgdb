@@ -1011,6 +1011,7 @@ namespace Mtgdb.Gui
 			this._listBoxSuggest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this._listBoxSuggest.Location = new System.Drawing.Point(12, 84);
 			this._listBoxSuggest.Name = "_listBoxSuggest";
+			this._listBoxSuggest.SelectionMode = System.Windows.Forms.SelectionMode.One;
 			this._listBoxSuggest.Size = new System.Drawing.Size(204, 119);
 			this._listBoxSuggest.TabIndex = 9;
 			this._listBoxSuggest.TabStop = false;

@@ -54,6 +54,8 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.ScaleDpi(transformIcon);
 
 			_listBoxSuggest.ScaleDpiWidth();
+			_listBoxSuggest.ScaleDpiFont();
+			new DpiScaler<ListBox>(l => l.SetHeightByContent()).Setup(_listBoxSuggest);
 
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);

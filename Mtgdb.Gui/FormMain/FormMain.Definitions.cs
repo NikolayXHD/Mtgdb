@@ -189,7 +189,8 @@ namespace Mtgdb.Gui
 				_layoutViewCards,
 				_deckListControl.DeckListView);
 
-			_buttons.SetupComboBox(_menuLegalityFormat, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuLegalityFormat, allowScroll: false);
+			ManualMenuPainter.SetupListBox(_listBoxSuggest);
 
 			updateExcludeManaAbility();
 			updateExcludeManaCost();

@@ -57,7 +57,7 @@ namespace Mtgdb.Controls
 
 			updateSortLabel();
 
-			_buttonSubsystem.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
 		}
 
 		private void subscribeToEvents()

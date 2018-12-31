@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -66,50 +65,6 @@ namespace Mtgdb.Controls
 
 				popup.Hide();
 			}
-		}
-
-
-		public void SetupComboBox(ComboBox menu, bool allowScroll)
-		{
-			const TextFormatFlags textFormat =
-				TextFormatFlags.NoClipping |
-				TextFormatFlags.NoPrefix |
-				TextFormatFlags.VerticalCenter |
-				TextFormatFlags.TextBoxControl;
-
-			menu.DrawMode = DrawMode.OwnerDrawVariable;
-			menu.FlatStyle = FlatStyle.Flat;
-			menu.IntegralHeight = false;
-
-			menu.MeasureItem += (s, e) =>
-			{
-				var comboBox = (ComboBox) s;
-				var size = e.Graphics.MeasureText((string) comboBox.Items[e.Index], comboBox.Font, comboBox.Size, textFormat);
-				e.ItemWidth = size.Width;
-				e.ItemHeight = size.Height;
-			};
-
-			menu.DrawItem += (s, e) =>
-			{
-				var comboBox = (ComboBox) s;
-
-				bool isHighlighted = (e.State & (DrawItemState.HotLight | DrawItemState.Focus)) > 0;
-				var backColor = isHighlighted ? SystemColors.Highlight : comboBox.BackColor;
-				var foreColor = isHighlighted ? SystemColors.HighlightText : comboBox.ForeColor;
-
-				e.Graphics.FillRectangle(new SolidBrush(backColor), e.Bounds);
-
-				if (e.Index >= 0 && e.Index < comboBox.Items.Count)
-					e.Graphics.DrawText((string) comboBox.Items[e.Index], comboBox.Font, e.Bounds, foreColor, textFormat);
-
-				e.DrawFocusRectangle();
-			};
-
-			if (!allowScroll)
-				menu.MouseWheel += (s, e) =>
-				{
-					((HandledMouseEventArgs) e).Handled = true;
-				};
 		}
 
 		public void SubscribeToEvents()
