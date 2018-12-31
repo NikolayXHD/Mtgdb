@@ -25,12 +25,6 @@ namespace Mtgdb.Controls
 			show(popup);
 		}
 
-		public void ClosePopup(ButtonBase popupButton)
-		{
-			var popup = _popupsByOwner[popupButton];
-			popup.Hide();
-		}
-
 		private void checkedChanged(object sender, EventArgs e)
 		{
 			var checkButton = (CheckBox)sender;
@@ -42,16 +36,30 @@ namespace Mtgdb.Controls
 		private void popupOwnerClick(object sender, EventArgs e)
 		{
 			var popup = _popupsByOwner[(ButtonBase)sender];
-
 			if (popup.Shown)
-				popup.Hide();
+				hide(popup);
 			else
 				show(popup);
 		}
 
+		private static void hide(Popup popup)
+		{
+			if (popup.Owner is CustomCheckBox check)
+				check.Checked = false;
+
+			popup.Hide();
+		}
+
 		private static void show(Popup popup)
 		{
+			var prevOwner = popup.MenuControl.GetTag<ButtonBase>("Owner");
+			if (prevOwner != null && prevOwner is CustomCheckBox prevCheck)
+				prevCheck.Checked = false;
+
+			if (popup.Owner is CustomCheckBox check)
+				check.Checked = true;
 			popup.MenuControl.SetTag("Owner", popup.Owner);
+
 			popup.Show();
 		}
 
@@ -63,7 +71,7 @@ namespace Mtgdb.Controls
 				var owner = control.GetTag<ButtonBase>("Owner");
 				var popup = _popupsByOwner[owner];
 
-				popup.Hide();
+				hide(popup);
 			}
 		}
 
@@ -138,7 +146,7 @@ namespace Mtgdb.Controls
 				case 0x0204:
 					foreach (var popup in _popupsByOwner.Values)
 						if (popup.Shown && !popup.IsCursorInPopup() && !popup.IsCursorInButton())
-							popup.Hide();
+							hide(popup);
 
 					break;
 			}

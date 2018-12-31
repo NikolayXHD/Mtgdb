@@ -693,9 +693,10 @@ namespace Mtgdb.Gui
 			// _buttonSearchExamplesDropDown
 			// 
 			this._buttonSearchExamplesDropDown.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonSearchExamplesDropDown.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSearchExamplesDropDown.AutoCheck = false;
 			this._buttonSearchExamplesDropDown.FlatAppearance.BorderSize = 0;
 			this._buttonSearchExamplesDropDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSearchExamplesDropDown.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSearchExamplesDropDown.Image = global::Mtgdb.Gui.Properties.Resources.book_40;
 			this._buttonSearchExamplesDropDown.Location = new System.Drawing.Point(734, 1);
 			this._buttonSearchExamplesDropDown.Margin = new System.Windows.Forms.Padding(1);
