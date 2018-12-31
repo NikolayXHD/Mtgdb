@@ -51,6 +51,12 @@
 		Path -> ^^^^^^^^^^^^^^^^^^^^ ^^^ <- Set code
 	-->
 	<ImageLocations>
+
+		<Root Name="XLHQ"    Path="images\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
+		<Root Name="Promo"   Path="images\XLHQ Promos" />
+		<Root Name="PTour"   Path="images\XLHQ Promos\Tournament and Program Promos" />
+		<Root Name="Torrent" Path="images\XLHQ-Sets-Torrent" />
+
 		<!--
 			High quality images for modern sets
 			Total size: 3.76 GB
@@ -59,15 +65,54 @@
 
 		<!--
 
-		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega" />
-		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Sets" />
-		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Digital Tokens" />
-		<Directory Zoom="Any" Set="MPS_AKH" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Amonkhet Invocations" />
-		<Directory Zoom="Any" Set="MPS"     Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Kaladesh Inventions" />
-		<Directory Zoom="Any" Set="EXP"     Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Masterpiece Series\Zendikar Expeditions" />
-		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos" />
-		<Directory Zoom="Any"               Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" Path="images\XLHQ Mega\Promos\Pre-Release Promos" />
-		<Directory Zoom="Any" Set="VMA"                                                   Path="images\XLHQ Mega\Other\Vintage Champs 300DPI" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />
+		<Directory Group="xlhq" Zoom="Any" Set="dvd"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="evg"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\EVG-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="gvl"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\GVL-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="jvc"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\JVC-EN Cards 300DPI" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Sets" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Digital Tokens" />
+		<Directory Group="xlhq" Zoom="Any" Set="mp2"       Root="XLHQ" Path="Masterpiece Series\Amonkhet Invocations" />
+		<Directory Group="xlhq" Zoom="Any" Set="mps"       Root="XLHQ" Path="Masterpiece Series\Kaladesh Inventions" />
+		<Directory Group="xlhq" Zoom="Any" Set="exp"       Root="XLHQ" Path="Masterpiece Series\Zendikar Expeditions" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="Promos\Pre-Release Promos" />
+		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="XLHQ" Path="Other\Vintage Champs 300DPI" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmps10"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmps11"    Root="XLHQ" Path="Promos\pMPS - Magic Premier Stores\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="ptc"       Root="XLHQ" Path="PTD - Pro Tour Decks" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc00"      Root="XLHQ" Path="WCD - World Championship Decks\WC00-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc01"      Root="XLHQ" Path="WCD - World Championship Decks\WC01-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc02"      Root="XLHQ" Path="WCD - World Championship Decks\WC02-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc03"      Root="XLHQ" Path="WCD - World Championship Decks\WC03-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc04"      Root="XLHQ" Path="WCD - World Championship Decks\WC04-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc97"      Root="XLHQ" Path="WCD - World Championship Decks\WC97-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc98"      Root="XLHQ" Path="WCD - World Championship Decks\WC98-04" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-01" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-02" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-03" />
+		<Directory Group="xlhq" Zoom="Any" Set="wc99"      Root="XLHQ" Path="WCD - World Championship Decks\WC99-04" />
 
 		-->
 
@@ -80,80 +125,127 @@
 
 		<!--
 
-		<Directory Zoom="Any"                 Path="images\XLHQ Promos" />
-		<Directory Zoom="Any" Set="pDRC"      Path="images\XLHQ Promos\Convention Promos\DragonCon" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Convention Promos\www.magicthegathering.com" />
-		<Directory Zoom="Any" Set="MGB"       Path="images\XLHQ Promos\Major Set Variants\Multiverse Box Set" />
-		<Directory Zoom="Any" Set="pPOD"      Path="images\XLHQ Promos\Major Set Variants\Portal Demogame" />
-		<Directory Zoom="Any" Set="S00"       Path="images\XLHQ Promos\Major Set Variants\Starter 2000 Sampler" />
-		<Directory Zoom="Any" Set="pSUS"      Path="images\XLHQ Promos\Major Set Variants\Summer Magic (Partial)" />
-		<Directory Zoom="Any" Set="10E"       Path="images\XLHQ Promos\Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Media Inserts" />
-		<Directory Zoom="Any" Set="pHHO"      Path="images\XLHQ Promos\Other\Happy Holidays" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Other\Resale Reward" />
-		<Directory Zoom="Any" Set="pCEL"      Path="images\XLHQ Promos\Other\Richard Garfield" />
-		<Directory Zoom="Any" Set="pWOS"      Path="images\XLHQ Promos\Other\WotC Online Store" />
-		<Directory Zoom="Any" Set="s99"       Path="images\XLHQ Promos\Oversized\6x9\Starter" />
-		<Directory Zoom="Any" Set="8ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Eighth Edition" />
-		<Directory Zoom="Any" Set="8ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Eighth Edition Promos" />
-		<Directory Zoom="Any" Set="9ED"       Path="images\XLHQ Promos\Oversized\Boxtoppers\Ninth Edition" />
-		<Directory Zoom="Any" Set="CMD"       Path="images\XLHQ Promos\Oversized\Commanders\Commander 2011 Launch Party" />
-		<Directory Zoom="Any" Set="AVR"       Path="images\XLHQ Promos\Oversized\Commanders\Helvault" />
-		<Directory Zoom="Any" Set="VMA"       Path="images\XLHQ Promos\Oversized\Vintage Championship" />
-		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Oversized\Magic Player Rewards" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Buy-a-Box" />
-		<Directory Zoom="Any" Set="pMGD"      Path="images\XLHQ Promos\Set Promos\Game Day" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Holiday Gift Box" />
-		<Directory Zoom="Any" Set="pMEI"      Path="images\XLHQ Promos\Set Promos\Intro Packs" />
-		<Directory Zoom="Any" Set="DD2"       Path="images\XLHQ Promos\Set Promos\Jace vs Chandra Anime" />
-		<Directory Zoom="Any" Set="pPRE"      Path="images\XLHQ Promos\Set Promos\Prerelease" />
-		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2003" />
-		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2004" />
-		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2005" />
-		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2006" />
-		<Directory Zoom="Any" Set="pREL"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2007" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2008" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2009" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2010" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2011" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2012" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2013" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2014" />
-		<Directory Zoom="Any" Set="pLPA"      Path="images\XLHQ Promos\Set Promos\Release and Launch Party\2015" />
-		<Directory Zoom="Any" Set="DTK"       Path="images\XLHQ Promos\Set Promos\Tarkir Dragonfury" />
-		<Directory Zoom="Any" Set="FRF_UGIN"  Path="images\XLHQ Promos\Set Promos\Ugin's Fate" />
-		<Directory Zoom="Any" Set="FEM"       Path="images\XLHQ Promos\Tokens\Duelist Fallen Empires Tokens" />
-		<Directory Zoom="Any" Set="pFNM"      Path="images\XLHQ Promos\Tokens\FNM" />
-		<Directory Zoom="Any" Set="AVR"       Path="images\XLHQ Promos\Tokens\Helvault" />
-		<Directory Zoom="Any" Set="pJGP"      Path="images\XLHQ Promos\Tokens\Judge" />
-		<Directory Zoom="Any" Set="pARL"      Path="images\XLHQ Promos\Tokens\League" />
-		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Tokens\Magic Player Rewards" />
-		<Directory Zoom="Any" Set="CSP"       Path="images\XLHQ Promos\Tokens\Release Events" />
-		<Directory Zoom="Any" Set="TSP"       Path="images\XLHQ Promos\Tokens\Time Spiral Bonus Program" />
-		<Directory Zoom="Any" Set="p15A"      Path="images\XLHQ Promos\Tournament and Program Promos\15th Anniversary" />
-		<Directory Zoom="Any" Set="pALP"      Path="images\XLHQ Promos\Tournament and Program Promos\APAC Lands" />
-		<Directory Zoom="Any" Set="pARL"      Path="images\XLHQ Promos\Tournament and Program Promos\Arena League" />
-		<Directory Zoom="Any" Set="pCMP"      Path="images\XLHQ Promos\Tournament and Program Promos\Champs" />
-		<Directory Zoom="Any" Set="pLGM"      Path="images\XLHQ Promos\Tournament and Program Promos\DCI Legend" />
-		<Directory Zoom="Any" Set="pELP"      Path="images\XLHQ Promos\Tournament and Program Promos\Euro Lands" />
-		<Directory Zoom="Any" Set="pFNM"      Path="images\XLHQ Promos\Tournament and Program Promos\Friday Night Magic" />
-		<Directory Zoom="Any" Set="pGTW"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2006" />
-		<Directory Zoom="Any" Set="pGTW"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2007" />
-		<Directory Zoom="Any" Set="pGTW;pWPN" Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2008" />
-		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2009" />
-		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2010" />
-		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2011" />
-		<Directory Zoom="Any" Set="pWPN"      Path="images\XLHQ Promos\Tournament and Program Promos\Gateway and Wizards Play Network\2012" />
-		<Directory Zoom="Any" Set="pGPX"      Path="images\XLHQ Promos\Tournament and Program Promos\Grand Prix" />
-		<Directory Zoom="Any" Set="pGRU"      Path="images\XLHQ Promos\Tournament and Program Promos\Guru" />
-		<Directory Zoom="Any" Set="pJGP"      Path="images\XLHQ Promos\Tournament and Program Promos\Judge" />
-		<Directory Zoom="Any" Set="pSUS"      Path="images\XLHQ Promos\Tournament and Program Promos\Junior Series" />
-		<Directory Zoom="Any" Set="pMPR"      Path="images\XLHQ Promos\Tournament and Program Promos\Magic Player Rewards" />
-		<Directory Zoom="Any" Set="pPRO"      Path="images\XLHQ Promos\Tournament and Program Promos\Pro Tour" />
-		<Directory Zoom="Any" Set="pSUM"      Path="images\XLHQ Promos\Tournament and Program Promos\Summer of Magic" />
-		<Directory Zoom="Any" Set="p2HG"      Path="images\XLHQ Promos\Tournament and Program Promos\Two-Headed Giant" />
-		<Directory Zoom="Any" Set="pWCQ"      Path="images\XLHQ Promos\Tournament and Program Promos\World Magic Cup Qualifiers" />
-		<Directory Zoom="Any" Set="pWOR"      Path="images\XLHQ Promos\Tournament and Program Promos\Worlds" />
+		<Directory Group="xlhq" Zoom="Any"                 Root="Promo" Path="" />
+		<Directory Group="xlhq" Zoom="Any" Set="pdrc"      Root="Promo" Path="Convention Promos\DragonCon" />
+		<Directory Group="xlhq" Zoom="Any" Set="mgb"       Root="Promo" Path="Major Set Variants\Multiverse Box Set" />
+		<Directory Group="xlhq" Zoom="Any" Set="ppod"      Root="Promo" Path="Major Set Variants\Portal Demogame" />
+		<Directory Group="xlhq" Zoom="Any" Set="s00"       Root="Promo" Path="Major Set Variants\Starter 2000 Sampler" />
+		<Directory Group="xlhq" Zoom="Any" Set="psum"      Root="Promo" Path="Major Set Variants\Summer Magic (Partial)" />
+		<Directory Group="xlhq" Zoom="Any" Set="p10e"      Root="Promo" Path="Major Set Variants\Tenth Edition Alternate Foils (Partial)" />
+		<Directory Group="xlhq" Zoom="Any" Set="hho"       Root="Promo" Path="Other\Happy Holidays" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pcel"      Root="Promo" Path="Other\Richard Garfield" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwos"      Root="Promo" Path="Other\WotC Online Store" />
+		<Directory Group="xlhq" Zoom="Any" Set="parc"      Root="Promo" Path="Other\Schemes - Promotional" />
+		<Directory Group="xlhq" Zoom="Any" Set="phop"      Root="Promo" Path="Other\Planes - Promotional" />
+		<Directory Group="xlhq" Zoom="Any" Set="ocmd"      Root="Promo" Path="Oversized\Commanders\Commander 2011 Launch Party" />
+		<Directory Group="xlhq" Zoom="Any" Set="phel"      Root="Promo" Path="Oversized\Commanders\Helvault" />
+		<Directory Group="xlhq" Zoom="Any" Set="vma"       Root="Promo" Path="Oversized\Vintage Championship" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Oversized\6x9\Release Events" />
+		<Directory Group="xlhq" Zoom="Any" Set="pdd2"      Root="Promo" Path="Set Promos\Jace vs Chandra Anime" />
+		<Directory Group="xlhq" Zoom="Any" Set="ppre"      Root="Promo" Path="Set Promos\Prerelease" />
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Set Promos\Release and Launch Party\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Set Promos\Release and Launch Party\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Set Promos\Release and Launch Party\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Set Promos\Release and Launch Party\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="prel"      Root="Promo" Path="Set Promos\Release and Launch Party\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2013" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2014" />
+		<Directory Group="xlhq" Zoom="Any" Set="plpa"      Root="Promo" Path="Set Promos\Release and Launch Party\2015" />
+		<Directory Group="xlhq" Zoom="Any" Set="pmei"      Root="Promo" Path="Media Inserts\RPG Magazine" />
+		<Directory Group="xlhq" Zoom="Any" Set="ptkdf"     Root="Promo" Path="Set Promos\Tarkir Dragonfury" />
+		<Directory Group="xlhq" Zoom="Any" Set="ugin"      Root="Promo" Path="Set Promos\Ugin's Fate" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="p15a"      Root="PTour" Path="15th Anniversary" />
+		<Directory Group="xlhq" Zoom="Any" Set="palp"      Root="PTour" Path="APAC Lands" />
+		<Directory Group="xlhq" Zoom="Any" Set="pcmp"      Root="PTour" Path="Champs" />
+		<Directory Group="xlhq" Zoom="Any" Set="plgm"      Root="PTour" Path="DCI Legend" />
+		<Directory Group="xlhq" Zoom="Any" Set="pelp"      Root="PTour" Path="Euro Lands" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="fnm"       Root="PTour" Path="Friday Night Magic\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="f01"       Root="PTour" Path="Friday Night Magic\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="f02"       Root="PTour" Path="Friday Night Magic\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="f03"       Root="PTour" Path="Friday Night Magic\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="f04"       Root="PTour" Path="Friday Night Magic\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="f05"       Root="PTour" Path="Friday Night Magic\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="f06"       Root="PTour" Path="Friday Night Magic\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="f07"       Root="PTour" Path="Friday Night Magic\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="f08"       Root="PTour" Path="Friday Night Magic\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="f09"       Root="PTour" Path="Friday Night Magic\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="f10"       Root="PTour" Path="Friday Night Magic\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="f11"       Root="PTour" Path="Friday Night Magic\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="f12"       Root="PTour" Path="Friday Night Magic\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="f13"       Root="PTour" Path="Friday Night Magic\2013" />
+		<Directory Group="xlhq" Zoom="Any" Set="f14"       Root="PTour" Path="Friday Night Magic\2014" />
+		<Directory Group="xlhq" Zoom="Any" Set="f15"       Root="PTour" Path="Friday Night Magic\2015" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pgtw"      Root="PTour" Path="Gateway and Wizards Play Network\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="pg07"      Root="PTour" Path="Gateway and Wizards Play Network\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="pg08;pwpn" Root="PTour" Path="Gateway and Wizards Play Network\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwp09"     Root="PTour" Path="Gateway and Wizards Play Network\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwp10"     Root="PTour" Path="Gateway and Wizards Play Network\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwp11"     Root="PTour" Path="Gateway and Wizards Play Network\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwp12"     Root="PTour" Path="Gateway and Wizards Play Network\2012" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pgpx"      Root="PTour" Path="Grand Prix" />
+		<Directory Group="xlhq" Zoom="Any" Set="pgru"      Root="PTour" Path="Guru" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="jgp"       Root="PTour" Path="Judge\1998" />
+		<Directory Group="xlhq" Zoom="Any" Set="g99"       Root="PTour" Path="Judge\1999" />
+		<Directory Group="xlhq" Zoom="Any" Set="g00"       Root="PTour" Path="Judge\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="g01"       Root="PTour" Path="Judge\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="g03"       Root="PTour" Path="Judge\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="g04"       Root="PTour" Path="Judge\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="g05"       Root="PTour" Path="Judge\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="g06"       Root="PTour" Path="Judge\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="g07"       Root="PTour" Path="Judge\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="g08"       Root="PTour" Path="Judge\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="g09"       Root="PTour" Path="Judge\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="g10"       Root="PTour" Path="Judge\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="g11"       Root="PTour" Path="Judge\2011" />
+		<Directory Group="xlhq" Zoom="Any" Set="j12"       Root="PTour" Path="Judge\2012" />
+		<Directory Group="xlhq" Zoom="Any" Set="j13"       Root="PTour" Path="Judge\2013" />
+		<Directory Group="xlhq" Zoom="Any" Set="j14"       Root="PTour" Path="Judge\2014" />
+		<Directory Group="xlhq" Zoom="Any" Set="j15"       Root="PTour" Path="Judge\2015" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="pjas"      Root="PTour" Path="Junior Series\APAC Junior Series" />
+		<Directory Group="xlhq" Zoom="Any" Set="pjjt"      Root="PTour" Path="Junior Series\Japan Junior Tournament" />
+		<Directory Group="xlhq" Zoom="Any" Set="pjse"      Root="PTour" Path="Junior Series\Junior Series (Europe)" />
+		<Directory Group="xlhq" Zoom="Any" Set="psus"      Root="PTour" Path="Junior Series\Junior Super Series and Magic Scholarship Series (US)" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="mpr"       Root="PTour" Path="Magic Player Rewards\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="pr2"       Root="PTour" Path="Magic Player Rewards\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="p03"       Root="PTour" Path="Magic Player Rewards\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="p04"       Root="PTour" Path="Magic Player Rewards\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="p05"       Root="PTour" Path="Magic Player Rewards\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="p06"       Root="PTour" Path="Magic Player Rewards\2006" />
+		<Directory Group="xlhq" Zoom="Any" Set="p07"       Root="PTour" Path="Magic Player Rewards\2007" />
+		<Directory Group="xlhq" Zoom="Any" Set="p08"       Root="PTour" Path="Magic Player Rewards\2008" />
+		<Directory Group="xlhq" Zoom="Any" Set="p09"       Root="PTour" Path="Magic Player Rewards\2009" />
+		<Directory Group="xlhq" Zoom="Any" Set="p10"       Root="PTour" Path="Magic Player Rewards\2010" />
+		<Directory Group="xlhq" Zoom="Any" Set="p11"       Root="PTour" Path="Magic Player Rewards\2011" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="ppro"      Root="PTour" Path="Pro Tour" />
+		<Directory Group="xlhq" Zoom="Any" Set="psum"      Root="PTour" Path="Summer of Magic" />
+		<Directory Group="xlhq" Zoom="Any" Set="p2hg"      Root="PTour" Path="Two-Headed Giant" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwcq"      Root="PTour" Path="World Magic Cup Qualifiers" />
+		<Directory Group="xlhq" Zoom="Any" Set="pwor"      Root="PTour" Path="Worlds" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="parl"      Root="PTour" Path="Arena League\1996" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal99"     Root="PTour" Path="Arena League\1999" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal00"     Root="PTour" Path="Arena League\2000" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal01"     Root="PTour" Path="Arena League\2001" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal02"     Root="PTour" Path="Arena League\2002" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal03"     Root="PTour" Path="Arena League\2003" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal04"     Root="PTour" Path="Arena League\2004" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal05"     Root="PTour" Path="Arena League\2005" />
+		<Directory Group="xlhq" Zoom="Any" Set="pal06"     Root="PTour" Path="Arena League\2006" />
 
 		-->
 
@@ -166,15 +258,19 @@
 			magnet:?xt=urn:btih:b07f3c3b288b20d49f5bbedcdf73214045abcce5&dn=XLHQ-Sets-Torrent&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.ccc.de%3A80&tr=udp%3A%2F%2Ftracker.blackunicorn.xyz%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969
 		-->
 		<!--
-		<Directory Zoom="Any"                 Path="images\XLHQ-Sets-Torrent" />
-		<Directory Zoom="Any" Set="MMA"       Path="images\XLHQ-Sets-Torrent\MM1" />
-		<Directory Zoom="Any" Set="RQS;ITP"   Path="images\XLHQ-Sets-Torrent\I2P" />
-		<Directory Zoom="Any" Set="NMS"       Path="images\XLHQ-Sets-Torrent\NEM" />
-		<Directory Zoom="Any" Set="CST"       Path="images\XLHQ-Sets-Torrent\CTD" />
-		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX" />
-		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX Extras" />
-		<Directory Zoom="Any" Set="CON"       Path="images\XLHQ-Sets-Torrent\CFX Tokens" />
-		<Directory Zoom="Any" Set="MD1"       Path="images\XLHQ-Sets-Torrent\MED" />
+
+		<Directory Group="xlhq" Zoom="Any"                 Root="Torrent" Path="" />
+		<Directory Group="xlhq" Zoom="Any" Set="mma"       Root="Torrent" Path="MM1" />
+		<Directory Group="xlhq" Zoom="Any" Set="rqs;itp"   Root="Torrent" Path="I2P" />
+		<Directory Group="xlhq" Zoom="Any" Set="nem"       Root="Torrent" Path="NEM" />
+		<Directory Group="xlhq" Zoom="Any" Set="cst"       Root="Torrent" Path="CTD" />
+		<Directory Group="xlhq" Zoom="Any" Set="con"       Root="Torrent" Path="CFX" />
+		<Directory Group="xlhq" Zoom="Any" Set="con"       Root="Torrent" Path="CFX Extras" />
+
+		<Directory Group="xlhq" Zoom="Any" Set="md1"       Root="Torrent" Path="MED" />
+		<Directory Group="xlhq" Zoom="Any" Set="me4;chr"   Root="Torrent" Path="CHR" />
+		<Directory Group="xlhq" Zoom="Any" Set="6ed;s00"   Root="Torrent" Path="6ED" />
+
 		-->
 	</ImageLocations>
 
