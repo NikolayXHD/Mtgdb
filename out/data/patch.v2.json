@@ -240,7 +240,10 @@
 		"My First Tome (b)": { "Name": "My First Tome" },
 		"Richard Garfield, Ph.D. (b)": { "Name": "Richard Garfield, Ph.D." },
 		"Mons's Goblin Waiters (b)": { "Name": "Mons's Goblin Waiters" },
-		"Keeper of the Sacred Word (b)": { "Name": "Keeper of the Sacred Word" }
+		"Keeper of the Sacred Word (b)": { "Name": "Keeper of the Sacred Word" },
+
+		"Glory": { "Set": "ppre", "Flavor": "Glory was gone; Glory was everywhere.\" —Scroll of Beginnings" },
+		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." }
 	},
 
 	"Legality": {

@@ -157,7 +157,19 @@ namespace Mtgdb.Dal
 			["Will O' The Wisp"] = "Will-O'-The-Wisp",
 			["Two Headed Giant of Foriys"] = "Two-Headed Giant of Foriys",
 			["Richard Garfield, Ph.D"] = "Richard Garfield, Ph.D.",
-			["Tough of the Horned God"] = "Touch of the Horned God"
+			["Tough of the Horned God"] = "Touch of the Horned God",
+
+			// fix split cards from XLHQ named like aftermath
+			["Assure»Assemble"] = "AssureAssemble",
+			["Connive»Concoct"] = "ConniveConcoct",
+			["Discovery»Dispersal"] = "DiscoveryDispersal",
+			["Expansion»Explosion"] = "ExpansionExplosion",
+			["Find»Finality"] = "FindFinality",
+			["Flower»Flourish"] = "FlowerFlourish",
+			["Integrity»Intervention"] = "IntegrityIntervention",
+			["Invert»Invent"] = "InvertInvent",
+			["Response»Resurgence"] = "ResponseResurgence",
+			["Status»Statue"] = "StatusStatue"
 		};
 	}
 }

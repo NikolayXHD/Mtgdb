@@ -382,7 +382,7 @@ namespace Mtgdb.Test
 					Assert.That(card.ManaCost, Does.Contain(mana).IgnoreCase);
 		}
 
-		[TestCase("Rarity:\"mythic rare\"", "mythic rare")]
+		[TestCase("Rarity:\"mythic\"", "mythic")]
 		public void Search_by_Rarity(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Rarity);
@@ -476,7 +476,7 @@ namespace Mtgdb.Test
 				Assert.That(card.GetType(lang), Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Color:white", "white")]
+		[TestCase(@"Color:w", "w")]
 		[TestCase(@"Color:colorless", "colorless")]
 		public void Search_by_Color(string queryStr, string expected)
 		{

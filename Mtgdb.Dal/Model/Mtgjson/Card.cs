@@ -597,6 +597,9 @@ namespace Mtgdb.Dal
 				TextEn = patch.Text;
 			}
 
+			if (patch.Flavor != null)
+				FlavorEn = patch.Flavor;
+
 			if (patch.GeneratedMana != null)
 			{
 				GeneratedManaArrExpanded = patch.GeneratedMana;

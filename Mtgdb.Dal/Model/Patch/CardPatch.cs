@@ -7,6 +7,8 @@ namespace Mtgdb.Dal
 	{
 		public string Name { get; [UsedImplicitly] set; }
 		public string Text { get; [UsedImplicitly] set; }
+		public string Flavor { get; [UsedImplicitly] set; }
+		public string Set { get; set; }
 		public List<string> GeneratedMana { get; [UsedImplicitly] set; }
 		public bool FlipDuplicate { get; [UsedImplicitly] set; }
 		public bool FullDuplicate { get; [UsedImplicitly] set; }

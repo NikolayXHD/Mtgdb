@@ -171,10 +171,7 @@ namespace Mtgdb.Dal
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.PatchCard(patch);
 
-			if (Patch.Cards.TryGetValue(card.NameEn, out patch))
-				card.PatchCard(patch);
-
-			if (Patch.Cards.TryGetValue(card.Id, out patch))
+			if (Patch.Cards.TryGetValue(card.NameEn, out patch) && (string.IsNullOrEmpty(patch.Set) || Str.Equals(patch.Set, card.SetCode)))
 				card.PatchCard(patch);
 
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());

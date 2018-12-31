@@ -90,7 +90,7 @@ namespace Mtgdb.Test
 
 		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
 		[TestCase("C18", XlhqDir, "C18 - Commander 2018\\300DPI Cards")]
-		[TestCase("GRN", GathererDir, "GRN")]
+		[TestCase("GRN", XlhqDir, "GRN - Guilds of Ravnica\\300DPI Cards")]
 		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{
@@ -103,7 +103,7 @@ namespace Mtgdb.Test
 			{
 				var imageModel = Ui.GetSmallImage(card);
 				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
-				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, card.ImageName);
+				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, $"{card.ImageName} {dir}");
 			}
 		}
 

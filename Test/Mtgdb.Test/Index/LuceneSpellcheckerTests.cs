@@ -79,11 +79,10 @@ namespace Mtgdb.Test
 		// legality
 		// ========
 		[TestCase(EnRu, "BannedIn:■", "commander", "vintage")]
-		[TestCase(EnRu, "BannedIn:c■", "commander", "legacy", "urza block")]
+		[TestCase(EnRu, "BannedIn:c■", "commander", "legacy")]
 		[TestCase(EnRu, "BannedIn:zzzz■")] // empty suggest
-		[TestCase(EnRu, "LegalIn:■", "amonkhet block", "kaladesh block")]
-		[TestCase(EnRu, "LegalIn:a■", "amonkhet block", "ixalan block")]
-		[TestCase(EnRu, "LegalIn:r■", "ravnica block", "mirrodin block")]
+		[TestCase(EnRu, "LegalIn:■", "1v1")]
+		[TestCase(EnRu, "LegalIn:p■", "pauper")]
 		[TestCase(EnRu, "LegalIn:zzzz■")] // empty suggest
 		[TestCase(EnRu, "RestrictedIn:■", "vintage")]
 		[TestCase(EnRu, "RestrictedIn:v■", "vintage")]
@@ -98,8 +97,8 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Artist:\"sam w■\"", "sam wood")]
 		[TestCase(EnRu, "Artist:я■")] // empty suggest
 		// color
-		[TestCase(EnRu, "Color:■", "black", "blue", "colorless", "green", "red", "white")]
-		[TestCase(EnRu, "Color:b■", "black", "blue")]
+		[TestCase(EnRu, "Color:■", "b", "r", "u", "g", "w", "colorless")]
+		[TestCase(EnRu, "Color:b■", "b")]
 		[TestCase(EnRu, "Color:я■")] // empty suggest
 		// generated mana
 		[TestCase(EnRu, "GeneratedMana:■", "{any}", "{b}", "{c}", "{e}", "{g}", "{r}", "{s}", "{u}", "{w}")]
@@ -114,7 +113,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Keywords:\"attack e■\"", "attack if able")]
 		[TestCase(EnRu, "Keywords:я■")] // empty suggest
 		// layout
-		[TestCase(EnRu, "Layout:■", "aftermath", "double-faced", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "token", "vanguard")]
+		[TestCase(EnRu, "Layout:■", "aftermath", "transform", "flip", "leveler", "meld", "normal", "phenomenon", "plane", "scheme", "split", "vanguard")]
 		[TestCase(EnRu, "Layout:v■", "vanguard", "leveler")]
 		[TestCase(EnRu, "Layout:z■")] // empty suggest
 		// mana cost
@@ -125,28 +124,29 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "ManaCost: \\/■", "{2/b}", "{2/g}", "{2/r}", "{2/u}", "{2/w}", "{b/g}", "{g/p}", "{r/g}", "{u/b}", "{w/b}", "{w/p}")]
 		[TestCase(EnRu, "ManaCost:я■")] // empty suggest
 		// power
-		[TestCase(EnRu, "Power:■", "*", "*²", "+0", "+1", "0", "½", "1", "1½")]
+		[TestCase(EnRu, "Power:■", "*", "*²", "+0", "+1", "0", "1", "1.5")]
+		[TestCase(EnRu, "Power:.■", ".5")]
 		[TestCase(EnRu, "Power:\\*■", "*", "1+*", "*²", "2+*")]
-		[TestCase(EnRu, "Power:1■", "1", "1+*", "10", "1½", "11", "15", "+1", "-1")]
+		[TestCase(EnRu, "Power:1■", "1", "1+*", "10", "1.5", "11", "15", "+1", "-1")]
 		[TestCase(EnRu, "Power:9■", "9", "99")]
 		[TestCase(EnRu, "Power:я■")]
 		// rarity
-		[TestCase(EnRu, "Rarity:■", "basic land", "common", "mythic rare", "rare", "special", "uncommon")]
+		[TestCase(EnRu, "Rarity:■", "basic land", "common", "mythic", "rare", "uncommon")]
 		[TestCase(EnRu, "Rarity:u■", "uncommon")]
 		[TestCase(EnRu, "Rarity:я■")]
 		// release date
-		[TestCase(EnRu, "ReleaseDate:■", "1993-08-05", "1994-08-08", "1996-06-10")]
+		[TestCase(EnRu, "ReleaseDate:■", "1993-08-05", "1994-08-01", "1996-06-10")]
 		[TestCase(EnRu, "ReleaseDate:6■", "2003-05-26", "2016-08-26")]
 		[TestCase(EnRu, "ReleaseDate: \\-02\\-27■", "2015-02-27")]
 		[TestCase(EnRu, "ReleaseDate:я■")]
 		// set code
 		[TestCase(EnRu, "SetCode:■", "10e", "5ed", "9ed", "aer")]
-		[TestCase(EnRu, "SetCode:1■", "10e", "cm1", "cp1", "e01", "m11", "v11", "c13")]
+		[TestCase(EnRu, "SetCode:1■", "10e", "cm1", "cp1", "e01", "c13")]
 		[TestCase(EnRu, "SetCode:gw■", "ogw")]
 		[TestCase(EnRu, "SetCode:z■", "bfz", "zen")]
 		[TestCase(EnRu, "SetCode:я■")]
 		// set name
-		[TestCase(EnRu, "SetName:■", "15th anniversary", "aether revolt", "amonkhet")]
+		[TestCase(EnRu, "SetName:■", "15th anniversary cards", "aether revolt", "amonkhet")]
 		[TestCase(EnRu, "SetName:a■", "aether revolt", "alara reborn", "alliances", "amonkhet")]
 		[TestCase(EnRu, "SetName:drit■", "eldritch moon")]
 		[TestCase(EnRu, "SetName:я■")]
@@ -163,7 +163,6 @@ namespace Mtgdb.Test
 			"eaturecray",
 			"enchantment",
 			"ever",
-			"host",
 			"instant",
 			"land",
 			"phenomenon",
@@ -180,9 +179,10 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Types:aa■", "artifact")]
 		[TestCase(EnRu, "Types:я■")]
 		// toughness
-		[TestCase(EnRu, "Toughness:■", "*", "*²", "+0", "+1", "0", "-0", "½", "1", "1½")]
+		[TestCase(EnRu, "Toughness:■", "*", "*²", "+0", "+1", "0", "-0", "1", "1.5")]
+		[TestCase(EnRu, "Toughness:.■", ".5")]
 		[TestCase(EnRu, "Toughness:\\*■", "*", "1+*", "*²", "2+*")]
-		[TestCase(EnRu, "Toughness:1■", "1", "1+*", "10", "1½", "11", "13", "+1", "-1")]
+		[TestCase(EnRu, "Toughness:1■", "1", "1+*", "10", "1.5", "11", "13", "+1", "-1")]
 		[TestCase(EnRu, "Toughness:9■", "9", "99")]
 		[TestCase(EnRu, "Toughness:я■")]
 		// non-limited-value fields
@@ -210,7 +210,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRuEn, "NameEn:я■")]
 		[TestCase(Ru, "Name:■", "Аббат Крепости Керал")]
 		[TestCase(Ru, "Name:а■", "Аббат Крепости Керал", "Абзанская проводница")]
-		[TestCase(Ru, "Name:с■", "с неба", "саблегривая мастикора")]
+		[TestCase(Ru, "Name:с■", "с той стороны", "саблегривая мастикора")]
 		[TestCase(Ru, "Name:сме■", "смельчак с двойным клинком", "смена направления")]
 		[TestCase(Ru, "Name:щ■", "щедрость луксы")]
 		[TestCase(Ru, "Name:щщщ■")]
@@ -245,7 +245,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "OriginalType:a■", "abomination", "ajani", "ali")]
 		[TestCase(EnRu, "OriginalType:b■", "baba", "baddest", "bears")]
 		[TestCase(EnRu, "OriginalType:dis■", "dinosaur", "advisor", "advisors")]
-		[TestCase(EnRu, "OriginalType:z■", "zombie", "eldrazi")]
+		[TestCase(EnRu, "OriginalType:z■", "zombie", "ooze")]
 		[TestCase(EnRu, "OriginalType:za■", "lizard", "wizards")]
 		[TestCase(EnRu, "OriginalType:я■")]
 		// subtypes

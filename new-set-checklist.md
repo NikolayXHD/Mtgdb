@@ -49,6 +49,12 @@ add them to config
 
 upload new images to mega storage
 
+check new XLHQ images for cases when *split* cards are named like *aftermath*
+
+search pattern for everything app
+D:\Distrib\games\mtg\Mega\XLHQ\ » !.xrop !200DPI !100DPI !GRN
+only aftermath and flip and *no* split cards should appear in search result
+
 Additional data
 ===============
 
