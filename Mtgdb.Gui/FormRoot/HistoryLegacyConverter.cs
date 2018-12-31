@@ -14,6 +14,9 @@ namespace Mtgdb.Gui
 
 		public IEnumerable<(int FormId, int TabId)> FindLegacyFiles()
 		{
+			if (!Directory.Exists(AppDir.History))
+				yield break;
+
 			foreach (var subdir in Directory.GetDirectories(AppDir.History))
 				if (int.TryParse(subdir.LastPathSegment(), out int formId))
 					foreach (var file in Directory.GetFiles(subdir, "*.json"))
