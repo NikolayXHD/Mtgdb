@@ -101,4 +101,4 @@ by `\r\n`
 ```regexp
 ^(.{33}) (.+)\.7z$
 ```
-by `<Dir Subdir="\2" GdriveId="\1" />`
+by `<Dir GdriveId="\1" Subdir="\2" />`
