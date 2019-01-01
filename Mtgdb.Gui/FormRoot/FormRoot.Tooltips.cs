@@ -65,7 +65,7 @@ namespace Mtgdb.Gui
 				"  * Download the most recent cards database from Mtgjson.com\r\n" +
 				"  * Download card images\r\n" +
 				"  * Download artworks",
-				_buttonDownload);
+				_buttonUpdate);
 
 			TooltipController.SetTooltip(this,
 				null,

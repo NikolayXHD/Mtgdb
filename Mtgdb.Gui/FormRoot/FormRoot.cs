@@ -339,8 +339,8 @@ namespace Mtgdb.Gui
 
 			this.Invoke(delegate
 			{
-				_buttonDownload.Enabled = enabled;
-				_buttonSubsystem.SetupButton(_buttonDownload, ButtonImages.ScaleDpi((null, image)));
+				_buttonUpdate.Enabled = enabled;
+				_buttonSubsystem.SetupButton(_buttonUpdate, ButtonImages.ScaleDpi((null, image)));
 
 				if (enabled && _downloaderSubsystem.NeedToSuggestDownloader)
 					_downloaderSubsystem.ShowDownloader(this, auto: true);

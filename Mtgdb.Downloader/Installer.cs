@@ -7,6 +7,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
+using NLog;
 using File = System.IO.File;
 
 namespace Mtgdb.Downloader
@@ -17,8 +18,7 @@ namespace Mtgdb.Downloader
 			AppSourceConfig appSourceConfig,
 			MtgjsonSourceConfig mtgjsonSourceConfig,
 			CardSearcher cardSearcher,
-			KeywordSearcher keywordSearcher,
-			Megatools megatools)
+			KeywordSearcher keywordSearcher)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
@@ -31,7 +31,6 @@ namespace Mtgdb.Downloader
 			AppDownloadedSignature = getAppDownloadedSignature();
 
 			_webClient = new WebClientBase();
-			_megatools = megatools;
 
 			_protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
 			{
@@ -107,11 +106,9 @@ namespace Mtgdb.Downloader
 		public void DownloadAppSignature()
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
-			_megatools.Download(
-				_appSourceConfig.FileListUrl,
-				_updateAppDir,
-				"current version signature",
-				silent: true);
+
+			new GdriveWebClient().TryDownload(_appSourceConfig.FileListUrl, _updateAppDir,
+				description: "current version signature");
 
 			AppOnlineSignature = getAppOnlineSignature();
 		}
@@ -123,7 +120,8 @@ namespace Mtgdb.Downloader
 			var appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
 			ensureFileDeleted(appOnline);
 
-			_megatools.Download(_appSourceConfig.ZipUrl, _updateAppDir, expectedSignature.Path);
+			new GdriveWebClient().TryDownload(_appSourceConfig.ZipUrl, _updateAppDir,
+				description: expectedSignature.Path);
 		}
 
 		public bool ValidateDownloadedApp()
@@ -312,6 +310,5 @@ namespace Mtgdb.Downloader
 		public FileSignature AppOnlineSignature { get; private set; }
 		public FileSignature AppDownloadedSignature { get; private set; }
 		private readonly WebClientBase _webClient;
-		private readonly Megatools _megatools;
 	}
 }

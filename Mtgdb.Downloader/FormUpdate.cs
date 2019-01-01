@@ -153,7 +153,7 @@ namespace Mtgdb.Downloader
 			setButtonsEnabled(false);
 
 			Console.WriteLine();
-			Console.WriteLine("Checking version online...");
+			Console.WriteLine("Checking version online");
 
 			var appVersionOnline = getAppVersionOnline();
 			var appVersionDownloaded = getAppVersionDownloaded();

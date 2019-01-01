@@ -36,7 +36,7 @@ namespace Mtgdb.Gui
 			this._buttonUndo = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonRedo = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDonate = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonDownload = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonUpdate = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonLanguage = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonConfig = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonHelp = new Mtgdb.Controls.CustomCheckBox();
@@ -200,21 +200,21 @@ namespace Mtgdb.Gui
 			// 
 			// _buttonDownload
 			// 
-			this._buttonDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonDownload.Appearance = System.Windows.Forms.Appearance.Button;
-			this._buttonDownload.AutoCheck = false;
-			this._buttonDownload.BackColor = System.Drawing.Color.Transparent;
-			this._buttonDownload.FlatAppearance.BorderSize = 0;
-			this._buttonDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonDownload.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonDownload.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
-			this._buttonDownload.Location = new System.Drawing.Point(356, 3);
-			this._buttonDownload.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this._buttonDownload.Name = "_buttonDownload";
-			this._buttonDownload.Size = new System.Drawing.Size(32, 24);
-			this._buttonDownload.TabIndex = 8;
-			this._buttonDownload.TabStop = false;
-			this._buttonDownload.UseVisualStyleBackColor = false;
+			this._buttonUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonUpdate.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonUpdate.AutoCheck = false;
+			this._buttonUpdate.BackColor = System.Drawing.Color.Transparent;
+			this._buttonUpdate.FlatAppearance.BorderSize = 0;
+			this._buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonUpdate.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonUpdate.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
+			this._buttonUpdate.Location = new System.Drawing.Point(356, 3);
+			this._buttonUpdate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._buttonUpdate.Name = "_buttonUpdate";
+			this._buttonUpdate.Size = new System.Drawing.Size(32, 24);
+			this._buttonUpdate.TabIndex = 8;
+			this._buttonUpdate.TabStop = false;
+			this._buttonUpdate.UseVisualStyleBackColor = false;
 			// 
 			// _buttonLanguage
 			// 
@@ -264,7 +264,7 @@ namespace Mtgdb.Gui
 			this._buttonHelp.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_16;
 			this._buttonHelp.Location = new System.Drawing.Point(228, 3);
-			this._buttonHelp.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._buttonHelp.Margin = new System.Windows.Forms.Padding(12, 3, 0, 0);
 			this._buttonHelp.Name = "_buttonHelp";
 			this._buttonHelp.Size = new System.Drawing.Size(32, 24);
 			this._buttonHelp.TabIndex = 12;
@@ -283,7 +283,7 @@ namespace Mtgdb.Gui
 			this._buttonClear.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_16;
 			this._buttonClear.Location = new System.Drawing.Point(184, 3);
-			this._buttonClear.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
+			this._buttonClear.Margin = new System.Windows.Forms.Padding(12, 3, 12, 0);
 			this._buttonClear.Name = "_buttonClear";
 			this._buttonClear.Size = new System.Drawing.Size(32, 24);
 			this._buttonClear.TabIndex = 13;
@@ -338,7 +338,7 @@ namespace Mtgdb.Gui
 			this._buttonSaveDeck.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSaveDeck.Location = new System.Drawing.Point(76, 3);
-			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 3, 12, 0);
+			this._buttonSaveDeck.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonSaveDeck.Name = "_buttonSaveDeck";
 			this._buttonSaveDeck.Size = new System.Drawing.Size(32, 24);
 			this._buttonSaveDeck.TabIndex = 16;
@@ -376,7 +376,7 @@ namespace Mtgdb.Gui
 			this._buttonTooltips.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_16;
 			this._buttonTooltips.Location = new System.Drawing.Point(260, 3);
-			this._buttonTooltips.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._buttonTooltips.Margin = new System.Windows.Forms.Padding(12, 3, 0, 0);
 			this._buttonTooltips.Name = "_buttonTooltips";
 			this._buttonTooltips.Size = new System.Drawing.Size(32, 24);
 			this._buttonTooltips.TabIndex = 18;
@@ -1296,16 +1296,16 @@ namespace Mtgdb.Gui
 			this._flowTitleRight.Controls.Add(this._buttonPaste);
 			this._flowTitleRight.Controls.Add(this._buttonOpenDeck);
 			this._flowTitleRight.Controls.Add(this._buttonSaveDeck);
+			this._flowTitleRight.Controls.Add(this._buttonClear);
 			this._flowTitleRight.Controls.Add(this._buttonPrint);
 			this._flowTitleRight.Controls.Add(this._buttonStat);
-			this._flowTitleRight.Controls.Add(this._buttonClear);
-			this._flowTitleRight.Controls.Add(this._buttonHelp);
 			this._flowTitleRight.Controls.Add(this._buttonTooltips);
 			this._flowTitleRight.Controls.Add(this._buttonShowFilterPanels);
 			this._flowTitleRight.Controls.Add(this._buttonConfig);
-			this._flowTitleRight.Controls.Add(this._buttonDownload);
 			this._flowTitleRight.Controls.Add(this._buttonColorScheme);
 			this._flowTitleRight.Controls.Add(this._buttonLanguage);
+			this._flowTitleRight.Controls.Add(this._buttonHelp);
+			this._flowTitleRight.Controls.Add(this._buttonUpdate);
 			this._flowTitleRight.Controls.Add(this._buttonSupport);
 			this._flowTitleRight.Controls.Add(this._buttonDonate);
 			this._flowTitleRight.Location = new System.Drawing.Point(259, 3);
@@ -1569,7 +1569,7 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.CustomCheckBox _buttonUndo;
 		private Mtgdb.Controls.CustomCheckBox _buttonRedo;
 		private Mtgdb.Controls.CustomCheckBox _buttonDonate;
-		private Mtgdb.Controls.CustomCheckBox _buttonDownload;
+		private Mtgdb.Controls.CustomCheckBox _buttonUpdate;
 		private Mtgdb.Controls.CustomCheckBox _buttonLanguage;
 		private Mtgdb.Controls.CustomCheckBox _buttonConfig;
 		private Mtgdb.Controls.CustomCheckBox _buttonHelp;

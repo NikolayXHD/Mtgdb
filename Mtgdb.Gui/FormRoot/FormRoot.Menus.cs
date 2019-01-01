@@ -14,9 +14,9 @@ namespace Mtgdb.Gui
 		{
 			_buttonTooltips.Checked = true;
 			_buttonShowFilterPanels.Checked = true;
-			_buttonDownload.Enabled = false;
+			_buttonUpdate.Enabled = false;
 
-			_buttonDownload.Click += downloadClick;
+			_buttonUpdate.Click += updateClick;
 
 			_buttonMenuOpenDeck.Click += openDeckClick;
 			_buttonMenuSaveDeck.Click += saveDeckClick;
@@ -158,7 +158,7 @@ namespace Mtgdb.Gui
 		private void openCollectionClick(object sender, EventArgs e) =>
 			SelectedTab?.ButtonLoadCollection();
 
-		private void downloadClick(object sender, EventArgs e) =>
+		private void updateClick(object sender, EventArgs e) =>
 			_downloaderSubsystem.ShowDownloader(this, auto: false);
 
 

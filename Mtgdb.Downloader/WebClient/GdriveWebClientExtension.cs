@@ -56,5 +56,22 @@ namespace Mtgdb.Downloader
 
 			return true;
 		}
+
+		public static void TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description)
+		{
+			Console.Write($"Download {description} from {url} ...");
+
+			try
+			{
+				webClient.DownloadFromGdrive(url, targetDirectory);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($" {ex}");
+				return;
+			}
+
+			Console.WriteLine(" done");
+		}
 	}
 }

@@ -101,7 +101,7 @@ namespace Mtgdb.Gui
 						ButtonImages.ScaleDpi((null, form._languageIcons[langButton.Text.Trim()])));
 
 				form._buttonSubsystem.SetupButton(form._buttonShowFilterPanels, ButtonImages.ScaleDpi((null, Resources.filters_show_32)));
-				form._buttonSubsystem.SetupButton(form._buttonDownload, ButtonImages.ScaleDpi((null, Resources.update_40)));
+				form._buttonSubsystem.SetupButton(form._buttonUpdate, ButtonImages.ScaleDpi((null, Resources.update_40)));
 				form._buttonSubsystem.SetupButton(form._buttonMenuOpenDeck, ButtonImages.ScaleDpi((null, Resources.deck_48)));
 				form._buttonSubsystem.SetupButton(form._buttonMenuOpenCollection, ButtonImages.ScaleDpi((null, Resources.box_48)));
 				form._buttonSubsystem.SetupButton(form._buttonMenuSaveDeck, ButtonImages.ScaleDpi((null, Resources.deck_48)));
