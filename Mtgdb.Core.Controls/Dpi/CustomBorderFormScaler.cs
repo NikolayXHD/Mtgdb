@@ -7,7 +7,6 @@ namespace Mtgdb.Controls
 	{
 		public static void ScaleDpi(this CustomBorderForm form)
 		{
-			form.ScaleDpiSize();
 			_scaler.Setup(form);
 		}
 

@@ -73,6 +73,8 @@ namespace Mtgdb.Controls
 
 		private void scale()
 		{
+			this.ScaleDpi();
+
 			new DpiScaler<ColorSchemeEditor>(f =>
 			{
 				f._cellSize = new Size(128, 36).ByDpi();

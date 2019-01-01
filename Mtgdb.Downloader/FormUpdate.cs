@@ -64,6 +64,7 @@ namespace Mtgdb.Downloader
 
 		private void scale()
 		{
+			this.ScaleDpiSize();
 			this.ScaleDpi();
 
 			_progressBar.ScaleDpiHeight();
