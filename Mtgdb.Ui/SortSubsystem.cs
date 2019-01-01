@@ -158,7 +158,7 @@ namespace Mtgdb.Ui
 
 			var docs = GetDocuments();
 
-			result = new List<TDoc>(sort(docs, SortInfo, defaultSort: defaultSort));
+			result = new List<TDoc>(sort(docs, SortInfo, defaultSort));
 			_sortedDocsByDefaultSort.Add(defaultSort, result);
 
 			return result;

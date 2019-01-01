@@ -26,9 +26,7 @@ namespace Mtgdb.Gui
 		}
 
 		protected override FieldSortInfo GetDefaultSort(bool duplicateAware) =>
-			duplicateAware
-				? _sortFromNewestToOldest
-				: _sortByIndexInFile;
+			_sortFromNewestToOldest;
 
 		protected override IEnumerable<Card> GetDocuments() =>
 			_repo.IsLoadingComplete
@@ -40,9 +38,6 @@ namespace Mtgdb.Gui
 
 		protected override bool IsLocalizable(string fieldName) =>
 			_localizableFields.Contains(fieldName);
-
-		private static readonly FieldSortInfo _sortByIndexInFile =
-			new FieldSortInfo(nameof(Card.IndexInFile), SortOrder.Ascending);
 
 		private static readonly FieldSortInfo _sortFromNewestToOldest =
 			new FieldSortInfo(nameof(Card.ReleaseDate), SortOrder.Descending);
