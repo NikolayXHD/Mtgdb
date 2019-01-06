@@ -43,8 +43,8 @@ namespace Mtgdb.Util
 			client.DownloadSet(set, MagicspoilerDir);
 		}
 
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "GRN.large")]
-		//[TestCase(GathererOriginalDir, GathererPreprocessedDir, "CM2")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "uma")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "puma")]
 		public void PreProcessImages(
 			string sourceDir,
 			string targetDir,
@@ -66,16 +66,10 @@ namespace Mtgdb.Util
 			}
 		}
 
-		//[TestCase(GathererOriginalDir, "bbd", PublishedSmallDir, "BBD")]
-		//[TestCase(GathererPreprocessedDir, "bbd", PublishedZoomDir, "BBD")]
-		//[TestCase(GathererOriginalDir, "gs1", PublishedSmallDir, "GS1")]
-		//[TestCase(GathererPreprocessedDir, "gs1", PublishedZoomDir, "GS1")]
-		//[TestCase(GathererOriginalDir, "ss1", PublishedSmallDir, "SS1")]
-		//[TestCase(GathererPreprocessedDir, "ss1", PublishedZoomDir, "SS1")]
-		//[TestCase(GathererPreprocessedDir, "C18.zoom", PublishedZoomDir, "C18")]
-		//[TestCase(GathererPreprocessedDir, "C18", PublishedZoomDir, "C18")]
-		//[TestCase(GathererOriginalDir, "GRN.small.png", PublishedSmallDir, "GRN")]
-		[TestCase(GathererPreprocessedDir, "GRN.large.png", PublishedZoomDir, "GRN")]
+		[TestCase(GathererPreprocessedDir, "uma.png", GathererPreprocessedDir, "uma")]
+		[TestCase(GathererPreprocessedDir, "puma.png", GathererPreprocessedDir, "puma")]
+		[TestCase(GathererOriginalDir, "uma.png", GathererOriginalDir, "uma")]
+		[TestCase(GathererOriginalDir, "puma.png", GathererOriginalDir, "puma")]
 		public void ConvertToJpg(string dir, string subdir, string targetDir, string targetSubdir)
 		{
 			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();

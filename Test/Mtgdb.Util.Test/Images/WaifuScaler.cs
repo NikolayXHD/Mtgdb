@@ -10,7 +10,7 @@ namespace Mtgdb.Util
 		{
 			int parallelism = Environment.ProcessorCount;
 
-			string exe = Path.Combine(AppDir.Root, @"..", "tools", "Waifu2x", "waifu2x-converter-cpp.exe");
+			string exe = @"D:\portable\waifu2x-converter-cpp\waifu2x-converter-cpp.exe";
 			string args = $"--jobs {parallelism} --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
 			string workingDirectory = Path.GetDirectoryName(exe) ??
 				throw new Exception($"Failed to get parent directory for {exe}");
@@ -27,9 +27,6 @@ namespace Mtgdb.Util
 
 			if (!process.WaitForExit(180_000))
 				throw new TimeoutException("waifu2x-converter.exe timeout");
-
-			string outputFileNameDueToBug = targetFile + ".png";
-			File.Move(outputFileNameDueToBug, targetFile);
 		}
 	}
 }

@@ -91,6 +91,9 @@ namespace Mtgdb.Test
 		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
 		[TestCase("C18", XlhqDir, "C18 - Commander 2018\\300DPI Cards")]
 		[TestCase("GRN", XlhqDir, "GRN - Guilds of Ravnica\\300DPI Cards")]
+		[TestCase("GK1", XlhqDir, "GK1 - GRN Guild Kit\\300DPI Cards")]
+		[TestCase("UMA", GathererDir, "uma")]
+		[TestCase("PUMA", GathererDir, "puma")]
 		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
 		{

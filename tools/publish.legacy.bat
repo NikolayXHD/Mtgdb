@@ -18,12 +18,9 @@ set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
 set msbuildexe="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
 set nunitconsoleexe=%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe
 set git="C:\Program Files\Git\bin\git.exe"
-
 set googledriveexe=%origin%\tools\gdrive-windows-x64.exe
 set signid=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg
 set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
-set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
-set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
 
 rem goto upload
 rem goto sign
@@ -87,9 +84,10 @@ del /q /s %target%\*.vshost.*
 :sign
 %utilexe% -sign %target%.zip -output %targetRoot%\filelist.txt
 
-rem upload to test directory so update can be tested without affecting actual users
-%googledriveexe% update %testfileid% %target%.zip
-%googledriveexe% update %testsignid% %targetRoot%\filelist.txt
+del /q /s %pub%\Archive\*.zip
+del /q /s %pub%\FileList\*.txt
+xcopy /q %target%.zip %pub%\Archive
+xcopy /q %targetRoot%\filelist.txt %pub%\FileList
 
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 %nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
@@ -107,7 +105,7 @@ pause
 %git% -C f:/Repo/Git/Mtgdb.Notifications push
 
 :upload
-%googledriveexe% update %fileid% %target%.zip
-%googledriveexe% update %signid% %targetRoot%\filelist.txt
+%googledriveexe% update %fileid% %pub%\Archive\%packageName%.zip
+%googledriveexe% update %signid% %pub%\FileList\filelist.txt
 
 exit /b

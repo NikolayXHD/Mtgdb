@@ -169,7 +169,8 @@ namespace Mtgdb.Dal
 			["Integrity»Intervention"] = "IntegrityIntervention",
 			["Invert»Invent"] = "InvertInvent",
 			["Response»Resurgence"] = "ResponseResurgence",
-			["Status»Statue"] = "StatusStatue"
+			["Status»Statue"] = "StatusStatue",
+			["Turn»Burn"] = "TurnBurn"
 		};
 	}
 }

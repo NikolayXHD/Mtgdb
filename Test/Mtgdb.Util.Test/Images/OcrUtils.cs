@@ -165,7 +165,7 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("M19", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\M19")]
+		[TestCase("UMA", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\UMA")]
 		public void RenameSetImages(string setCode, string unnamedImagesDirectory)
 		{
 			setup();

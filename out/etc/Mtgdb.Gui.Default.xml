@@ -20,7 +20,7 @@
 	<ImageCache CacheCapacity ="900"/>
 
 	<MtgjsonSource Url="https://mtgjson.com/v4/json/AllSets.json" />
-	https://drive.google.com/file/d//view?usp=sharing
+
 	<AppSource
 		FileListUrl= "https://drive.google.com/uc?export=download&amp;id=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg"
 		ZipUrl=      "https://drive.google.com/uc?export=download&amp;id=0B_zQYOTucmnUOVE1eDU0STJZeE0"
