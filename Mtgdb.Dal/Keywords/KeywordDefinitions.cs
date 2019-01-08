@@ -275,7 +275,11 @@ namespace Mtgdb.Dal
 			cost("Surge", bound("surge", notAfter: "cast this spell for its")),
 			custom("Suspend", bound("suspend(s|ed)?")),
 			cost("Transmute"),
-			cost("Unearth", pattern: "unearth(s|ed)?")
+			cost("Unearth", pattern: "unearth(s|ed)?"),
+
+			// non quick-filter values follow
+
+			cost("Spectacle")
 		};
 
 		public static readonly IList<string> Keywords = new[]
@@ -365,11 +369,11 @@ namespace Mtgdb.Dal
 			"Vigilance",
 			"Wither",
 
-			null,
+			// non quick-filter values follow
 
-			custom("Transform", bound("transform(s|ed)?")),
 			count("Absorb"),
 			count("Afflict"),
+			count("Afterlife"),
 			count("Amplify"),
 			cost("Aura Swap"),
 			"Assist",
@@ -439,6 +443,7 @@ namespace Mtgdb.Dal
 			count("Support"),
 			count("Surveil", bound("surveil", notAfter: "to")),
 			cost("Transfigure"),
+			custom("Transform", bound("transform(s|ed)?")),
 			count("Tribute", bound("tribute")),
 			"Undaunted",
 			custom("Undergrowth", bound("undergrowth", notBefore: "(champion|scavenger)")),

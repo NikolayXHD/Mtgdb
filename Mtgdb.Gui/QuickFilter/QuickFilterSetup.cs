@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 
@@ -41,6 +42,7 @@ namespace Mtgdb.Gui
 		public static void SetQuickFilterProperties(FormMain form)
 		{
 			form.FilterManaCost.Properties = KeywordDefinitions.ManaCost;
+
 			form.FilterAbility.Properties = KeywordDefinitions.Keywords.ToKeywordDisplayTexts();
 			form.FilterCastKeyword.Properties = KeywordDefinitions.CastKeywords.ToKeywordDisplayTexts();
 			form.FilterRarity.Properties = KeywordDefinitions.Rarity;

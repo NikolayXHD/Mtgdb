@@ -134,6 +134,17 @@ namespace Mtgdb.Test
 			_loadedIndexes = true;
 		}
 
+		protected static void LoadSmallAndZoomImages()
+		{
+			if (_loadedSmallAndZoomImages)
+				return;
+
+			ImgRepo.LoadFiles();
+			ImgRepo.LoadZoom();
+
+			_loadedSmallAndZoomImages = true;
+		}
+
 		protected static IKernel Kernel;
 		protected static CardRepository Repo { get; set; }
 		protected static ImageRepository ImgRepo { get; set; }
@@ -148,6 +159,7 @@ namespace Mtgdb.Test
 		private static bool _loadedPrices;
 		private static bool _loadedTranslations;
 		private static bool _loadedIndexes;
+		private static bool _loadedSmallAndZoomImages;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 

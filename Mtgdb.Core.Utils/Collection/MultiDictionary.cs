@@ -39,6 +39,14 @@ namespace Mtgdb
 		public bool TryGetValues(TKey key, out HashSet<TVal> vals) =>
 			_dict.TryGetValue(key, out vals);
 
+		public IEnumerable<TVal> this[TKey key] =>
+			TryGetValues(key, out var values)
+				? values
+				: Empty<TVal>.Sequence;
+
+		public ICollection<TKey> Keys =>
+			_dict.Keys;
+
 		private readonly Dictionary<TKey, HashSet<TVal>> _dict;
 		private readonly IEqualityComparer<TVal> _valComparer;
 	}

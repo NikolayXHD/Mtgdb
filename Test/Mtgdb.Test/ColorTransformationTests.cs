@@ -88,25 +88,5 @@ namespace Mtgdb.Test
 			Assert.That(resultColor.S, Is.EqualTo(c1.S + v * (c2.S - c1.S)).Within(0.01f));
 			Assert.That(resultColor.V, Is.EqualTo(c1.V + v * (c2.V - c1.V)).Within(0.01f));
 		}
-
-		[Test]
-		public void Brightness_adaptation_Transforms_image_file()
-		{
-			var bmp = new Bitmap(64, 1, PixelFormat.Format32bppArgb);
-			var g = Graphics.FromImage(bmp);
-			var rect = new Rectangle(default, bmp.Size);
-			g.FillRectangle(new LinearGradientBrush(rect, Color.Red, Color.Red, LinearGradientMode.Horizontal), rect);
-
-
-			bmp.Save(@"D:\temp\img\transform.src.png", ImageFormat.Png);
-
-			HsvColor c1 = new HsvColor(60f, 1f, 1f);
-			HsvColor c2 = new HsvColor(120f, 1f, 1f);
-			var transformation = new ColorSchemeTransformation(c1, c2, bmp);
-
-			transformation.Execute();
-
-			bmp.Save(@"D:\temp\img\transform.png", ImageFormat.Png);
-		}
 	}
 }

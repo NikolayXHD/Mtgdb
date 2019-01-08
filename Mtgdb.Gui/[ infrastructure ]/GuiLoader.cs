@@ -19,22 +19,22 @@ namespace Mtgdb.Gui
 			NewsService newsService,
 			DownloaderSubsystem downloaderSubsystem,
 			DeckListModel deckListModel,
-			DeckListLegacyConverter deckListLegacyConverter,
-			HistoryLegacyConverter historyLegacyConverter,
+			DeckListLegacyConverter deckListConverter,
+			HistoryLegacyConverter historyConverter,
 			DeckSearcher deckSearcher)
 		{
 			_loader = loader;
 			_repo = repo;
 			_repoLegacy = repoLegacy;
-			_deckListLegacyConverter = deckListLegacyConverter;
-			_historyLegacyConverter = historyLegacyConverter;
+			_deckListConverter = deckListConverter;
+			_historyConverter = historyConverter;
 
 			_loader.AddAction(newsService.FetchNews);
 			_loader.AddAction(downloaderSubsystem.CalculateProgress);
 			_loader.AddTask(async () =>
 			{
-				if (deckListLegacyConverter.IsConversionRequired)
-					while (!deckListLegacyConverter.IsConversionCompleted)
+				if (deckListConverter.IsLegacyConversionRequired)
+					while (!deckListConverter.IsLegacyConversionCompleted)
 						await TaskEx.Delay(100);
 
 				deckListModel.Load();
@@ -62,29 +62,36 @@ namespace Mtgdb.Gui
 			if (!_started)
 				throw new InvalidOperationException();
 
-			var legacyHistoryFiles = _historyLegacyConverter.FindLegacyFiles().ToList();
+			var legacyHistoryFiles = _historyConverter.FindLegacyFiles().ToList();
+			var v2HistoryFiles = _historyConverter.FindV2Files().ToList();
 
-			if (legacyHistoryFiles.Count == 0 && !_deckListLegacyConverter.IsConversionRequired)
-				return;
+			if (legacyHistoryFiles.Count != 0 || _deckListConverter.IsLegacyConversionRequired)
+			{
+				_repoLegacy.LoadFile();
+				_repoLegacy.Load();
 
-			_repoLegacy.LoadFile();
-			_repoLegacy.Load();
+				while (!_repo.IsLoadingComplete)
+					await TaskEx.Delay(100);
 
-			while (!_repo.IsLoadingComplete)
-				await TaskEx.Delay(100);
+				foreach (var legacyHistoryFile in legacyHistoryFiles)
+					_historyConverter.ConvertLegacyFile(legacyHistoryFile);
 
-			foreach (var legacyHistoryFile in legacyHistoryFiles)
-				_historyLegacyConverter.Convert(legacyHistoryFile);
+				if (_deckListConverter.IsLegacyConversionRequired)
+					_deckListConverter.ConvertLegacyList();
+			}
 
-			if (_deckListLegacyConverter.IsConversionRequired)
-				_deckListLegacyConverter.Convert();
+			foreach (var v2HistoryFile in v2HistoryFiles)
+				_historyConverter.ConvertV2File(v2HistoryFile);
+
+			if (_deckListConverter.IsV2ConversionRequired)
+				_deckListConverter.ConvertV2List();
 		}
 
 		private readonly Loader _loader;
 		private readonly CardRepository _repo;
 		private readonly CardRepositoryLegacy _repoLegacy;
-		private readonly DeckListLegacyConverter _deckListLegacyConverter;
-		private readonly HistoryLegacyConverter _historyLegacyConverter;
+		private readonly DeckListLegacyConverter _deckListConverter;
+		private readonly HistoryLegacyConverter _historyConverter;
 		private bool _started;
 	}
 }

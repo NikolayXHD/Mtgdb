@@ -30,22 +30,11 @@ namespace Mtgdb.Util
 			_distance = new DamerauLevenshteinDistance();
 		}
 
-		private void setup()
-		{
-			if (_isSetup)
-				return;
-
-			LoadCards();
-			ImgRepo.LoadFiles();
-			ImgRepo.LoadZoom();
-
-			_isSetup = true;
-		}
-
 		[Test]
 		public void DetectArtist()
 		{
-			setup();
+			LoadCards();
+			LoadSmallAndZoomImages();
 
 			string[] setCodes =
 			{
@@ -165,62 +154,26 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("UMA", "D:\\Distrib\\games\\mtg\\Gatherer.Original\\UMA")]
-		public void RenameSetImages(string setCode, string unnamedImagesDirectory)
+		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\rna", "rna;prna")]
+		public void RenameImages(string unnamedImagesDirectory, string setCodes)
 		{
-			setup();
-
 			var fileNames =
 				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
 					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
 
-			var cardsByName = Repo.SetsByCode[setCode].CardsByName;
+			var setCodesArr = setCodes.Split(';').ToHashSet(Str.Comparer);
 
-			var cardNames = cardsByName.Keys.ToArray();
-			var distances = new float[cardNames.Length];
-
-			foreach (var fileName in fileNames)
+			var repo = new CardRepository
 			{
-				var extension = Path.GetExtension(fileName);
-				var directory = Path.GetDirectoryName(fileName);
-
-				var name = ocr(fileName, new Rectangle(20, 20, 170, 17));
-
-				for (int i = 0; i < cardNames.Length; i++)
-					distances[i] = _distance.GetPrefixDistance(name, cardNames[i]);
-
-				var matchedNameIndex = Enumerable.Range(0, cardNames.Length)
-					.AtMin(i => distances[i])
-					.Find();
-
-				var matchedName = cardNames[matchedNameIndex];
-				var imageName = cardsByName[matchedName][0].ImageName;
-				string renamed = Path.Combine(directory, imageName + extension);
-
-				try
-				{
-					File.Move(fileName, renamed);
-				}
-				catch (IOException)
-				{
-				}
-			}
-		}
-
-		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\GRN.png", "GRN")]
-		public void RenameImages(string unnamedImagesDirectory, string setCode)
-		{
-			var fileNames =
-				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
-					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
-
-			var repo = new CardRepository();
-			repo.FilterSetCode = code => code == setCode;
+				FilterSetCode = setCodesArr.Contains
+			};
 
 			repo.LoadFile();
 			repo.Load();
 
-			var cardNames = repo.Cards.Select(c => c.NameEn).Distinct().ToArray();
+			// because we only have setCodes loaded to Repo
+			var cardNames = repo.CardsByName.Keys.ToArray();
+
 			float[] distances = new float[cardNames.Length];
 
 			foreach (var fileName in fileNames)
@@ -233,15 +186,27 @@ namespace Mtgdb.Util
 				for (int i = 0; i < cardNames.Length; i++)
 					distances[i] = _distance.GetPrefixDistance(name, cardNames[i]);
 
-				var mostSimilarName = cardNames[Enumerable.Range(0, cardNames.Length).AtMin(i => distances[i]).Find()];
+				int indexOfMostSimilarName = Enumerable.Range(0, cardNames.Length)
+					.AtMin(i => distances[i])
+					.Find();
+
+				float distance = distances[indexOfMostSimilarName];
+				var invalidFileNameChars = Path.GetInvalidFileNameChars().ToHashSet();
+
+				var mostSimilarName = distance <= (name.Length * 2f) * 0.4f
+					? cardNames[indexOfMostSimilarName]
+					: new string(name.Select(c => invalidFileNameChars.Contains(c) ? '_' : c).ToArray());
 
 				string renamed = Path.Combine(directory, mostSimilarName + extension);
 
 				if (Str.Equals(renamed, fileName))
 					continue;
 
+				int suffix = 0;
+				string baseName = Path.GetFileNameWithoutExtension(renamed);
+
 				while (File.Exists(renamed))
-					renamed = Path.Combine(directory, Path.GetFileNameWithoutExtension(renamed) + '-' + extension);
+					renamed = Path.Combine(directory, baseName + ++suffix + extension);
 
 				try
 				{

@@ -68,7 +68,7 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<DeckLegacyConverter>()
+			Kernel.Bind<DeckConverter>()
 				.ToSelf()
 				.InSingletonScope();
 

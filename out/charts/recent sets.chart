@@ -1,0 +1,30 @@
+{
+  "DataSource": 2,
+  "ApplyFilter": true,
+  "SeriesFields": [],
+  "SeriesFieldsSort": [],
+  "ColumnFields": [
+    "ReleaseDate",
+    "SetName",
+    "SetCode"
+  ],
+  "ColumnFieldsSort": [
+    2,
+    0,
+    0
+  ],
+  "SummaryFields": [
+    "NameEn"
+  ],
+  "SummaryFunctions": [
+    "Count"
+  ],
+  "SummarySort": [
+    0
+  ],
+  "ChartType": 8,
+  "LabelDataElement": 0,
+  "ShowArgumentTotal": false,
+  "ShowSeriesTotal": false,
+  "ExplainTotal": false
+}

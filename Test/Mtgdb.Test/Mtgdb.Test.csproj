@@ -130,6 +130,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardIdTests.cs" />
     <Compile Include="ColorTransformationTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />

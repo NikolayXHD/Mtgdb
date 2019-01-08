@@ -75,7 +75,10 @@ namespace Mtgdb.Dal
 							Str.Comparer);
 
 					foreach (var card in set.Cards)
+					{
 						CardsById[card.Id] = card;
+						CardsByScryfallId[card.ScryfallId] = card;
+					}
 
 					for (int i = 0; i < set.Cards.Count; i++)
 						postProcessCard(set.Cards[i]);
@@ -381,6 +384,8 @@ namespace Mtgdb.Dal
 		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
+		public IDictionary<string, Card> CardsByScryfallId { get; } = new Dictionary<string, Card>(Str.Comparer);
+
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
 		public IDictionary<int, IList<Card>> CardsByMultiverseId { get; private set; }
 

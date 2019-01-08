@@ -6,19 +6,19 @@ using NLog;
 
 namespace Mtgdb.Ui
 {
-	public class DeckLegacyConverter
+	public class DeckConverter
 	{
-		public DeckLegacyConverter(CardRepository repo, CardRepositoryLegacy repoLegacy)
+		public DeckConverter(CardRepository repo, CardRepositoryLegacy repoLegacy)
 		{
 			_repo = repo;
 			_repoLegacy = repoLegacy;
 		}
 
-		public Deck Convert(Deck deck)
+		public Deck ConvertLegacyDeck(Deck deck)
 		{
 			var result = Deck.Create();
-			add(deck.MainDeck, result.MainDeck);
-			add(deck.Sideboard, result.Sideboard);
+			addLegacy(deck.MainDeck, result.MainDeck);
+			addLegacy(deck.Sideboard, result.Sideboard);
 			result.File = deck.File;
 			result.Name = deck.Name;
 			result.Id = deck.Id;
@@ -27,7 +27,20 @@ namespace Mtgdb.Ui
 			return result;
 		}
 
-		private void add(DeckZone source, DeckZone target)
+		public Deck ConvertV2Deck(Deck deck)
+		{
+			var result = Deck.Create();
+			addV2(deck.MainDeck, result.MainDeck);
+			addV2(deck.Sideboard, result.Sideboard);
+			result.File = deck.File;
+			result.Name = deck.Name;
+			result.Id = deck.Id;
+			result.Error = deck.Error;
+			result.Saved = deck.Saved;
+			return result;
+		}
+
+		private void addLegacy(DeckZone source, DeckZone target)
 		{
 			foreach (var legacyId in source.Order)
 			{
@@ -51,6 +64,29 @@ namespace Mtgdb.Ui
 				{
 					target.Order.Add(card.Id);
 					target.Count[card.Id] = source.Count[legacyId];
+				}
+			}
+		}
+
+		private void addV2(DeckZone source, DeckZone target)
+		{
+			foreach (var v2Id in source.Order)
+			{
+				var card = _repo.CardsByScryfallId.TryGet(v2Id) ??
+					_repo.CardsById.TryGet(v2Id);
+
+				if (card == null)
+				{
+					_log.Error($"No v2 card found by id {v2Id}");
+					continue;
+				}
+
+				if (target.Count.TryGetValue(card.Id, out var count))
+					target.Count[card.Id] = count + source.Count[v2Id];
+				else
+				{
+					target.Order.Add(card.Id);
+					target.Count[card.Id] = source.Count[v2Id];
 				}
 			}
 		}

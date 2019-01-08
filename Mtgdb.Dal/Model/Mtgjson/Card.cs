@@ -196,6 +196,13 @@ namespace Mtgdb.Dal
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string Id { get; set; }
 
+		/// <summary>
+		/// Id from mtgjson v 4.1.3 and earlier, non-unique per card face
+		/// </summary>
+		[JsonProperty("scryfallId")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string ScryfallId { get; set; }
+
 		/*
 
 		/// <summary>

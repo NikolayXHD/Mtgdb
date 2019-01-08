@@ -30,7 +30,7 @@ namespace Mtgdb.Util
 				() => cardRepo.Load(),
 				() => cardRepoLegacy.Load());
 
-			var converter = new DeckLegacyConverter(cardRepo, cardRepoLegacy);
+			var converter = new DeckConverter(cardRepo, cardRepoLegacy);
 
 			var messages = new List<string>();
 

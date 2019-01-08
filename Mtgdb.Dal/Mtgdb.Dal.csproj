@@ -110,6 +110,7 @@
     <Compile Include="Index\CardQueryParser.cs" />
     <Compile Include="Index\CardSearcherState.cs" />
     <Compile Include="Index\CardSpellcheckerState.cs" />
+    <Compile Include="Index\IndexVersions.cs" />
     <Compile Include="Legacy\CardLegacy.cs" />
     <Compile Include="Legacy\CardLegacyExtension.cs" />
     <Compile Include="Legacy\CardRepositoryLegacy.cs" />
