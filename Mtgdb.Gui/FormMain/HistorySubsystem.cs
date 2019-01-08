@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mtgdb.Controls;
+using Mtgdb.Dal;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
 
@@ -21,9 +22,9 @@ namespace Mtgdb.Gui
 					objectType == typeof(GuiSettings.ZoomSettings)));
 		}
 
-		public HistorySubsystem(UndoConfig undoConfig)
+		public HistorySubsystem(UiConfigRepository uiConfigRepository)
 		{
-			_maxDepth = undoConfig.MaxDepth ?? 100;
+			_undoDepth = uiConfigRepository.Config.UndoDepth;
 		}
 
 		public void LoadHistory(string file)
@@ -118,8 +119,8 @@ namespace Mtgdb.Gui
 
 		private HistoryState getState()
 		{
-			int minSaveIndex = _settingsIndex - _maxDepth;
-			int saveCount = 1 + 2 * _maxDepth;
+			int minSaveIndex = _settingsIndex - _undoDepth;
+			int saveCount = 1 + 2 * _undoDepth;
 
 			if (minSaveIndex < 0)
 				minSaveIndex = 0;
@@ -169,7 +170,7 @@ namespace Mtgdb.Gui
 
 		private int _settingsIndex;
 		private List<GuiSettings> _settingsHistory;
-		private readonly int _maxDepth;
+		private readonly int _undoDepth;
 		private static readonly JsonSerializer _serializer;
 	}
 }

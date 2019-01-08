@@ -11,10 +11,10 @@ namespace Mtgdb.Gui
 		public bool NeedToSuggestDownloader { get; private set; }
 
 		public DownloaderSubsystem(
-			SuggestImageDownloaderConfig config,
+			UiConfigRepository uiConfigRepository,
 			FormUpdate formUpdate)
 		{
-			_config = config;
+			_uiConfigRepository = uiConfigRepository;
 			_formUpdate = formUpdate;
 		}
 
@@ -35,7 +35,7 @@ namespace Mtgdb.Gui
 
 			var notDownloaded = countTotal - countDownloaded;
 
-			NeedToSuggestDownloader = notDownloaded > 0 && _config.Enabled != false;
+			NeedToSuggestDownloader = notDownloaded > 0 && _uiConfigRepository.Config.SuggestDownloadMissingImages;
 
 			ProgressCalculated?.Invoke();
 		}
@@ -67,7 +67,7 @@ namespace Mtgdb.Gui
 
 		private bool _wasAutoShown;
 
-		private readonly SuggestImageDownloaderConfig _config;
+		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly FormUpdate _formUpdate;
 	}
 }

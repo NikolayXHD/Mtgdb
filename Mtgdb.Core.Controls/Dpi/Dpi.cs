@@ -10,10 +10,13 @@ namespace Mtgdb.Controls
 		public static event Action Changed;
 		public static event Action AfterChanged;
 
-		public static void Initialize(int uiScalePercent = 100)
+		public static void Set(int uiScalePercent = 100)
 		{
 			if (!_initialized && Environment.OSVersion.Version.Major >= 6)
 				SetProcessDPIAware();
+
+			if (_initialized && _uiScalePercent == uiScalePercent)
+				return;
 
 			_initialized = true;
 

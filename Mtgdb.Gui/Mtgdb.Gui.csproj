@@ -151,7 +151,9 @@
     <Compile Include="FormMain\FormMain.EventHandlers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain\FormMain.Scale.cs" />
+    <Compile Include="FormMain\FormMain.Scale.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormMain\FormMain.Tooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,7 +166,9 @@
     <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormRoot\FormRoot.Scale.cs" />
+    <Compile Include="FormRoot\FormRoot.Scale.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\TabHeadersTooltip.cs" />
@@ -270,7 +274,6 @@
       <DependentUpon>FormZoom.cs</DependentUpon>
     </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
-    <Compile Include="[ Infrastructure ]\UndoConfig.cs" />
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
     </EmbeddedResource>

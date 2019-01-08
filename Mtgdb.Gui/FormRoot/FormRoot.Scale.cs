@@ -66,13 +66,20 @@ namespace Mtgdb.Gui
 			foreach (var titleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
 				titleButton.ScaleDpi();
 
-			_labelUiScale.ScaleDpi();
-			_labelUiUseSmallImages.ScaleDpi();
-			_labelUiUseSmallImagesHint.ScaleDpi();
-
 			_menuUiScale.ScaleDpi();
 			_menuUiSmallImageQuality.ScaleDpi();
-			_buttonEditConfig.Height = _buttonEditConfig.Height.ByDpiHeight();
+			_menuUiSuggestDownloadMissingImages.ScaleDpi();
+			_menuUiImagesCacheCapacity.ScaleDpi();
+			_menuUiUndoDepth.ScaleDpi();
+			_labelUiScale.ScaleDpi();
+			_labelUiUseSmallImages.ScaleDpi();
+			_labelUiSuggestDownloadMissingImages.ScaleDpi();
+			_labelUiImageCacheCapacity.ScaleDpi();
+			_labelUiUndoDepth.ScaleDpi();
+			_labelUiUseSmallImagesHint.ScaleDpi();
+			_labelUiAppliedAfterRestartHint.ScaleDpi();
+
+			_buttonEditConfig.ScaleDpiHeight();
 			_buttonEditConfig.ScaleDpiFont();
 
 			_buttonImportMtgArenaCollection.ScaleDpiFont();

@@ -101,12 +101,19 @@ namespace Mtgdb.Gui
 			this._menuColors = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._menuItemEditColorScheme = new System.Windows.Forms.ToolStripMenuItem();
 			this._menuConfig = new Mtgdb.Controls.BorderedTableLayoutPanel();
+			this._labelUiAppliedAfterRestartHint = new System.Windows.Forms.Label();
+			this._menuUiUndoDepth = new System.Windows.Forms.ComboBox();
+			this._menuUiImagesCacheCapacity = new System.Windows.Forms.ComboBox();
+			this._labelUiUndoDepth = new System.Windows.Forms.Label();
+			this._labelUiImageCacheCapacity = new System.Windows.Forms.Label();
+			this._labelUiSuggestDownloadMissingImages = new System.Windows.Forms.Label();
 			this._labelUiUseSmallImagesHint = new System.Windows.Forms.Label();
 			this._labelUiScale = new System.Windows.Forms.Label();
 			this._menuUiScale = new System.Windows.Forms.ComboBox();
 			this._buttonEditConfig = new Mtgdb.Controls.CustomCheckBox();
 			this._labelUiUseSmallImages = new System.Windows.Forms.Label();
 			this._menuUiSmallImageQuality = new System.Windows.Forms.ComboBox();
+			this._menuUiSuggestDownloadMissingImages = new System.Windows.Forms.ComboBox();
 			this._panelCaption.SuspendLayout();
 			this._menuOpen.SuspendLayout();
 			this._menuLanguage.SuspendLayout();
@@ -188,7 +195,7 @@ namespace Mtgdb.Gui
 			this._buttonDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonDonate.ForeColor = System.Drawing.SystemColors.WindowText;
 			this._buttonDonate.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonDonate.Location = new System.Drawing.Point(598, 3);
+			this._buttonDonate.Location = new System.Drawing.Point(622, 3);
 			this._buttonDonate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonDonate.Name = "_buttonDonate";
 			this._buttonDonate.Size = new System.Drawing.Size(50, 24);
@@ -198,7 +205,7 @@ namespace Mtgdb.Gui
 			this._buttonDonate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonDonate.UseVisualStyleBackColor = false;
 			// 
-			// _buttonDownload
+			// _buttonUpdate
 			// 
 			this._buttonUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonUpdate.Appearance = System.Windows.Forms.Appearance.Button;
@@ -208,7 +215,7 @@ namespace Mtgdb.Gui
 			this._buttonUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonUpdate.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonUpdate.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
-			this._buttonUpdate.Location = new System.Drawing.Point(356, 3);
+			this._buttonUpdate.Location = new System.Drawing.Point(476, 3);
 			this._buttonUpdate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonUpdate.Name = "_buttonUpdate";
 			this._buttonUpdate.Size = new System.Drawing.Size(32, 24);
@@ -224,7 +231,7 @@ namespace Mtgdb.Gui
 			this._buttonLanguage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._buttonLanguage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonLanguage.Location = new System.Drawing.Point(423, 3);
+			this._buttonLanguage.Location = new System.Drawing.Point(371, 3);
 			this._buttonLanguage.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._buttonLanguage.Name = "_buttonLanguage";
 			this._buttonLanguage.Size = new System.Drawing.Size(58, 22);
@@ -244,7 +251,7 @@ namespace Mtgdb.Gui
 			this._buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonConfig.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_16;
-			this._buttonConfig.Location = new System.Drawing.Point(324, 3);
+			this._buttonConfig.Location = new System.Drawing.Point(304, 3);
 			this._buttonConfig.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonConfig.Name = "_buttonConfig";
 			this._buttonConfig.Size = new System.Drawing.Size(32, 24);
@@ -263,7 +270,7 @@ namespace Mtgdb.Gui
 			this._buttonHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonHelp.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_16;
-			this._buttonHelp.Location = new System.Drawing.Point(228, 3);
+			this._buttonHelp.Location = new System.Drawing.Point(444, 3);
 			this._buttonHelp.Margin = new System.Windows.Forms.Padding(12, 3, 0, 0);
 			this._buttonHelp.Name = "_buttonHelp";
 			this._buttonHelp.Size = new System.Drawing.Size(32, 24);
@@ -282,7 +289,7 @@ namespace Mtgdb.Gui
 			this._buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonClear.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_16;
-			this._buttonClear.Location = new System.Drawing.Point(184, 3);
+			this._buttonClear.Location = new System.Drawing.Point(120, 3);
 			this._buttonClear.Margin = new System.Windows.Forms.Padding(12, 3, 12, 0);
 			this._buttonClear.Name = "_buttonClear";
 			this._buttonClear.Size = new System.Drawing.Size(32, 24);
@@ -300,7 +307,7 @@ namespace Mtgdb.Gui
 			this._buttonPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonPrint.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonPrint.Image = global::Mtgdb.Gui.Properties.Resources.print_16;
-			this._buttonPrint.Location = new System.Drawing.Point(120, 3);
+			this._buttonPrint.Location = new System.Drawing.Point(164, 3);
 			this._buttonPrint.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonPrint.Name = "_buttonPrint";
 			this._buttonPrint.Size = new System.Drawing.Size(32, 24);
@@ -318,7 +325,7 @@ namespace Mtgdb.Gui
 			this._buttonStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonStat.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonStat.Image = global::Mtgdb.Gui.Properties.Resources.chart_16;
-			this._buttonStat.Location = new System.Drawing.Point(152, 3);
+			this._buttonStat.Location = new System.Drawing.Point(196, 3);
 			this._buttonStat.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonStat.Name = "_buttonStat";
 			this._buttonStat.Size = new System.Drawing.Size(32, 24);
@@ -375,7 +382,7 @@ namespace Mtgdb.Gui
 			this._buttonTooltips.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonTooltips.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_16;
-			this._buttonTooltips.Location = new System.Drawing.Point(260, 3);
+			this._buttonTooltips.Location = new System.Drawing.Point(240, 3);
 			this._buttonTooltips.Margin = new System.Windows.Forms.Padding(12, 3, 0, 0);
 			this._buttonTooltips.Name = "_buttonTooltips";
 			this._buttonTooltips.Size = new System.Drawing.Size(32, 24);
@@ -1308,11 +1315,11 @@ namespace Mtgdb.Gui
 			this._flowTitleRight.Controls.Add(this._buttonUpdate);
 			this._flowTitleRight.Controls.Add(this._buttonSupport);
 			this._flowTitleRight.Controls.Add(this._buttonDonate);
-			this._flowTitleRight.Location = new System.Drawing.Point(259, 3);
+			this._flowTitleRight.Location = new System.Drawing.Point(235, 3);
 			this._flowTitleRight.Margin = new System.Windows.Forms.Padding(0, 0, 0, 1);
 			this._flowTitleRight.Name = "_flowTitleRight";
 			this._flowTitleRight.PaintBackground = false;
-			this._flowTitleRight.Size = new System.Drawing.Size(648, 27);
+			this._flowTitleRight.Size = new System.Drawing.Size(672, 27);
 			this._flowTitleRight.TabIndex = 1;
 			this._flowTitleRight.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			this._flowTitleRight.WrapContents = false;
@@ -1328,7 +1335,7 @@ namespace Mtgdb.Gui
 			this._buttonShowFilterPanels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonShowFilterPanels.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonShowFilterPanels.Image = global::Mtgdb.Gui.Properties.Resources.filters_show_32;
-			this._buttonShowFilterPanels.Location = new System.Drawing.Point(292, 3);
+			this._buttonShowFilterPanels.Location = new System.Drawing.Point(272, 3);
 			this._buttonShowFilterPanels.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonShowFilterPanels.Name = "_buttonShowFilterPanels";
 			this._buttonShowFilterPanels.Size = new System.Drawing.Size(32, 24);
@@ -1346,7 +1353,7 @@ namespace Mtgdb.Gui
 			this._buttonColorScheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonColorScheme.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonColorScheme.Image = global::Mtgdb.Gui.Properties.Resources.color_swatch_32;
-			this._buttonColorScheme.Location = new System.Drawing.Point(388, 3);
+			this._buttonColorScheme.Location = new System.Drawing.Point(336, 3);
 			this._buttonColorScheme.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonColorScheme.Name = "_buttonColorScheme";
 			this._buttonColorScheme.Size = new System.Drawing.Size(32, 24);
@@ -1364,7 +1371,7 @@ namespace Mtgdb.Gui
 			this._buttonSupport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonSupport.ForeColor = System.Drawing.SystemColors.WindowText;
 			this._buttonSupport.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonSupport.Location = new System.Drawing.Point(484, 3);
+			this._buttonSupport.Location = new System.Drawing.Point(508, 3);
 			this._buttonSupport.Margin = new System.Windows.Forms.Padding(0, 3, 3, 0);
 			this._buttonSupport.Name = "_buttonSupport";
 			this._buttonSupport.Size = new System.Drawing.Size(111, 24);
@@ -1432,25 +1439,99 @@ namespace Mtgdb.Gui
 			this._menuConfig.ColumnCount = 2;
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._menuConfig.Controls.Add(this._labelUiAppliedAfterRestartHint, 0, 6);
+			this._menuConfig.Controls.Add(this._menuUiUndoDepth, 1, 5);
+			this._menuConfig.Controls.Add(this._menuUiImagesCacheCapacity, 1, 4);
+			this._menuConfig.Controls.Add(this._labelUiUndoDepth, 0, 5);
+			this._menuConfig.Controls.Add(this._labelUiImageCacheCapacity, 0, 4);
+			this._menuConfig.Controls.Add(this._labelUiSuggestDownloadMissingImages, 0, 3);
 			this._menuConfig.Controls.Add(this._labelUiUseSmallImagesHint, 0, 2);
 			this._menuConfig.Controls.Add(this._labelUiScale, 0, 0);
 			this._menuConfig.Controls.Add(this._menuUiScale, 1, 0);
-			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 3);
+			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 7);
 			this._menuConfig.Controls.Add(this._labelUiUseSmallImages, 0, 1);
 			this._menuConfig.Controls.Add(this._menuUiSmallImageQuality, 1, 1);
+			this._menuConfig.Controls.Add(this._menuUiSuggestDownloadMissingImages, 1, 3);
 			this._menuConfig.Location = new System.Drawing.Point(653, 62);
 			this._menuConfig.Name = "_menuConfig";
-			this._menuConfig.RowCount = 4;
+			this._menuConfig.RowCount = 8;
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this._menuConfig.Size = new System.Drawing.Size(210, 219);
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuConfig.Size = new System.Drawing.Size(227, 268);
 			this._menuConfig.TabIndex = 39;
 			this._menuConfig.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// _labelUiAppliedAfterRestartHint
+			// 
+			this._labelUiAppliedAfterRestartHint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._labelUiAppliedAfterRestartHint.AutoSize = true;
+			this._menuConfig.SetColumnSpan(this._labelUiAppliedAfterRestartHint, 2);
+			this._labelUiAppliedAfterRestartHint.Location = new System.Drawing.Point(111, 206);
+			this._labelUiAppliedAfterRestartHint.Margin = new System.Windows.Forms.Padding(3, 12, 3, 0);
+			this._labelUiAppliedAfterRestartHint.Name = "_labelUiAppliedAfterRestartHint";
+			this._labelUiAppliedAfterRestartHint.Size = new System.Drawing.Size(113, 13);
+			this._labelUiAppliedAfterRestartHint.TabIndex = 47;
+			this._labelUiAppliedAfterRestartHint.Text = "* applied after restart";
+			// 
+			// _menuUiUndoDepth
+			// 
+			this._menuUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiUndoDepth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this._menuUiUndoDepth.FormattingEnabled = true;
+			this._menuUiUndoDepth.Location = new System.Drawing.Point(134, 170);
+			this._menuUiUndoDepth.Name = "_menuUiUndoDepth";
+			this._menuUiUndoDepth.Size = new System.Drawing.Size(90, 21);
+			this._menuUiUndoDepth.TabIndex = 46;
+			this._menuUiUndoDepth.TabStop = false;
+			// 
+			// _menuUiImagesCacheCapacity
+			// 
+			this._menuUiImagesCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiImagesCacheCapacity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this._menuUiImagesCacheCapacity.FormattingEnabled = true;
+			this._menuUiImagesCacheCapacity.Location = new System.Drawing.Point(134, 143);
+			this._menuUiImagesCacheCapacity.Name = "_menuUiImagesCacheCapacity";
+			this._menuUiImagesCacheCapacity.Size = new System.Drawing.Size(90, 21);
+			this._menuUiImagesCacheCapacity.TabIndex = 45;
+			this._menuUiImagesCacheCapacity.TabStop = false;
+			// 
+			// _labelUiUndoDepth
+			// 
+			this._labelUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this._labelUiUndoDepth.AutoSize = true;
+			this._labelUiUndoDepth.Location = new System.Drawing.Point(56, 174);
+			this._labelUiUndoDepth.Name = "_labelUiUndoDepth";
+			this._labelUiUndoDepth.Size = new System.Drawing.Size(72, 13);
+			this._labelUiUndoDepth.TabIndex = 43;
+			this._labelUiUndoDepth.Text = "Undo depth *";
+			// 
+			// _labelUiImageCacheCapacity
+			// 
+			this._labelUiImageCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this._labelUiImageCacheCapacity.AutoSize = true;
+			this._labelUiImageCacheCapacity.Location = new System.Drawing.Point(3, 147);
+			this._labelUiImageCacheCapacity.Name = "_labelUiImageCacheCapacity";
+			this._labelUiImageCacheCapacity.Size = new System.Drawing.Size(125, 13);
+			this._labelUiImageCacheCapacity.TabIndex = 42;
+			this._labelUiImageCacheCapacity.Text = "Images cache capacity *";
+			// 
+			// _labelUiSuggestDownloadMissingImages
+			// 
+			this._labelUiSuggestDownloadMissingImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._labelUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(30, 111);
+			this._labelUiSuggestDownloadMissingImages.Name = "_labelUiSuggestDownloadMissingImages";
+			this._labelUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(98, 29);
+			this._labelUiSuggestDownloadMissingImages.TabIndex = 41;
+			this._labelUiSuggestDownloadMissingImages.Text = "Suggest download missing images *";
+			this._labelUiSuggestDownloadMissingImages.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// _labelUiUseSmallImagesHint
 			// 
@@ -1459,28 +1540,27 @@ namespace Mtgdb.Gui
 			this._labelUiUseSmallImagesHint.Location = new System.Drawing.Point(3, 57);
 			this._labelUiUseSmallImagesHint.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
 			this._labelUiUseSmallImagesHint.Name = "_labelUiUseSmallImagesHint";
-			this._labelUiUseSmallImagesHint.Size = new System.Drawing.Size(204, 114);
+			this._labelUiUseSmallImagesHint.Size = new System.Drawing.Size(221, 42);
 			this._labelUiUseSmallImagesHint.TabIndex = 40;
-			this._labelUiUseSmallImagesHint.Text = "NOTE: \"High (MQ)\" option fixes blurry card images:\r\n\r\n- if you set \"User interfac" +
-    "e scale\" setting above more than 100% \r\n\r\n- if you have Windows DPI setting more" +
-    " than default 96 dots per inch\r\n\r\n";
+			this._labelUiUseSmallImagesHint.Text = "Use \"High (MQ)\" to fix blurry images when\r\n- User Interface scale > 100% \r\n- Wind" +
+    "ows DPI setting > 96 dpi";
 			// 
 			// _labelUiScale
 			// 
 			this._labelUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiScale.AutoSize = true;
-			this._labelUiScale.Location = new System.Drawing.Point(3, 7);
+			this._labelUiScale.Location = new System.Drawing.Point(24, 7);
 			this._labelUiScale.Name = "_labelUiScale";
-			this._labelUiScale.Size = new System.Drawing.Size(108, 13);
+			this._labelUiScale.Size = new System.Drawing.Size(104, 13);
 			this._labelUiScale.TabIndex = 35;
-			this._labelUiScale.Text = "User Interface scale:";
+			this._labelUiScale.Text = "User Interface scale";
 			// 
 			// _menuUiScale
 			// 
 			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuUiScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiScale.FormattingEnabled = true;
-			this._menuUiScale.Location = new System.Drawing.Point(117, 3);
+			this._menuUiScale.Location = new System.Drawing.Point(134, 3);
 			this._menuUiScale.Name = "_menuUiScale";
 			this._menuUiScale.Size = new System.Drawing.Size(90, 21);
 			this._menuUiScale.TabIndex = 36;
@@ -1496,35 +1576,47 @@ namespace Mtgdb.Gui
 			this._buttonEditConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonEditConfig.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonEditConfig.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonEditConfig.Location = new System.Drawing.Point(2, 183);
-			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(2, 0, 2, 2);
+			this._buttonEditConfig.Location = new System.Drawing.Point(3, 231);
+			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
 			this._buttonEditConfig.Name = "_buttonEditConfig";
-			this._buttonEditConfig.Size = new System.Drawing.Size(206, 34);
+			this._buttonEditConfig.Size = new System.Drawing.Size(221, 34);
 			this._buttonEditConfig.TabIndex = 34;
 			this._buttonEditConfig.TabStop = false;
 			this._buttonEditConfig.Text = "Edit configuration file";
+			this._buttonEditConfig.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this._buttonEditConfig.UseVisualStyleBackColor = false;
 			// 
 			// _labelUiUseSmallImages
 			// 
 			this._labelUiUseSmallImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiUseSmallImages.AutoSize = true;
-			this._labelUiUseSmallImages.Location = new System.Drawing.Point(10, 34);
+			this._labelUiUseSmallImages.Location = new System.Drawing.Point(31, 34);
 			this._labelUiUseSmallImages.Name = "_labelUiUseSmallImages";
-			this._labelUiUseSmallImages.Size = new System.Drawing.Size(101, 13);
+			this._labelUiUseSmallImages.Size = new System.Drawing.Size(97, 13);
 			this._labelUiUseSmallImages.TabIndex = 38;
-			this._labelUiUseSmallImages.Text = "Small image quality:";
+			this._labelUiUseSmallImages.Text = "Small image quality";
 			// 
 			// _menuUiSmallImageQuality
 			// 
 			this._menuUiSmallImageQuality.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuUiSmallImageQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiSmallImageQuality.FormattingEnabled = true;
-			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(117, 30);
+			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(134, 30);
 			this._menuUiSmallImageQuality.Name = "_menuUiSmallImageQuality";
 			this._menuUiSmallImageQuality.Size = new System.Drawing.Size(90, 21);
 			this._menuUiSmallImageQuality.TabIndex = 39;
 			this._menuUiSmallImageQuality.TabStop = false;
+			// 
+			// _menuUiSuggestDownloadMissingImages
+			// 
+			this._menuUiSuggestDownloadMissingImages.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiSuggestDownloadMissingImages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this._menuUiSuggestDownloadMissingImages.FormattingEnabled = true;
+			this._menuUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(134, 115);
+			this._menuUiSuggestDownloadMissingImages.Name = "_menuUiSuggestDownloadMissingImages";
+			this._menuUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(90, 21);
+			this._menuUiSuggestDownloadMissingImages.TabIndex = 44;
+			this._menuUiSuggestDownloadMissingImages.TabStop = false;
 			// 
 			// FormRoot
 			// 
@@ -1641,5 +1733,12 @@ namespace Mtgdb.Gui
 		private Label _labelUiUseSmallImages;
 		private ComboBox _menuUiSmallImageQuality;
 		private Label _labelUiUseSmallImagesHint;
+		private Label _labelUiUndoDepth;
+		private Label _labelUiImageCacheCapacity;
+		private Label _labelUiSuggestDownloadMissingImages;
+		private ComboBox _menuUiSuggestDownloadMissingImages;
+		private ComboBox _menuUiImagesCacheCapacity;
+		private ComboBox _menuUiUndoDepth;
+		private Label _labelUiAppliedAfterRestartHint;
 	}
 }

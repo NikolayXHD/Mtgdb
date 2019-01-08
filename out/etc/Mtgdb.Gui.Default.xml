@@ -8,16 +8,11 @@
 		* etc\Mtgdb.Gui.xml
 	-->
 
-	<SuggestImageDownloader Enabled="True" />
-
-	<Undo MaxDepth="100" />
-
 	<MtgaIntegration
 		CardLibraryFile="%ProgramFiles(x86)%\Wizards of the Coast\MTGA\MTGA_Data\Downloads\AssetBundle\data_cards_[guid].mtga"
 		LogFile="%UserProfile%\AppData\LocalLow\Wizards Of The Coast\MTGA\output_log.txt"
 	/>
 
-	<ImageCache CacheCapacity ="900"/>
 	<MtgjsonSource Url="https://mtgjson.com/json/AllSets.json.zip" />
 
 	<AppSource

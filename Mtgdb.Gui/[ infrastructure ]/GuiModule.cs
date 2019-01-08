@@ -10,8 +10,6 @@ namespace Mtgdb.Gui
 	{
 		public override void Load()
 		{
-			Kernel.BindConfig<UndoConfig>();
-
 			// ReSharper disable once PossibleNullReferenceException
 			Kernel.Bind<DownloaderSubsystem>()
 				.ToSelf()

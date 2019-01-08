@@ -280,6 +280,9 @@ namespace Mtgdb.Gui
 
 			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
 			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiSuggestDownloadMissingImages, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiImagesCacheCapacity, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiUndoDepth, allowScroll: false);
 		}
 
 		private void updateMenuColors()

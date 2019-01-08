@@ -2,8 +2,6 @@
 <configuration>
 	<WatchFile Mode="Auto" />
 
-	<SuggestImageDownloader Enabled="False" />
-
 	<AppSource
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>

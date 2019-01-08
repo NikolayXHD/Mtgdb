@@ -145,9 +145,7 @@
     <Compile Include="Model\Price\PriceValues.cs" />
     <Compile Include="KeywordRegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
-    <Compile Include="[ infrastructure ]\ImageCacheConfig.cs" />
     <Compile Include="[ infrastructure ]\MtgaIntegrationConfig.cs" />
-    <Compile Include="[ infrastructure ]\SuggestImageDownloaderConfig.cs" />
     <Compile Include="Images\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
     <Compile Include="ImageRepository.cs" />

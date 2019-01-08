@@ -8,8 +8,6 @@ namespace Mtgdb.Dal
 		public override void Load()
 		{
 			Kernel.BindConfig<ImageLocationsConfig>();
-			Kernel.BindConfig<ImageCacheConfig>();
-			Kernel.BindConfig<SuggestImageDownloaderConfig>();
 
 			// ReSharper disable once PossibleNullReferenceException
 			Kernel.Bind<CardRepository>()

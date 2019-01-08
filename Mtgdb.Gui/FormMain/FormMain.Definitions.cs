@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
-using Mtgdb.Gui.Properties;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
@@ -20,10 +16,8 @@ namespace Mtgdb.Gui
 
 		[UsedImplicitly]
 		public FormMain(
-			UndoConfig undoConfig,
 			CardRepository cardRepo,
 			ImageRepository imageRepo,
-			ImageCacheConfig imageCacheConfig,
 			ImageLoader imageLoader,
 			UiConfigRepository uiConfigRepository,
 			CollectionEditorModel collectionEditor,
@@ -99,7 +93,6 @@ namespace Mtgdb.Gui
 				_viewCards,
 				_viewDeck,
 				_scroll,
-				imageCacheConfig,
 				uiConfigRepository);
 
 			_deckEditor = new DeckEditorModel();
@@ -158,7 +151,7 @@ namespace Mtgdb.Gui
 
 			_searchTextSelection = new RichTextBoxSelectionSubsystem(_searchEditor);
 
-			_history = new HistorySubsystem(undoConfig);
+			_history = new HistorySubsystem(uiConfigRepository);
 
 			_evaluators = new Evaluators
 			{

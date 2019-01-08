@@ -18,21 +18,6 @@
 			* attach a .zip with files from \logs directory
 	-->
 
-	<!-- === Suggest downloading images on program startup ===
-		On startup the program will check whether your images are up-to-date.
-		If not, it will open update window. To turn this off set Enabled="False"
-	-->
-	<SuggestImageDownloader Enabled="True" />
-
-	<!-- The maximum number of undo/redo operations saved to history -->
-	<Undo MaxDepth="1000" />
-
-	<!-- === Cache capacity ===
-		Decreasing CacheCapacity can reduce memory consumption at a cost of slowing down scrolling speed.
-		Zoomed images are not cached.
-	-->
-	<ImageCache CacheCapacity ="900"/>
-
 	<!-- === Magic The Gathering Arena files location ===
 		These files are used to import Collection from MTGA.
 		Edit this if you have MTGArena installed in custom location.

@@ -9,9 +9,9 @@ namespace Mtgdb.Dal
 {
 	public class ImageLoader
 	{
-		public ImageLoader(ImageCacheConfig config)
+		public ImageLoader(UiConfigRepository configRepository)
 		{
-			Capacity = config.GetCacheCapacity();
+			Capacity = configRepository.Config.ImageCacheCapacity;
 			Dpi.Changed += clearCache;
 		}
 

@@ -1,4 +1,5 @@
 using Mtgdb.Dal;
+using Ninject;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -27,7 +28,7 @@ namespace Mtgdb.Test
 			bool isCornerRemoved;
 			bool isFoundInCache;
 
-			var imageLoader = new ImageLoader(new ImageCacheConfig());
+			var imageLoader = new ImageLoader(new UiConfigRepository());
 			imageLoader.CornerRemoved += () => { isCornerRemoved = true; };
 			imageLoader.FoundInCache += () => { isFoundInCache = true; };
 

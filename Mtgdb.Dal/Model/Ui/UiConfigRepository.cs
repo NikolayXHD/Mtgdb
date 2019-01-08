@@ -8,8 +8,6 @@ namespace Mtgdb.Dal
 		private UiConfig _config;
 		public UiConfig Config => _config ?? (_config = readConfig());
 
-		public int[] UiScaleValues => _uiScaleValues;
-
 		public void Save()
 		{
 			var serialized = JsonConvert.SerializeObject(Config, Formatting.Indented);
@@ -27,6 +25,5 @@ namespace Mtgdb.Dal
 		}
 
 		private static readonly string _fileName = AppDir.History.AddPath("ui.json");
-		private static readonly int[] _uiScaleValues = { UiConfig.DefaultUiScalePercent, 125, 150, 200 };
 	}
 }

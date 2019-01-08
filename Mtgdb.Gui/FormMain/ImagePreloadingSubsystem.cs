@@ -12,14 +12,13 @@ namespace Mtgdb.Gui
 			MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
 			ScrollSubsystem scrollSubsystem,
-			ImageCacheConfig imageCacheConfig,
 			UiConfigRepository uiConfigRepository)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_scrollSubsystem = scrollSubsystem;
 			_uiConfigRepository = uiConfigRepository;
-			_imageCacheCapacity = imageCacheConfig.GetCacheCapacity();
+			_imageCacheCapacity = uiConfigRepository.Config.ImageCacheCapacity;
 		}
 
 		public void Reset()

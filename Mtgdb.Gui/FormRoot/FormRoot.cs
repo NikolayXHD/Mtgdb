@@ -139,7 +139,14 @@ namespace Mtgdb.Gui
 			setupButtonClicks();
 			setupLanguageMenu();
 
-			_uiConfigMenuSubsystem = new UiConfigMenuSubsystem(_menuUiScale, _menuUiSmallImageQuality, uiConfigRepository);
+			_uiConfigMenuSubsystem = new UiConfigMenuSubsystem(
+				_menuUiScale,
+				_menuUiSmallImageQuality,
+				_menuUiSuggestDownloadMissingImages,
+				_menuUiImagesCacheCapacity,
+				_menuUiUndoDepth,
+				uiConfigRepository);
+
 			_uiConfigMenuSubsystem.SetupMenu();
 
 			setupTooltips();
