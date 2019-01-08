@@ -11,7 +11,7 @@ namespace Mtgdb.Dal
 	{
 		public ImageLoader(UiConfigRepository configRepository)
 		{
-			Capacity = configRepository.Config.ImageCacheCapacity;
+			_configRepository = configRepository;
 			Dpi.Changed += clearCache;
 		}
 
@@ -46,7 +46,7 @@ namespace Mtgdb.Dal
 
 			lock (_sync)
 				if (addFirst(model.ImageFile.FullPath, model.Rotation, image))
-					if (_ratings.Count >= Capacity)
+					if (_ratings.Count >= _configRepository.Config.ImageCacheCapacity)
 						removeLast();
 
 			return image;
@@ -208,7 +208,7 @@ namespace Mtgdb.Dal
 		public Size CardSize => _cardSize.ByDpi();
 		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
 
-		public int Capacity { get; }
+		private readonly UiConfigRepository _configRepository;
 
 		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	}

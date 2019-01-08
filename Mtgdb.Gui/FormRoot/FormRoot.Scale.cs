@@ -77,7 +77,6 @@ namespace Mtgdb.Gui
 			_labelUiImageCacheCapacity.ScaleDpi();
 			_labelUiUndoDepth.ScaleDpi();
 			_labelUiUseSmallImagesHint.ScaleDpi();
-			_labelUiAppliedAfterRestartHint.ScaleDpi();
 
 			_buttonEditConfig.ScaleDpiHeight();
 			_buttonEditConfig.ScaleDpiFont();

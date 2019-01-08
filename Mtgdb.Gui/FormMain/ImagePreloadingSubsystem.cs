@@ -18,7 +18,6 @@ namespace Mtgdb.Gui
 			_layoutViewDeck = layoutViewDeck;
 			_scrollSubsystem = scrollSubsystem;
 			_uiConfigRepository = uiConfigRepository;
-			_imageCacheCapacity = uiConfigRepository.Config.ImageCacheCapacity;
 		}
 
 		public void Reset()
@@ -79,7 +78,7 @@ namespace Mtgdb.Gui
 				if (startReached && endReached)
 					return;
 
-				int maxPreload = Math.Min(_imageCacheCapacity * 3 / 4 - pageSize, pageSize * 10);
+				int maxPreload = Math.Min(_uiConfigRepository.Config.ImageCacheCapacity * 3 / 4 - pageSize, pageSize * 10);
 				if (cardsToPreloadImage.Count > maxPreload)
 					return;
 
@@ -115,6 +114,5 @@ namespace Mtgdb.Gui
 
 		private List<Card> _cardsToPreloadImage;
 		private List<Card> _cardsToPreloadImageStarted;
-		private readonly int _imageCacheCapacity;
 	}
 }

@@ -101,7 +101,6 @@ namespace Mtgdb.Gui
 			this._menuColors = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._menuItemEditColorScheme = new System.Windows.Forms.ToolStripMenuItem();
 			this._menuConfig = new Mtgdb.Controls.BorderedTableLayoutPanel();
-			this._labelUiAppliedAfterRestartHint = new System.Windows.Forms.Label();
 			this._menuUiUndoDepth = new System.Windows.Forms.ComboBox();
 			this._menuUiImagesCacheCapacity = new System.Windows.Forms.ComboBox();
 			this._labelUiUndoDepth = new System.Windows.Forms.Label();
@@ -1436,25 +1435,25 @@ namespace Mtgdb.Gui
 			this._menuConfig.AutoSize = true;
 			this._menuConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuConfig.BackColor = System.Drawing.SystemColors.Window;
-			this._menuConfig.ColumnCount = 2;
+			this._menuConfig.ColumnCount = 3;
+			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._menuConfig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._menuConfig.Controls.Add(this._labelUiAppliedAfterRestartHint, 0, 6);
-			this._menuConfig.Controls.Add(this._menuUiUndoDepth, 1, 5);
-			this._menuConfig.Controls.Add(this._menuUiImagesCacheCapacity, 1, 4);
+			this._menuConfig.Controls.Add(this._menuUiUndoDepth, 2, 5);
+			this._menuConfig.Controls.Add(this._menuUiImagesCacheCapacity, 2, 4);
 			this._menuConfig.Controls.Add(this._labelUiUndoDepth, 0, 5);
 			this._menuConfig.Controls.Add(this._labelUiImageCacheCapacity, 0, 4);
 			this._menuConfig.Controls.Add(this._labelUiSuggestDownloadMissingImages, 0, 3);
 			this._menuConfig.Controls.Add(this._labelUiUseSmallImagesHint, 0, 2);
 			this._menuConfig.Controls.Add(this._labelUiScale, 0, 0);
-			this._menuConfig.Controls.Add(this._menuUiScale, 1, 0);
-			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 7);
+			this._menuConfig.Controls.Add(this._menuUiScale, 2, 0);
+			this._menuConfig.Controls.Add(this._buttonEditConfig, 0, 6);
 			this._menuConfig.Controls.Add(this._labelUiUseSmallImages, 0, 1);
 			this._menuConfig.Controls.Add(this._menuUiSmallImageQuality, 1, 1);
-			this._menuConfig.Controls.Add(this._menuUiSuggestDownloadMissingImages, 1, 3);
+			this._menuConfig.Controls.Add(this._menuUiSuggestDownloadMissingImages, 2, 3);
 			this._menuConfig.Location = new System.Drawing.Point(653, 62);
 			this._menuConfig.Name = "_menuConfig";
-			this._menuConfig.RowCount = 8;
+			this._menuConfig.RowCount = 7;
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1462,44 +1461,31 @@ namespace Mtgdb.Gui
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuConfig.Size = new System.Drawing.Size(227, 268);
+			this._menuConfig.Size = new System.Drawing.Size(188, 257);
 			this._menuConfig.TabIndex = 39;
 			this._menuConfig.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			// 
-			// _labelUiAppliedAfterRestartHint
-			// 
-			this._labelUiAppliedAfterRestartHint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelUiAppliedAfterRestartHint.AutoSize = true;
-			this._menuConfig.SetColumnSpan(this._labelUiAppliedAfterRestartHint, 2);
-			this._labelUiAppliedAfterRestartHint.Location = new System.Drawing.Point(111, 206);
-			this._labelUiAppliedAfterRestartHint.Margin = new System.Windows.Forms.Padding(3, 12, 3, 0);
-			this._labelUiAppliedAfterRestartHint.Name = "_labelUiAppliedAfterRestartHint";
-			this._labelUiAppliedAfterRestartHint.Size = new System.Drawing.Size(113, 13);
-			this._labelUiAppliedAfterRestartHint.TabIndex = 47;
-			this._labelUiAppliedAfterRestartHint.Text = "* applied after restart";
-			// 
 			// _menuUiUndoDepth
 			// 
-			this._menuUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiUndoDepth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiUndoDepth.FormattingEnabled = true;
-			this._menuUiUndoDepth.Location = new System.Drawing.Point(134, 170);
+			this._menuUiUndoDepth.Location = new System.Drawing.Point(125, 178);
 			this._menuUiUndoDepth.Name = "_menuUiUndoDepth";
-			this._menuUiUndoDepth.Size = new System.Drawing.Size(90, 21);
+			this._menuUiUndoDepth.Size = new System.Drawing.Size(60, 21);
 			this._menuUiUndoDepth.TabIndex = 46;
 			this._menuUiUndoDepth.TabStop = false;
 			// 
 			// _menuUiImagesCacheCapacity
 			// 
-			this._menuUiImagesCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiImagesCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiImagesCacheCapacity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiImagesCacheCapacity.FormattingEnabled = true;
-			this._menuUiImagesCacheCapacity.Location = new System.Drawing.Point(134, 143);
+			this._menuUiImagesCacheCapacity.Location = new System.Drawing.Point(125, 151);
 			this._menuUiImagesCacheCapacity.Name = "_menuUiImagesCacheCapacity";
-			this._menuUiImagesCacheCapacity.Size = new System.Drawing.Size(90, 21);
+			this._menuUiImagesCacheCapacity.Size = new System.Drawing.Size(60, 21);
 			this._menuUiImagesCacheCapacity.TabIndex = 45;
 			this._menuUiImagesCacheCapacity.TabStop = false;
 			// 
@@ -1507,49 +1493,53 @@ namespace Mtgdb.Gui
 			// 
 			this._labelUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiUndoDepth.AutoSize = true;
-			this._labelUiUndoDepth.Location = new System.Drawing.Point(56, 174);
+			this._menuConfig.SetColumnSpan(this._labelUiUndoDepth, 2);
+			this._labelUiUndoDepth.Location = new System.Drawing.Point(56, 182);
 			this._labelUiUndoDepth.Name = "_labelUiUndoDepth";
-			this._labelUiUndoDepth.Size = new System.Drawing.Size(72, 13);
+			this._labelUiUndoDepth.Size = new System.Drawing.Size(63, 13);
 			this._labelUiUndoDepth.TabIndex = 43;
-			this._labelUiUndoDepth.Text = "Undo depth *";
+			this._labelUiUndoDepth.Text = "Undo depth";
 			// 
 			// _labelUiImageCacheCapacity
 			// 
 			this._labelUiImageCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiImageCacheCapacity.AutoSize = true;
-			this._labelUiImageCacheCapacity.Location = new System.Drawing.Point(3, 147);
+			this._menuConfig.SetColumnSpan(this._labelUiImageCacheCapacity, 2);
+			this._labelUiImageCacheCapacity.Location = new System.Drawing.Point(3, 155);
 			this._labelUiImageCacheCapacity.Name = "_labelUiImageCacheCapacity";
-			this._labelUiImageCacheCapacity.Size = new System.Drawing.Size(125, 13);
+			this._labelUiImageCacheCapacity.Size = new System.Drawing.Size(116, 13);
 			this._labelUiImageCacheCapacity.TabIndex = 42;
-			this._labelUiImageCacheCapacity.Text = "Images cache capacity *";
+			this._labelUiImageCacheCapacity.Text = "Images cache capacity";
 			// 
 			// _labelUiSuggestDownloadMissingImages
 			// 
 			this._labelUiSuggestDownloadMissingImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this._labelUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(30, 111);
+			this._menuConfig.SetColumnSpan(this._labelUiSuggestDownloadMissingImages, 2);
+			this._labelUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(21, 119);
 			this._labelUiSuggestDownloadMissingImages.Name = "_labelUiSuggestDownloadMissingImages";
 			this._labelUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(98, 29);
 			this._labelUiSuggestDownloadMissingImages.TabIndex = 41;
-			this._labelUiSuggestDownloadMissingImages.Text = "Suggest download missing images *";
+			this._labelUiSuggestDownloadMissingImages.Text = "Suggest download missing images";
 			this._labelUiSuggestDownloadMissingImages.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// _labelUiUseSmallImagesHint
 			// 
 			this._labelUiUseSmallImagesHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._menuConfig.SetColumnSpan(this._labelUiUseSmallImagesHint, 2);
-			this._labelUiUseSmallImagesHint.Location = new System.Drawing.Point(3, 57);
-			this._labelUiUseSmallImagesHint.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
+			this._menuConfig.SetColumnSpan(this._labelUiUseSmallImagesHint, 3);
+			this._labelUiUseSmallImagesHint.Location = new System.Drawing.Point(3, 59);
+			this._labelUiUseSmallImagesHint.Margin = new System.Windows.Forms.Padding(3, 3, 3, 18);
 			this._labelUiUseSmallImagesHint.Name = "_labelUiUseSmallImagesHint";
-			this._labelUiUseSmallImagesHint.Size = new System.Drawing.Size(221, 42);
+			this._labelUiUseSmallImagesHint.Size = new System.Drawing.Size(182, 42);
 			this._labelUiUseSmallImagesHint.TabIndex = 40;
-			this._labelUiUseSmallImagesHint.Text = "Use \"High (MQ)\" to fix blurry images when\r\n- User Interface scale > 100% \r\n- Wind" +
-    "ows DPI setting > 96 dpi";
+			this._labelUiUseSmallImagesHint.Text = "\"High (MQ)\" is recommended when\r\n- User Interface scale > 100% or\r\n- Windows DPI " +
+    "setting > 96 dpi";
 			// 
 			// _labelUiScale
 			// 
 			this._labelUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiScale.AutoSize = true;
-			this._labelUiScale.Location = new System.Drawing.Point(24, 7);
+			this._menuConfig.SetColumnSpan(this._labelUiScale, 2);
+			this._labelUiScale.Location = new System.Drawing.Point(15, 7);
 			this._labelUiScale.Name = "_labelUiScale";
 			this._labelUiScale.Size = new System.Drawing.Size(104, 13);
 			this._labelUiScale.TabIndex = 35;
@@ -1557,12 +1547,12 @@ namespace Mtgdb.Gui
 			// 
 			// _menuUiScale
 			// 
-			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiScale.FormattingEnabled = true;
-			this._menuUiScale.Location = new System.Drawing.Point(134, 3);
+			this._menuUiScale.Location = new System.Drawing.Point(125, 3);
 			this._menuUiScale.Name = "_menuUiScale";
-			this._menuUiScale.Size = new System.Drawing.Size(90, 21);
+			this._menuUiScale.Size = new System.Drawing.Size(60, 21);
 			this._menuUiScale.TabIndex = 36;
 			this._menuUiScale.TabStop = false;
 			// 
@@ -1572,14 +1562,14 @@ namespace Mtgdb.Gui
 			this._buttonEditConfig.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonEditConfig.AutoCheck = false;
 			this._buttonEditConfig.BackColor = System.Drawing.Color.Transparent;
-			this._menuConfig.SetColumnSpan(this._buttonEditConfig, 2);
+			this._menuConfig.SetColumnSpan(this._buttonEditConfig, 3);
 			this._buttonEditConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this._buttonEditConfig.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonEditConfig.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this._buttonEditConfig.Location = new System.Drawing.Point(3, 231);
-			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
+			this._buttonEditConfig.Location = new System.Drawing.Point(3, 220);
+			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(3, 18, 3, 3);
 			this._buttonEditConfig.Name = "_buttonEditConfig";
-			this._buttonEditConfig.Size = new System.Drawing.Size(221, 34);
+			this._buttonEditConfig.Size = new System.Drawing.Size(182, 34);
 			this._buttonEditConfig.TabIndex = 34;
 			this._buttonEditConfig.TabStop = false;
 			this._buttonEditConfig.Text = "Edit configuration file";
@@ -1588,20 +1578,21 @@ namespace Mtgdb.Gui
 			// 
 			// _labelUiUseSmallImages
 			// 
-			this._labelUiUseSmallImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this._labelUiUseSmallImages.AutoSize = true;
-			this._labelUiUseSmallImages.Location = new System.Drawing.Point(31, 34);
+			this._labelUiUseSmallImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._labelUiUseSmallImages.Location = new System.Drawing.Point(3, 27);
 			this._labelUiUseSmallImages.Name = "_labelUiUseSmallImages";
-			this._labelUiUseSmallImages.Size = new System.Drawing.Size(97, 13);
+			this._labelUiUseSmallImages.Size = new System.Drawing.Size(83, 29);
 			this._labelUiUseSmallImages.TabIndex = 38;
 			this._labelUiUseSmallImages.Text = "Small image quality";
+			this._labelUiUseSmallImages.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// _menuUiSmallImageQuality
 			// 
-			this._menuUiSmallImageQuality.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiSmallImageQuality.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this._menuConfig.SetColumnSpan(this._menuUiSmallImageQuality, 2);
 			this._menuUiSmallImageQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiSmallImageQuality.FormattingEnabled = true;
-			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(134, 30);
+			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(95, 31);
 			this._menuUiSmallImageQuality.Name = "_menuUiSmallImageQuality";
 			this._menuUiSmallImageQuality.Size = new System.Drawing.Size(90, 21);
 			this._menuUiSmallImageQuality.TabIndex = 39;
@@ -1609,12 +1600,12 @@ namespace Mtgdb.Gui
 			// 
 			// _menuUiSuggestDownloadMissingImages
 			// 
-			this._menuUiSuggestDownloadMissingImages.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._menuUiSuggestDownloadMissingImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiSuggestDownloadMissingImages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._menuUiSuggestDownloadMissingImages.FormattingEnabled = true;
-			this._menuUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(134, 115);
+			this._menuUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(125, 123);
 			this._menuUiSuggestDownloadMissingImages.Name = "_menuUiSuggestDownloadMissingImages";
-			this._menuUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(90, 21);
+			this._menuUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(60, 21);
 			this._menuUiSuggestDownloadMissingImages.TabIndex = 44;
 			this._menuUiSuggestDownloadMissingImages.TabStop = false;
 			// 
@@ -1739,6 +1730,5 @@ namespace Mtgdb.Gui
 		private ComboBox _menuUiSuggestDownloadMissingImages;
 		private ComboBox _menuUiImagesCacheCapacity;
 		private ComboBox _menuUiUndoDepth;
-		private Label _labelUiAppliedAfterRestartHint;
 	}
 }

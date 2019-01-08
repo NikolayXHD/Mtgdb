@@ -24,7 +24,7 @@ namespace Mtgdb.Gui
 
 		public HistorySubsystem(UiConfigRepository uiConfigRepository)
 		{
-			_undoDepth = uiConfigRepository.Config.UndoDepth;
+			_uiConfigRepository = uiConfigRepository;
 		}
 
 		public void LoadHistory(string file)
@@ -119,8 +119,10 @@ namespace Mtgdb.Gui
 
 		private HistoryState getState()
 		{
-			int minSaveIndex = _settingsIndex - _undoDepth;
-			int saveCount = 1 + 2 * _undoDepth;
+			var undoDepth = _uiConfigRepository.Config.UndoDepth;
+
+			int minSaveIndex = _settingsIndex - undoDepth;
+			int saveCount = 1 + 2 * undoDepth;
 
 			if (minSaveIndex < 0)
 				minSaveIndex = 0;
@@ -168,9 +170,10 @@ namespace Mtgdb.Gui
 		public event Action Loaded;
 		public bool IsLoaded { get; private set; }
 
+		private readonly UiConfigRepository _uiConfigRepository;
+
 		private int _settingsIndex;
 		private List<GuiSettings> _settingsHistory;
-		private readonly int _undoDepth;
 		private static readonly JsonSerializer _serializer;
 	}
 }

@@ -1,5 +1,4 @@
 using Mtgdb.Dal;
-using Ninject;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
