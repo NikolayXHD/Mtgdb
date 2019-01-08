@@ -302,6 +302,5 @@ namespace Mtgdb.Util
 		private string[] _artists;
 		private float[] _artistDistance;
 		private DamerauLevenshteinDistance _distance;
-		private bool _isSetup;
 	}
 }

@@ -87,6 +87,12 @@ del /q /s %target%\*.vshost.*
 :sign
 %utilexe% -sign %target%.zip -output %targetRoot%\filelist.txt
 
+rem publish to old mega directory
+del /q /s %pub%\Archive\*.zip
+del /q /s %pub%\FileList\*.txt
+xcopy /q %target%.zip %pub%\Archive
+xcopy /q %targetRoot%\filelist.txt %pub%\FileList
+
 rem upload to test directory so update can be tested without affecting actual users
 %googledriveexe% update %testfileid% %target%.zip
 %googledriveexe% update %testsignid% %targetRoot%\filelist.txt

@@ -136,7 +136,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "Rarity:я■")]
 		// release date
 		[TestCase(EnRu, "ReleaseDate:■", "1993-08-05", "1994-08-01", "1996-06-10")]
-		[TestCase(EnRu, "ReleaseDate:6■", "2003-05-26", "2016-08-26")]
+		[TestCase(EnRu, "ReleaseDate:6■", "1994-06-01", "1996-06-10")]
 		[TestCase(EnRu, "ReleaseDate: \\-02\\-27■", "2015-02-27")]
 		[TestCase(EnRu, "ReleaseDate:я■")]
 		// set code

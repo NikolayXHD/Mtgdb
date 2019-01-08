@@ -43,8 +43,7 @@ namespace Mtgdb.Util
 			client.DownloadSet(set, MagicspoilerDir);
 		}
 
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "uma")]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "puma")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "rna")]
 		public void PreProcessImages(
 			string sourceDir,
 			string targetDir,
@@ -66,10 +65,8 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererPreprocessedDir, "uma.png", GathererPreprocessedDir, "uma")]
-		[TestCase(GathererPreprocessedDir, "puma.png", GathererPreprocessedDir, "puma")]
-		[TestCase(GathererOriginalDir, "uma.png", GathererOriginalDir, "uma")]
-		[TestCase(GathererOriginalDir, "puma.png", GathererOriginalDir, "puma")]
+		[TestCase(GathererPreprocessedDir, "rna.png", GathererPreprocessedDir, "rna")]
+		[TestCase(GathererOriginalDir, "rna.png", GathererOriginalDir, "rna")]
 		public void ConvertToJpg(string dir, string subdir, string targetDir, string targetSubdir)
 		{
 			var sourceImages = Directory.GetFiles(Path.Combine(dir, subdir)).ToArray();
