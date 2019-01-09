@@ -15,7 +15,4 @@
     <None Include="$(MSBuildThisFileDirectory)sign-images.bat" />
     <None Include="$(MSBuildThisFileDirectory)subdir-util.bat" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)publish.legacy.bat" />
-  </ItemGroup>
 </Project>

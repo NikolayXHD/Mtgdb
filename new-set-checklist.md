@@ -39,20 +39,33 @@ verify new images are used by adding test case to Set_images_are_from_expected_d
 
 visually inspect set images by running Mtgdb.Gui
 
-use select images.bat and sign images.bat
-
-create .7z for new / modified image directories by using subdir-util.bat 
-
-add new directories to config (see `Mass import gdrive links` below)
-
-upload new images to gdrive
-
 check new XLHQ images for cases when *split* cards are named like *aftermath*
 search pattern for everything app
 ```
 D:\Distrib\games\mtg\Mega\XLHQ\ » !.xrop !200DPI !100DPI !GRN
 ```
-only aftermath and flip and *no* split cards should appear in result  
+only aftermath and flip and *no* split cards should appear in result
+
+select-images.bat
+    edit to specify sets
+sign-images.bat
+    edit to specify sets
+
+create .7z for 
+    lq-list/filelist.txt
+    mq-list/filelist.txt
+
+subdir-util.bat
+    edit to specify sets
+
+add new directories to Mtgdb.Gui.Default.xml
+    see `Mass import gdrive links` below
+
+upload .7z -ipped
+    set directories
+    lq-list/filelist.txt
+    mq-list/filelist.txt
+to gdrive  
   
 Additional data
 ===============
