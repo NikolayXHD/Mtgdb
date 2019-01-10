@@ -58,10 +58,7 @@ namespace Mtgdb.Gui
 		{
 			using (var fileReader = File.OpenText(file))
 			using (var jsonReader = new JsonTextReader(fileReader))
-			{
-				var state = _serializer.Deserialize<HistoryState>(jsonReader);
-				return state;
-			}
+				return _serializer.Deserialize<HistoryState>(jsonReader);
 		}
 
 		internal static void WriteHistory(string file, HistoryState state)
