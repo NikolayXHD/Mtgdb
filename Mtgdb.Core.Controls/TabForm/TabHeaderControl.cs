@@ -762,7 +762,7 @@ namespace Mtgdb.Controls
 
 		public string GetDefaultText(int i)
 		{
-			return $"Tab no.{i + 1}";
+			return (i + 1).ToString(Str.Culture);
 		}
 
 		protected override void OnLayout(LayoutEventArgs e)
