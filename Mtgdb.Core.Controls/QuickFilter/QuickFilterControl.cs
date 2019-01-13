@@ -265,7 +265,7 @@ namespace Mtgdb.Controls
 			if (imageDisabled == null)
 				return;
 
-			var rectangle = getPaintingRectangle(i, filterValueState);
+			var rectangle = GetPaintingRectangle(i, filterValueState);
 
 			bool enabled = state == filterValueState;
 			bool enabledPreview = statePreview == filterValueState;
@@ -317,7 +317,7 @@ namespace Mtgdb.Controls
 			return new Size(width, height);
 		}
 
-		private Rectangle getPaintingRectangle(int i, FilterValueState state)
+		public Rectangle GetPaintingRectangle(int i, FilterValueState state)
 		{
 			int imageWidth = ImageSize.Width;
 			var imageHeight = ImageSize.Height;
@@ -350,8 +350,10 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		private StateClick? getCommand(int x, int y, MouseButtons button)
+		public StateClick? GetCommand(Point location, MouseButtons button)
 		{
+			(int x, int y) = location;
+
 			var border = Border;
 
 			if (IsVertical)
@@ -405,7 +407,7 @@ namespace Mtgdb.Controls
 
 		private void controlClick(object sender, MouseEventArgs e)
 		{
-			var command = getCommand(e.X, e.Y, e.Button);
+			var command = GetCommand(e.Location, e.Button);
 
 			if (!command.HasValue)
 				return;
@@ -474,9 +476,6 @@ namespace Mtgdb.Controls
 					paintAllowButton(e, state, statePreview, i);
 				}
 			}
-
-			if (_mouseInside && ShowValueHint)
-				paintValueHint(e);
 		}
 
 		private void paintProhibitZone(PaintEventArgs e)
@@ -486,7 +485,7 @@ namespace Mtgdb.Controls
 
 			for (int i = 0; i < PropertiesCount; i++)
 			{
-				var rectangle = (RectangleF) getPaintingRectangle(i, FilterValueState.Prohibited);
+				var rectangle = (RectangleF) GetPaintingRectangle(i, FilterValueState.Prohibited);
 
 				if (IsVertical)
 					rectangle.Offset(Spacing.Height, 0);
@@ -548,91 +547,6 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void paintValueHint(PaintEventArgs e)
-		{
-			if (Properties == null)
-				return;
-
-			var command = getCommand(_mouseLocation.X, _mouseLocation.Y, MouseButtons.None);
-
-			if (!command.HasValue)
-				return;
-
-			var property = Properties[command.Value.ButtonIndex];
-
-			if (string.IsNullOrEmpty(property))
-				return;
-
-			var font = Font;
-			var border = Border;
-
-			var location = getPaintingRectangle(command.Value.ButtonIndex, command.Value.ClickedState)
-				.Location;
-
-			var textSize = e.Graphics.MeasureText(property, font);
-			bool rotateText = IsVertical && textSize.Width > Width;
-
-			int x;
-			int y;
-
-			if (IsVertical)
-			{
-				if (rotateText)
-				{
-					x = HintTextShift.Height + location.Y + ImageSize.Height + border;
-					y = -(HintTextShift.Width + location.X + ImageSize.Width - (ImageSize.Width - font.Height) / 2);
-				}
-				else
-				{
-					x = HintTextShift.Width + location.X;
-					y = HintTextShift.Height + location.Y + ImageSize.Height + border;
-				}
-			}
-			else
-			{
-				x = HintTextShift.Width + location.X + ImageSize.Width + border;
-				y = HintTextShift.Height + location.Y + (ImageSize.Height - font.Height) / 2;
-			}
-
-			if (rotateText)
-			{
-				if (x < 0)
-					x = 0;
-				else if (x + textSize.Width > Height)
-					x = Height - textSize.Width;
-
-				if (-y < 0)
-					y = 0;
-				else if (-(y + textSize.Height) > Width)
-					y = -(Width - textSize.Height);
-			}
-			else
-			{
-				if (x < 0)
-					x = 0;
-				else if (x + textSize.Width > Width)
-					x = Width - textSize.Width;
-
-				if (y < 0)
-					y = 0;
-				else if (y + textSize.Height > Height)
-					y = Height - textSize.Height;
-			}
-
-			if (rotateText)
-				e.Graphics.RotateTransform(90f);
-
-			var textLocation = new Point(x, y);
-
-			if (HintIcon != null)
-				e.Graphics.DrawImage(HintIcon, textLocation.Plus(HintIconShift).Minus(HintTextShift));
-
-			e.Graphics.DrawText(property, font, SystemColors.WindowText, SystemColors.Window, 1f, 3f, new Rectangle(textLocation, textSize));
-
-			if (rotateText)
-				e.Graphics.RotateTransform(-90f);
-		}
-
 		private void paintSelection(PaintEventArgs e)
 		{
 			for (int i = 0; i < _states.Length; i++)
@@ -645,7 +559,7 @@ namespace Mtgdb.Controls
 				if (state == FilterValueState.Prohibited && HideProhibit)
 					continue;
 
-				var rectBorder = (RectangleF) getPaintingRectangle(i, state);
+				var rectBorder = (RectangleF) GetPaintingRectangle(i, state);
 
 				rectBorder.Offset(-0.5f, -0.5f);
 				var rectContent = rectBorder;
@@ -710,6 +624,12 @@ namespace Mtgdb.Controls
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
+			var cursor = PointToClient(Cursor.Position);
+
+			// mouse moved into value tooltip
+			if (Bounds.Contains(cursor))
+				return;
+
 			_mouseInside = false;
 			_showPreview = false;
 			_lastClickPreview = null;
@@ -718,43 +638,39 @@ namespace Mtgdb.Controls
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			if (!_mouseInside)
-				return;
-
-			if (!ClientRectangle.Contains(e.Location))
+			if (!_mouseInside || !ClientRectangle.Contains(e.Location))
 				return;
 
 			_mouseLocation = e.Location;
 
-			var commandPreview = getCommand(e.X, e.Y, MouseButtons.Left);
+			var commandPreview = GetCommand(_mouseLocation, MouseButtons.Left);
 			if (commandPreview == null)
 			{
-				if (_lastClickPreview != null)
-				{
-					_statesPreview = _states.ToArray();
-					_lastClickPreview = null;
-					Refresh();
-				}
+				if (_lastClickPreview == null)
+					return;
 
-				return;
+				_lastClickPreview = null;
+
+				_statesPreview = _states.ToArray();
+				Refresh();
 			}
-
-			if (commandPreview != _lastClick)
-				_lastClick = null;
-
-			// _lastClick != null => the state after the click is already painted
-			if (_lastClick == null)
+			else
 			{
-				if (commandPreview != _lastClickPreview)
-				{
-					_lastClickPreview = commandPreview;
+				if (commandPreview != _lastClick)
+					_lastClick = null;
 
-					_showPreview = true;
-					_statesPreview = _states.ToArray();
-					setButtonState(commandPreview.Value, _statesPreview);
+				// _lastClick != null => the state after the click is already painted
+				if (_lastClick != null || commandPreview == _lastClickPreview)
+					return;
 
-					Invalidate();
-				}
+				_lastClickPreview = commandPreview;
+
+				_showPreview = true;
+
+				_statesPreview = _states.ToArray();
+				setButtonState(commandPreview.Value, _statesPreview);
+
+				Invalidate();
 			}
 		}
 
@@ -1038,10 +954,6 @@ namespace Mtgdb.Controls
 
 		[Category("Settings")]
 		[DefaultValue(false)]
-		public bool ShowValueHint { get; set; }
-
-		[Category("Settings")]
-		[DefaultValue(false)]
 		public bool IsVertical
 		{
 			get => _isVertical;
@@ -1123,7 +1035,6 @@ namespace Mtgdb.Controls
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int Border => (int) Math.Ceiling(SelectionBorder);
-
 
 		private const float OpacityEnabled = 1.00f;
 		private const float OpacityToEnable = 0.90f;

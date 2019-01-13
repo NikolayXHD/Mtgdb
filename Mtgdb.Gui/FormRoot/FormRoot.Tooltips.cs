@@ -111,7 +111,6 @@ namespace Mtgdb.Gui
 				_buttonSaveDeck);
 
 			var tabHeadersTooltip = new TabHeadersTooltip(_tabs, this);
-			tabHeadersTooltip.SubscribeToEvents();
 
 			TooltipController.SetCustomTooltip(tabHeadersTooltip);
 
@@ -123,11 +122,15 @@ namespace Mtgdb.Gui
 		{
 			TooltipController.SubscribeToEvents();
 			TooltipController.StartThread();
+
+			QuickFilterTooltipController.SubscribeToEvents();
+			QuickFilterTooltipController.StartThread();
 		}
 
 		private void closeTooltips(object sender, CancelEventArgs e)
 		{
 			TooltipController.AbortThread();
+			QuickFilterTooltipController.AbortThread();
 		}
 	}
 }

@@ -27,6 +27,7 @@ namespace Mtgdb.Gui
 				_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
 				_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 				_formRoot.TooltipController.UnsetTooltips(this);
+				_formRoot.QuickFilterTooltipController.UnsetTooltips(this);
 			}
 
 			_formRoot = formRoot;
@@ -53,9 +54,10 @@ namespace Mtgdb.Gui
 				_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
 				_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
 
-				setupTooltips();
+				setupTooltips(_formRoot.TooltipController, _formRoot.QuickFilterTooltipController);
 
 				_formRoot.TooltipController.SubscribeToEvents();
+				_formRoot.QuickFilterTooltipController.SubscribeToEvents();
 
 				// calls cardCreating handler
 				_layoutViewCards.ResetLayout();

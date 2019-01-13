@@ -66,8 +66,6 @@ namespace Mtgdb.Controls
 
 			_searchSubsystem.SubscribeToEvents();
 			_deckSort.SubscribeToEvents();
-			_layoutViewTooltip.SubscribeToEvents();
-			_highlightSubsystem.SubscribeToEvents();
 
 			_searchSubsystem.TextApplied += searchTextApplied;
 			_deckSort.SortChanged += sortChanged;

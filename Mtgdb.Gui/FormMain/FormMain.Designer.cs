@@ -151,7 +151,6 @@ namespace Mtgdb.Gui
 			this.FilterAbility.SelectionBorder = 1.75F;
 			this.FilterAbility.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterAbility.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterAbility.ShowValueHint = true;
 			this.FilterAbility.Size = new System.Drawing.Size(8, 34);
 			this.FilterAbility.Spacing = new System.Drawing.Size(-4, -10);
 			this.FilterAbility.TabIndex = 13;
@@ -172,7 +171,6 @@ namespace Mtgdb.Gui
 			this.FilterCastKeyword.SelectionBorder = 1.75F;
 			this.FilterCastKeyword.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterCastKeyword.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterCastKeyword.ShowValueHint = true;
 			this.FilterCastKeyword.Size = new System.Drawing.Size(8, 34);
 			this.FilterCastKeyword.Spacing = new System.Drawing.Size(-4, -10);
 			this.FilterCastKeyword.TabIndex = 18;
@@ -195,7 +193,6 @@ namespace Mtgdb.Gui
 			this.FilterType.SelectionBorder = 1.75F;
 			this.FilterType.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterType.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterType.ShowValueHint = true;
 			this.FilterType.Size = new System.Drawing.Size(44, 2);
 			this.FilterType.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterType.TabIndex = 14;
@@ -218,7 +215,6 @@ namespace Mtgdb.Gui
 			this.FilterManager.SelectionBorder = 2F;
 			this.FilterManager.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterManager.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterManager.ShowValueHint = true;
 			this.FilterManager.Size = new System.Drawing.Size(2, 46);
 			this.FilterManager.Spacing = new System.Drawing.Size(2, 2);
 			this.FilterManager.TabIndex = 16;
@@ -242,7 +238,6 @@ namespace Mtgdb.Gui
 			this.FilterLayout.SelectionBorder = 1.75F;
 			this.FilterLayout.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterLayout.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterLayout.ShowValueHint = true;
 			this.FilterLayout.Size = new System.Drawing.Size(24, 2);
 			this.FilterLayout.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterLayout.TabIndex = 17;
@@ -266,7 +261,6 @@ namespace Mtgdb.Gui
 			this.FilterRarity.SelectionBorder = 1.75F;
 			this.FilterRarity.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterRarity.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterRarity.ShowValueHint = true;
 			this.FilterRarity.Size = new System.Drawing.Size(24, 2);
 			this.FilterRarity.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterRarity.TabIndex = 15;
@@ -917,7 +911,6 @@ namespace Mtgdb.Gui
 			this.FilterGeneratedMana.SelectionBorder = 1.75F;
 			this.FilterGeneratedMana.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterGeneratedMana.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterGeneratedMana.ShowValueHint = true;
 			this.FilterGeneratedMana.Size = new System.Drawing.Size(44, 2);
 			this.FilterGeneratedMana.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterGeneratedMana.TabIndex = 20;
@@ -957,7 +950,6 @@ namespace Mtgdb.Gui
 			this.FilterManaAbility.SelectionBorder = 1.75F;
 			this.FilterManaAbility.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterManaAbility.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterManaAbility.ShowValueHint = true;
 			this.FilterManaAbility.Size = new System.Drawing.Size(44, 2);
 			this.FilterManaAbility.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterManaAbility.TabIndex = 19;
@@ -1198,7 +1190,6 @@ namespace Mtgdb.Gui
 			this.FilterManaCost.SelectionBorder = 1.75F;
 			this.FilterManaCost.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
 			this.FilterManaCost.SelectionColor = System.Drawing.SystemColors.Window;
-			this.FilterManaCost.ShowValueHint = true;
 			this.FilterManaCost.Size = new System.Drawing.Size(44, 2);
 			this.FilterManaCost.Spacing = new System.Drawing.Size(2, 0);
 			this.FilterManaCost.TabIndex = 22;

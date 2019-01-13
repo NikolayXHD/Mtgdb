@@ -15,11 +15,18 @@ namespace Mtgdb.Controls
 			_view = view;
 		}
 
-		public void SubscribeToEvents()
+		public void SubscribeEvents()
 		{
 			_view.MouseMove += mouseMove;
-			_view.CardIndexChanged += scrolled;
 			_view.MouseLeave += mouseLeave;
+			_view.CardIndexChanged += scrolled;
+		}
+
+		public void UnsubscribeEvents()
+		{
+			_view.MouseMove -= mouseMove;
+			_view.MouseLeave -= mouseLeave;
+			_view.CardIndexChanged -= scrolled;
 		}
 
 		private void scrolled(object sender)

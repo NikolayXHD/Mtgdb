@@ -18,16 +18,17 @@ namespace Mtgdb.Gui
 			_cardSearchSubsystem = cardSearchSubsystem;
 		}
 
-		public void SubscribeToEvents()
+		public void SubscribeEvents()
 		{
 			_layoutView.MouseMove += mouseMove;
-			_layoutView.VisibleRecordIndexChanged += scrolled;
 			_layoutView.MouseLeave += mouseLeave;
+			_layoutView.VisibleRecordIndexChanged += scrolled;
 		}
 
-		public void UnsubscribeFromEvents()
+		public void UnsubscribeEvents()
 		{
 			_layoutView.MouseMove -= mouseMove;
+			_layoutView.MouseLeave -= mouseLeave;
 			_layoutView.VisibleRecordIndexChanged -= scrolled;
 		}
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
@@ -10,6 +11,7 @@ using Mtgdb.Dal;
 using Mtgdb.Downloader;
 using Mtgdb.Gui.Properties;
 using Mtgdb.Ui;
+using Ninject;
 
 namespace Mtgdb.Gui
 {
@@ -79,7 +81,8 @@ namespace Mtgdb.Gui
 			NewsService newsService,
 			CardSuggestModel cardSuggestModel,
 			DeckSuggestModel deckSuggestModel,
-			TooltipController tooltipController,
+			[Named(GuiModule.DefaultTooltipScope)] TooltipController tooltipController,
+			[Named(GuiModule.QuickFilterTooltipScope)] TooltipController quickFilterTooltipController,
 			CardRepository repo,
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
@@ -90,6 +93,8 @@ namespace Mtgdb.Gui
 			:this()
 		{
 			TooltipController = tooltipController;
+			QuickFilterTooltipController = quickFilterTooltipController;
+
 			UiModel = uiModel;
 
 			DeckSuggestModel = deckSuggestModel;
@@ -577,6 +582,7 @@ namespace Mtgdb.Gui
 		}
 
 		public TooltipController TooltipController { get; }
+		public TooltipController QuickFilterTooltipController { get; }
 
 		public bool ShowTextualFields { get; set; }
 		public bool ShowDeck { get; set; }

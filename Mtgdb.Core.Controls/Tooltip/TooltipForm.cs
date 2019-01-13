@@ -2,15 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public class TooltipForm : ShadowedForm
 	{
 		public TooltipForm()
+			:this(EnableShadow.Yes)
 		{
-			BackColor = SystemColors.Window;
+		}
+
+		[UsedImplicitly] // by ninject
+		public TooltipForm(EnableShadow enableShadow)
+			:base(enableShadow)
+		{
 			FormBorderStyle = FormBorderStyle.None;
 
 			ControlBox = false;
@@ -18,11 +26,11 @@ namespace Mtgdb.Controls
 			StartPosition = FormStartPosition.Manual;
 			Location = new Point(-10000, -10000);
 			TopMost = true;
+
 			KeyPreview = false;
 
 			_panel = new BorderedPanel
 			{
-				BackColor = BackColor,
 				Dock = DockStyle.Fill
 			};
 
@@ -30,31 +38,20 @@ namespace Mtgdb.Controls
 
 			_tooltipTextbox = new FixedRichTextBox
 			{
-				Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+				Dock = DockStyle.Fill,
 				ReadOnly = true,
 				TabStop = false,
 				ScrollBars = RichTextBoxScrollBars.None,
 				WordWrap = true,
-				Size = new Size(Width - TextPadding * 2, Height - TextPadding * 2),
-				Location = new Point(TextPadding, TextPadding),
-				Margin = new Padding(TextPadding),
-				BackColor = BackColor,
 				BorderStyle = BorderStyle.None,
 				HideSelection = true,
 				Font = new Font(new FontFamily("Tahoma"), 9.75f, FontStyle.Regular, GraphicsUnit.Point),
 				AutoWordSelection = false
 			};
 
-			_tooltipTextbox.MouseDown += text_MouseDown;
-			_tooltipTextbox.MouseClick += text_MouseClick;
-
-			_tooltipTextbox.KeyDown += text_keyDown;
-			_tooltipTextbox.LostFocus += text_lostFocus;
+			TextPadding = new Padding(6, 3, 6, 3);
 
 			_panel.Controls.Add(_tooltipTextbox);
-
-			_selectionSubsystem = new RichTextBoxSelectionSubsystem(_tooltipTextbox);
-			_selectionSubsystem.SubscribeToEvents();
 
 			_tooltipFocusTarget = new Control
 			{
@@ -76,18 +73,29 @@ namespace Mtgdb.Controls
 					MouseOverBackColor = Color.Transparent,
 					MouseDownBackColor = Color.Transparent,
 					CheckedBackColor = Color.Transparent,
-					// setting Color.Transparent would lead to an exception
+					// setting Color.Transparent leads to an exception
 					BorderColor = Color.FromArgb(0, 255, 255, 255)
 				}
 			};
 
-			_buttonClose.Click += closeClick;
-
 			_panel.Controls.Add(_buttonClose);
 			_buttonClose.BringToFront();
 
+			_selectionSubsystem = new RichTextBoxSelectionSubsystem(_tooltipTextbox);
+			_selectionSubsystem.SubscribeToEvents();
+
+			_tooltipTextbox.MouseDown += text_MouseDown;
+			_tooltipTextbox.MouseClick += text_MouseClick;
+
+			_tooltipTextbox.KeyDown += text_keyDown;
+			_tooltipTextbox.LostFocus += text_lostFocus;
+
+			_buttonClose.Click += closeClick;
+
 			Resize += resize;
 			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
+
+			BackColor = SystemColors.Window;
 
 			scale();
 			setCloseEnabled(false);
@@ -97,9 +105,11 @@ namespace Mtgdb.Controls
 		{
 			_tooltipTextbox.ScaleDpiFont();
 
-			_tooltipSize = new Size(400, 300).ByDpi();
-			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
-			_selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
+			new DpiScaler<TooltipForm>(form =>
+			{
+				form._closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
+				form._selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
+			}).Setup(this);
 		}
 
 		private void systemColorsChanging() =>
@@ -136,8 +146,6 @@ namespace Mtgdb.Controls
 			_tooltip = tooltip;
 			Clickable = tooltip.Clickable;
 			_buttonClose.Visible = Clickable;
-
-			Size = _tooltipSize;
 
 			var titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold);
 
@@ -176,7 +184,9 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionLength = 0;
 
 			var size = measureTooltip(tooltip);
-			var bounds = allocateTooltip(size, tooltip.Control.RectangleToScreen(tooltip.ObjectBounds));
+			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
+			var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
+			var bounds = allocateTooltip(size, screenBounds, cursor, tooltip.Margin.ByDpiWidth(), tooltip.PositionPreference?.Invoke(screenBounds));
 
 			if (_tooltipTextbox.Focused)
 				_tooltipFocusTarget.Focus();
@@ -191,15 +201,22 @@ namespace Mtgdb.Controls
 			Location = bounds.Location;
 		}
 
-		private static Rectangle allocateTooltip(Size size, Rectangle target)
+		private Rectangle allocateTooltip(Size size, Rectangle target, Point? cursor, int margin,
+			Func<ExtremumFinder<TooltipPosition>, ExtremumFinder<TooltipPosition>> positionPreference = null)
 		{
-			var cursor = Cursor.Position;
-			var workingArea = Screen.FromPoint(cursor).WorkingArea;
-			var bounds = selectTooltipBounds(size, target, workingArea, cursor);
+			cursor = cursor ?? Cursor.Position;
+			var workingArea = Screen.FromPoint(cursor.Value).WorkingArea;
+			var bounds = selectTooltipBounds(size, target, workingArea, cursor.Value, margin, positionPreference);
 			return bounds;
 		}
 
-		private static Rectangle selectTooltipBounds(Size size, Rectangle target, Rectangle workingArea, Point cursor)
+		private Rectangle selectTooltipBounds(
+			Size size,
+			Rectangle target,
+			Rectangle workingArea,
+			Point cursor,
+			int margin,
+			Func<ExtremumFinder<TooltipPosition>, ExtremumFinder<TooltipPosition>> positionPreference = null)
 		{
 			var bounds = new Rectangle(target.Location, size);
 
@@ -222,10 +239,10 @@ namespace Mtgdb.Controls
 			int byCtr = cursor.X - size.Width / 2;
 			int byLft = target.Left;
 
-			var toBtm = new Point(0, TooltipMargin);
-			var toTop = new Point(0, -TooltipMargin);
-			var toRht = new Point(TooltipMargin, 0);
-			var toLft = new Point(-TooltipMargin, 0);
+			var toBtm = new Point(0, margin);
+			var toTop = new Point(0, -margin);
+			var toRht = new Point(margin, 0);
+			var toLft = new Point(-margin, 0);
 
 			var candidates = new List<TooltipPosition>
 			{
@@ -249,17 +266,16 @@ namespace Mtgdb.Controls
 			for (int i = 0; i < candidates.Count; i++)
 			{
 				var c = candidates[i];
-
 				c.Bounds = c.Bounds.OffsetInto(workingArea);
-				c.IntersectsTarget = target.IntersectsWith(c.Bounds);
-				c.DistanceToCursor = c.Bounds.Center().Minus(cursor)
-					.MultiplyIfNegative(new PointF(1.5f, 1.5f)) // prefer bottom right
-					.SquareNorm();
 			}
 
-			var candidate = candidates
-				.AtMin(_ => _.IntersectsTarget)
-				.ThenAtMin(_ => _.DistanceToCursor)
+			positionPreference = positionPreference ?? (
+				_ => _.ThenAtMin(c => c.Bounds.Center().Minus(cursor)
+					.MultiplyIfNegative(new PointF(1.5f, 1.5f)) // prefer bottom right
+					.SquareNorm()));
+
+			var candidate = positionPreference(
+					candidates.AtMin(c => target.IntersectsWith(c.Bounds)))
 				.Find();
 
 			return candidate.Bounds;
@@ -281,15 +297,19 @@ namespace Mtgdb.Controls
 
 			var graphics = _tooltipTextbox.CreateGraphics();
 
+			var baseSize = new Size(400, 300).ByDpi();
+
 			Size titleSize;
 			if (string.IsNullOrEmpty(tooltip.Title))
 				titleSize = new Size(0, 0);
 			else
+			{
 				titleSize = graphics.MeasureText(
 					tooltip.Title,
 					new Font(_tooltipTextbox.Font, FontStyle.Bold),
-					_tooltipTextbox.Size,
+					baseSize,
 					formatFlags);
+			}
 
 			Size contentSize;
 			if (string.IsNullOrEmpty(measuredContentText))
@@ -299,25 +319,24 @@ namespace Mtgdb.Controls
 				contentSize = graphics.MeasureText(
 					measuredContentText,
 					_tooltipTextbox.Font,
-					_tooltipTextbox.Size,
+					baseSize,
 					formatFlags);
 			}
 
 			int contentWidth = Math.Max(titleSize.Width, contentSize.Width);
 
 			// ideographic strings are under-measured
-			int cjkTermH = tooltip.Text.IsCjk() ? 32 : 0;
+			Size cjkDelta = tooltip.Text.IsCjk()
+				? new Size(32, 6).ByDpi()
+				: default;
 
-			if (Clickable)
-				cjkTermH = Math.Max(cjkTermH, titleSize.Width - contentWidth + (int) (_buttonClose.Width * 1.25f) - TextPadding);
-
-			int cjkTermV = tooltip.Text.IsCjk() ? 6 : 0;
-
-			var cjkTermSize = new Size(cjkTermH, cjkTermV).ByDpi();
+			int clickableWidthDelta = Clickable
+				? titleSize.Width + (int) (_buttonClose.Width * 1.25f) - TextPadding.Horizontal / 2 - contentWidth
+				: 0;
 
 			var size = new Size(
-				contentWidth + _tooltipTextbox.Margin.Horizontal + 2 + cjkTermSize.Width,
-				titleSize.Height + contentSize.Height + _tooltipTextbox.Margin.Vertical + cjkTermSize.Height);
+				contentWidth + TextPadding.Horizontal + 2 + Math.Max(cjkDelta.Width, clickableWidthDelta),
+				titleSize.Height + contentSize.Height + TextPadding.Vertical + cjkDelta.Height);
 
 			return size;
 		}
@@ -374,7 +393,16 @@ namespace Mtgdb.Controls
 		public sealed override Color BackColor
 		{
 			get => base.BackColor;
-			set => base.BackColor = value;
+			set
+			{
+				base.BackColor = value;
+
+				if (_panel != null)
+					_panel.BackColor = value;
+
+				if (_tooltipTextbox != null)
+					_tooltipTextbox.BackColor = value;
+			}
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -389,11 +417,31 @@ namespace Mtgdb.Controls
 		}
 
 
+		private Padding _textPadding;
+		public Padding TextPadding
+		{
+			get => _textPadding;
+			set
+			{
+				_textPadding = value;
+				_panel.Padding = value;
+			}
+		}
 
-		private const int TextPadding = 6;
-		private const int TooltipMargin = 12;
+		public bool ShowTooltipBorder
+		{
+			get => _panel.VisibleBorders != AnchorStyles.None;
+			set =>
+				_panel.VisibleBorders = value
+					? AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
+					: AnchorStyles.None;
+		}
 
-		private Size _tooltipSize;
+		public DashStyle TooltipBorderStyle
+		{
+			get => _panel.BorderDashStyle;
+			set => _panel.BorderDashStyle = value;
+		}
 
 		private readonly RichTextBoxSelectionSubsystem _selectionSubsystem;
 		private readonly FixedRichTextBox _tooltipTextbox;
@@ -418,18 +466,5 @@ namespace Mtgdb.Controls
 		private Bitmap _closeIcon;
 		private Bitmap _selectableTextIcon;
 		private bool _clickable;
-
-		private class TooltipPosition
-		{
-			public TooltipPosition(Size size, int left, int top, Point offset)
-			{
-				Bounds = new Rectangle(left + offset.X, top + offset.Y, size.Width, size.Height);
-			}
-
-			public Rectangle Bounds { get; set; }
-
-			public float DistanceToCursor { get; set; }
-			public bool IntersectsTarget { get; set; }
-		}
 	}
 }

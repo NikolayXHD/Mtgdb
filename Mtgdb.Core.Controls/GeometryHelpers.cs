@@ -49,6 +49,8 @@ namespace Mtgdb.Controls
 		public static Size MultiplyBy(this Point point, Size value) =>
 			new Size(value.Width * point.X, value.Height * point.Y);
 
+
+
 		public static SizeF DivideBy(this Size size, SizeF value) =>
 			new SizeF(size.Width / value.Width, size.Height / value.Height);
 
@@ -57,6 +59,8 @@ namespace Mtgdb.Controls
 
 		public static SizeF DivideBy(this SizeF size, float value) =>
 			new SizeF(size.Width / value, size.Height / value);
+
+
 
 		public static float Max(this SizeF size) =>
 			Math.Max(size.Width, size.Height);
@@ -69,9 +73,6 @@ namespace Mtgdb.Controls
 			rect.Offset(offset);
 			return rect;
 		}
-
-		public static Point RightBottom(this Rectangle rect) =>
-			new Point(rect.Right, rect.Bottom);
 
 		public static Point Plus(this Point left, Point right) =>
 			new Point(left.X + right.X, left.Y + right.Y);
@@ -235,8 +236,13 @@ namespace Mtgdb.Controls
 			return bounds;
 		}
 
+
+
 		public static Point TopLeft(this Rectangle rect) =>
 			rect.Location;
+
+		public static Point RightBottom(this Rectangle rect) =>
+			new Point(rect.Right, rect.Bottom);
 
 		public static Point TopRight(this Rectangle rect) =>
 			new Point(rect.Right, rect.Top);
@@ -247,22 +253,56 @@ namespace Mtgdb.Controls
 		public static Point BottomLeft(this Rectangle rect) =>
 			new Point(rect.Left, rect.Bottom);
 
+
+
 		public static float SquareNorm(this Point point) =>
 			point.X * point.X + point.Y * point.Y;
 
 		public static Point MultiplyIfNegative(this Point point, PointF q) =>
-			new Point(point.X.multiplyIfNegative(q.X), point.Y.multiplyIfNegative(q.Y));
+			new Point(point.X.MultiplyIfNegative(q.X), point.Y.MultiplyIfNegative(q.Y));
 
-		private static int multiplyIfNegative(this int val, float q) =>
+		public static int MultiplyIfNegative(this int val, float q) =>
 			val > 0 ? val : (int) (val * q);
 
 		public static Point Center(this Rectangle rect) =>
-			new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+			new Point(rect.CenterX(), rect.CenterY());
+
+		public static int CenterX(this Rectangle rect) =>
+			rect.Left + rect.Width / 2;
+
+		public static int CenterY(this Rectangle rect) =>
+			rect.Top + rect.Height / 2;
 
 		public static Rectangle Round(this RectangleF rect) =>
 			new Rectangle(strongRound(rect.Left), strongRound(rect.Top), strongRound(rect.Width), strongRound(rect.Height));
 
 		private static int strongRound(double value) =>
 			Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
+
+
+
+		public static void Deconstruct(this Point p, out int x, out int y)
+		{
+			x = p.X;
+			y = p.Y;
+		}
+
+		public static void Deconstruct(this PointF p, out float x, out float y)
+		{
+			x = p.X;
+			y = p.Y;
+		}
+
+		public static void Deconstruct(this Size s, out int w, out int h)
+		{
+			w = s.Width;
+			h = s.Height;
+		}
+
+		public static void Deconstruct(this SizeF s, out float w, out float h)
+		{
+			w = s.Width;
+			h = s.Height;
+		}
 	}
 }

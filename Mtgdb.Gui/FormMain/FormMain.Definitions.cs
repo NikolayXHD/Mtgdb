@@ -244,9 +244,6 @@ namespace Mtgdb.Gui
 
 			_scroll.Scrolled += gridScrolled;
 
-			_tooltipViewCards.SubscribeToEvents();
-			_tooltipViewDeck.SubscribeToEvents();
-
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged += quickFiltersChanged;
 
@@ -336,8 +333,6 @@ namespace Mtgdb.Gui
 			_keywordSearcher.LoadingProgress -= keywordSearcherLoadingProgress;
 
 			_scroll.Scrolled -= gridScrolled;
-			_tooltipViewCards.UnsubscribeFromEvents();
-			_tooltipViewDeck.UnsubscribeFromEvents();
 
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged -= quickFiltersChanged;

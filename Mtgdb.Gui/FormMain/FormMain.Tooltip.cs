@@ -4,31 +4,29 @@ namespace Mtgdb.Gui
 {
 	partial class FormMain
 	{
-		private void setupTooltips()
+		private void setupTooltips(TooltipController defaultTooltips, TooltipController quickFilterTooltips)
 		{
-			var controller = _formRoot.TooltipController;
-
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Deck zones",
 				"Drag the card here to change deck area before dropping it.\r\n" +
 				"Right/middle mouse click a card to add/remove it.\r\n" +
 				"Ctrl+Click or Ctrl+drag-n-drop a card to change its quantity by 4.",
 				_tabHeadersDeck);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Sets count",
 				_panelIconStatusSets,
 				_labelStatusSets);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Collection cards count",
 				"Use Alt+right/middle mouse click to add/remove card to collection.\r\n" +
 				"Use Ctrl+Alt+right/middle mouse click to add/remove 4 copies.",
 				_panelIconStatusCollection,
 				_labelStatusCollection);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Buttons filter mode",
 				"Button filters are round checkable buttons grouped by 2 rows.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n" +
@@ -37,7 +35,7 @@ namespace Mtgdb.Gui
 				_panelIconStatusFilterButtons,
 				_labelStatusFilterButtons);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Search bar mode",
 				"Search bar is a wide text input in top panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n" +
@@ -46,7 +44,7 @@ namespace Mtgdb.Gui
 				_panelIconStatusSearch,
 				_labelStatusSearch);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Collection mode",
 				"When filtering by Collection, Search result only shows\r\n" +
 				"cards present in your Collection.\r\n\r\n" +
@@ -56,7 +54,7 @@ namespace Mtgdb.Gui
 				_panelIconStatusFilterCollection,
 				_labelStatusFilterCollection);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Deck mode",
 				"When filtering by Deck, Search result only shows\r\n" +
 				"cards present in your current Deck.\r\n\r\n" +
@@ -73,13 +71,13 @@ namespace Mtgdb.Gui
 				_panelIconStatusFilterDeck,
 				_labelStatusFilterDeck);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Filter by Legality status",
 				_panelIconStatusFilterLegality,
 				_labelStatusFilterLegality);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Search result Sort order",
 				"Sort buttons are located over textual fields in Search result.\r\n" +
 				"Click sort button to sort by field or change sort direction.\r\n" +
@@ -90,27 +88,27 @@ namespace Mtgdb.Gui
 				_panelIconStatusSort,
 				_labelStatusSort);
 
-			setFilterButtonTooltips(controller);
+			setFilterButtonTooltips(defaultTooltips, quickFilterTooltips);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Visibility of Prohibiting buttons",
 				"Use Prohibiting buttons to PROHIBIT checked values in a card\r\n" +
 				"I guess you will not often need it so by default those buttons are hidden.",
 				_buttonShowProhibit);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Mana Ability filter LEFT row mode",
 				"- mode: PROHIBIT UNCHECKED values\r\n" +
 				"+ mode: REQUIRE ANY checked value",
 				_buttonExcludeManaAbility);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Mana Cost filter LEFT row mode",
 				"- mode: PROHIBIT UNCHECKED values\r\n" +
 				"+ mode: REQUIRE ANY checked value",
 				_buttonExcludeManaCost);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				() => _cardSearch.SearchResult?.ParseErrorMessage != null
 					? "Syntax error"
 					: "Search bar",
@@ -127,43 +125,43 @@ namespace Mtgdb.Gui
 				_searchEditor,
 				_panelIconSearch);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Search query examples",
 				"Opens menu with search query examples.\r\n" +
 				"Same menu is opened by pressing F1.",
 				_buttonSearchExamplesDropDown);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Select format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
 				_menuLegalityFormat,
 				_panelIconLegality);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Show cards LEGAL in selected format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowLegal);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Show cards RESTRICTED in selected format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowRestricted);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Show cards BANNED in selected format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
 				_buttonLegalityAllowBanned);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Show cards which will SOON BECOME LEGAL in selected format",
 				_buttonLegalityAllowFuture);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Show duplicates",
 				"Card duplicates have the same name and by rules\r\n" +
 				"they are considered to be the same card.\r\n\r\n" +
@@ -171,34 +169,34 @@ namespace Mtgdb.Gui
 				"Basic lands are released in multiple variants.",
 				_buttonShowDuplicates);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Deck panel visibility",
 				_buttonHideDeck);
 
 			const string hideScrollText = "Click to toggle scrollbar visibility";
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				hideScrollText,
 				_buttonShowScrollCards);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				hideScrollText,
 				_buttonShowScrollDeck);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Deck panel scroll position",
 				_labelStatusScrollDeck);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Search result scroll position",
 				_labelStatusScrollCards);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				"Partial cards visibility",
 				"Depending on window size displayed cards may lack some horizontal or vertical " +
 				"space at window borders.\r\n\r\n" +
@@ -206,45 +204,49 @@ namespace Mtgdb.Gui
 				"Disable partial cards to completely display card image and text whenever possible.",
 				_buttonShowPartialCards);
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				null,
 				"Card text visibility",
 				_buttonShowText);
 
-			controller.SetTooltip(this, 
+			defaultTooltips.SetTooltip(this,
 				"Reset all filters",
 				"Resets all search / filter controls to their default state " +
 				"in order to begin new search from scratch.",
 				_buttonResetFilters);
 
-			controller.SetCustomTooltip(_tooltipViewCards);
-			controller.SetCustomTooltip(_tooltipViewDeck);
+			defaultTooltips.SetCustomTooltip(_tooltipViewCards);
+			defaultTooltips.SetCustomTooltip(_tooltipViewDeck);
 		}
 
-		private void setFilterButtonTooltips(TooltipController controller)
+		private void setFilterButtonTooltips(TooltipController defaultTooltips, TooltipController quickFilterTooltips)
 		{
-			setFilterButtonTooltip(controller, FilterAbility,
-				"Filter by keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterAbility, "Filter by keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
-				"Keyword examples: Flying, First Strike, Haste, ...",
-				isKeyword: true);
+				"Keyword examples: Flying, First Strike, Haste, ...", true);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterAbility, this)
+			{
+				PreferHorizontalShift = true
+			});
 
-			setFilterButtonTooltip(controller, FilterCastKeyword,
-				"Filter by CAST RELATED keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterCastKeyword, "Filter by CAST RELATED keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
-				"Keyword examples: Cascade, Flashback, Madness, ...", isKeyword: true);
+				"Keyword examples: Cascade, Flashback, Madness, ...", true);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterCastKeyword, this)
+			{
+				PreferHorizontalShift = true
+			});
 
-			setFilterButtonTooltip(controller, FilterType,
-				"Filter by spell Type", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterType, "Filter by spell Type", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use BOTTOM row to PROHIBIT any UNCHECKED types in a card.\r\n" +
 				"Use TOP row to REQUIRE ALL checked types in a card.\r\n\r\n" +
 				"Example: to see all artifacts check artifact in TOP row.\r\n\r\n" +
-				"N/A means any Type different from values in this filter.");
+				"N/A means any Type different from values in this filter.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterType, this));
 
-			setFilterButtonTooltip(controller, FilterManager,
-				"Filter Manager", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterManager, "Filter Manager", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Filter manager selects between AND / OR mode or DISABLES the following filter sources:\r\n" +
 				"  * Filter buttons\r\n" +
 				"  * Search bar\r\n" +
@@ -253,50 +255,50 @@ namespace Mtgdb.Gui
 				"  * Filter to cards present in your deck\r\n\r\n" +
 				"Use TOP row set AND mode.\r\n" +
 				"Use BOTTOM row set OR mode.\r\n" +
-				"Uncheck the source in both rows to set DISABLED mode.");
+				"Uncheck the source in both rows to set DISABLED mode.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManager, this));
 
-			setFilterButtonTooltip(controller, FilterRarity,
-				"Filter by Rarity", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterRarity, "Filter by Rarity", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to PROHIBIT any UNCHECKED value.\r\n" +
 				"The card cannot have more than 1 Rarity value so there is no\r\n" +
 				"point in using the RIGHT row.\r\n\r\n" +
-				"N/A means any Rarity different from values in this filter.");
+				"N/A means any Rarity different from values in this filter.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterRarity, this));
 
-			setFilterButtonTooltip(controller, FilterManaAbility,
-				"Filter by Mana symbol in card Text", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterManaAbility, "Filter by Mana symbol in card Text", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use mode selector above to switch the way LEFT row acts:\r\n" +
 				"  - mode: PROHIBIT UNCHECKED values\r\n" +
 				"  + mode: REQUIRE ANY checked value\r\n\r\n" +
-				"N/A means the card has NONE of the symbols from this filter.");
+				"N/A means the card has NONE of the symbols from this filter.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManaAbility, this));
 
-			setFilterButtonTooltip(controller, FilterManaCost,
-				"Filter by Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterManaCost, "Filter by Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use mode selector above to switch the way LEFT row acts:\r\n" +
 				"  - mode: PROHIBIT UNCHECKED values\r\n" +
 				"  + mode: REQUIRE ANY checked value\r\n\r\n" +
-				"N/A means the card has NONE of the symbols from this filter.");
+				"N/A means the card has NONE of the symbols from this filter.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManaCost, this));
 
-			setFilterButtonTooltip(controller, FilterGeneratedMana,
-				"Filter by Generated Mana", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterGeneratedMana, "Filter by Generated Mana", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
-				"Use LEFT row to REQUIRE ANY checked value");
+				"Use LEFT row to REQUIRE ANY checked value", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterGeneratedMana, this));
 
-			setFilterButtonTooltip(controller, FilterCmc,
-				"Filter by Converted Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterCmc, "Filter by Converted Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Converted Mana Cost value\r\n" +
-				"so there is NO point in using the RIGHT row.");
+				"so there is NO point in using the RIGHT row.", false);
 
-			setFilterButtonTooltip(controller, FilterLayout,
-				"Filter by Layout", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, FilterLayout, "Filter by Layout", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Layout value\r\n" +
-				"so there is NO point in using the RIGHT row.");
+				"so there is NO point in using the RIGHT row.", false);
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterLayout, this));
 		}
 
-		private void setFilterButtonTooltip(TooltipController controller, QuickFilterControl control, string name, string description, bool isKeyword = false)
+		private void setRegularTooltip(TooltipController defaultTooltips, QuickFilterControl control, string name, string description, bool isKeyword)
 		{
 			if (isKeyword)
 			{
@@ -316,7 +318,7 @@ namespace Mtgdb.Gui
 					"Right-click the button to avoid auto checking / unchecking other buttons.";
 			}
 
-			controller.SetTooltip(this,
+			defaultTooltips.SetTooltip(this,
 				name,
 				description,
 				control);

@@ -1,11 +1,15 @@
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
 using Mtgdb.Ui;
+using Ninject;
 
 namespace Mtgdb.Gui
 {
@@ -21,7 +25,10 @@ namespace Mtgdb.Gui
 			DeckListModel deckListModel,
 			DeckListLegacyConverter deckListConverter,
 			HistoryLegacyConverter historyConverter,
-			DeckSearcher deckSearcher)
+			DeckSearcher deckSearcher,
+			[Named(GuiModule.DefaultTooltipScope)] TooltipForm defaultTooltip,
+			[Named(GuiModule.QuickFilterTooltipScope)] TooltipForm quickFilterTooltip,
+			[Named(GuiModule.QuickFilterTooltipScope)] TooltipController quickFilterTooltipController)
 		{
 			_loader = loader;
 			_repo = repo;
@@ -49,6 +56,18 @@ namespace Mtgdb.Gui
 					deckSearcher.LoadIndexes();
 				}
 			});
+
+			setupTooltips(quickFilterTooltip, quickFilterTooltipController);
+		}
+
+		private static void setupTooltips(TooltipForm quickFilterTooltip, TooltipController quickFilterTooltipController)
+		{
+			quickFilterTooltip.BackColor = SystemColors.Control;
+			quickFilterTooltip.TooltipBorderStyle = DashStyle.Dash;
+			quickFilterTooltip.TextPadding = new Padding(1, 1, 1, 1);
+
+			quickFilterTooltipController.DelayMs = 0;
+			quickFilterTooltipController.ToggleOnAlt = false;
 		}
 
 		public Task AsyncRun()

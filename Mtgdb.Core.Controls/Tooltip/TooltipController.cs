@@ -75,6 +75,7 @@ namespace Mtgdb.Controls
 		{
 			customClient.Show += customTooltipShow;
 			customClient.Hide += customTooltipHide;
+			customClient.SubscribeEvents();
 		}
 
 
@@ -116,6 +117,7 @@ namespace Mtgdb.Controls
 		{
 			customClient.Show -= customTooltipShow;
 			customClient.Hide -= customTooltipHide;
+			customClient.UnsubscribeEvents();
 		}
 
 
@@ -293,13 +295,15 @@ namespace Mtgdb.Controls
 		public int HideCounter { get; private set; }
 
 		private bool IsActive => Active != Alt;
-		private static bool Alt => Control.ModifierKeys == Keys.Alt || Control.ModifierKeys == Keys.Control;
+		private bool Alt => ToggleOnAlt && (Control.ModifierKeys == Keys.Alt || Control.ModifierKeys == Keys.Control);
+
+		public bool ToggleOnAlt { get; set; } = true;
 
 		private TooltipModel Tooltip { get; set; } = _emptyTooltip;
 
 
-		private const int DelayMs = 150;
-		private const int IntervalMs = 50;
+		public int DelayMs { get; set; } = 150;
+		public int IntervalMs { get; set; } = 50;
 
 		private readonly Dictionary<Control, StaticTooltipSettings> _staticTooltips = new Dictionary<Control, StaticTooltipSettings>();
 		private readonly HashSet<ICustomTooltip> _customTooltips = new HashSet<ICustomTooltip>();

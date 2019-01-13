@@ -13,10 +13,16 @@ namespace Mtgdb.Gui
 			Owner = owner;
 		}
 
-		public void SubscribeToEvents()
+		public void SubscribeEvents()
 		{
 			_control.MouseMove += mouseMove;
 			_control.MouseLeave += mouseLeave;
+		}
+
+		public void UnsubscribeEvents()
+		{
+			_control.MouseMove -= mouseMove;
+			_control.MouseLeave -= mouseLeave;
 		}
 
 		private void mouseLeave(object sender, EventArgs e) =>

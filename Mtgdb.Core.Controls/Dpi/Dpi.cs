@@ -21,7 +21,7 @@ namespace Mtgdb.Controls
 			_initialized = true;
 
 			_uiScalePercent = uiScalePercent;
-			_scale = getScale().MultiplyBy(_uiScalePercent / 100f);
+			_scale = getDpiScale().MultiplyBy(_uiScalePercent / 100f);
 			_scaleHalf = _scale.MultiplyBy(0.5f);
 
 			BeforeChanged?.Invoke();
@@ -64,7 +64,7 @@ namespace Mtgdb.Controls
 		public static Size HalfByDpi(this Size original) =>
 			original.MultiplyBy(_scaleHalf).Round();
 
-		private static SizeF getScale()
+		private static SizeF getDpiScale()
 		{
 			var g = Graphics.FromHwnd(IntPtr.Zero);
 			var desktopPtr = g.GetHdc();
