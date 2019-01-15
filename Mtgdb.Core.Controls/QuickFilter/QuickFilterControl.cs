@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Bitmaps;
@@ -620,20 +621,26 @@ namespace Mtgdb.Controls
 			_lastClick = null;
 			_lastClickPreview = null;
 			_mouseInside = true;
+
+			_mouseLeft = null;
 		}
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			var cursor = PointToClient(Cursor.Position);
-
-			// mouse moved into value tooltip
-			if (Bounds.Contains(cursor))
-				return;
-
 			_mouseInside = false;
 			_showPreview = false;
 			_lastClickPreview = null;
-			Invalidate();
+
+			var left = DateTime.Now;
+			_mouseLeft = left;
+
+			TaskEx.Run(async () =>
+			{
+				await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
+
+				if (_mouseLeft == left)
+					this.Invoke(Invalidate);
+			});
 		}
 
 		private void mouseMove(object sender, MouseEventArgs e)
@@ -1053,6 +1060,8 @@ namespace Mtgdb.Controls
 		private bool _showPreview;
 		private bool _mouseInside;
 		private Point _mouseLocation;
+
+		private DateTime? _mouseLeft;
 
 		private FilterValueState[] _states;
 		private int _propertiesCount;

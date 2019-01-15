@@ -28,7 +28,10 @@ namespace Mtgdb.Gui
 			_quickFilterTooltip.TooltipBorderStyle = DashStyle.Solid;
 			_quickFilterTooltip.TextPadding = new Padding(1, 1, 1, 1);
 			_quickFilterTooltip.VisibleBorders = AnchorStyles.None;
-			_quickFilterTooltip.TooltipMargin = 0;
+
+			// if TooltipMargin == 0 the tooltip shares 1 pixel border line with target
+			// placing mouse there makes tooltip flicker
+			_quickFilterTooltip.TooltipMargin = 1;
 
 			_quickFilterTooltip.ScaleDpi();
 			_defaultTooltip.ScaleDpi();
