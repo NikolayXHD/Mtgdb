@@ -35,7 +35,7 @@ namespace Mtgdb.Controls
 				bs => bs.Select(b => b.ResizeDpi()).ToArray());
 
 		private static readonly DpiScaler<CustomBorderForm, (Size, Size, int, Bitmap[])> _scaler =
-			Scalers.Combine(
+			DpiScalers.Combine(
 				_borderScaler,
 				_buttonScaler,
 				_captionHeightScaler,

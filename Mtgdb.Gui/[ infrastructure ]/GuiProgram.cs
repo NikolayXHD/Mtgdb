@@ -54,6 +54,8 @@ namespace Mtgdb.Gui
 			colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
 			colorSchemeEditorForm.LoadCurrentColorScheme();
 
+			_kernel.Get<TooltipConfiguration>().Setup();
+
 			var application = _kernel.Get<Application>();
 			application.MigrateHistoryFiles();
 			application.CreateForm();

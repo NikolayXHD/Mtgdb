@@ -58,8 +58,7 @@ namespace Mtgdb.Controls
 				ObjectBounds = bounds,
 				Cursor = bounds.Center(),
 				Text = property,
-				PositionPreference = getPositionPreference,
-				Margin = _control.IsVertical ? 9 : 3
+				PositionPreference = getPositionPreference
 			};
 
 			Show?.Invoke(model);

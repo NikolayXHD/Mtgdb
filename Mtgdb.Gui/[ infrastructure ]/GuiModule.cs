@@ -68,6 +68,10 @@ namespace Mtgdb.Gui
 				.InSingletonScope()
 				.Named(QuickFilterTooltipScope);
 
+			Kernel.Bind<TooltipConfiguration>()
+				.ToSelf()
+				.InSingletonScope();
+
 			Kernel.Bind<GuiLoader>()
 				.ToSelf()
 				.InSingletonScope();

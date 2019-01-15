@@ -23,7 +23,6 @@ namespace Mtgdb.Controls
 		public Rectangle ObjectBounds { get; set; }
 
 		public Point? Cursor { get; set; }
-		public int Margin { get; set; } = 12;
 		public Func<Rectangle, Func<ExtremumFinder<TooltipPosition>, ExtremumFinder<TooltipPosition>>> PositionPreference { get; set; }
 
 		public DateTime? Abandoned { get; set; }

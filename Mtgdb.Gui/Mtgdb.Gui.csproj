@@ -171,9 +171,19 @@
     </Compile>
     <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
-    <Compile Include="FormRoot\TabHeadersTooltip.cs" />
     <Compile Include="FormRoot\UiConfigMenuSubsystem.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
+    <Compile Include="Misc\Application.cs" />
+    <Compile Include="Misc\CardSearchSubsystem.cs" />
+    <Compile Include="Misc\FormZoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Misc\FormZoom.Designer.cs">
+      <DependentUpon>FormZoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\GuiSettings.cs" />
+    <Compile Include="Misc\TabHeadersTooltip.cs" />
+    <Compile Include="Misc\TooltipConfiguration.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -190,7 +200,6 @@
     </Compile>
     <Compile Include="FormChart\ReportSettings.cs" />
     <Compile Include="FormChart\TabField.cs" />
-    <Compile Include="FormRoot\Application.cs" />
     <Compile Include="LayoutView\CardLayoutControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -201,7 +210,6 @@
     <Compile Include="FormMain\PrintingSubsystem.cs" />
     <Compile Include="QuickFilter\QuickFilterImages.cs" />
     <Compile Include="FormMain\ScrollSubsystem.cs" />
-    <Compile Include="SearchString\CardSearchSubsystem.cs" />
     <Compile Include="FormMain\CardSortSubsystem.cs" />
     <Compile Include="FormMain\HistorySubsystem.cs" />
     <Compile Include="FormMain\HistoryState.cs" />
@@ -264,15 +272,8 @@
     <Compile Include="FormMain\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GuiSettings.cs" />
     <Compile Include="[ infrastructure ]\GuiProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zoom\FormZoom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Zoom\FormZoom.Designer.cs">
-      <DependentUpon>FormZoom.cs</DependentUpon>
-    </Compile>
     <Compile Include="QuickFilter\QuickFilterFacade.cs" />
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
@@ -291,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\CardLayout.resx">
       <DependentUpon>CardLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Misc\FormZoom.resx">
+      <DependentUpon>FormZoom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -329,9 +333,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRoot\FormRoot.resx">
       <DependentUpon>FormRoot.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Zoom\FormZoom.resx">
-      <DependentUpon>FormZoom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

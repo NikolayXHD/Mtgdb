@@ -33,7 +33,7 @@ namespace Mtgdb.Controls
 				font => font.ByDpi());
 
 		private static readonly DpiScaler<Control, (Size, Font)> _scaler =
-			Scalers.Combine(_sizeScaler, _fontScaler);
+			DpiScalers.Combine(_sizeScaler, _fontScaler);
 
 		private static readonly DpiScaler<Control, int> _heightScaler =
 			new DpiScaler<Control, int>(

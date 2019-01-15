@@ -15,7 +15,7 @@ namespace Mtgdb.Controls
 		TopRight = Top | Right,
 		BottomRight = Bottom | Right,
 		BottomLeft = Bottom | Left,
-		TopLeft = Top | Left,
+		TopLeft = Top | Left
 	}
 
 	public static class DirectionExtension

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
@@ -54,6 +55,9 @@ namespace Mtgdb.Controls
 
 		public static Size ByDpi(this Size original) =>
 			original.MultiplyBy(_scale).Round();
+
+		public static Padding ByDpi(this Padding original) =>
+			new Padding(original.Left.ByDpiWidth(), original.Top.ByDpiHeight(), original.Right.ByDpiWidth(), original.Bottom.ByDpiHeight());
 
 		public static Point ByDpi(this Point original) =>
 			original.MultiplyBy(_scale).Round();

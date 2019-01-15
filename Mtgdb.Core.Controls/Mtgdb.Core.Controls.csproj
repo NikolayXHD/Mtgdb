@@ -90,7 +90,7 @@
     <Compile Include="Dpi\ControlScaler.cs" />
     <Compile Include="Dpi\LayoutViewControlScaler.cs" />
     <Compile Include="Dpi\QuickFilterControlScaler.cs" />
-    <Compile Include="Dpi\Scalers.cs" />
+    <Compile Include="Dpi\DpiScalers.cs" />
     <Compile Include="Dpi\TabHeaderControlScaler.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />

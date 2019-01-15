@@ -62,7 +62,7 @@ namespace Mtgdb.Controls
 				bmp => bmp?.HalfResizeDpi());
 
 		private static readonly DpiScaler<DeckListLayout, (Bitmap, Bitmap)> _cardImageScaler =
-			Scalers.Combine(
+			DpiScalers.Combine(
 				new DpiScaler<DeckListLayout, Bitmap>(
 					c => (Bitmap) c.ImageDeckBox,
 					(c, bmp) => c.ImageDeckBox = bmp,

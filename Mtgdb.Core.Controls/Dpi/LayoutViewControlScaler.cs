@@ -43,7 +43,7 @@ namespace Mtgdb.Controls
 				Func<Bitmap, Bitmap> transformSearchIcon,
 				Func<Bitmap, string, int, Bitmap> transformCustomButtonIcon)
 		{
-			return Scalers.Combine(
+			return DpiScalers.Combine(
 				new DpiScaler<FieldControl, (string fieldName, IReadOnlyList<Bitmap> bitmaps)>(
 					c => (c.FieldName, c.CustomButtons.Select(b => b.Icon).ToReadOnlyList()),
 					(c, iconsInfo) => c.CustomButtons
@@ -83,8 +83,8 @@ namespace Mtgdb.Controls
 				(Bitmap, Bitmap))>
 			createViewOptionsScaler(Func<Bitmap, Bitmap> transformIcons)
 		{
-			return Scalers.Combine(
-				Scalers.Combine(
+			return DpiScalers.Combine(
+				DpiScalers.Combine(
 					new DpiScaler<LayoutViewControl, Dictionary<Direction, Bitmap>>(
 						c => c.LayoutOptions.AlignmentIconsByDirection.ToDictionary(),
 						(c, d) => c.LayoutOptions.AlignmentIconsByDirection = d,
@@ -95,7 +95,7 @@ namespace Mtgdb.Controls
 						(c, d) => c.LayoutOptions.AlignmentHoveredIconsByDirection = d,
 						d => d.ToDictionary(_ => _.Key, _ => _.Value?.Invoke0(transformIcons))
 					)),
-				Scalers.Combine(
+				DpiScalers.Combine(
 					new DpiScaler<LayoutViewControl, Bitmap>(
 						c => c.SortOptions.Icon,
 						(c, bmp) => c.SortOptions.Icon = bmp,
@@ -109,7 +109,7 @@ namespace Mtgdb.Controls
 						(c, bmp) => c.SortOptions.DescIcon = bmp,
 						bmp => bmp?.Invoke0(transformIcons))
 				),
-				Scalers.Combine(
+				DpiScalers.Combine(
 					new DpiScaler<LayoutViewControl, Bitmap>(
 						c => c.SortOptions.IconTransp,
 						(c, bmp) => c.SortOptions.IconTransp = bmp,
@@ -122,7 +122,7 @@ namespace Mtgdb.Controls
 						c => c.SortOptions.DescIconTransp,
 						(c, bmp) => c.SortOptions.DescIconTransp = bmp,
 						bmp => bmp?.Invoke0(transformIcons))),
-				Scalers.Combine(
+				DpiScalers.Combine(
 					new DpiScaler<LayoutViewControl, Bitmap>(
 						c => c.SearchOptions.Button.Icon,
 						(c, bmp) => c.SearchOptions.Button.Icon = bmp,
@@ -148,7 +148,7 @@ namespace Mtgdb.Controls
 				s => s.ByDpi());
 
 		private static readonly DpiScaler<LayoutViewControl, (Size, Size)> _scaler =
-			Scalers.Combine(_thresholdScaler, _intervalScaler);
+			DpiScalers.Combine(_thresholdScaler, _intervalScaler);
 
 		private static readonly DpiScaler<LayoutViewControl> _layoutResetter =
 			new DpiScaler<LayoutViewControl>(v => v.ResetLayout());

@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace Mtgdb.Controls
 {
-	public static class Scalers
+	public static class DpiScalers
 	{
 		public static DpiScaler<TComponent, (TState1, TState2)> Combine<TComponent, TState1, TState2>(
 			DpiScaler<TComponent, TState1> scaler1,

@@ -97,19 +97,35 @@ namespace Mtgdb.Controls
 
 			BackColor = SystemColors.Window;
 
-			scale();
-			setCloseEnabled(false);
+			setupIcons();
 		}
 
-		private void scale()
+		private void setupIcons()
+		{
+			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
+			_selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
+			setCloseEnabled(_closeEnabled);
+		}
+
+		public void ScaleDpi()
 		{
 			_tooltipTextbox.ScaleDpiFont();
 
-			new DpiScaler<TooltipForm>(form =>
-			{
-				form._closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
-				form._selectableTextIcon = Properties.Resources.selectable_transp_64.HalfResizeDpi();
-			}).Setup(this);
+			new DpiScaler<TooltipForm>(form => form.setupIcons())
+				.Setup(this);
+
+			DpiScalers.Combine(
+				new DpiScaler<TooltipForm, int>(
+					f => f.TooltipMargin,
+					(f, m) => f.TooltipMargin = m,
+					m => m.ByDpiWidth()
+				),
+				new DpiScaler<TooltipForm, Padding>(
+					f => f.TextPadding,
+					(f, p) => f.TextPadding = p,
+					p => p.ByDpi()
+				)
+			).Setup(this);
 		}
 
 		private void systemColorsChanging() =>
@@ -138,8 +154,6 @@ namespace Mtgdb.Controls
 			if (WindowState != FormWindowState.Normal)
 				WindowState = FormWindowState.Normal;
 		}
-
-
 
 		public void ShowTooltip(TooltipModel tooltip)
 		{
@@ -186,7 +200,7 @@ namespace Mtgdb.Controls
 			var size = measureTooltip(tooltip);
 			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
 			var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
-			var bounds = allocateTooltip(size, screenBounds, cursor, tooltip.Margin.ByDpiWidth(), tooltip.PositionPreference?.Invoke(screenBounds));
+			var bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
 
 			if (_tooltipTextbox.Focused)
 				_tooltipFocusTarget.Focus();
@@ -428,13 +442,12 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public bool ShowTooltipBorder
+		public int TooltipMargin { get; set; } = 12;
+
+		public AnchorStyles VisibleBorders
 		{
-			get => _panel.VisibleBorders != AnchorStyles.None;
-			set =>
-				_panel.VisibleBorders = value
-					? AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
-					: AnchorStyles.None;
+			get => _panel.VisibleBorders;
+			set => _panel.VisibleBorders = value;
 		}
 
 		public DashStyle TooltipBorderStyle

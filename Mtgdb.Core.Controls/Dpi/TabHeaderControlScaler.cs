@@ -10,7 +10,7 @@ namespace Mtgdb.Controls
 			_scaler.Setup(tab);
 			tab.ScaleDpiFont();
 
-			var iconsScaler = Scalers.Combine(
+			var iconsScaler = DpiScalers.Combine(
 				new DpiScaler<TabHeaderControl, Bitmap>(
 					c => c.CloseIcon,
 					(c, bmp) => c.CloseIcon = bmp,
@@ -63,7 +63,7 @@ namespace Mtgdb.Controls
 				(c, p) => c.TextPadding = p,
 				p => p.ByDpiWidth());
 
-		private static readonly DpiScaler<TabHeaderControl, (Size, Size, int, int, int)> _scaler = Scalers.Combine(
+		private static readonly DpiScaler<TabHeaderControl, (Size, Size, int, int, int)> _scaler = DpiScalers.Combine(
 			_slopeSizeScaler,
 			_addSlopeSizeScaler,
 			_heightScaler,
