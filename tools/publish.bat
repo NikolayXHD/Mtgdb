@@ -73,6 +73,7 @@ rmdir /q /s %target%\data\index\deck\search
 rmdir /q /s %target%\data\index\deck\suggest
 
 del /q %target%\data\allSets-x.json
+del /q %target%\data\AllSets.v42.json
 rmdir /q /s %target%\data\index\keywords\0.47
 rmdir /q /s %target%\data\index\search\0.47
 rmdir /q /s %target%\data\index\suggest\0.47

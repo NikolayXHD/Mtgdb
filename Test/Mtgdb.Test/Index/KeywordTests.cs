@@ -178,7 +178,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Keywords: ""can't block"" AND NOT Text: (""can't block"" OR ""can't attack or block"" OR ""can't attack, block"")")]
 		//
 		[TestCase(@"Text: *cascad* AND NOT Keywords: cascade AND NOT Name: ""Skyline Cascade""")]
-		[TestCase(@"Text: (cast* AND NOT (caste OR castle OR castaway* OR castigator)) AND NOT Keywords: cast")]
+		[TestCase(@"Text: (cast* AND NOT (caste OR caster OR castle OR castaway* OR castigator)) AND NOT Keywords: cast")]
 		[TestCase(@"Text: *champion* AND NOT Keywords: champion AND NOT Name: champion")]
 		[TestCase(@"Text: *changeling* AND NOT Keywords: changeling")]
 		[TestCase(@"Text: *cipher* AND NOT Keywords: cipher")]

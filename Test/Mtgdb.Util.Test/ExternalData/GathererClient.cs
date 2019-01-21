@@ -161,17 +161,8 @@ namespace Mtgdb.Util
 			return idsArray;
 		}
 
-		public void DownloadCardImage(Card card, string targetDirectory)
-		{
-			var setDirectory = Path.Combine(targetDirectory, card.SetCode);
-			Directory.CreateDirectory(setDirectory);
-
-			if (card.MultiverseId == null)
-				return;
-
-			DownloadFile(BaseUrl + ImagePath + card.MultiverseId,
-				Path.Combine(setDirectory, card.ImageName + ".png"));
-		}
+		public void DownloadCardImage(int multiverseId, string targetFile) =>
+			DownloadFile(BaseUrl + ImagePath + multiverseId, targetFile);
 
 		public string DownloadCardPage(int multiverseId)
 		{

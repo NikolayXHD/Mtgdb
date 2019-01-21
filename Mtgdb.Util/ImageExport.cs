@@ -11,24 +11,16 @@ using NLog;
 namespace Mtgdb.Util
 {
 	[UsedImplicitly]
-	public class ForgeIntegration
+	public class ImageExport
 	{
-		public ForgeIntegration(
+		public ImageExport(
 			ImageRepository imageRepo,
 			CardRepository cardRepo,
-			ForgeIntegrationConfig config,
-			ForgeSetRepository forgeSetRepository,
 			ImageLoader imageLoader)
 		{
 			_imageRepo = imageRepo;
 			_cardRepo = cardRepo;
-			_forgeSetRepository = forgeSetRepository;
 			_imageLoader = imageLoader;
-
-			CardPicsPath = Environment.ExpandEnvironmentVariables(config.CardPicsPath);
-			CardPicsBackupPath = Environment.ExpandEnvironmentVariables(config.CardPicsBackupPath);
-
-			_verbose = config.Verbose == true;
 		}
 
 		public void Load(string[] enabledImageGroups = null)
@@ -41,115 +33,6 @@ namespace Mtgdb.Util
 			_imageRepo.LoadFiles(enabledImageGroups);
 			_imageRepo.LoadSmall();
 			_imageRepo.LoadZoom();
-		}
-
-		public void OverrideForgePictures(string targetSetCode)
-		{
-			_forgeSetRepository.Load();
-
-			if (!Directory.Exists(CardPicsPath))
-			{
-				Console.WriteLine($"== Aborting. Not found {CardPicsPath} ==");
-				return;
-			}
-
-			if (!Directory.Exists(CardPicsBackupPath))
-			{
-				if (_verbose)
-					Console.WriteLine($"== Creating backup directory {CardPicsBackupPath} ==");
-
-				Directory.CreateDirectory(CardPicsBackupPath);
-			}
-
-			replaceExistingFiles(targetSetCode, small: false);
-			addNewFiles(targetSetCode, small: false);
-		}
-
-		private void addNewFiles(string targetSetCode, bool small)
-		{
-			Console.WriteLine("== Adding missing files ==");
-
-			foreach (var set in _cardRepo.SetsByCode.Values.OrderBy(s => s.Code))
-			{
-				string setCode = set.Code;
-
-				if (targetSetCode != null && !Str.Equals(setCode, targetSetCode))
-					continue;
-
-				string forgeSetCode = _forgeSetRepository.ToForgeSet(setCode);
-
-				string subdir = Path.Combine(CardPicsPath, forgeSetCode);
-
-				if (!Directory.Exists(subdir))
-					continue;
-
-				Console.WriteLine($"== Scanning {forgeSetCode} ... ==");
-
-				var exported = new HashSet<string>(Str.Comparer);
-
-				foreach (var card in set.Cards)
-				{
-					var model = _imageRepo.GetImagePrint(card, _cardRepo.GetReleaseDateSimilarity);
-
-					if (model == null)
-						continue;
-
-					if (exported.Contains(model.ImageFile.FullPath))
-						continue;
-
-					exported.Add(model.ImageFile.FullPath);
-
-					using (var original = ImageLoader.Open(model))
-					{
-						string targetFullPath = getTargetPath(card, model.ImageFile, subdir, forge: true);
-
-						if (!File.Exists(targetFullPath))
-							addFile(original, model.ImageFile, targetFullPath, small, forge: true);
-					}
-				}
-			}
-		}
-
-		private void replaceExistingFiles(string targetSetCode, bool small)
-		{
-			var subdirs = Directory.GetDirectories(CardPicsPath);
-			foreach (string subdir in subdirs)
-			{
-				Console.WriteLine($"== Scanning {subdir} ... ==");
-
-				string forgeSetCode = Path.GetFileName(subdir);
-
-				if (forgeSetCode == null)
-					continue;
-
-				string setCode = _forgeSetRepository.FromForgeSet(forgeSetCode);
-
-				if (targetSetCode != null && !Str.Equals(setCode, targetSetCode))
-					continue;
-
-				var oldFiles = Directory.GetFiles(subdir, "*.jpg", SearchOption.AllDirectories);
-
-				foreach (string oldFile in oldFiles)
-				{
-					var model = new ImageFile(oldFile, CardPicsPath, setCode: setCode);
-
-					var artist = _cardRepo.SetsByCode.TryGet(setCode)
-						?.Cards
-						.Where(_ => _.ImageNameBase == model.Name)
-						.AtMax(_ => _.ImageName == model.ImageName)
-						.FindOrDefault()
-						?.Artist;
-
-					var model2 = artist != null
-						? new ImageFile(oldFile, CardPicsPath, setCode: setCode, artist: artist)
-						: model;
-
-					var replacementModel = _imageRepo.GetReplacementImage(model2, _cardRepo.GetReleaseDateSimilarity);
-
-					if (replacementModel != null)
-						replace(replacementModel, model, small);
-				}
-			}
 		}
 
 		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small, bool forge)
@@ -227,45 +110,6 @@ namespace Mtgdb.Util
 			}
 
 			return false;
-		}
-
-		private void replace(ImageModel replacementModel, ImageFile imageFile, bool small)
-		{
-			byte[] bytes;
-
-			using (var original = ImageLoader.Open(replacementModel))
-				bytes = transform(original, replacementModel.ImageFile, small, isForge: true);
-
-			if (bytes == null)
-				return;
-
-			if (bytes.Length == new FileInfo(imageFile.FullPath).Length)
-			{
-				if (_verbose)
-					Console.WriteLine($"\tSkipping identical {replacementModel.ImageFile.FullPath}");
-
-				return;
-			}
-
-			var setBackupDir = Path.Combine(CardPicsBackupPath, imageFile.SetCode);
-			if (!Directory.Exists(setBackupDir))
-			{
-				if (_verbose)
-					Console.WriteLine($"\tCreating backup directory {setBackupDir}");
-				Directory.CreateDirectory(setBackupDir);
-			}
-
-			string fileName = Path.GetFileName(imageFile.FullPath);
-
-			if (_verbose)
-				Console.WriteLine($"\tReplacing {imageFile.FullPath}");
-
-			var backupFile = Path.Combine(setBackupDir, fileName);
-
-			if (!File.Exists(backupFile))
-				File.Move(imageFile.FullPath, backupFile);
-
-			File.WriteAllBytes(imageFile.FullPath, bytes);
 		}
 
 		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool isForge)
@@ -423,10 +267,9 @@ namespace Mtgdb.Util
 			}
 		}
 
-		private string ensureSetSubdirectory(string smallSet)
+		private static string ensureSetSubdirectory(string smallSet)
 		{
-			if (_verbose)
-				Console.WriteLine($"	Creating {smallSet} ...");
+			Console.WriteLine($"	Creating {smallSet} ...");
 
 			try
 			{
@@ -443,14 +286,9 @@ namespace Mtgdb.Util
 		}
 
 
-
 		private readonly ImageRepository _imageRepo;
 		private readonly CardRepository _cardRepo;
-		private readonly ForgeSetRepository _forgeSetRepository;
 		private readonly ImageLoader _imageLoader;
-		public readonly string CardPicsPath;
-		public readonly string CardPicsBackupPath;
-		private readonly bool _verbose;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

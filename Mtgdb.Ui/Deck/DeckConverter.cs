@@ -8,9 +8,13 @@ namespace Mtgdb.Ui
 {
 	public class DeckConverter
 	{
-		public DeckConverter(CardRepository repo, CardRepositoryLegacy repoLegacy)
+		public DeckConverter(
+			CardRepository repo,
+			CardRepository42 repo42,
+			CardRepositoryLegacy repoLegacy)
 		{
 			_repo = repo;
+			_repo42 = repo42;
 			_repoLegacy = repoLegacy;
 		}
 
@@ -40,6 +44,19 @@ namespace Mtgdb.Ui
 			return result;
 		}
 
+		public Deck ConvertV3Deck(Deck deck)
+		{
+			var result = Deck.Create();
+			addV3(deck.MainDeck, result.MainDeck);
+			addV3(deck.Sideboard, result.Sideboard);
+			result.File = deck.File;
+			result.Name = deck.Name;
+			result.Id = deck.Id;
+			result.Error = deck.Error;
+			result.Saved = deck.Saved;
+			return result;
+		}
+
 		private void addLegacy(DeckZone source, DeckZone target)
 		{
 			foreach (var legacyId in source.Order)
@@ -51,20 +68,15 @@ namespace Mtgdb.Ui
 					continue;
 				}
 
-				var card = FindMatchingCard(cardLegacy);
+				var card = MatchLegacyCard(cardLegacy);
 				if (card == null)
 				{
 					_log.Warn($"No matching card found for legacy card {cardLegacy.SetCode} {cardLegacy.NameEn} {cardLegacy.Number} {cardLegacy.MultiverseId} {cardLegacy.Id}");
 					continue;
 				}
 
-				if (target.Count.TryGetValue(card.Id, out var count))
-					target.Count[card.Id] = count + source.Count[legacyId];
-				else
-				{
-					target.Order.Add(card.Id);
-					target.Count[card.Id] = source.Count[legacyId];
-				}
+				string id = card.Id;
+				add(target, id, source, legacyId);
 			}
 		}
 
@@ -81,17 +93,60 @@ namespace Mtgdb.Ui
 					continue;
 				}
 
-				if (target.Count.TryGetValue(card.Id, out var count))
-					target.Count[card.Id] = count + source.Count[v2Id];
-				else
-				{
-					target.Order.Add(card.Id);
-					target.Count[card.Id] = source.Count[v2Id];
-				}
+				string id = card.Id;
+
+				add(target, id, source, v2Id);
 			}
 		}
 
-		public Card FindMatchingCard(CardLegacy cardLegacy)
+		private void addV3(DeckZone source, DeckZone target)
+		{
+			foreach (var v3Id in source.Order)
+			{
+				var id = MatchIdV3(v3Id);
+				if (id == null)
+					continue;
+
+				add(target, id, source, v3Id);
+			}
+		}
+
+		public string MatchIdV3(string v3Id)
+		{
+			(string scryfallId, string name) = _repo42.GetById(v3Id);
+
+			if (scryfallId == default && name == default)
+			{
+				_log.Error($"No v3 card found by id {v3Id}");
+				return null;
+			}
+
+			var id = CardId.Generate(scryfallId, name);
+
+			if (!_repo.CardsById.ContainsKey(id))
+			{
+				if (_repo.CardsByName.TryGetValue(name, out var cards))
+					return cards[0].Id;
+
+				_log.Error($"No card found by id {id}");
+				return null;
+			}
+
+			return id;
+		}
+
+		private static void add(DeckZone target, string id, DeckZone old, string oldId)
+		{
+			if (target.Count.TryGetValue(id, out var count))
+				target.Count[id] = count + old.Count[oldId];
+			else
+			{
+				target.Order.Add(id);
+				target.Count[id] = old.Count[oldId];
+			}
+		}
+
+		public Card MatchLegacyCard(CardLegacy cardLegacy)
 		{
 			IEnumerable<string> setCodes;
 
@@ -173,7 +228,7 @@ namespace Mtgdb.Ui
 		};
 
 		private readonly CardRepository _repo;
-
+		private readonly CardRepository42 _repo42;
 		private readonly CardRepositoryLegacy _repoLegacy;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

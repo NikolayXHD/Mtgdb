@@ -11,12 +11,15 @@ namespace Mtgdb.Controls
 			_model = model;
 			_deckConverter = deckConverter;
 
-			IsLegacyConversionRequired = File.Exists(_legacyFileName) &&
-				!File.Exists(_v2FileName) &&
-				!File.Exists(_model.FileName);
+			if (File.Exists(_model.FileName))
+				return;
 
-			IsV2ConversionRequired = File.Exists(_v2FileName) &&
-				!File.Exists(_model.FileName);
+			if (File.Exists(_v3FileName))
+				IsV3ConversionRequired = true;
+			else if (File.Exists(_v2FileName))
+				IsV2ConversionRequired = true;
+			else if (File.Exists(_legacyFileName))
+				IsLegacyConversionRequired = true;
 		}
 
 		public void ConvertLegacyList()
@@ -33,7 +36,7 @@ namespace Mtgdb.Controls
 			var serialized = _model.Serialize(deserialized);
 			File.WriteAllText(_model.FileName, serialized);
 
-			IsLegacyConversionCompleted = true;
+			IsConversionCompleted = true;
 		}
 
 		private CollectionSnapshot convertLegacyCollection(CollectionSnapshot collection)
@@ -61,7 +64,7 @@ namespace Mtgdb.Controls
 			var serialized = _model.Serialize(deserialized);
 			File.WriteAllText(_model.FileName, serialized);
 
-			IsLegacyConversionCompleted = true;
+			IsConversionCompleted = true;
 		}
 
 		private CollectionSnapshot convertV2Collection(CollectionSnapshot collection)
@@ -75,13 +78,46 @@ namespace Mtgdb.Controls
 			};
 		}
 
-		public bool IsLegacyConversionRequired { get; }
-		public bool IsLegacyConversionCompleted { get; private set; }
+		public void ConvertV3List()
+		{
+			string v3FileContent = File.ReadAllText(_v3FileName);
+			var deserialized = _model.Deserialize(v3FileContent);
 
+			deserialized.Decks = deserialized.Decks
+				.Select(_deckConverter.ConvertV3Deck)
+				.ToList();
+
+			deserialized.Collection = deserialized.Collection?.Invoke0(convertV3Collection);
+
+			var serialized = _model.Serialize(deserialized);
+			File.WriteAllText(_model.FileName, serialized);
+
+			IsConversionCompleted = true;
+		}
+
+		private CollectionSnapshot convertV3Collection(CollectionSnapshot collection)
+		{
+			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
+			var converted = _deckConverter.ConvertV3Deck(deck);
+
+			return new CollectionSnapshot
+			{
+				CountById = converted.MainDeck.Count
+			};
+		}
+
+		public bool IsLegacyConversionRequired { get; }
 		public bool IsV2ConversionRequired { get; }
+		public bool IsV3ConversionRequired { get; }
+
+		public bool IsConversionCompleted { get; private set; }
+
+
 
 		private static readonly string _legacyFileName = AppDir.History.AddPath("decks.json");
 		private static readonly string _v2FileName = AppDir.History.AddPath("decks.v2.json");
+		private static readonly string _v3FileName = AppDir.History.AddPath("decks.v3.json");
+
 		private readonly DeckListModel _model;
 		private readonly DeckConverter _deckConverter;
 	}

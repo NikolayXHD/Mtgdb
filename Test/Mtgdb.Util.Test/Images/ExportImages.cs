@@ -8,7 +8,7 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class ExportImages
 	{
-		private ForgeIntegration _integration;
+		private ImageExport _export;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -29,14 +29,14 @@ namespace Mtgdb.Util
 			imgRepo.LoadFiles();
 			imgRepo.LoadZoom();
 
-			_integration = kernel.Get<ForgeIntegration>();
+			_export = kernel.Get<ImageExport>();
 		}
 
 		//[TestCase("XLN", @"D:\Distrib\games\mtg\Mtgdb.Pictures", "lq", "mq")]
 		[TestCase("C17", @"D:\Distrib\games\mtg\Mtgdb.Pictures", "lq", "mq")]
 		public void Export(string set, string targetDir, string smallSubdir, string zoomSubdir)
 		{
-			_integration.ExportCardImages(
+			_export.ExportCardImages(
 				targetDir,
 				small: true,
 				zoomed: true,

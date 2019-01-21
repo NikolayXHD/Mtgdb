@@ -12,88 +12,124 @@ namespace Mtgdb.Dal
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets.json");
+			CustomSetCodes = new[] { "rna", "prna" };
 			PatchFile = AppDir.Data.AddPath("patch.v2.json");
 			Cards = new List<Card>();
 		}
 
 		public void LoadFile()
 		{
-			_streamContent = File.ReadAllBytes(SetsFile);
+			_defaultSetsContent = File.ReadAllBytes(SetsFile);
+
+			_customSetContents = CustomSetCodes
+				.Select(code => File.ReadAllBytes(AppDir.Data.AddPath("custom_sets").AddPath(code + ".json")))
+				.ToArray();
+
 			Patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(PatchFile));
 			Patch.IgnoreCase();
 
 			IsFileLoadingComplete = true;
 		}
 
-		public void Load()
+		internal IEnumerable<Set> DeserializeSets()
 		{
-			var serializer = new JsonSerializer();
+			return deserializeSets(_defaultSetsContent)
+				.Concat(Enumerable.Range(0, CustomSetCodes.Length)
+					.Where(i => FilterSetCode(CustomSetCodes[i]))
+					.Select(i => deserializeSet(_customSetContents[i])));
 
-			Stream stream = new MemoryStream(_streamContent);
-			using (stream)
-			using (var stringReader = new StreamReader(stream))
-			using (var jsonReader = new JsonTextReader(stringReader))
+			Set deserializeSet(byte[] content)
 			{
-				jsonReader.Read();
+				var serializer = new JsonSerializer();
+				Stream stream = new MemoryStream(content);
+				using (stream)
+				using (var stringReader = new StreamReader(stream))
+				using (var jsonReader = new JsonTextReader(stringReader))
+				{
+					var set = serializer.Deserialize<Set>(jsonReader);
+					return set;
+				}
+			}
 
-				while (true)
+			IEnumerable<Set> deserializeSets(byte[] content)
+			{
+				var serializer = new JsonSerializer();
+				Stream stream = new MemoryStream(content);
+				using (stream)
+				using (var stringReader = new StreamReader(stream))
+				using (var jsonReader = new JsonTextReader(stringReader))
 				{
 					jsonReader.Read();
 
-					if (jsonReader.TokenType == JsonToken.EndObject)
-						// sets are over, all json was read
-						break;
-
-					var setCode = (string) jsonReader.Value;
-
-					// skip set name
-					jsonReader.Read();
-
-					if (!FilterSetCode(setCode))
+					while (true)
 					{
-						jsonReader.Skip();
-						continue;
+						jsonReader.Read();
+
+						if (jsonReader.TokenType == JsonToken.EndObject)
+							// sets are over, all json was read
+							break;
+
+						string setCode = (string) jsonReader.Value;
+
+						// skip set name
+						jsonReader.Read();
+
+						if (!FilterSetCode(setCode) || _customSetCodesSet.Contains(setCode))
+						{
+							jsonReader.Skip();
+							continue;
+						}
+
+						var set = serializer.Deserialize<Set>(jsonReader);
+						yield return set;
 					}
-
-					var set = serializer.Deserialize<Set>(jsonReader);
-
-					for (int i = 0; i < set.Cards.Count; i++)
-					{
-						set.Cards[i].Set = set;
-						preProcessCard(set.Cards[i]);
-					}
-
-					for (int i = set.Cards.Count - 1; i >= 0; i--)
-						if (set.Cards[i].Remove)
-							set.Cards.RemoveAt(i);
-
-					// after preProcessCard, to have NameNormalized field set non empty
-					set.CardsByName = set.Cards.GroupBy(_ => _.NameNormalized)
-						.ToDictionary(
-							gr => gr.Key,
-							gr => gr.ToList(),
-							Str.Comparer);
-
-					foreach (var card in set.Cards)
-					{
-						CardsById[card.Id] = card;
-						CardsByScryfallId[card.ScryfallId] = card;
-					}
-
-					for (int i = 0; i < set.Cards.Count; i++)
-						postProcessCard(set.Cards[i]);
-
-					ImageNameCalculator.CalculateImageNames(set, Patch);
-
-					lock (SetsByCode)
-						SetsByCode.Add(set.Code, set);
-
-					lock (Cards)
-						foreach (var card in set.Cards)
-							Cards.Add(card);
-
-					SetAdded?.Invoke();
 				}
+			}
+		}
+
+		public void Load()
+		{
+			foreach (var set in DeserializeSets())
+			{
+				for (int i = 0; i < set.Cards.Count; i++)
+				{
+					var card = set.Cards[i];
+
+					card.Set = set;
+					card.Id = CardId.Generate(card);
+					preProcessCard(card);
+				}
+
+				for (int i = set.Cards.Count - 1; i >= 0; i--)
+					if (set.Cards[i].Remove)
+						set.Cards.RemoveAt(i);
+
+				// after preProcessCard, to have NameNormalized field set non empty
+				set.CardsByName = set.Cards.GroupBy(_ => _.NameNormalized)
+					.ToDictionary(
+						gr => gr.Key,
+						gr => gr.ToList(),
+						Str.Comparer);
+
+				foreach (var card in set.Cards)
+				{
+					CardsById[card.Id] = card;
+					CardsByScryfallId[card.ScryfallId] = card;
+				}
+
+				for (int i = 0; i < set.Cards.Count; i++)
+					postProcessCard(set.Cards[i]);
+
+				ImageNameCalculator.CalculateImageNames(set, Patch);
+
+				lock (SetsByCode)
+					SetsByCode.Add(set.Code, set);
+
+				lock (Cards)
+					foreach (var card in set.Cards)
+						Cards.Add(card);
+
+				SetAdded?.Invoke();
 			}
 
 			CardsByName = Cards.GroupBy(_ => _.NameNormalized)
@@ -126,7 +162,7 @@ namespace Mtgdb.Dal
 			LoadingComplete?.Invoke();
 
 			// release RAM
-			_streamContent = null;
+			_defaultSetsContent = null;
 			Patch = null;
 			Cards.Capacity = Cards.Count;
 
@@ -172,10 +208,10 @@ namespace Mtgdb.Dal
 					Str.Comparer);
 
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
-				card.PatchCard(patch);
+				card.Patch(patch);
 
 			if (Patch.Cards.TryGetValue(card.NameEn, out patch) && (string.IsNullOrEmpty(patch.Set) || Str.Equals(patch.Set, card.SetCode)))
-				card.PatchCard(patch);
+				card.Patch(patch);
 
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
 			card.Names = card.Names?.Select(_ => string.Intern(_.RemoveDiacritics())).ToList();
@@ -376,7 +412,18 @@ namespace Mtgdb.Dal
 		public bool IsPriceLoadingComplete { get; private set; }
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
-		private string SetsFile { get; }
+		internal string SetsFile { get; set; }
+
+		internal string[] CustomSetCodes
+		{
+			get => _customSetCodes;
+			set
+			{
+				_customSetCodes = value;
+				_customSetCodesSet = _customSetCodes.ToHashSet(Str.Comparer);
+			}
+		}
+
 		private string PatchFile { get; }
 
 		public Func<string, bool> FilterSetCode { get; set; } = _ => true;
@@ -389,7 +436,11 @@ namespace Mtgdb.Dal
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
 		public IDictionary<int, IList<Card>> CardsByMultiverseId { get; private set; }
 
-		private byte[] _streamContent;
+		private byte[] _defaultSetsContent;
+		private byte[][] _customSetContents;
+		private string[] _customSetCodes;
+		private HashSet<string> _customSetCodesSet;
+
 		internal Patch Patch { get; private set; }
 	}
 }

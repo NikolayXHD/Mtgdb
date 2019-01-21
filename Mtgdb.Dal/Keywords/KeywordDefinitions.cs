@@ -279,6 +279,7 @@ namespace Mtgdb.Dal
 
 			// non quick-filter values follow
 
+			"Addendum",
 			cost("Spectacle")
 		};
 
@@ -372,6 +373,7 @@ namespace Mtgdb.Dal
 			// non quick-filter values follow
 
 			count("Absorb"),
+			count("Adapt"),
 			count("Afflict"),
 			count("Afterlife"),
 			count("Amplify"),
@@ -434,6 +436,7 @@ namespace Mtgdb.Dal
 			cost("Recover"),
 			count("Reinforce"),
 			custom("Replicate", bound("replicate", notBefore: "cost")),
+			custom("Riot", bound("riot", notBefore:"(piker|ringleader)")),
 			count("Ripple"),
 			custom("Storm", bound(@"(grave)?storm",
 				notBefore: "(seeker|crow|world|elemental|spirit|sculptor|entity|shaman|fleet|the vault)",

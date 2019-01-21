@@ -4,11 +4,13 @@
   "SeriesFields": [],
   "SeriesFieldsSort": [],
   "ColumnFields": [
+    "ReleaseDate",
     "SetName",
     "SetCode"
   ],
   "ColumnFieldsSort": [
-    1,
+    2,
+    0,
     0
   ],
   "SummaryFields": [

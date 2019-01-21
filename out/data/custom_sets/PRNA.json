@@ -1,0 +1,424 @@
+{
+    "baseSetSize": 0,
+    "block": "Guilds of Ravnica",
+    "cards": [
+        {
+            "artist": "Dmitry Burmak",
+            "borderColor": "black",
+            "colorIdentity": [
+                "R"
+            ],
+            "colors": [
+                "R"
+            ],
+            "convertedManaCost": 3.0,
+            "flavorText": "\"Places, everyone!\"\n—Judith",
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{2}{R}",
+            "name": "Light Up the Stage",
+            "number": "107",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "uncommon",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "Light Up the Stage doesn’t change when you can play the exiled cards. For example, if you exile a sorcery card, you can cast it only during your main phase when the stack is empty. If you exile a land card, you can play it only during your main phase and only if you have an available land play remaining."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "Casting an exiled card causes it to leave exile. You can’t cast it multiple times."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "If you don’t play a card exiled this way, it remains in exile."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "Damage dealt to a player causes that player to lose that much life."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "Spectacle doesn’t change when you can cast the card. For example, you can’t cast a sorcery with spectacle during an opponent’s turn unless another effect allows you to do so, even if that player has lost life this turn."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "To determine the total cost of a spell, start with the mana cost or alternative cost you’re paying (such as a spectacle cost), add any cost increases, then apply any cost reductions. The converted mana cost of the spell remains unchanged, no matter what the total cost to cast it was."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "A card’s spectacle cost is the same no matter how much life your opponents lost or how many opponents lost life."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "In a multiplayer game, if an opponent loses life and later that turn leaves the game, you can cast a spell for its spectacle cost. (If a player leaves the game during their turn, that turn continues without an active player.)"
+                }
+            ],
+            "scryfallId": "f2ee6661-e63e-4fba-8da1-70a485097401",
+            "starter": true,
+            "subtypes": [],
+            "supertypes": [],
+            "text": "Spectacle {R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)\nExile the top two cards of your library. Until the end of your next turn, you may play those cards.",
+            "type": "Sorcery",
+            "types": [
+                "Sorcery"
+            ],
+            "uuid": "cbb2963a-2717-565b-afa7-8ae962c08c59",
+            "watermark": "planeswalker"
+        },
+        {
+            "artist": "Seb McKinnon",
+            "borderColor": "black",
+            "colorIdentity": [
+                "G",
+                "U"
+            ],
+            "colors": [
+                "G",
+                "U"
+            ],
+            "convertedManaCost": 2.0,
+            "flavorText": "Cyclical and spiral patterns are the specialty of the Gyre Clade, which sees to revitalize the cycles of nature.",
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{G}{U}",
+            "name": "Growth Spiral",
+            "number": "178",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "common",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "Growth Spiral’s effect doesn’t count as playing a land. It can put a land card onto the battlefield even if it’s not your turn or if you’ve already played your land for the turn."
+                }
+            ],
+            "scryfallId": "288ed3e9-4485-44ad-8561-efa09ed96f34",
+            "starter": true,
+            "subtypes": [],
+            "supertypes": [],
+            "text": "Draw a card. You may put a land card from your hand onto the battlefield.",
+            "type": "Instant",
+            "types": [
+                "Instant"
+            ],
+            "uuid": "2dc04540-cc5d-5649-8acc-b23ec38d1df3",
+            "watermark": "planeswalker"
+        },
+        {
+            "artist": "Matt Stewart",
+            "borderColor": "black",
+            "colorIdentity": [
+                "U",
+                "W"
+            ],
+            "colors": [
+                "U",
+                "W"
+            ],
+            "convertedManaCost": 2.0,
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": false,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{W}{U}",
+            "name": "Lavinia, Azorius Renegade",
+            "number": "189",
+            "power": "2",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "rare",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "Players may cast spells that they know Lavinia will counter. Any abilities that trigger when spells are cast will trigger and resolve if appropriate, and any effects that count spells cast will count those spells if appropriate."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "Effects that modify or replace the cost to cast a spell (such as spectacle) don’t affect the spell’s converted mana cost, so they won’t change whether Lavinia’s first ability restricts that spell from being cast."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "For spells with {X} in their mana costs, use the value chosen for X to determine the spell’s converted mana cost."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "If an effect allows a player to cast a spell without paying its mana cost, that player can’t choose to cast it and pay its mana cost unless another rule or effect allows that player to cast it that way."
+                }
+            ],
+            "scryfallId": "37361166-330b-475e-b300-1e89cc1afaff",
+            "starter": true,
+            "subtypes": [
+                "Human",
+                "Soldier"
+            ],
+            "supertypes": [
+                "Legendary"
+            ],
+            "text": "Each opponent can't cast noncreature spells with converted mana cost greater than the number of lands that player controls.\nWhenever an opponent casts a spell, if no mana was spent to cast it, counter that spell.",
+            "toughness": "2",
+            "type": "Legendary Creature — Human Soldier",
+            "types": [
+                "Creature"
+            ],
+            "uuid": "327b8f73-8209-5dec-aa41-cd241845ec47"
+        },
+        {
+            "artist": "Anthony Palumbo",
+            "borderColor": "black",
+            "colorIdentity": [
+                "B",
+                "W"
+            ],
+            "colors": [
+                "B",
+                "W"
+            ],
+            "convertedManaCost": 3.0,
+            "flavorText": "\"Your debt is erased.\"\n—Hilgur, Orzhov euthanist",
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "layout": "normal",
+            "legalities": {
+                "1v1": "Legal",
+                "commander": "Legal",
+                "duel": "Legal",
+                "future": "Legal",
+                "legacy": "Legal",
+                "modern": "Legal",
+                "standard": "Legal",
+                "vintage": "Legal"
+            },
+            "manaCost": "{1}{W}{B}",
+            "name": "Mortify",
+            "number": "192",
+            "printings": [
+                "C16",
+                "C17",
+                "C18",
+                "CM2",
+                "CMA",
+                "CMD",
+                "CNS",
+                "DDK",
+                "E02",
+                "GPT",
+                "P07",
+                "PRM",
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "uncommon",
+            "rulings": [
+                {
+                    "date": "2006-02-01",
+                    "text": "This spell isn’t Modal. When it resolves, it will destroy the target if it’s a creature or an enchantment, even if it changed from one to the other between targeting and resolution."
+                }
+            ],
+            "scryfallId": "645f4d28-68cb-4386-91b9-c748930d69fa",
+            "starter": true,
+            "subtypes": [],
+            "supertypes": [],
+            "text": "Destroy target creature or enchantment.",
+            "type": "Instant",
+            "types": [
+                "Instant"
+            ],
+            "uuid": "3af7c495-bf35-5d50-8481-5c9194907a20",
+            "watermark": "planeswalker"
+        },
+        {
+            "artist": "Tyler Walpole",
+            "borderColor": "black",
+            "colorIdentity": [
+                "B",
+                "R"
+            ],
+            "colors": [
+                "B",
+                "R"
+            ],
+            "convertedManaCost": 4.0,
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{B}{B}{R}{R}",
+            "name": "Rakdos Firewheeler",
+            "number": "197",
+            "power": "4",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "uncommon",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "If you can’t target any opponent with Rakdos Firewheeler’s ability, the ability doesn’t go on the stack. You can’t have it deal 2 damage to any creature or planeswalker. On the other hand, if you do choose legal targets but either target is illegal when the ability tries to resolve, the other is still affected as appropriate."
+                }
+            ],
+            "scryfallId": "73037cc3-1986-42b9-9917-fa20418c0d2f",
+            "starter": true,
+            "subtypes": [
+                "Human",
+                "Rogue"
+            ],
+            "supertypes": [],
+            "text": "When Rakdos Firewheeler enters the battlefield, it deals 2 damage to target opponent and 2 damage to up to one target creature or planeswalker.",
+            "toughness": "3",
+            "type": "Creature — Human Rogue",
+            "types": [
+                "Creature"
+            ],
+            "uuid": "4a4abb20-b345-59d0-8cc5-3ec34be17fe1"
+        },
+        {
+            "artist": "Simon Dominic",
+            "borderColor": "black",
+            "colorIdentity": [
+                "G",
+                "U"
+            ],
+            "colors": [
+                "G",
+                "U"
+            ],
+            "convertedManaCost": 2.0,
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{G}{U}",
+            "name": "Simic Ascendancy",
+            "number": "207",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "rare",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "An ability that triggers when counters are put on a permanent will trigger if that permanent somehow enters the battlefield with those counters."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "If Simic Ascendancy doesn’t have twenty or more growth counters on it as your upkeep begins, its last ability won’t trigger. You can’t take any actions during your turn before your upkeep begins."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "If the last ability does trigger, but counters are removed from Simic Ascendancy so it has fewer than twenty remaining on it, you won’t win the game."
+                },
+                {
+                    "date": "2019-01-25",
+                    "text": "If the last ability does trigger, but Simic Ascendancy leaves the battlefield, use the number of counters it had on it immediately before it left the battlefield to determine whether you win the game."
+                }
+            ],
+            "scryfallId": "e90192b4-696c-4d63-b752-0c891f50a810",
+            "starter": true,
+            "subtypes": [],
+            "supertypes": [],
+            "text": "{1}{G}{U}: Put a +1/+1 counter on target creature you control.\nWhenever one or more +1/+1 counters are put on a creature you control, put that many growth counters on Simic Ascendancy.\nAt the beginning of your upkeep, if Simic Ascendancy has twenty or more growth counters on it, you win the game.",
+            "type": "Enchantment",
+            "types": [
+                "Enchantment"
+            ],
+            "uuid": "31b35426-4899-54fb-b7cc-9eb64da600e4"
+        },
+        {
+            "artist": "Milivoj Ćeran",
+            "borderColor": "black",
+            "colorIdentity": [],
+            "colors": [],
+            "convertedManaCost": 8.0,
+            "foreignData": [],
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": false,
+            "layout": "normal",
+            "legalities": {
+                "future": "Legal",
+                "standard": "Legal"
+            },
+            "manaCost": "{8}",
+            "name": "Gate Colossus",
+            "number": "232",
+            "power": "8",
+            "printings": [
+                "PRNA",
+                "RNA"
+            ],
+            "rarity": "uncommon",
+            "rulings": [
+                {
+                    "date": "2019-01-25",
+                    "text": "Once a creature with power 3 or greater has blocked this creature, changing the power of the blocking creature won’t cause this creature to become unblocked."
+                }
+            ],
+            "scryfallId": "37d124dd-c5d8-4d53-820f-546be18685ef",
+            "starter": true,
+            "subtypes": [
+                "Construct"
+            ],
+            "supertypes": [],
+            "text": "This spell costs {1} less to cast for each Gate you control.\nGate Colossus can't be blocked by creatures with power 2 or less.\nWhenever a Gate enters the battlefield under your control, you may put Gate Colossus from your graveyard on top of your library.",
+            "toughness": "8",
+            "type": "Artifact Creature — Construct",
+            "types": [
+                "Artifact",
+                "Creature"
+            ],
+            "uuid": "ed6819de-1830-5493-bc5a-5b817acede4b"
+        }
+    ],
+    "code": "PRNA",
+    "meta": {
+        "date": "2018-01-12",
+        "version": "4.2.1"
+    },
+    "mtgoCode": "",
+    "name": "Ravnica Allegiance Promos",
+    "releaseDate": "2019-01-25",
+    "tokens": [],
+    "totalSetSize": 7,
+    "type": "promo"
+}

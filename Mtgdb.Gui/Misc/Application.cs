@@ -128,7 +128,7 @@ namespace Mtgdb.Gui
 				.Select(int.Parse);
 		}
 
-		public static string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v3.json");
+		public static string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v4.json");
 
 		private static string getHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
 

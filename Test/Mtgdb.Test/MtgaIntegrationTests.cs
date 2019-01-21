@@ -22,7 +22,10 @@ namespace Mtgdb.Test
 		public void Import_returns_non_empty_collection()
 		{
 			var integration = _kernel.Get<MtgArenaIntegration>();
-			var collection = integration.ImportCollection().ToList();
+			var cards = integration.ImportCollection();
+
+			Assert.That(cards, Is.Not.Null);
+			var collection = cards.ToList();
 
 			Assert.That(collection, Is.Not.Null);
 			Assert.That(collection, Is.Not.Empty);

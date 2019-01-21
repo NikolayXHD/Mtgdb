@@ -194,7 +194,7 @@ namespace Mtgdb.Dal
 		/// </summary>
 		[JsonProperty("uuid")]
 		[JsonConverter(typeof(InternedStringConverter))]
-		public string Id { get; set; }
+		public string MtgjsonId { get; set; }
 
 		/// <summary>
 		/// Id from mtgjson v 4.1.3 and earlier, non-unique per card face
@@ -202,6 +202,9 @@ namespace Mtgdb.Dal
 		[JsonProperty("scryfallId")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string ScryfallId { get; set; }
+
+		[JsonIgnore]
+		public string Id { get; set; }
 
 		/*
 
@@ -593,7 +596,7 @@ namespace Mtgdb.Dal
 
 
 
-		internal void PatchCard(CardPatch patch)
+		internal void Patch(CardPatch patch)
 		{
 			if (patch.Name != null)
 				NameEn = patch.Name;

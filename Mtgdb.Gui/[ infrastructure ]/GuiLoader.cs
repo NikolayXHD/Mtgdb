@@ -15,6 +15,7 @@ namespace Mtgdb.Gui
 		public GuiLoader(
 			Loader loader,
 			CardRepository repo,
+			CardRepository42 repo42,
 			CardRepositoryLegacy repoLegacy,
 			NewsService newsService,
 			DownloaderSubsystem downloaderSubsystem,
@@ -25,6 +26,7 @@ namespace Mtgdb.Gui
 		{
 			_loader = loader;
 			_repo = repo;
+			_repo42 = repo42;
 			_repoLegacy = repoLegacy;
 			_deckListConverter = deckListConverter;
 			_historyConverter = historyConverter;
@@ -34,7 +36,7 @@ namespace Mtgdb.Gui
 			_loader.AddTask(async () =>
 			{
 				if (deckListConverter.IsLegacyConversionRequired)
-					while (!deckListConverter.IsLegacyConversionCompleted)
+					while (!deckListConverter.IsConversionCompleted)
 						await TaskEx.Delay(100);
 
 				deckListModel.Load();
@@ -64,6 +66,7 @@ namespace Mtgdb.Gui
 
 			var legacyHistoryFiles = _historyConverter.FindLegacyFiles().ToList();
 			var v2HistoryFiles = _historyConverter.FindV2Files().ToList();
+			var v3HistoryFiles = _historyConverter.FindV3Files().ToList();
 
 			if (legacyHistoryFiles.Count != 0 || _deckListConverter.IsLegacyConversionRequired)
 			{
@@ -85,10 +88,23 @@ namespace Mtgdb.Gui
 
 			if (_deckListConverter.IsV2ConversionRequired)
 				_deckListConverter.ConvertV2List();
+
+			if (v3HistoryFiles.Count != 0 || _deckListConverter.IsV3ConversionRequired)
+			{
+				_repo42.LoadFile();
+				_repo42.Load();
+
+				foreach (var v3HistoryFile in v3HistoryFiles)
+					_historyConverter.ConvertV3File(v3HistoryFile);
+
+				if (_deckListConverter.IsV3ConversionRequired)
+					_deckListConverter.ConvertV3List();
+			}
 		}
 
 		private readonly Loader _loader;
 		private readonly CardRepository _repo;
+		private readonly CardRepository42 _repo42;
 		private readonly CardRepositoryLegacy _repoLegacy;
 		private readonly DeckListLegacyConverter _deckListConverter;
 		private readonly HistoryLegacyConverter _historyConverter;

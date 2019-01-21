@@ -80,20 +80,12 @@ namespace Mtgdb.Util
 					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir);
 				else
 					Console.WriteLine($"directory not found: {directory}");
-
-				return;
-			}
-
-			if (args.GetFlag("-forge"))
-			{
-				string setCode = args.GetParam("-set");
-				replaceForgeImages(setCode);
 			}
 		}
 
 		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir)
 		{
-			var integration = _kernel.Get<ForgeIntegration>();
+			var integration = _kernel.Get<ImageExport>();
 
 			if (small && !zoomed)
 				Console.Write("Small ");
@@ -129,34 +121,12 @@ namespace Mtgdb.Util
 			}
 		}
 
-		private static void replaceForgeImages(string setCode)
-		{
-			var integration = _kernel.Get<ForgeIntegration>();
-
-			Console.WriteLine($"Forge images for {setCode ?? "all sets"} at {integration.CardPicsPath} will be replaced.");
-			Console.WriteLine($"Replaced images will be backed up to {integration.CardPicsBackupPath}.");
-			Console.WriteLine(@"To change target directory edit etc\Mtgdb.Integration.Forge.xml and start this executable again.");
-			Console.WriteLine("To begin replacing Forge images press ENTER.");
-
-			Console.ReadLine();
-			integration.Load();
-
-			Console.WriteLine("== Start overriding Forge pictures ==");
-			integration.OverrideForgePictures(setCode);
-
-			Console.WriteLine("Replacing done. Press ENTER to exit");
-			Console.ReadLine();
-		}
-
 		private static void printUsage()
 		{
 			Console.WriteLine("Usage:");
 
 			Console.WriteLine("Mtgdb.Util.exe -rename_artworks directory");
 			Console.WriteLine("\t- rename artwork images moving artist and tags file attribute to name like cardname.[set soi,abc][artist John Doe].jpg");
-
-			Console.WriteLine("Mtgdb.Util.exe -forge [-set setcode]");
-			Console.WriteLine("\t- replace images in Forge image directory");
 
 			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small");
 			Console.WriteLine("\t- export small images to directory specified after -path");

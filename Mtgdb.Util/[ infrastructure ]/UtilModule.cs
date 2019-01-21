@@ -6,10 +6,8 @@ namespace Mtgdb.Util
 	{
 		public override void Load()
 		{
-			Kernel.BindConfig<ForgeIntegrationConfig>();
-
 			// ReSharper disable once PossibleNullReferenceException
-			Kernel.Bind<ForgeIntegration>()
+			Kernel.Bind<ImageExport>()
 				.ToSelf()
 				.InSingletonScope();
 		}

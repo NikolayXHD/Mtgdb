@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Lucene.Net.Contrib;
 using Mtgdb.Dal;
 using Mtgdb.Index;
+using Token = Lucene.Net.Contrib.Token;
 
 namespace Mtgdb.Gui
 {

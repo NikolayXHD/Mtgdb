@@ -7,7 +7,6 @@ using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
-using NLog;
 using File = System.IO.File;
 
 namespace Mtgdb.Downloader
