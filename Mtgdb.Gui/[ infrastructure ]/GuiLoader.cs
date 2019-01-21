@@ -68,14 +68,21 @@ namespace Mtgdb.Gui
 			var v2HistoryFiles = _historyConverter.FindV2Files().ToList();
 			var v3HistoryFiles = _historyConverter.FindV3Files().ToList();
 
-			if (legacyHistoryFiles.Count != 0 || _deckListConverter.IsLegacyConversionRequired)
+			bool legacyConversionRequired = legacyHistoryFiles.Count != 0 || _deckListConverter.IsLegacyConversionRequired;
+			bool v2ConversionRequired = v2HistoryFiles.Count != 0 || _deckListConverter.IsV2ConversionRequired;
+			bool v3ConversionRequired = v3HistoryFiles.Count != 0 || _deckListConverter.IsV3ConversionRequired;
+
+			if (!legacyConversionRequired && !v2ConversionRequired && !v3ConversionRequired)
+				return;
+
+			_repoLegacy.LoadFile();
+			_repoLegacy.Load();
+
+			while (!_repo.IsLoadingComplete)
+				await TaskEx.Delay(100);
+
+			if (legacyConversionRequired)
 			{
-				_repoLegacy.LoadFile();
-				_repoLegacy.Load();
-
-				while (!_repo.IsLoadingComplete)
-					await TaskEx.Delay(100);
-
 				foreach (var legacyHistoryFile in legacyHistoryFiles)
 					_historyConverter.ConvertLegacyFile(legacyHistoryFile);
 
@@ -83,13 +90,16 @@ namespace Mtgdb.Gui
 					_deckListConverter.ConvertLegacyList();
 			}
 
-			foreach (var v2HistoryFile in v2HistoryFiles)
-				_historyConverter.ConvertV2File(v2HistoryFile);
+			if (v2ConversionRequired)
+			{
+				foreach (var v2HistoryFile in v2HistoryFiles)
+					_historyConverter.ConvertV2File(v2HistoryFile);
 
-			if (_deckListConverter.IsV2ConversionRequired)
-				_deckListConverter.ConvertV2List();
+				if (_deckListConverter.IsV2ConversionRequired)
+					_deckListConverter.ConvertV2List();
+			}
 
-			if (v3HistoryFiles.Count != 0 || _deckListConverter.IsV3ConversionRequired)
+			if (v3ConversionRequired)
 			{
 				_repo42.LoadFile();
 				_repo42.Load();
