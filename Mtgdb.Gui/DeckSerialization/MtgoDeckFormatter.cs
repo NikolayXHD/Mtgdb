@@ -159,8 +159,8 @@ namespace Mtgdb.Gui
 		public static string ToMtgoName(Card card)
 		{
 			string name;
-			if (Str.Equals(card.Layout, "split") || Str.Equals(card.Layout, "aftermath"))
-				name = card.Names[0] + "/" + card.Names[1];
+			if (Str.Equals(card.Layout, CardLayouts.Split) || Str.Equals(card.Layout, CardLayouts.Aftermath))
+				name = card.Faces[0].NameEn + "/" + card.Faces[1].NameEn;
 			else
 				name = card.NameEn;
 
@@ -185,9 +185,8 @@ namespace Mtgdb.Gui
 		{
 			foreach (var cardId in deckZone.Order)
 			{
+				var card = _repository.CardsById[cardId].Faces.Main;
 				var count = deckZone.Count[cardId];
-				var card = _repository.CardsById[cardId];
-
 				result.AppendLine($"{count} {ToMtgoName(card)}");
 			}
 		}

@@ -71,7 +71,7 @@ namespace Mtgdb.Util
 
 			if (forge)
 			{
-				if (Str.Equals(card.Layout, "aftermath") && fileName.IndexOf("»", Str.Comparison) < 0)
+				if (Str.Equals(card.Layout, CardLayouts.Aftermath) && fileName.IndexOf("»", Str.Comparison) < 0)
 				{
 					int[] capitalIndices = Enumerable.Range(0, fileName.Length)
 						.Where(i => char.IsUpper(fileName[i]))

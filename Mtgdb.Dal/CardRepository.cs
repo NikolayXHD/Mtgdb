@@ -174,22 +174,22 @@ namespace Mtgdb.Dal
 		{
 			if (String.IsNullOrEmpty(card.Layout))
 				card.Layout = "Normal";
-			else if (Str.Equals(card.Layout, "Split"))
+			else if (Str.Equals(card.Layout, CardLayouts.Split))
 			{
-				if (card.GetCastKeywords().Contains("Aftermath"))
+				if (card.GetCastKeywords().Contains(KeywordDefinitions.AftermathKeyword))
 				{
-					card.Layout = "Aftermath";
+					card.Layout = CardLayouts.Aftermath;
 
-					foreach (var rotatedCard in card.Set.CardsByName[card.Names[0]])
-						rotatedCard.Layout = "Aftermath";
+					foreach (var rotatedCard in card.FaceVariants.Main)
+						rotatedCard.Layout = CardLayouts.Aftermath;
 				}
 			}
 			else if (Str.Equals(card.Layout, "Planar"))
 			{
 				if (card.TypesArr.Contains("Phenomenon", Str.Comparer))
-					card.Layout = "Phenomenon";
+					card.Layout = CardLayouts.Phenomenon;
 				else if (card.TypesArr.Contains("Plane"))
-					card.Layout = "Plane";
+					card.Layout = CardLayouts.Plane;
 			}
 
 			const string timeshifted = "Timeshifted ";
@@ -346,30 +346,6 @@ namespace Mtgdb.Dal
 			}
 
 			return DateTime.MinValue;
-		}
-
-		public List<Card> GetForms(Card card, UiModel ui)
-		{
-			var forms = new List<Card> { card };
-
-			if (card.Names == null)
-				return forms;
-
-			foreach (string name in card.Names)
-			{
-				string namesakeName = name.RemoveDiacritics();
-
-				if (card.NameNormalized == namesakeName)
-					continue;
-
-				var namesakeWithImage = CardsByName.TryGet(namesakeName)
-					?.FirstOrDefault(c => c.HasImage(ui));
-
-				if (namesakeWithImage != null)
-					forms.Add(namesakeWithImage);
-			}
-
-			return forms;
 		}
 
 		public void FillLocalizations(LocalizationRepository localizationRepository)

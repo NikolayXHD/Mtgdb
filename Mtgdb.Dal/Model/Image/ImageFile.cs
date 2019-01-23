@@ -80,14 +80,12 @@ namespace Mtgdb.Dal
 		public ImageModel ApplyRotation(Card card, bool zoom)
 		{
 			bool isAftermath =
-				Str.Equals(card.Layout, "aftermath") &&
-				card.Names?.Count == 2 &&
-				Str.Equals(card.NameEn, card.Names[1]);
+				Str.Equals(card.Layout, CardLayouts.Aftermath) && card == card.Faces[1];
 
 			if (isAftermath)
 				return rotateLeft();
 
-			if (zoom && Str.Equals(card.Layout, "split"))
+			if (zoom && Str.Equals(card.Layout, CardLayouts.Split))
 				return rotateRight();
 
 			if (card.IsFlipped())

@@ -1,3 +1,5 @@
+using System;
+
 namespace Mtgdb.Dal
 {
 	public static class CardExtensions
@@ -16,8 +18,17 @@ namespace Mtgdb.Dal
 		public static int MinCountInDeck(this Card c) => 0;
 
 		public static bool IsFlipped(this Card c) =>
-			Str.Equals(c.Layout, "flip")
-			&& c.Names?.Count == 2 &&
-			Str.Equals(c.NameEn, c.Names[1]);
+			Str.Equals(c.Layout, CardLayouts.Flip) && c.Faces[1] == c;
+
+		internal static string GetFaceName(this Card c, int i)
+		{
+			if (c.Names == null)
+				if (i == 0)
+					return c.NameNormalized;
+				else
+					throw new IndexOutOfRangeException();
+
+			return c.Names[i];
+		}
 	}
 }

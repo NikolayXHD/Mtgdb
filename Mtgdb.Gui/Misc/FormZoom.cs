@@ -92,7 +92,15 @@ namespace Mtgdb.Gui
 
 			_cts?.Cancel();
 
-			_cardForms = _cardRepository.GetForms(card, ui);
+			_cardForms = card.Faces
+				.OrderByDescending(face => face.NameNormalized == card.NameNormalized)
+				.Select(face => _cardRepository.CardsByName[face.NameNormalized]
+					.AtMax(c => c.HasImage(ui))
+					.ThenAtMax(c => c.Set == card.Set)
+					.ThenAtMax(c => c == card)
+					.Find())
+				.Where(c => c.HasImage(ui))
+				.ToList();
 
 			foreach (var oldImg in _images)
 				oldImg.Dispose();

@@ -223,7 +223,7 @@ namespace Mtgdb.Dal
 
 		public static readonly IList<string> CastKeywords = new[]
 		{
-			"Aftermath",
+			AftermathKeyword,
 			custom("Affinity", bound("affinity", before: "for")),
 			count("Awaken"),
 			cost("Bestow", bound("bestow", notBefore: "cost")),
@@ -479,17 +479,17 @@ namespace Mtgdb.Dal
 
 		public static readonly IList<string> Layout = new[]
 		{
-			"Normal",
-			"Aftermath",
-			"Split",
-			"Meld",
-			"Leveler",
-			"Transform",
-			"Flip",
-			"Phenomenon",
-			"Plane",
-			"Scheme",
-			"Vanguard",
+			CardLayouts.Normal,
+			CardLayouts.Aftermath,
+			CardLayouts.Split,
+			CardLayouts.Meld,
+			CardLayouts.Leveler,
+			CardLayouts.Transform,
+			CardLayouts.Flip,
+			CardLayouts.Phenomenon,
+			CardLayouts.Plane,
+			CardLayouts.Scheme,
+			CardLayouts.Vanguard,
 			null
 		};
 
@@ -575,5 +575,7 @@ namespace Mtgdb.Dal
 			@" ((a|any|this|these|that|those|target) )?(it|abilit(y|ies)|costs?|spells?|permanents?|vehicles?)\b";
 
 		private const string CountSuffix = @"( (\d+|x)\b| ?— ?sunburst)";
+
+		public const string AftermathKeyword = "Aftermath";
 	}
 }

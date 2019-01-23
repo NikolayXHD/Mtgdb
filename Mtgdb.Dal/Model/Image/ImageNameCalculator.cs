@@ -12,9 +12,11 @@ namespace Mtgdb.Dal
 			foreach (var pair in set.CardsByName)
 			{
 				var cards = pair.Value;
-				if (cards.First().IsFlipped())
+				var first = cards.First();
+
+				if (first.IsFlipped())
 				{
-					var unflippedCardName = cards.First().Names[0];
+					var unflippedCardName = first.Faces.Main.NameNormalized;
 
 					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(unflippedCardName);
 					string imageName = customImageOrder?.ImageName ?? unflippedCardName;
@@ -32,9 +34,9 @@ namespace Mtgdb.Dal
 						var card = cards[i];
 
 						string imageName = customImageOrder?.ImageName ?? (
-							Str.Equals(card.Layout, "split")
-								? string.Concat(card.Names)
-								: card.NameEn);
+							Str.Equals(card.Layout, CardLayouts.Split)
+								? string.Concat(card.Faces.Select(c=>c.NameNormalized))
+								: card.NameNormalized);
 
 						card.ImageName = calculateImageName(imageName, i, cards.Count);
 					}

@@ -112,20 +112,11 @@ namespace Mtgdb.Gui
 				var count = deckZone.Count[cardId];
 				var card = _repo.CardsById[cardId];
 
-				string name = card.NameEn;
 				string number = card.Number;
-				if (DoubleFacedLayouts.Contains(card.Layout))
-				{
-					bool deckContainsOtherSide = deckZone.Order.Any(
-						otherId => card.Names.Contains(_repo.CardsById[otherId].NameEn, Str.Comparer));
+				string name = card.Faces.Main.NameEn;
 
-					if (deckContainsOtherSide && card.Names.Count == 2 && Str.Equals(card.NameEn, card.Names[1]))
-						continue;
-
-					name = card.Names[0];
-					if (number.EndsWith("a", Str.Comparison))
-						number = number.Substring(0, number.Length - 1);
-				}
+				if (CardLayouts.DoubleFacedLayouts.Contains(card.Layout) && number.EndsWith("a", Str.Comparison))
+					number = number.Substring(0, number.Length - 1);
 
 				string setCode = _mtgaSetCodes.TryGet(card.SetCode) ?? card.SetCode;
 				result.AppendLine($"{count} {name} ({setCode}) {number}");
@@ -161,11 +152,5 @@ namespace Mtgdb.Gui
 
 		private static readonly Dictionary<string, string> _setCodesByMtga =
 			_mtgaSetCodes.ToDictionary(pair => pair.Value, pair => pair.Key, Str.Comparer);
-
-		private static readonly HashSet<string> DoubleFacedLayouts =
-			new HashSet<string>(Str.Comparer)
-			{
-				"Aftermath", "Split", "Double-faced", "Flip"
-			};
 	}
 }

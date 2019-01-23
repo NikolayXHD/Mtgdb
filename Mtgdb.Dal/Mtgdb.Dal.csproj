@@ -135,7 +135,10 @@
     <Compile Include="Index\CardSpellchecker.cs" />
     <Compile Include="Keywords\KeywordQueryTerm.cs" />
     <Compile Include="Model\CardExtensions.cs" />
+    <Compile Include="Model\Mtgjson\CardFaces.cs" />
+    <Compile Include="Model\Mtgjson\CardFaceVariants.cs" />
     <Compile Include="Model\Mtgjson\CardId.cs" />
+    <Compile Include="Model\Mtgjson\CardLayouts.cs" />
     <Compile Include="Model\Mtgjson\GuidV5.cs" />
     <Compile Include="Model\Patch\ImageNamePatch.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />

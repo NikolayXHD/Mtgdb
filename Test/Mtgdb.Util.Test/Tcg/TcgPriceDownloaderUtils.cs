@@ -169,17 +169,13 @@ namespace Mtgdb.Util
 
 		private static string preProcessMtgjsonName(Card card)
 		{
-			var name = card.NameEn;
+			string name = card.NameNormalized;
 
-			// ReSharper disable once CommentTypo
-			// Sauté
-			name = name.RemoveDiacritics();
+			if (Str.Equals(card.Layout, CardLayouts.Split) || Str.Equals(card.Layout, CardLayouts.Aftermath))
+				return string.Join("/", card.Faces.Select(c=>c.NameNormalized));
 
-			if (Str.Equals(card.Layout, "split") || Str.Equals(card.Layout, "aftermath"))
-				return string.Join("/", card.Names);
-
-			if (Str.Equals(card.Layout, "flip"))
-				return card.Names[0];
+			if (Str.Equals(card.Layout, CardLayouts.Flip))
+				return card.Faces.Main.NameNormalized;
 
 			if (name.EndsWith(" token card", Str.Comparison))
 				name = name.Substring(0, name.Length - " card".Length);

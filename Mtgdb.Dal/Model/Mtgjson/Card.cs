@@ -97,7 +97,7 @@ namespace Mtgdb.Dal
 		/// </summary>
 		[JsonProperty("names")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> Names { get; set; }
+		internal IList<string> Names { get; set; }
 
 		/// <summary>
 		/// Number of the card.
@@ -811,6 +811,24 @@ namespace Mtgdb.Dal
 		private CardKeywords _keywords;
 
 		private static readonly HashSet<string> _foundDuplicates = new HashSet<string>(Str.Comparer);
+
+
+
+		[JsonIgnore]
+		private CardFaceVariants _faceVariants;
+
+		[JsonIgnore]
+		public CardFaceVariants FaceVariants =>
+			_faceVariants ?? (_faceVariants = new CardFaceVariants(this));
+
+		[JsonIgnore]
+		private CardFaces _faces;
+
+		[JsonIgnore]
+		public CardFaces Faces =>
+			_faces ?? (_faces = new CardFaces(FaceVariants));
+
+
 
 		public static readonly HashSet<string> ColoredBasicLandNames =
 			new HashSet<string>(Str.Comparer)
