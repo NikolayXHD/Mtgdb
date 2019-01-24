@@ -6,10 +6,10 @@ namespace Mtgdb.Controls
 {
 	public class DeckListLegacyConverter
 	{
-		public DeckListLegacyConverter(DeckListModel model, DeckConverter deckConverter)
+		public DeckListLegacyConverter(DeckListModel model, DeckMigrator deckMigrator)
 		{
 			_model = model;
-			_deckConverter = deckConverter;
+			_deckMigrator = deckMigrator;
 
 			if (File.Exists(_model.FileName))
 				return;
@@ -28,7 +28,7 @@ namespace Mtgdb.Controls
 			var deserialized = _model.Deserialize(legacyFileContent);
 
 			deserialized.Decks = deserialized.Decks
-				.Select(_deckConverter.ConvertLegacyDeck)
+				.Select(_deckMigrator.ConvertLegacyDeck)
 				.ToList();
 
 			deserialized.Collection = deserialized.Collection?.Invoke0(convertLegacyCollection);
@@ -42,7 +42,7 @@ namespace Mtgdb.Controls
 		private CollectionSnapshot convertLegacyCollection(CollectionSnapshot collection)
 		{
 			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
-			var converted = _deckConverter.ConvertLegacyDeck(deck);
+			var converted = _deckMigrator.ConvertLegacyDeck(deck);
 
 			return new CollectionSnapshot
 			{
@@ -56,7 +56,7 @@ namespace Mtgdb.Controls
 			var deserialized = _model.Deserialize(v2FileContent);
 
 			deserialized.Decks = deserialized.Decks
-				.Select(_deckConverter.ConvertV2Deck)
+				.Select(_deckMigrator.ConvertV2Deck)
 				.ToList();
 
 			deserialized.Collection = deserialized.Collection?.Invoke0(convertV2Collection);
@@ -70,7 +70,7 @@ namespace Mtgdb.Controls
 		private CollectionSnapshot convertV2Collection(CollectionSnapshot collection)
 		{
 			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
-			var converted = _deckConverter.ConvertV2Deck(deck);
+			var converted = _deckMigrator.ConvertV2Deck(deck);
 
 			return new CollectionSnapshot
 			{
@@ -84,7 +84,7 @@ namespace Mtgdb.Controls
 			var deserialized = _model.Deserialize(v3FileContent);
 
 			deserialized.Decks = deserialized.Decks
-				.Select(_deckConverter.ConvertV3Deck)
+				.Select(_deckMigrator.ConvertV3Deck)
 				.ToList();
 
 			deserialized.Collection = deserialized.Collection?.Invoke0(convertV3Collection);
@@ -98,7 +98,7 @@ namespace Mtgdb.Controls
 		private CollectionSnapshot convertV3Collection(CollectionSnapshot collection)
 		{
 			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
-			var converted = _deckConverter.ConvertV3Deck(deck);
+			var converted = _deckMigrator.ConvertV3Deck(deck);
 
 			return new CollectionSnapshot
 			{
@@ -119,6 +119,6 @@ namespace Mtgdb.Controls
 		private static readonly string _v3FileName = AppDir.History.AddPath("decks.v3.json");
 
 		private readonly DeckListModel _model;
-		private readonly DeckConverter _deckConverter;
+		private readonly DeckMigrator _deckMigrator;
 	}
 }

@@ -8,13 +8,9 @@ namespace Mtgdb.Gui
 {
 	public class XMageDeckFormatter : RegexDeckFormatter
 	{
-		private readonly CardRepository _repository;
-		private static readonly Regex _idRegex = new Regex(@"^\d+", RegexOptions.Compiled);
-		private const string Header = "NAME:";
-
-		public XMageDeckFormatter(CardRepository repository)
+		public XMageDeckFormatter(CardRepository repo)
+			:base(repo)
 		{
-			_repository = repository;
 		}
 
 		public override Card GetCard(Match match)
@@ -26,8 +22,8 @@ namespace Mtgdb.Gui
 			name = fromXMageName(name);
 
 			var cards =
-				_repository.SetsByCode.TryGet(setCode)?.CardsByName.TryGet(name) ??
-				_repository.CardsByName.TryGet(name);
+				Repo.SetsByCode.TryGet(setCode)?.CardsByName.TryGet(name) ??
+				Repo.CardsByName.TryGet(name);
 
 			var card = cards
 				?.OrderByDescending(_ => _.ReleaseDate)
@@ -71,7 +67,7 @@ namespace Mtgdb.Gui
 			return xMageName;
 		}
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			var result = new StringBuilder();
 			result.AppendLine(Header + name);
@@ -87,7 +83,7 @@ namespace Mtgdb.Gui
 			foreach (var cardId in zone.Order)
 			{
 				var count = zone.Count[cardId];
-				var card = _repository.CardsById[cardId];
+				var card = Repo.CardsById[cardId];
 
 				result.AppendLine($"{prefix}{count} [{card.SetCode}:{0}] {card.NameNormalized}");
 			}
@@ -106,5 +102,8 @@ namespace Mtgdb.Gui
 
 		public override string Description => "XMage {type}";
 		public override string FileNamePattern => @"*.dck";
+
+		private static readonly Regex _idRegex = new Regex(@"^\d+", RegexOptions.Compiled);
+		private const string Header = "NAME:";
 	}
 }

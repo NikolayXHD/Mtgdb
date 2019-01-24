@@ -27,7 +27,7 @@ namespace Mtgdb.Test
 				() => cardRepo.Load(),
 				() => cardRepoLegacy.Load());
 
-			var converter = new DeckConverter(cardRepo, null, cardRepoLegacy);
+			var converter = new DeckMigrator(cardRepo, null, cardRepoLegacy);
 			var messages = new StringBuilder();
 			foreach (var set in cardRepoLegacy.SetsByCode.Values)
 			{
@@ -65,7 +65,7 @@ namespace Mtgdb.Test
 				() => cardRepo.Load(),
 				() => cardRepo42.Load());
 
-			var converter = new DeckConverter(cardRepo, cardRepo42, null);
+			var converter = new DeckMigrator(cardRepo, cardRepo42, null);
 			var messages = new StringBuilder();
 
 			foreach (string id in cardRepo42.Ids)

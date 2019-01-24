@@ -10,9 +10,9 @@ namespace Mtgdb.Gui
 {
 	public class MtgoDeckFormatter : RegexDeckFormatter
 	{
-		public MtgoDeckFormatter(CardRepository repository)
+		public MtgoDeckFormatter(CardRepository repo)
+			:base(repo)
 		{
-			_repository = repository;
 		}
 
 		public override Deck ImportDeck(string serialized)
@@ -22,7 +22,7 @@ namespace Mtgdb.Gui
 			_isSideboard = false;
 			_sideboardIndicator = getSideboardIndicator(serialized);
 			var deck = base.ImportDeck(serialized);
-			new XitaxDeckTransformation(_repository).Transform(deck);
+			new XitaxDeckTransformation(Repo).Transform(deck);
 			return deck;
 		}
 
@@ -170,7 +170,7 @@ namespace Mtgdb.Gui
 			return name;
 		}
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			var result = new StringBuilder();
 
@@ -185,7 +185,7 @@ namespace Mtgdb.Gui
 		{
 			foreach (var cardId in deckZone.Order)
 			{
-				var card = _repository.CardsById[cardId].Faces.Main;
+				var card = Repo.CardsById[cardId].Faces.Main;
 				var count = deckZone.Count[cardId];
 				result.AppendLine($"{count} {ToMtgoName(card)}");
 			}
@@ -203,7 +203,7 @@ namespace Mtgdb.Gui
 		private void ensureLoaded()
 		{
 			if (_cardsByName == null)
-				_cardsByName = _repository.Cards
+				_cardsByName = Repo.Cards
 					.GroupBy(_ => _.NameEn)
 					.ToDictionary(_ => _.Key, _ => _.ToList());
 		}
@@ -214,7 +214,6 @@ namespace Mtgdb.Gui
 		private bool _isSideboard;
 		private string _sideboardIndicator;
 
-		private readonly CardRepository _repository;
 		private Dictionary<string, List<Card>> _cardsByName;
 
 		private static readonly Dictionary<string, string> _mtgoNameByName =

@@ -33,17 +33,20 @@ namespace Mtgdb.Gui
 				MtgoFormatter
 			};
 
-			ImportedFilePatterns = _formatters
+			_loadFormatters = _formatters.Where(_ => _.SupportsImport && _.SupportsFile).ToArray();
+			_saveFormatters = _formatters.Where(_ => _.SupportsExport && _.SupportsFile).ToArray();
+
+			ImportedFilePatterns = _loadFormatters
 				.Where(_ => _.SupportsImport)
 				.Select(f => f.FileNamePattern)
 				.Distinct()
 				.ToReadOnlyList();
 
 			_loadFilter = string.Join(@"|", Sequence.From($"Any {{type}}|{string.Join(@";", ImportedFilePatterns)}").Concat(
-				_formatters.Where(_ => _.SupportsImport && _.SupportsFile).Select(f => $"{f.Description}|{f.FileNamePattern}")));
+				_loadFormatters.Select(f => $"{f.Description}|{f.FileNamePattern}")));
 
 			_saveFilter = string.Join(@"|",
-				_formatters.Where(_ => _.SupportsExport && _.SupportsFile).Select(f => $"{f.Description}|{f.FileNamePattern}"));
+				_saveFormatters.Select(f => $"{f.Description}|{f.FileNamePattern}"));
 
 			Directory.CreateDirectory(AppDir.Save);
 		}
@@ -70,7 +73,7 @@ namespace Mtgdb.Gui
 				deck.Name = Path.GetFileNameWithoutExtension(fileToSave.File);
 
 			var name = Path.GetFileNameWithoutExtension(fileToSave.File);
-			var formatter = _formatters[fileToSave.FormatIndex];
+			var formatter = _saveFormatters[fileToSave.FormatIndex];
 
 			string serialized = formatter.ExportDeck(name, deck);
 
@@ -194,7 +197,7 @@ namespace Mtgdb.Gui
 
 				deck.Error = "Deck format is not supported";
 
-				var hint = _formatters.Where(f => Str.Equals(f.FileNamePattern, format) && f.SupportsImport)
+				var hint = _loadFormatters.Where(f => Str.Equals(f.FileNamePattern, format))
 					.Select(f => f.FormatHint)
 					.FirstOrDefault();
 
@@ -322,6 +325,8 @@ namespace Mtgdb.Gui
 		private readonly string _saveFilter;
 
 		private readonly IDeckFormatter[] _formatters;
+		private readonly IList<IDeckFormatter> _loadFormatters;
+		private readonly IList<IDeckFormatter> _saveFormatters;
 		public IReadOnlyList<string> ImportedFilePatterns { get; }
 		public FileDialogState State { get; } = new FileDialogState();
 

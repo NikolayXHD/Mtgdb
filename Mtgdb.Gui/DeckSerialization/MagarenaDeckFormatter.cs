@@ -9,21 +9,21 @@ namespace Mtgdb.Gui
 {
 	public class MagarenaDeckFormatter : RegexDeckFormatter
 	{
-		public MagarenaDeckFormatter(CardRepository cardRepo)
+		public MagarenaDeckFormatter(CardRepository repo)
+			:base(repo)
 		{
-			_cardRepo = cardRepo;
 		}
 
 		public override Deck ImportDeck(string serialized)
 		{
 			var deck = base.ImportDeck(serialized);
-			new XitaxDeckTransformation(_cardRepo).Transform(deck);
+			new XitaxDeckTransformation(Repo).Transform(deck);
 			return deck;
 		}
 
 		public override Card GetCard(Match match)
 		{
-			var card = _cardRepo.CardsByName.TryGet(match.Groups["name"].Value.RemoveDiacritics())
+			var card = Repo.CardsByName.TryGet(match.Groups["name"].Value.RemoveDiacritics())
 				// card_by_name_sorting
 				?.First();
 
@@ -41,7 +41,7 @@ namespace Mtgdb.Gui
 
 
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			var creatures = new List<Card>();
 			var lands = new List<Card>();
@@ -49,7 +49,7 @@ namespace Mtgdb.Gui
 
 			foreach (var cardId in current.MainDeck.Order)
 			{
-				var card = _cardRepo.CardsById[cardId];
+				var card = Repo.CardsById[cardId];
 
 				if (card.TypeEn.IndexOf(@"Creature", Str.Comparison) >= 0)
 					creatures.Add(card);
@@ -100,7 +100,5 @@ namespace Mtgdb.Gui
 
 		public override string Description => "Magarena {type}";
 		public override string FileNamePattern => "*.dec";
-
-		private readonly CardRepository _cardRepo;
 	}
 }

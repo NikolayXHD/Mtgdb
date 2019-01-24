@@ -92,7 +92,7 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<DeckConverter>()
+			Kernel.Bind<DeckMigrator>()
 				.ToSelf()
 				.InSingletonScope();
 

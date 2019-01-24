@@ -7,9 +7,9 @@ namespace Mtgdb.Gui
 {
 	public class HistoryLegacyConverter
 	{
-		public HistoryLegacyConverter(DeckConverter deckConverter)
+		public HistoryLegacyConverter(DeckMigrator deckMigrator)
 		{
-			_deckConverter = deckConverter;
+			_deckMigrator = deckMigrator;
 		}
 
 		public IEnumerable<(int FormId, int TabId)> FindLegacyFiles()
@@ -86,9 +86,9 @@ namespace Mtgdb.Gui
 
 			foreach (var settings in state.SettingsHistory)
 			{
-				var converted = _deckConverter.ConvertLegacyDeck(settings.CollectionModel);
+				var converted = _deckMigrator.ConvertLegacyDeck(settings.CollectionModel);
 				settings.CollectionModel = converted;
-				settings.Deck = _deckConverter.ConvertLegacyDeck(settings.Deck);
+				settings.Deck = _deckMigrator.ConvertLegacyDeck(settings.Deck);
 			}
 
 			HistorySubsystem.WriteHistory(file, state);
@@ -108,9 +108,9 @@ namespace Mtgdb.Gui
 
 			foreach (var settings in state.SettingsHistory)
 			{
-				var converted = _deckConverter.ConvertV2Deck(settings.CollectionModel);
+				var converted = _deckMigrator.ConvertV2Deck(settings.CollectionModel);
 				settings.CollectionModel = converted;
-				settings.Deck = _deckConverter.ConvertV2Deck(settings.Deck);
+				settings.Deck = _deckMigrator.ConvertV2Deck(settings.Deck);
 			}
 
 			HistorySubsystem.WriteHistory(file, state);
@@ -130,9 +130,9 @@ namespace Mtgdb.Gui
 
 			foreach (var settings in state.SettingsHistory)
 			{
-				var converted = _deckConverter.ConvertV3Deck(settings.CollectionModel);
+				var converted = _deckMigrator.ConvertV3Deck(settings.CollectionModel);
 				settings.CollectionModel = converted;
-				settings.Deck = _deckConverter.ConvertV3Deck(settings.Deck);
+				settings.Deck = _deckMigrator.ConvertV3Deck(settings.Deck);
 			}
 
 			HistorySubsystem.WriteHistory(file, state);
@@ -142,6 +142,6 @@ namespace Mtgdb.Gui
 		private static string getV2File(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v2.json");
 		private static string getV3File(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v3.json");
 
-		private readonly DeckConverter _deckConverter;
+		private readonly DeckMigrator _deckMigrator;
 	}
 }

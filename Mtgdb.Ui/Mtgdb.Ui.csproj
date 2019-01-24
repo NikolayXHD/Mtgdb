@@ -85,8 +85,9 @@
     <Compile Include="Deck\CollectionChangedEventHandler.cs" />
     <Compile Include="Deck\Deck.cs" />
     <Compile Include="Deck\DeckChangedEventHandler.cs" />
-    <Compile Include="Deck\DeckEditorModel.cs" />
     <Compile Include="Deck\DeckConverter.cs" />
+    <Compile Include="Deck\DeckEditorModel.cs" />
+    <Compile Include="Deck\DeckMigrator.cs" />
     <Compile Include="Deck\DeckZone.cs" />
     <Compile Include="Deck\DeckZoneModel.cs" />
     <Compile Include="Deck\Zone.cs" />

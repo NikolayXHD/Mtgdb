@@ -8,9 +8,9 @@ namespace Mtgdb.Gui
 {
 	public class ForgeDeckFormatter : RegexDeckFormatter
 	{
-		public ForgeDeckFormatter(CardRepository cardRepo, ForgeSetRepository forgeSetRepo)
+		public ForgeDeckFormatter(CardRepository repo, ForgeSetRepository forgeSetRepo)
+			:base(repo)
 		{
-			_cardRepo = cardRepo;
 			_forgeSetRepo = forgeSetRepo;
 		}
 
@@ -28,7 +28,7 @@ namespace Mtgdb.Gui
 			{
 				var setCode = _forgeSetRepo.FromForgeSet(setGroup.Value);
 
-				var cards = _cardRepo.SetsByCode.TryGet(setCode)
+				var cards = Repo.SetsByCode.TryGet(setCode)
 					?.CardsByName.TryGet(name);
 
 				if (cards != null)
@@ -40,7 +40,7 @@ namespace Mtgdb.Gui
 				}
 			}
 
-			card = _cardRepo.CardsByName.TryGet(name)
+			card = Repo.CardsByName.TryGet(name)
 				// card_by_name_sorting
 				?.First();
 
@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 		}
 
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			_forgeSetRepo.EnsureLoaded();
 
@@ -93,7 +93,7 @@ namespace Mtgdb.Gui
 			foreach (var cardId in deckZone.Order)
 			{
 				var count = deckZone.Count[cardId];
-				var card = _cardRepo.CardsById[cardId];
+				var card = Repo.CardsById[cardId];
 				var set = _forgeSetRepo.ToForgeSet(card.SetCode);
 				result.AppendLine($"{count} {card.NameNormalized}|{set}");
 			}
@@ -116,7 +116,6 @@ namespace Mtgdb.Gui
 		private const string SideboardMark = @"[sideboard]";
 		private const string Header = @"[metadata]";
 
-		private readonly CardRepository _cardRepo;
 		private readonly ForgeSetRepository _forgeSetRepo;
 		private bool _isSideboard;
 	}

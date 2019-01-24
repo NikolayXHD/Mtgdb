@@ -8,9 +8,9 @@ namespace Mtgdb.Gui
 {
 	public class DeckedBuilderDeckFormatter : RegexDeckFormatter
 	{
-		public DeckedBuilderDeckFormatter(CardRepository cardRepo)
+		public DeckedBuilderDeckFormatter(CardRepository repo)
+			:base(repo)
 		{
-			_cardRepo = cardRepo;
 		}
 
 		public override bool IsSideboard(Match match, string line)
@@ -20,14 +20,14 @@ namespace Mtgdb.Gui
 
 		public override Card GetCard(Match match)
 		{
-			var card = _cardRepo.CardsByName.TryGet(match.Groups["name"].Value.RemoveDiacritics())
+			var card = Repo.CardsByName.TryGet(match.Groups["name"].Value.RemoveDiacritics())
 				// card_by_name_sorting
 				?.First();
 
 			return card;
 		}
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			var result = new StringBuilder();
 
@@ -49,7 +49,7 @@ namespace Mtgdb.Gui
 			foreach (var id in zone.Order)
 			{
 				result.Append(prefix);
-				result.AppendLine($"{zone.Count[id]} {_cardRepo.CardsById[id].NameEn}");
+				result.AppendLine($"{zone.Count[id]} {Repo.CardsById[id].NameEn}");
 			}
 		}
 
@@ -67,7 +67,5 @@ namespace Mtgdb.Gui
 
 		public override string Description => "Decked builder {type}";
 		public override string FileNamePattern => "*.dec";
-
-		private readonly CardRepository _cardRepo;
 	}
 }

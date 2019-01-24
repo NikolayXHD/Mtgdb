@@ -9,6 +9,11 @@ namespace Mtgdb.Gui
 {
 	public abstract class RegexDeckFormatter : IDeckFormatter
 	{
+		protected RegexDeckFormatter(CardRepository repo)
+		{
+			Repo = repo;
+		}
+
 		public abstract Regex LineRegex { get; }
 		public abstract bool IsSideboard(Match match, string line);
 		public abstract Card GetCard(Match match);
@@ -66,7 +71,18 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public abstract string ExportDeck(string name, Deck current);
+		public string ExportDeck(string name, Deck current)
+		{
+			if (!Repo.IsLoadingComplete)
+				throw new InvalidOperationException();
+
+			var deckToExport = DeckConverter.ConvertDeck(current,
+				cardId => Repo.CardsById[cardId].Faces.Main.Id);
+
+			return ExportDeckImplementation(name, deckToExport);
+		}
+
+		protected abstract string ExportDeckImplementation(string name, Deck current);
 		public abstract string Description { get; }
 		public abstract string FileNamePattern { get; }
 		public abstract bool ValidateFormat(string serialized);
@@ -76,6 +92,8 @@ namespace Mtgdb.Gui
 		public virtual bool SupportsFile => true;
 		public virtual bool UseBom => false;
 		public virtual string FormatHint => null;
+
+		protected readonly CardRepository Repo;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

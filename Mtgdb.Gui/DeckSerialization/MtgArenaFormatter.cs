@@ -11,8 +11,8 @@ namespace Mtgdb.Gui
 	public class MtgArenaFormatter : RegexDeckFormatter
 	{
 		public MtgArenaFormatter(CardRepository repo)
+			:base(repo)
 		{
-			_repo = repo;
 		}
 
 		public static Dictionary<string, int> ImportCollection(MtgArenaIntegration integration, CardRepository repo)
@@ -82,7 +82,7 @@ namespace Mtgdb.Gui
 			string setCode = match.Groups["set"].Value;
 			string actualSetCode = _setCodesByMtga.TryGet(setCode) ?? setCode;
 
-			if (_repo.CardsByName.TryGetValue(match.Groups["name"].Value.RemoveDiacritics(), out var cards))
+			if (Repo.CardsByName.TryGetValue(match.Groups["name"].Value.RemoveDiacritics(), out var cards))
 			{
 				return cards
 					.AtMax(c => Str.Equals(c.SetCode, actualSetCode))
@@ -90,11 +90,11 @@ namespace Mtgdb.Gui
 					.Find();
 			}
 
-			return _repo.SetsByCode.TryGet(actualSetCode)?.Cards
+			return Repo.SetsByCode.TryGet(actualSetCode)?.Cards
 				.FirstOrDefault(c => Str.Equals(c.Number, match.Groups["num"].Value));
 		}
 
-		public override string ExportDeck(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current)
 		{
 			var result = new StringBuilder();
 
@@ -110,7 +110,7 @@ namespace Mtgdb.Gui
 			foreach (var cardId in deckZone.Order)
 			{
 				var count = deckZone.Count[cardId];
-				var card = _repo.CardsById[cardId];
+				var card = Repo.CardsById[cardId];
 
 				string number = card.Number;
 				string name = card.Faces.Main.NameEn;
@@ -138,7 +138,6 @@ namespace Mtgdb.Gui
 			"*.txt";
 
 		private bool _isSideboard;
-		private readonly CardRepository _repo;
 
 		private static readonly Regex _lineRegex = new Regex(
 			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\) (?<num>\d+\w*)$",
