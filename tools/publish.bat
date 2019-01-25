@@ -100,7 +100,6 @@ rem upload to test directory so update can be tested without affecting actual us
 
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 %nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
-
 if errorlevel 1 exit /b %errorlevel%
 
 echo Ready to create update Notification

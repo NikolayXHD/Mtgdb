@@ -189,7 +189,7 @@ namespace Mtgdb.Downloader
 
 				onComplete?.Invoke();
 
-				Console.WriteLine("To try new version you need to restart.");
+				Console.WriteLine("Installed version will run next time you start Mtgdb.Gui");
 				Console.WriteLine();
 			}
 			else

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Mtgdb.Dal
 {
-	public class CardFaces : IEnumerable<Card>
+	public class CardFaces : IReadOnlyList<Card>
 	{
 		public CardFaces(CardFaceVariants v) =>
 			_v = v;
@@ -21,10 +21,15 @@ namespace Mtgdb.Dal
 				: list[0];
 
 		public IEnumerator<Card> GetEnumerator() =>
-			_v.Select(select).GetEnumerator();
+			Enumerable.Range(0, Count)
+				.Select(i => this[i])
+				.GetEnumerator();
 
 		IEnumerator IEnumerable.GetEnumerator() =>
 			GetEnumerator();
+
+		public int Count =>
+			_v.Count;
 
 		private readonly CardFaceVariants _v;
 	}

@@ -35,135 +35,6 @@ namespace Mtgdb.Util
 			_imageRepo.LoadZoom();
 		}
 
-		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small, bool forge)
-		{
-			_log.Debug($"\tCopying {target}");
-			var bytes = transform(original, imageFile, small, forge);
-
-			if (bytes != null)
-				File.WriteAllBytes(target, bytes);
-		}
-
-		private static string getTargetPath(Card card, ImageFile imageFile, string subdir, bool forge)
-		{
-			var fileName = Path.GetFileName(imageFile.FullPath);
-
-			while (true)
-			{
-				if (removeExtension(ref fileName, ".jpg"))
-					continue;
-
-				if (removeExtension(ref fileName, ".png"))
-					continue;
-
-				if (removeExtension(ref fileName, ".xlhq"))
-					continue;
-
-				// ReSharper disable once StringLiteralTypo
-				if (removeExtension(ref fileName, ".xhlq"))
-					continue;
-
-				if (removeExtension(ref fileName, ".full"))
-					continue;
-
-				break;
-			}
-
-			if (forge)
-			{
-				if (Str.Equals(card.Layout, CardLayouts.Aftermath) && fileName.IndexOf("»", Str.Comparison) < 0)
-				{
-					int[] capitalIndices = Enumerable.Range(0, fileName.Length)
-						.Where(i => char.IsUpper(fileName[i]))
-						.ToArray();
-
-					if (capitalIndices.Length == 2 && capitalIndices[0] == 0)
-					{
-						fileName =
-							fileName.Substring(0, capitalIndices[1]) +
-							"»" +
-							fileName.Substring(capitalIndices[1]);
-					}
-				}
-
-				fileName += ".full";
-			}
-
-			string targetFileName;
-			if (forge || imageFile.FullPath.EndsWith(".jpg", Str.Comparison))
-				targetFileName = fileName + ".jpg";
-			else if (imageFile.FullPath.EndsWith(".png", Str.Comparison))
-				targetFileName = fileName + ".png";
-			else
-				throw new NotSupportedException("only .png .jpg extensions are supported");
-
-			var targetFullPath = Path.Combine(subdir, targetFileName);
-			return targetFullPath;
-		}
-
-		private static bool removeExtension(ref string fileName, string ext)
-		{
-			if (fileName.EndsWith(ext, Str.Comparison))
-			{
-				fileName = fileName.Substring(0, fileName.Length - ext.Length);
-				return true;
-			}
-
-			return false;
-		}
-
-		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool isForge)
-		{
-			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
-
-			var chain = isForge
-				? _imageLoader.TransformForgeImage(original, size)
-				: _imageLoader.Transform(original, size);
-
-			using (chain)
-			{
-				var result = saveToByteArray(replacementImageFile, chain.Result, isForge);
-				chain.DisposeDifferentResult();
-				return result;
-			}
-		}
-
-		private static byte[] saveToByteArray(ImageFile replacementImageFile, Bitmap image, bool forge)
-		{
-			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-
-			using (var stream = new MemoryStream())
-			{
-				try
-				{
-					if (forge || replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
-					{
-						var codec = codecs.First(_ => _.MimeType == "image/jpeg");
-						var encoderParams = new EncoderParameters
-						{
-							Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
-						};
-
-						image.Save(stream, codec, encoderParams);
-					}
-					else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
-					{
-						image.Save(stream, ImageFormat.Png);
-					}
-					else
-						throw new NotSupportedException("only .png .jpg extensions are supported");
-				}
-				catch
-				{
-					Console.WriteLine("Failed to save " + replacementImageFile.FullPath);
-					return null;
-				}
-
-				var bytes = stream.ToArray();
-				return bytes;
-			}
-		}
-
 		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir)
 		{
 			var exportedSmall = new HashSet<string>(Str.Comparer);
@@ -218,6 +89,11 @@ namespace Mtgdb.Util
 
 				foreach (var card in entryBySetCode.Value.Cards)
 				{
+					if (card.Faces.Main != card)
+					{
+						continue;
+					}
+
 					Bitmap original = null;
 					ImageModel modelSmall = null;
 
@@ -229,12 +105,12 @@ namespace Mtgdb.Util
 							&& Str.Equals(card.SetCode, modelSmall.ImageFile.SetCode) == matchingSet &&
 							exportedSmall.Add(modelSmall.ImageFile.FullPath))
 						{
-							string smallPath = getTargetPath(card, modelSmall.ImageFile, smallSetSubdir, forge: false);
+							string smallPath = getTargetPath(modelSmall.ImageFile, smallSetSubdir);
 
-							if (!File.Exists(smallPath))
+							if (!File.Exists(smallPath) || card.Faces.Count > 1)
 							{
 								original = ImageLoader.Open(modelSmall);
-								addFile(original, modelSmall.ImageFile, smallPath, small: true, forge: false);
+								addFile(original, modelSmall.ImageFile, smallPath, small: true);
 							}
 						}
 					}
@@ -247,9 +123,9 @@ namespace Mtgdb.Util
 							Str.Equals(card.SetCode, modelZoom.ImageFile.SetCode) == matchingSet &&
 							exportedZoomed.Add(modelZoom.ImageFile.FullPath))
 						{
-							string zoomedPath = getTargetPath(card, modelZoom.ImageFile, zoomedSetSubdir, forge: false);
+							string zoomedPath = getTargetPath(modelZoom.ImageFile, zoomedSetSubdir);
 
-							if (!File.Exists(zoomedPath))
+							if (!File.Exists(zoomedPath) || card.Faces.Count > 1)
 							{
 								if (original == null || modelSmall.ImageFile.FullPath != modelZoom.ImageFile.FullPath)
 								{
@@ -257,7 +133,7 @@ namespace Mtgdb.Util
 									original = ImageLoader.Open(modelZoom);
 								}
 
-								addFile(original, modelZoom.ImageFile, zoomedPath, small: false, forge: false);
+								addFile(original, modelZoom.ImageFile, zoomedPath, small: false);
 							}
 						}
 					}
@@ -266,6 +142,8 @@ namespace Mtgdb.Util
 				}
 			}
 		}
+
+
 
 		private static string ensureSetSubdirectory(string smallSet)
 		{
@@ -283,6 +161,113 @@ namespace Mtgdb.Util
 			}
 
 			return smallSet;
+		}
+
+		private static string getTargetPath(ImageFile imageFile, string subdir)
+		{
+			var fileName = Path.GetFileName(imageFile.FullPath);
+
+			while (true)
+			{
+				if (removeExtension(ref fileName, ".jpg"))
+					continue;
+
+				if (removeExtension(ref fileName, ".png"))
+					continue;
+
+				if (removeExtension(ref fileName, ".xlhq"))
+					continue;
+
+				// ReSharper disable once StringLiteralTypo
+				if (removeExtension(ref fileName, ".xhlq"))
+					continue;
+
+				if (removeExtension(ref fileName, ".full"))
+					continue;
+
+				break;
+			}
+
+			string targetFileName;
+			if (imageFile.FullPath.EndsWith(".jpg", Str.Comparison))
+				targetFileName = fileName + ".jpg";
+			else if (imageFile.FullPath.EndsWith(".png", Str.Comparison))
+				targetFileName = fileName + ".png";
+			else
+				throw new NotSupportedException("only .png .jpg extensions are supported");
+
+			var targetFullPath = Path.Combine(subdir, targetFileName);
+			return targetFullPath;
+		}
+
+		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small)
+		{
+			_log.Debug($"\tCopying {target}");
+			var bytes = transform(original, imageFile, small);
+
+			if (bytes != null)
+				File.WriteAllBytes(target, bytes);
+		}
+
+		private static bool removeExtension(ref string fileName, string ext)
+		{
+			if (fileName.EndsWith(ext, Str.Comparison))
+			{
+				fileName = fileName.Substring(0, fileName.Length - ext.Length);
+				return true;
+			}
+
+			return false;
+		}
+
+		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small)
+		{
+			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
+
+			var chain = _imageLoader.Transform(original, size);
+
+			using (chain)
+			{
+				var result = saveToByteArray(replacementImageFile, chain.Result);
+				chain.DisposeDifferentResult();
+				return result;
+			}
+		}
+
+		private static byte[] saveToByteArray(ImageFile replacementImageFile, Bitmap image)
+		{
+			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+
+			using (var stream = new MemoryStream())
+			{
+				try
+				{
+					if (replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
+					{
+						var codec = codecs.First(_ => _.MimeType == "image/jpeg");
+						var encoderParams = new EncoderParameters
+						{
+							Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
+						};
+
+						image.Save(stream, codec, encoderParams);
+					}
+					else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
+					{
+						image.Save(stream, ImageFormat.Png);
+					}
+					else
+						throw new NotSupportedException("only .png .jpg extensions are supported");
+				}
+				catch
+				{
+					Console.WriteLine("Failed to save " + replacementImageFile.FullPath);
+					return null;
+				}
+
+				var bytes = stream.ToArray();
+				return bytes;
+			}
 		}
 
 

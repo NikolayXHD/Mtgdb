@@ -15,6 +15,9 @@
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
     <Content Include="$(MSBuildThisFileDirectory)data\mtgjson-42-id.csv" />
     <Content Include="$(MSBuildThisFileDirectory)data\patch.json" />
+    <Content Include="$(MSBuildThisFileDirectory)update\img\art\filelist.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)update\img\lq\filelist.txt" />
+    <Content Include="$(MSBuildThisFileDirectory)update\img\mq\filelist.txt" />
     <Folder Include="$(MSBuildThisFileDirectory)charts\" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\keywords" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\search" />

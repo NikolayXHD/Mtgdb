@@ -22,7 +22,7 @@ namespace Mtgdb.Dal
 
 		internal static string GetFaceName(this Card c, int i)
 		{
-			if (c.Names == null)
+			if (c.Names == null || c.Names.Count == 0)
 				if (i == 0)
 					return c.NameNormalized;
 				else

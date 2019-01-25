@@ -28,7 +28,8 @@ namespace Mtgdb.Downloader
 			PriceDownloader priceDownloader,
 			PriceRepository priceRepository,
 			ImageRepository imageRepository,
-			CardRepository cardRepository)
+			CardRepository cardRepository,
+			ImageLoader imageLoader)
 			:this()
 		{
 			_installer = installer;
@@ -39,6 +40,7 @@ namespace Mtgdb.Downloader
 			_priceRepository = priceRepository;
 			_imageRepository = imageRepository;
 			_cardRepository = cardRepository;
+			_imageLoader = imageLoader;
 
 			_buttonApp.Click += appClick;
 			_buttonImgLq.Click += imgLqClick;
@@ -368,6 +370,8 @@ namespace Mtgdb.Downloader
 
 		private void resetCardImages()
 		{
+			_imageLoader.ClearCache();
+
 			foreach (var card in _cardRepository.Cards)
 				card.ResetImageModel();
 		}
@@ -620,6 +624,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly PriceRepository _priceRepository;
 		private readonly ImageRepository _imageRepository;
 		private readonly CardRepository _cardRepository;
+		private readonly ImageLoader _imageLoader;
 		private readonly VersionComparer _versionComparer = new VersionComparer();
 	}
 }

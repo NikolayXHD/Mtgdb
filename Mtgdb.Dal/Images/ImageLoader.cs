@@ -12,10 +12,10 @@ namespace Mtgdb.Dal
 		public ImageLoader(UiConfigRepository configRepository)
 		{
 			_configRepository = configRepository;
-			Dpi.Changed += clearCache;
+			Dpi.Changed += ClearCache;
 		}
 
-		private void clearCache()
+		public void ClearCache()
 		{
 			lock (_sync)
 			{
