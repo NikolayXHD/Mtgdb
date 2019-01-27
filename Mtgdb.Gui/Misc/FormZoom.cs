@@ -395,12 +395,9 @@ namespace Mtgdb.Gui
 			if (!File.Exists(fullPath))
 				return;
 
-			string workingDirectory = Path.GetDirectoryName(fullPath);
-			if (workingDirectory == null)
-				return;
-
-			Process.Start(
-				new ProcessStartInfo("explorer.exe", $@"/select,""{fullPath}"""));
+			ShowSelectedInExplorer.FilesOrFolders(
+				Path.GetDirectoryName(fullPath),
+				Array.From(Path.GetFileName(fullPath)));
 		}
 
 		private void openFileClick(object sender, EventArgs e)

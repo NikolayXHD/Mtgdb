@@ -171,6 +171,7 @@
     <Compile Include="LayoutView\RichText\RichTextLayout.cs" />
     <Compile Include="LayoutView\RichText\RichTextTokenReader.cs" />
     <Compile Include="LayoutView\RichText\RichTextTokenType.cs" />
+    <Compile Include="ShowSelectedInExplorer.cs" />
     <Compile Include="Statistics\Field.cs" />
     <Compile Include="Statistics\FieldBuilder.cs" />
     <Compile Include="Statistics\IField.cs" />
