@@ -479,17 +479,18 @@ namespace Mtgdb.Dal
 
 		public static readonly IList<string> Layout = new[]
 		{
-			CardLayouts.Normal,
-			CardLayouts.Aftermath,
-			CardLayouts.Split,
-			CardLayouts.Meld,
-			CardLayouts.Leveler,
-			CardLayouts.Transform,
-			CardLayouts.Flip,
-			CardLayouts.Phenomenon,
-			CardLayouts.Plane,
-			CardLayouts.Scheme,
-			CardLayouts.Vanguard,
+			Dal.CardLayouts.Normal,
+			Dal.CardLayouts.Saga,
+			Dal.CardLayouts.Aftermath,
+			Dal.CardLayouts.Split,
+			Dal.CardLayouts.Meld,
+			Dal.CardLayouts.Leveler,
+			Dal.CardLayouts.Transform,
+			Dal.CardLayouts.Flip,
+			Dal.CardLayouts.Phenomenon,
+			Dal.CardLayouts.Plane,
+			Dal.CardLayouts.Scheme,
+			Dal.CardLayouts.Vanguard,
 			null
 		};
 

@@ -238,10 +238,11 @@ namespace Mtgdb.Gui
 		private static readonly Bitmap[] _layout =
 		{
 			ResourcesAbilities.Normal,
+			ResourcesAbilities.Saga,
 			ResourcesAbilities.Aftermath,
 			ResourcesAbilities.Fuse,
 			ResourcesAbilities.Meld,
-			ResourcesAbilities.Renown,
+			ResourcesAbilities.Leveler,
 			ResourcesAbilities.Transform,
 			ResourcesAbilities.Cycling,
 			ResourcesAbilities.Phenomenon,
