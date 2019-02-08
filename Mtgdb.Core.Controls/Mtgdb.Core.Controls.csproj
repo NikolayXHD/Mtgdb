@@ -34,6 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DrawingEx, Version=1.0.6978.3236, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Subrepo\DrawingEx\bin\DrawingEx.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
       <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
@@ -255,10 +258,6 @@
     <ProjectReference Include="..\Subrepo\CustomScrollbar\CustomScrollbar.csproj">
       <Project>{5b85e2d7-2005-4496-b5d7-59c68a1ec91d}</Project>
       <Name>CustomScrollbar</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Subrepo\DrawingEx\DrawingEx.csproj">
-      <Project>{a6441560-3cc8-4ac3-ae4a-d092b424719f}</Project>
-      <Name>DrawingEx</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
