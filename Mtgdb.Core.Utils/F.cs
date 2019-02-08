@@ -223,5 +223,8 @@ namespace Mtgdb
 		public static Action<TArgSpecific, TResult> Specific<TArg, TResult, TArgSpecific>(this Action<TArg, TResult> action)
 			where TArgSpecific : TArg =>
 			(val, arg) => action(val, arg);
+
+		public static T Self<T>(this T value) =>
+			value;
 	}
 }

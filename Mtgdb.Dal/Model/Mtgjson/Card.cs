@@ -509,7 +509,7 @@ namespace Mtgdb.Dal
 			var builder = new StringBuilder();
 
 			builder.AppendLine($"{ManaCost} {NameEn}");
-			builder.Append($"{TypeEn}");
+			builder.Append($"{TypeEn} {Layout}");
 
 			if (LoyaltyNum.HasValue)
 				builder.Append($" {LoyaltyNum}");
