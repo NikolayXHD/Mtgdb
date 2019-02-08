@@ -1,4 +1,5 @@
-﻿namespace Mtgdb.Gui
+
+namespace Mtgdb.Gui
 {
 	partial class FormChart
 	{
@@ -33,9 +34,9 @@
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.CustomCheckBox();
 			this._buttonDeckPrice = new Mtgdb.Controls.CustomCheckBox();
-			this._buttonApply = new System.Windows.Forms.Button();
+			this._buttonApply = new Mtgdb.Controls.CustomCheckBox();
 			this._menuFields = new System.Windows.Forms.ComboBox();
-			this._buttonAddCol = new System.Windows.Forms.Button();
+			this._buttonAddCol = new Mtgdb.Controls.CustomCheckBox();
 			this._panelFields = new System.Windows.Forms.FlowLayoutPanel();
 			this._labelCols = new System.Windows.Forms.Label();
 			this._tabCols = new Mtgdb.Controls.TabHeaderControl();
@@ -45,12 +46,12 @@
 			this._tabSumm = new Mtgdb.Controls.TabHeaderControl();
 			this._labelSummarySort = new System.Windows.Forms.Label();
 			this._tabSummSort = new Mtgdb.Controls.TabHeaderControl();
-			this._buttonArgumentTotals = new System.Windows.Forms.CheckBox();
-			this._buttonSeriesTotal = new System.Windows.Forms.CheckBox();
-			this._buttonExplainTotal = new System.Windows.Forms.CheckBox();
-			this._buttonFilterBySearchResult = new System.Windows.Forms.CheckBox();
-			this._buttonAddRow = new System.Windows.Forms.Button();
-			this._buttonAddSum = new System.Windows.Forms.Button();
+			this._buttonArgumentTotal = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonSeriesTotal = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonExplainTotal = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonFilterBySearchResult = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonAddRow = new Mtgdb.Controls.CustomCheckBox();
+			this._buttonAddSum = new Mtgdb.Controls.CustomCheckBox();
 			this._panelMenu = new System.Windows.Forms.FlowLayoutPanel();
 			this._labelField = new System.Windows.Forms.Label();
 			this._labelDataElement = new System.Windows.Forms.Label();
@@ -155,14 +156,21 @@
 			// _buttonApply
 			// 
 			this._buttonApply.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonApply.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonApply.AutoCheck = false;
+			this._buttonApply.AutoSize = true;
+			this._buttonApply.BackColor = System.Drawing.Color.Transparent;
 			this._buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonApply.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+			this._buttonApply.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonApply.HighlightMouseOverOpacity = 92;
+			this._buttonApply.HighlightMouseDownOpacity = 92;
 			this._buttonApply.Location = new System.Drawing.Point(504, 0);
 			this._buttonApply.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonApply.Name = "_buttonApply";
-			this._buttonApply.Size = new System.Drawing.Size(50, 24);
 			this._buttonApply.TabIndex = 28;
 			this._buttonApply.Text = "Build!";
-			this._buttonApply.UseVisualStyleBackColor = false;
+			this._buttonApply.UseVisualStyleBackColor = true;
 			// 
 			// _menuFields
 			// 
@@ -179,14 +187,21 @@
 			// 
 			// _buttonAddCol
 			// 
+			this._buttonAddCol.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonAddCol.AutoCheck = false;
+			this._buttonAddCol.AutoSize = true;
+			this._buttonAddCol.BackColor = System.Drawing.Color.Transparent;
+			this._buttonAddCol.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddCol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonAddCol.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonAddCol.HighlightMouseOverOpacity = 64;
+			this._buttonAddCol.HighlightMouseDownOpacity = 64;
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddCol.Name = "_buttonAddCol";
-			this._buttonAddCol.Size = new System.Drawing.Size(80, 24);
 			this._buttonAddCol.TabIndex = 41;
 			this._buttonAddCol.Text = "+ argument";
-			this._buttonAddCol.UseVisualStyleBackColor = false;
+			this._buttonAddCol.UseVisualStyleBackColor = true;
 			// 
 			// _panelFields
 			// 
@@ -299,80 +314,123 @@
 			// 
 			// _buttonArgumentTotals
 			// 
-			this._buttonArgumentTotals.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonArgumentTotals.AutoSize = true;
-			this._buttonArgumentTotals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this._buttonArgumentTotals.Location = new System.Drawing.Point(3, 3);
-			this._buttonArgumentTotals.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-			this._buttonArgumentTotals.Name = "_buttonArgumentTotals";
-			this._buttonArgumentTotals.Size = new System.Drawing.Size(120, 17);
-			this._buttonArgumentTotals.TabIndex = 56;
-			this._buttonArgumentTotals.Text = "Show argument total";
-			this._buttonArgumentTotals.UseVisualStyleBackColor = true;
+			this._buttonArgumentTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonArgumentTotal.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonArgumentTotal.AutoSize = true;
+			this._buttonArgumentTotal.BackColor = System.Drawing.Color.Transparent;
+			this._buttonArgumentTotal.FlatAppearance.BorderSize = 0;
+			this._buttonArgumentTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonArgumentTotal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonArgumentTotal.HighlightCheckedOpacity = 0;
+			this._buttonArgumentTotal.HighlightMouseDownOpacity = 64;
+			this._buttonArgumentTotal.HighlightMouseOverOpacity = 64;
+			this._buttonArgumentTotal.Location = new System.Drawing.Point(3, 3);
+			this._buttonArgumentTotal.Margin = new System.Windows.Forms.Padding(0);
+			this._buttonArgumentTotal.Name = "_buttonArgumentTotal";
+			this._buttonArgumentTotal.Size = new System.Drawing.Size(120, 17);
+			this._buttonArgumentTotal.TabIndex = 56;
+			this._buttonArgumentTotal.Text = "Argument total";
+			this._buttonArgumentTotal.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this._buttonArgumentTotal.UseVisualStyleBackColor = true;
 			// 
 			// _buttonSeriesTotal
 			// 
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonSeriesTotal.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonSeriesTotal.AutoSize = true;
+			this._buttonSeriesTotal.BackColor = System.Drawing.Color.Transparent;
+			this._buttonSeriesTotal.FlatAppearance.BorderSize = 0;
 			this._buttonSeriesTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonSeriesTotal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonSeriesTotal.HighlightCheckedOpacity = 0;
+			this._buttonSeriesTotal.HighlightMouseDownOpacity = 64;
+			this._buttonSeriesTotal.HighlightMouseOverOpacity = 64;
 			this._buttonSeriesTotal.Location = new System.Drawing.Point(123, 3);
 			this._buttonSeriesTotal.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonSeriesTotal.Name = "_buttonSeriesTotal";
 			this._buttonSeriesTotal.Size = new System.Drawing.Size(103, 17);
 			this._buttonSeriesTotal.TabIndex = 57;
-			this._buttonSeriesTotal.Text = "Show series total";
+			this._buttonSeriesTotal.Text = "Series total";
+			this._buttonSeriesTotal.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._buttonSeriesTotal.UseVisualStyleBackColor = true;
 			// 
 			// _buttonExplainTotal
 			// 
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonExplainTotal.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonExplainTotal.AutoSize = true;
+			this._buttonExplainTotal.BackColor = System.Drawing.Color.Transparent;
+			this._buttonExplainTotal.FlatAppearance.BorderSize = 0;
 			this._buttonExplainTotal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonExplainTotal.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonExplainTotal.HighlightCheckedOpacity = 0;
+			this._buttonExplainTotal.HighlightMouseDownOpacity = 64;
+			this._buttonExplainTotal.HighlightMouseOverOpacity = 64;
 			this._buttonExplainTotal.Location = new System.Drawing.Point(226, 3);
 			this._buttonExplainTotal.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonExplainTotal.Name = "_buttonExplainTotal";
 			this._buttonExplainTotal.Size = new System.Drawing.Size(80, 17);
 			this._buttonExplainTotal.TabIndex = 58;
 			this._buttonExplainTotal.Text = "Explain total";
+			this._buttonExplainTotal.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._buttonExplainTotal.UseVisualStyleBackColor = true;
 			// 
 			// _buttonFilterBySearchResult
 			// 
 			this._buttonFilterBySearchResult.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._buttonFilterBySearchResult.Appearance = System.Windows.Forms.Appearance.Button;
 			this._buttonFilterBySearchResult.AutoSize = true;
-			this._buttonFilterBySearchResult.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
+			this._buttonFilterBySearchResult.BackColor = System.Drawing.Color.Transparent;
+			this._buttonFilterBySearchResult.FlatAppearance.BorderSize = 0;
 			this._buttonFilterBySearchResult.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonFilterBySearchResult.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonFilterBySearchResult.HighlightCheckedOpacity = 0;
+			this._buttonFilterBySearchResult.HighlightMouseDownOpacity = 64;
+			this._buttonFilterBySearchResult.HighlightMouseOverOpacity = 64;
 			this._buttonFilterBySearchResult.Location = new System.Drawing.Point(366, 3);
-			this._buttonFilterBySearchResult.Margin = new System.Windows.Forms.Padding(60, 0, 0, 0);
+			this._buttonFilterBySearchResult.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonFilterBySearchResult.Name = "_buttonFilterBySearchResult";
 			this._buttonFilterBySearchResult.Size = new System.Drawing.Size(122, 17);
 			this._buttonFilterBySearchResult.TabIndex = 59;
 			this._buttonFilterBySearchResult.Text = "Filter by search result";
+			this._buttonFilterBySearchResult.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._buttonFilterBySearchResult.UseVisualStyleBackColor = true;
 			// 
 			// _buttonAddRow
 			// 
+			this._buttonAddRow.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonAddRow.AutoCheck = false;
+			this._buttonAddRow.AutoSize = true;
+			this._buttonAddRow.BackColor = System.Drawing.Color.Transparent;
 			this._buttonAddRow.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddRow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonAddRow.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonAddRow.HighlightMouseOverOpacity = 64;
+			this._buttonAddRow.HighlightMouseDownOpacity = 64;
 			this._buttonAddRow.Location = new System.Drawing.Point(293, 0);
 			this._buttonAddRow.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddRow.Name = "_buttonAddRow";
-			this._buttonAddRow.Size = new System.Drawing.Size(60, 24);
 			this._buttonAddRow.TabIndex = 42;
 			this._buttonAddRow.Text = "+ series";
-			this._buttonAddRow.UseVisualStyleBackColor = false;
+			this._buttonAddRow.UseVisualStyleBackColor = true;
 			// 
 			// _buttonAddSum
 			// 
+			this._buttonAddSum.Appearance = System.Windows.Forms.Appearance.Button;
+			this._buttonAddSum.AutoCheck = false;
+			this._buttonAddSum.AutoSize = true;
+			this._buttonAddSum.BackColor = System.Drawing.Color.Transparent;
 			this._buttonAddSum.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._buttonAddSum.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._buttonAddSum.HighlightBackColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonAddSum.HighlightMouseOverOpacity = 64;
+			this._buttonAddSum.HighlightMouseDownOpacity = 64;
 			this._buttonAddSum.Location = new System.Drawing.Point(369, 0);
 			this._buttonAddSum.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddSum.Name = "_buttonAddSum";
-			this._buttonAddSum.Size = new System.Drawing.Size(80, 24);
 			this._buttonAddSum.TabIndex = 43;
 			this._buttonAddSum.Text = "+ aggregate";
-			this._buttonAddSum.UseVisualStyleBackColor = false;
+			this._buttonAddSum.UseVisualStyleBackColor = true;
 			// 
 			// _panelMenu
 			// 
@@ -503,7 +561,7 @@
 			// 
 			this._panelFlags.AutoSize = true;
 			this._panelFlags.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._panelFlags.Controls.Add(this._buttonArgumentTotals);
+			this._panelFlags.Controls.Add(this._buttonArgumentTotal);
 			this._panelFlags.Controls.Add(this._buttonSeriesTotal);
 			this._panelFlags.Controls.Add(this._buttonExplainTotal);
 			this._panelFlags.Controls.Add(this._buttonFilterBySearchResult);
@@ -822,17 +880,17 @@
 		private Mtgdb.Controls.CustomCheckBox _buttonManaCurveType;
 		private Mtgdb.Controls.CustomCheckBox _buttonDeckPrice;
 		private Controls.TabHeaderControl _tabCols;
-		private System.Windows.Forms.Button _buttonApply;
+		private Mtgdb.Controls.CustomCheckBox _buttonApply;
 		private System.Windows.Forms.ComboBox _menuFields;
-		private System.Windows.Forms.Button _buttonAddCol;
+		private Mtgdb.Controls.CustomCheckBox _buttonAddCol;
 		private System.Windows.Forms.FlowLayoutPanel _panelFields;
 		private System.Windows.Forms.Label _labelRows;
 		private System.Windows.Forms.Label _labelCols;
 		private Controls.TabHeaderControl _tabRows;
 		private System.Windows.Forms.Label _labelSum;
 		private Controls.TabHeaderControl _tabSumm;
-		private System.Windows.Forms.Button _buttonAddRow;
-		private System.Windows.Forms.Button _buttonAddSum;
+		private Mtgdb.Controls.CustomCheckBox _buttonAddRow;
+		private Mtgdb.Controls.CustomCheckBox _buttonAddSum;
 		private System.Windows.Forms.FlowLayoutPanel _panelMenu;
 		private System.Windows.Forms.ComboBox _menuDataSource;
 		private System.Windows.Forms.Label _labelDataSource;
@@ -846,22 +904,22 @@
 		private System.Windows.Forms.TableLayoutPanel _panelTable;
 		private System.Windows.Forms.ComboBox _menuPrice;
 		private System.Windows.Forms.ComboBox _menuPriceChartType;
-		private System.Windows.Forms.CheckBox _buttonArgumentTotals;
-		private System.Windows.Forms.CheckBox _buttonSeriesTotal;
-		private System.Windows.Forms.CheckBox _buttonExplainTotal;
+		private Mtgdb.Controls.CustomCheckBox _buttonArgumentTotal;
+		private Mtgdb.Controls.CustomCheckBox _buttonSeriesTotal;
+		private Mtgdb.Controls.CustomCheckBox _buttonExplainTotal;
 		private Mtgdb.Controls.CustomCheckBox _buttonCollectionPrice;
-		private System.Windows.Forms.CheckBox _buttonFilterBySearchResult;
+		private Mtgdb.Controls.CustomCheckBox _buttonFilterBySearchResult;
 		private System.Windows.Forms.FlowLayoutPanel _panelFlags;
 		private Mtgdb.Controls.CustomCheckBox _buttonDeckColors;
 		private Mtgdb.Controls.CustomCheckBox _buttonCollectionColors;
 		private Mtgdb.Controls.CustomCheckBox _buttonManaCurveManacost;
-		private Controls.CustomCheckBox _buttonSave;
-		private Controls.CustomCheckBox _buttonLoad;
+		private Mtgdb.Controls.CustomCheckBox _buttonSave;
+		private Mtgdb.Controls.CustomCheckBox _buttonLoad;
 		private System.Windows.Forms.Label _labelTitle;
 		private Controls.BorderedFlowLayoutPanel _flowTitle;
 		private Controls.BorderedFlowLayoutPanel _flowDropdowns;
 		private Controls.BorderedFlowLayoutPanel _flowPriceReports;
-		private Controls.CustomCheckBox _buttonMruFiles;
+		private Mtgdb.Controls.CustomCheckBox _buttonMruFiles;
 		private System.Windows.Forms.ContextMenuStrip _menuMruFiles;
 		private Controls.BorderedFlowLayoutPanel _flowFileMenu;
 	}

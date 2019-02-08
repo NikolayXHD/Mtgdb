@@ -173,6 +173,16 @@ namespace Mtgdb.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap checked_32 {
+            get {
+                object obj = ResourceManager.GetObject("checked_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clone_48 {
             get {
                 object obj = ResourceManager.GetObject("clone_48", resourceCulture);
@@ -876,6 +886,16 @@ namespace Mtgdb.Gui.Properties {
         internal static System.Drawing.Bitmap tw {
             get {
                 object obj = ResourceManager.GetObject("tw", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap unchecked_32 {
+            get {
+                object obj = ResourceManager.GetObject("unchecked_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

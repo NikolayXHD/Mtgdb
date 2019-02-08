@@ -185,6 +185,8 @@ namespace Mtgdb.Gui
 				_tabs[i].DefaultIcon = defaultIcons[i];
 
 			scale();
+
+			_buttonSubsystem.SubscribeToEvents();
 		}
 
 		private void scale()
@@ -193,9 +195,7 @@ namespace Mtgdb.Gui
 
 			_tabs.ForEach(t => t.ScaleDpi(bmp => bmp?.HalfResizeDpi()));
 
-			_buttons.Cast<Control>()
-				.Concat(_headerButtons)
-				.Append(_buttonApply)
+			_headerButtons.Cast<Control>()
 				.Append(_buttonSave)
 				.Append(_buttonLoad)
 				.ForEach(ControlScaler.ScaleDpi);
@@ -206,32 +206,47 @@ namespace Mtgdb.Gui
 			_aggregateIconsScaler.Setup(this);
 
 			new Control[]
-			{
-				_labelField,
-				_labelDataElement,
-				_labelDataSource,
-				_labelChartType,
-				_labelCols,
-				_labelRows,
-				_labelSum,
-				_labelSummarySort,
+				{
+					_labelField,
+					_labelDataElement,
+					_labelDataSource,
+					_labelChartType,
+					_labelCols,
+					_labelRows,
+					_labelSum,
+					_labelSummarySort,
 
-				_buttonArgumentTotals,
-				_buttonSeriesTotal,
-				_buttonExplainTotal,
-				_buttonFilterBySearchResult,
+					_buttonArgumentTotal,
+					_buttonSeriesTotal,
+					_buttonExplainTotal,
+					_buttonFilterBySearchResult,
+					_buttonApply,
 
-				_menuMruFiles,
-				_labelTitle,
+					_menuMruFiles,
+					_labelTitle,
 
-				_chart
-			}.ForEach(ControlScaler.ScaleDpiFont);
+					_chart
+				}
+				.Concat(_buttons)
+				.ForEach(ControlScaler.ScaleDpiFont);
 
 			new DpiScaler<FormChart>(form =>
 			{
 				form._buttonSubsystem.SetupButton(form._buttonSave, ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32)));
 				form._buttonSubsystem.SetupButton(form._buttonLoad, ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32)));
 				form._buttonSubsystem.SetupButton(form._buttonMruFiles, ButtonImages.ScaleDpi((null, Resources.down_32)));
+
+				var checkImages = ButtonImages.ScaleDpi(
+					(null, Resources.unchecked_32),
+					(null, Resources.checked_32));
+
+				Sequence.From(
+						_buttonArgumentTotal,
+						_buttonSeriesTotal,
+						_buttonExplainTotal,
+						_buttonFilterBySearchResult)
+					.ForEach(b => form._buttonSubsystem.SetupButton(b, checkImages));
+
 			}).Setup(this);
 		}
 
@@ -359,7 +374,7 @@ namespace Mtgdb.Gui
 			if (_menuFields.SelectedIndex < 0)
 				return;
 
-			var button = (Button) sender;
+			var button = (CustomCheckBox) sender;
 			var tab = _tabByButton[button];
 			var fieldName = _fieldsOrder[_menuFields.SelectedIndex];
 
@@ -1067,7 +1082,7 @@ namespace Mtgdb.Gui
 			_menuLabelDataElement.SelectedIndex = (int) settings.LabelDataElement;
 			_menuChartType.SelectedIndex = _menuChartType.Items.IndexOf(settings.ChartType.ToString());
 
-			_buttonArgumentTotals.Checked = settings.ShowArgumentTotal;
+			_buttonArgumentTotal.Checked = settings.ShowArgumentTotal;
 			_buttonSeriesTotal.Checked = settings.ShowSeriesTotal;
 			_buttonExplainTotal.Checked = settings.ExplainTotal;
 
@@ -1115,7 +1130,7 @@ namespace Mtgdb.Gui
 					.Cast<int>()
 					.Select(i => _aggregatesOrder[i])
 					.ToList(),
-				ShowArgumentTotal = _buttonArgumentTotals.Checked,
+				ShowArgumentTotal = _buttonArgumentTotal.Checked,
 				ShowSeriesTotal = _buttonSeriesTotal.Checked,
 				ExplainTotal = _buttonExplainTotal.Checked
 			};
@@ -1203,7 +1218,7 @@ namespace Mtgdb.Gui
 
 		private IReadOnlyList<Bitmap> _sortIconsOrder;
 
-		private readonly Dictionary<Button, TabHeaderControl> _tabByButton;
+		private readonly Dictionary<CustomCheckBox, TabHeaderControl> _tabByButton;
 		private readonly TabHeaderControl[] _summTabs;
 		private readonly TabHeaderControl[] _tabs;
 
@@ -1250,7 +1265,7 @@ namespace Mtgdb.Gui
 			nameof(Card.CollectionTotalHigh)
 		};
 
-		private readonly Button[] _buttons;
+		private readonly CustomCheckBox[] _buttons;
 		private readonly ComboBox[] _menus;
 
 		private readonly CardFields _fields;

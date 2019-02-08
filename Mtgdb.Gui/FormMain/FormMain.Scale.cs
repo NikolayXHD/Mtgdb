@@ -16,11 +16,10 @@ namespace Mtgdb.Gui
 			_panelSearchExamples.ScaleDpi();
 			_menuLegalityFormat.ScaleDpi();
 
-			_buttonLegalityAllowLegal.ScaleDpi();
-			_buttonLegalityAllowRestricted.ScaleDpi();
-			_buttonLegalityAllowBanned.ScaleDpi();
-			_buttonLegalityAllowFuture.ScaleDpi();
-
+			_buttonLegalityAllowLegal.ScaleDpiFont();
+			_buttonLegalityAllowRestricted.ScaleDpiFont();
+			_buttonLegalityAllowBanned.ScaleDpiFont();
+			_buttonLegalityAllowFuture.ScaleDpiFont();
 
 			_buttonShowDuplicates.ScaleDpi();
 
@@ -84,45 +83,56 @@ namespace Mtgdb.Gui
 			new DpiScaler<FormMain>(
 				form =>
 				{
-					form._buttons.SetupButton(form._buttonSampleHandNew,
+					form._buttonSubsystem.SetupButton(form._buttonSampleHandNew,
 						ButtonImages.ScaleDpi((null, Resources.hand_48)));
 
-					form._buttons.SetupButton(form._buttonSampleHandDraw,
+					form._buttonSubsystem.SetupButton(form._buttonSampleHandDraw,
 						ButtonImages.ScaleDpi((null, Resources.draw_48)));
 
-					form._buttons.SetupButton(form._buttonSampleHandMulligan,
+					form._buttonSubsystem.SetupButton(form._buttonSampleHandMulligan,
 						ButtonImages.ScaleDpi((null, Resources.mulligan_48)));
 
-					form._buttons.SetupButton(form._buttonShowDuplicates,
+					form._buttonSubsystem.SetupButton(form._buttonShowDuplicates,
 						ButtonImages.ScaleDpi((null, Resources.clone_48)));
 
-					form._buttons.SetupButton(form._buttonShowProhibit,
+					form._buttonSubsystem.SetupButton(form._buttonShowProhibit,
 						ButtonImages.ScaleDpi((null, Resources.exclude_minus_24)));
 
-					form._buttons.SetupButton(form._buttonExcludeManaAbility,
+					form._buttonSubsystem.SetupButton(form._buttonExcludeManaAbility,
 						ButtonImages.ScaleDpi((null, Resources.include_plus_24), (null, Resources.exclude_minus_24)));
 
-					form._buttons.SetupButton(form._buttonExcludeManaCost,
+					form._buttonSubsystem.SetupButton(form._buttonExcludeManaCost,
 						ButtonImages.ScaleDpi((null, Resources.include_plus_24), (null, Resources.exclude_minus_24)));
 
-					form._buttons.SetupButton(form._buttonHideDeck,
+					form._buttonSubsystem.SetupButton(form._buttonHideDeck,
 						ButtonImages.ScaleDpi((null, Resources.shown_40), (null, Resources.hidden_40)));
 
 					var scrollImages = ButtonImages.ScaleDpi((null, Resources.scroll_shown_40));
-					form._buttons.SetupButton(form._buttonShowScrollCards, scrollImages);
-					form._buttons.SetupButton(form._buttonShowScrollDeck, scrollImages);
+					form._buttonSubsystem.SetupButton(form._buttonShowScrollCards, scrollImages);
+					form._buttonSubsystem.SetupButton(form._buttonShowScrollDeck, scrollImages);
 
-					form._buttons.SetupButton(form._buttonShowPartialCards,
+					form._buttonSubsystem.SetupButton(form._buttonShowPartialCards,
 						ButtonImages.ScaleDpi((null, Resources.partial_card_enabled_40)));
 
-					form._buttons.SetupButton(form._buttonShowText,
+					form._buttonSubsystem.SetupButton(form._buttonShowText,
 						ButtonImages.ScaleDpi((null, Resources.text_enabled_40)));
 
-					form._buttons.SetupButton(form._buttonSearchExamplesDropDown,
+					form._buttonSubsystem.SetupButton(form._buttonSearchExamplesDropDown,
 						ButtonImages.ScaleDpi((null, Resources.book_40)));
 
-					form._buttons.SetupButton(form._buttonResetFilters,
+					form._buttonSubsystem.SetupButton(form._buttonResetFilters,
 						ButtonImages.ScaleDpi((null, Resources.erase)));
+
+					var checkImages = ButtonImages.ScaleDpi(
+						(null, Resources.unchecked_32),
+						(null, Resources.checked_32));
+
+					Sequence.From(
+							_buttonLegalityAllowLegal,
+							_buttonLegalityAllowRestricted,
+							_buttonLegalityAllowBanned,
+							_buttonLegalityAllowFuture)
+						.ForEach(b => form._buttonSubsystem.SetupButton(b, checkImages));
 
 					int border = FilterManaCost.Border;
 					var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
