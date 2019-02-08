@@ -13,8 +13,26 @@ namespace Mtgdb.Dal
 		public IList<Card> this[int i] =>
 			Card.Set.CardsByName[Card.GetFaceName(i)];
 
-		public IList<Card> Main =>
-			this[0];
+		public IList<Card> Main
+		{
+			get
+			{
+				if (Card.IsMeld())
+				{
+					if (Str.Equals(Card.NameNormalized, Card.Names[1])) // meld union
+						// Protect from silent errors of replacing one meld card by another in deck transformations
+						return null;
+
+					// Each card in meld pair considers itself the main face, convenient in deck transformations
+					if (Str.Equals(Card.NameNormalized, Card.Names[2]))
+						return this[2];
+
+					return this[0];
+				}
+
+				return this[0];
+			}
+		}
 
 		public IEnumerator<IList<Card>> GetEnumerator() =>
 			Enumerable.Range(0, Count)

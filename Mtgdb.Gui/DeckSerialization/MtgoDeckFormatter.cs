@@ -186,6 +186,9 @@ namespace Mtgdb.Gui
 			foreach (var cardId in deckZone.Order)
 			{
 				var card = Repo.CardsById[cardId].Faces.Main;
+				if (card == null)
+					continue;
+
 				var count = deckZone.Count[cardId];
 				result.AppendLine($"{count} {ToMtgoName(card)}");
 			}

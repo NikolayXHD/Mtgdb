@@ -113,9 +113,13 @@ namespace Mtgdb.Gui
 				var card = Repo.CardsById[cardId];
 
 				string number = card.Number;
+
+				if (card.Faces.Main == null)
+					continue;
+
 				string name = card.Faces.Main.NameEn;
 
-				if (CardLayouts.DoubleFacedLayouts.Contains(card.Layout) && number.EndsWith("a", Str.Comparison))
+				if (card.IsDoubleFace() && number.EndsWith("a", Str.Comparison))
 					number = number.Substring(0, number.Length - 1);
 
 				string setCode = _mtgaSetCodes.TryGet(card.SetCode) ?? card.SetCode;

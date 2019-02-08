@@ -89,10 +89,8 @@ namespace Mtgdb.Util
 
 				foreach (var card in entryBySetCode.Value.Cards)
 				{
-					if (card.Faces.Main != card)
-					{
+					if (card.Faces.Main != card && card.IsSingleSide())
 						continue;
-					}
 
 					Bitmap original = null;
 					ImageModel modelSmall = null;

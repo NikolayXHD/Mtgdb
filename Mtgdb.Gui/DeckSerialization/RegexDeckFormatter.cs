@@ -77,7 +77,7 @@ namespace Mtgdb.Gui
 				throw new InvalidOperationException();
 
 			var deckToExport = DeckConverter.ConvertDeck(current,
-				cardId => Repo.CardsById[cardId].Faces.Main.Id);
+				cardId => Repo.CardsById[cardId].Faces.Main?.Id);
 
 			return ExportDeckImplementation(name, deckToExport);
 		}

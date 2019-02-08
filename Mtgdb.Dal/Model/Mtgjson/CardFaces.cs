@@ -13,7 +13,7 @@ namespace Mtgdb.Dal
 			select(_v[i]);
 
 		public Card Main =>
-			this[0];
+			select(_v.Main);
 
 		private Card select(IList<Card> list) =>
 			Str.Equals(list[0].NameNormalized, _v.Card.NameNormalized)
