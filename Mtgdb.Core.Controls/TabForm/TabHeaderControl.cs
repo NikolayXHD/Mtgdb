@@ -100,7 +100,7 @@ namespace Mtgdb.Controls
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
-			this.PaintPanelBack(e.Graphics, e.ClipRectangle, PaintBackground);
+			this.PaintPanelBack(e.Graphics, e.ClipRectangle, this.BackgroundImage, this.BackColor, PaintBackground);
 
 		public void ApplyOrderFrom(TabHeaderControl other)
 		{

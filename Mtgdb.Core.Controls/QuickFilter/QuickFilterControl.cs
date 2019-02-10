@@ -11,12 +11,11 @@ using Mtgdb.Bitmaps;
 
 namespace Mtgdb.Controls
 {
-	public class QuickFilterControl : UserControl
+	public class QuickFilterControl : Control
 	{
 		public QuickFilterControl()
 		{
-			init();
-
+			TabStop = false;
 			ImageSize = new Size(20, 20);
 			PropertiesCount = DefaultPropertiesCount;
 
@@ -30,6 +29,8 @@ namespace Mtgdb.Controls
 			_opacityDisabled = OpacityDisabled;
 
 			CostNeutralValues = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+			SetStyle(ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
 			Paint += controlPaint;
 			MouseClick += controlClick;
@@ -679,21 +680,6 @@ namespace Mtgdb.Controls
 
 				Invalidate();
 			}
-		}
-
-
-
-		private void init()
-		{
-			SuspendLayout();
-
-			AutoScaleDimensions = new SizeF(6F, 13F);
-			AutoScaleMode = AutoScaleMode.Font;
-			Name = "QuickFilterControl";
-			Size = new Size(100, 60);
-			DoubleBuffered = true;
-
-			ResumeLayout(false);
 		}
 
 

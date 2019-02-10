@@ -19,6 +19,7 @@ namespace Mtgdb.Gui
 		public FormChart()
 		{
 			InitializeComponent();
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
 
 			_menus = new[]
 			{
@@ -195,9 +196,7 @@ namespace Mtgdb.Gui
 
 			_tabs.ForEach(t => t.ScaleDpi(bmp => bmp?.HalfResizeDpi()));
 
-			_headerButtons.Cast<Control>()
-				.Append(_buttonSave)
-				.Append(_buttonLoad)
+			_buttons.Concat(_headerButtons).Concat(new[] { _buttonSave, _buttonLoad, _buttonApply })
 				.ForEach(ControlScaler.ScaleDpi);
 
 			_menus.ForEach(ControlScaler.ScaleDpi);
@@ -220,14 +219,12 @@ namespace Mtgdb.Gui
 					_buttonSeriesTotal,
 					_buttonExplainTotal,
 					_buttonFilterBySearchResult,
-					_buttonApply,
 
 					_menuMruFiles,
 					_labelTitle,
 
 					_chart
 				}
-				.Concat(_buttons)
 				.ForEach(ControlScaler.ScaleDpiFont);
 
 			new DpiScaler<FormChart>(form =>
@@ -448,11 +445,11 @@ namespace Mtgdb.Gui
 			foreach (CustomCheckBox button in _headerButtons)
 				button.Checked = button == sender;
 
-			var checkBox = (CheckBox) sender;
+			var checkBox = (CustomCheckBox) sender;
 			loadReport(checkBox);
 		}
 
-		private void loadReport(CheckBox button)
+		private void loadReport(CustomCheckBox button)
 		{
 			ReportSettings settings = null;
 

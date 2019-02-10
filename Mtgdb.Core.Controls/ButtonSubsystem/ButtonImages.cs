@@ -13,12 +13,12 @@ namespace Mtgdb.Controls
 			return new ButtonImages
 			{
 				Unchecked = uncheckedImg.ImageDouble != null && (uncheckedImg.Image == null || forceLargeIcon)
-					? uncheckedImg.ImageDouble.Shift(new Point(-2, -2)).HalfResizeDpi()
-					: uncheckedImg.Image?.Shift(new Point(-1, -1)).ResizeDpi(),
+					? uncheckedImg.ImageDouble.HalfResizeDpi()
+					: uncheckedImg.Image?.ResizeDpi(),
 
 				Checked = checkedImg.ImageDouble != null && (checkedImg.Image == null || forceLargeIcon)
-					? checkedImg.ImageDouble.Shift(new Point(-2, -2)).HalfResizeDpi()
-					: checkedImg.Image?.Shift(new Point(-1, -1)).ResizeDpi()
+					? checkedImg.ImageDouble.HalfResizeDpi()
+					: checkedImg.Image?.ResizeDpi()
 			};
 		}
 

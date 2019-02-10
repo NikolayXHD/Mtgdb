@@ -31,7 +31,7 @@ namespace Mtgdb.Gui
 
 			_buttonHelp.Click += helpClick;
 
-			_buttonEditConfig.Click += configClick;
+			_buttonMenuEditConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
@@ -104,7 +104,7 @@ namespace Mtgdb.Gui
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
-			HideTooltips = !((CheckBox) sender).Checked;
+			HideTooltips = !((CustomCheckBox) sender).Checked;
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
@@ -175,8 +175,8 @@ namespace Mtgdb.Gui
 
 		private void languageMenuClick(object sender, EventArgs e)
 		{
-			var button = (ButtonBase) sender;
-			UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture).Trim();
+			var button = (CustomCheckBox) sender;
+			UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture);
 		}
 
 		private void updateLanguage()
@@ -184,7 +184,7 @@ namespace Mtgdb.Gui
 			var language = UiModel.LanguageController.Language;
 
 			var menuItem = getLanguageMenuItems()
-				.Single(_ => Str.Equals(_.Text.Trim(), language));
+				.Single(_ => Str.Equals(_.Text, language));
 
 			_buttonLanguage.Image = menuItem.Image;
 			_buttonLanguage.Text = language.ToUpperInvariant();
@@ -213,11 +213,11 @@ namespace Mtgdb.Gui
 			_buttonVisitDotP2014.SetTag(@"https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467");
 			_buttonVisitDotP2014.Click += buttonVisitClick;
 
-			_buttonDonatePayPal.SetTag(@"http://paypal.me/nidalgo");
-			_buttonDonatePayPal.Click += buttonVisitClick;
+			_buttonMenuDonatePayPal.SetTag(@"http://paypal.me/nidalgo");
+			_buttonMenuDonatePayPal.Click += buttonVisitClick;
 
-			_buttonDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
-			_buttonDonateYandexMoney.Click += buttonVisitClick;
+			_buttonMenuDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
+			_buttonMenuDonateYandexMoney.Click += buttonVisitClick;
 
 			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
 			_buttonVisitMtgo.Click += buttonVisitClick;
@@ -239,7 +239,7 @@ namespace Mtgdb.Gui
 			System.Diagnostics.Process.Start(url);
 		}
 
-		private void setMenuMode(ButtonBase sender)
+		private void setMenuMode(CustomCheckBox sender)
 		{
 			_menuOpen.SuspendLayout();
 
@@ -387,7 +387,7 @@ namespace Mtgdb.Gui
 		private void unsubscribeButtonEvents() =>
 			_buttonSubsystem.UnsubscribeFromEvents();
 
-		private readonly ButtonBase[] _deckButtons;
+		private readonly CustomCheckBox[] _deckButtons;
 		private readonly ButtonSubsystem _buttonSubsystem;
 		private readonly Dictionary<string, Bitmap> _languageIcons;
 
@@ -395,5 +395,7 @@ namespace Mtgdb.Gui
 
 		private SaveLoadMenuMode SaveLoadMenuMode =>
 			_saveLoadMenuModes.First(_ => _.IsCurrent);
+
+		public event Action ShowFilterPanelsChanged;
 	}
 }

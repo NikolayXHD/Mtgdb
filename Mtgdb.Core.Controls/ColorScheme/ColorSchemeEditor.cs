@@ -250,13 +250,9 @@ namespace Mtgdb.Controls
 			{
 				AutoSize = false,
 				AutoCheck = false,
-				Appearance = Appearance.Button,
 				Size = _cellSize,
 				Margin = _cellMargin,
 				BackColor = SystemColors.Control,
-				ForeColor = SystemColors.ControlText,
-				TextAlign = ContentAlignment.MiddleCenter,
-				HighlightBackColor = SystemColors.HotTrack,
 				Text = text,
 				Font = new Font(Font.FontFamily, Font.Size * 9f / 8f, FontStyle.Bold, Font.Unit)
 			};

@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 
 		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_trigger);
 
-		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, ButtonBase trigger)
+		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, CustomCheckBox trigger)
 		{
 			_trigger = trigger;
 			_buttonSubsystem = buttonSubsystem;
@@ -74,6 +74,6 @@ namespace Mtgdb.Gui
 
 		private ButtonSubsystem _buttonSubsystem;
 
-		private ButtonBase _trigger;
+		private CustomCheckBox _trigger;
 	}
 }

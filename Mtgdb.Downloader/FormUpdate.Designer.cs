@@ -327,7 +327,6 @@ namespace Mtgdb.Downloader
 			//
 			this.ClientSize = new System.Drawing.Size(839, 455);
 			this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "FormUpdate";

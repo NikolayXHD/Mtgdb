@@ -22,8 +22,8 @@ namespace Mtgdb.Gui
 
 			this.ScaleDpi();
 
-			_buttonDonateYandexMoney.ScaleDpi();
-			_buttonDonatePayPal.ScaleDpi();
+			_buttonMenuDonateYandexMoney.ScaleDpi();
+			_buttonMenuDonatePayPal.ScaleDpi();
 			_panelAva.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 			_labelDonate.ScaleDpi();
 
@@ -60,10 +60,10 @@ namespace Mtgdb.Gui
 			foreach (var langButton in getLanguageMenuItems())
 				langButton.ScaleDpi();
 
-			foreach (var titleButton in _flowTitleLeft.Controls.OfType<ButtonBase>())
+			foreach (var titleButton in _flowTitleLeft.Controls.OfType<CustomCheckBox>())
 				titleButton.ScaleDpi();
 
-			foreach (var titleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
+			foreach (var titleButton in _flowTitleRight.Controls.OfType<CustomCheckBox>())
 				titleButton.ScaleDpi();
 
 			_menuUiScale.ScaleDpi();
@@ -78,8 +78,8 @@ namespace Mtgdb.Gui
 			_labelUiUndoDepth.ScaleDpi();
 			_labelUiUseSmallImagesHint.ScaleDpi();
 
-			_buttonEditConfig.ScaleDpiHeight();
-			_buttonEditConfig.ScaleDpiFont();
+			_buttonMenuEditConfig.ScaleDpiHeight();
+			_buttonMenuEditConfig.ScaleDpiFont();
 
 			_buttonImportMtgArenaCollection.ScaleDpiFont();
 			_buttonImportExportToMtgArena.ScaleDpiFont();
@@ -115,8 +115,8 @@ namespace Mtgdb.Gui
 				form._buttonSubsystem.SetupButton(form._buttonOpenWindow, ButtonImages.ScaleDpi((null, Resources.add_form_32)));
 				form._buttonSubsystem.SetupButton(form._buttonLanguage, ButtonImages.ScaleDpi((null, Resources.en)));
 				form._buttonSubsystem.SetupButton(form._buttonColorScheme, ButtonImages.ScaleDpi((null, Resources.color_swatch_32)));
-				form._buttonSubsystem.SetupButton(form._buttonDonateYandexMoney, ButtonImages.ScaleDpi((Resources.yandex_money_32, null)));
-				form._buttonSubsystem.SetupButton(form._buttonDonatePayPal, ButtonImages.ScaleDpi((Resources.paypal_32, null)));
+				form._buttonSubsystem.SetupButton(form._buttonMenuDonateYandexMoney, ButtonImages.ScaleDpi((Resources.yandex_money_32, null)));
+				form._buttonSubsystem.SetupButton(form._buttonMenuDonatePayPal, ButtonImages.ScaleDpi((Resources.paypal_32, null)));
 			}).Setup(this);
 		}
 

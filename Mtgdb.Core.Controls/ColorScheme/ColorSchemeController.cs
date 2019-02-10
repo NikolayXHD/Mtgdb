@@ -115,6 +115,9 @@ namespace Mtgdb.Controls
 				SystemColors.Control,
 				SystemColors.ControlText,
 
+				SystemColors.ButtonFace, // menu gradient
+				SystemColors.ButtonShadow, // menu border
+
 				SystemColors.Window,
 				SystemColors.WindowText,
 				SystemColors.GrayText,

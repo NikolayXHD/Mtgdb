@@ -86,6 +86,7 @@
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ButtonSubsystem\CustomCheckBox.cs" />
     <Compile Include="ButtonSubsystem\ManualMenuPainter.cs" />
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
     <Compile Include="ColorScheme\ColorSchemeEditor.cs">
@@ -106,9 +107,6 @@
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
     <Compile Include="ButtonSubsystem\ButtonImages.cs" />
-    <Compile Include="ButtonSubsystem\CustomCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ButtonSubsystem\Popup.cs" />
     <Compile Include="Contract\CustomDrawArgs.cs" />
     <Compile Include="Contract\FieldSortInfo.cs" />

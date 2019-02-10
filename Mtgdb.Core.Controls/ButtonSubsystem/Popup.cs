@@ -9,7 +9,7 @@ namespace Mtgdb.Controls
 	{
 		public Popup(
 			Control menuControl,
-			ButtonBase owner,
+			CustomCheckBox owner,
 			HorizontalAlignment alignment = HorizontalAlignment.Left,
 			bool closeMenuOnClick = true,
 			Action beforeShow = null)
@@ -115,7 +115,7 @@ namespace Mtgdb.Controls
 
 
 		public bool CloseMenuOnClick { get; }
-		public ButtonBase Owner { get; }
+		public CustomCheckBox Owner { get; }
 		private readonly HorizontalAlignment _alignment;
 		private readonly Action _beforeShow;
 		private Point? _screenLocation;

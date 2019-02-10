@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
@@ -10,10 +11,10 @@ namespace Mtgdb.Gui
 
 		public LegalitySubsystem(
 			ComboBox menuLegalityFormat,
-			CheckBox buttonLegalityAllowLegal,
-			CheckBox buttonLegalityAllowRestricted,
-			CheckBox buttonLegalityAllowBanned,
-			CheckBox buttonLegalityAllowFuture)
+			CustomCheckBox buttonLegalityAllowLegal,
+			CustomCheckBox buttonLegalityAllowRestricted,
+			CustomCheckBox buttonLegalityAllowBanned,
+			CustomCheckBox buttonLegalityAllowFuture)
 		{
 			_menuLegalityFormat = menuLegalityFormat;
 
@@ -196,9 +197,9 @@ namespace Mtgdb.Gui
 		private bool _resetting;
 
 		private readonly ComboBox _menuLegalityFormat;
-		private readonly CheckBox _buttonLegalityAllowLegal;
-		private readonly CheckBox _buttonLegalityAllowRestricted;
-		private readonly CheckBox _buttonLegalityAllowBanned;
-		private readonly CheckBox _buttonLegalityAllowFuture;
+		private readonly CustomCheckBox _buttonLegalityAllowLegal;
+		private readonly CustomCheckBox _buttonLegalityAllowRestricted;
+		private readonly CustomCheckBox _buttonLegalityAllowBanned;
+		private readonly CustomCheckBox _buttonLegalityAllowFuture;
 	}
 }

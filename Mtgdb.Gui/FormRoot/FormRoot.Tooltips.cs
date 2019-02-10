@@ -82,7 +82,7 @@ namespace Mtgdb.Gui
 				"I recommend using an editor with XML syntax highlighting e.g. Notepad++.\r\n" +
 				"\r\n" +
 				"To apply your changes save the modified configuration file and restart the program.",
-				_buttonEditConfig
+				_buttonMenuEditConfig
 			);
 
 			TooltipController.SetTooltip(this,

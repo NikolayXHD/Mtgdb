@@ -1,5 +1,7 @@
 Control: ff3c3f41
 ControlText: ffafb1b3
+ButtonFace: ff3c3f41
+ButtonShadow: ff5e5e5e
 Window: ff2b2b2b
 WindowText: ffa9b7c6
 GrayText: ff808080

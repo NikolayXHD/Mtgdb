@@ -21,7 +21,7 @@ namespace Mtgdb.Controls
 			this.PaintBorder(e.Graphics, VisibleBorders, BorderColor, BorderDashStyle);
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
-			this.PaintPanelBack(e.Graphics, e.ClipRectangle, PaintBackground);
+			this.PaintPanelBack(e.Graphics, e.ClipRectangle, this.BackgroundImage, this.BackColor, PaintBackground);
 
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor { get; set; } = SystemColors.ActiveBorder;

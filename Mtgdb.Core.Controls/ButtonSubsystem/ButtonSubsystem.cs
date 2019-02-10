@@ -19,7 +19,7 @@ namespace Mtgdb.Controls
 			popup.MenuControl.Visible = false;
 		}
 
-		public void OpenPopup(ButtonBase popupButton)
+		public void OpenPopup(CustomCheckBox popupButton)
 		{
 			var popup = _popupsByOwner[popupButton];
 			show(popup);
@@ -27,7 +27,7 @@ namespace Mtgdb.Controls
 
 		private void checkedChanged(object sender, EventArgs e)
 		{
-			var checkButton = (CheckBox)sender;
+			var checkButton = (CustomCheckBox)sender;
 			setCheckImage(checkButton, checkButton.Checked);
 		}
 
@@ -35,7 +35,7 @@ namespace Mtgdb.Controls
 
 		private void popupOwnerClick(object sender, EventArgs e)
 		{
-			var popup = _popupsByOwner[(ButtonBase)sender];
+			var popup = _popupsByOwner[(CustomCheckBox)sender];
 			if (popup.Shown)
 				hide(popup);
 			else
@@ -52,7 +52,7 @@ namespace Mtgdb.Controls
 
 		private static void show(Popup popup)
 		{
-			var prevOwner = popup.MenuControl.GetTag<ButtonBase>("Owner");
+			var prevOwner = popup.MenuControl.GetTag<CustomCheckBox>("Owner");
 			if (prevOwner != null && prevOwner is CustomCheckBox prevCheck)
 				prevCheck.Checked = false;
 
@@ -68,7 +68,7 @@ namespace Mtgdb.Controls
 			if (e.KeyData == Keys.Escape)
 			{
 				var control = (Control) sender;
-				var owner = control.GetTag<ButtonBase>("Owner");
+				var owner = control.GetTag<CustomCheckBox>("Owner");
 				var popup = _popupsByOwner[owner];
 
 				hide(popup);
@@ -79,7 +79,7 @@ namespace Mtgdb.Controls
 		{
 			foreach (var control in _images.Keys)
 			{
-				if (control is CheckBox box)
+				if (control is CustomCheckBox box)
 					box.CheckedChanged += checkedChanged;
 			}
 
@@ -100,7 +100,7 @@ namespace Mtgdb.Controls
 		{
 			foreach (var control in _images.Keys)
 			{
-				if (control is CheckBox box)
+				if (control is CustomCheckBox box)
 					box.CheckedChanged -= checkedChanged;
 			}
 
@@ -108,7 +108,7 @@ namespace Mtgdb.Controls
 			{
 				popup.Owner.Click -= popupOwnerClick;
 
-				foreach (var button in popup.MenuControl.Controls.OfType<ButtonBase>())
+				foreach (var button in popup.MenuControl.Controls.OfType<CustomCheckBox>())
 					button.Click -= popupItemClick;
 
 				popup.MenuControl.PreviewKeyDown -= popupKeyDown;
@@ -121,19 +121,19 @@ namespace Mtgdb.Controls
 
 		private void popupItemClick(object sender, EventArgs e)
 		{
-			if (!(sender is ButtonBase))
+			if (!(sender is CustomCheckBox))
 				return;
 
-			var button = (ButtonBase)sender;
+			var button = (CustomCheckBox)sender;
 			var container = button.Parent;
-			var owner = container.GetTag<ButtonBase>("Owner");
+			var owner = container.GetTag<CustomCheckBox>("Owner");
 			var popup = _popupsByOwner[owner];
 
 			if (popup.CloseMenuOnClick)
 				popup.Hide();
 		}
 
-		private void setCheckImage(ButtonBase control, bool isChecked) =>
+		private void setCheckImage(CustomCheckBox control, bool isChecked) =>
 			control.Image = _images[control]?.GetImage(isChecked);
 
 		public bool PreFilterMessage(ref Message m)
@@ -154,8 +154,8 @@ namespace Mtgdb.Controls
 			return false;
 		}
 
-		private readonly Dictionary<ButtonBase, ButtonImages> _images = new Dictionary<ButtonBase, ButtonImages>();
+		private readonly Dictionary<CustomCheckBox, ButtonImages> _images = new Dictionary<CustomCheckBox, ButtonImages>();
 
-		private readonly Dictionary<ButtonBase, Popup> _popupsByOwner = new Dictionary<ButtonBase, Popup>();
+		private readonly Dictionary<CustomCheckBox, Popup> _popupsByOwner = new Dictionary<CustomCheckBox, Popup>();
 	}
 }

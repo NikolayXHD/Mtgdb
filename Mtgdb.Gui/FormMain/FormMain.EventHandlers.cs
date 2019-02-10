@@ -199,7 +199,7 @@ namespace Mtgdb.Gui
 
 			_updatingButtonHideScroll = true;
 
-			var value = ((CheckBox) sender).Checked;
+			var value = ((CustomCheckBox) sender).Checked;
 
 			_layoutViewCards.LayoutOptions.HideScroll =
 				_layoutViewDeck.LayoutOptions.HideScroll =

@@ -115,7 +115,7 @@ namespace Mtgdb.Controls
 
 		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor, DashStyle dashStyle)
 		{
-			if (borderColor == Color.Transparent || borderColor == Color.Empty)
+			if (borderColor == Color.Transparent || borderColor == Color.Empty || borderColor.A == 0)
 				return;
 
 			var pen = new Pen(borderColor)
@@ -136,19 +136,19 @@ namespace Mtgdb.Controls
 				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
 		}
 
-		public static void PaintPanelBack(this Control c, Graphics g, Rectangle clipRect, bool paintBack)
+		public static void PaintPanelBack(this Control c, Graphics g, Rectangle clipRect, Image backImage, Color backColor, bool paintBack)
 		{
-			if (!paintBack || c.BackColor.A < byte.MaxValue)
+			if (!paintBack || backColor.A < byte.MaxValue)
 				ButtonRenderer.DrawParentBackground(g, clipRect, c);
 
 			if (!paintBack && VisualStyleRenderer.IsSupported)
 				return;
 
-			if (c.BackColor != Color.Empty && c.BackColor != Color.Transparent)
-				g.FillRectangle(new SolidBrush(c.BackColor), c.ClientRectangle);
+			if (backColor != Color.Empty && backColor != Color.Transparent && backColor.A > 0)
+				g.FillRectangle(new SolidBrush(backColor), c.ClientRectangle);
 
-			if (c.BackgroundImage != null)
-				g.DrawImage(c.BackgroundImage, new Rectangle(System.Drawing.Point.Empty, c.BackgroundImage.Size));
+			if (backImage != null)
+				g.DrawImage(backImage, backImage.GetRect());
 		}
 
 		public static bool IsUnderMouse(this Control c) =>

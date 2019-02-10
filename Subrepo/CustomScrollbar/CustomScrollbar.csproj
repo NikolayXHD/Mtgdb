@@ -60,7 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageExtension.cs" />
     <Compile Include="Scrollbar.cs">
       <SubType>UserControl</SubType>
     </Compile>

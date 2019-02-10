@@ -303,9 +303,9 @@ namespace Mtgdb.Controls
 			else
 				measuredContentText = tooltip.Text;
 
-			const TextFormatFlags formatFlags = TextFormatFlags.GlyphOverhangPadding |
+			const TextFormatFlags formatFlags =
+				TextFormatFlags.GlyphOverhangPadding |
 				TextFormatFlags.NoPadding |
-				TextFormatFlags.Left |
 				TextFormatFlags.TextBoxControl |
 				TextFormatFlags.WordBreak;
 

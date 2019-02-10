@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
@@ -21,6 +20,29 @@ namespace Mtgdb.Gui
 		{
 			InitializeComponent();
 
+			_buttonLanguage.VisibleAllBorders = true;
+
+			getLanguageMenuItems().Append(_buttonLanguage).ForEach(
+				b => b.Font = new Font("Consolas", 9f, b.Font.Style));
+
+			new[]
+				{
+					_buttonMenuCopyDeck,
+					_buttonMenuPasteDeck,
+					_buttonMenuPasteDeckAppend,
+					_buttonMenuCopyCollection,
+					_buttonMenuPasteCollection,
+					_buttonMenuPasteCollectionAppend,
+					_buttonMenuSaveDeck,
+					_buttonMenuOpenDeck,
+					_buttonMenuSaveCollection,
+					_buttonMenuOpenCollection,
+					_buttonMenuEditConfig,
+					_buttonMenuDonatePayPal,
+					_buttonMenuDonateYandexMoney
+				}
+				.ForEach(b => b.VisibleAllBorders = true);
+
 			_languageIcons = new Dictionary<string, Bitmap>(Str.Comparer)
 			{
 				{ "cn", Resources.cn },
@@ -36,7 +58,7 @@ namespace Mtgdb.Gui
 				{ "ru", Resources.ru }
 			};
 
-			_deckButtons = new ButtonBase[]
+			_deckButtons = new[]
 			{
 				_buttonOpenDeck,
 				_buttonSaveDeck,
@@ -51,14 +73,14 @@ namespace Mtgdb.Gui
 				new SaveLoadMenuMode
 				{
 					TitleButton = _buttonOpenDeck,
-					MenuButtons = new ButtonBase[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
+					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
 					MtgArenaButtonText = "Import MTGArena deck",
 					IsMtgArenaPaste = true
 				},
 				new SaveLoadMenuMode
 				{
 					TitleButton = _buttonSaveDeck,
-					MenuButtons = new ButtonBase[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
+					MenuButtons = new[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
 					MtgArenaButtonText = "Export MTGArena deck",
 					IsMtgArenaPaste = false
 				}
@@ -73,6 +95,8 @@ namespace Mtgdb.Gui
 				_flowTitleLeft.PaintBackground =
 					_flowTitleRight.PaintBackground =
 						_tabs.PaintBackground = false;
+
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
 		}
 
 		[UsedImplicitly]
@@ -167,8 +191,6 @@ namespace Mtgdb.Gui
 
 			_menuColors.BackColor = SystemColors.Control;
 			_menuColors.ForeColor = SystemColors.ControlText;
-
-
 		}
 
 		private void updateFormBorderColor()
@@ -465,7 +487,7 @@ namespace Mtgdb.Gui
 			set => _buttonShowFilterPanels.Checked = value;
 		}
 
-		public event Action ShowFilterPanelsChanged;
+
 
 		public bool HideTooltips
 		{

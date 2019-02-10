@@ -17,6 +17,7 @@ namespace Mtgdb.Downloader
 		public FormUpdate()
 		{
 			InitializeComponent();
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
 		}
 
 		[UsedImplicitly]

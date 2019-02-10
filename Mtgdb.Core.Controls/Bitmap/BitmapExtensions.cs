@@ -219,6 +219,9 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
+		public static Rectangle GetRect(this Image image) =>
+			new Rectangle(default, image.Size);
+
 		private static void reThrow(Exception ex) =>
 			throw new ApplicationException("image transformation failed", ex);
 
