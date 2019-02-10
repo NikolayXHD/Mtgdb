@@ -66,6 +66,11 @@ namespace Mtgdb.Controls
 					imageRect = alignHorizontally(imageSize);
 					break;
 
+				case TextImageRelation.Overlay:
+					imageRect = alignVertically(imageSize);
+					textRect = alignVertically(textSize);
+					break;
+
 				default:
 					throw new NotSupportedException();
 			}
@@ -76,16 +81,24 @@ namespace Mtgdb.Controls
 			if (!string.IsNullOrEmpty(Text))
 			{
 				var foreColor = Enabled ? ForeColor : DisabledForeColor;
-				e.Graphics.DrawText(Text, Font, textRect, foreColor, TextFormat);
+				var format = TextFormat;
+
+				switch (TextAlign)
+				{
+					case StringAlignment.Far:
+						format |= TextFormatFlags.Right;
+						break;
+
+					case StringAlignment.Center:
+						format |= TextFormatFlags.HorizontalCenter;
+						break;
+				}
+
+				e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
 			}
 
-			paintBorder();
-
-			void paintBorder()
-			{
-				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
-				this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderDashStyle);
-			}
+			var borderColor = Enabled ? BorderColor : _disabledBorderColor;
+			this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderDashStyle);
 
 			Rectangle alignVertically(Size itemSize) =>
 				new Rectangle(new Point(x, Padding.Top + (Height - Padding.Vertical - itemSize.Height) / 2), itemSize);
@@ -146,17 +159,20 @@ namespace Mtgdb.Controls
 					Size = new Size(
 						imageSize.Width + textSize.Width + Padding.Horizontal,
 						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
+
 					break;
 				case TextImageRelation.ImageAboveText:
 				case TextImageRelation.TextAboveImage:
 					Size = new Size(
 						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
 						imageSize.Height + textSize.Height + Padding.Vertical);
+
 					break;
 				case TextImageRelation.Overlay:
 					Size = new Size(
 						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
 						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
+
 					break;
 				default:
 					throw new NotSupportedException();
@@ -219,6 +235,7 @@ namespace Mtgdb.Controls
 
 		private Bitmap _imageDisabled;
 		private Bitmap _image;
+
 		public Bitmap Image
 		{
 			get => _image;
@@ -239,6 +256,7 @@ namespace Mtgdb.Controls
 		private Color _checkedBackColor;
 		private Color _disabledBorderColor;
 		private Color _highlightBackColor = SystemColors.HotTrack;
+
 		[Category("Settings"), DefaultValue(typeof(Color), "HotTrack")]
 		public Color HighlightBackColor
 		{
@@ -254,6 +272,7 @@ namespace Mtgdb.Controls
 		}
 
 		private int _highlightMouseOverOpacity = 64;
+
 		[DefaultValue(64), Category("Settings")]
 		public int HighlightMouseOverOpacity
 		{
@@ -269,6 +288,7 @@ namespace Mtgdb.Controls
 		}
 
 		private int _highlightCheckedOpacity = 128;
+
 		[DefaultValue(128), Category("Settings")]
 		public int HighlightCheckedOpacity
 		{
@@ -284,6 +304,7 @@ namespace Mtgdb.Controls
 		}
 
 		private Color _borderColor = SystemColors.ActiveBorder;
+
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor
 		{
@@ -319,6 +340,7 @@ namespace Mtgdb.Controls
 		}
 
 		private bool _checked;
+
 		[Category("Settings"), DefaultValue(false)]
 		public bool Checked
 		{
@@ -390,6 +412,7 @@ namespace Mtgdb.Controls
 		}
 
 		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
+
 		[Category("Settings"), DefaultValue(typeof(TextImageRelation), "ImageBeforeText")]
 		public TextImageRelation TextImageRelation
 		{
@@ -404,6 +427,9 @@ namespace Mtgdb.Controls
 				Invalidate();
 			}
 		}
+
+		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
+		public StringAlignment TextAlign { get; set; } = StringAlignment.Near;
 
 		private const TextFormatFlags TextFormat =
 			TextFormatFlags.NoClipping |

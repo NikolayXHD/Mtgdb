@@ -198,8 +198,7 @@ namespace Mtgdb.Gui
 			this._buttonLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonLanguage.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
-			this._buttonLanguage.HighlightMouseOverOpacity = 32;
-			this._buttonLanguage.HighlightCheckedOpacity = 32;
+			this._buttonLanguage.HighlightMouseOverOpacity = 16;
 			this._buttonLanguage.Location = new System.Drawing.Point(371, 3);
 			this._buttonLanguage.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this._buttonLanguage.Name = "_buttonLanguage";
@@ -455,6 +454,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgo.Size = new System.Drawing.Size(72, 72);
 			this._buttonVisitMtgo.TabIndex = 32;
 			this._buttonVisitMtgo.Text = "Magic\r\nthe Gathering\r\nOnline";
+			this._buttonVisitMtgo.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMtgo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitCockatrice
@@ -469,6 +469,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(72, 54);
 			this._buttonVisitCockatrice.TabIndex = 3;
 			this._buttonVisitCockatrice.Text = "Cockatrice";
+			this._buttonVisitCockatrice.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitCockatrice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitDotP2014
@@ -483,6 +484,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitDotP2014.Size = new System.Drawing.Size(72, 72);
 			this._buttonVisitDotP2014.TabIndex = 4;
 			this._buttonVisitDotP2014.Text = "Riiak\'s\r\nDotP 2014\r\nDeck Builder";
+			this._buttonVisitDotP2014.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDotP2014.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _labelFormats
@@ -510,6 +512,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitXMage.Size = new System.Drawing.Size(54, 68);
 			this._buttonVisitXMage.TabIndex = 1;
 			this._buttonVisitXMage.Text = "XMage";
+			this._buttonVisitXMage.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitXMage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitMagarena
@@ -524,6 +527,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMagarena.Size = new System.Drawing.Size(64, 68);
 			this._buttonVisitMagarena.TabIndex = 2;
 			this._buttonVisitMagarena.Text = "Magarena";
+			this._buttonVisitMagarena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMagarena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitDeckedBuilder
@@ -539,6 +543,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitDeckedBuilder.Size = new System.Drawing.Size(59, 68);
 			this._buttonVisitDeckedBuilder.TabIndex = 37;
 			this._buttonVisitDeckedBuilder.Text = "Decked\r\nbuilder";
+			this._buttonVisitDeckedBuilder.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDeckedBuilder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitForge
@@ -553,6 +558,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitForge.Size = new System.Drawing.Size(72, 68);
 			this._buttonVisitForge.TabIndex = 0;
 			this._buttonVisitForge.Text = "Forge";
+			this._buttonVisitForge.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitForge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonVisitMtgArena
@@ -568,6 +574,7 @@ namespace Mtgdb.Gui
 			this._buttonVisitMtgArena.Size = new System.Drawing.Size(72, 58);
 			this._buttonVisitMtgArena.TabIndex = 38;
 			this._buttonVisitMtgArena.Text = "MTGArena";
+			this._buttonVisitMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			//
 			// _buttonImportMtgArenaCollection
