@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class ButtonSubsystem : IMessageFilter
+	public class PopupSubsystem : IMessageFilter
 	{
 		public void SetupPopup(Popup popup)
 		{

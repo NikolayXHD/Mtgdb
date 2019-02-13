@@ -112,7 +112,7 @@
     <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
-    <Compile Include="ButtonSubsystem\ButtonSubsystem.cs" />
+    <Compile Include="ButtonSubsystem\PopupSubsystem.cs" />
     <Compile Include="ButtonSubsystem\ButtonImages.cs" />
     <Compile Include="ButtonSubsystem\Popup.cs" />
     <Compile Include="Contract\CustomDrawArgs.cs" />

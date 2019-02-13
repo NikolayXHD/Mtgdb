@@ -14,14 +14,14 @@ namespace Mtgdb.Gui
 			InitializeComponent();
 		}
 
-		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_trigger);
+		public void ShowFindExamples() => _popupSubsystem.OpenPopup(_trigger);
 
-		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, ButtonBase trigger)
+		public void Setup(CardSearchSubsystem cardSearchSubsystem, PopupSubsystem popupSubsystem, ButtonBase trigger)
 		{
 			_trigger = trigger;
-			_buttonSubsystem = buttonSubsystem;
+			_popupSubsystem = popupSubsystem;
 
-			buttonSubsystem.SetupPopup(new Popup(this, trigger, HorizontalAlignment.Right));
+			popupSubsystem.SetupPopup(new Popup(this, trigger, HorizontalAlignment.Right));
 
 			var queryRows = Enumerable.Range(0, _panelExamples.RowCount)
 				.Select(getFindExampleRow)
@@ -73,7 +73,7 @@ namespace Mtgdb.Gui
 			return (queryLabel, commentLabel, queryLabel.BackColor);
 		}
 
-		private ButtonSubsystem _buttonSubsystem;
+		private PopupSubsystem _popupSubsystem;
 
 		private ButtonBase _trigger;
 	}

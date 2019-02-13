@@ -198,7 +198,7 @@ namespace Mtgdb.Gui
 
 			scale();
 
-			_buttonSubsystem.SubscribeToEvents();
+			_popupSubsystem.SubscribeToEvents();
 		}
 
 		private void scale()
@@ -1262,7 +1262,7 @@ namespace Mtgdb.Gui
 		private readonly ComboBox[] _menus;
 
 		private readonly CardFields _fields;
-		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
+		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 		private readonly ChartFilesSubsystem _filesSubsystem;
 
 		private readonly PseudoCheckBox[] _checkBoxes;

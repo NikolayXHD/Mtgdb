@@ -270,22 +270,22 @@ namespace Mtgdb.Gui
 				(null, Resources.update_40),
 				(null, Resources.update_notification_40));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
-			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
+			_popupSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
+			_popupSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck,
+			_popupSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck,
 				beforeShow: () => setMenuMode(_buttonOpenDeck)));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck,
+			_popupSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck,
 				beforeShow: () => setMenuMode(_buttonSaveDeck)));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste));
-			_buttonSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme,
+			_popupSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste));
+			_popupSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme,
 				beforeShow: updateMenuColors));
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
+			_popupSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
 
-			_buttonSubsystem.SubscribeToEvents();
+			_popupSubsystem.SubscribeToEvents();
 
 			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
 			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
@@ -395,10 +395,10 @@ namespace Mtgdb.Gui
 		}
 
 		private void unsubscribeButtonEvents() =>
-			_buttonSubsystem.UnsubscribeFromEvents();
+			_popupSubsystem.UnsubscribeFromEvents();
 
 		private readonly ButtonBase[] _deckButtons;
-		private readonly ButtonSubsystem _buttonSubsystem;
+		private readonly PopupSubsystem _popupSubsystem;
 		private readonly Dictionary<string, Bitmap> _languageIcons;
 
 		private readonly List<SaveLoadMenuMode> _saveLoadMenuModes;

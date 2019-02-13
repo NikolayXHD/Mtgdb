@@ -25,12 +25,12 @@ namespace Mtgdb.Gui
 			_buttonMruFiles = buttonMruFiles;
 			_menuMruFiles = menuMruFiles;
 
-			_buttonSubsystem.SetupPopup(new Popup(_menuMruFiles, _buttonMruFiles, HorizontalAlignment.Right, beforeShow: updateMruFilesMenu));
+			_popupSubsystem.SetupPopup(new Popup(_menuMruFiles, _buttonMruFiles, HorizontalAlignment.Right, beforeShow: updateMruFilesMenu));
 		}
 
 		public void SubscribeToEvents()
 		{
-			_buttonSubsystem.SubscribeToEvents();
+			_popupSubsystem.SubscribeToEvents();
 
 			_buttonSave.Pressed += handleSaveClick;
 			_buttonLoad.Pressed += handleLoadClick;
@@ -165,6 +165,6 @@ namespace Mtgdb.Gui
 		private readonly ButtonBase _buttonLoad;
 		private readonly ButtonBase _buttonMruFiles;
 		private readonly ContextMenuStrip _menuMruFiles;
-		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
+		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 	}
 }

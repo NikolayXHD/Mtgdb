@@ -85,7 +85,7 @@ namespace Mtgdb.Gui
 				_layoutViewCards,
 				_layoutViewDeck);
 
-			_menuSearchExamples.Setup(_cardSearch, _buttonSubsystem, _buttonSearchExamplesDropDown);
+			_menuSearchExamples.Setup(_cardSearch, _popupSubsystem, _buttonSearchExamplesDropDown);
 
 			_cardSort = new CardSortSubsystem(_layoutViewCards, _cardRepo, _fields, _cardSearch);
 
@@ -257,7 +257,7 @@ namespace Mtgdb.Gui
 				filterControl.StateChanged += quickFiltersChanged;
 
 			FilterManager.StateChanged += quickFilterManagerChanged;
-			_buttonSubsystem.SubscribeToEvents();
+			_popupSubsystem.SubscribeToEvents();
 
 			System.Windows.Forms.Application.ApplicationExit += applicationExit;
 
@@ -346,7 +346,7 @@ namespace Mtgdb.Gui
 				filterControl.StateChanged -= quickFiltersChanged;
 
 			FilterManager.StateChanged -= quickFilterManagerChanged;
-			_buttonSubsystem.UnsubscribeFromEvents();
+			_popupSubsystem.UnsubscribeFromEvents();
 
 			System.Windows.Forms.Application.ApplicationExit -= applicationExit;
 
@@ -476,7 +476,7 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly LayoutViewTooltip _tooltipViewDeck;
-		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
+		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;

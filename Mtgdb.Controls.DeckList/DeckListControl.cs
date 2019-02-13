@@ -501,7 +501,7 @@ namespace Mtgdb.Controls
 
 		private Cursor _textSelectionCursor;
 		private DeckSortSubsystem _deckSort;
-		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
+		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 
 		private bool _aborted;
 		private readonly object _sync = new object();

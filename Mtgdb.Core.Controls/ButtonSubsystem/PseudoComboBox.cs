@@ -12,7 +12,7 @@ namespace Mtgdb.Controls
 {
 	public class PseudoComboBox : IComponent
 	{
-		public PseudoComboBox(ButtonSubsystem buttonSubsystem, ButtonBase owner, Control parent)
+		public PseudoComboBox(PopupSubsystem popupSubsystem, ButtonBase owner, Control parent)
 		{
 			Owner = owner;
 
@@ -42,7 +42,7 @@ namespace Mtgdb.Controls
 
 			parent.Controls.Add(_menu);
 
-			buttonSubsystem.SetupPopup(new Popup(_menu, owner));
+			popupSubsystem.SetupPopup(new Popup(_menu, owner));
 
 			_menuItemsAccessor = new MenuItemsAccessor(this);
 			_menuValuesAccessor = new MenuValuesAccessor(_menuItemsAccessor);

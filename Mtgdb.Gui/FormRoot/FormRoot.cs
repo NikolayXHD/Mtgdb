@@ -138,7 +138,7 @@ namespace Mtgdb.Gui
 			_serialization = serialization;
 			_colorSchemeEditor = colorSchemeEditor;
 
-			_buttonSubsystem = new ButtonSubsystem();
+			_popupSubsystem = new PopupSubsystem();
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
 			_newsService = newsService;
