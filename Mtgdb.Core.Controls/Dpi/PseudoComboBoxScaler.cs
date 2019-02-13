@@ -11,7 +11,7 @@ namespace Mtgdb.Controls
 
 			new DpiScaler<PseudoComboBox>(cb =>
 			{
-				cb.ButtonSubsystem.SetupButton(cb.Owner, ButtonImages.ScaleDpi((null, Resources.drop_down_48)));
+				cb.Owner.ButtonImages = ButtonImages.ScaleDpi((null, Resources.drop_down_48));
 			}).Setup(comboBox);
 
 			comboBox.MenuItemsCreated += menuItemsCreated;

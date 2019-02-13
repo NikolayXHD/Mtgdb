@@ -339,6 +339,8 @@ namespace Mtgdb.Controls
 			return (imageSize, textSize);
 		}
 
+		private void updateImage() =>
+			Image = _buttonImages?.GetImage(Checked);
 
 
 		public event EventHandler CheckedChanged;
@@ -478,6 +480,7 @@ namespace Mtgdb.Controls
 					return;
 
 				_checked = value;
+				updateImage();
 				Invalidate();
 				CheckedChanged?.Invoke(this, EventArgs.Empty);
 			}
@@ -557,6 +560,21 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
 		public StringAlignment TextAlign { get; set; } = StringAlignment.Near;
 
+		private ButtonImages _buttonImages;
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+		public ButtonImages ButtonImages
+		{
+			get => _buttonImages;
+			set
+			{
+				if (_buttonImages == value)
+					return;
+
+				_buttonImages = value;
+				updateImage();
+			}
+		}
+
 		private const TextFormatFlags TextFormat =
 			TextFormatFlags.NoClipping |
 			TextFormatFlags.NoPrefix |
@@ -567,5 +585,8 @@ namespace Mtgdb.Controls
 			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
 		private static readonly Size _infiniteSize = new Size(int.MaxValue, int.MaxValue);
+
+		
+
 	}
 }

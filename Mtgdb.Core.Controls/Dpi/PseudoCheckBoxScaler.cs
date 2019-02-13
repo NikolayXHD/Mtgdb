@@ -10,9 +10,9 @@ namespace Mtgdb.Controls
 			checkBox.Box.ScaleDpiPadding();
 
 			new DpiScaler<PseudoCheckBox>(b => 
-					b.ButtonSubsystem.SetupButton(b.Box, ButtonImages.ScaleDpi(
+					b.Box.ButtonImages = ButtonImages.ScaleDpi(
 						(null, Resources.unchecked_32),
-						(null, Resources.checked_32))))
+						(null, Resources.checked_32)))
 				.Setup(checkBox);
 		}
 	}

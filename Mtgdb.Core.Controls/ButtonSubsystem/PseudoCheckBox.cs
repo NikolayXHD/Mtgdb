@@ -16,9 +16,9 @@ namespace Mtgdb.Controls
 			Box.AutoCheck = true;
 			Box.TextImageRelation = TextImageRelation.ImageBeforeText;
 
-			buttonSubsystem.SetupButton(box, new ButtonImages(
+			box.ButtonImages = new ButtonImages(
 				Resources.unchecked_32.ScaleBy(0.5f),
-				Resources.checked_32.ScaleBy(0.5f)));
+				Resources.checked_32.ScaleBy(0.5f));
 		}
 
 		internal readonly ButtonBase Box;

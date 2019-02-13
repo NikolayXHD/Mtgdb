@@ -14,7 +14,6 @@ namespace Mtgdb.Controls
 	{
 		public PseudoComboBox(ButtonSubsystem buttonSubsystem, ButtonBase owner, Control parent)
 		{
-			ButtonSubsystem = buttonSubsystem;
 			Owner = owner;
 
 			Owner.AutoSize = false;
@@ -29,7 +28,7 @@ namespace Mtgdb.Controls
 			Owner.ForeColor = SystemColors.WindowText;
 
 			var dropDownImg = Resources.drop_down_48.ScaleBy(0.5f);
-			ButtonSubsystem.SetupButton(Owner, new ButtonImages(dropDownImg, dropDownImg));
+			Owner.ButtonImages = new ButtonImages(dropDownImg, dropDownImg);
 
 			_menu = new BorderedFlowLayoutPanel
 			{
@@ -43,7 +42,7 @@ namespace Mtgdb.Controls
 
 			parent.Controls.Add(_menu);
 
-			ButtonSubsystem.SetupPopup(new Popup(_menu, owner));
+			buttonSubsystem.SetupPopup(new Popup(_menu, owner));
 
 			_menuItemsAccessor = new MenuItemsAccessor(this);
 			_menuValuesAccessor = new MenuValuesAccessor(_menuItemsAccessor);
@@ -210,7 +209,6 @@ namespace Mtgdb.Controls
 		public event EventHandler MenuItemsCreated;
 		public event EventHandler Disposed;
 
-		internal readonly ButtonSubsystem ButtonSubsystem;
 		private readonly BorderedFlowLayoutPanel _menu;
 		private readonly MenuValuesAccessor _menuValuesAccessor;
 		private readonly MenuItemsAccessor _menuItemsAccessor;

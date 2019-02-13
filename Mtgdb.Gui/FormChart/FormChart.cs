@@ -235,9 +235,9 @@ namespace Mtgdb.Gui
 
 			new DpiScaler<FormChart>(form =>
 			{
-				form._buttonSubsystem.SetupButton(form._buttonSave, ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32)));
-				form._buttonSubsystem.SetupButton(form._buttonLoad, ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32)));
-				form._buttonSubsystem.SetupButton(form._buttonMruFiles, ButtonImages.ScaleDpi((null, Resources.down_32)));
+				form._buttonSave.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
+				form._buttonLoad.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
+				form._buttonMruFiles.ButtonImages = ButtonImages.ScaleDpi((null, Resources.down_32));
 			}).Setup(this);
 
 			_checkBoxes.ForEach(PseudoCheckBoxScaler.ScaleDpi);

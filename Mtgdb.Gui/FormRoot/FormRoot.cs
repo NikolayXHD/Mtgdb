@@ -395,16 +395,12 @@ namespace Mtgdb.Gui
 
 		private void updateDownloadButton()
 		{
-			var image = _newsService.HasUnreadNews
-				? Resources.update_notification_40
-				: Resources.update_40;
-
-			bool enabled = _downloaderSubsystem.IsProgressCalculated && _newsService.NewsLoaded;
-
+			_buttonUpdate.Checked = _newsService.HasUnreadNews;
 			this.Invoke(delegate
 			{
+				bool enabled = _downloaderSubsystem.IsProgressCalculated && _newsService.NewsLoaded;
+
 				_buttonUpdate.Enabled = enabled;
-				_buttonSubsystem.SetupButton(_buttonUpdate, ButtonImages.ScaleDpi((null, image)));
 
 				if (enabled && _downloaderSubsystem.NeedToSuggestDownloader)
 					_downloaderSubsystem.ShowDownloader(this, auto: true);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using Mtgdb.Gui.Properties;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
@@ -169,8 +170,8 @@ namespace Mtgdb.Gui
 		{
 			_buttonLanguage.AutoCheck = false;
 
-			updateLanguage();
-			UiModel.LanguageController.LanguageChanged += updateLanguage;
+			updateButtonLanguage();
+			UiModel.LanguageController.LanguageChanged += updateButtonLanguage;
 
 			foreach (var langMenuItem in getLanguageMenuItems())
 				langMenuItem.MouseClick += languageMenuClick;
@@ -185,16 +186,15 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void updateLanguage()
+		private void updateButtonLanguage()
 		{
 			var language = UiModel.LanguageController.Language;
 
 			var menuItem = getLanguageMenuItems()
 				.Single(_ => Str.Equals(_.Text, language));
 
-			_buttonLanguage.Image = menuItem.Image;
-			_buttonLanguage.Text = language.ToUpperInvariant();
-			_buttonSubsystem.SetupButton(_buttonLanguage, ButtonImages.ScaleDpi((null, _languageIcons[language])));
+			_buttonLanguage.Text = menuItem.Text;
+			_buttonLanguage.ButtonImages = menuItem.ButtonImages;
 		}
 
 		private IEnumerable<ButtonBase> getLanguageMenuItems() =>
@@ -266,6 +266,10 @@ namespace Mtgdb.Gui
 
 		private void setupButtons()
 		{
+			_buttonUpdate.ButtonImages = ButtonImages.ScaleDpi(
+				(null, Resources.update_40),
+				(null, Resources.update_notification_40));
+
 			_buttonSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
 			_buttonSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
 

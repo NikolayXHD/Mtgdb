@@ -7,12 +7,6 @@ namespace Mtgdb.Controls
 {
 	public class ButtonSubsystem : IMessageFilter
 	{
-		public void SetupButton(ButtonBase control, ButtonImages buttonImages)
-		{
-			_images[control] = buttonImages;
-			setCheckImage(control, control.Checked);
-		}
-
 		public void SetupPopup(Popup popup)
 		{
 			_popupsByOwner[popup.Owner] = popup;
@@ -23,12 +17,6 @@ namespace Mtgdb.Controls
 		{
 			var popup = _popupsByOwner[popupButton];
 			show(popup, focus: false);
-		}
-
-		private void checkedChanged(object sender, EventArgs e)
-		{
-			var checkButton = (ButtonBase)sender;
-			setCheckImage(checkButton, checkButton.Checked);
 		}
 
 
@@ -65,12 +53,6 @@ namespace Mtgdb.Controls
 
 		public void SubscribeToEvents()
 		{
-			foreach (var control in _images.Keys)
-			{
-				if (control is ButtonBase box)
-					box.CheckedChanged += checkedChanged;
-			}
-
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
 				popup.Owner.PressDown += popupOwnerPressed;
@@ -90,12 +72,6 @@ namespace Mtgdb.Controls
 
 		public void UnsubscribeFromEvents()
 		{
-			foreach (var control in _images.Keys)
-			{
-				if (control is ButtonBase box)
-					box.CheckedChanged -= checkedChanged;
-			}
-
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
 				popup.Owner.PressDown -= popupOwnerPressed;
@@ -210,9 +186,6 @@ namespace Mtgdb.Controls
 
 
 
-		private void setCheckImage(ButtonBase control, bool isChecked) =>
-			control.Image = _images[control]?.GetImage(isChecked);
-
 		public bool PreFilterMessage(ref Message m)
 		{
 			// ReSharper disable InconsistentNaming
@@ -237,8 +210,6 @@ namespace Mtgdb.Controls
 
 			return false;
 		}
-
-		private readonly Dictionary<ButtonBase, ButtonImages> _images = new Dictionary<ButtonBase, ButtonImages>();
 
 		private readonly Dictionary<ButtonBase, Popup> _popupsByOwner = new Dictionary<ButtonBase, Popup>();
 	}

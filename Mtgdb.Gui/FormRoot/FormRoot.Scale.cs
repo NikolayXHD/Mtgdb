@@ -90,34 +90,36 @@ namespace Mtgdb.Gui
 
 			new DpiScaler<FormRoot>(form =>
 			{
-				form._buttonSubsystem.SetupButton(form._buttonUndo, ButtonImages.ScaleDpi((Resources.undo_16, Resources.undo_32)));
-				form._buttonSubsystem.SetupButton(form._buttonRedo, ButtonImages.ScaleDpi((Resources.redo_16, Resources.redo_32)));
-				form._buttonSubsystem.SetupButton(form._buttonSaveDeck, ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32)));
-				form._buttonSubsystem.SetupButton(form._buttonOpenDeck, ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32)));
-				form._buttonSubsystem.SetupButton(form._buttonStat, ButtonImages.ScaleDpi((Resources.chart_16, Resources.chart_32)));
-				form._buttonSubsystem.SetupButton(form._buttonPrint, ButtonImages.ScaleDpi((Resources.print_16, Resources.print_32)));
-				form._buttonSubsystem.SetupButton(form._buttonClear, ButtonImages.ScaleDpi((Resources.trash_16, Resources.trash_32)));
-				form._buttonSubsystem.SetupButton(form._buttonPaste, ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32)));
-				form._buttonSubsystem.SetupButton(form._buttonHelp, ButtonImages.ScaleDpi((Resources.index_16, Resources.index_32)));
-				form._buttonSubsystem.SetupButton(form._buttonConfig, ButtonImages.ScaleDpi((Resources.properties_16, Resources.properties_32)));
-				form._buttonSubsystem.SetupButton(form._buttonTooltips, ButtonImages.ScaleDpi((Resources.tooltip_16, Resources.tooltip_32)));
-				form._buttonSubsystem.SetupButton(form._buttonImportExportToMtgArena, ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32)));
+				form._buttonUndo.ButtonImages = ButtonImages.ScaleDpi((Resources.undo_16, Resources.undo_32));
+				form._buttonRedo.ButtonImages = ButtonImages.ScaleDpi((Resources.redo_16, Resources.redo_32));
+				form._buttonSaveDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
+				form._buttonOpenDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
+				form._buttonStat.ButtonImages = ButtonImages.ScaleDpi((Resources.chart_16, Resources.chart_32));
+				form._buttonPrint.ButtonImages = ButtonImages.ScaleDpi((Resources.print_16, Resources.print_32));
+				form._buttonClear.ButtonImages = ButtonImages.ScaleDpi((Resources.trash_16, Resources.trash_32));
+				form._buttonPaste.ButtonImages = ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32));
+				form._buttonHelp.ButtonImages = ButtonImages.ScaleDpi((Resources.index_16, Resources.index_32));
+				form._buttonConfig.ButtonImages = ButtonImages.ScaleDpi((Resources.properties_16, Resources.properties_32));
+				form._buttonTooltips.ButtonImages = ButtonImages.ScaleDpi((Resources.tooltip_16, Resources.tooltip_32));
+				form._buttonImportExportToMtgArena.ButtonImages = ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32));
 
 				foreach (var langButton in getLanguageMenuItems())
-					form._buttonSubsystem.SetupButton(langButton,
-						ButtonImages.ScaleDpi((null, form._languageIcons[langButton.Text.Trim()])));
+					langButton.ButtonImages = ButtonImages.ScaleDpi((null, form._languageIcons[langButton.Text.Trim()]));
 
-				form._buttonSubsystem.SetupButton(form._buttonShowFilterPanels, ButtonImages.ScaleDpi((null, Resources.filters_show_32)));
-				form._buttonSubsystem.SetupButton(form._buttonUpdate, ButtonImages.ScaleDpi((null, Resources.update_40)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuOpenDeck, ButtonImages.ScaleDpi((null, Resources.deck_48)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuOpenCollection, ButtonImages.ScaleDpi((null, Resources.box_48)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuSaveDeck, ButtonImages.ScaleDpi((null, Resources.deck_48)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuSaveCollection, ButtonImages.ScaleDpi((null, Resources.box_48)));
-				form._buttonSubsystem.SetupButton(form._buttonOpenWindow, ButtonImages.ScaleDpi((null, Resources.add_form_32)));
-				form._buttonSubsystem.SetupButton(form._buttonLanguage, ButtonImages.ScaleDpi((null, Resources.en)));
-				form._buttonSubsystem.SetupButton(form._buttonColorScheme, ButtonImages.ScaleDpi((null, Resources.color_swatch_32)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuDonateYandexMoney, ButtonImages.ScaleDpi((Resources.yandex_money_32, null)));
-				form._buttonSubsystem.SetupButton(form._buttonMenuDonatePayPal, ButtonImages.ScaleDpi((Resources.paypal_32, null)));
+				updateButtonLanguage();
+
+				form._buttonShowFilterPanels.ButtonImages = ButtonImages.ScaleDpi((null, Resources.filters_show_32));
+				form._buttonUpdate.ButtonImages = ButtonImages.ScaleDpi((null, Resources.update_40));
+				form._buttonMenuOpenDeck.ButtonImages = ButtonImages.ScaleDpi((null, Resources.deck_48));
+				form._buttonMenuOpenCollection.ButtonImages = ButtonImages.ScaleDpi((null, Resources.box_48));
+				form._buttonMenuSaveDeck.ButtonImages = ButtonImages.ScaleDpi((null, Resources.deck_48));
+				form._buttonMenuSaveCollection.ButtonImages = ButtonImages.ScaleDpi((null, Resources.box_48));
+				form._buttonOpenWindow.ButtonImages = ButtonImages.ScaleDpi((null, Resources.add_form_32));
+
+				form._buttonColorScheme.ButtonImages = ButtonImages.ScaleDpi((null, Resources.color_swatch_32));
+				form._buttonMenuDonateYandexMoney.ButtonImages = ButtonImages.ScaleDpi((Resources.yandex_money_32, null));
+				form._buttonMenuDonatePayPal.ButtonImages = ButtonImages.ScaleDpi((Resources.paypal_32, null));
+
 			}).Setup(this);
 		}
 
