@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Gui.Properties;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -60,10 +61,10 @@ namespace Mtgdb.Gui
 			foreach (var langButton in getLanguageMenuItems())
 				langButton.ScaleDpi();
 
-			foreach (var titleButton in _flowTitleLeft.Controls.OfType<CustomCheckBox>())
+			foreach (var titleButton in _flowTitleLeft.Controls.OfType<ButtonBase>())
 				titleButton.ScaleDpi();
 
-			foreach (var titleButton in _flowTitleRight.Controls.OfType<CustomCheckBox>())
+			foreach (var titleButton in _flowTitleRight.Controls.OfType<ButtonBase>())
 				titleButton.ScaleDpi();
 
 			_menuUiScale.ScaleDpi();

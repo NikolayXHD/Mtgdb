@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Newtonsoft.Json;
 using NLog;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -13,9 +14,9 @@ namespace Mtgdb.Gui
 	{
 		public ChartFilesSubsystem(
 			FormChart formChart, 
-			CustomCheckBox buttonSave,
-			CustomCheckBox buttonLoad,
-			CustomCheckBox buttonMruFiles,
+			ButtonBase buttonSave,
+			ButtonBase buttonLoad,
+			ButtonBase buttonMruFiles,
 			ContextMenuStrip menuMruFiles)
 		{
 			_formChart = formChart;
@@ -160,9 +161,9 @@ namespace Mtgdb.Gui
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
 		private readonly FormChart _formChart;
-		private readonly CustomCheckBox _buttonSave;
-		private readonly CustomCheckBox _buttonLoad;
-		private readonly CustomCheckBox _buttonMruFiles;
+		private readonly ButtonBase _buttonSave;
+		private readonly ButtonBase _buttonLoad;
+		private readonly ButtonBase _buttonMruFiles;
 		private readonly ContextMenuStrip _menuMruFiles;
 		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
 	}

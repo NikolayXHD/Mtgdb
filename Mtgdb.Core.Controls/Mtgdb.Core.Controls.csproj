@@ -88,7 +88,7 @@
     </Compile>
     <Compile Include="ButtonSubsystem\PseudoCheckBox.cs" />
     <Compile Include="Dpi\PseudoCheckBoxScaler.cs" />
-    <Compile Include="ButtonSubsystem\CustomCheckBox.cs">
+    <Compile Include="ButtonSubsystem\ButtonBase.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ButtonSubsystem\ManualMenuPainter.cs" />

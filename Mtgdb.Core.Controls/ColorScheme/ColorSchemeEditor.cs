@@ -246,7 +246,7 @@ namespace Mtgdb.Controls
 
 		private void createButton(string text, EventHandler clickHandler)
 		{
-			var control = new CustomCheckBox
+			var control = new ButtonBase
 			{
 				AutoSize = false,
 				AutoCheck = false,

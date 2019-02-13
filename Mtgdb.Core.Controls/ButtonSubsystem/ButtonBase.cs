@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class CustomCheckBox : Control
+	public class ButtonBase : Control
 	{
-		public CustomCheckBox()
+		public ButtonBase()
 		{
 			SetStyle(
 				ControlStyles.UserPaint |

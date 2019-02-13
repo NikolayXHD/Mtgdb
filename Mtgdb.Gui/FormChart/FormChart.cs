@@ -10,6 +10,7 @@ using Mtgdb.Dal;
 using Mtgdb.Gui.Properties;
 using Mtgdb.Gui.Resx;
 using ReadOnlyCollectionsExtensions;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -366,7 +367,7 @@ namespace Mtgdb.Gui
 			if (_menuFields.SelectedIndex < 0)
 				return;
 
-			var button = (CustomCheckBox) sender;
+			var button = (ButtonBase) sender;
 			var tab = _tabByButton[button];
 			var fieldName = _fieldsOrder[_menuFields.SelectedIndex];
 
@@ -437,14 +438,14 @@ namespace Mtgdb.Gui
 
 		private void buttonClick(object sender, EventArgs e)
 		{
-			foreach (CustomCheckBox button in _headerButtons)
+			foreach (ButtonBase button in _headerButtons)
 				button.Checked = button == sender;
 
-			var checkBox = (CustomCheckBox) sender;
+			var checkBox = (ButtonBase) sender;
 			loadReport(checkBox);
 		}
 
-		private void loadReport(CustomCheckBox button)
+		private void loadReport(ButtonBase button)
 		{
 			ReportSettings settings = null;
 
@@ -1210,7 +1211,7 @@ namespace Mtgdb.Gui
 
 		private IReadOnlyList<Bitmap> _sortIconsOrder;
 
-		private readonly Dictionary<CustomCheckBox, TabHeaderControl> _tabByButton;
+		private readonly Dictionary<ButtonBase, TabHeaderControl> _tabByButton;
 		private readonly TabHeaderControl[] _summTabs;
 		private readonly TabHeaderControl[] _tabs;
 
@@ -1222,7 +1223,7 @@ namespace Mtgdb.Gui
 		private readonly CardRepository _repository;
 		private readonly Func<UiModel> _uiSnapshotFactory;
 		private bool _applyingSettings;
-		private readonly CustomCheckBox[] _headerButtons;
+		private readonly ButtonBase[] _headerButtons;
 
 		private static readonly DpiScaler<FormChart, IReadOnlyList<Bitmap>> _sortIconsScaler =
 			new DpiScaler<FormChart, IReadOnlyList<Bitmap>>(
@@ -1257,7 +1258,7 @@ namespace Mtgdb.Gui
 			nameof(Card.CollectionTotalHigh)
 		};
 
-		private readonly CustomCheckBox[] _buttons;
+		private readonly ButtonBase[] _buttons;
 		private readonly ComboBox[] _menus;
 
 		private readonly CardFields _fields;

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -106,7 +107,7 @@ namespace Mtgdb.Gui
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
-			HideTooltips = !((CustomCheckBox) sender).Checked;
+			HideTooltips = !((ButtonBase) sender).Checked;
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
@@ -179,7 +180,7 @@ namespace Mtgdb.Gui
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				var button = (CustomCheckBox) sender;
+				var button = (ButtonBase) sender;
 				UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture);
 			}
 		}
@@ -196,8 +197,8 @@ namespace Mtgdb.Gui
 			_buttonSubsystem.SetupButton(_buttonLanguage, ButtonImages.ScaleDpi((null, _languageIcons[language])));
 		}
 
-		private IEnumerable<CustomCheckBox> getLanguageMenuItems() =>
-			_menuLanguage.Controls.OfType<CustomCheckBox>();
+		private IEnumerable<ButtonBase> getLanguageMenuItems() =>
+			_menuLanguage.Controls.OfType<ButtonBase>();
 
 
 
@@ -244,7 +245,7 @@ namespace Mtgdb.Gui
 			System.Diagnostics.Process.Start(url);
 		}
 
-		private void setMenuMode(CustomCheckBox sender)
+		private void setMenuMode(ButtonBase sender)
 		{
 			_menuOpen.SuspendLayout();
 
@@ -392,7 +393,7 @@ namespace Mtgdb.Gui
 		private void unsubscribeButtonEvents() =>
 			_buttonSubsystem.UnsubscribeFromEvents();
 
-		private readonly CustomCheckBox[] _deckButtons;
+		private readonly ButtonBase[] _deckButtons;
 		private readonly ButtonSubsystem _buttonSubsystem;
 		private readonly Dictionary<string, Bitmap> _languageIcons;
 

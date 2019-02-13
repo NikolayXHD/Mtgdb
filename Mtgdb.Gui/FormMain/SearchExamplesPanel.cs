@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -15,7 +16,7 @@ namespace Mtgdb.Gui
 
 		public void ShowFindExamples() => _buttonSubsystem.OpenPopup(_trigger);
 
-		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, CustomCheckBox trigger)
+		public void Setup(CardSearchSubsystem cardSearchSubsystem, ButtonSubsystem buttonSubsystem, ButtonBase trigger)
 		{
 			_trigger = trigger;
 			_buttonSubsystem = buttonSubsystem;
@@ -74,6 +75,6 @@ namespace Mtgdb.Gui
 
 		private ButtonSubsystem _buttonSubsystem;
 
-		private CustomCheckBox _trigger;
+		private ButtonBase _trigger;
 	}
 }

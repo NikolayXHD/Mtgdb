@@ -7,7 +7,7 @@ namespace Mtgdb.Controls
 {
 	public class PseudoCheckBox : IComponent
 	{
-		public PseudoCheckBox(CustomCheckBox box, ButtonSubsystem buttonSubsystem)
+		public PseudoCheckBox(ButtonBase box, ButtonSubsystem buttonSubsystem)
 		{
 			Box = box;
 			ButtonSubsystem = buttonSubsystem;
@@ -21,7 +21,7 @@ namespace Mtgdb.Controls
 				Resources.checked_32.ScaleBy(0.5f)));
 		}
 
-		internal readonly CustomCheckBox Box;
+		internal readonly ButtonBase Box;
 		internal readonly ButtonSubsystem ButtonSubsystem;
 		
 		/// <summary>

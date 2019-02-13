@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -191,7 +192,7 @@ namespace Mtgdb.Gui
 
 			_updatingButtonHideScroll = true;
 
-			var value = ((CustomCheckBox) sender).Checked;
+			var value = ((ButtonBase) sender).Checked;
 
 			_layoutViewCards.LayoutOptions.HideScroll =
 				_layoutViewDeck.LayoutOptions.HideScroll =

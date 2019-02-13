@@ -12,7 +12,7 @@ namespace Mtgdb.Controls
 {
 	public class PseudoComboBox : IComponent
 	{
-		public PseudoComboBox(ButtonSubsystem buttonSubsystem, CustomCheckBox owner, Control parent)
+		public PseudoComboBox(ButtonSubsystem buttonSubsystem, ButtonBase owner, Control parent)
 		{
 			ButtonSubsystem = buttonSubsystem;
 			Owner = owner;
@@ -58,9 +58,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private CustomCheckBox createMenuItem(string value, int index)
+		private ButtonBase createMenuItem(string value, int index)
 		{
-			var result = new CustomCheckBox
+			var result = new ButtonBase
 			{
 				Text = value,
 				AutoSize = true,
@@ -132,7 +132,7 @@ namespace Mtgdb.Controls
 
 
 
-		public CustomCheckBox Owner { get; }
+		public ButtonBase Owner { get; }
 
 		public IReadOnlyList<string> MenuValues =>
 			_menuValuesAccessor;
@@ -164,7 +164,7 @@ namespace Mtgdb.Controls
 			SelectedIndex = Math.Min(SelectedIndex, values.Count - 1);
 		}
 
-		internal IReadOnlyList<CustomCheckBox> MenuItems =>
+		internal IReadOnlyList<ButtonBase> MenuItems =>
 			_menuItemsAccessor;
 
 		private int _selectedIndex = -1;
@@ -176,13 +176,13 @@ namespace Mtgdb.Controls
 				if (_selectedIndex == value)
 					return;
 
-				((CustomCheckBox) _menu.Controls.TryGet(_selectedIndex))
+				((ButtonBase) _menu.Controls.TryGet(_selectedIndex))
 					?.Invoke0(_ => _.Checked = false);
 
 				_selectedIndex = value;
 
 				if (_selectedIndex.IsWithin(0, _menu.Controls.Count - 1))
-					((CustomCheckBox) _menu.Controls[_selectedIndex]).Checked = true;
+					((ButtonBase) _menu.Controls[_selectedIndex]).Checked = true;
 
 				updateSelectedText();
 				MenuItems.ForEach((m, i) => m.Checked = i == _selectedIndex);
@@ -217,13 +217,13 @@ namespace Mtgdb.Controls
 
 
 
-		private class MenuItemsAccessor : IReadOnlyList<CustomCheckBox>
+		private class MenuItemsAccessor : IReadOnlyList<ButtonBase>
 		{
 			public MenuItemsAccessor(PseudoComboBox comboBox) =>
 				_comboBox = comboBox;
 
-			public IEnumerator<CustomCheckBox> GetEnumerator() =>
-				_comboBox._menu.Controls.Cast<CustomCheckBox>().GetEnumerator();
+			public IEnumerator<ButtonBase> GetEnumerator() =>
+				_comboBox._menu.Controls.Cast<ButtonBase>().GetEnumerator();
 
 			IEnumerator IEnumerable.GetEnumerator() =>
 				GetEnumerator();
@@ -231,8 +231,8 @@ namespace Mtgdb.Controls
 			public int Count =>
 				_comboBox._menu.Controls.Count;
 
-			public CustomCheckBox this[int index] =>
-				(CustomCheckBox) _comboBox._menu.Controls[index];
+			public ButtonBase this[int index] =>
+				(ButtonBase) _comboBox._menu.Controls[index];
 
 			private readonly PseudoComboBox _comboBox;
 		}

@@ -10,7 +10,7 @@ namespace Mtgdb.Controls
 	{
 		public Popup(
 			Control menuControl,
-			CustomCheckBox owner,
+			ButtonBase owner,
 			HorizontalAlignment alignment = HorizontalAlignment.Left,
 			bool closeMenuOnClick = true,
 			Action beforeShow = null)
@@ -70,7 +70,7 @@ namespace Mtgdb.Controls
 
 		public void FocusFirstMenuItem()
 		{
-			MenuControl.Controls.OfType<CustomCheckBox>()
+			MenuControl.Controls.OfType<ButtonBase>()
 				.Where(_ => _.TabStop && _.Enabled)
 				.AtMin(_ => _.TabIndex)
 				.FindOrDefault()
@@ -79,7 +79,7 @@ namespace Mtgdb.Controls
 
 		public void FocusLastMenuItem()
 		{
-			MenuControl.Controls.OfType<CustomCheckBox>()
+			MenuControl.Controls.OfType<ButtonBase>()
 				.Where(_ => _.TabStop && _.Enabled)
 				.AtMax(_ => _.TabIndex)
 				.FindOrDefault()
@@ -129,7 +129,7 @@ namespace Mtgdb.Controls
 		}
 
 		public bool CloseMenuOnClick { get; }
-		public CustomCheckBox Owner { get; }
+		public ButtonBase Owner { get; }
 		private readonly HorizontalAlignment _alignment;
 		private readonly Action _beforeShow;
 		private Point? _screenLocation;
