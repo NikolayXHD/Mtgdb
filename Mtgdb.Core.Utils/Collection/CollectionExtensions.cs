@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +48,14 @@ namespace Mtgdb
 		}
 
 		public static TVal TryGet<TVal>(this IList<TVal> list, int index)
+		{
+			if (index < 0 || index >= list.Count)
+				return default;
+
+			return list[index];
+		}
+
+		public static object TryGet(this IList list, int index)
 		{
 			if (index < 0 || index >= list.Count)
 				return default;
@@ -179,6 +188,13 @@ namespace Mtgdb
 		{
 			foreach (var element in source)
 				action(element);
+		}
+
+		public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+		{
+			int i = 0;
+			foreach (var element in source)
+				action(element, i++);
 		}
 
 		public static void Add<TKey, TValue>(this IDictionary<TKey, List<TValue>> multiDict, TKey key, TValue val)

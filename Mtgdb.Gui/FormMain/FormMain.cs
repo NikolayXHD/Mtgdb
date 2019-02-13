@@ -10,7 +10,7 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
-	public sealed partial class FormMain : Form
+	public sealed partial class FormMain : UserControl
 	{
 		public void SetFormRoot(FormRoot formRoot)
 		{
@@ -137,10 +137,7 @@ namespace Mtgdb.Gui
 			historyUpdateButtons();
 
 			if (IsHandleCreated)
-			{
-				_searchEditor.Focus();
 				startThreads();
-			}
 		}
 
 
@@ -564,22 +561,30 @@ namespace Mtgdb.Gui
 
 			if (!string.IsNullOrEmpty(_legality.FilterFormat))
 			{
-				result.Append(' ').Append(_legality.FilterFormat);
-
-				if (_legality.AllowLegal)
-					result.Append(' ').Append(Legality.Legal);
-
-				if (_legality.AllowRestricted)
-					result.Append(' ').Append(Legality.Restricted);
-
-				if (_legality.AllowBanned)
-					result.Append(' ').Append(Legality.Banned);
-
-				if (_legality.AllowFuture)
-					result.Append(' ').Append(Legality.Future);
+				result
+					.Append(' ')
+					.Append(_legality.FilterFormat)
+					.Append(' ')
+					.Append(toChar(_legality.AllowLegal))
+					.Append(firstChar(Legality.Legal))
+					.Append(' ')
+					.Append(toChar(_legality.AllowRestricted))
+					.Append(firstChar(Legality.Restricted))
+					.Append(' ')
+					.Append(toChar(_legality.AllowBanned))
+					.Append(firstChar(Legality.Banned))
+					.Append(' ')
+					.Append(toChar(_legality.AllowFuture))
+					.Append(firstChar(Legality.Future));
 			}
 
 			return result.ToString();
+
+			char toChar(bool value) =>
+				value ? '+' : '-';
+
+			string firstChar(string value) =>
+				value.Substring(0, 1).ToUpper(Str.Culture);
 		}
 
 
@@ -1008,9 +1013,11 @@ namespace Mtgdb.Gui
 				_printing.ShowPrintingDialog(_deckEditor, _deckEditor.DeckName);
 		}
 
-		public void FocusSearch() => _cardSearch.FocusSearch();
+		public void FocusSearch() =>
+			_cardSearch.FocusSearch();
 
-		public void ShowFindExamples() => _panelSearchExamples.ShowFindExamples();
+		public void ShowFindExamples() =>
+			_menuSearchExamples.ShowFindExamples();
 
 
 

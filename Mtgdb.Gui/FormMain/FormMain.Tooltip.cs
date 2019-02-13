@@ -135,7 +135,7 @@ namespace Mtgdb.Gui
 				"Filter by Legality",
 				"Select format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
-				_menuLegalityFormat,
+				_menuLegalityOwner,
 				_panelIconLegality);
 
 			defaultTooltips.SetTooltip(this,

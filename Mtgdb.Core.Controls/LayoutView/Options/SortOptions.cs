@@ -9,9 +9,9 @@ namespace Mtgdb.Controls
 	{
 		public SortOptions()
 		{
-			Icon = Properties.Resources.sort_none;
-			AscIcon = Properties.Resources.sort_asc;
-			DescIcon = Properties.Resources.sort_desc;
+			Icon = Properties.Resources.sort_none_hovered;
+			AscIcon = Properties.Resources.sort_asc_hovered;
+			DescIcon = Properties.Resources.sort_desc_hovered;
 		}
 
 		public bool IsButtonVisible(LayoutControl card, FieldControl field) =>

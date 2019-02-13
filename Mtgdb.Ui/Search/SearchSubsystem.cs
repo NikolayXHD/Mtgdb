@@ -88,6 +88,8 @@ namespace Mtgdb.Ui
 			_findEditor.TextChanged -= findTextChanged;
 			_findEditor.SelectionChanged -= findSelectionChanged;
 			_findEditor.LocationChanged -= findLocationChanged;
+
+			_findEditor.GotFocus -= findGotFocus;
 			_findEditor.LostFocus -= findLostFocus;
 
 			_listBoxSuggest.Click -= suggestClick;
@@ -266,6 +268,10 @@ namespace Mtgdb.Ui
 		private void findLocationChanged(object sender, EventArgs e)
 		{
 			updateSuggestLocation();
+		}
+
+		private void findGotFocus(object sender, EventArgs e)
+		{
 		}
 
 		private void findLostFocus(object sender, EventArgs e)

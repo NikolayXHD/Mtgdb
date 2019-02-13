@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -34,7 +35,6 @@ namespace Mtgdb.Gui
 			: this()
 		{
 			DoubleBuffered = true;
-			KeyPreview = true;
 
 			_viewCards = new MtgLayoutView(_layoutViewCards);
 			_viewDeck = new MtgLayoutView(_layoutViewDeck);
@@ -64,19 +64,28 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_buttonSubsystem = new ButtonSubsystem();
+			_menuLegality = new PseudoComboBox(_buttonSubsystem, _menuLegalityOwner, this);
+			_menuLegalityCheckBoxes = new[]
+				{
+					_buttonLegalityAllowLegal,
+					_buttonLegalityAllowRestricted,
+					_buttonLegalityAllowBanned,
+					_buttonLegalityAllowFuture
+				}
+				.Select(_ => new PseudoCheckBox(_, _buttonSubsystem))
+				.ToArray();
 
 			_cardSearch = new CardSearchSubsystem(
 				this,
 				_searchEditor,
 				_panelIconSearch,
-				_listBoxSuggest,
+				_menuSuggest,
 				cardSearcher,
 				cardAdapter,
 				_layoutViewCards,
 				_layoutViewDeck);
 
-			_panelSearchExamples.Setup(_cardSearch, _buttonSubsystem, _buttonSearchExamplesDropDown);
+			_menuSearchExamples.Setup(_cardSearch, _buttonSubsystem, _buttonSearchExamplesDropDown);
 
 			_cardSort = new CardSortSubsystem(_layoutViewCards, _cardRepo, _fields, _cardSearch);
 
@@ -119,7 +128,7 @@ namespace Mtgdb.Gui
 			_viewCards.SetDataSource(_searchResultCards);
 
 			_legality = new LegalitySubsystem(
-				_menuLegalityFormat,
+				_menuLegality,
 				_buttonLegalityAllowLegal,
 				_buttonLegalityAllowRestricted,
 				_buttonLegalityAllowBanned,
@@ -182,8 +191,7 @@ namespace Mtgdb.Gui
 				_layoutViewCards,
 				_deckListControl.DeckListView);
 
-			ManualMenuPainter.SetupComboBox(_menuLegalityFormat, allowScroll: false);
-			ManualMenuPainter.SetupListBox(_listBoxSuggest);
+			ManualMenuPainter.SetupListBox(_menuSuggest);
 
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
@@ -194,13 +202,14 @@ namespace Mtgdb.Gui
 			subscribeToEvents();
 		}
 
+		
+
 		private void cardCreating(object view, LayoutControl probeCard) =>
 			((CardLayoutControlBase) probeCard).Ui = () => _formRoot.UiModel;
 
 		private void subscribeToEvents()
 		{
 			Load += formLoad;
-			FormClosing += formClosing;
 
 			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown += resetExcludeManaAbility;
@@ -299,7 +308,6 @@ namespace Mtgdb.Gui
 		private void unsubscribeFromEvents()
 		{
 			Load -= formLoad;
-			FormClosing -= formClosing;
 
 			_buttonExcludeManaCost.MouseDown -= resetExcludeManaCost;
 			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
@@ -468,7 +476,7 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly LayoutViewTooltip _tooltipViewDeck;
-		private readonly ButtonSubsystem _buttonSubsystem;
+		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
@@ -479,6 +487,8 @@ namespace Mtgdb.Gui
 		private string _deckName;
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
+		private readonly PseudoComboBox _menuLegality;
+		private readonly PseudoCheckBox[] _menuLegalityCheckBoxes;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

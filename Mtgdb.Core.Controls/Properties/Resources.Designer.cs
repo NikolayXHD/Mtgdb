@@ -19,7 +19,7 @@ namespace Mtgdb.Controls.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -66,6 +66,16 @@ namespace Mtgdb.Controls.Properties {
         internal static System.Drawing.Bitmap add_tab_32 {
             get {
                 object obj = ResourceManager.GetObject("add_tab_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap checked_32 {
+            get {
+                object obj = ResourceManager.GetObject("checked_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,6 +133,16 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap drop_down_48 {
+            get {
+                object obj = ResourceManager.GetObject("drop_down_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap maximize {
             get {
                 object obj = ResourceManager.GetObject("maximize", resourceCulture);
@@ -153,7 +173,7 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap search {
+        internal static System.Drawing.Bitmap search_hovered {
             get {
                 object obj = ResourceManager.GetObject("search_hovered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +193,7 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap sort_asc {
+        internal static System.Drawing.Bitmap sort_asc_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_asc_hovered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -183,7 +203,7 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap sort_desc {
+        internal static System.Drawing.Bitmap sort_desc_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_desc_hovered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,9 +213,19 @@ namespace Mtgdb.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap sort_none {
+        internal static System.Drawing.Bitmap sort_none_hovered {
             get {
                 object obj = ResourceManager.GetObject("sort_none_hovered", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap unchecked_32 {
+            get {
+                object obj = ResourceManager.GetObject("unchecked_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

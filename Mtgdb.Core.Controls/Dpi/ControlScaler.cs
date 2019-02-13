@@ -11,6 +11,9 @@ namespace Mtgdb.Controls
 		public static void ScaleDpiSize(this Control control) =>
 			_sizeScaler.Setup(control);
 
+		public static void ScaleDpiPadding(this Control control) =>
+			_paddingScaler.Setup(control);
+
 		public static void ScaleDpiFont(this Control control) =>
 			_fontScaler.Setup(control);
 
@@ -32,8 +35,14 @@ namespace Mtgdb.Controls
 				(c, f) => c.Font = f,
 				font => font.ByDpi());
 
-		private static readonly DpiScaler<Control, (Size, Font)> _scaler =
-			DpiScalers.Combine(_sizeScaler, _fontScaler);
+		private static readonly DpiScaler<Control, Padding> _paddingScaler =
+			new DpiScaler<Control, Padding>(
+				c => c.Padding,
+				(c, p) => c.Padding = p,
+				p => p.ByDpi());
+
+		private static readonly DpiScaler<Control, (Size, Font, Padding)> _scaler =
+			DpiScalers.Combine(_sizeScaler, _fontScaler, _paddingScaler);
 
 		private static readonly DpiScaler<Control, int> _heightScaler =
 			new DpiScaler<Control, int>(

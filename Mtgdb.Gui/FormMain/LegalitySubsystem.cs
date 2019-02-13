@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
@@ -10,18 +11,14 @@ namespace Mtgdb.Gui
 		public event Action FilterChanged;
 
 		public LegalitySubsystem(
-			ComboBox menuLegalityFormat,
+			PseudoComboBox menuLegalityFormat,
 			CustomCheckBox buttonLegalityAllowLegal,
 			CustomCheckBox buttonLegalityAllowRestricted,
 			CustomCheckBox buttonLegalityAllowBanned,
 			CustomCheckBox buttonLegalityAllowFuture)
 		{
 			_menuLegalityFormat = menuLegalityFormat;
-
-			_menuLegalityFormat.Items.Clear();
-			_menuLegalityFormat.Items.Add(Legality.AnyFormat);
-			foreach (string format in Legality.Formats)
-				_menuLegalityFormat.Items.Add(format);
+			_menuLegalityFormat.SetMenuValues(Legality.Formats.Prepend(Legality.AnyFormat));
 
 			_buttonLegalityAllowLegal = buttonLegalityAllowLegal;
 			_buttonLegalityAllowRestricted = buttonLegalityAllowRestricted;
@@ -42,7 +39,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.MouseUp += handleMouseClick;
 			_buttonLegalityAllowRestricted.MouseUp += handleMouseClick;
 			_buttonLegalityAllowBanned.MouseUp += handleMouseClick;
-			_menuLegalityFormat.MouseUp += handleMouseClick;
+			_menuLegalityFormat.Owner.MouseUp += handleMouseClick;
 		}
 
 		private void handleMouseClick(object sender, MouseEventArgs e)
@@ -151,8 +148,8 @@ namespace Mtgdb.Gui
 			if (_menuLegalityFormat.SelectedIndex <= 0)
 				return null;
 
-			var selectedItem = _menuLegalityFormat.Items[_menuLegalityFormat.SelectedIndex];
-			return (string) selectedItem;
+			var selectedItem = _menuLegalityFormat.MenuValues[_menuLegalityFormat.SelectedIndex];
+			return selectedItem;
 		}
 
 		public bool AllowLegal { get; private set;}
@@ -162,8 +159,8 @@ namespace Mtgdb.Gui
 
 		public void SetFilterFormat(string value)
 		{
-			for (int i = 0; i < _menuLegalityFormat.Items.Count; i++)
-				if (Str.Equals((string)_menuLegalityFormat.Items[i], value))
+			for (int i = 0; i < _menuLegalityFormat.MenuValues.Count; i++)
+				if (Str.Equals(_menuLegalityFormat.MenuValues[i], value))
 				{
 					_menuLegalityFormat.SelectedIndex = i;
 					return;
@@ -196,7 +193,7 @@ namespace Mtgdb.Gui
 
 		private bool _resetting;
 
-		private readonly ComboBox _menuLegalityFormat;
+		private readonly PseudoComboBox _menuLegalityFormat;
 		private readonly CustomCheckBox _buttonLegalityAllowLegal;
 		private readonly CustomCheckBox _buttonLegalityAllowRestricted;
 		private readonly CustomCheckBox _buttonLegalityAllowBanned;

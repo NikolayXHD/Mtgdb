@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -32,6 +31,15 @@ namespace Mtgdb.Controls
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
 		public static extern bool SetForegroundWindow(HandleRef hWnd);
+
+		public static Form ParentForm(this Control c)
+		{
+			var current = c;
+			while (current.Parent != null)
+				current = current.Parent;
+
+			return current as Form;
+		}
 
 		public static bool Invoke(this Control value, Action method)
 		{

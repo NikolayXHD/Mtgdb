@@ -104,6 +104,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		public static Bitmap ScaleBy(this Bitmap original, float factor) =>
+			original.FitIn(original.Size.MultiplyBy(factor).Round());
+
 		public static Bitmap FitIn(this Bitmap original, Size size, Size frame = default)
 		{
 			var croppedSize = new Size(

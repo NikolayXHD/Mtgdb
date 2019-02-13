@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -34,7 +35,7 @@ namespace Mtgdb.Controls
 				show(strip, location);
 			else
 				show(location);
-			
+
 			Shown = true;
 		}
 
@@ -67,7 +68,23 @@ namespace Mtgdb.Controls
 			return isCursorInButton;
 		}
 
+		public void FocusFirstMenuItem()
+		{
+			MenuControl.Controls.OfType<CustomCheckBox>()
+				.Where(_ => _.TabStop && _.Enabled)
+				.AtMin(_ => _.TabIndex)
+				.FindOrDefault()
+				?.Focus();
+		}
 
+		public void FocusLastMenuItem()
+		{
+			MenuControl.Controls.OfType<CustomCheckBox>()
+				.Where(_ => _.TabStop && _.Enabled)
+				.AtMax(_ => _.TabIndex)
+				.FindOrDefault()
+				?.Focus();
+		}
 
 		private void show(Point location)
 		{
@@ -81,7 +98,6 @@ namespace Mtgdb.Controls
 			MenuControl.Location = location;
 			MenuControl.BringToFront();
 			MenuControl.Show();
-			MenuControl.Focus();
 		}
 
 		private void show(ContextMenuStrip contextMenuStrip, Point location)
@@ -111,8 +127,6 @@ namespace Mtgdb.Controls
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-
-
 
 		public bool CloseMenuOnClick { get; }
 		public CustomCheckBox Owner { get; }

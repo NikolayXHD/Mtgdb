@@ -9,15 +9,11 @@ namespace Mtgdb.Gui
 {
 	partial class FormMain
 	{
-		private void applicationExit(object sender, EventArgs e)
-		{
-			shutdown();
-		}
+		private void applicationExit(object sender, EventArgs e) =>
+			Shutdown();
 
 		private void formLoad(object sender, EventArgs e)
 		{
-			_searchEditor.Focus();
-
 			startThreads();
 			subscribeCardRepoEvents();
 		}
@@ -40,18 +36,14 @@ namespace Mtgdb.Gui
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 		}
 
-		private void formClosing(object sender, FormClosingEventArgs e)
-		{
-			shutdown();
-		}
-
-		private void shutdown()
+		public void Shutdown()
 		{
 			stopThreads();
 			unsubscribeFromEvents();
 			unsubscribeCardRepoEvents();
 			_deckEditorSubsystem.Dispose();
 			_deckListControl.UnsubscribeFromEvents();
+			_menuLegality.Dispose();
 		}
 
 

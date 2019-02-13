@@ -8,7 +8,7 @@ namespace Mtgdb.Controls
 		{
 			Button = new ButtonOptions
 			{
-				Icon = Properties.Resources.search
+				Icon = Properties.Resources.search_hovered
 			};
 		}
 

@@ -97,6 +97,12 @@ namespace Mtgdb.Gui
 						_tabs.PaintBackground = false;
 
 			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
+
+			_flowTitleLeft.Controls.Cast<Control>()
+				.Concat(_flowTitleRight.Controls.Cast<Control>())
+				.Append(_panelClient)
+				.Where(_ => _.TabStop)
+				.ForEach((c, i) => c.TabIndex = i);
 		}
 
 		[UsedImplicitly]
@@ -207,6 +213,12 @@ namespace Mtgdb.Gui
 			System.Windows.Forms.Application.AddMessageFilter(this);
 			CardSuggestModel.StartSuggestThread();
 			DeckSuggestModel.StartSuggestThread();
+
+			if (SelectedTab != null)
+			{
+				SelectedTab.Focus();
+				SelectedTab.FocusSearch();
+			}
 		}
 
 		private void repositoryLoaded()
@@ -301,13 +313,18 @@ namespace Mtgdb.Gui
 			selectedForm.Size = _panelClient.Size;
 
 			if (!_panelClient.Controls.Contains(selectedForm))
-			{
 				_panelClient.Controls.Add(selectedForm);
-				selectedForm.Show();
-			}
 
 			selectedForm.BringToFront();
+			selectedForm.Show();
+			selectedForm.Focus();
+			selectedForm.FocusSearch();
+
 			selectedForm.OnTabSelected();
+
+			foreach (Control control in _panelClient.Controls)
+				if (control != selectedForm && control.Visible)
+					control.Hide();
 		}
 
 		private void tabClosing(object sender, int i)
@@ -321,7 +338,16 @@ namespace Mtgdb.Gui
 			var lastTabId = _tabs.Count - 1;
 
 			formMain.SaveHistory(Application.GetHistoryFile(Id, lastTabId));
-			formMain.Close();
+			formMain.Hide();
+
+			dispose(formMain);
+		}
+
+		private void dispose(FormMain formMain)
+		{
+			formMain.Shutdown();
+			_panelClient.Controls.Remove(formMain);
+			formMain.Dispose();
 		}
 
 		private void tabClosed(TabHeaderControl sender)
@@ -338,8 +364,12 @@ namespace Mtgdb.Gui
 			{
 				var formMain = getTab(i);
 				formMain.SaveHistory(Application.GetHistoryFile(Id, i));
-				formMain.Close();
 			}
+
+			Enumerable.Range(0, _tabs.Count)
+				.Select(getTab)
+				.ToArray()
+				.ForEach(dispose);
 
 			_application.RemoveForm(this);
 
@@ -402,9 +432,6 @@ namespace Mtgdb.Gui
 		{
 			var form = _formMainFactory();
 
-			form.TopLevel = false;
-			form.ControlBox = false;
-			form.FormBorderStyle = FormBorderStyle.None;
 			form.Size = _panelClient.Size;
 			form.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 			form.Location = new Point(0, 0);

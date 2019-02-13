@@ -22,7 +22,7 @@ namespace Mtgdb.Controls
 		public void OpenPopup(CustomCheckBox popupButton)
 		{
 			var popup = _popupsByOwner[popupButton];
-			show(popup);
+			show(popup, focus: false);
 		}
 
 		private void checkedChanged(object sender, EventArgs e)
@@ -33,24 +33,18 @@ namespace Mtgdb.Controls
 
 
 
-		private void popupOwnerClick(object sender, EventArgs e)
-		{
-			var popup = _popupsByOwner[(CustomCheckBox)sender];
-			if (popup.Shown)
-				hide(popup);
-			else
-				show(popup);
-		}
-
-		private static void hide(Popup popup)
+		private static void hide(Popup popup, bool focus)
 		{
 			if (popup.Owner is CustomCheckBox check)
 				check.Checked = false;
 
 			popup.Hide();
+
+			if (focus && popup.Owner.TabStop && popup.Owner.Enabled)
+				popup.Owner.Focus();
 		}
 
-		private static void show(Popup popup)
+		private static void show(Popup popup, bool focus)
 		{
 			var prevOwner = popup.MenuControl.GetTag<CustomCheckBox>("Owner");
 			if (prevOwner != null && prevOwner is CustomCheckBox prevCheck)
@@ -58,22 +52,16 @@ namespace Mtgdb.Controls
 
 			if (popup.Owner is CustomCheckBox check)
 				check.Checked = true;
+
 			popup.MenuControl.SetTag("Owner", popup.Owner);
 
 			popup.Show();
+			
+			if (focus)
+				popup.FocusFirstMenuItem();
 		}
 
-		private void popupKeyDown(object sender, PreviewKeyDownEventArgs e)
-		{
-			if (e.KeyData == Keys.Escape)
-			{
-				var control = (Control) sender;
-				var owner = control.GetTag<CustomCheckBox>("Owner");
-				var popup = _popupsByOwner[owner];
 
-				hide(popup);
-			}
-		}
 
 		public void SubscribeToEvents()
 		{
@@ -85,12 +73,17 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.Click += popupOwnerClick;
+				popup.Owner.MouseClick += popupOwnerClick;
+				popup.Owner.KeyDown += popupOwnerKeyDown;
 
 				foreach (Control button in popup.MenuControl.Controls)
-					button.Click += popupItemClick;
-
-				popup.MenuControl.PreviewKeyDown += popupKeyDown;
+				{
+					button.MouseClick += popupItemClick;
+					button.KeyDown += popupItemKeyDown;
+					button.PreviewKeyDown += popupItemPreviewKeyDown;
+				}
+				
+				popup.Owner.PreviewKeyDown += popupOwnerPreviewKeyDown;
 			}
 
 			Application.AddMessageFilter(this);
@@ -106,12 +99,17 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.Click -= popupOwnerClick;
+				popup.Owner.MouseClick -= popupOwnerClick;
+				popup.Owner.KeyDown -= popupOwnerKeyDown;
 
 				foreach (var button in popup.MenuControl.Controls.OfType<CustomCheckBox>())
-					button.Click -= popupItemClick;
+				{
+					button.MouseClick -= popupItemClick;
+					button.KeyDown -= popupItemKeyDown;
+					button.PreviewKeyDown -= popupItemPreviewKeyDown;
+				}
 
-				popup.MenuControl.PreviewKeyDown -= popupKeyDown;
+				popup.Owner.PreviewKeyDown -= popupOwnerPreviewKeyDown;
 			}
 
 			Application.RemoveMessageFilter(this);
@@ -119,34 +117,149 @@ namespace Mtgdb.Controls
 
 
 
-		private void popupItemClick(object sender, EventArgs e)
+		private void popupItemClick(object sender, MouseEventArgs e)
 		{
-			if (!(sender is CustomCheckBox))
+			if (e.Button != MouseButtons.Left)
 				return;
 
-			var button = (CustomCheckBox)sender;
+			var button = (CustomCheckBox) sender;
 			var container = button.Parent;
 			var owner = container.GetTag<CustomCheckBox>("Owner");
 			var popup = _popupsByOwner[owner];
 
-			if (popup.CloseMenuOnClick)
-				popup.Hide();
+			popupItemPressed(popup, focus: false);
 		}
+
+		private static void popupItemPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Right:
+				case Keys.Left:
+					e.IsInputKey = true;
+					break;
+			}
+		}
+
+		private void popupItemKeyDown(object sender, KeyEventArgs e)
+		{
+			var button = (CustomCheckBox) sender;
+			var container = button.Parent;
+			var owner = container.GetTag<CustomCheckBox>("Owner");
+			var popup = _popupsByOwner[owner];
+
+			switch (e.KeyData)
+			{
+				case Keys.Space:
+				case Keys.Enter:
+					popupItemPressed(popup, focus: true);
+					break;
+
+				case Keys.Escape:
+					hide(popup, focus: true);
+					break;
+
+				case Keys.Right:
+					hide(popup, focus: true);
+					SendKeys.Send("{TAB}");
+					break;
+
+				case Keys.Left:
+					hide(popup, focus: true);
+					SendKeys.Send("+{TAB}"); // Alt
+					break;
+			}
+		}
+
+		private static void popupItemPressed(Popup popup, bool focus)
+		{
+			if (popup.CloseMenuOnClick)
+				hide(popup, focus);
+		}
+
+
+
+		private void popupOwnerClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left)
+				return;
+
+			var popup = _popupsByOwner[(CustomCheckBox) sender];
+			popupOwnerPressed(popup, focus: false);
+		}
+
+		private static void popupOwnerPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Up:
+				case Keys.Down:
+					e.IsInputKey = true;
+					break;
+			}
+		}
+
+		private void popupOwnerKeyDown(object sender, KeyEventArgs e)
+		{
+			var button = (CustomCheckBox) sender;
+			var popup = _popupsByOwner[button];
+
+			switch (e.KeyData)
+			{
+				case Keys.Space:
+				case Keys.Enter:
+					popupOwnerPressed(popup, focus: true);
+					break;
+				
+				case Keys.Down:
+					if (!popup.Shown)
+						show(popup, focus: true);
+					else
+						popup.FocusFirstMenuItem();
+					break;
+
+				case Keys.Up:
+					popup.FocusLastMenuItem();
+					break;
+
+				case Keys.Escape:
+					hide(popup, focus: false);
+					break;
+			}
+		}
+
+		private static void popupOwnerPressed(Popup popup, bool focus)
+		{
+			
+			if (popup.Shown)
+				hide(popup, focus);
+			else
+				show(popup, focus);
+		}
+
+
 
 		private void setCheckImage(CustomCheckBox control, bool isChecked) =>
 			control.Image = _images[control]?.GetImage(isChecked);
 
 		public bool PreFilterMessage(ref Message m)
 		{
+			// ReSharper disable InconsistentNaming
+			// ReSharper disable IdentifierTypo
+			const int WM_LBUTTONDOWN = 0x0201;
+			const int WM_MBUTTONDOWN = 0x0207;
+			const int WM_RBUTTONDOWN = 0x0204;
+			// ReSharper restore IdentifierTypo
+			// ReSharper restore InconsistentNaming
+
 			switch (m.Msg)
 			{
-				// WM_LBUTTONDOWN, WM_MBUTTONDOWN, WM_RBUTTONDOWN
-				case 0x0201:
-				case 0x0207:
-				case 0x0204:
+				case WM_LBUTTONDOWN:
+				case WM_MBUTTONDOWN:
+				case WM_RBUTTONDOWN:
 					foreach (var popup in _popupsByOwner.Values)
 						if (popup.Shown && !popup.IsCursorInPopup() && !popup.IsCursorInButton())
-							hide(popup);
+							hide(popup, focus: false);
 
 					break;
 			}

@@ -284,6 +284,9 @@
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormMain\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain\SearchExamplesPanel.resx">
       <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -413,7 +416,6 @@
     <Content Include="Resources\Changeling.png" />
     <Content Include="Resources\chart_16.png" />
     <Content Include="Resources\chart_32.png" />
-    <Content Include="Resources\checked_32.png" />
     <Content Include="Resources\Cipher.png" />
     <Content Include="Resources\clone_48.png" />
     <Content Include="Resources\cmc0.png" />
@@ -619,7 +621,6 @@
     <Content Include="Resources\tw.png" />
     <Content Include="Resources\u.png" />
     <Content Include="Resources\ub.png" />
-    <Content Include="Resources\unchecked_32.png" />
     <Content Include="Resources\uncommon.png" />
     <Content Include="Resources\undo_16.png" />
     <Content Include="Resources\undo_32.png" />
@@ -667,9 +668,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj">
       <Project>{6fac0808-416a-4605-a1e7-042f7a270bb3}</Project>

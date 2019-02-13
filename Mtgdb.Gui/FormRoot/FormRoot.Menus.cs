@@ -12,37 +12,39 @@ namespace Mtgdb.Gui
 		private void setupButtonClicks()
 		{
 			_buttonTooltips.Checked = true;
-			_buttonShowFilterPanels.Checked = true;
-			_buttonUpdate.Enabled = false;
-
-			_buttonUpdate.Click += updateClick;
-
-			_buttonMenuOpenDeck.Click += openDeckClick;
-			_buttonMenuSaveDeck.Click += saveDeckClick;
-
-			_buttonMenuOpenCollection.Click += openCollectionClick;
-			_buttonMenuSaveCollection.Click += saveCollectionClick;
-
-			_buttonStat.Click += statClick;
-			_buttonPrint.Click += printClick;
-			_buttonClear.Click += clearClick;
-			_buttonUndo.Click += undoClick;
-			_buttonRedo.Click += redoClick;
-
-			_buttonHelp.Click += helpClick;
-
-			_buttonMenuEditConfig.Click += configClick;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
+
+			_buttonShowFilterPanels.Checked = true;
 			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
-			_buttonOpenWindow.Click += openWindowClick;
-			_buttonMenuPasteDeck.Click += pasteClick;
-			_buttonMenuPasteDeckAppend.Click += pasteClick;
-			_buttonMenuPasteCollection.Click += pasteClick;
-			_buttonMenuPasteCollectionAppend.Click += pasteClick;
-			_buttonMenuCopyCollection.Click += pasteClick;
-			_buttonMenuCopyDeck.Click += pasteClick;
-			_buttonImportExportToMtgArena.Click += buttonImportExportToMtgArenaClick;
+			_buttonUpdate.Enabled = false;
+			_buttonUpdate.LeftClick += updateClick;
+
+			_buttonMenuOpenDeck.LeftClick += openDeckClick;
+			_buttonMenuSaveDeck.LeftClick += saveDeckClick;
+
+			_buttonMenuOpenCollection.LeftClick += openCollectionClick;
+			_buttonMenuSaveCollection.LeftClick += saveCollectionClick;
+
+			_buttonStat.LeftClick += statClick;
+			_buttonPrint.LeftClick += printClick;
+			_buttonClear.LeftClick += clearClick;
+			_buttonUndo.LeftClick += undoClick;
+			_buttonRedo.LeftClick += redoClick;
+
+			_buttonHelp.LeftClick += helpClick;
+
+			_buttonMenuEditConfig.LeftClick += configClick;
+			
+
+			_buttonOpenWindow.LeftClick += openWindowClick;
+			_buttonMenuPasteDeck.LeftClick += pasteClick;
+			_buttonMenuPasteDeckAppend.LeftClick += pasteClick;
+			_buttonMenuPasteCollection.LeftClick += pasteClick;
+			_buttonMenuPasteCollectionAppend.LeftClick += pasteClick;
+			_buttonMenuCopyCollection.LeftClick += pasteClick;
+			_buttonMenuCopyDeck.LeftClick += pasteClick;
+			_buttonImportExportToMtgArena.LeftClick += buttonImportExportToMtgArenaClick;
 
 			_menuColors.Items[0].Click += buttonColorSchemeClick;
 
@@ -170,13 +172,16 @@ namespace Mtgdb.Gui
 			UiModel.LanguageController.LanguageChanged += updateLanguage;
 
 			foreach (var langMenuItem in getLanguageMenuItems())
-				langMenuItem.Click += languageMenuClick;
+				langMenuItem.MouseClick += languageMenuClick;
 		}
 
-		private void languageMenuClick(object sender, EventArgs e)
+		private void languageMenuClick(object sender, MouseEventArgs e)
 		{
-			var button = (CustomCheckBox) sender;
-			UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture);
+			if (e.Button == MouseButtons.Left)
+			{
+				var button = (CustomCheckBox) sender;
+				UiModel.LanguageController.Language = button.Text.ToLower(Str.Culture);
+			}
 		}
 
 		private void updateLanguage()

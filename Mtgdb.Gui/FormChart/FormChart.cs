@@ -77,6 +77,16 @@ namespace Mtgdb.Gui
 		public FormChart(CardRepository repository, Func<UiModel> uiSnapshotFactory, CardFields fields)
 			: this()
 		{
+			_checkBoxes = new[]
+				{
+					_buttonArgumentTotal,
+					_buttonSeriesTotal,
+					_buttonExplainTotal,
+					_buttonFilterBySearchResult
+				}
+				.Select(_ => new PseudoCheckBox(_, _buttonSubsystem))
+				.ToArray();
+
 			_fields = fields;
 			_fieldsOrder = fields.ChartFields.OrderBy(_ => _fields.ByName[_].Alias)
 				.ToArray();
@@ -215,11 +225,6 @@ namespace Mtgdb.Gui
 					_labelSum,
 					_labelSummarySort,
 
-					_buttonArgumentTotal,
-					_buttonSeriesTotal,
-					_buttonExplainTotal,
-					_buttonFilterBySearchResult,
-
 					_menuMruFiles,
 					_labelTitle,
 
@@ -232,19 +237,9 @@ namespace Mtgdb.Gui
 				form._buttonSubsystem.SetupButton(form._buttonSave, ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32)));
 				form._buttonSubsystem.SetupButton(form._buttonLoad, ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32)));
 				form._buttonSubsystem.SetupButton(form._buttonMruFiles, ButtonImages.ScaleDpi((null, Resources.down_32)));
-
-				var checkImages = ButtonImages.ScaleDpi(
-					(null, Resources.unchecked_32),
-					(null, Resources.checked_32));
-
-				Sequence.From(
-						_buttonArgumentTotal,
-						_buttonSeriesTotal,
-						_buttonExplainTotal,
-						_buttonFilterBySearchResult)
-					.ForEach(b => form._buttonSubsystem.SetupButton(b, checkImages));
-
 			}).Setup(this);
+
+			_checkBoxes.ForEach(PseudoCheckBoxScaler.ScaleDpi);
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
@@ -1268,5 +1263,7 @@ namespace Mtgdb.Gui
 		private readonly CardFields _fields;
 		private readonly ButtonSubsystem _buttonSubsystem = new ButtonSubsystem();
 		private readonly ChartFilesSubsystem _filesSubsystem;
+
+		private readonly PseudoCheckBox[] _checkBoxes;
 	}
 }

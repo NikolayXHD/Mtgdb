@@ -12,6 +12,7 @@ namespace Mtgdb.Controls
 	public class ColorSchemeController
 	{
 		public static event Action SystemColorsChanging;
+		public static event Action SystemColorsChanged;
 
 		public ColorSchemeController()
 		{
@@ -50,7 +51,13 @@ namespace Mtgdb.Controls
 				return;
 
 			_colorTable = readColorTable();
+			fireColorsChangedEvents();
+		}
+
+		private static void fireColorsChangedEvents()
+		{
 			SystemColorsChanging?.Invoke();
+			SystemColorsChanged?.Invoke();
 		}
 
 		private int[] readColorTable() =>
@@ -62,7 +69,7 @@ namespace Mtgdb.Controls
 
 			ThreadData[SystemBrushesKey] = null;
 			ThreadData[SystemPensKey] = null;
-			SystemColorsChanging?.Invoke();
+			fireColorsChangedEvents();
 		}
 
 		private void setColor(KnownColor knownColor, int argb) =>
@@ -94,7 +101,7 @@ namespace Mtgdb.Controls
 
 			ThreadData[SystemBrushesKey] = null;
 			ThreadData[SystemPensKey] = null;
-			SystemColorsChanging?.Invoke();
+			fireColorsChangedEvents();
 		}
 
 		public void Reset(KnownColor color) =>

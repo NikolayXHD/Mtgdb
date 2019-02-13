@@ -86,8 +86,14 @@
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ButtonSubsystem\CustomCheckBox.cs" />
+    <Compile Include="ButtonSubsystem\PseudoCheckBox.cs" />
+    <Compile Include="Dpi\PseudoCheckBoxScaler.cs" />
+    <Compile Include="ButtonSubsystem\CustomCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ButtonSubsystem\ManualMenuPainter.cs" />
+    <Compile Include="ButtonSubsystem\MenuItemArgs.cs" />
+    <Compile Include="ButtonSubsystem\PseudoComboBox.cs" />
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
     <Compile Include="ColorScheme\ColorSchemeEditor.cs">
       <SubType>Form</SubType>
@@ -99,6 +105,7 @@
     <Compile Include="Dpi\DpiScaler.cs" />
     <Compile Include="Dpi\ControlScaler.cs" />
     <Compile Include="Dpi\LayoutViewControlScaler.cs" />
+    <Compile Include="Dpi\PseudoComboBoxScaler.cs" />
     <Compile Include="Dpi\QuickFilterControlScaler.cs" />
     <Compile Include="Dpi\DpiScalers.cs" />
     <Compile Include="Dpi\TabHeaderControlScaler.cs" />
@@ -238,7 +245,22 @@
     <None Include="Resources\close_tab_hovered_32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\add_tab_32.png" />
+    <Content Include="Resources\checked_32.png" />
+    <Content Include="Resources\close.png" />
+    <Content Include="Resources\close_tab_32.png" />
+    <Content Include="Resources\corner_32.png" />
+    <Content Include="Resources\corner_hovered_32.png" />
+    <Content Include="Resources\drop_down_48.png" />
+    <Content Include="Resources\maximize.png" />
+    <Content Include="Resources\minimize.png" />
+    <Content Include="Resources\normalize.png" />
+    <Content Include="Resources\search_hovered.png" />
     <Content Include="Resources\selectable_transp_64.png" />
+    <Content Include="Resources\sort_asc_hovered.png" />
+    <Content Include="Resources\sort_desc_hovered.png" />
+    <Content Include="Resources\sort_none_hovered.png" />
+    <Content Include="Resources\unchecked_32.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">

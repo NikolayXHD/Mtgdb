@@ -13,13 +13,7 @@ namespace Mtgdb.Gui
 			_deckEditorSubsystem.Scale();
 
 			_panelSearch.ScaleDpi();
-			_panelSearchExamples.ScaleDpi();
-			_menuLegalityFormat.ScaleDpi();
-
-			_buttonLegalityAllowLegal.ScaleDpiFont();
-			_buttonLegalityAllowRestricted.ScaleDpiFont();
-			_buttonLegalityAllowBanned.ScaleDpiFont();
-			_buttonLegalityAllowFuture.ScaleDpiFont();
+			_menuSearchExamples.ScaleDpi();
 
 			_buttonShowDuplicates.ScaleDpi();
 
@@ -52,9 +46,9 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.ScaleDpi(transformIcon);
 
-			_listBoxSuggest.ScaleDpiWidth();
-			_listBoxSuggest.ScaleDpiFont();
-			new DpiScaler<ListBox>(l => l.SetHeightByContent()).Setup(_listBoxSuggest);
+			_menuSuggest.ScaleDpiWidth();
+			_menuSuggest.ScaleDpiFont();
+			new DpiScaler<ListBox>(l => l.SetHeightByContent()).Setup(_menuSuggest);
 
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
@@ -74,9 +68,6 @@ namespace Mtgdb.Gui
 			_panelIconStatusSort.ScaleDpi(transformIcon);
 
 			_deckListControl.Scale();
-
-			foreach (var filterButtonsControl in _quickFilterControls.Append(FilterManager))
-				filterButtonsControl.ScaleDpiFont();
 
 			_searchEditor.ScaleDpiFont();
 
@@ -123,17 +114,6 @@ namespace Mtgdb.Gui
 					form._buttonSubsystem.SetupButton(form._buttonResetFilters,
 						ButtonImages.ScaleDpi((null, Resources.erase)));
 
-					var checkImages = ButtonImages.ScaleDpi(
-						(null, Resources.unchecked_32),
-						(null, Resources.checked_32));
-
-					Sequence.From(
-							_buttonLegalityAllowLegal,
-							_buttonLegalityAllowRestricted,
-							_buttonLegalityAllowBanned,
-							_buttonLegalityAllowFuture)
-						.ForEach(b => form._buttonSubsystem.SetupButton(b, checkImages));
-
 					int border = FilterManaCost.Border;
 					var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
 					int rightMargin = FilterManaCost.Width - modeButtonSize.Width;
@@ -158,6 +138,9 @@ namespace Mtgdb.Gui
 					_layoutViewDeck.Height = deckHeight;
 					_deckListControl.Height = deckHeight;
 				}).Setup(this);
+
+			_menuLegality.ScaleDpi();
+			_menuLegalityCheckBoxes.ForEach(PseudoCheckBoxScaler.ScaleDpi);
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)

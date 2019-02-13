@@ -10,9 +10,13 @@ namespace Mtgdb.Controls
 	{
 		public CustomCheckBox()
 		{
-			SetStyle(ControlStyles.UserPaint | ControlStyles.DoubleBuffer | ControlStyles.SupportsTransparentBackColor, true);
+			SetStyle(
+				ControlStyles.UserPaint |
+				ControlStyles.DoubleBuffer |
+				ControlStyles.SupportsTransparentBackColor |
+				ControlStyles.Selectable,
+				value: true);
 
-			TabStop = false;
 			BackColor = Color.Transparent;
 			ForeColor = SystemColors.ControlText;
 			Padding = new Padding(4);
@@ -20,91 +24,169 @@ namespace Mtgdb.Controls
 			updateHighlightColors();
 			updateDisabledBorder();
 
-			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 			EnabledChanged += enabledChanged;
 			Paint += paint;
+			MouseDown += mouseDown;
+			MouseUp += mouseUp;
 			MouseClick += mouseClick;
 			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
+			GotFocus += gotFocus;
+			LostFocus += lostFocus;
+			KeyDown += keyDown;
+		}
+
+		protected override void OnHandleCreated(EventArgs e)
+		{
+			base.OnHandleCreated(e);
+			ColorSchemeController.SystemColorsChanged += systemColorsChanged;
+		}
+
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			ColorSchemeController.SystemColorsChanged -= systemColorsChanged;
+			base.OnHandleDestroyed(e);
 		}
 
 		private void paint(object sender, PaintEventArgs e)
 		{
-			var image = Enabled ? Image : _imageDisabled;
-
 			var (imageSize, textSize) = measure(e.Graphics);
+			var (textRect, imageRect) = layout();
+			
+			paintImage();
+			paintText();
+			paintBorder();
+			paintFocusRectangle();
 
-			int x = Padding.Left + (Width - Padding.Horizontal - textSize.Width - imageSize.Width) / 2;
-			int y = Padding.Top + (Height - Padding.Vertical - textSize.Height - imageSize.Height) / 2;
-
-			Rectangle textRect;
-			Rectangle imageRect;
-
-			switch (TextImageRelation)
+			void paintImage()
 			{
-				case TextImageRelation.ImageBeforeText:
-					imageRect = alignVertically(imageSize);
-					x = imageRect.Right;
-					textRect = alignVertically(textSize);
-					break;
-
-				case TextImageRelation.TextBeforeImage:
-					textRect = alignVertically(textSize);
-					x = textRect.Right;
-					imageRect = alignVertically(imageSize);
-					break;
-
-				case TextImageRelation.ImageAboveText:
-					imageRect = alignHorizontally(imageSize);
-					y = imageRect.Bottom;
-					textRect = alignHorizontally(textSize);
-					break;
-
-				case TextImageRelation.TextAboveImage:
-					textRect = alignHorizontally(textSize);
-					y = textRect.Bottom;
-					imageRect = alignHorizontally(imageSize);
-					break;
-
-				case TextImageRelation.Overlay:
-					imageRect = alignVertically(imageSize);
-					textRect = alignVertically(textSize);
-					break;
-
-				default:
-					throw new NotSupportedException();
+				var image = Enabled ? Image : _imageDisabled;
+				if (image != null)
+					e.Graphics.DrawImage(image, imageRect);
 			}
 
-			if (image != null)
-				e.Graphics.DrawImage(image, imageRect);
-
-			if (!string.IsNullOrEmpty(Text))
+			void paintText()
 			{
-				var foreColor = Enabled ? ForeColor : DisabledForeColor;
-				var format = TextFormat;
-
-				switch (TextAlign)
+				if (!string.IsNullOrEmpty(Text))
 				{
-					case StringAlignment.Far:
-						format |= TextFormatFlags.Right;
+					var foreColor = Enabled ? ForeColor : DisabledForeColor;
+					var format = TextFormat;
+
+					switch (TextAlign)
+					{
+						case StringAlignment.Far:
+							format |= TextFormatFlags.Right;
+							break;
+
+						case StringAlignment.Center:
+							format |= TextFormatFlags.HorizontalCenter;
+							break;
+					}
+
+					e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
+				}
+			}
+
+			void paintBorder()
+			{
+				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
+				this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderStyle);
+			}
+
+			void paintFocusRectangle()
+			{
+				if (Focused && _mouseOverBackColor.A > 0)
+				{
+					e.Graphics.DrawRectangle(
+						new Pen(_mouseOverBackColor) { DashStyle = DashStyle.Dot, Width = 2},
+						new Rectangle(new Point(1, 1), Size - new Size(1, 1) - new Size(1, 1)));
+				}
+			}
+
+			(Rectangle textRect, Rectangle imageRect) layout()
+			{
+				Rectangle textRectangle;
+				Rectangle imageRectangle;
+
+				int x = Padding.Left;
+				int y = Padding.Top;
+				switch (TextImageRelation)
+				{
+					case TextImageRelation.ImageBeforeText:
+
+						if (textSize == default)
+							imageRectangle = alignBoth(imageSize);
+						else
+							imageRectangle = alignVertically(imageSize);
+
+						if (imageSize != default)
+							x = Width - Padding.Right - textSize.Width;
+
+						textRectangle = alignVertically(textSize);
 						break;
 
-					case StringAlignment.Center:
-						format |= TextFormatFlags.HorizontalCenter;
+					case TextImageRelation.TextBeforeImage:
+						textRectangle = alignVertically(textSize);
+
+						if (textSize == default)
+							imageRectangle = alignBoth(imageSize);
+						else
+						{
+							x = Width - Padding.Right - imageSize.Width;
+							imageRectangle = alignVertically(imageSize);
+						}
 						break;
+
+					case TextImageRelation.ImageAboveText:
+						if (textSize == default)
+							imageRectangle = alignBoth(imageSize);
+						else
+							imageRectangle = alignHorizontally(imageSize);
+
+						if (imageSize != default)
+							y = Height - Padding.Bottom - textSize.Height;
+
+						textRectangle = alignHorizontally(textSize);
+						break;
+
+					case TextImageRelation.TextAboveImage:
+						textRectangle = alignHorizontally(textSize);
+						if (textSize == default)
+							imageRectangle = alignBoth(imageSize);
+						else
+						{
+							y = Height - Padding.Bottom - imageSize.Height;
+							imageRectangle = alignHorizontally(imageSize);
+						}
+
+						break;
+
+					case TextImageRelation.Overlay:
+						imageRectangle = alignBoth(imageSize);
+						textRectangle = alignHorizontally(textSize);
+						break;
+
+					default:
+						throw new NotSupportedException();
 				}
 
-				e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
+				return (textRect: textRectangle, imageRect: imageRectangle);
+
+				Rectangle alignVertically(Size itemSize) =>
+					new Rectangle(new Point(x, centerTop(itemSize)), itemSize);
+
+				Rectangle alignHorizontally(Size itemSize) =>
+					new Rectangle(new Point(centerLeft(itemSize), y), itemSize);
+
+				Rectangle alignBoth(Size itemSize) =>
+					new Rectangle(new Point(centerLeft(itemSize), centerTop(itemSize)), itemSize);
+
+				int centerTop(Size itemSize) =>
+					Padding.Top + (Height - Padding.Vertical - itemSize.Height) / 2;
+
+				int centerLeft(Size itemSize) =>
+					Padding.Left + (Width - Padding.Horizontal - itemSize.Width) / 2;
 			}
-
-			var borderColor = Enabled ? BorderColor : _disabledBorderColor;
-			this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderDashStyle);
-
-			Rectangle alignVertically(Size itemSize) =>
-				new Rectangle(new Point(x, Padding.Top + (Height - Padding.Vertical - itemSize.Height) / 2), itemSize);
-
-			Rectangle alignHorizontally(Size itemSize) =>
-				new Rectangle(new Point(Padding.Left + (Width - Padding.Horizontal - itemSize.Width) / 2, y), itemSize);
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
@@ -127,13 +209,48 @@ namespace Mtgdb.Controls
 		private void mouseEnter(object sender, EventArgs e) =>
 			MouseOver = true;
 
+		private void mouseDown(object sender, MouseEventArgs e) =>
+			Focus();
+
+		private void mouseUp(object sender, MouseEventArgs e) =>
+			Focus();
+
+		private void lostFocus(object sender, EventArgs e) =>
+			Invalidate();
+
+		private void gotFocus(object sender, EventArgs e) =>
+			Invalidate();
+
 		private void mouseClick(object sender, MouseEventArgs e)
 		{
-			if (Enabled && AutoCheck)
-				Checked = !Checked;
+			if (e.Button == MouseButtons.Left)
+			{
+				if (ReceivesUserInput)
+					Checked = !Checked;
+
+				if (Enabled)
+					LeftClick?.Invoke(this, e);
+			}
 		}
 
-		private void systemColorsChanging()
+		private void keyDown(object sender, KeyEventArgs e)
+		{
+			if (!ReceivesUserInput)
+				return;
+
+			switch (e.KeyData)
+			{
+				case Keys.Enter:
+				case Keys.Space:
+					Checked = !Checked;
+					break;
+			}
+		}
+
+		private bool ReceivesUserInput =>
+			Enabled && AutoCheck;
+
+		private void systemColorsChanged()
 		{
 			updateHighlightColors();
 			updateDisabledBorder();
@@ -146,9 +263,12 @@ namespace Mtgdb.Controls
 
 		private void updateSize()
 		{
-			if (!AutoSize)
-				return;
+			if (AutoSize)
+				Size = MeasureContent();
+		}
 
+		public Size MeasureContent()
+		{
 			var g = CreateGraphics();
 			var (imageSize, textSize) = measure(g);
 
@@ -156,24 +276,21 @@ namespace Mtgdb.Controls
 			{
 				case TextImageRelation.ImageBeforeText:
 				case TextImageRelation.TextBeforeImage:
-					Size = new Size(
+					return new Size(
 						imageSize.Width + textSize.Width + Padding.Horizontal,
 						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
 
-					break;
 				case TextImageRelation.ImageAboveText:
 				case TextImageRelation.TextAboveImage:
-					Size = new Size(
+					return new Size(
 						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
 						imageSize.Height + textSize.Height + Padding.Vertical);
 
-					break;
 				case TextImageRelation.Overlay:
-					Size = new Size(
+					return new Size(
 						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
 						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
 
-					break;
 				default:
 					throw new NotSupportedException();
 			}
@@ -220,7 +337,12 @@ namespace Mtgdb.Controls
 			return (imageSize, textSize);
 		}
 
+
+
 		public event EventHandler CheckedChanged;
+
+		public event MouseEventHandler LeftClick;
+
 
 		[Category("Settings"), DefaultValue("")]
 		public override string Text
@@ -230,12 +352,14 @@ namespace Mtgdb.Controls
 			{
 				base.Text = value;
 				updateSize();
+				Invalidate();
 			}
 		}
 
 		private Bitmap _imageDisabled;
 		private Bitmap _image;
 
+		[Category("Settings"), DefaultValue(null)]
 		public Bitmap Image
 		{
 			get => _image;
@@ -377,9 +501,6 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(true)]
 		public bool PaintBackground { get; set; } = true;
 
-		[Category("Settings"), DefaultValue(typeof(DashStyle), "Solid")]
-		public DashStyle BorderDashStyle { get; set; } = DashStyle.Solid;
-
 		[Category("Settings"), DefaultValue(true)]
 		public bool AutoCheck { get; set; } = true;
 
@@ -411,8 +532,10 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
+		[Category("Settings"), DefaultValue(typeof(DashStyle), "Solid")]
+		public DashStyle BorderStyle { get; set; } = DashStyle.Solid;
 
+		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
 		[Category("Settings"), DefaultValue(typeof(TextImageRelation), "ImageBeforeText")]
 		public TextImageRelation TextImageRelation
 		{
