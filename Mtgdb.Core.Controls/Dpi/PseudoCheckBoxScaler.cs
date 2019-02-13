@@ -2,15 +2,15 @@ using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
-	public static class PseudoCheckBoxScaler
+	public static class CheckBoxScaler
 	{
-		public static void ScaleDpi(this PseudoCheckBox checkBox)
+		public static void ScaleDpi(this CheckBox checkBox)
 		{
-			checkBox.Box.ScaleDpiFont();
-			checkBox.Box.ScaleDpiPadding();
+			checkBox.ScaleDpiFont();
+			checkBox.ScaleDpiPadding();
 
-			new DpiScaler<PseudoCheckBox>(b => 
-					b.Box.ButtonImages = ButtonImages.ScaleDpi(
+			new DpiScaler<CheckBox>(b => 
+					b.ButtonImages = ButtonImages.ScaleDpi(
 						(null, Resources.unchecked_32),
 						(null, Resources.checked_32)))
 				.Setup(checkBox);

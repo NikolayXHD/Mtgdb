@@ -127,7 +127,7 @@ namespace Mtgdb.Gui
 				}).Setup(this);
 
 			_menuLegality.ScaleDpi();
-			_menuLegalityCheckBoxes.ForEach(PseudoCheckBoxScaler.ScaleDpi);
+			_menuLegalityCheckBoxes.ForEach(CheckBoxScaler.ScaleDpi);
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)

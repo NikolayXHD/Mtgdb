@@ -11,6 +11,7 @@ using Mtgdb.Gui.Properties;
 using Mtgdb.Gui.Resx;
 using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
+using CheckBox = Mtgdb.Controls.CheckBox;
 
 namespace Mtgdb.Gui
 {
@@ -79,14 +80,12 @@ namespace Mtgdb.Gui
 			: this()
 		{
 			_checkBoxes = new[]
-				{
-					_buttonArgumentTotal,
-					_buttonSeriesTotal,
-					_buttonExplainTotal,
-					_buttonFilterBySearchResult
-				}
-				.Select(_ => new PseudoCheckBox(_, _buttonSubsystem))
-				.ToArray();
+			{
+				_buttonArgumentTotal,
+				_buttonSeriesTotal,
+				_buttonExplainTotal,
+				_buttonFilterBySearchResult
+			};
 
 			_fields = fields;
 			_fieldsOrder = fields.ChartFields.OrderBy(_ => _fields.ByName[_].Alias)
@@ -240,7 +239,7 @@ namespace Mtgdb.Gui
 				form._buttonMruFiles.ButtonImages = ButtonImages.ScaleDpi((null, Resources.down_32));
 			}).Setup(this);
 
-			_checkBoxes.ForEach(PseudoCheckBoxScaler.ScaleDpi);
+			_checkBoxes.ForEach(CheckBoxScaler.ScaleDpi);
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
@@ -1265,6 +1264,6 @@ namespace Mtgdb.Gui
 		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 		private readonly ChartFilesSubsystem _filesSubsystem;
 
-		private readonly PseudoCheckBox[] _checkBoxes;
+		private readonly CheckBox[] _checkBoxes;
 	}
 }

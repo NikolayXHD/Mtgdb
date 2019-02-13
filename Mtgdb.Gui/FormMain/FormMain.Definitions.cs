@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -64,16 +63,14 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegality = new PseudoComboBox(_buttonSubsystem, _menuLegalityOwner, this);
-			_menuLegalityCheckBoxes = new[]
+			_menuLegality = new PseudoComboBox(_popupSubsystem, _menuLegalityOwner, this);
+			_menuLegalityCheckBoxes = new []
 				{
 					_buttonLegalityAllowLegal,
 					_buttonLegalityAllowRestricted,
 					_buttonLegalityAllowBanned,
 					_buttonLegalityAllowFuture
-				}
-				.Select(_ => new PseudoCheckBox(_, _buttonSubsystem))
-				.ToArray();
+				};
 
 			_cardSearch = new CardSearchSubsystem(
 				this,
@@ -488,7 +485,7 @@ namespace Mtgdb.Gui
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
 		private readonly PseudoComboBox _menuLegality;
-		private readonly PseudoCheckBox[] _menuLegalityCheckBoxes;
+		private readonly CheckBox[] _menuLegalityCheckBoxes;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

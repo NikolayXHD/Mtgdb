@@ -5,32 +5,18 @@ using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
-	public class PseudoCheckBox : IComponent
+	public class CheckBox : ButtonBase
 	{
-		public PseudoCheckBox(ButtonBase box, ButtonSubsystem buttonSubsystem)
+		public CheckBox()
+			:base()
 		{
-			Box = box;
-			ButtonSubsystem = buttonSubsystem;
+			AutoSize = true;
+			AutoCheck = true;
+			TextImageRelation = TextImageRelation.ImageBeforeText;
 
-			Box.AutoSize = true;
-			Box.AutoCheck = true;
-			Box.TextImageRelation = TextImageRelation.ImageBeforeText;
-
-			box.ButtonImages = new ButtonImages(
+			ButtonImages = new ButtonImages(
 				Resources.unchecked_32.ScaleBy(0.5f),
 				Resources.checked_32.ScaleBy(0.5f));
 		}
-
-		internal readonly ButtonBase Box;
-		internal readonly ButtonSubsystem ButtonSubsystem;
-		
-		/// <summary>
-		/// Does nothing because this class owns nothing
-		/// </summary>
-		public void Dispose() =>
-			Disposed?.Invoke(this, EventArgs.Empty);
-
-		public ISite Site { get; set; }
-		public event EventHandler Disposed;
 	}
 }
