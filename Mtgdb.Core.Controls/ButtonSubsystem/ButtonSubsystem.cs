@@ -56,7 +56,7 @@ namespace Mtgdb.Controls
 			popup.MenuControl.SetTag("Owner", popup.Owner);
 
 			popup.Show();
-			
+
 			if (focus)
 				popup.FocusFirstMenuItem();
 		}
@@ -73,17 +73,16 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.MouseClick += popupOwnerClick;
+				popup.Owner.PressDown += popupOwnerPressed;
 				popup.Owner.KeyDown += popupOwnerKeyDown;
+				popup.Owner.PreviewKeyDown += popupOwnerPreviewKeyDown;
 
-				foreach (Control button in popup.MenuControl.Controls)
+				foreach (var button in popup.MenuControl.Controls.OfType<CustomCheckBox>())
 				{
-					button.MouseClick += popupItemClick;
+					button.Pressed += popupItemPressed;
 					button.KeyDown += popupItemKeyDown;
 					button.PreviewKeyDown += popupItemPreviewKeyDown;
 				}
-				
-				popup.Owner.PreviewKeyDown += popupOwnerPreviewKeyDown;
 			}
 
 			Application.AddMessageFilter(this);
@@ -99,17 +98,16 @@ namespace Mtgdb.Controls
 
 			foreach (var popup in _popupsByOwner.Values.Distinct())
 			{
-				popup.Owner.MouseClick -= popupOwnerClick;
+				popup.Owner.PressDown -= popupOwnerPressed;
 				popup.Owner.KeyDown -= popupOwnerKeyDown;
+				popup.Owner.PreviewKeyDown -= popupOwnerPreviewKeyDown;
 
 				foreach (var button in popup.MenuControl.Controls.OfType<CustomCheckBox>())
 				{
-					button.MouseClick -= popupItemClick;
+					button.Pressed -= popupItemPressed;
 					button.KeyDown -= popupItemKeyDown;
 					button.PreviewKeyDown -= popupItemPreviewKeyDown;
 				}
-
-				popup.Owner.PreviewKeyDown -= popupOwnerPreviewKeyDown;
 			}
 
 			Application.RemoveMessageFilter(this);
@@ -117,17 +115,15 @@ namespace Mtgdb.Controls
 
 
 
-		private void popupItemClick(object sender, MouseEventArgs e)
+		private void popupItemPressed(object sender, EventArgs eventArgs)
 		{
-			if (e.Button != MouseButtons.Left)
-				return;
-
 			var button = (CustomCheckBox) sender;
 			var container = button.Parent;
 			var owner = container.GetTag<CustomCheckBox>("Owner");
 			var popup = _popupsByOwner[owner];
 
-			popupItemPressed(popup, focus: false);
+			if (popup.CloseMenuOnClick)
+				hide(popup, false);
 		}
 
 		private static void popupItemPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -150,11 +146,6 @@ namespace Mtgdb.Controls
 
 			switch (e.KeyData)
 			{
-				case Keys.Space:
-				case Keys.Enter:
-					popupItemPressed(popup, focus: true);
-					break;
-
 				case Keys.Escape:
 					hide(popup, focus: true);
 					break;
@@ -171,21 +162,15 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private static void popupItemPressed(Popup popup, bool focus)
+
+
+		private void popupOwnerPressed(object sender, EventArgs e)
 		{
-			if (popup.CloseMenuOnClick)
-				hide(popup, focus);
-		}
-
-
-
-		private void popupOwnerClick(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left)
-				return;
-
 			var popup = _popupsByOwner[(CustomCheckBox) sender];
-			popupOwnerPressed(popup, focus: false);
+			if (popup.Shown)
+				hide(popup, false);
+			else
+				show(popup, false);
 		}
 
 		private static void popupOwnerPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -206,11 +191,6 @@ namespace Mtgdb.Controls
 
 			switch (e.KeyData)
 			{
-				case Keys.Space:
-				case Keys.Enter:
-					popupOwnerPressed(popup, focus: true);
-					break;
-				
 				case Keys.Down:
 					if (!popup.Shown)
 						show(popup, focus: true);
@@ -226,15 +206,6 @@ namespace Mtgdb.Controls
 					hide(popup, focus: false);
 					break;
 			}
-		}
-
-		private static void popupOwnerPressed(Popup popup, bool focus)
-		{
-			
-			if (popup.Shown)
-				hide(popup, focus);
-			else
-				show(popup, focus);
 		}
 
 

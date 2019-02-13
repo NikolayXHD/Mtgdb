@@ -31,8 +31,8 @@ namespace Mtgdb.Gui
 		{
 			_buttonSubsystem.SubscribeToEvents();
 
-			_buttonSave.Click += handleSaveClick;
-			_buttonLoad.Click += handleLoadClick;
+			_buttonSave.Pressed += handleSaveClick;
+			_buttonLoad.Pressed += handleLoadClick;
 		}
 
 		private void saveChart()

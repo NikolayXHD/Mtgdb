@@ -18,37 +18,37 @@ namespace Mtgdb.Gui
 			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
 
 			_buttonUpdate.Enabled = false;
-			_buttonUpdate.LeftClick += updateClick;
+			_buttonUpdate.Pressed += updateClick;
 
-			_buttonMenuOpenDeck.LeftClick += openDeckClick;
-			_buttonMenuSaveDeck.LeftClick += saveDeckClick;
+			_buttonMenuOpenDeck.Pressed += openDeckClick;
+			_buttonMenuSaveDeck.Pressed += saveDeckClick;
 
-			_buttonMenuOpenCollection.LeftClick += openCollectionClick;
-			_buttonMenuSaveCollection.LeftClick += saveCollectionClick;
+			_buttonMenuOpenCollection.Pressed += openCollectionClick;
+			_buttonMenuSaveCollection.Pressed += saveCollectionClick;
 
-			_buttonStat.LeftClick += statClick;
-			_buttonPrint.LeftClick += printClick;
-			_buttonClear.LeftClick += clearClick;
-			_buttonUndo.LeftClick += undoClick;
-			_buttonRedo.LeftClick += redoClick;
+			_buttonStat.Pressed += statClick;
+			_buttonPrint.Pressed += printClick;
+			_buttonClear.Pressed += clearClick;
+			_buttonUndo.Pressed += undoClick;
+			_buttonRedo.Pressed += redoClick;
 
-			_buttonHelp.LeftClick += helpClick;
+			_buttonHelp.Pressed += helpClick;
 
-			_buttonMenuEditConfig.LeftClick += configClick;
+			_buttonMenuEditConfig.Pressed += configClick;
 			
 
-			_buttonOpenWindow.LeftClick += openWindowClick;
-			_buttonMenuPasteDeck.LeftClick += pasteClick;
-			_buttonMenuPasteDeckAppend.LeftClick += pasteClick;
-			_buttonMenuPasteCollection.LeftClick += pasteClick;
-			_buttonMenuPasteCollectionAppend.LeftClick += pasteClick;
-			_buttonMenuCopyCollection.LeftClick += pasteClick;
-			_buttonMenuCopyDeck.LeftClick += pasteClick;
-			_buttonImportExportToMtgArena.LeftClick += buttonImportExportToMtgArenaClick;
+			_buttonOpenWindow.Pressed += openWindowClick;
+			_buttonMenuPasteDeck.Pressed += pasteClick;
+			_buttonMenuPasteDeckAppend.Pressed += pasteClick;
+			_buttonMenuPasteCollection.Pressed += pasteClick;
+			_buttonMenuPasteCollectionAppend.Pressed += pasteClick;
+			_buttonMenuCopyCollection.Pressed += pasteClick;
+			_buttonMenuCopyDeck.Pressed += pasteClick;
+			_buttonImportExportToMtgArena.Pressed += buttonImportExportToMtgArenaClick;
 
 			_menuColors.Items[0].Click += buttonColorSchemeClick;
 
-			_buttonImportMtgArenaCollection.Click += buttonImportMtgArenaCollectionClick;
+			_buttonImportMtgArenaCollection.Pressed += buttonImportMtgArenaCollectionClick;
 		}
 
 		private void buttonColorSchemeClick(object sender, EventArgs e)
@@ -204,37 +204,37 @@ namespace Mtgdb.Gui
 		private void setupExternalLinks()
 		{
 			_buttonVisitForge.SetTag(@"https://www.slightlymagic.net/forum/viewforum.php?f=26");
-			_buttonVisitForge.Click += buttonVisitClick;
+			_buttonVisitForge.Pressed += buttonVisitClick;
 
 			_buttonVisitXMage.SetTag(@"http://www.xmage.de");
-			_buttonVisitXMage.Click += buttonVisitClick;
+			_buttonVisitXMage.Pressed += buttonVisitClick;
 
 			_buttonVisitMagarena.SetTag(@"https://www.slightlymagic.net/forum/viewforum.php?f=82");
-			_buttonVisitMagarena.Click += buttonVisitClick;
+			_buttonVisitMagarena.Pressed += buttonVisitClick;
 
 			_buttonVisitCockatrice.SetTag(@"https://cockatrice.github.io/");
-			_buttonVisitCockatrice.Click += buttonVisitClick;
+			_buttonVisitCockatrice.Pressed += buttonVisitClick;
 
 			_buttonVisitDotP2014.SetTag(@"https://www.slightlymagic.net/forum/viewtopic.php?f=99&t=10999&start=270#p213467");
-			_buttonVisitDotP2014.Click += buttonVisitClick;
+			_buttonVisitDotP2014.Pressed += buttonVisitClick;
 
 			_buttonMenuDonatePayPal.SetTag(@"http://paypal.me/nidalgo");
-			_buttonMenuDonatePayPal.Click += buttonVisitClick;
+			_buttonMenuDonatePayPal.Pressed += buttonVisitClick;
 
 			_buttonMenuDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
-			_buttonMenuDonateYandexMoney.Click += buttonVisitClick;
+			_buttonMenuDonateYandexMoney.Pressed += buttonVisitClick;
 
 			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
-			_buttonVisitMtgo.Click += buttonVisitClick;
+			_buttonVisitMtgo.Pressed += buttonVisitClick;
 
 			_buttonSupport.SetTag(_appSourceConfig.ForumUrl);
-			_buttonSupport.Click += buttonVisitClick;
+			_buttonSupport.Pressed += buttonVisitClick;
 
 			_buttonVisitMtgArena.SetTag(@"https://magic.wizards.com/en/mtgarena");
-			_buttonVisitMtgArena.Click += buttonVisitClick;
+			_buttonVisitMtgArena.Pressed += buttonVisitClick;
 
 			_buttonVisitDeckedBuilder.SetTag(@"http://www.deckedbuilder.com/");
-			_buttonVisitDeckedBuilder.Click += buttonVisitClick;
+			_buttonVisitDeckedBuilder.Pressed += buttonVisitClick;
 		}
 
 		private static void buttonVisitClick(object sender, EventArgs e)

@@ -19,8 +19,8 @@ namespace Mtgdb.Controls
 
 			Owner.AutoSize = false;
 			Owner.AutoCheck = false;
-			Owner.HighlightCheckedOpacity = 32;
-			Owner.HighlightMouseOverOpacity = 32;
+			Owner.HighlightCheckedOpacity = 64;
+			Owner.HighlightMouseOverOpacity = 64;
 			Owner.TextImageRelation = TextImageRelation.TextBeforeImage;
 			Owner.TextAlign = StringAlignment.Near;
 			Owner.VisibleAllBorders = true;

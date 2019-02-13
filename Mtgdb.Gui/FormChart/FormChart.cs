@@ -99,16 +99,16 @@ namespace Mtgdb.Gui
 			foreach (var button in _headerButtons)
 			{
 				button.AutoCheck = false;
-				button.Click += buttonClick;
+				button.Pressed += buttonClick;
 			}
 
 			_tabByButton = Enumerable.Range(0, _buttons.Length)
 				.ToDictionary(i => _buttons[i], i => _tabs[i]);
 
 			foreach (var button in _buttons)
-				button.Click += buttonAddFieldClick;
+				button.Pressed += buttonAddFieldClick;
 
-			_buttonApply.Click += buttonApplyClick;
+			_buttonApply.Pressed += buttonApplyClick;
 
 			for (int i = 0; i < _tabs.Length; i++)
 			{

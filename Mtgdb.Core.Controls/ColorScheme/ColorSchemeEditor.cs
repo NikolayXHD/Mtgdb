@@ -258,7 +258,7 @@ namespace Mtgdb.Controls
 			};
 
 			bindForeColor(control);
-			control.Click += clickHandler;
+			control.Pressed += clickHandler;
 			_layoutPanel.Controls.Add(control);
 		}
 

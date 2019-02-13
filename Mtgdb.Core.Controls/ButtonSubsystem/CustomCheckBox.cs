@@ -97,9 +97,10 @@ namespace Mtgdb.Controls
 			{
 				if (Focused && _mouseOverBackColor.A > 0)
 				{
-					e.Graphics.DrawRectangle(
-						new Pen(_mouseOverBackColor) { DashStyle = DashStyle.Dot, Width = 2},
-						new Rectangle(new Point(1, 1), Size - new Size(1, 1) - new Size(1, 1)));
+					var rectangle = new Rectangle(default, Size);
+					int width = 2;
+					rectangle.Inflate(-(width - 1), -(width - 1));
+					e.Graphics.DrawRectangle(new Pen(_mouseOverBackColor) { Width = width, DashStyle = DashStyle.Dot }, rectangle);
 				}
 			}
 
@@ -209,8 +210,12 @@ namespace Mtgdb.Controls
 		private void mouseEnter(object sender, EventArgs e) =>
 			MouseOver = true;
 
-		private void mouseDown(object sender, MouseEventArgs e) =>
+		private void mouseDown(object sender, MouseEventArgs e)
+		{
 			Focus();
+			if (e.Button == MouseButtons.Left)
+				PressDown?.Invoke(this, EventArgs.Empty);
+		}
 
 		private void mouseUp(object sender, MouseEventArgs e) =>
 			Focus();
@@ -224,31 +229,28 @@ namespace Mtgdb.Controls
 		private void mouseClick(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-			{
-				if (ReceivesUserInput)
-					Checked = !Checked;
-
-				if (Enabled)
-					LeftClick?.Invoke(this, e);
-			}
+				onPressed();
 		}
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
-			if (!ReceivesUserInput)
-				return;
-
 			switch (e.KeyData)
 			{
 				case Keys.Enter:
 				case Keys.Space:
-					Checked = !Checked;
+					PressDown?.Invoke(this, EventArgs.Empty);
+					onPressed();
 					break;
 			}
 		}
 
-		private bool ReceivesUserInput =>
-			Enabled && AutoCheck;
+		private void onPressed()
+		{
+			if (AutoCheck)
+				Checked = !Checked;
+
+			Pressed?.Invoke(this, EventArgs.Empty);
+		}
 
 		private void systemColorsChanged()
 		{
@@ -341,7 +343,8 @@ namespace Mtgdb.Controls
 
 		public event EventHandler CheckedChanged;
 
-		public event MouseEventHandler LeftClick;
+		public event EventHandler PressDown;
+		public event EventHandler Pressed;
 
 
 		[Category("Settings"), DefaultValue("")]

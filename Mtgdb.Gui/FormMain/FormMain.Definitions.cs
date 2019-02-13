@@ -264,9 +264,9 @@ namespace Mtgdb.Gui
 			_copyPaste.SubscribeToEvents();
 			_tabHeadersDeck.DragOver += deckZoneDrag;
 
-			_buttonSampleHandNew.Click += sampleHandNew;
-			_buttonSampleHandMulligan.Click += sampleHandMulligan;
-			_buttonSampleHandDraw.Click += sampleHandDraw;
+			_buttonSampleHandNew.Pressed += sampleHandNew;
+			_buttonSampleHandMulligan.Pressed += sampleHandMulligan;
+			_buttonSampleHandDraw.Pressed += sampleHandDraw;
 
 			_searchTextSelection.SubscribeToEvents();
 
@@ -275,7 +275,7 @@ namespace Mtgdb.Gui
 			_buttonShowScrollDeck.CheckedChanged += buttonShowScrollChanged;
 			_buttonShowPartialCards.CheckedChanged += buttonPartialCardsChanged;
 			_buttonShowText.CheckedChanged += buttonHideTextChanged;
-			_buttonResetFilters.Click += resetFiltersClick;
+			_buttonResetFilters.Pressed += resetFiltersClick;
 
 			_layoutRight.SizeChanged += rightLayoutChanged;
 
@@ -353,9 +353,9 @@ namespace Mtgdb.Gui
 			_copyPaste.UnsubscribeFromEvents();
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
 
-			_buttonSampleHandNew.Click -= sampleHandNew;
-			_buttonSampleHandMulligan.Click -= sampleHandMulligan;
-			_buttonSampleHandDraw.Click -= sampleHandDraw;
+			_buttonSampleHandNew.Pressed -= sampleHandNew;
+			_buttonSampleHandMulligan.Pressed -= sampleHandMulligan;
+			_buttonSampleHandDraw.Pressed -= sampleHandDraw;
 
 			_searchTextSelection.UnsubscribeFromEvents();
 
@@ -364,7 +364,7 @@ namespace Mtgdb.Gui
 			_buttonShowScrollDeck.CheckedChanged -= buttonShowScrollChanged;
 			_buttonShowPartialCards.CheckedChanged -= buttonPartialCardsChanged;
 			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
-			_buttonResetFilters.Click -= resetFiltersClick;
+			_buttonResetFilters.Pressed -= resetFiltersClick;
 
 			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_history.Loaded -= historyLoaded;
