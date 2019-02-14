@@ -86,7 +86,9 @@
     <Compile Include="BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ButtonSubsystem\PseudoCheckBox.cs" />
+    <Compile Include="ButtonSubsystem\PseudoCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Dpi\PseudoCheckBoxScaler.cs" />
     <Compile Include="ButtonSubsystem\ButtonBase.cs">
       <SubType>Component</SubType>

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using Mtgdb.Index;
 
 namespace Mtgdb.Controls
 {
-	public class SearchResultHighlightSubsystem
+	public class SearchResultHighlightSubsystem : IComponent
 	{
 		public SearchResultHighlightSubsystem(
 			LayoutViewControl view,
@@ -13,10 +15,9 @@ namespace Mtgdb.Controls
 			_view = view;
 			var keywordHighlighter = new DeckKeywordHighlighter();
 			_highlightSubsystem = new SearchResultHighlighter(searchSubsystem, adapter, keywordHighlighter);
-		}
 
-		public void SubscribeToEvents() =>
 			_view.RowDataLoaded += rowDataLoaded;
+		}
 
 		private void rowDataLoaded(object sender, int rowHandle)
 		{
@@ -37,6 +38,14 @@ namespace Mtgdb.Controls
 				_view.SetHighlightTextRanges(highlightRanges, rowHandle, displayField);
 			}
 		}
+
+		public void Dispose()
+		{
+			_view.RowDataLoaded -= rowDataLoaded;
+		}
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
 
 		private readonly LayoutViewControl _view;
 		private readonly SearchResultHighlighter _highlightSubsystem;

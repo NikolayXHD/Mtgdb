@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Gui.Properties;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
@@ -37,7 +36,6 @@ namespace Mtgdb.Gui
 			_buttonHelp.Pressed += helpClick;
 
 			_buttonMenuEditConfig.Pressed += configClick;
-			
 
 			_buttonOpenWindow.Pressed += openWindowClick;
 			_buttonMenuPasteDeck.Pressed += pasteClick;
@@ -98,7 +96,7 @@ namespace Mtgdb.Gui
 			SelectedTab?.ImportMtgArenaCollection();
 
 		private void openWindowClick(object sender, EventArgs e) =>
-			_application.CreateForm();
+			_app.CreateForm();
 
 		private static void configClick(object sender, EventArgs e) =>
 			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
@@ -264,36 +262,6 @@ namespace Mtgdb.Gui
 			_menuOpen.PerformLayout();
 		}
 
-		private void setupButtons()
-		{
-			_buttonUpdate.ButtonImages = ButtonImages.ScaleDpi(
-				(null, Resources.update_40),
-				(null, Resources.update_notification_40));
-
-			_popupSubsystem.SetupPopup(new Popup(_menuLanguage, _buttonLanguage));
-			_popupSubsystem.SetupPopup(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
-
-			_popupSubsystem.SetupPopup(new Popup(_menuOpen, _buttonOpenDeck,
-				beforeShow: () => setMenuMode(_buttonOpenDeck)));
-
-			_popupSubsystem.SetupPopup(new Popup(_menuOpen, _buttonSaveDeck,
-				beforeShow: () => setMenuMode(_buttonSaveDeck)));
-
-			_popupSubsystem.SetupPopup(new Popup(_menuPaste, _buttonPaste));
-			_popupSubsystem.SetupPopup(new Popup(_menuColors, _buttonColorScheme,
-				beforeShow: updateMenuColors));
-
-			_popupSubsystem.SetupPopup(new Popup(_menuConfig, _buttonConfig));
-
-			_popupSubsystem.SubscribeToEvents();
-
-			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiSuggestDownloadMissingImages, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiImagesCacheCapacity, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiUndoDepth, allowScroll: false);
-		}
-
 		private void updateMenuColors()
 		{
 			for (int i = _menuColors.Items.Count - 1; i > 0; i--)
@@ -394,11 +362,8 @@ namespace Mtgdb.Gui
 			e.SuppressKeyPress = handled;
 		}
 
-		private void unsubscribeButtonEvents() =>
-			_popupSubsystem.UnsubscribeFromEvents();
-
 		private readonly ButtonBase[] _deckButtons;
-		private readonly PopupSubsystem _popupSubsystem;
+
 		private readonly Dictionary<string, Bitmap> _languageIcons;
 
 		private readonly List<SaveLoadMenuMode> _saveLoadMenuModes;

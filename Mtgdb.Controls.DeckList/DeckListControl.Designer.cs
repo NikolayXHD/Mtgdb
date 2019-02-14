@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Mtgdb.Controls
+﻿namespace Mtgdb.Controls
 {
 	partial class DeckListControl
 	{

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -6,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class Popup
+	public class Popup : IComponent
 	{
 		public Popup(
 			Control menuControl,
@@ -20,26 +21,156 @@ namespace Mtgdb.Controls
 			Owner = owner;
 			_alignment = alignment;
 			_beforeShow = beforeShow;
+
+			MenuControl.Visible = false;
+
+			Owner.PressDown += popupOwnerPressed;
+			Owner.KeyDown += popupOwnerKeyDown;
+			Owner.PreviewKeyDown += popupOwnerPreviewKeyDown;
+
+			foreach (var button in MenuControl.Controls.OfType<ButtonBase>())
+				subscribeToEvents(button);
+
+			MenuControl.ControlAdded += controlAdded;
+			MenuControl.ControlRemoved += controlRemoved;
+
+			PopupSubsystem.Instance.GlobalMouseDown += globalMouseDown;
 		}
 
-		public Control MenuControl { get; }
-		public bool Shown { get; private set; }
+		public void OpenPopup() =>
+			show(focus: false);
 
-		public void Show()
+		public void ClosePopup() =>
+			hide(focus: false);
+
+		private void show(bool focus)
 		{
+			var prevOwner = MenuControl.GetTag<ButtonBase>("Owner");
+			if (prevOwner != null && prevOwner is ButtonBase prevCheck)
+				prevCheck.Checked = false;
+
+			if (Owner is ButtonBase check)
+				check.Checked = true;
+
+			MenuControl.SetTag("Owner", Owner);
+
 			_beforeShow?.Invoke();
 
 			var location = getLocation();
 
 			if (MenuControl is ContextMenuStrip strip)
-				show(strip, location);
+				showContextMenu(strip, location);
 			else
-				show(location);
+				showRegularMenu(location);
 
 			Shown = true;
+
+			if (focus)
+				FocusFirstMenuItem();
 		}
 
-		public void Hide()
+		private void hide(bool focus)
+		{
+			if (Owner is ButtonBase check)
+				check.Checked = false;
+
+			hide();
+
+			if (focus && Owner.TabStop && Owner.Enabled)
+				Owner.Focus();
+		}
+
+
+
+		private void popupItemPressed(object sender, EventArgs eventArgs)
+		{
+			var owner = MenuControl.GetTag<ButtonBase>("Owner");
+
+			if (owner != Owner)
+				return;
+
+			if (CloseMenuOnClick)
+				hide(false);
+		}
+
+		private static void popupItemPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Right:
+				case Keys.Left:
+					e.IsInputKey = true;
+					break;
+			}
+		}
+
+		private void popupItemKeyDown(object sender, KeyEventArgs e)
+		{
+			var owner = MenuControl.GetTag<ButtonBase>("Owner");
+			if (Owner != owner)
+				return;
+
+			switch (e.KeyData)
+			{
+				case Keys.Escape:
+					hide(focus: true);
+					break;
+
+				case Keys.Right:
+					hide(focus: true);
+					SendKeys.Send("{TAB}");
+					break;
+
+				case Keys.Left:
+					hide(focus: true);
+					SendKeys.Send("+{TAB}"); // Alt
+					break;
+			}
+		}
+
+
+
+		private void popupOwnerPressed(object sender, EventArgs e)
+		{
+			if (Shown)
+				hide(false);
+			else
+				show(false);
+		}
+
+		private static void popupOwnerPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Up:
+				case Keys.Down:
+					e.IsInputKey = true;
+					break;
+			}
+		}
+
+		private void popupOwnerKeyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyData)
+			{
+				case Keys.Down:
+					if (!Shown)
+						show(focus: true);
+					else
+						FocusFirstMenuItem();
+					break;
+
+				case Keys.Up:
+					FocusLastMenuItem();
+					break;
+
+				case Keys.Escape:
+					hide(focus: false);
+					break;
+			}
+		}
+
+		private void hide()
 		{
 			MenuControl.Hide();
 			Shown = false;
@@ -86,7 +217,7 @@ namespace Mtgdb.Controls
 				?.Focus();
 		}
 
-		private void show(Point location)
+		private void showRegularMenu(Point location)
 		{
 			var parent = MenuControl.Parent;
 			location = parent.PointToClient(Owner, location);
@@ -100,7 +231,7 @@ namespace Mtgdb.Controls
 			MenuControl.Show();
 		}
 
-		private void show(ContextMenuStrip contextMenuStrip, Point location)
+		private void showContextMenu(ContextMenuStrip contextMenuStrip, Point location)
 		{
 			ControlHelpers.SetForegroundWindow(
 				new HandleRef(
@@ -128,10 +259,68 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public bool CloseMenuOnClick { get; }
-		public ButtonBase Owner { get; }
+		private void globalMouseDown(object sender, EventArgs e)
+		{
+			if (Shown && !IsCursorInPopup() && !IsCursorInButton())
+				hide(focus: false);
+		}
+
+		private void controlAdded(object sender, ControlEventArgs e)
+		{
+			if (e.Control is ButtonBase button)
+				subscribeToEvents(button);
+		}
+
+		private void controlRemoved(object sender, ControlEventArgs e)
+		{
+			if (e.Control is ButtonBase button)
+				unsubscribeFromEvents(button);
+		}
+
+		private void subscribeToEvents(ButtonBase button)
+		{
+			button.Pressed += popupItemPressed;
+			button.KeyDown += popupItemKeyDown;
+			button.PreviewKeyDown += popupItemPreviewKeyDown;
+		}
+
+		private void unsubscribeFromEvents(ButtonBase button)
+		{
+			button.Pressed -= popupItemPressed;
+			button.KeyDown -= popupItemKeyDown;
+			button.PreviewKeyDown -= popupItemPreviewKeyDown;
+		}
+
+
+
+		public void Dispose()
+		{
+			Owner.PressDown -= popupOwnerPressed;
+			Owner.KeyDown -= popupOwnerKeyDown;
+			Owner.PreviewKeyDown -= popupOwnerPreviewKeyDown;
+
+			foreach (var button in MenuControl.Controls.OfType<ButtonBase>())
+				unsubscribeFromEvents(button);
+
+			MenuControl.ControlAdded -= controlAdded;
+			MenuControl.ControlRemoved -= controlRemoved;
+
+			PopupSubsystem.Instance.GlobalMouseDown -= globalMouseDown;
+
+			Disposed?.Invoke(this, EventArgs.Empty);
+		}
+
+		private Control MenuControl { get; }
+		private bool Shown { get; set; }
+
+		private bool CloseMenuOnClick { get; }
+		private ButtonBase Owner { get; }
+
 		private readonly HorizontalAlignment _alignment;
 		private readonly Action _beforeShow;
 		private Point? _screenLocation;
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
 	}
 }

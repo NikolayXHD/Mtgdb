@@ -25,18 +25,18 @@ namespace Mtgdb.Ui
 			var tokenizer = new MtgTolerantTokenizer(_findEditor.Text);
 			tokenizer.Parse();
 
-			setColor(0, _findEditor.TextLength, SystemColors.WindowText, false);
+			setColor(0, _findEditor.TextLength, SystemColors.WindowText);
 
 			foreach (var token in tokenizer.Tokens)
 			{
 				if (token.Type.IsAny(TokenType.FieldValue))
-					setColor(token.Position, token.Value.Length, null, true);
+					setColor(token.Position, token.Value.Length, null);
 				else if (token.Type.IsAny(TokenType.Field | TokenType.Colon))
-					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkCyan)), false);
+					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkCyan)));
 				else if (token.Type.IsAny(TokenType.RegexBody))
-					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkRed)), false);
+					setColor(token.Position, token.Value.Length, SystemColors.HotTrack.TransformHsv(h: _ => _ + Color.RoyalBlue.RotationTo(Color.DarkRed)));
 				else
-					setColor(token.Position, token.Value.Length, SystemColors.Highlight, false);
+					setColor(token.Position, token.Value.Length, SystemColors.Highlight);
 			}
 
 			_findEditor.SelectionStart = start;
@@ -51,7 +51,7 @@ namespace Mtgdb.Ui
 
 		private readonly RichTextBox _findEditor;
 
-		private void setColor(int from, int len, Color? foreColor, bool underline)
+		private void setColor(int from, int len, Color? foreColor)
 		{
 			_findEditor.SelectionStart = from;
 			_findEditor.SelectionLength = len;
@@ -59,12 +59,7 @@ namespace Mtgdb.Ui
 			if (foreColor.HasValue)
 				_findEditor.SelectionColor = foreColor.Value;
 
-			string selectedText = _findEditor.SelectedText;
-
-			if (underline && !selectedText.IsCjk() && selectedText.IndexOf('_') < 0)
-				_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Underline);
-			else
-				_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Regular);
+			_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Regular);
 		}
 	}
 }

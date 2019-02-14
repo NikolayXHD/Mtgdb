@@ -65,7 +65,6 @@ namespace Mtgdb.Gui
 
 			Kernel.Bind<TooltipController>()
 				.ToSelf()
-				.InSingletonScope()
 				.Named(QuickFilterTooltipScope);
 
 			Kernel.Bind<TooltipConfiguration>()
@@ -76,12 +75,12 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<Application>()
+			Kernel.Bind<App>()
 				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<IApplication>()
-				.ToMethod(ctx => ctx.Kernel.Get<Application>())
+				.ToMethod(ctx => ctx.Kernel.Get<App>())
 				.InSingletonScope();
 
 			Kernel.Bind<HistoryLegacyConverter>()

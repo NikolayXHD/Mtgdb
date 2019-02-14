@@ -117,7 +117,7 @@ namespace Mtgdb.Gui
 			DeckSerializationSubsystem serialization,
 			UiModel uiModel,
 			ColorSchemeEditor colorSchemeEditor,
-			Application application,
+			App app,
 			AppSourceConfig appSourceConfig,
 			UiConfigRepository uiConfigRepository)
 			:this()
@@ -132,13 +132,12 @@ namespace Mtgdb.Gui
 			CardSuggestModel = cardSuggestModel;
 			CardSuggestModel.Ui = UiModel;
 
-			_application = application;
+			_app = app;
 			_appSourceConfig = appSourceConfig;
 			_repo = repo;
 			_serialization = serialization;
 			_colorSchemeEditor = colorSchemeEditor;
 
-			_popupSubsystem = new PopupSubsystem();
 			_formMainFactory = formMainFactory;
 			_downloaderSubsystem = downloaderSubsystem;
 			_newsService = newsService;
@@ -168,21 +167,9 @@ namespace Mtgdb.Gui
 			_newsService.NewsDisplayed += newsDisplayed;
 			_downloaderSubsystem.ProgressCalculated += downloaderProgressCalculated;
 
-			setupButtons();
-
 			setupExternalLinks();
 			setupButtonClicks();
 			setupLanguageMenu();
-
-			_uiConfigMenuSubsystem = new UiConfigMenuSubsystem(
-				_menuUiScale,
-				_menuUiSmallImageQuality,
-				_menuUiSuggestDownloadMissingImages,
-				_menuUiImagesCacheCapacity,
-				_menuUiUndoDepth,
-				uiConfigRepository);
-
-			_uiConfigMenuSubsystem.SetupMenu();
 
 			setupTooltips();
 
@@ -197,6 +184,31 @@ namespace Mtgdb.Gui
 
 			_menuColors.BackColor = SystemColors.Control;
 			_menuColors.ForeColor = SystemColors.ControlText;
+
+			if (components == null)
+				components = new Container();
+
+			components.Add(new UiConfigMenuSubsystem(
+				_menuUiScale,
+				_menuUiSmallImageQuality,
+				_menuUiSuggestDownloadMissingImages,
+				_menuUiImagesCacheCapacity,
+				_menuUiUndoDepth,
+				uiConfigRepository));
+
+			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiSuggestDownloadMissingImages, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiImagesCacheCapacity, allowScroll: false);
+			ManualMenuPainter.SetupComboBox(_menuUiUndoDepth, allowScroll: false);
+
+			components.Add(new Popup(_menuLanguage, _buttonLanguage));
+			components.Add(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
+			components.Add(new Popup(_menuOpen, _buttonOpenDeck, beforeShow: () => setMenuMode(_buttonOpenDeck)));
+			components.Add(new Popup(_menuOpen, _buttonSaveDeck, beforeShow: () => setMenuMode(_buttonSaveDeck)));
+			components.Add(new Popup(_menuPaste, _buttonPaste));
+			components.Add(new Popup(_menuColors, _buttonColorScheme, beforeShow: updateMenuColors));
+			components.Add(new Popup(_menuConfig, _buttonConfig));
 		}
 
 		private void updateFormBorderColor()
@@ -210,7 +222,7 @@ namespace Mtgdb.Gui
 			updateDownloadButton();
 			updateDeckButtons();
 
-			System.Windows.Forms.Application.AddMessageFilter(this);
+			Application.AddMessageFilter(this);
 			CardSuggestModel.StartSuggestThread();
 			DeckSuggestModel.StartSuggestThread();
 
@@ -265,7 +277,7 @@ namespace Mtgdb.Gui
 
 			if (creatingNewForm)
 			{
-				string historyFile = Application.GetHistoryFile(Id, i);
+				string historyFile = App.GetHistoryFile(Id, i);
 				form.LoadHistory(historyFile);
 				_tabs.TabIds[i] = form;
 			}
@@ -337,7 +349,7 @@ namespace Mtgdb.Gui
 
 			var lastTabId = _tabs.Count - 1;
 
-			formMain.SaveHistory(Application.GetHistoryFile(Id, lastTabId));
+			formMain.SaveHistory(App.GetHistoryFile(Id, lastTabId));
 			formMain.Hide();
 
 			dispose(formMain);
@@ -358,12 +370,12 @@ namespace Mtgdb.Gui
 
 		private void formClosing(object sender, EventArgs e)
 		{
-			_application.MoveFormHistoryToEnd(this);
+			_app.MoveFormHistoryToEnd(this);
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
 				var formMain = getTab(i);
-				formMain.SaveHistory(Application.GetHistoryFile(Id, i));
+				formMain.SaveHistory(App.GetHistoryFile(Id, i));
 			}
 
 			Enumerable.Range(0, _tabs.Count)
@@ -371,7 +383,7 @@ namespace Mtgdb.Gui
 				.ToArray()
 				.ForEach(dispose);
 
-			_application.RemoveForm(this);
+			_app.RemoveForm(this);
 
 			System.Windows.Forms.Application.RemoveMessageFilter(this);
 		}
@@ -411,7 +423,6 @@ namespace Mtgdb.Gui
 
 		private void closed(object sender, EventArgs e)
 		{
-			unsubscribeButtonEvents();
 			CardSuggestModel.AbortSuggestThread();
 			DeckSuggestModel.AbortSuggestThread();
 		}
@@ -438,7 +449,7 @@ namespace Mtgdb.Gui
 
 		private void tabMouseMove(object sender, MouseEventArgs e)
 		{
-			var draggingFromTab = _application.FindCardDraggingForm();
+			var draggingFromTab = _app.FindCardDraggingForm();
 
 			if (draggingFromTab == null)
 				return;
@@ -468,7 +479,7 @@ namespace Mtgdb.Gui
 			if (!_tabs.IsUnderMouse())
 				return;
 
-			var tabDraggingForm = _application.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
+			var tabDraggingForm = _app.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
 
 			if (tabDraggingForm == this)
 				return;
@@ -496,7 +507,7 @@ namespace Mtgdb.Gui
 
 			dragSourceTabs.RemoveTab(draggedIndex);
 
-			_application.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
+			_app.MoveTabHistory(Id, TabsCount, tabDraggingForm.Id, draggedIndex);
 
 			addTab(formMain);
 
@@ -637,7 +648,7 @@ namespace Mtgdb.Gui
 		public bool LoadedGuiSettings { get; set; }
 
 
-		private int Id => _application.GetId(this);
+		private int Id => _app.GetId(this);
 
 		public sealed override string Text
 		{
@@ -652,11 +663,10 @@ namespace Mtgdb.Gui
 		private readonly Func<FormMain> _formMainFactory;
 		private readonly DownloaderSubsystem _downloaderSubsystem;
 		private readonly NewsService _newsService;
-		private readonly Application _application;
+		private readonly App _app;
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 		private readonly ColorSchemeEditor _colorSchemeEditor;
-		private readonly UiConfigMenuSubsystem _uiConfigMenuSubsystem;
 	}
 }

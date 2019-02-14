@@ -166,11 +166,11 @@
     <Compile Include="FormMain\IconRecognizerFactory.cs" />
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
     <Compile Include="FormMain\KeywordHighlighter.cs" />
-    <Compile Include="FormMain\SearchExamplesPanel.cs">
+    <Compile Include="FormMain\SearchExamplesMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FormMain\SearchExamplesPanel.Designer.cs">
-      <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
+    <Compile Include="FormMain\SearchExamplesMenu.Designer.cs">
+      <DependentUpon>SearchExamplesMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="FormRoot\FormRoot.Scale.cs">
       <SubType>Form</SubType>
@@ -179,7 +179,7 @@
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\UiConfigMenuSubsystem.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
-    <Compile Include="Misc\Application.cs" />
+    <Compile Include="Misc\App.cs" />
     <Compile Include="Misc\CardSearchSubsystem.cs" />
     <Compile Include="Misc\FormZoom.cs">
       <SubType>Form</SubType>
@@ -287,8 +287,8 @@
     <EmbeddedResource Include="FormMain\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain\SearchExamplesPanel.resx">
-      <DependentUpon>SearchExamplesPanel.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain\SearchExamplesMenu.resx">
+      <DependentUpon>SearchExamplesMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LayoutView\CardLayoutControlBase.resx">
       <DependentUpon>CardLayoutControlBase.cs</DependentUpon>
@@ -392,7 +392,7 @@
     <Content Include="Resources\art_64.png" />
     <Content Include="Resources\ascend.png" />
     <Content Include="Resources\Attacks each turn.png" />
-    <Content Include="Resources\ava.jpg" />
+    <Content Include="Resources\ava.png" />
     <Content Include="Resources\avg_hovered.png" />
     <Content Include="Resources\awake.png" />
     <Content Include="Resources\b.png" />

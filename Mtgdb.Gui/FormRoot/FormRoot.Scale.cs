@@ -109,7 +109,11 @@ namespace Mtgdb.Gui
 				updateButtonLanguage();
 
 				form._buttonShowFilterPanels.ButtonImages = ButtonImages.ScaleDpi((null, Resources.filters_show_32));
-				form._buttonUpdate.ButtonImages = ButtonImages.ScaleDpi((null, Resources.update_40));
+				
+				_buttonUpdate.ButtonImages = ButtonImages.ScaleDpi(
+					(null, Resources.update_40), 
+					(null, Resources.update_notification_40));
+
 				form._buttonMenuOpenDeck.ButtonImages = ButtonImages.ScaleDpi((null, Resources.deck_48));
 				form._buttonMenuOpenCollection.ButtonImages = ButtonImages.ScaleDpi((null, Resources.box_48));
 				form._buttonMenuSaveDeck.ButtonImages = ButtonImages.ScaleDpi((null, Resources.deck_48));

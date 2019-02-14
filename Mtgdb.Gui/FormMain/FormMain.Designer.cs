@@ -105,7 +105,7 @@
 			this._buttonExcludeManaCost = new Mtgdb.Controls.ButtonBase();
 			this._buttonResetFilters = new Mtgdb.Controls.ButtonBase();
 			this._layoutRoot = new System.Windows.Forms.TableLayoutPanel();
-			this._menuSearchExamples = new Mtgdb.Gui.SearchExamplesPanel();
+			this._menuSearchExamples = new Mtgdb.Gui.SearchExamplesMenu();
 			this._panelFilters.SuspendLayout();
 			this._panelStatus.SuspendLayout();
 			this._panelMenu.SuspendLayout();
@@ -1277,7 +1277,7 @@
 		private System.Windows.Forms.TableLayoutPanel _layoutRight;
 		private System.Windows.Forms.TableLayoutPanel _layoutRoot;
 		private Mtgdb.Controls.ButtonBase _buttonSearchExamplesDropDown;
-		private SearchExamplesPanel _menuSearchExamples;
+		private SearchExamplesMenu _menuSearchExamples;
 		private Controls.BorderedPanel _panelIconStatusSort;
 		private System.Windows.Forms.Label _labelStatusSort;
 		public Controls.QuickFilterControl FilterLayout;

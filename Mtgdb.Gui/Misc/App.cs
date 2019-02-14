@@ -10,10 +10,10 @@ using NLog;
 
 namespace Mtgdb.Gui
 {
-	public class Application : ApplicationContext, IApplication
+	public class App : ApplicationContext, IApplication
 	{
 		[UsedImplicitly]
-		public Application(Func<FormRoot> formFactory)
+		public App(Func<FormRoot> formFactory)
 		{
 			_formFactory = formFactory;
 		}
@@ -141,7 +141,7 @@ namespace Mtgdb.Gui
 
 		public IEnumerable<FormRoot> Forms => _instances;
 
-		public void Cancel() => _cts.Cancel();
+		public void CancelAllTasks() => _cts.Cancel();
 
 		public CancellationToken CancellationToken => _cts.Token;
 

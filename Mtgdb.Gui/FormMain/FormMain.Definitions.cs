@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Dal.Index;
 using Mtgdb.Ui;
+using CheckBox = Mtgdb.Controls.CheckBox;
 
 namespace Mtgdb.Gui
 {
@@ -30,7 +33,7 @@ namespace Mtgdb.Gui
 			IconRecognizer iconRecognizer,
 			DeckSerializationSubsystem serialization,
 			MtgArenaIntegration mtgArenaIntegration,
-			Application application)
+			App app)
 			: this()
 		{
 			DoubleBuffered = true;
@@ -44,7 +47,6 @@ namespace Mtgdb.Gui
 
 			_cardRepo = cardRepo;
 			_imageLoader = imageLoader;
-			_uiConfigRepository = uiConfigRepository;
 			_collectionEditor = collectionEditor;
 			_serialization = serialization;
 			_mtgArenaIntegration = mtgArenaIntegration;
@@ -63,7 +65,7 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegality = new PseudoComboBox(_popupSubsystem, _menuLegalityOwner, this);
+			_menuLegality = new PseudoComboBox(_menuLegalityOwner, this);
 			_menuLegalityCheckBoxes = new []
 				{
 					_buttonLegalityAllowLegal,
@@ -81,8 +83,6 @@ namespace Mtgdb.Gui
 				cardAdapter,
 				_layoutViewCards,
 				_layoutViewDeck);
-
-			_menuSearchExamples.Setup(_cardSearch, _popupSubsystem, _buttonSearchExamplesDropDown);
 
 			_cardSort = new CardSortSubsystem(_layoutViewCards, _cardRepo, _fields, _cardSearch);
 
@@ -109,7 +109,7 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_imageLoader,
-				application);
+				app);
 
 			_deckEditorSubsystem = new DeckEditorSubsystem(
 				_viewCards,
@@ -197,9 +197,15 @@ namespace Mtgdb.Gui
 			updateDeckVisibility();
 
 			subscribeToEvents();
-		}
 
-		
+			if (components == null)
+				components = new Container();
+
+			components.Add(_deckEditorSubsystem);
+			components.Add(_menuLegality);
+			components.Add(_popupSearchExamples =
+				new Popup(_menuSearchExamples, _buttonSearchExamplesDropDown, HorizontalAlignment.Right));
+		}
 
 		private void cardCreating(object view, LayoutControl probeCard) =>
 			((CardLayoutControlBase) probeCard).Ui = () => _formRoot.UiModel;
@@ -254,9 +260,8 @@ namespace Mtgdb.Gui
 				filterControl.StateChanged += quickFiltersChanged;
 
 			FilterManager.StateChanged += quickFilterManagerChanged;
-			_popupSubsystem.SubscribeToEvents();
 
-			System.Windows.Forms.Application.ApplicationExit += applicationExit;
+			Application.ApplicationExit += applicationExit;
 
 			_copyPaste.SubscribeToEvents();
 			_tabHeadersDeck.DragOver += deckZoneDrag;
@@ -297,6 +302,8 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.CardCreating += cardCreating;
 			_layoutViewDeck.CardCreating += cardCreating;
+
+			_menuSearchExamples.QueryClicked += searchExampleClicked;
 
 			Dpi.BeforeChanged += beforeDpiChanged;
 			Dpi.AfterChanged += afterDpiChanged;
@@ -343,9 +350,8 @@ namespace Mtgdb.Gui
 				filterControl.StateChanged -= quickFiltersChanged;
 
 			FilterManager.StateChanged -= quickFilterManagerChanged;
-			_popupSubsystem.UnsubscribeFromEvents();
 
-			System.Windows.Forms.Application.ApplicationExit -= applicationExit;
+			Application.ApplicationExit -= applicationExit;
 
 			_copyPaste.UnsubscribeFromEvents();
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
@@ -385,6 +391,8 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.CardCreating -= cardCreating;
 			_layoutViewDeck.CardCreating -= cardCreating;
+
+			_menuSearchExamples.QueryClicked -= searchExampleClicked;
 
 			Dpi.BeforeChanged -= beforeDpiChanged;
 			Dpi.AfterChanged -= afterDpiChanged;
@@ -440,7 +448,6 @@ namespace Mtgdb.Gui
 
 		private readonly CardRepository _cardRepo;
 		private readonly ImageLoader _imageLoader;
-		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
 		private readonly List<Card> _searchResultCards = new List<Card>();
@@ -473,7 +480,6 @@ namespace Mtgdb.Gui
 		private readonly MtgLayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly LayoutViewTooltip _tooltipViewDeck;
-		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
@@ -486,6 +492,7 @@ namespace Mtgdb.Gui
 		private readonly DeckSearcher _deckSearcher;
 		private readonly PseudoComboBox _menuLegality;
 		private readonly CheckBox[] _menuLegalityCheckBoxes;
+		private readonly Popup _popupSearchExamples;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

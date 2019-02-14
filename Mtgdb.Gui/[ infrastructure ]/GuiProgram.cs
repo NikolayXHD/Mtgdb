@@ -22,12 +22,12 @@ namespace Mtgdb.Gui
 
 		private static void main(string[] args)
 		{
-			System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 			AppDomain.CurrentDomain.UnhandledException += unhandledException;
-			System.Windows.Forms.Application.ThreadException += threadException;
+			Application.ThreadException += threadException;
 
-			System.Windows.Forms.Application.EnableVisualStyles();
-			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
 			_kernel.Load<CoreModule>();
 			_kernel.Load<DalModule>();
@@ -53,14 +53,15 @@ namespace Mtgdb.Gui
 			colorSchemeEditorForm.LoadCurrentColorScheme();
 
 			_kernel.Get<TooltipConfiguration>().Setup();
+			Application.AddMessageFilter(PopupSubsystem.Instance);
 
-			var application = _kernel.Get<Application>();
+			var application = _kernel.Get<App>();
 			application.MigrateHistoryFiles();
 			application.CreateForm();
 
-			System.Windows.Forms.Application.Run(application);
-
-			application.Cancel();
+			Application.Run(application);
+			Application.RemoveMessageFilter(PopupSubsystem.Instance);
+			application.CancelAllTasks();
 		}
 
 		private static void mtgjsonFileUpdated()

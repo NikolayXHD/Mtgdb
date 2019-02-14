@@ -22,7 +22,7 @@ namespace Mtgdb.Gui
 					foreach (var file in Directory.GetFiles(subdir, "*.json"))
 						if (int.TryParse(Path.GetFileNameWithoutExtension(file), out int tabId))
 							if (
-								!File.Exists(Application.GetHistoryFile(formId, tabId)) &&
+								!File.Exists(App.GetHistoryFile(formId, tabId)) &&
 								!File.Exists(getV2File(formId, tabId)) &&
 								!File.Exists(getV3File(formId, tabId)))
 
@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 						string name = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(file));
 						if (int.TryParse(name, out int tabId))
 							if (
-								!File.Exists(Application.GetHistoryFile(formId, tabId)) &&
+								!File.Exists(App.GetHistoryFile(formId, tabId)) &&
 								!File.Exists(getV3File(formId, tabId)))
 
 								yield return (formId, tabId);
@@ -66,7 +66,7 @@ namespace Mtgdb.Gui
 					{
 						string name = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(file));
 						if (int.TryParse(name, out int tabId))
-							if (!File.Exists(Application.GetHistoryFile(formId, tabId)))
+							if (!File.Exists(App.GetHistoryFile(formId, tabId)))
 								yield return (formId, tabId);
 					}
 				}
@@ -76,7 +76,7 @@ namespace Mtgdb.Gui
 		{
 			(int formId, int tabId) = legacyFile;
 
-			var file = Application.GetHistoryFile(formId, tabId);
+			var file = App.GetHistoryFile(formId, tabId);
 			var fileLegacy = getLegacyFile(formId, tabId);
 
 			if (!File.Exists(fileLegacy) || File.Exists(file))
@@ -98,7 +98,7 @@ namespace Mtgdb.Gui
 		{
 			(int formId, int tabId) = v2File;
 
-			var file = Application.GetHistoryFile(formId, tabId);
+			var file = App.GetHistoryFile(formId, tabId);
 			var fileV2 = getV2File(formId, tabId);
 
 			if (!File.Exists(fileV2) || File.Exists(file))
@@ -120,7 +120,7 @@ namespace Mtgdb.Gui
 		{
 			(int formId, int tabId) = v3File;
 
-			var file = Application.GetHistoryFile(formId, tabId);
+			var file = App.GetHistoryFile(formId, tabId);
 			var fileV3 = getV3File(formId, tabId);
 
 			if (!File.Exists(fileV3) || File.Exists(file))

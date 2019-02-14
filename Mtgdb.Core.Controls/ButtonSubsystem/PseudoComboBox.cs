@@ -12,7 +12,7 @@ namespace Mtgdb.Controls
 {
 	public class PseudoComboBox : IComponent
 	{
-		public PseudoComboBox(PopupSubsystem popupSubsystem, ButtonBase owner, Control parent)
+		public PseudoComboBox(ButtonBase owner, Control parent)
 		{
 			Owner = owner;
 
@@ -42,7 +42,7 @@ namespace Mtgdb.Controls
 
 			parent.Controls.Add(_menu);
 
-			popupSubsystem.SetupPopup(new Popup(_menu, owner));
+			_popup = new Popup(_menu, owner);
 
 			_menuItemsAccessor = new MenuItemsAccessor(this);
 			_menuValuesAccessor = new MenuValuesAccessor(_menuItemsAccessor);
@@ -126,6 +126,8 @@ namespace Mtgdb.Controls
 		{
 			clear();
 			_menu.Dispose();
+			_popup.Dispose();
+
 			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -189,7 +191,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private readonly string _emptySelectionText = String.Empty;
+		private readonly string _emptySelectionText = string.Empty;
 		public string EmptySelectionText
 		{
 			get => _emptySelectionText;
@@ -212,6 +214,7 @@ namespace Mtgdb.Controls
 		private readonly BorderedFlowLayoutPanel _menu;
 		private readonly MenuValuesAccessor _menuValuesAccessor;
 		private readonly MenuItemsAccessor _menuItemsAccessor;
+		private readonly Popup _popup;
 
 
 

@@ -4,7 +4,7 @@ namespace Mtgdb.Ui
 {
 	public interface IApplication
 	{
-		void Cancel();
+		void CancelAllTasks();
 		CancellationToken CancellationToken { get; }
 	}
 }

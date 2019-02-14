@@ -42,9 +42,7 @@ namespace Mtgdb.Gui
 			stopThreads();
 			unsubscribeFromEvents();
 			unsubscribeCardRepoEvents();
-			_deckEditorSubsystem.Dispose();
 			_deckListControl.UnsubscribeFromEvents();
-			_menuLegality.Dispose();
 		}
 
 
@@ -745,6 +743,13 @@ namespace Mtgdb.Gui
 
 			_buttonShowDuplicates.Checked = true;
 			return true;
+		}
+
+		private void searchExampleClicked(string query)
+		{
+			_cardSearch.AppliedText = query;
+			_cardSearch.Apply();
+			_popupSearchExamples.ClosePopup();
 		}
 	}
 }

@@ -17,14 +17,14 @@ namespace Mtgdb.Gui
 			DeckEditorModel deckEditorModel,
 			FormMain parent,
 			ImageLoader imageLoader,
-			Application application)
+			App app)
 		{
 			_layoutViewDeck = layoutViewDeck;
 			_layoutViewCards = layoutViewCards;
 			_deckEditorModel = deckEditorModel;
 			_parent = parent;
 			_imageLoader = imageLoader;
-			_application = application;
+			_app = app;
 		}
 
 
@@ -388,7 +388,7 @@ namespace Mtgdb.Gui
 			if (!underMouse)
 				return;
 
-			var draggingForm = _application.FindCardDraggingForm();
+			var draggingForm = _app.FindCardDraggingForm();
 
 			if (draggingForm == null || draggingForm == _parent)
 				return;
@@ -422,7 +422,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;
-		private readonly Application _application;
+		private readonly App _app;
 		private Cursor _dragCursor;
 	}
 }

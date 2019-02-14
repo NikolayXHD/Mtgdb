@@ -161,7 +161,7 @@ namespace Mtgdb.Gui
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddCol.Name = "_buttonAddCol";
-			this._buttonAddCol.Size = new System.Drawing.Size(60, 24);
+			this._buttonAddCol.Size = new System.Drawing.Size(64, 24);
 			this._buttonAddCol.TabIndex = 41;
 			this._buttonAddCol.Text = "+ argument";
 			this._buttonAddCol.VisibleAllBorders = true;
@@ -329,7 +329,7 @@ namespace Mtgdb.Gui
 			this._buttonAddRow.Location = new System.Drawing.Point(293, 0);
 			this._buttonAddRow.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddRow.Name = "_buttonAddRow";
-			this._buttonAddRow.Size = new System.Drawing.Size(44, 24);
+			this._buttonAddRow.Size = new System.Drawing.Size(48, 24);
 			this._buttonAddRow.TabIndex = 42;
 			this._buttonAddRow.Text = "+ series";
 			this._buttonAddRow.VisibleAllBorders = true;
@@ -340,7 +340,7 @@ namespace Mtgdb.Gui
 			this._buttonAddSum.Location = new System.Drawing.Point(369, 0);
 			this._buttonAddSum.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddSum.Name = "_buttonAddSum";
-			this._buttonAddSum.Size = new System.Drawing.Size(64, 24);
+			this._buttonAddSum.Size = new System.Drawing.Size(72, 24);
 			this._buttonAddSum.TabIndex = 43;
 			this._buttonAddSum.Text = "+ aggregate";
 			this._buttonAddSum.VisibleAllBorders = true;

@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Mtgdb.Controls;
 using Newtonsoft.Json;
 using NLog;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
-	public class ChartFilesSubsystem
+	public class ChartFilesSubsystem : IComponent
 	{
 		public ChartFilesSubsystem(
 			FormChart formChart, 
 			ButtonBase buttonSave,
 			ButtonBase buttonLoad,
-			ButtonBase buttonMruFiles,
 			ContextMenuStrip menuMruFiles)
 		{
 			_formChart = formChart;
 			_buttonSave = buttonSave;
 			_buttonLoad = buttonLoad;
-			_buttonMruFiles = buttonMruFiles;
 			_menuMruFiles = menuMruFiles;
-
-			_popupSubsystem.SetupPopup(new Popup(_menuMruFiles, _buttonMruFiles, HorizontalAlignment.Right, beforeShow: updateMruFilesMenu));
-		}
-
-		public void SubscribeToEvents()
-		{
-			_popupSubsystem.SubscribeToEvents();
 
 			_buttonSave.Pressed += handleSaveClick;
 			_buttonLoad.Pressed += handleLoadClick;
@@ -128,7 +119,7 @@ namespace Mtgdb.Gui
 		private void loadSavedChart(string name) =>
 			load(SaveDirectory.AddPath(name + Ext));
 
-		private void updateMruFilesMenu()
+		public void UpdateMruFilesMenu()
 		{
 			foreach (ToolStripMenuItem menuItem in _menuMruFiles.Items)
 				menuItem.Click -= handleMruMenuClick;
@@ -152,19 +143,27 @@ namespace Mtgdb.Gui
 		private void handleLoadClick(object s, EventArgs e) =>
 			loadChart();
 
+		public void Dispose()
+		{
+			_buttonSave.Pressed -= handleSaveClick;
+			_buttonLoad.Pressed -= handleLoadClick;
+			Disposed?.Invoke(this, EventArgs.Empty);
+		}
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
+
 		private const string Ext = ".chart";
 		private static readonly string _filter = $"Mtgdb.Gui chart settings (*{Ext})|*{Ext}";
 		private string SaveDirectory { get; } = AppDir.Charts;
 		private string DefaultFileName =>
 			string.IsNullOrEmpty(_formChart.Title) ? null : _formChart.Title + Ext;
 
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
-
 		private readonly FormChart _formChart;
 		private readonly ButtonBase _buttonSave;
 		private readonly ButtonBase _buttonLoad;
-		private readonly ButtonBase _buttonMruFiles;
 		private readonly ContextMenuStrip _menuMruFiles;
-		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

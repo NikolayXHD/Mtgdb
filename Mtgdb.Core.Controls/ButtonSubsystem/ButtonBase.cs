@@ -27,7 +27,6 @@ namespace Mtgdb.Controls
 			EnabledChanged += enabledChanged;
 			Paint += paint;
 			MouseDown += mouseDown;
-			MouseUp += mouseUp;
 			MouseClick += mouseClick;
 			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
@@ -52,7 +51,7 @@ namespace Mtgdb.Controls
 		{
 			var (imageSize, textSize) = measure(e.Graphics);
 			var (textRect, imageRect) = layout();
-			
+
 			paintImage();
 			paintText();
 			paintBorder();
@@ -216,9 +215,6 @@ namespace Mtgdb.Controls
 			if (e.Button == MouseButtons.Left)
 				PressDown?.Invoke(this, EventArgs.Empty);
 		}
-
-		private void mouseUp(object sender, MouseEventArgs e) =>
-			Focus();
 
 		private void lostFocus(object sender, EventArgs e) =>
 			Invalidate();
@@ -585,8 +581,5 @@ namespace Mtgdb.Controls
 			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
 		private static readonly Size _infiniteSize = new Size(int.MaxValue, int.MaxValue);
-
-		
-
 	}
 }

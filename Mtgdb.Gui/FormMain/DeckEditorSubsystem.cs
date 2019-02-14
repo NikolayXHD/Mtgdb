@@ -228,9 +228,26 @@ namespace Mtgdb.Gui
 			throw new Exception(@"wrapper not found");
 		}
 
+
+
+		public void Dispose()
+		{
+			_layoutViewCards.MouseLeave -= gridMouseLeave;
+			_layoutViewDeck.MouseLeave -= gridMouseLeave;
+
+			_layoutViewCards.MouseMove -= gridMouseMove;
+			_layoutViewDeck.MouseMove -= gridMouseMove;
+
+			_layoutViewCards.MouseClicked -= gridMouseClick;
+			_layoutViewDeck.MouseClicked -= gridMouseClick;
+
+			Disposed?.Invoke(this, EventArgs.Empty);
+		}
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
+
 		public UiModel Ui { get; set; }
-
-
 
 		private readonly MtgLayoutView _layoutViewCards;
 		private readonly MtgLayoutView _layoutViewDeck;
@@ -243,16 +260,5 @@ namespace Mtgdb.Gui
 
 		private Cursor _textSelectionCursor;
 		private Cursor _zoomCursor;
-
-		public void Dispose() =>
-			Disposed?.Invoke(this, EventArgs.Empty);
-
-		public ISite Site
-		{
-			get => throw new NotSupportedException();
-			set => throw new NotSupportedException();
-		}
-
-		public event EventHandler Disposed;
 	}
 }

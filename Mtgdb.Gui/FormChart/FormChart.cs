@@ -164,9 +164,6 @@ namespace Mtgdb.Gui
 			foreach (var menu in _menus)
 				ManualMenuPainter.SetupComboBox(menu, allowScroll: true);
 
-			_filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _buttonMruFiles, _menuMruFiles);
-			_filesSubsystem.SubscribeToEvents();
-
 			_sortIconsOrder = new[]
 			{
 				LayoutControlBitmaps.SortNone,
@@ -197,7 +194,13 @@ namespace Mtgdb.Gui
 
 			scale();
 
-			_popupSubsystem.SubscribeToEvents();
+			var filesSubsystem = new ChartFilesSubsystem(this, _buttonSave, _buttonLoad, _menuMruFiles);
+
+			if (components == null)
+				components = new Container();
+
+			components.Add(filesSubsystem);
+			components.Add(new Popup(_menuMruFiles, _buttonMruFiles, HorizontalAlignment.Right, beforeShow: filesSubsystem.UpdateMruFilesMenu));
 		}
 
 		private void scale()
@@ -1261,9 +1264,6 @@ namespace Mtgdb.Gui
 		private readonly ComboBox[] _menus;
 
 		private readonly CardFields _fields;
-		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
-		private readonly ChartFilesSubsystem _filesSubsystem;
-
 		private readonly CheckBox[] _checkBoxes;
 	}
 }

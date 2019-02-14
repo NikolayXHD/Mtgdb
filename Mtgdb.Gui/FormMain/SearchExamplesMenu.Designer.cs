@@ -1,6 +1,6 @@
 ﻿namespace Mtgdb.Gui
 {
-	partial class SearchExamplesPanel
+	partial class SearchExamplesMenu
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchExamplesPanel));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchExamplesMenu));
 			this._panelExamples = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this.label62 = new System.Windows.Forms.Label();
 			this.label61 = new System.Windows.Forms.Label();
@@ -884,7 +884,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.Controls.Add(this._panelExamples);
 			this.Font = new System.Drawing.Font("Consolas", 9F);
-			this.Name = "SearchExamplesPanel";
+			this.Name = "SearchExamplesMenu";
 			this.Size = new System.Drawing.Size(730, 852);
 			this._panelExamples.ResumeLayout(false);
 			this.ResumeLayout(false);

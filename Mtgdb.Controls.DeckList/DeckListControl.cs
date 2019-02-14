@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -48,7 +49,6 @@ namespace Mtgdb.Controls
 			_searchSubsystem = new DeckSearchSubsystem(this, _textBoxSearch, _panelSearchIcon, _listBoxSuggest, _searcher, adapter, _viewDeck);
 			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
 			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
-			_highlightSubsystem = new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter);
 
 			_model = _listModel.CreateModel(Deck.Create());
 			_model.IsCurrent = true;
@@ -58,6 +58,11 @@ namespace Mtgdb.Controls
 			updateSortLabel();
 
 			ManualMenuPainter.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
+
+			if (components == null)
+				components = new Container();
+
+			components.Add(new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter));
 		}
 
 		private void subscribeToEvents()
@@ -497,11 +502,9 @@ namespace Mtgdb.Controls
 		private DeckSearchSubsystem _searchSubsystem;
 
 		private FilterByDeckMode _filterByDeckMode;
-		private SearchResultHighlightSubsystem _highlightSubsystem;
 
 		private Cursor _textSelectionCursor;
 		private DeckSortSubsystem _deckSort;
-		private readonly PopupSubsystem _popupSubsystem = new PopupSubsystem();
 
 		private bool _aborted;
 		private readonly object _sync = new object();

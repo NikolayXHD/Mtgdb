@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -6,7 +7,7 @@ using Mtgdb.Dal;
 
 namespace Mtgdb.Gui
 {
-	public class UiConfigMenuSubsystem
+	public class UiConfigMenuSubsystem : IComponent
 	{
 		public UiConfigMenuSubsystem(
 			ComboBox menuUiScale,
@@ -22,10 +23,7 @@ namespace Mtgdb.Gui
 			_menuImagesCacheCapacity = menuImagesCacheCapacity;
 			_menuUndoDepth = menuUndoDepth;
 			_configRepo = configRepo;
-		}
 
-		public void SetupMenu()
-		{
 			_menuUiScale.Items.AddRange(new[] { 100, 125, 150, 200 }.Select(formatScalePercent).Cast<object>().ToArray());
 			_menuUiSmallImageQuality.Items.AddRange(new object[] { "Normal (LQ)", "High (MQ)" });
 			_menuSuggestDownloadMissingImages.Items.AddRange(new object[] { "No", "Yes" });
@@ -120,6 +118,18 @@ namespace Mtgdb.Gui
 
 			Dpi.Set(config.UiScalePercent);
 		}
+
+		public void Dispose()
+		{
+			_menuUiScale.SelectedIndexChanged -= handleUiScalePercentChanged;
+			_menuUiSmallImageQuality.SelectedIndexChanged -= handleMenuChanged;
+			_menuSuggestDownloadMissingImages.SelectedIndexChanged -= handleMenuChanged;
+			_menuImagesCacheCapacity.SelectedIndexChanged -= handleMenuChanged;
+			_menuUndoDepth.SelectedIndexChanged -= handleMenuChanged;
+		}
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
 
 		private bool _updating;
 
