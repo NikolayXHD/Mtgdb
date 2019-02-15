@@ -70,7 +70,7 @@ namespace Mtgdb.Gui
 			TooltipController.SetTooltip(this,
 				null,
 				"Advanced settings menu",
-				_buttonConfig);
+				_dropdownConfig);
 
 			TooltipController.SetTooltip(this,
 				null,
@@ -93,22 +93,22 @@ namespace Mtgdb.Gui
 			TooltipController.SetTooltip(this,
 				null,
 				"Color scheme menu",
-				_buttonColorScheme);
+				_dropdownColorScheme);
 
 			TooltipController.SetTooltip(this,
 				null,
 				"Clipboard operations menu",
-				_buttonPaste);
+				_dropdownPaste);
 
 			TooltipController.SetTooltip(this,
 				null,
 				"Open file menu",
-				_buttonOpenDeck);
+				_dropdownOpenDeck);
 
 			TooltipController.SetTooltip(this,
 				null,
 				"Save to file menu",
-				_buttonSaveDeck);
+				_dropdownSaveDeck);
 
 			var tabHeadersTooltip = new TabHeadersTooltip(_tabs, this);
 

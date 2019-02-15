@@ -65,7 +65,8 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegality = new PseudoComboBox(_menuLegalityOwner, this);
+			_menuLegality.SetMenuContainer(this);
+
 			_menuLegalityCheckBoxes = new []
 				{
 					_buttonLegalityAllowLegal,
@@ -202,9 +203,9 @@ namespace Mtgdb.Gui
 				components = new Container();
 
 			components.Add(_deckEditorSubsystem);
-			components.Add(_menuLegality);
-			components.Add(_popupSearchExamples =
-				new Popup(_menuSearchExamples, _buttonSearchExamplesDropDown, HorizontalAlignment.Right));
+
+			_dropdownSearchExamples.MenuControl = _menuSearchExamples;
+			_dropdownSearchExamples.MenuAlignment = HorizontalAlignment.Right;
 		}
 
 		private void cardCreating(object view, LayoutControl probeCard) =>
@@ -490,9 +491,7 @@ namespace Mtgdb.Gui
 		private string _deckName;
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
-		private readonly PseudoComboBox _menuLegality;
 		private readonly CheckBox[] _menuLegalityCheckBoxes;
-		private readonly Popup _popupSearchExamples;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

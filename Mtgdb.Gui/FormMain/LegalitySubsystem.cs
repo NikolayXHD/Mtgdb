@@ -1,9 +1,8 @@
 using System;
 using System.Windows.Forms;
-using Mtgdb.Controls;
 using Mtgdb.Dal;
-using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
+using ComboBox = Mtgdb.Controls.ComboBox;
 
 namespace Mtgdb.Gui
 {
@@ -12,7 +11,7 @@ namespace Mtgdb.Gui
 		public event Action FilterChanged;
 
 		public LegalitySubsystem(
-			PseudoComboBox menuLegalityFormat,
+			ComboBox menuLegalityFormat,
 			ButtonBase buttonLegalityAllowLegal,
 			ButtonBase buttonLegalityAllowRestricted,
 			ButtonBase buttonLegalityAllowBanned,
@@ -40,7 +39,7 @@ namespace Mtgdb.Gui
 			_buttonLegalityAllowLegal.MouseUp += handleMouseClick;
 			_buttonLegalityAllowRestricted.MouseUp += handleMouseClick;
 			_buttonLegalityAllowBanned.MouseUp += handleMouseClick;
-			_menuLegalityFormat.Owner.MouseUp += handleMouseClick;
+			_menuLegalityFormat.MouseUp += handleMouseClick;
 		}
 
 		private void handleMouseClick(object sender, MouseEventArgs e)
@@ -194,7 +193,7 @@ namespace Mtgdb.Gui
 
 		private bool _resetting;
 
-		private readonly PseudoComboBox _menuLegalityFormat;
+		private readonly ComboBox _menuLegalityFormat;
 		private readonly ButtonBase _buttonLegalityAllowLegal;
 		private readonly ButtonBase _buttonLegalityAllowRestricted;
 		private readonly ButtonBase _buttonLegalityAllowBanned;

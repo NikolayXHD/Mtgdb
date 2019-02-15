@@ -26,7 +26,7 @@ namespace Mtgdb.Gui
 			_buttonShowScrollDeck.ScaleDpi();
 			_buttonShowPartialCards.ScaleDpi();
 			_buttonShowText.ScaleDpi();
-			_buttonSearchExamplesDropDown.ScaleDpi();
+			_dropdownSearchExamples.ScaleDpi();
 			_buttonResetFilters.ScaleDpi();
 
 			_labelStatusScrollCards.ScaleDpi();
@@ -98,7 +98,7 @@ namespace Mtgdb.Gui
 
 					form._buttonShowPartialCards.ButtonImages = ButtonImages.ScaleDpi((null, Resources.partial_card_enabled_40));
 					form._buttonShowText.ButtonImages = ButtonImages.ScaleDpi((null, Resources.text_enabled_40));
-					form._buttonSearchExamplesDropDown.ButtonImages = ButtonImages.ScaleDpi((null, Resources.book_40));
+					form._dropdownSearchExamples.ButtonImages = ButtonImages.ScaleDpi((null, Resources.book_40));
 					form._buttonResetFilters.ButtonImages = ButtonImages.ScaleDpi((null, Resources.erase));
 
 					int border = FilterManaCost.Border;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
+using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
 {
@@ -126,6 +127,8 @@ namespace Mtgdb.Gui
 			_menuSuggestDownloadMissingImages.SelectedIndexChanged -= handleMenuChanged;
 			_menuImagesCacheCapacity.SelectedIndexChanged -= handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged -= handleMenuChanged;
+
+			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
 		public ISite Site { get; set; }

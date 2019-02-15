@@ -42,6 +42,7 @@ namespace Mtgdb.Controls
 		public void Dispose()
 		{
 			_view.RowDataLoaded -= rowDataLoaded;
+			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
 		public ISite Site { get; set; }

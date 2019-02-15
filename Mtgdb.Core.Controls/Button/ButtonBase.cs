@@ -19,6 +19,7 @@ namespace Mtgdb.Controls
 
 			BackColor = Color.Transparent;
 			ForeColor = SystemColors.ControlText;
+
 			Padding = new Padding(4);
 
 			updateHighlightColors();
@@ -33,18 +34,23 @@ namespace Mtgdb.Controls
 			GotFocus += gotFocus;
 			LostFocus += lostFocus;
 			KeyDown += keyDown;
-		}
-
-		protected override void OnHandleCreated(EventArgs e)
-		{
-			base.OnHandleCreated(e);
 			ColorSchemeController.SystemColorsChanged += systemColorsChanged;
 		}
 
-		protected override void OnHandleDestroyed(EventArgs e)
+		protected override void Dispose(bool disposing)
 		{
+			EnabledChanged -= enabledChanged;
+			Paint -= paint;
+			MouseDown -= mouseDown;
+			MouseClick -= mouseClick;
+			MouseEnter -= mouseEnter;
+			MouseLeave -= mouseLeave;
+			GotFocus -= gotFocus;
+			LostFocus -= lostFocus;
+			KeyDown -= keyDown;
 			ColorSchemeController.SystemColorsChanged -= systemColorsChanged;
-			base.OnHandleDestroyed(e);
+
+			base.Dispose(disposing);
 		}
 
 		private void paint(object sender, PaintEventArgs e)
@@ -52,8 +58,8 @@ namespace Mtgdb.Controls
 			var (imageSize, textSize) = measure(e.Graphics);
 			var (textRect, imageRect) = layout();
 
-			paintImage();
 			paintText();
+			paintImage();
 			paintBorder();
 			paintFocusRectangle();
 
@@ -361,7 +367,7 @@ namespace Mtgdb.Controls
 		private Bitmap _image;
 
 		[Category("Settings"), DefaultValue(null)]
-		public Bitmap Image
+		public virtual Bitmap Image
 		{
 			get => _image;
 			set
@@ -399,7 +405,7 @@ namespace Mtgdb.Controls
 		private int _highlightMouseOverOpacity = 64;
 
 		[DefaultValue(64), Category("Settings")]
-		public int HighlightMouseOverOpacity
+		public virtual int HighlightMouseOverOpacity
 		{
 			get => _highlightMouseOverOpacity;
 			set
@@ -415,7 +421,7 @@ namespace Mtgdb.Controls
 		private int _highlightCheckedOpacity = 128;
 
 		[DefaultValue(128), Category("Settings")]
-		public int HighlightCheckedOpacity
+		public virtual int HighlightCheckedOpacity
 		{
 			get => _highlightCheckedOpacity;
 			set
@@ -450,7 +456,7 @@ namespace Mtgdb.Controls
 		private int _disabledOpacity = 128;
 
 		[DefaultValue(128), Category("Settings")]
-		public int DisabledOpacity
+		public virtual int DisabledOpacity
 		{
 			get => _disabledOpacity;
 			set
@@ -497,17 +503,24 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		[Category("Settings"), DefaultValue(false)]
+		public override bool AutoSize
+		{
+			get => base.AutoSize;
+			set => base.AutoSize = value;
+		}
+
 		[Category("Settings"), DefaultValue(typeof(AnchorStyles), "None")]
-		public AnchorStyles VisibleBorders { get; set; } = AnchorStyles.None;
+		public virtual AnchorStyles VisibleBorders { get; set; } = AnchorStyles.None;
 
 		[Category("Settings"), DefaultValue(true)]
 		public bool PaintBackground { get; set; } = true;
 
 		[Category("Settings"), DefaultValue(true)]
-		public bool AutoCheck { get; set; } = true;
+		public virtual bool AutoCheck { get; set; } = true;
 
 		[Category("Settings"), DefaultValue(false)]
-		public bool? VisibleAllBorders
+		public virtual bool? VisibleAllBorders
 		{
 			get
 			{
@@ -539,7 +552,7 @@ namespace Mtgdb.Controls
 
 		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
 		[Category("Settings"), DefaultValue(typeof(TextImageRelation), "ImageBeforeText")]
-		public TextImageRelation TextImageRelation
+		public virtual TextImageRelation TextImageRelation
 		{
 			get => _textImageRelation;
 			set
@@ -554,10 +567,10 @@ namespace Mtgdb.Controls
 		}
 
 		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
-		public StringAlignment TextAlign { get; set; } = StringAlignment.Near;
+		public virtual StringAlignment TextAlign { get; set; } = StringAlignment.Near;
 
 		private ButtonImages _buttonImages;
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ButtonImages ButtonImages
 		{
 			get => _buttonImages;

@@ -66,7 +66,7 @@ namespace Mtgdb.Gui
 			if (form == null)
 				return;
 
-			if (sender == _buttonPaste || sender == _buttonMenuPasteDeck)
+			if (sender == _dropdownPaste || sender == _buttonMenuPasteDeck)
 				form.PasteDeck(append: false);
 			else if (sender == _buttonMenuPasteDeckAppend)
 				form.PasteDeck(append: true);
@@ -166,7 +166,7 @@ namespace Mtgdb.Gui
 
 		private void setupLanguageMenu()
 		{
-			_buttonLanguage.AutoCheck = false;
+			_dropdownLanguage.AutoCheck = false;
 
 			updateButtonLanguage();
 			UiModel.LanguageController.LanguageChanged += updateButtonLanguage;
@@ -191,8 +191,8 @@ namespace Mtgdb.Gui
 			var menuItem = getLanguageMenuItems()
 				.Single(_ => Str.Equals(_.Text, language));
 
-			_buttonLanguage.Text = menuItem.Text;
-			_buttonLanguage.ButtonImages = menuItem.ButtonImages;
+			_dropdownLanguage.Text = menuItem.Text;
+			_dropdownLanguage.ButtonImages = menuItem.ButtonImages;
 		}
 
 		private IEnumerable<ButtonBase> getLanguageMenuItems() =>

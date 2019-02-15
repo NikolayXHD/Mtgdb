@@ -20,9 +20,9 @@ namespace Mtgdb.Gui
 		{
 			InitializeComponent();
 
-			_buttonLanguage.VisibleAllBorders = true;
+			_dropdownLanguage.VisibleAllBorders = true;
 
-			getLanguageMenuItems().Append(_buttonLanguage).ForEach(
+			getLanguageMenuItems().Append(_dropdownLanguage).ForEach(
 				b => b.Font = new Font("Consolas", 9f, b.Font.Style));
 
 			new[]
@@ -60,26 +60,26 @@ namespace Mtgdb.Gui
 
 			_deckButtons = new[]
 			{
-				_buttonOpenDeck,
-				_buttonSaveDeck,
+				_dropdownOpenDeck,
+				_dropdownSaveDeck,
 				_buttonPrint,
 				_buttonClear,
 				_buttonStat,
-				_buttonPaste
+				_dropdownPaste
 			};
 
 			_saveLoadMenuModes = new List<SaveLoadMenuMode>
 			{
 				new SaveLoadMenuMode
 				{
-					TitleButton = _buttonOpenDeck,
+					TitleButton = _dropdownOpenDeck,
 					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
 					MtgArenaButtonText = "Import MTGArena deck",
 					IsMtgArenaPaste = true
 				},
 				new SaveLoadMenuMode
 				{
-					TitleButton = _buttonSaveDeck,
+					TitleButton = _dropdownSaveDeck,
 					MenuButtons = new[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
 					MtgArenaButtonText = "Export MTGArena deck",
 					IsMtgArenaPaste = false
@@ -202,13 +202,23 @@ namespace Mtgdb.Gui
 			ManualMenuPainter.SetupComboBox(_menuUiImagesCacheCapacity, allowScroll: false);
 			ManualMenuPainter.SetupComboBox(_menuUiUndoDepth, allowScroll: false);
 
-			components.Add(new Popup(_menuLanguage, _buttonLanguage));
-			components.Add(new Popup(_menuDonate, _buttonDonate, HorizontalAlignment.Center));
-			components.Add(new Popup(_menuOpen, _buttonOpenDeck, beforeShow: () => setMenuMode(_buttonOpenDeck)));
-			components.Add(new Popup(_menuOpen, _buttonSaveDeck, beforeShow: () => setMenuMode(_buttonSaveDeck)));
-			components.Add(new Popup(_menuPaste, _buttonPaste));
-			components.Add(new Popup(_menuColors, _buttonColorScheme, beforeShow: updateMenuColors));
-			components.Add(new Popup(_menuConfig, _buttonConfig));
+			_dropdownLanguage.MenuControl = _menuLanguage;
+
+			_dropdownDonate.MenuControl = _menuDonate;
+			_dropdownDonate.MenuAlignment = HorizontalAlignment.Center;
+			
+			_dropdownOpenDeck.MenuControl = _menuOpen;
+			_dropdownOpenDeck.BeforeShow = () => setMenuMode(_dropdownOpenDeck);
+
+			_dropdownSaveDeck.MenuControl = _menuOpen;
+			_dropdownSaveDeck.BeforeShow = () => setMenuMode(_dropdownSaveDeck);
+
+			_dropdownPaste.MenuControl = _menuPaste;
+			
+			_dropdownColorScheme.MenuControl = _menuColors;
+			_dropdownColorScheme.BeforeShow = updateMenuColors;
+
+			_dropdownConfig.MenuControl = _menuConfig;
 		}
 
 		private void updateFormBorderColor()

@@ -26,7 +26,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor { get; set; } = SystemColors.ActiveBorder;
 
-		[Category("Settings"), DefaultValue(typeof (AnchorStyles), "Top|Right|Bottom|Left")]
+		[Category("Settings"), DefaultValue(typeof (AnchorStyles), "Top, Bottom, Left, Right")]
 		public AnchorStyles VisibleBorders { get; set; } = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
 
 		[Category("Settings"), DefaultValue(true)]

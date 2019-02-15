@@ -21,12 +21,12 @@ namespace Mtgdb.Controls
 			this.PaintBorder(e.Graphics, VisibleBorders, BorderColor, BorderDashStyle);
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
-			this.PaintPanelBack(e.Graphics, e.ClipRectangle, this.BackgroundImage, this.BackColor, PaintBackground);
+			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, BackColor, PaintBackground);
 
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor { get; set; } = SystemColors.ActiveBorder;
 
-		[Category("Settings"), DefaultValue(typeof (AnchorStyles), "Top|Right|Bottom|Left")]
+		[Category("Settings"), DefaultValue(typeof (AnchorStyles), "Top, Bottom, Left, Right")]
 		public AnchorStyles VisibleBorders { get; set; } = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
 
 		[Category("Settings"), DefaultValue(true)]

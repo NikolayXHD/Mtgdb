@@ -6,7 +6,7 @@ namespace Mtgdb.Controls
 {
 	public static class ManualMenuPainter
 	{
-		public static void SetupComboBox(ComboBox menu, bool allowScroll)
+		public static void SetupComboBox(System.Windows.Forms.ComboBox menu, bool allowScroll)
 		{
 			menu.DrawMode = DrawMode.OwnerDrawVariable;
 			menu.FlatStyle = FlatStyle.Flat;
@@ -14,7 +14,7 @@ namespace Mtgdb.Controls
 
 			menu.MeasureItem += (s, e) =>
 			{
-				var comboBox = (ComboBox) s;
+				var comboBox = (System.Windows.Forms.ComboBox) s;
 				var size = comboBox.MeasureText(comboBox.Items[e.Index], e.Graphics);
 				e.ItemWidth = size.Width;
 				e.ItemHeight = size.Height;
@@ -22,7 +22,7 @@ namespace Mtgdb.Controls
 
 			menu.DrawItem += (s, e) =>
 			{
-				var comboBox = (ComboBox) s;
+				var comboBox = (System.Windows.Forms.ComboBox) s;
 
 				bool isHighlighted = (e.State & (DrawItemState.HotLight | DrawItemState.Focus)) > 0;
 				var backColor = isHighlighted ? SystemColors.Highlight : comboBox.BackColor;

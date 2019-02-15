@@ -3,15 +3,15 @@ using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
-	public static class PseudoComboBoxScaler
+	public static class ComboBoxScaler
 	{
-		public static void ScaleDpi(this PseudoComboBox comboBox)
+		public static void ScaleDpi(this ComboBox comboBox)
 		{
-			comboBox.Owner.ScaleDpi();
+			ControlScaler.ScaleDpi(comboBox);
 
-			new DpiScaler<PseudoComboBox>(cb =>
+			new DpiScaler<ComboBox>(cb =>
 			{
-				cb.Owner.ButtonImages = ButtonImages.ScaleDpi((null, Resources.drop_down_48));
+				cb.ButtonImages = ButtonImages.ScaleDpi((null, Resources.drop_down_48));
 			}).Setup(comboBox);
 
 			comboBox.MenuItemsCreated += menuItemsCreated;

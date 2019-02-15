@@ -12,6 +12,7 @@ using Mtgdb.Gui.Resx;
 using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 using CheckBox = Mtgdb.Controls.CheckBox;
+using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
 {
@@ -200,7 +201,10 @@ namespace Mtgdb.Gui
 				components = new Container();
 
 			components.Add(filesSubsystem);
-			components.Add(new Popup(_menuMruFiles, _buttonMruFiles, HorizontalAlignment.Right, beforeShow: filesSubsystem.UpdateMruFilesMenu));
+
+			_dropdownMruFiles.MenuControl = _menuMruFiles;
+			_dropdownMruFiles.MenuAlignment = HorizontalAlignment.Right;
+			_dropdownMruFiles.BeforeShow = filesSubsystem.UpdateMruFilesMenu;
 		}
 
 		private void scale()
@@ -239,7 +243,7 @@ namespace Mtgdb.Gui
 			{
 				form._buttonSave.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
 				form._buttonLoad.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
-				form._buttonMruFiles.ButtonImages = ButtonImages.ScaleDpi((null, Resources.down_32));
+				form._dropdownMruFiles.ButtonImages = ButtonImages.ScaleDpi((null, Resources.down_32));
 			}).Setup(this);
 
 			_checkBoxes.ForEach(CheckBoxScaler.ScaleDpi);

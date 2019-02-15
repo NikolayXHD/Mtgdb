@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 			this._labelTitle = new System.Windows.Forms.Label();
 			this._flowTitle = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._flowFileMenu = new Mtgdb.Controls.BorderedFlowLayoutPanel();
-			this._buttonMruFiles = new Mtgdb.Controls.ButtonBase();
+			this._dropdownMruFiles = new Mtgdb.Controls.Dropdown();
 			this._buttonLoad = new Mtgdb.Controls.ButtonBase();
 			this._buttonSave = new Mtgdb.Controls.ButtonBase();
 			this._flowPriceReports = new Mtgdb.Controls.BorderedFlowLayoutPanel();
@@ -593,7 +593,7 @@ namespace Mtgdb.Gui
 			this._flowFileMenu.BorderColor = System.Drawing.SystemColors.ControlText;
 			this._flowFileMenu.BorderDashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
 			this._flowFileMenu.Controls.Add(this._labelTitle);
-			this._flowFileMenu.Controls.Add(this._buttonMruFiles);
+			this._flowFileMenu.Controls.Add(this._dropdownMruFiles);
 			this._flowFileMenu.Controls.Add(this._buttonLoad);
 			this._flowFileMenu.Controls.Add(this._buttonSave);
 			this._flowFileMenu.Location = new System.Drawing.Point(3, 3);
@@ -607,14 +607,14 @@ namespace Mtgdb.Gui
 			// 
 			// _buttonMruFiles
 			// 
-			this._buttonMruFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonMruFiles.AutoCheck = false;
-			this._buttonMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
-			this._buttonMruFiles.Location = new System.Drawing.Point(51, 13);
-			this._buttonMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
-			this._buttonMruFiles.Name = "_buttonMruFiles";
-			this._buttonMruFiles.Size = new System.Drawing.Size(24, 24);
-			this._buttonMruFiles.TabIndex = 62;
+			this._dropdownMruFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._dropdownMruFiles.AutoCheck = false;
+			this._dropdownMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
+			this._dropdownMruFiles.Location = new System.Drawing.Point(51, 13);
+			this._dropdownMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
+			this._dropdownMruFiles.Name = "_dropdownMruFiles";
+			this._dropdownMruFiles.Size = new System.Drawing.Size(24, 24);
+			this._dropdownMruFiles.TabIndex = 62;
 			//
 			// _buttonLoad
 			// 
@@ -756,7 +756,7 @@ namespace Mtgdb.Gui
 		private Controls.BorderedFlowLayoutPanel _flowTitle;
 		private Controls.BorderedFlowLayoutPanel _flowDropdowns;
 		private Controls.BorderedFlowLayoutPanel _flowPriceReports;
-		private Mtgdb.Controls.ButtonBase _buttonMruFiles;
+		private Mtgdb.Controls.Dropdown _dropdownMruFiles;
 		private System.Windows.Forms.ContextMenuStrip _menuMruFiles;
 		private Controls.BorderedFlowLayoutPanel _flowFileMenu;
 	}

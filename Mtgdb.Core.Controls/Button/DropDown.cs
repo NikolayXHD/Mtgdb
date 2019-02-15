@@ -7,33 +7,15 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class Popup : IComponent
+	public class Dropdown : ButtonBase
 	{
-		public Popup(
-			Control menuControl,
-			ButtonBase owner,
-			HorizontalAlignment alignment = HorizontalAlignment.Left,
-			bool closeMenuOnClick = true,
-			Action beforeShow = null)
+		public Dropdown()
 		{
-			MenuControl = menuControl;
-			CloseMenuOnClick = closeMenuOnClick;
-			Owner = owner;
-			_alignment = alignment;
-			_beforeShow = beforeShow;
+			AutoCheck = false;
 
-			MenuControl.Visible = false;
-
-			Owner.PressDown += popupOwnerPressed;
-			Owner.KeyDown += popupOwnerKeyDown;
-			Owner.PreviewKeyDown += popupOwnerPreviewKeyDown;
-
-			foreach (var button in MenuControl.Controls.OfType<ButtonBase>())
-				subscribeToEvents(button);
-
-			MenuControl.ControlAdded += controlAdded;
-			MenuControl.ControlRemoved += controlRemoved;
-
+			PressDown += popupOwnerPressed;
+			KeyDown += popupOwnerKeyDown;
+			PreviewKeyDown += popupOwnerPreviewKeyDown;
 			PopupSubsystem.Instance.GlobalMouseDown += globalMouseDown;
 		}
 
@@ -49,12 +31,11 @@ namespace Mtgdb.Controls
 			if (prevOwner != null && prevOwner is ButtonBase prevCheck)
 				prevCheck.Checked = false;
 
-			if (Owner is ButtonBase check)
-				check.Checked = true;
+			Checked = true;
 
-			MenuControl.SetTag("Owner", Owner);
+			MenuControl.SetTag("Owner", this);
 
-			_beforeShow?.Invoke();
+			BeforeShow?.Invoke();
 
 			var location = getLocation();
 
@@ -71,13 +52,12 @@ namespace Mtgdb.Controls
 
 		private void hide(bool focus)
 		{
-			if (Owner is ButtonBase check)
-				check.Checked = false;
+			Checked = false;
 
 			hide();
 
-			if (focus && Owner.TabStop && Owner.Enabled)
-				Owner.Focus();
+			if (focus && TabStop && Enabled)
+				Focus();
 		}
 
 
@@ -86,7 +66,7 @@ namespace Mtgdb.Controls
 		{
 			var owner = MenuControl.GetTag<ButtonBase>("Owner");
 
-			if (owner != Owner)
+			if (owner != this)
 				return;
 
 			if (CloseMenuOnClick)
@@ -107,7 +87,7 @@ namespace Mtgdb.Controls
 		private void popupItemKeyDown(object sender, KeyEventArgs e)
 		{
 			var owner = MenuControl.GetTag<ButtonBase>("Owner");
-			if (Owner != owner)
+			if (owner != this)
 				return;
 
 			switch (e.KeyData)
@@ -195,7 +175,7 @@ namespace Mtgdb.Controls
 		public bool IsCursorInButton()
 		{
 			var cursorPosition = Cursor.Position;
-			bool isCursorInButton = Owner.ClientRectangle.Contains(Owner.PointToClient(cursorPosition));
+			bool isCursorInButton = ClientRectangle.Contains(PointToClient(cursorPosition));
 			return isCursorInButton;
 		}
 
@@ -220,7 +200,7 @@ namespace Mtgdb.Controls
 		private void showRegularMenu(Point location)
 		{
 			var parent = MenuControl.Parent;
-			location = parent.PointToClient(Owner, location);
+			location = parent.PointToClient(this, location);
 
 			location = new Point(
 				location.X.WithinRange(MenuControl.Margin.Left, parent.Width - MenuControl.Width - MenuControl.Margin.Right),
@@ -238,22 +218,22 @@ namespace Mtgdb.Controls
 					MenuControl,
 					MenuControl.Handle));
 
-			_screenLocation = Owner.PointToScreen(location);
+			_screenLocation = PointToScreen(location);
 			contextMenuStrip.Show(_screenLocation.Value);
 		}
 
 		private Point getLocation()
 		{
-			int top = Owner.Height + MenuControl.Margin.Top;
+			int top = Height + (MarginTop ?? MenuControl.Margin.Top);
 
-			switch (_alignment)
+			switch (MenuAlignment)
 			{
 				case HorizontalAlignment.Left:
 					return new Point(0, top);
 				case HorizontalAlignment.Right:
-					return new Point(Owner.Width - MenuControl.Width, top);
+					return new Point(Width - MenuControl.Width, top);
 				case HorizontalAlignment.Center:
-					return new Point((Owner.Width - MenuControl.Width) / 2, top);
+					return new Point((Width - MenuControl.Width) / 2, top);
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -291,36 +271,79 @@ namespace Mtgdb.Controls
 			button.PreviewKeyDown -= popupItemPreviewKeyDown;
 		}
 
-
-
-		public void Dispose()
+		private void subscribeToEvents(Control menuControl)
 		{
-			Owner.PressDown -= popupOwnerPressed;
-			Owner.KeyDown -= popupOwnerKeyDown;
-			Owner.PreviewKeyDown -= popupOwnerPreviewKeyDown;
+			menuControl.Visible = false;
 
-			foreach (var button in MenuControl.Controls.OfType<ButtonBase>())
+			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
+				subscribeToEvents(button);
+
+			menuControl.ControlAdded += controlAdded;
+			menuControl.ControlRemoved += controlRemoved;
+		}
+
+		private void unsubscribeFromEvents(Control menuControl)
+		{
+			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
 				unsubscribeFromEvents(button);
 
-			MenuControl.ControlAdded -= controlAdded;
-			MenuControl.ControlRemoved -= controlRemoved;
+			menuControl.ControlAdded -= controlAdded;
+			menuControl.ControlRemoved -= controlRemoved;
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			PressDown -= popupOwnerPressed;
+			KeyDown -= popupOwnerKeyDown;
+			PreviewKeyDown -= popupOwnerPreviewKeyDown;
+
+			unsubscribeFromEvents(_menuControl);
 
 			PopupSubsystem.Instance.GlobalMouseDown -= globalMouseDown;
 
-			Disposed?.Invoke(this, EventArgs.Empty);
+			base.Dispose(disposing);
 		}
 
-		private Control MenuControl { get; }
+		[Category("Settings"), DefaultValue(null)]
+		public virtual int? MarginTop { get; set; }
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override bool AutoCheck
+		{
+			get => base.AutoCheck;
+			set => base.AutoCheck = value;
+		}
+
+
+		private Control _menuControl;
+		[Category("Settings")]
+		public virtual Control MenuControl
+		{
+			get => _menuControl;
+			set
+			{
+				if (_menuControl == value)
+					return;
+
+				_menuControl?.Invoke0(unsubscribeFromEvents);
+				_menuControl = value;
+				_menuControl?.Invoke0(subscribeToEvents);
+			}
+		}
+
+
+
 		private bool Shown { get; set; }
 
-		private bool CloseMenuOnClick { get; }
-		private ButtonBase Owner { get; }
+		[Category("Settings"), DefaultValue(true)]
+		public bool CloseMenuOnClick { get; set; } = true;
 
-		private readonly HorizontalAlignment _alignment;
-		private readonly Action _beforeShow;
+		[Category("Settings"), DefaultValue(typeof(HorizontalAlignment), "Left")]
+		public HorizontalAlignment MenuAlignment { get; set; } = HorizontalAlignment.Left;
+		
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Action BeforeShow { get; set; }
+
 		private Point? _screenLocation;
-
-		public ISite Site { get; set; }
-		public event EventHandler Disposed;
 	}
 }

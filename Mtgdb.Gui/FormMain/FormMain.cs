@@ -1017,7 +1017,7 @@ namespace Mtgdb.Gui
 			_cardSearch.FocusSearch();
 
 		public void ShowFindExamples() =>
-			_popupSearchExamples.OpenPopup();
+			_dropdownSearchExamples.OpenPopup();
 
 
 

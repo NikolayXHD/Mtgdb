@@ -92,14 +92,14 @@ namespace Mtgdb.Gui
 			{
 				form._buttonUndo.ButtonImages = ButtonImages.ScaleDpi((Resources.undo_16, Resources.undo_32));
 				form._buttonRedo.ButtonImages = ButtonImages.ScaleDpi((Resources.redo_16, Resources.redo_32));
-				form._buttonSaveDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
-				form._buttonOpenDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
+				form._dropdownSaveDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
+				form._dropdownOpenDeck.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
 				form._buttonStat.ButtonImages = ButtonImages.ScaleDpi((Resources.chart_16, Resources.chart_32));
 				form._buttonPrint.ButtonImages = ButtonImages.ScaleDpi((Resources.print_16, Resources.print_32));
 				form._buttonClear.ButtonImages = ButtonImages.ScaleDpi((Resources.trash_16, Resources.trash_32));
-				form._buttonPaste.ButtonImages = ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32));
+				form._dropdownPaste.ButtonImages = ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32));
 				form._buttonHelp.ButtonImages = ButtonImages.ScaleDpi((Resources.index_16, Resources.index_32));
-				form._buttonConfig.ButtonImages = ButtonImages.ScaleDpi((Resources.properties_16, Resources.properties_32));
+				form._dropdownConfig.ButtonImages = ButtonImages.ScaleDpi((Resources.properties_16, Resources.properties_32));
 				form._buttonTooltips.ButtonImages = ButtonImages.ScaleDpi((Resources.tooltip_16, Resources.tooltip_32));
 				form._buttonImportExportToMtgArena.ButtonImages = ButtonImages.ScaleDpi((Resources.paste_16, Resources.paste_32));
 
@@ -120,7 +120,7 @@ namespace Mtgdb.Gui
 				form._buttonMenuSaveCollection.ButtonImages = ButtonImages.ScaleDpi((null, Resources.box_48));
 				form._buttonOpenWindow.ButtonImages = ButtonImages.ScaleDpi((null, Resources.add_form_32));
 
-				form._buttonColorScheme.ButtonImages = ButtonImages.ScaleDpi((null, Resources.color_swatch_32));
+				form._dropdownColorScheme.ButtonImages = ButtonImages.ScaleDpi((null, Resources.color_swatch_32));
 				form._buttonMenuDonateYandexMoney.ButtonImages = ButtonImages.ScaleDpi((Resources.yandex_money_32, null));
 				form._buttonMenuDonatePayPal.ButtonImages = ButtonImages.ScaleDpi((Resources.paypal_32, null));
 
