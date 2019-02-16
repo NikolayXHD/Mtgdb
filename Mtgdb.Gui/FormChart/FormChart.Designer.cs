@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 			this._labelTitle = new System.Windows.Forms.Label();
 			this._flowTitle = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._flowFileMenu = new Mtgdb.Controls.BorderedFlowLayoutPanel();
-			this._dropdownMruFiles = new Mtgdb.Controls.Dropdown();
+			this._dropdownMruFiles = new Mtgdb.Controls.Popup();
 			this._buttonLoad = new Mtgdb.Controls.ButtonBase();
 			this._buttonSave = new Mtgdb.Controls.ButtonBase();
 			this._flowPriceReports = new Mtgdb.Controls.BorderedFlowLayoutPanel();
@@ -756,7 +756,7 @@ namespace Mtgdb.Gui
 		private Controls.BorderedFlowLayoutPanel _flowTitle;
 		private Controls.BorderedFlowLayoutPanel _flowDropdowns;
 		private Controls.BorderedFlowLayoutPanel _flowPriceReports;
-		private Mtgdb.Controls.Dropdown _dropdownMruFiles;
+		private Mtgdb.Controls.Popup _dropdownMruFiles;
 		private System.Windows.Forms.ContextMenuStrip _menuMruFiles;
 		private Controls.BorderedFlowLayoutPanel _flowFileMenu;
 	}

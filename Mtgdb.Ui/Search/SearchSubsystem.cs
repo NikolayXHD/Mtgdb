@@ -18,51 +18,42 @@ namespace Mtgdb.Ui
 	{
 		protected SearchSubsystem(
 			Control parent,
-			RichTextBox findEditor,
-			Panel panelSearchIcon,
-			ListBox listBoxSuggest,
+			SearchBar searchBar,
 			LuceneSearcher<TId, TObj> searcher,
 			IDocumentAdapter<TId, TObj> adapter,
 			params LayoutViewControl[] layoutViews)
 		{
 			_parent = parent;
-			_findEditor = findEditor;
-			_panelSearchIcon = panelSearchIcon;
-
-			_listBoxSuggest = listBoxSuggest;
+			_searchBar = searchBar;
 
 			Searcher = searcher;
 			_adapter = adapter;
 			_views = layoutViews;
 
-			_listBoxSuggest.Visible = false;
-			_listBoxSuggest.Height = 0;
-
-			_highlighter = new SearchStringHighlighter(_findEditor);
+			_highlighter = new SearchStringHighlighter(_searchBar.Input);
 			_highlighter.Highlight();
 		}
 
 		public void SubscribeToEvents()
 		{
-			_findEditor.KeyDown += findKeyDown;
-			_findEditor.KeyUp += findKeyUp;
+			_searchBar.Input.KeyDown += findKeyDown;
+			_searchBar.Input.KeyUp += findKeyUp;
 
-			_findEditor.TextChanged += findTextChanged;
-			_findEditor.SelectionChanged += findSelectionChanged;
-			_findEditor.LocationChanged += findLocationChanged;
-			_findEditor.LostFocus += findLostFocus;
+			_searchBar.Input.TextChanged += findTextChanged;
+			_searchBar.Input.SelectionChanged += findSelectionChanged;
+			_searchBar.Input.LocationChanged += findLocationChanged;
+			_searchBar.Input.LostFocus += findLostFocus;
 
-			_listBoxSuggest.Click += suggestClick;
-			_listBoxSuggest.KeyUp += suggestKeyUp;
+			_searchBar.MenuItemPressed += suggestPressed;
+			_searchBar.MenuItemKeyUp += suggestKeyUp;
 
 			foreach (var view in _views)
 				view.SearchClicked += gridSearchClicked;
 
 			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
 
-			_findEditor.MouseUp += handleMouseClick;
-			_findEditor.Parent.MouseUp += handleMouseClick;
-			_panelSearchIcon.MouseUp += handleMouseClick;
+			_searchBar.Input.MouseUp += handleMouseClick;
+			_searchBar.MouseUp += handleMouseClick;
 		}
 
 		private void handleMouseClick(object sender, MouseEventArgs e)
@@ -83,26 +74,23 @@ namespace Mtgdb.Ui
 
 		public void UnsubscribeFromEvents()
 		{
-			_findEditor.KeyDown -= findKeyDown;
-			_findEditor.KeyUp -= findKeyUp;
-			_findEditor.TextChanged -= findTextChanged;
-			_findEditor.SelectionChanged -= findSelectionChanged;
-			_findEditor.LocationChanged -= findLocationChanged;
+			_searchBar.Input.KeyDown -= findKeyDown;
+			_searchBar.Input.KeyUp -= findKeyUp;
+			_searchBar.Input.TextChanged -= findTextChanged;
+			_searchBar.Input.SelectionChanged -= findSelectionChanged;
+			_searchBar.Input.LocationChanged -= findLocationChanged;
+			_searchBar.Input.LostFocus -= findLostFocus;
 
-			_findEditor.GotFocus -= findGotFocus;
-			_findEditor.LostFocus -= findLostFocus;
-
-			_listBoxSuggest.Click -= suggestClick;
-			_listBoxSuggest.KeyUp -= suggestKeyUp;
+			_searchBar.MenuItemPressed -= suggestPressed;
+			_searchBar.MenuItemKeyUp -= suggestKeyUp;
 
 			foreach (var view in _views)
 				view.SearchClicked -= gridSearchClicked;
 
 			ColorSchemeController.SystemColorsChanging -= systemColorsChanged;
 
-			_findEditor.MouseUp -= handleMouseClick;
-			_panelSearchIcon.MouseUp -= handleMouseClick;
-			_findEditor.Parent.MouseUp -= handleMouseClick;
+			_searchBar.Input.MouseUp -= handleMouseClick;
+			_searchBar.MouseUp -= handleMouseClick;
 		}
 
 		public void SubscribeSuggestModelEvents()
@@ -139,7 +127,7 @@ namespace Mtgdb.Ui
 					updateBackColor();
 
 					int deltaMs;
-					if (!_lastUserInput.HasValue || _listBoxSuggest.Visible || _currentText == _appliedText)
+					if (!_lastUserInput.HasValue || _searchBar.IsPopupOpen || _currentText == _appliedText)
 						deltaMs = delay;
 					else
 						deltaMs = delay - (int) (DateTime.Now - _lastUserInput.Value).TotalMilliseconds;
@@ -147,7 +135,7 @@ namespace Mtgdb.Ui
 					if (deltaMs > 0)
 						await TaskEx.Delay(deltaMs + 100);
 					else
-						_findEditor.Invoke(Apply);
+						_parent.Invoke(Apply);
 				}
 			});
 
@@ -159,17 +147,10 @@ namespace Mtgdb.Ui
 
 		private void updateBackColor()
 		{
-			_findEditor.Invoke(delegate
+			_parent.Invoke(delegate
 			{
 				var color = getBackColor();
-
-				_findEditor.Parent.BackColor =
-					_panelSearchIcon.BackColor = color;
-
-				// otherwise the change is not applied
-				// probably there is some internal cache of RGB values
-				_findEditor.BackColor = Color.Black;
-				_findEditor.BackColor = color;
+				_searchBar.BackColor = color;
 			});
 		}
 
@@ -211,21 +192,8 @@ namespace Mtgdb.Ui
 				_suggestTypes = suggest.Types;
 				_suggestToken = suggest.Token;
 
-				_listBoxSuggest.BeginUpdate();
-
-				var index = _listBoxSuggest.SelectedIndex;
-
-				_listBoxSuggest.Items.Clear();
-
-				foreach (string value in values)
-					_listBoxSuggest.Items.Add(value);
-
-				_listBoxSuggest.SelectedIndex = index.WithinRange(-1, values.Count - 1);
-
-				_listBoxSuggest.EndUpdate();
+				_searchBar.SetMenuValues(values);
 			}
-
-			_listBoxSuggest.SetHeightByContent();
 
 			if (values.Count == 0)
 				continueEditingAfterSuggest();
@@ -235,22 +203,22 @@ namespace Mtgdb.Ui
 
 		private void showSuggest()
 		{
-			if (_listBoxSuggest.Items.Count == 0)
+			if (_searchBar.MenuItems.Count == 0)
 				return;
 
 			updateSuggestLocation();
-			_listBoxSuggest.Visible = true;
-			_listBoxSuggest.BringToFront();
+			_searchBar.OpenPopup();
 		}
 
 		private void updateSuggestLocation()
 		{
-			int editedWordIndex = _suggestToken?.Position ?? _findEditor.SelectionStart;
-			var caretPosition = _findEditor.GetPositionFromCharIndex(editedWordIndex);
-			var caretPositionAtForm = _parent.PointToClient(_findEditor, caretPosition);
+			int editedWordIndex = _suggestToken?.Position ?? _searchBar.Input.SelectionStart;
+			var caretPosition =  _searchBar.Input.GetPositionFromCharIndex(editedWordIndex);
+			
+			var caretPositionAtForm = _searchBar.Input.PointToScreen(caretPosition);
+			var bottomPositionAtForm = _searchBar.PointToScreen(new Point(0, _searchBar.Height));
 
-			var bottomPositionAtForm = _parent.PointToClient(_panelSearchIcon, new Point(0, _panelSearchIcon.Height));
-			_listBoxSuggest.Location = new Point(caretPositionAtForm.X, bottomPositionAtForm.Y);
+			_searchBar.CustomMenuLocation = new Point(caretPositionAtForm.X, bottomPositionAtForm.Y);
 		}
 
 
@@ -259,7 +227,7 @@ namespace Mtgdb.Ui
 
 		private void findTextChanged(object sender, EventArgs e)
 		{
-			_currentText = _findEditor.Text;
+			_currentText = _searchBar.Input.Text;
 
 			UpdateSuggestInput();
 			TextChanged?.Invoke();
@@ -270,13 +238,9 @@ namespace Mtgdb.Ui
 			updateSuggestLocation();
 		}
 
-		private void findGotFocus(object sender, EventArgs e)
-		{
-		}
-
 		private void findLostFocus(object sender, EventArgs e)
 		{
-			if (!_listBoxSuggest.Focused)
+			if (!_searchBar.MenuControl.ContainsFocus)
 				closeSuggest();
 		}
 
@@ -290,15 +254,15 @@ namespace Mtgdb.Ui
 		private TextInputState getSearchInputState() =>
 			new TextInputState(
 				_currentText,
-				_findEditor.SelectionStart,
-				_findEditor.SelectionLength);
+				_searchBar.Input.SelectionStart,
+				_searchBar.Input.SelectionLength);
 
 		public void FocusSearch()
 		{
 			if (IsSearchFocused())
 				return;
 
-			_findEditor.SelectionStart = _findEditor.TextLength;
+			_searchBar.Input.SelectionStart = _searchBar.Input.TextLength;
 			focusSearch();
 		}
 
@@ -310,10 +274,10 @@ namespace Mtgdb.Ui
 			switch (e.KeyData)
 			{
 				case Keys.Down:
-					if (_listBoxSuggest.Visible)
+					if (_searchBar.IsPopupOpen)
 					{
-						if (_listBoxSuggest.SelectedIndex < _listBoxSuggest.Items.Count - 1)
-							_listBoxSuggest.SelectedIndex++;
+						if (_searchBar.SelectedIndex < _searchBar.MenuItems.Count - 1)
+							_searchBar.SelectedIndex++;
 					}
 					else
 						showSuggest();
@@ -322,10 +286,10 @@ namespace Mtgdb.Ui
 					break;
 
 				case Keys.Up:
-					if (_listBoxSuggest.Visible)
+					if (_searchBar.IsPopupOpen)
 					{
-						if (_listBoxSuggest.SelectedIndex > 0)
-							_listBoxSuggest.SelectedIndex--;
+						if (_searchBar.SelectedIndex > 0)
+							_searchBar.SelectedIndex--;
 						else
 							continueEditingAfterSuggest();
 					}
@@ -346,9 +310,9 @@ namespace Mtgdb.Ui
 					break;
 
 				case Keys.Escape:
-					if (_listBoxSuggest.Visible)
+					if (_searchBar.IsPopupOpen)
 						continueEditingAfterSuggest();
-					else if (_appliedText != _findEditor.Text)
+					else if (_appliedText != _searchBar.Input.Text)
 					{
 						var appliedText = _appliedText;
 						ApplyDirtyText();
@@ -361,7 +325,7 @@ namespace Mtgdb.Ui
 					break;
 
 				case Keys.Enter:
-					if (!_listBoxSuggest.Visible)
+					if (!_searchBar.IsPopupOpen)
 					{
 						Apply();
 					}
@@ -399,7 +363,7 @@ namespace Mtgdb.Ui
 				case Keys.End:
 				case Keys.Control | Keys.Right:
 				case Keys.Control | Keys.End:
-					if (_findEditor.SelectionStart == _findEditor.TextLength)
+					if (_searchBar.Input.SelectionStart == _searchBar.Input.TextLength)
 					{
 						e.Handled = true;
 						e.SuppressKeyPress = true;
@@ -411,7 +375,7 @@ namespace Mtgdb.Ui
 				case Keys.Home:
 				case Keys.Control | Keys.Left:
 				case Keys.Control | Keys.Home:
-					if (_findEditor.SelectionStart == 0)
+					if (_searchBar.Input.SelectionStart == 0)
 					{
 						e.Handled = true;
 						e.SuppressKeyPress = true;
@@ -423,7 +387,7 @@ namespace Mtgdb.Ui
 
 		public void ApplyDirtyText()
 		{
-			if (_appliedText != _findEditor.Text)
+			if (_appliedText != _searchBar.Input.Text)
 				Apply();
 		}
 
@@ -564,8 +528,8 @@ namespace Mtgdb.Ui
 
 		private void findKeyUp(object sender, KeyEventArgs e)
 		{
-			updateBackColor();
 			_lastUserInput = DateTime.Now;
+			updateBackColor();
 			UpdateSuggestInput();
 		}
 
@@ -574,18 +538,14 @@ namespace Mtgdb.Ui
 		private void suggestKeyUp(object sender, KeyEventArgs e)
 		{
 			_lastUserInput = DateTime.Now;
-			if (e.KeyCode == Keys.Enter)
-			{
-				selectSuggest();
-				continueEditingAfterSuggest();
-			}
-			else if (e.KeyCode == Keys.Up && _listBoxSuggest.SelectedIndex == 0)
+
+			if (e.KeyData == Keys.Up && _searchBar.SelectedIndex == 0)
 				focusSearch();
-			else if (e.KeyCode == Keys.Escape)
+			else if (e.KeyData == Keys.Escape)
 				continueEditingAfterSuggest();
 		}
 
-		private void suggestClick(object sender, EventArgs e)
+		private void suggestPressed(object sender, MenuItemEventArgs e)
 		{
 			selectSuggest();
 			continueEditingAfterSuggest();
@@ -594,14 +554,14 @@ namespace Mtgdb.Ui
 
 		private void continueEditingAfterSuggest()
 		{
-			_listBoxSuggest.Visible = false;
+			_searchBar.ClosePopup();
 			focusSearch();
 		}
 
 		private void closeSuggest()
 		{
-			if (_listBoxSuggest.Visible)
-				_listBoxSuggest.Visible = false;
+			if (_searchBar.IsPopupOpen)
+				_searchBar.ClosePopup();
 		}
 
 		private void selectSuggest()
@@ -610,11 +570,11 @@ namespace Mtgdb.Ui
 			TokenType type;
 			Token token;
 
-			int selectedIndex = _listBoxSuggest.SelectedIndex;
+			int selectedIndex = _searchBar.SelectedIndex;
 			if (selectedIndex < 0)
 				return;
 
-			string value = (string) _listBoxSuggest.Items[selectedIndex];
+			string value = _searchBar.MenuValues[selectedIndex];
 			if (string.IsNullOrEmpty(value))
 				return;
 
@@ -637,25 +597,25 @@ namespace Mtgdb.Ui
 
 		private void setFindText(string text, int caret)
 		{
-			_findEditor.Parent.SuspendLayout();
-			_findEditor.Visible = false;
+			_searchBar.SuspendLayout();
+			_searchBar.Input.Visible = false;
 
-			_findEditor.Text = text;
-			_findEditor.SelectionStart = caret;
-			_findEditor.SelectionLength = 0;
+			_searchBar.Input.Text = text;
+			_searchBar.Input.SelectionStart = caret;
+			_searchBar.Input.SelectionLength = 0;
 
-			_findEditor.Visible = true;
-			_findEditor.Parent.ResumeLayout(false);
+			_searchBar.Input.Visible = true;
+			_searchBar.Input.ResumeLayout(false);
 		}
 
 		private void focusSearch()
 		{
-			int originalSelectionStart = _findEditor.SelectionStart;
-			int originalSelectionLength = _findEditor.SelectionLength;
+			int originalSelectionStart = _searchBar.Input.SelectionStart;
+			int originalSelectionLength = _searchBar.Input.SelectionLength;
 
-			_findEditor.Focus();
-			_findEditor.SelectionStart = originalSelectionStart;
-			_findEditor.SelectionLength = originalSelectionLength;
+			_searchBar.Input.Focus();
+			_searchBar.Input.SelectionStart = originalSelectionStart;
+			_searchBar.Input.SelectionLength = originalSelectionLength;
 		}
 
 		public void Apply()
@@ -674,9 +634,9 @@ namespace Mtgdb.Ui
 		private void updateForeColor()
 		{
 			if (SearchResult?.ParseErrorMessage == null)
-				_findEditor.ResetForeColor();
+				_searchBar.Input.ResetForeColor();
 			else
-				_findEditor.ForeColor = SystemColors.HotTrack.TransformHsv(
+				_searchBar.Input.ForeColor = SystemColors.HotTrack.TransformHsv(
 					h: _ => _ + Color.Blue.RotationTo(Color.DarkRed));
 		}
 
@@ -688,7 +648,7 @@ namespace Mtgdb.Ui
 		protected abstract SearchResult<TId> Search(string query);
 
 		public bool IsSearchFocused() =>
-			_findEditor.ContainsFocus;
+			_searchBar.ContainsFocus || _searchBar.MenuControl.ContainsFocus;
 
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{
@@ -772,7 +732,7 @@ namespace Mtgdb.Ui
 			set
 			{
 				_appliedText = value;
-				_findEditor.Text = value;
+				_searchBar.Input.Text = value;
 			}
 		}
 
@@ -796,9 +756,8 @@ namespace Mtgdb.Ui
 		private Token _suggestToken;
 
 		private readonly Control _parent;
-		private readonly RichTextBox _findEditor;
-		private readonly Panel _panelSearchIcon;
-		private readonly ListBox _listBoxSuggest;
+		private readonly SearchBar _searchBar;
+
 		protected readonly LuceneSearcher<TId, TObj> Searcher;
 		private readonly IDocumentAdapter<TId, TObj> _adapter;
 		private readonly LayoutViewControl[] _views;

@@ -89,13 +89,18 @@
     <Compile Include="Button\CheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dpi\PseudoCheckBoxScaler.cs" />
+    <Compile Include="Button\DropDownBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Button\MenuItemsAccessor.cs" />
+    <Compile Include="Button\MenuValuesAccessor.cs" />
+    <Compile Include="Dpi\CheckBoxScaler.cs" />
     <Compile Include="Button\ButtonBase.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Button\ManualMenuPainter.cs" />
     <Compile Include="Button\MenuItemArgs.cs" />
-    <Compile Include="Button\ComboBox.cs">
+    <Compile Include="Button\DropDown.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColorScheme\ColorSchemeController.cs" />
@@ -108,17 +113,19 @@
     <Compile Include="Dpi\Dpi.cs" />
     <Compile Include="Dpi\DpiScaler.cs" />
     <Compile Include="Dpi\ControlScaler.cs" />
+    <Compile Include="Dpi\DropDownBaseScaler.cs" />
     <Compile Include="Dpi\LayoutViewControlScaler.cs" />
-    <Compile Include="Dpi\ComboBoxScaler.cs" />
+    <Compile Include="Dpi\DropDownScaler.cs" />
     <Compile Include="Dpi\QuickFilterControlScaler.cs" />
     <Compile Include="Dpi\DpiScalers.cs" />
+    <Compile Include="Dpi\SearchBarScaler.cs" />
     <Compile Include="Dpi\TabHeaderControlScaler.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="Button\PopupSubsystem.cs" />
     <Compile Include="Button\ButtonImages.cs" />
-    <Compile Include="Button\Dropdown.cs">
+    <Compile Include="Button\Popup.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Contract\CustomDrawArgs.cs" />
@@ -188,6 +195,7 @@
     <Compile Include="SearchBar\SearchBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Button\MenuItemEventArgs.cs" />
     <Compile Include="ShowSelectedInExplorer.cs" />
     <Compile Include="Statistics\Field.cs" />
     <Compile Include="Statistics\FieldBuilder.cs" />

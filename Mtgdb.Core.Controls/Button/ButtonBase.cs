@@ -100,12 +100,14 @@ namespace Mtgdb.Controls
 
 			void paintFocusRectangle()
 			{
-				if (Focused && _mouseOverBackColor.A > 0)
+				if (ContainsFocus && _checkedBackColor.A > 0)
 				{
 					var rectangle = new Rectangle(default, Size);
 					int width = 2;
 					rectangle.Inflate(-(width - 1), -(width - 1));
-					e.Graphics.DrawRectangle(new Pen(_mouseOverBackColor) { Width = width, DashStyle = DashStyle.Dot }, rectangle);
+					var pen = new Pen(_checkedBackColor) { Width = width, DashStyle = DashStyle.Dot };
+					
+					e.Graphics.DrawRectangle(pen, rectangle);
 				}
 			}
 
@@ -316,13 +318,18 @@ namespace Mtgdb.Controls
 
 			byte o1 = bg.A;
 			return Color.FromArgb(
-				blendBytes(o1, (byte) foreOpacity),
+				(255 * 255 - (255 - o1) * (255 - foreOpacity)) / 255,
 				blendBytes(bg.R, fore.R),
 				blendBytes(bg.G, fore.G),
 				blendBytes(bg.B, fore.B));
 
-			int blendBytes(byte b1, byte b2) =>
-				(b2 * foreOpacity * 255 + b1 * o1 * (255 - foreOpacity)) / (255 * 255);
+			int blendBytes(byte b1, byte b2)
+			{
+				int share2 = 255 * foreOpacity;
+				int share1 = o1 * (255 - foreOpacity);
+
+				return (b1 * share1 + b2 * share2) / (share1 + share2);
+			}
 		}
 
 		private void updateDisabledBorder() =>
@@ -382,6 +389,20 @@ namespace Mtgdb.Controls
 				Invalidate();
 			}
 		}
+
+		public override Color BackColor
+		{
+			get => base.BackColor;
+			set
+			{
+				if (base.BackColor == value)
+					return;
+
+				base.BackColor = value;
+				updateHighlightColors();
+			}
+		}
+
 
 		private Color _mouseOverBackColor;
 		private Color _checkedBackColor;
@@ -526,7 +547,7 @@ namespace Mtgdb.Controls
 			{
 				switch (VisibleBorders)
 				{
-					case AnchorAll:
+					case ControlHelpers.AnchorAll:
 						return true;
 					case AnchorStyles.None:
 						return false;
@@ -541,7 +562,7 @@ namespace Mtgdb.Controls
 					return;
 
 				if (value.Value)
-					VisibleBorders = AnchorAll;
+					VisibleBorders = ControlHelpers.AnchorAll;
 				else
 					VisibleBorders = AnchorStyles.None;
 			}
@@ -589,9 +610,6 @@ namespace Mtgdb.Controls
 			TextFormatFlags.NoPrefix |
 			TextFormatFlags.VerticalCenter |
 			TextFormatFlags.TextBoxControl;
-
-		private const AnchorStyles AnchorAll =
-			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
 		private static readonly Size _infiniteSize = new Size(int.MaxValue, int.MaxValue);
 	}

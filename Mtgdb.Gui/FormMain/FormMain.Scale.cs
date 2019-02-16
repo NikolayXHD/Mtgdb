@@ -11,8 +11,7 @@ namespace Mtgdb.Gui
 		private void scale()
 		{
 			_deckEditorSubsystem.Scale();
-
-			_panelSearch.ScaleDpi();
+			_searchBar.ScaleDpi();
 			_menuSearchExamples.ScaleDpi();
 
 			_buttonShowDuplicates.ScaleDpi();
@@ -46,10 +45,6 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.ScaleDpi(transformIcon);
 
-			_menuSuggest.ScaleDpiWidth();
-			_menuSuggest.ScaleDpiFont();
-			new DpiScaler<ListBox>(l => l.SetHeightByContent()).Setup(_menuSuggest);
-
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
@@ -69,7 +64,7 @@ namespace Mtgdb.Gui
 
 			_deckListControl.Scale();
 
-			_searchEditor.ScaleDpiFont();
+			_searchBar.ScaleDpi();
 
 			new DpiScaler<FormMain>(
 				form =>
@@ -147,7 +142,7 @@ namespace Mtgdb.Gui
 			_panelFilters.SuspendLayout();
 			_panelStatus.SuspendLayout();
 			_panelMenu.SuspendLayout();
-			_panelSearch.SuspendLayout();
+			_searchBar.SuspendLayout();
 			_panelMenuRightSubpanel.SuspendLayout();
 			_panelRightCost.SuspendLayout();
 			_panelManaAbility.SuspendLayout();
@@ -170,8 +165,8 @@ namespace Mtgdb.Gui
 			_panelMenu.ResumeLayout(false);
 			_panelMenu.PerformLayout();
 
-			_panelSearch.ResumeLayout(false);
-			_panelSearch.PerformLayout();
+			_searchBar.ResumeLayout(false);
+			_searchBar.PerformLayout();
 
 			_panelMenuRightSubpanel.ResumeLayout(false);
 			_panelMenuRightSubpanel.PerformLayout();

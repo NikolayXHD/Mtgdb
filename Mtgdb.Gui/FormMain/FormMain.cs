@@ -589,7 +589,7 @@ namespace Mtgdb.Gui
 
 
 		private bool isSearchStringModified() =>
-			_searchEditor.Text != (_history?.Current?.Find ?? string.Empty);
+			_searchBar.Input.Text != (_history?.Current?.Find ?? string.Empty);
 
 		private static string getFilterStatusText(
 			FilterValueState[] filterManagerStates,

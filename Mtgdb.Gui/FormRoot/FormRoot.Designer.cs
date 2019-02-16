@@ -35,16 +35,16 @@ namespace Mtgdb.Gui
 			this._tabs = new Mtgdb.Controls.TabHeaderControl();
 			this._buttonUndo = new Mtgdb.Controls.ButtonBase();
 			this._buttonRedo = new Mtgdb.Controls.ButtonBase();
-			this._dropdownDonate = new Mtgdb.Controls.Dropdown();
+			this._dropdownDonate = new Mtgdb.Controls.Popup();
 			this._buttonUpdate = new Mtgdb.Controls.ButtonBase();
-			this._dropdownLanguage = new Mtgdb.Controls.Dropdown();
-			this._dropdownConfig = new Mtgdb.Controls.Dropdown();
+			this._dropdownLanguage = new Mtgdb.Controls.Popup();
+			this._dropdownConfig = new Mtgdb.Controls.Popup();
 			this._buttonHelp = new Mtgdb.Controls.ButtonBase();
 			this._buttonClear = new Mtgdb.Controls.ButtonBase();
 			this._buttonPrint = new Mtgdb.Controls.ButtonBase();
 			this._buttonStat = new Mtgdb.Controls.ButtonBase();
-			this._dropdownSaveDeck = new Mtgdb.Controls.Dropdown();
-			this._dropdownOpenDeck = new Mtgdb.Controls.Dropdown();
+			this._dropdownSaveDeck = new Mtgdb.Controls.Popup();
+			this._dropdownOpenDeck = new Mtgdb.Controls.Popup();
 			this._buttonTooltips = new Mtgdb.Controls.ButtonBase();
 			this._menuOpen = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonImportExportToMtgArena = new Mtgdb.Controls.ButtonBase();
@@ -82,7 +82,7 @@ namespace Mtgdb.Gui
 			this._panelAva = new Mtgdb.Controls.BorderedPanel();
 			this._buttonMenuDonatePayPal = new Mtgdb.Controls.ButtonBase();
 			this._labelDonate = new System.Windows.Forms.Label();
-			this._dropdownPaste = new Mtgdb.Controls.Dropdown();
+			this._dropdownPaste = new Mtgdb.Controls.Popup();
 			this._menuPaste = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonMenuCopyCollection = new Mtgdb.Controls.ButtonBase();
 			this._buttonMenuCopyDeck = new Mtgdb.Controls.ButtonBase();
@@ -94,7 +94,7 @@ namespace Mtgdb.Gui
 			this._layoutTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._flowTitleRight = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._buttonShowFilterPanels = new Mtgdb.Controls.ButtonBase();
-			this._dropdownColorScheme = new Mtgdb.Controls.Dropdown();
+			this._dropdownColorScheme = new Mtgdb.Controls.Popup();
 			this._buttonSupport = new Mtgdb.Controls.ButtonBase();
 			this._flowTitleLeft = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._buttonOpenWindow = new Mtgdb.Controls.ButtonBase();
@@ -1416,13 +1416,13 @@ namespace Mtgdb.Gui
 		#endregion
 		private Mtgdb.Controls.ButtonBase _buttonUndo;
 		private Mtgdb.Controls.ButtonBase _buttonRedo;
-		private Mtgdb.Controls.Dropdown _dropdownDonate;
+		private Mtgdb.Controls.Popup _dropdownDonate;
 		private Mtgdb.Controls.ButtonBase _buttonUpdate;
-		private Mtgdb.Controls.Dropdown _dropdownLanguage;
-		private Mtgdb.Controls.Dropdown _dropdownConfig;
+		private Mtgdb.Controls.Popup _dropdownLanguage;
+		private Mtgdb.Controls.Popup _dropdownConfig;
 		private Mtgdb.Controls.ButtonBase _buttonHelp;
-		private Mtgdb.Controls.Dropdown _dropdownOpenDeck;
-		private Mtgdb.Controls.Dropdown _dropdownSaveDeck;
+		private Mtgdb.Controls.Popup _dropdownOpenDeck;
+		private Mtgdb.Controls.Popup _dropdownSaveDeck;
 		private Mtgdb.Controls.ButtonBase _buttonStat;
 		private Mtgdb.Controls.ButtonBase _buttonPrint;
 		private Mtgdb.Controls.ButtonBase _buttonClear;
@@ -1457,7 +1457,7 @@ namespace Mtgdb.Gui
 		private Controls.ButtonBase _buttonMenuSaveDeck;
 		private Controls.ButtonBase _buttonMenuSaveCollection;
 		private System.Windows.Forms.Label _labelMtgo;
-		private Controls.Dropdown _dropdownPaste;
+		private Controls.Popup _dropdownPaste;
 		private System.Windows.Forms.Label _labelPasteInfo;
 		private Controls.ButtonBase _buttonMenuPasteDeckAppend;
 		private Controls.ButtonBase _buttonMenuPasteDeck;
@@ -1478,7 +1478,7 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.ButtonBase _buttonVisitDeckedBuilder;
 		private Mtgdb.Controls.ButtonBase _buttonVisitMtgArena;
 		private Mtgdb.Controls.ButtonBase _buttonImportExportToMtgArena;
-		private Mtgdb.Controls.Dropdown _dropdownColorScheme;
+		private Mtgdb.Controls.Popup _dropdownColorScheme;
 		private Controls.ButtonBase _buttonImportMtgArenaCollection;
 		private ContextMenuStrip _menuColors;
 		private ToolStripMenuItem _menuItemEditColorScheme;

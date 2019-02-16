@@ -12,6 +12,9 @@ namespace Mtgdb.Controls
 {
 	public static class ControlHelpers
 	{
+		public const AnchorStyles AnchorAll =
+			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+
 		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, System.Drawing.Point pt)
 		{
 			Point wpt = new Point(pt.X, pt.Y);

@@ -8,17 +8,13 @@ namespace Mtgdb.Controls
 	{
 		public DeckSearchSubsystem(
 			Control parent,
-			RichTextBox findEditor,
-			Panel panelSearchIcon,
-			ListBox listBoxSuggest,
+			SearchBar searchBar,
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
 			params LayoutViewControl[] layoutViews)
 			: base(
 				parent,
-				findEditor,
-				panelSearchIcon,
-				listBoxSuggest,
+				searchBar,
 				searcher,
 				adapter,
 				layoutViews)

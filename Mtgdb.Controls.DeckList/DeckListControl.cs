@@ -46,7 +46,7 @@ namespace Mtgdb.Controls
 			_tooltipOwner = tooltipOwner;
 			_collection = collection;
 
-			_searchSubsystem = new DeckSearchSubsystem(this, _textBoxSearch, _panelSearchIcon, _listBoxSuggest, _searcher, adapter, _viewDeck);
+			_searchSubsystem = new DeckSearchSubsystem(this, _searchBar, _searcher, adapter, _viewDeck);
 			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
 			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 
@@ -59,10 +59,14 @@ namespace Mtgdb.Controls
 
 			ManualMenuPainter.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
 
+			_searchBar.MenuContainer = tooltipOwner;
+
 			if (components == null)
 				components = new Container();
 
 			components.Add(new SearchResultHighlightSubsystem(_viewDeck, _searchSubsystem, adapter));
+
+			_searchSubsystem.Apply();
 		}
 
 		private void subscribeToEvents()

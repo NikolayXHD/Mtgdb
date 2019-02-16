@@ -24,8 +24,8 @@
 					"F1 to learn search bar query syntax\r\n" +
 					"Middle mouse click to clear",
 				_panelSearchIcon,
-				_panelSearch,
-				_textBoxSearch);
+				_searchBar,
+				_searchBar.Input);
 
 			controller.SetTooltip(_tooltipOwner,
 				"Deck list sort order",

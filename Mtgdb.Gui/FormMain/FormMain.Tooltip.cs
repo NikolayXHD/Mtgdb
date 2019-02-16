@@ -121,8 +121,8 @@ namespace Mtgdb.Gui
 					"F1 to learn search bar query syntax\r\n\r\n" +
 					"Ctrl+F to focus search bar\r\n" +
 					"Middle mouse click to clear",
-				_panelSearch,
-				_searchEditor,
+				_searchBar,
+				_searchBar.Input,
 				_panelIconSearch);
 
 			defaultTooltips.SetTooltip(this,

@@ -11,17 +11,13 @@ namespace Mtgdb.Gui
 	{
 		public CardSearchSubsystem(
 			Control parent,
-			RichTextBox findEditor,
-			Panel panelSearchIcon,
-			ListBox listBoxSuggest,
+			SearchBar searchBar,
 			CardSearcher searcher,
 			CardDocumentAdapter adapter,
 			params LayoutViewControl[] layoutViews)
 			: base(
 				parent,
-				findEditor,
-				panelSearchIcon,
-				listBoxSuggest,
+				searchBar,
 				searcher,
 				adapter,
 				layoutViews)

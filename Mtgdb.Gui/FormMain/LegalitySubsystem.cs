@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 using Mtgdb.Dal;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
-using ComboBox = Mtgdb.Controls.ComboBox;
 
 namespace Mtgdb.Gui
 {
@@ -11,7 +11,7 @@ namespace Mtgdb.Gui
 		public event Action FilterChanged;
 
 		public LegalitySubsystem(
-			ComboBox menuLegalityFormat,
+			DropDown menuLegalityFormat,
 			ButtonBase buttonLegalityAllowLegal,
 			ButtonBase buttonLegalityAllowRestricted,
 			ButtonBase buttonLegalityAllowBanned,
@@ -193,7 +193,7 @@ namespace Mtgdb.Gui
 
 		private bool _resetting;
 
-		private readonly ComboBox _menuLegalityFormat;
+		private readonly DropDown _menuLegalityFormat;
 		private readonly ButtonBase _buttonLegalityAllowLegal;
 		private readonly ButtonBase _buttonLegalityAllowRestricted;
 		private readonly ButtonBase _buttonLegalityAllowBanned;

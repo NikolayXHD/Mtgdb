@@ -22,12 +22,10 @@ namespace Mtgdb.Controls
 			_panelSearchIcon.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 			_panelSortIcon.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 
-			_panelSearch.ScaleDpiHeight();
+			_searchBar.ScaleDpi();
 			_menuFilterByDeckMode.ScaleDpi();
 
 			scaleLayoutView(_viewDeck);
-
-			_textBoxSearch.ScaleDpiFont();
 
 			_labelSortStatus.ScaleDpiFont();
 			_labelFilterByDeckMode.ScaleDpiFont();

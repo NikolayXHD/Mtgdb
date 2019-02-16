@@ -57,14 +57,23 @@ namespace Mtgdb.Gui
 
 			Kernel.Bind<TooltipForm>()
 				.ToMethod(ctx => ctx.Kernel.Get<TooltipForm>(QuickFilterTooltipScope))
-				.WhenParentNamed(QuickFilterTooltipScope);
+				.WhenParentNamed(UnspecifiedTooltipScope);
+
+			Kernel.Bind<TooltipController>()
+				.ToSelf()
+				.Named(UnspecifiedTooltipScope);
 
 			Kernel.Bind<TooltipController>()
 				.ToSelf()
 				.Named(DefaultTooltipScope);
 
 			Kernel.Bind<TooltipController>()
-				.ToSelf()
+				.ToMethod(ctx =>
+				{
+					var controller = ctx.Kernel.Get<TooltipController>(UnspecifiedTooltipScope);
+					ctx.Kernel.Get<TooltipConfiguration>().SetupQuickFilterTooltipController(controller);
+					return controller;
+				})
 				.Named(QuickFilterTooltipScope);
 
 			Kernel.Bind<TooltipConfiguration>()
@@ -136,6 +145,7 @@ namespace Mtgdb.Gui
 				.InSingletonScope();
 		}
 
+		private const string UnspecifiedTooltipScope = "unspecified";
 		public const string DefaultTooltipScope = "default-tooltip";
 		public const string QuickFilterTooltipScope = "quick-filter-tooltip";
 	}

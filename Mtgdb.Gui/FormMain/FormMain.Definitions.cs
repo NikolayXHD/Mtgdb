@@ -65,7 +65,8 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegality.SetMenuContainer(this);
+			_menuLegality.MenuContainer = this;
+			_searchBar.MenuContainer = this;
 
 			_menuLegalityCheckBoxes = new []
 				{
@@ -77,9 +78,7 @@ namespace Mtgdb.Gui
 
 			_cardSearch = new CardSearchSubsystem(
 				this,
-				_searchEditor,
-				_panelIconSearch,
-				_menuSuggest,
+				_searchBar,
 				cardSearcher,
 				cardAdapter,
 				_layoutViewCards,
@@ -156,8 +155,6 @@ namespace Mtgdb.Gui
 			_luceneSearchIndexUpToDate = _cardSearcher.IsUpToDate;
 			_spellcheckerIndexUpToDate = _cardSearcher.Spellchecker.IsUpToDate;
 
-			_searchTextSelection = new RichTextBoxSelectionSubsystem(_searchEditor);
-
 			_history = new HistorySubsystem(uiConfigRepository);
 
 			_evaluators = new Evaluators
@@ -188,8 +185,6 @@ namespace Mtgdb.Gui
 				_tabHeadersDeck,
 				_layoutViewCards,
 				_deckListControl.DeckListView);
-
-			ManualMenuPainter.SetupListBox(_menuSuggest);
 
 			updateExcludeManaAbility();
 			updateExcludeManaCost();
@@ -270,8 +265,6 @@ namespace Mtgdb.Gui
 			_buttonSampleHandNew.Pressed += sampleHandNew;
 			_buttonSampleHandMulligan.Pressed += sampleHandMulligan;
 			_buttonSampleHandDraw.Pressed += sampleHandDraw;
-
-			_searchTextSelection.SubscribeToEvents();
 
 			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
 			_buttonShowScrollCards.CheckedChanged += buttonShowScrollChanged;
@@ -360,8 +353,6 @@ namespace Mtgdb.Gui
 			_buttonSampleHandNew.Pressed -= sampleHandNew;
 			_buttonSampleHandMulligan.Pressed -= sampleHandMulligan;
 			_buttonSampleHandDraw.Pressed -= sampleHandDraw;
-
-			_searchTextSelection.UnsubscribeFromEvents();
 
 			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
 			_buttonShowScrollCards.CheckedChanged -= buttonShowScrollChanged;
@@ -484,7 +475,6 @@ namespace Mtgdb.Gui
 
 		private readonly bool _luceneSearchIndexUpToDate;
 		private readonly bool _spellcheckerIndexUpToDate;
-		private readonly RichTextBoxSelectionSubsystem _searchTextSelection;
 		private readonly CopyPasteSubsystem _copyPaste;
 		private readonly FormZoom _formZoom;
 

@@ -10,16 +10,13 @@ namespace Mtgdb.Gui
 	{
 		private readonly TooltipForm _defaultTooltip;
 		private readonly TooltipForm _quickFilterTooltip;
-		private readonly TooltipController _quickFilterTooltipController;
 
 		public TooltipConfiguration(
 			[Named(GuiModule.DefaultTooltipScope)] TooltipForm defaultTooltip,
-			[Named(GuiModule.QuickFilterTooltipScope)] TooltipForm quickFilterTooltip,
-			[Named(GuiModule.QuickFilterTooltipScope)] TooltipController quickFilterTooltipController)
+			[Named(GuiModule.QuickFilterTooltipScope)] TooltipForm quickFilterTooltip)
 		{
 			_defaultTooltip = defaultTooltip;
 			_quickFilterTooltip = quickFilterTooltip;
-			_quickFilterTooltipController = quickFilterTooltipController;
 		}
 
 		public void Setup()
@@ -35,9 +32,12 @@ namespace Mtgdb.Gui
 
 			_quickFilterTooltip.ScaleDpi();
 			_defaultTooltip.ScaleDpi();
+		}
 
-			_quickFilterTooltipController.DelayMs = 0;
-			_quickFilterTooltipController.ToggleOnAlt = false;
+		public void SetupQuickFilterTooltipController(TooltipController controller)
+		{
+			controller.DelayMs = 0;
+			controller.ToggleOnAlt = false;
 		}
 	}
 }
