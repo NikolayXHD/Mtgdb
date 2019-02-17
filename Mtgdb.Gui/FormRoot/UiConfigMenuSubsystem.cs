@@ -1,21 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
 {
 	public class UiConfigMenuSubsystem : IComponent
 	{
 		public UiConfigMenuSubsystem(
-			ComboBox menuUiScale,
-			ComboBox menuUiSmallImageQuality,
-			ComboBox menuSuggestDownloadMissingImages,
-			ComboBox menuImagesCacheCapacity,
-			ComboBox menuUndoDepth,
+			DropDown menuUiScale,
+			DropDown menuUiSmallImageQuality,
+			DropDown menuSuggestDownloadMissingImages,
+			DropDown menuImagesCacheCapacity,
+			DropDown menuUndoDepth,
 			UiConfigRepository configRepo)
 		{
 			_menuUiScale = menuUiScale;
@@ -25,11 +23,11 @@ namespace Mtgdb.Gui
 			_menuUndoDepth = menuUndoDepth;
 			_configRepo = configRepo;
 
-			_menuUiScale.Items.AddRange(new[] { 100, 125, 150, 200 }.Select(formatScalePercent).Cast<object>().ToArray());
-			_menuUiSmallImageQuality.Items.AddRange(new object[] { "Normal (LQ)", "High (MQ)" });
-			_menuSuggestDownloadMissingImages.Items.AddRange(new object[] { "No", "Yes" });
-			_menuImagesCacheCapacity.Items.AddRange(new [] { 100, 300, 1000, 3000 }.Select(formatInt).Cast<object>().ToArray());
-			_menuUndoDepth.Items.AddRange(new [] { 100, 300, 1000, 3000 }.Select(formatInt).Cast<object>().ToArray());
+			_menuUiScale.SetMenuValues(new[] { 100, 125, 150, 200 }.Select(formatScalePercent));
+			_menuUiSmallImageQuality.SetMenuValues("Normal (LQ)", "High (MQ)");
+			_menuSuggestDownloadMissingImages.SetMenuValues("No", "Yes");
+			_menuImagesCacheCapacity.SetMenuValues(new [] { 100, 300, 1000, 3000 }.Select(formatInt));
+			_menuUndoDepth.SetMenuValues(new [] { 100, 300, 1000, 3000 }.Select(formatInt));
 
 			var config = _configRepo.Config;
 
@@ -77,8 +75,8 @@ namespace Mtgdb.Gui
 
 		private int UiScalePercent
 		{
-			get => parseScalePercent((string) _menuUiScale.SelectedItem);
-			set => _menuUiScale.SelectedIndex = _menuUiScale.Items.IndexOf(formatScalePercent(value));
+			get => parseScalePercent(_menuUiScale.SelectedValue);
+			set => _menuUiScale.SelectedIndex = _menuUiScale.MenuValues.IndexOf(formatScalePercent(value));
 		}
 
 		private bool UseSmallImages
@@ -95,14 +93,14 @@ namespace Mtgdb.Gui
 
 		private int ImageCacheCapacity
 		{
-			get => int.Parse((string) _menuImagesCacheCapacity.SelectedItem, Str.Culture);
-			set => _menuImagesCacheCapacity.SelectedIndex = _menuImagesCacheCapacity.Items.IndexOf(value.ToString(Str.Culture));
+			get => int.Parse(_menuImagesCacheCapacity.SelectedValue, Str.Culture);
+			set => _menuImagesCacheCapacity.SelectedIndex = _menuImagesCacheCapacity.MenuValues.IndexOf(value.ToString(Str.Culture));
 		}
 
 		private int UndoDepth
 		{
-			get => int.Parse((string) _menuUndoDepth.SelectedItem, Str.Culture);
-			set => _menuUndoDepth.SelectedIndex = _menuUndoDepth.Items.IndexOf(value.ToString(Str.Culture));
+			get => int.Parse(_menuUndoDepth.SelectedValue, Str.Culture);
+			set => _menuUndoDepth.SelectedIndex = _menuUndoDepth.MenuValues.IndexOf(value.ToString(Str.Culture));
 		}
 
 		private void handleConfigChanged()
@@ -138,11 +136,11 @@ namespace Mtgdb.Gui
 
 		private const string ScalePercentSuffix = " %";
 
-		private readonly ComboBox _menuUiScale;
-		private readonly ComboBox _menuUiSmallImageQuality;
-		private readonly ComboBox _menuSuggestDownloadMissingImages;
-		private readonly ComboBox _menuImagesCacheCapacity;
-		private readonly ComboBox _menuUndoDepth;
+		private readonly DropDown _menuUiScale;
+		private readonly DropDown _menuUiSmallImageQuality;
+		private readonly DropDown _menuSuggestDownloadMissingImages;
+		private readonly DropDown _menuImagesCacheCapacity;
+		private readonly DropDown _menuUndoDepth;
 		private readonly UiConfigRepository _configRepo;
 	}
 }

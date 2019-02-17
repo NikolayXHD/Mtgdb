@@ -20,12 +20,12 @@ namespace Mtgdb.Controls
 		}
 
 		public void OpenPopup() =>
-			show(focus: false);
+			Show(focus: false);
 
 		public void ClosePopup() =>
-			hide(focus: false);
+			Hide(focus: false);
 
-		private void show(bool focus)
+		protected virtual void Show(bool focus)
 		{
 			var prevOwner = MenuControl.GetTag<ButtonBase>("Owner");
 			if (prevOwner != null && prevOwner is ButtonBase prevCheck)
@@ -41,7 +41,10 @@ namespace Mtgdb.Controls
 			if (MenuControl is ContextMenuStrip)
 				showContextMenu(location);
 			else
+			{
 				setRegularMenuLocation(location);
+				showRegularMenu();
+			}
 
 			IsPopupOpen = true;
 
@@ -49,7 +52,7 @@ namespace Mtgdb.Controls
 				FocusFirstMenuItem();
 		}
 
-		private void hide(bool focus)
+		protected virtual void Hide(bool focus)
 		{
 			Checked = false;
 
@@ -63,13 +66,8 @@ namespace Mtgdb.Controls
 
 		private void popupItemPressed(object sender, EventArgs eventArgs)
 		{
-			var owner = MenuControl.GetTag<ButtonBase>("Owner");
-
-			if (owner != this)
-				return;
-
-			if (CloseMenuOnClick)
-				hide(false);
+			if (CloseMenuOnClick && !(sender is DropDownBase) && MenuControl.GetTag<ButtonBase>("Owner") == this)
+				Hide(false);
 		}
 
 		private static void popupItemPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -97,16 +95,16 @@ namespace Mtgdb.Controls
 			switch (e.KeyData)
 			{
 				case Keys.Escape:
-					hide(focus: true);
+					Hide(focus: true);
 					break;
 
 				case Keys.Right:
-					hide(focus: true);
+					Hide(focus: true);
 					SendKeys.Send("{TAB}");
 					break;
 
 				case Keys.Left:
-					hide(focus: true);
+					Hide(focus: true);
 					SendKeys.Send("+{TAB}"); // Alt
 					break;
 			}
@@ -120,9 +118,9 @@ namespace Mtgdb.Controls
 		protected virtual void OnPopupOwnerPressed()
 		{
 			if (IsPopupOpen)
-				hide(false);
+				Hide(false);
 			else
-				show(false);
+				Show(false);
 		}
 
 		private static void popupOwnerPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -142,7 +140,7 @@ namespace Mtgdb.Controls
 			{
 				case Keys.Down:
 					if (!IsPopupOpen)
-						show(focus: true);
+						Show(focus: true);
 					else
 						FocusFirstMenuItem();
 					break;
@@ -152,7 +150,7 @@ namespace Mtgdb.Controls
 					break;
 
 				case Keys.Escape:
-					hide(focus: false);
+					Hide(focus: false);
 					break;
 			}
 		}
@@ -206,12 +204,6 @@ namespace Mtgdb.Controls
 				?.Focus();
 		}
 
-		private void showRegularMenu()
-		{
-			MenuControl.BringToFront();
-			MenuControl.Show();
-		}
-
 		private void setRegularMenuLocation(Point location)
 		{
 			var parent = MenuControl.Parent;
@@ -222,6 +214,12 @@ namespace Mtgdb.Controls
 				location.Y.WithinRange(MenuControl.Margin.Top, parent.Height - MenuControl.Height - MenuControl.Margin.Bottom));
 
 			MenuControl.Location = location;
+		}
+
+		private void showRegularMenu()
+		{
+			MenuControl.BringToFront();
+			MenuControl.Show();
 		}
 
 		private void showContextMenu(Point location)
@@ -257,7 +255,7 @@ namespace Mtgdb.Controls
 		private void globalMouseDown(object sender, EventArgs e)
 		{
 			if (IsPopupOpen && !IsCursorInPopup() && !IsCursorInButton())
-				hide(focus: false);
+				Hide(focus: false);
 		}
 
 		private void controlAdded(object sender, ControlEventArgs e)

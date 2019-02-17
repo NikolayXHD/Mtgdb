@@ -128,6 +128,15 @@ namespace Mtgdb.Controls
 		public static Size Transpose(this Size value) =>
 			new Size(value.Height, value.Width);
 
+		public static Point Transpose(this Point value) =>
+			new Point(value.Y, value.X);
+
+		public static Padding Transpose(this Padding value) =>
+			new Padding(value.Top, value.Left, value.Bottom, value.Right);
+
+		public static Rectangle Transpose(this Rectangle value) =>
+			new Rectangle(value.Location.Transpose(), value.Size.Transpose());
+
 		public static int SizeInPixels(this Font font) =>
 			((int) (font.SizeInPoints * 96 / 72)).ByDpiWidth();
 

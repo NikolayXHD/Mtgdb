@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
@@ -100,100 +101,96 @@ namespace Mtgdb.Controls
 
 			void paintFocusRectangle()
 			{
-				if (ContainsFocus && _checkedBackColor.A > 0)
+				if (ContainsFocus && _focusBorderColor.A > 0)
 				{
 					var rectangle = new Rectangle(default, Size);
 					int width = 2;
 					rectangle.Inflate(-(width - 1), -(width - 1));
-					var pen = new Pen(_checkedBackColor) { Width = width, DashStyle = DashStyle.Dot };
-					
+					var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
+
 					e.Graphics.DrawRectangle(pen, rectangle);
 				}
 			}
 
 			(Rectangle textRect, Rectangle imageRect) layout()
 			{
-				Rectangle textRectangle;
-				Rectangle imageRectangle;
-
-				int x = Padding.Left;
-				int y = Padding.Top;
+				int imageIndex;
+				int textIndex;
 				switch (TextImageRelation)
 				{
-					case TextImageRelation.ImageBeforeText:
-
-						if (textSize == default)
-							imageRectangle = alignBoth(imageSize);
-						else
-							imageRectangle = alignVertically(imageSize);
-
-						if (imageSize != default)
-							x = Width - Padding.Right - textSize.Width;
-
-						textRectangle = alignVertically(textSize);
-						break;
-
-					case TextImageRelation.TextBeforeImage:
-						textRectangle = alignVertically(textSize);
-
-						if (textSize == default)
-							imageRectangle = alignBoth(imageSize);
-						else
-						{
-							x = Width - Padding.Right - imageSize.Width;
-							imageRectangle = alignVertically(imageSize);
-						}
-						break;
-
 					case TextImageRelation.ImageAboveText:
-						if (textSize == default)
-							imageRectangle = alignBoth(imageSize);
-						else
-							imageRectangle = alignHorizontally(imageSize);
-
-						if (imageSize != default)
-							y = Height - Padding.Bottom - textSize.Height;
-
-						textRectangle = alignHorizontally(textSize);
+					case TextImageRelation.ImageBeforeText:
+						imageIndex = 0;
+						textIndex = 1;
 						break;
-
-					case TextImageRelation.TextAboveImage:
-						textRectangle = alignHorizontally(textSize);
-						if (textSize == default)
-							imageRectangle = alignBoth(imageSize);
-						else
-						{
-							y = Height - Padding.Bottom - imageSize.Height;
-							imageRectangle = alignHorizontally(imageSize);
-						}
-
-						break;
-
-					case TextImageRelation.Overlay:
-						imageRectangle = alignBoth(imageSize);
-						textRectangle = alignHorizontally(textSize);
-						break;
-
 					default:
-						throw new NotSupportedException();
+						imageIndex = 1;
+						textIndex = 0;
+						break;
 				}
 
-				return (textRect: textRectangle, imageRect: imageRectangle);
+				Size[] sizes = new Size[2];
+				sizes[imageIndex] = imageSize;
+				sizes[textIndex] = textSize;
 
-				Rectangle alignVertically(Size itemSize) =>
+				var aligns = new StringAlignment[2];
+				aligns[imageIndex] = ImagePosition;
+				aligns[textIndex] = TextPosition;
+
+				Size containerSize = Size;
+				Padding containerPadding = Padding;
+				bool vertical = false;
+				switch (TextImageRelation)
+				{
+					case TextImageRelation.ImageAboveText:
+					case TextImageRelation.TextAboveImage:
+						vertical = true;
+						containerSize = containerSize.Transpose();
+						containerPadding = containerPadding.Transpose();
+						sizes[0] = sizes[0].Transpose();
+						sizes[1] = sizes[1].Transpose();
+						break;
+				}
+
+				Rectangle[] rectangles = new Rectangle[2];
+
+				int contentWidth = sizes.Sum(_ => _.Width);
+				int containerWidth = containerSize.Width - containerPadding.Horizontal;
+				int freeWidth = containerWidth - contentWidth;
+
+				int left;
+				if (aligns[0] == StringAlignment.Near)
+					left = containerPadding.Left;
+				else if (aligns[0] == StringAlignment.Center || aligns[0] == StringAlignment.Far && aligns[1] != aligns[0] && sizes[1].Width > 0)
+					left = containerPadding.Left + freeWidth / 2;
+				else // aligns[0] == StringAlignment.Far
+					left = containerPadding.Left + freeWidth;
+
+				rectangles[0] = centerVertically(sizes[0], left);
+
+				int right;
+				if (aligns[1] == StringAlignment.Far)
+					right = containerSize.Width - containerPadding.Right;
+				else if (aligns[1] == StringAlignment.Center || aligns[1] == StringAlignment.Near && aligns[0] != aligns[1] && sizes[0].Width > 0)
+					right = containerSize.Width - containerPadding.Right - freeWidth / 2;
+				else // aligns[1] == StringAlignment.Near
+					right = containerSize.Width - containerPadding.Right - freeWidth;
+
+				rectangles[1] = centerVertically(sizes[1], right - sizes[1].Width);
+
+				if (vertical)
+				{
+					rectangles[imageIndex] = rectangles[imageIndex].Transpose();
+					rectangles[textIndex] = rectangles[textIndex].Transpose();
+				}
+
+				return (textRect: rectangles[textIndex], imageRect: rectangles[imageIndex]);
+
+				Rectangle centerVertically(Size itemSize, int x) =>
 					new Rectangle(new Point(x, centerTop(itemSize)), itemSize);
 
-				Rectangle alignHorizontally(Size itemSize) =>
-					new Rectangle(new Point(centerLeft(itemSize), y), itemSize);
-
-				Rectangle alignBoth(Size itemSize) =>
-					new Rectangle(new Point(centerLeft(itemSize), centerTop(itemSize)), itemSize);
-
 				int centerTop(Size itemSize) =>
-					Padding.Top + (Height - Padding.Vertical - itemSize.Height) / 2;
-
-				int centerLeft(Size itemSize) =>
-					Padding.Left + (Width - Padding.Horizontal - itemSize.Width) / 2;
+					containerPadding.Top + (containerSize.Height - containerPadding.Vertical - itemSize.Height) / 2;
 			}
 		}
 
@@ -309,6 +306,7 @@ namespace Mtgdb.Controls
 
 			_mouseOverBackColor = blend(BackColor, _highlightBackColor, _highlightMouseOverOpacity);
 			_checkedBackColor = blend(BackColor, _highlightBackColor, _highlightCheckedOpacity);
+			_focusBorderColor = blend(BackColor, _highlightBackColor, _highlightFocusOpacity);
 		}
 
 		private static Color blend(Color bg, Color fore, int foreOpacity)
@@ -406,9 +404,9 @@ namespace Mtgdb.Controls
 
 		private Color _mouseOverBackColor;
 		private Color _checkedBackColor;
+		private Color _focusBorderColor;
 		private Color _disabledBorderColor;
 		private Color _highlightBackColor = SystemColors.HotTrack;
-
 		[Category("Settings"), DefaultValue(typeof(Color), "HotTrack")]
 		public Color HighlightBackColor
 		{
@@ -424,7 +422,6 @@ namespace Mtgdb.Controls
 		}
 
 		private int _highlightMouseOverOpacity = 64;
-
 		[DefaultValue(64), Category("Settings")]
 		public virtual int HighlightMouseOverOpacity
 		{
@@ -440,7 +437,6 @@ namespace Mtgdb.Controls
 		}
 
 		private int _highlightCheckedOpacity = 128;
-
 		[DefaultValue(128), Category("Settings")]
 		public virtual int HighlightCheckedOpacity
 		{
@@ -455,8 +451,22 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private Color _borderColor = SystemColors.ActiveBorder;
+		private int _highlightFocusOpacity = 128;
+		[DefaultValue(128), Category("Settings")]
+		public virtual int HighlightFocusOpacity
+		{
+			get => _highlightFocusOpacity;
+			set
+			{
+				if (_highlightFocusOpacity != value)
+				{
+					_highlightFocusOpacity = value;
+					updateHighlightColors();
+				}
+			}
+		}
 
+		private Color _borderColor = SystemColors.ActiveBorder;
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor
 		{
@@ -475,7 +485,6 @@ namespace Mtgdb.Controls
 		public Color DisabledForeColor { get; set; } = SystemColors.GrayText;
 
 		private int _disabledOpacity = 128;
-
 		[DefaultValue(128), Category("Settings")]
 		public virtual int DisabledOpacity
 		{
@@ -572,6 +581,7 @@ namespace Mtgdb.Controls
 		public DashStyle BorderStyle { get; set; } = DashStyle.Solid;
 
 		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
+
 		[Category("Settings"), DefaultValue(typeof(TextImageRelation), "ImageBeforeText")]
 		public virtual TextImageRelation TextImageRelation
 		{
@@ -587,10 +597,56 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private StringAlignment _textPosition = StringAlignment.Near;
+
 		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
-		public virtual StringAlignment TextAlign { get; set; } = StringAlignment.Near;
+		public virtual StringAlignment TextPosition
+		{
+			get => _textPosition;
+			set
+			{
+				if (_textPosition == value)
+					return;
+
+				_textPosition = value;
+				Invalidate();
+			}
+		}
+
+		private StringAlignment _textAlign = StringAlignment.Near;
+
+		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
+		public virtual StringAlignment TextAlign
+		{
+			get => _textAlign;
+			set
+			{
+				if (_textAlign == value)
+					return;
+
+				_textAlign = value;
+				Invalidate();
+			}
+		}
+
+		private StringAlignment _imagePosition = StringAlignment.Center;
+
+		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Center")]
+		public virtual StringAlignment ImagePosition
+		{
+			get => _imagePosition;
+			set
+			{
+				if (_imagePosition == value)
+					return;
+
+				_imagePosition = value;
+				Invalidate();
+			}
+		}
 
 		private ButtonImages _buttonImages;
+
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ButtonImages ButtonImages
 		{

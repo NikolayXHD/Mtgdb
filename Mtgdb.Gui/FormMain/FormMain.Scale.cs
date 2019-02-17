@@ -51,7 +51,6 @@ namespace Mtgdb.Gui
 			foreach (var qf in _quickFilterControls.Append(FilterManager))
 				qf.ScaleDpi();
 
-			_panelIconSearch.ScaleDpi(transformIcon);
 			_panelIconLegality.ScaleDpi(transformIcon);
 			_panelIconStatusSets.ScaleDpi(transformIcon);
 			_panelIconStatusCollection.ScaleDpi(transformIcon);
@@ -69,6 +68,8 @@ namespace Mtgdb.Gui
 			new DpiScaler<FormMain>(
 				form =>
 				{
+					form._searchBar.ButtonImages = ButtonImages.ScaleDpi((null, Resources.search_48));
+
 					form._buttonSampleHandNew.ButtonImages = ButtonImages.ScaleDpi((null, Resources.hand_48));
 					form._buttonSampleHandDraw.ButtonImages = ButtonImages.ScaleDpi((null, Resources.draw_48));
 					form._buttonSampleHandMulligan.ButtonImages = ButtonImages.ScaleDpi((null, Resources.mulligan_48));

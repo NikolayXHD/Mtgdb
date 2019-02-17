@@ -218,7 +218,7 @@ namespace Mtgdb.Ui
 			var caretPositionAtForm = _searchBar.Input.PointToScreen(caretPosition);
 			var bottomPositionAtForm = _searchBar.PointToScreen(new Point(0, _searchBar.Height));
 
-			_searchBar.CustomMenuLocation = new Point(caretPositionAtForm.X, bottomPositionAtForm.Y);
+			_searchBar.CustomMenuLocation = new Point(caretPositionAtForm.X + 4, bottomPositionAtForm.Y);
 		}
 
 

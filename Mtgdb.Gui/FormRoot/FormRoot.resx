@@ -118,19 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="_labelPasteInfo.Text" xml:space="preserve">
-    <value>NOTE: Instead of pasting the text you can Drag-n-drop it.
+    <value>Select and Drag-n-drop deck from websites
 
-Drag-n-drop to create new Deck
-Shift + Drag-n-drop to add to Deck
-Alt + Drag-n-drop create Collection
-Alt + Shift + Drag-n-drop to add to Collection
+- Drag-n-drop to create new Deck
+- Shift + Drag-n-drop to add to Deck
+- Alt + Drag-n-drop create Collection
+- Alt + Shift + Drag-n-drop to add to Collection
 
-NOTE: In Forge Deck editor you can select and Ctrl + C the cards when in List View mode.
-
-NOTE: Many websites and applications support downloading deck in *.txt file. You can open them as MTGO *.txt deck.
-
-NOTE: When Search result contains selected text, Ctrl + C will copy selected text instead of Deck.
-To clear selection press ESC.</value>
+In Forge Deck editor in List View mode Copy selected cards with Ctrl + C</value>
   </data>
   <metadata name="_menuColors.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

@@ -23,7 +23,6 @@
 					"Ctrl+Backspace to delete one word\r\n\r\n" +
 					"F1 to learn search bar query syntax\r\n" +
 					"Middle mouse click to clear",
-				_panelSearchIcon,
 				_searchBar,
 				_searchBar.Input);
 
@@ -39,7 +38,7 @@
 				_labelSortStatus);
 
 			string filterMode(FilterByDeckMode mode) =>
-				_menuFilterByDeckMode.Items[(int) mode].ToString();
+				_menuFilterByDeckMode.MenuValues[(int) mode];
 
 			controller.SetTooltip(_tooltipOwner,
 				"Filter by deck mode",

@@ -65,9 +65,6 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegality.MenuContainer = this;
-			_searchBar.MenuContainer = this;
-
 			_menuLegalityCheckBoxes = new []
 				{
 					_buttonLegalityAllowLegal,

@@ -12,6 +12,7 @@ namespace Mtgdb.Controls
 			AutoSize = true;
 			AutoCheck = true;
 			TextImageRelation = TextImageRelation.ImageBeforeText;
+			HighlightCheckedOpacity = 0;
 
 			ButtonImages = new ButtonImages(
 				Resources.unchecked_32.ScaleBy(0.5f),
@@ -44,6 +45,13 @@ namespace Mtgdb.Controls
 		{
 			get => base.AutoCheck;
 			set => base.AutoCheck = value;
+		}
+
+		[DefaultValue(0)]
+		public override int HighlightCheckedOpacity
+		{
+			get => base.HighlightCheckedOpacity;
+			set => base.HighlightCheckedOpacity = value;
 		}
 	}
 }

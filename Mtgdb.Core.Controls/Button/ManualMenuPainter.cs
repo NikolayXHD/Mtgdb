@@ -43,26 +43,6 @@ namespace Mtgdb.Controls
 		public static Size MeasureText(this Control listBox, object item, Graphics g) =>
 			g.MeasureText((string) item, listBox.Font, listBox.Size, TextFormat);
 
-		public static void SetHeightByContent(this ListBox listBox)
-		{
-			listBox.Height = getHeight();
-
-			int getHeight()
-			{
-				if (listBox.Items.Count == 0)
-					return 0;
-
-				var g = listBox.CreateGraphics();
-
-				int contentHeight = listBox.Items
-					.Cast<object>()
-					.Sum(item => listBox.MeasureText(item, g).Height);
-
-				int height = 2 + contentHeight;
-				return height;
-			}
-		}
-
 		private const TextFormatFlags TextFormat =
 			TextFormatFlags.NoClipping |
 			TextFormatFlags.NoPrefix |

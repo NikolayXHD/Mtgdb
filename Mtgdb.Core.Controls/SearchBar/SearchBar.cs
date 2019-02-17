@@ -7,7 +7,7 @@ namespace Mtgdb.Controls
 {
 	// TODO suggest list content depends on history of caret movement
 	// Reproduce:
-	// Artist: "Aarron Boyd"
+	// Artist: "Aaron Boyd"
 	// move caret around quoted name
 	// Result:
 	// suggest content on the same position depends on direction it was moved from
@@ -17,9 +17,12 @@ namespace Mtgdb.Controls
 		public SearchBar()
 		{
 			SuspendLayout();
-			
+
 			Padding = DefaultPadding;
 			HighlightMouseOverOpacity = 0;
+			HighlightCheckedOpacity = 0;
+			TextImageRelation = TextImageRelation.ImageBeforeText;
+			ImagePosition = StringAlignment.Near;
 
 			Input = new FixedRichTextBox
 			{
@@ -27,7 +30,8 @@ namespace Mtgdb.Controls
 				Multiline = false,
 				BackColor = BackColor,
 				ForeColor = ForeColor,
-				BorderStyle = System.Windows.Forms.BorderStyle.None
+				BorderStyle = System.Windows.Forms.BorderStyle.None,
+				Margin = new Padding(3)
 			};
 
 			Controls.Add(Input);
@@ -36,6 +40,8 @@ namespace Mtgdb.Controls
 			PerformLayout();
 
 			GotFocus += gotFocus;
+			Input.GotFocus += inputFocusedChanged;
+			Input.LostFocus += inputFocusedChanged;
 			Layout += layout;
 
 			_searchTextSelection = new RichTextBoxSelectionSubsystem(Input);
@@ -44,15 +50,15 @@ namespace Mtgdb.Controls
 
 		private void layout(object sender, LayoutEventArgs e)
 		{
+			int imageWidth = Image?.Width ?? 0;
+
 			Input.SetBounds(
-				Padding.Left,
-				Padding.Top,
-				Width - Padding.Horizontal,
-				Height - Padding.Vertical,
+				Input.Margin.Left + Padding.Left + imageWidth,
+				Input.Margin.Top,
+				Width - Input.Margin.Horizontal - Padding.Left - imageWidth,
+				Height - Input.Margin.Vertical,
 				BoundsSpecified.All);
 		}
-
-
 
 		protected override void HandlePopupItemKeyDown(KeyEventArgs e)
 		{
@@ -78,23 +84,27 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
+
+
 		private void gotFocus(object sender, EventArgs e) =>
 			Input.Focus();
 
+		private void inputFocusedChanged(object sender, EventArgs e) =>
+			Invalidate();
 
 
 		protected override void Dispose(bool disposing)
 		{
 			GotFocus -= gotFocus;
+			Input.GotFocus -= inputFocusedChanged;
+			Input.LostFocus -= inputFocusedChanged;
 			Layout -= layout;
 			_searchTextSelection.UnsubscribeFromEvents();
+
 			base.Dispose(disposing);
 		}
 
-		protected override Padding DefaultPadding => new Padding(3);
-
-		public override bool Focused =>
-			base.Focused || Input.Focused;
+		protected override Padding DefaultPadding => new Padding(0);
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public override TextImageRelation TextImageRelation
@@ -104,17 +114,17 @@ namespace Mtgdb.Controls
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override StringAlignment TextAlign
+		public override StringAlignment TextPosition
 		{
-			get => base.TextAlign;
-			set => base.TextAlign = value;
+			get => base.TextPosition;
+			set => base.TextPosition = value;
 		}
 
-		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override Bitmap Image
+		[DefaultValue(typeof(StringAlignment), "Near")]
+		public override StringAlignment ImagePosition
 		{
-			get => base.Image;
-			set => base.Image = value;
+			get => base.ImagePosition;
+			set => base.ImagePosition = value;
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -129,6 +139,13 @@ namespace Mtgdb.Controls
 		{
 			get => base.AutoCheck;
 			set => base.AutoCheck = value;
+		}
+
+		[DefaultValue(0)]
+		public override int HighlightCheckedOpacity
+		{
+			get => base.HighlightCheckedOpacity;
+			set => base.HighlightCheckedOpacity = value;
 		}
 
 		[DefaultValue(0)]

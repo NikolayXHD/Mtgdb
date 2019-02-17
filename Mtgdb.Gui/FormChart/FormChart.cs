@@ -12,7 +12,6 @@ using Mtgdb.Gui.Resx;
 using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 using CheckBox = Mtgdb.Controls.CheckBox;
-using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Mtgdb.Gui
 {
@@ -121,22 +120,21 @@ namespace Mtgdb.Gui
 				_tabs[i].TabRemoving += tabRemoving;
 			}
 
-			_menuDataSource.Items.AddRange(Enum.GetNames(typeof(DataSource)).Cast<object>().ToArray());
+			_menuDataSource.SetMenuValues(Enum.GetNames(typeof(DataSource)).Cast<string>());
 			_menuDataSource.SelectedIndex = 0;
 
-			_menuLabelDataElement.Items.AddRange(Enum.GetNames(typeof(DataElement)).Cast<object>().ToArray());
+			_menuLabelDataElement.SetMenuValues(Enum.GetNames(typeof(DataElement)).Cast<string>());
 			_menuDataSource.SelectedIndex = 0;
 
-			_menuChartType.Items.AddRange(
+			_menuChartType.SetMenuValues(
 				Enum.GetValues(typeof(SeriesChartType))
 					.Cast<SeriesChartType>()
 					.Where(isChartTypeSupported)
-					.Select(_ => _.ToString())
-					.Cast<object>().ToArray());
+					.Select(_ => _.ToString()));
 
 			_menuChartType.SelectedIndex = 0;
 
-			_menuFields.Items.AddRange(_fieldsOrder.Select(_ => _fields.ByName[_].Alias).Cast<object>().ToArray());
+			_menuFields.SetMenuValues(_fieldsOrder.Select(_ => _fields.ByName[_].Alias));
 
 			foreach (var tab in _summTabs)
 			{
@@ -145,25 +143,20 @@ namespace Mtgdb.Gui
 				tab.TabReordered += tabSummReordered;
 			}
 
-			_menuPriceChartType.Items.AddRange(new object[]
-			{
+			_menuPriceChartType.SetMenuValues(
 				SeriesChartType.Bar.ToString(),
 				SeriesChartType.Pyramid.ToString(),
 				SeriesChartType.Pie.ToString(),
-				SeriesChartType.Doughnut.ToString()
-			});
+				SeriesChartType.Doughnut.ToString());
 
 			_menuPriceChartType.SelectedIndex = 0;
 
-			_menuPrice.Items.AddRange(new object[] { "Low", "Mid", "High" });
+			_menuPrice.SetMenuValues( "Low", "Mid", "High" );
 			_menuPrice.SelectedIndex = 1;
 
 			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
-
-			foreach (var menu in _menus)
-				ManualMenuPainter.SetupComboBox(menu, allowScroll: true);
 
 			_sortIconsOrder = new[]
 			{
@@ -483,7 +476,7 @@ namespace Mtgdb.Gui
 					SummaryFunctions = new List<string> { Aggregates.Sum, Aggregates.Sum },
 					SummarySort = new List<SortOrder> { SortOrder.Descending, SortOrder.None },
 					LabelDataElement = DataElement.SummaryField,
-					ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), (string) _menuPriceChartType.SelectedItem)
+					ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuPriceChartType.SelectedValue)
 				};
 
 				if (button == _buttonDeckPrice)
@@ -1079,7 +1072,7 @@ namespace Mtgdb.Gui
 			_menuDataSource.SelectedIndex = (int) settings.DataSource;
 			_buttonFilterBySearchResult.Checked = settings.ApplyFilter;
 			_menuLabelDataElement.SelectedIndex = (int) settings.LabelDataElement;
-			_menuChartType.SelectedIndex = _menuChartType.Items.IndexOf(settings.ChartType.ToString());
+			_menuChartType.SelectedIndex = _menuChartType.MenuValues.IndexOf(settings.ChartType.ToString());
 
 			_buttonArgumentTotal.Checked = settings.ShowArgumentTotal;
 			_buttonSeriesTotal.Checked = settings.ShowSeriesTotal;
@@ -1115,10 +1108,10 @@ namespace Mtgdb.Gui
 		{
 			var result = new ReportSettings
 			{
-				DataSource = (DataSource) Enum.Parse(typeof(DataSource), (string) _menuDataSource.SelectedItem),
+				DataSource = (DataSource) Enum.Parse(typeof(DataSource), _menuDataSource.SelectedValue),
 				ApplyFilter = _buttonFilterBySearchResult.Checked,
-				LabelDataElement = (DataElement) Enum.Parse(typeof(DataElement), (string) _menuLabelDataElement.SelectedItem),
-				ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), (string) _menuChartType.SelectedItem),
+				LabelDataElement = (DataElement) Enum.Parse(typeof(DataElement), _menuLabelDataElement.SelectedValue),
+				ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuChartType.SelectedValue),
 				ColumnFields = readFields(_tabCols),
 				ColumnFieldsSort = readEnum<SortOrder>(_tabCols),
 				SeriesFields = readFields(_tabRows),
@@ -1265,7 +1258,7 @@ namespace Mtgdb.Gui
 		};
 
 		private readonly ButtonBase[] _buttons;
-		private readonly ComboBox[] _menus;
+		private readonly DropDown[] _menus;
 
 		private readonly CardFields _fields;
 		private readonly CheckBox[] _checkBoxes;

@@ -53,6 +53,9 @@ namespace Mtgdb.Controls
 		public void SetMenuValues(IList<string> values) =>
 			SetMenuValues(values.AsReadOnlyList());
 
+		public void SetMenuValues(params string[] values) =>
+			SetMenuValues(values.AsReadOnlyList());
+
 		public void SetMenuValues(IReadOnlyList<string> values)
 		{
 			if (MenuValues.SequenceEqual(values))
@@ -108,24 +111,24 @@ namespace Mtgdb.Controls
 			}
 		}
 
+
+
+		protected override void Show(bool focus)
+		{
+			Menu.Parent = this.ParentForm();
+			base.Show(focus);
+		}
+
+		protected override void Hide(bool focus)
+		{
+			base.Hide(focus);
+			Menu.Parent = null;
+		}
+
+
+
 		protected virtual Size MeasureMenuItem(ButtonBase menuItem) =>
 			menuItem.MeasureContent();
-
-		private Control _menuContainer;
-		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Control MenuContainer
-		{
-			get => _menuContainer;
-			set
-			{
-				if (_menuContainer == value)
-					return;
-
-				_menuContainer?.Controls.Remove(Menu);
-				_menuContainer = value;
-				_menuContainer?.Controls.Add(Menu);
-			}
-		}
 
 		protected void OnMenuItemPressed(int index)
 		{
@@ -159,7 +162,7 @@ namespace Mtgdb.Controls
 				Text = value,
 				AutoSize = true,
 				AutoCheck = false,
-				TextAlign = StringAlignment.Near,
+				TextPosition = StringAlignment.Near,
 				Margin = new Padding(0),
 				ForeColor = SystemColors.WindowText,
 				Checked = index == SelectedIndex
@@ -232,6 +235,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		public string SelectedValue =>
+			MenuValues.TryGet(SelectedIndex);
 
 		[DefaultValue(typeof(Color), "Window")]
 		public override Color BackColor

@@ -40,6 +40,11 @@ namespace Mtgdb.Controls
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.DataSource = _filteredModels;
 
+			_menuFilterByDeckMode.SetMenuValues(
+				"Ignored",
+				"Cards in currently open deck",
+				"Cards in saved decks matching filter");
+
 			_menuFilterByDeckMode.SelectedIndex = 0;
 
 			_listModel = decks;
@@ -56,10 +61,6 @@ namespace Mtgdb.Controls
 			subscribeToEvents();
 
 			updateSortLabel();
-
-			ManualMenuPainter.SetupComboBox(_menuFilterByDeckMode, allowScroll: false);
-
-			_searchBar.MenuContainer = tooltipOwner;
 
 			if (components == null)
 				components = new Container();

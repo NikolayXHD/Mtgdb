@@ -55,6 +55,14 @@ namespace Mtgdb
 			return list[index];
 		}
 
+		public static TVal TryGet<TVal>(this IReadOnlyList<TVal> list, int index)
+		{
+			if (index < 0 || index >= list.Count)
+				return default;
+
+			return list[index];
+		}
+
 		public static object TryGet(this IList list, int index)
 		{
 			if (index < 0 || index >= list.Count)

@@ -74,14 +74,14 @@ namespace Mtgdb.Gui
 				{
 					TitleButton = _dropdownOpenDeck,
 					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
-					MtgArenaButtonText = "Import MTGArena deck",
+					MtgArenaButtonText = "Import deck\r\nfrom MTGArena",
 					IsMtgArenaPaste = true
 				},
 				new SaveLoadMenuMode
 				{
 					TitleButton = _dropdownSaveDeck,
 					MenuButtons = new[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
-					MtgArenaButtonText = "Export MTGArena deck",
+					MtgArenaButtonText = "Export deck\r\nto MTGArena",
 					IsMtgArenaPaste = false
 				}
 			};
@@ -195,12 +195,6 @@ namespace Mtgdb.Gui
 				_menuUiImagesCacheCapacity,
 				_menuUiUndoDepth,
 				uiConfigRepository));
-
-			ManualMenuPainter.SetupComboBox(_menuUiScale, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiSmallImageQuality, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiSuggestDownloadMissingImages, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiImagesCacheCapacity, allowScroll: false);
-			ManualMenuPainter.SetupComboBox(_menuUiUndoDepth, allowScroll: false);
 
 			_dropdownLanguage.MenuControl = _menuLanguage;
 
@@ -395,7 +389,7 @@ namespace Mtgdb.Gui
 
 			_app.RemoveForm(this);
 
-			System.Windows.Forms.Application.RemoveMessageFilter(this);
+			Application.RemoveMessageFilter(this);
 		}
 
 

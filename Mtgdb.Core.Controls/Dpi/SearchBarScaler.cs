@@ -6,6 +6,7 @@ namespace Mtgdb.Controls
 		{
 			DropDownBaseScaler.ScaleDpi(searchBar);
 			searchBar.Input.ScaleDpiFont();
+			searchBar.Input.ScaleDpiMargin();
 		}
 	}
 }

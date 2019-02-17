@@ -13,7 +13,8 @@ namespace Mtgdb.Controls
 			Padding = DefaultPadding;
 
 			TextImageRelation = TextImageRelation.TextBeforeImage;
-			TextAlign = StringAlignment.Near;
+			TextPosition = StringAlignment.Near;
+			ImagePosition = StringAlignment.Far;
 
 			var dropDownImg = Resources.drop_down_48.ScaleBy(0.5f);
 			ButtonImages = new ButtonImages(dropDownImg, dropDownImg);
@@ -80,10 +81,17 @@ namespace Mtgdb.Controls
 		}
 
 		[DefaultValue(typeof(StringAlignment), "Near")]
-		public override StringAlignment TextAlign
+		public override StringAlignment TextPosition
 		{
-			get => base.TextAlign;
-			set => base.TextAlign = value;
+			get => base.TextPosition;
+			set => base.TextPosition = value;
+		}
+
+		[DefaultValue(typeof(StringAlignment), "Far")]
+		public override StringAlignment ImagePosition
+		{
+			get => base.ImagePosition;
+			set => base.ImagePosition = value;
 		}
 	}
 }
