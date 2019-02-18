@@ -436,8 +436,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private int _highlightCheckedOpacity = 128;
-		[DefaultValue(128), Category("Settings")]
+		private int _highlightCheckedOpacity = 96;
+		[DefaultValue(96), Category("Settings")]
 		public virtual int HighlightCheckedOpacity
 		{
 			get => _highlightCheckedOpacity;
@@ -451,8 +451,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private int _highlightFocusOpacity = 128;
-		[DefaultValue(128), Category("Settings")]
+		private int _highlightFocusOpacity = 96;
+		[DefaultValue(96), Category("Settings")]
 		public virtual int HighlightFocusOpacity
 		{
 			get => _highlightFocusOpacity;

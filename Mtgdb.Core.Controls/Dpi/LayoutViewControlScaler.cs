@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CustomScrollbar;
+using Mtgdb.Controls.Properties;
 using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
@@ -36,6 +38,7 @@ namespace Mtgdb.Controls
 			createViewOptionsScaler(transformIcons).Setup(view);
 
 			_layoutResetter.Setup(view);
+			_scrollBarScaler.Setup(view.Scrollbar);
 		}
 
 		private static
@@ -152,5 +155,19 @@ namespace Mtgdb.Controls
 
 		private static readonly DpiScaler<LayoutViewControl> _layoutResetter =
 			new DpiScaler<LayoutViewControl>(v => v.ResetLayout());
+
+		private static readonly DpiScaler<Scrollbar> _scrollBarScaler = new DpiScaler<Scrollbar>(s =>
+		{
+			s.UpArrowImage = Resources.uparrow.HalfResizeDpi();
+			s.ThumbTopImage = Resources.ThumbTop.HalfResizeDpi();
+			s.ThumbTopSpanImage = Resources.ThumbSpanTop.HalfResizeDpi();
+			s.ThumbMiddleImage = Resources.ThumbMiddle.HalfResizeDpi();
+			s.ThumbBottomSpanImage = Resources.ThumbSpanBottom.HalfResizeDpi();
+			s.ThumbBottomImage = Resources.ThumbBottom.HalfResizeDpi();
+			s.DownArrowImage = Resources.downarrow.HalfResizeDpi();
+
+			s.Width = s.UpArrowImage.Width;
+			s.Left = s.Parent.Right - s.Width;
+		});
 	}
 }

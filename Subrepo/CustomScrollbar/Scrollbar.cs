@@ -293,25 +293,25 @@ namespace CustomScrollbar
 		public Color BorderColor { get; set; }
 
 		[Category("Skin")]
-		public Image UpArrowImage { get; set; }
+		public Bitmap UpArrowImage { get; set; }
 
 		[Category("Skin")]
-		public Image DownArrowImage { get; set; }
+		public Bitmap DownArrowImage { get; set; }
 
 		[Category("Skin")]
-		public Image ThumbTopImage { get; set; }
+		public Bitmap ThumbTopImage { get; set; }
 
 		[Category("Skin")]
-		public Image ThumbTopSpanImage { get; set; }
+		public Bitmap ThumbTopSpanImage { get; set; }
 
 		[Category("Skin")]
-		public Image ThumbBottomImage { get; set; }
+		public Bitmap ThumbBottomImage { get; set; }
 
 		[Category("Skin")]
-		public Image ThumbBottomSpanImage { get; set; }
+		public Bitmap ThumbBottomSpanImage { get; set; }
 
 		[Category("Skin")]
-		public Image ThumbMiddleImage { get; set; }
+		public Bitmap ThumbMiddleImage { get; set; }
 
 		private int _largeChange = 10;
 		private int _smallChange = 1;

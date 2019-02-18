@@ -9,6 +9,7 @@ using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using ReadOnlyCollectionsExtensions;
+using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Downloader
 {
@@ -65,10 +66,24 @@ namespace Mtgdb.Downloader
 			scale();
 		}
 
+		public override string Text
+		{
+			get => base.Text;
+			set
+			{
+				if (_labelTitle != null)
+					_labelTitle.Text = value;
+
+				base.Text = value;
+			}
+		}
+
 		private void scale()
 		{
 			this.ScaleDpiSize();
 			this.ScaleDpi();
+
+			_labelTitle.ScaleDpiFont();
 
 			_progressBar.ScaleDpiHeight();
 			_tableLayoutButtons.ScaleDpi();
@@ -99,6 +114,8 @@ namespace Mtgdb.Downloader
 			}
 
 			_appVersionInstalled = getAppVersionInstalled();
+			Text = _appVersionInstalled.Replace(".zip", string.Empty) + " - updates and downloads";
+
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
 
@@ -329,7 +346,7 @@ namespace Mtgdb.Downloader
 				ThreadPool.QueueUserWorkItem(_ =>
 				{
 					setButtonsEnabled(false);
-					suggestAbortImageDownloading((Button) sender);
+					suggestAbortImageDownloading((ButtonBase) sender);
 
 					Console.WriteLine();
 
@@ -363,7 +380,7 @@ namespace Mtgdb.Downloader
 
 					Console.WriteLine(" Done");
 
-					suggestImageDownloading((Button) sender);
+					suggestImageDownloading((ButtonBase) sender);
 					setButtonsEnabled(true);
 				});
 			}
@@ -431,7 +448,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 
 
-		private void suggestAbortImageDownloading(Button button)
+		private void suggestAbortImageDownloading(ButtonBase button)
 		{
 			this.Invoke(delegate
 			{
@@ -449,7 +466,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 			});
 		}
 
-		private void suggestImageDownloading(Button button)
+		private void suggestImageDownloading(ButtonBase button)
 		{
 			this.Invoke(delegate
 			{
@@ -600,15 +617,14 @@ Are you sure you need small images? (Recommended answer is NO)",
 			new DpiScaler<FormUpdate, IReadOnlyList<Bitmap>>(
 
 				f => f._tableLayoutButtons.Controls
-					.Cast<Button>()
+					.Cast<ButtonBase>()
 					.Select(b => b.Image)
-					.Cast<Bitmap>()
 					.ToReadOnlyList(),
 				// materialize to correctly remember the initial state
 				// the remembered IEnumerable would return modified values on second Scale() call
 
 				(f, bitmaps) => f._tableLayoutButtons.Controls
-					.Cast<Button>()
+					.Cast<ButtonBase>()
 					.Zip(bitmaps, (btn, bmp) => (btn, bmp))
 					.ForEach(
 						_ => _.btn.Image = _.bmp),

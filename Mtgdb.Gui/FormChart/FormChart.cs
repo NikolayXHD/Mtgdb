@@ -209,7 +209,7 @@ namespace Mtgdb.Gui
 			_buttons.Concat(_headerButtons).Concat(new[] { _buttonSave, _buttonLoad, _buttonApply })
 				.ForEach(ControlScaler.ScaleDpi);
 
-			_menus.ForEach(ControlScaler.ScaleDpi);
+			_menus.ForEach(DropDownScaler.ScaleDpi);
 
 			_sortIconsScaler.Setup(this);
 			_aggregateIconsScaler.Setup(this);

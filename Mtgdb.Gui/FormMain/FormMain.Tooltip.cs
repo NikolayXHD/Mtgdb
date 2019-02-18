@@ -30,8 +30,8 @@ namespace Mtgdb.Gui
 				"Buttons filter mode",
 				"Button filters are round checkable buttons grouped by 2 rows.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n" +
-				"To select between modes use Filter manager - the rightmost " +
-				"buttons group in top panel.",
+				"To select between modes use Filter manager - the bottom " +
+				"buttons group in right panel.",
 				_panelIconStatusFilterButtons,
 				_labelStatusFilterButtons);
 
@@ -39,8 +39,8 @@ namespace Mtgdb.Gui
 				"Search bar mode",
 				"Search bar is a wide text input in top panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n" +
-				"To select between modes use Filter manager - the rightmost " +
-				"buttons group in top panel.",
+				"To select between modes use Filter manager - the bottom " +
+				"buttons group in right panel.",
 				_panelIconStatusSearch,
 				_labelStatusSearch);
 
@@ -49,7 +49,7 @@ namespace Mtgdb.Gui
 				"When filtering by Collection, Search result only shows\r\n" +
 				"cards present in your Collection.\r\n\r\n" +
 				"Filtering by Collection can be enabled or disabled using Filter manager - " +
-				"the rightmost buttons group in top panel.\r\n" +
+				"the bottom buttons group in right panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n",
 				_panelIconStatusFilterCollection,
 				_labelStatusFilterCollection);
@@ -66,7 +66,7 @@ namespace Mtgdb.Gui
 				"- change selected value in `filter by deck` menu located in top right " +
 				"of `deck list` panel.\r\n\r\n" +
 				"Filtering by Deck can be enabled or disabled using Filter manager - " +
-				"the rightmost buttons group in top panel.\r\n" +
+				"the bottom buttons group in right panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n",
 				_panelIconStatusFilterDeck,
 				_labelStatusFilterDeck);

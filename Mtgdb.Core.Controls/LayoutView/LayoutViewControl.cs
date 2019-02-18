@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -32,14 +33,23 @@ namespace Mtgdb.Controls
 
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
-			scaleScrollbar();
-
 			_selectionCaretTimer = new Timer
 			{
 				Interval = SystemInformation.CaretBlinkTime
 			};
 
 			_selectionCaretTimer.Tick += tick;
+
+			Scrollbar.ChannelColor = SystemColors.Control;
+			Scrollbar.BorderColor = SystemColors.Control;
+
+			Scrollbar.UpArrowImage = Resources.uparrow.ScaleBy(0.5f);
+			Scrollbar.ThumbTopImage = Resources.ThumbTop.ScaleBy(0.5f);
+			Scrollbar.ThumbTopSpanImage = Resources.ThumbSpanTop.ScaleBy(0.5f);
+			Scrollbar.ThumbMiddleImage = Resources.ThumbMiddle.ScaleBy(0.5f);
+			Scrollbar.ThumbBottomSpanImage = Resources.ThumbSpanBottom.ScaleBy(0.5f);
+			Scrollbar.ThumbBottomImage = Resources.ThumbBottom.ScaleBy(0.5f);
+			Scrollbar.DownArrowImage = Resources.downarrow.ScaleBy(0.5f);
 		}
 
 		private void tick(object sender, EventArgs e)
@@ -53,27 +63,6 @@ namespace Mtgdb.Controls
 			}
 			else
 				getNonEmptySelection()?.Hide();
-		}
-
-		private void scaleScrollbar()
-		{
-			_scrollBar.ChannelColor = SystemColors.Control;
-			_scrollBar.BorderColor = SystemColors.Control;
-
-			int scrollbarWidth = _scrollBar.Width.ByDpiWidth();
-
-			_scrollBar.Left = _scrollBar.Right - scrollbarWidth;
-			_scrollBar.Width = scrollbarWidth;
-
-			_scrollBar.UpArrowImage = ((Bitmap) _scrollBar.UpArrowImage)?.ResizeDpi();
-			_scrollBar.ThumbTopImage = ((Bitmap) _scrollBar.ThumbTopImage)?.ResizeDpi();
-			_scrollBar.ThumbTopSpanImage = ((Bitmap) _scrollBar.ThumbTopSpanImage)?.ResizeDpi();
-
-			_scrollBar.ThumbMiddleImage = ((Bitmap) _scrollBar.ThumbMiddleImage)?.ResizeDpi();
-
-			_scrollBar.ThumbBottomSpanImage = ((Bitmap) _scrollBar.ThumbBottomSpanImage)?.ResizeDpi();
-			_scrollBar.ThumbBottomImage = ((Bitmap) _scrollBar.ThumbBottomImage)?.ResizeDpi();
-			_scrollBar.DownArrowImage = ((Bitmap) _scrollBar.DownArrowImage)?.ResizeDpi();
 		}
 
 		private void layout(object sender, LayoutEventArgs e)
@@ -303,7 +292,7 @@ namespace Mtgdb.Controls
 		private void updateScrollbar()
 		{
 			int pageSize = getRowsCount() * getColumnsCount();
-			_scrollBar.Enabled = Count > pageSize;
+			Scrollbar.Enabled = Count > pageSize;
 
 			int largeChange = ((int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))))
 				.WithinRange(1, PageCount).AtLeast(1);
@@ -313,11 +302,11 @@ namespace Mtgdb.Controls
 
 			_updatingScrollValue = true;
 
-			_scrollBar.SmallChange = 1;
-			_scrollBar.LargeChange = largeChange;
-			_scrollBar.Minimum = 0;
-			_scrollBar.Maximum = maximum;
-			_scrollBar.Value = value;
+			Scrollbar.SmallChange = 1;
+			Scrollbar.LargeChange = largeChange;
+			Scrollbar.Minimum = 0;
+			Scrollbar.Maximum = maximum;
+			Scrollbar.Value = value;
 
 			_updatingScrollValue = false;
 		}
@@ -326,7 +315,7 @@ namespace Mtgdb.Controls
 		{
 			ApplyIconRecognizer();
 
-			_scrollBar.Scroll += scrolled;
+			Scrollbar.Scroll += scrolled;
 			MouseWheel += mouseWheel;
 			KeyDown += keyDown;
 			PreviewKeyDown += previewKeyDown;
@@ -409,7 +398,7 @@ namespace Mtgdb.Controls
 				return;
 
 			int pageSize = getRowsCount() * getColumnsCount();
-			int cardIndex = _scrollBar.Value * pageSize;
+			int cardIndex = Scrollbar.Value * pageSize;
 
 			if (cardIndex == CardIndex)
 				return;
@@ -1353,7 +1342,7 @@ namespace Mtgdb.Controls
 
 		private void layoutOptionsChanged()
 		{
-			_scrollBar.Visible = !_layoutOptions.HideScroll;
+			Scrollbar.Visible = !_layoutOptions.HideScroll;
 			Invalidate();
 			OnLayout(new LayoutEventArgs(this, nameof(LayoutOptions)));
 		}
@@ -1396,7 +1385,7 @@ namespace Mtgdb.Controls
 		}
 
 		[Browsable(false)]
-		public int ScrollWidth => _layoutOptions.HideScroll ? 0 : _scrollBar.Width;
+		public int ScrollWidth => _layoutOptions.HideScroll ? 0 : Scrollbar.Width;
 
 		[Browsable(false)]
 		public int Count => DataSource?.Count ?? 0;
@@ -1433,7 +1422,7 @@ namespace Mtgdb.Controls
 			ProbeCard.Fields.Select(_ => _.FieldName).Where(F.IsNotNull);
 
 		private bool IsUnderMouse =>
-			this.IsUnderMouse() || _scrollBar.IsUnderMouse();
+			this.IsUnderMouse() || Scrollbar.IsUnderMouse();
 
 		/// <summary>
 		/// mouse wheel without focus

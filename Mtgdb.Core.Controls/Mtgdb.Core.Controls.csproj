@@ -98,7 +98,6 @@
     <Compile Include="Button\ButtonBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Button\ManualMenuPainter.cs" />
     <Compile Include="Button\MenuItemArgs.cs" />
     <Compile Include="Button\DropDown.cs">
       <SubType>Component</SubType>
@@ -265,6 +264,8 @@
     <Content Include="Resources\close_tab_32.png" />
     <Content Include="Resources\corner_32.png" />
     <Content Include="Resources\corner_hovered_32.png" />
+    <None Include="Resources\uparrow.png" />
+    <None Include="Resources\downarrow.png" />
     <Content Include="Resources\drop_down_48.png" />
     <Content Include="Resources\maximize.png" />
     <Content Include="Resources\minimize.png" />
@@ -274,6 +275,11 @@
     <Content Include="Resources\sort_asc_hovered.png" />
     <Content Include="Resources\sort_desc_hovered.png" />
     <Content Include="Resources\sort_none_hovered.png" />
+    <None Include="Resources\ThumbBottom.png" />
+    <None Include="Resources\ThumbMiddle.png" />
+    <None Include="Resources\ThumbSpanBottom.png" />
+    <None Include="Resources\ThumbSpanTop.png" />
+    <None Include="Resources\ThumbTop.png" />
     <Content Include="Resources\unchecked_32.png" />
   </ItemGroup>
   <ItemGroup>

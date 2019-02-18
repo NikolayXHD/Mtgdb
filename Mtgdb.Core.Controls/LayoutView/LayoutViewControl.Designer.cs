@@ -28,22 +28,22 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._scrollBar = new CustomScrollbar.Scrollbar();
+			this.Scrollbar = new CustomScrollbar.Scrollbar();
 			this.SuspendLayout();
 			//
 			// _scrollBar
 			//
-			this._scrollBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.Scrollbar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._scrollBar.Location = new System.Drawing.Point(133, 0);
-			this._scrollBar.Name = "_scrollBar";
-			this._scrollBar.Size = new System.Drawing.Size(17, 150);
-			this._scrollBar.TabIndex = 0;
+			this.Scrollbar.Location = new System.Drawing.Point(133, 0);
+			this.Scrollbar.Name = "Scrollbar";
+			this.Scrollbar.Size = new System.Drawing.Size(17, 150);
+			this.Scrollbar.TabIndex = 0;
 			//
 			// LayoutViewControl
 			//
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.Controls.Add(this._scrollBar);
+			this.Controls.Add(this.Scrollbar);
 			this.DoubleBuffered = true;
 			this.Name = "LayoutViewControl";
 			this.ResumeLayout(false);
@@ -52,6 +52,6 @@
 
 		#endregion
 
-		private CustomScrollbar.Scrollbar _scrollBar;
+		internal CustomScrollbar.Scrollbar Scrollbar;
 	}
 }

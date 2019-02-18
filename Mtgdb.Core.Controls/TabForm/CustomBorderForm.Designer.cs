@@ -31,33 +31,32 @@
 			this._panelClient = new System.Windows.Forms.Panel();
 			this._panelCaption = new Mtgdb.Controls.BorderedPanel();
 			this.SuspendLayout();
-			//
+			// 
 			// _panelClient
-			//
-			this._panelClient.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+			// 
+			this._panelClient.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelClient.Location = new System.Drawing.Point(8, 28);
 			this._panelClient.Margin = new System.Windows.Forms.Padding(0);
 			this._panelClient.Name = "_panelClient";
 			this._panelClient.Size = new System.Drawing.Size(784, 564);
-			this._panelClient.TabIndex = 3;
-			//
-			// _panelHeader
-			//
-			this._panelCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this._panelClient.TabIndex = 1;
+			// 
+			// _panelCaption
+			// 
+			this._panelCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._panelCaption.BorderColor = System.Drawing.SystemColors.ActiveBorder;
 			this._panelCaption.Location = new System.Drawing.Point(8, 8);
 			this._panelCaption.Margin = new System.Windows.Forms.Padding(0);
 			this._panelCaption.Name = "_panelCaption";
 			this._panelCaption.PaintBackground = false;
 			this._panelCaption.Size = new System.Drawing.Size(784, 20);
-			this._panelCaption.TabIndex = 4;
+			this._panelCaption.TabIndex = 0;
 			this._panelCaption.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
-			//
+			// 
 			// CustomBorderForm
-			//
+			// 
 			this.BackColor = System.Drawing.Color.Magenta;
 			this.ClientSize = new System.Drawing.Size(800, 600);
 			this.ControlBox = false;

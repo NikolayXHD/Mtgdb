@@ -105,6 +105,7 @@ namespace Mtgdb.Ui
 
 		private void systemColorsChanged()
 		{
+			_searchBar.Input.TouchColorProperties();
 			updateBackColor();
 			updateForeColor();
 			_highlighter.Highlight();

@@ -27,6 +27,8 @@ namespace Mtgdb.Controls
 		{
 			InitializeComponent();
 
+			TabStop = false;
+
 			clearTabs();
 
 			Layout += layout;
