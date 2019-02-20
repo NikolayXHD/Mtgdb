@@ -1,8 +1,5 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 
 namespace Mtgdb
 {
@@ -153,5 +150,26 @@ namespace Mtgdb
 
 		public static Color TransformHsv(this Color c, Func<float, float> h = null, Func<float, float> s = null, Func<float, float> v = null) =>
 			c.ToHsv().Transform(h, s, v).ToRgb();
+
+		public static Color BlendWith(this Color bg, Color fore, int opacity)
+		{
+			if (bg == Color.Empty || bg == Color.Transparent)
+				return Color.FromArgb(opacity, fore);
+
+			byte o1 = bg.A;
+			return Color.FromArgb(
+				(255 * 255 - (255 - o1) * (255 - opacity)) / 255,
+				blendBytes(bg.R, fore.R),
+				blendBytes(bg.G, fore.G),
+				blendBytes(bg.B, fore.B));
+
+			int blendBytes(byte b1, byte b2)
+			{
+				int share2 = 255 * opacity;
+				int share1 = o1 * (255 - opacity);
+
+				return (b1 * share1 + b2 * share2) / (share1 + share2);
+			}
+		}
 	}
 }

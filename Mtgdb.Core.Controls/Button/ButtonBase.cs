@@ -2,32 +2,18 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class ButtonBase : Control
+	public class ButtonBase : ControlBase
 	{
 		public ButtonBase()
 		{
-			SetStyle(
-				ControlStyles.UserPaint |
-				ControlStyles.DoubleBuffer |
-				ControlStyles.SupportsTransparentBackColor |
-				ControlStyles.Selectable,
-				value: true);
-
-			BackColor = Color.Transparent;
-			ForeColor = SystemColors.ControlText;
-
-			Padding = DefaultPadding;
+			SetStyle(ControlStyles.Selectable, value: true);
 
 			updateHighlightColors();
-			updateDisabledBorder();
 
-			EnabledChanged += enabledChanged;
-			Paint += paint;
 			MouseDown += mouseDown;
 			MouseClick += mouseClick;
 			MouseEnter += mouseEnter;
@@ -35,69 +21,12 @@ namespace Mtgdb.Controls
 			GotFocus += gotFocus;
 			LostFocus += lostFocus;
 			KeyDown += keyDown;
-			ColorSchemeController.SystemColorsChanged += systemColorsChanged;
 		}
 
-		protected override void Dispose(bool disposing)
+		protected override void HandlePaint(object sender, PaintEventArgs e)
 		{
-			EnabledChanged -= enabledChanged;
-			Paint -= paint;
-			MouseDown -= mouseDown;
-			MouseClick -= mouseClick;
-			MouseEnter -= mouseEnter;
-			MouseLeave -= mouseLeave;
-			GotFocus -= gotFocus;
-			LostFocus -= lostFocus;
-			KeyDown -= keyDown;
-			ColorSchemeController.SystemColorsChanged -= systemColorsChanged;
-
-			base.Dispose(disposing);
-		}
-
-		private void paint(object sender, PaintEventArgs e)
-		{
-			var (imageSize, textSize) = measure(e.Graphics);
-			var (textRect, imageRect) = layout();
-
-			paintText();
-			paintImage();
-			paintBorder();
+			base.HandlePaint(sender, e);
 			paintFocusRectangle();
-
-			void paintImage()
-			{
-				var image = SelectImage();
-				if (image != null)
-					e.Graphics.DrawImage(image, imageRect);
-			}
-
-			void paintText()
-			{
-				if (string.IsNullOrEmpty(Text))
-					return;
-
-				var foreColor = Enabled ? ForeColor : DisabledForeColor;
-				var format = TextFormat;
-
-				switch (TextAlign)
-				{
-					case StringAlignment.Far:
-						format |= TextFormatFlags.Right;
-						break;
-
-					case StringAlignment.Center:
-						format |= TextFormatFlags.HorizontalCenter;
-						break;
-				}
-
-				e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
-			}
-
-			void paintBorder()
-			{
-				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
-				this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderStyle);
-			}
 
 			void paintFocusRectangle()
 			{
@@ -111,140 +40,9 @@ namespace Mtgdb.Controls
 
 				e.Graphics.DrawRectangle(pen, rectangle);
 			}
-
-			(Rectangle textRect, Rectangle imageRect) layout()
-			{
-				int imageIndex;
-				int textIndex;
-				switch (TextImageRelation)
-				{
-					case TextImageRelation.ImageAboveText:
-					case TextImageRelation.ImageBeforeText:
-						imageIndex = 0;
-						textIndex = 1;
-						break;
-					default:
-						imageIndex = 1;
-						textIndex = 0;
-						break;
-				}
-
-				Size[] sizes = new Size[2];
-				sizes[imageIndex] = imageSize;
-				sizes[textIndex] = textSize;
-
-				var aligns = new StringAlignment[2];
-				aligns[imageIndex] = ImagePosition;
-				aligns[textIndex] = TextPosition;
-
-				Size containerSize = Size;
-				Padding containerPadding = Padding;
-				bool vertical = false;
-				switch (TextImageRelation)
-				{
-					case TextImageRelation.ImageAboveText:
-					case TextImageRelation.TextAboveImage:
-						vertical = true;
-						containerSize = containerSize.Transpose();
-						containerPadding = containerPadding.Transpose();
-						sizes[0] = sizes[0].Transpose();
-						sizes[1] = sizes[1].Transpose();
-						break;
-				}
-
-				Rectangle[] rectangles = new Rectangle[2];
-
-				int contentWidth = sizes.Sum(_ => _.Width);
-				int containerWidth = containerSize.Width - containerPadding.Horizontal;
-				int freeWidth = containerWidth - contentWidth;
-
-				int left;
-				if (aligns[0] == StringAlignment.Near)
-					left = containerPadding.Left;
-				else if (aligns[0] == StringAlignment.Center || aligns[0] == StringAlignment.Far && aligns[1] != aligns[0] && sizes[1].Width > 0)
-					left = containerPadding.Left + freeWidth / 2;
-				else // aligns[0] == StringAlignment.Far
-					left = containerPadding.Left + freeWidth;
-
-				rectangles[0] = centerVertically(sizes[0], left);
-
-				int right;
-				if (aligns[1] == StringAlignment.Far)
-					right = containerSize.Width - containerPadding.Right;
-				else if (aligns[1] == StringAlignment.Center || aligns[1] == StringAlignment.Near && aligns[0] != aligns[1] && sizes[0].Width > 0)
-					right = containerSize.Width - containerPadding.Right - freeWidth / 2;
-				else // aligns[1] == StringAlignment.Near
-					right = containerSize.Width - containerPadding.Right - freeWidth;
-
-				rectangles[1] = centerVertically(sizes[1], right - sizes[1].Width);
-
-				if (vertical)
-				{
-					rectangles[imageIndex] = rectangles[imageIndex].Transpose();
-					rectangles[textIndex] = rectangles[textIndex].Transpose();
-				}
-
-				return (textRect: rectangles[textIndex], imageRect: rectangles[imageIndex]);
-
-				Rectangle centerVertically(Size itemSize, int x) =>
-					new Rectangle(new Point(x, centerTop(itemSize)), itemSize);
-
-				int centerTop(Size itemSize) =>
-					containerPadding.Top + (containerSize.Height - containerPadding.Vertical - itemSize.Height) / 2;
-			}
 		}
 
-		private void updateImages(
-			bool unscaled = true, bool scaled = true,
-			bool disabled = true, bool enabled = true,
-			bool image = true, bool uncheckedImage = true, bool checkedImage = true)
-		{
-			if (unscaled)
-			{
-				if (disabled)
-				{
-					if (image)
-						_imageDisabled = toDisabledImage(_image);
-
-					if (uncheckedImage)
-						_imageUncheckedDisabled = toDisabledImage(_imageUnchecked);
-
-					if (checkedImage)
-						_imageCheckedDisabled = toDisabledImage(_imageChecked);
-				}
-			}
-
-			if (scaled)
-			{
-				if (enabled)
-				{
-					if (image)
-						_imageScaled = _image?.ScaleBy(ImageScale);
-
-					if (uncheckedImage)
-						_imageUncheckedScaled = _imageUnchecked?.ScaleBy(ImageScale);
-
-					if (checkedImage)
-						_imageCheckedScaled = _imageChecked?.ScaleBy(ImageScale);
-				}
-
-				if (disabled)
-				{
-					if (image)
-						_imageDisabledScaled = _imageDisabled?.ScaleBy(ImageScale);
-
-					if (uncheckedImage)
-						_imageUncheckedDisabledScaled = _imageUncheckedDisabled?.ScaleBy(ImageScale);
-
-					if (checkedImage)
-						_imageCheckedDisabledScaled = _imageCheckedDisabled?.ScaleBy(ImageScale);
-				}
-			}
-
-			Invalidate();
-		}
-
-		protected Bitmap SelectImage()
+		protected override Bitmap SelectImage()
 		{
 			return Enabled
 				? Checked
@@ -255,10 +53,13 @@ namespace Mtgdb.Controls
 					: _imageUncheckedDisabledScaled ?? _imageDisabledScaled ?? _imageCheckedDisabledScaled;
 		}
 
-		protected override void OnPaintBackground(PaintEventArgs e) =>
-			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, getBgColor(), PaintBackground);
+		protected override void HandleImageScaleChange()
+		{
+			updateImages(unscaled: false);
+			UpdateSize();
+		}
 
-		private Color getBgColor()
+		protected override Color GetBgColor()
 		{
 			if (MouseOver)
 				return _mouseOverBackColor;
@@ -266,7 +67,73 @@ namespace Mtgdb.Controls
 			if (Checked)
 				return _checkedBackColor;
 
-			return BackColor;
+			return base.GetBgColor();
+		}
+
+		protected override void HandleSystemColorsChanged(object s, EventArgs e)
+		{
+			base.HandleSystemColorsChanged(s, e);
+			updateHighlightColors();
+			updateImages(true, true, true, true, true, true, true);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			MouseDown -= mouseDown;
+			MouseClick -= mouseClick;
+			MouseEnter -= mouseEnter;
+			MouseLeave -= mouseLeave;
+			GotFocus -= gotFocus;
+			LostFocus -= lostFocus;
+			KeyDown -= keyDown;
+
+			base.Dispose(disposing);
+		}
+
+
+
+		private void updateImages(
+			bool unscaled = true, bool scaled = true,
+			bool disabled = true, bool enabled = true,
+			bool image = true, bool uncheckedImage = true, bool checkedImage = true)
+		{
+			if (image)
+				UpdateImages(unscaled, scaled, disabled, enabled);
+
+			if (unscaled)
+			{
+				if (disabled)
+				{
+					if (uncheckedImage)
+						_imageUncheckedDisabled = ToDisabledImage(_imageUnchecked);
+
+					if (checkedImage)
+						_imageCheckedDisabled = ToDisabledImage(_imageChecked);
+				}
+			}
+
+			if (scaled)
+			{
+				if (enabled)
+				{
+					if (uncheckedImage)
+						_imageUncheckedScaled = _imageUnchecked?.ScaleBy(ImageScale);
+
+					if (checkedImage)
+						_imageCheckedScaled = _imageChecked?.ScaleBy(ImageScale);
+				}
+
+				if (disabled)
+				{
+					if (uncheckedImage)
+						_imageUncheckedDisabledScaled = _imageUncheckedDisabled?.ScaleBy(ImageScale);
+
+					if (checkedImage)
+						_imageCheckedDisabledScaled = _imageCheckedDisabled?.ScaleBy(ImageScale);
+				}
+			}
+
+			Invalidate();
 		}
 
 		private void mouseLeave(object sender, EventArgs e) =>
@@ -314,97 +181,14 @@ namespace Mtgdb.Controls
 			Pressed?.Invoke(this, EventArgs.Empty);
 		}
 
-		private void systemColorsChanged()
-		{
-			updateHighlightColors();
-			updateDisabledBorder();
-			updateImages(true, true, true, true, true, true, true);
-		}
-
-		private void enabledChanged(object sender, EventArgs e) =>
-			Invalidate();
-
-		private void updateSize()
-		{
-			if (AutoSize)
-				Size = MeasureContent();
-		}
-
-		public Size MeasureContent()
-		{
-			var g = CreateGraphics();
-			var (imageSize, textSize) = measure(g);
-
-			switch (TextImageRelation)
-			{
-				case TextImageRelation.ImageBeforeText:
-				case TextImageRelation.TextBeforeImage:
-					return new Size(
-						imageSize.Width + textSize.Width + Padding.Horizontal,
-						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
-
-				case TextImageRelation.ImageAboveText:
-				case TextImageRelation.TextAboveImage:
-					return new Size(
-						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
-						imageSize.Height + textSize.Height + Padding.Vertical);
-
-				case TextImageRelation.Overlay:
-					return new Size(
-						Math.Max(imageSize.Width, textSize.Width) + Padding.Horizontal,
-						Math.Max(imageSize.Height, textSize.Height) + Padding.Vertical);
-
-				default:
-					throw new NotSupportedException();
-			}
-		}
-
 		private void updateHighlightColors()
 		{
 			if (DesignMode)
 				return;
 
-			_mouseOverBackColor = blend(BackColor, _highlightBackColor, _highlightMouseOverOpacity);
-			_checkedBackColor = blend(BackColor, _highlightBackColor, _highlightCheckedOpacity);
-			_focusBorderColor = blend(BackColor, _highlightBackColor, _highlightFocusOpacity);
-		}
-
-		private static Color blend(Color bg, Color fore, int foreOpacity)
-		{
-			if (bg == Color.Empty || bg == Color.Transparent)
-				return Color.FromArgb(foreOpacity, fore);
-
-			byte o1 = bg.A;
-			return Color.FromArgb(
-				(255 * 255 - (255 - o1) * (255 - foreOpacity)) / 255,
-				blendBytes(bg.R, fore.R),
-				blendBytes(bg.G, fore.G),
-				blendBytes(bg.B, fore.B));
-
-			int blendBytes(byte b1, byte b2)
-			{
-				int share2 = 255 * foreOpacity;
-				int share1 = o1 * (255 - foreOpacity);
-
-				return (b1 * share1 + b2 * share2) / (share1 + share2);
-			}
-		}
-
-		private void updateDisabledBorder() =>
-			_disabledBorderColor = blend(Color.Transparent, _borderColor, DisabledOpacity);
-
-		private Bitmap toDisabledImage(Bitmap value) =>
-			value?.SetOpacity((float) DisabledOpacity / 255);
-
-		private (Size imageSize, Size textSize) measure(Graphics g)
-		{
-			var imageSize = SelectImage()?.Size ?? default;
-
-			var textSize = string.IsNullOrEmpty(Text)
-				? default
-				: g.MeasureText(Text, Font, _infiniteSize, TextFormat);
-
-			return (imageSize, textSize);
+			_mouseOverBackColor = BackColor.BlendWith(_highlightBackColor, _highlightMouseOverOpacity);
+			_checkedBackColor = BackColor.BlendWith(_highlightBackColor, _highlightCheckedOpacity);
+			_focusBorderColor = BackColor.BlendWith(_highlightBackColor, _highlightFocusOpacity);
 		}
 
 		public event EventHandler CheckedChanged;
@@ -412,58 +196,17 @@ namespace Mtgdb.Controls
 		public event EventHandler PressDown;
 		public event EventHandler Pressed;
 
-		protected override Padding DefaultPadding => new Padding(4);
-
-		[Category("Settings"), DefaultValue("")]
-		public override string Text
+		public override int DisabledOpacity
 		{
-			get => base.Text;
+			get => base.DisabledOpacity;
 			set
 			{
-				base.Text = value;
-				updateSize();
-				Invalidate();
-			}
-		}
-
-		[Category("Settings"), DefaultValue(typeof(Color), "GrayText")]
-		public Color DisabledForeColor { get; set; } = SystemColors.GrayText;
-
-		private int _disabledOpacity = 128;
-		[DefaultValue(128), Category("Settings")]
-		public int DisabledOpacity
-		{
-			get => _disabledOpacity;
-			set
-			{
-				if (_disabledOpacity != value)
-				{
-					_disabledOpacity = value;
-					updateDisabledBorder();
-					updateImages(enabled: false);
-					Invalidate();
-				}
-			}
-		}
-
-
-
-		private Bitmap _image;
-		private Bitmap _imageDisabled;
-		private Bitmap _imageScaled;
-		private Bitmap _imageDisabledScaled;
-		[Category("Settings"), DefaultValue(null)]
-		public virtual Bitmap Image
-		{
-			get => _image;
-			set
-			{
-				if (_image == value)
+				if (base.DisabledOpacity == value)
 					return;
 
-				_image = value;
-				updateImages(uncheckedImage: false, checkedImage: false);
-				updateSize();
+				base.DisabledOpacity = value;
+				updateImages(enabled: false);
+				Invalidate();
 			}
 		}
 
@@ -482,7 +225,7 @@ namespace Mtgdb.Controls
 
 				_imageUnchecked = value;
 				updateImages(image: false, checkedImage: false);
-				updateSize();
+				UpdateSize();
 			}
 		}
 
@@ -501,23 +244,7 @@ namespace Mtgdb.Controls
 
 				_imageChecked = value;
 				updateImages(image: false, uncheckedImage: false);
-				updateSize();
-			}
-		}
-
-		private float _imageScale = 1f;
-		[Category("Settings"), DefaultValue(1f)]
-		public float ImageScale
-		{
-			get => _imageScale;
-			set
-			{
-				if (_imageScale == value)
-					return;
-
-				_imageScale = value;
-				updateImages(unscaled: false);
-				updateSize();
+				UpdateSize();
 			}
 		}
 
@@ -534,11 +261,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
-
 		private Color _mouseOverBackColor;
 		private Color _checkedBackColor;
 		private Color _focusBorderColor;
-		private Color _disabledBorderColor;
 		private Color _highlightBackColor = SystemColors.HotTrack;
 		[Category("Settings"), DefaultValue(typeof(Color), "HotTrack")]
 		public Color HighlightBackColor
@@ -599,22 +324,6 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private Color _borderColor = SystemColors.ActiveBorder;
-		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
-		public Color BorderColor
-		{
-			get => _borderColor;
-			set
-			{
-				if (_borderColor == value)
-					return;
-
-				_borderColor = value;
-				updateDisabledBorder();
-				Invalidate();
-			}
-		}
-
 		private bool _checked;
 		[Category("Settings"), DefaultValue(false)]
 		public bool Checked
@@ -644,127 +353,5 @@ namespace Mtgdb.Controls
 				Invalidate();
 			}
 		}
-
-		[Category("Settings"), DefaultValue(false)]
-		public override bool AutoSize
-		{
-			get => base.AutoSize;
-			set => base.AutoSize = value;
-		}
-
-		[Category("Settings"), DefaultValue(typeof(AnchorStyles), "None")]
-		public virtual AnchorStyles VisibleBorders { get; set; } = AnchorStyles.None;
-
-		[Category("Settings"), DefaultValue(true)]
-		public bool PaintBackground { get; set; } = true;
-
-		[Category("Settings"), DefaultValue(true)]
-		public virtual bool AutoCheck { get; set; } = true;
-
-		[Category("Settings"), DefaultValue(false)]
-		public virtual bool? VisibleAllBorders
-		{
-			get
-			{
-				switch (VisibleBorders)
-				{
-					case ControlHelpers.AnchorAll:
-						return true;
-					case AnchorStyles.None:
-						return false;
-					default:
-						return null;
-				}
-			}
-
-			set
-			{
-				if (!value.HasValue)
-					return;
-
-				if (value.Value)
-					VisibleBorders = ControlHelpers.AnchorAll;
-				else
-					VisibleBorders = AnchorStyles.None;
-			}
-		}
-
-		[Category("Settings"), DefaultValue(typeof(DashStyle), "Solid")]
-		public DashStyle BorderStyle { get; set; } = DashStyle.Solid;
-
-		private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
-
-		[Category("Settings"), DefaultValue(typeof(TextImageRelation), "ImageBeforeText")]
-		public virtual TextImageRelation TextImageRelation
-		{
-			get => _textImageRelation;
-			set
-			{
-				if (_textImageRelation == value)
-					return;
-
-				_textImageRelation = value;
-				updateSize();
-				Invalidate();
-			}
-		}
-
-		private StringAlignment _textPosition = StringAlignment.Near;
-
-		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
-		public virtual StringAlignment TextPosition
-		{
-			get => _textPosition;
-			set
-			{
-				if (_textPosition == value)
-					return;
-
-				_textPosition = value;
-				Invalidate();
-			}
-		}
-
-		private StringAlignment _textAlign = StringAlignment.Near;
-
-		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Near")]
-		public virtual StringAlignment TextAlign
-		{
-			get => _textAlign;
-			set
-			{
-				if (_textAlign == value)
-					return;
-
-				_textAlign = value;
-				Invalidate();
-			}
-		}
-
-		private StringAlignment _imagePosition = StringAlignment.Center;
-
-		[Category("Settings"), DefaultValue(typeof(StringAlignment), "Center")]
-		public virtual StringAlignment ImagePosition
-		{
-			get => _imagePosition;
-			set
-			{
-				if (_imagePosition == value)
-					return;
-
-				_imagePosition = value;
-				Invalidate();
-			}
-		}
-
-
-
-		private const TextFormatFlags TextFormat =
-			TextFormatFlags.NoClipping |
-			TextFormatFlags.NoPrefix |
-			TextFormatFlags.VerticalCenter |
-			TextFormatFlags.TextBoxControl;
-
-		private static readonly Size _infiniteSize = new Size(int.MaxValue, int.MaxValue);
 	}
 }

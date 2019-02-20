@@ -54,8 +54,6 @@ namespace Mtgdb.Gui
 			_dropdownConfig.ScaleDpiImages((Resources.properties_16, Resources.properties_32));
 			_buttonTooltips.ScaleDpiImages((Resources.tooltip_16, Resources.tooltip_32));
 			_buttonImportExportToMtgArena.ScaleDpiImages((Resources.paste_16, Resources.paste_32));
-			_buttonUpdate.ImageUnchecked = Resources.update_40;
-			_buttonUpdate.ImageChecked = Resources.update_notification_40;
 
 			new[]
 				{

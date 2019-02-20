@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
@@ -8,19 +9,30 @@ namespace Mtgdb.Controls
 		{
 			ButtonBaseScaler.ScaleDpi(dropDown);
 
-			dropDown.MenuItemsCreated += menuItemsCreated;
+			dropDown.MenuItemCreated += menuItemsCreated;
 			dropDown.Disposed += disposed;
 
-			dropDown.MenuItems.ForEach(item => item.ScaleDpi());
+			dropDown.MenuItems.ForEach(scale);
 
-			void menuItemsCreated(object s, EventArgs e) =>
-				dropDown.MenuItems.ForEach(item => item.ScaleDpi());
+			void menuItemsCreated(object s, ControlEventArgs e) =>
+				scale((ButtonBase) e.Control);
 
 			void disposed(object s, EventArgs e)
 			{
 				dropDown.Disposed -= disposed;
-				dropDown.MenuItemsCreated -= menuItemsCreated;
+				dropDown.MenuItemCreated -= menuItemsCreated;
+			}
+
+			_menuSizeScaler.Setup(dropDown);
+
+			void scale(ButtonBase b)
+			{
+				b.ScaleDpiFont();
+				b.ScaleDpiPadding();
 			}
 		}
+
+		private static readonly DpiScaler<DropDownBase> _menuSizeScaler =
+			new DpiScaler<DropDownBase>(d => d.UpdateMenuSize());
 	}
 }

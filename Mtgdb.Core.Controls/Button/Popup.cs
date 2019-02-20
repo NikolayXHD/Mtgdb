@@ -62,9 +62,10 @@ namespace Mtgdb.Controls
 				Focus();
 		}
 
+		private void popupItemPressed(object sender, EventArgs eventArgs) =>
+			HandlePopupItemPressed((ButtonBase) sender);
 
-
-		private void popupItemPressed(object sender, EventArgs eventArgs)
+		protected virtual void HandlePopupItemPressed(ButtonBase sender)
 		{
 			if (CloseMenuOnClick && !(sender is DropDownBase) && MenuControl.GetTag<ButtonBase>("Owner") == this)
 				Hide(false);

@@ -5,7 +5,6 @@ namespace Mtgdb.Controls
 		public static void ScaleDpi(this SearchBar searchBar)
 		{
 			DropDownBaseScaler.ScaleDpi(searchBar);
-			searchBar.Input.ScaleDpiFont();
 			searchBar.Input.ScaleDpiMargin();
 		}
 	}

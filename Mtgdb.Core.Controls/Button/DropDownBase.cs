@@ -71,7 +71,7 @@ namespace Mtgdb.Controls
 				Menu.Controls.Add(CreateMenuItem(text, i));
 			}
 
-			updateItemSizes();
+			UpdateMenuSize();
 			updateItemBorders();
 
 			MenuItemsCreated?.Invoke(this, EventArgs.Empty);
@@ -80,17 +80,6 @@ namespace Mtgdb.Controls
 			Menu.PerformLayout();
 
 			SelectedIndex = Math.Min(SelectedIndex, values.Count - 1);
-
-			void updateItemSizes()
-			{
-				var sizes = MenuItems.Select(MeasureMenuItem)
-					.ToArray();
-
-				var maxWidth = sizes.DefaultIfEmpty(default).Max(_ => _.Width);
-
-				MenuItems.ForEach((item, i) =>
-					item.Size = new Size(maxWidth, sizes[i].Height));
-			}
 
 			void updateItemBorders()
 			{
@@ -111,6 +100,16 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		internal void UpdateMenuSize()
+		{
+			var sizes = MenuItems.Select(MeasureMenuItem)
+				.ToArray();
+
+			var maxWidth = sizes.DefaultIfEmpty(default).Max(_ => _.Width);
+
+			MenuItems.ForEach((item, i) =>
+				item.Size = new Size(maxWidth, sizes[i].Height));
+		}
 
 
 		protected override void Show(bool focus)
@@ -129,12 +128,6 @@ namespace Mtgdb.Controls
 
 		protected virtual Size MeasureMenuItem(ButtonBase menuItem) =>
 			menuItem.MeasureContent();
-
-		protected void OnMenuItemPressed(int index)
-		{
-			SelectedIndex = index;
-			MenuItemPressed?.Invoke(this, new MenuItemEventArgs(MenuItems[index]));
-		}
 
 		protected override void Dispose(bool disposing)
 		{
@@ -160,7 +153,6 @@ namespace Mtgdb.Controls
 			var result = new ButtonBase
 			{
 				Text = value,
-				AutoSize = true,
 				AutoCheck = false,
 				TextPosition = StringAlignment.Near,
 				Margin = new Padding(0),
@@ -169,27 +161,8 @@ namespace Mtgdb.Controls
 				Checked = index == SelectedIndex
 			};
 
-			result.MouseClick += click;
-			result.KeyDown += keyDown;
 			result.KeyUp += keyUp;
 			result.Disposed += disposed;
-
-			void click(object s, MouseEventArgs e)
-			{
-				if (e.Button == MouseButtons.Left)
-					OnMenuItemPressed(index);
-			}
-
-			void keyDown(object sender, KeyEventArgs e)
-			{
-				switch (e.KeyData)
-				{
-					case Keys.Enter:
-					case Keys.Space:
-						OnMenuItemPressed(index);
-						break;
-				}
-			}
 
 			void keyUp(object sender, KeyEventArgs e) =>
 				MenuItemKeyUp?.Invoke(sender, e);
@@ -197,14 +170,22 @@ namespace Mtgdb.Controls
 			void disposed(object s, EventArgs e)
 			{
 				result.Disposed -= disposed;
-				result.MouseClick -= click;
-				result.KeyDown -= keyDown;
 				result.KeyUp -= keyUp;
 			}
 
+			MenuItemCreated?.Invoke(this, new ControlEventArgs(result));
 			return result;
 		}
 
+		protected override void HandlePopupItemPressed(ButtonBase sender)
+		{
+			int index = MenuItems.IndexOf(sender);
+			SelectedIndex = index;
+			MenuItemPressed?.Invoke(this, new MenuItemEventArgs(MenuItems[index]));
+			
+			if (CloseMenuOnClick)
+				Hide(focus: true);
+		}
 
 
 		private int _selectedIndex = -1;
@@ -318,6 +299,7 @@ namespace Mtgdb.Controls
 
 
 		public event EventHandler MenuItemsCreated;
+		public event ControlEventHandler MenuItemCreated;
 		public event EventHandler SelectedIndexChanged;
 		public event EventHandler<MenuItemEventArgs> MenuItemPressed;
 		public event KeyEventHandler MenuItemKeyUp;

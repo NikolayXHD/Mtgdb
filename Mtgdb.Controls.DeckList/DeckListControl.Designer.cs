@@ -104,7 +104,6 @@
 			// 
 			// _menuFilterByDeckMode
 			// 
-			this._menuFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._menuFilterByDeckMode.EmptySelectionText = "";
 			this._menuFilterByDeckMode.ImageScale = 0.5F;
 			this._menuFilterByDeckMode.Location = new System.Drawing.Point(542, 0);

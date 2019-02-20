@@ -191,8 +191,9 @@
 			this._buttonUpdate.AutoCheck = false;
 			this._buttonUpdate.BackColor = System.Drawing.Color.Transparent;
 			this._buttonUpdate.ForeColor = System.Drawing.SystemColors.ControlText;
-			this._buttonUpdate.Image = global::Mtgdb.Gui.Properties.Resources.update_40;
+			this._buttonUpdate.ImageChecked = global::Mtgdb.Gui.Properties.Resources.update_notification_40;
 			this._buttonUpdate.ImageScale = 0.5F;
+			this._buttonUpdate.ImageUnchecked = global::Mtgdb.Gui.Properties.Resources.update_40;
 			this._buttonUpdate.Location = new System.Drawing.Point(468, 3);
 			this._buttonUpdate.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._buttonUpdate.Name = "_buttonUpdate";
