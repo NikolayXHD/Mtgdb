@@ -249,7 +249,8 @@ namespace Mtgdb.Ui
 
 		public void UpdateSuggestInput()
 		{
-			SuggestModel.TextInputStateCurrent = getSearchInputState();
+			if (SuggestModel != null)
+				SuggestModel.TextInputStateCurrent = getSearchInputState();
 		}
 
 		private TextInputState getSearchInputState() =>
@@ -740,7 +741,19 @@ namespace Mtgdb.Ui
 		public event Action TextApplied;
 		public event Action TextChanged;
 
-		public SuggestModel<TId, TObj> SuggestModel { get; set; }
+		private SuggestModel<TId, TObj> _suggestModel;
+		public SuggestModel<TId, TObj> SuggestModel
+		{
+			get => _suggestModel;
+			set
+			{
+				if (_suggestModel == value)
+					return;
+
+				_suggestModel = value;
+				UpdateSuggestInput();
+			}
+		}
 
 		public SearchResult<TId> SearchResult { get; private set; }
 
