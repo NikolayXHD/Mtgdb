@@ -40,8 +40,10 @@
 			this._labelFilterByDeckMode = new System.Windows.Forms.Label();
 			this._panelSortIcon = new Mtgdb.Controls.BorderedPanel();
 			this._searchBar = new Mtgdb.Controls.SearchBar();
-			this._textBoxName = new System.Windows.Forms.TextBox();
+			this._textboxRename = new Mtgdb.Controls.FixedRichTextBox();
+			this._panelRename = new Mtgdb.Controls.BorderedPanel();
 			this._panelLayout.SuspendLayout();
+			this._panelRename.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _panelLayout
@@ -158,31 +160,45 @@
 			this._searchBar.Size = new System.Drawing.Size(364, 24);
 			this._searchBar.TabIndex = 6;
 			// 
-			// _textBoxName
+			// _textboxRename
 			// 
-			this._textBoxName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._textboxRename.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this._textBoxName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._textBoxName.Location = new System.Drawing.Point(24, 51);
-			this._textBoxName.Margin = new System.Windows.Forms.Padding(10, 2, 0, 0);
-			this._textBoxName.Multiline = true;
-			this._textBoxName.Name = "_textBoxName";
-			this._textBoxName.Size = new System.Drawing.Size(177, 20);
-			this._textBoxName.TabIndex = 1;
-			this._textBoxName.TabStop = false;
-			this._textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this._textboxRename.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this._textboxRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._textboxRename.Location = new System.Drawing.Point(1, 1);
+			this._textboxRename.Margin = new System.Windows.Forms.Padding(0);
+			this._textboxRename.MaxLength = 1024;
+			this._textboxRename.Name = "_textboxRename";
+			this._textboxRename.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+			this._textboxRename.Size = new System.Drawing.Size(432, 20);
+			this._textboxRename.TabIndex = 1;
+			this._textboxRename.TabStop = false;
+			this._textboxRename.Text = "";
+			// 
+			// _panelRename
+			// 
+			this._panelRename.BackColor = System.Drawing.SystemColors.Window;
+			this._panelRename.Controls.Add(this._textboxRename);
+			this._panelRename.Location = new System.Drawing.Point(32, 56);
+			this._panelRename.Margin = new System.Windows.Forms.Padding(10, 2, 0, 0);
+			this._panelRename.Name = "_panelRename";
+			this._panelRename.Padding = new System.Windows.Forms.Padding(1);
+			this._panelRename.Size = new System.Drawing.Size(434, 22);
+			this._panelRename.TabIndex = 3;
+			this._panelRename.Visible = false;
 			// 
 			// DeckListControl
 			// 
-			this.Controls.Add(this._textBoxName);
+			this.Controls.Add(this._panelRename);
 			this.Controls.Add(this._panelLayout);
 			this.Name = "DeckListControl";
 			this.Size = new System.Drawing.Size(732, 311);
 			this._panelLayout.ResumeLayout(false);
 			this._panelLayout.PerformLayout();
+			this._panelRename.ResumeLayout(false);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -190,11 +206,12 @@
 
 		private System.Windows.Forms.TableLayoutPanel _panelLayout;
 		private LayoutViewControl _viewDeck;
-		private System.Windows.Forms.TextBox _textBoxName;
+		private Mtgdb.Controls.FixedRichTextBox _textboxRename;
 		private System.Windows.Forms.Label _labelFilterByDeckMode;
 		private Mtgdb.Controls.DropDown _menuFilterByDeckMode;
 		private System.Windows.Forms.Label _labelSortStatus;
 		private BorderedPanel _panelSortIcon;
 		private SearchBar _searchBar;
+		private BorderedPanel _panelRename;
 	}
 }

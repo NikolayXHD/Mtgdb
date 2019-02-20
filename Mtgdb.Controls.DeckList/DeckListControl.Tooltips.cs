@@ -7,7 +7,8 @@
 			controller.SetTooltip(_tooltipOwner, "Deck name", "Type deck name.\r\n" +
 				"press Enter to apply\r\n" +
 				"press Esc to cancel",
-				_textBoxName);
+				_textboxRename,
+				_panelRename);
 
 			controller.SetTooltip(_tooltipOwner,
 				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null

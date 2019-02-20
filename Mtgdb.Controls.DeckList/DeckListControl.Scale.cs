@@ -23,12 +23,13 @@ namespace Mtgdb.Controls
 			_panelSortIcon.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 
 			_searchBar.ScaleDpi();
-			DropDownBaseScaler.ScaleDpi(_menuFilterByDeckMode);
+			_menuFilterByDeckMode.ScaleDpi();
 
 			scaleLayoutView(_viewDeck);
 
 			_labelSortStatus.ScaleDpiFont();
 			_labelFilterByDeckMode.ScaleDpiFont();
+			_textboxRename.ScaleDpiFont();
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)
@@ -52,6 +53,11 @@ namespace Mtgdb.Controls
 			Dpi.ScalePercent > 100
 				? bmp.HalfResizeDpi()
 				: bmp.ResizeDpi();
+
+		private void systemColorsChanged() =>
+			_textboxRename.TouchColorProperties();
+
+
 
 		private static readonly DpiScaler<FieldControl, Bitmap> _fieldImageScaler =
 			new DpiScaler<FieldControl, Bitmap>(

@@ -35,7 +35,7 @@ namespace Mtgdb.Controls
 			Control tooltipOwner)
 		{
 			_searcher = searcher;
-			_textBoxName.Visible = false;
+			_panelRename.Visible = false;
 
 			_viewDeck.IconRecognizer = recognizer;
 			_viewDeck.DataSource = _filteredModels;
@@ -80,8 +80,8 @@ namespace Mtgdb.Controls
 			_searchSubsystem.TextApplied += searchTextApplied;
 			_deckSort.SortChanged += sortChanged;
 
-			_textBoxName.LostFocus += nameLostFocus;
-			_textBoxName.KeyDown += nameKeyDown;
+			_textboxRename.LostFocus += nameLostFocus;
+			_textboxRename.KeyDown += nameKeyDown;
 
 			_viewDeck.MouseClicked += viewDeckClicked;
 			_viewDeck.RowDataLoaded += viewDeckRowDataLoaded;
@@ -97,6 +97,8 @@ namespace Mtgdb.Controls
 				searcherLoaded();
 			else
 				_searcher.Loaded += searcherLoaded;
+
+			ColorSchemeController.SystemColorsChanged += systemColorsChanged;
 		}
 
 		public void UnsubscribeFromEvents()
@@ -109,8 +111,8 @@ namespace Mtgdb.Controls
 			_searchSubsystem.TextApplied -= searchTextApplied;
 			_deckSort.SortChanged -= sortChanged;
 
-			_textBoxName.LostFocus -= nameLostFocus;
-			_textBoxName.KeyDown -= nameKeyDown;
+			_textboxRename.LostFocus -= nameLostFocus;
+			_textboxRename.KeyDown -= nameKeyDown;
 
 			_viewDeck.MouseClicked -= viewDeckClicked;
 			_viewDeck.RowDataLoaded -= viewDeckRowDataLoaded;
@@ -118,11 +120,9 @@ namespace Mtgdb.Controls
 			_viewDeck.MouseMove -= deckMouseMove;
 
 			_listModel.Loaded -= listModelLoaded;
+			_searcher.Loaded -= searcherLoaded;
 
-			if (_searcher.IsLoaded)
-				searcherLoaded();
-			else
-				_searcher.Loaded += searcherLoaded;
+			ColorSchemeController.SystemColorsChanged -= systemColorsChanged;
 		}
 
 		private void searcherLoaded()
@@ -386,12 +386,14 @@ namespace Mtgdb.Controls
 			_renamedModel = model;
 
 			fieldBounds.Offset(_viewDeck.Location);
-			_textBoxName.Bounds = fieldBounds;
-			_textBoxName.Text = model.Name;
-			_textBoxName.SelectAll();
+			_panelRename.Bounds = fieldBounds;
 
-			_textBoxName.Visible = true;
-			_textBoxName.Focus();
+			_textboxRename.Text = model.Name;
+			_textboxRename.SelectAll();
+			_textboxRename.SelectionAlignment = HorizontalAlignment.Center;
+			
+			_panelRename.Visible = true;
+			_textboxRename.Focus();
 		}
 
 		private void endRenaming(bool commit)
@@ -405,18 +407,18 @@ namespace Mtgdb.Controls
 			{
 				if (renamedModel.IsCurrent)
 				{
-					renamedModel.Name = _textBoxName.Text;
+					renamedModel.Name = _textboxRename.Text;
 				}
 				else
 				{
-					_listModel.Rename(renamedModel, _textBoxName.Text);
+					_listModel.Rename(renamedModel, _textboxRename.Text);
 					_listModel.Save();
 				}
 			}
 
 			_renamedModel = null;
-			_textBoxName.Visible = false;
-			_textBoxName.Text = string.Empty;
+			_panelRename.Visible = false;
+			_textboxRename.Text = string.Empty;
 
 			if (commit)
 			{
