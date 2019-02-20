@@ -50,7 +50,7 @@ namespace Mtgdb.Controls
 
 		private void layout(object sender, LayoutEventArgs e)
 		{
-			int imageWidth = Image?.Width ?? 0;
+			int imageWidth = SelectImage()?.Width ?? 0;
 
 			Input.SetBounds(
 				Input.Margin.Left + Padding.Left + imageWidth,

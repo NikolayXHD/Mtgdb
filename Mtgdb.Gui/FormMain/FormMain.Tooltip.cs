@@ -128,13 +128,13 @@ namespace Mtgdb.Gui
 				"Search query examples",
 				"Opens menu with search query examples.\r\n" +
 				"Same menu is opened by pressing F1.",
-				_dropdownSearchExamples);
+				_popupSearchExamples);
 
 			defaultTooltips.SetTooltip(this,
 				"Filter by Legality",
 				"Select format\r\n\r\n" +
 				"Middle mouse click to reset filter by legality",
-				_menuLegality,
+				_dropdownLegality,
 				_panelIconLegality);
 
 			defaultTooltips.SetTooltip(this,

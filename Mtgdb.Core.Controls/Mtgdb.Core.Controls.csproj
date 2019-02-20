@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="Button\MenuItemsAccessor.cs" />
     <Compile Include="Button\MenuValuesAccessor.cs" />
-    <Compile Include="Dpi\CheckBoxScaler.cs" />
+    <Compile Include="Dpi\ButtonBaseScaler.cs" />
     <Compile Include="Button\ButtonBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -114,7 +114,6 @@
     <Compile Include="Dpi\ControlScaler.cs" />
     <Compile Include="Dpi\DropDownBaseScaler.cs" />
     <Compile Include="Dpi\LayoutViewControlScaler.cs" />
-    <Compile Include="Dpi\DropDownScaler.cs" />
     <Compile Include="Dpi\QuickFilterControlScaler.cs" />
     <Compile Include="Dpi\DpiScalers.cs" />
     <Compile Include="Dpi\SearchBarScaler.cs" />
@@ -123,7 +122,6 @@
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="Button\PopupSubsystem.cs" />
-    <Compile Include="Button\ButtonImages.cs" />
     <Compile Include="Button\Popup.cs">
       <SubType>Component</SubType>
     </Compile>

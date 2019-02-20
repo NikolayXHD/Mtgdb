@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
-using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Downloader
@@ -89,7 +88,9 @@ namespace Mtgdb.Downloader
 			_tableLayoutButtons.ScaleDpi();
 			_textBoxLog.ScaleDpiFont();
 
-			_buttonImagesScaler.Setup(this);
+			_tableLayoutButtons.Controls
+				.Cast<ButtonBase>()
+				.ForEach(b => b.ScaleDpi());
 		}
 
 		private void systemColorsChanged() =>
@@ -612,26 +613,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private string _appVersionInstalled;
 		private string _appVersionOnline;
 		private string _appVersionDownloaded;
-
-		private static readonly DpiScaler<FormUpdate, IReadOnlyList<Bitmap>> _buttonImagesScaler =
-			new DpiScaler<FormUpdate, IReadOnlyList<Bitmap>>(
-
-				f => f._tableLayoutButtons.Controls
-					.Cast<ButtonBase>()
-					.Select(b => b.Image)
-					.ToReadOnlyList(),
-				// materialize to correctly remember the initial state
-				// the remembered IEnumerable would return modified values on second Scale() call
-
-				(f, bitmaps) => f._tableLayoutButtons.Controls
-					.Cast<ButtonBase>()
-					.Zip(bitmaps, (btn, bmp) => (btn, bmp))
-					.ForEach(
-						_ => _.btn.Image = _.bmp),
-
-				bitmaps => bitmaps
-					.Select(bmp => bmp.HalfResizeDpi())
-					.ToReadOnlyList());
 
 		private readonly Installer _installer;
 		private readonly ImageDownloader _imageDownloader;

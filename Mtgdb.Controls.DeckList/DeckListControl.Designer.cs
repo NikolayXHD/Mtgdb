@@ -104,6 +104,7 @@
 			// 
 			this._menuFilterByDeckMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._menuFilterByDeckMode.EmptySelectionText = "";
+			this._menuFilterByDeckMode.ImageScale = 0.5F;
 			this._menuFilterByDeckMode.Location = new System.Drawing.Point(542, 0);
 			this._menuFilterByDeckMode.Margin = new System.Windows.Forms.Padding(0);
 			this._menuFilterByDeckMode.Name = "_menuFilterByDeckMode";
@@ -149,6 +150,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._searchBar.Font = new System.Drawing.Font("Source Code Pro", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._searchBar.Image = global::Mtgdb.Controls.Properties.Resources.search_48;
+			this._searchBar.ImageScale = 0.5F;
 			this._searchBar.Location = new System.Drawing.Point(0, 0);
 			this._searchBar.Margin = new System.Windows.Forms.Padding(0);
 			this._searchBar.Name = "_searchBar";

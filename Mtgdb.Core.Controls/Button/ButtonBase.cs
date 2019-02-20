@@ -21,7 +21,7 @@ namespace Mtgdb.Controls
 			BackColor = Color.Transparent;
 			ForeColor = SystemColors.ControlText;
 
-			Padding = new Padding(4);
+			Padding = DefaultPadding;
 
 			updateHighlightColors();
 			updateDisabledBorder();
@@ -66,31 +66,31 @@ namespace Mtgdb.Controls
 
 			void paintImage()
 			{
-				var image = Enabled ? Image : _imageDisabled;
+				var image = SelectImage();
 				if (image != null)
 					e.Graphics.DrawImage(image, imageRect);
 			}
 
 			void paintText()
 			{
-				if (!string.IsNullOrEmpty(Text))
+				if (string.IsNullOrEmpty(Text))
+					return;
+
+				var foreColor = Enabled ? ForeColor : DisabledForeColor;
+				var format = TextFormat;
+
+				switch (TextAlign)
 				{
-					var foreColor = Enabled ? ForeColor : DisabledForeColor;
-					var format = TextFormat;
+					case StringAlignment.Far:
+						format |= TextFormatFlags.Right;
+						break;
 
-					switch (TextAlign)
-					{
-						case StringAlignment.Far:
-							format |= TextFormatFlags.Right;
-							break;
-
-						case StringAlignment.Center:
-							format |= TextFormatFlags.HorizontalCenter;
-							break;
-					}
-
-					e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
+					case StringAlignment.Center:
+						format |= TextFormatFlags.HorizontalCenter;
+						break;
 				}
+
+				e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
 			}
 
 			void paintBorder()
@@ -101,15 +101,15 @@ namespace Mtgdb.Controls
 
 			void paintFocusRectangle()
 			{
-				if (ContainsFocus && _focusBorderColor.A > 0)
-				{
-					var rectangle = new Rectangle(default, Size);
-					int width = 2;
-					rectangle.Inflate(-(width - 1), -(width - 1));
-					var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
+				if (!ContainsFocus || _focusBorderColor.A == 0)
+					return;
 
-					e.Graphics.DrawRectangle(pen, rectangle);
-				}
+				var rectangle = new Rectangle(default, Size);
+				int width = 2;
+				rectangle.Inflate(-(width - 1), -(width - 1));
+				var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
+
+				e.Graphics.DrawRectangle(pen, rectangle);
 			}
 
 			(Rectangle textRect, Rectangle imageRect) layout()
@@ -194,6 +194,67 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		private void updateImages(
+			bool unscaled = true, bool scaled = true,
+			bool disabled = true, bool enabled = true,
+			bool image = true, bool uncheckedImage = true, bool checkedImage = true)
+		{
+			if (unscaled)
+			{
+				if (disabled)
+				{
+					if (image)
+						_imageDisabled = toDisabledImage(_image);
+
+					if (uncheckedImage)
+						_imageUncheckedDisabled = toDisabledImage(_imageUnchecked);
+
+					if (checkedImage)
+						_imageCheckedDisabled = toDisabledImage(_imageChecked);
+				}
+			}
+
+			if (scaled)
+			{
+				if (enabled)
+				{
+					if (image)
+						_imageScaled = _image?.ScaleBy(ImageScale);
+
+					if (uncheckedImage)
+						_imageUncheckedScaled = _imageUnchecked?.ScaleBy(ImageScale);
+
+					if (checkedImage)
+						_imageCheckedScaled = _imageChecked?.ScaleBy(ImageScale);
+				}
+
+				if (disabled)
+				{
+					if (image)
+						_imageDisabledScaled = _imageDisabled?.ScaleBy(ImageScale);
+
+					if (uncheckedImage)
+						_imageUncheckedDisabledScaled = _imageUncheckedDisabled?.ScaleBy(ImageScale);
+
+					if (checkedImage)
+						_imageCheckedDisabledScaled = _imageCheckedDisabled?.ScaleBy(ImageScale);
+				}
+			}
+
+			Invalidate();
+		}
+
+		protected Bitmap SelectImage()
+		{
+			return Enabled
+				? Checked
+					? _imageCheckedScaled ?? _imageScaled ?? _imageUncheckedScaled
+					: _imageUncheckedScaled ?? _imageScaled ?? _imageCheckedScaled
+				: Checked
+					? _imageCheckedDisabledScaled ?? _imageDisabledScaled ?? _imageUncheckedDisabledScaled
+					: _imageUncheckedDisabledScaled ?? _imageDisabledScaled ?? _imageCheckedDisabledScaled;
+		}
+
 		protected override void OnPaintBackground(PaintEventArgs e) =>
 			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, getBgColor(), PaintBackground);
 
@@ -257,8 +318,7 @@ namespace Mtgdb.Controls
 		{
 			updateHighlightColors();
 			updateDisabledBorder();
-			updateDisabledImage();
-			Invalidate();
+			updateImages(true, true, true, true, true, true, true);
 		}
 
 		private void enabledChanged(object sender, EventArgs e) =>
@@ -331,14 +391,15 @@ namespace Mtgdb.Controls
 		}
 
 		private void updateDisabledBorder() =>
-			_disabledBorderColor = blend(Color.Transparent, _borderColor, _disabledOpacity);
+			_disabledBorderColor = blend(Color.Transparent, _borderColor, DisabledOpacity);
 
-		private void updateDisabledImage() =>
-			_imageDisabled = _image?.SetOpacity((float) _disabledOpacity / 255);
+		private Bitmap toDisabledImage(Bitmap value) =>
+			value?.SetOpacity((float) DisabledOpacity / 255);
 
 		private (Size imageSize, Size textSize) measure(Graphics g)
 		{
-			var imageSize = Image?.Size ?? default;
+			var imageSize = SelectImage()?.Size ?? default;
+
 			var textSize = string.IsNullOrEmpty(Text)
 				? default
 				: g.MeasureText(Text, Font, _infiniteSize, TextFormat);
@@ -346,15 +407,12 @@ namespace Mtgdb.Controls
 			return (imageSize, textSize);
 		}
 
-		private void updateImage() =>
-			Image = _buttonImages?.GetImage(Checked);
-
-
 		public event EventHandler CheckedChanged;
 
 		public event EventHandler PressDown;
 		public event EventHandler Pressed;
 
+		protected override Padding DefaultPadding => new Padding(4);
 
 		[Category("Settings"), DefaultValue("")]
 		public override string Text
@@ -368,9 +426,32 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private Bitmap _imageDisabled;
-		private Bitmap _image;
+		[Category("Settings"), DefaultValue(typeof(Color), "GrayText")]
+		public Color DisabledForeColor { get; set; } = SystemColors.GrayText;
 
+		private int _disabledOpacity = 128;
+		[DefaultValue(128), Category("Settings")]
+		public int DisabledOpacity
+		{
+			get => _disabledOpacity;
+			set
+			{
+				if (_disabledOpacity != value)
+				{
+					_disabledOpacity = value;
+					updateDisabledBorder();
+					updateImages(enabled: false);
+					Invalidate();
+				}
+			}
+		}
+
+
+
+		private Bitmap _image;
+		private Bitmap _imageDisabled;
+		private Bitmap _imageScaled;
+		private Bitmap _imageDisabledScaled;
 		[Category("Settings"), DefaultValue(null)]
 		public virtual Bitmap Image
 		{
@@ -381,10 +462,62 @@ namespace Mtgdb.Controls
 					return;
 
 				_image = value;
-
-				updateDisabledImage();
+				updateImages(uncheckedImage: false, checkedImage: false);
 				updateSize();
-				Invalidate();
+			}
+		}
+
+		private Bitmap _imageUncheckedDisabled;
+		private Bitmap _imageUnchecked;
+		private Bitmap _imageUncheckedDisabledScaled;
+		private Bitmap _imageUncheckedScaled;
+		[Category("Settings"), DefaultValue(null)]
+		public virtual Bitmap ImageUnchecked
+		{
+			get => _imageUnchecked;
+			set
+			{
+				if (_imageUnchecked == value)
+					return;
+
+				_imageUnchecked = value;
+				updateImages(image: false, checkedImage: false);
+				updateSize();
+			}
+		}
+
+		private Bitmap _imageCheckedDisabled;
+		private Bitmap _imageChecked;
+		private Bitmap _imageCheckedDisabledScaled;
+		private Bitmap _imageCheckedScaled;
+		[Category("Settings"), DefaultValue(null)]
+		public virtual Bitmap ImageChecked
+		{
+			get => _imageChecked;
+			set
+			{
+				if (_imageChecked == value)
+					return;
+
+				_imageChecked = value;
+				updateImages(image: false, uncheckedImage: false);
+				updateSize();
+			}
+		}
+
+		private float _imageScale = 1f;
+		[Category("Settings"), DefaultValue(1f)]
+		public float ImageScale
+		{
+			get => _imageScale;
+			set
+			{
+				if (_imageScale == value)
+					return;
+
+				_imageScale = value;
+				updateImages(unscaled: false);
+				updateSize();
 			}
 		}
 
@@ -478,30 +611,11 @@ namespace Mtgdb.Controls
 
 				_borderColor = value;
 				updateDisabledBorder();
-			}
-		}
-
-		[Category("Settings"), DefaultValue(typeof(Color), "GrayText")]
-		public Color DisabledForeColor { get; set; } = SystemColors.GrayText;
-
-		private int _disabledOpacity = 128;
-		[DefaultValue(128), Category("Settings")]
-		public virtual int DisabledOpacity
-		{
-			get => _disabledOpacity;
-			set
-			{
-				if (_disabledOpacity != value)
-				{
-					_disabledOpacity = value;
-					updateDisabledBorder();
-					updateDisabledImage();
-				}
+				Invalidate();
 			}
 		}
 
 		private bool _checked;
-
 		[Category("Settings"), DefaultValue(false)]
 		public bool Checked
 		{
@@ -512,24 +626,22 @@ namespace Mtgdb.Controls
 					return;
 
 				_checked = value;
-				updateImage();
 				Invalidate();
 				CheckedChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
 		private bool _mouseOver;
-
 		private bool MouseOver
 		{
 			get => _mouseOver;
 			set
 			{
-				if (_mouseOver != value)
-				{
-					_mouseOver = value;
-					Invalidate();
-				}
+				if (_mouseOver == value)
+					return;
+
+				_mouseOver = value;
+				Invalidate();
 			}
 		}
 
@@ -645,21 +757,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private ButtonImages _buttonImages;
 
-		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public ButtonImages ButtonImages
-		{
-			get => _buttonImages;
-			set
-			{
-				if (_buttonImages == value)
-					return;
-
-				_buttonImages = value;
-				updateImage();
-			}
-		}
 
 		private const TextFormatFlags TextFormat =
 			TextFormatFlags.NoClipping |

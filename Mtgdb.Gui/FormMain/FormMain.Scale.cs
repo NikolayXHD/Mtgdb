@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Gui.Properties;
 
 namespace Mtgdb.Gui
 {
@@ -10,23 +10,27 @@ namespace Mtgdb.Gui
 	{
 		private void scale()
 		{
+			new[]
+				{
+					_buttonSampleHandNew,
+					_buttonSampleHandDraw,
+					_buttonSampleHandMulligan,
+					_buttonShowDuplicates,
+					_buttonShowScrollCards,
+					_buttonShowScrollDeck,
+					_buttonShowPartialCards,
+					_buttonShowText,
+					_buttonResetFilters,
+					_buttonExcludeManaAbility,
+					_buttonExcludeManaCost,
+					_buttonShowProhibit,
+					_buttonHideDeck
+				}
+				.Concat(_menuLegalityCheckBoxes)
+				.ForEach(ButtonBaseScaler.ScaleDpi);
+
 			_deckEditorSubsystem.Scale();
-			_searchBar.ScaleDpi();
 			_menuSearchExamples.ScaleDpi();
-
-			_buttonShowDuplicates.ScaleDpi();
-
-			_buttonSampleHandNew.ScaleDpi();
-			_buttonSampleHandMulligan.ScaleDpi();
-			_buttonSampleHandDraw.ScaleDpi();
-
-			_buttonHideDeck.ScaleDpi();
-			_buttonShowScrollCards.ScaleDpi();
-			_buttonShowScrollDeck.ScaleDpi();
-			_buttonShowPartialCards.ScaleDpi();
-			_buttonShowText.ScaleDpi();
-			_dropdownSearchExamples.ScaleDpi();
-			_buttonResetFilters.ScaleDpi();
 
 			_labelStatusScrollCards.ScaleDpi();
 			_labelStatusScrollDeck.ScaleDpi();
@@ -62,41 +66,14 @@ namespace Mtgdb.Gui
 			_panelIconStatusSort.ScaleDpi(transformIcon);
 
 			_deckListControl.Scale();
+			_popupSearchExamples.ScaleDpi();
 
+			_dropdownLegality.ScaleDpi();
 			_searchBar.ScaleDpi();
 
 			new DpiScaler<FormMain>(
 				form =>
 				{
-					form._searchBar.ButtonImages = ButtonImages.ScaleDpi((null, Resources.search_48));
-
-					form._buttonSampleHandNew.ButtonImages = ButtonImages.ScaleDpi((null, Resources.hand_48));
-					form._buttonSampleHandDraw.ButtonImages = ButtonImages.ScaleDpi((null, Resources.draw_48));
-					form._buttonSampleHandMulligan.ButtonImages = ButtonImages.ScaleDpi((null, Resources.mulligan_48));
-					form._buttonShowDuplicates.ButtonImages = ButtonImages.ScaleDpi((null, Resources.clone_48));
-					form._buttonShowProhibit.ButtonImages = ButtonImages.ScaleDpi((null, Resources.exclude_minus_24));
-
-					form._buttonExcludeManaAbility.ButtonImages = ButtonImages.ScaleDpi(
-						(null, Resources.include_plus_24),
-						(null, Resources.exclude_minus_24));
-
-					form._buttonExcludeManaCost.ButtonImages = ButtonImages.ScaleDpi(
-						(null, Resources.include_plus_24),
-						(null, Resources.exclude_minus_24));
-
-					form._buttonHideDeck.ButtonImages = ButtonImages.ScaleDpi(
-						(null, Resources.shown_40),
-						(null, Resources.hidden_40));
-
-					var scrollImages = ButtonImages.ScaleDpi((null, Resources.scroll_shown_40));
-					form._buttonShowScrollCards.ButtonImages = scrollImages;
-					form._buttonShowScrollDeck.ButtonImages = scrollImages;
-
-					form._buttonShowPartialCards.ButtonImages = ButtonImages.ScaleDpi((null, Resources.partial_card_enabled_40));
-					form._buttonShowText.ButtonImages = ButtonImages.ScaleDpi((null, Resources.text_enabled_40));
-					form._dropdownSearchExamples.ButtonImages = ButtonImages.ScaleDpi((null, Resources.book_40));
-					form._buttonResetFilters.ButtonImages = ButtonImages.ScaleDpi((null, Resources.erase));
-
 					int border = FilterManaCost.Border;
 					var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
 					int rightMargin = FilterManaCost.Width - modeButtonSize.Width;
@@ -121,9 +98,6 @@ namespace Mtgdb.Gui
 					_layoutViewDeck.Height = deckHeight;
 					_deckListControl.Height = deckHeight;
 				}).Setup(this);
-
-			_menuLegality.ScaleDpi();
-			_menuLegalityCheckBoxes.ForEach(CheckBoxScaler.ScaleDpi);
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)

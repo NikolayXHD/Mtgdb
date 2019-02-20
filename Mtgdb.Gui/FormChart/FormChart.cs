@@ -209,7 +209,7 @@ namespace Mtgdb.Gui
 			_buttons.Concat(_headerButtons).Concat(new[] { _buttonSave, _buttonLoad, _buttonApply })
 				.ForEach(ControlScaler.ScaleDpi);
 
-			_menus.ForEach(DropDownScaler.ScaleDpi);
+			_menus.ForEach(DropDownBaseScaler.ScaleDpi);
 
 			_sortIconsScaler.Setup(this);
 			_aggregateIconsScaler.Setup(this);
@@ -232,14 +232,12 @@ namespace Mtgdb.Gui
 				}
 				.ForEach(ControlScaler.ScaleDpiFont);
 
-			new DpiScaler<FormChart>(form =>
-			{
-				form._buttonSave.ButtonImages = ButtonImages.ScaleDpi((Resources.save_16, Resources.save_32));
-				form._buttonLoad.ButtonImages = ButtonImages.ScaleDpi((Resources.open_16, Resources.open_32));
-				form._dropdownMruFiles.ButtonImages = ButtonImages.ScaleDpi((null, Resources.down_32));
-			}).Setup(this);
+			_dropdownMruFiles.ScaleDpi();
 
-			_checkBoxes.ForEach(CheckBoxScaler.ScaleDpi);
+			_buttonSave.ScaleDpiImages((Resources.save_16, Resources.save_32));
+			_buttonLoad.ScaleDpiImages((Resources.open_16, Resources.open_32));
+
+			_checkBoxes.ForEach(ButtonBaseScaler.ScaleDpi);
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)

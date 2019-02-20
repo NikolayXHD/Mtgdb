@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -192,7 +191,7 @@ namespace Mtgdb.Gui
 				.Single(_ => Str.Equals(_.Text, language));
 
 			_dropdownLanguage.Text = menuItem.Text;
-			_dropdownLanguage.ButtonImages = menuItem.ButtonImages;
+			_dropdownLanguage.Image = menuItem.Image;
 		}
 
 		private IEnumerable<ButtonBase> getLanguageMenuItems() =>
@@ -363,8 +362,6 @@ namespace Mtgdb.Gui
 		}
 
 		private readonly ButtonBase[] _deckButtons;
-
-		private readonly Dictionary<string, Bitmap> _languageIcons;
 
 		private readonly List<SaveLoadMenuMode> _saveLoadMenuModes;
 

@@ -6,7 +6,7 @@ namespace Mtgdb.Controls
 	{
 		public static void ScaleDpi(this DropDownBase dropDown)
 		{
-			ControlScaler.ScaleDpi(dropDown);
+			ButtonBaseScaler.ScaleDpi(dropDown);
 
 			dropDown.MenuItemsCreated += menuItemsCreated;
 			dropDown.Disposed += disposed;

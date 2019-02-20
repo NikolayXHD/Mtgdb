@@ -23,7 +23,6 @@ namespace Mtgdb.Controls
 
 			_uiScalePercent = uiScalePercent;
 			_scale = getDpiScale().MultiplyBy(_uiScalePercent / 100f);
-			_scaleHalf = _scale.MultiplyBy(0.5f);
 
 			BeforeChanged?.Invoke();
 			Changed?.Invoke();
@@ -44,10 +43,10 @@ namespace Mtgdb.Controls
 				font.GdiVerticalFont);
 		}
 
-		public static int ByDpiWidth(this int width) =>
-			(width * _scale.Width).Round();
+		public static float ByDpiWidth(this float width) =>
+			width * _scale.Width;
 
-		public static int ByDpiWidth(this float width) =>
+		public static int ByDpiWidth(this int width) =>
 			(width * _scale.Width).Round();
 
 		public static int ByDpiHeight(this int height) =>
@@ -59,14 +58,8 @@ namespace Mtgdb.Controls
 		public static Padding ByDpi(this Padding original) =>
 			new Padding(original.Left.ByDpiWidth(), original.Top.ByDpiHeight(), original.Right.ByDpiWidth(), original.Bottom.ByDpiHeight());
 
-		public static Point ByDpi(this Point original) =>
-			original.MultiplyBy(_scale).Round();
-
 		public static SizeF ByDpi(this SizeF original) =>
 			original.MultiplyBy(_scale);
-
-		public static Size HalfByDpi(this Size original) =>
-			original.MultiplyBy(_scaleHalf).Round();
 
 		private static SizeF getDpiScale()
 		{
@@ -90,7 +83,6 @@ namespace Mtgdb.Controls
 		private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
 		private static SizeF _scale = new SizeF(1f, 1f);
-		private static SizeF _scaleHalf = new SizeF(0.5f, 0.5f);
 		private static bool _initialized;
 	}
 }

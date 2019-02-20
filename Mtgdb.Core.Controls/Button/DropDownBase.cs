@@ -164,15 +164,10 @@ namespace Mtgdb.Controls
 				AutoCheck = false,
 				TextPosition = StringAlignment.Near,
 				Margin = new Padding(0),
+				Padding = new Padding(2),
 				ForeColor = SystemColors.WindowText,
 				Checked = index == SelectedIndex
 			};
-
-			result.Padding = new Padding(
-				result.Padding.Left - 1,
-				result.Padding.Top - 1,
-				result.Padding.Right - 1,
-				result.Padding.Bottom - 1);
 
 			result.MouseClick += click;
 			result.KeyDown += keyDown;

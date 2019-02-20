@@ -749,7 +749,7 @@ namespace Mtgdb.Gui
 		{
 			_cardSearch.AppliedText = query;
 			_cardSearch.Apply();
-			_dropdownSearchExamples.ClosePopup();
+			_popupSearchExamples.ClosePopup();
 		}
 	}
 }

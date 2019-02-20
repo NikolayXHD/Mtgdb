@@ -16,8 +16,8 @@ namespace Mtgdb.Controls
 			TextPosition = StringAlignment.Near;
 			ImagePosition = StringAlignment.Far;
 
-			var dropDownImg = Resources.drop_down_48.ScaleBy(0.5f);
-			ButtonImages = new ButtonImages(dropDownImg, dropDownImg);
+			ImageUnchecked = Resources.drop_down_48;
+			ImageScale = 0.5f;
 		}
 
 		protected override void OnSelectedIndexChanged()
@@ -71,7 +71,7 @@ namespace Mtgdb.Controls
 		}
 
 		protected override Padding DefaultPadding =>
-			new Padding(4, 4, 0, 4);
+			new Padding(2, 0, 0, 0);
 
 		[DefaultValue(typeof(TextImageRelation), "TextBeforeImage")]
 		public override TextImageRelation TextImageRelation
@@ -92,6 +92,20 @@ namespace Mtgdb.Controls
 		{
 			get => base.ImagePosition;
 			set => base.ImagePosition = value;
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Bitmap ImageUnchecked
+		{
+			get => base.ImageUnchecked;
+			set => base.ImageUnchecked = value;
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Bitmap ImageChecked
+		{
+			get => base.ImageChecked;
+			set => base.ImageChecked = value;
 		}
 	}
 }

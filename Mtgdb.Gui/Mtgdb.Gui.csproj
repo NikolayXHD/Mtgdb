@@ -284,9 +284,6 @@
     <EmbeddedResource Include="FormChart\FormChart.resx">
       <DependentUpon>FormChart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain\FormMain.resx">
-      <DependentUpon>FormMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormMain\SearchExamplesMenu.resx">
       <DependentUpon>SearchExamplesMenu.cs</DependentUpon>
     </EmbeddedResource>

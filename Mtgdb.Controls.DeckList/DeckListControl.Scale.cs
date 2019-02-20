@@ -19,11 +19,11 @@ namespace Mtgdb.Controls
 			new DpiScaler<DeckListControl>(c => c._textSelectionCursor = createTextSelectionCursor())
 				.Setup(this);
 
-			_searchBar.ButtonImages = ButtonImages.ScaleDpi((null, Resources.search_48));
+			_searchBar.ScaleDpi();
 			_panelSortIcon.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 
 			_searchBar.ScaleDpi();
-			_menuFilterByDeckMode.ScaleDpi();
+			DropDownBaseScaler.ScaleDpi(_menuFilterByDeckMode);
 
 			scaleLayoutView(_viewDeck);
 

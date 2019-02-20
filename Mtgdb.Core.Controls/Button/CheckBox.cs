@@ -14,9 +14,9 @@ namespace Mtgdb.Controls
 			TextImageRelation = TextImageRelation.ImageBeforeText;
 			HighlightCheckedOpacity = 0;
 
-			ButtonImages = new ButtonImages(
-				Resources.unchecked_32.ScaleBy(0.5f),
-				Resources.checked_32.ScaleBy(0.5f));
+			ImageScale = 0.5f;
+			ImageUnchecked = Resources.unchecked_32;
+			ImageChecked = Resources.checked_32;
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -52,6 +52,20 @@ namespace Mtgdb.Controls
 		{
 			get => base.HighlightCheckedOpacity;
 			set => base.HighlightCheckedOpacity = value;
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Bitmap ImageUnchecked
+		{
+			get => base.ImageUnchecked;
+			set => base.ImageUnchecked = value;
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Bitmap ImageChecked
+		{
+			get => base.ImageChecked;
+			set => base.ImageChecked = value;
 		}
 	}
 }

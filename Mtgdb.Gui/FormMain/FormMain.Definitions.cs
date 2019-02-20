@@ -122,7 +122,7 @@ namespace Mtgdb.Gui
 			_viewCards.SetDataSource(_searchResultCards);
 
 			_legality = new LegalitySubsystem(
-				_menuLegality,
+				_dropdownLegality,
 				_buttonLegalityAllowLegal,
 				_buttonLegalityAllowRestricted,
 				_buttonLegalityAllowBanned,
@@ -196,8 +196,8 @@ namespace Mtgdb.Gui
 
 			components.Add(_deckEditorSubsystem);
 
-			_dropdownSearchExamples.MenuControl = _menuSearchExamples;
-			_dropdownSearchExamples.MenuAlignment = HorizontalAlignment.Right;
+			_popupSearchExamples.MenuControl = _menuSearchExamples;
+			_popupSearchExamples.MenuAlignment = HorizontalAlignment.Right;
 		}
 
 		private void cardCreating(object view, LayoutControl probeCard) =>

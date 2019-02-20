@@ -30,7 +30,6 @@ namespace Mtgdb.Gui
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChart));
 			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.ButtonBase();
 			this._buttonDeckPrice = new Mtgdb.Controls.ButtonBase();
@@ -120,7 +119,6 @@ namespace Mtgdb.Gui
 			this._buttonManaCurveType.Location = new System.Drawing.Point(356, 11);
 			this._buttonManaCurveType.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this._buttonManaCurveType.Name = "_buttonManaCurveType";
-			this._buttonManaCurveType.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonManaCurveType.Size = new System.Drawing.Size(76, 40);
 			this._buttonManaCurveType.TabIndex = 2;
 			this._buttonManaCurveType.Text = "mana curve \r\n/ type";
@@ -133,7 +131,6 @@ namespace Mtgdb.Gui
 			this._buttonDeckPrice.Location = new System.Drawing.Point(6, 8);
 			this._buttonDeckPrice.Margin = new System.Windows.Forms.Padding(6, 3, 0, 3);
 			this._buttonDeckPrice.Name = "_buttonDeckPrice";
-			this._buttonDeckPrice.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonDeckPrice.Size = new System.Drawing.Size(50, 40);
 			this._buttonDeckPrice.TabIndex = 0;
 			this._buttonDeckPrice.Text = "deck\r\nprice";
@@ -147,7 +144,6 @@ namespace Mtgdb.Gui
 			this._buttonApply.Location = new System.Drawing.Point(435, 0);
 			this._buttonApply.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonApply.Name = "_buttonApply";
-			this._buttonApply.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonApply.Size = new System.Drawing.Size(50, 24);
 			this._buttonApply.TabIndex = 4;
 			this._buttonApply.Text = "Build!";
@@ -162,6 +158,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuFields.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuFields.EmptySelectionText = "";
+			this._menuFields.ImageScale = 0.5F;
 			this._menuFields.Location = new System.Drawing.Point(49, 0);
 			this._menuFields.Margin = new System.Windows.Forms.Padding(0);
 			this._menuFields.Name = "_menuFields";
@@ -177,7 +174,6 @@ namespace Mtgdb.Gui
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddCol.Name = "_buttonAddCol";
-			this._buttonAddCol.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonAddCol.Size = new System.Drawing.Size(68, 24);
 			this._buttonAddCol.TabIndex = 1;
 			this._buttonAddCol.Text = "+ argument";
@@ -306,10 +302,10 @@ namespace Mtgdb.Gui
 			this._buttonArgumentTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonArgumentTotal.BackColor = System.Drawing.Color.Transparent;
 			this._buttonArgumentTotal.ForeColor = System.Drawing.SystemColors.ControlText;
+			this._buttonArgumentTotal.ImageScale = 0.5F;
 			this._buttonArgumentTotal.Location = new System.Drawing.Point(3, 0);
 			this._buttonArgumentTotal.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
 			this._buttonArgumentTotal.Name = "_buttonArgumentTotal";
-			this._buttonArgumentTotal.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonArgumentTotal.Size = new System.Drawing.Size(99, 24);
 			this._buttonArgumentTotal.TabIndex = 0;
 			this._buttonArgumentTotal.Text = "Argument total";
@@ -319,10 +315,10 @@ namespace Mtgdb.Gui
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSeriesTotal.BackColor = System.Drawing.Color.Transparent;
 			this._buttonSeriesTotal.ForeColor = System.Drawing.SystemColors.ControlText;
+			this._buttonSeriesTotal.ImageScale = 0.5F;
 			this._buttonSeriesTotal.Location = new System.Drawing.Point(102, 0);
 			this._buttonSeriesTotal.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonSeriesTotal.Name = "_buttonSeriesTotal";
-			this._buttonSeriesTotal.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonSeriesTotal.Size = new System.Drawing.Size(83, 24);
 			this._buttonSeriesTotal.TabIndex = 1;
 			this._buttonSeriesTotal.Text = "Series total";
@@ -332,10 +328,10 @@ namespace Mtgdb.Gui
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonExplainTotal.BackColor = System.Drawing.Color.Transparent;
 			this._buttonExplainTotal.ForeColor = System.Drawing.SystemColors.ControlText;
+			this._buttonExplainTotal.ImageScale = 0.5F;
 			this._buttonExplainTotal.Location = new System.Drawing.Point(185, 0);
 			this._buttonExplainTotal.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonExplainTotal.Name = "_buttonExplainTotal";
-			this._buttonExplainTotal.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonExplainTotal.Size = new System.Drawing.Size(88, 24);
 			this._buttonExplainTotal.TabIndex = 2;
 			this._buttonExplainTotal.Text = "Explain total";
@@ -345,10 +341,10 @@ namespace Mtgdb.Gui
 			this._buttonFilterBySearchResult.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonFilterBySearchResult.BackColor = System.Drawing.Color.Transparent;
 			this._buttonFilterBySearchResult.ForeColor = System.Drawing.SystemColors.ControlText;
+			this._buttonFilterBySearchResult.ImageScale = 0.5F;
 			this._buttonFilterBySearchResult.Location = new System.Drawing.Point(289, 0);
 			this._buttonFilterBySearchResult.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonFilterBySearchResult.Name = "_buttonFilterBySearchResult";
-			this._buttonFilterBySearchResult.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonFilterBySearchResult.Size = new System.Drawing.Size(130, 24);
 			this._buttonFilterBySearchResult.TabIndex = 3;
 			this._buttonFilterBySearchResult.Text = "Filter by search result";
@@ -361,7 +357,6 @@ namespace Mtgdb.Gui
 			this._buttonAddRow.Location = new System.Drawing.Point(281, 0);
 			this._buttonAddRow.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddRow.Name = "_buttonAddRow";
-			this._buttonAddRow.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonAddRow.Size = new System.Drawing.Size(52, 24);
 			this._buttonAddRow.TabIndex = 2;
 			this._buttonAddRow.Text = "+ series";
@@ -380,7 +375,6 @@ namespace Mtgdb.Gui
 			this._buttonAddSum.Location = new System.Drawing.Point(349, 0);
 			this._buttonAddSum.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddSum.Name = "_buttonAddSum";
-			this._buttonAddSum.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonAddSum.Size = new System.Drawing.Size(72, 24);
 			this._buttonAddSum.TabIndex = 3;
 			this._buttonAddSum.Text = "+ aggregate";
@@ -440,6 +434,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuLabelDataElement.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuLabelDataElement.EmptySelectionText = "";
+			this._menuLabelDataElement.ImageScale = 0.5F;
 			this._menuLabelDataElement.Location = new System.Drawing.Point(531, 0);
 			this._menuLabelDataElement.Margin = new System.Windows.Forms.Padding(0);
 			this._menuLabelDataElement.Name = "_menuLabelDataElement";
@@ -462,6 +457,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuDataSource.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuDataSource.EmptySelectionText = "";
+			this._menuDataSource.ImageScale = 0.5F;
 			this._menuDataSource.Location = new System.Drawing.Point(727, 0);
 			this._menuDataSource.Margin = new System.Windows.Forms.Padding(0);
 			this._menuDataSource.Name = "_menuDataSource";
@@ -484,6 +480,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuChartType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._menuChartType.EmptySelectionText = "";
+			this._menuChartType.ImageScale = 0.5F;
 			this._menuChartType.Location = new System.Drawing.Point(937, 0);
 			this._menuChartType.Margin = new System.Windows.Forms.Padding(0);
 			this._menuChartType.Name = "_menuChartType";
@@ -531,6 +528,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuPrice.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPrice.EmptySelectionText = "";
+			this._menuPrice.ImageScale = 0.5F;
 			this._menuPrice.Location = new System.Drawing.Point(0, 0);
 			this._menuPrice.Margin = new System.Windows.Forms.Padding(0);
 			this._menuPrice.Name = "_menuPrice";
@@ -542,6 +540,7 @@ namespace Mtgdb.Gui
 			// 
 			this._menuPriceChartType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPriceChartType.EmptySelectionText = "";
+			this._menuPriceChartType.ImageScale = 0.5F;
 			this._menuPriceChartType.Location = new System.Drawing.Point(0, 26);
 			this._menuPriceChartType.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this._menuPriceChartType.Name = "_menuPriceChartType";
@@ -557,7 +556,6 @@ namespace Mtgdb.Gui
 			this._buttonCollectionPrice.Location = new System.Drawing.Point(56, 8);
 			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this._buttonCollectionPrice.Name = "_buttonCollectionPrice";
-			this._buttonCollectionPrice.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonCollectionPrice.Size = new System.Drawing.Size(60, 40);
 			this._buttonCollectionPrice.TabIndex = 1;
 			this._buttonCollectionPrice.Text = "collection\r\nprice";
@@ -570,7 +568,6 @@ namespace Mtgdb.Gui
 			this._buttonManaCurveManacost.Location = new System.Drawing.Point(432, 11);
 			this._buttonManaCurveManacost.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonManaCurveManacost.Name = "_buttonManaCurveManacost";
-			this._buttonManaCurveManacost.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonManaCurveManacost.Size = new System.Drawing.Size(76, 40);
 			this._buttonManaCurveManacost.TabIndex = 3;
 			this._buttonManaCurveManacost.Text = "mana curve\r\n/ color";
@@ -583,7 +580,6 @@ namespace Mtgdb.Gui
 			this._buttonCollectionColors.Location = new System.Drawing.Point(584, 11);
 			this._buttonCollectionColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonCollectionColors.Name = "_buttonCollectionColors";
-			this._buttonCollectionColors.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonCollectionColors.Size = new System.Drawing.Size(90, 40);
 			this._buttonCollectionColors.TabIndex = 5;
 			this._buttonCollectionColors.Text = "collection color\r\n/ type";
@@ -596,7 +592,6 @@ namespace Mtgdb.Gui
 			this._buttonDeckColors.Location = new System.Drawing.Point(508, 11);
 			this._buttonDeckColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDeckColors.Name = "_buttonDeckColors";
-			this._buttonDeckColors.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonDeckColors.Size = new System.Drawing.Size(76, 40);
 			this._buttonDeckColors.TabIndex = 4;
 			this._buttonDeckColors.Text = "deck color\r\n/ type";
@@ -659,11 +654,11 @@ namespace Mtgdb.Gui
 			this._dropdownMruFiles.BackColor = System.Drawing.Color.Transparent;
 			this._dropdownMruFiles.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._dropdownMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
+			this._dropdownMruFiles.ImageScale = 0.5F;
 			this._dropdownMruFiles.Location = new System.Drawing.Point(51, 13);
 			this._dropdownMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
 			this._dropdownMruFiles.MenuControl = null;
 			this._dropdownMruFiles.Name = "_dropdownMruFiles";
-			this._dropdownMruFiles.Padding = new System.Windows.Forms.Padding(4);
 			this._dropdownMruFiles.Size = new System.Drawing.Size(24, 24);
 			this._dropdownMruFiles.TabIndex = 0;
 			// 
@@ -677,7 +672,6 @@ namespace Mtgdb.Gui
 			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
 			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
 			this._buttonLoad.Name = "_buttonLoad";
-			this._buttonLoad.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonLoad.Size = new System.Drawing.Size(24, 24);
 			this._buttonLoad.TabIndex = 1;
 			// 
@@ -691,7 +685,6 @@ namespace Mtgdb.Gui
 			this._buttonSave.Location = new System.Drawing.Point(123, 13);
 			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);
 			this._buttonSave.Name = "_buttonSave";
-			this._buttonSave.Padding = new System.Windows.Forms.Padding(4);
 			this._buttonSave.Size = new System.Drawing.Size(24, 24);
 			this._buttonSave.TabIndex = 2;
 			// 
@@ -735,7 +728,6 @@ namespace Mtgdb.Gui
 			// 
 			this.CaptionHeight = 68;
 			this.ClientSize = new System.Drawing.Size(1221, 738);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "FormChart";

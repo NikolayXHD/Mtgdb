@@ -36,6 +36,7 @@ namespace Mtgdb.Downloader
 			this._labelProgress = new System.Windows.Forms.Label();
 			this._tableLayoutRoot = new System.Windows.Forms.TableLayoutPanel();
 			this._tableLayoutButtons = new System.Windows.Forms.TableLayoutPanel();
+			this._labelTitle = new System.Windows.Forms.Label();
 			this._buttonPrices = new Mtgdb.Controls.ButtonBase();
 			this._buttonApp = new Mtgdb.Controls.ButtonBase();
 			this._buttonImgMq = new Mtgdb.Controls.ButtonBase();
@@ -45,7 +46,6 @@ namespace Mtgdb.Downloader
 			this._buttonEditConfig = new Mtgdb.Controls.ButtonBase();
 			this._buttonDesktopShortcut = new Mtgdb.Controls.ButtonBase();
 			this._buttonNotifications = new Mtgdb.Controls.ButtonBase();
-			this._labelTitle = new System.Windows.Forms.Label();
 			this._panelClient.SuspendLayout();
 			this._panelCaption.SuspendLayout();
 			this._tableLayoutRoot.SuspendLayout();
@@ -153,6 +153,18 @@ namespace Mtgdb.Downloader
 			this._tableLayoutButtons.Size = new System.Drawing.Size(823, 108);
 			this._tableLayoutButtons.TabIndex = 11;
 			// 
+			// _labelTitle
+			// 
+			this._labelTitle.AutoSize = true;
+			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
+			this._labelTitle.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._labelTitle.Location = new System.Drawing.Point(0, 0);
+			this._labelTitle.Margin = new System.Windows.Forms.Padding(0);
+			this._labelTitle.Name = "_labelTitle";
+			this._labelTitle.Size = new System.Drawing.Size(198, 19);
+			this._labelTitle.TabIndex = 0;
+			this._labelTitle.Text = "Updates and downloads";
+			// 
 			// _buttonPrices
 			// 
 			this._buttonPrices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -162,7 +174,10 @@ namespace Mtgdb.Downloader
 			this._buttonPrices.BackColor = System.Drawing.Color.Transparent;
 			this._buttonPrices.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonPrices.Image = global::Mtgdb.Downloader.Properties.Resources.price_16;
+			this._buttonPrices.ImageChecked = null;
 			this._buttonPrices.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonPrices.ImageScale = 0.5F;
+			this._buttonPrices.ImageUnchecked = null;
 			this._buttonPrices.Location = new System.Drawing.Point(346, 0);
 			this._buttonPrices.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonPrices.Name = "_buttonPrices";
@@ -186,7 +201,10 @@ namespace Mtgdb.Downloader
 			this._buttonApp.BackColor = System.Drawing.Color.Transparent;
 			this._buttonApp.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonApp.Image = global::Mtgdb.Downloader.Properties.Resources.update;
+			this._buttonApp.ImageChecked = null;
 			this._buttonApp.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonApp.ImageScale = 0.5F;
+			this._buttonApp.ImageUnchecked = null;
 			this._buttonApp.Location = new System.Drawing.Point(662, 0);
 			this._buttonApp.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonApp.Name = "_buttonApp";
@@ -210,7 +228,10 @@ namespace Mtgdb.Downloader
 			this._buttonImgMq.BackColor = System.Drawing.Color.Transparent;
 			this._buttonImgMq.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonImgMq.Image = global::Mtgdb.Downloader.Properties.Resources.card_img_24;
+			this._buttonImgMq.ImageChecked = null;
 			this._buttonImgMq.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonImgMq.ImageScale = 0.5F;
+			this._buttonImgMq.ImageUnchecked = null;
 			this._buttonImgMq.Location = new System.Drawing.Point(504, 54);
 			this._buttonImgMq.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonImgMq.Name = "_buttonImgMq";
@@ -234,7 +255,10 @@ namespace Mtgdb.Downloader
 			this._buttonImgArt.BackColor = System.Drawing.Color.Transparent;
 			this._buttonImgArt.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonImgArt.Image = global::Mtgdb.Downloader.Properties.Resources.art_24;
+			this._buttonImgArt.ImageChecked = null;
 			this._buttonImgArt.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonImgArt.ImageScale = 0.5F;
+			this._buttonImgArt.ImageUnchecked = null;
 			this._buttonImgArt.Location = new System.Drawing.Point(662, 54);
 			this._buttonImgArt.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonImgArt.Name = "_buttonImgArt";
@@ -258,7 +282,10 @@ namespace Mtgdb.Downloader
 			this._buttonImgLq.BackColor = System.Drawing.Color.Transparent;
 			this._buttonImgLq.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonImgLq.Image = global::Mtgdb.Downloader.Properties.Resources.card_img_16;
+			this._buttonImgLq.ImageChecked = null;
 			this._buttonImgLq.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonImgLq.ImageScale = 0.5F;
+			this._buttonImgLq.ImageUnchecked = null;
 			this._buttonImgLq.Location = new System.Drawing.Point(346, 54);
 			this._buttonImgLq.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonImgLq.Name = "_buttonImgLq";
@@ -282,7 +309,10 @@ namespace Mtgdb.Downloader
 			this._buttonMtgjson.BackColor = System.Drawing.Color.Transparent;
 			this._buttonMtgjson.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonMtgjson.Image = global::Mtgdb.Downloader.Properties.Resources.card_data_20;
+			this._buttonMtgjson.ImageChecked = null;
 			this._buttonMtgjson.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonMtgjson.ImageScale = 0.5F;
+			this._buttonMtgjson.ImageUnchecked = null;
 			this._buttonMtgjson.Location = new System.Drawing.Point(504, 0);
 			this._buttonMtgjson.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonMtgjson.Name = "_buttonMtgjson";
@@ -306,7 +336,10 @@ namespace Mtgdb.Downloader
 			this._buttonEditConfig.BackColor = System.Drawing.Color.Transparent;
 			this._buttonEditConfig.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonEditConfig.Image = global::Mtgdb.Downloader.Properties.Resources.properties_16x16;
+			this._buttonEditConfig.ImageChecked = null;
 			this._buttonEditConfig.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonEditConfig.ImageScale = 0.5F;
+			this._buttonEditConfig.ImageUnchecked = null;
 			this._buttonEditConfig.Location = new System.Drawing.Point(0, 0);
 			this._buttonEditConfig.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonEditConfig.Name = "_buttonEditConfig";
@@ -330,7 +363,10 @@ namespace Mtgdb.Downloader
 			this._buttonDesktopShortcut.BackColor = System.Drawing.Color.Transparent;
 			this._buttonDesktopShortcut.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonDesktopShortcut.Image = global::Mtgdb.Downloader.Properties.Resources.mtg_16;
+			this._buttonDesktopShortcut.ImageChecked = null;
 			this._buttonDesktopShortcut.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonDesktopShortcut.ImageScale = 0.5F;
+			this._buttonDesktopShortcut.ImageUnchecked = null;
 			this._buttonDesktopShortcut.Location = new System.Drawing.Point(0, 54);
 			this._buttonDesktopShortcut.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonDesktopShortcut.Name = "_buttonDesktopShortcut";
@@ -355,7 +391,10 @@ namespace Mtgdb.Downloader
 			this._buttonNotifications.BackColor = System.Drawing.Color.Transparent;
 			this._buttonNotifications.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonNotifications.Image = global::Mtgdb.Downloader.Properties.Resources.mailbox_26;
+			this._buttonNotifications.ImageChecked = null;
 			this._buttonNotifications.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonNotifications.ImageScale = 0.5F;
+			this._buttonNotifications.ImageUnchecked = null;
 			this._buttonNotifications.Location = new System.Drawing.Point(173, 54);
 			this._buttonNotifications.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
 			this._buttonNotifications.Name = "_buttonNotifications";
@@ -369,18 +408,6 @@ namespace Mtgdb.Downloader
 			this._buttonNotifications.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
-			// _labelTitle
-			// 
-			this._labelTitle.AutoSize = true;
-			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
-			this._labelTitle.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._labelTitle.Location = new System.Drawing.Point(0, 0);
-			this._labelTitle.Margin = new System.Windows.Forms.Padding(0);
-			this._labelTitle.Name = "_labelTitle";
-			this._labelTitle.Size = new System.Drawing.Size(198, 19);
-			this._labelTitle.TabIndex = 0;
-			this._labelTitle.Text = "Updates and downloads";
 			// 
 			// FormUpdate
 			// 

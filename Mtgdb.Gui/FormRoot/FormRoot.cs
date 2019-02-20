@@ -25,25 +25,7 @@ namespace Mtgdb.Gui
 			getLanguageMenuItems().Append(_dropdownLanguage).ForEach(
 				b => b.Font = new Font("Consolas", 9f, b.Font.Style));
 
-			new[]
-				{
-					_buttonMenuCopyDeck,
-					_buttonMenuPasteDeck,
-					_buttonMenuPasteDeckAppend,
-					_buttonMenuCopyCollection,
-					_buttonMenuPasteCollection,
-					_buttonMenuPasteCollectionAppend,
-					_buttonMenuSaveDeck,
-					_buttonMenuOpenDeck,
-					_buttonMenuSaveCollection,
-					_buttonMenuOpenCollection,
-					_buttonMenuEditConfig,
-					_buttonMenuDonatePayPal,
-					_buttonMenuDonateYandexMoney
-				}
-				.ForEach(b => b.VisibleAllBorders = true);
-
-			_languageIcons = new Dictionary<string, Bitmap>(Str.Comparer)
+			new Dictionary<string, Bitmap>(Str.Comparer)
 			{
 				{ "cn", Resources.cn },
 				{ "jp", Resources.jp },

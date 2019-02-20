@@ -32,7 +32,7 @@ namespace Mtgdb.Controls
 			new DpiScaler<QuickFilterControl, float>(
 				c => c.SelectionBorder,
 				(c, b) => c.SelectionBorder = b,
-				b => b.ByDpiWidth());
+				b => b.ByDpiWidth().Round());
 
 		private static readonly DpiScaler<QuickFilterControl, (Size, Size, Bitmap, float)> _scaler = DpiScalers.Combine(
 			_imageSizeScaler,
