@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -159,7 +159,7 @@ namespace Mtgdb.Gui
 			if (loadingInProgress || !added)
 				return;
 
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(() =>
 			{
 				var failedDecks = new List<Deck>();
 

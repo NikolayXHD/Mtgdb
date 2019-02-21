@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
@@ -255,7 +256,7 @@ namespace Mtgdb.Gui
 
 		public void RunRefilterTask(Action onFinished = null)
 		{
-			ThreadPool.QueueUserWorkItem(_ => refilter(onFinished));
+			TaskEx.Run(() => refilter(onFinished));
 		}
 
 		private void refilter(Action onFinished)

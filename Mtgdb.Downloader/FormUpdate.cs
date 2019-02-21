@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
@@ -136,7 +136,7 @@ namespace Mtgdb.Downloader
 
 		private void mtgjsonClick(object sender, EventArgs e)
 		{
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(() =>
 			{
 				setButtonsEnabled(false);
 				Console.WriteLine();
@@ -148,18 +148,18 @@ namespace Mtgdb.Downloader
 		private void appClick(object sender, EventArgs e)
 		{
 			if (!_appVersionOnlineChecked)
-				ThreadPool.QueueUserWorkItem(checkNewVersion);
+				TaskEx.Run(checkNewVersion);
 			else if (_appVersionDownloaded == null)
-				ThreadPool.QueueUserWorkItem(downloadNewVersion);
+				TaskEx.Run(downloadNewVersion);
 			else
-				ThreadPool.QueueUserWorkItem(installNewVersion);
+				TaskEx.Run(installNewVersion);
 		}
 
 		private void notificationsClick(object sender, EventArgs e)
 		{
 			setButtonsEnabled(false);
 
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(() =>
 			{
 				_newsService.FetchNews(repeatViewed: true);
 				_newsService.DisplayNews();
@@ -170,7 +170,7 @@ namespace Mtgdb.Downloader
 
 
 
-		private void checkNewVersion(object _)
+		private void checkNewVersion()
 		{
 			setButtonsEnabled(false);
 
@@ -190,7 +190,7 @@ namespace Mtgdb.Downloader
 				suggestInstallApp(appVersionDownloaded);
 		}
 
-		private void downloadNewVersion(object _)
+		private void downloadNewVersion()
 		{
 			if (_appVersionOnline == null)
 				throw new InvalidOperationException("There is no online version to download");
@@ -216,7 +216,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine();
 		}
 
-		private void installNewVersion(object _)
+		private void installNewVersion()
 		{
 			if (_appVersionDownloaded == null)
 				throw new InvalidOperationException("There is no downloaded version to install");
@@ -344,7 +344,7 @@ namespace Mtgdb.Downloader
 			}
 			else
 			{
-				ThreadPool.QueueUserWorkItem(_ =>
+				TaskEx.Run(() =>
 				{
 					setButtonsEnabled(false);
 					suggestAbortImageDownloading((ButtonBase) sender);
@@ -529,7 +529,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 			}
 			else
 			{
-				ThreadPool.QueueUserWorkItem(_ =>
+				TaskEx.Run(() =>
 				{
 					setButtonsEnabled(false);
 					suggestAbortPriceDownloading();

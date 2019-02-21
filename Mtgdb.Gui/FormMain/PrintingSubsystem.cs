@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
@@ -46,7 +46,7 @@ namespace Mtgdb.Gui
 			};
 
 			if (dlg.ShowDialog() == DialogResult.OK)
-				ThreadPool.QueueUserWorkItem(_ => { print(deckEditorModel, dlg.FileName); });
+				TaskEx.Run(() => print(deckEditorModel, dlg.FileName));
 		}
 
 		private void print(DeckEditorModel deckEditorModel, string fileName)

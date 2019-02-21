@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
@@ -238,7 +238,7 @@ namespace Mtgdb.Controls
 
 		private void runRefreshSearchResultTask(Action onComplete)
 		{
-			ThreadPool.QueueUserWorkItem(_ =>
+			TaskEx.Run(() =>
 			{
 				_aborted = true;
 				lock (_sync)
