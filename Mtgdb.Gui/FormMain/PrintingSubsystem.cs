@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Ui;
 
@@ -18,10 +19,7 @@ namespace Mtgdb.Gui
 		private const float BorderMm = 0.25f;
 		private static readonly SizeF _sizeMm = new SizeF(63, 88);
 		private static readonly int _border = (int)Math.Round(BorderMm * PxPerInch / MmPerInch);
-
-		private static readonly Size _cardSizePx = new Size(
-				(int)Math.Round(_sizeMm.Width * PxPerInch / MmPerInch),
-				(int)Math.Round(_sizeMm.Height * PxPerInch / MmPerInch));
+		private static readonly Size _cardSizePx = _sizeMm.MultiplyBy(PxPerInch / MmPerInch).Round();
 
 		private static readonly int _height = _cardSizePx.Height * CardsPerColumn + _border * (CardsPerColumn - 1);
 		private static readonly int _width = _cardSizePx.Width * CardsPerRow + _border * (CardsPerRow - 1);
