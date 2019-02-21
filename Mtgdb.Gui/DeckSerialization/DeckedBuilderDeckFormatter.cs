@@ -60,8 +60,7 @@ namespace Mtgdb.Gui
 		}
 
 		public override Regex LineRegex { get; } = new Regex(
-			@"^(SB: )?(?<count>\d+) (?<name>.+)$",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			@"^(SB: )?(?<count>\d+) (?<name>.+)$", RegexOptions.IgnoreCase);
 
 		public const string SideboardPrefix = "SB: ";
 

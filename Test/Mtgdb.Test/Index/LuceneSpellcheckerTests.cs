@@ -366,9 +366,8 @@ namespace Mtgdb.Test
 		private const string Ru = "ru";
 
 		private static readonly Regex _enSuffixPattern = new Regex("(?<=\\bname|text|type|flavor)En(?=:)",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			RegexOptions.IgnoreCase);
 
-		private static readonly Regex _boolOperatorPattern = new Regex(@"\b(a■?n■?d|o■?r|n■?o■?t)\b",
-			RegexOptions.Compiled);
+		private static readonly Regex _boolOperatorPattern = new Regex(@"\b(a■?n■?d|o■?r|n■?o■?t)\b");
 	}
 }

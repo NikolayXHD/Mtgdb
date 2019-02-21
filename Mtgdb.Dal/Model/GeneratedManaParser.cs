@@ -76,21 +76,20 @@ namespace Mtgdb.Dal
 
 		private static readonly Regex[] _ePatterns =
 		{
-			new Regex(@"\byou get \{e\}",
-				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+			new Regex(@"\byou get \{e\}", RegexOptions.IgnoreCase)
 		};
 
 		private static readonly Regex[] _anyPatterns =
 		{
 			new Regex(@"\bmana (to his or her mana pool |to your mana pool )?(of (the chosen|any one|any|that)|in any combination of colors|of a color of your choice|of one of the card's colors)",
-				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+				RegexOptions.IgnoreCase)
 		};
 
 		private static readonly Regex[] _specificPatterns =
 		{
 			new Regex(
 				@"\b(adds?|produces?) (an amount of |an additional |([^ ]+ |that much )?mana in any combination of |that much )?(((?<w>\{w\})|(?<u>\{[u]\})|(?<b>\{[b]\})|(?<r>\{[r]\})|(?<g>\{[g]\})|(?<c>\{[c1-9]\}|colorless mana))( and\/or |, or |, | or )?)+",
-				RegexOptions.Compiled | RegexOptions.IgnoreCase)
+				RegexOptions.IgnoreCase)
 		};
 
 		private static readonly string[] _symbols =

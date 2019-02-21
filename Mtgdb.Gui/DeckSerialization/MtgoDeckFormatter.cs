@@ -235,9 +235,9 @@ namespace Mtgdb.Gui
 			_mtgoNameByName.ToDictionary(_ => _.Value, _ => _.Key);
 
 		private static readonly Regex _splitterRegex =
-			new Regex(@"\b(?<count>\d+)\s+\b", RegexOptions.Compiled);
+			new Regex(@"\b(?<count>\d+)\s+\b");
 
 		private static readonly Regex _lineRegex =
-			new Regex(@"^(?<count>\d+)\s+(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			new Regex(@"^(?<count>\d+)\s+(?<name>.+)$", RegexOptions.IgnoreCase);
 	}
 }

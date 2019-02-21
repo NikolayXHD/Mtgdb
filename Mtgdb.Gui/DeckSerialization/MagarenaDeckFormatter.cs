@@ -94,9 +94,8 @@ namespace Mtgdb.Gui
 
 
 
-		public override Regex LineRegex { get; } = new Regex(
-			@"^(?<count>\d+) (?<name>.+)$",
-			RegexOptions.Compiled);
+		public override Regex LineRegex { get; } =
+			new Regex(@"^(?<count>\d+) (?<name>.+)$");
 
 		public override string Description => "Magarena {type}";
 		public override string FileNamePattern => "*.dec";

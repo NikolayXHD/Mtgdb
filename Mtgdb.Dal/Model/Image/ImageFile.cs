@@ -9,7 +9,7 @@ namespace Mtgdb.Dal
 {
 	public class ImageFile
 	{
-		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.IgnoreCase);
 
 		public ImageFile(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
 		{

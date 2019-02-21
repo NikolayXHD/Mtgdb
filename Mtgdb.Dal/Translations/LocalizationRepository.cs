@@ -72,6 +72,6 @@ namespace Mtgdb.Dal
 			return result;
 		}
 
-		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})", RegexOptions.Compiled);
+		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})");
 	}
 }

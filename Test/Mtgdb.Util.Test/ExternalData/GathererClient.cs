@@ -327,10 +327,10 @@ namespace Mtgdb.Util
 		};
 
 		private static readonly Regex _symbolRegex = new Regex(@"&name=(?<name>[\w\d]+)&type=symbol",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			RegexOptions.IgnoreCase);
 
-		private static readonly Regex _hrefFixRegex = new Regex(@"\bhref='(?<url>[^']+)'", RegexOptions.Compiled);
-		private static readonly Regex _ampFixRegex = new Regex(@"&(?!amp;)", RegexOptions.Compiled);
+		private static readonly Regex _hrefFixRegex = new Regex(@"\bhref='(?<url>[^']+)'");
+		private static readonly Regex _ampFixRegex = new Regex(@"&(?!amp;)");
 
 		private const string TranslationEnd = "</td>";
 

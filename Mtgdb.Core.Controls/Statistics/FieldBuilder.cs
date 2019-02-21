@@ -13,7 +13,7 @@ namespace Mtgdb.Controls.Statistics
 
 	public static class FieldNameFormatter
 	{
-		private static readonly Regex _camelPattern = new Regex("(\\B[A-Z])", RegexOptions.Compiled);
+		private static readonly Regex _camelPattern = new Regex("(\\B[A-Z])");
 
 		public static string FromCamelCase(this string name)
 		{

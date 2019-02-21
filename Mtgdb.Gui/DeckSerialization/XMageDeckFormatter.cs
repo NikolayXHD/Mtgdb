@@ -98,12 +98,12 @@ namespace Mtgdb.Gui
 
 		public override Regex LineRegex { get; } = new Regex(
 			@"^(?<sb>SB: )?(?<count>\d+) \[(?<set>[^:]+):(?<id>\d+)\] (?<name>.*)$",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			RegexOptions.IgnoreCase);
 
 		public override string Description => "XMage {type}";
 		public override string FileNamePattern => @"*.dck";
 
-		private static readonly Regex _idRegex = new Regex(@"^\d+", RegexOptions.Compiled);
+		private static readonly Regex _idRegex = new Regex(@"^\d+");
 		private const string Header = "NAME:";
 	}
 }

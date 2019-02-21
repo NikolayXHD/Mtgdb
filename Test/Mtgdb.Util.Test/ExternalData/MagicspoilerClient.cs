@@ -67,7 +67,7 @@ namespace Mtgdb.Util
 		}
 
 		private static readonly Regex _cropRegex = new Regex(@"-\d+x\d+(?=\.(?:png|jpg)$)",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			 RegexOptions.IgnoreCase);
 
 		private const string BaseUrl = "http://www.magicspoiler.com/mtg-set/";
 

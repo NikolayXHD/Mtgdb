@@ -79,7 +79,6 @@ namespace Mtgdb.Downloader
 		}
 
 		private static readonly Regex _priceRegex = new Regex(
-			@"(?<=TCGPPriceLow\\'><[^>]+>)(?<low>[^<]+)(?=<)|(?<=TCGPPriceMid\\'><[^>]+>)(?<mid>[^<]+)(?=<)|(?<=TCGPPriceHigh\\'><[^>]+>)(?<high>[^<]+)(?=<)",
-			RegexOptions.Compiled);
+			@"(?<=TCGPPriceLow\\'><[^>]+>)(?<low>[^<]+)(?=<)|(?<=TCGPPriceMid\\'><[^>]+>)(?<mid>[^<]+)(?=<)|(?<=TCGPPriceHigh\\'><[^>]+>)(?<high>[^<]+)(?=<)");
 	}
 }

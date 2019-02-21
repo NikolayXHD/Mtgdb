@@ -57,7 +57,7 @@ namespace Mtgdb.Util
 				"(?<prefix>href=\"[^\"]*)(?<name>" +
 				string.Join("|", helpFileNames.Select(f => Regex.Escape(HttpUtility.HtmlEncode(Path.GetFileNameWithoutExtension(f))))) +
 				")(?<postfix>[^\"]*\")",
-				RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				RegexOptions.IgnoreCase);
 
 			helpContent = hrefRegex.Replace(helpContent, "${prefix}${name}.html${postfix}");
 
@@ -216,7 +216,7 @@ namespace Mtgdb.Util
 		}
 
 		private static readonly Regex _htmlHeaderTagRegex = new Regex("<h[1-6]>",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			RegexOptions.IgnoreCase);
 
 		private const string HelpContentOpenElement = "<div class=\"markdown-body\">";
 		private const string HelpContentCloseElement = "</div>";

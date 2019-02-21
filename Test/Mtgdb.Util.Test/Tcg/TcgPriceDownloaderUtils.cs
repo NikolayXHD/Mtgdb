@@ -233,8 +233,7 @@ namespace Mtgdb.Util
 		}
 
 		private readonly Regex _preProcessRegex = new Regex(
-			// ReSharper disable once StringLiteralTypo
 			@" ?((?:\[[^\]]+\] ?)+|(?:\([^\)]+\) ?)+|- ?full art|\(?SDCC \d* EXCLUSIVE\)?)$",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			RegexOptions.IgnoreCase);
 	}
 }

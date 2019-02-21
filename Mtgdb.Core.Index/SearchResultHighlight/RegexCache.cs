@@ -12,7 +12,7 @@ namespace Mtgdb.Index
 			if (_regexCache.TryGetValue(pattern, out var regex))
 				return regex;
 
-			regex = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			regex = new Regex(pattern, RegexOptions.IgnoreCase);
 			_regexCache.Add(pattern, regex);
 
 			return regex;

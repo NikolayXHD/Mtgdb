@@ -10,7 +10,7 @@ namespace Mtgdb.Util
 {
 	internal static class ArtworkRenamer
 	{
-		private static readonly Regex _propertyRegex = new Regex(@"\[[^\]]+\]", RegexOptions.Compiled);
+		private static readonly Regex _propertyRegex = new Regex(@"\[[^\]]+\]");
 		private static readonly char[] _valueSeparator = { ',', ';' };
 
 		public static void RenameArtworks(string directory)

@@ -11,9 +11,9 @@ namespace Mtgdb
 	[Localizable(false)]
 	public static class ShadowCopy
 	{
-		private static readonly Regex _invalidChar = new Regex("[\x00\x0a\x0d]", RegexOptions.Compiled);
-		private static readonly Regex _needsQuotes = new Regex(@"\s|""", RegexOptions.Compiled);
-		private static readonly Regex _escapeQuote = new Regex(@"(\\*)(""|$)", RegexOptions.Compiled);
+		private static readonly Regex _invalidChar = new Regex("[\x00\x0a\x0d]");
+		private static readonly Regex _needsQuotes = new Regex(@"\s|""");
+		private static readonly Regex _escapeQuote = new Regex(@"(\\*)(""|$)");
 
 		private static void startShadowCopy(string[] args)
 		{

@@ -107,8 +107,7 @@ namespace Mtgdb.Gui
 
 
 		public override Regex LineRegex { get; } = new Regex(
-			@"^(?<count>\d+) (?<name>[^|]+)(\|(?<set>[^|]+)(\|(?<variant>[^|]+))?)?",
-			RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			@"^(?<count>\d+) (?<name>[^|]+)(\|(?<set>[^|]+)(\|(?<variant>[^|]+))?)?", RegexOptions.IgnoreCase);
 
 		public override string Description => "Forge {type}";
 		public override string FileNamePattern => @"*.dck";
