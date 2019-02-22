@@ -26,21 +26,18 @@ namespace Mtgdb.Gui
 			_tabs.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 			_panelAva.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 
-			_labelPasteInfo.ScaleDpi();
-
+			_labelPasteInfo.ScaleDpiFont();
 			_labelFormats.ScaleDpiFont();
 			_labelMtgo.ScaleDpiFont();
 			_labelMagarena.ScaleDpiFont();
 			_labelDotP2.ScaleDpiFont();
-
 			_labelUiScale.ScaleDpiFont();
 			_labelUiUseSmallImages.ScaleDpiFont();
 			_labelUiSuggestDownloadMissingImages.ScaleDpiFont();
 			_labelUiImageCacheCapacity.ScaleDpiFont();
 			_labelUiUndoDepth.ScaleDpiFont();
 			_labelUiUseSmallImagesHint.ScaleDpiFont();
-
-			_labelDonate.ScaleDpi();
+			_labelDonate.ScaleDpiFont();
 
 			_flowTitleLeft.Controls.OfType<ButtonBase>()
 				.Concat(_flowTitleRight.Controls.OfType<ButtonBase>())
