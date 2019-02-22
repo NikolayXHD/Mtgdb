@@ -114,8 +114,6 @@ namespace Mtgdb.Gui
 			// _buttonManaCurveType
 			// 
 			this._buttonManaCurveType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonManaCurveType.BackColor = System.Drawing.Color.Transparent;
-			this._buttonManaCurveType.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonManaCurveType.Location = new System.Drawing.Point(356, 11);
 			this._buttonManaCurveType.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this._buttonManaCurveType.Name = "_buttonManaCurveType";
@@ -126,8 +124,6 @@ namespace Mtgdb.Gui
 			// _buttonDeckPrice
 			// 
 			this._buttonDeckPrice.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonDeckPrice.BackColor = System.Drawing.Color.Transparent;
-			this._buttonDeckPrice.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonDeckPrice.Location = new System.Drawing.Point(6, 8);
 			this._buttonDeckPrice.Margin = new System.Windows.Forms.Padding(6, 3, 0, 3);
 			this._buttonDeckPrice.Name = "_buttonDeckPrice";
@@ -139,8 +135,6 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonApply.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonApply.AutoCheck = false;
-			this._buttonApply.BackColor = System.Drawing.Color.Transparent;
-			this._buttonApply.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonApply.Location = new System.Drawing.Point(435, 0);
 			this._buttonApply.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonApply.Name = "_buttonApply";
@@ -169,8 +163,6 @@ namespace Mtgdb.Gui
 			// _buttonAddCol
 			// 
 			this._buttonAddCol.AutoCheck = false;
-			this._buttonAddCol.BackColor = System.Drawing.Color.Transparent;
-			this._buttonAddCol.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonAddCol.Location = new System.Drawing.Point(197, 0);
 			this._buttonAddCol.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddCol.Name = "_buttonAddCol";
@@ -300,8 +292,6 @@ namespace Mtgdb.Gui
 			// _buttonArgumentTotal
 			// 
 			this._buttonArgumentTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonArgumentTotal.BackColor = System.Drawing.Color.Transparent;
-			this._buttonArgumentTotal.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonArgumentTotal.ImageScale = 0.5F;
 			this._buttonArgumentTotal.Location = new System.Drawing.Point(3, 0);
 			this._buttonArgumentTotal.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -313,8 +303,6 @@ namespace Mtgdb.Gui
 			// _buttonSeriesTotal
 			// 
 			this._buttonSeriesTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonSeriesTotal.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSeriesTotal.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonSeriesTotal.ImageScale = 0.5F;
 			this._buttonSeriesTotal.Location = new System.Drawing.Point(102, 0);
 			this._buttonSeriesTotal.Margin = new System.Windows.Forms.Padding(0);
@@ -326,8 +314,6 @@ namespace Mtgdb.Gui
 			// _buttonExplainTotal
 			// 
 			this._buttonExplainTotal.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonExplainTotal.BackColor = System.Drawing.Color.Transparent;
-			this._buttonExplainTotal.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonExplainTotal.ImageScale = 0.5F;
 			this._buttonExplainTotal.Location = new System.Drawing.Point(185, 0);
 			this._buttonExplainTotal.Margin = new System.Windows.Forms.Padding(0);
@@ -339,8 +325,6 @@ namespace Mtgdb.Gui
 			// _buttonFilterBySearchResult
 			// 
 			this._buttonFilterBySearchResult.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonFilterBySearchResult.BackColor = System.Drawing.Color.Transparent;
-			this._buttonFilterBySearchResult.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonFilterBySearchResult.ImageScale = 0.5F;
 			this._buttonFilterBySearchResult.Location = new System.Drawing.Point(289, 0);
 			this._buttonFilterBySearchResult.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
@@ -352,8 +336,6 @@ namespace Mtgdb.Gui
 			// _buttonAddRow
 			// 
 			this._buttonAddRow.AutoCheck = false;
-			this._buttonAddRow.BackColor = System.Drawing.Color.Transparent;
-			this._buttonAddRow.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonAddRow.Location = new System.Drawing.Point(281, 0);
 			this._buttonAddRow.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddRow.Name = "_buttonAddRow";
@@ -370,8 +352,6 @@ namespace Mtgdb.Gui
 			// _buttonAddSum
 			// 
 			this._buttonAddSum.AutoCheck = false;
-			this._buttonAddSum.BackColor = System.Drawing.Color.Transparent;
-			this._buttonAddSum.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonAddSum.Location = new System.Drawing.Point(349, 0);
 			this._buttonAddSum.Margin = new System.Windows.Forms.Padding(16, 0, 0, 0);
 			this._buttonAddSum.Name = "_buttonAddSum";
@@ -551,8 +531,6 @@ namespace Mtgdb.Gui
 			// _buttonCollectionPrice
 			// 
 			this._buttonCollectionPrice.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonCollectionPrice.BackColor = System.Drawing.Color.Transparent;
-			this._buttonCollectionPrice.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonCollectionPrice.Location = new System.Drawing.Point(56, 8);
 			this._buttonCollectionPrice.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this._buttonCollectionPrice.Name = "_buttonCollectionPrice";
@@ -563,8 +541,6 @@ namespace Mtgdb.Gui
 			// _buttonManaCurveManacost
 			// 
 			this._buttonManaCurveManacost.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonManaCurveManacost.BackColor = System.Drawing.Color.Transparent;
-			this._buttonManaCurveManacost.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonManaCurveManacost.Location = new System.Drawing.Point(432, 11);
 			this._buttonManaCurveManacost.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonManaCurveManacost.Name = "_buttonManaCurveManacost";
@@ -575,8 +551,6 @@ namespace Mtgdb.Gui
 			// _buttonCollectionColors
 			// 
 			this._buttonCollectionColors.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonCollectionColors.BackColor = System.Drawing.Color.Transparent;
-			this._buttonCollectionColors.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonCollectionColors.Location = new System.Drawing.Point(584, 11);
 			this._buttonCollectionColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonCollectionColors.Name = "_buttonCollectionColors";
@@ -587,8 +561,6 @@ namespace Mtgdb.Gui
 			// _buttonDeckColors
 			// 
 			this._buttonDeckColors.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._buttonDeckColors.BackColor = System.Drawing.Color.Transparent;
-			this._buttonDeckColors.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonDeckColors.Location = new System.Drawing.Point(508, 11);
 			this._buttonDeckColors.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonDeckColors.Name = "_buttonDeckColors";
@@ -651,13 +623,11 @@ namespace Mtgdb.Gui
 			// _dropdownMruFiles
 			// 
 			this._dropdownMruFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._dropdownMruFiles.BackColor = System.Drawing.Color.Transparent;
-			this._dropdownMruFiles.ForeColor = System.Drawing.SystemColors.ControlText;
+			this._dropdownMruFiles.ForeColor = System.Drawing.Color.Transparent;
 			this._dropdownMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
 			this._dropdownMruFiles.ImageScale = 0.5F;
 			this._dropdownMruFiles.Location = new System.Drawing.Point(51, 13);
 			this._dropdownMruFiles.Margin = new System.Windows.Forms.Padding(0, 13, 0, 13);
-			this._dropdownMruFiles.MenuControl = null;
 			this._dropdownMruFiles.Name = "_dropdownMruFiles";
 			this._dropdownMruFiles.Size = new System.Drawing.Size(24, 24);
 			this._dropdownMruFiles.TabIndex = 0;
@@ -666,8 +636,6 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonLoad.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonLoad.AutoCheck = false;
-			this._buttonLoad.BackColor = System.Drawing.Color.Transparent;
-			this._buttonLoad.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
 			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
@@ -679,8 +647,6 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSave.AutoCheck = false;
-			this._buttonSave.BackColor = System.Drawing.Color.Transparent;
-			this._buttonSave.ForeColor = System.Drawing.SystemColors.ControlText;
 			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSave.Location = new System.Drawing.Point(123, 13);
 			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);

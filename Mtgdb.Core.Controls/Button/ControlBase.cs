@@ -24,7 +24,7 @@ namespace Mtgdb.Controls
 
 			updateDisabledBorder();
 
-			Paint += HandlePaint;
+			Paint += paint;
 			EnabledChanged += enabledChanged;
 			ColorSchemeController.SystemColorsChanged += HandleSystemColorsChanged;
 			Layout += layout;
@@ -64,7 +64,7 @@ namespace Mtgdb.Controls
 		protected override void Dispose(bool disposing)
 		{
 			Layout -= layout;
-			Paint -= HandlePaint;
+			Paint -= paint;
 			EnabledChanged -= enabledChanged;
 			ColorSchemeController.SystemColorsChanged -= HandleSystemColorsChanged;
 
@@ -78,49 +78,17 @@ namespace Mtgdb.Controls
 			Invalidate();
 		}
 
-		protected virtual void HandlePaint(object sender, PaintEventArgs e)
+		private void paint(object sender, PaintEventArgs e) =>
+			HandlePaint(e.Graphics);
+
+		protected virtual void HandlePaint(Graphics g)
 		{
-			var (imageSize, textSize) = measure(e.Graphics);
+			var (imageSize, textSize) = measure(g);
 			var (textRect, imageRect) = layout();
 
 			paintText();
 			paintImage();
 			paintBorder();
-
-			void paintImage()
-			{
-				var image = SelectImage();
-				if (image != null)
-					e.Graphics.DrawImage(image, imageRect);
-			}
-
-			void paintText()
-			{
-				if (string.IsNullOrEmpty(Text))
-					return;
-
-				var foreColor = Enabled ? ForeColor : DisabledForeColor;
-				var format = TextFormat;
-
-				switch (TextAlign)
-				{
-					case StringAlignment.Far:
-						format |= TextFormatFlags.Right;
-						break;
-
-					case StringAlignment.Center:
-						format |= TextFormatFlags.HorizontalCenter;
-						break;
-				}
-
-				e.Graphics.DrawText(Text, Font, textRect, foreColor, format);
-			}
-
-			void paintBorder()
-			{
-				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
-				this.PaintBorder(e.Graphics, VisibleBorders, borderColor, BorderStyle);
-			}
 
 			(Rectangle textRect, Rectangle imageRect) layout()
 			{
@@ -202,7 +170,43 @@ namespace Mtgdb.Controls
 				int centerTop(Size itemSize) =>
 					containerPadding.Top + (containerSize.Height - containerPadding.Vertical - itemSize.Height) / 2;
 			}
+
+			void paintText()
+			{
+				if (string.IsNullOrEmpty(Text))
+					return;
+
+				var format = TextFormat;
+
+				switch (TextAlign)
+				{
+					case StringAlignment.Far:
+						format |= TextFormatFlags.Right;
+						break;
+
+					case StringAlignment.Center:
+						format |= TextFormatFlags.HorizontalCenter;
+						break;
+				}
+
+				g.DrawText(Text, Font, textRect, ActualForeColor, format);
+			}
+
+			void paintImage()
+			{
+				var image = SelectImage();
+				if (image != null)
+					g.DrawImage(image, imageRect);
+			}
+
+			void paintBorder()
+			{
+				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
+				this.PaintBorder(g, VisibleBorders, borderColor, BorderStyle);
+			}
 		}
+
+		public Color ActualForeColor => Enabled ? ForeColor : DisabledForeColor;
 
 		protected virtual Bitmap SelectImage()
 		{

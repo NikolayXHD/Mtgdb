@@ -81,6 +81,9 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
+		protected override void PaintDropDownTriangle(Graphics g)
+		{
+		}
 
 
 		private void gotFocus(object sender, EventArgs e) =>

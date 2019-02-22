@@ -23,9 +23,9 @@ namespace Mtgdb.Controls
 			KeyDown += keyDown;
 		}
 
-		protected override void HandlePaint(object sender, PaintEventArgs e)
+		protected override void HandlePaint(Graphics g)
 		{
-			base.HandlePaint(sender, e);
+			PaintContent(g);
 			paintFocusRectangle();
 
 			void paintFocusRectangle()
@@ -38,9 +38,12 @@ namespace Mtgdb.Controls
 				rectangle.Inflate(-(width - 1), -(width - 1));
 				var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
 
-				e.Graphics.DrawRectangle(pen, rectangle);
+				g.DrawRectangle(pen, rectangle);
 			}
 		}
+
+		protected virtual void PaintContent(Graphics g) =>
+			base.HandlePaint(g);
 
 		protected override Bitmap SelectImage()
 		{
@@ -342,7 +345,7 @@ namespace Mtgdb.Controls
 		}
 
 		private bool _mouseOver;
-		private bool MouseOver
+		protected bool MouseOver
 		{
 			get => _mouseOver;
 			set

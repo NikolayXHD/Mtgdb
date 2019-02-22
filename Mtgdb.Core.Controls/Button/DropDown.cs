@@ -36,6 +36,10 @@ namespace Mtgdb.Controls
 			return size;
 		}
 
+		protected override void PaintDropDownTriangle(Graphics g)
+		{
+		}
+
 		private void updateSelectedText()
 		{
 			if (SelectedIndex == -1)
