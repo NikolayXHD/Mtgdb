@@ -111,6 +111,7 @@
     </Compile>
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="Dpi\BorderedPanelScaler.cs" />
+    <Compile Include="Dpi\CheckBoxScaler.cs" />
     <Compile Include="Dpi\ControlBaseScaler.cs" />
     <Compile Include="Dpi\CustomBorderFormScaler.cs" />
     <Compile Include="Dpi\Dpi.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="LayoutControlBitmaps.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
-    <Compile Include="Button\PopupSubsystem.cs" />
+    <Compile Include="MessageFilter.cs" />
     <Compile Include="Button\Popup.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -223,7 +224,6 @@
     <Compile Include="ShadowedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Tooltip\RichTextboxSelectionSubsystem.cs" />
     <Compile Include="Tooltip\StaticTooltipSettings.cs" />
     <Compile Include="Tooltip\TooltipController.cs" />
     <Compile Include="Tooltip\TooltipForm.cs">

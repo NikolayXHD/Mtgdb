@@ -8,13 +8,12 @@ using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Dal;
 using Mtgdb.Downloader;
-using Mtgdb.Gui.Properties;
 using Mtgdb.Ui;
 using Ninject;
 
 namespace Mtgdb.Gui
 {
-	public partial class FormRoot : CustomBorderForm, IMessageFilter
+	public partial class FormRoot : CustomBorderForm
 	{
 		public FormRoot()
 		{
@@ -24,21 +23,6 @@ namespace Mtgdb.Gui
 
 			getLanguageMenuItems().Append(_dropdownLanguage).ForEach(
 				b => b.Font = new Font("Consolas", 9f, b.Font.Style));
-
-			new Dictionary<string, Bitmap>(Str.Comparer)
-			{
-				{ "cn", Resources.cn },
-				{ "jp", Resources.jp },
-				{ "kr", Resources.kr },
-				{ "tw", Resources.tw },
-				{ "es", Resources.es },
-				{ "fr", Resources.fr },
-				{ "it", Resources.it },
-				{ "pt", Resources.pt },
-				{ "de", Resources.de },
-				{ "en", Resources.en },
-				{ "ru", Resources.ru }
-			};
 
 			_deckButtons = new[]
 			{
@@ -116,6 +100,7 @@ namespace Mtgdb.Gui
 
 			_app = app;
 			_appSourceConfig = appSourceConfig;
+			_uiConfigRepository = uiConfigRepository;
 			_repo = repo;
 			_serialization = serialization;
 			_colorSchemeEditor = colorSchemeEditor;
@@ -143,6 +128,7 @@ namespace Mtgdb.Gui
 			_tabs.DragOver += tabsDragOver;
 			_tabs.MouseMove += tabMouseMove;
 
+			MessageFilter.Instance.GlobalMouseMove += globalMouseMove;
 			FormClosing += formClosing;
 
 			_newsService.NewsFetched += newsFetched;
@@ -176,25 +162,14 @@ namespace Mtgdb.Gui
 				_menuUiSuggestDownloadMissingImages,
 				_menuUiImagesCacheCapacity,
 				_menuUiUndoDepth,
+				_checkboxTopPanel,
+				_checkboxRightPanel,
+				_checkboxSearchBar,
 				uiConfigRepository));
 
-			_dropdownLanguage.MenuControl = _menuLanguage;
-
-			_dropdownDonate.MenuControl = _menuDonate;
-			_dropdownDonate.MenuAlignment = HorizontalAlignment.Center;
-			
-			_dropdownOpenDeck.MenuControl = _menuOpen;
 			_dropdownOpenDeck.BeforeShow = () => setMenuMode(_dropdownOpenDeck);
-
-			_dropdownSaveDeck.MenuControl = _menuOpen;
 			_dropdownSaveDeck.BeforeShow = () => setMenuMode(_dropdownSaveDeck);
-
-			_dropdownPaste.MenuControl = _menuPaste;
-			
-			_dropdownColorScheme.MenuControl = _menuColors;
 			_dropdownColorScheme.BeforeShow = updateMenuColors;
-
-			_dropdownConfig.MenuControl = _menuConfig;
 		}
 
 		private void updateFormBorderColor()
@@ -208,7 +183,6 @@ namespace Mtgdb.Gui
 			updateDownloadButton();
 			updateDeckButtons();
 
-			Application.AddMessageFilter(this);
 			CardSuggestModel.StartSuggestThread();
 			DeckSuggestModel.StartSuggestThread();
 
@@ -252,7 +226,7 @@ namespace Mtgdb.Gui
 
 		private void tabCreated(TabHeaderControl sender, int i)
 		{
-			var form = getTab(i);
+			var form = GetTab(i);
 
 			bool creatingNewForm = form == null;
 
@@ -265,6 +239,8 @@ namespace Mtgdb.Gui
 			{
 				string historyFile = App.GetHistoryFile(Id, i);
 				form.LoadHistory(historyFile);
+				form.SetPanelVisibility(_uiConfigRepository.Config);
+
 				_tabs.TabIds[i] = form;
 			}
 		}
@@ -327,7 +303,7 @@ namespace Mtgdb.Gui
 
 		private void tabClosing(object sender, int i)
 		{
-			var formMain = getTab(i);
+			var formMain = GetTab(i);
 
 			// implicit connection: move_tab_between_forms
 			if (formMain == null)
@@ -360,18 +336,18 @@ namespace Mtgdb.Gui
 
 			for (int i = 0; i < _tabs.Count; i++)
 			{
-				var formMain = getTab(i);
+				var formMain = GetTab(i);
 				formMain.SaveHistory(App.GetHistoryFile(Id, i));
 			}
 
 			Enumerable.Range(0, _tabs.Count)
-				.Select(getTab)
+				.Select(GetTab)
 				.ToArray()
 				.ForEach(dispose);
 
 			_app.RemoveForm(this);
 
-			Application.RemoveMessageFilter(this);
+			MessageFilter.Instance.GlobalMouseMove -= globalMouseMove;
 		}
 
 
@@ -448,19 +424,7 @@ namespace Mtgdb.Gui
 				AddTab();
 		}
 
-		public bool PreFilterMessage(ref Message m)
-		{
-			if (Disposing || IsDisposed)
-				return false;
-
-			// WM_MOUSEMOVE
-			if (m.Msg == 0x0200)
-				mouseMoved();
-
-			return false;
-		}
-
-		private void mouseMoved()
+		private void globalMouseMove(object s, EventArgs e)
 		{
 			if (!_tabs.IsUnderMouse())
 				return;
@@ -485,7 +449,7 @@ namespace Mtgdb.Gui
 			dragSourceTabs.AbortDrag();
 			dragSourceTabs.Capture = false;
 
-			var formMain = tabDraggingForm.getTab(draggedIndex);
+			var formMain = tabDraggingForm.GetTab(draggedIndex);
 
 			// implicit connection: move_tab_between_forms
 			dragSourceTabs.TabIds[draggedIndex] = null;
@@ -500,14 +464,6 @@ namespace Mtgdb.Gui
 			_tabs.Capture = true;
 			_tabs.BeginDrag(TabsCount - 1);
 		}
-
-		public bool ShowFilterPanels
-		{
-			get => _buttonShowFilterPanels.Checked;
-			set => _buttonShowFilterPanels.Checked = value;
-		}
-
-
 
 		public bool HideTooltips
 		{
@@ -569,7 +525,7 @@ namespace Mtgdb.Gui
 		{
 			void onTabCreated(TabHeaderControl c, int i)
 			{
-				var form = getTab(i);
+				var form = GetTab(i);
 				form.ScheduleOpeningDeck(deck);
 			}
 
@@ -584,7 +540,7 @@ namespace Mtgdb.Gui
 
 		private FormMain HoveredTab => (FormMain)_tabs.HoveredTabId;
 
-		private FormMain getTab(int i) => (FormMain) _tabs.TabIds[i];
+		public FormMain GetTab(int i) => (FormMain) _tabs.TabIds[i];
 
 		public int TabsCount => _tabs.Count;
 
@@ -651,6 +607,7 @@ namespace Mtgdb.Gui
 		private readonly NewsService _newsService;
 		private readonly App _app;
 		private readonly AppSourceConfig _appSourceConfig;
+		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 		private readonly ColorSchemeEditor _colorSchemeEditor;

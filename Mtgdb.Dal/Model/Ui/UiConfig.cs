@@ -6,7 +6,7 @@ namespace Mtgdb.Dal
 	{
 		[DefaultValue(DefaultUiScalePercent)]
 		public int UiScalePercent { get; set; } = DefaultUiScalePercent;
-		
+
 		[DefaultValue(true)]
 		public bool DisplaySmallImages { get; set; } = true;
 
@@ -18,6 +18,15 @@ namespace Mtgdb.Dal
 
 		[DefaultValue(DefaultUndoDepth)]
 		public int UndoDepth { get; set; } = DefaultUndoDepth;
+
+		[DefaultValue(true)]
+		public bool ShowTopPanel { get; set; } = true;
+
+		[DefaultValue(true)]
+		public bool ShowRightPanel { get; set; } = true;
+
+		[DefaultValue(true)]
+		public bool ShowSearchBar { get; set; } = true;
 
 		public const int DefaultUiScalePercent = 100;
 		private const int DefaultCacheCapacity = 100;

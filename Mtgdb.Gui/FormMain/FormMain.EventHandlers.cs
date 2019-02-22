@@ -568,27 +568,15 @@ namespace Mtgdb.Gui
 			historyUpdate();
 		}
 
-		private void showFilterPanelsChanged()
+		public void SetPanelVisibility(UiConfig config)
 		{
-			if (!_isTabSelected)
-				return;
+			_layoutRight.Visible = config.ShowRightPanel;
 
-			if (restoringSettings())
-				return;
+			_panelFilters.Visible = config.ShowTopPanel;
 
-			applyShowFilterPanels();
-
-			historyUpdate();
-		}
-
-		private void applyShowFilterPanels()
-		{
-			_layoutRight.Visible =
-				_panelFilters.Visible =
-					_panelMenu.Visible =
-						_buttonShowScrollCards.Visible =
-							_labelStatusScrollCards.Visible =
-						_formRoot.ShowFilterPanels;
+			_panelMenu.Visible =
+				_buttonShowScrollCards.Visible =
+					_labelStatusScrollCards.Visible = config.ShowSearchBar;
 		}
 
 		private void languageChanged()

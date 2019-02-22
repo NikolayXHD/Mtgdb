@@ -70,11 +70,12 @@ namespace Mtgdb.Controls
 			return base.GetBgColor();
 		}
 
-		protected override void HandleSystemColorsChanged(object s, EventArgs e)
+		protected override void HandleSystemColorsChanged()
 		{
-			base.HandleSystemColorsChanged(s, e);
+			base.HandleSystemColorsChanged();
 			updateHighlightColors();
-			updateImages(true, true, true, true, true, true, true);
+			updateImages();
+			Invalidate();
 		}
 
 		protected override void Dispose(bool disposing)

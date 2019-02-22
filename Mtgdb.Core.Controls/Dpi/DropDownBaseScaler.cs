@@ -7,32 +7,33 @@ namespace Mtgdb.Controls
 	{
 		public static void ScaleDpi(this DropDownBase dropDown)
 		{
-			ButtonBaseScaler.ScaleDpi(dropDown);
-
-			dropDown.MenuItemCreated += menuItemsCreated;
-			dropDown.Disposed += disposed;
+			ControlScaler.ScaleDpi(dropDown);
+			dropDown.ScaleDpiImages();
 
 			dropDown.MenuItems.ForEach(scale);
 
-			void menuItemsCreated(object s, ControlEventArgs e) =>
-				scale((ButtonBase) e.Control);
+			dropDown.MenuItemCreated += menuItemCreated;
+			dropDown.Disposed += disposed;
+			Dpi.AfterChanged += afterDpiChange;
 
-			void disposed(object s, EventArgs e)
-			{
-				dropDown.Disposed -= disposed;
-				dropDown.MenuItemCreated -= menuItemsCreated;
-			}
-
-			_menuSizeScaler.Setup(dropDown);
+			void menuItemCreated(object s, MenuItemEventArgs e) =>
+				scale(e.MenuItem);
 
 			void scale(ButtonBase b)
 			{
 				b.ScaleDpiFont();
 				b.ScaleDpiPadding();
 			}
-		}
 
-		private static readonly DpiScaler<DropDownBase> _menuSizeScaler =
-			new DpiScaler<DropDownBase>(d => d.UpdateMenuSize());
+			void afterDpiChange() =>
+				dropDown.UpdateMenuSize();
+
+			void disposed(object s, EventArgs e)
+			{
+				dropDown.Disposed -= disposed;
+				dropDown.MenuItemCreated -= menuItemCreated;
+				Dpi.AfterChanged -= afterDpiChange;
+			}
+		}
 	}
 }

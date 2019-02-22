@@ -26,7 +26,8 @@ namespace Mtgdb.Controls
 
 			Paint += HandlePaint;
 			EnabledChanged += enabledChanged;
-			SystemColorsChanged += HandleSystemColorsChanged;
+			ColorSchemeController.SystemColorsChanged += HandleSystemColorsChanged;
+			Layout += layout;
 		}
 
 		public Size MeasureContent()
@@ -62,15 +63,20 @@ namespace Mtgdb.Controls
 
 		protected override void Dispose(bool disposing)
 		{
+			Layout -= layout;
 			Paint -= HandlePaint;
 			EnabledChanged -= enabledChanged;
-			SystemColorsChanged -= HandleSystemColorsChanged;
+			ColorSchemeController.SystemColorsChanged -= HandleSystemColorsChanged;
 
 			base.Dispose(disposing);
 		}
 
-		protected virtual void HandleSystemColorsChanged(object s, EventArgs e) =>
+		protected virtual void HandleSystemColorsChanged()
+		{
 			updateDisabledBorder();
+			UpdateImages();
+			Invalidate();
+		}
 
 		protected virtual void HandlePaint(object sender, PaintEventArgs e)
 		{
@@ -266,7 +272,11 @@ namespace Mtgdb.Controls
 		private void enabledChanged(object sender, EventArgs e) =>
 			Invalidate();
 
-
+		private void layout(object sender, LayoutEventArgs e)
+		{
+			if (AutoSize)
+				Size = MeasureContent();
+		}
 
 		protected override Padding DefaultPadding => new Padding(4);
 

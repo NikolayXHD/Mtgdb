@@ -6,9 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-// ReSharper disable IdentifierTypo
-// ReSharper disable UnusedMember.Local
-// ReSharper disable InconsistentNaming
 namespace Mtgdb.Controls
 {
 	public static class ShowSelectedInExplorer
@@ -17,10 +14,10 @@ namespace Mtgdb.Controls
 		{
 			if (path == null) throw new ArgumentNullException(nameof(path));
 
-			var pidl = PathToAbsolutePIDL(path);
+			var pidl = pathToAbsolutePidl(path);
 			try
 			{
-				SHOpenFolderAndSelectItems(pidl, null, edit);
+				shOpenFolderAndSelectItems(pidl, null, edit);
 			}
 			finally
 			{
@@ -33,17 +30,17 @@ namespace Mtgdb.Controls
 			if (filenames == null) throw new ArgumentNullException(nameof(filenames));
 			if (filenames.Count == 0) return;
 
-			var parentPidl = PathToAbsolutePIDL(parentDirectory);
+			var parentPidl = pathToAbsolutePidl(parentDirectory);
 			try
 			{
-				var parent = PIDLToShellFolder(parentPidl);
+				var parent = pidlToShellFolder(parentPidl);
 				var filesPidl = filenames
-					.Select(filename => GetShellFolderChildrenRelativePIDL(parent, filename))
+					.Select(filename => getShellFolderChildrenRelativePidl(parent, filename))
 					.ToArray();
 
 				try
 				{
-					SHOpenFolderAndSelectItems(parentPidl, filesPidl, false);
+					shOpenFolderAndSelectItems(parentPidl, filesPidl, false);
 				}
 				finally
 				{
@@ -68,7 +65,7 @@ namespace Mtgdb.Controls
 		{
 			if (paths == null) throw new ArgumentNullException(nameof(paths));
 
-			FilesOrFolders(PathToFileSystemInfo(paths));
+			FilesOrFolders(pathToFileSystemInfo(paths));
 		}
 
 		public static void FilesOrFolders(IEnumerable<FileSystemInfo> paths)
@@ -88,7 +85,7 @@ namespace Mtgdb.Controls
 
 
 
-		private static IntPtr GetShellFolderChildrenRelativePIDL(IShellFolder parentFolder, string displayName)
+		private static IntPtr getShellFolderChildrenRelativePidl(IShellFolder parentFolder, string displayName)
 		{
 			uint pdwAttributes = 0;
 			parentFolder.ParseDisplayName(IntPtr.Zero, null, displayName, out uint _, out var ppidl, ref pdwAttributes);
@@ -96,32 +93,32 @@ namespace Mtgdb.Controls
 			return ppidl;
 		}
 
-		private static IntPtr PathToAbsolutePIDL(string path)
+		private static IntPtr pathToAbsolutePidl(string path)
 		{
 			var desktopFolder = NativeMethods.SHGetDesktopFolder();
-			return GetShellFolderChildrenRelativePIDL(desktopFolder, path);
+			return getShellFolderChildrenRelativePidl(desktopFolder, path);
 		}
 
 		private static Guid IID_IShellFolder = typeof(IShellFolder).GUID;
 
-		private static IShellFolder PIDLToShellFolder(IShellFolder parent, IntPtr pidl)
+		private static IShellFolder pidlToShellFolder(IShellFolder parent, IntPtr pidl)
 		{
 			var result = parent.BindToObject(pidl, null, ref IID_IShellFolder, out var folder);
 			Marshal.ThrowExceptionForHR(result);
 			return folder;
 		}
 
-		private static IShellFolder PIDLToShellFolder(IntPtr pidl)
+		private static IShellFolder pidlToShellFolder(IntPtr pidl)
 		{
-			return PIDLToShellFolder(NativeMethods.SHGetDesktopFolder(), pidl);
+			return pidlToShellFolder(NativeMethods.SHGetDesktopFolder(), pidl);
 		}
 
-		private static void SHOpenFolderAndSelectItems(IntPtr pidlFolder, IntPtr[] apidl, bool edit)
+		private static void shOpenFolderAndSelectItems(IntPtr pidlFolder, IntPtr[] apidl, bool edit)
 		{
 			NativeMethods.SHOpenFolderAndSelectItems(pidlFolder, apidl, edit ? 1 : 0);
 		}
 
-		private static IEnumerable<FileSystemInfo> PathToFileSystemInfo(IEnumerable<string> paths)
+		private static IEnumerable<FileSystemInfo> pathToFileSystemInfo(IEnumerable<string> paths)
 		{
 			foreach (var path in paths)
 			{

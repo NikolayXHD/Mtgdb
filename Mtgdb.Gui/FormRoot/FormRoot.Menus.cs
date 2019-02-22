@@ -14,9 +14,6 @@ namespace Mtgdb.Gui
 			_buttonTooltips.Checked = true;
 			_buttonTooltips.CheckedChanged += tooltipsChecked;
 
-			_buttonShowFilterPanels.Checked = true;
-			_buttonShowFilterPanels.CheckedChanged += filterPanelsChecked;
-
 			_buttonUpdate.Enabled = false;
 			_buttonUpdate.Pressed += updateClick;
 
@@ -99,9 +96,6 @@ namespace Mtgdb.Gui
 
 		private static void configClick(object sender, EventArgs e) =>
 			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
-
-		private void filterPanelsChecked(object sender, EventArgs e) =>
-			ShowFilterPanelsChanged?.Invoke();
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
@@ -367,7 +361,5 @@ namespace Mtgdb.Gui
 
 		private SaveLoadMenuMode SaveLoadMenuMode =>
 			_saveLoadMenuModes.First(_ => _.IsCurrent);
-
-		public event Action ShowFilterPanelsChanged;
 	}
 }

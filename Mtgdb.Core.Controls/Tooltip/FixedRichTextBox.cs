@@ -14,7 +14,80 @@ namespace Mtgdb.Controls
 				AutoWordSelection = true;
 				AutoWordSelection = false;
 			}
+
+			SelectionEnabled = true;
+
+			MouseDown += text_MouseDown;
+			MouseUp += text_MouseUp;
+			MouseMove += text_MouseMove;
 		}
+
+		protected override void Dispose(bool disposing)
+		{
+			MouseDown -= text_MouseDown;
+			MouseUp -= text_MouseUp;
+			MouseMove -= text_MouseMove;
+
+			base.Dispose(disposing);
+		}
+
+		private void text_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (!SelectionEnabled)
+				return;
+
+			if (e.Button == MouseButtons.Left)
+			{
+				int current = this.GetTrueIndexPositionFromPoint(e.Location);
+
+				if (current == _selectionStart)
+					_selectionManual = true;
+			}
+		}
+
+		private void text_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (!SelectionEnabled)
+				return;
+
+			_selectionStart = -1;
+			_selectionManual = false;
+		}
+
+		private void text_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (!SelectionEnabled)
+				return;
+
+			if (_selectionManual)
+			{
+				var current = this.GetTrueIndexPositionFromPoint(e.Location);
+
+				if (current != _selectionStart)
+				{
+					int start = Math.Min(current, _selectionStart);
+
+					SelectionStart = start;
+					SelectionLength = Math.Abs(current - _selectionStart);
+				}
+			}
+			else if (!Focused)
+			{
+				SelectionStart = _selectionStart =
+					this.GetTrueIndexPositionFromPoint(e.Location);
+			}
+		}
+
+		public void ResetSelection()
+		{
+			_selectionStart = -1;
+			_selectionManual = false;
+		}
+
+		public bool SelectionEnabled { get; set; }
+
+		private int _selectionStart;
+		private bool _selectionManual;
 
 		protected override void WndProc(ref Message m)
 		{
@@ -52,8 +125,6 @@ namespace Mtgdb.Controls
 		private static readonly Regex _leftDelimiterRegex = new Regex(@"\W", RegexOptions.RightToLeft);
 		private static readonly Regex _rightDelimiterRegex = new Regex(@"\W");
 
-		// ReSharper disable once InconsistentNaming
-		// ReSharper disable once IdentifierTypo
 		private const int WM_LBUTTONDBLCLK = 0x0203;
 	}
 }

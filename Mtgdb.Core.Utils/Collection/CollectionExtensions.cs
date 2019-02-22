@@ -192,17 +192,23 @@ namespace Mtgdb
 			return result;
 		}
 
-		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+		public static void ForEach<T>(this IEnumerable<T> source, params Action<T>[] action)
 		{
 			foreach (var element in source)
-				action(element);
+				foreach (var a in action)
+					a(element);
 		}
 
-		public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
+		public static void ForEach<T>(this IEnumerable<T> source, params Action<T, int>[] action)
 		{
 			int i = 0;
 			foreach (var element in source)
-				action(element, i++);
+			{
+				foreach (var a in action)
+					a(element, i);
+
+				i++;
+			}
 		}
 
 		public static void Add<TKey, TValue>(this IDictionary<TKey, List<TValue>> multiDict, TKey key, TValue val)

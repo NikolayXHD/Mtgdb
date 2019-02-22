@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 
@@ -26,8 +25,22 @@ namespace Mtgdb.Gui
 					_buttonShowProhibit,
 					_buttonHideDeck
 				}
-				.Concat(_menuLegalityCheckBoxes)
-				.ForEach(ButtonBaseScaler.ScaleDpi);
+				.ForEach(button =>
+				{
+					button.ScaleDpiImages();
+					button.ScaleDpi();
+				});
+
+			new[]
+			{
+				_buttonLegalityAllowLegal,
+				_buttonLegalityAllowRestricted,
+				_buttonLegalityAllowBanned,
+				_buttonLegalityAllowFuture
+			}.ForEach(b =>
+			{
+				b.ScaleDpi();
+			});
 
 			_deckEditorSubsystem.Scale();
 			_menuSearchExamples.ScaleDpi();
@@ -66,7 +79,9 @@ namespace Mtgdb.Gui
 			_panelIconStatusSort.ScaleDpi(transformIcon);
 
 			_deckListControl.Scale();
-			_popupSearchExamples.ScaleDpi();
+
+			_popupSearchExamples.ScaleDpiImages();
+			_popupSearchExamples.ScaleDpiSize();
 
 			_dropdownLegality.ScaleDpi();
 			_searchBar.ScaleDpi();

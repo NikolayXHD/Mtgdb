@@ -71,10 +71,10 @@ namespace Mtgdb.Controls
 				Menu.Controls.Add(CreateMenuItem(text, i));
 			}
 
-			UpdateMenuSize();
-			updateItemBorders();
-
 			MenuItemsCreated?.Invoke(this, EventArgs.Empty);
+
+			updateItemBorders();
+			UpdateMenuSize();
 
 			Menu.ResumeLayout(false);
 			Menu.PerformLayout();
@@ -155,6 +155,7 @@ namespace Mtgdb.Controls
 				Text = value,
 				AutoCheck = false,
 				TextPosition = StringAlignment.Near,
+				TextAlign = StringAlignment.Near,
 				Margin = new Padding(0),
 				Padding = new Padding(2),
 				ForeColor = SystemColors.WindowText,
@@ -173,7 +174,7 @@ namespace Mtgdb.Controls
 				result.KeyUp -= keyUp;
 			}
 
-			MenuItemCreated?.Invoke(this, new ControlEventArgs(result));
+			MenuItemCreated?.Invoke(this, new MenuItemEventArgs(result));
 			return result;
 		}
 
@@ -182,7 +183,7 @@ namespace Mtgdb.Controls
 			int index = MenuItems.IndexOf(sender);
 			SelectedIndex = index;
 			MenuItemPressed?.Invoke(this, new MenuItemEventArgs(MenuItems[index]));
-			
+
 			if (CloseMenuOnClick)
 				Hide(focus: true);
 		}
@@ -299,9 +300,9 @@ namespace Mtgdb.Controls
 
 
 		public event EventHandler MenuItemsCreated;
-		public event ControlEventHandler MenuItemCreated;
-		public event EventHandler SelectedIndexChanged;
+		public event EventHandler<MenuItemEventArgs> MenuItemCreated;
 		public event EventHandler<MenuItemEventArgs> MenuItemPressed;
+		public event EventHandler SelectedIndexChanged;
 		public event KeyEventHandler MenuItemKeyUp;
 
 		protected readonly FlowLayoutPanel Menu;

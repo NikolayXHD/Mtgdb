@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
@@ -15,19 +14,25 @@ namespace Mtgdb.Controls
 		public const AnchorStyles AnchorAll =
 			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
-		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, System.Drawing.Point pt)
+		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, Point point)
 		{
-			Point wpt = new Point(pt.X, pt.Y);
-			int index = (int) SendMessage(new HandleRef(rtb, rtb.Handle), EmCharFromPos, 0, wpt);
-
-			return index;
+			// https://docs.microsoft.com/en-us/windows/desktop/controls/em-charfrompos
+			const int EM_CHARFROMPOS = 0x00D7;
+			var pointPtr = Marshal.AllocHGlobal(Marshal.SizeOf(point));
+			try
+			{
+				Marshal.StructureToPtr(point, pointPtr, fDeleteOld: false);
+				int index = (int) SendMessage(rtb.Handle, EM_CHARFROMPOS, IntPtr.Zero, pointPtr);
+				return index;
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(pointPtr);
+			}
 		}
 
-		[DllImport("User32.dll", EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
-		private static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, Point lParam);
-
 		[DllImport("user32.dll")]
-		public static extern IntPtr WindowFromPoint(System.Drawing.Point pt);
+		public static extern IntPtr WindowFromPoint(Point pt);
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -88,7 +93,7 @@ namespace Mtgdb.Controls
 
 
 
-		public static System.Drawing.Point PointToClient(this Control control, Control targetControl, System.Drawing.Point targetLocation)
+		public static Point PointToClient(this Control control, Control targetControl, Point targetLocation)
 		{
 			targetLocation = targetControl.PointToScreen(targetLocation);
 			targetLocation = control.PointToClient(targetLocation);
@@ -202,22 +207,33 @@ namespace Mtgdb.Controls
 			return false;
 		}
 
-		private const int EmCharFromPos = 0x00D7;
+		/// <summary>
+		/// Convert <see cref="Message.LParam"/> to <see cref="Point"/>
+		/// </summary>
+		public static Point ToPoint(this IntPtr lParam) =>
+			new Point(unchecked((int)lParam.ToInt64()));
 
-		[StructLayout(LayoutKind.Sequential)]
-		private class Point
+		public static IntPtr ToIntPtr(this Point point)
 		{
-			[UsedImplicitly]
-			public int x;
-
-			[UsedImplicitly]
-			public int y;
-
-			public Point(int x, int y)
+			unchecked
 			{
-				this.x = x;
-				this.y = y;
+				return ToIntPtr((short) point.X, (short) point.Y);
 			}
 		}
+
+		public static IntPtr ToIntPtr(short lowWord, short highWord) =>
+			new IntPtr(((highWord & 0x0000ffff) << 16) | (lowWord & 0x0000ffff));
+
+		public static short HighWord(this IntPtr number) =>
+			HighWord(number.ToInt64());
+
+		public static short LowWord(this IntPtr number) =>
+			LowWord(number.ToInt64());
+
+		public static short HighWord(this long number) =>
+			unchecked((short)(number >> 16));
+
+		public static short LowWord(this long number) =>
+			unchecked((short)(number & 0x0000ffff));
 	}
 }

@@ -4,9 +4,9 @@ namespace Mtgdb.Controls
 {
 	public static class ButtonBaseScaler
 	{
-		public static void ScaleDpi(this ButtonBase button)
+		public static void ScaleDpiImages(this ButtonBase button)
 		{
-			ControlBaseScaler.ScaleDpi(button);
+			ControlBaseScaler.ScaleDpiImages(button);
 
 			button.ImageChecked = button.ImageChecked?.ApplyColorScheme();
 			button.ImageUnchecked = button.ImageUnchecked?.ApplyColorScheme();

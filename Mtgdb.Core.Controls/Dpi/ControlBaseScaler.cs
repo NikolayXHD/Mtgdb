@@ -4,10 +4,9 @@ namespace Mtgdb.Controls
 {
 	public static class ControlBaseScaler
 	{
-		public static void ScaleDpi(this ControlBase control)
+		public static void ScaleDpiImages(this ControlBase control)
 		{
 			_imageScaleScaler.Setup(control);
-			ControlScaler.ScaleDpi(control);
 			control.Image = control.Image?.ApplyColorScheme();
 		}
 

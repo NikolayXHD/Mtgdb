@@ -16,7 +16,7 @@ namespace Mtgdb.Controls
 			PressDown += popupOwnerPressed;
 			KeyDown += popupOwnerKeyDown;
 			PreviewKeyDown += popupOwnerPreviewKeyDown;
-			PopupSubsystem.Instance.GlobalMouseDown += globalMouseDown;
+			MessageFilter.Instance.GlobalMouseDown += globalGlobalMouseDown;
 		}
 
 		public void OpenPopup() =>
@@ -253,7 +253,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void globalMouseDown(object sender, EventArgs e)
+		private void globalGlobalMouseDown(object sender, EventArgs e)
 		{
 			if (IsPopupOpen && !IsCursorInPopup() && !IsCursorInButton())
 				Hide(focus: false);
@@ -287,8 +287,6 @@ namespace Mtgdb.Controls
 
 		private void subscribeToEvents(Control menuControl)
 		{
-			menuControl.Visible = false;
-
 			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
 				subscribeToEvents(button);
 
@@ -298,11 +296,14 @@ namespace Mtgdb.Controls
 
 		private void unsubscribeFromEvents(Control menuControl)
 		{
-			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
-				unsubscribeFromEvents(button);
+			if (menuControl != null)
+			{
+				foreach (var button in menuControl.Controls.OfType<ButtonBase>())
+					unsubscribeFromEvents(button);
 
-			menuControl.ControlAdded -= controlAdded;
-			menuControl.ControlRemoved -= controlRemoved;
+				menuControl.ControlAdded -= controlAdded;
+				menuControl.ControlRemoved -= controlRemoved;
+			}
 		}
 
 		protected override void Dispose(bool disposing)
@@ -313,7 +314,7 @@ namespace Mtgdb.Controls
 
 			unsubscribeFromEvents(_menuControl);
 
-			PopupSubsystem.Instance.GlobalMouseDown -= globalMouseDown;
+			MessageFilter.Instance.GlobalMouseDown -= globalGlobalMouseDown;
 
 			base.Dispose(disposing);
 		}
@@ -359,7 +360,7 @@ namespace Mtgdb.Controls
 
 
 		private Control _menuControl;
-		[Category("Settings")]
+		[Category("Settings"), DefaultValue(null)]
 		public virtual Control MenuControl
 		{
 			get => _menuControl;
@@ -368,9 +369,16 @@ namespace Mtgdb.Controls
 				if (_menuControl == value)
 					return;
 
-				_menuControl?.Invoke0(unsubscribeFromEvents);
+				if (!DesignMode)
+					_menuControl?.Invoke0(unsubscribeFromEvents);
+
 				_menuControl = value;
-				_menuControl?.Invoke0(subscribeToEvents);
+
+				if (!DesignMode)
+				{
+					_menuControl.Visible = false;
+					_menuControl?.Invoke0(subscribeToEvents);
+				}
 			}
 		}
 
@@ -382,7 +390,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings"), DefaultValue(typeof(HorizontalAlignment), "Left")]
 		public HorizontalAlignment MenuAlignment { get; set; } = HorizontalAlignment.Left;
-		
+
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Action BeforeShow { get; set; }
 

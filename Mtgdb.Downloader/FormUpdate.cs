@@ -90,7 +90,11 @@ namespace Mtgdb.Downloader
 
 			_tableLayoutButtons.Controls
 				.Cast<ButtonBase>()
-				.ForEach(b => b.ScaleDpi());
+				.ForEach(b =>
+				{
+					b.ScaleDpiImages();
+					b.ScaleDpiFont();
+				});
 		}
 
 		private void systemColorsChanged() =>

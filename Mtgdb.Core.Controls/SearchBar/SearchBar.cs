@@ -43,9 +43,6 @@ namespace Mtgdb.Controls
 			Input.GotFocus += inputFocusedChanged;
 			Input.LostFocus += inputFocusedChanged;
 			Layout += layout;
-
-			_searchTextSelection = new RichTextBoxSelectionSubsystem(Input);
-			_searchTextSelection.SubscribeToEvents();
 		}
 
 		private void layout(object sender, LayoutEventArgs e)
@@ -99,7 +96,6 @@ namespace Mtgdb.Controls
 			Input.GotFocus -= inputFocusedChanged;
 			Input.LostFocus -= inputFocusedChanged;
 			Layout -= layout;
-			_searchTextSelection.UnsubscribeFromEvents();
 
 			base.Dispose(disposing);
 		}
@@ -157,7 +153,5 @@ namespace Mtgdb.Controls
 
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public FixedRichTextBox Input { get; }
-
-		private readonly RichTextBoxSelectionSubsystem _searchTextSelection;
 	}
 }

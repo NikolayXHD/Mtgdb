@@ -26,7 +26,6 @@ namespace Mtgdb.Gui
 				_cardSearch.TextChanged -= cardSearchStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
-				_formRoot.ShowFilterPanelsChanged -= showFilterPanelsChanged;
 				_formRoot.TooltipController.UnsetTooltips(this);
 				_formRoot.QuickFilterTooltipController.UnsetTooltips(this);
 			}
@@ -53,7 +52,6 @@ namespace Mtgdb.Gui
 				_cardSearch.TextChanged += cardSearchStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
-				_formRoot.ShowFilterPanelsChanged += showFilterPanelsChanged;
 
 				setupTooltips(_formRoot.TooltipController, _formRoot.QuickFilterTooltipController);
 
@@ -669,7 +667,6 @@ namespace Mtgdb.Gui
 			settings.ShowTextualFields = _formRoot.ShowTextualFields;
 			settings.ShowScroll = _formRoot.ShowScroll;
 
-			settings.ShowFilterPanels = _formRoot.ShowFilterPanels;
 			settings.HideTooltips = _formRoot.HideTooltips;
 			settings.Language = _formRoot.UiModel.LanguageController.Language;
 			settings.Zoom = _formRoot.ZoomSettings;
@@ -716,7 +713,6 @@ namespace Mtgdb.Gui
 				ShowScroll = _buttonShowScrollCards.Checked,
 				ShowPartialCards = _buttonShowPartialCards.Checked,
 				ShowTextualFields = _buttonShowText.Checked,
-				ShowFilterPanels = _formRoot.ShowFilterPanels,
 				FilterByDeckMode = _deckListControl.FilterByDeckMode,
 				Zoom = _formZoom.Settings
 			};
@@ -797,9 +793,6 @@ namespace Mtgdb.Gui
 			_buttonShowScrollCards.Checked = settings.ShowScroll != false;
 			_buttonShowPartialCards.Checked = settings.ShowPartialCards != false;
 			_buttonShowText.Checked = settings.ShowTextualFields != false;
-			_formRoot.ShowFilterPanels = settings.ShowFilterPanels != false;
-
-			applyShowFilterPanels();
 
 			_deckListControl.FilterByDeckMode = settings.FilterByDeckMode ??
 			(isFilterGroupEnabled(FilterGroup.Deck)

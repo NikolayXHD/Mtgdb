@@ -8,14 +8,6 @@ namespace Mtgdb.Controls
 	{
 		public void Scale()
 		{
-			Cursor createTextSelectionCursor()
-			{
-				var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-				var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-				var textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
-				return textSelectionCursor;
-			}
-
 			new DpiScaler<DeckListControl>(c => c._textSelectionCursor = createTextSelectionCursor())
 				.Setup(this);
 
@@ -28,6 +20,14 @@ namespace Mtgdb.Controls
 			_labelSortStatus.ScaleDpiFont();
 			_labelFilterByDeckMode.ScaleDpiFont();
 			_textboxRename.ScaleDpiFont();
+
+			Cursor createTextSelectionCursor()
+			{
+				var iBeamIcon = Resources.text_selection_24.ResizeDpi();
+				var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
+				var textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
+				return textSelectionCursor;
+			}
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)

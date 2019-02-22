@@ -65,14 +65,6 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_menuLegalityCheckBoxes = new []
-				{
-					_buttonLegalityAllowLegal,
-					_buttonLegalityAllowRestricted,
-					_buttonLegalityAllowBanned,
-					_buttonLegalityAllowFuture
-				};
-
 			_cardSearch = new CardSearchSubsystem(
 				this,
 				_searchBar,
@@ -478,7 +470,6 @@ namespace Mtgdb.Gui
 		private string _deckName;
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
-		private readonly CheckBox[] _menuLegalityCheckBoxes;
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;

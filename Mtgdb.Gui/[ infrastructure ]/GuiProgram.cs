@@ -53,14 +53,14 @@ namespace Mtgdb.Gui
 			colorSchemeEditorForm.LoadCurrentColorScheme();
 
 			_kernel.Get<TooltipConfiguration>().Setup();
-			Application.AddMessageFilter(PopupSubsystem.Instance);
+			Application.AddMessageFilter(MessageFilter.Instance);
 
 			var application = _kernel.Get<App>();
 			application.MigrateHistoryFiles();
 			application.CreateForm();
 
 			Application.Run(application);
-			Application.RemoveMessageFilter(PopupSubsystem.Instance);
+			Application.RemoveMessageFilter(MessageFilter.Instance);
 			application.CancelAllTasks();
 		}
 

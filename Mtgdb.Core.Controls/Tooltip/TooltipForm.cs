@@ -81,9 +81,6 @@ namespace Mtgdb.Controls
 			_panel.Controls.Add(_buttonClose);
 			_buttonClose.BringToFront();
 
-			_selectionSubsystem = new RichTextBoxSelectionSubsystem(_tooltipTextbox);
-			_selectionSubsystem.SubscribeToEvents();
-
 			_tooltipTextbox.MouseDown += text_MouseDown;
 			_tooltipTextbox.MouseClick += text_MouseClick;
 
@@ -360,7 +357,7 @@ namespace Mtgdb.Controls
 			if (_tooltipTextbox.Focused || _buttonClose.Focused)
 				_tooltip.Control.Focus();
 
-			_selectionSubsystem.Reset();
+			_tooltipTextbox.ResetSelection();
 
 			Location = new Point(-10000, -10000);
 			UserInteracted = false;
@@ -456,7 +453,6 @@ namespace Mtgdb.Controls
 			set => _panel.BorderDashStyle = value;
 		}
 
-		private readonly RichTextBoxSelectionSubsystem _selectionSubsystem;
 		private readonly FixedRichTextBox _tooltipTextbox;
 		private readonly Control _tooltipFocusTarget;
 		private readonly Button _buttonClose;
@@ -468,7 +464,7 @@ namespace Mtgdb.Controls
 			private set
 			{
 				_clickable = value;
-				_selectionSubsystem.SelectionEnabled = value;
+				_tooltipTextbox.SelectionEnabled = value;
 			}
 		}
 
