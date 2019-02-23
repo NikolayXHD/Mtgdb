@@ -26,20 +26,22 @@ namespace Mtgdb.Controls
 		protected override void HandlePaint(Graphics g)
 		{
 			PaintContent(g);
-			paintFocusRectangle();
 
-			void paintFocusRectangle()
-			{
-				if (!ContainsFocus || _focusBorderColor.A == 0)
-					return;
+			if (ContainsFocus)
+				PaintFocusRectangle(g);
+		}
 
-				var rectangle = new Rectangle(default, Size);
-				int width = 2;
-				rectangle.Inflate(-(width - 1), -(width - 1));
-				var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
+		protected virtual void PaintFocusRectangle(Graphics g)
+		{
+			if (_focusBorderColor.A == 0)
+				return;
 
-				g.DrawRectangle(pen, rectangle);
-			}
+			var rectangle = new Rectangle(default, Size);
+			int width = 2;
+			rectangle.Inflate(-(width - 1), -(width - 1));
+			var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
+
+			g.DrawRectangle(pen, rectangle);
 		}
 
 		protected virtual void PaintContent(Graphics g) =>
@@ -62,15 +64,18 @@ namespace Mtgdb.Controls
 			UpdateSize();
 		}
 
-		protected override Color GetBgColor()
+		protected override Color ActualBackColor
 		{
-			if (MouseOver)
-				return _mouseOverBackColor;
+			get
+			{
+				if (MouseOver)
+					return _mouseOverBackColor;
 
-			if (Checked)
-				return _checkedBackColor;
+				if (Checked)
+					return _checkedBackColor;
 
-			return base.GetBgColor();
+				return base.ActualBackColor;
+			}
 		}
 
 		protected override void HandleSystemColorsChanged()
@@ -283,8 +288,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private int _highlightMouseOverOpacity = 64;
-		[DefaultValue(64), Category("Settings")]
+		private int _highlightMouseOverOpacity = 48;
+		[DefaultValue(48), Category("Settings")]
 		public virtual int HighlightMouseOverOpacity
 		{
 			get => _highlightMouseOverOpacity;
@@ -313,8 +318,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private int _highlightFocusOpacity = 96;
-		[DefaultValue(96), Category("Settings")]
+		private int _highlightFocusOpacity = 64;
+		[DefaultValue(64), Category("Settings")]
 		public virtual int HighlightFocusOpacity
 		{
 			get => _highlightFocusOpacity;

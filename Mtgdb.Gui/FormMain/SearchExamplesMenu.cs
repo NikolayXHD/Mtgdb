@@ -2,10 +2,11 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Mtgdb.Controls;
 
 namespace Mtgdb.Gui
 {
-	public partial class SearchExamplesMenu : UserControl
+	public partial class SearchExamplesMenu : UserControl, IPostPaintEvent
 	{
 		public SearchExamplesMenu()
 		{
@@ -54,6 +55,13 @@ namespace Mtgdb.Gui
 			}
 		}
 
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			base.OnPaint(e);
+			e.Graphics.Clear(SystemColors.ActiveBorder);
+			PostPaint?.Invoke(this, e);
+		}
+
 		private (Label Query, Label Comment, Color BackColor) getFindExampleRow(int i)
 		{
 			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
@@ -67,5 +75,7 @@ namespace Mtgdb.Gui
 		}
 
 		public event Action<string> QueryClicked;
+
+		public event PaintEventHandler PostPaint;
 	}
 }

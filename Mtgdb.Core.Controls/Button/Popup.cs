@@ -18,6 +18,8 @@ namespace Mtgdb.Controls
 			KeyDown += popupOwnerKeyDown;
 			PreviewKeyDown += popupOwnerPreviewKeyDown;
 			MessageFilter.Instance.GlobalMouseDown += globalGlobalMouseDown;
+
+			MarginTop = 0;
 		}
 
 		public void OpenPopup() =>
@@ -115,10 +117,10 @@ namespace Mtgdb.Controls
 		protected override void HandlePaint(Graphics g)
 		{
 			base.HandlePaint(g);
-			PaintDropDownTriangle(g);
+			PaintDropDownIndication(g);
 		}
 
-		protected virtual void PaintDropDownTriangle(Graphics g)
+		protected virtual void PaintDropDownIndication(Graphics g)
 		{
 			if (BorderColor.A > 0 && VisibleBorders != AnchorStyles.None || Checked || ActualForeColor.A == 0)
 				return;
@@ -136,6 +138,42 @@ namespace Mtgdb.Controls
 				start,
 				start - new Size(markWidth, 0)
 			);
+		}
+
+		protected override void PaintFocusRectangle(Graphics g)
+		{
+			if (PaintCommonBorder)
+			{
+				this.PaintBorder(g,
+					AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right,
+					BorderColor,
+					BorderStyle);
+			}
+			else
+				base.PaintFocusRectangle(g);
+		}
+
+		protected override Color ActualBackColor =>
+			PaintCommonBorder
+				? MenuControl.BackColor
+				: base.ActualBackColor;
+
+		private bool PaintCommonBorder =>
+			Checked && MenuControl is IPostPaintEvent && (MarginTop == 0 || MenuControl.Margin.Top == 0);
+
+		private void postPaintMenu(object sender, PaintEventArgs e)
+		{
+			if (!Checked)
+				return;
+
+			var rect = new Rectangle(default, Size);
+			e.Graphics.DrawLine(
+				new Pen(MenuControl.BackColor),
+				relativeToMenu(rect.BottomLeft() + new Size(1, 0)),
+				relativeToMenu(rect.BottomRight() + new Size(-2, 0)));
+
+			Point relativeToMenu(Point p) =>
+				MenuControl.PointToClient(PointToScreen(p));
 		}
 
 		private static void popupItemPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -309,6 +347,8 @@ namespace Mtgdb.Controls
 				unsubscribeFromEvents(button);
 		}
 
+
+
 		private void subscribeToEvents(ButtonBase button)
 		{
 			button.Pressed += popupItemPressed;
@@ -323,6 +363,8 @@ namespace Mtgdb.Controls
 			button.PreviewKeyDown -= popupItemPreviewKeyDown;
 		}
 
+
+
 		private void subscribeToEvents(Control menuControl)
 		{
 			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
@@ -330,6 +372,9 @@ namespace Mtgdb.Controls
 
 			menuControl.ControlAdded += controlAdded;
 			menuControl.ControlRemoved += controlRemoved;
+
+			if (menuControl is IPostPaintEvent eventProvider)
+				eventProvider.PostPaint += postPaintMenu;
 		}
 
 		private void unsubscribeFromEvents(Control menuControl)
@@ -341,8 +386,12 @@ namespace Mtgdb.Controls
 
 				menuControl.ControlAdded -= controlAdded;
 				menuControl.ControlRemoved -= controlRemoved;
+				if (menuControl is IPostPaintEvent eventProvider)
+					eventProvider.PostPaint -= postPaintMenu;
 			}
 		}
+
+
 
 		private Point? _customMenuLocation;
 		/// <summary>
@@ -373,7 +422,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings"), DefaultValue(null)]
+		[Category("Settings"), DefaultValue(0)]
 		public virtual int? MarginTop { get; set; }
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

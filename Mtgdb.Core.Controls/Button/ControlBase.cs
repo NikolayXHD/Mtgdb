@@ -88,7 +88,7 @@ namespace Mtgdb.Controls
 
 			paintText();
 			paintImage();
-			paintBorder();
+			PaintBorder(g);
 
 			(Rectangle textRect, Rectangle imageRect) layout()
 			{
@@ -198,15 +198,10 @@ namespace Mtgdb.Controls
 				if (image != null)
 					g.DrawImage(image, imageRect);
 			}
-
-			void paintBorder()
-			{
-				var borderColor = Enabled ? BorderColor : _disabledBorderColor;
-				this.PaintBorder(g, VisibleBorders, borderColor, BorderStyle);
-			}
 		}
 
-		public Color ActualForeColor => Enabled ? ForeColor : DisabledForeColor;
+		protected virtual void PaintBorder(Graphics g) =>
+			this.PaintBorder(g, VisibleBorders, ActualBorderColor, BorderStyle);
 
 		protected virtual Bitmap SelectImage()
 		{
@@ -247,10 +242,7 @@ namespace Mtgdb.Controls
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
-			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, GetBgColor(), PaintBackground);
-
-		protected virtual Color GetBgColor() =>
-			BackColor;
+			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, ActualBackColor, PaintBackground);
 
 		protected virtual void HandleImageScaleChange()
 		{
@@ -503,6 +495,14 @@ namespace Mtgdb.Controls
 				Invalidate();
 			}
 		}
+
+
+
+		protected Color ActualBorderColor => Enabled ? BorderColor : _disabledBorderColor;
+
+		protected Color ActualForeColor => Enabled ? ForeColor : DisabledForeColor;
+
+		protected virtual Color ActualBackColor => BackColor;
 
 		private const TextFormatFlags TextFormat =
 			TextFormatFlags.NoClipping |

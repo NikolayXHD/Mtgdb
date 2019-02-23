@@ -83,7 +83,7 @@
     <Compile Include="Bitmap\ColorSchemeTransformation.cs" />
     <Compile Include="Bitmap\SemiTransparentShadowTransformation.cs" />
     <Compile Include="Bitmap\BitmapExtensions.cs" />
-    <Compile Include="BorderedFlowLayoutPanel.cs">
+    <Compile Include="Panel\BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Button\CheckBox.cs">
@@ -124,6 +124,7 @@
     <Compile Include="Dpi\SearchBarScaler.cs" />
     <Compile Include="Dpi\TabHeaderControlScaler.cs" />
     <Compile Include="LayoutControlBitmaps.cs" />
+    <Compile Include="Panel\IPostPaintEvent.cs" />
     <Compile Include="QuickFilter\GrayscaleBmpProcessor.cs" />
     <Compile Include="Bitmap\TextDrawingHelper.cs" />
     <Compile Include="MessageFilter.cs" />
@@ -135,10 +136,10 @@
     <Compile Include="Contract\HitInfo.cs" />
     <Compile Include="Contract\SearchArgs.cs" />
     <Compile Include="CursorHelper.cs" />
-    <Compile Include="BorderedPanel.cs">
+    <Compile Include="Panel\BorderedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BorderedTableLayoutPanel.cs">
+    <Compile Include="Panel\BorderedTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GeometryHelpers.cs" />

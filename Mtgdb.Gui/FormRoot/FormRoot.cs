@@ -19,11 +19,6 @@ namespace Mtgdb.Gui
 		{
 			InitializeComponent();
 
-			_dropdownLanguage.VisibleAllBorders = true;
-
-			getLanguageMenuItems().Append(_dropdownLanguage).ForEach(
-				b => b.Font = new Font("Consolas", 9f, b.Font.Style));
-
 			_deckButtons = new[]
 			{
 				_dropdownOpenDeck,

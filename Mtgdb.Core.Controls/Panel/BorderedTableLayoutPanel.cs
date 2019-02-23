@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	public class BorderedPanel : Panel
+	public class BorderedTableLayoutPanel : TableLayoutPanel, IPostPaintEvent
 	{
-		public BorderedPanel()
+		public BorderedTableLayoutPanel()
 		{
 			SetStyle(
 				ControlStyles.UserPaint |
@@ -17,8 +17,11 @@ namespace Mtgdb.Controls
 				true);
 		}
 
-		protected override void OnPaint(PaintEventArgs e) =>
+		protected override void OnPaint(PaintEventArgs e)
+		{
 			this.PaintBorder(e.Graphics, VisibleBorders, BorderColor, BorderDashStyle);
+			PostPaint?.Invoke(this, e);
+		}
 
 		protected override void OnPaintBackground(PaintEventArgs e) =>
 			this.PaintPanelBack(e.Graphics, e.ClipRectangle, BackgroundImage, BackColor, PaintBackground);
@@ -26,7 +29,7 @@ namespace Mtgdb.Controls
 		[Category("Settings"), DefaultValue(typeof(Color), "ActiveBorder")]
 		public Color BorderColor { get; set; } = SystemColors.ActiveBorder;
 
-		[Category("Settings"), DefaultValue(typeof (AnchorStyles), "Top, Bottom, Left, Right")]
+		[Category("Settings"), DefaultValue(typeof(AnchorStyles), "Top, Bottom, Left, Right")]
 		public AnchorStyles VisibleBorders { get; set; } = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
 
 		[Category("Settings"), DefaultValue(true)]
@@ -34,5 +37,7 @@ namespace Mtgdb.Controls
 
 		[Category("Settings"), DefaultValue(typeof(DashStyle), "Solid")]
 		public DashStyle BorderDashStyle { get; set; } = DashStyle.Solid;
+
+		public event PaintEventHandler PostPaint;
 	}
 }

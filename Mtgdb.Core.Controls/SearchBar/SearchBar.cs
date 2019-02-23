@@ -81,7 +81,7 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		protected override void PaintDropDownTriangle(Graphics g)
+		protected override void PaintDropDownIndication(Graphics g)
 		{
 		}
 
