@@ -143,6 +143,14 @@ namespace Mtgdb.Controls
 		protected override void PaintFocusRectangle(Graphics g)
 		{
 			if (PaintCommonBorder)
+				return;
+
+			base.PaintFocusRectangle(g);
+		}
+
+		protected override void PaintBorder(Graphics g)
+		{
+			if (PaintCommonBorder)
 			{
 				this.PaintBorder(g,
 					AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right,
@@ -150,7 +158,9 @@ namespace Mtgdb.Controls
 					BorderStyle);
 			}
 			else
-				base.PaintFocusRectangle(g);
+			{
+				base.PaintBorder(g);
+			}
 		}
 
 		protected override Color ActualBackColor =>

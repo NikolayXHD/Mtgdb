@@ -101,8 +101,8 @@
 			this._panelExamples.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._panelExamples.BackColor = System.Drawing.SystemColors.Window;
 			this._panelExamples.ColumnCount = 2;
-			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelExamples.Controls.Add(this.label62, 1, 27);
 			this._panelExamples.Controls.Add(this.label61, 0, 27);
 			this._panelExamples.Controls.Add(this.label60, 1, 13);
@@ -165,716 +165,960 @@
 			this._panelExamples.Controls.Add(this.label55, 0, 19);
 			this._panelExamples.Controls.Add(this.label56, 1, 19);
 			this._panelExamples.Controls.Add(this.label17, 0, 8);
-			this._panelExamples.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._panelExamples.Location = new System.Drawing.Point(0, 0);
+			this._panelExamples.Location = new System.Drawing.Point(1, 1);
 			this._panelExamples.Margin = new System.Windows.Forms.Padding(0);
 			this._panelExamples.Name = "_panelExamples";
-			this._panelExamples.Padding = new System.Windows.Forms.Padding(1);
 			this._panelExamples.RowCount = 32;
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.002078F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999941F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999941F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99994F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99994F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.002077F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.998004F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.99802F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.002077F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999922F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999715F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18.00001F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.000798F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.000011F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.998794F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.000001F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.999921F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99992F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99992F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99992F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99992F));
-			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1.99992F));
-			this._panelExamples.Size = new System.Drawing.Size(730, 852);
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.Size = new System.Drawing.Size(649, 858);
 			this._panelExamples.TabIndex = 48;
+			this._panelExamples.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
 			// label62
 			// 
-			this.label62.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label62.Location = new System.Drawing.Point(255, 746);
-			this.label62.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label62.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label62.AutoSize = true;
+			this.label62.Location = new System.Drawing.Point(218, 768);
+			this.label62.Margin = new System.Windows.Forms.Padding(0);
 			this.label62.Name = "label62";
-			this.label62.Size = new System.Drawing.Size(473, 16);
+			this.label62.Padding = new System.Windows.Forms.Padding(2);
+			this.label62.Size = new System.Drawing.Size(431, 18);
 			this.label62.TabIndex = 62;
 			this.label62.Text = "Fractional modifier allows reverse words order";
 			// 
 			// label61
 			// 
-			this.label61.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label61.Location = new System.Drawing.Point(2, 746);
-			this.label61.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label61.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label61.AutoSize = true;
+			this.label61.Location = new System.Drawing.Point(0, 768);
+			this.label61.Margin = new System.Windows.Forms.Padding(0);
 			this.label61.Name = "label61";
-			this.label61.Size = new System.Drawing.Size(253, 16);
+			this.label61.Padding = new System.Windows.Forms.Padding(2);
+			this.label61.Size = new System.Drawing.Size(218, 18);
 			this.label61.TabIndex = 61;
 			this.label61.Text = "\"dealt damage\"~2.5";
 			// 
 			// label60
 			// 
-			this.label60.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label60.Location = new System.Drawing.Point(255, 502);
-			this.label60.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label60.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label60.AutoSize = true;
+			this.label60.Location = new System.Drawing.Point(218, 504);
+			this.label60.Margin = new System.Windows.Forms.Padding(0);
 			this.label60.Name = "label60";
-			this.label60.Size = new System.Drawing.Size(473, 17);
+			this.label60.Padding = new System.Windows.Forms.Padding(2);
+			this.label60.Size = new System.Drawing.Size(431, 18);
 			this.label60.TabIndex = 60;
 			this.label60.Text = "Values containing whitespace must be quoted";
 			// 
 			// label59
 			// 
-			this.label59.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label59.Location = new System.Drawing.Point(2, 502);
-			this.label59.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label59.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label59.AutoSize = true;
+			this.label59.Location = new System.Drawing.Point(0, 504);
+			this.label59.Margin = new System.Windows.Forms.Padding(0);
 			this.label59.Name = "label59";
-			this.label59.Size = new System.Drawing.Size(253, 17);
+			this.label59.Padding = new System.Windows.Forms.Padding(2);
+			this.label59.Size = new System.Drawing.Size(218, 18);
 			this.label59.TabIndex = 59;
 			this.label59.Text = "keywords: \"deal damage\"";
 			// 
 			// label58
 			// 
+			this.label58.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label58.AutoSize = true;
 			this.label58.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label58.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label58.Location = new System.Drawing.Point(255, 349);
-			this.label58.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label58.Location = new System.Drawing.Point(218, 364);
+			this.label58.Margin = new System.Windows.Forms.Padding(0);
 			this.label58.Name = "label58";
-			this.label58.Size = new System.Drawing.Size(473, 153);
+			this.label58.Size = new System.Drawing.Size(431, 140);
 			this.label58.TabIndex = 58;
 			this.label58.Text = resources.GetString("label58.Text");
 			this.label58.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label57
 			// 
+			this.label57.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label57.AutoSize = true;
 			this.label57.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label57.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label57.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label57.Location = new System.Drawing.Point(2, 349);
-			this.label57.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label57.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label57.Location = new System.Drawing.Point(0, 364);
+			this.label57.Margin = new System.Windows.Forms.Padding(0);
 			this.label57.Name = "label57";
-			this.label57.Size = new System.Drawing.Size(253, 153);
+			this.label57.Padding = new System.Windows.Forms.Padding(4);
+			this.label57.Size = new System.Drawing.Size(218, 140);
 			this.label57.TabIndex = 57;
-			this.label57.Text = "Search by keyword ability";
+			this.label57.Text = "Search keywords";
 			this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label32
 			// 
+			this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label32.AutoSize = true;
 			this.label32.BackColor = System.Drawing.SystemColors.Window;
-			this.label32.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label32.Location = new System.Drawing.Point(2, 810);
-			this.label32.Margin = new System.Windows.Forms.Padding(1, 0, 0, 1);
+			this.label32.Location = new System.Drawing.Point(0, 840);
+			this.label32.Margin = new System.Windows.Forms.Padding(0);
 			this.label32.Name = "label32";
-			this.label32.Size = new System.Drawing.Size(253, 40);
+			this.label32.Padding = new System.Windows.Forms.Padding(2);
+			this.label32.Size = new System.Drawing.Size(218, 18);
 			this.label32.TabIndex = 32;
 			this.label32.Text = "angel^3 OR demon";
 			// 
 			// label9
 			// 
+			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label9.AutoSize = true;
 			this.label9.BackColor = System.Drawing.SystemColors.Control;
-			this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label9.Location = new System.Drawing.Point(255, 83);
-			this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label9.Location = new System.Drawing.Point(218, 84);
+			this.label9.Margin = new System.Windows.Forms.Padding(0);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(473, 16);
+			this.label9.Padding = new System.Windows.Forms.Padding(2);
+			this.label9.Size = new System.Drawing.Size(431, 18);
 			this.label9.TabIndex = 8;
 			this.label9.Text = "Both words must be present, each in any field in any order";
 			// 
 			// label8
 			// 
-			this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label8.Location = new System.Drawing.Point(255, 67);
-			this.label8.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(218, 66);
+			this.label8.Margin = new System.Windows.Forms.Padding(0);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(473, 16);
+			this.label8.Padding = new System.Windows.Forms.Padding(2);
+			this.label8.Size = new System.Drawing.Size(431, 18);
 			this.label8.TabIndex = 7;
 			this.label8.Text = "Restricts the search to Name field only";
 			// 
 			// label7
 			// 
+			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label7.AutoSize = true;
 			this.label7.BackColor = System.Drawing.SystemColors.Control;
-			this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label7.Location = new System.Drawing.Point(255, 51);
-			this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label7.Location = new System.Drawing.Point(218, 48);
+			this.label7.Margin = new System.Windows.Forms.Padding(0);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(473, 16);
+			this.label7.Padding = new System.Windows.Forms.Padding(2);
+			this.label7.Size = new System.Drawing.Size(431, 18);
 			this.label7.TabIndex = 6;
 			this.label7.Text = "Contains both words in exactly same order in some field";
 			// 
 			// label3
 			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label3.AutoSize = true;
 			this.label3.BackColor = System.Drawing.SystemColors.Control;
-			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label3.Location = new System.Drawing.Point(2, 51);
-			this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label3.Location = new System.Drawing.Point(0, 48);
+			this.label3.Margin = new System.Windows.Forms.Padding(0);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(253, 16);
+			this.label3.Padding = new System.Windows.Forms.Padding(2);
+			this.label3.Size = new System.Drawing.Size(218, 18);
 			this.label3.TabIndex = 2;
 			this.label3.Text = "\"llanowar elves\"";
 			// 
 			// label2
 			// 
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(255, 35);
-			this.label2.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(218, 30);
+			this.label2.Margin = new System.Windows.Forms.Padding(0);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(473, 16);
+			this.label2.Padding = new System.Windows.Forms.Padding(2);
+			this.label2.Size = new System.Drawing.Size(431, 18);
 			this.label2.TabIndex = 1;
 			this.label2.Text = "Has either llanowar OR elves in any field";
 			// 
 			// label1
 			// 
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(2, 35);
-			this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(0, 30);
+			this.label1.Margin = new System.Windows.Forms.Padding(0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(253, 16);
+			this.label1.Padding = new System.Windows.Forms.Padding(2);
+			this.label1.Size = new System.Drawing.Size(218, 18);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "llanowar elves\r\n";
 			// 
 			// label4
 			// 
-			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label4.Location = new System.Drawing.Point(2, 67);
-			this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(0, 66);
+			this.label4.Margin = new System.Windows.Forms.Padding(0);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(253, 16);
+			this.label4.Padding = new System.Windows.Forms.Padding(2);
+			this.label4.Size = new System.Drawing.Size(218, 18);
 			this.label4.TabIndex = 3;
 			this.label4.Text = "name: \"llanowar elves\"";
 			// 
 			// label5
 			// 
+			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label5.AutoSize = true;
 			this.label5.BackColor = System.Drawing.SystemColors.Control;
-			this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label5.Location = new System.Drawing.Point(2, 83);
-			this.label5.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label5.Location = new System.Drawing.Point(0, 84);
+			this.label5.Margin = new System.Windows.Forms.Padding(0);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(253, 16);
+			this.label5.Padding = new System.Windows.Forms.Padding(2);
+			this.label5.Size = new System.Drawing.Size(218, 18);
 			this.label5.TabIndex = 4;
 			this.label5.Text = "llanowar AND elves";
 			// 
 			// label11
 			// 
+			this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label11.AutoSize = true;
 			this.label11.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label11, 2);
-			this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label11.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label11.Location = new System.Drawing.Point(2, 2);
-			this.label11.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
+			this.label11.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label11.Location = new System.Drawing.Point(0, 0);
+			this.label11.Margin = new System.Windows.Forms.Padding(0);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(726, 33);
+			this.label11.Padding = new System.Windows.Forms.Padding(4);
+			this.label11.Size = new System.Drawing.Size(649, 30);
 			this.label11.TabIndex = 10;
 			this.label11.Text = "Basic examples";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label12
 			// 
+			this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label12.AutoSize = true;
 			this.label12.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label12.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label12.Location = new System.Drawing.Point(2, 99);
-			this.label12.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label12.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label12.Location = new System.Drawing.Point(0, 102);
+			this.label12.Margin = new System.Windows.Forms.Padding(0);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(253, 34);
+			this.label12.Padding = new System.Windows.Forms.Padding(4);
+			this.label12.Size = new System.Drawing.Size(218, 30);
 			this.label12.TabIndex = 11;
 			this.label12.Text = "Caveats";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label15
 			// 
-			this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label15.Location = new System.Drawing.Point(2, 301);
-			this.label15.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label15.AutoSize = true;
+			this.label15.Location = new System.Drawing.Point(0, 310);
+			this.label15.Margin = new System.Windows.Forms.Padding(0);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(253, 16);
+			this.label15.Padding = new System.Windows.Forms.Padding(2);
+			this.label15.Size = new System.Drawing.Size(218, 18);
 			this.label15.TabIndex = 14;
 			this.label15.Text = "like: displace";
 			// 
 			// label18
 			// 
+			this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label18.AutoSize = true;
 			this.label18.BackColor = System.Drawing.SystemColors.Control;
-			this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label18.Location = new System.Drawing.Point(2, 317);
-			this.label18.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label18.Location = new System.Drawing.Point(0, 328);
+			this.label18.Margin = new System.Windows.Forms.Padding(0);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(253, 16);
+			this.label18.Padding = new System.Windows.Forms.Padding(2);
+			this.label18.Size = new System.Drawing.Size(218, 18);
 			this.label18.TabIndex = 17;
 			this.label18.Text = "like: \"thalia\'s lieutenant\"";
 			// 
 			// label19
 			// 
+			this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label19.AutoSize = true;
 			this.label19.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label19, 2);
-			this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label19.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label19.Location = new System.Drawing.Point(2, 519);
-			this.label19.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.label19.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label19.Location = new System.Drawing.Point(0, 522);
+			this.label19.Margin = new System.Windows.Forms.Padding(0);
 			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(726, 34);
+			this.label19.Padding = new System.Windows.Forms.Padding(4);
+			this.label19.Size = new System.Drawing.Size(649, 30);
 			this.label19.TabIndex = 18;
 			this.label19.Text = "More syntax details";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label20
 			// 
-			this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label20.Location = new System.Drawing.Point(2, 553);
-			this.label20.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(0, 552);
+			this.label20.Margin = new System.Windows.Forms.Padding(0);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(253, 16);
+			this.label20.Padding = new System.Windows.Forms.Padding(2);
+			this.label20.Size = new System.Drawing.Size(218, 18);
 			this.label20.TabIndex = 19;
-			this.label20.Text = "((angel OR demon) AND legendary)";
+			this.label20.Text = "((rogue OR rat) AND haste)";
 			// 
 			// label21
 			// 
+			this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label21.AutoSize = true;
 			this.label21.BackColor = System.Drawing.SystemColors.Control;
-			this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label21.Location = new System.Drawing.Point(2, 569);
-			this.label21.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label21.Location = new System.Drawing.Point(0, 570);
+			this.label21.Margin = new System.Windows.Forms.Padding(0);
 			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(253, 16);
+			this.label21.Padding = new System.Windows.Forms.Padding(2);
+			this.label21.Size = new System.Drawing.Size(218, 18);
 			this.label21.TabIndex = 20;
 			this.label21.Text = "name:ooze";
 			// 
 			// label23
 			// 
-			this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label23.Location = new System.Drawing.Point(2, 585);
-			this.label23.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label23.AutoSize = true;
+			this.label23.Location = new System.Drawing.Point(0, 588);
+			this.label23.Margin = new System.Windows.Forms.Padding(0);
 			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(253, 16);
+			this.label23.Padding = new System.Windows.Forms.Padding(2);
+			this.label23.Size = new System.Drawing.Size(218, 18);
 			this.label23.TabIndex = 22;
 			this.label23.Text = "disk";
 			// 
 			// label22
 			// 
+			this.label22.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label22.AutoSize = true;
 			this.label22.BackColor = System.Drawing.SystemColors.Control;
-			this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label22.Location = new System.Drawing.Point(2, 601);
-			this.label22.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label22.Location = new System.Drawing.Point(0, 606);
+			this.label22.Margin = new System.Windows.Forms.Padding(0);
 			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(253, 16);
+			this.label22.Padding = new System.Windows.Forms.Padding(2);
+			this.label22.Size = new System.Drawing.Size(218, 18);
 			this.label22.TabIndex = 21;
 			this.label22.Text = "\"discard your hand\"";
 			// 
 			// label24
 			// 
+			this.label24.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label24.AutoSize = true;
 			this.label24.BackColor = System.Drawing.SystemColors.Control;
-			this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label24.Location = new System.Drawing.Point(2, 633);
-			this.label24.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label24.Location = new System.Drawing.Point(0, 642);
+			this.label24.Margin = new System.Windows.Forms.Padding(0);
 			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(253, 16);
+			this.label24.Padding = new System.Windows.Forms.Padding(2);
+			this.label24.Size = new System.Drawing.Size(218, 18);
 			this.label24.TabIndex = 23;
 			this.label24.Text = "type: (rogue rat)";
 			// 
 			// label25
 			// 
-			this.label25.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label25.Location = new System.Drawing.Point(2, 649);
-			this.label25.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label25.AutoSize = true;
+			this.label25.Location = new System.Drawing.Point(0, 660);
+			this.label25.Margin = new System.Windows.Forms.Padding(0);
 			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(253, 16);
+			this.label25.Padding = new System.Windows.Forms.Padding(2);
+			this.label25.Size = new System.Drawing.Size(218, 18);
 			this.label25.TabIndex = 24;
-			this.label25.Text = "subtypes: (*ngel OR dem* OR human)";
+			this.label25.Text = "(*ngel OR dem* OR human)";
 			// 
 			// label26
 			// 
+			this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label26.AutoSize = true;
 			this.label26.BackColor = System.Drawing.SystemColors.Control;
-			this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label26.Location = new System.Drawing.Point(2, 665);
-			this.label26.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label26.Location = new System.Drawing.Point(0, 678);
+			this.label26.Margin = new System.Windows.Forms.Padding(0);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(253, 16);
+			this.label26.Padding = new System.Windows.Forms.Padding(2);
+			this.label26.Size = new System.Drawing.Size(218, 18);
 			this.label26.TabIndex = 25;
 			this.label26.Text = "su????*";
 			// 
 			// label27
 			// 
-			this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label27.Location = new System.Drawing.Point(2, 681);
-			this.label27.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label27.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label27.AutoSize = true;
+			this.label27.Location = new System.Drawing.Point(0, 696);
+			this.label27.Margin = new System.Windows.Forms.Padding(0);
 			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(253, 16);
+			this.label27.Padding = new System.Windows.Forms.Padding(2);
+			this.label27.Size = new System.Drawing.Size(218, 18);
 			this.label27.TabIndex = 26;
 			this.label27.Text = "nameen: /[ab]nge.{1,2}|demon/";
 			// 
 			// label28
 			// 
+			this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label28.AutoSize = true;
 			this.label28.BackColor = System.Drawing.SystemColors.Control;
-			this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label28.Location = new System.Drawing.Point(2, 697);
-			this.label28.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label28.Location = new System.Drawing.Point(0, 714);
+			this.label28.Margin = new System.Windows.Forms.Padding(0);
 			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(253, 16);
+			this.label28.Padding = new System.Windows.Forms.Padding(2);
+			this.label28.Size = new System.Drawing.Size(218, 18);
 			this.label28.TabIndex = 27;
 			this.label28.Text = "neviniral~";
 			// 
 			// label6
 			// 
-			this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label6.Location = new System.Drawing.Point(2, 713);
-			this.label6.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(0, 732);
+			this.label6.Margin = new System.Windows.Forms.Padding(0);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(253, 17);
+			this.label6.Padding = new System.Windows.Forms.Padding(2);
+			this.label6.Size = new System.Drawing.Size(218, 18);
 			this.label6.TabIndex = 5;
 			this.label6.Text = "neviniral~0.2";
 			// 
 			// label10
 			// 
+			this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label10.AutoSize = true;
 			this.label10.BackColor = System.Drawing.SystemColors.Control;
-			this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label10.Location = new System.Drawing.Point(2, 730);
-			this.label10.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label10.Location = new System.Drawing.Point(0, 750);
+			this.label10.Margin = new System.Windows.Forms.Padding(0);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(253, 16);
+			this.label10.Padding = new System.Windows.Forms.Padding(2);
+			this.label10.Size = new System.Drawing.Size(218, 18);
 			this.label10.TabIndex = 28;
 			this.label10.Text = "\"mana color\"~2";
 			// 
 			// label29
 			// 
+			this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label29.AutoSize = true;
 			this.label29.BackColor = System.Drawing.SystemColors.Control;
-			this.label29.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label29.Location = new System.Drawing.Point(2, 762);
-			this.label29.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label29.Location = new System.Drawing.Point(0, 786);
+			this.label29.Margin = new System.Windows.Forms.Padding(0);
 			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(253, 16);
+			this.label29.Padding = new System.Windows.Forms.Padding(2);
+			this.label29.Size = new System.Drawing.Size(218, 18);
 			this.label29.TabIndex = 29;
 			this.label29.Text = "name: [a TO ced]";
 			// 
 			// label30
 			// 
+			this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label30.AutoSize = true;
 			this.label30.BackColor = System.Drawing.SystemColors.Window;
-			this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label30.Location = new System.Drawing.Point(2, 778);
-			this.label30.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label30.Location = new System.Drawing.Point(0, 804);
+			this.label30.Margin = new System.Windows.Forms.Padding(0);
 			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(253, 16);
+			this.label30.Padding = new System.Windows.Forms.Padding(2);
+			this.label30.Size = new System.Drawing.Size(218, 18);
 			this.label30.TabIndex = 30;
 			this.label30.Text = "pricingmid: {100 TO *}";
 			// 
 			// label31
 			// 
+			this.label31.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label31.AutoSize = true;
 			this.label31.BackColor = System.Drawing.SystemColors.Control;
-			this.label31.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label31.Location = new System.Drawing.Point(2, 794);
-			this.label31.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label31.Location = new System.Drawing.Point(0, 822);
+			this.label31.Margin = new System.Windows.Forms.Padding(0);
 			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(253, 16);
+			this.label31.Padding = new System.Windows.Forms.Padding(2);
+			this.label31.Size = new System.Drawing.Size(218, 18);
 			this.label31.TabIndex = 31;
 			this.label31.Text = "cmc: {0 TO 2]";
 			// 
 			// label37
 			// 
-			this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label37.Location = new System.Drawing.Point(255, 301);
-			this.label37.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label37.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label37.AutoSize = true;
+			this.label37.Location = new System.Drawing.Point(218, 310);
+			this.label37.Margin = new System.Windows.Forms.Padding(0);
 			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(473, 16);
+			this.label37.Padding = new System.Windows.Forms.Padding(2);
+			this.label37.Size = new System.Drawing.Size(431, 18);
 			this.label37.TabIndex = 37;
 			this.label37.Text = "Find cards with similar Text or GeneratedMana";
 			// 
 			// label38
 			// 
+			this.label38.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label38.AutoSize = true;
 			this.label38.BackColor = System.Drawing.SystemColors.Control;
-			this.label38.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label38.Location = new System.Drawing.Point(255, 317);
-			this.label38.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label38.Location = new System.Drawing.Point(218, 328);
+			this.label38.Margin = new System.Windows.Forms.Padding(0);
 			this.label38.Name = "label38";
-			this.label38.Size = new System.Drawing.Size(473, 16);
+			this.label38.Padding = new System.Windows.Forms.Padding(2);
+			this.label38.Size = new System.Drawing.Size(431, 18);
 			this.label38.TabIndex = 38;
 			this.label38.Text = "Values containing whitespace must be quoted";
 			// 
 			// label39
 			// 
-			this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label39.Location = new System.Drawing.Point(255, 333);
-			this.label39.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label39.AutoSize = true;
+			this.label39.Location = new System.Drawing.Point(218, 346);
+			this.label39.Margin = new System.Windows.Forms.Padding(0);
 			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(473, 16);
+			this.label39.Padding = new System.Windows.Forms.Padding(2);
+			this.label39.Size = new System.Drawing.Size(431, 18);
 			this.label39.TabIndex = 39;
 			this.label39.Text = "Set min similarity, default is 0.6";
 			// 
 			// label40
 			// 
-			this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label40.Location = new System.Drawing.Point(255, 553);
-			this.label40.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label40.AutoSize = true;
+			this.label40.Location = new System.Drawing.Point(218, 552);
+			this.label40.Margin = new System.Windows.Forms.Padding(0);
 			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(473, 16);
+			this.label40.Padding = new System.Windows.Forms.Padding(2);
+			this.label40.Size = new System.Drawing.Size(431, 18);
 			this.label40.TabIndex = 40;
 			this.label40.Text = "Boolean operators can be nested";
 			// 
 			// label41
 			// 
+			this.label41.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label41.AutoSize = true;
 			this.label41.BackColor = System.Drawing.SystemColors.Control;
-			this.label41.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label41.Location = new System.Drawing.Point(255, 569);
-			this.label41.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label41.Location = new System.Drawing.Point(218, 570);
+			this.label41.Margin = new System.Windows.Forms.Padding(0);
 			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(473, 16);
+			this.label41.Padding = new System.Windows.Forms.Padding(2);
+			this.label41.Size = new System.Drawing.Size(431, 18);
 			this.label41.TabIndex = 41;
 			this.label41.Text = "Search in a specific field";
 			// 
 			// label42
 			// 
-			this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label42.Location = new System.Drawing.Point(255, 585);
-			this.label42.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label42.AutoSize = true;
+			this.label42.Location = new System.Drawing.Point(218, 588);
+			this.label42.Margin = new System.Windows.Forms.Padding(0);
 			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(473, 16);
+			this.label42.Padding = new System.Windows.Forms.Padding(2);
+			this.label42.Size = new System.Drawing.Size(431, 18);
 			this.label42.TabIndex = 42;
 			this.label42.Text = "Searh in any field";
 			// 
 			// label43
 			// 
+			this.label43.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label43.AutoSize = true;
 			this.label43.BackColor = System.Drawing.SystemColors.Control;
-			this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label43.Location = new System.Drawing.Point(255, 601);
-			this.label43.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label43.Location = new System.Drawing.Point(218, 606);
+			this.label43.Margin = new System.Windows.Forms.Padding(0);
 			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(473, 16);
+			this.label43.Padding = new System.Windows.Forms.Padding(2);
+			this.label43.Size = new System.Drawing.Size(431, 18);
 			this.label43.TabIndex = 43;
 			this.label43.Text = "Search whole phrase";
 			// 
 			// label44
 			// 
+			this.label44.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label44.AutoSize = true;
 			this.label44.BackColor = System.Drawing.SystemColors.Control;
-			this.label44.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label44.Location = new System.Drawing.Point(255, 633);
-			this.label44.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label44.Location = new System.Drawing.Point(218, 642);
+			this.label44.Margin = new System.Windows.Forms.Padding(0);
 			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(473, 16);
+			this.label44.Padding = new System.Windows.Forms.Padding(2);
+			this.label44.Size = new System.Drawing.Size(431, 18);
 			this.label44.TabIndex = 44;
 			this.label44.Text = "Cards of types Rogue OR Rat because default operator is OR";
 			// 
 			// label45
 			// 
-			this.label45.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label45.Location = new System.Drawing.Point(255, 649);
-			this.label45.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label45.AutoSize = true;
+			this.label45.Location = new System.Drawing.Point(218, 660);
+			this.label45.Margin = new System.Windows.Forms.Padding(0);
 			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(473, 16);
+			this.label45.Padding = new System.Windows.Forms.Padding(2);
+			this.label45.Size = new System.Drawing.Size(431, 18);
 			this.label45.TabIndex = 45;
 			this.label45.Text = "* means 0 or more characters";
 			// 
 			// label46
 			// 
+			this.label46.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label46.AutoSize = true;
 			this.label46.BackColor = System.Drawing.SystemColors.Control;
-			this.label46.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label46.Location = new System.Drawing.Point(255, 665);
-			this.label46.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label46.Location = new System.Drawing.Point(218, 678);
+			this.label46.Margin = new System.Windows.Forms.Padding(0);
 			this.label46.Name = "label46";
-			this.label46.Size = new System.Drawing.Size(473, 16);
+			this.label46.Padding = new System.Windows.Forms.Padding(2);
+			this.label46.Size = new System.Drawing.Size(431, 18);
 			this.label46.TabIndex = 46;
 			this.label46.Text = "? means any one character, can be used to set minimum length";
 			// 
 			// label47
 			// 
-			this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label47.Location = new System.Drawing.Point(255, 681);
-			this.label47.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label47.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label47.AutoSize = true;
+			this.label47.Location = new System.Drawing.Point(218, 696);
+			this.label47.Margin = new System.Windows.Forms.Padding(0);
 			this.label47.Name = "label47";
-			this.label47.Size = new System.Drawing.Size(473, 16);
+			this.label47.Padding = new System.Windows.Forms.Padding(2);
+			this.label47.Size = new System.Drawing.Size(431, 18);
 			this.label47.TabIndex = 47;
 			this.label47.Text = "Regular expressions (lucene dialect) are delimited by /";
 			// 
 			// label48
 			// 
+			this.label48.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label48.AutoSize = true;
 			this.label48.BackColor = System.Drawing.SystemColors.Control;
-			this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label48.Location = new System.Drawing.Point(255, 697);
-			this.label48.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label48.Location = new System.Drawing.Point(218, 714);
+			this.label48.Margin = new System.Windows.Forms.Padding(0);
 			this.label48.Name = "label48";
-			this.label48.Size = new System.Drawing.Size(473, 16);
+			this.label48.Padding = new System.Windows.Forms.Padding(2);
+			this.label48.Size = new System.Drawing.Size(431, 18);
 			this.label48.TabIndex = 48;
 			this.label48.Text = "Approximate spelling, searches nevinYrral and so on";
 			// 
 			// label49
 			// 
-			this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label49.Location = new System.Drawing.Point(255, 713);
-			this.label49.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label49.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label49.AutoSize = true;
+			this.label49.Location = new System.Drawing.Point(218, 732);
+			this.label49.Margin = new System.Windows.Forms.Padding(0);
 			this.label49.Name = "label49";
-			this.label49.Size = new System.Drawing.Size(473, 17);
+			this.label49.Padding = new System.Windows.Forms.Padding(2);
+			this.label49.Size = new System.Drawing.Size(431, 18);
 			this.label49.TabIndex = 49;
 			this.label49.Text = "Set min similarity, default is 0.5, valid is between 0 and 1";
 			// 
 			// label50
 			// 
+			this.label50.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label50.AutoSize = true;
 			this.label50.BackColor = System.Drawing.SystemColors.Control;
-			this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label50.Location = new System.Drawing.Point(255, 730);
-			this.label50.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label50.Location = new System.Drawing.Point(218, 750);
+			this.label50.Margin = new System.Windows.Forms.Padding(0);
 			this.label50.Name = "label50";
-			this.label50.Size = new System.Drawing.Size(473, 16);
+			this.label50.Padding = new System.Windows.Forms.Padding(2);
+			this.label50.Size = new System.Drawing.Size(431, 18);
 			this.label50.TabIndex = 50;
 			this.label50.Text = "Words mana and color have 2 or less words between them";
 			// 
 			// label51
 			// 
+			this.label51.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label51.AutoSize = true;
 			this.label51.BackColor = System.Drawing.SystemColors.Control;
-			this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label51.Location = new System.Drawing.Point(255, 762);
-			this.label51.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label51.Location = new System.Drawing.Point(218, 786);
+			this.label51.Margin = new System.Windows.Forms.Padding(0);
 			this.label51.Name = "label51";
-			this.label51.Size = new System.Drawing.Size(473, 16);
+			this.label51.Padding = new System.Windows.Forms.Padding(2);
+			this.label51.Size = new System.Drawing.Size(431, 18);
 			this.label51.TabIndex = 51;
 			this.label51.Text = "A word between \'a\' and \'ced\' in alphabet order";
 			// 
 			// label52
 			// 
+			this.label52.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label52.AutoSize = true;
 			this.label52.BackColor = System.Drawing.SystemColors.Window;
-			this.label52.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label52.Location = new System.Drawing.Point(255, 778);
-			this.label52.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label52.Location = new System.Drawing.Point(218, 804);
+			this.label52.Margin = new System.Windows.Forms.Padding(0);
 			this.label52.Name = "label52";
-			this.label52.Size = new System.Drawing.Size(473, 16);
+			this.label52.Padding = new System.Windows.Forms.Padding(2);
+			this.label52.Size = new System.Drawing.Size(431, 18);
 			this.label52.TabIndex = 52;
 			this.label52.Text = "Cards with price strictly > than 100$";
 			// 
 			// label53
 			// 
+			this.label53.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label53.AutoSize = true;
 			this.label53.BackColor = System.Drawing.SystemColors.Control;
-			this.label53.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label53.Location = new System.Drawing.Point(255, 794);
-			this.label53.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label53.Location = new System.Drawing.Point(218, 822);
+			this.label53.Margin = new System.Windows.Forms.Padding(0);
 			this.label53.Name = "label53";
-			this.label53.Size = new System.Drawing.Size(473, 16);
+			this.label53.Padding = new System.Windows.Forms.Padding(2);
+			this.label53.Size = new System.Drawing.Size(431, 18);
 			this.label53.TabIndex = 53;
 			this.label53.Text = "Boundary types are {} non-inclusive, [] inclusive";
 			// 
 			// label54
 			// 
+			this.label54.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label54.AutoSize = true;
 			this.label54.BackColor = System.Drawing.SystemColors.Window;
-			this.label54.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label54.Location = new System.Drawing.Point(255, 810);
-			this.label54.Margin = new System.Windows.Forms.Padding(0, 0, 1, 1);
+			this.label54.Location = new System.Drawing.Point(218, 840);
+			this.label54.Margin = new System.Windows.Forms.Padding(0);
 			this.label54.Name = "label54";
-			this.label54.Size = new System.Drawing.Size(473, 40);
+			this.label54.Padding = new System.Windows.Forms.Padding(2);
+			this.label54.Size = new System.Drawing.Size(431, 18);
 			this.label54.TabIndex = 54;
 			this.label54.Text = "^3 booster affects sort order multiplying angel score by 3";
 			// 
 			// label13
 			// 
+			this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label13.AutoSize = true;
 			this.label13.BackColor = System.Drawing.SystemColors.Control;
-			this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label13.Location = new System.Drawing.Point(2, 149);
-			this.label13.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label13.Location = new System.Drawing.Point(0, 150);
+			this.label13.Margin = new System.Windows.Forms.Padding(0);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(253, 118);
+			this.label13.Padding = new System.Windows.Forms.Padding(2);
+			this.label13.Size = new System.Drawing.Size(218, 130);
 			this.label13.TabIndex = 12;
 			this.label13.Text = "name: shivan dragon";
 			// 
 			// label14
 			// 
+			this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label14.AutoSize = true;
 			this.label14.BackColor = System.Drawing.SystemColors.Window;
-			this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label14.Location = new System.Drawing.Point(2, 133);
-			this.label14.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label14.Location = new System.Drawing.Point(0, 132);
+			this.label14.Margin = new System.Windows.Forms.Padding(0);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(253, 16);
+			this.label14.Padding = new System.Windows.Forms.Padding(2);
+			this.label14.Size = new System.Drawing.Size(218, 18);
 			this.label14.TabIndex = 13;
 			this.label14.Text = "angel";
 			// 
 			// label33
 			// 
+			this.label33.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label33.AutoSize = true;
 			this.label33.BackColor = System.Drawing.SystemColors.Control;
-			this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label33.Location = new System.Drawing.Point(255, 149);
-			this.label33.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label33.Location = new System.Drawing.Point(218, 150);
+			this.label33.Margin = new System.Windows.Forms.Padding(0);
 			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(473, 118);
+			this.label33.Padding = new System.Windows.Forms.Padding(2);
+			this.label33.Size = new System.Drawing.Size(431, 130);
 			this.label33.TabIndex = 33;
 			this.label33.Text = resources.GetString("label33.Text");
 			// 
 			// label34
 			// 
+			this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label34.AutoSize = true;
 			this.label34.BackColor = System.Drawing.SystemColors.Window;
-			this.label34.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label34.Location = new System.Drawing.Point(255, 133);
-			this.label34.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label34.Location = new System.Drawing.Point(218, 132);
+			this.label34.Margin = new System.Windows.Forms.Padding(0);
 			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(473, 16);
+			this.label34.Padding = new System.Windows.Forms.Padding(2);
+			this.label34.Size = new System.Drawing.Size(431, 18);
 			this.label34.TabIndex = 34;
 			this.label34.Text = "Will not match angelic. Use wildcards * and ? e.g. angel*";
 			// 
 			// label16
 			// 
-			this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label16.Location = new System.Drawing.Point(2, 333);
-			this.label16.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label16.AutoSize = true;
+			this.label16.Location = new System.Drawing.Point(0, 346);
+			this.label16.Margin = new System.Windows.Forms.Padding(0);
 			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(253, 16);
+			this.label16.Padding = new System.Windows.Forms.Padding(2);
+			this.label16.Size = new System.Drawing.Size(218, 18);
 			this.label16.TabIndex = 15;
 			this.label16.Text = "like: \"predator ooze\"~0.75";
 			// 
 			// label36
 			// 
+			this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label36.AutoSize = true;
 			this.label36.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label36.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label36.Location = new System.Drawing.Point(255, 267);
-			this.label36.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label36.Location = new System.Drawing.Point(218, 280);
+			this.label36.Margin = new System.Windows.Forms.Padding(0);
 			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(473, 34);
+			this.label36.Size = new System.Drawing.Size(431, 30);
 			this.label36.TabIndex = 36;
 			this.label36.Text = "The button on top-right corner of card image does the same";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label35
 			// 
+			this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label35.AutoSize = true;
 			this.label35.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label35.Location = new System.Drawing.Point(255, 99);
-			this.label35.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label35.Location = new System.Drawing.Point(218, 102);
+			this.label35.Margin = new System.Windows.Forms.Padding(0);
 			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(473, 34);
+			this.label35.Size = new System.Drawing.Size(431, 30);
 			this.label35.TabIndex = 35;
 			this.label35.Text = "Search is case-INsensitive, AND OR NOT must be uppercase";
 			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label55
 			// 
-			this.label55.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label55.Location = new System.Drawing.Point(2, 617);
-			this.label55.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label55.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label55.AutoSize = true;
+			this.label55.Location = new System.Drawing.Point(0, 624);
+			this.label55.Margin = new System.Windows.Forms.Padding(0);
 			this.label55.Name = "label55";
-			this.label55.Size = new System.Drawing.Size(253, 16);
+			this.label55.Padding = new System.Windows.Forms.Padding(2);
+			this.label55.Size = new System.Drawing.Size(218, 18);
 			this.label55.TabIndex = 55;
-			this.label55.Text = "text: \"/counters?/ (on OR from) it\"";
+			this.label55.Text = "\"/counters?/ (on OR from) it\"";
 			// 
 			// label56
 			// 
-			this.label56.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label56.Location = new System.Drawing.Point(255, 617);
-			this.label56.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this.label56.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label56.AutoSize = true;
+			this.label56.Location = new System.Drawing.Point(218, 624);
+			this.label56.Margin = new System.Windows.Forms.Padding(0);
 			this.label56.Name = "label56";
-			this.label56.Size = new System.Drawing.Size(473, 16);
+			this.label56.Padding = new System.Windows.Forms.Padding(2);
+			this.label56.Size = new System.Drawing.Size(431, 18);
 			this.label56.TabIndex = 56;
 			this.label56.Text = "Regular expression and boolean subqueries inside phrase";
 			// 
 			// label17
 			// 
+			this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label17.AutoSize = true;
 			this.label17.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label17.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label17.Location = new System.Drawing.Point(2, 267);
-			this.label17.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this.label17.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label17.Location = new System.Drawing.Point(0, 280);
+			this.label17.Margin = new System.Windows.Forms.Padding(0);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(253, 34);
+			this.label17.Padding = new System.Windows.Forms.Padding(4);
+			this.label17.Size = new System.Drawing.Size(218, 30);
 			this.label17.TabIndex = 16;
 			this.label17.Text = "Search similar cards";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -882,13 +1126,17 @@
 			// SearchExamplesMenu
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.Controls.Add(this._panelExamples);
 			this.Font = new System.Drawing.Font("Consolas", 9F);
 			this.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.Name = "SearchExamplesMenu";
-			this.Size = new System.Drawing.Size(730, 852);
+			this.Padding = new System.Windows.Forms.Padding(1);
+			this.Size = new System.Drawing.Size(651, 860);
 			this._panelExamples.ResumeLayout(false);
+			this._panelExamples.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

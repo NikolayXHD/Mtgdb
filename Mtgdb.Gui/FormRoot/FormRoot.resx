@@ -117,18 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_labelPasteInfo.Text" xml:space="preserve">
-    <value>Select and Drag-n-drop deck from websites
-
-- Drag-n-drop to create new Deck
-- Shift + Drag-n-drop to add to Deck
-- Alt + Drag-n-drop create Collection
-- Alt + Shift + Drag-n-drop to add to Collection
-
-In Forge Deck editor in List View mode Copy 
-selected cards with Ctrl + C</value>
-  </data>
   <metadata name="_menuColors.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="_labelPasteInfo.Text" xml:space="preserve">
+    <value>* Select and Drag-n-drop deck from websites
+  - Drag-n-drop to create new Deck
+  - Shift + Drag-n-drop to add to Deck
+  - Alt + Drag-n-drop create Collection
+  - Alt + Shift + Drag-n-drop to add to Collection
+
+* In Forge Deck editor in List View mode Copy 
+selected cards with Ctrl + C</value>
+  </data>
 </root>

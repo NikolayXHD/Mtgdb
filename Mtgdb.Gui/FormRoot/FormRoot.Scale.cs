@@ -24,7 +24,8 @@ namespace Mtgdb.Gui
 			this.ScaleDpi();
 
 			_tabs.ScaleDpi(bmp => bmp?.HalfResizeDpi());
-			_panelAva.ScaleDpi(bmp => bmp?.HalfResizeDpi());
+
+			_panelAva.ScaleDpiImages();
 
 			_labelPasteInfo.ScaleDpiFont();
 			_labelFormats.ScaleDpiFont();

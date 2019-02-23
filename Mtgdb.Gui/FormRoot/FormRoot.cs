@@ -35,14 +35,14 @@ namespace Mtgdb.Gui
 				{
 					TitleButton = _dropdownOpenDeck,
 					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
-					MtgArenaButtonText = "Import deck\r\nfrom MTGArena",
+					MtgArenaButtonText = "Import deck from MTGArena",
 					IsMtgArenaPaste = true
 				},
 				new SaveLoadMenuMode
 				{
 					TitleButton = _dropdownSaveDeck,
 					MenuButtons = new[] { _buttonMenuSaveDeck, _buttonMenuSaveCollection },
-					MtgArenaButtonText = "Export deck\r\nto MTGArena",
+					MtgArenaButtonText = "Export deck to MTGArena",
 					IsMtgArenaPaste = false
 				}
 			};
