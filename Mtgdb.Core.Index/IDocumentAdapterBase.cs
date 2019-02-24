@@ -7,6 +7,8 @@ namespace Mtgdb.Index
 	public interface IDocumentAdapterBase
 	{
 		IEnumerable<string> GetUserFields();
+		IReadOnlyDictionary<string, string> FieldByAlias { get; }
+
 		IEnumerable<string> GetFieldLanguages(string userField);
 
 		bool IsUserField(string userField);

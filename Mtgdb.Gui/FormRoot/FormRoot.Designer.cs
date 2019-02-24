@@ -83,14 +83,15 @@
 			this._buttonVisitMtgo = new Mtgdb.Controls.ButtonBase();
 			this._buttonVisitCockatrice = new Mtgdb.Controls.ButtonBase();
 			this._labelMagarena = new System.Windows.Forms.Label();
-			this._buttonVisitMtgArena = new Mtgdb.Controls.ButtonBase();
 			this._buttonVisitForge = new Mtgdb.Controls.ButtonBase();
 			this._buttonVisitXMage = new Mtgdb.Controls.ButtonBase();
 			this._buttonVisitMagarena = new Mtgdb.Controls.ButtonBase();
 			this._labelFormats = new System.Windows.Forms.Label();
 			this._buttonVisitDeckedBuilder = new Mtgdb.Controls.ButtonBase();
 			this._buttonImportExportToMtgArena = new Mtgdb.Controls.ButtonBase();
+			this._buttonVisitMtgArena = new Mtgdb.Controls.ButtonBase();
 			this._buttonImportMtgArenaCollection = new Mtgdb.Controls.ButtonBase();
+			this._buttonRestoreCollection = new Mtgdb.Controls.ButtonBase();
 			this._dropdownOpenDeck = new Mtgdb.Controls.Popup();
 			this._buttonTooltips = new Mtgdb.Controls.ButtonBase();
 			this._dropdownPaste = new Mtgdb.Controls.Popup();
@@ -747,29 +748,30 @@
 			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._menuOpen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._menuOpen.Controls.Add(this._labelMtgo, 2, 9);
-			this._menuOpen.Controls.Add(this._buttonVisitDotP2014, 0, 11);
+			this._menuOpen.Controls.Add(this._labelMtgo, 2, 10);
+			this._menuOpen.Controls.Add(this._buttonVisitDotP2014, 0, 12);
 			this._menuOpen.Controls.Add(this._buttonMenuSaveCollection, 0, 3);
 			this._menuOpen.Controls.Add(this._buttonMenuSaveDeck, 0, 2);
-			this._menuOpen.Controls.Add(this._labelDotP2, 2, 11);
+			this._menuOpen.Controls.Add(this._labelDotP2, 2, 12);
 			this._menuOpen.Controls.Add(this._buttonMenuOpenCollection, 0, 1);
 			this._menuOpen.Controls.Add(this._buttonMenuOpenDeck, 0, 0);
-			this._menuOpen.Controls.Add(this._buttonVisitMtgo, 0, 9);
-			this._menuOpen.Controls.Add(this._buttonVisitCockatrice, 0, 10);
-			this._menuOpen.Controls.Add(this._labelMagarena, 2, 10);
+			this._menuOpen.Controls.Add(this._buttonVisitMtgo, 0, 10);
+			this._menuOpen.Controls.Add(this._buttonVisitCockatrice, 0, 11);
+			this._menuOpen.Controls.Add(this._labelMagarena, 2, 11);
+			this._menuOpen.Controls.Add(this._buttonVisitForge, 0, 8);
+			this._menuOpen.Controls.Add(this._buttonVisitXMage, 1, 8);
+			this._menuOpen.Controls.Add(this._buttonVisitMagarena, 2, 8);
+			this._menuOpen.Controls.Add(this._labelFormats, 0, 7);
+			this._menuOpen.Controls.Add(this._buttonVisitDeckedBuilder, 3, 8);
+			this._menuOpen.Controls.Add(this._buttonImportExportToMtgArena, 1, 6);
 			this._menuOpen.Controls.Add(this._buttonVisitMtgArena, 0, 4);
-			this._menuOpen.Controls.Add(this._buttonVisitForge, 0, 7);
-			this._menuOpen.Controls.Add(this._buttonVisitXMage, 1, 7);
-			this._menuOpen.Controls.Add(this._buttonVisitMagarena, 2, 7);
-			this._menuOpen.Controls.Add(this._labelFormats, 0, 6);
-			this._menuOpen.Controls.Add(this._buttonVisitDeckedBuilder, 3, 7);
-			this._menuOpen.Controls.Add(this._buttonImportExportToMtgArena, 1, 5);
-			this._menuOpen.Controls.Add(this._buttonImportMtgArenaCollection, 1, 4);
+			this._menuOpen.Controls.Add(this._buttonRestoreCollection, 1, 4);
+			this._menuOpen.Controls.Add(this._buttonImportMtgArenaCollection, 1, 5);
 			this._menuOpen.ForeColor = System.Drawing.SystemColors.WindowText;
 			this._menuOpen.Location = new System.Drawing.Point(369, 245);
 			this._menuOpen.Margin = new System.Windows.Forms.Padding(0);
 			this._menuOpen.Name = "_menuOpen";
-			this._menuOpen.RowCount = 12;
+			this._menuOpen.RowCount = 13;
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -782,7 +784,8 @@
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuOpen.Size = new System.Drawing.Size(243, 400);
+			this._menuOpen.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._menuOpen.Size = new System.Drawing.Size(243, 420);
 			this._menuOpen.TabIndex = 4;
 			this._menuOpen.Visible = false;
 			// 
@@ -791,7 +794,7 @@
 			this._labelMtgo.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelMtgo.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelMtgo, 2);
-			this._labelMtgo.Location = new System.Drawing.Point(113, 254);
+			this._labelMtgo.Location = new System.Drawing.Point(113, 274);
 			this._labelMtgo.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this._labelMtgo.Name = "_labelMtgo";
 			this._labelMtgo.Size = new System.Drawing.Size(127, 26);
@@ -808,7 +811,7 @@
 			this._buttonVisitDotP2014.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitDotP2014.HighlightCheckedOpacity = 92;
 			this._buttonVisitDotP2014.Image = global::Mtgdb.Gui.Properties.Resources.dot_p2014_32;
-			this._buttonVisitDotP2014.Location = new System.Drawing.Point(2, 344);
+			this._buttonVisitDotP2014.Location = new System.Drawing.Point(2, 364);
 			this._buttonVisitDotP2014.Margin = new System.Windows.Forms.Padding(2, 0, 0, 2);
 			this._buttonVisitDotP2014.Name = "_buttonVisitDotP2014";
 			this._buttonVisitDotP2014.Size = new System.Drawing.Size(106, 54);
@@ -859,7 +862,7 @@
 			this._labelDotP2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDotP2.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelDotP2, 2);
-			this._labelDotP2.Location = new System.Drawing.Point(113, 358);
+			this._labelDotP2.Location = new System.Drawing.Point(113, 378);
 			this._labelDotP2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 1);
 			this._labelDotP2.Name = "_labelDotP2";
 			this._labelDotP2.Size = new System.Drawing.Size(115, 26);
@@ -912,7 +915,7 @@
 			this._buttonVisitMtgo.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitMtgo.HighlightCheckedOpacity = 92;
 			this._buttonVisitMtgo.Image = global::Mtgdb.Gui.Properties.Resources.mtgo_32;
-			this._buttonVisitMtgo.Location = new System.Drawing.Point(2, 240);
+			this._buttonVisitMtgo.Location = new System.Drawing.Point(2, 260);
 			this._buttonVisitMtgo.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonVisitMtgo.Name = "_buttonVisitMtgo";
 			this._buttonVisitMtgo.Size = new System.Drawing.Size(106, 54);
@@ -931,7 +934,7 @@
 			this._buttonVisitCockatrice.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitCockatrice.HighlightCheckedOpacity = 92;
 			this._buttonVisitCockatrice.Image = global::Mtgdb.Gui.Properties.Resources.cockatrice_32;
-			this._buttonVisitCockatrice.Location = new System.Drawing.Point(2, 294);
+			this._buttonVisitCockatrice.Location = new System.Drawing.Point(2, 314);
 			this._buttonVisitCockatrice.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonVisitCockatrice.Name = "_buttonVisitCockatrice";
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(106, 50);
@@ -946,35 +949,13 @@
 			this._labelMagarena.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelMagarena.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelMagarena, 2);
-			this._labelMagarena.Location = new System.Drawing.Point(113, 306);
+			this._labelMagarena.Location = new System.Drawing.Point(113, 326);
 			this._labelMagarena.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this._labelMagarena.Name = "_labelMagarena";
 			this._labelMagarena.Size = new System.Drawing.Size(110, 26);
 			this._labelMagarena.TabIndex = 17;
 			this._labelMagarena.Text = "* Supports Magarena\r\nformat";
 			this._labelMagarena.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// _buttonVisitMtgArena
-			// 
-			this._buttonVisitMtgArena.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this._buttonVisitMtgArena.AutoCheck = false;
-			this._buttonVisitMtgArena.Cursor = System.Windows.Forms.Cursors.Hand;
-			this._buttonVisitMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._buttonVisitMtgArena.ForeColor = System.Drawing.SystemColors.HotTrack;
-			this._buttonVisitMtgArena.HighlightCheckedOpacity = 92;
-			this._buttonVisitMtgArena.Image = global::Mtgdb.Gui.Properties.Resources.MTGArena_32;
-			this._buttonVisitMtgArena.Location = new System.Drawing.Point(1, 98);
-			this._buttonVisitMtgArena.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
-			this._buttonVisitMtgArena.Name = "_buttonVisitMtgArena";
-			this._menuOpen.SetRowSpan(this._buttonVisitMtgArena, 2);
-			this._buttonVisitMtgArena.Size = new System.Drawing.Size(59, 52);
-			this._buttonVisitMtgArena.TabIndex = 4;
-			this._buttonVisitMtgArena.Text = "MTGArena";
-			this._buttonVisitMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
-			this._buttonVisitMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-			this._buttonVisitMtgArena.TextPosition = System.Drawing.StringAlignment.Center;
-			this._buttonVisitMtgArena.VisibleAllBorders = null;
-			this._buttonVisitMtgArena.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
 			// 
 			// _buttonVisitForge
 			// 
@@ -984,7 +965,7 @@
 			this._buttonVisitForge.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitForge.HighlightCheckedOpacity = 92;
 			this._buttonVisitForge.Image = global::Mtgdb.Gui.Properties.Resources.forge_32;
-			this._buttonVisitForge.Location = new System.Drawing.Point(2, 188);
+			this._buttonVisitForge.Location = new System.Drawing.Point(2, 208);
 			this._buttonVisitForge.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonVisitForge.Name = "_buttonVisitForge";
 			this._buttonVisitForge.Size = new System.Drawing.Size(58, 50);
@@ -1002,7 +983,7 @@
 			this._buttonVisitXMage.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitXMage.HighlightCheckedOpacity = 92;
 			this._buttonVisitXMage.Image = global::Mtgdb.Gui.Properties.Resources.xmage_32;
-			this._buttonVisitXMage.Location = new System.Drawing.Point(60, 188);
+			this._buttonVisitXMage.Location = new System.Drawing.Point(60, 208);
 			this._buttonVisitXMage.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonVisitXMage.Name = "_buttonVisitXMage";
 			this._buttonVisitXMage.Size = new System.Drawing.Size(52, 50);
@@ -1020,7 +1001,7 @@
 			this._buttonVisitMagarena.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitMagarena.HighlightCheckedOpacity = 92;
 			this._buttonVisitMagarena.Image = global::Mtgdb.Gui.Properties.Resources.magarena_32;
-			this._buttonVisitMagarena.Location = new System.Drawing.Point(112, 188);
+			this._buttonVisitMagarena.Location = new System.Drawing.Point(112, 208);
 			this._buttonVisitMagarena.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this._buttonVisitMagarena.Name = "_buttonVisitMagarena";
 			this._buttonVisitMagarena.Size = new System.Drawing.Size(53, 50);
@@ -1036,7 +1017,7 @@
 			this._labelFormats.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelFormats, 4);
 			this._labelFormats.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._labelFormats.Location = new System.Drawing.Point(64, 162);
+			this._labelFormats.Location = new System.Drawing.Point(64, 182);
 			this._labelFormats.Margin = new System.Windows.Forms.Padding(3, 12, 3, 12);
 			this._labelFormats.Name = "_labelFormats";
 			this._labelFormats.Size = new System.Drawing.Size(114, 14);
@@ -1052,7 +1033,7 @@
 			this._buttonVisitDeckedBuilder.ForeColor = System.Drawing.SystemColors.HotTrack;
 			this._buttonVisitDeckedBuilder.HighlightCheckedOpacity = 92;
 			this._buttonVisitDeckedBuilder.Image = global::Mtgdb.Gui.Properties.Resources.decked_builder;
-			this._buttonVisitDeckedBuilder.Location = new System.Drawing.Point(169, 188);
+			this._buttonVisitDeckedBuilder.Location = new System.Drawing.Point(169, 208);
 			this._buttonVisitDeckedBuilder.Margin = new System.Windows.Forms.Padding(2, 0, 0, 2);
 			this._buttonVisitDeckedBuilder.Name = "_buttonVisitDeckedBuilder";
 			this._buttonVisitDeckedBuilder.Size = new System.Drawing.Size(73, 50);
@@ -1072,18 +1053,39 @@
 			this._buttonImportExportToMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonImportExportToMtgArena.ForeColor = System.Drawing.SystemColors.WindowText;
 			this._buttonImportExportToMtgArena.Image = global::Mtgdb.Gui.Properties.Resources.paste_16;
-			this._buttonImportExportToMtgArena.ImagePosition = System.Drawing.StringAlignment.Far;
-			this._buttonImportExportToMtgArena.Location = new System.Drawing.Point(60, 126);
+			this._buttonImportExportToMtgArena.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonImportExportToMtgArena.Location = new System.Drawing.Point(60, 146);
 			this._buttonImportExportToMtgArena.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
 			this._buttonImportExportToMtgArena.Name = "_buttonImportExportToMtgArena";
 			this._buttonImportExportToMtgArena.Size = new System.Drawing.Size(182, 24);
 			this._buttonImportExportToMtgArena.TabIndex = 6;
 			this._buttonImportExportToMtgArena.Text = "Export deck to MTGArena";
 			this._buttonImportExportToMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
-			this._buttonImportExportToMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this._buttonImportExportToMtgArena.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonImportExportToMtgArena.VisibleAllBorders = null;
 			this._buttonImportExportToMtgArena.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
+			// 
+			// _buttonVisitMtgArena
+			// 
+			this._buttonVisitMtgArena.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._buttonVisitMtgArena.AutoCheck = false;
+			this._buttonVisitMtgArena.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonVisitMtgArena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonVisitMtgArena.ForeColor = System.Drawing.SystemColors.HotTrack;
+			this._buttonVisitMtgArena.HighlightCheckedOpacity = 92;
+			this._buttonVisitMtgArena.Image = global::Mtgdb.Gui.Properties.Resources.MTGArena_32;
+			this._buttonVisitMtgArena.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonVisitMtgArena.Location = new System.Drawing.Point(1, 118);
+			this._buttonVisitMtgArena.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+			this._buttonVisitMtgArena.Name = "_buttonVisitMtgArena";
+			this._menuOpen.SetRowSpan(this._buttonVisitMtgArena, 3);
+			this._buttonVisitMtgArena.Size = new System.Drawing.Size(59, 52);
+			this._buttonVisitMtgArena.TabIndex = 4;
+			this._buttonVisitMtgArena.Text = "MTGArena";
+			this._buttonVisitMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
+			this._buttonVisitMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+			this._buttonVisitMtgArena.VisibleAllBorders = null;
+			this._buttonVisitMtgArena.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
 			// 
 			// _buttonImportMtgArenaCollection
 			// 
@@ -1094,7 +1096,7 @@
 			this._buttonImportMtgArenaCollection.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonImportMtgArenaCollection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonImportMtgArenaCollection.ForeColor = System.Drawing.SystemColors.WindowText;
-			this._buttonImportMtgArenaCollection.Location = new System.Drawing.Point(60, 98);
+			this._buttonImportMtgArenaCollection.Location = new System.Drawing.Point(60, 122);
 			this._buttonImportMtgArenaCollection.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
 			this._buttonImportMtgArenaCollection.Name = "_buttonImportMtgArenaCollection";
 			this._buttonImportMtgArenaCollection.Size = new System.Drawing.Size(182, 24);
@@ -1102,6 +1104,26 @@
 			this._buttonImportMtgArenaCollection.Text = "Import collection from MTGArena";
 			this._buttonImportMtgArenaCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonImportMtgArenaCollection.TextPosition = System.Drawing.StringAlignment.Center;
+			// 
+			// _buttonRestoreCollection
+			// 
+			this._buttonRestoreCollection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._buttonRestoreCollection.AutoCheck = false;
+			this._buttonRestoreCollection.BackColor = System.Drawing.SystemColors.Window;
+			this._menuOpen.SetColumnSpan(this._buttonRestoreCollection, 3);
+			this._buttonRestoreCollection.Cursor = System.Windows.Forms.Cursors.Hand;
+			this._buttonRestoreCollection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._buttonRestoreCollection.ForeColor = System.Drawing.SystemColors.WindowText;
+			this._buttonRestoreCollection.Image = global::Mtgdb.Gui.Properties.Resources.undo_16;
+			this._buttonRestoreCollection.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonRestoreCollection.Location = new System.Drawing.Point(60, 98);
+			this._buttonRestoreCollection.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+			this._buttonRestoreCollection.Name = "_buttonRestoreCollection";
+			this._buttonRestoreCollection.Size = new System.Drawing.Size(182, 24);
+			this._buttonRestoreCollection.TabIndex = 18;
+			this._buttonRestoreCollection.Text = "Restore collection before import";
+			this._buttonRestoreCollection.TextAlign = System.Drawing.StringAlignment.Center;
+			this._buttonRestoreCollection.TextPosition = System.Drawing.StringAlignment.Center;
 			// 
 			// _dropdownOpenDeck
 			// 
@@ -1593,5 +1615,6 @@
 		private Controls.CheckBox _checkboxSearchBar;
 		private Controls.Popup _popupPanelVisibility;
 		private Controls.CheckBox _checkboxAllPanels;
+		private Controls.ButtonBase _buttonRestoreCollection;
 	}
 }

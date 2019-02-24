@@ -133,7 +133,7 @@ namespace Mtgdb.Index
 			void getContentToIndex((string UserField, string Language) task)
 			{
 				var values = _adapter.IsStoredInSpellchecker(task.UserField, task.Language)
-					? GetObjectsToIndex().SelectMany(c => 
+					? GetObjectsToIndex().SelectMany(c =>
 						_adapter.GetSpellcheckerValues(c, task.UserField, task.Language))
 					: GetValuesCache(task.UserField, task.Language);
 
@@ -245,7 +245,7 @@ namespace Mtgdb.Index
 		private static IEnumerable<string> getNumericallySimilarValues(IReadOnlyList<string> cache, string value) =>
 			cache.Where(_ => _.IndexOf(value, Str.Comparison) >= 0);
 
-		
+
 
 		public bool IsLoaded { get; private set; }
 		public bool IsLoading { get; private set; }

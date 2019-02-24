@@ -130,14 +130,14 @@ Cycle keyword alphabetically without opening intellisense:
 - hit Ctrl + Down or Ctrl+Up</value>
   </data>
   <data name="label33.Text" xml:space="preserve">
-    <value>Will not search cards with name shivan dragon because the
+    <value>Will not only find cards with name "shivan dragon" because the
 query is equivalent to 
-  name: shivan OR *:dragon
+  name: shivan AND *:dragon
 where * means any field.
 
-Unquoted words are separate terms joined by OR unless there
-is AND in between. Correct queries would be
+Unquoted words are separate terms joined by AND unless there
+is OR in between. Correct queries would be
   name: "shivan dragon"
-  name:(shivan OR dragon)</value>
+  name:(shivan AND dragon)</value>
   </data>
 </root>

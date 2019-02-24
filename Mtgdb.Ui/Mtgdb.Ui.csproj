@@ -102,7 +102,6 @@
     <Compile Include="Search\SearchSubsystem.cs" />
     <Compile Include="SortSubsystem.cs" />
     <Compile Include="Search\SuggestModel.cs" />
-    <Compile Include="UnformattedJsonConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">

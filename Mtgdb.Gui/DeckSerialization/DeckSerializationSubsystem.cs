@@ -61,6 +61,11 @@ namespace Mtgdb.Gui
 			return save(collection, "collection");
 		}
 
+		public Deck SaveCollectionBackup(Deck collection)
+		{
+			return save(collection, "collection");
+		}
+
 		private Deck save(Deck deck, string fileType)
 		{
 			var fileToSave = selectFileToSave(deck.Name, fileType);
@@ -68,12 +73,17 @@ namespace Mtgdb.Gui
 			if (fileToSave == null)
 				return null;
 
-			deck.File = fileToSave.File;
-			if (deck.Name == null)
-				deck.Name = Path.GetFileNameWithoutExtension(fileToSave.File);
+			return save(deck, fileToSave);
+		}
 
-			var name = Path.GetFileNameWithoutExtension(fileToSave.File);
-			var formatter = _saveFormatters[fileToSave.FormatIndex];
+		private Deck save(Deck deck, DeckFile file)
+		{
+			deck.File = file.File;
+			if (deck.Name == null)
+				deck.Name = Path.GetFileNameWithoutExtension(file.File);
+
+			var name = Path.GetFileNameWithoutExtension(file.File);
+			var formatter = _saveFormatters[file.FormatIndex];
 
 			string serialized = formatter.ExportDeck(name, deck);
 
@@ -85,11 +95,11 @@ namespace Mtgdb.Gui
 					var content = Encoding.UTF8.GetBytes(serialized);
 					var bytes = preamble.Concat(content).ToArray();
 
-					File.WriteAllBytes(fileToSave.File, bytes);
+					File.WriteAllBytes(file.File, bytes);
 				}
 				else
 				{
-					File.WriteAllText(fileToSave.File, serialized);
+					File.WriteAllText(file.File, serialized);
 				}
 			}
 			catch (IOException ex)

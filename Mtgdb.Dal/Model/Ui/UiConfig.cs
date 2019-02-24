@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Mtgdb.Dal
 {
@@ -27,6 +28,8 @@ namespace Mtgdb.Dal
 
 		[DefaultValue(true)]
 		public bool ShowSearchBar { get; set; } = true;
+
+		public Dictionary<string, int> CollectionBeforeImportMtga { get; set; }
 
 		public const int DefaultUiScalePercent = 100;
 		private const int DefaultCacheCapacity = 100;

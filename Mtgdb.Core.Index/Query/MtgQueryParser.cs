@@ -21,6 +21,7 @@ namespace Mtgdb.Index
 			FuzzyMinSim = 0.5f;
 			AllowLeadingWildcard = true;
 			AutoGeneratePhraseQueries = true;
+			DefaultOperator = AND_OPERATOR;
 		}
 
 		public override Query Parse(string query)
@@ -254,6 +255,9 @@ namespace Mtgdb.Index
 			Func<(bool IsFloat, bool IsInt)> numericTypeGetter,
 			QueryFactory queryFactory)
 		{
+			if (_adapter.FieldByAlias.TryGetValue(field, out var actualField))
+				return resolveField(actualField, numericTypeGetter, queryFactory);
+
 			bool isAnalyzed(string userField) =>
 				!_adapter.IsNotAnalyzed(userField);
 

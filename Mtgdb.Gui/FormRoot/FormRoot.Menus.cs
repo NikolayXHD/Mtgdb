@@ -45,6 +45,7 @@ namespace Mtgdb.Gui
 			_menuColors.Items[0].Click += buttonColorSchemeClick;
 
 			_buttonImportMtgArenaCollection.Pressed += buttonImportMtgArenaCollectionClick;
+			_buttonRestoreCollection.Pressed += buttonRestoreCollectionClick;
 		}
 
 		private void buttonColorSchemeClick(object sender, EventArgs e)
@@ -87,6 +88,9 @@ namespace Mtgdb.Gui
 			else
 				form.CopyDeckInMtgArenaFormat();
 		}
+
+		private void buttonRestoreCollectionClick(object sender, EventArgs e) =>
+			SelectedTab?.RestoreCollectionBeforeMtgArenaImport();
 
 		private void buttonImportMtgArenaCollectionClick(object sender, EventArgs e) =>
 			SelectedTab?.ImportMtgArenaCollection();
@@ -248,7 +252,8 @@ namespace Mtgdb.Gui
 					_buttonImportExportToMtgArena.Text = state.MtgArenaButtonText;
 
 				foreach (var menuButton in state.MenuButtons)
-					menuButton.Visible = state.IsCurrent;
+					menuButton.Visible = state.IsCurrent &&
+						(menuButton != _buttonRestoreCollection || _uiConfigRepository.Config.CollectionBeforeImportMtga != null);
 			}
 
 			_menuOpen.ResumeLayout(false);

@@ -5,6 +5,7 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
 using Mtgdb.Index;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -18,13 +19,16 @@ namespace Mtgdb.Controls
 		public IEnumerable<string> GetUserFields() =>
 			_userFields;
 
-		public bool IsUserField(string userField) => 
+		public IReadOnlyDictionary<string, string> FieldByAlias { get; } =
+			new Dictionary<string, string>(Str.Comparer).AsReadOnlyDictionary();
+
+		public bool IsUserField(string userField) =>
 			_userFields.Contains(userField);
 
-		public IEnumerable<string> GetFieldLanguages(string userField) => 
+		public IEnumerable<string> GetFieldLanguages(string userField) =>
 			Sequence.From((string) null);
 
-		public bool IsIntField(string userField) => 
+		public bool IsIntField(string userField) =>
 			userField != null && userField.EndsWith("count", Str.Comparison);
 
 		public bool IsFloatField(string userField) =>
@@ -33,10 +37,10 @@ namespace Mtgdb.Controls
 		public bool IsIndexedInSpellchecker(string userField) =>
 			!this.IsNumericField(userField);
 
-		public bool IsStoredInSpellchecker(string userField, string lang) => 
+		public bool IsStoredInSpellchecker(string userField, string lang) =>
 			_spellcheckerValues.ContainsKey(userField);
 
-		public string GetSpellcheckerFieldIn(string userField, string lang) => 
+		public string GetSpellcheckerFieldIn(string userField, string lang) =>
 			userField.ToLower(Str.Culture);
 
 		public string GetFieldLocalizedIn(string userField, string lang) =>
@@ -45,8 +49,8 @@ namespace Mtgdb.Controls
 		public bool IsAnyField(string field) =>
 			string.IsNullOrEmpty(field) || field == AnyField;
 
-		public bool IsSuggestAnalyzedIn(string userField, string lang) => 
-			!IsNotAnalyzed(userField) && 
+		public bool IsSuggestAnalyzedIn(string userField, string lang) =>
+			!IsNotAnalyzed(userField) &&
 			!_spellcheckerValues.ContainsKey(userField);
 
 		public bool IsNotAnalyzed(string userField) =>
@@ -55,7 +59,7 @@ namespace Mtgdb.Controls
 		public IEnumerable<string> GetSpellcheckerValues(DeckModel obj, string userField, string language) =>
 			_spellcheckerValues[userField](obj);
 
-		public long GetId(Document doc) => 
+		public long GetId(Document doc) =>
 			long.Parse(doc.Get(nameof(DeckModel.Id).ToLower(Str.Culture)));
 
 		public Document ToDocument(DeckModel deck)

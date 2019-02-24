@@ -59,6 +59,7 @@ namespace Mtgdb.Gui
 
 			_buttonImportExportToMtgArena.ScaleDpiAuto((Resources.paste_16, Resources.paste_32));
 			_buttonImportMtgArenaCollection.ScaleDpiAuto();
+			_buttonRestoreCollection.ScaleDpiAuto((Resources.undo_16, Resources.undo_32));
 
 			new[]
 				{

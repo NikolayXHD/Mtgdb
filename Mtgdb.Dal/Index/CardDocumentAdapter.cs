@@ -5,6 +5,7 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
 using Mtgdb.Index;
+using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Dal.Index
 {
@@ -88,6 +89,22 @@ namespace Mtgdb.Dal.Index
 
 		public IEnumerable<string> GetUserFields() =>
 			DocumentFactory.UserFields;
+
+		public IReadOnlyDictionary<string, string> FieldByAlias { get; } =
+			new Dictionary<string, string>(Str.Comparer)
+			{
+				["e"] = nameof(Card.SetCode),
+				["c"] = nameof(Card.Color),
+				["t"] = nameof(Card.TypeEn),
+				["o"] = nameof(Card.TextEn),
+				["m"] = nameof(Card.ManaCost),
+				["pow"] = nameof(Card.PowerNum),
+				["tou"] = nameof(Card.ToughnessNum),
+				["loy"] = nameof(Card.LoyaltyNum),
+				["f"] = nameof(Card.LegalIn),
+				["a"] = nameof(Card.Artist),
+				["ft"] = nameof(Card.FlavorEn)
+			}.AsReadOnlyDictionary();
 
 		public IEnumerable<string> GetFieldLanguages(string userField)
 		{

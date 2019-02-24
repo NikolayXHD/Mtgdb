@@ -1,17 +1,27 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using Mtgdb.Ui;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Dal
 {
 	public class UiConfigRepository
 	{
-		private UiConfig _config;
-		public UiConfig Config => _config ?? (_config = readConfig());
+		static UiConfigRepository()
+		{
+			_serializer = new JsonSerializer();
+
+			_serializer.Converters.Add(
+				new UnformattedJsonConverter(objectType =>
+					typeof(IDictionary<string, int>).IsAssignableFrom(objectType) ||
+					typeof(IEnumerable<string>).IsAssignableFrom(objectType)));
+		}
 
 		public void Save()
 		{
-			var serialized = JsonConvert.SerializeObject(Config, Formatting.Indented);
-			File.WriteAllText(_fileName, serialized);
+			using (var writer = File.CreateText(_fileName))
+			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
+				_serializer.Serialize(jsonWriter, Config);
 		}
 
 		private static UiConfig readConfig()
@@ -24,6 +34,10 @@ namespace Mtgdb.Dal
 			return config;
 		}
 
+		private UiConfig _config;
+		public UiConfig Config => _config ?? (_config = readConfig());
+
 		private static readonly string _fileName = AppDir.History.AddPath("ui.json");
+		private static readonly JsonSerializer _serializer;
 	}
 }

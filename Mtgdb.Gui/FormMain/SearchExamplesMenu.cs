@@ -67,7 +67,7 @@ namespace Mtgdb.Gui
 			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
 
 			if (queryLabel.TextAlign != ContentAlignment.TopLeft)
-				return (null, null, default);
+				return default;
 
 			var commentLabel = (Label) _panelExamples.GetControlFromPosition(1, i);
 

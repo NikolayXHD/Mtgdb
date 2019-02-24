@@ -158,7 +158,7 @@ namespace Mtgdb.Index
 
 
 		private string getDisplayField(Token token) =>
-			GetDisplayField(token.ParentField ?? string.Empty);
+			GetDisplayField(Adapter.GetActualField(token.ParentField));
 
 		public void Dispose()
 		{

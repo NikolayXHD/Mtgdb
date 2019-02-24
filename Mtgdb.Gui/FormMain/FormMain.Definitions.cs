@@ -47,6 +47,7 @@ namespace Mtgdb.Gui
 
 			_cardRepo = cardRepo;
 			_imageLoader = imageLoader;
+			_uiConfigRepository = uiConfigRepository;
 			_collectionEditor = collectionEditor;
 			_serialization = serialization;
 			_mtgArenaIntegration = mtgArenaIntegration;
@@ -429,6 +430,7 @@ namespace Mtgdb.Gui
 
 		private readonly CardRepository _cardRepo;
 		private readonly ImageLoader _imageLoader;
+		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly QuickFilterFacade _quickFilterFacade;
 
 		private readonly List<Card> _searchResultCards = new List<Card>();

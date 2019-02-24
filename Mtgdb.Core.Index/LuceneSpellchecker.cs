@@ -14,9 +14,10 @@ namespace Mtgdb.Index
 			Adapter = adapter;
 			MaxCount = 20;
 
-			_userFields = Adapter.GetUserFields()
-				.Select(f => f + ":")
-				.OrderBy(Str.Comparer)
+			_userFields =
+				Adapter.FieldByAlias.Keys.OrderBy(Str.Comparer)
+					.Concat(Adapter.GetUserFields().OrderBy(Str.Comparer))
+					.Select(f => f + ":")
 				.ToReadOnlyList();
 
 			_allTokensAreField = _userFields
@@ -42,8 +43,7 @@ namespace Mtgdb.Index
 			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
 				return LuceneSpellcheckerConstants.EmptySuggest;
 
-			string userField = token.ParentField ?? string.Empty;
-
+			string userField = Adapter.GetActualField(token.ParentField);
 			bool isFieldInvalid = !Adapter.IsAnyField(userField) && !Adapter.IsUserField(userField);
 
 			if (!Adapter.IsSuggestAnalyzedIn(userField, language))
@@ -99,8 +99,7 @@ namespace Mtgdb.Index
 			if (token == null || token.Type.IsAny(TokenType.ModifierValue))
 				return null;
 
-			string userField = token.ParentField ?? string.Empty;
-
+			string userField = Adapter.GetActualField(token.ParentField);
 			bool isFieldInvalid = !Adapter.IsAnyField(userField) && !Adapter.IsUserField(userField);
 
 			if (isFieldInvalid)

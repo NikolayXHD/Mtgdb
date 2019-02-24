@@ -142,8 +142,6 @@ namespace Mtgdb.Gui
 				throw new IndexOutOfRangeException();
 		}
 
-
-
 		public GuiSettings Current => _settingsHistory?[_settingsIndex];
 
 		public bool CanRedo

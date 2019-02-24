@@ -429,7 +429,7 @@ namespace Mtgdb.Gui
 					: $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}",
 				_labelStatusScrollDeck);
 
-			_labelStatusCollection.Text = _collectionEditor.CollectionSize.ToString();
+			_labelStatusCollection.Text = getCollectionStatus();
 
 			var filterManagerStates = FilterManager.States;
 
@@ -446,6 +446,16 @@ namespace Mtgdb.Gui
 
 			_panelStatus.ResumeLayout(false);
 			_panelStatus.PerformLayout();
+		}
+
+		private string getCollectionStatus()
+		{
+			int count = _collectionEditor.CollectionSize;
+
+			if (_uiConfigRepository.Config.CollectionBeforeImportMtga != null)
+				return $"MTGArena: {count}";
+
+			return $"paper: {count}";
 		}
 
 		private static void setScrollStatus(string scrollCardsStatus, Label label)
@@ -1094,10 +1104,41 @@ namespace Mtgdb.Gui
 				return;
 			}
 
+			savePreviousCollection();
 			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null, null, null);
 			_collectionEditor.LoadCollection(deck, append: false);
 
 			MessageBox.Show($"Imported collection of {countById.Values.Sum()} cards, {countById.Count} distinct.");
+
+			void savePreviousCollection()
+			{
+				if (_uiConfigRepository.Config.CollectionBeforeImportMtga != null)
+					// we are already working with MTGA collection
+					// no point in overwriting actual collection before import with MTGA collection
+					return;
+
+				_uiConfigRepository.Config.CollectionBeforeImportMtga =
+					_history.Current.Collection ?? new Dictionary<string, int>(Str.Comparer);
+
+				_uiConfigRepository.Save();
+
+				updateFormStatus();
+			}
+		}
+
+		public void RestoreCollectionBeforeMtgArenaImport()
+		{
+			var collection = _uiConfigRepository.Config.CollectionBeforeImportMtga;
+			if (collection == null)
+				return;
+
+			var deck = Deck.Create(collection, collection.Keys.ToList(), null, null, null, null);
+			_collectionEditor.LoadCollection(deck, append: false);
+
+			_uiConfigRepository.Config.CollectionBeforeImportMtga = null;
+			_uiConfigRepository.Save();
+
+			updateFormStatus();
 		}
 
 		private void beginRestoreSettings()

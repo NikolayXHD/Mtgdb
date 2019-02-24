@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 				new SaveLoadMenuMode
 				{
 					TitleButton = _dropdownOpenDeck,
-					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection },
+					MenuButtons = new[] { _buttonMenuOpenDeck, _buttonMenuOpenCollection, _buttonImportMtgArenaCollection, _buttonRestoreCollection },
 					MtgArenaButtonText = "Import deck from MTGArena",
 					IsMtgArenaPaste = true
 				},

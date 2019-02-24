@@ -37,11 +37,9 @@
 			this.label58 = new System.Windows.Forms.Label();
 			this.label57 = new System.Windows.Forms.Label();
 			this.label32 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -92,6 +90,10 @@
 			this.label55 = new System.Windows.Forms.Label();
 			this.label56 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label63 = new System.Windows.Forms.Label();
+			this.label64 = new System.Windows.Forms.Label();
 			this._panelExamples.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -103,72 +105,74 @@
 			this._panelExamples.ColumnCount = 2;
 			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._panelExamples.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._panelExamples.Controls.Add(this.label62, 1, 27);
-			this._panelExamples.Controls.Add(this.label61, 0, 27);
-			this._panelExamples.Controls.Add(this.label60, 1, 13);
-			this._panelExamples.Controls.Add(this.label59, 0, 13);
-			this._panelExamples.Controls.Add(this.label58, 1, 12);
-			this._panelExamples.Controls.Add(this.label57, 0, 12);
-			this._panelExamples.Controls.Add(this.label32, 0, 31);
-			this._panelExamples.Controls.Add(this.label9, 1, 4);
-			this._panelExamples.Controls.Add(this.label8, 1, 3);
+			this._panelExamples.Controls.Add(this.label62, 1, 29);
+			this._panelExamples.Controls.Add(this.label61, 0, 29);
+			this._panelExamples.Controls.Add(this.label32, 0, 33);
 			this._panelExamples.Controls.Add(this.label7, 1, 2);
 			this._panelExamples.Controls.Add(this.label3, 0, 2);
-			this._panelExamples.Controls.Add(this.label2, 1, 1);
 			this._panelExamples.Controls.Add(this.label1, 0, 1);
-			this._panelExamples.Controls.Add(this.label4, 0, 3);
-			this._panelExamples.Controls.Add(this.label5, 0, 4);
 			this._panelExamples.Controls.Add(this.label11, 0, 0);
-			this._panelExamples.Controls.Add(this.label12, 0, 5);
-			this._panelExamples.Controls.Add(this.label15, 0, 9);
-			this._panelExamples.Controls.Add(this.label18, 0, 10);
-			this._panelExamples.Controls.Add(this.label19, 0, 14);
-			this._panelExamples.Controls.Add(this.label20, 0, 15);
-			this._panelExamples.Controls.Add(this.label21, 0, 16);
-			this._panelExamples.Controls.Add(this.label23, 0, 17);
-			this._panelExamples.Controls.Add(this.label22, 0, 18);
-			this._panelExamples.Controls.Add(this.label24, 0, 20);
-			this._panelExamples.Controls.Add(this.label25, 0, 21);
-			this._panelExamples.Controls.Add(this.label26, 0, 22);
-			this._panelExamples.Controls.Add(this.label27, 0, 23);
-			this._panelExamples.Controls.Add(this.label28, 0, 24);
-			this._panelExamples.Controls.Add(this.label6, 0, 25);
-			this._panelExamples.Controls.Add(this.label10, 0, 26);
-			this._panelExamples.Controls.Add(this.label29, 0, 28);
-			this._panelExamples.Controls.Add(this.label30, 0, 29);
-			this._panelExamples.Controls.Add(this.label31, 0, 30);
-			this._panelExamples.Controls.Add(this.label37, 1, 9);
-			this._panelExamples.Controls.Add(this.label38, 1, 10);
-			this._panelExamples.Controls.Add(this.label39, 1, 11);
-			this._panelExamples.Controls.Add(this.label40, 1, 15);
-			this._panelExamples.Controls.Add(this.label41, 1, 16);
-			this._panelExamples.Controls.Add(this.label42, 1, 17);
-			this._panelExamples.Controls.Add(this.label43, 1, 18);
-			this._panelExamples.Controls.Add(this.label44, 1, 20);
-			this._panelExamples.Controls.Add(this.label45, 1, 21);
-			this._panelExamples.Controls.Add(this.label46, 1, 22);
-			this._panelExamples.Controls.Add(this.label47, 1, 23);
-			this._panelExamples.Controls.Add(this.label48, 1, 24);
-			this._panelExamples.Controls.Add(this.label49, 1, 25);
-			this._panelExamples.Controls.Add(this.label50, 1, 26);
-			this._panelExamples.Controls.Add(this.label51, 1, 28);
-			this._panelExamples.Controls.Add(this.label52, 1, 29);
-			this._panelExamples.Controls.Add(this.label53, 1, 30);
-			this._panelExamples.Controls.Add(this.label54, 1, 31);
-			this._panelExamples.Controls.Add(this.label13, 0, 7);
-			this._panelExamples.Controls.Add(this.label14, 0, 6);
-			this._panelExamples.Controls.Add(this.label33, 1, 7);
-			this._panelExamples.Controls.Add(this.label34, 1, 6);
-			this._panelExamples.Controls.Add(this.label16, 0, 11);
-			this._panelExamples.Controls.Add(this.label36, 1, 8);
-			this._panelExamples.Controls.Add(this.label35, 1, 5);
-			this._panelExamples.Controls.Add(this.label55, 0, 19);
-			this._panelExamples.Controls.Add(this.label56, 1, 19);
-			this._panelExamples.Controls.Add(this.label17, 0, 8);
+			this._panelExamples.Controls.Add(this.label20, 0, 17);
+			this._panelExamples.Controls.Add(this.label21, 0, 18);
+			this._panelExamples.Controls.Add(this.label23, 0, 19);
+			this._panelExamples.Controls.Add(this.label22, 0, 20);
+			this._panelExamples.Controls.Add(this.label24, 0, 22);
+			this._panelExamples.Controls.Add(this.label25, 0, 23);
+			this._panelExamples.Controls.Add(this.label26, 0, 24);
+			this._panelExamples.Controls.Add(this.label27, 0, 25);
+			this._panelExamples.Controls.Add(this.label28, 0, 26);
+			this._panelExamples.Controls.Add(this.label6, 0, 27);
+			this._panelExamples.Controls.Add(this.label10, 0, 28);
+			this._panelExamples.Controls.Add(this.label29, 0, 30);
+			this._panelExamples.Controls.Add(this.label30, 0, 31);
+			this._panelExamples.Controls.Add(this.label31, 0, 32);
+			this._panelExamples.Controls.Add(this.label40, 1, 17);
+			this._panelExamples.Controls.Add(this.label41, 1, 18);
+			this._panelExamples.Controls.Add(this.label42, 1, 19);
+			this._panelExamples.Controls.Add(this.label43, 1, 20);
+			this._panelExamples.Controls.Add(this.label44, 1, 22);
+			this._panelExamples.Controls.Add(this.label45, 1, 23);
+			this._panelExamples.Controls.Add(this.label46, 1, 24);
+			this._panelExamples.Controls.Add(this.label47, 1, 25);
+			this._panelExamples.Controls.Add(this.label48, 1, 26);
+			this._panelExamples.Controls.Add(this.label49, 1, 27);
+			this._panelExamples.Controls.Add(this.label50, 1, 28);
+			this._panelExamples.Controls.Add(this.label51, 1, 30);
+			this._panelExamples.Controls.Add(this.label52, 1, 31);
+			this._panelExamples.Controls.Add(this.label53, 1, 32);
+			this._panelExamples.Controls.Add(this.label54, 1, 33);
+			this._panelExamples.Controls.Add(this.label55, 0, 21);
+			this._panelExamples.Controls.Add(this.label56, 1, 21);
+			this._panelExamples.Controls.Add(this.label9, 1, 1);
+			this._panelExamples.Controls.Add(this.label19, 0, 16);
+			this._panelExamples.Controls.Add(this.label63, 0, 5);
+			this._panelExamples.Controls.Add(this.label59, 0, 15);
+			this._panelExamples.Controls.Add(this.label60, 1, 15);
+			this._panelExamples.Controls.Add(this.label57, 0, 14);
+			this._panelExamples.Controls.Add(this.label58, 1, 14);
+			this._panelExamples.Controls.Add(this.label16, 0, 13);
+			this._panelExamples.Controls.Add(this.label39, 1, 13);
+			this._panelExamples.Controls.Add(this.label18, 0, 12);
+			this._panelExamples.Controls.Add(this.label38, 1, 12);
+			this._panelExamples.Controls.Add(this.label15, 0, 11);
+			this._panelExamples.Controls.Add(this.label37, 1, 11);
+			this._panelExamples.Controls.Add(this.label17, 0, 10);
+			this._panelExamples.Controls.Add(this.label36, 1, 10);
+			this._panelExamples.Controls.Add(this.label13, 0, 9);
+			this._panelExamples.Controls.Add(this.label33, 1, 9);
+			this._panelExamples.Controls.Add(this.label14, 0, 8);
+			this._panelExamples.Controls.Add(this.label34, 1, 8);
+			this._panelExamples.Controls.Add(this.label35, 1, 7);
+			this._panelExamples.Controls.Add(this.label12, 0, 7);
+			this._panelExamples.Controls.Add(this.label64, 0, 6);
+			this._panelExamples.Controls.Add(this.label2, 1, 3);
+			this._panelExamples.Controls.Add(this.label8, 1, 4);
+			this._panelExamples.Controls.Add(this.label5, 0, 3);
+			this._panelExamples.Controls.Add(this.label4, 0, 4);
 			this._panelExamples.Location = new System.Drawing.Point(1, 1);
 			this._panelExamples.Margin = new System.Windows.Forms.Padding(0);
 			this._panelExamples.Name = "_panelExamples";
-			this._panelExamples.RowCount = 32;
+			this._panelExamples.RowCount = 34;
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -201,7 +205,9 @@
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._panelExamples.Size = new System.Drawing.Size(649, 858);
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this._panelExamples.Size = new System.Drawing.Size(663, 920);
 			this._panelExamples.TabIndex = 48;
 			this._panelExamples.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			// 
@@ -211,11 +217,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label62.AutoSize = true;
-			this.label62.Location = new System.Drawing.Point(218, 768);
+			this.label62.Location = new System.Drawing.Point(218, 830);
 			this.label62.Margin = new System.Windows.Forms.Padding(0);
 			this.label62.Name = "label62";
 			this.label62.Padding = new System.Windows.Forms.Padding(2);
-			this.label62.Size = new System.Drawing.Size(431, 18);
+			this.label62.Size = new System.Drawing.Size(445, 18);
 			this.label62.TabIndex = 62;
 			this.label62.Text = "Fractional modifier allows reverse words order";
 			// 
@@ -225,7 +231,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label61.AutoSize = true;
-			this.label61.Location = new System.Drawing.Point(0, 768);
+			this.label61.Location = new System.Drawing.Point(0, 830);
 			this.label61.Margin = new System.Windows.Forms.Padding(0);
 			this.label61.Name = "label61";
 			this.label61.Padding = new System.Windows.Forms.Padding(2);
@@ -239,11 +245,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label60.AutoSize = true;
-			this.label60.Location = new System.Drawing.Point(218, 504);
+			this.label60.Location = new System.Drawing.Point(218, 566);
 			this.label60.Margin = new System.Windows.Forms.Padding(0);
 			this.label60.Name = "label60";
 			this.label60.Padding = new System.Windows.Forms.Padding(2);
-			this.label60.Size = new System.Drawing.Size(431, 18);
+			this.label60.Size = new System.Drawing.Size(445, 18);
 			this.label60.TabIndex = 60;
 			this.label60.Text = "Values containing whitespace must be quoted";
 			// 
@@ -253,7 +259,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label59.AutoSize = true;
-			this.label59.Location = new System.Drawing.Point(0, 504);
+			this.label59.Location = new System.Drawing.Point(0, 566);
 			this.label59.Margin = new System.Windows.Forms.Padding(0);
 			this.label59.Name = "label59";
 			this.label59.Padding = new System.Windows.Forms.Padding(2);
@@ -268,10 +274,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label58.AutoSize = true;
 			this.label58.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label58.Location = new System.Drawing.Point(218, 364);
+			this.label58.Location = new System.Drawing.Point(218, 426);
 			this.label58.Margin = new System.Windows.Forms.Padding(0);
 			this.label58.Name = "label58";
-			this.label58.Size = new System.Drawing.Size(431, 140);
+			this.label58.Size = new System.Drawing.Size(445, 140);
 			this.label58.TabIndex = 58;
 			this.label58.Text = resources.GetString("label58.Text");
 			this.label58.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -284,7 +290,7 @@
 			this.label57.AutoSize = true;
 			this.label57.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label57.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label57.Location = new System.Drawing.Point(0, 364);
+			this.label57.Location = new System.Drawing.Point(0, 426);
 			this.label57.Margin = new System.Windows.Forms.Padding(0);
 			this.label57.Name = "label57";
 			this.label57.Padding = new System.Windows.Forms.Padding(4);
@@ -300,7 +306,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label32.AutoSize = true;
 			this.label32.BackColor = System.Drawing.SystemColors.Window;
-			this.label32.Location = new System.Drawing.Point(0, 840);
+			this.label32.Location = new System.Drawing.Point(0, 902);
 			this.label32.Margin = new System.Windows.Forms.Padding(0);
 			this.label32.Name = "label32";
 			this.label32.Padding = new System.Windows.Forms.Padding(2);
@@ -308,32 +314,19 @@
 			this.label32.TabIndex = 32;
 			this.label32.Text = "angel^3 OR demon";
 			// 
-			// label9
-			// 
-			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label9.AutoSize = true;
-			this.label9.BackColor = System.Drawing.SystemColors.Control;
-			this.label9.Location = new System.Drawing.Point(218, 84);
-			this.label9.Margin = new System.Windows.Forms.Padding(0);
-			this.label9.Name = "label9";
-			this.label9.Padding = new System.Windows.Forms.Padding(2);
-			this.label9.Size = new System.Drawing.Size(431, 18);
-			this.label9.TabIndex = 8;
-			this.label9.Text = "Both words must be present, each in any field in any order";
-			// 
 			// label8
 			// 
 			this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(218, 66);
+			this.label8.BackColor = System.Drawing.SystemColors.Control;
+			this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label8.Location = new System.Drawing.Point(218, 84);
 			this.label8.Margin = new System.Windows.Forms.Padding(0);
 			this.label8.Name = "label8";
 			this.label8.Padding = new System.Windows.Forms.Padding(2);
-			this.label8.Size = new System.Drawing.Size(431, 18);
+			this.label8.Size = new System.Drawing.Size(445, 18);
 			this.label8.TabIndex = 7;
 			this.label8.Text = "Restricts the search to Name field only";
 			// 
@@ -344,11 +337,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label7.AutoSize = true;
 			this.label7.BackColor = System.Drawing.SystemColors.Control;
+			this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.label7.Location = new System.Drawing.Point(218, 48);
 			this.label7.Margin = new System.Windows.Forms.Padding(0);
 			this.label7.Name = "label7";
 			this.label7.Padding = new System.Windows.Forms.Padding(2);
-			this.label7.Size = new System.Drawing.Size(431, 18);
+			this.label7.Size = new System.Drawing.Size(445, 18);
 			this.label7.TabIndex = 6;
 			this.label7.Text = "Contains both words in exactly same order in some field";
 			// 
@@ -359,6 +353,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label3.AutoSize = true;
 			this.label3.BackColor = System.Drawing.SystemColors.Control;
+			this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.label3.Location = new System.Drawing.Point(0, 48);
 			this.label3.Margin = new System.Windows.Forms.Padding(0);
 			this.label3.Name = "label3";
@@ -366,20 +361,6 @@
 			this.label3.Size = new System.Drawing.Size(218, 18);
 			this.label3.TabIndex = 2;
 			this.label3.Text = "\"llanowar elves\"";
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(218, 30);
-			this.label2.Margin = new System.Windows.Forms.Padding(0);
-			this.label2.Name = "label2";
-			this.label2.Padding = new System.Windows.Forms.Padding(2);
-			this.label2.Size = new System.Drawing.Size(431, 18);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Has either llanowar OR elves in any field";
 			// 
 			// label1
 			// 
@@ -401,7 +382,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(0, 66);
+			this.label4.BackColor = System.Drawing.SystemColors.Control;
+			this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label4.Location = new System.Drawing.Point(0, 84);
 			this.label4.Margin = new System.Windows.Forms.Padding(0);
 			this.label4.Name = "label4";
 			this.label4.Padding = new System.Windows.Forms.Padding(2);
@@ -415,14 +398,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label5.AutoSize = true;
-			this.label5.BackColor = System.Drawing.SystemColors.Control;
-			this.label5.Location = new System.Drawing.Point(0, 84);
+			this.label5.BackColor = System.Drawing.SystemColors.Window;
+			this.label5.Location = new System.Drawing.Point(0, 66);
 			this.label5.Margin = new System.Windows.Forms.Padding(0);
 			this.label5.Name = "label5";
 			this.label5.Padding = new System.Windows.Forms.Padding(2);
 			this.label5.Size = new System.Drawing.Size(218, 18);
 			this.label5.TabIndex = 4;
-			this.label5.Text = "llanowar AND elves";
+			this.label5.Text = "llanowar OR elves";
 			// 
 			// label11
 			// 
@@ -437,7 +420,7 @@
 			this.label11.Margin = new System.Windows.Forms.Padding(0);
 			this.label11.Name = "label11";
 			this.label11.Padding = new System.Windows.Forms.Padding(4);
-			this.label11.Size = new System.Drawing.Size(649, 30);
+			this.label11.Size = new System.Drawing.Size(663, 30);
 			this.label11.TabIndex = 10;
 			this.label11.Text = "Basic examples";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -450,7 +433,7 @@
 			this.label12.AutoSize = true;
 			this.label12.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label12.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label12.Location = new System.Drawing.Point(0, 102);
+			this.label12.Location = new System.Drawing.Point(0, 164);
 			this.label12.Margin = new System.Windows.Forms.Padding(0);
 			this.label12.Name = "label12";
 			this.label12.Padding = new System.Windows.Forms.Padding(4);
@@ -465,7 +448,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label15.AutoSize = true;
-			this.label15.Location = new System.Drawing.Point(0, 310);
+			this.label15.Location = new System.Drawing.Point(0, 372);
 			this.label15.Margin = new System.Windows.Forms.Padding(0);
 			this.label15.Name = "label15";
 			this.label15.Padding = new System.Windows.Forms.Padding(2);
@@ -480,7 +463,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label18.AutoSize = true;
 			this.label18.BackColor = System.Drawing.SystemColors.Control;
-			this.label18.Location = new System.Drawing.Point(0, 328);
+			this.label18.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label18.Location = new System.Drawing.Point(0, 390);
 			this.label18.Margin = new System.Windows.Forms.Padding(0);
 			this.label18.Name = "label18";
 			this.label18.Padding = new System.Windows.Forms.Padding(2);
@@ -497,11 +481,11 @@
 			this.label19.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label19, 2);
 			this.label19.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label19.Location = new System.Drawing.Point(0, 522);
+			this.label19.Location = new System.Drawing.Point(0, 584);
 			this.label19.Margin = new System.Windows.Forms.Padding(0);
 			this.label19.Name = "label19";
 			this.label19.Padding = new System.Windows.Forms.Padding(4);
-			this.label19.Size = new System.Drawing.Size(649, 30);
+			this.label19.Size = new System.Drawing.Size(663, 30);
 			this.label19.TabIndex = 18;
 			this.label19.Text = "More syntax details";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -512,7 +496,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(0, 552);
+			this.label20.Location = new System.Drawing.Point(0, 614);
 			this.label20.Margin = new System.Windows.Forms.Padding(0);
 			this.label20.Name = "label20";
 			this.label20.Padding = new System.Windows.Forms.Padding(2);
@@ -527,7 +511,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label21.AutoSize = true;
 			this.label21.BackColor = System.Drawing.SystemColors.Control;
-			this.label21.Location = new System.Drawing.Point(0, 570);
+			this.label21.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label21.Location = new System.Drawing.Point(0, 632);
 			this.label21.Margin = new System.Windows.Forms.Padding(0);
 			this.label21.Name = "label21";
 			this.label21.Padding = new System.Windows.Forms.Padding(2);
@@ -541,7 +526,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label23.AutoSize = true;
-			this.label23.Location = new System.Drawing.Point(0, 588);
+			this.label23.Location = new System.Drawing.Point(0, 650);
 			this.label23.Margin = new System.Windows.Forms.Padding(0);
 			this.label23.Name = "label23";
 			this.label23.Padding = new System.Windows.Forms.Padding(2);
@@ -556,7 +541,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label22.AutoSize = true;
 			this.label22.BackColor = System.Drawing.SystemColors.Control;
-			this.label22.Location = new System.Drawing.Point(0, 606);
+			this.label22.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label22.Location = new System.Drawing.Point(0, 668);
 			this.label22.Margin = new System.Windows.Forms.Padding(0);
 			this.label22.Name = "label22";
 			this.label22.Padding = new System.Windows.Forms.Padding(2);
@@ -571,7 +557,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label24.AutoSize = true;
 			this.label24.BackColor = System.Drawing.SystemColors.Control;
-			this.label24.Location = new System.Drawing.Point(0, 642);
+			this.label24.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label24.Location = new System.Drawing.Point(0, 704);
 			this.label24.Margin = new System.Windows.Forms.Padding(0);
 			this.label24.Name = "label24";
 			this.label24.Padding = new System.Windows.Forms.Padding(2);
@@ -585,7 +572,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label25.AutoSize = true;
-			this.label25.Location = new System.Drawing.Point(0, 660);
+			this.label25.Location = new System.Drawing.Point(0, 722);
 			this.label25.Margin = new System.Windows.Forms.Padding(0);
 			this.label25.Name = "label25";
 			this.label25.Padding = new System.Windows.Forms.Padding(2);
@@ -600,7 +587,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label26.AutoSize = true;
 			this.label26.BackColor = System.Drawing.SystemColors.Control;
-			this.label26.Location = new System.Drawing.Point(0, 678);
+			this.label26.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label26.Location = new System.Drawing.Point(0, 740);
 			this.label26.Margin = new System.Windows.Forms.Padding(0);
 			this.label26.Name = "label26";
 			this.label26.Padding = new System.Windows.Forms.Padding(2);
@@ -614,7 +602,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label27.AutoSize = true;
-			this.label27.Location = new System.Drawing.Point(0, 696);
+			this.label27.Location = new System.Drawing.Point(0, 758);
 			this.label27.Margin = new System.Windows.Forms.Padding(0);
 			this.label27.Name = "label27";
 			this.label27.Padding = new System.Windows.Forms.Padding(2);
@@ -629,7 +617,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label28.AutoSize = true;
 			this.label28.BackColor = System.Drawing.SystemColors.Control;
-			this.label28.Location = new System.Drawing.Point(0, 714);
+			this.label28.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label28.Location = new System.Drawing.Point(0, 776);
 			this.label28.Margin = new System.Windows.Forms.Padding(0);
 			this.label28.Name = "label28";
 			this.label28.Padding = new System.Windows.Forms.Padding(2);
@@ -643,7 +632,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(0, 732);
+			this.label6.Location = new System.Drawing.Point(0, 794);
 			this.label6.Margin = new System.Windows.Forms.Padding(0);
 			this.label6.Name = "label6";
 			this.label6.Padding = new System.Windows.Forms.Padding(2);
@@ -658,7 +647,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label10.AutoSize = true;
 			this.label10.BackColor = System.Drawing.SystemColors.Control;
-			this.label10.Location = new System.Drawing.Point(0, 750);
+			this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label10.Location = new System.Drawing.Point(0, 812);
 			this.label10.Margin = new System.Windows.Forms.Padding(0);
 			this.label10.Name = "label10";
 			this.label10.Padding = new System.Windows.Forms.Padding(2);
@@ -673,7 +663,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label29.AutoSize = true;
 			this.label29.BackColor = System.Drawing.SystemColors.Control;
-			this.label29.Location = new System.Drawing.Point(0, 786);
+			this.label29.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label29.Location = new System.Drawing.Point(0, 848);
 			this.label29.Margin = new System.Windows.Forms.Padding(0);
 			this.label29.Name = "label29";
 			this.label29.Padding = new System.Windows.Forms.Padding(2);
@@ -688,7 +679,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label30.AutoSize = true;
 			this.label30.BackColor = System.Drawing.SystemColors.Window;
-			this.label30.Location = new System.Drawing.Point(0, 804);
+			this.label30.Location = new System.Drawing.Point(0, 866);
 			this.label30.Margin = new System.Windows.Forms.Padding(0);
 			this.label30.Name = "label30";
 			this.label30.Padding = new System.Windows.Forms.Padding(2);
@@ -703,7 +694,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label31.AutoSize = true;
 			this.label31.BackColor = System.Drawing.SystemColors.Control;
-			this.label31.Location = new System.Drawing.Point(0, 822);
+			this.label31.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label31.Location = new System.Drawing.Point(0, 884);
 			this.label31.Margin = new System.Windows.Forms.Padding(0);
 			this.label31.Name = "label31";
 			this.label31.Padding = new System.Windows.Forms.Padding(2);
@@ -717,11 +709,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label37.AutoSize = true;
-			this.label37.Location = new System.Drawing.Point(218, 310);
+			this.label37.Location = new System.Drawing.Point(218, 372);
 			this.label37.Margin = new System.Windows.Forms.Padding(0);
 			this.label37.Name = "label37";
 			this.label37.Padding = new System.Windows.Forms.Padding(2);
-			this.label37.Size = new System.Drawing.Size(431, 18);
+			this.label37.Size = new System.Drawing.Size(445, 18);
 			this.label37.TabIndex = 37;
 			this.label37.Text = "Find cards with similar Text or GeneratedMana";
 			// 
@@ -732,11 +724,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label38.AutoSize = true;
 			this.label38.BackColor = System.Drawing.SystemColors.Control;
-			this.label38.Location = new System.Drawing.Point(218, 328);
+			this.label38.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label38.Location = new System.Drawing.Point(218, 390);
 			this.label38.Margin = new System.Windows.Forms.Padding(0);
 			this.label38.Name = "label38";
 			this.label38.Padding = new System.Windows.Forms.Padding(2);
-			this.label38.Size = new System.Drawing.Size(431, 18);
+			this.label38.Size = new System.Drawing.Size(445, 18);
 			this.label38.TabIndex = 38;
 			this.label38.Text = "Values containing whitespace must be quoted";
 			// 
@@ -746,11 +739,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label39.AutoSize = true;
-			this.label39.Location = new System.Drawing.Point(218, 346);
+			this.label39.Location = new System.Drawing.Point(218, 408);
 			this.label39.Margin = new System.Windows.Forms.Padding(0);
 			this.label39.Name = "label39";
 			this.label39.Padding = new System.Windows.Forms.Padding(2);
-			this.label39.Size = new System.Drawing.Size(431, 18);
+			this.label39.Size = new System.Drawing.Size(445, 18);
 			this.label39.TabIndex = 39;
 			this.label39.Text = "Set min similarity, default is 0.6";
 			// 
@@ -760,11 +753,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label40.AutoSize = true;
-			this.label40.Location = new System.Drawing.Point(218, 552);
+			this.label40.Location = new System.Drawing.Point(218, 614);
 			this.label40.Margin = new System.Windows.Forms.Padding(0);
 			this.label40.Name = "label40";
 			this.label40.Padding = new System.Windows.Forms.Padding(2);
-			this.label40.Size = new System.Drawing.Size(431, 18);
+			this.label40.Size = new System.Drawing.Size(445, 18);
 			this.label40.TabIndex = 40;
 			this.label40.Text = "Boolean operators can be nested";
 			// 
@@ -775,11 +768,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label41.AutoSize = true;
 			this.label41.BackColor = System.Drawing.SystemColors.Control;
-			this.label41.Location = new System.Drawing.Point(218, 570);
+			this.label41.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label41.Location = new System.Drawing.Point(218, 632);
 			this.label41.Margin = new System.Windows.Forms.Padding(0);
 			this.label41.Name = "label41";
 			this.label41.Padding = new System.Windows.Forms.Padding(2);
-			this.label41.Size = new System.Drawing.Size(431, 18);
+			this.label41.Size = new System.Drawing.Size(445, 18);
 			this.label41.TabIndex = 41;
 			this.label41.Text = "Search in a specific field";
 			// 
@@ -789,11 +783,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label42.AutoSize = true;
-			this.label42.Location = new System.Drawing.Point(218, 588);
+			this.label42.Location = new System.Drawing.Point(218, 650);
 			this.label42.Margin = new System.Windows.Forms.Padding(0);
 			this.label42.Name = "label42";
 			this.label42.Padding = new System.Windows.Forms.Padding(2);
-			this.label42.Size = new System.Drawing.Size(431, 18);
+			this.label42.Size = new System.Drawing.Size(445, 18);
 			this.label42.TabIndex = 42;
 			this.label42.Text = "Searh in any field";
 			// 
@@ -804,11 +798,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label43.AutoSize = true;
 			this.label43.BackColor = System.Drawing.SystemColors.Control;
-			this.label43.Location = new System.Drawing.Point(218, 606);
+			this.label43.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label43.Location = new System.Drawing.Point(218, 668);
 			this.label43.Margin = new System.Windows.Forms.Padding(0);
 			this.label43.Name = "label43";
 			this.label43.Padding = new System.Windows.Forms.Padding(2);
-			this.label43.Size = new System.Drawing.Size(431, 18);
+			this.label43.Size = new System.Drawing.Size(445, 18);
 			this.label43.TabIndex = 43;
 			this.label43.Text = "Search whole phrase";
 			// 
@@ -819,11 +814,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label44.AutoSize = true;
 			this.label44.BackColor = System.Drawing.SystemColors.Control;
-			this.label44.Location = new System.Drawing.Point(218, 642);
+			this.label44.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label44.Location = new System.Drawing.Point(218, 704);
 			this.label44.Margin = new System.Windows.Forms.Padding(0);
 			this.label44.Name = "label44";
 			this.label44.Padding = new System.Windows.Forms.Padding(2);
-			this.label44.Size = new System.Drawing.Size(431, 18);
+			this.label44.Size = new System.Drawing.Size(445, 18);
 			this.label44.TabIndex = 44;
 			this.label44.Text = "Cards of types Rogue OR Rat because default operator is OR";
 			// 
@@ -833,11 +829,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label45.AutoSize = true;
-			this.label45.Location = new System.Drawing.Point(218, 660);
+			this.label45.Location = new System.Drawing.Point(218, 722);
 			this.label45.Margin = new System.Windows.Forms.Padding(0);
 			this.label45.Name = "label45";
 			this.label45.Padding = new System.Windows.Forms.Padding(2);
-			this.label45.Size = new System.Drawing.Size(431, 18);
+			this.label45.Size = new System.Drawing.Size(445, 18);
 			this.label45.TabIndex = 45;
 			this.label45.Text = "* means 0 or more characters";
 			// 
@@ -848,11 +844,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label46.AutoSize = true;
 			this.label46.BackColor = System.Drawing.SystemColors.Control;
-			this.label46.Location = new System.Drawing.Point(218, 678);
+			this.label46.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label46.Location = new System.Drawing.Point(218, 740);
 			this.label46.Margin = new System.Windows.Forms.Padding(0);
 			this.label46.Name = "label46";
 			this.label46.Padding = new System.Windows.Forms.Padding(2);
-			this.label46.Size = new System.Drawing.Size(431, 18);
+			this.label46.Size = new System.Drawing.Size(445, 18);
 			this.label46.TabIndex = 46;
 			this.label46.Text = "? means any one character, can be used to set minimum length";
 			// 
@@ -862,11 +859,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label47.AutoSize = true;
-			this.label47.Location = new System.Drawing.Point(218, 696);
+			this.label47.Location = new System.Drawing.Point(218, 758);
 			this.label47.Margin = new System.Windows.Forms.Padding(0);
 			this.label47.Name = "label47";
 			this.label47.Padding = new System.Windows.Forms.Padding(2);
-			this.label47.Size = new System.Drawing.Size(431, 18);
+			this.label47.Size = new System.Drawing.Size(445, 18);
 			this.label47.TabIndex = 47;
 			this.label47.Text = "Regular expressions (lucene dialect) are delimited by /";
 			// 
@@ -877,11 +874,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label48.AutoSize = true;
 			this.label48.BackColor = System.Drawing.SystemColors.Control;
-			this.label48.Location = new System.Drawing.Point(218, 714);
+			this.label48.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label48.Location = new System.Drawing.Point(218, 776);
 			this.label48.Margin = new System.Windows.Forms.Padding(0);
 			this.label48.Name = "label48";
 			this.label48.Padding = new System.Windows.Forms.Padding(2);
-			this.label48.Size = new System.Drawing.Size(431, 18);
+			this.label48.Size = new System.Drawing.Size(445, 18);
 			this.label48.TabIndex = 48;
 			this.label48.Text = "Approximate spelling, searches nevinYrral and so on";
 			// 
@@ -891,11 +889,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label49.AutoSize = true;
-			this.label49.Location = new System.Drawing.Point(218, 732);
+			this.label49.Location = new System.Drawing.Point(218, 794);
 			this.label49.Margin = new System.Windows.Forms.Padding(0);
 			this.label49.Name = "label49";
 			this.label49.Padding = new System.Windows.Forms.Padding(2);
-			this.label49.Size = new System.Drawing.Size(431, 18);
+			this.label49.Size = new System.Drawing.Size(445, 18);
 			this.label49.TabIndex = 49;
 			this.label49.Text = "Set min similarity, default is 0.5, valid is between 0 and 1";
 			// 
@@ -906,11 +904,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label50.AutoSize = true;
 			this.label50.BackColor = System.Drawing.SystemColors.Control;
-			this.label50.Location = new System.Drawing.Point(218, 750);
+			this.label50.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label50.Location = new System.Drawing.Point(218, 812);
 			this.label50.Margin = new System.Windows.Forms.Padding(0);
 			this.label50.Name = "label50";
 			this.label50.Padding = new System.Windows.Forms.Padding(2);
-			this.label50.Size = new System.Drawing.Size(431, 18);
+			this.label50.Size = new System.Drawing.Size(445, 18);
 			this.label50.TabIndex = 50;
 			this.label50.Text = "Words mana and color have 2 or less words between them";
 			// 
@@ -921,11 +920,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label51.AutoSize = true;
 			this.label51.BackColor = System.Drawing.SystemColors.Control;
-			this.label51.Location = new System.Drawing.Point(218, 786);
+			this.label51.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label51.Location = new System.Drawing.Point(218, 848);
 			this.label51.Margin = new System.Windows.Forms.Padding(0);
 			this.label51.Name = "label51";
 			this.label51.Padding = new System.Windows.Forms.Padding(2);
-			this.label51.Size = new System.Drawing.Size(431, 18);
+			this.label51.Size = new System.Drawing.Size(445, 18);
 			this.label51.TabIndex = 51;
 			this.label51.Text = "A word between \'a\' and \'ced\' in alphabet order";
 			// 
@@ -936,11 +936,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label52.AutoSize = true;
 			this.label52.BackColor = System.Drawing.SystemColors.Window;
-			this.label52.Location = new System.Drawing.Point(218, 804);
+			this.label52.Location = new System.Drawing.Point(218, 866);
 			this.label52.Margin = new System.Windows.Forms.Padding(0);
 			this.label52.Name = "label52";
 			this.label52.Padding = new System.Windows.Forms.Padding(2);
-			this.label52.Size = new System.Drawing.Size(431, 18);
+			this.label52.Size = new System.Drawing.Size(445, 18);
 			this.label52.TabIndex = 52;
 			this.label52.Text = "Cards with price strictly > than 100$";
 			// 
@@ -951,11 +951,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label53.AutoSize = true;
 			this.label53.BackColor = System.Drawing.SystemColors.Control;
-			this.label53.Location = new System.Drawing.Point(218, 822);
+			this.label53.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label53.Location = new System.Drawing.Point(218, 884);
 			this.label53.Margin = new System.Windows.Forms.Padding(0);
 			this.label53.Name = "label53";
 			this.label53.Padding = new System.Windows.Forms.Padding(2);
-			this.label53.Size = new System.Drawing.Size(431, 18);
+			this.label53.Size = new System.Drawing.Size(445, 18);
 			this.label53.TabIndex = 53;
 			this.label53.Text = "Boundary types are {} non-inclusive, [] inclusive";
 			// 
@@ -966,11 +967,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label54.AutoSize = true;
 			this.label54.BackColor = System.Drawing.SystemColors.Window;
-			this.label54.Location = new System.Drawing.Point(218, 840);
+			this.label54.Location = new System.Drawing.Point(218, 902);
 			this.label54.Margin = new System.Windows.Forms.Padding(0);
 			this.label54.Name = "label54";
 			this.label54.Padding = new System.Windows.Forms.Padding(2);
-			this.label54.Size = new System.Drawing.Size(431, 18);
+			this.label54.Size = new System.Drawing.Size(445, 18);
 			this.label54.TabIndex = 54;
 			this.label54.Text = "^3 booster affects sort order multiplying angel score by 3";
 			// 
@@ -981,7 +982,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label13.AutoSize = true;
 			this.label13.BackColor = System.Drawing.SystemColors.Control;
-			this.label13.Location = new System.Drawing.Point(0, 150);
+			this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label13.Location = new System.Drawing.Point(0, 212);
 			this.label13.Margin = new System.Windows.Forms.Padding(0);
 			this.label13.Name = "label13";
 			this.label13.Padding = new System.Windows.Forms.Padding(2);
@@ -996,7 +998,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label14.AutoSize = true;
 			this.label14.BackColor = System.Drawing.SystemColors.Window;
-			this.label14.Location = new System.Drawing.Point(0, 132);
+			this.label14.Location = new System.Drawing.Point(0, 194);
 			this.label14.Margin = new System.Windows.Forms.Padding(0);
 			this.label14.Name = "label14";
 			this.label14.Padding = new System.Windows.Forms.Padding(2);
@@ -1011,11 +1013,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label33.AutoSize = true;
 			this.label33.BackColor = System.Drawing.SystemColors.Control;
-			this.label33.Location = new System.Drawing.Point(218, 150);
+			this.label33.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label33.Location = new System.Drawing.Point(218, 212);
 			this.label33.Margin = new System.Windows.Forms.Padding(0);
 			this.label33.Name = "label33";
 			this.label33.Padding = new System.Windows.Forms.Padding(2);
-			this.label33.Size = new System.Drawing.Size(431, 130);
+			this.label33.Size = new System.Drawing.Size(445, 130);
 			this.label33.TabIndex = 33;
 			this.label33.Text = resources.GetString("label33.Text");
 			// 
@@ -1026,11 +1029,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label34.AutoSize = true;
 			this.label34.BackColor = System.Drawing.SystemColors.Window;
-			this.label34.Location = new System.Drawing.Point(218, 132);
+			this.label34.Location = new System.Drawing.Point(218, 194);
 			this.label34.Margin = new System.Windows.Forms.Padding(0);
 			this.label34.Name = "label34";
 			this.label34.Padding = new System.Windows.Forms.Padding(2);
-			this.label34.Size = new System.Drawing.Size(431, 18);
+			this.label34.Size = new System.Drawing.Size(445, 18);
 			this.label34.TabIndex = 34;
 			this.label34.Text = "Will not match angelic. Use wildcards * and ? e.g. angel*";
 			// 
@@ -1040,7 +1043,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label16.AutoSize = true;
-			this.label16.Location = new System.Drawing.Point(0, 346);
+			this.label16.Location = new System.Drawing.Point(0, 408);
 			this.label16.Margin = new System.Windows.Forms.Padding(0);
 			this.label16.Name = "label16";
 			this.label16.Padding = new System.Windows.Forms.Padding(2);
@@ -1055,10 +1058,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label36.AutoSize = true;
 			this.label36.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label36.Location = new System.Drawing.Point(218, 280);
+			this.label36.Location = new System.Drawing.Point(218, 342);
 			this.label36.Margin = new System.Windows.Forms.Padding(0);
 			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(431, 30);
+			this.label36.Size = new System.Drawing.Size(445, 30);
 			this.label36.TabIndex = 36;
 			this.label36.Text = "The button on top-right corner of card image does the same";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1070,10 +1073,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label35.AutoSize = true;
 			this.label35.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label35.Location = new System.Drawing.Point(218, 102);
+			this.label35.Location = new System.Drawing.Point(218, 164);
 			this.label35.Margin = new System.Windows.Forms.Padding(0);
 			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(431, 30);
+			this.label35.Size = new System.Drawing.Size(445, 30);
 			this.label35.TabIndex = 35;
 			this.label35.Text = "Search is case-INsensitive, AND OR NOT must be uppercase";
 			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1084,7 +1087,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label55.AutoSize = true;
-			this.label55.Location = new System.Drawing.Point(0, 624);
+			this.label55.Location = new System.Drawing.Point(0, 686);
 			this.label55.Margin = new System.Windows.Forms.Padding(0);
 			this.label55.Name = "label55";
 			this.label55.Padding = new System.Windows.Forms.Padding(2);
@@ -1098,11 +1101,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label56.AutoSize = true;
-			this.label56.Location = new System.Drawing.Point(218, 624);
+			this.label56.Location = new System.Drawing.Point(218, 686);
 			this.label56.Margin = new System.Windows.Forms.Padding(0);
 			this.label56.Name = "label56";
 			this.label56.Padding = new System.Windows.Forms.Padding(2);
-			this.label56.Size = new System.Drawing.Size(431, 18);
+			this.label56.Size = new System.Drawing.Size(445, 18);
 			this.label56.TabIndex = 56;
 			this.label56.Text = "Regular expression and boolean subqueries inside phrase";
 			// 
@@ -1114,7 +1117,7 @@
 			this.label17.AutoSize = true;
 			this.label17.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label17.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label17.Location = new System.Drawing.Point(0, 280);
+			this.label17.Location = new System.Drawing.Point(0, 342);
 			this.label17.Margin = new System.Windows.Forms.Padding(0);
 			this.label17.Name = "label17";
 			this.label17.Padding = new System.Windows.Forms.Padding(4);
@@ -1122,6 +1125,72 @@
 			this.label17.TabIndex = 16;
 			this.label17.Text = "Search similar cards";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label2.AutoSize = true;
+			this.label2.BackColor = System.Drawing.SystemColors.Window;
+			this.label2.Location = new System.Drawing.Point(218, 66);
+			this.label2.Margin = new System.Windows.Forms.Padding(0);
+			this.label2.Name = "label2";
+			this.label2.Padding = new System.Windows.Forms.Padding(2);
+			this.label2.Size = new System.Drawing.Size(445, 18);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Has either llanowar or elves in any field";
+			// 
+			// label9
+			// 
+			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label9.AutoSize = true;
+			this.label9.BackColor = System.Drawing.SystemColors.Window;
+			this.label9.Location = new System.Drawing.Point(218, 30);
+			this.label9.Margin = new System.Windows.Forms.Padding(0);
+			this.label9.Name = "label9";
+			this.label9.Padding = new System.Windows.Forms.Padding(2);
+			this.label9.Size = new System.Drawing.Size(445, 18);
+			this.label9.TabIndex = 8;
+			this.label9.Text = "Both words must be present, each in any field in any order";
+			// 
+			// label63
+			// 
+			this.label63.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label63.AutoSize = true;
+			this.label63.BackColor = System.Drawing.SystemColors.InactiveCaption;
+			this._panelExamples.SetColumnSpan(this.label63, 2);
+			this.label63.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label63.Location = new System.Drawing.Point(0, 102);
+			this.label63.Margin = new System.Windows.Forms.Padding(0);
+			this.label63.Name = "label63";
+			this.label63.Padding = new System.Windows.Forms.Padding(4);
+			this.label63.Size = new System.Drawing.Size(663, 30);
+			this.label63.TabIndex = 63;
+			this.label63.Text = "Scryfall.com -like field aliases";
+			this.label63.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label64
+			// 
+			this.label64.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label64.AutoSize = true;
+			this.label64.BackColor = System.Drawing.SystemColors.Window;
+			this._panelExamples.SetColumnSpan(this.label64, 2);
+			this.label64.Location = new System.Drawing.Point(0, 132);
+			this.label64.Margin = new System.Windows.Forms.Padding(0);
+			this.label64.Name = "label64";
+			this.label64.Padding = new System.Windows.Forms.Padding(2);
+			this.label64.Size = new System.Drawing.Size(663, 32);
+			this.label64.TabIndex = 64;
+			this.label64.Text = "e: SetCode   t: Type    m: ManaCost    o: TextEn     pow: PowerNum   tou: Toughne" +
+    "ssNum\r\nf: LegalIn   c: Color   a: Artist     ft: FlavorEn   loy: LoyaltyNum";
+			this.label64.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SearchExamplesMenu
 			// 
@@ -1134,7 +1203,7 @@
 			this.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.Name = "SearchExamplesMenu";
 			this.Padding = new System.Windows.Forms.Padding(1);
-			this.Size = new System.Drawing.Size(651, 860);
+			this.Size = new System.Drawing.Size(665, 922);
 			this._panelExamples.ResumeLayout(false);
 			this._panelExamples.PerformLayout();
 			this.ResumeLayout(false);
@@ -1207,5 +1276,7 @@
 		private System.Windows.Forms.Label label59;
 		private System.Windows.Forms.Label label62;
 		private System.Windows.Forms.Label label61;
+		private System.Windows.Forms.Label label63;
+		private System.Windows.Forms.Label label64;
 	}
 }
