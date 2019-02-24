@@ -75,7 +75,7 @@ namespace Mtgdb.Controls
 				}
 			}
 
-			var zones = new[] { original.MainDeck, original.Sideboard };
+			var zones = new[] { original.MainDeck, original.Sideboard }; // ignore maybeboard
 			var previousZones = new[] { previousTransformed?.MainDeck, previousTransformed?.Sideboard };
 			var resultZones = new[] { target.MainDeck, target.Sideboard };
 

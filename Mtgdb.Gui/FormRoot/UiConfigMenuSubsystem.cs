@@ -16,6 +16,7 @@ namespace Mtgdb.Gui
 			DropDown menuSuggestDownloadMissingImages,
 			DropDown menuImagesCacheCapacity,
 			DropDown menuUndoDepth,
+			CheckBox checkboxAllPanels,
 			CheckBox checkboxTopPanel,
 			CheckBox checkboxRightPanel,
 			CheckBox checkboxSearchBar,
@@ -26,9 +27,17 @@ namespace Mtgdb.Gui
 			_menuSuggestDownloadMissingImages = menuSuggestDownloadMissingImages;
 			_menuImagesCacheCapacity = menuImagesCacheCapacity;
 			_menuUndoDepth = menuUndoDepth;
+			_checkboxAllPanels = checkboxAllPanels;
 			_checkboxTopPanel = checkboxTopPanel;
 			_checkboxRightPanel = checkboxRightPanel;
 			_checkboxSearchBar = checkboxSearchBar;
+
+			_allPanelCheckboxes = new[]
+			{
+				_checkboxTopPanel,
+				_checkboxRightPanel,
+				_checkboxSearchBar
+			};
 
 			_configRepo = configRepo;
 
@@ -50,15 +59,18 @@ namespace Mtgdb.Gui
 			ShowRightPanel = config.ShowRightPanel;
 			ShowSearchBar = config.ShowSearchBar;
 
+			_checkboxAllPanels.Checked = allPanelsChecked(true);
+
 			_menuUiScale.SelectedIndexChanged += handleUiScalePercentChanged;
 			_menuUiSmallImageQuality.SelectedIndexChanged += handleMenuChanged;
 			_menuSuggestDownloadMissingImages.SelectedIndexChanged += handleMenuChanged;
 			_menuImagesCacheCapacity.SelectedIndexChanged += handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged += handleMenuChanged;
 
-			_checkboxTopPanel.CheckedChanged += handleMenuChanged;
-			_checkboxRightPanel.CheckedChanged += handleMenuChanged;
-			_checkboxSearchBar.CheckedChanged += handleMenuChanged;
+			_checkboxAllPanels.CheckedChanged += handleAllPanelsChanged;
+			_checkboxTopPanel.CheckedChanged += handlePanelVisibilityChanged;
+			_checkboxRightPanel.CheckedChanged += handlePanelVisibilityChanged;
+			_checkboxSearchBar.CheckedChanged += handlePanelVisibilityChanged;
 		}
 
 		private void handleUiScalePercentChanged(object sender, EventArgs e)
@@ -69,6 +81,44 @@ namespace Mtgdb.Gui
 				UseSmallImages = false;
 				_updating = false;
 			}
+
+			handleConfigChanged();
+		}
+
+		private void handlePanelVisibilityChanged(object sender, EventArgs e)
+		{
+			bool allChecked = allPanelsChecked(true);
+			if (_checkboxAllPanels.Checked != allChecked)
+			{
+				_updating = true;
+				_checkboxAllPanels.Checked = allChecked;
+				_updating = false;
+			}
+
+			handleConfigChanged();
+		}
+
+
+
+		private bool allPanelsChecked(bool value) =>
+			_allPanelCheckboxes.All(_ => _.Checked == value);
+
+		private void setAllPanelsChecked(bool value) =>
+			_allPanelCheckboxes.ForEach(_ => _.Checked = value);
+
+
+
+		private void handleAllPanelsChanged(object sender, EventArgs e)
+		{
+			if (_updating)
+				return;
+
+			if (allPanelsChecked(_checkboxAllPanels.Checked))
+				return;
+
+			_updating = true;
+			setAllPanelsChecked(_checkboxAllPanels.Checked);
+			_updating = false;
 
 			handleConfigChanged();
 		}
@@ -169,6 +219,11 @@ namespace Mtgdb.Gui
 			_menuImagesCacheCapacity.SelectedIndexChanged -= handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged -= handleMenuChanged;
 
+			_checkboxTopPanel.CheckedChanged -= handleAllPanelsChanged;
+			_checkboxTopPanel.CheckedChanged -= handlePanelVisibilityChanged;
+			_checkboxRightPanel.CheckedChanged -= handlePanelVisibilityChanged;
+			_checkboxSearchBar.CheckedChanged -= handlePanelVisibilityChanged;
+
 			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -184,9 +239,12 @@ namespace Mtgdb.Gui
 		private readonly DropDown _menuSuggestDownloadMissingImages;
 		private readonly DropDown _menuImagesCacheCapacity;
 		private readonly DropDown _menuUndoDepth;
+		private readonly CheckBox _checkboxAllPanels;
 		private readonly CheckBox _checkboxTopPanel;
 		private readonly CheckBox _checkboxRightPanel;
 		private readonly CheckBox _checkboxSearchBar;
 		private readonly UiConfigRepository _configRepo;
+
+		private readonly CheckBox[] _allPanelCheckboxes;
 	}
 }

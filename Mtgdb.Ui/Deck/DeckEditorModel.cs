@@ -11,6 +11,7 @@ namespace Mtgdb.Ui
 		{
 			MainDeck = new DeckZoneModel();
 			SideDeck = new DeckZoneModel();
+			MaybeDeck = new DeckZoneModel();
 			SampleHand = new DeckZoneModel();
 
 			CurrentZone = Zone.Main;
@@ -28,10 +29,16 @@ namespace Mtgdb.Ui
 			{
 				case Zone.Main:
 					return MainDeck;
+
 				case Zone.Side:
 					return SideDeck;
+
+				case Zone.Maybe:
+					return MaybeDeck;
+
 				case Zone.SampleHand:
 					return SampleHand;
+
 				default:
 					throw new NotSupportedException();
 			}
@@ -54,6 +61,7 @@ namespace Mtgdb.Ui
 
 			MainDeck.SetDeck(deck.MainDeck);
 			SideDeck.SetDeck(deck.Sideboard);
+			MaybeDeck.SetDeck(deck.Maybeboard);
 
 			LoadDeck(repo);
 		}
@@ -73,7 +81,7 @@ namespace Mtgdb.Ui
 				if (CurrentZone.HasValue)
 					DataSource.AddRange(Deck.CardsIds.Select(transform));
 				else
-					DataSource.AddRange(MainDeck.CardsIds.Union(SideDeck.CardsIds).Select(transform));
+					DataSource.AddRange(MainDeck.CardsIds.Union(SideDeck.CardsIds).Union(MaybeDeck.CardsIds).Select(transform));
 			}
 
 			DeckChanged?.Invoke(
@@ -158,9 +166,13 @@ namespace Mtgdb.Ui
 				case Zone.Side:
 					SideDeck.Clear();
 					break;
+				case Zone.Maybe:
+					MaybeDeck.Clear();
+					break;
 				case Zone.Main:
 					MainDeck.Clear();
 					SideDeck.Clear();
+					MaybeDeck.Clear();
 					break;
 				default:
 					return;
@@ -276,7 +288,7 @@ namespace Mtgdb.Ui
 			if (operations.Count == 0)
 				return;
 
-			if (!append && (CurrentZone == Zone.Main || CurrentZone == Zone.Side))
+			if (!append && (CurrentZone == Zone.Main || CurrentZone == Zone.Side || CurrentZone == Zone.Maybe))
 				lock (DataSource)
 					DataSource.Clear();
 
@@ -396,7 +408,9 @@ namespace Mtgdb.Ui
 				MainDeck.CountById.ToDictionary(),
 				MainDeck.CardsIds.ToList(),
 				SideDeck.CountById.ToDictionary(),
-				SideDeck.CardsIds.ToList());
+				SideDeck.CardsIds.ToList(),
+				MaybeDeck.CountById.ToDictionary(),
+				MaybeDeck.CardsIds.ToList());
 
 			result.Name = DeckName;
 			result.File = DeckFile;
@@ -430,6 +444,7 @@ namespace Mtgdb.Ui
 
 		public int MainDeckSize => MainDeck.CountById.Values.Sum();
 		public int SideDeckSize => SideDeck.CountById.Values.Sum();
+		public int MaybeDeckSize => MaybeDeck.CountById.Values.Sum();
 		public int SampleHandSize => SampleHand.CountById.Values.Sum();
 
 		public Card DraggedCard { get; set; }
@@ -439,6 +454,7 @@ namespace Mtgdb.Ui
 
 		public DeckZoneModel MainDeck { get; }
 		public DeckZoneModel SideDeck { get; }
+		public DeckZoneModel MaybeDeck { get; }
 		public DeckZoneModel SampleHand { get; }
 
 		public Zone? CurrentZone { get; private set; }

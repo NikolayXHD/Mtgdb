@@ -111,7 +111,6 @@
     </Compile>
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="Dpi\BorderedPanelScaler.cs" />
-    <Compile Include="Dpi\CheckBoxScaler.cs" />
     <Compile Include="Dpi\ControlBaseScaler.cs" />
     <Compile Include="Dpi\CustomBorderFormScaler.cs" />
     <Compile Include="Dpi\Dpi.cs" />

@@ -40,6 +40,7 @@ namespace Mtgdb.Gui
 			writeDeckZone(result, current.MainDeck, prefix: string.Empty);
 			result.AppendLine();
 			writeDeckZone(result, current.Sideboard, prefix: SideboardPrefix);
+			// ignore maybeboard
 
 			return result.ToString();
 		}

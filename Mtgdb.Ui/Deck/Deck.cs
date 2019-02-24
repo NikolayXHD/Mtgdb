@@ -21,6 +21,12 @@ namespace Mtgdb.Ui
 				{
 					Order = new List<string>(),
 					Count = new Dictionary<string, int>(Str.Comparer)
+				},
+
+				Maybeboard = new DeckZone
+				{
+					Order = new List<string>(),
+					Count = new Dictionary<string, int>(Str.Comparer)
 				}
 			};
 
@@ -31,7 +37,9 @@ namespace Mtgdb.Ui
 			Dictionary<string, int> mainCountById,
 			List<string> mainOrder,
 			Dictionary<string, int> sideCountById,
-			List<string> sideOrder)
+			List<string> sideOrder,
+			Dictionary<string, int> maybeCountById,
+			List<string> maybeOrder)
 		{
 			var result = new Deck
 			{
@@ -45,6 +53,12 @@ namespace Mtgdb.Ui
 				{
 					Count = sideCountById ?? new Dictionary<string, int>(Str.Comparer),
 					Order = sideOrder ?? new List<string>()
+				},
+
+				Maybeboard = new DeckZone
+				{
+					Count = maybeCountById ?? new Dictionary<string, int>(Str.Comparer),
+					Order = maybeOrder ?? new List<string>()
 				}
 			};
 
@@ -57,7 +71,9 @@ namespace Mtgdb.Ui
 				MainDeck.Count.ToDictionary(),
 				MainDeck.Order.ToList(),
 				Sideboard.Count.ToDictionary(),
-				Sideboard.Order.ToList());
+				Sideboard.Order.ToList(),
+				Maybeboard.Count.ToDictionary(),
+				Maybeboard.Order.ToList());
 
 			result.Name = Name;
 			result.File = File;
@@ -69,12 +85,13 @@ namespace Mtgdb.Ui
 		}
 
 		public bool IsEquivalentTo(Deck other) =>
-			MainDeck.IsEquivalentTo(other.MainDeck) && Sideboard.IsEquivalentTo(other.Sideboard);
+			MainDeck.IsEquivalentTo(other.MainDeck) && Sideboard.IsEquivalentTo(other.Sideboard) && Maybeboard.IsEquivalentTo(other.Maybeboard);
 
 		public void Replace(Dictionary<string, string> replacements)
 		{
 			MainDeck = replace(MainDeck, replacements);
 			Sideboard = replace(Sideboard, replacements);
+			Maybeboard = replace(Maybeboard, replacements);
 		}
 
 		[UsedImplicitly]  // to find usages in IDE
@@ -92,7 +109,7 @@ namespace Mtgdb.Ui
 					.Select(_ => replacements[_])
 					.Distinct()
 					.ToList(),
-				
+
 				Count = original.Count
 					.GroupBy(_ => replacements[_.Key])
 					.ToDictionary(
@@ -103,6 +120,7 @@ namespace Mtgdb.Ui
 
 		public DeckZone MainDeck { get; set; }
 		public DeckZone Sideboard { get; set; }
+		public DeckZone Maybeboard { get; set; }
 
 		public DeckZone GetZone(Zone zone)
 		{
@@ -112,6 +130,8 @@ namespace Mtgdb.Ui
 					return MainDeck;
 				case Zone.Side:
 					return Sideboard;
+				case Zone.Maybe:
+					return Maybeboard;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
 			}

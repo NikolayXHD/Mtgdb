@@ -27,20 +27,17 @@ namespace Mtgdb.Controls
 		{
 			PaintContent(g);
 
-			if (ContainsFocus)
+			if (VisibleFocusRectangle)
 				PaintFocusRectangle(g);
 		}
 
 		protected virtual void PaintFocusRectangle(Graphics g)
 		{
-			if (_focusBorderColor.A == 0)
+			if (_focusBorderColor.A == 0 || FocusBorderWidth == 0)
 				return;
 
-			var rectangle = new Rectangle(default, Size);
-			int width = 2;
-			rectangle.Inflate(-(width - 1), -(width - 1));
-			var pen = new Pen(_focusBorderColor) { Width = width, DashStyle = DashStyle.Dot };
-
+			var pen = new Pen(_focusBorderColor) { Width = FocusBorderWidth, DashStyle = DashStyle.Dot };
+			var rectangle = this.GetBorderRectangle(FocusBorderWidth);
 			g.DrawRectangle(pen, rectangle);
 		}
 
@@ -62,20 +59,6 @@ namespace Mtgdb.Controls
 		{
 			updateImages(unscaled: false);
 			UpdateSize();
-		}
-
-		protected override Color ActualBackColor
-		{
-			get
-			{
-				if (MouseOver)
-					return _mouseOverBackColor;
-
-				if (Checked)
-					return _checkedBackColor;
-
-				return base.ActualBackColor;
-			}
 		}
 
 		protected override void HandleSystemColorsChanged()
@@ -204,6 +187,9 @@ namespace Mtgdb.Controls
 
 		public event EventHandler PressDown;
 		public event EventHandler Pressed;
+
+		[Category("Settings"), DefaultValue(true)]
+		public virtual bool AutoCheck { get; set; } = true;
 
 		public override int DisabledOpacity
 		{
@@ -349,6 +335,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		[Category("Settings"), DefaultValue(2)]
+		public int FocusBorderWidth { get; set; } = 2;
+
 		private bool _mouseOver;
 		protected bool MouseOver
 		{
@@ -362,5 +351,21 @@ namespace Mtgdb.Controls
 				Invalidate();
 			}
 		}
+
+		protected override Color ActualBackColor
+		{
+			get
+			{
+				if (MouseOver)
+					return _mouseOverBackColor;
+
+				if (Checked)
+					return _checkedBackColor;
+
+				return base.ActualBackColor;
+			}
+		}
+
+		protected virtual bool VisibleFocusRectangle => ContainsFocus;
 	}
 }

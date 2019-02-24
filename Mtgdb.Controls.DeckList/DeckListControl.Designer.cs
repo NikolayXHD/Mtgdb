@@ -36,9 +36,8 @@
 			this._panelLayout = new System.Windows.Forms.TableLayoutPanel();
 			this._viewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._menuFilterByDeckMode = new Mtgdb.Controls.DropDown();
-			this._labelSortStatus = new System.Windows.Forms.Label();
 			this._labelFilterByDeckMode = new System.Windows.Forms.Label();
-			this._panelSortIcon = new Mtgdb.Controls.BorderedPanel();
+			this._labelSortStatus = new Mtgdb.Controls.ControlBase();
 			this._searchBar = new Mtgdb.Controls.SearchBar();
 			this._textboxRename = new Mtgdb.Controls.FixedRichTextBox();
 			this._panelRename = new Mtgdb.Controls.BorderedPanel();
@@ -60,9 +59,8 @@
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this._panelLayout.Controls.Add(this._viewDeck, 0, 1);
 			this._panelLayout.Controls.Add(this._menuFilterByDeckMode, 4, 0);
-			this._panelLayout.Controls.Add(this._labelSortStatus, 2, 0);
 			this._panelLayout.Controls.Add(this._labelFilterByDeckMode, 3, 0);
-			this._panelLayout.Controls.Add(this._panelSortIcon, 1, 0);
+			this._panelLayout.Controls.Add(this._labelSortStatus, 1, 0);
 			this._panelLayout.Controls.Add(this._searchBar, 0, 0);
 			this._panelLayout.Location = new System.Drawing.Point(0, 0);
 			this._panelLayout.Margin = new System.Windows.Forms.Padding(0);
@@ -113,17 +111,6 @@
 			this._menuFilterByDeckMode.Size = new System.Drawing.Size(190, 24);
 			this._menuFilterByDeckMode.TabIndex = 2;
 			// 
-			// _labelSortStatus
-			// 
-			this._labelSortStatus.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this._labelSortStatus.AutoSize = true;
-			this._labelSortStatus.Location = new System.Drawing.Point(387, 5);
-			this._labelSortStatus.Name = "_labelSortStatus";
-			this._labelSortStatus.Size = new System.Drawing.Size(44, 13);
-			this._labelSortStatus.TabIndex = 3;
-			this._labelSortStatus.Text = "Name ^";
-			this._labelSortStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// _labelFilterByDeckMode
 			// 
 			this._labelFilterByDeckMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -135,15 +122,18 @@
 			this._labelFilterByDeckMode.Text = "Filter cards by deck:";
 			this._labelFilterByDeckMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// _panelSortIcon
+			// _labelSortStatus
 			// 
-			this._panelSortIcon.BackgroundImage = global::Mtgdb.Controls.Properties.Resources.sort_48;
-			this._panelSortIcon.Location = new System.Drawing.Point(364, 0);
-			this._panelSortIcon.Margin = new System.Windows.Forms.Padding(0);
-			this._panelSortIcon.Name = "_panelSortIcon";
-			this._panelSortIcon.Size = new System.Drawing.Size(20, 24);
-			this._panelSortIcon.TabIndex = 5;
-			this._panelSortIcon.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
+			this._labelSortStatus.AutoSize = true;
+			this._labelSortStatus.Image = global::Mtgdb.Controls.Properties.Resources.sort_48;
+			this._labelSortStatus.ImageScale = 0.5F;
+			this._labelSortStatus.Location = new System.Drawing.Point(362, 0);
+			this._labelSortStatus.Margin = new System.Windows.Forms.Padding(0);
+			this._labelSortStatus.Name = "_labelSortStatus";
+			this._labelSortStatus.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
+			this._labelSortStatus.Size = new System.Drawing.Size(72, 24);
+			this._labelSortStatus.TabIndex = 5;
+			this._labelSortStatus.Text = "Name ^";
 			// 
 			// _searchBar
 			// 
@@ -156,8 +146,11 @@
 			this._searchBar.Margin = new System.Windows.Forms.Padding(0);
 			this._searchBar.Name = "_searchBar";
 			this._searchBar.SelectedIndex = -1;
-			this._searchBar.Size = new System.Drawing.Size(364, 24);
+			this._searchBar.Size = new System.Drawing.Size(362, 24);
 			this._searchBar.TabIndex = 6;
+			this._searchBar.VisibleAllBorders = null;
+			this._searchBar.VisibleBorders = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			// 
 			// _textboxRename
 			// 
@@ -171,6 +164,7 @@
 			this._textboxRename.MaxLength = 1024;
 			this._textboxRename.Name = "_textboxRename";
 			this._textboxRename.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+			this._textboxRename.SelectionEnabled = true;
 			this._textboxRename.Size = new System.Drawing.Size(432, 20);
 			this._textboxRename.TabIndex = 1;
 			this._textboxRename.TabStop = false;
@@ -208,8 +202,7 @@
 		private Mtgdb.Controls.FixedRichTextBox _textboxRename;
 		private System.Windows.Forms.Label _labelFilterByDeckMode;
 		private Mtgdb.Controls.DropDown _menuFilterByDeckMode;
-		private System.Windows.Forms.Label _labelSortStatus;
-		private BorderedPanel _panelSortIcon;
+		private ControlBase _labelSortStatus;
 		private SearchBar _searchBar;
 		private BorderedPanel _panelRename;
 	}

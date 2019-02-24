@@ -16,14 +16,12 @@ namespace Mtgdb.Gui
 			defaultTooltips.SetTooltip(this,
 				null,
 				"Sets count",
-				_panelIconStatusSets,
 				_labelStatusSets);
 
 			defaultTooltips.SetTooltip(this,
 				"Collection cards count",
 				"Use Alt+right/middle mouse click to add/remove card to collection.\r\n" +
 				"Use Ctrl+Alt+right/middle mouse click to add/remove 4 copies.",
-				_panelIconStatusCollection,
 				_labelStatusCollection);
 
 			defaultTooltips.SetTooltip(this,
@@ -32,7 +30,6 @@ namespace Mtgdb.Gui
 				"There are 3 possible modes: and, or, ignored.\r\n" +
 				"To select between modes use Filter manager - the bottom " +
 				"buttons group in right panel.",
-				_panelIconStatusFilterButtons,
 				_labelStatusFilterButtons);
 
 			defaultTooltips.SetTooltip(this,
@@ -41,7 +38,6 @@ namespace Mtgdb.Gui
 				"There are 3 possible modes: and, or, ignored.\r\n" +
 				"To select between modes use Filter manager - the bottom " +
 				"buttons group in right panel.",
-				_panelIconStatusSearch,
 				_labelStatusSearch);
 
 			defaultTooltips.SetTooltip(this,
@@ -51,7 +47,6 @@ namespace Mtgdb.Gui
 				"Filtering by Collection can be enabled or disabled using Filter manager - " +
 				"the bottom buttons group in right panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n",
-				_panelIconStatusFilterCollection,
 				_labelStatusFilterCollection);
 
 			defaultTooltips.SetTooltip(this,
@@ -68,13 +63,11 @@ namespace Mtgdb.Gui
 				"Filtering by Deck can be enabled or disabled using Filter manager - " +
 				"the bottom buttons group in right panel.\r\n" +
 				"There are 3 possible modes: and, or, ignored.\r\n",
-				_panelIconStatusFilterDeck,
 				_labelStatusFilterDeck);
 
 			defaultTooltips.SetTooltip(this,
 				null,
 				"Filter by Legality status",
-				_panelIconStatusFilterLegality,
 				_labelStatusFilterLegality);
 
 			defaultTooltips.SetTooltip(this,
@@ -85,7 +78,6 @@ namespace Mtgdb.Gui
 				"Ctrl + Click to remove field from sort priorities.\r\n\r\n" +
 				"When all explicit sort criteria are equal, cards are ordered " +
 				"by relevance to search result, then by order in AllSets-x.json file.",
-				_panelIconStatusSort,
 				_labelStatusSort);
 
 			setFilterButtonTooltips(defaultTooltips, quickFilterTooltips);

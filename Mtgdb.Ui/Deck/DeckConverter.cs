@@ -9,6 +9,7 @@ namespace Mtgdb.Ui
 			var result = Deck.Create();
 			addDeckZone(deck.MainDeck, result.MainDeck, mapId);
 			addDeckZone(deck.Sideboard, result.Sideboard, mapId);
+			addDeckZone(deck.Maybeboard, result.Maybeboard, mapId);
 
 			result.File = deck.File;
 			result.Name = deck.Name;

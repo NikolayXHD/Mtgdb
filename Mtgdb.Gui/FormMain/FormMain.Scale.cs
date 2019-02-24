@@ -25,11 +25,7 @@ namespace Mtgdb.Gui
 					_buttonShowProhibit,
 					_buttonHideDeck
 				}
-				.ForEach(button =>
-				{
-					button.ScaleDpiImages();
-					button.ScaleDpi();
-				});
+				.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 
 			new[]
 			{
@@ -37,10 +33,7 @@ namespace Mtgdb.Gui
 				_buttonLegalityAllowRestricted,
 				_buttonLegalityAllowBanned,
 				_buttonLegalityAllowFuture
-			}.ForEach(b =>
-			{
-				b.ScaleDpi();
-			});
+			}.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 
 			_deckEditorSubsystem.Scale();
 			_menuSearchExamples.ScaleDpi();
@@ -48,14 +41,14 @@ namespace Mtgdb.Gui
 			_labelStatusScrollCards.ScaleDpi();
 			_labelStatusScrollDeck.ScaleDpi();
 
-			_labelStatusSets.ScaleDpi();
-			_labelStatusCollection.ScaleDpi();
-			_labelStatusFilterButtons.ScaleDpi();
-			_labelStatusSearch.ScaleDpi();
-			_labelStatusFilterCollection.ScaleDpi();
-			_labelStatusFilterDeck.ScaleDpi();
-			_labelStatusFilterLegality.ScaleDpi();
-			_labelStatusSort.ScaleDpi();
+			_labelStatusSets.ScaleDpiAuto();
+			_labelStatusCollection.ScaleDpiAuto();
+			_labelStatusFilterButtons.ScaleDpiAuto();
+			_labelStatusSearch.ScaleDpiAuto();
+			_labelStatusFilterCollection.ScaleDpiAuto();
+			_labelStatusFilterDeck.ScaleDpiAuto();
+			_labelStatusFilterLegality.ScaleDpiAuto();
+			_labelStatusSort.ScaleDpiAuto();
 
 			Bitmap transformIcon(Bitmap bmp) =>
 				bmp?.HalfResizeDpi();
@@ -68,20 +61,9 @@ namespace Mtgdb.Gui
 			foreach (var qf in _quickFilterControls.Append(FilterManager))
 				qf.ScaleDpi();
 
-			_panelIconLegality.ScaleDpi(transformIcon);
-			_panelIconStatusSets.ScaleDpi(transformIcon);
-			_panelIconStatusCollection.ScaleDpi(transformIcon);
-			_panelIconStatusFilterButtons.ScaleDpi(transformIcon);
-			_panelIconStatusSearch.ScaleDpi(transformIcon);
-			_panelIconStatusFilterCollection.ScaleDpi(transformIcon);
-			_panelIconStatusFilterDeck.ScaleDpi(transformIcon);
-			_panelIconStatusFilterLegality.ScaleDpi(transformIcon);
-			_panelIconStatusSort.ScaleDpi(transformIcon);
-
 			_deckListControl.Scale();
 
-			_popupSearchExamples.ScaleDpiImages();
-			_popupSearchExamples.ScaleDpiSize();
+			_popupSearchExamples.ScaleDpiAuto();
 
 			_dropdownLegality.ScaleDpi();
 			_searchBar.ScaleDpi();

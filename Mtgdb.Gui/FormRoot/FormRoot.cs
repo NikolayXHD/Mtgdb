@@ -157,6 +157,7 @@ namespace Mtgdb.Gui
 				_menuUiSuggestDownloadMissingImages,
 				_menuUiImagesCacheCapacity,
 				_menuUiUndoDepth,
+				_checkboxAllPanels,
 				_checkboxTopPanel,
 				_checkboxRightPanel,
 				_checkboxSearchBar,

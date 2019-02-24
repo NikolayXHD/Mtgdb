@@ -273,6 +273,7 @@ namespace Mtgdb.Controls
 
 						_cardIdsInFilteredDecks.UnionWith(model.Deck.MainDeck.Order);
 						_cardIdsInFilteredDecks.UnionWith(model.Deck.Sideboard.Order);
+						// ignore maybeboard
 					}
 				}
 

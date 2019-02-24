@@ -232,16 +232,12 @@ namespace Mtgdb.Gui
 				}
 				.ForEach(ControlScaler.ScaleDpiFont);
 
-			_dropdownMruFiles.ScaleDpiImages();
-			_dropdownMruFiles.ScaleDpiSize();
+			_dropdownMruFiles.ScaleDpiAuto();
 
-			_buttonSave.ScaleDpiImages((Resources.save_16, Resources.save_32));
-			_buttonSave.ScaleDpiSize();
+			_buttonSave.ScaleDpiAuto((Resources.save_16, Resources.save_32));
+			_buttonLoad.ScaleDpiAuto((Resources.open_16, Resources.open_32));
 
-			_buttonLoad.ScaleDpiImages((Resources.open_16, Resources.open_32));
-			_buttonLoad.ScaleDpiSize();
-
-			_checkBoxes.ForEach(CheckBoxScaler.ScaleDpi);
+			_checkBoxes.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 		}
 
 		private static bool isChartTypeSupported(SeriesChartType arg)

@@ -189,6 +189,10 @@ namespace Mtgdb.Controls
 		}
 
 
+		protected override bool VisibleCommonBorder => false;
+
+		protected override bool VisibleFocusRectangle => base.VisibleFocusRectangle && !IsPopupOpen;
+
 		private int _selectedIndex = -1;
 		public int SelectedIndex
 		{

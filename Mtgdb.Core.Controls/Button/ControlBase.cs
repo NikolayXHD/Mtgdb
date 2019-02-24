@@ -388,9 +388,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		[Category("Settings"), DefaultValue(true)]
-		public virtual bool AutoCheck { get; set; } = true;
-
+		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 		[Category("Settings"), DefaultValue(false)]
 		public override bool AutoSize
 		{

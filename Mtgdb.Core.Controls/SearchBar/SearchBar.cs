@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 			base.HandlePopupItemKeyDown(e);
 		}
 
-		protected override void OnPopupOwnerPressed()
+		protected override void HandlePopupOwnerPressed()
 		{
 		}
 

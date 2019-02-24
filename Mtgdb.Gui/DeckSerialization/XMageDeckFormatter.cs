@@ -74,6 +74,7 @@ namespace Mtgdb.Gui
 
 			writeCards(result, current.MainDeck, string.Empty);
 			writeCards(result, current.Sideboard, @"SB: ");
+			// ignore maybeboard
 
 			return result.ToString();
 		}

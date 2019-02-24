@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Gui.Properties;
-using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
 {
@@ -25,8 +24,6 @@ namespace Mtgdb.Gui
 
 			_tabs.ScaleDpi(bmp => bmp?.HalfResizeDpi());
 
-			_panelAva.ScaleDpiImages();
-
 			_labelPasteInfo.ScaleDpiFont();
 			_labelFormats.ScaleDpiFont();
 			_labelMtgo.ScaleDpiFont();
@@ -40,37 +37,28 @@ namespace Mtgdb.Gui
 			_labelUiUseSmallImagesHint.ScaleDpiFont();
 			_labelDonate.ScaleDpiFont();
 
-			_flowTitleLeft.Controls.OfType<ButtonBase>()
-				.Concat(_flowTitleRight.Controls.OfType<ButtonBase>())
-				.ForEach(ControlScaler.ScaleDpi);
+			_buttonUndo.ScaleDpiAuto((Resources.undo_16, Resources.undo_32));
+			_buttonRedo.ScaleDpiAuto((Resources.redo_16, Resources.redo_32));
+			_buttonOpenWindow.ScaleDpiAuto();
+			_dropdownPaste.ScaleDpiAuto((Resources.paste_16, Resources.paste_32));
+			_dropdownSaveDeck.ScaleDpiAuto((Resources.save_16, Resources.save_32));
+			_dropdownOpenDeck.ScaleDpiAuto((Resources.open_16, Resources.open_32));
+			_buttonClear.ScaleDpiAuto((Resources.trash_16, Resources.trash_32));
+			_buttonPrint.ScaleDpiAuto((Resources.print_16, Resources.print_32));
+			_buttonStat.ScaleDpiAuto((Resources.chart_16, Resources.chart_32));
+			_buttonTooltips.ScaleDpiAuto((Resources.tooltip_16, Resources.tooltip_32));
+			_popupPanelVisibility.ScaleDpiAuto();
+			_dropdownConfig.ScaleDpiAuto((Resources.config_16, Resources.config_32));
+			_dropdownColorScheme.ScaleDpiAuto();
+			_dropdownLanguage.ScaleDpiAuto();
+			_buttonHelp.ScaleDpiAuto((Resources.index_16, Resources.index_32));
 
-			_buttonUndo.ScaleDpiImages((Resources.undo_16, Resources.undo_32));
-			_buttonRedo.ScaleDpiImages((Resources.redo_16, Resources.redo_32));
-			_buttonOpenWindow.ScaleDpiImages();
-			_dropdownPaste.ScaleDpiImages((Resources.paste_16, Resources.paste_32));
-			_dropdownSaveDeck.ScaleDpiImages((Resources.save_16, Resources.save_32));
-			_dropdownOpenDeck.ScaleDpiImages((Resources.open_16, Resources.open_32));
-			_buttonClear.ScaleDpiImages((Resources.trash_16, Resources.trash_32));
-			_buttonPrint.ScaleDpiImages((Resources.print_16, Resources.print_32));
-			_buttonStat.ScaleDpiImages((Resources.chart_16, Resources.chart_32));
-			_buttonTooltips.ScaleDpiImages((Resources.tooltip_16, Resources.tooltip_32));
-			_popupPanelVisibility.ScaleDpiImages();
-			_dropdownConfig.ScaleDpiImages((Resources.properties_16, Resources.properties_32));
-			_dropdownColorScheme.ScaleDpiImages();
-			_dropdownLanguage.ScaleDpiImages();
-			_buttonHelp.ScaleDpiImages((Resources.index_16, Resources.index_32));
+			_buttonUpdate.ScaleDpiAuto();
+			_buttonSupport.ScaleDpiAuto();
+			_dropdownDonate.ScaleDpiAuto();
 
-			_buttonUpdate.ScaleDpiImages();
-			_buttonSupport.ScaleDpiImages();
-			_dropdownDonate.ScaleDpiImages();
-
-			_buttonImportExportToMtgArena.ScaleDpiImages((Resources.paste_16, Resources.paste_32));
-
-			new[]
-			{
-				_buttonImportMtgArenaCollection,
-				_buttonImportExportToMtgArena
-			}.ForEach(ControlScaler.ScaleDpi);
+			_buttonImportExportToMtgArena.ScaleDpiAuto((Resources.paste_16, Resources.paste_32));
+			_buttonImportMtgArenaCollection.ScaleDpiAuto();
 
 			new[]
 				{
@@ -96,12 +84,11 @@ namespace Mtgdb.Gui
 					_buttonVisitDeckedBuilder
 				}
 				.Concat(getLanguageMenuItems())
-				.ForEach(
-					ButtonBaseScaler.ScaleDpiImages,
-					ControlScaler.ScaleDpi);
+				.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 
-			_buttonMenuEditConfig.ScaleDpiHeight();
-			_buttonMenuEditConfig.ScaleDpiFont();
+			_panelAva.ScaleDpiAuto();
+
+			_buttonMenuEditConfig.ScaleDpiAuto((Resources.config_16, Resources.config_32));
 
 			_menuColors.ScaleDpiFont();
 
@@ -116,10 +103,11 @@ namespace Mtgdb.Gui
 
 			new[]
 			{
+				_checkboxAllPanels,
 				_checkboxTopPanel,
 				_checkboxRightPanel,
 				_checkboxSearchBar
-			}.ForEach(CheckBoxScaler.ScaleDpi);
+			}.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 		}
 
 		private void beforeDpiChanged()

@@ -48,6 +48,8 @@ namespace Mtgdb.Gui
 					add(card, count, result.Sideboard);
 				else
 					add(card, count, result.MainDeck);
+
+				// ignore maybeboard
 			}
 
 			_log.Info("Unmatched cards:\r\n{0}", string.Join("\r\n", unmatched));

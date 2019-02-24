@@ -148,9 +148,6 @@
   <data name="tooltip_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tooltip_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="mulligan_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\mulligan_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="hidden_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hidden_40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -196,8 +193,8 @@
   <data name="tooltip_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tooltip_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="properties_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\properties_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="config_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="save_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\save_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -298,9 +295,6 @@
   <data name="add_form_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add_form_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="draw_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\draw_48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="de" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\de.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -310,8 +304,8 @@
   <data name="art_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\art_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="properties_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\properties_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="config_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\config_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="search_like_hovered_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\search_like_hovered_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -360,6 +360,7 @@ namespace Mtgdb.Controls
 			_cardNames.Clear();
 			_cardNames.UnionWith(OriginalDeck.MainDeck.Order.Select(_ => _repo.CardsById[_].NameEn));
 			_cardNames.UnionWith(OriginalDeck.Sideboard.Order.Select(_ => _repo.CardsById[_].NameEn));
+			// ignore maybeboard
 		}
 
 		private readonly CardRepository _repo;

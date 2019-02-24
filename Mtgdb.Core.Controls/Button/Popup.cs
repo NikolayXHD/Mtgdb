@@ -17,6 +17,7 @@ namespace Mtgdb.Controls
 			PressDown += popupOwnerPressed;
 			KeyDown += popupOwnerKeyDown;
 			PreviewKeyDown += popupOwnerPreviewKeyDown;
+			LostFocus += lostFocus;
 			MessageFilter.Instance.GlobalMouseDown += globalGlobalMouseDown;
 
 			MarginTop = 0;
@@ -30,17 +31,30 @@ namespace Mtgdb.Controls
 
 
 
+		protected override void Dispose(bool disposing)
+		{
+			PressDown -= popupOwnerPressed;
+			KeyDown -= popupOwnerKeyDown;
+			PreviewKeyDown -= popupOwnerPreviewKeyDown;
+			LostFocus -= lostFocus;
+			MessageFilter.Instance.GlobalMouseDown -= globalGlobalMouseDown;
+
+			_menuControl?.Invoke0(unsubscribeFromEvents);
+			base.Dispose(disposing);
+		}
+
 		protected virtual void Show(bool focus)
 		{
 			var prevOwner = MenuControl.GetTag<ButtonBase>("Owner");
 			if (prevOwner != null && prevOwner is ButtonBase prevCheck)
 				prevCheck.Checked = false;
 
-			Checked = true;
-
 			MenuControl.SetTag("Owner", this);
 
 			BeforeShow?.Invoke();
+
+			Checked = true;
+			IsPopupOpen = true;
 
 			var location = ActualLocation;
 			if (MenuControl is ContextMenuStrip)
@@ -51,16 +65,12 @@ namespace Mtgdb.Controls
 				showRegularMenu();
 			}
 
-			IsPopupOpen = true;
-
 			if (focus)
 				focusFirstMenuItem();
 		}
 
 		protected virtual void Hide(bool focus)
 		{
-			Checked = false;
-
 			hide();
 
 			if (focus && TabStop && Enabled)
@@ -93,25 +103,12 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		protected virtual void OnPopupOwnerPressed()
+		protected virtual void HandlePopupOwnerPressed()
 		{
 			if (IsPopupOpen)
 				Hide(false);
 			else
 				Show(false);
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			PressDown -= popupOwnerPressed;
-			KeyDown -= popupOwnerKeyDown;
-			PreviewKeyDown -= popupOwnerPreviewKeyDown;
-
-			unsubscribeFromEvents(_menuControl);
-
-			MessageFilter.Instance.GlobalMouseDown -= globalGlobalMouseDown;
-
-			base.Dispose(disposing);
 		}
 
 		protected override void HandlePaint(Graphics g)
@@ -125,32 +122,24 @@ namespace Mtgdb.Controls
 			if (BorderColor.A > 0 && VisibleBorders != AnchorStyles.None || Checked || ActualForeColor.A == 0)
 				return;
 
-			var rect = new Rectangle(default, Size);
-			int width = 2;
+			int size = FocusBorderWidth;
+
+			var rect = this.GetBorderRectangle(FocusBorderWidth);
+
 			int dotsCount = 3;
+			int markWidth = size * (2 * dotsCount - 1);
 
-			int markWidth = width * 2 * dotsCount;
-
-			int freeWidth = rect.Width - markWidth;
-			var start = rect.BottomRight() - new Size(1 + freeWidth / 2, 1);
+			var start = rect.BottomLeft() + new Size((rect.Width - markWidth) / 2, 0);
 			g.DrawLine(
-				new Pen(ActualForeColor) { Width = width, DashStyle = DashStyle.Dot },
+				new Pen(ActualForeColor) { Width = size, DashStyle = DashStyle.Dot },
 				start,
-				start - new Size(markWidth, 0)
+				start + new Size(markWidth, 0)
 			);
-		}
-
-		protected override void PaintFocusRectangle(Graphics g)
-		{
-			if (PaintCommonBorder)
-				return;
-
-			base.PaintFocusRectangle(g);
 		}
 
 		protected override void PaintBorder(Graphics g)
 		{
-			if (PaintCommonBorder)
+			if (VisibleCommonBorder)
 			{
 				this.PaintBorder(g,
 					AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right,
@@ -162,14 +151,6 @@ namespace Mtgdb.Controls
 				base.PaintBorder(g);
 			}
 		}
-
-		protected override Color ActualBackColor =>
-			PaintCommonBorder
-				? MenuControl.BackColor
-				: base.ActualBackColor;
-
-		private bool PaintCommonBorder =>
-			Checked && MenuControl is IPostPaintEvent && (MarginTop == 0 || MenuControl.Margin.Top == 0);
 
 		private void postPaintMenu(object sender, PaintEventArgs e)
 		{
@@ -221,7 +202,7 @@ namespace Mtgdb.Controls
 		}
 
 		private void popupOwnerPressed(object sender, EventArgs e) =>
-			OnPopupOwnerPressed();
+			HandlePopupOwnerPressed();
 
 		private void popupOwnerKeyDown(object sender, KeyEventArgs e)
 		{
@@ -247,6 +228,7 @@ namespace Mtgdb.Controls
 		private void hide()
 		{
 			MenuControl.Hide();
+			Checked = false;
 			IsPopupOpen = false;
 		}
 
@@ -357,6 +339,11 @@ namespace Mtgdb.Controls
 				unsubscribeFromEvents(button);
 		}
 
+		private void lostFocus(object sender, EventArgs e)
+		{
+			if (!MenuControl.ContainsFocus)
+				Hide(focus: false);
+		}
 
 
 		private void subscribeToEvents(ButtonBase button)
@@ -385,21 +372,40 @@ namespace Mtgdb.Controls
 
 			if (menuControl is IPostPaintEvent eventProvider)
 				eventProvider.PostPaint += postPaintMenu;
+
+			if (menuControl is ContextMenuStrip contextMenu)
+				contextMenu.Closed += contextMenuClosed;
 		}
 
 		private void unsubscribeFromEvents(Control menuControl)
 		{
-			if (menuControl != null)
-			{
-				foreach (var button in menuControl.Controls.OfType<ButtonBase>())
-					unsubscribeFromEvents(button);
+			foreach (var button in menuControl.Controls.OfType<ButtonBase>())
+				unsubscribeFromEvents(button);
 
-				menuControl.ControlAdded -= controlAdded;
-				menuControl.ControlRemoved -= controlRemoved;
-				if (menuControl is IPostPaintEvent eventProvider)
-					eventProvider.PostPaint -= postPaintMenu;
-			}
+			menuControl.ControlAdded -= controlAdded;
+			menuControl.ControlRemoved -= controlRemoved;
+
+			if (menuControl is IPostPaintEvent eventProvider)
+				eventProvider.PostPaint -= postPaintMenu;
+
+			if (menuControl is ContextMenuStrip contextMenu)
+				contextMenu.Closed -= contextMenuClosed;
 		}
+
+		private void contextMenuClosed(object sender, ToolStripDropDownClosedEventArgs e) =>
+			hide();
+
+
+
+		protected override Color ActualBackColor =>
+			VisibleCommonBorder
+				? MenuControl.BackColor
+				: base.ActualBackColor;
+
+		protected virtual bool VisibleCommonBorder =>
+			Checked && MenuControl is IPostPaintEvent && (MarginTop == 0 || MenuControl.Margin.Top == 0);
+
+		protected override bool VisibleFocusRectangle => base.VisibleFocusRectangle && !VisibleCommonBorder;
 
 
 

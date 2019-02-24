@@ -22,7 +22,9 @@ namespace Mtgdb.Gui
 				MainDeckCount = current.MainDeck?.Count,
 				MainDeckOrder = current.MainDeck?.Order,
 				SideDeckCount = current.Sideboard?.Count,
-				SideDeckOrder = current.Sideboard?.Order
+				SideDeckOrder = current.Sideboard?.Order,
+				MaybeDeckCount = current.Maybeboard?.Count,
+				MaybeDeckOrder = current.Maybeboard?.Order
 			};
 
 			return JsonConvert.SerializeObject(settings, Formatting.Indented);

@@ -19,6 +19,7 @@ namespace Mtgdb.Ui
 			var modified = pairs
 				.Concat(deck.MainDeck.Count)
 				.Concat(deck.Sideboard.Count)
+				.Concat(deck.Maybeboard.Count)
 				.GroupBy(_ => _.Key)
 				.ToDictionary(
 					gr => gr.Key,

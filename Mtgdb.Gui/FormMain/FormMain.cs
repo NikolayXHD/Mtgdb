@@ -174,16 +174,28 @@ namespace Mtgdb.Gui
 
 		private void updateShowSampleHandButtons()
 		{
-			bool isSampleHand = _deckEditor.CurrentZone == Zone.SampleHand;
-			bool enabled = _cardRepo.IsLoadingComplete;
+			var buttons = new[]
+			{
+				_buttonSampleHandNew,
+				_buttonSampleHandMulligan,
+				_buttonSampleHandDraw
+			};
 
-			_buttonSampleHandNew.Visible = isSampleHand;
-			_buttonSampleHandMulligan.Visible = isSampleHand;
-			_buttonSampleHandDraw.Visible = isSampleHand;
+			if (_deckEditor.CurrentZone == Zone.SampleHand)
+			{
+				int prevIndex = _panelStatus.Controls.GetChildIndex(_tabHeadersDeck);
+				buttons.Reverse().ForEach(b =>
+				{
+					b.Visible = true;
 
-			_buttonSampleHandNew.Enabled = enabled;
-			_buttonSampleHandMulligan.Enabled = enabled;
-			_buttonSampleHandDraw.Enabled = enabled;
+					// workaround FlowLayoutPanel losing track of children order on their visibility change
+					_panelStatus.Controls.SetChildIndex(b, prevIndex + 1);
+				});
+			}
+			else
+				buttons.ForEach(b => b.Visible = false);
+
+			buttons.ForEach(b => b.Enabled = _cardRepo.IsLoadingComplete);
 		}
 
 		private void updateShowProhibited()
@@ -403,6 +415,7 @@ namespace Mtgdb.Gui
 			{
 				{ (int) Zone.Main, new TabSettings($"main deck: {_deckEditor.MainDeckSize}/60") },
 				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckEditor.SideDeckSize}/15") },
+				{ (int) Zone.Maybe, new TabSettings($"maybeboard: {_deckEditor.MaybeDeckSize}") },
 				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckEditor.SampleHandSize}") },
 				{ DeckListTabIndex, new TabSettings(getDeckListStatus()) }
 			});
@@ -602,11 +615,15 @@ namespace Mtgdb.Gui
 			switch (filterManagerStates[filterGroup.Index()])
 			{
 				case FilterValueState.RequiredSome:
-					return "OR mode";
+					return "or";
 				case FilterValueState.Required:
-					return "AND mode";
+					return "and";
+				case FilterValueState.Prohibited:
+					return "not";
+				case FilterValueState.Ignored:
+					return "any";
 				default:
-					return "ignored";
+					throw new NotSupportedException();
 			}
 		}
 
@@ -691,10 +708,14 @@ namespace Mtgdb.Gui
 				FilterLayout = FilterLayout.States,
 				FilterGrid = FilterManager.States,
 				Language = _formRoot.UiModel.LanguageController.Language,
+
 				MainDeckCount = _deckEditor.MainDeck.CountById.ToDictionary(),
 				MainDeckOrder = _deckEditor.MainDeck.CardsIds.ToList(),
 				SideDeckCount = _deckEditor.SideDeck.CountById.ToDictionary(),
 				SideDeckOrder = _deckEditor.SideDeck.CardsIds.ToList(),
+				MaybeDeckCount = _deckEditor.MaybeDeck.CountById.ToDictionary(),
+				MaybeDeckOrder = _deckEditor.MaybeDeck.CardsIds.ToList(),
+
 				Collection = _collectionEditor.CountById.ToDictionary(),
 				ShowDuplicates = _buttonShowDuplicates.Checked,
 				HideTooltips = !_formRoot.TooltipController.Active,
@@ -1073,7 +1094,7 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null);
+			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null, null, null);
 			_collectionEditor.LoadCollection(deck, append: false);
 
 			MessageBox.Show($"Imported collection of {countById.Values.Sum()} cards, {countById.Count} distinct.");

@@ -41,7 +41,7 @@ namespace Mtgdb.Controls
 
 		private CollectionSnapshot convertLegacyCollection(CollectionSnapshot collection)
 		{
-			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
+			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null, null, null);
 			var converted = _deckMigrator.ConvertLegacyDeck(deck);
 
 			return new CollectionSnapshot
@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 
 		private CollectionSnapshot convertV2Collection(CollectionSnapshot collection)
 		{
-			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
+			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null, null, null);
 			var converted = _deckMigrator.ConvertV2Deck(deck);
 
 			return new CollectionSnapshot
@@ -97,7 +97,7 @@ namespace Mtgdb.Controls
 
 		private CollectionSnapshot convertV3Collection(CollectionSnapshot collection)
 		{
-			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null);
+			var deck = Deck.Create(collection.CountById, collection.CountById.Keys.ToList(), null, null, null, null);
 			var converted = _deckMigrator.ConvertV3Deck(deck);
 
 			return new CollectionSnapshot

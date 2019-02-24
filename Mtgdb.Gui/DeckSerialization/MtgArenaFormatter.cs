@@ -101,6 +101,7 @@ namespace Mtgdb.Gui
 			writeCards(result, current.MainDeck);
 			result.AppendLine();
 			writeCards(result, current.Sideboard);
+			// ignore maybeboard
 
 			return result.ToString();
 		}

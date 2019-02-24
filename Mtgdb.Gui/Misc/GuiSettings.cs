@@ -40,6 +40,12 @@ namespace Mtgdb.Gui
 		[JsonProperty("SideDeckOrder")]
 		public List<string> SideDeckOrder { get; set; } = new List<string>();
 
+		[JsonProperty("MaybeDeck")]
+		public Dictionary<string, int> MaybeDeckCount { get; set; } = new Dictionary<string, int>();
+
+		[JsonProperty("MaybeDeckOrder")]
+		public List<string> MaybeDeckOrder { get; set; } = new List<string>();
+
 		public string Language { get; set; }
 		public bool ShowDuplicates { get; set; }
 		public bool HideTooltips { get; set; }
@@ -79,7 +85,7 @@ namespace Mtgdb.Gui
 		{
 			get
 			{
-				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder);
+				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder, MaybeDeckCount, MaybeDeckOrder);
 
 				deck.Name = DeckName;
 				deck.File = DeckFile;
@@ -93,13 +99,15 @@ namespace Mtgdb.Gui
 				MainDeckOrder = value.MainDeck.Order;
 				SideDeckCount = value.Sideboard.Count;
 				SideDeckOrder = value.Sideboard.Order;
+				MaybeDeckCount = value.Maybeboard.Count;
+				MaybeDeckOrder = value.Maybeboard.Order;
 			}
 		}
 
 		[JsonIgnore]
 		public Deck CollectionModel
 		{
-			get => Deck.Create(Collection, Collection?.Keys.ToList(), null, null);
+			get => Deck.Create(Collection, Collection?.Keys.ToList(), null, null, null, null);
 			set => Collection = value.MainDeck.Count;
 		}
 

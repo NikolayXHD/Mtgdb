@@ -21,11 +21,12 @@ namespace Mtgdb.Gui
 			var cardIds = new HashSet<string>();
 			cardIds.UnionWith(deck.MainDeck.Order);
 			cardIds.UnionWith(deck.Sideboard.Order);
+			cardIds.UnionWith(deck.Maybeboard.Order);
 
 			var releaseDate = cardIds.Max(
 				cardId => _repo.CardsById[cardId].Printings.Min(
 						setcode => _repo.SetsByCode[setcode].ReleaseDate));
-			
+
 			var replacements = new Dictionary<string, string>();
 
 			foreach (string cardId in cardIds)

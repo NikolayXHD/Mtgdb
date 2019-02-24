@@ -4,16 +4,20 @@ namespace Mtgdb.Controls
 {
 	public static class ControlBaseScaler
 	{
-		public static void ScaleDpiImages(this ControlBase control)
+		public static void ScaleDpiAuto(this ControlBase control)
 		{
+			scaleAuto(control);
+
 			_imageScaleScaler.Setup(control);
 			control.Image = control.Image?.ApplyColorScheme();
 		}
 
-		public static void ScaleDpiImages(this ButtonBase button,
+		public static void ScaleDpiAuto(this ControlBase button,
 			(Bitmap Image, Bitmap ImageDouble) img)
 		{
-			new DpiScaler<ButtonBase>(b =>
+			scaleAuto(button);
+
+			new DpiScaler<ControlBase>(b =>
 			{
 				if (Dpi.ScalePercent > 100)
 				{
@@ -26,6 +30,16 @@ namespace Mtgdb.Controls
 					b.ImageScale = 1f.ByDpiWidth();
 				}
 			}).Setup(button);
+		}
+
+		private static void scaleAuto(ControlBase control)
+		{
+			control.ScaleDpiFont();
+			control.ScaleDpiMargin();
+			control.ScaleDpiPadding();
+
+			if (!control.AutoSize)
+				control.ScaleDpiSize();
 		}
 
 		private static readonly DpiScaler<ControlBase, float> _imageScaleScaler =

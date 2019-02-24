@@ -129,6 +129,19 @@ namespace Mtgdb.Controls
 		public static TValue GetTag<TValue>(this Control control) =>
 			GetTag<TValue>(control, typeof(TValue).FullName);
 
+		public static Rectangle GetBorderRectangle(this Control control, int focusBorderWidth)
+		{
+			var rectangle = new Rectangle(default, control.Size);
+			rectangle.Inflate(-focusBorderWidth / 2, -focusBorderWidth / 2);
+			if (focusBorderWidth % 2 == 1)
+			{
+				rectangle.Width -= 1;
+				rectangle.Height -= 1;
+			}
+
+			return rectangle;
+		}
+
 		public static void PaintBorder(this Control c, Graphics graphics, AnchorStyles borders, Color borderColor, DashStyle dashStyle)
 		{
 			if (borderColor == Color.Transparent || borderColor == Color.Empty || borderColor.A == 0)

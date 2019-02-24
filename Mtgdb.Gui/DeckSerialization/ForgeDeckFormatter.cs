@@ -84,6 +84,7 @@ namespace Mtgdb.Gui
 
 			result.AppendLine(@"[Sideboard]");
 			writeCards(result, current.Sideboard);
+			// ignore maybeboard
 
 			return result.ToString();
 		}

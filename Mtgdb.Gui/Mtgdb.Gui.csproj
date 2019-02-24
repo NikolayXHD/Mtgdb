@@ -190,11 +190,6 @@
     <Compile Include="Misc\GuiSettings.cs" />
     <Compile Include="Misc\TabHeadersTooltip.cs" />
     <Compile Include="Misc\TooltipConfiguration.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="FormRoot\FormRoot.Menus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,6 +203,11 @@
     <Compile Include="FormChart\TabField.cs" />
     <Compile Include="LayoutView\CardLayoutControlBase.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="[ Infrastructure ]\GuiLoader.cs" />
     <Compile Include="LayoutView\LayoutViewTooltip.cs" />

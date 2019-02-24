@@ -106,6 +106,7 @@
 			this._flowTitleRight = new Mtgdb.Controls.BorderedFlowLayoutPanel();
 			this._popupPanelVisibility = new Mtgdb.Controls.Popup();
 			this._menuPanelVisibility = new Mtgdb.Controls.BorderedFlowLayoutPanel();
+			this._checkboxAllPanels = new Mtgdb.Controls.CheckBox();
 			this._checkboxTopPanel = new Mtgdb.Controls.CheckBox();
 			this._checkboxRightPanel = new Mtgdb.Controls.CheckBox();
 			this._checkboxSearchBar = new Mtgdb.Controls.CheckBox();
@@ -206,7 +207,7 @@
 			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuDonate.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this._menuDonate.Size = new System.Drawing.Size(217, 167);
+			this._menuDonate.Size = new System.Drawing.Size(225, 175);
 			this._menuDonate.TabIndex = 2;
 			this._menuDonate.Visible = false;
 			// 
@@ -219,10 +220,10 @@
 			this._buttonMenuDonateYandexMoney.Image = global::Mtgdb.Gui.Properties.Resources.yandex_money_32;
 			this._buttonMenuDonateYandexMoney.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._buttonMenuDonateYandexMoney.ImageScale = 0.75F;
-			this._buttonMenuDonateYandexMoney.Location = new System.Drawing.Point(1, 142);
+			this._buttonMenuDonateYandexMoney.Location = new System.Drawing.Point(1, 150);
 			this._buttonMenuDonateYandexMoney.Margin = new System.Windows.Forms.Padding(1, 0, 1, 1);
 			this._buttonMenuDonateYandexMoney.Name = "_buttonMenuDonateYandexMoney";
-			this._buttonMenuDonateYandexMoney.Size = new System.Drawing.Size(215, 24);
+			this._buttonMenuDonateYandexMoney.Size = new System.Drawing.Size(223, 24);
 			this._buttonMenuDonateYandexMoney.TabIndex = 1;
 			this._buttonMenuDonateYandexMoney.Text = "Donate via YandexMoney";
 			this._buttonMenuDonateYandexMoney.TextAlign = System.Drawing.StringAlignment.Center;
@@ -230,12 +231,13 @@
 			// 
 			// _panelAva
 			// 
+			this._panelAva.AutoSize = true;
 			this._panelAva.Image = global::Mtgdb.Gui.Properties.Resources.ava;
 			this._panelAva.ImageScale = 0.5F;
 			this._panelAva.Location = new System.Drawing.Point(1, 1);
 			this._panelAva.Margin = new System.Windows.Forms.Padding(1, 1, 2, 0);
 			this._panelAva.Name = "_panelAva";
-			this._panelAva.Size = new System.Drawing.Size(87, 117);
+			this._panelAva.Size = new System.Drawing.Size(95, 125);
 			this._panelAva.TabIndex = 2;
 			// 
 			// _buttonMenuDonatePayPal
@@ -247,10 +249,10 @@
 			this._buttonMenuDonatePayPal.Image = global::Mtgdb.Gui.Properties.Resources.paypal_32;
 			this._buttonMenuDonatePayPal.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._buttonMenuDonatePayPal.ImageScale = 0.75F;
-			this._buttonMenuDonatePayPal.Location = new System.Drawing.Point(1, 118);
+			this._buttonMenuDonatePayPal.Location = new System.Drawing.Point(1, 126);
 			this._buttonMenuDonatePayPal.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this._buttonMenuDonatePayPal.Name = "_buttonMenuDonatePayPal";
-			this._buttonMenuDonatePayPal.Size = new System.Drawing.Size(215, 24);
+			this._buttonMenuDonatePayPal.Size = new System.Drawing.Size(223, 24);
 			this._buttonMenuDonatePayPal.TabIndex = 0;
 			this._buttonMenuDonatePayPal.Text = "Donate via PayPal";
 			this._buttonMenuDonatePayPal.TextAlign = System.Drawing.StringAlignment.Center;
@@ -262,7 +264,7 @@
 			// 
 			this._labelDonate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDonate.AutoSize = true;
-			this._labelDonate.Location = new System.Drawing.Point(90, 7);
+			this._labelDonate.Location = new System.Drawing.Point(98, 11);
 			this._labelDonate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 0);
 			this._labelDonate.Name = "_labelDonate";
 			this._labelDonate.Size = new System.Drawing.Size(126, 104);
@@ -484,7 +486,7 @@
 			// _dropdownConfig
 			// 
 			this._dropdownConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this._dropdownConfig.Image = global::Mtgdb.Gui.Properties.Resources.properties_16;
+			this._dropdownConfig.Image = global::Mtgdb.Gui.Properties.Resources.config_16;
 			this._dropdownConfig.Location = new System.Drawing.Point(304, 3);
 			this._dropdownConfig.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this._dropdownConfig.MenuControl = this._menuConfig;
@@ -535,7 +537,8 @@
 			this._buttonMenuEditConfig.BackColor = System.Drawing.SystemColors.Window;
 			this._menuConfig.SetColumnSpan(this._buttonMenuEditConfig, 4);
 			this._buttonMenuEditConfig.ForeColor = System.Drawing.SystemColors.WindowText;
-			this._buttonMenuEditConfig.ImageScale = 0.5F;
+			this._buttonMenuEditConfig.Image = global::Mtgdb.Gui.Properties.Resources.config_16;
+			this._buttonMenuEditConfig.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._buttonMenuEditConfig.Location = new System.Drawing.Point(1, 188);
 			this._buttonMenuEditConfig.Margin = new System.Windows.Forms.Padding(1, 10, 1, 1);
 			this._buttonMenuEditConfig.Name = "_buttonMenuEditConfig";
@@ -809,7 +812,7 @@
 			this._buttonVisitDotP2014.Margin = new System.Windows.Forms.Padding(2, 0, 0, 2);
 			this._buttonVisitDotP2014.Name = "_buttonVisitDotP2014";
 			this._buttonVisitDotP2014.Size = new System.Drawing.Size(106, 54);
-			this._buttonVisitDotP2014.TabIndex = 12;
+			this._buttonVisitDotP2014.TabIndex = 13;
 			this._buttonVisitDotP2014.Text = "Riiak\'s DotP 2014\r\nDeck Builder";
 			this._buttonVisitDotP2014.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDotP2014.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -932,7 +935,7 @@
 			this._buttonVisitCockatrice.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonVisitCockatrice.Name = "_buttonVisitCockatrice";
 			this._buttonVisitCockatrice.Size = new System.Drawing.Size(106, 50);
-			this._buttonVisitCockatrice.TabIndex = 13;
+			this._buttonVisitCockatrice.TabIndex = 12;
 			this._buttonVisitCockatrice.Text = "Cockatrice";
 			this._buttonVisitCockatrice.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitCockatrice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -965,7 +968,7 @@
 			this._buttonVisitMtgArena.Name = "_buttonVisitMtgArena";
 			this._menuOpen.SetRowSpan(this._buttonVisitMtgArena, 2);
 			this._buttonVisitMtgArena.Size = new System.Drawing.Size(59, 52);
-			this._buttonVisitMtgArena.TabIndex = 8;
+			this._buttonVisitMtgArena.TabIndex = 4;
 			this._buttonVisitMtgArena.Text = "MTGArena";
 			this._buttonVisitMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -985,7 +988,7 @@
 			this._buttonVisitForge.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this._buttonVisitForge.Name = "_buttonVisitForge";
 			this._buttonVisitForge.Size = new System.Drawing.Size(58, 50);
-			this._buttonVisitForge.TabIndex = 4;
+			this._buttonVisitForge.TabIndex = 7;
 			this._buttonVisitForge.Text = "Forge";
 			this._buttonVisitForge.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitForge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -1003,7 +1006,7 @@
 			this._buttonVisitXMage.Margin = new System.Windows.Forms.Padding(0);
 			this._buttonVisitXMage.Name = "_buttonVisitXMage";
 			this._buttonVisitXMage.Size = new System.Drawing.Size(52, 50);
-			this._buttonVisitXMage.TabIndex = 5;
+			this._buttonVisitXMage.TabIndex = 8;
 			this._buttonVisitXMage.Text = "XMage";
 			this._buttonVisitXMage.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitXMage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -1021,7 +1024,7 @@
 			this._buttonVisitMagarena.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this._buttonVisitMagarena.Name = "_buttonVisitMagarena";
 			this._buttonVisitMagarena.Size = new System.Drawing.Size(53, 50);
-			this._buttonVisitMagarena.TabIndex = 6;
+			this._buttonVisitMagarena.TabIndex = 9;
 			this._buttonVisitMagarena.Text = "Magarena";
 			this._buttonVisitMagarena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMagarena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -1053,7 +1056,7 @@
 			this._buttonVisitDeckedBuilder.Margin = new System.Windows.Forms.Padding(2, 0, 0, 2);
 			this._buttonVisitDeckedBuilder.Name = "_buttonVisitDeckedBuilder";
 			this._buttonVisitDeckedBuilder.Size = new System.Drawing.Size(73, 50);
-			this._buttonVisitDeckedBuilder.TabIndex = 7;
+			this._buttonVisitDeckedBuilder.TabIndex = 10;
 			this._buttonVisitDeckedBuilder.Text = "Decked builder";
 			this._buttonVisitDeckedBuilder.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDeckedBuilder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -1074,7 +1077,7 @@
 			this._buttonImportExportToMtgArena.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
 			this._buttonImportExportToMtgArena.Name = "_buttonImportExportToMtgArena";
 			this._buttonImportExportToMtgArena.Size = new System.Drawing.Size(182, 24);
-			this._buttonImportExportToMtgArena.TabIndex = 9;
+			this._buttonImportExportToMtgArena.TabIndex = 6;
 			this._buttonImportExportToMtgArena.Text = "Export deck to MTGArena";
 			this._buttonImportExportToMtgArena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonImportExportToMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1095,7 +1098,7 @@
 			this._buttonImportMtgArenaCollection.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
 			this._buttonImportMtgArenaCollection.Name = "_buttonImportMtgArenaCollection";
 			this._buttonImportMtgArenaCollection.Size = new System.Drawing.Size(182, 24);
-			this._buttonImportMtgArenaCollection.TabIndex = 10;
+			this._buttonImportMtgArenaCollection.TabIndex = 5;
 			this._buttonImportMtgArenaCollection.Text = "Import collection from MTGArena";
 			this._buttonImportMtgArenaCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonImportMtgArenaCollection.TextPosition = System.Drawing.StringAlignment.Center;
@@ -1333,6 +1336,7 @@
 			this._menuPanelVisibility.AutoSize = true;
 			this._menuPanelVisibility.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuPanelVisibility.BackColor = System.Drawing.SystemColors.Window;
+			this._menuPanelVisibility.Controls.Add(this._checkboxAllPanels);
 			this._menuPanelVisibility.Controls.Add(this._checkboxTopPanel);
 			this._menuPanelVisibility.Controls.Add(this._checkboxRightPanel);
 			this._menuPanelVisibility.Controls.Add(this._checkboxSearchBar);
@@ -1342,37 +1346,55 @@
 			this._menuPanelVisibility.Margin = new System.Windows.Forms.Padding(0);
 			this._menuPanelVisibility.Name = "_menuPanelVisibility";
 			this._menuPanelVisibility.Padding = new System.Windows.Forms.Padding(1);
-			this._menuPanelVisibility.Size = new System.Drawing.Size(152, 74);
+			this._menuPanelVisibility.Size = new System.Drawing.Size(87, 102);
 			this._menuPanelVisibility.TabIndex = 0;
+			// 
+			// _checkboxAllPanels
+			// 
+			this._checkboxAllPanels.AutoSize = false;
+			this._checkboxAllPanels.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._checkboxAllPanels.ImageScale = 0.5F;
+			this._checkboxAllPanels.Location = new System.Drawing.Point(1, 1);
+			this._checkboxAllPanels.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+			this._checkboxAllPanels.Name = "_checkboxAllPanels";
+			this._checkboxAllPanels.Size = new System.Drawing.Size(85, 24);
+			this._checkboxAllPanels.TabIndex = 0;
+			this._checkboxAllPanels.Text = "All panels";
 			// 
 			// _checkboxTopPanel
 			// 
+			this._checkboxTopPanel.AutoSize = false;
+			this._checkboxTopPanel.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxTopPanel.ImageScale = 0.5F;
-			this._checkboxTopPanel.Location = new System.Drawing.Point(1, 1);
+			this._checkboxTopPanel.Location = new System.Drawing.Point(1, 29);
 			this._checkboxTopPanel.Margin = new System.Windows.Forms.Padding(0);
 			this._checkboxTopPanel.Name = "_checkboxTopPanel";
-			this._checkboxTopPanel.Size = new System.Drawing.Size(143, 24);
-			this._checkboxTopPanel.TabIndex = 0;
-			this._checkboxTopPanel.Text = "Top panel filter buttons";
+			this._checkboxTopPanel.Size = new System.Drawing.Size(85, 24);
+			this._checkboxTopPanel.TabIndex = 1;
+			this._checkboxTopPanel.Text = "Top panel";
 			// 
 			// _checkboxRightPanel
 			// 
+			this._checkboxRightPanel.AutoSize = false;
+			this._checkboxRightPanel.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxRightPanel.ImageScale = 0.5F;
-			this._checkboxRightPanel.Location = new System.Drawing.Point(1, 25);
+			this._checkboxRightPanel.Location = new System.Drawing.Point(1, 53);
 			this._checkboxRightPanel.Margin = new System.Windows.Forms.Padding(0);
 			this._checkboxRightPanel.Name = "_checkboxRightPanel";
-			this._checkboxRightPanel.Size = new System.Drawing.Size(150, 24);
-			this._checkboxRightPanel.TabIndex = 1;
-			this._checkboxRightPanel.Text = "Right panel filter buttons";
+			this._checkboxRightPanel.Size = new System.Drawing.Size(85, 24);
+			this._checkboxRightPanel.TabIndex = 2;
+			this._checkboxRightPanel.Text = "Right panel";
 			// 
 			// _checkboxSearchBar
 			// 
+			this._checkboxSearchBar.AutoSize = false;
+			this._checkboxSearchBar.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxSearchBar.ImageScale = 0.5F;
-			this._checkboxSearchBar.Location = new System.Drawing.Point(1, 49);
+			this._checkboxSearchBar.Location = new System.Drawing.Point(1, 77);
 			this._checkboxSearchBar.Margin = new System.Windows.Forms.Padding(0);
 			this._checkboxSearchBar.Name = "_checkboxSearchBar";
-			this._checkboxSearchBar.Size = new System.Drawing.Size(83, 24);
-			this._checkboxSearchBar.TabIndex = 2;
+			this._checkboxSearchBar.Size = new System.Drawing.Size(85, 24);
+			this._checkboxSearchBar.TabIndex = 3;
 			this._checkboxSearchBar.Text = "Search bar";
 			// 
 			// _dropdownColorScheme
@@ -1477,7 +1499,6 @@
 			this._layoutTitle.PerformLayout();
 			this._flowTitleRight.ResumeLayout(false);
 			this._menuPanelVisibility.ResumeLayout(false);
-			this._menuPanelVisibility.PerformLayout();
 			this._menuColors.ResumeLayout(false);
 			this._flowTitleLeft.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -1571,5 +1592,6 @@
 		private Controls.CheckBox _checkboxRightPanel;
 		private Controls.CheckBox _checkboxSearchBar;
 		private Controls.Popup _popupPanelVisibility;
+		private Controls.CheckBox _checkboxAllPanels;
 	}
 }

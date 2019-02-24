@@ -242,11 +242,18 @@ namespace Mtgdb.Gui
 						operations.Add(deck.MainDeck, _deckEditor.MainDeck);
 						if (deck.Sideboard.Order.Count > 0)
 							operations.Add(deck.Sideboard, _deckEditor.SideDeck);
-
+						if (deck.Maybeboard.Order.Count > 0)
+							operations.Add(deck.Maybeboard, _deckEditor.MaybeDeck);
 						break;
+
 					case Zone.Side:
 						operations.Add(deck.MainDeck, _deckEditor.SideDeck);
 						break;
+
+					case Zone.Maybe:
+						operations.Add(deck.Maybeboard, _deckEditor.MaybeDeck);
+						break;
+
 					case Zone.SampleHand:
 						operations.Add(deck.MainDeck, _deckEditor.SampleHand);
 						break;
@@ -286,6 +293,8 @@ namespace Mtgdb.Gui
 				_collection.CountById?.ToDictionary(),
 				_collection.CountById?.Keys.OrderBy(_ => _cardRepo.CardsById[_].NameEn).ToList(),
 				null,
+				null,
+				null,
 				null);
 
 			var serialized = _serialization.SaveSerialized(deck, formatter);
@@ -302,12 +311,19 @@ namespace Mtgdb.Gui
 				case null when _targetForm.IsDeckListSelected:
 					deck = _deckEditor.Snapshot();
 					break;
+
 				case Zone.Side:
 					deck = copySideDeck();
 					break;
+
+				case Zone.Maybe:
+					deck = copyMaybeDeck();
+					break;
+
 				case Zone.SampleHand:
 					deck = copySampleHand();
 					break;
+
 				default:
 					return;
 			}
@@ -321,12 +337,25 @@ namespace Mtgdb.Gui
 				_deckEditor.SampleHand.CountById.ToDictionary(),
 				_deckEditor.SampleHand.CardsIds.ToList(),
 				null,
+				null,
+				null,
 				null);
 
 		private Deck copySideDeck() =>
 			Deck.Create(
 				_deckEditor.SideDeck.CountById.ToDictionary(),
 				_deckEditor.SideDeck.CardsIds.ToList(),
+				null,
+				null,
+				null,
+				null);
+
+		private Deck copyMaybeDeck() =>
+			Deck.Create(
+				_deckEditor.MaybeDeck.CountById.ToDictionary(),
+				_deckEditor.MaybeDeck.CardsIds.ToList(),
+				null,
+				null,
 				null,
 				null);
 
