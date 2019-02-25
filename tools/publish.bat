@@ -28,6 +28,8 @@ set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
 set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
 set deflatefileid=1X5h6C9u9L13T720DLqMmKwZz_0YzxQmm
 
+rem goto publish_prod
+
 %out% build
 
 %msbuildexe% %origin%\Mtgdb.sln /verbosity:m
@@ -94,6 +96,8 @@ cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuratio
 del /q /s %target%\*.vshost.*
 %utilexe% -sign %target%\bin\v%version% -output %targetBin%\filelist.txt
 
+:zip_lzma
+
 %out% create LZMA - compressed zip
 
 %sevenzexe% a %targetRoot%\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
@@ -103,6 +107,10 @@ del /q /s %target%\*.vshost.*
 %utilexe% -sign %targetRoot%\%packageName%.zip -output %targetRoot%\filelist.txt
 
 %out% publish zip to test update URL
+
+:publish_test
+
+goto publish_prod
 
 %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
 %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
@@ -118,6 +126,8 @@ rem if errorlevel 1 exit /b %errorlevel%
 
 %out% Press Ctrl+C to cancel
 pause
+
+:publish_prod
 
 %out% push update notification
 

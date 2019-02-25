@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using JetBrains.Annotations;
 
 namespace Mtgdb.Ui
@@ -97,6 +98,29 @@ namespace Mtgdb.Ui
 		[UsedImplicitly]  // to find usages in IDE
 		public Deck()
 		{
+		}
+
+		[OnDeserialized]
+		public void OnDeserialized(StreamingContext context)
+		{
+			if (isMalformed(MainDeck))
+				MainDeck = createEmptyZone();
+
+			if (isMalformed(Sideboard))
+				Sideboard = createEmptyZone();
+
+			if (isMalformed(Maybeboard))
+				Maybeboard = createEmptyZone();
+
+			bool isMalformed(DeckZone zone) =>
+				zone == null || zone.Order == null || zone.Count == null;
+
+			DeckZone createEmptyZone() =>
+				new DeckZone
+				{
+					Order = new List<string>(),
+					Count = new Dictionary<string, int>()
+				};
 		}
 
 		private static DeckZone replace(DeckZone original, Dictionary<string, string> replacements)

@@ -221,6 +221,7 @@ namespace Mtgdb.Controls
 			catch (JsonException)
 			{
 				var decks = JsonConvert.DeserializeObject<List<Deck>>(serialized);
+
 				return new State
 				{
 					Collection = _state.Collection,

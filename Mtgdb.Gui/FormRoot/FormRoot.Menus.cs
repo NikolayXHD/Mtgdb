@@ -252,9 +252,10 @@ namespace Mtgdb.Gui
 					_buttonImportExportToMtgArena.Text = state.MtgArenaButtonText;
 
 				foreach (var menuButton in state.MenuButtons)
-					menuButton.Visible = state.IsCurrent &&
-						(menuButton != _buttonRestoreCollection || _uiConfigRepository.Config.CollectionBeforeImportMtga != null);
+					menuButton.Visible = state.IsCurrent;
 			}
+
+			_buttonRestoreCollection.Enabled = _uiConfigRepository.Config.CollectionBeforeImportMtga != null;
 
 			_menuOpen.ResumeLayout(false);
 			_menuOpen.PerformLayout();

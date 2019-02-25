@@ -570,15 +570,14 @@ namespace Mtgdb.Gui
 			// 
 			// _labelTitle
 			// 
-			this._labelTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this._labelTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelTitle.AutoSize = true;
 			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
 			this._labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this._labelTitle.Location = new System.Drawing.Point(6, 0);
+			this._labelTitle.Location = new System.Drawing.Point(6, 17);
 			this._labelTitle.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this._labelTitle.Name = "_labelTitle";
-			this._labelTitle.Size = new System.Drawing.Size(45, 50);
+			this._labelTitle.Size = new System.Drawing.Size(45, 16);
 			this._labelTitle.TabIndex = 59;
 			this._labelTitle.Text = "Name";
 			this._labelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -623,6 +622,7 @@ namespace Mtgdb.Gui
 			// _dropdownMruFiles
 			// 
 			this._dropdownMruFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this._dropdownMruFiles.AutoSize = true;
 			this._dropdownMruFiles.ForeColor = System.Drawing.Color.Transparent;
 			this._dropdownMruFiles.Image = global::Mtgdb.Gui.Properties.Resources.down_32;
 			this._dropdownMruFiles.ImageScale = 0.5F;
@@ -636,6 +636,7 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonLoad.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonLoad.AutoCheck = false;
+			this._buttonLoad.AutoSize = true;
 			this._buttonLoad.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._buttonLoad.Location = new System.Drawing.Point(99, 13);
 			this._buttonLoad.Margin = new System.Windows.Forms.Padding(24, 13, 0, 13);
@@ -647,6 +648,7 @@ namespace Mtgdb.Gui
 			// 
 			this._buttonSave.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._buttonSave.AutoCheck = false;
+			this._buttonSave.AutoSize = true;
 			this._buttonSave.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._buttonSave.Location = new System.Drawing.Point(123, 13);
 			this._buttonSave.Margin = new System.Windows.Forms.Padding(0, 13, 6, 13);
@@ -656,6 +658,7 @@ namespace Mtgdb.Gui
 			// 
 			// _flowPriceReports
 			// 
+			this._flowPriceReports.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._flowPriceReports.AutoSize = true;
 			this._flowPriceReports.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._flowPriceReports.BorderColor = System.Drawing.SystemColors.ControlText;
