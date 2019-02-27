@@ -108,6 +108,12 @@ namespace Mtgdb.Downloader
 
 					Parallel.ForEach(sids, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, sid =>
 					{
+						if (sid.EndsWith("&utm_source=scryfall"))
+						{
+							PriceAdded?.Invoke();
+							return;
+						}
+
 						PriceValues price;
 						try
 						{
@@ -118,10 +124,9 @@ namespace Mtgdb.Downloader
 							return;
 						}
 
-						var serialized = JsonConvert.SerializeObject(price, Formatting.None);
-
 						lock (_sync)
 						{
+							var serialized = JsonConvert.SerializeObject(price, Formatting.None);
 							_priceRepository.AddPrice(sid, price);
 							writer.WriteLine(serialized);
 							PriceAdded?.Invoke();

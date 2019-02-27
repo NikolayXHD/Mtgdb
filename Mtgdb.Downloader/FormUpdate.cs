@@ -53,6 +53,7 @@ namespace Mtgdb.Downloader
 			_buttonNotifications.Click += notificationsClick;
 
 			Closing += closing;
+			Closed += closed;
 			Load += load;
 			DoubleBuffered = true;
 
@@ -103,7 +104,8 @@ namespace Mtgdb.Downloader
 
 		private void load(object sender, EventArgs e)
 		{
-			Console.SetOut(new RichTextBoxWriter(_textBoxLog));
+			_consoleWriter = new RichTextBoxWriter(_textBoxLog);
+			Console.SetOut(_consoleWriter);
 
 			if (IsShownAutomatically)
 			{
@@ -128,6 +130,9 @@ namespace Mtgdb.Downloader
 			Hide();
 			e.Cancel = true;
 		}
+
+		private void closed(object sender, EventArgs e) =>
+			_consoleWriter.Dispose();
 
 		private static void editConfigClick(object sender, EventArgs e)
 		{
@@ -624,5 +629,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly CardRepository _cardRepository;
 		private readonly ImageLoader _imageLoader;
 		private readonly VersionComparer _versionComparer = new VersionComparer();
+		private RichTextBoxWriter _consoleWriter;
 	}
 }

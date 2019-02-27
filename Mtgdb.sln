@@ -17,6 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
+		devdoc.md = devdoc.md
 		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
 		LICENSE = LICENSE
 		etc\Mtgdb.Gui.xml = etc\Mtgdb.Gui.xml

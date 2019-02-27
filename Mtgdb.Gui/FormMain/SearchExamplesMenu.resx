@@ -118,26 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label58.Text" xml:space="preserve">
-    <value>Filter buttons above do the same, but provide less keywords.
-
-Use intellisense to see available keywords:
-- type keywords:
-- hit Ctrl + Space
-- begin typing keyword part
-
-Cycle keyword alphabetically without opening intellisense:
-- move input caret to a keyword
-- hit Ctrl + Down or Ctrl+Up</value>
+    <value>Filter buttons do the same, but show less keywords. To see available keywords:
+  * type keywords:    * hit Ctrl + Space    * begin typing keyword part
+To cycle typed keyword under input caret alphabetically:
+  * move input caret to a keyword    * hit Ctrl + Down or Ctrl+Up</value>
   </data>
   <data name="label33.Text" xml:space="preserve">
-    <value>Will not only find cards with name "shivan dragon" because the
-query is equivalent to 
-  name: shivan AND *:dragon
-where * means any field.
-
-Unquoted words are separate terms joined by AND unless there
-is OR in between. Correct queries would be
-  name: "shivan dragon"
-  name:(shivan AND dragon)</value>
+    <value>Will not search "shivan dragon" in name field. It's equivalent to
+  name: shivan AND *:dragon    where * means any field.
+AND is assumed between unquoted words unless there is OR in between. Use:
+  name: "shivan dragon"    name:(shivan AND dragon)</value>
   </data>
 </root>

@@ -12,7 +12,7 @@ namespace Mtgdb.Dal
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets.json");
-			CustomSetCodes = new[] { "rna", "prna" };
+			CustomSetCodes = new string[0];
 			PatchFile = AppDir.Data.AddPath("patch.v2.json");
 			Cards = new List<Card>();
 		}

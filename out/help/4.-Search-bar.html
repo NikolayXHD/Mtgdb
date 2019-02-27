@@ -18,6 +18,7 @@
               <div>
 <div><a href="https://py3j9.app.goo.gl/dl" rel="nofollow">Download link</a></div>
 <div><a href="https://py3j9.app.goo.gl/frm" rel="nofollow">Support &amp; feedback</a></div>
+<div><a href="Release-notes.html">Release notes</a></div>
 </div>
 <dl>
 <dt>Introduction</dt>
@@ -26,7 +27,6 @@
 <div><a href="Home.html">Overview</a></div>
 <div><a href="1.-Get-started.html">Get started</a></div>
 <div><a href="9.-Using-custom-images.html">Using custom images</a></div>
-<div><a href="Release-notes.html">Release notes</a></div>
 </div>
 </dd>
 <dt>Search cards</dt>
@@ -95,24 +95,22 @@
 <tbody valign="top">
 <tr>
 <td><code>llanowar elves</code></td>
-<td>yields cards that have <em>either</em> <strong>llanowar</strong> <em>OR</em> <strong>elves</strong>  in
-<em>any field</em>
-</td>
+<td>yields cards that have <em>both</em> <code>llanowar</code> <em>and</em> <code>elves</code> in
+a field, same or different</td>
 </tr>
 <tr>
 <td><code>"llanowar elves"</code></td>
-<td>in contrast yelds cards that contain <em>both words in exactly
-same order</em> in <em>some field</em>
-</td>
+<td>yelds cards that contain <em>both</em> words in <em>specified order</em>
+in the <em>same</em> field</td>
 </tr>
 <tr>
 <td><code>name:"llanowar elves"</code></td>
 <td>restricts the search to <em>name</em> field only</td>
 </tr>
 <tr>
-<td><code>llanowar AND elves</code></td>
-<td>requires both words to be present without restricting the order
-of words nor requiring them to appear in the same field</td>
+<td><code>llanowar OR elves</code></td>
+<td>yields cards that have <em>either</em> <code>llanovar</code> <em>or</em> <code>elves</code> or
+both in any field</td>
 </tr>
 </tbody>
 </table>
@@ -128,7 +126,7 @@ of words nor requiring them to appear in the same field</td>
 <tr>
 <td>
 <p>Hit <code>Ctrl</code> + <code>Space</code> within
-search input to get a list of
+search bar to get a list of
 suggested values.</p>
 <p>The hint shows
 possible field names and known
@@ -153,13 +151,14 @@ specified</p>
 <tr>
 <td><code>name: shivan dragon</code></td>
 <td>
-<p><em>will not</em> search cards with name <strong>shivan dragon</strong> because the
-query is equivalent to <code>name: shivan OR *:dragon</code> where <code>*</code>
-means <strong>any field</strong>.</p>
-<p>Each unquoted word is a separate term joined to others by <code>OR</code>
-unless you write <code>AND</code> between them.</p>
-<p>Correct queries would be <code>name: "shivan dragon"</code> or
-<code>name:(shivan OR dragon)</code></p>
+<p><em>will not</em> search cards with name <code>shivan dragon</code> because the
+query is equivalent to <code>name: shivan AND *:dragon</code> where <code>*</code>
+means <em>any field</em>.</p>
+<p>Each unquoted word is a separate term joined to others by <code>AND</code>
+unless you write <code>OR</code> between them.</p>
+<p>Correct queries would be <code>name: "shivan dragon"</code>,
+<code>name:(shivan AND dragon)</code> equivalent to a shorter
+<code>name:(shivan dragon)</code></p>
 </td>
 </tr>
 <tr>
@@ -280,10 +279,11 @@ field</td>
 <td>using quotes</td>
 </tr>
 <tr>
-<td>Default operator is OR</td>
+<td>Default operator is AND</td>
 <td><code>Type:(Rogue Rat)</code></td>
-<td>matches any card of types
-Rogue OR Rat</td>
+<td>matches a card of both types
+<code>Rogue</code> <em>and</em> <code>Rat</code>
+</td>
 </tr>
 <tr>
 <td>

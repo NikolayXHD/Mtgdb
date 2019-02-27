@@ -28,7 +28,7 @@ set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
 set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
 set deflatefileid=1X5h6C9u9L13T720DLqMmKwZz_0YzxQmm
 
-rem goto publish_prod
+rem goto publish_zip
 
 %out% build
 
@@ -106,30 +106,24 @@ del /q /s %target%\*.vshost.*
 
 %utilexe% -sign %targetRoot%\%packageName%.zip -output %targetRoot%\filelist.txt
 
-%out% publish zip to test update URL
-
-:publish_test
-
-goto publish_prod
-
-%googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
-%googledriveexe% update %testsignid% %targetRoot%\filelist.txt
+rem :publish_test
+rem %out% publish zip to test update URL
+rem %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
+rem %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
 
 %out% run installed app
 
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
-%out% run tests
-
-%nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
+rem :run_tests
+rem %out% run tests
+rem %nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
 rem if errorlevel 1 exit /b %errorlevel%
+rem %out% Press Ctrl+C to cancel
+rem pause
 
-%out% Press Ctrl+C to cancel
-pause
-
-:publish_prod
-
-%out% push update notification
+:publish_update_notification
+%out% publish update notification
 
 %gitexe% -C f:/Repo/Git/Mtgdb.wiki pull
 %utilexe% -notify
@@ -137,18 +131,18 @@ pause
 %gitexe% -C f:/Repo/Git/Mtgdb.Notifications commit -m auto
 %gitexe% -C f:/Repo/Git/Mtgdb.Notifications push
 
-%out% publish zip to actual update URL
-
-%googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
-%googledriveexe% update %signid% %targetRoot%\filelist.txt
+rem :publish_zip
+rem %out% publish zip to actual update URL
+rem %googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
+rem %googledriveexe% update %signid% %targetRoot%\filelist.txt
 
 %out% create deflate - compressed zip
 
 mkdir %targetRoot%\deflate
 %sevenzexe% a %targetRoot%\deflate\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -x!data\index\* -mm=deflate
 
-%out% upload deflate - compressed zip
-
-%googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
+rem :upload_deflate
+rem %out% upload deflate - compressed zip
+rem %googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
 
 exit /b

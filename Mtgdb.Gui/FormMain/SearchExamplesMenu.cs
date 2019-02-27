@@ -62,6 +62,9 @@ namespace Mtgdb.Gui
 			PostPaint?.Invoke(this, e);
 		}
 
+		public void Scale() =>
+			_panelExamples.Controls.OfType<Label>().ForEach(ControlScaler.ScaleDpiFont);
+
 		private (Label Query, Label Comment, Color BackColor) getFindExampleRow(int i)
 		{
 			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
