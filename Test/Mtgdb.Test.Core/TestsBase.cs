@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -22,7 +23,7 @@ namespace Mtgdb.Test
 			LogManager.Flush();
 		}
 
-		private static void loadModules()
+		public static void LoadModules()
 		{
 			if (_loadedModules)
 				return;
@@ -31,6 +32,7 @@ namespace Mtgdb.Test
 			Kernel.Load<DalModule>();
 			Kernel.Load<CoreModule>();
 			Kernel.Load<DownloaderModule>();
+			Kernel.Load<DeckListModule>();
 
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();
@@ -44,7 +46,7 @@ namespace Mtgdb.Test
 			if (_loadedCards)
 				return;
 
-			loadModules();
+			LoadModules();
 
 			var sw = new Stopwatch();
 			sw.Start();

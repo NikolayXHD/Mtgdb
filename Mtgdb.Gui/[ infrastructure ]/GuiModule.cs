@@ -1,6 +1,5 @@
 using Mtgdb.Controls;
 using Mtgdb.Data;
-using Mtgdb.Data.Index;
 using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 using Ninject;
@@ -24,17 +23,6 @@ namespace Mtgdb.Gui
 
 			Kernel.Bind<CardSuggestModel>()
 				.ToSelf();
-
-			Kernel.Bind<DeckSearcher>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<DeckSuggestModel>()
-				.ToSelf();
-
-			Kernel.Bind<DeckDocumentAdapter>()
-				.ToSelf()
-				.InSingletonScope();
 
 			Kernel.Bind<FormRoot>()
 				.ToSelf();
@@ -106,10 +94,6 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<DeckListModel>()
-				.ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<IconRecognizer>()
 				.ToMethod(ctx => IconRecognizerFactory.Create())
 				.InSingletonScope();
@@ -123,14 +107,6 @@ namespace Mtgdb.Gui
 				.InSingletonScope();
 
 			Kernel.Bind<DeckSerializationSubsystem>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<CollectedCardsDeckTransformation>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<DeckIndexUpdateSubsystem>()
 				.ToSelf()
 				.InSingletonScope();
 

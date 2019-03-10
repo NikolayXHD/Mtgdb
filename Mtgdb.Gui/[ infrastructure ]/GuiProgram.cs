@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -32,6 +33,7 @@ namespace Mtgdb.Gui
 			_kernel.Load<CoreModule>();
 			_kernel.Load<DalModule>();
 			_kernel.Load<DownloaderModule>();
+			_kernel.Load<DeckListModule>();
 			_kernel.Load<GuiModule>();
 
 			Dpi.Set(_kernel.Get<UiConfigRepository>().Config.UiScalePercent);

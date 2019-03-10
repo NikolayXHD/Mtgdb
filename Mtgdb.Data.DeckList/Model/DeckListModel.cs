@@ -186,25 +186,27 @@ namespace Mtgdb.Data.Model
 
 		public void Load()
 		{
+			State state;
 			if (File.Exists(FileName))
 			{
 				string serialized = File.ReadAllText(FileName);
+				state = Deserialize(serialized);
+			}
+			else
+				state = new State();
 
-				var deserialized = Deserialize(serialized);
+			lock (_syncModels)
+			{
+				_state = state;
 
-				lock (_syncModels)
-				{
-					_state = deserialized;
+				_deckModels = _state.Decks
+					.Select(d => new DeckModel(d, _repo, _state.Collection, _transformation))
+					.ToList();
 
-					_deckModels = _state.Decks
-						.Select(d => new DeckModel(d, _repo, _state.Collection, _transformation))
-						.ToList();
+				_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
 
-					_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
-
-					_indexByDeck = Enumerable.Range(0, _deckModels.Count)
-						.ToDictionary(i => _deckModels[i]);
-				}
+				_indexByDeck = Enumerable.Range(0, _deckModels.Count)
+					.ToDictionary(i => _deckModels[i]);
 			}
 
 			IsLoaded = true;
@@ -273,7 +275,7 @@ namespace Mtgdb.Data.Model
 		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
-		internal readonly string FileName = AppDir.History.AddPath("decks.v4.json");
+		public string FileName { get; set; } = AppDir.History.AddPath("decks.v4.json");
 		private State _state = new State();
 
 		private readonly AsyncSemaphore _syncCollection = new AsyncSemaphore(1);

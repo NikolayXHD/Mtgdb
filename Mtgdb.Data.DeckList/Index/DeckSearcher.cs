@@ -63,11 +63,14 @@ namespace Mtgdb.Data.Index
 			return index;
 		}
 
-		private string IndexDirectoryParent
+		public string IndexDirectoryParent
 		{
 			get => _version.Directory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.DeckSearcher);
 		}
+
+		public void InvalidateIndex() =>
+			_version.Invalidate();
 
 		public bool IsIndexSaved => _version.IsUpToDate;
 

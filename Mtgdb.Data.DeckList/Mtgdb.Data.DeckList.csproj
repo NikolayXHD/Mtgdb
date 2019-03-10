@@ -32,6 +32,7 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Include="DeckListModule.cs" />
 	  <Compile Include="Index\DeckDocumentAdapter.cs" />
 	  <Compile Include="Index\DeckIndexUpdateSubsystem.cs" />
 	  <Compile Include="Index\DeckKeywordHighlighter.cs" />
@@ -108,6 +109,10 @@
 	  </Reference>
 	  <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
 	    <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+	    <Private>True</Private>
+	  </Reference>
+	  <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+	    <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
 	    <Private>True</Private>
 	  </Reference>
 	  <Reference Include="ReadOnlyCollectionsExtensions, Version=1.3.0.0, Culture=neutral, PublicKeyToken=null">

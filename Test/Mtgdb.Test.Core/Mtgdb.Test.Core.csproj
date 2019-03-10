@@ -93,6 +93,10 @@
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
       <Name>Mtgdb.App</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Data.DeckList\Mtgdb.Data.DeckList.csproj">
+      <Project>{c837c025-eb64-4e1a-85c4-306a88ed690f}</Project>
+      <Name>Mtgdb.Data.DeckList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Data.Index\Mtgdb.Data.Index.csproj">
       <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
       <Name>Mtgdb.Data.Index</Name>
