@@ -1,5 +1,7 @@
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 using Ninject;
 using Ninject.Modules;

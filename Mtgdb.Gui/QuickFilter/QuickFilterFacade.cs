@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {

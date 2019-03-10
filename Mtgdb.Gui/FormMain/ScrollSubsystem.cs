@@ -1,5 +1,5 @@
 using System;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {

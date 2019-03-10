@@ -5,7 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Mtgdb.Dal;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Controls

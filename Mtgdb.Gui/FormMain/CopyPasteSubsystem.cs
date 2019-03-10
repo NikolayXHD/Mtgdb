@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 using NLog;
 

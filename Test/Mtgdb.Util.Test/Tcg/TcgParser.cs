@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Mtgdb.Test;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Util

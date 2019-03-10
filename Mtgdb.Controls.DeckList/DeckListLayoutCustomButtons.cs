@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using Mtgdb.Controls.Properties;
+using Mtgdb.Data.Model;
 
 namespace Mtgdb.Controls
 {

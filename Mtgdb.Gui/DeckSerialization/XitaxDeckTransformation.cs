@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui

@@ -1,8 +1,7 @@
 ﻿using System.Windows.Forms;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
 using Mtgdb.Controls;
-using Mtgdb.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui

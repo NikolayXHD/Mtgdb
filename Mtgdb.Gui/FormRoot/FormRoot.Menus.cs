@@ -96,7 +96,7 @@ namespace Mtgdb.Gui
 			SelectedTab?.ImportMtgArenaCollection();
 
 		private void openWindowClick(object sender, EventArgs e) =>
-			_app.CreateForm();
+			_app.StartForm();
 
 		private static void configClick(object sender, EventArgs e) =>
 			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));

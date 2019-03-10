@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using JetBrains.Annotations;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 using ReadOnlyCollectionsExtensions;
 

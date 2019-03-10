@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Gui.Properties;
 using Mtgdb.Gui.Resx;
 using ReadOnlyCollectionsExtensions;
@@ -451,9 +451,9 @@ namespace Mtgdb.Gui
 				settings = new ReportSettings
 				{
 					DataSource = DataSource.Deck,
-					SeriesFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					SeriesFieldsSort = new List<SortDirection> { SortDirection.Asc },
 					ColumnFields = new List<string> { nameof(Card.Cmc) },
-					ColumnFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					ColumnFieldsSort = new List<SortDirection> { SortDirection.Asc },
 					SummaryFields = new List<string> { nameof(Card.DeckCount) },
 					SummaryFunctions = new List<string> { Aggregates.Sum },
 					ChartType = SeriesChartType.StackedColumn,
@@ -472,7 +472,7 @@ namespace Mtgdb.Gui
 				{
 					ColumnFields = new List<string> { nameof(Card.NameEn) },
 					SummaryFunctions = new List<string> { Aggregates.Sum, Aggregates.Sum },
-					SummarySort = new List<SortOrder> { SortOrder.Descending, SortOrder.None },
+					SummarySort = new List<SortDirection> { SortDirection.Desc, SortDirection.No },
 					LabelDataElement = DataElement.SummaryField,
 					ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuPriceChartType.SelectedValue)
 				};
@@ -504,9 +504,9 @@ namespace Mtgdb.Gui
 				settings = new ReportSettings
 				{
 					SeriesFields = new List<string> { nameof(Card.Types) },
-					SeriesFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					SeriesFieldsSort = new List<SortDirection> { SortDirection.Asc },
 					ColumnFields = new List<string> { nameof(Card.Color) },
-					ColumnFieldsSort = new List<SortOrder> { SortOrder.Ascending },
+					ColumnFieldsSort = new List<SortDirection> { SortDirection.Asc },
 					SummaryFunctions = new List<string> { Aggregates.Sum },
 					ChartType = SeriesChartType.StackedColumn,
 					LabelDataElement = DataElement.Series,
@@ -592,7 +592,7 @@ namespace Mtgdb.Gui
 
 
 
-		private List<KeyValuePair<List<object>, HashSet<Card>>> getGroups(List<string> fields, List<SortOrder> order, Card[] cards)
+		private List<KeyValuePair<List<object>, HashSet<Card>>> getGroups(List<string> fields, List<SortDirection> order, Card[] cards)
 		{
 			var columnGroups = _fields.ByName[fields[0]].GroupBy(cards, order[0]);
 
@@ -660,13 +660,13 @@ namespace Mtgdb.Gui
 			{
 				int s = k;
 
-				if (settings.SummarySort[s] == SortOrder.Ascending)
+				if (settings.SummarySort[s] == SortDirection.Asc)
 				{
 					sortedArgumentIndices = sortedArgumentIndices
 						.ThenByDescending(i => argumentTotals[i][s] != null)
 						.ThenBy(i => argumentTotals[i][s], Comparer<object>.Default);
 				}
-				else if (settings.SummarySort[s] == SortOrder.Descending)
+				else if (settings.SummarySort[s] == SortDirection.Desc)
 				{
 					sortedArgumentIndices = sortedArgumentIndices
 						.ThenBy(i => argumentTotals[i][s] != null)
@@ -1083,7 +1083,7 @@ namespace Mtgdb.Gui
 			_applyingSettings = false;
 		}
 
-		private void displayAxis(TabHeaderControl tab, List<string> fields, List<SortOrder> fieldsSort)
+		private void displayAxis(TabHeaderControl tab, List<string> fields, List<SortDirection> fieldsSort)
 		{
 			tab.Count = 0;
 
@@ -1111,11 +1111,11 @@ namespace Mtgdb.Gui
 				LabelDataElement = (DataElement) Enum.Parse(typeof(DataElement), _menuLabelDataElement.SelectedValue),
 				ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuChartType.SelectedValue),
 				ColumnFields = readFields(_tabCols),
-				ColumnFieldsSort = readEnum<SortOrder>(_tabCols),
+				ColumnFieldsSort = readEnum<SortDirection>(_tabCols),
 				SeriesFields = readFields(_tabRows),
-				SeriesFieldsSort = readEnum<SortOrder>(_tabRows),
+				SeriesFieldsSort = readEnum<SortDirection>(_tabRows),
 				SummaryFields = readFields(_tabSummSort),
-				SummarySort = readEnum<SortOrder>(_tabSummSort),
+				SummarySort = readEnum<SortDirection>(_tabSummSort),
 				SummaryFunctions = _tabSumm.Tags
 					.Cast<int>()
 					.Select(i => _aggregatesOrder[i])

@@ -31,9 +31,9 @@ namespace Mtgdb.Gui
 				File.Copy(file, firstFormDirectory.AddPath(Path.GetFileName(file)));
 		}
 
-		public void CreateForm()
+		public void StartForm()
 		{
-			_log.Info($"{nameof(CreateForm)}");
+			_log.Info($"{nameof(StartForm)}");
 
 			var form = _formFactory();
 
@@ -53,9 +53,9 @@ namespace Mtgdb.Gui
 			return result;
 		}
 
-		public void RemoveForm(FormRoot form)
+		public void StopForm(FormRoot form)
 		{
-			_log.Info($"{nameof(RemoveForm)}");
+			_log.Info($"{nameof(StopForm)}");
 
 			_instances.Remove(form);
 

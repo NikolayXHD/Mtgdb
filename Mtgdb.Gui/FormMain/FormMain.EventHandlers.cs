@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 

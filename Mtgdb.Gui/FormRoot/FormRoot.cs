@@ -6,7 +6,8 @@ using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Downloader;
 using Mtgdb.Ui;
 using Ninject;
@@ -341,7 +342,7 @@ namespace Mtgdb.Gui
 				.ToArray()
 				.ForEach(dispose);
 
-			_app.RemoveForm(this);
+			_app.StopForm(this);
 
 			MessageFilter.Instance.GlobalMouseMove -= globalMouseMove;
 		}

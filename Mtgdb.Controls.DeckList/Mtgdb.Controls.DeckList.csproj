@@ -91,25 +91,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncSemaphore.cs" />
-    <Compile Include="DeckDocumentAdapter.cs" />
-    <Compile Include="DeckFields.cs" />
-    <Compile Include="DeckKeywordHighlighter.cs" />
-    <Compile Include="DeckIndexUpdateSubsystem.cs" />
     <Compile Include="DeckListControl.Scale.cs" />
     <Compile Include="DeckListControl.Tooltips.cs" />
     <Compile Include="DeckListLayoutCustomButtons.cs" />
-    <Compile Include="DeckQueryParser.cs" />
-    <Compile Include="DeckSearcher.cs" />
-    <Compile Include="DeckSearcherState.cs" />
+    <Compile Include="DeckSearchSubsystem.cs" />
     <Compile Include="DeckSortSubsystem.cs" />
-    <Compile Include="DeckSpellchecker.cs" />
-    <Compile Include="DeckSpellcheckerState.cs" />
     <Compile Include="FilterByDeckMode.cs" />
-    <Compile Include="Model\CollectedCardsDeckTransformation.cs" />
-    <Compile Include="Model\DeckListLegacyConverter.cs" />
-    <Compile Include="Model\DeckListModel.cs" />
-    <Compile Include="Model\DeckAggregateCache.cs" />
     <Compile Include="DeckListLayout.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -122,15 +109,12 @@
     <Compile Include="DeckListControl.Designer.cs">
       <DependentUpon>DeckListControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\DeckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DeckSearchSubsystem.cs" />
-    <Compile Include="DeckSuggestModel.cs" />
     <Compile Include="SearchResultHighlightSubsystem.cs" />
     <Compile Include="ViewDeckListTooltips.cs" />
   </ItemGroup>
@@ -149,29 +133,41 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
-      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
-      <Name>Mtgdb.Core.Controls</Name>
+    <ProjectReference Include="..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.App.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
-      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
-      <Name>Mtgdb.Core.Index</Name>
+    <ProjectReference Include="..\Mtgdb.App\Mtgdb.App.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.App</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
+    <ProjectReference Include="..\Mtgdb.Controls.Core\Mtgdb.Controls.Core.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Controls.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4FE226AC-EC61-451F-A602-C79DA136CE25}</Project>
-      <Name>Mtgdb.Core</Name>
+    <ProjectReference Include="..\Mtgdb.Data.Core\Mtgdb.Data.Core.csproj">
+      <Project>{d5c61885-5ef9-48fd-bb00-8b6622246ee5}</Project>
+      <Name>Mtgdb.Data.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
-      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
-      <Name>Mtgdb.Dal</Name>
+    <ProjectReference Include="..\Mtgdb.Data.DeckList\Mtgdb.Data.DeckList.csproj">
+      <Project>{c837c025-eb64-4e1a-85c4-306a88ed690f}</Project>
+      <Name>Mtgdb.Data.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Ui\Mtgdb.Ui.csproj">
+    <ProjectReference Include="..\Mtgdb.Data.Index\Mtgdb.Data.Index.csproj">
+      <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
+      <Name>Mtgdb.Data.Index</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Data.Ui\Mtgdb.Data.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Ui</Name>
+      <Name>Mtgdb.Data.Ui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Data\Mtgdb.Data.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}</Project>

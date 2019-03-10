@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {

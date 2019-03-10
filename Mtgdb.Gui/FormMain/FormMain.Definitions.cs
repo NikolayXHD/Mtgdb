@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Ui;
-using CheckBox = Mtgdb.Controls.CheckBox;
 
 namespace Mtgdb.Gui
 {

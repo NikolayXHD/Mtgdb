@@ -94,37 +94,45 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.App.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.App\Mtgdb.App.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Controls.Core\Mtgdb.Controls.Core.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Controls.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj">
       <Project>{6FAC0808-416A-4605-A1E7-042F7A270BB3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
-      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
-      <Name>Mtgdb.Core.Bitmaps</Name>
+    <ProjectReference Include="..\..\Mtgdb.Data.DeckList\Mtgdb.Data.DeckList.csproj">
+      <Project>{c837c025-eb64-4e1a-85c4-306a88ed690f}</Project>
+      <Name>Mtgdb.Data.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
-      <Name>Mtgdb.Core</Name>
+    <ProjectReference Include="..\..\Mtgdb.Data.Index\Mtgdb.Data.Index.csproj">
+      <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
+      <Name>Mtgdb.Data.Index</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Ui\Mtgdb.Ui.csproj">
+    <ProjectReference Include="..\..\Mtgdb.Data.Ui\Mtgdb.Data.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Ui</Name>
+      <Name>Mtgdb.Data.Ui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
-      <Project>{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}</Project>
-      <Name>Mtgdb.Core.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
-      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
-      <Name>Mtgdb.Core.Index</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+    <ProjectReference Include="..\..\Mtgdb.Data\Mtgdb.Data.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
-      <Name>Mtgdb.Dal</Name>
+      <Name>Mtgdb.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Utils.Bitmaps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
@@ -139,6 +147,7 @@
     <Compile Include="CardFacesTests.cs" />
     <Compile Include="CardIdTests.cs" />
     <Compile Include="ColorTransformationTests.cs" />
+    <Compile Include="DeckSearchTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />

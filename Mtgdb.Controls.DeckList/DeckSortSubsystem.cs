@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Mtgdb.Data;
+using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Controls
@@ -39,7 +40,7 @@ namespace Mtgdb.Controls
 				: Empty<DeckModel>.Sequence;
 
 		private static readonly FieldSortInfo _sortFromNewestToOldest =
-			new FieldSortInfo(nameof(Deck.Saved), SortOrder.Descending);
+			new FieldSortInfo(nameof(Deck.Saved), SortDirection.Desc);
 
 		private readonly DeckListModel _deckListModel;
 	}

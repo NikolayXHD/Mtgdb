@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using Mtgdb.Controls.Properties;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 
 namespace Mtgdb.Controls
 {
@@ -178,6 +180,6 @@ namespace Mtgdb.Controls
 		}
 
 		public override bool ShowSortButton(FieldControl field) =>
-			field.IsHotTracked && field.AllowSort || field.SortOrder != SortOrder.None;
+			field.IsHotTracked && field.AllowSort || field.SortOrder != SortDirection.No;
 	}
 }

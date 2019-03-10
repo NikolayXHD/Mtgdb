@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {

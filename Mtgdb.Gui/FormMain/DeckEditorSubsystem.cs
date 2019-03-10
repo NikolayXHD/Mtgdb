@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Gui.Properties;
 using Mtgdb.Ui;
 

@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
-using Mtgdb.Ui;
+using Mtgdb.Data;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Gui

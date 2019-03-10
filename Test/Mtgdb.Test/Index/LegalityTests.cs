@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

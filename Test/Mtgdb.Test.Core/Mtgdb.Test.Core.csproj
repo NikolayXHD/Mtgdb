@@ -85,25 +85,29 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
-      <Project>{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}</Project>
-      <Name>Mtgdb.Core.Index</Name>
+    <ProjectReference Include="..\..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.App.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Core\Mtgdb.Core.csproj">
+    <ProjectReference Include="..\..\Mtgdb.App\Mtgdb.App.csproj">
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
-      <Name>Mtgdb.Core</Name>
+      <Name>Mtgdb.App</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+    <ProjectReference Include="..\..\Mtgdb.Data.Index\Mtgdb.Data.Index.csproj">
+      <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
+      <Name>Mtgdb.Data.Index</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Data\Mtgdb.Data.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
-      <Name>Mtgdb.Dal</Name>
+      <Name>Mtgdb.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
-      <Project>{3229CA82-875D-4154-92B7-2F7C47678010}</Project>
-      <Name>Mtgdb.Downloader</Name>
+    <ProjectReference Include="..\..\Mtgdb.Gui.Downloader\Mtgdb.Gui.Downloader.csproj">
+      <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
+      <Name>Mtgdb.Gui.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

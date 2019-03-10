@@ -667,41 +667,53 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.App.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.App\Mtgdb.App.csproj">
+      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+      <Name>Mtgdb.App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Controls.Core\Mtgdb.Controls.Core.csproj">
+      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
+      <Name>Mtgdb.Controls.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj">
       <Project>{6fac0808-416a-4605-a1e7-042f7a270bb3}</Project>
       <Name>Mtgdb.Controls.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
-      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
-      <Name>Mtgdb.Core.Bitmaps</Name>
+    <ProjectReference Include="..\Mtgdb.Data.Core\Mtgdb.Data.Core.csproj">
+      <Project>{d5c61885-5ef9-48fd-bb00-8b6622246ee5}</Project>
+      <Name>Mtgdb.Data.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj">
-      <Project>{e6dc781a-1e0f-481b-aaa9-3585fbd0ffde}</Project>
-      <Name>Mtgdb.Core.Controls</Name>
+    <ProjectReference Include="..\Mtgdb.Data.DeckList\Mtgdb.Data.DeckList.csproj">
+      <Project>{c837c025-eb64-4e1a-85c4-306a88ed690f}</Project>
+      <Name>Mtgdb.Data.DeckList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Index\Mtgdb.Core.Index.csproj">
+    <ProjectReference Include="..\Mtgdb.Data.Index\Mtgdb.Data.Index.csproj">
       <Project>{c6c3c03b-b8bd-4208-b2da-727536b5cda1}</Project>
-      <Name>Mtgdb.Core.Index</Name>
+      <Name>Mtgdb.Data.Index</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
-      <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
-      <Name>Mtgdb.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
-      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
-      <Name>Mtgdb.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
-      <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
-      <Name>Mtgdb.Downloader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Ui\Mtgdb.Ui.csproj">
+    <ProjectReference Include="..\Mtgdb.Data.Ui\Mtgdb.Data.Ui.csproj">
       <Project>{65731f8b-3fd8-4893-b35f-371f69c9734d}</Project>
-      <Name>Mtgdb.Ui</Name>
+      <Name>Mtgdb.Data.Ui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Data\Mtgdb.Data.csproj">
+      <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+      <Name>Mtgdb.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Gui.Downloader\Mtgdb.Gui.Downloader.csproj">
+      <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
+      <Name>Mtgdb.Gui.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Utils.Bitmaps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>

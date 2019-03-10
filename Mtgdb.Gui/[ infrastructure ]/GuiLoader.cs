@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
+using Mtgdb.Data.Model;
 using Mtgdb.Downloader;
 using Mtgdb.Ui;
 

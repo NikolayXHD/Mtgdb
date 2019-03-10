@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Downloader;
 
 namespace Mtgdb.Gui
@@ -35,7 +35,10 @@ namespace Mtgdb.Gui
 
 			var notDownloaded = countTotal - countDownloaded;
 
-			NeedToSuggestDownloader = notDownloaded > 0 && _uiConfigRepository.Config.SuggestDownloadMissingImages;
+			bool signaturesAreMissing = progress.Any(p => !_formUpdate.AreSignaturesDownloaded(p.QualityGroup));
+
+			NeedToSuggestDownloader = _uiConfigRepository.Config.SuggestDownloadMissingImages &&
+				(signaturesAreMissing || notDownloaded > 0);
 
 			ProgressCalculated?.Invoke();
 		}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Ninject;
 
 namespace Mtgdb.Util
@@ -99,7 +99,7 @@ namespace Mtgdb.Util
 			else
 				Console.Write("all sets ");
 
-			Console.WriteLine($"Mtgdb.Gui images will be exported to {directory}.");
+			Console.WriteLine($"Mtgdb.Gui images will be exported to {directory}");
 
 			if (!silent)
 			{

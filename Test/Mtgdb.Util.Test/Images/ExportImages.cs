@@ -1,5 +1,5 @@
 ﻿using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Ninject;
 using NUnit.Framework;
 

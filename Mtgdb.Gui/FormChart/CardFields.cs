@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Mtgdb.Controls.Statistics;
-using Mtgdb.Dal;
-using Mtgdb.Ui;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {

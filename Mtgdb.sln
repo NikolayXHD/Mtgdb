@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dal", "Mtgdb.Dal\Mtgdb.Dal.csproj", "{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data", "Mtgdb.Data\Mtgdb.Data.csproj", "{4E1F0D65-B2B4-44DE-B2A7-F9F36521E475}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Test", "Test\Mtgdb.Test\Mtgdb.Test.csproj", "{C23E2DE4-5C35-4205-99B5-55A0CE80CCBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Gui", "Mtgdb.Gui\Mtgdb.Gui.csproj", "{97545C6D-ACD6-4A2C-84DD-CD91293CFBB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Downloader", "Mtgdb.Downloader\Mtgdb.Downloader.csproj", "{3229CA82-875D-4154-92B7-2F7C47678010}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Gui.Downloader", "Mtgdb.Gui.Downloader\Mtgdb.Gui.Downloader.csproj", "{3229CA82-875D-4154-92B7-2F7C47678010}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{106FC38B-1268-47D8-A527-E4376709F683}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core", "Mtgdb.Core\Mtgdb.Core.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.App", "Mtgdb.App\Mtgdb.App.csproj", "{4FE226AC-EC61-451F-A602-C79DA136CE25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{867E0502-F667-4D1E-A5F8-7B7D33D53FE6}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[ root ]", "[ root ]", "{86
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditedTokenLocator", "Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj", "{482239D1-673C-4181-A2DD-F9E5B1A2FD9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Controls", "Mtgdb.Core.Controls\Mtgdb.Core.Controls.csproj", "{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls.Core", "Mtgdb.Controls.Core\Mtgdb.Controls.Core.csproj", "{E6DC781A-1E0F-481B-AAA9-3585FBD0FFDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Test", "Test\Mtgdb.Util.Test\Mtgdb.Util.Test.csproj", "{71505A79-B810-4C19-9DC4-C880F23E2A16}"
 EndProject
@@ -40,23 +40,27 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "out", "out\out.shproj", "{3
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "tools", "tools\tools.shproj", "{B1C7F4D9-46BA-4D18-92A0-2E8214973929}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Bitmaps", "Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj", "{24C593F8-E50B-4765-AEA9-B152C68EBDBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Utils.Bitmaps", "Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj", "{24C593F8-E50B-4765-AEA9-B152C68EBDBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Utils", "Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj", "{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Utils.Collections", "Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj", "{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Localization", "Mtgdb.Core.Localization\Mtgdb.Core.Localization.csproj", "{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.App.Localization", "Mtgdb.App.Localization\Mtgdb.App.Localization.csproj", "{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Controls.DeckList", "Mtgdb.Controls.DeckList\Mtgdb.Controls.DeckList.csproj", "{6FAC0808-416A-4605-A1E7-042F7A270BB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Core.Index", "Mtgdb.Core.Index\Mtgdb.Core.Index.csproj", "{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data.Index", "Mtgdb.Data.Index\Mtgdb.Data.Index.csproj", "{C6C3C03B-B8BD-4208-B2DA-727536B5CDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Ui", "Mtgdb.Ui\Mtgdb.Ui.csproj", "{65731F8B-3FD8-4893-B35F-371F69C9734D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data.Ui", "Mtgdb.Data.Ui\Mtgdb.Data.Ui.csproj", "{65731F8B-3FD8-4893-B35F-371F69C9734D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{9DCD61F8-1E1A-4650-BB23-35F646C6ACEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomScrollbar", "Subrepo\CustomScrollbar\CustomScrollbar.csproj", "{5B85E2D7-2005-4496-B5D7-59C68A1EC91D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mtgdb.Util.csproj", "{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data.DeckList", "Mtgdb.Data.DeckList\Mtgdb.Data.DeckList.csproj", "{C837C025-EB64-4E1A-85C4-306A88ED690F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data.Core", "Mtgdb.Data.Core\Mtgdb.Data.Core.csproj", "{D5C61885-5EF9-48FD-BB00-8B6622246EE5}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -140,6 +144,14 @@ Global
 		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C837C025-EB64-4E1A-85C4-306A88ED690F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C837C025-EB64-4E1A-85C4-306A88ED690F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C837C025-EB64-4E1A-85C4-306A88ED690F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C837C025-EB64-4E1A-85C4-306A88ED690F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5C61885-5EF9-48FD-BB00-8B6622246EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5C61885-5EF9-48FD-BB00-8B6622246EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5C61885-5EF9-48FD-BB00-8B6622246EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5C61885-5EF9-48FD-BB00-8B6622246EE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

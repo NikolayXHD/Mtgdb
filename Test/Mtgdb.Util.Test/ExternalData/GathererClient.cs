@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Downloader;
 using Newtonsoft.Json;
 using NLog;

@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;

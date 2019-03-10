@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using NUnit.Framework;
 // ReSharper disable StringLiteralTypo
 

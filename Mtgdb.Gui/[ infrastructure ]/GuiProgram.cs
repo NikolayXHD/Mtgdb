@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 
 			var application = _kernel.Get<App>();
 			application.MigrateHistoryFiles();
-			application.CreateForm();
+			application.StartForm();
 
 			Application.Run(application);
 			Application.RemoveMessageFilter(MessageFilter.Instance);

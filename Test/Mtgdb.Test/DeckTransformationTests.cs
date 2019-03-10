@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
+using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 using NUnit.Framework;
 

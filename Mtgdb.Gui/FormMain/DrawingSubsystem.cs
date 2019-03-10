@@ -7,9 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
-using Mtgdb.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui

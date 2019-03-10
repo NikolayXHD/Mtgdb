@@ -1,5 +1,5 @@
 using Lucene.Net.Contrib;
-using Mtgdb.Index;
+using Mtgdb.Data;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

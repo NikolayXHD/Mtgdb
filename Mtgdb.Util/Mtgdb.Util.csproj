@@ -98,25 +98,29 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Core.Bitmaps\Mtgdb.Core.Bitmaps.csproj">
-      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
-      <Name>Mtgdb.Core.Bitmaps</Name>
+    <ProjectReference Include="..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+      <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+      <Name>Mtgdb.App.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core.Utils\Mtgdb.Core.Utils.csproj">
-      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Core.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Core\Mtgdb.Core.csproj">
+    <ProjectReference Include="..\Mtgdb.App\Mtgdb.App.csproj">
       <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
-      <Name>Mtgdb.Core</Name>
+      <Name>Mtgdb.App</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Dal\Mtgdb.Dal.csproj">
+    <ProjectReference Include="..\Mtgdb.Data\Mtgdb.Data.csproj">
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
-      <Name>Mtgdb.Dal</Name>
+      <Name>Mtgdb.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Downloader\Mtgdb.Downloader.csproj">
+    <ProjectReference Include="..\Mtgdb.Gui.Downloader\Mtgdb.Gui.Downloader.csproj">
       <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
-      <Name>Mtgdb.Downloader</Name>
+      <Name>Mtgdb.Gui.Downloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj">
+      <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
+      <Name>Mtgdb.Utils.Bitmaps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+      <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
+      <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -67,7 +67,7 @@ del /q /s %target%\update\notifications\*.zip
 del /q /s %target%\update\notifications\new\*
 del /q /s %target%\update\notifications\read\*
 del /q /s %target%\update\notifications\archive\*
-del /q /s %target%\update\filelist.txt
+del /q %target%\update\filelist.txt
 rmdir /q /s %target%\update\megatools-1.9.98-win32
 
 del /q /s %target%\color-schemes\current.colors
@@ -97,13 +97,9 @@ del /q /s %target%\*.vshost.*
 %utilexe% -sign %target%\bin\v%version% -output %targetBin%\filelist.txt
 
 :zip_lzma
-
 %out% create LZMA - compressed zip
-
 %sevenzexe% a %targetRoot%\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
-
 %out% sign zip
-
 %utilexe% -sign %targetRoot%\%packageName%.zip -output %targetRoot%\filelist.txt
 
 rem :publish_test
@@ -111,9 +107,9 @@ rem %out% publish zip to test update URL
 rem %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
 rem %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
 
-%out% run installed app
-
-start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
+rem :start_app
+rem %out% run installed app
+rem start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
 rem :run_tests
 rem %out% run tests
@@ -124,7 +120,6 @@ rem pause
 
 :publish_update_notification
 %out% publish update notification
-
 %gitexe% -C f:/Repo/Git/Mtgdb.wiki pull
 %utilexe% -notify
 %gitexe% -C f:/Repo/Git/Mtgdb.Notifications add -A
@@ -136,8 +131,8 @@ rem %out% publish zip to actual update URL
 rem %googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
 rem %googledriveexe% update %signid% %targetRoot%\filelist.txt
 
+:zip_deflate
 %out% create deflate - compressed zip
-
 mkdir %targetRoot%\deflate
 %sevenzexe% a %targetRoot%\deflate\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -x!data\index\* -mm=deflate
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Ninject;
 using NLog;
 using NUnit.Framework;

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using JetBrains.Annotations;
+using Mtgdb.Data;
 
 namespace Mtgdb.Gui
 {
@@ -16,12 +16,12 @@ namespace Mtgdb.Gui
 		public DataSource DataSource { get; set; }
 		public bool ApplyFilter { get; set; }
 		public List<string> SeriesFields { get; set; } = new List<string>();
-		public List<SortOrder> SeriesFieldsSort { get; set; } = new List<SortOrder>();
+		public List<SortDirection> SeriesFieldsSort { get; set; } = new List<SortDirection>();
 		public List<string> ColumnFields { get; set; } = new List<string>();
-		public List<SortOrder> ColumnFieldsSort { get; set; } = new List<SortOrder>();
+		public List<SortDirection> ColumnFieldsSort { get; set; } = new List<SortDirection>();
 		public List<string> SummaryFields { get; set; } = new List<string>();
 		public List<string> SummaryFunctions { get; set; } = new List<string>();
-		public List<SortOrder> SummarySort { get; set; } = new List<SortOrder>();
+		public List<SortDirection> SummarySort { get; set; } = new List<SortDirection>();
 		public SeriesChartType ChartType { get; set; }
 		public DataElement LabelDataElement { get; set; }
 		public bool ShowArgumentTotal { get; set; }
@@ -68,18 +68,18 @@ namespace Mtgdb.Gui
 			return modified;
 		}
 
-		private static bool ensureNonEmpty(List<string> fields, List<SortOrder> order, string emptyValue)
+		private static bool ensureNonEmpty(List<string> fields, List<SortDirection> order, string emptyValue)
 		{
 			if (fields.Count == 0)
 			{
 				fields.Add(emptyValue);
-				order.Add(SortOrder.None);
+				order.Add(SortDirection.No);
 				return true;
 			}
 
 			if (order.Count == 0)
 			{
-				order.AddRange(Enumerable.Repeat(SortOrder.None, fields.Count));
+				order.AddRange(Enumerable.Repeat(SortDirection.No, fields.Count));
 				return true;
 			}
 

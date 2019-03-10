@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
-using Mtgdb.Dal;
-using Mtgdb.Dal.Index;
-using Mtgdb.Index;
+using Mtgdb.Data;
+using Mtgdb.Data.Index;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui

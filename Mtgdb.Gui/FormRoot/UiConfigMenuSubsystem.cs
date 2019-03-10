@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using CheckBox = Mtgdb.Controls.CheckBox;
 
 namespace Mtgdb.Gui

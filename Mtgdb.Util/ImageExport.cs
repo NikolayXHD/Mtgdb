@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using NLog;
 
 namespace Mtgdb.Util

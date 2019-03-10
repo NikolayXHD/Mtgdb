@@ -1,6 +1,6 @@
 using System.Text;
 using System.Threading.Tasks;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 using Ninject;
 using NUnit.Framework;

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using NUnit.Framework;
 
 namespace Mtgdb.Util

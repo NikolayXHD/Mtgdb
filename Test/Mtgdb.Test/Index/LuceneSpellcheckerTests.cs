@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Mtgdb.Index;
+using Mtgdb.Data;
 using NUnit.Framework;
 // ReSharper disable StringLiteralTypo
 

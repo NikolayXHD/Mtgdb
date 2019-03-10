@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Mtgdb.Controls;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
@@ -40,7 +39,7 @@ namespace Mtgdb.Gui
 			_localizableFields.Contains(fieldName);
 
 		private static readonly FieldSortInfo _sortFromNewestToOldest =
-			new FieldSortInfo(nameof(Card.ReleaseDate), SortOrder.Descending);
+			new FieldSortInfo(nameof(Card.ReleaseDate), SortDirection.Desc);
 
 		private readonly CardRepository _repo;
 	}

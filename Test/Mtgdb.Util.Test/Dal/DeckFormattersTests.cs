@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
-using Mtgdb.Dal;
+using Mtgdb.Data;
 using Mtgdb.Gui;
 using Mtgdb.Test;
 using Ninject;
