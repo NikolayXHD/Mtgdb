@@ -114,6 +114,7 @@ namespace Mtgdb.Data.Model
 				_decksByName.Add(deck.Name, model);
 			}
 
+			// Save not called here to optimize mass-import
 			return true;
 		}
 
