@@ -126,18 +126,18 @@ rem pause
 %gitexe% -C f:/Repo/Git/Mtgdb.Notifications commit -m auto
 %gitexe% -C f:/Repo/Git/Mtgdb.Notifications push
 
-rem :publish_zip
-rem %out% publish zip to actual update URL
-rem %googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
-rem %googledriveexe% update %signid% %targetRoot%\filelist.txt
+:publish_zip
+%out% publish zip to actual update URL
+%googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
+%googledriveexe% update %signid% %targetRoot%\filelist.txt
 
 :zip_deflate
 %out% create deflate - compressed zip
 mkdir %targetRoot%\deflate
 %sevenzexe% a %targetRoot%\deflate\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -x!data\index\* -mm=deflate
 
-rem :upload_deflate
-rem %out% upload deflate - compressed zip
-rem %googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
+:upload_deflate
+%out% upload deflate - compressed zip
+%googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
 
 exit /b

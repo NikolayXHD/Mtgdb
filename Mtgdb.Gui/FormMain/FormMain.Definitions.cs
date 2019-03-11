@@ -231,8 +231,11 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.MouseMove += deckZoneHover;
 			_tabHeadersDeck.Click += deckZoneClick;
 
-			_cardSearcher.IndexingProgress += cardSearcherIndexingProgress;
-			_cardSearcher.Spellchecker.IndexingProgress += cardSearcherIndexingProgress;
+			_cardSearcher.IndexingProgress += indexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress += indexingProgress;
+			_deckSearcher.IndexingProgress += indexingProgress;
+			_deckSearcher.Spellchecker.IndexingProgress += indexingProgress;
+
 			_cardSearcher.Loaded += cardSearcherLoaded;
 			_cardSearcher.Disposed += cardSearcherDisposed;
 
@@ -251,6 +254,7 @@ namespace Mtgdb.Gui
 
 			_copyPaste.SubscribeToEvents();
 			_tabHeadersDeck.DragOver += deckZoneDrag;
+			_tabHeadersDeck.SizeChanged += deckTabsResized;
 
 			_buttonSampleHandNew.Pressed += sampleHandNew;
 			_buttonSampleHandMulligan.Pressed += sampleHandMulligan;
@@ -320,8 +324,11 @@ namespace Mtgdb.Gui
 			_tabHeadersDeck.MouseMove -= deckZoneHover;
 			_tabHeadersDeck.Click -= deckZoneClick;
 
-			_cardSearcher.IndexingProgress -= cardSearcherIndexingProgress;
-			_cardSearcher.Spellchecker.IndexingProgress -= cardSearcherIndexingProgress;
+			_cardSearcher.IndexingProgress -= indexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress -= indexingProgress;
+			_deckSearcher.IndexingProgress -= indexingProgress;
+			_deckSearcher.Spellchecker.IndexingProgress -= indexingProgress;
+
 			_cardSearcher.Loaded -= cardSearcherLoaded;
 			_cardSearcher.Disposed -= cardSearcherDisposed;
 
@@ -339,6 +346,7 @@ namespace Mtgdb.Gui
 
 			_copyPaste.UnsubscribeFromEvents();
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
+			_tabHeadersDeck.SizeChanged -= deckTabsResized;
 
 			_buttonSampleHandNew.Pressed -= sampleHandNew;
 			_buttonSampleHandMulligan.Pressed -= sampleHandMulligan;

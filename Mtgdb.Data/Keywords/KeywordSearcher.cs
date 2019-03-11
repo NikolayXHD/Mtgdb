@@ -24,7 +24,7 @@ namespace Mtgdb.Data
 			IsLoading = true;
 
 			if (_version.IsUpToDate)
-				_index = new RAMDirectory(FSDirectory.Open(_version.Directory), IOContext.READ_ONCE);
+				_index = new RAMDirectory(FSDirectory.Open(_version.IndexDirectory), IOContext.READ_ONCE);
 			else
 				_index = new RAMDirectory(createKeywordsFrom(_repo), IOContext.READ_ONCE);
 
@@ -145,7 +145,7 @@ namespace Mtgdb.Data
 
 			_version.CreateDirectory();
 
-			var fsIndex = FSDirectory.Open(_version.Directory);
+			var fsIndex = FSDirectory.Open(_version.IndexDirectory);
 			var indexWriterConfig = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
 
 			using (var writer = new IndexWriter(fsIndex, indexWriterConfig))
@@ -166,11 +166,11 @@ namespace Mtgdb.Data
 
 
 
-		public string IndexDirectory => _version.Directory;
+		public string IndexDirectory => _version.IndexDirectory;
 
 		public string IndexDirectoryParent
 		{
-			get => _version.Directory.Parent();
+			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.KeywordSearcher);
 		}
 

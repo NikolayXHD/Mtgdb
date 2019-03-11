@@ -112,7 +112,7 @@ namespace Mtgdb.Gui
 			this.Invoke(updateFormStatus);
 		}
 
-		private void cardSearcherIndexingProgress() =>
+		private void indexingProgress() =>
 			this.Invoke(updateFormStatus);
 
 
@@ -738,6 +738,13 @@ namespace Mtgdb.Gui
 			_cardSearch.AppliedText = query;
 			_cardSearch.Apply();
 			_popupSearchExamples.ClosePopup();
+		}
+
+		private void deckTabsResized(object sender, EventArgs e)
+		{
+			_panelDeckTabsContainer.Size = new Size(
+				Math.Max(_tabHeadersDeck.Width, _panelDeckTabsContainer.Width),
+				_tabHeadersDeck.Height);
 		}
 	}
 }

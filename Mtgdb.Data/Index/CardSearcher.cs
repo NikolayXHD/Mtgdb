@@ -38,7 +38,7 @@ namespace Mtgdb.Data.Index
 
 			if (_version.IsUpToDate)
 			{
-				using (var fsDirectory = FSDirectory.Open(_version.Directory))
+				using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
 					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
 
 				return index;
@@ -53,7 +53,7 @@ namespace Mtgdb.Data.Index
 			if (index == null)
 				return null;
 
-			index.SaveTo(_version.Directory);
+			index.SaveTo(_version.IndexDirectory);
 			_version.SetIsUpToDate();
 
 			return index;
@@ -66,11 +66,11 @@ namespace Mtgdb.Data.Index
 
 		public string IndexDirectoryParent
 		{
-			get => _version.Directory.Parent();
+			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.CardSearcher);
 		}
 
-		public string IndexDirectory => _version.Directory;
+		public string IndexDirectory => _version.IndexDirectory;
 		public bool IsUpToDate => _version.IsUpToDate;
 		public int SetsAddedToIndex => GroupsAddedToIndex;
 

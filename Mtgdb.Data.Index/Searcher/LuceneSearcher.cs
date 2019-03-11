@@ -171,12 +171,9 @@ namespace Mtgdb.Data
 
 		protected virtual Directory CreateIndex(LuceneSearcherState<TId, TDoc> state)
 		{
-			void progressHandler() =>
-				IndexingProgress?.Invoke();
-
-			state.IndexingProgress += progressHandler;
+			state.IndexingProgress += InvokeIndexingProgressEvent;
 			var result = state.CreateIndex();
-			state.IndexingProgress -= progressHandler;
+			state.IndexingProgress -= InvokeIndexingProgressEvent;
 
 			return result;
 		}
@@ -191,6 +188,9 @@ namespace Mtgdb.Data
 
 			return query;
 		}
+
+		protected void InvokeIndexingProgressEvent() =>
+			IndexingProgress?.Invoke();
 
 		protected virtual string GetDisplayField(string field) => field;
 

@@ -23,7 +23,8 @@ namespace Mtgdb.Gui
 			DeckListModel deckListModel,
 			DeckListLegacyConverter deckListConverter,
 			HistoryLegacyConverter historyConverter,
-			DeckSearcher deckSearcher)
+			DeckSearcher deckSearcher,
+			DeckIndexUpdateSubsystem deckIndexUpdateSubsystem)
 		{
 			_loader = loader;
 			_repo = repo;
@@ -42,15 +43,12 @@ namespace Mtgdb.Gui
 
 				deckListModel.Load();
 
-				if (deckSearcher.IsIndexSaved)
-					deckSearcher.LoadIndexes();
-				else
-				{
+				if (!deckSearcher.IsIndexSaved)
 					while (!_repo.IsPriceLoadingComplete)
 						await TaskEx.Delay(100);
 
-					deckSearcher.LoadIndexes();
-				}
+				deckSearcher.LoadIndexes();
+				deckIndexUpdateSubsystem.SubscribeToEvents();
 			});
 		}
 

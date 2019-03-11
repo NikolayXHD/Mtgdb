@@ -20,7 +20,7 @@ namespace Mtgdb.Data.Index
 			if (!_indexCreated && _version.IsUpToDate)
 			{
 				lock (_syncDirectory)
-					using (var fsDirectory = FSDirectory.Open(_version.Directory))
+					using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
 						index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
 
 				var spellchecker = CreateSpellchecker();
@@ -41,7 +41,7 @@ namespace Mtgdb.Data.Index
 			lock (_syncDirectory)
 				_version.CreateDirectory();
 
-			index.SaveTo(_version.Directory);
+			index.SaveTo(_version.IndexDirectory);
 			_version.SetIsUpToDate();
 
 			_indexCreated = true;
@@ -61,7 +61,7 @@ namespace Mtgdb.Data.Index
 
 		public string IndexDirectoryParent
 		{
-			get => _version.Directory.Parent();
+			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.DeckSpellchecker);
 		}
 

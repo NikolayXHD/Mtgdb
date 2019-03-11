@@ -94,6 +94,8 @@ namespace Mtgdb.Gui
 
 					_layoutViewDeck.Height = deckHeight;
 					_deckListControl.Height = deckHeight;
+
+					_panelDeckTabsContainer.Size = _tabHeadersDeck.Size;
 				}).Setup(this);
 		}
 

@@ -4,7 +4,7 @@ namespace Mtgdb.Data
 {
 	public class IndexVersion
 	{
-		public string Directory { get; }
+		public string IndexDirectory { get; }
 
 		private readonly string _completionLabelFile;
 		private readonly string _indexVersion;
@@ -13,17 +13,17 @@ namespace Mtgdb.Data
 
 		public IndexVersion(string directory, string indexVersion)
 		{
-			Directory = Path.Combine(directory, indexVersion);
+			IndexDirectory = Path.Combine(directory, indexVersion);
 			_indexVersion = indexVersion;
-			_completionLabelFile = Directory.AddPath("indexing.done");
+			_completionLabelFile = IndexDirectory.AddPath("indexing.done");
 		}
 
 		public void CreateDirectory()
 		{
-			if (System.IO.Directory.Exists(Directory))
-				System.IO.Directory.Delete(Directory, recursive: true);
+			if (Directory.Exists(IndexDirectory))
+				Directory.Delete(IndexDirectory, recursive: true);
 
-			System.IO.Directory.CreateDirectory(Directory);
+			Directory.CreateDirectory(IndexDirectory);
 		}
 
 		public void SetIsUpToDate()

@@ -16,6 +16,10 @@ namespace Mtgdb.Data.Index
 			_searcher = searcher;
 			_repo = repo;
 			_listModel = listModel;
+		}
+
+		public void SubscribeToEvents()
+		{
 			_listModel.Changed += modelChanged;
 		}
 
