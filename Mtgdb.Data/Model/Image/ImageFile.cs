@@ -168,7 +168,19 @@ namespace Mtgdb.Data
 			["Invert»Invent"] = "InvertInvent",
 			["Response»Resurgence"] = "ResponseResurgence",
 			["Status»Statue"] = "StatusStatue",
-			["Turn»Burn"] = "TurnBurn"
+			["Turn»Burn"] = "TurnBurn",
+
+			// RNA split cards
+			["Bedeck»Bedazzle"] = "BedeckBedazzle",
+			["Carnival»Carnage"] = "CarnivalCarnage",
+			["Collision»Colossus"] = "CollisionColossus",
+			["Consecrate»Consume"] = "ConsecrateConsume",
+			["Depose»Deploy"] = "DeposeDeploy",
+			["Incubation»Incongruity"] = "IncubationIncongruity",
+			["Repudiate»Replicate"] = "RepudiateReplicate",
+			["Revival»Revenge"] = "RevivalRevenge",
+			["Thrash»Threat"] = "ThrashThreat",
+			["Warrant»Warden"] = "WarrantWarden"
 		};
 	}
 }

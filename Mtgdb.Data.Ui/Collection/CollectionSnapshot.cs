@@ -6,13 +6,21 @@ namespace Mtgdb.Ui
 {
 	public class CollectionSnapshot : ICardCollection
 	{
+		public static CollectionSnapshot Empty() =>
+			new CollectionSnapshot(new Dictionary<string, int>(Str.Comparer));
+
 		[UsedImplicitly] // when deserializing
 		public CollectionSnapshot()
 		{
 		}
 
-		public CollectionSnapshot(CollectionEditorModel original) =>
-			CountById = original.CountById.ToDictionary(Str.Comparer);
+		private CollectionSnapshot(Dictionary<string, int> countById) =>
+			CountById = countById;
+
+		public CollectionSnapshot(CollectionEditorModel original)
+			: this(original.CountById.ToDictionary(Str.Comparer))
+		{
+		}
 
 		public int GetCount(Card c) =>
 			CountById.TryGet(c.Id);

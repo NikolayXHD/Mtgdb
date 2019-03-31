@@ -475,9 +475,6 @@ namespace Mtgdb.Gui
 				if (isActualCollectionChange)
 					historyUpdate();
 
-			if (isActualCollectionChange)
-				_deckListControl.CollectionChanged();
-
 			if (!restoringSettings())
 				updateFormStatus();
 		}

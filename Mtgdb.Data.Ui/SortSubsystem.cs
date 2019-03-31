@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
+using NLog;
 
 namespace Mtgdb.Ui
 {
@@ -118,26 +119,31 @@ namespace Mtgdb.Ui
 			for (int i = 0; i < sortExpressions.Length; i++)
 			{
 				var sortExpression = sortExpressions[i];
-				string descMark = $@" {SortOrder.Descending}";
-				string ascMark = $@" {SortOrder.Ascending}";
+				string[] descMarks = { $@" {SortOrder.Descending}", $" {SortDirection.Desc}" };
+				string[] ascMarks = { $@" {SortOrder.Ascending}", $" {SortDirection.Asc}" };
 
 				SortDirection sortOrder;
 				string fieldName;
 
-				if (sortExpression.EndsWith(ascMark))
+				var ascMark = ascMarks.FirstOrDefault(_ => sortExpression.EndsWith(_, Str.Comparison));
+				if (ascMark != null)
 				{
 					sortOrder = SortDirection.Asc;
 					fieldName = sortExpression.Substring(0, sortExpression.Length - ascMark.Length);
 				}
 				else
 				{
-					if (sortExpression.EndsWith(descMark))
+					var descMark = descMarks.FirstOrDefault(_ => sortExpression.EndsWith(_, Str.Comparison));
+					if (descMark != null)
 					{
 						sortOrder = SortDirection.Desc;
 						fieldName = sortExpression.Substring(0, sortExpression.Length - descMark.Length);
 					}
 					else
-						throw new Exception($"Invalid sort expression in history: {sort}");
+					{
+						_log.Error($"Invalid sort expression in history: {sort}");
+						continue;
+					}
 				}
 
 				yield return new FieldSortInfo(fieldName, sortOrder);
@@ -197,5 +203,7 @@ namespace Mtgdb.Ui
 
 		private readonly Dictionary<FieldSortInfo, List<TDoc>> _sortedDocsByDefaultSort =
 			new Dictionary<FieldSortInfo, List<TDoc>>();
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

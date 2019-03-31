@@ -183,7 +183,7 @@ namespace Mtgdb.Gui
 
 			if (_deckEditor.CurrentZone == Zone.SampleHand)
 			{
-				int prevIndex = _panelStatus.Controls.GetChildIndex(_tabHeadersDeck);
+				int prevIndex = _panelStatus.Controls.GetChildIndex(_panelDeckTabsContainer);
 				buttons.Reverse().ForEach(b =>
 				{
 					b.Visible = true;

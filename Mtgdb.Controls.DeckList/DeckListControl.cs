@@ -100,6 +100,8 @@ namespace Mtgdb.Controls
 			else
 				_searcher.Loaded += searcherLoaded;
 
+			_collection.CollectionChanged += collectionChanged;
+
 			ColorSchemeController.SystemColorsChanged += systemColorsChanged;
 		}
 
@@ -123,6 +125,8 @@ namespace Mtgdb.Controls
 
 			_listModel.Loaded -= listModelLoaded;
 			_searcher.Loaded -= searcherLoaded;
+
+			_collection.CollectionChanged -= collectionChanged;
 
 			ColorSchemeController.SystemColorsChanged -= systemColorsChanged;
 		}
@@ -201,8 +205,13 @@ namespace Mtgdb.Controls
 			refreshData();
 		}
 
-		public void CollectionChanged() =>
+		private void collectionChanged(bool listChanged, bool countChanged, Card card)
+		{
+			if (!listChanged && !countChanged)
+				return;
+
 			_model.UpdateCollection(_collection.Snapshot(), affectedNames: null);
+		}
 
 		private void viewDeckClicked(object view, HitInfo hitInfo, MouseEventArgs mouseArgs)
 		{

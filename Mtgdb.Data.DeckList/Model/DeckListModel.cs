@@ -294,7 +294,7 @@ namespace Mtgdb.Data.Model
 				get => Id;
 				set => Id = value;
 			}
-			public CollectionSnapshot Collection { get; set; }
+			public CollectionSnapshot Collection { get; set; } = CollectionSnapshot.Empty();
 			public List<Deck> Decks { get; set; } = new List<Deck>();
 		}
 
