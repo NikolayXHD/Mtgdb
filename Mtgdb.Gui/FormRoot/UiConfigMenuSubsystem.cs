@@ -20,6 +20,7 @@ namespace Mtgdb.Gui
 			CheckBox checkboxTopPanel,
 			CheckBox checkboxRightPanel,
 			CheckBox checkboxSearchBar,
+			CardRepository cardRepository,
 			UiConfigRepository configRepo)
 		{
 			_menuUiScale = menuUiScale;
@@ -40,6 +41,7 @@ namespace Mtgdb.Gui
 			};
 
 			_configRepo = configRepo;
+			_cardRepository = cardRepository;
 
 			_menuUiScale.SetMenuValues(new[] { 100, 125, 150, 200 }.Select(formatScalePercent));
 			_menuUiSmallImageQuality.SetMenuValues("Normal (LQ)", "High (MQ)");
@@ -62,7 +64,7 @@ namespace Mtgdb.Gui
 			_checkboxAllPanels.Checked = allPanelsChecked(true);
 
 			_menuUiScale.SelectedIndexChanged += handleUiScalePercentChanged;
-			_menuUiSmallImageQuality.SelectedIndexChanged += handleMenuChanged;
+			_menuUiSmallImageQuality.SelectedIndexChanged += handleSmallImageQualityChanged;
 			_menuSuggestDownloadMissingImages.SelectedIndexChanged += handleMenuChanged;
 			_menuImagesCacheCapacity.SelectedIndexChanged += handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged += handleMenuChanged;
@@ -83,6 +85,14 @@ namespace Mtgdb.Gui
 			}
 
 			handleConfigChanged();
+		}
+
+		private void handleSmallImageQualityChanged(object sender, EventArgs e)
+		{
+			handleConfigChanged();
+
+			foreach (var card in _cardRepository.Cards)
+				card.ResetImageModel();
 		}
 
 		private void handlePanelVisibilityChanged(object sender, EventArgs e)
@@ -244,6 +254,7 @@ namespace Mtgdb.Gui
 		private readonly CheckBox _checkboxRightPanel;
 		private readonly CheckBox _checkboxSearchBar;
 		private readonly UiConfigRepository _configRepo;
+		private readonly CardRepository _cardRepository;
 
 		private readonly CheckBox[] _allPanelCheckboxes;
 	}

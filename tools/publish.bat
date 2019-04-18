@@ -102,21 +102,22 @@ del /q /s %target%\*.vshost.*
 %out% sign zip
 %utilexe% -sign %targetRoot%\%packageName%.zip -output %targetRoot%\filelist.txt
 
-rem :publish_test
-rem %out% publish zip to test update URL
-rem %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
-rem %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
+:publish_test
+%out% publish zip to test update URL
+%googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
+%googledriveexe% update %testsignid% %targetRoot%\filelist.txt
 
-rem :start_app
-rem %out% run installed app
-rem start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
+:start_app
+%out% run installed app
+start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
-rem :run_tests
-rem %out% run tests
-rem %nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
-rem if errorlevel 1 exit /b %errorlevel%
-rem %out% Press Ctrl+C to cancel
-rem pause
+:run_tests
+%out% run tests
+%nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
+if errorlevel 1 exit /b %errorlevel%
+%out% Press Ctrl+C to cancel
+
+pause
 
 :publish_update_notification
 %out% publish update notification

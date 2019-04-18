@@ -372,10 +372,13 @@ namespace Mtgdb.Downloader
 							_imageRepository.LoadSmall();
 							resetCardImages();
 							break;
+
 						case ImageQuality.Medium:
 							_imageRepository.LoadFilesZoom();
 							_imageRepository.LoadZoom();
+							resetCardImages();
 							break;
+
 						case ImageQuality.Art:
 							_imageRepository.LoadFilesArt();
 							_imageRepository.LoadArt();

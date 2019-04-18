@@ -73,8 +73,8 @@ namespace Mtgdb.Util
 		// private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
 
 		[TestCase(
-			HtmlDir + @"\Ravnica Allegiance _ MAGIC_ THE GATHERING.html",
-			GathererOriginalDir + @"\rna.png")]
+			HtmlDir + @"\War of the Spark   MAGIC  THE GATHERING.htm",
+			GathererOriginalDir + @"\war.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
 			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
@@ -93,13 +93,39 @@ namespace Mtgdb.Util
 				var filePath = Path.Combine(filesDirectory, originalFileName);
 
 				var name = HttpUtility.HtmlDecode(match.Groups["name"].Value).Replace(" // ", "");
-				var renamedPath = Path.Combine(targetDir, name + ext);
 
-				File.Copy(filePath, renamedPath, overwrite: true);
+				string defaultTargetPath = Path.Combine(targetDir, name + ext);
+
+				bool defaultTargetExists = File.Exists(defaultTargetPath);
+
+				if (defaultTargetExists || File.Exists(getTargetPath(1)))
+				{
+					if (defaultTargetExists)
+						File.Move(defaultTargetPath, getTargetPath(1));
+
+					for (int i = 2; i < 12; i++)
+					{
+						string targetPath = getTargetPath(i);
+						if (!File.Exists(targetPath))
+						{
+							File.Copy(filePath, targetPath, overwrite: false);
+							break;
+						}
+					}
+				}
+				else
+				{
+					File.Copy(filePath, defaultTargetPath, overwrite: false);
+				}
+
+				string getTargetPath(int num) =>
+					Path.Combine(targetDir, name + num + ext);
 			}
 		}
 
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "rna.png", "rna")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "war.png", "war")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "pwar.png", "pwar")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "mh1.png", "mh1")]
 		public void PreProcessImages(
 			string smallDir,
 			string zoomDir,

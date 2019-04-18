@@ -10,7 +10,7 @@
 			if (dir == null)
 				return true;
 
-			bool result = Path.StartsWith(dir + System.IO.Path.DirectorySeparatorChar);
+			bool result = Path.StartsWith(dir + System.IO.Path.DirectorySeparatorChar, Str.Comparison);
 			return result;
 		}
 

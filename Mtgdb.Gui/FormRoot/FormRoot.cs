@@ -162,6 +162,7 @@ namespace Mtgdb.Gui
 				_checkboxTopPanel,
 				_checkboxRightPanel,
 				_checkboxSearchBar,
+				_repo,
 				uiConfigRepository));
 
 			_dropdownOpenDeck.BeforeShow = () => setMenuMode(_dropdownOpenDeck);
