@@ -58,13 +58,14 @@ namespace Mtgdb.Gui
 			scaleLayoutView(_layoutViewCards);
 			scaleLayoutView(_layoutViewDeck);
 
-			foreach (var qf in _quickFilterControls.Append(FilterManager))
-				qf.ScaleDpi();
+			_quickFilterControls.Append(_filterManager)
+				.ForEach(QuickFilterControlScaler.ScaleDpi);
 
 			_deckListControl.Scale();
 
 			_popupSearchExamples.ScaleDpiAuto();
 
+			_panelIconLegality.ScaleDpiAuto();
 			_dropdownLegality.ScaleDpi();
 			_searchBar.ScaleDpi();
 
