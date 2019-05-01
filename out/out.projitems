@@ -9,9 +9,6 @@
     <Import_RootNamespace>out</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)data\AllSets-x.json" />
-    <Content Include="$(MSBuildThisFileDirectory)data\AllSets.v42.json" />
-    <Content Include="$(MSBuildThisFileDirectory)data\AllSets.json" />
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
     <Content Include="$(MSBuildThisFileDirectory)data\mtgjson-42-id.csv" />
     <Content Include="$(MSBuildThisFileDirectory)data\patch.json" />
