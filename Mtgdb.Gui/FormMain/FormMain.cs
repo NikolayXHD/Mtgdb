@@ -204,7 +204,7 @@ namespace Mtgdb.Gui
 			_layoutRight.SuspendLayout();
 			_layoutMain.SuspendLayout();
 
-			var controls = _quickFilterControls.Append(FilterManager);
+			var controls = _quickFilterControls.Append(_filterManager);
 
 			// ReSharper disable PossibleMultipleEnumeration
 			foreach (var control in controls)
@@ -247,14 +247,14 @@ namespace Mtgdb.Gui
 
 		private void updateExcludeManaCost()
 		{
-			FilterManaCost.EnableRequiringSome = !_buttonExcludeManaCost.Checked;
-			FilterManaCost.EnableCostBehavior = _buttonExcludeManaCost.Checked;
+			_filterManaCost.EnableRequiringSome = !_buttonExcludeManaCost.Checked;
+			_filterManaCost.EnableCostBehavior = _buttonExcludeManaCost.Checked;
 		}
 
 		private void updateExcludeManaAbility()
 		{
-			FilterManaAbility.EnableRequiringSome = !_buttonExcludeManaAbility.Checked;
-			FilterManaAbility.EnableCostBehavior = _buttonExcludeManaAbility.Checked;
+			_filterManaAbility.EnableRequiringSome = !_buttonExcludeManaAbility.Checked;
+			_filterManaAbility.EnableCostBehavior = _buttonExcludeManaAbility.Checked;
 		}
 
 
@@ -273,7 +273,7 @@ namespace Mtgdb.Gui
 		{
 			var touchedCard = _deckEditor.TouchedCard;
 			bool showDuplicates = _buttonShowDuplicates.Checked;
-			var filterManagerStates = FilterManager.States;
+			var filterManagerStates = _filterManager.States;
 
 			_breakRefreshing = true;
 
@@ -431,7 +431,7 @@ namespace Mtgdb.Gui
 
 			_labelStatusCollection.Text = getCollectionStatus();
 
-			var filterManagerStates = FilterManager.States;
+			var filterManagerStates = _filterManager.States;
 
 			_labelStatusFilterButtons.Text = getStatusFilterButtons(filterManagerStates);
 			_labelStatusSearch.Text = getStatusSearch(filterManagerStates);
@@ -639,7 +639,7 @@ namespace Mtgdb.Gui
 
 		private bool isFilterGroupEnabled(FilterGroup filterGroup)
 		{
-			var state = FilterManager.States[filterGroup.Index()];
+			var state = _filterManager.States[filterGroup.Index()];
 
 			switch (state)
 			{
@@ -663,7 +663,7 @@ namespace Mtgdb.Gui
 
 		private void setFilterManagerState(FilterGroup filterGroup, FilterValueState value)
 		{
-			var states = FilterManager.States;
+			var states = _filterManager.States;
 
 			if (states[filterGroup.Index()] == value)
 				return;
@@ -671,7 +671,7 @@ namespace Mtgdb.Gui
 			states[filterGroup.Index()] = value;
 
 			beginRestoreSettings();
-			FilterManager.States = states;
+			_filterManager.States = states;
 			endRestoreSettings();
 		}
 
@@ -707,16 +707,16 @@ namespace Mtgdb.Gui
 			var settings = new GuiSettings
 			{
 				Find = _cardSearch.AppliedText,
-				FilterAbility = FilterAbility.States,
-				FilterCastKeyword = FilterCastKeyword.States,
-				FilterMana = FilterManaCost.States,
-				FilterManaAbility = FilterManaAbility.States,
-				FilterManaGenerated = FilterGeneratedMana.States,
-				FilterRarity = FilterRarity.States,
-				FilterType = FilterType.States,
-				FilterCmc = FilterCmc.States,
-				FilterLayout = FilterLayout.States,
-				FilterGrid = FilterManager.States,
+				FilterAbility = _filterAbility.States,
+				FilterCastKeyword = _filterCastKeyword.States,
+				FilterMana = _filterManaCost.States,
+				FilterManaAbility = _filterManaAbility.States,
+				FilterManaGenerated = _filterGeneratedMana.States,
+				FilterRarity = _filterRarity.States,
+				FilterType = _filterType.States,
+				FilterCmc = _filterCmc.States,
+				FilterLayout = _filterLayout.States,
+				FilterGrid = _filterManager.States,
 				Language = _formRoot.UiModel.LanguageController.Language,
 
 				MainDeckCount = _deckEditor.MainDeck.CountById.ToDictionary(),
@@ -758,35 +758,35 @@ namespace Mtgdb.Gui
 		{
 			beginRestoreSettings();
 
-			if (settings.FilterAbility == null || settings.FilterAbility.Length == FilterAbility.PropertiesCount)
-				FilterAbility.States = settings.FilterAbility;
+			if (settings.FilterAbility == null || settings.FilterAbility.Length == _filterAbility.PropertiesCount)
+				_filterAbility.States = settings.FilterAbility;
 
-			if (settings.FilterCastKeyword == null || settings.FilterCastKeyword.Length == FilterCastKeyword.PropertiesCount)
-				FilterCastKeyword.States = settings.FilterCastKeyword;
+			if (settings.FilterCastKeyword == null || settings.FilterCastKeyword.Length == _filterCastKeyword.PropertiesCount)
+				_filterCastKeyword.States = settings.FilterCastKeyword;
 
-			if (settings.FilterMana == null || settings.FilterMana.Length == FilterManaCost.PropertiesCount)
-				FilterManaCost.States = settings.FilterMana;
+			if (settings.FilterMana == null || settings.FilterMana.Length == _filterManaCost.PropertiesCount)
+				_filterManaCost.States = settings.FilterMana;
 
-			if (settings.FilterManaAbility == null || settings.FilterManaAbility.Length == FilterManaAbility.PropertiesCount)
-				FilterManaAbility.States = settings.FilterManaAbility;
+			if (settings.FilterManaAbility == null || settings.FilterManaAbility.Length == _filterManaAbility.PropertiesCount)
+				_filterManaAbility.States = settings.FilterManaAbility;
 
-			if (settings.FilterManaGenerated == null || settings.FilterManaGenerated.Length == FilterGeneratedMana.PropertiesCount)
-				FilterGeneratedMana.States = settings.FilterManaGenerated;
+			if (settings.FilterManaGenerated == null || settings.FilterManaGenerated.Length == _filterGeneratedMana.PropertiesCount)
+				_filterGeneratedMana.States = settings.FilterManaGenerated;
 
-			if (settings.FilterRarity == null || settings.FilterRarity.Length == FilterRarity.PropertiesCount)
-				FilterRarity.States = settings.FilterRarity;
+			if (settings.FilterRarity == null || settings.FilterRarity.Length == _filterRarity.PropertiesCount)
+				_filterRarity.States = settings.FilterRarity;
 
-			if (settings.FilterType == null || settings.FilterType.Length == FilterType.PropertiesCount)
-				FilterType.States = settings.FilterType;
+			if (settings.FilterType == null || settings.FilterType.Length == _filterType.PropertiesCount)
+				_filterType.States = settings.FilterType;
 
-			if (settings.FilterCmc == null || settings.FilterCmc.Length == FilterCmc.PropertiesCount)
-				FilterCmc.States = settings.FilterCmc;
+			if (settings.FilterCmc == null || settings.FilterCmc.Length == _filterCmc.PropertiesCount)
+				_filterCmc.States = settings.FilterCmc;
 
-			if (settings.FilterLayout == null || settings.FilterLayout.Length == FilterLayout.PropertiesCount)
-				FilterLayout.States = settings.FilterLayout;
+			if (settings.FilterLayout == null || settings.FilterLayout.Length == _filterLayout.PropertiesCount)
+				_filterLayout.States = settings.FilterLayout;
 
-			if (settings.FilterGrid == null || settings.FilterGrid.Length == FilterManager.PropertiesCount)
-				FilterManager.States = settings.FilterGrid;
+			if (settings.FilterGrid == null || settings.FilterGrid.Length == _filterManager.PropertiesCount)
+				_filterManager.States = settings.FilterGrid;
 
 			updateFilterByDeckMode();
 

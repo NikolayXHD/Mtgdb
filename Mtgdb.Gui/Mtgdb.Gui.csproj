@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net.QueryParser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.QueryParser.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -717,6 +720,10 @@
     <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Utils.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Subrepo\CustomScrollbar\CustomScrollbar.csproj">
+      <Project>{5b85e2d7-2005-4496-b5d7-59c68a1ec91d}</Project>
+      <Name>CustomScrollbar</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>

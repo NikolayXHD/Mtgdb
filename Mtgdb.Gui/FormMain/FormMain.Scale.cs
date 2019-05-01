@@ -71,9 +71,9 @@ namespace Mtgdb.Gui
 			new DpiScaler<FormMain>(
 				form =>
 				{
-					int border = FilterManaCost.Border;
-					var modeButtonSize = FilterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
-					int rightMargin = FilterManaCost.Width - modeButtonSize.Width;
+					int border = _filterManaCost.Border;
+					var modeButtonSize = _filterManaCost.ImageSize.Plus(new Size(border, border).MultiplyBy(2));
+					int rightMargin = _filterManaCost.Width - modeButtonSize.Width;
 
 					new[]
 					{

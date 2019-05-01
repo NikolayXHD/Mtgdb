@@ -248,7 +248,7 @@ namespace Mtgdb.Gui
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged += quickFiltersChanged;
 
-			FilterManager.StateChanged += quickFilterManagerChanged;
+			_filterManager.StateChanged += quickFilterManagerChanged;
 
 			Application.ApplicationExit += applicationExit;
 
@@ -340,7 +340,7 @@ namespace Mtgdb.Gui
 			foreach (var filterControl in _quickFilterControls)
 				filterControl.StateChanged -= quickFiltersChanged;
 
-			FilterManager.StateChanged -= quickFilterManagerChanged;
+			_filterManager.StateChanged -= quickFilterManagerChanged;
 
 			Application.ApplicationExit -= applicationExit;
 
@@ -483,5 +483,18 @@ namespace Mtgdb.Gui
 
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		private const int DeckListTabIndex = MaxZoneIndex + 1;
+
+		// ReSharper disable ConvertToAutoProperty
+		public QuickFilterControl FilterManaCost => _filterManaCost;
+		public QuickFilterControl FilterAbility => _filterAbility;
+		public QuickFilterControl FilterRarity => _filterRarity;
+		public QuickFilterControl FilterType => _filterType;
+		public QuickFilterControl FilterGeneratedMana => _filterGeneratedMana;
+		public QuickFilterControl FilterLayout => _filterLayout;
+		public QuickFilterControl FilterCastKeyword => _filterCastKeyword;
+		public QuickFilterControl FilterCmc => _filterCmc;
+		public QuickFilterControl FilterManaAbility => _filterManaAbility;
+		public QuickFilterControl FilterManager => _filterManager;
+		// ReSharper restore ConvertToAutoProperty
 	}
 }

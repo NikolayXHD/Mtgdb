@@ -704,7 +704,7 @@ namespace Mtgdb.Gui
 
 			beginRestoreSettings();
 
-			foreach (var filterControl in _quickFilterControls.Append(FilterManager))
+			foreach (var filterControl in _quickFilterControls.Append(_filterManager))
 				modified |= filterControl.Reset();
 
 			modified |= _legality.Reset();

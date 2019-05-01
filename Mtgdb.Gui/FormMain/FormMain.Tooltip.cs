@@ -212,32 +212,32 @@ namespace Mtgdb.Gui
 
 		private void setFilterButtonTooltips(TooltipController defaultTooltips, TooltipController quickFilterTooltips)
 		{
-			setRegularTooltip(defaultTooltips, FilterAbility, "Filter by keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterAbility, "Filter by keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
 				"Keyword examples: Flying, First Strike, Haste, ...", true);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterAbility, this)
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterAbility, this)
 			{
 				PreferHorizontalShift = true
 			});
 
-			setRegularTooltip(defaultTooltips, FilterCastKeyword, "Filter by CAST RELATED keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterCastKeyword, "Filter by CAST RELATED keyword abilities", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use TOP row to REQUIRE ALL checked keywords in a card.\r\n" +
 				"Use BOTTOM row to REQUIRE ANY checked keyword in a card.\r\n\r\n" +
 				"Keyword examples: Cascade, Flashback, Madness, ...", true);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterCastKeyword, this)
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterCastKeyword, this)
 			{
 				PreferHorizontalShift = true
 			});
 
-			setRegularTooltip(defaultTooltips, FilterType, "Filter by spell Type", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterType, "Filter by spell Type", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use BOTTOM row to PROHIBIT any UNCHECKED types in a card.\r\n" +
 				"Use TOP row to REQUIRE ALL checked types in a card.\r\n\r\n" +
 				"Example: to see all artifacts check artifact in TOP row.\r\n\r\n" +
 				"N/A means any Type different from values in this filter.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterType, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterType, this));
 
-			setRegularTooltip(defaultTooltips, FilterManager, "Filter Manager", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterManager, "Filter Manager", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Filter manager selects between AND / OR mode or DISABLES the following filter sources:\r\n" +
 				"  * Filter buttons\r\n" +
 				"  * Search bar\r\n" +
@@ -247,46 +247,46 @@ namespace Mtgdb.Gui
 				"Use TOP row set AND mode.\r\n" +
 				"Use BOTTOM row set OR mode.\r\n" +
 				"Uncheck the source in both rows to set DISABLED mode.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManager, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterManager, this));
 
-			setRegularTooltip(defaultTooltips, FilterRarity, "Filter by Rarity", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterRarity, "Filter by Rarity", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to PROHIBIT any UNCHECKED value.\r\n" +
 				"The card cannot have more than 1 Rarity value so there is no\r\n" +
 				"point in using the RIGHT row.\r\n\r\n" +
 				"N/A means any Rarity different from values in this filter.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterRarity, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterRarity, this));
 
-			setRegularTooltip(defaultTooltips, FilterManaAbility, "Filter by Mana symbol in card Text", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterManaAbility, "Filter by Mana symbol in card Text", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use mode selector above to switch the way LEFT row acts:\r\n" +
 				"  - mode: PROHIBIT UNCHECKED values\r\n" +
 				"  + mode: REQUIRE ANY checked value\r\n\r\n" +
 				"N/A means the card has NONE of the symbols from this filter.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManaAbility, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterManaAbility, this));
 
-			setRegularTooltip(defaultTooltips, FilterManaCost, "Filter by Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterManaCost, "Filter by Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use mode selector above to switch the way LEFT row acts:\r\n" +
 				"  - mode: PROHIBIT UNCHECKED values\r\n" +
 				"  + mode: REQUIRE ANY checked value\r\n\r\n" +
 				"N/A means the card has NONE of the symbols from this filter.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterManaCost, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterManaCost, this));
 
-			setRegularTooltip(defaultTooltips, FilterGeneratedMana, "Filter by Generated Mana", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterGeneratedMana, "Filter by Generated Mana", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use RIGHT row to REQUIRE ALL checked values to be present in one card.\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterGeneratedMana, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterGeneratedMana, this));
 
-			setRegularTooltip(defaultTooltips, FilterCmc, "Filter by Converted Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterCmc, "Filter by Converted Mana Cost", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Converted Mana Cost value\r\n" +
 				"so there is NO point in using the RIGHT row.", false);
 
-			setRegularTooltip(defaultTooltips, FilterLayout, "Filter by Layout", "Use Middle mouse click to RESET.\r\n\r\n" +
+			setRegularTooltip(defaultTooltips, _filterLayout, "Filter by Layout", "Use Middle mouse click to RESET.\r\n\r\n" +
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Layout value\r\n" +
 				"so there is NO point in using the RIGHT row.", false);
-			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(FilterLayout, this));
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterLayout, this));
 		}
 
 		private void setRegularTooltip(TooltipController defaultTooltips, QuickFilterControl control, string name, string description, bool isKeyword)
