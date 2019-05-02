@@ -66,7 +66,7 @@ namespace Mtgdb.Gui
 
 				endRestoreSettings();
 
-				RunRefilterTask();
+				runRefilterTask();
 			});
 		}
 
@@ -87,7 +87,7 @@ namespace Mtgdb.Gui
 					beginRestoreSettings();
 					_cardSearch.Apply();
 					endRestoreSettings();
-					RunRefilterTask();
+					runRefilterTask();
 				}
 			});
 		}
@@ -102,7 +102,7 @@ namespace Mtgdb.Gui
 					_cardSearch.Apply();
 					endRestoreSettings();
 
-					RunRefilterTask();
+					runRefilterTask();
 				}
 			});
 		}
@@ -137,7 +137,7 @@ namespace Mtgdb.Gui
 				return;
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -295,7 +295,7 @@ namespace Mtgdb.Gui
 			}
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 		}
 
 		private void deckListOpenedDeck(object sender, Deck deck, bool inNewTab)
@@ -346,7 +346,7 @@ namespace Mtgdb.Gui
 			updateTerms();
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -371,7 +371,7 @@ namespace Mtgdb.Gui
 			}
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -396,7 +396,7 @@ namespace Mtgdb.Gui
 			}
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -416,7 +416,7 @@ namespace Mtgdb.Gui
 			}
 
 			if (isFilterGroupEnabled(FilterGroup.Deck))
-				RunRefilterTask();
+				runRefilterTask();
 
 			updateFormStatus();
 			updateShowSampleHandButtons();
@@ -491,9 +491,9 @@ namespace Mtgdb.Gui
 				var touchedCard = _deckEditor.TouchedCard;
 
 				if (touchedChanged && touchedCard != null)
-					RunRefilterTask(() => _scroll.EnsureCardVisibility(touchedCard, _viewCards));
+					runRefilterTask(() => _scroll.EnsureCardVisibility(touchedCard, _viewCards));
 				else
-					RunRefilterTask();
+					runRefilterTask();
 			}
 			else
 			{
@@ -561,7 +561,7 @@ namespace Mtgdb.Gui
 			if (!isFilterGroupEnabled(FilterGroup.Legality))
 				setFilterManagerState(FilterGroup.Legality, FilterValueState.Required);
 
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -596,7 +596,7 @@ namespace Mtgdb.Gui
 
 				endRestoreSettings();
 
-				RunRefilterTask();
+				runRefilterTask();
 			}
 			else
 			{
@@ -621,7 +621,7 @@ namespace Mtgdb.Gui
 
 			resetTouchedCard();
 
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -635,7 +635,7 @@ namespace Mtgdb.Gui
 			if (restoringSettings())
 				return;
 
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdate();
 		}
 
@@ -716,7 +716,7 @@ namespace Mtgdb.Gui
 			if (modified)
 			{
 				resetTouchedCard();
-				RunRefilterTask();
+				runRefilterTask();
 				historyUpdate();
 			}
 		}

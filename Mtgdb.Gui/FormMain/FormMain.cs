@@ -264,7 +264,7 @@ namespace Mtgdb.Gui
 			_deckEditor.TouchedCard = null;
 		}
 
-		public void RunRefilterTask(Action onFinished = null)
+		private void runRefilterTask(Action onFinished = null)
 		{
 			TaskEx.Run(() => refilter(onFinished));
 		}
@@ -279,7 +279,7 @@ namespace Mtgdb.Gui
 
 			lock (_searchResultCards)
 			{
-				_uiSnapshot = getUISnapshot();
+				_uiSnapshot = getUiSnapshot();
 
 				_breakRefreshing = false;
 
@@ -361,7 +361,7 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private UiModel getUISnapshot()
+		private UiModel getUiSnapshot()
 		{
 			return new UiModel(
 				_cardRepo,
@@ -836,7 +836,7 @@ namespace Mtgdb.Gui
 
 
 			resetTouchedCard();
-			RunRefilterTask();
+			runRefilterTask();
 			historyUpdateButtons();
 
 			DeckName = settings.DeckName;
@@ -1027,7 +1027,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPivot()
 		{
-			var formChart = new FormChart(_cardRepo, getUISnapshot, _fields);
+			var formChart = new FormChart(_cardRepo, getUiSnapshot, _fields);
 			formChart.SnapTo(Direction.Top, _formRoot.Location);
 			formChart.Show();
 		}
@@ -1049,7 +1049,7 @@ namespace Mtgdb.Gui
 		private void keywordSearcherLoaded()
 		{
 			updateTerms();
-			RunRefilterTask();
+			runRefilterTask();
 		}
 
 		private void keywordSearcherLoadingProgress()
