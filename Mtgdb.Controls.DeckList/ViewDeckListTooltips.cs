@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using NLog;
 
 namespace Mtgdb.Controls
 {
@@ -90,7 +91,8 @@ namespace Mtgdb.Controls
 			{
 				if (hitInfo.IsSearchButton)
 				{
-					throw new NotSupportedException();
+					_log.Error("Search button tooltip is not supported in DeckList layout view");
+					return;
 				}
 
 				if (hitInfo.CustomButtonIndex >= 0)
@@ -176,5 +178,7 @@ namespace Mtgdb.Controls
 		private readonly LayoutViewControl _view;
 
 		public object Owner { get; }
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

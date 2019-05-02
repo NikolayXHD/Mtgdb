@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -496,11 +495,11 @@ namespace Mtgdb.Ui
 		}
 
 		private static string removeExtraWhitespaces(string text) =>
-			WhitespacePattern.Replace(text, " ");
+			RegexUtil.WhitespacePattern.Replace(text, " ");
 
 
 
-		public virtual string GetFieldValueQuery(string fieldName, string fieldValue, bool useAndOperator = false)
+		public virtual string GetFieldValueQuery(string fieldName, string fieldValue)
 		{
 			string valueExpression = getValueExpression(fieldValue);
 
@@ -508,9 +507,6 @@ namespace Mtgdb.Ui
 				return $"-{fieldName}: *";
 
 			var builder = new StringBuilder();
-
-			if (useAndOperator)
-				builder.Append('+');
 
 			builder.Append(fieldName);
 			builder.Append(": ");
@@ -655,7 +651,7 @@ namespace Mtgdb.Ui
 
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{
-			var query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue, searchArgs.UseAndOperator);
+			var query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
 			var source = getSearchInputState();
 
 			int queryStartIndex = source.Text.IndexOf(query, Str.Comparison);
@@ -664,7 +660,7 @@ namespace Mtgdb.Ui
 			else
 			{
 				var token = new MtgTolerantTokenizer(source.Text).GetTokenForTermInsertion(source.Caret);
-				pasteText(query, TokenType.None, source, token, positionCaretToNextValue: true);
+				pasteText(query, TokenType.Field, source, token, positionCaretToNextValue: true);
 			}
 
 			Apply();
@@ -780,7 +776,5 @@ namespace Mtgdb.Ui
 
 		private CancellationTokenSource _cts;
 		private readonly object _syncSuggest = new object();
-
-		private static readonly Regex WhitespacePattern = new Regex(@"\s+");
 	}
 }

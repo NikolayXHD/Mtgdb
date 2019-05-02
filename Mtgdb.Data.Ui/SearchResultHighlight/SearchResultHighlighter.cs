@@ -196,7 +196,7 @@ namespace Mtgdb.Ui
 				return;
 			}
 
-			tokenPattern = (new HashSet<string>(Str.Comparer) { termField }, RegexCache.Get(pattern));
+			tokenPattern = (new HashSet<string>(Str.Comparer) { termField }, RegexUtil.GetCached(pattern));
 			patternsSet.Add(pattern, tokenPattern);
 		}
 

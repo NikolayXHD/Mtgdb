@@ -95,7 +95,9 @@ namespace Mtgdb.Gui
 				{
 					string text;
 					string title;
-					string query = _cardSearchSubsystem.GetFieldValueQuery(hitInfo.FieldName, _layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+					string query = _cardSearchSubsystem.GetFieldValueQuery(
+						hitInfo.FieldName,
+						_layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
 
 					if (hitInfo.FieldName == nameof(Card.Image))
 					{
@@ -109,12 +111,9 @@ namespace Mtgdb.Gui
 					else
 					{
 						title = "Add to search";
-						text = "Click to EXTEND search result by cards matching this value\r\n" +
-							"Shift+Click to NARROW DOWN search result by cards matching this value\r\n" +
-							"\r\n" +
+						text = "Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
 							"Following term will be added to search bar\r\n" +
-							query + "\r\n" +
-							"\r\n" +
+							query + "\r\n\r\n" +
 							"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";
 					}
 

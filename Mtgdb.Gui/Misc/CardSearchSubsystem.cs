@@ -32,12 +32,12 @@ namespace Mtgdb.Gui
 		protected override SearchResult<int> Search(string query) =>
 			Searcher.Search(query, GetLanguage());
 
-		public override string GetFieldValueQuery(string fieldName, string fieldValue, bool useAndOperator = false)
+		public override string GetFieldValueQuery(string fieldName, string fieldValue)
 		{
 			if (fieldName == nameof(Card.Image))
 				fieldName = CardQueryParser.Like;
 
-			return base.GetFieldValueQuery(fieldName, fieldValue, useAndOperator);
+			return base.GetFieldValueQuery(fieldName, fieldValue);
 		}
 
 		public UiModel Ui { get; set; }

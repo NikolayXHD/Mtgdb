@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using Mtgdb.Controls.Properties;
 using Mtgdb.Data;
 
@@ -778,7 +780,7 @@ namespace Mtgdb.Controls
 				{
 					FieldName = hitInfo.FieldName,
 					FieldValue = GetText(hitInfo.RowHandle, hitInfo.FieldName),
-					UseAndOperator = ModifierKeys == Keys.Shift
+					IsShiftModifier = ModifierKeys == Keys.Shift
 				});
 		}
 
@@ -851,10 +853,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void handleAlignClick(HitInfo hitInfo)
-		{
+		private void handleAlignClick(HitInfo hitInfo) =>
 			LayoutOptions.Alignment = hitInfo.AlignButtonDirection.Value;
-		}
 
 		private void updateSort()
 		{

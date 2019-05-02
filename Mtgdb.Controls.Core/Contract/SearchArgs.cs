@@ -4,6 +4,6 @@ namespace Mtgdb.Controls
 	{
 		public string FieldName { get; set; }
 		public string FieldValue { get; set; }
-		public bool UseAndOperator { get; set; }
+		public bool IsShiftModifier { get; set; }
 	}
 }

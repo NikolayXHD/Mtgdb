@@ -100,7 +100,7 @@
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchResultHighlight\IKeywordHighlighter.cs" />
-    <Compile Include="SearchResultHighlight\RegexCache.cs" />
+    <Compile Include="SearchResultHighlight\RegexUtil.cs" />
     <Compile Include="SearchResultHighlight\SearchResultHighlighter.cs" />
     <Compile Include="Search\SearchStringHighlighter.cs" />
     <Compile Include="Search\SearchSubsystem.cs" />
