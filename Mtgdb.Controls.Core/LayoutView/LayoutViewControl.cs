@@ -1433,30 +1433,51 @@ namespace Mtgdb.Controls
 			if (Disposing || IsDisposed)
 				return false;
 
-			// WM_MOUSEWHEEL, WM_KEYDOWN
-			if (m.Msg != 0x020a && m.Msg != 0x0100)
+			if (ContainsFocus || !IsUnderMouse)
 				return false;
 
-			if (m.Msg == 0x0100)
+			switch (m.Msg)
 			{
-				int[] navigationKeys =
-				{
-					0x21, // pgUp
-					0x22, // pgDn
-					0x23, // end
-					0x24 //  home
-				};
+				case 0x020a: // WM_MOUSEWHEEL
 
-				var keyCode = m.WParam.ToInt32();
-				if (keyCode < navigationKeys[0] || keyCode > navigationKeys[navigationKeys.Length - 1])
-					return false;
+					// win10 scrolls unfocused window under mouse itself
+					if (_isWin10)
+						return false;
+
+					break;
+
+				case 0x0100: // WM_KEYDOWN
+					var keyCode = m.WParam.ToInt32();
+
+					// 0x21: pgUp 0x22: pgDn 0x23: end 0x24: home
+					if (keyCode < 0x21 || keyCode > 0x24)
+						return false;
+
+					break;
 			}
 
-			if (!ContainsFocus && IsUnderMouse)
-				// send the event to this control
-				ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
-
+			// send the event to this control
+			ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 			return false;
+		}
+
+		private static bool isWin10()
+		{
+			try
+			{
+				var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+
+				if (reg == null)
+					return false;
+
+				string productName = (string) reg.GetValue("ProductName");
+				var result = Regex.IsMatch(productName, @"^Windows 10\b");
+				return result;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		public event Action<object> CardIndexChanged;
@@ -1480,5 +1501,7 @@ namespace Mtgdb.Controls
 		private HitInfo _hitInfo;
 		private bool _selectionCaretTimerSkip;
 		private bool _updatingScrollValue;
+
+		private static readonly bool _isWin10 = isWin10();
 	}
 }
