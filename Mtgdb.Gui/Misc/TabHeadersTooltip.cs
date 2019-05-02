@@ -44,7 +44,8 @@ namespace Mtgdb.Gui
 				Control = _control,
 				Text = "Add tab: Ctrl+T or click '+' button\r\n" +
 					"Remove tab: Ctrl + F4 or click 'x' button or Middle mouse click\r\n" +
-					"Select next tab: Ctrl + Tab\r\n\r\n" +
+					"Select next tab: Ctrl + Tab\r\n" +
+					"Select previous tab: Ctrl + Shift + Tab\r\n\r\n" +
 					"Drag tab headers to reorder tabs.\r\n\r\n" +
 					"Move the tab to another window by dragging it to another window title.\r\n\r\n" +
 					"Drag the card here to select or create another tab where you want to drop the card."
