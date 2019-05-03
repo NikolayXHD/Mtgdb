@@ -7,22 +7,24 @@ namespace Mtgdb
 	{
 		internal static ExtremumFinder<TElement> AtMin<TValue>(
 			IEnumerable<TElement> sequence,
-			Func<TElement, TValue> valueSelector)
+			Func<TElement, TValue> valueSelector,
+			IComparer<TValue> customComparer)
 			where TValue : IComparable<TValue>
 		{
 			return new ExtremumFinder<TElement>(
 				sequence,
-				new ExtremumSearcher<TValue>(valueSelector, parent: null, sign: -1));
+				new ExtremumSearcher<TValue>(valueSelector, parent: null, sign: -1, customComparer));
 		}
 
 		internal static ExtremumFinder<TElement> AtMax<TValue>(
 			IEnumerable<TElement> sequence,
-			Func<TElement, TValue> valueSelector)
+			Func<TElement, TValue> valueSelector,
+			IComparer<TValue> customComparer)
 			where TValue : IComparable<TValue>
 		{
 			return new ExtremumFinder<TElement>(
 				sequence,
-				new ExtremumSearcher<TValue>(valueSelector, parent: null, sign: 1));
+				new ExtremumSearcher<TValue>(valueSelector, parent: null, sign: 1, customComparer));
 		}
 
 		private ExtremumFinder(IEnumerable<TElement> sequence, IExtremumSearcher searcher)
@@ -31,17 +33,17 @@ namespace Mtgdb
 			_searcher = searcher;
 		}
 
-		public ExtremumFinder<TElement> ThenAtMin<TValue>(Func<TElement, TValue> valueSelector)
+		public ExtremumFinder<TElement> ThenAtMin<TValue>(Func<TElement, TValue> valueSelector, IComparer<TValue> customComparer = null)
 			where TValue : IComparable<TValue>
 		{
-			_searcher = new ExtremumSearcher<TValue>(valueSelector, _searcher, sign: -1);
+			_searcher = new ExtremumSearcher<TValue>(valueSelector, _searcher, sign: -1, customComparer);
 			return this;
 		}
 
-		public ExtremumFinder<TElement> ThenAtMax<TValue>(Func<TElement, TValue> valueSelector)
+		public ExtremumFinder<TElement> ThenAtMax<TValue>(Func<TElement, TValue> valueSelector, IComparer<TValue> customComparer = null)
 			where TValue : IComparable<TValue>
 		{
-			_searcher = new ExtremumSearcher<TValue>(valueSelector, _searcher, sign: 1);
+			_searcher = new ExtremumSearcher<TValue>(valueSelector, _searcher, sign: 1, customComparer);
 			return this;
 		}
 
@@ -102,11 +104,12 @@ namespace Mtgdb
 		private class ExtremumSearcher<TValue> : IExtremumSearcher
 			where TValue : IComparable<TValue>
 		{
-			public ExtremumSearcher(Func<TElement, TValue> valueSelector, IExtremumSearcher parent, int sign)
+			public ExtremumSearcher(Func<TElement, TValue> valueSelector, IExtremumSearcher parent, int sign, IComparer<TValue> customComparer)
 			{
 				_valueSelector = valueSelector;
 				_parent = parent;
 				_sign = sign;
+				_customComparer = customComparer;
 			}
 
 			public int Compare(TElement el)
@@ -142,16 +145,24 @@ namespace Mtgdb
 				}
 
 				int compare;
-				if (value == null)
+
+				if (_customComparer == null)
 				{
-					if (_max == null)
-						compare = 0;
+					if (value == null)
+					{
+						if (_max == null)
+							compare = 0;
+						else
+							compare = -_max.CompareTo(value);
+					}
 					else
-						compare = -_max.CompareTo(value);
+					{
+						compare = value.CompareTo(_max);
+					}
 				}
 				else
 				{
-					compare = value.CompareTo(_max);
+					compare = _customComparer.Compare(value, _max);
 				}
 
 				compare *= _sign;
@@ -165,6 +176,7 @@ namespace Mtgdb
 			private readonly Func<TElement, TValue> _valueSelector;
 			private readonly IExtremumSearcher _parent;
 			private readonly int _sign;
+			private readonly IComparer<TValue> _customComparer;
 			private TValue _max;
 			private bool _hasValue;
 		}
