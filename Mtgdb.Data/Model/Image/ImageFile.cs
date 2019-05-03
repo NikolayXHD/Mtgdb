@@ -180,7 +180,10 @@ namespace Mtgdb.Data
 			["Repudiate»Replicate"] = "RepudiateReplicate",
 			["Revival»Revenge"] = "RevivalRevenge",
 			["Thrash»Threat"] = "ThrashThreat",
-			["Warrant»Warden"] = "WarrantWarden"
+			["Warrant»Warden"] = "WarrantWarden",
+
+			// UMA split cards
+			["Fire»Ice"] = "FireIce"
 		};
 	}
 }

@@ -616,9 +616,6 @@ namespace Mtgdb.Data
 				GeneratedManaArr = patch.GeneratedMana;
 			}
 
-			if (patch.FlipDuplicate)
-				Remove = TextEn != OriginalText;
-
 			if (patch.Loyalty != null)
 				Loyalty = patch.Loyalty;
 
@@ -643,8 +640,10 @@ namespace Mtgdb.Data
 			if (patch.Number != null)
 				Number = patch.Number;
 
-			if (patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}"))
-				Remove = true;
+			Remove =
+				patch.Remove ||
+				patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}") ||
+				patch.FlipDuplicate && TextEn != OriginalText;
 
 			if (patch.Life != null)
 				Life = patch.Life;

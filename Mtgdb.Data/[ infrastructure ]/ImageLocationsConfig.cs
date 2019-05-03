@@ -22,10 +22,15 @@ namespace Mtgdb.Data
 			{
 				if (!string.IsNullOrEmpty(directory.Root))
 				{
-					directory.Path = Path.Combine(rootsByName[directory.Root].Path, directory.Path).NullIfEmpty();
+					directory.Path = Path.Combine(
+							rootsByName[directory.Root].Path,
+							directory.Path)
+						.NullIfEmpty();
 
 					directory.Exclude = string.Join(";",
-						Sequence.From(rootsByName[directory.Root].Exclude, directory.Exclude)
+						Sequence.From(
+								rootsByName[directory.Root].Exclude,
+								directory.Exclude)
 							.Where(exclude => !string.IsNullOrEmpty(exclude)));
 				}
 

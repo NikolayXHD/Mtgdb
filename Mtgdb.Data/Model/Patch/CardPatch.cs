@@ -8,10 +8,11 @@ namespace Mtgdb.Data
 		public string Name { get; [UsedImplicitly] set; }
 		public string Text { get; [UsedImplicitly] set; }
 		public string Flavor { get; [UsedImplicitly] set; }
-		public string Set { get; set; }
+		public string Set { get; [UsedImplicitly] set; }
 		public List<string> GeneratedMana { get; [UsedImplicitly] set; }
 		public bool FlipDuplicate { get; [UsedImplicitly] set; }
 		public bool FullDuplicate { get; [UsedImplicitly] set; }
+		public bool Remove { get; [UsedImplicitly] set; }
 		public string Loyalty { get; [UsedImplicitly] set; }
 		public string Type { get; [UsedImplicitly] set; }
 		public List<string> Types { get; [UsedImplicitly] set; }
@@ -21,7 +22,7 @@ namespace Mtgdb.Data
 		public string[] Names { get; [UsedImplicitly] set; }
 		public string Number { get;  [UsedImplicitly] set; }
 
-		public int? Hand;
-		public int? Life;
+		public int? Hand { get; [UsedImplicitly] set; }
+		public int? Life { get; [UsedImplicitly] set; }
 	}
 }

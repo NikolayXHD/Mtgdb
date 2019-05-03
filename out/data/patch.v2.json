@@ -243,7 +243,11 @@
 		"Keeper of the Sacred Word (b)": { "Name": "Keeper of the Sacred Word" },
 
 		"Glory": { "Set": "ppre", "Flavor": "Glory was gone; Glory was everywhere.\" —Scroll of Beginnings" },
-		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." }
+		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." },
+		"Ob Nixilis Reignited Emblem": { "Remove": true },
+		"Gifts Given (b)": { "Remove": true },
+		"Stocking Tiger (b)": { "Remove": true },
+		"2002 World Championships Ad": { "Remove": true }
 	},
 
 	"Legality": {

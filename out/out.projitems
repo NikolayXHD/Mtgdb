@@ -11,7 +11,6 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
     <Content Include="$(MSBuildThisFileDirectory)data\mtgjson-42-id.csv" />
-    <Content Include="$(MSBuildThisFileDirectory)data\patch.json" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\art\filelist.txt" />
     <Folder Include="$(MSBuildThisFileDirectory)update\img\art" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\lq\filelist.txt" />
