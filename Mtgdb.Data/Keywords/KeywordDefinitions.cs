@@ -373,6 +373,7 @@ namespace Mtgdb.Data
 
 			// non quick-filter values follow
 
+			count("Amass"),
 			count("Absorb"),
 			count("Adapt"),
 			count("Afflict"),
