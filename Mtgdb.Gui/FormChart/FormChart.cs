@@ -206,7 +206,7 @@ namespace Mtgdb.Gui
 
 			_tabs.ForEach(t => t.ScaleDpi(bmp => bmp?.HalfResizeDpi()));
 
-			_buttons.Concat(_headerButtons).Concat(new[] { _buttonSave, _buttonLoad, _buttonApply })
+			_buttons.Concat(_headerButtons).Append(_buttonApply)
 				.ForEach(ControlScaler.ScaleDpi);
 
 			_menus.ForEach(DropDownBaseScaler.ScaleDpi);
