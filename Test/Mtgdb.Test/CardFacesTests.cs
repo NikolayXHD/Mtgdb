@@ -57,5 +57,23 @@ namespace Mtgdb.Test
 					foreach (var faceVariant in card.Set.CardsByName[name])
 						Assert.That(faceVariant.Names.SequenceEqual(card.Names), card.ToString);
 		}
+
+		[Test]
+		public void Aftermath_card_sides_Have_layout_aftermath()
+		{
+			var aftermathCards = Repo.Cards
+				.Where(_ => _.GetCastKeywords().Contains(KeywordDefinitions.AftermathKeyword))
+				.ToArray();
+
+			Assert.That(aftermathCards, Is.Not.Null.And.Not.Empty);
+
+			foreach (var card in aftermathCards)
+			{
+				Assert.That(card.Layout, Is.EqualTo(CardLayouts.Aftermath).IgnoreCase);
+
+				foreach (var rotatedCard in card.FaceVariants.Main)
+					Assert.That(rotatedCard.Layout, Is.EqualTo(CardLayouts.Aftermath).IgnoreCase);
+			}
+		}
 	}
 }

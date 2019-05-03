@@ -174,16 +174,6 @@ namespace Mtgdb.Data
 		{
 			if (String.IsNullOrEmpty(card.Layout))
 				card.Layout = "Normal";
-			else if (Str.Equals(card.Layout, CardLayouts.Split))
-			{
-				if (card.GetCastKeywords().Contains(KeywordDefinitions.AftermathKeyword))
-				{
-					card.Layout = CardLayouts.Aftermath;
-
-					foreach (var rotatedCard in card.FaceVariants.Main)
-						rotatedCard.Layout = CardLayouts.Aftermath;
-				}
-			}
 			else if (Str.Equals(card.Layout, "Planar"))
 			{
 				if (card.TypesArr.Contains("Phenomenon", Str.Comparer))
