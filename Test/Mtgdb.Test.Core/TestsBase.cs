@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
-using Mtgdb.Data.Model;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -60,27 +59,6 @@ namespace Mtgdb.Test
 			LogManager.Flush();
 
 			_loadedCards = true;
-		}
-
-		protected static void LoadPrices()
-		{
-			if (_loadedPrices)
-				return;
-
-			LoadCards();
-
-			var sw = new Stopwatch();
-			sw.Start();
-
-			var priceRepo = Kernel.Get<PriceRepository>();
-			priceRepo.Load();
-
-			Repo.FillPrices(priceRepo);
-
-			sw.Stop();
-			_log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
-
-			_loadedPrices = true;
 		}
 
 		protected static void LoadTranslations()
@@ -158,7 +136,6 @@ namespace Mtgdb.Test
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;
-		private static bool _loadedPrices;
 		private static bool _loadedTranslations;
 		private static bool _loadedIndexes;
 		private static bool _loadedSmallAndZoomImages;

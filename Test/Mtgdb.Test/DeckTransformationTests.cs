@@ -20,11 +20,6 @@ namespace Mtgdb.Test
 
 			_repo.LoadFile();
 			_repo.Load();
-
-			_priceRepo = new PriceRepository();
-			_priceRepo.Load();
-
-			_repo.FillPrices(_priceRepo);
 			_transformation = new CollectedCardsDeckTransformation(_repo);
 		}
 
@@ -133,7 +128,6 @@ namespace Mtgdb.Test
 		}
 
 		private CardRepository _repo;
-		private PriceRepository _priceRepo;
 		private CollectedCardsDeckTransformation _transformation;
 		private DeckEditorModel _deckEditor;
 		private CollectionEditorModel _collectionEditor;
@@ -143,20 +137,20 @@ namespace Mtgdb.Test
 			public static TemporaryPrice Clear(Card c) =>
 				new TemporaryPrice(c, null);
 
-			public static TemporaryPrice Set(Card c, PriceValues p) =>
+			public static TemporaryPrice Set(Card c, MtgjsonPrices p) =>
 				new TemporaryPrice(c, p);
 
-			private TemporaryPrice(Card c, PriceValues p)
+			private TemporaryPrice(Card c, MtgjsonPrices p)
 			{
-				_originalPrice = c.PricesValues;
+				_originalPrice = c.MtgjsonPrices;
 				_card = c;
-				c.PricesValues = p;
+				c.MtgjsonPrices = p;
 			}
 
 			public void Dispose() =>
-				_card.PricesValues = _originalPrice;
+				_card.MtgjsonPrices = _originalPrice;
 
-			private readonly PriceValues _originalPrice;
+			private readonly MtgjsonPrices _originalPrice;
 			private readonly Card _card;
 		}
 	}

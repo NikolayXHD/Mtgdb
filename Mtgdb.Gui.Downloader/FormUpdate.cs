@@ -26,8 +26,6 @@ namespace Mtgdb.Downloader
 			ImageDownloader imageDownloader,
 			ImageDownloadProgressReader imageDownloadProgressReader,
 			NewsService newsService,
-			PriceDownloader priceDownloader,
-			PriceRepository priceRepository,
 			ImageRepository imageRepository,
 			CardRepository cardRepository,
 			ImageLoader imageLoader)
@@ -37,8 +35,6 @@ namespace Mtgdb.Downloader
 			_imageDownloader = imageDownloader;
 			_imageDownloadProgressReader = imageDownloadProgressReader;
 			_newsService = newsService;
-			_priceDownloader = priceDownloader;
-			_priceRepository = priceRepository;
 			_imageRepository = imageRepository;
 			_cardRepository = cardRepository;
 			_imageLoader = imageLoader;
@@ -48,7 +44,6 @@ namespace Mtgdb.Downloader
 			_buttonImgMq.Click += imgMqClick;
 			_buttonImgArt.Click += imgArtClick;
 			_buttonMtgjson.Click += mtgjsonClick;
-			_buttonPrices.Click += pricesClick;
 			_buttonEditConfig.Click += editConfigClick;
 			_buttonNotifications.Click += notificationsClick;
 
@@ -58,9 +53,6 @@ namespace Mtgdb.Downloader
 			DoubleBuffered = true;
 
 			_imageDownloader.ProgressChanged += downloadImageProgressChanged;
-			_priceDownloader.SidAdded += downloadPricesProgressChanged;
-			_priceDownloader.PriceAdded += downloadPricesProgressChanged;
-
 			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
 
 			scale();
@@ -491,7 +483,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 			{
 				_buttonApp.Enabled =
 				_buttonMtgjson.Enabled =
-				_buttonPrices.Enabled =
 				_buttonImgArt.Enabled =
 				_buttonImgLq.Enabled =
 				_buttonImgMq.Enabled =
@@ -524,80 +515,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 			_labelProgress.Text = string.Format(messageFormat, current, total);
 		}
 
-
-		private void pricesClick(object sender, EventArgs e)
-		{
-			if (_downloadingPrices)
-			{
-				setButtonsEnabled(false);
-				_priceDownloader.Abort();
-				Console.WriteLine("Interrupting...");
-			}
-			else
-			{
-				TaskEx.Run(() =>
-				{
-					setButtonsEnabled(false);
-					suggestAbortPriceDownloading();
-
-					Console.WriteLine("Downloading prices ...");
-
-					_priceDownloader.LoadPendingProgress();
-					_priceDownloader.Download();
-
-					Console.WriteLine("Done");
-
-					suggestPriceDownloading();
-					setButtonsEnabled(true);
-				});
-			}
-		}
-
-		private void suggestAbortPriceDownloading()
-		{
-			this.Invoke(delegate
-			{
-				var button = _buttonPrices;
-
-				_downloadingPrices = true;
-
-				_progressBar.Value = 0;
-				_progressBar.Visible = true;
-
-				_labelProgress.Text = null;
-				_labelProgress.Visible = true;
-
-				button.Enabled = true;
-				button.Tag = button.Text;
-				button.Text = "Abort";
-			});
-		}
-
-		private void suggestPriceDownloading()
-		{
-			this.Invoke(delegate
-			{
-				var button = _buttonPrices;
-
-				_downloadingPrices = false;
-				_progressBar.Visible = false;
-				_labelProgress.Visible = false;
-
-				button.Text = (string)button.Tag;
-			});
-		}
-
-		private void downloadPricesProgressChanged()
-		{
-			this.Invoke(delegate
-			{
-				setProgress(
-					_priceDownloader.DefinedCardsCount * 2 - _priceRepository.SidCount,
-					_priceDownloader.SidCount + _priceDownloader.PricesCount - _priceRepository.SidCount,
-					"{0} / {1} operations done");
-			});
-		}
-
 		public void SetWindowLocation(Form owner)
 		{
 			StartPosition = FormStartPosition.Manual;
@@ -617,7 +534,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 
 		private bool _downloadingImages;
-		private bool _downloadingPrices;
 		private bool _appVersionOnlineChecked;
 		private string _appVersionInstalled;
 		private string _appVersionOnline;
@@ -627,8 +543,6 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly ImageDownloader _imageDownloader;
 		private readonly ImageDownloadProgressReader _imageDownloadProgressReader;
 		private readonly NewsService _newsService;
-		private readonly PriceDownloader _priceDownloader;
-		private readonly PriceRepository _priceRepository;
 		private readonly ImageRepository _imageRepository;
 		private readonly CardRepository _cardRepository;
 		private readonly ImageLoader _imageLoader;

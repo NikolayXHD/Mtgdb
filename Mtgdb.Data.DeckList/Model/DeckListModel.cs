@@ -28,7 +28,7 @@ namespace Mtgdb.Data.Model
 
 			_collectionEditor.CollectionChanged += collectionChanged;
 			_state.Collection = _collectionEditor.Snapshot();
-			_repo.PriceLoadingComplete += priceLoadingComplete;
+			_repo.LoadingComplete += repoLoadingComplete;
 
 			Serializer = new JsonSerializer();
 
@@ -37,7 +37,7 @@ namespace Mtgdb.Data.Model
 					typeof(IEnumerable<int>).IsAssignableFrom(type)));
 		}
 
-		private void priceLoadingComplete()
+		private void repoLoadingComplete()
 		{
 			lock (_syncModels)
 				foreach (var model in _deckModels)

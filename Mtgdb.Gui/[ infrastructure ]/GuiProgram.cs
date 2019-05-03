@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
-using Mtgdb.Data.Model;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -44,8 +43,6 @@ namespace Mtgdb.Gui
 			installer.BeginInstall += beginInstall;
 			installer.EndInstall += endInstall;
 
-			_kernel.Get<PriceDownloader>().PricesDownloaded += pricesDownloaded;
-
 			var loader = _kernel.Get<GuiLoader>();
 			loader.AsyncRun();
 			TaskEx.Run(loader.AsyncConvertLegacyCardId).Wait();
@@ -82,11 +79,6 @@ namespace Mtgdb.Gui
 
 		private static void endInstall()
 		{
-		}
-
-		private static void pricesDownloaded()
-		{
-			_kernel.Get<CardSearcher>().InvalidateIndex();
 		}
 
 		private static void threadException(object sender, ThreadExceptionEventArgs e)

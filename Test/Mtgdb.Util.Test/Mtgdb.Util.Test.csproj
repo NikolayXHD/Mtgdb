@@ -135,7 +135,6 @@
     <Compile Include="Images\ImageDownloadingUtil.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="ExternalData\MagicspoilerClient.cs" />
-    <Compile Include="ExternalData\PriceDownloadUtils.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />
     <Compile Include="Tcg\TcgCard.cs" />
     <Compile Include="Tcg\TcgParser.cs" />

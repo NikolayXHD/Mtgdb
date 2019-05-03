@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 				deckListModel.Load();
 
 				if (!deckSearcher.IsIndexSaved)
-					while (!_repo.IsPriceLoadingComplete)
+					while (!_repo.IsLoadingComplete)
 						await TaskEx.Delay(100);
 
 				deckSearcher.LoadIndexes();

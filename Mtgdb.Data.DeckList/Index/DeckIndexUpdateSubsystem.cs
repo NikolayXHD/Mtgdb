@@ -31,7 +31,7 @@ namespace Mtgdb.Data.Index
 
 		private async Task handleModelChanged()
 		{
-			while (!_repo.IsPriceLoadingComplete)
+			while (!_repo.IsLoadingComplete)
 				await TaskEx.Delay(100);
 
 			lock (_sync)

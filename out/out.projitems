@@ -22,8 +22,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)data\index\search" />
     <Folder Include="$(MSBuildThisFileDirectory)data\index\suggest" />
     <Content Include="$(MSBuildThisFileDirectory)data\patch.v2.json" />
-    <Content Include="$(MSBuildThisFileDirectory)data\price.id.json" />
-    <Content Include="$(MSBuildThisFileDirectory)data\price.json" />
     <Content Include="$(MSBuildThisFileDirectory)data\translations.json" />
     <Content Include="$(MSBuildThisFileDirectory)etc\Mtgdb.Gui.Default.xml" />
     <Content Include="$(MSBuildThisFileDirectory)etc\Mtgdb.Gui.xml" />

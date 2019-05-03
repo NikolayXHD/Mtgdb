@@ -145,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardFacesTests.cs" />
-    <Compile Include="CardIdTests.cs" />
+    <Compile Include="CardDataTests.cs" />
     <Compile Include="ColorTransformationTests.cs" />
     <Compile Include="DeckSearchTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />

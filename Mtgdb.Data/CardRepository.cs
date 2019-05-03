@@ -357,25 +357,14 @@ namespace Mtgdb.Data
 			LocalizationLoadingComplete?.Invoke();
 		}
 
-		public void FillPrices(PriceRepository priceRepository)
-		{
-			foreach (var card in Cards)
-				card.PricesValues = priceRepository.GetPrice(card);
-
-			IsPriceLoadingComplete = true;
-			PriceLoadingComplete?.Invoke();
-		}
-
 
 
 		public event Action SetAdded;
 		public event Action LoadingComplete;
-		public event Action PriceLoadingComplete;
 		public event Action LocalizationLoadingComplete;
 
 		public bool IsFileLoadingComplete { get; private set; }
 		public bool IsLoadingComplete { get; private set; }
-		public bool IsPriceLoadingComplete { get; private set; }
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
 		internal string SetsFile { get; set; }

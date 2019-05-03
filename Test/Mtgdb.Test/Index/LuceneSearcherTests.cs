@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mtgdb.Data;
-using Ninject;
-using NLog;
 using NUnit.Framework;
 // ReSharper disable StringLiteralTypo
 
@@ -16,17 +14,6 @@ namespace Mtgdb.Test
 		public void Setup()
 		{
 			LoadIndexes();
-
-			var priceRepo = Kernel.Get<PriceRepository>();
-			var sw = new Stopwatch();
-			sw.Start();
-
-			priceRepo.Load();
-			Repo.FillPrices(priceRepo);
-
-			sw.Stop();
-			Log.Debug($"Prices loaded in {sw.ElapsedMilliseconds} ms");
-			LogManager.Flush();
 		}
 
 		[TestCase(@"OriginalText:set", "set")]

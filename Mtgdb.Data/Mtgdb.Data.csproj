@@ -138,6 +138,7 @@
     <Compile Include="Model\Mtgjson\CardId.cs" />
     <Compile Include="Model\Mtgjson\CardLayouts.cs" />
     <Compile Include="Model\Mtgjson\GuidV5.cs" />
+    <Compile Include="Model\Mtgjson\MtgjsonPrices.cs" />
     <Compile Include="Model\Patch\ImageNamePatch.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />
@@ -149,10 +150,6 @@
     <Compile Include="Model\Ui\UiConfig.cs" />
     <Compile Include="Model\Ui\UiConfigRepository.cs" />
     <Compile Include="MtgArenaIntegration.cs" />
-    <Compile Include="PriceDownloaderRepository.cs" />
-    <Compile Include="Model\Price\PriceId.cs" />
-    <Compile Include="PriceRepository.cs" />
-    <Compile Include="Model\Price\PriceValues.cs" />
     <Compile Include="KeywordRegexUtil.cs" />
     <Compile Include="Translations\Translation.cs" />
     <Compile Include="[ infrastructure ]\MtgaIntegrationConfig.cs" />

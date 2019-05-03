@@ -21,9 +21,6 @@ namespace Mtgdb.Downloader
 			Kernel.Bind<ImageDownloader>().ToSelf();
 			Kernel.Bind<ImageDownloadProgressReader>().ToSelf();
 
-			Kernel.Bind<PriceDownloader>().ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<NewsService>().ToSelf()
 				.InSingletonScope();
 

@@ -203,6 +203,9 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string ScryfallId { get; set; }
 
+		[JsonProperty("prices")]
+		public MtgjsonPrices MtgjsonPrices { get; set; }
+
 		[JsonIgnore]
 		public string Id { get; set; }
 
@@ -476,25 +479,43 @@ namespace Mtgdb.Data
 		public CardLocalization Localization { get; internal set; }
 
 		[JsonIgnore]
-		internal PriceValues PricesValues { get; set; }
+		public float? PricingLow
+		{
+			get
+			{
+				initPriceValues();
+				return _priceMin;
+			}
+		}
 
 		[JsonIgnore]
-		public float? PricingLow => PricesValues?.Low;
+		public float? PricingMid
+		{
+			get
+			{
+				initPriceValues();
+				return _priceLast;
+			}
+		}
 
 		[JsonIgnore]
-		public float? PricingMid => PricesValues?.Mid;
+		public float? PricingHigh
+		{
+			get
+			{
+				initPriceValues();
+				return _priceMax;
+			}
+		}
 
 		[JsonIgnore]
-		public float? PricingHigh => PricesValues?.High;
+		public float? PriceLow => PricingLow ?? PricingMid;
 
 		[JsonIgnore]
-		public float? PriceLow => PricingLow ?? PricingMid ?? PricingHigh;
+		public float? PriceMid => PricingMid;
 
 		[JsonIgnore]
-		public float? PriceMid => PricingMid ?? PricingLow ?? PricingHigh;
-
-		[JsonIgnore]
-		public float? PriceHigh => PricingHigh ?? PricingMid ?? PricingLow;
+		public float? PriceHigh => PricingHigh ?? PriceMid;
 
 		public CardKeywords GetAllKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
 
@@ -595,6 +616,45 @@ namespace Mtgdb.Data
 		}
 
 
+		private void initPriceValues()
+		{
+			if (_priceValuesReady)
+				return;
+
+			if (MtgjsonPrices?.Paper == null || MtgjsonPrices.Paper.Count == 0)
+			{
+				_priceValuesReady = true;
+				return;
+			}
+
+			string latestKey = null;
+			float latest = float.MaxValue;
+			float min = float.MaxValue;
+			float max = float.MinValue;
+
+			foreach (var entry in MtgjsonPrices.Paper)
+			{
+				if (latestKey == null || Str.Compare(entry.Key, latestKey) > 0)
+				{
+					latestKey = entry.Key;
+					latest = entry.Value;
+				}
+
+				max = Math.Max(max, entry.Value);
+				min = Math.Min(min, entry.Value);
+			}
+
+			_priceLast = latest;
+
+			if (latest != min)
+				_priceMin = min;
+
+			if (latest != max)
+				_priceMax = max;
+
+			_priceValuesReady = true;
+		}
+
 
 		internal void Patch(CardPatch patch)
 		{
@@ -666,8 +726,8 @@ namespace Mtgdb.Data
 
 		public ImageModel ImageModel(UiModel ui)
 		{
-			return ui.Config.DisplaySmallImages 
-				? getImageModel(ui) 
+			return ui.Config.DisplaySmallImages
+				? getImageModel(ui)
 				: getZoomImageModel(ui);
 		}
 
@@ -827,8 +887,6 @@ namespace Mtgdb.Data
 		public CardFaces Faces =>
 			_faces ?? (_faces = new CardFaces(FaceVariants));
 
-
-
 		public static readonly HashSet<string> ColoredBasicLandNames =
 			new HashSet<string>(Str.Comparer)
 			{
@@ -841,5 +899,10 @@ namespace Mtgdb.Data
 
 		public static readonly HashSet<string> BasicLandNames =
 			new HashSet<string>(ColoredBasicLandNames.Append("wastes"), Str.Comparer);
+
+		private float? _priceLast;
+		private float? _priceMax;
+		private float? _priceMin;
+		private bool _priceValuesReady;
 	}
 }

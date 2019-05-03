@@ -34,14 +34,6 @@ namespace Mtgdb.Data
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<PriceRepository>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<PriceDownloaderRepository>()
-				.ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<ForgeSetRepository>()
 				.ToSelf()
 				.InSingletonScope();

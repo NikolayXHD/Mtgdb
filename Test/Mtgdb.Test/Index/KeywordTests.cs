@@ -15,7 +15,6 @@ namespace Mtgdb.Test
 		{
 			LoadTranslations();
 			LoadIndexes();
-			LoadPrices();
 		}
 
 		[Test]

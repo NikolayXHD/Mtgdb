@@ -37,7 +37,6 @@ namespace Mtgdb.Downloader
 			this._tableLayoutRoot = new System.Windows.Forms.TableLayoutPanel();
 			this._tableLayoutButtons = new System.Windows.Forms.TableLayoutPanel();
 			this._labelTitle = new System.Windows.Forms.Label();
-			this._buttonPrices = new Mtgdb.Controls.ButtonBase();
 			this._buttonApp = new Mtgdb.Controls.ButtonBase();
 			this._buttonImgMq = new Mtgdb.Controls.ButtonBase();
 			this._buttonImgArt = new Mtgdb.Controls.ButtonBase();
@@ -135,7 +134,6 @@ namespace Mtgdb.Downloader
 			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
 			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
 			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
-			this._tableLayoutButtons.Controls.Add(this._buttonPrices, 4, 0);
 			this._tableLayoutButtons.Controls.Add(this._buttonApp, 6, 0);
 			this._tableLayoutButtons.Controls.Add(this._buttonImgMq, 5, 1);
 			this._tableLayoutButtons.Controls.Add(this._buttonImgArt, 6, 1);
@@ -164,33 +162,6 @@ namespace Mtgdb.Downloader
 			this._labelTitle.Size = new System.Drawing.Size(198, 19);
 			this._labelTitle.TabIndex = 0;
 			this._labelTitle.Text = "Updates and downloads";
-			//
-			// _buttonPrices
-			//
-			this._buttonPrices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonPrices.AutoCheck = false;
-			this._buttonPrices.BackColor = System.Drawing.Color.Transparent;
-			this._buttonPrices.ForeColor = System.Drawing.SystemColors.ControlText;
-			this._buttonPrices.Image = global::Mtgdb.Downloader.Properties.Resources.price_16;
-			this._buttonPrices.ImageChecked = null;
-			this._buttonPrices.ImagePosition = System.Drawing.StringAlignment.Near;
-			this._buttonPrices.ImageScale = 0.5F;
-			this._buttonPrices.ImageUnchecked = null;
-			this._buttonPrices.Location = new System.Drawing.Point(346, 0);
-			this._buttonPrices.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
-			this._buttonPrices.Name = "_buttonPrices";
-			this._buttonPrices.Padding = new System.Windows.Forms.Padding(4);
-			this._buttonPrices.Size = new System.Drawing.Size(154, 51);
-			this._buttonPrices.TabIndex = 3;
-			this._buttonPrices.Text = "Update\r\ncard prices";
-			this._buttonPrices.TextAlign = System.Drawing.StringAlignment.Center;
-			this._buttonPrices.TextPosition = System.Drawing.StringAlignment.Center;
-			this._buttonPrices.VisibleAllBorders = true;
-			this._buttonPrices.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
 			//
 			// _buttonApp
 			//
@@ -440,7 +411,6 @@ namespace Mtgdb.Downloader
 		private Label _labelProgress;
 		private TableLayoutPanel _tableLayoutRoot;
 		private TableLayoutPanel _tableLayoutButtons;
-		private Mtgdb.Controls.ButtonBase _buttonPrices;
 		private Mtgdb.Controls.ButtonBase _buttonNotifications;
 		private Label _labelTitle;
 	}

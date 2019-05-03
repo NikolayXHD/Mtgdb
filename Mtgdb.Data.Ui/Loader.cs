@@ -19,7 +19,6 @@ namespace Mtgdb.Ui
 			LocalizationRepository localizationRepository,
 			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher,
-			PriceRepository priceRepository,
 			IApplication application)
 		{
 			_repository = repository;
@@ -27,7 +26,6 @@ namespace Mtgdb.Ui
 			_localizationRepository = localizationRepository;
 			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
-			_priceRepository = priceRepository;
 			_application = application;
 
 			createLoadingActions();
@@ -89,8 +87,6 @@ namespace Mtgdb.Ui
 
 				if (_keywordSearcher.IsUpToDate)
 					_keywordSearcher.Load();
-
-				_priceRepository.Load();
 			});
 
 			AddTask(async () =>
@@ -102,11 +98,6 @@ namespace Mtgdb.Ui
 
 				while (!_imageRepository.IsLoadingZoomComplete)
 					await TaskEx.Delay(50);
-
-				while (!_priceRepository.IsLoadingComplete)
-					await TaskEx.Delay(50);
-
-				_repository.FillPrices(_priceRepository);
 
 				_localizationRepository.LoadFile();
 				_localizationRepository.Load();
@@ -131,7 +122,6 @@ namespace Mtgdb.Ui
 		private readonly LocalizationRepository _localizationRepository;
 		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
-		private readonly PriceRepository _priceRepository;
 		private readonly IApplication _application;
 		private bool _indexesUpToDate;
 
