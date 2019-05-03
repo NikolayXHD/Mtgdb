@@ -55,6 +55,8 @@ namespace Mtgdb.Downloader
 			_imageDownloader.ProgressChanged += downloadImageProgressChanged;
 			ColorSchemeController.SystemColorsChanging += systemColorsChanged;
 
+			RegisterDragControl(_labelTitle);
+
 			scale();
 		}
 
@@ -107,7 +109,7 @@ namespace Mtgdb.Downloader
 			}
 
 			_appVersionInstalled = getAppVersionInstalled();
-			Text = _appVersionInstalled.Replace(".zip", string.Empty) + " - updates and downloads";
+			Text = $"{_appVersionInstalled.Replace(".zip", string.Empty)} - updates and downloads";
 
 			Console.WriteLine("Downloaded images:");
 			write(ImageDownloadProgress);
