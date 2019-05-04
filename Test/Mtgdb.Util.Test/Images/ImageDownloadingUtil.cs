@@ -26,8 +26,9 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("RNA", true)]
-		public void DownloadGathererImages(string setCode, bool useCustomSet)
+		// [TestCase("RNA", ".png" true)]
+		[TestCase("WAR", ".jpg", false)]
+		public void DownloadGathererImages(string setCode, string extension, bool useCustomSet)
 		{
 			var repo = new CardRepository();
 			if (useCustomSet)
@@ -52,7 +53,7 @@ namespace Mtgdb.Util
 				if (!card.MultiverseId.HasValue)
 					continue;
 
-				string targetFile = Path.Combine(setDirectory, card.ImageName + ".png");
+				string targetFile = Path.Combine(setDirectory, card.ImageName + extension);
 				string processedFile = Path.Combine(setDirectory, card.ImageName + ".jpg");
 
 				if (File.Exists(targetFile) || File.Exists(processedFile))
@@ -73,7 +74,7 @@ namespace Mtgdb.Util
 		// private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
 
 		[TestCase(
-			HtmlDir + @"\War of the Spark   MAGIC  THE GATHERING.htm",
+			HtmlDir + @"\War of the Spark _ MAGIC_ THE GATHERING.html",
 			GathererOriginalDir + @"\war.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
@@ -123,33 +124,31 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "war.png", "war")]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "pwar.png", "pwar")]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "mh1.png", "mh1")]
-		public void PreProcessImages(
-			string smallDir,
-			string zoomDir,
-			string pngSubdir,
-			string jpgSubdir)
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "war")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2")]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17")]
+		public void PreProcessImages(string smallDir, string zoomDir, string pngSubdir, string jpgSubdir)
 		{
+			var smallJpgDir = Path.Combine(smallDir, jpgSubdir);
+			var zoomJpgDir = Path.Combine(zoomDir, jpgSubdir);
+
+			if (pngSubdir == null)
+			{
+				Directory.CreateDirectory(zoomJpgDir);
+				scale(smallJpgDir);
+				return;
+			}
+
 			string smallPngDir = Path.Combine(smallDir, pngSubdir);
 			string zoomPngDir = Path.Combine(zoomDir, pngSubdir);
 
 			Directory.CreateDirectory(zoomPngDir);
-			var smallImages = Directory.GetFiles(smallPngDir);
-
-			foreach (var smallImage in smallImages)
-			{
-				var zoomImage = smallImage.Replace(smallDir, zoomDir);
-
-				if (!File.Exists(zoomImage))
-					WaifuScaler.Scale(smallImage, zoomImage);
-			}
+			scale(smallPngDir);
 
 			var dirs = new[]
 			{
-				(pngDir: smallPngDir, jpgDir: Path.Combine(smallDir, jpgSubdir)),
-				(pngDir: zoomPngDir, jpgDir: Path.Combine(zoomDir, jpgSubdir))
+				(pngDir: smallPngDir, jpgDir: smallJpgDir),
+				(pngDir: zoomPngDir, jpgDir: zoomJpgDir)
 			};
 
 			foreach (var _ in dirs)
@@ -160,6 +159,17 @@ namespace Mtgdb.Util
 
 				foreach (var sourceImage in pngImages)
 					convertToJpg(sourceImage, _.jpgDir);
+			}
+
+			void scale(string smallImagesDir)
+			{
+				foreach (var smallImage in Directory.GetFiles(smallImagesDir))
+				{
+					var zoomImage = smallImage.Replace(smallDir, zoomDir);
+
+					if (!File.Exists(zoomImage))
+						WaifuScaler.Scale(smallImage, zoomImage);
+				}
 			}
 		}
 
@@ -186,6 +196,7 @@ namespace Mtgdb.Util
 		private const string GathererPreprocessedDir = @"D:\Distrib\games\mtg\Gatherer.PreProcessed";
 		private const string HtmlDir = @"D:\temp\html";
 
-		private static readonly Regex _imgTagPattern = new Regex(@"<img alt=""(?<name>[^""]+)"" src=""[^""]+\/(?<file>[^""]+)""");
+		private static readonly Regex _imgTagPattern =
+			new Regex(@"<img alt=""(?<name>[^""]+)"" src=""[^""]+\/(?<file>[^""]+)""");
 	}
 }

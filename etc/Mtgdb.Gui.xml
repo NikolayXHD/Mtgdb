@@ -6,7 +6,7 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-	<ImageLocations EnabledGroups="prod-dev" >
+	<ImageLocations EnabledGroups="xlhq,dev" >
 
 		<Root Name="XLHQ"    Path="D:\Distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
 		<Root Name="Promo"   Path="D:\Distrib\games\mtg\XLHQ Promos" />

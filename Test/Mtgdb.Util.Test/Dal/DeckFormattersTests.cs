@@ -44,7 +44,7 @@ namespace Mtgdb.Util
 			var mtgoCardNames = File.ReadAllLines(mtgoCardsFile).Distinct().OrderBy(Str.Comparer);
 
 			Log.Debug("Unmatched mtgo cards");
-			
+
 			var cardsByMtgoName = Repo.Cards.GroupBy(MtgoDeckFormatter.ToMtgoName)
 				.ToDictionary(_ => _.Key, _ => _.ToList());
 
@@ -63,8 +63,8 @@ namespace Mtgdb.Util
 					string line = gr.Key;
 					var match = formatter.LineRegex.Match(line);
 
-					var card = match.Success 
-						? formatter.GetCard(match) 
+					var card = match.Success
+						? formatter.GetCard(match)
 						: null;
 
 					return new { match, card, files = gr.Select(_ => _.file).ToArray() };
