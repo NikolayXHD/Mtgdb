@@ -149,6 +149,7 @@
     <Compile Include="ColorTransformationTests.cs" />
     <Compile Include="DeckSearchTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />
+    <Compile Include="ExtremumFinderTests.cs" />
     <Compile Include="ImageLoaderTests.cs" />
     <Compile Include="ImageMappingTests.cs" />
     <Compile Include="Index\CardTextAlphabetTests.cs" />
