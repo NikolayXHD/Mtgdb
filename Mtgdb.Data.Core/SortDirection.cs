@@ -2,6 +2,6 @@ namespace Mtgdb.Data
 {
 	public enum SortDirection
 	{
-		Asc, Desc, No
+		No, Asc, Desc
 	}
 }
