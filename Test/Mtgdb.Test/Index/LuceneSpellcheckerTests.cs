@@ -67,8 +67,8 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "PricingHigh:■", "0.29", "0.35")]
 		[TestCase(EnRu, "PricingHigh:1■", "0.51", "1")]
 		[TestCase(EnRu, "PricingHigh:z■")] // empty
-		[TestCase(EnRu, "PricingLow:■", "0.01", "0.15")]
-		[TestCase(EnRu, "PricingLow:1■", "0.01", "0.1", "1")]
+		[TestCase(EnRu, "PricingLow:■", "0.1", "0.15")]
+		[TestCase(EnRu, "PricingLow:1■", "0.1", "1")]
 		[TestCase(EnRu, "PricingLow:z■")] // empty
 		[TestCase(EnRu, "PricingMid:■", "0.14", "0.19")]
 		[TestCase(EnRu, "PricingMid:2■", "0.2", "0.42")]
@@ -81,7 +81,7 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "BannedIn:■", "commander", "vintage")]
 		[TestCase(EnRu, "BannedIn:c■", "commander", "legacy")]
 		[TestCase(EnRu, "BannedIn:zzzz■")] // empty suggest
-		[TestCase(EnRu, "LegalIn:■", "1v1")]
+		[TestCase(EnRu, "LegalIn:■", "duel")]
 		[TestCase(EnRu, "LegalIn:p■", "pauper")]
 		[TestCase(EnRu, "LegalIn:zzzz■")] // empty suggest
 		[TestCase(EnRu, "RestrictedIn:■", "vintage")]

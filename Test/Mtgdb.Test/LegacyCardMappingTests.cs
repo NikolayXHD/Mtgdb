@@ -7,10 +7,10 @@ using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
-	[TestFixture]
+	[TestFixture, Explicit]
 	public class LegacyCardMappingTests: TestsBase
 	{
-		[Test, Explicit]
+		[Test]
 		public void MapLegacyCardIds()
 		{
 			var kernel = new StandardKernel();

@@ -20,7 +20,6 @@ namespace Mtgdb.Data
 			"Vintage",
 
 			"Commander",
-			"1v1",
 			"Brawl",
 
 			"Frontier",
@@ -28,7 +27,8 @@ namespace Mtgdb.Data
 			"Pauper",
 			"Penny",
 			"Future",
-			"Duel"
+			"Duel",
+			"Oldschool"
 		};
 	}
 }

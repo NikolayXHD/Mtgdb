@@ -17,7 +17,7 @@ namespace Mtgdb.Test
 		public void All_symbols_in_card_texts_are_considered_in_code()
 		{
 			var alphabet = new HashSet<char>();
-				
+
 			var languages = new HashSet<string>(CardLocalization.GetAllLanguages(), Str.Comparer);
 			languages.Remove("cn");
 			languages.Remove("tw");

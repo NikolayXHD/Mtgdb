@@ -244,6 +244,8 @@
 
 		"Glory": { "Set": "ppre", "Flavor": "Glory was gone; Glory was everywhere.\" —Scroll of Beginnings" },
 		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." },
+		"Cast Down": { "Set": "pmei", "Flavor": "\"Your life is finished, your name lost, and your work forgotten. It is as though Mazeura never existed.\"\n—Chainer's Torment" },
+
 		"Ob Nixilis Reignited Emblem": { "Remove": true },
 		"Gifts Given (b)": { "Remove": true },
 		"Stocking Tiger (b)": { "Remove": true },

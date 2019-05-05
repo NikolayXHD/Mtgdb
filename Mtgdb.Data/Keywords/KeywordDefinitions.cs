@@ -373,11 +373,11 @@ namespace Mtgdb.Data
 
 			// non quick-filter values follow
 
-			count("Amass"),
 			count("Absorb"),
 			count("Adapt"),
 			count("Afflict"),
 			count("Afterlife"),
+			count("Amass"),
 			count("Amplify"),
 			cost("Aura Swap"),
 			"Assist",

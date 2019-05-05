@@ -26,10 +26,10 @@ namespace Mtgdb.Test
 		{
 			foreach (var card in Repo.Cards.Where(CardLayouts.IsSingleFace))
 			{
-				Assert.That(card.Names, Is.Null.Or.Count.LessThanOrEqualTo(1), card.ToString);
+				Assert.That(card.Names, Is.Null.Or.Count.LessThanOrEqualTo(1), card.ToStringShort);
 
 				if (card.Names?.Count == 1)
-					Assert.That(card.NameNormalized, Is.EqualTo(card.Names[0]), card.ToString);
+					Assert.That(card.NameNormalized, Is.EqualTo(card.Names[0]), card.ToStringShort);
 			}
 		}
 

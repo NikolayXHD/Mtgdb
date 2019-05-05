@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
-	[TestFixture]
+	[TestFixture, Explicit]
 	public class MtgaIntegrationTests
 	{
 		private StandardKernel _kernel;

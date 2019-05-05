@@ -5,40 +5,43 @@ namespace Mtgdb.Data
 {
 	internal class BmpCornerRemoval : BmpProcessor
 	{
-		public BmpCornerRemoval(Bitmap bmp)
+		public BmpCornerRemoval(Bitmap bmp, bool force)
 			: base(bmp)
 		{
+			_force = force;
 		}
 
 		protected override void ExecuteRaw()
 		{
 			int size = Math.Max(Rect.Width, Rect.Height);
 
-			int margin = (int) Math.Ceiling(size / 150f);
+			if (!_force)
+			{
+				int margin = (int) Math.Ceiling(size / 150f);
+				int ltTop = GetLocation(0, 0);
 
-			int ltTop = GetLocation(0, 0);
+				if (SameColor(ltTop, 0, 0, 0, 0))
+					return;
 
-			if (SameColor(ltTop, 0, 0, 0, 0))
-				return;
+				int mdTop = GetLocation(Rect.Width / 2, margin);
+				int rtTop = GetLocation(Rect.Width - 1, 0);
+				int rtMdl = GetLocation(Rect.Width - 1 - margin, Rect.Height / 2);
+				int rtBtm = GetLocation(Rect.Width - 1, Rect.Height - 1);
+				int mdBtm = GetLocation(Rect.Width / 2, Rect.Height - 1 - margin);
+				int ltBtm = GetLocation(0, Rect.Height - 1);
+				int ltMdl = GetLocation(margin, Rect.Height / 2);
 
-			int mdTop = GetLocation(Rect.Width / 2, margin);
-			int rtTop = GetLocation(Rect.Width - 1, 0);
-			int rtMdl = GetLocation(Rect.Width - 1 - margin, Rect.Height / 2);
-			int rtBtm = GetLocation(Rect.Width - 1, Rect.Height - 1);
-			int mdBtm = GetLocation(Rect.Width / 2, Rect.Height - 1 - margin);
-			int ltBtm = GetLocation(0, Rect.Height - 1);
-			int ltMdl = GetLocation(margin, Rect.Height / 2);
+				bool hasCorner =
+					SameColor(ltTop, rtTop) && SameColor(rtTop, rtBtm) && SameColor(rtBtm, ltBtm) &&
+					(
+						!SameColor(ltTop, mdTop) ||
+						!SameColor(ltTop, rtMdl) ||
+						!SameColor(ltTop, mdBtm) ||
+						!SameColor(ltTop, ltMdl));
 
-			bool hasCorner =
-				SameColor(ltTop, rtTop) && SameColor(rtTop, rtBtm) && SameColor(rtBtm, ltBtm) &&
-				(
-					!SameColor(ltTop, mdTop) ||
-					!SameColor(ltTop, rtMdl) ||
-					!SameColor(ltTop, mdBtm) ||
-					!SameColor(ltTop, ltMdl));
-
-			if (!hasCorner)
-				return;
+				if (!hasCorner)
+					return;
+			}
 
 			ImageChanged = true;
 
@@ -101,5 +104,6 @@ namespace Mtgdb.Data
 		}
 
 		protected override int ColorSimilarityThreshold => 60;
+		private readonly bool _force;
 	}
 }

@@ -186,7 +186,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *convok* AND NOT Keywords: convoke")]
 		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia) AND NOT Keywords: copy")]
 		//
-		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/[0-9]/ OR poison OR energy OR experience OR lore) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
+		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/[0-9]/ OR poison OR energy OR experience OR lore OR another) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
 		[TestCase(@"Keywords: counter AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (instant OR creature OR >) (/spells?/ OR /abilit(y|ies)/)""~5) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
 		//
 		[TestCase(@"Text: (*creat* AND NOT *creature*) AND NOT Keywords: ""create token""")]

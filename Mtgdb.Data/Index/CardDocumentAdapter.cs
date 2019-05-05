@@ -93,6 +93,7 @@ namespace Mtgdb.Data.Index
 			new Dictionary<string, string>(Str.Comparer)
 			{
 				["e"] = nameof(Card.SetCode),
+				["n"] = nameof(Card.NameEn),
 				["c"] = nameof(Card.Color),
 				["t"] = nameof(Card.TypeEn),
 				["o"] = nameof(Card.TextEn),

@@ -61,7 +61,7 @@ namespace Mtgdb.Data
 
 			var chain = model.ImageFile.IsArt
 				? TransformArt(original, size)
-				: Transform(original, size);
+				: Transform(original, size, forceRemoveCorner: false);
 
 			using (chain)
 			{
@@ -96,17 +96,6 @@ namespace Mtgdb.Data
 
 
 
-		public BitmapTransformationChain TransformForgeImage(Bitmap original, Size size)
-		{
-			var frameDetector = new BmpFrameDetector(original, SizeCropped);
-			frameDetector.Execute();
-			var frame = frameDetector.Frame;
-
-			var chain = new BitmapTransformationChain(original, logException);
-			chain.ReplaceBy(_ => resize(_, size, frame));
-			return chain;
-		}
-
 		public BitmapTransformationChain TransformArt(Bitmap original, Size size)
 		{
 			var chain = new BitmapTransformationChain(original, logException);
@@ -117,11 +106,11 @@ namespace Mtgdb.Data
 			return chain;
 		}
 
-		public BitmapTransformationChain Transform(Bitmap original, Size size)
+		public BitmapTransformationChain Transform(Bitmap original, Size size, bool forceRemoveCorner)
 		{
 			var chain = new BitmapTransformationChain(original, logException);
 			chain.ReplaceBy(_ => resize(_, size));
-			chain.Update(removeCorners);
+			chain.Update(bmp => removeCorners(bmp, forceRemoveCorner));
 
 			return chain;
 		}
@@ -136,9 +125,9 @@ namespace Mtgdb.Data
 			return original.FitIn(requiredSize, frame);
 		}
 
-		private void removeCorners(Bitmap bitmap)
+		private void removeCorners(Bitmap bitmap, bool force)
 		{
-			var remover = new BmpCornerRemoval(bitmap);
+			var remover = new BmpCornerRemoval(bitmap, force);
 			remover.Execute();
 
 			if (remover.ImageChanged)
