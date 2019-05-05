@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
-    <Content Include="$(MSBuildThisFileDirectory)data\mtgjson-42-id.csv" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\art\filelist.txt" />
     <Folder Include="$(MSBuildThisFileDirectory)update\img\lq" />
     <Folder Include="$(MSBuildThisFileDirectory)update\img\mq" />

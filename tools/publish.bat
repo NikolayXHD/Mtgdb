@@ -68,6 +68,7 @@ del /q /s %target%\update\notifications\new\*
 del /q /s %target%\update\notifications\read\*
 del /q /s %target%\update\notifications\archive\*
 del /q %target%\update\filelist.txt
+del /q /s %target%\update\img\art\filelist.txt
 rmdir /q /s %target%\update\megatools-1.9.98-win32
 
 del /q /s %target%\color-schemes\current.colors
@@ -78,14 +79,10 @@ del /q /s %targetBin%\*.pdb
 rmdir /q /s %target%\data\index\keywords-test
 rmdir /q /s %target%\data\index\search-test
 rmdir /q /s %target%\data\index\suggest-test
-rmdir /q /s %target%\data\index\deck\search
-rmdir /q /s %target%\data\index\deck\suggest
+del /q /s %target%\data\index\deck\*
 
 del /q /s %target%\data\allSets-x.json
 del /q /s %target%\data\AllSets.v42.json
-rmdir /q /s %target%\data\index\keywords\0.47
-rmdir /q /s %target%\data\index\search\0.47
-rmdir /q /s %target%\data\index\suggest\0.47
 
 %out% make shortcut
 
