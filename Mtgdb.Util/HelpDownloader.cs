@@ -27,7 +27,7 @@ namespace Mtgdb.Util
 		private static string[] getHelpFileNames()
 		{
 			var helpFiles = Directory.GetFiles(
-				AppDir.Root.AddPath("..\\..\\Mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
+				AppDir.Root.AddPath("..\\..\\mtgdb.wiki"), "*.rest", SearchOption.TopDirectoryOnly);
 
 			return helpFiles.OrderByDescending(f => Str.Equals("home", Path.GetFileNameWithoutExtension(f)))
 				.Where(f => !_obsoletePages.Contains(getPageTitle(f)))

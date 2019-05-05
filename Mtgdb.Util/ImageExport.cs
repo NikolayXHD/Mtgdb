@@ -35,13 +35,13 @@ namespace Mtgdb.Util
 			_imageRepo.LoadZoom();
 		}
 
-		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir)
+		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner)
 		{
 			var exportedSmall = new HashSet<string>(Str.Comparer);
 			var exportedZoomed = new HashSet<string>(Str.Comparer);
 
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true);
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner);
 		}
 
 		private void export(
@@ -53,7 +53,8 @@ namespace Mtgdb.Util
 			bool zoomed,
 			string smallSubdir,
 			string zoomedSubdir,
-			bool matchingSet)
+			bool matchingSet,
+			bool forceRemoveCorner)
 		{
 			foreach (var entryBySetCode in _cardRepo.SetsByCode)
 			{
@@ -108,7 +109,7 @@ namespace Mtgdb.Util
 							if (!File.Exists(smallPath) || card.Faces.Count > 1)
 							{
 								original = ImageLoader.Open(modelSmall);
-								addFile(original, modelSmall.ImageFile, smallPath, small: true);
+								addFile(original, modelSmall.ImageFile, smallPath, small: true, forceRemoveCorner);
 							}
 						}
 					}
@@ -131,7 +132,7 @@ namespace Mtgdb.Util
 									original = ImageLoader.Open(modelZoom);
 								}
 
-								addFile(original, modelZoom.ImageFile, zoomedPath, small: false);
+								addFile(original, modelZoom.ImageFile, zoomedPath, small: false, forceRemoveCorner);
 							}
 						}
 					}
@@ -198,10 +199,10 @@ namespace Mtgdb.Util
 			return targetFullPath;
 		}
 
-		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small)
+		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small, bool forceRemoveCorner)
 		{
 			_log.Debug($"\tCopying {target}");
-			var bytes = transform(original, imageFile, small);
+			var bytes = transform(original, imageFile, small, forceRemoveCorner);
 
 			if (bytes != null)
 				File.WriteAllBytes(target, bytes);
@@ -218,11 +219,14 @@ namespace Mtgdb.Util
 			return false;
 		}
 
-		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small)
+		private byte[] transform(Bitmap original, ImageFile replacementImageFile, bool small, bool forceRemoveCorner)
 		{
 			var size = small ? _imageLoader.CardSize : _imageLoader.ZoomedCardSize;
 
-			var chain = _imageLoader.Transform(original, size);
+			var chain = _imageLoader.Transform(original, size, forceRemoveCorner);
+
+			if (!replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
+				chain.Update(bmp => new BmpAlphaToBackgroundColorTransformation(bmp, Color.White).Execute());
 
 			using (chain)
 			{

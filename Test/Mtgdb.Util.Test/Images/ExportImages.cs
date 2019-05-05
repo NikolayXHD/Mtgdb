@@ -33,16 +33,17 @@ namespace Mtgdb.Util
 		}
 
 		//[TestCase("XLN", @"D:\Distrib\games\mtg\Mtgdb.Pictures", "lq", "mq")]
-		[TestCase("C17", @"D:\Distrib\games\mtg\Mtgdb.Pictures", "lq", "mq")]
-		public void Export(string set, string targetDir, string smallSubdir, string zoomSubdir)
+		[TestCase("C17", @"D:\Distrib\games\mtg\Mtgdb.Pictures", "lq", "mq", /* forceRemoveCorner */false)]
+		public void Export(string set, string targetDir, string smallSubdir, string zoomSubdir, bool forceRemoveCorner)
 		{
 			_export.ExportCardImages(
 				targetDir,
 				small: true,
 				zoomed: true,
 				code: set,
-				smallSubdir: smallSubdir,
-				zoomedSubdir: zoomSubdir);
+				smallSubdir,
+				zoomSubdir,
+				forceRemoveCorner);
 		}
 	}
 }

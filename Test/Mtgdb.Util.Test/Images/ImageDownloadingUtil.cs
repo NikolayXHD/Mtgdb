@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -26,8 +27,7 @@ namespace Mtgdb.Util
 			};
 		}
 
-		// [TestCase("RNA", ".png" true)]
-		[TestCase("WAR", ".jpg", false)]
+		[TestCase("WAR", ".png", false)]
 		public void DownloadGathererImages(string setCode, string extension, bool useCustomSet)
 		{
 			var repo = new CardRepository();
@@ -124,32 +124,40 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "war")]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2")]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17")]
-		public void PreProcessImages(string smallDir, string zoomDir, string pngSubdir, string jpgSubdir)
+		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ "war.png", "war", /* createZoom */ false)]
+		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2", /* createZoom */ true)]
+		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17", /* createZoom */ true)]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "pwar.png", "pwar", /* createZoom */ true)]
+		public void PreProcessImages(string smallDir, string zoomDir, string pngSubdir, string jpgSubdir, bool createZoom)
 		{
 			var smallJpgDir = Path.Combine(smallDir, jpgSubdir);
 			var zoomJpgDir = Path.Combine(zoomDir, jpgSubdir);
 
 			if (pngSubdir == null)
 			{
-				Directory.CreateDirectory(zoomJpgDir);
-				scale(smallJpgDir);
+				if (createZoom)
+				{
+					Directory.CreateDirectory(zoomJpgDir);
+					scale(smallJpgDir);
+				}
+
 				return;
 			}
 
 			string smallPngDir = Path.Combine(smallDir, pngSubdir);
 			string zoomPngDir = Path.Combine(zoomDir, pngSubdir);
 
-			Directory.CreateDirectory(zoomPngDir);
-			scale(smallPngDir);
-
-			var dirs = new[]
+			var dirs = new List<(string pngDir, string jpgDir)>
 			{
-				(pngDir: smallPngDir, jpgDir: smallJpgDir),
-				(pngDir: zoomPngDir, jpgDir: zoomJpgDir)
+				(pngDir: smallPngDir, jpgDir: smallJpgDir)
 			};
+
+			if (createZoom)
+			{
+				Directory.CreateDirectory(zoomPngDir);
+				scale(smallPngDir);
+				dirs.Add((pngDir: zoomPngDir, jpgDir: zoomJpgDir));
+			}
 
 			foreach (var _ in dirs)
 			{
@@ -178,7 +186,7 @@ namespace Mtgdb.Util
 			var targetImage = Path.Combine(targetDir, Path.GetFileNameWithoutExtension(sourceImage) + ".jpg");
 
 			// if (File.Exists(targetImage))
-			// 	return;
+			// 	 return;
 
 			using (var original = new Bitmap(sourceImage))
 			{

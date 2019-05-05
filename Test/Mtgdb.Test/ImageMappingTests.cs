@@ -18,8 +18,8 @@ namespace Mtgdb.Test
 			ImgRepo.LoadZoom();
 		}
 
-		[Test, Order(1)]
-		public void No_cards_without_image()
+		[Test]
+		public void Zoom_images_match_small_ones()
 		{
 			var messages = new List<string>();
 
@@ -31,35 +31,22 @@ namespace Mtgdb.Test
 
 					if (small == null || zooms == null || zooms.Count == 0)
 						messages.Add($"{card.SetCode} {card.ImageName}");
-				}
+					else
+					{
+						var smallPath = small.ImageFile.FullPath;
+						var zoomPath = zooms[0].ImageFile.FullPath;
 
-			Assert.That(messages, Is.Empty);
-		}
+						smallPath = smallPath.ToLower(Str.Culture)
+							.Replace("gatherer.original", "gatherer")
+							.Replace("\\lq\\", string.Empty);
 
-		[Test, Order(2)]
-		public void Zoom_images_match_small_ones()
-		{
-			var messages = new List<string>();
+						zoomPath = zoomPath.ToLower(Str.Culture)
+							.Replace("gatherer.preprocessed", "gatherer")
+							.Replace("\\mq\\", string.Empty);
 
-			foreach (var set in Repo.SetsByCode)
-				foreach (var card in set.Value.Cards)
-				{
-					var small = Ui.GetSmallImage(card);
-					var zooms = Ui.GetZoomImages(card);
-
-					var smallPath = small.ImageFile.FullPath;
-					var zoomPath = zooms[0].ImageFile.FullPath;
-
-					smallPath = smallPath.ToLower(Str.Culture)
-						.Replace("gatherer.original", "gatherer")
-						.Replace("\\lq\\", string.Empty);
-
-					zoomPath = zoomPath.ToLower(Str.Culture)
-						.Replace("gatherer.preprocessed", "gatherer")
-						.Replace("\\mq\\", string.Empty);
-
-					if (!Str.Equals(smallPath, zoomPath))
-						messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
+						if (!Str.Equals(smallPath, zoomPath))
+							messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
+					}
 				}
 
 			Assert.That(messages, Is.Empty);
@@ -73,7 +60,6 @@ namespace Mtgdb.Test
 		[TestCase("UST", XlhqDir, "UST - Unstable\\300DPI Cards")]
 		[TestCase("CED", XlhqDir, "CED - Collectors' Edition\\300DPI")]
 		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
-
 		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
 		[TestCase("CMA", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
 		[TestCase("DDT", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
@@ -81,13 +67,11 @@ namespace Mtgdb.Test
 		[TestCase("E02", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
 		[TestCase("RIX", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
 		[TestCase("V17", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
-
 		[TestCase("BBD", XlhqDir, "BBD - Battlebond\\300DPI Cards")]
 		[TestCase("DOM", XlhqDir, "DOM - Dominaria\\300DPI Cards")]
 		[TestCase("GS1", XlhqDir, "GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
 		[TestCase("M19", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
 		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
-
 		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
 		[TestCase("C18", XlhqDir, "C18 - Commander 2018\\300DPI Cards")]
 		[TestCase("GRN", XlhqDir, "GRN - Guilds of Ravnica\\300DPI Cards")]

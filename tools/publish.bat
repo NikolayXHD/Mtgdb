@@ -16,7 +16,7 @@ set target=%targetRoot%\%packageName%
 set targetBin=%targetRoot%\%packageName%\bin\v%version%
 
 set utilexe=%output%\bin\%configuration%\Mtgdb.Util.exe
-set msbuildexe="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
+set msbuildexe="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
 set nunitconsoleexe=%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe
 set gitexe="C:\Program Files\Git\bin\git.exe"
 set sevenzexe=%output%\update\7z\7za.exe

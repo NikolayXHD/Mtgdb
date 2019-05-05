@@ -7,7 +7,7 @@ using Ninject;
 
 namespace Mtgdb.Util
 {
-	internal class UtilProgram
+	internal static class UtilProgram
 	{
 		private static readonly IKernel _kernel = new StandardKernel();
 
@@ -75,15 +75,17 @@ namespace Mtgdb.Util
 					return;
 				}
 
+				bool forceRemoveCorner = args.GetFlag("-force-remove-corner");
+
 
 				if (Directory.Exists(directory))
-					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir);
+					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir, forceRemoveCorner);
 				else
 					Console.WriteLine($"directory not found: {directory}");
 			}
 		}
 
-		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir)
+		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner)
 		{
 			var integration = _kernel.Get<ImageExport>();
 
@@ -112,7 +114,7 @@ namespace Mtgdb.Util
 			Console.WriteLine("== Exporting card images ==");
 
 			foreach (string setCode in setCodes?.Split(';', ',', '|') ?? new string[] { null })
-				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir);
+				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir, forceRemoveCorner);
 
 			if (!silent)
 			{
@@ -128,12 +130,12 @@ namespace Mtgdb.Util
 			Console.WriteLine("Mtgdb.Util.exe -rename_artworks directory");
 			Console.WriteLine("\t- rename artwork images moving artist and tags file attribute to name like cardname.[set soi,abc][artist John Doe].jpg");
 
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] [-force-remove-corner] [-silent] -small");
 			Console.WriteLine("\t- export small images to directory specified after -path");
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -zoomed");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] [-force-remove-corner] [-silent] -zoomed");
 			Console.WriteLine("\t- export zoomed images to directory specified after -path");
 
-			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] -small subdirectory_small -zoomed subdirectory_zoomed");
+			Console.WriteLine("Mtgdb.Util.exe -export directory [-set setcode1;setcode2;...] [-force-remove-corner] [-silent] -small subdirectory_small -zoomed subdirectory_zoomed");
 			Console.WriteLine("\t- export small images to directory\\subdirectory_small and zoomed images to directory\\subdirectory_zoomed");
 
 			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name] [-set setcode1;setcode2;...]");

@@ -1,5 +1,10 @@
 set origin=F:\Repo\Git\mtgDb\out
 set images=D:\Distrib\games\mtg\Mtgdb.Pictures
+set qs=lq mq
 
-%origin%\bin\release\Mtgdb.Util.exe -sign %images%\lq -output %images%\lq-list\filelist.txt -set war,ss2
-%origin%\bin\release\Mtgdb.Util.exe -sign %images%\mq -output %images%\mq-list\filelist.txt -set war,ss2
+rem set sets=war,ss2,htr17
+set sets=htr17
+
+for %%q in (%qs%) do (
+    %origin%\bin\debug\Mtgdb.Util.exe -sign %images%\%%q -output %images%\%%q-list\filelist.txt -set %sets%
+)
