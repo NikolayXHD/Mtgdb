@@ -142,13 +142,13 @@ namespace Mtgdb.Test
 
 			private TemporaryPrice(Card c, MtgjsonPrices p)
 			{
-				_originalPrice = c.MtgjsonPrices;
+				_originalPrice = c.Prices;
 				_card = c;
-				c.MtgjsonPrices = p;
+				c.Prices = p;
 			}
 
 			public void Dispose() =>
-				_card.MtgjsonPrices = _originalPrice;
+				_card.Prices = _originalPrice;
 
 			private readonly MtgjsonPrices _originalPrice;
 			private readonly Card _card;

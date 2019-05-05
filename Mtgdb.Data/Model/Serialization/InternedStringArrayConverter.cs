@@ -7,6 +7,21 @@ namespace Mtgdb.Data
 {
 	public class InternedStringArrayConverter : JsonConverter
 	{
+		public override bool CanWrite => false;
+
+		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) =>
+			throw new NotSupportedException();
+
+
+
+		public override bool CanConvert(Type objectType)
+		{
+			return
+				objectType.IsAssignableFrom(typeof(HashSet<string>)) ||
+				objectType.IsAssignableFrom(typeof(List<string>)) ||
+				objectType.IsAssignableFrom(typeof(string[]));
+		}
+
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
 			if (objectType == typeof(HashSet<string>))
@@ -26,34 +41,17 @@ namespace Mtgdb.Data
 			while (true)
 			{
 				reader.Read();
-				if (reader.TokenType == JsonToken.String)
-				{
-					if (reader.Value == null)
-						yield return null;
-					else
-						yield return string.Intern((string)reader.Value);
-				}
-				else if (reader.TokenType == JsonToken.EndArray)
+
+				if (reader.TokenType == JsonToken.EndArray)
 					break;
+
+				if (reader.Value == null)
+					yield return null;
+				else if (reader.TokenType == JsonToken.String)
+					yield return string.Intern((string) reader.Value);
 				else if (reader.TokenType != JsonToken.Comment)
 					throw new JsonReaderException($"Unexpected token {reader.TokenType} {reader.Value} at {reader.Path} while reading IEnumerable<string>");
 			}
-		}
-
-		public override bool CanConvert(Type objectType)
-		{
-			return
-				objectType.IsAssignableFrom(typeof(HashSet<string>)) ||
-				objectType.IsAssignableFrom(typeof(List<string>)) ||
-				objectType.IsAssignableFrom(typeof(string[]));
-		}
-
-
-		public override bool CanWrite => false;
-
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			throw new NotSupportedException();
 		}
 	}
 }

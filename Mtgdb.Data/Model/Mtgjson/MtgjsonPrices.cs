@@ -5,7 +5,7 @@ namespace Mtgdb.Data
 {
 	public class MtgjsonPrices
 	{
-		[JsonProperty("paper")]
-		public Dictionary<string, float> Paper { get; set; }
+		[JsonProperty("paper"), JsonConverter(typeof(PriceHistoryConverter))]
+		public List<KeyValuePair<string, float>> Paper { get; set; }
 	}
 }

@@ -204,7 +204,15 @@ namespace Mtgdb.Data
 		public string ScryfallId { get; set; }
 
 		[JsonProperty("prices")]
-		public MtgjsonPrices MtgjsonPrices { get; set; }
+		public MtgjsonPrices Prices
+		{
+			get => _prices;
+			set
+			{
+				_prices = value;
+				resetPrices();
+			}
+		}
 
 		[JsonIgnore]
 		public string Id { get; set; }
@@ -483,7 +491,7 @@ namespace Mtgdb.Data
 		{
 			get
 			{
-				initPriceValues();
+				readyPrices();
 				return _priceMin;
 			}
 		}
@@ -493,7 +501,7 @@ namespace Mtgdb.Data
 		{
 			get
 			{
-				initPriceValues();
+				readyPrices();
 				return _priceLast;
 			}
 		}
@@ -503,7 +511,7 @@ namespace Mtgdb.Data
 		{
 			get
 			{
-				initPriceValues();
+				readyPrices();
 				return _priceMax;
 			}
 		}
@@ -616,43 +624,44 @@ namespace Mtgdb.Data
 		}
 
 
-		private void initPriceValues()
+		private void resetPrices()
 		{
-			if (_priceValuesReady)
+			_pricesReady = false;
+			_priceLast = null;
+			_priceMin = null;
+			_priceMax = null;
+		}
+
+		private void readyPrices()
+		{
+			if (_pricesReady)
 				return;
 
-			if (MtgjsonPrices?.Paper == null || MtgjsonPrices.Paper.Count == 0)
+			if (Prices?.Paper == null || Prices.Paper.Count == 0)
 			{
-				_priceValuesReady = true;
+				_pricesReady = true;
 				return;
 			}
 
-			string latestKey = null;
-			float latest = float.MaxValue;
 			float min = float.MaxValue;
 			float max = float.MinValue;
 
-			foreach (var entry in MtgjsonPrices.Paper)
+			for (var i = 0; i < Prices.Paper.Count; i++)
 			{
-				if (latestKey == null || Str.Compare(entry.Key, latestKey) > 0)
-				{
-					latestKey = entry.Key;
-					latest = entry.Value;
-				}
-
-				max = Math.Max(max, entry.Value);
-				min = Math.Min(min, entry.Value);
+				var value = Prices.Paper[i].Value;
+				max = Math.Max(max, value);
+				min = Math.Min(min, value);
 			}
 
-			_priceLast = latest;
+			_priceLast = Prices.Paper.GetLast().Value;
 
-			if (latest != min)
+			if (_priceLast != min)
 				_priceMin = min;
 
-			if (latest != max)
+			if (_priceLast != max)
 				_priceMax = max;
 
-			_priceValuesReady = true;
+			_pricesReady = true;
 		}
 
 
@@ -903,6 +912,7 @@ namespace Mtgdb.Data
 		private float? _priceLast;
 		private float? _priceMax;
 		private float? _priceMin;
-		private bool _priceValuesReady;
+		private bool _pricesReady;
+		private MtgjsonPrices _prices;
 	}
 }

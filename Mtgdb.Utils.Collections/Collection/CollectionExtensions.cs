@@ -79,6 +79,9 @@ namespace Mtgdb
 			return list[list.Count - 1];
 		}
 
+		public static TVal GetLast<TVal>(this IList<TVal> list) =>
+			list[list.Count - 1];
+
 		public static Dictionary<TKey, TVal> ToDictionary<TKey, TVal>(
 			this IEnumerable<KeyValuePair<TKey, TVal>> dict,
 			IEqualityComparer<TKey> equalityComparer = null)

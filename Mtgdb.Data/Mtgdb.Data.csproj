@@ -140,9 +140,11 @@
     <Compile Include="Model\Mtgjson\GuidV5.cs" />
     <Compile Include="Model\Mtgjson\MtgjsonPrices.cs" />
     <Compile Include="Model\Patch\ImageNamePatch.cs" />
+    <Compile Include="Model\Serialization\EntryListConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />
     <Compile Include="Model\Serialization\IntToInternedStringConverter.cs" />
+    <Compile Include="Model\Serialization\PriceHistoryConverter.cs" />
     <Compile Include="Model\Ui\LanguageController.cs" />
     <Compile Include="Model\Legality.cs" />
     <Compile Include="Model\Patch\LegalityPatch.cs" />

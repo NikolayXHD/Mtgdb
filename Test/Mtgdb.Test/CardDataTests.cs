@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -28,13 +29,22 @@ namespace Mtgdb.Test
 		{
 			foreach (var card in Repo.Cards)
 			{
-				if (card.MtgjsonPrices?.Paper == null || card.MtgjsonPrices.Paper.Count == 0)
+				if (card.Prices?.Paper == null || card.Prices.Paper.Count == 0)
 					return;
 
-				foreach (var date in card.MtgjsonPrices.Paper.Keys)
+				for (var i = 0; i < card.Prices.Paper.Count; i++)
 				{
+					var date = card.Prices.Paper[i].Key;
+
 					Assert.That(date, Is.Not.Null);
 					Assert.That(date, Is.Not.Empty);
+					Assert.That(date, Does.Match(@"^\d{4}-\d{2}-\d{2}$"));
+
+					if (i > 0)
+					{
+						var prevDate = card.Prices.Paper[i - 1].Key;
+						Assert.That(date, Is.GreaterThan(prevDate).Using<string>(StringComparer.Ordinal));
+					}
 				}
 			}
 		}

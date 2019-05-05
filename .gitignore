@@ -15,6 +15,7 @@ out/color-schemes/current.colors
 out/update/app/
 out/update/*.txt
 out/update/*.zip
+out/update/img/art/filelist.txt
 out/images/**/*.jpg
 out/images/**/*.txt
 out/images/**/*.bak
@@ -23,9 +24,5 @@ out/save/
 out/logs/
 out/update/notifications/
 out/data/index/
-out/data/AllSets-x.json
 out/data/AllSets.json
 out/data/translations.json
-out/data/price.inprogress.json
-out/data/price.id.inprogress.json
-out/data/AllSets.v42.json
