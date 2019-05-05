@@ -20,7 +20,6 @@ namespace Mtgdb.Data
 			"Vintage",
 
 			"Commander",
-			"Brawl",
 
 			"Frontier",
 

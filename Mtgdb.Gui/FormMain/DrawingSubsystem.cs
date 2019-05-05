@@ -335,7 +335,7 @@ namespace Mtgdb.Gui
 			if (fieldName != nameof(Card.Rulings))
 				return;
 
-			var legalityMatches = new Regex(_legalitySubsystem.FilterFormat).Matches(text)
+			var legalityMatches = RegexUtil.GetCached(_legalitySubsystem.FilterFormat).Matches(text)
 				.OfType<Match>()
 				.Where(_ => _.Success)
 				.Select(TextRange.Copy);

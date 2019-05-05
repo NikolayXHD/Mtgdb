@@ -26,14 +26,10 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void All_known_formats_exist_in_cards()
+		public void All_known_legalities_exist_in_cards()
 		{
-			var unusedFormats = new HashSet<string>(
-				Repo.Cards.SelectMany(c => c.LegalityByFormat.Keys),
-				Str.Comparer);
-
-			unusedFormats.ExceptWith(Legality.Formats);
-
+			var unusedFormats = new HashSet<string>(Legality.Formats, Str.Comparer);
+			unusedFormats.ExceptWith(Repo.Cards.SelectMany(c => c.LegalityByFormat.Keys));
 			Assert.That(unusedFormats, Is.Empty);
 		}
 	}
