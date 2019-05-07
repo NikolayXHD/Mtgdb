@@ -118,15 +118,20 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label58.Text" xml:space="preserve">
-    <value>Filter buttons do the same, but show less keywords. To see available keywords:
-  * type keywords:    * hit Ctrl + Space    * begin typing keyword part
+    <value>Filter buttons do the same, but show less keywords.
+To see available keywords:
+  * type keywords:
+  * hit Ctrl + Space
 To cycle typed keyword under input caret alphabetically:
-  * move input caret to a keyword    * hit Ctrl + Down or Ctrl+Up</value>
+  * move input caret to a keyword
+  * hit Ctrl + Down or Ctrl + Up</value>
   </data>
   <data name="label33.Text" xml:space="preserve">
-    <value>Will not search "shivan dragon" in name field. It's equivalent to
+    <value>Will not exactly search "shivan dragon" in name field,
+rather it's equivalent to
   name: shivan AND *:dragon    where * means any field.
-AND is assumed between unquoted words unless there is OR in between. Use:
+AND is assumed between unquoted words 
+unless there is OR in between. Correct queries:
   name: "shivan dragon"    name:(shivan AND dragon)</value>
   </data>
 </root>
