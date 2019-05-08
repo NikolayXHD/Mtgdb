@@ -387,6 +387,7 @@ namespace Mtgdb.Data
 			count("Bloodthirst"),
 			count("Bushido"),
 			cost("Cumulative Upkeep"),
+			"Detain",
 			"Dethrone",
 			"Devoid",
 			cost("Echo"),
