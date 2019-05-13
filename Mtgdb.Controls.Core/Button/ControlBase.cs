@@ -498,7 +498,7 @@ namespace Mtgdb.Controls
 
 		protected Color ActualBorderColor => Enabled ? BorderColor : _disabledBorderColor;
 
-		protected Color ActualForeColor => Enabled ? ForeColor : DisabledForeColor;
+		protected virtual Color ActualForeColor => Enabled ? ForeColor : DisabledForeColor;
 
 		protected virtual Color ActualBackColor => BackColor;
 

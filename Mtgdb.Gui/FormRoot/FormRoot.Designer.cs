@@ -129,19 +129,19 @@
 			this._menuColors.SuspendLayout();
 			this._flowTitleLeft.SuspendLayout();
 			this.SuspendLayout();
-			// 
+			//
 			// _panelClient
-			// 
+			//
 			this._panelClient.Location = new System.Drawing.Point(6, 37);
 			this._panelClient.Size = new System.Drawing.Size(1012, 757);
-			// 
+			//
 			// _panelCaption
-			// 
+			//
 			this._panelCaption.Controls.Add(this._layoutTitle);
 			this._panelCaption.Size = new System.Drawing.Size(907, 31);
-			// 
+			//
 			// _tabs
-			// 
+			//
 			this._tabs.AddButtonSlopeSize = new System.Drawing.Size(9, 17);
 			this._tabs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._tabs.DrawBottomBorder = true;
@@ -154,9 +154,9 @@
 			this._tabs.SlopeSize = new System.Drawing.Size(15, 27);
 			this._tabs.TabIndex = 2;
 			this._tabs.TabStop = false;
-			// 
+			//
 			// _buttonUndo
-			// 
+			//
 			this._buttonUndo.AutoCheck = false;
 			this._buttonUndo.Image = global::Mtgdb.Gui.Properties.Resources.undo_16;
 			this._buttonUndo.Location = new System.Drawing.Point(0, 3);
@@ -164,9 +164,9 @@
 			this._buttonUndo.Name = "_buttonUndo";
 			this._buttonUndo.Size = new System.Drawing.Size(32, 24);
 			this._buttonUndo.TabIndex = 0;
-			// 
+			//
 			// _buttonRedo
-			// 
+			//
 			this._buttonRedo.AutoCheck = false;
 			this._buttonRedo.Image = global::Mtgdb.Gui.Properties.Resources.redo_16;
 			this._buttonRedo.Location = new System.Drawing.Point(32, 3);
@@ -174,9 +174,9 @@
 			this._buttonRedo.Name = "_buttonRedo";
 			this._buttonRedo.Size = new System.Drawing.Size(32, 24);
 			this._buttonRedo.TabIndex = 1;
-			// 
+			//
 			// _dropdownDonate
-			// 
+			//
 			this._dropdownDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownDonate.ForeColor = System.Drawing.SystemColors.WindowText;
 			this._dropdownDonate.Location = new System.Drawing.Point(608, 3);
@@ -187,9 +187,9 @@
 			this._dropdownDonate.Size = new System.Drawing.Size(50, 24);
 			this._dropdownDonate.TabIndex = 14;
 			this._dropdownDonate.Text = "Donate";
-			// 
+			//
 			// _menuDonate
-			// 
+			//
 			this._menuDonate.AutoSize = true;
 			this._menuDonate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuDonate.BackColor = System.Drawing.SystemColors.Window;
@@ -211,9 +211,9 @@
 			this._menuDonate.Size = new System.Drawing.Size(225, 175);
 			this._menuDonate.TabIndex = 2;
 			this._menuDonate.Visible = false;
-			// 
+			//
 			// _buttonMenuDonateYandexMoney
-			// 
+			//
 			this._buttonMenuDonateYandexMoney.AutoCheck = false;
 			this._buttonMenuDonateYandexMoney.BackColor = System.Drawing.SystemColors.Window;
 			this._menuDonate.SetColumnSpan(this._buttonMenuDonateYandexMoney, 2);
@@ -229,9 +229,9 @@
 			this._buttonMenuDonateYandexMoney.Text = "Donate via YandexMoney";
 			this._buttonMenuDonateYandexMoney.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuDonateYandexMoney.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _panelAva
-			// 
+			//
 			this._panelAva.AutoSize = true;
 			this._panelAva.Image = global::Mtgdb.Gui.Properties.Resources.ava;
 			this._panelAva.ImageScale = 0.5F;
@@ -240,9 +240,9 @@
 			this._panelAva.Name = "_panelAva";
 			this._panelAva.Size = new System.Drawing.Size(95, 125);
 			this._panelAva.TabIndex = 2;
-			// 
+			//
 			// _buttonMenuDonatePayPal
-			// 
+			//
 			this._buttonMenuDonatePayPal.AutoCheck = false;
 			this._buttonMenuDonatePayPal.BackColor = System.Drawing.SystemColors.Window;
 			this._menuDonate.SetColumnSpan(this._buttonMenuDonatePayPal, 2);
@@ -260,9 +260,9 @@
 			this._buttonMenuDonatePayPal.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonMenuDonatePayPal.VisibleAllBorders = null;
 			this._buttonMenuDonatePayPal.VisibleBorders = System.Windows.Forms.AnchorStyles.Top;
-			// 
+			//
 			// _labelDonate
-			// 
+			//
 			this._labelDonate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDonate.AutoSize = true;
 			this._labelDonate.Location = new System.Drawing.Point(98, 11);
@@ -272,9 +272,9 @@
 			this._labelDonate.TabIndex = 3;
 			this._labelDonate.Text = "This application is free.\r\n\r\nIf you like it, consider \r\ndonating to support its\r\n" +
     "maintenance and further\r\ndevelopment.\r\n\r\nThank you!";
-			// 
+			//
 			// _buttonUpdate
-			// 
+			//
 			this._buttonUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonUpdate.AutoCheck = false;
 			this._buttonUpdate.ImageChecked = global::Mtgdb.Gui.Properties.Resources.update_notification_40;
@@ -285,13 +285,14 @@
 			this._buttonUpdate.Name = "_buttonUpdate";
 			this._buttonUpdate.Size = new System.Drawing.Size(32, 24);
 			this._buttonUpdate.TabIndex = 12;
-			// 
+			//
 			// _dropdownLanguage
-			// 
+			//
 			this._dropdownLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownLanguage.BackColor = System.Drawing.SystemColors.Window;
 			this._dropdownLanguage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._dropdownLanguage.HighlightCheckedOpacity = 24;
+			this._dropdownLanguage.HighlightForeColor = System.Drawing.SystemColors.WindowText;
 			this._dropdownLanguage.HighlightMouseOverOpacity = 24;
 			this._dropdownLanguage.Image = global::Mtgdb.Gui.Properties.Resources.en;
 			this._dropdownLanguage.ImageScale = 0.5F;
@@ -303,12 +304,12 @@
 			this._dropdownLanguage.TabIndex = 10;
 			this._dropdownLanguage.Text = "EN";
 			this._dropdownLanguage.VisibleAllBorders = true;
-			this._dropdownLanguage.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this._dropdownLanguage.VisibleBorders = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-			// 
+			//
 			// _menuLanguage
-			// 
+			//
 			this._menuLanguage.AutoSize = true;
 			this._menuLanguage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuLanguage.BackColor = System.Drawing.SystemColors.Window;
@@ -340,9 +341,9 @@
 			this._menuLanguage.Size = new System.Drawing.Size(152, 98);
 			this._menuLanguage.TabIndex = 6;
 			this._menuLanguage.Visible = false;
-			// 
+			//
 			// _buttonPT
-			// 
+			//
 			this._buttonPT.AutoCheck = false;
 			this._buttonPT.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonPT.Image = global::Mtgdb.Gui.Properties.Resources.pt;
@@ -353,9 +354,9 @@
 			this._buttonPT.Size = new System.Drawing.Size(50, 24);
 			this._buttonPT.TabIndex = 7;
 			this._buttonPT.Text = "PT";
-			// 
+			//
 			// _buttonDE
-			// 
+			//
 			this._buttonDE.AutoCheck = false;
 			this._buttonDE.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonDE.Image = global::Mtgdb.Gui.Properties.Resources.de;
@@ -366,9 +367,9 @@
 			this._buttonDE.Size = new System.Drawing.Size(50, 24);
 			this._buttonDE.TabIndex = 9;
 			this._buttonDE.Text = "DE";
-			// 
+			//
 			// _buttonCN
-			// 
+			//
 			this._buttonCN.AutoCheck = false;
 			this._buttonCN.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonCN.Image = global::Mtgdb.Gui.Properties.Resources.cn;
@@ -379,9 +380,9 @@
 			this._buttonCN.Size = new System.Drawing.Size(50, 24);
 			this._buttonCN.TabIndex = 0;
 			this._buttonCN.Text = "CN";
-			// 
+			//
 			// _buttonEN
-			// 
+			//
 			this._buttonEN.AutoCheck = false;
 			this._buttonEN.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonEN.Image = global::Mtgdb.Gui.Properties.Resources.en;
@@ -392,9 +393,9 @@
 			this._buttonEN.Size = new System.Drawing.Size(50, 24);
 			this._buttonEN.TabIndex = 8;
 			this._buttonEN.Text = "EN";
-			// 
+			//
 			// _buttonTW
-			// 
+			//
 			this._buttonTW.AutoCheck = false;
 			this._buttonTW.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonTW.Image = global::Mtgdb.Gui.Properties.Resources.tw;
@@ -405,9 +406,9 @@
 			this._buttonTW.Size = new System.Drawing.Size(50, 24);
 			this._buttonTW.TabIndex = 3;
 			this._buttonTW.Text = "TW";
-			// 
+			//
 			// _buttonIT
-			// 
+			//
 			this._buttonIT.AutoCheck = false;
 			this._buttonIT.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonIT.Image = global::Mtgdb.Gui.Properties.Resources.it;
@@ -418,9 +419,9 @@
 			this._buttonIT.Size = new System.Drawing.Size(50, 24);
 			this._buttonIT.TabIndex = 6;
 			this._buttonIT.Text = "IT";
-			// 
+			//
 			// _buttonJP
-			// 
+			//
 			this._buttonJP.AutoCheck = false;
 			this._buttonJP.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonJP.Image = global::Mtgdb.Gui.Properties.Resources.jp;
@@ -431,9 +432,9 @@
 			this._buttonJP.Size = new System.Drawing.Size(50, 24);
 			this._buttonJP.TabIndex = 1;
 			this._buttonJP.Text = "JP";
-			// 
+			//
 			// _buttonKR
-			// 
+			//
 			this._buttonKR.AutoCheck = false;
 			this._buttonKR.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonKR.Image = global::Mtgdb.Gui.Properties.Resources.kr;
@@ -444,9 +445,9 @@
 			this._buttonKR.Size = new System.Drawing.Size(50, 24);
 			this._buttonKR.TabIndex = 2;
 			this._buttonKR.Text = "KR";
-			// 
+			//
 			// _buttonFR
-			// 
+			//
 			this._buttonFR.AutoCheck = false;
 			this._buttonFR.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonFR.Image = global::Mtgdb.Gui.Properties.Resources.fr;
@@ -457,9 +458,9 @@
 			this._buttonFR.Size = new System.Drawing.Size(50, 24);
 			this._buttonFR.TabIndex = 5;
 			this._buttonFR.Text = "FR";
-			// 
+			//
 			// _buttonES
-			// 
+			//
 			this._buttonES.AutoCheck = false;
 			this._buttonES.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonES.Image = global::Mtgdb.Gui.Properties.Resources.es;
@@ -470,9 +471,9 @@
 			this._buttonES.Size = new System.Drawing.Size(50, 24);
 			this._buttonES.TabIndex = 4;
 			this._buttonES.Text = "ES";
-			// 
+			//
 			// _buttonRU
-			// 
+			//
 			this._buttonRU.AutoCheck = false;
 			this._buttonRU.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this._buttonRU.Image = global::Mtgdb.Gui.Properties.Resources.ru;
@@ -483,9 +484,9 @@
 			this._buttonRU.Size = new System.Drawing.Size(50, 24);
 			this._buttonRU.TabIndex = 10;
 			this._buttonRU.Text = "RU";
-			// 
+			//
 			// _dropdownConfig
-			// 
+			//
 			this._dropdownConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownConfig.Image = global::Mtgdb.Gui.Properties.Resources.config_16;
 			this._dropdownConfig.Location = new System.Drawing.Point(304, 3);
@@ -494,9 +495,9 @@
 			this._dropdownConfig.Name = "_dropdownConfig";
 			this._dropdownConfig.Size = new System.Drawing.Size(32, 24);
 			this._dropdownConfig.TabIndex = 8;
-			// 
+			//
 			// _menuConfig
-			// 
+			//
 			this._menuConfig.AutoSize = true;
 			this._menuConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuConfig.BackColor = System.Drawing.SystemColors.Window;
@@ -529,10 +530,10 @@
 			this._menuConfig.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._menuConfig.Size = new System.Drawing.Size(240, 213);
 			this._menuConfig.TabIndex = 3;
-			// 
+			//
 			// _buttonMenuEditConfig
-			// 
-			this._buttonMenuEditConfig.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			//
+			this._buttonMenuEditConfig.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonMenuEditConfig.AutoCheck = false;
 			this._buttonMenuEditConfig.BackColor = System.Drawing.SystemColors.Window;
@@ -550,9 +551,9 @@
 			this._buttonMenuEditConfig.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonMenuEditConfig.VisibleAllBorders = null;
 			this._buttonMenuEditConfig.VisibleBorders = System.Windows.Forms.AnchorStyles.Top;
-			// 
+			//
 			// _menuUiUndoDepth
-			// 
+			//
 			this._menuUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiUndoDepth.EmptySelectionText = "";
 			this._menuUiUndoDepth.ImageScale = 0.5F;
@@ -563,9 +564,9 @@
 			this._menuUiUndoDepth.Size = new System.Drawing.Size(100, 24);
 			this._menuUiUndoDepth.TabIndex = 4;
 			this._menuUiUndoDepth.TabStop = false;
-			// 
+			//
 			// _menuUiImagesCacheCapacity
-			// 
+			//
 			this._menuUiImagesCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiImagesCacheCapacity.EmptySelectionText = "";
 			this._menuUiImagesCacheCapacity.ImageScale = 0.5F;
@@ -576,9 +577,9 @@
 			this._menuUiImagesCacheCapacity.Size = new System.Drawing.Size(100, 24);
 			this._menuUiImagesCacheCapacity.TabIndex = 3;
 			this._menuUiImagesCacheCapacity.TabStop = false;
-			// 
+			//
 			// _labelUiUndoDepth
-			// 
+			//
 			this._labelUiUndoDepth.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiUndoDepth.AutoSize = true;
 			this._labelUiUndoDepth.Location = new System.Drawing.Point(72, 158);
@@ -587,9 +588,9 @@
 			this._labelUiUndoDepth.Size = new System.Drawing.Size(63, 13);
 			this._labelUiUndoDepth.TabIndex = 10;
 			this._labelUiUndoDepth.Text = "Undo depth";
-			// 
+			//
 			// _labelUiImageCacheCapacity
-			// 
+			//
 			this._labelUiImageCacheCapacity.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiImageCacheCapacity.AutoSize = true;
 			this._labelUiImageCacheCapacity.Location = new System.Drawing.Point(19, 132);
@@ -598,9 +599,9 @@
 			this._labelUiImageCacheCapacity.Size = new System.Drawing.Size(116, 13);
 			this._labelUiImageCacheCapacity.TabIndex = 9;
 			this._labelUiImageCacheCapacity.Text = "Images cache capacity";
-			// 
+			//
 			// _labelUiSuggestDownloadMissingImages
-			// 
+			//
 			this._labelUiSuggestDownloadMissingImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiSuggestDownloadMissingImages.AutoSize = true;
 			this._labelUiSuggestDownloadMissingImages.Location = new System.Drawing.Point(2, 106);
@@ -610,9 +611,9 @@
 			this._labelUiSuggestDownloadMissingImages.TabIndex = 8;
 			this._labelUiSuggestDownloadMissingImages.Text = "Missing images notification";
 			this._labelUiSuggestDownloadMissingImages.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
+			//
 			// _labelUiUseSmallImagesHint
-			// 
+			//
 			this._labelUiUseSmallImagesHint.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiUseSmallImagesHint.AutoSize = true;
 			this._menuConfig.SetColumnSpan(this._labelUiUseSmallImagesHint, 2);
@@ -623,9 +624,9 @@
 			this._labelUiUseSmallImagesHint.TabIndex = 7;
 			this._labelUiUseSmallImagesHint.Text = "Use \"High (MQ)\" when either\r\n- User Interface scale > 100%\r\n- Windows DPI setting" +
     " > 96 dpi";
-			// 
+			//
 			// _labelUiScale
-			// 
+			//
 			this._labelUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiScale.AutoSize = true;
 			this._labelUiScale.Location = new System.Drawing.Point(30, 7);
@@ -633,9 +634,9 @@
 			this._labelUiScale.Size = new System.Drawing.Size(104, 13);
 			this._labelUiScale.TabIndex = 5;
 			this._labelUiScale.Text = "User Interface scale";
-			// 
+			//
 			// _menuUiScale
-			// 
+			//
 			this._menuUiScale.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiScale.EmptySelectionText = "";
 			this._menuUiScale.ImageScale = 0.5F;
@@ -646,9 +647,9 @@
 			this._menuUiScale.Size = new System.Drawing.Size(100, 24);
 			this._menuUiScale.TabIndex = 0;
 			this._menuUiScale.TabStop = false;
-			// 
+			//
 			// _labelUiUseSmallImages
-			// 
+			//
 			this._labelUiUseSmallImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._labelUiUseSmallImages.AutoSize = true;
 			this._labelUiUseSmallImages.Location = new System.Drawing.Point(38, 33);
@@ -658,9 +659,9 @@
 			this._labelUiUseSmallImages.TabIndex = 6;
 			this._labelUiUseSmallImages.Text = "Small image quality";
 			this._labelUiUseSmallImages.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
+			//
 			// _menuUiSuggestDownloadMissingImages
-			// 
+			//
 			this._menuUiSuggestDownloadMissingImages.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this._menuUiSuggestDownloadMissingImages.EmptySelectionText = "";
 			this._menuUiSuggestDownloadMissingImages.ImageScale = 0.5F;
@@ -671,9 +672,9 @@
 			this._menuUiSuggestDownloadMissingImages.Size = new System.Drawing.Size(100, 24);
 			this._menuUiSuggestDownloadMissingImages.TabIndex = 2;
 			this._menuUiSuggestDownloadMissingImages.TabStop = false;
-			// 
+			//
 			// _menuUiSmallImageQuality
-			// 
+			//
 			this._menuUiSmallImageQuality.EmptySelectionText = "";
 			this._menuUiSmallImageQuality.ImageScale = 0.5F;
 			this._menuUiSmallImageQuality.Location = new System.Drawing.Point(137, 29);
@@ -682,9 +683,9 @@
 			this._menuUiSmallImageQuality.SelectedIndex = -1;
 			this._menuUiSmallImageQuality.Size = new System.Drawing.Size(100, 24);
 			this._menuUiSmallImageQuality.TabIndex = 11;
-			// 
+			//
 			// _buttonHelp
-			// 
+			//
 			this._buttonHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonHelp.AutoCheck = false;
 			this._buttonHelp.Image = global::Mtgdb.Gui.Properties.Resources.index_16;
@@ -693,9 +694,9 @@
 			this._buttonHelp.Name = "_buttonHelp";
 			this._buttonHelp.Size = new System.Drawing.Size(32, 24);
 			this._buttonHelp.TabIndex = 11;
-			// 
+			//
 			// _buttonClear
-			// 
+			//
 			this._buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonClear.AutoCheck = false;
 			this._buttonClear.Image = global::Mtgdb.Gui.Properties.Resources.trash_16;
@@ -704,9 +705,9 @@
 			this._buttonClear.Name = "_buttonClear";
 			this._buttonClear.Size = new System.Drawing.Size(32, 24);
 			this._buttonClear.TabIndex = 3;
-			// 
+			//
 			// _buttonPrint
-			// 
+			//
 			this._buttonPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonPrint.AutoCheck = false;
 			this._buttonPrint.Image = global::Mtgdb.Gui.Properties.Resources.print_16;
@@ -715,9 +716,9 @@
 			this._buttonPrint.Name = "_buttonPrint";
 			this._buttonPrint.Size = new System.Drawing.Size(32, 24);
 			this._buttonPrint.TabIndex = 4;
-			// 
+			//
 			// _buttonStat
-			// 
+			//
 			this._buttonStat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonStat.AutoCheck = false;
 			this._buttonStat.Image = global::Mtgdb.Gui.Properties.Resources.chart_16;
@@ -726,9 +727,9 @@
 			this._buttonStat.Name = "_buttonStat";
 			this._buttonStat.Size = new System.Drawing.Size(32, 24);
 			this._buttonStat.TabIndex = 5;
-			// 
+			//
 			// _dropdownSaveDeck
-			// 
+			//
 			this._dropdownSaveDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownSaveDeck.Image = global::Mtgdb.Gui.Properties.Resources.save_16;
 			this._dropdownSaveDeck.Location = new System.Drawing.Point(76, 3);
@@ -737,9 +738,9 @@
 			this._dropdownSaveDeck.Name = "_dropdownSaveDeck";
 			this._dropdownSaveDeck.Size = new System.Drawing.Size(32, 24);
 			this._dropdownSaveDeck.TabIndex = 2;
-			// 
+			//
 			// _menuOpen
-			// 
+			//
 			this._menuOpen.AutoSize = true;
 			this._menuOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuOpen.BackColor = System.Drawing.SystemColors.Window;
@@ -788,9 +789,9 @@
 			this._menuOpen.Size = new System.Drawing.Size(243, 420);
 			this._menuOpen.TabIndex = 4;
 			this._menuOpen.Visible = false;
-			// 
+			//
 			// _labelMtgo
-			// 
+			//
 			this._labelMtgo.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelMtgo.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelMtgo, 2);
@@ -801,9 +802,9 @@
 			this._labelMtgo.TabIndex = 15;
 			this._labelMtgo.Text = "* Many websites support\r\nMTGO .txt format";
 			this._labelMtgo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
+			//
 			// _buttonVisitDotP2014
-			// 
+			//
 			this._buttonVisitDotP2014.AutoCheck = false;
 			this._menuOpen.SetColumnSpan(this._buttonVisitDotP2014, 2);
 			this._buttonVisitDotP2014.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -820,9 +821,9 @@
 			this._buttonVisitDotP2014.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDotP2014.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitDotP2014.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuSaveCollection
-			// 
+			//
 			this._buttonMenuSaveCollection.AutoCheck = false;
 			this._buttonMenuSaveCollection.BackColor = System.Drawing.SystemColors.Window;
 			this._menuOpen.SetColumnSpan(this._buttonMenuSaveCollection, 4);
@@ -838,9 +839,9 @@
 			this._buttonMenuSaveCollection.Text = "Save collection to file: Ctrl+Alt+S";
 			this._buttonMenuSaveCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuSaveCollection.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuSaveDeck
-			// 
+			//
 			this._buttonMenuSaveDeck.AutoCheck = false;
 			this._buttonMenuSaveDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._menuOpen.SetColumnSpan(this._buttonMenuSaveDeck, 4);
@@ -856,9 +857,9 @@
 			this._buttonMenuSaveDeck.Text = "Save deck to file: Ctrl+S";
 			this._buttonMenuSaveDeck.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuSaveDeck.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _labelDotP2
-			// 
+			//
 			this._labelDotP2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelDotP2.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelDotP2, 2);
@@ -869,9 +870,9 @@
 			this._labelDotP2.TabIndex = 16;
 			this._labelDotP2.Text = "* Modified version\r\nsupports Forge format";
 			this._labelDotP2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
+			//
 			// _buttonMenuOpenCollection
-			// 
+			//
 			this._buttonMenuOpenCollection.AutoCheck = false;
 			this._buttonMenuOpenCollection.BackColor = System.Drawing.SystemColors.Window;
 			this._menuOpen.SetColumnSpan(this._buttonMenuOpenCollection, 4);
@@ -887,9 +888,9 @@
 			this._buttonMenuOpenCollection.Text = "Load collection from file: Ctrl+Alt+O";
 			this._buttonMenuOpenCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuOpenCollection.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuOpenDeck
-			// 
+			//
 			this._buttonMenuOpenDeck.AutoCheck = false;
 			this._buttonMenuOpenDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._menuOpen.SetColumnSpan(this._buttonMenuOpenDeck, 4);
@@ -905,9 +906,9 @@
 			this._buttonMenuOpenDeck.Text = "Load deck(s) from file(s): Ctrl+O";
 			this._buttonMenuOpenDeck.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuOpenDeck.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonVisitMtgo
-			// 
+			//
 			this._buttonVisitMtgo.AutoCheck = false;
 			this._menuOpen.SetColumnSpan(this._buttonVisitMtgo, 2);
 			this._buttonVisitMtgo.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -924,9 +925,9 @@
 			this._buttonVisitMtgo.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMtgo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitMtgo.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonVisitCockatrice
-			// 
+			//
 			this._buttonVisitCockatrice.AutoCheck = false;
 			this._menuOpen.SetColumnSpan(this._buttonVisitCockatrice, 2);
 			this._buttonVisitCockatrice.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -943,9 +944,9 @@
 			this._buttonVisitCockatrice.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitCockatrice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitCockatrice.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _labelMagarena
-			// 
+			//
 			this._labelMagarena.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelMagarena.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelMagarena, 2);
@@ -956,9 +957,9 @@
 			this._labelMagarena.TabIndex = 17;
 			this._labelMagarena.Text = "* Supports Magarena\r\nformat";
 			this._labelMagarena.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
+			//
 			// _buttonVisitForge
-			// 
+			//
 			this._buttonVisitForge.AutoCheck = false;
 			this._buttonVisitForge.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonVisitForge.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -974,9 +975,9 @@
 			this._buttonVisitForge.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitForge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitForge.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonVisitXMage
-			// 
+			//
 			this._buttonVisitXMage.AutoCheck = false;
 			this._buttonVisitXMage.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonVisitXMage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -992,9 +993,9 @@
 			this._buttonVisitXMage.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitXMage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitXMage.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonVisitMagarena
-			// 
+			//
 			this._buttonVisitMagarena.AutoCheck = false;
 			this._buttonVisitMagarena.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonVisitMagarena.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1010,9 +1011,9 @@
 			this._buttonVisitMagarena.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitMagarena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitMagarena.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _labelFormats
-			// 
+			//
 			this._labelFormats.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._labelFormats.AutoSize = true;
 			this._menuOpen.SetColumnSpan(this._labelFormats, 4);
@@ -1024,9 +1025,9 @@
 			this._labelFormats.TabIndex = 14;
 			this._labelFormats.Text = "Supported formats:";
 			this._labelFormats.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
+			//
 			// _buttonVisitDeckedBuilder
-			// 
+			//
 			this._buttonVisitDeckedBuilder.AutoCheck = false;
 			this._buttonVisitDeckedBuilder.Cursor = System.Windows.Forms.Cursors.Hand;
 			this._buttonVisitDeckedBuilder.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1042,9 +1043,9 @@
 			this._buttonVisitDeckedBuilder.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonVisitDeckedBuilder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitDeckedBuilder.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonImportExportToMtgArena
-			// 
+			//
 			this._buttonImportExportToMtgArena.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonImportExportToMtgArena.AutoCheck = false;
 			this._buttonImportExportToMtgArena.BackColor = System.Drawing.SystemColors.Window;
@@ -1064,9 +1065,9 @@
 			this._buttonImportExportToMtgArena.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonImportExportToMtgArena.VisibleAllBorders = null;
 			this._buttonImportExportToMtgArena.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
-			// 
+			//
 			// _buttonVisitMtgArena
-			// 
+			//
 			this._buttonVisitMtgArena.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonVisitMtgArena.AutoCheck = false;
 			this._buttonVisitMtgArena.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -1086,9 +1087,9 @@
 			this._buttonVisitMtgArena.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this._buttonVisitMtgArena.VisibleAllBorders = null;
 			this._buttonVisitMtgArena.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
-			// 
+			//
 			// _buttonImportMtgArenaCollection
-			// 
+			//
 			this._buttonImportMtgArenaCollection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonImportMtgArenaCollection.AutoCheck = false;
 			this._buttonImportMtgArenaCollection.BackColor = System.Drawing.SystemColors.Window;
@@ -1104,9 +1105,9 @@
 			this._buttonImportMtgArenaCollection.Text = "Import collection from MTGArena";
 			this._buttonImportMtgArenaCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonImportMtgArenaCollection.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonRestoreCollection
-			// 
+			//
 			this._buttonRestoreCollection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._buttonRestoreCollection.AutoCheck = false;
 			this._buttonRestoreCollection.BackColor = System.Drawing.SystemColors.Window;
@@ -1124,9 +1125,9 @@
 			this._buttonRestoreCollection.Text = "Restore collection before import";
 			this._buttonRestoreCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonRestoreCollection.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _dropdownOpenDeck
-			// 
+			//
 			this._dropdownOpenDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownOpenDeck.Image = global::Mtgdb.Gui.Properties.Resources.open_16;
 			this._dropdownOpenDeck.Location = new System.Drawing.Point(44, 3);
@@ -1135,9 +1136,9 @@
 			this._dropdownOpenDeck.Name = "_dropdownOpenDeck";
 			this._dropdownOpenDeck.Size = new System.Drawing.Size(32, 24);
 			this._dropdownOpenDeck.TabIndex = 1;
-			// 
+			//
 			// _buttonTooltips
-			// 
+			//
 			this._buttonTooltips.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonTooltips.Checked = true;
 			this._buttonTooltips.Image = global::Mtgdb.Gui.Properties.Resources.tooltip_16;
@@ -1146,9 +1147,9 @@
 			this._buttonTooltips.Name = "_buttonTooltips";
 			this._buttonTooltips.Size = new System.Drawing.Size(32, 24);
 			this._buttonTooltips.TabIndex = 6;
-			// 
+			//
 			// _dropdownPaste
-			// 
+			//
 			this._dropdownPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownPaste.Image = global::Mtgdb.Gui.Properties.Resources.paste_16;
 			this._dropdownPaste.Location = new System.Drawing.Point(0, 3);
@@ -1157,9 +1158,9 @@
 			this._dropdownPaste.Name = "_dropdownPaste";
 			this._dropdownPaste.Size = new System.Drawing.Size(32, 24);
 			this._dropdownPaste.TabIndex = 0;
-			// 
+			//
 			// _menuPaste
-			// 
+			//
 			this._menuPaste.AutoSize = true;
 			this._menuPaste.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuPaste.BackColor = System.Drawing.SystemColors.Window;
@@ -1187,9 +1188,9 @@
 			this._menuPaste.Size = new System.Drawing.Size(252, 253);
 			this._menuPaste.TabIndex = 5;
 			this._menuPaste.Visible = false;
-			// 
+			//
 			// _buttonMenuCopyCollection
-			// 
+			//
 			this._buttonMenuCopyCollection.AutoCheck = false;
 			this._buttonMenuCopyCollection.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuCopyCollection.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1204,9 +1205,9 @@
 			this._buttonMenuCopyCollection.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonMenuCopyCollection.VisibleAllBorders = null;
 			this._buttonMenuCopyCollection.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
-			// 
+			//
 			// _buttonMenuCopyDeck
-			// 
+			//
 			this._buttonMenuCopyDeck.AutoCheck = false;
 			this._buttonMenuCopyDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuCopyDeck.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1219,9 +1220,9 @@
 			this._buttonMenuCopyDeck.Text = "Copy Deck to Clipboard: Ctrl + C";
 			this._buttonMenuCopyDeck.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuCopyDeck.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuPasteCollectionAppend
-			// 
+			//
 			this._buttonMenuPasteCollectionAppend.AutoCheck = false;
 			this._buttonMenuPasteCollectionAppend.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuPasteCollectionAppend.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1234,9 +1235,9 @@
 			this._buttonMenuPasteCollectionAppend.Text = "Add to Collection from Clipboard: Alt + Shift + V";
 			this._buttonMenuPasteCollectionAppend.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuPasteCollectionAppend.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuPasteCollection
-			// 
+			//
 			this._buttonMenuPasteCollection.AutoCheck = false;
 			this._buttonMenuPasteCollection.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuPasteCollection.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1249,9 +1250,9 @@
 			this._buttonMenuPasteCollection.Text = "Create Collection from Clipboard: Alt + V";
 			this._buttonMenuPasteCollection.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuPasteCollection.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _labelPasteInfo
-			// 
+			//
 			this._labelPasteInfo.AutoSize = true;
 			this._labelPasteInfo.Location = new System.Drawing.Point(3, 148);
 			this._labelPasteInfo.Margin = new System.Windows.Forms.Padding(3, 3, 3, 1);
@@ -1260,9 +1261,9 @@
 			this._labelPasteInfo.TabIndex = 6;
 			this._labelPasteInfo.Text = resources.GetString("_labelPasteInfo.Text");
 			this._labelPasteInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
+			//
 			// _buttonMenuPasteDeck
-			// 
+			//
 			this._buttonMenuPasteDeck.AutoCheck = false;
 			this._buttonMenuPasteDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuPasteDeck.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1275,9 +1276,9 @@
 			this._buttonMenuPasteDeck.Text = "Create new Deck from Clipboard: Ctrl + V";
 			this._buttonMenuPasteDeck.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuPasteDeck.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _buttonMenuPasteDeckAppend
-			// 
+			//
 			this._buttonMenuPasteDeckAppend.AutoCheck = false;
 			this._buttonMenuPasteDeckAppend.BackColor = System.Drawing.SystemColors.Window;
 			this._buttonMenuPasteDeckAppend.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1290,9 +1291,9 @@
 			this._buttonMenuPasteDeckAppend.Text = "Add to Deck from Clipboard: Ctrl + Shift + V";
 			this._buttonMenuPasteDeckAppend.TextAlign = System.Drawing.StringAlignment.Center;
 			this._buttonMenuPasteDeckAppend.TextPosition = System.Drawing.StringAlignment.Center;
-			// 
+			//
 			// _layoutTitle
-			// 
+			//
 			this._layoutTitle.ColumnCount = 3;
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -1311,9 +1312,9 @@
 			this._layoutTitle.Size = new System.Drawing.Size(907, 31);
 			this._layoutTitle.TabIndex = 0;
 			this._layoutTitle.VisibleBorders = System.Windows.Forms.AnchorStyles.Bottom;
-			// 
+			//
 			// _flowTitleRight
-			// 
+			//
 			this._flowTitleRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this._flowTitleRight.AutoSize = true;
 			this._flowTitleRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -1340,9 +1341,9 @@
 			this._flowTitleRight.TabIndex = 1;
 			this._flowTitleRight.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			this._flowTitleRight.WrapContents = false;
-			// 
+			//
 			// _popupPanelVisibility
-			// 
+			//
 			this._popupPanelVisibility.CloseMenuOnClick = false;
 			this._popupPanelVisibility.Image = global::Mtgdb.Gui.Properties.Resources.filters_show_32;
 			this._popupPanelVisibility.ImageScale = 0.5F;
@@ -1352,9 +1353,9 @@
 			this._popupPanelVisibility.Name = "_popupPanelVisibility";
 			this._popupPanelVisibility.Size = new System.Drawing.Size(32, 24);
 			this._popupPanelVisibility.TabIndex = 15;
-			// 
+			//
 			// _menuPanelVisibility
-			// 
+			//
 			this._menuPanelVisibility.AutoSize = true;
 			this._menuPanelVisibility.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._menuPanelVisibility.BackColor = System.Drawing.SystemColors.Window;
@@ -1370,9 +1371,9 @@
 			this._menuPanelVisibility.Padding = new System.Windows.Forms.Padding(1);
 			this._menuPanelVisibility.Size = new System.Drawing.Size(87, 102);
 			this._menuPanelVisibility.TabIndex = 0;
-			// 
+			//
 			// _checkboxAllPanels
-			// 
+			//
 			this._checkboxAllPanels.AutoSize = false;
 			this._checkboxAllPanels.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxAllPanels.ImageScale = 0.5F;
@@ -1382,9 +1383,9 @@
 			this._checkboxAllPanels.Size = new System.Drawing.Size(85, 24);
 			this._checkboxAllPanels.TabIndex = 0;
 			this._checkboxAllPanels.Text = "All panels";
-			// 
+			//
 			// _checkboxTopPanel
-			// 
+			//
 			this._checkboxTopPanel.AutoSize = false;
 			this._checkboxTopPanel.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxTopPanel.ImageScale = 0.5F;
@@ -1394,9 +1395,9 @@
 			this._checkboxTopPanel.Size = new System.Drawing.Size(85, 24);
 			this._checkboxTopPanel.TabIndex = 1;
 			this._checkboxTopPanel.Text = "Top panel";
-			// 
+			//
 			// _checkboxRightPanel
-			// 
+			//
 			this._checkboxRightPanel.AutoSize = false;
 			this._checkboxRightPanel.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxRightPanel.ImageScale = 0.5F;
@@ -1406,9 +1407,9 @@
 			this._checkboxRightPanel.Size = new System.Drawing.Size(85, 24);
 			this._checkboxRightPanel.TabIndex = 2;
 			this._checkboxRightPanel.Text = "Right panel";
-			// 
+			//
 			// _checkboxSearchBar
-			// 
+			//
 			this._checkboxSearchBar.AutoSize = false;
 			this._checkboxSearchBar.ImagePosition = System.Drawing.StringAlignment.Near;
 			this._checkboxSearchBar.ImageScale = 0.5F;
@@ -1418,9 +1419,9 @@
 			this._checkboxSearchBar.Size = new System.Drawing.Size(85, 24);
 			this._checkboxSearchBar.TabIndex = 3;
 			this._checkboxSearchBar.Text = "Search bar";
-			// 
+			//
 			// _dropdownColorScheme
-			// 
+			//
 			this._dropdownColorScheme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._dropdownColorScheme.Image = global::Mtgdb.Gui.Properties.Resources.color_swatch_32;
 			this._dropdownColorScheme.ImageScale = 0.5F;
@@ -1430,22 +1431,22 @@
 			this._dropdownColorScheme.Name = "_dropdownColorScheme";
 			this._dropdownColorScheme.Size = new System.Drawing.Size(32, 24);
 			this._dropdownColorScheme.TabIndex = 9;
-			// 
+			//
 			// _menuColors
-			// 
+			//
 			this._menuColors.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._menuItemEditColorScheme});
 			this._menuColors.Name = "_menuColors";
 			this._menuColors.Size = new System.Drawing.Size(169, 26);
-			// 
+			//
 			// _menuItemEditColorScheme
-			// 
+			//
 			this._menuItemEditColorScheme.Name = "_menuItemEditColorScheme";
 			this._menuItemEditColorScheme.Size = new System.Drawing.Size(168, 22);
 			this._menuItemEditColorScheme.Text = "Edit color scheme";
-			// 
+			//
 			// _buttonSupport
-			// 
+			//
 			this._buttonSupport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonSupport.AutoCheck = false;
 			this._buttonSupport.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -1455,9 +1456,9 @@
 			this._buttonSupport.Size = new System.Drawing.Size(111, 24);
 			this._buttonSupport.TabIndex = 13;
 			this._buttonSupport.Text = "Support & feedback";
-			// 
+			//
 			// _flowTitleLeft
-			// 
+			//
 			this._flowTitleLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this._flowTitleLeft.AutoSize = true;
 			this._flowTitleLeft.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -1472,9 +1473,9 @@
 			this._flowTitleLeft.TabIndex = 0;
 			this._flowTitleLeft.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
 			this._flowTitleLeft.WrapContents = false;
-			// 
+			//
 			// _buttonOpenWindow
-			// 
+			//
 			this._buttonOpenWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonOpenWindow.AutoCheck = false;
 			this._buttonOpenWindow.Image = global::Mtgdb.Gui.Properties.Resources.add_form_32;
@@ -1484,9 +1485,9 @@
 			this._buttonOpenWindow.Name = "_buttonOpenWindow";
 			this._buttonOpenWindow.Size = new System.Drawing.Size(32, 24);
 			this._buttonOpenWindow.TabIndex = 2;
-			// 
+			//
 			// FormRoot
-			// 
+			//
 			this.CaptionHeight = 37;
 			this.ClientSize = new System.Drawing.Size(1024, 800);
 			this.Controls.Add(this._menuPanelVisibility);

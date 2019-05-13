@@ -301,7 +301,7 @@ namespace Mtgdb.Controls
 		public IReadOnlyList<ButtonBase> MenuItems =>
 			_menuItemsAccessor;
 
-
+		protected override bool IsHighlighted => MouseOver;
 
 		public event EventHandler MenuItemsCreated;
 		public event EventHandler<MenuItemEventArgs> MenuItemCreated;

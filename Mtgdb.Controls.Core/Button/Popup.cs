@@ -472,6 +472,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		protected override bool IsHighlighted => MouseOver && !Checked;
+
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsPopupOpen { get; set; }
 

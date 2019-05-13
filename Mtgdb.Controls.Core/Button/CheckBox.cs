@@ -67,5 +67,7 @@ namespace Mtgdb.Controls
 			get => base.ImageChecked;
 			set => base.ImageChecked = value;
 		}
+
+		protected override bool IsHighlighted => MouseOver;
 	}
 }

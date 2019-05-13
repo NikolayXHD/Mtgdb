@@ -319,6 +319,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		[Category("Settings"), DefaultValue(typeof(Color), "HighlightText")]
+		public Color HighlightForeColor { get; set; } = SystemColors.HighlightText;
+
 		private bool _checked;
 		[Category("Settings"), DefaultValue(false)]
 		public bool Checked
@@ -363,6 +366,19 @@ namespace Mtgdb.Controls
 					return _checkedBackColor;
 
 				return base.ActualBackColor;
+			}
+		}
+
+		protected virtual bool IsHighlighted => MouseOver || Checked;
+
+		protected override Color ActualForeColor
+		{
+			get
+			{
+				if (IsHighlighted)
+					return HighlightForeColor;
+
+				return base.ActualForeColor;
 			}
 		}
 

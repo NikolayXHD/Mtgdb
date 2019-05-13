@@ -21,19 +21,26 @@ namespace Mtgdb.Gui
 				.ToList();
 
 			var selectionBackColor = SystemColors.Highlight;
+			var selectionForeColor = SystemColors.HighlightText;
 
-			foreach (var (query, comment, backColor) in queryRows)
+			foreach (var (query, comment, backColor, foreColor) in queryRows)
 			{
 				void mouseEnter(object sender, EventArgs args)
 				{
 					query.BackColor = selectionBackColor;
 					comment.BackColor = selectionBackColor;
+
+					query.ForeColor = selectionForeColor;
+					comment.ForeColor = selectionForeColor;
 				}
 
 				void mouseLeave(object sender, EventArgs args)
 				{
 					query.BackColor = backColor;
 					comment.BackColor = backColor;
+
+					query.ForeColor = foreColor;
+					comment.ForeColor = foreColor;
 				}
 
 				void mouseClick(object sender, MouseEventArgs args)
@@ -65,7 +72,7 @@ namespace Mtgdb.Gui
 		public void Scale() =>
 			_panelExamples.Controls.OfType<Label>().ForEach(ControlScaler.ScaleDpiFont);
 
-		private (Label Query, Label Comment, Color BackColor) getFindExampleRow(int i)
+		private (Label Query, Label Comment, Color BackColor, Color ForeColor) getFindExampleRow(int i)
 		{
 			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
 
@@ -74,7 +81,7 @@ namespace Mtgdb.Gui
 
 			var commentLabel = (Label) _panelExamples.GetControlFromPosition(1, i);
 
-			return (queryLabel, commentLabel, queryLabel.BackColor);
+			return (queryLabel, commentLabel, queryLabel.BackColor, queryLabel.ForeColor);
 		}
 
 		public event Action<string> QueryClicked;

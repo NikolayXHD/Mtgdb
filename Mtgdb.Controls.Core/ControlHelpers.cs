@@ -167,17 +167,51 @@ namespace Mtgdb.Controls
 
 		public static void PaintPanelBack(this Control c, Graphics g, Rectangle clipRect, Image backImage, Color backColor, bool paintBack)
 		{
-			if (!paintBack || backColor.A < byte.MaxValue)
-				ButtonRenderer.DrawParentBackground(g, clipRect, c);
+			var isVisualStyleSupported = VisualStyleRenderer.IsSupported;
 
-			if (!paintBack && VisualStyleRenderer.IsSupported)
+			if (!paintBack || isTransparent(backColor))
+			{
+				if (isVisualStyleSupported)
+					ButtonRenderer.DrawParentBackground(g, clipRect, c);
+				else
+				{
+					if (!paintBack || !isVisible(backColor))
+					{
+						var current = c.Parent;
+						while (current != null)
+						{
+							var bg = current.BackColor;
+							if (isVisible(bg))
+							{
+								g.FillRectangle(new SolidBrush(Color.FromArgb(255, bg)), c.ClientRectangle);
+								break;
+							}
+
+							current = current.Parent;
+						}
+					}
+				}
+			}
+
+			if (!paintBack)
 				return;
 
-			if (backColor != Color.Empty && backColor != Color.Transparent && backColor.A > 0)
-				g.FillRectangle(new SolidBrush(backColor), c.ClientRectangle);
+			if (isVisible(backColor))
+			{
+				if (isVisualStyleSupported)
+					g.FillRectangle(new SolidBrush(backColor), c.ClientRectangle);
+				else
+					g.FillRectangle(new SolidBrush(Color.FromArgb(255, backColor)), c.ClientRectangle);
+			}
 
 			if (backImage != null)
 				g.DrawImage(backImage, backImage.GetRect());
+
+			bool isVisible(Color color) =>
+				color != Color.Empty && color != Color.Transparent && color.A > 0;
+
+			bool isTransparent(Color color) =>
+				color == Color.Empty || color == Color.Transparent || color.A < 255;
 		}
 
 		public static bool IsUnderMouse(this Control c) =>
