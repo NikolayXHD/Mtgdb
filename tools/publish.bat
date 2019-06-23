@@ -109,9 +109,12 @@ del /q /s %target%\*.vshost.*
 start D:\Games\Mtgdb.Gui\Mtgdb.Gui.lnk
 
 :run_tests
+goto confirm
 %out% run tests
 %nunitconsoleexe% %output%\bin\release-test\Mtgdb.Test.dll
-if errorlevel 1 exit /b %errorlevel%
+errorlevel 1 exit /b %errorlevel%
+
+:confirm
 %out% Press Ctrl+C to cancel
 
 pause

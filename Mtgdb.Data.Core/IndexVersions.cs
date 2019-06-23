@@ -2,13 +2,15 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// keyword detain
-		public const string CardSearcher = "1.11";
-		public const string CardSpellchecker = "1.11";
-		public const string KeywordSearcher = "1.11";
+		// mtgjson v 4.4.1-rebuild.1
+		private const string Cards = "1.12";
+		public const string CardSearcher = Cards;
+		public const string CardSpellchecker = Cards;
+		public const string KeywordSearcher = Cards;
 
 		// fixed deck list re-indexing, bump version to force update obsolete indexes
-		public const string DeckSearcher = "1.06";
-		public const string DeckSpellchecker = "1.06";
+		private const string Decks = "1.06";
+		public const string DeckSearcher = Decks;
+		public const string DeckSpellchecker = Decks;
 	}
 }

@@ -189,13 +189,13 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/[0-9]/ OR poison OR energy OR experience OR lore OR another) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
 		[TestCase(@"Keywords: counter AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (instant OR creature OR >) (/spells?/ OR /abilit(y|ies)/)""~5) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
 		//
-		[TestCase(@"Text: (*creat* AND NOT *creature*) AND NOT Keywords: ""create token""")]
+		[TestCase(@"Text: (*creat* AND NOT *creature* AND NOT creativity) AND NOT Keywords: ""create token""")]
 		//
 		[TestCase(@"Text: *crew* AND NOT Keywords: crew AND NOT Name: *crew*")]
 		[TestCase(@"Keywords: crew AND NOT Text: (""crew /[0-9]/"" OR ""/crews?/ (a OR >) /vehicles?/"")")]
 		//
 		[TestCase(@"Text: (cumulativ* AND upkeep*) AND NOT Keywords: ""cumulative upkeep""")]
-		[TestCase(@"Text: (*cycl* AND NOT (cyclo*)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler)")]
+		[TestCase(@"Text: (*cycl* AND NOT (cyclo*)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler OR ""growth cycle"")")]
 		[TestCase(@"Keywords: cycling AND NOT Text: (*cycling OR ""cycles a card"" OR ""can't cycle cards"" OR ""cycle or discard a card"" OR ""cycled or discarded"")")]
 		[TestCase(@"Text: *dash* AND NOT Keywords: dash AND NOT Name: (dash OR dasher)")]
 		[TestCase(@"Text: *deathtouch* AND NOT Keywords: deathtouch")]

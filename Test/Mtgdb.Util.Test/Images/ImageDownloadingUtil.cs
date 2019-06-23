@@ -27,7 +27,7 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("WAR", ".png", false)]
+		[TestCase("mh1", ".png", false)]
 		public void DownloadGathererImages(string setCode, string extension, bool useCustomSet)
 		{
 			var repo = new CardRepository();
@@ -74,8 +74,8 @@ namespace Mtgdb.Util
 		// private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
 
 		[TestCase(
-			HtmlDir + @"\War of the Spark _ MAGIC_ THE GATHERING.html",
-			GathererOriginalDir + @"\war.png")]
+			HtmlDir + @"\Core Set 2020 Cards _ MAGIC_ THE GATHERING.html",
+			GathererOriginalDir + @"\m20.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
 			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
@@ -127,7 +127,7 @@ namespace Mtgdb.Util
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ "war.png", "war", /* createZoom */ false)]
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2", /* createZoom */ true)]
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17", /* createZoom */ true)]
-		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "pwar.png", "pwar", /* createZoom */ true)]
+		[TestCase(GathererOriginalDir, GathererPreprocessedDir, "m20.png", "m20", /* createZoom */ true)]
 		public void PreProcessImages(string smallDir, string zoomDir, string pngSubdir, string jpgSubdir, bool createZoom)
 		{
 			var smallJpgDir = Path.Combine(smallDir, jpgSubdir);

@@ -36,6 +36,7 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
+			<Dir GdriveId="1hcZ9J1KtLEHG2hyx172F1ybFcH3XURd-" Subdir="m20" />
 			<Dir GdriveId="1RSnPoLL6FzVVyyW-gWXRsSxae_Q8JkiC" Subdir="ss2" />
 			<Dir GdriveId="1CWLui43ref3yMWKqqiFOe0yDL6oFyQfF" Subdir="war" />
 			<Dir GdriveId="1v8Is4oWA4MgDkiOnDSXB7m2QqPsgui6K" Subdir="pwar" />
@@ -485,6 +486,7 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
+			<Dir GdriveId="1isC-N8aAI_rYB6PG8KigFsX8r6t2Eu8o" Subdir="m20" />
 			<Dir GdriveId="1DA13tPjVquDQAeJp6DGjClaZnvzDXWWt" Subdir="ss2" />
 			<Dir GdriveId="1P4B2M934j7Ec1JxUoot-15K4KtSb3gjJ" Subdir="war" />
 			<Dir GdriveId="1bcZQfHhEIo1FOZnLSVi2hc1H7xpBH4X5" Subdir="pwar" />

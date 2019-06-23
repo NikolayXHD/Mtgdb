@@ -18,36 +18,37 @@ namespace Mtgdb.Test
 			ImgRepo.LoadZoom();
 		}
 
-		[Test]
-		public void Zoom_images_match_small_ones()
+		[TestCase("M20")]
+		public void Zoom_images_match_small_ones(params string[] setsToSkip)
 		{
+			var skipSets = setsToSkip.ToHashSet(Str.Comparer);
 			var messages = new List<string>();
 
-			foreach (var set in Repo.SetsByCode)
-				foreach (var card in set.Value.Cards)
+			foreach (var set in Repo.SetsByCode.Where(_ => !skipSets.Contains(_.Key)))
+			foreach (var card in set.Value.Cards)
+			{
+				var small = Ui.GetSmallImage(card);
+				var zooms = Ui.GetZoomImages(card);
+
+				if (small == null || zooms == null || zooms.Count == 0)
+					messages.Add($"{card.SetCode} {card.ImageName}");
+				else
 				{
-					var small = Ui.GetSmallImage(card);
-					var zooms = Ui.GetZoomImages(card);
+					var smallPath = small.ImageFile.FullPath;
+					var zoomPath = zooms[0].ImageFile.FullPath;
 
-					if (small == null || zooms == null || zooms.Count == 0)
-						messages.Add($"{card.SetCode} {card.ImageName}");
-					else
-					{
-						var smallPath = small.ImageFile.FullPath;
-						var zoomPath = zooms[0].ImageFile.FullPath;
+					smallPath = smallPath.ToLower(Str.Culture)
+						.Replace("gatherer.original", "gatherer")
+						.Replace("\\lq\\", string.Empty);
 
-						smallPath = smallPath.ToLower(Str.Culture)
-							.Replace("gatherer.original", "gatherer")
-							.Replace("\\lq\\", string.Empty);
+					zoomPath = zoomPath.ToLower(Str.Culture)
+						.Replace("gatherer.preprocessed", "gatherer")
+						.Replace("\\mq\\", string.Empty);
 
-						zoomPath = zoomPath.ToLower(Str.Culture)
-							.Replace("gatherer.preprocessed", "gatherer")
-							.Replace("\\mq\\", string.Empty);
-
-						if (!Str.Equals(smallPath, zoomPath))
-							messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
-					}
+					if (!Str.Equals(smallPath, zoomPath))
+						messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
 				}
+			}
 
 			Assert.That(messages, Is.Empty);
 		}
@@ -62,14 +63,17 @@ namespace Mtgdb.Test
 		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
 		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
 		[TestCase("CMA", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
-		[TestCase("DDT", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
-		[TestCase("DDU", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
+		[TestCase("DDT", XlhqDir,
+			"DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
+		[TestCase("DDU", XlhqDir,
+			"DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
 		[TestCase("E02", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
 		[TestCase("RIX", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
 		[TestCase("V17", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
 		[TestCase("BBD", XlhqDir, "BBD - Battlebond\\300DPI Cards")]
 		[TestCase("DOM", XlhqDir, "DOM - Dominaria\\300DPI Cards")]
-		[TestCase("GS1", XlhqDir, "GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
+		[TestCase("GS1", XlhqDir,
+			"GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
 		[TestCase("M19", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
 		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
 		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
@@ -77,11 +81,13 @@ namespace Mtgdb.Test
 		[TestCase("GRN", XlhqDir, "GRN - Guilds of Ravnica\\300DPI Cards")]
 		[TestCase("GK1", XlhqDir, "GK1 - GRN Guild Kit\\300DPI Cards")]
 		[TestCase("UMA", XlhqDir, "UMA - Ultimate Masters\\300DPI Cards")]
+		[TestCase("WAR", XlhqDir, "WAR - War of the Spark\\300DPI Cards")]
 		[TestCase("PUMA", GathererDir, "puma")]
-		[TestCase("WAR", GathererDir, "war")]
 		[TestCase("SS2", GathererDir, "ss2")]
+		[TestCase("mh1", GathererDir, "mh1")]
 		// ReSharper restore StringLiteralTypo
-		public void Set_images_are_from_expected_directory(string setCode, string baseDir, params string[] expectedSubdirs)
+		public void Set_images_are_from_expected_directory(
+			string setCode, string baseDir, params string[] expectedSubdirs)
 		{
 			var expectedDirsSet = expectedSubdirs
 				.Select(_ => Path.Combine(baseDir, _))
@@ -92,12 +98,17 @@ namespace Mtgdb.Test
 			{
 				var imageModel = Ui.GetSmallImage(card);
 				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
-				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase, $"{card.ImageName} {dir}");
+				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase,
+					$"{card.ImageName} {dir}");
 			}
 		}
 
 		private const string XlhqDir = "D:\\Distrib\\games\\mtg\\Mega\\XLHQ";
-		private const string XlhqTorrentsDir = "D:\\Distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
-		private const string GathererDir = "D:\\Distrib\\games\\mtg\\Gatherer.Original";
+
+		private const string XlhqTorrentsDir =
+			"D:\\Distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
+
+		private const string GathererDir =
+			"D:\\Distrib\\games\\mtg\\Gatherer.Original";
 	}
 }
