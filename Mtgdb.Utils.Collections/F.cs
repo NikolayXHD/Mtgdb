@@ -229,5 +229,11 @@ namespace Mtgdb
 
 		public static T Self<T>(this T value) =>
 			value;
+
+		public static IEnumerable<T> Seq<T>(T val) =>
+			Mtgdb.Sequence.From(val);
+
+		public static IEnumerable<T> Seq<T>(T val1, T val2) =>
+			Mtgdb.Sequence.From(val1, val2);
 	}
 }
