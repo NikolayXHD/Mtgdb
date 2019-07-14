@@ -206,6 +206,11 @@ namespace Mtgdb.Gui
 				"in order to begin new search from scratch.",
 				_buttonResetFilters);
 
+			defaultTooltips.SetTooltip(this,
+				_countInputSubsystem.GetTooltipTitle,
+				_countInputSubsystem.GetTooltipText,
+				_countInputSubsystem.InputControl);
+
 			defaultTooltips.SetCustomTooltip(_tooltipViewCards);
 			defaultTooltips.SetCustomTooltip(_tooltipViewDeck);
 		}

@@ -215,8 +215,8 @@ namespace Mtgdb.Data.Model
 
 				bool isAllowedIn(string format, string id, int count)
 				{
-					var c = _repo.CardsById[id];
-					return c.IsLegalIn(format) || c.IsRestrictedIn(format) && count <= 1;
+					var c = _repo.CardsById.TryGet(id);
+					return c != null && (c.IsLegalIn(format) || c.IsRestrictedIn(format) && count <= 1);
 				}
 
 				_legalFormatsCache = Legality.Formats
@@ -357,9 +357,14 @@ namespace Mtgdb.Data.Model
 				return;
 
 			_cardNames.Clear();
-			_cardNames.UnionWith(OriginalDeck.MainDeck.Order.Select(_ => _repo.CardsById[_].NameEn));
-			_cardNames.UnionWith(OriginalDeck.Sideboard.Order.Select(_ => _repo.CardsById[_].NameEn));
+			_cardNames.UnionWith(getNames(OriginalDeck.MainDeck));
+			_cardNames.UnionWith(getNames(OriginalDeck.Sideboard));
 			// ignore maybeboard
+
+			IEnumerable<string> getNames(DeckZone zone) =>
+				zone.Order
+					.Select(_ => _repo.CardsById?.TryGet(_)?.NameEn)
+					.Where(F.IsNotNull);
 		}
 
 		private readonly CardRepository _repo;

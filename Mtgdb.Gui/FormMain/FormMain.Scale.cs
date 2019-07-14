@@ -36,6 +36,7 @@ namespace Mtgdb.Gui
 			}.ForEach(ButtonBaseScaler.ScaleDpiAuto);
 
 			_deckEditorSubsystem.Scale();
+			_countInputSubsystem.Scale();
 			_menuSearchExamples.Scale();
 
 			_labelStatusScrollCards.ScaleDpi();

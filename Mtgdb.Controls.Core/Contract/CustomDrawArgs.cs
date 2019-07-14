@@ -15,5 +15,6 @@ namespace Mtgdb.Controls
 		public Font Font { get; set; }
 		public Color ForeColor { get; set; }
 		public RectangularSelection Selection { get; set; }
+		public bool HotTracked { get; set; }
 	}
 }

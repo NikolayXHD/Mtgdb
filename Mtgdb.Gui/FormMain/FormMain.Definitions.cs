@@ -78,8 +78,9 @@ namespace Mtgdb.Gui
 
 			endRestoreSettings();
 
-			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _cardSearch);
-			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _cardSearch);
+			_countInputSubsystem = new CountInputSubsystem();
+			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _cardSearch, _countInputSubsystem);
+			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _cardSearch, _countInputSubsystem);
 
 			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -107,6 +108,7 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				_collectionEditor,
 				_dragging,
+				_countInputSubsystem,
 				Cursor,
 				_formZoom,
 				this);
@@ -128,9 +130,9 @@ namespace Mtgdb.Gui
 				_cardSearch,
 				cardAdapter,
 				_deckEditor,
+				_countInputSubsystem,
 				_quickFilterFacade,
 				_legality,
-				_imageLoader,
 				iconRecognizer);
 
 
@@ -455,6 +457,7 @@ namespace Mtgdb.Gui
 
 		// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 		private readonly DeckEditorSubsystem _deckEditorSubsystem;
+		private readonly CountInputSubsystem _countInputSubsystem;
 		private readonly DrawingSubsystem _drawing;
 		private readonly DraggingSubsystem _dragging;
 

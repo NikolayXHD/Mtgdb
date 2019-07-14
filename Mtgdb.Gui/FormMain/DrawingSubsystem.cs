@@ -16,25 +16,24 @@ namespace Mtgdb.Gui
 	[Localizable(false)]
 	public class DrawingSubsystem
 	{
-		public DrawingSubsystem(
-			MtgLayoutView layoutViewCards,
+		public DrawingSubsystem(MtgLayoutView layoutViewCards,
 			MtgLayoutView layoutViewDeck,
 			DraggingSubsystem draggingSubsystem,
 			CardSearchSubsystem cardSearchSubsystem,
 			CardDocumentAdapter adapter,
 			DeckEditorModel deckEditorModel,
+			CountInputSubsystem countInputSubsystem,
 			QuickFilterFacade quickFilterFacade,
 			LegalitySubsystem legalitySubsystem,
-			ImageLoader imageLoader,
 			IconRecognizer iconRecognizer)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
 			_draggingSubsystem = draggingSubsystem;
 			_deckEditorModel = deckEditorModel;
+			_countInputSubsystem = countInputSubsystem;
 			_quickFilterFacade = quickFilterFacade;
 			_legalitySubsystem = legalitySubsystem;
-			_imageLoader = imageLoader;
 
 			_layoutViewCards.RowDataLoaded += setHighlightMatches;
 			_layoutViewCards.SetIconRecognizer(iconRecognizer);
@@ -81,10 +80,10 @@ namespace Mtgdb.Gui
 				var colorSelection = SystemColors.InactiveCaption;
 				var colorSelectionGradient = SystemColors.GradientInactiveCaption;
 
-				if (deckCount == 0 && collectionCount > 0)
-					drawSelection(e, colorSelection, colorSelectionGradient, 127 - 32);
-				else if (deckCount > 0)
+				if (deckCount > 0)
 					drawSelection(e, colorSelection, colorSelectionGradient, 255 - 32);
+				else if (collectionCount > 0 || e.HotTracked)
+					drawSelection(e, colorSelection, colorSelectionGradient, 127 - 32);
 			}
 
 			drawLegalityWarning(e, sender, card);
@@ -105,8 +104,7 @@ namespace Mtgdb.Gui
 				return;
 
 			var rect = getLegalityWarningRectangle(e);
-			const int size = 18;
-			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
+			var font = getWarningFont();
 
 			var lineSize = e.Graphics.MeasureText(legalityWarning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
@@ -116,6 +114,17 @@ namespace Mtgdb.Gui
 					SystemColors.Highlight.TransformHsv(
 						h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
 			);
+		}
+
+		private Font getWarningFont()
+		{
+			var countFont = _countInputSubsystem.CountFont;
+			var font = new Font(
+				FontFamily.GenericMonospace,
+				countFont.Height - _countInputSubsystem.CountBorder,
+				FontStyle.Italic | FontStyle.Bold,
+				countFont.Unit);
+			return font;
 		}
 
 		private void drawCountWarning(CustomDrawArgs e, Card card)
@@ -161,9 +170,7 @@ namespace Mtgdb.Gui
 				warning = $"{countInMain}+{countInSideboard}/{maxCount}";
 
 			var rect = getCountWarningRectangle(e);
-
-			const int size = 16;
-			var font = new Font(FontFamily.GenericMonospace, size, FontStyle.Italic | FontStyle.Bold);
+			var font = getWarningFont();
 
 			var lineSize = e.Graphics.MeasureText(warning, font);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
@@ -171,15 +178,15 @@ namespace Mtgdb.Gui
 			e.Graphics.DrawText(warning, font, rect, Color.FromArgb(224, color));
 		}
 
-		private void drawSelection(CustomDrawArgs e, Color borderColor, Color foreColor, int opacity)
+		private void drawSelection(CustomDrawArgs e, Color colorGrad1, Color colorGrad2, int opacity)
 		{
-			var rect = getSelectionRectangle(e);
+			var rect = _countInputSubsystem.GetCountRectangle(e.Bounds);
 
-			const int borderWidth = 2;
+			int countBorder = _countInputSubsystem.CountBorder;
 			const int cornerOffset = -1;
-			var cornerShare = 4;
+			const int cornerShare = 4;
 
-			rect.Inflate(new Size(-borderWidth, -borderWidth));
+			rect.Inflate(-countBorder, -countBorder);
 
 			int cornerYSize = rect.Height / cornerShare;
 			int cornerXSize = rect.Height / cornerShare;
@@ -204,8 +211,8 @@ namespace Mtgdb.Gui
 
 			var brush = new LinearGradientBrush(
 				gradientRect,
-				Color.FromArgb(opacity, borderColor),
-				Color.FromArgb(opacity, foreColor),
+				Color.FromArgb(opacity, colorGrad1),
+				Color.FromArgb(opacity, colorGrad2),
 				LinearGradientMode.BackwardDiagonal);
 
 			brush.SetBlendTriangularShape(0.99f, 1f);
@@ -218,9 +225,8 @@ namespace Mtgdb.Gui
 			if (string.IsNullOrEmpty(countText))
 				return;
 
-			var rect = getSelectionRectangle(e);
-
-			var font = new Font("Arial Black", 18.ByDpiHeight(), GraphicsUnit.Pixel);
+			var rect = _countInputSubsystem.GetCountRectangle(e.Bounds);
+			var font = _countInputSubsystem.CountFont;
 
 			var textSize = e.Graphics.MeasureText(countText, font);
 
@@ -230,28 +236,14 @@ namespace Mtgdb.Gui
 				textSize.Width,
 				textSize.Height);
 
-			targetRect.Inflate(1, 0);
-			targetRect.Offset(2, 0);
-
+			targetRect.Offset(0, 1);
 			e.Graphics.DrawText(countText, font, targetRect, SystemColors.WindowText);
-		}
-
-		private Rectangle getSelectionRectangle(CustomDrawArgs e)
-		{
-			var size = new Size(80, 30).ByDpi();
-
-			var rect = new Rectangle(
-				e.Bounds.Left + (_imageLoader.CardSize.Width - size.Width) / 2,
-				e.Bounds.Bottom - size.Height,
-				size.Width,
-				size.Height);
-
-			return rect;
 		}
 
 		private Rectangle getLegalityWarningRectangle(CustomDrawArgs e)
 		{
-			var stripSize = new Size(_imageLoader.CardSize.Width, 20.ByDpiHeight());
+			var stripSize = new Size(Ui.ImageLoader.CardSize.Width,
+				getWarningFont().Height + _countInputSubsystem.CountBorder);
 
 			var rect = new Rectangle(
 				e.Bounds.Left,
@@ -363,9 +355,9 @@ namespace Mtgdb.Gui
 		private readonly DraggingSubsystem _draggingSubsystem;
 
 		private readonly DeckEditorModel _deckEditorModel;
+		private readonly CountInputSubsystem _countInputSubsystem;
 		private readonly QuickFilterFacade _quickFilterFacade;
 		private readonly LegalitySubsystem _legalitySubsystem;
-		private readonly ImageLoader _imageLoader;
 		private readonly SearchResultHighlighter _highlightSubsystem;
 	}
 }

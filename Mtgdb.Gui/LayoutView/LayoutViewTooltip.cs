@@ -11,11 +11,16 @@ namespace Mtgdb.Gui
 		public event Action<TooltipModel> Show;
 		public event Action Hide;
 
-		public LayoutViewTooltip(object owner, MtgLayoutView layoutView, CardSearchSubsystem cardSearchSubsystem)
+		public LayoutViewTooltip(
+			object owner,
+			MtgLayoutView layoutView,
+			CardSearchSubsystem cardSearchSubsystem,
+			CountInputSubsystem countInput)
 		{
 			Owner = owner;
 			_layoutView = layoutView;
 			_cardSearchSubsystem = cardSearchSubsystem;
+			_countInput = countInput;
 		}
 
 		public void SubscribeEvents()
@@ -32,43 +37,63 @@ namespace Mtgdb.Gui
 			_layoutView.VisibleRecordIndexChanged -= scrolled;
 		}
 
-		private void scrolled(object sender)
-		{
-			var position = Cursor.Position;
-			showFieldTooltip(position);
-		}
+		private void scrolled(object sender) =>
+			showFieldTooltip(Cursor.Position);
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
 			if (_layoutView.IsSelectingText())
-			{
 				Hide?.Invoke();
-			}
 			else
-			{
-				var position = Cursor.Position;
-				showFieldTooltip(position);
-			}
+				showFieldTooltip(Cursor.Position);
 		}
 
-		private void mouseLeave(object sender, EventArgs e)
-		{
+		private void mouseLeave(object sender, EventArgs e) =>
 			Hide?.Invoke();
-		}
 
 		private void showFieldTooltip(Point position)
 		{
 			var cursorPosition = _layoutView.Control.PointToClient(position);
 			var hitInfo = _layoutView.CalcHitInfo(cursorPosition);
 
-			var card = (Card) _layoutView.FindRow(hitInfo.RowHandle);
-			if (!hitInfo.AlignButtonDirection.HasValue && (card == null || hitInfo.IsOverImage() || !hitInfo.FieldBounds.HasValue))
+			if (hitInfo.AlignButtonDirection.HasValue)
 			{
-				Hide?.Invoke();
-				return;
+				Show?.Invoke(new TooltipModel
+				{
+					Id =
+						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.align",
+					ObjectBounds = _layoutView.GetAlignButtonBounds(hitInfo),
+					Control = _layoutView.Control,
+					Title = "Viewport alignment",
+					Text = "Aligns viewport by this corner.\r\n" +
+						"\r\n" +
+						"If this corner would be truncated\r\n" +
+						"viewport will shift to fit it into the screen.",
+					Clickable = false
+				});
 			}
-
-			if (hitInfo.IsSortButton)
+			else if (_countInput.IsCountRectangle(hitInfo, cursorPosition, out var countRect))
+			{
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.edit_count",
+					ObjectBounds = countRect,
+					Control = _layoutView.Control,
+					Title = "Edit count",
+					Text =
+						"Left click here: set count in deck\r\n" +
+						"Alt + Left click here: set count in collection\r\n" +
+						"When editing, Tab / Shift + Tab: switch to next / previous card\r\n\r\n" +
+						"Right click: add 1 to deck\r\n" +
+						"Middle click: remove 1 from deck\r\n" +
+						"Alt + Right click: add 1 to collection\r\n" +
+						"Alt + Middle click: remove 1 from collection\r\n" +
+						"Ctrl + any above shortcut: add/remove 4 cards instead of 1\r\n\r\n" +
+						"Note: clicks work anywhere inside card, not necessarily at the count label",
+					Clickable = false
+				});
+			}
+			else if (hitInfo.IsSortButton)
 			{
 				Show?.Invoke(new TooltipModel
 				{
@@ -89,96 +114,92 @@ namespace Mtgdb.Gui
 					Clickable = false
 				});
 			}
-			else
+			else if (hitInfo.IsSearchButton)
 			{
-				if (hitInfo.IsSearchButton)
+				string text;
+				string title;
+				string query = _cardSearchSubsystem.GetFieldValueQuery(
+					hitInfo.FieldName,
+					_layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+
+				if (hitInfo.FieldName == nameof(Card.Image))
 				{
-					string text;
-					string title;
-					string query = _cardSearchSubsystem.GetFieldValueQuery(
-						hitInfo.FieldName,
-						_layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
-
-					if (hitInfo.FieldName == nameof(Card.Image))
-					{
-						title = "Search similar cards";
-						text = "Click to search cards similar to this one.\r\n" +
-							"Similarity is determined by Text and GeneratedMana fields.\r\n" +
-							"\r\n" +
-							"Following term will be added to search bar\r\n" +
-							query;
-					}
-					else
-					{
-						title = "Add to search";
-						text = "Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
-							"Following term will be added to search bar\r\n" +
-							query + "\r\n\r\n" +
-							"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";
-					}
-
-
-					Show?.Invoke(new TooltipModel
-					{
-						Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
-						ObjectBounds = hitInfo.ButtonBounds,
-						Control = _layoutView.Control,
-						Title = title,
-						Text = text,
-						Clickable = false
-					});
-				}
-				else if (hitInfo.CustomButtonIndex >= 0)
-				{
-					bool isDeck = DeckEditorButtons.IsDeck(hitInfo.CustomButtonIndex);
-					int delta = DeckEditorButtons.GetCountDelta(hitInfo.CustomButtonIndex);
-					int absDelta = Math.Abs(delta);
-
-					Show?.Invoke(new TooltipModel
-					{
-						Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.CustomButtonIndex}",
-						ObjectBounds = hitInfo.ButtonBounds,
-						Control = _layoutView.Control,
-						Title = $"{(delta > 0 ? "Add" : "Remove")} {absDelta} card{(absDelta == 1 ? string.Empty : "s")} {(delta > 0 ? "to" : "from")} {(isDeck ? "Deck" : "Collection")}",
-						Text = $"{(absDelta == 1 ? string.Empty : "Ctrl + ")}{(isDeck ? string.Empty : "Alt + ")}{(delta > 0 ? "Right" : "Middle")} " +
-							"mouse click on card image does the same",
-						Clickable = false
-					});
-				}
-				else if (hitInfo.AlignButtonDirection.HasValue)
-				{
-					Show?.Invoke(new TooltipModel
-					{
-						Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.align",
-						ObjectBounds = _layoutView.GetAlignButtonBounds(hitInfo),
-						Control = _layoutView.Control,
-						Title = "Viewport alignment",
-						Text = "Aligns viewport by this corner.\r\n" +
-							"\r\n" +
-							"If this corner would be truncated\r\n" +
-							"viewport will shift to fit it into the screen.",
-						Clickable = false
-					});
+					title = "Search similar cards";
+					text = "Click to search cards similar to this one.\r\n" +
+						"Similarity is determined by Text and GeneratedMana fields.\r\n" +
+						"\r\n" +
+						"Following term will be added to search bar\r\n" +
+						query;
 				}
 				else
 				{
-					Show?.Invoke(new TooltipModel
-					{
-						Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
-						ObjectBounds = hitInfo.FieldBounds.Value,
-						Control = _layoutView.Control,
-						Title = hitInfo.FieldName,
-						Text = _layoutView.GetFieldTooltipText(hitInfo.RowHandle, hitInfo.FieldName),
-						HighlightRanges = _layoutView.GetHighlightRanges(hitInfo.RowHandle, hitInfo.FieldName),
-						HighlightOptions = _layoutView.GetHighlightSettings(),
-						Clickable = true
-					});
+					title = "Add to search";
+					text =
+						"Click to NARROW DOWN search result by cards matching this value\r\n\r\n" +
+						"Following term will be added to search bar\r\n" +
+						query + "\r\n\r\n" +
+						"Hold Alt key when hovering to prevent showing this button. Helps selecting text in small fields.";
 				}
+
+				Show?.Invoke(new TooltipModel
+				{
+					Id =
+						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
+					ObjectBounds = hitInfo.ButtonBounds,
+					Control = _layoutView.Control,
+					Title = title,
+					Text = text,
+					Clickable = false
+				});
+			}
+			else if (hitInfo.CustomButtonIndex >= 0)
+			{
+				bool isDeck = DeckEditorButtons.IsDeck(hitInfo.CustomButtonIndex);
+				int delta = DeckEditorButtons.GetCountDelta(hitInfo.CustomButtonIndex);
+				int absDelta = Math.Abs(delta);
+
+				Show?.Invoke(new TooltipModel
+				{
+					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.CustomButtonIndex}",
+					ObjectBounds = hitInfo.ButtonBounds,
+					Control = _layoutView.Control,
+					Title = $"{(delta > 0 ? "Add" : "Remove")} {absDelta} card{(absDelta == 1 ? string.Empty : "s")} {(delta > 0 ? "to" : "from")} {(isDeck ? "Deck" : "Collection")}",
+					Text =
+						$"{(absDelta == 1 ? string.Empty : "Ctrl + ")}{(isDeck ? string.Empty : "Alt + ")}{(delta > 0 ? "Right" : "Middle")} " +
+						"mouse click on card image does the same",
+					Clickable = false
+				});
+			}
+			else if (
+				hitInfo.RowDataSource != null &&
+				hitInfo.FieldBounds.HasValue &&
+				!Str.Equals(hitInfo.FieldName, nameof(Card.Image)))
+			{
+				Show?.Invoke(new TooltipModel
+				{
+					Id =
+						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
+					ObjectBounds = hitInfo.FieldBounds.Value,
+					Control = _layoutView.Control,
+					Title = hitInfo.FieldName,
+					Text = _layoutView.GetFieldTooltipText(hitInfo.RowHandle, hitInfo.FieldName),
+					HighlightRanges =
+						_layoutView.GetHighlightRanges(hitInfo.RowHandle,
+							hitInfo.FieldName),
+					HighlightOptions = _layoutView.GetHighlightSettings(),
+					Clickable = true
+				});
+			}
+			else
+			{
+				Hide?.Invoke();
 			}
 		}
 
+
 		private readonly MtgLayoutView _layoutView;
 		private readonly CardSearchSubsystem _cardSearchSubsystem;
+		private readonly CountInputSubsystem _countInput;
 
 		public object Owner { get; }
 	}

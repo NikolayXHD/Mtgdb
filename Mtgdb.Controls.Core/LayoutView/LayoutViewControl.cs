@@ -145,8 +145,7 @@ namespace Mtgdb.Controls
 				if (!card.Visible || card.DataSource == null)
 					continue;
 
-				var cardArea = new Rectangle(card.Location, card.Size);
-				if (!clipRectangle.IntersectsWith(cardArea))
+				if (!clipRectangle.IntersectsWith(card.Bounds))
 					continue;
 
 				actions.Back.Add(e => card.PaintSelf(e.Graphics, card.Location, BackColor));
@@ -154,7 +153,6 @@ namespace Mtgdb.Controls
 				foreach (var field in card.Fields)
 				{
 					var fieldArea = new Rectangle(card.Location.Plus(field.Location), field.Size);
-
 					if (!clipRectangle.IntersectsWith(fieldArea))
 						continue;
 
@@ -196,7 +194,8 @@ namespace Mtgdb.Controls
 					ForeColor = field.ForeColor,
 					DisplayText = field.DataText,
 					HAlignment = field.HorizontalAlignment,
-					Selection = _selection
+					Selection = _selection,
+					HotTracked = field.IsHotTracked
 				};
 
 				CustomDrawField.Invoke(this, customFieldArgs);
@@ -292,9 +291,12 @@ namespace Mtgdb.Controls
 			updateScrollbar();
 		}
 
+		public int GetPageSize() =>
+			getRowsCount() * getColumnsCount();
+
 		private void updateScrollbar()
 		{
-			int pageSize = getRowsCount() * getColumnsCount();
+			int pageSize = GetPageSize();
 			Scrollbar.Enabled = Count > pageSize;
 
 			int largeChange = ((int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))))
@@ -400,9 +402,7 @@ namespace Mtgdb.Controls
 			if (_updatingScrollValue)
 				return;
 
-			int pageSize = getRowsCount() * getColumnsCount();
-			int cardIndex = Scrollbar.Value * pageSize;
-
+			int cardIndex = Scrollbar.Value * GetPageSize();
 			if (cardIndex == CardIndex)
 				return;
 
@@ -425,14 +425,14 @@ namespace Mtgdb.Controls
 			if (e.KeyData == Keys.PageDown)
 			{
 				if (IsUnderMouse)
-					scrollAdd(getRowsCount() * getColumnsCount());
+					scrollAdd(GetPageSize());
 				else
 					handled = false;
 			}
 			else if (e.KeyData == Keys.PageUp)
 			{
 				if (IsUnderMouse)
-					scrollAdd(-(getRowsCount() * getColumnsCount()));
+					scrollAdd(-GetPageSize());
 				else
 					handled = false;
 			}
@@ -524,9 +524,9 @@ namespace Mtgdb.Controls
 				return;
 
 			if (e.Delta < 0)
-				scrollAdd(getRowsCount() * getColumnsCount());
+				scrollAdd(GetPageSize());
 			else if (e.Delta > 0)
-				scrollAdd(-(getRowsCount() * getColumnsCount()));
+				scrollAdd(-GetPageSize());
 		}
 
 		private void scrollAdd(int pageSize)
@@ -870,20 +870,46 @@ namespace Mtgdb.Controls
 
 		public void InvalidateCard(object row)
 		{
+			var card = getCard(row);
+			if (card != null)
+				Invalidate(card.Bounds);
+		}
+
+		public Rectangle? GetFieldBounds(object row, string fieldName)
+		{
 			if (row == null)
-				return;
+				return null;
 
-			int rowHandle = FindRow(row);
-			if (rowHandle < 0)
-				return;
+			var index = FindRow(row);
+			if (index < 0)
+				return null;
 
-			var cardIndex = getDisplayIndex(rowHandle);
+			return GetFieldBounds(index, fieldName);
+		}
+
+		public Rectangle GetFieldBounds(int index, string fieldName)
+		{
+			var card = Cards[getDisplayIndex(index)];
+			var field = card.Fields.Single(_ => _.FieldName == fieldName);
+			var bounds = new Rectangle(card.Location.Plus(field.Location), field.Size);
+			return bounds;
+		}
+
+		private LayoutControl getCard(object row)
+		{
+			if (row == null)
+				return null;
+
+			int index = FindRow(row);
+			if (index < 0)
+				return null;
+
+			var cardIndex = getDisplayIndex(index);
 
 			if (cardIndex < 0)
-				return;
+				return null;
 
-			var card = Cards[cardIndex];
-			Invalidate(card.Bounds);
+			return Cards[cardIndex];
 		}
 
 
@@ -1153,12 +1179,9 @@ namespace Mtgdb.Controls
 			else if (value < 0 && count > 0)
 				value = 0;
 
-			int columnsCount = getColumnsCount();
-			int rowsCount = getRowsCount();
-
 			if (value >= 0)
 			{
-				int pageSize = columnsCount * rowsCount;
+				int pageSize = GetPageSize();
 				value = pageSize * (value / pageSize);
 			}
 
@@ -1222,11 +1245,8 @@ namespace Mtgdb.Controls
 
 		private int getDisplayIndex(int rowHandle)
 		{
-			int columnsCount = getColumnsCount();
-			int rowsCount = getRowsCount();
 			int result = rowHandle - CardIndex;
-
-			if (result < 0 || result >= columnsCount * rowsCount || !Cards[result].Visible)
+			if (result < 0 || result >= GetPageSize() || !Cards[result].Visible)
 				return -1;
 
 			return result;
@@ -1396,7 +1416,7 @@ namespace Mtgdb.Controls
 		{
 			get
 			{
-				int pageSize = getRowsCount() * getColumnsCount();
+				int pageSize = GetPageSize();
 
 				int pageCount = Count / pageSize;
 

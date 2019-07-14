@@ -18,9 +18,10 @@ namespace Mtgdb.Gui
 			DeckEditorModel deckEditorModel,
 			CollectionEditorModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
+			CountInputSubsystem countInputSubsystem,
 			Cursor cursor,
 			FormZoom formZoom,
-			Control parent)
+			FormMain parent)
 		{
 			_layoutViewCards = layoutViewCards;
 			_layoutViewDeck = layoutViewDeck;
@@ -28,10 +29,7 @@ namespace Mtgdb.Gui
 			_deckEditorModel = deckEditorModel;
 			_collectionModel = collectionModel;
 			_draggingSubsystem = draggingSubsystem;
-			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
-			_draggingSubsystem.DragRemoved += dragRemoved;
-			_draggingSubsystem.DragAdded += dragAdded;
-			_layoutViewCards.SelectionStarted += selectionStarted;
+			_countInputSubsystem = countInputSubsystem;
 
 			_formZoom = formZoom;
 			_parent = parent;
@@ -76,6 +74,13 @@ namespace Mtgdb.Gui
 
 			_layoutViewCards.MouseClicked += gridMouseClick;
 			_layoutViewDeck.MouseClicked += gridMouseClick;
+
+			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
+			_draggingSubsystem.DragRemoved += dragRemoved;
+			_draggingSubsystem.DragAdded += dragAdded;
+			_layoutViewCards.SelectionStarted += selectionStarted;
+
+			_countInputSubsystem.Input += countInput;
 		}
 
 		private void gridMouseLeave(object sender, EventArgs e)
@@ -100,7 +105,9 @@ namespace Mtgdb.Gui
 			{
 				updateCursor(view.Control,
 					overImage: hitInfo.IsOverImage(),
-					overText: hitInfo.IsOverText(),
+					overText:
+						hitInfo.IsOverText() ||
+						_countInputSubsystem.IsCountRectangle(hitInfo, e.Location, out _),
 					overButton: hitInfo.IsSomeButton);
 			}
 			else
@@ -115,10 +122,10 @@ namespace Mtgdb.Gui
 				control.Cursor = _cursor;
 			else if (overButton)
 				control.Cursor = Cursors.Default;
-			else if (overImage)
-				control.Cursor = _zoomCursor;
 			else if (overText)
 				control.Cursor = _textSelectionCursor;
+			else if (overImage)
+				control.Cursor = _zoomCursor;
 			else
 				control.Cursor = Cursors.Default;
 		}
@@ -128,30 +135,43 @@ namespace Mtgdb.Gui
 			if (_draggingSubsystem.IsDragging())
 				return;
 
-			var view = getView(sender);
-
 			if (hitInfo.AlignButtonDirection.HasValue)
 				return;
 
-			var card = getCard(view, hitInfo);
-
+			var card = _countInputSubsystem.GetCard((LayoutViewControl)sender, hitInfo);
 			if (card == null)
+				return;
+
+			var viewControl = (LayoutViewControl)sender;
+			if (_countInputSubsystem.HandleClick(viewControl, card, e))
 				return;
 
 			var (countDelta, isDeck) = getChange(hitInfo, e);
 
-			if (countDelta != 0)
-			{
-				if (isDeck)
-					_deckEditorModel.Add(card, countDelta);
-				else
-					changeCountInCollection(card, countDelta);
-
+			if (handleCountChange(countDelta, isDeck, card))
 				return;
-			}
 
 			if (e.Button == MouseButtons.Left)
 				zoomCard(card);
+		}
+
+		private bool handleCountChange(int countDelta, bool isDeck, Card card)
+		{
+			if (countDelta == 0)
+				return false;
+
+			if (isDeck)
+				_deckEditorModel.Add(card, countDelta);
+			else
+				_collectionModel.Add(card, countDelta);
+
+			return true;
+		}
+
+		private void countInput((int CountDelta, bool IsDeck, Card Card) e)
+		{
+			if (e.CountDelta != 0)
+				handleCountChange(e.CountDelta, e.IsDeck, e.Card);
 		}
 
 		private static (int CountDelta, bool IsDeck) getChange(HitInfo hitInfo, MouseEventArgs e)
@@ -169,21 +189,14 @@ namespace Mtgdb.Gui
 
 			if (e.Button == MouseButtons.Middle)
 				return (-deltaAbs, isDeck);
-			
+
 			if (e.Button == MouseButtons.Right)
 				return (+deltaAbs, isDeck);
 
 			return (0, true);
 		}
 
-		private static Card getCard(MtgLayoutView view, HitInfo hitInfo)
-		{
-			if (!hitInfo.IsOverImage() && hitInfo.CustomButtonIndex < 0)
-				return null;
 
-			var card = (Card) view.FindRow(hitInfo.RowHandle);
-			return card;
-		}
 
 		private void zoomCard(Card card)
 		{
@@ -195,11 +208,6 @@ namespace Mtgdb.Gui
 				await _formZoom.LoadImages(card, Ui);
 				_parent.Invoke(delegate { _formZoom.ShowImages(); });
 			});
-		}
-
-		private void changeCountInCollection(Card card, int increment)
-		{
-			_collectionModel.Add(card, increment);
 		}
 
 		private void draggedLikeClick(Card card)
@@ -241,6 +249,13 @@ namespace Mtgdb.Gui
 			_layoutViewCards.MouseClicked -= gridMouseClick;
 			_layoutViewDeck.MouseClicked -= gridMouseClick;
 
+			_draggingSubsystem.DraggedLikeClick -= draggedLikeClick;
+			_draggingSubsystem.DragRemoved -= dragRemoved;
+			_draggingSubsystem.DragAdded -= dragAdded;
+			_layoutViewCards.SelectionStarted -= selectionStarted;
+
+			_countInputSubsystem.Input -= countInput;
+
 			Disposed?.Invoke(this, EventArgs.Empty);
 		}
 
@@ -255,9 +270,9 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly CollectionEditorModel _collectionModel;
 		private readonly DraggingSubsystem _draggingSubsystem;
+		private readonly CountInputSubsystem _countInputSubsystem;
 		private readonly FormZoom _formZoom;
-		private readonly Control _parent;
-
+		private readonly FormMain _parent;
 		private Cursor _textSelectionCursor;
 		private Cursor _zoomCursor;
 	}

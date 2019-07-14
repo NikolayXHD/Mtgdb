@@ -144,6 +144,7 @@
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\CardFields.cs" />
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
+    <Compile Include="FormMain\CountInputSubsystem.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
     <Compile Include="FormMain\DeckEditorSubsystem.cs" />

@@ -90,9 +90,11 @@ namespace Mtgdb.Data.Model
 
 				foreach (string id in zone.Order)
 				{
-					var card = _repo.CardsById[id];
-					int count = zone.Count[id];
+					var card = _repo.CardsById.TryGet(id);
+					if (card == null)
+						continue;
 
+					int count = zone.Count[id];
 					if (transformPrevious && !affectedNames.Contains(card.NameEn))
 						use(card, count, targetZone);
 					else

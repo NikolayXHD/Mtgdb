@@ -36,11 +36,12 @@ namespace Mtgdb.Gui
 			{
 				_cardSearch.Ui =
 					_deckEditorSubsystem.Ui =
-						_imagePreloading.Ui =
-							_printing.Ui =
-								_dragging.Ui =
-									_drawing.Ui =
-										_fields.Ui = _formRoot.UiModel;
+						_countInputSubsystem.Ui =
+							_imagePreloading.Ui =
+								_printing.Ui =
+									_dragging.Ui =
+										_drawing.Ui =
+											_fields.Ui = _formRoot.UiModel;
 
 				_cardSearch.SuggestModel = _formRoot.CardSuggestModel;
 

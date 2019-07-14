@@ -26,6 +26,6 @@ namespace Mtgdb
 			value.CompareTo(max) > 0 ? max : value;
 
 		public static bool IsWithin<TVal>(this TVal value, TVal min, TVal max) where TVal : IComparable<TVal> =>
-			min.CompareTo(value) < 0 && 0 < max.CompareTo(value);
+			min.CompareTo(value) <= 0 && 0 <= max.CompareTo(value);
 	}
 }

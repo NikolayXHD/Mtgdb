@@ -9,6 +9,10 @@ namespace Mtgdb.Data
 {
 	public class CardRepository
 	{
+		public Func<string, bool> FilterSetCode { get; set; } =
+			// str => Str.Equals(str, "ISD");
+			_ => true;
+
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllSets.json");
@@ -380,8 +384,6 @@ namespace Mtgdb.Data
 		}
 
 		private string PatchFile { get; }
-
-		public Func<string, bool> FilterSetCode { get; set; } = _ => true;
 
 		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
