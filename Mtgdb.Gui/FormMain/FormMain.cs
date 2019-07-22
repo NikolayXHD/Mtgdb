@@ -60,10 +60,22 @@ namespace Mtgdb.Gui
 				_formRoot.QuickFilterTooltipController.SubscribeToEvents();
 
 				// calls cardCreating handler
-				_layoutViewCards.ResetLayout();
-				_layoutViewDeck.ResetLayout();
+				_viewCards.ResetLayout();
+				_viewDeck.ResetLayout();
 			}
 		}
+
+		public void Shutdown()
+		{
+			stopThreads();
+			unsubscribeFromEvents();
+			unsubscribeCardRepoEvents();
+			_deckListControl.UnsubscribeFromEvents();
+		}
+
+		public void ScheduleOpeningDeck(Deck deck) =>
+			_requiredDeck = deck;
+
 
 		private bool evalFilterBySearchText(Card c) =>
 			_cardSearch.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
@@ -357,7 +369,15 @@ namespace Mtgdb.Gui
 			this.Invoke(delegate
 			{
 				_imagePreloading.Reset();
-				refreshData();
+				_viewCards.RefreshData();
+				if (_requiredScroll.HasValue && _cardRepo.IsLoadingComplete)
+				{
+					_viewCards.ScrollTo(_requiredScroll.Value);
+					_requiredScroll = null;
+				}
+
+				_viewDeck.Invalidate();
+				updateFormStatus();
 				onFinished?.Invoke();
 			});
 		}
@@ -379,31 +399,6 @@ namespace Mtgdb.Gui
 				card.IsSearchResult = _filteredCards.Contains(card);
 		}
 
-		private void refreshData()
-		{
-			int visibleRecordIndex;
-
-			if (_requiredScroll.HasValue && _cardRepo.IsLoadingComplete)
-			{
-				visibleRecordIndex = _requiredScroll.Value;
-				_requiredScroll = null;
-			}
-			else
-				visibleRecordIndex = _viewCards.VisibleRecordIndex;
-
-			if (visibleRecordIndex >= _searchResultCards.Count)
-				visibleRecordIndex = 0;
-
-			_viewCards.VisibleRecordIndex = visibleRecordIndex;
-
-			_viewCards.RefreshData();
-			_viewCards.Invalidate();
-
-			_viewDeck.Invalidate();
-
-			updateFormStatus();
-		}
-
 
 
 		private void updateFormStatus()
@@ -418,17 +413,13 @@ namespace Mtgdb.Gui
 				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckEditor.SideDeckSize}/15") },
 				{ (int) Zone.Maybe, new TabSettings($"maybeboard: {_deckEditor.MaybeDeckSize}") },
 				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckEditor.SampleHandSize}") },
-				{ DeckListTabIndex, new TabSettings(getDeckListStatus()) }
+				{ DeckZoneSubsystem.DeckListTabIndex, new TabSettings(getDeckListStatus()) }
 			});
 
-			setScrollStatus($"{_viewCards.VisibleRecordIndex}/{_searchResultCards.Count}",
+			setScrollStatus($"{_viewCards.CardIndex}/{_viewCards.Count}",
 				_labelStatusScrollCards);
 
-			setScrollStatus(
-				IsDeckListSelected
-					? $"{_deckListControl.ScrollPosition}/{_deckListControl.MaxScroll}"
-					: $"{_viewDeck.VisibleRecordIndex}/{_viewDeck.RowCount}",
-				_labelStatusScrollDeck);
+			UpdateDeckScrollLabel();
 
 			_labelStatusCollection.Text = getCollectionStatus();
 
@@ -447,6 +438,15 @@ namespace Mtgdb.Gui
 
 			_panelStatus.ResumeLayout(false);
 			_panelStatus.PerformLayout();
+		}
+
+		public void UpdateDeckScrollLabel()
+		{
+			setScrollStatus(
+				IsDeckListSelected
+					? $"{_deckListControl.ScrollPosition}/{_deckListControl.MaxScroll}"
+					: $"{_viewDeck.CardIndex}/{_viewDeck.Count}",
+				_labelStatusScrollDeck);
 		}
 
 		private string getCollectionStatus()
@@ -740,7 +740,7 @@ namespace Mtgdb.Gui
 				LegalityAllowBanned = _legality.AllowBanned,
 				DeckFile = _deckEditor.DeckFile,
 				DeckName = _deckEditor.DeckName,
-				SearchResultScroll = _viewCards.VisibleRecordIndex,
+				SearchResultScroll = _viewCards.CardIndex,
 				ShowDeck = !_buttonHideDeck.Checked,
 				ShowScroll = _buttonShowScrollCards.Checked,
 				ShowPartialCards = _buttonShowPartialCards.Checked,
@@ -808,7 +808,7 @@ namespace Mtgdb.Gui
 			_buttonShowProhibit.Checked = settings.ShowProhibit;
 			_cardSort.ApplySort(settings.Sort);
 
-			hideSampleHand();
+			_deckZones.HideSampleHand();
 
 			_collectionEditor.LoadCollection(settings.CollectionModel, append: false);
 			_copyPaste.LoadDeck(_requiredDeck ?? settings.Deck);
@@ -1013,7 +1013,7 @@ namespace Mtgdb.Gui
 				MessageBox.Show(deck.Error);
 			else
 			{
-				hideSampleHand();
+				_deckZones.HideSampleHand();
 				_copyPaste.LoadDeck(deck);
 			}
 		}
@@ -1058,7 +1058,7 @@ namespace Mtgdb.Gui
 			this.Invoke(updateFormStatus);
 		}
 
-		public bool IsDraggingCard => _dragging.IsDragging();
+		public bool IsDraggingCard => _dragging.IsDragging;
 
 		public Card DraggedCard =>
 			_deckEditor.DraggedCard;

@@ -84,8 +84,8 @@
 			this._layoutMain = new System.Windows.Forms.TableLayoutPanel();
 			this._buttonShowScrollDeck = new Mtgdb.Controls.ButtonBase();
 			this._buttonShowScrollCards = new Mtgdb.Controls.ButtonBase();
-			this._layoutViewCards = new Mtgdb.Controls.LayoutViewControl();
-			this._layoutViewDeck = new Mtgdb.Controls.LayoutViewControl();
+			this._viewCards = new Mtgdb.Controls.LayoutViewControl();
+			this._viewDeck = new Mtgdb.Controls.LayoutViewControl();
 			this._deckListControl = new Mtgdb.Controls.DeckListControl();
 			this._layoutRight = new System.Windows.Forms.TableLayoutPanel();
 			this._buttonShowProhibit = new Mtgdb.Controls.ButtonBase();
@@ -668,11 +668,11 @@
 			this._layoutMain.Controls.Add(this._buttonShowScrollDeck, 2, 3);
 			this._layoutMain.Controls.Add(this._labelStatusScrollDeck, 1, 3);
 			this._layoutMain.Controls.Add(this._buttonShowScrollCards, 2, 1);
-			this._layoutMain.Controls.Add(this._layoutViewCards, 0, 2);
+			this._layoutMain.Controls.Add(this._viewCards, 0, 2);
 			this._layoutMain.Controls.Add(this._panelFilters, 0, 0);
 			this._layoutMain.Controls.Add(this._panelMenu, 0, 1);
 			this._layoutMain.Controls.Add(this._panelStatus, 0, 3);
-			this._layoutMain.Controls.Add(this._layoutViewDeck, 0, 4);
+			this._layoutMain.Controls.Add(this._viewDeck, 0, 4);
 			this._layoutMain.Controls.Add(this._deckListControl, 0, 5);
 			this._layoutMain.Location = new System.Drawing.Point(0, 0);
 			this._layoutMain.Margin = new System.Windows.Forms.Padding(0);
@@ -708,64 +708,64 @@
 			this._buttonShowScrollCards.Name = "_buttonShowScrollCards";
 			this._buttonShowScrollCards.Size = new System.Drawing.Size(17, 24);
 			this._buttonShowScrollCards.TabIndex = 3;
-			this._layoutViewCards.Anchor =
+			this._viewCards.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
 				                                         System.Windows.Forms.AnchorStyles.Bottom) |
 				                                        System.Windows.Forms.AnchorStyles.Left) |
 				                                       System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutViewCards.BackColor = System.Drawing.SystemColors.Window;
-			this._layoutMain.SetColumnSpan(this._layoutViewCards, 3);
-			this._layoutViewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
+			this._viewCards.BackColor = System.Drawing.SystemColors.Window;
+			this._layoutMain.SetColumnSpan(this._viewCards, 3);
+			this._viewCards.LayoutControlType = typeof(Mtgdb.Gui.CardLayout);
 			layoutOptions1.AllowPartialCards = true;
 			layoutOptions1.CardInterval = new System.Drawing.Size(4, 2);
 			layoutOptions1.PartialCardsThreshold = new System.Drawing.Size(327, 209);
-			this._layoutViewCards.LayoutOptions = layoutOptions1;
-			this._layoutViewCards.Location = new System.Drawing.Point(0, 58);
-			this._layoutViewCards.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewCards.Name = "_layoutViewCards";
+			this._viewCards.LayoutOptions = layoutOptions1;
+			this._viewCards.Location = new System.Drawing.Point(0, 58);
+			this._viewCards.Margin = new System.Windows.Forms.Padding(0);
+			this._viewCards.Name = "_viewCards";
 			buttonOptions1.Margin = new System.Drawing.Size(0, 0);
 			searchOptions1.Button = buttonOptions1;
-			this._layoutViewCards.SearchOptions = searchOptions1;
+			this._viewCards.SearchOptions = searchOptions1;
 			selectionOptions1.Alpha = ((byte) (192));
 			selectionOptions1.ForeColor = System.Drawing.SystemColors.HighlightText;
 			selectionOptions1.RectAlpha = ((byte) (0));
 			selectionOptions1.RectBorderColor = System.Drawing.Color.Empty;
 			selectionOptions1.RectFillColor = System.Drawing.Color.Empty;
-			this._layoutViewCards.SelectionOptions = selectionOptions1;
-			this._layoutViewCards.Size = new System.Drawing.Size(1267, 163);
+			this._viewCards.SelectionOptions = selectionOptions1;
+			this._viewCards.Size = new System.Drawing.Size(1267, 163);
 			sortOptions1.Allow = true;
-			this._layoutViewCards.SortOptions = sortOptions1;
-			this._layoutViewCards.TabIndex = 4;
-			this._layoutViewCards.TabStop = false;
-			this._layoutViewDeck.Anchor =
+			this._viewCards.SortOptions = sortOptions1;
+			this._viewCards.TabIndex = 4;
+			this._viewCards.TabStop = false;
+			this._viewDeck.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
 				                                         System.Windows.Forms.AnchorStyles.Bottom) |
 				                                        System.Windows.Forms.AnchorStyles.Left) |
 				                                       System.Windows.Forms.AnchorStyles.Right)));
-			this._layoutViewDeck.BackColor = System.Drawing.SystemColors.Window;
-			this._layoutMain.SetColumnSpan(this._layoutViewDeck, 3);
-			this._layoutViewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
+			this._viewDeck.BackColor = System.Drawing.SystemColors.Window;
+			this._layoutMain.SetColumnSpan(this._viewDeck, 3);
+			this._viewDeck.LayoutControlType = typeof(Mtgdb.Gui.DeckLayout);
 			layoutOptions2.AllowPartialCards = true;
 			layoutOptions2.CardInterval = new System.Drawing.Size(2, 0);
 			layoutOptions2.PartialCardsThreshold = new System.Drawing.Size(150, 209);
-			this._layoutViewDeck.LayoutOptions = layoutOptions2;
-			this._layoutViewDeck.Location = new System.Drawing.Point(0, 245);
-			this._layoutViewDeck.Margin = new System.Windows.Forms.Padding(0);
-			this._layoutViewDeck.Name = "_layoutViewDeck";
+			this._viewDeck.LayoutOptions = layoutOptions2;
+			this._viewDeck.Location = new System.Drawing.Point(0, 245);
+			this._viewDeck.Margin = new System.Windows.Forms.Padding(0);
+			this._viewDeck.Name = "_viewDeck";
 			searchOptions2.Button = buttonOptions2;
-			this._layoutViewDeck.SearchOptions = searchOptions2;
+			this._viewDeck.SearchOptions = searchOptions2;
 			selectionOptions2.Alpha = ((byte) (255));
 			selectionOptions2.Enabled = false;
 			selectionOptions2.ForeColor = System.Drawing.SystemColors.HighlightText;
 			selectionOptions2.RectAlpha = ((byte) (0));
 			selectionOptions2.RectBorderColor = System.Drawing.Color.Empty;
 			selectionOptions2.RectFillColor = System.Drawing.Color.Empty;
-			this._layoutViewDeck.SelectionOptions = selectionOptions2;
-			this._layoutViewDeck.Size = new System.Drawing.Size(1267, 311);
+			this._viewDeck.SelectionOptions = selectionOptions2;
+			this._viewDeck.Size = new System.Drawing.Size(1267, 311);
 			sortOptions2.Allow = true;
-			this._layoutViewDeck.SortOptions = sortOptions2;
-			this._layoutViewDeck.TabIndex = 7;
-			this._layoutViewDeck.TabStop = false;
+			this._viewDeck.SortOptions = sortOptions2;
+			this._viewDeck.TabIndex = 7;
+			this._viewDeck.TabStop = false;
 			this._deckListControl.AllowPartialCard = true;
 			this._deckListControl.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
@@ -952,7 +952,7 @@
 		private Mtgdb.Controls.QuickFilterControl _filterGeneratedMana;
 		private System.Windows.Forms.FlowLayoutPanel _panelFilters;
 		private System.Windows.Forms.FlowLayoutPanel _panelStatus;
-		private Mtgdb.Controls.LayoutViewControl _layoutViewCards;
+		private Mtgdb.Controls.LayoutViewControl _viewCards;
 		private Mtgdb.Controls.TabHeaderControl _tabHeadersDeck;
 		private Mtgdb.Controls.ButtonBase _buttonShowProhibit;
 		private System.Windows.Forms.TableLayoutPanel _panelMenu;
@@ -975,7 +975,7 @@
 		private Mtgdb.Controls.ControlBase _labelStatusFilterDeck;
 		private Mtgdb.Controls.ControlBase _labelStatusFilterLegality;
 		private Mtgdb.Controls.ControlBase _panelIconLegality;
-		private Mtgdb.Controls.LayoutViewControl _layoutViewDeck;
+		private Mtgdb.Controls.LayoutViewControl _viewDeck;
 		private System.Windows.Forms.FlowLayoutPanel _panelRightCost;
 		private System.Windows.Forms.TableLayoutPanel _layoutMain;
 		private Mtgdb.Controls.ButtonBase _buttonSampleHandNew;

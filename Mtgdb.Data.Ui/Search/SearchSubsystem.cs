@@ -21,14 +21,14 @@ namespace Mtgdb.Ui
 			SearchBar searchBar,
 			LuceneSearcher<TId, TObj> searcher,
 			IDocumentAdapter<TId, TObj> adapter,
-			params LayoutViewControl[] layoutViews)
+			params LayoutViewControl[] views)
 		{
 			_parent = parent;
 			_searchBar = searchBar;
 
 			Searcher = searcher;
 			_adapter = adapter;
-			_views = layoutViews;
+			_views = views;
 
 			_highlighter = new SearchStringHighlighter(_searchBar.Input);
 			_highlighter.Highlight();

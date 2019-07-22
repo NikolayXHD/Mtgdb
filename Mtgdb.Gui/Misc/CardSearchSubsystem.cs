@@ -13,13 +13,13 @@ namespace Mtgdb.Gui
 			SearchBar searchBar,
 			CardSearcher searcher,
 			CardDocumentAdapter adapter,
-			params LayoutViewControl[] layoutViews)
+			params LayoutViewControl[] views)
 			: base(
 				parent,
 				searchBar,
 				searcher,
 				adapter,
-				layoutViews)
+				views)
 		{
 		}
 

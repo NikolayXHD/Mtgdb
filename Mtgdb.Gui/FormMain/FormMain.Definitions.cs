@@ -38,9 +38,6 @@ namespace Mtgdb.Gui
 		{
 			DoubleBuffered = true;
 
-			_viewCards = new MtgLayoutView(_layoutViewCards);
-			_viewDeck = new MtgLayoutView(_layoutViewDeck);
-
 			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
@@ -71,10 +68,10 @@ namespace Mtgdb.Gui
 				_searchBar,
 				cardSearcher,
 				cardAdapter,
-				_layoutViewCards,
-				_layoutViewDeck);
+				_viewCards,
+				_viewDeck);
 
-			_cardSort = new CardSortSubsystem(_layoutViewCards, _cardRepo, _fields, _cardSearch);
+			_cardSort = new CardSortSubsystem(_viewCards, _cardRepo, _fields, _cardSearch);
 
 			endRestoreSettings();
 
@@ -84,12 +81,9 @@ namespace Mtgdb.Gui
 
 			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
-			_scroll = new ScrollSubsystem(_viewDeck, _viewCards);
-
 			_imagePreloading = new ImagePreloadingSubsystem(
 				_viewCards,
 				_viewDeck,
-				_scroll,
 				uiConfigRepository);
 
 			_deckEditor = new DeckEditorModel();
@@ -113,8 +107,8 @@ namespace Mtgdb.Gui
 				_formZoom,
 				this);
 
-			_viewDeck.SetDataSource(_deckEditor.DataSource);
-			_viewCards.SetDataSource(_searchResultCards);
+			_viewDeck.DataSource = _deckEditor.DataSource;
+			_viewCards.DataSource = _searchResultCards;
 
 			_legality = new LegalitySubsystem(
 				_dropdownLegality,
@@ -126,7 +120,6 @@ namespace Mtgdb.Gui
 			_drawing = new DrawingSubsystem(
 				_viewCards,
 				_viewDeck,
-				_dragging,
 				_cardSearch,
 				cardAdapter,
 				_deckEditor,
@@ -138,7 +131,14 @@ namespace Mtgdb.Gui
 
 			_printing = new PrintingSubsystem(imageRepo, _cardRepo);
 
-			DeckZone = Zone.Main;
+			_deckZones = new DeckZoneSubsystem(
+				_panelDeckTabsContainer,
+				_tabHeadersDeck,
+				_dragging,
+				_viewDeck)
+			{
+				DeckZone = Zone.Main
+			};
 
 			scale();
 			setRightPanelsWidth();
@@ -173,9 +173,9 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_deckListControl,
-				_layoutViewDeck,
+				_viewDeck,
 				_tabHeadersDeck,
-				_layoutViewCards,
+				_viewCards,
 				_deckListControl.DeckListView);
 
 			updateExcludeManaAbility();
@@ -190,219 +190,10 @@ namespace Mtgdb.Gui
 				components = new Container();
 
 			components.Add(_deckEditorSubsystem);
+			components.Add(_countInputSubsystem);
 
 			_popupSearchExamples.MenuControl = _menuSearchExamples;
 			_popupSearchExamples.MenuAlignment = HorizontalAlignment.Right;
-		}
-
-		private void cardCreating(object view, LayoutControl probeCard) =>
-			((CardLayoutControlBase) probeCard).Ui = () => _formRoot.UiModel;
-
-		private void subscribeToEvents()
-		{
-			Load += formLoad;
-
-			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
-			_buttonExcludeManaAbility.MouseDown += resetExcludeManaAbility;
-			_buttonShowDuplicates.CheckedChanged += showDuplicatesCheckedChanged;
-
-			_dragging.SubscribeToEvents();
-
-			_drawing.SetupDrawingCardEvent();
-			_dragging.SetupDrawingDraggingMarkEvent();
-
-			// After _deckDraggingSubsystem.SubscribeToEvents(), so that it would recapture the click on drag-n-drop before
-			_deckEditorSubsystem.SubscribeToEvents();
-			// After _deckEditingSubsystem, to show zoom before moving the card
-			_scroll.SubscribeToEvents();
-
-			_legality.SubscribeToEvents();
-			_legality.FilterChanged += legalityFilterChanged;
-
-			_deckEditor.DeckChanged += deckChanged;
-			_collectionEditor.CollectionChanged += collectionChanged;
-
-			_cardSort.SubscribeToEvents();
-			_cardSort.SortChanged += cardSortChanged;
-
-			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
-			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
-			_buttonShowProhibit.CheckedChanged += showProhibitChanged;
-
-			_tabHeadersDeck.SelectedIndexChanged += deckZoneChanged;
-			_tabHeadersDeck.MouseMove += deckZoneHover;
-			_tabHeadersDeck.Click += deckZoneClick;
-
-			_cardSearcher.IndexingProgress += indexingProgress;
-			_cardSearcher.Spellchecker.IndexingProgress += indexingProgress;
-			_deckSearcher.IndexingProgress += indexingProgress;
-			_deckSearcher.Spellchecker.IndexingProgress += indexingProgress;
-
-			_cardSearcher.Loaded += cardSearcherLoaded;
-			_cardSearcher.Disposed += cardSearcherDisposed;
-
-
-			_keywordSearcher.Loaded += keywordSearcherLoaded;
-			_keywordSearcher.LoadingProgress += keywordSearcherLoadingProgress;
-
-			_scroll.Scrolled += gridScrolled;
-
-			foreach (var filterControl in _quickFilterControls)
-				filterControl.StateChanged += quickFiltersChanged;
-
-			_filterManager.StateChanged += quickFilterManagerChanged;
-
-			Application.ApplicationExit += applicationExit;
-
-			_copyPaste.SubscribeToEvents();
-			_tabHeadersDeck.DragOver += deckZoneDrag;
-			_tabHeadersDeck.SizeChanged += deckTabsResized;
-
-			_buttonSampleHandNew.Pressed += sampleHandNew;
-			_buttonSampleHandMulligan.Pressed += sampleHandMulligan;
-			_buttonSampleHandDraw.Pressed += sampleHandDraw;
-
-			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
-			_buttonShowScrollCards.CheckedChanged += buttonShowScrollChanged;
-			_buttonShowScrollDeck.CheckedChanged += buttonShowScrollChanged;
-			_buttonShowPartialCards.CheckedChanged += buttonPartialCardsChanged;
-			_buttonShowText.CheckedChanged += buttonHideTextChanged;
-			_buttonResetFilters.Pressed += resetFiltersClick;
-
-			_layoutRight.SizeChanged += rightLayoutChanged;
-
-			_history.Loaded += historyLoaded;
-
-			_cardSearch.SubscribeToEvents();
-
-			SizeChanged += sizeChanged;
-			PreviewKeyDown += previewKeyDown;
-
-			_deckSearcher.BeginLoad += beginUpdateDeckIndex;
-
-			_deckListControl.Scrolled += deckListScrolled;
-			_deckListControl.Refreshed += deckListRefreshed;
-			_deckListControl.DeckOpened += deckListOpenedDeck;
-			_deckListControl.DeckRenamed += deckListRenamedDeck;
-			_deckListControl.FilterByDeckModeChanged += filterByDeckModeChanged;
-			_deckListControl.DeckAdded += deckListAdded;
-			_deckListControl.DeckTransformed += deckListTransformed;
-
-			_formZoom.SettingsChanged += zoomSettingsChanged;
-
-			_layoutViewCards.CardCreating += cardCreating;
-			_layoutViewDeck.CardCreating += cardCreating;
-
-			_menuSearchExamples.QueryClicked += searchExampleClicked;
-
-			Dpi.BeforeChanged += beforeDpiChanged;
-			Dpi.AfterChanged += afterDpiChanged;
-		}
-
-		private void unsubscribeFromEvents()
-		{
-			Load -= formLoad;
-
-			_buttonExcludeManaCost.MouseDown -= resetExcludeManaCost;
-			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
-			_buttonShowDuplicates.CheckedChanged -= showDuplicatesCheckedChanged;
-
-			_dragging.UnsubscribeFromEvents();
-
-			_scroll.UnsubscribeFromEvents();
-
-			_legality.FilterChanged -= legalityFilterChanged;
-			_deckEditor.DeckChanged -= deckChanged;
-			_collectionEditor.CollectionChanged -= collectionChanged;
-
-			_cardSort.UnsubscribeFromEvents();
-			_cardSort.SortChanged -= cardSortChanged;
-
-			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
-			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
-			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;
-
-			_tabHeadersDeck.SelectedIndexChanged -= deckZoneChanged;
-			_tabHeadersDeck.MouseMove -= deckZoneHover;
-			_tabHeadersDeck.Click -= deckZoneClick;
-
-			_cardSearcher.IndexingProgress -= indexingProgress;
-			_cardSearcher.Spellchecker.IndexingProgress -= indexingProgress;
-			_deckSearcher.IndexingProgress -= indexingProgress;
-			_deckSearcher.Spellchecker.IndexingProgress -= indexingProgress;
-
-			_cardSearcher.Loaded -= cardSearcherLoaded;
-			_cardSearcher.Disposed -= cardSearcherDisposed;
-
-			_keywordSearcher.Loaded -= keywordSearcherLoaded;
-			_keywordSearcher.LoadingProgress -= keywordSearcherLoadingProgress;
-
-			_scroll.Scrolled -= gridScrolled;
-
-			foreach (var filterControl in _quickFilterControls)
-				filterControl.StateChanged -= quickFiltersChanged;
-
-			_filterManager.StateChanged -= quickFilterManagerChanged;
-
-			Application.ApplicationExit -= applicationExit;
-
-			_copyPaste.UnsubscribeFromEvents();
-			_tabHeadersDeck.DragOver -= deckZoneDrag;
-			_tabHeadersDeck.SizeChanged -= deckTabsResized;
-
-			_buttonSampleHandNew.Pressed -= sampleHandNew;
-			_buttonSampleHandMulligan.Pressed -= sampleHandMulligan;
-			_buttonSampleHandDraw.Pressed -= sampleHandDraw;
-
-			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
-			_buttonShowScrollCards.CheckedChanged -= buttonShowScrollChanged;
-			_buttonShowScrollDeck.CheckedChanged -= buttonShowScrollChanged;
-			_buttonShowPartialCards.CheckedChanged -= buttonPartialCardsChanged;
-			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
-			_buttonResetFilters.Pressed -= resetFiltersClick;
-
-			_layoutRight.SizeChanged -= rightLayoutChanged;
-			_history.Loaded -= historyLoaded;
-
-			_cardSearch.UnsubscribeFromEvents();
-
-			SizeChanged -= sizeChanged;
-			PreviewKeyDown -= previewKeyDown;
-
-			_deckSearcher.BeginLoad -= beginUpdateDeckIndex;
-
-			_deckListControl.Scrolled -= deckListScrolled;
-			_deckListControl.Refreshed -= deckListRefreshed;
-			_deckListControl.DeckOpened -= deckListOpenedDeck;
-			_deckListControl.DeckRenamed -= deckListRenamedDeck;
-			_deckListControl.FilterByDeckModeChanged -= filterByDeckModeChanged;
-			_deckListControl.DeckAdded -= deckListAdded;
-			_deckListControl.DeckTransformed -= deckListTransformed;
-
-			_formZoom.SettingsChanged -= zoomSettingsChanged;
-
-			_layoutViewCards.CardCreating -= cardCreating;
-			_layoutViewDeck.CardCreating -= cardCreating;
-
-			_menuSearchExamples.QueryClicked -= searchExampleClicked;
-
-			Dpi.BeforeChanged -= beforeDpiChanged;
-			Dpi.AfterChanged -= afterDpiChanged;
-		}
-
-		public Zone? DeckZone
-		{
-			get
-			{
-				int zoneIndex = _tabHeadersDeck.SelectedIndex;
-
-				if (zoneIndex > MaxZoneIndex)
-					return null;
-
-				return (Zone) zoneIndex;
-			}
-
-			set => _tabHeadersDeck.SelectedIndex = (int) value;
 		}
 
 		public string DeckName
@@ -416,7 +207,10 @@ namespace Mtgdb.Gui
 		}
 
 		public bool IsDeckListSelected =>
-			_tabHeadersDeck.SelectedIndex == DeckListTabIndex;
+			_deckZones.IsDeckListSelected;
+
+		public Zone? DeckZone =>
+			_deckZones.DeckZone;
 
 		private FormRoot _formRoot;
 
@@ -451,7 +245,6 @@ namespace Mtgdb.Gui
 		private readonly MtgArenaIntegration _mtgArenaIntegration;
 		private readonly DeckEditorModel _deckEditor;
 		private readonly ImagePreloadingSubsystem _imagePreloading;
-		private readonly ScrollSubsystem _scroll;
 		private readonly CollectionEditorModel _collectionEditor;
 		private readonly CardSearchSubsystem _cardSearch;
 
@@ -470,8 +263,6 @@ namespace Mtgdb.Gui
 		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 
-		private readonly MtgLayoutView _viewCards;
-		private readonly MtgLayoutView _viewDeck;
 		private readonly LayoutViewTooltip _tooltipViewCards;
 		private readonly LayoutViewTooltip _tooltipViewDeck;
 
@@ -483,9 +274,7 @@ namespace Mtgdb.Gui
 		private string _deckName;
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
-
-		private const int MaxZoneIndex = (int) Zone.SampleHand;
-		private const int DeckListTabIndex = MaxZoneIndex + 1;
+		private readonly DeckZoneSubsystem _deckZones;
 
 		// ReSharper disable ConvertToAutoProperty
 		public QuickFilterControl FilterManaCost => _filterManaCost;

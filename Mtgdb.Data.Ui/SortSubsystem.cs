@@ -13,31 +13,31 @@ namespace Mtgdb.Ui
 		public event Action SortChanged;
 
 		protected SortSubsystem(
-			LayoutViewControl layoutView,
+			LayoutViewControl view,
 			Fields<TDoc> fields,
 			SearchSubsystem<TId, TDoc> searchSubsystem)
 		{
 			_fields = fields;
 			_searchSubsystem = searchSubsystem;
-			_layoutView = layoutView;
+			_view = view;
 
 			ApplySort(string.Empty);
 		}
 
 		public void SubscribeToEvents()
 		{
-			_layoutView.SortChanged += sortChanged;
+			_view.SortChanged += sortChanged;
 		}
 
 		public void UnsubscribeFromEvents()
 		{
-			_layoutView.SortChanged -= sortChanged;
+			_view.SortChanged -= sortChanged;
 		}
 
 		public void ApplySort(string sort)
 		{
 			var sortInfos = parse(sort).ToList();
-			_layoutView.SortInfo = sortInfos;
+			_view.SortInfo = sortInfos;
 		}
 
 		public void Invalidate()
@@ -48,7 +48,7 @@ namespace Mtgdb.Ui
 
 		private void sortChanged(object sender)
 		{
-			var sortInfo = _layoutView.SortInfo;
+			var sortInfo = _view.SortInfo;
 			string sortString = toString(sortInfo);
 
 			if (sortString == SortString)
@@ -197,7 +197,7 @@ namespace Mtgdb.Ui
 
 		protected abstract bool IsLocalizable(string fieldName);
 
-		private readonly LayoutViewControl _layoutView;
+		private readonly LayoutViewControl _view;
 		private readonly Fields<TDoc> _fields;
 		private readonly SearchSubsystem<TId, TDoc> _searchSubsystem;
 

@@ -16,9 +16,9 @@ namespace Mtgdb.Gui
 	[Localizable(false)]
 	public class DrawingSubsystem
 	{
-		public DrawingSubsystem(MtgLayoutView layoutViewCards,
-			MtgLayoutView layoutViewDeck,
-			DraggingSubsystem draggingSubsystem,
+		public DrawingSubsystem(
+			LayoutViewControl viewCards,
+			LayoutViewControl viewDeck,
 			CardSearchSubsystem cardSearchSubsystem,
 			CardDocumentAdapter adapter,
 			DeckEditorModel deckEditorModel,
@@ -27,16 +27,15 @@ namespace Mtgdb.Gui
 			LegalitySubsystem legalitySubsystem,
 			IconRecognizer iconRecognizer)
 		{
-			_layoutViewCards = layoutViewCards;
-			_layoutViewDeck = layoutViewDeck;
-			_draggingSubsystem = draggingSubsystem;
+			_viewCards = viewCards;
+			_viewDeck = viewDeck;
 			_deckEditorModel = deckEditorModel;
 			_countInputSubsystem = countInputSubsystem;
 			_quickFilterFacade = quickFilterFacade;
 			_legalitySubsystem = legalitySubsystem;
 
-			_layoutViewCards.RowDataLoaded += setHighlightMatches;
-			_layoutViewCards.SetIconRecognizer(iconRecognizer);
+			_viewCards.RowDataLoaded += setHighlightMatches;
+			_viewCards.IconRecognizer = iconRecognizer;
 
 			_highlightSubsystem = new SearchResultHighlighter(
 				cardSearchSubsystem,
@@ -46,13 +45,14 @@ namespace Mtgdb.Gui
 
 		public void SetupDrawingCardEvent()
 		{
-			_layoutViewCards.CustomDrawField += drawCard;
-			_layoutViewDeck.CustomDrawField += drawCard;
+			_viewCards.CustomDrawField += drawCard;
+			_viewDeck.CustomDrawField += drawCard;
 		}
 
 		private void drawCard(object sender, CustomDrawArgs e)
 		{
-			var card = _draggingSubsystem.GetCard(getView(sender), e.RowHandle);
+			var view = (LayoutViewControl) sender;
+			var card = (Card)view.FindRow(e.RowHandle);
 
 			if (card == null)
 				return;
@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 			}
 
 			if (card == _deckEditorModel.TouchedCard)
-				drawSelection(e, SystemColors.ActiveCaption, SystemColors.GradientActiveCaption, 255 - 48);
+				drawSelection(e, SystemColors.ActiveCaption, SystemColors.GradientActiveCaption, 255);
 			else
 			{
 				int deckCount = card.DeckCount(Ui);
@@ -81,7 +81,7 @@ namespace Mtgdb.Gui
 				var colorSelectionGradient = SystemColors.GradientInactiveCaption;
 
 				if (deckCount > 0)
-					drawSelection(e, colorSelection, colorSelectionGradient, 255 - 32);
+					drawSelection(e, colorSelection, colorSelectionGradient, 127 + 32);
 				else if (collectionCount > 0 || e.HotTracked)
 					drawSelection(e, colorSelection, colorSelectionGradient, 127 - 32);
 			}
@@ -97,7 +97,7 @@ namespace Mtgdb.Gui
 
 			int deckCount = card.DeckCount(Ui);
 
-			if (legalityWarning == Legality.Restricted && deckCount <= 1 && sender == _layoutViewDeck)
+			if (legalityWarning == Legality.Restricted && deckCount <= 1 && sender == _viewDeck)
 				legalityWarning = null;
 
 			if (string.IsNullOrEmpty(legalityWarning))
@@ -271,9 +271,12 @@ namespace Mtgdb.Gui
 				countText.Append(deckCount);
 
 			int collectionCount = card.CollectionCount(Ui);
-
-			if (collectionCount > 0 && (_deckEditorModel.CurrentZone != Zone.SampleHand || !_layoutViewDeck.Wraps(sender)))
+			if (collectionCount > 0 && (
+				sender == _viewDeck && _deckEditorModel.CurrentZone != Zone.SampleHand ||
+				sender == _viewCards))
+			{
 				countText.AppendFormat(@" / {0}", collectionCount);
+			}
 
 			string countTextStr = countText.ToString();
 			return countTextStr;
@@ -281,22 +284,17 @@ namespace Mtgdb.Gui
 
 		private void setHighlightMatches(object sender, int rowHandle)
 		{
-			var view = getView(sender);
-
-			if (!view.TextualFieldsVisible)
-				return;
-
+			var view = (LayoutViewControl)sender;
 			var card = (Card) view.FindRow(rowHandle);
-
 			if (card == null)
 				return;
 
 			foreach (var displayField in view.FieldNames)
 			{
-				if (displayField == nameof(Card.Image))
+				if (Str.Equals(displayField, nameof(Card.Image)))
 					continue;
 
-				var displayText = _layoutViewCards.GetFieldText(rowHandle, displayField);
+				var displayText = _viewCards.GetText(rowHandle, displayField);
 				var matches = new List<TextRange>();
 				var contextMatches = new List<TextRange>();
 
@@ -305,7 +303,7 @@ namespace Mtgdb.Gui
 				addLegalityMatches(matches, displayField, displayText);
 
 				var highlightRanges = _highlightSubsystem.GetHighlightRanges(matches, contextMatches);
-				_layoutViewCards.SetHighlightTextRanges(highlightRanges, rowHandle, displayField);
+				_viewCards.SetHighlightTextRanges(highlightRanges, rowHandle, displayField);
 			}
 		}
 
@@ -335,24 +333,11 @@ namespace Mtgdb.Gui
 			matches.AddRange(legalityMatches);
 		}
 
-		private MtgLayoutView getView(object view)
-		{
-			if (_layoutViewCards.Wraps(view))
-				return _layoutViewCards;
-
-			if (_layoutViewDeck.Wraps(view))
-				return _layoutViewDeck;
-
-			throw new Exception(@"wrapper not found");
-		}
-
-
 		public UiModel Ui { get; set; }
 
 
-		private readonly MtgLayoutView _layoutViewCards;
-		private readonly MtgLayoutView _layoutViewDeck;
-		private readonly DraggingSubsystem _draggingSubsystem;
+		private readonly LayoutViewControl _viewCards;
+		private readonly LayoutViewControl _viewDeck;
 
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly CountInputSubsystem _countInputSubsystem;

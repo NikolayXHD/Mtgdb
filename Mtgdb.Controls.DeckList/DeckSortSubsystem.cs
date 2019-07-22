@@ -8,11 +8,11 @@ namespace Mtgdb.Controls
 	public class DeckSortSubsystem : SortSubsystem<long, DeckModel>
 	{
 		public DeckSortSubsystem(
-			LayoutViewControl layoutView, 
+			LayoutViewControl view, 
 			DeckFields fields,
 			DeckSearchSubsystem searchSubsystem,
 			DeckListModel deckListModel)
-			: base(layoutView, fields, searchSubsystem)
+			: base(view, fields, searchSubsystem)
 		{
 			_deckListModel = deckListModel;
 			_deckListModel.Loaded += deckListLoaded;

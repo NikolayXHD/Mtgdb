@@ -145,6 +145,7 @@
     <Compile Include="FormChart\CardFields.cs" />
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\CountInputSubsystem.cs" />
+    <Compile Include="FormMain\DeckZoneSubsystem.cs" />
     <Compile Include="FormMain\DraggingSubsystem.cs" />
     <Compile Include="DeckSerialization\DeckSerializationSubsystem.cs" />
     <Compile Include="FormMain\DeckEditorSubsystem.cs" />
@@ -219,7 +220,6 @@
     <Compile Include="FormMain\LegalitySubsystem.cs" />
     <Compile Include="FormMain\PrintingSubsystem.cs" />
     <Compile Include="QuickFilter\QuickFilterImages.cs" />
-    <Compile Include="FormMain\ScrollSubsystem.cs" />
     <Compile Include="FormMain\CardSortSubsystem.cs" />
     <Compile Include="FormMain\HistorySubsystem.cs" />
     <Compile Include="FormMain\HistoryState.cs" />
@@ -237,7 +237,6 @@
     <Compile Include="LayoutView\CardLayout.Designer.cs">
       <DependentUpon>CardLayout.cs</DependentUpon>
     </Compile>
-    <Compile Include="LayoutView\MtgLayoutView.cs" />
     <Compile Include="FormRoot\FormRoot.cs">
       <SubType>Form</SubType>
     </Compile>

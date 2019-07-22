@@ -13,8 +13,8 @@ namespace Mtgdb.Gui
 	public class DeckEditorSubsystem: IComponent
 	{
 		public DeckEditorSubsystem(
-			MtgLayoutView layoutViewCards,
-			MtgLayoutView layoutViewDeck,
+			LayoutViewControl viewCards,
+			LayoutViewControl viewDeck,
 			DeckEditorModel deckEditorModel,
 			CollectionEditorModel collectionModel,
 			DraggingSubsystem draggingSubsystem,
@@ -23,8 +23,8 @@ namespace Mtgdb.Gui
 			FormZoom formZoom,
 			FormMain parent)
 		{
-			_layoutViewCards = layoutViewCards;
-			_layoutViewDeck = layoutViewDeck;
+			_viewCards = viewCards;
+			_viewDeck = viewDeck;
 			_cursor = cursor;
 			_deckEditorModel = deckEditorModel;
 			_collectionModel = collectionModel;
@@ -51,72 +51,72 @@ namespace Mtgdb.Gui
 		private void dragRemoved(Card card, Zone fromDeckZone)
 		{
 			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
-			_deckEditorModel.Add(card, -count, fromDeckZone);
+			_deckEditorModel.Add(card, -count, zone: fromDeckZone);
 		}
 
-		private void dragAdded(Card card, Zone? fromDeckZone)
+		private void dragAdded(Card card, Card at, Zone? fromDeckZone)
 		{
 			int count = Control.ModifierKeys == Keys.Control ? 4 : 1;
 
 			if (fromDeckZone.HasValue && _deckEditorModel.CurrentZone != Zone.SampleHand)
-				_deckEditorModel.Add(card, -count, zone: fromDeckZone, changeTerminatesBatch: false);
+				_deckEditorModel.Add(card, -count, at, zone: fromDeckZone, changeTerminatesBatch: false);
 
-			_deckEditorModel.Add(card, +count);
+			_deckEditorModel.Add(card, +count, at);
 		}
 
 		public void SubscribeToEvents()
 		{
-			_layoutViewCards.MouseLeave += gridMouseLeave;
-			_layoutViewDeck.MouseLeave += gridMouseLeave;
+			_viewCards.MouseLeave += gridMouseLeave;
+			_viewDeck.MouseLeave += gridMouseLeave;
 
-			_layoutViewCards.MouseMove += gridMouseMove;
-			_layoutViewDeck.MouseMove += gridMouseMove;
+			_viewCards.MouseMove += gridMouseMove;
+			_viewDeck.MouseMove += gridMouseMove;
 
-			_layoutViewCards.MouseClicked += gridMouseClick;
-			_layoutViewDeck.MouseClicked += gridMouseClick;
+			_viewCards.MouseClicked += gridMouseClick;
+			_viewDeck.MouseClicked += gridMouseClick;
 
 			_draggingSubsystem.DraggedLikeClick += draggedLikeClick;
 			_draggingSubsystem.DragRemoved += dragRemoved;
 			_draggingSubsystem.DragAdded += dragAdded;
-			_layoutViewCards.SelectionStarted += selectionStarted;
+			_viewCards.SelectionStarted += selectionStarted;
 
 			_countInputSubsystem.Input += countInput;
 		}
 
 		private void gridMouseLeave(object sender, EventArgs e)
 		{
-			if (_deckEditorModel.IsDragging())
+			if (_deckEditorModel.IsDragging)
 				return;
 
-			updateCursor(getView(sender).Control, outside: true);
+			updateCursor((LayoutViewControl)sender, outside: true);
 		}
 
 		private void gridMouseMove(object sender, MouseEventArgs e)
 		{
-			var view = getView(sender);
-
-			if (_deckEditorModel.IsDragging())
+			var view = (LayoutViewControl)sender;
+			if (_deckEditorModel.IsDragging)
 				return;
 
 			var hitInfo = view.CalcHitInfo(e.Location);
 			var card = (Card) view.FindRow(hitInfo.RowHandle);
 
 			if (card != null)
-			{
-				updateCursor(view.Control,
+				updateCursor(view,
 					overImage: hitInfo.IsOverImage(),
 					overText:
-						hitInfo.IsOverText() ||
-						_countInputSubsystem.IsCountRectangle(hitInfo, e.Location, out _),
+					hitInfo.IsOverText() ||
+					_countInputSubsystem.IsCountRectangle(hitInfo, e.Location, out _),
 					overButton: hitInfo.IsSomeButton);
-			}
 			else
-			{
-				updateCursor(view.Control);
-			}
+				updateCursor(view);
 		}
 
-		private void updateCursor(Control control, bool overImage = false, bool overText = false, bool overButton = false, bool outside = false)
+		private void updateCursor(
+			LayoutViewControl control,
+			bool overImage = false,
+			bool overText = false,
+			bool overButton = false,
+			bool outside = false)
 		{
 			if (outside)
 				control.Cursor = _cursor;
@@ -132,7 +132,7 @@ namespace Mtgdb.Gui
 
 		private void gridMouseClick(object sender, HitInfo hitInfo, MouseEventArgs e)
 		{
-			if (_draggingSubsystem.IsDragging())
+			if (_draggingSubsystem.IsDragging)
 				return;
 
 			if (hitInfo.AlignButtonDirection.HasValue)
@@ -147,11 +147,9 @@ namespace Mtgdb.Gui
 				return;
 
 			var (countDelta, isDeck) = getChange(hitInfo, e);
-
 			if (handleCountChange(countDelta, isDeck, card))
-				return;
-
-			if (e.Button == MouseButtons.Left)
+				_countInputSubsystem.UpdateText(card, isDeck);
+			else if (e.Button == MouseButtons.Left)
 				zoomCard(card);
 		}
 
@@ -225,34 +223,23 @@ namespace Mtgdb.Gui
 				cancelArgs.Cancel = true;
 		}
 
-		private MtgLayoutView getView(object view)
-		{
-			if (_layoutViewCards.Wraps(view))
-				return _layoutViewCards;
-
-			if (_layoutViewDeck.Wraps(view))
-				return _layoutViewDeck;
-
-			throw new Exception(@"wrapper not found");
-		}
-
 
 
 		public void Dispose()
 		{
-			_layoutViewCards.MouseLeave -= gridMouseLeave;
-			_layoutViewDeck.MouseLeave -= gridMouseLeave;
+			_viewCards.MouseLeave -= gridMouseLeave;
+			_viewDeck.MouseLeave -= gridMouseLeave;
 
-			_layoutViewCards.MouseMove -= gridMouseMove;
-			_layoutViewDeck.MouseMove -= gridMouseMove;
+			_viewCards.MouseMove -= gridMouseMove;
+			_viewDeck.MouseMove -= gridMouseMove;
 
-			_layoutViewCards.MouseClicked -= gridMouseClick;
-			_layoutViewDeck.MouseClicked -= gridMouseClick;
+			_viewCards.MouseClicked -= gridMouseClick;
+			_viewDeck.MouseClicked -= gridMouseClick;
 
 			_draggingSubsystem.DraggedLikeClick -= draggedLikeClick;
 			_draggingSubsystem.DragRemoved -= dragRemoved;
 			_draggingSubsystem.DragAdded -= dragAdded;
-			_layoutViewCards.SelectionStarted -= selectionStarted;
+			_viewCards.SelectionStarted -= selectionStarted;
 
 			_countInputSubsystem.Input -= countInput;
 
@@ -264,8 +251,8 @@ namespace Mtgdb.Gui
 
 		public UiModel Ui { get; set; }
 
-		private readonly MtgLayoutView _layoutViewCards;
-		private readonly MtgLayoutView _layoutViewDeck;
+		private readonly LayoutViewControl _viewCards;
+		private readonly LayoutViewControl _viewDeck;
 		private readonly Cursor _cursor;
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly CollectionEditorModel _collectionModel;

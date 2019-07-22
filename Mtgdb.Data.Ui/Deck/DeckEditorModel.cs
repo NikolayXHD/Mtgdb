@@ -21,6 +21,7 @@ namespace Mtgdb.Ui
 		{
 			CurrentZone = value;
 			LoadDeck(repo);
+			ZoneChanged?.Invoke();
 		}
 
 		private DeckZoneModel getDeckZone(Zone zone)
@@ -44,14 +45,8 @@ namespace Mtgdb.Ui
 			}
 		}
 
-		public IList<Card> GetVisibleCards()
-		{
-			if (IsDraggingFromZone == CurrentZone)
-				return getReorderedCards(DraggedCard, CardBelowDragged);
-
-			lock (DataSource)
-				return DataSource.ToList();
-		}
+		public List<Card> GetVisibleCards() =>
+			getReorderedCards(DraggedCard, CardBelowDragged);
 
 
 		public void SetDeck(Deck deck, CardRepository repo)
@@ -93,7 +88,7 @@ namespace Mtgdb.Ui
 				changeTerminatesBatch: true);
 		}
 
-		public void Add(Card card, int increment, Zone? zone = null, bool changeTerminatesBatch = true)
+		public void Add(Card card, int increment, Card at = null, Zone? zone = null, bool changeTerminatesBatch = true)
 		{
 			var specificZone = zone ?? CurrentZone ?? Zone.Main;
 			var deckZone = getDeckZone(specificZone);
@@ -106,7 +101,7 @@ namespace Mtgdb.Ui
 					card.MaxCountInDeck());
 
 			if (increment > 0)
-				add(card, newCount: count, zone: specificZone);
+				add(card, at, newCount: count, zone: specificZone);
 			else if (increment < 0)
 				remove(card, newCount: count, zone: specificZone);
 
@@ -143,16 +138,27 @@ namespace Mtgdb.Ui
 					DataSource.Remove(card);
 		}
 
-		private void add(Card card, int newCount, Zone zone)
+		private void add(Card card, Card at, int newCount, Zone zone)
 		{
-			getDeckZone(zone).Add(card.Id, newCount);
+			var zoneModel = getDeckZone(zone);
+			int index = getInsertionIndex(card, at, zoneModel);
+
+			zoneModel.Insert(card.Id, index, newCount);
 
 			if (zone != CurrentZone)
 				return;
 
 			lock (DataSource)
 				if (!DataSource.Contains(card))
-					DataSource.Add(card);
+					DataSource.Insert(index, card);
+		}
+
+		private static int getInsertionIndex(Card card, Card at, DeckZoneModel zoneModel)
+		{
+			int index = zoneModel.CardsIds.IndexOf((at ?? card).Id);
+			if (index < 0)
+				return zoneModel.CardsIds.Count;
+			return index;
 		}
 
 
@@ -193,7 +199,6 @@ namespace Mtgdb.Ui
 		private List<Card> getReorderedCards(Card cardDragged, Card cardBelowDragged)
 		{
 			List<Card> copy;
-
 			lock (DataSource)
 				copy = DataSource.ToList();
 
@@ -268,10 +273,8 @@ namespace Mtgdb.Ui
 			IsDraggingFromZone = fromDeck ? CurrentZone : null;
 		}
 
-		public bool IsDragging()
-		{
-			return DraggedCard != null;
-		}
+		public bool IsDragging =>
+			DraggedCard != null;
 
 		public void DragAbort()
 		{
@@ -437,6 +440,7 @@ namespace Mtgdb.Ui
 
 
 		public event DeckChangedEventHandler DeckChanged;
+		public event Action ZoneChanged;
 
 		public readonly List<Card> DataSource = new List<Card>();
 

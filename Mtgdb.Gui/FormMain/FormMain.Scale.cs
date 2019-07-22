@@ -56,8 +56,8 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.ScaleDpi(transformIcon);
 
-			scaleLayoutView(_layoutViewCards);
-			scaleLayoutView(_layoutViewDeck);
+			scaleLayoutView(_viewCards);
+			scaleLayoutView(_viewDeck);
 
 			_quickFilterControls.Append(_filterManager)
 				.ForEach(QuickFilterControlScaler.ScaleDpi);
@@ -92,9 +92,9 @@ namespace Mtgdb.Gui
 
 					_buttonShowProhibit.Margin = new Padding(0);
 
-					int deckHeight = _imageLoader.CardSize.Height + _layoutViewDeck.LayoutOptions.CardInterval.Height;
+					int deckHeight = _imageLoader.CardSize.Height + _viewDeck.LayoutOptions.CardInterval.Height;
 
-					_layoutViewDeck.Height = deckHeight;
+					_viewDeck.Height = deckHeight;
 					_deckListControl.Height = deckHeight;
 
 					_panelDeckTabsContainer.Size = _tabHeadersDeck.Size;

@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -13,28 +15,28 @@ namespace Mtgdb.Gui
 
 		public LayoutViewTooltip(
 			object owner,
-			MtgLayoutView layoutView,
+			LayoutViewControl view,
 			CardSearchSubsystem cardSearchSubsystem,
 			CountInputSubsystem countInput)
 		{
 			Owner = owner;
-			_layoutView = layoutView;
+			_view = view;
 			_cardSearchSubsystem = cardSearchSubsystem;
 			_countInput = countInput;
 		}
 
 		public void SubscribeEvents()
 		{
-			_layoutView.MouseMove += mouseMove;
-			_layoutView.MouseLeave += mouseLeave;
-			_layoutView.VisibleRecordIndexChanged += scrolled;
+			_view.MouseMove += mouseMove;
+			_view.MouseLeave += mouseLeave;
+			_view.CardIndexChanged += scrolled;
 		}
 
 		public void UnsubscribeEvents()
 		{
-			_layoutView.MouseMove -= mouseMove;
-			_layoutView.MouseLeave -= mouseLeave;
-			_layoutView.VisibleRecordIndexChanged -= scrolled;
+			_view.MouseMove -= mouseMove;
+			_view.MouseLeave -= mouseLeave;
+			_view.CardIndexChanged -= scrolled;
 		}
 
 		private void scrolled(object sender) =>
@@ -42,7 +44,7 @@ namespace Mtgdb.Gui
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			if (_layoutView.IsSelectingText())
+			if (_view.IsSelectingText())
 				Hide?.Invoke();
 			else
 				showFieldTooltip(Cursor.Position);
@@ -53,17 +55,17 @@ namespace Mtgdb.Gui
 
 		private void showFieldTooltip(Point position)
 		{
-			var cursorPosition = _layoutView.Control.PointToClient(position);
-			var hitInfo = _layoutView.CalcHitInfo(cursorPosition);
+			var cursorPosition = _view.PointToClient(position);
+			var hitInfo = _view.CalcHitInfo(cursorPosition);
 
 			if (hitInfo.AlignButtonDirection.HasValue)
 			{
 				Show?.Invoke(new TooltipModel
 				{
 					Id =
-						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.align",
-					ObjectBounds = _layoutView.GetAlignButtonBounds(hitInfo),
-					Control = _layoutView.Control,
+						$"{_view.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.align",
+					ObjectBounds = _view.GetAlignButtonBounds(hitInfo),
+					Control = _view,
 					Title = "Viewport alignment",
 					Text = "Aligns viewport by this corner.\r\n" +
 						"\r\n" +
@@ -76,9 +78,9 @@ namespace Mtgdb.Gui
 			{
 				Show?.Invoke(new TooltipModel
 				{
-					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.edit_count",
+					Id = $"{_view.Name}.{hitInfo.RowHandle}.edit_count",
 					ObjectBounds = countRect,
-					Control = _layoutView.Control,
+					Control = _view,
 					Title = "Edit count",
 					Text =
 						"Left click here: set count in deck\r\n" +
@@ -97,9 +99,9 @@ namespace Mtgdb.Gui
 			{
 				Show?.Invoke(new TooltipModel
 				{
-					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.sort",
+					Id = $"{_view.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.sort",
 					ObjectBounds = hitInfo.ButtonBounds,
-					Control = _layoutView.Control,
+					Control = _view,
 					Title = "Sort by " + hitInfo.FieldName,
 					Text =
 						"Click to sort by this field.\r\n" +
@@ -120,7 +122,7 @@ namespace Mtgdb.Gui
 				string title;
 				string query = _cardSearchSubsystem.GetFieldValueQuery(
 					hitInfo.FieldName,
-					_layoutView.GetFieldText(hitInfo.RowHandle, hitInfo.FieldName));
+					_view.GetText(hitInfo.RowHandle, hitInfo.FieldName));
 
 				if (hitInfo.FieldName == nameof(Card.Image))
 				{
@@ -144,9 +146,9 @@ namespace Mtgdb.Gui
 				Show?.Invoke(new TooltipModel
 				{
 					Id =
-						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
+						$"{_view.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}.search",
 					ObjectBounds = hitInfo.ButtonBounds,
-					Control = _layoutView.Control,
+					Control = _view,
 					Title = title,
 					Text = text,
 					Clickable = false
@@ -160,9 +162,9 @@ namespace Mtgdb.Gui
 
 				Show?.Invoke(new TooltipModel
 				{
-					Id = $"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.CustomButtonIndex}",
+					Id = $"{_view.Name}.{hitInfo.RowHandle}.{hitInfo.CustomButtonIndex}",
 					ObjectBounds = hitInfo.ButtonBounds,
-					Control = _layoutView.Control,
+					Control = _view,
 					Title = $"{(delta > 0 ? "Add" : "Remove")} {absDelta} card{(absDelta == 1 ? string.Empty : "s")} {(delta > 0 ? "to" : "from")} {(isDeck ? "Deck" : "Collection")}",
 					Text =
 						$"{(absDelta == 1 ? string.Empty : "Ctrl + ")}{(isDeck ? string.Empty : "Alt + ")}{(delta > 0 ? "Right" : "Middle")} " +
@@ -178,15 +180,13 @@ namespace Mtgdb.Gui
 				Show?.Invoke(new TooltipModel
 				{
 					Id =
-						$"{_layoutView.Control.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
+						$"{_view.Name}.{hitInfo.RowHandle}.{hitInfo.FieldName}",
 					ObjectBounds = hitInfo.FieldBounds.Value,
-					Control = _layoutView.Control,
+					Control = _view,
 					Title = hitInfo.FieldName,
-					Text = _layoutView.GetFieldTooltipText(hitInfo.RowHandle, hitInfo.FieldName),
-					HighlightRanges =
-						_layoutView.GetHighlightRanges(hitInfo.RowHandle,
-							hitInfo.FieldName),
-					HighlightOptions = _layoutView.GetHighlightSettings(),
+					Text = getFieldTooltipText(hitInfo.RowHandle, hitInfo.FieldName),
+					HighlightRanges = _view.GetHighlightTextRanges(hitInfo.RowHandle, hitInfo.FieldName),
+					HighlightOptions = _view.HighlightOptions,
 					Clickable = true
 				});
 			}
@@ -196,8 +196,78 @@ namespace Mtgdb.Gui
 			}
 		}
 
+		private string getFieldTooltipText(int rowHandle, string field)
+		{
+			var text = new StringBuilder(_view.GetText(rowHandle, field));
 
-		private readonly MtgLayoutView _layoutView;
+			var card = (Card) _view.FindRow(rowHandle);
+
+			if (Str.Equals(field, nameof(Card.Text)))
+			{
+				if (!string.IsNullOrEmpty(card.OriginalText))
+					text
+						.AppendLine()
+						.AppendLine()
+						.Append(nameof(Card.OriginalText)).Append(":")
+						.AppendLine()
+						.Append(card.OriginalText);
+
+				var additionalFields = new StringBuilder();
+
+				if (!string.IsNullOrEmpty(card.GeneratedMana))
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.GeneratedMana)).Append(": ").Append(card.GeneratedMana);
+
+				var keywords = card.GetKeywords()
+					.Concat(card.GetCastKeywords())
+					.ToHashSet(Str.Comparer);
+
+				if (keywords.Count > 0)
+					additionalFields
+						.AppendLine()
+						.Append(nameof(KeywordDefinitions.Keywords)).Append(": ")
+						.Append(string.Join(", ", keywords));
+
+				additionalFields
+					.AppendLine()
+					.Append(nameof(KeywordDefinitions.Layout)).Append(": ").Append(card.Layout);
+
+				if (!string.IsNullOrEmpty(card.Number))
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.Number)).Append(": ")
+						.Append(card.Number);
+
+				if (card.MultiverseId.HasValue)
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.MultiverseId)).Append(": ")
+						.Append(card.MultiverseId);
+
+				if (!string.IsNullOrEmpty(card.ImageName))
+					additionalFields
+						.AppendLine()
+						.Append(nameof(Card.ImageName)).Append(": ")
+						.Append(card.ImageName);
+
+				if (additionalFields.Length > 0)
+					text
+						.AppendLine()
+						.Append(additionalFields);
+			}
+			else if (Str.Equals(field, nameof(Card.Type)) && !string.IsNullOrEmpty(card.OriginalType))
+				text
+					.AppendLine()
+					.AppendLine()
+					.Append(nameof(Card.OriginalType)).Append(":")
+					.AppendLine()
+					.Append(card.OriginalType);
+
+			return text.ToString();
+		}
+
+		private readonly LayoutViewControl _view;
 		private readonly CardSearchSubsystem _cardSearchSubsystem;
 		private readonly CountInputSubsystem _countInput;
 

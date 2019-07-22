@@ -143,7 +143,7 @@ namespace Mtgdb.Gui
 			int maxIndex =
 				Math.Min(_view.Count, _view.CardIndex + _view.GetPageSize()) - 1;
 
-			int index = _view.FindRow(_card);
+			int index = _view.FindIndex(_card);
 			if (!index.IsWithin(minIndex, maxIndex))
 				return false;
 
@@ -181,27 +181,34 @@ namespace Mtgdb.Gui
 			countBounds.Size = countBounds.Size.Minus(new Size(1, 1));
 			countBounds.Offset(1, 1);
 			InputControl.Bounds = countBounds;
-			InputControl.Text = getCount(card).ToString(Str.Culture);
+			updateText(card);
 
 			showCountEditor();
 			return true;
 		}
 
-		private void showCountEditor()
+		public void UpdateText(Card card, bool isDeck)
 		{
+			if (InputControl.Parent != null && _card == card && isDeck == _editDeck)
+				updateText(card);
+		}
+
+		private void updateText(Card card)
+		{
+			InputControl.Text = getCount(card).ToString(Str.Culture);
 			InputControl.SelectAll();
 			InputControl.SelectionAlignment = HorizontalAlignment.Center;
+		}
 
+		private void showCountEditor()
+		{
 			_view.Controls.Add(InputControl);
 			InputControl.BringToFront();
 			InputControl.Focus();
 		}
 
-		private void hideCountEditor()
-		{
-			if (_view != null)
-				_view.Controls.Remove(InputControl);
-		}
+		private void hideCountEditor() =>
+			_view?.Controls.Remove(InputControl);
 
 		private void apply()
 		{

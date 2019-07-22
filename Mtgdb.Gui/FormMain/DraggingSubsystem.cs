@@ -12,15 +12,15 @@ namespace Mtgdb.Gui
 	public class DraggingSubsystem: IMessageFilter
 	{
 		public DraggingSubsystem(
-			MtgLayoutView layoutViewDeck,
-			MtgLayoutView layoutViewCards,
+			LayoutViewControl viewDeck,
+			LayoutViewControl viewCards,
 			DeckEditorModel deckEditorModel,
 			FormMain parent,
 			ImageLoader imageLoader,
 			App app)
 		{
-			_layoutViewDeck = layoutViewDeck;
-			_layoutViewCards = layoutViewCards;
+			_viewDeck = viewDeck;
+			_viewCards = viewCards;
 			_deckEditorModel = deckEditorModel;
 			_parent = parent;
 			_imageLoader = imageLoader;
@@ -31,52 +31,56 @@ namespace Mtgdb.Gui
 
 		public void SubscribeToEvents()
 		{
-			_layoutViewDeck.MouseDown += mouseDown;
-			_layoutViewCards.MouseDown += mouseDown;
+			_viewDeck.MouseDown += mouseDown;
+			_viewCards.MouseDown += mouseDown;
 
-			_layoutViewDeck.MouseMove += mouseMove;
-			_layoutViewCards.MouseMove += mouseMove;
+			_viewDeck.MouseMove += mouseMove;
+			_viewCards.MouseMove += mouseMove;
 
-			_layoutViewDeck.MouseUp += mouseUp;
-			_layoutViewCards.MouseUp += mouseUp;
+			_viewDeck.MouseUp += mouseUp;
+			_viewCards.MouseUp += mouseUp;
 
-			_layoutViewDeck.VisibleRecordIndexChanged += deckScrolled;
+			_viewDeck.CardIndexChanged += deckScrolled;
 
-			_layoutViewDeck.MouseEnter += mouseEnter;
-			_layoutViewCards.MouseEnter += mouseEnter;
+			_viewDeck.MouseEnter += mouseEnter;
+			_viewCards.MouseEnter += mouseEnter;
 
-			_layoutViewDeck.MouseLeave += mouseLeave;
-			_layoutViewCards.MouseLeave += mouseLeave;
+			_viewDeck.MouseLeave += mouseLeave;
+			_viewCards.MouseLeave += mouseLeave;
 
-			System.Windows.Forms.Application.AddMessageFilter(this);
+			_deckEditorModel.ZoneChanged += zoneChanged;
+
+			Application.AddMessageFilter(this);
 		}
 
 		public void UnsubscribeFromEvents()
 		{
-			_layoutViewDeck.MouseDown -= mouseDown;
-			_layoutViewCards.MouseDown -= mouseDown;
+			_viewDeck.MouseDown -= mouseDown;
+			_viewCards.MouseDown -= mouseDown;
 
-			_layoutViewDeck.MouseMove -= mouseMove;
-			_layoutViewCards.MouseMove -= mouseMove;
+			_viewDeck.MouseMove -= mouseMove;
+			_viewCards.MouseMove -= mouseMove;
 
-			_layoutViewDeck.MouseUp -= mouseUp;
-			_layoutViewCards.MouseUp -= mouseUp;
+			_viewDeck.MouseUp -= mouseUp;
+			_viewCards.MouseUp -= mouseUp;
 
-			_layoutViewDeck.VisibleRecordIndexChanged -= deckScrolled;
+			_viewDeck.CardIndexChanged -= deckScrolled;
 
-			_layoutViewDeck.MouseEnter -= mouseEnter;
-			_layoutViewCards.MouseEnter -= mouseEnter;
+			_viewDeck.MouseEnter -= mouseEnter;
+			_viewCards.MouseEnter -= mouseEnter;
 
-			_layoutViewDeck.MouseLeave -= mouseLeave;
-			_layoutViewCards.MouseLeave -= mouseLeave;
+			_viewDeck.MouseLeave -= mouseLeave;
+			_viewCards.MouseLeave -= mouseLeave;
 
-			System.Windows.Forms.Application.RemoveMessageFilter(this);
+			_deckEditorModel.ZoneChanged -= zoneChanged;
+
+			Application.RemoveMessageFilter(this);
 		}
 
 		public void SetupDrawingDraggingMarkEvent()
 		{
-			_layoutViewDeck.CustomDrawField += drawDraggingMark;
-			_layoutViewCards.CustomDrawField += drawDraggingMark;
+			_viewDeck.CustomDrawField += drawDraggingMark;
+			_viewCards.CustomDrawField += drawDraggingMark;
 		}
 
 		private void mouseDown(object sender, MouseEventArgs e)
@@ -84,7 +88,7 @@ namespace Mtgdb.Gui
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			var view = getView(sender);
+			var view = (LayoutViewControl)sender;
 			var hitInfo = view.CalcHitInfo(e.Location);
 			if (!hitInfo.IsOverImage())
 				return;
@@ -96,17 +100,17 @@ namespace Mtgdb.Gui
 
 			_mouseDownLocation = e.Location;
 			_cardMouseDown = card;
-			_dragFromView = view;
+			_dragFrom = view;
 		}
 
 		private void mouseMove(object sender, MouseEventArgs e)
 		{
-			var view = getView(sender);
+			var view = (LayoutViewControl)sender;
 
-			if (_deckEditorModel.IsDragging())
+			if (_deckEditorModel.IsDragging)
 			{
-				if (view == _layoutViewDeck)
-					updateCardBelowDragged(view);
+				if (view == _viewDeck)
+					updateCardBelowDragged();
 
 				return;
 			}
@@ -115,7 +119,7 @@ namespace Mtgdb.Gui
 			if (!_mouseDownLocation.HasValue || _mouseDownLocation == e.Location)
 				return;
 
-			DragBegin(_cardMouseDown, _dragFromView);
+			dragBegin(_cardMouseDown, _dragFrom);
 		}
 
 		private void mouseUp(object sender, MouseEventArgs e)
@@ -126,14 +130,14 @@ namespace Mtgdb.Gui
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			if (!_deckEditorModel.IsDragging())
+			if (!_deckEditorModel.IsDragging)
 				return;
 
 			var draggedCard = _deckEditorModel.DraggedCard;
 			var cardBelowDragged = _deckEditorModel.CardBelowDragged;
 
-			var cardHitInfo = getHitInfo(_layoutViewCards, cursorPosition);
-			var deckHitInfo = getHitInfo(_layoutViewDeck, cursorPosition);
+			var cardHitInfo = getHitInfo(_viewCards, cursorPosition);
+			var deckHitInfo = getHitInfo(_viewDeck, cursorPosition);
 
 			if (cardHitInfo.InBounds)
 			{
@@ -145,7 +149,7 @@ namespace Mtgdb.Gui
 			else if (deckHitInfo.InBounds)
 			{
 				if (_deckEditorModel.IsDraggingFromZone != _deckEditorModel.CurrentZone)
-					DragAdded?.Invoke(draggedCard, _deckEditorModel.IsDraggingFromZone);
+					DragAdded?.Invoke(draggedCard, cardBelowDragged, _deckEditorModel.IsDraggingFromZone);
 				else if (cardBelowDragged != draggedCard)
 					_deckEditorModel.ApplyReorder(draggedCard, cardBelowDragged);
 				else
@@ -168,53 +172,60 @@ namespace Mtgdb.Gui
 
 		private void deckScrolled(object sender)
 		{
-			if (!_deckEditorModel.IsDragging())
+			if (!_deckEditorModel.IsDragging || sender != _viewDeck)
 				return;
 
-			updateCardBelowDragged(_layoutViewDeck);
+			updateCardBelowDragged();
 		}
+
+		private void zoneChanged()
+		{
+			if (_deckEditorModel.IsDragging && _deckEditorModel.CurrentZone.HasValue)
+				beginDisplayReorderedDeck();
+		}
+
 
 		private void mouseEnter(object sender, EventArgs e)
 		{
-			if (!_deckEditorModel.IsDragging())
+			if (!_deckEditorModel.IsDragging)
 				return;
 
 			updateCursor();
 
-			var view = getView(sender);
-			if (view == _layoutViewDeck)
-				updateCardBelowDragged(view);
+			var view = (LayoutViewControl)sender;
+			if (view == _viewDeck)
+			{
+				view.ScrollTo(_deckEditorModel.DraggedCard);
+				updateCardBelowDragged();
+			}
 		}
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
-			if (_deckEditorModel.IsDragging())
+			if (sender == _viewDeck && _deckEditorModel.IsDragging)
 				setCardBelowDragged(_deckEditorModel.DraggedCard);
 		}
 
+		public bool IsDragging =>
+			_deckEditorModel.IsDragging;
 
-
-		public bool IsDragging()
+		private void dragBegin(Card card, LayoutViewControl dragFrom)
 		{
-			return _deckEditorModel.IsDragging();
-		}
-
-		public void DragBegin(Card card, MtgLayoutView dragFromView)
-		{
-			dragFromView.Control.Capture = false;
+			dragFrom.Capture = false;
 			_cardMouseDown = card;
-			_dragFromView = dragFromView;
+			_dragFrom = dragFrom;
+			FromDeck = dragFrom == _viewDeck;
 
 			_dragStartedTime = DateTime.Now;
-
-			_deckEditorModel.DragStart(card, fromDeck: dragFromView == _layoutViewDeck);
+			_deckEditorModel.DragStart(card, fromDeck: FromDeck);
 
 			createDragCursor(card);
 			updateCursor();
 
+			beginDisplayReorderedDeck();
+
 			// Because the card we are dragging received a mark
-			_layoutViewCards.InvalidateCard(card);
-			_layoutViewDeck.InvalidateCard(card);
+			_viewCards.InvalidateCard(card);
 		}
 
 		private void createDragCursor(Card card)
@@ -255,60 +266,74 @@ namespace Mtgdb.Gui
 			updateCursor();
 
 			// because there is no more mark on the card we are dragging
-			_layoutViewCards.InvalidateCard(draggedCard);
-			_layoutViewDeck.Invalidate();
+			_viewCards.InvalidateCard(draggedCard);
+
+			endDisplayReorderedDeck();
+		}
+
+		private void beginDisplayReorderedDeck()
+		{
+			_viewDeck.DataSource = _deckEditorModel.GetVisibleCards();
+			_viewDeck.RefreshData();
+			_parent.UpdateDeckScrollLabel();
+		}
+
+		private void endDisplayReorderedDeck()
+		{
+			_viewDeck.DataSource = _deckEditorModel.DataSource;
+			_viewDeck.RefreshData();
+			_parent.UpdateDeckScrollLabel();
+		}
+
+		private void updateCardBelowDragged()
+		{
+			var hitInfo = getHitInfo(_viewDeck, Cursor.Position);
+			var rowHandle = hitInfo.RowHandle;
+			var deck = _deckEditorModel.DataSource;
+			Card card;
+			if (0 <= rowHandle && rowHandle < deck.Count)
+				card = deck[rowHandle];
+			else
+				card = _deckEditorModel.DraggedCard;
+			setCardBelowDragged(card);
 		}
 
 		private void setCardBelowDragged(Card card)
 		{
-			if (_deckEditorModel.CardBelowDragged != card)
-				_deckEditorModel.CardBelowDragged = card;
+			if (_deckEditorModel.CardBelowDragged == card)
+				return;
 
-			_layoutViewDeck.Invalidate();
-		}
-
-		private void updateCardBelowDragged(MtgLayoutView view)
-		{
-			var card = getCardBelowDragged(view) ?? _deckEditorModel.CardBelowDragged;
-			setCardBelowDragged(card);
+			_deckEditorModel.CardBelowDragged = card;
+			_viewDeck.DataSource = _deckEditorModel.GetVisibleCards();
+			_viewDeck.RefreshData();
 		}
 
 		private void updateCursor()
 		{
 			Cursor cursor;
 
-			if (_deckEditorModel.IsDragging())
+			if (_deckEditorModel.IsDragging)
 				cursor = _dragCursor;
 			else
 				cursor = Cursors.Default;
 
 			_parent.Cursor =
-			_layoutViewDeck.Control.Cursor =
-			_layoutViewCards.Control.Cursor =
+			_viewDeck.Cursor =
+			_viewCards.Cursor =
 				cursor;
 		}
 
-		private Card getCardBelowDragged(MtgLayoutView view)
+		private static HitInfo getHitInfo(LayoutViewControl view, Point position)
 		{
-			var hitInfo = getHitInfo(view, Cursor.Position);
-
-			if (hitInfo.IsOverImage())
-				return (Card) _layoutViewDeck.FindRow(hitInfo.RowHandle);
-
-			return null;
-		}
-
-		private static HitInfo getHitInfo(MtgLayoutView view, Point position)
-		{
-			var clientLocation = view.Control.PointToClient(position);
+			var clientLocation = view.PointToClient(position);
 			var hitInfo = view.CalcHitInfo(clientLocation);
 			return hitInfo;
 		}
 
 		private void drawDraggingMark(object sender, CustomDrawArgs e)
 		{
-			var view = getView(sender);
-			var card = GetCard(view, e.RowHandle);
+			var view = (LayoutViewControl)sender;
+			var card = (Card)view.FindRow(e.RowHandle);
 
 			if (card == null)
 				return;
@@ -338,34 +363,6 @@ namespace Mtgdb.Gui
 
 
 
-		private MtgLayoutView getView(object view)
-		{
-			if (_layoutViewCards.Wraps(view))
-				return _layoutViewCards;
-
-			if (_layoutViewDeck.Wraps(view))
-				return _layoutViewDeck;
-
-			throw new Exception(@"wrapper not found");
-		}
-
-		public Card GetCard(MtgLayoutView view, int rowHandle)
-		{
-			if (view == _layoutViewCards)
-				return (Card)view.FindRow(rowHandle);
-
-			if (view != _layoutViewDeck)
-				throw new ArgumentOutOfRangeException();
-
-			int visibleIndex = view.GetVisibleIndex(rowHandle);
-
-			if (visibleIndex < 0)
-				return null;
-
-			return _deckEditorModel.GetVisibleCards()[visibleIndex];
-		}
-
-
 		public bool PreFilterMessage(ref Message m)
 		{
 			if (_parent.IsDisposed || _parent.Disposing)
@@ -380,7 +377,7 @@ namespace Mtgdb.Gui
 
 		private void mouseMoved()
 		{
-			if (IsDragging())
+			if (IsDragging)
 				return;
 
 			bool underMouse = _parent.IsChildUnderMouse();
@@ -396,29 +393,30 @@ namespace Mtgdb.Gui
 			var draggedCard = draggingForm.DraggedCard;
 			draggingForm.StopDragging();
 
-			if (IsDragging())
+			if (IsDragging)
 				DragAbort();
 
-			DragBegin(draggedCard, _layoutViewCards);
+			dragBegin(draggedCard, _viewCards);
 		}
 
 
 
 		public event Action<Card> DraggedLikeClick;
 		public event Action<Card, Zone> DragRemoved;
-		public event Action<Card, Zone?> DragAdded;
+		public event Action<Card, Card, Zone?> DragAdded;
 
 
 		public UiModel Ui { get; set; }
 
+		public bool FromDeck { get; private set; }
 
 		private DateTime? _dragStartedTime;
 		private Point? _mouseDownLocation;
 		private Card _cardMouseDown;
 
-		private MtgLayoutView _dragFromView;
-		private readonly MtgLayoutView _layoutViewDeck;
-		private readonly MtgLayoutView _layoutViewCards;
+		private LayoutViewControl _dragFrom;
+		private readonly LayoutViewControl _viewDeck;
+		private readonly LayoutViewControl _viewCards;
 		private readonly DeckEditorModel _deckEditorModel;
 		private readonly FormMain _parent;
 		private readonly ImageLoader _imageLoader;

@@ -71,7 +71,7 @@ namespace Mtgdb.Controls
 		private void layout(object sender, LayoutEventArgs e)
 		{
 			applySize();
-			ApplyCardIndex();
+			loadVisibleData();
 			updateScrollbar();
 		}
 
@@ -265,6 +265,23 @@ namespace Mtgdb.Controls
 
 
 
+		public void ScrollTo(int rowHandle)
+		{
+			if (rowHandle < 0)
+				return;
+
+			int index = snapCardIndex(rowHandle);
+			if (index == CardIndex)
+				return;
+
+			CardIndex = index;
+			loadVisibleData();
+			updateScrollbar();
+		}
+
+		public void ScrollTo(object row) =>
+			ScrollTo(FindIndex(row));
+
 		public Rectangle GetAlignButtonBounds(HitInfo hitInfo)
 		{
 			if (!hitInfo.AlignButtonDirection.HasValue)
@@ -282,12 +299,10 @@ namespace Mtgdb.Controls
 			{
 				for (int i = 0; i < DataSource.Count; i++)
 					_rowHandleByObject[DataSource[i]] = i;
-
-				if (CardIndex < 0 || CardIndex >= Count)
-					CardIndex = snapCardIndex(CardIndex, Count);
 			}
 
-			ApplyCardIndex();
+			CardIndex = snapCardIndex(CardIndex);
+			loadVisibleData();
 			updateScrollbar();
 		}
 
@@ -300,7 +315,7 @@ namespace Mtgdb.Controls
 			Scrollbar.Enabled = Count > pageSize;
 
 			int largeChange = ((int) Math.Round(Math.Pow(10, Math.Round(Math.Log10(Count + 1d) - 2.5d))))
-				.WithinRange(1, PageCount).AtLeast(1);
+				.WithinRange(1, PageCount);
 
 			int maximum = Math.Max(0, PageCount - 1);
 			int value = CardIndex / pageSize;
@@ -318,7 +333,7 @@ namespace Mtgdb.Controls
 
 		private void load(object sender, EventArgs e)
 		{
-			ApplyIconRecognizer();
+			applyIconRecognizer();
 
 			Scrollbar.Scroll += scrolled;
 			MouseWheel += mouseWheel;
@@ -402,18 +417,16 @@ namespace Mtgdb.Controls
 			if (_updatingScrollValue)
 				return;
 
-			int cardIndex = Scrollbar.Value * GetPageSize();
-			if (cardIndex == CardIndex)
+			int index = snapCardIndex(Scrollbar.Value * GetPageSize());
+			if (index == CardIndex)
 				return;
 
-			CardIndex = cardIndex;
-			ApplyCardIndex();
+			CardIndex = index;
+			loadVisibleData();
 		}
 
-		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e)
-		{
+		private static void previewKeyDown(object sender, PreviewKeyDownEventArgs e) =>
 			e.IsInputKey = true;
-		}
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
@@ -531,11 +544,12 @@ namespace Mtgdb.Controls
 
 		private void scrollAdd(int pageSize)
 		{
-			int cardIndex = CardIndex;
-			cardIndex += pageSize;
-			CardIndex = snapCardIndex(cardIndex, Count);
+			int index = snapCardIndex(CardIndex + pageSize);
+			if (index == CardIndex)
+				return;
 
-			ApplyCardIndex();
+			CardIndex = index;
+			loadVisibleData();
 			updateScrollbar();
 		}
 
@@ -853,8 +867,11 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void handleAlignClick(HitInfo hitInfo) =>
-			LayoutOptions.Alignment = hitInfo.AlignButtonDirection.Value;
+		private void handleAlignClick(HitInfo hitInfo)
+		{
+			if (hitInfo.AlignButtonDirection.HasValue)
+				LayoutOptions.Alignment = hitInfo.AlignButtonDirection.Value;
+		}
 
 		private void updateSort()
 		{
@@ -880,7 +897,7 @@ namespace Mtgdb.Controls
 			if (row == null)
 				return null;
 
-			var index = FindRow(row);
+			var index = FindIndex(row);
 			if (index < 0)
 				return null;
 
@@ -900,7 +917,7 @@ namespace Mtgdb.Controls
 			if (row == null)
 				return null;
 
-			int index = FindRow(row);
+			int index = FindIndex(row);
 			if (index < 0)
 				return null;
 
@@ -1100,11 +1117,8 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private Rectangle getCardBounds(int i, int j, Point alignmentShift)
-		{
-			var cardArea = new Rectangle(getCardLocation(i, j, alignmentShift), CardSize);
-			return cardArea;
-		}
+		private Rectangle getCardBounds(int i, int j, Point alignmentShift) =>
+			new Rectangle(getCardLocation(i, j, alignmentShift), CardSize);
 
 		private Point getCardLocation(int i, int j, Point alignmentShift)
 		{
@@ -1168,14 +1182,14 @@ namespace Mtgdb.Controls
 		}
 
 
-		private int snapCardIndex(int value, int count)
+		private int snapCardIndex(int value)
 		{
+			var count = Count;
 			if (count == 0)
 				return 0;
 
 			if (value >= count)
 				value = count - 1;
-
 			else if (value < 0 && count > 0)
 				value = 0;
 
@@ -1188,7 +1202,7 @@ namespace Mtgdb.Controls
 			return value;
 		}
 
-		public void ApplyCardIndex()
+		private void loadVisibleData()
 		{
 			if (!_selection.Selecting)
 				_selection.Reset();
@@ -1202,19 +1216,11 @@ namespace Mtgdb.Controls
 					int index = j * columnsCount + i;
 					int rowHandle = getRowHandle(index);
 					var row = FindRow(rowHandle);
-
-					if (row != null)
-					{
-						Cards[index].DataSource = row;
-						Cards[index].Visible = true;
-
+					Cards[index].DataSource = row;
+					bool hasData = row != null;
+					Cards[index].Visible = hasData;
+					if (hasData)
 						RowDataLoaded?.Invoke(this, rowHandle);
-					}
-					else
-					{
-						Cards[index].DataSource = null;
-						Cards[index].Visible = false;
-					}
 				}
 
 			for (int index = rowsCount * columnsCount; index < Cards.Count; index++)
@@ -1228,13 +1234,16 @@ namespace Mtgdb.Controls
 				bool visible = isAlignIconVisible(direction);
 				_alignButtonVisible[direction] = visible;
 			}
+
+			Invalidate();
 		}
 
-		public void ApplyIconRecognizer()
+		private void applyIconRecognizer()
 		{
 			foreach (var card in Cards)
 				card.SetIconRecognizer(IconRecognizer);
 		}
+
 
 		public void SetHighlightTextRanges(IList<TextRange> ranges, int rowHandle, string fieldName)
 		{
@@ -1252,10 +1261,8 @@ namespace Mtgdb.Controls
 			return result;
 		}
 
-		private int getRowHandle(int displayIndex)
-		{
-			return CardIndex + displayIndex;
-		}
+		private int getRowHandle(int displayIndex) =>
+			CardIndex + displayIndex;
 
 		public IList<TextRange> GetHighlightTextRanges(int rowHandle, string fieldName)
 		{
@@ -1264,9 +1271,9 @@ namespace Mtgdb.Controls
 			return field.HighlightRanges;
 		}
 
-		public int FindRow(object row)
+		public int FindIndex(object row)
 		{
-			if (!_rowHandleByObject.TryGetValue(row, out int rowHandle))
+			if (row == null || !_rowHandleByObject.TryGetValue(row, out int rowHandle))
 				return -1;
 
 			return rowHandle;
@@ -1373,7 +1380,7 @@ namespace Mtgdb.Controls
 		public int CardIndex
 		{
 			get => _cardIndex;
-			set
+			private set
 			{
 				if (value == _cardIndex)
 					return;

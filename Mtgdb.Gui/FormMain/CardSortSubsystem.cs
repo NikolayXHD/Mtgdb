@@ -15,11 +15,11 @@ namespace Mtgdb.Gui
 		};
 
 		public CardSortSubsystem(
-			LayoutViewControl layoutView,
+			LayoutViewControl view,
 			CardRepository repo,
 			CardFields fields,
 			CardSearchSubsystem searchSubsystem)
-			: base(layoutView, fields, searchSubsystem)
+			: base(view, fields, searchSubsystem)
 		{
 			_repo = repo;
 		}

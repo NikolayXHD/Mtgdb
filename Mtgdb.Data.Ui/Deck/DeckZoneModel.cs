@@ -18,13 +18,15 @@ namespace Mtgdb.Ui
 		{
 		}
 
-		public void Add(string cardId, int newCount)
+		public void Insert(string cardId, int index, int newCount)
 		{
 			CountById[cardId] = newCount;
-
 			if (!Order.Contains(cardId))
-				Order.Add(cardId);
+				Order.Insert(index, cardId);
 		}
+
+		public void Add(string cardId, int newCount) =>
+			Insert(cardId, Order.Count, newCount);
 
 		public void Clear()
 		{

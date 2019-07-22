@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mtgdb.Controls;
 using Mtgdb.Data;
 
 namespace Mtgdb.Gui
@@ -9,22 +10,20 @@ namespace Mtgdb.Gui
 	public class ImagePreloadingSubsystem
 	{
 		public ImagePreloadingSubsystem(
-			MtgLayoutView layoutViewCards,
-			MtgLayoutView layoutViewDeck,
-			ScrollSubsystem scrollSubsystem,
+			LayoutViewControl viewCards,
+			LayoutViewControl viewDeck,
 			UiConfigRepository uiConfigRepository)
 		{
-			_layoutViewCards = layoutViewCards;
-			_layoutViewDeck = layoutViewDeck;
-			_scrollSubsystem = scrollSubsystem;
+			_viewCards = viewCards;
+			_viewDeck = viewDeck;
 			_uiConfigRepository = uiConfigRepository;
 		}
 
 		public void Reset()
 		{
 			var cardsToPreloadImage = new List<Card>();
-			addCardsToPreview(_layoutViewDeck, cardsToPreloadImage);
-			addCardsToPreview(_layoutViewCards, cardsToPreloadImage);
+			addCardsToPreview(_viewDeck, cardsToPreloadImage);
+			addCardsToPreview(_viewCards, cardsToPreloadImage);
 
 			_cardsToPreloadImage = cardsToPreloadImage;
 		}
@@ -63,11 +62,10 @@ namespace Mtgdb.Gui
 		public void AbortThread() =>
 			_cts?.Cancel();
 
-		private void addCardsToPreview(MtgLayoutView view, List<Card> cardsToPreloadImage)
+		private void addCardsToPreview(LayoutViewControl view, List<Card> cardsToPreloadImage)
 		{
-			var pageSize = _scrollSubsystem.GetPageSize(view);
-			
-			int visibleRecordIndex = view.VisibleRecordIndex;
+			var pageSize = view.GetPageSize();
+			int index = view.CardIndex;
 
 			bool endReached = false;
 			bool startReached = false;
@@ -82,20 +80,18 @@ namespace Mtgdb.Gui
 				if (cardsToPreloadImage.Count > maxPreload)
 					return;
 
-				startReached |= !add(visibleRecordIndex - i - 1);
-				endReached |= !add(visibleRecordIndex + pageSize + i);
+				startReached |= !add(index - i - 1);
+				endReached |= !add(index + pageSize + i);
 
 				i++;
 			}
 
 			bool add(int j)
 			{
-				if (j < 0 || j >= view.RowCount)
+				if (j < 0 || j >= view.Count)
 					return false;
 
-				int handle = view.GetVisibleRowHandle(j);
-				var card = (Card) view.FindRow(handle);
-
+				var card = (Card) view.FindRow(j);
 				if (card == null)
 					return false;
 
@@ -107,9 +103,8 @@ namespace Mtgdb.Gui
 		public UiModel Ui { get; set; }
 		private CancellationTokenSource _cts;
 
-		private readonly MtgLayoutView _layoutViewCards;
-		private readonly MtgLayoutView _layoutViewDeck;
-		private readonly ScrollSubsystem _scrollSubsystem;
+		private readonly LayoutViewControl _viewCards;
+		private readonly LayoutViewControl _viewDeck;
 		private readonly UiConfigRepository _uiConfigRepository;
 
 		private List<Card> _cardsToPreloadImage;

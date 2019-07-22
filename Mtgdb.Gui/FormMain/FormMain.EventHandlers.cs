@@ -10,8 +10,200 @@ namespace Mtgdb.Gui
 {
 	partial class FormMain
 	{
+		private void subscribeToEvents()
+		{
+			Load += formLoad;
+
+			_buttonExcludeManaCost.MouseDown += resetExcludeManaCost;
+			_buttonExcludeManaAbility.MouseDown += resetExcludeManaAbility;
+			_buttonShowDuplicates.CheckedChanged += showDuplicatesCheckedChanged;
+
+			_dragging.SubscribeToEvents();
+
+			_drawing.SetupDrawingCardEvent();
+			_dragging.SetupDrawingDraggingMarkEvent();
+
+
+			// After _deckDraggingSubsystem.SubscribeToEvents(), so that it would recapture the click on drag-n-drop before
+			_deckEditorSubsystem.SubscribeToEvents();
+			// After _deckEditingSubsystem, to show zoom before moving the card
+
+			_legality.SubscribeToEvents();
+			_legality.FilterChanged += legalityFilterChanged;
+
+			_deckEditor.DeckChanged += deckChanged;
+			_collectionEditor.CollectionChanged += collectionChanged;
+
+			_cardSort.SubscribeToEvents();
+			_cardSort.SortChanged += cardSortChanged;
+
+			_buttonExcludeManaAbility.CheckedChanged += excludeManaAbilityChanged;
+			_buttonExcludeManaCost.CheckedChanged += excludeManaCostChanged;
+			_buttonShowProhibit.CheckedChanged += showProhibitChanged;
+
+			_tabHeadersDeck.SelectedIndexChanged += deckZoneChanged;
+			_tabHeadersDeck.Click += deckZoneClick;
+
+			_deckZones.SubscribeEvents();
+
+			_cardSearcher.IndexingProgress += indexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress += indexingProgress;
+			_deckSearcher.IndexingProgress += indexingProgress;
+			_deckSearcher.Spellchecker.IndexingProgress += indexingProgress;
+
+			_cardSearcher.Loaded += cardSearcherLoaded;
+			_cardSearcher.Disposed += cardSearcherDisposed;
+
+			_keywordSearcher.Loaded += keywordSearcherLoaded;
+			_keywordSearcher.LoadingProgress += keywordSearcherLoadingProgress;
+
+			_viewCards.CardIndexChanged += gridScrolled;
+			_viewDeck.CardIndexChanged += gridScrolled;
+
+			foreach (var filterControl in _quickFilterControls)
+				filterControl.StateChanged += quickFiltersChanged;
+
+			_filterManager.StateChanged += quickFilterManagerChanged;
+
+			Application.ApplicationExit += applicationExit;
+
+			_copyPaste.SubscribeToEvents();
+
+			_buttonSampleHandNew.Pressed += sampleHandNew;
+			_buttonSampleHandMulligan.Pressed += sampleHandMulligan;
+			_buttonSampleHandDraw.Pressed += sampleHandDraw;
+
+			_buttonHideDeck.CheckedChanged += buttonHideDeckChanged;
+			_buttonShowScrollCards.CheckedChanged += buttonShowScrollChanged;
+			_buttonShowScrollDeck.CheckedChanged += buttonShowScrollChanged;
+			_buttonShowPartialCards.CheckedChanged += buttonPartialCardsChanged;
+			_buttonShowText.CheckedChanged += buttonHideTextChanged;
+			_buttonResetFilters.Pressed += resetFiltersClick;
+
+			_layoutRight.SizeChanged += rightLayoutChanged;
+
+			_history.Loaded += historyLoaded;
+
+			_cardSearch.SubscribeToEvents();
+
+			SizeChanged += sizeChanged;
+			PreviewKeyDown += previewKeyDown;
+
+			_deckSearcher.BeginLoad += beginUpdateDeckIndex;
+
+			_deckListControl.Scrolled += deckListScrolled;
+			_deckListControl.Refreshed += deckListRefreshed;
+			_deckListControl.DeckOpened += deckListOpenedDeck;
+			_deckListControl.DeckRenamed += deckListRenamedDeck;
+			_deckListControl.FilterByDeckModeChanged += filterByDeckModeChanged;
+			_deckListControl.DeckAdded += deckListAdded;
+			_deckListControl.DeckTransformed += deckListTransformed;
+
+			_formZoom.SettingsChanged += zoomSettingsChanged;
+
+			_viewCards.CardCreating += cardCreating;
+			_viewDeck.CardCreating += cardCreating;
+
+			_menuSearchExamples.QueryClicked += searchExampleClicked;
+
+			Dpi.BeforeChanged += beforeDpiChanged;
+			Dpi.AfterChanged += afterDpiChanged;
+		}
+
+		private void unsubscribeFromEvents()
+		{
+			Load -= formLoad;
+
+			_buttonExcludeManaCost.MouseDown -= resetExcludeManaCost;
+			_buttonExcludeManaAbility.MouseDown -= resetExcludeManaAbility;
+			_buttonShowDuplicates.CheckedChanged -= showDuplicatesCheckedChanged;
+
+			_dragging.UnsubscribeFromEvents();
+
+			_legality.FilterChanged -= legalityFilterChanged;
+			_deckEditor.DeckChanged -= deckChanged;
+			_collectionEditor.CollectionChanged -= collectionChanged;
+
+			_cardSort.UnsubscribeFromEvents();
+			_cardSort.SortChanged -= cardSortChanged;
+
+			_buttonExcludeManaAbility.CheckedChanged -= excludeManaAbilityChanged;
+			_buttonExcludeManaCost.CheckedChanged -= excludeManaCostChanged;
+			_buttonShowProhibit.CheckedChanged -= showProhibitChanged;
+
+			_tabHeadersDeck.SelectedIndexChanged -= deckZoneChanged;
+			_tabHeadersDeck.Click -= deckZoneClick;
+			_deckZones.UnsubscribeEvents();
+
+			_cardSearcher.IndexingProgress -= indexingProgress;
+			_cardSearcher.Spellchecker.IndexingProgress -= indexingProgress;
+			_deckSearcher.IndexingProgress -= indexingProgress;
+			_deckSearcher.Spellchecker.IndexingProgress -= indexingProgress;
+
+			_cardSearcher.Loaded -= cardSearcherLoaded;
+			_cardSearcher.Disposed -= cardSearcherDisposed;
+
+			_keywordSearcher.Loaded -= keywordSearcherLoaded;
+			_keywordSearcher.LoadingProgress -= keywordSearcherLoadingProgress;
+
+			_viewCards.CardIndexChanged -= gridScrolled;
+			_viewDeck.CardIndexChanged -= gridScrolled;
+
+			foreach (var filterControl in _quickFilterControls)
+				filterControl.StateChanged -= quickFiltersChanged;
+
+			_filterManager.StateChanged -= quickFilterManagerChanged;
+
+			Application.ApplicationExit -= applicationExit;
+
+			_copyPaste.UnsubscribeFromEvents();
+
+
+			_buttonSampleHandNew.Pressed -= sampleHandNew;
+			_buttonSampleHandMulligan.Pressed -= sampleHandMulligan;
+			_buttonSampleHandDraw.Pressed -= sampleHandDraw;
+
+			_buttonHideDeck.CheckedChanged -= buttonHideDeckChanged;
+			_buttonShowScrollCards.CheckedChanged -= buttonShowScrollChanged;
+			_buttonShowScrollDeck.CheckedChanged -= buttonShowScrollChanged;
+			_buttonShowPartialCards.CheckedChanged -= buttonPartialCardsChanged;
+			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
+			_buttonResetFilters.Pressed -= resetFiltersClick;
+
+			_layoutRight.SizeChanged -= rightLayoutChanged;
+			_history.Loaded -= historyLoaded;
+
+			_cardSearch.UnsubscribeFromEvents();
+
+			SizeChanged -= sizeChanged;
+			PreviewKeyDown -= previewKeyDown;
+
+			_deckSearcher.BeginLoad -= beginUpdateDeckIndex;
+
+			_deckListControl.Scrolled -= deckListScrolled;
+			_deckListControl.Refreshed -= deckListRefreshed;
+			_deckListControl.DeckOpened -= deckListOpenedDeck;
+			_deckListControl.DeckRenamed -= deckListRenamedDeck;
+			_deckListControl.FilterByDeckModeChanged -= filterByDeckModeChanged;
+			_deckListControl.DeckAdded -= deckListAdded;
+			_deckListControl.DeckTransformed -= deckListTransformed;
+
+			_formZoom.SettingsChanged -= zoomSettingsChanged;
+
+			_viewCards.CardCreating -= cardCreating;
+			_viewDeck.CardCreating -= cardCreating;
+
+			_menuSearchExamples.QueryClicked -= searchExampleClicked;
+
+			Dpi.BeforeChanged -= beforeDpiChanged;
+			Dpi.AfterChanged -= afterDpiChanged;
+		}
+
 		private void applicationExit(object sender, EventArgs e) =>
 			Shutdown();
+
+		private void cardCreating(object view, LayoutControl probeCard) =>
+			((CardLayoutControlBase) probeCard).Ui = () => _formRoot.UiModel;
 
 		private void formLoad(object sender, EventArgs e)
 		{
@@ -35,14 +227,6 @@ namespace Mtgdb.Gui
 			_cardRepo.SetAdded -= cardRepoSetAdded;
 			_cardRepo.LoadingComplete -= repoLoadingComplete;
 			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
-		}
-
-		public void Shutdown()
-		{
-			stopThreads();
-			unsubscribeFromEvents();
-			unsubscribeCardRepoEvents();
-			_deckListControl.UnsubscribeFromEvents();
 		}
 
 
@@ -107,10 +291,8 @@ namespace Mtgdb.Gui
 			});
 		}
 
-		private void cardSearcherDisposed()
-		{
+		private void cardSearcherDisposed() =>
 			this.Invoke(updateFormStatus);
-		}
 
 		private void indexingProgress() =>
 			this.Invoke(updateFormStatus);
@@ -192,8 +374,8 @@ namespace Mtgdb.Gui
 
 			var value = ((ButtonBase) sender).Checked;
 
-			_layoutViewCards.LayoutOptions.HideScroll =
-				_layoutViewDeck.LayoutOptions.HideScroll =
+			_viewCards.LayoutOptions.HideScroll =
+				_viewDeck.LayoutOptions.HideScroll =
 					_deckListControl.HideScroll = !value;
 
 			_buttonShowScrollDeck.Checked =
@@ -211,21 +393,37 @@ namespace Mtgdb.Gui
 		{
 			updateFormSettings();
 
-			_viewCards.TextualFieldsVisible =
-				_buttonShowText.Checked;
-
+			setTextualFieldsVisible(_viewCards, _buttonShowText.Checked);
 			_viewCards.RefreshData();
 
 			if (!restoringSettings())
 				historyUpdate();
 		}
 
+		private void setTextualFieldsVisible(LayoutViewControl view, bool value)
+		{
+			var layout = value ? typeof(CardLayout) : typeof(DeckLayout);
+			view.LayoutControlType = layout;
+
+			var interval = view.LayoutOptions.CardInterval;
+			if (value)
+				view.LayoutOptions.CardInterval = new Size(interval.Height * 2, interval.Height);
+			else
+				view.LayoutOptions.CardInterval = new Size(interval.Height, interval.Height);
+
+			var threshold = view.LayoutOptions.PartialCardsThreshold;
+
+			view.LayoutOptions.PartialCardsThreshold = new Size(
+				view.CardSize.Width * threshold.Height / view.CardSize.Height,
+				threshold.Height);
+		}
+
 		private void buttonPartialCardsChanged(object sender, EventArgs e)
 		{
 			updateFormSettings();
 
-			_viewCards.AllowPartialCards =
-				_viewDeck.AllowPartialCards =
+			_viewCards.LayoutOptions.AllowPartialCards =
+				_viewDeck.LayoutOptions.AllowPartialCards =
 					_deckListControl.AllowPartialCard =
 						_buttonShowPartialCards.Checked;
 
@@ -267,7 +465,7 @@ namespace Mtgdb.Gui
 		}
 
 
-		private void gridScrolled(MtgLayoutView sender)
+		private void gridScrolled(object sender)
 		{
 			if (restoringSettings())
 				return;
@@ -277,7 +475,7 @@ namespace Mtgdb.Gui
 				_imagePreloading.Reset();
 
 				if (_cardRepo.IsLoadingComplete)
-					_history.Current.SearchResultScroll = _viewCards.VisibleRecordIndex;
+					_history.Current.SearchResultScroll = _viewCards.CardIndex;
 			}
 
 			updateFormStatus();
@@ -362,10 +560,10 @@ namespace Mtgdb.Gui
 			{
 				beginRestoreSettings();
 
-				if (mustBeEnabled)
-					setFilterManagerState(FilterGroup.Deck, FilterValueState.Required);
-				else
-					setFilterManagerState(FilterGroup.Deck, FilterValueState.Ignored);
+				setFilterManagerState(FilterGroup.Deck,
+					mustBeEnabled
+						? FilterValueState.Required
+						: FilterValueState.Ignored);
 
 				endRestoreSettings();
 			}
@@ -406,12 +604,15 @@ namespace Mtgdb.Gui
 		{
 			updateDeckVisibility();
 
-			var zone = DeckZone;
+			var zone = _deckZones.DeckZone;
 
 			if (_deckEditor.CurrentZone != zone)
 			{
 				beginRestoreSettings();
 				_deckEditor.SetZone(zone, _cardRepo);
+				var scroll = _deckZones.GetLastScroll(zone);
+				if (scroll.HasValue)
+					_viewDeck.ScrollTo(scroll.Value);
 				endRestoreSettings();
 			}
 
@@ -427,7 +628,7 @@ namespace Mtgdb.Gui
 			_layoutMain.SuspendLayout();
 
 			_deckListControl.Visible = IsDeckListSelected && !_buttonHideDeck.Checked;
-			_layoutViewDeck.Visible = !IsDeckListSelected && !_buttonHideDeck.Checked;
+			_viewDeck.Visible = !IsDeckListSelected && !_buttonHideDeck.Checked;
 
 			_layoutMain.ResumeLayout(false);
 			_layoutMain.PerformLayout();
@@ -445,12 +646,13 @@ namespace Mtgdb.Gui
 			bool isActualDeckChange = zone != Zone.SampleHand &&
 				(countChanged || listChanged) && changeTerminatesBatch;
 
-			if (!restoringSettings())
-				if (isActualDeckChange)
+			if (isActualDeckChange)
+			{
+				if (!restoringSettings())
 					historyUpdate();
 
-			if (isActualDeckChange)
 				_deckListControl.DeckChanged(_deckEditor.Snapshot());
+			}
 
 			if (!restoringSettings())
 				updateFormStatus();
@@ -462,7 +664,7 @@ namespace Mtgdb.Gui
 
 			updateViewDeck(
 				listChanged: false,
-				countChanged: true,
+				countChanged: false,
 				card: card,
 				touchedChanged: false);
 
@@ -481,9 +683,9 @@ namespace Mtgdb.Gui
 
 
 
-		private void updateViewCards(bool listChanged, Card card, FilterGroup changeRelatedFilterGroup, bool touchedChanged)
+		private void updateViewCards(bool listChanged, Card card, FilterGroup relatedFilterGroup, bool touchedChanged)
 		{
-			if (touchedChanged || listChanged && isFilterGroupEnabled(changeRelatedFilterGroup))
+			if (touchedChanged || listChanged && isFilterGroupEnabled(relatedFilterGroup))
 			{
 				if (restoringSettings())
 					return;
@@ -491,33 +693,30 @@ namespace Mtgdb.Gui
 				var touchedCard = _deckEditor.TouchedCard;
 
 				if (touchedChanged && touchedCard != null)
-					runRefilterTask(() => _scroll.EnsureCardVisibility(touchedCard, _viewCards));
+					runRefilterTask(() => _viewCards.ScrollTo(touchedCard));
 				else
 					runRefilterTask();
+
+				return;
 			}
+
+			if (card != null)
+				_viewCards.InvalidateCard(card);
 			else
-			{
-				if (card == null)
-					_viewCards.Invalidate();
-				else
-					_viewCards.InvalidateCard(card);
-			}
+				_viewCards.Invalidate();
 		}
 
 		private void updateViewDeck(bool listChanged, bool countChanged, Card card, bool touchedChanged)
 		{
 			if (listChanged)
 				_viewDeck.RefreshData();
-
-			if (touchedChanged && _deckEditor.TouchedCard != null)
-				_scroll.EnsureCardVisibility(_deckEditor.TouchedCard, _viewDeck);
-
-			if (listChanged)
-				_viewDeck.Invalidate();
-			else if (touchedChanged || countChanged)
-				_viewDeck.Invalidate();
 			else if (card != null)
 				_viewDeck.InvalidateCard(card);
+			else
+				_viewDeck.Invalidate();
+
+			if ((countChanged || touchedChanged) && _deckEditor.TouchedCard != null)
+				_viewDeck.ScrollTo(_deckEditor.TouchedCard);
 		}
 
 		private void deckZoneClick(object sender, EventArgs e)
@@ -525,33 +724,6 @@ namespace Mtgdb.Gui
 			if (_buttonHideDeck.Checked)
 				_buttonHideDeck.Checked = false;
 		}
-
-		private void deckZoneHover(object sender, EventArgs e)
-		{
-			if (!IsDraggingCard)
-				return;
-
-			var hoveredIndex = _tabHeadersDeck.HoveredIndex;
-
-			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex > MaxZoneIndex)
-				return;
-
-			_tabHeadersDeck.SelectedIndex = hoveredIndex;
-		}
-
-		private void deckZoneDrag(object sender, DragEventArgs e)
-		{
-			var location = _tabHeadersDeck.PointToClient(new Point(e.X, e.Y));
-
-			_tabHeadersDeck.GetTabIndex(location, out int hoveredIndex, out _);
-
-			if (hoveredIndex < 0 || hoveredIndex == _tabHeadersDeck.SelectedIndex || hoveredIndex >= MaxZoneIndex)
-				return;
-
-			_tabHeadersDeck.SelectedIndex = hoveredIndex;
-		}
-
-
 
 		private void legalityFilterChanged()
 		{
@@ -599,10 +771,7 @@ namespace Mtgdb.Gui
 				runRefilterTask();
 			}
 			else
-			{
 				_viewCards.RefreshData();
-				_viewCards.Invalidate();
-			}
 
 			historyUpdate();
 		}
@@ -637,17 +806,6 @@ namespace Mtgdb.Gui
 
 			runRefilterTask();
 			historyUpdate();
-		}
-
-
-
-		public void ScheduleOpeningDeck(Deck deck) =>
-			_requiredDeck = deck;
-
-		private void hideSampleHand()
-		{
-			if (DeckZone == Zone.SampleHand)
-				DeckZone = Zone.Main;
 		}
 
 
@@ -735,13 +893,6 @@ namespace Mtgdb.Gui
 			_cardSearch.AppliedText = query;
 			_cardSearch.Apply();
 			_popupSearchExamples.ClosePopup();
-		}
-
-		private void deckTabsResized(object sender, EventArgs e)
-		{
-			_panelDeckTabsContainer.Size = new Size(
-				Math.Max(_tabHeadersDeck.Width, _panelDeckTabsContainer.Width),
-				_tabHeadersDeck.Height);
 		}
 	}
 }
