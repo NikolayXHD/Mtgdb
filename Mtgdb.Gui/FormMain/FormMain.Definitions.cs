@@ -132,7 +132,6 @@ namespace Mtgdb.Gui
 			_printing = new PrintingSubsystem(imageRepo, _cardRepo);
 
 			_deckZones = new DeckZoneSubsystem(
-				_panelDeckTabsContainer,
 				_tabHeadersDeck,
 				_dragging,
 				_viewDeck)

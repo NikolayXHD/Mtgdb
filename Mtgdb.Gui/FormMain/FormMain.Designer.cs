@@ -49,7 +49,6 @@
 			this._buttonHideDeck = new Mtgdb.Controls.ButtonBase();
 			this._buttonShowPartialCards = new Mtgdb.Controls.ButtonBase();
 			this._buttonShowText = new Mtgdb.Controls.ButtonBase();
-			this._panelDeckTabsContainer = new System.Windows.Forms.Panel();
 			this._tabHeadersDeck = new Mtgdb.Controls.TabHeaderControl();
 			this._buttonSampleHandNew = new Mtgdb.Controls.ButtonBase();
 			this._buttonSampleHandMulligan = new Mtgdb.Controls.ButtonBase();
@@ -98,7 +97,6 @@
 			this._menuSearchExamples = new Mtgdb.Gui.SearchExamplesMenu();
 			this._panelFilters.SuspendLayout();
 			this._panelStatus.SuspendLayout();
-			this._panelDeckTabsContainer.SuspendLayout();
 			this._panelMenu.SuspendLayout();
 			this._panelMenuRightSubpanel.SuspendLayout();
 			this._panelRightCost.SuspendLayout();
@@ -242,7 +240,7 @@
 			this._panelStatus.Controls.Add(this._buttonHideDeck);
 			this._panelStatus.Controls.Add(this._buttonShowPartialCards);
 			this._panelStatus.Controls.Add(this._buttonShowText);
-			this._panelStatus.Controls.Add(this._panelDeckTabsContainer);
+			this._panelStatus.Controls.Add(this._tabHeadersDeck);
 			this._panelStatus.Controls.Add(this._buttonSampleHandNew);
 			this._panelStatus.Controls.Add(this._buttonSampleHandMulligan);
 			this._panelStatus.Controls.Add(this._buttonSampleHandDraw);
@@ -284,12 +282,6 @@
 			this._buttonShowText.Name = "_buttonShowText";
 			this._buttonShowText.Size = new System.Drawing.Size(24, 24);
 			this._buttonShowText.TabIndex = 11;
-			this._panelDeckTabsContainer.Controls.Add(this._tabHeadersDeck);
-			this._panelDeckTabsContainer.Location = new System.Drawing.Point(72, 0);
-			this._panelDeckTabsContainer.Margin = new System.Windows.Forms.Padding(0);
-			this._panelDeckTabsContainer.Name = "_panelDeckTabsContainer";
-			this._panelDeckTabsContainer.Size = new System.Drawing.Size(144, 24);
-			this._panelDeckTabsContainer.TabIndex = 22;
 			this._tabHeadersDeck.AddButtonSlopeSize = new System.Drawing.Size(6, 14);
 			this._tabHeadersDeck.AllowAddingTabs = false;
 			this._tabHeadersDeck.AllowRemovingTabs = false;
@@ -920,7 +912,6 @@
 			this._panelFilters.ResumeLayout(false);
 			this._panelStatus.ResumeLayout(false);
 			this._panelStatus.PerformLayout();
-			this._panelDeckTabsContainer.ResumeLayout(false);
 			this._panelMenu.ResumeLayout(false);
 			this._panelMenu.PerformLayout();
 			this._panelMenuRightSubpanel.ResumeLayout(false);
@@ -999,6 +990,5 @@
 		private Mtgdb.Controls.DeckListControl _deckListControl;
 		private Mtgdb.Controls.ButtonBase _buttonResetFilters;
 		private Mtgdb.Controls.SearchBar _searchBar;
-		private System.Windows.Forms.Panel _panelDeckTabsContainer;
 	}
 }

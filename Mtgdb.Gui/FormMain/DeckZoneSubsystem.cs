@@ -11,12 +11,10 @@ namespace Mtgdb.Gui
 	public class DeckZoneSubsystem
 	{
 		public DeckZoneSubsystem(
-			Control panelDeckTabsContainer,
 			TabHeaderControl tabHeadersDeck,
 			DraggingSubsystem dragging,
 			LayoutViewControl viewDeck)
 		{
-			_panelDeckTabsContainer = panelDeckTabsContainer;
 			_tabHeadersDeck = tabHeadersDeck;
 			_dragging = dragging;
 			_viewDeck = viewDeck;
@@ -30,7 +28,6 @@ namespace Mtgdb.Gui
 
 		public void SubscribeEvents()
 		{
-			_tabHeadersDeck.SizeChanged += deckTabsResized;
 			_tabHeadersDeck.DragOver += deckZoneDrag;
 			_tabHeadersDeck.MouseMove += deckZoneHover;
 			_dragging.DragRemoved += dragRemoved;
@@ -39,20 +36,10 @@ namespace Mtgdb.Gui
 
 		public void UnsubscribeEvents()
 		{
-			_tabHeadersDeck.SizeChanged -= deckTabsResized;
 			_tabHeadersDeck.DragOver -= deckZoneDrag;
 			_tabHeadersDeck.MouseMove -= deckZoneHover;
 			_dragging.DragRemoved -= dragRemoved;
 			_tabHeadersDeck.SelectedIndexChanging -= changing;
-		}
-
-
-
-		private void deckTabsResized(object sender, EventArgs e)
-		{
-			_panelDeckTabsContainer.Size = new Size(
-				Math.Max(_tabHeadersDeck.Width, _panelDeckTabsContainer.Width),
-				_tabHeadersDeck.Height);
 		}
 
 		private void deckZoneDrag(object sender, DragEventArgs e)
@@ -131,7 +118,6 @@ namespace Mtgdb.Gui
 		private const int MaxZoneIndex = (int) Zone.SampleHand;
 		public const int DeckListTabIndex = MaxZoneIndex + 1;
 
-		private readonly Control _panelDeckTabsContainer;
 		private readonly TabHeaderControl _tabHeadersDeck;
 		private readonly DraggingSubsystem _dragging;
 		private readonly LayoutViewControl _viewDeck;
