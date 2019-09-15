@@ -68,9 +68,9 @@ namespace Mtgdb.Data.Model
 			_filterNone = c => true;
 			_filterPriceIsUnknown = c => !c.PriceMid.HasValue;
 
-			_filterIsCreature = c => c.TypesArr.IndexOf("creature", Str.Comparer) >= 0;
-			_filterIsLand = c => c.TypesArr.IndexOf("land", Str.Comparer) >= 0;
-			_filterIsOtherSpell = c => !_filterIsCreature(c) && !_filterIsLand(c);
+			_filterIsCreature = CardTypes.IsCreature;
+			_filterIsLand = CardTypes.IsLand;
+			_filterIsOtherSpell = c => !(c.IsCreature() || c.IsLand());
 
 			_filterIsLandAndPriceIsUnknown = c => _filterIsLand(c) && _filterPriceIsUnknown(c);
 			_filterIsCreatureAndPriceIsUnknown = c => _filterIsCreature(c) && _filterPriceIsUnknown(c);

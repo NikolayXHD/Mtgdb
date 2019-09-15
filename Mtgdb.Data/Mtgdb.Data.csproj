@@ -137,6 +137,7 @@
     <Compile Include="Model\Mtgjson\CardFaceVariants.cs" />
     <Compile Include="Model\Mtgjson\CardId.cs" />
     <Compile Include="Model\Mtgjson\CardLayouts.cs" />
+    <Compile Include="Model\Mtgjson\CardTypes.cs" />
     <Compile Include="Model\Mtgjson\GuidV5.cs" />
     <Compile Include="Model\Mtgjson\MtgjsonPrices.cs" />
     <Compile Include="Model\Patch\ImageNamePatch.cs" />

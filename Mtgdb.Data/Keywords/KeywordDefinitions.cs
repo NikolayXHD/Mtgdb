@@ -212,13 +212,13 @@ namespace Mtgdb.Data
 
 		public static readonly IList<string> Type = new[]
 		{
-			"Creature",
-			"Instant",
-			"Sorcery",
-			"Planeswalker",
-			"Enchantment",
-			"Artifact",
-			"Land",
+			CardTypes.Creature,
+			CardTypes.Instant,
+			CardTypes.Sorcery,
+			CardTypes.Planeswalker,
+			CardTypes.Enchantment,
+			CardTypes.Artifact,
+			CardTypes.Land,
 			null
 		};
 

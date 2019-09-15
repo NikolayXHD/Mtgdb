@@ -18,7 +18,10 @@ namespace Mtgdb.Data
 		public static int MinCountInDeck(this Card c) => 0;
 
 		public static bool IsFlipped(this Card c) =>
-			Str.Equals(c.Layout, CardLayouts.Flip) && c.Faces[1] == c;
+			c.IsFlip() && c.Faces[1] == c;
+
+		public static bool IsAdventureAttachment(this Card c) =>
+			c.IsAdventure() && !c.IsCreature(); // instant or sorcery
 
 		internal static string GetFaceName(this Card c, int i)
 		{

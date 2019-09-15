@@ -152,14 +152,14 @@ namespace Mtgdb.Data
 		/// </summary>
 		[JsonProperty("subtypes")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> SubtypesArr { get; set; }
+		public HashSet<string> SubtypesArr { get; set; }
 
 		/// <summary>
 		/// List of card supertypes found before em-dash.
 		/// </summary>
 		[JsonProperty("supertypes")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> SupertypesArr { get; set; }
+		public HashSet<string> SupertypesArr { get; set; }
 
 		/// <summary>
 		/// Rules text of the card.
@@ -187,7 +187,7 @@ namespace Mtgdb.Data
 		/// </summary>
 		[JsonProperty("types")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> TypesArr { get; set; }
+		public HashSet<string> TypesArr { get; set; }
 
 		/// <summary>
 		/// A universal unique id generated for the card.
@@ -695,10 +695,10 @@ namespace Mtgdb.Data
 				OriginalType = patch.OriginalType;
 
 			if (patch.Types != null)
-				TypesArr = patch.Types;
+				TypesArr = new HashSet<string>(patch.Types, Str.Comparer);
 
 			if (patch.Subtypes != null)
-				SubtypesArr = patch.Subtypes;
+				SubtypesArr = new HashSet<string>(patch.Subtypes, Str.Comparer);
 
 			if (patch.Layout != null)
 				Layout = patch.Layout;

@@ -14,12 +14,12 @@ namespace Mtgdb.Data
 				var cards = pair.Value;
 				var first = cards.First();
 
-				if (first.IsFlipped())
+				if (first.IsFlipped() || first.IsAdventureAttachment())
 				{
-					var unflippedCardName = first.Faces.Main.NameNormalized;
+					var mainCardName = first.Faces.Main.NameNormalized;
 
-					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(unflippedCardName);
-					string imageName = customImageOrder?.ImageName ?? unflippedCardName;
+					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(mainCardName);
+					string imageName = customImageOrder?.ImageName ?? mainCardName;
 
 					for (int i = 0; i < cards.Count; i++)
 						cards[i].ImageName = calculateImageName(imageName, i, cards.Count);

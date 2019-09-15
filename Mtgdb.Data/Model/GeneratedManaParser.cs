@@ -50,17 +50,17 @@ namespace Mtgdb.Data
 			}
 
 			if (matchedExpanded.Contains(true))
-				matched[7] = matchedExpanded[7] = c.SupertypesArr?.Contains("Snow", Str.Comparer) == true;
+				matched[7] = matchedExpanded[7] = c.SupertypesArr?.Contains("Snow") == true;
 
 			if (_ePatterns.Any(_ => _.IsMatch(text)))
 				matched[8] = matchedExpanded[8] = true;
-			
-			var resultExpanded = 
+
+			var resultExpanded =
 				Enumerable.Range(0, matchedExpanded.Length)
 					.Where(i => matchedExpanded[i])
 					.Select(i => _symbols[i]).ToList();
 
-			var result = 
+			var result =
 				Enumerable.Range(0, matched.Length)
 					.Where(i => matched[i])
 					.Select(i => _symbols[i]).ToList();
@@ -68,7 +68,7 @@ namespace Mtgdb.Data
 			return (result, resultExpanded);
 		}
 
-		private static readonly string[] _harmfulExplanations = 
+		private static readonly string[] _harmfulExplanations =
 		{
 			// convoke explanation
 			"(Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)"

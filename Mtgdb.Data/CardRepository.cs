@@ -180,7 +180,7 @@ namespace Mtgdb.Data
 				card.Layout = "Normal";
 			else if (Str.Equals(card.Layout, "Planar"))
 			{
-				if (card.TypesArr.Contains("Phenomenon", Str.Comparer))
+				if (card.TypesArr.Contains("Phenomenon"))
 					card.Layout = CardLayouts.Phenomenon;
 				else if (card.TypesArr.Contains("Plane"))
 					card.Layout = CardLayouts.Plane;
