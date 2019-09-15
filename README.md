@@ -44,7 +44,7 @@ The search functionality in Mtgdb.Gui is quite advanced.
 You type a search query in [Lucene query language](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html).
 The query editor **highlights query syntax** and gives you **intellisense** when hitting `Ctrl`+`Space`
 
-[![search intellisense](https://github.com/NikolayXHD/Mtgdb/blob/master/out/help/l/search_intellisense.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/output/help/l/search_intellisense.jpg?raw=true)
+[![search intellisense](https://github.com/NikolayXHD/Mtgdb/raw/master/out/help/l/search_intellisense.jpg)](https://github.com/NikolayXHD/Mtgdb/raw/master/output/help/l/search_intellisense.jpg?raw=true)
 
 ## SEO phrases  
 The phrases below are to make this page more visible to search engines  

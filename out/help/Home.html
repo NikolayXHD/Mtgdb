@@ -88,18 +88,19 @@
           <a name="user-content-overview"></a>
 <h2>
 <a id="overview" class="anchor" href="#overview" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h2>
-<p><strong>Mtgdb.Gui</strong> is a <em>free</em> and <em>opensource</em> application for Windows to help Magic the Gathering
-players build decks. Card search features are well-thought, powerful and intutive. The search can be
-limited to the cards from user's own collection. Search for <a href="4.-Search-bar.html#search-similar-cards">similar cards</a>
-shows you cards with similar <em>text</em> and / or <em>generated mana</em>.</p>
-<p>Mtgdb.Gui supports several ways to input decks and collection. Some of them are blazingly fast like
-<em>drag-n-drop</em> as well as <em>copy</em> and <em>paste</em> operations from other applications or websites.</p>
-<p>Decks can be saved in various formats compatible with other MTG-related applications such as Magic
-the Gathering Online, Forge or XMage.</p>
-<p>Diagrams give you a high-level understanding of what is your current workset like. The simplest example
-of a diagram is <a href="7.-Diagrams.html#deck-mana-curve">mana curve</a>.</p>
-<p>You can analyze your deck or collection from different angles by <a href="7.1-Custom-diagrams.html">building your own diagram</a>. It is conceptually the same as building <em>pivot table</em> or <em>pivot diagram</em> in
-Excel.</p>
+<p><strong>Mtgdb.Gui</strong> is a Magic the Gathering <em>deck builder</em> application with collection tracking and card
+prices.</p>
+<p>It's <em>free</em>, <em>open source</em> and requires Windows operating system to run.</p>
+<p>Search features are easy to use and powerful. Search can be limited to user's own collection.
+Lookup for <a href="4.-Search-bar.html#search-similar-cards">similar alternatives</a> to a given card is a matter
+of 1 click.</p>
+<p>Mtgdb.Gui supports several ways to input decks or collection, the fastest are <em>drag-n-drop</em> and
+<em>copy / paste</em> from another application or website.</p>
+<p>Decks can be saved in formats compatible with other MTG-related applications such as Magic
+the Gathering Online, Magic the Gathering Arena, Forge or XMage.</p>
+<p><em>Diagrams</em> like <a href="7.-Diagrams.html#deck-mana-curve">mana curve</a> provide high-level perspective on
+a given deck or collection. You can <a href="7.1-Custom-diagrams.html">build custom diagrams</a> conceptually the
+same way as <em>pivot table</em> or <em>pivot diagram</em> in Excel.</p>
 <a name="user-content-feature-list"></a>
 <h2>
 <a id="feature-list" class="anchor" href="#feature-list" aria-hidden="true"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Feature list</h2>
@@ -117,16 +118,15 @@ Excel.</p>
 <tbody valign="top">
 <tr>
 <td>Database contains all MTG sets
-up to <em>War of the Spark</em>
+up to <em>Core Set 2020</em>
 </td>
 <td>
 <a href="l/Ixalan_crop.jpg"><img alt="s/Ixalan_crop.jpg" src="s/Ixalan_crop.jpg"></a>
 </td>
 </tr>
 <tr>
-<td>Built-in update. Images,
-data and the program itself are
-updated from <cite>Update</cite> window</td>
+<td>Built-in update of images, card properties
+and the program itself</td>
 <td>
 <a href="l/update_window.jpg"><img alt="s/update_window.jpg" src="s/update_window.jpg"></a>
 </td>
@@ -190,9 +190,8 @@ deck format</div>
 <p>One-click <em>filter buttons</em>
 let you <em>instantly</em> filter
 cards by common properties such
-as abilities <code>Flying</code>,
-<code>Haste</code>, type, manacost and
-so on.</p>
+as abilities (<code>Flying</code>, <code>Haste</code>, ...),
+type, manacost and so on</p>
 <p><a href="3.-Filter-buttons.html">details</a></p>
 </td>
 <td>
@@ -202,8 +201,8 @@ so on.</p>
 <tr>
 <td>
 <p>Textual <em>search bar</em> with <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html" rel="nofollow">Lucene syntax</a>.</p>
-<p>Supports <em>syntax highlighting</em>
-and <em>intellisense</em>.</p>
+<p>Supports syntax highlighting
+and intellisense.</p>
 <p>Search for <em>similar cards</em> shows you cards
 with similar <em>text</em> and / or
 <em>generated mana</em>.</p>
@@ -215,9 +214,10 @@ with similar <em>text</em> and / or
 </tr>
 <tr>
 <td>
-<p>Search bar in <em>deck list</em> lets you <em>find
-decks</em> by their properties e.g. <code>LandCount</code></p>
-<p>You can also <em>find cards</em> that belong to the
+<p>Search bar in <em>deck list</em> lets you find
+<em>decks</em> by their properties e.g.
+<code>LandCount</code></p>
+<p>You can also fliter to <em>cards</em> from to the
 decks you've found.</p>
 <p><a href="2.4.-Deck-list.html">details</a></p>
 </td>
@@ -251,15 +251,9 @@ operators to combine filters</td>
 <td>
 <p>Show or hide card <em>duplicates</em> in search
 result.</p>
-<p>Namesakes can be confusing when creating a
-deck or analyzing some deck or collection
--related statistics.</p>
-<p>However sometimes you need duplicates so
-that you can put into your deck a specific
-version of a beautiful island.</p>
-<p>Check <code>Show duplicates</code>
-button to show all variants of
-a card.</p>
+<p>You may want to see all variants of a card
+to put into your deck a specific version of
+a beautiful land</p>
 </td>
 <td>
 <a href="l/show_duplicate.jpg"><img alt="s/show_duplicate.jpg" src="s/show_duplicate.jpg"></a>
@@ -333,7 +327,7 @@ spanish, portugal and etc.</td>
 </td>
 </tr>
 <tr>
-<td>Search result highlighting</td>
+<td>Highlighting matched text in search result</td>
 <td>
 <a href="l/Filter_example.jpg"><img alt="s/Filter_example.jpg" src="s/Filter_example.jpg"></a>
 </td>
@@ -343,17 +337,6 @@ spanish, portugal and etc.</td>
 <td>
 <a href="l/color-schemes.jpg"><img alt="s/color-schemes.jpg" src="s/color-schemes.jpg"></a>
 </td>
-</tr>
-<tr>
-<td>
-<p>Using images from Mtgdb.Gui in
-<em>Forge</em>. With High Quality images
-anything gets prettier :)</p>
-<p>UPDATE: as for year 2018 Forge's native
-card images have become way better rendering
-this feature obsolete.</p>
-</td>
-<td><a href="9.-Using-custom-images.html#export-images-to-forge">details</a></td>
 </tr>
 <tr>
 <td>Using card <em>images you already
@@ -370,12 +353,6 @@ annoying thing when you have a filter, then
 you remove a card, and you cannot quickly
 undo as the card disappears from search
 result.</td>
-</tr>
-<tr>
-<td>This help can also be
-considered a feature worth
-mentioning</td>
-<td> </td>
 </tr>
 </tbody>
 </table>
