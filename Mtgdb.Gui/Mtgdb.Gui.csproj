@@ -386,6 +386,7 @@
     <Content Include="Resources\add_four.png" />
     <Content Include="Resources\add_one.png" />
     <Content Include="Resources\add_one_collection.png" />
+    <Content Include="Resources\adventure.png" />
     <Content Include="Resources\Affinity.png" />
     <Content Include="Resources\aftermath.png" />
     <Content Include="Resources\Annihilator.png" />

@@ -6,24 +6,24 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-	<ImageLocations EnabledGroups="prod-dev" >
+	<ImageLocations EnabledGroups="dev,xlhq" >
 
-		<Root Name="XLHQ"    Path="D:\Distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
-		<Root Name="Promo"   Path="D:\Distrib\games\mtg\XLHQ Promos" />
-		<Root Name="PTour"   Path="D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
-		<Root Name="Torrent" Path="D:\Distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
+		<Root Name="XLHQ"    Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
+		<Root Name="Promo"   Path="D:\distrib\games\mtg\XLHQ Promos" />
+		<Root Name="PTour"   Path="D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
+		<Root Name="Torrent" Path="D:\distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
 
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
 		<Directory Group="prod" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="prod-dev" Path="D:\Distrib\games\mtg\Mtgdb.Pictures\LQ" />
-		<Directory Group="prod-dev" Path="D:\Distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
+		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\LQ" />
+		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
 		<Directory Group="prod-dev" Path="D:\games\Mtgdb.Gui\images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="dev" Zoom="False" Path="D:\Distrib\games\mtg\Gatherer.Original" />
-		<Directory Group="dev" Zoom="True"  Path="D:\Distrib\games\mtg\Gatherer.Preprocessed" />
-		<Directory Group="dev" Zoom="Any"   Path="D:\Distrib\games\mtg\Patch" />
+		<Directory Group="dev" Zoom="False" Path="D:\distrib\games\mtg\Gatherer.Original" />
+		<Directory Group="dev" Zoom="True"  Path="D:\distrib\games\mtg\Gatherer.Preprocessed" />
+		<Directory Group="dev" Zoom="Any"   Path="D:\distrib\games\mtg\Patch" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="dvd"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />
@@ -230,7 +230,7 @@
 <Directory Group="xlhq" Zoom="Any" Set="8ED"   Root="Promo" Path="Oversized\Boxtoppers\Eighth Edition Promos" />
 <Directory Group="xlhq" Zoom="Any" Set="s99"   Root="Promo" Path="Oversized\6x9\Starter" />
 
-"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
+"D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Magic Premiere Store"
 	moved to \patch and split by year
 
 -->
@@ -247,10 +247,10 @@ Other
 
 <!-- Not mapped
 
-"D:\Distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Dengeki Character Festival"
-"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Prerelease Pack Promos"
-"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Hero's Path"
-"D:\Distrib\games\mtg\XLHQ Promos\Set Promos\Duels of the Planeswalkers Reward Cards"
+"D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos\Dengeki Character Festival"
+"D:\distrib\games\mtg\XLHQ Promos\Set Promos\Prerelease Pack Promos"
+"D:\distrib\games\mtg\XLHQ Promos\Set Promos\Hero's Path"
+"D:\distrib\games\mtg\XLHQ Promos\Set Promos\Duels of the Planeswalkers Reward Cards"
 
 <Directory Group="xlhq" Zoom="Any" Set="pMGD"     Root="Promo" Path="Set Promos\Game Day" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Set Promos\Duels of the Planeswalkers Reward Cards" />
@@ -260,31 +260,31 @@ Other
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Convention Promos\www.magicthegathering.com" />
 <Directory Group="xlhq" Zoom="Any" Set="pMEI"     Root="Promo" Path="Other\Resale Reward" />
 
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Arena"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Armada"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Caravan Tours 1995"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Duelist"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\InQuest"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Microprose"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Release Events"
-"D:\Distrib\games\mtg\XLHQ Promos\Oversized\6x9\Scrye"
-"D:\Distrib\games\mtg\XLHQ Promos\Other\DCI Tournament Center"
-"D:\Distrib\games\mtg\XLHQ Promos\Digital\Astral"
-"D:\Distrib\games\mtg\XLHQ Promos\Digital\Dreamcast"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Card Pack Supplement"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Dragon's Maze Achievement Cards"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Dragon's Maze Guild Cards"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Duels of the Planeswalkers 2012"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Guru Book"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Instinct"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Japanese Sixth Anniversary"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Pro Player Cards"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Ravnica Guild Magnets"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\The Duelist"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\Time Spiral Art Cards"
-"D:\Distrib\games\mtg\XLHQ Promos\Extras\WotC Poker Deck"
-"D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\Japanese Sixth Anniversary"
-"D:\Distrib\games\mtg\XLHQ Promos\Convention Promos\SDCC"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Arena"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Armada"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Caravan Tours 1995"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Duelist"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\InQuest"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Microprose"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Release Events"
+"D:\distrib\games\mtg\XLHQ Promos\Oversized\6x9\Scrye"
+"D:\distrib\games\mtg\XLHQ Promos\Other\DCI Tournament Center"
+"D:\distrib\games\mtg\XLHQ Promos\Digital\Astral"
+"D:\distrib\games\mtg\XLHQ Promos\Digital\Dreamcast"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Card Pack Supplement"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Dragon's Maze Achievement Cards"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Dragon's Maze Guild Cards"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Duels of the Planeswalkers 2012"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Guru Book"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Instinct"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Japanese Sixth Anniversary"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Pro Player Cards"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Ravnica Guild Magnets"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\The Duelist"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\Time Spiral Art Cards"
+"D:\distrib\games\mtg\XLHQ Promos\Extras\WotC Poker Deck"
+"D:\distrib\games\mtg\XLHQ Promos\Convention Promos\Japanese Sixth Anniversary"
+"D:\distrib\games\mtg\XLHQ Promos\Convention Promos\SDCC"
 
 -->
 

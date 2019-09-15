@@ -3,7 +3,7 @@ rem FOR /F "usebackq tokens=* delims=" %%A IN (`DIR %source% /B`) DO 7z\7za.exe 
 set root=D:\Distrib\games\mtg\Mtgdb.Pictures
 set qs=mq lq
 rem set sets=war ss2 htr17
-set sets=m20
+set sets=c19,celd,eld,m20,mh1,pwar,ss2
 
 for %%q in (%qs%) do (
    for %%s in (%sets%) do (

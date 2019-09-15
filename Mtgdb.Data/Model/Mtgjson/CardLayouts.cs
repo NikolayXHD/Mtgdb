@@ -21,6 +21,7 @@ namespace Mtgdb.Data
 		public const string Meld = "Meld";
 		public const string Host = "Host";
 		public const string Augment = "Augment";
+		public const string Adventure = "Adventure";
 
 		private static readonly HashSet<string> _doubleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
@@ -31,7 +32,8 @@ namespace Mtgdb.Data
 		private static readonly HashSet<string> _singleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
 			{
-				Normal, Leveler, Phenomenon, Plane, Scheme, Vanguard, Saga, Host, Augment
+				Normal, Leveler, Phenomenon, Plane, Scheme, Vanguard, Saga, Host, Augment,
+				Adventure,
 			};
 
 		private static readonly HashSet<string> _allLayouts =
@@ -91,5 +93,8 @@ namespace Mtgdb.Data
 
 		public static bool IsVanguard(this Card c) =>
 			Str.Equals(c.Layout, Vanguard);
+
+		public static bool IsAdventure(this Card c) =>
+			Str.Equals(c.Layout, Adventure);
 	}
 }

@@ -18,20 +18,29 @@ namespace Mtgdb.Test
 			ImgRepo.LoadZoom();
 		}
 
-		[TestCase("M20")]
-		public void Zoom_images_match_small_ones(params string[] setsToSkip)
+		[TestCase(/* skip */ null, /* partial */ "eld,celd")]
+		public void Zoom_images_match_small_ones(
+			string setsToSkipList, string partialSetsList)
 		{
-			var skipSets = setsToSkip.ToHashSet(Str.Comparer);
-			var messages = new List<string>();
+			var setsToSkip = setsToSkipList?.Split(',').ToHashSet(Str.Comparer)
+				?? Empty<string>.Set;
+			var partialSets = partialSetsList?.Split(',').ToHashSet(Str.Comparer)
+				?? Empty<string>.Set;
 
-			foreach (var set in Repo.SetsByCode.Where(_ => !skipSets.Contains(_.Key)))
+			var messages = new List<string>();
+			foreach (var set in Repo.SetsByCode.Where(_ => !setsToSkip.Contains(_.Key)))
 			foreach (var card in set.Value.Cards)
 			{
 				var small = Ui.GetSmallImage(card);
 				var zooms = Ui.GetZoomImages(card);
+				bool noZooms = zooms == null || zooms.Count == 0;
 
-				if (small == null || zooms == null || zooms.Count == 0)
+				if (small == null || noZooms)
+				{
+					if (partialSets.Contains(set.Value.Code) && small == null && noZooms)
+						continue;
 					messages.Add($"{card.SetCode} {card.ImageName}");
+				}
 				else
 				{
 					var smallPath = small.ImageFile.FullPath;
@@ -63,17 +72,14 @@ namespace Mtgdb.Test
 		[TestCase("XLN", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
 		[TestCase("A25", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
 		[TestCase("CMA", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
-		[TestCase("DDT", XlhqDir,
-			"DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
-		[TestCase("DDU", XlhqDir,
-			"DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
+		[TestCase("DDT", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
+		[TestCase("DDU", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
 		[TestCase("E02", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
 		[TestCase("RIX", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
 		[TestCase("V17", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
 		[TestCase("BBD", XlhqDir, "BBD - Battlebond\\300DPI Cards")]
 		[TestCase("DOM", XlhqDir, "DOM - Dominaria\\300DPI Cards")]
-		[TestCase("GS1", XlhqDir,
-			"GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
+		[TestCase("GS1", XlhqDir, "GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
 		[TestCase("M19", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
 		[TestCase("SS1", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
 		[TestCase("CM2", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
@@ -82,9 +88,16 @@ namespace Mtgdb.Test
 		[TestCase("GK1", XlhqDir, "GK1 - GRN Guild Kit\\300DPI Cards")]
 		[TestCase("UMA", XlhqDir, "UMA - Ultimate Masters\\300DPI Cards")]
 		[TestCase("WAR", XlhqDir, "WAR - War of the Spark\\300DPI Cards")]
+		[TestCase("M20", XlhqDir, "M20 - Core 2020\\300DPI Cards")]
+		[TestCase("SS2", XlhqDir, "SS2 - Signature Spellbook Gideon\\300DPI Cards")]
+		[TestCase("MH1", XlhqDir, "MH1 - Modern Horizons\\300DPI Cards")]
+		[TestCase("PWAR", XlhqDir,
+			"Promos\\pWAR - War of the Spark Promos",
+			"WAR - War of the Spark\\300DPI Cards")]
 		[TestCase("PUMA", GathererDir, "puma")]
-		[TestCase("SS2", GathererDir, "ss2")]
-		[TestCase("mh1", GathererDir, "mh1")]
+		[TestCase("c19", GathererDir, "c19")]
+		[TestCase("eld", GathererDir, "eld")]
+		[TestCase("celd", GathererDir, "celd")]
 		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(
 			string setCode, string baseDir, params string[] expectedSubdirs)
@@ -103,12 +116,12 @@ namespace Mtgdb.Test
 			}
 		}
 
-		private const string XlhqDir = "D:\\Distrib\\games\\mtg\\Mega\\XLHQ";
+		private const string XlhqDir = "D:\\distrib\\games\\mtg\\Mega\\XLHQ";
 
 		private const string XlhqTorrentsDir =
-			"D:\\Distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
+			"D:\\distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
 
 		private const string GathererDir =
-			"D:\\Distrib\\games\\mtg\\Gatherer.Original";
+			"D:\\distrib\\games\\mtg\\Gatherer.Original";
 	}
 }

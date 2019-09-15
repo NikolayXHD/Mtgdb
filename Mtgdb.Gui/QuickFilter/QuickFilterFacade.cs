@@ -18,7 +18,7 @@ namespace Mtgdb.Gui
 		{
 			if (fieldNames.Count != values.Count || fieldNames.Count != fieldNamesDisplay.Count)
 				throw new ArgumentException(@"invalid length");
-			
+
 			_values = values;
 			_searcher = searcher;
 			_patterns = patterns;
@@ -40,7 +40,7 @@ namespace Mtgdb.Gui
 			RequiredSome = Enumerable.Range(0, fieldNames.Count)
 				.Select(i => new KeywordQueryTerm { FieldName = fieldNames[i] })
 				.ToArray();
-			
+
 			Ignored = Enumerable.Range(0, fieldNames.Count)
 				.Select(i => new KeywordQueryTerm { FieldName = fieldNames[i] })
 				.ToArray();
@@ -113,7 +113,7 @@ namespace Mtgdb.Gui
 		private KeywordQueryTerm[] Prohibited { get; }
 		private KeywordQueryTerm[] RequiredSome { get; }
 		private KeywordQueryTerm[] Ignored { get; }
-		
+
 		public bool Evaluate(Card c)
 		{
 			if (_matchingCardIds == null)

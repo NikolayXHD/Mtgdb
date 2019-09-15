@@ -77,8 +77,8 @@ namespace Mtgdb.Util
 		// private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
 
 		[TestCase(
-			HtmlDir + @"\Core Set 2020 Cards _ MAGIC_ THE GATHERING.html",
-			GathererOriginalDir + @"\m20.png")]
+			HtmlDir + @"\CELD_Throne_of_Eldraine_Variants _MAGIC_THE_GATHERING.html",
+			GathererOriginalDir + @"\celd.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
 			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
@@ -132,7 +132,7 @@ namespace Mtgdb.Util
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2", /* createZoom */ true)]
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17", /* createZoom */ true)]
 		[TestCase(
-			GathererOriginalDir, GathererPreprocessedDir, "m20.png", "m20",
+			GathererOriginalDir, GathererPreprocessedDir, "celd.png", "celd",
 			/* createZoom */ true,
 			/*keepExisting*/ true
 		)]

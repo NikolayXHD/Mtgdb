@@ -374,6 +374,7 @@ namespace Mtgdb.Data
 			// non quick-filter values follow
 
 			count("Absorb"),
+			custom("Adamant", bound("adamant", notAfter: "the")),
 			count("Adapt"),
 			count("Afflict"),
 			count("Afterlife"),
@@ -489,6 +490,7 @@ namespace Mtgdb.Data
 		public static readonly IList<string> Layout = new[]
 		{
 			CardLayouts.Normal,
+			CardLayouts.Adventure,
 			CardLayouts.Saga,
 			CardLayouts.Aftermath,
 			CardLayouts.Split,

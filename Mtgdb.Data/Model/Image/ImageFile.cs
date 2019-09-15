@@ -183,7 +183,12 @@ namespace Mtgdb.Data
 			["Warrant»Warden"] = "WarrantWarden",
 
 			// UMA split cards
-			["Fire»Ice"] = "FireIce"
+			["Fire»Ice"] = "FireIce",
+
+			// C19 split
+			["DuskDawn"] = "Dusk»Dawn",
+			["FarmMarket"] = "Farm»Market",
+			["RefuseCooperate"] = "Refuse»Cooperate",
 		};
 	}
 }

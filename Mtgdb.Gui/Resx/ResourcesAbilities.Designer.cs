@@ -63,6 +63,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Adventure {
+            get {
+                object obj = ResourceManager.GetObject("Adventure", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Affinity {
             get {
                 object obj = ResourceManager.GetObject("Affinity", resourceCulture);
