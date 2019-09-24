@@ -34,21 +34,14 @@ namespace Mtgdb.Data.Index
 
 		protected override Directory CreateIndex(LuceneSearcherState<int, Card> state)
 		{
-			Directory index;
-
 			if (_version.IsUpToDate)
-			{
-				using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
-					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
-
-				return index;
-			}
+				return FSDirectory.Open(_version.IndexDirectory);
 
 			if (!_repo.IsLocalizationLoadingComplete)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();
-			index = base.CreateIndex(state);
+			var index = base.CreateIndex(state);
 
 			if (index == null)
 				return null;

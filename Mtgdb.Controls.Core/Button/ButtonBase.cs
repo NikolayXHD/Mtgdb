@@ -36,9 +36,11 @@ namespace Mtgdb.Controls
 			if (_focusBorderColor.A == 0 || FocusBorderWidth == 0)
 				return;
 
-			var pen = new Pen(_focusBorderColor) { Width = FocusBorderWidth, DashStyle = DashStyle.Dot };
-			var rectangle = this.GetBorderRectangle(FocusBorderWidth);
-			g.DrawRectangle(pen, rectangle);
+			using (var pen = new Pen(_focusBorderColor) {Width = FocusBorderWidth, DashStyle = DashStyle.Dot})
+			{
+				var rectangle = this.GetBorderRectangle(FocusBorderWidth);
+				g.DrawRectangle(pen, rectangle);
+			}
 		}
 
 		protected virtual void PaintContent(Graphics g) =>

@@ -59,7 +59,8 @@ namespace Mtgdb.Ui
 			if (foreColor.HasValue)
 				_findEditor.SelectionColor = foreColor.Value;
 
-			_findEditor.SelectionFont = new Font(_findEditor.Font, FontStyle.Regular);
+			using (var font = new Font(_findEditor.Font, FontStyle.Regular))
+				_findEditor.SelectionFont = font;
 		}
 	}
 }

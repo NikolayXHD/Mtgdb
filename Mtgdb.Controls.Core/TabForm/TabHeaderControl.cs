@@ -64,7 +64,8 @@ namespace Mtgdb.Controls
 				IList<Bitmap> icons = Icons;
 
 				if (DrawBottomBorder)
-					e.Graphics.DrawLine(new Pen(ColorTabBorder), 0, Height - 1, Width - 1, Height - 1);
+					using (Pen pen = new Pen(ColorTabBorder))
+						e.Graphics.DrawLine(pen, 0, Height - 1, Width - 1, Height - 1);
 
 				if (IsDragging())
 				{
@@ -557,21 +558,22 @@ namespace Mtgdb.Controls
 			var closeIcon = getCloseIcon(i);
 			var points = getTabPolygon(i, widths);
 
-			var brush = new SolidBrush(color);
-			var pen = new Pen(ColorTabBorder, TabBorderWidth);
-
-			g.FillPolygon(brush, points);
-			g.DrawPolygon(pen, points);
-
-			if (DrawBottomBorder && !isDraggedOver(i) && !isSelected(i))
+			using (var brush = new SolidBrush(color))
+			using (var pen = new Pen(ColorTabBorder, TabBorderWidth))
 			{
-				var bottomBorderPoints = new[]
-				{
-					new Point(points[0].X, points[0].Y - 1),
-					new Point(points[3].X, points[3].Y - 1)
-				};
+				g.FillPolygon(brush, points);
+				g.DrawPolygon(pen, points);
 
-				g.DrawLine(pen, bottomBorderPoints[0], bottomBorderPoints[1]);
+				if (DrawBottomBorder && !isDraggedOver(i) && !isSelected(i))
+				{
+					var bottomBorderPoints = new[]
+					{
+						new Point(points[0].X, points[0].Y - 1),
+						new Point(points[3].X, points[3].Y - 1)
+					};
+
+					g.DrawLine(pen, bottomBorderPoints[0], bottomBorderPoints[1]);
+				}
 			}
 
 			if (i != AddButtonIndex)

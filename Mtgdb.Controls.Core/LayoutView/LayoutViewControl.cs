@@ -84,21 +84,25 @@ namespace Mtgdb.Controls
 			// implicit connection: data_source_sync
 			lock (DataSource)
 			{
-				paintActions.Back.Add(e => e.Graphics.Clear(BackColor));
-				addPaintCardActions(paintActions, eArgs.ClipRectangle);
-				paintActions.AlignButtons.Add(paintAlignButtons);
-				paintActions.Selection.Add(paintSelection);
+				using (var hotTrackBgBrush = new SolidBrush(SelectionOptions.HotTrackBackColor))
+				using (var hotTrackBgPen = new Pen(SelectionOptions.HotTrackBorderColor))
+				{
+					paintActions.Back.Add(e => e.Graphics.Clear(BackColor));
+					addPaintCardActions(paintActions, eArgs.ClipRectangle, hotTrackBgBrush, hotTrackBgPen);
+					paintActions.AlignButtons.Add(paintAlignButtons);
+					paintActions.Selection.Add(paintSelection);
 
-				eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-				eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+					eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+					eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-				paintActions.Back.Paint(eArgs);
-				paintActions.FieldData.Paint(eArgs);
-				paintActions.Selection.Paint(eArgs);
+					paintActions.Back.Paint(eArgs);
+					paintActions.FieldData.Paint(eArgs);
+					paintActions.Selection.Paint(eArgs);
 
-				paintActions.AlignButtons.Paint(eArgs);
-				// paint field buttons over align buttons
-				paintActions.FieldButtons.Paint(eArgs);
+					paintActions.AlignButtons.Paint(eArgs);
+					// paint field buttons over align buttons
+					paintActions.FieldButtons.Paint(eArgs);
+				}
 			}
 		}
 
@@ -118,25 +122,16 @@ namespace Mtgdb.Controls
 			var rectangle = new Rectangle(_selection.Rectangle.Location, _selection.Rectangle.Size.Minus(new Size(1, 1)));
 
 			if (SelectionOptions.RectFillColor != Color.Transparent)
-			{
-				e.Graphics.FillRectangle(
-					new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor)),
-					rectangle);
-			}
+				using (var brush = new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor)))
+					e.Graphics.FillRectangle(brush, rectangle);
 
 			if (SelectionOptions.RectBorderColor != Color.Transparent)
-			{
-				e.Graphics.DrawRectangle(
-					new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor)),
-					rectangle);
-			}
+				using (var pen = new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor)))
+					e.Graphics.DrawRectangle(pen, rectangle);
 		}
 
-		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle)
+		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle, SolidBrush hotTrackBgBrush, Pen hotTrackBgPen)
 		{
-			var hotTrackBgBrush = new SolidBrush(SelectionOptions.HotTrackBackColor);
-			var hotTrackBgPen = new Pen(SelectionOptions.HotTrackBorderColor);
-
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
@@ -156,7 +151,8 @@ namespace Mtgdb.Controls
 					if (!clipRectangle.IntersectsWith(fieldArea))
 						continue;
 
-					actions.Back.Add(e => paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
+					actions.Back.Add(e =>
+						paintFieldBg(e, field, fieldArea, hotTrackBgBrush, hotTrackBgPen));
 					actions.FieldData.Add(e => paintFieldData(e, card, field, fieldArea, rowHandle));
 					actions.FieldButtons.Add(e => paintButtons(e, field, card));
 				}
@@ -173,10 +169,8 @@ namespace Mtgdb.Controls
 				e.Graphics.DrawRectangle(hotTrackBgPen, rect);
 			}
 			else if (!field.BackColor.Equals(BackColor) && !field.BackColor.Equals(Color.Transparent))
-			{
-				var bgBrush = new SolidBrush(field.BackColor);
-				e.Graphics.FillRectangle(bgBrush, rect);
-			}
+				using (var bgBrush = new SolidBrush(field.BackColor))
+					e.Graphics.FillRectangle(bgBrush, rect);
 		}
 
 		private void paintFieldData(PaintEventArgs e, LayoutControl card, FieldControl field, Rectangle fieldArea, int rowHandle)

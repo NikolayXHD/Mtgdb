@@ -497,9 +497,7 @@ namespace Mtgdb.Controls
 				var color2 = Color.FromArgb(0, ProhibitedColor);
 
 				Brush fillBrush;
-
 				float widthPart = 0.5f;
-
 				if (IsVertical)
 				{
 					rectangle.Inflate(new SizeF(0, Spacing.Width / 2f));
@@ -544,7 +542,8 @@ namespace Mtgdb.Controls
 						color2);
 				}
 
-				e.Graphics.FillRectangle(fillBrush, rectangle);
+				using (fillBrush)
+					e.Graphics.FillRectangle(fillBrush, rectangle);
 			}
 		}
 
@@ -573,9 +572,17 @@ namespace Mtgdb.Controls
 				Action<Color, RectangleF, float> fillBorder;
 
 				if (BorderShape == BorderShape.Ellipse)
-					fill = (c, r) => e.Graphics.FillEllipse(new SolidBrush(c), r);
+					fill = (c, r) =>
+					{
+						using (var brush = new SolidBrush(c))
+							e.Graphics.FillEllipse(brush, r);
+					};
 				else if (BorderShape == BorderShape.Rectangle)
-					fill = (c, r) => e.Graphics.FillRectangle(new SolidBrush(c), r);
+					fill = (c, r) =>
+					{
+						using (var brush = new SolidBrush(c))
+							e.Graphics.FillRectangle(brush, r);
+					};
 				else
 					throw new NotSupportedException();
 
@@ -583,10 +590,15 @@ namespace Mtgdb.Controls
 					fillBorder = (c, r, w) =>
 					{
 						r.Inflate(-w / 2, -w / 2);
-						e.Graphics.DrawEllipse(new Pen(c, w), r);
+						using (var pen = new Pen(c, w))
+							e.Graphics.DrawEllipse(pen, r);
 					};
 				else if (BorderShape == BorderShape.Rectangle)
-					fillBorder = (c, r, w) => { e.Graphics.DrawRectangles(new Pen(c, w), Array.From(r)); };
+					fillBorder = (c, r, w) =>
+					{
+						using (var pen = new Pen(c, w))
+							e.Graphics.DrawRectangles(pen, Array.From(r));
+					};
 				else
 					throw new NotSupportedException();
 

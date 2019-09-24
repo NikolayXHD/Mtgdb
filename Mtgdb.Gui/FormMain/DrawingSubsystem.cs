@@ -104,16 +104,17 @@ namespace Mtgdb.Gui
 				return;
 
 			var rect = getLegalityWarningRectangle(e);
-			var font = getWarningFont();
+			using (var warningFont = getWarningFont())
+			{
+				var lineSize = e.Graphics.MeasureText(legalityWarning, warningFont);
+				rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-			var lineSize = e.Graphics.MeasureText(legalityWarning, font);
-			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
-
-			e.Graphics.DrawText(legalityWarning, font, rect,
-				Color.FromArgb(255 - 16,
-					SystemColors.Highlight.TransformHsv(
-						h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
-			);
+				e.Graphics.DrawText(legalityWarning, warningFont, rect,
+					Color.FromArgb(255 - 16,
+						SystemColors.Highlight.TransformHsv(
+							h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
+				);
+			}
 		}
 
 		private Font getWarningFont()
@@ -170,12 +171,13 @@ namespace Mtgdb.Gui
 				warning = $"{countInMain}+{countInSideboard}/{maxCount}";
 
 			var rect = getCountWarningRectangle(e);
-			var font = getWarningFont();
+			using (var warningFont = getWarningFont())
+			{
+				var lineSize = e.Graphics.MeasureText(warning, warningFont);
+				rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-			var lineSize = e.Graphics.MeasureText(warning, font);
-			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
-
-			e.Graphics.DrawText(warning, font, rect, Color.FromArgb(224, color));
+				e.Graphics.DrawText(warning, warningFont, rect, Color.FromArgb(224, color));
+			}
 		}
 
 		private void drawSelection(CustomDrawArgs e, Color colorGrad1, Color colorGrad2, int opacity)
@@ -214,9 +216,11 @@ namespace Mtgdb.Gui
 				Color.FromArgb(opacity, colorGrad1),
 				Color.FromArgb(opacity, colorGrad2),
 				LinearGradientMode.BackwardDiagonal);
-
-			brush.SetBlendTriangularShape(0.99f, 1f);
-			e.Graphics.FillClosedCurve(brush, points, FillMode.Alternate, 0.05f);
+			using (brush)
+			{
+				brush.SetBlendTriangularShape(0.99f, 1f);
+				e.Graphics.FillClosedCurve(brush, points, FillMode.Alternate, 0.05f);
+			}
 		}
 
 		private void drawCount(object sender, CustomDrawArgs e, Card card)
@@ -242,8 +246,11 @@ namespace Mtgdb.Gui
 
 		private Rectangle getLegalityWarningRectangle(CustomDrawArgs e)
 		{
-			var stripSize = new Size(Ui.ImageLoader.CardSize.Width,
-				getWarningFont().Height + _countInputSubsystem.CountBorder);
+			Size stripSize;
+			using (var warningFont = getWarningFont())
+				stripSize = new Size(
+					Ui.ImageLoader.CardSize.Width,
+					warningFont.Height + _countInputSubsystem.CountBorder);
 
 			var rect = new Rectangle(
 				e.Bounds.Left,

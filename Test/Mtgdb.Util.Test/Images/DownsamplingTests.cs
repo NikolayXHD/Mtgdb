@@ -43,7 +43,10 @@ namespace Mtgdb.Util
 
 				for (int i = -5; i <= 5; i ++)
 					for (int j = -5; j <= 5; j++)
-						g.DrawString($"{i}/{j}", new Font(FontFamily.GenericMonospace, 10), new SolidBrush(Color.Black), i * 50, j * 50);
+					{
+						using (var font = new Font(FontFamily.GenericMonospace, 10))
+							g.DrawString($"{i}/{j}", font, Brushes.Black, i * 50, j * 50);
+					}
 
 				g.RotateTransform(-90f);
 			}

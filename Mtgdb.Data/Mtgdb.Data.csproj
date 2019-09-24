@@ -116,11 +116,6 @@
     <Compile Include="Index\CardQueryParser.cs" />
     <Compile Include="Index\CardSearcherState.cs" />
     <Compile Include="Index\CardSpellcheckerState.cs" />
-    <Compile Include="Legacy\CardLegacy.cs" />
-    <Compile Include="Legacy\CardLegacyExtension.cs" />
-    <Compile Include="Legacy\CardRepository42.cs" />
-    <Compile Include="Legacy\CardRepositoryLegacy.cs" />
-    <Compile Include="Legacy\SetLegacy.cs" />
     <Compile Include="Model\Image\ImageModel.cs" />
     <Compile Include="Model\Image\ImageNameCalculator.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />

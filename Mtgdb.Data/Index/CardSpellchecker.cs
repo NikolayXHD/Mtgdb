@@ -18,8 +18,7 @@ namespace Mtgdb.Data.Index
 
 			if (_version.IsUpToDate)
 			{
-				using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
-					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
+				index = FSDirectory.Open(_version.IndexDirectory);
 
 				var spellchecker = CreateSpellchecker();
 				spellchecker.Load(index);

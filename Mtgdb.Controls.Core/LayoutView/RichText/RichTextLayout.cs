@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Mtgdb.Controls
 {
-	internal class RichTextLayout
+	internal class RichTextLayout : IDisposable
 	{
 		public RichTextLayout(RichTextRenderContext renderContext, IconRecognizer iconRecognizer)
 		{
@@ -15,7 +15,8 @@ namespace Mtgdb.Controls
 
 			_highlightBrush = new SolidBrush(renderContext.HighlightColor);
 			_highlightContextBrush = new SolidBrush(renderContext.HighlightContextColor);
-			_selectionBrush = new SolidBrush(Color.FromArgb(_renderContext.SelectionAlpha, _renderContext.SelectionBackColor));
+			_selectionBrush = new SolidBrush(Color.FromArgb(_renderContext.SelectionAlpha,
+				_renderContext.SelectionBackColor));
 
 			_pen = new Pen(renderContext.HighlightBorderColor, renderContext.HighlightBorderWidth);
 
@@ -27,6 +28,8 @@ namespace Mtgdb.Controls
 			_spaceWidth = lineSize.Width;
 
 			_iconShadowOffset = new SizeF(-0.7f, 1f).ByDpi().ToPointF();
+			_caretPen = new Pen(_renderContext.ForeColor, 1f);
+			_shadowBrush = new SolidBrush(Color.FromArgb(0x50, 0x50, 0x50));
 		}
 
 		public bool PrintWord(List<RichTextToken> word)
@@ -35,7 +38,8 @@ namespace Mtgdb.Controls
 				return false;
 
 			var size = getLineSize(_renderContext.Text, word);
-			if (_x + size.Width >= _renderContext.Rect.Right && _x > _renderContext.Rect.Left && !newLine())
+			if (_x + size.Width >= _renderContext.Rect.Right && _x > _renderContext.Rect.Left &&
+				!newLine())
 			{
 				printWord(word);
 				return false;
@@ -54,7 +58,8 @@ namespace Mtgdb.Controls
 				var overflow = _x + width >= _renderContext.Rect.Right;
 				RectangleF targetRect;
 				if (overflow)
-					targetRect = new RectangleF(location, new SizeF(_renderContext.Rect.Right - _x, _lineHeight));
+					targetRect = new RectangleF(location,
+						new SizeF(_renderContext.Rect.Right - _x, _lineHeight));
 				else
 					targetRect = new RectangleF(location, new SizeF(width, _lineHeight));
 
@@ -88,7 +93,8 @@ namespace Mtgdb.Controls
 								textRect.Inflate(1, 0);
 								textRect.Offset(1, 0);
 
-								_renderContext.Graphics.DrawText(tokenText, _renderContext.Font, textRect.Round(), foreColor);
+								_renderContext.Graphics.DrawText(tokenText, _renderContext.Font, textRect.Round(),
+									foreColor);
 								printCaret(rect, token);
 							});
 					}
@@ -190,7 +196,6 @@ namespace Mtgdb.Controls
 		}
 
 
-
 		public bool PrintSpace(RichTextToken space)
 		{
 			if (_y + _lineHeight * HeightPart < _renderContext.Rect.Bottom)
@@ -246,7 +251,6 @@ namespace Mtgdb.Controls
 		}
 
 
-
 		private SizeF getLineSize(string text, IList<RichTextToken> word)
 		{
 			float width = word.Sum(token => getTokenWidth(text, token));
@@ -259,7 +263,8 @@ namespace Mtgdb.Controls
 			if (richTextToken.IconName == null)
 				delta = getLineSize(text.Substring(richTextToken.Index, richTextToken.Length)).Width;
 			else
-				delta = _iconRecognizer.GetIcon(richTextToken.IconName, (int) Math.Round(_lineHeight)).Width;
+				delta = _iconRecognizer.GetIcon(richTextToken.IconName, (int) Math.Round(_lineHeight))
+					.Width;
 
 			return delta;
 		}
@@ -338,7 +343,7 @@ namespace Mtgdb.Controls
 			float top = roundedRect.Top;
 			var bottom = roundedRect.Bottom - 1f;
 
-			_renderContext.Graphics.DrawLine(new Pen(_renderContext.ForeColor, 1f), x, top, x, bottom);
+			_renderContext.Graphics.DrawLine(_caretPen, x, top, x, bottom);
 		}
 
 		private (bool IsStart, bool IsRightToLeft) isRectSelectionStart(RectangleF tokenRect)
@@ -360,7 +365,8 @@ namespace Mtgdb.Controls
 			return rectangle.Left <= getSelectionDelimitersForLine(rectangle).SelectionEndX;
 		}
 
-		private (int SelectionStartX, int SelectionEndX) getSelectionDelimitersForLine(RectangleF tokenFromLine)
+		private (int SelectionStartX, int SelectionEndX) getSelectionDelimitersForLine(
+			RectangleF tokenFromLine)
 		{
 			float lineTop = tokenFromLine.Top;
 			float lineBottom = tokenFromLine.Bottom - 1;
@@ -369,8 +375,10 @@ namespace Mtgdb.Controls
 				_renderContext.SelectionStart.Y < lineTop ||
 				_renderContext.SelectionEnd.Y < lineTop;
 
-			bool selectionStartsWithinLine = ((float) _renderContext.SelectionStart.Y).IsWithin(lineTop, lineBottom);
-			bool selectionEndsWithinLine = ((float) _renderContext.SelectionEnd.Y).IsWithin(lineTop, lineBottom);
+			bool selectionStartsWithinLine =
+				((float) _renderContext.SelectionStart.Y).IsWithin(lineTop, lineBottom);
+			bool selectionEndsWithinLine =
+				((float) _renderContext.SelectionEnd.Y).IsWithin(lineTop, lineBottom);
 
 			bool selectionContinuesNextLine =
 				_renderContext.SelectionStart.Y > lineBottom ||
@@ -404,7 +412,6 @@ namespace Mtgdb.Controls
 		}
 
 
-
 		public void Flush()
 		{
 			float offsetX;
@@ -422,7 +429,8 @@ namespace Mtgdb.Controls
 				queue[i].Offset(offsetX, 0);
 
 				bool highlightBegin = queue[i].IsHighlighted && (i == 0 || !queue[i - 1].IsHighlighted);
-				bool highlightEnd = queue[i].IsHighlighted && (i == queue.Count - 1 || !queue[i + 1].IsHighlighted);
+				bool highlightEnd = queue[i].IsHighlighted &&
+					(i == queue.Count - 1 || !queue[i + 1].IsHighlighted);
 
 				queue[i].Invoke(highlightBegin, highlightEnd);
 			}
@@ -430,24 +438,32 @@ namespace Mtgdb.Controls
 			queue.Clear();
 		}
 
+		public void Dispose()
+		{
+			_highlightBrush.Dispose();
+			_highlightContextBrush.Dispose();
+			_pen.Dispose();
+			_shadowBrush.Dispose();
+			_selectionBrush.Dispose();
+			_caretPen.Dispose();
+		}
 
-
-		private const float HeightPart = 0.8f;
 
 		private float _x;
 		private float _y;
+		private const float HeightPart = 0.8f;
 		private readonly float _lineHeight;
 		private readonly float _spaceWidth;
+		private readonly RichTextRenderContext _renderContext;
+		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
+		private readonly IconRecognizer _iconRecognizer;
+		private readonly PointF _iconShadowOffset;
 
 		private readonly Brush _highlightBrush;
 		private readonly Brush _highlightContextBrush;
 		private readonly Pen _pen;
-
-		private readonly RenderBatchQueue _lineQueue = new RenderBatchQueue();
-		private readonly RichTextRenderContext _renderContext;
-		private readonly IconRecognizer _iconRecognizer;
-		private readonly SolidBrush _shadowBrush = new SolidBrush(Color.FromArgb(0x50, 0x50, 0x50));
-		private readonly PointF _iconShadowOffset;
+		private readonly SolidBrush _shadowBrush;
 		private readonly SolidBrush _selectionBrush;
+		private readonly Pen _caretPen;
 	}
 }

@@ -33,12 +33,9 @@ namespace Mtgdb.Data
 				if (reader.TokenType != JsonToken.PropertyName)
 					throw new JsonReaderException($"Property name was expected at {reader.Path}");
 
-				string key = (string) reader.Value;
-
+				string key = string.Intern((string) reader.Value);
 				reader.Read();
-
 				TVal value = serializer.Deserialize<TVal>(reader);
-
 				result.Add(new KeyValuePair<string, TVal>(key, value));
 			}
 

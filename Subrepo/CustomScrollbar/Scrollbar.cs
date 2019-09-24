@@ -128,8 +128,11 @@ namespace CustomScrollbar
 		{
 			e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-			e.Graphics.DrawRectangle(new Pen(BorderColor), Rectangle.FromLTRB(0, 0, Width - 1, Height - 1));
-			e.Graphics.FillRectangle(new SolidBrush(ChannelColor), Rectangle.FromLTRB(1, 1, Width - 1, Height - 1));
+			using (var borderPen = new Pen(BorderColor))
+				e.Graphics.DrawRectangle(borderPen, Rectangle.FromLTRB(0, 0, Width - 1, Height - 1));
+
+			using (var channelBrush = new SolidBrush(ChannelColor))
+				e.Graphics.FillRectangle(channelBrush, Rectangle.FromLTRB(1, 1, Width - 1, Height - 1));
 
 			e.Graphics.DrawImage(UpArrowImage, getUpRect());
 			e.Graphics.DrawImage(DownArrowImage, getDownRect());

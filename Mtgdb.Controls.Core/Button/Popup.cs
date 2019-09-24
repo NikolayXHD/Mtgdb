@@ -130,11 +130,14 @@ namespace Mtgdb.Controls
 			int markWidth = size * (2 * dotsCount - 1);
 
 			var start = rect.BottomLeft() + new Size((rect.Width - markWidth) / 2, 0);
-			g.DrawLine(
-				new Pen(ActualForeColor) { Width = size, DashStyle = DashStyle.Dot },
-				start,
-				start + new Size(markWidth, 0)
-			);
+			using (var pen = new Pen(ActualForeColor) {Width = size, DashStyle = DashStyle.Dot})
+			{
+				g.DrawLine(
+					pen,
+					start,
+					start + new Size(markWidth, 0)
+				);
+			}
 		}
 
 		protected override void PaintBorder(Graphics g)
@@ -158,10 +161,13 @@ namespace Mtgdb.Controls
 				return;
 
 			var rect = new Rectangle(default, Size);
-			e.Graphics.DrawLine(
-				new Pen(MenuControl.BackColor),
-				relativeToMenu(rect.BottomLeft() + new Size(1, 0)),
-				relativeToMenu(rect.BottomRight() + new Size(-2, 0)));
+			using (var pen = new Pen(MenuControl.BackColor))
+			{
+				e.Graphics.DrawLine(
+					pen,
+					relativeToMenu(rect.BottomLeft() + new Size(1, 0)),
+					relativeToMenu(rect.BottomRight() + new Size(-2, 0)));
+			}
 
 			Point relativeToMenu(Point p) =>
 				MenuControl.PointToClient(PointToScreen(p));

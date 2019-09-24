@@ -29,20 +29,18 @@ namespace Mtgdb.Controls
 			var area = getArea(zeroPoint, zeroPoint, new Padding(0));
 			var contentArea = getArea(zeroPoint, zeroPoint, Padding);
 
-			Pen borderPen = new Pen(Color.Black)
+			using (var borderPen = new Pen(Color.Black) {DashStyle = DashStyle.Dot})
 			{
-				DashStyle = DashStyle.Dot
-			};
+				graphics.DrawRectangle(borderPen,
+					new Rectangle(
+						area.Location,
+						new Size(area.Width - 1, area.Height - 1)));
 
-			graphics.DrawRectangle(borderPen,
-				new Rectangle(
-					area.Location,
-					new Size(area.Width - 1, area.Height - 1)));
-
-			graphics.DrawRectangle(borderPen,
-				new Rectangle(
-					contentArea.Location,
-					new Size(contentArea.Width - 1, contentArea.Height - 1)));
+				graphics.DrawRectangle(borderPen,
+					new Rectangle(
+						contentArea.Location,
+						new Size(contentArea.Width - 1, contentArea.Height - 1)));
+			}
 
 			if (Image != null)
 				paintImage(graphics, contentArea);

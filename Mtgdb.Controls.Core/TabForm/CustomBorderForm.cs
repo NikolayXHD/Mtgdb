@@ -112,7 +112,8 @@ namespace Mtgdb.Controls
 			if (!clipRectangle.IntersectsWith(titleRect))
 				return;
 
-			g.FillRectangle(getCaptionBrush(titleRect), titleRect);
+			using (var brush = getCaptionBrush(titleRect))
+				g.FillRectangle(brush, titleRect);
 		}
 
 		private Brush getCaptionBrush(Rectangle titleRect)
@@ -170,25 +171,34 @@ namespace Mtgdb.Controls
 					if (!clipRectangle.IntersectsWith(border))
 						continue;
 
-					g.FillRectangle(getBorderBrush(direction, border), border);
+					(var brush, bool isSystem) = getBorderBrush(direction, border);
+					try
+					{
+						g.FillRectangle(brush, border);
+					}
+					finally
+					{
+						if (!isSystem)
+							brush.Dispose();
+					}
 				}
 			}
 
-			Brush getBorderBrush(Direction d, Rectangle rect)
+			(Brush brush, bool isSystem) getBorderBrush(Direction d, Rectangle rect)
 			{
 				if (ContainsFocus)
 					switch (d)
 					{
-						case Direction.Left: return new SolidBrush(SystemColors.ActiveCaption);
-						case Direction.Right: return new SolidBrush(SystemColors.GradientActiveCaption);
-						case Direction.Bottom: return getCaptionBrush(rect);
+						case Direction.Left: return (SystemBrushes.ActiveCaption, true);
+						case Direction.Right: return (SystemBrushes.GradientActiveCaption, true);
+						case Direction.Bottom: return (getCaptionBrush(rect), false);
 					}
 
 				switch (d)
 				{
-					case Direction.Left: return new SolidBrush(SystemColors.InactiveCaption);
-					case Direction.Right: return new SolidBrush(SystemColors.GradientInactiveCaption);
-					case Direction.Bottom: return getCaptionBrush(rect);
+					case Direction.Left: return (SystemBrushes.InactiveCaption, true);
+					case Direction.Right: return (SystemBrushes.GradientInactiveCaption, true);
+					case Direction.Bottom: return (getCaptionBrush(rect), false);
 				}
 
 				throw new ArgumentException();
@@ -197,34 +207,35 @@ namespace Mtgdb.Controls
 
 		private void paintBorderInterior(Graphics g, Rectangle titleRect)
 		{
-			var pen = new Pen(_panelCaption.BorderColor);
-
-			int left = BorderSize.Width - 1;
-			int top = titleRect.Height - 1;
-			int right = Width - BorderSize.Width;
-			int bottom = Height - BorderSize.Height;
-
-			if (IsMaximized)
+			using (var pen = new Pen(_panelCaption.BorderColor))
 			{
-				left = 0;
-				right = Width - 1;
+				int left = BorderSize.Width - 1;
+				int top = titleRect.Height - 1;
+				int right = Width - BorderSize.Width;
+				int bottom = Height - BorderSize.Height;
 
-				g.DrawLine(pen, left, top, right, top);
-			}
-			else
-			{
-				var points = new[]
+				if (IsMaximized)
 				{
-					new Point(left, top),
-					new Point(left, bottom),
-					new Point(right, bottom),
-					new Point(right, top)
-				};
+					left = 0;
+					right = Width - 1;
 
-				g.DrawLine(pen, points[0], points[1]);
-				g.DrawLine(pen, points[1], points[2]);
-				g.DrawLine(pen, points[2], points[3]);
-				g.DrawLine(pen, points[3], points[0]);
+					g.DrawLine(pen, left, top, right, top);
+				}
+				else
+				{
+					var points = new[]
+					{
+						new Point(left, top),
+						new Point(left, bottom),
+						new Point(right, bottom),
+						new Point(right, top)
+					};
+
+					g.DrawLine(pen, points[0], points[1]);
+					g.DrawLine(pen, points[1], points[2]);
+					g.DrawLine(pen, points[2], points[3]);
+					g.DrawLine(pen, points[3], points[0]);
+				}
 			}
 		}
 

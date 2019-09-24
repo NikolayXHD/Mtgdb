@@ -69,7 +69,7 @@ namespace Mtgdb.Controls
 			//http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
 			int dpiX = GetDeviceCaps(desktopPtr, 88);
 			int dpiY = GetDeviceCaps(desktopPtr, 90);
-			
+
 			return new SizeF((float) dpiX / 96, (float) dpiY / 96);
 		}
 

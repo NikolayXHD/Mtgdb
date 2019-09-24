@@ -102,8 +102,8 @@ namespace Mtgdb.Controls
 				BorderStyle = BorderStyle.None
 			};
 
-			control.MouseEnter += (s, e) => { selectForeColor(control, hover: true); };
-			control.MouseLeave += (s, e) => { selectForeColor(control, hover: false); };
+			control.MouseEnter += (s, e) => selectForeColor(control, hover: true);
+			control.MouseLeave += (s, e) => selectForeColor(control, hover: false);
 
 			updateText();
 			ColorSchemeController.SystemColorsChanging += updateText;
@@ -259,8 +259,12 @@ namespace Mtgdb.Controls
 
 			bindForeColor(control);
 			control.Pressed += clickHandler;
+			control.Disposed += controlDisposed;
 			_layoutPanel.Controls.Add(control);
 		}
+
+		private static void controlDisposed(object c, EventArgs args) =>
+			((Control) c).Font.Dispose();
 
 		private static void bindForeColor(Control c)
 		{

@@ -775,11 +775,8 @@ namespace Mtgdb.Data
 
 		public bool HasImage(UiModel ui) => ImageModel(ui) != null;
 
-		public void PreloadImage(UiModel ui)
-		{
+		public void PreloadImage(UiModel ui) =>
 			ui.ImageLoader.GetSmallImage(ImageModel(ui));
-		}
-
 
 
 		public string Name(UiModel ui) => GetName(ui.LanguageController?.Language);

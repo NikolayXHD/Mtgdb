@@ -165,17 +165,17 @@ namespace Mtgdb.Controls
 			result.KeyUp += keyUp;
 			result.Disposed += disposed;
 
-			void keyUp(object sender, KeyEventArgs e) =>
-				MenuItemKeyUp?.Invoke(sender, e);
-
-			void disposed(object s, EventArgs e)
-			{
-				result.Disposed -= disposed;
-				result.KeyUp -= keyUp;
-			}
-
 			MenuItemCreated?.Invoke(this, new MenuItemEventArgs(result));
 			return result;
+		}
+
+		private void keyUp(object sender, KeyEventArgs e) =>
+			MenuItemKeyUp?.Invoke(sender, e);
+
+		private void disposed(object s, EventArgs e)
+		{
+			((ButtonBase)s).Disposed -= disposed;
+			((ButtonBase)s).KeyUp -= keyUp;
 		}
 
 		protected override void HandlePopupItemPressed(ButtonBase sender)

@@ -240,7 +240,8 @@ namespace Mtgdb.Gui
 				var bitmap = card?.Image(Ui);
 
 				if (bitmap == null)
-					g.DrawRectangle(new Pen(SystemColors.WindowText, width: 2), new Rectangle(Point.Empty, cardIconSize));
+					using (Pen pen = new Pen(SystemColors.WindowText, width: 2))
+						g.DrawRectangle(pen, new Rectangle(Point.Empty, cardIconSize));
 				else
 					g.DrawImage(bitmap, new Rectangle(Point.Empty, cardIconSize));
 
@@ -357,8 +358,8 @@ namespace Mtgdb.Gui
 				Color.FromArgb(opacity, SystemColors.GradientActiveCaption),
 				Color.FromArgb(opacity, SystemColors.ActiveCaption),
 				LinearGradientMode.BackwardDiagonal);
-
-			e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageLoader.CardSize));
+			using (brush)
+				e.Graphics.FillRectangle(brush, new Rectangle(e.Bounds.Location, _imageLoader.CardSize));
 		}
 
 

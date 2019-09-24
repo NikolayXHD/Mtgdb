@@ -116,10 +116,7 @@ namespace Mtgdb.Data
 						Str.Comparer);
 
 				foreach (var card in set.Cards)
-				{
 					CardsById[card.Id] = card;
-					CardsByScryfallId[card.ScryfallId] = card;
-				}
 
 				for (int i = 0; i < set.Cards.Count; i++)
 					postProcessCard(set.Cards[i]);
@@ -142,11 +139,6 @@ namespace Mtgdb.Data
 					// card_by_name_sorting
 					gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
 					Str.Comparer);
-
-			CardsByMultiverseId = Cards
-				.Where(c => c.MultiverseId.HasValue)
-				.GroupBy(c => c.MultiverseId.Value)
-				.ToDictionary(gr => gr.Key, gr => (IList<Card>) gr.ToList());
 
 			for (int i = 0; i < Cards.Count; i++)
 			{
@@ -233,7 +225,7 @@ namespace Mtgdb.Data
 			card.FlavorEn = card.FlavorEn?.Invoke1(LocalizationRepository.IncompleteChaosPattern.Replace, "{CHAOS}");
 
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
-				? string.Join(" ", card.ColorsArr)
+				? string.Intern(string.Join(" ", card.ColorsArr))
 				: "Colorless";
 
 			if (!string.IsNullOrEmpty(card.OriginalText) && Str.Equals(card.OriginalText, card.TextEn))
@@ -388,16 +380,14 @@ namespace Mtgdb.Data
 		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
-		public IDictionary<string, Card> CardsByScryfallId { get; } = new Dictionary<string, Card>(Str.Comparer);
 
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
-		public IDictionary<int, IList<Card>> CardsByMultiverseId { get; private set; }
 
 		private byte[] _defaultSetsContent;
 		private byte[][] _customSetContents;
 		private string[] _customSetCodes;
 		private HashSet<string> _customSetCodesSet;
 
-		internal Patch Patch { get; private set; }
+		private Patch Patch { get; set; }
 	}
 }

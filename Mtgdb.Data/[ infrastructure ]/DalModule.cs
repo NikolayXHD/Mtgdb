@@ -49,14 +49,6 @@ namespace Mtgdb.Data
 			Kernel.Bind<MtgArenaIntegration>().ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<CardRepositoryLegacy>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<CardRepository42>()
-				.ToSelf()
-				.InSingletonScope();
-
 			Kernel.Bind<UiConfigRepository>()
 				.ToSelf()
 				.InSingletonScope();

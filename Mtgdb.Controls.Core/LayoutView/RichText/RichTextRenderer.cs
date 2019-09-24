@@ -7,23 +7,37 @@ namespace Mtgdb.Controls
 	{
 		public static void Render(RichTextRenderContext renderContext, IconRecognizer iconRecognizer)
 		{
-			var textTokenPrinter = new RichTextLayout(renderContext, iconRecognizer);
-			var readingContext = new RichTextTokenReader(renderContext.Text, renderContext.HighlightRanges);
-
-			var currentWord = new List<RichTextToken>();
-			bool aborted = false;
-			while (readingContext.ReadToken())
+			using (var textTokenPrinter = new RichTextLayout(renderContext, iconRecognizer))
 			{
-				var token = readingContext.Current;
+				var readingContext = new RichTextTokenReader(renderContext.Text, renderContext.HighlightRanges);
 
-				bool isCj = renderContext.Text[token.Index + token.Length - 1].IsCj();
-
-				if (token.Type == RichTextTokenType.Word)
+				var currentWord = new List<RichTextToken>();
+				bool aborted = false;
+				while (readingContext.ReadToken())
 				{
-					var subtokens = getSubtokens(token, renderContext, iconRecognizer);
-					currentWord.AddRange(subtokens);
+					var token = readingContext.Current;
 
-					if (isCj)
+					bool isCj = renderContext.Text[token.Index + token.Length - 1].IsCj();
+
+					if (token.Type == RichTextTokenType.Word)
+					{
+						var subtokens = getSubtokens(token, renderContext, iconRecognizer);
+						currentWord.AddRange(subtokens);
+
+						if (isCj)
+						{
+							bool canContinue = textTokenPrinter.PrintWord(currentWord);
+
+							if (currentWord.Count > 0 && !canContinue)
+							{
+								aborted = true;
+								break;
+							}
+
+							currentWord.Clear();
+						}
+					}
+					else if (token.Type == RichTextTokenType.Space)
 					{
 						bool canContinue = textTokenPrinter.PrintWord(currentWord);
 
@@ -34,53 +48,41 @@ namespace Mtgdb.Controls
 						}
 
 						currentWord.Clear();
+
+						canContinue = textTokenPrinter.PrintSpace(token);
+
+						if (!canContinue)
+						{
+							aborted = true;
+							break;
+						}
+					}
+					else if (token.Type == RichTextTokenType.NewLine)
+					{
+						bool canContinue = textTokenPrinter.PrintWord(currentWord);
+
+						if (currentWord.Count > 0 && !canContinue)
+						{
+							aborted = true;
+							break;
+						}
+
+						currentWord.Clear();
+						canContinue = textTokenPrinter.NewParagraph();
+
+						if (!canContinue)
+						{
+							aborted = true;
+							break;
+						}
 					}
 				}
-				else if (token.Type == RichTextTokenType.Space)
-				{
-					bool canContinue = textTokenPrinter.PrintWord(currentWord);
 
-					if (currentWord.Count > 0 && !canContinue)
-					{
-						aborted = true;
-						break;
-					}
+				if (!aborted && currentWord.Count > 0)
+					textTokenPrinter.PrintWord(currentWord);
 
-					currentWord.Clear();
-
-					canContinue = textTokenPrinter.PrintSpace(token);
-
-					if (!canContinue)
-					{
-						aborted = true;
-						break;
-					}
-				}
-				else if (token.Type == RichTextTokenType.NewLine)
-				{
-					bool canContinue = textTokenPrinter.PrintWord(currentWord);
-
-					if (currentWord.Count > 0 && !canContinue)
-					{
-						aborted = true;
-						break;
-					}
-
-					currentWord.Clear();
-					canContinue = textTokenPrinter.NewParagraph();
-
-					if (!canContinue)
-					{
-						aborted = true;
-						break;
-					}
-				}
+				textTokenPrinter.Flush();
 			}
-
-			if (!aborted && currentWord.Count > 0)
-				textTokenPrinter.PrintWord(currentWord);
-
-			textTokenPrinter.Flush();
 		}
 
 		private static IEnumerable<RichTextToken> getSubtokens(

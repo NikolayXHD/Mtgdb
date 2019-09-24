@@ -34,7 +34,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DrawingEx, Version=1.0.6978.3236, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="DrawingEx, Version=1.0.7200.6141, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\Subrepo\DrawingEx\bin\DrawingEx.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">

@@ -120,7 +120,7 @@ namespace Mtgdb.Gui
 			page = new Bitmap(_width, _height);
 			page.SetResolution(PxPerInch, PxPerInch);
 			gr = Graphics.FromImage(page);
-			gr.FillRectangle(new SolidBrush(Color.White), new Rectangle(new Point(0, 0), page.Size));
+			gr.FillRectangle(Brushes.White, new Rectangle(new Point(0, 0), page.Size));
 		}
 
 		public UiModel Ui { get; set; }

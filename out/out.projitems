@@ -14,9 +14,6 @@
     <Content Include="$(MSBuildThisFileDirectory)update\img\lq\filelist.txt" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\mq\filelist.txt" />
     <Folder Include="$(MSBuildThisFileDirectory)charts\" />
-    <Folder Include="$(MSBuildThisFileDirectory)data\index\keywords" />
-    <Folder Include="$(MSBuildThisFileDirectory)data\index\search" />
-    <Folder Include="$(MSBuildThisFileDirectory)data\index\suggest" />
     <Content Include="$(MSBuildThisFileDirectory)data\patch.v2.json" />
     <Content Include="$(MSBuildThisFileDirectory)data\translations.json" />
     <Content Include="$(MSBuildThisFileDirectory)etc\Mtgdb.Gui.Default.xml" />

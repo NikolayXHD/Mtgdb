@@ -23,7 +23,8 @@ namespace Mtgdb.Controls
 			var cardArea = new Rectangle(parentLocation, Size);
 
 			if (!parentBg.Equals(BackColor) && !BackColor.Equals(Color.Transparent))
-				graphics.FillRectangle(new SolidBrush(BackColor), cardArea);
+				using (var brush = new SolidBrush(BackColor))
+					graphics.FillRectangle(brush, cardArea);
 
 			if (BackgroundImage != null)
 				graphics.DrawImage(BackgroundImage, cardArea);

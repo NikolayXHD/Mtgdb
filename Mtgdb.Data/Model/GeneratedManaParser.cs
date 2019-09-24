@@ -55,15 +55,17 @@ namespace Mtgdb.Data
 			if (_ePatterns.Any(_ => _.IsMatch(text)))
 				matched[8] = matchedExpanded[8] = true;
 
-			var resultExpanded =
+			List<string> resultExpanded =
 				Enumerable.Range(0, matchedExpanded.Length)
 					.Where(i => matchedExpanded[i])
-					.Select(i => _symbols[i]).ToList();
+					.Select(i => _symbols[i])
+					.ToList();
 
-			var result =
+			List<string> result =
 				Enumerable.Range(0, matched.Length)
 					.Where(i => matched[i])
-					.Select(i => _symbols[i]).ToList();
+					.Select(i => _symbols[i])
+					.ToList();
 
 			return (result, resultExpanded);
 		}

@@ -1,6 +1,5 @@
 using Mtgdb.Controls;
 using Mtgdb.Data;
-using Mtgdb.Data.Model;
 using Mtgdb.Ui;
 using Ninject;
 using Ninject.Modules;
@@ -80,18 +79,6 @@ namespace Mtgdb.Gui
 
 			Kernel.Bind<IApplication>()
 				.ToMethod(ctx => ctx.Kernel.Get<App>())
-				.InSingletonScope();
-
-			Kernel.Bind<HistoryLegacyConverter>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<DeckListLegacyConverter>()
-				.ToSelf()
-				.InSingletonScope();
-
-			Kernel.Bind<DeckMigrator>()
-				.ToSelf()
 				.InSingletonScope();
 
 			Kernel.Bind<IconRecognizer>()

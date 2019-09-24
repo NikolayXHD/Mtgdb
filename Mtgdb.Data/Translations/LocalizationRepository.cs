@@ -10,8 +10,8 @@ namespace Mtgdb.Data
 	{
 		private const string TranslationsFile = @"translations.json";
 
-		private Dictionary<int, Dictionary<string, Translation>> _cardsByMultiverseIdByNumber =
-			new Dictionary<int, Dictionary<string, Translation>>();
+		private Dictionary<(int, string), Translation> _cardsByMultiverseIdByNumber =
+			new Dictionary<(int, string), Translation>();
 
 		private string _serialized;
 
@@ -22,12 +22,10 @@ namespace Mtgdb.Data
 
 		public void Load()
 		{
-			var translations = JsonConvert.DeserializeObject<List<Translation>>(_serialized);
-
-			_cardsByMultiverseIdByNumber = translations.GroupBy(_ => _.Id)
-				.ToDictionary(
-					gr => gr.Key,
-					gr => gr.ToDictionary(_ => _.CardNumber ?? string.Empty));
+			var translations = JsonConvert.DeserializeObject<Translation[]>(_serialized) ??
+				Empty<Translation>.Array;
+			_cardsByMultiverseIdByNumber = translations.ToDictionary(
+				_ => (_.Id, _.CardNumber ?? string.Empty));
 
 			// release RAM
 			_serialized = null;
@@ -39,6 +37,7 @@ namespace Mtgdb.Data
 		public void Clear()
 		{
 			_cardsByMultiverseIdByNumber.Clear();
+			_cardsByMultiverseIdByNumber = null;
 		}
 
 		public CardLocalization GetLocalization(Card card)
@@ -50,9 +49,7 @@ namespace Mtgdb.Data
 
 			foreach (var name in card.ForeignNames)
 			{
-				var translation = _cardsByMultiverseIdByNumber.TryGet(name.MultiverseId)
-					?.TryGet(card.Number ?? string.Empty);
-
+				var translation = _cardsByMultiverseIdByNumber.TryGet((name.MultiverseId, card.Number ?? string.Empty));
 				if (translation != null)
 				{
 					if (Str.Equals(translation.Type, card.TypeEn))
@@ -63,7 +60,7 @@ namespace Mtgdb.Data
 
 					if (Str.Equals(translation.Text, card.TextEn))
 						translation.Text = null;
-					
+
 					if (translation.Text != null || translation.Type != null || translation.Flavor != null)
 						result.Add(card, name, translation);
 				}

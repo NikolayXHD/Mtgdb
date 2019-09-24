@@ -180,7 +180,6 @@
     <Compile Include="FormRoot\FormRoot.Scale.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormRoot\HistoryLegacyConverter.cs" />
     <Compile Include="FormRoot\SaveLoadMenuMode.cs" />
     <Compile Include="FormRoot\UiConfigMenuSubsystem.cs" />
     <Compile Include="LayoutView\DeckEditorButtons.cs" />
