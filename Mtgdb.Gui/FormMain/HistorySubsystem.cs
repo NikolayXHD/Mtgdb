@@ -4,6 +4,7 @@ using System.IO;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Newtonsoft.Json;
+using NLog;
 
 namespace Mtgdb.Gui
 {
@@ -34,11 +35,8 @@ namespace Mtgdb.Gui
 				throw new ArgumentException($"parent directory not found for path: {file}", nameof(file));
 
 			Directory.CreateDirectory(directory);
-
-			if (File.Exists(file))
+			if (TryReadHistory(file, out var state))
 			{
-				var state = ReadHistory(file);
-
 				_settingsHistory = state.SettingsHistory;
 				_settingsIndex = state.SettingsIndex;
 			}
@@ -53,11 +51,23 @@ namespace Mtgdb.Gui
 			Loaded?.Invoke();
 		}
 
-		internal static HistoryState ReadHistory(string file)
+		internal bool TryReadHistory(string file, out HistoryState state)
 		{
-			using (var fileReader = File.OpenText(file))
-			using (var jsonReader = new JsonTextReader(fileReader))
-				return _serializer.Deserialize<HistoryState>(jsonReader);
+			state = null;
+			if (!File.Exists(file))
+				return false;
+			try
+			{
+				using (var fileReader = File.OpenText(file))
+				using (var jsonReader = new JsonTextReader(fileReader))
+					state = _serializer.Deserialize<HistoryState>(jsonReader);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_log.Error(ex, "Failed to read history");
+				return false;
+			}
 		}
 
 		internal static void WriteHistory(string file, HistoryState state)
@@ -168,6 +178,8 @@ namespace Mtgdb.Gui
 
 		private int _settingsIndex;
 		private List<GuiSettings> _settingsHistory;
+
 		private static readonly JsonSerializer _serializer;
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }
