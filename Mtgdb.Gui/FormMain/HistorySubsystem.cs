@@ -70,11 +70,22 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		internal static void WriteHistory(string file, HistoryState state)
+		internal static void WriteHistory(string filename, HistoryState state)
 		{
-			using (var writer = File.CreateText(file))
-			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
-				_serializer.Serialize(jsonWriter, state);
+			FileUtil.SafeCreateFile(filename, file =>
+			{
+				using (var writer = File.CreateText(file))
+				{
+					var textWriter = new JsonTextWriter(writer)
+					{
+						Formatting = Formatting.Indented,
+						Indentation = 1,
+						IndentChar = '\t'
+					};
+					using (var jsonWriter = textWriter)
+						_serializer.Serialize(jsonWriter, state);
+				}
+			});
 		}
 
 		public void Add(GuiSettings settings)
