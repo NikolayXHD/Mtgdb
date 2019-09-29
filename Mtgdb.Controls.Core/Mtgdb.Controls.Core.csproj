@@ -83,6 +83,8 @@
     <Compile Include="Bitmap\ColorSchemeTransformation.cs" />
     <Compile Include="Bitmap\SemiTransparentShadowTransformation.cs" />
     <Compile Include="Bitmap\BitmapExtensions.cs" />
+    <Compile Include="ColorScheme\ColorSchemeController.cs" />
+    <Compile Include="ColorScheme\ColorSchemeEditor.cs" />
     <Compile Include="Panel\BorderedFlowLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -104,10 +106,6 @@
     <Compile Include="Button\MenuItemArgs.cs" />
     <Compile Include="Button\DropDown.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ColorScheme\ColorSchemeController.cs" />
-    <Compile Include="ColorScheme\ColorSchemeEditor.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ColorScheme\BmpOverwrite.cs" />
     <Compile Include="Dpi\BorderedPanelScaler.cs" />

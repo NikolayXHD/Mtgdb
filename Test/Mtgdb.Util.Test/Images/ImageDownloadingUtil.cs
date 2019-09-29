@@ -27,9 +27,8 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("m20", ".png", false)]
-		public void DownloadGathererImages(string setCode, string extension,
-			bool useCustomSet)
+		[TestCase("eld", ".png", false)]
+		public void DownloadGathererImages(string setCode, string extension, bool useCustomSet)
 		{
 			var repo = new CardRepository();
 			if (useCustomSet)
@@ -66,18 +65,11 @@ namespace Mtgdb.Util
 			}
 		}
 
-		// [TestCase("xln")]
-		// public void DownloadMagicspoilerImages(string setCode)
-		// {
-		// 	var client = new MagicspoilerClient();
-		// 	var set = Repo.SetsByCode[setCode];
-		// 	client.DownloadSet(set, MagicspoilerDir);
-		// }
-
-		// private const string MagicspoilerDir = @"D:\Distrib\games\mtg\magicspoiler.original";
-
+//		[TestCase(
+//			HtmlDir + @"\eld_v2_Card_Image_Gallery_MAGIC_THE GATHERING.html",
+//			GathererOriginalDir + @"\eld.png")]
 		[TestCase(
-			HtmlDir + @"\CELD_Throne_of_Eldraine_Variants _MAGIC_THE_GATHERING.html",
+			HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html",
 			GathererOriginalDir + @"\celd.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
@@ -131,10 +123,16 @@ namespace Mtgdb.Util
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ "war.png", "war", /* createZoom */ false)]
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2", /* createZoom */ true)]
 		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17", /* createZoom */ true)]
+
+		[TestCase(
+			GathererOriginalDir, GathererPreprocessedDir, "eld.png", "eld",
+			/* createZoom */ true,
+			/*keepExisting*/ false
+		)]
 		[TestCase(
 			GathererOriginalDir, GathererPreprocessedDir, "celd.png", "celd",
 			/* createZoom */ true,
-			/*keepExisting*/ true
+			/*keepExisting*/ false
 		)]
 		public void PreProcessImages(string smallDir, string zoomDir,
 			string pngSubdir, string jpgSubdir,
