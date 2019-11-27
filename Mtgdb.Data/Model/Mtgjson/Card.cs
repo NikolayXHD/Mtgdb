@@ -645,21 +645,29 @@ namespace Mtgdb.Data
 
 			float min = float.MaxValue;
 			float max = float.MinValue;
+			float last = float.MinValue;
 
 			for (var i = 0; i < Prices.Paper.Count; i++)
 			{
 				var value = Prices.Paper[i].Value;
-				max = Math.Max(max, value);
-				min = Math.Min(min, value);
+				if (!value.HasValue)
+					continue;
+
+				max = Math.Max(max, value.Value);
+				min = Math.Min(min, value.Value);
+				last = value.Value;
 			}
 
-			_priceLast = Prices.Paper.GetLast().Value;
+			if (last != float.MinValue)
+			{
+				_priceLast = Prices.Paper.GetLast().Value;
 
-			if (_priceLast != min)
-				_priceMin = min;
+				if (_priceLast != min)
+					_priceMin = min;
 
-			if (_priceLast != max)
-				_priceMax = max;
+				if (_priceLast != max)
+					_priceMax = max;
+			}
 
 			_pricesReady = true;
 		}

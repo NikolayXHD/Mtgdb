@@ -24,5 +24,6 @@ out/save/
 out/logs/
 out/update/notifications/
 out/data/index/
-out/data/AllSets.json
+out/data/AllPrintings.json
+out/data/AllPrices.json
 out/data/translations.json

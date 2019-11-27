@@ -1,6 +1,6 @@
 namespace Mtgdb.Data
 {
-	public class PriceHistoryConverter : EntryListConverter<float>
+	public class PriceHistoryConverter : EntryListConverter<float?>
 	{
 	}
 }

@@ -15,7 +15,8 @@ namespace Mtgdb.Data
 
 		public CardRepository()
 		{
-			SetsFile = AppDir.Data.AddPath("AllSets.json");
+			SetsFile = AppDir.Data.AddPath("AllPrintings.json");
+			PricesFile = AppDir.Data.AddPath("AllPrices.json");
 			CustomSetCodes = new string[0];
 			PatchFile = AppDir.Data.AddPath("patch.v2.json");
 			Cards = new List<Card>();
@@ -24,6 +25,9 @@ namespace Mtgdb.Data
 		public void LoadFile()
 		{
 			_defaultSetsContent = File.ReadAllBytes(SetsFile);
+			_priceContent = File.Exists(PricesFile)
+				? File.ReadAllBytes(PricesFile)
+				: null;
 
 			_customSetContents = CustomSetCodes
 				.Select(code => File.ReadAllBytes(AppDir.Data.AddPath("custom_sets").AddPath(code + ".json")))
@@ -35,7 +39,7 @@ namespace Mtgdb.Data
 			IsFileLoadingComplete = true;
 		}
 
-		internal IEnumerable<Set> DeserializeSets()
+		private IEnumerable<Set> deserializeSets()
 		{
 			return deserializeSets(_defaultSetsContent)
 				.Concat(Enumerable.Range(0, CustomSetCodes.Length)
@@ -44,63 +48,71 @@ namespace Mtgdb.Data
 
 			Set deserializeSet(byte[] content)
 			{
-				var serializer = new JsonSerializer();
-				Stream stream = new MemoryStream(content);
-				using (stream)
-				using (var stringReader = new StreamReader(stream))
-				using (var jsonReader = new JsonTextReader(stringReader))
-				{
-					var set = serializer.Deserialize<Set>(jsonReader);
-					return set;
-				}
+				using var stream = new MemoryStream(content);
+				using var stringReader = new StreamReader(stream);
+				using var jsonReader = new JsonTextReader(stringReader);
+				var set = new JsonSerializer().Deserialize<Set>(jsonReader);
+				return set;
 			}
 
 			IEnumerable<Set> deserializeSets(byte[] content)
 			{
 				var serializer = new JsonSerializer();
-				Stream stream = new MemoryStream(content);
-				using (stream)
-				using (var stringReader = new StreamReader(stream))
-				using (var jsonReader = new JsonTextReader(stringReader))
+				using var stream = new MemoryStream(content);
+				using var stringReader = new StreamReader(stream);
+				using var jsonReader = new JsonTextReader(stringReader);
+				jsonReader.Read();
+
+				while (true)
 				{
 					jsonReader.Read();
 
-					while (true)
+					if (jsonReader.TokenType == JsonToken.EndObject)
+						// sets are over, all json was read
+						break;
+
+					string setCode = (string) jsonReader.Value;
+
+					// skip set name
+					jsonReader.Read();
+
+					if (!FilterSetCode(setCode) || _customSetCodesSet.Contains(setCode))
 					{
-						jsonReader.Read();
-
-						if (jsonReader.TokenType == JsonToken.EndObject)
-							// sets are over, all json was read
-							break;
-
-						string setCode = (string) jsonReader.Value;
-
-						// skip set name
-						jsonReader.Read();
-
-						if (!FilterSetCode(setCode) || _customSetCodesSet.Contains(setCode))
-						{
-							jsonReader.Skip();
-							continue;
-						}
-
-						var set = serializer.Deserialize<Set>(jsonReader);
-						yield return set;
+						jsonReader.Skip();
+						continue;
 					}
+
+					var set = serializer.Deserialize<Set>(jsonReader);
+					yield return set;
 				}
 			}
 		}
 
+		private Dictionary<string, PricePatch> deserializePrices()
+		{
+			if (_priceContent == null)
+				return null;
+
+			using Stream stream = new MemoryStream(_priceContent);
+			using var stringReader = new StreamReader(stream);
+			using var jsonReader = new JsonTextReader(stringReader);
+			var result = new JsonSerializer().Deserialize<Dictionary<string, PricePatch>>(jsonReader);
+			return result;
+		}
+
 		public void Load()
 		{
-			foreach (var set in DeserializeSets())
+			var prices = deserializePrices();
+
+			foreach (var set in deserializeSets())
 			{
 				for (int i = 0; i < set.Cards.Count; i++)
 				{
 					var card = set.Cards[i];
-
 					card.Set = set;
 					card.Id = CardId.Generate(card);
+					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var patch))
+						card.Prices = patch.Prices;
 					preProcessCard(card);
 				}
 
@@ -159,6 +171,7 @@ namespace Mtgdb.Data
 
 			// release RAM
 			_defaultSetsContent = null;
+			_priceContent = null;
 			Patch = null;
 			Cards.Capacity = Cards.Count;
 
@@ -364,6 +377,7 @@ namespace Mtgdb.Data
 		public bool IsLocalizationLoadingComplete { get; private set; }
 
 		internal string SetsFile { get; set; }
+		private string PricesFile { get; set; }
 
 		internal string[] CustomSetCodes
 		{
@@ -387,6 +401,7 @@ namespace Mtgdb.Data
 		private byte[][] _customSetContents;
 		private string[] _customSetCodes;
 		private HashSet<string> _customSetCodesSet;
+		private byte[] _priceContent;
 
 		private Patch Patch { get; set; }
 	}

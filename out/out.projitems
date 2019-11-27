@@ -9,6 +9,7 @@
     <Import_RootNamespace>out</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)data\AllPrices.json" />
     <Content Include="$(MSBuildThisFileDirectory)data\forge_set_mapping.txt" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\art\filelist.txt" />
     <Content Include="$(MSBuildThisFileDirectory)update\img\lq\filelist.txt" />

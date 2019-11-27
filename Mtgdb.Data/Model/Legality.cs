@@ -15,6 +15,7 @@ namespace Mtgdb.Data
 		public static readonly IList<string> Formats = new[]
 		{
 			"Standard",
+			"Pioneer",
 			"Modern",
 			"Legacy",
 			"Vintage",

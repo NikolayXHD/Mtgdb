@@ -13,7 +13,10 @@
 		LogFile="%UserProfile%\AppData\LocalLow\Wizards Of The Coast\MTGA\output_log.txt"
 	/>
 
-	<MtgjsonSource Url="https://mtgjson.com/json/AllSets.json.zip" />
+	<MtgjsonSource
+			Url="https://www.mtgjson.com/files/AllPrintings.json.zip"
+			PriceUrl="https://www.mtgjson.com/files/AllPrices.json.zip"
+	/>
 
 	<AppSource
 		FileListUrl= "https://drive.google.com/uc?export=download&amp;id=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg"

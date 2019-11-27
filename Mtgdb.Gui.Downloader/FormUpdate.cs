@@ -39,13 +39,14 @@ namespace Mtgdb.Downloader
 			_cardRepository = cardRepository;
 			_imageLoader = imageLoader;
 
-			_buttonApp.Click += appClick;
-			_buttonImgLq.Click += imgLqClick;
-			_buttonImgMq.Click += imgMqClick;
-			_buttonImgArt.Click += imgArtClick;
-			_buttonMtgjson.Click += mtgjsonClick;
-			_buttonEditConfig.Click += editConfigClick;
-			_buttonNotifications.Click += notificationsClick;
+			_buttonApp.Pressed += appClick;
+			_buttonImgLq.Pressed += imgLqClick;
+			_buttonImgMq.Pressed += imgMqClick;
+			_buttonImgArt.Pressed += imgArtClick;
+			_buttonMtgjson.Pressed += mtgjsonClick;
+			_buttonPrices.Pressed += pricesClick;
+			_buttonEditConfig.Pressed += editConfigClick;
+			_buttonNotifications.Pressed += notificationsClick;
 
 			Closing += closing;
 			Closed += closed;
@@ -138,6 +139,17 @@ namespace Mtgdb.Downloader
 				setButtonsEnabled(false);
 				Console.WriteLine();
 				_installer.DownloadMtgjson();
+				setButtonsEnabled(true);
+			});
+		}
+
+		private void pricesClick(object sender, EventArgs e)
+		{
+			TaskEx.Run(() =>
+			{
+				setButtonsEnabled(false);
+				Console.WriteLine();
+				_installer.DownloadPrices();
 				setButtonsEnabled(true);
 			});
 		}

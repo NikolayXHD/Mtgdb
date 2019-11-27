@@ -139,6 +139,9 @@
     <Compile Include="[ infrastructure ]\AppSourceConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormUpdate.resx">
+      <DependentUpon>FormUpdate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -41,16 +41,22 @@ namespace Mtgdb.Downloader
 			};
 		}
 
-		public void DownloadMtgjson()
+		public void DownloadMtgjson() =>
+			downloadDataZip(_mtgjsonSourceConfig.Url);
+
+		public void DownloadPrices() =>
+			downloadDataZip(_mtgjsonSourceConfig.PriceUrl);
+
+		private void downloadDataZip(string url)
 		{
-			Console.WriteLine("GET {0}", _mtgjsonSourceConfig.Url);
+			Console.WriteLine("GET {0}", url);
 
 			try
 			{
-				var responseStream = _webClient.DownloadStream(_mtgjsonSourceConfig.Url);
+				var responseStream = _webClient.DownloadStream(url);
 				if (responseStream == null)
 				{
-					Console.WriteLine("Failed to send request to mtgjson.com: empty response");
+					Console.WriteLine("Failed request to mtgjson.com: empty response");
 					Console.WriteLine();
 					return;
 				}
@@ -82,11 +88,12 @@ namespace Mtgdb.Downloader
 			}
 			catch (AggregateException ex)
 			{
-				Console.WriteLine("Failed to send request to mtgjson.com: {0}", string.Join(", ", ex.InnerExceptions.Select(_ => _.Message)));
+				Console.WriteLine("Failed request to mtgjson.com: {0}",
+					string.Join(", ", ex.InnerExceptions.Select(_ => _.Message)));
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("Failed to send request to mtgjson.com: {0}", ex.Message);
+				Console.WriteLine("Failed request to mtgjson.com: {0}", ex.Message);
 			}
 		}
 
