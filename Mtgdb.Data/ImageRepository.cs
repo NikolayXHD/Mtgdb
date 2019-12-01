@@ -179,7 +179,7 @@ namespace Mtgdb.Data
 				Folder dir = null;
 				if (isArt && readAttributes)
 				{
-					shl = shl ?? new Shell();
+					shl ??= new Shell();
 					dir = shl.NameSpace(entryByDirectory.Key);
 				}
 
@@ -255,7 +255,7 @@ namespace Mtgdb.Data
 			if (values == null)
 				return;
 
-			valuesList = valuesList ?? new List<string>();
+			valuesList ??= new List<string>();
 
 			foreach (string value in values)
 				valuesList.Add(value);
@@ -303,7 +303,7 @@ namespace Mtgdb.Data
 				modelsBySet.Add(imageFile.SetCode, modelsByImageVariant);
 			}
 
-			// For each number select the representative with best quality 
+			// For each number select the representative with best quality
 			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out var currentImageFile) || currentImageFile.Quality < imageFile.Quality)
 				modelsByImageVariant[imageFile.VariantNumber] = imageFile;
 		}
@@ -527,7 +527,7 @@ namespace Mtgdb.Data
 
 		/// <summary>
 		/// Others by variant number ascending
-		
+
 		/// </summary>
 		/// <returns></returns>
 		private static Func<ImageFile, int> cardUnpriority5()

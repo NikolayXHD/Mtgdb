@@ -191,7 +191,7 @@ namespace Mtgdb.Gui
 			if (formatter == null && format == null)
 				throw new ArgumentException($"either {nameof(format)} or {nameof(formatter)} must be specified");
 
-			formatter = formatter ?? _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
+			formatter ??= _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
 			var result = formatter.ExportDeck(deck.Name, deck);
 			return result;
 		}

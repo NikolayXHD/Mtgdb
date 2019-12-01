@@ -211,7 +211,7 @@ namespace Mtgdb.Data
 		public event Action Disposed;
 
 		private Analyzer QueryParserAnalyzer =>
-			_queryParserAnalyzer ?? (_queryParserAnalyzer = Adapter.CreateAnalyzer());
+			_queryParserAnalyzer ??= Adapter.CreateAnalyzer();
 
 		private Analyzer _queryParserAnalyzer;
 

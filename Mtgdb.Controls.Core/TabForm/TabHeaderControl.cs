@@ -256,7 +256,7 @@ namespace Mtgdb.Controls
 		{
 			lock (_syncRoot)
 			{
-				tabText = tabText ?? GetDefaultText(Count);
+				tabText ??= GetDefaultText(Count);
 				var tabIcon = icon ?? DefaultIcon;
 				int width = getTabWidth(tabText, tabIcon, CloseIcon);
 

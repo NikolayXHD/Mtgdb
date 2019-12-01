@@ -172,7 +172,7 @@ namespace Mtgdb.Controls
 						continue;
 					}
 
-					prev.Abandoned = prev.Abandoned ?? DateTime.Now;
+					prev.Abandoned ??= DateTime.Now;
 
 					int elapsedMs = (int) (DateTime.Now - prev.Abandoned.Value).TotalMilliseconds;
 					if (elapsedMs < DelayMs)
@@ -281,7 +281,7 @@ namespace Mtgdb.Controls
 		{
 			if (!IsActive)
 				return;
-			
+
 			Tooltip = tooltip;
 		}
 

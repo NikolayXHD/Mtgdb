@@ -367,7 +367,7 @@ namespace Mtgdb.Data
 		public int? LoyaltyNum { get; internal set; }
 
 		[JsonIgnore]
-		public string GeneratedMana => _generatedMana ?? (_generatedMana = string.Concat(GeneratedManaArrExpanded));
+		public string GeneratedMana => _generatedMana ??= string.Concat(GeneratedManaArrExpanded);
 
 		[JsonIgnore]
 		public IList<string> GeneratedManaArrExpanded
@@ -408,7 +408,7 @@ namespace Mtgdb.Data
 			_generatedManaParsed = true;
 		}
 
-		public Document Document => _document ?? (_document = this.ToDocument());
+		public Document Document => _document ??= this.ToDocument();
 
 		[JsonIgnore]
 		public string Rulings
@@ -446,28 +446,28 @@ namespace Mtgdb.Data
 		}
 
 		[JsonIgnore]
-		public string LegalIn => _legalIn ?? (_legalIn = string.Intern(string.Join(@", ", LegalFormats)));
+		public string LegalIn => _legalIn ??= string.Intern(string.Join(@", ", LegalFormats));
 
 		[JsonIgnore]
-		public string RestrictedIn => _restrictedIn ?? (_restrictedIn = string.Intern(string.Join(@", ", RestrictedFormats)));
+		public string RestrictedIn => _restrictedIn ??= string.Intern(string.Join(@", ", RestrictedFormats));
 
 		[JsonIgnore]
-		public string BannedIn => _bannedIn ?? (_bannedIn = string.Intern(string.Join(@", ", BannedFormats)));
+		public string BannedIn => _bannedIn ??= string.Intern(string.Join(@", ", BannedFormats));
 
 		[JsonIgnore]
-		public string FutureIn => _futureIn ?? (_futureIn = string.Intern(string.Join(@", ", FutureFormats)));
+		public string FutureIn => _futureIn ??= string.Intern(string.Join(@", ", FutureFormats));
 
 		[JsonIgnore]
-		public string[] LegalFormats => _legalFormats ?? (_legalFormats = getFormats(Legality.Legal));
+		public string[] LegalFormats => _legalFormats ??= getFormats(Legality.Legal);
 
 		[JsonIgnore]
-		public string[] RestrictedFormats => _restrictedFormats ?? (_restrictedFormats = getFormats(Legality.Restricted));
+		public string[] RestrictedFormats => _restrictedFormats ??= getFormats(Legality.Restricted);
 
 		[JsonIgnore]
-		public string[] BannedFormats => _bannedFormats ?? (_bannedFormats = getFormats(Legality.Banned));
+		public string[] BannedFormats => _bannedFormats ??= getFormats(Legality.Banned);
 
 		[JsonIgnore]
-		public string[] FutureFormats => _futureFormats ?? (_futureFormats = getFormats(Legality.Future));
+		public string[] FutureFormats => _futureFormats ??= getFormats(Legality.Future);
 
 		private string[] getFormats(string legality)
 		{
@@ -528,7 +528,7 @@ namespace Mtgdb.Data
 		[JsonIgnore]
 		public float? PriceHigh => PricingHigh ?? PriceMid;
 
-		public CardKeywords GetAllKeywords() => _keywords ?? (_keywords = new CardKeywords(this));
+		public CardKeywords GetAllKeywords() => _keywords ??= new CardKeywords(this);
 
 		public ICollection<string> GetKeywords() => GetAllKeywords().OtherKeywords;
 		public ICollection<string> GetCastKeywords() => GetAllKeywords().CastKeywords;
@@ -895,14 +895,14 @@ namespace Mtgdb.Data
 
 		[JsonIgnore]
 		public CardFaceVariants FaceVariants =>
-			_faceVariants ?? (_faceVariants = new CardFaceVariants(this));
+			_faceVariants ??= new CardFaceVariants(this);
 
 		[JsonIgnore]
 		private CardFaces _faces;
 
 		[JsonIgnore]
 		public CardFaces Faces =>
-			_faces ?? (_faces = new CardFaces(FaceVariants));
+			_faces ??= new CardFaces(FaceVariants);
 
 		public static readonly HashSet<string> ColoredBasicLandNames =
 			new HashSet<string>(Str.Comparer)

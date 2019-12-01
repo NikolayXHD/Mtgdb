@@ -34,7 +34,7 @@ namespace Mtgdb.Data
 		}
 
 		private UiConfig _config;
-		public UiConfig Config => _config ?? (_config = readConfig());
+		public UiConfig Config => _config ??= readConfig();
 
 		private static readonly string _fileName = AppDir.History.AddPath("ui.json");
 		private static readonly JsonSerializer _serializer;

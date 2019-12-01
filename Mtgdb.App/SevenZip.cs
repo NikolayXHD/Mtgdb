@@ -17,7 +17,7 @@ namespace Mtgdb
 
 		public bool Extract(string archive, string targetDirectory, IEnumerable<string> excludedFiles = null)
 		{
-			excludedFiles = excludedFiles ?? Enumerable.Empty<string>();
+			excludedFiles ??= Enumerable.Empty<string>();
 
 			if (_process != null)
 				throw new InvalidOperationException("7za.exe is already running. Use another instance.");
@@ -34,7 +34,7 @@ namespace Mtgdb
 				var relativePath = excludedFile.Substring(targetDirectory.Length + 1);
 				argsBuilder.Append($" \"-x!{relativePath}\"");
 			}
-			
+
 			_process = new Process
 			{
 				StartInfo = new ProcessStartInfo(executableName, argsBuilder.ToString())

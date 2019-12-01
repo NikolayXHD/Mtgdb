@@ -107,7 +107,7 @@ namespace Mtgdb.Downloader
 
 			var existingSignaturesFile = Path.Combine(targetSubdirectory, Signer.SignaturesFile);
 
-			signatures = signatures ?? Signer.CreateSignatures(targetSubdirectory);
+			signatures ??= Signer.CreateSignatures(targetSubdirectory);
 			Signer.WriteToFile(existingSignaturesFile, signatures);
 		}
 

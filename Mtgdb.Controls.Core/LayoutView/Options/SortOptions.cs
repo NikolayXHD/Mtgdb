@@ -88,7 +88,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_icon = value;
-				IconTransp = IconTransp ?? deriveTranspIcon(value);
+				IconTransp ??= deriveTranspIcon(value);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_ascIcon = value;
-				AscIconTransp = AscIconTransp ?? deriveTranspIcon(value);
+				AscIconTransp ??= deriveTranspIcon(value);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace Mtgdb.Controls
 			set
 			{
 				_descIcon = value;
-				DescIconTransp = DescIconTransp ?? deriveTranspIcon(value);
+				DescIconTransp ??= deriveTranspIcon(value);
 			}
 		}
 

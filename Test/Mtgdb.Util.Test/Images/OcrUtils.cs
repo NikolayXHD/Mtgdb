@@ -124,7 +124,7 @@ namespace Mtgdb.Util
 
 						sw.Start();
 
-						text = text ?? string.Empty;
+						text ??= string.Empty;
 
 						text = new Regex(@"\s+").Replace(text, " ");
 						texts[r] = text;
@@ -224,8 +224,8 @@ namespace Mtgdb.Util
 			IList<Func<Bitmap, BmpProcessor>> preScaleFilters = null,
 			IList<Func<Bitmap, BmpProcessor>> postScaleFilters = null)
 		{
-			preScaleFilters = preScaleFilters ?? new List<Func<Bitmap, BmpProcessor>> { bmp => null };
-			postScaleFilters = postScaleFilters ?? new List<Func<Bitmap, BmpProcessor>> { bmp => null };
+			preScaleFilters ??= new List<Func<Bitmap, BmpProcessor>> { bmp => null };
+			postScaleFilters ??= new List<Func<Bitmap, BmpProcessor>> { bmp => null };
 
 			Bitmap textArea;
 

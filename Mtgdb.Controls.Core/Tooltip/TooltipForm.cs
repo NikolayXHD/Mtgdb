@@ -216,7 +216,7 @@ namespace Mtgdb.Controls
 		private Rectangle allocateTooltip(Size size, Rectangle target, Point? cursor, int margin,
 			Func<ExtremumFinder<TooltipPosition>, ExtremumFinder<TooltipPosition>> positionPreference = null)
 		{
-			cursor = cursor ?? Cursor.Position;
+			cursor ??= Cursor.Position;
 			var workingArea = Screen.FromPoint(cursor.Value).WorkingArea;
 			var bounds = selectTooltipBounds(size, target, workingArea, cursor.Value, margin, positionPreference);
 			return bounds;
@@ -281,10 +281,10 @@ namespace Mtgdb.Controls
 				c.Bounds = c.Bounds.OffsetInto(workingArea);
 			}
 
-			positionPreference = positionPreference ?? (
+			positionPreference ??=
 				_ => _.ThenAtMin(c => c.Bounds.Center().Minus(cursor)
 					.MultiplyIfNegative(new PointF(1.5f, 1.5f)) // prefer bottom right
-					.SquareNorm()));
+					.SquareNorm());
 
 			var candidate = positionPreference(
 					candidates.AtMin(c => target.IntersectsWith(c.Bounds)))
