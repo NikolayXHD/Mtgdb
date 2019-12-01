@@ -25,12 +25,24 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
+		public void Price_patch_does_not_lose_information()
+		{
+			foreach (var card in Repo.Cards)
+			{
+				if ((card.OriginalPrices?.Paper?.Count ?? 0) == 0)
+					continue;
+
+				Assert.That(card.OriginalPrices.Paper.Count <= card.Prices.Paper.Count);
+			}
+		}
+
+		[Test]
 		public void Price_dates_are_correct()
 		{
 			foreach (var card in Repo.Cards)
 			{
-				if (card.Prices?.Paper == null || card.Prices.Paper.Count == 0)
-					return;
+				if ((card.Prices?.Paper?.Count ?? 0) == 0)
+					continue;
 
 				for (var i = 0; i < card.Prices.Paper.Count; i++)
 				{

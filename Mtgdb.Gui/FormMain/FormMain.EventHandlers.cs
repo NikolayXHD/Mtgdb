@@ -84,7 +84,7 @@ namespace Mtgdb.Gui
 
 			_history.Loaded += historyLoaded;
 
-			_cardSearch.SubscribeToEvents();
+			_searchSubsystem.SubscribeToEvents();
 
 			SizeChanged += sizeChanged;
 			PreviewKeyDown += previewKeyDown;
@@ -173,7 +173,7 @@ namespace Mtgdb.Gui
 			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_history.Loaded -= historyLoaded;
 
-			_cardSearch.UnsubscribeFromEvents();
+			_searchSubsystem.UnsubscribeFromEvents();
 
 			SizeChanged -= sizeChanged;
 			PreviewKeyDown -= previewKeyDown;
@@ -244,7 +244,7 @@ namespace Mtgdb.Gui
 				beginRestoreSettings();
 
 				updateShowSampleHandButtons();
-				_cardSearch.Apply();
+				_searchSubsystem.Apply();
 				_deckEditor.LoadDeck(_cardRepo);
 				_cardSort.Invalidate();
 
@@ -266,10 +266,10 @@ namespace Mtgdb.Gui
 				}
 
 				if (_formRoot.UiModel.LanguageController.Language != CardLocalization.DefaultLanguage &&
-					!string.IsNullOrEmpty(_cardSearch.AppliedText))
+					!string.IsNullOrEmpty(_searchSubsystem.AppliedText))
 				{
 					beginRestoreSettings();
-					_cardSearch.Apply();
+					_searchSubsystem.Apply();
 					endRestoreSettings();
 					runRefilterTask();
 				}
@@ -280,10 +280,10 @@ namespace Mtgdb.Gui
 		{
 			this.Invoke(delegate
 			{
-				if (!string.IsNullOrEmpty(_cardSearch.AppliedText))
+				if (!string.IsNullOrEmpty(_searchSubsystem.AppliedText))
 				{
 					beginRestoreSettings();
-					_cardSearch.Apply();
+					_searchSubsystem.Apply();
 					endRestoreSettings();
 
 					runRefilterTask();
@@ -739,9 +739,19 @@ namespace Mtgdb.Gui
 
 		public void SetPanelVisibility(UiConfig config)
 		{
-			_layoutRight.Visible = config.ShowRightPanel;
-
 			_panelFilters.Visible = config.ShowTopPanel;
+			if (config.ShowTopPanel)
+			{
+				_searchBar.VisibleBorders |= AnchorStyles.Top;
+				_dropdownLegality.VisibleBorders |= AnchorStyles.Top;
+			}
+			else
+			{
+				_searchBar.VisibleBorders &= ~AnchorStyles.Top;
+				_dropdownLegality.VisibleBorders &= ~AnchorStyles.Top;
+			}
+
+			_layoutRight.Visible = config.ShowRightPanel;
 
 			_panelMenu.Visible =
 				_buttonShowScrollCards.Visible =
@@ -764,7 +774,7 @@ namespace Mtgdb.Gui
 					_cardSort.Invalidate();
 
 				if (isFilterGroupEnabled(FilterGroup.Find) && isSearchStringApplied())
-					_cardSearch.Apply();
+					_searchSubsystem.Apply();
 
 				endRestoreSettings();
 
@@ -776,7 +786,7 @@ namespace Mtgdb.Gui
 			historyUpdate();
 		}
 
-		private void cardSearchStringApplied()
+		private void searchSubsystemStringApplied()
 		{
 			beginRestoreSettings();
 			_cardSort.Invalidate();
@@ -794,7 +804,7 @@ namespace Mtgdb.Gui
 			historyUpdate();
 		}
 
-		private void cardSearchStringChanged()
+		private void searchSubsystemStringChanged()
 		{
 			updateFormStatus();
 		}
@@ -866,7 +876,7 @@ namespace Mtgdb.Gui
 				modified |= filterControl.Reset();
 
 			modified |= _legality.Reset();
-			modified |= _cardSearch.ResetText();
+			modified |= _searchSubsystem.ResetText();
 			modified |= resetShowDuplicates();
 
 			endRestoreSettings();
@@ -890,8 +900,8 @@ namespace Mtgdb.Gui
 
 		private void searchExampleClicked(string query)
 		{
-			_cardSearch.AppliedText = query;
-			_cardSearch.Apply();
+			_searchSubsystem.AppliedText = query;
+			_searchSubsystem.Apply();
 			_popupSearchExamples.ClosePopup();
 		}
 	}

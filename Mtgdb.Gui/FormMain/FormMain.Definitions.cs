@@ -63,21 +63,22 @@ namespace Mtgdb.Gui
 				KeywordDefinitions.PropertyNamesDisplay,
 				keywordSearcher);
 
-			_cardSearch = new CardSearchSubsystem(
+			_searchSubsystem = new CardSearchSubsystem(
 				this,
 				_searchBar,
+				uiConfigRepository,
 				cardSearcher,
 				cardAdapter,
 				_viewCards,
 				_viewDeck);
 
-			_cardSort = new CardSortSubsystem(_viewCards, _cardRepo, _fields, _cardSearch);
+			_cardSort = new CardSortSubsystem(_viewCards, _cardRepo, _fields, _searchSubsystem);
 
 			endRestoreSettings();
 
 			_countInputSubsystem = new CountInputSubsystem();
-			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _cardSearch, _countInputSubsystem);
-			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _cardSearch, _countInputSubsystem);
+			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchSubsystem, _countInputSubsystem);
+			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchSubsystem, _countInputSubsystem);
 
 			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
@@ -120,7 +121,7 @@ namespace Mtgdb.Gui
 			_drawing = new DrawingSubsystem(
 				_viewCards,
 				_viewDeck,
-				_cardSearch,
+				_searchSubsystem,
 				cardAdapter,
 				_deckEditor,
 				_countInputSubsystem,
@@ -158,11 +159,13 @@ namespace Mtgdb.Gui
 			};
 
 			_deckSearcher = deckSearcher;
-			_deckListControl.Init(deckListModel,
+			_deckListControl.Init(
+				deckListModel,
 				iconRecognizer,
 				_deckSearcher,
 				deckAdapter,
 				collectionEditor,
+				uiConfigRepository,
 				this);
 
 			_copyPaste = new CopyPasteSubsystem(
@@ -245,7 +248,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditor;
 		private readonly ImagePreloadingSubsystem _imagePreloading;
 		private readonly CollectionEditorModel _collectionEditor;
-		private readonly CardSearchSubsystem _cardSearch;
+		private readonly CardSearchSubsystem _searchSubsystem;
 
 		// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 		private readonly DeckEditorSubsystem _deckEditorSubsystem;

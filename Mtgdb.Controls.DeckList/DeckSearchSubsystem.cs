@@ -11,12 +11,14 @@ namespace Mtgdb.Controls
 		public DeckSearchSubsystem(
 			Control parent,
 			SearchBar searchBar,
+			UiConfigRepository uiConfigRepository,
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
 			params LayoutViewControl[] views)
 			: base(
 				parent,
 				searchBar,
+				uiConfigRepository,
 				searcher,
 				adapter,
 				views)

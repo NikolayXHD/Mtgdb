@@ -10,12 +10,12 @@ namespace Mtgdb.Gui
 {
 	public class UiConfigMenuSubsystem : IComponent
 	{
-		public UiConfigMenuSubsystem(
-			DropDown menuUiScale,
-			DropDown menuUiSmallImageQuality,
+		public UiConfigMenuSubsystem(DropDown menuScale,
+			DropDown menuSmallImageQuality,
 			DropDown menuSuggestDownloadMissingImages,
 			DropDown menuImagesCacheCapacity,
 			DropDown menuUndoDepth,
+			DropDown menuApplySearchBar,
 			CheckBox checkboxAllPanels,
 			CheckBox checkboxTopPanel,
 			CheckBox checkboxRightPanel,
@@ -23,8 +23,8 @@ namespace Mtgdb.Gui
 			CardRepository cardRepository,
 			UiConfigRepository configRepo)
 		{
-			_menuUiScale = menuUiScale;
-			_menuUiSmallImageQuality = menuUiSmallImageQuality;
+			_menuScale = menuScale;
+			_menuSmallImageQuality = menuSmallImageQuality;
 			_menuSuggestDownloadMissingImages = menuSuggestDownloadMissingImages;
 			_menuImagesCacheCapacity = menuImagesCacheCapacity;
 			_menuUndoDepth = menuUndoDepth;
@@ -32,6 +32,7 @@ namespace Mtgdb.Gui
 			_checkboxTopPanel = checkboxTopPanel;
 			_checkboxRightPanel = checkboxRightPanel;
 			_checkboxSearchBar = checkboxSearchBar;
+			_menuApplySearchBar = menuApplySearchBar;
 
 			_allPanelCheckboxes = new[]
 			{
@@ -43,9 +44,10 @@ namespace Mtgdb.Gui
 			_configRepo = configRepo;
 			_cardRepository = cardRepository;
 
-			_menuUiScale.SetMenuValues(new[] { 100, 125, 150, 200 }.Select(formatScalePercent));
-			_menuUiSmallImageQuality.SetMenuValues("Normal (LQ)", "High (MQ)");
+			_menuScale.SetMenuValues(new[] { 100, 125, 150, 200 }.Select(formatScalePercent));
+			_menuSmallImageQuality.SetMenuValues("Normal (LQ)", "High (MQ)");
 			_menuSuggestDownloadMissingImages.SetMenuValues("No", "Yes");
+			_menuApplySearchBar.SetMenuValues("press ENTER", "press ENTER or wait");
 			_menuImagesCacheCapacity.SetMenuValues(new [] { 100, 300, 1000, 3000 }.Select(formatInt));
 			_menuUndoDepth.SetMenuValues(new [] { 100, 300, 1000, 3000 }.Select(formatInt));
 
@@ -60,14 +62,16 @@ namespace Mtgdb.Gui
 			ShowTopPanel = config.ShowTopPanel;
 			ShowRightPanel = config.ShowRightPanel;
 			ShowSearchBar = config.ShowSearchBar;
+			AutoApplySearchBar = config.AutoApplySearchBar;
 
 			_checkboxAllPanels.Checked = allPanelsChecked(true);
 
-			_menuUiScale.SelectedIndexChanged += handleUiScalePercentChanged;
-			_menuUiSmallImageQuality.SelectedIndexChanged += handleSmallImageQualityChanged;
+			_menuScale.SelectedIndexChanged += handleScalePercentChanged;
+			_menuSmallImageQuality.SelectedIndexChanged += handleSmallImageQualityChanged;
 			_menuSuggestDownloadMissingImages.SelectedIndexChanged += handleMenuChanged;
 			_menuImagesCacheCapacity.SelectedIndexChanged += handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged += handleMenuChanged;
+			_menuApplySearchBar.SelectedIndexChanged += handleMenuChanged;
 
 			_checkboxAllPanels.CheckedChanged += handleAllPanelsChanged;
 			_checkboxTopPanel.CheckedChanged += handlePanelVisibilityChanged;
@@ -75,7 +79,7 @@ namespace Mtgdb.Gui
 			_checkboxSearchBar.CheckedChanged += handlePanelVisibilityChanged;
 		}
 
-		private void handleUiScalePercentChanged(object sender, EventArgs e)
+		private void handleScalePercentChanged(object sender, EventArgs e)
 		{
 			if (UiScalePercent > 100)
 			{
@@ -152,14 +156,14 @@ namespace Mtgdb.Gui
 
 		private int UiScalePercent
 		{
-			get => parseScalePercent(_menuUiScale.SelectedValue);
-			set => _menuUiScale.SelectedIndex = _menuUiScale.MenuValues.IndexOf(formatScalePercent(value));
+			get => parseScalePercent(_menuScale.SelectedValue);
+			set => _menuScale.SelectedIndex = _menuScale.MenuValues.IndexOf(formatScalePercent(value));
 		}
 
 		private bool UseSmallImages
 		{
-			get => _menuUiSmallImageQuality.SelectedIndex == 0;
-			set => _menuUiSmallImageQuality.SelectedIndex = value ? 0 : 1;
+			get => _menuSmallImageQuality.SelectedIndex == 0;
+			set => _menuSmallImageQuality.SelectedIndex = value ? 0 : 1;
 		}
 
 		private bool SuggestDownloadMissingImages
@@ -198,6 +202,12 @@ namespace Mtgdb.Gui
 			set => _checkboxSearchBar.Checked = value;
 		}
 
+		private bool AutoApplySearchBar
+		{
+			get => _menuApplySearchBar.SelectedIndex == 1;
+			set => _menuApplySearchBar.SelectedIndex = value ? 1 : 0;
+		}
+
 		private void handleConfigChanged()
 		{
 			var config = _configRepo.Config;
@@ -210,6 +220,7 @@ namespace Mtgdb.Gui
 			config.ShowTopPanel = ShowTopPanel;
 			config.ShowRightPanel = ShowRightPanel;
 			config.ShowSearchBar = ShowSearchBar;
+			config.AutoApplySearchBar = AutoApplySearchBar;
 
 			_configRepo.Save();
 
@@ -223,8 +234,8 @@ namespace Mtgdb.Gui
 
 		public void Dispose()
 		{
-			_menuUiScale.SelectedIndexChanged -= handleUiScalePercentChanged;
-			_menuUiSmallImageQuality.SelectedIndexChanged -= handleMenuChanged;
+			_menuScale.SelectedIndexChanged -= handleScalePercentChanged;
+			_menuSmallImageQuality.SelectedIndexChanged -= handleMenuChanged;
 			_menuSuggestDownloadMissingImages.SelectedIndexChanged -= handleMenuChanged;
 			_menuImagesCacheCapacity.SelectedIndexChanged -= handleMenuChanged;
 			_menuUndoDepth.SelectedIndexChanged -= handleMenuChanged;
@@ -244,11 +255,12 @@ namespace Mtgdb.Gui
 
 		private const string ScalePercentSuffix = " %";
 
-		private readonly DropDown _menuUiScale;
-		private readonly DropDown _menuUiSmallImageQuality;
+		private readonly DropDown _menuScale;
+		private readonly DropDown _menuSmallImageQuality;
 		private readonly DropDown _menuSuggestDownloadMissingImages;
 		private readonly DropDown _menuImagesCacheCapacity;
 		private readonly DropDown _menuUndoDepth;
+		private readonly DropDown _menuApplySearchBar;
 		private readonly CheckBox _checkboxAllPanels;
 		private readonly CheckBox _checkboxTopPanel;
 		private readonly CheckBox _checkboxRightPanel;

@@ -50,6 +50,7 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
+			Repo.RememberOriginalPrices = true;
 			Repo.LoadFile();
 			Repo.Load();
 

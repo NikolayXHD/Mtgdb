@@ -13,6 +13,8 @@ namespace Mtgdb.Data
 			// str => Str.Equals(str, "ISD");
 			_ => true;
 
+		internal bool RememberOriginalPrices { get; set; }
+
 		public CardRepository()
 		{
 			SetsFile = AppDir.Data.AddPath("AllPrintings.json");
@@ -111,8 +113,12 @@ namespace Mtgdb.Data
 					var card = set.Cards[i];
 					card.Set = set;
 					card.Id = CardId.Generate(card);
-					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var patch))
-						card.Prices = patch.Prices;
+					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var pricePatch))
+					{
+						if (RememberOriginalPrices)
+							card.OriginalPrices = card.Prices;
+						card.Prices = pricePatch.Prices;
+					}
 					preProcessCard(card);
 				}
 

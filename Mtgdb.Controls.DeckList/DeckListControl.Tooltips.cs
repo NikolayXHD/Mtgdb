@@ -11,19 +11,41 @@
 				_panelRename);
 
 			controller.SetTooltip(_tooltipOwner,
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage != null
-					? "Syntax error"
-					: "Search bar for decks",
-				() => _searchSubsystem.SearchResult?.ParseErrorMessage ??
-					"Filter decks, example queries:\r\n" +
-					// ReSharper disable once StringLiteralTypo
-					"\tname: affin*\r\n" +
-					"\tmana: \\{w\\} AND \\{u\\}\r\n\r\n" +
-					"Ctrl+SPACE to get intellisense\r\n" +
-					"Enter to apply\r\n" +
-					"Ctrl+Backspace to delete one word\r\n\r\n" +
-					"F1 to learn search bar query syntax\r\n" +
-					"Middle mouse click to clear",
+				() =>
+				{
+					if (!_searchSubsystem.IsApplied)
+						return "Search bar for decks: receiving user input";
+
+					string errorMessage = _searchSubsystem.SearchResult?.ParseErrorMessage;
+					if (errorMessage != null)
+						return "Search bar for decks: Syntax error";
+
+					return "Search bar for decks";
+				},
+				() =>
+				{
+					if (!_searchSubsystem.IsApplied)
+						return (_uiConfigRepository.Config.AutoApplySearchBar
+								? "Press ENTER or wait 1 second to apply"
+								: "Press ENTER to apply") + "\r\n\r\n" +
+							"Auto-apply after 1 second can be turned on / off\r\n" +
+							"from Advanced Settings menu in window title";
+
+					string errorMessage = _searchSubsystem.SearchResult?.ParseErrorMessage;
+					if (errorMessage != null)
+						return errorMessage;
+
+					return
+						"Filter decks, example queries:\r\n" +
+						// ReSharper disable once StringLiteralTypo
+						"\tname: affin*\r\n" +
+						"\tmana: \\{w\\} AND \\{u\\}\r\n\r\n" +
+						"Ctrl+SPACE to get intellisense\r\n" +
+						"Enter to apply\r\n" +
+						"Ctrl+Backspace to delete one word\r\n\r\n" +
+						"F1 to learn search bar query syntax\r\n" +
+						"Middle mouse click to clear";
+				},
 				_searchBar,
 				_searchBar.Input);
 

@@ -20,10 +20,10 @@ namespace Mtgdb.Gui
 
 			if (_formRoot != null)
 			{
-				_cardSearch.UnsubscribeSuggestModelEvents();
+				_searchSubsystem.UnsubscribeSuggestModelEvents();
 
-				_cardSearch.TextApplied -= cardSearchStringApplied;
-				_cardSearch.TextChanged -= cardSearchStringChanged;
+				_searchSubsystem.TextApplied -= searchSubsystemStringApplied;
+				_searchSubsystem.TextChanged -= searchSubsystemStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged -= languageChanged;
 				_formRoot.TooltipController.UnsetTooltips(this);
@@ -34,7 +34,7 @@ namespace Mtgdb.Gui
 
 			if (formRoot != null)
 			{
-				_cardSearch.Ui =
+				_searchSubsystem.Ui =
 					_deckEditorSubsystem.Ui =
 						_countInputSubsystem.Ui =
 							_imagePreloading.Ui =
@@ -43,14 +43,14 @@ namespace Mtgdb.Gui
 										_drawing.Ui =
 											_fields.Ui = _formRoot.UiModel;
 
-				_cardSearch.SuggestModel = _formRoot.CardSuggestModel;
+				_searchSubsystem.SuggestModel = _formRoot.CardSuggestModel;
 
 				_deckListControl.SetUi(_formRoot.TooltipController, _formRoot.DeckSuggestModel);
 
-				_cardSearch.SubscribeSuggestModelEvents();
+				_searchSubsystem.SubscribeSuggestModelEvents();
 
-				_cardSearch.TextApplied += cardSearchStringApplied;
-				_cardSearch.TextChanged += cardSearchStringChanged;
+				_searchSubsystem.TextApplied += searchSubsystemStringApplied;
+				_searchSubsystem.TextChanged += searchSubsystemStringChanged;
 
 				_formRoot.UiModel.LanguageController.LanguageChanged += languageChanged;
 
@@ -78,7 +78,7 @@ namespace Mtgdb.Gui
 
 
 		private bool evalFilterBySearchText(Card c) =>
-			_cardSearch.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
+			_searchSubsystem.SearchResult?.RelevanceById?.ContainsKey(c.IndexInFile) != false;
 
 		private bool evalFilterByDeck(Card c)
 		{
@@ -120,7 +120,7 @@ namespace Mtgdb.Gui
 
 			_formRoot.UiModel.Deck = _deckEditor;
 
-			_cardSearch.UpdateSuggestInput();
+			_searchSubsystem.UpdateSuggestInput();
 
 			bool isFirstTime = !_formRoot.LoadedGuiSettings;
 
@@ -529,7 +529,7 @@ namespace Mtgdb.Gui
 
 		private string getStatusSearch(FilterValueState[] filterManagerStates)
 		{
-			if (isSearchStringModified())
+			if (!_searchSubsystem.IsApplied)
 				return "receiving user input";
 
 			string noInputText;
@@ -550,7 +550,7 @@ namespace Mtgdb.Gui
 				else
 					noInputText = $"indexing intellisense {_cardSearcher.Spellchecker.IndexedFields} / {_cardSearcher.Spellchecker.TotalFields} fields…";
 			}
-			else if (_cardSearch.SearchResult?.ParseErrorMessage != null)
+			else if (_searchSubsystem.SearchResult?.ParseErrorMessage != null)
 				noInputText = "syntax error";
 			else
 				noInputText = "empty";
@@ -567,7 +567,7 @@ namespace Mtgdb.Gui
 		private bool isSearchStringApplied()
 		{
 			return
-				_cardSearch.SearchResult?.RelevanceById != null &&
+				_searchSubsystem.SearchResult?.RelevanceById != null &&
 				_cardSearcher.Spellchecker.IsLoaded;
 		}
 
@@ -610,9 +610,6 @@ namespace Mtgdb.Gui
 				value.Substring(0, 1).ToUpper(Str.Culture);
 		}
 
-
-		private bool isSearchStringModified() =>
-			_searchBar.Input.Text != (_history?.Current?.Find ?? string.Empty);
 
 		private static string getFilterStatusText(
 			FilterValueState[] filterManagerStates,
@@ -707,7 +704,7 @@ namespace Mtgdb.Gui
 
 			var settings = new GuiSettings
 			{
-				Find = _cardSearch.AppliedText,
+				Find = _searchSubsystem.AppliedText,
 				FilterAbility = _filterAbility.States,
 				FilterCastKeyword = _filterCastKeyword.States,
 				FilterMana = _filterManaCost.States,
@@ -796,8 +793,8 @@ namespace Mtgdb.Gui
 
 			_formRoot.UiModel.LanguageController.Language = settings.Language ?? CardLocalization.DefaultLanguage;
 
-			_cardSearch.AppliedText = settings.Find ?? string.Empty;
-			_cardSearch.Apply();
+			_searchSubsystem.AppliedText = settings.Find ?? string.Empty;
+			_searchSubsystem.Apply();
 
 			_buttonShowDuplicates.Checked = settings.ShowDuplicates;
 
@@ -915,7 +912,7 @@ namespace Mtgdb.Gui
 			}
 
 			_imagePreloading.StartThread();
-			_cardSearch.StartThread();
+			_searchSubsystem.StartThread();
 			_deckListControl.StartThread();
 		}
 
@@ -930,7 +927,7 @@ namespace Mtgdb.Gui
 			}
 
 			_imagePreloading.AbortThread();
-			_cardSearch.AbortThread();
+			_searchSubsystem.AbortThread();
 			_deckListControl.AbortThread();
 			_copyPaste.Abort();
 		}
@@ -1020,7 +1017,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonUndo()
 		{
-			_cardSearch.ApplyDirtyText();
+			_searchSubsystem.ApplyDirtyText();
 			historyUndo();
 		}
 
@@ -1040,7 +1037,7 @@ namespace Mtgdb.Gui
 		}
 
 		public void FocusSearch() =>
-			_cardSearch.FocusSearch();
+			_searchSubsystem.FocusSearch();
 
 		public void ShowFindExamples() =>
 			_popupSearchExamples.OpenPopup();
@@ -1067,7 +1064,7 @@ namespace Mtgdb.Gui
 			_dragging.DragAbort();
 
 		public bool IsTextInputFocused() =>
-			_cardSearch.IsSearchFocused() || _deckListControl.IsSearchFocused();
+			_searchSubsystem.IsSearchFocused() || _deckListControl.IsSearchFocused();
 
 		public void PasteDeck(bool append) =>
 			_copyPaste.PasteDeck(append);

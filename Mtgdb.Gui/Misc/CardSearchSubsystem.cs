@@ -11,12 +11,14 @@ namespace Mtgdb.Gui
 		public CardSearchSubsystem(
 			Control parent,
 			SearchBar searchBar,
+			UiConfigRepository uiConfigRepository,
 			CardSearcher searcher,
 			CardDocumentAdapter adapter,
 			params LayoutViewControl[] views)
 			: base(
 				parent,
 				searchBar,
+				uiConfigRepository,
 				searcher,
 				adapter,
 				views)

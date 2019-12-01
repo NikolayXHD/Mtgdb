@@ -29,6 +29,8 @@ namespace Mtgdb.Data
 		[DefaultValue(true)]
 		public bool ShowSearchBar { get; set; } = true;
 
+		public bool AutoApplySearchBar { get; set; } = true;
+
 		public Dictionary<string, int> CollectionBeforeImportMtga { get; set; }
 
 		public const int DefaultUiScalePercent = 100;

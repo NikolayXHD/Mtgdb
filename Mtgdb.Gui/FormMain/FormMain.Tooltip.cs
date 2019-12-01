@@ -101,18 +101,40 @@ namespace Mtgdb.Gui
 				_buttonExcludeManaCost);
 
 			defaultTooltips.SetTooltip(this,
-				() => _cardSearch.SearchResult?.ParseErrorMessage != null
-					? "Syntax error"
-					: "Search bar",
-				() => _cardSearch.SearchResult?.ParseErrorMessage ??
-					"Narrows down the list of cards below based on a query you type. Example query:\r\n" +
-					"TextEn: \"counter target spell\"\r\n\r\n" +
-					"Ctrl+SPACE to get intellisense\r\n" +
-					"Enter to apply\r\n" +
-					"Ctrl+Backspace to delete one word\r\n" +
-					"F1 to learn search bar query syntax\r\n\r\n" +
-					"Ctrl+F to focus search bar\r\n" +
-					"Middle mouse click to clear",
+				() =>
+				{
+					if (!_searchSubsystem.IsApplied)
+						return "Search bar: receiving user input";
+
+					string errorMessage = _searchSubsystem.SearchResult?.ParseErrorMessage;
+					if (errorMessage != null)
+						return "Search bar: Syntax error";
+
+					return "Search bar";
+				},
+				() =>
+				{
+					if (!_searchSubsystem.IsApplied)
+						return (_uiConfigRepository.Config.AutoApplySearchBar
+								? "Press ENTER or wait 1 second to apply"
+								: "Press ENTER to apply") + "\r\n\r\n" +
+							"Auto-apply after 1 second can be turned on / off\r\n" +
+							"from Advanced Settings menu in window title";
+
+					string errorMessage = _searchSubsystem.SearchResult?.ParseErrorMessage;
+					if (errorMessage != null)
+						return errorMessage;
+
+					return
+						"Narrows down the list of cards below based on a query you type. Example query:\r\n" +
+						"TextEn: \"counter target spell\"\r\n\r\n" +
+						"Ctrl+SPACE to get intellisense\r\n" +
+						"Enter to apply\r\n" +
+						"Ctrl+Backspace to delete one word\r\n" +
+						"F1 to learn search bar query syntax\r\n\r\n" +
+						"Ctrl+F to focus search bar\r\n" +
+						"Middle mouse click to clear";
+				},
 				_searchBar,
 				_searchBar.Input);
 

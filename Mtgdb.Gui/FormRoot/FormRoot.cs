@@ -158,12 +158,9 @@ namespace Mtgdb.Gui
 				_menuUiSuggestDownloadMissingImages,
 				_menuUiImagesCacheCapacity,
 				_menuUiUndoDepth,
+				_menuUiApplySearchBar,
 				_checkboxAllPanels,
-				_checkboxTopPanel,
-				_checkboxRightPanel,
-				_checkboxSearchBar,
-				_repo,
-				uiConfigRepository));
+				_checkboxTopPanel, _checkboxRightPanel, _checkboxSearchBar, _repo, uiConfigRepository));
 
 			_dropdownOpenDeck.BeforeShow = () => setMenuMode(_dropdownOpenDeck);
 			_dropdownSaveDeck.BeforeShow = () => setMenuMode(_dropdownSaveDeck);

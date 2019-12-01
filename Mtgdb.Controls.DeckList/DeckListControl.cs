@@ -34,9 +34,11 @@ namespace Mtgdb.Controls
 			DeckSearcher searcher,
 			DeckDocumentAdapter adapter,
 			CollectionEditorModel collection,
+			UiConfigRepository uiConfigRepository,
 			Control tooltipOwner)
 		{
 			_searcher = searcher;
+			_uiConfigRepository = uiConfigRepository;
 			_panelRename.Visible = false;
 
 			_viewDeck.IconRecognizer = recognizer;
@@ -53,7 +55,13 @@ namespace Mtgdb.Controls
 			_tooltipOwner = tooltipOwner;
 			_collection = collection;
 
-			_searchSubsystem = new DeckSearchSubsystem(this, _searchBar, _searcher, adapter, _viewDeck);
+			_searchSubsystem = new DeckSearchSubsystem(
+				this,
+				_searchBar,
+				uiConfigRepository,
+				_searcher,
+				adapter,
+				_viewDeck);
 			_deckSort = new DeckSortSubsystem(_viewDeck, new DeckFields(), _searchSubsystem, _listModel);
 			_layoutViewTooltip = new ViewDeckListTooltips(_tooltipOwner, _viewDeck);
 
@@ -403,7 +411,7 @@ namespace Mtgdb.Controls
 			_textboxRename.Text = model.Name;
 			_textboxRename.SelectAll();
 			_textboxRename.SelectionAlignment = HorizontalAlignment.Center;
-			
+
 			_panelRename.Visible = true;
 			_textboxRename.Focus();
 		}
@@ -528,5 +536,6 @@ namespace Mtgdb.Controls
 		private bool _aborted;
 		private readonly object _sync = new object();
 		private DeckSearcher _searcher;
+		private UiConfigRepository _uiConfigRepository;
 	}
 }

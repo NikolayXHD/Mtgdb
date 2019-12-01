@@ -99,7 +99,8 @@ namespace Mtgdb.Gui
 				_menuUiSmallImageQuality,
 				_menuUiSuggestDownloadMissingImages,
 				_menuUiImagesCacheCapacity,
-				_menuUiUndoDepth
+				_menuUiUndoDepth,
+				_menuUiApplySearchBar
 			}.ForEach(DropDownBaseScaler.ScaleDpi);
 
 			new[]

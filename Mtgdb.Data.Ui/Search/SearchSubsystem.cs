@@ -19,12 +19,14 @@ namespace Mtgdb.Ui
 		protected SearchSubsystem(
 			Control parent,
 			SearchBar searchBar,
+			UiConfigRepository uiConfigRepository,
 			LuceneSearcher<TId, TObj> searcher,
 			IDocumentAdapter<TId, TObj> adapter,
 			params LayoutViewControl[] views)
 		{
 			_parent = parent;
 			_searchBar = searchBar;
+			_uiConfigRepository = uiConfigRepository;
 
 			Searcher = searcher;
 			_adapter = adapter;
@@ -128,7 +130,13 @@ namespace Mtgdb.Ui
 					updateBackColor();
 
 					int deltaMs;
-					if (!_lastUserInput.HasValue || _searchBar.IsPopupOpen || _currentText == _appliedText)
+					bool isAutoApplyPending =
+						_uiConfigRepository.Config.AutoApplySearchBar &&
+						!_searchBar.IsPopupOpen &&
+						_lastUserInput.HasValue &&
+						!IsApplied;
+
+					if (!isAutoApplyPending)
 						deltaMs = delay;
 					else
 						deltaMs = delay - (int) (DateTime.Now - _lastUserInput.Value).TotalMilliseconds;
@@ -165,12 +173,14 @@ namespace Mtgdb.Ui
 				return result;
 			}
 
-			if (_currentText != _appliedText || SearchResult?.IndexNotBuilt == true)
+			if (!IsApplied || SearchResult?.IndexNotBuilt == true)
 				return SystemColors.Control;
 
 			return SystemColors.Window;
 		}
 
+		public bool IsApplied =>
+			_currentText == _appliedText;
 
 
 		private bool suggested(IntellisenseSuggest suggest, TextInputState source)
@@ -215,7 +225,7 @@ namespace Mtgdb.Ui
 		{
 			int editedWordIndex = _suggestToken?.Position ?? _searchBar.Input.SelectionStart;
 			var caretPosition =  _searchBar.Input.GetPositionFromCharIndex(editedWordIndex);
-			
+
 			var caretPositionAtForm = _searchBar.Input.PointToScreen(caretPosition);
 			var bottomPositionAtForm = _searchBar.PointToScreen(new Point(0, _searchBar.Height));
 
@@ -771,6 +781,7 @@ namespace Mtgdb.Ui
 
 		protected readonly LuceneSearcher<TId, TObj> Searcher;
 		private readonly IDocumentAdapter<TId, TObj> _adapter;
+		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly LayoutViewControl[] _views;
 		private readonly SearchStringHighlighter _highlighter;
 

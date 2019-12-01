@@ -215,6 +215,9 @@ namespace Mtgdb.Data
 		}
 
 		[JsonIgnore]
+		internal MtgjsonPrices OriginalPrices { get; set; }
+
+		[JsonIgnore]
 		public string Id { get; set; }
 
 		/*
@@ -658,14 +661,14 @@ namespace Mtgdb.Data
 				last = value.Value;
 			}
 
-			if (last != float.MinValue)
+			if (!last.Equals(float.MinValue))
 			{
 				_priceLast = Prices.Paper.GetLast().Value;
 
-				if (_priceLast != min)
+				if (!Equals(_priceLast, min))
 					_priceMin = min;
 
-				if (_priceLast != max)
+				if (!Equals(_priceLast, max))
 					_priceMax = max;
 			}
 
