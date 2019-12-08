@@ -36,7 +36,7 @@ namespace Mtgdb.Test
 			var cards = _repo.CardsByName["plains"];
 
 			foreach (var card in cards)
-				Assert.That(card.PriceMid, Is.Not.Null);
+				Assert.That(card.Price, Is.Not.Null);
 		}
 
 		[Test]
@@ -46,9 +46,9 @@ namespace Mtgdb.Test
 			var card = _repo.CardsByName[name][1];
 
 			using (TemporaryPrice.Clear(card))
-				Assert.That(card.PriceMid, Is.Null);
+				Assert.That(card.Price, Is.Null);
 
-			Assert.That(card.PriceMid, Is.Not.Null);
+			Assert.That(card.Price, Is.Not.Null);
 		}
 
 
@@ -82,8 +82,8 @@ namespace Mtgdb.Test
 
 			var cardVariants = _repo.CardsByName[name];
 
-			var cardKnownPrice = cardVariants.First(c => c.PricingMid.HasValue);
-			var cardUnknownPrice = cardVariants.FirstOrDefault(c => !c.PriceMid.HasValue) ??
+			var cardKnownPrice = cardVariants.First(c => c.Price.HasValue);
+			var cardUnknownPrice = cardVariants.FirstOrDefault(c => !c.Price.HasValue) ??
 				cardVariants.First(c => c != cardKnownPrice);
 
 			_deckEditor.Add(cardUnknownPrice, count);
@@ -108,8 +108,8 @@ namespace Mtgdb.Test
 
 			var cardVariants = _repo.CardsByName[name];
 
-			var cardKnownPrice = cardVariants.First(c => c.PricingMid.HasValue);
-			var cardCollectedUnknownPrice = cardVariants.FirstOrDefault(c => !c.PriceMid.HasValue) ??
+			var cardKnownPrice = cardVariants.First(c => c.Price.HasValue);
+			var cardCollectedUnknownPrice = cardVariants.FirstOrDefault(c => !c.Price.HasValue) ??
 				cardVariants.First(c => c != cardKnownPrice);
 
 			_collectionEditor.Add(cardCollectedUnknownPrice, 1);

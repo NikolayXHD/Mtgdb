@@ -19,9 +19,7 @@ namespace Mtgdb.Gui
 				Builder.Get(nameof(Card.Artist), c => c.Artist),
 				Builder.Get(nameof(Card.ReleaseDate), c => c.ReleaseDate),
 				Builder.Get(nameof(Card.Rarity), c => c.Rarity),
-				Builder.Get(nameof(Card.PricingLow), c => c.PricingLow, @"price_low"),
-				Builder.Get(nameof(Card.PricingMid), c => c.PricingMid, @"price_mid"),
-				Builder.Get(nameof(Card.PricingHigh), c => c.PricingHigh, @"price_high"),
+				Builder.Get(nameof(Card.Price), c => c.Price),
 				Builder.Get(nameof(Card.Loyalty), c => c.LoyaltyNum),
 				Builder.Get(nameof(Card.Power), c => c.PowerNum),
 				Builder.Get(nameof(Card.Toughness), c => c.ToughnessNum),
@@ -38,15 +36,8 @@ namespace Mtgdb.Gui
 
 				Builder.Get(nameof(Card.CollectionCount), c => c.CollectionCount(Ui)),
 				Builder.Get(nameof(Card.DeckCount), c => c.DeckCount(Ui)),
-				Builder.Get(nameof(Card.PriceLow), c => c.PriceLow),
-				Builder.Get(nameof(Card.PriceMid), c => c.PriceMid),
-				Builder.Get(nameof(Card.PriceHigh), c => c.PriceHigh),
-				Builder.Get(nameof(Card.DeckTotalLow), c => c.DeckTotalLow(Ui)),
-				Builder.Get(nameof(Card.DeckTotalMid), c => c.DeckTotalMid(Ui)),
-				Builder.Get(nameof(Card.DeckTotalHigh), c => c.DeckTotalHigh(Ui)),
-				Builder.Get(nameof(Card.CollectionTotalLow), c => c.CollectionTotalLow(Ui)),
-				Builder.Get(nameof(Card.CollectionTotalMid), c => c.CollectionTotalMid(Ui)),
-				Builder.Get(nameof(Card.CollectionTotalHigh), c => c.CollectionTotalHigh(Ui)),
+				Builder.Get(nameof(Card.DeckTotal), c => c.DeckTotal(Ui)),
+				Builder.Get(nameof(Card.CollectionTotal), c => c.CollectionTotal(Ui)),
 
 				Builder.Get(nameof(Card.IsSearchResult), c => c.IsSearchResult),
 				Builder.Get(nameof(Card.HasImage), c => c.HasImage(Ui)),
@@ -57,6 +48,15 @@ namespace Mtgdb.Gui
 
 				Builder.Get(string.Empty, c => string.Empty, "")
 			}.ToDictionary(_ => _.Name);
+
+			SplitFieldsByName = new Dictionary<string, IList<IField<Card>>>
+			{
+				[nameof(Card.Number)] = new List<IField<Card>>
+				{
+					Builder.Get(nameof(Card.Number) + nameof(Card.SortableNumber.Number), c => c.SortableNumber.Number),
+					Builder.Get(nameof(Card.Number) + nameof(Card.SortableNumber.Letter), c => c.SortableNumber.Letter),
+				}
+			};
 		}
 
 		public UiModel Ui { get; set; }
@@ -81,17 +81,11 @@ namespace Mtgdb.Gui
 			nameof(Card.Types),
 			nameof(Card.Subtypes),
 
-			nameof(Card.PriceLow),
-			nameof(Card.PriceMid),
-			nameof(Card.PriceHigh),
+			nameof(Card.Price),
 			nameof(Card.DeckCount),
-			nameof(Card.DeckTotalLow),
-			nameof(Card.DeckTotalMid),
-			nameof(Card.DeckTotalHigh),
+			nameof(Card.DeckTotal),
 			nameof(Card.CollectionCount),
-			nameof(Card.CollectionTotalLow),
-			nameof(Card.CollectionTotalMid),
-			nameof(Card.CollectionTotalHigh),
+			nameof(Card.CollectionTotal),
 
 			nameof(Card.Color),
 			nameof(Card.IsSearchResult),

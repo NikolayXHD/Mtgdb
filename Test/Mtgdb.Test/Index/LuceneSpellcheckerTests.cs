@@ -39,14 +39,14 @@ namespace Mtgdb.Test
 		// caret positions
 		// ===============
 		[TestCase(EnRu, "■", "Artist:", "Types:")] // all fields
-		[TestCase(EnRu, "PricingMid■:[", "PricingMid:")]
-		[TestCase(EnRu, "PricingMid:■[", Float)]
-		[TestCase(EnRu, "PricingMid:[■", Float)]
-		[TestCase(EnRu, "PricingMid:[0 TO 1■] OR", Float)]
-		[TestCase(EnRu, "PricingMid:[0 TO 1]■ OR", "Artist:", "Types:")] // all fields
-		[TestCase(EnRu, "PricingMid:[0 TO 1] ■OR", "OR", "AND", "NOT")]
-		[TestCase(EnRu, "PricingMid:[0 TO 1] O■R", "OR", "AND", "NOT")]
-		[TestCase(EnRu, "PricingMid:[0 TO 1] OR■", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "Price■:[", "Price:")]
+		[TestCase(EnRu, "Price:■[", Float)]
+		[TestCase(EnRu, "Price:[■", Float)]
+		[TestCase(EnRu, "Price:[0 TO 1■] OR", Float)]
+		[TestCase(EnRu, "Price:[0 TO 1]■ OR", "Artist:", "Types:")] // all fields
+		[TestCase(EnRu, "Price:[0 TO 1] ■OR", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "Price:[0 TO 1] O■R", "OR", "AND", "NOT")]
+		[TestCase(EnRu, "Price:[0 TO 1] OR■", "OR", "AND", "NOT")]
 		// numeric
 		// =======
 		[TestCase(EnRu, "Cmc:■", "0", "0.5", "10")]
@@ -70,9 +70,9 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "PricingLow:■", "0.1", "0.15")]
 		[TestCase(EnRu, "PricingLow:1■", "0.1", "1")]
 		[TestCase(EnRu, "PricingLow:z■")] // empty
-		[TestCase(EnRu, "PricingMid:■", "0.14", "0.19")]
-		[TestCase(EnRu, "PricingMid:2■", "0.2", "0.42")]
-		[TestCase(EnRu, "PricingMid:z■")] // empty
+		[TestCase(EnRu, "Price:■", "0.14", "0.19")]
+		[TestCase(EnRu, "Price:2■", "0.2", "0.42")]
+		[TestCase(EnRu, "Price:z■")] // empty
 		[TestCase(EnRu, "ToughnessNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9")]
 		[TestCase(EnRu, "ToughnessNum:3■", "3", "3.5", "13")]
 		[TestCase(EnRu, "ToughnessNum:z■")] // empty

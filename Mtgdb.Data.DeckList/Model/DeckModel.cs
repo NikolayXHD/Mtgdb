@@ -15,9 +15,9 @@ namespace Mtgdb.Data.Model
 			int countCollected(Card c, int countInDeck) => Math.Min(countInDeck, Collection.GetCount(c));
 			int countCollectedSide(Card c, int countInDeck) => (Collection.GetCount(c) - countInMain(c)).WithinRange(0, countInDeck);
 
-			float priceTotal(Card c, int countInDeck) => countInDeck * (c.PriceMid ?? 0f);
-			float priceCollected(Card c, int countInDeck) => countCollected(c, countInDeck) * (c.PriceMid ?? 0f);
-			float priceCollectedSide(Card c, int countInDeck) => countCollectedSide(c, countInDeck) * (c.PriceMid ?? 0f);
+			float priceTotal(Card c, int countInDeck) => countInDeck * (c.Price ?? 0f);
+			float priceCollected(Card c, int countInDeck) => countCollected(c, countInDeck) * (c.Price ?? 0f);
+			float priceCollectedSide(Card c, int countInDeck) => countCollectedSide(c, countInDeck) * (c.Price ?? 0f);
 
 			IList<string> generatedMana(Card c, int countInDeck) => c.GeneratedManaArr;
 
@@ -66,7 +66,7 @@ namespace Mtgdb.Data.Model
 				a => string.Concat(a.Keys.OrderBy(s => KeywordDefinitions.GeneratedMana.IndexOf(s, Str.Comparer))));
 
 			_filterNone = c => true;
-			_filterPriceIsUnknown = c => !c.PriceMid.HasValue;
+			_filterPriceIsUnknown = c => !c.Price.HasValue;
 
 			_filterIsCreature = CardTypes.IsCreature;
 			_filterIsLand = CardTypes.IsLand;

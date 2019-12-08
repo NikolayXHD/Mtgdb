@@ -170,8 +170,8 @@
 			this._panelExamples.Controls.Add(this.label8, 1, 4);
 			this._panelExamples.Controls.Add(this.label5, 0, 3);
 			this._panelExamples.Controls.Add(this.label4, 0, 4);
-			this._panelExamples.Font = new System.Drawing.Font("Source Code Pro", 8.999999F, System.Drawing.FontStyle.Regular,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this._panelExamples.Font = new System.Drawing.Font("Source Code Pro", 8.999999F,
+				System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this._panelExamples.Location = new System.Drawing.Point(1, 1);
 			this._panelExamples.Margin = new System.Windows.Forms.Padding(0);
 			this._panelExamples.Name = "_panelExamples";
@@ -218,9 +218,8 @@
 			// 
 			this.label62.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label62.AutoSize = true;
 			this.label62.Location = new System.Drawing.Point(214, 782);
 			this.label62.Margin = new System.Windows.Forms.Padding(0);
@@ -234,9 +233,8 @@
 			// 
 			this.label61.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label61.AutoSize = true;
 			this.label61.Location = new System.Drawing.Point(0, 782);
 			this.label61.Margin = new System.Windows.Forms.Padding(0);
@@ -250,9 +248,8 @@
 			// 
 			this.label32.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label32.AutoSize = true;
 			this.label32.BackColor = System.Drawing.SystemColors.Window;
 			this.label32.Location = new System.Drawing.Point(0, 858);
@@ -267,9 +264,8 @@
 			// 
 			this.label7.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label7.AutoSize = true;
 			this.label7.BackColor = System.Drawing.SystemColors.Control;
 			this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -285,9 +281,8 @@
 			// 
 			this.label3.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label3.AutoSize = true;
 			this.label3.BackColor = System.Drawing.SystemColors.Control;
 			this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -303,9 +298,8 @@
 			// 
 			this.label1.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(0, 24);
 			this.label1.Margin = new System.Windows.Forms.Padding(0);
@@ -319,14 +313,13 @@
 			// 
 			this.label11.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label11.AutoSize = true;
 			this.label11.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label11, 2);
-			this.label11.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label11.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label11.Location = new System.Drawing.Point(0, 0);
 			this.label11.Margin = new System.Windows.Forms.Padding(0);
 			this.label11.Name = "label11";
@@ -340,9 +333,8 @@
 			// 
 			this.label20.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label20.AutoSize = true;
 			this.label20.Location = new System.Drawing.Point(0, 539);
 			this.label20.Margin = new System.Windows.Forms.Padding(0);
@@ -356,9 +348,8 @@
 			// 
 			this.label21.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label21.AutoSize = true;
 			this.label21.BackColor = System.Drawing.SystemColors.Control;
 			this.label21.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -374,9 +365,8 @@
 			// 
 			this.label23.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label23.AutoSize = true;
 			this.label23.Location = new System.Drawing.Point(0, 577);
 			this.label23.Margin = new System.Windows.Forms.Padding(0);
@@ -390,9 +380,8 @@
 			// 
 			this.label22.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label22.AutoSize = true;
 			this.label22.BackColor = System.Drawing.SystemColors.Control;
 			this.label22.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -408,9 +397,8 @@
 			// 
 			this.label24.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label24.AutoSize = true;
 			this.label24.BackColor = System.Drawing.SystemColors.Control;
 			this.label24.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -426,9 +414,8 @@
 			// 
 			this.label25.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label25.AutoSize = true;
 			this.label25.Location = new System.Drawing.Point(0, 668);
 			this.label25.Margin = new System.Windows.Forms.Padding(0);
@@ -442,9 +429,8 @@
 			// 
 			this.label26.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label26.AutoSize = true;
 			this.label26.BackColor = System.Drawing.SystemColors.Control;
 			this.label26.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -460,9 +446,8 @@
 			// 
 			this.label27.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label27.AutoSize = true;
 			this.label27.Location = new System.Drawing.Point(0, 706);
 			this.label27.Margin = new System.Windows.Forms.Padding(0);
@@ -476,9 +461,8 @@
 			// 
 			this.label28.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label28.AutoSize = true;
 			this.label28.BackColor = System.Drawing.SystemColors.Control;
 			this.label28.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -494,9 +478,8 @@
 			// 
 			this.label6.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label6.AutoSize = true;
 			this.label6.Location = new System.Drawing.Point(0, 744);
 			this.label6.Margin = new System.Windows.Forms.Padding(0);
@@ -510,9 +493,8 @@
 			// 
 			this.label10.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label10.AutoSize = true;
 			this.label10.BackColor = System.Drawing.SystemColors.Control;
 			this.label10.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -528,9 +510,8 @@
 			// 
 			this.label29.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label29.AutoSize = true;
 			this.label29.BackColor = System.Drawing.SystemColors.Control;
 			this.label29.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -546,9 +527,8 @@
 			// 
 			this.label30.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label30.AutoSize = true;
 			this.label30.BackColor = System.Drawing.SystemColors.Window;
 			this.label30.Location = new System.Drawing.Point(0, 820);
@@ -557,15 +537,14 @@
 			this.label30.Padding = new System.Windows.Forms.Padding(2);
 			this.label30.Size = new System.Drawing.Size(214, 19);
 			this.label30.TabIndex = 30;
-			this.label30.Text = "pricingmid: {100 TO *}";
+			this.label30.Text = "price: {100 TO *}";
 			// 
 			// label31
 			// 
 			this.label31.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label31.AutoSize = true;
 			this.label31.BackColor = System.Drawing.SystemColors.Control;
 			this.label31.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -581,9 +560,8 @@
 			// 
 			this.label40.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label40.AutoSize = true;
 			this.label40.Location = new System.Drawing.Point(214, 539);
 			this.label40.Margin = new System.Windows.Forms.Padding(0);
@@ -597,9 +575,8 @@
 			// 
 			this.label41.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label41.AutoSize = true;
 			this.label41.BackColor = System.Drawing.SystemColors.Control;
 			this.label41.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -615,9 +592,8 @@
 			// 
 			this.label42.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label42.AutoSize = true;
 			this.label42.Location = new System.Drawing.Point(214, 577);
 			this.label42.Margin = new System.Windows.Forms.Padding(0);
@@ -631,9 +607,8 @@
 			// 
 			this.label43.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label43.AutoSize = true;
 			this.label43.BackColor = System.Drawing.SystemColors.Control;
 			this.label43.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -649,9 +624,8 @@
 			// 
 			this.label44.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label44.AutoSize = true;
 			this.label44.BackColor = System.Drawing.SystemColors.Control;
 			this.label44.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -661,15 +635,15 @@
 			this.label44.Padding = new System.Windows.Forms.Padding(2);
 			this.label44.Size = new System.Drawing.Size(399, 34);
 			this.label44.TabIndex = 44;
-			this.label44.Text = "AND is assumed between terms by default,\r\nso both types Rogue, Rat are required";
+			this.label44.Text =
+				"AND is assumed between terms by default,\r\nso both types Rogue, Rat are required";
 			// 
 			// label45
 			// 
 			this.label45.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label45.AutoSize = true;
 			this.label45.Location = new System.Drawing.Point(214, 668);
 			this.label45.Margin = new System.Windows.Forms.Padding(0);
@@ -683,9 +657,8 @@
 			// 
 			this.label46.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label46.AutoSize = true;
 			this.label46.BackColor = System.Drawing.SystemColors.Control;
 			this.label46.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -701,9 +674,8 @@
 			// 
 			this.label47.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label47.AutoSize = true;
 			this.label47.Location = new System.Drawing.Point(214, 706);
 			this.label47.Margin = new System.Windows.Forms.Padding(0);
@@ -717,9 +689,8 @@
 			// 
 			this.label48.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label48.AutoSize = true;
 			this.label48.BackColor = System.Drawing.SystemColors.Control;
 			this.label48.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -735,9 +706,8 @@
 			// 
 			this.label49.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label49.AutoSize = true;
 			this.label49.Location = new System.Drawing.Point(214, 744);
 			this.label49.Margin = new System.Windows.Forms.Padding(0);
@@ -751,9 +721,8 @@
 			// 
 			this.label50.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label50.AutoSize = true;
 			this.label50.BackColor = System.Drawing.SystemColors.Control;
 			this.label50.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -769,9 +738,8 @@
 			// 
 			this.label51.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label51.AutoSize = true;
 			this.label51.BackColor = System.Drawing.SystemColors.Control;
 			this.label51.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -787,9 +755,8 @@
 			// 
 			this.label52.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label52.AutoSize = true;
 			this.label52.BackColor = System.Drawing.SystemColors.Window;
 			this.label52.Location = new System.Drawing.Point(214, 820);
@@ -804,9 +771,8 @@
 			// 
 			this.label53.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label53.AutoSize = true;
 			this.label53.BackColor = System.Drawing.SystemColors.Control;
 			this.label53.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -822,9 +788,8 @@
 			// 
 			this.label54.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label54.AutoSize = true;
 			this.label54.BackColor = System.Drawing.SystemColors.Window;
 			this.label54.Location = new System.Drawing.Point(214, 858);
@@ -839,9 +804,8 @@
 			// 
 			this.label55.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label55.AutoSize = true;
 			this.label55.Location = new System.Drawing.Point(0, 615);
 			this.label55.Margin = new System.Windows.Forms.Padding(0);
@@ -855,9 +819,8 @@
 			// 
 			this.label56.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label56.AutoSize = true;
 			this.label56.Location = new System.Drawing.Point(214, 615);
 			this.label56.Margin = new System.Windows.Forms.Padding(0);
@@ -871,9 +834,8 @@
 			// 
 			this.label9.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label9.AutoSize = true;
 			this.label9.BackColor = System.Drawing.SystemColors.Window;
 			this.label9.Location = new System.Drawing.Point(214, 24);
@@ -888,14 +850,13 @@
 			// 
 			this.label19.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label19.AutoSize = true;
 			this.label19.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label19, 2);
-			this.label19.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label19.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label19.Location = new System.Drawing.Point(0, 515);
 			this.label19.Margin = new System.Windows.Forms.Padding(0);
 			this.label19.Name = "label19";
@@ -909,14 +870,13 @@
 			// 
 			this.label63.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label63.AutoSize = true;
 			this.label63.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label63, 2);
-			this.label63.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label63.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label63.Location = new System.Drawing.Point(0, 100);
 			this.label63.Margin = new System.Windows.Forms.Padding(0);
 			this.label63.Name = "label63";
@@ -930,9 +890,8 @@
 			// 
 			this.label59.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label59.AutoSize = true;
 			this.label59.Location = new System.Drawing.Point(0, 496);
 			this.label59.Margin = new System.Windows.Forms.Padding(0);
@@ -946,9 +905,8 @@
 			// 
 			this.label60.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label60.AutoSize = true;
 			this.label60.Location = new System.Drawing.Point(214, 496);
 			this.label60.Margin = new System.Windows.Forms.Padding(0);
@@ -962,13 +920,12 @@
 			// 
 			this.label57.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label57.AutoSize = true;
 			this.label57.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label57.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label57.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label57.Location = new System.Drawing.Point(0, 391);
 			this.label57.Margin = new System.Windows.Forms.Padding(0);
 			this.label57.Name = "label57";
@@ -982,9 +939,8 @@
 			// 
 			this.label58.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label58.AutoSize = true;
 			this.label58.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label58.Location = new System.Drawing.Point(214, 391);
@@ -999,9 +955,8 @@
 			// 
 			this.label16.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label16.AutoSize = true;
 			this.label16.Location = new System.Drawing.Point(0, 372);
 			this.label16.Margin = new System.Windows.Forms.Padding(0);
@@ -1015,9 +970,8 @@
 			// 
 			this.label39.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label39.AutoSize = true;
 			this.label39.Location = new System.Drawing.Point(214, 372);
 			this.label39.Margin = new System.Windows.Forms.Padding(0);
@@ -1031,9 +985,8 @@
 			// 
 			this.label18.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label18.AutoSize = true;
 			this.label18.BackColor = System.Drawing.SystemColors.Control;
 			this.label18.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1049,9 +1002,8 @@
 			// 
 			this.label38.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label38.AutoSize = true;
 			this.label38.BackColor = System.Drawing.SystemColors.Control;
 			this.label38.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1067,9 +1019,8 @@
 			// 
 			this.label15.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label15.AutoSize = true;
 			this.label15.Location = new System.Drawing.Point(0, 334);
 			this.label15.Margin = new System.Windows.Forms.Padding(0);
@@ -1083,9 +1034,8 @@
 			// 
 			this.label37.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label37.AutoSize = true;
 			this.label37.Location = new System.Drawing.Point(214, 334);
 			this.label37.Margin = new System.Windows.Forms.Padding(0);
@@ -1099,13 +1049,12 @@
 			// 
 			this.label17.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label17.AutoSize = true;
 			this.label17.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label17.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label17.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label17.Location = new System.Drawing.Point(0, 310);
 			this.label17.Margin = new System.Windows.Forms.Padding(0);
 			this.label17.Name = "label17";
@@ -1119,9 +1068,8 @@
 			// 
 			this.label36.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label36.AutoSize = true;
 			this.label36.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label36.Location = new System.Drawing.Point(214, 310);
@@ -1136,9 +1084,8 @@
 			// 
 			this.label13.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label13.AutoSize = true;
 			this.label13.BackColor = System.Drawing.SystemColors.Control;
 			this.label13.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1154,9 +1101,8 @@
 			// 
 			this.label33.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label33.AutoSize = true;
 			this.label33.BackColor = System.Drawing.SystemColors.Control;
 			this.label33.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1172,9 +1118,8 @@
 			// 
 			this.label14.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label14.AutoSize = true;
 			this.label14.BackColor = System.Drawing.SystemColors.Window;
 			this.label14.Location = new System.Drawing.Point(0, 197);
@@ -1189,9 +1134,8 @@
 			// 
 			this.label34.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label34.AutoSize = true;
 			this.label34.BackColor = System.Drawing.SystemColors.Window;
 			this.label34.Location = new System.Drawing.Point(214, 197);
@@ -1206,9 +1150,8 @@
 			// 
 			this.label35.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label35.AutoSize = true;
 			this.label35.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this.label35.Location = new System.Drawing.Point(214, 173);
@@ -1223,13 +1166,12 @@
 			// 
 			this.label12.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label12.AutoSize = true;
 			this.label12.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label12.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label12.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F,
+				System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label12.Location = new System.Drawing.Point(0, 173);
 			this.label12.Margin = new System.Windows.Forms.Padding(0);
 			this.label12.Name = "label12";
@@ -1243,9 +1185,8 @@
 			// 
 			this.label64.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label64.AutoSize = true;
 			this.label64.BackColor = System.Drawing.SystemColors.Window;
 			this._panelExamples.SetColumnSpan(this.label64, 2);
@@ -1255,17 +1196,18 @@
 			this.label64.Padding = new System.Windows.Forms.Padding(2);
 			this.label64.Size = new System.Drawing.Size(613, 49);
 			this.label64.TabIndex = 64;
-			this.label64.Text = "n: NameEn  m: ManaCost   c: Color    pow: PowerNum\r\nt: Type    e: SetCode    f: L" +
-			                    "egalIn  tou: ToughnessNum\r\no: TextEn  ft: FlavorEn  a: Artist   loy: LoyaltyNum";
+			this.label64.Text =
+				"n: NameEn  e: SetCode   m: ManaCost  pow: PowerNum       a: Artist\r\nt: Type   ee:" +
+				" SetName   c: Color     tou: ToughnessNum  ft: FlavorEn\r\no: TextEn  f: LegalIn  " +
+				"              loy: LoyaltyNum";
 			this.label64.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2
 			// 
 			this.label2.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label2.AutoSize = true;
 			this.label2.BackColor = System.Drawing.SystemColors.Window;
 			this.label2.Location = new System.Drawing.Point(214, 62);
@@ -1280,9 +1222,8 @@
 			// 
 			this.label8.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label8.AutoSize = true;
 			this.label8.BackColor = System.Drawing.SystemColors.Control;
 			this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1298,9 +1239,8 @@
 			// 
 			this.label5.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label5.AutoSize = true;
 			this.label5.BackColor = System.Drawing.SystemColors.Window;
 			this.label5.Location = new System.Drawing.Point(0, 62);
@@ -1315,9 +1255,8 @@
 			// 
 			this.label4.Anchor =
 				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-				                                         System.Windows.Forms.AnchorStyles.Bottom) |
-				                                        System.Windows.Forms.AnchorStyles.Left) |
-				                                       System.Windows.Forms.AnchorStyles.Right)));
+						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this.label4.AutoSize = true;
 			this.label4.BackColor = System.Drawing.SystemColors.Control;
 			this.label4.ForeColor = System.Drawing.SystemColors.ControlText;

@@ -389,31 +389,13 @@ namespace Mtgdb.Test
 				Assert.That(card.ReleaseDate, Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"PricingHigh:[100 TO *]", 100f)]
-		public void Search_by_PricingHigh(string queryStr, float min)
+		[TestCase(@"Price:[50 TO *]", 50f)]
+		public void Search_by_Price(string queryStr, float min)
 		{
-			var cards = search(queryStr, c => c.NameEn + ": " + c.PricingHigh);
+			var cards = search(queryStr, c => c.NameEn + ": " + c.Price);
 
 			foreach (var card in cards)
-				Assert.That(card.PricingHigh, Is.GreaterThanOrEqualTo(min));
-		}
-
-		[TestCase(@"PricingMid:[50 TO *]", 50f)]
-		public void Search_by_PricingMid(string queryStr, float min)
-		{
-			var cards = search(queryStr, c => c.NameEn + ": " + c.PricingMid);
-
-			foreach (var card in cards)
-				Assert.That(card.PricingMid, Is.GreaterThanOrEqualTo(min));
-		}
-
-		[TestCase(@"PricingLow:[10 TO *]", 10f)]
-		public void Search_by_PricingLow(string queryStr, float min)
-		{
-			var cards = search(queryStr, c => c.NameEn + ": " + c.PricingLow);
-
-			foreach (var card in cards)
-				Assert.That(card.PricingLow, Is.GreaterThanOrEqualTo(min));
+				Assert.That(card.Price, Is.GreaterThanOrEqualTo(min));
 		}
 
 		[TestCase(@"angel")]

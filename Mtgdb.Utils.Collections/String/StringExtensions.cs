@@ -85,6 +85,30 @@ namespace Mtgdb
 			return new Tuple<string, int>(string.Empty, 0);
 		}
 
+		public static (int? Number, string Letter) SplitTailingLetters(this string value)
+		{
+			if (value == null)
+				return (null, null);
+			if (value.Length == 0)
+				return (null, string.Empty);
+
+			int nonDigitIndex = -1;
+			for (int i = 0; i < value.Length; i++)
+				if (!char.IsDigit(value[i]))
+				{
+					nonDigitIndex = i;
+					break;
+				}
+
+			if (nonDigitIndex == -1)
+				return (int.Parse(value, CultureInfo.InvariantCulture), string.Empty);
+			if (nonDigitIndex == 0)
+				return (null, value);
+			return (
+				int.Parse(value.Substring(0, nonDigitIndex), CultureInfo.InvariantCulture),
+				value.Substring(nonDigitIndex));
+		}
+
 		public static string NullIfEmpty(this string value) =>
 			value == string.Empty
 				? null

@@ -61,7 +61,6 @@ namespace Mtgdb.Gui
 			this._menuChartType = new Mtgdb.Controls.DropDown();
 			this._panelTable = new System.Windows.Forms.TableLayoutPanel();
 			this._panelFlags = new System.Windows.Forms.FlowLayoutPanel();
-			this._menuPrice = new Mtgdb.Controls.DropDown();
 			this._menuPriceChartType = new Mtgdb.Controls.DropDown();
 			this._buttonCollectionPrice = new Mtgdb.Controls.ButtonBase();
 			this._buttonManaCurveManacost = new Mtgdb.Controls.ButtonBase();
@@ -421,15 +420,6 @@ namespace Mtgdb.Gui
 			this._panelFlags.Name = "_panelFlags";
 			this._panelFlags.Size = new System.Drawing.Size(522, 24);
 			this._panelFlags.TabIndex = 2;
-			this._menuPrice.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this._menuPrice.EmptySelectionText = "";
-			this._menuPrice.ImageScale = 0.5F;
-			this._menuPrice.Location = new System.Drawing.Point(0, 0);
-			this._menuPrice.Margin = new System.Windows.Forms.Padding(0);
-			this._menuPrice.Name = "_menuPrice";
-			this._menuPrice.SelectedIndex = -1;
-			this._menuPrice.Size = new System.Drawing.Size(60, 24);
-			this._menuPrice.TabIndex = 0;
 			this._menuPriceChartType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this._menuPriceChartType.EmptySelectionText = "";
 			this._menuPriceChartType.ImageScale = 0.5F;
@@ -566,7 +556,6 @@ namespace Mtgdb.Gui
 			this._flowDropdowns.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._flowDropdowns.AutoSize = true;
 			this._flowDropdowns.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this._flowDropdowns.Controls.Add(this._menuPrice);
 			this._flowDropdowns.Controls.Add(this._menuPriceChartType);
 			this._flowDropdowns.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this._flowDropdowns.Location = new System.Drawing.Point(122, 3);
@@ -636,7 +625,6 @@ namespace Mtgdb.Gui
 		private System.Windows.Forms.Label _labelSummarySort;
 		private Mtgdb.Controls.TabHeaderControl _tabSummSort;
 		private System.Windows.Forms.TableLayoutPanel _panelTable;
-		private Mtgdb.Controls.DropDown _menuPrice;
 		private Mtgdb.Controls.DropDown _menuPriceChartType;
 		private Mtgdb.Controls.CheckBox _buttonArgumentTotal;
 		private Mtgdb.Controls.CheckBox _buttonSeriesTotal;

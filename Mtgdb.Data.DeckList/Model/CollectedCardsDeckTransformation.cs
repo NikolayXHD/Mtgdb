@@ -46,8 +46,8 @@ namespace Mtgdb.Data.Model
 				var candidates = card.Namesakes.Prepend(card)
 					.Select(c => (Card: c, AvailableCount: collection.GetCount(c) - getUsedCount(c)))
 					.OrderBy(_ => _.AvailableCount <= 0)
-					.ThenBy(_ => _.Card.PriceMid == null)
-					.ThenBy(_ => _.Card.PriceMid)
+					.ThenBy(_ => _.Card.Price == null)
+					.ThenBy(_ => _.Card.Price)
 					.ToList();
 
 				for (int i = 0; i < candidates.Count; i++)
@@ -56,8 +56,8 @@ namespace Mtgdb.Data.Model
 					if (candidate.AvailableCount <= 0)
 					{
 						var bestNotCollectedCandidate = candidates
-							.AtMin(_ => _.Card.PriceMid == null)
-							.ThenAtMin(_ => _.Card.PriceMid ?? 0)
+							.AtMin(_ => _.Card.Price == null)
+							.ThenAtMin(_ => _.Card.Price ?? 0)
 							.Find();
 
 						use(bestNotCollectedCandidate.Card, count, targetZone);

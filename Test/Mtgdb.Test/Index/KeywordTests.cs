@@ -94,8 +94,8 @@ namespace Mtgdb.Test
 				.Where(c => c.IsLegalIn(format) || c.IsRestrictedIn(format))
 				.GroupBy(c => c.NameEn)
 				.Select(c => c.First().Namesakes
-					.Select(cn => cn.PriceMid)
-					.Where(_=>_.HasValue && _.Value != 0f)
+					.Select(cn => cn.Price)
+					.Where(_=>_?.Equals(0f) == false)
 					.Cast<float>()
 					.DefaultIfEmpty(0f)
 					.Min())

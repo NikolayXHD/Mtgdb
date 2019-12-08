@@ -29,7 +29,6 @@ namespace Mtgdb.Gui
 				_menuChartType,
 				_menuFields,
 				_menuLabelDataElement,
-				_menuPrice,
 				_menuPriceChartType
 			};
 
@@ -150,11 +149,6 @@ namespace Mtgdb.Gui
 				SeriesChartType.Doughnut.ToString());
 
 			_menuPriceChartType.SelectedIndex = 0;
-
-			_menuPrice.SetMenuValues( "Low", "Mid", "High" );
-			_menuPrice.SelectedIndex = 1;
-
-			_menuPrice.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuPriceChartType.SelectedIndexChanged += priceMenuIndexChanged;
 			_menuChartType.SelectedIndexChanged += chartTypeChanged;
 
@@ -479,12 +473,20 @@ namespace Mtgdb.Gui
 
 				if (button == _buttonDeckPrice)
 				{
-					settings.SummaryFields = getPriceSummaryFields(_deckPriceTotalFields);
+					settings.SummaryFields = new List<string>
+					{
+						nameof(Card.Price),
+						nameof(Card.DeckTotal)
+					};
 					settings.DataSource = DataSource.Deck;
 				}
 				else if (button == _buttonCollectionPrice)
 				{
-					settings.SummaryFields = getPriceSummaryFields(_collectionPriceTotalFields);
+					settings.SummaryFields = new List<string>
+					{
+						nameof(Card.Price),
+						nameof(Card.CollectionTotal)
+					};
 					settings.DataSource = DataSource.Collection;
 				}
 				else
@@ -530,17 +532,6 @@ namespace Mtgdb.Gui
 				Title = button.Text;
 				buildChart(settings);
 			}
-		}
-
-		private List<string> getPriceSummaryFields(string[] totalFields)
-		{
-			var summaryFields = new List<string>
-			{
-				totalFields[_menuPrice.SelectedIndex],
-				_priceFields[_menuPrice.SelectedIndex]
-			};
-
-			return summaryFields;
 		}
 
 		private void buildChartData(ReportSettings settings)
@@ -1233,27 +1224,6 @@ namespace Mtgdb.Gui
 				f => f._aggregateIconsOrder,
 				(f, bitmaps) => f._aggregateIconsOrder = bitmaps,
 				bitmaps => bitmaps.Select(bmp => bmp.HalfResizeDpi()).ToReadOnlyList());
-
-		private static readonly string[] _priceFields =
-		{
-			nameof(Card.PriceLow),
-			nameof(Card.PriceMid),
-			nameof(Card.PriceHigh)
-		};
-
-		private static readonly string[] _deckPriceTotalFields =
-		{
-			nameof(Card.DeckTotalLow),
-			nameof(Card.DeckTotalMid),
-			nameof(Card.DeckTotalHigh)
-		};
-
-		private static readonly string[] _collectionPriceTotalFields =
-		{
-			nameof(Card.CollectionTotalLow),
-			nameof(Card.CollectionTotalMid),
-			nameof(Card.CollectionTotalHigh)
-		};
 
 		private readonly ButtonBase[] _buttons;
 		private readonly DropDown[] _menus;

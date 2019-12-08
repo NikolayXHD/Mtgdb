@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mtgdb.Data.Model
@@ -51,6 +52,8 @@ namespace Mtgdb.Data.Model
 				Builder.Get(nameof(DeckModel.SideCollectedUnknownPriceCount), d => d.SideCollectedUnknownPriceCount),
 				Builder.Get(nameof(DeckModel.SideCollectedUnknownPricePercent), d => d.SideCollectedUnknownPricePercent)
 			}.ToDictionary(_ => _.Name);
+
+			SplitFieldsByName = new Dictionary<string, IList<IField<DeckModel>>>();
 		}
 	}
 }

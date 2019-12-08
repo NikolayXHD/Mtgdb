@@ -24,9 +24,8 @@ namespace Mtgdb.Gui
 			_fieldArtist.FieldName = nameof(Card.Artist);
 			_fieldReleaseDate.FieldName = nameof(Card.ReleaseDate);
 			_fieldRarity.FieldName = nameof(Card.Rarity);
-			_fieldPricingLow.FieldName = nameof(Card.PricingLow);
-			_fieldPricingMid.FieldName = nameof(Card.PricingMid);
-			_fieldPricingHigh.FieldName = nameof(Card.PricingHigh);
+			_fieldNumber.FieldName = nameof(Card.Number);
+			_fieldPrice.FieldName = nameof(Card.Price);
 			_fieldLoyalty.FieldName = nameof(Card.Loyalty);
 			_fieldPower.FieldName = nameof(Card.Power);
 			_fieldToughness.FieldName = nameof(Card.Toughness);
@@ -73,9 +72,8 @@ namespace Mtgdb.Gui
 			_fieldArtist.DataText = card?.Artist;
 			_fieldReleaseDate.DataText = card?.ReleaseDate;
 			_fieldRarity.DataText = card?.Rarity;
-			_fieldPricingLow.DataText = card?.PricingLow?.ToString(@"$0.##");
-			_fieldPricingMid.DataText = card?.PricingMid?.ToString(@"$0.##");
-			_fieldPricingHigh.DataText = card?.PricingHigh?.ToString(@"$0.##");
+			_fieldNumber.DataText = card?.Number;
+			_fieldPrice.DataText = card?.Price?.ToString(@"$0.##");
 			_fieldLoyalty.DataText = card?.Loyalty;
 			_fieldPower.DataText = card?.Power;
 			_fieldToughness.DataText = card?.Toughness;

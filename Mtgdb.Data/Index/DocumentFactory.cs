@@ -54,9 +54,7 @@ namespace Mtgdb.Data.Index
 			addIntField(nameof(Card.Life));
 
 			addFloatField(nameof(Card.Cmc));
-			addFloatField(nameof(Card.PricingLow));
-			addFloatField(nameof(Card.PricingMid));
-			addFloatField(nameof(Card.PricingHigh));
+			addFloatField(nameof(Card.Price));
 
 			foreach (var lang in Languages)
 			{
@@ -265,16 +263,8 @@ namespace Mtgdb.Data.Index
 				doc.addTextField(nameof(card.ReleaseDate), card.ReleaseDate);
 
 			// Tested
-			if (card.PricingHigh.HasValue)
-				doc.addNumericField(nameof(card.PricingHigh), card.PricingHigh.Value);
-
-			// Tested
-			if (card.PricingMid.HasValue)
-				doc.addNumericField(nameof(card.PricingMid), card.PricingMid.Value);
-
-			// Tested
-			if (card.PricingLow.HasValue)
-				doc.addNumericField(nameof(card.PricingLow), card.PricingLow.Value);
+			if (card.Price.HasValue)
+				doc.addNumericField(nameof(card.Price), card.Price.Value);
 
 			// Tested
 			if (!string.IsNullOrEmpty(card.Layout))
