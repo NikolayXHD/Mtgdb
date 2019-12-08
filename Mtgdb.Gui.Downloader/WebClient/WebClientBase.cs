@@ -22,9 +22,9 @@ namespace Mtgdb.Downloader
 
 		public void DownloadFile(string downloadUrl, string downloadTarget)
 		{
-			using (var webStream = DownloadStream(downloadUrl))
-			using (var fileStream = File.Open(downloadTarget, FileMode.Create))
-				webStream.CopyTo(fileStream);
+			using var webStream = DownloadStream(downloadUrl);
+			using var fileStream = File.Open(downloadTarget, FileMode.Create);
+			webStream.CopyTo(fileStream);
 		}
 
 		public string DownloadString(string pageUrl)
@@ -48,11 +48,9 @@ namespace Mtgdb.Downloader
 				if (stream == null)
 					return null;
 
-				using (var streamReader = new StreamReader(stream, Encoding.UTF8))
-				{
-					string result = streamReader.ReadToEnd();
-					return result;
-				}
+				using var streamReader = new StreamReader(stream, Encoding.UTF8);
+				string result = streamReader.ReadToEnd();
+				return result;
 			}
 		}
 

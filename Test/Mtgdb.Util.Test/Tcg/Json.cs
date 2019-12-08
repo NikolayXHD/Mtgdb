@@ -10,8 +10,10 @@ namespace Mtgdb.Util
 		{
 			var builder = new StringBuilder();
 			using (var writer = new StringWriter(builder))
-			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, IndentChar = '\t', Indentation = 1 })
+			{
+				using var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, IndentChar = '\t', Indentation = 1 };
 				new JsonSerializer().Serialize(jsonWriter, cardsBySet);
+			}
 
 			var serialized = builder.ToString();
 			return serialized;

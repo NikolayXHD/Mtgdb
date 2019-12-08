@@ -56,11 +56,9 @@ namespace Mtgdb.Data
 		{
 			var files = index.ListAll();
 
-			using (var storedIndex = FSDirectory.Open(directory))
-			{
-				foreach (string file in files)
-					index.Copy(storedIndex, file, file, IOContext.READ_ONCE);
-			}
+			using var storedIndex = FSDirectory.Open(directory);
+			foreach (string file in files)
+				index.Copy(storedIndex, file, file, IOContext.READ_ONCE);
 		}
 
 		public static IndexWriterConfig CreateWriterConfig(Analyzer analyzer)

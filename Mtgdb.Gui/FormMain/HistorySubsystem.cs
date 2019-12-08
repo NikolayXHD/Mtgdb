@@ -59,8 +59,11 @@ namespace Mtgdb.Gui
 			try
 			{
 				using (var fileReader = File.OpenText(file))
-				using (var jsonReader = new JsonTextReader(fileReader))
+				{
+					using var jsonReader = new JsonTextReader(fileReader);
 					state = _serializer.Deserialize<HistoryState>(jsonReader);
+				}
+
 				return true;
 			}
 			catch (Exception ex)
@@ -74,17 +77,15 @@ namespace Mtgdb.Gui
 		{
 			FileUtil.SafeCreateFile(filename, file =>
 			{
-				using (var writer = File.CreateText(file))
+				using var writer = File.CreateText(file);
+				var textWriter = new JsonTextWriter(writer)
 				{
-					var textWriter = new JsonTextWriter(writer)
-					{
-						Formatting = Formatting.Indented,
-						Indentation = 1,
-						IndentChar = '\t'
-					};
-					using (var jsonWriter = textWriter)
-						_serializer.Serialize(jsonWriter, state);
-				}
+					Formatting = Formatting.Indented,
+					Indentation = 1,
+					IndentChar = '\t'
+				};
+				using var jsonWriter = textWriter;
+				_serializer.Serialize(jsonWriter, state);
 			});
 		}
 

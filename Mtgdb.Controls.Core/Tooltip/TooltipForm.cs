@@ -158,59 +158,57 @@ namespace Mtgdb.Controls
 			Clickable = tooltip.Clickable;
 			_buttonClose.Visible = Clickable;
 
-			using (var titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold))
+			using var titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold);
+			_tooltipTextbox.ResetText();
+			if (!string.IsNullOrEmpty(tooltip.Title))
 			{
-				_tooltipTextbox.ResetText();
-				if (!string.IsNullOrEmpty(tooltip.Title))
-				{
-					_tooltipTextbox.AppendText(tooltip.Title);
-					_tooltipTextbox.Select(0, tooltip.Title.Length);
-					_tooltipTextbox.SelectionFont = titleFont;
-				}
-
-
-				if (!string.IsNullOrWhiteSpace(tooltip.Text))
-				{
-					if (_tooltipTextbox.TextLength > 0)
-						_tooltipTextbox.AppendText("\n\n");
-
-					var titleLength = _tooltipTextbox.TextLength;
-
-					_tooltipTextbox.AppendText(tooltip.Text);
-
-					if (tooltip.HighlightRanges != null)
-						foreach (var range in tooltip.HighlightRanges)
-						{
-							_tooltipTextbox.SelectionStart = titleLength + range.Index;
-							_tooltipTextbox.SelectionLength = range.Length;
-
-							if (range.IsContext)
-								_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightContextColor;
-							else
-								_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightColor;
-						}
-				}
-
-				_tooltipTextbox.SelectionStart = 0;
-				_tooltipTextbox.SelectionLength = 0;
-
-				var size = measureTooltip(tooltip, titleFont);
-				var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
-				var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
-				var bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
-
-				if (_tooltipTextbox.Focused)
-					_tooltipFocusTarget.Focus();
-
-				if (tooltip.Clickable)
-					_tooltipTextbox.Cursor = Cursors.IBeam;
-				else
-					_tooltipTextbox.Cursor = Cursors.Arrow;
-
-				Size = bounds.Size;
-				Application.DoEvents();
-				Location = bounds.Location;
+				_tooltipTextbox.AppendText(tooltip.Title);
+				_tooltipTextbox.Select(0, tooltip.Title.Length);
+				_tooltipTextbox.SelectionFont = titleFont;
 			}
+
+
+			if (!string.IsNullOrWhiteSpace(tooltip.Text))
+			{
+				if (_tooltipTextbox.TextLength > 0)
+					_tooltipTextbox.AppendText("\n\n");
+
+				var titleLength = _tooltipTextbox.TextLength;
+
+				_tooltipTextbox.AppendText(tooltip.Text);
+
+				if (tooltip.HighlightRanges != null)
+					foreach (var range in tooltip.HighlightRanges)
+					{
+						_tooltipTextbox.SelectionStart = titleLength + range.Index;
+						_tooltipTextbox.SelectionLength = range.Length;
+
+						if (range.IsContext)
+							_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightContextColor;
+						else
+							_tooltipTextbox.SelectionBackColor = tooltip.HighlightOptions.HighlightColor;
+					}
+			}
+
+			_tooltipTextbox.SelectionStart = 0;
+			_tooltipTextbox.SelectionLength = 0;
+
+			var size = measureTooltip(tooltip, titleFont);
+			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
+			var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
+			var bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
+
+			if (_tooltipTextbox.Focused)
+				_tooltipFocusTarget.Focus();
+
+			if (tooltip.Clickable)
+				_tooltipTextbox.Cursor = Cursors.IBeam;
+			else
+				_tooltipTextbox.Cursor = Cursors.Arrow;
+
+			Size = bounds.Size;
+			Application.DoEvents();
+			Location = bounds.Location;
 		}
 
 		private Rectangle allocateTooltip(Size size, Rectangle target, Point? cursor, int margin,

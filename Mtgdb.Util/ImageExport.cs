@@ -240,36 +240,34 @@ namespace Mtgdb.Util
 		{
 			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
 
-			using (var stream = new MemoryStream())
+			using var stream = new MemoryStream();
+			try
 			{
-				try
+				if (replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
 				{
-					if (replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
+					var codec = codecs.First(_ => _.MimeType == "image/jpeg");
+					var encoderParams = new EncoderParameters
 					{
-						var codec = codecs.First(_ => _.MimeType == "image/jpeg");
-						var encoderParams = new EncoderParameters
-						{
-							Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
-						};
+						Param = { [0] = new EncoderParameter(Encoder.Quality, (long) 90) }
+					};
 
-						image.Save(stream, codec, encoderParams);
-					}
-					else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
-					{
-						image.Save(stream, ImageFormat.Png);
-					}
-					else
-						throw new NotSupportedException("only .png .jpg extensions are supported");
+					image.Save(stream, codec, encoderParams);
 				}
-				catch
+				else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
 				{
-					Console.WriteLine("Failed to save " + replacementImageFile.FullPath);
-					return null;
+					image.Save(stream, ImageFormat.Png);
 				}
-
-				var bytes = stream.ToArray();
-				return bytes;
+				else
+					throw new NotSupportedException("only .png .jpg extensions are supported");
 			}
+			catch
+			{
+				Console.WriteLine("Failed to save " + replacementImageFile.FullPath);
+				return null;
+			}
+
+			var bytes = stream.ToArray();
+			return bytes;
 		}
 
 

@@ -130,14 +130,12 @@ namespace Mtgdb.Controls
 			int markWidth = size * (2 * dotsCount - 1);
 
 			var start = rect.BottomLeft() + new Size((rect.Width - markWidth) / 2, 0);
-			using (var pen = new Pen(ActualForeColor) {Width = size, DashStyle = DashStyle.Dot})
-			{
-				g.DrawLine(
-					pen,
-					start,
-					start + new Size(markWidth, 0)
-				);
-			}
+			using var pen = new Pen(ActualForeColor) {Width = size, DashStyle = DashStyle.Dot};
+			g.DrawLine(
+				pen,
+				start,
+				start + new Size(markWidth, 0)
+			);
 		}
 
 		protected override void PaintBorder(Graphics g)

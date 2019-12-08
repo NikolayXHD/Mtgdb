@@ -43,14 +43,12 @@ namespace Mtgdb
 
 		public static FileSignature CreateSignature(string path, bool useAbsolutePath = false)
 		{
-			using (var md5 = MD5.Create())
+			using var md5 = MD5.Create();
+			return new FileSignature
 			{
-				return new FileSignature
-				{
-					Path = useAbsolutePath ? path : Path.GetFileName(path),
-					Md5Hash = getMd5Hash(md5, File.ReadAllBytes(path))
-				};
-			}
+				Path = useAbsolutePath ? path : Path.GetFileName(path),
+				Md5Hash = getMd5Hash(md5, File.ReadAllBytes(path))
+			};
 		}
 
 		public static void WriteToFile(string targetFile, IEnumerable<FileSignature> signatures)

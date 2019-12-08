@@ -64,8 +64,10 @@ namespace Mtgdb.Controls
 				IList<Bitmap> icons = Icons;
 
 				if (DrawBottomBorder)
-					using (Pen pen = new Pen(ColorTabBorder))
-						e.Graphics.DrawLine(pen, 0, Height - 1, Width - 1, Height - 1);
+				{
+					using Pen pen = new Pen(ColorTabBorder);
+					e.Graphics.DrawLine(pen, 0, Height - 1, Width - 1, Height - 1);
+				}
 
 				if (IsDragging())
 				{
@@ -559,8 +561,8 @@ namespace Mtgdb.Controls
 			var points = getTabPolygon(i, widths);
 
 			using (var brush = new SolidBrush(color))
-			using (var pen = new Pen(ColorTabBorder, TabBorderWidth))
 			{
+				using var pen = new Pen(ColorTabBorder, TabBorderWidth);
 				g.FillPolygon(brush, points);
 				g.DrawPolygon(pen, points);
 

@@ -84,25 +84,23 @@ namespace Mtgdb.Controls
 			// implicit connection: data_source_sync
 			lock (DataSource)
 			{
-				using (var hotTrackBgBrush = new SolidBrush(SelectionOptions.HotTrackBackColor))
-				using (var hotTrackBgPen = new Pen(SelectionOptions.HotTrackBorderColor))
-				{
-					paintActions.Back.Add(e => e.Graphics.Clear(BackColor));
-					addPaintCardActions(paintActions, eArgs.ClipRectangle, hotTrackBgBrush, hotTrackBgPen);
-					paintActions.AlignButtons.Add(paintAlignButtons);
-					paintActions.Selection.Add(paintSelection);
+				using var hotTrackBgBrush = new SolidBrush(SelectionOptions.HotTrackBackColor);
+				using var hotTrackBgPen = new Pen(SelectionOptions.HotTrackBorderColor);
+				paintActions.Back.Add(e => e.Graphics.Clear(BackColor));
+				addPaintCardActions(paintActions, eArgs.ClipRectangle, hotTrackBgBrush, hotTrackBgPen);
+				paintActions.AlignButtons.Add(paintAlignButtons);
+				paintActions.Selection.Add(paintSelection);
 
-					eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-					eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				eArgs.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+				eArgs.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-					paintActions.Back.Paint(eArgs);
-					paintActions.FieldData.Paint(eArgs);
-					paintActions.Selection.Paint(eArgs);
+				paintActions.Back.Paint(eArgs);
+				paintActions.FieldData.Paint(eArgs);
+				paintActions.Selection.Paint(eArgs);
 
-					paintActions.AlignButtons.Paint(eArgs);
-					// paint field buttons over align buttons
-					paintActions.FieldButtons.Paint(eArgs);
-				}
+				paintActions.AlignButtons.Paint(eArgs);
+				// paint field buttons over align buttons
+				paintActions.FieldButtons.Paint(eArgs);
 			}
 		}
 
@@ -122,12 +120,16 @@ namespace Mtgdb.Controls
 			var rectangle = new Rectangle(_selection.Rectangle.Location, _selection.Rectangle.Size.Minus(new Size(1, 1)));
 
 			if (SelectionOptions.RectFillColor != Color.Transparent)
-				using (var brush = new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor)))
-					e.Graphics.FillRectangle(brush, rectangle);
+			{
+				using var brush = new SolidBrush(Color.FromArgb(alpha, SelectionOptions.RectFillColor));
+				e.Graphics.FillRectangle(brush, rectangle);
+			}
 
 			if (SelectionOptions.RectBorderColor != Color.Transparent)
-				using (var pen = new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor)))
-					e.Graphics.DrawRectangle(pen, rectangle);
+			{
+				using var pen = new Pen(Color.FromArgb(alpha, SelectionOptions.RectBorderColor));
+				e.Graphics.DrawRectangle(pen, rectangle);
+			}
 		}
 
 		private void addPaintCardActions(PaintActions actions, Rectangle clipRectangle, SolidBrush hotTrackBgBrush, Pen hotTrackBgPen)
@@ -169,8 +171,10 @@ namespace Mtgdb.Controls
 				e.Graphics.DrawRectangle(hotTrackBgPen, rect);
 			}
 			else if (!field.BackColor.Equals(BackColor) && !field.BackColor.Equals(Color.Transparent))
-				using (var bgBrush = new SolidBrush(field.BackColor))
-					e.Graphics.FillRectangle(bgBrush, rect);
+			{
+				using var bgBrush = new SolidBrush(field.BackColor);
+				e.Graphics.FillRectangle(bgBrush, rect);
+			}
 		}
 
 		private void paintFieldData(PaintEventArgs e, LayoutControl card, FieldControl field, Rectangle fieldArea, int rowHandle)

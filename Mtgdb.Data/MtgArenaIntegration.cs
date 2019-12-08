@@ -101,19 +101,17 @@ namespace Mtgdb.Data
 			Dictionary<string, int> parseCountByMtgaId()
 			{
 				var serializer = new JsonSerializer();
-				using (var textReader = new StringReader(log.Substring(inventoryJsonIndex)))
-				using (var jsonReader = new JsonTextReader(textReader))
+				using var textReader = new StringReader(log.Substring(inventoryJsonIndex));
+				using var jsonReader = new JsonTextReader(textReader);
+				try
 				{
-					try
-					{
-						var parsed = serializer.Deserialize<Dictionary<string, int>>(jsonReader);
-						return parsed;
-					}
-					catch (Exception ex)
-					{
-						_log.Warn(ex);
-						return null;
-					}
+					var parsed = serializer.Deserialize<Dictionary<string, int>>(jsonReader);
+					return parsed;
+				}
+				catch (Exception ex)
+				{
+					_log.Warn(ex);
+					return null;
 				}
 			}
 
@@ -144,24 +142,22 @@ namespace Mtgdb.Data
 			Dictionary<string, (string Set, string Number)> parseCardByMtgaId()
 			{
 				var serializer = new JsonSerializer();
-				using (var textReader = new StringReader(cardLibrary.Substring(libraryJsonIndex)))
-				using (var jsonReader = new JsonTextReader(textReader))
+				using var textReader = new StringReader(cardLibrary.Substring(libraryJsonIndex));
+				using var jsonReader = new JsonTextReader(textReader);
+				try
 				{
-					try
-					{
-						var parsed = serializer.Deserialize<JArray>(jsonReader);
+					var parsed = serializer.Deserialize<JArray>(jsonReader);
 
-						Dictionary<string, (string Set, string Number)> result = parsed.Children().ToDictionary(
-							t => t.Value<string>("grpid"),
-							t => (Set: t.Value<string>("set"), Number: t.Value<string>("CollectorNumber")));
+					Dictionary<string, (string Set, string Number)> result = parsed.Children().ToDictionary(
+						t => t.Value<string>("grpid"),
+						t => (Set: t.Value<string>("set"), Number: t.Value<string>("CollectorNumber")));
 
-						return result;
-					}
-					catch (Exception ex)
-					{
-						_log.Warn(ex);
-						return null;
-					}
+					return result;
+				}
+				catch (Exception ex)
+				{
+					_log.Warn(ex);
+					return null;
 				}
 			}
 

@@ -84,16 +84,14 @@ namespace Mtgdb.Controls
 			SizeF delta = originalSize.Minus(reducedSize).DivideBy(
 				reducedSize.MultiplyBy(stepsCount));
 
-			using (var chain = new BitmapTransformationChain(original, reThrow))
+			using var chain = new BitmapTransformationChain(original, reThrow);
+			for (int k = stepsCount - 1; k >= 0; k--)
 			{
-				for (int k = stepsCount - 1; k >= 0; k--)
-				{
-					Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
-					chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
-				}
-
-				return chain.Result;
+				Size currentSize = reducedSize.MultiplyBy(delta.MultiplyBy(k).Plus(1f)).Round();
+				chain.ReplaceBy(bmp => bmp.FitIn(currentSize));
 			}
+
+			return chain.Result;
 		}
 
 		public static Bitmap ApplyColorScheme(this Bitmap bmp)
@@ -120,8 +118,8 @@ namespace Mtgdb.Controls
 					return;
 				}
 
-				using (var transformed = transform())
-					new BmpOverwrite(result, transformed).Execute();
+				using var transformed = transform();
+				new BmpOverwrite(result, transformed).Execute();
 			}
 		}
 

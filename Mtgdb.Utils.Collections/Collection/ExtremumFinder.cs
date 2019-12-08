@@ -49,46 +49,42 @@ namespace Mtgdb
 
 		public TElement FindOrDefault()
 		{
-			using (var enumerator = _sequence.GetEnumerator())
+			using var enumerator = _sequence.GetEnumerator();
+			if (!enumerator.MoveNext())
+				return default;
+
+			TElement result = enumerator.Current;
+			_searcher.Compare(result);
+
+			while (enumerator.MoveNext())
 			{
-				if (!enumerator.MoveNext())
-					return default;
+				TElement element = enumerator.Current;
 
-				TElement result = enumerator.Current;
-				_searcher.Compare(result);
-
-				while (enumerator.MoveNext())
-				{
-					TElement element = enumerator.Current;
-
-					if (_searcher.Compare(element) > 0)
-						result = element;
-				}
-
-				return result;
+				if (_searcher.Compare(element) > 0)
+					result = element;
 			}
+
+			return result;
 		}
 
 		public TElement Find()
 		{
-			using (var enumerator = _sequence.GetEnumerator())
+			using var enumerator = _sequence.GetEnumerator();
+			if (!enumerator.MoveNext())
+				throw new ArgumentException("Sequence contains no elements");
+
+			TElement result = enumerator.Current;
+			_searcher.Compare(result);
+
+			while (enumerator.MoveNext())
 			{
-				if (!enumerator.MoveNext())
-					throw new ArgumentException("Sequence contains no elements");
+				TElement element = enumerator.Current;
 
-				TElement result = enumerator.Current;
-				_searcher.Compare(result);
-
-				while (enumerator.MoveNext())
-				{
-					TElement element = enumerator.Current;
-
-					if (_searcher.Compare(element) > 0)
-						result = element;
-				}
-
-				return result;
+				if (_searcher.Compare(element) > 0)
+					result = element;
 			}
+
+			return result;
 		}
 
 		private readonly IEnumerable<TElement> _sequence;

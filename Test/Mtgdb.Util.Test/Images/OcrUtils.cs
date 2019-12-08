@@ -269,11 +269,9 @@ namespace Mtgdb.Util
 
 						//scaled.Save("D:\\temp\\img\\bw.png");
 
-						using (var page = _engine.Process(scaled, PageSegMode.SingleLine))
-						{
-							texts[i] = page.GetText();
-							textConfidences[i] = page.GetMeanConfidence();
-						}
+						using var page = _engine.Process(scaled, PageSegMode.SingleLine);
+						texts[i] = page.GetText();
+						textConfidences[i] = page.GetMeanConfidence();
 					}
 
 					sw.Stop();

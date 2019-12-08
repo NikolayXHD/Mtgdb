@@ -17,8 +17,8 @@ namespace Mtgdb.Controls
 		{
 			ImageChanged = true;
 
-			using (var reader = new BmpReader(_replacement, new Rectangle(default, _replacement.Size)))
-				reader.BgraValues.CopyTo(BgraValues, 0);
+			using var reader = new BmpReader(_replacement, new Rectangle(default, _replacement.Size));
+			reader.BgraValues.CopyTo(BgraValues, 0);
 		}
 
 		private readonly Bitmap _replacement;

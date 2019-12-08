@@ -18,9 +18,9 @@ namespace Mtgdb.Data
 
 		public void Save()
 		{
-			using (var writer = File.CreateText(_fileName))
-			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
-				_serializer.Serialize(jsonWriter, Config);
+			using var writer = File.CreateText(_fileName);
+			using var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' };
+			_serializer.Serialize(jsonWriter, Config);
 		}
 
 		private static UiConfig readConfig()

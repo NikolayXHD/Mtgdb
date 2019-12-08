@@ -240,8 +240,10 @@ namespace Mtgdb.Gui
 				var bitmap = card?.Image(Ui);
 
 				if (bitmap == null)
-					using (Pen pen = new Pen(SystemColors.WindowText, width: 2))
-						g.DrawRectangle(pen, new Rectangle(Point.Empty, cardIconSize));
+				{
+					using Pen pen = new Pen(SystemColors.WindowText, width: 2);
+					g.DrawRectangle(pen, new Rectangle(Point.Empty, cardIconSize));
+				}
 				else
 					g.DrawImage(bitmap, new Rectangle(Point.Empty, cardIconSize));
 

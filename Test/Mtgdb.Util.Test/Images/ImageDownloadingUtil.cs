@@ -204,13 +204,11 @@ namespace Mtgdb.Util
 				if (keepExisting && File.Exists(targetImage))
 					return;
 
-				using (var original = new Bitmap(sourceImage))
-				{
-					new BmpAlphaToBackgroundColorTransformation(original, Color.White)
-						.Execute();
+				using var original = new Bitmap(sourceImage);
+				new BmpAlphaToBackgroundColorTransformation(original, Color.White)
+					.Execute();
 
-					original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
-				}
+				original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
 			}
 		}
 

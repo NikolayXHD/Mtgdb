@@ -18,14 +18,12 @@ namespace Mtgdb.Controls
 		public static void DrawText(this Graphics g, string text, Font font, Color color, Color borderColor, float opaqueBorder, float fadeBorder, Rectangle rect)
 		{
 			var dw = (int) fadeBorder;
-			using (var bmp = new Bitmap(rect.Width + 2 * dw, rect.Height + 2 * dw))
-			using (var gb = Graphics.FromImage(bmp))
-			{
-				gb.Clear(borderColor);
-				TextRenderer.DrawText(gb, text, font, new Point(dw, dw), color, borderColor, _textFormatFlags);
-				new SemiTransparentShadowTransformation(bmp, borderColor, opaqueBorder, fadeBorder).Execute();
-				g.DrawImageUnscaled(bmp, rect.X - dw, rect.Y - dw);
-			}
+			using var bmp = new Bitmap(rect.Width + 2 * dw, rect.Height + 2 * dw);
+			using var gb = Graphics.FromImage(bmp);
+			gb.Clear(borderColor);
+			TextRenderer.DrawText(gb, text, font, new Point(dw, dw), color, borderColor, _textFormatFlags);
+			new SemiTransparentShadowTransformation(bmp, borderColor, opaqueBorder, fadeBorder).Execute();
+			g.DrawImageUnscaled(bmp, rect.X - dw, rect.Y - dw);
 		}
 
 		private static readonly TextFormatFlags _textFormatFlags =

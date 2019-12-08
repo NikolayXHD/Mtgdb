@@ -147,20 +147,18 @@ namespace Mtgdb.Controls
 			if (borderColor == Color.Transparent || borderColor == Color.Empty || borderColor.A == 0)
 				return;
 
-			using (var pen = new Pen(borderColor) {DashStyle = dashStyle})
-			{
-				if ((borders & AnchorStyles.Top) > 0)
-					graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
+			using var pen = new Pen(borderColor) {DashStyle = dashStyle};
+			if ((borders & AnchorStyles.Top) > 0)
+				graphics.DrawLine(pen, 0, 0, c.Width - 1, 0);
 
-				if ((borders & AnchorStyles.Bottom) > 0)
-					graphics.DrawLine(pen, 0, c.Height - 1, c.Width - 1, c.Height - 1);
+			if ((borders & AnchorStyles.Bottom) > 0)
+				graphics.DrawLine(pen, 0, c.Height - 1, c.Width - 1, c.Height - 1);
 
-				if ((borders & AnchorStyles.Left) > 0)
-					graphics.DrawLine(pen, 0, 0, 0, c.Height - 1);
+			if ((borders & AnchorStyles.Left) > 0)
+				graphics.DrawLine(pen, 0, 0, 0, c.Height - 1);
 
-				if ((borders & AnchorStyles.Right) > 0)
-					graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
-			}
+			if ((borders & AnchorStyles.Right) > 0)
+				graphics.DrawLine(pen, c.Width - 1, 0, c.Width - 1, c.Height - 1);
 		}
 
 		public static void PaintPanelBack(this Control c, Graphics g, Rectangle clipRect, Image backImage, Color backColor, bool paintBack)
@@ -181,8 +179,8 @@ namespace Mtgdb.Controls
 							var bg = current.BackColor;
 							if (isVisible(bg))
 							{
-								using (var brush = new SolidBrush(Color.FromArgb(255, bg)))
-									g.FillRectangle(brush, c.ClientRectangle);
+								using var brush = new SolidBrush(Color.FromArgb(255, bg));
+								g.FillRectangle(brush, c.ClientRectangle);
 								break;
 							}
 
@@ -198,11 +196,15 @@ namespace Mtgdb.Controls
 			if (isVisible(backColor))
 			{
 				if (isVisualStyleSupported)
-					using (var brush = new SolidBrush(backColor))
-						g.FillRectangle(brush, c.ClientRectangle);
+				{
+					using var brush = new SolidBrush(backColor);
+					g.FillRectangle(brush, c.ClientRectangle);
+				}
 				else
-					using (var brush = new SolidBrush(Color.FromArgb(255, backColor)))
-						g.FillRectangle(brush, c.ClientRectangle);
+				{
+					using var brush = new SolidBrush(Color.FromArgb(255, backColor));
+					g.FillRectangle(brush, c.ClientRectangle);
+				}
 			}
 
 			if (backImage != null)

@@ -20,42 +20,40 @@ namespace Mtgdb.Downloader
 				if (response.StatusCode != HttpStatusCode.OK || !response.ContentType.StartsWith("text/html", Str.Comparison))
 					throw new WebException($"Unexpected response from {downloadUrl}: {response}");
 
-				using (var stream = response.GetResponseStream())
-				using (var reader = new StreamReader(stream))
+				using var stream = response.GetResponseStream();
+				using var reader = new StreamReader(stream);
+				var content = reader.ReadToEnd();
+
+				var continuationUrlPattern = new Regex(@"href ?= ?""([^""]*confirm=[^""]+)""");
+				var urlPatternMatch = continuationUrlPattern.Match(content);
+
+				if (!urlPatternMatch.Success)
+					throw new WebException($"Continuation URL not found in: {content}");
+
+				var continuationUrl = WebUtility.HtmlDecode(urlPatternMatch.Groups[1].Value);
+
+				if (!Uri.TryCreate(continuationUrl, UriKind.Absolute, out _))
 				{
-					var content = reader.ReadToEnd();
+					var originalUrl = new UriBuilder(downloadUrl);
 
-					var continuationUrlPattern = new Regex(@"href ?= ?""([^""]*confirm=[^""]+)""");
-					var urlPatternMatch = continuationUrlPattern.Match(content);
-
-					if (!urlPatternMatch.Success)
-						throw new WebException($"Continuation URL not found in: {content}");
-
-					var continuationUrl = WebUtility.HtmlDecode(urlPatternMatch.Groups[1].Value);
-
-					if (!Uri.TryCreate(continuationUrl, UriKind.Absolute, out _))
+					var builder = new UriBuilder
 					{
-						var originalUrl = new UriBuilder(downloadUrl);
+						Scheme = originalUrl.Scheme,
+						Host = originalUrl.Host
+					};
 
-						var builder = new UriBuilder
-						{
-							Scheme = originalUrl.Scheme,
-							Host = originalUrl.Host
-						};
-
-						continuationUrl = builder.ToString().TrimEnd('/') + '/' + continuationUrl.TrimStart('/');
-					}
-
-					var request = CreateRequest(continuationUrl);
-
-					request.Referer = downloadUrl;
-
-					request.CookieContainer = new CookieContainer();
-					foreach (Cookie cookie in response.Cookies)
-						request.CookieContainer.Add(cookie);
-
-					response = GetResponse(request);
+					continuationUrl = builder.ToString().TrimEnd('/') + '/' + continuationUrl.TrimStart('/');
 				}
+
+				var request = CreateRequest(continuationUrl);
+
+				request.Referer = downloadUrl;
+
+				request.CookieContainer = new CookieContainer();
+				foreach (Cookie cookie in response.Cookies)
+					request.CookieContainer.Add(cookie);
+
+				response = GetResponse(request);
 			}
 
 			contentDisposition = response.Headers["content-disposition"];
@@ -75,8 +73,10 @@ namespace Mtgdb.Downloader
 			var downloadTarget = targetDirectory.AddPath(fileName);
 
 			using (var stream = response.GetResponseStream())
-			using (var fileStream = File.Open(downloadTarget, FileMode.Create))
+			{
+				using var fileStream = File.Open(downloadTarget, FileMode.Create);
 				stream.CopyTo(fileStream);
+			}
 		}
 	}
 }

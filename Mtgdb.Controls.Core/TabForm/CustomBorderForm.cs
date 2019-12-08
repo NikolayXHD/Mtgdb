@@ -112,8 +112,8 @@ namespace Mtgdb.Controls
 			if (!clipRectangle.IntersectsWith(titleRect))
 				return;
 
-			using (var brush = getCaptionBrush(titleRect))
-				g.FillRectangle(brush, titleRect);
+			using var brush = getCaptionBrush(titleRect);
+			g.FillRectangle(brush, titleRect);
 		}
 
 		private Brush getCaptionBrush(Rectangle titleRect)
@@ -207,35 +207,33 @@ namespace Mtgdb.Controls
 
 		private void paintBorderInterior(Graphics g, Rectangle titleRect)
 		{
-			using (var pen = new Pen(_panelCaption.BorderColor))
+			using var pen = new Pen(_panelCaption.BorderColor);
+			int left = BorderSize.Width - 1;
+			int top = titleRect.Height - 1;
+			int right = Width - BorderSize.Width;
+			int bottom = Height - BorderSize.Height;
+
+			if (IsMaximized)
 			{
-				int left = BorderSize.Width - 1;
-				int top = titleRect.Height - 1;
-				int right = Width - BorderSize.Width;
-				int bottom = Height - BorderSize.Height;
+				left = 0;
+				right = Width - 1;
 
-				if (IsMaximized)
+				g.DrawLine(pen, left, top, right, top);
+			}
+			else
+			{
+				var points = new[]
 				{
-					left = 0;
-					right = Width - 1;
+					new Point(left, top),
+					new Point(left, bottom),
+					new Point(right, bottom),
+					new Point(right, top)
+				};
 
-					g.DrawLine(pen, left, top, right, top);
-				}
-				else
-				{
-					var points = new[]
-					{
-						new Point(left, top),
-						new Point(left, bottom),
-						new Point(right, bottom),
-						new Point(right, top)
-					};
-
-					g.DrawLine(pen, points[0], points[1]);
-					g.DrawLine(pen, points[1], points[2]);
-					g.DrawLine(pen, points[2], points[3]);
-					g.DrawLine(pen, points[3], points[0]);
-				}
+				g.DrawLine(pen, points[0], points[1]);
+				g.DrawLine(pen, points[1], points[2]);
+				g.DrawLine(pen, points[2], points[3]);
+				g.DrawLine(pen, points[3], points[0]);
 			}
 		}
 

@@ -80,22 +80,20 @@ namespace Mtgdb.Ui
 					.ToList();
 			}
 
-			using (var enumerator = sortInfo.GetEnumerator())
-			{
-				enumerator.MoveNext();
+			using var enumerator = sortInfo.GetEnumerator();
+			enumerator.MoveNext();
 
-				var cardsOrdered = docs.OrderBy(enumerator.Current, _fields);
+			var cardsOrdered = docs.OrderBy(enumerator.Current, _fields);
 
-				while (enumerator.MoveNext())
-					cardsOrdered = cardsOrdered.ThenBy(enumerator.Current, _fields);
+			while (enumerator.MoveNext())
+				cardsOrdered = cardsOrdered.ThenBy(enumerator.Current, _fields);
 
-				cardsOrdered = cardsOrdered
-					.ThenByDescending(getRelevance)
-					.ThenBy(defaultSort, _fields);
+			cardsOrdered = cardsOrdered
+				.ThenByDescending(getRelevance)
+				.ThenBy(defaultSort, _fields);
 
-				var result = cardsOrdered.ToList();
-				return result;
-			}
+			var result = cardsOrdered.ToList();
+			return result;
 		}
 
 		protected abstract TId GetId(TDoc doc);

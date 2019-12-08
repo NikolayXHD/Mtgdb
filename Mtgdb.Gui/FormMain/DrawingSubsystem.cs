@@ -104,17 +104,15 @@ namespace Mtgdb.Gui
 				return;
 
 			var rect = getLegalityWarningRectangle(e);
-			using (var warningFont = getWarningFont())
-			{
-				var lineSize = e.Graphics.MeasureText(legalityWarning, warningFont);
-				rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
+			using var warningFont = getWarningFont();
+			var lineSize = e.Graphics.MeasureText(legalityWarning, warningFont);
+			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-				e.Graphics.DrawText(legalityWarning, warningFont, rect,
-					Color.FromArgb(255 - 16,
-						SystemColors.Highlight.TransformHsv(
-							h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
-				);
-			}
+			e.Graphics.DrawText(legalityWarning, warningFont, rect,
+				Color.FromArgb(255 - 16,
+					SystemColors.Highlight.TransformHsv(
+						h: _ => _ + Color.DodgerBlue.RotationTo(Color.OrangeRed)))
+			);
 		}
 
 		private Font getWarningFont()
@@ -171,13 +169,11 @@ namespace Mtgdb.Gui
 				warning = $"{countInMain}+{countInSideboard}/{maxCount}";
 
 			var rect = getCountWarningRectangle(e);
-			using (var warningFont = getWarningFont())
-			{
-				var lineSize = e.Graphics.MeasureText(warning, warningFont);
-				rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
+			using var warningFont = getWarningFont();
+			var lineSize = e.Graphics.MeasureText(warning, warningFont);
+			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-				e.Graphics.DrawText(warning, warningFont, rect, Color.FromArgb(224, color));
-			}
+			e.Graphics.DrawText(warning, warningFont, rect, Color.FromArgb(224, color));
 		}
 
 		private void drawSelection(CustomDrawArgs e, Color colorGrad1, Color colorGrad2, int opacity)

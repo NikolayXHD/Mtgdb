@@ -574,14 +574,14 @@ namespace Mtgdb.Controls
 				if (BorderShape == BorderShape.Ellipse)
 					fill = (c, r) =>
 					{
-						using (var brush = new SolidBrush(c))
-							e.Graphics.FillEllipse(brush, r);
+						using var brush = new SolidBrush(c);
+						e.Graphics.FillEllipse(brush, r);
 					};
 				else if (BorderShape == BorderShape.Rectangle)
 					fill = (c, r) =>
 					{
-						using (var brush = new SolidBrush(c))
-							e.Graphics.FillRectangle(brush, r);
+						using var brush = new SolidBrush(c);
+						e.Graphics.FillRectangle(brush, r);
 					};
 				else
 					throw new NotSupportedException();
@@ -590,14 +590,14 @@ namespace Mtgdb.Controls
 					fillBorder = (c, r, w) =>
 					{
 						r.Inflate(-w / 2, -w / 2);
-						using (var pen = new Pen(c, w))
-							e.Graphics.DrawEllipse(pen, r);
+						using var pen = new Pen(c, w);
+						e.Graphics.DrawEllipse(pen, r);
 					};
 				else if (BorderShape == BorderShape.Rectangle)
 					fillBorder = (c, r, w) =>
 					{
-						using (var pen = new Pen(c, w))
-							e.Graphics.DrawRectangles(pen, Array.From(r));
+						using var pen = new Pen(c, w);
+						e.Graphics.DrawRectangles(pen, Array.From(r));
 					};
 				else
 					throw new NotSupportedException();
