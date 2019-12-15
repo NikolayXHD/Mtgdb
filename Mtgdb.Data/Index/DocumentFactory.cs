@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lucene.Net.Documents;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data.Index
 {
@@ -391,7 +390,7 @@ namespace Mtgdb.Data.Index
 		public static readonly IReadOnlyList<string> Languages =
 			CardLocalization.GetAllLanguages()
 				.Where(lang => !Str.Equals(lang, CardLocalization.DefaultLanguage))
-				.ToReadOnlyList();
+				.ToList();
 
 		public static readonly HashSet<string> IntFields = new HashSet<string>(Str.Comparer);
 		public static readonly HashSet<string> FloatFields = new HashSet<string>(Str.Comparer);

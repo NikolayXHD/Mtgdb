@@ -279,7 +279,7 @@ namespace Mtgdb.Gui
 
 		private void runRefilterTask(Action onFinished = null)
 		{
-			TaskEx.Run(() => refilter(onFinished));
+			Task.Run(() => refilter(onFinished));
 		}
 
 		private void refilter(Action onFinished)

@@ -646,9 +646,9 @@ namespace Mtgdb.Controls
 			var left = DateTime.Now;
 			_mouseLeft = left;
 
-			TaskEx.Run(async () =>
+			Task.Run(async () =>
 			{
-				await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
+				await Task.Delay(TimeSpan.FromMilliseconds(200));
 
 				if (_mouseLeft == left)
 					this.Invoke(Invalidate);

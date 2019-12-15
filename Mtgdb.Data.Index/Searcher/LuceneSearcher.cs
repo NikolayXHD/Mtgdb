@@ -5,7 +5,7 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Contrib;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
-using ReadOnlyCollectionsExtensions;
+
 using Token = Lucene.Net.Contrib.Token;
 
 namespace Mtgdb.Data
@@ -121,16 +121,14 @@ namespace Mtgdb.Data
 				.GroupBy(getDisplayField, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,
-					gr => gr.ToReadOnlyList());
+					gr => (IReadOnlyList<Token>) gr.ToList());
 
 			var highlightPhrases = tokenizer.Tokens
 				.Where(_ => analyzedTokens[_]?.Count > 1)
 				.GroupBy(getDisplayField, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,
-					gr => gr
-						.Select(_ => analyzedTokens[_])
-						.ToReadOnlyList());
+					gr => (IReadOnlyList<IReadOnlyList<string>>) gr.Select(_ => analyzedTokens[_]).ToList());
 
 			return (highlightTerms, highlightPhrases);
 		}
@@ -150,7 +148,7 @@ namespace Mtgdb.Data
 			var result = QueryParserAnalyzer
 				.GetTokens(t.ParentField, text)
 				.Select(_ => _.Term)
-				.ToReadOnlyList();
+				.ToList();
 
 			return result;
 		}

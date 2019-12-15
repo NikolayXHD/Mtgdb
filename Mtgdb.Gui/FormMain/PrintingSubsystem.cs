@@ -44,7 +44,7 @@ namespace Mtgdb.Gui
 			};
 
 			if (dlg.ShowDialog() == DialogResult.OK)
-				TaskEx.Run(() => print(deckEditorModel, dlg.FileName));
+				Task.Run(() => print(deckEditorModel, dlg.FileName));
 		}
 
 		private void print(DeckEditorModel deckEditorModel, string fileName)

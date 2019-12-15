@@ -998,7 +998,7 @@ namespace Mtgdb.Controls
 
 		private static (int Index, ButtonLayout layout) getCustomButtonIndex(Point location, IList<ButtonLayout> buttons)
 		{
-			int firstCustomButtonIndex = buttons.BinarySearchFirstIndexOf(button => button.Type == ButtonType.Custom);
+			int firstCustomButtonIndex = buttons.BinarySearchFirstIndex(button => button.Type == ButtonType.Custom);
 
 			if (firstCustomButtonIndex == -1)
 				return (-1, null);

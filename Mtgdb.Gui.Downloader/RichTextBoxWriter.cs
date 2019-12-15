@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -12,23 +13,21 @@ namespace Mtgdb.Downloader
 		{
 			_textbox = textbox;
 			_buffer = new StringBuilder();
-
-			TaskEx.Run(flushByTimeoutLoop);
+			_cts = new CancellationTokenSource();
+			Task.Run(async () =>
+			{
+				while (!_cts.Token.IsCancellationRequested)
+				{
+					await Task.Delay(200, _cts.Token);
+					flush();
+				}
+			});
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			_disposed = true;
+			_cts.Cancel();
 			base.Dispose(disposing);
-		}
-
-		private async Task flushByTimeoutLoop()
-		{
-			while (!_disposed)
-			{
-				await TaskEx.Delay(200);
-				flush();
-			}
 		}
 
 		public override void Write(char value)
@@ -71,7 +70,7 @@ namespace Mtgdb.Downloader
 
 		private readonly RichTextBox _textbox;
 		private readonly StringBuilder _buffer;
-		private bool _disposed;
+		private readonly CancellationTokenSource _cts;
 
 		public override Encoding Encoding => Encoding.UTF8;
 	}

@@ -42,8 +42,8 @@ namespace Mtgdb
 			toRelease?.SetResult(true);
 		}
 
-		private static readonly Task _completed = TaskEx.FromResult(true);
+		private static readonly Task _completed = Task.FromResult(true);
 		private readonly Queue<TaskCompletionSource<bool>> _waiters = new Queue<TaskCompletionSource<bool>>();
-		private int _currentCount; 
+		private int _currentCount;
 	}
 }

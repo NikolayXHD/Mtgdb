@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Data;
 using Mtgdb.Ui;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Gui
 {
@@ -40,7 +39,7 @@ namespace Mtgdb.Gui
 				.Where(_ => _.SupportsImport)
 				.Select(f => f.FileNamePattern)
 				.Distinct()
-				.ToReadOnlyList();
+				.ToList();
 
 			_loadFilter = string.Join(@"|", Sequence.From($"Any {{type}}|{string.Join(@";", ImportedFilePatterns)}").Concat(
 				_loadFormatters.Select(f => $"{f.Description}|{f.FileNamePattern}")));

@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Lucene.Net.Contrib;
 using Mtgdb.Data;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Ui
 {
@@ -142,10 +141,10 @@ namespace Mtgdb.Ui
 				return;
 
 			var displayTextTokens = new Lazy<IReadOnlyList<(string Term, int Offset)>>(() =>
-				_analyzer.GetTokens(displayField, displayText).ToReadOnlyList());
+				_analyzer.GetTokens(displayField, displayText).ToList());
 
 			var displayTextValues = new Lazy<IReadOnlyList<string>>(() =>
-				displayTextTokens.Value.Select(_ => _.Term).ToReadOnlyList());
+				displayTextTokens.Value.Select(_ => _.Term).ToList());
 
 			foreach (var term in highlightPhrases.Where(term => isRelevantField(displayField, term.Key)))
 			{

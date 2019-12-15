@@ -9,7 +9,6 @@ using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Gui.Properties;
 using Mtgdb.Gui.Resx;
-using ReadOnlyCollectionsExtensions;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 using CheckBox = Mtgdb.Controls.CheckBox;
 
@@ -157,7 +156,7 @@ namespace Mtgdb.Gui
 				LayoutControlBitmaps.SortNone,
 				LayoutControlBitmaps.SortAsc,
 				LayoutControlBitmaps.SortDesc
-			}.AsReadOnlyList();
+			};
 
 			_aggregateIconsOrder = new[]
 			{
@@ -167,7 +166,7 @@ namespace Mtgdb.Gui
 				ResourcesFilter.min_hovered,
 				ResourcesFilter.avg_hovered,
 				ResourcesFilter.max_hovered
-			}.AsReadOnlyList();
+			};
 
 			var defaultIcons = new[]
 			{
@@ -1217,13 +1216,13 @@ namespace Mtgdb.Gui
 			new DpiScaler<FormChart, IReadOnlyList<Bitmap>>(
 				f => f._sortIconsOrder,
 				(f, bitmaps) => f._sortIconsOrder = bitmaps,
-				bitmaps => bitmaps.Select(bmp => bmp.HalfResizeDpi()).ToReadOnlyList());
+				bitmaps => bitmaps.Select(bmp => bmp.HalfResizeDpi()).ToList());
 
 		private static readonly DpiScaler<FormChart, IReadOnlyList<Bitmap>> _aggregateIconsScaler =
 			new DpiScaler<FormChart, IReadOnlyList<Bitmap>>(
 				f => f._aggregateIconsOrder,
 				(f, bitmaps) => f._aggregateIconsOrder = bitmaps,
-				bitmaps => bitmaps.Select(bmp => bmp.HalfResizeDpi()).ToReadOnlyList());
+				bitmaps => bitmaps.Select(bmp => bmp.HalfResizeDpi()).ToList());
 
 		private readonly ButtonBase[] _buttons;
 		private readonly DropDown[] _menus;

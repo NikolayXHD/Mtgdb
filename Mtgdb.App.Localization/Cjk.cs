@@ -15,7 +15,7 @@ namespace Mtgdb
 		/// </summary>
 		public static bool IsCjk(this char c)
 		{
-			var rangeIndex = _cjkCharacterRanges.BinarySearchFirstIndexOf(r => r.Max >= c);
+			var rangeIndex = _cjkCharacterRanges.BinarySearchFirstIndex(r => r.Max >= c);
 
 			if (rangeIndex < 0)
 				return false;
@@ -29,7 +29,7 @@ namespace Mtgdb
 		/// <summary>
 		/// https://en.wikipedia.org/wiki/Unicode_block
 		/// </summary>
-		private static readonly List<CharRange> _cjkCharacterRanges = new List<CharRange>
+		private static readonly IReadOnlyList<CharRange> _cjkCharacterRanges = new List<CharRange>
 		{
 			new CharRange('\u1100', '\u11FF'), // Hangul Jamo
 			new CharRange('\u2E80', '\u2EFF'), // CJK Radicals Supplement
@@ -49,7 +49,7 @@ namespace Mtgdb
 			// new CharRange('\u4DC0', '\u4DFF'), // Yijing Hexagram Symbols
 			// new CharRange('\u4E00', '\u9FFF'), // CJK Unified Ideographs
 			new CharRange('\u3000', '\u9FFF'), // merged 14 adjacent spans from above
-			
+
 			new CharRange('\uA960', '\uA97F'), // Hangul Jamo Extended-A
 
 			// new CharRange('\uAC00', '\uD7AF'), // Hangul Syllables

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -48,13 +47,10 @@ namespace Mtgdb.Controls
 
 
 		public void SetMenuValues(IEnumerable<string> values) =>
-			SetMenuValues(values.ToReadOnlyList());
-
-		public void SetMenuValues(IList<string> values) =>
-			SetMenuValues(values.AsReadOnlyList());
+			SetMenuValues(values.ToList());
 
 		public void SetMenuValues(params string[] values) =>
-			SetMenuValues(values.AsReadOnlyList());
+			SetMenuValues((IReadOnlyList<string>) values);
 
 		public void SetMenuValues(IReadOnlyList<string> values)
 		{

@@ -10,7 +10,7 @@
     <RootNamespace>CustomScrollbar</RootNamespace>
     <AssemblyName>CustomScrollbar</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

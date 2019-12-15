@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Ui;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data.Model
 {
@@ -222,7 +221,7 @@ namespace Mtgdb.Data.Model
 				_legalFormatsCache = Legality.Formats
 					.Where(format => OriginalDeck.MainDeck.Count
 						.All(_ => isAllowedIn(format, id: _.Key, count: _.Value)))
-					.ToReadOnlyList();
+					.ToList();
 
 				return _legalFormatsCache;
 			}

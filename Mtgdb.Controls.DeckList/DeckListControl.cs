@@ -257,7 +257,7 @@ namespace Mtgdb.Controls
 
 		private void runRefreshSearchResultTask(Action onComplete)
 		{
-			TaskEx.Run(() =>
+			Task.Run(() =>
 			{
 				_aborted = true;
 				lock (_sync)

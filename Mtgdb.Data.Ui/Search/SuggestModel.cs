@@ -49,16 +49,16 @@ namespace Mtgdb.Ui
 
 			var cts = new CancellationTokenSource();
 
-			TaskEx.Run(async () =>
+			Task.Run(async () =>
 			{
 				while (!cts.IsCancellationRequested)
 				{
 					if (Searcher.Spellchecker.IsLoaded && TextInputStateCurrent != null && !IsSuggestUpToDate() && trySuggest())
 						continue;
 
-					await TaskEx.Delay(100);
+					await Task.Delay(100, cts.Token);
 				}
-			});
+			}, cts.Token);
 
 			_cts = cts;
 		}

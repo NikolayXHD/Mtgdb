@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Lucene.Net.Contrib;
 using Mtgdb.Controls;
 using Mtgdb.Data;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Ui
 {
@@ -121,7 +120,7 @@ namespace Mtgdb.Ui
 				throw new InvalidOperationException("Already started");
 
 			var cts = new CancellationTokenSource();
-			TaskEx.Run(async () =>
+			Task.Run(async () =>
 			{
 				const int delay = 1000;
 
@@ -142,11 +141,11 @@ namespace Mtgdb.Ui
 						deltaMs = delay - (int) (DateTime.Now - _lastUserInput.Value).TotalMilliseconds;
 
 					if (deltaMs > 0)
-						await TaskEx.Delay(deltaMs + 100);
+						await Task.Delay(deltaMs + 100, cts.Token);
 					else
 						_parent.Invoke(Apply);
 				}
-			});
+			}, cts.Token);
 
 			_cts = cts;
 		}
@@ -773,7 +772,7 @@ namespace Mtgdb.Ui
 		private string _currentText = string.Empty;
 
 		private TextInputState _suggestSource;
-		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToReadOnlyList();
+		private IReadOnlyList<TokenType> _suggestTypes = Enumerable.Empty<TokenType>().ToList();
 		private Token _suggestToken;
 
 		private readonly Control _parent;

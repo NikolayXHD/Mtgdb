@@ -9,17 +9,14 @@ namespace Mtgdb.Controls
 		protected override void OnHandleCreated(EventArgs e)
 		{
 			base.OnHandleCreated(e);
-			if (!AutoWordSelection)
-			{
-				AutoWordSelection = true;
-				AutoWordSelection = false;
-			}
 
 			SelectionEnabled = true;
 
 			MouseDown += text_MouseDown;
 			MouseUp += text_MouseUp;
 			MouseMove += text_MouseMove;
+
+			AutoWordSelection = false;
 		}
 
 		protected override void Dispose(bool disposing)
@@ -37,12 +34,7 @@ namespace Mtgdb.Controls
 				return;
 
 			if (e.Button == MouseButtons.Left)
-			{
-				int current = this.GetTrueIndexPositionFromPoint(e.Location);
-
-				if (current == _selectionStart)
-					_selectionManual = true;
-			}
+				_selectionStart = this.GetTrueIndexPositionFromPoint(e.Location);
 		}
 
 		private void text_MouseUp(object sender, MouseEventArgs e)
@@ -51,7 +43,6 @@ namespace Mtgdb.Controls
 				return;
 
 			_selectionStart = -1;
-			_selectionManual = false;
 		}
 
 		private void text_MouseMove(object sender, MouseEventArgs e)
@@ -59,46 +50,38 @@ namespace Mtgdb.Controls
 			if (!SelectionEnabled)
 				return;
 
-			if (_selectionManual)
-			{
-				var current = this.GetTrueIndexPositionFromPoint(e.Location);
+			if (_selectionStart == -1)
+				return;
 
-				if (current != _selectionStart)
-				{
-					int start = Math.Min(current, _selectionStart);
+			var location = e.Location;
+			if (location.Y < 0 || location.Y >= Height)
+				location.Y = 0;
+			var current = this.GetTrueIndexPositionFromPoint(location);
+			int start = Math.Min(current, _selectionStart);
+			int length = Math.Abs(current - _selectionStart);
 
-					SelectionStart = start;
-					SelectionLength = Math.Abs(current - _selectionStart);
-				}
-			}
-			else if (!Focused)
-			{
-				SelectionStart = _selectionStart =
-					this.GetTrueIndexPositionFromPoint(e.Location);
-			}
+			if (start == SelectionStart && length == SelectionLength)
+				return;
+
+			SelectionStart = start;
+			SelectionLength = length;
 		}
 
 		public void ResetSelection()
 		{
 			_selectionStart = -1;
-			_selectionManual = false;
 		}
-
-		public bool SelectionEnabled { get; set; }
-
-		private int _selectionStart;
-		private bool _selectionManual;
 
 		protected override void WndProc(ref Message m)
 		{
-			if (m.Msg == WM_LBUTTONDBLCLK && handleDoubleClick())
+			if (m.Msg == WM_LBUTTONDBLCLK && handleDoubleClick(m))
 				return;
 
 			base.WndProc(ref m);
 
-			bool handleDoubleClick()
+			bool handleDoubleClick(Message msg)
 			{
-				int start = SelectionStart;
+				int start = this.GetTrueIndexPositionFromPoint(msg.LParam.ToPoint());
 				if (start < 0)
 					return false;
 
@@ -122,6 +105,9 @@ namespace Mtgdb.Controls
 			}
 		}
 
+		public bool SelectionEnabled { get; set; }
+
+		private int _selectionStart = -1;
 		private static readonly Regex _leftDelimiterRegex = new Regex(@"\W", RegexOptions.RightToLeft);
 		private static readonly Regex _rightDelimiterRegex = new Regex(@"\W");
 

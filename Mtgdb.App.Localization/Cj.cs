@@ -9,7 +9,7 @@ namespace Mtgdb
 		/// </summary>
 		public static bool IsCj(this char c)
 		{
-			var rangeIndex = _cjCharacterRanges.BinarySearchFirstIndexOf(r => r.Max >= c);
+			var rangeIndex = _cjCharacterRanges.BinarySearchFirstIndex(r => r.Max >= c);
 
 			if (rangeIndex < 0)
 				return false;
@@ -23,7 +23,7 @@ namespace Mtgdb
 		/// <summary>
 		/// https://en.wikipedia.org/wiki/Unicode_block
 		/// </summary>
-		private static readonly List<CharRange> _cjCharacterRanges = new List<CharRange>
+		private static readonly IReadOnlyList<CharRange> _cjCharacterRanges = new List<CharRange>
 		{
 			new CharRange('\u3040', '\u312f'),
 			//new CharRange('\u3040', '\u309F'), // Hiragana

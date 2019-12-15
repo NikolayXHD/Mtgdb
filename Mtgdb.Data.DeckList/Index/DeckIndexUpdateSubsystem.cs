@@ -26,13 +26,13 @@ namespace Mtgdb.Data.Index
 		private void modelChanged()
 		{
 			_modelUpdatedTime = DateTime.UtcNow;
-			TaskEx.Run(handleModelChanged);
+			Task.Run(handleModelChanged);
 		}
 
 		private async Task handleModelChanged()
 		{
 			while (!_repo.IsLoadingComplete)
-				await TaskEx.Delay(100);
+				await Task.Delay(100);
 
 			lock (_sync)
 			{

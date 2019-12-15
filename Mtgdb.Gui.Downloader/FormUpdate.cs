@@ -134,7 +134,7 @@ namespace Mtgdb.Downloader
 
 		private void mtgjsonClick(object sender, EventArgs e)
 		{
-			TaskEx.Run(() =>
+			Task.Run(() =>
 			{
 				setButtonsEnabled(false);
 				Console.WriteLine();
@@ -145,7 +145,7 @@ namespace Mtgdb.Downloader
 
 		private void pricesClick(object sender, EventArgs e)
 		{
-			TaskEx.Run(() =>
+			Task.Run(() =>
 			{
 				setButtonsEnabled(false);
 				Console.WriteLine();
@@ -157,18 +157,18 @@ namespace Mtgdb.Downloader
 		private void appClick(object sender, EventArgs e)
 		{
 			if (!_appVersionOnlineChecked)
-				TaskEx.Run(checkNewVersion);
+				Task.Run(checkNewVersion);
 			else if (_appVersionDownloaded == null)
-				TaskEx.Run(downloadNewVersion);
+				Task.Run(downloadNewVersion);
 			else
-				TaskEx.Run(installNewVersion);
+				Task.Run(installNewVersion);
 		}
 
 		private void notificationsClick(object sender, EventArgs e)
 		{
 			setButtonsEnabled(false);
 
-			TaskEx.Run(() =>
+			Task.Run(() =>
 			{
 				_newsService.FetchNews(repeatViewed: true);
 				_newsService.DisplayNews();
@@ -353,7 +353,7 @@ namespace Mtgdb.Downloader
 			}
 			else
 			{
-				TaskEx.Run(() =>
+				Task.Run(() =>
 				{
 					setButtonsEnabled(false);
 					suggestAbortImageDownloading((ButtonBase) sender);

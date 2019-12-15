@@ -11,7 +11,6 @@ using Lucene.Net.Search;
 using Lucene.Net.Search.Similarities;
 using Lucene.Net.Support;
 using Lucene.Net.Util;
-using ReadOnlyCollectionsExtensions;
 using Directory = Lucene.Net.Store.Directory;
 
 namespace Mtgdb.Data
@@ -72,7 +71,7 @@ namespace Mtgdb.Data
 				.Select(_ => _searcher.Doc(_.Doc).Get(WordField))
 				.Distinct()
 				.OrderBy(Str.Comparer)
-				.ToReadOnlyList();
+				.ToList();
 
 			return result;
 		}
@@ -116,7 +115,7 @@ namespace Mtgdb.Data
 		return sugQueue
 				.Reverse()
 				.Select(_ => _.String)
-				.ToReadOnlyList();
+				.ToList();
 		}
 
 		private Query createQuery(string word, string field)

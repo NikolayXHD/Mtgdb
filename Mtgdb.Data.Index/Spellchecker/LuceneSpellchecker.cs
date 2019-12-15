@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Lucene.Net.Contrib;
 using Lucene.Net.Store;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data
 {
@@ -18,11 +18,11 @@ namespace Mtgdb.Data
 				Adapter.FieldByAlias.Keys.OrderBy(Str.Comparer)
 					.Concat(Adapter.GetUserFields().OrderBy(Str.Comparer))
 					.Select(f => f + ":")
-				.ToReadOnlyList();
+				.ToList();
 
 			_allTokensAreField = _userFields
 				.Select(_ => TokenType.Field)
-				.ToReadOnlyList();
+				.ToList();
 		}
 
 		public void LoadIndex(LuceneSearcherState<TId, TDoc> searcherState)
@@ -71,11 +71,11 @@ namespace Mtgdb.Data
 
 				var fieldSuggest = suggestFields(fieldPart: valuePart);
 
-				var values = fieldSuggest.Concat(valueSuggest).ToReadOnlyList();
+				var values = fieldSuggest.Concat(valueSuggest).ToList();
 
 				var types = fieldSuggest.Select(_ => TokenType.Field)
 					.Concat(valueSuggest.Select(_ => TokenType.FieldValue))
-					.ToReadOnlyList();
+					.ToList();
 
 				return new IntellisenseSuggest(token, values, types);
 			}
@@ -123,8 +123,24 @@ namespace Mtgdb.Data
 			if (allValues.Count == 0)
 				return null;
 
-			var currentIndex =
-				allValues.BinarySearchLastIndexOf(str => Str.Comparer.Compare(str, currentValue) <= 0);
+			int currentIndex;
+			if (Adapter.IsFloatField(userField))
+			{
+				float currentParsed = float.Parse(currentValue, NumberStyles.Float, Str.Culture);
+				currentIndex = allValues.BinarySearchLastIndex(str =>
+						float.Parse(str, NumberStyles.Float, Str.Culture) - currentParsed <= 0);
+			}
+			else if (Adapter.IsIntField(userField))
+			{
+				float currentParsed = int.Parse(currentValue, NumberStyles.Integer, Str.Culture);
+				currentIndex = allValues.BinarySearchLastIndex(str =>
+					int.Parse(str, NumberStyles.Integer, Str.Culture) - currentParsed <= 0);
+			}
+			else
+			{
+				currentIndex = allValues.BinarySearchLastIndex(str =>
+					Str.Comparer.Compare(str, currentValue) <= 0);
+			}
 
 			int increment = backward ? -1 : 1;
 			var nextIndex = currentIndex + increment;
@@ -145,7 +161,7 @@ namespace Mtgdb.Data
 			var fieldSuggest = _userFields
 				.Where(_ => _.IndexOf(fieldPart, Str.Comparison) >= 0)
 				.OrderByDescending(_ => _.StartsWith(fieldPart, Str.Comparison))
-				.ToReadOnlyList();
+				.ToList();
 
 			return fieldSuggest;
 		}
@@ -199,7 +215,7 @@ namespace Mtgdb.Data
 		{
 			get => _allTokensAreValues.Count;
 			set => _allTokensAreValues =
-				Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToReadOnlyList();
+				Enumerable.Range(0, value).Select(_ => TokenType.FieldValue).ToList();
 		}
 
 		public bool IsLoaded => State?.IsLoaded ?? false;

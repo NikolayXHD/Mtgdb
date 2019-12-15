@@ -159,7 +159,7 @@ namespace Mtgdb.Gui
 			if (loadingInProgress || !added)
 				return;
 
-			TaskEx.Run(() =>
+			Task.Run(() =>
 			{
 				var failedDecks = new List<Deck>();
 

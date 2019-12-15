@@ -112,23 +112,23 @@ namespace Mtgdb.Gui
 			var loadingCancellation = new CancellationTokenSource();
 			var waitingCancellation = new CancellationTokenSource();
 
-			#pragma warning disable 4014
-			TaskEx.Run(async () =>
-			#pragma warning restore 4014
+#pragma warning disable 4014
+			Task.Run(async () =>
+#pragma warning restore 4014
 			{
 				await loadImages(loadingCancellation.Token);
 				waitingCancellation.Cancel();
-			});
+			}, loadingCancellation.Token);
 
-			await someImageLoaded(waitingCancellation.Token);
+			await anyImageLoaded(waitingCancellation.Token).MayBeCanceled();
 
 			_cts = loadingCancellation;
 		}
 
-		private async Task someImageLoaded(CancellationToken cancellation)
+		private async Task anyImageLoaded(CancellationToken cancellation)
 		{
 			while (_images.Count == 0 && !cancellation.IsCancellationRequested)
-				await TaskEx.Delay(50);
+				await Task.Delay(50, cancellation);
 		}
 
 		private void showArtChanged(object sender, EventArgs e)
@@ -137,7 +137,7 @@ namespace Mtgdb.Gui
 
 			if (_card != null)
 			{
-				TaskEx.Run(async () =>
+				Task.Run(async () =>
 				{
 					await runLoadImagesTask(_card, _ui);
 
@@ -160,7 +160,7 @@ namespace Mtgdb.Gui
 			updateImage();
 			applyZoom();
 
-			System.Windows.Forms.Application.DoEvents();
+			Application.DoEvents();
 
 			Show();
 			Focus();
@@ -176,7 +176,7 @@ namespace Mtgdb.Gui
 				return;
 
 			while (!isRepoLoadingComplete() && !token.IsCancellationRequested)
-				await TaskEx.Delay(100);
+				await Task.Delay(100, token);
 
 			await load(token);
 		}
@@ -198,7 +198,7 @@ namespace Mtgdb.Gui
 					foreach (var model in _ui.GetImagesArt(_cardForms[j]) ?? Empty<ImageModel>.Sequence)
 					{
 						while (index > _imageIndex + 10 && !token.IsCancellationRequested)
-							await TaskEx.Delay(100);
+							await Task.Delay(100, token);
 
 						if (token.IsCancellationRequested)
 							return;
@@ -219,7 +219,7 @@ namespace Mtgdb.Gui
 				foreach (var model in _ui.GetZoomImages(_cardForms[j]) ?? Empty<ImageModel>.Sequence)
 				{
 					while (index > _imageIndex + 10 && !token.IsCancellationRequested)
-						await TaskEx.Delay(100);
+						await Task.Delay(100, token);
 
 					if (token.IsCancellationRequested)
 						return;
@@ -286,7 +286,7 @@ namespace Mtgdb.Gui
 			{
 				updateImage();
 				applyZoom();
-				System.Windows.Forms.Application.DoEvents();
+				Application.DoEvents();
 			}
 		}
 
@@ -384,7 +384,7 @@ namespace Mtgdb.Gui
 			_cts?.Cancel();
 
 			_pictureBox.Image = null;
-			System.Windows.Forms.Application.DoEvents();
+			Application.DoEvents();
 			Hide();
 		}
 

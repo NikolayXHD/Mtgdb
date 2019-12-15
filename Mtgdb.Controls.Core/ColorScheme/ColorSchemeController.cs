@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Win32;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -29,8 +28,7 @@ namespace Mtgdb.Controls
 
 			OriginalColors = _colorTable.ToArray();
 			KnownOriginalColors = KnownColors.Cast<int>()
-				.ToDictionary(i => i, i => OriginalColors[i])
-				.AsReadOnlyDictionary();
+				.ToDictionary(i => i, i => OriginalColors[i]);
 
 			_threadDataProperty = systemDrawingAssembly.GetType("System.Drawing.SafeNativeMethods")
 				.GetNestedType("Gdip", BindingFlags.NonPublic)
@@ -88,8 +86,7 @@ namespace Mtgdb.Controls
 
 		public IReadOnlyDictionary<int, int> Save() =>
 			KnownColors.Cast<int>()
-				.ToDictionary(i => i, i => _colorTable[i])
-				.AsReadOnlyDictionary();
+				.ToDictionary(i => i, i => _colorTable[i]);
 
 		public void Load(IReadOnlyDictionary<int, int> saved)
 		{

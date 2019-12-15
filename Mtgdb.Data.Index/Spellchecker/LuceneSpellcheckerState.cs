@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data
 {
@@ -60,10 +59,10 @@ namespace Mtgdb.Data
 
 				enumerable = enumerable
 					.Concat(spellcheckerValues.Where(v => !numericValues.Contains(v)))
-					.ToReadOnlyList();
+					.ToList();
 			}
 
-			return enumerable.ToReadOnlyList();
+			return enumerable.ToList();
 		}
 
 		public IReadOnlyList<string> SuggestValues(string userField, string language, string value)
@@ -77,7 +76,7 @@ namespace Mtgdb.Data
 			if (_adapter.IsNumericField(userField))
 			{
 				var cache = GetValuesCache(userField, language);
-				return getNumericallySimilarValues(cache, value).Take(_maxCount()).ToReadOnlyList();
+				return getNumericallySimilarValues(cache, value).Take(_maxCount()).ToList();
 			}
 
 			if (!IsLoaded)
@@ -125,7 +124,7 @@ namespace Mtgdb.Data
 				_adapter.GetUserFields()
 					.Where(_adapter.IsIndexedInSpellchecker)
 					.SelectMany(f => _adapter.GetFieldLanguages(f).Select(l => (f, l)))
-					.ToReadOnlyList();
+					.ToList();
 
 			TotalFields = tasks.Count;
 			var indexedWordsByField = new Dictionary<string, HashSet<string>>(Str.Comparer);
@@ -197,7 +196,7 @@ namespace Mtgdb.Data
 			if (_abort)
 				return;
 
-			var words = pair.Value.OrderBy(Str.Comparer).ToReadOnlyList();
+			var words = pair.Value.OrderBy(Str.Comparer).ToList();
 
 			foreach (string word in words)
 			{
@@ -238,7 +237,7 @@ namespace Mtgdb.Data
 					.Distinct()
 					.OrderBy(Str.Comparer);
 
-			var result = enumerable.ToReadOnlyList();
+			var result = enumerable.ToList();
 			return result;
 		}
 

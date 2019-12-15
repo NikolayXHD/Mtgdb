@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data.Model
 {
@@ -52,7 +51,7 @@ namespace Mtgdb.Data.Model
 			if (!listChanged && !countChanged)
 				return;
 
-			TaskEx.Run(async () =>
+			Task.Run(async () =>
 			{
 				_abort = true;
 
@@ -69,7 +68,7 @@ namespace Mtgdb.Data.Model
 						return;
 
 					while (!_repo.IsLoadingComplete)
-						await TaskEx.Delay(100);
+						await Task.Delay(100);
 
 					var affectedNames = affectedCardIds
 						.Select(id => _repo.CardsById[id].NameEn)
@@ -150,7 +149,7 @@ namespace Mtgdb.Data.Model
 		public IReadOnlyList<DeckModel> GetModelCopies()
 		{
 			lock (_syncModels)
-				return _state.Decks.Select(CreateModel).ToReadOnlyList();
+				return _state.Decks.Select(CreateModel).ToList();
 		}
 
 		public IEnumerable<DeckModel> GetModels()

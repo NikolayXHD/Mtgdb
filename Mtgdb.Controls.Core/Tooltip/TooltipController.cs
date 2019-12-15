@@ -128,7 +128,7 @@ namespace Mtgdb.Controls
 				throw new InvalidOperationException("Already started");
 
 			var cts = new CancellationTokenSource();
-			TaskEx.Run(async () => { await updateTooltipLoop(cts.Token); });
+			Task.Run( () => updateTooltipLoop(cts.Token), cts.Token);
 
 			_cts = cts;
 		}
@@ -158,7 +158,7 @@ namespace Mtgdb.Controls
 			{
 				if (isTooltipUpdateSuspended())
 				{
-					await TaskEx.Delay(IntervalMs);
+					await Task.Delay(IntervalMs, token);
 					continue;
 				}
 
@@ -168,7 +168,7 @@ namespace Mtgdb.Controls
 					if (prev.Id.Equals(Tooltip.Id))
 					{
 						prev.Abandoned = null;
-						await TaskEx.Delay(DelayMs + IntervalMs);
+						await Task.Delay(DelayMs + IntervalMs, token);
 						continue;
 					}
 
@@ -177,7 +177,7 @@ namespace Mtgdb.Controls
 					int elapsedMs = (int) (DateTime.Now - prev.Abandoned.Value).TotalMilliseconds;
 					if (elapsedMs < DelayMs)
 					{
-						await TaskEx.Delay(DelayMs - elapsedMs + IntervalMs);
+						await Task.Delay(DelayMs - elapsedMs + IntervalMs, token);
 						continue;
 					}
 
@@ -193,7 +193,7 @@ namespace Mtgdb.Controls
 					int elapsedMs = (int) (DateTime.Now - curr.Created).TotalMilliseconds;
 					if (elapsedMs < DelayMs)
 					{
-						await TaskEx.Delay(DelayMs - elapsedMs + IntervalMs);
+						await Task.Delay(DelayMs - elapsedMs + IntervalMs, token);
 						continue;
 					}
 
@@ -202,7 +202,7 @@ namespace Mtgdb.Controls
 					_tooltip = curr;
 				}
 
-				await TaskEx.Delay(IntervalMs);
+				await Task.Delay(IntervalMs, token);
 			}
 		}
 

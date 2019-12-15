@@ -5,7 +5,6 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
 using Mtgdb.Data.Model;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data.Index
 {
@@ -20,7 +19,7 @@ namespace Mtgdb.Data.Index
 			_userFields;
 
 		public IReadOnlyDictionary<string, string> FieldByAlias { get; } =
-			new Dictionary<string, string>(Str.Comparer).AsReadOnlyDictionary();
+			new Dictionary<string, string>(Str.Comparer);
 
 		public bool IsUserField(string userField) =>
 			_userFields.Contains(userField);

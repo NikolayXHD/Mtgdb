@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using CustomScrollbar;
 using Mtgdb.Controls.Properties;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -48,13 +47,13 @@ namespace Mtgdb.Controls
 		{
 			return DpiScalers.Combine(
 				new DpiScaler<FieldControl, (string fieldName, IReadOnlyList<Bitmap> bitmaps)>(
-					c => (c.FieldName, c.CustomButtons.Select(b => b.Icon).ToReadOnlyList()),
+					c => (c.FieldName, c.CustomButtons.Select(b => b.Icon).ToList()),
 					(c, iconsInfo) => c.CustomButtons
 						.Zip(iconsInfo.bitmaps, (btn, bmp) => (btn, bmp))
 						.ForEach(_ => _.btn.Icon = _.bmp),
 					customIconsScaler),
 				new DpiScaler<FieldControl, (string fieldName, IReadOnlyList<Bitmap> bitmaps)>(
-					c => (c.FieldName, c.CustomButtons.Select(b => b.IconTransp).ToReadOnlyList()),
+					c => (c.FieldName, c.CustomButtons.Select(b => b.IconTransp).ToList()),
 					(c, iconsInfo) => c.CustomButtons
 						.Zip(iconsInfo.bitmaps, (btn, bmp) => (btn, bmp))
 						.ForEach(_ => _.btn.IconTransp = _.bmp),
@@ -74,7 +73,7 @@ namespace Mtgdb.Controls
 				_.fieldName,
 				_.bitmaps
 					.Select((bmp, i) => bmp?.Invoke1(transformCustomButtonIcon, _.fieldName, i))
-					.ToReadOnlyList()
+					.ToList()
 			);
 		}
 

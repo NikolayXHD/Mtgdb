@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using DrawingEx.ColorManagement;
 using DrawingEx.ColorManagement.ColorModels;
 using JetBrains.Annotations;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Controls
 {
@@ -398,7 +397,7 @@ namespace Mtgdb.Controls
 					map.Add((int) colorName, rgba);
 				}
 
-				result = map.AsReadOnlyDictionary();
+				result = map;
 				return true;
 			}
 

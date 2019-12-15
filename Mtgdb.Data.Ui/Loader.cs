@@ -68,7 +68,7 @@ namespace Mtgdb.Ui
 		public Task AsyncRun()
 		{
 			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
-			return TaskEx.WhenAll(_loadingTasks.Select(TaskEx.Run).Concat(_loadingActions.Select(TaskEx.Run)));
+			return Task.WhenAll(_loadingTasks.Select(Task.Run).Concat(_loadingActions.Select(Task.Run)));
 		}
 
 		private void createLoadingActions()
@@ -92,12 +92,12 @@ namespace Mtgdb.Ui
 			AddTask(async () =>
 			{
 				while (!_repository.IsFileLoadingComplete)
-					await TaskEx.Delay(50);
+					await Task.Delay(50);
 
 				_repository.Load();
 
 				while (!_imageRepository.IsLoadingZoomComplete)
-					await TaskEx.Delay(50);
+					await Task.Delay(50);
 
 				_localizationRepository.LoadFile();
 				_localizationRepository.Load();

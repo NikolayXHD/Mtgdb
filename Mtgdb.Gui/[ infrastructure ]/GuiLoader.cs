@@ -31,7 +31,7 @@ namespace Mtgdb.Gui
 
 				if (!deckSearcher.IsIndexSaved)
 					while (!_repo.IsLoadingComplete)
-						await TaskEx.Delay(100);
+						await Task.Delay(100);
 
 				deckSearcher.LoadIndexes();
 				deckIndexUpdateSubsystem.SubscribeToEvents();

@@ -201,7 +201,7 @@ namespace Mtgdb.Gui
 			if (!card.HasImage(Ui))
 				return;
 
-			TaskEx.Run(async () =>
+			Task.Run(async () =>
 			{
 				await _formZoom.LoadImages(card, Ui);
 				_parent.Invoke(delegate { _formZoom.ShowImages(); });

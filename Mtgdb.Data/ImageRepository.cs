@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ReadOnlyCollectionsExtensions;
 using Shell32;
 
 namespace Mtgdb.Data
@@ -402,7 +401,7 @@ namespace Mtgdb.Data
 
 			var distinctModels = models?.GroupBy(_ => _.ImageFile.FullPath)
 				.Select(_ => _.First().ImageFile.NonRotated())
-				.ToReadOnlyList();
+				.ToList();
 
 			return distinctModels;
 		}
@@ -446,7 +445,7 @@ namespace Mtgdb.Data
 				if (models.Count == 0)
 					return null;
 
-				return models.Select(m => m.ApplyRotation(card, zoom: true)).ToReadOnlyList();
+				return models.Select(m => m.ApplyRotation(card, zoom: true)).ToList();
 			}
 		}
 

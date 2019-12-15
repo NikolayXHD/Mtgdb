@@ -4,7 +4,6 @@ using System.Linq;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.QueryParsers.Classic;
-using ReadOnlyCollectionsExtensions;
 
 namespace Mtgdb.Data.Index
 {
@@ -105,7 +104,7 @@ namespace Mtgdb.Data.Index
 				["f"] = nameof(Card.LegalIn),
 				["a"] = nameof(Card.Artist),
 				["ft"] = nameof(Card.FlavorEn)
-			}.AsReadOnlyDictionary();
+			};
 
 		public IEnumerable<string> GetFieldLanguages(string userField)
 		{
