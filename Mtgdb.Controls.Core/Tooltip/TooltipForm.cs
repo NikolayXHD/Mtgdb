@@ -356,7 +356,8 @@ namespace Mtgdb.Controls
 			if (_tooltipTextbox.Focused || _buttonClose.Focused)
 				_tooltip.Control.Focus();
 
-			_tooltipTextbox.ResetSelection();
+			_tooltipTextbox.SelectionStart = 0;
+			_tooltipTextbox.SelectionLength = 0;
 
 			Location = new Point(-10000, -10000);
 			UserInteracted = false;
@@ -456,16 +457,7 @@ namespace Mtgdb.Controls
 		private readonly Control _tooltipFocusTarget;
 		private readonly Button _buttonClose;
 
-		public bool Clickable
-		{
-			get => _clickable;
-
-			private set
-			{
-				_clickable = value;
-				_tooltipTextbox.SelectionEnabled = value;
-			}
-		}
+		public bool Clickable { get; private set; }
 
 		private bool _userInteracted;
 		private TooltipModel _tooltip;
@@ -473,6 +465,5 @@ namespace Mtgdb.Controls
 		private bool _closeEnabled;
 		private Bitmap _closeIcon;
 		private Bitmap _selectableTextIcon;
-		private bool _clickable;
 	}
 }

@@ -19,6 +19,7 @@ namespace Mtgdb.Gui
 
 			InputControl = new FixedRichTextBox
 			{
+				AutoWordSelection = false,
 				Multiline = false,
 				BorderStyle = BorderStyle.None,
 				Font = new Font("Arial Black", 18, GraphicsUnit.Pixel),

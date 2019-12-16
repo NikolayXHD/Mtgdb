@@ -27,6 +27,7 @@ namespace Mtgdb.Controls
 			Input = new FixedRichTextBox
 			{
 				Anchor = ControlHelpers.AnchorAll,
+				AutoWordSelection = false,
 				Multiline = false,
 				BackColor = BackColor,
 				ForeColor = ForeColor,

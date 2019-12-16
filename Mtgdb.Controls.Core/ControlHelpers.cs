@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -13,23 +14,6 @@ namespace Mtgdb.Controls
 	{
 		public const AnchorStyles AnchorAll =
 			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-		public static int GetTrueIndexPositionFromPoint(this FixedRichTextBox rtb, Point point)
-		{
-			// https://docs.microsoft.com/en-us/windows/desktop/controls/em-charfrompos
-			const int EM_CHARFROMPOS = 0x00D7;
-			var pointPtr = Marshal.AllocHGlobal(Marshal.SizeOf(point));
-			try
-			{
-				Marshal.StructureToPtr(point, pointPtr, fDeleteOld: false);
-				int index = (int) SendMessage(rtb.Handle, EM_CHARFROMPOS, IntPtr.Zero, pointPtr);
-				return index;
-			}
-			finally
-			{
-				Marshal.FreeHGlobal(pointPtr);
-			}
-		}
 
 		[DllImport("user32.dll")]
 		public static extern IntPtr WindowFromPoint(Point pt);
@@ -285,5 +269,23 @@ namespace Mtgdb.Controls
 
 		public static short LowWord(this long number) =>
 			unchecked((short)(number & 0x0000ffff));
+
+		public static void BeginUpdate(this Control c) =>
+			_beginUpdateMethod.Invoke(c, Empty<object>.Array);
+
+		public static void EndUpdate(this Control c) =>
+			_endUpdateMethod.Invoke(c, Empty<object>.Array);
+
+		private static readonly MethodInfo _beginUpdateMethod =
+			typeof(Control).GetMethod("BeginUpdateInternal",
+				BindingFlags.Instance | BindingFlags.NonPublic);
+
+		// there are 2 EndUpdateInternal methods, we are looking the one with parameterless signature
+		private static readonly MethodInfo _endUpdateMethod =
+			typeof(Control).GetMethod("EndUpdateInternal",
+				BindingFlags.Instance | BindingFlags.NonPublic,
+				binder: null,
+				types: new Type[0],
+				modifiers: new ParameterModifier[0]);
 	}
 }

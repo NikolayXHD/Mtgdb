@@ -74,7 +74,6 @@ namespace Mtgdb.Downloader
 			this._textBoxLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 0);
 			this._textBoxLog.Name = "_textBoxLog";
 			this._textBoxLog.ReadOnly = true;
-			this._textBoxLog.SelectionEnabled = true;
 			this._textBoxLog.Size = new System.Drawing.Size(819, 260);
 			this._textBoxLog.TabIndex = 0;
 			this._textBoxLog.Text = "";

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
-	public class TestTaskCancellation
+	public class TaskCancellationTests
 	{
 		[Test]
 		public void When_delay_canceled_before_timeout_Then_exception_is_raised()

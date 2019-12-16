@@ -146,7 +146,8 @@
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
     <Compile Include="MtgaIntegrationTests.cs" />
     <Compile Include="SelectionStateTests.cs" />
-    <Compile Include="TestCancellationTokenWithTaskDelay.cs" />
+    <Compile Include="BinarySearchTests.cs" />
+    <Compile Include="TaskCancellationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

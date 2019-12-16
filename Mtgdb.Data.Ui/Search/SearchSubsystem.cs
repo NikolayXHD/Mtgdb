@@ -358,7 +358,6 @@ namespace Mtgdb.Ui
 				case Keys.Control | Keys.V:
 				case Keys.Shift | Keys.Insert:
 					pasteFromClipboard();
-
 					e.Handled = true;
 					e.SuppressKeyPress = true;
 					break;
@@ -420,7 +419,6 @@ namespace Mtgdb.Ui
 				: cycleSuggest.Values[0];
 
 			pasteText(value, type, currentState, cycleSuggest.Token, positionCaretToNextValue: false);
-			Apply();
 		}
 
 		protected abstract IntellisenseSuggest CycleValue(TextInputState currentState, bool backward);
@@ -605,22 +603,26 @@ namespace Mtgdb.Ui
 
 		private void setFindText(string text, int caret)
 		{
-			_searchBar.SuspendLayout();
-			_searchBar.Input.Visible = false;
-
-			_searchBar.Input.Text = text;
-			_searchBar.Input.SelectionStart = caret;
-			_searchBar.Input.SelectionLength = 0;
-
-			_searchBar.Input.Visible = true;
-			_searchBar.Input.ResumeLayout(false);
+			_searchBar.Input.BeginUpdate();
+			try
+			{
+				_searchBar.Input.Text = text;
+				_searchBar.Input.SelectionStart = caret;
+				_searchBar.Input.SelectionLength = 0;
+			}
+			finally
+			{
+				_searchBar.Input.EndUpdate();
+			}
 		}
 
 		private void focusSearch()
 		{
+			if (_searchBar.Input.Focused)
+				return;
+
 			int originalSelectionStart = _searchBar.Input.SelectionStart;
 			int originalSelectionLength = _searchBar.Input.SelectionLength;
-
 			_searchBar.Input.Focus();
 			_searchBar.Input.SelectionStart = originalSelectionStart;
 			_searchBar.Input.SelectionLength = originalSelectionLength;
