@@ -37,7 +37,7 @@ namespace Mtgdb.Data.Index
 			if (_version.IsUpToDate)
 				return FSDirectory.Open(_version.IndexDirectory);
 
-			if (!_repo.IsLocalizationLoadingComplete)
+			if (!_repo.IsLocalizationLoadingComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();

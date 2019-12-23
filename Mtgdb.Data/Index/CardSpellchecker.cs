@@ -29,7 +29,7 @@ namespace Mtgdb.Data.Index
 				return index;
 			}
 
-			if (!_repo.IsLocalizationLoadingComplete)
+			if (!_repo.IsLocalizationLoadingComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must load localizations first");
 
 			_version.CreateDirectory();

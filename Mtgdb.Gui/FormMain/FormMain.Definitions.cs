@@ -38,9 +38,12 @@ namespace Mtgdb.Gui
 		{
 			DoubleBuffered = true;
 
+			_app = app;
 			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
+
+			_quickFilterControls.Append(_filterManager).ForEach(_ => _.CancellationToken = _app.CancellationToken);
 
 			_cardRepo = cardRepo;
 			_imageLoader = imageLoader;
@@ -80,7 +83,7 @@ namespace Mtgdb.Gui
 			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchSubsystem, _countInputSubsystem);
 			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchSubsystem, _countInputSubsystem);
 
-			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
+			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader, _app);
 
 			_imagePreloading = new ImagePreloadingSubsystem(
 				_viewCards,
@@ -95,7 +98,7 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_imageLoader,
-				app);
+				_app);
 
 			_deckEditorSubsystem = new DeckEditorSubsystem(
 				_viewCards,
@@ -175,6 +178,7 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_deckListControl,
+				_app,
 				_viewDeck,
 				_tabHeadersDeck,
 				_viewCards,
@@ -277,6 +281,7 @@ namespace Mtgdb.Gui
 		private UiModel _uiSnapshot;
 		private readonly DeckSearcher _deckSearcher;
 		private readonly DeckZoneSubsystem _deckZones;
+		private readonly App _app;
 
 		// ReSharper disable ConvertToAutoProperty
 		public QuickFilterControl FilterManaCost => _filterManaCost;

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mtgdb.Data.Model;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Data.Index
 {
@@ -11,11 +11,13 @@ namespace Mtgdb.Data.Index
 		public DeckIndexUpdateSubsystem(
 			DeckSearcher searcher,
 			CardRepository repo,
-			DeckListModel listModel)
+			DeckListModel listModel,
+			IApplication app)
 		{
 			_searcher = searcher;
 			_repo = repo;
 			_listModel = listModel;
+			_app = app;
 		}
 
 		public void SubscribeToEvents()
@@ -26,24 +28,18 @@ namespace Mtgdb.Data.Index
 		private void modelChanged()
 		{
 			_modelUpdatedTime = DateTime.UtcNow;
-			Task.Run(handleModelChanged);
-		}
-
-		private async Task handleModelChanged()
-		{
-			while (!_repo.IsLoadingComplete)
-				await Task.Delay(100);
-
-			lock (_sync)
+			_app.When(_repo.IsLoadingComplete).Run(() =>
 			{
-				var modelUpdatedTime = _modelUpdatedTime;
-
-				if (_indexUpdatedTime != modelUpdatedTime)
+				lock (_sync)
 				{
+					var modelUpdatedTime = _modelUpdatedTime;
+					if (_indexUpdatedTime == modelUpdatedTime)
+						return;
+
 					_searcher.LoadIndexes();
 					_indexUpdatedTime = modelUpdatedTime;
 				}
-			}
+			});
 		}
 
 		private DateTime? _indexUpdatedTime;
@@ -51,6 +47,7 @@ namespace Mtgdb.Data.Index
 
 		private readonly DeckSearcher _searcher;
 		private readonly DeckListModel _listModel;
+		private readonly IApplication _app;
 		private readonly CardRepository _repo;
 		private readonly object _sync = new object();
 	}

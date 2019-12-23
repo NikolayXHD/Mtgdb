@@ -28,7 +28,7 @@ namespace Mtgdb.Gui
 			_sortFromNewestToOldest;
 
 		protected override IEnumerable<Card> GetDocuments() =>
-			_repo.IsLoadingComplete
+			_repo.IsLoadingComplete.Signaled
 				? _repo.Cards
 				: Enumerable.Empty<Card>();
 

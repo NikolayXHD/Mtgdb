@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
+using JetBrains.Annotations;
 using NLog;
 
 namespace Mtgdb.Downloader
 {
 	public class NewsService
 	{
+		[UsedImplicitly] // by ninject
 		public NewsService(AppSourceConfig appSourceConfig)
 		{
 			_appSourceConfig = appSourceConfig;

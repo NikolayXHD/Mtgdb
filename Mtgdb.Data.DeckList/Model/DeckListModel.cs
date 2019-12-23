@@ -19,21 +19,25 @@ namespace Mtgdb.Data.Model
 		public DeckListModel(
 			CardRepository repo,
 			CollectedCardsDeckTransformation transformation,
-			CollectionEditorModel collection)
+			CollectionEditorModel collection,
+			IApplication app)
 		{
+			_app = app;
 			_repo = repo;
 			_transformation = transformation;
 			_collectionEditor = collection;
 
 			_collectionEditor.CollectionChanged += collectionChanged;
 			_state.Collection = _collectionEditor.Snapshot();
-			_repo.LoadingComplete += repoLoadingComplete;
 
 			Serializer = new JsonSerializer();
 
 			Serializer.Converters.Add(
 				new UnformattedJsonConverter(type =>
 					typeof(IEnumerable<int>).IsAssignableFrom(type)));
+
+			_app.When(_repo.IsLoadingComplete)
+				.Run(repoLoadingComplete);
 		}
 
 		private void repoLoadingComplete()
@@ -55,9 +59,9 @@ namespace Mtgdb.Data.Model
 			{
 				_abort = true;
 
+				await _syncCollection.WaitAsync(_app.CancellationToken);
 				try
 				{
-					await _syncCollection.WaitAsync();
 					_abort = false;
 
 					var snapshot = _collectionEditor.Snapshot();
@@ -67,8 +71,7 @@ namespace Mtgdb.Data.Model
 					if (affectedCardIds.Count == 0)
 						return;
 
-					while (!_repo.IsLoadingComplete)
-						await Task.Delay(100);
+					await _app.Wait(_repo.IsLoadingComplete);
 
 					var affectedNames = affectedCardIds
 						.Select(id => _repo.CardsById[id].NameEn)
@@ -90,7 +93,7 @@ namespace Mtgdb.Data.Model
 				{
 					_syncCollection.Release();
 				}
-			});
+			}, _app.CancellationToken);
 		}
 
 		public bool Add(Deck deck)
@@ -278,7 +281,7 @@ namespace Mtgdb.Data.Model
 		public string FileName { get; set; } = AppDir.History.AddPath("decks.v4.json");
 		private State _state = new State();
 
-		private readonly AsyncSemaphore _syncCollection = new AsyncSemaphore(1);
+		private readonly SemaphoreSlim _syncCollection = new SemaphoreSlim(1);
 		private readonly object _syncModels = new object();
 		private bool _abort;
 
@@ -298,5 +301,6 @@ namespace Mtgdb.Data.Model
 		}
 
 		internal readonly JsonSerializer Serializer;
+		private readonly IApplication _app;
 	}
 }

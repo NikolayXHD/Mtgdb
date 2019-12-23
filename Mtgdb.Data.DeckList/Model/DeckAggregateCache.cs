@@ -27,7 +27,7 @@ namespace Mtgdb.Data.Model
 
 		public TResult GetAggregate(Zone zone, Func<Card, bool> filter)
 		{
-			if (!_repo.IsLoadingComplete)
+			if (!_repo.IsLoadingComplete.Signaled)
 				return _transform(_aggregationSeed());
 
 			var key = (zone, filter);

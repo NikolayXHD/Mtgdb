@@ -12,7 +12,7 @@ namespace Mtgdb.Downloader
 		{
 			try
 			{
-				ServicePointManager.SecurityProtocol |= (SecurityProtocolType) 3072;
+				ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 			}
 			catch (NotSupportedException ex)
 			{

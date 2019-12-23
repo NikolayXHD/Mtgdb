@@ -23,25 +23,22 @@ namespace Mtgdb.Gui
 			_loader = loader;
 			_repo = repo;
 
-			_loader.AddAction(newsService.FetchNews);
-			_loader.AddAction(downloaderSubsystem.CalculateProgress);
-			_loader.AddTask(async () =>
+			_loader.AddTask(token => newsService.FetchNews());
+			_loader.AddTask(token => downloaderSubsystem.CalculateProgress());
+			_loader.AddTask(async token =>
 			{
 				deckListModel.Load();
 
 				if (!deckSearcher.IsIndexSaved)
-					while (!_repo.IsLoadingComplete)
-						await Task.Delay(100);
+					await _repo.IsLoadingComplete.Wait(token);
 
 				deckSearcher.LoadIndexes();
 				deckIndexUpdateSubsystem.SubscribeToEvents();
 			});
 		}
 
-		public Task AsyncRun()
-		{
-			return _loader.AsyncRun();
-		}
+		public Task AsyncRun() =>
+			_loader.AsyncRun();
 
 		private readonly Loader _loader;
 		private readonly CardRepository _repo;

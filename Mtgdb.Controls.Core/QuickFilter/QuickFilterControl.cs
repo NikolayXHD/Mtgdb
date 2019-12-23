@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using JetBrains.Annotations;
@@ -648,11 +649,11 @@ namespace Mtgdb.Controls
 
 			Task.Run(async () =>
 			{
-				await Task.Delay(TimeSpan.FromMilliseconds(200));
+				await Task.Delay(TimeSpan.FromMilliseconds(200), CancellationToken);
 
 				if (_mouseLeft == left)
 					this.Invoke(Invalidate);
-			});
+			}, CancellationToken);
 		}
 
 		private void mouseMove(object sender, MouseEventArgs e)
@@ -1039,6 +1040,8 @@ namespace Mtgdb.Controls
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int Border => (int) Math.Ceiling(SelectionBorder);
+
+		public CancellationToken CancellationToken { private get; set; } = CancellationToken.None;
 
 		private const float OpacityEnabled = 1.00f;
 		private const float OpacityToEnable = 0.90f;

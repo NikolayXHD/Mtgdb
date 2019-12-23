@@ -19,6 +19,7 @@ namespace Mtgdb.Gui
 			DeckEditorModel deckEditor,
 			FormMain targetForm,
 			DeckListControl deckListControl,
+			IApplication app,
 			params Control[] targetControls)
 		{
 			_cardRepo = cardRepo;
@@ -27,6 +28,7 @@ namespace Mtgdb.Gui
 			_deckEditor = deckEditor;
 			_targetForm = targetForm;
 			_deckListControl = deckListControl;
+			_app = app;
 			_targetControls = targetControls;
 		}
 
@@ -57,13 +59,11 @@ namespace Mtgdb.Gui
 
 		private void deckDragDropped(object sender, DragEventArgs e)
 		{
-			if (_cardRepo.IsLoadingComplete)
+			if (_cardRepo.IsLoadingComplete.Signaled)
 			{
 				dragDropped(e.Data);
 				return;
 			}
-
-			_cardRepo.LoadingComplete += () => { _targetForm.Invoke(delegate { dragDropped(e.Data); }); };
 
 			MessageBox.Show(_targetForm,
 				"Mtgdb.Gui is loading cards.\r\n" +
@@ -71,6 +71,9 @@ namespace Mtgdb.Gui
 				"Opening deck(s) delayed",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
+
+			_app.When(_cardRepo.IsLoadingComplete).Run(() =>
+				_targetForm.Invoke(delegate { dragDropped(e.Data); }));
 		}
 
 		private void dragDropped(IDataObject dragData)
@@ -265,7 +268,7 @@ namespace Mtgdb.Gui
 
 		public void PasteDeck(bool append)
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var text = Clipboard.GetText();
@@ -277,7 +280,7 @@ namespace Mtgdb.Gui
 
 		public void PasteCollection(bool append)
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var text = Clipboard.GetText();
@@ -382,6 +385,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditor;
 		private readonly FormMain _targetForm;
 		private readonly DeckListControl _deckListControl;
+		private readonly IApplication _app;
 		private readonly Control[] _targetControls;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

@@ -54,7 +54,7 @@ namespace Mtgdb.Data.Index
 			if (string.IsNullOrEmpty(unescaped))
 				return MatchNothingQuery;
 
-			if (!_repository.IsLoadingComplete)
+			if (!_repository.IsLoadingComplete.Signaled)
 				return MatchNothingQuery;
 
 			string cardName = unescaped.RemoveDiacritics();

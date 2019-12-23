@@ -682,7 +682,7 @@ namespace Mtgdb.Data
 		{
 			if (!_imageModelSelected)
 			{
-				if (!ui.ImageRepo.IsLoadingSmallComplete)
+				if (!ui.ImageRepo.IsLoadingSmallComplete.Signaled)
 					return null;
 
 				_imageModel = ui.GetSmallImage(this);
@@ -696,7 +696,7 @@ namespace Mtgdb.Data
 		{
 			if (!_zoomImageModelSelected)
 			{
-				if (!ui.ImageRepo.IsLoadingZoomComplete)
+				if (!ui.ImageRepo.IsLoadingZoomComplete.Signaled)
 					return null;
 
 				_zoomImageModel = ui.GetZoomImages(this)?.FirstOrDefault();

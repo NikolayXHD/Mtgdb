@@ -167,7 +167,7 @@ namespace Mtgdb.Downloader
 
 		private string getReleaseDate(ImageDownloadProgress progress)
 		{
-			if (!_repository.IsLoadingComplete)
+			if (!_repository.IsLoadingComplete.Signaled)
 				return null;
 
 			return _repository.SetsByCode.TryGet(progress.Dir.Subdirectory)?.ReleaseDate;

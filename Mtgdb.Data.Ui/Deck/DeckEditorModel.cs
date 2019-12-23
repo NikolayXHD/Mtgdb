@@ -63,7 +63,7 @@ namespace Mtgdb.Ui
 
 		public void LoadDeck(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete)
+			if (!cardRepository.IsLoadingComplete.Signaled)
 				return;
 
 			lock (DataSource)
@@ -319,7 +319,7 @@ namespace Mtgdb.Ui
 
 		public void NewSampleHand(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete.Signaled || CurrentZone != Zone.SampleHand)
 				return;
 
 			createSampleHand(7, cardRepository);
@@ -327,7 +327,7 @@ namespace Mtgdb.Ui
 
 		public void Mulligan(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete.Signaled || CurrentZone != Zone.SampleHand)
 				return;
 
 			int count = getMulliganCount();
@@ -336,7 +336,7 @@ namespace Mtgdb.Ui
 
 		public void Draw(CardRepository cardRepository)
 		{
-			if (!cardRepository.IsLoadingComplete || CurrentZone != Zone.SampleHand)
+			if (!cardRepository.IsLoadingComplete.Signaled || CurrentZone != Zone.SampleHand)
 				return;
 
 			var drawn = draw(cardRepository);

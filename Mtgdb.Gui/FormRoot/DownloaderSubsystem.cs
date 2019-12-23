@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 using Mtgdb.Data;
 using Mtgdb.Downloader;
 
@@ -10,6 +11,7 @@ namespace Mtgdb.Gui
 	{
 		public bool NeedToSuggestDownloader { get; private set; }
 
+		[UsedImplicitly] // by ninject
 		public DownloaderSubsystem(
 			UiConfigRepository uiConfigRepository,
 			FormUpdate formUpdate)

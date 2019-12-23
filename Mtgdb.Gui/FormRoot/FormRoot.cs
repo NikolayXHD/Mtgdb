@@ -109,8 +109,6 @@ namespace Mtgdb.Gui
 			PreviewKeyDown += previewKeyDown;
 			KeyDown += formKeyDown;
 
-			_repo.LoadingComplete += repositoryLoaded;
-
 			QueryHandleDrag += queryHandleDrag;
 			Load += load;
 			Closed += closed;
@@ -165,6 +163,9 @@ namespace Mtgdb.Gui
 			_dropdownOpenDeck.BeforeShow = () => setMenuMode(_dropdownOpenDeck);
 			_dropdownSaveDeck.BeforeShow = () => setMenuMode(_dropdownSaveDeck);
 			_dropdownColorScheme.BeforeShow = updateMenuColors;
+
+			_app.When(_repo.IsLoadingComplete)
+				.Run(repositoryLoaded);
 		}
 
 		private void updateFormBorderColor()
@@ -196,7 +197,7 @@ namespace Mtgdb.Gui
 		private void updateDeckButtons()
 		{
 			foreach (var button in _deckButtons)
-				button.Enabled = _repo.IsLoadingComplete;
+				button.Enabled = _repo.IsLoadingComplete.Signaled;
 		}
 
 

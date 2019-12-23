@@ -126,7 +126,7 @@ namespace Mtgdb.Data
 
 		private FSDirectory createKeywordsFrom(CardRepository repository)
 		{
-			if (!repository.IsLoadingComplete)
+			if (!repository.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must be loaded first");
 
 			var keywordsList = new List<CardKeywords>(repository.Cards.Count);

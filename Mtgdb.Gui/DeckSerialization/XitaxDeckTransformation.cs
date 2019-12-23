@@ -15,7 +15,7 @@ namespace Mtgdb.Gui
 
 		public void Transform(Deck deck)
 		{
-			if (!_repo.IsLoadingComplete)
+			if (!_repo.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException();
 
 			var cardIds = new HashSet<string>();

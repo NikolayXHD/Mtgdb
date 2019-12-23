@@ -42,8 +42,7 @@ namespace Mtgdb.Gui
 			installer.BeginInstall += beginInstall;
 			installer.EndInstall += endInstall;
 
-			var loader = _kernel.Get<GuiLoader>();
-			loader.AsyncRun();
+			_kernel.Get<GuiLoader>().AsyncRun();
 
 			var colorSchemeEditorForm = _kernel.Get<ColorSchemeEditor>();
 			colorSchemeEditorForm.SaveDirectory = AppDir.ColorSchemes;
@@ -91,7 +90,7 @@ namespace Mtgdb.Gui
 			LogManager.Flush();
 		}
 
-		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 		private static readonly IKernel _kernel = new StandardKernel();
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

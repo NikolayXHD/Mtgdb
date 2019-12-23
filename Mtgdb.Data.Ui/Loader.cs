@@ -19,66 +19,53 @@ namespace Mtgdb.Ui
 			LocalizationRepository localizationRepository,
 			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher,
-			IApplication application)
+			IApplication app)
 		{
 			_repository = repository;
 			_imageRepository = imageRepository;
 			_localizationRepository = localizationRepository;
 			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
-			_application = application;
+			_app = app;
 
 			createLoadingActions();
 		}
 
-		public void AddAction(Action a) =>
-			_loadingActions.Add(wrap(a));
-
-		public void AddTask(Func<Task> a) =>
+		public void AddTask(Action<CancellationToken> a) =>
 			_loadingTasks.Add(wrap(a));
 
-		private Action wrap(Action a) =>
-			() =>
-			{
-				try
-				{
-					using (_application.CancellationToken.Register(Thread.CurrentThread.Abort))
-						a.Invoke();
-				}
-				catch (Exception ex)
-				{
-					_log.Error(ex);
-				}
-			};
+		public void AddTask(Func<CancellationToken, Task> a) =>
+			_loadingTasks.Add(wrap(a));
 
-		private Func<Task> wrap(Func<Task> a) =>
-			async () =>
-			{
-				try
-				{
-					using (_application.CancellationToken.Register(Thread.CurrentThread.Abort))
-						await a.Invoke();
-				}
-				catch (Exception ex)
-				{
-					_log.Error(ex);
-				}
-			};
+		private Func<CancellationToken, Task> wrap(Action<CancellationToken> a) =>
+			token => Task.Run(() => a(token), token);
 
-		public Task AsyncRun()
+		private Func<CancellationToken, Task> wrap(Func<CancellationToken, Task> a) =>
+			token => Task.Run(() => a(token), token);
+
+		public async Task AsyncRun()
 		{
 			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
-			return Task.WhenAll(_loadingTasks.Select(Task.Run).Concat(_loadingActions.Select(Task.Run)));
+			try
+			{
+				await Task.WhenAll(_loadingTasks.Select(_ => _(_app.CancellationToken)));
+			}
+			catch (TaskCanceledException ex) when (ex.CancellationToken == _app.CancellationToken)
+			{
+				_log.Info(ex);
+			}
+			catch (Exception ex)
+			{
+				_log.Error(ex);
+			}
 		}
 
 		private void createLoadingActions()
 		{
-			AddAction(() =>
+			AddTask(token =>
 			{
 				_repository.LoadFile();
-
 				_imageRepository.LoadFiles();
-
 				_imageRepository.LoadSmall();
 				_imageRepository.LoadZoom();
 
@@ -89,16 +76,12 @@ namespace Mtgdb.Ui
 					_keywordSearcher.Load();
 			});
 
-			AddTask(async () =>
+			AddTask(async token =>
 			{
-				while (!_repository.IsFileLoadingComplete)
-					await Task.Delay(50);
-
+				await _repository.IsFileLoadingComplete.Wait(token);
 				_repository.Load();
 
-				while (!_imageRepository.IsLoadingZoomComplete)
-					await Task.Delay(50);
-
+				await _imageRepository.IsLoadingZoomComplete.Wait(token);
 				_localizationRepository.LoadFile();
 				_localizationRepository.Load();
 
@@ -122,11 +105,11 @@ namespace Mtgdb.Ui
 		private readonly LocalizationRepository _localizationRepository;
 		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
-		private readonly IApplication _application;
+		private readonly IApplication _app;
 		private bool _indexesUpToDate;
 
-		private readonly IList<Func<Task>> _loadingTasks = new List<Func<Task>>();
-		private readonly IList<Action> _loadingActions = new List<Action>();
+		private readonly IList<Func<CancellationToken, Task>> _loadingTasks =
+			new List<Func<CancellationToken, Task>>();
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

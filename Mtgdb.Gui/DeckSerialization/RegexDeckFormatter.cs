@@ -75,7 +75,7 @@ namespace Mtgdb.Gui
 
 		public string ExportDeck(string name, Deck current)
 		{
-			if (!Repo.IsLoadingComplete)
+			if (!Repo.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException();
 
 			var deckToExport = DeckConverter.ConvertDeck(current,

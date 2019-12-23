@@ -14,7 +14,7 @@ namespace Mtgdb.Data.Model
 
 		public Deck Transform(Deck original, CollectionSnapshot collection, Deck previousTransformed = null, HashSet<string> affectedNames = null)
 		{
-			if (!_repo.IsLoadingComplete)
+			if (!_repo.IsLoadingComplete.Signaled)
 				return original;
 
 			var target = Deck.Create();

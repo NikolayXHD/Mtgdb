@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationExtension.cs" />
     <Compile Include="Collection\CollectionEditorModel.cs" />
     <Compile Include="Collection\CollectionSnapshot.cs" />
     <Compile Include="Deck\CollectionChangedEventHandler.cs" />

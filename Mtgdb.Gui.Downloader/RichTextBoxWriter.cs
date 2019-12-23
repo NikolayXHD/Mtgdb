@@ -21,7 +21,7 @@ namespace Mtgdb.Downloader
 					await Task.Delay(200, _cts.Token);
 					flush();
 				}
-			});
+			}, _cts.Token);
 		}
 
 		protected override void Dispose(bool disposing)

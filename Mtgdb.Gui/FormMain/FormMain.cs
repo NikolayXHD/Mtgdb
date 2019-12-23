@@ -208,7 +208,7 @@ namespace Mtgdb.Gui
 			else
 				buttons.ForEach(b => b.Visible = false);
 
-			buttons.ForEach(b => b.Enabled = _cardRepo.IsLoadingComplete);
+			buttons.ForEach(b => b.Enabled = _cardRepo.IsLoadingComplete.Signaled);
 		}
 
 		private void updateShowProhibited()
@@ -370,7 +370,7 @@ namespace Mtgdb.Gui
 			{
 				_imagePreloading.Reset();
 				_viewCards.RefreshData();
-				if (_requiredScroll.HasValue && _cardRepo.IsLoadingComplete)
+				if (_requiredScroll.HasValue && _cardRepo.IsLoadingComplete.Signaled)
 				{
 					_viewCards.ScrollTo(_requiredScroll.Value);
 					_requiredScroll = null;
@@ -948,7 +948,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveDeck()
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var saved = _serialization.SaveDeck(_history.Current.Deck);
@@ -963,7 +963,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadDeck()
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var files = _serialization.SelectDeckFiles();
@@ -976,7 +976,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonSaveCollection()
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var saved = _serialization.SaveCollection(_history.Current.CollectionModel);
@@ -987,7 +987,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonLoadCollection()
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			var loaded = _serialization.LoadCollection();
@@ -1032,7 +1032,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPrint()
 		{
-			if (_cardRepo.IsLoadingComplete)
+			if (_cardRepo.IsLoadingComplete.Signaled)
 				_printing.ShowPrintingDialog(_deckEditor, _deckEditor.DeckName);
 		}
 

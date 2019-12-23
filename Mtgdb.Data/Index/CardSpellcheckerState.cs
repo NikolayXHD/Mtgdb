@@ -20,7 +20,7 @@ namespace Mtgdb.Data.Index
 
 		protected override IEnumerable<Card> GetObjectsToIndex()
 		{
-			if (!_repo.IsLocalizationLoadingComplete)
+			if (!_repo.IsLocalizationLoadingComplete.Signaled)
 				throw new InvalidOperationException();
 
 			return _repo.SetsByCode.Values.SelectMany(_ => _.Cards);

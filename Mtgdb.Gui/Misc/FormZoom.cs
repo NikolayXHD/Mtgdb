@@ -11,6 +11,7 @@ using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Gui.Properties;
+using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
@@ -27,12 +28,14 @@ namespace Mtgdb.Gui
 		public FormZoom(
 			CardRepository cardRepository,
 			ImageRepository imageRepository,
-			ImageLoader imageLoader)
+			ImageLoader imageLoader,
+			IApplication app)
 			: this()
 		{
 			_cardRepository = cardRepository;
 			_imageRepository = imageRepository;
 			_imageLoader = imageLoader;
+			_app = app;
 
 			BackgroundImageLayout = ImageLayout.Zoom;
 			TransparencyKey = BackColor = _defaultBgColor;
@@ -169,21 +172,20 @@ namespace Mtgdb.Gui
 
 		private async Task loadImages(CancellationToken token)
 		{
-			bool repoLoadingComplete = isRepoLoadingComplete();
+			bool repoLoadingComplete =
+				_imageRepository.IsLoadingArtComplete.Signaled &&
+				_imageRepository.IsLoadingZoomComplete.Signaled;
+
 			await load(token);
 
 			if (repoLoadingComplete)
 				return;
 
-			while (!isRepoLoadingComplete() && !token.IsCancellationRequested)
-				await Task.Delay(100, token);
+			await _app.WaitAll(
+				_imageRepository.IsLoadingArtComplete,
+				_imageRepository.IsLoadingZoomComplete);
 
 			await load(token);
-		}
-
-		private bool isRepoLoadingComplete()
-		{
-			return _imageRepository.IsLoadingArtComplete && _imageRepository.IsLoadingZoomComplete;
 		}
 
 		private async Task load(CancellationToken token)
@@ -435,6 +437,7 @@ namespace Mtgdb.Gui
 		private readonly CardRepository _cardRepository;
 		private readonly ImageRepository _imageRepository;
 		private readonly ImageLoader _imageLoader;
+		private readonly IApplication _app;
 		private int _imageIndex;
 		private Bitmap _image;
 

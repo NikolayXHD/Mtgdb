@@ -47,6 +47,8 @@ namespace Mtgdb.Data
 
 			_directories = directories;
 			_files = files;
+
+			IsLoadingSmallFileComplete.Signal();
 		}
 
 		private void loadFilesZoom(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
@@ -58,6 +60,8 @@ namespace Mtgdb.Data
 
 			_directoriesZoom = directories;
 			_filesZoom = files;
+
+			IsLoadingZoomFileComplete.Signal();
 		}
 
 		private void loadFilesArt(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
@@ -69,6 +73,8 @@ namespace Mtgdb.Data
 
 			_directoriesArt = directories;
 			_filesArt = files;
+
+			IsLoadingArtFileComplete.Signal();
 		}
 
 
@@ -126,7 +132,7 @@ namespace Mtgdb.Data
 
 		public void LoadSmall()
 		{
-			if (!IsLoadingSmallFileComplete)
+			if (!IsLoadingSmallFileComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(LoadFilesSmall)} must be executed first");
 
 			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
@@ -134,11 +140,13 @@ namespace Mtgdb.Data
 			load(models, _directories, _files);
 
 			_modelsByNameBySetByVariant = models;
+
+			IsLoadingSmallComplete.Signal();
 		}
 
 		public void LoadZoom()
 		{
-			if (!IsLoadingZoomFileComplete)
+			if (!IsLoadingZoomFileComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(LoadFilesZoom)} must be executed first");
 
 			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
@@ -146,11 +154,13 @@ namespace Mtgdb.Data
 			load(models, _directoriesZoom, _filesZoom);
 
 			_modelsByNameBySetByVariantZoom = models;
+
+			IsLoadingZoomComplete.Signal();
 		}
 
 		public void LoadArt()
 		{
-			if (!IsLoadingArtFileComplete)
+			if (!IsLoadingArtFileComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(LoadFilesArt)} must be executed first");
 
 			var models = new Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>>(Str.Comparer);
@@ -158,6 +168,8 @@ namespace Mtgdb.Data
 			load(models, _directoriesArt, _filesArt, isArt: true);
 
 			_modelsByNameBySetByVariantArt = models;
+
+			IsLoadingArtComplete.Signal();
 		}
 
 		private static void load(
@@ -380,7 +392,7 @@ namespace Mtgdb.Data
 		{
 			IReadOnlyList<ImageModel> result;
 
-			if (IsLoadingZoomComplete)
+			if (IsLoadingZoomComplete.Signaled)
 			{
 				result = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantZoom);
 
@@ -394,7 +406,7 @@ namespace Mtgdb.Data
 
 		public IReadOnlyList<ImageModel> GetArts(Card card, Func<string, string, string> setCodePreference)
 		{
-			if (!IsLoadingArtComplete)
+			if (!IsLoadingArtComplete.Signaled)
 				return null;
 
 			var models = getImageModels(card, setCodePreference, _modelsByNameBySetByVariantArt);
@@ -562,13 +574,13 @@ namespace Mtgdb.Data
 		}
 
 
-		public bool IsLoadingSmallComplete => _modelsByNameBySetByVariant != null;
-		public bool IsLoadingZoomComplete => _modelsByNameBySetByVariantZoom != null;
-		public bool IsLoadingArtComplete => _modelsByNameBySetByVariantArt != null;
+		public AsyncSignal IsLoadingSmallComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLoadingZoomComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLoadingArtComplete { get; } = new AsyncSignal();
 
-		private bool IsLoadingSmallFileComplete => _files != null && _directories != null;
-		private bool IsLoadingZoomFileComplete => _filesZoom != null && _directoriesZoom != null;
-		private bool IsLoadingArtFileComplete => _filesArt != null && _directoriesArt != null;
+		private AsyncSignal IsLoadingSmallFileComplete { get; } = new AsyncSignal();
+		private AsyncSignal IsLoadingZoomFileComplete { get; } = new AsyncSignal();
+		private AsyncSignal IsLoadingArtFileComplete { get; } = new AsyncSignal();
 
 
 		private HashSet<string> _files;

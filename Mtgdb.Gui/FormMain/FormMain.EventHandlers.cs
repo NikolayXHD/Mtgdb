@@ -213,20 +213,16 @@ namespace Mtgdb.Gui
 
 		private void subscribeCardRepoEvents()
 		{
+			_app.When(_cardRepo.IsLocalizationLoadingComplete)
+				.Run(localizationLoadingComplete);
+			_app.When(_cardRepo.IsLoadingComplete)
+				.Run(repoLoadingComplete);
 			_cardRepo.SetAdded += cardRepoSetAdded;
-			_cardRepo.LocalizationLoadingComplete += localizationLoadingComplete;
-
-			if (_cardRepo.IsLoadingComplete)
-				repoLoadingComplete();
-			else
-				_cardRepo.LoadingComplete += repoLoadingComplete;
 		}
 
 		private void unsubscribeCardRepoEvents()
 		{
 			_cardRepo.SetAdded -= cardRepoSetAdded;
-			_cardRepo.LoadingComplete -= repoLoadingComplete;
-			_cardRepo.LocalizationLoadingComplete -= localizationLoadingComplete;
 		}
 
 
@@ -474,7 +470,7 @@ namespace Mtgdb.Gui
 			{
 				_imagePreloading.Reset();
 
-				if (_cardRepo.IsLoadingComplete)
+				if (_cardRepo.IsLoadingComplete.Signaled)
 					_history.Current.SearchResultScroll = _viewCards.CardIndex;
 			}
 
@@ -822,7 +818,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandNew(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			_deckEditor.NewSampleHand(_cardRepo);
@@ -830,7 +826,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandMulligan(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			_deckEditor.Mulligan(_cardRepo);
@@ -838,7 +834,7 @@ namespace Mtgdb.Gui
 
 		private void sampleHandDraw(object sender, EventArgs e)
 		{
-			if (!_cardRepo.IsLoadingComplete)
+			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
 			_deckEditor.Draw(_cardRepo);

@@ -209,7 +209,7 @@ namespace Mtgdb.Data.Model
 				if (_legalFormatsCache != null)
 					return _legalFormatsCache;
 
-				if (!_repo.IsLoadingComplete)
+				if (!_repo.IsLoadingComplete.Signaled)
 					return ReadOnlyList.Empty<string>();
 
 				bool isAllowedIn(string format, string id, int count)
@@ -347,7 +347,7 @@ namespace Mtgdb.Data.Model
 
 		public void FillCardNames()
 		{
-			bool isRepoLoaded = _repo.IsLoadingComplete;
+			bool isRepoLoaded = _repo.IsLoadingComplete.Signaled;
 
 			if (_cardNames == null && isRepoLoaded)
 				_cardNames = new HashSet<string>(Str.Comparer);

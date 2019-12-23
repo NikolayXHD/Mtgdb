@@ -38,7 +38,7 @@ namespace Mtgdb.Data
 			Patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(PatchFile));
 			Patch.IgnoreCase();
 
-			IsFileLoadingComplete = true;
+			IsFileLoadingComplete.Signal();
 		}
 
 		private IEnumerable<Set> deserializeSets()
@@ -172,8 +172,7 @@ namespace Mtgdb.Data
 
 			patchLegality();
 
-			IsLoadingComplete = true;
-			LoadingComplete?.Invoke();
+			IsLoadingComplete.Signal();
 
 			// release RAM
 			_defaultSetsContent = null;
@@ -368,19 +367,15 @@ namespace Mtgdb.Data
 				//}
 			}
 
-			IsLocalizationLoadingComplete = true;
-			LocalizationLoadingComplete?.Invoke();
+			IsLocalizationLoadingComplete.Signal();
 		}
 
 
 
 		public event Action SetAdded;
-		public event Action LoadingComplete;
-		public event Action LocalizationLoadingComplete;
-
-		public bool IsFileLoadingComplete { get; private set; }
-		public bool IsLoadingComplete { get; private set; }
-		public bool IsLocalizationLoadingComplete { get; private set; }
+		public AsyncSignal IsFileLoadingComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLoadingComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLocalizationLoadingComplete { get; } = new AsyncSignal();
 
 		internal string SetsFile { get; set; }
 		private string PricesFile { get; set; }
