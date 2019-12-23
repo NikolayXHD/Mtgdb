@@ -9,15 +9,9 @@ namespace Mtgdb.Data
 	[JsonObject]
 	public class Set
 	{
-		/// <summary>
-		/// The name of the set
-		/// </summary>
 		[JsonProperty("name")]
 		public string Name { get; set; }
 
-		/// <summary>
-		/// The set's abbreviated code
-		/// </summary>
 		[JsonProperty("code")]
 		public string Code { get; set; }
 
@@ -27,24 +21,18 @@ namespace Mtgdb.Data
 		[JsonProperty("releaseDate")]
 		public string ReleaseDate { get; set; }
 
-		/// <summary>
-		/// The cards in the set
-		/// </summary>
 		[JsonProperty("cards")]
 		public IList<Card> Cards { get; set; }
+
+		[JsonProperty("cards")]
+		public IList<Card> Tokens { get; set; }
 
 		[JsonIgnore]
 		public Dictionary<string, List<Card>> CardsByName { get; set; }
 
-		public override string ToString()
-		{
-			return $"{Code}: {Name}";
-		}
-
-		// [JsonProperty("tokens")]
-		// public IList<Token> Tokens { get; set; }
-
-/*
+		public override string ToString() =>
+			$"{Code}: {Name} {Cards?.Count ?? 0}+{Tokens?.Count ?? 0} {ReleaseDate}";
+		/*
 block	string
 isOnlineOnly	bool
 meta	object	{"date": "2018-10-13","version": "4.0.0"}

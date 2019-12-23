@@ -122,6 +122,14 @@ namespace Mtgdb.Data
 					preProcessCard(card);
 				}
 
+				for (int i = 0; i < set.Tokens.Count; i++)
+				{
+					var token = set.Tokens[i];
+					token.Set = set;
+					token.Id = CardId.Generate(token);
+					preProcessCardOrToken(token);
+				}
+
 				for (int i = set.Cards.Count - 1; i >= 0; i--)
 					if (set.Cards[i].Remove)
 						set.Cards.RemoveAt(i);
@@ -217,6 +225,17 @@ namespace Mtgdb.Data
 			if (Patch.Cards.TryGetValue(card.NameEn, out patch) && (string.IsNullOrEmpty(patch.Set) || Str.Equals(patch.Set, card.SetCode)))
 				card.Patch(patch);
 
+			preProcessCardOrToken(card);
+
+			if (!string.IsNullOrEmpty(card.OriginalText) && Str.Equals(card.OriginalText, card.TextEn))
+				card.OriginalText = null;
+
+			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
+				card.OriginalType = null;
+		}
+
+		private static void preProcessCardOrToken(Card card)
+		{
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
 			card.Names = card.Names?.Select(_ => string.Intern(_.RemoveDiacritics())).ToList();
 
@@ -245,12 +264,6 @@ namespace Mtgdb.Data
 			card.Color = card.ColorsArr != null && card.ColorsArr.Count > 0
 				? string.Intern(string.Join(" ", card.ColorsArr))
 				: "Colorless";
-
-			if (!string.IsNullOrEmpty(card.OriginalText) && Str.Equals(card.OriginalText, card.TextEn))
-				card.OriginalText = null;
-
-			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
-				card.OriginalType = null;
 		}
 
 		private void patchLegality()
