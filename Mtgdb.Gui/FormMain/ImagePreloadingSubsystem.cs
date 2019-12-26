@@ -34,13 +34,13 @@ namespace Mtgdb.Gui
 				throw new InvalidOperationException("Already started");
 
 			var cts = new CancellationTokenSource();
-			Task.Run(async () =>
+			cts.Token.Run(async token =>
 			{
-				while (!cts.IsCancellationRequested)
+				while (!token.IsCancellationRequested)
 				{
 					if (_cardsToPreloadImage == null || _cardsToPreloadImage == _cardsToPreloadImageStarted)
 					{
-						await Task.Delay(200, cts.Token);
+						await Task.Delay(200, token);
 						continue;
 					}
 
@@ -54,7 +54,7 @@ namespace Mtgdb.Gui
 						card.PreloadImage(Ui);
 					}
 				}
-			}, cts.Token);
+			});
 
 			_cts = cts;
 		}

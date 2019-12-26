@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Downloader
 {
@@ -10,32 +13,33 @@ namespace Mtgdb.Downloader
 		private readonly ImageSourcesConfig _config;
 		private readonly Megatools _megatools;
 
+		[UsedImplicitly] // by ninject
 		public ImageDownloadProgressReader(ImageSourcesConfig config, Megatools megatools)
 		{
 			_config = config;
 			_megatools = megatools;
 		}
 
-		public void DownloadSignatures(string quality)
+		public async Task DownloadSignatures(string quality, CancellationToken token)
 		{
 			foreach (var qualityGroup in _config.QualityGroups)
 			{
 				if (!Str.Equals(quality, qualityGroup.Quality))
 					continue;
 
-				downloadSignatures(qualityGroup);
+				await downloadSignatures(qualityGroup, token);
 			}
 		}
 
 		public bool SignaturesFileExist(QualityGroupConfig qualityGroup) =>
 			File.Exists(getSignaturesFile(qualityGroup).File);
 
-		private void downloadSignatures(QualityGroupConfig qualityGroup)
+		private async Task downloadSignatures(QualityGroupConfig qualityGroup, CancellationToken token)
 		{
 			if (qualityGroup.FileListMegaId == null && qualityGroup.FileListGdriveId == null)
 				return;
 
-			var (signaturesDir, signaturesFile) = getSignaturesFile(qualityGroup);
+			(string signaturesDir, string signaturesFile) = getSignaturesFile(qualityGroup);
 			string signaturesFileBak = signaturesFile + ".bak";
 
 			if (File.Exists(signaturesFile))
@@ -49,23 +53,30 @@ namespace Mtgdb.Downloader
 			if (qualityGroup.FileListMegaId != null)
 			{
 				string megaUrl = _config.MegaPrefix + qualityGroup.FileListMegaId;
-				_megatools.Download(megaUrl, signaturesDir, $"Signatures for {qualityGroup.Quality} images", silent: true);
+				await _megatools.Download(megaUrl, signaturesDir,
+					name: $"Signatures for {qualityGroup.Quality} images", silent: true, token: token);
 			}
 			else if (qualityGroup.FileListGdriveId != null)
 			{
-				var webClient = new WebClientBase();
+				var webClient = new GdriveWebClient();
 				string gdriveUrl = _config.GdrivePrefix + qualityGroup.FileListGdriveId;
 				string fileListArchive = signaturesDir.AddPath("filelist.7z");
-				Console.WriteLine($"Downloading {fileListArchive} from {gdriveUrl}");
-				webClient.DownloadFile(gdriveUrl, fileListArchive);
-				new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
+				Console.Write($"Downloading {fileListArchive} from {gdriveUrl} ... ");
+				await webClient.DownloadFromGdrive(gdriveUrl, signaturesDir, token);
+				if (File.Exists(fileListArchive))
+				{
+					Console.WriteLine("done");
+					new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
+				}
+				else
+					Console.WriteLine("FAILED");
 			}
 
 			if (!File.Exists(signaturesFile))
 			{
 				if (File.Exists(signaturesFileBak))
 				{
-					Console.WriteLine("Failed to download signatures");
+					Console.WriteLine("Failed to unzip signatures");
 
 					Console.WriteLine("Move {0} {1}", signaturesFileBak, signaturesFile);
 					File.Move(signaturesFileBak, signaturesFile);
@@ -104,8 +115,7 @@ namespace Mtgdb.Downloader
 		public static void WriteExistingSignatures(ImageDownloadProgress progress, IEnumerable<FileSignature> signatures = null)
 		{
 			string targetSubdirectory = progress.TargetSubdirectory;
-
-			var existingSignaturesFile = Path.Combine(targetSubdirectory, Signer.SignaturesFile);
+			string existingSignaturesFile = Path.Combine(targetSubdirectory, Signer.SignaturesFile);
 
 			signatures ??= Signer.CreateSignatures(targetSubdirectory);
 			Signer.WriteToFile(existingSignaturesFile, signatures);

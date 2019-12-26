@@ -37,6 +37,7 @@ namespace Mtgdb.Controls
 			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
 			MouseMove += mouseMove;
+			_ctsLifetime = new CancellationTokenSource();
 		}
 
 		private void makeProhibitedValuesIgnored()
@@ -647,13 +648,13 @@ namespace Mtgdb.Controls
 			var left = DateTime.Now;
 			_mouseLeft = left;
 
-			Task.Run(async () =>
+			_ctsLifetime.Token.Run(async token =>
 			{
-				await Task.Delay(TimeSpan.FromMilliseconds(200), CancellationToken);
+				await Task.Delay(TimeSpan.FromMilliseconds(200), token);
 
 				if (_mouseLeft == left)
 					this.Invoke(Invalidate);
-			}, CancellationToken);
+			});
 		}
 
 		private void mouseMove(object sender, MouseEventArgs e)
@@ -694,6 +695,13 @@ namespace Mtgdb.Controls
 			}
 		}
 
+
+
+		protected override void Dispose(bool disposing)
+		{
+			_ctsLifetime.Cancel();
+			base.Dispose(disposing);
+		}
 
 
 		[Category("Settings")]
@@ -1041,8 +1049,6 @@ namespace Mtgdb.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int Border => (int) Math.Ceiling(SelectionBorder);
 
-		public CancellationToken CancellationToken { private get; set; } = CancellationToken.None;
-
 		private const float OpacityEnabled = 1.00f;
 		private const float OpacityToEnable = 0.90f;
 		private const float OpacityToDisable = 0.30f;
@@ -1084,5 +1090,6 @@ namespace Mtgdb.Controls
 		private bool _isVertical;
 		private bool _isFlipped;
 		private IList<string> _properties;
+		private readonly CancellationTokenSource _ctsLifetime;
 	}
 }

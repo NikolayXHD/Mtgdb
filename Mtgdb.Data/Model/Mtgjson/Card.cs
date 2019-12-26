@@ -494,7 +494,7 @@ namespace Mtgdb.Data
 		{
 			var builder = new StringBuilder();
 
-			builder.AppendLine($"{ManaCost} {NameEn}");
+			builder.AppendLine($"{ManaCost} {NameEn} {SetCode}");
 			builder.Append($"{TypeEn} {Layout}");
 
 			if (LoyaltyNum.HasValue)
@@ -629,6 +629,9 @@ namespace Mtgdb.Data
 
 			if (patch.Type != null)
 				TypeEn = patch.Type;
+
+			if (patch.OriginalText != null)
+				OriginalText = patch.OriginalText;
 
 			if (patch.OriginalType != null)
 				OriginalType = patch.OriginalType;

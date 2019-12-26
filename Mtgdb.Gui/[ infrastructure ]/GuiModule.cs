@@ -77,7 +77,7 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<IApplication>()
+			Kernel.Rebind<IApplication>()
 				.ToMethod(ctx => ctx.Kernel.Get<App>())
 				.InSingletonScope();
 

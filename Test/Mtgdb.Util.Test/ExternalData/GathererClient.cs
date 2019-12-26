@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Mtgdb.Data;
@@ -23,29 +25,28 @@ namespace Mtgdb.Util
 			_repo = repo;
 		}
 
-		public void DownloadTranslations(string targetDir)
+		public async Task DownloadTranslations(string targetDir, CancellationToken token)
 		{
 			var idsArray = getMultiverseIds();
 
 			for (int i = 0; i < idsArray.Length; i++)
 			{
 				int id = idsArray[i];
-				DownloadTranslation(targetDir, id);
+				await DownloadTranslation(targetDir, id, token);
 
 				if (i % 1000 == 0)
 					_log.Info($"downloaded {i} / {idsArray.Length}");
 			}
 		}
 
-		public void DownloadTranslation(string targetDir, int id)
+		public async Task DownloadTranslation(string targetDir, int id, CancellationToken token)
 		{
 			string targetFile = Path.Combine(targetDir, id + ".html");
+			if (File.Exists(targetFile))
+				return;
 
-			if (!File.Exists(targetFile))
-			{
-				var page = DownloadCardPage(id);
-				File.WriteAllText(targetFile, page);
-			}
+			var page = await DownloadCardPage(id, token);
+			File.WriteAllText(targetFile, page);
 		}
 
 		public void ParseTranslations(string downloadedDir, string parsedDir)
@@ -161,14 +162,11 @@ namespace Mtgdb.Util
 			return idsArray;
 		}
 
-		public void DownloadCardImage(int multiverseId, string targetFile) =>
-			DownloadFile(BaseUrl + ImagePath + multiverseId, targetFile);
+		public Task DownloadCardImage(int multiverseId, string targetFile, CancellationToken token) =>
+			DownloadFile(BaseUrl + ImagePath + multiverseId, targetFile, token);
 
-		public string DownloadCardPage(int multiverseId)
-		{
-			string pageText = DownloadString(BaseUrl + TranslationPath + multiverseId);
-			return pageText;
-		}
+		public Task<string> DownloadCardPage(int multiverseId, CancellationToken token) =>
+			DownloadString(BaseUrl + TranslationPath + multiverseId, token);
 
 		public IEnumerable<Translation> ParseCardPage(string pageText)
 		{

@@ -178,7 +178,7 @@ namespace Mtgdb.Test
 		//
 		[TestCase(@"Text: *cascad* AND NOT Keywords: cascade AND NOT Name: ""Skyline Cascade""")]
 		[TestCase(@"Text: (cast* AND NOT (caste OR caster OR castle OR castaway* OR castigator)) AND NOT Keywords: cast")]
-		[TestCase(@"Text: *champion* AND NOT Keywords: champion AND NOT Name: champion")]
+		[TestCase(@"Text: (*champion* AND NOT championship) AND NOT Keywords: champion AND NOT Name: champion")]
 		[TestCase(@"Text: *changeling* AND NOT Keywords: changeling")]
 		[TestCase(@"Text: *cipher* AND NOT Keywords: cipher")]
 		[TestCase(@"Text: *cohort* AND NOT Keywords: cohort AND NOT Name: cohort")]
@@ -186,7 +186,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *convok* AND NOT Keywords: convoke")]
 		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia) AND NOT Keywords: copy")]
 		//
-		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/[0-9]/ OR poison OR energy OR experience OR lore OR another) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
+		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/[0-9]/ OR poison OR energy OR experience OR lore OR another OR spark OR have) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
 		[TestCase(@"Keywords: counter AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (instant OR creature OR >) (/spells?/ OR /abilit(y|ies)/)""~5) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
 		//
 		[TestCase(@"Text: (*creat* AND NOT *creature* AND NOT creativity) AND NOT Keywords: ""create token""")]
@@ -195,9 +195,9 @@ namespace Mtgdb.Test
 		[TestCase(@"Keywords: crew AND NOT Text: (""crew /[0-9]/"" OR ""/crews?/ (a OR >) /vehicles?/"")")]
 		//
 		[TestCase(@"Text: (cumulativ* AND upkeep*) AND NOT Keywords: ""cumulative upkeep""")]
-		[TestCase(@"Text: (*cycl* AND NOT (cyclo*)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler OR ""growth cycle"")")]
+		[TestCase(@"Text: (*cycl* AND NOT (cyclo* OR recycla)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler OR ""growth cycle"")")]
 		[TestCase(@"Keywords: cycling AND NOT Text: (*cycling OR ""cycles a card"" OR ""can't cycle cards"" OR ""cycle or discard a card"" OR ""cycled or discarded"")")]
-		[TestCase(@"Text: *dash* AND NOT Keywords: dash AND NOT Name: (dash OR dasher)")]
+		[TestCase(@"Text: *dash* AND NOT Keywords: dash AND NOT Name: (dash OR dasher)  AND NOT Text: ""rainbow dash""")]
 		[TestCase(@"Text: *deathtouch* AND NOT Keywords: deathtouch")]
 		[TestCase(@"Text: *defender* AND NOT Keywords: defender AND NOT Name: defender*")]
 		[TestCase(@"Text: *delirium* AND NOT Keywords: delirium")]

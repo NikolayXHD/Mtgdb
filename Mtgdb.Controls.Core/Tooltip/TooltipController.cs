@@ -4,17 +4,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
 	public class TooltipController
 	{
-		public event Action<TooltipModel> TooltipShown;
-		public event Action<TooltipModel> TooltipHidden;
-
+		[UsedImplicitly] // by ninject
 		public TooltipController(TooltipForm form)
 		{
-			HideCounter = 0;
 			_tooltipForm = form;
 			_tooltipForm.Show();
 		}
@@ -128,7 +126,7 @@ namespace Mtgdb.Controls
 				throw new InvalidOperationException("Already started");
 
 			var cts = new CancellationTokenSource();
-			Task.Run( () => updateTooltipLoop(cts.Token), cts.Token);
+			cts.Token.Run(updateTooltipLoop);
 
 			_cts = cts;
 		}
@@ -211,8 +209,6 @@ namespace Mtgdb.Controls
 			curr.Control.Invoke(delegate
 			{
 				_tooltipForm.ShowTooltip(curr);
-				ShowCounter++;
-				TooltipShown?.Invoke(curr);
 			});
 		}
 
@@ -221,8 +217,6 @@ namespace Mtgdb.Controls
 			prev.Control.Invoke(delegate
 			{
 				_tooltipForm.HideTooltip();
-				HideCounter++;
-				TooltipHidden?.Invoke(prev);
 			});
 		}
 
@@ -291,9 +285,6 @@ namespace Mtgdb.Controls
 		}
 
 
-		public int ShowCounter { get; private set; }
-		public int HideCounter { get; private set; }
-
 		private bool IsActive => Active != Alt;
 		private bool Alt => ToggleOnAlt && (Control.ModifierKeys == Keys.Alt || Control.ModifierKeys == Keys.Control);
 
@@ -303,7 +294,7 @@ namespace Mtgdb.Controls
 
 
 		public int DelayMs { get; set; } = 150;
-		public int IntervalMs { get; set; } = 50;
+		private int IntervalMs { get; set; } = 50;
 
 		private readonly Dictionary<Control, StaticTooltipSettings> _staticTooltips = new Dictionary<Control, StaticTooltipSettings>();
 		private readonly HashSet<ICustomTooltip> _customTooltips = new HashSet<ICustomTooltip>();
@@ -315,8 +306,7 @@ namespace Mtgdb.Controls
 		private readonly TooltipForm _tooltipForm;
 		private bool _active = true;
 
-		private static readonly TooltipModel _emptyTooltip = new TooltipModel();
-
 		private CancellationTokenSource _cts;
+		private static readonly TooltipModel _emptyTooltip = new TooltipModel();
 	}
 }

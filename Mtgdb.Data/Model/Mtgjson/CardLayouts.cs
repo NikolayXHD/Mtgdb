@@ -26,14 +26,13 @@ namespace Mtgdb.Data
 		private static readonly HashSet<string> _doubleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
 			{
-				Aftermath, Split, Transform, Flip
+				Aftermath, Split, Transform, Flip, Adventure,
 			};
 
 		private static readonly HashSet<string> _singleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
 			{
 				Normal, Leveler, Phenomenon, Plane, Scheme, Vanguard, Saga, Host, Augment,
-				Adventure,
 			};
 
 		private static readonly HashSet<string> _allLayouts =

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using JetBrains.Annotations;
@@ -28,7 +29,8 @@ namespace Mtgdb.Downloader
 			NewsService newsService,
 			ImageRepository imageRepository,
 			CardRepository cardRepository,
-			ImageLoader imageLoader)
+			ImageLoader imageLoader,
+			IApplication app)
 			:this()
 		{
 			_installer = installer;
@@ -38,6 +40,7 @@ namespace Mtgdb.Downloader
 			_imageRepository = imageRepository;
 			_cardRepository = cardRepository;
 			_imageLoader = imageLoader;
+			_app = app;
 
 			_buttonApp.Pressed += appClick;
 			_buttonImgLq.Pressed += imgLqClick;
@@ -134,22 +137,22 @@ namespace Mtgdb.Downloader
 
 		private void mtgjsonClick(object sender, EventArgs e)
 		{
-			Task.Run(() =>
+			_app.CancellationToken.Run(async token =>
 			{
 				setButtonsEnabled(false);
 				Console.WriteLine();
-				_installer.DownloadMtgjson();
+				await _installer.DownloadMtgjson(token);
 				setButtonsEnabled(true);
 			});
 		}
 
 		private void pricesClick(object sender, EventArgs e)
 		{
-			Task.Run(() =>
+			_app.CancellationToken.Run(async token =>
 			{
 				setButtonsEnabled(false);
 				Console.WriteLine();
-				_installer.DownloadPrices();
+				await _installer.DownloadPrices(token);
 				setButtonsEnabled(true);
 			});
 		}
@@ -157,36 +160,34 @@ namespace Mtgdb.Downloader
 		private void appClick(object sender, EventArgs e)
 		{
 			if (!_appVersionOnlineChecked)
-				Task.Run(checkNewVersion);
+				_app.CancellationToken.Run(checkNewVersion);
 			else if (_appVersionDownloaded == null)
-				Task.Run(downloadNewVersion);
+				_app.CancellationToken.Run(downloadNewVersion);
 			else
-				Task.Run(installNewVersion);
+				_app.CancellationToken.Run(token => installNewVersion());
 		}
 
 		private void notificationsClick(object sender, EventArgs e)
 		{
 			setButtonsEnabled(false);
-
-			Task.Run(() =>
+			_app.CancellationToken.Run(async token =>
 			{
-				_newsService.FetchNews(repeatViewed: true);
+				await _newsService.FetchNews(repeatViewed: true, token);
 				_newsService.DisplayNews();
-
 				setButtonsEnabled(true);
 			});
 		}
 
 
 
-		private void checkNewVersion()
+		private async Task checkNewVersion(CancellationToken token)
 		{
 			setButtonsEnabled(false);
 
 			Console.WriteLine();
 			Console.WriteLine("Checking version online");
 
-			var appVersionOnline = getAppVersionOnline();
+			var appVersionOnline = await getAppVersionOnline(token);
 			var appVersionDownloaded = getAppVersionDownloaded();
 
 			setButtonsEnabled(true);
@@ -199,7 +200,7 @@ namespace Mtgdb.Downloader
 				suggestInstallApp(appVersionDownloaded);
 		}
 
-		private void downloadNewVersion()
+		private async Task downloadNewVersion(CancellationToken token)
 		{
 			if (_appVersionOnline == null)
 				throw new InvalidOperationException("There is no online version to download");
@@ -207,7 +208,7 @@ namespace Mtgdb.Downloader
 			setButtonsEnabled(false);
 
 			Console.WriteLine();
-			_installer.DownloadApp();
+			await _installer.DownloadApp(token);
 			bool downloadSuccess = _installer.ValidateDownloadedApp();
 
 			setButtonsEnabled(true);
@@ -319,9 +320,9 @@ namespace Mtgdb.Downloader
 
 
 
-		private string getAppVersionOnline()
+		private async Task<string> getAppVersionOnline(CancellationToken token)
 		{
-			_installer.DownloadAppSignature();
+			await _installer.DownloadAppSignature(token);
 			string result = _installer.AppOnlineSignature?.Path;
 			Console.WriteLine("Online version: {0}", result ?? "None");
 			return result;
@@ -353,17 +354,17 @@ namespace Mtgdb.Downloader
 			}
 			else
 			{
-				Task.Run(() =>
+				_app.CancellationToken.Run(async token =>
 				{
 					setButtonsEnabled(false);
 					suggestAbortImageDownloading((ButtonBase) sender);
 
 					Console.WriteLine();
 
-					_imageDownloadProgressReader.DownloadSignatures(quality);
+					await _imageDownloadProgressReader.DownloadSignatures(quality, token);
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
 
-					_imageDownloader.Download(quality, ImageDownloadProgress);
+					await _imageDownloader.Download(quality, ImageDownloadProgress, token);
 
 					Console.WriteLine("Looking up downloaded images...");
 					ImageDownloadProgress = _imageDownloadProgressReader.GetProgress();
@@ -560,6 +561,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 		private readonly ImageRepository _imageRepository;
 		private readonly CardRepository _cardRepository;
 		private readonly ImageLoader _imageLoader;
+		private readonly IApplication _app;
 		private readonly VersionComparer _versionComparer = new VersionComparer();
 		private RichTextBoxWriter _consoleWriter;
 	}

@@ -120,11 +120,11 @@ namespace Mtgdb.Ui
 				throw new InvalidOperationException("Already started");
 
 			var cts = new CancellationTokenSource();
-			Task.Run(async () =>
+			cts.Token.Run(async token =>
 			{
 				const int delay = 1000;
 
-				while (!cts.IsCancellationRequested)
+				while (!token.IsCancellationRequested)
 				{
 					updateBackColor();
 
@@ -141,11 +141,11 @@ namespace Mtgdb.Ui
 						deltaMs = delay - (int) (DateTime.Now - _lastUserInput.Value).TotalMilliseconds;
 
 					if (deltaMs > 0)
-						await Task.Delay(deltaMs + 100, cts.Token);
+						await Task.Delay(deltaMs + 100, token);
 					else
 						_parent.Invoke(Apply);
 				}
-			}, cts.Token);
+			});
 
 			_cts = cts;
 		}

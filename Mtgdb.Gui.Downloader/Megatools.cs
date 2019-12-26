@@ -2,34 +2,46 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Downloader
 {
 	public class Megatools
 	{
+		[UsedImplicitly] // by ninject
 		public Megatools(AppSourceConfig config)
 		{
 			_megatoolsUrl = config.MegatoolsUrl;
 		}
 
-		public void Download(string storageUrl, string targetDirectory, string name, bool silent = false, int? timeoutSec = null)
+		public async Task Download(string storageUrl, string targetDirectory, string name, CancellationToken token, bool silent = false, int? timeoutSec = null)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
 
 			_silent = silent;
 
-			lock (_syncSelfdownload)
+			await _syncSelfDownload.WaitAsync(token);
+			try
+			{
 				if (!File.Exists(MegadlExePath))
 				{
 					var webClient = new GdriveWebClient();
-					webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, "megatools.7z");
+					await webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, "megatools.7z", token);
 				}
+			}
+			finally
+			{
+				_syncSelfDownload.Release();
+			}
 
 			DownloadedCount = 0;
 
 			string arguments;
 
+			Directory.CreateDirectory(targetDirectory);
 			if (targetDirectory.Contains(' '))
 				arguments = $@"--path=""{targetDirectory}"" --print-names {storageUrl}";
 			else
@@ -50,7 +62,7 @@ namespace Mtgdb.Downloader
 
 			_process.OutputDataReceived += downloadOutputReceived;
 			_process.ErrorDataReceived += downloadErrorReceived;
-			
+
 			if (!_silent)
 				Console.WriteLine("Downloading {0} from {1} to {2}", name, storageUrl, targetDirectory);
 
@@ -130,7 +142,7 @@ namespace Mtgdb.Downloader
 
 		private Process _process;
 		private bool _silent;
-		private string _megatoolsUrl;
-		private static object _syncSelfdownload = new object();
+		private readonly string _megatoolsUrl;
+		private static readonly SemaphoreSlim _syncSelfDownload = new SemaphoreSlim(1);
 	}
 }

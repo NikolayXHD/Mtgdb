@@ -18,10 +18,11 @@ namespace Mtgdb.Test
 			ImgRepo.LoadZoom();
 		}
 
-		[TestCase(/* skip */ null, /* partial */ "eld,celd")]
-		public void Zoom_images_match_small_ones(
-			string setsToSkipList, string partialSetsList)
+		[TestCase(/* skip */ "", /* partial */ "eld,celd")]
+		public void No_missing_images_And_zoom_images_match_small_ones(string setsToSkipList, string partialSetsList)
 		{
+			// one test for 2 checks for performance reason
+
 			var setsToSkip = setsToSkipList?.Split(',').ToHashSet(Str.Comparer)
 				?? Empty<string>.Set;
 			var partialSets = partialSetsList?.Split(',').ToHashSet(Str.Comparer)
@@ -39,7 +40,14 @@ namespace Mtgdb.Test
 				{
 					if (partialSets.Contains(set.Value.Code) && small == null && noZooms)
 						continue;
-					messages.Add($"{card.SetCode} {card.ImageName}");
+
+					messages.Add($"missing " +
+						string.Join(", ", new[]
+							{
+								small == null ? "small" : null,
+								noZooms ? "zoom" : null
+							}.Where(_ => _ != null)) +
+						$" {card.SetCode} {card.ImageName}");
 				}
 				else
 				{
@@ -96,8 +104,7 @@ namespace Mtgdb.Test
 			"WAR - War of the Spark\\300DPI Cards")]
 		[TestCase("PUMA", GathererDir, "puma")]
 		[TestCase("c19", GathererDir, "c19")]
-		[TestCase("eld", GathererDir, "eld")]
-		[TestCase("celd", GathererDir, "celd")]
+		[TestCase("eld", GathererDir, "eld", "celd")]
 		// ReSharper restore StringLiteralTypo
 		public void Set_images_are_from_expected_directory(
 			string setCode, string baseDir, params string[] expectedSubdirs)

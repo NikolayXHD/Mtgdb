@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationExtension.cs" />
     <Compile Include="Collection\CollectionEditorModel.cs" />
     <Compile Include="Collection\CollectionSnapshot.cs" />
     <Compile Include="Deck\CollectionChangedEventHandler.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Deck\DeckZoneModel.cs" />
     <Compile Include="Deck\Zone.cs" />
     <Compile Include="Deck\DeckZoneSnapshot.cs" />
-    <Compile Include="IApplication.cs" />
     <Compile Include="ISearchSubsystem.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

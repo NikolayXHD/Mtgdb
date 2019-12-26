@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
 using NLog;
@@ -58,12 +60,12 @@ namespace Mtgdb.Downloader
 		}
 
 
-		public void FetchNews() =>
-			FetchNews(repeatViewed: false);
+		public Task FetchNews(CancellationToken token) =>
+			FetchNews(repeatViewed: false, token);
 
-		public void FetchNews(bool repeatViewed)
+		public async Task FetchNews(bool repeatViewed, CancellationToken token)
 		{
-			downloadNews();
+			await downloadNews(token);
 			unpackNews();
 
 			_unreadNews = Directory.GetFiles(_unreadNewsDir, "*.txt", SearchOption.TopDirectoryOnly)
@@ -74,14 +76,14 @@ namespace Mtgdb.Downloader
 			NewsFetched?.Invoke();
 		}
 
-		private void downloadNews()
+		private async Task downloadNews(CancellationToken token)
 		{
 			Console.Write("Fetching update news... ");
 
 			try
 			{
 				var webClient = new WebClientBase();
-				webClient.DownloadFile(_appSourceConfig.NewsUrl, _newsArchive);
+				await webClient.DownloadFile(_appSourceConfig.NewsUrl, _newsArchive, token);
 
 				Console.WriteLine("done");
 			}

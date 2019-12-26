@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using Mtgdb.Downloader;
 
@@ -10,7 +12,7 @@ namespace Mtgdb.Util
 {
 	public static class HelpDownloader
 	{
-		public static void UpdateLocalHelp()
+		public static async Task UpdateLocalHelp()
 		{
 			var helpFileNames = getHelpFileNames();
 
@@ -19,7 +21,7 @@ namespace Mtgdb.Util
 			foreach (string helpFileName in helpFileNames)
 			{
 				var htmlFile = AppDir.Root.AddPath($"help\\{getPageName(helpFileName)}.html");
-				string htmlPage = getHtmlPage(helpFileName, htmlTemplate, helpFileNames);
+				string htmlPage = await getHtmlPage(helpFileName, htmlTemplate, helpFileNames);
 				File.WriteAllText(htmlFile, htmlPage);
 			}
 		}
@@ -39,9 +41,9 @@ namespace Mtgdb.Util
 			return Path.GetFileNameWithoutExtension(helpFile);
 		}
 
-		private static string getHtmlPage(string helpFileName, string htmlTemplate, IList<string> helpFileNames)
+		private static async Task<string> getHtmlPage(string helpFileName, string htmlTemplate, IList<string> helpFileNames)
 		{
-			string completePageContent = getHelpPage(helpFileName);
+			string completePageContent = await getHelpPage(helpFileName);
 			string helpContent = getMainSectionContent(completePageContent);
 
 			helpContent = trimSeoSectionFrom(helpContent);
@@ -96,11 +98,13 @@ namespace Mtgdb.Util
 			return result;
 		}
 
-		private static string getHelpPage(string helpFileName)
+		private static async Task<string> getHelpPage(string helpFileName)
 		{
 			var client = new WebClientBase();
 			string name = Path.GetFileNameWithoutExtension(helpFileName);
-			var pageContent = client.DownloadString("https://github.com/NikolayXHD/Mtgdb/wiki/" + name);
+			var pageContent = await client.DownloadString(
+				"https://github.com/NikolayXHD/Mtgdb/wiki/" + name,
+				CancellationToken.None);
 			return pageContent;
 		}
 

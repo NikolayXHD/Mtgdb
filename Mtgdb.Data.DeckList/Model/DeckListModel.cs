@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
@@ -26,52 +25,40 @@ namespace Mtgdb.Data.Model
 			_repo = repo;
 			_transformation = transformation;
 			_collectionEditor = collection;
-
-			_collectionEditor.CollectionChanged += collectionChanged;
 			_state.Collection = _collectionEditor.Snapshot();
 
-			Serializer = new JsonSerializer();
+			_serializer = new JsonSerializer();
 
-			Serializer.Converters.Add(
+			_serializer.Converters.Add(
 				new UnformattedJsonConverter(type =>
 					typeof(IEnumerable<int>).IsAssignableFrom(type)));
-
-			_app.When(_repo.IsLoadingComplete)
-				.Run(repoLoadingComplete);
 		}
 
-		private void repoLoadingComplete()
+		public void SubscribeToEvents()
 		{
-			lock (_syncModels)
-				foreach (var model in _deckModels)
-				{
-					model.FillCardNames();
-					model.ClearCaches();
-				}
+			_collectionEditor.CollectionChanged += collectionChanged;
 		}
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card)
 		{
+			if (!_repo.IsLoadingComplete.Signaled)
+				throw new InvalidOperationException();
+
 			if (!listChanged && !countChanged)
 				return;
 
-			Task.Run(async () =>
+			_app.CancellationToken.Run(token =>
 			{
 				_abort = true;
-
-				await _syncCollection.WaitAsync(_app.CancellationToken);
-				try
+				lock (_syncCollection)
 				{
 					_abort = false;
 
 					var snapshot = _collectionEditor.Snapshot();
 
 					var affectedCardIds = snapshot.GetAffectedCardIds(_state.Collection);
-
 					if (affectedCardIds.Count == 0)
 						return;
-
-					await _app.Wait(_repo.IsLoadingComplete);
 
 					var affectedNames = affectedCardIds
 						.Select(id => _repo.CardsById[id].NameEn)
@@ -89,11 +76,7 @@ namespace Mtgdb.Data.Model
 					_state.Collection = snapshot;
 					Save();
 				}
-				finally
-				{
-					_syncCollection.Release();
-				}
-			}, _app.CancellationToken);
+			});
 		}
 
 		public bool Add(Deck deck)
@@ -171,18 +154,18 @@ namespace Mtgdb.Data.Model
 			lock (_syncModels)
 			{
 				_state.Decks = _deckModels.Select(_ => _.OriginalDeck).ToList();
-				serialized = Serialize(_state);
+				serialized = serialize(_state);
 			}
 
 			File.WriteAllText(FileName, serialized);
 		}
 
-		internal string Serialize(State state)
+		private string serialize(State state)
 		{
 			var result = new StringBuilder();
 			using (var writer = new StringWriter(result))
 			using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' })
-				Serializer.Serialize(jsonWriter, state);
+				_serializer.Serialize(jsonWriter, state);
 
 			return result.ToString();
 		}
@@ -193,7 +176,7 @@ namespace Mtgdb.Data.Model
 			if (File.Exists(FileName))
 			{
 				string serialized = File.ReadAllText(FileName);
-				state = Deserialize(serialized);
+				state = deserialize(serialized);
 			}
 			else
 				state = new State();
@@ -216,7 +199,20 @@ namespace Mtgdb.Data.Model
 			Loaded?.Invoke();
 		}
 
-		internal State Deserialize(string serialized)
+		public void FillCardNames()
+		{
+			if (_repo.IsLoadingComplete.Signaled)
+				throw new InvalidOperationException();
+
+			lock (_syncModels)
+				foreach (var model in _deckModels)
+				{
+					model.FillCardNames();
+					model.ClearCaches();
+				}
+		}
+
+		private State deserialize(string serialized)
 		{
 			try
 			{
@@ -281,7 +277,7 @@ namespace Mtgdb.Data.Model
 		public string FileName { get; set; } = AppDir.History.AddPath("decks.v4.json");
 		private State _state = new State();
 
-		private readonly SemaphoreSlim _syncCollection = new SemaphoreSlim(1);
+		private readonly object _syncCollection = new object();
 		private readonly object _syncModels = new object();
 		private bool _abort;
 
@@ -300,7 +296,7 @@ namespace Mtgdb.Data.Model
 			public List<Deck> Decks { get; set; } = new List<Deck>();
 		}
 
-		internal readonly JsonSerializer Serializer;
+		private readonly JsonSerializer _serializer;
 		private readonly IApplication _app;
 	}
 }

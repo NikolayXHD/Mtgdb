@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace Mtgdb.Ui
+namespace Mtgdb.Data
 {
 	public interface IApplication
 	{

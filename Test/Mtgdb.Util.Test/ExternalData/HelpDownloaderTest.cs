@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Mtgdb.Util
 {
@@ -6,9 +7,9 @@ namespace Mtgdb.Util
 	public class HelpDownloaderUtil
 	{
 		[Test]
-		public void UpdateLocalHelp()
+		public async Task UpdateLocalHelp()
 		{
-			HelpDownloader.UpdateLocalHelp();
+			await HelpDownloader.UpdateLocalHelp();
 		}
 	}
 }

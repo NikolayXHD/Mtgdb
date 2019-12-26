@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using Mtgdb.Data;
 using NUnit.Framework;
@@ -27,8 +29,8 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("eld", ".png", false)]
-		public void DownloadGathererImages(string setCode, string extension, bool useCustomSet)
+		[TestCase("cmb1", ".png", false)]
+		public async Task DownloadGathererImages(string setCode, string extension, bool useCustomSet)
 		{
 			var repo = new CardRepository();
 			if (useCustomSet)
@@ -61,7 +63,7 @@ namespace Mtgdb.Util
 				if (File.Exists(targetFile) || File.Exists(processedFile))
 					continue;
 
-				client.DownloadCardImage(card.MultiverseId.Value, targetFile);
+				await client.DownloadCardImage(card.MultiverseId.Value, targetFile, CancellationToken.None);
 			}
 		}
 

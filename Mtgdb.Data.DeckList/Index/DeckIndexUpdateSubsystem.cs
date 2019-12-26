@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Mtgdb.Data.Model;
-using Mtgdb.Ui;
 
 namespace Mtgdb.Data.Index
 {
@@ -27,8 +26,11 @@ namespace Mtgdb.Data.Index
 
 		private void modelChanged()
 		{
+			if (!_repo.IsLoadingComplete.Signaled)
+				throw new InvalidOperationException();
+
 			_modelUpdatedTime = DateTime.UtcNow;
-			_app.When(_repo.IsLoadingComplete).Run(() =>
+			_app.CancellationToken.Run(token =>
 			{
 				lock (_sync)
 				{

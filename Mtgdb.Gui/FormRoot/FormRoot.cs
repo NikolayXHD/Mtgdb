@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
@@ -164,8 +165,8 @@ namespace Mtgdb.Gui
 			_dropdownSaveDeck.BeforeShow = () => setMenuMode(_dropdownSaveDeck);
 			_dropdownColorScheme.BeforeShow = updateMenuColors;
 
-			_app.When(_repo.IsLoadingComplete)
-				.Run(repositoryLoaded);
+			_ctsLifetime = new CancellationTokenSource();
+			_ctsLifetime.Token.When(_repo.IsLoadingComplete).Run(repositoryLoaded);
 		}
 
 		private void updateFormBorderColor()
@@ -328,6 +329,8 @@ namespace Mtgdb.Gui
 
 		private void formClosing(object sender, EventArgs e)
 		{
+			_ctsLifetime.Cancel();
+
 			_app.MoveFormHistoryToEnd(this);
 
 			for (int i = 0; i < _tabs.Count; i++)
@@ -607,5 +610,6 @@ namespace Mtgdb.Gui
 		private readonly CardRepository _repo;
 		private readonly DeckSerializationSubsystem _serialization;
 		private readonly ColorSchemeEditor _colorSchemeEditor;
+		private readonly CancellationTokenSource _ctsLifetime;
 	}
 }

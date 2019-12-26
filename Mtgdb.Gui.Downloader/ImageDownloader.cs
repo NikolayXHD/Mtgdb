@@ -19,7 +19,7 @@ namespace Mtgdb.Downloader
 			_megatools = megatools;
 		}
 
-		public void Download(string quality, IList<ImageDownloadProgress> allProgress)
+		public async Task Download(string quality, IList<ImageDownloadProgress> allProgress, CancellationToken token)
 		{
 			var progressEnumerable = allProgress
 				.Where(_ => Str.Equals(_.QualityGroup.Quality, quality))
@@ -48,9 +48,6 @@ namespace Mtgdb.Downloader
 			_countInDownloadedDirs = 0;
 			ProgressChanged?.Invoke();
 
-			var webClient1 = new GdriveWebClient();
-			var webClient2 = new GdriveWebClient();
-
 			void megaFileDownloaded()
 			{
 				Interlocked.Increment(ref _countInDownloadedDirs);
@@ -59,19 +56,20 @@ namespace Mtgdb.Downloader
 
 			_megatools.FileDownloaded += megaFileDownloaded;
 
-			Parallel.Invoke(
-				() => download(megaStack, commonStack, downloadFromMega),
+			await Task.WhenAll(
+				token.Run(tkn => downloadAll(megaStack, commonStack, downloadFromMega, tkn)),
 				// google drive delays download start
-				() => download(gdriveStack, commonStack, t=> downloadFromGdrive(t, webClient1)),
-				() => download(gdriveStack, commonStack, t=> downloadFromGdrive(t, webClient2)));
+				token.Run(tkn => downloadAll(gdriveStack, commonStack, downloadFromGdrive, tkn)),
+				token.Run(tkn => downloadAll(gdriveStack, commonStack, downloadFromGdrive, tkn)));
 
 			_megatools.FileDownloaded -= megaFileDownloaded;
 		}
 
-		private void download(
+		private async Task downloadAll(
 			Stack<ImageDownloadProgress> specificTasks,
 			ConcurrentStack<ImageDownloadProgress> commonTasks,
-			Action<ImageDownloadProgress> downloader)
+			Func<ImageDownloadProgress, CancellationToken, Task> downloader,
+			CancellationToken token)
 		{
 			while (true)
 			{
@@ -83,7 +81,7 @@ namespace Mtgdb.Downloader
 				if (selectedTask == null)
 					return;
 
-				download(selectedTask, downloader);
+				await download(selectedTask, downloader, token);
 			}
 		}
 
@@ -118,7 +116,7 @@ namespace Mtgdb.Downloader
 			return commonTask;
 		}
 
-		private void download(ImageDownloadProgress task, Action<ImageDownloadProgress> downloader)
+		private async Task download(ImageDownloadProgress task, Func<ImageDownloadProgress, CancellationToken, Task> downloader, CancellationToken token)
 		{
 			if (isAlreadyDownloaded(task))
 			{
@@ -132,24 +130,25 @@ namespace Mtgdb.Downloader
 				Interlocked.Add(ref _countInDownloadedDirs, task.FilesDownloaded.Count);
 				ProgressChanged?.Invoke();
 
-				downloader(task);
+				await downloader(task, token);
 				ImageDownloadProgressReader.WriteExistingSignatures(task);
 			}
 		}
 
-		private void downloadFromMega(ImageDownloadProgress task)
+		private async Task downloadFromMega(ImageDownloadProgress task, CancellationToken token)
 		{
 			lock (_syncOutput)
 				Console.WriteLine($"Downloading {task.Dir.Subdirectory} from {task.MegaUrl}");
 
-			_megatools.Download(
+			await _megatools.Download(
 				task.MegaUrl,
 				task.TargetSubdirectory,
 				name: task.Dir.Subdirectory,
-				silent: true);
+				silent: true,
+				token: token);
 		}
 
-		private void downloadFromGdrive(ImageDownloadProgress task, GdriveWebClient webClient)
+		private async Task downloadFromGdrive(ImageDownloadProgress task, CancellationToken token)
 		{
 			string fileName = task.Dir.Subdirectory + ".7z";
 			string targetDirectory = task.TargetDirectory;
@@ -158,7 +157,8 @@ namespace Mtgdb.Downloader
 			lock (_syncOutput)
 				Console.WriteLine($"Downloading {task.Dir.Subdirectory} from {gdriveUrl}");
 
-			if (!webClient.DownloadAndExtract(gdriveUrl, targetDirectory, fileName))
+			var webClient = new GdriveWebClient();
+			if (!await webClient.DownloadAndExtract(gdriveUrl, targetDirectory, fileName, token))
 				return;
 
 			Interlocked.Add(ref _countInDownloadedDirs, task.FilesOnline.Count - task.FilesDownloaded.Count);

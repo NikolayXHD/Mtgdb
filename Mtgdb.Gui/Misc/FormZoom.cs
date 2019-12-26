@@ -11,7 +11,6 @@ using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Gui.Properties;
-using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
@@ -21,6 +20,7 @@ namespace Mtgdb.Gui
 		public FormZoom()
 		{
 			InitializeComponent();
+			DoubleBuffered = true;
 			_contextMenu.ForeColor = SystemColors.ControlText;
 			_contextMenu.BackColor = SystemColors.Control;
 		}
@@ -28,21 +28,20 @@ namespace Mtgdb.Gui
 		public FormZoom(
 			CardRepository cardRepository,
 			ImageRepository imageRepository,
-			ImageLoader imageLoader,
-			IApplication app)
+			ImageLoader imageLoader)
 			: this()
 		{
 			_cardRepository = cardRepository;
 			_imageRepository = imageRepository;
 			_imageLoader = imageLoader;
-			_app = app;
 
 			BackgroundImageLayout = ImageLayout.Zoom;
 			TransparencyKey = BackColor = _defaultBgColor;
 
+			_ctsLifetime = new CancellationTokenSource();
+
 			_pictureBox.MouseClick += click;
 			MouseWheel += mouseWheel;
-			DoubleBuffered = true;
 
 			scale();
 
@@ -51,6 +50,8 @@ namespace Mtgdb.Gui
 			_showOtherSetsButton.CheckedChanged += (x, y) => onSettingsChanged();
 
 			updateShowArt();
+
+			Disposed += handleDisposed;
 		}
 
 		private void scale()
@@ -85,15 +86,15 @@ namespace Mtgdb.Gui
 		public async Task LoadImages(Card card, UiModel ui)
 		{
 			_location = Cursor.Position;
-			await runLoadImagesTask(card, ui);
+			await runLoadImagesTask(card, ui, _ctsLifetime.Token);
 		}
 
-		private async Task runLoadImagesTask(Card card, UiModel ui)
+		private async Task runLoadImagesTask(Card card, UiModel ui, CancellationToken token)
 		{
 			_card = card;
 			_ui = ui;
 
-			_cts?.Cancel();
+			_ctsLoadingImages?.Cancel();
 
 			_cardForms = card.Faces
 				.OrderByDescending(face => face.NameNormalized == card.NameNormalized)
@@ -113,19 +114,22 @@ namespace Mtgdb.Gui
 			_imageIndex = 0;
 
 			var loadingCancellation = new CancellationTokenSource();
+			var loadingCancellationLinked = CancellationTokenSource.CreateLinkedTokenSource(loadingCancellation.Token, token);
+
 			var waitingCancellation = new CancellationTokenSource();
+			var waitingCancellationLinked = CancellationTokenSource.CreateLinkedTokenSource(waitingCancellation.Token, token);
 
 #pragma warning disable 4014
-			Task.Run(async () =>
+			loadingCancellationLinked.Token.Run(async tkn =>
 #pragma warning restore 4014
 			{
-				await loadImages(loadingCancellation.Token);
+				await loadImages(tkn);
 				waitingCancellation.Cancel();
-			}, loadingCancellation.Token);
+			});
 
-			await anyImageLoaded(waitingCancellation.Token).MayBeCanceled();
+			await anyImageLoaded(waitingCancellationLinked.Token).CatchCanceled();
 
-			_cts = loadingCancellation;
+			_ctsLoadingImages = loadingCancellation;
 		}
 
 		private async Task anyImageLoaded(CancellationToken cancellation)
@@ -140,9 +144,9 @@ namespace Mtgdb.Gui
 
 			if (_card != null)
 			{
-				Task.Run(async () =>
+				_ctsLifetime.Token.Run(async token =>
 				{
-					await runLoadImagesTask(_card, _ui);
+					await runLoadImagesTask(_card, _ui, token);
 
 					this.Invoke(delegate
 					{
@@ -181,9 +185,9 @@ namespace Mtgdb.Gui
 			if (repoLoadingComplete)
 				return;
 
-			await _app.WaitAll(
-				_imageRepository.IsLoadingArtComplete,
-				_imageRepository.IsLoadingZoomComplete);
+			await Task.WhenAll(
+				_imageRepository.IsLoadingArtComplete.Wait(_ctsLifetime.Token),
+				_imageRepository.IsLoadingZoomComplete.Wait(_ctsLifetime.Token));
 
 			await load(token);
 		}
@@ -383,7 +387,7 @@ namespace Mtgdb.Gui
 
 		private void hideImage()
 		{
-			_cts?.Cancel();
+			_ctsLoadingImages?.Cancel();
 
 			_pictureBox.Image = null;
 			Application.DoEvents();
@@ -432,12 +436,14 @@ namespace Mtgdb.Gui
 		private void onSettingsChanged() =>
 			SettingsChanged?.Invoke();
 
+		private void handleDisposed(object s, EventArgs e) =>
+			_ctsLifetime.Cancel();
+
 		public event Action SettingsChanged;
 
 		private readonly CardRepository _cardRepository;
 		private readonly ImageRepository _imageRepository;
 		private readonly ImageLoader _imageLoader;
-		private readonly IApplication _app;
 		private int _imageIndex;
 		private Bitmap _image;
 
@@ -452,6 +458,7 @@ namespace Mtgdb.Gui
 		private bool _showArt;
 		private UiModel _ui;
 
-		private CancellationTokenSource _cts;
+		private CancellationTokenSource _ctsLoadingImages;
+		private readonly CancellationTokenSource _ctsLifetime;
 	}
 }

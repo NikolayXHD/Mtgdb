@@ -15,7 +15,7 @@ namespace Mtgdb.Data
 		internal HashSet<string> GetPropertyValues(string propertyName)
 		{
 			var index = KeywordDefinitions.PropertyNames.IndexOf(propertyName, Str.Comparer);
-			
+
 			if (index < 0)
 				throw new ArgumentException();
 
@@ -66,7 +66,7 @@ namespace Mtgdb.Data
 		public int IndexInFile =>
 			_card.IndexInFile;
 
-		internal ICollection<string> OtherKeywords => 
+		internal ICollection<string> OtherKeywords =>
 			GetPropertyValues(nameof(KeywordDefinitions.Keywords));
 
 		internal ICollection<string> CastKeywords =>

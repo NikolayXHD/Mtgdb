@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
+using JetBrains.Annotations;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
 using File = System.IO.File;
@@ -13,6 +16,7 @@ namespace Mtgdb.Downloader
 {
 	public class Installer
 	{
+		[UsedImplicitly] // by ninject
 		public Installer(
 			AppSourceConfig appSourceConfig,
 			MtgjsonSourceConfig mtgjsonSourceConfig,
@@ -41,44 +45,39 @@ namespace Mtgdb.Downloader
 			};
 		}
 
-		public void DownloadMtgjson() =>
-			downloadDataZip(_mtgjsonSourceConfig.Url);
+		public Task DownloadMtgjson(CancellationToken token) =>
+			downloadDataZip(_mtgjsonSourceConfig.Url, token);
 
-		public void DownloadPrices() =>
-			downloadDataZip(_mtgjsonSourceConfig.PriceUrl);
+		public Task DownloadPrices(CancellationToken token) =>
+			downloadDataZip(_mtgjsonSourceConfig.PriceUrl, token);
 
-		private void downloadDataZip(string url)
+		private async Task downloadDataZip(string url, CancellationToken token)
 		{
 			Console.WriteLine("GET {0}", url);
 
 			try
 			{
-				var responseStream = _webClient.DownloadStream(url);
-				if (responseStream == null)
+				var stream = await _webClient.DownloadStream(url, token);
+				if (stream == null)
 				{
 					Console.WriteLine("Failed request to mtgjson.com: empty response");
 					Console.WriteLine();
 					return;
 				}
 
-				using (responseStream)
+				Console.WriteLine("Downloading complete.");
+				using (stream)
 				{
-					var byteArray = responseStream.ReadAllBytes();
-					Console.WriteLine("Downloading complete.");
-
-					using (var stream = new MemoryStream(byteArray))
-					{
-						Console.WriteLine("Extracting to {0}", AppDir.Data);
-						new FastZip().ExtractZip(
-							stream,
-							AppDir.Data,
-							FastZip.Overwrite.Always,
-							name => true,
-							fileFilter: null,
-							directoryFilter: null,
-							restoreDateTime: true,
-							isStreamOwner: false);
-					}
+					Console.WriteLine("Extracting to {0}", AppDir.Data);
+					new FastZip().ExtractZip(
+						stream,
+						AppDir.Data,
+						FastZip.Overwrite.Always,
+						name => true,
+						fileFilter: null,
+						directoryFilter: null,
+						restoreDateTime: true,
+						isStreamOwner: false);
 
 					MtgjsonFileUpdated?.Invoke();
 
@@ -109,25 +108,26 @@ namespace Mtgdb.Downloader
 			return result;
 		}
 
-		public void DownloadAppSignature()
+		public async Task DownloadAppSignature(CancellationToken token)
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
-
-			new GdriveWebClient().TryDownload(_appSourceConfig.FileListUrl, _updateAppDir,
-				description: "current version signature");
-
+			Directory.CreateDirectory(_updateAppDir);
+			await new GdriveWebClient().TryDownload(
+				_appSourceConfig.FileListUrl, _updateAppDir,
+				description: "current version signature", token);
 			AppOnlineSignature = getAppOnlineSignature();
 		}
 
-		public void DownloadApp()
+		public async Task DownloadApp(CancellationToken token)
 		{
 			var expectedSignature = AppOnlineSignature;
 
 			var appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
 			ensureFileDeleted(appOnline);
-
-			new GdriveWebClient().TryDownload(_appSourceConfig.ZipUrl, _updateAppDir,
-				description: expectedSignature.Path);
+			Directory.CreateDirectory(_updateAppDir);
+			await new GdriveWebClient().TryDownload(
+				_appSourceConfig.ZipUrl, _updateAppDir,
+				description: expectedSignature.Path, token);
 		}
 
 		public bool ValidateDownloadedApp()

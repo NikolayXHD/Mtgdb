@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
@@ -33,7 +34,7 @@ namespace Mtgdb.Gui
 			_cardRepository = cardRepository;
 		}
 
-		public void ShowPrintingDialog(DeckEditorModel deckEditorModel, string fileName)
+		public string SelectOutputFileDialog(string fileName)
 		{
 			var dlg = new SaveFileDialog
 			{
@@ -44,10 +45,12 @@ namespace Mtgdb.Gui
 			};
 
 			if (dlg.ShowDialog() == DialogResult.OK)
-				Task.Run(() => print(deckEditorModel, dlg.FileName));
+				return dlg.FileName;
+
+			return null;
 		}
 
-		private void print(DeckEditorModel deckEditorModel, string fileName)
+		public void Print(DeckEditorModel deckEditorModel, string fileName)
 		{
 			var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
 			var dir = Path.GetDirectoryName(fileName);

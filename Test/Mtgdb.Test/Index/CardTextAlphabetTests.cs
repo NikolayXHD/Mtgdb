@@ -16,6 +16,17 @@ namespace Mtgdb.Test
 		[Test]
 		public void All_symbols_in_card_texts_are_considered_in_code()
 		{
+			// ReSharper disable StringLiteralTypo
+			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
+			var cyrillic = new HashSet<char>("абвгдежзийклмнопрстуфхцчшщьыъэюя");
+			var numbers = new HashSet<char>("01234567890");
+			var ideographicArtistNames =
+				"林泰玄 コーヘー"
+					.Except(" ")
+					.ToArray();
+			var knownSpecialChars = new HashSet<char>("ºß"); // artist name
+			// ReSharper restore StringLiteralTypo
+
 			var alphabet = new HashSet<char>();
 
 			var languages = new HashSet<string>(CardLocalization.GetAllLanguages(), Str.Comparer);
@@ -24,85 +35,95 @@ namespace Mtgdb.Test
 			languages.Remove("jp");
 			languages.Remove("kr");
 
+			var empty = Enumerable.Empty<char>();
+
 			foreach (var set in Repo.SetsByCode.Values)
 			{
 				alphabet.UnionWith(set.Name);
 				alphabet.UnionWith(set.Code);
 			}
 
+			var failedCards = new List<(char[], Card)>();
 			foreach (var card in Repo.Cards)
 			{
-				alphabet.UnionWithNullable(card.NameEn);
-				alphabet.UnionWithNullable(card.TypeEn);
-				alphabet.UnionWithNullable(card.FlavorEn);
-				alphabet.UnionWithNullable(card.TextEn);
-				alphabet.UnionWithNullable(card.Artist);
+				var cardChars =new HashSet<char>();
+				cardChars.UnionWith(card.NameEn ?? empty);
+				cardChars.UnionWith(card.TypeEn ?? empty);
+				cardChars.UnionWith(card.FlavorEn ?? empty);
+				cardChars.UnionWith(card.TextEn ?? empty);
+				cardChars.UnionWith(card.OriginalText ?? empty);
+				cardChars.UnionWith(card.OriginalType ?? empty);
+				cardChars.UnionWith(card.Artist?.Except(ideographicArtistNames) ?? empty);
 
 				foreach (string lang in languages)
 				{
-					alphabet.UnionWithNullable(card.GetName(lang));
-					alphabet.UnionWithNullable(card.GetType(lang));
-					alphabet.UnionWithNullable(card.GetFlavor(lang));
-					alphabet.UnionWithNullable(card.GetText(lang));
+					cardChars.UnionWith(card.GetName(lang) ?? empty);
+					cardChars.UnionWith(card.GetType(lang) ?? empty);
+					cardChars.UnionWith(card.GetFlavor(lang) ?? empty);
+					cardChars.UnionWith(card.GetText(lang) ?? empty);
 				}
+
+				var badChars = cardChars.Where(isUnknownChar).Where(shouldBeConsidered).ToArray();
+				if (badChars.Length > 0)
+					failedCards.Add((badChars, card));
+
+				alphabet.UnionWith(cardChars);
 			}
 
 			var chars = alphabet.Select(c=> char.ToLower(c, Str.Culture)).Distinct().OrderBy(c => c).ToArray();
-
 			Log.Debug(() => new string(chars));
 
-			var specialChars = new List<char>();
+			var unknownChars = chars.Where(isUnknownChar).ToArray();
+			Log.Debug(new string(unknownChars.ToArray()));
 
-			// ReSharper disable StringLiteralTypo
-			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
-			var cyrillic = new HashSet<char>("абвгдежзийклмнопрстуфхцчшщьыъэюя");
-			var numbers = new HashSet<char>("01234567890");
-			var knownSpecialChars = new HashSet<char>("ºß林泰玄");
-			// ReSharper restore StringLiteralTypo
+			var notConsideredChars = new string(unknownChars.Where(shouldBeConsidered).ToArray());
 
-			foreach (char c in chars)
+			Assert.That(failedCards, Is.Empty);
+
+			Assert.That(notConsideredChars, Is.Empty);
+
+			static bool shouldBeConsidered(char c) =>
+				char.IsLetterOrDigit(c);
+
+			bool isUnknownChar(char c)
 			{
+				c = char.ToLower(c);
+
 				if (latin.Contains(c))
-					continue;
+					return false;
 
 				if (cyrillic.Contains(c))
-					continue;
+					return false;
 
 				if (numbers.Contains(c))
-					continue;
+					return false;
 
 				if (c == '\n')
-					continue;
+					return false;
 
 				if (c == '\r')
-					continue;
+					return false;
 
 				if (MtgAlphabet.Replacements.ContainsKey(c))
-					continue;
+					return false;
 
 				if (MtgAlphabet.WordCharsSet.Contains(c))
-					continue;
+					return false;
 
 				if (MtgAlphabet.LeftDelimitersSet.Contains(c))
-					continue;
+					return false;
 
 				if (MtgAlphabet.RightDelimitersSet.Contains(c))
-					continue;
+					return false;
 
 				if (MtgAlphabet.SingletoneWordChars.Contains(c))
-					continue;
+					return false;
 
 				if (knownSpecialChars.Contains(c))
-					continue;
+					return false;
 
-				specialChars.Add(c);
+				return true;
 			}
-
-			var specialCharsStr = new string(specialChars.ToArray());
-			Log.Debug(specialCharsStr);
-
-			var notConsideredChars = new string(specialCharsStr.Where(char.IsLetterOrDigit).ToArray());
-			Assert.That(notConsideredChars, Is.Empty);
 		}
 	}
 }

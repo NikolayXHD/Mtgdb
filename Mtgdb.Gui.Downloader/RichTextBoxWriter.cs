@@ -14,14 +14,14 @@ namespace Mtgdb.Downloader
 			_textbox = textbox;
 			_buffer = new StringBuilder();
 			_cts = new CancellationTokenSource();
-			Task.Run(async () =>
+			_cts.Token.Run(async token =>
 			{
-				while (!_cts.Token.IsCancellationRequested)
+				while (!token.IsCancellationRequested)
 				{
-					await Task.Delay(200, _cts.Token);
+					await Task.Delay(200, token);
 					flush();
 				}
-			}, _cts.Token);
+			});
 		}
 
 		protected override void Dispose(bool disposing)

@@ -33,11 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ApplicationStub.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="FieldBuilder.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="FieldsExtension.cs" />
     <Compile Include="FieldSortInfo.cs" />
+    <Compile Include="IApplication.cs" />
     <Compile Include="IField.cs" />
     <Compile Include="IndexVersion.cs" />
     <Compile Include="IndexVersions.cs" />

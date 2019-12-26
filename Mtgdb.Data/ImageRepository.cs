@@ -574,13 +574,13 @@ namespace Mtgdb.Data
 		}
 
 
-		public AsyncSignal IsLoadingSmallComplete { get; } = new AsyncSignal();
-		public AsyncSignal IsLoadingZoomComplete { get; } = new AsyncSignal();
-		public AsyncSignal IsLoadingArtComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLoadingSmallComplete { get; } = new AsyncSignal(multiple: true);
+		public AsyncSignal IsLoadingZoomComplete { get; } = new AsyncSignal(multiple: true);
+		public AsyncSignal IsLoadingArtComplete { get; } = new AsyncSignal(multiple: true);
 
-		private AsyncSignal IsLoadingSmallFileComplete { get; } = new AsyncSignal();
-		private AsyncSignal IsLoadingZoomFileComplete { get; } = new AsyncSignal();
-		private AsyncSignal IsLoadingArtFileComplete { get; } = new AsyncSignal();
+		private AsyncSignal IsLoadingSmallFileComplete { get; } = new AsyncSignal(multiple: true);
+		private AsyncSignal IsLoadingZoomFileComplete { get; } = new AsyncSignal(multiple: true);
+		private AsyncSignal IsLoadingArtFileComplete { get; } = new AsyncSignal(multiple: true);
 
 
 		private HashSet<string> _files;

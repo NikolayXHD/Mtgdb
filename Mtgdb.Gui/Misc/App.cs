@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using JetBrains.Annotations;
-using Mtgdb.Ui;
+using Mtgdb.Data;
 using NLog;
 
 namespace Mtgdb.Gui
@@ -99,7 +99,7 @@ namespace Mtgdb.Gui
 			foreach (int tabId in toTabIds)
 			{
 				File.Move(
-					GetHistoryFile(toFormId, tabId), 
+					GetHistoryFile(toFormId, tabId),
 					GetHistoryFile(toFormId, tabId + 1));
 			}
 
@@ -114,7 +114,7 @@ namespace Mtgdb.Gui
 			foreach (int tabId in fromTabIds)
 			{
 				File.Move(
-					GetHistoryFile(fromFormId, tabId), 
+					GetHistoryFile(fromFormId, tabId),
 					GetHistoryFile(fromFormId, tabId - 1));
 			}
 		}

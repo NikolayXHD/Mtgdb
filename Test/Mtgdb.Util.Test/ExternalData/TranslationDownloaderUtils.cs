@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Mtgdb.Test;
 using NUnit.Framework;
 
@@ -18,13 +20,13 @@ namespace Mtgdb.Util
 		private const string ResultDir = @"D:\temp\gatherer\result";
 
 		[Test]
-		public void Update_translations()
+		public async Task Update_translations()
 		{
 			Directory.CreateDirectory(ParsedDir);
 			Directory.CreateDirectory(ResultDir);
 
 			var client = new GathererClient(Repo);
-			client.DownloadTranslations(DownloadedDir);
+			await client.DownloadTranslations(DownloadedDir, CancellationToken.None);
 			client.ParseTranslations(DownloadedDir, ParsedDir);
 			client.MergeTranslations(ParsedDir, ResultDir);
 			client.SaveNonEnglishTranslations(ResultDir);

@@ -1,110 +1,72 @@
-using System;
 using System.IO;
-using System.Net;
-using System.Text;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 
 namespace Mtgdb.Downloader
 {
 	public class WebClientBase
 	{
-		static WebClientBase()
-		{
-			try
-			{
-				ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-			}
-			catch (NotSupportedException ex)
-			{
-				_log.Warn(ex, "Failed to setup HTTPS");
-			}
-		}
+		protected const int BufferSize = 1 << 20; // 1MB
 
-		public void DownloadFile(string downloadUrl, string downloadTarget)
+		public async Task DownloadFile(string downloadUrl, string downloadTarget, CancellationToken token)
 		{
-			using var webStream = DownloadStream(downloadUrl);
+			using var stream = await DownloadStream(downloadUrl, token);
 			using var fileStream = File.Open(downloadTarget, FileMode.Create);
-			webStream.CopyTo(fileStream);
+			await stream.CopyToAsync(fileStream, BufferSize, token);
 		}
 
-		public string DownloadString(string pageUrl)
+		public async Task<string> DownloadString(string pageUrl, CancellationToken token)
 		{
-			Stream stream;
 			try
 			{
-				stream = DownloadStream(pageUrl);
+				using var client = new HttpClient();
+				using var request = new HttpRequestMessage(HttpMethod.Get, pageUrl);
+				using var response = await GetResponse(client, request, token);
+				using var memoryStream = await ReadToMemoryStream(response, token);
+				using var streamReader = new StreamReader(memoryStream);
+				return streamReader.ReadToEnd();
 			}
-			catch (WebException)
+			catch (HttpRequestException)
 			{
 				return null;
 			}
-			catch (ProtocolViolationException)
-			{
-				return null;
-			}
-
-			using (stream)
-			{
-				if (stream == null)
-					return null;
-
-				using var streamReader = new StreamReader(stream, Encoding.UTF8);
-				string result = streamReader.ReadToEnd();
-				return result;
-			}
 		}
 
-		public Stream DownloadStream(string url)
+		public async Task<Stream> DownloadStream(string url, CancellationToken token)
 		{
-			var response = GetResponse(url);
+			using var client = new HttpClient();
+			using var request = new HttpRequestMessage(HttpMethod.Get, url);
+			using var response = await GetResponse(client, request, token);
+			var memoryStream = await ReadToMemoryStream(response, token);
+			return memoryStream;
+		}
 
-			Stream result;
-
+		protected static async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
+		{
+			HttpResponseMessage response;
 			try
 			{
-				result = response.GetResponseStream();
+				response = await client.SendAsync(request, token);
+				response.EnsureSuccessStatusCode();
 			}
-			catch (ProtocolViolationException ex)
+			catch (HttpRequestException ex)
 			{
-				_log.Error(ex, $"{nameof(HttpWebRequest)} to {url} failed");
-				throw;
-			}
-
-			return result;
-		}
-
-		protected static HttpWebResponse GetResponse(string url)
-		{
-			var request = CreateRequest(url);
-			return GetResponse(request);
-		}
-
-		protected static HttpWebResponse GetResponse(HttpWebRequest request)
-		{
-			HttpWebResponse response;
-			try
-			{
-				response = (HttpWebResponse) request.GetResponse();
-			}
-			catch (WebException ex)
-			{
-				_log.Info(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
-				throw;
-			}
-			catch (ProtocolViolationException ex)
-			{
-				_log.Info(ex, $"{nameof(HttpWebRequest)} to {request.RequestUri} failed");
+				_log.Info(ex, $"{nameof(HttpRequestMessage)} to {request.RequestUri} failed");
 				throw;
 			}
 
 			return response;
 		}
 
-		protected static HttpWebRequest CreateRequest(string url)
+		protected static async Task<MemoryStream> ReadToMemoryStream(HttpResponseMessage response, CancellationToken token)
 		{
-			var request = (HttpWebRequest) WebRequest.Create(url);
-			request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36";
-			return request;
+			using var stream = await response.Content.ReadAsStreamAsync();
+			var memoryStream = new MemoryStream();
+			await stream.CopyToAsync(memoryStream, BufferSize, token);
+			memoryStream.Seek(0, SeekOrigin.Begin);
+			return memoryStream;
 		}
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

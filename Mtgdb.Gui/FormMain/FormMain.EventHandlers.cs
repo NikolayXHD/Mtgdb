@@ -213,9 +213,9 @@ namespace Mtgdb.Gui
 
 		private void subscribeCardRepoEvents()
 		{
-			_app.When(_cardRepo.IsLocalizationLoadingComplete)
+			_app.CancellationToken.When(_cardRepo.IsLocalizationLoadingComplete)
 				.Run(localizationLoadingComplete);
-			_app.When(_cardRepo.IsLoadingComplete)
+			_app.CancellationToken.When(_cardRepo.IsLoadingComplete)
 				.Run(repoLoadingComplete);
 			_cardRepo.SetAdded += cardRepoSetAdded;
 		}

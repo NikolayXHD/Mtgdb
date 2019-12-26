@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -33,6 +33,7 @@ namespace Mtgdb.Gui
 
 			_formZoom = formZoom;
 			_parent = parent;
+			_ctsLifetime = new CancellationTokenSource();
 		}
 
 		public void Scale()
@@ -201,7 +202,7 @@ namespace Mtgdb.Gui
 			if (!card.HasImage(Ui))
 				return;
 
-			Task.Run(async () =>
+			_ctsLifetime.Token.Run(async token =>
 			{
 				await _formZoom.LoadImages(card, Ui);
 				_parent.Invoke(delegate { _formZoom.ShowImages(); });
@@ -227,6 +228,8 @@ namespace Mtgdb.Gui
 
 		public void Dispose()
 		{
+			_ctsLifetime.Cancel();
+
 			_viewCards.MouseLeave -= gridMouseLeave;
 			_viewDeck.MouseLeave -= gridMouseLeave;
 
@@ -251,6 +254,9 @@ namespace Mtgdb.Gui
 
 		public UiModel Ui { get; set; }
 
+		private Cursor _textSelectionCursor;
+		private Cursor _zoomCursor;
+
 		private readonly LayoutViewControl _viewCards;
 		private readonly LayoutViewControl _viewDeck;
 		private readonly Cursor _cursor;
@@ -260,7 +266,6 @@ namespace Mtgdb.Gui
 		private readonly CountInputSubsystem _countInputSubsystem;
 		private readonly FormZoom _formZoom;
 		private readonly FormMain _parent;
-		private Cursor _textSelectionCursor;
-		private Cursor _zoomCursor;
+		private readonly CancellationTokenSource _ctsLifetime;
 	}
 }

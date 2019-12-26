@@ -297,7 +297,7 @@ namespace Mtgdb.Data
 						@"(?<!\bcan't )(attacks? or )?block(s|ed)?\b", "if able"),
 					sequence("able to\\b", "block\\b", "do (it|so)"),
 					"must be blocked"))),
-			custom("Can't attack", bound(or(cant("attack"), cant("be", "attacked")))),
+			custom("Can't attack", bound(or(cant("(?<!didn't )attack"), cant("be", "attacked")))),
 			custom("Can't be blocked", bound(cant("be", "blocked"),
 				notAfter: "this spell works on creatures that")),
 			custom("Can't be regenerated", bound(cant("be", "regenerated"))),
@@ -473,7 +473,7 @@ namespace Mtgdb.Data
 			custom("Shuffle", bound("shuffle(s|d)?")),
 			custom("Tap", bound("tap(s|ped)?")),
 			custom("Untap", bound("untap(s|ped)?", notAfter: "skips? (their|the|your)( next)?")),
-			custom("Bury", bound("bur(y|ies|ied)", notBefore: "ruin")),
+			custom("Bury", bound("bur(y|ies|ied)", notBefore: "(ruin|ogre)")),
 			custom("Ante", bound("ante(s|d)?"))
 		};
 

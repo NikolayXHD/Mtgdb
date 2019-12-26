@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -10,7 +12,7 @@ using NLog;
 
 namespace Mtgdb.Gui
 {
-	public class CopyPasteSubsystem
+	public class CopyPasteSubsystem : IComponent
 	{
 		public CopyPasteSubsystem(
 			CardRepository cardRepo,
@@ -19,7 +21,6 @@ namespace Mtgdb.Gui
 			DeckEditorModel deckEditor,
 			FormMain targetForm,
 			DeckListControl deckListControl,
-			IApplication app,
 			params Control[] targetControls)
 		{
 			_cardRepo = cardRepo;
@@ -28,8 +29,8 @@ namespace Mtgdb.Gui
 			_deckEditor = deckEditor;
 			_targetForm = targetForm;
 			_deckListControl = deckListControl;
-			_app = app;
 			_targetControls = targetControls;
+			_ctsLifetime = new CancellationTokenSource();
 		}
 
 		public void SubscribeToEvents()
@@ -72,8 +73,9 @@ namespace Mtgdb.Gui
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
 
-			_app.When(_cardRepo.IsLoadingComplete).Run(() =>
-				_targetForm.Invoke(delegate { dragDropped(e.Data); }));
+			_ctsLifetime.Token
+				.When(_cardRepo.IsLoadingComplete)
+				.Run(() => _targetForm.Invoke(delegate { dragDropped(e.Data); }));
 		}
 
 		private void dragDropped(IDataObject dragData)
@@ -162,7 +164,7 @@ namespace Mtgdb.Gui
 			if (loadingInProgress || !added)
 				return;
 
-			Task.Run(() =>
+			_ctsLifetime.Token.Run(token =>
 			{
 				var failedDecks = new List<Deck>();
 
@@ -203,7 +205,7 @@ namespace Mtgdb.Gui
 					if (failedDecks.Count == 0)
 						return;
 
-					var message = string.Join(Str.Endl,
+					string message = string.Join(Str.Endl,
 						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
 
 					_log.Error($"Errors loading decks: {message}");
@@ -372,6 +374,16 @@ namespace Mtgdb.Gui
 		}
 
 
+
+		public ISite Site { get; set; }
+		public event EventHandler Disposed;
+
+		public void Dispose()
+		{
+			_ctsLifetime.Cancel();
+			Disposed?.Invoke(this, EventArgs.Empty);
+		}
+
 		private bool _abort;
 
 		private readonly HashSet<(string File, string Dir)> _filesToLoadDistinct = new HashSet<(string, string)>();
@@ -385,7 +397,7 @@ namespace Mtgdb.Gui
 		private readonly DeckEditorModel _deckEditor;
 		private readonly FormMain _targetForm;
 		private readonly DeckListControl _deckListControl;
-		private readonly IApplication _app;
+		private readonly CancellationTokenSource _ctsLifetime;
 		private readonly Control[] _targetControls;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

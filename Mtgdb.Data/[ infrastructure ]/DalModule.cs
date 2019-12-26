@@ -1,4 +1,5 @@
 ﻿using Mtgdb.Data.Index;
+using Ninject;
 using Ninject.Modules;
 
 namespace Mtgdb.Data
@@ -52,6 +53,11 @@ namespace Mtgdb.Data
 			Kernel.Bind<UiConfigRepository>()
 				.ToSelf()
 				.InSingletonScope();
+
+			if (!Kernel.CanResolve<IApplication>())
+				Kernel.Bind<IApplication>()
+					.To<ApplicationStub>()
+					.InSingletonScope();
 		}
 	}
 }

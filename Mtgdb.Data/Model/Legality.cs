@@ -16,13 +16,13 @@ namespace Mtgdb.Data
 		{
 			"Standard",
 			"Pioneer",
+			"Historic",
 			"Modern",
 			"Legacy",
 			"Vintage",
 
+			"Brawl",
 			"Commander",
-
-			"Frontier",
 
 			"Pauper",
 			"Penny",

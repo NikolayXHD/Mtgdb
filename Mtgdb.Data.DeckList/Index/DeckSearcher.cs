@@ -35,12 +35,12 @@ namespace Mtgdb.Data.Index
 
 			if (!_indexCreated && _version.IsUpToDate)
 				lock (_syncDirectory)
-					using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
-					{
-						index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
-						_indexCreated = true;
-						return index;
-					}
+				{
+					using var fsDirectory = FSDirectory.Open(_version.IndexDirectory);
+					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
+					_indexCreated = true;
+					return index;
+				}
 
 			IsUpdating = true;
 

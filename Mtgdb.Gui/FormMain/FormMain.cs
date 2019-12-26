@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -277,10 +276,8 @@ namespace Mtgdb.Gui
 			_deckEditor.TouchedCard = null;
 		}
 
-		private void runRefilterTask(Action onFinished = null)
-		{
-			Task.Run(() => refilter(onFinished));
-		}
+		private void runRefilterTask(Action onFinished = null) =>
+			_app.CancellationToken.Run(token => refilter(onFinished));
 
 		private void refilter(Action onFinished)
 		{
@@ -1033,7 +1030,11 @@ namespace Mtgdb.Gui
 		public void ButtonPrint()
 		{
 			if (_cardRepo.IsLoadingComplete.Signaled)
-				_printing.ShowPrintingDialog(_deckEditor, _deckEditor.DeckName);
+			{
+				var outputPath = _printing.SelectOutputFileDialog(_deckEditor.DeckName);
+				if (outputPath != null)
+					_app.CancellationToken.Run(token => _printing.Print(_deckEditor, outputPath));
+			}
 		}
 
 		public void FocusSearch() =>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
@@ -35,7 +34,8 @@ namespace Mtgdb.Controls
 			DeckDocumentAdapter adapter,
 			CollectionEditorModel collection,
 			UiConfigRepository uiConfigRepository,
-			Control tooltipOwner)
+			Control tooltipOwner,
+			IApplication app)
 		{
 			_searcher = searcher;
 			_uiConfigRepository = uiConfigRepository;
@@ -52,8 +52,9 @@ namespace Mtgdb.Controls
 			_menuFilterByDeckMode.SelectedIndex = 0;
 
 			_listModel = decks;
-			_tooltipOwner = tooltipOwner;
 			_collection = collection;
+			_tooltipOwner = tooltipOwner;
+			_app = app;
 
 			_searchSubsystem = new DeckSearchSubsystem(
 				this,
@@ -257,7 +258,7 @@ namespace Mtgdb.Controls
 
 		private void runRefreshSearchResultTask(Action onComplete)
 		{
-			Task.Run(() =>
+			_app.CancellationToken.Run(token =>
 			{
 				_aborted = true;
 				lock (_sync)
@@ -301,7 +302,6 @@ namespace Mtgdb.Controls
 					refreshData();
 					onComplete?.Invoke();
 				});
-
 			});
 		}
 
@@ -537,5 +537,6 @@ namespace Mtgdb.Controls
 		private readonly object _sync = new object();
 		private DeckSearcher _searcher;
 		private UiConfigRepository _uiConfigRepository;
+		private IApplication _app;
 	}
 }

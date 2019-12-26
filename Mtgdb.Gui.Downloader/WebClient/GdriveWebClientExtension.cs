@@ -1,12 +1,14 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mtgdb.Downloader
 {
 	public static class GdriveWebClientExtension
 	{
-		public static bool DownloadAndExtract(this GdriveWebClient webClient, string gdriveUrl, string targetDirectory, string fileName)
+		public static async Task<bool> DownloadAndExtract(this GdriveWebClient webClient, string gdriveUrl, string targetDirectory, string fileName, CancellationToken token)
 		{
 			if (!Str.Equals(".7z", Path.GetExtension(fileName)))
 				throw new ArgumentException();
@@ -28,7 +30,7 @@ namespace Mtgdb.Downloader
 
 			try
 			{
-				webClient.DownloadFromGdrive(gdriveUrl, targetDirectory);
+				await webClient.DownloadFromGdrive(gdriveUrl, targetDirectory, token);
 			}
 			catch (Exception ex)
 			{
@@ -57,13 +59,13 @@ namespace Mtgdb.Downloader
 			return true;
 		}
 
-		public static void TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description)
+		public static async Task TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description, CancellationToken token)
 		{
 			Console.Write($"Download {description} from {url} ...");
 
 			try
 			{
-				webClient.DownloadFromGdrive(url, targetDirectory);
+				await webClient.DownloadFromGdrive(url, targetDirectory, token);
 			}
 			catch (Exception ex)
 			{

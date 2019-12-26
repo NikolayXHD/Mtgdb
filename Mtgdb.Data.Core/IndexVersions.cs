@@ -2,8 +2,8 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// PriceMid -> Price
-		private const string Cards = "1.17";
+		// fix keyword definitions
+		private const string Cards = "1.18";
 		public const string CardSearcher = Cards;
 		public const string CardSpellchecker = Cards;
 		public const string KeywordSearcher = Cards;

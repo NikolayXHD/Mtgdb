@@ -257,6 +257,14 @@ namespace Mtgdb.Gui
 					.Append(nameof(Card.OriginalType)).Append(":")
 					.AppendLine()
 					.Append(card.OriginalType);
+			else if (Str.Equals(field, nameof(Card.Number)))
+			{
+				if (card.MultiverseId.HasValue)
+					text
+						.AppendLine()
+						.AppendLine()
+						.Append(nameof(card.MultiverseId)).Append(": ").Append(card.MultiverseId.Value);
+			}
 
 			return text.ToString();
 		}

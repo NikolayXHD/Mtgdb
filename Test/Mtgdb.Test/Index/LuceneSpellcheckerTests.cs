@@ -64,12 +64,6 @@ namespace Mtgdb.Test
 		[TestCase(EnRu, "PowerNum:■", "-1", "0.5", "1.5", "2.5", "3.5", "9", "11")]
 		[TestCase(EnRu, "PowerNum:9■", "9", "99")]
 		[TestCase(EnRu, "PowerNum:z■")] // empty
-		[TestCase(EnRu, "PricingHigh:■", "0.29", "0.35")]
-		[TestCase(EnRu, "PricingHigh:1■", "0.51", "1")]
-		[TestCase(EnRu, "PricingHigh:z■")] // empty
-		[TestCase(EnRu, "PricingLow:■", "0.1", "0.15")]
-		[TestCase(EnRu, "PricingLow:1■", "0.1", "1")]
-		[TestCase(EnRu, "PricingLow:z■")] // empty
 		[TestCase(EnRu, "Price:■", "0.14", "0.19")]
 		[TestCase(EnRu, "Price:2■", "0.2", "0.42")]
 		[TestCase(EnRu, "Price:z■")] // empty

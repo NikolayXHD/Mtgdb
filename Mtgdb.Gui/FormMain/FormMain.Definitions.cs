@@ -43,8 +43,6 @@ namespace Mtgdb.Gui
 			_keywordSearcher = keywordSearcher;
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
-			_quickFilterControls.Append(_filterManager).ForEach(_ => _.CancellationToken = _app.CancellationToken);
-
 			_cardRepo = cardRepo;
 			_imageLoader = imageLoader;
 			_uiConfigRepository = uiConfigRepository;
@@ -83,7 +81,7 @@ namespace Mtgdb.Gui
 			_tooltipViewCards = new LayoutViewTooltip(this, _viewCards, _searchSubsystem, _countInputSubsystem);
 			_tooltipViewDeck = new LayoutViewTooltip(this, _viewDeck, _searchSubsystem, _countInputSubsystem);
 
-			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader, _app);
+			_formZoom = new FormZoom(_cardRepo, imageRepo, _imageLoader);
 
 			_imagePreloading = new ImagePreloadingSubsystem(
 				_viewCards,
@@ -169,7 +167,8 @@ namespace Mtgdb.Gui
 				deckAdapter,
 				collectionEditor,
 				uiConfigRepository,
-				this);
+				this,
+				_app);
 
 			_copyPaste = new CopyPasteSubsystem(
 				_cardRepo,
@@ -178,7 +177,6 @@ namespace Mtgdb.Gui
 				_deckEditor,
 				this,
 				_deckListControl,
-				_app,
 				_viewDeck,
 				_tabHeadersDeck,
 				_viewCards,
@@ -197,6 +195,8 @@ namespace Mtgdb.Gui
 
 			components.Add(_deckEditorSubsystem);
 			components.Add(_countInputSubsystem);
+			components.Add(_formZoom);
+			components.Add(_copyPaste);
 
 			_popupSearchExamples.MenuControl = _menuSearchExamples;
 			_popupSearchExamples.MenuAlignment = HorizontalAlignment.Right;

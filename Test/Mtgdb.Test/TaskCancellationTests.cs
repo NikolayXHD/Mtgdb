@@ -30,10 +30,7 @@ namespace Mtgdb.Test
 		public void When_delay_canceled_within_task_run_with_same_token_Then_exception_is_raised()
 		{
 			var cts = new CancellationTokenSource();
-			var task = Task.Run(async () =>
-			{
-				await Task.Delay(100, cts.Token);
-			}, cts.Token);
+			var task = cts.Token.Run( token => Task.Delay(100, token));
 
 
 			Assert.ThrowsAsync<TaskCanceledException>(async () =>
@@ -70,14 +67,14 @@ namespace Mtgdb.Test
 		public async Task When_canceling_task_run_Then_exception_is_not_raised()
 		{
 			var cts = new CancellationTokenSource();
-			var task = Task.Run(async () =>
+			var task = cts.Token.Run(async token =>
 			{
-				if (cts.Token.IsCancellationRequested)
+				if (token.IsCancellationRequested)
 					return;
 
 				// ReSharper disable once MethodSupportsCancellation
 				await Task.Delay(100);
-			}, cts.Token);
+			});
 
 			await Task.WhenAll(task, interrupt());
 			Assert.That(task.Status, Is.EqualTo(TaskStatus.RanToCompletion));
@@ -94,10 +91,7 @@ namespace Mtgdb.Test
 		public async Task When_using_catch_with_task_run_containing_delay_Then_exception_is_swallowed()
 		{
 			var cts = new CancellationTokenSource();
-			var task = Task.Run(async () =>
-			{
-				await Task.Delay(100, cts.Token);
-			}, cts.Token);
+			var task = cts.Token.Run(token => Task.Delay(100, token));
 
 			await Task.WhenAll(task.Catch<TaskCanceledException>(), interrupt());
 			Assert.That(task.Status, Is.EqualTo(TaskStatus.Canceled));

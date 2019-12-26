@@ -31,24 +31,24 @@ namespace Mtgdb.Ui
 			createLoadingActions();
 		}
 
-		public void AddTask(Action<CancellationToken> a) =>
-			_loadingTasks.Add(wrap(a));
+		public void AddTask(Action<CancellationToken> a)
+		{
+			_loadingTasks.Add(token =>
+			{
+				a(token);
+				return Task.CompletedTask;
+			});
+		}
 
 		public void AddTask(Func<CancellationToken, Task> a) =>
-			_loadingTasks.Add(wrap(a));
-
-		private Func<CancellationToken, Task> wrap(Action<CancellationToken> a) =>
-			token => Task.Run(() => a(token), token);
-
-		private Func<CancellationToken, Task> wrap(Func<CancellationToken, Task> a) =>
-			token => Task.Run(() => a(token), token);
+			_loadingTasks.Add(a);
 
 		public async Task AsyncRun()
 		{
 			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
 			try
 			{
-				await Task.WhenAll(_loadingTasks.Select(_ => _(_app.CancellationToken)));
+				await Task.WhenAll(_loadingTasks.Select(task => _app.CancellationToken.Run(task)));
 			}
 			catch (TaskCanceledException ex) when (ex.CancellationToken == _app.CancellationToken)
 			{
