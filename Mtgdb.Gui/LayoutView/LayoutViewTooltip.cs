@@ -233,12 +233,6 @@ namespace Mtgdb.Gui
 					.AppendLine()
 					.Append(nameof(KeywordDefinitions.Layout)).Append(": ").Append(card.Layout);
 
-				if (card.MultiverseId.HasValue)
-					additionalFields
-						.AppendLine()
-						.Append(nameof(Card.MultiverseId)).Append(": ")
-						.Append(card.MultiverseId);
-
 				if (!string.IsNullOrEmpty(card.ImageName))
 					additionalFields
 						.AppendLine()
