@@ -38,9 +38,13 @@
 			<Dir MegaId="39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
 		</QualityGroup>
 
-		<QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
-			<Dir GdriveId="1KW6blPmgNookdntdVGX4oFdW1AqLMO9C" Subdir="c19" />
-			<Dir GdriveId="11yzOSKdWvZGKUSLC9ppcmTR7XuwdEN97" Subdir="celd" />
+    <QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
+      <Dir GdriveId="1FsNweT2ObjmLpBBtLk548LP0bLQnheXC" Subdir="gn2" />
+      <Dir GdriveId="1nCxU3zQKbwDOXwbdreWetiu5vtwG6g3P" Subdir="cmb1" />
+      <Dir GdriveId="1-Z9JJjypQ-CaySv5FpMdadYIpunSxQGU" Subdir="ha1" />
+      <Dir GdriveId="1BoyLCuQm3viXopCHNbcVTWlIr5xkfFwV" Subdir="peld" />
+      <Dir GdriveId="1j0PivfYo79rBoCkax60wJgmhwyUeWRxK" Subdir="ptg" />
+      <Dir GdriveId="1KW6blPmgNookdntdVGX4oFdW1AqLMO9C" Subdir="c19" />
 			<Dir GdriveId="1B4kJ3UT23e1vdJig2DFuJh3pM8gRXryM" Subdir="eld" />
 			<Dir GdriveId="1hcZ9J1KtLEHG2hyx172F1ybFcH3XURd-" Subdir="m20" />
 			<Dir GdriveId="1RSnPoLL6FzVVyyW-gWXRsSxae_Q8JkiC" Subdir="ss2" />
@@ -492,8 +496,12 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
-			<Dir GdriveId="1kxX6QOwraBqyQPqcLOJins5L1EmiNn1V" Subdir="c19" />
-			<Dir GdriveId="1iOrkc-uN7iChjU52U3TmSJ4UySZdeMMK" Subdir="celd" />
+      <Dir GdriveId="1TamVtsEh4i8NPtFHlnCuWGBlgd6XPTMb" Subdir="gn2" />
+      <Dir GdriveId="1KVMLgut2xXpjku6pj5gfK0kHtbP50ZIL" Subdir="cmb1" />
+      <Dir GdriveId="1TqTvQjzJfjMqX26jZwUzx-tYYm7vUKjP" Subdir="ha1" />
+      <Dir GdriveId="1068eg5RzMPXCOFFXycMF8jjsUykCw8FU" Subdir="peld" />
+      <Dir GdriveId="1GOls0j7WmBPFd_5bW_MzXGfIAW6yur9K" Subdir="ptg" />
+      <Dir GdriveId="1kxX6QOwraBqyQPqcLOJins5L1EmiNn1V" Subdir="c19" />
 			<Dir GdriveId="1_Nof3LzUfQh2Mgbdp1116pFPsJtpdfpx" Subdir="eld" />
 			<Dir GdriveId="1isC-N8aAI_rYB6PG8KigFsX8r6t2Eu8o" Subdir="m20" />
 			<Dir GdriveId="1DA13tPjVquDQAeJp6DGjClaZnvzDXWWt" Subdir="ss2" />

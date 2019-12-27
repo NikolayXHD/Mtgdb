@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Mtgdb.Data;
-using Mtgdb.Downloader;
 using Newtonsoft.Json;
 using NLog;
 
 namespace Mtgdb.Util
 {
-	public class GathererClient : WebClientBase
+	public class GathererClient : ImageDownloaderBase
 	{
 		public GathererClient()
 		{
@@ -162,8 +161,14 @@ namespace Mtgdb.Util
 			return idsArray;
 		}
 
-		public Task DownloadCardImage(int multiverseId, string targetFile, CancellationToken token) =>
-			DownloadFile(BaseUrl + ImagePath + multiverseId, targetFile, token);
+		public override Task DownloadCardImage(Card card, string targetFile, CancellationToken token)
+		{
+			if (card.MultiverseId.HasValue)
+				return DownloadFile(BaseUrl + ImagePath + card.MultiverseId.Value, targetFile, token);
+
+			_log.Info("Empty multiverse id: {0}", card);
+			return Task.CompletedTask;
+		}
 
 		public Task<string> DownloadCardPage(int multiverseId, CancellationToken token) =>
 			DownloadString(BaseUrl + TranslationPath + multiverseId, token);
@@ -309,6 +314,8 @@ namespace Mtgdb.Util
 
 			return $"{{{value}}}";
 		}
+
+
 
 		private const string BaseUrl = "http://gatherer.wizards.com/";
 		private const string ImagePath = "Handlers/Image.ashx?type=card&multiverseid=";

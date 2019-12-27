@@ -494,7 +494,7 @@ namespace Mtgdb.Data
 		{
 			var builder = new StringBuilder();
 
-			builder.AppendLine($"{ManaCost} {NameEn} {SetCode}");
+			builder.AppendLine($"{NameEn} {ManaCost} {SetCode} {Number}");
 			builder.Append($"{TypeEn} {Layout}");
 
 			if (LoyaltyNum.HasValue)

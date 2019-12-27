@@ -184,6 +184,7 @@ namespace Mtgdb.Data
 				// use_dir_sorting_to_find_most_nested_root
 				var root = directories.First(_ => entryByDirectory.Key.StartsWith(_.Path));
 				string customSetCode = root.Set;
+				int? customPriority = root.Priority;
 
 				bool readAttributes = root.ReadMetadataFromAttributes == true;
 
@@ -214,7 +215,7 @@ namespace Mtgdb.Data
 					foreach (string author in authors)
 						foreach (string setCode in setCodes)
 						{
-							var model = new ImageFile(file, root.Path, setCode, author, isArt);
+							var model = new ImageFile(file, root.Path, setCode, author, isArt, customPriority);
 							add(model, modelsByNameBySetByVariant);
 						}
 				}

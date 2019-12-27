@@ -1,5 +1,4 @@
 Incorporating new sets checklist
-################################
 
 Data
 ====
@@ -88,6 +87,15 @@ Miscellaneous
 
 Mass import gdrive links
 ------------------------
+
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz' in parents
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq' in parents
+
+11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz
+1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq
+
+old way
+-------
 
 - Open gdrive directory in web browser 
 - Scroll down to make sure all files are loaded into the table

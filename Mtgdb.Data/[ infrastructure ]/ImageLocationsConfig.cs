@@ -72,6 +72,9 @@ namespace Mtgdb.Data
 		[DataMember(Name = "Set")]
 		public string Set { get; set; }
 
+		[DataMember(Name = "Priority")]
+		public int? Priority { get; set; }
+
 		[DataMember(Name = "Exclude")]
 		public string Exclude { get; set; }
 

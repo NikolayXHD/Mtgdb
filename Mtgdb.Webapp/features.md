@@ -11,13 +11,11 @@ client-server webapp    v     v     v     v     v
     [v]at webserver
       [ ] nodejs
       [*] .NET core
-        selected because 
-          required by Lucene.net anyway
-          easier to migrate from exising c# code
+        + required by Lucene.net anyway
+        + easier to migrate from exising c# code
 
     [ ] by mongodb
-      not selected because
-        of the need to deploy mongodb on user's pc
+      - the need to deploy mongodb on user's pc
 
   Filter
     [*] Lucene.net 4.8.0 requires C#, .NET core 
@@ -27,10 +25,9 @@ client-server webapp    v     v     v     v     v
       
     [ ] or Lucene 7.6.0 requires jvm 8
       Win Vista SP2+, WinXP not supported
-      
 
   [x] Language depending data
-    not worth the amount of required effort
+    - too much effort, rarely tested
 
 [v] Display images
   [*] From local fs ->

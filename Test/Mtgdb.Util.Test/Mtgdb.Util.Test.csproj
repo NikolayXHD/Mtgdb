@@ -63,7 +63,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -98,7 +98,9 @@
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="ExternalData\HelpDownloaderTest.cs" />
+    <Compile Include="ExternalData\ImageDownloader.cs" />
     <Compile Include="ExternalData\InstallerTest.cs" />
+    <Compile Include="ExternalData\ScryfallClient.cs" />
     <Compile Include="Images\ImageDownloadingUtil.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />

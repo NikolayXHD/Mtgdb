@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -29,14 +30,23 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("cmb1", ".png", false)]
-		public async Task DownloadGathererImages(string setCode, string extension, bool useCustomSet)
+		[TestCase("c19 ", false, Clients.Scryfall)]
+		[TestCase("cmb1", false, Clients.Scryfall)]
+		[TestCase("eld ", false, Clients.Scryfall)]
+		[TestCase("gn2 ", false, Clients.Scryfall)]
+		[TestCase("ha1 ", false, Clients.Scryfall)]
+		[TestCase("peld", false, Clients.Scryfall)]
+		[TestCase("ptg ", false, Clients.Scryfall)]
+		[TestCase("puma", false, Clients.Scryfall)]
+		[TestCase("hho ", false, Clients.Scryfall)]
+		public async Task DownloadGathererImages(string setCode, bool useCustomSet, Clients client)
 		{
+			setCode = setCode.Trim();
 			var repo = new CardRepository();
 			if (useCustomSet)
 			{
 				repo.SetsFile = null;
-				repo.CustomSetCodes = new[] { setCode };
+				repo.CustomSetCodes = new[] {setCode};
 			}
 
 			repo.FilterSetCode = code => Str.Equals(code, setCode);
@@ -45,106 +55,42 @@ namespace Mtgdb.Util
 			repo.Load();
 
 			var set = repo.SetsByCode[setCode];
-			var client = new GathererClient();
-
-			var setDirectory = Path.Combine(GathererOriginalDir, set.Code);
-			Directory.CreateDirectory(setDirectory);
+			var setDirectory = Path.Combine(OriginalDir, set.Code);
+			var setDirectoryPng = setDirectory + ".png";
+			Directory.CreateDirectory(setDirectoryPng);
 
 			foreach (var card in set.Cards)
 			{
-				if (!card.MultiverseId.HasValue)
-					continue;
-
 				string targetFile =
-					Path.Combine(setDirectory, card.ImageName + extension);
+					Path.Combine(setDirectoryPng, card.ImageName + ".png");
 				string processedFile =
 					Path.Combine(setDirectory, card.ImageName + ".jpg");
 
 				if (File.Exists(targetFile) || File.Exists(processedFile))
 					continue;
 
-				await client.DownloadCardImage(card.MultiverseId.Value, targetFile, CancellationToken.None);
+				await _clientFactory[client]().DownloadCardImage(card, targetFile, CancellationToken.None);
 			}
 		}
 
-//		[TestCase(
-//			HtmlDir + @"\eld_v2_Card_Image_Gallery_MAGIC_THE GATHERING.html",
-//			GathererOriginalDir + @"\eld.png")]
-		[TestCase(
-			HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html",
-			GathererOriginalDir + @"\celd.png")]
-		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
+		[TestCase("c19 ", true, false, false)]
+		[TestCase("cmb1", true, false, false)]
+		[TestCase("eld ", true, false, false)]
+		[TestCase("gn2 ", true, false, false)]
+		[TestCase("ha1 ", true, false, false)]
+		[TestCase("peld", true, false, false)]
+		[TestCase("ptg ", true, false, false)]
+		[TestCase("puma", true, false, false)]
+		[TestCase("hho ", true, false, false)]
+		public void PreProcessImages(string set, bool fromPng, bool createZoom, bool keepExisting)
 		{
-			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
-			var directoryName = Path.GetDirectoryName(htmlPath);
-			var filesDirectory = Path.Combine(directoryName, htmlFileName + "_files");
+			var smallDir = OriginalDir;
+			var zoomDir = PreprocessedDir;
+			set = set.Trim();
+			var smallJpgDir = Path.Combine(smallDir, set);
+			var zoomJpgDir = Path.Combine(zoomDir, set);
 
-			var content = File.ReadAllText(htmlPath);
-			var matches = _imgTagPattern.Matches(content);
-
-			Directory.CreateDirectory(targetDir);
-			foreach (Match match in matches)
-			{
-				string originalFileName = match.Groups["file"].Value;
-				string ext = Path.GetExtension(originalFileName);
-
-				var filePath = Path.Combine(filesDirectory, originalFileName);
-
-				var name = HttpUtility.HtmlDecode(match.Groups["name"].Value)
-					.Replace(" // ", "");
-
-				string defaultTargetPath = Path.Combine(targetDir, name + ext);
-
-				bool defaultTargetExists = File.Exists(defaultTargetPath);
-
-				if (defaultTargetExists || File.Exists(getTargetPath(1)))
-				{
-					if (defaultTargetExists)
-						File.Move(defaultTargetPath, getTargetPath(1));
-
-					for (int i = 2; i < 12; i++)
-					{
-						string targetPath = getTargetPath(i);
-						if (!File.Exists(targetPath))
-						{
-							File.Copy(filePath, targetPath, overwrite: false);
-							break;
-						}
-					}
-				}
-				else
-				{
-					File.Copy(filePath, defaultTargetPath, overwrite: false);
-				}
-
-				string getTargetPath(int num) =>
-					Path.Combine(targetDir, name + num + ext);
-			}
-		}
-
-		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ "war.png", "war", /* createZoom */ false)]
-		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "ss2", /* createZoom */ true)]
-		// [TestCase(GathererOriginalDir, GathererPreprocessedDir, /* png subdir */ null, "htr17", /* createZoom */ true)]
-
-		[TestCase(
-			GathererOriginalDir, GathererPreprocessedDir, "eld.png", "eld",
-			/* createZoom */ true,
-			/*keepExisting*/ false
-		)]
-		[TestCase(
-			GathererOriginalDir, GathererPreprocessedDir, "celd.png", "celd",
-			/* createZoom */ true,
-			/*keepExisting*/ false
-		)]
-		public void PreProcessImages(string smallDir, string zoomDir,
-			string pngSubdir, string jpgSubdir,
-			bool createZoom,
-			bool keepExisting)
-		{
-			var smallJpgDir = Path.Combine(smallDir, jpgSubdir);
-			var zoomJpgDir = Path.Combine(zoomDir, jpgSubdir);
-
-			if (pngSubdir == null)
+			if (!fromPng)
 			{
 				if (!createZoom)
 					return;
@@ -160,6 +106,7 @@ namespace Mtgdb.Util
 			}
 			else
 			{
+				var pngSubdir = set + ".png";
 				string smallPngDir = Path.Combine(smallDir, pngSubdir);
 				string zoomPngDir = Path.Combine(zoomDir, pngSubdir);
 
@@ -214,13 +161,68 @@ namespace Mtgdb.Util
 			}
 		}
 
+		// [TestCase(
+		// 	HtmlDir + @"\eld_v2_Card_Image_Gallery_MAGIC_THE GATHERING.html",
+		// 	GathererOriginalDir + @"\eld.png")]
+		[TestCase(
+			HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html",
+			OriginalDir + @"\celd.png")]
+		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
+		{
+			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
+			var directoryName = Path.GetDirectoryName(htmlPath);
+			var filesDirectory = Path.Combine(directoryName, htmlFileName + "_files");
+
+			var content = File.ReadAllText(htmlPath);
+			var matches = _imgTagPattern.Matches(content);
+
+			Directory.CreateDirectory(targetDir);
+			foreach (Match match in matches)
+			{
+				string originalFileName = match.Groups["file"].Value;
+				string ext = Path.GetExtension(originalFileName);
+
+				var filePath = Path.Combine(filesDirectory, originalFileName);
+
+				var name = HttpUtility.HtmlDecode(match.Groups["name"].Value)
+					.Replace(" // ", "");
+
+				string defaultTargetPath = Path.Combine(targetDir, name + ext);
+
+				bool defaultTargetExists = File.Exists(defaultTargetPath);
+
+				if (defaultTargetExists || File.Exists(getTargetPath(1)))
+				{
+					if (defaultTargetExists)
+						File.Move(defaultTargetPath, getTargetPath(1));
+
+					for (int i = 2; i < 12; i++)
+					{
+						string targetPath = getTargetPath(i);
+						if (!File.Exists(targetPath))
+						{
+							File.Copy(filePath, targetPath, overwrite: false);
+							break;
+						}
+					}
+				}
+				else
+				{
+					File.Copy(filePath, defaultTargetPath, overwrite: false);
+				}
+
+				string getTargetPath(int num) =>
+					Path.Combine(targetDir, name + num + ext);
+			}
+		}
+
 		private ImageCodecInfo _jpegCodec;
 		private EncoderParameters _jpegEncoderParams;
 
-		private const string GathererOriginalDir =
+		private const string OriginalDir =
 			@"D:\Distrib\games\mtg\Gatherer.Original";
 
-		private const string GathererPreprocessedDir =
+		private const string PreprocessedDir =
 			@"D:\Distrib\games\mtg\Gatherer.PreProcessed";
 
 		private const string HtmlDir = @"D:\temp\html";
@@ -228,5 +230,17 @@ namespace Mtgdb.Util
 		private static readonly Regex _imgTagPattern =
 			new Regex(
 				@"<img alt=""(?<name>[^""]+)"" src=""[^""]+\/(?<file>[^""]+)""");
+
+		private static readonly Dictionary<Clients, Func<ImageDownloaderBase>> _clientFactory =
+			new Dictionary<Clients, Func<ImageDownloaderBase>>
+			{
+				[Clients.Scryfall] = () => new ScryfallClient(),
+				[Clients.Gatherer] = () => new GathererClient()
+			};
+
+		public enum Clients
+		{
+			Scryfall, Gatherer
+		}
 	}
 }

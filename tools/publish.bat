@@ -28,7 +28,7 @@ set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
 set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
 set deflatefileid=1X5h6C9u9L13T720DLqMmKwZz_0YzxQmm
 
-rem goto publish_zip
+rem goto upload_deflate
 
 %out% build
 

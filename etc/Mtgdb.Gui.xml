@@ -9,10 +9,13 @@
 <!--	<ImageLocations EnabledGroups="dev,xlhq" >-->
 	<ImageLocations EnabledGroups="prod-dev" >
 
-		<Root Name="XLHQ"    Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
-		<Root Name="Promo"   Path="D:\distrib\games\mtg\XLHQ Promos" />
-		<Root Name="PTour"   Path="D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
-		<Root Name="Torrent" Path="D:\distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
+		<Root Name="XLHQ"         Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
+		<Root Name="Promo"        Path="D:\distrib\games\mtg\XLHQ Promos" />
+		<Root Name="PTour"        Path="D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
+		<Root Name="Torrent"      Path="D:\distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
+    <Root Name="Original"     Path="D:\distrib\games\mtg\Gatherer.Original" />
+    <Root Name="Preprocessed" Path="D:\distrib\games\mtg\Gatherer.Preprocessed" />
+    <Root Name="Patch"        Path="D:\distrib\games\mtg\Patch" />
 
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
 		<Directory Group="prod" Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
@@ -22,9 +25,10 @@
 		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
 		<Directory Group="prod-dev" Path="D:\games\Mtgdb.Gui\images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="dev" Zoom="False" Path="D:\distrib\games\mtg\Gatherer.Original" />
-		<Directory Group="dev" Zoom="True"  Path="D:\distrib\games\mtg\Gatherer.Preprocessed" />
-		<Directory Group="dev" Zoom="Any"   Path="D:\distrib\games\mtg\Patch" />
+		<Directory Group="dev" Zoom="False" Root="Original"     Path="" />
+		<Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="" />
+    <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="hho" Set="hho" Priority="4" />
+		<Directory Group="dev" Zoom="Any"   Root="Patch"        Path="" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />
 		<Directory Group="xlhq" Zoom="Any" Set="dvd"       Root="XLHQ" Path="DDA - Duel Decks%3a Anthology\DVD-EN Cards 300DPI" />

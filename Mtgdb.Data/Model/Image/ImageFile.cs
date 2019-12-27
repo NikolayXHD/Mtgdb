@@ -11,7 +11,8 @@ namespace Mtgdb.Data
 	{
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.IgnoreCase);
 
-		public ImageFile(string fileName, string rootPath, string setCode = null, string artist = null, bool isArt = false)
+		public ImageFile(string fileName, string rootPath, string setCode = null, string artist = null,
+			bool isArt = false, int? customPriority = null)
 		{
 			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
 			if (fileNameWithoutExtension == null)
@@ -68,7 +69,7 @@ namespace Mtgdb.Data
 					SetCode = string.Empty;
 			}
 
-			Quality = getQuality();
+			Quality = customPriority ?? getQuality();
 
 			if (artist != null)
 				Artist = string.Intern(artist);
