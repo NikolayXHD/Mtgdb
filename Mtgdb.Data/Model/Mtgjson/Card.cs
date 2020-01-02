@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using Lucene.Net.Documents;
 using Mtgdb.Data.Index;
 using Newtonsoft.Json;
@@ -196,6 +195,10 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string MtgjsonId { get; set; }
 
+		[JsonProperty("side")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string Side { get; set; }
+
 		/// <summary>
 		/// Id from mtgjson v 4.1.3 and earlier, non-unique per card face
 		/// </summary>
@@ -214,11 +217,11 @@ namespace Mtgdb.Data
 			}
 		}
 
-		[JsonIgnore] internal MtgjsonPrices OriginalPrices { get; set; }
+		[JsonIgnore]
+		internal MtgjsonPrices OriginalPrices { get; set; }
 
-		[JsonIgnore] public string Id { get; set; }
-
-		/*
+		[JsonIgnore]
+		public string Id { get; internal set; } /*
 
 		/// <summary>
 		/// Color of the border. Can be black, borderless, gold, silver, or white.
@@ -291,28 +294,38 @@ namespace Mtgdb.Data
 		*/
 
 
-		[JsonIgnore] public Set Set { get; set; }
+		[JsonIgnore]
+		public Set Set { get; set; }
 
 		/// <summary>
 		/// The name of the set
 		/// </summary>
 		[JsonIgnore]
-		public string SetName => Set?.Name;
+		public string SetName =>
+			Set?.Name;
 
 		/// <summary>
 		/// The set's abbreviated code
 		/// </summary>
 		[JsonIgnore]
-		public string SetCode => Set?.Code;
+		public string SetCode =>
+			Set?.Code;
 
-		[JsonIgnore] public string ReleaseDate => Set?.ReleaseDate;
+		[JsonIgnore]
+		public string ReleaseDate =>
+			Set?.ReleaseDate;
 
-		[JsonIgnore] public string ReleaseMonth => Set?.ReleaseDate?.Substring(0, 7);
+		[JsonIgnore]
+		public string ReleaseMonth =>
+			Set?.ReleaseDate?.Substring(0, 7);
 
-		[JsonIgnore] public string ReleaseYear => Set?.ReleaseDate?.Substring(0, 4);
+		[JsonIgnore]
+		public string ReleaseYear =>
+			Set?.ReleaseDate?.Substring(0, 4);
 
 
-		[JsonIgnore] public string Color { get; set; }
+		[JsonIgnore]
+		public string Color { get; set; }
 
 		/// <summary>
 		/// Maximum hand size modifier. Only exists for Vanguard cards.
@@ -326,29 +339,41 @@ namespace Mtgdb.Data
 		[JsonIgnore]
 		public int? Life { get; set; }
 
-		[JsonIgnore] public string ImageNameBase => ImageName.SplitTailingNumber().Item1;
-
-		[JsonIgnore] public string NameNormalized { get; internal set; }
-
-		[JsonIgnore] public int IndexInFile { get; set; }
-
-		[JsonIgnore] public bool IsSearchResult { get; set; }
-
-
-		[JsonIgnore] public string Types { get; internal set; }
-
-		[JsonIgnore] public string Subtypes { get; internal set; }
-
-		[JsonIgnore] public string Supertypes { get; internal set; }
-
-		[JsonIgnore] public float? PowerNum { get; internal set; }
-
-		[JsonIgnore] public float? ToughnessNum { get; internal set; }
-
-		[JsonIgnore] public int? LoyaltyNum { get; internal set; }
+		[JsonIgnore]
+		public string ImageNameBase =>
+			ImageName.SplitTailingNumber().Item1;
 
 		[JsonIgnore]
-		public string GeneratedMana => _generatedMana ??= string.Concat(GeneratedManaArrExpanded);
+		public string NameNormalized { get; internal set; }
+
+		[JsonIgnore]
+		public int IndexInFile { get; set; }
+
+		[JsonIgnore]
+		public bool IsSearchResult { get; set; }
+
+
+		[JsonIgnore]
+		public string Types { get; internal set; }
+
+		[JsonIgnore]
+		public string Subtypes { get; internal set; }
+
+		[JsonIgnore]
+		public string Supertypes { get; internal set; }
+
+		[JsonIgnore]
+		public float? PowerNum { get; internal set; }
+
+		[JsonIgnore]
+		public float? ToughnessNum { get; internal set; }
+
+		[JsonIgnore]
+		public int? LoyaltyNum { get; internal set; }
+
+		[JsonIgnore]
+		public string GeneratedMana =>
+			_generatedMana ??= string.Concat(GeneratedManaArrExpanded);
 
 		[JsonIgnore]
 		public IList<string> GeneratedManaArrExpanded
@@ -389,7 +414,8 @@ namespace Mtgdb.Data
 			_generatedManaParsed = true;
 		}
 
-		public Document Document => _document ??= this.ToDocument();
+		public Document Document =>
+			_document ??= this.ToDocument();
 
 		[JsonIgnore]
 		public string Rulings
@@ -405,9 +431,9 @@ namespace Mtgdb.Data
 				{
 					const string chinaOnlyStandardLegalSet = "GS1";
 
-					if (Str.Equals(SetCode, chinaOnlyStandardLegalSet) && (Printings == null ||
-						Printings.Count == 0 || Printings.Count == 1 &&
-						Str.Equals(Printings[0], chinaOnlyStandardLegalSet)))
+					if (Str.Equals(SetCode, chinaOnlyStandardLegalSet) && (
+							Printings == null || Printings.Count == 0 ||
+							Printings.Count == 1 && Str.Equals(Printings[0], chinaOnlyStandardLegalSet)))
 						resultBuilder.Add($"legal: {LegalIn.Replace("Standard", "Standard (China only)")}");
 					else
 						resultBuilder.Add($"legal: {LegalIn}");
@@ -429,28 +455,38 @@ namespace Mtgdb.Data
 		}
 
 		[JsonIgnore]
-		public string LegalIn => _legalIn ??= string.Intern(string.Join(@", ", LegalFormats));
+		public string LegalIn =>
+			_legalIn ??= string.Intern(string.Join(@", ", LegalFormats));
 
 		[JsonIgnore]
 		public string RestrictedIn =>
 			_restrictedIn ??= string.Intern(string.Join(@", ", RestrictedFormats));
 
 		[JsonIgnore]
-		public string BannedIn => _bannedIn ??= string.Intern(string.Join(@", ", BannedFormats));
+		public string BannedIn =>
+			_bannedIn ??= string.Intern(string.Join(@", ", BannedFormats));
 
 		[JsonIgnore]
-		public string FutureIn => _futureIn ??= string.Intern(string.Join(@", ", FutureFormats));
-
-		[JsonIgnore] public string[] LegalFormats => _legalFormats ??= getFormats(Legality.Legal);
+		public string FutureIn =>
+			_futureIn ??= string.Intern(string.Join(@", ", FutureFormats));
 
 		[JsonIgnore]
-		public string[] RestrictedFormats => _restrictedFormats ??= getFormats(Legality.Restricted);
+		public IReadOnlyList<string> LegalFormats =>
+			_legalFormats ??= getFormats(Legality.Legal);
 
-		[JsonIgnore] public string[] BannedFormats => _bannedFormats ??= getFormats(Legality.Banned);
+		[JsonIgnore]
+		public IReadOnlyList<string> RestrictedFormats =>
+			_restrictedFormats ??= getFormats(Legality.Restricted);
 
-		[JsonIgnore] public string[] FutureFormats => _futureFormats ??= getFormats(Legality.Future);
+		[JsonIgnore]
+		public IReadOnlyList<string> BannedFormats =>
+			_bannedFormats ??= getFormats(Legality.Banned);
 
-		private string[] getFormats(string legality)
+		[JsonIgnore]
+		public IReadOnlyList<string> FutureFormats =>
+			_futureFormats ??= getFormats(Legality.Future);
+
+		private IReadOnlyList<string> getFormats(string legality)
 		{
 			return LegalityByFormat
 				.Where(_ => Str.Equals(_.Value, legality))
@@ -467,7 +503,8 @@ namespace Mtgdb.Data
 				LegalityByFormat[format] = legality;
 		}
 
-		[JsonIgnore] public CardLocalization Localization { get; internal set; }
+		[JsonIgnore]
+		public CardLocalization Localization { get; internal set; }
 
 		[JsonIgnore]
 		public float? Price
@@ -488,39 +525,8 @@ namespace Mtgdb.Data
 		public ICollection<string> GetCastKeywords() =>
 			GetAllKeywords().CastKeywords;
 
-		[JsonIgnore] public string ImageName { get; set; }
-
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-
-			builder.AppendLine($"{NameEn} {ManaCost} {SetCode} {Number}");
-			builder.Append($"{TypeEn} {Layout}");
-
-			if (LoyaltyNum.HasValue)
-				builder.Append($" {LoyaltyNum}");
-
-			if (!string.IsNullOrEmpty(Power) || !string.IsNullOrEmpty(Toughness))
-				builder.Append($" {Power}/{Toughness}");
-
-			builder.AppendLine();
-
-			if (!string.IsNullOrEmpty(TextEn))
-				builder.AppendLine(TextEn);
-
-			string rulingsText = Rulings;
-			if (!string.IsNullOrEmpty(rulingsText))
-				builder.AppendLine(rulingsText);
-
-			if (!string.IsNullOrEmpty(FlavorEn))
-				builder.AppendLine(FlavorEn);
-
-			if (!string.IsNullOrEmpty(Artist))
-				builder.AppendLine(Artist);
-
-			return builder.ToString();
-		}
-
+		[JsonIgnore]
+		public string ImageName { get; set; }
 
 		public bool IsLegalIn(string format) =>
 			hasLegalityValueIn(format, Legality.Legal);
@@ -746,72 +752,108 @@ namespace Mtgdb.Data
 		public int CollectionCount(UiModel ui) =>
 			ui.Collection?.GetCount(this) ?? 0;
 
-		[JsonIgnore] public ICollection<Card> Namesakes { get; internal set; }
+		[JsonIgnore]
+		public ICollection<Card> Namesakes { get; internal set; }
 
-		[JsonIgnore] internal bool Remove { get; set; }
+		[JsonIgnore]
+		public HashSet<string> NamesakeIds { get; internal set; }
 
-		[JsonIgnore] private bool _generatedManaParsed;
+		[JsonIgnore]
+		internal bool Remove { get; set; }
 
-		[JsonIgnore] private string _generatedMana;
+		[JsonIgnore]
+		private bool _generatedManaParsed;
 
-		[JsonIgnore] private IList<string> _generatedManaArrExpanded;
+		[JsonIgnore]
+		private string _generatedMana;
+
+		[JsonIgnore]
+		private IList<string> _generatedManaArrExpanded;
 
 		private IList<string> _generatedManaArr;
 
-		[JsonIgnore] private string _rulings;
+		[JsonIgnore]
+		private string _rulings;
 
-		[JsonIgnore] private string _legalIn;
+		[JsonIgnore]
+		private string _legalIn;
 
-		[JsonIgnore] private string _restrictedIn;
+		[JsonIgnore]
+		private string _restrictedIn;
 
-		[JsonIgnore] private string _bannedIn;
+		[JsonIgnore]
+		private string _bannedIn;
 
-		[JsonIgnore] private string _futureIn;
+		[JsonIgnore]
+		private string _futureIn;
 
-		[JsonIgnore] private string[] _legalFormats;
+		[JsonIgnore]
+		private IReadOnlyList<string> _legalFormats;
 
-		[JsonIgnore] private string[] _restrictedFormats;
+		[JsonIgnore]
+		private IReadOnlyList<string> _restrictedFormats;
 
-		[JsonIgnore] private string[] _bannedFormats;
+		[JsonIgnore]
+		private IReadOnlyList<string> _bannedFormats;
 
-		[JsonIgnore] private string[] _futureFormats;
+		[JsonIgnore]
+		private IReadOnlyList<string> _futureFormats;
 
-		[JsonIgnore] private bool _textDeltaApplied;
+		[JsonIgnore]
+		private bool _textDeltaApplied;
 
-		[JsonIgnore] private Document _document;
+		[JsonIgnore]
+		private Document _document;
 
-		[JsonIgnore] private ImageModel _imageModel;
+		[JsonIgnore]
+		private ImageModel _imageModel;
 
-		[JsonIgnore] private ImageModel _zoomImageModel;
+		[JsonIgnore]
+		private ImageModel _zoomImageModel;
 
-		[JsonIgnore] private bool _imageModelSelected;
+		[JsonIgnore]
+		private bool _imageModelSelected;
 
-		[JsonIgnore] private bool _zoomImageModelSelected;
+		[JsonIgnore]
+		private bool _zoomImageModelSelected;
 
 		[JsonIgnore]
 		private readonly Dictionary<(string PropertyName, string Language), string>
 			_namesakeTranslations =
 				new Dictionary<(string PropertyName, string Language), string>();
 
-		[JsonIgnore] private CardKeywords _keywords;
+		[JsonIgnore]
+		private CardKeywords _keywords;
 
 		private static readonly HashSet<string> _foundDuplicates = new HashSet<string>(Str.Comparer);
 
 
-		[JsonIgnore] private CardFaceVariants _faceVariants;
+		[JsonIgnore]
+		private CardFaceVariants _faceVariants;
 
 		[JsonIgnore]
 		public CardFaceVariants FaceVariants =>
 			_faceVariants ??= new CardFaceVariants(this);
 
-		[JsonIgnore] private CardFaces _faces;
+		[JsonIgnore]
+		private CardFaces _faces;
 
-		[JsonIgnore] public CardFaces Faces =>
+		[JsonIgnore]
+		public CardFaces Faces =>
 			_faces ??= new CardFaces(FaceVariants);
 
 		[JsonIgnore]
 		public (int? Number, string Letter) SortableNumber =>
 			_sortableNumber ??= Number.SplitTailingLetters();
+
+		[JsonIgnore]
+		public bool IsToken { get; internal set; }
+
+		[JsonIgnore]
+		internal CardFormatter Formatter { private get; set; }
+
+		public override string ToString() =>
+			Formatter.ToString(this);
 
 		public static readonly HashSet<string> ColoredBasicLandNames =
 			new HashSet<string>(Str.Comparer)

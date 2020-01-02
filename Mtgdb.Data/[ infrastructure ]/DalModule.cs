@@ -58,6 +58,10 @@ namespace Mtgdb.Data
 				Kernel.Bind<IApplication>()
 					.To<ApplicationStub>()
 					.InSingletonScope();
+
+			Kernel.Bind<CardFormatter>()
+				.ToSelf()
+				.InSingletonScope();
 		}
 	}
 }

@@ -115,43 +115,45 @@ namespace Mtgdb.Gui
 			);
 		}
 
-		private Font getWarningFont()
-		{
-			var countFont = _countInputSubsystem.CountFont;
-			var font = new Font(
-				FontFamily.GenericMonospace,
-				countFont.Height - _countInputSubsystem.CountBorder,
-				FontStyle.Italic | FontStyle.Bold,
-				countFont.Unit);
-			return font;
-		}
+		private Font getWarningFont() =>
+			new Font(_countInputSubsystem.CountFont, FontStyle.Italic | FontStyle.Bold);
 
 		private void drawCountWarning(CustomDrawArgs e, Card card)
 		{
-			int countInMain = _deckEditorModel.MainDeck.GetCount(card.Id);
-			int countInSideboard = _deckEditorModel.SideDeck.GetCount(card.Id);
-
-			if (countInMain == 0 || countInSideboard == 0)
-				// the excessive count is not due to main + side sum
-				// therefore it is obvious, warning is not necessary
+			if (!_deckEditorModel.Deck.Contains(card))
 				return;
 
-			var totalCount = countInMain + countInSideboard;
+			var namesakeCounts = new[]
+			{
+				_deckEditorModel.MainDeck.NamesakeIds(card).Sum(_deckEditorModel.MainDeck.GetCount),
+				_deckEditorModel.SideDeck.NamesakeIds(card).Sum(_deckEditorModel.SideDeck.GetCount),
+			};
 
 			Color color;
+			int[] counts;
 			int maxCount;
 
-			if (totalCount > card.MaxCountInDeck())
+			int maxCountInDeck = card.MaxCountInDeck();
+			if (namesakeCounts.Sum() > maxCountInDeck)
 			{
-				maxCount = card.MaxCountInDeck();
+				counts = namesakeCounts;
+				maxCount = maxCountInDeck;
 				color = SystemColors.HotTrack.TransformHsv(
 					h: _ => _ + Color.Blue.RotationTo(Color.Crimson));
 			}
 			else
 			{
 				int collectionCount = card.CollectionCount(Ui);
+				if (collectionCount == 0)
+					return;
 
-				if (totalCount > collectionCount && collectionCount > 0)
+				counts = new[]
+				{
+					_deckEditorModel.MainDeck.GetCount(card.Id),
+					_deckEditorModel.SideDeck.GetCount(card.Id),
+				};
+
+				if (counts.Sum() > collectionCount)
 				{
 					maxCount = collectionCount;
 					color = SystemColors.HotTrack;
@@ -160,20 +162,18 @@ namespace Mtgdb.Gui
 					return;
 			}
 
-			string warning;
-			if (countInMain == 0)
-				warning = $"{countInSideboard}/{maxCount}";
-			else if (countInSideboard == 0)
-				warning = $"{countInMain}/{maxCount}";
-			else
-				warning = $"{countInMain}+{countInSideboard}/{maxCount}";
-
+			string warning = $"{string.Join("+", counts.Where(c => c != 0))} / {maxCount}";
 			var rect = getCountWarningRectangle(e);
 			using var warningFont = getWarningFont();
 			var lineSize = e.Graphics.MeasureText(warning, warningFont);
 			rect.Offset((int) ((rect.Width - lineSize.Width) / 2f), 0);
 
-			e.Graphics.DrawText(warning, warningFont, rect, Color.FromArgb(224, color));
+			using var bgBrush = new SolidBrush(Color.FromArgb(160, SystemColors.Window));
+			var bgRect = new Rectangle(rect.Location, lineSize);
+			bgRect.Inflate(2 * _countInputSubsystem.CountBorder, 0);
+			bgRect.Offset(_countInputSubsystem.CountBorder, 0);
+			e.Graphics.FillRectangle(bgBrush, bgRect);
+			e.Graphics.DrawText(warning, warningFont, rect, color);
 		}
 
 		private void drawSelection(CustomDrawArgs e, Color colorGrad1, Color colorGrad2, int opacity)
@@ -182,7 +182,7 @@ namespace Mtgdb.Gui
 
 			int countBorder = _countInputSubsystem.CountBorder;
 			const int cornerOffset = -1;
-			const int cornerShare = 4;
+			int cornerShare = countBorder * 2;
 
 			rect.Inflate(-countBorder, -countBorder);
 

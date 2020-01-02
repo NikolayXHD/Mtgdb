@@ -1,10 +1,9 @@
-using Lucene.Net.QueryParsers.ComplexPhrase;
 using Lucene.Net.Search;
 using Lucene.Net.Search.Spans;
 
 namespace Mtgdb.Data
 {
-	public class RewritableComplexPhraseQuery : ComplexPhraseQueryParser.ComplexPhraseQuery
+	public class RewritableComplexPhraseQuery : ComplexPhraseQueryParserPatched.ComplexPhraseQuery
 	{
 		public RewritableComplexPhraseQuery(string field, string phrasedQueryStringContents, int slopFactor, bool inOrder)
 			: base(field, phrasedQueryStringContents, slopFactor, inOrder)

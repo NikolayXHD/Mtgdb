@@ -12,7 +12,7 @@ namespace Mtgdb.Data
 
 		public const string AnyFormat = "[ any format ]";
 
-		public static readonly IList<string> Formats = new[]
+		public static readonly IReadOnlyList<string> Formats = new[]
 		{
 			"Standard",
 			"Pioneer",

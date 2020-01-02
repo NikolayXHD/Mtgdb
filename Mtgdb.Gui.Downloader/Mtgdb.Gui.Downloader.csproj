@@ -187,4 +187,5 @@
     <Content Include="Resources\update.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\shared\shared.projitems" Label="Shared" />
 </Project>

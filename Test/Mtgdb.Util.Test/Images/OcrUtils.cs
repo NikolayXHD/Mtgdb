@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Test;
+using Ninject;
 using NUnit.Framework;
 using Tesseract;
 
@@ -163,7 +164,7 @@ namespace Mtgdb.Util
 
 			var setCodesArr = setCodes.Split(';').ToHashSet(Str.Comparer);
 
-			var repo = new CardRepository
+			var repo = new CardRepository(Kernel.Get<CardFormatter>())
 			{
 				FilterSetCode = setCodesArr.Contains
 			};

@@ -23,12 +23,8 @@ namespace Mtgdb.Downloader
 		public async Task DownloadSignatures(string quality, CancellationToken token)
 		{
 			foreach (var qualityGroup in _config.QualityGroups)
-			{
-				if (!Str.Equals(quality, qualityGroup.Quality))
-					continue;
-
-				await downloadSignatures(qualityGroup, token);
-			}
+				if (Str.Equals(quality, qualityGroup.Quality))
+					await downloadSignatures(qualityGroup, token);
 		}
 
 		public bool SignaturesFileExist(QualityGroupConfig qualityGroup) =>
@@ -88,14 +84,12 @@ namespace Mtgdb.Downloader
 			}
 		}
 
-		public IList<ImageDownloadProgress> GetProgress()
+		public IReadOnlyList<ImageDownloadProgress> GetProgress()
 		{
 			var result = new List<ImageDownloadProgress>();
 			foreach (var qualityGroup in _config.QualityGroups)
 			{
-				string signaturesDir = Path.Combine(_updateImgDir, qualityGroup.Quality);
-				string signaturesFile = Path.Combine(signaturesDir, Signer.SignaturesFile);
-
+				(_, string signaturesFile) = getSignaturesFile(qualityGroup);
 				var imagesOnline = Signer.ReadFromFile(signaturesFile);
 
 				foreach (var dir in qualityGroup.Dirs)
@@ -123,8 +117,11 @@ namespace Mtgdb.Downloader
 
 		private static (string Directory, string File) getSignaturesFile(QualityGroupConfig qualityGroup)
 		{
-			string dir = Path.Combine(_updateImgDir, qualityGroup.Quality);
+			string dir = getSignaturesDir(qualityGroup);
 			return (Directory: dir, File: Path.Combine(dir, Signer.SignaturesFile));
 		}
+
+		private static string getSignaturesDir(QualityGroupConfig qualityGroup) =>
+			Path.Combine(_updateImgDir, qualityGroup.Name);
 	}
 }

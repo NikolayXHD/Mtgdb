@@ -38,7 +38,7 @@ namespace Mtgdb.Util
 				card.ScryfallId +
 				"?format=image" +
 				"&version=png";
-			if (card.IsTransform() && card == card.Faces[1])
+			if (card.Side == "b")
 				urlScryfallId += "&face=back";
 
 			try

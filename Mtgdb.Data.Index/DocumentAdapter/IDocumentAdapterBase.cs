@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Lucene.Net.Analysis;
-using Lucene.Net.QueryParsers.Classic;
 
 namespace Mtgdb.Data
 {
@@ -23,6 +22,6 @@ namespace Mtgdb.Data
 		bool IsNotAnalyzed(string userField);
 
 		Analyzer CreateAnalyzer();
-		QueryParser CreateQueryParser(string language, Analyzer analyzer);
+		QueryParserPatched CreateQueryParser(string language, Analyzer analyzer);
 	}
 }

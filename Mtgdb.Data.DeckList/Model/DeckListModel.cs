@@ -201,7 +201,7 @@ namespace Mtgdb.Data.Model
 
 		public void FillCardNames()
 		{
-			if (_repo.IsLoadingComplete.Signaled)
+			if (!_repo.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException();
 
 			lock (_syncModels)

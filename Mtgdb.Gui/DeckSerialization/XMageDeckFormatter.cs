@@ -22,7 +22,7 @@ namespace Mtgdb.Gui
 			name = fromXMageName(name);
 
 			var cards =
-				Repo.SetsByCode.TryGet(setCode)?.CardsByName.TryGet(name) ??
+				Repo.SetsByCode.TryGet(setCode)?.ActualCardsByName.TryGet(name) ??
 				Repo.CardsByName.TryGet(name);
 
 			var card = cards

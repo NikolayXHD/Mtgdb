@@ -3,6 +3,7 @@ using System.Linq;
 using Mtgdb.Data;
 using Mtgdb.Data.Model;
 using Mtgdb.Ui;
+using Ninject;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -13,9 +14,9 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void OneTimeSetup()
 		{
-			_repo = new CardRepository
+			_repo = new CardRepository(Kernel.Get<CardFormatter>())
 			{
-				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer)
+				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer),
 			};
 
 			_repo.LoadFile();

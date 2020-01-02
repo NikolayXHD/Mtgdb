@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
+using Ninject;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -11,7 +12,7 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			_repo = new CardRepository
+			_repo = new CardRepository(Kernel.Get<CardFormatter>())
 			{
 				FilterSetCode = F.IsEqualTo("ISD", Str.Comparer)
 			};

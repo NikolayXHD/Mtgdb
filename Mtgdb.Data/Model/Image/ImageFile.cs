@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Data
 {
@@ -11,7 +12,8 @@ namespace Mtgdb.Data
 	{
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.IgnoreCase);
 
-		public ImageFile(string fileName, string rootPath, string setCode = null, string artist = null,
+		public ImageFile(
+			[NotNull] string fileName, string rootPath, string setCode = null, string artist = null,
 			bool isArt = false, int? customPriority = null)
 		{
 			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
@@ -69,13 +71,13 @@ namespace Mtgdb.Data
 					SetCode = string.Empty;
 			}
 
-			Quality = customPriority ?? getQuality();
+			Priority = customPriority ?? getPriority();
 
 			if (artist != null)
 				Artist = string.Intern(artist);
 
 			IsArt = isArt;
-			IsToken = directoryName.IndexOf("Tokens", Str.Comparison) >= 0;
+			IsToken = directoryName.IndexOf("Token", Str.Comparison) >= 0;
 		}
 
 		public ImageModel ApplyRotation(Card card, bool zoom)
@@ -115,7 +117,7 @@ namespace Mtgdb.Data
 			return new ImageModel(this, RotateFlipType.Rotate180FlipNone);
 		}
 
-		private int getQuality()
+		private int getPriority()
 		{
 			if (string.IsNullOrEmpty(Type))
 				return 1;
@@ -137,15 +139,18 @@ namespace Mtgdb.Data
 		public string Name { get; }
 		public int VariantNumber { get; }
 		private string Type { get; }
+
+		[NotNull]
 		public string FullPath { get; }
-		public int Quality { get; }
+
+		public int Priority { get; }
 		public string Artist { get; }
 		public bool IsArt { get; }
 		public bool IsToken { get; }
 
 		public override string ToString()
 		{
-			return $"{SetCode} {Name} #{VariantNumber} q{Quality}";
+			return $"{SetCode} {Name} #{VariantNumber} q{Priority}";
 		}
 
 		// -S.xlhq.jpg marks image with artist signature

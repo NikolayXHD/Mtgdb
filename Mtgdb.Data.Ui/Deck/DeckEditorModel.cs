@@ -446,10 +446,27 @@ namespace Mtgdb.Ui
 
 		public DeckZoneModel Deck => getDeckZone(CurrentZone ?? Zone.Main);
 
-		public int MainDeckSize => MainDeck.CountById.Values.Sum();
-		public int SideDeckSize => SideDeck.CountById.Values.Sum();
-		public int MaybeDeckSize => MaybeDeck.CountById.Values.Sum();
-		public int SampleHandSize => SampleHand.CountById.Values.Sum();
+		public int MainDeckSize(CardRepository repo) =>
+			countNonTokens(repo, MainDeck);
+
+		public int SideDeckSize(CardRepository repo) =>
+			countNonTokens(repo, SideDeck);
+
+		public int MaybeDeckSize(CardRepository repo) =>
+			countNonTokens(repo, MaybeDeck);
+
+		public int SampleHandSize(CardRepository repo) =>
+			countNonTokens(repo, SampleHand);
+
+		private static int countNonTokens(CardRepository repo, DeckZoneModel zone)
+		{
+			if (repo.IsLoadingComplete.Signaled)
+				return zone.CountById
+					.Where(_ => !repo.CardsById[_.Key].IsToken)
+					.Sum(_ => _.Value);
+
+			return zone.CountById.Values.Sum();
+		}
 
 		public Card DraggedCard { get; set; }
 		public Card CardBelowDragged { get; set; }

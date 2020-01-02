@@ -6,7 +6,7 @@ using Mtgdb.Ui;
 
 namespace Mtgdb.Gui
 {
-	class XitaxDeckTransformation
+	internal class XitaxDeckTransformation
 	{
 		public XitaxDeckTransformation(CardRepository repo)
 		{
@@ -38,7 +38,7 @@ namespace Mtgdb.Gui
 					.Where(set => Str.Compare(set.ReleaseDate, releaseDate) <= 0)
 					.AtMax(set => set.ReleaseDate)
 					.Find()
-					.CardsByName[card.NameNormalized];
+					.MapByName(card.IsToken)[card.NameNormalized];
 
 				var replacement =
 					candidates.FirstOrDefault(_ => _.ImageName == card.ImageName) ??

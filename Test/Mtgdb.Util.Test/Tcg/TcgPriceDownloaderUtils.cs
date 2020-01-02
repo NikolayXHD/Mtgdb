@@ -113,7 +113,7 @@ namespace Mtgdb.Util
 
 				var tcgCards = tcgCardsByTcgSet[tcgSet];
 
-				foreach (var pair in set.CardsByName.OrderBy(_ => _.Key))
+				foreach (var pair in set.ActualCardsByName.OrderBy(_ => _.Key))
 				{
 					var cards = pair.Value
 						.OrderBy(_ => _.Number)

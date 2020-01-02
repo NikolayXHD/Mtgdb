@@ -6,8 +6,8 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-<!--	<ImageLocations EnabledGroups="dev,xlhq" >-->
-	<ImageLocations EnabledGroups="prod-dev" >
+  <!--<ImageLocations EnabledGroups="dev,xlhq" >-->
+	<ImageLocations EnabledGroups="prod" >
 
 		<Root Name="XLHQ"         Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
 		<Root Name="Promo"        Path="D:\distrib\games\mtg\XLHQ Promos" />
@@ -17,16 +17,22 @@
     <Root Name="Preprocessed" Path="D:\distrib\games\mtg\Gatherer.Preprocessed" />
     <Root Name="Patch"        Path="D:\distrib\games\mtg\Patch" />
 
-		<Directory Group="prod" Path="images\Mtgdb.Pictures\LQ" />
-		<Directory Group="prod" Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
+    <Directory Group="prod" Path="images\Mtgdb.Pictures\LQ"       />
+    <Directory Group="prod" Path="images\Mtgdb.Pictures\LQ-Token" />
+    <Directory Group="prod" Path="images\Mtgdb.Pictures\MQ"       Zoom="True" />
+    <Directory Group="prod" Path="images\Mtgdb.Pictures\MQ-Token" Zoom="True" />
 		<Directory Group="prod" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\LQ" />
-		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\MQ" Zoom="True" />
+		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\LQ"       />
+    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\LQ-Token" />
+    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\MQ"       Zoom="True" />
+    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\MQ-Token" Zoom="True" />
 		<Directory Group="prod-dev" Path="D:\games\Mtgdb.Gui\images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="dev" Zoom="False" Root="Original"     Path="" />
-		<Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="" />
+		<Directory Group="dev" Zoom="False" Root="Original"     Path="cards" />
+    <Directory Group="dev" Zoom="False" Root="Original"     Path="tokens" Priority="4" />
+		<Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="cards" />
+    <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="tokens" Priority="4" />
     <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="hho" Set="hho" Priority="4" />
 		<Directory Group="dev" Zoom="Any"   Root="Patch"        Path="" />
 

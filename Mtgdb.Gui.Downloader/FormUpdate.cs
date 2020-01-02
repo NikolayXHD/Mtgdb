@@ -408,22 +408,21 @@ namespace Mtgdb.Downloader
 				card.ResetImageModel();
 		}
 
-		private static void write(IList<ImageDownloadProgress> imageDownloadProgresses)
+		private static void write(IReadOnlyList<ImageDownloadProgress> imageDownloadProgresses)
 		{
-			var progressByQuality = imageDownloadProgresses
-				.GroupBy(_ => _.QualityGroup.Quality)
+			var progressByGroup = imageDownloadProgresses
+				.GroupBy(_ => _.QualityGroup.Name)
 				.ToDictionary(
 					grQ => grQ.Key,
 					grQ => grQ.ToList());
 
-			foreach (var pair in progressByQuality)
+			foreach ((string quality, var progress) in progressByGroup)
 			{
-				var quality = pair.Key;
-				var totalDirs = pair.Value.Count;
-				var downloadedDirs = pair.Value.Where(_ => _.MayBeComplete).Select(_ => _.Dir.Subdirectory).ToArray();
-				var downloadedDirsCount = downloadedDirs.Length;
-				var totalFiles = pair.Value.Sum(_ => _.FilesOnline?.Count ?? 0);
-				var downloadedFiles = pair.Value.Sum(_ => _.FilesDownloaded?.Count);
+				int totalDirs = progress.Count;
+				var downloadedDirs = progress.Where(_ => _.MayBeComplete).Select(_ => _.Dir.Subdirectory).ToArray();
+				int downloadedDirsCount = downloadedDirs.Length;
+				int totalFiles = progress.Sum(_ => _.FilesOnline?.Count ?? 0);
+				var downloadedFiles = progress.Sum(_ => _.FilesDownloaded?.Count);
 
 				Console.WriteLine($"{quality}: {downloadedDirsCount}/{totalDirs} directories, {downloadedFiles}/{totalFiles} files");
 			}
@@ -541,7 +540,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 		public bool IsShownAutomatically { get; set; }
 
-		public IList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
+		public IReadOnlyList<ImageDownloadProgress> ImageDownloadProgress { get; private set; }
 		public bool IsProgressCalculated => ImageDownloadProgress != null;
 
 		public bool AreSignaturesDownloaded(QualityGroupConfig qualityGroup) =>

@@ -27,18 +27,20 @@
 	/>
 
 	<ImageLocations>
-		<Directory Path="images\Mtgdb.Pictures\LQ" />
-		<Directory Path="images\Mtgdb.Pictures\MQ" Zoom="True" />
+		<Directory Path="images\Mtgdb.Pictures\LQ"       />
+    <Directory Path="images\Mtgdb.Pictures\LQ-Token" />
+    <Directory Path="images\Mtgdb.Pictures\MQ"       Zoom="True" />
+    <Directory Path="images\Mtgdb.Pictures\MQ-Token" Zoom="True" />
 		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 	</ImageLocations>
 
 	<ImageSources MegaPrefix="https://mega.nz/#F!" GdrivePrefix="https://drive.google.com/uc?export=download&amp;id=">
 
-		<QualityGroup Quality="Art" TargetDirectory="images\Artworks" FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
+		<QualityGroup Quality="Art" Name="Art" TargetDirectory="images\Artworks" FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
 			<Dir MegaId="39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
 		</QualityGroup>
 
-    <QualityGroup Quality="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
+    <QualityGroup Quality="LQ" Name="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
       <Dir GdriveId="1FsNweT2ObjmLpBBtLk548LP0bLQnheXC" Subdir="gn2" />
       <Dir GdriveId="1nCxU3zQKbwDOXwbdreWetiu5vtwG6g3P" Subdir="cmb1" />
       <Dir GdriveId="1-Z9JJjypQ-CaySv5FpMdadYIpunSxQGU" Subdir="ha1" />
@@ -495,7 +497,7 @@
 			<Dir GdriveId="16sKDbvkM5gr5oIatg4QzAGNOufXHDDgx" Subdir="zen" />
 		</QualityGroup>
 
-		<QualityGroup Quality="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
+		<QualityGroup Quality="MQ" Name="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
       <Dir GdriveId="1TamVtsEh4i8NPtFHlnCuWGBlgd6XPTMb" Subdir="gn2" />
       <Dir GdriveId="1KVMLgut2xXpjku6pj5gfK0kHtbP50ZIL" Subdir="cmb1" />
       <Dir GdriveId="1TqTvQjzJfjMqX26jZwUzx-tYYm7vUKjP" Subdir="ha1" />
@@ -951,6 +953,295 @@
 			<Dir GdriveId="1ZMB3i49Hf62kaF8n-LP0Alc9yJYvCZrd" Subdir="xln" />
 			<Dir GdriveId="1eByq8C8SAgcoB-J3gutYfxhNBU41gYcI" Subdir="zen" />
 		</QualityGroup>
+
+    <QualityGroup Quality="LQ" Name="LQ-Token" TargetDirectory="images\Mtgdb.Pictures\LQ-Token" FileListGdriveId="1b-QNQgDX2BSi5InzSc1dYjya4JtbsUNR" >
+      <Dir GdriveId="1sqlfLpiLkepP8v2HqhgGjV6V5HRCUDHL" Subdir="10E" />
+      <Dir GdriveId="1vi_FPMKKJc-Sc5Avr7Pk5LHMyhSgBi2D" Subdir="A25" />
+      <Dir GdriveId="1wCnZFsO5Wek5UgObGj-PEm9yWUQiQmDN" Subdir="AER" />
+      <Dir GdriveId="1qTpQp6Bwado_lW-V9UPI2C7qz-I3Qcy1" Subdir="AKH" />
+      <Dir GdriveId="1ZvsAZxgAs_LRHil-tN0hqye2AUt1jbGF" Subdir="ALA" />
+      <Dir GdriveId="1UQBJAtpIzfr8R0UtWiiDvrcBL6rJmaF_" Subdir="AMH1" />
+      <Dir GdriveId="1Vyv_tiBu8MA2ojEKHX9uT7-I_NtvK3K5" Subdir="ANA" />
+      <Dir GdriveId="1g5H-kfo2l57DSc9sGfrraPU_cBTKaAgj" Subdir="ARB" />
+      <Dir GdriveId="1imgaN_xsYH3o-JXLEUraLK6Tdlmo4gEn" Subdir="AVR" />
+      <Dir GdriveId="1wrMGRBEBvcgJ_y-66fXcWmMb2BC8zHKj" Subdir="BBD" />
+      <Dir GdriveId="1yRhVCdHNN_mx3-WXJRtM8xqZ3O0_6uy_" Subdir="BFZ" />
+      <Dir GdriveId="1gfkyf5eL5fOi-4l9I9PBgY8qmFNHclYv" Subdir="BNG" />
+      <Dir GdriveId="1B2Fke22P86SkBJQIhCFVwSJMrUWn7Fnh" Subdir="C14" />
+      <Dir GdriveId="1KzmMzhmzLX_189fK4dQHYUOtOduIn9qm" Subdir="C15" />
+      <Dir GdriveId="1M3OJg6ruCs0WMoXkzc-zdA4Hv0WXufrt" Subdir="C16" />
+      <Dir GdriveId="1QhxwjdQnfm9D0teZG3SMmyrUQ36vrzwz" Subdir="C17" />
+      <Dir GdriveId="1PkT1H05PvXqUfmXlaJFfeDel5ujab953" Subdir="C18" />
+      <Dir GdriveId="1aue5rRu4T1bzrdgnvS5lsx8oxrFkQD76" Subdir="C19" />
+      <Dir GdriveId="10A178FUTMU4JGhUK-D-nepN-MZz8olDz" Subdir="CM2" />
+      <Dir GdriveId="19xtobrtd-LJNGX2kcb1Nt-Q7kgrC7dXA" Subdir="CMA" />
+      <Dir GdriveId="1_0m7TYWGGuWOVuhvClf0Vw2r5DKe9Obf" Subdir="CN2" />
+      <Dir GdriveId="1nlCY079rhxbE423IVt-mQgT5wBUktEIa" Subdir="CNS" />
+      <Dir GdriveId="1NRUPOZp1noaqCMtU7_mjQHNm3MJvO8hn" Subdir="CON escape" />
+      <Dir GdriveId="1CIXVgWJeeU5Wqf0Nwmgkrq429hgQExeb" Subdir="CSP" />
+      <Dir GdriveId="1ic5XirlRgB43-3Mwy3EGBYr9d3kRX4m8" Subdir="DD1" />
+      <Dir GdriveId="14IoTZfXossaAzb66ThgfX-PTlltL6Aa0" Subdir="DD2" />
+      <Dir GdriveId="11EotpO-ExWF5UvwIjg9AbKMIeK3ggEka" Subdir="DDC" />
+      <Dir GdriveId="18mmhBsJuhDcZLhO4jmPA7vJsiAIBlrzh" Subdir="DDD" />
+      <Dir GdriveId="1KRJWXwUc2KRg7n74L_11kIhXEn6oSyIC" Subdir="DDE" />
+      <Dir GdriveId="10ReuAj0MyJmnKmlAZH8UHSF1Cs85q2iV" Subdir="DDF" />
+      <Dir GdriveId="1wN0KBn1pw1tG76na99D3vtdDExTL33OA" Subdir="DDG" />
+      <Dir GdriveId="1VaYSgd_o7W5imgDTAp1q9t9LE2akWjNm" Subdir="DDH" />
+      <Dir GdriveId="1rp1JZooVfHbqJCivWwQ7YJ6v9HIcUf3t" Subdir="DDI" />
+      <Dir GdriveId="1zAUNUGxThQWnL0xxf4IwE3XTKwq8qdUk" Subdir="DDJ" />
+      <Dir GdriveId="1p4OKzP21GoN1jsM8s1wE9G6Wed3ta8Bj" Subdir="DDK" />
+      <Dir GdriveId="15_hv1xVeEpDRWa0VrE35WH-3YEylHkh3" Subdir="DDL" />
+      <Dir GdriveId="1WFqv234OxODy6CHAPtwLDzgJQt4bV6kE" Subdir="DDM" />
+      <Dir GdriveId="1tuPOK0uWGSPwd0BwMUAOwDDHNeR_u7_A" Subdir="DDN" />
+      <Dir GdriveId="1uG52fDU2ZqbUC-dzzpWkEerGlETUq-nN" Subdir="DDO" />
+      <Dir GdriveId="1B2LdjMB0aOKoXAezeUhZmxeU1w77zYPd" Subdir="DDP" />
+      <Dir GdriveId="1LKRXK3kaGOlm_3TsCNViOKC8xIEj_WNi" Subdir="DDQ" />
+      <Dir GdriveId="1kjQO1QvbiKSSqNE7OhwK3KnvAUgWxTDF" Subdir="DDR" />
+      <Dir GdriveId="12_AMzeOVxbnGxREmOGQ68E5pN7HosToS" Subdir="DDS" />
+      <Dir GdriveId="1FLOtSl8zvj7ez1-U1144fg1kDkjnQP9L" Subdir="DDT" />
+      <Dir GdriveId="186M3COKwynpKMQ_WBkQ0SLt9UKi2UKgY" Subdir="DDU" />
+      <Dir GdriveId="12W8VW1la3HVm8lYVB8-B6X6nGkPfv0eX" Subdir="DGM" />
+      <Dir GdriveId="1Kcs4OxQKp_cvxsKYTTM3ZEw0M-79dmak" Subdir="DKA" />
+      <Dir GdriveId="1iJRzt5mFZKS7IbkQpuIUVNfxiqpmQl4z" Subdir="DOM" />
+      <Dir GdriveId="1qnnhel3_fmr-6kr-rgt6zs47BMydoh_b" Subdir="DTK" />
+      <Dir GdriveId="1rRtLUlWxAOQCLCS_21gfGb-c2qx_gFsS" Subdir="DVD" />
+      <Dir GdriveId="1k_bYXxTF9uwVUs3eRri87Ev4oKsRSkCo" Subdir="E01" />
+      <Dir GdriveId="1Qa2t8onq8JwolsDyWe6y852wRWGJRzyg" Subdir="E02" />
+      <Dir GdriveId="1zf_kHDbIhUfwI8nYcJp1YPZsQV1vIK6D" Subdir="ELD" />
+      <Dir GdriveId="1Ok96k_HO78hQV2H7qbkMcUYIH5HFuI0V" Subdir="EMA" />
+      <Dir GdriveId="1RkCk7LU4ILkOteuTAEMke-cKN4NXMwgj" Subdir="EMN" />
+      <Dir GdriveId="1pwrRs9TfYm9TNmjweXTw02bwA-daFvJX" Subdir="EVE" />
+      <Dir GdriveId="1qJKwE_qKg18WBElZpE0D_t6XAZa4ciya" Subdir="EVG" />
+      <Dir GdriveId="1DvojvxO-Np926K-mS9dnblx8LcgAmkoC" Subdir="F12" />
+      <Dir GdriveId="1jZg98PiM7wj1gRmG28VdpFa9E1dIh_VQ" Subdir="F17" />
+      <Dir GdriveId="1p11UIjt-IagVIPcn7uqq2w3IaLWmu6If" Subdir="F18" />
+      <Dir GdriveId="1GMCeLfcMsH_GpSRNDlFWbS9jpj7FTPzQ" Subdir="FRF" />
+      <Dir GdriveId="1UtsMadiemS2uwAgWAHGc5jJodlYV3s52" Subdir="G11" />
+      <Dir GdriveId="1EuEruE3Dhbz77DuoA7xm1OOoNqe_ANxJ" Subdir="GK1" />
+      <Dir GdriveId="1xaunTnrLTEMgVWrLBrRjAX_rbB0MWGjp" Subdir="GK2" />
+      <Dir GdriveId="1sOoKT0tyu-iIppx3Dbh-rps-Z-23Q-Ao" Subdir="GRN" />
+      <Dir GdriveId="1KRrI6f7RlsB0HUlCa2Ad-u4AigJWkY1f" Subdir="GS1" />
+      <Dir GdriveId="1_6Zcdjrk5w_TtfEiKDQG_HnAd4KBU57W" Subdir="GTC" />
+      <Dir GdriveId="1ZCG3NGyLSAcyJOTcuzUZkFdfMOHU4WZl" Subdir="GVL" />
+      <Dir GdriveId="1dCE5cT0-zV3IBjUoPpew57oCcOm4WHiE" Subdir="H17" />
+      <Dir GdriveId="1tYVGdHuLuMSkAjcXzsOELv9qKKykpRKh" Subdir="HOU" />
+      <Dir GdriveId="1qxZz7jY8aWAs4Mm_RvSP8qtHmKtTYQJf" Subdir="IMA" />
+      <Dir GdriveId="1VydonqO2v6knGKLksHY0ZCjgr-XZStZI" Subdir="ISD" />
+      <Dir GdriveId="1-rSWVmhmMlViu5kD4OgxDsEcPSMAhiN-" Subdir="J12" />
+      <Dir GdriveId="1lrKcWA9-tF-TOxz2aoGwt6B4KZuuDjdA" Subdir="J13" />
+      <Dir GdriveId="1V1t8Fu1FzIALMz_iH2O33YntxE8MKV8l" Subdir="JOU" />
+      <Dir GdriveId="1KasX-bYAuGyfIGbHZuFxazhbGwncOt3B" Subdir="JVC" />
+      <Dir GdriveId="1BIkDMMHV_KbPKhbkvcK-IZ6e5P7YG9Ip" Subdir="KLD" />
+      <Dir GdriveId="1CoHJk6HkVBQk4JMjLxb3758avQGH-bkh" Subdir="KTK" />
+      <Dir GdriveId="1PYcXaRqLHbaVyN4IoS8VVmK03QuZuKGv" Subdir="L12" />
+      <Dir GdriveId="1xlTvkxzIt15s916UFTpxT_BNIhrAVtdm" Subdir="L13" />
+      <Dir GdriveId="1JYGc-k5lcZolC4VjHD5Z98cpHAppNQ5k" Subdir="L14" />
+      <Dir GdriveId="1w9i6dQZesSVRTE-A7Rs8qJ-U0JoIcfbO" Subdir="L15" />
+      <Dir GdriveId="1rPRn2GBFZjhCA_3-DlhvuaOLkP6EFtC5" Subdir="L16" />
+      <Dir GdriveId="18Z9eSfG5qIjnT1VsdeNtCxM7MgtFpzPv" Subdir="L17" />
+      <Dir GdriveId="1jSQpTiC-H2X96TKMl-Of1doeR3Q5rOoa" Subdir="LRW" />
+      <Dir GdriveId="1ErEhYG6ADBvmfa3QJ5_Ry0rqRGA2Al_f" Subdir="M10" />
+      <Dir GdriveId="15jUk63RIhQzpOOCfaCiWyf2_x0y72p0h" Subdir="M11" />
+      <Dir GdriveId="1ynaJeYAX43FG11bGNRr45s05dlMPq37I" Subdir="M12" />
+      <Dir GdriveId="14AupsA1F2aSW9uhr24spmkv4L1LbTq91" Subdir="M13" />
+      <Dir GdriveId="1KnpOskpiaR9jfRIHth8pkf0rl-vjfWw4" Subdir="M14" />
+      <Dir GdriveId="1qKBnMHsDlkYVIm15_NB0wO7tVLkAUEpP" Subdir="M15" />
+      <Dir GdriveId="12hVebbbx1Al4ZBIT2u4opBlFZ6Nh5DmH" Subdir="M19" />
+      <Dir GdriveId="1OMVdExZibIBS_ihGRwTOg6ycJ426fGHg" Subdir="M20" />
+      <Dir GdriveId="1_GKyvuNLsVokEFmjo_cJMVfHgs7tQfnp" Subdir="MBS" />
+      <Dir GdriveId="1VPBhvbZWQ044yn5d_GNfbWkteQxwxU9a" Subdir="MD1" />
+      <Dir GdriveId="1aP66s7rQQguTXb-YwS_Z4CfmPIcMd4z3" Subdir="MED" />
+      <Dir GdriveId="1PxZ4WkASBj1N-v2HkSPvyxgQkSZLyfCe" Subdir="MH1" />
+      <Dir GdriveId="1NRHzkSQFXOvQUIv42zxDXlPSCu8hF2O7" Subdir="MM2" />
+      <Dir GdriveId="1dsF7tuwm30x7AO9zhzcNfzBwEgqs7VdT" Subdir="MM3" />
+      <Dir GdriveId="1IBDFEr1tS4mxWUkoYQEd7E3PwU5r88xv" Subdir="MMA" />
+      <Dir GdriveId="1GIMbfhpAUw3jzv8w5pcXZo3FQasg3ugB" Subdir="MOR" />
+      <Dir GdriveId="1fmxHDaDcq2QkdY0R-5BcJ5d1FEzN7KIk" Subdir="MPR" />
+      <Dir GdriveId="1465CZ_VUKShVfU68UmVZHbPQFheSTl2O" Subdir="NPH" />
+      <Dir GdriveId="1amcaYI-cNHo5uT4icYS5czi2DT4BYvdd" Subdir="OGW" />
+      <Dir GdriveId="1Xhmo2mwbaGcJflVmEbcTKtUUOO3ILjAE" Subdir="ORI" />
+      <Dir GdriveId="10pi40y6pD6uW-1K5-b1TXG_JJ2KgpcaN" Subdir="P03" />
+      <Dir GdriveId="1zMU3MOkH9PL2kapj3Vn6IyJSEXvX0rh4" Subdir="P04" />
+      <Dir GdriveId="1YcCxVRlvLUI2nDKqCG-mkqUyCXERTJpI" Subdir="PCA" />
+      <Dir GdriveId="1lKRaPeE4dirYZzdQZ67RjyxHaWWwlqHm" Subdir="PEMN" />
+      <Dir GdriveId="1Ln31AeikvVMgyTekHAFb1UH5MyTuaiF4" Subdir="PHEL" />
+      <Dir GdriveId="1S0MD3VHIuUzC3GjlMfpm-ji6De96op6m" Subdir="PLNY" />
+      <Dir GdriveId="1RcY5QpYGOtwejJFU0-5Yh3-EVcvUPNvW" Subdir="PPC1" />
+      <Dir GdriveId="1UqDPvt5Hz_lgWLXgvU5wDLkMbijHQHrE" Subdir="PR2" />
+      <Dir GdriveId="1N5yuuki5rstD6g14SNe8XNYgMhSzn-3t" Subdir="RIX" />
+      <Dir GdriveId="1ljdn-7uCnzWvvLl85sBjGOsxc-iYtKGj" Subdir="RNA" />
+      <Dir GdriveId="1cvwK-UN4FOP2_A6RXJwHaQqwlhH2l8kU" Subdir="ROE" />
+      <Dir GdriveId="1Yfg1g79YxThdLJVn3cjLPE1-wTmm-9X2" Subdir="RTR" />
+      <Dir GdriveId="1hDt0Byik-eK8Jf5ufUkLUhxtZzFfm-iK" Subdir="SHM" />
+      <Dir GdriveId="1Oy-FSMVdAAj4s4u7tTrlVdBm_SIJHQuF" Subdir="SOI" />
+      <Dir GdriveId="1VllSu9gDcY5M6u-dHiuyYR0t_2dUb4uY" Subdir="SOM" />
+      <Dir GdriveId="1NQG0S9VWXmovEW9OPEuA5C8_Tr4Kcvk6" Subdir="TBTH" />
+      <Dir GdriveId="1YE2eb1q4kQn_wra7gA283IWnvSc_ExXb" Subdir="TDAG" />
+      <Dir GdriveId="1PCO0K4bxcSaeIUy859r_wj-4atsc-yO_" Subdir="TFTH" />
+      <Dir GdriveId="1O2LLF5MH0iP2WpWHbQo_dH9fqKs0qVfT" Subdir="THP3" />
+      <Dir GdriveId="17bYNhkkuDStXyNT8fzRX2fBoOvtzCgy-" Subdir="THS" />
+      <Dir GdriveId="1Nmlb-wI3q5L2WDUmK9JkdVYFa0F_vXtX" Subdir="UGL" />
+      <Dir GdriveId="13jIACy5-JemBHVuKMruu6b1pKjXgp5O5" Subdir="UMA" />
+      <Dir GdriveId="1zyT7AjcFjXNkPH0QPrBF2du47MyV4Zgi" Subdir="UST" />
+      <Dir GdriveId="1h8qtgKlmZvLUfOxTmuu9TJhr6nh46VRI" Subdir="V16" />
+      <Dir GdriveId="1mczvMI8Ps9AluKEt_fZTPbqgd_WatHWG" Subdir="WAR" />
+      <Dir GdriveId="16I7IRa39LXcdqQVNK7lSzsp1AduQmF1c" Subdir="WC00" />
+      <Dir GdriveId="1Etq0r7vfUEm44pOH2f6ByN5BVVwTQlry" Subdir="WC01" />
+      <Dir GdriveId="1gYFoyUzMLWygQ3sPmH9xffEZArvfjBcT" Subdir="WC02" />
+      <Dir GdriveId="18x4Dh1boRmbEM3QGgHe5APyDkalM9E3C" Subdir="WC03" />
+      <Dir GdriveId="1BM8lo4OLpw57PtG-RsNp-klvOkGzwnbn" Subdir="WC04" />
+      <Dir GdriveId="1bM4EBwKdHXCi-Bu-sgj_yeSJyK7_KfKC" Subdir="WC97" />
+      <Dir GdriveId="18dRZ8riwQPJ_wTckpRs0F6MGl_hpyEli" Subdir="WC98" />
+      <Dir GdriveId="1x1j650TSllLOQjazKj78cxtX81lAVI03" Subdir="WC99" />
+      <Dir GdriveId="1YSazLck6b3vEDs1FScH75hYhGuuJD6rY" Subdir="WWK" />
+      <Dir GdriveId="1mLTUbvmChncvalj77jL_WZBq4wTxdI_L" Subdir="XLN" />
+      <Dir GdriveId="1_bPtO9ietnu1Eihn-TDlT7CdVHx10bMV" Subdir="ZEN" />
+    </QualityGroup>
+
+    <QualityGroup Quality="MQ" Name="MQ-Token" TargetDirectory="images\Mtgdb.Pictures\MQ-Token" FileListGdriveId="12qRW67Gpf8XJHWrQyO5DhEh_Z7a0oxzf" >
+      <Dir GdriveId="1oTkSY5ypLezthL2uLzLT9cgBLBa4lvc5" Subdir="10E" />
+      <Dir GdriveId="1l63mxWO-uy2yKcxcd0qfkW2bKdg72UmQ" Subdir="A25" />
+      <Dir GdriveId="1ATZMsCgO3TpYc98SOrfrUEq9eMgXLZZh" Subdir="AER" />
+      <Dir GdriveId="16quzZ3QgNfV2SGP6YQ-i8vULYwF8jn9-" Subdir="AKH" />
+      <Dir GdriveId="1jeQYXc-sWfWAaU2eyy6y93mnoXNqO61n" Subdir="ALA" />
+      <Dir GdriveId="1ZXTECC7FakyKpXPQP7vESEoUf8SYd6gZ" Subdir="AMH1" />
+      <Dir GdriveId="1RBTuhOoJEFo1T3NC1kEcNhQlmU6EG5CS" Subdir="ANA" />
+      <Dir GdriveId="1C9VSrG159OTISQ7gVfBDA3V6_47itDOs" Subdir="ARB" />
+      <Dir GdriveId="1T8xf85rCCenGYcyLLeHfyTwtfP3eWl2S" Subdir="AVR" />
+      <Dir GdriveId="1ZL4AzAYGIx8jncPdEmtijx8HF8S-hjJ3" Subdir="BBD" />
+      <Dir GdriveId="1EeaMOkMRROxGIQDzke7s1cQ4EjO62XfQ" Subdir="BFZ" />
+      <Dir GdriveId="1JNtrJIi51HS5DZ3e2mdAQzY060BmexqT" Subdir="BNG" />
+      <Dir GdriveId="1SLQJ9nup6KoTAgzyJ0TSDoDu2fcld_M7" Subdir="C14" />
+      <Dir GdriveId="1YRIUSUWWw1iO4L9zZvEddyF5qvBPUlT3" Subdir="C15" />
+      <Dir GdriveId="1EKOryyXU4BsZMa84suxkep6YL94XoZ9Y" Subdir="C16" />
+      <Dir GdriveId="1wutyc1DLnSWFj6TGmuORQQG8iNgmbTGj" Subdir="C17" />
+      <Dir GdriveId="1l1hhwYBjW_FY-eVmecBoAKQuQ7IW7diW" Subdir="C18" />
+      <Dir GdriveId="1IrtvFOtM34D2DjUTVOaPu7UsFQyLGFGf" Subdir="C19" />
+      <Dir GdriveId="1shHZ6mwMiQek6ijMbCNFnl64pMu0ETBQ" Subdir="CM2" />
+      <Dir GdriveId="1ibIt2PPWf4uDnezUAukH4VTfhY4FvXRe" Subdir="CMA" />
+      <Dir GdriveId="1GdB0oOcjfqjqGSKEIF5pdm-qU_QGJAN8" Subdir="CN2" />
+      <Dir GdriveId="1y_GXswzD9nj_ZBb8U4syxQtxGM9lAnAz" Subdir="CNS" />
+      <Dir GdriveId="1GMOC00hbjYhPkM0YwMGMDBvO0yvibugm" Subdir="CON escape" />
+      <Dir GdriveId="1FnWUgoLP0Hj5vBn5oLLR6XSMADYaRZoO" Subdir="CSP" />
+      <Dir GdriveId="1SmPduW5kyMc4GCqpnHsyEoMfuBkUNY8g" Subdir="DD1" />
+      <Dir GdriveId="1bdjIR4OSySQpaCy-Ip2L_kSK3fVrw6t9" Subdir="DD2" />
+      <Dir GdriveId="1JJfEa1dKo_kNq0TS3p63QoKExCvaBPMH" Subdir="DDC" />
+      <Dir GdriveId="10QQCpDxGblu67TefEOPwT3e4R27lvrbL" Subdir="DDD" />
+      <Dir GdriveId="1v_eK-7q1xdRNyKebaZKBSob_qPiR_1mn" Subdir="DDE" />
+      <Dir GdriveId="1b0qP4h7XUqa8PtVFQb_4KQvLy3K-QekI" Subdir="DDF" />
+      <Dir GdriveId="1hxz4YHslwoyaO6yrNeKJ4jqhnBTO_YWl" Subdir="DDG" />
+      <Dir GdriveId="17lFvn3_vKhQz4kxVKv8KW9kR0Jl7tDZg" Subdir="DDH" />
+      <Dir GdriveId="1ylx6fzF27BPW_c-LH0AXcgkFSfISqq_Y" Subdir="DDI" />
+      <Dir GdriveId="17WE1mT4Zo5iwt3QmJj_IiUfE4uK906ce" Subdir="DDJ" />
+      <Dir GdriveId="1Vj6sdstD8Y0Kw0fQ9d2QvOzZSYcx-yEB" Subdir="DDK" />
+      <Dir GdriveId="1RczxwMOrOKu_X7cb_wP92L7JmxN83lIp" Subdir="DDL" />
+      <Dir GdriveId="10kjv9ajoHHQ8mrha5SryS-2QJC1e5XtJ" Subdir="DDM" />
+      <Dir GdriveId="19rsG4oMA4to2GtVvXfaLkHRrx1FDqZ8e" Subdir="DDN" />
+      <Dir GdriveId="11ZR8jEwjbonqkd4S-1Qyy2GIFtpOaORy" Subdir="DDO" />
+      <Dir GdriveId="1OZZBI_hLh5RI8Y1ndPgpLTpt-5UCAEkY" Subdir="DDP" />
+      <Dir GdriveId="1IPc9jFMhLvnuRSFK_gx3XSCxdnG1rqed" Subdir="DDQ" />
+      <Dir GdriveId="1L-kSH77x67nq5LJKjkpsV1Yx160CDCVX" Subdir="DDR" />
+      <Dir GdriveId="1zvLySEa-_5pVAv3iVrVE35Ej-hbK_kq4" Subdir="DDS" />
+      <Dir GdriveId="1YI9R1qC2ddHk1a7I5entuVUGeaa99u3S" Subdir="DDT" />
+      <Dir GdriveId="1C3L0lsy5JlRzNfTWycJiCEUagThErvtW" Subdir="DDU" />
+      <Dir GdriveId="1mncPZts83kIU2mujbKfrQF5JKcmpjFNp" Subdir="DGM" />
+      <Dir GdriveId="1enz2s2XH83SkuxJYBJrvUDJb1_VyJI3s" Subdir="DKA" />
+      <Dir GdriveId="1ZW9HtVwNBIiD0v8NGlBaD9bDX8rNV4jn" Subdir="DOM" />
+      <Dir GdriveId="12E1xM7CfTnD8BqvMmQWuM_WXpJgHy3aF" Subdir="DTK" />
+      <Dir GdriveId="182sd0VtX1iD5yymH1cFiXBoKMT5R4XoE" Subdir="DVD" />
+      <Dir GdriveId="194V5OLyjqzurZMeG6qZrIXClwk8sK0Zm" Subdir="E01" />
+      <Dir GdriveId="1A7MPqLKbdU61HAok1qG0CfYRAiAwRBzl" Subdir="E02" />
+      <Dir GdriveId="11Am7cItB5ahbGMuziDEp3xzbpdGpsA5P" Subdir="ELD" />
+      <Dir GdriveId="1NpeqUBdDtxVm6fAJwt1pxmKV8MXVazoM" Subdir="EMA" />
+      <Dir GdriveId="1cn1tJNBp3Qbd7UihD1DTbFKmmoItfTrW" Subdir="EMN" />
+      <Dir GdriveId="1Ln_r9ENsueEvCRr0EmqHJtO6HrCFs_vB" Subdir="EVE" />
+      <Dir GdriveId="1kMkOhMfvDVCYME71NxQBEo2yxjuN7jyL" Subdir="EVG" />
+      <Dir GdriveId="1yzma-Zx3_Krd9nS3LUBIZEHNRuJg-876" Subdir="F12" />
+      <Dir GdriveId="1BBT6z9MhdlKCStI55Sw7k4RVCAWJfZzu" Subdir="F17" />
+      <Dir GdriveId="198sArK-3qPSRVWY_HiFFLrGfILa4TTEG" Subdir="F18" />
+      <Dir GdriveId="1I7BrfiQJ5CdqyX0ShcFDHmNuVRZxNfDJ" Subdir="FRF" />
+      <Dir GdriveId="1LgM59xZVvqO4dIhLHrpKHaa8F-sSXbnk" Subdir="G11" />
+      <Dir GdriveId="1DqJawnPNX62hRnqR_R0UtaU1oiDQWJBG" Subdir="GK1" />
+      <Dir GdriveId="125cH-hScHq8-agEZDX75rXeMCj4t9fwf" Subdir="GK2" />
+      <Dir GdriveId="1V6rB19ON8o6J0n3dIv81cjK5vPOSri_O" Subdir="GRN" />
+      <Dir GdriveId="1_tzHoXolR58cKReS-7Zcq3d7Vj6HFuTI" Subdir="GS1" />
+      <Dir GdriveId="1v_UXoMxoTPr73FAit-nZKJDv3s8uviVz" Subdir="GTC" />
+      <Dir GdriveId="1F02ke6D_Q3TDBUSvNwWxaagqudp7ViDg" Subdir="GVL" />
+      <Dir GdriveId="1IHiO358kq633qnABwnG1FifF9slYU_TY" Subdir="H17" />
+      <Dir GdriveId="1SAc1gaX72DWh8Sja-7slfJ5fUlS3diI3" Subdir="HOU" />
+      <Dir GdriveId="1e11GsRwmBljppNbUcfDk-9hA-1bXnEne" Subdir="IMA" />
+      <Dir GdriveId="1LzSotfXCJPAQtp7mmLxGL86OniRE9dyL" Subdir="ISD" />
+      <Dir GdriveId="1rVYA9sMaZQlQOTTCxgBh4V6Su4CTN2gU" Subdir="J12" />
+      <Dir GdriveId="1Ojf2TAqW3rw5lugIKZuIjQM_Kxn_Cebo" Subdir="J13" />
+      <Dir GdriveId="16vBU9WiBH_SO8BaOlT5xjUaJepMbPygd" Subdir="JOU" />
+      <Dir GdriveId="1nD9fmkftW-kCKMlB8SunuF5awgpMMFPa" Subdir="JVC" />
+      <Dir GdriveId="1Fy_Dqks-RaGy6QZAe0QLadC8o_2fljXA" Subdir="KLD" />
+      <Dir GdriveId="1qqlrkEZ-Cqkwute1oIpXLQKCal9yhXXw" Subdir="KTK" />
+      <Dir GdriveId="122E-7I8J9eakiSXNMZ1oMsp1t9jkJaXF" Subdir="L12" />
+      <Dir GdriveId="1MF935ANTm9zVte90HnjmlGQ0klI9QwfB" Subdir="L13" />
+      <Dir GdriveId="1dCv0IWNvnSUzPuCDN_UH3VclYfVqqqd_" Subdir="L14" />
+      <Dir GdriveId="1RxYOEGK8KKuzao_snR6RF8lzhUjOE7U7" Subdir="L15" />
+      <Dir GdriveId="1jH0fr9Jdpu5Q8ByGwzGyNrBajqujYY06" Subdir="L16" />
+      <Dir GdriveId="15omlEzKgvOf-apqeItFRO_nE21tQsg_5" Subdir="L17" />
+      <Dir GdriveId="1L3zLyQNP96kUVDcEWHfwrka4Ha2ZpFm5" Subdir="LRW" />
+      <Dir GdriveId="1zG6zRCvvp5vL9tT3s4LZHAC6OLp9yRsJ" Subdir="M10" />
+      <Dir GdriveId="1FNdz4uo60L-fklEiktp1ZTUCDa4f6sWt" Subdir="M11" />
+      <Dir GdriveId="1Ap7BoIiQuizdxfOlt08RIcu3rtUMpWY8" Subdir="M12" />
+      <Dir GdriveId="1E_nNUljnvXv1CZ6ABwuipq4Aj_KokU4w" Subdir="M13" />
+      <Dir GdriveId="14G7W-_TLhb0fdF7suBFF3--_zPtlJ5RR" Subdir="M14" />
+      <Dir GdriveId="1Te5xIv329mHl7VU7650lx6CQIBFzqvDb" Subdir="M15" />
+      <Dir GdriveId="1KnSPI9EECBgr975mPy1Lva99yQBC3K-X" Subdir="M19" />
+      <Dir GdriveId="1PJoD20A7R1Ev7YAHuWQBoRxiO56WI5rO" Subdir="M20" />
+      <Dir GdriveId="1TC3THV7bVkdQ_WhwdsAfANOYGC6bnj3d" Subdir="MBS" />
+      <Dir GdriveId="1JxExeXwBRUPutNwpdqobnQP7ydEb0NJ2" Subdir="MD1" />
+      <Dir GdriveId="1HBK0kfGmOGE3GIdbo0-TgDj63khTotYx" Subdir="MED" />
+      <Dir GdriveId="1YEt2B5aR7w3D-z-O-V0E_76aSYXPVeYG" Subdir="MH1" />
+      <Dir GdriveId="1-BVp0-hXozlJOhIw9sAlZRD29Xaanlrr" Subdir="MM2" />
+      <Dir GdriveId="1hPM88yJ7I1RGfbWWKO3mx8tgG1oN4zxI" Subdir="MM3" />
+      <Dir GdriveId="1xlXzyZsKrCI6WLJYxd_T7sT8EkX3PJfj" Subdir="MMA" />
+      <Dir GdriveId="1U1qW6Jz1MDbjdP8fVTV4wVBVGuWbVPO0" Subdir="MOR" />
+      <Dir GdriveId="11y_-QWD8ckU2hyRH4V6dA3rBx-QvBMO4" Subdir="MPR" />
+      <Dir GdriveId="1Q7BJHGnQA5mjlrkR2ABPZWRBLGstW9Lk" Subdir="NPH" />
+      <Dir GdriveId="14-cEde11Dw2gChigwNlxtU3XgvUGfWGK" Subdir="OGW" />
+      <Dir GdriveId="19o7sIxcLdgWrkqoJd8jEb9_FnnpW91v7" Subdir="ORI" />
+      <Dir GdriveId="1bBfKZRisDKZZkwDhYNF8q7un9u27ZOzr" Subdir="P03" />
+      <Dir GdriveId="1ncss0mSy49b6uWLgmXXONZhu5pZOpTEL" Subdir="P04" />
+      <Dir GdriveId="1_AIKI6yH60T-KJs7LKJ2Erb0sNJ7Ywni" Subdir="PCA" />
+      <Dir GdriveId="1fW51GAeOJGaIFKt9IYB9G3Ur38Eb9Pi9" Subdir="PEMN" />
+      <Dir GdriveId="1FvqXtc5DqgxC2h_ScG8n7iRHIfFxjunt" Subdir="PHEL" />
+      <Dir GdriveId="1jiiudNI-RqiJc12Tx5JY74XU99yEB0yR" Subdir="PLNY" />
+      <Dir GdriveId="1VQtpBsJeZhBBtv6NPZw4LUmeufY9eKOg" Subdir="PPC1" />
+      <Dir GdriveId="17TAf-_bypJ2Waz7_EjgEhK4bax1nMyq5" Subdir="PR2" />
+      <Dir GdriveId="1YLWzazInpX593v6knKSka3eQs9ycc6jm" Subdir="RIX" />
+      <Dir GdriveId="1_ioU7zWLOIeQOhLXJOsTeC03MJsFWemw" Subdir="RNA" />
+      <Dir GdriveId="1RbGLZgrefxxNGifYE1TNNLQDtRbVOcPy" Subdir="ROE" />
+      <Dir GdriveId="1MIwW4Oy6vKX6rsnfcEbZ5kSMjUnuVWtu" Subdir="RTR" />
+      <Dir GdriveId="1NR0LzTHIbKa6mudoGnTSQ8-Ep_2m6C66" Subdir="SHM" />
+      <Dir GdriveId="1gWm1xl8egoVFpJfGJoVzU_K278DCuYAl" Subdir="SOI" />
+      <Dir GdriveId="1UwSYJ6LPSGgJKdvJQAb7UU4A4CSKl82E" Subdir="SOM" />
+      <Dir GdriveId="1SuSJqYWu3AeoKg8iwVYilKiPXM-GXh4z" Subdir="TBTH" />
+      <Dir GdriveId="1guBZbOg6GnB2DmTJBl-ecU0v3gVrmJjR" Subdir="TDAG" />
+      <Dir GdriveId="1_lRzbN7ba6wWTlOQpt-LfIEQe4AGHpGq" Subdir="TFTH" />
+      <Dir GdriveId="1tPPrOW6ZMVau3Gdf1WejVRAo63b1ixby" Subdir="THP3" />
+      <Dir GdriveId="1F3vbDe_JDVUc5Kc_BvtlcSKsLSEzwjwd" Subdir="THS" />
+      <Dir GdriveId="1SN1b6Z0RvgkGehraPLNtDTxZtOstChyw" Subdir="UGL" />
+      <Dir GdriveId="1GyaTZ8m6iMQpcM2k-HgKS2qtB1IB7N1Y" Subdir="UMA" />
+      <Dir GdriveId="1rpnhzU6sxihg8KlzSm4YvD9941op3YTl" Subdir="UST" />
+      <Dir GdriveId="17wpP3Br8AC81N4nA_OttOTHyQB0qw-rL" Subdir="V16" />
+      <Dir GdriveId="1bcaPTntQH-TP4hui0JfnMrWPSItKgUlx" Subdir="WAR" />
+      <Dir GdriveId="1CGuNg0rW5C5YnR4ixvpNAKSEcajKN1pG" Subdir="WC00" />
+      <Dir GdriveId="1cq4Di2IrgeK6Db53VY4CPf9iZn5v7rNx" Subdir="WC01" />
+      <Dir GdriveId="1I-JmUFg9orEjGgUJJVjoGNWZWiJ2iqlD" Subdir="WC02" />
+      <Dir GdriveId="1JMSOrZdHjy3dvLVtSApQtYGr5Dguwle9" Subdir="WC03" />
+      <Dir GdriveId="1rjQM01XxrAVVmFTy1MG3gO1mQL89tYBb" Subdir="WC04" />
+      <Dir GdriveId="1mA5uAefolg0Aa8T3ERU4J_BDqBqKqKh4" Subdir="WC97" />
+      <Dir GdriveId="1wQwsly670kXZQ3tKfwoAAR3diUDkfETg" Subdir="WC98" />
+      <Dir GdriveId="11GnTsZj-rb6QB666NuwnrSHskG7-6yrU" Subdir="WC99" />
+      <Dir GdriveId="1KOM-XY-cBTR7o_tybF8ZazERcLjmStEr" Subdir="WWK" />
+      <Dir GdriveId="1RzIxFt2VdcojUxJLyXG77YYeo4JN77oW" Subdir="XLN" />
+      <Dir GdriveId="1ExjI7zT7a8w6nNdZd4jAu9OyLZZKMHUz" Subdir="ZEN" />
+    </QualityGroup>
+
 	</ImageSources>
 
 </configuration>

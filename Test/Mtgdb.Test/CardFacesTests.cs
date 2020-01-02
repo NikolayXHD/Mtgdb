@@ -54,7 +54,7 @@ namespace Mtgdb.Test
 		{
 			foreach (var card in Repo.Cards.Where(CardLayouts.IsMultiFace))
 				foreach (var name in card.Names)
-					foreach (var faceVariant in card.Set.CardsByName[name])
+					foreach (var faceVariant in card.Set.MapByName(card.IsToken)[name])
 						Assert.That(faceVariant.Names.SequenceEqual(card.Names), card.ToString);
 		}
 

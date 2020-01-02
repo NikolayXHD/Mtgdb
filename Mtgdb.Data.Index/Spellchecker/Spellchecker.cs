@@ -112,7 +112,7 @@ namespace Mtgdb.Data
 					break;
 			}
 
-		return sugQueue
+			return sugQueue
 				.Reverse()
 				.Select(_ => _.String)
 				.ToList();
@@ -155,7 +155,7 @@ namespace Mtgdb.Data
 				int step = (int) Math.Ceiling(0.5f * n).AtLeast(1);
 
 				string key;
-				for (int i = 0; i < right; i+= step)
+				for (int i = 0; i < right; i += step)
 				{
 					key = word.Substring(i, n);
 
@@ -198,7 +198,6 @@ namespace Mtgdb.Data
 
 			return result;
 		}
-
 
 
 		public void IndexWord(string discriminant, string word)
@@ -265,8 +264,11 @@ namespace Mtgdb.Data
 
 		private class SpellcheckerSimilarity : DefaultSimilarity
 		{
-			public override float Idf(long docFreq, long numDocs) => 1f;
-			public override float Tf(float freq) => Math.Sign(freq);
+			public override float Idf(long docFreq, long numDocs) =>
+				1f;
+
+			public override float Tf(float freq) =>
+				Math.Sign(freq);
 		}
 	}
 }

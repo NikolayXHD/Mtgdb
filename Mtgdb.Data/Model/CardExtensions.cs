@@ -6,6 +6,9 @@ namespace Mtgdb.Data
 	{
 		public static int MaxCountInDeck(this Card c)
 		{
+			if (c.IsToken)
+				return int.MaxValue;
+
 			if (Str.Equals(c.Rarity, "Basic Land"))
 				return int.MaxValue;
 

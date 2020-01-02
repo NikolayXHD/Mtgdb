@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Lucene.Net.Contrib;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers.Classic;
-using Lucene.Net.QueryParsers.ComplexPhrase;
 using Lucene.Net.Search;
 using Lucene.Net.Util;
+using Lucene.Net.Util.Automaton;
 using Token = Lucene.Net.QueryParsers.Classic.Token;
 
 namespace Mtgdb.Data
 {
-	public abstract class MtgQueryParser : ComplexPhraseQueryParser
+	public abstract class MtgQueryParser : ComplexPhraseQueryParserPatched
 	{
 		protected MtgQueryParser(MtgAnalyzer analyzer, IDocumentAdapterBase adapter, string lang)
 			: base(LuceneVersion.LUCENE_48, "*", analyzer)
@@ -21,7 +20,6 @@ namespace Mtgdb.Data
 			FuzzyMinSim = 0.5f;
 			AllowLeadingWildcard = true;
 			AutoGeneratePhraseQueries = true;
-			DefaultOperator = AND_OPERATOR;
 		}
 
 		public override Query Parse(string query)
@@ -30,27 +28,29 @@ namespace Mtgdb.Data
 			return result;
 		}
 
-		protected override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
+		protected internal override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
 		{
 			string image = termToken.Image.Substring(1, termToken.Image.Length - 2);
-			string value = StringEscaper.Unescape(image);
+			string value = DiscardEscapeChar(image);
 
-			(bool IsFloat, bool IsInt) numericTypeGetter() => getNumericTypes(value);
+			(bool IsFloat, bool IsInt) numericTypeGetter() =>
+				getNumericTypes(value);
 
 			Query queryFactory(string fld, bool analyzed)
 			{
 				if (analyzed)
+					// which will create ComplexPhraseQuery
 					return base.HandleQuotedTerm(fld, termToken, slopToken);
 
-				var notAnalyzedQuery = GetFieldQuery(fld, value, quoted: true);
-				return notAnalyzedQuery;
+				// not analyzed field cannot have phrases in value, so create TermQuery
+				return GetFieldQuery(fld, value, quoted: true);
 			}
 
 			var result = resolveField(field, numericTypeGetter, queryFactory);
 			return result;
 		}
 
-		protected override Query HandleBareTokenQuery(
+		protected internal override Query HandleBareTokenQuery(
 			string field,
 			Token termToken,
 			Token slopToken,
@@ -74,7 +74,7 @@ namespace Mtgdb.Data
 			return result;
 		}
 
-		protected override Query HandleBareFuzzy(string field, Token slopToken, string termImage)
+		protected internal override Query HandleBareFuzzy(string field, Token slopToken, string termImage)
 		{
 			(bool IsFloat, bool IsInt) numericTypeGetter() => (false, false);
 			Query queryFactory(string fld, bool analyzed) => base.HandleBareFuzzy(fld, slopToken, termImage);
@@ -83,7 +83,7 @@ namespace Mtgdb.Data
 			return result;
 		}
 
-		protected override Query GetRangeQuery(
+		protected internal override Query GetRangeQuery(
 			string field,
 			string part1,
 			string part2,
@@ -109,7 +109,7 @@ namespace Mtgdb.Data
 			return result;
 		}
 
-		protected override Query NewRangeQuery(string field, string v1, string v2, bool v1Incl, bool v2Incl)
+		protected internal override Query NewRangeQuery(string field, string v1, string v2, bool v1Incl, bool v2Incl)
 		{
 			var query = (TermRangeQuery) base.NewRangeQuery(field, v1, v2, v1Incl, v2Incl);
 
@@ -125,33 +125,13 @@ namespace Mtgdb.Data
 		}
 
 
-		protected override Query GetRegexpQuery(string field, string value)
-		{
-			if (_adapter.IsNumericField(field))
-				return MatchNothingQuery;
+		protected internal override Query NewRegexpQuery(Term regexp) =>
+			new RegexpQuery(regexp, RegExpSyntax.ALL);
 
-			return base.GetRegexpQuery(field, value);
-		}
+		protected override ComplexPhraseQuery NewComplexPhraseQuery(string field, string phrase, int slop, bool inOrder) =>
+			new RewritableComplexPhraseQuery(field, phrase, slop, inOrder);
 
-		protected override Query NewRegexpQuery(Term regexp) =>
-			new MtgRegexpQuery(regexp);
-
-
-
-		protected override Query GetComplexPhraseQuery(string field, Token fuzzySlop, string phrase)
-		{
-			if (_adapter.IsNumericField(field))
-				return MatchNothingQuery;
-
-			return base.GetComplexPhraseQuery(field, fuzzySlop, phrase);
-		}
-
-		protected override ComplexPhraseQuery NewComplexPhraseQuery(string field, string phrase, int slop, bool inOrder)
-		{
-			return new RewritableComplexPhraseQuery(field, phrase, slop, inOrder);
-		}
-
-		protected override Query GetFieldQuery(string field, string value, bool quoted)
+		protected internal override Query GetFieldQuery(string field, string value, bool quoted)
 		{
 			if (_adapter.IsFloatField(field))
 				return createRangeQuery<float>(field, value, IndexUtils.TryParseFloat,
@@ -164,85 +144,10 @@ namespace Mtgdb.Data
 			return base.GetFieldQuery(field, value, quoted);
 		}
 
-		protected override Query GetFieldQuery(string field, string value, int slop)
-		{
-			var result = base.GetFieldQuery(field, value, slop);
-			return result;
-		}
+		protected internal override Query GetFuzzyQuery(string field, string value, float minSimilarity) =>
+			base.GetFuzzyQuery(field, value, minSimilarity.WithinRange(0.001f, 0.999f));
 
-
-
-		protected override Query GetFuzzyQuery(string field, string value, float minSimilarity)
-		{
-			minSimilarity = minSimilarity.WithinRange(0.001f, 0.999f);
-			return base.GetFuzzyQuery(field, value, minSimilarity);
-		}
-
-		protected override Query GetPrefixQuery(string field, string value)
-		{
-			if (_adapter.IsAnyField(field) && !IsPass2ResolvingPhrases)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in ExpandAnyField())
-				{
-					if (_adapter.IsNumericField(userField))
-						continue;
-
-					var specificFieldQuery = base.GetPrefixQuery(userField, value);
-
-					if (specificFieldQuery == null)
-						continue;
-
-					result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return MatchNothingQuery;
-
-				return result;
-			}
-
-			return base.GetPrefixQuery(field, value);
-		}
-
-		protected override Query GetWildcardQuery(string field, string escapedValue)
-		{
-			if (_adapter.IsAnyField(field) && !IsPass2ResolvingPhrases)
-			{
-				var result = new BooleanQuery(disableCoord: true);
-
-				foreach (var userField in ExpandAnyField())
-				{
-					if (_adapter.IsNumericField(userField))
-						continue;
-
-					var specificFieldQuery = base.GetWildcardQuery(userField, escapedValue);
-
-					if (specificFieldQuery == null)
-						continue;
-
-					result.Add(specificFieldQuery, Occur.SHOULD);
-				}
-
-				if (result.Clauses.Count == 0)
-					return MatchNothingQuery;
-
-				return result;
-			}
-
-			var value = StringEscaper.Unescape(escapedValue);
-
-			if (_adapter.IsFloatField(field) && !isValueFloat(value))
-				return MatchNothingQuery;
-
-			if (_adapter.IsIntField(field) && !isValueInt(value))
-				return MatchNothingQuery;
-
-			return base.GetWildcardQuery(field, escapedValue);
-		}
-
-		protected override void AddClause(IList<BooleanClause> clauses, int conj, int mods, Query q)
+		protected internal override void AddClause(IList<BooleanClause> clauses, int conj, int mods, Query q)
 		{
 			if (q == null)
 				base.AddClause(clauses, conj, mods, new EmptyPhraseQuery(Field));
@@ -250,21 +155,15 @@ namespace Mtgdb.Data
 			base.AddClause(clauses, conj, mods, q);
 		}
 
-		private Query resolveField(
-			string field,
-			Func<(bool IsFloat, bool IsInt)> numericTypeGetter,
-			QueryFactory queryFactory)
+		private Query resolveField(string field, Func<(bool IsFloat, bool IsInt)> numericTypeGetter, QueryFactory queryFactory)
 		{
-			if (_adapter.FieldByAlias.TryGetValue(field, out var actualField))
-				return resolveField(actualField, numericTypeGetter, queryFactory);
+			if (_adapter.FieldByAlias.TryGetValue(field, out string actualField))
+				field = actualField;
 
-			bool isAnalyzed(string userField) =>
-				!_adapter.IsNotAnalyzed(userField);
+			(bool valueIsFloat, bool valueIsInt) = numericTypeGetter();
 
 			if (_adapter.IsAnyField(field))
 			{
-				(bool valueIsFloat, bool valueIsInt) = numericTypeGetter();
-
 				var result = new BooleanQuery(disableCoord: true);
 
 				foreach (var userField in ExpandAnyField())
@@ -275,7 +174,7 @@ namespace Mtgdb.Data
 					if (!valueIsInt && _adapter.IsIntField(userField))
 						continue;
 
-					var specificFieldQuery = queryFactory(_adapter.GetFieldLocalizedIn(userField, Language), isAnalyzed(userField));
+					var specificFieldQuery = queryFactory(_adapter.GetFieldLocalizedIn(userField, Language), !_adapter.IsNotAnalyzed(userField));
 
 					if (specificFieldQuery == null)
 						continue;
@@ -289,15 +188,21 @@ namespace Mtgdb.Data
 				return result;
 			}
 
-			return queryFactory(_adapter.GetFieldLocalizedIn(field, Language), isAnalyzed(field));
+			if (!valueIsFloat && _adapter.IsFloatField(field))
+				return MatchNothingQuery;
+
+			if (!valueIsInt && _adapter.IsIntField(field))
+				return MatchNothingQuery;
+
+			return queryFactory(_adapter.GetFieldLocalizedIn(field, Language), !_adapter.IsNotAnalyzed(field));
 		}
 
 		protected virtual IEnumerable<string> ExpandAnyField() =>
 			_adapter.GetUserFields();
 
-		private static (bool IsFloat, bool IsInt) getNumericTypes(string termImage)
+		private (bool IsFloat, bool IsInt) getNumericTypes(string termImage)
 		{
-			string value = StringEscaper.Unescape(termImage);
+			string value = DiscardEscapeChar(termImage);
 			bool isFloat = isValueFloat(value);
 			bool isInt = isValueInt(value);
 

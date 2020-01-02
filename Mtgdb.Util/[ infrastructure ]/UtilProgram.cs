@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Mtgdb.Data;
 using Ninject;
 
@@ -49,7 +47,8 @@ namespace Mtgdb.Util
 			{
 				string setCodes = args.GetParam("-set");
 				var output = args.GetParam("-output") ?? AppDir.Root.AddPath("filelist.txt");
-				sign(directory, output, setCodes);
+				var integration = _kernel.Get<ImageExport>();
+				integration.SignFiles(directory, output, setCodes);
 				return;
 			}
 
@@ -60,6 +59,7 @@ namespace Mtgdb.Util
 				bool small = args.GetFlag("-small");
 				bool zoomed = args.GetFlag("-zoomed");
 				string setCodes = args.GetParam("-set");
+				bool tokens = args.GetParam("-type") == "token";
 
 				string smallSubdir;
 				string zoomedSubdir;
@@ -79,13 +79,15 @@ namespace Mtgdb.Util
 
 
 				if (Directory.Exists(directory))
-					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir, forceRemoveCorner);
+					exportImages(small, zoomed, setCodes, directory, silent, smallSubdir, zoomedSubdir, forceRemoveCorner, tokens);
 				else
 					Console.WriteLine($"directory not found: {directory}");
 			}
 		}
 
-		private static void exportImages(bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner)
+		private static void exportImages(
+			bool small, bool zoomed, string setCodes, string directory, bool silent, string smallSubdir, string zoomedSubdir,
+			bool forceRemoveCorner, bool tokens)
 		{
 			var integration = _kernel.Get<ImageExport>();
 
@@ -101,7 +103,12 @@ namespace Mtgdb.Util
 			else
 				Console.Write("all sets ");
 
-			Console.WriteLine($"Mtgdb.Gui images will be exported to {directory}");
+			if (tokens)
+				Console.Write("token ");
+			else
+				Console.Write("card ");
+
+			Console.WriteLine($"images will be exported to {directory}");
 
 			if (!silent)
 			{
@@ -114,7 +121,7 @@ namespace Mtgdb.Util
 			Console.WriteLine("== Exporting card images ==");
 
 			foreach (string setCode in setCodes?.Split(';', ',', '|') ?? new string[] { null })
-				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir, forceRemoveCorner);
+				integration.ExportCardImages(directory, small, zoomed, setCode, smallSubdir, zoomedSubdir, forceRemoveCorner, tokens);
 
 			if (!silent)
 			{
@@ -146,39 +153,6 @@ namespace Mtgdb.Util
 
 			Console.WriteLine("Press ENTER to exit");
 			Console.ReadLine();
-		}
-
-		private static void sign(string packagePath, string output, string setCodes)
-		{
-			string parentDir = output.Parent();
-			if (!Directory.Exists(parentDir))
-			{
-				Console.WriteLine("Cannot create output file. Directory {0} does not exist", parentDir);
-				return;
-			}
-
-			if (Directory.Exists(packagePath))
-			{
-				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
-
-				var prevSignatureByPath = sets != null && File.Exists(output)
-					? Signer.ReadFromFile(output)
-						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
-						.ToDictionary(_ => _.Path)
-					: new Dictionary<string, FileSignature>();
-
-				var signatures = Signer.CreateSignatures(packagePath, precalculated: prevSignatureByPath);
-				Signer.WriteToFile(output, signatures);
-			}
-			else if (File.Exists(packagePath))
-			{
-				var metadata = Signer.CreateSignature(packagePath);
-				Signer.WriteToFile(output, Array.From(metadata));
-			}
-			else
-			{
-				Console.WriteLine("Specified path {0} does not exist", packagePath);
-			}
 		}
 	}
 }

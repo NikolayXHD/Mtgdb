@@ -18,15 +18,9 @@ namespace Mtgdb
 		public bool Extract(string archive, string targetDirectory, IEnumerable<string> excludedFiles = null)
 		{
 			excludedFiles ??= Enumerable.Empty<string>();
-
-			if (_process != null)
-				throw new InvalidOperationException("7za.exe is already running. Use another instance.");
-
 			var argsBuilder = new StringBuilder($"x -aoa \"{archive}\" \"-o{targetDirectory}\"");
 
-			string executableName = AppDir.Update.AddPath(@"7z\7za.exe");
-
-			foreach (string excludedFile in excludedFiles.Append(executableName))
+			foreach (string excludedFile in excludedFiles.Append(_executable))
 			{
 				if (!excludedFile.StartsWith(targetDirectory))
 					continue;
@@ -35,9 +29,24 @@ namespace Mtgdb
 				argsBuilder.Append($" \"-x!{relativePath}\"");
 			}
 
+			string args = argsBuilder.ToString();
+
+			return run(args);
+		}
+
+		public bool Compress(string dir, string output)
+		{
+			return run($"a \"{output}\" -t7z \"{dir}\" -r");
+		}
+
+		private bool run(string args)
+		{
+			if (_process != null)
+				throw new InvalidOperationException("7za.exe is already running. Use another instance.");
+
 			_process = new Process
 			{
-				StartInfo = new ProcessStartInfo(executableName, argsBuilder.ToString())
+				StartInfo = new ProcessStartInfo(_executable, args)
 				{
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
@@ -50,8 +59,8 @@ namespace Mtgdb
 
 			_process.OutputDataReceived += outputReceived;
 			_process.ErrorDataReceived += errorReceived;
-
 			AppDomain.CurrentDomain.ProcessExit += processExit;
+
 			_process.Start();
 			_process.BeginOutputReadLine();
 			_process.BeginErrorReadLine();
@@ -59,7 +68,7 @@ namespace Mtgdb
 
 			var exitCode = _process.ExitCode;
 
-			Abort();
+			abort();
 
 			if (!_silent)
 				Console.WriteLine();
@@ -69,10 +78,10 @@ namespace Mtgdb
 
 		private void processExit(object sender, EventArgs e)
 		{
-			Abort();
+			abort();
 		}
 
-		public void Abort()
+		private void abort()
 		{
 			if (_process == null)
 				return;
@@ -108,5 +117,6 @@ namespace Mtgdb
 		}
 
 		private readonly bool _silent;
+		private static readonly string _executable = AppDir.Update.AddPath(@"7z\7za.exe");
 	}
 }

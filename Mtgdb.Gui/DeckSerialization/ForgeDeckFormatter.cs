@@ -29,7 +29,7 @@ namespace Mtgdb.Gui
 				var setCode = _forgeSetRepo.FromForgeSet(setGroup.Value);
 
 				var cards = Repo.SetsByCode.TryGet(setCode)
-					?.CardsByName.TryGet(name);
+					?.ActualCardsByName.TryGet(name);
 
 				if (cards != null)
 				{

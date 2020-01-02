@@ -2,8 +2,8 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// fix keyword definitions
-		private const string Cards = "1.18";
+		// treat ∞*+- as word characters
+		private const string Cards = "1.20";
 		public const string CardSearcher = Cards;
 		public const string CardSpellchecker = Cards;
 		public const string KeywordSearcher = Cards;

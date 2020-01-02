@@ -63,13 +63,6 @@
       <HintPath>..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Lucene.Net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.QueryParser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Subrepo\Lucene.Net.Contrib\bin\Lucene.Net.QueryParser.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
@@ -703,7 +696,7 @@
       <Project>{5b85e2d7-2005-4496-b5d7-59c68a1ec91d}</Project>
       <Name>CustomScrollbar</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+    <ProjectReference Include="..\Subrepo\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
       <Name>EditedTokenLocator</Name>
     </ProjectReference>

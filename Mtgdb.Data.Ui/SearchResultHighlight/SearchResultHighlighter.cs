@@ -128,7 +128,6 @@ namespace Mtgdb.Ui
 
 
 
-
 		private void addPhraseMatches(
 			List<TextRange> matches,
 			string displayField,

@@ -7,9 +7,16 @@ namespace Mtgdb.Data
 {
 	internal static class ImageNameCalculator
 	{
-		public static void CalculateImageNames(Set set, Patch patch)
+		public static void CalculateCardImageNames(Set set, Patch patch)
 		{
-			foreach (var pair in set.CardsByName)
+			calculateImageNames(set.Code, set.ActualCardsByName, patch);
+			calculateImageNames(set.Code, set.TokensByName, patch);
+		}
+
+		private static void calculateImageNames(string setCode, Dictionary<string, List<Card>> map,
+			Patch patch)
+		{
+			foreach (var pair in map)
 			{
 				var cards = pair.Value;
 				var first = cards.First();
@@ -18,7 +25,7 @@ namespace Mtgdb.Data
 				{
 					var mainCardName = first.Faces.Main.NameNormalized;
 
-					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(mainCardName);
+					var customImageOrder = patch.ImageOrder.TryGet(setCode)?.TryGet(mainCardName);
 					string imageName = customImageOrder?.ImageName ?? mainCardName;
 
 					for (int i = 0; i < cards.Count; i++)
@@ -26,7 +33,7 @@ namespace Mtgdb.Data
 				}
 				else
 				{
-					var customImageOrder = patch.ImageOrder.TryGet(set.Code)?.TryGet(pair.Key);
+					var customImageOrder = patch.ImageOrder.TryGet(setCode)?.TryGet(pair.Key);
 					cards = reOrderCards(pair.Value, customImageOrder);
 
 					for (int i = 0; i < cards.Count; i++)
@@ -35,7 +42,7 @@ namespace Mtgdb.Data
 
 						string imageName = customImageOrder?.ImageName ?? (
 							Str.Equals(card.Layout, CardLayouts.Split)
-								? string.Concat(card.Faces.Select(c=>c.NameNormalized))
+								? string.Concat(card.Faces.Select(c => c.NameNormalized))
 								: card.NameNormalized);
 
 						card.ImageName = calculateImageName(imageName, i, cards.Count);

@@ -106,15 +106,10 @@ namespace Mtgdb.Test
 			return list[list.Count / 10];
 		}
 
-		[Test]
-		public void Card_keywords_contain_expected_value(
-			[Values("LEA")] string setcode,
-			[Values("Badlands")] string name,
-			[Values(nameof(KeywordDefinitions.ManaCost))]
-			string field,
-			[Values("")] string expectedValue)
+		[TestCase("LEA", "Badlands", nameof(KeywordDefinitions.ManaCost), "")]
+		public void Card_keywords_contain_expected_value(string setcode, string name, string field, string expectedValue)
 		{
-			var card = Repo.SetsByCode[setcode].CardsByName[name].First();
+			var card = Repo.SetsByCode[setcode].ActualCardsByName[name].First();
 			var keywords = card.GetAllKeywords();
 
 			if (string.IsNullOrEmpty(expectedValue))

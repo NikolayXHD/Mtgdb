@@ -12,12 +12,13 @@ namespace Mtgdb.Data
 
 		public static readonly HashSet<char> RightDelimitersSet = new HashSet<char>("}");
 		public static readonly HashSet<char> LeftDelimitersSet = new HashSet<char>("{");
-		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("²½_/");
+		// slash included to treat {w/u} as single word
+		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("²½_/∞*+-");
 
 		public static bool IsSingletoneWordChar(char c) =>
 			SingletoneWordChars.Contains(c) || c.IsCj();
 
-		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>("∞.?!:;,+-‑—–―−\"#$%&'()*=@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
+		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>(".?!:;,‑—–―−\"#$%&'()=@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
 
 		public const string CharPattern = ".";
 

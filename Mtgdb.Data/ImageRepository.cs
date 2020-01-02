@@ -316,7 +316,7 @@ namespace Mtgdb.Data
 			}
 
 			// For each number select the representative with best quality
-			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out var currentImageFile) || currentImageFile.Quality < imageFile.Quality)
+			if (!modelsByImageVariant.TryGetValue(imageFile.VariantNumber, out var currentImageFile) || currentImageFile.Priority < imageFile.Priority)
 				modelsByImageVariant[imageFile.VariantNumber] = imageFile;
 		}
 
@@ -344,12 +344,14 @@ namespace Mtgdb.Data
 			Func<string, string, string> setCodePreference,
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant)
 		{
-			var model = getImage(modelsByNameBySetByVariant,
+			var model = getImage(
+				modelsByNameBySetByVariant,
 				setCodePreference,
 				card.SetCode,
 				card.ImageNameBase,
 				card.ImageName,
-				card.Artist);
+				card.Artist,
+				card.IsToken);
 
 			var result = model?.ApplyRotation(card, zoom: false);
 			return result;
@@ -361,7 +363,8 @@ namespace Mtgdb.Data
 			string set,
 			string imageNameBase,
 			string imageName,
-			string artist)
+			string artist,
+			bool isToken)
 		{
 			lock (modelsByNameBySetByVariant)
 			{
@@ -371,18 +374,21 @@ namespace Mtgdb.Data
 				if (set == null || !bySet.TryGetValue(set, out var byImageVariant))
 				{
 					byImageVariant = bySet
-						.AtMax(setPriority2(artist))
-						.ThenAtMax(setPriority3(setCodePreference, set))
+						.AtMax(setPriority2(isToken))
+						.ThenAtMax(setPriority3(artist))
+						.ThenAtMax(setPriority4(setCodePreference, set))
 						.Find()
 						.Value;
 				}
 
 				var model = byImageVariant.Values
-					.AtMax(cardPriority1(set, imageName))
-					.ThenAtMax(cardPriority2(set, artist))
-					.ThenAtMax(cardPriority3(artist))
-					.ThenAtMax(cardPriority4(imageName))
-					.ThenAtMin(cardUnpriority5())
+					.AtMax(cardPriority1(set, isToken))
+					.ThenAtMax(cardPriority2(set, imageName))
+					.ThenAtMax(cardPriority3(set, artist))
+					.ThenAtMax(cardPriority4(isToken))
+					.ThenAtMax(cardPriority5(artist))
+					.ThenAtMax(cardPriority6(imageName))
+					.ThenAtMin(cardUnpriority7())
 					.Find();
 
 				return model;
@@ -447,8 +453,9 @@ namespace Mtgdb.Data
 
 				var entriesBySet = modelsBySet
 					.OrderByDescending(setPriority1(card.SetCode))
-					.ThenByDescending(setPriority2(card.Artist))
-					.ThenByDescending(setPriority3(setCodePreference, card.SetCode))
+					.ThenByDescending(setPriority2(card.IsToken))
+					.ThenByDescending(setPriority3(card.Artist))
+					.ThenByDescending(setPriority4(setCodePreference, card.SetCode))
 					.ToList();
 
 				var models = entriesBySet
@@ -465,11 +472,13 @@ namespace Mtgdb.Data
 		private static IEnumerable<ImageFile> orderCardsWithinSet(Card card, Dictionary<int, ImageFile> variants)
 		{
 			var result = variants.Select(byVariant => byVariant.Value)
-				.OrderByDescending(cardPriority1(card.SetCode, card.ImageName))
-				.ThenByDescending(cardPriority2(card.SetCode, card.Artist))
-				.ThenByDescending(cardPriority3(card.Artist))
-				.ThenByDescending(cardPriority4(card.ImageName))
-				.ThenBy(cardUnpriority5())
+				.OrderByDescending(cardPriority1(card.SetCode, card.IsToken))
+				.ThenByDescending(cardPriority2(card.SetCode, card.ImageName))
+				.ThenByDescending(cardPriority3(card.SetCode, card.Artist))
+				.ThenByDescending(cardPriority4(card.IsToken))
+				.ThenByDescending(cardPriority5(card.Artist))
+				.ThenByDescending(cardPriority6(card.ImageName))
+				.ThenBy(cardUnpriority7())
 				.ToList();
 
 			return result;
@@ -486,9 +495,17 @@ namespace Mtgdb.Data
 		}
 
 		/// <summary>
+		/// Then sets that have the card with matching IsToken flag
+		/// </summary>
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority2(bool isToken)
+		{
+			return bySet => bySet.Value.Values.Any(_ => _.IsToken == isToken);
+		}
+
+		/// <summary>
 		/// Then the sets that have a variant with matching artist
 		/// </summary>
-		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority2(string artist)
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, bool> setPriority3(string artist)
 		{
 			return bySet => artist != null && bySet.Value.Values.Any(_ => Str.Equals(_.Artist, artist));
 		}
@@ -496,7 +513,7 @@ namespace Mtgdb.Data
 		/// <summary>
 		/// Other sets go from new to old
 		/// </summary>
-		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, string> setPriority3(Func<string, string, string> setCodePreference, string set)
+		private static Func<KeyValuePair<string, Dictionary<int, ImageFile>>, string> setPriority4(Func<string, string, string> setCodePreference, string set)
 		{
 			return bySet => setCodePreference(set, bySet.Key);
 		}
@@ -504,7 +521,7 @@ namespace Mtgdb.Data
 		/// <summary>
 		/// In matching set let's show first the card with matching variant number
 		/// </summary>
-		private static Func<ImageFile, bool> cardPriority1(string set, string imageName)
+		private static Func<ImageFile, bool> cardPriority2(string set, string imageName)
 		{
 			return model =>
 				Str.Equals(model.SetCode, set) &&
@@ -512,9 +529,19 @@ namespace Mtgdb.Data
 		}
 
 		/// <summary>
+		/// In matching set let's show first the card with matching IsToken flag
+		/// </summary>
+		private static Func<ImageFile, bool> cardPriority1(string set, bool isToken)
+		{
+			return model =>
+				Str.Equals(model.SetCode, set) &&
+				model.IsToken == isToken;
+		}
+
+		/// <summary>
 		/// then the card with matching artist
 		/// </summary>
-		private static Func<ImageFile, bool> cardPriority2(string set, string artist)
+		private static Func<ImageFile, bool> cardPriority3(string set, string artist)
 		{
 			return model =>
 				Str.Equals(model.SetCode, set) &&
@@ -522,9 +549,17 @@ namespace Mtgdb.Data
 		}
 
 		/// <summary>
-		/// In other sets first the card with matching artist
+		/// In other sets first the card with matching IsToken flag
 		/// </summary>
-		private static Func<ImageFile, bool> cardPriority3(string artist)
+		private static Func<ImageFile, bool> cardPriority4(bool isToken)
+		{
+			return model => model.IsToken == isToken;
+		}
+
+		/// <summary>
+		/// Then matching artist
+		/// </summary>
+		private static Func<ImageFile, bool> cardPriority5(string artist)
 		{
 			return model => Str.Equals(model.Artist, artist);
 		}
@@ -532,47 +567,20 @@ namespace Mtgdb.Data
 		/// <summary>
 		/// Then matching number
 		/// </summary>
-		private static Func<ImageFile, bool> cardPriority4(string imageName)
+		private static Func<ImageFile, bool> cardPriority6(string imageName)
 		{
 			return model => Str.Equals(model.ImageName, imageName);
 		}
 
 		/// <summary>
 		/// Others by variant number ascending
-
 		/// </summary>
 		/// <returns></returns>
-		private static Func<ImageFile, int> cardUnpriority5()
+		private static Func<ImageFile, int> cardUnpriority7()
 		{
 			return model => model.VariantNumber;
 		}
 
-
-
-		public ImageModel GetReplacementImage(ImageFile imageFile, Func<string, string, string> setCodePreference)
-		{
-			if (string.IsNullOrEmpty(imageFile.Name))
-				return null;
-
-			var result = getImage(_modelsByNameBySetByVariantZoom,
-				setCodePreference,
-				imageFile.SetCode,
-				imageFile.Name,
-				imageFile.ImageName,
-				imageFile.Artist);
-
-			if (result != null)
-				return result.NonRotated();
-
-			result = getImage(_modelsByNameBySetByVariant,
-				setCodePreference,
-				imageFile.SetCode,
-				imageFile.Name,
-				imageFile.ImageName,
-				imageFile.Artist);
-
-			return result.NonRotated();
-		}
 
 
 		public AsyncSignal IsLoadingSmallComplete { get; } = new AsyncSignal(multiple: true);

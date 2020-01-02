@@ -148,8 +148,11 @@ namespace Mtgdb.Data.Index
 		public Analyzer CreateAnalyzer() =>
 			new MtgAnalyzer(this);
 
-		public QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
-			new DeckQueryParser((MtgAnalyzer) analyzer, this);
+		public QueryParserPatched CreateQueryParser(string language, Analyzer analyzer) =>
+			new DeckQueryParser((MtgAnalyzer) analyzer, this)
+			{
+				DefaultOperator = Operator.AND
+			};
 
 		private static void addIdField(Document doc, string fieldName, long fieldValue)
 		{

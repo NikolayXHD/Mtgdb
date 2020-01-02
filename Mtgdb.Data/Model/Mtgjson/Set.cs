@@ -22,16 +22,25 @@ namespace Mtgdb.Data
 		public string ReleaseDate { get; set; }
 
 		[JsonProperty("cards")]
-		public IList<Card> Cards { get; set; }
+		internal IList<Card> ActualCards { get; set; }
 
-		[JsonProperty("cards")]
-		public IList<Card> Tokens { get; set; }
+		[JsonProperty("tokens")]
+		internal IList<Card> Tokens { get; set; }
 
 		[JsonIgnore]
-		public Dictionary<string, List<Card>> CardsByName { get; set; }
+		public IList<Card> Cards { get; set; }
+
+		[JsonIgnore]
+		public Dictionary<string, List<Card>> ActualCardsByName { get; internal set; }
+
+		[JsonIgnore]
+		public Dictionary<string, List<Card>> TokensByName { get; internal set; }
+
+		public Dictionary<string, List<Card>> MapByName(bool tokens) =>
+			tokens ? TokensByName : ActualCardsByName;
 
 		public override string ToString() =>
-			$"{Code}: {Name} {Cards?.Count ?? 0}+{Tokens?.Count ?? 0} {ReleaseDate}";
+			$"{Code}: {Name} {ActualCards?.Count ?? 0}+{Tokens?.Count ?? 0} {ReleaseDate}";
 		/*
 block	string
 isOnlineOnly	bool

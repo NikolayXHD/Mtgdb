@@ -11,7 +11,7 @@ namespace Mtgdb.Data
 			Card = c;
 
 		public IList<Card> this[int i] =>
-			Card.Set.CardsByName[Card.GetFaceName(i)];
+			Card.Set.MapByName(Card.IsToken)[Card.GetFaceName(i)];
 
 		public IList<Card> Main
 		{

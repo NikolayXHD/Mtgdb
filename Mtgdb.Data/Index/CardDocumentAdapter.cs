@@ -117,8 +117,11 @@ namespace Mtgdb.Data.Index
 		public Analyzer CreateAnalyzer() =>
 			new MtgAnalyzer(this);
 
-		public QueryParser CreateQueryParser(string language, Analyzer analyzer) =>
-			new CardQueryParser((MtgAnalyzer) analyzer, _repo, this, language);
+		public QueryParserPatched CreateQueryParser(string language, Analyzer analyzer) =>
+			new CardQueryParser((MtgAnalyzer) analyzer, _repo, this, language)
+			{
+				DefaultOperator = Operator.AND
+			};
 
 		private readonly Dictionary<string, Func<Card, string, IEnumerable<string>>> _spellcheckerValues
 			= new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)

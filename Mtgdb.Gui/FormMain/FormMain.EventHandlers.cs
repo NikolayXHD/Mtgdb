@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -697,7 +698,13 @@ namespace Mtgdb.Gui
 			}
 
 			if (card != null)
-				_viewCards.InvalidateCard(card);
+			{
+				_deckEditor.Deck.NamesakeIds(card)
+					.Select(id => _cardRepo.CardsById[id])
+					.Append(card)
+					.Distinct()
+					.ForEach(_viewCards.InvalidateCard);
+			}
 			else
 				_viewCards.Invalidate();
 		}
@@ -707,7 +714,11 @@ namespace Mtgdb.Gui
 			if (listChanged)
 				_viewDeck.RefreshData();
 			else if (card != null)
-				_viewDeck.InvalidateCard(card);
+			{
+				_deckEditor.Deck.NamesakeIds(card)
+					.Select(id => _cardRepo.CardsById[id])
+					.ForEach(_viewDeck.InvalidateCard);
+			}
 			else
 				_viewDeck.Invalidate();
 

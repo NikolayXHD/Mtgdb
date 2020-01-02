@@ -406,15 +406,14 @@ namespace Mtgdb.Gui
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{
-				{ (int) Zone.Main, new TabSettings($"main deck: {_deckEditor.MainDeckSize}/60") },
-				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckEditor.SideDeckSize}/15") },
-				{ (int) Zone.Maybe, new TabSettings($"maybeboard: {_deckEditor.MaybeDeckSize}") },
-				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckEditor.SampleHandSize}") },
+				{ (int) Zone.Main, new TabSettings($"main deck: {_deckEditor.MainDeckSize(_cardRepo)}/60") },
+				{ (int) Zone.Side, new TabSettings($"sideboard: {_deckEditor.SideDeckSize(_cardRepo)}/15") },
+				{ (int) Zone.Maybe, new TabSettings($"maybeboard: {_deckEditor.MaybeDeckSize(_cardRepo)}") },
+				{ (int) Zone.SampleHand, new TabSettings($"sample hand: {_deckEditor.SampleHandSize(_cardRepo)}") },
 				{ DeckZoneSubsystem.DeckListTabIndex, new TabSettings(getDeckListStatus()) }
 			});
 
-			setScrollStatus($"{_viewCards.CardIndex}/{_viewCards.Count}",
-				_labelStatusScrollCards);
+			setScrollStatus($"{_viewCards.CardIndex}/{_viewCards.Count}", _labelStatusScrollCards);
 
 			UpdateDeckScrollLabel();
 

@@ -7,6 +7,9 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "Quality")]
 		public string Quality { get; set; }
 
+		[DataMember(Name = "Name")]
+		public string Name { get; set; }
+
 		[DataMember(Name = "TargetDirectory")]
 		public string TargetDirectory { get; set; }
 

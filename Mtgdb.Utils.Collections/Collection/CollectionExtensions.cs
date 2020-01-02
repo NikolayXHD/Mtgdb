@@ -139,6 +139,12 @@ namespace Mtgdb
 		public static HashSet<T> ToHashSet<T>(this IEnumerable<T> sequence, IEqualityComparer<T> comparer) =>
 			new HashSet<T>(sequence, comparer);
 
+		public static HashSet<TKey> ToHashSet<T, TKey>(this IEnumerable<T> sequence, Func<T, TKey> selector) =>
+			new HashSet<TKey>(sequence.Select(selector));
+
+		public static HashSet<TKey> ToHashSet<T, TKey>(this IEnumerable<T> sequence, Func<T, TKey> selector, IEqualityComparer<TKey> comparer) =>
+			new HashSet<TKey>(sequence.Select(selector), comparer);
+
 		public static int IndexOf<T>(this IList<T> list, T value, IEqualityComparer<T> comparer)
 		{
 			for (int i = 0; i < list.Count; i++)
@@ -215,6 +221,12 @@ namespace Mtgdb
 			}
 
 			list.Add(val);
+		}
+
+		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> entry, out T1 t1, out T2 t2)
+		{
+			t1 = entry.Key;
+			t2 = entry.Value;
 		}
 	}
 }

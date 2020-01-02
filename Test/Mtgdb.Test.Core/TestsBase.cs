@@ -22,7 +22,7 @@ namespace Mtgdb.Test
 			LogManager.Flush();
 		}
 
-		public static void LoadModules()
+		protected static void LoadModules()
 		{
 			if (_loadedModules)
 				return;
@@ -36,6 +36,7 @@ namespace Mtgdb.Test
 			Repo = Kernel.Get<CardRepository>();
 			ImgRepo = Kernel.Get<ImageRepository>();
 			Ui = Kernel.Get<UiModel>();
+			Formatter = Kernel.Get<CardFormatter>();
 
 			_loadedModules = true;
 		}
@@ -127,13 +128,14 @@ namespace Mtgdb.Test
 		}
 
 		protected static IKernel Kernel;
-		protected static CardRepository Repo { get; set; }
-		protected static ImageRepository ImgRepo { get; set; }
-		protected static UiModel Ui { get; set; }
+		protected static CardRepository Repo { get; private set; }
+		protected static ImageRepository ImgRepo { get; private set; }
+		protected static UiModel Ui { get; private set; }
 
-		protected static CardSearcher Searcher { get; set; }
-		protected static CardSpellchecker Spellchecker { get; set; }
-		protected static KeywordSearcher KeywordSearcher { get; set; }
+		protected static CardSearcher Searcher { get; private set; }
+		protected static CardSpellchecker Spellchecker { get; private set; }
+		protected static KeywordSearcher KeywordSearcher { get; private set; }
+		protected static CardFormatter Formatter { get; set; }
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;

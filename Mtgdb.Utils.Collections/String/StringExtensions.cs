@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Mtgdb
@@ -40,6 +41,19 @@ namespace Mtgdb
 
 			foreach (var fileInfo in dirInfo.GetFiles())
 				fileInfo.Delete();
+		}
+
+		public static void RemoveDirectoryIfEmpty(this string dir)
+		{
+			if (dir == null)
+				return;
+
+			var info = new DirectoryInfo(dir);
+			if (!info.Exists)
+				return;
+
+			if (!info.EnumerateFileSystemInfos().Any())
+				Directory.Delete(dir);
 		}
 
 		public static string RemoveDiacritics(this string value)

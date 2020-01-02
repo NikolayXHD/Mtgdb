@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using JetBrains.Annotations;
 using Mtgdb.Data;
 using NUnit.Framework;
 
@@ -19,7 +20,7 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+			var codecs = ImageCodecInfo.GetImageEncoders();
 			_jpegCodec = codecs.First(_ => _.MimeType == "image/jpeg");
 			_jpegEncoderParams = new EncoderParameters
 			{
@@ -30,150 +31,159 @@ namespace Mtgdb.Util
 			};
 		}
 
-		[TestCase("c19 ", false, Clients.Scryfall)]
-		[TestCase("cmb1", false, Clients.Scryfall)]
-		[TestCase("eld ", false, Clients.Scryfall)]
-		[TestCase("gn2 ", false, Clients.Scryfall)]
-		[TestCase("ha1 ", false, Clients.Scryfall)]
-		[TestCase("peld", false, Clients.Scryfall)]
-		[TestCase("ptg ", false, Clients.Scryfall)]
-		[TestCase("puma", false, Clients.Scryfall)]
-		[TestCase("hho ", false, Clients.Scryfall)]
-		public async Task DownloadGathererImages(string setCode, bool useCustomSet, Clients client)
+		[TestCase(null, false, Clients.Scryfall, TokensSubdir)]
+		public async Task DownloadGathererImages(string setCode, bool useCustomSet, Clients client, string type)
 		{
-			setCode = setCode.Trim();
-			var repo = new CardRepository();
-			if (useCustomSet)
+			var repo = new CardRepository(new CardFormatter());
+			if (setCode != null)
 			{
-				repo.SetsFile = null;
-				repo.CustomSetCodes = new[] {setCode};
-			}
+				if (useCustomSet)
+				{
+					repo.SetsFile = null;
+					repo.CustomSetCodes = new[] {setCode.Trim()};
+				}
 
-			repo.FilterSetCode = code => Str.Equals(code, setCode);
+				repo.FilterSetCode = code => Str.Equals(code, setCode.Trim());
+			}
 
 			repo.LoadFile();
 			repo.Load();
 
-			var set = repo.SetsByCode[setCode];
-			var setDirectory = Path.Combine(OriginalDir, set.Code);
-			var setDirectoryPng = setDirectory + ".png";
-			Directory.CreateDirectory(setDirectoryPng);
-
-			foreach (var card in set.Cards)
+			foreach (Set set in repo.SetsByCode.Values)
 			{
-				string targetFile =
-					Path.Combine(setDirectoryPng, card.ImageName + ".png");
-				string processedFile =
-					Path.Combine(setDirectory, card.ImageName + ".jpg");
-
-				if (File.Exists(targetFile) || File.Exists(processedFile))
+				if (setCode != null && Str.Equals(set.Code, setCode.Trim()))
 					continue;
 
-				await _clientFactory[client]().DownloadCardImage(card, targetFile, CancellationToken.None);
-			}
-		}
-
-		[TestCase("c19 ", true, false, false)]
-		[TestCase("cmb1", true, false, false)]
-		[TestCase("eld ", true, false, false)]
-		[TestCase("gn2 ", true, false, false)]
-		[TestCase("ha1 ", true, false, false)]
-		[TestCase("peld", true, false, false)]
-		[TestCase("ptg ", true, false, false)]
-		[TestCase("puma", true, false, false)]
-		[TestCase("hho ", true, false, false)]
-		public void PreProcessImages(string set, bool fromPng, bool createZoom, bool keepExisting)
-		{
-			var smallDir = OriginalDir;
-			var zoomDir = PreprocessedDir;
-			set = set.Trim();
-			var smallJpgDir = Path.Combine(smallDir, set);
-			var zoomJpgDir = Path.Combine(zoomDir, set);
-
-			if (!fromPng)
-			{
-				if (!createZoom)
-					return;
-
-				Directory.CreateDirectory(zoomJpgDir);
-				foreach (var smallImg in Directory.GetFiles(smallJpgDir))
+				foreach ((string typeSubdir, var listGetter) in _listBySubdir)
 				{
-					var zoomImg = smallImg.Replace(smallDir, zoomDir);
-					if (keepExisting && File.Exists(zoomImg))
+					if (type != null && type != typeSubdir)
 						continue;
-					WaifuScaler.Scale(smallImg, zoomImg);
-				}
-			}
-			else
-			{
-				var pngSubdir = set + ".png";
-				string smallPngDir = Path.Combine(smallDir, pngSubdir);
-				string zoomPngDir = Path.Combine(zoomDir, pngSubdir);
 
-				var dirs = new List<(string pngDir, string jpgDir)>
-				{
-					(pngDir: smallPngDir, jpgDir: smallJpgDir)
-				};
+					var cards = listGetter(set);
+					if (cards.Count == 0)
+						continue;
 
-				if (createZoom)
-				{
-					Directory.CreateDirectory(zoomPngDir);
-					foreach (var smallImg in Directory.GetFiles(smallPngDir))
+					string setSubdir = set.Code + (Str.Equals(set.Code, "con") ? " escape" : string.Empty);
+					string setDirectory = Path.Combine(OriginalDir, typeSubdir, setSubdir);
+					string setDirectoryPng = setDirectory + ".png";
+
+					bool dirExisted = Directory.Exists(setDirectoryPng);
+					if (!dirExisted)
+						Directory.CreateDirectory(setDirectoryPng);
+
+					foreach (var card in cards)
 					{
-						var zoomImg = smallImg.Replace(smallDir, zoomDir);
-						var convertedImg = zoomImg
-							.Replace(smallDir, zoomJpgDir)
-							.Replace(".png", ".jpg");
+						string targetFile = Path.Combine(setDirectoryPng, card.ImageName + ".png");
+						string processedFile = Path.Combine(setDirectory, card.ImageName + ".jpg");
 
-						if (keepExisting && F.Seq(zoomImg, convertedImg).Any(File.Exists))
+						if (_scope?.Invoke(card) == false || File.Exists(targetFile) || File.Exists(processedFile))
 							continue;
 
-						WaifuScaler.Scale(smallImg, zoomImg);
+						await _clientFactory[client]().DownloadCardImage(card, targetFile, CancellationToken.None);
 					}
 
-					dirs.Add((pngDir: zoomPngDir, jpgDir: zoomJpgDir));
+					if (!dirExisted && Directory.GetFileSystemEntries(setDirectoryPng).Length == 0)
+						Directory.Delete(setDirectoryPng);
 				}
-
-				foreach (var (pngDir, jpgDir) in dirs)
-				{
-					Directory.CreateDirectory(jpgDir);
-
-					var pngImages = Directory.GetFiles(pngDir).ToArray();
-
-					foreach (var sourceImage in pngImages)
-						convertToJpg(sourceImage, jpgDir);
-				}
-			}
-
-			void convertToJpg(string sourceImage, string targetDir)
-			{
-				var targetImage = Path.Combine(targetDir,
-					Path.GetFileNameWithoutExtension(sourceImage) + ".jpg");
-
-				if (keepExisting && File.Exists(targetImage))
-					return;
-
-				using var original = new Bitmap(sourceImage);
-				new BmpAlphaToBackgroundColorTransformation(original, Color.White)
-					.Execute();
-
-				original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
 			}
 		}
 
-		// [TestCase(
-		// 	HtmlDir + @"\eld_v2_Card_Image_Gallery_MAGIC_THE GATHERING.html",
-		// 	GathererOriginalDir + @"\eld.png")]
 		[TestCase(
-			HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html",
-			OriginalDir + @"\celd.png")]
+			null,
+			true,
+			false,
+			false,
+			TokensSubdir)]
+		public void PreProcessImages(string setCode, bool fromPng, bool createZoom, bool keepExisting, string type)
+		{
+			const string smallDir = OriginalDir;
+			const string zoomDir = PreprocessedDir;
+
+			foreach ((string typeSubdir, _) in _listBySubdir)
+			{
+				if (type != null && type != typeSubdir)
+					continue;
+
+				string typeDir = Path.Combine(smallDir, typeSubdir);
+				foreach (string setDir in Directory.GetDirectories(typeDir))
+				{
+					string subdir = Path.GetFileName(setDir) ??
+						throw new ApplicationException($"Null subdirectory in {typeDir}");
+
+					string setSubdir = Regex.Replace(subdir, @"\.png$", string.Empty);
+
+					if (setCode != null && !Str.Equals(setSubdir, setCode.Trim()))
+						continue;
+
+					string smallJpgDir = Path.Combine(smallDir, typeSubdir, setSubdir);
+					string zoomJpgDir = Path.Combine(zoomDir, typeSubdir, setSubdir);
+
+					if (!fromPng)
+					{
+						if (!createZoom)
+							return;
+
+						Directory.CreateDirectory(zoomJpgDir);
+						foreach (string smallImg in Directory.GetFiles(smallJpgDir))
+						{
+							string zoomImg = smallImg.Replace(smallDir, zoomDir);
+							if (keepExisting && File.Exists(zoomImg))
+								continue;
+							WaifuScaler.Scale(smallImg, zoomImg);
+						}
+					}
+					else
+					{
+						string smallPngDir = Path.Combine(smallDir, typeSubdir, setSubdir + ".png");
+						string zoomPngDir = Path.Combine(zoomDir, typeSubdir, setSubdir + ".png");
+
+						var dirs = new List<(string pngDir, string jpgDir)>
+						{
+							(pngDir: smallPngDir, jpgDir: smallJpgDir)
+						};
+
+						if (createZoom)
+						{
+							Directory.CreateDirectory(zoomPngDir);
+							foreach (string smallImg in Directory.GetFiles(smallPngDir))
+							{
+								string zoomImg = smallImg.Replace(smallDir, zoomDir);
+								string convertedImg = zoomImg
+									.Replace(smallDir, zoomJpgDir)
+									.Replace(".png", ".jpg");
+
+								if (keepExisting && F.Seq(zoomImg, convertedImg).Any(File.Exists))
+									continue;
+
+								WaifuScaler.Scale(smallImg, zoomImg);
+							}
+
+							dirs.Add((pngDir: zoomPngDir, jpgDir: zoomJpgDir));
+						}
+
+						foreach ((string pngDir, string jpgDir) in dirs)
+						{
+							Directory.CreateDirectory(jpgDir);
+
+							var pngImages = Directory.GetFiles(pngDir).ToArray();
+
+							foreach (string sourceImage in pngImages)
+								convertToJpg(sourceImage, jpgDir, keepExisting);
+						}
+					}
+				}
+			}
+		}
+
+		[TestCase(HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html", OriginalDir + @"\celd.png")]
 		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
 		{
-			var htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
-			var directoryName = Path.GetDirectoryName(htmlPath);
-			var filesDirectory = Path.Combine(directoryName, htmlFileName + "_files");
+			string htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
+			string directoryName = Path.GetDirectoryName(htmlPath) ??
+				throw new ArgumentException(htmlPath, nameof(htmlPath));
+			string filesDirectory = Path.Combine(directoryName, htmlFileName + "_files");
 
-			var content = File.ReadAllText(htmlPath);
+			string content = File.ReadAllText(htmlPath);
 			var matches = _imgTagPattern.Matches(content);
 
 			Directory.CreateDirectory(targetDir);
@@ -182,9 +192,9 @@ namespace Mtgdb.Util
 				string originalFileName = match.Groups["file"].Value;
 				string ext = Path.GetExtension(originalFileName);
 
-				var filePath = Path.Combine(filesDirectory, originalFileName);
+				string filePath = Path.Combine(filesDirectory, originalFileName);
 
-				var name = HttpUtility.HtmlDecode(match.Groups["name"].Value)
+				string name = HttpUtility.HtmlDecode(match.Groups["name"].Value)
 					.Replace(" // ", "");
 
 				string defaultTargetPath = Path.Combine(targetDir, name + ext);
@@ -216,6 +226,23 @@ namespace Mtgdb.Util
 			}
 		}
 
+
+
+		private void convertToJpg([NotNull] string sourceImage, string targetDir, bool keepExisting)
+		{
+			string targetImage = Path.Combine(targetDir,
+				Path.GetFileNameWithoutExtension(sourceImage) + ".jpg");
+
+			if (keepExisting && File.Exists(targetImage))
+				return;
+
+			using var original = new Bitmap(sourceImage);
+			new BmpAlphaToBackgroundColorTransformation(original, Color.White)
+				.Execute();
+
+			original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
+		}
+
 		private ImageCodecInfo _jpegCodec;
 		private EncoderParameters _jpegEncoderParams;
 
@@ -224,6 +251,9 @@ namespace Mtgdb.Util
 
 		private const string PreprocessedDir =
 			@"D:\Distrib\games\mtg\Gatherer.PreProcessed";
+
+		private const string CardsSubdir = "cards";
+		private const string TokensSubdir = "tokens";
 
 		private const string HtmlDir = @"D:\temp\html";
 
@@ -238,9 +268,18 @@ namespace Mtgdb.Util
 				[Clients.Gatherer] = () => new GathererClient()
 			};
 
+		private static readonly Dictionary<string, Func<Set, IList<Card>>> _listBySubdir =
+			new Dictionary<string, Func<Set,IList<Card>>>
+			{
+				[CardsSubdir] = set => set.ActualCards,
+				[TokensSubdir] = set => set.Tokens,
+			};
+
 		public enum Clients
 		{
 			Scryfall, Gatherer
 		}
+
+		private static readonly Func<Card, bool> _scope = card => card.Side == "b";
 	}
 }

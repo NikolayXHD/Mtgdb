@@ -61,8 +61,5 @@ namespace Mtgdb.Ui
 			CountById.TryGetValue(cardId, out int count);
 			return count;
 		}
-
-		public bool Contains(Card c) =>
-			CountById.ContainsKey(c.Id);
 	}
 }

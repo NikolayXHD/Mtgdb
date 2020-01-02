@@ -16,9 +16,11 @@ namespace Mtgdb.Data
 			select(_v.Main);
 
 		private Card select(IList<Card> list) =>
-			Str.Equals(list[0].NameNormalized, _v.Card.NameNormalized)
-				? _v.Card
-				: list[0];
+			list == null
+				? null
+				: Str.Equals(list[0].NameNormalized, _v.Card.NameNormalized)
+					? _v.Card
+					: list[0];
 
 		public IEnumerator<Card> GetEnumerator() =>
 			Enumerable.Range(0, Count)

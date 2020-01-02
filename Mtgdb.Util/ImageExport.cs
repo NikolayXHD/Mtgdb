@@ -35,13 +35,42 @@ namespace Mtgdb.Util
 			_imageRepo.LoadZoom();
 		}
 
-		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner)
+		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner, bool token)
 		{
 			var exportedSmall = new HashSet<string>(Str.Comparer);
 			var exportedZoomed = new HashSet<string>(Str.Comparer);
 
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner);
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner, token);
+			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner, token);
+		}
+
+		public void SignFiles(string packagePath, string output, string setCodes)
+		{
+			string parentDir = output.Parent();
+			Directory.CreateDirectory(parentDir);
+
+			if (Directory.Exists(packagePath))
+			{
+				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
+
+				var prevSignatureByPath = sets != null && File.Exists(output)
+					? Signer.ReadFromFile(output)
+						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
+						.ToDictionary(_ => _.Path)
+					: new Dictionary<string, FileSignature>();
+
+				var signatures = Signer.CreateSignatures(packagePath, precalculated: prevSignatureByPath);
+				Signer.WriteToFile(output, signatures);
+			}
+			else if (File.Exists(packagePath))
+			{
+				var metadata = Signer.CreateSignature(packagePath);
+				Signer.WriteToFile(output, Array.From(metadata));
+			}
+			else
+			{
+				Console.WriteLine("Specified path {0} does not exist", packagePath);
+			}
 		}
 
 		private void export(
@@ -54,12 +83,11 @@ namespace Mtgdb.Util
 			string smallSubdir,
 			string zoomedSubdir,
 			bool matchingSet,
-			bool forceRemoveCorner)
+			bool forceRemoveCorner,
+			bool token)
 		{
-			foreach (var entryBySetCode in _cardRepo.SetsByCode)
+			foreach ((string setCode, Set set) in _cardRepo.SetsByCode)
 			{
-				string setCode = entryBySetCode.Key;
-
 				Console.WriteLine(setCode);
 
 				if (code != null && !Str.Equals(code, setCode))
@@ -88,9 +116,12 @@ namespace Mtgdb.Util
 					zoomedSetSubdir = ensureSetSubdirectory(zoomedSetSubdir);
 				}
 
-				foreach (var card in entryBySetCode.Value.Cards)
+				foreach (var card in set.Cards)
 				{
-					if (card.Faces.Main != card && card.IsSingleSide())
+					if (card.IsSingleSide() && card.Faces.Main != card)
+						continue;
+
+					if (card.IsToken != token)
 						continue;
 
 					Bitmap original = null;
@@ -139,10 +170,11 @@ namespace Mtgdb.Util
 
 					original?.Dispose();
 				}
+
+				smallSetSubdir.RemoveDirectoryIfEmpty();
+				zoomedSetSubdir.RemoveDirectoryIfEmpty();
 			}
 		}
-
-
 
 		private static string ensureSetSubdirectory(string smallSet)
 		{

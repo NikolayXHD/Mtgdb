@@ -19,7 +19,7 @@ namespace Mtgdb.Downloader
 			_megatools = megatools;
 		}
 
-		public async Task Download(string quality, IList<ImageDownloadProgress> allProgress, CancellationToken token)
+		public async Task Download(string quality, IReadOnlyList<ImageDownloadProgress> allProgress, CancellationToken token)
 		{
 			var progressEnumerable = allProgress
 				.Where(_ => Str.Equals(_.QualityGroup.Quality, quality))

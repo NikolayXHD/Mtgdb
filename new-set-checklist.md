@@ -88,11 +88,16 @@ Miscellaneous
 Mass import gdrive links
 ------------------------
 
-gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz' in parents
-gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq' in parents
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz' in parents"
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq' in parents"
 
-11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz
-1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'1HGB0CJXBPc9E_YTiIo1kbSV_RULqERdl' in parents"
+gdrive-windows-x64.exe list --max 0 --name-width 0 --order name --query "'1ZonX6PNJBVjOcqQzojwTzWdZ8HoNyAz0' in parents"
+
+lq       11Fm-i-coWuRscB0QeFwqdDdPknXBs_Lz
+mq       1AfTea0-lYJUT__vrxyeNbpZJRVouTIfq
+lq-token 1HGB0CJXBPc9E_YTiIo1kbSV_RULqERdl
+mq-token 1ZonX6PNJBVjOcqQzojwTzWdZ8HoNyAz0
 
 old way
 -------
