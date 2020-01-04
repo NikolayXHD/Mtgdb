@@ -541,7 +541,7 @@ namespace Mtgdb.Data
 			hasLegalityValueIn(format, Legality.Future);
 
 		private bool hasLegalityValueIn(string format, string legalityValue) =>
-			LegalityByFormat.TryGetValue(format, out var legality) &&
+			LegalityByFormat.TryGetValue(format, out string legality) &&
 			Str.Equals(legality, legalityValue);
 
 		public string GetName(string language) =>

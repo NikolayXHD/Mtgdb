@@ -497,7 +497,7 @@ namespace Mtgdb.Data
                     {
                         goop1.Image = goop1.Image.Substring(1, goop1.Image.Length - 2);
                     }
-                    else if ("*".Equals(goop1.Image, StringComparison.Ordinal))
+                    else if ("*".Equals(goop1.Image))
                     {
                         startOpen = true;
                     }
@@ -505,7 +505,7 @@ namespace Mtgdb.Data
                     {
                         goop2.Image = goop2.Image.Substring(1, goop2.Image.Length - 2);
                     }
-                    else if ("*".Equals(goop2.Image, StringComparison.Ordinal))
+                    else if ("*".Equals(goop2.Image))
                     {
                         endOpen = true;
                     }
@@ -598,45 +598,35 @@ namespace Mtgdb.Data
         private int jj_la;
         private int jj_gen;
         private int[] jj_la1 = new int[21];
-        private static uint[] jj_la1_0 = new uint[] // LUCENENET: Avoid static constructors (see https://github.com/apache/lucenenet/pull/224#issuecomment-469284006)
+        private static uint[] jj_la1_0;
+        private static int[] jj_la1_1;
+
+        static QueryParserPatched()
         {
-            0x300, 0x300, 0x1c00, 0x1c00, 0xfda7f00, 0x120000, 0x40000, 0xfda6000, 0x9d22000, 0x200000,
-            0x200000, 0x40000, 0x6000000, 0x80000000, 0x10000000, 0x80000000, 0x60000000, 0x40000,
-            0x200000, 0x40000, 0xfda2000,
-        };
-        private static int[] jj_la1_1 = new int[] // LUCENENET: Avoid static constructors (see https://github.com/apache/lucenenet/pull/224#issuecomment-469284006)
+            {
+                Jj_la1_init_0();
+                Jj_la1_init_1();
+            }
+        }
+
+        private static void Jj_la1_init_0()
         {
-            0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0,
-            0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
-        };
+            jj_la1_0 = new uint[]
+            {
+                0x300, 0x300, 0x1c00, 0x1c00, 0xfda7f00, 0x120000, 0x40000, 0xfda6000, 0x9d22000, 0x200000,
+                0x200000, 0x40000, 0x6000000, 0x80000000, 0x10000000, 0x80000000, 0x60000000, 0x40000,
+                0x200000, 0x40000, 0xfda2000,
+            };
+        }
 
-        // LUCENENET: Avoid static constructors (see https://github.com/apache/lucenenet/pull/224#issuecomment-469284006)
-        //static QueryParser()
-        //{
-        //    {
-        //        Jj_la1_init_0();
-        //        Jj_la1_init_1();
-        //    }
-        //}
-
-        //private static void Jj_la1_init_0()
-        //{
-        //    jj_la1_0 = new uint[]
-        //    {
-        //        0x300, 0x300, 0x1c00, 0x1c00, 0xfda7f00, 0x120000, 0x40000, 0xfda6000, 0x9d22000, 0x200000,
-        //        0x200000, 0x40000, 0x6000000, 0x80000000, 0x10000000, 0x80000000, 0x60000000, 0x40000,
-        //        0x200000, 0x40000, 0xfda2000,
-        //    };
-        //}
-
-        //private static void Jj_la1_init_1()
-        //{
-        //    jj_la1_1 = new int[]
-        //    {
-        //        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0,
-        //        0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
-        //    };
-        //}
+        private static void Jj_la1_init_1()
+        {
+            jj_la1_1 = new int[]
+            {
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0,
+                0x1, 0x0, 0x0, 0x0, 0x0, 0x0,
+            };
+        }
 
         private readonly JJCalls[] jj_2_rtns = new JJCalls[1];
         private bool jj_rescan = false;

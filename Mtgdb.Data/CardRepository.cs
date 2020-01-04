@@ -123,8 +123,8 @@ namespace Mtgdb.Data
 
 					card.Formatter = _formatter;
 
-					preProcessCardOrToken(card);
 					preProcessCard(card);
+					preProcessCardOrToken(card);
 
 					if (set.ActualCards[i].Remove)
 						set.ActualCards.RemoveAt(i);
@@ -136,7 +136,7 @@ namespace Mtgdb.Data
 					{
 						formats.IntersectWith(card.LegalityByFormat.Keys);
 						return formats;
-					}).ToDictionary(_ => _, _ => Legality.Legal);
+					}).ToDictionary(_ => _, _ => Legality.Legal, Str.Comparer);
 
 				for (int i = 0; i < set.Tokens.Count; i++)
 				{
@@ -146,8 +146,8 @@ namespace Mtgdb.Data
 					token.Id = CardId.Generate(token);
 					token.LegalityByFormat = tokenLegalityByFormat;
 					token.Formatter = _formatter;
-					preProcessCardOrToken(token);
 					preProcessToken(token);
+					preProcessCardOrToken(token);
 				}
 
 				var cards = new List<Card>(set.ActualCards.Count + set.Tokens.Count);
@@ -170,8 +170,6 @@ namespace Mtgdb.Data
 
 				foreach (var card in set.Cards)
 					CardsById[card.Id] = card;
-
-				set.Cards.ForEach(postProcessCard);
 
 				ImageNameCalculator.CalculateCardImageNames(set, Patch);
 
@@ -222,7 +220,7 @@ namespace Mtgdb.Data
 				namesakeList.Capacity = namesakeList.Count;
 		}
 
-		private void preProcessCardOrToken(Card card)
+		private static void preProcessCardOrToken(Card card)
 		{
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
 			card.Names = card.Names?.Select(_ => string.Intern(_.RemoveDiacritics())).ToList();
@@ -256,12 +254,6 @@ namespace Mtgdb.Data
 
 		private void preProcessCard(Card card)
 		{
-			if (card.LegalityByFormat != null)
-				card.LegalityByFormat = card.LegalityByFormat.ToDictionary(
-					pair => string.Intern(pair.Key),
-					pair => string.Intern(pair.Value),
-					Str.Comparer);
-
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.Patch(patch);
 
@@ -273,20 +265,8 @@ namespace Mtgdb.Data
 
 			if (!string.IsNullOrEmpty(card.OriginalType) && Str.Equals(card.OriginalType, card.TypeEn))
 				card.OriginalType = null;
-		}
 
-		private static void preProcessToken(Card card)
-		{
-			if (Str.Equals(card.Layout, "double_faced_token"))
-				card.Layout = CardLayouts.Transform;
-		}
-
-		private void postProcessCard(Card card)
-		{
-			if (card.IsToken)
-				return;
-
-			if (String.IsNullOrEmpty(card.Layout))
+			if (string.IsNullOrEmpty(card.Layout))
 				card.Layout = "Normal";
 			else if (Str.Equals(card.Layout, "Planar"))
 			{
@@ -303,23 +283,34 @@ namespace Mtgdb.Data
 				card.Rarity = string.Intern(card.Rarity.Substring(timeshifted.Length));
 		}
 
+		private static void preProcessToken(Card card)
+		{
+			if (Str.Equals(card.Layout, "double_faced_token"))
+				card.Layout = CardLayouts.Transform;
+			else if (Str.Equals(card.Layout, "emblem"))
+				card.Layout = CardLayouts.Normal;
+		}
+
 		private void patchLegality()
 		{
-			if (Patch.Legality == null)
-				return;
+			if (Patch.Legality != null)
+				foreach ((string format, var patch) in Patch.Legality)
+				foreach (var card in Cards)
+				{
+					if (card.IsBannedIn(format) && !patch.Banned.Remove.Contains(card.NameEn) || patch.Banned.Add.Contains(card.NameEn))
+						card.SetLegality(format, Legality.Banned);
+					else if (card.IsRestrictedIn(format) && !patch.Restricted.Remove.Contains(card.NameEn) ||
+						patch.Restricted.Add.Contains(card.NameEn))
+						card.SetLegality(format, Legality.Restricted);
+					else if (card.IsLegalIn(format) && !card.Printings.Any(patch.Sets.Remove.Contains) || card.Printings.Any(patch.Sets.Add.Contains))
+						card.SetLegality(format, Legality.Legal);
+					else
+						card.SetLegality(format, Legality.Illegal);
+				}
 
-			foreach ((string format, var patch) in Patch.Legality)
 			foreach (var card in Cards)
-			{
-				if (card.IsBannedIn(format) && !patch.Banned.Remove.Contains(card.NameEn) || patch.Banned.Add.Contains(card.NameEn))
-					card.SetLegality(format, Legality.Banned);
-				else if (card.IsRestrictedIn(format) && !patch.Restricted.Remove.Contains(card.NameEn) || patch.Restricted.Add.Contains(card.NameEn))
-					card.SetLegality(format, Legality.Restricted);
-				else if (card.IsLegalIn(format) && !card.Printings.Any(patch.Sets.Remove.Contains) || card.Printings.Any(patch.Sets.Add.Contains))
-					card.SetLegality(format, Legality.Legal);
-				else
-					card.SetLegality(format, Legality.Illegal);
-			}
+				card.LegalityByFormat = card.LegalityByFormat?
+					.ToDictionary(pair => string.Intern(pair.Key), pair => string.Intern(pair.Value), Str.Comparer);
 		}
 
 		private static float? getPower(string power)

@@ -41,6 +41,7 @@
 		</QualityGroup>
 
     <QualityGroup Quality="LQ" Name="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
+      <Dir GdriveId="1MwaI9FnfSNiNgbNw9AcFqua6oTgRqkiE" Subdir="g18" />
       <Dir GdriveId="1FsNweT2ObjmLpBBtLk548LP0bLQnheXC" Subdir="gn2" />
       <Dir GdriveId="1nCxU3zQKbwDOXwbdreWetiu5vtwG6g3P" Subdir="cmb1" />
       <Dir GdriveId="1-Z9JJjypQ-CaySv5FpMdadYIpunSxQGU" Subdir="ha1" />
@@ -329,7 +330,6 @@
 			<Dir GdriveId="1q4pnXHBPoXR709WXZqr20zUmJYSaUqjq" Subdir="pfrf" />
 			<Dir GdriveId="1_FbQ9zBtTuCpVeffQ-KBGjRzpp5CMz76" Subdir="pg07" />
 			<Dir GdriveId="10LWTpt3ENmAJR1In68JCsOCk0-ZVMbfp" Subdir="pg08" />
-			<Dir GdriveId="1ZIpYu4W2G5NiUFdvtl1EeblrETQuF9Bz" Subdir="pgp1" />
 			<Dir GdriveId="1XOYlci6Z6F14_QAJ881_dbiiwPxggqP0" Subdir="pgp17" />
 			<Dir GdriveId="15CY7cez7mAvstO1phx--Buu2Q2vMpHF2" Subdir="pgpx" />
 			<Dir GdriveId="1zJnavp6dQSW4orr8zc-KPgNPtQ5lD4Te" Subdir="pgrn" />
@@ -498,6 +498,7 @@
 		</QualityGroup>
 
 		<QualityGroup Quality="MQ" Name="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
+      <Dir GdriveId="1Txp-0Rwio5YmIKpaPOmAJ5wBnkzJkfEX" Subdir="g18" />
       <Dir GdriveId="1TamVtsEh4i8NPtFHlnCuWGBlgd6XPTMb" Subdir="gn2" />
       <Dir GdriveId="1KVMLgut2xXpjku6pj5gfK0kHtbP50ZIL" Subdir="cmb1" />
       <Dir GdriveId="1TqTvQjzJfjMqX26jZwUzx-tYYm7vUKjP" Subdir="ha1" />
@@ -786,7 +787,6 @@
 			<Dir GdriveId="11OJb7IlmwcgU3GzVbTGpxNAti_EP4IJD" Subdir="pfrf" />
 			<Dir GdriveId="1jZXch551vA6io68TV0mjdYebemqalB7O" Subdir="pg07" />
 			<Dir GdriveId="1X85YUlaT8BSn3t7IWylqo0lA2zkcZ6PB" Subdir="pg08" />
-			<Dir GdriveId="1PnMqPE9-_aMV69QJDwFT51gpOuzP97d4" Subdir="pgp1" />
 			<Dir GdriveId="1fO9fpaArsjdXqB0MzRjiF5dSGLUyXxXS" Subdir="pgp17" />
 			<Dir GdriveId="1IkDZplZXmlhCb4Bjz4IZvVwOwWzx_E84" Subdir="pgpx" />
 			<Dir GdriveId="1GaTTFL4_zqsRdO71hiBdsOJqn7zr0nRb" Subdir="pgrn" />

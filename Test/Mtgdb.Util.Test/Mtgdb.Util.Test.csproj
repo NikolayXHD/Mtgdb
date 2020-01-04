@@ -104,13 +104,12 @@
     <Compile Include="EditDistance\DamerauLevenshteinDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
-    <Compile Include="DeploymentUtils.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="ExternalData\HelpDownloaderTest.cs" />
     <Compile Include="ExternalData\ImageDownloader.cs" />
     <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="ExternalData\ScryfallClient.cs" />
-    <Compile Include="Images\ImageDownloadingUtil.cs" />
+    <Compile Include="Images\WizardImageHtmlPageUtil.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />
     <Compile Include="Tcg\TcgCard.cs" />
@@ -126,6 +125,8 @@
     <Compile Include="Images\ImageMagickScaler.cs" />
     <Compile Include="Images\MedianFilter.cs" />
     <Compile Include="Images\SaturationFilter.cs" />
+    <Compile Include="[Deploy]\DeploymentUtils.cs" />
+    <Compile Include="[Deploy]\ImageExport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">

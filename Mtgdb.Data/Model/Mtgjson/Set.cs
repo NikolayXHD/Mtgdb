@@ -39,6 +39,9 @@ namespace Mtgdb.Data
 		public Dictionary<string, List<Card>> MapByName(bool tokens) =>
 			tokens ? TokensByName : ActualCardsByName;
 
+		public IList<Card> List(bool tokens) =>
+			tokens ? Tokens : ActualCards;
+
 		public override string ToString() =>
 			$"{Code}: {Name} {ActualCards?.Count ?? 0}+{Tokens?.Count ?? 0} {ReleaseDate}";
 		/*

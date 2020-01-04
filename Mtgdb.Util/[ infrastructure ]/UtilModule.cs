@@ -6,8 +6,7 @@ namespace Mtgdb.Util
 	{
 		public override void Load()
 		{
-			// ReSharper disable once PossibleNullReferenceException
-			Kernel.Bind<ImageExport>()
+			Kernel.Bind<ImageDirectorySigner>()
 				.ToSelf()
 				.InSingletonScope();
 		}

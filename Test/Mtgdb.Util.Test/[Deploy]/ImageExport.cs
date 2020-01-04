@@ -23,61 +23,22 @@ namespace Mtgdb.Util
 			_imageLoader = imageLoader;
 		}
 
-		public void Load(string[] enabledImageGroups = null)
-		{
-			Console.WriteLine("== Loading cards ==");
-			_cardRepo.LoadFile();
-			_cardRepo.Load();
-
-			Console.WriteLine("== Loading pictures ==");
-			_imageRepo.LoadFiles(enabledImageGroups);
-			_imageRepo.LoadSmall();
-			_imageRepo.LoadZoom();
-		}
-
-		public void ExportCardImages(string directory, bool small, bool zoomed, string code, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner, bool token)
+		public void ExportCardImages(string directory, bool small, bool zoom, string setCodes, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner, bool token)
 		{
 			var exportedSmall = new HashSet<string>(Str.Comparer);
 			var exportedZoomed = new HashSet<string>(Str.Comparer);
 
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner, token);
-			export(directory, code, exportedSmall, exportedZoomed, small, zoomed, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner, token);
+			export(directory, setCodes, exportedSmall, exportedZoomed, small, zoom, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner, token);
+			export(directory, setCodes, exportedSmall, exportedZoomed, small, zoom, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner, token);
 		}
 
-		public void SignFiles(string packagePath, string output, string setCodes)
-		{
-			string parentDir = output.Parent();
-			Directory.CreateDirectory(parentDir);
 
-			if (Directory.Exists(packagePath))
-			{
-				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
-
-				var prevSignatureByPath = sets != null && File.Exists(output)
-					? Signer.ReadFromFile(output)
-						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
-						.ToDictionary(_ => _.Path)
-					: new Dictionary<string, FileSignature>();
-
-				var signatures = Signer.CreateSignatures(packagePath, precalculated: prevSignatureByPath);
-				Signer.WriteToFile(output, signatures);
-			}
-			else if (File.Exists(packagePath))
-			{
-				var metadata = Signer.CreateSignature(packagePath);
-				Signer.WriteToFile(output, Array.From(metadata));
-			}
-			else
-			{
-				Console.WriteLine("Specified path {0} does not exist", packagePath);
-			}
-		}
 
 		private void export(
 			string directory,
-			string code,
-			HashSet<string> exportedSmall,
-			HashSet<string> exportedZoomed,
+			string setCodes,
+			ISet<string> exportedSmall,
+			ISet<string> exportedZoomed,
 			bool small,
 			bool zoomed,
 			string smallSubdir,
@@ -86,11 +47,12 @@ namespace Mtgdb.Util
 			bool forceRemoveCorner,
 			bool token)
 		{
+			var setCodesArr = setCodes?.Split(',');
 			foreach ((string setCode, Set set) in _cardRepo.SetsByCode)
 			{
 				Console.WriteLine(setCode);
 
-				if (code != null && !Str.Equals(code, setCode))
+				if (setCodesArr != null && !setCodesArr.Contains(setCode, Str.Comparer))
 					continue;
 
 				string smallSetSubdir = null;

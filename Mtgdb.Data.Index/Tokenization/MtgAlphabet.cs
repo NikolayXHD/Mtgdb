@@ -13,7 +13,7 @@ namespace Mtgdb.Data
 		public static readonly HashSet<char> RightDelimitersSet = new HashSet<char>("}");
 		public static readonly HashSet<char> LeftDelimitersSet = new HashSet<char>("{");
 		// slash included to treat {w/u} as single word
-		public static readonly HashSet<char> WordCharsSet = new HashSet<char>("²½_/∞*+-");
+		public static readonly HashSet<char> ExtraWordChars = new HashSet<char>("²½_/∞*+-");
 
 		public static bool IsSingletoneWordChar(char c) =>
 			SingletoneWordChars.Contains(c) || c.IsCj();
@@ -65,6 +65,7 @@ namespace Mtgdb.Data
 			{ 'ô', 'o' },
 			{ 'õ', 'o' },
 			{ 'ö', 'o' },
+			{ 'š', 's' },
 			{ 'ù', 'u' },
 			{ 'ú', 'u' },
 			{ 'û', 'u' },

@@ -73,7 +73,7 @@ namespace Mtgdb.Data
 				}
 				else if (
 					char.IsLetterOrDigit(c) || 
-					MtgAlphabet.WordCharsSet.Contains(c) || 
+					MtgAlphabet.ExtraWordChars.Contains(c) || 
 					(isSingletoneWordChar = MtgAlphabet.IsSingletoneWordChar(c)))
 				{
 					if (isSingletoneWordChar)

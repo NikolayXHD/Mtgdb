@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -68,7 +69,7 @@ namespace Mtgdb.Test
 				}
 			}
 
-			Assert.That(messages, Is.Empty);
+			messages.Should().BeEmpty();
 		}
 
 		// ReSharper disable StringLiteralTypo
@@ -121,7 +122,7 @@ namespace Mtgdb.Test
 				.ToList();
 
 			var set = Repo.SetsByCode[setCode];
-			foreach (var card in set.Cards)
+			foreach (var card in set.ActualCards)
 			{
 				var imageModel = Ui.GetSmallImage(card);
 				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);

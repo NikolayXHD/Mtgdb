@@ -18,28 +18,22 @@ namespace Mtgdb.Data
 		{
 			for (int i = 0; i < m_clauses.Count; i++)
 			{
-				if (!(m_clauses[i] is SpanOrQuery))
+				if (!(m_clauses[i] is SpanOrQuery spanOrQuery))
 					continue;
 
-				var clauses = ((SpanOrQuery) m_clauses[i]).GetClauses();
+				var clauses = spanOrQuery.GetClauses();
+				var lengths = clauses.Select(getSpanLength).ToArray();
 
-				var spanLengths = clauses.Select(getSpanLength).ToArray();
-
-				if (spanLengths.All(F.IsNotNull) && spanLengths.Skip(1).All(l => l == spanLengths[0]))
+				if (lengths.All(F.IsNotNull) && lengths.All(l => l == lengths[0]))
 					continue;
-
-				var nonFixedLengthSpans = Enumerable.Range(0, clauses.Length)
-					.Where(j => spanLengths[j] == null)
-					.Select(j => clauses[j])
-					.ToArray();
 
 				var spansByLength = Enumerable.Range(0, clauses.Length)
-					.Where(j => spanLengths[j] != null)
-					.GroupBy(j => spanLengths[j])
+					.Where(j => lengths[j] != null)
+					.GroupBy(j => lengths[j])
 					.Select(gr => new KeyValuePair<int?, SpanQuery[]>(gr.Key, gr.Select(j => clauses[j]).ToArray()))
 					.ToList();
 
-				var boost = m_clauses[i].Boost;
+				float boost = m_clauses[i].Boost;
 				var result = new BooleanQuery(disableCoord: true);
 
 				if (spansByLength.Any(p => p.Key == 0))
@@ -49,17 +43,17 @@ namespace Mtgdb.Data
 					result.Add(new RewritableSpanNearQuery(clausesCopy.ToArray(), Slop, IsInOrder), Occur.SHOULD);
 				}
 
-				foreach (var pair in spansByLength)
+				foreach (var (length, queries) in spansByLength)
 				{
-					if (pair.Key == 0)
+					if (length == 0)
 						continue;
 
 					var clausesCopy = m_clauses.ToArray();
-					clausesCopy[i] = getClause(pair.Value, boost);
+					clausesCopy[i] = getClause(queries, boost);
 					result.Add(new RewritableSpanNearQuery(clausesCopy, Slop, IsInOrder), Occur.SHOULD);
 				}
 
-				foreach (var span in nonFixedLengthSpans)
+				foreach (var span in clauses.Where((span, j) => lengths[j] == null))
 				{
 					var clausesCopy = m_clauses.ToArray();
 					clausesCopy[i] = span;

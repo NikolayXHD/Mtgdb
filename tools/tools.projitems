@@ -10,10 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)publish.bat" />
-    <None Include="$(MSBuildThisFileDirectory)select-images.bat" />
     <None Include="$(MSBuildThisFileDirectory)shortcut.vbs" />
-    <None Include="$(MSBuildThisFileDirectory)sign-images.bat" />
-    <None Include="$(MSBuildThisFileDirectory)subdir-util.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)gdrive-windows-x64.exe" />

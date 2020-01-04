@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Mtgdb.Data;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void All_symbols_in_card_texts_are_considered_in_code()
+		public void All_symbols_in_card_fields_are_known()
 		{
 			// ReSharper disable StringLiteralTypo
 			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
@@ -107,7 +108,7 @@ namespace Mtgdb.Test
 				if (MtgAlphabet.Replacements.ContainsKey(c))
 					return false;
 
-				if (MtgAlphabet.WordCharsSet.Contains(c))
+				if (MtgAlphabet.ExtraWordChars.Contains(c))
 					return false;
 
 				if (MtgAlphabet.LeftDelimitersSet.Contains(c))
@@ -124,6 +125,27 @@ namespace Mtgdb.Test
 
 				return true;
 			}
+		}
+
+		[Test]
+		public void All_symbols_in_text_are_known()
+		{
+			var known = new HashSet<char>("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			known.UnionWith(MtgAlphabet.SingletoneWordChars);
+			known.UnionWith(MtgAlphabet.ExtraWordChars);
+			known.UnionWith(" .?!,;:'\"()[]{}\r\n");
+			known.UnionWith("âáàãéíñöŠûúüπ");
+			known.Add('−'); // planeswalker minus loyalty sign
+			known.Add('☐'); // checkbox
+
+			Repo.Cards.Select(_=>_.TextEn).Where(F.IsNotNull).Should()
+				.NotContain(str => new string(str.Where(c => !known.Contains(c)).Distinct().ToArray()).Length > 0);
+
+			Repo.Cards.Select(_=>_.NameEn).Where(F.IsNotNull).Should()
+				.NotContain(str => new string(str.Where(c => !known.Contains(c)).Distinct().ToArray()).Length > 0);
+
+			Repo.Cards.Select(_=>_.TypeEn).Where(F.IsNotNull).Should()
+				.NotContain(str => new string(str.Where(c => !known.Contains(c)).Distinct().ToArray()).Length > 0);
 		}
 	}
 }

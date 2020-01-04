@@ -7,7 +7,7 @@ namespace Mtgdb.Test
 	[TestFixture]
 	public class TolerantTokenizerTests : TestsBase
 	{
-		[TestCase(@"PricingLow:{10 TO *]")]
+		[TestCase(@"PricingLow:{10 TO ?]")]
 		[TestCase(@"\""""angelic demon""")]
 		[TestCase(@"""\""angelic demon""")]
 		[TestCase(@"ManaCost:*E?")]

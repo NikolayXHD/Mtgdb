@@ -34,9 +34,9 @@ namespace Mtgdb
 			return run(args);
 		}
 
-		public bool Compress(string dir, string output)
+		public bool Compress(string path, string output)
 		{
-			return run($"a \"{output}\" -t7z \"{dir}\" -r");
+			return run($"a \"{output}\" -t7z \"{path}\" -r");
 		}
 
 		private bool run(string args)

@@ -147,7 +147,7 @@
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Subrepo\Lucene.Net.Contrib\EditedTokenLocator\EditedTokenLocator.csproj">
+    <ProjectReference Include="..\..\Subrepo\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
       <Name>EditedTokenLocator</Name>
     </ProjectReference>

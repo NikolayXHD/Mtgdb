@@ -161,9 +161,9 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Plus_minus_are_not_surrounded_by_letter()
+		public void Plus_minus_are_followed_by_letter()
 		{
-			var regex = new Regex(@"\p{L}[+\-]|[+\-]\p{L}");
+			var regex = new Regex(@"[+\-]\p{L}");
 			Repo.Cards.Select(_ => _.TextEn).Where(F.IsNotNull)
 				.Should().NotContain(_ => regex.IsMatch(_));
 		}

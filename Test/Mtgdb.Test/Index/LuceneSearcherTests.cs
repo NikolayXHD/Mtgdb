@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
+using FluentAssertions;
 using Mtgdb.Data;
 using NUnit.Framework;
 // ReSharper disable StringLiteralTypo
@@ -43,7 +45,7 @@ namespace Mtgdb.Test
 				Assert.That(card.Layout, Is.EqualTo(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Hand:[3 TO *]", 3)]
+		[TestCase(@"Hand:[3 TO ?]", 3)]
 		public void Search_by_Hand(string queryStr, int min)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": Hand " + c.Hand);
@@ -52,7 +54,7 @@ namespace Mtgdb.Test
 				Assert.That(card.Hand, Is.GreaterThanOrEqualTo(min));
 		}
 
-		[TestCase(@"Life:[2 TO *]", 2)]
+		[TestCase(@"Life:[2 TO ?]", 2)]
 		public void Search_by_Life(string queryStr, int min)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": Life " + c.Life);
@@ -88,18 +90,13 @@ namespace Mtgdb.Test
 				Assert.That(card.FlavorEn, Contains.Substring(expected).IgnoreCase);
 		}
 
-		[TestCase(@"SetName:""Battle for""", "battle", "for")]
-		[TestCase(@"SetName:""Battle zendikar""~1", "battle", "zendikar")]
-		public void Search_by_SetName(string queryStr, params string[] allExpected)
+		[TestCase(@"SetName:""Battle for""", "battle for")]
+		[TestCase(@"SetName:""Battle zendikar""~1", @"battle (\w* )?zendikar")]
+		public void Search_by_SetName(string queryStr, string expectedPattern)
 		{
+			var regex = new Regex(expectedPattern, RegexOptions.IgnoreCase);
 			var cards = search(queryStr, c => c.SetName);
-
-			Assert.That(allExpected, Is.Not.Null);
-			Assert.That(allExpected, Is.Not.Empty);
-
-			foreach (var card in cards)
-				foreach (string name in allExpected)
-					Assert.That(card.SetName, Contains.Substring(name).IgnoreCase);
+			cards.Select(c => c.SetName).Distinct().Should().OnlyContain(name => regex.IsMatch(name));
 		}
 
 		[TestCase("SetCode:LEA", "LEA")]
@@ -203,9 +200,7 @@ namespace Mtgdb.Test
 		public void Search_by_LegalIn(string queryStr, string expected)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.LegalIn);
-
-			foreach (var card in cards)
-				Assert.That(card.IsLegalIn(expected));
+			cards.Should().OnlyContain(c => c.IsLegalIn(expected));
 		}
 
 		[TestCase(@"Power:\*", "*")]
@@ -298,12 +293,8 @@ namespace Mtgdb.Test
 		[TestCase(@"ToughnessNum:{1 TO 2}", 1f, 2f, true)]
 		[TestCase(@"ToughnessNum:[1 TO ?]", 1f, null, false)]
 		[TestCase(@"ToughnessNum:{1 TO ?}", 1f, null, true)]
-		[TestCase(@"ToughnessNum:[1 TO *]", 1f, null, false)]
-		[TestCase(@"ToughnessNum:{1 TO *}", 1f, null, true)]
 		[TestCase(@"ToughnessNum:[? TO 2]", null, 2f, false)]
 		[TestCase(@"ToughnessNum:{? TO 2}", null, 2f, true)]
-		[TestCase(@"ToughnessNum:[* TO 2]", null, 2f, false)]
-		[TestCase(@"ToughnessNum:{* TO 2}", null, 2f, true)]
 		public void Search_by_ToughnessNum_range(string queryStr, float? min, float? max, bool open)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Power + "/" + c.Toughness);
@@ -389,7 +380,7 @@ namespace Mtgdb.Test
 				Assert.That(card.ReleaseDate, Does.Contain(expected).IgnoreCase);
 		}
 
-		[TestCase(@"Price:[50 TO *]", 50f)]
+		[TestCase(@"Price:[50 TO ?]", 50f)]
 		public void Search_by_Price(string queryStr, float min)
 		{
 			var cards = search(queryStr, c => c.NameEn + ": " + c.Price);

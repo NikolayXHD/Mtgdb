@@ -49,7 +49,7 @@ namespace Mtgdb.Data
 			{
 				[nameof(Card.NameEn)] = _ => _.NameEn,
 				[nameof(Card.TypeEn)] = _ => _.TypeEn,
-				[nameof(Card.TextEn)] = _ => _.TextEn,
+				[nameof(Card.TextEn)] = _ => _.TextEn?.Replace("\r\n", "¶ ").Replace("\n", "¶ "),
 				[nameof(Card.FlavorEn)] = _ => _.FlavorEn,
 				[nameof(Card.ManaCost)] = _ => _.ManaCost,
 				[nameof(Card.Layout)] = _ => _.Layout,

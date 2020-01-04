@@ -1,4 +1,5 @@
 using System.Linq;
+using FluentAssertions;
 using Mtgdb.Data;
 using NUnit.Framework;
 
@@ -14,11 +15,8 @@ namespace Mtgdb.Test
 		[Test]
 		public void All_cards_have_known_layout()
 		{
-			foreach (var card in Repo.Cards)
-			{
-				Assert.That(card.IsKnownLayout(), card.ToString);
-				Assert.That(card.IsMultiFace() ^ card.IsSingleFace(), card.ToString);
-			}
+			Repo.Cards.Should().OnlyContain(card => card.IsKnownLayout());
+			Repo.Cards.Should().OnlyContain(card => card.IsMultiFace() ^ card.IsSingleFace());
 		}
 
 		[Test]
@@ -36,23 +34,23 @@ namespace Mtgdb.Test
 		[Test]
 		public void Multiface_cards_have_expected_faces_count()
 		{
-			foreach (var card in Repo.Cards.Where(CardLayouts.IsMultiFace))
-			{
-				Assert.That(card.Names, Is.Not.Null, card.ToString);
+			var multifaceCards = Repo.Cards.Where(card => card.IsMultiFace()).ToArray();
+			multifaceCards.Should().NotContain(c => !c.IsToken && c.Names == null);
+			multifaceCards.Where(c => c.IsMeld()).Should().OnlyContain(c => c.Names.Count == 3);
+			multifaceCards.Where(c => c.IsSplit()).Should().OnlyContain(c => c.Names.Count > 1);
+			multifaceCards.Where(c => !c.IsMeld() && !c.IsSplit() && !c.IsToken).Should().OnlyContain(c => c.Names.Count == 2);
 
-				if (card.IsMeld())
-					Assert.That(card.Names.Count == 3, card.ToString);
-				else if (card.IsSplit()) // some unset cards have > 2 faces
-					Assert.That(card.Names.Count > 1, card.ToString);
-				else
-					Assert.That(card.Names.Count == 2, card.ToString);
-			}
+			multifaceCards.Where(c => c.IsToken).Should().OnlyContain(c => c.IsTransform());
+			multifaceCards.Where(c => c.IsToken && c.IsTransform()).Should().OnlyContain(c =>
+				c.Names != null && c.Names.Count == 2 ||
+				!string.IsNullOrEmpty(c.Side) &&
+				c.Namesakes.Any(ns => ns.Set == c.Set && !string.IsNullOrEmpty(ns.Side) && ns.Side != c.Side));
 		}
 
 		[Test]
 		public void Multiface_cards_report_same_faces_order()
 		{
-			foreach (var card in Repo.Cards.Where(CardLayouts.IsMultiFace))
+			foreach (var card in Repo.Cards.Where(c => c.IsMultiFace() && (!c.IsToken || !c.TypesArr.Contains("card"))))
 				foreach (var name in card.Names)
 					foreach (var faceVariant in card.Set.MapByName(card.IsToken)[name])
 						Assert.That(faceVariant.Names.SequenceEqual(card.Names), card.ToString);
