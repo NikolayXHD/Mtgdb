@@ -20,20 +20,18 @@ namespace Mtgdb.Downloader
 		{
 			var resultGroups = new List<QualityGroupConfig>();
 
-			var groupsByType = QualityGroups.ToDictionary(_ => _.Quality);
-			var otherGroupsByType = other.QualityGroups.ToDictionary(_ => _.Quality);
+			var groupsByType = QualityGroups.ToDictionary(_ => _.Name ?? _.Quality);
+			var otherGroupsByType = other.QualityGroups.ToDictionary(_ => _.Name ?? _.Quality);
 
-			foreach (var entry in otherGroupsByType)
+			foreach ((string name, QualityGroupConfig grp) in otherGroupsByType)
 			{
-				var otherGroup = entry.Value;
-
-				if (groupsByType.TryGetValue(entry.Key, out var group))
+				if (groupsByType.TryGetValue(name, out var group))
 				{
-					var combined = combiner.Combine(group, otherGroup);
+					var combined = combiner.Combine(group, grp);
 					resultGroups.Add(combined);
 				}
 				else
-					resultGroups.Add(otherGroup);
+					resultGroups.Add(grp);
 			}
 
 			QualityGroups = resultGroups.ToArray();
