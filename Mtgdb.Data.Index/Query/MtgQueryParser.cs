@@ -10,7 +10,7 @@ using Token = Lucene.Net.QueryParsers.Classic.Token;
 
 namespace Mtgdb.Data
 {
-	public abstract class MtgQueryParser : ComplexPhraseQueryParserPatched
+	public abstract class MtgQueryParser : QueryParserPatched
 	{
 		protected MtgQueryParser(MtgAnalyzer analyzer, IDocumentAdapterBase adapter, string lang)
 			: base(LuceneVersion.LUCENE_48, "*", analyzer)
@@ -22,28 +22,28 @@ namespace Mtgdb.Data
 			AutoGeneratePhraseQueries = true;
 		}
 
-		public override Query Parse(string query)
-		{
-			var result = base.Parse(query);
-			return result;
-		}
-
 		protected internal override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
 		{
 			string image = termToken.Image.Substring(1, termToken.Image.Length - 2);
-			string value = DiscardEscapeChar(image);
 
 			(bool IsFloat, bool IsInt) numericTypeGetter() =>
-				getNumericTypes(value);
+				(false, false);
 
 			Query queryFactory(string fld, bool analyzed)
 			{
 				if (analyzed)
-					// which will create ComplexPhraseQuery
-					return base.HandleQuotedTerm(fld, termToken, slopToken);
+				{
+					float slop = slopToken == null
+						? 1f
+						: float.Parse(slopToken.Image.Substring(1), CultureInfo.InvariantCulture);
+					bool isInteger = (slop % 1).Equals(0f);
+					var parser = new ComplexPhraseQueryParserPatched(LuceneVersion.LUCENE_48, fld, Analyzer, (int) slop, isInteger);
+					return parser.Parse(image);
+				}
 
 				// not analyzed field cannot have phrases in value, so create TermQuery
-				return GetFieldQuery(fld, value, quoted: true);
+				var unescaped = DiscardEscapeChar(image);
+				return GetFieldQuery(fld, unescaped, quoted: true);
 			}
 
 			var result = resolveField(field, numericTypeGetter, queryFactory);
@@ -127,9 +127,6 @@ namespace Mtgdb.Data
 
 		protected internal override Query NewRegexpQuery(Term regexp) =>
 			new RegexpQuery(regexp, RegExpSyntax.ALL);
-
-		protected override ComplexPhraseQuery NewComplexPhraseQuery(string field, string phrase, int slop, bool inOrder) =>
-			new RewritableComplexPhraseQuery(field, phrase, slop, inOrder);
 
 		protected internal override Query GetFieldQuery(string field, string value, bool quoted)
 		{

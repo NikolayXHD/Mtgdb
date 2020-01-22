@@ -171,6 +171,7 @@
     <Compile Include="Index\KeywordTests.cs" />
     <Compile Include="Index\LegalityTests.cs" />
     <Compile Include="Index\QueryParserTests.cs" />
+    <Compile Include="Index\SurroundQueryParserTests.cs" />
     <Compile Include="Index\TolerantTokenizerTests.cs" />
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />

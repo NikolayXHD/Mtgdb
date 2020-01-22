@@ -2,13 +2,10 @@
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
-using Lucene.Net.Search.Spans;
 using Lucene.Net.Util;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Token = Lucene.Net.QueryParsers.Classic.Token;
+using Lucene.Net.Search.Spans;
 
 namespace Mtgdb.Data
 {
@@ -51,86 +48,27 @@ namespace Mtgdb.Data
 	/// </summary>
 	public class ComplexPhraseQueryParserPatched : QueryParserPatched
 	{
-		private List<ComplexPhraseQuery> complexPhrases = null;
-
-		protected bool IsPass2ResolvingPhrases { get; private set; }
-
-		private ComplexPhraseQuery currentPhraseQuery = null;
-
-		public ComplexPhraseQueryParserPatched(LuceneVersion matchVersion, string f, Analyzer a)
+		public ComplexPhraseQueryParserPatched(LuceneVersion matchVersion,
+			string f,
+			Analyzer a,
+			int slop,
+			bool inOrder)
 			: base(matchVersion, f, a)
 		{
-		}
-
-		protected internal override Query HandleQuotedTerm(string qfield, Token term, Token fuzzySlop)
-		{
-			if (IsPass2ResolvingPhrases)
-			{
-				return base.HandleQuotedTerm(qfield, term, fuzzySlop);
-			}
-
-			return GetComplexPhraseQuery(qfield, fuzzySlop, term.Image.Substring(1, term.Image.Length - 2));
-		}
-
-		protected virtual Query GetComplexPhraseQuery(string qfield, Token fuzzySlop, string phrase)
-		{
-			float slop = ParseSlop(fuzzySlop);
-			bool inOrder = fuzzySlop != null && fuzzySlop.Image.IndexOf(".", StringComparison.InvariantCulture) < 0;
-
-			var result = NewComplexPhraseQuery(qfield, phrase, (int) slop, inOrder);
-			complexPhrases.Add(result);
-
-			return result;
-		}
-
-		protected virtual ComplexPhraseQuery NewComplexPhraseQuery(string qfield, string phrase, int slop, bool inOrder) =>
-			new ComplexPhraseQuery(qfield, phrase, slop, inOrder);
-
-		private static float ParseSlop(Token fuzzySlop)
-		{
-			if (fuzzySlop == null)
-				return 0f;
-
-			if (fuzzySlop.Image.Length <= 1)
-				return 0f;
-
-			float.TryParse(fuzzySlop.Image.Substring(1), NumberStyles.Float, CultureInfo.InvariantCulture, out var slop);
-
-			return slop;
+			_slop = slop;
+			_inOrder = inOrder;
 		}
 
 		public override Query Parse(string query)
 		{
-			if (IsPass2ResolvingPhrases)
+			var contents = base.Parse(query);
+			if (contents is BooleanQuery bq)
 			{
-				return base.Parse(query);
+				SpanQuery spanQuery = convertBooleanQuery(bq, _slop, _inOrder);
+				return spanQuery;
 			}
 
-			// First pass - parse the top-level query recording any PhraseQuerys
-			// which will need to be resolved
-			complexPhrases = new List<ComplexPhraseQuery>();
-			Query q = base.Parse(query);
-
-			// Perform second pass, using this QueryParser to parse any nested
-			// PhraseQueries with different
-			// set of syntax restrictions (i.e. all fields must be same)
-			IsPass2ResolvingPhrases = true;
-			try
-			{
-				foreach (var phrase in complexPhrases)
-				{
-					this.currentPhraseQuery = phrase;
-					// in each phrase, now parse the contents between quotes as a
-					// separate parse operation
-					phrase.ParsePhraseElements(this);
-				}
-			}
-			finally
-			{
-				IsPass2ResolvingPhrases = false;
-			}
-
-			return q;
+			return contents;
 		}
 
 		// There is No "getTermQuery throws ParseException" method to override so
@@ -139,365 +77,161 @@ namespace Mtgdb.Data
 		// in phrase query
 		protected override Query NewTermQuery(Term term)
 		{
-			if (IsPass2ResolvingPhrases)
+			try
 			{
-				try
-				{
-					CheckPhraseClauseIsForSameField(term.Field);
-				}
-				catch (ParseException pe)
-				{
-					throw new Exception("Error parsing complex phrase", pe);
-				}
+				validateField(term.Field);
+			}
+			catch (ParseException pe)
+			{
+				throw new Exception("Error parsing complex phrase", pe);
 			}
 
 			return base.NewTermQuery(term);
 		}
 
-		// Helper method used to report on any clauses that appear in query syntax
-		private void CheckPhraseClauseIsForSameField(string field)
-		{
-			if (!field.Equals(currentPhraseQuery.Field))
-			{
-				throw new ParseException("Cannot have clause for field \"" + field
-					+ "\" nested in phrase " + " for field \"" + currentPhraseQuery.Field
-					+ "\"");
-			}
-		}
-
 		protected internal override Query GetWildcardQuery(string field, string termStr)
 		{
-			if (IsPass2ResolvingPhrases)
-			{
-				CheckPhraseClauseIsForSameField(field);
-			}
-
+			validateField(field);
 			return base.GetWildcardQuery(field, termStr);
 		}
 
 		protected internal override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
 		{
-			if (IsPass2ResolvingPhrases)
-			{
-				CheckPhraseClauseIsForSameField(field);
-			}
-
+			validateField(field);
 			return base.GetRangeQuery(field, part1, part2, startInclusive, endInclusive);
 		}
 
 		protected internal override Query NewRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)
 		{
-			if (IsPass2ResolvingPhrases)
-			{
-				// Must use old-style RangeQuery in order to produce a BooleanQuery
-				// that can be turned into SpanOr clause
-				TermRangeQuery rangeQuery = TermRangeQuery.NewStringRange(field, part1, part2, startInclusive, endInclusive);
-				rangeQuery.MultiTermRewriteMethod = MultiTermQuery.SCORING_BOOLEAN_QUERY_REWRITE;
-				return rangeQuery;
-			}
-
-			return base.NewRangeQuery(field, part1, part2, startInclusive, endInclusive);
+			// Must use old-style RangeQuery in order to produce a BooleanQuery
+			// that can be turned into SpanOr clause
+			TermRangeQuery rangeQuery = TermRangeQuery.NewStringRange(field, part1, part2, startInclusive, endInclusive);
+			rangeQuery.MultiTermRewriteMethod = MultiTermQuery.SCORING_BOOLEAN_QUERY_REWRITE;
+			return rangeQuery;
 		}
 
 		protected internal override Query GetFuzzyQuery(string field, string termStr, float minSimilarity)
 		{
-			if (IsPass2ResolvingPhrases)
-			{
-				CheckPhraseClauseIsForSameField(field);
-			}
-
+			validateField(field);
 			return base.GetFuzzyQuery(field, termStr, minSimilarity);
 		}
 
 		/// <summary>
-		/// Used to handle the query content in between quotes and produced Span-based
-		/// interpretations of the clauses.
+		/// Helper method used to report on any clauses that appear in query syntax
 		/// </summary>
-		public class ComplexPhraseQuery : Query
+		private void validateField(string field)
 		{
-			private readonly string field;
-			private readonly string phrasedQueryStringContents;
-			private readonly int slopFactor;
-			private readonly bool inOrder;
-			private Query contents;
-
-			public ComplexPhraseQuery(string field, string phrasedQueryStringContents,
-				int slopFactor, bool inOrder)
-			{
-				this.field = field;
-				this.phrasedQueryStringContents = phrasedQueryStringContents;
-				this.slopFactor = slopFactor;
-				this.inOrder = inOrder;
-			}
-
-			public string Field
-			{
-				get { return field; }
-			}
-
-			// Called by ComplexPhraseQueryParser for each phrase after the main
-			// parse
-			// thread is through
-			protected internal void ParsePhraseElements(ComplexPhraseQueryParserPatched qp)
-			{
-				// TODO ensure that field-sensitivity is preserved ie the query
-				// string below is parsed as
-				// field+":("+phrasedQueryStringContents+")"
-				// but this will need code in rewrite to unwrap the first layer of
-				// boolean query
-
-				string oldDefaultParserField = qp.Field;
-				try
-				{
-					//temporarily set the QueryParser to be parsing the default field for this phrase e.g author:"fred* smith"
-					qp.m_field = this.field;
-					contents = qp.Parse(phrasedQueryStringContents);
-				}
-				finally
-				{
-					qp.m_field = oldDefaultParserField;
-				}
-			}
-
-			public override Query Rewrite(IndexReader reader)
-			{
-				if (!(contents is BooleanQuery))
-					return contents;
-
-				// Build a sequence of Span clauses arranged in a SpanNear - child
-				// clauses can be complex
-				// Booleans e.g. nots and ors etc
-				int numNegatives = 0;
-
-				BooleanQuery bq = (BooleanQuery) contents;
-				BooleanClause[] bclauses = bq.GetClauses();
-				var allSpanClauses = new List<SpanQuery>();
-				// For all clauses e.g. one* two~
-				for (int i = 0; i < bclauses.Length; i++)
-				{
-					// HashSet bclauseterms=new HashSet();
-					Query qc = bclauses[i].Query;
-					// Rewrite this clause e.g one* becomes (one OR onerous)
-					// qc = qc.Rewrite(reader);
-					if (bclauses[i].Occur.Equals(Occur.MUST_NOT))
-					{
-						numNegatives++;
-					}
-
-					if (qc is BooleanQuery)
-					{
-						List<SpanQuery> sc = new List<SpanQuery>();
-						AddComplexPhraseClause(sc, (BooleanQuery) qc);
-						if (sc.Count > 0)
-						{
-							allSpanClauses.Add(sc[0]);
-						}
-						else
-						{
-							// Insert fake term e.g. phrase query was for "Fred Smithe*" and
-							// there were no "Smithe*" terms - need to
-							// prevent match on just "Fred".
-							allSpanClauses.Add(new SpanTermQuery(new Term(field, "Dummy clause because no terms found - must match nothing")));
-						}
-					}
-					else
-					{
-						allSpanClauses.Add(Wrap(qc));
-					}
-				}
-
-				if (numNegatives == 0)
-				{
-					// The simple case - no negative elements in phrase
-					return NewSpanNearQuery(allSpanClauses.ToArray(), slopFactor, inOrder);
-				}
-
-				// Complex case - we have mixed positives and negatives in the
-				// sequence.
-				// Need to return a SpanNotQuery
-				List<SpanQuery> positiveClauses = new List<SpanQuery>();
-				for (int j = 0; j < allSpanClauses.Count; j++)
-				{
-					if (!bclauses[j].Occur.Equals(Occur.MUST_NOT))
-					{
-						positiveClauses.Add(allSpanClauses[j]);
-					}
-				}
-
-				SpanQuery[] includeClauses = positiveClauses
-					.ToArray();
-
-				SpanQuery include;
-				if (includeClauses.Length == 1)
-				{
-					include = includeClauses[0]; // only one positive clause
-				}
-				else
-				{
-					// need to increase slop factor based on gaps introduced by
-					// negatives
-					include = NewSpanNearQuery(includeClauses, slopFactor + numNegatives, inOrder);
-				}
-
-				// Use sequence of positive and negative values as the exclude.
-				var exclude = NewSpanNearQuery(allSpanClauses.ToArray(), slopFactor, inOrder);
-				var snot = new SpanNotQuery(include, exclude);
-				return snot;
-			}
-
-			protected virtual SpanQuery Wrap(Query qc)
-			{
-				if (qc is MultiTermQuery)
-				{
-					return new SpanMultiTermQueryWrapper<MultiTermQuery>((MultiTermQuery) qc);
-				}
-
-				if (qc is TermQuery)
-				{
-					return ToSpanTermQuery((TermQuery) qc);
-				}
-
-				if (qc is PhraseQuery)
-				{
-					return ToSpanNearQuery((PhraseQuery) qc);
-				}
-
-				throw new ArgumentException("Unknown query type:" + qc.GetType().Name);
-			}
-
-			private void AddComplexPhraseClause(IList<SpanQuery> spanClauses, BooleanQuery boolQuery)
-			{
-				List<SpanQuery> ors = new List<SpanQuery>();
-				List<SpanQuery> nots = new List<SpanQuery>();
-				BooleanClause[] clauses = boolQuery.GetClauses();
-
-				// For all clauses e.g. one* two~
-				for (int i = 0; i < clauses.Length; i++)
-				{
-					Query childQuery = clauses[i].Query;
-
-					// select the list to which we will add these options
-					List<SpanQuery> chosenList = ors;
-					if (clauses[i].Occur == Occur.MUST_NOT)
-					{
-						chosenList = nots;
-					}
-
-					if (childQuery is BooleanQuery)
-					{
-						AddComplexPhraseClause(chosenList, (BooleanQuery) childQuery);
-					}
-					else
-					{
-						chosenList.Add(Wrap(childQuery));
-					}
-				}
-
-				if (ors.Count == 0)
-				{
-					return;
-				}
-
-				SpanOrQuery soq = NewSpanOrQuery(ors);
-				if (nots.Count == 0)
-				{
-					spanClauses.Add(soq);
-				}
-				else
-				{
-					SpanOrQuery snqs = new SpanOrQuery(nots
-						.ToArray());
-					SpanNotQuery snq = new SpanNotQuery(soq, snqs);
-					spanClauses.Add(snq);
-				}
-			}
-
-			private static SpanOrQuery NewSpanOrQuery(List<SpanQuery> ors)
-			{
-				return new SpanOrQuery(ors.ToArray());
-			}
-
-			private static SpanTermQuery ToSpanTermQuery(TermQuery tq)
-			{
-				SpanTermQuery stq = new SpanTermQuery(tq.Term);
-				stq.Boost = tq.Boost;
-				return stq;
-			}
-
-			private SpanNearQuery ToSpanNearQuery(PhraseQuery pq)
-			{
-				var spanTermQueries = pq.GetTerms()
-					.Select(t => new SpanTermQuery(t))
-					.Cast<SpanQuery>()
-					.ToArray();
-
-				int slop = pq.Slop;
-
-				var snq = NewSpanNearQuery(spanTermQueries, slop, inOrder: true);
-				snq.Boost = pq.Boost;
-				return snq;
-			}
-
-			protected virtual SpanNearQuery NewSpanNearQuery(SpanQuery[] spanTermQueries, int slop, bool inOrder)
-			{
-				return new SpanNearQuery(spanTermQueries, slop, inOrder);
-			}
-
-			public override string ToString(string field)
-			{
-				return "\"" + phrasedQueryStringContents + "\"";
-			}
-
-			public override int GetHashCode()
-			{
-				int prime = 31;
-				int result = base.GetHashCode();
-				result = prime * result + ((field == null) ? 0 : field.GetHashCode());
-				result = prime
-					* result
-					+ ((phrasedQueryStringContents == null)
-						? 0
-						: phrasedQueryStringContents.GetHashCode());
-				result = prime * result + slopFactor;
-				result = prime * result + (inOrder ? 1 : 0);
-				return result;
-			}
-
-			public override bool Equals(object obj)
-			{
-				if (this == obj)
-					return true;
-				if (obj == null)
-					return false;
-				if (GetType() != obj.GetType())
-					return false;
-				if (!base.Equals(obj))
-				{
-					return false;
-				}
-
-				ComplexPhraseQuery other = (ComplexPhraseQuery) obj;
-				if (field == null)
-				{
-					if (other.field != null)
-						return false;
-				}
-				else if (!field.Equals(other.field))
-					return false;
-
-				if (phrasedQueryStringContents == null)
-				{
-					if (other.phrasedQueryStringContents != null)
-						return false;
-				}
-				else if (!phrasedQueryStringContents
-					.Equals(other.phrasedQueryStringContents))
-					return false;
-
-				if (slopFactor != other.slopFactor)
-					return false;
-				return inOrder == other.inOrder;
-			}
+			if (!field.Equals(Field))
+				throw new ParseException($"Clause for field \"{field}\": nested in phrase for \"{Field}\":");
 		}
+
+		protected internal override void AddClause(IList<BooleanClause> clauses, int conj, int mods, Query q)
+		{
+			base.AddClause(clauses, conj, mods, q);
+			var clause = clauses[clauses.Count - 1];
+			_conjByClause.Add(clause, conj);
+		}
+
+		private SpanQuery convertBooleanQuery(BooleanQuery boolQuery, int slop, bool ordered)
+		{
+			var or = new List<SpanQuery>();
+			var not = new List<SpanQuery>();
+			var and = new List<SpanQuery>();
+			var phrase = new List<SpanQuery>();
+
+			// For all clauses e.g. one* two~
+			var clauses = boolQuery.GetClauses();
+			for (int i = 0; i < clauses.Length; i++)
+			{
+				var clause = clauses[i];
+				phrase.Clear();
+
+				for (int n = i + 1; n < clauses.Length; n++)
+				{
+					var nextClause = clauses[n];
+					if (isImplicit(nextClause))
+					{
+						if (phrase.Count == 0)
+							phrase.Add(convert(clause));
+
+						phrase.Add(convert(nextClause));
+						i++;
+					}
+					else
+						break;
+				}
+
+				// select the list to which we will add these options
+				var list = clause.Occur switch
+				{
+					Occur.MUST => and,
+					Occur.SHOULD => or,
+					Occur.MUST_NOT => not,
+					_ => throw new NotSupportedException()
+				};
+
+				if (phrase.Count > 0)
+					list.Add(new SpanNearQuery(phrase.ToArray(), slop, ordered));
+				else
+					list.Add(convert(clause));
+			}
+
+			int groupsCount = Math.Sign(and.Count) + Math.Sign(or.Count) + Math.Sign(not.Count);
+			if (groupsCount == 0)
+				// Insert fake term e.g. phrase query was for "Fred Smithe*" and
+				// there were no "Smithe*" terms - need to
+				// prevent match on just "Fred".
+				return matchNothingQuery();
+
+			if (groupsCount > 1 || and.Count > 0)
+			{
+				if (or.Count > 0)
+					and.Add(orQuery(or));
+
+				if (not.Count > 0)
+					return notQuery(andQuery(and), andQuery(not));
+
+				return andQuery(and);
+			}
+
+			if (or.Count > 0)
+				return orQuery(or);
+
+			throw new ParseException("Pure negative clause within phrase: " + boolQuery);
+
+			SpanQuery convert(BooleanClause clause) =>
+				clause.Query is BooleanQuery booleanQuery
+					? convertBooleanQuery(booleanQuery, 1, true)
+					: wrap(clause.Query);
+
+			bool isImplicit(BooleanClause clause) =>
+				!_conjByClause.TryGetValue(clause, out int conj) || conj == CONJ_NONE;
+
+			static SpanQuery wrap(Query qc) =>
+				qc switch
+				{
+					MultiTermQuery query => (SpanQuery) new SpanMultiTermQueryWrapper<MultiTermQuery>(query) { Boost = query.Boost },
+					TermQuery query => new SpanTermQuery(query.Term) { Boost = query.Boost },
+					_ => throw new NotSupportedException("Unknown query type:" + qc.GetType().Name)
+				};
+		}
+
+		private static SpanQuery andQuery(List<SpanQuery> qs) =>
+			qs.Count > 1 ? new SpanNearQuery(qs.ToArray(), int.MaxValue, false) : qs[0];
+
+		private static SpanQuery orQuery(List<SpanQuery> qs) =>
+			qs.Count > 1 ? new SpanOrQuery(qs.ToArray()) : qs[0];
+
+		private static SpanQuery notQuery(SpanQuery and, SpanQuery not) =>
+			new SpanNotQuery(and, not);
+
+		private SpanQuery matchNothingQuery() =>
+			new SpanTermQuery(new Term(Field, "fake_term_to_match_nothing"));
+
+		private readonly int _slop;
+		private readonly bool _inOrder;
+
+		private readonly Dictionary<BooleanClause, int> _conjByClause =
+			new Dictionary<BooleanClause, int>();
 	}
 }

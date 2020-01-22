@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
-using Lucene.Net.Search.Spans;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
 using NUnit.Framework;
@@ -19,25 +18,24 @@ namespace Mtgdb.Test
 		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~0.", false)]
 		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.", false)]
 		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.5", false)]
+		[Ignore("Surround query")]
 		public void Complex_phrase_query_is_parsed(string query, bool isInOrder)
 		{
+			// o: "under n (your OR its n owner n ' n s) n control"
+			// works correctly, while complex phrase query parser not.
+			// regex inside query is not supported
+			// n or w operator is required between phrase terms
+			// phrase terms are not analyzed so "owner's" will not work, must be "owner n ' n s"
 			var parser = getParser();
-			var q = parser.Parse(query);
-			q.Should().BeAssignableTo<ComplexPhraseQueryParserPatched.ComplexPhraseQuery>();
-			var rewritten = q.Rewrite(null);
-			rewritten.Should().BeAssignableTo<SpanNearQuery>();
-			var spanQuery = ((SpanNearQuery) rewritten);
-			spanQuery.IsInOrder.Should().Be(isInOrder);
+			parser.Parse(query);
 		}
 
-		private static CardQueryParser getParser()
+		[Test]
+		public void Complex_phrase_srnd()
 		{
-			var adapter = new CardDocumentAdapter(null);
-			var parser = new CardQueryParser(new MtgAnalyzer(adapter), null, adapter, null)
-			{
-				DefaultOperator = Operator.AND
-			};
-			return parser;
+			var parser = getParser();
+			var query = parser.Parse("o: \"under (your OR its owner's) control\"");
+			query.Should().NotBeNull();
 		}
 
 		[TestCase(nameof(Card.ManaCost), @"{w/u}{b}", "{w/u}", "{b}")]
@@ -69,6 +67,16 @@ namespace Mtgdb.Test
 			rangeQ.IncludesMin.Should().BeTrue();
 			rangeQ.Max.Should().BeNull();
 			rangeQ.IncludesMax.Should().BeTrue();
+		}
+
+		private static CardQueryParser getParser()
+		{
+			var adapter = new CardDocumentAdapter(null);
+			var parser = new CardQueryParser(new MtgAnalyzer(adapter), null, adapter, null)
+			{
+				DefaultOperator = Operator.AND
+			};
+			return parser;
 		}
 	}
 }
