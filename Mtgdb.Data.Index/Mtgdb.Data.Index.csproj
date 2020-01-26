@@ -82,13 +82,12 @@
     <Compile Include="DocumentAdapter\IDocumentAdapter.cs" />
     <Compile Include="DocumentAdapter\IDocumentAdapterBase.cs" />
     <Compile Include="IndexUtils.cs" />
-    <Compile Include="Lucene.Patched\ComplexPhraseQueryParserPatched.cs" />
+    <Compile Include="Lucene.Patched\PhraseQueryParser.cs" />
+    <Compile Include="Lucene.Patched\ListPool.cs" />
     <Compile Include="Lucene.Patched\QueryParserBasePatched.cs" />
     <Compile Include="Lucene.Patched\QueryParserPatched.cs" />
     <Compile Include="Query\MtgQueryParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\EmptyPhraseQuery.cs" />
-    <Compile Include="Query\EmptyPhraseSpanQuery.cs" />
     <Compile Include="Searcher\ISearchResultBase.cs" />
     <Compile Include="Searcher\LuceneSearcher.cs" />
     <Compile Include="Searcher\LuceneSearcherState.cs" />

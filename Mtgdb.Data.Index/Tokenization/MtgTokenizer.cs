@@ -60,35 +60,32 @@ namespace Mtgdb.Data
 
 				if (MtgAlphabet.RightDelimitersSet.Contains(c))
 					return terminateToken(c);
-				else if (MtgAlphabet.LeftDelimitersSet.Contains(c))
+
+				if (MtgAlphabet.LeftDelimitersSet.Contains(c))
 				{
 					if (_length > 0)
 						return terminatePreviousToken();
-					else
-					{
-						push(c);
-						if (_length == MaxWordLen)
-							return flush();
-					}
+
+					push(c);
+					if (_length == MaxWordLen)
+						return flush();
 				}
 				else if (
-					char.IsLetterOrDigit(c) || 
-					MtgAlphabet.ExtraWordChars.Contains(c) || 
-					(isSingletoneWordChar = MtgAlphabet.IsSingletoneWordChar(c)))
+					char.IsLetterOrDigit(c) ||
+					MtgAlphabet.ExtraWordChars.Contains(c) ||
+					(isSingletoneWordChar = MtgAlphabet.IsSingletoneWordChar(c) || MtgAlphabet.EmptyPhraseChar == c))
 				{
 					if (isSingletoneWordChar)
 					{
 						if (_length > 0)
 							return terminatePreviousToken();
-						else
-							return terminateToken(c);
+
+						return terminateToken(c);
 					}
-					else
-					{
-						push(c);
-						if (_length == MaxWordLen)
-							return flush();
-					}
+
+					push(c);
+					if (_length == MaxWordLen)
+						return flush();
 				}
 				else
 				{

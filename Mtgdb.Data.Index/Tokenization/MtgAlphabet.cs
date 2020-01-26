@@ -19,6 +19,7 @@ namespace Mtgdb.Data
 			SingletoneWordChars.Contains(c) || c.IsCj();
 
 		public static readonly HashSet<char> SingletoneWordChars = new HashSet<char>(".?!:;,‑—–―−\"#$%&'()=@[\\]|¡£«®°´º»¿‚‘’“”„•●™");
+		public static char EmptyPhraseChar = '>';
 
 		public const string CharPattern = ".";
 

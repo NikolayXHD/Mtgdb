@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
+using Lucene.Net.Search.Spans;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
 using NUnit.Framework;
@@ -11,31 +13,24 @@ namespace Mtgdb.Test
 	[TestFixture]
 	public class QueryParserTests
 	{
-		[TestCase(@"texten: ""\+ ? \+""", true)]
-		[TestCase(@"nameen: ""a bc""~3", true)]
-		[TestCase(@"nameen: ""some /regex/""~", true)]
-		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~.", false)]
-		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~0.", false)]
-		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.", false)]
-		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.5", false)]
-		[Ignore("Surround query")]
-		public void Complex_phrase_query_is_parsed(string query, bool isInOrder)
-		{
-			// o: "under n (your OR its n owner n ' n s) n control"
-			// works correctly, while complex phrase query parser not.
-			// regex inside query is not supported
-			// n or w operator is required between phrase terms
-			// phrase terms are not analyzed so "owner's" will not work, must be "owner n ' n s"
-			var parser = getParser();
-			parser.Parse(query);
-		}
-
-		[Test]
-		public void Complex_phrase_srnd()
+		[TestCase(@"texten: ""\+ ? \+""", "texten", 0, true)]
+		[TestCase(@"nameen: ""a bc""~3", "nameen",  3, true)]
+		[TestCase(@"nameen: ""some /regex/""~", "nameen", 0, true)]
+		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~.", "nameen", 0, false)]
+		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~0.", "nameen", 0, false)]
+		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.", "nameen", 1, false)]
+		[TestCase(@"nameen: ""another (/regex/ OR prefix*)""~1.5", "nameen", 1, false)]
+		public void Complex_phrase_query_is_parsed_with_expected_field_and_slop(string queryStr, string field, int slop, bool isInOrder)
 		{
 			var parser = getParser();
-			var query = parser.Parse("o: \"under (your OR its owner's) control\"");
-			query.Should().NotBeNull();
+			var query = parser.Parse(queryStr);
+			var spanNearQuery = query.Should().BeAssignableTo<SpanNearQuery>().Which;
+			using (new AssertionScope())
+			{
+				spanNearQuery.IsInOrder.Should().Be(isInOrder);
+				spanNearQuery.Slop.Should().Be(slop);
+				spanNearQuery.Field.Should().Be(field);
+			}
 		}
 
 		[TestCase(nameof(Card.ManaCost), @"{w/u}{b}", "{w/u}", "{b}")]
@@ -58,15 +53,11 @@ namespace Mtgdb.Test
 		[Test]
 		public void Range_query_is_parsed()
 		{
-			string queryStr = "Hand:[3 TO ?]";
+			string queryStr = "hand:[3 TO ?]";
 			var parser = getParser();
 			var query = parser.Parse(queryStr);
-			query.Should().BeAssignableTo<NumericRangeQuery<int>>();
-			var rangeQ = (NumericRangeQuery<int>) query;
-			rangeQ.Min.Should().Be(3);
-			rangeQ.IncludesMin.Should().BeTrue();
-			rangeQ.Max.Should().BeNull();
-			rangeQ.IncludesMax.Should().BeTrue();
+			query.Should().BeAssignableTo<NumericRangeQuery<int>>()
+				.Which.Should().BeEquivalentTo(NumericRangeQuery.NewInt32Range("hand", 3, null, true, true));
 		}
 
 		private static CardQueryParser getParser()

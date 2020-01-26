@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search;
@@ -15,11 +16,16 @@ namespace Mtgdb.Data
 		protected MtgQueryParser(MtgAnalyzer analyzer, IDocumentAdapterBase adapter, string lang)
 			: base(LuceneVersion.LUCENE_48, "*", analyzer)
 		{
-			_adapter = adapter;
 			Language = lang;
 			FuzzyMinSim = 0.5f;
 			AllowLeadingWildcard = true;
 			AutoGeneratePhraseQueries = true;
+			_adapter = adapter;
+			_phraseParser = new PhraseQueryParser("*", analyzer)
+			{
+				AllowLeadingWildcard = true,
+				AutoGeneratePhraseQueries = true
+			};
 		}
 
 		protected internal override Query HandleQuotedTerm(string field, Token termToken, Token slopToken)
@@ -33,12 +39,36 @@ namespace Mtgdb.Data
 			{
 				if (analyzed)
 				{
-					float slop = slopToken == null
-						? 1f
-						: float.Parse(slopToken.Image.Substring(1), CultureInfo.InvariantCulture);
-					bool isInteger = (slop % 1).Equals(0f);
-					var parser = new ComplexPhraseQueryParserPatched(LuceneVersion.LUCENE_48, fld, Analyzer, (int) slop, isInteger);
-					return parser.Parse(image);
+					int slop;
+					bool inOrder;
+					if (slopToken == null)
+					{
+						slop = 0;
+						inOrder = true;
+					}
+					else
+					{
+						string slopStr = slopToken.Image.Substring(1);
+						var match = _slopPattern.Match(slopStr);
+						if (!match.Success)
+						{
+							slop = 0;
+							inOrder = true;
+						}
+						else
+						{
+							Group intGrp = match.Groups["int"];
+							slop = intGrp.Success
+								? int.Parse(intGrp.Value, NumberStyles.Integer, CultureInfo.InvariantCulture)
+								: 0;
+							inOrder = !match.Groups["separator"].Success;
+						}
+					}
+
+					_phraseParser.Slop = slop;
+					_phraseParser.InOrder = inOrder;
+					_phraseParser.PhraseField = fld;
+					return _phraseParser.Parse(image);
 				}
 
 				// not analyzed field cannot have phrases in value, so create TermQuery
@@ -143,14 +173,6 @@ namespace Mtgdb.Data
 
 		protected internal override Query GetFuzzyQuery(string field, string value, float minSimilarity) =>
 			base.GetFuzzyQuery(field, value, minSimilarity.WithinRange(0.001f, 0.999f));
-
-		protected internal override void AddClause(IList<BooleanClause> clauses, int conj, int mods, Query q)
-		{
-			if (q == null)
-				base.AddClause(clauses, conj, mods, new EmptyPhraseQuery(Field));
-
-			base.AddClause(clauses, conj, mods, q);
-		}
 
 		private Query resolveField(string field, Func<(bool IsFloat, bool IsInt)> numericTypeGetter, QueryFactory queryFactory)
 		{
@@ -327,5 +349,9 @@ namespace Mtgdb.Data
 		protected static readonly Query MatchNothingQuery = new TermQuery(new Term("none", "*"));
 
 		private readonly IDocumentAdapterBase _adapter;
+		private static readonly Regex _slopPattern =
+			new Regex(@"^\s*(?<int>\d+)?(?<separator>\.\d*)?\s*$");
+
+		private readonly PhraseQueryParser _phraseParser;
 	}
 }
