@@ -33,7 +33,7 @@
     <Directory Group="dev" Zoom="False" Root="Original"     Path="tokens" Priority="4" />
 		<Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="cards" />
     <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="tokens" Priority="4" />
-    <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="cards/hho" Set="hho" Priority="4" />
+    <Directory Group="dev" Zoom="Any"   Root="Preprocessed" Path="cards\hho" Set="hho" Priority="4" />
 		<Directory Group="dev" Zoom="Any"   Root="Patch"        Path="" />
 
 		<Directory Group="xlhq" Zoom="Any"                 Root="XLHQ" Path="" />

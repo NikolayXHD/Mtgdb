@@ -57,24 +57,28 @@ namespace Mtgdb.Data.Index
 			if (!_repository.IsLoadingComplete.Signaled)
 				return MatchNothingQuery;
 
-			string cardName = unescaped.RemoveDiacritics();
-			if (!_repository.CardsByName.TryGetValue(cardName, out var cards))
-				return MatchNothingQuery;
-
-			var card = cards[0];
-
+			string name = unescaped.RemoveDiacritics();
 			var result = new DisjunctionMaxQuery(0.1f);
+			addClauses(isToken: false);
+			addClauses(isToken: true);
 
-			if (!string.IsNullOrEmpty(card.TextEn))
-				result.Add(createMoreLikeThisQuery(slop, card.TextEn, nameof(card.TextEn)));
+			return result.Disjuncts.Count == 0
+				? MatchNothingQuery
+				: result;
 
-			if (!string.IsNullOrEmpty(card.GeneratedMana))
-				result.Add(createMoreLikeThisQuery(slop, card.GeneratedMana, nameof(card.GeneratedMana)));
+			void addClauses(bool isToken)
+			{
+				if (!_repository.MapByName(isToken).TryGetValue(name, out var list))
+					return;
 
-			if (result.Disjuncts.Count == 0)
-				return MatchNothingQuery;
+				Card c = list[0];
 
-			return result;
+				if (!string.IsNullOrEmpty(c.TextEn))
+					result.Add(createMoreLikeThisQuery(slop, c.TextEn, nameof(Card.TextEn)));
+
+				if (!string.IsNullOrEmpty(c.GeneratedMana))
+					result.Add(createMoreLikeThisQuery(slop, c.GeneratedMana, nameof(Card.GeneratedMana)));
+			}
 		}
 
 		private static float parseSlop(Token fuzzySlop)

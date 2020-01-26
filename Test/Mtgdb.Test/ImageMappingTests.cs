@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -119,15 +120,14 @@ namespace Mtgdb.Test
 			setCode = setCode.Trim();
 			var expectedDirsSet = expectedSubdirs
 				.Select(_ => Path.Combine(baseDir, _))
-				.ToList();
+				.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 			var set = Repo.SetsByCode[setCode];
 			foreach (var card in set.ActualCards)
 			{
 				var imageModel = Ui.GetSmallImage(card);
-				var dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
-				Assert.That(expectedDirsSet, Does.Contain(dir).IgnoreCase,
-					$"{card.ImageName} {dir}");
+				string dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
+				new[] { dir }.Should().BeSubsetOf(expectedDirsSet);
 			}
 		}
 
@@ -137,8 +137,8 @@ namespace Mtgdb.Test
 			"D:\\distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
 
 		private const string OriginalDir =
-			"D:\\distrib\\games\\mtg\\Gatherer.Original";
+			"D:\\distrib\\games\\mtg\\Gatherer.Original\\cards";
 		private const string PreprocesedDir =
-			"D:\\distrib\\games\\mtg\\Gatherer.Preprocessed";
+			"D:\\distrib\\games\\mtg\\Gatherer.Preprocessed\\cards";
 	}
 }

@@ -120,13 +120,6 @@ namespace Mtgdb.Data
 		public string OriginalType { get; set; }
 
 		/// <summary>
-		/// List of sets the card was printed in, in uppercase.
-		/// </summary>
-		[JsonProperty("printings")]
-		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> Printings { get; set; }
-
-		/// <summary>
 		/// Power of the creature.
 		/// </summary>
 		[JsonProperty("power")]
@@ -221,8 +214,12 @@ namespace Mtgdb.Data
 		internal MtgjsonPrices OriginalPrices { get; set; }
 
 		[JsonIgnore]
-		public string Id { get; internal set; } /*
+		public string Id { get; internal set; }
 
+		[JsonIgnore]
+		public IReadOnlyList<string> Printings { get; set; }
+
+		/*
 		/// <summary>
 		/// Color of the border. Can be black, borderless, gold, silver, or white.
 		/// </summary>
@@ -583,7 +580,7 @@ namespace Mtgdb.Data
 				if (_namesakeTranslations.TryGetValue((propertyName, language), out result))
 					return result;
 
-			result = Namesakes
+			result = Namesakes.Where(_ => _ != this)
 				.Select(namesake => namesake.Localization?.Invoke1(getter, language))
 				.FirstOrDefault(transl => transl != null);
 
@@ -752,9 +749,15 @@ namespace Mtgdb.Data
 		public int CollectionCount(UiModel ui) =>
 			ui.Collection?.GetCount(this) ?? 0;
 
+		/// <summary>
+		/// all cards with same name, including this
+		/// </summary>
 		[JsonIgnore]
 		public ICollection<Card> Namesakes { get; internal set; }
 
+		/// <summary>
+		/// ids of all cards with same name, including this
+		/// </summary>
 		[JsonIgnore]
 		public HashSet<string> NamesakeIds { get; internal set; }
 

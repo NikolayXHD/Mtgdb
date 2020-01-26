@@ -43,7 +43,7 @@ namespace Mtgdb.Data.Model
 
 			void transform(Card card, int count, DeckZone targetZone)
 			{
-				var candidates = card.Namesakes.Prepend(card)
+				var candidates = card.Namesakes
 					.Select(c => (Card: c, AvailableCount: collection.GetCount(c) - getUsedCount(c)))
 					.OrderBy(_ => _.AvailableCount <= 0)
 					.ThenBy(_ => _.Card.Price == null)

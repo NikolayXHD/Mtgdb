@@ -59,7 +59,7 @@ namespace Mtgdb.Downloader
 			return true;
 		}
 
-		public static async Task TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description, CancellationToken token)
+		public static async Task<bool> TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description, CancellationToken token)
 		{
 			Console.Write($"Download {description} from {url} ...");
 
@@ -70,10 +70,11 @@ namespace Mtgdb.Downloader
 			catch (Exception ex)
 			{
 				Console.WriteLine($" {ex}");
-				return;
+				return false;
 			}
 
 			Console.WriteLine(" done");
+			return true;
 		}
 	}
 }

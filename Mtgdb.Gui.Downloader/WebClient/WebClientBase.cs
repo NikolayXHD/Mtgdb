@@ -43,7 +43,7 @@ namespace Mtgdb.Downloader
 			return memoryStream;
 		}
 
-		protected static async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
+		public async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
 		{
 			HttpResponseMessage response;
 			try

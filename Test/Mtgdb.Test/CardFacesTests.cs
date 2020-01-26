@@ -35,22 +35,32 @@ namespace Mtgdb.Test
 		public void Multiface_cards_have_expected_faces_count()
 		{
 			var multifaceCards = Repo.Cards.Where(card => card.IsMultiFace()).ToArray();
-			multifaceCards.Should().NotContain(c => !c.IsToken && c.Names == null);
-			multifaceCards.Where(c => c.IsMeld()).Should().OnlyContain(c => c.Names.Count == 3);
-			multifaceCards.Where(c => c.IsSplit()).Should().OnlyContain(c => c.Names.Count > 1);
-			multifaceCards.Where(c => !c.IsMeld() && !c.IsSplit() && !c.IsToken).Should().OnlyContain(c => c.Names.Count == 2);
+			multifaceCards
+				.Should().NotContain(c => !c.IsToken && c.Names == null);
 
-			multifaceCards.Where(c => c.IsToken).Should().OnlyContain(c => c.IsTransform());
-			multifaceCards.Where(c => c.IsToken && c.IsTransform()).Should().OnlyContain(c =>
-				c.Names != null && c.Names.Count == 2 ||
-				!string.IsNullOrEmpty(c.Side) &&
-				c.Namesakes.Any(ns => ns.Set == c.Set && !string.IsNullOrEmpty(ns.Side) && ns.Side != c.Side));
+			multifaceCards.Where(c => c.IsMeld())
+				.Should().OnlyContain(c => c.Names.Count == 3);
+
+			multifaceCards.Where(c => c.IsSplit())
+				.Should().OnlyContain(c => c.Names.Count > 1);
+
+			multifaceCards.Where(c => !c.IsMeld() && !c.IsSplit() && !c.IsToken)
+				.Should().OnlyContain(c => c.Names.Count == 2);
+
+			multifaceCards.Where(c => c.IsToken)
+				.Should().OnlyContain(c => c.IsTransform());
+
+			multifaceCards.Where(c => c.IsToken && c.IsTransform())
+				.Should().OnlyContain(c =>
+					c.Names != null && c.Names.Count == 2 ||
+					!string.IsNullOrEmpty(c.Side) &&
+					c.Namesakes.Any(ns => ns.Set == c.Set && !string.IsNullOrEmpty(ns.Side) && ns.Side != c.Side));
 		}
 
 		[Test]
 		public void Multiface_cards_report_same_faces_order()
 		{
-			foreach (var card in Repo.Cards.Where(c => c.IsMultiFace() && (!c.IsToken || !c.TypesArr.Contains("card"))))
+			foreach (var card in Repo.Cards.Where(c => c.IsMultiFace() && !c.IsToken))
 				foreach (var name in card.Names)
 					foreach (var faceVariant in card.Set.MapByName(card.IsToken)[name])
 						Assert.That(faceVariant.Names.SequenceEqual(card.Names), card.ToString);

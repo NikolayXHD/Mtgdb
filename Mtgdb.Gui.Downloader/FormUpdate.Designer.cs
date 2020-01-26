@@ -40,35 +40,34 @@ namespace Mtgdb.Downloader
 			this._buttonImgMq = new Mtgdb.Controls.ButtonBase();
 			this._buttonImgArt = new Mtgdb.Controls.ButtonBase();
 			this._buttonImgLq = new Mtgdb.Controls.ButtonBase();
-			this._buttonMtgjson = new Mtgdb.Controls.ButtonBase();
 			this._buttonEditConfig = new Mtgdb.Controls.ButtonBase();
 			this._buttonDesktopShortcut = new Mtgdb.Controls.ButtonBase();
 			this._buttonNotifications = new Mtgdb.Controls.ButtonBase();
-			this._labelTitle = new System.Windows.Forms.Label();
+			this._buttonMtgjson = new Mtgdb.Controls.ButtonBase();
 			this._buttonPrices = new Mtgdb.Controls.ButtonBase();
+			this._labelTitle = new System.Windows.Forms.Label();
 			this._panelClient.SuspendLayout();
 			this._panelCaption.SuspendLayout();
 			this._tableLayoutRoot.SuspendLayout();
 			this._tableLayoutButtons.SuspendLayout();
 			this.SuspendLayout();
-			//
+			// 
 			// _panelClient
-			//
+			// 
 			this._panelClient.Controls.Add(this._tableLayoutRoot);
 			this._panelClient.Location = new System.Drawing.Point(6, 31);
 			this._panelClient.Size = new System.Drawing.Size(827, 418);
-			//
+			// 
 			// _panelCaption
-			//
+			// 
 			this._panelCaption.Controls.Add(this._labelTitle);
 			this._panelCaption.Size = new System.Drawing.Size(722, 25);
-			//
+			// 
 			// _textBoxLog
-			//
+			// 
 			this._textBoxLog.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._textBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this._textBoxLog.Location = new System.Drawing.Point(4, 3);
 			this._textBoxLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 0);
@@ -77,12 +76,12 @@ namespace Mtgdb.Downloader
 			this._textBoxLog.Size = new System.Drawing.Size(819, 260);
 			this._textBoxLog.TabIndex = 0;
 			this._textBoxLog.Text = "";
-			//
+			// 
 			// _progressBar
-			//
+			// 
 			this._progressBar.Anchor =
-				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
-					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) |
+					System.Windows.Forms.AnchorStyles.Right)));
 			this._progressBar.Location = new System.Drawing.Point(4, 266);
 			this._progressBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 0);
 			this._progressBar.Name = "_progressBar";
@@ -90,9 +89,9 @@ namespace Mtgdb.Downloader
 			this._progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this._progressBar.TabIndex = 1;
 			this._progressBar.Visible = false;
-			//
+			// 
 			// _labelProgress
-			//
+			// 
 			this._labelProgress.AutoSize = true;
 			this._labelProgress.Location = new System.Drawing.Point(4, 294);
 			this._labelProgress.Margin = new System.Windows.Forms.Padding(4, 3, 0, 0);
@@ -101,13 +100,12 @@ namespace Mtgdb.Downloader
 			this._labelProgress.TabIndex = 9;
 			this._labelProgress.Text = "121 / 10030 files ready";
 			this._labelProgress.Visible = false;
-			//
+			// 
 			// _tableLayoutRoot
-			//
+			// 
 			this._tableLayoutRoot.BackColor = System.Drawing.SystemColors.Control;
 			this._tableLayoutRoot.ColumnCount = 1;
-			this._tableLayoutRoot.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._tableLayoutRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._tableLayoutRoot.Controls.Add(this._labelProgress, 0, 2);
 			this._tableLayoutRoot.Controls.Add(this._progressBar, 0, 1);
 			this._tableLayoutRoot.Controls.Add(this._textBoxLog, 0, 0);
@@ -117,36 +115,27 @@ namespace Mtgdb.Downloader
 			this._tableLayoutRoot.Margin = new System.Windows.Forms.Padding(0);
 			this._tableLayoutRoot.Name = "_tableLayoutRoot";
 			this._tableLayoutRoot.RowCount = 4;
-			this._tableLayoutRoot.RowStyles.Add(
-				new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._tableLayoutRoot.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this._tableLayoutRoot.Size = new System.Drawing.Size(827, 418);
 			this._tableLayoutRoot.TabIndex = 0;
-			//
+			// 
 			// _tableLayoutButtons
-			//
+			// 
 			this._tableLayoutButtons.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._tableLayoutButtons.BackColor = System.Drawing.SystemColors.Control;
 			this._tableLayoutButtons.ColumnCount = 7;
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.923077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.923077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
-			this._tableLayoutButtons.ColumnStyles.Add(
-				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.923077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.923077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
+			this._tableLayoutButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.23077F));
 			this._tableLayoutButtons.Controls.Add(this._buttonApp, 6, 0);
 			this._tableLayoutButtons.Controls.Add(this._buttonImgMq, 5, 1);
 			this._tableLayoutButtons.Controls.Add(this._buttonImgArt, 6, 1);
@@ -160,19 +149,16 @@ namespace Mtgdb.Downloader
 			this._tableLayoutButtons.Margin = new System.Windows.Forms.Padding(4, 3, 0, 0);
 			this._tableLayoutButtons.Name = "_tableLayoutButtons";
 			this._tableLayoutButtons.RowCount = 2;
-			this._tableLayoutButtons.RowStyles.Add(
-				new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this._tableLayoutButtons.RowStyles.Add(
-				new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this._tableLayoutButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this._tableLayoutButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this._tableLayoutButtons.Size = new System.Drawing.Size(823, 108);
 			this._tableLayoutButtons.TabIndex = 11;
-			//
+			// 
 			// _buttonApp
-			//
+			// 
 			this._buttonApp.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonApp.AutoCheck = false;
 			this._buttonApp.Image = global::Mtgdb.Downloader.Properties.Resources.update;
 			this._buttonApp.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -187,16 +173,14 @@ namespace Mtgdb.Downloader
 			this._buttonApp.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonApp.VisibleAllBorders = true;
 			this._buttonApp.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonImgMq
-			//
+			// 
 			this._buttonImgMq.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonImgMq.AutoCheck = false;
 			this._buttonImgMq.Image = global::Mtgdb.Downloader.Properties.Resources.card_img_24;
 			this._buttonImgMq.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -211,16 +195,14 @@ namespace Mtgdb.Downloader
 			this._buttonImgMq.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonImgMq.VisibleAllBorders = true;
 			this._buttonImgMq.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonImgArt
-			//
+			// 
 			this._buttonImgArt.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonImgArt.AutoCheck = false;
 			this._buttonImgArt.Image = global::Mtgdb.Downloader.Properties.Resources.art_24;
 			this._buttonImgArt.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -235,16 +217,14 @@ namespace Mtgdb.Downloader
 			this._buttonImgArt.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonImgArt.VisibleAllBorders = true;
 			this._buttonImgArt.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonImgLq
-			//
+			// 
 			this._buttonImgLq.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonImgLq.AutoCheck = false;
 			this._buttonImgLq.Image = global::Mtgdb.Downloader.Properties.Resources.card_img_16;
 			this._buttonImgLq.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -259,40 +239,14 @@ namespace Mtgdb.Downloader
 			this._buttonImgLq.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonImgLq.VisibleAllBorders = true;
 			this._buttonImgLq.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
-			// _buttonMtgjson
-			//
-			this._buttonMtgjson.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			this._buttonMtgjson.AutoCheck = false;
-			this._buttonMtgjson.Image = global::Mtgdb.Downloader.Properties.Resources.card_data_20;
-			this._buttonMtgjson.ImagePosition = System.Drawing.StringAlignment.Near;
-			this._buttonMtgjson.ImageScale = 0.5F;
-			this._buttonMtgjson.Location = new System.Drawing.Point(346, 0);
-			this._buttonMtgjson.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
-			this._buttonMtgjson.Name = "_buttonMtgjson";
-			this._buttonMtgjson.Size = new System.Drawing.Size(154, 51);
-			this._buttonMtgjson.TabIndex = 5;
-			this._buttonMtgjson.Text = "Update cards\r\nfrom mtgjson.com";
-			this._buttonMtgjson.TextAlign = System.Drawing.StringAlignment.Center;
-			this._buttonMtgjson.TextPosition = System.Drawing.StringAlignment.Center;
-			this._buttonMtgjson.VisibleAllBorders = true;
-			this._buttonMtgjson.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonEditConfig
-			//
+			// 
 			this._buttonEditConfig.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonEditConfig.AutoCheck = false;
 			this._buttonEditConfig.Image = global::Mtgdb.Downloader.Properties.Resources.properties_16x16;
 			this._buttonEditConfig.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -306,16 +260,14 @@ namespace Mtgdb.Downloader
 			this._buttonEditConfig.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonEditConfig.VisibleAllBorders = true;
 			this._buttonEditConfig.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonDesktopShortcut
-			//
+			// 
 			this._buttonDesktopShortcut.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonDesktopShortcut.AutoCheck = false;
 			this._buttonDesktopShortcut.Image = global::Mtgdb.Downloader.Properties.Resources.mtg_16;
 			this._buttonDesktopShortcut.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -329,17 +281,15 @@ namespace Mtgdb.Downloader
 			this._buttonDesktopShortcut.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonDesktopShortcut.VisibleAllBorders = true;
 			this._buttonDesktopShortcut.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonDesktopShortcut.Click += new System.EventHandler(this.buttonDesktopShortcut);
-			//
+			// 
 			// _buttonNotifications
-			//
+			// 
 			this._buttonNotifications.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonNotifications.AutoCheck = false;
 			this._buttonNotifications.Image = global::Mtgdb.Downloader.Properties.Resources.mailbox_26;
 			this._buttonNotifications.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -354,29 +304,36 @@ namespace Mtgdb.Downloader
 			this._buttonNotifications.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonNotifications.VisibleAllBorders = true;
 			this._buttonNotifications.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
-			// _labelTitle
-			//
-			this._labelTitle.AutoSize = true;
-			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
-			this._labelTitle.Font = new System.Drawing.Font("Consolas", 12F,
-				System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this._labelTitle.Location = new System.Drawing.Point(0, 0);
-			this._labelTitle.Margin = new System.Windows.Forms.Padding(0);
-			this._labelTitle.Name = "_labelTitle";
-			this._labelTitle.Size = new System.Drawing.Size(198, 19);
-			this._labelTitle.TabIndex = 0;
-			this._labelTitle.Text = "Updates and downloads";
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// _buttonMtgjson
+			// 
+			this._buttonMtgjson.Anchor =
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			this._buttonMtgjson.AutoCheck = false;
+			this._buttonMtgjson.Image = global::Mtgdb.Downloader.Properties.Resources.card_data_20;
+			this._buttonMtgjson.ImagePosition = System.Drawing.StringAlignment.Near;
+			this._buttonMtgjson.ImageScale = 0.5F;
+			this._buttonMtgjson.Location = new System.Drawing.Point(346, 0);
+			this._buttonMtgjson.Margin = new System.Windows.Forms.Padding(0, 0, 4, 3);
+			this._buttonMtgjson.Name = "_buttonMtgjson";
+			this._buttonMtgjson.Size = new System.Drawing.Size(154, 51);
+			this._buttonMtgjson.TabIndex = 5;
+			this._buttonMtgjson.Text = "Update cards\r\nfrom mtgjson.com";
+			this._buttonMtgjson.TextAlign = System.Drawing.StringAlignment.Center;
+			this._buttonMtgjson.TextPosition = System.Drawing.StringAlignment.Center;
+			this._buttonMtgjson.VisibleAllBorders = true;
+			this._buttonMtgjson.VisibleBorders =
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _buttonPrices
-			//
+			// 
 			this._buttonPrices.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._buttonPrices.AutoCheck = false;
 			this._buttonPrices.Image = global::Mtgdb.Downloader.Properties.Resources.price_16;
 			this._buttonPrices.ImagePosition = System.Drawing.StringAlignment.Near;
@@ -390,15 +347,27 @@ namespace Mtgdb.Downloader
 			this._buttonPrices.TextPosition = System.Drawing.StringAlignment.Center;
 			this._buttonPrices.VisibleAllBorders = true;
 			this._buttonPrices.VisibleBorders =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
-						System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
-			//
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			// _labelTitle
+			// 
+			this._labelTitle.AutoSize = true;
+			this._labelTitle.BackColor = System.Drawing.Color.Transparent;
+			this._labelTitle.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
+				((byte) (204)));
+			this._labelTitle.Location = new System.Drawing.Point(0, 0);
+			this._labelTitle.Margin = new System.Windows.Forms.Padding(0);
+			this._labelTitle.Name = "_labelTitle";
+			this._labelTitle.Size = new System.Drawing.Size(198, 19);
+			this._labelTitle.TabIndex = 0;
+			this._labelTitle.Text = "Updates and downloads";
+			// 
 			// FormUpdate
-			//
+			// 
 			this.ClientSize = new System.Drawing.Size(839, 455);
-			this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular,
-				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point,
+				((byte) (204)));
 			this.Location = new System.Drawing.Point(0, 0);
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "FormUpdate";

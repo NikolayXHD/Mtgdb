@@ -183,27 +183,22 @@ namespace Mtgdb.Data
 				SetAdded?.Invoke();
 			}
 
-			CardsByName = Cards.GroupBy(_ => _.NameNormalized)
-				.ToDictionary(
-					gr => gr.Key,
-					// card_by_name_sorting
-					gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
-					Str.Comparer);
+			CardsByName = toNamesakesMap(Cards.Where(c=>!c.IsToken));
+			TokensByName = toNamesakesMap(Cards.Where(c => c.IsToken));
 
+			CardIdsByName = CardsByName.ToDictionary(_ => _.Key, _ => _.Value.ToHashSet(c => c.Id), Str.Comparer);
+			TokenIdsByName = TokensByName.ToDictionary(_ => _.Key, _ => _.Value.ToHashSet(c => c.Id), Str.Comparer);
+
+			CardPrintingsByName = CardsByName.ToDictionary(_ => _.Key, toPrintings, Str.Comparer);
+			TokenPrintingsByName = TokensByName.ToDictionary(_ => _.Key, toPrintings, Str.Comparer);
 
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
 				card.IndexInFile = i;
-				card.Namesakes = CardsByName[card.NameNormalized]
-					.Where(c => c != card && c.IsToken == card.IsToken)
-					.OrderByDescending(c => c.ReleaseDate)
-					.ToArray();
-
-				card.NamesakeIds = card.Namesakes.ToHashSet(_ => _.Id);
-
-				if (card.IsToken)
-					card.Printings = card.Namesakes.Select(_ => _.SetCode).Distinct().ToArray();
+				card.Namesakes = MapByName(card.IsToken)[card.NameNormalized];
+				card.NamesakeIds = MapIdByName(card.IsToken)[card.NameNormalized];
+				card.Printings = MapPrintingsByName(card.IsToken)[card.NameNormalized];
 			}
 
 			patchLegality();
@@ -218,6 +213,20 @@ namespace Mtgdb.Data
 
 			foreach (var namesakeList in CardsByName.Values)
 				namesakeList.Capacity = namesakeList.Count;
+
+			foreach (var namesakeList in TokensByName.Values)
+				namesakeList.Capacity = namesakeList.Count;
+
+			IReadOnlyList<string> toPrintings(KeyValuePair<string, List<Card>> _) =>
+				_.Value.Select(c => c.Set).Distinct().OrderBy(s => s.ReleaseDate).Select(s => s.Code).ToList();
+
+			Dictionary<string, List<Card>> toNamesakesMap(IEnumerable<Card> cards) =>
+				cards.GroupBy(_ => _.NameNormalized)
+					.ToDictionary(
+						gr => gr.Key,
+						// card_by_name_sorting
+						gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
+						Str.Comparer);
 		}
 
 		private static void preProcessCardOrToken(Card card)
@@ -415,6 +424,15 @@ namespace Mtgdb.Data
 			}
 		}
 
+		public IDictionary<string, List<Card>> MapByName(bool tokens) =>
+			tokens ? TokensByName : CardsByName;
+
+		public IDictionary<string, HashSet<string>> MapIdByName(bool tokens) =>
+			tokens ? TokenIdsByName : CardIdsByName;
+
+		public IDictionary<string, IReadOnlyList<string>> MapPrintingsByName(bool tokens) =>
+			tokens ? TokenPrintingsByName : CardPrintingsByName;
+
 		private string PatchFile { get; }
 
 		public List<Card> Cards { get; }
@@ -422,6 +440,11 @@ namespace Mtgdb.Data
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
 
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
+		public IDictionary<string, List<Card>> TokensByName { get; private set; }
+		public IDictionary<string, HashSet<string>> CardIdsByName { get; private set; }
+		public IDictionary<string, HashSet<string>> TokenIdsByName { get; private set; }
+		public IDictionary<string, IReadOnlyList<string>> CardPrintingsByName { get; private set; }
+		public IDictionary<string, IReadOnlyList<string>> TokenPrintingsByName { get; private set; }
 
 		private byte[] _defaultSetsContent;
 		private byte[][] _customSetContents;

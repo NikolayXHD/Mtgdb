@@ -106,20 +106,27 @@ namespace Mtgdb.Test
 		[Test]
 		public void Tokens_in_set_are_in_separate_map()
 		{
+			var cardNamesakeLists = new HashSet<ICollection<Card>>();
+			var tokenNamesakeLists = new HashSet<ICollection<Card>>();
+
 			foreach (Set set in Repo.SetsByCode.Values)
 			{
 				foreach (var (_, cards) in set.ActualCardsByName)
+				foreach (Card card in cards)
 				{
-					cards.Should().NotContain(card => card.IsToken);
-					foreach (var card in cards)
+					card.IsToken.Should().BeFalse();
+					if (cardNamesakeLists.Add(card.Namesakes))
 						card.Namesakes.Should().NotContain(_ => _.IsToken);
 				}
 
 				foreach (var (_, tokens) in set.TokensByName)
 				{
-					tokens.Should().NotContain(token => !token.IsToken);
-					foreach (var token in tokens)
-						token.Namesakes.Should().NotContain(_ => !_.IsToken);
+					foreach (Card token in tokens)
+					{
+						token.IsToken.Should().BeTrue();
+						if (tokenNamesakeLists.Add(token.Namesakes))
+							token.Namesakes.Should().NotContain(_ => !_.IsToken);
+					}
 				}
 			}
 		}
@@ -131,11 +138,11 @@ namespace Mtgdb.Test
 			{
 				foreach (var (_, cards) in set.ActualCardsByName)
 				foreach (var card in cards)
-					card.Printings.Should().BeEquivalentTo(cards[0].Printings);
+					card.Printings.Should().BeSameAs(cards[0].Printings);
 
 				foreach (var (_, tokens) in set.TokensByName)
 				foreach (var token in tokens)
-					token.Printings.Should().BeEquivalentTo(tokens[0].Printings);
+					token.Printings.Should().BeSameAs(tokens[0].Printings);
 			}
 		}
 
@@ -161,11 +168,17 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Plus_minus_are_followed_by_letter()
+		public void Punctuation_plus_minus_are_not_preceding_or_following_text_without_whitespace()
 		{
-			var regex = new Regex(@"[+\-]\p{L}");
-			Repo.Cards.Select(_ => _.TextEn).Where(F.IsNotNull)
-				.Should().NotContain(_ => regex.IsMatch(_));
+			var precedingSignPattern = new Regex(@"(?<![\w']+)[+\-](?![xXyY]\b)\p{L}");
+			Repo.CardsByName.Select(_ => _.Value[0].TextEn)
+				.Where(_ => _ != null && precedingSignPattern.IsMatch(_))
+				.Should().BeEmpty();
+
+			var followingSignPattern = new Regex(@"\p{L}(?<![xXyY]\b)[+\-](?![\w']+)");
+			Repo.CardsByName.Select(_ => _.Value[0].TextEn)
+				.Where(_ => _ != null && followingSignPattern.IsMatch(_))
+				.Should().BeEmpty();
 		}
 
 		private static bool isToken(Card c) =>

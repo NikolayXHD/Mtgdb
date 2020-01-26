@@ -27,8 +27,7 @@ set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
 set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
 set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
 set deflatefileid=1X5h6C9u9L13T720DLqMmKwZz_0YzxQmm
-
-rem goto upload_deflate
+set robocopy_params=/s
 
 %out% build
 
@@ -47,42 +46,59 @@ mkdir %targetRoot%
 mkdir %targetRoot%\%packageName%
 
 %out% copy files
+robocopy %output%\data                     ^
+         %target%\data                     ^
+         %robocopy_params%                 ^
+     /xf %output%\data\allSets-x.json      ^
+         %output%\data\AllSets.v42.json    ^
+     /xd %output%\data\index\keywords-test ^
+         %output%\data\index\search-test   ^
+         %output%\data\index\suggest-test  ^
+         %output%\data\index\deck
 
-xcopy /q /r /i /e %output%\data %target%\data
-xcopy /q /r /i /e %output%\bin\%configuration% %targetBin%
-xcopy /q /r /i /e %output%\etc %target%\etc
-xcopy /q /r /i /e %output%\images %target%\images
-xcopy /q /r /i /e %output%\update %target%\update
-xcopy /q /r /i /e %output%\help %target%\help
-xcopy /q /r /i /e %output%\color-schemes %target%\color-schemes
-xcopy /q /r /i /e %output%\charts %target%\charts
-xcopy /q %output%\..\LICENSE %target%
+robocopy %output%\bin\%configuration% ^
+         %targetBin%                  ^
+         %robocopy_params%            ^
+     /xf *.xml                        ^
+         *.pdb
 
-%out% remove redundant files
+robocopy %output%\etc            ^
+         %target%\etc            ^
+      /s /nfl /ndl /np /njh /njs
 
-del /q /s %target%\update\app\*
-del /q /s %target%\update\*.bak
-del /q /s %target%\update\*.zip
-del /q /s %target%\update\notifications\*.zip
-del /q /s %target%\update\notifications\new\*
-del /q /s %target%\update\notifications\read\*
-del /q /s %target%\update\notifications\archive\*
-del /q %target%\update\filelist.txt
-del /q /s %target%\update\img\art\filelist.txt
-rmdir /q /s %target%\update\megatools-1.9.98-win32
+robocopy %output%\images         ^
+         %target%\images         ^
+         %robocopy_params%       ^
+     /xf *.jpg                   ^
+         *.txt
 
-del /q /s %target%\color-schemes\current.colors
-del /q /s %target%\images\*.jpg
-del /q /s %target%\images\*.txt
-del /q /s %targetBin%\*.xml
-del /q /s %targetBin%\*.pdb
-rmdir /q /s %target%\data\index\keywords-test
-rmdir /q /s %target%\data\index\search-test
-rmdir /q /s %target%\data\index\suggest-test
-del /q /s %target%\data\index\deck\*
+robocopy %output%\update                        ^
+         %target%\update                        ^
+         %robocopy_params%                      ^
+     /xf *.bak                                  ^
+         *.zip                                  ^
+         %output%\update\filelist.txt           ^
+         %output%\update\version.txt            ^
+         %output%\update\img\art\filelist.txt   ^
+     /xd %output%\update\app                    ^
+         %output%\update\notifications          ^
+         %output%\update\megatools-1.9.98-win32
 
-del /q /s %target%\data\allSets-x.json
-del /q /s %target%\data\AllSets.v42.json
+robocopy %output%\help           ^
+         %target%\help           ^
+         %robocopy_params%
+
+robocopy %output%\color-schemes  ^
+         %target%\color-schemes  ^
+         %robocopy_params%       ^
+     /xf current.colors
+
+robocopy %output%\charts         ^
+         %target%\charts         ^
+         %robocopy_params%
+
+xcopy /q %output%\..\LICENSE ^
+         %target%
 
 %out% make shortcut
 

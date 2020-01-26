@@ -19,9 +19,9 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class DeploymentUtils
 	{
-		private const string SetCodes = "pz2,g18";
+		private const string SetCodes = null; //"pz2,g18";
 		private const bool NonToken = true;
-		private const bool Token = false;
+		private const bool Token = true;
 		private const bool SelectSmall = true;
 		private const bool SelectZoom = true;
 
@@ -196,6 +196,16 @@ namespace Mtgdb.Util
 				string outputFile = getSignatureFile(qualityDir, tokenSuffix);
 				string packagePath = TargetDir.AddPath(qualityDir + tokenSuffix);
 				new ImageDirectorySigner().SignFiles(packagePath, outputFile, setCodes);
+
+				FileInfo signatureFile = new FileInfo(getSignatureFile(qualityDir, tokenSuffix));
+				FileInfo compressedSignatureFile = new FileInfo(Path.Combine(
+					signatureFile.DirectoryName ?? throw new ApplicationException("Invalid signature file path " + signatureFile.FullName),
+					Path.GetFileNameWithoutExtension(signatureFile.Name) + SevenZipExtension));
+
+				if (compressedSignatureFile.Exists)
+					compressedSignatureFile.Delete();
+
+				new SevenZip(false).Compress(signatureFile.FullName, compressedSignatureFile.FullName).Should().BeTrue();
 			}
 		}
 
@@ -224,20 +234,8 @@ namespace Mtgdb.Util
 					new SevenZip(false).Compress(subdir.FullName, targetFile.FullName)
 						.Should().BeTrue();
 				}
-
-				FileInfo signatureFile = new FileInfo(getSignatureFile(qualityDir, tokenSuffix));
-				FileInfo compressedSignatureFile = new FileInfo(Path.Combine(
-					signatureFile.DirectoryName ?? throw new ApplicationException("Invalid signature file path " + signatureFile.FullName),
-					Path.GetFileNameWithoutExtension(signatureFile.Name) + SevenZipExtension));
-
-				if (compressedSignatureFile.Exists)
-					compressedSignatureFile.Delete();
-
-				new SevenZip(false).Compress(signatureFile.FullName, compressedSignatureFile.FullName).Should().BeTrue();
 			}
 		}
-
-
 
 		private static void moveDirectoryToBackup(string dir, string dirBak)
 		{

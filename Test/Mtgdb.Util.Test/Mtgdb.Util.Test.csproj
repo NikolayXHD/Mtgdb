@@ -109,6 +109,7 @@
     <Compile Include="ExternalData\ImageDownloader.cs" />
     <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="ExternalData\ScryfallClient.cs" />
+    <Compile Include="ExternalData\YandexDIsk.cs" />
     <Compile Include="Images\WizardImageHtmlPageUtil.cs" />
     <Compile Include="Tcg\Json.cs" />
     <Compile Include="Tcg\TcgPriceDownloaderUtils.cs" />

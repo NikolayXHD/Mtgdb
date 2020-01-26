@@ -12,9 +12,20 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "QualityGroup")]
 		public QualityGroupConfig[] QualityGroups { get; set; }
 
+		[DataMember(Name = "MegaPrefix")]
 		public string MegaPrefix { get; [UsedImplicitly] set; }
 
+		[DataMember(Name = "GdrivePrefix")]
 		public string GdrivePrefix { get; [UsedImplicitly] set; }
+
+		[DataMember(Name = "YandexKey")]
+		public string YandexKey { get; set; }
+
+		[DataMember(Name = "YandexListPath")]
+		public string YandexListPath { get; set; }
+
+		[DataMember(Name = "YandexDirPath")]
+		public string YandexDirPath { get; set; }
 
 		public void Combine(ICombiner combiner, ImageSourcesConfig other)
 		{

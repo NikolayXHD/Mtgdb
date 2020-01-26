@@ -19,11 +19,17 @@ namespace Mtgdb.Downloader
 			};
 
 			using var client = new HttpClient();
+
+			client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+			client.DefaultRequestHeaders.Add("Cache-Control", "max-age=0");
 			client.DefaultRequestHeaders.Add("User-Agent",
-				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) " +
-				"AppleWebKit/537.36 (KHTML, like Gecko) " +
-				"Chrome/60.0.3112.113 " +
-				"Safari/537.36");
+				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
+			client.DefaultRequestHeaders.Add("Accept",
+				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "cross-site");
+			client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
+			client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
+			client.DefaultRequestHeaders.Add("Accept-Language", "ru,en;q=0.9");
 
 			var request = new HttpRequestMessage(HttpMethod.Get, downloadUrl);
 			var response = await GetResponse(client, request, token);

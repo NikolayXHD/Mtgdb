@@ -34,13 +34,16 @@
 		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 	</ImageLocations>
 
-	<ImageSources MegaPrefix="https://mega.nz/#F!" GdrivePrefix="https://drive.google.com/uc?export=download&amp;id=">
+	<ImageSources MegaPrefix="https://mega.nz/#F!" GdrivePrefix="https://drive.google.com/uc?export=download&amp;id="
+                YandexKey="oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=="
+                YandexListPath="/{0}-list/filelist.7z"
+                YandexDirPath="/{0}-7z/{1}.7z">
 
-		<QualityGroup Quality="Art" Name="Art" TargetDirectory="images\Artworks" FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
+		<QualityGroup Quality="Art" Name="Art"     Yandex="False" TargetDirectory="images\Artworks" FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
 			<Dir MegaId="39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
 		</QualityGroup>
 
-    <QualityGroup Quality="LQ" Name="LQ" TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W" >
+    <QualityGroup Quality="LQ" Name="LQ"       Yandex="True"  TargetDirectory="images\Mtgdb.Pictures\LQ" FileListGdriveId="1FMfg6L-AxLwWt6nhXaFLdSIxm8XlDk7W">
       <Dir GdriveId="1MwaI9FnfSNiNgbNw9AcFqua6oTgRqkiE" Subdir="g18" />
       <Dir GdriveId="1FsNweT2ObjmLpBBtLk548LP0bLQnheXC" Subdir="gn2" />
       <Dir GdriveId="1nCxU3zQKbwDOXwbdreWetiu5vtwG6g3P" Subdir="cmb1" />
@@ -497,7 +500,7 @@
 			<Dir GdriveId="16sKDbvkM5gr5oIatg4QzAGNOufXHDDgx" Subdir="zen" />
 		</QualityGroup>
 
-		<QualityGroup Quality="MQ" Name="MQ" TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
+		<QualityGroup Quality="MQ" Name="MQ"       Yandex="True"  TargetDirectory="images\Mtgdb.Pictures\MQ" FileListGdriveId="1-kJHjDPZ97QdhcJnj-x2gcMCHE4BjFKz">
       <Dir GdriveId="1Txp-0Rwio5YmIKpaPOmAJ5wBnkzJkfEX" Subdir="g18" />
       <Dir GdriveId="1TamVtsEh4i8NPtFHlnCuWGBlgd6XPTMb" Subdir="gn2" />
       <Dir GdriveId="1KVMLgut2xXpjku6pj5gfK0kHtbP50ZIL" Subdir="cmb1" />
@@ -954,7 +957,7 @@
 			<Dir GdriveId="1eByq8C8SAgcoB-J3gutYfxhNBU41gYcI" Subdir="zen" />
 		</QualityGroup>
 
-    <QualityGroup Quality="LQ" Name="LQ-Token" TargetDirectory="images\Mtgdb.Pictures\LQ-Token" FileListGdriveId="1b-QNQgDX2BSi5InzSc1dYjya4JtbsUNR" >
+    <QualityGroup Quality="LQ" Name="LQ-Token" Yandex="True"  TargetDirectory="images\Mtgdb.Pictures\LQ-Token" FileListGdriveId="1b-QNQgDX2BSi5InzSc1dYjya4JtbsUNR" >
       <Dir GdriveId="1sqlfLpiLkepP8v2HqhgGjV6V5HRCUDHL" Subdir="10E" />
       <Dir GdriveId="1vi_FPMKKJc-Sc5Avr7Pk5LHMyhSgBi2D" Subdir="A25" />
       <Dir GdriveId="1wCnZFsO5Wek5UgObGj-PEm9yWUQiQmDN" Subdir="AER" />
@@ -1098,7 +1101,7 @@
       <Dir GdriveId="1_bPtO9ietnu1Eihn-TDlT7CdVHx10bMV" Subdir="ZEN" />
     </QualityGroup>
 
-    <QualityGroup Quality="MQ" Name="MQ-Token" TargetDirectory="images\Mtgdb.Pictures\MQ-Token" FileListGdriveId="12qRW67Gpf8XJHWrQyO5DhEh_Z7a0oxzf" >
+    <QualityGroup Quality="MQ" Name="MQ-Token" Yandex="True"  TargetDirectory="images\Mtgdb.Pictures\MQ-Token" FileListGdriveId="12qRW67Gpf8XJHWrQyO5DhEh_Z7a0oxzf" >
       <Dir GdriveId="1oTkSY5ypLezthL2uLzLT9cgBLBa4lvc5" Subdir="10E" />
       <Dir GdriveId="1l63mxWO-uy2yKcxcd0qfkW2bKdg72UmQ" Subdir="A25" />
       <Dir GdriveId="1ATZMsCgO3TpYc98SOrfrUEq9eMgXLZZh" Subdir="AER" />

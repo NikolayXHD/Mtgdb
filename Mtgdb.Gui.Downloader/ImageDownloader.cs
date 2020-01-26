@@ -59,7 +59,6 @@ namespace Mtgdb.Downloader
 			await Task.WhenAll(
 				token.Run(tkn => downloadAll(megaStack, commonStack, downloadFromMega, tkn)),
 				// google drive delays download start
-				token.Run(tkn => downloadAll(gdriveStack, commonStack, downloadFromGdrive, tkn)),
 				token.Run(tkn => downloadAll(gdriveStack, commonStack, downloadFromGdrive, tkn)));
 
 			_megatools.FileDownloaded -= megaFileDownloaded;

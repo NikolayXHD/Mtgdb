@@ -57,15 +57,9 @@ namespace Mtgdb.Downloader
 				var webClient = new GdriveWebClient();
 				string gdriveUrl = _config.GdrivePrefix + qualityGroup.FileListGdriveId;
 				string fileListArchive = signaturesDir.AddPath("filelist.7z");
-				Console.Write($"Downloading {fileListArchive} from {gdriveUrl} ... ");
-				await webClient.DownloadFromGdrive(gdriveUrl, signaturesDir, token);
+				await webClient.TryDownload(gdriveUrl, signaturesDir, fileListArchive, token);
 				if (File.Exists(fileListArchive))
-				{
-					Console.WriteLine("done");
 					new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
-				}
-				else
-					Console.WriteLine("FAILED");
 			}
 
 			if (!File.Exists(signaturesFile))

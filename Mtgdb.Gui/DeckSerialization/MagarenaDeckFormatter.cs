@@ -27,7 +27,7 @@ namespace Mtgdb.Gui
 				// card_by_name_sorting
 				?.First();
 
-			// To verify reverse integration with test 
+			// To verify reverse integration with test
 			//if (card != null && card.NameEn != match.Groups["name"].Value)
 			//	return null;
 
