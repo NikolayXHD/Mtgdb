@@ -8,10 +8,7 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "MegaId")]
 		public string MegaId { get; set; }
 
-		[DataMember(Name = "GdriveId")]
-		public string GdriveId { get; set; }
-
 		[DataMember(Name = "Subdir")]
-		public string Subdirectory { get; set; }
+		public string Subdir { get; set; }
 	}
 }

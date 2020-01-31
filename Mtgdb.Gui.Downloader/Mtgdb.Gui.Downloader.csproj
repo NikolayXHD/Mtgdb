@@ -82,22 +82,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Images\IDownloader.cs" />
+    <Compile Include="Images\ImageDownloadQueue.cs" />
+    <Compile Include="Images\ImageDownloader.cs" />
+    <Compile Include="Images\ImageDownloadProgress.cs" />
+    <Compile Include="Images\ImageDownloadProgressReader.cs" />
+    <Compile Include="Images\MegaDownloader.cs" />
+    <Compile Include="Images\YandexDownloader.cs" />
     <Compile Include="WebClient\GdriveWebClient.cs" />
     <Compile Include="NewsService.cs" />
-    <Compile Include="WebClient\GdriveWebClientExtension.cs" />
+    <Compile Include="WebClient\WebClientExtension.cs" />
     <Compile Include="WebClient\WebClientBase.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="WebClient\YandexDiskClient.cs" />
     <Compile Include="[ infrastructure ]\QualityGroupConfig.cs" />
     <Compile Include="[ infrastructure ]\ImageDirConfig.cs" />
     <Compile Include="[ infrastructure ]\ImageSourcesConfig.cs" />
     <Compile Include="[ infrastructure ]\MtgjsonSourceConfig.cs" />
-    <Compile Include="ImageDownloader.cs" />
-    <Compile Include="ImageDownloadProgress.cs" />
-    <Compile Include="ImageDownloadProgressReader.cs" />
     <Compile Include="ImageQuality.cs" />
     <Compile Include="Megatools.cs" />
     <Compile Include="[ infrastructure ]\DownloaderModule.cs" />
@@ -174,7 +179,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\art_24.png" />
     <Content Include="Resources\card_data_20.png" />

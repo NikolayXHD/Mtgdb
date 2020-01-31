@@ -70,6 +70,7 @@ robocopy %output%\images         ^
          %target%\images         ^
          %robocopy_params%       ^
      /xf *.jpg                   ^
+         *.png                   ^
          *.txt
 
 robocopy %output%\update                        ^
@@ -111,7 +112,11 @@ del /q /s %target%\*.vshost.*
 
 :zip_lzma
 %out% create LZMA - compressed zip
-%sevenzexe% a %targetRoot%\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
+
+%sevenzexe% a %targetRoot%\%packageName%.zip       ^
+            -tzip -ir!%targetRoot%\%packageName%\* ^
+            -mmt=on -mm=LZMA -md=64m -mfb=64 -mlc=8
+
 %out% sign zip
 %utilexe% -sign %targetRoot%\%packageName%.zip -output %targetRoot%\filelist.txt
 
@@ -151,7 +156,11 @@ pause
 :zip_deflate
 %out% create deflate - compressed zip
 mkdir %targetRoot%\deflate
-%sevenzexe% a %targetRoot%\deflate\%packageName%.zip -tzip -ir!%targetRoot%\%packageName%\* -x!data\index\* -mm=deflate
+
+%sevenzexe% a %targetRoot%\deflate\%packageName%.zip ^
+            -tzip -ir!%targetRoot%\%packageName%\*   ^
+            -x!data\index\*                          ^
+            -mm=deflate
 
 :upload_deflate
 %out% upload deflate - compressed zip

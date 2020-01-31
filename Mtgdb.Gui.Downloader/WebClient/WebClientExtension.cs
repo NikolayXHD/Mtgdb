@@ -3,12 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace Mtgdb.Downloader
 {
-	public static class GdriveWebClientExtension
+	public static class WebClientExtension
 	{
-		public static async Task<bool> DownloadAndExtract(this GdriveWebClient webClient, string gdriveUrl, string targetDirectory, string fileName, CancellationToken token)
+		public static async Task<bool> DownloadAndExtract(this WebClientBase webClient, string url, string targetDirectory, string fileName, CancellationToken token)
 		{
 			if (!Str.Equals(".7z", Path.GetExtension(fileName)))
 				throw new ArgumentException();
@@ -30,17 +31,18 @@ namespace Mtgdb.Downloader
 
 			try
 			{
-				await webClient.DownloadFromGdrive(gdriveUrl, targetDirectory, token);
+				await webClient.DownloadFile(url, archiveFileName, token);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error downloading {archiveFileName} from {gdriveUrl}: {ex.Message}");
+				Console.WriteLine($"Error downloading {archiveFileName} from {url}: {ex.Message}");
+				_log.Warn(ex, $"Failed download {archiveFileName} from {url}");
 				return false;
 			}
 
 			if (!File.Exists(archiveFileName))
 			{
-				Console.WriteLine($"Failed to download {archiveFileName} from {gdriveUrl}");
+				Console.WriteLine($"Failed to download {archiveFileName} from {url}");
 				return false;
 			}
 
@@ -59,22 +61,25 @@ namespace Mtgdb.Downloader
 			return true;
 		}
 
-		public static async Task<bool> TryDownload(this GdriveWebClient webClient, string url, string targetDirectory, string description, CancellationToken token)
+		public static async Task<bool> TryDownload(this WebClientBase webClient, string url, string targetFile, CancellationToken token)
 		{
-			Console.Write($"Download {description} from {url} ...");
+			Console.Write($"Download {targetFile} from {url} ...");
 
 			try
 			{
-				await webClient.DownloadFromGdrive(url, targetDirectory, token);
+				await webClient.DownloadFile(url, targetFile, token);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($" {ex}");
+				Console.WriteLine($" failed: {ex.Message}");
+				_log.Warn(ex, $"Failed download {targetFile} from {url}");
 				return false;
 			}
 
 			Console.WriteLine(" done");
 			return true;
 		}
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

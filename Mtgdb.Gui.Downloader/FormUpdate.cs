@@ -419,7 +419,7 @@ namespace Mtgdb.Downloader
 			foreach ((string quality, var progress) in progressByGroup)
 			{
 				int totalDirs = progress.Count;
-				var downloadedDirs = progress.Where(_ => _.MayBeComplete).Select(_ => _.Dir.Subdirectory).ToArray();
+				var downloadedDirs = progress.Where(_ => _.MayBeComplete).Select(_ => _.Dir.Subdir).ToArray();
 				int downloadedDirsCount = downloadedDirs.Length;
 				int totalFiles = progress.Sum(_ => _.FilesOnline?.Count ?? 0);
 				var downloadedFiles = progress.Sum(_ => _.FilesDownloaded?.Count);

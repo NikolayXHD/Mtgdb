@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using NLog;
 
 namespace Mtgdb.Downloader
 {
@@ -32,7 +34,7 @@ namespace Mtgdb.Downloader
 
 		private async Task downloadSignatures(QualityGroupConfig qualityGroup, CancellationToken token)
 		{
-			if (qualityGroup.FileListMegaId == null && qualityGroup.FileListGdriveId == null)
+			if (qualityGroup.FileListMegaId == null && qualityGroup.YandexName == null)
 				return;
 
 			(string signaturesDir, string signaturesFile) = getSignaturesFile(qualityGroup);
@@ -46,21 +48,45 @@ namespace Mtgdb.Downloader
 				File.Move(signaturesFile, signaturesFileBak);
 			}
 
+			Directory.CreateDirectory(signaturesDir);
+
 			if (qualityGroup.FileListMegaId != null)
 			{
 				string megaUrl = _config.MegaPrefix + qualityGroup.FileListMegaId;
 				await _megatools.Download(megaUrl, signaturesDir,
 					name: $"Signatures for {qualityGroup.Quality} images", silent: true, token: token);
 			}
-			else if (qualityGroup.FileListGdriveId != null)
+			else if (qualityGroup.YandexName != null)
 			{
-				var webClient = new GdriveWebClient();
-				string gdriveUrl = _config.GdrivePrefix + qualityGroup.FileListGdriveId;
 				string fileListArchive = signaturesDir.AddPath("filelist.7z");
-				await webClient.TryDownload(gdriveUrl, signaturesDir, fileListArchive, token);
-				if (File.Exists(fileListArchive))
-					new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
+				var client = new YandexDiskClient();
+				Console.Write("{0} filelist.7z: get YandexDisk download url ... ", qualityGroup.Name);
+				var url = await client.GetFilelistDownloadUrl(_config, qualityGroup, token);
+				Console.Write("downloading ... ");
+
+				bool success;
+				try
+				{
+					await client.DownloadFile(url, fileListArchive, token);
+					Console.WriteLine($"done");
+					success = true;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"failed: {ex.Message}");
+					_log.Warn(ex, $"Failed download {fileListArchive} from {url}");
+					success = false;
+				}
+
+				if (success)
+				{
+					if (File.Exists(fileListArchive))
+						new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
+				}
 			}
+			else
+				throw new ArgumentException($"No downloader can get filelist for quality {qualityGroup.Quality}");
+
 
 			if (!File.Exists(signaturesFile))
 			{
@@ -85,6 +111,13 @@ namespace Mtgdb.Downloader
 			{
 				(_, string signaturesFile) = getSignaturesFile(qualityGroup);
 				var imagesOnline = Signer.ReadFromFile(signaturesFile);
+
+				if (qualityGroup.YandexName != null && imagesOnline != null)
+					qualityGroup.Dirs = imagesOnline
+						.Select(_ => Path.GetDirectoryName(_.Path))
+						.Distinct()
+						.OrderBy(_ => _, Str.Comparer)
+						.Select(_ => new ImageDirConfig { Subdir = _ }).ToArray();
 
 				foreach (var dir in qualityGroup.Dirs)
 				{
@@ -117,5 +150,7 @@ namespace Mtgdb.Downloader
 
 		private static string getSignaturesDir(QualityGroupConfig qualityGroup) =>
 			Path.Combine(_updateImgDir, qualityGroup.Name);
+
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

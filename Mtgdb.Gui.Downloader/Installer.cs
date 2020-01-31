@@ -113,8 +113,7 @@ namespace Mtgdb.Downloader
 			ensureFileDeleted(_appOnlineSignatureFile);
 			Directory.CreateDirectory(_updateAppDir);
 			await new GdriveWebClient().TryDownload(
-				_appSourceConfig.FileListUrl, _updateAppDir,
-				description: "current version signature", token);
+				_appSourceConfig.FileListUrl, _appOnlineSignatureFile, token);
 			AppOnlineSignature = getAppOnlineSignature();
 		}
 
@@ -122,12 +121,11 @@ namespace Mtgdb.Downloader
 		{
 			var expectedSignature = AppOnlineSignature;
 
-			var appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
+			string appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
 			ensureFileDeleted(appOnline);
 			Directory.CreateDirectory(_updateAppDir);
 			await new GdriveWebClient().TryDownload(
-				_appSourceConfig.ZipUrl, _updateAppDir,
-				description: expectedSignature.Path, token);
+				_appSourceConfig.ZipUrl, appOnline, token);
 		}
 
 		public bool ValidateDownloadedApp()

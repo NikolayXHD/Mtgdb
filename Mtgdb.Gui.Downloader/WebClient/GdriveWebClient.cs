@@ -5,12 +5,13 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Mtgdb.Downloader
 {
 	public class GdriveWebClient : WebClientBase
 	{
-		public async Task DownloadFromGdrive(string downloadUrl, string targetDirectory, CancellationToken token)
+		public override async Task DownloadFile(string downloadUrl, [NotNull] string targetFile, CancellationToken token)
 		{
 			var originalCookieContainer = new CookieContainer();
 			using var originalHandler = new HttpClientHandler
@@ -78,9 +79,12 @@ namespace Mtgdb.Downloader
 				throw new HttpRequestException($"File name not found in content-disposition header {contentDisposition} from {request.RequestUri}");
 
 			var fileName = fileNameMatch.Groups[1].Value;
-			var downloadTarget = targetDirectory.AddPath(fileName);
+			if (!Str.Equals(fileName, Path.GetFileName(targetFile)))
+				throw new ApplicationException(
+					$"Attempted to download file {fileName} to different filename {targetFile}");
+
 			using var stream = await response.Content.ReadAsStreamAsync();
-			using var fileStream = File.Open(downloadTarget, FileMode.Create);
+			using var fileStream = File.Open(targetFile, FileMode.Create);
 			await stream.CopyToAsync(fileStream, BufferSize, token);
 		}
 	}

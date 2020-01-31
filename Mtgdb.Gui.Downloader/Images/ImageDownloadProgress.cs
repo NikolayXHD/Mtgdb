@@ -16,10 +16,9 @@ namespace Mtgdb.Downloader
 			Dir = dir;
 
 			TargetDirectory = QualityGroup.TargetDirectory.ToAppRootedPath();
-			TargetSubdirectory = TargetDirectory.AddPath(Dir.Subdirectory);
+			TargetSubdirectory = TargetDirectory.AddPath(Dir.Subdir);
 
 			MegaUrl = string.IsNullOrEmpty(Dir.MegaId) ? null : ImageSource.MegaPrefix + Dir.MegaId;
-			GdriveUrl = string.IsNullOrEmpty(Dir.GdriveId) ? null: ImageSource.GdrivePrefix + Dir.GdriveId;
 
 			var existingSignatures = readExistingSignatures()
 				?.ToDictionary(_ => _.Path, Str.Comparer);
@@ -31,8 +30,8 @@ namespace Mtgdb.Downloader
 			}
 
 			FilesOnline = imagesOnline
-				.Where(_ => _.IsRelativeTo(Dir.Subdirectory))
-				.Select(_ => _.AsRelativeTo(Dir.Subdirectory))
+				.Where(_ => _.IsRelativeTo(Dir.Subdir))
+				.Select(_ => _.AsRelativeTo(Dir.Subdir))
 				.ToDictionary(_ => _.Path, Str.Comparer);
 
 			FilesDownloaded = new Dictionary<string, FileSignature>(Str.Comparer);
@@ -67,11 +66,10 @@ namespace Mtgdb.Downloader
 		public Dictionary<string, FileSignature> FilesCorrupted { get; }
 		public Dictionary<string, FileSignature> FilesDownloaded { get; }
 
-		public string TargetDirectory { get; } 
+		public string TargetDirectory { get; }
 		public string TargetSubdirectory { get; }
 
 		public string MegaUrl { get; }
-		public string GdriveUrl { get; }
 
 		public bool MayBeComplete
 		{
@@ -87,7 +85,7 @@ namespace Mtgdb.Downloader
 
 		public override string ToString()
 		{
-			return $"{QualityGroup.Quality} {Dir.Subdirectory} {FilesDownloaded?.Count ?? 0} / {FilesOnline?.Count ?? 0}";
+			return $"{QualityGroup.Quality} {Dir.Subdir} {FilesDownloaded?.Count ?? 0} / {FilesOnline?.Count ?? 0}";
 		}
 	}
 }

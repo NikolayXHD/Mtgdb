@@ -22,7 +22,7 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "Dir")]
 		public ImageDirConfig[] Dirs { get; set; }
 
-		[DataMember(Name = "Yandex")]
-		private bool Yandex { get; set; }
+		[DataMember(Name = "YandexName")]
+		public string YandexName { get; set; }
 	}
 }

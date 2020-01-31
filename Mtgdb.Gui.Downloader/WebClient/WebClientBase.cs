@@ -10,7 +10,7 @@ namespace Mtgdb.Downloader
 	{
 		protected const int BufferSize = 1 << 20; // 1MB
 
-		public async Task DownloadFile(string downloadUrl, string downloadTarget, CancellationToken token)
+		public virtual async Task DownloadFile(string downloadUrl, string downloadTarget, CancellationToken token)
 		{
 			using var stream = await DownloadStream(downloadUrl, token);
 			using var fileStream = File.Open(downloadTarget, FileMode.Create);
@@ -43,7 +43,7 @@ namespace Mtgdb.Downloader
 			return memoryStream;
 		}
 
-		public async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
+		protected async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
 		{
 			HttpResponseMessage response;
 			try
