@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forge\ForgeSetRepository.cs" />
+    <Compile Include="IDataDownloader.cs" />
     <Compile Include="Index\CardDocumentAdapter.cs" />
     <Compile Include="Index\CardQueryParser.cs" />
     <Compile Include="Index\CardSearcherState.cs" />

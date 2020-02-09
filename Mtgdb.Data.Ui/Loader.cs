@@ -45,7 +45,6 @@ namespace Mtgdb.Ui
 
 		public async Task AsyncRun()
 		{
-			_indexesUpToDate = _cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate;
 			try
 			{
 				await Task.WhenAll(_loadingTasks.Select(task => _app.CancellationToken.Run(task)));
@@ -62,14 +61,16 @@ namespace Mtgdb.Ui
 
 		private void createLoadingActions()
 		{
-			AddTask(token =>
+			AddTask(async token =>
 			{
+				await _repository.DownloadFiles(token);
 				_repository.LoadFile();
+
 				_imageRepository.LoadFiles();
 				_imageRepository.LoadSmall();
 				_imageRepository.LoadZoom();
 
-				if (_indexesUpToDate)
+				if (_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate)
 					_cardSearcher.LoadIndexes();
 
 				if (_keywordSearcher.IsUpToDate)
@@ -91,7 +92,7 @@ namespace Mtgdb.Ui
 				if (!_keywordSearcher.IsUpToDate)
 					_keywordSearcher.Load();
 
-				if (!_indexesUpToDate)
+				if (!(_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate))
 					_cardSearcher.LoadIndexes();
 
 				_imageRepository.LoadArt();
@@ -106,7 +107,6 @@ namespace Mtgdb.Ui
 		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 		private readonly IApplication _app;
-		private bool _indexesUpToDate;
 
 		private readonly IList<Func<CancellationToken, Task>> _loadingTasks =
 			new List<Func<CancellationToken, Task>>();

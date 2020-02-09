@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtworkRenamer.cs" />
-    <Compile Include="HelpDownloader.cs" />
     <Compile Include="ImageDirectorySigner.cs" />
     <Compile Include="NewVersionNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

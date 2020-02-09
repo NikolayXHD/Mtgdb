@@ -12,7 +12,7 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			_repo = new CardRepository(Kernel.Get<CardFormatter>())
+			_repo = new CardRepository(Kernel.Get<CardFormatter>(), () => null)
 			{
 				FilterSetCode = F.IsEqualTo("ISD", Str.Comparer)
 			};

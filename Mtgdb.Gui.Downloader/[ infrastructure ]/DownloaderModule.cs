@@ -1,5 +1,4 @@
-﻿using System;
-using Ninject;
+﻿using Mtgdb.Data;
 using Ninject.Modules;
 
 namespace Mtgdb.Downloader
@@ -17,6 +16,8 @@ namespace Mtgdb.Downloader
 			Kernel.Bind<Installer>().ToSelf()
 				.InSingletonScope();
 
+			Kernel.BindFunc<IDataDownloader, Installer>();
+
 			Kernel.Bind<Megatools>().ToSelf();
 			Kernel.Bind<ImageDownloader>().ToSelf();
 			Kernel.Bind<ImageDownloadProgressReader>().ToSelf();
@@ -24,13 +25,9 @@ namespace Mtgdb.Downloader
 			Kernel.Bind<NewsService>().ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<FormUpdate>().ToSelf();
-
-			FormUpdate downloaderFormFactory() => Kernel.Get<FormUpdate>();
-
-			Kernel.Bind<Func<FormUpdate>>()
-				.ToConstant((Func<FormUpdate>) downloaderFormFactory)
+			Kernel.Bind<FormUpdate>().ToSelf()
 				.InSingletonScope();
+			Kernel.BindFunc<FormUpdate>();
 		}
 	}
 }

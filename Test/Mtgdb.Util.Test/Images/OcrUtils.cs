@@ -164,7 +164,7 @@ namespace Mtgdb.Util
 
 			var setCodesArr = setCodes.Split(';').ToHashSet(Str.Comparer);
 
-			var repo = new CardRepository(Kernel.Get<CardFormatter>())
+			var repo = new CardRepository(Kernel.Get<CardFormatter>(), () => null)
 			{
 				FilterSetCode = setCodesArr.Contains
 			};

@@ -31,7 +31,7 @@ namespace Mtgdb.Util
 		{
 			var client = new ScryfallClient();
 			var setCodes = setCodesList?.Split(',');
-			var repo = new CardRepository(new CardFormatter());
+			var repo = new CardRepository(new CardFormatter(), () => null);
 			if (setCodesList != null)
 				repo.FilterSetCode = code => setCodes.Contains(code, Str.Comparer);
 
@@ -92,7 +92,7 @@ namespace Mtgdb.Util
 			{
 				string typeDir = Path.Combine(_createZoom ? smallDir : zoomDir, typeSubdir);
 				return Directory.EnumerateDirectories(typeDir,
-						_fromPng ? "*.png" : "*.*",
+						_fromPng ? "*.png" : "*",
 						SearchOption.TopDirectoryOnly)
 					.Select(Path.GetFileName)
 					.Distinct()

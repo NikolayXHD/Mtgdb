@@ -22,11 +22,11 @@ namespace Mtgdb.Data
 				return;
 
 			IsLoading = true;
-
-			if (_version.IsUpToDate)
-				_index = new RAMDirectory(FSDirectory.Open(_version.IndexDirectory), IOContext.READ_ONCE);
-			else
-				_index = new RAMDirectory(createKeywordsFrom(_repo), IOContext.READ_ONCE);
+			var directory = _version.IsUpToDate
+				? FSDirectory.Open(_version.IndexDirectory)
+				: createKeywordsFrom(_repo);
+			using (directory)
+				_index = new RAMDirectory(directory, IOContext.READ_ONCE);
 
 			_indexReader = DirectoryReader.Open(_index);
 			_searcher = new IndexSearcher(_indexReader);
@@ -128,6 +128,8 @@ namespace Mtgdb.Data
 		{
 			if (!repository.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException($"{nameof(CardRepository)} must be loaded first");
+
+			_version.RemoveObsoleteIndexes();
 
 			var keywordsList = new List<CardKeywords>(repository.Cards.Count);
 

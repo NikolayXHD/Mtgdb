@@ -113,7 +113,7 @@ namespace Mtgdb.Gui
 		}
 
 		private static void helpClick(object sender, EventArgs e) =>
-			System.Diagnostics.Process.Start(AppDir.Root.AddPath("help\\home.html"));
+			System.Diagnostics.Process.Start("https://github.com/NikolayXHD/Mtgdb/wiki");
 
 		private void redoClick(object sender, EventArgs e)
 		{

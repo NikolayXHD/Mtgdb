@@ -31,6 +31,9 @@ namespace Mtgdb.Data.Index
 
 		protected override Directory CreateIndex(LuceneSearcherState<long, DeckModel> state)
 		{
+			lock (_syncDirectory)
+				_version.RemoveObsoleteIndexes();
+
 			Directory index;
 
 			if (!_indexCreated && _version.IsUpToDate)

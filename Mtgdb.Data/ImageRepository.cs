@@ -115,7 +115,7 @@ namespace Mtgdb.Data
 			{
 				cache = new List<string>();
 
-				foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
+				foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
 				{
 					if (!_extensions.Contains(Path.GetExtension(file)))
 						continue;

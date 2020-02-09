@@ -105,7 +105,7 @@ namespace Mtgdb.Downloader
 			bool alreadyDownloaded = true;
 
 			var existingFiles = new HashSet<string>(
-				Directory.GetFiles(targetSubdirectory, "*.*", SearchOption.AllDirectories),
+				Directory.GetFiles(targetSubdirectory, "*", SearchOption.AllDirectories),
 				Str.Comparer);
 
 			var existingSignatures = new Dictionary<string, FileSignature>(Str.Comparer);

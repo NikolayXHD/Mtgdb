@@ -77,16 +77,13 @@ namespace Mtgdb.Gui
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Rebind<IApplication>()
-				.ToMethod(ctx => ctx.Kernel.Get<App>())
-				.InSingletonScope();
+			Kernel.RebindFunc<IApplication, App>();
 
 			Kernel.Bind<IconRecognizer>()
 				.ToMethod(ctx => IconRecognizerFactory.Create())
 				.InSingletonScope();
 
-			Kernel.Bind<ICardCollection>()
-				.ToMethod(ctx => ctx.Kernel.Get<CollectionEditorModel>())
+			Kernel.BindFunc<ICardCollection, CollectionEditorModel>()
 				.Named("collection");
 
 			Kernel.Bind<CollectionEditorModel>()

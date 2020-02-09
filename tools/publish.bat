@@ -34,11 +34,6 @@ set robocopy_params=/s
 %msbuildexe% %origin%\Mtgdb.sln /verbosity:m
 if errorlevel 1 exit /b
 
-%out% update help
-
-%utilexe% -update_help
-if errorlevel 1 exit /b
-
 %out% create publish directory
 
 rmdir /q /s %targetRoot%
@@ -51,10 +46,10 @@ robocopy %output%\data                     ^
          %robocopy_params%                 ^
      /xf %output%\data\allSets-x.json      ^
          %output%\data\AllSets.v42.json    ^
-     /xd %output%\data\index\keywords-test ^
+     /xd %output%\data\index\deck          ^
+         %output%\data\index\keywords-test ^
          %output%\data\index\search-test   ^
-         %output%\data\index\suggest-test  ^
-         %output%\data\index\deck
+         %output%\data\index\suggest-test
 
 robocopy %output%\bin\%configuration% ^
          %targetBin%                  ^
@@ -64,7 +59,7 @@ robocopy %output%\bin\%configuration% ^
 
 robocopy %output%\etc            ^
          %target%\etc            ^
-      /s /nfl /ndl /np /njh /njs
+         %robocopy_params%
 
 robocopy %output%\images         ^
          %target%\images         ^
@@ -78,16 +73,13 @@ robocopy %output%\update                        ^
          %robocopy_params%                      ^
      /xf *.bak                                  ^
          *.zip                                  ^
+         *.7z                                   ^
          %output%\update\filelist.txt           ^
          %output%\update\version.txt            ^
          %output%\update\img\art\filelist.txt   ^
      /xd %output%\update\app                    ^
          %output%\update\notifications          ^
          %output%\update\megatools-1.9.98-win32
-
-robocopy %output%\help           ^
-         %target%\help           ^
-         %robocopy_params%
 
 robocopy %output%\color-schemes  ^
          %target%\color-schemes  ^
@@ -100,6 +92,8 @@ robocopy %output%\charts         ^
 
 xcopy /q %output%\..\LICENSE ^
          %target%
+
+echo %packageName%.zip %target%\update\version.txt
 
 %out% make shortcut
 
@@ -160,6 +154,8 @@ mkdir %targetRoot%\deflate
 %sevenzexe% a %targetRoot%\deflate\%packageName%.zip ^
             -tzip -ir!%targetRoot%\%packageName%\*   ^
             -x!data\index\*                          ^
+            -x!data\AllPrintings.json                ^
+            -x!data\AllPrices.json                   ^
             -mm=deflate
 
 :upload_deflate

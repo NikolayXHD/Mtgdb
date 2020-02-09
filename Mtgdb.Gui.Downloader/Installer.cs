@@ -14,7 +14,7 @@ using File = System.IO.File;
 
 namespace Mtgdb.Downloader
 {
-	public class Installer
+	public class Installer : IDataDownloader
 	{
 		[UsedImplicitly] // by ninject
 		public Installer(
@@ -39,9 +39,9 @@ namespace Mtgdb.Downloader
 			{
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
-				cardSearcher.IndexDirectory.AddPath("*.*"),
-				cardSearcher.Spellchecker.IndexDirectory.AddPath("*.*"),
-				keywordSearcher.IndexDirectory.AddPath("*.*")
+				cardSearcher.IndexDirectory.AddPath("*"),
+				cardSearcher.Spellchecker.IndexDirectory.AddPath("*"),
+				keywordSearcher.IndexDirectory.AddPath("*")
 			};
 		}
 

@@ -12,7 +12,7 @@ namespace Mtgdb
 
 		public static IList<FileSignature> CreateSignatures(
 			string path,
-			string pattern = "*.*",
+			string pattern = "*",
 			Dictionary<string, FileSignature> precalculated = null)
 		{
 			var files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories);

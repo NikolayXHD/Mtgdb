@@ -105,7 +105,6 @@
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
-    <Compile Include="ExternalData\HelpDownloaderTest.cs" />
     <Compile Include="ExternalData\ImageDownloader.cs" />
     <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="ExternalData\ScryfallClient.cs" />

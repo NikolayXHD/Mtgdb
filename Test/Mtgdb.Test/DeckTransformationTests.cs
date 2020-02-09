@@ -14,7 +14,7 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void OneTimeSetup()
 		{
-			_repo = new CardRepository(Kernel.Get<CardFormatter>())
+			_repo = new CardRepository(Kernel.Get<CardFormatter>(), () => null)
 			{
 				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer),
 			};

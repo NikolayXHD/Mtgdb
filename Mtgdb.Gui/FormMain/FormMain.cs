@@ -402,7 +402,9 @@ namespace Mtgdb.Gui
 		{
 			_panelStatus.SuspendLayout();
 
-			_labelStatusSets.Text = _cardRepo.SetsByCode.Count.ToString();
+			_labelStatusSets.Text = _cardRepo.IsDownloadComplete.Signaled
+				? _cardRepo.SetsByCode.Count.ToString()
+				: "downloading cards…";
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{

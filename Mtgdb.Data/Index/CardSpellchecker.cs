@@ -14,11 +14,14 @@ namespace Mtgdb.Data.Index
 
 		protected override Directory CreateIndex(LuceneSearcherState<int, Card> searcherState)
 		{
+			_version.RemoveObsoleteIndexes();
+
 			Directory index;
 
 			if (_version.IsUpToDate)
 			{
-				index = FSDirectory.Open(_version.IndexDirectory);
+				using var directory = FSDirectory.Open(_version.IndexDirectory);
+				index = new RAMDirectory(directory, IOContext.READ_ONCE);
 
 				var spellchecker = CreateSpellchecker();
 				spellchecker.Load(index);

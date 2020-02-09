@@ -62,6 +62,8 @@ namespace Mtgdb.Data
 			Kernel.Bind<CardFormatter>()
 				.ToSelf()
 				.InSingletonScope();
+
+			Kernel.BindFunc<IDataDownloader>();
 		}
 	}
 }

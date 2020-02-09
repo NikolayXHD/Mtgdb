@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Data
@@ -15,14 +17,29 @@ namespace Mtgdb.Data
 
 		internal bool RememberOriginalPrices { get; set; }
 
-		public CardRepository(CardFormatter formatter)
+		public CardRepository(CardFormatter formatter, Func<IDataDownloader> downloader)
 		{
 			_formatter = formatter;
+			_downloader = downloader;
 			SetsFile = AppDir.Data.AddPath("AllPrintings.json");
 			PricesFile = AppDir.Data.AddPath("AllPrices.json");
 			CustomSetCodes = new string[0];
 			PatchFile = AppDir.Data.AddPath("patch.v2.json");
 			Cards = new List<Card>();
+		}
+
+		public async Task DownloadFiles(CancellationToken token)
+		{
+			var downloader = _downloader();
+
+			var tasks = new List<Task>(2);
+			if (!File.Exists(SetsFile))
+				tasks.Add(downloader.DownloadMtgjson(token));
+			if (!File.Exists(PricesFile))
+				tasks.Add(downloader.DownloadPrices(token));
+			if (tasks.Count > 0)
+				await Task.WhenAll(tasks);
+			IsDownloadComplete.Signal();
 		}
 
 		public void LoadFile()
@@ -407,6 +424,7 @@ namespace Mtgdb.Data
 
 
 		public event Action SetAdded;
+		public AsyncSignal IsDownloadComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsFileLoadingComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLoadingComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLocalizationLoadingComplete { get; } = new AsyncSignal();
@@ -451,7 +469,9 @@ namespace Mtgdb.Data
 		private string[] _customSetCodes;
 		private HashSet<string> _customSetCodesSet;
 		private byte[] _priceContent;
+
 		private readonly CardFormatter _formatter;
+		private readonly Func<IDataDownloader> _downloader;
 
 		private Patch Patch { get; set; }
 	}
