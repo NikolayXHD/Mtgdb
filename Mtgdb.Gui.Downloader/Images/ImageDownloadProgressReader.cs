@@ -110,7 +110,8 @@ namespace Mtgdb.Downloader
 			foreach (var qualityGroup in _config.QualityGroups)
 			{
 				(_, string signaturesFile) = getSignaturesFile(qualityGroup);
-				var imagesOnline = Signer.ReadFromFile(signaturesFile);
+				// do not intern image path here because it contains parent directory
+				var imagesOnline = Signer.ReadFromFile(signaturesFile, internPath: false);
 
 				if (qualityGroup.YandexName != null && imagesOnline != null)
 					qualityGroup.Dirs = imagesOnline

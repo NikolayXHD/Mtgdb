@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Mtgdb.Controls;
+using Mtgdb.Data;
 using Mtgdb.Ui;
 using Newtonsoft.Json;
 
@@ -29,21 +30,27 @@ namespace Mtgdb.Gui
 		public FilterValueState[] FilterGrid { get; set; }
 
 		[JsonProperty("Deck")]
+		[JsonConverter(typeof(InternedStringToIntDictionaryConverter))]
 		public Dictionary<string, int> MainDeckCount { get; set; } = new Dictionary<string, int>();
 
 		[JsonProperty("DeckOrder")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
 		public List<string> MainDeckOrder { get; set; } = new List<string>();
 
 		[JsonProperty("SideDeck")]
+		[JsonConverter(typeof(InternedStringToIntDictionaryConverter))]
 		public Dictionary<string, int> SideDeckCount { get; set; } = new Dictionary<string, int>();
 
 		[JsonProperty("SideDeckOrder")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
 		public List<string> SideDeckOrder { get; set; } = new List<string>();
 
 		[JsonProperty("MaybeDeck")]
+		[JsonConverter(typeof(InternedStringToIntDictionaryConverter))]
 		public Dictionary<string, int> MaybeDeckCount { get; set; } = new Dictionary<string, int>();
 
 		[JsonProperty("MaybeDeckOrder")]
+		[JsonConverter(typeof(InternedStringArrayConverter))]
 		public List<string> MaybeDeckOrder { get; set; } = new List<string>();
 
 		public string Language { get; set; }
@@ -54,6 +61,7 @@ namespace Mtgdb.Gui
 		public bool ShowProhibit { get; set; }
 		public string Sort { get; set; }
 
+		[JsonConverter(typeof(InternedStringToIntDictionaryConverter))]
 		public Dictionary<string, int> Collection { get; set; }
 
 		public string LegalityFilterFormat { get; set; }

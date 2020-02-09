@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,50 +16,38 @@ namespace Mtgdb.Gui
 			if (DesignMode)
 				return;
 
-			var queryRows = Enumerable.Range(0, _panelExamples.RowCount)
-				.Select(getFindExampleRow)
-				.Where(r => r.Query != null)
-				.ToList();
+			_numberByIndex = new Dictionary<int, int>();
 
-			var selectionBackColor = SystemColors.Highlight;
-			var selectionForeColor = SystemColors.HighlightText;
-
-			foreach (var (query, comment, backColor, foreColor) in queryRows)
+			for (int i = 0; i < _panelExamples.RowCount; i++)
 			{
-				void mouseEnter(object sender, EventArgs args)
-				{
-					query.BackColor = selectionBackColor;
-					comment.BackColor = selectionBackColor;
+				(Label query, Label comment) = getLabels(i);
+				bool isRow = query.TextAlign == ContentAlignment.TopLeft;
+				if (isRow)
+					_numberByIndex[i] = _numberByIndex.Count;
 
-					query.ForeColor = selectionForeColor;
-					comment.ForeColor = selectionForeColor;
+				(Color back, Color fore) = getColors(i);
+
+				query.BackColor = back;
+				query.ForeColor = fore;
+				if (comment != null)
+				{
+					comment.BackColor = back;
+					comment.ForeColor = fore;
 				}
 
-				void mouseLeave(object sender, EventArgs args)
+				if (isRow)
 				{
-					query.BackColor = backColor;
-					comment.BackColor = backColor;
+					query.MouseEnter += mouseEnter;
+					query.MouseLeave += mouseLeave;
+					query.MouseClick += mouseClick;
 
-					query.ForeColor = foreColor;
-					comment.ForeColor = foreColor;
+					if (comment != null)
+					{
+						comment.MouseEnter += mouseEnter;
+						comment.MouseLeave += mouseLeave;
+						comment.MouseClick += mouseClick;
+					}
 				}
-
-				void mouseClick(object sender, MouseEventArgs args)
-				{
-					if (args.Button != MouseButtons.Left)
-						return;
-
-					QueryClicked?.Invoke(query.Text);
-				}
-
-				query.MouseEnter += mouseEnter;
-				comment.MouseEnter += mouseEnter;
-
-				query.MouseLeave += mouseLeave;
-				comment.MouseLeave += mouseLeave;
-
-				query.MouseClick += mouseClick;
-				comment.MouseClick += mouseClick;
 			}
 		}
 
@@ -72,20 +61,64 @@ namespace Mtgdb.Gui
 		public void Scale() =>
 			_panelExamples.Controls.OfType<Label>().ForEach(ControlScaler.ScaleDpiFont);
 
-		private (Label Query, Label Comment, Color BackColor, Color ForeColor) getFindExampleRow(int i)
+		private void mouseEnter(object sender, EventArgs args)
 		{
-			var queryLabel = (Label) _panelExamples.GetControlFromPosition(0, i);
+			var  position = _panelExamples.GetCellPosition((Control) sender);
+			(Label query, Label comment) = getLabels(position.Row);
 
-			if (queryLabel.TextAlign != ContentAlignment.TopLeft)
-				return default;
-
-			var commentLabel = (Label) _panelExamples.GetControlFromPosition(1, i);
-
-			return (queryLabel, commentLabel, queryLabel.BackColor, queryLabel.ForeColor);
+			query.BackColor = comment.BackColor = _selectionBackColor;
+			query.ForeColor = comment.ForeColor = _selectionForeColor;
 		}
+
+		private void mouseLeave(object sender, EventArgs args)
+		{
+			var position = _panelExamples.GetCellPosition((Control) sender);
+			int i = position.Row;
+
+			(Label query, Label comment) = getLabels(i);
+			(Color back, Color fore) = getColors(i);
+
+			query.BackColor = comment.BackColor = back;
+			query.ForeColor = comment.ForeColor = fore;
+		}
+
+		private void mouseClick(object sender, MouseEventArgs args)
+		{
+			if (args.Button != MouseButtons.Left)
+				return;
+
+			var position = _panelExamples.GetCellPosition((Control) sender);
+			(Label query, _) = getLabels(position.Row);
+			QueryClicked?.Invoke(query.Text);
+		}
+
+
+
+		private (Color Back, Color Fore) getColors(int i)
+		{
+			if (_numberByIndex.TryGetValue(i, out int n))
+				return n % 2 == 0
+					? (SystemColors.Window, SystemColors.WindowText)
+					: (SystemColors.Control, SystemColors.ControlText);
+
+			return (SystemColors.ActiveCaption, SystemColors.ActiveCaptionText);
+		}
+
+		private (Label query, Label comment) getLabels(int i) =>
+		(
+			(Label) _panelExamples.GetControlFromPosition(0, i),
+			(Label) _panelExamples.GetControlFromPosition(1, i)
+		);
+
+
 
 		public event Action<string> QueryClicked;
 
 		public event PaintEventHandler PostPaint;
+
+
+		private readonly Dictionary<int, int> _numberByIndex;
+		private static readonly Color _selectionBackColor = SystemColors.Highlight;
+		private static readonly Color _selectionForeColor = SystemColors.HighlightText;
 	}
 }

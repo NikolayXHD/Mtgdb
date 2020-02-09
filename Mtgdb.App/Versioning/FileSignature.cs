@@ -14,13 +14,14 @@
 			return result;
 		}
 
-		public FileSignature AsRelativeTo(string dir)
+		public FileSignature AsRelativeTo(string dir, bool internPath)
 		{
+			string path = dir != null
+				? Path.Substring(dir.Length + 1)
+				: Path;
 			return new FileSignature
 			{
-				Path = dir != null
-					? Path.Substring(dir.Length + 1)
-					: Path,
+				Path = internPath ? string.Intern(path) : path,
 				Md5Hash = Md5Hash
 			};
 		}

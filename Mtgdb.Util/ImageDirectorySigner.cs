@@ -17,7 +17,7 @@ namespace Mtgdb.Util
 				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
 
 				var prevSignatureByPath = sets != null && File.Exists(output)
-					? Signer.ReadFromFile(output)
+					? Signer.ReadFromFile(output, internPath: false)
 						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
 						.ToDictionary(_ => _.Path)
 					: new Dictionary<string, FileSignature>();

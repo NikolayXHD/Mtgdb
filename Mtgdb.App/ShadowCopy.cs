@@ -20,8 +20,8 @@ namespace Mtgdb
 			string binSignaturesFile = AppDir.BinVersion.AddPath(Signer.SignaturesFile);
 			string binShadowCopySignaturesFile = AppDir.BinShadowCopy.AddPath(Signer.SignaturesFile);
 
-			IList<FileSignature> signatures = Signer.ReadFromFile(binSignaturesFile);
-			var copiedSignatures = Signer.ReadFromFile(binShadowCopySignaturesFile);
+			IList<FileSignature> signatures = Signer.ReadFromFile(binSignaturesFile, internPath: false);
+			var copiedSignatures = Signer.ReadFromFile(binShadowCopySignaturesFile, internPath: false);
 
 			if (signatures == null || copiedSignatures == null || !equal(signatures, copiedSignatures))
 			{

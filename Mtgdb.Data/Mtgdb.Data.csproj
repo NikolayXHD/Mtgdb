@@ -129,6 +129,7 @@
     <Compile Include="Model\Serialization\EntryListConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringConverter.cs" />
+    <Compile Include="Model\Serialization\InternedStringToIntDictionaryConverter.cs" />
     <Compile Include="Model\Serialization\IntToInternedStringConverter.cs" />
     <Compile Include="Model\Serialization\PriceHistoryConverter.cs" />
     <Compile Include="Model\Ui\LanguageController.cs" />

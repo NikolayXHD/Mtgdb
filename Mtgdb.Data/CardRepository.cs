@@ -130,7 +130,7 @@ namespace Mtgdb.Data
 				{
 					var card = set.ActualCards[i];
 					card.Set = set;
-					card.Id = CardId.Generate(card);
+					card.Id = string.Intern(CardId.Generate(card));
 					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var pricePatch))
 					{
 						if (RememberOriginalPrices)
@@ -160,7 +160,7 @@ namespace Mtgdb.Data
 					var token = set.Tokens[i];
 					token.IsToken = true;
 					token.Set = set;
-					token.Id = CardId.Generate(token);
+					token.Id = string.Intern(CardId.Generate(token));
 					token.LegalityByFormat = tokenLegalityByFormat;
 					token.Formatter = _formatter;
 					preProcessToken(token);

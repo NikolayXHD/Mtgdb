@@ -87,9 +87,9 @@ namespace Mtgdb.Data
 			var clearedImageName = _removedSubstringPattern.Replace(normalizedImageName, string.Empty);
 
 			if (count == 1)
-				return clearedImageName;
+				return string.Intern(clearedImageName);
 
-			return clearedImageName + (i + 1);
+			return string.Intern(clearedImageName + (i + 1));
 		}
 
 		private static readonly Regex _removedSubstringPattern = new Regex(@"[:?""®]| token card", RegexOptions.IgnoreCase);

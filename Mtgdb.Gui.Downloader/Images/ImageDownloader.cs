@@ -123,7 +123,7 @@ namespace Mtgdb.Downloader
 				var existingSignature =
 					progress.FilesCorrupted.TryGet(fileOnline.Path) ??
 					progress.FilesDownloaded.TryGet(fileOnline.Path) ??
-					Signer.CreateSignature(filePath, useAbsolutePath: true).AsRelativeTo(targetSubdirectory);
+					Signer.CreateSignature(filePath, useAbsolutePath: true).AsRelativeTo(targetSubdirectory, internPath: true);
 
 				if (existingSignature.Md5Hash != fileOnline.Md5Hash)
 				{

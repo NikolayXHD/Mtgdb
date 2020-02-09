@@ -9,7 +9,6 @@ using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
 using JetBrains.Annotations;
 using Mtgdb.Data;
-using Mtgdb.Data.Index;
 using File = System.IO.File;
 
 namespace Mtgdb.Downloader
@@ -19,9 +18,7 @@ namespace Mtgdb.Downloader
 		[UsedImplicitly] // by ninject
 		public Installer(
 			AppSourceConfig appSourceConfig,
-			MtgjsonSourceConfig mtgjsonSourceConfig,
-			CardSearcher cardSearcher,
-			KeywordSearcher keywordSearcher)
+			MtgjsonSourceConfig mtgjsonSourceConfig)
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
@@ -39,9 +36,6 @@ namespace Mtgdb.Downloader
 			{
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
-				cardSearcher.IndexDirectory.AddPath("*"),
-				cardSearcher.Spellchecker.IndexDirectory.AddPath("*"),
-				keywordSearcher.IndexDirectory.AddPath("*")
 			};
 		}
 
@@ -218,7 +212,7 @@ namespace Mtgdb.Downloader
 				return null;
 			}
 
-			var fileList = Signer.ReadFromFile(_appOnlineSignatureFile);
+			var fileList = Signer.ReadFromFile(_appOnlineSignatureFile, internPath: false);
 
 			// may be empty if downloading signature failed
 			var lastMetadata = fileList.LastOrDefault();
@@ -230,7 +224,7 @@ namespace Mtgdb.Downloader
 			if (!File.Exists(_appDownloadedSignatureFile))
 				return null;
 
-			var fileList = Signer.ReadFromFile(_appDownloadedSignatureFile);
+			var fileList = Signer.ReadFromFile(_appDownloadedSignatureFile, internPath: false);
 			var lastMetadata = fileList[fileList.Length - 1];
 			return lastMetadata;
 		}

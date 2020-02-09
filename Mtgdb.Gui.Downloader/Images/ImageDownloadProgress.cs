@@ -31,7 +31,7 @@ namespace Mtgdb.Downloader
 
 			FilesOnline = imagesOnline
 				.Where(_ => _.IsRelativeTo(Dir.Subdir))
-				.Select(_ => _.AsRelativeTo(Dir.Subdir))
+				.Select(_ => _.AsRelativeTo(Dir.Subdir, internPath: true))
 				.ToDictionary(_ => _.Path, Str.Comparer);
 
 			FilesDownloaded = new Dictionary<string, FileSignature>(Str.Comparer);
@@ -54,7 +54,7 @@ namespace Mtgdb.Downloader
 		private IList<FileSignature> readExistingSignatures()
 		{
 			var existingSignaturesFile = TargetSubdirectory.AddPath(Signer.SignaturesFile);
-			var existingSignatures = Signer.ReadFromFile(existingSignaturesFile);
+			var existingSignatures = Signer.ReadFromFile(existingSignaturesFile, internPath: true);
 			return existingSignatures;
 		}
 

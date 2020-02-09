@@ -56,7 +56,7 @@ namespace Mtgdb
 			File.WriteAllLines(targetFile, signatures.Select(_ => _.Md5Hash + "\t" + _.Path));
 		}
 
-		public static FileSignature[] ReadFromFile(string targetFile)
+		public static FileSignature[] ReadFromFile(string targetFile, bool internPath)
 		{
 			if (!File.Exists(targetFile))
 				return null;
@@ -66,7 +66,7 @@ namespace Mtgdb
 				.Select(_ => new FileSignature
 				{
 					Md5Hash = _.Substring(0, 32),
-					Path = _.Substring(33)
+					Path = internPath ? string.Intern(_.Substring(33)) : _.Substring(33)
 				}).ToArray();
 
 			return result;
