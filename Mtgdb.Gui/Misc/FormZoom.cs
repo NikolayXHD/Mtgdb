@@ -428,7 +428,7 @@ namespace Mtgdb.Gui
 					return;
 
 				_showArtButton.Checked = value.ShowArt;
-				_showDuplicatesButton.Checked = value.ShowOtherSet;
+				_showDuplicatesButton.Checked = value.ShowVariants;
 				_showOtherSetsButton.Checked = value.ShowOtherSet;
 			}
 		}
