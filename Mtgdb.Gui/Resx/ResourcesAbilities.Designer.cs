@@ -213,6 +213,16 @@ namespace Mtgdb.Gui.Resx {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Card {
+            get {
+                object obj = ResourceManager.GetObject("Card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Cascade {
             get {
                 object obj = ResourceManager.GetObject("Cascade", resourceCulture);
@@ -466,6 +476,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Embalm {
             get {
                 object obj = ResourceManager.GetObject("Embalm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Emblem {
+            get {
+                object obj = ResourceManager.GetObject("Emblem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -746,6 +766,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Madness {
             get {
                 object obj = ResourceManager.GetObject("Madness", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Manifest {
+            get {
+                object obj = ResourceManager.GetObject("Manifest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1096,6 +1126,16 @@ namespace Mtgdb.Gui.Resx {
         internal static System.Drawing.Bitmap Suspend {
             get {
                 object obj = ResourceManager.GetObject("Suspend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Token {
+            get {
+                object obj = ResourceManager.GetObject("Token", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

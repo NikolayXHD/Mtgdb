@@ -22,6 +22,7 @@ namespace Mtgdb.Data
 		public const string Host = "Host";
 		public const string Augment = "Augment";
 		public const string Adventure = "Adventure";
+		public const string Emblem = "Emblem";
 
 		private static readonly HashSet<string> _doubleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
@@ -32,7 +33,7 @@ namespace Mtgdb.Data
 		private static readonly HashSet<string> _singleFaceLayouts =
 			new HashSet<string>(Str.Comparer)
 			{
-				Normal, Leveler, Phenomenon, Plane, Scheme, Vanguard, Saga, Host, Augment,
+				Normal, Leveler, Phenomenon, Plane, Scheme, Vanguard, Saga, Host, Augment, Emblem
 			};
 
 		private static readonly HashSet<string> _allLayouts =

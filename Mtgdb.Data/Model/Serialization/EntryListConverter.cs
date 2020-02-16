@@ -11,10 +11,10 @@ namespace Mtgdb.Data
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) =>
 			throw new NotSupportedException();
 
-		public override bool CanConvert(Type objectType) =>
-			objectType == typeof(List<KeyValuePair<string, TVal>>);
+		public override bool CanConvert(Type type) =>
+			type == typeof(List<KeyValuePair<string, TVal>>);
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer)
 		{
 			if (reader.TokenType != JsonToken.StartObject)
 				throw new JsonReaderException(

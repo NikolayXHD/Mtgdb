@@ -13,10 +13,10 @@ namespace Mtgdb.Data
 
 
 
-		public override bool CanConvert(Type objectType) =>
-			objectType.IsAssignableFrom(typeof(Dictionary<string, int>));
+		public override bool CanConvert(Type type) =>
+			type.IsAssignableFrom(typeof(Dictionary<string, int>));
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer)
 		{
 			if (reader.TokenType == JsonToken.Null)
 				return null;

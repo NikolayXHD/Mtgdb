@@ -68,7 +68,6 @@ namespace Mtgdb.Data.Index
 			set => _version = new IndexVersion(value, IndexVersions.CardSearcher);
 		}
 
-		public string IndexDirectory => _version.IndexDirectory;
 		public bool IsUpToDate => _version.IsUpToDate;
 		public int SetsAddedToIndex => GroupsAddedToIndex;
 

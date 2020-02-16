@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Mtgdb.Data
 {
 	public static class CardTypes
@@ -9,6 +11,11 @@ namespace Mtgdb.Data
 		public const string Enchantment = "Enchantment";
 		public const string Artifact = "Artifact";
 		public const string Land = "Land";
+		public const string Token = "Token";
+		public const string Card = "Card";
+		public const string Emblem = "Emblem";
+
+
 
 		public static bool IsCreature(this Card c) =>
 			c.TypesArr.Contains(Creature);

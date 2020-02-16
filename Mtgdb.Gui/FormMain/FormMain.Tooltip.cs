@@ -313,7 +313,15 @@ namespace Mtgdb.Gui
 				"Use LEFT row to REQUIRE ANY checked value\r\n" +
 				"The card cannot have more than 1 Layout value\r\n" +
 				"so there is NO point in using the RIGHT row.", false);
+
 			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterLayout, this));
+
+			setRegularTooltip(defaultTooltips, _filterCardType, "Filter by Card Type", "Use Middle mouse click to RESET.\r\n\r\n" +
+				"Use LEFT row to REQUIRE ANY checked value\r\n" +
+				"The card cannot have more than 1 Card Type value\r\n" +
+				"so there is NO point in using the RIGHT row.", false);
+
+			quickFilterTooltips.SetCustomTooltip(new QuickFilterTooltip(_filterCardType, this));
 		}
 
 		private void setRegularTooltip(TooltipController defaultTooltips, QuickFilterControl control, string name, string description, bool isKeyword)

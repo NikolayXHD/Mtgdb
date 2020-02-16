@@ -303,18 +303,24 @@ namespace Mtgdb.Data
 			}
 
 			const string timeshifted = "Timeshifted ";
-			if (Card.BasicLandNames.Contains(card.NameEn))
+			if (CardNames.BasicLands.Contains(card.NameEn))
 				card.Rarity = "Basic land";
 			else if (card.Rarity.StartsWith(timeshifted, Str.Comparison))
 				card.Rarity = string.Intern(card.Rarity.Substring(timeshifted.Length));
+
+			card.CardType = CardCardTypes.Normal;
 		}
 
 		private static void preProcessToken(Card card)
 		{
 			if (Str.Equals(card.Layout, "double_faced_token"))
 				card.Layout = CardLayouts.Transform;
-			else if (Str.Equals(card.Layout, "emblem"))
-				card.Layout = CardLayouts.Normal;
+
+			string type = null;
+			if (card.TypesArr.Any(_ => CardCardTypes.ByType.TryGetValue(_, out type)))
+				card.CardType = type;
+			else if (CardCardTypes.ByName.TryGetValue(card.NameEn, out type))
+				card.CardType = type;
 		}
 
 		private void patchLegality()

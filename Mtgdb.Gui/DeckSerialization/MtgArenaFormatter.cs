@@ -46,11 +46,11 @@ namespace Mtgdb.Gui
 			const int basicLandsCount = 40;
 
 			var latestSet = repo.SetsByCode.Values
-				.Where(s => !string.IsNullOrEmpty(s.ReleaseDate) && Card.ColoredBasicLandNames.All(s.ActualCardsByName.ContainsKey))
+				.Where(s => !string.IsNullOrEmpty(s.ReleaseDate) && CardNames.ColoredBasicLands.All(s.ActualCardsByName.ContainsKey))
 				.AtMax(s => s.ReleaseDate)
 				.Find();
 
-			var basicLands = Card.ColoredBasicLandNames.Select(land => (
+			var basicLands = CardNames.ColoredBasicLands.Select(land => (
 				latestSet.Code,
 				latestSet.ActualCardsByName[land].First().Number,
 				basicLandsCount));

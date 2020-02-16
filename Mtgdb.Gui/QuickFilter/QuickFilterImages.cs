@@ -17,6 +17,7 @@ namespace Mtgdb.Gui
 			formMain.FilterRarity.PropertyImages = _rarity;
 			formMain.FilterType.PropertyImages = _type;
 			formMain.FilterLayout.PropertyImages = _layout;
+			formMain.FilterCardType.PropertyImages = _cardType;
 		}
 
 		private static readonly Bitmap[] _filterManager =
@@ -100,6 +101,15 @@ namespace Mtgdb.Gui
 			ResourcesType.artifact,
 			ResourcesType.land,
 			ResourcesCost.na
+		};
+
+		private static readonly Bitmap[] _cardType =
+		{
+			ResourcesAbilities.Normal,
+			ResourcesAbilities.Token,
+			ResourcesAbilities.Emblem,
+			ResourcesAbilities.Manifest,
+			ResourcesAbilities.Card,
 		};
 
 		private static readonly Bitmap[] _castKeywords =

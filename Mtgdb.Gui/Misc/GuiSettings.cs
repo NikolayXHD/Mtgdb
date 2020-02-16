@@ -27,6 +27,7 @@ namespace Mtgdb.Gui
 		public FilterValueState[] FilterCastKeyword { get; set; }
 		public FilterValueState[] FilterCmc { get; set; }
 		public FilterValueState[] FilterLayout { get; set; }
+		public FilterValueState[] FilterCardType { get; set; }
 		public FilterValueState[] FilterGrid { get; set; }
 
 		[JsonProperty("Deck")]

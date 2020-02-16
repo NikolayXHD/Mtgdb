@@ -14,20 +14,20 @@ namespace Mtgdb.Data
 
 
 
-		public override bool CanConvert(Type objectType)
+		public override bool CanConvert(Type type)
 		{
 			return
-				objectType.IsAssignableFrom(typeof(HashSet<string>)) ||
-				objectType.IsAssignableFrom(typeof(List<string>)) ||
-				objectType.IsAssignableFrom(typeof(string[]));
+				type.IsAssignableFrom(typeof(HashSet<string>)) ||
+				type.IsAssignableFrom(typeof(List<string>)) ||
+				type.IsAssignableFrom(typeof(string[]));
 		}
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer)
 		{
-			if (objectType == typeof(HashSet<string>))
+			if (type == typeof(HashSet<string>))
 				return new HashSet<string>(readValues(reader), Str.Comparer);
 
-			if (objectType == typeof(string[]))
+			if (type == typeof(string[]))
 				return readValues(reader).ToArray();
 
 			return new List<string>(readValues(reader));

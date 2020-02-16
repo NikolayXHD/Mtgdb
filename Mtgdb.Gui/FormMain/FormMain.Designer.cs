@@ -44,6 +44,7 @@
 			this._filterType = new Mtgdb.Controls.QuickFilterControl();
 			this._filterManager = new Mtgdb.Controls.QuickFilterControl();
 			this._filterLayout = new Mtgdb.Controls.QuickFilterControl();
+			this._filterCardType = new Mtgdb.Controls.QuickFilterControl();
 			this._filterRarity = new Mtgdb.Controls.QuickFilterControl();
 			this._panelStatus = new System.Windows.Forms.FlowLayoutPanel();
 			this._buttonHideDeck = new Mtgdb.Controls.ButtonBase();
@@ -228,6 +229,29 @@
 			this._filterLayout.Spacing = new System.Drawing.Size(2, 0);
 			this._filterLayout.TabIndex = 1;
 			this._filterLayout.TabStop = false;
+			// 
+			// _filterCardType
+			// 
+			this._filterCardType.BorderShape = Mtgdb.Controls.BorderShape.Ellipse;
+			this._filterCardType.EnableCostBehavior = true;
+			this._filterCardType.EnableMutuallyExclusive = true;
+			this._filterCardType.HideProhibit = true;
+			this._filterCardType.IsFlipped = true;
+			this._filterCardType.IsVertical = true;
+			this._filterCardType.Location = new System.Drawing.Point(0, 24);
+			this._filterCardType.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
+			this._filterCardType.MinimumSize = new System.Drawing.Size(24, 2);
+			this._filterCardType.Name = "_filterCardType";
+			this._filterCardType.ProhibitedColor = System.Drawing.Color.OrangeRed;
+			this._filterCardType.PropertiesCount = 0;
+			this._filterCardType.PropertyImages = null;
+			this._filterCardType.SelectionBorder = 1.75F;
+			this._filterCardType.SelectionBorderColor = System.Drawing.SystemColors.ActiveCaption;
+			this._filterCardType.SelectionColor = System.Drawing.SystemColors.Window;
+			this._filterCardType.Size = new System.Drawing.Size(24, 2);
+			this._filterCardType.Spacing = new System.Drawing.Size(2, 0);
+			this._filterCardType.TabIndex = 1;
+			this._filterCardType.TabStop = false;
 			// 
 			// _filterRarity
 			// 
@@ -750,7 +774,7 @@
 			this._filterCmc.HideProhibit = true;
 			this._filterCmc.IsFlipped = true;
 			this._filterCmc.IsVertical = true;
-			this._filterCmc.Location = new System.Drawing.Point(0, 24);
+			this._filterCmc.Location = new System.Drawing.Point(0, 36);
 			this._filterCmc.Margin = new System.Windows.Forms.Padding(0);
 			this._filterCmc.MinimumSize = new System.Drawing.Size(24, 2);
 			this._filterCmc.Name = "_filterCmc";
@@ -946,12 +970,13 @@
 			this._panelRightNarrow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._panelRightNarrow.Controls.Add(this._filterRarity);
 			this._panelRightNarrow.Controls.Add(this._filterLayout);
+			this._panelRightNarrow.Controls.Add(this._filterCardType);
 			this._panelRightNarrow.Controls.Add(this._filterCmc);
 			this._panelRightNarrow.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this._panelRightNarrow.Location = new System.Drawing.Point(88, 0);
 			this._panelRightNarrow.Margin = new System.Windows.Forms.Padding(0);
 			this._panelRightNarrow.Name = "_panelRightNarrow";
-			this._panelRightNarrow.Size = new System.Drawing.Size(24, 26);
+			this._panelRightNarrow.Size = new System.Drawing.Size(24, 38);
 			this._panelRightNarrow.TabIndex = 2;
 			// 
 			// _panelRightManaCost
@@ -1129,6 +1154,7 @@
 		private Mtgdb.Gui.SearchExamplesMenu _menuSearchExamples;
 		private Mtgdb.Controls.ControlBase _labelStatusSort;
 		private Mtgdb.Controls.QuickFilterControl _filterLayout;
+		private Mtgdb.Controls.QuickFilterControl _filterCardType;
 		private Mtgdb.Controls.QuickFilterControl _filterCastKeyword;
 		private System.Windows.Forms.FlowLayoutPanel _panelRightNarrow;
 		private System.Windows.Forms.FlowLayoutPanel _panelRightManaCost;

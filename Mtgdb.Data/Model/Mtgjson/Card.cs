@@ -853,23 +853,15 @@ namespace Mtgdb.Data
 		public bool IsToken { get; internal set; }
 
 		[JsonIgnore]
+		public string CardType { get; internal set; }
+
+		[JsonIgnore]
 		internal CardFormatter Formatter { private get; set; }
 
 		public override string ToString() =>
 			Formatter.ToString(this);
 
-		public static readonly HashSet<string> ColoredBasicLandNames =
-			new HashSet<string>(Str.Comparer)
-			{
-				"swamp",
-				"forest",
-				"mountain",
-				"island",
-				"plains"
-			};
 
-		public static readonly HashSet<string> BasicLandNames =
-			new HashSet<string>(ColoredBasicLandNames.Append("wastes"), Str.Comparer);
 
 		private float? _price;
 		private bool _pricesReady;

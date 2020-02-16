@@ -182,20 +182,6 @@ namespace Mtgdb.Test
 		}
 
 		private static bool isToken(Card c) =>
-			_tokenNames.Contains(c.NameEn) || _tokenTypes.Overlaps(c.TypesArr);
-
-		private static readonly HashSet<string> _tokenTypes =
-			new HashSet<string>(Str.Comparer)
-			{
-				"Token", "Emblem", "Card",
-				// "Elite",
-			};
-
-		private static readonly HashSet<string> _tokenNames =
-			new HashSet<string>(Str.Comparer)
-			{
-				"Morph", "Manifest",
-				// "Punchcard",
-			};
+			CardCardTypes.ByName.ContainsKey(c.NameEn) || c.TypesArr.Any(CardCardTypes.ByType.ContainsKey);
 	}
 }

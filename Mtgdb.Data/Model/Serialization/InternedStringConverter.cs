@@ -5,13 +5,13 @@ namespace Mtgdb.Data
 {
 	public class InternedStringConverter : JsonConverter
 	{
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) =>
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer) =>
 			reader.TokenType == JsonToken.String
 				? string.Intern((string) reader.Value)
 				: null;
 
-		public override bool CanConvert(Type objectType) =>
-			objectType == typeof(string);
+		public override bool CanConvert(Type type) =>
+			type == typeof(string);
 
 		public override bool CanWrite => false;
 

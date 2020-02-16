@@ -10,10 +10,10 @@ namespace Mtgdb
 			_canConvert = canConvert;
 		}
 
-		public override bool CanConvert(Type objectType) =>
-			_canConvert(objectType);
+		public override bool CanConvert(Type type) =>
+			_canConvert(type);
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer)
 		{
 			throw new NotSupportedException();
 		}

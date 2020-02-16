@@ -290,6 +290,7 @@ namespace Mtgdb.Gui
 		public QuickFilterControl FilterType => _filterType;
 		public QuickFilterControl FilterGeneratedMana => _filterGeneratedMana;
 		public QuickFilterControl FilterLayout => _filterLayout;
+		public QuickFilterControl FilterCardType => _filterCardType;
 		public QuickFilterControl FilterCastKeyword => _filterCastKeyword;
 		public QuickFilterControl FilterCmc => _filterCmc;
 		public QuickFilterControl FilterManaAbility => _filterManaAbility;

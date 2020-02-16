@@ -15,11 +15,11 @@ namespace Mtgdb.Gui
 			_serializer = new JsonSerializer();
 
 			_serializer.Converters.Add(
-				new UnformattedJsonConverter(objectType =>
-					typeof(IEnumerable<FilterValueState>).IsAssignableFrom(objectType) ||
-					typeof(IDictionary<string, int>).IsAssignableFrom(objectType) ||
-					typeof(IEnumerable<string>).IsAssignableFrom(objectType) ||
-					objectType == typeof(GuiSettings.ZoomSettings)));
+				new UnformattedJsonConverter(type =>
+					typeof(IEnumerable<FilterValueState>).IsAssignableFrom(type) ||
+					typeof(IDictionary<string, int>).IsAssignableFrom(type) ||
+					typeof(IEnumerable<string>).IsAssignableFrom(type) ||
+					type == typeof(GuiSettings.ZoomSettings)));
 		}
 
 		public HistorySubsystem(UiConfigRepository uiConfigRepository)

@@ -18,7 +18,8 @@ namespace Mtgdb.Gui
 				form.FilterManaAbility,
 				form.FilterGeneratedMana,
 				form.FilterLayout,
-				form.FilterCastKeyword
+				form.FilterCastKeyword,
+				form.FilterCardType,
 			};
 		}
 
@@ -34,7 +35,8 @@ namespace Mtgdb.Gui
 				form.FilterManaAbility.States,
 				form.FilterGeneratedMana.States,
 				form.FilterLayout.States,
-				form.FilterCastKeyword.States
+				form.FilterCastKeyword.States,
+				form.FilterCardType.States,
 			};
 		}
 
@@ -50,6 +52,7 @@ namespace Mtgdb.Gui
 			form.FilterManaAbility.Properties = KeywordDefinitions.ManaAbility;
 			form.FilterGeneratedMana.Properties = KeywordDefinitions.GeneratedMana;
 			form.FilterLayout.Properties = KeywordDefinitions.Layout;
+			form.FilterCardType.Properties = KeywordDefinitions.CardType;
 
 			form.FilterManager.Properties = new[]
 			{

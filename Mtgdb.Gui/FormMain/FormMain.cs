@@ -712,6 +712,7 @@ namespace Mtgdb.Gui
 				FilterType = _filterType.States,
 				FilterCmc = _filterCmc.States,
 				FilterLayout = _filterLayout.States,
+				FilterCardType = _filterCardType.States,
 				FilterGrid = _filterManager.States,
 				Language = _formRoot.UiModel.LanguageController.Language,
 
@@ -780,6 +781,9 @@ namespace Mtgdb.Gui
 
 			if (settings.FilterLayout == null || settings.FilterLayout.Length == _filterLayout.PropertiesCount)
 				_filterLayout.States = settings.FilterLayout;
+
+			if (settings.FilterCardType == null || settings.FilterCardType.Length == _filterCardType.PropertiesCount)
+				_filterCardType.States = settings.FilterCardType;
 
 			if (settings.FilterGrid == null || settings.FilterGrid.Length == _filterManager.PropertiesCount)
 				_filterManager.States = settings.FilterGrid;

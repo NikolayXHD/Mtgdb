@@ -457,4 +457,16 @@
 	<data name="Leveler" type="System.Resources.ResXFileRef, System.Windows.Forms">
 		<value>..\Resources\leveler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
 	</data>
+	<data name="Token" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		<value>..\Resources\token.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</data>
+	<data name="Emblem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		<value>..\Resources\emblem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</data>
+	<data name="Manifest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		<value>..\Resources\manifest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</data>
+	<data name="Card" type="System.Resources.ResXFileRef, System.Windows.Forms">
+		<value>..\Resources\card.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	</data>
 </root>

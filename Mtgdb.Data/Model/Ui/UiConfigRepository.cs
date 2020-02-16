@@ -11,9 +11,9 @@ namespace Mtgdb.Data
 			_serializer = new JsonSerializer();
 
 			_serializer.Converters.Add(
-				new UnformattedJsonConverter(objectType =>
-					typeof(IDictionary<string, int>).IsAssignableFrom(objectType) ||
-					typeof(IEnumerable<string>).IsAssignableFrom(objectType)));
+				new UnformattedJsonConverter(type =>
+					typeof(IDictionary<string, int>).IsAssignableFrom(type) ||
+					typeof(IEnumerable<string>).IsAssignableFrom(type)));
 		}
 
 		public void Save()

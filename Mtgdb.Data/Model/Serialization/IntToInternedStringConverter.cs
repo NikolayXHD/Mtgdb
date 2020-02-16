@@ -5,7 +5,7 @@ namespace Mtgdb.Data
 {
 	public class IntToInternedStringConverter : JsonConverter
 	{
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson(JsonReader reader, Type type, object existingValue, JsonSerializer serializer)
 		{
 			if (reader.TokenType == JsonToken.String)
 				return string.Intern((string) reader.Value);
@@ -16,11 +16,11 @@ namespace Mtgdb.Data
 			return null;
 		}
 
-		public override bool CanConvert(Type objectType)
+		public override bool CanConvert(Type type)
 		{
-			return objectType == typeof(int?) ||
-			       objectType == typeof(int) ||
-			       objectType == typeof(string);
+			return type == typeof(int?) ||
+			       type == typeof(int) ||
+			       type == typeof(string);
 		}
 
 

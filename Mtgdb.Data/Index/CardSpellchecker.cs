@@ -66,7 +66,6 @@ namespace Mtgdb.Data.Index
 			set => _version = new IndexVersion(value, IndexVersions.CardSpellchecker);
 		}
 
-		public string IndexDirectory => _version.IndexDirectory;
 		public bool IsUpToDate => _version.IsUpToDate;
 
 		private IndexVersion _version;

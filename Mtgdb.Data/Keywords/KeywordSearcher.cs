@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
@@ -131,13 +132,18 @@ namespace Mtgdb.Data
 
 			_version.RemoveObsoleteIndexes();
 
-			var keywordsList = new List<CardKeywords>(repository.Cards.Count);
+			var keywordsList = new List<(CardKeywords Keywords, Document Document)>(repository.Cards.Count);
 
 			foreach (var set in repository.SetsByCode.Values)
 			{
-				var setKeywords = new CardKeywords[set.Cards.Count];
+				var setKeywords = new (CardKeywords Keywords, Document Document)[set.Cards.Count];
 
-				IndexUtils.For(0, set.Cards.Count, i => setKeywords[i] = set.Cards[i].GetAllKeywords());
+				IndexUtils.For(0, set.Cards.Count, i =>
+				{
+					var keywords = set.Cards[i].GetAllKeywords();
+					var doc = keywords.ToDocument();
+					setKeywords[i] = (keywords, doc);
+				});
 
 				keywordsList.AddRange(setKeywords);
 
@@ -149,26 +155,20 @@ namespace Mtgdb.Data
 
 			var fsIndex = FSDirectory.Open(_version.IndexDirectory);
 			var indexWriterConfig = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
+			using var writer = new IndexWriter(fsIndex, indexWriterConfig);
 
-			using (var writer = new IndexWriter(fsIndex, indexWriterConfig))
-			{
-				IndexUtils.ForEach(keywordsList,
-					keyword =>
-					{
-						var doc = keyword.ToDocument();
-						// ReSharper disable once AccessToDisposedClosure
-						writer.AddDocument(doc);
-					});
-			}
+			IndexUtils.ForEach(keywordsList,
+				keyword =>
+				{
+					// ReSharper disable once AccessToDisposedClosure
+					writer.AddDocument(keyword.Document);
+				});
 
 			_version.SetIsUpToDate();
-
 			return fsIndex;
 		}
 
 
-
-		public string IndexDirectory => _version.IndexDirectory;
 
 		public string IndexDirectoryParent
 		{

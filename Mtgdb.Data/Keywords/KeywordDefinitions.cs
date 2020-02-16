@@ -219,7 +219,7 @@ namespace Mtgdb.Data
 			CardTypes.Enchantment,
 			CardTypes.Artifact,
 			CardTypes.Land,
-			null
+			null,
 		};
 
 		public static readonly IList<string> CastKeywords = new[]
@@ -505,7 +505,14 @@ namespace Mtgdb.Data
 			null
 		};
 
-
+		public static readonly IList<string> CardType = new[]
+		{
+			CardCardTypes.Normal,
+			CardCardTypes.Token,
+			CardCardTypes.Emblem,
+			CardCardTypes.Manifest,
+			CardCardTypes.Card,
+		};
 
 		private static Func<string, Regex>[] PatternFactories { get; } =
 		{
@@ -517,6 +524,7 @@ namespace Mtgdb.Data
 			KeywordRegexUtil.CreateContainsRegex,
 			KeywordRegexUtil.CreateContainsRegex,
 			KeywordRegexUtil.CreateEqualsRegex,
+			KeywordRegexUtil.CreateContainsRegex,
 			KeywordRegexUtil.CreateContainsRegex
 		};
 
@@ -530,7 +538,8 @@ namespace Mtgdb.Data
 			c => c.TextEn,
 			c => c.GeneratedMana,
 			c => c.Layout,
-			c => c.TextEn
+			c => c.TextEn,
+			c	=> c.CardType
 		};
 
 		public static readonly IList<string> PropertyNamesDisplay = new[]
@@ -543,7 +552,8 @@ namespace Mtgdb.Data
 			nameof(Card.Text),
 			nameof(Card.Text),
 			nameof(Card.Layout),
-			nameof(Card.Text)
+			nameof(Card.Text),
+			nameof(Card.Type)
 		};
 
 		public static readonly IList<IList<string>> Values = new[]
@@ -556,7 +566,8 @@ namespace Mtgdb.Data
 			ManaAbility,
 			GeneratedMana,
 			Layout,
-			CastKeywords
+			CastKeywords,
+			CardType
 		};
 
 		public static readonly IList<string> PropertyNames = new[]
@@ -569,7 +580,8 @@ namespace Mtgdb.Data
 			nameof(ManaAbility),
 			nameof(GeneratedMana),
 			nameof(Layout),
-			nameof(CastKeywords)
+			nameof(CastKeywords),
+			nameof(CardType)
 		};
 
 
