@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Shell32;
 
 namespace Mtgdb.Data
@@ -203,7 +204,7 @@ namespace Mtgdb.Data
 					if (isArt)
 					{
 						string fileName = Path.GetFileName(file);
-						getMetadataFromName(fileName, ref authors, ref setCodes);
+						GetMetadataFromName(fileName, ref authors, ref setCodes);
 
 						if (readAttributes)
 							getMetadataFromAttributes(dir, fileName, ref authors, ref setCodes);
@@ -232,34 +233,28 @@ namespace Mtgdb.Data
 			add(ref keywords, keywordsValue?.Split(';').Select(_ => _.Trim()).ToArray());
 		}
 
-		private static void getMetadataFromName(string fileName, ref IList<string> artist, ref IList<string> set)
+		internal static void GetMetadataFromName(string fileName, ref IList<string> artist, ref IList<string> set)
 		{
-			var parts = fileName.Split('.');
-
-			foreach (string part in parts)
+			foreach (Match match in _metadataRegex.Matches(fileName))
 			{
-				if (part.Length < 2)
-					continue;
-
-				if (part[0] != MetadataBegin || part[part.Length - 1] != MetadataEnd)
-					continue;
-
-				var subparts = part.Substring(1, part.Length - 2).Split(_metadataSeparator, StringSplitOptions.None);
-
-				foreach (string subpart in subparts)
-					if (!tryAdd(ref artist, "artist ", subpart))
-						tryAdd(ref set, "set ", subpart);
+				switch (match.Groups["field"].Value)
+				{
+					case "artist":
+						add(match, ref artist);
+						break;
+					case "set":
+						add(match, ref set);
+						break;
+					default:
+						continue;
+				}
 			}
-		}
 
-		private static bool tryAdd(ref IList<string> valuesList, string prefix, string subpart)
-		{
-			if (!subpart.StartsWith(prefix, Str.Comparison))
-				return false;
-
-			var values = subpart.Substring(prefix.Length).Split(_metadataValueSeparator);
-			add(ref valuesList, values);
-			return true;
+			static void add(Match match, ref IList<string> list)
+			{
+				foreach (Capture capture in match.Groups["name"].Captures)
+					(list ??= new List<string>()).Add(capture.Value);
+			}
 		}
 
 		private static void add(ref IList<string> valuesList, string[] values)
@@ -607,12 +602,9 @@ namespace Mtgdb.Data
 
 
 		private static readonly HashSet<string> _extensions = new HashSet<string>(Str.Comparer) { ".jpg", ".png" };
-		private static readonly string[] _metadataSeparator = { "][" };
-		private const char MetadataBegin = '[';
-		private const char MetadataEnd = ']';
-		private static readonly char[] _metadataValueSeparator = { ',', ';' };
-
-
+		private static readonly Regex _metadataRegex = new Regex(
+			@"\[(?<field>set|artist) (?:(?<name>[^\];,]+)?[;,]?)+\]",
+			RegexOptions.IgnoreCase);
 
 		private readonly ImageLocationsConfig _config;
 	}

@@ -147,6 +147,10 @@
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Utils.Collections</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Util\Mtgdb.Util.csproj">
+      <Project>{e1349e1c-77a7-4fc3-bda8-735cd5cb2735}</Project>
+      <Name>Mtgdb.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Subrepo\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>
       <Name>EditedTokenLocator</Name>
@@ -157,6 +161,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MetadataFromFileNameTests.cs" />
     <Compile Include="CardFacesTests.cs" />
     <Compile Include="CardDataTests.cs" />
     <Compile Include="ColorTransformationTests.cs" />

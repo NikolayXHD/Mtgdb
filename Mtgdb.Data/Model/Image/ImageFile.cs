@@ -52,10 +52,10 @@ namespace Mtgdb.Data
 			rootPath = rootPath.ToAppRootedPath();
 
 			if (!rootPath.EndsWith("\\"))
-				rootPath = rootPath + "\\";
+				rootPath += "\\";
 
 			if (!directoryName.EndsWith("\\"))
-				directoryName = directoryName + "\\";
+				directoryName += "\\";
 
 			if (setCode != null)
 			{
