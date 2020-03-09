@@ -19,7 +19,7 @@ namespace Mtgdb.Gui
 
 			var mappings = entries.Select(_ => new
 			{
-				symbols = getSymbol((string) _.Key), 
+				symbols = getSymbol((string) _.Key),
 				image = (Bitmap) _.Value
 			});
 
@@ -37,7 +37,8 @@ namespace Mtgdb.Gui
 			var nonShadowedIcons = new HashSet<string>(Str.Comparer)
 			{
 				"E",
-				"Q"
+				"Q",
+				"a"
 			};
 
 			var iconRecognizer = new IconRecognizer(imageByText, nonShadowedIcons);
@@ -54,7 +55,7 @@ namespace Mtgdb.Gui
 			if (name == "i")
 				return new[] { "∞", "oo" };
 
-			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || name == "100" || name == "1000000" || name == "chaos" || name == "any")
+			if (name.Length == 1 || name.Length == 2 && name.All(char.IsDigit) || _longKeys.Contains(name))
 				return new[] { name };
 
 			if (name.Length == 2)
@@ -62,5 +63,14 @@ namespace Mtgdb.Gui
 
 			return null;
 		}
+
+		private static readonly HashSet<string> _longKeys =
+			new HashSet<string>(Str.Comparer)
+			{
+				"100",
+				"1000000",
+				"chaos",
+				"any"
+			};
 	}
 }

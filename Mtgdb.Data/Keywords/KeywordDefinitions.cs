@@ -281,7 +281,8 @@ namespace Mtgdb.Data
 			// non quick-filter values follow
 
 			"Addendum",
-			cost("Spectacle")
+			cost("Spectacle"),
+			cost("Escape")
 		};
 
 		public static readonly IList<string> Keywords = new[]

@@ -66,15 +66,15 @@ namespace Mtgdb.Ui
 				await _repository.DownloadFiles(token);
 				_repository.LoadFile();
 
-				_imageRepository.LoadFiles();
-				_imageRepository.LoadSmall();
-				_imageRepository.LoadZoom();
-
 				if (_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate)
 					_cardSearcher.LoadIndexes();
 
 				if (_keywordSearcher.IsUpToDate)
 					_keywordSearcher.Load();
+
+				_imageRepository.LoadFiles();
+				_imageRepository.LoadSmall();
+				_imageRepository.LoadZoom();
 			});
 
 			AddTask(async token =>

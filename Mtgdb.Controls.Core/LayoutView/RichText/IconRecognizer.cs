@@ -75,20 +75,17 @@ namespace Mtgdb.Controls
 
 			var scaledSize = icon.Size.FitIn(new Size(int.MaxValue, maxHeight));
 
-			if (scaledSize == icon.Size)
-				return icon;
-
 			if (!_iconsByTextByHeight.TryGetValue(name, out var iconsBySize))
 			{
 				iconsBySize = new Dictionary<int, Bitmap>();
 				_iconsByTextByHeight.Add(name, iconsBySize);
 			}
 
-			if (!iconsBySize.TryGetValue(scaledSize.Height, out var scaledIcon))
-			{
-				scaledIcon = icon.FitIn(scaledSize);
-				iconsBySize.Add(scaledSize.Height, scaledIcon);
-			}
+			if (iconsBySize.TryGetValue(scaledSize.Height, out var scaledIcon))
+				return scaledIcon;
+
+			scaledIcon = icon.FitIn(scaledSize).ApplyColorScheme();
+			iconsBySize.Add(scaledSize.Height, scaledIcon);
 
 			return scaledIcon;
 		}

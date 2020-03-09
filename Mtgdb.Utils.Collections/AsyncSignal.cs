@@ -8,13 +8,16 @@ namespace Mtgdb
 	{
 		private readonly SemaphoreSlim _semaphore;
 
+		public bool Signaled { get; private set; }
+
 		public AsyncSignal(bool multiple = false) =>
 			_semaphore = new SemaphoreSlim(0, multiple ? int.MaxValue : 1);
 
-		public void Signal() =>
+		public void Signal()
+		{
 			_semaphore.Release();
-
-		public bool Signaled => _semaphore.CurrentCount > 0;
+			Signaled = true;
+		}
 
 		public async Task Wait(CancellationToken token)
 		{

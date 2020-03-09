@@ -49,8 +49,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Data.Core", "Mtgdb.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingEx", "Subrepo\DrawingEx\DrawingEx.csproj", "{A6441560-3CC8-4AC3-AE4A-D092B424719F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "tools", "tools\tools.shproj", "{B1C7F4D9-46BA-4D18-92A0-2E8214973929}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13

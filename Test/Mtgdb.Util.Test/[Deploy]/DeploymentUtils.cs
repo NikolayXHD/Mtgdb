@@ -19,17 +19,18 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class DeploymentUtils
 	{
-		private const string SetCodes = null; //"pz2,g18";
+		private const string SetCodes = "und";
 		private const bool NonToken = true;
 		private const bool Token = true;
 		private const bool SelectSmall = true;
 		private const bool SelectZoom = true;
 
 		[Order(1)]
-		// [TestCase(SetCodes, NonToken, Token)]
+		[TestCase(SetCodes, NonToken, Token)]
 		public async Task DownloadGathererImages(string setCodesList, bool nonToken, bool token)
 		{
 			var client = new ScryfallClient();
+			//var client = new GathererClient();
 			var setCodes = setCodesList?.Split(',');
 			var repo = new CardRepository(new CardFormatter(), () => null);
 			if (setCodesList != null)
@@ -76,7 +77,7 @@ namespace Mtgdb.Util
 		}
 
 		[Order(2)]
-		// [TestCase(SetCodes,NonToken, Token)]
+		[TestCase(SetCodes,NonToken, Token)]
 		public void PreProcessImages(string setCodesList, bool nonToken, bool token)
 		{
 			setupImageConversion();
@@ -170,7 +171,7 @@ namespace Mtgdb.Util
 		}
 
 		[Order(3)]
-		//[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
+		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
 		public void SelectImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
 		{
 			setupExport();
@@ -240,7 +241,7 @@ namespace Mtgdb.Util
 		private static void moveDirectoryToBackup(string dir, string dirBak)
 		{
 			if (Directory.Exists(dirBak))
-				Directory.Delete(dirBak);
+				Directory.Delete(dirBak, true);
 			Directory.CreateDirectory(dirBak.Parent());
 			Directory.Move(dir, dirBak);
 		}
@@ -337,7 +338,7 @@ namespace Mtgdb.Util
 
 		private static readonly bool _keepExisting = false;
 		private static readonly bool _fromPng = true;
-		private static readonly bool _createZoom = false;
+		private static readonly bool _createZoom = true;
 
 		private ImageCodecInfo _jpegCodec;
 		private EncoderParameters _jpegEncoderParams;

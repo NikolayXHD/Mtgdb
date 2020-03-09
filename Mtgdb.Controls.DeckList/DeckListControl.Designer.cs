@@ -44,12 +44,12 @@
 			this._panelLayout.SuspendLayout();
 			this._panelRename.SuspendLayout();
 			this.SuspendLayout();
-			//
+			// 
 			// _panelLayout
-			//
-			this._panelLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			this._panelLayout.Anchor =
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+				                                        System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._panelLayout.ColumnCount = 5;
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -70,12 +70,12 @@
 			this._panelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelLayout.Size = new System.Drawing.Size(732, 311);
 			this._panelLayout.TabIndex = 2;
-			//
+			// 
 			// _viewDeck
-			//
-			this._viewDeck.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			this._viewDeck.Anchor =
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+				                                        System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._viewDeck.BackColor = System.Drawing.SystemColors.Window;
 			this._panelLayout.SetColumnSpan(this._viewDeck, 5);
 			layoutOptions1.AllowPartialCards = true;
@@ -88,9 +88,9 @@
 			searchOptions1.Allow = false;
 			searchOptions1.Button = buttonOptions1;
 			this._viewDeck.SearchOptions = searchOptions1;
-			selectionOptions1.Alpha = ((byte)(255));
+			selectionOptions1.Alpha = ((byte) (255));
 			selectionOptions1.ForeColor = System.Drawing.SystemColors.HighlightText;
-			selectionOptions1.RectAlpha = ((byte)(0));
+			selectionOptions1.RectAlpha = ((byte) (0));
 			selectionOptions1.RectBorderColor = System.Drawing.Color.Empty;
 			selectionOptions1.RectFillColor = System.Drawing.Color.Empty;
 			this._viewDeck.SelectionOptions = selectionOptions1;
@@ -99,9 +99,9 @@
 			sortOptions1.ButtonMargin = new System.Drawing.Size(0, 0);
 			this._viewDeck.SortOptions = sortOptions1;
 			this._viewDeck.TabIndex = 1;
-			//
+			// 
 			// _menuFilterByDeckMode
-			//
+			// 
 			this._menuFilterByDeckMode.EmptySelectionText = "";
 			this._menuFilterByDeckMode.ImageScale = 0.5F;
 			this._menuFilterByDeckMode.Location = new System.Drawing.Point(542, 0);
@@ -110,55 +110,59 @@
 			this._menuFilterByDeckMode.SelectedIndex = -1;
 			this._menuFilterByDeckMode.Size = new System.Drawing.Size(190, 24);
 			this._menuFilterByDeckMode.TabIndex = 2;
-			//
+			// 
 			// _labelFilterByDeckMode
-			//
+			// 
 			this._labelFilterByDeckMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this._labelFilterByDeckMode.AutoSize = true;
-			this._labelFilterByDeckMode.Location = new System.Drawing.Point(437, 5);
+			this._labelFilterByDeckMode.Location = new System.Drawing.Point(428, 4);
 			this._labelFilterByDeckMode.Name = "_labelFilterByDeckMode";
-			this._labelFilterByDeckMode.Size = new System.Drawing.Size(102, 13);
+			this._labelFilterByDeckMode.Size = new System.Drawing.Size(111, 15);
 			this._labelFilterByDeckMode.TabIndex = 4;
 			this._labelFilterByDeckMode.Text = "Filter cards by deck:";
 			this._labelFilterByDeckMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			//
+			// 
 			// _labelSortStatus
-			//
+			// 
 			this._labelSortStatus.AutoSize = true;
 			this._labelSortStatus.Image = global::Mtgdb.Controls.Properties.Resources.sort_48;
 			this._labelSortStatus.ImageScale = 0.5F;
-			this._labelSortStatus.Location = new System.Drawing.Point(362, 0);
+			this._labelSortStatus.Location = new System.Drawing.Point(347, 0);
 			this._labelSortStatus.Margin = new System.Windows.Forms.Padding(0);
 			this._labelSortStatus.Name = "_labelSortStatus";
 			this._labelSortStatus.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
-			this._labelSortStatus.Size = new System.Drawing.Size(72, 24);
+			this._labelSortStatus.Size = new System.Drawing.Size(78, 24);
 			this._labelSortStatus.TabIndex = 5;
 			this._labelSortStatus.Text = "Name ^";
-			//
+			// 
 			// _searchBar
-			//
-			this._searchBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this._searchBar.Font = new System.Drawing.Font("Source Code Pro", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			// 
+			this._searchBar.Anchor =
+				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) |
+				                                       System.Windows.Forms.AnchorStyles.Right)));
+			this._searchBar.Font = new System.Drawing.Font("Source Code Pro", 9.749999F, System.Drawing.FontStyle.Regular,
+				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this._searchBar.Image = global::Mtgdb.Controls.Properties.Resources.search_48;
 			this._searchBar.ImageScale = 0.5F;
 			this._searchBar.Location = new System.Drawing.Point(0, 0);
 			this._searchBar.Margin = new System.Windows.Forms.Padding(0);
 			this._searchBar.Name = "_searchBar";
 			this._searchBar.SelectedIndex = -1;
-			this._searchBar.Size = new System.Drawing.Size(362, 24);
+			this._searchBar.Size = new System.Drawing.Size(347, 24);
 			this._searchBar.TabIndex = 6;
 			this._searchBar.VisibleAllBorders = null;
-			this._searchBar.VisibleBorders = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Right)));
-			//
+			this._searchBar.VisibleBorders =
+				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+				                                       System.Windows.Forms.AnchorStyles.Right)));
+			// 
 			// _textboxRename
-			//
-			this._textboxRename.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			this._textboxRename.Anchor =
+				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+				                                        System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._textboxRename.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this._textboxRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this._textboxRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular,
+				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this._textboxRename.Location = new System.Drawing.Point(1, 1);
 			this._textboxRename.Margin = new System.Windows.Forms.Padding(0);
 			this._textboxRename.MaxLength = 1024;
@@ -168,9 +172,9 @@
 			this._textboxRename.TabIndex = 1;
 			this._textboxRename.TabStop = false;
 			this._textboxRename.Text = "";
-			//
+			// 
 			// _panelRename
-			//
+			// 
 			this._panelRename.BackColor = System.Drawing.SystemColors.Window;
 			this._panelRename.Controls.Add(this._textboxRename);
 			this._panelRename.Location = new System.Drawing.Point(32, 56);
@@ -180,9 +184,9 @@
 			this._panelRename.Size = new System.Drawing.Size(434, 22);
 			this._panelRename.TabIndex = 3;
 			this._panelRename.Visible = false;
-			//
+			// 
 			// DeckListControl
-			//
+			// 
 			this.Controls.Add(this._panelRename);
 			this.Controls.Add(this._panelLayout);
 			this.Name = "DeckListControl";
@@ -191,18 +195,17 @@
 			this._panelLayout.PerformLayout();
 			this._panelRename.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel _panelLayout;
-		private LayoutViewControl _viewDeck;
 		private Mtgdb.Controls.FixedRichTextBox _textboxRename;
 		private System.Windows.Forms.Label _labelFilterByDeckMode;
 		private Mtgdb.Controls.DropDown _menuFilterByDeckMode;
-		private ControlBase _labelSortStatus;
-		private SearchBar _searchBar;
-		private BorderedPanel _panelRename;
+		private Mtgdb.Controls.BorderedPanel _panelRename;
+		private Mtgdb.Controls.SearchBar _searchBar;
+		private Mtgdb.Controls.ControlBase _labelSortStatus;
+		private Mtgdb.Controls.LayoutViewControl _viewDeck;
 	}
 }
