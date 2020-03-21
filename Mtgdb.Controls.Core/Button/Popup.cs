@@ -297,11 +297,6 @@ namespace Mtgdb.Controls
 
 		private void showContextMenu(Point location)
 		{
-			ControlHelpers.SetForegroundWindow(
-				new HandleRef(
-					MenuControl,
-					MenuControl.Handle));
-
 			_screenLocation = PointToScreen(location);
 
 			var contextMenuStrip = (ContextMenuStrip) MenuControl;

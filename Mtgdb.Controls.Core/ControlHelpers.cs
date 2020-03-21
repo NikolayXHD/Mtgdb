@@ -21,9 +21,6 @@ namespace Mtgdb.Controls
 		[DllImport("user32.dll")]
 		public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
 
-		[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-		public static extern bool SetForegroundWindow(HandleRef hWnd);
-
 		public static Form ParentForm(this Control c)
 		{
 			var current = c;
@@ -271,10 +268,10 @@ namespace Mtgdb.Controls
 			unchecked((short)(number & 0x0000ffff));
 
 		public static void BeginUpdate(this Control c) =>
-			_beginUpdateMethod.Invoke(c, Empty<object>.Array);
+			_beginUpdateMethod?.Invoke(c, Empty<object>.Array);
 
 		public static void EndUpdate(this Control c) =>
-			_endUpdateMethod.Invoke(c, Empty<object>.Array);
+			_endUpdateMethod?.Invoke(c, Empty<object>.Array);
 
 		private static readonly MethodInfo _beginUpdateMethod =
 			typeof(Control).GetMethod("BeginUpdateInternal",
