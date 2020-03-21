@@ -29,8 +29,6 @@ namespace Mtgdb.Gui
 			_buttonUndo.Pressed += undoClick;
 			_buttonRedo.Pressed += redoClick;
 
-			_buttonHelp.Pressed += helpClick;
-
 			_buttonMenuEditConfig.Pressed += configClick;
 
 			_buttonOpenWindow.Pressed += openWindowClick;
@@ -111,9 +109,6 @@ namespace Mtgdb.Gui
 				formMain?.ButtonTooltip();
 			}
 		}
-
-		private static void helpClick(object sender, EventArgs e) =>
-			System.Diagnostics.Process.Start("https://github.com/NikolayXHD/Mtgdb/wiki");
 
 		private void redoClick(object sender, EventArgs e)
 		{
@@ -220,7 +215,7 @@ namespace Mtgdb.Gui
 			_buttonMenuDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
 			_buttonMenuDonateYandexMoney.Pressed += buttonVisitClick;
 
-			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("help\\html\\Import_collection_&_decks_from_Magic_The_Gathering_Online.html"));
+			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("https://github.com/NikolayXHD/Mtgdb/wiki/2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online"));
 			_buttonVisitMtgo.Pressed += buttonVisitClick;
 
 			_buttonSupport.SetTag(_appSourceConfig.ForumUrl);
@@ -231,6 +226,9 @@ namespace Mtgdb.Gui
 
 			_buttonVisitDeckedBuilder.SetTag(@"http://www.deckedbuilder.com/");
 			_buttonVisitDeckedBuilder.Pressed += buttonVisitClick;
+
+			_buttonHelp.SetTag("https://github.com/NikolayXHD/Mtgdb/wiki");
+			_buttonHelp.Pressed += buttonVisitClick;
 		}
 
 		private static void buttonVisitClick(object sender, EventArgs e)
