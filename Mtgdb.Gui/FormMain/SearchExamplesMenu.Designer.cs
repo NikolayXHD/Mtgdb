@@ -170,7 +170,7 @@
 			this._panelExamples.Controls.Add(this.label8, 1, 4);
 			this._panelExamples.Controls.Add(this.label5, 0, 3);
 			this._panelExamples.Controls.Add(this.label4, 0, 4);
-			this._panelExamples.Font = new System.Drawing.Font("Source Code Pro", 8.999999F, System.Drawing.FontStyle.Regular,
+			this._panelExamples.Font = new System.Drawing.Font("Consolas", 8.999999F, System.Drawing.FontStyle.Regular,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this._panelExamples.Location = new System.Drawing.Point(1, 1);
 			this._panelExamples.Margin = new System.Windows.Forms.Padding(0);
@@ -311,7 +311,7 @@
 			this.label11.AutoSize = true;
 			this.label11.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label11, 2);
-			this.label11.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label11.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label11.Location = new System.Drawing.Point(0, 0);
 			this.label11.Margin = new System.Windows.Forms.Padding(0);
@@ -814,7 +814,7 @@
 			this.label19.AutoSize = true;
 			this.label19.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label19, 2);
-			this.label19.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label19.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label19.Location = new System.Drawing.Point(0, 515);
 			this.label19.Margin = new System.Windows.Forms.Padding(0);
@@ -833,7 +833,7 @@
 			this.label63.AutoSize = true;
 			this.label63.BackColor = System.Drawing.SystemColors.InactiveCaption;
 			this._panelExamples.SetColumnSpan(this.label63, 2);
-			this.label63.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label63.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label63.Location = new System.Drawing.Point(0, 100);
 			this.label63.Margin = new System.Windows.Forms.Padding(0);
@@ -879,7 +879,7 @@
 					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this.label57.AutoSize = true;
 			this.label57.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label57.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label57.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label57.Location = new System.Drawing.Point(0, 391);
 			this.label57.Margin = new System.Windows.Forms.Padding(0);
@@ -1000,7 +1000,7 @@
 					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this.label17.AutoSize = true;
 			this.label17.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label17.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label17.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label17.Location = new System.Drawing.Point(0, 310);
 			this.label17.Margin = new System.Windows.Forms.Padding(0);
@@ -1110,7 +1110,7 @@
 					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this.label12.AutoSize = true;
 			this.label12.BackColor = System.Drawing.SystemColors.InactiveCaption;
-			this.label12.Font = new System.Drawing.Font("Source Code Pro Semibold", 12F, System.Drawing.FontStyle.Bold,
+			this.label12.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold,
 				System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label12.Location = new System.Drawing.Point(0, 173);
 			this.label12.Margin = new System.Windows.Forms.Padding(0);
