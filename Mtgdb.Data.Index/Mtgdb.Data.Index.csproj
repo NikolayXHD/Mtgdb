@@ -114,9 +114,9 @@
       <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
       <Name>Mtgdb.App.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+    <ProjectReference Include="..\Mtgdb.Utils\Mtgdb.Utils.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Utils.Collections</Name>
+      <Name>Mtgdb.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\EditedTokenLocator\EditedTokenLocator.csproj">
       <Project>{482239d1-673c-4181-a2dd-f9e5b1a2fd9b}</Project>

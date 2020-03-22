@@ -27,7 +27,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "shared", "shared\shared.shp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Utils.Bitmaps", "Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj", "{24C593F8-E50B-4765-AEA9-B152C68EBDBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Utils.Collections", "Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj", "{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Utils", "Mtgdb.Utils\Mtgdb.Utils.csproj", "{1B2FEA9B-3D4B-430F-A7D2-8CFE47820238}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.App.Localization", "Mtgdb.App.Localization\Mtgdb.App.Localization.csproj", "{10ABCE2D-9376-4F1E-B316-A8CC9805FAD1}"
 EndProject

@@ -688,9 +688,9 @@
       <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
       <Name>Mtgdb.Utils.Bitmaps</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+    <ProjectReference Include="..\Mtgdb.Utils\Mtgdb.Utils.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Utils.Collections</Name>
+      <Name>Mtgdb.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Subrepo\CustomScrollbar\CustomScrollbar.csproj">
       <Project>{5b85e2d7-2005-4496-b5d7-59c68a1ec91d}</Project>

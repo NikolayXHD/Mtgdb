@@ -43,9 +43,9 @@
     <Compile Include="Str.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mtgdb.Utils.Collections\Mtgdb.Utils.Collections.csproj">
+    <ProjectReference Include="..\Mtgdb.Utils\Mtgdb.Utils.csproj">
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
-      <Name>Mtgdb.Utils.Collections</Name>
+      <Name>Mtgdb.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
