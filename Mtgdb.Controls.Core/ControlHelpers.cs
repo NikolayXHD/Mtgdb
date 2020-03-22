@@ -267,11 +267,17 @@ namespace Mtgdb.Controls
 		public static short LowWord(this long number) =>
 			unchecked((short)(number & 0x0000ffff));
 
-		public static void BeginUpdate(this Control c) =>
-			_beginUpdateMethod?.Invoke(c, Empty<object>.Array);
+		public static void BeginUpdate(this Control c)
+		{
+			if (!Runtime.IsMono)
+				_beginUpdateMethod.Invoke(c, Empty<object>.Array);
+		}
 
-		public static void EndUpdate(this Control c) =>
-			_endUpdateMethod?.Invoke(c, Empty<object>.Array);
+		public static void EndUpdate(this Control c)
+		{
+			if (!Runtime.IsMono)
+				_endUpdateMethod.Invoke(c, Empty<object>.Array);
+		}
 
 		private static readonly MethodInfo _beginUpdateMethod =
 			typeof(Control).GetMethod("BeginUpdateInternal",

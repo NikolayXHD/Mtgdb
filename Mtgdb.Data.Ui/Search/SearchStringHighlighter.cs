@@ -15,6 +15,9 @@ namespace Mtgdb.Ui
 
 		public void Highlight()
 		{
+			if (Runtime.IsMono)
+				return;
+
 			var start = _findEditor.SelectionStart;
 			var len = _findEditor.SelectionLength;
 
