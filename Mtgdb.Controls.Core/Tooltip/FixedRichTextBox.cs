@@ -9,6 +9,9 @@ namespace Mtgdb.Controls
 		{
 			base.OnHandleCreated(e);
 
+			if (Runtime.IsMono)
+				return;
+
 			if (AutoWordSelection)
 				return;
 
