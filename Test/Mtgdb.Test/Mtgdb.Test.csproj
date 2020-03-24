@@ -185,6 +185,7 @@
     <Compile Include="SelectionStateTests.cs" />
     <Compile Include="BinarySearchTests.cs" />
     <Compile Include="TaskCancellationTests.cs" />
+    <Compile Include="TestSevenZip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

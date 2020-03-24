@@ -117,6 +117,9 @@ namespace Mtgdb
 		}
 
 		private readonly bool _silent;
-		private static readonly string _executable = AppDir.Update.AddPath(@"7z\7za.exe");
+
+		private static readonly string _executable = Runtime.IsLinux
+			? "7z" // from p7zip-full package
+			: AppDir.Update.AddPath("7z").AddPath("7za.exe");
 	}
 }
