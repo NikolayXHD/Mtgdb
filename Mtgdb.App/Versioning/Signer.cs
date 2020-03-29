@@ -61,8 +61,13 @@ namespace Mtgdb
 			if (!File.Exists(targetFile))
 				return null;
 
-			var result = File.ReadAllLines(targetFile)
-				.Where(_ => !string.IsNullOrEmpty(_))
+			var lines = File.ReadAllLines(targetFile)
+				.Where(_ => !string.IsNullOrEmpty(_));
+
+			if (Path.DirectorySeparatorChar != '\\')
+				lines = lines.Select(_ => _.Replace('\\', Path.DirectorySeparatorChar));
+
+			var result = lines
 				.Select(_ => new FileSignature
 				{
 					Md5Hash = _.Substring(0, 32),
