@@ -549,34 +549,10 @@ namespace Mtgdb.Gui
 		public DeckSuggestModel DeckSuggestModel { get; }
 		public UiModel UiModel { get; }
 
-		public Direction? SnapDirection
-		{
-			get => Enum.GetValues(typeof(Direction))
+		public Direction? SnapDirection =>
+			Enum.GetValues(typeof(Direction))
 				.Cast<Direction>()
 				.FirstOrDefault(IsSnappedTo);
-
-			set
-			{
-				if (!value.HasValue)
-					return;
-
-				if (!IsSnappedTo(value.Value))
-					SnapTo(value.Value);
-			}
-		}
-
-		public Rectangle WindowArea
-		{
-			get => DesktopBounds;
-			set
-			{
-				SnapTo(Direction.MiddleCenter);
-
-				var nearestScreenArea = Screen.GetWorkingArea(value);
-				if (nearestScreenArea.IntersectsWith(value))
-					DesktopBounds = value;
-			}
-		}
 
 		public TooltipController TooltipController { get; }
 		public TooltipController QuickFilterTooltipController { get; }

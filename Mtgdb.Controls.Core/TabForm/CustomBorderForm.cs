@@ -29,8 +29,6 @@ namespace Mtgdb.Controls
 			Activated += focusChanged;
 			Deactivate += focusChanged;
 
-			SizeBeforeMaximized = Size;
-
 			SetStyle(
 				ControlStyles.UserPaint |
 				ControlStyles.AllPaintingInWmPaint |
@@ -68,7 +66,7 @@ namespace Mtgdb.Controls
 			Rectangle client;
 			int headerTop;
 
-			if (IsMaximized)
+			if (WindowState == FormWindowState.Maximized)
 			{
 				client = Rectangle.FromLTRB(
 					rect.Left,
@@ -160,7 +158,7 @@ namespace Mtgdb.Controls
 		{
 			foreach (Direction direction in getBorderDirections())
 			{
-				if (IsMaximized && (direction & Direction.Top) == 0)
+				if (WindowState == FormWindowState.Maximized && (direction & Direction.Top) == 0)
 					// there is always the top border, it doesn't always function as size changed though
 					// therefore we always paint the top border
 					continue;
@@ -213,7 +211,7 @@ namespace Mtgdb.Controls
 			int right = Width - BorderSize.Width;
 			int bottom = Height - BorderSize.Height;
 
-			if (IsMaximized)
+			if (WindowState == FormWindowState.Maximized)
 			{
 				left = 0;
 				right = Width - 1;
@@ -251,7 +249,7 @@ namespace Mtgdb.Controls
 
 			if (ShowMaximizeButton)
 			{
-				if (IsMaximized)
+				if (WindowState == FormWindowState.Maximized)
 				{
 					add(clientLocation);
 					addEmpty();
@@ -355,35 +353,44 @@ namespace Mtgdb.Controls
 
 			Keys keyData = e.KeyData;
 
-			if (keyData == Keys.Left || keyData == Keys.NumPad4)
-				SnapTo(Direction.Left);
-			else if (keyData == Keys.Right || keyData == Keys.NumPad6)
-				SnapTo(Direction.Right);
-			else if (keyData == Keys.Up)
+			switch (keyData)
 			{
-				if (!_isMaximizedBySystem)
+				case Keys.Left:
+				case Keys.NumPad4:
+					SnapTo(Direction.Left);
+					break;
+				case Keys.Right:
+				case Keys.NumPad6:
+					SnapTo(Direction.Right);
+					break;
+				case Keys.Up:
+				case Keys.NumPad8:
 					SnapTo(Direction.Top);
-				else
-					_isMaximizedBySystem = false;
-			}
-			else if (keyData == Keys.NumPad8)
-				SnapTo(Direction.Top);
-			else if (keyData == Keys.NumPad1)
-				SnapTo(Direction.BottomLeft);
-			else if (keyData == Keys.NumPad3)
-				SnapTo(Direction.BottomRight);
-			else if (keyData == Keys.NumPad9)
-				SnapTo(Direction.TopRight);
-			else if (keyData == Keys.NumPad7)
-				SnapTo(Direction.TopLeft);
-			else if (keyData == Keys.NumPad5)
-				SnapTo(Direction.MiddleCenter);
-			else if (keyData == Keys.Down || keyData == Keys.NumPad2)
-			{
-				if (IsMaximized)
+					break;
+				case Keys.NumPad1:
+					SnapTo(Direction.BottomLeft);
+					break;
+				case Keys.NumPad3:
+					SnapTo(Direction.BottomRight);
+					break;
+				case Keys.NumPad9:
+					SnapTo(Direction.TopRight);
+					break;
+				case Keys.NumPad7:
+					SnapTo(Direction.TopLeft);
+					break;
+				case Keys.NumPad5:
 					SnapTo(Direction.MiddleCenter);
-				else
-					minimize();
+					break;
+				case Keys.Down:
+				case Keys.NumPad2:
+				{
+					if (WindowState == FormWindowState.Maximized)
+						SnapTo(Direction.MiddleCenter);
+					else
+						minimize();
+					break;
+				}
 			}
 		}
 
@@ -391,16 +398,13 @@ namespace Mtgdb.Controls
 
 		private void resize(object sender, EventArgs e)
 		{
-			_isMaximizedBySystem = !IsMaximized && WindowState == FormWindowState.Maximized;
-			IsMaximized = WindowState == FormWindowState.Maximized;
-
 			bool isForcedSize =
 				WindowState == FormWindowState.Minimized ||
 				WindowState == FormWindowState.Maximized ||
 				getResizeDirections().Any(IsSnappedTo);
 
 			if (!isForcedSize)
-				SizeBeforeMaximized = Size;
+				BoundsBeforeMaximized = Bounds;
 		}
 
 		private void titleBeginDrag(Point clientPosition)
@@ -408,7 +412,7 @@ namespace Mtgdb.Controls
 			_dragFromLocation = clientPosition;
 			_dragFromSize = Size;
 
-			_dragEnabledUnmaximizeThreshold = IsMaximized;
+			_dragEnabledUnmaximizeThreshold = WindowState == FormWindowState.Maximized;
 		}
 
 		private bool titleIsDragging()
@@ -513,10 +517,10 @@ namespace Mtgdb.Controls
 
 			if (snapDirection == Direction.MiddleCenter)
 				return new Rectangle(
-					screenBounds.Left + (screenBounds.Width - SizeBeforeMaximized.Width) / 2,
-					screenBounds.Top + (screenBounds.Height - SizeBeforeMaximized.Height) / 2,
-					SizeBeforeMaximized.Width,
-					SizeBeforeMaximized.Height);
+					screenBounds.Left + (screenBounds.Width - BoundsBeforeMaximized.Width) / 2,
+					screenBounds.Top + (screenBounds.Height - BoundsBeforeMaximized.Height) / 2,
+					BoundsBeforeMaximized.Width,
+					BoundsBeforeMaximized.Height);
 
 			return Rectangle.Empty;
 		}
@@ -554,37 +558,22 @@ namespace Mtgdb.Controls
 			if (snapRectangle == Rectangle.Empty)
 				return;
 
-			SuspendLayout();
-
 			bool maximize = snapDirection == Direction.Top;
-
 			if (maximize)
 			{
-				IsMaximized = true;
-
 				var screenBounds = Screen.FromPoint(snapRectangle.TopLeft()).Bounds;
 				snapRectangle.Offset(-screenBounds.Left, -screenBounds.Top);
 				MaximizedBounds = snapRectangle;
 				Location = screenBounds.TopLeft();
-
-				if (WindowState != FormWindowState.Maximized)
-					WindowState = FormWindowState.Maximized;
+				WindowState = FormWindowState.Maximized;
 			}
 			else
 			{
-				IsMaximized = false;
-
-				if (WindowState != FormWindowState.Normal)
-					WindowState = FormWindowState.Normal;
-
+				WindowState = FormWindowState.Normal;
 				setBounds(snapRectangle);
 			}
 
-			ResumeLayout(false);
-			PerformLayout();
-
 			invalidateCaption();
-
 			invalidateBorders();
 		}
 
@@ -615,19 +604,16 @@ namespace Mtgdb.Controls
 
 		private void moveToDraggedLocation(Point screenPosition)
 		{
-			if (WindowState != FormWindowState.Normal)
-				WindowState = FormWindowState.Normal;
-
 			var draggedLocation = getDraggedFormLocation(screenPosition);
 
 			var targetBounds = new Rectangle(
 				draggedLocation.X,
 				draggedLocation.Y,
-				SizeBeforeMaximized.Width,
-				SizeBeforeMaximized.Height);
+				BoundsBeforeMaximized.Width,
+				BoundsBeforeMaximized.Height);
 
+			WindowState = FormWindowState.Normal;
 			setBounds(targetBounds);
-			IsMaximized = false;
 		}
 
 		private Point getDraggedFormLocation(Point screenPosition)
@@ -681,7 +667,7 @@ namespace Mtgdb.Controls
 
 
 		private Rectangle getTitleRectangle() =>
-			IsMaximized
+			WindowState == FormWindowState.Maximized
 				? new Rectangle(0, 0, Bounds.Width, CaptionHeight - BorderSize.Height)
 				: new Rectangle(0, 0, Bounds.Width, CaptionHeight);
 
@@ -799,11 +785,10 @@ namespace Mtgdb.Controls
 		private void toggleMaximize()
 		{
 			var screenLocation = Cursor.Position;
-
-			if (IsMaximized)
-				SnapTo(Direction.MiddleCenter, screenLocation);
-			else
-				SnapTo(Direction.Top, screenLocation);
+			var snapDirection = WindowState == FormWindowState.Maximized
+				? Direction.MiddleCenter
+				: Direction.Top;
+			SnapTo(snapDirection, screenLocation);
 		}
 
 		private void setBounds(Rectangle rect)
@@ -830,13 +815,13 @@ namespace Mtgdb.Controls
 
 
 
-		protected void RegisterDragControl(Control c)
+		protected void RegisterDragControl(Control c, bool ignoreDoubleClick = false)
 		{
 			c.MouseDown += mouseDown;
 			c.MouseUp += mouseUp;
 			c.MouseMove += mouseMove;
 
-			if (c == this || c == _panelCaption)
+			if (!ignoreDoubleClick)
 				c.MouseDoubleClick += doubleClick;
 
 			c.MouseLeave += mouseLeave;
@@ -844,7 +829,7 @@ namespace Mtgdb.Controls
 
 		protected override void WndProc(ref Message m)
 		{
-			if (m.Msg == 0x84 && !IsMaximized)
+			if (m.Msg == 0x84 && WindowState != FormWindowState.Maximized)
 			{
 				var screenLocation = new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16);
 				var clientLocation = PointToClient(screenLocation);
@@ -926,21 +911,6 @@ namespace Mtgdb.Controls
 		public Size BorderSize { get; set; }
 		public Size ControlBoxButtonSize { get; set; }
 
-		[Browsable(false)]
-		private bool IsMaximized
-		{
-			get => _isMaximized;
-			set
-			{
-				if (_isMaximized != value)
-				{
-					_isMaximized = value;
-					OnLayout(new LayoutEventArgs(this, nameof(IsMaximized)));
-					Invalidate(getControlBoxRectangle());
-				}
-			}
-		}
-
 		private void applySystemColors()
 		{
 			_isVisualStyleSupported = VisualStyleRenderer.IsSupported;
@@ -963,13 +933,14 @@ namespace Mtgdb.Controls
 			_panelClient.Invalidate(true);
 		}
 
-		private Size SizeBeforeMaximized { get; set; }
+		public Rectangle BoundsBeforeMaximized
+		{
+			get => _boundsBeforeMaximized ??= RestoreBounds;
+			set => _boundsBeforeMaximized = value;
+		}
 
 		private Point? _dragFromLocation;
 		private Size? _dragFromSize;
-		private bool _isMaximized;
-		private bool _isMaximizedBySystem;
-
 		private bool _showCloseButton = true;
 		private bool _showMinimizeButton = true;
 		private bool _showMaximizeButton = true;
@@ -998,5 +969,6 @@ namespace Mtgdb.Controls
 
 		private bool _dragEnabledUnmaximizeThreshold;
 		private bool _isVisualStyleSupported;
+		private Rectangle? _boundsBeforeMaximized;
 	}
 }

@@ -158,24 +158,16 @@ namespace Mtgdb.Gui
 			var snapDirection = _history.Current.WindowSnapDirection ?? Direction.Top;
 			var windowArea = _history.Current.WindowArea;
 
-			if (snapDirection != Direction.MiddleCenter)
-			{
-				if (windowArea.HasValue)
-					_formRoot.Location = windowArea.Value.TopLeft();
-			}
-			else
-			{
-				if (windowArea.HasValue)
-					_formRoot.WindowArea = windowArea.Value;
-			}
+			if (windowArea.HasValue)
+				_formRoot.BoundsBeforeMaximized = windowArea.Value;
 
-			_formRoot.SnapDirection = snapDirection;
+			_formRoot.SnapTo(snapDirection, windowArea?.TopLeft());
 		}
 
 		private void historyUpdateFormPosition(GuiSettings settings)
 		{
 			settings.WindowSnapDirection = _formRoot.SnapDirection;
-			settings.WindowArea = _formRoot.WindowArea;
+			settings.WindowArea = _formRoot.BoundsBeforeMaximized;
 		}
 
 		public void OnTabUnselected()
