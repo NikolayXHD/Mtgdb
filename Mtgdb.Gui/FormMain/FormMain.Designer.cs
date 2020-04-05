@@ -361,7 +361,6 @@
 			// _buttonSampleHandNew
 			//
 			this._buttonSampleHandNew.AutoCheck = false;
-			this._buttonSampleHandNew.AutoSize = true;
 			this._buttonSampleHandNew.Image = global::Mtgdb.Gui.Properties.Resources.hand_48;
 			this._buttonSampleHandNew.ImageScale = 0.5F;
 			this._buttonSampleHandNew.Location = new System.Drawing.Point(216, 0);
