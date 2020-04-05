@@ -134,9 +134,6 @@
 			// 
 			// _panelClient
 			// 
-			this._panelClient.Anchor =
-				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) |
-					System.Windows.Forms.AnchorStyles.Right)));
 			this._panelClient.Location = new System.Drawing.Point(6, 37);
 			this._panelClient.Size = new System.Drawing.Size(1012, 757);
 			// 
