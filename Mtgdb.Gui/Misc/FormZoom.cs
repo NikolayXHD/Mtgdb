@@ -166,11 +166,8 @@ namespace Mtgdb.Gui
 		{
 			updateImage();
 			applyZoom();
-
-			Application.DoEvents();
-
 			Show();
-			Focus();
+			BringToFront();
 		}
 
 
@@ -366,7 +363,7 @@ namespace Mtgdb.Gui
 			_pictureBox.Size = _image.Size;
 			_pictureBox.Location = Point.Empty;
 
-			Size = formArea.Size;
+			ClientSize = formArea.Size;
 			Location = formArea.Location;
 		}
 
