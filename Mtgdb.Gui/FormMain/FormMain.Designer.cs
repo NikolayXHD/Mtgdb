@@ -911,7 +911,7 @@
 			//
 			this._deckListControl.AllowPartialCard = true;
 			this._deckListControl.Anchor =
-				((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) |
+				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
 					System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
 			this._layoutMain.SetColumnSpan(this._deckListControl, 3);
 			this._deckListControl.FilterByDeckMode = Mtgdb.Controls.FilterByDeckMode.Ignored;
