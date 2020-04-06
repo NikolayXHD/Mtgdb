@@ -1,5 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
@@ -22,8 +27,7 @@ namespace Mtgdb.Downloader
 			try
 			{
 				using var client = new HttpClient();
-				using var request = new HttpRequestMessage(HttpMethod.Get, pageUrl);
-				using var response = await GetResponse(client, request, token);
+				using var response = await GetResponse(client, HttpMethod.Get, pageUrl, token);
 				using var memoryStream = await ReadToMemoryStream(response, token);
 				using var streamReader = new StreamReader(memoryStream);
 				return streamReader.ReadToEnd();
@@ -37,27 +41,41 @@ namespace Mtgdb.Downloader
 		public async Task<Stream> DownloadStream(string url, CancellationToken token)
 		{
 			using var client = new HttpClient();
-			using var request = new HttpRequestMessage(HttpMethod.Get, url);
-			using var response = await GetResponse(client, request, token);
+			using var response = await GetResponse(client, HttpMethod.Get, url, token);
 			var memoryStream = await ReadToMemoryStream(response, token);
 			return memoryStream;
 		}
 
-		protected async Task<HttpResponseMessage> GetResponse(HttpClient client, HttpRequestMessage request, CancellationToken token)
+		protected async Task<HttpResponseMessage> GetResponse(
+			HttpClient client, HttpMethod method, string uri, CancellationToken token,
+			Action<HttpRequestHeaders> setHeaders = null)
 		{
-			HttpResponseMessage response;
-			try
+			int attempts = 0;
+			const int maxAttempts = 5;
+			const int delayMs = 500;
+			while (true)
 			{
-				response = await client.SendAsync(request, token);
-				response.EnsureSuccessStatusCode();
+				try
+				{
+					var request = new HttpRequestMessage(method, uri);
+					setHeaders?.Invoke(request.Headers);
+					var response = await client.SendAsync(request, token);
+					response.EnsureSuccessStatusCode();
+					return response;
+				}
+				catch (Exception ex) when (
+					getInnerExceptionsChain(ex).OfType<SocketException>().Any()
+					&& attempts++ < maxAttempts)
+				{
+					_log.Debug(ex, "");
+					await Task.Delay(delayMs, token);
+				}
+				catch (Exception ex)
+				{
+					_log.Error(ex, $"HTTP {method.Method} {uri} failed");
+					throw;
+				}
 			}
-			catch (HttpRequestException ex)
-			{
-				_log.Info(ex, $"{nameof(HttpRequestMessage)} to {request.RequestUri} failed");
-				throw;
-			}
-
-			return response;
 		}
 
 		protected static async Task<MemoryStream> ReadToMemoryStream(HttpResponseMessage response, CancellationToken token)
@@ -70,5 +88,14 @@ namespace Mtgdb.Downloader
 		}
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
+
+		private static IEnumerable<Exception> getInnerExceptionsChain(Exception ex)
+		{
+			while (ex != null)
+			{
+				yield return ex;
+				ex = ex.InnerException;
+			}
+		}
 	}
 }

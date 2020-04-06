@@ -15,7 +15,7 @@ namespace Mtgdb.Downloader
 		{
 			const string dirUrl = "https://yadi.sk/d/f1HuKUg7xW2FUQ";
 			var metaUrl = $"{ApiUrl}?public_key={dirUrl}&limit={Limit}";
-			var response = await GetResponse(_http, new HttpRequestMessage(HttpMethod.Get, metaUrl), CancellationToken.None);
+			var response = await GetResponse(_http, HttpMethod.Get, metaUrl, CancellationToken.None);
 			response.EnsureSuccessStatusCode();
 			var contentStr = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<DirectoryWrapperJson>(contentStr);
@@ -29,7 +29,7 @@ namespace Mtgdb.Downloader
 
 		private async Task<string> getDownloadLink(string key, string path, CancellationToken token)
 		{
-			var response = await GetResponse(_http, new HttpRequestMessage(HttpMethod.Get, $"{ApiUrl}/download?public_key={key}&path={path}"), token);
+			var response = await GetResponse(_http, HttpMethod.Get, $"{ApiUrl}/download?public_key={key}&path={path}", token);
 			response.EnsureSuccessStatusCode();
 			var linkStr = await response.Content.ReadAsStringAsync();
 			var link = JsonConvert.DeserializeObject<LinkJson>(linkStr);

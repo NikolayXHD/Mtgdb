@@ -25,8 +25,7 @@ namespace Mtgdb.Downloader
 				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
 			client.DefaultRequestHeaders.Add("Accept-Language", "ru,en;q=0.9");
 
-			var request = new HttpRequestMessage(HttpMethod.Get, downloadUrl);
-			var response = await GetResponse(client, request, token);
+			var response = await GetResponse(client, HttpMethod.Get, downloadUrl, token);
 			if (response.Content.Headers.ContentDisposition?.ToString()
 				    .StartsWith("attachment;", Str.Comparison) != true)
 			{
@@ -56,20 +55,17 @@ namespace Mtgdb.Downloader
 					continuationUrl = builder.ToString().TrimEnd('/') + '/' + continuationUrl.TrimStart('/');
 				}
 
-				request = new HttpRequestMessage(HttpMethod.Get, continuationUrl);
-				request.Headers.Referrer = originalUrl.Uri;
-
-				response = await GetResponse(client, request, token);
+				response = await GetResponse(client, HttpMethod.Get, continuationUrl, token, h => h.Referrer = originalUrl.Uri);
 			}
 
 			var contentDisposition = response.Content.Headers.ContentDisposition?.ToString();
 			if (contentDisposition == null)
-				throw new HttpRequestException($"content-disposition header not found in response from {request.RequestUri}");
+				throw new HttpRequestException($"content-disposition header not found in response from {response.RequestMessage.RequestUri}");
 
 			var fileNamePattern = new Regex("filename=\"([^\"]+)\"");
 			var fileNameMatch = fileNamePattern.Match(contentDisposition);
 			if (!fileNameMatch.Success)
-				throw new HttpRequestException($"File name not found in content-disposition header {contentDisposition} from {request.RequestUri}");
+				throw new HttpRequestException($"File name not found in content-disposition header {contentDisposition} from {response.RequestMessage.RequestUri}");
 
 			var fileName = fileNameMatch.Groups[1].Value;
 			if (!Str.Equals(fileName, Path.GetFileName(targetFile)))
