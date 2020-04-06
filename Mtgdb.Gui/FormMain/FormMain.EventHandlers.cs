@@ -81,8 +81,6 @@ namespace Mtgdb.Gui
 			_buttonShowText.CheckedChanged += buttonHideTextChanged;
 			_buttonResetFilters.Pressed += resetFiltersClick;
 
-			_layoutRight.SizeChanged += rightLayoutChanged;
-
 			_history.Loaded += historyLoaded;
 
 			_searchSubsystem.SubscribeToEvents();
@@ -109,6 +107,8 @@ namespace Mtgdb.Gui
 
 			Dpi.BeforeChanged += beforeDpiChanged;
 			Dpi.AfterChanged += afterDpiChanged;
+
+			Layout += layout;
 		}
 
 		private void unsubscribeFromEvents()
@@ -171,7 +171,6 @@ namespace Mtgdb.Gui
 			_buttonShowText.CheckedChanged -= buttonHideTextChanged;
 			_buttonResetFilters.Pressed -= resetFiltersClick;
 
-			_layoutRight.SizeChanged -= rightLayoutChanged;
 			_history.Loaded -= historyLoaded;
 
 			_searchSubsystem.UnsubscribeFromEvents();
@@ -198,6 +197,8 @@ namespace Mtgdb.Gui
 
 			Dpi.BeforeChanged -= beforeDpiChanged;
 			Dpi.AfterChanged -= afterDpiChanged;
+
+			Layout -= layout;
 		}
 
 		private void applicationExit(object sender, EventArgs e) =>
@@ -431,10 +432,8 @@ namespace Mtgdb.Gui
 				historyUpdate();
 		}
 
-		private void rightLayoutChanged(object sender, EventArgs e)
-		{
+		private void layout(object sender, LayoutEventArgs e) =>
 			setRightPanelsWidth();
-		}
 
 		private void setRightPanelsWidth()
 		{
@@ -447,8 +446,8 @@ namespace Mtgdb.Gui
 		{
 			var tableLayout = (TableLayoutPanel) panel.Parent;
 			var cell = tableLayout.GetCellPosition(panel);
-
-			var preferredSize = panel.GetPreferredSize(new Size(int.MaxValue, panel.Height));
+			var rowHeight = tableLayout.GetRowHeights()[cell.Row];
+			var preferredSize = panel.GetPreferredSize(new Size(int.MaxValue, rowHeight));
 			int preferredWidth = preferredSize.Width + panel.Margin.Right + panel.Margin.Left;
 
 			tableLayout.ColumnStyles[cell.Column].Width = preferredWidth;
