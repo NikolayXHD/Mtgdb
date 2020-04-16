@@ -10,8 +10,9 @@
 			if (dir == null)
 				return true;
 
-			bool result = Path.StartsWith(dir + System.IO.Path.DirectorySeparatorChar, Str.Comparison);
-			return result;
+			return Path.Length > dir.Length &&
+				Path[dir.Length] == System.IO.Path.DirectorySeparatorChar &&
+				Path.StartsWith(dir, Str.Comparison);
 		}
 
 		public FileSignature AsRelativeTo(string dir, bool internPath)
