@@ -25,8 +25,8 @@ namespace Mtgdb.Downloader
 			lock (_syncOutput)
 				Console.Write("downloading ... ");
 
-			string fileName = task.Dir.Subdir + ".7z";
-			string targetDirectory = task.TargetDirectory;
+			FsPath fileName = task.Dir.Subdir.Concat(".7z");
+			FsPath targetDirectory = task.TargetDirectory;
 
 			if (!await _client.DownloadAndExtract(url, targetDirectory, fileName, token))
 				return false;

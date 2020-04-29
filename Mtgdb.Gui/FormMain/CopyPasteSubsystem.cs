@@ -83,7 +83,7 @@ namespace Mtgdb.Gui
 			if (dragData.GetDataPresent(DataFormats.FileDrop))
 			{
 				var files = (string[]) dragData.GetData(DataFormats.FileDrop);
-				PasteDecks(files);
+				PasteDecks(files.Select(_ => new FsPath(_)).ToArray());
 			}
 			else if (dragData.GetFormats().Contains(DataFormats.Text))
 			{
@@ -100,9 +100,9 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public void PasteDecks(string[] files)
+		public void PasteDecks(FsPath[] files)
 		{
-			bool tryGetFile(int i, out (string File, string Dir) file)
+			bool tryGetFile(int i, out (FsPath File, FsPath Dir) file)
 			{
 				lock (_sync)
 				{
@@ -111,7 +111,7 @@ namespace Mtgdb.Gui
 						_filesToLoad.Clear();
 						_filesToLoadDistinct.Clear();
 
-						file = (null, null);
+						file = (FsPath.Empty, FsPath.Empty);
 						return false;
 					}
 
@@ -121,24 +121,24 @@ namespace Mtgdb.Gui
 				return true;
 			}
 
-			(bool LoadingInProgress, bool Added) addFilesToLoad(string[] toAdd)
+			(bool LoadingInProgress, bool Added) addFilesToLoad(FsPath[] toAdd)
 			{
 				lock (_sync)
 				{
 					bool inProgress = _filesToLoad.Count > 0;
 
-					foreach (string path in toAdd)
+					foreach (FsPath path in toAdd)
 					{
-						IEnumerable<(string File, string Dir)> actualFiles;
+						IEnumerable<(FsPath File, FsPath Dir)> actualFiles;
 
-						if (File.Exists(path))
-							actualFiles = Sequence.From<(string File, string Dir)>((path, null));
-						else if (Directory.Exists(path))
+						if (path.IsFile())
+							actualFiles = Sequence.From<(FsPath File, FsPath Dir)>((path, FsPath.Empty));
+						else if (path.IsDirectory())
 							actualFiles = _serialization.ImportedFilePatterns
-								.SelectMany(pattern => Directory.GetFiles(path, pattern, SearchOption.AllDirectories))
-								.Select(file => (file, Path.GetDirectoryName(file)));
+								.SelectMany(pattern => path.EnumerateFiles(pattern, SearchOption.AllDirectories))
+								.Select(file => (file, file.Parent()));
 						else
-							actualFiles = Empty<(string File, string Dir)>.Sequence;
+							actualFiles = Empty<(FsPath File, FsPath Dir)>.Sequence;
 
 						foreach (var file in actualFiles)
 						{
@@ -386,8 +386,8 @@ namespace Mtgdb.Gui
 
 		private bool _abort;
 
-		private readonly HashSet<(string File, string Dir)> _filesToLoadDistinct = new HashSet<(string, string)>();
-		private readonly List<(string File, string Dir)> _filesToLoad = new List<(string, string)>();
+		private readonly HashSet<(FsPath File, FsPath Dir)> _filesToLoadDistinct = new HashSet<(FsPath, FsPath)>();
+		private readonly List<(FsPath File, FsPath Dir)> _filesToLoad = new List<(FsPath, FsPath)>();
 
 		private readonly object _sync = new object();
 

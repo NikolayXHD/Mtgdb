@@ -21,10 +21,10 @@ namespace Mtgdb.Data
 		{
 			_formatter = formatter;
 			_downloader = downloader;
-			SetsFile = AppDir.Data.AddPath("AllPrintings.json");
-			PricesFile = AppDir.Data.AddPath("AllPrices.json");
+			SetsFile = AppDir.Data.Join("AllPrintings.json");
+			PricesFile = AppDir.Data.Join("AllPrices.json");
 			CustomSetCodes = new string[0];
-			PatchFile = AppDir.Data.AddPath("patch.v2.json");
+			PatchFile = AppDir.Data.Join("patch.v2.json");
 			Cards = new List<Card>();
 		}
 
@@ -33,9 +33,9 @@ namespace Mtgdb.Data
 			var downloader = _downloader();
 
 			var tasks = new List<Task>(2);
-			if (!File.Exists(SetsFile))
+			if (!SetsFile.IsFile())
 				tasks.Add(downloader.DownloadMtgjson(token));
-			if (!File.Exists(PricesFile))
+			if (!PricesFile.IsFile())
 				tasks.Add(downloader.DownloadPrices(token));
 			if (tasks.Count > 0)
 				await Task.WhenAll(tasks);
@@ -44,16 +44,16 @@ namespace Mtgdb.Data
 
 		public void LoadFile()
 		{
-			_defaultSetsContent = File.ReadAllBytes(SetsFile);
-			_priceContent = File.Exists(PricesFile)
-				? File.ReadAllBytes(PricesFile)
+			_defaultSetsContent = SetsFile.ReadAllBytes();
+			_priceContent = PricesFile.IsFile()
+				? PricesFile.ReadAllBytes()
 				: null;
 
 			_customSetContents = CustomSetCodes
-				.Select(code => File.ReadAllBytes(AppDir.Data.AddPath("custom_sets").AddPath(code + ".json")))
+				.Select(code => AppDir.Data.Join("custom_sets", code + ".json").ReadAllBytes())
 				.ToArray();
 
-			Patch = JsonConvert.DeserializeObject<Patch>(File.ReadAllText(PatchFile));
+			Patch = JsonConvert.DeserializeObject<Patch>(PatchFile.ReadAllText());
 			Patch.IgnoreCase();
 
 			IsFileLoadingComplete.Signal();
@@ -435,8 +435,8 @@ namespace Mtgdb.Data
 		public AsyncSignal IsLoadingComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLocalizationLoadingComplete { get; } = new AsyncSignal();
 
-		internal string SetsFile { get; set; }
-		private string PricesFile { get; set; }
+		internal FsPath SetsFile { get; set; }
+		private FsPath PricesFile { get; set; }
 
 		internal string[] CustomSetCodes
 		{
@@ -457,7 +457,7 @@ namespace Mtgdb.Data
 		public IDictionary<string, IReadOnlyList<string>> MapPrintingsByName(bool tokens) =>
 			tokens ? TokenPrintingsByName : CardPrintingsByName;
 
-		private string PatchFile { get; }
+		private FsPath PatchFile { get; }
 
 		public List<Card> Cards { get; }
 		public IDictionary<string, Set> SetsByCode { get; } = new Dictionary<string, Set>(Str.Comparer);

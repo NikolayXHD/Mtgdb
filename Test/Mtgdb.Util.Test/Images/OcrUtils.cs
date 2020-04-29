@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Controls;
 using Mtgdb.Data;
+using Mtgdb.Dev;
 using Mtgdb.Test;
 using Ninject;
 using NUnit.Framework;
@@ -155,12 +156,14 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("D:\\Distrib\\games\\mtg\\Gatherer.Original\\rna", "rna;prna")]
-		public void RenameImages(string unnamedImagesDirectory, string setCodes)
+		[TestCase("rna;prna")]
+		public void RenameImages(string setCodes)
 		{
+			var unnamedImagesDirectory = DevPaths.GathererOriginalCardsDir.Join("rna");
+
 			var fileNames =
-				Directory.EnumerateFiles(unnamedImagesDirectory, "*.jpg", SearchOption.TopDirectoryOnly).Concat(
-					Directory.EnumerateFiles(unnamedImagesDirectory, "*.png", SearchOption.TopDirectoryOnly));
+				unnamedImagesDirectory.EnumerateFiles("*.jpg")
+					.Concat(unnamedImagesDirectory.EnumerateFiles("*.png"));
 
 			var setCodesArr = setCodes.Split(';').ToHashSet(Str.Comparer);
 
@@ -179,8 +182,8 @@ namespace Mtgdb.Util
 
 			foreach (var fileName in fileNames)
 			{
-				var extension = Path.GetExtension(fileName);
-				var directory = Path.GetDirectoryName(fileName);
+				var extension = fileName.Extension();
+				var directory = fileName.Parent();
 
 				var name = ocr(fileName, new Rectangle(20, 20, 170, 17));
 
@@ -198,20 +201,20 @@ namespace Mtgdb.Util
 					? cardNames[indexOfMostSimilarName]
 					: new string(name.Select(c => invalidFileNameChars.Contains(c) ? '_' : c).ToArray());
 
-				string renamed = Path.Combine(directory, mostSimilarName + extension);
+				FsPath renamed = directory.Join(mostSimilarName + extension);
 
-				if (Str.Equals(renamed, fileName))
+				if (renamed == fileName)
 					continue;
 
 				int suffix = 0;
-				string baseName = Path.GetFileNameWithoutExtension(renamed);
+				string baseName = renamed.Basename(extension: false);
 
-				while (File.Exists(renamed))
-					renamed = Path.Combine(directory, baseName + ++suffix + extension);
+				while (renamed.IsFile())
+					renamed = directory.Join(baseName + ++suffix + extension);
 
 				try
 				{
-					File.Move(fileName, renamed);
+					fileName.MoveFileTo(renamed);
 				}
 				catch (IOException)
 				{
@@ -220,7 +223,7 @@ namespace Mtgdb.Util
 		}
 
 		private string ocr(
-			string bitmapPath,
+			FsPath bitmapPath,
 			Rectangle rect,
 			IList<Func<Bitmap, BmpProcessor>> preScaleFilters = null,
 			IList<Func<Bitmap, BmpProcessor>> postScaleFilters = null)
@@ -230,15 +233,13 @@ namespace Mtgdb.Util
 
 			Bitmap textArea;
 
-			using (var bitmap = new Bitmap(bitmapPath))
+			using (var bitmap = new Bitmap(bitmapPath.Value))
 				textArea = getPart(bitmap, rect);
 
 			using (textArea)
 			{
 				foreach (var preScaleFilter in preScaleFilters)
 					preScaleFilter(textArea)?.Execute();
-
-				//textArea.Save("D:\\temp\\img\\text.png");
 
 				float[] factors =
 				{
@@ -267,8 +268,6 @@ namespace Mtgdb.Util
 
 						var scaled = textArea.FitIn(scaledSize);
 						postScaleFilters[p](scaled)?.Execute();
-
-						//scaled.Save("D:\\temp\\img\\bw.png");
 
 						using var page = _engine.Process(scaled, PageSegMode.SingleLine);
 						texts[i] = page.GetText();

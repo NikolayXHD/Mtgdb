@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
@@ -13,16 +12,11 @@ namespace Mtgdb.Data
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.IgnoreCase);
 
 		public ImageFile(
-			[NotNull] string fileName, string rootPath, string setCode = null, string artist = null,
+			[NotNull] FsPath fileName, FsPath rootPath, string setCode = null, string artist = null,
 			bool isArt = false, int? customPriority = null)
 		{
-			var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-			if (fileNameWithoutExtension == null)
-				throw new ArgumentException(@"fileName is null", nameof(fileName));
-
-			string directoryName = Path.GetDirectoryName(fileName);
-			if (directoryName == null)
-				throw new ArgumentException(@"directoryName is null", nameof(fileName));
+			var fileNameWithoutExtension = fileName.Basename(extension: false);
+			FsPath directoryName = fileName.Parent();
 
 			FullPath = fileName;
 
@@ -51,12 +45,6 @@ namespace Mtgdb.Data
 
 			rootPath = rootPath.ToAppRootedPath();
 
-			if (!rootPath.EndsWith("\\"))
-				rootPath += "\\";
-
-			if (!directoryName.EndsWith("\\"))
-				directoryName += "\\";
-
 			if (setCode != null)
 			{
 				SetCode = string.Intern(setCode);
@@ -64,7 +52,7 @@ namespace Mtgdb.Data
 			}
 			else
 			{
-				var setCodeMatch = _setCodeRegex.Match(directoryName.Substring(rootPath.Length));
+				var setCodeMatch = _setCodeRegex.Match(directoryName.RelativeTo(rootPath).Value);
 				if (setCodeMatch.Success)
 					SetCode = string.Intern(setCodeMatch.Value.ToUpperInvariant());
 				else
@@ -77,7 +65,7 @@ namespace Mtgdb.Data
 				Artist = string.Intern(artist);
 
 			IsArt = isArt;
-			IsToken = directoryName.IndexOf("Token", Str.Comparison) >= 0;
+			IsToken = directoryName.Value.IndexOf("Token", Str.Comparison) >= 0;
 		}
 
 		public ImageModel ApplyRotation(Card card, bool zoom)
@@ -141,7 +129,7 @@ namespace Mtgdb.Data
 		private string Type { get; }
 
 		[NotNull]
-		public string FullPath { get; }
+		public FsPath FullPath { get; }
 
 		public int Priority { get; }
 		public string Artist { get; }

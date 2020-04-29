@@ -15,17 +15,17 @@ namespace Mtgdb
 
 		private Process _process;
 
-		public bool Extract(string archive, string targetDirectory, IEnumerable<string> excludedFiles = null)
+		public bool Extract(FsPath archive, FsPath targetDirectory, IEnumerable<FsPath> excludedFiles = null)
 		{
-			excludedFiles ??= Enumerable.Empty<string>();
+			excludedFiles ??= Enumerable.Empty<FsPath>();
 			var argsBuilder = new StringBuilder($"x -aoa \"{archive}\" \"-o{targetDirectory}\"");
 
-			foreach (string excludedFile in excludedFiles.Append(_executable))
+			foreach (FsPath excludedFile in excludedFiles.Append(_executable))
 			{
-				if (!excludedFile.StartsWith(targetDirectory))
+				var relativePath = excludedFile.RelativeTo(targetDirectory);
+				if (relativePath == FsPath.None)
 					continue;
 
-				var relativePath = excludedFile.Substring(targetDirectory.Length + 1);
 				argsBuilder.Append($" \"-x!{relativePath}\"");
 			}
 
@@ -34,7 +34,7 @@ namespace Mtgdb
 			return run(args);
 		}
 
-		public bool Compress(string path, string output)
+		public bool Compress(FsPath path, FsPath output)
 		{
 			return run($"a \"{output}\" -t7z \"{path}\" -r");
 		}
@@ -46,7 +46,7 @@ namespace Mtgdb
 
 			_process = new Process
 			{
-				StartInfo = new ProcessStartInfo(_executable, args)
+				StartInfo = new ProcessStartInfo(_executable.ToString(), args)
 				{
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
@@ -118,8 +118,8 @@ namespace Mtgdb
 
 		private readonly bool _silent;
 
-		private static readonly string _executable = Runtime.IsLinux
-			? "7z" // from p7zip-full package
-			: AppDir.Update.AddPath("7z").AddPath("7za.exe");
+		private static readonly FsPath _executable = Runtime.IsLinux
+			? new FsPath("7z") // from p7zip-full package
+			: AppDir.Update.Join("7z", "7za.exe");
 	}
 }

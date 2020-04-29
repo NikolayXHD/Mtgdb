@@ -1,29 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Mtgdb.Dev;
 using Newtonsoft.Json;
 
 namespace Mtgdb.Util
 {
 	public class TcgParser
 	{
-		private readonly string _resourcesDir = @"D:\Distrib\games\mtg\tcg";
+		private readonly FsPath _resourcesDir = DevPaths.MtgContentDir.Join("tcg");
 
 		public Dictionary<string, Dictionary<string, int>> GetOrderByCard()
 		{
-			string sortFile = _resourcesDir.AddPath("tcg.sort.json");
+			FsPath sortFile = _resourcesDir.Join("tcg.sort.json");
 
-			var json = File.ReadAllText(sortFile);
+			var json = sortFile.ReadAllText();
 			var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(json);
 			return result;
 		}
 
 		public Dictionary<string, string> GetTcgSetBySet()
 		{
-			string setMapFile = _resourcesDir.AddPath("tcg.sets.map.txt");
+			FsPath setMapFile = _resourcesDir.Join("tcg.sets.map.txt");
 
-			var tcgSetBySet = File.ReadAllLines(setMapFile)
+			var tcgSetBySet = setMapFile.ReadAllLines()
 				.Where(l => l != string.Empty)
 				.Select(l => l.Split('\t'))
 				.ToDictionary(p => p[0], p => p[1]);
@@ -33,9 +33,9 @@ namespace Mtgdb.Util
 
 		public List<TcgSet> ParseSets()
 		{
-			string setListFile = _resourcesDir.AddPath("tcg.sets.xml");
+			FsPath setListFile = _resourcesDir.Join("tcg.sets.xml");
 
-			var text = File.ReadAllText(setListFile);
+			var text = setListFile.ReadAllText();
 			var root = XElement.Parse(text);
 			var options = root.Elements("option").ToArray();
 
@@ -52,8 +52,8 @@ namespace Mtgdb.Util
 
 		public Dictionary<string, Dictionary<string, TcgCard>> GetTcgCardsByTcgSet()
 		{
-			string cardsFile = _resourcesDir.AddPath("tcg.json");
-			var json = File.ReadAllText(cardsFile);
+			FsPath cardsFile = _resourcesDir.Join("tcg.json");
+			var json = cardsFile.ReadAllText();
 			var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, TcgCard>>>(json);
 			return result;
 		}
@@ -62,13 +62,13 @@ namespace Mtgdb.Util
 		{
 			var result = new Dictionary<string, Dictionary<string, TcgCard>>();
 
-			string dir = _resourcesDir.AddPath("pages");
+			FsPath dir = _resourcesDir.Join("pages");
 
-			var files = Directory.GetFiles(dir, "*.html", SearchOption.TopDirectoryOnly);
+			var files = dir.EnumerateFiles("*.html");
 			foreach (var file in files)
 			{
-				var content = File.ReadAllText(file);
-				var setCode = Path.GetFileNameWithoutExtension(file);
+				var content = file.ReadAllText();
+				string setCode = file.Basename(extension: false);
 
 				var tableBeginPosition = content.IndexOf("<table class=\"priceGuideTable", 0, Str.Comparison);
 				string closingTag = "</table>";

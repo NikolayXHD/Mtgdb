@@ -20,7 +20,7 @@ namespace Mtgdb.Gui
 		public FormChart()
 		{
 			InitializeComponent();
-			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable.Value);
 
 			_menus = new[]
 			{

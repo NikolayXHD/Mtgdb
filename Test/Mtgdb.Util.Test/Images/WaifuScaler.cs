@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using Mtgdb.Dev;
 
 namespace Mtgdb.Util
 {
 	public static class WaifuScaler
 	{
-		public static void Scale(string sourceFile, string targetFile)
+		public static void Scale(FsPath sourceFile, FsPath targetFile)
 		{
 			int parallelism = Environment.ProcessorCount;
 
-			string exe = @"D:\portable\waifu2x-converter-cpp\waifu2x-converter-cpp.exe";
+			FsPath exe = DevPaths.DataDrive.Join("portable", "waifu2x-converter-cpp", "waifu2x-converter-cpp.exe");
 			string args = $"--jobs {parallelism} --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
-			string workingDirectory = Path.GetDirectoryName(exe) ??
-				throw new Exception($"Failed to get parent directory for {exe}");
+			FsPath workingDirectory = exe.Parent();
 
-			var process = Process.Start(new ProcessStartInfo(exe, args)
+			var process = Process.Start(new ProcessStartInfo(exe.Value, args)
 			{
-				WorkingDirectory = workingDirectory,
+				WorkingDirectory = workingDirectory.Value,
 				UseShellExecute = false,
 				CreateNoWindow = true
 			});

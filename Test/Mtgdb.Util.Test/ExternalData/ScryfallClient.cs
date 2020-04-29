@@ -8,7 +8,7 @@ namespace Mtgdb.Util
 {
 	public class ScryfallClient : ImageDownloaderBase
 	{
-		public override async Task DownloadCardImage(Card card, string targetPath, CancellationToken token)
+		public override async Task DownloadCardImage(Card card, FsPath targetPath, CancellationToken token)
 		{
 			if (string.IsNullOrEmpty(card.ScryfallId))
 			{

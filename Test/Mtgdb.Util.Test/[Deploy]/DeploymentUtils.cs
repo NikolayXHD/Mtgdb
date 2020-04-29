@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -11,6 +10,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Data;
+using Mtgdb.Dev;
 using Ninject;
 using NUnit.Framework;
 
@@ -44,106 +44,106 @@ namespace Mtgdb.Util
 				if (setCodes != null && !setCodes.Contains(set.Code, Str.Comparer))
 					continue;
 
-				foreach ((bool isToken, string typeSubdir, _) in getIsToken(nonToken, token))
+				foreach ((bool isToken, FsPath typeSubdir, _) in getIsToken(nonToken, token))
 				{
 					var cards = set.List(isToken);
 					if (cards.Count == 0)
 						continue;
 
-					string setSubdir = set.Code + (Str.Equals(set.Code, "con") ? " escape" : string.Empty);
-					string downloadRootDir = RootDir.AddPath(_createZoom ? OriginalSubdir : PreProcessedSubdir);
-					string setDirectory = Path.Combine(downloadRootDir, typeSubdir, setSubdir);
-					string setDirectoryPng = setDirectory + ".png";
+					FsPath setSubdir = new FsPath(set.Code + (Str.Equals(set.Code, "con") ? " escape" : string.Empty));
+					FsPath downloadRootDir = DevPaths.MtgContentDir.Join(_createZoom ? OriginalSubdir : PreProcessedSubdir);
+					FsPath setDirectory = downloadRootDir.Join(typeSubdir, setSubdir);
+					FsPath setDirectoryPng = setDirectory.Concat(".png");
 
-					bool dirExisted = Directory.Exists(setDirectoryPng);
+					bool dirExisted = setDirectoryPng.IsDirectory();
 					if (!dirExisted)
-						Directory.CreateDirectory(setDirectoryPng);
+						setDirectoryPng.CreateDirectory();
 
 					foreach (var card in cards)
 					{
-						string targetFile = Path.Combine(setDirectoryPng, card.ImageName + ".png");
-						string processedFile = Path.Combine(setDirectory, card.ImageName + ".jpg");
+						FsPath targetFile = setDirectoryPng.Join(card.ImageName + ".png");
+						FsPath processedFile = setDirectory.Join(card.ImageName + ".jpg");
 
-						if (File.Exists(targetFile) || File.Exists(processedFile))
+						if (targetFile.IsFile() || processedFile.IsFile())
 							continue;
 
 						await client.DownloadCardImage(card, targetFile, CancellationToken.None);
 					}
 
-					if (!dirExisted && Directory.GetFileSystemEntries(setDirectoryPng).Length == 0)
-						Directory.Delete(setDirectoryPng);
+					if (!dirExisted && !setDirectoryPng.EnumerateFiles().Any())
+						setDirectoryPng.DeleteDirectory();
 				}
 			}
 		}
 
 		[Order(2)]
-		[TestCase(SetCodes,NonToken, Token)]
+		[TestCase(SetCodes, NonToken, Token)]
 		public void PreProcessImages(string setCodesList, bool nonToken, bool token)
 		{
 			setupImageConversion();
 
-			string smallDir = RootDir.AddPath(OriginalSubdir);
-			string zoomDir = RootDir.AddPath(PreProcessedSubdir);
-			string smallDirBak = BakDir.AddPath(OriginalSubdir);
-			string zoomDirBak = BakDir.AddPath(PreProcessedSubdir);
+			FsPath smallDir = DevPaths.MtgContentDir.Join(OriginalSubdir);
+			FsPath zoomDir = DevPaths.MtgContentDir.Join(PreProcessedSubdir);
+			FsPath smallDirBak = BakDir.Join(OriginalSubdir);
+			FsPath zoomDirBak = BakDir.Join(PreProcessedSubdir);
 
 			var setCodes = setCodesList?.Split(',');
 
-			IEnumerable<string> getSetSubdirs(string typeSubdir)
+			IEnumerable<FsPath> getSetSubdirs(FsPath typeSubdir)
 			{
-				string typeDir = Path.Combine(_createZoom ? smallDir : zoomDir, typeSubdir);
-				return Directory.EnumerateDirectories(typeDir,
-						_fromPng ? "*.png" : "*",
-						SearchOption.TopDirectoryOnly)
-					.Select(Path.GetFileName)
-					.Distinct()
-					.Select(subdir => Regex.Replace(subdir, @"\.png$", string.Empty));
+				FsPath typeDir = _createZoom ? smallDir : zoomDir.Join(typeSubdir);
+				return typeDir
+					.EnumerateDirectories(_fromPng ? "*.png" : "*", SearchOption.TopDirectoryOnly)
+					.Select(_ => new FsPath(
+						Regex.Replace(
+							_.Basename(),
+							@"\.png$",
+							string.Empty)));
 			}
 
-			foreach ((_, string typeSubdir, _) in getIsToken(nonToken, token))
+			foreach ((_, FsPath typeSubdir, _) in getIsToken(nonToken, token))
 			{
-				foreach (string setSubdir in getSetSubdirs(typeSubdir))
+				foreach (FsPath setSubdir in getSetSubdirs(typeSubdir))
 				{
-					if (setCodes != null && !setCodes.Contains(setSubdir, Str.Comparer))
+					if (setCodes != null && !setCodes.Contains(setSubdir.Value, Str.Comparer))
 						continue;
 
-					string smallJpgDir = Path.Combine(smallDir, typeSubdir, setSubdir);
-					string zoomJpgDir = Path.Combine(zoomDir, typeSubdir, setSubdir);
+					FsPath smallJpgDir = smallDir.Join(typeSubdir, setSubdir);
+					FsPath zoomJpgDir = zoomDir.Join(typeSubdir, setSubdir);
 
 					if (!_fromPng)
 					{
 						if (!_createZoom)
 							return;
 
-						Directory.CreateDirectory(zoomJpgDir);
-						foreach (string smallImg in Directory.GetFiles(smallJpgDir))
+						zoomJpgDir.CreateDirectory();
+						foreach (FsPath smallImg in smallJpgDir.EnumerateFiles())
 						{
-							string zoomImg = smallImg.Replace(smallDir, zoomDir);
-							if (_keepExisting && File.Exists(zoomImg))
+							FsPath zoomImg = smallImg.ChangeDirectory(smallDir, zoomDir);
+							if (_keepExisting && zoomImg.IsFile())
 								continue;
 							WaifuScaler.Scale(smallImg, zoomImg);
 						}
 					}
 					else
 					{
-						string setPngSubdir = setSubdir + ".png";
-						string smallPngDir = Path.Combine(smallDir, typeSubdir, setPngSubdir);
-						string smallPngDirBak = Path.Combine(smallDirBak, typeSubdir, setPngSubdir);
-						string zoomPngDir = Path.Combine(zoomDir, typeSubdir, setPngSubdir);
-						string zoomPngDirBak = Path.Combine(zoomDirBak, typeSubdir, setPngSubdir);
+						FsPath setPngSubdir = setSubdir.Concat(".png");
+						FsPath smallPngDir = smallDir.Join(typeSubdir, setPngSubdir);
+						FsPath smallPngDirBak = smallDirBak.Join(typeSubdir, setPngSubdir);
+						FsPath zoomPngDir = zoomDir.Join(typeSubdir, setPngSubdir);
+						FsPath zoomPngDirBak = zoomDirBak.Join(typeSubdir, setPngSubdir);
 
-						var dirs = new List<(string pngDir, string pngDirBak, string jpgDir)>();
+						var dirs = new List<(FsPath pngDir, FsPath pngDirBak, FsPath jpgDir)>();
 						if (_createZoom)
 						{
-							Directory.CreateDirectory(zoomPngDir);
-							foreach (string smallImg in Directory.GetFiles(smallPngDir))
+							zoomPngDir.CreateDirectory();
+							foreach (FsPath smallImg in smallPngDir.EnumerateFiles())
 							{
-								string zoomImg = smallImg.Replace(smallDir, zoomDir);
-								string convertedImg = zoomImg
-									.Replace(smallDir, zoomJpgDir)
-									.Replace(".png", ".jpg");
+								FsPath zoomImg = smallImg.ChangeDirectory(smallDir, zoomDir);
+								FsPath convertedImg = zoomImg.ChangeDirectory(smallDir, zoomJpgDir)
+									.Rename(_ => _.Replace(".png", ".jpg"));
 
-								if (_keepExisting && F.Seq(zoomImg, convertedImg).Any(File.Exists))
+								if (_keepExisting && (zoomImg.IsFile() || convertedImg.IsFile()))
 									continue;
 
 								WaifuScaler.Scale(smallImg, zoomImg);
@@ -154,13 +154,12 @@ namespace Mtgdb.Util
 
 						dirs.Add((pngDir: zoomPngDir, pngDirBak: zoomPngDirBak, jpgDir: zoomJpgDir));
 
-						foreach ((string pngDir, string pngDirBak, string jpgDir) in dirs)
+						foreach ((FsPath pngDir, FsPath pngDirBak, FsPath jpgDir) in dirs)
 						{
-							Directory.CreateDirectory(jpgDir);
+							jpgDir.CreateDirectory();
 
-							var pngImages = Directory.GetFiles(pngDir).ToArray();
-
-							foreach (string sourceImage in pngImages)
+							var pngImages = pngDir.EnumerateFiles();
+							foreach (FsPath sourceImage in pngImages)
 								convertToJpg(sourceImage, jpgDir, _keepExisting);
 
 							moveDirectoryToBackup(pngDir, pngDirBak);
@@ -176,13 +175,13 @@ namespace Mtgdb.Util
 		{
 			setupExport();
 
-			foreach ((bool isToken, _, string tokenSuffix) in getIsToken(nonToken, token))
+			foreach ((bool isToken, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
 				_export.ExportCardImages(TargetDir,
 					small,
 					zoom,
 					setCodes,
-					LqDir + tokenSuffix,
-					MqDir + tokenSuffix,
+					LqDir.Concat(tokenSuffix),
+					MqDir.Concat(tokenSuffix),
 					true,
 					isToken);
 		}
@@ -191,22 +190,24 @@ namespace Mtgdb.Util
 		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
 		public void SignImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
 		{
-			foreach (string qualityDir in getQualities(small, zoom))
-			foreach ((_, _, string tokenSuffix) in getIsToken(nonToken, token))
+			foreach (FsPath qualityDir in getQualities(small, zoom))
+			foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
 			{
-				string outputFile = getSignatureFile(qualityDir, tokenSuffix);
-				string packagePath = TargetDir.AddPath(qualityDir + tokenSuffix);
+				FsPath outputFile = getSignatureFile(qualityDir, tokenSuffix);
+				FsPath packagePath = TargetDir.Join(qualityDir).Concat(tokenSuffix);
 				new ImageDirectorySigner().SignFiles(packagePath, outputFile, setCodes);
 
-				FileInfo signatureFile = new FileInfo(getSignatureFile(qualityDir, tokenSuffix));
-				FileInfo compressedSignatureFile = new FileInfo(Path.Combine(
-					signatureFile.DirectoryName ?? throw new ApplicationException("Invalid signature file path " + signatureFile.FullName),
-					Path.GetFileNameWithoutExtension(signatureFile.Name) + SevenZipExtension));
+				FsPath signatureFile = getSignatureFile(qualityDir, tokenSuffix);
+				FsPath compressedSignatureFile = signatureFile
+						.Parent()
+						.Join(signatureFile.Basename(extension: false))
+						.Concat(SevenZipExtension);
 
-				if (compressedSignatureFile.Exists)
-					compressedSignatureFile.Delete();
+				if (compressedSignatureFile.IsFile())
+					compressedSignatureFile.DeleteFile();
 
-				new SevenZip(false).Compress(signatureFile.FullName, compressedSignatureFile.FullName).Should().BeTrue();
+				new SevenZip(false).Compress(signatureFile, compressedSignatureFile)
+					.Should().BeTrue();
 			}
 		}
 
@@ -214,54 +215,53 @@ namespace Mtgdb.Util
 		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
 		public void ZipImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
 		{
-			foreach (string qualityDir in getQualities(small, zoom))
-			foreach ((_, _, string tokenSuffix) in getIsToken(nonToken, token))
+			var list = setCodes?.Split(',').ToHashSet(Str.Comparer);
+
+			foreach (FsPath qualityDir in getQualities(small, zoom))
+			foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
 			{
-				var list = setCodes?.Split(',').ToHashSet(Str.Comparer);
-				string compressedRoot = TargetDir.AddPath(qualityDir + tokenSuffix + ZipDirSuffix);
+				FsPath compressedRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix).Concat(ZipDirSuffix);
+				compressedRoot.CreateDirectory();
 
-				Directory.CreateDirectory(compressedRoot);
-
-				string sourceRoot = TargetDir.AddPath(qualityDir + tokenSuffix);
-				foreach (var subdir in new DirectoryInfo(sourceRoot).EnumerateDirectories())
+				FsPath sourceRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix);
+				foreach (var subdir in sourceRoot.EnumerateDirectories())
 				{
-					if (list?.Contains(subdir.Name) == false)
+					string subdirRelative = subdir.Basename();
+					if (list?.Contains(subdirRelative) == false)
 						continue;
 
-					var targetFile = new FileInfo(compressedRoot.AddPath(subdir.Name + SevenZipExtension));
-					if (targetFile.Exists)
-						targetFile.Delete();
+					var targetFile = compressedRoot.Join(subdirRelative).Concat(SevenZipExtension);
+					if (targetFile.IsFile())
+						targetFile.DeleteFile();
 
-					new SevenZip(false).Compress(subdir.FullName, targetFile.FullName)
+					new SevenZip(false).Compress(subdir, targetFile)
 						.Should().BeTrue();
 				}
 			}
 		}
 
-		private static void moveDirectoryToBackup(string dir, string dirBak)
+		private static void moveDirectoryToBackup(FsPath dir, FsPath dirBak)
 		{
-			if (Directory.Exists(dirBak))
-				Directory.Delete(dirBak, true);
-			Directory.CreateDirectory(dirBak.Parent());
-			Directory.Move(dir, dirBak);
+			if (dirBak.IsDirectory())
+				dirBak.DeleteDirectory(recursive: true);
+			dirBak.Parent().CreateDirectory();
+			dir.MoveDirectoryTo(dirBak);
 		}
 
-		private void convertToJpg([NotNull] string sourceImage, string targetDir, bool keepExisting)
+		private void convertToJpg([NotNull] FsPath sourceImage, FsPath targetDir, bool keepExisting)
 		{
-			string targetImage = Path.Combine(targetDir,
-				Path.GetFileNameWithoutExtension(sourceImage) + ".jpg");
-
-			if (keepExisting && File.Exists(targetImage))
+			FsPath targetImage = targetDir.Join(sourceImage.Basename(extension: false)).Concat(".jpg");
+			if (keepExisting && targetImage.IsFile())
 				return;
 
-			using var original = new Bitmap(sourceImage);
+			using var original = new Bitmap(sourceImage.Value);
 			new BmpAlphaToBackgroundColorTransformation(original, Color.White)
 				.Execute();
 
-			original.Save(targetImage, _jpegCodec, _jpegEncoderParams);
+			original.Save(targetImage.Value, _jpegCodec, _jpegEncoderParams);
 		}
 
-		private static IEnumerable<string> getQualities(bool small, bool zoom)
+		private static IEnumerable<FsPath> getQualities(bool small, bool zoom)
 		{
 			if (small)
 				yield return LqDir;
@@ -270,23 +270,22 @@ namespace Mtgdb.Util
 				yield return MqDir;
 		}
 
-		private static IEnumerable<(bool IsToken, string SourceSubdir, string TargetDirSuffix)> getIsToken(bool nonToken, bool token)
+		private static IEnumerable<(bool IsToken, FsPath SourceSubdir, FsPath TargetDirSuffix)> getIsToken(bool nonToken, bool token)
 		{
 			if (nonToken)
-				yield return (false, CardsSubdir, string.Empty);
+				yield return (false, CardsSubdir, FsPath.Empty);
 
 			if (token)
 				yield return (true, TokensSubdir, TokenSuffix);
 		}
 
-		private static string getSignatureFile(string qualityDir, string tokenSuffix)
+		private static FsPath getSignatureFile(FsPath qualityDir, FsPath tokenSuffix)
 		{
-			string outputFile = TargetDir
-				.AddPath(qualityDir + tokenSuffix + ListDirSuffix)
-				.AddPath(Signer.SignaturesFile);
+			FsPath outputFile = TargetDir
+				.Join(qualityDir).Concat(tokenSuffix).Concat(ListDirSuffix)
+				.Join(Signer.SignaturesFile);
 			return outputFile;
 		}
-
 
 
 		private void setupExport()
@@ -335,7 +334,6 @@ namespace Mtgdb.Util
 		}
 
 
-
 		private static readonly bool _keepExisting = false;
 		private static readonly bool _fromPng = true;
 		private static readonly bool _createZoom = true;
@@ -344,22 +342,22 @@ namespace Mtgdb.Util
 		private EncoderParameters _jpegEncoderParams;
 		private ImageExport _export;
 
-		private const string BakDir = @"D:\Distrib\games\mtg\.bak";
-		private const string RootDir = @"D:\Distrib\games\mtg";
-		private const string TargetDir = RootDir + @"\" + TargetSubdir;
+		private static readonly FsPath BakDir = DevPaths.MtgContentDir.Join(".bak");
+		private static readonly FsPath TargetSubdir = new FsPath("Mtgdb.Pictures");
+		private static readonly FsPath TargetDir = DevPaths.MtgContentDir.Join(TargetSubdir);
 
-		private const string OriginalSubdir = "Gatherer.Original";
-		private const string PreProcessedSubdir = "Gatherer.PreProcessed";
-		private const string CardsSubdir = "cards";
-		private const string TokensSubdir = "tokens";
+		private static readonly string OriginalSubdir = DevPaths.GathererOriginalDir.Basename();
+		private static readonly string PreProcessedSubdir = DevPaths.GathererPreprocessedDir.Basename();
+		private static readonly FsPath CardsSubdir = new FsPath("cards");
+		private static readonly FsPath TokensSubdir = new FsPath("tokens");
 
-		private const string TargetSubdir = @"Mtgdb.Pictures";
-		private const string LqDir = "lq";
-		private const string MqDir = "mq";
-		private const string ListDirSuffix = "-list";
-		private const string ZipDirSuffix = "-7z";
-		private const string TokenSuffix = "-token";
-		private const string SevenZipExtension = ".7z";
+		private static readonly FsPath LqDir = new FsPath("lq");
+		private static readonly FsPath MqDir = new FsPath("mq");
+
+		private static readonly FsPath ListDirSuffix = new FsPath("-list");
+		private static readonly FsPath ZipDirSuffix = new FsPath("-7z");
+		private static readonly FsPath TokenSuffix = new FsPath("-token");
+		private static readonly FsPath SevenZipExtension = new FsPath(".7z");
 
 		private bool _setupExportComplete;
 		private bool _setupConversionComplete;

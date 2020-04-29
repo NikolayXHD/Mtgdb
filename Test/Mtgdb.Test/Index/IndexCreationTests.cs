@@ -33,7 +33,7 @@ namespace Mtgdb.Test
 		[Test, Order(0)]
 		public void KeywordSearcher_creates_index()
 		{
-			_keywordSearcher.IndexDirectoryParent += "-test";
+			_keywordSearcher.IndexDirectoryParent = _keywordSearcher.IndexDirectoryParent.Concat("-test");
 			_keywordSearcher.InvalidateIndex();
 
 			Assert.That(_keywordSearcher.IsUpToDate, Is.Not.True);
@@ -46,7 +46,7 @@ namespace Mtgdb.Test
 		[Test, Order(0)]
 		public void LuceneSearcher_creates_index()
 		{
-			_cardSearcher.IndexDirectoryParent += "-test";
+			_cardSearcher.IndexDirectoryParent = _cardSearcher.IndexDirectoryParent.Concat("-test");
 			_cardSearcher.InvalidateIndex();
 
 			Assert.That(_cardSearcher.IsUpToDate, Is.Not.True);
@@ -60,7 +60,8 @@ namespace Mtgdb.Test
 		[Test, Order(1)]
 		public void LuceneSpellchecker_creates_index()
 		{
-			_cardSearcher.Spellchecker.IndexDirectoryParent += "-test";
+			_cardSearcher.Spellchecker.IndexDirectoryParent =
+				_cardSearcher.Spellchecker.IndexDirectoryParent.Concat("-test");
 			_cardSearcher.Spellchecker.InvalidateIndex();
 
 			Assert.That(_cardSearcher.Spellchecker.IsUpToDate, Is.Not.True);

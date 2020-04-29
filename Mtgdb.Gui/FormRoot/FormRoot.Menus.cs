@@ -97,7 +97,7 @@ namespace Mtgdb.Gui
 			_app.StartForm();
 
 		private static void configClick(object sender, EventArgs e) =>
-			System.Diagnostics.Process.Start(AppDir.Etc.AddPath(@"Mtgdb.Gui.xml"));
+			System.Diagnostics.Process.Start(AppDir.Etc.Join(@"Mtgdb.Gui.xml").Value);
 
 		private void tooltipsChecked(object sender, EventArgs e)
 		{
@@ -215,7 +215,7 @@ namespace Mtgdb.Gui
 			_buttonMenuDonateYandexMoney.SetTag(@"https://money.yandex.ru/to/410012387625926?_openstat=template%3Bipulldown%3Btopupme");
 			_buttonMenuDonateYandexMoney.Pressed += buttonVisitClick;
 
-			_buttonVisitMtgo.SetTag(AppDir.Root.AddPath("https://github.com/NikolayXHD/Mtgdb/wiki/2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online"));
+			_buttonVisitMtgo.SetTag("https://github.com/NikolayXHD/Mtgdb/wiki/2.2-Import-collection-&-decks-from-Magic-The-Gathering-Online");
 			_buttonVisitMtgo.Pressed += buttonVisitClick;
 
 			_buttonSupport.SetTag(_appSourceConfig.ForumUrl);

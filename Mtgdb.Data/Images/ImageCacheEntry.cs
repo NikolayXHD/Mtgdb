@@ -6,13 +6,13 @@ namespace Mtgdb.Data
 {
 	internal class ImageCacheEntry
 	{
-		public ImageCacheEntry(Bitmap image, LinkedListNode<Tuple<string, RotateFlipType>> ratingEntry)
+		public ImageCacheEntry(Bitmap image, LinkedListNode<Tuple<FsPath, RotateFlipType>> ratingEntry)
 		{
 			RatingEntry = ratingEntry;
 			Image = image;
 		}
 
 		public Bitmap Image { get; }
-		public LinkedListNode<Tuple<string, RotateFlipType>> RatingEntry { get; }
+		public LinkedListNode<Tuple<FsPath, RotateFlipType>> RatingEntry { get; }
 	}
 }

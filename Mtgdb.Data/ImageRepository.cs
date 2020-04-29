@@ -16,7 +16,7 @@ namespace Mtgdb.Data
 
 		public void LoadFiles(IEnumerable<string> enabledGroups = null)
 		{
-			var filesByDirCache = new Dictionary<string, IList<string>>(Str.Comparer);
+			var filesByDirCache = new Dictionary<FsPath, IList<FsPath>>();
 			var enabledDirectories = _config.GetEnabledDirectories(enabledGroups);
 
 			loadFilesSmall(enabledDirectories, filesByDirCache);
@@ -26,23 +26,23 @@ namespace Mtgdb.Data
 
 		public void LoadFilesSmall()
 		{
-			loadFilesSmall(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+			loadFilesSmall(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
 		public void LoadFilesZoom()
 		{
-			loadFilesZoom(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+			loadFilesZoom(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
 		public void LoadFilesArt()
 		{
-			loadFilesArt(_config.GetEnabledDirectories(), new Dictionary<string, IList<string>>(Str.Comparer));
+			loadFilesArt(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
-		private void loadFilesSmall(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		private void loadFilesSmall(IList<DirectoryConfig> enabledDirectories, Dictionary<FsPath, IList<FsPath>> filesByDirCache)
 		{
 			var directories = getFolders(enabledDirectories, ImageType.Small);
-			var files = new HashSet<string>(Str.Comparer);
+			var files = new HashSet<FsPath>();
 
 			loadFiles(filesByDirCache, directories, files);
 
@@ -52,10 +52,10 @@ namespace Mtgdb.Data
 			IsLoadingSmallFileComplete.Signal();
 		}
 
-		private void loadFilesZoom(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		private void loadFilesZoom(IList<DirectoryConfig> enabledDirectories, Dictionary<FsPath, IList<FsPath>> filesByDirCache)
 		{
 			var directories = getFolders(enabledDirectories, ImageType.Zoom);
-			var files = new HashSet<string>(Str.Comparer);
+			var files = new HashSet<FsPath>();
 
 			loadFiles(filesByDirCache, directories, files);
 
@@ -65,10 +65,10 @@ namespace Mtgdb.Data
 			IsLoadingZoomFileComplete.Signal();
 		}
 
-		private void loadFilesArt(IList<DirectoryConfig> enabledDirectories, Dictionary<string, IList<string>> filesByDirCache)
+		private void loadFilesArt(IList<DirectoryConfig> enabledDirectories, Dictionary<FsPath, IList<FsPath>> filesByDirCache)
 		{
 			var directories = getFolders(enabledDirectories, ImageType.Art);
-			var files = new HashSet<string>(Str.Comparer);
+			var files = new HashSet<FsPath>();
 
 			loadFiles(filesByDirCache, directories, files);
 
@@ -83,21 +83,23 @@ namespace Mtgdb.Data
 		private static DirectoryConfig[] getFolders(IList<DirectoryConfig> directoryConfigs, Func<DirectoryConfig, bool> filter)
 		{
 			return directoryConfigs
-				.Where(c => filter(c) && Directory.Exists(c.Path))
+				.Where(c => filter(c) && c.Path.IsDirectory())
 				// use_dir_sorting_to_find_most_nested_root
-				.OrderByDescending(c => c.Path.Length)
+				.OrderByDescending(c => c.Path.Value.Length)
 				.ToArray();
 		}
 
-		private static void loadFiles(Dictionary<string, IList<string>> filesByDirCache, IList<DirectoryConfig> directories, ICollection<string> files)
+		private static void loadFiles(Dictionary<FsPath, IList<FsPath>> filesByDirCache, IList<DirectoryConfig> directories, ICollection<FsPath> files)
 		{
 			foreach (var directory in directories)
 			{
-				var excludes = directory.Exclude?.Split(Array.From(';'), StringSplitOptions.RemoveEmptyEntries);
+				if (!directory.Path.HasValue())
+					continue;
 
-				foreach (string file in getDirectoryFiles(filesByDirCache, directory.Path))
+				var excludes = directory.Exclude?.Split(Array.From(';'), StringSplitOptions.RemoveEmptyEntries);
+				foreach (FsPath file in getDirectoryFiles(filesByDirCache, directory.Path))
 				{
-					if (excludes != null && excludes.Any(exclude => file.IndexOf(exclude, Str.Comparison) >= 0))
+					if (excludes != null && excludes.Any(exclude => file.Value.IndexOf(exclude, Str.Comparison) >= 0))
 						continue;
 
 					files.Add(file);
@@ -105,20 +107,20 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private static IEnumerable<string> getDirectoryFiles(Dictionary<string, IList<string>> filesByDirCache, string path)
+		private static IEnumerable<FsPath> getDirectoryFiles(Dictionary<FsPath, IList<FsPath>> filesByDirCache, FsPath path)
 		{
 			if (filesByDirCache.TryGetValue(path, out var cache))
 			{
-				foreach (string file in cache)
+				foreach (FsPath file in cache)
 					yield return file;
 			}
 			else
 			{
-				cache = new List<string>();
+				cache = new List<FsPath>();
 
-				foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+				foreach (FsPath file in path.EnumerateFiles(option: SearchOption.AllDirectories))
 				{
-					if (!_extensions.Contains(Path.GetExtension(file)))
+					if (!_extensions.Contains(file.Extension()))
 						continue;
 
 					cache.Add(file);
@@ -176,14 +178,14 @@ namespace Mtgdb.Data
 		private static void load(
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant,
 			IList<DirectoryConfig> directories,
-			IEnumerable<string> files,
+			IEnumerable<FsPath> files,
 			bool isArt = false)
 		{
 			Shell shl = null;
-			foreach (var entryByDirectory in files.GroupBy(Path.GetDirectoryName))
+			foreach (var entryByDirectory in files.GroupBy(_=>_.Parent()))
 			{
 				// use_dir_sorting_to_find_most_nested_root
-				var root = directories.First(_ => entryByDirectory.Key.StartsWith(_.Path));
+				var root = directories.First(_ => _.Path.IsParentOf(entryByDirectory.Key));
 				string customSetCode = root.Set;
 				int? customPriority = root.Priority;
 
@@ -196,14 +198,14 @@ namespace Mtgdb.Data
 					dir = shl.NameSpace(entryByDirectory.Key);
 				}
 
-				foreach (string file in entryByDirectory)
+				foreach (FsPath file in entryByDirectory)
 				{
 					IList<string> authors = null;
 					IList<string> setCodes = customSetCode?.Split(';').ToList();
 
 					if (isArt)
 					{
-						string fileName = Path.GetFileName(file);
+						string fileName = file.Basename();
 						GetMetadataFromName(fileName, ref authors, ref setCodes);
 
 						if (readAttributes)
@@ -587,9 +589,9 @@ namespace Mtgdb.Data
 		private AsyncSignal IsLoadingArtFileComplete { get; } = new AsyncSignal(multiple: true);
 
 
-		private HashSet<string> _files;
-		private HashSet<string> _filesZoom;
-		private HashSet<string> _filesArt;
+		private HashSet<FsPath> _files;
+		private HashSet<FsPath> _filesZoom;
+		private HashSet<FsPath> _filesArt;
 
 		private IList<DirectoryConfig> _directories;
 		private IList<DirectoryConfig> _directoriesZoom;

@@ -39,7 +39,7 @@ namespace Mtgdb.Data
 				return image;
 			}
 
-			if (!File.Exists(model.ImageFile.FullPath))
+			if (!model.ImageFile.FullPath.IsFile())
 				return null;
 
 			image = LoadImage(model, CardSize);
@@ -77,7 +77,7 @@ namespace Mtgdb.Data
 				byte[] bytes;
 
 				lock (SyncIo)
-					bytes = File.ReadAllBytes(model.ImageFile.FullPath);
+					bytes = model.ImageFile.FullPath.ReadAllBytes();
 
 				var result = new Bitmap(new MemoryStream(bytes));
 
@@ -136,9 +136,9 @@ namespace Mtgdb.Data
 
 
 
-		private Bitmap tryGetFromCache(string path, RotateFlipType rotations)
+		private Bitmap tryGetFromCache(FsPath path, RotateFlipType rotations)
 		{
-			if (!_imagesByPath.TryGetValue(new Tuple<string, RotateFlipType>(path, rotations), out var cacheEntry))
+			if (!_imagesByPath.TryGetValue(new Tuple<FsPath, RotateFlipType>(path, rotations), out var cacheEntry))
 				return null;
 
 			shiftFromLast(cacheEntry);
@@ -155,9 +155,9 @@ namespace Mtgdb.Data
 				ratingEntry.SwapWith(previousEntry);
 		}
 
-		private bool addFirst(string path, RotateFlipType rotations, Bitmap image)
+		private bool addFirst(FsPath path, RotateFlipType rotations, Bitmap image)
 		{
-			var key = new Tuple<string, RotateFlipType>(path, rotations);
+			var key = new Tuple<FsPath, RotateFlipType>(path, rotations);
 
 			if (_imagesByPath.ContainsKey(key))
 				return false;
@@ -183,11 +183,11 @@ namespace Mtgdb.Data
 		public static readonly object SyncIo = new object();
 		private static readonly object _sync = new object();
 
-		private readonly Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry> _imagesByPath =
-			new Dictionary<Tuple<string, RotateFlipType>, ImageCacheEntry>();
+		private readonly Dictionary<Tuple<FsPath, RotateFlipType>, ImageCacheEntry> _imagesByPath =
+			new Dictionary<Tuple<FsPath, RotateFlipType>, ImageCacheEntry>();
 
-		private readonly LinkedList<Tuple<string, RotateFlipType>> _ratings =
-			new LinkedList<Tuple<string, RotateFlipType>>();
+		private readonly LinkedList<Tuple<FsPath, RotateFlipType>> _ratings =
+			new LinkedList<Tuple<FsPath, RotateFlipType>>();
 
 
 		public static readonly Size SizeCropped = new Size(470, 659);

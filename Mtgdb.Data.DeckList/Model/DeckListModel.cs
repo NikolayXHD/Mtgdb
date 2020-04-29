@@ -157,7 +157,7 @@ namespace Mtgdb.Data.Model
 				serialized = serialize(_state);
 			}
 
-			File.WriteAllText(FileName, serialized);
+			FileName.WriteAllText(serialized);
 		}
 
 		private string serialize(State state)
@@ -173,9 +173,9 @@ namespace Mtgdb.Data.Model
 		public void Load()
 		{
 			State state;
-			if (File.Exists(FileName))
+			if (FileName.IsFile())
 			{
-				string serialized = File.ReadAllText(FileName);
+				string serialized = FileName.ReadAllText();
 				state = deserialize(serialized);
 			}
 			else
@@ -274,7 +274,7 @@ namespace Mtgdb.Data.Model
 		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
-		public string FileName { get; set; } = AppDir.History.AddPath("decks.v4.json");
+		public FsPath FileName { get; set; } = AppDir.History.Join("decks.v4.json");
 		private State _state = new State();
 
 		private readonly object _syncCollection = new object();

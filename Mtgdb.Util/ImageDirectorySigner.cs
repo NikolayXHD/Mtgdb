@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Mtgdb.Util
 {
 	public class ImageDirectorySigner
 	{
-		public void SignFiles(string packagePath, string output, string setCodes)
+		public void SignFiles(FsPath packagePath, FsPath output, string setCodes)
 		{
-			string parentDir = output.Parent();
-			Directory.CreateDirectory(parentDir);
+			FsPath parentDir = output.Parent();
+			parentDir.CreateDirectory();
 
-			if (Directory.Exists(packagePath))
+			if (packagePath.IsDirectory())
 			{
 				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
 
-				var prevSignatureByPath = sets != null && File.Exists(output)
+				var prevSignatureByPath = sets != null && output.IsFile()
 					? Signer.ReadFromFile(output, internPath: false)
-						.Where(_ => !sets.Contains(Path.GetDirectoryName(_.Path)))
+						.Where(_ => !sets.Contains(_.Path.Parent().Value))
 						.ToDictionary(_ => _.Path)
-					: new Dictionary<string, FileSignature>();
+					: new Dictionary<FsPath, FileSignature>();
 
 				var signatures = Signer.CreateSignatures(packagePath, precalculated: prevSignatureByPath);
 				Signer.WriteToFile(output, signatures);
 			}
-			else if (File.Exists(packagePath))
+			else if (packagePath.IsFile())
 			{
 				var metadata = Signer.CreateSignature(packagePath);
 				Signer.WriteToFile(output, Array.From(metadata));

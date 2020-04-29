@@ -8,7 +8,7 @@ namespace Mtgdb.Data.Index
 		public CardSpellchecker(CardRepository repo, CardDocumentAdapter adapter)
 			: base(adapter)
 		{
-			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("suggest");
+			IndexDirectoryParent = AppDir.Data.Join("index", "suggest");
 			_repo = repo;
 		}
 
@@ -20,7 +20,7 @@ namespace Mtgdb.Data.Index
 
 			if (_version.IsUpToDate)
 			{
-				using var directory = FSDirectory.Open(_version.IndexDirectory);
+				using var directory = FSDirectory.Open(_version.IndexDirectory.Value);
 				index = new RAMDirectory(directory, IOContext.READ_ONCE);
 
 				var spellchecker = CreateSpellchecker();
@@ -41,7 +41,7 @@ namespace Mtgdb.Data.Index
 			if (index == null)
 				return null;
 
-			index.SaveTo(_version.IndexDirectory);
+			index.SaveTo(_version.IndexDirectory.Value);
 			_version.SetIsUpToDate();
 
 			return index;
@@ -60,7 +60,7 @@ namespace Mtgdb.Data.Index
 
 
 
-		public string IndexDirectoryParent
+		public FsPath IndexDirectoryParent
 		{
 			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.CardSpellchecker);

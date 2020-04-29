@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,15 +19,15 @@ namespace Mtgdb.Gui
 
 		public void MigrateHistoryFiles()
 		{
-			string firstFormDirectory = AppDir.History.AddPath(0.ToString());
+			FsPath firstFormDirectory = AppDir.History.Join(0.ToString());
 
-			if (Directory.Exists(firstFormDirectory))
+			if (firstFormDirectory.IsDirectory())
 				return;
 
-			Directory.CreateDirectory(firstFormDirectory);
+			firstFormDirectory.CreateDirectory();
 
-			foreach (var file in Directory.GetFiles(AppDir.History))
-				File.Copy(file, firstFormDirectory.AddPath(Path.GetFileName(file)));
+			foreach (FsPath file in AppDir.History.EnumerateFiles())
+				file.CopyFileTo(firstFormDirectory.Join(file.Basename()));
 		}
 
 		public void StartForm()
@@ -67,19 +66,19 @@ namespace Mtgdb.Gui
 		{
 			var idBeforeClosing = GetId(form);
 
-			var tempDir = AppDir.History.AddPath("temp");
+			FsPath tempDir = AppDir.History.Join("temp");
 
-			if (Directory.Exists(tempDir))
-				Directory.Delete(tempDir, recursive: true);
+			if (tempDir.IsDirectory())
+				tempDir.DeleteDirectory(recursive: true);
 
-			Directory.Move(AppDir.History.AddPath(idBeforeClosing.ToString()), tempDir);
+			AppDir.History.Join(idBeforeClosing.ToString()).MoveDirectoryTo(tempDir);
 
 			int lastId = _instances.Count - 1;
 
 			for (int i = idBeforeClosing + 1; i <= lastId; i++)
-				Directory.Move(AppDir.History.AddPath(i.ToString()), AppDir.History.AddPath((i - 1).ToString()));
+				AppDir.History.Join(i.ToString()).MoveDirectoryTo(AppDir.History.Join((i - 1).ToString()));
 
-			Directory.Move(tempDir, AppDir.History.AddPath(lastId.ToString()));
+			tempDir.MoveDirectoryTo(AppDir.History.Join(lastId.ToString()));
 
 			_instances.RemoveAt(idBeforeClosing);
 			_instances.Add(form);
@@ -98,13 +97,12 @@ namespace Mtgdb.Gui
 
 			foreach (int tabId in toTabIds)
 			{
-				File.Move(
-					GetHistoryFile(toFormId, tabId),
+				GetHistoryFile(toFormId, tabId).MoveFileTo(
 					GetHistoryFile(toFormId, tabId + 1));
 			}
 
-			if (File.Exists(fromFile))
-				File.Move(fromFile, toFile);
+			if (fromFile.IsFile())
+				fromFile.MoveFileTo(toFile);
 
 			var fromTabIds = getSavedTabIds(fromFormId)
 				.Where(tabId => tabId > fromTabId)
@@ -113,24 +111,23 @@ namespace Mtgdb.Gui
 
 			foreach (int tabId in fromTabIds)
 			{
-				File.Move(
-					GetHistoryFile(fromFormId, tabId),
+				GetHistoryFile(fromFormId, tabId).MoveFileTo(
 					GetHistoryFile(fromFormId, tabId - 1));
 			}
 		}
 
 		private static IEnumerable<int> getSavedTabIds(int formId)
 		{
-			return Directory.GetFiles(getHistoryDirectory(formId))
-				.Where(f => Str.Equals(Path.GetExtension(f), ".json"))
-				.Select(Path.GetFileNameWithoutExtension)
+			return getHistoryDirectory(formId).EnumerateFiles()
+				.Where(f => Str.Equals(f.Extension(), ".json"))
+				.Select(f => f.Basename(extension: false))
 				.Where(n => n.All(c => '0' <= c && c <= '9'))
 				.Select(int.Parse);
 		}
 
-		public static string GetHistoryFile(int formId, int tabId) => AppDir.History.AddPath($"{formId}\\{tabId}.v4.json");
+		public static FsPath GetHistoryFile(int formId, int tabId) => AppDir.History.Join(formId.ToString(), $"{tabId}.v4.json");
 
-		private static string getHistoryDirectory(int formId) => AppDir.History.AddPath($"{formId}");
+		private static FsPath getHistoryDirectory(int formId) => AppDir.History.Join(formId.ToString());
 
 		public FormMain FindCardDraggingForm()
 		{

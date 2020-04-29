@@ -13,7 +13,7 @@ namespace Mtgdb.Gui
 	public class ChartFilesSubsystem : IComponent
 	{
 		public ChartFilesSubsystem(
-			FormChart formChart, 
+			FormChart formChart,
 			ButtonBase buttonSave,
 			ButtonBase buttonLoad,
 			ContextMenuStrip menuMruFiles)
@@ -32,8 +32,8 @@ namespace Mtgdb.Gui
 			var dlg = new SaveFileDialog
 			{
 				DefaultExt = Ext,
-				InitialDirectory = SaveDirectory,
-				FileName = DefaultFileName,
+				InitialDirectory = SaveDirectory.Value,
+				FileName = DefaultFileName.Value,
 				AddExtension = true,
 				Filter = _filter,
 				Title = "Save chart settings",
@@ -48,7 +48,7 @@ namespace Mtgdb.Gui
 
 			try
 			{
-				File.WriteAllText(dlg.FileName, serialized);
+				new FsPath(dlg.FileName).WriteAllText(serialized);
 			}
 			catch (Exception ex)
 			{
@@ -65,8 +65,8 @@ namespace Mtgdb.Gui
 			var dlg = new OpenFileDialog
 			{
 				DefaultExt = Ext,
-				InitialDirectory = SaveDirectory,
-				FileName = DefaultFileName,
+				InitialDirectory = SaveDirectory.Value,
+				FileName = DefaultFileName.Value,
 				AddExtension = true,
 				Filter = _filter,
 				Title = "Load chart settings",
@@ -76,15 +76,15 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return;
 
-			load(dlg.FileName);
+			load(new FsPath(dlg.FileName));
 		}
 
-		private void load(string fileName)
+		private void load(FsPath fileName)
 		{
 			string serialized;
 			try
 			{
-				serialized = File.ReadAllText(fileName);
+				serialized = fileName.ReadAllText();
 			}
 			catch (Exception ex)
 			{
@@ -105,25 +105,24 @@ namespace Mtgdb.Gui
 				return;
 			}
 
-			_formChart.Title = Path.GetFileNameWithoutExtension(fileName);
+			_formChart.Title = fileName.Basename(extension: false);
 			_formChart.LoadSavedChart(settings);
 		}
 
 		private IEnumerable<string> getSavedCharts()
 		{
-			return Directory
-				.GetFiles(SaveDirectory, "*" + Ext, SearchOption.TopDirectoryOnly)
-				.Select(Path.GetFileNameWithoutExtension);
+			return SaveDirectory.EnumerateFiles("*" + Ext)
+				.Select(_ => _.Basename(extension: false));
 		}
 
 		private void loadSavedChart(string name) =>
-			load(SaveDirectory.AddPath(name + Ext));
+			load(SaveDirectory.Join(name + Ext));
 
 		public void UpdateMruFilesMenu()
 		{
 			foreach (ToolStripMenuItem menuItem in _menuMruFiles.Items)
 				menuItem.Click -= handleMruMenuClick;
-			
+
 			_menuMruFiles.Items.Clear();
 
 			foreach (string chartName in getSavedCharts())
@@ -155,9 +154,9 @@ namespace Mtgdb.Gui
 
 		private const string Ext = ".chart";
 		private static readonly string _filter = $"Mtgdb.Gui chart settings (*{Ext})|*{Ext}";
-		private string SaveDirectory { get; } = AppDir.Charts;
-		private string DefaultFileName =>
-			string.IsNullOrEmpty(_formChart.Title) ? null : _formChart.Title + Ext;
+		private FsPath SaveDirectory { get; } = AppDir.Charts;
+		private FsPath DefaultFileName =>
+			string.IsNullOrEmpty(_formChart.Title) ? FsPath.None : new FsPath(_formChart.Title + Ext);
 
 		private readonly FormChart _formChart;
 		private readonly ButtonBase _buttonSave;

@@ -16,17 +16,17 @@ namespace Mtgdb.Downloader
 		public NewsService(AppSourceConfig appSourceConfig)
 		{
 			_appSourceConfig = appSourceConfig;
-			string newsDir = AppDir.Update.AddPath("notifications");
+			FsPath newsDir = AppDir.Update.Join("notifications");
 
-			_newsArchive = newsDir.AddPath("archive.zip");
+			_newsArchive = newsDir.Join("archive.zip");
 
-			_unzippedNewsDir = newsDir.AddPath("archive");
-			_unreadNewsDir = newsDir.AddPath("new");
-			_readNewsDir = newsDir.AddPath("read");
+			_unzippedNewsDir = newsDir.Join("archive");
+			_unreadNewsDir = newsDir.Join("new");
+			_readNewsDir = newsDir.Join("read");
 
-			Directory.CreateDirectory(_unzippedNewsDir);
-			Directory.CreateDirectory(_unreadNewsDir);
-			Directory.CreateDirectory(_readNewsDir);
+			_unzippedNewsDir.CreateDirectory();
+			_unreadNewsDir.CreateDirectory();
+			_readNewsDir.CreateDirectory();
 		}
 
 		public void DisplayNews()
@@ -36,14 +36,14 @@ namespace Mtgdb.Downloader
 
 			foreach (var file in _unreadNews)
 			{
-				string readAnnounceFile = getReadNewsFile(file);
+				FsPath readAnnounceFile = getReadNewsFile(file);
 
-				string text = File.ReadAllText(file).Trim();
+				string text = file.ReadAllText().Trim();
 
-				bool isLocked = file.IndexOf("[locked]", Str.Comparison) >= 0;
+				bool isLocked = file.Value.IndexOf("[locked]", Str.Comparison) >= 0;
 
-				if (!isLocked && !File.Exists(readAnnounceFile))
-					File.Move(file, readAnnounceFile);
+				if (!isLocked && !readAnnounceFile.IsFile())
+					file.MoveFileTo(readAnnounceFile);
 
 				if (string.IsNullOrEmpty(text))
 					continue;
@@ -68,9 +68,9 @@ namespace Mtgdb.Downloader
 			await downloadNews(token);
 			unpackNews();
 
-			_unreadNews = Directory.GetFiles(_unreadNewsDir, "*.txt", SearchOption.TopDirectoryOnly)
-				.Where(file => repeatViewed || !File.Exists(getReadNewsFile(file)))
-				.OrderByDescending(Path.GetFileNameWithoutExtension, _versionComparer)
+			_unreadNews = _unreadNewsDir.EnumerateFiles("*.txt")
+				.Where(file => repeatViewed || !getReadNewsFile(file).IsFile())
+				.OrderByDescending(_=>_.Basename(extension: false), _versionComparer)
 				.ToList();
 
 			NewsFetched?.Invoke();
@@ -98,28 +98,28 @@ namespace Mtgdb.Downloader
 
 		private void unpackNews()
 		{
-			if (File.Exists(_newsArchive))
+			if (_newsArchive.IsFile())
 			{
-				_unzippedNewsDir.EmptyDirectory();
+				_unzippedNewsDir.EnsureEmptyDirectory();
 
-				new FastZip().ExtractZip(_newsArchive, _unzippedNewsDir, fileFilter: null);
-				var unzipped = Directory.GetFiles(_unzippedNewsDir, "*.txt", SearchOption.AllDirectories);
+				new FastZip().ExtractZip(_newsArchive.Value, _unzippedNewsDir.Value, fileFilter: null);
+				var unzipped = _unzippedNewsDir.EnumerateFiles("*.txt", SearchOption.AllDirectories);
 
-				_unreadNewsDir.EmptyDirectory();
+				_unreadNewsDir.EnsureEmptyDirectory();
 
 				foreach (var file in unzipped)
-					File.Copy(file, getUnreadNewsFile(file));
+					file.CopyFileTo(getUnreadNewsFile(file));
 			}
 		}
 
-		private string getUnreadNewsFile(string file)
+		private FsPath getUnreadNewsFile(FsPath file)
 		{
-			return _unreadNewsDir.AddPath(Path.GetFileName(file));
+			return _unreadNewsDir.Join(file.Basename());
 		}
 
-		private string getReadNewsFile(string file)
+		private FsPath getReadNewsFile(FsPath file)
 		{
-			return _readNewsDir.AddPath(Path.GetFileName(file));
+			return _readNewsDir.Join(file.Basename());
 		}
 
 		public event Action NewsFetched;
@@ -128,12 +128,12 @@ namespace Mtgdb.Downloader
 		public bool NewsLoaded => _unreadNews != null;
 		public bool HasUnreadNews => _unreadNews != null && _unreadNews.Count > 0;
 
-		private List<string> _unreadNews;
+		private List<FsPath> _unreadNews;
 
-		private readonly string _unzippedNewsDir;
-		private readonly string _unreadNewsDir;
-		private readonly string _readNewsDir;
-		private readonly string _newsArchive;
+		private readonly FsPath _unzippedNewsDir;
+		private readonly FsPath _unreadNewsDir;
+		private readonly FsPath _readNewsDir;
+		private readonly FsPath _newsArchive;
 		private readonly AppSourceConfig _appSourceConfig;
 
 		private readonly VersionComparer _versionComparer = new VersionComparer();

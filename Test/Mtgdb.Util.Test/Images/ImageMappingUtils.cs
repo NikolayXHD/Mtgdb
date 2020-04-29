@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using Mtgdb.Test;
 using NUnit.Framework;
@@ -26,8 +25,9 @@ namespace Mtgdb.Util
 			var imagesBySet = zoomImages.GroupBy(_ => _.SetCode ?? string.Empty, Str.Comparer)
 				.ToDictionary(
 					gr => gr.Key,
-					gr => gr.OrderBy(_ => Path.GetFileNameWithoutExtension(_.FullPath)).ToList(),
-					Str.Comparer
+					gr => gr
+						.OrderBy(_ => _.FullPath.Basename(extension: false))
+						.ToList()
 				);
 
 			var sets = Repo.SetsByCode.Values.OrderBy(_ => _.ReleaseDate);
@@ -42,7 +42,7 @@ namespace Mtgdb.Util
 				else
 				{
 					foreach (var dir in entry
-						.GroupBy(_ => Path.GetDirectoryName(_.FullPath))
+						.GroupBy(_ => _.FullPath.Parent().Value)
 						.ToDictionary(gr => gr.Key, gr => gr.Count())
 						.OrderBy(_ => _.Key))
 					{
@@ -60,7 +60,7 @@ namespace Mtgdb.Util
 			var detectedColors = new BitArray(1 << 24);
 			for (int i = 0; i < zoomImages.Count; i++)
 			{
-				var img = new Bitmap(zoomImages[i].FullPath);
+				var img = new Bitmap(zoomImages[i].FullPath.Value);
 				new ColorDetector(img, detectedColors).Execute();
 			}
 

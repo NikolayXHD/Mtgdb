@@ -59,7 +59,7 @@ namespace Mtgdb.Gui
 					_flowTitleRight.PaintBackground =
 						_tabs.PaintBackground = false;
 
-			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable.Value);
 
 			_flowTitleLeft.Controls.Cast<Control>()
 				.Concat(_flowTitleRight.Controls.Cast<Control>())
@@ -234,7 +234,7 @@ namespace Mtgdb.Gui
 
 			if (creatingNewForm)
 			{
-				string historyFile = App.GetHistoryFile(Id, i);
+				FsPath historyFile = App.GetHistoryFile(Id, i);
 				form.LoadHistory(historyFile);
 				form.SetPanelVisibility(_uiConfigRepository.Config);
 

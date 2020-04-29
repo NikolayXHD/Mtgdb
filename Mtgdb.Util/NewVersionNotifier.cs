@@ -1,15 +1,14 @@
 using System;
-using System.IO;
 using System.Linq;
+using Mtgdb.Dev;
 
 namespace Mtgdb.Util
 {
-	public class NewVersionNotifier
+	public static class NewVersionNotifier
 	{
 		public static void Notify()
 		{
-			string releaseNotesFile = @"F:\Repo\Git\Mtgdb.wiki\Release-notes.rest";
-			var lines = File.ReadAllLines(releaseNotesFile);
+			var lines = DevPaths.ReleaseNotesFile.ReadAllLines();
 
 			int headersCount = 0;
 			bool success = false;
@@ -27,7 +26,7 @@ namespace Mtgdb.Util
 
 			if (!success || lastVersionLines.Count <= 2)
 			{
-				Console.WriteLine($"Failed to parse {releaseNotesFile}");
+				Console.WriteLine($"Failed to parse {DevPaths.ReleaseNotesFile}");
 				Console.WriteLine();
 				return;
 			}
@@ -39,7 +38,7 @@ namespace Mtgdb.Util
 			Console.WriteLine(string.Join(Str.Endl, content));
 			Console.WriteLine();
 
-			File.WriteAllLines(Path.Combine(@"f:\Repo\Git\Mtgdb.Notifications", lines[0] + ".txt"), content);
+			DevPaths.NotificationsRepo.Join(lines[0] + ".txt").WriteAllLines(content);
 		}
 	}
 }

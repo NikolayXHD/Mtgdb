@@ -9,6 +9,6 @@ namespace Mtgdb.Downloader
 		public string MegaId { get; set; }
 
 		[DataMember(Name = "Subdir")]
-		public string Subdir { get; set; }
+		public FsPath Subdir { get; set; }
 	}
 }

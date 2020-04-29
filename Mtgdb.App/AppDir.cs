@@ -1,27 +1,26 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 
 namespace Mtgdb
 {
 	public static class AppDir
 	{
-		public static string Executable { get; }
-		public static string BinVersion { get; }
+		public static FsPath Executable { get; }
+		public static FsPath BinVersion { get; }
 
-		public static string Root { get; }
+		public static FsPath Root { get; }
 
-		public static string Update => Root.AddPath("update");
-		public static string Data => Root.AddPath("data");
-		public static string Save => Root.AddPath("save");
-		public static string ColorSchemes => Root.AddPath("color-schemes");
-		public static string History => Root.AddPath("history");
-		public static string Charts => Root.AddPath("charts");
+		public static FsPath Update => Root.Join("update");
+		public static FsPath Data => Root.Join("data");
+		public static FsPath Save => Root.Join("save");
+		public static FsPath ColorSchemes => Root.Join("color-schemes");
+		public static FsPath History => Root.Join("history");
+		public static FsPath Charts => Root.Join("charts");
 
-		public static string Etc => Root.AddPath("etc");
-		public static string GeneralConfigXml => Root.AddPath("etc").AddPath("Mtgdb.Gui.xml");
-		public static string DisplayConfigXml => Root.AddPath("etc").AddPath("Mtgdb.Gui.Display.xml");
-		public static string BinShadowCopy => Root.AddPath("bin").AddPath("_shadow_copy");
+		public static FsPath Etc => Root.Join("etc");
+		public static FsPath GeneralConfigXml => Root.Join("etc", "Mtgdb.Gui.xml");
+		public static FsPath DisplayConfigXml => Root.Join("etc", "Mtgdb.Gui.Display.xml");
+		public static FsPath BinShadowCopy => Root.Join("bin", "_shadow_copy");
 
 		static AppDir()
 		{
@@ -31,21 +30,21 @@ namespace Mtgdb
 			Root = Executable.Parent().Parent().Parent();
 		}
 
-		private static string getAssemblyFile(Assembly assembly)
+		private static FsPath getAssemblyFile(Assembly assembly)
 		{
 			if (assembly == null)
-				return null;
+				return FsPath.None;
 
 			string dllPath = new Uri(assembly.CodeBase).LocalPath;
-			return dllPath;
+			return new FsPath(dllPath);
 		}
 
-		public static string ToAppRootedPath(this string path)
+		public static FsPath ToAppRootedPath(this FsPath path)
 		{
-			if (Path.IsPathRooted(path))
+			if (path.IsPathRooted())
 				return path;
 
-			var result = Root.AddPath(path);
+			FsPath result = Root.Join(path);
 			return result;
 		}
 

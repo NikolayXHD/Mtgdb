@@ -11,7 +11,7 @@ namespace Mtgdb.Downloader
 		public string Name { get; set; }
 
 		[DataMember(Name = "TargetDirectory")]
-		public string TargetDirectory { get; set; }
+		public FsPath TargetDirectory { get; set; }
 
 		[DataMember(Name = "FileListGdriveId")]
 		public string FileListGdriveId { get; set; }

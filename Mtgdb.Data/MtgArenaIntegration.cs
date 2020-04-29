@@ -19,24 +19,24 @@ namespace Mtgdb.Data
 			_cardLibraryFile = resolveCardLibraryPath();
 			_logFile = resolveLogPath();
 
-			string resolveCardLibraryPath()
+			FsPath resolveCardLibraryPath()
 			{
-				var path = Environment.ExpandEnvironmentVariables(config.CardLibraryFile);
-				var directory = Path.GetDirectoryName(path);
-				var filePattern = Path.GetFileName(path).Replace("[guid]", "*");
+				var path = config.CardLibraryFile.ExpandEnvironmentVariables();
+				var directory = path.Parent();
+				var filePattern = path.Basename().Replace("[guid]", "*");
 
-				if (!Directory.Exists(directory))
-					return null;
+				if (!directory.IsDirectory())
+					return FsPath.None;
 
-				var file = Directory.EnumerateFiles(directory, filePattern, SearchOption.TopDirectoryOnly).FirstOrDefault();
+				var file = directory.EnumerateFiles(filePattern).FirstOrDefault();
 				return file;
 			}
 
-			string resolveLogPath()
+			FsPath resolveLogPath()
 			{
-				var path = Environment.ExpandEnvironmentVariables(config.LogFile);
-				if (!File.Exists(path))
-					return null;
+				var path = config.LogFile.ExpandEnvironmentVariables();
+				if (!path.IsFile())
+					return FsPath.None;
 
 				return path;
 			}
@@ -77,7 +77,7 @@ namespace Mtgdb.Data
 			{
 				try
 				{
-					var result = File.ReadAllText(_logFile);
+					var result = _logFile.ReadAllText();
 					return result;
 				}
 				catch (Exception ex)
@@ -119,7 +119,7 @@ namespace Mtgdb.Data
 			{
 				try
 				{
-					var result = File.ReadAllText(_cardLibraryFile, Encoding.Default);
+					var result = _cardLibraryFile.ReadAllText(Encoding.Default);
 					return result;
 				}
 				catch (Exception ex)
@@ -174,10 +174,10 @@ namespace Mtgdb.Data
 		}
 
 		public bool MtgaInstallationFound =>
-			_cardLibraryFile != null && _logFile != null;
+			_cardLibraryFile != FsPath.None && _logFile != FsPath.None;
 
-		private readonly string _cardLibraryFile;
-		private readonly string _logFile;
+		private readonly FsPath _cardLibraryFile;
+		private readonly FsPath _logFile;
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

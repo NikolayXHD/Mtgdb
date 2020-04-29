@@ -2,8 +2,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mtgdb.Controls;
 using Mtgdb.Data;
@@ -76,7 +74,7 @@ namespace Mtgdb.Gui
 						continue;
 
 					var model = _imageRepository.GetImagePrint(card, _cardRepository.GetReleaseDateSimilarity);
-					var image = Image.FromFile(model.ImageFile.FullPath);
+					var image = Image.FromFile(model.ImageFile.FullPath.Value);
 
 					int count = deck.GetCount(card.Id);
 					for (int c = 0; c < count; c++)

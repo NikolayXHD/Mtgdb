@@ -32,6 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="NConfiguration, Version=2.4.0.0, Culture=neutral, PublicKeyToken=bfc22cf7cdd506d6">
+      <HintPath>..\packages\NConfiguration.2.5.0\lib\net45\NConfiguration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -43,6 +47,7 @@
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncSignal.cs" />
@@ -50,6 +55,12 @@
     <Compile Include="Collection\ExtremumFinder.cs" />
     <Compile Include="Collection\MultiDictionary.cs" />
     <Compile Include="KnutMorrisPrattSubstringSearch.cs" />
+    <Compile Include="Paths\FsPath.cs" />
+    <Compile Include="Paths\FsPathDeserializer.cs" />
+    <Compile Include="Paths\FsPathExt.cs" />
+    <Compile Include="Paths\FsPathPersistence.cs" />
+    <Compile Include="Paths\FsPathTypeConverter.cs" />
+    <Compile Include="Paths\Range.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="String\ArgsExt.cs" />
     <Compile Include="Collection\Array.cs" />
@@ -74,7 +85,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\shared\shared.projitems" Label="Shared" />
 </Project>

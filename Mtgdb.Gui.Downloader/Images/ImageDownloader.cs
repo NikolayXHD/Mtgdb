@@ -96,24 +96,22 @@ namespace Mtgdb.Downloader
 
 		private static bool isAlreadyDownloaded(ImageDownloadProgress progress)
 		{
-			string targetSubdirectory = progress.TargetSubdirectory;
-			Directory.CreateDirectory(targetSubdirectory);
+			FsPath targetSubdirectory = progress.TargetSubdirectory;
+			targetSubdirectory.CreateDirectory();
 
 			if (progress.FilesOnline == null)
 				return false;
 
 			bool alreadyDownloaded = true;
 
-			var existingFiles = new HashSet<string>(
-				Directory.GetFiles(targetSubdirectory, "*", SearchOption.AllDirectories),
-				Str.Comparer);
+			var existingFiles = new HashSet<FsPath>(
+				targetSubdirectory.EnumerateFiles("*", SearchOption.AllDirectories));
 
-			var existingSignatures = new Dictionary<string, FileSignature>(Str.Comparer);
+			var existingSignatures = new Dictionary<FsPath, FileSignature>();
 
 			foreach (var fileOnline in progress.FilesOnline.Values)
 			{
-				string filePath = Path.Combine(targetSubdirectory, fileOnline.Path);
-
+				FsPath filePath = targetSubdirectory.Join(fileOnline.Path);
 				if (!existingFiles.Contains(filePath))
 				{
 					alreadyDownloaded = false;
@@ -134,7 +132,7 @@ namespace Mtgdb.Downloader
 					{
 						try
 						{
-							File.Delete(filePath);
+							filePath.DeleteFile();
 						}
 						catch (IOException ex)
 						{
@@ -148,13 +146,13 @@ namespace Mtgdb.Downloader
 				}
 			}
 
-			foreach (string file in existingFiles)
+			foreach (FsPath file in existingFiles)
 			{
-				var relativePath = file.Substring(targetSubdirectory.Length + 1);
-				if (!progress.FilesOnline.ContainsKey(relativePath) && !Str.Equals(relativePath, Signer.SignaturesFile))
+				var relativePath = file.RelativeTo(targetSubdirectory);
+				if (!progress.FilesOnline.ContainsKey(relativePath) && relativePath != Signer.SignaturesFile)
 				{
 					Console.WriteLine("Deleting {0}", file);
-					File.Delete(file);
+					file.DeleteFile();
 				}
 			}
 

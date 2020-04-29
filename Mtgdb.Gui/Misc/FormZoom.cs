@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -393,20 +392,20 @@ namespace Mtgdb.Gui
 
 		private void openInExplorerClick(object sender, EventArgs e)
 		{
-			string fullPath = _models[_imageIndex].ImageFile.FullPath;
+			FsPath fullPath = _models[_imageIndex].ImageFile.FullPath;
 
-			if (!File.Exists(fullPath))
+			if (!fullPath.IsFile())
 				return;
 
 			ShowSelectedInExplorer.FilesOrFolders(
-				Path.GetDirectoryName(fullPath),
-				Array.From(Path.GetFileName(fullPath)));
+				fullPath.Parent(),
+				Array.From(fullPath.Basename()));
 		}
 
 		private void openFileClick(object sender, EventArgs e)
 		{
-			string fullPath = _models[_imageIndex].ImageFile.FullPath;
-			Process.Start(new ProcessStartInfo(fullPath));
+			FsPath fullPath = _models[_imageIndex].ImageFile.FullPath;
+			Process.Start(new ProcessStartInfo(fullPath.Value));
 		}
 
 

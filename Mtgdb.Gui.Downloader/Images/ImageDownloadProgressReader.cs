@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace Mtgdb.Downloader
 {
 	public class ImageDownloadProgressReader
 	{
-		private static readonly string _updateImgDir = AppDir.Update.AddPath("img");
+		private static readonly FsPath _updateImgDir = AppDir.Update.Join("img");
 		private readonly ImageSourcesConfig _config;
 		private readonly Megatools _megatools;
 
@@ -30,25 +29,25 @@ namespace Mtgdb.Downloader
 		}
 
 		public bool SignaturesFileExist(QualityGroupConfig qualityGroup) =>
-			File.Exists(getSignaturesFile(qualityGroup).File);
+			getSignaturesFile(qualityGroup).File.IsFile();
 
 		private async Task downloadSignatures(QualityGroupConfig qualityGroup, CancellationToken token)
 		{
 			if (qualityGroup.FileListMegaId == null && qualityGroup.YandexName == null)
 				return;
 
-			(string signaturesDir, string signaturesFile) = getSignaturesFile(qualityGroup);
-			string signaturesFileBak = signaturesFile + ".bak";
+			(FsPath signaturesDir, FsPath signaturesFile) = getSignaturesFile(qualityGroup);
+			FsPath signaturesFileBak = signaturesFile.Concat(".bak");
 
-			if (File.Exists(signaturesFile))
+			if (signaturesFile.IsFile())
 			{
-				if (File.Exists(signaturesFileBak))
-					File.Delete(signaturesFileBak);
+				if (signaturesFileBak.IsFile())
+					signaturesFileBak.DeleteFile();
 
-				File.Move(signaturesFile, signaturesFileBak);
+				signaturesFile.MoveFileTo(signaturesFileBak);
 			}
 
-			Directory.CreateDirectory(signaturesDir);
+			signaturesDir.CreateDirectory();
 
 			if (qualityGroup.FileListMegaId != null)
 			{
@@ -58,7 +57,7 @@ namespace Mtgdb.Downloader
 			}
 			else if (qualityGroup.YandexName != null)
 			{
-				string fileListArchive = signaturesDir.AddPath("filelist.7z");
+				FsPath fileListArchive = signaturesDir.Join("filelist.7z");
 				var client = new YandexDiskClient();
 				Console.Write("{0} filelist.7z: get YandexDisk download url ... ", qualityGroup.Name);
 				var url = await client.GetFilelistDownloadUrl(_config, qualityGroup, token);
@@ -80,7 +79,7 @@ namespace Mtgdb.Downloader
 
 				if (success)
 				{
-					if (File.Exists(fileListArchive))
+					if (fileListArchive.IsFile())
 						new SevenZip(silent: true).Extract(fileListArchive, signaturesDir);
 				}
 			}
@@ -88,19 +87,19 @@ namespace Mtgdb.Downloader
 				throw new ArgumentException($"No downloader can get filelist for quality {qualityGroup.Quality}");
 
 
-			if (!File.Exists(signaturesFile))
+			if (!signaturesFile.IsFile())
 			{
-				if (File.Exists(signaturesFileBak))
+				if (signaturesFileBak.IsFile())
 				{
 					Console.WriteLine("Failed to unzip signatures");
 
 					Console.WriteLine("Move {0} {1}", signaturesFileBak, signaturesFile);
-					File.Move(signaturesFileBak, signaturesFile);
+					signaturesFileBak.MoveFileTo(signaturesFile);
 				}
 			}
 			else
 			{
-				File.Delete(signaturesFileBak);
+				signaturesFileBak.DeleteFile();
 			}
 		}
 
@@ -109,15 +108,15 @@ namespace Mtgdb.Downloader
 			var result = new List<ImageDownloadProgress>();
 			foreach (var qualityGroup in _config.QualityGroups)
 			{
-				(_, string signaturesFile) = getSignaturesFile(qualityGroup);
+				(_, FsPath signaturesFile) = getSignaturesFile(qualityGroup);
 				// do not intern image path here because it contains parent directory
 				var imagesOnline = Signer.ReadFromFile(signaturesFile, internPath: false);
 
 				if (qualityGroup.YandexName != null && imagesOnline != null)
 					qualityGroup.Dirs = imagesOnline
-						.Select(_ => Path.GetDirectoryName(_.Path))
+						.Select(_ => _.Path.Parent())
 						.Distinct()
-						.OrderBy(_ => _, Str.Comparer)
+						.OrderBy(_ => _.Value, Str.Comparer)
 						.Select(_ => new ImageDirConfig { Subdir = _ }).ToArray();
 
 				foreach (var dir in qualityGroup.Dirs)
@@ -136,21 +135,21 @@ namespace Mtgdb.Downloader
 
 		public static void WriteExistingSignatures(ImageDownloadProgress progress, IEnumerable<FileSignature> signatures = null)
 		{
-			string targetSubdirectory = progress.TargetSubdirectory;
-			string existingSignaturesFile = Path.Combine(targetSubdirectory, Signer.SignaturesFile);
+			FsPath targetSubdirectory = progress.TargetSubdirectory;
+			FsPath existingSignaturesFile = targetSubdirectory.Join(Signer.SignaturesFile);
 
 			signatures ??= Signer.CreateSignatures(targetSubdirectory);
 			Signer.WriteToFile(existingSignaturesFile, signatures);
 		}
 
-		private static (string Directory, string File) getSignaturesFile(QualityGroupConfig qualityGroup)
+		private static (FsPath Directory, FsPath File) getSignaturesFile(QualityGroupConfig qualityGroup)
 		{
-			string dir = getSignaturesDir(qualityGroup);
-			return (Directory: dir, File: Path.Combine(dir, Signer.SignaturesFile));
+			FsPath dir = getSignaturesDir(qualityGroup);
+			return (Directory: dir, File: dir.Join(Signer.SignaturesFile));
 		}
 
-		private static string getSignaturesDir(QualityGroupConfig qualityGroup) =>
-			Path.Combine(_updateImgDir, qualityGroup.Name);
+		private static FsPath getSignaturesDir(QualityGroupConfig qualityGroup) =>
+			_updateImgDir.Join(qualityGroup.Name);
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}

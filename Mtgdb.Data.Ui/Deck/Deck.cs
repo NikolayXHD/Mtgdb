@@ -163,7 +163,7 @@ namespace Mtgdb.Ui
 
 		public long Id { get; set; }
 		public string Name { get; set; }
-		public string File { get; set; }
+		public FsPath File { get; set; }
 		public string Error { get; set; }
 		public DateTime? Saved { get; set; }
 	}

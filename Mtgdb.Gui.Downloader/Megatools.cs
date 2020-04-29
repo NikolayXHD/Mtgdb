@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace Mtgdb.Downloader
 			_megatoolsUrl = config.MegatoolsUrl;
 		}
 
-		public async Task Download(string storageUrl, string targetDirectory, string name, CancellationToken token, bool silent = false, int? timeoutSec = null)
+		public async Task Download(string storageUrl, FsPath targetDirectory, string name, CancellationToken token, bool silent = false, int? timeoutSec = null)
 		{
 			if (_process != null)
 				throw new InvalidOperationException("Download is already running. Use another instance to start new download.");
@@ -26,10 +25,10 @@ namespace Mtgdb.Downloader
 			await _syncSelfDownload.WaitAsync(token);
 			try
 			{
-				if (!File.Exists(MegadlExePath))
+				if (!MegadlExePath.IsFile())
 				{
 					var webClient = new GdriveWebClient();
-					await webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, "megatools.7z", token);
+					await webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, new FsPath("megatools.7z"), token);
 				}
 			}
 			finally
@@ -41,15 +40,15 @@ namespace Mtgdb.Downloader
 
 			string arguments;
 
-			Directory.CreateDirectory(targetDirectory);
-			if (targetDirectory.Contains(' '))
+			targetDirectory.CreateDirectory();
+			if (targetDirectory.Value.Contains(' '))
 				arguments = $@"--path=""{targetDirectory}"" --print-names {storageUrl}";
 			else
 				arguments = $@"--path={targetDirectory} --print-names {storageUrl}";
 
 			_process = new Process
 			{
-				StartInfo = new ProcessStartInfo(MegadlExePath, arguments)
+				StartInfo = new ProcessStartInfo(MegadlExePath.Value, arguments)
 				{
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
@@ -133,8 +132,8 @@ namespace Mtgdb.Downloader
 
 
 
-		private static string MegadlExePath =>
-			AppDir.Update.AddPath(@"megatools-1.9.98-win32\megadl.exe");
+		private static FsPath MegadlExePath =>
+			AppDir.Update.Join(@"megatools-1.9.98-win32", "megadl.exe");
 
 		public int DownloadedCount { get; private set; }
 

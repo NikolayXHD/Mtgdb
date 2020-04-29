@@ -27,7 +27,7 @@ namespace Mtgdb.Downloader
 			if (!_repo.IsLoadingComplete.Signaled)
 				return null;
 
-			return _repo.SetsByCode.TryGet(progress.Dir.Subdir)?.ReleaseDate;
+			return _repo.SetsByCode.TryGet(progress.Dir.Subdir.Value)?.ReleaseDate;
 		}
 
 		public ImageDownloadProgress PopTaskFor(IDownloader downloader)

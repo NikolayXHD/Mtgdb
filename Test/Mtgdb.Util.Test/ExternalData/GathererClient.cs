@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,7 +23,7 @@ namespace Mtgdb.Util
 			_repo = repo;
 		}
 
-		public async Task DownloadTranslations(string targetDir, CancellationToken token)
+		public async Task DownloadTranslations(FsPath targetDir, CancellationToken token)
 		{
 			var idsArray = getMultiverseIds();
 
@@ -38,35 +37,35 @@ namespace Mtgdb.Util
 			}
 		}
 
-		public async Task DownloadTranslation(string targetDir, int id, CancellationToken token)
+		public async Task DownloadTranslation(FsPath targetDir, int id, CancellationToken token)
 		{
-			string targetFile = Path.Combine(targetDir, id + ".html");
-			if (File.Exists(targetFile))
+			FsPath targetFile = targetDir.Join(id.ToString()).Concat(".html");
+			if (targetFile.IsFile())
 				return;
 
 			var page = await DownloadCardPage(id, token);
-			File.WriteAllText(targetFile, page);
+			targetFile.WriteAllText(page);
 		}
 
-		public void ParseTranslations(string downloadedDir, string parsedDir)
+		public void ParseTranslations(FsPath downloadedDir, FsPath parsedDir)
 		{
-			var files = Directory.GetFiles(downloadedDir, "*.html");
+			var files = downloadedDir.EnumerateFiles("*.html").ToArray();
 			var failedIds = new List<int>();
 
 			for (int i = 0; i < files.Length; i++)
 			{
 				var file = files[i];
-				int id = int.Parse(Path.GetFileNameWithoutExtension(file));
+				int id = int.Parse(file.Basename(extension: false));
 
 				if (id == 0)
 					continue;
 
-				var resultFile = Path.Combine(parsedDir, id + ".json");
-				if (File.Exists(resultFile))
+				var resultFile = parsedDir.Join(id.ToString()).Concat(".json");
+				if (resultFile.IsFile())
 					continue;
 
-				string targetFile = GetSavedTranslationHtmlFile(downloadedDir, id);
-				var content = File.ReadAllText(targetFile);
+				FsPath targetFile = GetSavedTranslationHtmlFile(downloadedDir, id);
+				var content = targetFile.ReadAllText();
 				var translations = ParseCardPage(content);
 
 				var result = new List<Translation>();
@@ -86,61 +85,61 @@ namespace Mtgdb.Util
 				if (result.Count > 0)
 				{
 					var serialized = JsonConvert.SerializeObject(result);
-					File.WriteAllText(resultFile, serialized);
+					resultFile.WriteAllText(serialized);
 				}
 
 				if (i % 1000 == 0)
 					_log.Info($"parsed {i} / {files.Length}");
 			}
 
-			File.WriteAllLines(getFailedListFile(parsedDir), failedIds.Select(id => id.ToString()));
+			getFailedListFile(parsedDir).WriteAllLines(failedIds.Select(id => id.ToString()));
 		}
 
-		public void MergeTranslations(string parsedDir, string resultDir)
+		public void MergeTranslations(FsPath parsedDir, FsPath resultDir)
 		{
-			var files = Directory.GetFiles(parsedDir, "*.json", SearchOption.TopDirectoryOnly);
+			var files = parsedDir.EnumerateFiles("*.json");
 			var result = new List<Translation>();
 
 			foreach (var file in files)
 			{
-				var list = JsonConvert.DeserializeObject<List<Translation>>(File.ReadAllText(file));
+				var list = JsonConvert.DeserializeObject<List<Translation>>(file.ReadAllText());
 				result.AddRange(list);
 			}
 
 			var serialized = JsonConvert.SerializeObject(result);
-			File.WriteAllText(Path.Combine(resultDir, "translations.json"), serialized);
+			resultDir.Join("translations.json").WriteAllText(serialized);
 		}
 
-		public void SaveNonEnglishTranslations(string resultDir)
+		public void SaveNonEnglishTranslations(FsPath resultDir)
 		{
 			var engMultiverseIds = new HashSet<int>(_repo.Cards.Select(card => card.MultiverseId)
 				.Where(_ => _.HasValue)
 				.Cast<int>());
 
-			var serialized = File.ReadAllText(Path.Combine(resultDir, "translations.json"));
+			var serialized = resultDir.Join("translations.json").ReadAllText();
 			var translations = JsonConvert.DeserializeObject<List<Translation>>(serialized);
 
 			var nonEnglishTranslations = translations.Where(_ => !engMultiverseIds.Contains(_.Id)).ToList();
 			serialized = JsonConvert.SerializeObject(nonEnglishTranslations);
 
-			File.WriteAllText(Path.Combine(resultDir, "translations-non-en.json"), serialized);
+			resultDir.Join("translations-non-en.json").WriteAllText(serialized);
 		}
 
-		public string GetSavedTranslationHtmlFile(string targetDir, int id)
+		public FsPath GetSavedTranslationHtmlFile(FsPath targetDir, int id)
 		{
-			return Path.Combine(targetDir, id + ".html");
+			return targetDir.Join(id.ToString()).Concat(".html");
 		}
 
-		public int[] GetFailedIds(string resultDir)
+		public int[] GetFailedIds(FsPath resultDir)
 		{
 			var file = getFailedListFile(resultDir);
-			var result = File.ReadAllLines(file).Select(int.Parse).ToArray();
+			var result = file.ReadAllLines().Select(int.Parse).ToArray();
 			return result;
 		}
 
-		private static string getFailedListFile(string resultDir)
+		private static FsPath getFailedListFile(FsPath resultDir)
 		{
-			return Path.Combine(Path.GetDirectoryName(resultDir), "failed");
+			return resultDir.Parent().Join("failed");
 		}
 
 		private int[] getMultiverseIds()
@@ -161,7 +160,7 @@ namespace Mtgdb.Util
 			return idsArray;
 		}
 
-		public override Task DownloadCardImage(Card card, string targetFile, CancellationToken token)
+		public override Task DownloadCardImage(Card card, FsPath targetFile, CancellationToken token)
 		{
 			if (card.MultiverseId.HasValue)
 				return DownloadFile(BaseUrl + ImagePath + card.MultiverseId.Value, targetFile, token);

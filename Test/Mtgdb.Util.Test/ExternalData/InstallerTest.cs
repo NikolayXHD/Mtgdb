@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Mtgdb.Dev;
 using Mtgdb.Downloader;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace Mtgdb.Util
 			var client = new GdriveWebClient();
 			await client.DownloadFile(
 				"https://drive.google.com/uc?id=0B_zQYOTucmnUOVE1eDU0STJZeE0&export=download",
-				"D:\\temp\\file.temp",
+				 DevPaths.DataDrive.Join("temp", "file.temp"),
 					CancellationToken.None
 				);
 		}

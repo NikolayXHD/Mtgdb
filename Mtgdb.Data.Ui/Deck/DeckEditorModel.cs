@@ -480,7 +480,7 @@ namespace Mtgdb.Ui
 
 		public Zone? CurrentZone { get; private set; }
 
-		public string DeckFile { get; set; }
+		public FsPath DeckFile { get; set; }
 		public string DeckName { get; set; }
 
 		private static readonly Random _random = new Random();

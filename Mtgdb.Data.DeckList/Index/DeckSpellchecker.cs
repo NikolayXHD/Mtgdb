@@ -10,7 +10,7 @@ namespace Mtgdb.Data.Index
 		public DeckSpellchecker(DeckDocumentAdapter adapter)
 			: base(adapter)
 		{
-			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("suggest");
+			IndexDirectoryParent = AppDir.Data.Join("index", "deck", "suggest");
 		}
 
 		protected override Directory CreateIndex(LuceneSearcherState<long, DeckModel> searcherState)
@@ -23,7 +23,7 @@ namespace Mtgdb.Data.Index
 			if (!_indexCreated && _version.IsUpToDate)
 			{
 				lock (_syncDirectory)
-					using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory))
+					using (var fsDirectory = FSDirectory.Open(_version.IndexDirectory.Value))
 						index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
 
 				var spellchecker = CreateSpellchecker();
@@ -44,7 +44,7 @@ namespace Mtgdb.Data.Index
 			lock (_syncDirectory)
 				_version.CreateDirectory();
 
-			index.SaveTo(_version.IndexDirectory);
+			index.SaveTo(_version.IndexDirectory.Value);
 			_version.SetIsUpToDate();
 
 			_indexCreated = true;
@@ -62,7 +62,7 @@ namespace Mtgdb.Data.Index
 				() => MaxCount,
 				loaded);
 
-		public string IndexDirectoryParent
+		public FsPath IndexDirectoryParent
 		{
 			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.DeckSpellchecker);

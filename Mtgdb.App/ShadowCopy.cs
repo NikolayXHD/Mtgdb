@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,18 +16,18 @@ namespace Mtgdb
 
 		private static void startShadowCopy(string[] args)
 		{
-			string binSignaturesFile = AppDir.BinVersion.AddPath(Signer.SignaturesFile);
-			string binShadowCopySignaturesFile = AppDir.BinShadowCopy.AddPath(Signer.SignaturesFile);
+			FsPath binSignaturesFile = AppDir.BinVersion.Join(Signer.SignaturesFile);
+			FsPath binShadowCopySignaturesFile = AppDir.BinShadowCopy.Join(Signer.SignaturesFile);
 
 			IList<FileSignature> signatures = Signer.ReadFromFile(binSignaturesFile, internPath: false);
 			var copiedSignatures = Signer.ReadFromFile(binShadowCopySignaturesFile, internPath: false);
 
 			if (signatures == null || copiedSignatures == null || !equal(signatures, copiedSignatures))
 			{
-				if (Directory.Exists(AppDir.BinShadowCopy))
-					Directory.Delete(AppDir.BinShadowCopy, true);
+				if (AppDir.BinShadowCopy.IsDirectory())
+					AppDir.BinShadowCopy.DeleteDirectory(recursive: true);
 
-				Directory.CreateDirectory(AppDir.BinShadowCopy);
+				AppDir.BinShadowCopy.CreateDirectory();
 
 				if (signatures == null)
 				{
@@ -36,12 +35,12 @@ namespace Mtgdb
 					Signer.WriteToFile(binSignaturesFile, signatures);
 				}
 
-				copyRecursively(AppDir.BinVersion, AppDir.BinShadowCopy);
+				AppDir.BinVersion.CopyDirectoryTo(AppDir.BinShadowCopy, overwrite: true);
 			}
 
 			string arguments = escape(args);
-			string exe = AppDir.BinShadowCopy.AddPath(AppDir.Executable.LastPathSegment());
-			Process.Start(exe, arguments);
+			FsPath exe = AppDir.BinShadowCopy.Join(AppDir.Executable.Basename());
+			Process.Start(exe.Value, arguments);
 		}
 
 		private static bool equal(IList<FileSignature> val1, IList<FileSignature> val2)
@@ -101,20 +100,11 @@ namespace Mtgdb
 
 		private static bool isShadowCopied()
 		{
-			string dirName = AppDir.BinVersion.LastPathSegment();
+			string dirName = AppDir.BinVersion.Basename();
 
 			return dirName.IndexOf("debug", Str.Comparison) >= 0 ||
 			       dirName.IndexOf("release", Str.Comparison) >= 0 ||
 			       AppDir.BinVersion == AppDir.BinShadowCopy;
-		}
-
-		private static void copyRecursively(string sourcePath, string targetPath)
-		{
-			foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
-				Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
-
-			foreach (string newPath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
-				File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
 		}
 
 		public static void RunMain(Action<string[]> actualMain, string[] args)

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,7 +12,7 @@ namespace Mtgdb.Util
 		private static readonly Regex _propertyRegex = new Regex(@"\.?\[(?<prop>[^\]]+)\]\.?");
 		private static readonly char[] _valueSeparator = { ',', ';' };
 
-		public static void RenameArtworks(string directory)
+		public static void RenameArtworks(FsPath directory)
 		{
 			Console.WriteLine("Artwork images at {0} will be renamed.", directory);
 			Console.WriteLine("Press ENTER to continue");
@@ -48,31 +47,30 @@ namespace Mtgdb.Util
 						sets: gr.Where(_ => _.SetCodeIsFromAttribute && !string.IsNullOrWhiteSpace(_.SetCode)).Select(_ => _.SetCode).ToList()
 					));
 
-			foreach ((string path, (List<string> artistsList, List<string> setsList)) in images)
+			foreach ((FsPath path, (List<string> artistsList, List<string> setsList)) in images)
 			{
-				string original = path.LastPathSegment();
-
+				string original = path.Basename();
 				string renamed = Rename(original, artistsList, setsList);
 
 				if (Str.Equals(renamed, original))
 					continue;
 
 				Console.WriteLine("\trenaming {0} to {1}", original, renamed);
-				string renamedFullPath = Path.Combine(path.Parent(), renamed);
-				if (File.Exists(renamedFullPath))
+				FsPath renamedFullPath = path.Parent().Join(renamed);
+				if (renamedFullPath.IsFile())
 				{
 					var originalSignature = Signer.CreateSignature(path);
 					var renamedSignature = Signer.CreateSignature(renamedFullPath);
 					if (Str.Equals(originalSignature.Md5Hash, renamedSignature.Md5Hash))
 					{
 						Console.WriteLine("Deleting {0} as identical to renamed {1}", path, renamedFullPath);
-						File.Delete(path);
+						path.DeleteFile();
 					}
 					else
 						Console.WriteLine("FILE ALREADY EXISTS: {0}", renamedFullPath);
 				}
 				else
-					File.Move(path, renamedFullPath);
+					path.MoveFileTo(renamedFullPath);
 			}
 
 			Console.WriteLine("Press ENTER to exit");

@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 		public bool? LegalityAllowBanned { get; set; }
 		public bool? LegalityAllowFuture { get; set; }
 
-		public string DeckFile { get; set; }
+		public FsPath? DeckFile { get; set; }
 		public string DeckName { get; set; }
 
 		public int? SearchResultScroll { get; set; }
@@ -97,7 +97,7 @@ namespace Mtgdb.Gui
 				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder, MaybeDeckCount, MaybeDeckOrder);
 
 				deck.Name = DeckName;
-				deck.File = DeckFile;
+				deck.File = DeckFile.OrNone();
 
 				return deck;
 			}

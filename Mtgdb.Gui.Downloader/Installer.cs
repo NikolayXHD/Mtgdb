@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -9,7 +8,6 @@ using ICSharpCode.SharpZipLib.Zip;
 using IWshRuntimeLibrary;
 using JetBrains.Annotations;
 using Mtgdb.Data;
-using File = System.IO.File;
 
 namespace Mtgdb.Downloader
 {
@@ -22,17 +20,17 @@ namespace Mtgdb.Downloader
 		{
 			_appSourceConfig = appSourceConfig;
 			_mtgjsonSourceConfig = mtgjsonSourceConfig;
-			_updateAppDir = AppDir.Update.AddPath("app");
+			_updateAppDir = AppDir.Update.Join("app");
 
-			_appOnlineSignatureFile = Path.Combine(_updateAppDir, Signer.SignaturesFile);
-			_appDownloadedSignatureFile = AppDir.Update.AddPath(Signer.SignaturesFile);
-			_appInstalledVersionFile = AppDir.Update.AddPath("version.txt");
+			_appOnlineSignatureFile = _updateAppDir.Join(Signer.SignaturesFile);
+			_appDownloadedSignatureFile = AppDir.Update.Join(Signer.SignaturesFile);
+			_appInstalledVersionFile = AppDir.Update.Join("version.txt");
 
 			AppDownloadedSignature = getAppDownloadedSignature();
 
 			_webClient = new WebClientBase();
 
-			_protectedFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+			_protectedFiles = new HashSet<FsPath>
 			{
 				AppDir.GeneralConfigXml,
 				AppDir.DisplayConfigXml,
@@ -65,7 +63,7 @@ namespace Mtgdb.Downloader
 					Console.WriteLine("Extracting to {0}", AppDir.Data);
 					new FastZip().ExtractZip(
 						stream,
-						AppDir.Data,
+						AppDir.Data.Value,
 						FastZip.Overwrite.Always,
 						name => true,
 						fileFilter: null,
@@ -92,20 +90,20 @@ namespace Mtgdb.Downloader
 
 		public string GetAppVersionInstalled()
 		{
-			if (!File.Exists(_appInstalledVersionFile))
+			if (!_appInstalledVersionFile.IsFile())
 			{
 				string versionFromAssembly = getVersionFromAssembly();
 				return versionFromAssembly;
 			}
 
-			var result = File.ReadAllText(_appInstalledVersionFile);
+			var result = _appInstalledVersionFile.ReadAllText();
 			return result;
 		}
 
 		public async Task DownloadAppSignature(CancellationToken token)
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
-			Directory.CreateDirectory(_updateAppDir);
+			_updateAppDir.CreateDirectory();
 			await new GdriveWebClient().TryDownload(
 				_appSourceConfig.FileListUrl, _appOnlineSignatureFile, token);
 			AppOnlineSignature = getAppOnlineSignature();
@@ -115,9 +113,9 @@ namespace Mtgdb.Downloader
 		{
 			var expectedSignature = AppOnlineSignature;
 
-			string appOnline = Path.Combine(_updateAppDir, expectedSignature.Path);
+			FsPath appOnline = _updateAppDir.Join(expectedSignature.Path);
 			ensureFileDeleted(appOnline);
-			Directory.CreateDirectory(_updateAppDir);
+			_updateAppDir.CreateDirectory();
 			await new GdriveWebClient().TryDownload(
 				_appSourceConfig.ZipUrl, appOnline, token);
 		}
@@ -128,10 +126,10 @@ namespace Mtgdb.Downloader
 				throw new InvalidOperationException("Cannot validate downloaded app. Online signature must be downloaded first");
 
 			var expectedSignature = AppOnlineSignature;
-			var appOnline = _updateAppDir.AddPath(expectedSignature.Path);
-			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
+			var appOnline = _updateAppDir.Join(expectedSignature.Path);
+			var appDownloaded = AppDir.Update.Join(expectedSignature.Path);
 
-			if (!File.Exists(appOnline))
+			if (!appOnline.IsFile())
 			{
 				Console.WriteLine("Failed to download {0}", expectedSignature.Path);
 				return false;
@@ -155,35 +153,33 @@ namespace Mtgdb.Downloader
 			return false;
 		}
 
-		private static void move(string appOnline, string appDownloaded, bool overwrite)
+		private static void move(FsPath appOnline, FsPath appDownloaded, bool overwrite)
 		{
-			if (File.Exists(appDownloaded) && overwrite)
-				File.Delete(appDownloaded);
+			if (overwrite)
+				ensureFileDeleted(appDownloaded);
 
-			File.Move(appOnline, appDownloaded);
+			appOnline.MoveFileTo(appDownloaded);
 		}
 
-		private static void ensureFileDeleted(string file)
+		private static void ensureFileDeleted(FsPath file)
 		{
-			if (!File.Exists(file))
-				return;
-
-			File.Delete(file);
+			if (file.IsFile())
+				file.DeleteFile();
 		}
 
 		public void Install(Action onComplete)
 		{
 			var expectedSignature = AppOnlineSignature;
-			var appDownloaded = AppDir.Update.AddPath(expectedSignature.Path);
+			var appDownloaded = AppDir.Update.Join(expectedSignature.Path);
 
 			BeginInstall?.Invoke();
 
 			if (new SevenZip(silent: false).Extract(appDownloaded, AppDir.Root, _protectedFiles))
 			{
 				EndInstall?.Invoke();
-				writeInstalledVersion(expectedSignature.Path);
+				writeInstalledVersion(expectedSignature.Path.Value);
 				CreateApplicationShortcut(AppDir.Root);
-				updateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+				updateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
 				Console.WriteLine();
 
 				onComplete?.Invoke();
@@ -206,7 +202,7 @@ namespace Mtgdb.Downloader
 
 		private FileSignature getAppOnlineSignature()
 		{
-			if (!File.Exists(_appOnlineSignatureFile))
+			if (!_appOnlineSignatureFile.IsFile())
 			{
 				Console.WriteLine("Failed to download current version signature");
 				return null;
@@ -221,7 +217,7 @@ namespace Mtgdb.Downloader
 
 		private FileSignature getAppDownloadedSignature()
 		{
-			if (!File.Exists(_appDownloadedSignatureFile))
+			if (!_appDownloadedSignatureFile.IsFile())
 				return null;
 
 			var fileList = Signer.ReadFromFile(_appDownloadedSignatureFile, internPath: false);
@@ -231,19 +227,19 @@ namespace Mtgdb.Downloader
 
 		private void writeInstalledVersion(string version)
 		{
-			File.WriteAllText(_appInstalledVersionFile, version);
+			_appInstalledVersionFile.WriteAllText(version);
 		}
 
-		private void updateApplicationShortcut(string shortcutLocation)
+		private void updateApplicationShortcut(FsPath shortcutLocation)
 		{
-			string shortcutPath = Path.Combine(shortcutLocation, ShortcutFileName);
-			if (File.Exists(shortcutPath))
+			FsPath shortcutPath = shortcutLocation.Join(ShortcutFileName);
+			if (shortcutPath.IsFile())
 				CreateApplicationShortcut(shortcutLocation);
 		}
 
-		public void CreateApplicationShortcut(string shortcutLocation)
+		public void CreateApplicationShortcut(FsPath shortcutLocation)
 		{
-			string shortcutPath = Path.Combine(shortcutLocation, ShortcutFileName);
+			FsPath shortcutPath = shortcutLocation.Join(ShortcutFileName);
 
 			string appVersionInstalled = GetAppVersionInstalled();
 			// Mtgdb.Gui.v1.3.5.10.zip
@@ -251,37 +247,37 @@ namespace Mtgdb.Downloader
 			var postfix = ".zip";
 			var versionDir = appVersionInstalled.Substring(prefix.Length, appVersionInstalled.Length - prefix.Length - postfix.Length);
 
-			string currentBin = AppDir.BinVersion.Parent().AddPath(versionDir);
-			string execPath = currentBin.AddPath(ExecutableFileName);
-			string iconPath = currentBin.AddPath("mtg64.ico");
+			FsPath currentBin = AppDir.BinVersion.Parent().Join(versionDir);
+			FsPath execPath = currentBin.Join(ExecutableFileName);
+			FsPath iconPath = currentBin.Join("mtg64.ico");
 
 			createApplicationShortcut(shortcutPath, execPath, iconPath);
 		}
 
 		private static string getVersionFromAssembly()
 		{
-			string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+			string version = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
 			return "Mtgdb.Gui.v" + version + ".zip";
 		}
 
-		private static void createApplicationShortcut(string shortcutPath, string exePath, string iconPath)
+		private static void createApplicationShortcut(FsPath shortcutPath, FsPath exePath, FsPath iconPath)
 		{
 			var wsh = new WshShell();
-			var shortcut = wsh.CreateShortcut(shortcutPath) as IWshShortcut;
+			var shortcut = wsh.CreateShortcut(shortcutPath.Value) as IWshShortcut;
 
-			string bin = Path.GetDirectoryName(exePath);
+			FsPath bin = exePath.Parent();
 
 			if (shortcut != null)
 			{
 				shortcut.Arguments = "";
-				shortcut.TargetPath = exePath;
+				shortcut.TargetPath = exePath.Value;
 				shortcut.WindowStyle = 1;
 
 				shortcut.Description = "Application to search MTG cards and build decks";
-				shortcut.WorkingDirectory = bin;
+				shortcut.WorkingDirectory = bin.Value;
 
 				if (iconPath != null)
-					shortcut.IconLocation = iconPath;
+					shortcut.IconLocation = iconPath.Value;
 
 				shortcut.Save();
 				Console.WriteLine("Created shortcut {0}", shortcutPath);
@@ -296,15 +292,15 @@ namespace Mtgdb.Downloader
 		public const string ShortcutFileName = "Mtgdb.Gui.lnk";
 		private const string ExecutableFileName = "Mtgdb.Gui.exe";
 
-		private readonly HashSet<string> _protectedFiles;
+		private readonly HashSet<FsPath> _protectedFiles;
 
 		private readonly AppSourceConfig _appSourceConfig;
 		private readonly MtgjsonSourceConfig _mtgjsonSourceConfig;
 
-		private readonly string _updateAppDir;
-		private readonly string _appOnlineSignatureFile;
-		private readonly string _appDownloadedSignatureFile;
-		private readonly string _appInstalledVersionFile;
+		private readonly FsPath _updateAppDir;
+		private readonly FsPath _appOnlineSignatureFile;
+		private readonly FsPath _appDownloadedSignatureFile;
+		private readonly FsPath _appInstalledVersionFile;
 		public FileSignature AppOnlineSignature { get; private set; }
 		public FileSignature AppDownloadedSignature { get; private set; }
 		private readonly WebClientBase _webClient;

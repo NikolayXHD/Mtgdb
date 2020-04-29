@@ -8,60 +8,60 @@ namespace Mtgdb
 {
 	public static class Signer
 	{
-		public const string SignaturesFile = "filelist.txt";
+		public static readonly FsPath SignaturesFile = new FsPath("filelist.txt");
 
 		public static IList<FileSignature> CreateSignatures(
-			string path,
+			FsPath path,
 			string pattern = "*",
-			Dictionary<string, FileSignature> precalculated = null)
+			Dictionary<FsPath, FileSignature> precalculated = null)
 		{
-			var files = Directory.GetFiles(path, pattern, SearchOption.AllDirectories);
-			var result = new List<FileSignature>(files.Length);
+			var files = path.EnumerateFiles(pattern, SearchOption.AllDirectories);
+			var result = new List<FileSignature>();
 
-			using (var md5 = MD5.Create())
-				for (int i = 0; i < files.Length; i++)
+			using var md5 = MD5.Create();
+			foreach (FsPath file in files)
+			{
+				if (Str.Equals(file.Basename(), SignaturesFile.Value))
+					continue;
+
+				var relativePath = file.RelativeTo(path);
+
+				if (precalculated == null || !precalculated.TryGetValue(relativePath, out var signature))
 				{
-					if (Str.Equals(files[i].LastPathSegment(), SignaturesFile))
-						continue;
-
-					string relativePath = files[i].Substring(path.Length + 1);
-
-					if (precalculated == null || !precalculated.TryGetValue(relativePath, out var signature))
+					signature = new FileSignature
 					{
-						signature = new FileSignature
-						{
-							Path = relativePath,
-							Md5Hash = getMd5Hash(md5, File.ReadAllBytes(files[i]))
-						};
-					}
-
-					result.Add(signature);
+						Path = relativePath,
+						Md5Hash = getMd5Hash(md5, file.ReadAllBytes())
+					};
 				}
+
+				result.Add(signature);
+			}
 
 			return result;
 		}
 
-		public static FileSignature CreateSignature(string path, bool useAbsolutePath = false)
+		public static FileSignature CreateSignature(FsPath path, bool useAbsolutePath = false)
 		{
-			using var md5 = MD5.Create();
-			return new FileSignature
-			{
-				Path = useAbsolutePath ? path : Path.GetFileName(path),
-				Md5Hash = getMd5Hash(md5, File.ReadAllBytes(path))
-			};
+			using (var md5 = MD5.Create())
+				return new FileSignature
+				{
+					Path = useAbsolutePath ? path : path.Base(),
+					Md5Hash = getMd5Hash(md5, path.ReadAllBytes())
+				};
 		}
 
-		public static void WriteToFile(string targetFile, IEnumerable<FileSignature> signatures)
+		public static void WriteToFile(FsPath targetFile, IEnumerable<FileSignature> signatures)
 		{
-			File.WriteAllLines(targetFile, signatures.Select(_ => _.Md5Hash + "\t" + _.Path));
+			targetFile.WriteAllLines(signatures.Select(_ => _.Md5Hash + "\t" + _.Path.Value));
 		}
 
-		public static FileSignature[] ReadFromFile(string targetFile, bool internPath)
+		public static FileSignature[] ReadFromFile(FsPath targetFile, bool internPath)
 		{
-			if (!File.Exists(targetFile))
+			if (!targetFile.IsFile())
 				return null;
 
-			var lines = File.ReadAllLines(targetFile)
+			var lines = targetFile.ReadAllLines()
 				.Where(_ => !string.IsNullOrEmpty(_));
 
 			if (Path.DirectorySeparatorChar != '\\')
@@ -71,7 +71,7 @@ namespace Mtgdb
 				.Select(_ => new FileSignature
 				{
 					Md5Hash = _.Substring(0, 32),
-					Path = internPath ? string.Intern(_.Substring(33)) : _.Substring(33)
+					Path = FsPathPersistence.Deserialize(_.Substring(33)).Intern(internPath)
 				}).ToArray();
 
 			return result;

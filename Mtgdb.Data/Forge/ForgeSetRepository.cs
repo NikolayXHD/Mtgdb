@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Mtgdb.Data
@@ -8,7 +7,7 @@ namespace Mtgdb.Data
 	{
 		public void Load()
 		{
-			var mappings = File.ReadAllLines(AppDir.Data.AddPath("forge_set_mapping.txt"))
+			var mappings = AppDir.Data.Join("forge_set_mapping.txt").ReadAllLines()
 				.Select(_ => _.Split('\t'))
 				.ToArray();
 

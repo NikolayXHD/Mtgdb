@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using Mtgdb.Dev;
+using Ninject.Modules;
 
 namespace Mtgdb.Util
 {
@@ -6,9 +7,12 @@ namespace Mtgdb.Util
 	{
 		public override void Load()
 		{
+			// ReSharper disable once PossibleNullReferenceException
 			Kernel.Bind<ImageDirectorySigner>()
 				.ToSelf()
 				.InSingletonScope();
+
+			FsPathPersistence.RegisterPathSubstitution(DevPaths.DriveSubstitution);
 		}
 	}
 }

@@ -1,6 +1,6 @@
-﻿using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Mtgdb.Dev;
 using Mtgdb.Test;
 using NUnit.Framework;
 
@@ -15,15 +15,11 @@ namespace Mtgdb.Util
 			LoadCards();
 		}
 
-		private const string DownloadedDir = @"D:\temp\gatherer\downloaded";
-		private const string ParsedDir = @"D:\temp\gatherer\parsed";
-		private const string ResultDir = @"D:\temp\gatherer\result";
-
 		[Test]
 		public async Task Update_translations()
 		{
-			Directory.CreateDirectory(ParsedDir);
-			Directory.CreateDirectory(ResultDir);
+			ParsedDir.CreateDirectory();
+			ResultDir.CreateDirectory();
 
 			var client = new GathererClient(Repo);
 			await client.DownloadTranslations(DownloadedDir, CancellationToken.None);
@@ -31,5 +27,10 @@ namespace Mtgdb.Util
 			client.MergeTranslations(ParsedDir, ResultDir);
 			client.SaveNonEnglishTranslations(ResultDir);
 		}
+
+		private static readonly FsPath RootDir = DevPaths.DataDrive.Join("temp", "gatherer");
+		private static readonly FsPath DownloadedDir = RootDir.Join("downloaded");
+		private static readonly FsPath ParsedDir = RootDir.Join("parsed");
+		private static readonly FsPath ResultDir = RootDir.Join("result");
 	}
 }

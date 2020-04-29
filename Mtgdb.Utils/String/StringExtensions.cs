@@ -1,61 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Mtgdb
 {
 	public static class StringExtensions
 	{
-		public static string Parent(this string dir)
-		{
-			return Path.GetDirectoryName(dir);
-		}
-
-		public static string LastPathSegment(this string dir)
-		{
-			return Path.GetFileName(dir);
-		}
-
-		public static string AddPath(this string original, string dir)
-		{
-			if (string.IsNullOrEmpty(dir))
-				return original;
-
-			return Path.Combine(original, dir);
-		}
-
-		public static void EmptyDirectory(this string dir)
-		{
-			var dirInfo = new DirectoryInfo(dir);
-
-			if (!dirInfo.Exists)
-			{
-				dirInfo.Create();
-				return;
-			}
-
-			foreach (var subdirInfo in dirInfo.GetDirectories())
-				subdirInfo.Delete(recursive: true);
-
-			foreach (var fileInfo in dirInfo.GetFiles())
-				fileInfo.Delete();
-		}
-
-		public static void RemoveDirectoryIfEmpty(this string dir)
-		{
-			if (dir == null)
-				return;
-
-			var info = new DirectoryInfo(dir);
-			if (!info.Exists)
-				return;
-
-			if (!info.EnumerateFileSystemInfos().Any())
-				Directory.Delete(dir);
-		}
-
 		public static string RemoveDiacritics(this string value)
 		{
 			var normalizedString = value.Normalize(NormalizationForm.FormD);

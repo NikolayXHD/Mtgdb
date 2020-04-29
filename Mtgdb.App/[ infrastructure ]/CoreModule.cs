@@ -20,8 +20,7 @@ namespace Mtgdb
 
 		private static IAppSettings loadSettings(IContext ctx)
 		{
-			var systemSettings = new XmlSystemSettings(@"ExtConfigure", AppDir.Root);
-
+			var systemSettings = new XmlSystemSettings("ExtConfigure", AppDir.Executable.Parent().Value);
 			var settingsLoader = new SettingsLoader();
 			settingsLoader.XmlFileByExtension();
 			var settings = settingsLoader.LoadSettings(systemSettings).Joined.ToAppSettings();

@@ -2,11 +2,11 @@ namespace Mtgdb.Gui
 {
 	public class FileDialogState
 	{
-		public string LastFile { get; set; }
+		public FsPath LastFile { get; set; }
 
-		public string LastSavedFile
+		public FsPath LastSavedFile
 		{
-			get => _lastSavedFile ?? LastFile;
+			get => _lastSavedFile.Or(LastFile);
 
 			set
 			{
@@ -15,9 +15,9 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public string LastLoadedFile
+		public FsPath LastLoadedFile
 		{
-			get => _lastLoadedFile ?? LastFile;
+			get => _lastLoadedFile.Or(LastFile);
 
 			set
 			{
@@ -26,7 +26,7 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private string _lastSavedFile;
-		private string _lastLoadedFile;
+		private FsPath _lastSavedFile;
+		private FsPath _lastLoadedFile;
 	}
 }

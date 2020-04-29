@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Mtgdb.Dev;
 using NUnit.Framework;
 
 namespace Mtgdb.Test
@@ -45,25 +44,25 @@ namespace Mtgdb.Test
 
 					messages.Add($"missing " +
 						string.Join(", ", new[]
-							{
-								small == null ? "small" : null,
-								noZooms ? "zoom" : null
-							}.Where(_ => _ != null)) +
+						{
+							small == null ? "small" : null,
+							noZooms ? "zoom" : null
+						}.Where(_ => _ != null)) +
 						$" {card.SetCode} {card.ImageName}");
 				}
 				else
 				{
-					var smallPath = small.ImageFile.FullPath;
-					var zoomPath = zooms[0].ImageFile.FullPath;
+					var smallPath = small.ImageFile.FullPath.Value;
+					var zoomPath = zooms[0].ImageFile.FullPath.Value;
 
 					smallPath = smallPath.ToLower(Str.Culture)
 						.Replace("gatherer.original", "gatherer")
 						.Replace("gatherer.preprocessed", "gatherer")
-						.Replace("\\lq\\", string.Empty);
+						.Replace( $"{FsPath.Separator}lq{FsPath.Separator}", $"{FsPath.Separator}");
 
 					zoomPath = zoomPath.ToLower(Str.Culture)
 						.Replace("gatherer.preprocessed", "gatherer")
-						.Replace("\\mq\\", string.Empty);
+						.Replace($"{FsPath.Separator}mq{FsPath.Separator}", $"{FsPath.Separator}");
 
 					if (!Str.Equals(smallPath, zoomPath))
 						messages.Add($"{card.SetCode}: {smallPath}{Str.Endl}{zoomPath}");
@@ -73,72 +72,76 @@ namespace Mtgdb.Test
 			messages.Should().BeEmpty();
 		}
 
-		// ReSharper disable StringLiteralTypo
-		[TestCase("UGL ", TorrentsDir, "UGL", "UGL Tokens")]
-		[TestCase("DDE ", TorrentsDir, "DDE", "DDE Tokens")]
-		[TestCase("C17 ", XlhqDir, "C17 - Commander 2017\\300DPI Cards")]
-		[TestCase("IMA ", XlhqDir, "IMA - Iconic Masters\\300DPI Cards")]
-		[TestCase("UST ", XlhqDir, "UST - Unstable\\300DPI Cards")]
-		[TestCase("CED ", XlhqDir, "CED - Collectors' Edition\\300DPI")]
-		[TestCase("XLN ", XlhqDir, "XLN - Ixalan\\300DPI Cards")]
-		[TestCase("A25 ", XlhqDir, "A25 - 25 Masters\\300DPI Cards")]
-		[TestCase("CMA ", XlhqDir, "CMA - Commander Anthology\\300DPI Cards")]
-		[TestCase("DDT ", XlhqDir, "DDT - Duel Decks Merfolk vs Goblins\\300DPI Cards")]
-		[TestCase("DDU ", XlhqDir, "DDU - Duel Decks Elves vs Inventors\\300DPI Cards")]
-		[TestCase("E02 ", XlhqDir, "E02 - Explorers of Ixalan\\300DPI Cards")]
-		[TestCase("RIX ", XlhqDir, "RIX - Rivals of Ixalan\\300DPI Cards")]
-		[TestCase("V17 ", XlhqDir, "V17 - From the Vault Transform\\300DPI Cards")]
-		[TestCase("BBD ", XlhqDir, "BBD - Battlebond\\300DPI Cards")]
-		[TestCase("DOM ", XlhqDir, "DOM - Dominaria\\300DPI Cards")]
-		[TestCase("GS1 ", XlhqDir, "GS1 - Global Series Jiang Yanggu & Mu Yanling\\300DPI Cards")]
-		[TestCase("M19 ", XlhqDir, "M19 - Core 2019\\300DPI Cards")]
-		[TestCase("SS1 ", XlhqDir, "SS1 - Signature Spellbook Jace\\300DPI Cards")]
-		[TestCase("CM2 ", XlhqDir, "CM2 - Commander Anthology 2\\300DPI Cards")]
-		[TestCase("C18 ", XlhqDir, "C18 - Commander 2018\\300DPI Cards")]
-		[TestCase("GRN ", XlhqDir, "GRN - Guilds of Ravnica\\300DPI Cards")]
-		[TestCase("GK1 ", XlhqDir, "GK1 - GRN Guild Kit\\300DPI Cards")]
-		[TestCase("UMA ", XlhqDir, "UMA - Ultimate Masters\\300DPI Cards")]
-		[TestCase("WAR ", XlhqDir, "WAR - War of the Spark\\300DPI Cards")]
-		[TestCase("M20 ", XlhqDir, "M20 - Core 2020\\300DPI Cards")]
-		[TestCase("SS2 ", XlhqDir, "SS2 - Signature Spellbook Gideon\\300DPI Cards")]
-		[TestCase("MH1 ", XlhqDir, "MH1 - Modern Horizons\\300DPI Cards")]
-		[TestCase("PWAR", XlhqDir, "Promos\\pWAR - War of the Spark Promos", "WAR - War of the Spark\\300DPI Cards")]
+		private static IEnumerable<TestCaseData> Cases
+		{
+			get
+			{
+				// ReSharper disable StringLiteralTypo
+				yield return new TestCaseData("UGL ", new[]
+				{
+					DevPaths.TorrentsDir.Join("UGL"),
+					DevPaths.TorrentsDir.Join("UGL Tokens")
+				});
+				yield return new TestCaseData("DDE ", new[]
+				{
+					DevPaths.TorrentsDir.Join("DDE"),
+					DevPaths.TorrentsDir.Join("DDE Tokens")
+				});
+				yield return new TestCaseData("C17 ", new [] {DevPaths.XlhqDir.Join("C17 - Commander 2017", "300DPI Cards")});
+				yield return new TestCaseData("IMA ", new [] {DevPaths.XlhqDir.Join("IMA - Iconic Masters", "300DPI Cards")});
+				yield return new TestCaseData("UST ", new [] {DevPaths.XlhqDir.Join("UST - Unstable", "300DPI Cards")});
+				yield return new TestCaseData("CED ", new [] {DevPaths.XlhqDir.Join("CED - Collectors' Edition", "300DPI")});
+				yield return new TestCaseData("XLN ", new [] {DevPaths.XlhqDir.Join("XLN - Ixalan", "300DPI Cards")});
+				yield return new TestCaseData("A25 ", new [] {DevPaths.XlhqDir.Join("A25 - 25 Masters", "300DPI Cards")});
+				yield return new TestCaseData("CMA ", new [] {DevPaths.XlhqDir.Join("CMA - Commander Anthology", "300DPI Cards")});
+				yield return new TestCaseData("DDT ", new [] {DevPaths.XlhqDir.Join("DDT - Duel Decks Merfolk vs Goblins", "300DPI Cards")});
+				yield return new TestCaseData("DDU ", new [] {DevPaths.XlhqDir.Join("DDU - Duel Decks Elves vs Inventors", "300DPI Cards")});
+				yield return new TestCaseData("E02 ", new [] {DevPaths.XlhqDir.Join("E02 - Explorers of Ixalan", "300DPI Cards")});
+				yield return new TestCaseData("RIX ", new [] {DevPaths.XlhqDir.Join("RIX - Rivals of Ixalan", "300DPI Cards")});
+				yield return new TestCaseData("V17 ", new [] {DevPaths.XlhqDir.Join("V17 - From the Vault Transform", "300DPI Cards")});
+				yield return new TestCaseData("BBD ", new [] {DevPaths.XlhqDir.Join("BBD - Battlebond", "300DPI Cards")});
+				yield return new TestCaseData("DOM ", new [] {DevPaths.XlhqDir.Join("DOM - Dominaria", "300DPI Cards")});
+				yield return new TestCaseData("GS1 ", new [] {DevPaths.XlhqDir.Join("GS1 - Global Series Jiang Yanggu & Mu Yanling", "300DPI Cards")});
+				yield return new TestCaseData("M19 ", new [] {DevPaths.XlhqDir.Join("M19 - Core 2019", "300DPI Cards")});
+				yield return new TestCaseData("SS1 ", new [] {DevPaths.XlhqDir.Join("SS1 - Signature Spellbook Jace", "300DPI Cards")});
+				yield return new TestCaseData("CM2 ", new [] {DevPaths.XlhqDir.Join("CM2 - Commander Anthology 2", "300DPI Cards")});
+				yield return new TestCaseData("C18 ", new [] {DevPaths.XlhqDir.Join("C18 - Commander 2018", "300DPI Cards")});
+				yield return new TestCaseData("GRN ", new [] {DevPaths.XlhqDir.Join("GRN - Guilds of Ravnica", "300DPI Cards")});
+				yield return new TestCaseData("GK1 ", new [] {DevPaths.XlhqDir.Join("GK1 - GRN Guild Kit", "300DPI Cards")});
+				yield return new TestCaseData("UMA ", new [] {DevPaths.XlhqDir.Join("UMA - Ultimate Masters", "300DPI Cards")});
+				yield return new TestCaseData("WAR ", new [] {DevPaths.XlhqDir.Join("WAR - War of the Spark", "300DPI Cards")});
+				yield return new TestCaseData("M20 ", new [] {DevPaths.XlhqDir.Join("M20 - Core 2020", "300DPI Cards")});
+				yield return new TestCaseData("SS2 ", new [] {DevPaths.XlhqDir.Join("SS2 - Signature Spellbook Gideon", "300DPI Cards")});
+				yield return new TestCaseData("MH1 ", new [] {DevPaths.XlhqDir.Join("MH1 - Modern Horizons", "300DPI Cards")});
+				yield return new TestCaseData("PWAR", new[]
+				{
+					DevPaths.XlhqDir.Join("Promos", "pWAR - War of the Spark Promos"),
+					DevPaths.XlhqDir.Join("WAR - War of the Spark", "300DPI Cards")
+				});
+				yield return new TestCaseData("c19 ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("c19")});
+				yield return new TestCaseData("cmb1", new[] {DevPaths.GathererPreprocessedCardsDir.Join("cmb1")});
+				yield return new TestCaseData("eld ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("eld")});
+				yield return new TestCaseData("gn2 ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("gn2")});
+				yield return new TestCaseData("ha1 ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("ha1")});
+				yield return new TestCaseData("peld", new[] {DevPaths.GathererPreprocessedCardsDir.Join("peld")});
+				yield return new TestCaseData("ptg ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("ptg")});
+				yield return new TestCaseData("puma", new[] {DevPaths.GathererPreprocessedCardsDir.Join("puma")});
+				yield return new TestCaseData("hho ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("hho")});
+				// ReSharper restore StringLiteralTypo
+			}
+		}
 
-		[TestCase("c19 ", PreprocesedDir, "c19")]
-		[TestCase("cmb1", PreprocesedDir, "cmb1")]
-		[TestCase("eld ", PreprocesedDir, "eld")]
-		[TestCase("gn2 ", PreprocesedDir, "gn2")]
-		[TestCase("ha1 ", PreprocesedDir, "ha1")]
-		[TestCase("peld", PreprocesedDir, "peld")]
-		[TestCase("ptg ", PreprocesedDir, "ptg")]
-		[TestCase("puma", PreprocesedDir, "puma")]
-		[TestCase("hho ", PreprocesedDir, "hho")]
-		// ReSharper restore StringLiteralTypo
-		public void Set_images_are_from_expected_directory(
-			string setCode, string baseDir, params string[] expectedSubdirs)
+		[TestCaseSource(nameof(Cases))]
+		public void Set_images_are_from_expected_directory(string setCode, params FsPath[] expectedDirsSet)
 		{
 			setCode = setCode.Trim();
-			var expectedDirsSet = expectedSubdirs
-				.Select(_ => Path.Combine(baseDir, _))
-				.ToHashSet(StringComparer.OrdinalIgnoreCase);
-
 			var set = Repo.SetsByCode[setCode];
 			foreach (var card in set.ActualCards)
 			{
 				var imageModel = Ui.GetSmallImage(card);
-				string dir = Path.GetDirectoryName(imageModel.ImageFile.FullPath);
+				FsPath dir = imageModel.ImageFile.FullPath.Parent();
 				new[] { dir }.Should().BeSubsetOf(expectedDirsSet);
 			}
 		}
-
-		private const string XlhqDir = "D:\\distrib\\games\\mtg\\Mega\\XLHQ";
-
-		private const string TorrentsDir =
-			"D:\\distrib\\games\\mtg\\XLHQ-Sets-Torrent.Unpacked";
-
-		private const string OriginalDir =
-			"D:\\distrib\\games\\mtg\\Gatherer.Original\\cards";
-		private const string PreprocesedDir =
-			"D:\\distrib\\games\\mtg\\Gatherer.Preprocessed\\cards";
 	}
 }

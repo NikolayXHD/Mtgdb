@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
-using System.IO;
 using ImageMagick;
+using Mtgdb.Dev;
 using NUnit.Framework;
 
 namespace Mtgdb.Util
@@ -9,23 +9,24 @@ namespace Mtgdb.Util
 	public class DownsamplingTests
 	{
 		// ReSharper disable StringLiteralTypo
-		[TestCase(@"D:\Distrib\games\mtg\Mega\XLHQ\XLN - Ixalan\300DPI Cards\Adanto, the First Fort.xlhq.jpg")]
+		[Test]
 		// ReSharper restore StringLiteralTypo
-		public void Resample(string file)
+		public void Resample()
 		{
-			string name = Path.GetFileNameWithoutExtension(file);
-			string targetDir = "D:\\temp\\img\\";
+			FsPath file = DevPaths.XlhqDir.Join("XLN - Ixalan", "300DPI Cards", "Adanto, the First Fort.xlhq.jpg");
+			string name = file.Basename(extension: false);
+			FsPath targetDir = DevPaths.DataDrive.Join("temp", "img");
 
-			using (var image = new MagickImage(file))
+			using (var image = new MagickImage(file.Value))
 			{
 				image.Resize(new Percentage(50));
-				image.Write(targetDir + name + "resized.jpg");
+				image.Write(targetDir.Join(name).Concat("resized.jpg").Value);
 			}
 
-			using (var image = new MagickImage(file))
+			using (var image = new MagickImage(file.Value))
 			{
 				image.Scale(new Percentage(50));
-				image.Write(targetDir + name + "scaled.jpg");
+				image.Write(targetDir.Join(name).Concat("scaled.jpg").Value);
 			}
 		}
 	}
@@ -51,7 +52,7 @@ namespace Mtgdb.Util
 				g.RotateTransform(-90f);
 			}
 
-			image.Save(Path.Combine("d:", "temp", "transform.bmp"));
+			image.Save(DevPaths.DataDrive.Join("temp", "transform.bmp").Value);
 		}
 	}
 }

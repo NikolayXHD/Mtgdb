@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Web;
+using Mtgdb.Dev;
 using NUnit.Framework;
 
 namespace Mtgdb.Util
@@ -9,59 +10,63 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class WizardImageHtmlPageUtil
 	{
-		[TestCase(HtmlDir + @"\Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html", OriginalDir + @"\celd.png")]
-		public void RenameWizardsWebpageImages(string htmlPath, string targetDir)
+		[TestCase("Throne of Eldraine Variants _ MAGIC_ THE GATHERING.html", "celd.png")]
+		public void RenameWizardsWebpageImages(string htmlFile, string targetSubdir)
 		{
-			string htmlFileName = Path.GetFileNameWithoutExtension(htmlPath);
-			string directoryName = Path.GetDirectoryName(htmlPath) ??
-				throw new ArgumentException(htmlPath, nameof(htmlPath));
-			string filesDirectory = Path.Combine(directoryName, htmlFileName + "_files");
+			FsPath htmlPath = HtmlDir.Join(htmlFile);
+			FsPath targetDir = DevPaths.GathererOriginalDir.Join(targetSubdir);
 
-			string content = File.ReadAllText(htmlPath);
+			string htmlFileName = htmlPath.Basename(extension: false);
+			FsPath directoryName = htmlPath.Parent();
+			if (!directoryName.HasValue())
+				throw new ArgumentException(htmlPath.Value, nameof(htmlPath));
+
+			FsPath filesDirectory = directoryName.Join(htmlFileName + "_files");
+
+			string content = htmlPath.ReadAllText();
 			var matches = _imgTagPattern.Matches(content);
 
-			Directory.CreateDirectory(targetDir);
+			targetDir.CreateDirectory();
 			foreach (Match match in matches)
 			{
 				string originalFileName = match.Groups["file"].Value;
 				string ext = Path.GetExtension(originalFileName);
 
-				string filePath = Path.Combine(filesDirectory, originalFileName);
+				FsPath filePath = filesDirectory.Join(originalFileName);
 
 				string name = HttpUtility.HtmlDecode(match.Groups["name"].Value)
 					.Replace(" // ", "");
 
-				string defaultTargetPath = Path.Combine(targetDir, name + ext);
+				FsPath defaultTargetPath = targetDir.Join(name + ext);
 
-				bool defaultTargetExists = File.Exists(defaultTargetPath);
+				bool defaultTargetExists = defaultTargetPath.IsFile();
 
-				if (defaultTargetExists || File.Exists(getTargetPath(1)))
+				if (defaultTargetExists || getTargetPath(1).IsFile())
 				{
 					if (defaultTargetExists)
-						File.Move(defaultTargetPath, getTargetPath(1));
+						defaultTargetPath.MoveFileTo(getTargetPath(1));
 
 					for (int i = 2; i < 12; i++)
 					{
-						string targetPath = getTargetPath(i);
-						if (!File.Exists(targetPath))
+						FsPath targetPath = getTargetPath(i);
+						if (!targetPath.IsFile())
 						{
-							File.Copy(filePath, targetPath, overwrite: false);
+							filePath.CopyFileTo(targetPath, overwrite: false);
 							break;
 						}
 					}
 				}
 				else
 				{
-					File.Copy(filePath, defaultTargetPath, overwrite: false);
+					filePath.CopyFileTo(defaultTargetPath, overwrite: false);
 				}
 
-				string getTargetPath(int num) =>
-					Path.Combine(targetDir, name + num + ext);
+				FsPath getTargetPath(int num) =>
+					targetDir.Join(name + num + ext);
 			}
 		}
 
-		private const string OriginalDir = @"D:\Distrib\games\mtg\Gatherer.Original";
-		private const string HtmlDir = @"D:\temp\html";
+		private static readonly FsPath HtmlDir = DevPaths.DataDrive.Join("temp", "html");
 		private static readonly Regex _imgTagPattern = new Regex(
 			@"<img alt=""(?<name>[^""]+)"" src=""[^""]+\/(?<file>[^""]+)""");
 	}

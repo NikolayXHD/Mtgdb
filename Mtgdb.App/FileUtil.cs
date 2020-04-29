@@ -1,33 +1,32 @@
 ﻿using System;
-using System.IO;
 
 namespace Mtgdb
 {
 	public static class FileUtil
 	{
-		public static void SafeCreateFile(string filename, Action<string> createFile)
+		public static void SafeCreateFile(FsPath filename, Action<FsPath> createFile)
 		{
-			if (!File.Exists(filename))
+			if (!filename.IsFile())
 			{
 				createFile(filename);
 				return;
 			}
 
-			string backupName = filename + ".bak";
-			if (File.Exists(backupName))
-				File.Delete(backupName);
-			File.Move(filename, backupName);
+			FsPath backupName = filename.Concat(".bak");
+			if (backupName.IsFile())
+				backupName.DeleteFile();
+			filename.MoveFileTo(backupName);
 			try
 			{
 				createFile(filename);
 			}
 			catch (Exception)
 			{
-				File.Move(backupName, filename);
+				backupName.MoveFileTo(filename);
 				throw;
 			}
 
-			File.Delete(backupName);
+			backupName.DeleteFile();
 		}
 	}
 }

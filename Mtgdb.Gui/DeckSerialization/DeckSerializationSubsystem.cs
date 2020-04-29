@@ -47,7 +47,7 @@ namespace Mtgdb.Gui
 			_saveFilter = string.Join(@"|",
 				_saveFormatters.Select(f => $"{f.Description}|{f.FileNamePattern}"));
 
-			Directory.CreateDirectory(AppDir.Save);
+			AppDir.Save.CreateDirectory();
 		}
 
 		public Deck SaveDeck(Deck deck)
@@ -79,9 +79,9 @@ namespace Mtgdb.Gui
 		{
 			deck.File = file.File;
 			if (deck.Name == null)
-				deck.Name = Path.GetFileNameWithoutExtension(file.File);
+				deck.Name = file.File.Basename(extension: false);
 
-			var name = Path.GetFileNameWithoutExtension(file.File);
+			var name = file.File.Basename(extension: false);
 			var formatter = _saveFormatters[file.FormatIndex];
 
 			string serialized = formatter.ExportDeck(name, deck);
@@ -94,11 +94,11 @@ namespace Mtgdb.Gui
 					var content = Encoding.UTF8.GetBytes(serialized);
 					var bytes = preamble.Concat(content).ToArray();
 
-					File.WriteAllBytes(file.File, bytes);
+					file.File.WriteAllBytes(bytes);
 				}
 				else
 				{
-					File.WriteAllText(file.File, serialized);
+					file.File.WriteAllText(serialized);
 				}
 			}
 			catch (IOException ex)
@@ -112,10 +112,13 @@ namespace Mtgdb.Gui
 		public Deck LoadCollection()
 		{
 			var file = selectFilesToOpen("collection", allowMultiple: false).SingleOrDefault();
-			return file?.Invoke0(f => Deserialize(f, null));
+			if (file == FsPath.None)
+				return null;
+
+			return file.Invoke0(f => Deserialize(f, FsPath.None));
 		}
 
-		public Deck Deserialize(string file, string dir)
+		public Deck Deserialize(FsPath file, FsPath dir)
 		{
 			State.LastLoadedFile = file;
 
@@ -123,7 +126,7 @@ namespace Mtgdb.Gui
 			deck.File = file;
 
 			int maxLen = 0x8000000; // 128 MB
-			long length = new FileInfo(file).Length;
+			long length = file.File().Length;
 			if (length > maxLen)
 			{
 				deck.Error = $"File size {length} bytes exceeds maximum of {maxLen} bytes";
@@ -134,7 +137,7 @@ namespace Mtgdb.Gui
 
 			try
 			{
-				serialized = File.ReadAllText(file);
+				serialized = file.ReadAllText();
 			}
 			catch (IOException ex)
 			{
@@ -142,7 +145,7 @@ namespace Mtgdb.Gui
 				return deck;
 			}
 
-			var format = @"*" + Path.GetExtension(file);
+			var format = @"*" + file.Extension();
 
 			var formatter = getFormatter(format, serialized);
 
@@ -159,13 +162,13 @@ namespace Mtgdb.Gui
 			if (deck.Name == null)
 			{
 				string getNestedFileName() =>
-					(Path.GetFileName(dir) + Path.DirectorySeparatorChar + file.Substring(dir.Length + 1 /*separator*/))
-					.Replace(new string(Path.DirectorySeparatorChar, 1), Environment.NewLine);
+					dir.Base().Join(file.RelativeTo(dir)).Value
+						.Replace(new string(Path.DirectorySeparatorChar, 1), Environment.NewLine);
 
-				var extension = Path.GetExtension(file);
+				var extension = file.Extension();
 
-				string nameBase = dir == null
-					? Path.GetFileName(file)
+				string nameBase = !dir.HasValue()
+					? file.Basename()
 					: getNestedFileName();
 
 				deck.Name = nameBase.Substring(0, nameBase.Length - extension.Length);
@@ -220,15 +223,15 @@ namespace Mtgdb.Gui
 			return deck;
 		}
 
-		private string LastSavedDirectory => getDir(State.LastSavedFile);
+		private FsPath LastSavedDirectory => getDir(State.LastSavedFile);
 
-		private string LastLoadedDirectory => getDir(State.LastLoadedFile);
+		private FsPath LastLoadedDirectory => getDir(State.LastLoadedFile);
 
 
 
-		private string LastSavedExtension => Path.GetExtension(State.LastSavedFile);
+		private string LastSavedExtension => State.LastSavedFile.Extension();
 
-		private string LastLoadedExtension => Path.GetExtension(State.LastLoadedFile);
+		private string LastLoadedExtension => State.LastLoadedFile.Extension();
 
 
 
@@ -240,7 +243,7 @@ namespace Mtgdb.Gui
 		{
 			var dlg = new SaveFileDialog
 			{
-				InitialDirectory = LastSavedDirectory ?? new DirectoryInfo(AppDir.Save).FullName,
+				InitialDirectory = LastSavedDirectory.Value ?? AppDir.Save.Value,
 				Filter = _saveFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = SaveFilterIndex,
@@ -251,18 +254,19 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return null;
 
-			State.LastSavedFile = dlg.FileName;
-			return new DeckFile(dlg.FileName, dlg.FilterIndex - 1);
+			var savePath = new FsPath(dlg.FileName);
+			State.LastSavedFile = savePath;
+			return new DeckFile(savePath, dlg.FilterIndex - 1);
 		}
 
-		public string[] SelectDeckFiles() =>
+		public FsPath[] SelectDeckFiles() =>
 			selectFilesToOpen("deck", allowMultiple: true);
 
-		private string[] selectFilesToOpen(string fileType, bool allowMultiple)
+		private FsPath[] selectFilesToOpen(string fileType, bool allowMultiple)
 		{
 			var dlg = new OpenFileDialog
 			{
-				InitialDirectory = LastLoadedDirectory ?? new DirectoryInfo(AppDir.Save).FullName,
+				InitialDirectory = LastLoadedDirectory.Value ?? AppDir.Save.Value,
 				Filter = _loadFilter.Replace("{type}", fileType),
 				AddExtension = true,
 				FilterIndex = LoadFilterIndex,
@@ -273,20 +277,20 @@ namespace Mtgdb.Gui
 			if (dlg.ShowDialog() != DialogResult.OK)
 				return null;
 
-			return dlg.FileNames;
+			return dlg.FileNames.Select(_ => new FsPath(_)).ToArray();
 		}
 
 
 
-		private static string getDir(string lastFile)
+		private static FsPath getDir(FsPath lastFile)
 		{
-			if (lastFile == null)
-				return null;
+			if (lastFile == FsPath.None)
+				return FsPath.None;
 
-			var result = Path.GetDirectoryName(lastFile);
+			var result = lastFile.Parent();
 
-			if (!Directory.Exists(result))
-				return null;
+			if (!result.IsDirectory())
+				return FsPath.None;
 
 			return result;
 		}

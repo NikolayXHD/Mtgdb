@@ -95,13 +95,13 @@ namespace Mtgdb.Gui
 		private bool evalFilterByCollection(Card c) =>
 			c.CollectionCount(_uiSnapshot) > 0;
 
-		public void LoadHistory(string historyFile)
+		public void LoadHistory(FsPath historyFile)
 		{
 			_history.LoadHistory(historyFile);
-			_serialization.State.LastFile = _history.Current.DeckFile;
+			_serialization.State.LastFile = _history.Current.DeckFile.OrNone();
 		}
 
-		public void SaveHistory(string historyFile)
+		public void SaveHistory(FsPath historyFile)
 		{
 			historyUpdateFormPosition(_history.Current);
 			_history.Save(historyFile);
@@ -933,7 +933,7 @@ namespace Mtgdb.Gui
 
 			if (_deckEditor.CurrentZone == Zone.Main)
 			{
-				_deckEditor.DeckFile = null;
+				_deckEditor.DeckFile = FsPath.Empty;
 				_deckEditor.DeckName = null;
 			}
 

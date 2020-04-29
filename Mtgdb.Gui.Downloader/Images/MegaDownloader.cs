@@ -23,7 +23,7 @@ namespace Mtgdb.Downloader
 			await _megatools.Download(
 				task.MegaUrl,
 				task.TargetSubdirectory,
-				name: task.Dir.Subdir,
+				name: task.Dir.Subdir.Value,
 				silent: true,
 				token: token);
 

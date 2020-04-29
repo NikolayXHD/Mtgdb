@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using Mtgdb.Data.Index;
 using Mtgdb.Data.Model;
@@ -17,10 +16,10 @@ namespace Mtgdb.Test
 			LoadModules();
 
 			_searcher = Kernel.Get<DeckSearcher>();
-			_searcher.IndexDirectoryParent += "-test";
+			_searcher.IndexDirectoryParent = _searcher.IndexDirectoryParent.Concat("-test");
 
 			_model = Kernel.Get<DeckListModel>();
-			_model.FileName = AppDir.History.AddPath("decks.test.json");
+			_model.FileName = AppDir.History.Join("decks.test.json");
 		}
 
 		[SetUp]
@@ -29,8 +28,8 @@ namespace Mtgdb.Test
 
 		private void clearDeckList()
 		{
-			if (File.Exists(_model.FileName))
-				File.Delete(_model.FileName);
+			if (_model.FileName.IsFile())
+				_model.FileName.DeleteFile();
 
 			_model.Load();
 

@@ -7,6 +7,6 @@ namespace Mtgdb.Util
 {
 	public abstract class ImageDownloaderBase : WebClientBase
 	{
-		public abstract Task DownloadCardImage(Card card, string targetPath, CancellationToken token);
+		public abstract Task DownloadCardImage(Card card, FsPath targetPath, CancellationToken token);
 	}
 }

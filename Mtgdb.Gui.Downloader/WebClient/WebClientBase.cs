@@ -15,10 +15,10 @@ namespace Mtgdb.Downloader
 	{
 		protected const int BufferSize = 1 << 20; // 1MB
 
-		public virtual async Task DownloadFile(string downloadUrl, string downloadTarget, CancellationToken token)
+		public virtual async Task DownloadFile(string downloadUrl, FsPath downloadTarget, CancellationToken token)
 		{
 			using var stream = await DownloadStream(downloadUrl, token);
-			using var fileStream = File.Open(downloadTarget, FileMode.Create);
+			using var fileStream = downloadTarget.OpenFile(FileMode.Create);
 			await stream.CopyToAsync(fileStream, BufferSize, token);
 		}
 

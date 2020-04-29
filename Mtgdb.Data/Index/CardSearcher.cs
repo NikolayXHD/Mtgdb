@@ -11,7 +11,7 @@ namespace Mtgdb.Data.Index
 			: base(new CardSpellchecker(repository, adapter), adapter)
 		{
 			_repo = repository;
-			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("search");
+			IndexDirectoryParent = AppDir.Data.Join("index", "search");
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace Mtgdb.Data.Index
 
 			if (_version.IsUpToDate)
 			{
-				using var directory = FSDirectory.Open(_version.IndexDirectory);
+				using var directory = FSDirectory.Open(_version.IndexDirectory.Value);
 				return new RAMDirectory(directory, IOContext.READ_ONCE);
 			}
 
@@ -51,7 +51,7 @@ namespace Mtgdb.Data.Index
 			if (index == null)
 				return null;
 
-			index.SaveTo(_version.IndexDirectory);
+			index.SaveTo(_version.IndexDirectory.Value);
 			_version.SetIsUpToDate();
 
 			return index;
@@ -62,7 +62,7 @@ namespace Mtgdb.Data.Index
 		public void InvalidateIndex() =>
 			_version.Invalidate();
 
-		public string IndexDirectoryParent
+		public FsPath IndexDirectoryParent
 		{
 			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.CardSearcher);

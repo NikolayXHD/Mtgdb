@@ -10,38 +10,38 @@ namespace Mtgdb.Test
 		[SetUp]
 		public void Setup()
 		{
-			_tempDirectoryPath = Path.GetTempPath().AddPath(Path.GetRandomFileName());
-			Directory.CreateDirectory(_tempDirectoryPath);
+			_tempDirectoryPath = new FsPath(Path.GetTempPath()).Join(Path.GetRandomFileName());
+			_tempDirectoryPath.CreateDirectory();
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			if (Directory.Exists(_tempDirectoryPath))
-				Directory.Delete(_tempDirectoryPath, recursive: true);
+			if (_tempDirectoryPath.IsDirectory())
+				_tempDirectoryPath.DeleteDirectory(recursive: true);
 		}
 
 		[Test]
 		public void Test_compress_to_extract_roundtrip()
 		{
 			const string originalContent = "Hello world!";
-			var originalPath = _tempDirectoryPath.AddPath("original.txt");
-			File.WriteAllText(originalPath, originalContent);
+			var originalPath = _tempDirectoryPath.Join("original.txt");
+			originalPath.WriteAllText(originalContent);
 
 			var sevenZip = new SevenZip(silent: false);
-			var zipPath = _tempDirectoryPath.AddPath("compressed.7z");
+			var zipPath = _tempDirectoryPath.Join("compressed.7z");
 			sevenZip.Compress(originalPath, zipPath);
-			File.Exists(zipPath).Should().BeTrue();
+			zipPath.IsFile().Should().BeTrue();
 
-			var extractedDirectoryPath = _tempDirectoryPath.AddPath("extracted");
-			Directory.CreateDirectory(extractedDirectoryPath);
+			var extractedDirectoryPath = _tempDirectoryPath.Join("extracted");
+			extractedDirectoryPath.CreateDirectory();
 			sevenZip.Extract(zipPath, extractedDirectoryPath);
 
-			var extractedPath = extractedDirectoryPath.AddPath("original.txt");
-			Directory.Exists(extractedDirectoryPath).Should().BeTrue();
-			File.Exists(extractedPath).Should().BeTrue();
+			var extractedPath = extractedDirectoryPath.Join("original.txt");
+			extractedDirectoryPath.IsDirectory().Should().BeTrue();
+			extractedPath.IsFile().Should().BeTrue();
 
-			var extractedContent = File.ReadAllText(extractedPath);
+			var extractedContent = extractedPath.ReadAllText();
 			extractedContent.Should().Be(originalContent);
 		}
 
@@ -49,30 +49,30 @@ namespace Mtgdb.Test
 		public void Test_extract_excluding_path()
 		{
 			const string originalContent = "Hello world!";
-			var originalDirPath = _tempDirectoryPath.AddPath("original");
-			Directory.CreateDirectory(originalDirPath);
-			var originalPath1 = originalDirPath.AddPath("to_be_extracted.txt");
-			var originalPath2 = originalDirPath.AddPath("to_be_excluded.txt");
-			File.WriteAllText(originalPath1, originalContent);
-			File.WriteAllText(originalPath2, originalContent);
+			var originalDirPath = _tempDirectoryPath.Join("original");
+			originalDirPath.CreateDirectory();
+			var originalPath1 = originalDirPath.Join("to_be_extracted.txt");
+			var originalPath2 = originalDirPath.Join("to_be_excluded.txt");
+			originalPath1.WriteAllText(originalContent);
+			originalPath2.WriteAllText(originalContent);
 
 			var sevenZip = new SevenZip(silent: false);
-			var zipPath = _tempDirectoryPath.AddPath("compressed.7z");
+			var zipPath = _tempDirectoryPath.Join("compressed.7z");
 			sevenZip.Compress(originalDirPath, zipPath);
-			File.Exists(zipPath).Should().BeTrue();
+			zipPath.IsFile().Should().BeTrue();
 
-			var extractedDirectoryPath = _tempDirectoryPath.AddPath("extracted");
-			var extractedDirPath = extractedDirectoryPath.AddPath("original");
-			Directory.CreateDirectory(extractedDirectoryPath);
+			var extractedDirectoryPath = _tempDirectoryPath.Join("extracted");
+			var extractedDirPath = extractedDirectoryPath.Join("original");
+			extractedDirectoryPath.CreateDirectory();
 			sevenZip.Extract(zipPath, extractedDirectoryPath,
-				excludedFiles: new[] { extractedDirPath.AddPath("to_be_excluded.txt") });
+				excludedFiles: new[] { extractedDirPath.Join("to_be_excluded.txt") });
 
-			Directory.Exists(extractedDirectoryPath).Should().BeTrue();
-			Directory.Exists(extractedDirPath).Should().BeTrue();
-			File.Exists(extractedDirPath.AddPath("to_be_extracted.txt")).Should().BeTrue();
-			File.Exists(extractedDirPath.AddPath("to_be_excluded.txt")).Should().BeFalse();
+			extractedDirectoryPath.IsDirectory().Should().BeTrue();
+			extractedDirPath.IsDirectory().Should().BeTrue();
+			extractedDirPath.Join("to_be_extracted.txt").IsFile().Should().BeTrue();
+			extractedDirPath.Join("to_be_excluded.txt").IsFile().Should().BeFalse();
 		}
 
-		private string _tempDirectoryPath;
+		private FsPath _tempDirectoryPath;
 	}
 }

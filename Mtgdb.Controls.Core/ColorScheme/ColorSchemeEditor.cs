@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,7 +12,7 @@ using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
-	public class ColorSchemeEditor : CustomBorderForm
+	public sealed class ColorSchemeEditor : CustomBorderForm
 	{
 		public ColorSchemeEditor()
 		{
@@ -25,7 +24,6 @@ namespace Mtgdb.Controls
 
 			scale();
 		}
-
 
 
 		[UsedImplicitly]
@@ -199,17 +197,17 @@ namespace Mtgdb.Controls
 
 			createButton("Load", (s, e) =>
 			{
-				if (trySelectFile(out string selectedFile) && load(selectedFile))
+				if (trySelectFile(out FsPath selectedFile) && load(selectedFile))
 					saveCurrentColorScheme();
 
-				bool trySelectFile(out string result)
+				bool trySelectFile(out FsPath result)
 				{
-					result = null;
+					result = FsPath.None;
 
 					var dlg = new OpenFileDialog
 					{
 						DefaultExt = Ext,
-						InitialDirectory = SaveDirectory,
+						InitialDirectory = SaveDirectory.Value,
 						AddExtension = true,
 						Filter = _filter,
 						Title = "Load color scheme",
@@ -219,7 +217,7 @@ namespace Mtgdb.Controls
 					if (dlg.ShowDialog() != DialogResult.OK)
 						return false;
 
-					result = dlg.FileName;
+					result = new FsPath(dlg.FileName);
 					return true;
 				}
 			});
@@ -229,7 +227,7 @@ namespace Mtgdb.Controls
 				var dlg = new SaveFileDialog
 				{
 					DefaultExt = Ext,
-					InitialDirectory = SaveDirectory,
+					InitialDirectory = SaveDirectory.Value,
 					AddExtension = true,
 					Filter = _filter,
 					Title = "Save color scheme",
@@ -239,7 +237,7 @@ namespace Mtgdb.Controls
 				if (dlg.ShowDialog() != DialogResult.OK)
 					return false;
 
-				return save(_controller.Save(), dlg.FileName);
+				return save(_controller.Save(), new FsPath(dlg.FileName));
 			}
 		}
 
@@ -289,13 +287,13 @@ namespace Mtgdb.Controls
 
 		private void saveCurrentColorScheme()
 		{
-			string file = currentColorsFile();
+			FsPath file = currentColorsFile();
 			var values = _controller.Save();
 
 			if (values.Count == 0)
 			{
-				if (File.Exists(file))
-					File.Delete(file);
+				if (file.IsFile())
+					file.DeleteFile();
 			}
 			else
 				save(values, file, quiet: true);
@@ -304,12 +302,12 @@ namespace Mtgdb.Controls
 		public void LoadCurrentColorScheme() =>
 			load(currentColorsFile(), quiet: true);
 
-		private static bool save(IReadOnlyDictionary<int, int> values, string file, bool quiet = false)
+		private static bool save(IReadOnlyDictionary<int, int> values, FsPath file, bool quiet = false)
 		{
 			string serialized = string.Join(Str.Endl, values.Select(_ => string.Format(Format, (KnownColor) _.Key, _.Value)));
 			try
 			{
-				File.WriteAllText(file, serialized);
+				file.WriteAllText(serialized);
 				return true;
 			}
 			catch (Exception ex)
@@ -321,7 +319,7 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private bool load(string file, bool quiet = false)
+		private bool load(FsPath file, bool quiet = false)
 		{
 			if (tryReadFile(file, out string serialized) && tryDeserialize(serialized, out var deserialized))
 			{
@@ -331,11 +329,10 @@ namespace Mtgdb.Controls
 
 			return false;
 
-			bool tryReadFile(string fileName, out string result)
+			bool tryReadFile(FsPath fileName, out string result)
 			{
 				result = null;
-				var fileInfo = new FileInfo(fileName);
-
+				var fileInfo = fileName.File();
 				if (!fileInfo.Exists)
 				{
 					warnOnInvalidContent("File not found");
@@ -350,7 +347,7 @@ namespace Mtgdb.Controls
 
 				try
 				{
-					result = File.ReadAllText(fileName);
+					result = fileName.ReadAllText();
 					return true;
 				}
 				catch (Exception ex)
@@ -408,21 +405,21 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private string currentColorsFile()
+		private FsPath currentColorsFile()
 		{
-			return SaveDirectory.AddPath(CurrentSchemeName + Ext);
+			return SaveDirectory.Join(CurrentSchemeName + Ext);
 		}
 
 		public IEnumerable<string> GetSavedSchemeNames() =>
-			Directory
-				.GetFiles(SaveDirectory, "*" + Ext, SearchOption.TopDirectoryOnly)
-				.Select(Path.GetFileNameWithoutExtension)
+			SaveDirectory
+				.EnumerateFiles("*" + Ext)
+				.Select(_ => _.Basename(extension: false))
 				.Where(n => !Str.Equals(n, CurrentSchemeName))
 				.OrderByDescending(n => Str.Equals(n, "system default"));
 
 		public void LoadSavedScheme(string name)
 		{
-			if (load(SaveDirectory.AddPath(name + Ext)))
+			if (load(SaveDirectory.Join(name + Ext)))
 				saveCurrentColorScheme();
 		}
 
@@ -439,7 +436,7 @@ namespace Mtgdb.Controls
 			Margin = new Padding(0)
 		};
 
-		public string SaveDirectory { get; set; }
+		public FsPath SaveDirectory { get; set; }
 
 		private const string CurrentSchemeName = "current";
 		private const string Ext = ".colors";

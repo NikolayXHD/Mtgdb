@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -10,25 +9,13 @@ namespace Mtgdb.Controls
 {
 	public static class ShowSelectedInExplorer
 	{
-		public static void FileOrFolder(string path, bool edit = false)
+		public static void FilesOrFolders(FsPath parentDirectory, ICollection<string> filenames)
 		{
-			if (path == null) throw new ArgumentNullException(nameof(path));
+			if (filenames == null)
+				throw new ArgumentNullException(nameof(filenames));
 
-			var pidl = pathToAbsolutePidl(path);
-			try
-			{
-				shOpenFolderAndSelectItems(pidl, null, edit);
-			}
-			finally
-			{
-				NativeMethods.ILFree(pidl);
-			}
-		}
-
-		public static void FilesOrFolders(string parentDirectory, ICollection<string> filenames)
-		{
-			if (filenames == null) throw new ArgumentNullException(nameof(filenames));
-			if (filenames.Count == 0) return;
+			if (filenames.Count == 0)
+				return;
 
 			var parentPidl = pathToAbsolutePidl(parentDirectory);
 			try
@@ -56,35 +43,6 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		public static void FilesOrFolders(params string[] paths)
-		{
-			FilesOrFolders((IEnumerable<string>)paths);
-		}
-
-		public static void FilesOrFolders(IEnumerable<string> paths)
-		{
-			if (paths == null) throw new ArgumentNullException(nameof(paths));
-
-			FilesOrFolders(pathToFileSystemInfo(paths));
-		}
-
-		public static void FilesOrFolders(IEnumerable<FileSystemInfo> paths)
-		{
-			if (paths == null) throw new ArgumentNullException(nameof(paths));
-			var pathsArray = paths.ToArray();
-			if (!pathsArray.Any()) return;
-
-			var explorerWindows = pathsArray.GroupBy(p => Path.GetDirectoryName(p.FullName));
-
-			foreach (var explorerWindowPaths in explorerWindows)
-			{
-				var parentDirectory = Path.GetDirectoryName(explorerWindowPaths.First().FullName);
-				FilesOrFolders(parentDirectory, explorerWindowPaths.Select(fsi => fsi.Name).ToList());
-			}
-		}
-
-
-
 		private static IntPtr getShellFolderChildrenRelativePidl(IShellFolder parentFolder, string displayName)
 		{
 			uint pdwAttributes = 0;
@@ -93,10 +51,10 @@ namespace Mtgdb.Controls
 			return ppidl;
 		}
 
-		private static IntPtr pathToAbsolutePidl(string path)
+		private static IntPtr pathToAbsolutePidl(FsPath path)
 		{
 			var desktopFolder = NativeMethods.SHGetDesktopFolder();
-			return getShellFolderChildrenRelativePidl(desktopFolder, path);
+			return getShellFolderChildrenRelativePidl(desktopFolder, path.Value);
 		}
 
 		private static Guid IID_IShellFolder = typeof(IShellFolder).GUID;
@@ -117,36 +75,6 @@ namespace Mtgdb.Controls
 		{
 			NativeMethods.SHOpenFolderAndSelectItems(pidlFolder, apidl, edit ? 1 : 0);
 		}
-
-		private static IEnumerable<FileSystemInfo> pathToFileSystemInfo(IEnumerable<string> paths)
-		{
-			foreach (var path in paths)
-			{
-				var fixedPath = path;
-				if (fixedPath.EndsWith(Path.DirectorySeparatorChar.ToString())
-					|| fixedPath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
-				{
-					fixedPath = fixedPath.Remove(fixedPath.Length - 1);
-				}
-
-				if (Directory.Exists(fixedPath))
-				{
-					yield return new DirectoryInfo(fixedPath);
-				}
-				else if (File.Exists(fixedPath))
-				{
-					yield return new FileInfo(fixedPath);
-				}
-				else
-				{
-					throw new FileNotFoundException
-					(string.Format("The specified file or folder doesn't exists : {0}", fixedPath),
-						fixedPath);
-				}
-			}
-		}
-
-
 
 		[Flags]
 		private enum SHCONT : ushort

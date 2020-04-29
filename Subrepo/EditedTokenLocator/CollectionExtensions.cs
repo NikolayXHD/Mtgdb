@@ -2,7 +2,7 @@
 
 namespace Lucene.Net.Contrib
 {
-	internal static class Extensions
+	internal static class CollectionExtensions
 	{
 		public static TVal TryPeek<TVal>(this Stack<TVal> stack) =>
 			stack.Count == 0

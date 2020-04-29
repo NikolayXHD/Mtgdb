@@ -29,7 +29,7 @@ namespace Mtgdb.Util
 			string directory = args.GetParam("-rename_artworks");
 			if (directory != null)
 			{
-				ArtworkRenamer.RenameArtworks(directory);
+				ArtworkRenamer.RenameArtworks(new FsPath(directory));
 				return;
 			}
 
@@ -37,8 +37,8 @@ namespace Mtgdb.Util
 			if (directory != null)
 			{
 				string setCodes = args.GetParam("-set");
-				string output = args.GetParam("-output") ?? AppDir.Root.AddPath("filelist.txt");
-				_kernel.Get<ImageDirectorySigner>().SignFiles(directory, output, setCodes);
+				string output = args.GetParam("-output") ?? AppDir.Root.Join("filelist.txt").Value;
+				_kernel.Get<ImageDirectorySigner>().SignFiles(new FsPath(directory), new FsPath(output), setCodes);
 				return;
 			}
 

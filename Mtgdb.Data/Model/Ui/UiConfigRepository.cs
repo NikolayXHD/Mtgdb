@@ -18,17 +18,17 @@ namespace Mtgdb.Data
 
 		public void Save()
 		{
-			using var writer = File.CreateText(_fileName);
+			using var writer = _fileName.CreateText();
 			using var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented, Indentation = 1, IndentChar = '\t' };
 			_serializer.Serialize(jsonWriter, Config);
 		}
 
 		private static UiConfig readConfig()
 		{
-			if (!File.Exists(_fileName))
+			if (!_fileName.IsFile())
 				return new UiConfig();
 
-			var serialized = File.ReadAllText(_fileName);
+			var serialized = _fileName.ReadAllText();
 			var config = JsonConvert.DeserializeObject<UiConfig>(serialized);
 			return config;
 		}
@@ -36,7 +36,7 @@ namespace Mtgdb.Data
 		private UiConfig _config;
 		public UiConfig Config => _config ??= readConfig();
 
-		private static readonly string _fileName = AppDir.History.AddPath("ui.json");
+		private static readonly FsPath _fileName = AppDir.History.Join("ui.json");
 		private static readonly JsonSerializer _serializer;
 	}
 }

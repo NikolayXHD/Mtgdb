@@ -14,7 +14,7 @@ namespace Mtgdb.Data
 		public KeywordSearcher(CardRepository repo)
 		{
 			_repo = repo;
-			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("keywords");
+			IndexDirectoryParent = AppDir.Data.Join("index", "keywords");
 		}
 
 		public void Load()
@@ -24,7 +24,7 @@ namespace Mtgdb.Data
 
 			IsLoading = true;
 			var directory = _version.IsUpToDate
-				? FSDirectory.Open(_version.IndexDirectory)
+				? FSDirectory.Open(_version.IndexDirectory.Value)
 				: createKeywordsFrom(_repo);
 			using (directory)
 				_index = new RAMDirectory(directory, IOContext.READ_ONCE);
@@ -153,7 +153,7 @@ namespace Mtgdb.Data
 
 			_version.CreateDirectory();
 
-			var fsIndex = FSDirectory.Open(_version.IndexDirectory);
+			var fsIndex = FSDirectory.Open(_version.IndexDirectory.Value);
 			var indexWriterConfig = IndexUtils.CreateWriterConfig(new LowercaseKeywordAnalyzer());
 			using var writer = new IndexWriter(fsIndex, indexWriterConfig);
 
@@ -170,7 +170,7 @@ namespace Mtgdb.Data
 
 
 
-		public string IndexDirectoryParent
+		public FsPath IndexDirectoryParent
 		{
 			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.KeywordSearcher);

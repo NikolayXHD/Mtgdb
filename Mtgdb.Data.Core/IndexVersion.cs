@@ -1,53 +1,50 @@
-using System.IO;
-
 namespace Mtgdb.Data
 {
 	public class IndexVersion
 	{
-		public string IndexDirectory { get; }
+		public FsPath IndexDirectory { get; }
 
-		private readonly string _completionLabelFile;
-		private readonly string _root;
+		private readonly FsPath _completionLabelFile;
+		private readonly FsPath _root;
 		private readonly string _indexVersion;
 
-		public bool IsUpToDate => File.Exists(_completionLabelFile) && File.ReadAllText(_completionLabelFile) == _indexVersion;
+		public bool IsUpToDate => _completionLabelFile.IsFile() && _completionLabelFile.ReadAllText() == _indexVersion;
 
-		public IndexVersion(string root, string indexVersion)
+		public IndexVersion(FsPath root, string indexVersion)
 		{
-			IndexDirectory = root.AddPath(indexVersion);
+			IndexDirectory = root.Join(indexVersion);
 			_root = root;
 			_indexVersion = indexVersion;
-			_completionLabelFile = IndexDirectory.AddPath("indexing.done");
+			_completionLabelFile = IndexDirectory.Join("indexing.done");
 		}
 
 		public void RemoveObsoleteIndexes()
 		{
-			var rootDir = new DirectoryInfo(_root);
-			if (rootDir.Exists)
-				foreach (var subdir in rootDir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
-					if (!Str.Equals(subdir.FullName, IndexDirectory))
-						subdir.Delete(recursive: true);
+			if (!_root.IsDirectory())
+				return;
+
+			foreach (var subdir in _root.EnumerateDirectories())
+				if (subdir != IndexDirectory)
+					subdir.DeleteDirectory(recursive: true);
 		}
 
 		public void CreateDirectory()
 		{
-			if (Directory.Exists(IndexDirectory))
-				Directory.Delete(IndexDirectory, recursive: true);
+			if (IndexDirectory.IsDirectory())
+				IndexDirectory.DeleteDirectory(recursive: true);
 
-			Directory.CreateDirectory(IndexDirectory);
+			IndexDirectory.CreateDirectory();
 		}
 
 		public void SetIsUpToDate()
 		{
-			File.WriteAllText(_completionLabelFile, _indexVersion);
+			_completionLabelFile.WriteAllText(_indexVersion);
 		}
 
 		public void Invalidate()
 		{
-			var fileInfo = new FileInfo(_completionLabelFile);
-
-			if (fileInfo.Exists)
-				fileInfo.Delete();
+			if (_completionLabelFile.IsFile())
+				_completionLabelFile.DeleteFile();
 		}
 	}
 }

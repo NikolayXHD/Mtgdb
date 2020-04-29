@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -17,7 +16,7 @@ namespace Mtgdb.Data
 
 		public void LoadFile()
 		{
-			_serialized = File.ReadAllText(AppDir.Data.AddPath(TranslationsFile));
+			_serialized = AppDir.Data.Join(TranslationsFile).ReadAllText();
 		}
 
 		public void Load()

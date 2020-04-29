@@ -23,10 +23,10 @@ namespace Mtgdb.Util
 			_imageLoader = imageLoader;
 		}
 
-		public void ExportCardImages(string directory, bool small, bool zoom, string setCodes, string smallSubdir, string zoomedSubdir, bool forceRemoveCorner, bool token)
+		public void ExportCardImages(FsPath directory, bool small, bool zoom, string setCodes, FsPath smallSubdir, FsPath zoomedSubdir, bool forceRemoveCorner, bool token)
 		{
-			var exportedSmall = new HashSet<string>(Str.Comparer);
-			var exportedZoomed = new HashSet<string>(Str.Comparer);
+			var exportedSmall = new HashSet<FsPath>();
+			var exportedZoomed = new HashSet<FsPath>();
 
 			export(directory, setCodes, exportedSmall, exportedZoomed, small, zoom, smallSubdir, zoomedSubdir, matchingSet: true, forceRemoveCorner, token);
 			export(directory, setCodes, exportedSmall, exportedZoomed, small, zoom, smallSubdir, zoomedSubdir, matchingSet: false, forceRemoveCorner, token);
@@ -35,14 +35,14 @@ namespace Mtgdb.Util
 
 
 		private void export(
-			string directory,
+			FsPath directory,
 			string setCodes,
-			ISet<string> exportedSmall,
-			ISet<string> exportedZoomed,
+			ISet<FsPath> exportedSmall,
+			ISet<FsPath> exportedZoomed,
 			bool small,
 			bool zoomed,
-			string smallSubdir,
-			string zoomedSubdir,
+			FsPath smallSubdir,
+			FsPath zoomedSubdir,
 			bool matchingSet,
 			bool forceRemoveCorner,
 			bool token)
@@ -55,25 +55,25 @@ namespace Mtgdb.Util
 				if (setCodesArr != null && !setCodesArr.Contains(setCode, Str.Comparer))
 					continue;
 
-				string smallSetSubdir = null;
-				string zoomedSetSubdir = null;
+				FsPath smallSetSubdir = FsPath.None;
+				FsPath zoomedSetSubdir = FsPath.None;
 
 				if (small)
 				{
-					if (!string.IsNullOrEmpty(smallSubdir))
-						smallSetSubdir = Path.Combine(directory, smallSubdir, setCode);
+					if (smallSubdir.HasValue())
+						smallSetSubdir = directory.Join(smallSubdir).Join(setCode);
 					else
-						smallSetSubdir = Path.Combine(directory, setCode);
+						smallSetSubdir = directory.Join(setCode);
 
 					smallSetSubdir = ensureSetSubdirectory(smallSetSubdir);
 				}
 
 				if (zoomed)
 				{
-					if (!string.IsNullOrEmpty(zoomedSubdir))
-						zoomedSetSubdir = Path.Combine(directory, zoomedSubdir, setCode);
+					if (zoomedSubdir.HasValue())
+						zoomedSetSubdir = directory.Join(zoomedSubdir).Join(setCode);
 					else
-						zoomedSetSubdir = Path.Combine(directory, setCode);
+						zoomedSetSubdir = directory.Join(setCode);
 
 					zoomedSetSubdir = ensureSetSubdirectory(zoomedSetSubdir);
 				}
@@ -97,9 +97,9 @@ namespace Mtgdb.Util
 							&& Str.Equals(card.SetCode, modelSmall.ImageFile.SetCode) == matchingSet &&
 							exportedSmall.Add(modelSmall.ImageFile.FullPath))
 						{
-							string smallPath = getTargetPath(modelSmall.ImageFile, smallSetSubdir);
+							FsPath smallPath = getTargetPath(modelSmall.ImageFile, smallSetSubdir);
 
-							if (!File.Exists(smallPath) || card.Faces.Count > 1)
+							if (!smallPath.IsFile() || card.Faces.Count > 1)
 							{
 								original = ImageLoader.Open(modelSmall);
 								addFile(original, modelSmall.ImageFile, smallPath, small: true, forceRemoveCorner);
@@ -115,9 +115,9 @@ namespace Mtgdb.Util
 							Str.Equals(card.SetCode, modelZoom.ImageFile.SetCode) == matchingSet &&
 							exportedZoomed.Add(modelZoom.ImageFile.FullPath))
 						{
-							string zoomedPath = getTargetPath(modelZoom.ImageFile, zoomedSetSubdir);
+							FsPath zoomedPath = getTargetPath(modelZoom.ImageFile, zoomedSetSubdir);
 
-							if (!File.Exists(zoomedPath) || card.Faces.Count > 1)
+							if (!zoomedPath.IsFile() || card.Faces.Count > 1)
 							{
 								if (original == null || modelSmall.ImageFile.FullPath != modelZoom.ImageFile.FullPath)
 								{
@@ -133,32 +133,32 @@ namespace Mtgdb.Util
 					original?.Dispose();
 				}
 
-				smallSetSubdir.RemoveDirectoryIfEmpty();
-				zoomedSetSubdir.RemoveDirectoryIfEmpty();
+				smallSetSubdir.DeleteEmptyDirectory();
+				zoomedSetSubdir.DeleteEmptyDirectory();
 			}
 		}
 
-		private static string ensureSetSubdirectory(string smallSet)
+		private static FsPath ensureSetSubdirectory(FsPath smallSet)
 		{
 			Console.WriteLine($"	Creating {smallSet} ...");
 
 			try
 			{
-				Directory.CreateDirectory(smallSet);
+				smallSet.CreateDirectory();
 			}
 			catch (DirectoryNotFoundException)
 			{
 				// CON is banned as file / folder name in Windows
-				smallSet += " escape";
-				Directory.CreateDirectory(smallSet);
+				smallSet = smallSet.Concat(" escape");
+				smallSet.CreateDirectory();
 			}
 
 			return smallSet;
 		}
 
-		private static string getTargetPath(ImageFile imageFile, string subdir)
+		private static FsPath getTargetPath(ImageFile imageFile, FsPath subdir)
 		{
-			var fileName = Path.GetFileName(imageFile.FullPath);
+			var fileName = imageFile.FullPath.Basename();
 
 			while (true)
 			{
@@ -182,24 +182,24 @@ namespace Mtgdb.Util
 			}
 
 			string targetFileName;
-			if (imageFile.FullPath.EndsWith(".jpg", Str.Comparison))
+			if (imageFile.FullPath.Value.EndsWith(".jpg", Str.Comparison))
 				targetFileName = fileName + ".jpg";
-			else if (imageFile.FullPath.EndsWith(".png", Str.Comparison))
+			else if (imageFile.FullPath.Value.EndsWith(".png", Str.Comparison))
 				targetFileName = fileName + ".png";
 			else
 				throw new NotSupportedException("only .png .jpg extensions are supported");
 
-			var targetFullPath = Path.Combine(subdir, targetFileName);
+			var targetFullPath = subdir.Join(targetFileName);
 			return targetFullPath;
 		}
 
-		private void addFile(Bitmap original, ImageFile imageFile, string target, bool small, bool forceRemoveCorner)
+		private void addFile(Bitmap original, ImageFile imageFile, FsPath target, bool small, bool forceRemoveCorner)
 		{
 			_log.Debug($"\tCopying {target}");
 			var bytes = transform(original, imageFile, small, forceRemoveCorner);
 
 			if (bytes != null)
-				File.WriteAllBytes(target, bytes);
+				target.WriteAllBytes(bytes);
 		}
 
 		private static bool removeExtension(ref string fileName, string ext)
@@ -219,7 +219,7 @@ namespace Mtgdb.Util
 
 			var chain = _imageLoader.Transform(original, size, forceRemoveCorner);
 
-			if (!replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
+			if (!replacementImageFile.FullPath.Value.EndsWith(".png", Str.Comparison))
 				chain.Update(bmp => new BmpAlphaToBackgroundColorTransformation(bmp, Color.White).Execute());
 
 			using (chain)
@@ -237,7 +237,7 @@ namespace Mtgdb.Util
 			using var stream = new MemoryStream();
 			try
 			{
-				if (replacementImageFile.FullPath.EndsWith(".jpg", Str.Comparison))
+				if (replacementImageFile.FullPath.Value.EndsWith(".jpg", Str.Comparison))
 				{
 					var codec = codecs.First(_ => _.MimeType == "image/jpeg");
 					var encoderParams = new EncoderParameters
@@ -247,7 +247,7 @@ namespace Mtgdb.Util
 
 					image.Save(stream, codec, encoderParams);
 				}
-				else if (replacementImageFile.FullPath.EndsWith(".png", Str.Comparison))
+				else if (replacementImageFile.FullPath.Value.EndsWith(".png", Str.Comparison))
 				{
 					image.Save(stream, ImageFormat.Png);
 				}

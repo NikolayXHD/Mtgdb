@@ -11,7 +11,7 @@ namespace Mtgdb.Downloader
 {
 	public class GdriveWebClient : WebClientBase
 	{
-		public override async Task DownloadFile(string downloadUrl, [NotNull] string targetFile, CancellationToken token)
+		public override async Task DownloadFile(string downloadUrl, [NotNull] FsPath targetFile, CancellationToken token)
 		{
 			var originalCookieContainer = new CookieContainer();
 			using var originalHandler = new HttpClientHandler
@@ -34,7 +34,7 @@ namespace Mtgdb.Downloader
 
 				using var memoryStream = await ReadToMemoryStream(response, token);
 				using var reader = new StreamReader(memoryStream);
-				var content = reader.ReadToEnd();
+				var content = await reader.ReadToEndAsync();
 
 				var continuationUrlPattern = new Regex("href ?= ?\"([^\"]*confirm=[^\"]+)\"");
 				var urlPatternMatch = continuationUrlPattern.Match(content);
@@ -68,12 +68,12 @@ namespace Mtgdb.Downloader
 				throw new HttpRequestException($"File name not found in content-disposition header {contentDisposition} from {response.RequestMessage.RequestUri}");
 
 			var fileName = fileNameMatch.Groups[1].Value;
-			if (!Str.Equals(fileName, Path.GetFileName(targetFile)))
+			if (!Str.Equals(fileName, targetFile.Basename()))
 				throw new ApplicationException(
 					$"Attempted to download file {fileName} to different filename {targetFile}");
 
 			using var stream = await response.Content.ReadAsStreamAsync();
-			using var fileStream = File.Open(targetFile, FileMode.Create);
+			using var fileStream = targetFile.OpenFile(FileMode.Create);
 			await stream.CopyToAsync(fileStream, BufferSize, token);
 		}
 	}

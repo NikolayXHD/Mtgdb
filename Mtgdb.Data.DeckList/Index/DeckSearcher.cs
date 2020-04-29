@@ -14,7 +14,7 @@ namespace Mtgdb.Data.Index
 			: base(spellchecker, adapter)
 		{
 			_deckListModel = deckListModel;
-			IndexDirectoryParent = AppDir.Data.AddPath("index").AddPath("deck").AddPath("search");
+			IndexDirectoryParent = AppDir.Data.Join("index", "deck", "search");
 		}
 
 		public SearchResult<long> Search(string query) =>
@@ -39,7 +39,7 @@ namespace Mtgdb.Data.Index
 			if (!_indexCreated && _version.IsUpToDate)
 				lock (_syncDirectory)
 				{
-					using var fsDirectory = FSDirectory.Open(_version.IndexDirectory);
+					using var fsDirectory = FSDirectory.Open(_version.IndexDirectory.Value);
 					index = new RAMDirectory(fsDirectory, IOContext.READ_ONCE);
 					_indexCreated = true;
 					return index;
@@ -54,7 +54,7 @@ namespace Mtgdb.Data.Index
 				lock (_syncDirectory)
 				{
 					_version.CreateDirectory();
-					index.SaveTo(_version.IndexDirectory);
+					index.SaveTo(_version.IndexDirectory.Value);
 					_version.SetIsUpToDate();
 				}
 
@@ -67,7 +67,7 @@ namespace Mtgdb.Data.Index
 			return index;
 		}
 
-		public string IndexDirectoryParent
+		public FsPath IndexDirectoryParent
 		{
 			get => _version.IndexDirectory.Parent();
 			set => _version = new IndexVersion(value, IndexVersions.DeckSearcher);

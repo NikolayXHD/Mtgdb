@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -22,10 +21,9 @@ namespace Mtgdb.Data
 			{
 				if (!string.IsNullOrEmpty(directory.Root))
 				{
-					directory.Path = Path.Combine(
-							rootsByName[directory.Root].Path,
-							directory.Path)
-						.NullIfEmpty();
+					directory.Path = rootsByName[directory.Root].Path.Join(directory.Path);
+					if (!directory.Path.HasValue())
+						directory.Path = FsPath.None;
 
 					directory.Exclude = string.Join(";",
 						Sequence.From(
@@ -58,7 +56,7 @@ namespace Mtgdb.Data
 		public string Root { get; set; }
 
 		[DataMember(Name = "Path")]
-		public string Path { get; set; }
+		public FsPath Path { get; set; }
 
 		[DataMember(Name = "Zoom")]
 		public string Zoom { get; set; }
@@ -88,7 +86,7 @@ namespace Mtgdb.Data
 		public string Name { get; set; }
 
 		[DataMember(Name = "Path")]
-		public string Path { get; set; }
+		public FsPath Path { get; set; }
 
 		[DataMember(Name = "Exclude")]
 		public string Exclude { get; set; }

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Mtgdb.Data;
 using Mtgdb.Data.Index;
+using Mtgdb.Dev;
 using Mtgdb.Downloader;
 using Ninject;
 using NLog;
@@ -26,6 +27,8 @@ namespace Mtgdb.Test
 		{
 			if (_loadedModules)
 				return;
+
+			FsPathPersistence.RegisterPathSubstitution(DevPaths.DriveSubstitution);
 
 			Kernel = new StandardKernel();
 			Kernel.Load<DalModule>();

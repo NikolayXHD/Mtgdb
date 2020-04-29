@@ -16,12 +16,12 @@ namespace Mtgdb.Downloader
 			Dir = dir;
 
 			TargetDirectory = QualityGroup.TargetDirectory.ToAppRootedPath();
-			TargetSubdirectory = TargetDirectory.AddPath(Dir.Subdir);
+			TargetSubdirectory = TargetDirectory.Join(Dir.Subdir.OrEmpty());
 
 			MegaUrl = string.IsNullOrEmpty(Dir.MegaId) ? null : ImageSource.MegaPrefix + Dir.MegaId;
 
 			var existingSignatures = readExistingSignatures()
-				?.ToDictionary(_ => _.Path, Str.Comparer);
+				?.ToDictionary(_ => _.Path);
 
 			if (imagesOnline == null)
 			{
@@ -30,12 +30,12 @@ namespace Mtgdb.Downloader
 			}
 
 			FilesOnline = imagesOnline
-				.Where(_ => _.IsRelativeTo(Dir.Subdir))
 				.Select(_ => _.AsRelativeTo(Dir.Subdir, internPath: true))
-				.ToDictionary(_ => _.Path, Str.Comparer);
+				.Where(_=>_.Path != FsPath.None)
+				.ToDictionary(_ => _.Path);
 
-			FilesDownloaded = new Dictionary<string, FileSignature>(Str.Comparer);
-			FilesCorrupted = new Dictionary<string, FileSignature>(Str.Comparer);
+			FilesDownloaded = new Dictionary<FsPath, FileSignature>();
+			FilesCorrupted = new Dictionary<FsPath, FileSignature>();
 
 			foreach (var onlineImage in FilesOnline.Values)
 			{
@@ -53,7 +53,7 @@ namespace Mtgdb.Downloader
 
 		private IList<FileSignature> readExistingSignatures()
 		{
-			var existingSignaturesFile = TargetSubdirectory.AddPath(Signer.SignaturesFile);
+			FsPath existingSignaturesFile = TargetSubdirectory.Join(Signer.SignaturesFile);
 			var existingSignatures = Signer.ReadFromFile(existingSignaturesFile, internPath: true);
 			return existingSignatures;
 		}
@@ -62,12 +62,12 @@ namespace Mtgdb.Downloader
 		public QualityGroupConfig QualityGroup { get; }
 		public ImageDirConfig Dir { get; }
 
-		public Dictionary<string, FileSignature> FilesOnline { get; }
-		public Dictionary<string, FileSignature> FilesCorrupted { get; }
-		public Dictionary<string, FileSignature> FilesDownloaded { get; }
+		public Dictionary<FsPath, FileSignature> FilesOnline { get; }
+		public Dictionary<FsPath, FileSignature> FilesCorrupted { get; }
+		public Dictionary<FsPath, FileSignature> FilesDownloaded { get; }
 
-		public string TargetDirectory { get; }
-		public string TargetSubdirectory { get; }
+		public FsPath TargetDirectory { get; }
+		public FsPath TargetSubdirectory { get; }
 
 		public string MegaUrl { get; }
 

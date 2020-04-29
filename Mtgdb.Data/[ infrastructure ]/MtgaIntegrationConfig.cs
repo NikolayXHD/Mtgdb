@@ -6,9 +6,9 @@ namespace Mtgdb.Data
 	public class MtgaIntegrationConfig
 	{
 		[DataMember(Name = "CardLibraryFile")]
-		public string CardLibraryFile { get; set; }
+		public FsPath CardLibraryFile { get; set; }
 
 		[DataMember(Name = "LogFile")]
-		public string LogFile { get; set; }
+		public FsPath LogFile { get; set; }
 	}
 }

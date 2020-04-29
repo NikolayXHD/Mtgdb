@@ -18,7 +18,7 @@ namespace Mtgdb.Downloader
 		public FormUpdate()
 		{
 			InitializeComponent();
-			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable);
+			Icon = Icon.ExtractAssociatedIcon(AppDir.Executable.Value);
 		}
 
 		[UsedImplicitly]
@@ -132,7 +132,7 @@ namespace Mtgdb.Downloader
 
 		private static void editConfigClick(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(AppDir.GeneralConfigXml);
+			System.Diagnostics.Process.Start(AppDir.GeneralConfigXml.Value);
 		}
 
 		private void mtgjsonClick(object sender, EventArgs e)
@@ -323,14 +323,14 @@ namespace Mtgdb.Downloader
 		private async Task<string> getAppVersionOnline(CancellationToken token)
 		{
 			await _installer.DownloadAppSignature(token);
-			string result = _installer.AppOnlineSignature?.Path;
+			string result = _installer.AppOnlineSignature?.Path.Value;
 			Console.WriteLine("Online version: {0}", result ?? "None");
 			return result;
 		}
 
 		private string getAppVersionDownloaded()
 		{
-			string result = _installer.AppDownloadedSignature?.Path;
+			string result = _installer.AppDownloadedSignature?.Path.Value;
 			Console.WriteLine("Downloaded version: {0}", result ?? "None");
 			return result;
 		}
@@ -508,7 +508,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 		private void buttonDesktopShortcut(object sender, EventArgs e)
 		{
-			_installer.CreateApplicationShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+			_installer.CreateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
 		}
 
 		private void downloadImageProgressChanged()

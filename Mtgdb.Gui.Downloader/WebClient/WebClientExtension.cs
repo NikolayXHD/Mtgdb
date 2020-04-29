@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,18 +8,18 @@ namespace Mtgdb.Downloader
 {
 	public static class WebClientExtension
 	{
-		public static async Task<bool> DownloadAndExtract(this WebClientBase webClient, string url, string targetDirectory, string fileName, CancellationToken token)
+		public static async Task<bool> DownloadAndExtract(this WebClientBase webClient, string url, FsPath targetDirectory, FsPath fileName, CancellationToken token)
 		{
-			if (!Str.Equals(".7z", Path.GetExtension(fileName)))
+			if (!Str.Equals(".7z", fileName.Extension()))
 				throw new ArgumentException();
 
-			string archiveFileName = targetDirectory.AddPath(fileName);
+			FsPath archiveFileName = targetDirectory.Join(fileName);
 
-			if (File.Exists(archiveFileName))
+			if (archiveFileName.IsFile())
 			{
 				try
 				{
-					File.Delete(archiveFileName);
+					archiveFileName.DeleteFile();
 				}
 				catch (Exception ex)
 				{
@@ -40,18 +39,18 @@ namespace Mtgdb.Downloader
 				return false;
 			}
 
-			if (!File.Exists(archiveFileName))
+			if (!archiveFileName.IsFile())
 			{
 				Console.WriteLine($"Failed to download {archiveFileName} from {url}");
 				return false;
 			}
 
 			var sevenZip = new SevenZip(silent: true);
-			sevenZip.Extract(archiveFileName, targetDirectory, Enumerable.Empty<string>());
+			sevenZip.Extract(archiveFileName, targetDirectory, Enumerable.Empty<FsPath>());
 
 			try
 			{
-				File.Delete(archiveFileName);
+				archiveFileName.DeleteFile();
 			}
 			catch (Exception ex)
 			{
@@ -61,7 +60,7 @@ namespace Mtgdb.Downloader
 			return true;
 		}
 
-		public static async Task<bool> TryDownload(this WebClientBase webClient, string url, string targetFile, CancellationToken token)
+		public static async Task<bool> TryDownload(this WebClientBase webClient, string url, FsPath targetFile, CancellationToken token)
 		{
 			Console.Write($"Download {targetFile} from {url} ...");
 

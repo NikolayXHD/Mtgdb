@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Newtonsoft.Json;
@@ -27,14 +26,11 @@ namespace Mtgdb.Gui
 			_uiConfigRepository = uiConfigRepository;
 		}
 
-		public void LoadHistory(string file)
+		public void LoadHistory(FsPath file)
 		{
-			string directory = Path.GetDirectoryName(file);
+			FsPath directory = file.Parent();
+			directory.CreateDirectory();
 
-			if (string.IsNullOrEmpty(directory))
-				throw new ArgumentException($"parent directory not found for path: {file}", nameof(file));
-
-			Directory.CreateDirectory(directory);
 			if (TryReadHistory(file, out var state))
 			{
 				_settingsHistory = state.SettingsHistory;
@@ -51,14 +47,14 @@ namespace Mtgdb.Gui
 			Loaded?.Invoke();
 		}
 
-		internal bool TryReadHistory(string file, out HistoryState state)
+		internal bool TryReadHistory(FsPath file, out HistoryState state)
 		{
 			state = null;
-			if (!File.Exists(file))
+			if (!file.IsFile())
 				return false;
 			try
 			{
-				using (var fileReader = File.OpenText(file))
+				using (var fileReader = file.OpenText())
 				{
 					using var jsonReader = new JsonTextReader(fileReader);
 					state = _serializer.Deserialize<HistoryState>(jsonReader);
@@ -73,11 +69,11 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		internal static void WriteHistory(string filename, HistoryState state)
+		internal static void WriteHistory(FsPath filename, HistoryState state)
 		{
 			FileUtil.SafeCreateFile(filename, file =>
 			{
-				using var writer = File.CreateText(file);
+				using var writer = file.CreateText();
 				var textWriter = new JsonTextWriter(writer)
 				{
 					Formatting = Formatting.Indented,
@@ -121,17 +117,11 @@ namespace Mtgdb.Gui
 			return false;
 		}
 
-		public void Save(string file)
+		public void Save(FsPath file)
 		{
-			string directory = Path.GetDirectoryName(file);
-
-			if (string.IsNullOrEmpty(directory))
-				throw new ArgumentException($"Parent directory not found for path: {file}", nameof(file));
-
-			Directory.CreateDirectory(directory);
-
+			FsPath directory = file.Parent();
+			directory.CreateDirectory();
 			var state = getState();
-
 			WriteHistory(file, state);
 		}
 
