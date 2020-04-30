@@ -21,6 +21,9 @@ namespace Mtgdb.Data
 
 			FsPath resolveCardLibraryPath()
 			{
+				if (Runtime.IsLinux)
+					return FsPath.None;
+
 				var path = config.CardLibraryFile.ExpandEnvironmentVariables();
 				var directory = path.Parent();
 				var filePattern = path.Basename().Replace("[guid]", "*");
@@ -34,6 +37,9 @@ namespace Mtgdb.Data
 
 			FsPath resolveLogPath()
 			{
+				if (Runtime.IsLinux)
+					return FsPath.None;
+
 				var path = config.LogFile.ExpandEnvironmentVariables();
 				if (!path.IsFile())
 					return FsPath.None;

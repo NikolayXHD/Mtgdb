@@ -19,7 +19,10 @@ namespace Mtgdb.Controls
 
 			Padding = DefaultPadding;
 
-			BackColor = Color.Transparent;
+			BackColor = Runtime.IsMono
+				? SystemColors.Control
+				: Color.Transparent;
+
 			ForeColor = SystemColors.ControlText;
 
 			updateDisabledBorder();

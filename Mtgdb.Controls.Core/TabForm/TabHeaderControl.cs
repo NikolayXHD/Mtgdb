@@ -785,8 +785,12 @@ namespace Mtgdb.Controls
 			OnLayout(new LayoutEventArgs(this, null));
 		}
 
-		protected bool IsLayoutSuspended() =>
-			(bool) _layoutSuspendedProperty.GetValue(this, null);
+		protected bool IsLayoutSuspended()
+		{
+			return Runtime.IsMono
+				? (int) _layoutSuspendedMonoField.GetValue(this) > 0
+				: (bool) _layoutSuspendedProperty.GetValue(this, null);
+		}
 
 		private int getValidIndex(int value)
 		{
@@ -1132,6 +1136,9 @@ namespace Mtgdb.Controls
 
 		private static readonly PropertyInfo _layoutSuspendedProperty =
 			typeof(Control).GetProperty("IsLayoutSuspended", BindingFlags.NonPublic | BindingFlags.Instance);
+
+		private static readonly FieldInfo _layoutSuspendedMonoField =
+			typeof(Control).GetField("layout_suspended", BindingFlags.NonPublic | BindingFlags.Instance);
 
 		private static readonly Bitmap _defaultCloseIconHovered = Resources.close_tab_hovered_32;
 		private static readonly Bitmap _defaultCloseIcon = Resources.close_tab_32;

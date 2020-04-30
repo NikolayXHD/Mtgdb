@@ -20,8 +20,11 @@ namespace Mtgdb.Controls
 
 			var systemDrawingAssembly = typeof(Color).Assembly;
 
+			string colorTableField = Runtime.IsMono
+				? "s_colorTable"
+				: "colorTable";
 			_colorTableField = systemDrawingAssembly.GetType("System.Drawing.KnownColorTable")
-				.GetField("colorTable", BindingFlags.Static | BindingFlags.NonPublic);
+				.GetField(colorTableField, BindingFlags.Static | BindingFlags.NonPublic);
 
 			_colorTable = readColorTable();
 			SystemEvents.UserPreferenceChanging += userPreferenceChanging;
@@ -34,13 +37,17 @@ namespace Mtgdb.Controls
 				.GetNestedType("Gdip", BindingFlags.NonPublic)
 				.GetProperty("ThreadData", BindingFlags.Static | BindingFlags.NonPublic);
 
+			string systemBrushesKeyField = Runtime.IsMono
+				? "s_systemBrushesKey"
+				: "SystemBrushesKey";
+
 			SystemBrushesKey = typeof(SystemBrushes)
-				.GetField("SystemBrushesKey", BindingFlags.Static | BindingFlags.NonPublic)
-				.GetValue(null);
+				.GetField(systemBrushesKeyField, BindingFlags.Static | BindingFlags.NonPublic)
+				?.GetValue(null);
 
 			SystemPensKey = typeof(SystemPens)
 				.GetField("SystemPensKey", BindingFlags.Static | BindingFlags.NonPublic)
-				.GetValue(null);
+				?.GetValue(null);
 		}
 
 		private void userPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
@@ -65,8 +72,12 @@ namespace Mtgdb.Controls
 		{
 			setColor(knownColor, argb);
 
-			ThreadData[SystemBrushesKey] = null;
-			ThreadData[SystemPensKey] = null;
+			if (SystemBrushesKey != null)
+				ThreadData[SystemBrushesKey] = null;
+
+			if (SystemPensKey != null)
+				ThreadData[SystemPensKey] = null;
+
 			fireColorsChangedEvents();
 		}
 
@@ -96,8 +107,12 @@ namespace Mtgdb.Controls
 				setColor(color, value);
 			}
 
-			ThreadData[SystemBrushesKey] = null;
-			ThreadData[SystemPensKey] = null;
+			if (SystemBrushesKey != null)
+				ThreadData[SystemBrushesKey] = null;
+
+			if (SystemPensKey != null)
+				ThreadData[SystemPensKey] = null;
+
 			fireColorsChangedEvents();
 		}
 

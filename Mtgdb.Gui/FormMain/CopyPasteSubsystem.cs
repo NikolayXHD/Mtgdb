@@ -209,7 +209,7 @@ namespace Mtgdb.Gui
 						failedDecks.Select(f => $"{f.File}{Str.Endl}{f.Error}{Str.Endl}"));
 
 					_log.Error($"Errors loading decks: {message}");
-					MessageBox.Show($@"Failed to load {failedDecks.Count} of {i} decks. See \logs\error.log for details");
+					MessageBox.Show($@"Failed to load {failedDecks.Count} of {i} decks. See {new FsPath("logs", "error.log")} for details");
 				});
 			});
 		}
