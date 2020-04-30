@@ -184,7 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="[ Infrastructure ]\GuiLoader.cs" />
+    <Compile Include="[ infrastructure ]\GuiLoader.cs" />
     <Compile Include="LayoutView\LayoutViewTooltip.cs" />
     <Compile Include="LayoutView\HitInfoExtensions.cs" />
     <Compile Include="FormMain\LegalitySubsystem.cs" />
