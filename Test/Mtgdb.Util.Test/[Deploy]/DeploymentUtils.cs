@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using JetBrains.Annotations;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Dev;
@@ -19,7 +18,7 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class DeploymentUtils
 	{
-		private const string SetCodes = "und";
+		private const string SetCodes = "slu,ss3,ha2,c20,iko";
 		private const bool NonToken = true;
 		private const bool Token = true;
 		private const bool SelectSmall = true;
@@ -29,12 +28,17 @@ namespace Mtgdb.Util
 		[TestCase(SetCodes, NonToken, Token)]
 		public async Task DownloadGathererImages(string setCodesList, bool nonToken, bool token)
 		{
-			var client = new ScryfallClient();
-			//var client = new GathererClient();
-			var setCodes = setCodesList?.Split(',');
-			var repo = new CardRepository(new CardFormatter(), () => null);
-			if (setCodesList != null)
-				repo.FilterSetCode = code => setCodes.Contains(code, Str.Comparer);
+			var clients = new List<ImageDownloaderBase>(2)
+			{
+				// new GathererClient(),
+				new ScryfallClient(),
+			};
+
+			var setCodes = setCodesList?.ToLower().Split(',');
+			var repo = new CardRepository(new CardFormatter(), () => null)
+			{
+				FilterSetCode = setCode => setCodes?.Contains(setCode.ToLower()) != false
+			};
 
 			repo.LoadFile();
 			repo.Load();
@@ -50,6 +54,8 @@ namespace Mtgdb.Util
 					if (cards.Count == 0)
 						continue;
 
+					var missingCardsByClient = clients.ToDictionary(_ => _, _ => 0);
+
 					FsPath setSubdir = new FsPath(set.Code + (Str.Equals(set.Code, "con") ? " escape" : string.Empty));
 					FsPath downloadRootDir = DevPaths.MtgContentDir.Join(_createZoom ? OriginalSubdir : PreProcessedSubdir);
 					FsPath setDirectory = downloadRootDir.Join(typeSubdir, setSubdir);
@@ -63,11 +69,26 @@ namespace Mtgdb.Util
 					{
 						FsPath targetFile = setDirectoryPng.Join(card.ImageName + ".png");
 						FsPath processedFile = setDirectory.Join(card.ImageName + ".jpg");
-
 						if (targetFile.IsFile() || processedFile.IsFile())
 							continue;
 
-						await client.DownloadCardImage(card, targetFile, CancellationToken.None);
+						if (targetFile.Basename(extension: false).EndsWith("1"))
+						{
+							var unnumbered = targetFile.Rename(_ => _.Replace("1.png", ".png"));
+							if (unnumbered.IsFile())
+								unnumbered.MoveFileTo(targetFile);
+
+							continue;
+						}
+
+						foreach (ImageDownloaderBase client in clients)
+						{
+							await client.DownloadCardImage(card, targetFile, CancellationToken.None);
+							if (targetFile.IsFile())
+								break;
+
+							missingCardsByClient[client]++;
+						}
 					}
 
 					if (!dirExisted && !setDirectoryPng.EnumerateFiles().Any())
@@ -82,16 +103,16 @@ namespace Mtgdb.Util
 		{
 			setupImageConversion();
 
-			FsPath smallDir = DevPaths.MtgContentDir.Join(OriginalSubdir);
-			FsPath zoomDir = DevPaths.MtgContentDir.Join(PreProcessedSubdir);
-			FsPath smallDirBak = BakDir.Join(OriginalSubdir);
-			FsPath zoomDirBak = BakDir.Join(PreProcessedSubdir);
+			FsPath smallDir = DevPaths.GathererOriginalDir;
+			FsPath zoomDir = DevPaths.GathererPreprocessedDir;
+			FsPath smallDirBak = BakDir.Join(smallDir.Basename());
+			FsPath zoomDirBak = BakDir.Join(zoomDir.Basename());
 
 			var setCodes = setCodesList?.Split(',');
 
 			IEnumerable<FsPath> getSetSubdirs(FsPath typeSubdir)
 			{
-				FsPath typeDir = _createZoom ? smallDir : zoomDir.Join(typeSubdir);
+				FsPath typeDir = smallDir.Join(typeSubdir);
 				return typeDir
 					.EnumerateDirectories(_fromPng ? "*.png" : "*", SearchOption.TopDirectoryOnly)
 					.Select(_ => new FsPath(
@@ -140,7 +161,7 @@ namespace Mtgdb.Util
 							foreach (FsPath smallImg in smallPngDir.EnumerateFiles())
 							{
 								FsPath zoomImg = smallImg.ChangeDirectory(smallDir, zoomDir);
-								FsPath convertedImg = zoomImg.ChangeDirectory(smallDir, zoomJpgDir)
+								FsPath convertedImg = zoomImg.ChangeDirectory(zoomPngDir, zoomJpgDir)
 									.Rename(_ => _.Replace(".png", ".jpg"));
 
 								if (_keepExisting && (zoomImg.IsFile() || convertedImg.IsFile()))
@@ -149,10 +170,10 @@ namespace Mtgdb.Util
 								WaifuScaler.Scale(smallImg, zoomImg);
 							}
 
-							dirs.Add((pngDir: smallPngDir, pngDirBak: smallPngDirBak, jpgDir: smallJpgDir));
+							dirs.Add((pngDir: zoomPngDir, pngDirBak: zoomPngDirBak, jpgDir: zoomJpgDir));
 						}
 
-						dirs.Add((pngDir: zoomPngDir, pngDirBak: zoomPngDirBak, jpgDir: zoomJpgDir));
+						dirs.Add((pngDir: smallPngDir, pngDirBak: smallPngDirBak, jpgDir: smallJpgDir));
 
 						foreach ((FsPath pngDir, FsPath pngDirBak, FsPath jpgDir) in dirs)
 						{
@@ -199,9 +220,9 @@ namespace Mtgdb.Util
 
 				FsPath signatureFile = getSignatureFile(qualityDir, tokenSuffix);
 				FsPath compressedSignatureFile = signatureFile
-						.Parent()
-						.Join(signatureFile.Basename(extension: false))
-						.Concat(SevenZipExtension);
+					.Parent()
+					.Join(signatureFile.Basename(extension: false))
+					.Concat(SevenZipExtension);
 
 				if (compressedSignatureFile.IsFile())
 					compressedSignatureFile.DeleteFile();
@@ -248,7 +269,7 @@ namespace Mtgdb.Util
 			dir.MoveDirectoryTo(dirBak);
 		}
 
-		private void convertToJpg([NotNull] FsPath sourceImage, FsPath targetDir, bool keepExisting)
+		private void convertToJpg(FsPath sourceImage, FsPath targetDir, bool keepExisting)
 		{
 			FsPath targetImage = targetDir.Join(sourceImage.Basename(extension: false)).Concat(".jpg");
 			if (keepExisting && targetImage.IsFile())
@@ -334,7 +355,7 @@ namespace Mtgdb.Util
 		}
 
 
-		private static readonly bool _keepExisting = false;
+		private static readonly bool _keepExisting = true;
 		private static readonly bool _fromPng = true;
 		private static readonly bool _createZoom = true;
 

@@ -7,19 +7,19 @@ namespace Mtgdb.Dev
 	{
 		private static readonly Dictionary<bool, FsPath> _windowsDrive = new Dictionary<bool, FsPath>
 		{
-			[false] = new FsPath("C:"),
+			[false] = new FsPath("C:\\"),
 			[true] = new FsPath("media", "kolia", "windows")
 		};
 
 		private static readonly Dictionary<bool, FsPath> _dataDrive = new Dictionary<bool, FsPath>
 		{
-			[false] = new FsPath("D:"),
+			[false] = new FsPath("D:\\"),
 			[true] = new FsPath("media", "kolia", "data")
 		};
 
 		private static readonly Dictionary<bool, FsPath> _repoDrive = new Dictionary<bool, FsPath>
 		{
-			[false] = new FsPath("F:"),
+			[false] = new FsPath("F:\\"),
 			[true] = new FsPath("media", "kolia", "ssd")
 		};
 
@@ -40,7 +40,7 @@ namespace Mtgdb.Dev
 		public static readonly FsPath NotificationsRepo =
 			RepoDrive.Join("repo", "git", "mtgdb.notifications");
 
-		public static readonly Func<FsPath, FsPath> DriveSubstitution = (FsPath path) =>
+		public static readonly Func<FsPath, FsPath> DriveSubstitution = path =>
 		{
 			if (!Runtime.IsLinux)
 				return path;

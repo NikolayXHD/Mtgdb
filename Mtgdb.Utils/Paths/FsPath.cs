@@ -47,8 +47,16 @@ namespace Mtgdb
 			if (string.IsNullOrEmpty(other.Value))
 				return this;
 
-			int minLen = other.Value.Length + 1;
+
 			int len = Value.Length;
+			if (len == other.Length)
+			{
+				return Value.StartsWith(other.Value, comparison ?? Comparison)
+					? Empty
+					: None;
+			}
+
+			int minLen = other.Value.Length + 1;
 			if (len < minLen || Value[other.Value.Length] != Separator || !Value.StartsWith(other.Value, comparison ?? Comparison))
 				return None;
 
@@ -96,7 +104,7 @@ namespace Mtgdb
 			var values = new string[others.Length + 1];
 			values[0] = Value;
 			others.CopyTo(values, 1);
-			return new FsPath(Path.Combine(others));
+			return new FsPath(Path.Combine(values));
 		}
 
 
