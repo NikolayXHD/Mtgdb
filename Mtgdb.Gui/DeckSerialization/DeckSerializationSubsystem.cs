@@ -317,7 +317,7 @@ namespace Mtgdb.Gui
 			const int maxLength = 30;
 			const int maxLines = 2;
 
-			var lines = deckName.Split(Array.From('\r', '\n'), StringSplitOptions.RemoveEmptyEntries);
+			var lines = deckName.Lines(StringSplitOptions.RemoveEmptyEntries);
 			var builder = new StringBuilder();
 
 			for (int i = Math.Max(0, lines.Length - maxLines); i < lines.Length; i++)

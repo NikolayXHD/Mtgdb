@@ -360,7 +360,7 @@ namespace Mtgdb.Controls
 			bool tryDeserialize(string input, out IReadOnlyDictionary<int, int> result)
 			{
 				result = null;
-				var lines = input.Split(Array.From(Str.Endl), StringSplitOptions.RemoveEmptyEntries);
+				var lines = input.Lines(StringSplitOptions.RemoveEmptyEntries);
 				var map = new Dictionary<int, int>();
 
 				for (int i = 0; i < lines.Length; i++)

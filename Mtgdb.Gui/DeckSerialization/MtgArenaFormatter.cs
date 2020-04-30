@@ -67,7 +67,7 @@ namespace Mtgdb.Gui
 
 		protected override IList<string> SplitToLines(string serialized)
 		{
-			var lines = serialized.Trim().Split(Array.From("\r\n", "\r", "\n"), StringSplitOptions.None);
+			var lines = serialized.Trim().Lines(StringSplitOptions.None);
 			return lines;
 		}
 

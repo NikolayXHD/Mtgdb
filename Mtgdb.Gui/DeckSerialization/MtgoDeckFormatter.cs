@@ -57,7 +57,7 @@ namespace Mtgdb.Gui
 		{
 			_sideboardIndicator = getSideboardIndicator(serialized);
 
-			var lines = serialized.Trim().Split(Array.From("\r\n", "\r", "\n"), StringSplitOptions.None);
+			var lines = serialized.Trim().Lines(StringSplitOptions.None);
 
 			var result = new List<string>();
 

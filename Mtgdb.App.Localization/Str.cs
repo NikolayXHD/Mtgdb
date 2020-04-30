@@ -21,5 +21,10 @@ namespace Mtgdb
 		public static readonly string Endl = Environment.NewLine;
 
 		public static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
+
+		public static string[] Lines(this string original, StringSplitOptions splitOptions = StringSplitOptions.None) =>
+			original.Split(_lineEnds, splitOptions);
+
+		private static readonly string[] _lineEnds = Array.From("\r\n", "\r", "\n");
 	}
 }

@@ -59,7 +59,7 @@ namespace Mtgdb.Gui
 
 		protected virtual IList<string> SplitToLines(string serialized)
 		{
-			return serialized.Split(Array.From('\r', '\n'), StringSplitOptions.RemoveEmptyEntries);
+			return serialized.Lines(StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		private static void add(Card card, int count, DeckZone collection)
