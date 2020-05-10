@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Mtgdb.Data;
@@ -8,6 +11,12 @@ namespace Mtgdb.Util
 {
 	public class ScryfallClient : ImageDownloaderBase
 	{
+		public bool Jpg
+		{
+			get;
+			set;
+		}
+
 		public override async Task DownloadCardImage(Card card, FsPath targetPath, CancellationToken token)
 		{
 			if (string.IsNullOrEmpty(card.ScryfallId))
@@ -16,39 +25,47 @@ namespace Mtgdb.Util
 				return;
 			}
 
-
+			string format = Jpg ? "normal" : "png";
 			if (card.MultiverseId.HasValue)
 			{
 				string urlMultiverseId = "https://api.scryfall.com/cards/multiverse/" + card.MultiverseId.Value +
-					"?format=image" +
-					"&version=png";
+					"?format=image&version=" + format;
 
-				try
-				{
-					await DownloadFile(urlMultiverseId, targetPath, token);
+				await downloadImage(urlMultiverseId, targetPath, token);
+				if (targetPath.IsFile())
 					return;
-				}
-				catch (HttpRequestException ex)
-				{
-					_log.Info(ex,"Failed request to {0} {1}", urlMultiverseId);
-				}
 			}
 
 			string urlScryfallId = "https://api.scryfall.com/cards/" +
-				card.ScryfallId +
-				"?format=image" +
-				"&version=png";
+				card.ScryfallId + "?format=image&version=" + format;
 			if (card.Side == "b")
 				urlScryfallId += "&face=back";
 
+			await downloadImage(urlScryfallId, targetPath, token);
+		}
+
+		private async Task downloadImage(string url, FsPath targetPath, CancellationToken token)
+		{
 			try
 			{
-				await DownloadFile(urlScryfallId, targetPath, token);
+				var stream = await DownloadStream(url, token);
+				convertToPng(stream, targetPath);
 			}
 			catch (HttpRequestException ex)
 			{
-				_log.Info(ex, "Failed request to {0}", urlScryfallId);
+				_log.Info(ex,"Failed request to {0} {1}", url);
 			}
+		}
+
+		private static void convertToPng(Stream jpgImage, FsPath targetPath)
+		{
+			var bmp = new Bitmap(jpgImage);
+			var converted = new Bitmap(265, 370);
+			var scaler = new BmpScaler(converted, bmp, new Rectangle(default, bmp.Size));
+			scaler.Execute();
+			var removeCorner = new BmpCornerRemoval(converted, force: true);
+			removeCorner.Execute();
+			converted.Save(targetPath.Value, ImageFormat.Png);
 		}
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();

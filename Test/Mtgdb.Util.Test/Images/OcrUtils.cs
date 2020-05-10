@@ -10,7 +10,6 @@ using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Dev;
 using Mtgdb.Test;
-using Ninject;
 using NUnit.Framework;
 using Tesseract;
 
@@ -156,18 +155,18 @@ namespace Mtgdb.Util
 			}
 		}
 
-		[TestCase("rna;prna")]
+		[TestCase("iko")]
 		public void RenameImages(string setCodes)
 		{
-			var unnamedImagesDirectory = DevPaths.GathererOriginalCardsDir.Join("rna");
+			var unnamedImagesDirectory = DevPaths.GathererOriginalCardsDir.Join("iko");
 
 			var fileNames =
 				unnamedImagesDirectory.EnumerateFiles("*.jpg")
-					.Concat(unnamedImagesDirectory.EnumerateFiles("*.png"));
+					.Concat(unnamedImagesDirectory.EnumerateFiles("*.png")).ToArray();
 
 			var setCodesArr = setCodes.Split(';').ToHashSet(Str.Comparer);
 
-			var repo = new CardRepository(Kernel.Get<CardFormatter>(), () => null)
+			var repo = new CardRepository(new CardFormatter(), () => null)
 			{
 				FilterSetCode = setCodesArr.Contains
 			};

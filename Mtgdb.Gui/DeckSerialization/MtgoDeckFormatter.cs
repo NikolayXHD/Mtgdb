@@ -239,6 +239,6 @@ namespace Mtgdb.Gui
 			new Regex(@"\b(?<count>\d+)x?\s+\b", RegexOptions.IgnoreCase);
 
 		private static readonly Regex _lineRegex =
-			new Regex(@"^(?<count>\d+)x?\s+(?<name>.+)$", RegexOptions.IgnoreCase);
+			new Regex(@"^(?<count>\d+)x?\s+(?<name>[\S ]+)(?:\t.*)?$", RegexOptions.IgnoreCase);
 	}
 }

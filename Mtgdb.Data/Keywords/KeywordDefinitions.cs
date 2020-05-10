@@ -281,8 +281,9 @@ namespace Mtgdb.Data
 			// non quick-filter values follow
 
 			"Addendum",
+			cost("Escape"),
+			cost("Mutate"),
 			cost("Spectacle"),
-			cost("Escape")
 		};
 
 		public static readonly IList<string> Keywords = new[]
@@ -388,6 +389,7 @@ namespace Mtgdb.Data
 			custom("Bloodrush", bound("bloodrush", before: "—")),
 			count("Bloodthirst"),
 			count("Bushido"),
+			cost("Companion"),
 			cost("Cumulative Upkeep"),
 			"Detain",
 			"Dethrone",

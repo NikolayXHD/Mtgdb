@@ -12,7 +12,9 @@ namespace Mtgdb.Util
 				magic.Crop(new MagickGeometry(sourceRect));
 
 			if (targetSize != sourceRect.Size)
-				magic.Resize(new MagickGeometry(targetSize.Width, targetSize.Height));
+				magic.Resize(
+					new MagickGeometry(targetSize.Width, targetSize.Height)
+				);
 
 			return magic.ToBitmap();
 		}
