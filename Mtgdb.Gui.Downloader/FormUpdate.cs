@@ -508,7 +508,7 @@ Are you sure you need small images? (Recommended answer is NO)",
 
 		private void buttonDesktopShortcut(object sender, EventArgs e)
 		{
-			_installer.CreateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
+			_installer.CreateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)));
 		}
 
 		private void downloadImageProgressChanged()

@@ -82,16 +82,17 @@ namespace Mtgdb.Gui
 			string setCode = match.Groups["set"].Value;
 			string actualSetCode = _setCodesByMtga.TryGet(setCode) ?? setCode;
 
+			string num = match.Groups["num"].Value;
 			if (Repo.CardsByName.TryGetValue(match.Groups["name"].Value.RemoveDiacritics(), out var cards))
 			{
 				return cards
 					.AtMax(c => Str.Equals(c.SetCode, actualSetCode))
-					.ThenAtMax(c => Str.Equals(c.Number, match.Groups["num"].Value))
+					.ThenAtMax(c => Str.Equals(c.Number, num))
 					.Find();
 			}
 
 			return Repo.SetsByCode.TryGet(actualSetCode)?.Cards
-				.FirstOrDefault(c => Str.Equals(c.Number, match.Groups["num"].Value));
+				.FirstOrDefault(c => Str.Equals(c.Number, num));
 		}
 
 		protected override string ExportDeckImplementation(string name, Deck current)
@@ -145,7 +146,7 @@ namespace Mtgdb.Gui
 		private bool _isSideboard;
 
 		private static readonly Regex _lineRegex = new Regex(
-			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\) (?<num>\d+\w*)$",
+			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\)( (?<num>\d+\w*))?$",
 			RegexOptions.IgnoreCase);
 
 		private static readonly Dictionary<string, string> _mtgaSetCodes =

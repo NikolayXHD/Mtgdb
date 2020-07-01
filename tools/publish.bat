@@ -3,7 +3,7 @@
 set out=powershell write-host -fore DarkGreen
 
 set configuration=release
-set origin=F:\Repo\Git\mtgDb
+set origin=C:\git\mtgdb
 set output=%origin%\out
 
 for /f "delims=" %%x in (%origin%\shared\SolutionInfo.cs) do @set version=%%x
@@ -21,7 +21,7 @@ set nunitconsoleexe=%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe
 set gitexe="C:\Program Files\Git\bin\git.exe"
 set sevenzexe=%output%\update\7z\7za.exe
 
-set googledriveexe=%origin%\tools\gdrive-windows-x64.exe
+set googledriveexe=%origin%\tools\gdrive-windows-x64.exe --service-account mtgdb-gui.json
 set signid=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg
 set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
 set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
@@ -116,8 +116,12 @@ del /q /s %target%\*.vshost.*
 
 :publish_test
 %out% publish zip to test update URL
-%googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
-%googledriveexe% update %testsignid% %targetRoot%\filelist.txt
+echo upload %targetRoot%\%packageName%.zip
+echo upload %targetRoot%\filelist.txt
+echo When done, press any key
+pause
+rem %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
+rem %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
 
 :start_app
 %out% run installed app
@@ -136,16 +140,21 @@ pause
 
 :publish_update_notification
 %out% publish update notification
-%gitexe% -C f:/Repo/Git/Mtgdb.wiki pull
+%gitexe% -C c:/Git/Mtgdb.wiki pull
 %utilexe% -notify
-%gitexe% -C f:/Repo/Git/Mtgdb.Notifications add -A
-%gitexe% -C f:/Repo/Git/Mtgdb.Notifications commit -m auto
-%gitexe% -C f:/Repo/Git/Mtgdb.Notifications push
+%gitexe% -C c:/Git/Mtgdb.Notifications add -A
+%gitexe% -C c:/Git/Mtgdb.Notifications commit -m auto
+%gitexe% -C c:/Git/Mtgdb.Notifications push
 
 :publish_zip
 %out% publish zip to actual update URL
-%googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
-%googledriveexe% update %signid% %targetRoot%\filelist.txt
+echo upload %targetRoot%\%packageName%.zip
+echo upload %targetRoot%\filelist.txt
+echo When done, press any key
+pause
+rem %googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
+rem %googledriveexe% update %signid% %targetRoot%\filelist.txt
+
 
 :zip_deflate
 %out% create deflate - compressed zip
@@ -160,6 +169,8 @@ mkdir %targetRoot%\deflate
 
 :upload_deflate
 %out% upload deflate - compressed zip
-%googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
-
+rem %googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
+echo upload %targetRoot%\deflate\%packageName%.zip
+echo When done, press any key
+pause
 exit /b

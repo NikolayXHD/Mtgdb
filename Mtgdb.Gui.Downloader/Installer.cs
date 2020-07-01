@@ -179,7 +179,7 @@ namespace Mtgdb.Downloader
 				EndInstall?.Invoke();
 				writeInstalledVersion(expectedSignature.Path.Value);
 				CreateApplicationShortcut(AppDir.Root);
-				updateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
+				updateApplicationShortcut(new FsPath(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)));
 				Console.WriteLine();
 
 				onComplete?.Invoke();
@@ -276,10 +276,19 @@ namespace Mtgdb.Downloader
 				shortcut.Description = "Application to search MTG cards and build decks";
 				shortcut.WorkingDirectory = bin.Value;
 
-				if (iconPath != null)
+				if (iconPath.HasValue())
 					shortcut.IconLocation = iconPath.Value;
 
-				shortcut.Save();
+				try
+				{
+					shortcut.Save();
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Failed to created shortcut {0}: {1}", shortcutPath, ex);
+					return;
+				}
+
 				Console.WriteLine("Created shortcut {0}", shortcutPath);
 			}
 		}

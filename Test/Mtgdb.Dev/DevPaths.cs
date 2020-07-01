@@ -19,8 +19,8 @@ namespace Mtgdb.Dev
 
 		private static readonly Dictionary<bool, FsPath> _repoDrive = new Dictionary<bool, FsPath>
 		{
-			[false] = new FsPath("F:\\"),
-			[true] = new FsPath("media", "kolia", "ssd")
+			[false] = new FsPath("C:\\"),
+			[true] = new FsPath("home", "kolia")
 		};
 
 		public static readonly FsPath WindowsDrive = _windowsDrive[Runtime.IsLinux];
@@ -35,10 +35,10 @@ namespace Mtgdb.Dev
 		};
 
 		public static readonly FsPath ReleaseNotesFile =
-			RepoDrive.Join("repo", "git", "mtgdb.wiki", "Release-notes.rest");
+			RepoDrive.Join("git", "mtgdb.wiki", "Release-notes.rest");
 
 		public static readonly FsPath NotificationsRepo =
-			RepoDrive.Join("repo", "git", "mtgdb.notifications");
+			RepoDrive.Join("git", "mtgdb.notifications");
 
 		public static readonly Func<FsPath, FsPath> DriveSubstitution = path =>
 		{
