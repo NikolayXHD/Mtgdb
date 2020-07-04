@@ -20,13 +20,11 @@ set msbuildexe="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\M
 set nunitconsoleexe=%origin%\tools\NUnit.Console-3.7.0\nunit3-console.exe
 set gitexe="C:\Program Files\Git\bin\git.exe"
 set sevenzexe=%output%\update\7z\7za.exe
+set remote_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\release
+set remote_test_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\test
+set remote_deflate_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\deflate
+set yandex_disk=C:\Users\hidal\AppData\Roaming\Yandex\YandexDisk2\3.1.20.3664\YandexDisk2.exe
 
-set googledriveexe=%origin%\tools\gdrive-windows-x64.exe --service-account mtgdb-gui.json
-set signid=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg
-set fileid=0B_zQYOTucmnUOVE1eDU0STJZeE0
-set testsignid=13kTrLvgeyIF2ZMOzJMzGfhcx3M0-63_B
-set testfileid=18-gJb7NpBxSgjDgqDkuyKfX42pQUtdRt
-set deflatefileid=1X5h6C9u9L13T720DLqMmKwZz_0YzxQmm
 set robocopy_params=/s
 
 %out% build
@@ -116,12 +114,9 @@ del /q /s %target%\*.vshost.*
 
 :publish_test
 %out% publish zip to test update URL
-echo upload %targetRoot%\%packageName%.zip
-echo upload %targetRoot%\filelist.txt
-echo When done, press any key
-pause
-rem %googledriveexe% update %testfileid% %targetRoot%\%packageName%.zip
-rem %googledriveexe% update %testsignid% %targetRoot%\filelist.txt
+xcopy /q /y %targetRoot%\%packageName%.zip %remote_test_dir%
+xcopy /q /y %targetRoot%\filelist.txt %remote_test_dir%
+%yandex_disk%
 
 :start_app
 %out% run installed app
@@ -148,19 +143,14 @@ pause
 
 :publish_zip
 %out% publish zip to actual update URL
-echo upload %targetRoot%\%packageName%.zip
-echo upload %targetRoot%\filelist.txt
-echo When done, press any key
-pause
-rem %googledriveexe% update %fileid% %targetRoot%\%packageName%.zip
-rem %googledriveexe% update %signid% %targetRoot%\filelist.txt
-
+xcopy /q /y %targetRoot%\%packageName%.zip %remote_dir%
+xcopy /q /y %targetRoot%\filelist.txt %remote_dir%
 
 :zip_deflate
 %out% create deflate - compressed zip
 mkdir %targetRoot%\deflate
 
-%sevenzexe% a %targetRoot%\deflate\%packageName%.zip ^
+%sevenzexe% a %targetRoot%\deflate\Mtgdb.Gui.zip     ^
             -tzip -ir!%targetRoot%\%packageName%\*   ^
             -x!data\index\*                          ^
             -x!data\AllPrintings.json                ^
@@ -169,8 +159,5 @@ mkdir %targetRoot%\deflate
 
 :upload_deflate
 %out% upload deflate - compressed zip
-rem %googledriveexe% update %deflatefileid% %targetRoot%\deflate\%packageName%.zip
-echo upload %targetRoot%\deflate\%packageName%.zip
-echo When done, press any key
-pause
+robocopy %targetRoot%\deflate %remote_deflate_dir% /mir
 exit /b
