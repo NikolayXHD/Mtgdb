@@ -83,7 +83,13 @@ namespace Mtgdb.Gui
 			string actualSetCode = _setCodesByMtga.TryGet(setCode) ?? setCode;
 
 			string num = match.Groups["num"].Value;
-			if (Repo.CardsByName.TryGetValue(match.Groups["name"].Value.RemoveDiacritics(), out var cards))
+			string name = match.Groups["name"].Value.RemoveDiacritics();
+
+			int separatorIndex = name.IndexOf('/');
+			if (separatorIndex >= 0)
+				name = name.Substring(0, separatorIndex).TrimEnd();
+
+			if (Repo.CardsByName.TryGetValue(name, out var cards))
 			{
 				return cards
 					.AtMax(c => Str.Equals(c.SetCode, actualSetCode))
