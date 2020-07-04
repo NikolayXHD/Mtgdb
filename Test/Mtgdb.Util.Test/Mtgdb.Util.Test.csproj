@@ -106,7 +106,6 @@
     <Compile Include="EditDistance\Similarity.cs" />
     <Compile Include="ExternalData\GathererClient.cs" />
     <Compile Include="ExternalData\ImageDownloader.cs" />
-    <Compile Include="ExternalData\InstallerTest.cs" />
     <Compile Include="ExternalData\ScryfallClient.cs" />
     <Compile Include="Images\WizardImageHtmlPageUtil.cs" />
     <Compile Include="Tcg\Json.cs" />

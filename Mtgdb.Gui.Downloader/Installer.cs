@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -104,20 +105,20 @@ namespace Mtgdb.Downloader
 		{
 			ensureFileDeleted(_appOnlineSignatureFile);
 			_updateAppDir.CreateDirectory();
-			await new GdriveWebClient().TryDownload(
-				_appSourceConfig.FileListUrl, _appOnlineSignatureFile, token);
+			var client = new YandexDiskClientWrapper(new YandexDiskClient(), _appSourceConfig.YandexKey);
+			await client.TryDownloadFile(_appSourceConfig.FileListUrl, _appOnlineSignatureFile, token);
 			AppOnlineSignature = getAppOnlineSignature();
 		}
 
 		public async Task DownloadApp(CancellationToken token)
 		{
 			var expectedSignature = AppOnlineSignature;
-
 			FsPath appOnline = _updateAppDir.Join(expectedSignature.Path);
 			ensureFileDeleted(appOnline);
 			_updateAppDir.CreateDirectory();
-			await new GdriveWebClient().TryDownload(
-				_appSourceConfig.ZipUrl, appOnline, token);
+			var client = new YandexDiskClientWrapper(new YandexDiskClient(), _appSourceConfig.YandexKey);
+			string url = string.Format(_appSourceConfig.ZipUrl, expectedSignature.Path);
+			await client.TryDownloadFile(url, appOnline, token);
 		}
 
 		public bool ValidateDownloadedApp()
@@ -239,8 +240,6 @@ namespace Mtgdb.Downloader
 
 		public void CreateApplicationShortcut(FsPath shortcutLocation)
 		{
-			FsPath shortcutPath = shortcutLocation.Join(ShortcutFileName);
-
 			string appVersionInstalled = GetAppVersionInstalled();
 			// Mtgdb.Gui.v1.3.5.10.zip
 			var prefix = "Mtgdb.Gui.";
@@ -248,10 +247,41 @@ namespace Mtgdb.Downloader
 			var versionDir = appVersionInstalled.Substring(prefix.Length, appVersionInstalled.Length - prefix.Length - postfix.Length);
 
 			FsPath currentBin = AppDir.BinVersion.Parent().Join(versionDir);
+			// may be different from currently running executable because of just installed upgrade
 			FsPath execPath = currentBin.Join(ExecutableFileName);
 			FsPath iconPath = currentBin.Join("mtg64.ico");
 
-			createApplicationShortcut(shortcutPath, execPath, iconPath);
+			FsPath shortcutPath = shortcutLocation.Join(ShortcutFileName);
+			if (createApplicationShortcut(shortcutPath, execPath, iconPath))
+				return;
+
+			// workaround a problem with WshShell unable to create the link within desktop directory
+			// due to a mismatch between physical and localized directory names
+			var tempLocation = new FsPath(Path.GetTempPath());
+			FsPath tempPath = tempLocation.Join(ShortcutFileName);
+			if (!createApplicationShortcut(tempPath, execPath, iconPath))
+				return;
+			try
+			{
+				tempPath.MoveFileTo(shortcutPath);
+				Console.WriteLine("Moved application shortcut from {0} to {1}",
+					tempLocation, shortcutLocation);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Failed to move application shortcut from {0} to {1}: {2}",
+					tempLocation, shortcutLocation, ex);
+
+				try
+				{
+					tempPath.DeleteFile();
+				}
+				catch (Exception cleanupEx)
+				{
+					Console.WriteLine("Failed to remove application shortcut from {0}: {1}",
+						tempLocation, cleanupEx);
+				}
+			}
 		}
 
 		private static string getVersionFromAssembly()
@@ -260,37 +290,45 @@ namespace Mtgdb.Downloader
 			return "Mtgdb.Gui.v" + version + ".zip";
 		}
 
-		private static void createApplicationShortcut(FsPath shortcutPath, FsPath exePath, FsPath iconPath)
+		private static bool createApplicationShortcut(FsPath shortcutPath, FsPath exePath, FsPath iconPath)
 		{
+			if (shortcutPath.IsFile())
+				shortcutPath.DeleteFile();
+
 			var wsh = new WshShell();
 			var shortcut = wsh.CreateShortcut(shortcutPath.Value) as IWshShortcut;
-
 			FsPath bin = exePath.Parent();
 
-			if (shortcut != null)
+			if (shortcut == null)
 			{
-				shortcut.Arguments = "";
-				shortcut.TargetPath = exePath.Value;
-				shortcut.WindowStyle = 1;
-
-				shortcut.Description = "Application to search MTG cards and build decks";
-				shortcut.WorkingDirectory = bin.Value;
-
-				if (iconPath.HasValue())
-					shortcut.IconLocation = iconPath.Value;
-
-				try
-				{
-					shortcut.Save();
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine("Failed to created shortcut {0}: {1}", shortcutPath, ex);
-					return;
-				}
-
-				Console.WriteLine("Created shortcut {0}", shortcutPath);
+				Console.WriteLine("Failed to create shortcut at {0}: {1}.{2} returned null",
+					shortcutPath, nameof(WshShell), nameof(wsh.CreateShortcut));
+				return false;
 			}
+
+			shortcut.Arguments = "";
+			shortcut.TargetPath = exePath.Value;
+			shortcut.WindowStyle = 1;
+
+			shortcut.Description = "Application to search MTG cards and build decks";
+			shortcut.WorkingDirectory = bin.Value;
+
+			if (iconPath.HasValue())
+				shortcut.IconLocation = iconPath.Value;
+
+			try
+			{
+				shortcut.Save();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Failed to create shortcut {0}: {1}", shortcutPath, ex);
+				return false;
+			}
+
+			Console.WriteLine("Created shortcut {0}", shortcutPath);
+			return true;
+
 		}
 
 		public event Action MtgjsonFileUpdated;

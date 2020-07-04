@@ -22,12 +22,9 @@ namespace Mtgdb.Downloader
 		}
 
 		public Task<string> GetFilelistDownloadUrl(ImageSourcesConfig source, QualityGroupConfig quality, CancellationToken token) =>
-			getDownloadLink(source.YandexKey, string.Format(source.YandexListPath, quality.YandexName), token);
+			GetDownloadLink(source.YandexKey, string.Format(source.YandexListPath, quality.YandexName), token);
 
-		public Task<string> GetSubdirDownloadUrl(ImageSourcesConfig source, QualityGroupConfig quality, ImageDirConfig dir, CancellationToken token) =>
-			getDownloadLink(source.YandexKey, string.Format(source.YandexDirPath, quality.YandexName, dir.Subdir), token);
-
-		private async Task<string> getDownloadLink(string key, string path, CancellationToken token)
+		public async Task<string> GetDownloadLink(string key, string path, CancellationToken token)
 		{
 			var response = await GetResponse(_http, HttpMethod.Get, $"{ApiUrl}/download?public_key={key}&path={path}", token);
 			response.EnsureSuccessStatusCode();

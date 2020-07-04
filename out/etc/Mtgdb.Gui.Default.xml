@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<WatchFile Mode="Auto" />
+	<WatchFile Mode="Auto"/>
 
 	<!-- === DEFAULT APPLICATION CONFIGURATION ===
 		Do not edit this, because your changes will not survive installing new version.
@@ -9,8 +9,8 @@
 	-->
 
 	<MtgaIntegration
-		CardLibraryFile="%ProgramFiles(x86)%\Wizards of the Coast\MTGA\MTGA_Data\Downloads\Data\data_cards_[guid].mtga"
-		LogFile="%UserProfile%\AppData\LocalLow\Wizards Of The Coast\MTGA\output_log.txt"
+			CardLibraryFile="%ProgramFiles(x86)%\Wizards of the Coast\MTGA\MTGA_Data\Downloads\Data\data_cards_[guid].mtga"
+			LogFile="%UserProfile%\AppData\LocalLow\Wizards Of The Coast\MTGA\output_log.txt"
 	/>
 
 	<MtgjsonSource
@@ -19,34 +19,38 @@
 	/>
 
 	<AppSource
-		FileListUrl= "https://drive.google.com/uc?export=download&amp;id=1IUp6u10KW4tv9AumeddhrL9UtQBejYEg"
-		ZipUrl=      "https://drive.google.com/uc?export=download&amp;id=0B_zQYOTucmnUOVE1eDU0STJZeE0"
-		NewsUrl=     "https://py3j9.app.goo.gl/run"
-		ForumUrl=    "https://py3j9.app.goo.gl/frm"
-		MegatoolsUrl="https://drive.google.com/uc?export=download&amp;id=15xQpkAxz33w1LpP1MLUIAMfljNL05VJp"
+			YandexKey="oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=="
+			FileListUrl="/app/release/filelist.txt"
+			ZipUrl="/app/release/{0}"
+			MegatoolsUrl="/app/megatools.7z"
+			NewsUrl="https://py3j9.app.goo.gl/run"
+			ForumUrl="https://py3j9.app.goo.gl/frm"
 	/>
 
 	<ImageLocations>
-		<Directory Path="images\Mtgdb.Pictures\LQ"       />
-    <Directory Path="images\Mtgdb.Pictures\LQ-Token" />
-    <Directory Path="images\Mtgdb.Pictures\MQ"       Zoom="True" />
-    <Directory Path="images\Mtgdb.Pictures\MQ-Token" Zoom="True" />
-		<Directory Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
+		<Directory Path="images\Mtgdb.Pictures\LQ"/>
+		<Directory Path="images\Mtgdb.Pictures\LQ-Token"/>
+		<Directory Path="images\Mtgdb.Pictures\MQ"       Zoom="True"/>
+		<Directory Path="images\Mtgdb.Pictures\MQ-Token" Zoom="True"/>
+		<Directory Path="images\Artworks"                Art="True" ReadMetadataFromAttributes="False"/>
 	</ImageLocations>
 
-	<ImageSources MegaPrefix="https://mega.nz/#F!" GdrivePrefix="https://drive.google.com/uc?export=download&amp;id="
-                YandexKey="oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=="
-                YandexListPath="/{0}-list/filelist.7z"
-                YandexDirPath="/{0}-7z/{1}.7z">
+	<ImageSources
+			MegaPrefix="https://mega.nz/#F!"
+			GdrivePrefix="https://drive.google.com/uc?export=download&amp;id="
+			YandexKey="oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=="
+			YandexListPath="/{0}-list/filelist.7z"
+			YandexDirPath="/{0}-7z/{1}.7z">
 
-		<QualityGroup Quality="Art" Name="Art"     Yandex="False" TargetDirectory="images\Artworks" FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
-			<Dir MegaId="39B0xRqL!QRyz9vbrroXflw7pOWda6Q" />
+		<QualityGroup Quality="Art" Name="Art" Yandex="False" TargetDirectory="images\Artworks"
+				FileListMegaId="mgY1SSga!iP67fkG5mHQT23uYXwdP5g">
+			<Dir MegaId="39B0xRqL!QRyz9vbrroXflw7pOWda6Q"/>
 		</QualityGroup>
 
-    <QualityGroup Quality="LQ" Name="LQ"       YandexName="lq"       TargetDirectory="images\Mtgdb.Pictures\LQ"       />
-    <QualityGroup Quality="LQ" Name="LQ-Token" YandexName="lq-token" TargetDirectory="images\Mtgdb.Pictures\LQ-Token" />
-    <QualityGroup Quality="MQ" Name="MQ"       YandexName="mq"       TargetDirectory="images\Mtgdb.Pictures\MQ"       />
-		<QualityGroup Quality="MQ" Name="MQ-Token" YandexName="mq-token" TargetDirectory="images\Mtgdb.Pictures\MQ-Token" />
+		<QualityGroup Quality="LQ" Name="LQ"       YandexName="lq"       TargetDirectory="images\Mtgdb.Pictures\LQ"/>
+		<QualityGroup Quality="LQ" Name="LQ-Token" YandexName="lq-token" TargetDirectory="images\Mtgdb.Pictures\LQ-Token"/>
+		<QualityGroup Quality="MQ" Name="MQ"       YandexName="mq"       TargetDirectory="images\Mtgdb.Pictures\MQ"/>
+		<QualityGroup Quality="MQ" Name="MQ-Token" YandexName="mq-token" TargetDirectory="images\Mtgdb.Pictures\MQ-Token"/>
 
 	</ImageSources>
 

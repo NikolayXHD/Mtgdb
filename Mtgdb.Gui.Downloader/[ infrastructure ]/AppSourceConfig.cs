@@ -5,6 +5,9 @@ namespace Mtgdb.Downloader
 	[DataContract(Name = "AppSource")]
 	public class AppSourceConfig
 	{
+		[DataMember(Name = "YandexKey")]
+		public string YandexKey { get; set; }
+
 		[DataMember(Name = "FileListUrl")]
 		public string FileListUrl { get; set; }
 

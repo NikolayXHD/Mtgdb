@@ -91,9 +91,7 @@
     <Compile Include="Images\ImageDownloadProgressReader.cs" />
     <Compile Include="Images\MegaDownloader.cs" />
     <Compile Include="Images\YandexDownloader.cs" />
-    <Compile Include="WebClient\GdriveWebClient.cs" />
     <Compile Include="NewsService.cs" />
-    <Compile Include="WebClient\WebClientExtension.cs" />
     <Compile Include="WebClient\WebClientBase.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -191,6 +189,7 @@
     <Content Include="Resources\price_16.png" />
     <Content Include="Resources\properties_16x16.png" />
     <Content Include="Resources\update.png" />
+    <Compile Include="WebClient\YandexDiskClientWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\shared\shared.projitems" Label="Shared" />

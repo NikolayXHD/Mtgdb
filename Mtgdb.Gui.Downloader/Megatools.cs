@@ -13,6 +13,7 @@ namespace Mtgdb.Downloader
 		public Megatools(AppSourceConfig config)
 		{
 			_megatoolsUrl = config.MegatoolsUrl;
+			_yandexKey = config.YandexKey;
 		}
 
 		public async Task Download(string storageUrl, FsPath targetDirectory, string name, CancellationToken token, bool silent = false, int? timeoutSec = null)
@@ -27,7 +28,7 @@ namespace Mtgdb.Downloader
 			{
 				if (!MegadlExePath.IsFile())
 				{
-					var webClient = new GdriveWebClient();
+					var webClient = new YandexDiskClientWrapper(new YandexDiskClient(), _yandexKey);
 					await webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, new FsPath("megatools.7z"), token);
 				}
 			}
@@ -142,6 +143,7 @@ namespace Mtgdb.Downloader
 		private Process _process;
 		private bool _silent;
 		private readonly string _megatoolsUrl;
+		private readonly string _yandexKey;
 		private static readonly SemaphoreSlim _syncSelfDownload = new SemaphoreSlim(1);
 	}
 }

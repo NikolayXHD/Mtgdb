@@ -17,24 +17,16 @@ namespace Mtgdb.Downloader
 
 		public async Task<bool> Download(ImageDownloadProgress task, CancellationToken token)
 		{
-			lock (_syncOutput)
-				Console.Write("{0}.7z: get YandexDisk download url  ... ", task.Dir.Subdir);
+			var client = new YandexDiskClientWrapper(_client, task.ImageSource.YandexKey, _syncOutput);
 
-			string url = await _client.GetSubdirDownloadUrl(task.ImageSource, task.QualityGroup, task.Dir, token);
+			string remotePath = string.Format(
+				task.ImageSource.YandexDirPath, task.QualityGroup.YandexName, task.Dir.Subdir);
+			bool success = await client.DownloadAndExtract(remotePath, task.TargetDirectory, task.Dir.Subdir.Concat(".7z"), token);
 
-			lock (_syncOutput)
-				Console.Write("downloading ... ");
+			if (success)
+				ProgressChanged?.Invoke(task);
 
-			FsPath fileName = task.Dir.Subdir.Concat(".7z");
-			FsPath targetDirectory = task.TargetDirectory;
-
-			if (!await _client.DownloadAndExtract(url, targetDirectory, fileName, token))
-				return false;
-
-			Console.WriteLine("done");
-
-			ProgressChanged?.Invoke(task);
-			return true;
+			return success;
 		}
 
 		public event Action<ImageDownloadProgress> ProgressChanged;
