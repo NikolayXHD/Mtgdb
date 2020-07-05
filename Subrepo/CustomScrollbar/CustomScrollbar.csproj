@@ -64,11 +64,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
     <Compile Include="ScrollbarControlDesigner.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
@@ -77,32 +72,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>Scrollbar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resource.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\uparrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\downarrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ThumbBottom.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ThumbMiddle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ThumbSpanBottom.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ThumbSpanTop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ThumbTop.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

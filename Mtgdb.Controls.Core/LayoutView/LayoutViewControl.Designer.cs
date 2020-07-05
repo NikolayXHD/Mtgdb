@@ -38,10 +38,6 @@
 			this.Scrollbar.Anchor =
 				((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
 					System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Right)));
-			this.Scrollbar.BorderColor = System.Drawing.SystemColors.Control;
-			this.Scrollbar.ChannelColor = System.Drawing.SystemColors.ScrollBar;
-			this.Scrollbar.DownArrowImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.DownArrowImage")));
 			this.Scrollbar.LargeChange = 10;
 			this.Scrollbar.Location = new System.Drawing.Point(133, 0);
 			this.Scrollbar.Maximum = 100;
@@ -50,18 +46,6 @@
 			this.Scrollbar.Size = new System.Drawing.Size(17, 150);
 			this.Scrollbar.SmallChange = 1;
 			this.Scrollbar.TabIndex = 0;
-			this.Scrollbar.ThumbBottomImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.ThumbBottomImage")));
-			this.Scrollbar.ThumbBottomSpanImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.ThumbBottomSpanImage")));
-			this.Scrollbar.ThumbMiddleImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.ThumbMiddleImage")));
-			this.Scrollbar.ThumbTopImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.ThumbTopImage")));
-			this.Scrollbar.ThumbTopSpanImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.ThumbTopSpanImage")));
-			this.Scrollbar.UpArrowImage =
-				((System.Drawing.Bitmap) (resources.GetObject("Scrollbar.UpArrowImage")));
 			this.Scrollbar.Value = 0;
 			//
 			// LayoutViewControl

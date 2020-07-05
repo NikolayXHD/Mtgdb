@@ -42,17 +42,6 @@ namespace Mtgdb.Controls
 			};
 
 			_selectionCaretTimer.Tick += tick;
-
-			Scrollbar.ChannelColor = SystemColors.Control;
-			Scrollbar.BorderColor = SystemColors.Control;
-
-			Scrollbar.UpArrowImage = Resources.uparrow.ScaleBy(0.5f);
-			Scrollbar.ThumbTopImage = Resources.ThumbTop.ScaleBy(0.5f);
-			Scrollbar.ThumbTopSpanImage = Resources.ThumbSpanTop.ScaleBy(0.5f);
-			Scrollbar.ThumbMiddleImage = Resources.ThumbMiddle.ScaleBy(0.5f);
-			Scrollbar.ThumbBottomSpanImage = Resources.ThumbSpanBottom.ScaleBy(0.5f);
-			Scrollbar.ThumbBottomImage = Resources.ThumbBottom.ScaleBy(0.5f);
-			Scrollbar.DownArrowImage = Resources.downarrow.ScaleBy(0.5f);
 		}
 
 		private void tick(object sender, EventArgs e)
