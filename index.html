@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="referrer" content="no-referrer"/>
+	<script>
+window.onload = function () {
+	var api_url = 'https://cloud-api.yandex.net/v1/disk/public/resources'
+	var download_path = '/app/deflate/Mtgdb.Gui.zip'
+	var key = 'oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=='
+	var get_link_url = api_url + '/download?public_key=' + key + '&path=' + download_path
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', get_link_url, true);
+	xhr.send();
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState !== 4) {
+			return;
+		}
+
+		if (xhr.status !== 200) {
+			return;
+		}
+
+		var link_model = JSON.parse(xhr.responseText);
+		var a = document.createElement('a');
+		a.href = link_model.href;
+		a.download = 'Mtgdb.Gui.zip';
+		a.innerText = 'download';
+		document.body.appendChild(a);
+		a.click();
+	}
+}
+	</script>
+	<title>Mtgdb.Gui download</title>
+</head>
+<body>
+<h2>Mtgdb.Gui download page</h2>
+<p>The download should begin automatically. If it doesn't, click download link below.</p>
+</body>
+</html>
