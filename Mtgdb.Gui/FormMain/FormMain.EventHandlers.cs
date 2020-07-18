@@ -109,6 +109,7 @@ namespace Mtgdb.Gui
 			Dpi.AfterChanged += afterDpiChanged;
 
 			_layoutRight.Layout += layoutRightPanel;
+			TextChanged += textChanged;
 		}
 
 		private void unsubscribeFromEvents()
@@ -199,6 +200,7 @@ namespace Mtgdb.Gui
 			Dpi.AfterChanged -= afterDpiChanged;
 
 			Layout -= layoutRightPanel;
+			TextChanged -= textChanged;
 		}
 
 		private void applicationExit(object sender, EventArgs e) =>
@@ -909,6 +911,11 @@ namespace Mtgdb.Gui
 			_searchSubsystem.AppliedText = query;
 			_searchSubsystem.Apply();
 			_popupSearchExamples.ClosePopup();
+		}
+
+		private void textChanged(object sender, EventArgs e)
+		{
+			_formRoot.UpdateTabText(this);
 		}
 	}
 }

@@ -242,10 +242,9 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		private void formTextChanged(object sender, EventArgs e)
+		public void UpdateTabText(FormMain formMain)
 		{
-			var formMain = (FormMain) sender;
-			var formIndex = _tabs.TabIds.IndexOf(formMain);
+			int formIndex = _tabs.TabIds.IndexOf(formMain);
 
 			if (formIndex < 0)
 				return;
@@ -404,7 +403,6 @@ namespace Mtgdb.Gui
 			form.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 			form.Location = new Point(0, 0);
 
-			form.TextChanged += formTextChanged;
 			return form;
 		}
 
