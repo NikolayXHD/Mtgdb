@@ -14,10 +14,11 @@ namespace Mtgdb.Gui
 		{
 		}
 
-		public override Deck ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized, bool exact = false)
 		{
-			var deck = base.ImportDeck(serialized);
-			new XitaxDeckTransformation(Repo).Transform(deck);
+			var deck = base.ImportDeck(serialized, exact);
+			if (!exact)
+				new XitaxDeckTransformation(Repo).Transform(deck);
 			return deck;
 		}
 
@@ -41,7 +42,7 @@ namespace Mtgdb.Gui
 
 
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			var creatures = new List<Card>();
 			var lands = new List<Card>();

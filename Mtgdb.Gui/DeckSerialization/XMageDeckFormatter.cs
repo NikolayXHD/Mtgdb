@@ -67,7 +67,7 @@ namespace Mtgdb.Gui
 			return xMageName;
 		}
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			var result = new StringBuilder();
 			result.AppendLine(Header + name);

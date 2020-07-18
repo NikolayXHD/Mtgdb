@@ -15,14 +15,15 @@ namespace Mtgdb.Gui
 		{
 		}
 
-		public override Deck ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized, bool exact = false)
 		{
 			ensureLoaded();
 
 			_isSideboard = false;
 			_sideboardIndicator = getSideboardIndicator(serialized);
-			var deck = base.ImportDeck(serialized);
-			new XitaxDeckTransformation(Repo).Transform(deck);
+			var deck = base.ImportDeck(serialized, exact);
+			if (!exact)
+				new XitaxDeckTransformation(Repo).Transform(deck);
 			return deck;
 		}
 
@@ -170,23 +171,26 @@ namespace Mtgdb.Gui
 			return name;
 		}
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			var result = new StringBuilder();
 
-			writeCards(result, current.MainDeck);
+			writeCards(result, current.MainDeck, exact);
 			result.AppendLine();
-			writeCards(result, current.Sideboard);
+			writeCards(result, current.Sideboard, exact);
 			// ignore maybeboard
 
 			return result.ToString();
 		}
 
-		private void writeCards(StringBuilder result, DeckZone deckZone)
+		private void writeCards(StringBuilder result, DeckZone deckZone, bool exact = false)
 		{
 			foreach (var cardId in deckZone.Order)
 			{
-				var card = Repo.CardsById[cardId].Faces.Main;
+				var card = exact
+					? Repo.CardsById[cardId]
+					: Repo.CardsById[cardId].Faces.Main;
+
 				if (card == null)
 					continue;
 

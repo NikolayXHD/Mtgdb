@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Mtgdb.Controls;
+using Mtgdb.Ui;
 using ButtonBase = Mtgdb.Controls.ButtonBase;
 
 namespace Mtgdb.Gui
@@ -38,6 +39,8 @@ namespace Mtgdb.Gui
 			_buttonMenuPasteCollectionAppend.Pressed += pasteClick;
 			_buttonMenuCopyCollection.Pressed += pasteClick;
 			_buttonMenuCopyDeck.Pressed += pasteClick;
+			_buttonMenuCopySearchResult.Pressed += pasteClick;
+
 			_buttonImportExportToMtgArena.Pressed += buttonImportExportToMtgArenaClick;
 
 			_menuColors.Items[0].Click += buttonColorSchemeClick;
@@ -73,6 +76,42 @@ namespace Mtgdb.Gui
 				form.CopyDeck();
 			else if (sender == _buttonMenuCopyCollection)
 				form.CopyCollection();
+			else if (sender == _buttonMenuCopySearchResult)
+				form.CopySearchResult();
+		}
+
+		public void ReportClipboardOperation(
+			Deck deck, bool isPasted, bool isCollection,
+			bool isAppended = false, bool isFromSearchResult = false)
+		{
+			if (deck == null)
+				return;
+
+			var zones = new[] { Zone.Main, Zone.Side, Zone.Maybe, Zone.SampleHand };
+			var cardsCount = zones.SelectMany(_ => deck.GetZone(_).CountList).Sum();
+			var uniqueCardsCount = zones.SelectMany(_ => deck.GetZone(_).Order).ToHashSet().Count;
+
+			string target = isFromSearchResult
+				? "Search result"
+				: isCollection
+					? "Collection"
+					: "Deck";
+
+			string count = uniqueCardsCount == cardsCount
+				? $"{cardsCount}"
+				: $"{cardsCount} ({uniqueCardsCount} distinct)";
+
+			string message;
+			if (isAppended)
+				message = $"Added {count} cards from clipboard to {target}";
+			else if (isPasted)
+				message = $"Replaced {target} by {count} cards from clipboard";
+			else
+				message = $"Copied to clipboard {count} cards from {target}";
+
+			string title = $"{(isPasted ? "Paste" : "Copy")} result";
+
+			TooltipController.ShowOneOffTooltip(_dropdownPaste, title, message);
 		}
 
 		private void buttonImportExportToMtgArenaClick(object sender, EventArgs e)
@@ -84,7 +123,11 @@ namespace Mtgdb.Gui
 			if (SaveLoadMenuMode.IsMtgArenaPaste)
 				form.PasteDeck(append: false);
 			else
+			{
 				form.CopyDeckInMtgArenaFormat();
+				MessageBox.Show("Deck was saved to Clipboard in MTGArena format.\r\n\r\n" +
+					"To proceed use 'import' button in MTGArena.", "Export deck to MTGArena");
+			}
 		}
 
 		private void buttonRestoreCollectionClick(object sender, EventArgs e) =>
@@ -292,68 +335,94 @@ namespace Mtgdb.Gui
 
 			bool handled = true;
 
-			if (e.KeyData == (Keys.Control | Keys.F4))
-				CloseTab();
-			else if (e.KeyData == (Keys.Control | Keys.Tab))
-				SelectNextTab();
-			else if (e.KeyData == (Keys.Control | Keys.Shift | Keys.Tab))
-				SelectPreviousTab();
-			else if (e.KeyData == (Keys.Control | Keys.T))
-				AddTab();
-			else if (e.KeyData == (Keys.Alt | Keys.Left) || e.KeyData == (Keys.Control | Keys.Z))
-				form.ButtonUndo();
-			else if (e.KeyData == (Keys.Alt | Keys.Right) || e.KeyData == (Keys.Control | Keys.Y))
-				form.ButtonRedo();
-			else if (e.KeyData == (Keys.Control | Keys.F))
-				form.FocusSearch();
-			else if (e.KeyData == Keys.Escape)
+			switch (e.KeyData)
 			{
-				if (form.IsDraggingCard)
+				case Keys.Control | Keys.F4:
+					CloseTab();
+					break;
+				case Keys.Control | Keys.Tab:
+					SelectNextTab();
+					break;
+				case Keys.Control | Keys.Shift | Keys.Tab:
+					SelectPreviousTab();
+					break;
+				case Keys.Control | Keys.T:
+					AddTab();
+					break;
+				case Keys.Alt | Keys.Left:
+				case Keys.Control | Keys.Z:
+					form.ButtonUndo();
+					break;
+				case Keys.Alt | Keys.Right:
+				case Keys.Control | Keys.Y:
+					form.ButtonRedo();
+					break;
+				case Keys.Control | Keys.F:
+					form.FocusSearch();
+					break;
+				case Keys.Escape when form.IsDraggingCard:
 					form.StopDragging();
-				else
+					break;
+				case Keys.Escape:
 					handled = false;
-			}
-			else if (e.KeyData == (Keys.Control | Keys.S))
-				form.ButtonSaveDeck();
-			else if (e.KeyData == (Keys.Control | Keys.O))
-				form.ButtonLoadDeck();
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.S))
-				form.ButtonSaveCollection();
-			else if (e.KeyData == (Keys.Control | Keys.Alt | Keys.O))
-				form.ButtonLoadCollection();
-			else if (e.KeyData == (Keys.Control | Keys.P))
-				form.ButtonPrint();
-			else if (e.KeyData == (Keys.Control | Keys.Shift | Keys.V))
-				form.PasteDeck(append: true);
-			else if (e.KeyData == (Keys.Control | Keys.V) || e.KeyData == (Keys.Shift | Keys.Insert))
-			{
-				if (form.IsTextInputFocused())
-					handled = false;
-				else
-					form.PasteDeck(append: false);
-			}
-			else if (e.KeyData == (Keys.Alt | Keys.Shift | Keys.V))
-				form.PasteCollection(append: true);
-			else if (e.KeyData == (Keys.Alt | Keys.V))
-				form.PasteCollection(append: false);
-			else if (e.KeyData == (Keys.Control | Keys.C))
-			{
-				if (!form.IsTextInputFocused())
-					form.CopyDeck();
+					break;
+				case Keys.Control | Keys.S:
+					form.ButtonSaveDeck();
+					break;
+				case Keys.Control | Keys.O:
+					form.ButtonLoadDeck();
+					break;
+				case Keys.Control | Keys.Alt | Keys.S:
+					form.ButtonSaveCollection();
+					break;
+				case Keys.Control | Keys.Alt | Keys.O:
+					form.ButtonLoadCollection();
+					break;
+				case Keys.Control | Keys.P:
+					form.ButtonPrint();
+					break;
+				case Keys.Control | Keys.Shift | Keys.V:
+					form.PasteDeck(append: true);
+					break;
+				case Keys.Control | Keys.V:
+				case Keys.Shift | Keys.Insert:
+				{
+					if (form.IsTextInputFocused())
+						handled = false;
+					else
+						form.PasteDeck(append: false);
+					break;
+				}
+				case Keys.Alt | Keys.Shift | Keys.V:
+					form.PasteCollection(append: true);
+					break;
+				case Keys.Alt | Keys.V:
+					form.PasteCollection(append: false);
+					break;
+				case Keys.Control | Keys.C:
+				{
+					if (!form.IsTextInputFocused())
+						form.CopyDeck();
 
-				handled = false;
-			}
-			else if (e.KeyData == (Keys.Alt | Keys.C))
-			{
-				if (form.IsTextInputFocused())
 					handled = false;
-				else
+					break;
+				}
+				case Keys.Alt | Keys.C when form.IsTextInputFocused():
+					handled = false;
+					break;
+				case Keys.Alt | Keys.C:
 					form.CopyCollection();
+					break;
+				case Keys.Control | Keys.Alt | Keys.C:
+					form.CopySearchResult();
+					break;
+				case Keys.F1:
+					form.ShowFindExamples();
+					break;
+				default:
+					handled = false;
+					break;
 			}
-			else if (e.KeyData == Keys.F1)
-				form.ShowFindExamples();
-			else
-				handled = false;
 
 			e.Handled = handled;
 			e.SuppressKeyPress = handled;

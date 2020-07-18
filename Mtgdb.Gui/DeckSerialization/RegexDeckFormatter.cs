@@ -18,7 +18,7 @@ namespace Mtgdb.Gui
 		public abstract bool IsSideboard(Match match, string line);
 		public abstract Card GetCard(Match match);
 
-		public virtual Deck ImportDeck(string serialized)
+		public virtual Deck ImportDeck(string serialized, bool exact = false)
 		{
 			var result = Deck.Create();
 
@@ -73,18 +73,19 @@ namespace Mtgdb.Gui
 			}
 		}
 
-		public string ExportDeck(string name, Deck current)
+		public string ExportDeck(string name, Deck current, bool exact = false)
 		{
 			if (!Repo.IsLoadingComplete.Signaled)
 				throw new InvalidOperationException();
 
-			var deckToExport = DeckConverter.ConvertDeck(current,
-				cardId => Repo.CardsById[cardId].Faces.Main?.Id);
+			Deck deckToExport = exact
+				? current
+				: DeckConverter.ConvertDeck(current, cardId => Repo.CardsById[cardId].Faces.Main?.Id);
 
-			return ExportDeckImplementation(name, deckToExport);
+			return ExportDeckImplementation(name, deckToExport, exact);
 		}
 
-		protected abstract string ExportDeckImplementation(string name, Deck current);
+		protected abstract string ExportDeckImplementation(string name, Deck current, bool exact = false);
 		public abstract string Description { get; }
 		public abstract string FileNamePattern { get; }
 		public abstract bool ValidateFormat(string serialized);

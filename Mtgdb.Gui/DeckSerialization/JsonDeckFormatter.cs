@@ -8,14 +8,14 @@ namespace Mtgdb.Gui
 		public string Description => @"Mtgdb.Gui {type}";
 		public string FileNamePattern => @"*.json";
 
-		public Deck ImportDeck(string serialized)
+		public Deck ImportDeck(string serialized, bool exact = false)
 		{
 			var saved = JsonConvert.DeserializeObject<GuiSettings>(serialized);
 			var result = saved.Deck;
 			return result;
 		}
 
-		public string ExportDeck(string name, Deck current)
+		public string ExportDeck(string name, Deck current, bool exact = false)
 		{
 			var settings = new GuiSettings
 			{

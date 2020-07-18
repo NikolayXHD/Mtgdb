@@ -28,6 +28,12 @@ namespace Mtgdb.Ui
 				{
 					Order = new List<string>(),
 					Count = new Dictionary<string, int>(Str.Comparer)
+				},
+
+				SampleHand = new DeckZone
+				{
+					Order = new List<string>(),
+					Count = new Dictionary<string, int>(Str.Comparer)
 				}
 			};
 
@@ -40,7 +46,9 @@ namespace Mtgdb.Ui
 			Dictionary<string, int> sideCountById,
 			List<string> sideOrder,
 			Dictionary<string, int> maybeCountById,
-			List<string> maybeOrder)
+			List<string> maybeOrder,
+			Dictionary<string, int> sampleCountById,
+			List<string> sampleOrder)
 		{
 			var result = new Deck
 			{
@@ -60,6 +68,12 @@ namespace Mtgdb.Ui
 				{
 					Count = maybeCountById ?? new Dictionary<string, int>(Str.Comparer),
 					Order = maybeOrder ?? new List<string>()
+				},
+
+				SampleHand = new DeckZone
+				{
+					Count = sampleCountById ?? new Dictionary<string, int>(Str.Comparer),
+					Order = sampleOrder ?? new List<string>()
 				}
 			};
 
@@ -74,7 +88,9 @@ namespace Mtgdb.Ui
 				Sideboard.Count.ToDictionary(),
 				Sideboard.Order.ToList(),
 				Maybeboard.Count.ToDictionary(),
-				Maybeboard.Order.ToList());
+				Maybeboard.Order.ToList(),
+				SampleHand.Count.ToDictionary(),
+				SampleHand.Order.ToList());
 
 			result.Name = Name;
 			result.File = File;
@@ -112,10 +128,13 @@ namespace Mtgdb.Ui
 			if (isMalformed(Maybeboard))
 				Maybeboard = createEmptyZone();
 
-			bool isMalformed(DeckZone zone) =>
+			if (isMalformed(SampleHand))
+				SampleHand = createEmptyZone();
+
+			static bool isMalformed(DeckZone zone) =>
 				zone == null || zone.Order == null || zone.Count == null;
 
-			DeckZone createEmptyZone() =>
+			static DeckZone createEmptyZone() =>
 				new DeckZone
 				{
 					Order = new List<string>(),
@@ -145,6 +164,7 @@ namespace Mtgdb.Ui
 		public DeckZone MainDeck { get; set; }
 		public DeckZone Sideboard { get; set; }
 		public DeckZone Maybeboard { get; set; }
+		public DeckZone SampleHand { get; set; }
 
 		public DeckZone GetZone(Zone zone)
 		{
@@ -156,6 +176,8 @@ namespace Mtgdb.Ui
 					return Sideboard;
 				case Zone.Maybe:
 					return Maybeboard;
+				case Zone.SampleHand:
+					return SampleHand;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
 			}

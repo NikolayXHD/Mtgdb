@@ -1064,24 +1064,42 @@ namespace Mtgdb.Gui
 		public bool IsTextInputFocused() =>
 			_searchSubsystem.IsSearchFocused() || _deckListControl.IsSearchFocused();
 
-		public void PasteDeck(bool append) =>
-			_copyPaste.PasteDeck(append);
-
-		public void PasteCollection(bool append) =>
-			_copyPaste.PasteCollection(append);
-
-		public void CopyCollection() =>
-			_copyPaste.CopyCollection(_serialization.MtgoFormatter);
-
-		public void CopyDeck() =>
-			_copyPaste.CopyDeck(_serialization.MtgoFormatter);
-
-		public void CopyDeckInMtgArenaFormat()
+		public void PasteDeck(bool append)
 		{
-			_copyPaste.CopyDeck(_serialization.MtgArenaFormatter);
-			MessageBox.Show("Deck was saved to Clipboard in MTGArena format.\r\n\r\n" +
-				"To proceed use 'import' button in MTGArena.", "Export deck to MTGArena");
+			var deck = _copyPaste.PasteDeck(append);
+			_formRoot.ReportClipboardOperation(deck, isPasted: true, isAppended: append, isCollection: false);
 		}
+
+		public void PasteCollection(bool append)
+		{
+			var deck = _copyPaste.PasteCollection(append);
+			_formRoot.ReportClipboardOperation(deck, isPasted: true, isAppended: append, isCollection: true);
+		}
+
+		public void CopyCollection()
+		{
+			var deck =  _copyPaste.CopyCollection(_serialization.MtgArenaFormatter);
+			_formRoot.ReportClipboardOperation(deck, isPasted: false, isCollection: true);
+		}
+
+		public void CopyDeck()
+		{
+			var deck = _copyPaste.CopyDeck(_serialization.MtgArenaFormatter);
+			_formRoot.ReportClipboardOperation(deck, isPasted: false, isCollection: false);
+		}
+
+		public void CopySearchResult()
+		{
+			Deck deck;
+			lock (_searchResultCards)
+				deck = _copyPaste.CopyCards(
+					_searchResultCards,
+					_serialization.MtgArenaFormatter);
+			_formRoot.ReportClipboardOperation(deck, isPasted: false, isCollection: false, isFromSearchResult: true);
+		}
+
+		public void CopyDeckInMtgArenaFormat() =>
+			_copyPaste.CopyDeck(_serialization.MtgArenaFormatter);
 
 		public void ImportMtgArenaCollection()
 		{
@@ -1101,7 +1119,7 @@ namespace Mtgdb.Gui
 			}
 
 			savePreviousCollection();
-			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null, null, null);
+			var deck = Deck.Create(countById, countById.Keys.ToList(), null, null, null, null, null, null);
 			_collectionEditor.LoadCollection(deck, append: false);
 
 			MessageBox.Show($"Imported collection of {countById.Values.Sum()} cards, {countById.Count} distinct.");
@@ -1128,7 +1146,7 @@ namespace Mtgdb.Gui
 			if (collection == null)
 				return;
 
-			var deck = Deck.Create(collection, collection.Keys.ToList(), null, null, null, null);
+			var deck = Deck.Create(collection, collection.Keys.ToList(), null, null, null, null, null, null);
 			_collectionEditor.LoadCollection(deck, append: false);
 
 			_uiConfigRepository.Config.CollectionBeforeImportMtga = null;

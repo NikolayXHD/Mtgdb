@@ -94,7 +94,7 @@ namespace Mtgdb.Gui
 		{
 			get
 			{
-				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder, MaybeDeckCount, MaybeDeckOrder);
+				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder, MaybeDeckCount, MaybeDeckOrder, null, null);
 
 				deck.Name = DeckName;
 				deck.File = DeckFile.OrNone();
@@ -116,7 +116,7 @@ namespace Mtgdb.Gui
 		[JsonIgnore]
 		public Deck CollectionModel
 		{
-			get => Deck.Create(Collection, Collection?.Keys.ToList(), null, null, null, null);
+			get => Deck.Create(Collection, Collection?.Keys.ToList(), null, null, null, null, null, null);
 			set => Collection = value.MainDeck.Count;
 		}
 

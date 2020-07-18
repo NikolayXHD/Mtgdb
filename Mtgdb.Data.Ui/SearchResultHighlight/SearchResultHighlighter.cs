@@ -71,6 +71,8 @@ namespace Mtgdb.Ui
 			string displayText)
 		{
 			var searchResult = _searchSubsystem.SearchResult;
+			if (!string.IsNullOrEmpty(searchResult?.ParseErrorMessage))
+				return;
 
 			addTermMatches(matches, contextMatches, displayField, displayText, searchResult);
 			addPhraseMatches(matches, displayField, displayText, searchResult);
@@ -84,7 +86,6 @@ namespace Mtgdb.Ui
 			ISearchResultBase searchResult)
 		{
 			var highlightTerms = searchResult?.HighlightTerms;
-
 			if (highlightTerms == null)
 				return;
 

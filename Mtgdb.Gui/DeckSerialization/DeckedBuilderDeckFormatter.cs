@@ -27,7 +27,7 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			var result = new StringBuilder();
 

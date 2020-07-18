@@ -217,82 +217,116 @@ namespace Mtgdb.Gui
 		public void Abort() =>
 			_abort = true;
 
-		private void pasteCollectionFromText(string text, bool append)
+		private Deck pasteCollectionFromText(string text, bool append)
 		{
-			var deck = _serialization.LoadSerialized("*.txt", text);
+			var deck = _serialization.LoadSerialized("*.txt", text, exact: true);
 
 			if (deck.Error != null)
+			{
 				MessageBox.Show(deck.Error);
-			else
-				_collection.LoadCollection(deck, append);
+				return null;
+			}
+
+			_collection.LoadCollection(deck, append);
+			return deck;
 		}
 
-		private void pasteDeckFromText(string text, bool append)
+		private Deck pasteDeckFromText(string text, bool append)
 		{
-			var deck = _serialization.LoadSerialized("*.txt", text);
+			var deck = _serialization.LoadSerialized("*.txt", text, exact: true);
 
 			if (deck.Error != null)
-				MessageBox.Show(deck.Error);
-			else
-				_deckEditor.Paste(getPasteOperations(), append, _cardRepo);
-
-			Dictionary<DeckZone, DeckZoneModel> getPasteOperations()
 			{
-				var operations = new Dictionary<DeckZone, DeckZoneModel>();
+				MessageBox.Show(deck.Error);
+				return null;
+			}
+
+			var deckToPaste = getPasteOperations();
+			return _deckEditor.Paste(deckToPaste, append, _cardRepo);
+
+			Deck getPasteOperations()
+			{
+				DeckZone mainDeck;
+				DeckZone sideDeck;
+				DeckZone maybeDeck;
+				DeckZone sampleHand;
 
 				switch (_targetForm.DeckZone)
 				{
 					case Zone.Main:
 					case null when _targetForm.IsDeckListSelected:
-						operations.Add(deck.MainDeck, _deckEditor.MainDeck);
-						if (deck.Sideboard.Order.Count > 0)
-							operations.Add(deck.Sideboard, _deckEditor.SideDeck);
-						if (deck.Maybeboard.Order.Count > 0)
-							operations.Add(deck.Maybeboard, _deckEditor.MaybeDeck);
+						mainDeck = deck.MainDeck;
+						sideDeck = deck.Sideboard.Order.Count > 0
+							? deck.Sideboard
+							: null;
+						maybeDeck = deck.Maybeboard.Order.Count > 0
+							? deck.Maybeboard
+							: null;
+						sampleHand = null;
 						break;
 
 					case Zone.Side:
-						operations.Add(deck.MainDeck, _deckEditor.SideDeck);
+						mainDeck = null;
+						sideDeck = deck.MainDeck;
+						maybeDeck = null;
+						sampleHand = null;
 						break;
 
 					case Zone.Maybe:
-						operations.Add(deck.Maybeboard, _deckEditor.MaybeDeck);
+						mainDeck = null;
+						sideDeck = null;
+						maybeDeck = deck.MainDeck;
+						sampleHand = null;
 						break;
 
 					case Zone.SampleHand:
-						operations.Add(deck.MainDeck, _deckEditor.SampleHand);
+						mainDeck = null;
+						sideDeck = null;
+						maybeDeck = null;
+						sampleHand = deck.MainDeck;
 						break;
+
+					default:
+						return null;
 				}
 
-				return operations;
+				return Deck.Create(
+					mainDeck?.Count,
+					mainDeck?.Order,
+					sideDeck?.Count,
+					sideDeck?.Order,
+					maybeDeck?.Count,
+					maybeDeck?.Order,
+					sampleHand?.Count,
+					sampleHand?.Order);
 			}
 		}
 
-		public void PasteDeck(bool append)
+		public Deck PasteDeck(bool append)
 		{
 			if (!_cardRepo.IsLoadingComplete.Signaled)
-				return;
+				return null;
 
 			var text = Clipboard.GetText();
 			if (string.IsNullOrWhiteSpace(text))
-				return;
+				return null;
 
-			pasteDeckFromText(text, append);
+			return pasteDeckFromText(text, append);
 		}
 
-		public void PasteCollection(bool append)
+		public Deck PasteCollection(bool append)
 		{
 			if (!_cardRepo.IsLoadingComplete.Signaled)
-				return;
+				return null;
 
 			var text = Clipboard.GetText();
 			if (string.IsNullOrWhiteSpace(text))
-				return;
+				return null;
 
-			pasteCollectionFromText(text, append);
+			return pasteCollectionFromText(text, append);
 		}
 
-		public void CopyCollection(IDeckFormatter formatter)
+		public Deck CopyCollection(IDeckFormatter formatter)
 		{
 			var deck = Deck.Create(
 				_collection.CountById?.ToDictionary(),
@@ -300,13 +334,18 @@ namespace Mtgdb.Gui
 				null,
 				null,
 				null,
+				null,
+				null,
 				null);
 
-			var serialized = _serialization.SaveSerialized(deck, formatter);
-			serialized.TryCopyToClipboard();
+			var serialized = _serialization.SaveSerialized(deck, exact: true, formatter);
+			if (serialized.TryCopyToClipboard())
+				return deck;
+
+			return null;
 		}
 
-		public void CopyDeck(IDeckFormatter formatter)
+		public Deck CopyDeck(IDeckFormatter formatter)
 		{
 			Deck deck;
 
@@ -330,17 +369,41 @@ namespace Mtgdb.Gui
 					break;
 
 				default:
-					return;
+					return null;
 			}
 
-			var serialized = _serialization.SaveSerialized(deck, formatter);
-			serialized.TryCopyToClipboard();
+			var serialized = _serialization.SaveSerialized(deck, exact: true, formatter);
+			if (serialized.TryCopyToClipboard())
+				return deck;
+
+			return null;
+		}
+
+		public Deck CopyCards(ICollection<Card> cards, IDeckFormatter formatter)
+		{
+			var deck = Deck.Create(
+				cards.ToDictionary(_=>_.Id, _ => 1),
+				cards.Select(_=>_.Id).ToList(),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+
+			var serialized = _serialization.SaveSerialized(deck, exact: true, formatter);
+			if (serialized.TryCopyToClipboard())
+				return deck;
+
+			return null;
 		}
 
 		private Deck copySampleHand() =>
 			Deck.Create(
 				_deckEditor.SampleHand.CountById.ToDictionary(),
 				_deckEditor.SampleHand.CardsIds.ToList(),
+				null,
+				null,
 				null,
 				null,
 				null,
@@ -353,12 +416,16 @@ namespace Mtgdb.Gui
 				null,
 				null,
 				null,
+				null,
+				null,
 				null);
 
 		private Deck copyMaybeDeck() =>
 			Deck.Create(
 				_deckEditor.MaybeDeck.CountById.ToDictionary(),
 				_deckEditor.MaybeDeck.CardsIds.ToList(),
+				null,
+				null,
 				null,
 				null,
 				null,

@@ -155,7 +155,7 @@ namespace Mtgdb.Gui
 				return deck;
 			}
 
-			deck = LoadSerialized(format, serialized);
+			deck = LoadSerialized(format, serialized, exact: false);
 
 			deck.File = file;
 
@@ -188,17 +188,17 @@ namespace Mtgdb.Gui
 			return formatter;
 		}
 
-		public string SaveSerialized(Deck deck, IDeckFormatter formatter = null, string format = null)
+		public string SaveSerialized(Deck deck, bool exact, IDeckFormatter formatter = null, string format = null)
 		{
 			if (formatter == null && format == null)
 				throw new ArgumentException($"either {nameof(format)} or {nameof(formatter)} must be specified");
 
 			formatter ??= _formatters.First(f => Str.Equals(f.FileNamePattern, format) && f.SupportsExport);
-			var result = formatter.ExportDeck(deck.Name, deck);
+			var result = formatter.ExportDeck(deck.Name, deck, exact);
 			return result;
 		}
 
-		public Deck LoadSerialized(string format, string serialized)
+		public Deck LoadSerialized(string format, string serialized, bool exact)
 		{
 			var formatter = getFormatter(format, serialized);
 
@@ -219,7 +219,7 @@ namespace Mtgdb.Gui
 				return deck;
 			}
 
-			deck = formatter.ImportDeck(serialized);
+			deck = formatter.ImportDeck(serialized, exact);
 			return deck;
 		}
 

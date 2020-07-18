@@ -70,13 +70,13 @@ namespace Mtgdb.Ui
 			{
 				DataSource.Clear();
 
-				Card transform(string id) =>
+				Card getCard(string id) =>
 					cardRepository.CardsById[id];
 
 				if (CurrentZone.HasValue)
-					DataSource.AddRange(Deck.CardsIds.Select(transform));
+					DataSource.AddRange(Deck.CardsIds.Select(getCard));
 				else
-					DataSource.AddRange(MainDeck.CardsIds.Union(SideDeck.CardsIds).Union(MaybeDeck.CardsIds).Select(transform));
+					DataSource.AddRange(MainDeck.CardsIds.Union(SideDeck.CardsIds).Union(MaybeDeck.CardsIds).Select(getCard));
 			}
 
 			DeckChanged?.Invoke(
@@ -286,35 +286,51 @@ namespace Mtgdb.Ui
 		public int GetCount(Card c) =>
 			Deck.GetCount(c.Id);
 
-		public void Paste(Dictionary<DeckZone, DeckZoneModel> operations, bool append, CardRepository repo)
+		public Deck Paste(Deck source, bool append, CardRepository repo)
 		{
-			if (operations.Count == 0)
-				return;
+			var zones = new[] { Zone.Main, Zone.Side, Zone.Maybe, Zone.SampleHand };
+			if (zones.All(_=> source.GetZone(_).Order.Count == 0))
+				return null;
 
 			if (!append && (CurrentZone == Zone.Main || CurrentZone == Zone.Side || CurrentZone == Zone.Maybe))
 				lock (DataSource)
 					DataSource.Clear();
 
-			foreach (var operation in operations)
-			{
-				if (!append)
-					operation.Value.Clear();
+			var pastedDeck = source.Copy();
 
-				foreach (var cardId in operation.Key.Order)
+			foreach (var zone in zones)
+			{
+				var sourceZone = source.GetZone(zone);
+				if (sourceZone.Order.Count == 0)
+					continue;
+
+				var targetZone = getDeckZone(zone);
+				if (!append)
+					targetZone.Clear();
+
+				var pastedZone = pastedDeck.GetZone(zone);
+				for (int i = 0; i < sourceZone.Order.Count; i++)
 				{
-					var prevCount = operation.Value.CountById.TryGet(cardId);
-					var increment = operation.Key.Count[cardId];
+					string cardId = sourceZone.Order[i];
+					int prevCount = targetZone.CountById.TryGet(cardId);
+					int increment = sourceZone.Count[cardId];
 
 					var card = repo.CardsById[cardId];
 
-					var newCount = (prevCount + increment)
+					int newCount = (prevCount + increment)
 						.WithinRange(card.MinCountInDeck(), card.MaxCountInDeck());
 
-					operation.Value.Add(cardId, newCount);
+					int delta = newCount - prevCount;
+
+					pastedZone.Count[cardId] = delta;
+					pastedZone.CountList[i] = delta;
+
+					targetZone.Add(cardId, newCount);
 				}
 			}
 
 			LoadDeck(repo);
+			return pastedDeck;
 		}
 
 		public void NewSampleHand(CardRepository cardRepository)
@@ -413,7 +429,9 @@ namespace Mtgdb.Ui
 				SideDeck.CountById.ToDictionary(),
 				SideDeck.CardsIds.ToList(),
 				MaybeDeck.CountById.ToDictionary(),
-				MaybeDeck.CardsIds.ToList());
+				MaybeDeck.CardsIds.ToList(),
+				SampleHand.CountById.ToDictionary(),
+				SampleHand.CardsIds.ToList());
 
 			result.Name = DeckName;
 			result.File = DeckFile;

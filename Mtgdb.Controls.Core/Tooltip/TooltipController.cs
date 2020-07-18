@@ -82,7 +82,7 @@ namespace Mtgdb.Controls
 		{
 			var staticTooltipsToRemove = _staticTooltips
 				.Where(_ => _.Value.Owner == owner)
-				.Select(_=>_.Key)
+				.Select(_ => _.Key)
 				.ToArray();
 
 			foreach (var control in staticTooltipsToRemove)
@@ -198,6 +198,7 @@ namespace Mtgdb.Controls
 					show(curr);
 
 					_tooltip = curr;
+					_showingOneOffTooltip = false;
 				}
 
 				await Task.Delay(IntervalMs, token);
@@ -228,14 +229,16 @@ namespace Mtgdb.Controls
 			if (!_tooltipForm.Clickable)
 				return false;
 
+			if (_showingOneOffTooltip)
+				return false;
+
 			return _tooltipForm.Bounds.Contains(Cursor.Position) || _tooltipForm.UserInteracted;
 		}
 
 
-
 		private void mouseEnter(object sender, EventArgs e)
 		{
-			if (!IsActive)
+			if (!IsActive || _showingOneOffTooltip)
 				return;
 
 			var control = (Control) sender;
@@ -245,10 +248,9 @@ namespace Mtgdb.Controls
 			if (control == Tooltip.Control)
 				return;
 
-			if (settings.IsEmpty)
-				Tooltip = _emptyTooltip;
-			else
-				Tooltip = new TooltipModel
+			Tooltip = settings.IsEmpty
+				? _emptyTooltip
+				: new TooltipModel
 				{
 					Id = settings.Controls[0],
 					Control = control,
@@ -261,11 +263,17 @@ namespace Mtgdb.Controls
 
 		private void mouseLeave(object sender, EventArgs e)
 		{
+			if (_showingOneOffTooltip)
+				return;
+
 			Tooltip = _emptyTooltip;
 		}
 
 		private void gotFocus(object sender, EventArgs e)
 		{
+			if (_showingOneOffTooltip)
+				return;
+
 			Tooltip = _emptyTooltip;
 		}
 
@@ -273,7 +281,7 @@ namespace Mtgdb.Controls
 
 		private void customTooltipShow(TooltipModel tooltip)
 		{
-			if (!IsActive)
+			if (!IsActive || _showingOneOffTooltip)
 				return;
 
 			Tooltip = tooltip;
@@ -281,7 +289,26 @@ namespace Mtgdb.Controls
 
 		private void customTooltipHide()
 		{
+			if (_showingOneOffTooltip)
+				return;
+
 			Tooltip = _emptyTooltip;
+		}
+
+		public void ShowOneOffTooltip(Control control, string title, string text)
+		{
+			_showingOneOffTooltip = true;
+			Tooltip = new TooltipModel
+			{
+				Id = control,
+				Control = control,
+				ObjectBounds = control.ClientRectangle,
+
+				Title = title,
+				Text = text,
+				Clickable = true,
+				UnderMouse = true,
+			};
 		}
 
 
@@ -305,6 +332,8 @@ namespace Mtgdb.Controls
 
 		private readonly TooltipForm _tooltipForm;
 		private bool _active = true;
+
+		private bool _showingOneOffTooltip;
 
 		private CancellationTokenSource _cts;
 		private static readonly TooltipModel _emptyTooltip = new TooltipModel();

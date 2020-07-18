@@ -58,10 +58,10 @@ namespace Mtgdb.Gui
 			return collectionData.Concat(basicLands);
 		}
 
-		public override Deck ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized, bool exact = false)
 		{
 			_isSideboard = false;
-			var deck = base.ImportDeck(serialized);
+			var deck = base.ImportDeck(serialized, exact);
 			return deck;
 		}
 
@@ -79,6 +79,13 @@ namespace Mtgdb.Gui
 
 		public override Card GetCard(Match match)
 		{
+			if (match.Groups["id"].Success)
+			{
+				string id = match.Groups["id"].Value;
+				if (Repo.CardsById.TryGetValue(id, out var card))
+					return card;
+			}
+
 			string setCode = match.Groups["set"].Value;
 			string actualSetCode = _setCodesByMtga.TryGet(setCode) ?? setCode;
 
@@ -101,19 +108,19 @@ namespace Mtgdb.Gui
 				.FirstOrDefault(c => Str.Equals(c.Number, num));
 		}
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			var result = new StringBuilder();
 
-			writeCards(result, current.MainDeck);
+			writeCards(result, current.MainDeck, exact);
 			result.AppendLine();
-			writeCards(result, current.Sideboard);
+			writeCards(result, current.Sideboard, exact);
 			// ignore maybeboard
 
 			return result.ToString();
 		}
 
-		private void writeCards(StringBuilder result, DeckZone deckZone)
+		private void writeCards(StringBuilder result, DeckZone deckZone, bool exact = false)
 		{
 			foreach (var cardId in deckZone.Order)
 			{
@@ -125,13 +132,19 @@ namespace Mtgdb.Gui
 				if (card.Faces.Main == null)
 					continue;
 
-				string name = card.Faces.Main.NameEn;
+				string name = exact
+					? card.NameEn
+					: card.Faces.Main.NameEn;
 
 				if (card.IsDoubleFace() && number.EndsWith("a", Str.Comparison))
 					number = number.Substring(0, number.Length - 1);
 
 				string setCode = _mtgaSetCodes.TryGet(card.SetCode) ?? card.SetCode;
-				result.AppendLine($"{count} {name} ({setCode}) {number}");
+
+				result.Append($"{count} {name} ({setCode}) {number}");
+				if (exact)
+					result.Append(' ').Append(card.Id);
+				result.AppendLine();
 			}
 		}
 
@@ -152,7 +165,7 @@ namespace Mtgdb.Gui
 		private bool _isSideboard;
 
 		private static readonly Regex _lineRegex = new Regex(
-			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\)( (?<num>\d+\w*))?$",
+			@"^(?<count>\d+)\s+(?<name>.+) \((?<set>[^\)]+)\)( (?<num>\d+\w*))?( (?<id>[^\s]+))?$",
 			RegexOptions.IgnoreCase);
 
 		private static readonly Dictionary<string, string> _mtgaSetCodes =

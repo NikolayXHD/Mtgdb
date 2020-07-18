@@ -18,6 +18,7 @@ namespace Mtgdb.Controls
 		public string Text { get; set; }
 		public DateTime Created { get; }
 		public bool Clickable { get; set; }
+		public bool UnderMouse { get; set; }
 		public IList<TextRange> HighlightRanges { get; set; }
 		public HighlightOptions HighlightOptions { get; set; }
 		public Rectangle ObjectBounds { get; set; }

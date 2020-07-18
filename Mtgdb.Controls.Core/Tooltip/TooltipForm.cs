@@ -195,8 +195,15 @@ namespace Mtgdb.Controls
 
 			var size = measureTooltip(tooltip, titleFont);
 			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
-			var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
-			var bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
+
+			Rectangle bounds;
+			if (tooltip.UnderMouse)
+			 	bounds = new Rectangle(Cursor.Position - size.MultiplyBy(0.5f).Round(), size);
+			else
+			{
+				var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
+				bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
+			}
 
 			if (_tooltipTextbox.Focused)
 				_tooltipFocusTarget.Focus();

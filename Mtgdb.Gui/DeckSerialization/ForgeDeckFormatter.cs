@@ -47,12 +47,12 @@ namespace Mtgdb.Gui
 			return card;
 		}
 
-		public override Deck ImportDeck(string serialized)
+		public override Deck ImportDeck(string serialized, bool exact = false)
 		{
 			_forgeSetRepo.EnsureLoaded();
 
 			_isSideboard = false;
-			return base.ImportDeck(serialized);
+			return base.ImportDeck(serialized, exact);
 		}
 
 		public override bool IsSideboard(Match match, string line)
@@ -71,7 +71,7 @@ namespace Mtgdb.Gui
 		}
 
 
-		protected override string ExportDeckImplementation(string name, Deck current)
+		protected override string ExportDeckImplementation(string name, Deck current, bool exact = false)
 		{
 			_forgeSetRepo.EnsureLoaded();
 

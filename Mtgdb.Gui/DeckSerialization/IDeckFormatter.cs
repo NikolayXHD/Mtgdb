@@ -7,8 +7,9 @@ namespace Mtgdb.Gui
 		string Description { get; }
 		string FileNamePattern { get; }
 
-		Deck ImportDeck(string serialized);
-		string ExportDeck(string name, Deck current);
+		Deck ImportDeck(string serialized, bool exact = false);
+
+		string ExportDeck(string name, Deck current, bool exact = false);
 
 		bool ValidateFormat(string serialized);
 
