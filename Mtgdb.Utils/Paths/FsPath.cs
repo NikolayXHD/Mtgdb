@@ -8,7 +8,7 @@ using NConfiguration.Serialization;
 namespace Mtgdb
 {
 	[TypeConverter(typeof(FsPathTypeConverter))]
-	[Deserializer(typeof(FsPathDeserializer))]
+	[Deserializer(typeof(FsPathDeserializer<>))]
 	public readonly struct FsPath : IEquatable<FsPath>
 	{
 		public FsPath(string value)
