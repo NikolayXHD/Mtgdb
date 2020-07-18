@@ -108,7 +108,7 @@ namespace Mtgdb.Gui
 			Dpi.BeforeChanged += beforeDpiChanged;
 			Dpi.AfterChanged += afterDpiChanged;
 
-			Layout += layout;
+			_layoutRight.Layout += layoutRightPanel;
 		}
 
 		private void unsubscribeFromEvents()
@@ -198,7 +198,7 @@ namespace Mtgdb.Gui
 			Dpi.BeforeChanged -= beforeDpiChanged;
 			Dpi.AfterChanged -= afterDpiChanged;
 
-			Layout -= layout;
+			Layout -= layoutRightPanel;
 		}
 
 		private void applicationExit(object sender, EventArgs e) =>
@@ -432,7 +432,7 @@ namespace Mtgdb.Gui
 				historyUpdate();
 		}
 
-		private void layout(object sender, LayoutEventArgs e) =>
+		private void layoutRightPanel(object sender, LayoutEventArgs e) =>
 			setRightPanelsWidth();
 
 		private void setRightPanelsWidth()

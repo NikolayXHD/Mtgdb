@@ -687,7 +687,6 @@
 			this._panelRightCost.Location = new System.Drawing.Point(44, 0);
 			this._panelRightCost.Margin = new System.Windows.Forms.Padding(0);
 			this._panelRightCost.Name = "_panelRightCost";
-			this._layoutRight.SetRowSpan(this._panelRightCost, 2);
 			this._panelRightCost.Size = new System.Drawing.Size(44, 50);
 			this._panelRightCost.TabIndex = 1;
 			//
