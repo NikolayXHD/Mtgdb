@@ -47,8 +47,13 @@ namespace Mtgdb
 		public static string Extension(this FsPath path) =>
 			Path.GetExtension(path.Value);
 
-		public static bool IsParentOf(this FsPath path, FsPath other) =>
-			other.RelativeTo(path) != FsPath.None;
+		public static bool IsParentOf(this FsPath path, FsPath other)
+		{
+			return
+				other.Value != null && other.Value.Length > path.Value.Length + 1
+				&& other.Value[path.Value.Length] == FsPath.Separator
+				&& other.Value.StartsWith(path.Value, FsPath.Comparison);
+		}
 
 		public static DirectoryInfo CreateDirectory(this FsPath path) =>
 			System.IO.Directory.CreateDirectory(path.Value);

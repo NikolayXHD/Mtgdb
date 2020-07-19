@@ -118,10 +118,15 @@ namespace Mtgdb.Downloader
 					continue;
 				}
 
+				FileSignature tempQualifier = Signer.CreateSignature(filePath, useAbsolutePath: true);
 				var existingSignature =
 					progress.FilesCorrupted.TryGet(fileOnline.Path) ??
 					progress.FilesDownloaded.TryGet(fileOnline.Path) ??
-					Signer.CreateSignature(filePath, useAbsolutePath: true).AsRelativeTo(targetSubdirectory, internPath: true);
+					new FileSignature
+					{
+						Path = tempQualifier.Path.RelativeTo(targetSubdirectory).Intern(true),
+						Md5Hash = tempQualifier.Md5Hash
+					};
 
 				if (existingSignature.Md5Hash != fileOnline.Md5Hash)
 				{

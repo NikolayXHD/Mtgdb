@@ -16,7 +16,9 @@ namespace Mtgdb.Downloader
 			Dir = dir;
 
 			TargetDirectory = QualityGroup.TargetDirectory.ToAppRootedPath();
-			TargetSubdirectory = TargetDirectory.Join(Dir.Subdir.OrEmpty());
+			TargetSubdirectory = Dir.Subdir.Value == null
+				? TargetDirectory
+				: TargetDirectory.Join(Dir.Subdir);
 
 			MegaUrl = string.IsNullOrEmpty(Dir.MegaId) ? null : ImageSource.MegaPrefix + Dir.MegaId;
 
@@ -29,9 +31,14 @@ namespace Mtgdb.Downloader
 				return;
 			}
 
-			FilesOnline = imagesOnline
-				.Select(_ => _.AsRelativeTo(Dir.Subdir, internPath: true))
-				.Where(_=>_.Path != FsPath.None)
+			FilesOnline = Dir.Subdir.Value == null
+				? imagesOnline.ToDictionary(_ => _.Path)
+				: imagesOnline.Where(_ => Dir.Subdir.IsParentOf(_.Path))
+				.Select(_ => new FileSignature
+				{
+					Path = _.Path.RelativeTo(Dir.Subdir).Intern(true),
+					Md5Hash = _.Md5Hash
+				})
 				.ToDictionary(_ => _.Path);
 
 			FilesDownloaded = new Dictionary<FsPath, FileSignature>();
