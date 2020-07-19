@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using Mtgdb.Controls.Properties;
 using Mtgdb.Data;
 
 namespace Mtgdb.Controls
@@ -36,12 +35,14 @@ namespace Mtgdb.Controls
 
 			SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
-			_selectionCaretTimer = new Timer
+			if (SystemInformation.CaretBlinkTime > 0)
 			{
-				Interval = SystemInformation.CaretBlinkTime
-			};
-
-			_selectionCaretTimer.Tick += tick;
+				_selectionCaretTimer = new Timer
+				{
+					Interval = SystemInformation.CaretBlinkTime
+				};
+				_selectionCaretTimer.Tick += tick;
+			}
 		}
 
 		private void tick(object sender, EventArgs e)
@@ -338,12 +339,12 @@ namespace Mtgdb.Controls
 
 			Application.AddMessageFilter(this);
 
-			_selectionCaretTimer.Start();
+			_selectionCaretTimer?.Start();
 		}
 
 		private void disposed(object sender, EventArgs e)
 		{
-			_selectionCaretTimer.Stop();
+			_selectionCaretTimer?.Stop();
 			Application.RemoveMessageFilter(this);
 		}
 
