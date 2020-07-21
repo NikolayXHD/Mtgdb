@@ -104,6 +104,7 @@
     <Compile Include="Index\CardQueryParser.cs" />
     <Compile Include="Index\CardSearcherState.cs" />
     <Compile Include="Index\CardSpellcheckerState.cs" />
+    <Compile Include="IShell.cs" />
     <Compile Include="Model\Image\ImageModel.cs" />
     <Compile Include="Model\Image\ImageNameCalculator.cs" />
     <Compile Include="Images\BmpCornerRemoval.cs" />
@@ -169,17 +170,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Shell32">
-      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">

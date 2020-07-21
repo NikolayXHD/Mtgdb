@@ -73,6 +73,7 @@
     <Compile Include="ArtworkRenamer.cs" />
     <Compile Include="ImageDirectorySigner.cs" />
     <Compile Include="NewVersionNotifier.cs" />
+    <Compile Include="ShellWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="[ infrastructure ]\UtilModule.cs" />
     <Compile Include="[ infrastructure ]\UtilProgram.cs" />
@@ -81,6 +82,17 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+	<ItemGroup>
+		<COMReference Include="Shell32">
+			<Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+			<VersionMajor>1</VersionMajor>
+			<VersionMinor>0</VersionMinor>
+			<Lcid>0</Lcid>
+			<WrapperTool>tlbimp</WrapperTool>
+			<Isolated>False</Isolated>
+			<EmbedInteropTypes>True</EmbedInteropTypes>
+		</COMReference>
+	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
       <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Shell32;
+using Ninject;
 
 namespace Mtgdb.Data
 {
 	public class ImageRepository
 	{
-		public ImageRepository(ImageLocationsConfig config)
+		public ImageRepository(
+			ImageLocationsConfig config,
+			[Optional] IShell shell)
 		{
 			_config = config;
+			_shell = shell;
 		}
 
 		public void LoadFiles(IEnumerable<string> enabledGroups = null)
@@ -175,13 +178,12 @@ namespace Mtgdb.Data
 			IsLoadingArtComplete.Signal();
 		}
 
-		private static void load(
+		private void load(
 			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant,
 			IList<DirectoryConfig> directories,
 			IEnumerable<FsPath> files,
 			bool isArt = false)
 		{
-			Shell shl = null;
 			foreach (var entryByDirectory in files.GroupBy(_=>_.Parent()))
 			{
 				// use_dir_sorting_to_find_most_nested_root
@@ -189,13 +191,12 @@ namespace Mtgdb.Data
 				string customSetCode = root.Set;
 				int? customPriority = root.Priority;
 
-				bool readAttributes = root.ReadMetadataFromAttributes == true;
+				bool readAttributes = root.ReadMetadataFromAttributes == true && _shell != null;
 
-				Folder dir = null;
+				IShellFolder dir = null;
 				if (isArt && readAttributes)
 				{
-					shl ??= new Shell();
-					dir = shl.NameSpace(entryByDirectory.Key);
+					dir = _shell.GetFolder(entryByDirectory.Key);
 				}
 
 				foreach (FsPath file in entryByDirectory)
@@ -225,11 +226,11 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private static void getMetadataFromAttributes(Folder dir, string fileName, ref IList<string> authors, ref IList<string> keywords)
+		private static void getMetadataFromAttributes(IShellFolder dir, string fileName, ref IList<string> authors, ref IList<string> keywords)
 		{
-			var item = dir.ParseName(fileName);
-			string authorsValue = dir.GetDetailsOf(item, 20);
-			string keywordsValue = dir.GetDetailsOf(item, 18);
+			var shellFile = dir.GetFile(fileName);
+			string authorsValue = shellFile.GetAuthors();
+			string keywordsValue = shellFile.GetKeywords();
 
 			add(ref authors, authorsValue?.Split(';').Select(_ => _.Trim()).ToArray());
 			add(ref keywords, keywordsValue?.Split(';').Select(_ => _.Trim()).ToArray());
@@ -609,5 +610,6 @@ namespace Mtgdb.Data
 			RegexOptions.IgnoreCase);
 
 		private readonly ImageLocationsConfig _config;
+		private readonly IShell _shell;
 	}
 }

@@ -26,10 +26,10 @@ namespace Mtgdb.Util
 						{
 							Path = directory,
 							Art = true,
-							ReadMetadataFromAttributes = true,
 							Zoom = "False"
 						})
-				});
+				},
+				new ShellWrapper());
 
 			Console.WriteLine("Reading metadata from attributes...");
 
