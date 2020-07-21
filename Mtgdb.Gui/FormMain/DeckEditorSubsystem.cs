@@ -34,6 +34,7 @@ namespace Mtgdb.Gui
 			_formZoom = formZoom;
 			_parent = parent;
 			_ctsLifetime = new CancellationTokenSource();
+			_textSelectionCursor = Cursors.IBeam;
 		}
 
 		public void Scale()
@@ -43,9 +44,6 @@ namespace Mtgdb.Gui
 				var hotSpot = Size.Empty.ByDpi();
 				s._zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
 
-				var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-				var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-				s._textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
 			}).Setup(this);
 		}
 

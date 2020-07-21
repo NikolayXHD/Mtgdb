@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -397,15 +398,74 @@ namespace Mtgdb.Gui
 			if (!fullPath.IsFile())
 				return;
 
-			ShowSelectedInExplorer.FilesOrFolders(
-				fullPath.Parent(),
-				Array.From(fullPath.Basename()));
+			if (Runtime.IsLinux)
+			{
+				var explorerApp = detectFileExplorerApp();
+				if (!string.IsNullOrEmpty(explorerApp))
+					Process.Start(explorerApp, $"--select \"{fullPath}\"");
+				else
+					Process.Start("xdg-open", $"\"{fullPath.Parent()}\"");
+			}
+			else
+				Process.Start("explorer.exe", $"/select, \"{fullPath.Parent()}\"");
+		}
+
+		private static string detectFileExplorerApp()
+		{
+			if (_nativeExplorerApp != null)
+				return _nativeExplorerApp;
+
+			_nativeExplorerApp = detect();
+			return _nativeExplorerApp;
+
+			static string detect()
+			{
+				var queryProcess = Process.Start(
+					new ProcessStartInfo("xdg-mime", "query default inode/directory")
+					{
+						RedirectStandardOutput = true,
+						UseShellExecute = false,
+						CreateNoWindow = true
+					});
+
+				if (queryProcess == null)
+					return string.Empty;
+
+				queryProcess.WaitForExit();
+				string output = queryProcess.StandardOutput.ReadToEnd();
+				var appDesktopName = output.TrimEnd();
+				var appDesktopFile = new FsPath($"/usr/share/applications/{appDesktopName}");
+				if (!appDesktopFile.IsFile())
+					return string.Empty;
+
+				string[] lines;
+				try
+				{
+					lines = appDesktopFile.ReadAllLines();
+				}
+				catch
+				{
+					return string.Empty;
+				}
+
+				const string prefix = "Exec=";
+				string line = lines.FirstOrDefault(_ => _.StartsWith(prefix));
+				if (line == null)
+					return string.Empty;
+
+				string command = line.Substring(prefix.Length);
+				string name = new Regex(@"( %\w)+$").Replace(command, "");
+				return name;
+			}
 		}
 
 		private void openFileClick(object sender, EventArgs e)
 		{
 			FsPath fullPath = _models[_imageIndex].ImageFile.FullPath;
-			Process.Start(new ProcessStartInfo(fullPath.Value));
+			if (Runtime.IsLinux)
+				Process.Start("xdg-open", $"\"{fullPath}\"");
+			else
+				Process.Start(fullPath.Value);
 		}
 
 
@@ -453,6 +513,8 @@ namespace Mtgdb.Gui
 		private Point _location;
 		private bool _showArt;
 		private UiModel _ui;
+
+		private static string _nativeExplorerApp;
 
 		private CancellationTokenSource _ctsLoadingImages;
 		private readonly CancellationTokenSource _ctsLifetime;

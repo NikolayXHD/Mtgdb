@@ -1456,28 +1456,33 @@ namespace Mtgdb.Controls
 				case 0x020a: // WM_MOUSEWHEEL
 
 					// win10 scrolls unfocused window under mouse itself
-					if (_isWin10)
-						return false;
-
+					if (!_isWin10)
+						WndProc(ref m);
 					break;
 
 				case 0x0100: // WM_KEYDOWN
 					var keyCode = m.WParam.ToInt32();
-
 					// 0x21: pgUp 0x22: pgDn 0x23: end 0x24: home
-					if (keyCode < 0x21 || keyCode > 0x24)
-						return false;
-
+					switch (keyCode)
+					{
+						case 0x21:
+						case 0x22:
+						case 0x23:
+						case 0x24:
+							WndProc(ref m);
+							break;
+					}
 					break;
 			}
 
-			// send the event to this control
-			ControlHelpers.SendMessage(Handle, m.Msg, m.WParam, m.LParam);
 			return false;
 		}
 
 		private static bool isWin10()
 		{
+			if (Runtime.IsLinux)
+				return false;
+
 			try
 			{
 				var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");

@@ -8,24 +8,20 @@ using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
-	public class TooltipForm : ShadowedForm
+	public class TooltipForm : Form
 	{
-		public TooltipForm()
-			:this(EnableShadow.Yes)
-		{
-		}
-
 		[UsedImplicitly] // by ninject
-		public TooltipForm(EnableShadow enableShadow)
-			:base(enableShadow)
+		public TooltipForm()
 		{
 			FormBorderStyle = FormBorderStyle.None;
-
 			ControlBox = false;
 			ShowInTaskbar = false;
 			StartPosition = FormStartPosition.Manual;
-			Location = new Point(-10000, -10000);
-			TopMost = true;
+			if (!Runtime.IsMono)
+			{
+				TopMost = true;
+				Location = _hiddenLocation;
+			}
 
 			KeyPreview = false;
 
@@ -36,6 +32,8 @@ namespace Mtgdb.Controls
 
 			Controls.Add(_panel);
 
+			var font = new Font(FontFamily.GenericSansSerif, 9.75f, FontStyle.Regular, GraphicsUnit.Point);
+			_titleFont = new Font(font, FontStyle.Bold);
 			_tooltipTextbox = new FixedRichTextBox
 			{
 				Dock = DockStyle.Fill,
@@ -45,7 +43,7 @@ namespace Mtgdb.Controls
 				WordWrap = true,
 				BorderStyle = BorderStyle.None,
 				HideSelection = true,
-				Font = new Font(new FontFamily("Tahoma"), 9.75f, FontStyle.Regular, GraphicsUnit.Point),
+				Font = font,
 				AutoWordSelection = false
 			};
 
@@ -89,12 +87,30 @@ namespace Mtgdb.Controls
 
 			_buttonClose.Click += closeClick;
 
-			Resize += resize;
 			ColorSchemeController.SystemColorsChanging += systemColorsChanging;
 
 			BackColor = SystemColors.Window;
 
 			setupIcons();
+		}
+
+		protected override bool ShowWithoutActivation => true;
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				CreateParams baseParams = base.CreateParams;
+
+				if (Runtime.IsMono)
+				{
+					const int WS_EX_NOACTIVATE = 0x08000000;
+					const int WS_EX_TOOLWINDOW = 0x00000080;
+					baseParams.ExStyle |= WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW;
+				}
+
+				return baseParams;
+			}
 		}
 
 		private void setupIcons()
@@ -146,25 +162,18 @@ namespace Mtgdb.Controls
 			}
 		}
 
-		private void resize(object sender, EventArgs e)
-		{
-			if (WindowState != FormWindowState.Normal)
-				WindowState = FormWindowState.Normal;
-		}
-
 		public void ShowTooltip(TooltipModel tooltip)
 		{
 			_tooltip = tooltip;
 			Clickable = tooltip.Clickable;
 			_buttonClose.Visible = Clickable;
 
-			using var titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold);
 			_tooltipTextbox.ResetText();
 			if (!string.IsNullOrEmpty(tooltip.Title))
 			{
 				_tooltipTextbox.AppendText(tooltip.Title);
 				_tooltipTextbox.Select(0, tooltip.Title.Length);
-				_tooltipTextbox.SelectionFont = titleFont;
+				_tooltipTextbox.SelectionFont = _titleFont;
 			}
 
 
@@ -193,7 +202,7 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionStart = 0;
 			_tooltipTextbox.SelectionLength = 0;
 
-			var size = measureTooltip(tooltip, titleFont);
+			var size = measureTooltip(tooltip, _titleFont);
 			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
 
 			Rectangle bounds;
@@ -214,8 +223,11 @@ namespace Mtgdb.Controls
 				_tooltipTextbox.Cursor = Cursors.Arrow;
 
 			Size = bounds.Size;
-			Application.DoEvents();
+			if (!Runtime.IsMono)
+				Application.DoEvents();
 			Location = bounds.Location;
+			if (Runtime.IsMono)
+				Show();
 		}
 
 		private Rectangle allocateTooltip(Size size, Rectangle target, Point? cursor, int margin,
@@ -366,7 +378,11 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionStart = 0;
 			_tooltipTextbox.SelectionLength = 0;
 
-			Location = new Point(-10000, -10000);
+			if (Runtime.IsMono)
+				Hide();
+			else
+				Location = _hiddenLocation;
+
 			UserInteracted = false;
 			Clickable = false;
 		}
@@ -472,5 +488,7 @@ namespace Mtgdb.Controls
 		private bool _closeEnabled;
 		private Bitmap _closeIcon;
 		private Bitmap _selectableTextIcon;
+		private readonly Font _titleFont;
+		private static readonly Point _hiddenLocation = new Point(-10000, -10000);
 	}
 }

@@ -14,7 +14,8 @@ namespace Mtgdb.Controls
 		public TooltipController(TooltipForm form)
 		{
 			_tooltipForm = form;
-			_tooltipForm.Show();
+			if (!Runtime.IsMono)
+				_tooltipForm.Show();
 		}
 
 		public void SetTooltip(object owner, string title, string tooltip, params Control[] controls) =>

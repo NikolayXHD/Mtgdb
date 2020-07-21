@@ -31,14 +31,12 @@ namespace Mtgdb.Gui
 			Kernel.Bind<TooltipForm>()
 				.ToSelf()
 				.InSingletonScope()
-				.Named(DefaultTooltipScope)
-				.WithConstructorArgument(EnableShadow.Yes);
+				.Named(DefaultTooltipScope);
 
 			Kernel.Bind<TooltipForm>()
 				.ToSelf()
 				.InSingletonScope()
-				.Named(QuickFilterTooltipScope)
-				.WithConstructorArgument(EnableShadow.No);
+				.Named(QuickFilterTooltipScope);
 
 			Kernel.Bind<TooltipForm>()
 				.ToMethod(ctx => ctx.Kernel.Get<TooltipForm>(DefaultTooltipScope))

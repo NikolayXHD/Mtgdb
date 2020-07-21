@@ -25,6 +25,7 @@ namespace Mtgdb.Controls
 		{
 			InitializeComponent();
 			_viewDeck.LayoutControlType = typeof(DeckListLayout);
+			_textSelectionCursor = Cursors.IBeam;
 		}
 
 		public void Init(

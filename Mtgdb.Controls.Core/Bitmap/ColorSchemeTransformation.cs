@@ -13,6 +13,9 @@ namespace Mtgdb.Controls
 		{
 		}
 
+		public bool IgnoreSaturation { get; set; }
+		public bool AsBackground { get; set; }
+
 		/// <summary> for test </summary>
 		internal ColorSchemeTransformation(HsvColor text, HsvColor bg, Bitmap bmp = null)
 			: base(bmp)
@@ -23,10 +26,12 @@ namespace Mtgdb.Controls
 
 		protected override void ExecuteRaw()
 		{
-			float meanSaturation = 0;
-			long alphaSum = 0;
+			if (!IgnoreSaturation)
+			{
+				float meanSaturation = 0;
+				long alphaSum = 0;
 
-			for (int i = Rect.Left; i < Rect.Right; i++)
+				for (int i = Rect.Left; i < Rect.Right; i++)
 				for (int j = Rect.Top; j < Rect.Bottom; j++)
 				{
 					int location = GetLocation(i, j);
@@ -35,15 +40,16 @@ namespace Mtgdb.Controls
 					alphaSum += alpha;
 				}
 
-			meanSaturation /= alphaSum;
+				meanSaturation /= alphaSum;
 
-			if (meanSaturation > MaxIconSaturationToInvert)
-				return;
+				if (meanSaturation > MaxIconSaturationToInvert)
+					return;
+			}
 
 			ImageChanged = true;
 			for (int i = Rect.Left; i < Rect.Right; i++)
-				for (int j = Rect.Top; j < Rect.Bottom; j++)
-					Transform(BgraValues, GetLocation(i, j));
+			for (int j = Rect.Top; j < Rect.Bottom; j++)
+				Transform(BgraValues, GetLocation(i, j));
 		}
 
 		public Color TransformColor(Color c)
@@ -52,8 +58,11 @@ namespace Mtgdb.Controls
 				return c;
 
 			var hsv = c.ToHsv();
-			if (hsv.S > MaxIconSaturationToInvert)
-				return c;
+			if (!IgnoreSaturation)
+			{
+				if (hsv.S > MaxIconSaturationToInvert)
+					return c;
+			}
 
 			return Color.FromArgb(c.A, Transform(hsv).ToRgb());
 		}

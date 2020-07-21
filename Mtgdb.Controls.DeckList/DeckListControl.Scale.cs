@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using System.Windows.Forms;
-using Mtgdb.Controls.Properties;
 
 namespace Mtgdb.Controls
 {
@@ -8,9 +6,6 @@ namespace Mtgdb.Controls
 	{
 		public void Scale()
 		{
-			new DpiScaler<DeckListControl>(c => c._textSelectionCursor = createTextSelectionCursor())
-				.Setup(this);
-
 			_labelSortStatus.ScaleDpiAuto();
 			_searchBar.ScaleDpi();
 			_menuFilterByDeckMode.ScaleDpi();
@@ -19,14 +14,6 @@ namespace Mtgdb.Controls
 
 			_labelFilterByDeckMode.ScaleDpiFont();
 			_textboxRename.ScaleDpiFont();
-
-			Cursor createTextSelectionCursor()
-			{
-				var iBeamIcon = Resources.text_selection_24.ResizeDpi();
-				var iBeamHotSpot = new Size(iBeamIcon.Width / 2, iBeamIcon.Height / 2);
-				var textSelectionCursor = CursorHelper.CreateCursor(iBeamIcon, iBeamHotSpot);
-				return textSelectionCursor;
-			}
 		}
 
 		private static void scaleLayoutView(LayoutViewControl view)

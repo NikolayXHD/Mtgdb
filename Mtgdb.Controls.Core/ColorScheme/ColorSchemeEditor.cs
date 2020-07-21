@@ -299,8 +299,14 @@ namespace Mtgdb.Controls
 				save(values, file, quiet: true);
 		}
 
-		public void LoadCurrentColorScheme() =>
-			load(currentColorsFile(), quiet: true);
+		public void LoadCurrentColorScheme()
+		{
+			var currentFile = currentColorsFile();
+			if (currentFile.IsFile())
+				load(currentFile, quiet: true);
+			else if (Runtime.IsMono)
+					LoadSavedScheme("win7");
+		}
 
 		private static bool save(IReadOnlyDictionary<int, int> values, FsPath file, bool quiet = false)
 		{

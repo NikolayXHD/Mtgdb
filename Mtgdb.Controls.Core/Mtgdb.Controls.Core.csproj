@@ -165,7 +165,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Button\MenuItemEventArgs.cs" />
-    <Compile Include="ShowSelectedInExplorer.cs" />
     <Compile Include="TabForm\Direction.cs" />
     <Compile Include="TabForm\CustomBorderForm.cs">
       <SubType>Form</SubType>

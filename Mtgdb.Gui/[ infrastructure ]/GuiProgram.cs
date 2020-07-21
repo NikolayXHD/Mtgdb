@@ -13,7 +13,6 @@ namespace Mtgdb.Gui
 	internal static class GuiProgram
 	{
 		[STAThread]
-		[LoaderOptimization(LoaderOptimization.MultiDomainHost)]
 		public static void Main(string[] args)
 		{
 			ShadowCopy.RunMain(main, args);
