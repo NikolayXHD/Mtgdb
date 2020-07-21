@@ -1,11 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Mtgdb.Controls
 {
 	public class ColorSchemeTransformation : BmpProcessor
 	{
-		private readonly HsvColor _textColor = SystemColors.WindowText.ToHsv();
-		private readonly HsvColor _bgColor = SystemColors.Window.ToHsv();
+		private readonly HsvColor _textColor = SystemColors.WindowText.ToPerceptedHsv();
+		private readonly HsvColor _bgColor = SystemColors.Window.ToPerceptedHsv();
 
 		private const float MaxIconSaturationToInvert = 0.05f;
 
@@ -64,7 +65,13 @@ namespace Mtgdb.Controls
 					return c;
 			}
 
-			return Color.FromArgb(c.A, Transform(hsv).ToRgb());
+			return Color.FromArgb(c.A,
+				c
+					.ToPerceptedHsv()
+					.Transform(v: tV)
+					.ToActualHsv(c)
+					.ToRgb()
+			);
 		}
 
 		public void Transform(byte[] bgraValues, int location) =>
@@ -73,21 +80,17 @@ namespace Mtgdb.Controls
 
 		/// <summary> for test </summary>
 		internal HsvColor Transform(HsvColor hsv) =>
-			hsv.Transform(tH, tS, tV);
+			hsv.Transform(v: tV);
 
-		private float tH(HsvColor c)
+		private float tV(HsvColor c)
 		{
-			float left = _textColor.H;
-			float right = _bgColor.H;
-			right = (right - left + 180).Modulo(360) - 180 + left;
+			float delta = _bgColor.V - _textColor.V;
+			if (Math.Abs(delta) < 0.01)
+				return c.V;
 
-			return left + (right - left) * c.V;
+			if (AsBackground)
+				return _bgColor.V - delta * (1 - c.V);
+			return _textColor.V + delta * c.V;
 		}
-
-		private float tS(HsvColor c) =>
-			_textColor.S + (_bgColor.S - _textColor.S) * c.V;
-
-		private float tV(HsvColor c) =>
-			_textColor.V + (_bgColor.V - _textColor.V) * c.V;
 	}
 }

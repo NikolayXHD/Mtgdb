@@ -11,7 +11,6 @@ namespace Mtgdb
 			return Color.FromArgb(rgb.R, rgb.G, rgb.B);
 		}
 
-
 		public static void ToBgra(this HsvColor c, byte[] rgbArr, int i)
 		{
 			var rgb = c.toRgb();
@@ -20,94 +19,49 @@ namespace Mtgdb
 			rgbArr[i + BmpProcessor.R] = rgb.R;
 		}
 
-		private static (byte R, byte G, byte B) toRgb(this HsvColor c)
+		private static Rgb toRgb(this HsvColor c)
 		{
-			float h = c.H;
-			float s = c.S;
-			float v = c.V;
+			float r;
+			float g;
+			float b;
 
-			float r, g, b;
-			if (v <= 0)
-				r = g = b = 0;
-			else if (s <= 0)
-				r = g = b = v;
+			if (c.S.Equals(0))
+				r = g = b = c.V; // achromatic
 			else
 			{
-				float hf = h / 60f;
-				int i = (int) Math.Floor(hf);
-				float f = hf - i;
-				float pv = v * (1 - s);
-				float qv = v * (1 - s * f);
-				float tv = v * (1 - s * (1 - f));
-				switch (i)
-				{
-					// Red is the dominant color
-
-					case 0:
-						r = v;
-						g = tv;
-						b = pv;
-						break;
-
-					// Green is the dominant color
-
-					case 1:
-						r = qv;
-						g = v;
-						b = pv;
-						break;
-					case 2:
-						r = pv;
-						g = v;
-						b = tv;
-						break;
-
-					// Blue is the dominant color
-
-					case 3:
-						r = pv;
-						g = qv;
-						b = v;
-						break;
-					case 4:
-						r = tv;
-						g = pv;
-						b = v;
-						break;
-
-					// Red is the dominant color
-
-					case 5:
-						r = v;
-						g = pv;
-						b = qv;
-						break;
-
-					// Just in case we overshoot on our math by a little, we put these here. Since its a switch it won't slow us down at all to put these here.
-
-					case 6:
-						r = v;
-						g = tv;
-						b = pv;
-						break;
-					case -1:
-						r = v;
-						g = pv;
-						b = qv;
-						break;
-
-					// The color is not defined, we should throw an error.
-
-					default:
-						// ("i Value error in Pixel conversion, Value is %d", i);
-						r = g = b = v; // Just pretend its black/white
-						break;
-				}
+				var q = c.V < 0.5
+					? c.V * (1 + c.S)
+					: c.V + c.S - c.V * c.S;
+				var p = 2 * c.V - q;
+				r = hue2Rgb(p, q, c.H + 1 / 3f);
+				g = hue2Rgb(p, q, c.H);
+				b = hue2Rgb(p, q, c.H - 1 / 3f);
 			}
 
-			byte toByte(float val) => (byte) Math.Round(val.WithinRange(0, 1) * 255f);
+			return new Rgb(toByte(r), toByte(g), toByte(b));
 
-			return (toByte(r), toByte(g), toByte(b));
+			static float hue2Rgb(float p, float q, float t)
+			{
+				if (t < 0)
+					t++;
+
+				if (t > 1)
+					t--;
+
+				if (t < 1 / 6f)
+					return p + (q - p) * 6 * t;
+
+				if (t < 1 / 2f)
+					return q;
+
+				if (t < 2 / 3f)
+					return p + (q - p) * (2 / 3f - t) * 6;
+
+				return p;
+			}
+
+			byte toByte(float x) =>
+				(byte) Math.Floor(x * 256).AtMost(255f);
 		}
 
 		public static float RotationTo(this Color c, Color t) =>
@@ -125,27 +79,33 @@ namespace Mtgdb
 			float g = gB / 255f;
 			float b = bB / 255f;
 
-			float v = r.AtLeast(g).AtLeast(b);
-			float min = r.AtMost(g).AtMost(b);
+			float max = Math.Max(r, Math.Max(g, b));
+			float min = Math.Min(r, Math.Min(g, b));
 
-			float h, s;
-			float d = v - min;
+			float h;
+			float s;
+			float l = (max + min) / 2;
 
-			if (v == min)
-				h = 0;
-			else if (v == r)
-				h = (g - b) / d % 6 * 60;
-			else if (v == g)
-				h = ((b - r) / d + 2) * 60;
-			else // v == b
-				h = ((r - g) / d + 4) * 60;
-
-			if (v == 0)
-				s = 0;
+			if (max.Equals(min))
+				h = s = 0; // achromatic
 			else
-				s = d / v;
+			{
+				float d = max - min;
+				s = l > 0.5
+					? d / (2 - max - min)
+					: d / (max + min);
 
-			return new HsvColor(h, s, v);
+				if (max.Equals(r))
+					h = (g - b) / d + (g < b ? 6 : 0);
+				else if (max.Equals(g))
+					h = (b - r) / d + 2;
+				else // if (max.Equals(b))
+					h = (r - g) / d + 4;
+
+				h /= 6;
+			}
+
+			return new HsvColor(h, s, l);
 		}
 
 		public static Color TransformHsv(this Color c, Func<float, float> h = null, Func<float, float> s = null, Func<float, float> v = null) =>
@@ -170,6 +130,77 @@ namespace Mtgdb
 
 				return (b1 * share1 + b2 * share2) / (share1 + share2);
 			}
+		}
+
+		public static HsvColor ToPerceptedHsv(this Color rgb)
+		{
+			HsvColor hsv = rgb.ToHsv();
+			return hsv.Transform(v: v => perceptedV(rgb, v), s: s => perceptedS(hsv, s));
+		}
+
+		public static HsvColor ToActualHsv(this HsvColor hsl, Color rgb) =>
+			hsl.Transform(v: v => actualV(rgb, v), s: s=> actualS(hsl, s));
+
+		private static float perceptedV(Color rgb, float v) =>
+			gammaTransform(v, gamma(rgb));
+
+		private static float actualV(Color rgb, float percepted) =>
+			gammaTransform(percepted, 1f / gamma(rgb));
+
+		private static float perceptedS(HsvColor hsv, float s)
+		{
+			// black v - 0 white v = 1
+			// for this value we cannot perceive color => visible saturation = 0
+			// at v = 0.5 we get pure R, G, B colors => visible saturation = s
+			float q = 1f - 2f * Math.Abs(0.5f - hsv.V);
+			return s * q;
+		}
+
+		private static float actualS(HsvColor hsv, float s)
+		{
+			// black v - 0 white v = 1
+			// for this value we cannot perceive color => visible saturation = 0
+			// at v = 0.5 we get pure R, G, B colors => visible saturation = s
+			float q = 1f - 2f * Math.Abs(0.5f - hsv.V);
+			if (q == 0f)
+				return 0;
+
+			return s / q;
+		}
+
+		private static float gammaTransform(float v, float gamma)
+		{
+			float l0 = gamma / (gamma + 1);
+			if (v < l0)
+				return v / gamma;
+
+			return 1 + gamma * (v - 1);
+		}
+
+		private static float gamma(Color c)
+		{
+			if (c.R == c.G && c.G == c.B)
+				return 1;
+
+			const float r = 0.8f;
+			const float g = 1.75f;
+			const float b = 0.45f;
+
+			return (c.R + c.G + c.B) / ((c.R * r) + (c.G * g) + (c.B * b));
+		}
+	}
+
+	internal readonly struct Rgb
+	{
+		public readonly byte R;
+		public readonly byte G;
+		public readonly byte B;
+
+		public Rgb(byte r, byte g, byte b)
+		{
+			R = r;
+			G = g;
+			B = b;
 		}
 	}
 }
