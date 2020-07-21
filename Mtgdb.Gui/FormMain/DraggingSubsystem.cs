@@ -383,7 +383,7 @@ namespace Mtgdb.Gui
 			if (IsDragging)
 				return;
 
-			bool underMouse = _parent.IsChildUnderMouse();
+			bool underMouse = _parent.IsUnderMouse();
 
 			if (!underMouse)
 				return;

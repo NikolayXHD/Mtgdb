@@ -15,20 +15,8 @@ namespace Mtgdb.Controls
 		public const AnchorStyles AnchorAll =
 			AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
-		[DllImport("user32.dll")]
-		public static extern IntPtr WindowFromPoint(Point pt);
-
-		[DllImport("user32.dll")]
-		public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
-
-		public static Form ParentForm(this Control c)
-		{
-			var current = c;
-			while (current.Parent != null)
-				current = current.Parent;
-
-			return current as Form;
-		}
+		public static Form ParentForm(this Control c) =>
+			c.TopLevelControl as Form;
 
 		public static bool Invoke(this Control value, Action method)
 		{
@@ -198,27 +186,30 @@ namespace Mtgdb.Controls
 				color == Color.Empty || color == Color.Transparent || color.A < 255;
 		}
 
-		public static bool IsUnderMouse(this Control c) =>
-			c.Handle.Equals(WindowFromPoint(Cursor.Position));
-
-		public static bool IsChildUnderMouse(this Control c)
+		public static bool IsUnderMouse(this Control c)
 		{
-			var position = Cursor.Position;
-			var handle = WindowFromPoint(position);
+			var parentForm = c.ParentForm();
+			if (parentForm == null || parentForm != Form.ActiveForm)
+				return false;
 
-			while (true)
+			Control current = parentForm;
+			var cursorScreen = Cursor.Position;
+
+			while (current != null)
 			{
-				var clientPosition = c.PointToClient(position);
-				var child = c.GetChildAtPoint(clientPosition);
+				var cursorClient = current.PointToClient(cursorScreen);
+				var child = current.GetChildAtPoint(cursorClient);
 
-				if (child == null || child == c)
-				{
-					bool result = c.Handle.Equals(handle);
-					return result;
-				}
+				if (child == c)
+					return true;
 
-				c = child;
+				if (child == current)
+					break;
+
+				current = child;
 			}
+
+			return false;
 		}
 
 		public static bool TryCopyToClipboard(this string selectedText)
@@ -237,23 +228,6 @@ namespace Mtgdb.Controls
 
 			return false;
 		}
-
-		/// <summary>
-		/// Convert <see cref="Message.LParam"/> to <see cref="Point"/>
-		/// </summary>
-		public static Point ToPoint(this IntPtr lParam) =>
-			new Point(unchecked((int)lParam.ToInt64()));
-
-		public static IntPtr ToIntPtr(this Point point)
-		{
-			unchecked
-			{
-				return ToIntPtr((short) point.X, (short) point.Y);
-			}
-		}
-
-		public static IntPtr ToIntPtr(short lowWord, short highWord) =>
-			new IntPtr(((highWord & 0x0000ffff) << 16) | (lowWord & 0x0000ffff));
 
 		public static short HighWord(this IntPtr number) =>
 			HighWord(number.ToInt64());
