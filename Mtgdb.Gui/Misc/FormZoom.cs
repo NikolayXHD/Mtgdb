@@ -412,7 +412,7 @@ namespace Mtgdb.Gui
 					Process.Start("xdg-open", $"\"{fullPath.Parent()}\"");
 			}
 			else
-				Process.Start("explorer.exe", $"/select, \"{fullPath.Parent()}\"");
+				Process.Start("explorer.exe", $"/select, \"{fullPath}\"");
 		}
 
 		private static string detectFileExplorerApp()
