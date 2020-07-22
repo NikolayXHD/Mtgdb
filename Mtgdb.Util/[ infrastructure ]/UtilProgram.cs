@@ -1,5 +1,6 @@
 ﻿using System;
 using Mtgdb.Data;
+using Mtgdb.Dev;
 using Ninject;
 
 namespace Mtgdb.Util
@@ -41,7 +42,7 @@ namespace Mtgdb.Util
 			string directory = args.GetParam("-rename_artworks");
 			if (directory != null)
 			{
-				ArtworkRenamer.RenameArtworks(new FsPath(directory));
+				ArtworkRenamer.RenameArtworks(new FsPath(directory), new ShellWrapper());
 				return;
 			}
 

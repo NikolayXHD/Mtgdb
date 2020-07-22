@@ -163,10 +163,6 @@
       <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
       <Name>Mtgdb.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mtgdb.Util\Mtgdb.Util.csproj">
-      <Project>{56661dad-10a7-41ef-8672-f417f15923cb}</Project>
-      <Name>Mtgdb.Util</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mtgdb.Dev\Mtgdb.Dev.csproj">
       <Project>{991e5b1f-8e0c-48fe-a470-9c747b0bcfbc}</Project>
       <Name>Mtgdb.Dev</Name>

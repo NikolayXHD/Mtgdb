@@ -5,14 +5,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Data;
 
-namespace Mtgdb.Util
+namespace Mtgdb.Dev
 {
-	internal static class ArtworkRenamer
+	public static class ArtworkRenamer
 	{
 		private static readonly Regex _propertyRegex = new Regex(@"\.?\[(?<prop>[^\]]+)\]\.?");
 		private static readonly char[] _valueSeparator = { ',', ';' };
 
-		public static void RenameArtworks(FsPath directory)
+		public static void RenameArtworks(FsPath directory, IShell shell)
 		{
 			Console.WriteLine("Artwork images at {0} will be renamed.", directory);
 			Console.WriteLine("Press ENTER to continue");
@@ -29,7 +29,7 @@ namespace Mtgdb.Util
 							Zoom = "False"
 						})
 				},
-				new ShellWrapper());
+				shell);
 
 			Console.WriteLine("Reading metadata from attributes...");
 
@@ -77,7 +77,7 @@ namespace Mtgdb.Util
 			Console.ReadLine();
 		}
 
-		internal static string Rename(string original, List<string> artistsList = null, List<string> setsList = null)
+		public static string Rename(string original, List<string> artistsList = null, List<string> setsList = null)
 		{
 			artistsList ??= new List<string>();
 			setsList ??= new List<string>();

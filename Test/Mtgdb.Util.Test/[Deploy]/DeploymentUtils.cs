@@ -317,7 +317,6 @@ namespace Mtgdb.Util
 			var kernel = new StandardKernel();
 			kernel.Load<CoreModule>();
 			kernel.Load<DalModule>();
-			kernel.Load<UtilModule>();
 
 			var repo = kernel.Get<CardRepository>();
 			repo.LoadFile();

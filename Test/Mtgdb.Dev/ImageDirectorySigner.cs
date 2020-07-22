@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mtgdb.Util
+namespace Mtgdb.Dev
 {
 	public class ImageDirectorySigner
 	{

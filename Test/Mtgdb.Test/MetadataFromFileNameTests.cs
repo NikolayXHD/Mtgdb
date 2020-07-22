@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using Mtgdb.Data;
-using Mtgdb.Util;
+using Mtgdb.Dev;
 using NUnit.Framework;
 
 namespace Mtgdb.Test

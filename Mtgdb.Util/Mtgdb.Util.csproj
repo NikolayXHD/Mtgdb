@@ -70,8 +70,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArtworkRenamer.cs" />
-    <Compile Include="ImageDirectorySigner.cs" />
     <Compile Include="NewVersionNotifier.cs" />
     <Compile Include="ShellWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

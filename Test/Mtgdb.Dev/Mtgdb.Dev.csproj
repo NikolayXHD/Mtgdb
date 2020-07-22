@@ -44,10 +44,24 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ArtworkRenamer.cs" />
         <Compile Include="DevPaths.cs" />
+        <Compile Include="ImageDirectorySigner.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\Mtgdb.App.Localization\Mtgdb.App.Localization.csproj">
+        <Project>{10abce2d-9376-4f1e-b316-a8cc9805fad1}</Project>
+        <Name>Mtgdb.App.Localization</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\Mtgdb.App\Mtgdb.App.csproj">
+        <Project>{4fe226ac-ec61-451f-a602-c79da136ce25}</Project>
+        <Name>Mtgdb.App</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\Mtgdb.Data\Mtgdb.Data.csproj">
+        <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
+        <Name>Mtgdb.Data</Name>
+      </ProjectReference>
       <ProjectReference Include="..\..\Mtgdb.Utils\Mtgdb.Utils.csproj">
         <Project>{1b2fea9b-3d4b-430f-a7d2-8cfe47820238}</Project>
         <Name>Mtgdb.Utils</Name>
