@@ -5,20 +5,32 @@ namespace Mtgdb.Util
 {
 	public static class Shortcut
 	{
-		public static bool CreateApplicationShortcut(FsPath shortcutPath, FsPath exePath, FsPath iconPath)
+		public static void CreateApplicationShortcut(FsPath exePath, FsPath iconPath, FsPath shortcutPath)
 		{
 			if (shortcutPath.IsFile())
 				shortcutPath.DeleteFile();
 
 			var wsh = new WshShell();
-			var shortcut = wsh.CreateShortcut(shortcutPath.Value) as IWshShortcut;
+			IWshShortcut shortcut;
+			try
+			{
+				shortcut = wsh.CreateShortcut(shortcutPath.Value) as IWshShortcut;
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine(
+					"Failed to create shortcut object {0} at {1}: {2}",
+					exePath, shortcutPath, ex);
+				return;
+			}
+
 			FsPath bin = exePath.Parent();
 
 			if (shortcut == null)
 			{
-				Console.WriteLine("Failed to create shortcut at {0}: {1}.{2} returned null",
-					shortcutPath, nameof(WshShell), nameof(wsh.CreateShortcut));
-				return false;
+				Console.Error.WriteLine("Failed to create shortcut {0} at {1}: {2}.{3} returned null",
+					exePath, shortcutPath, nameof(WshShell), nameof(wsh.CreateShortcut));
+				return;
 			}
 
 			shortcut.Arguments = "";
@@ -37,11 +49,8 @@ namespace Mtgdb.Util
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("Failed to create shortcut {0}: {1}", shortcutPath, ex);
-				return false;
+				Console.Error.WriteLine("Failed to create shortcut {0} at {1}: {2}", exePath, shortcutPath, ex);
 			}
-
-			return true;
 		}
 	}
 }

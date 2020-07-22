@@ -29,13 +29,14 @@ namespace Mtgdb.Util
 
 			if (args.GetFlag("-create_shortcut"))
 			{
-				string target = args.GetParam("-target_path");
-				string source = args.GetParam("-source_path");
-				string icon = args.GetParam("-icon_path");
+				string exePath = args.GetParam("-exe_path");
+				string iconPath = args.GetParam("-ico_path");
+				string shortcutPath = args.GetParam("-src_path");
+
 				Shortcut.CreateApplicationShortcut(
-					shortcutPath: new FsPath(source),
-					exePath: new FsPath(target),
-					iconPath: new FsPath(icon));
+					exePath: new FsPath(exePath),
+					iconPath: new FsPath(iconPath),
+					shortcutPath: new FsPath(shortcutPath));
 				return;
 			}
 
@@ -70,9 +71,9 @@ namespace Mtgdb.Util
 
 			Console.WriteLine(
 				"Mtgdb.Util.exe -create_shortcut " +
-				"-target_path path\\to\\app.exe " +
-				"-source_path path\\to\\app.lnk " +
-				"-icon_path path\\to\\icon.ico");
+				"-exe_path path\\to\\app.exe " +
+				"-ico_path path\\to\\icon.ico" +
+				"-src_path path\\to\\app.lnk ");
 
 			Console.WriteLine("Press ENTER to exit");
 			Console.ReadLine();

@@ -5,13 +5,15 @@ namespace Mtgdb.Downloader
 {
 	internal class UtilExe
 	{
-		public bool CreateShortcut(FsPath exePath, FsPath shortcutPath, FsPath iconPath) =>
-			run($"-create_shortcut -source_path \"{shortcutPath}\" -target_path \"{exePath}\" -icon_path \"{iconPath}\"");
+		public bool CreateShortcut(FsPath exePath, FsPath iconPath, FsPath shortcutPath) =>
+			run($"-create_shortcut -exe_path \"{exePath}\" -ico_path \"{iconPath}\" -src_path \"{shortcutPath}\"");
 
 		private bool run(string args)
 		{
 			if (_process != null)
 				throw new InvalidOperationException($"{_executable} is already running. Use another instance.");
+
+			_errorReceived = false;
 
 			_process = new Process
 			{
@@ -35,13 +37,10 @@ namespace Mtgdb.Downloader
 			_process.BeginErrorReadLine();
 			_process.WaitForExit();
 
-			int exitCode = _process.ExitCode;
-
 			abort();
-
 			Console.WriteLine();
 
-			return exitCode == 0;
+			return !_errorReceived;
 		}
 
 		private void processExit(object sender, EventArgs e)
@@ -65,12 +64,13 @@ namespace Mtgdb.Downloader
 			_process = null;
 		}
 
-		private static void errorReceived(object sender, DataReceivedEventArgs e)
+		private void errorReceived(object sender, DataReceivedEventArgs e)
 		{
 			if (string.IsNullOrEmpty(e.Data))
 				return;
 
 			Console.WriteLine(e.Data);
+			_errorReceived = true;
 		}
 
 		private void outputReceived(object sender, DataReceivedEventArgs e)
@@ -82,7 +82,7 @@ namespace Mtgdb.Downloader
 		}
 
 		private static readonly FsPath _executable = new FsPath("Mtgdb.Util.exe");
-
+		private bool _errorReceived;
 		private Process _process;
 	}
 }

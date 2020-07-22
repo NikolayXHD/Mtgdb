@@ -297,7 +297,8 @@ namespace Mtgdb.Downloader
 				return true;
 			}
 
-			return new UtilExe().CreateShortcut(shortcutPath, exePath, iconPath);
+			return new UtilExe().CreateShortcut(
+				exePath: exePath, iconPath: iconPath, shortcutPath: shortcutPath);
 		}
 
 		public event Action MtgjsonFileUpdated;
