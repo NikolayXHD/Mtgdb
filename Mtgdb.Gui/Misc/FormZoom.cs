@@ -58,8 +58,13 @@ namespace Mtgdb.Gui
 		{
 			new DpiScaler<FormZoom>(form =>
 			{
-				var hotSpot = new Size(14, 8).ByDpi();
-				var cursorImage = Resources.rightclick_48.HalfResizeDpi();
+				var hotSpot = new Point(14, 8).ByDpi();
+				var cursorImage = Runtime.IsMono
+					? Dpi.ScalePercent > 100
+						? Resources.rightclick_48_bw.HalfResizeDpi()
+						: Resources.rightclick_24_bw.ResizeDpi()
+					: Resources.rightclick_48.HalfResizeDpi();
+
 				form.Cursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
 
 				bool useLargeIcon = Dpi.ScalePercent > 100;

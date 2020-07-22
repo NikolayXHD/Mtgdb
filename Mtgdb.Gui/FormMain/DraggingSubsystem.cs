@@ -254,7 +254,7 @@ namespace Mtgdb.Gui
 			}
 
 			cursorImage = cursorImage.SetOpacity(0.65f);
-			var hotSpot = new Size(cursorImage.Width / 2, cardIconSize.Height);
+			var hotSpot = new Point(cursorImage.Width / 2, cardIconSize.Height);
 			_dragCursor = CursorHelper.CreateCursor(cursorImage, hotSpot);
 		}
 

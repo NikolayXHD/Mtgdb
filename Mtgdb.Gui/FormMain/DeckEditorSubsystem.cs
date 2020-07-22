@@ -41,9 +41,13 @@ namespace Mtgdb.Gui
 		{
 			new DpiScaler<DeckEditorSubsystem>(s =>
 			{
-				var hotSpot = Size.Empty.ByDpi();
-				s._zoomCursor = CursorHelper.CreateCursor(Resources.zoom_48.HalfResizeDpi(), hotSpot);
-
+				var hotSpot = Point.Empty.ByDpi();
+				var image = Runtime.IsMono
+					? Dpi.ScalePercent > 100
+						? Resources.zoom_48_bw.HalfResizeDpi()
+						: Resources.zoom_24_bw.ResizeDpi()
+					: Resources.zoom_48.HalfResizeDpi();
+				s._zoomCursor = CursorHelper.CreateCursor(image, hotSpot);
 			}).Setup(this);
 		}
 

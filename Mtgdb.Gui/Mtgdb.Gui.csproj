@@ -554,6 +554,8 @@
     <Content Include="Resources\Retrace.png" />
     <Content Include="Resources\rg.png" />
     <Content Include="Resources\rightclick_48.png" />
+    <Content Include="Resources\rightclick_24_bw.png" />
+    <Content Include="Resources\rightclick_48_bw.png" />
     <Content Include="Resources\rp.png" />
     <Content Include="Resources\ru.png" />
     <Content Include="Resources\rw.png" />
@@ -618,6 +620,8 @@
     <Content Include="Resources\yandex_money_32.png" />
     <Content Include="Resources\z.png" />
     <Content Include="Resources\zoom_48.png" />
+    <Content Include="Resources\zoom_24_bw.png" />
+    <Content Include="Resources\zoom_48_bw.png" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
