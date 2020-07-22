@@ -26,6 +26,18 @@ namespace Mtgdb.Util
 				return;
 			}
 
+			if (args.GetFlag("-create_shortcut"))
+			{
+				string target = args.GetParam("-target_path");
+				string source = args.GetParam("-source_path");
+				string icon = args.GetParam("-icon_path");
+				Shortcut.CreateApplicationShortcut(
+					shortcutPath: new FsPath(source),
+					exePath: new FsPath(target),
+					iconPath: new FsPath(icon));
+				return;
+			}
+
 			string directory = args.GetParam("-rename_artworks");
 			if (directory != null)
 			{
@@ -54,6 +66,12 @@ namespace Mtgdb.Util
 
 			Console.WriteLine("Mtgdb.Util.exe -sign directory_or_file [-output filelist_name] [-set setcode1;setcode2;...]");
 			Console.WriteLine("\t- create a list of files with corresponding md5 hashes");
+
+			Console.WriteLine(
+				"Mtgdb.Util.exe -create_shortcut " +
+				"-target_path path\\to\\app.exe " +
+				"-source_path path\\to\\app.lnk " +
+				"-icon_path path\\to\\icon.ico");
 
 			Console.WriteLine("Press ENTER to exit");
 			Console.ReadLine();

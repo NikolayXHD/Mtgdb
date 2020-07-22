@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
-using IWshRuntimeLibrary;
 using JetBrains.Annotations;
 using Mtgdb.Data;
 
@@ -292,43 +291,13 @@ namespace Mtgdb.Downloader
 
 		private static bool createApplicationShortcut(FsPath shortcutPath, FsPath exePath, FsPath iconPath)
 		{
-			if (shortcutPath.IsFile())
-				shortcutPath.DeleteFile();
-
-			var wsh = new WshShell();
-			var shortcut = wsh.CreateShortcut(shortcutPath.Value) as IWshShortcut;
-			FsPath bin = exePath.Parent();
-
-			if (shortcut == null)
+			if (Runtime.IsLinux)
 			{
-				Console.WriteLine("Failed to create shortcut at {0}: {1}.{2} returned null",
-					shortcutPath, nameof(WshShell), nameof(wsh.CreateShortcut));
-				return false;
+				Console.WriteLine("Shortcut creation is not supported");
+				return true;
 			}
 
-			shortcut.Arguments = "";
-			shortcut.TargetPath = exePath.Value;
-			shortcut.WindowStyle = 1;
-
-			shortcut.Description = "Application to search MTG cards and build decks";
-			shortcut.WorkingDirectory = bin.Value;
-
-			if (iconPath.HasValue())
-				shortcut.IconLocation = iconPath.Value;
-
-			try
-			{
-				shortcut.Save();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Failed to create shortcut {0}: {1}", shortcutPath, ex);
-				return false;
-			}
-
-			Console.WriteLine("Created shortcut {0}", shortcutPath);
-			return true;
-
+			return new UtilExe().CreateShortcut(shortcutPath, exePath, iconPath);
 		}
 
 		public event Action MtgjsonFileUpdated;
