@@ -191,6 +191,8 @@ namespace Mtgdb.Gui
 			_dropdownMruFiles.MenuControl = _menuMruFiles;
 			_dropdownMruFiles.MenuAlignment = HorizontalAlignment.Right;
 			_dropdownMruFiles.BeforeShow = filesSubsystem.UpdateMruFilesMenu;
+
+			OnInitializationComplete();
 		}
 
 		private void scale()

@@ -159,7 +159,8 @@ namespace Mtgdb.Gui
 			var windowArea = _history.Current.WindowArea;
 
 			if (windowArea.HasValue)
-				_formRoot.BoundsBeforeMaximized = windowArea.Value;
+				if (!Runtime.IsMono)
+					_formRoot.BoundsBeforeMaximized = windowArea.Value;
 
 			_formRoot.SnapTo(snapDirection, windowArea?.TopLeft());
 		}

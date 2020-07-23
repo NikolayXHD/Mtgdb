@@ -18,6 +18,14 @@ namespace Mtgdb.Controls
 		{
 			InitializeComponent();
 
+			if (!Runtime.IsMono)
+			{
+				SuspendLayout();
+				ControlBox = false;
+				FormBorderStyle = FormBorderStyle.None;
+				ResumeLayout(false);
+			}
+
 			Paint += paint;
 			Click += click;
 
@@ -47,6 +55,14 @@ namespace Mtgdb.Controls
 
 			applySystemColors();
 			ColorSchemeController.SystemColorsChanging += applySystemColors;
+
+			OnInitializationComplete();
+		}
+
+		protected void OnInitializationComplete()
+		{
+			if (Runtime.IsMono)
+				BoundsBeforeMaximized = Bounds;
 		}
 
 		protected override bool FixShadowTransparency =>
@@ -66,7 +82,7 @@ namespace Mtgdb.Controls
 			Rectangle client;
 			int headerTop;
 
-			if (WindowState == FormWindowState.Maximized)
+			if (WindowState == FormWindowState.Maximized || Runtime.IsMono)
 			{
 				client = Rectangle.FromLTRB(
 					rect.Left,
@@ -242,12 +258,12 @@ namespace Mtgdb.Controls
 
 			var result = new List<(bool IsHovered, Rectangle Bounds)>();
 
-			if (ShowCloseButton)
+			if (ShowCloseButton && !Runtime.IsMono)
 				add(clientLocation);
 			else
 				addEmpty();
 
-			if (ShowMaximizeButton)
+			if (ShowMaximizeButton && !Runtime.IsMono)
 			{
 				if (WindowState == FormWindowState.Maximized)
 				{
@@ -266,7 +282,7 @@ namespace Mtgdb.Controls
 				addEmpty();
 			}
 
-			if (ShowMinimizeButton)
+			if (ShowMinimizeButton && !Runtime.IsMono)
 				add(clientLocation);
 			else
 				addEmpty();
@@ -340,11 +356,17 @@ namespace Mtgdb.Controls
 
 		private void keyDown(object sender, KeyEventArgs e)
 		{
+			if (Runtime.IsMono)
+				return;
+
 			_downKeys.Add(e.KeyData);
 		}
 
 		private void keyUp(object sender, KeyEventArgs e)
 		{
+			if (Runtime.IsMono)
+				return;
+
 			bool winModifier = _winModifiers.Any(_downKeys.Contains);
 			_downKeys.Remove(e.KeyData);
 
@@ -398,6 +420,9 @@ namespace Mtgdb.Controls
 
 		private void resize(object sender, EventArgs e)
 		{
+			if (Runtime.IsMono)
+				return;
+
 			bool isForcedSize =
 				WindowState == FormWindowState.Minimized ||
 				WindowState == FormWindowState.Maximized ||
@@ -817,6 +842,9 @@ namespace Mtgdb.Controls
 
 		protected void RegisterDragControl(Control c, bool ignoreDoubleClick = false)
 		{
+			if (Runtime.IsMono)
+				return;
+
 			c.MouseDown += mouseDown;
 			c.MouseUp += mouseUp;
 			c.MouseMove += mouseMove;

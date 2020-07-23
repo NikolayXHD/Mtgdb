@@ -50,6 +50,8 @@ namespace Mtgdb.Controls
 
 			LocationChanged += moved;
 			SizeChanged += moved;
+
+			OnInitializationComplete();
 		}
 
 		private void updateFormSize()
