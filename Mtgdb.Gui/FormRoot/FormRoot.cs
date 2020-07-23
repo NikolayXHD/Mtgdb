@@ -121,6 +121,9 @@ namespace Mtgdb.Gui
 			_tabs.SelectedIndexChanging += selectedTabChanging;
 			_tabs.SelectedIndexChanged += selectedTabChanged;
 			_tabs.DragOver += tabsDragOver;
+
+			_tabs.MouseEnter += tabMouseEnter;
+			_tabs.MouseEnter += tabMouseLeave;
 			_tabs.MouseMove += tabMouseMove;
 
 			MessageFilter.Instance.GlobalMouseMove += globalMouseMove;
@@ -406,6 +409,16 @@ namespace Mtgdb.Gui
 			return form;
 		}
 
+		private void tabMouseEnter(object sender, EventArgs e)
+		{
+			_isTabUnderMouse = true;
+		}
+
+		private void tabMouseLeave(object sender, EventArgs e)
+		{
+			_isTabUnderMouse = false;
+		}
+
 		private void tabMouseMove(object sender, MouseEventArgs e)
 		{
 			var draggingFromTab = _app.FindCardDraggingForm();
@@ -423,7 +436,7 @@ namespace Mtgdb.Gui
 
 		private void globalMouseMove(object s, EventArgs e)
 		{
-			if (!_tabs.IsUnderMouse())
+			if (!_isTabUnderMouse)
 				return;
 
 			var tabDraggingForm = _app.Forms.FirstOrDefault(_ => _._tabs.IsDragging());
@@ -572,7 +585,7 @@ namespace Mtgdb.Gui
 		}
 
 		private bool _undoingOrRedoing;
-
+		private bool _isTabUnderMouse;
 
 
 		private readonly Func<FormMain> _formMainFactory;

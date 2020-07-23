@@ -330,7 +330,13 @@ namespace Mtgdb.Controls
 
 			MouseDown += mouseDown;
 			MouseMove += mouseMove;
+
+			MouseEnter += mouseEnter;
 			MouseLeave += mouseLeave;
+
+			Scrollbar.MouseEnter += scrollMouseEnter;
+			Scrollbar.MouseLeave += scrollMouseLeave;
+
 			MouseUp += mouseUp;
 
 			MouseClick += mouseClick;
@@ -687,10 +693,26 @@ namespace Mtgdb.Controls
 				}
 		}
 
+		private void mouseEnter(object sender, EventArgs e)
+		{
+			_isUnderMouse = true;
+		}
+
 		private void mouseLeave(object sender, EventArgs e)
 		{
+			_isUnderMouse = false;
 			var hitInfo = CalcHitInfo(new Point(-10000, -10000));
 			handleMouseMove(hitInfo);
+		}
+
+		private void scrollMouseEnter(object sender, EventArgs e)
+		{
+			_isScrollUnderMouse = true;
+		}
+
+		private void scrollMouseLeave(object sender, EventArgs e)
+		{
+			_isScrollUnderMouse = false;
 		}
 
 		private void handleMouseMove(HitInfo hitInfo)
@@ -1438,7 +1460,7 @@ namespace Mtgdb.Controls
 			ProbeCard.Fields.Select(_ => _.FieldName).Where(F.IsNotNull);
 
 		private bool IsUnderMouse =>
-			this.IsUnderMouse() || Scrollbar.IsUnderMouse();
+			_isUnderMouse || _isScrollUnderMouse;
 
 		/// <summary>
 		/// mouse wheel without focus
@@ -1523,5 +1545,7 @@ namespace Mtgdb.Controls
 		private bool _updatingScrollValue;
 
 		private static readonly bool _isWin10 = isWin10();
+		private bool _isUnderMouse;
+		private bool _isScrollUnderMouse;
 	}
 }

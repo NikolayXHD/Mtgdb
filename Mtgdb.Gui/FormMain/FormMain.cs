@@ -1169,5 +1169,7 @@ namespace Mtgdb.Gui
 		{
 			return _restoringGuiSettings > 0;
 		}
+
+		public bool IsUnderMouse { get; private set; }
 	}
 }

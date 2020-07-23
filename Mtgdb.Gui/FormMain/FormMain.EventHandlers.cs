@@ -110,6 +110,9 @@ namespace Mtgdb.Gui
 
 			_layoutRight.Layout += layoutRightPanel;
 			TextChanged += textChanged;
+
+			MouseEnter += mouseEnter;
+			MouseLeave += mouseLeave;
 		}
 
 		private void unsubscribeFromEvents()
@@ -201,6 +204,9 @@ namespace Mtgdb.Gui
 
 			Layout -= layoutRightPanel;
 			TextChanged -= textChanged;
+
+			MouseEnter -= mouseEnter;
+			MouseLeave -= mouseLeave;
 		}
 
 		private void applicationExit(object sender, EventArgs e) =>
@@ -916,6 +922,16 @@ namespace Mtgdb.Gui
 		private void textChanged(object sender, EventArgs e)
 		{
 			_formRoot.UpdateTabText(this);
+		}
+
+		private void mouseEnter(object sender, EventArgs e)
+		{
+			IsUnderMouse = true;
+		}
+
+		private void mouseLeave(object sender, EventArgs e)
+		{
+			IsUnderMouse = false;
 		}
 	}
 }

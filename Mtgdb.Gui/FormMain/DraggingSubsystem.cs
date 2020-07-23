@@ -383,13 +383,10 @@ namespace Mtgdb.Gui
 			if (IsDragging)
 				return;
 
-			bool underMouse = _parent.IsUnderMouse();
-
-			if (!underMouse)
+			if (!_parent.IsUnderMouse)
 				return;
 
 			var draggingForm = _app.FindCardDraggingForm();
-
 			if (draggingForm == null || draggingForm == _parent)
 				return;
 

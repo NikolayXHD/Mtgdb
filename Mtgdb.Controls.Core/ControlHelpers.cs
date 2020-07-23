@@ -186,32 +186,6 @@ namespace Mtgdb.Controls
 				color == Color.Empty || color == Color.Transparent || color.A < 255;
 		}
 
-		public static bool IsUnderMouse(this Control c)
-		{
-			var parentForm = c.ParentForm();
-			if (parentForm == null || parentForm != Form.ActiveForm)
-				return false;
-
-			Control current = parentForm;
-			var cursorScreen = Cursor.Position;
-
-			while (current != null)
-			{
-				var cursorClient = current.PointToClient(cursorScreen);
-				var child = current.GetChildAtPoint(cursorClient);
-
-				if (child == c)
-					return true;
-
-				if (child == current)
-					break;
-
-				current = child;
-			}
-
-			return false;
-		}
-
 		public static bool TryCopyToClipboard(this string selectedText)
 		{
 			if (!string.IsNullOrEmpty(selectedText))
