@@ -662,16 +662,17 @@ namespace Mtgdb.Ui
 
 		private void gridSearchClicked(object view, SearchArgs searchArgs)
 		{
-			var query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
+			string query = GetFieldValueQuery(searchArgs.FieldName, searchArgs.FieldValue);
+			var preProcessedQuery = removeExtraWhitespaces(query);
 			var source = getSearchInputState();
 
-			int queryStartIndex = source.Text.IndexOf(query, Str.Comparison);
+			int queryStartIndex = source.Text.IndexOf(preProcessedQuery, Str.Comparison);
 			if (queryStartIndex >= 0)
-				removeQueryFromInput(queryStartIndex, query, source);
+				removeQueryFromInput(queryStartIndex, preProcessedQuery, source);
 			else
 			{
 				var token = new MtgTolerantTokenizer(source.Text).GetTokenForTermInsertion(source.Caret);
-				pasteText(query, TokenType.Field, source, token, positionCaretToNextValue: true);
+				pasteText(preProcessedQuery, TokenType.Field, source, token, positionCaretToNextValue: true);
 			}
 
 			Apply();
