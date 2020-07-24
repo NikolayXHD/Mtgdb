@@ -644,7 +644,7 @@ namespace Mtgdb.Ui
 		private void updateForeColor()
 		{
 			if (SearchResult?.ParseErrorMessage == null)
-				_searchBar.Input.ResetForeColor();
+				_searchBar.Input.ForeColor = SystemColors.WindowText;
 			else
 				_searchBar.Input.ForeColor = SystemColors.HotTrack.TransformHsv(
 					h: _ => _ + Color.Blue.RotationTo(Color.DarkRed));

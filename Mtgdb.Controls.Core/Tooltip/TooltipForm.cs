@@ -3,28 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 
 namespace Mtgdb.Controls
 {
-	public class TooltipForm : Form
+	public class TooltipForm : Control
 	{
 		[UsedImplicitly] // by ninject
 		public TooltipForm()
 		{
-			FormBorderStyle = FormBorderStyle.None;
-			ControlBox = false;
-			ShowInTaskbar = false;
-			StartPosition = FormStartPosition.Manual;
-			if (!Runtime.IsMono)
-			{
-				TopMost = true;
-				Location = _hiddenLocation;
-			}
-
-			KeyPreview = false;
-
 			_panel = new BorderedPanel
 			{
 				Dock = DockStyle.Fill
@@ -33,7 +22,6 @@ namespace Mtgdb.Controls
 			Controls.Add(_panel);
 
 			var font = new Font(FontFamily.GenericSansSerif, 9.75f, FontStyle.Regular, GraphicsUnit.Point);
-			_titleFont = new Font(font, FontStyle.Bold);
 			_tooltipTextbox = new FixedRichTextBox
 			{
 				Dock = DockStyle.Fill,
@@ -50,14 +38,6 @@ namespace Mtgdb.Controls
 			TextPadding = new Padding(6, 3, 6, 3);
 
 			_panel.Controls.Add(_tooltipTextbox);
-
-			_tooltipFocusTarget = new Control
-			{
-				Size = new Size(1, 1),
-				Location = new Point(-1, -1)
-			};
-
-			_panel.Controls.Add(_tooltipFocusTarget);
 
 			_buttonClose = new Button
 			{
@@ -94,25 +74,6 @@ namespace Mtgdb.Controls
 			setupIcons();
 		}
 
-		protected override bool ShowWithoutActivation => true;
-
-		protected override CreateParams CreateParams
-		{
-			get
-			{
-				CreateParams baseParams = base.CreateParams;
-
-				if (Runtime.IsMono)
-				{
-					const int WS_EX_NOACTIVATE = 0x08000000;
-					const int WS_EX_TOOLWINDOW = 0x00000080;
-					baseParams.ExStyle |= WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW;
-				}
-
-				return baseParams;
-			}
-		}
-
 		private void setupIcons()
 		{
 			_closeIcon = Properties.Resources.close_tab_hovered_32.HalfResizeDpi();
@@ -132,6 +93,11 @@ namespace Mtgdb.Controls
 					f => f.TooltipMargin,
 					(f, m) => f.TooltipMargin = m,
 					m => m.ByDpiWidth()
+				),
+				new DpiScaler<TooltipForm, Size>(
+					f => f.MonoLineInterval,
+					(f, m) => f.MonoLineInterval = m,
+					m => m.ByDpi()
 				),
 				new DpiScaler<TooltipForm, Padding>(
 					f => f.TextPadding,
@@ -169,11 +135,12 @@ namespace Mtgdb.Controls
 			_buttonClose.Visible = Clickable;
 
 			_tooltipTextbox.ResetText();
-			if (!string.IsNullOrEmpty(tooltip.Title))
+		  Font titleFont = new Font(_tooltipTextbox.Font, FontStyle.Bold);
+		  if (!string.IsNullOrEmpty(tooltip.Title))
 			{
 				_tooltipTextbox.AppendText(tooltip.Title);
 				_tooltipTextbox.Select(0, tooltip.Title.Length);
-				_tooltipTextbox.SelectionFont = _titleFont;
+				_tooltipTextbox.SelectionFont = titleFont;
 			}
 
 
@@ -202,39 +169,49 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionStart = 0;
 			_tooltipTextbox.SelectionLength = 0;
 
-			var size = measureTooltip(tooltip, _titleFont);
+			var size = measureTooltip(tooltip, titleFont);
 			var screenBounds = tooltip.Control.RectangleToScreen(tooltip.ObjectBounds);
 
+			var parentForm = _tooltip.Control.ParentForm();
 			Rectangle bounds;
 			if (tooltip.UnderMouse)
 			 	bounds = new Rectangle(Cursor.Position - size.MultiplyBy(0.5f).Round(), size);
 			else
 			{
 				var cursor = tooltip.Cursor?.Invoke0(tooltip.Control.PointToScreen);
-				bounds = allocateTooltip(size, screenBounds, cursor, TooltipMargin, tooltip.PositionPreference?.Invoke(screenBounds));
+				bounds = allocateTooltip(
+					size,
+					screenBounds,
+					cursor,
+					TooltipMargin,
+					parentForm,
+					tooltip.PositionPreference?.Invoke(screenBounds));
 			}
-
-			if (_tooltipTextbox.Focused)
-				_tooltipFocusTarget.Focus();
 
 			if (tooltip.Clickable)
 				_tooltipTextbox.Cursor = Cursors.IBeam;
 			else
 				_tooltipTextbox.Cursor = Cursors.Arrow;
 
+			var parentFormPrev = this.ParentForm();
+			if (parentForm != parentFormPrev)
+			{
+				parentFormPrev?.Controls.Remove(this);
+				parentForm.Controls.Add(this);
+			}
+
 			Size = bounds.Size;
-			if (!Runtime.IsMono)
-				Application.DoEvents();
-			Location = bounds.Location;
-			if (Runtime.IsMono)
-				Show();
+			Location = parentForm.PointToClient(bounds.Location);
+			Visible = true;
+			BringToFront();
 		}
 
-		private Rectangle allocateTooltip(Size size, Rectangle target, Point? cursor, int margin,
+		private Rectangle allocateTooltip(
+			Size size, Rectangle target, Point? cursor, int margin, Control parentForm,
 			Func<ExtremumFinder<TooltipPosition>, ExtremumFinder<TooltipPosition>> positionPreference = null)
 		{
 			cursor ??= Cursor.Position;
-			var workingArea = Screen.FromPoint(cursor.Value).WorkingArea;
+			var workingArea = parentForm.RectangleToScreen(parentForm.ClientRectangle);
 			var bounds = selectTooltipBounds(size, target, workingArea, cursor.Value, margin, positionPreference);
 			return bounds;
 		}
@@ -318,13 +295,11 @@ namespace Mtgdb.Controls
 			else
 				measuredContentText = tooltip.Text;
 
-			const TextFormatFlags formatFlags =
-				TextFormatFlags.GlyphOverhangPadding |
-				TextFormatFlags.NoPadding |
-				TextFormatFlags.TextBoxControl |
-				TextFormatFlags.WordBreak;
+		  var formatFlags = TextFormatFlags.GlyphOverhangPadding | TextFormatFlags.WordBreak;
+		  if (!Runtime.IsMono)
+			  formatFlags |= TextFormatFlags.NoPadding | TextFormatFlags.TextBoxControl;
 
-			var graphics = _tooltipTextbox.CreateGraphics();
+		  var graphics = _tooltipTextbox.CreateGraphics();
 
 			var baseSize = new Size(400, 300).ByDpi();
 
@@ -345,7 +320,8 @@ namespace Mtgdb.Controls
 				contentSize = new Size(0, 0);
 			else
 			{
-				contentSize = graphics.MeasureText(
+				Graphics g = Runtime.IsMono ? null : graphics;
+				contentSize = g.MeasureText(
 					measuredContentText,
 					_tooltipTextbox.Font,
 					baseSize,
@@ -367,6 +343,9 @@ namespace Mtgdb.Controls
 				contentWidth + TextPadding.Horizontal + 2 + Math.Max(cjkDelta.Width, clickableWidthDelta),
 				titleSize.Height + contentSize.Height + TextPadding.Vertical + cjkDelta.Height);
 
+			if (Runtime.IsMono)
+				size += MonoLineInterval.MultiplyBy(measuredContentText.Count(_ => _ == '\n'));
+
 			return size;
 		}
 
@@ -378,10 +357,8 @@ namespace Mtgdb.Controls
 			_tooltipTextbox.SelectionStart = 0;
 			_tooltipTextbox.SelectionLength = 0;
 
-			if (Runtime.IsMono)
-				Hide();
-			else
-				Location = _hiddenLocation;
+			SendToBack();
+			Visible = false;
 
 			UserInteracted = false;
 			Clickable = false;
@@ -477,10 +454,10 @@ namespace Mtgdb.Controls
 		}
 
 		private readonly FixedRichTextBox _tooltipTextbox;
-		private readonly Control _tooltipFocusTarget;
 		private readonly Button _buttonClose;
 
 		public bool Clickable { get; private set; }
+		public Size MonoLineInterval { get; set; } = new Size(0, 5);
 
 		private bool _userInteracted;
 		private TooltipModel _tooltip;
@@ -488,7 +465,5 @@ namespace Mtgdb.Controls
 		private bool _closeEnabled;
 		private Bitmap _closeIcon;
 		private Bitmap _selectableTextIcon;
-		private readonly Font _titleFont;
-		private static readonly Point _hiddenLocation = new Point(-10000, -10000);
 	}
 }
