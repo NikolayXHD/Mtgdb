@@ -701,16 +701,16 @@ namespace Mtgdb.Controls
 			var images = getControlBoxImages(clientLocation: default);
 
 			int left = images.Where(_ => _.Bounds != default).Select(_ => _.Bounds.Left)
-				.DefaultIfEmpty(Right).Min();
+				.DefaultIfEmpty(ClientRectangle.Right).Min();
 
 			int top = images.Where(_ => _.Bounds != default).Select(_ => _.Bounds.Top)
-				.DefaultIfEmpty(Top).Min();
+				.DefaultIfEmpty(ClientRectangle.Top).Min();
 
 			int right = images.Where(_ => _.Bounds != default).Select(_ => _.Bounds.Right)
-				.DefaultIfEmpty(Right).Max();
+				.DefaultIfEmpty(ClientRectangle.Right).Max();
 
 			int bottom = images.Where(_ => _.Bounds != default).Select(_ => _.Bounds.Bottom)
-				.DefaultIfEmpty(Top).Max();
+				.DefaultIfEmpty(ClientRectangle.Top).Max();
 
 			return Rectangle.FromLTRB(left, top, right, bottom);
 		}

@@ -1341,7 +1341,6 @@
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this._layoutTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this._layoutTitle.Controls.Add(this._flowTitleRight, 2, 0);
 			this._layoutTitle.Controls.Add(this._flowTitleLeft, 0, 0);
 			this._layoutTitle.Controls.Add(this._tabs, 1, 0);
