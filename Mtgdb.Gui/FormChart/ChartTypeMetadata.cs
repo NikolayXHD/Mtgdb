@@ -8,22 +8,27 @@ namespace Mtgdb.Gui
 	public class ChartTypeMetadata
 	{
 		private static readonly Type[] _pointChartTypes =
-		{
-			findChartType(SeriesChartType.Point),
-			findChartType(SeriesChartType.FastLine),
-			findChartType(SeriesChartType.FastPoint)
-		};
+			Runtime.IsMono
+				? Array.Empty<Type>()
+				: new[]
+				{
+					findChartType(SeriesChartType.Point),
+					findChartType(SeriesChartType.FastLine),
+					findChartType(SeriesChartType.FastPoint)
+				};
 
 		private static readonly Type[] _pieChartTypes =
-		{
-			findChartType(SeriesChartType.Pie)
-		};
+			Runtime.IsMono
+				? Array.Empty<Type>()
+				: new[] { findChartType(SeriesChartType.Pie) };
 
 		public static readonly Dictionary<SeriesChartType, ChartTypeMetadata> ByType =
-			Enum.GetValues(typeof (SeriesChartType))
-				.Cast<SeriesChartType>()
-				.ToDictionary(_ => _, create);
-		
+			Runtime.IsMono
+				? new Dictionary<SeriesChartType, ChartTypeMetadata>()
+				: Enum.GetValues(typeof(SeriesChartType))
+					.Cast<SeriesChartType>()
+					.ToDictionary(_ => _, create);
+
 		private static ChartTypeMetadata create(SeriesChartType chartType)
 		{
 			var type = findChartType(chartType);
@@ -46,14 +51,15 @@ namespace Mtgdb.Gui
 				IsPieChart = _pieChartTypes.Any(_ => _.IsAssignableFrom(type))
 			};
 
-			result.CanDisplayMultipleSeries = result.SideBySideSeries || result.Stacked || result.IsPointChart && chartType != SeriesChartType.Kagi;
+			result.CanDisplayMultipleSeries =
+				result.SideBySideSeries || result.Stacked || result.IsPointChart && chartType != SeriesChartType.Kagi;
 
 			return result;
 		}
 
 		private static Type findChartType(SeriesChartType chartType)
 		{
-			var assembly = typeof (SeriesChartType).Assembly;
+			var assembly = typeof(SeriesChartType).Assembly;
 
 			string typeName = $"System.Windows.Forms.DataVisualization.Charting.ChartTypes.{chartType}Chart";
 

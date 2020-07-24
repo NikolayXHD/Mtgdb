@@ -77,6 +77,10 @@
       <HintPath>..\packages\NLog.4.7.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NPlot, Version=0.9.10.0, Culture=neutral, PublicKeyToken=4eda430eb4395eb1">
+      <HintPath>..\packages\NPlot.0.9.10.0\lib\net20\NPlot.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -114,6 +118,7 @@
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\CardFields.cs" />
+    <Compile Include="FormChart\FormChart.NPlot.cs" />
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\CountInputSubsystem.cs" />
     <Compile Include="FormMain\DeckZoneSubsystem.cs" />

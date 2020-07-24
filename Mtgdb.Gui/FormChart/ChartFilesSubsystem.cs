@@ -156,7 +156,7 @@ namespace Mtgdb.Gui
 		private static readonly string _filter = $"Mtgdb.Gui chart settings (*{Ext})|*{Ext}";
 		private FsPath SaveDirectory { get; } = AppDir.Charts;
 		private FsPath DefaultFileName =>
-			string.IsNullOrEmpty(_formChart.Title) ? FsPath.None : new FsPath(_formChart.Title + Ext);
+			string.IsNullOrEmpty(_formChart.Title) ? FsPath.None : new FsPath(string.Join(" ", _formChart.Title.Lines()) + Ext);
 
 		private readonly FormChart _formChart;
 		private readonly ButtonBase _buttonSave;

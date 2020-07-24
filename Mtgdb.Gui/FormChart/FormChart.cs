@@ -222,8 +222,6 @@ namespace Mtgdb.Gui
 
 					_menuMruFiles,
 					_labelTitle,
-
-					_chart
 				}
 				.ForEach(ControlScaler.ScaleDpiFont);
 
@@ -237,6 +235,9 @@ namespace Mtgdb.Gui
 
 		private static bool isChartTypeSupported(SeriesChartType arg)
 		{
+			if (Runtime.IsMono)
+				return arg == SeriesChartType.StackedBar;
+
 			var metadata = ChartTypeMetadata.ByType[arg];
 			return metadata.YValuesPerPoint == 1 && !metadata.CircularChartArea;
 		}
@@ -386,7 +387,6 @@ namespace Mtgdb.Gui
 		}
 
 
-
 		private static ChartArea createArea()
 		{
 			var area = new ChartArea();
@@ -493,13 +493,16 @@ namespace Mtgdb.Gui
 				else
 					throw new Exception("Logical error");
 
-				if (!ChartTypeMetadata.ByType[settings.ChartType].CanDisplayMultipleSeries)
+				if (!Runtime.IsMono)
 				{
-					settings.SummaryFields.RemoveAt(1);
-					settings.SummarySort.RemoveAt(1);
-					settings.SummaryFunctions.RemoveAt(1);
+					if (!ChartTypeMetadata.ByType[settings.ChartType].CanDisplayMultipleSeries)
+					{
+						settings.SummaryFields.RemoveAt(1);
+						settings.SummarySort.RemoveAt(1);
+						settings.SummaryFunctions.RemoveAt(1);
 
-					settings.LabelDataElement = DataElement.Argument;
+						settings.LabelDataElement = DataElement.Argument;
+					}
 				}
 			}
 			else if (button == _buttonDeckColors || button == _buttonCollectionColors)
@@ -559,7 +562,10 @@ namespace Mtgdb.Gui
 				.Select(_ => applySort(_, sortedArgumentIndices))
 				.ToList();
 
-			populateData(sortedArguments, series, sortedValues, sortedArgumentTotals, seriesTotals, settings);
+			if (Runtime.IsMono)
+				populateDataNPlot(sortedArguments, series, sortedValues, sortedArgumentTotals, seriesTotals, settings);
+			else
+				populateData(sortedArguments, series, sortedValues, sortedArgumentTotals, seriesTotals, settings);
 		}
 
 		private IList<object[]> getTotals(ReportSettings settings, List<KeyValuePair<List<object>, HashSet<Card>>> groups)
@@ -581,7 +587,6 @@ namespace Mtgdb.Gui
 
 			return totals;
 		}
-
 
 
 		private List<KeyValuePair<List<object>, HashSet<Card>>> getGroups(List<string> fields, List<SortDirection> order, Card[] cards)
@@ -642,7 +647,6 @@ namespace Mtgdb.Gui
 		}
 
 
-
 		private static int[] getSortBySummary(ReportSettings settings, IList<object[]> argumentTotals)
 		{
 			var sortedArgumentIndices = Enumerable.Range(0, argumentTotals.Count)
@@ -677,12 +681,23 @@ namespace Mtgdb.Gui
 			IList<object[]> seriesTotals,
 			ReportSettings settings)
 		{
-			_chart = createChart();
+			if (Runtime.IsMono)
+				throw new NotSupportedException();
+
+			var chart = new Chart
+			{
+				BackColor = SystemColors.Window,
+				ForeColor = SystemColors.WindowText,
+				BorderColor = SystemColors.ActiveBorder,
+				BorderlineColor = SystemColors.ActiveBorder,
+				Dock = DockStyle.Fill
+			};
+			replaceChart(chart);
 
 			var colorTransformation = new ColorSchemeTransformation(null);
 
-			var originalPalette = ChartPalettes.OriginalByName[_chart.Palette];
-			var palette = ChartPalettes.ByName[_chart.Palette];
+			var originalPalette = ChartPalettes.OriginalByName[chart.Palette];
+			var palette = ChartPalettes.ByName[chart.Palette];
 
 			for (int i = 0; i < palette.Length; i++)
 				palette[i] = colorTransformation.TransformColor(originalPalette[i]);
@@ -692,7 +707,7 @@ namespace Mtgdb.Gui
 			var metadata = ChartTypeMetadata.ByType[settings.ChartType];
 
 			if (metadata.CanDisplayMultipleSeries)
-				_chart.Legends.Add(createLegend());
+				chart.Legends.Add(createLegend());
 
 			ChartArea area = null;
 			Series[] seriesList = null;
@@ -707,7 +722,7 @@ namespace Mtgdb.Gui
 				if (k == 0 || !metadata.CanDisplayMultipleSeries)
 				{
 					area = createArea();
-					_chart.ChartAreas.Add(area);
+					chart.ChartAreas.Add(area);
 
 					if (metadata.SwitchValueAxes)
 						area.AxisX.IsReversed = true;
@@ -764,7 +779,7 @@ namespace Mtgdb.Gui
 
 						chartSeries[@"PyramidValueType"] = @"Surface";
 
-						_chart.Series.Add(chartSeries);
+						chart.Series.Add(chartSeries);
 
 						chartSeries.IsVisibleInLegend = settings.ShowSeriesTotal && metadata.CanDisplayMultipleSeries;
 					}
@@ -779,42 +794,42 @@ namespace Mtgdb.Gui
 					}
 
 				for (int i = 0; i < arguments.Count; i++)
-					for (int j = 0; j < series.Count; j++)
-					{
-						Series chartSeries;
-						if (metadata.CanDisplayMultipleSeries)
-							chartSeries = seriesList[k * series.Count + j];
-						else
-							chartSeries = seriesList[0];
+				for (int j = 0; j < series.Count; j++)
+				{
+					Series chartSeries;
+					if (metadata.CanDisplayMultipleSeries)
+						chartSeries = seriesList[k * series.Count + j];
+					else
+						chartSeries = seriesList[0];
 
-						var yValue = seriesValues[j][i][k];
+					var yValue = seriesValues[j][i][k];
 
-						chartSeries.Points.AddXY(arguments[i], yValue);
+					chartSeries.Points.AddXY(arguments[i], yValue);
 
-						var point = chartSeries.Points[chartSeries.Points.Count - 1];
+					var point = chartSeries.Points[chartSeries.Points.Count - 1];
 
-						if (yValue == null || Convert.ToSingle(yValue) < 0.009f)
-							point.IsEmpty = true;
-						else if (settings.LabelDataElement == DataElement.SummaryField)
-							point.Label = $"{yValue:0.##}: {summaryFieldAlias}";
-						else if (settings.LabelDataElement == DataElement.Series)
-							point.Label = $"{yValue:0.##}: {series[j]}";
-						else if (settings.LabelDataElement == DataElement.Argument)
-							point.Label = $"{yValue:0.##}: {arguments[i]}";
-						else if (settings.LabelDataElement == DataElement.SeriesAndArgument)
-							point.Label = $"{yValue:0.##}: {arguments[i]}, {series[j]}";
-						else if (settings.LabelDataElement == DataElement.Values)
-							point.Label = $"{yValue:0.##}";
-						else
-							point.Label = null;
+					if (yValue == null || Convert.ToSingle(yValue) < 0.009f)
+						point.IsEmpty = true;
+					else if (settings.LabelDataElement == DataElement.SummaryField)
+						point.Label = $"{yValue:0.##}: {summaryFieldAlias}";
+					else if (settings.LabelDataElement == DataElement.Series)
+						point.Label = $"{yValue:0.##}: {series[j]}";
+					else if (settings.LabelDataElement == DataElement.Argument)
+						point.Label = $"{yValue:0.##}: {arguments[i]}";
+					else if (settings.LabelDataElement == DataElement.SeriesAndArgument)
+						point.Label = $"{yValue:0.##}: {arguments[i]}, {series[j]}";
+					else if (settings.LabelDataElement == DataElement.Values)
+						point.Label = $"{yValue:0.##}";
+					else
+						point.Label = null;
 
-						if (series.Count > 1)
-							point.Color = palette[j % palette.Length];
-						else if (!metadata.RequireAxes)
-							point.Color = palette[i % palette.Length];
-						else if (summaryFields.Count > 1)
-							point.Color = palette[k % palette.Length];
-					}
+					if (series.Count > 1)
+						point.Color = palette[j % palette.Length];
+					else if (!metadata.RequireAxes)
+						point.Color = palette[i % palette.Length];
+					else if (summaryFields.Count > 1)
+						point.Color = palette[k % palette.Length];
+				}
 
 				if (settings.ShowSeriesTotal)
 					for (int j = 0; j < series.Count; j++)
@@ -873,7 +888,7 @@ namespace Mtgdb.Gui
 							legend.CustomItems.Add(SystemColors.ActiveBorder, argumentLegend[0]);
 						}
 
-					_chart.Legends.Add(legend);
+					chart.Legends.Add(legend);
 				}
 			}
 
@@ -884,37 +899,31 @@ namespace Mtgdb.Gui
 					.ToArray();
 
 				for (int k = 0; k < summaryFields.Count; k++)
-					for (int j = 0; j < series.Count; j++)
-					{
-						var chartSeries = _chart.Series[k * series.Count + j];
+				for (int j = 0; j < series.Count; j++)
+				{
+					var chartSeries = chart.Series[k * series.Count + j];
 
-						for (int i = 0; i < chartSeries.Points.Count; i++)
-							chartSeries.Points[i].AxisLabel = argumentSummaries[i];
-					}
+					for (int i = 0; i < chartSeries.Points.Count; i++)
+						chartSeries.Points[i].AxisLabel = argumentSummaries[i];
+				}
 			}
 
-			setupScrollbar(metadata);
+			setupScrollbar(chart, metadata);
 		}
 
-		private Chart createChart()
+		private void replaceChart(Control chart)
 		{
-			var cellPosition = _panelTable.GetCellPosition(_chart);
-			_panelTable.Controls.Remove(_chart);
-			_chart.Dispose();
-
-			var chart = new Chart
+			if (_chart != null)
 			{
-				BackColor = SystemColors.Window,
-				ForeColor = SystemColors.WindowText,
-				BorderColor = SystemColors.ActiveBorder,
-				BorderlineColor = SystemColors.ActiveBorder,
+				_panelTable.Controls.Remove(_chart);
+				_chart.Dispose();
+			}
 
-				Dock = DockStyle.Fill
-			};
+			_chart = chart;
 
-			_panelTable.Controls.Add(chart, cellPosition.Column, cellPosition.Row);
-
-			return chart;
+			_chart.Dock = DockStyle.Fill;
+			_chart.ScaleDpiFont();
+			_panelTable.Controls.Add(_chart, 0, 3);
 		}
 
 		private static Legend createLegend()
@@ -934,13 +943,16 @@ namespace Mtgdb.Gui
 			return legend;
 		}
 
-		private void setupScrollbar(ChartTypeMetadata metadata)
+		private void setupScrollbar(Chart chart, ChartTypeMetadata metadata)
 		{
+			if (Runtime.IsMono)
+				throw new NotSupportedException();
+
 			if (metadata.RequireAxes)
 			{
-				foreach (var chartArea in _chart.ChartAreas)
+				foreach (var chartArea in chart.ChartAreas)
 				{
-					var chartSeries = _chart.Series.Where(s => s.ChartArea == chartArea.Name).ToArray();
+					var chartSeries = chart.Series.Where(s => s.ChartArea == chartArea.Name).ToArray();
 
 					if (chartSeries.Length == 0)
 						continue;
@@ -966,7 +978,6 @@ namespace Mtgdb.Gui
 				}
 			}
 		}
-
 
 
 		private static List<T> applySort<T>(IList<T> values, int[] sortedIndices)
@@ -1023,7 +1034,6 @@ namespace Mtgdb.Gui
 
 			return result;
 		}
-
 
 
 		private void display(ReportSettings settings)
@@ -1125,6 +1135,8 @@ namespace Mtgdb.Gui
 			get => _labelTitle.Text;
 			set
 			{
+				if (Runtime.IsLinux)
+					value = value?.Replace("\r\n", "\n");
 				_labelTitle.Text = value;
 				Text = string.IsNullOrEmpty(value) ? " " : value;
 			}
@@ -1137,7 +1149,6 @@ namespace Mtgdb.Gui
 
 		private static List<T> readEnum<T>(TabHeaderControl tab) =>
 			tab.Tags.Cast<T>().ToList();
-
 
 
 		private void tabSummAdded(TabHeaderControl tab, int addedIndex)
@@ -1231,5 +1242,7 @@ namespace Mtgdb.Gui
 
 		private readonly CardFields _fields;
 		private readonly CheckBox[] _checkBoxes;
+
+		private Control _chart;
 	}
 }

@@ -1,4 +1,6 @@
 
+using System.Windows.Forms;
+
 namespace Mtgdb.Gui
 {
 	partial class FormChart
@@ -30,7 +32,6 @@ namespace Mtgdb.Gui
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this._chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this._buttonManaCurveType = new Mtgdb.Controls.ButtonBase();
 			this._buttonDeckPrice = new Mtgdb.Controls.ButtonBase();
 			this._buttonApply = new Mtgdb.Controls.ButtonBase();
@@ -67,7 +68,7 @@ namespace Mtgdb.Gui
 			this._buttonCollectionColors = new Mtgdb.Controls.ButtonBase();
 			this._buttonDeckColors = new Mtgdb.Controls.ButtonBase();
 			this._labelTitle = new System.Windows.Forms.Label();
-			this._flowTitle = new Mtgdb.Controls.BorderedFlowLayoutPanel();
+			this._flowTitle = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._tableFileMenu = new Mtgdb.Controls.BorderedTableLayoutPanel();
 			this._buttonSave = new Mtgdb.Controls.ButtonBase();
 			this._dropdownMruFiles = new Mtgdb.Controls.Popup();
@@ -77,7 +78,6 @@ namespace Mtgdb.Gui
 			this._menuMruFiles = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._panelClient.SuspendLayout();
 			this._panelCaption.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize) (this._chart)).BeginInit();
 			this._panelFields.SuspendLayout();
 			this._panelMenu.SuspendLayout();
 			this._panelTable.SuspendLayout();
@@ -99,16 +99,6 @@ namespace Mtgdb.Gui
 			this._panelCaption.Controls.Add(this._flowTitle);
 			this._panelCaption.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
 			this._panelCaption.Size = new System.Drawing.Size(1104, 62);
-			// 
-			// _chart
-			// 
-			this._chart.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._chart.Location = new System.Drawing.Point(0, 120);
-			this._chart.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
-			this._chart.Name = "_chart";
-			this._chart.Size = new System.Drawing.Size(1209, 544);
-			this._chart.TabIndex = 3;
-			this._chart.TabStop = false;
 			// 
 			// _buttonManaCurveType
 			// 
@@ -486,7 +476,6 @@ namespace Mtgdb.Gui
 				new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this._panelTable.Controls.Add(this._panelMenu, 0, 0);
 			this._panelTable.Controls.Add(this._panelFields, 0, 1);
-			this._panelTable.Controls.Add(this._chart, 0, 3);
 			this._panelTable.Controls.Add(this._panelFlags, 0, 2);
 			this._panelTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._panelTable.Location = new System.Drawing.Point(0, 0);
@@ -590,19 +579,25 @@ namespace Mtgdb.Gui
 			this._flowTitle.AutoSize = true;
 			this._flowTitle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this._flowTitle.BackColor = System.Drawing.Color.Transparent;
-			this._flowTitle.Controls.Add(this._tableFileMenu);
-			this._flowTitle.Controls.Add(this._flowPriceReports);
-			this._flowTitle.Controls.Add(this._buttonManaCurveType);
-			this._flowTitle.Controls.Add(this._buttonManaCurveManacost);
-			this._flowTitle.Controls.Add(this._buttonDeckColors);
-			this._flowTitle.Controls.Add(this._buttonCollectionColors);
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.ColumnStyles.Add(new ColumnStyle());
+			this._flowTitle.Controls.Add(this._tableFileMenu, 0, 0);
+			this._flowTitle.Controls.Add(this._flowPriceReports, 1, 0);
+			this._flowTitle.Controls.Add(this._buttonManaCurveType, 2, 0);
+			this._flowTitle.Controls.Add(this._buttonManaCurveManacost, 3, 0);
+			this._flowTitle.Controls.Add(this._buttonDeckColors, 4, 0);
+			this._flowTitle.Controls.Add(this._buttonCollectionColors, 5, 0);
 			this._flowTitle.Location = new System.Drawing.Point(0, 0);
 			this._flowTitle.Margin = new System.Windows.Forms.Padding(0);
 			this._flowTitle.Name = "_flowTitle";
+			this._flowTitle.RowStyles.Add(new RowStyle());
 			this._flowTitle.Size = new System.Drawing.Size(674, 52);
 			this._flowTitle.TabIndex = 57;
 			this._flowTitle.VisibleBorders = System.Windows.Forms.AnchorStyles.None;
-			this._flowTitle.WrapContents = false;
 			// 
 			// _tableFileMenu
 			// 
@@ -718,7 +713,6 @@ namespace Mtgdb.Gui
 			this._panelClient.ResumeLayout(false);
 			this._panelCaption.ResumeLayout(false);
 			this._panelCaption.PerformLayout();
-			((System.ComponentModel.ISupportInitialize) (this._chart)).EndInit();
 			this._panelFields.ResumeLayout(false);
 			this._panelFields.PerformLayout();
 			this._panelMenu.ResumeLayout(false);
@@ -739,7 +733,6 @@ namespace Mtgdb.Gui
 
 		#endregion
 
-		private System.Windows.Forms.DataVisualization.Charting.Chart _chart;
 		private Mtgdb.Controls.ButtonBase _buttonManaCurveType;
 		private Mtgdb.Controls.ButtonBase _buttonDeckPrice;
 		private Mtgdb.Controls.TabHeaderControl _tabCols;
@@ -778,7 +771,7 @@ namespace Mtgdb.Gui
 		private Mtgdb.Controls.ButtonBase _buttonSave;
 		private Mtgdb.Controls.ButtonBase _buttonLoad;
 		private System.Windows.Forms.Label _labelTitle;
-		private Mtgdb.Controls.BorderedFlowLayoutPanel _flowTitle;
+		private Mtgdb.Controls.BorderedTableLayoutPanel _flowTitle;
 		private Mtgdb.Controls.BorderedFlowLayoutPanel _flowDropdowns;
 		private Mtgdb.Controls.BorderedFlowLayoutPanel _flowPriceReports;
 		private Mtgdb.Controls.Popup _dropdownMruFiles;
