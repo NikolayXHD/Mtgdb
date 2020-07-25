@@ -23,7 +23,7 @@ set sevenzexe=%output%\update\7z\7za.exe
 set remote_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\release
 set remote_test_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\test
 set remote_deflate_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\deflate
-set yandex_disk=C:\Users\hidal\AppData\Roaming\Yandex\YandexDisk2\3.1.20.3664\YandexDisk2.exe
+set yandex_disk=C:\Users\hidal\AppData\Roaming\Yandex\YandexDisk2\3.1.21.3681\YandexDisk2.exe
 
 set robocopy_params=/s
 
@@ -91,6 +91,9 @@ robocopy %output%\charts         ^
 xcopy /q %output%\..\LICENSE ^
          %target%
 
+xcopy /q %output%\start.sh ^
+         %target%
+
 echo %packageName%.zip %target%\update\version.txt
 
 %out% make shortcut
@@ -114,6 +117,8 @@ del /q /s %target%\*.vshost.*
 
 :publish_test
 %out% publish zip to test update URL
+
+del %remote_test_dir%\*.zip
 xcopy /q /y %targetRoot%\%packageName%.zip %remote_test_dir%
 xcopy /q /y %targetRoot%\filelist.txt %remote_test_dir%
 %yandex_disk%
@@ -143,6 +148,7 @@ pause
 
 :publish_zip
 %out% publish zip to actual update URL
+del %remote_dir%\*.zip
 xcopy /q /y %targetRoot%\%packageName%.zip %remote_dir%
 xcopy /q /y %targetRoot%\filelist.txt %remote_dir%
 

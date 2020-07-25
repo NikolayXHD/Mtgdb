@@ -1,10 +1,15 @@
 ## Mtgdb.Gui Overview
 
-**Mtgdb.Gui** is a free and opensource *Windows* application to help *Magic the Gathering* players build
-decks. Card search features are well-thought and powerful. Users may limit the search to the cards
-from their own collection. Search for *similar cards* shows you cards with similar *text* and / or *generated mana*.
+**Mtgdb.Gui** is a free and opensource desktop application to build *Magic the Gathering* decks 
+with collection tracking and card prices. Supported operating systems are Windows and GNU/Linux 
+desktops.
 
-Mtgdb.Gui supports several ways to input decks and collections. Some of them are blazingly fast like *drag-n-drop* as well as *copy* and *paste* operations from other applications or websites.
+Search related features are well-thought and powerful. Search can be limited in scope to the cards
+from the collection owned by user. Search for *similar cards* lets user find cards with resembling 
+*text* and / or *generated mana*.
+
+Mtgdb.Gui offers several ways to input decks and collections. The fastest are *drag-n-drop* and 
+*copy* / *paste* from a website or another application.
 
 Decks can be saved in various formats compatible with other MTG-related applications such as
 Magic the Gathering Online, Forge or XMage.
