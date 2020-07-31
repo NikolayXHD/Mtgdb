@@ -23,7 +23,7 @@ set sevenzexe=%output%\update\7z\7za.exe
 set remote_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\release
 set remote_test_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\test
 set remote_deflate_dir=C:\Users\hidal\YandexDisk\Mtgdb.Gui\app\deflate
-set yandex_disk=C:\Users\hidal\AppData\Roaming\Yandex\YandexDisk2\3.1.21.3681\YandexDisk2.exe
+set yandex_disk=C:\Users\hidal\AppData\Roaming\Yandex\YandexDisk\YandexDisk.exe
 
 set robocopy_params=/s
 
