@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Mtgdb.Gui
+Exec=Mtgdb.Gui
+Icon=Mtgdb.Gui
+Terminal=false
+Type=Application
+Categories=Game;
+X-AppImage-Arch=x86_64
+X-AppImage-Name=Mtgdb.Gui
+X-AppImage-Version=4.1.0.2

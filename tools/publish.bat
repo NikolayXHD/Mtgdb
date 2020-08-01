@@ -91,8 +91,14 @@ robocopy %output%\charts         ^
 xcopy /q %output%\..\LICENSE ^
          %target%
 
-xcopy /q %output%\start.sh ^
+xcopy /q %output%\AppRun ^
          %target%
+
+xcopy /q %output%\Mtgdb.Gui.png ^
+        %target%
+
+xcopy /q %output%\Mtgdb.Gui.desktop ^
+        %target%
 
 echo %packageName%.zip %target%\update\version.txt
 
