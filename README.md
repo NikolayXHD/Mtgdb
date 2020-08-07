@@ -53,6 +53,6 @@ The query editor **highlights query syntax** and gives you **intellisense** when
 
 ## SEO phrases  
 The phrases below are to make this page more visible to search engines  
-Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) advanced card search in card database  
-Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) deck building and deck analisys  
-Mtgdb.Gui is a free windows application software for Magic the Gathering (MTG) inventory tracking collection management
+Mtgdb.Gui is a free windows linux desktop application software for Magic the Gathering (MTG) advanced card search in card database  
+Mtgdb.Gui is a free windows linux desktop application software for Magic the Gathering (MTG) deck building and deck analisys  
+Mtgdb.Gui is a free windows linux desktop application software for Magic the Gathering (MTG) inventory tracking collection management
