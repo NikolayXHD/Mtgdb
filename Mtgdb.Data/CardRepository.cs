@@ -110,7 +110,7 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private Dictionary<string, PricePatch> deserializePrices()
+		private Dictionary<string, MtgjsonPrices> deserializePrices()
 		{
 			if (_priceContent == null)
 				return null;
@@ -118,7 +118,10 @@ namespace Mtgdb.Data
 			using Stream stream = new MemoryStream(_priceContent);
 			using var stringReader = new StreamReader(stream);
 			using var jsonReader = new JsonTextReader(stringReader);
-			var result = new JsonSerializer().Deserialize<Dictionary<string, PricePatch>>(jsonReader);
+			jsonReader.Read(); // {
+			jsonReader.Read(); //   "data":
+			jsonReader.Read(); //   {
+			var result = new JsonSerializer().Deserialize<Dictionary<string, MtgjsonPrices>>(jsonReader);
 			return result;
 		}
 
@@ -133,11 +136,11 @@ namespace Mtgdb.Data
 					var card = set.ActualCards[i];
 					card.Set = set;
 					card.Id = string.Intern(CardId.Generate(card));
-					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var pricePatch))
+					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
 					{
 						if (RememberOriginalPrices)
 							card.OriginalPrices = card.Prices;
-						card.Prices = pricePatch.Prices;
+						card.Prices = mtgjsonPrices;
 					}
 
 					card.Formatter = _formatter;

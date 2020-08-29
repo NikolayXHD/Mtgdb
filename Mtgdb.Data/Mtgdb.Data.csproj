@@ -127,7 +127,6 @@
     <Compile Include="Model\Mtgjson\CardTypes.cs" />
     <Compile Include="Model\Mtgjson\GuidV5.cs" />
     <Compile Include="Model\Mtgjson\MtgjsonPrices.cs" />
-    <Compile Include="Model\Mtgjson\PricePatch.cs" />
     <Compile Include="Model\Patch\ImageNamePatch.cs" />
     <Compile Include="Model\Serialization\EntryListConverter.cs" />
     <Compile Include="Model\Serialization\InternedStringArrayConverter.cs" />

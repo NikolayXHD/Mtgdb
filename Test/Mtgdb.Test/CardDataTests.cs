@@ -66,18 +66,25 @@ namespace Mtgdb.Test
 				if ((card.Prices?.Paper?.Count ?? 0) == 0)
 					continue;
 
-				for (var i = 0; i < card.Prices.Paper.Count; i++)
+				foreach ((string shopName, ShopPriceHistory shopPrices) in card.Prices.Paper)
 				{
-					var date = card.Prices.Paper[i].Key;
+					if ((shopPrices.Retail?.Normal?.Count ?? 0) == 0)
+						continue;
 
-					Assert.That(date, Is.Not.Null);
-					Assert.That(date, Is.Not.Empty);
-					Assert.That(date, Does.Match(@"^\d{4}-\d{2}-\d{2}$"));
-
-					if (i > 0)
+					for (var i = 0; i < shopPrices.Retail.Normal.Count; i++)
 					{
-						var prevDate = card.Prices.Paper[i - 1].Key;
-						Assert.That(date, Is.GreaterThan(prevDate).Using<string>(StringComparer.Ordinal));
+						var list = shopPrices.Retail.Normal;
+
+						var date = list[i].Key;
+						Assert.That(date, Is.Not.Null);
+						Assert.That(date, Is.Not.Empty);
+						Assert.That(date, Does.Match(@"^\d{4}-\d{2}-\d{2}$"));
+
+						if (i > 0)
+						{
+							var prevDate = list[i - 1].Key;
+							Assert.That(date, Is.GreaterThan(prevDate).Using<string>(StringComparer.Ordinal));
+						}
 					}
 				}
 			}

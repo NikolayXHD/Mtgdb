@@ -219,78 +219,6 @@ namespace Mtgdb.Data
 		[JsonIgnore]
 		public IReadOnlyList<string> Printings { get; set; }
 
-		/*
-		/// <summary>
-		/// Color of the border. Can be black, borderless, gold, silver, or white.
-		/// </summary>
-		public string BorderColor { get; set; }
-
-		/// <summary>
-		/// List of all colors in card’s mana cost, rules text and any color indicator.
-		/// </summary>
-		public List<string> ColorIdentity { get; set; }
-
-		/// <summary>
-		/// List of all colors in card’s color indicator. Usually found only on cards without mana costs and other special cards.
-		/// </summary>
-		public List<string> ColorIndicator { get; set; }
-
-		/// <summary>
-		/// The converted mana cost of the face (half, or part) of the card.
-		/// </summary>
-		[JsonProperty("faceConvertedManaCost")]
-		public float FaceCmc { get; set; }
-
-		/// <summary>Style of the card frame. Can be 1993, 1997, 2003, 2015, or future.</summary>
-		[JsonProperty("frameVersion")]
-		public string FrameVersion { get; set; }
-
-		/// <summary>Can the card be found in foil? Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("hasFoil")]
-		public bool hasFoil { get; set; }
-
-		/// <summary>Can the card be found in foil? Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("hasFoil")]
-		public bool HasFoil { get; set; }
-
-		/// <summary>Can the card be found in non-foil? Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("hasNoFoil")]
-		public bool HasNoFoil { get; set; }
-
-		/// <summary>Can the card only be found in foil? true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("isFoilOnly")]
-		public bool IsFoilOnly { get; set; }
-
-		/// <summary>Is the card only available online? Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("isOnlineOnly")]
-		public bool IsOnlineOnly { get; set; }
-
-		/// <summary>Is the card oversized? Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("isOversized")]
-		public bool IsOversized { get; set; }
-
-		/// <summary>Is the card on the Reserved List? Can be true or false. (If false, isReserved is usually omitted.)</summary>
-		[JsonProperty("isReserved")]
-		public bool IsReserved { get; set; }
-
-		/// <summary>Card is “timeshifted”, a feature from Time Spiral block. Can be true or false. (If false, it is usually omitted.)</summary>
-		[JsonProperty("isTimeshifted")]
-		public bool IsTimeshifted { get; set; }
-
-		/// <summary>
-		/// UUIDs of cards with alternate printings with the same set code (excluding Un-sets).
-		/// </summary>
-		[JsonProperty("variations")]
-		public List<string> Variations { get; set; }
-
-		/// <summary>
-		/// Name of the watermark on the card. Can be one of many different values, including a guild name, clan name, or wotc for the shooting star. (If there isn’t one, it can be an empty string, but it is usually omitted.)
-		/// </summary>
-		[JsonProperty("watermark")]
-		public string Watermark { get; set; }
-		*/
-
-
 		[JsonIgnore]
 		public Set Set { get; set; }
 
@@ -603,9 +531,11 @@ namespace Mtgdb.Data
 				return;
 
 			_pricesReady = true;
-			_price = Prices?.Paper?.TryGetLast().Value;
+			_price = Prices?.Paper?.SelectMany(entry =>
+				(IEnumerable<KeyValuePair<string, float?>>)entry.Value?.Retail?.Normal ??
+				Enumerable.Empty<KeyValuePair<string, float?>>()
+			).AtMin(entry => entry.Key).FindOrDefault().Value;
 		}
-
 
 		internal void Patch(CardPatch patch)
 		{
