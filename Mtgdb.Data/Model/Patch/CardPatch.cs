@@ -20,7 +20,6 @@ namespace Mtgdb.Data
 		public string OriginalText { get; [UsedImplicitly] set; }
 		public string OriginalType { get; [UsedImplicitly] set; }
 		public string Layout { get; [UsedImplicitly] set; }
-		public string[] Names { get; [UsedImplicitly] set; }
 		public string Number { get;  [UsedImplicitly] set; }
 
 		public int? Hand { get; [UsedImplicitly] set; }

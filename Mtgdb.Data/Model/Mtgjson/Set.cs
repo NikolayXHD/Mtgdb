@@ -36,8 +36,17 @@ namespace Mtgdb.Data
 		[JsonIgnore]
 		public Dictionary<string, List<Card>> TokensByName { get; internal set; }
 
+		[JsonIgnore]
+		public Dictionary<string, Card> ActualCardsById { get; internal set; }
+
+		[JsonIgnore]
+		public Dictionary<string, Card> TokensById { get; internal set; }
+
 		public Dictionary<string, List<Card>> MapByName(bool tokens) =>
 			tokens ? TokensByName : ActualCardsByName;
+
+		public Dictionary<string, Card> MapById(bool tokens) =>
+			tokens ? TokensById : ActualCardsById;
 
 		public IList<Card> List(bool tokens) =>
 			tokens ? Tokens : ActualCards;

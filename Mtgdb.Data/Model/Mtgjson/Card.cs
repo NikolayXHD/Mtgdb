@@ -78,25 +78,23 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string ManaCost { get; set; }
 
-		/// <summary>
-		/// An integer most cards have which Wizards uses as a card identifier.
-		/// </summary>
-		[JsonProperty("multiverseId")]
-		public int? MultiverseId { get; set; }
-
-		/// <summary>
-		/// Name of the card. (If the card is in an Un-set and has multiple printings, a space and letter enclosed in parentheses, starting with (b), follows the name.)
-		/// </summary>
 		[JsonProperty("name")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string NameEn { get; set; }
 
+		[JsonProperty("faceName")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		internal string FaceName { get; set; }
+
 		/// <summary>
 		/// Names of each face on the card. Meld cards are listed in the order of CardA, Meld, CardB.
 		/// </summary>
-		[JsonProperty("names")]
+		[JsonProperty("otherFaceIds")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		internal IList<string> Names { get; set; }
+		public IList<string> OtherFaceIds { get; set; }
+
+		public IEnumerable<Card> OtherFaces =>
+			OtherFaceIds?.Select(id => Set.MapById(IsToken)[id]) ?? Enumerable.Empty<Card>();
 
 		/// <summary>
 		/// Number of the card.
@@ -188,16 +186,18 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string MtgjsonId { get; set; }
 
+		[JsonProperty("identifiers")]
+		private CardIdentifiers Identifiers { get; set; }
+
+		[JsonIgnore]
+		public int? MultiverseId => Identifiers.MultiverseId;
+
+		[JsonIgnore]
+		public string ScryfallId => Identifiers.ScryfallId;
+
 		[JsonProperty("side")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string Side { get; set; }
-
-		/// <summary>
-		/// Id from mtgjson v 4.1.3 and earlier, non-unique per card face
-		/// </summary>
-		[JsonProperty("scryfallId")]
-		[JsonConverter(typeof(InternedStringConverter))]
-		public string ScryfallId { get; set; }
 
 		[JsonProperty("prices")]
 		public MtgjsonPrices Prices
@@ -648,9 +648,6 @@ namespace Mtgdb.Data
 			if (patch.Layout != null)
 				Layout = patch.Layout;
 
-			if (patch.Names != null)
-				Names = patch.Names;
-
 			if (patch.Number != null)
 				Number = patch.Number;
 
@@ -830,20 +827,12 @@ namespace Mtgdb.Data
 
 		private static readonly HashSet<string> _foundDuplicates = new HashSet<string>(Str.Comparer);
 
-
-		[JsonIgnore]
-		private CardFaceVariants _faceVariants;
-
-		[JsonIgnore]
-		public CardFaceVariants FaceVariants =>
-			_faceVariants ??= new CardFaceVariants(this);
-
 		[JsonIgnore]
 		private CardFaces _faces;
 
 		[JsonIgnore]
 		public CardFaces Faces =>
-			_faces ??= new CardFaces(FaceVariants);
+			_faces ??= new CardFaces(this);
 
 		[JsonIgnore]
 		public (int? Number, string Letter) SortableNumber =>
@@ -867,5 +856,21 @@ namespace Mtgdb.Data
 		private bool _pricesReady;
 		private MtgjsonPrices _prices;
 		private (int? Number, string Letter)? _sortableNumber;
+	}
+
+	public class CardIdentifiers
+	{
+		/// <summary>
+		/// An integer most cards have which Wizards uses as a card identifier.
+		/// </summary>
+		[JsonProperty("multiverseId")]
+		public int? MultiverseId { get; set; }
+
+		/// <summary>
+		/// Id from mtgjson v 4.1.3 and earlier, non-unique per card face
+		/// </summary>
+		[JsonProperty("scryfallId")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string ScryfallId { get; set; }
 	}
 }

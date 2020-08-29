@@ -101,7 +101,7 @@ namespace Mtgdb.Gui
 
 			_ctsLoadingImages?.Cancel();
 
-			_cardForms = card.Faces
+			_cardForms = card.OtherFaces.Prepend(card)
 				.OrderByDescending(face => face.NameNormalized == card.NameNormalized)
 				.Select(face => _cardRepository.MapByName(card.IsToken)[face.NameNormalized]
 					.AtMax(c => c.HasImage(ui))

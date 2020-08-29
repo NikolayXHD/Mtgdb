@@ -38,7 +38,7 @@ namespace Mtgdb.Util
 
 			string urlScryfallId = "https://api.scryfall.com/cards/" +
 				card.ScryfallId + "?format=image&version=" + format;
-			if (card.Side == "b")
+			if (Str.Equals(card.Side, CardSides.B))
 				urlScryfallId += "&face=back";
 
 			await downloadImage(urlScryfallId, targetPath, token);

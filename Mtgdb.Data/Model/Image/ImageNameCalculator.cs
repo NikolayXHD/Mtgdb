@@ -43,7 +43,8 @@ namespace Mtgdb.Data
 						string imageName = customImageOrder?.ImageName ?? (
 							Str.Equals(card.Layout, CardLayouts.Split)
 								? string.Concat(card.Faces.Select(c => c.NameNormalized))
-								: card.NameNormalized);
+								: card.NameNormalized
+							);
 
 						card.ImageName = calculateImageName(imageName, i, cards.Count);
 					}

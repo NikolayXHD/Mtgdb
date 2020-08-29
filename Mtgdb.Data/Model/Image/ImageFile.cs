@@ -71,7 +71,7 @@ namespace Mtgdb.Data
 		public ImageModel ApplyRotation(Card card, bool zoom)
 		{
 			bool isAftermath =
-				Str.Equals(card.Layout, CardLayouts.Aftermath) && card == card.Faces[1];
+				Str.Equals(card.Layout, CardLayouts.Aftermath) && Str.Equals(card.Side, CardSides.B);
 
 			if (isAftermath)
 				return rotateLeft();

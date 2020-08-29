@@ -239,10 +239,10 @@ namespace Mtgdb.Gui
 						.Append(nameof(Card.ImageName)).Append(": ")
 						.Append(card.ImageName);
 
-				if (card.Faces.Count > 1)
+				if (card.OtherFaceIds != null && card.OtherFaceIds.Count > 0)
 					additionalFields.AppendLine()
 						.Append(nameof(Card.Faces)).Append(": ")
-						.Append(string.Join(", ", card.Faces.Select(face => face.NameEn)));
+						.Append(string.Join(", ", card.OtherFaces.Select(_=>_.NameEn)));
 
 				if (additionalFields.Length > 0)
 					text

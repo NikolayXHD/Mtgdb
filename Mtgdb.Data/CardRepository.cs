@@ -81,11 +81,13 @@ namespace Mtgdb.Data
 				using var stream = new MemoryStream(content);
 				using var stringReader = new StreamReader(stream);
 				using var jsonReader = new JsonTextReader(stringReader);
-				jsonReader.Read();
+				jsonReader.Read(); // {
+				jsonReader.Read(); //   "data":
+				jsonReader.Read(); //   {
 
 				while (true)
 				{
-					jsonReader.Read();
+					jsonReader.Read(); // "10E":
 
 					if (jsonReader.TokenType == JsonToken.EndObject)
 						// sets are over, all json was read
@@ -185,6 +187,12 @@ namespace Mtgdb.Data
 						gr => gr.ToList(),
 						Str.Comparer);
 
+				set.ActualCardsById = set.ActualCards
+					.ToDictionary(_ => _.MtgjsonId);
+
+				set.TokensById = set.Tokens
+					.ToDictionary(_ => _.MtgjsonId);
+
 				foreach (var card in set.Cards)
 					CardsById[card.Id] = card;
 
@@ -249,7 +257,6 @@ namespace Mtgdb.Data
 		private static void preProcessCardOrToken(Card card)
 		{
 			card.NameNormalized = string.Intern(card.NameEn.RemoveDiacritics());
-			card.Names = card.Names?.Select(_ => string.Intern(_.RemoveDiacritics())).ToList();
 
 			if (card.SubtypesArr != null)
 				card.Subtypes = string.Intern(string.Join(" ", card.SubtypesArr));
@@ -280,6 +287,9 @@ namespace Mtgdb.Data
 
 		private void preProcessCard(Card card)
 		{
+			if (!string.IsNullOrEmpty(card.FaceName))
+				card.NameEn = card.FaceName;
+
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.Patch(patch);
 
@@ -313,8 +323,18 @@ namespace Mtgdb.Data
 
 		private static void preProcessToken(Card card)
 		{
+			if (!string.IsNullOrEmpty(card.FaceName))
+				card.NameEn = card.FaceName;
+
 			if (Str.Equals(card.Layout, "double_faced_token"))
 				card.Layout = CardLayouts.Transform;
+			else if (
+				Str.Equals(card.Layout, "art_series") ||
+				Str.Equals(card.Layout, CardTypes.Token) ||
+				Str.Equals(card.Layout, CardTypes.Emblem))
+			{
+				card.Layout = CardLayouts.Normal;
+			}
 
 			string type = null;
 			if (card.TypesArr.Any(_ => CardCardTypes.ByType.TryGetValue(_, out type)))
