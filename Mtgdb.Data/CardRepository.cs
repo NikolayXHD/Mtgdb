@@ -135,7 +135,12 @@ namespace Mtgdb.Data
 				{
 					var card = set.ActualCards[i];
 					card.Set = set;
+
+					if (!string.IsNullOrEmpty(card.FaceName))
+						card.NameEn = card.FaceName;
+
 					card.Id = string.Intern(CardId.Generate(card));
+
 					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
 					{
 						if (RememberOriginalPrices)
@@ -165,6 +170,10 @@ namespace Mtgdb.Data
 					var token = set.Tokens[i];
 					token.IsToken = true;
 					token.Set = set;
+
+					if (!string.IsNullOrEmpty(token.FaceName))
+						token.NameEn = token.FaceName;
+
 					token.Id = string.Intern(CardId.Generate(token));
 					token.LegalityByFormat = tokenLegalityByFormat;
 					token.Formatter = _formatter;
@@ -290,9 +299,6 @@ namespace Mtgdb.Data
 
 		private void preProcessCard(Card card)
 		{
-			if (!string.IsNullOrEmpty(card.FaceName))
-				card.NameEn = card.FaceName;
-
 			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
 				card.Patch(patch);
 
@@ -326,9 +332,6 @@ namespace Mtgdb.Data
 
 		private static void preProcessToken(Card card)
 		{
-			if (!string.IsNullOrEmpty(card.FaceName))
-				card.NameEn = card.FaceName;
-
 			if (Str.Equals(card.Layout, "double_faced_token"))
 				card.Layout = CardLayouts.Transform;
 			else if (
