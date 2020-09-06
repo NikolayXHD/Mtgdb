@@ -4,7 +4,7 @@
 
 	<!-- === DEFAULT APPLICATION CONFIGURATION ===
 		Do not edit this, because your changes will not survive installing new version.
-		For your changes there is is a separate file
+		For your changes there is a separate file
 		* etc\Mtgdb.Gui.xml
 	-->
 
@@ -14,8 +14,8 @@
 	/>
 
 	<MtgjsonSource
-			Url="https://www.mtgjson.com/files/AllPrintings.json.zip"
-			PriceUrl="https://www.mtgjson.com/files/AllPrices.json.zip"
+			Url="https://mtgjson.com/api/v5/AllPrintings.json.zip"
+			PriceUrl="https://mtgjson.com/api/v5/AllPrices.json.zip"
 	/>
 
 	<AppSource

@@ -434,6 +434,7 @@ namespace Mtgdb.Data
 			"Living Weapon",
 			custom("Manifest", bound("manifest", notAfter: "to")),
 			custom("Melee", bound("melee", notAfter: "cast")),
+			custom("Mill", @"mill (\w*|all but the bottom ten) cards?"),
 			count("Monstrosity"),
 			"Morbid",
 			custom("Myriad", bound("myriad", notBefore: "landscape")),

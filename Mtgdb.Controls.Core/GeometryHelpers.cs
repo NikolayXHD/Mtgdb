@@ -101,6 +101,9 @@ namespace Mtgdb.Controls
 		public static Size Minus(this Size left, Size right) =>
 			new Size(left.Width - right.Width, left.Height - right.Height);
 
+		public static bool HasSmallerDimensionThan(this Size size, Size other) =>
+			size.Width < other.Width || size.Height < other.Height;
+
 		public static Padding AddTopLeft(this Padding padding, Size value)
 		{
 			int dl = value.Width / 2;
@@ -287,6 +290,7 @@ namespace Mtgdb.Controls
 
 		private static int strongRound(double value) =>
 			Math.Sign(value) * (int) (Math.Abs(value) + 0.5);
+
 
 
 

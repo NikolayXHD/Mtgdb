@@ -187,7 +187,7 @@ namespace Mtgdb.Data
 			foreach (var entryByDirectory in files.GroupBy(_=>_.Parent()))
 			{
 				// use_dir_sorting_to_find_most_nested_root
-				var root = directories.First(_ => _.Path.IsParentOf(entryByDirectory.Key));
+				var root = directories.First(_ => _.Path.IsParentOrEqualOf(entryByDirectory.Key));
 				string customSetCode = root.Set;
 				int? customPriority = root.Priority;
 

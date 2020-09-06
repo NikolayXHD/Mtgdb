@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -18,11 +19,13 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class DeploymentUtils
 	{
-		private const string SetCodes = "slu,ss3,ha2,c20,iko";
+		private const string SetCodes = "2xm,ajmp,akr,anb,c20,cc1,cmr,fjmp,ha3,htr18,iko,jmp,m21,plgs,slu,ss3";
 		private const bool NonToken = true;
 		private const bool Token = true;
 		private const bool SelectSmall = true;
 		private const bool SelectZoom = true;
+
+
 
 		[Order(1)]
 		[TestCase(SetCodes, NonToken, Token)]
@@ -37,7 +40,8 @@ namespace Mtgdb.Util
 			var setCodes = setCodesList?.ToLower().Split(',');
 			var repo = new CardRepository(new CardFormatter(), () => null)
 			{
-				FilterSetCode = setCode => setCodes?.Contains(setCode.ToLower()) != false
+				FilterSetCode = setCode => setCodes?.Contains(setCode.ToLower()) != false,
+				PricesFile = FsPath.None
 			};
 
 			repo.LoadFile();
@@ -76,14 +80,36 @@ namespace Mtgdb.Util
 						{
 							var unnumbered = targetFile.Rename(_ => _.Replace("1.png", ".png"));
 							if (unnumbered.IsFile())
+							{
 								unnumbered.MoveFileTo(targetFile);
-
-							continue;
+								continue;
+							}
 						}
 
 						foreach (ImageDownloaderBase client in clients)
 						{
-							await client.DownloadCardImage(card, targetFile, CancellationToken.None);
+							int attempts = 5;
+
+							for (int i = 0; i < attempts; i++)
+							{
+								var cancellation = new CancellationTokenSource();
+								var time = DateTime.UtcNow;
+
+								var downloadTask = client.DownloadCardImage(card, targetFile, cancellation.Token);
+								var waitTask = Task.Delay(TimeSpan.FromSeconds(5), cancellation.Token);
+
+								await Task.WhenAny(downloadTask, waitTask);
+								cancellation.Cancel();
+
+								var elapsed = DateTime.UtcNow - time;
+								var delta = TimeSpan.FromSeconds(0.5) - elapsed;
+								if (delta.TotalSeconds > 0)
+									await Task.Delay(delta);
+
+								if (targetFile.IsFile())
+									break;
+							}
+
 							if (targetFile.IsFile())
 								break;
 
@@ -141,9 +167,10 @@ namespace Mtgdb.Util
 						foreach (FsPath smallImg in smallJpgDir.EnumerateFiles())
 						{
 							FsPath zoomImg = smallImg.ChangeDirectory(smallDir, zoomDir);
-							if (_keepExisting && zoomImg.IsFile())
+							if (_keepExisting && zoomImg.IsFile() && isZoomed(zoomImg))
 								continue;
-							WaifuScaler.Scale(smallImg, zoomImg);
+
+							scale(smallImg, zoomImg);
 						}
 					}
 					else
@@ -154,7 +181,7 @@ namespace Mtgdb.Util
 						FsPath zoomPngDir = zoomDir.Join(typeSubdir, setPngSubdir);
 						FsPath zoomPngDirBak = zoomDirBak.Join(typeSubdir, setPngSubdir);
 
-						var dirs = new List<(FsPath pngDir, FsPath pngDirBak, FsPath jpgDir)>();
+						var dirs = new List<(FsPath pngDir, FsPath pngDirBak, FsPath jpgDir, bool isZoom)>();
 						if (_createZoom)
 						{
 							zoomPngDir.CreateDirectory();
@@ -164,24 +191,28 @@ namespace Mtgdb.Util
 								FsPath convertedImg = zoomImg.ChangeDirectory(zoomPngDir, zoomJpgDir)
 									.Rename(_ => _.Replace(".png", ".jpg"));
 
-								if (_keepExisting && (zoomImg.IsFile() || convertedImg.IsFile()))
+								if (_keepExisting && (
+									zoomImg.IsFile() && isZoomed(zoomImg) ||
+									convertedImg.IsFile() && isZoomed(convertedImg)))
+								{
 									continue;
+								}
 
-								WaifuScaler.Scale(smallImg, zoomImg);
+								scale(smallImg, zoomImg);
 							}
 
-							dirs.Add((pngDir: zoomPngDir, pngDirBak: zoomPngDirBak, jpgDir: zoomJpgDir));
+							dirs.Add((pngDir: zoomPngDir, pngDirBak: zoomPngDirBak, jpgDir: zoomJpgDir, isZoom: true));
 						}
 
-						dirs.Add((pngDir: smallPngDir, pngDirBak: smallPngDirBak, jpgDir: smallJpgDir));
+						dirs.Add((pngDir: smallPngDir, pngDirBak: smallPngDirBak, jpgDir: smallJpgDir, isZoom: false));
 
-						foreach ((FsPath pngDir, FsPath pngDirBak, FsPath jpgDir) in dirs)
+						foreach ((FsPath pngDir, FsPath pngDirBak, FsPath jpgDir, bool isZoom) in dirs)
 						{
 							jpgDir.CreateDirectory();
 
 							var pngImages = pngDir.EnumerateFiles();
 							foreach (FsPath sourceImage in pngImages)
-								convertToJpg(sourceImage, jpgDir, _keepExisting);
+								convertToJpg(sourceImage, jpgDir, isZoom);
 
 							moveDirectoryToBackup(pngDir, pngDirBak);
 						}
@@ -261,6 +292,25 @@ namespace Mtgdb.Util
 			}
 		}
 
+
+		private static void scale(FsPath smallImg, FsPath zoomImg)
+		{
+			if (isZoomed(smallImg))
+				File.Copy(smallImg.Value, zoomImg.Value);
+			else
+				WaifuScaler.Scale(smallImg, zoomImg);
+		}
+
+		private static bool isZoomed(FsPath smallImg)
+		{
+			using var bitmap = new Bitmap(smallImg.Value);
+			Size size = bitmap.Size;
+			Size targetSize = ImageLoader.ZoomedSize;
+			return
+				!size.HasSmallerDimensionThan(targetSize) ||
+				!size.HasSmallerDimensionThan(targetSize.Transpose());
+		}
+
 		private static void moveDirectoryToBackup(FsPath dir, FsPath dirBak)
 		{
 			if (dirBak.IsDirectory())
@@ -269,10 +319,10 @@ namespace Mtgdb.Util
 			dir.MoveDirectoryTo(dirBak);
 		}
 
-		private void convertToJpg(FsPath sourceImage, FsPath targetDir, bool keepExisting)
+		private void convertToJpg(FsPath sourceImage, FsPath targetDir, bool isZoomDir)
 		{
 			FsPath targetImage = targetDir.Join(sourceImage.Basename(extension: false)).Concat(".jpg");
-			if (keepExisting && targetImage.IsFile())
+			if (_keepExisting && targetImage.IsFile() && (isZoomed(targetImage) || !isZoomDir))
 				return;
 
 			using var original = new Bitmap(sourceImage.Value);
@@ -319,6 +369,7 @@ namespace Mtgdb.Util
 			kernel.Load<DalModule>();
 
 			var repo = kernel.Get<CardRepository>();
+			repo.PricesFile = FsPath.None;
 			repo.LoadFile();
 			repo.Load();
 

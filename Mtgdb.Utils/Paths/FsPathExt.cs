@@ -55,6 +55,14 @@ namespace Mtgdb
 				&& other.Value.StartsWith(path.Value, FsPath.Comparison);
 		}
 
+		public static bool IsParentOrEqualOf(this FsPath path, FsPath other)
+		{
+			return
+				other.Value != null && other.Value.Length >= path.Value.Length
+				&& (other.Value.Length == path.Value.Length || other.Value[path.Value.Length] == FsPath.Separator)
+				&& other.Value.StartsWith(path.Value, FsPath.Comparison);
+		}
+
 		public static DirectoryInfo CreateDirectory(this FsPath path) =>
 			System.IO.Directory.CreateDirectory(path.Value);
 

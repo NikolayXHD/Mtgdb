@@ -1,4 +1,20 @@
+4.1.0.3
+-------
+
+new sets are plgs,ha3,slu,ss3,2xm
+
+[v] update data structures to match mtgjson v5 scheme 
+[v] update card / prices download links
+[v] download and scale new images
+[v] test new images
+[v] publish new images
+[v] check legalities
+[v] check if new keywords were introduced
+    mill
+    
+
 Incorporating new sets checklist
+################################
 
 Data
 ====
@@ -64,7 +80,7 @@ upload .7z -ipped
     set directories
     lq-list/filelist.txt
     mq-list/filelist.txt
-to gdrive  
+to yandex drive  
   
 Additional data
 ===============

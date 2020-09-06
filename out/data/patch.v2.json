@@ -449,12 +449,39 @@
 		"AKH": {
 			"Swamp": { "order": [4, 1, 2, 3] },
 			"Forest": { "order": [4, 1, 2, 3] },
-			"Mountain": { "order": [4, 1, 2, 3]},
+			"Mountain": { "order": [4, 1, 2, 3] },
 			"Plains": { "order": [4, 1, 2, 3] },
 			"Island": { "order": [4, 1, 2, 3] }
 		},
 		"DD3_DVD": {
-			"Swamp": { "order": [1, 2, 4, 3]}
-		}
+			"Swamp": { "order": [1, 2, 4, 3] }
+		},
+        "AKR": {
+          "Authority": { "ImageName": "Appeal"   },
+          "Fame":      { "ImageName": "Claim"    },
+          "Memory":    { "ImageName": "Commit"   },
+          "Oblivion":  { "ImageName": "Consign"  },
+          "Ribbons":   { "ImageName": "Cut"      },
+          "Lead":      { "ImageName": "Destined" },
+          "Despair":   { "ImageName": "Driven"   },
+          "Dawn":      { "ImageName": "Dusk"     },
+          "Comply":    { "ImageName": "Failure"  },
+          "Market":    { "ImageName": "Farm"     },
+          "Dust":      { "ImageName": "Grind"    },
+          "Earth":     { "ImageName": "Heaven"   },
+          "Injury":    { "ImageName": "Insult"   },
+          "Chance":    { "ImageName": "Leave"    },
+          "Feed":      { "ImageName": "Mouth"    },
+          "Return":    { "ImageName": "Never"    },
+          "Victory":   { "ImageName": "Onward"   },
+          "Fight":     { "ImageName": "Prepare"  },
+          "Riches":    { "ImageName": "Rags"     },
+          "Believe":   { "ImageName": "Reason"   },
+          "Rubble":    { "ImageName": "Reduce"   },
+          "Cooperate": { "ImageName": "Refuse"   },
+          "Mind":      { "ImageName": "Spring"   },
+          "Finish":    { "ImageName": "Start"    },
+          "Survive":   { "ImageName": "Struggle" }
+        }
 	}
 }

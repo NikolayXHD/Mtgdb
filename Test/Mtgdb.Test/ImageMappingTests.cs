@@ -118,6 +118,7 @@ namespace Mtgdb.Test
 					DevPaths.XlhqDir.Join("Promos", "pWAR - War of the Spark Promos"),
 					DevPaths.XlhqDir.Join("WAR - War of the Spark", "300DPI Cards")
 				});
+
 				yield return new TestCaseData("c19 ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("c19")});
 				yield return new TestCaseData("cmb1", new[] {DevPaths.GathererPreprocessedCardsDir.Join("cmb1")});
 				yield return new TestCaseData("eld ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("eld")});
@@ -127,6 +128,24 @@ namespace Mtgdb.Test
 				yield return new TestCaseData("ptg ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("ptg")});
 				yield return new TestCaseData("puma", new[] {DevPaths.GathererPreprocessedCardsDir.Join("puma")});
 				yield return new TestCaseData("hho ", new[] {DevPaths.GathererPreprocessedCardsDir.Join("hho")});
+
+				yield return new TestCaseData("PLGS", new[] {DevPaths.GathererPreprocessedCardsDir.Join("PLGS")});
+				yield return new TestCaseData("HA3", new[] {DevPaths.GathererPreprocessedCardsDir.Join("HA3")});
+				yield return new TestCaseData("SLU", new[] {DevPaths.GathererPreprocessedCardsDir.Join("SLU")});
+				yield return new TestCaseData("SS3", new[] {DevPaths.GathererPreprocessedCardsDir.Join("SS3")});
+				yield return new TestCaseData("2XM", new[] {DevPaths.GathererPreprocessedCardsDir.Join("2XM")});
+
+				yield return new TestCaseData("CC1", new[] {DevPaths.GathererPreprocessedCardsDir.Join("CC1")});
+				yield return new TestCaseData("CMR", new[] {DevPaths.GathererPreprocessedCardsDir.Join("CMR")});
+				yield return new TestCaseData("AKR", new[] {DevPaths.GathererPreprocessedCardsDir.Join("AKR")});
+				yield return new TestCaseData("ANB", new[] {DevPaths.GathererPreprocessedCardsDir.Join("ANB")});
+				yield return new TestCaseData("AJMP", new[] {DevPaths.GathererPreprocessedCardsDir.Join("AJMP")});
+				yield return new TestCaseData("JMP", new[] {DevPaths.GathererPreprocessedCardsDir.Join("JMP")});
+				yield return new TestCaseData("FJMP", new[] {DevPaths.GathererPreprocessedCardsDir.Join("FJMP")});
+
+				yield return new TestCaseData("M21", new[] {DevPaths.GathererPreprocessedCardsDir.Join("M21")});
+				yield return new TestCaseData("HTR18", new[] {DevPaths.GathererPreprocessedCardsDir.Join("HTR18")});
+
 				// ReSharper restore StringLiteralTypo
 			}
 		}
@@ -140,7 +159,7 @@ namespace Mtgdb.Test
 			{
 				var imageModel = Ui.GetSmallImage(card);
 				FsPath dir = imageModel.ImageFile.FullPath.Parent();
-				new[] { dir }.Should().BeSubsetOf(expectedDirsSet);
+				new[] { dir.Value }.Should().BeSubsetOf(expectedDirsSet.Select(_=>_.Value));
 			}
 		}
 	}

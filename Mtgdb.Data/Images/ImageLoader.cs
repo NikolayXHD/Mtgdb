@@ -192,10 +192,10 @@ namespace Mtgdb.Data
 
 		public static readonly Size SizeCropped = new Size(470, 659);
 		private readonly Size _cardSize = new Size(223, 311);
-		private readonly Size _zoomedCardSize = new Size(446, 622);
+		internal static readonly Size ZoomedSize = new Size(446, 622);
 
 		public Size CardSize => _cardSize.ByDpi();
-		public Size ZoomedCardSize => _zoomedCardSize.ByDpi();
+		public Size ZoomedCardSize => ZoomedSize.ByDpi();
 
 		private readonly UiConfigRepository _configRepository;
 

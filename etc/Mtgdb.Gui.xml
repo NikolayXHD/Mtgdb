@@ -6,15 +6,15 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-  <!--<ImageLocations EnabledGroups="dev,xlhq" >-->
-	<ImageLocations EnabledGroups="prod-dev" >
+	<ImageLocations EnabledGroups="dev,xlhq">
+<!--<ImageLocations EnabledGroups="prod-dev" >-->
 
 		<Root Name="XLHQ"         Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
 		<Root Name="Promo"        Path="D:\distrib\games\mtg\XLHQ Promos" />
 		<Root Name="PTour"        Path="D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
 		<Root Name="Torrent"      Path="D:\distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
     <Root Name="Original"     Path="D:\distrib\games\mtg\Gatherer.Original" />
-    <Root Name="Preprocessed" Path="D:\distrib\games\mtg\Gatherer.Preprocessed" />
+    <Root Name="Preprocessed" Path="D:\distrib\games\mtg\Gatherer.PreProcessed" />
     <Root Name="Patch"        Path="D:\distrib\games\mtg\Patch" />
 
     <Directory Group="prod" Path="images\Mtgdb.Pictures\LQ"       />

@@ -202,11 +202,13 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *devoid* AND NOT Keywords: devoid")]
 		[TestCase(@"Text: *devour* AND NOT Keywords: devour AND NOT Name: *devour*")]
 		[TestCase(@"Text: *discard* AND NOT Keywords: discard")]
-		//[TestCase(@"")]
+		//
 		[TestCase(@"Text: (extra AND turn) AND NOT Keywords: ""extra turn""")]
 		[TestCase(@"Keywords: ""extra turn"" AND NOT Text: ""extra turn""")]
-		//[TestCase(@"")]
-		public void Keyword_pattern_Has_perfect_recall(string query)
+		//
+		[TestCase(@"Keywords: ""mill"" AND NOT Text: ""mill""")]
+		[TestCase(@"Text: ""mill"" AND NOT Keywords: ""mill"" AND NOT NameEn: ""tread mill""")]
+		public void Keyword_pattern_Has_perfect_presision_and_recall(string query)
 		{
 			var cardNames = Searcher.SearchCards(query, "en")
 				.Select(c => c.NameEn)

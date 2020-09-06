@@ -80,6 +80,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Tesseract, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null">
