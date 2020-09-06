@@ -31,11 +31,11 @@ namespace Mtgdb.Gui
 				if (deckSearcher.IsIndexSaved)
 				{
 					deckSearcher.LoadIndexes();
-					await _repo.IsLoadingComplete.Wait(token);
+					await _repo.IsLoadingPriceComplete.Wait(token);
 				}
 				else
 				{
-					await _repo.IsLoadingComplete.Wait(token);
+					await _repo.IsLoadingPriceComplete.Wait(token);
 					deckSearcher.LoadIndexes();
 				}
 

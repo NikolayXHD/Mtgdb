@@ -17,10 +17,10 @@ namespace Mtgdb.Data
 
 		internal bool RememberOriginalPrices { get; set; }
 
-		public CardRepository(CardFormatter formatter, Func<IDataDownloader> downloader)
+		public CardRepository(CardFormatter formatter, Func<IDataDownloader> downloaderFactory)
 		{
 			_formatter = formatter;
-			_downloader = downloader;
+			_downloaderFactory = downloaderFactory;
 			SetsFile = AppDir.Data.Join("AllPrintings.json");
 			PricesFile = AppDir.Data.Join("AllPrices.json");
 			CustomSetCodes = new string[0];
@@ -28,26 +28,59 @@ namespace Mtgdb.Data
 			Cards = new List<Card>();
 		}
 
-		public async Task DownloadFiles(CancellationToken token)
+		public async Task DownloadPriceFile(CancellationToken token)
 		{
-			var downloader = _downloader();
+			if (PricesFile.IsValid() && !PricesFile.IsFile())
+				await Downloader.DownloadPrices(token);
 
-			var tasks = new List<Task>(2);
+			IsDownloadPriceComplete.Signal();
+		}
+
+		public void LoadPriceFile()
+		{
+			_priceContent = PricesFile.IsFile()
+				? PricesFile.ReadAllBytes()
+				: null;
+		}
+
+		public void LoadPrice()
+		{
+			Prices = deserializePrices();
+		}
+
+		public void FillPrice()
+		{
+			if (!IsLoadingComplete.Signaled)
+				throw new InvalidOperationException("Cards must be loaded filling price");
+
+			foreach (var set in SetsByCode.Values)
+			{
+				foreach (var card in set.Cards)
+				{
+					if (Prices != null && Prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
+					{
+						if (RememberOriginalPrices)
+							card.OriginalPrices = card.Prices;
+						card.Prices = mtgjsonPrices;
+					}
+				}
+			}
+
+			IsLoadingPriceComplete.Signal();
+			Prices = null; // free memory
+		}
+
+		public async Task DownloadFile(CancellationToken token)
+		{
 			if (!SetsFile.IsFile())
-				tasks.Add(downloader.DownloadMtgjson(token));
-			if (!PricesFile.IsFile())
-				tasks.Add(downloader.DownloadPrices(token));
-			if (tasks.Count > 0)
-				await Task.WhenAll(tasks);
+				await Downloader.DownloadMtgjson(token);
+
 			IsDownloadComplete.Signal();
 		}
 
 		public void LoadFile()
 		{
 			_defaultSetsContent = SetsFile.ReadAllBytes();
-			_priceContent = PricesFile.IsFile()
-				? PricesFile.ReadAllBytes()
-				: null;
 
 			_customSetContents = CustomSetCodes
 				.Select(code => AppDir.Data.Join("custom_sets", code + ".json").ReadAllBytes())
@@ -127,8 +160,6 @@ namespace Mtgdb.Data
 
 		public void Load()
 		{
-			var prices = deserializePrices();
-
 			foreach (var set in deserializeSets())
 			{
 				for (int i = set.ActualCards.Count - 1; i >= 0; i--)
@@ -140,13 +171,6 @@ namespace Mtgdb.Data
 						card.NameEn = card.FaceName;
 
 					card.Id = string.Intern(CardId.Generate(card));
-
-					if (prices != null && prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
-					{
-						if (RememberOriginalPrices)
-							card.OriginalPrices = card.Prices;
-						card.Prices = mtgjsonPrices;
-					}
 
 					card.Formatter = _formatter;
 
@@ -457,12 +481,15 @@ namespace Mtgdb.Data
 
 		public event Action SetAdded;
 		public AsyncSignal IsDownloadComplete { get; } = new AsyncSignal();
+
+		public AsyncSignal IsDownloadPriceComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsFileLoadingComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLoadingComplete { get; } = new AsyncSignal();
+		public AsyncSignal IsLoadingPriceComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLocalizationLoadingComplete { get; } = new AsyncSignal();
 
 		internal FsPath SetsFile { get; set; }
-		private FsPath PricesFile { get; set; }
+		internal FsPath PricesFile { get; set; }
 
 		internal string[] CustomSetCodes
 		{
@@ -503,8 +530,12 @@ namespace Mtgdb.Data
 		private byte[] _priceContent;
 
 		private readonly CardFormatter _formatter;
-		private readonly Func<IDataDownloader> _downloader;
+
+		private readonly Func<IDataDownloader> _downloaderFactory;
+		private IDataDownloader _downloader;
+		private IDataDownloader Downloader => _downloader ??= _downloaderFactory();
 
 		private Patch Patch { get; set; }
+		private Dictionary<string, MtgjsonPrices> Prices { get; set; }
 	}
 }

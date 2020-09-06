@@ -26,7 +26,7 @@ namespace Mtgdb.Data.Index
 
 		private void modelChanged()
 		{
-			if (!_repo.IsLoadingComplete.Signaled)
+			if (!_repo.IsLoadingPriceComplete.Signaled)
 				throw new InvalidOperationException();
 
 			_modelUpdatedTime = DateTime.UtcNow;

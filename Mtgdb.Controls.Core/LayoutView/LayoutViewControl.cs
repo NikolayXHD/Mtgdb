@@ -1465,7 +1465,7 @@ namespace Mtgdb.Controls
 		/// <summary>
 		/// mouse wheel without focus
 		/// </summary>
-		public bool PreFilterMessage(ref Message m)
+		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
 			if (Disposing || IsDisposed)
 				return false;

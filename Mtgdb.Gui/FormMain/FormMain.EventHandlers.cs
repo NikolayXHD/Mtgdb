@@ -227,6 +227,8 @@ namespace Mtgdb.Gui
 				.Run(localizationLoadingComplete);
 			_app.CancellationToken.When(_cardRepo.IsLoadingComplete)
 				.Run(repoLoadingComplete);
+			_app.CancellationToken.When(_cardRepo.IsLoadingPriceComplete)
+				.Run(repoLoadingPriceComplete);
 			_cardRepo.SetAdded += cardRepoSetAdded;
 		}
 
@@ -257,6 +259,18 @@ namespace Mtgdb.Gui
 				endRestoreSettings();
 
 				runRefilterTask();
+			});
+		}
+
+		private void repoLoadingPriceComplete()
+		{
+			this.Invoke(delegate
+			{
+				beginRestoreSettings();
+				_viewCards.RefreshData();
+				_cardSort.Invalidate();
+				endRestoreSettings();
+				updateFormStatus();
 			});
 		}
 

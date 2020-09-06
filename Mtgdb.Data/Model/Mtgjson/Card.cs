@@ -200,7 +200,7 @@ namespace Mtgdb.Data
 		public string Side { get; set; }
 
 		[JsonProperty("prices")]
-		public MtgjsonPrices Prices
+		internal MtgjsonPrices Prices
 		{
 			get => _prices;
 			set

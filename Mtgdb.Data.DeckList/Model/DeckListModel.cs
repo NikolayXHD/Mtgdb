@@ -41,7 +41,7 @@ namespace Mtgdb.Data.Model
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card)
 		{
-			if (!_repo.IsLoadingComplete.Signaled)
+			if (!_repo.IsLoadingPriceComplete.Signaled)
 				throw new InvalidOperationException();
 
 			if (!listChanged && !countChanged)

@@ -28,6 +28,9 @@ namespace Mtgdb.Gui
 		public bool ShowSeriesTotal { get; set; } = true;
 		public bool ExplainTotal { get; set; }
 
+		public IEnumerable<string> GetAllFields() =>
+			SeriesFields.Concat(ColumnFields).Concat(SummaryFields);
+
 		public bool SetDefaultValues()
 		{
 			bool modified = false;

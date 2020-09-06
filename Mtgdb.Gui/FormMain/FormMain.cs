@@ -395,9 +395,26 @@ namespace Mtgdb.Gui
 		{
 			_panelStatus.SuspendLayout();
 
-			_labelStatusSets.Text = _cardRepo.IsDownloadComplete.Signaled
-				? _cardRepo.SetsByCode.Count.ToString()
-				: "downloading cards…";
+			bool cardsDownloaded = _cardRepo.IsDownloadComplete.Signaled;
+			bool priceDownloaded = _cardRepo.IsDownloadPriceComplete.Signaled;
+
+			string status;
+			if (!cardsDownloaded && !priceDownloaded)
+				status = "downloading cards… prices…";
+			else if (cardsDownloaded && priceDownloaded)
+			{
+				status = _cardRepo.SetsByCode.Count.ToString();
+				if (_cardRepo.IsLoadingPriceComplete.Signaled || !_cardRepo.IsLoadingComplete.Signaled)
+					status = _cardRepo.SetsByCode.Count.ToString();
+				else
+					status = $"{_cardRepo.SetsByCode.Count.ToString()} loading prices…" ;
+			}
+			else if (!cardsDownloaded)
+				status = "downloading cards…";
+			else
+				status = "downloading prices…";
+
+			_labelStatusSets.Text = status;
 
 			_tabHeadersDeck.SetTabSettings(new Dictionary<object, TabSettings>
 			{

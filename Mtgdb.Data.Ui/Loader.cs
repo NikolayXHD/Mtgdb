@@ -63,7 +63,7 @@ namespace Mtgdb.Ui
 		{
 			AddTask(async token =>
 			{
-				await _repository.DownloadFiles(token);
+				await _repository.DownloadFile(token);
 				_repository.LoadFile();
 
 				if (_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate)
@@ -75,6 +75,16 @@ namespace Mtgdb.Ui
 				_imageRepository.LoadFiles();
 				_imageRepository.LoadSmall();
 				_imageRepository.LoadZoom();
+			});
+
+			AddTask(async token =>
+			{
+				await _repository.IsDownloadComplete.Wait(token);
+				await _repository.DownloadPriceFile(token);
+				_repository.LoadPriceFile();
+				_repository.LoadPrice();
+				await _repository.IsLoadingComplete.Wait(token);
+				_repository.FillPrice();
 			});
 
 			AddTask(async token =>
@@ -92,11 +102,12 @@ namespace Mtgdb.Ui
 				if (!_keywordSearcher.IsUpToDate)
 					_keywordSearcher.Load();
 
+				await _repository.IsLoadingPriceComplete.Wait(token);
+
 				if (!(_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate))
 					_cardSearcher.LoadIndexes();
 
 				_imageRepository.LoadArt();
-
 				GC.Collect();
 			});
 		}

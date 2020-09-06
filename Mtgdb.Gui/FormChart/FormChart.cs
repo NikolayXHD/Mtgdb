@@ -1001,6 +1001,16 @@ namespace Mtgdb.Gui
 				display(settings);
 			}
 
+			if (!_repository.IsLoadingPriceComplete.Signaled && settings.GetAllFields().Contains(nameof(Card.Price)))
+			{
+				MessageBox.Show(
+					$"Price loading is still in progress." + Environment.NewLine +
+					$"Once complete, refresh the diagram by \"{_buttonApply.Text}\" button."
+				);
+
+				return;
+			}
+
 			buildChartData(settings);
 		}
 
