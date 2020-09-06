@@ -11,7 +11,6 @@ new sets are plgs,ha3,slu,ss3,2xm
 [v] check legalities
 [v] check if new keywords were introduced
     mill
-    
 
 Incorporating new sets checklist
 ################################
@@ -61,26 +60,23 @@ D:\Distrib\games\mtg\Mega\XLHQ\ » !.xrop !200DPI !100DPI !GRN
 ```
 only aftermath and flip and *no* split cards should appear in result
 
-select-images.bat
-    edit to specify sets
-sign-images.bat
-    edit to specify sets
 
-create .7z for 
+use DeploymentUtils to
+- download
+- scale
+- select
+- sign
+- .7z
+the images
+
+upload .7z -ipped set directories to yandex drive
+also update these files in out/update/img/
     lq-list/filelist.txt
+    lq-token-list/filelist.txt
     mq-list/filelist.txt
+    mq-token-list/filelist.txt
 
-subdir-util.bat
-    edit to specify sets
-
-add new directories to Mtgdb.Gui.Default.xml
-    see `Mass import gdrive links` below
-
-upload .7z -ipped
-    set directories
-    lq-list/filelist.txt
-    mq-list/filelist.txt
-to yandex drive  
+update
   
 Additional data
 ===============
