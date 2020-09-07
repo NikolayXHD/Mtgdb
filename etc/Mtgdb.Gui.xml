@@ -6,10 +6,12 @@
 		NewsUrl= "https://github.com/NikolayXHD/Notifications/archive/master.zip"
 		ForumUrl="https://www.slightlymagic.net/forum/viewtopic.php?f=62&amp;t=19299&amp;start=10000"/>
 
-	<ImageLocations EnabledGroups="dev,xlhq">
-<!--<ImageLocations EnabledGroups="prod-dev" >-->
+<!--	<ImageLocations EnabledGroups="dev,xlhq">-->
+	<ImageLocations EnabledGroups="prod-dev" >
+<!--	<ImageLocations EnabledGroups="linux-install" >-->
 
 		<Root Name="Data"                     Path="D:\" LinuxPath="/home/kolia/data" />
+		<Root Name="LinuxInstall"             Path=""    LinuxPath="/home/kolia/Mtgdb.Gui" />
 		<Root Name="XLHQ"         Root="Data" Path="distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
 		<Root Name="Promo"        Root="Data" Path="distrib\games\mtg\XLHQ Promos" />
 		<Root Name="PTour"        Root="Data" Path="distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
@@ -31,6 +33,12 @@
     <Directory Group="prod-dev" Root="ToPublish" Path="mq"              Zoom="True" />
     <Directory Group="prod-dev" Root="ToPublish" Path="mq-token"        Zoom="True" />
 		<Directory Group="prod-dev" Root="Installed" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
+
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\LQ"       />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\LQ-token" />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\MQ"              Zoom="True" />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\MQ-token"        Zoom="True" />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
 		<Directory Group="dev" Zoom="False" Root="Original"     Path="cards" />
     <Directory Group="dev" Zoom="False" Root="Original"     Path="tokens" Priority="4" />

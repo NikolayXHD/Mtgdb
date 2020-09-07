@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using Mtgdb.Controls;
 using NLog;
@@ -110,6 +111,9 @@ namespace Mtgdb.Data
 		{
 			var chain = new BitmapTransformationChain(original, logException);
 			chain.ReplaceBy(_ => resize(_, size));
+
+			if (Runtime.IsMono)
+				chain.ReplaceBy(copy);
 			chain.Update(bmp => removeCorners(bmp, forceRemoveCorner));
 
 			return chain;
@@ -134,6 +138,17 @@ namespace Mtgdb.Data
 				CornerRemoved?.Invoke();
 		}
 
+		private static Bitmap copy(Bitmap bmp)
+		{
+			if (bmp == null || bmp.Width < 1 || bmp.Height < 1)
+				return bmp;
+
+			//copy the input argument
+			Bitmap copy = new Bitmap(bmp.Width, bmp.Height, PixelFormat.Format32bppArgb);
+			using Graphics gr = Graphics.FromImage(copy);
+			gr.DrawImage(bmp, 0, 0, bmp.Width, bmp.Height);
+			return copy;
+		}
 
 
 		private Bitmap tryGetFromCache(FsPath path, RotateFlipType rotations)
@@ -175,7 +190,8 @@ namespace Mtgdb.Data
 			_imagesByPath.Remove(keyToRemove);
 		}
 
-		private static void logException(Exception ex) => _logger.Error(ex);
+		private static void logException(Exception ex) =>
+			_logger.Error(ex);
 
 		internal event Action CornerRemoved;
 		internal event Action FoundInCache;
