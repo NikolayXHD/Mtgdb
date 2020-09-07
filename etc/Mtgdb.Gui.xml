@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<WatchFile Mode="Auto" />
 
@@ -9,13 +9,16 @@
 	<ImageLocations EnabledGroups="dev,xlhq">
 <!--<ImageLocations EnabledGroups="prod-dev" >-->
 
-		<Root Name="XLHQ"         Path="D:\distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
-		<Root Name="Promo"        Path="D:\distrib\games\mtg\XLHQ Promos" />
-		<Root Name="PTour"        Path="D:\distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
-		<Root Name="Torrent"      Path="D:\distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
-    <Root Name="Original"     Path="D:\distrib\games\mtg\Gatherer.Original" />
-    <Root Name="Preprocessed" Path="D:\distrib\games\mtg\Gatherer.PreProcessed" />
-    <Root Name="Patch"        Path="D:\distrib\games\mtg\Patch" />
+		<Root Name="Data"                     Path="D:\" LinuxPath="/home/kolia/data" />
+		<Root Name="XLHQ"         Root="Data" Path="distrib\games\mtg\Mega\XLHQ" Exclude="100DPI;100 DPI;200DPI;200 DPI;Crops" />
+		<Root Name="Promo"        Root="Data" Path="distrib\games\mtg\XLHQ Promos" />
+		<Root Name="PTour"        Root="Data" Path="distrib\games\mtg\XLHQ Promos\Tournament and Program Promos" />
+		<Root Name="Torrent"      Root="Data" Path="distrib\games\mtg\XLHQ-Sets-Torrent.Unpacked" />
+    <Root Name="Original"     Root="Data" Path="distrib\games\mtg\Gatherer.Original" />
+    <Root Name="Preprocessed" Root="Data" Path="distrib\games\mtg\Gatherer.PreProcessed" />
+    <Root Name="Patch"        Root="Data" Path="distrib\games\mtg\Patch" />
+		<Root Name="ToPublish"    Root="Data" Path="distrib\games\mtg\Mtgdb.Pictures" />
+		<Root Name="Installed"    Root="Data" Path="games\Mtgdb.Gui" />
 
     <Directory Group="prod" Path="images\Mtgdb.Pictures\LQ"       />
     <Directory Group="prod" Path="images\Mtgdb.Pictures\LQ-Token" />
@@ -23,11 +26,11 @@
     <Directory Group="prod" Path="images\Mtgdb.Pictures\MQ-Token" Zoom="True" />
 		<Directory Group="prod" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
-		<Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\lq"       />
-    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\lq-token" />
-    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\mq"       Zoom="True" />
-    <Directory Group="prod-dev" Path="D:\distrib\games\mtg\Mtgdb.Pictures\mq-token" Zoom="True" />
-		<Directory Group="prod-dev" Path="D:\games\Mtgdb.Gui\images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
+		<Directory Group="prod-dev" Root="ToPublish" Path="lq"       />
+    <Directory Group="prod-dev" Root="ToPublish" Path="lq-token" />
+    <Directory Group="prod-dev" Root="ToPublish" Path="mq"              Zoom="True" />
+    <Directory Group="prod-dev" Root="ToPublish" Path="mq-token"        Zoom="True" />
+		<Directory Group="prod-dev" Root="Installed" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
 		<Directory Group="dev" Zoom="False" Root="Original"     Path="cards" />
     <Directory Group="dev" Zoom="False" Root="Original"     Path="tokens" Priority="4" />

@@ -21,7 +21,7 @@ namespace Mtgdb.Data
 			{
 				if (!string.IsNullOrEmpty(directory.Root))
 				{
-					directory.Path = rootsByName[directory.Root].Path.Join(directory.Path);
+					directory.Path = getRootPath(rootsByName[directory.Root]).Join(directory.Path);
 					if (!directory.Path.HasValue())
 						directory.Path = FsPath.None;
 
@@ -43,6 +43,22 @@ namespace Mtgdb.Data
 			return Directories
 				.Where(_ => groups.Contains(_.Group ?? string.Empty))
 				.ToList();
+
+			FsPath getRootPath(RootConfig root)
+			{
+				var basePath = string.IsNullOrEmpty(root.Root)
+					? null
+					: (FsPath?)getRootPath(rootsByName[root.Root]);
+
+				var path = root.LinuxPath.HasValue() && Runtime.IsLinux
+					? root.LinuxPath
+					: root.Path;
+
+				if (basePath.HasValue)
+					return basePath.Value.Join(path);
+
+				return path;
+			}
 		}
 
 		[DataMember(Name = "EnabledGroups")]
@@ -87,6 +103,12 @@ namespace Mtgdb.Data
 
 		[DataMember(Name = "Path")]
 		public FsPath Path { get; set; }
+
+		[DataMember(Name = "LinuxPath")]
+		public FsPath LinuxPath { get; set; }
+
+		[DataMember(Name = "Root")]
+		public string Root { get; set; }
 
 		[DataMember(Name = "Exclude")]
 		public string Exclude { get; set; }
