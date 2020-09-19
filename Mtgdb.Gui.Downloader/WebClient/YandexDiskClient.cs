@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -9,12 +10,25 @@ namespace Mtgdb.Downloader
 	{
 		private readonly HttpClient _http = new HttpClient();
 		private const string ApiUrl = "https://cloud-api.yandex.net/v1/disk/public/resources";
-		const int Limit = 1000;
+		private const int Limit = 1000;
 
-		public async Task<DirectoryWrapperJson> GetRootDirectoryMetadata()
+		public async Task<DirectoryWrapperJson> GetRootMetadata()
 		{
-			const string dirUrl = "https://yadi.sk/d/f1HuKUg7xW2FUQ";
-			var metaUrl = $"{ApiUrl}?public_key={dirUrl}&limit={Limit}";
+			const string rootUrl = "https://yadi.sk/d/f1HuKUg7xW2FUQ";
+			var metaUrl = $"{ApiUrl}?public_key={rootUrl}&limit={Limit}";
+			var response = await GetResponse(_http, HttpMethod.Get, metaUrl, CancellationToken.None);
+			response.EnsureSuccessStatusCode();
+			var contentStr = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<DirectoryWrapperJson>(contentStr);
+		}
+
+		public async Task<DirectoryWrapperJson> GetPathMetadata(string path)
+		{
+			if (string.IsNullOrEmpty(path))
+				throw new ArgumentException("Empty path", nameof(path));
+
+			const string rootUrl = "https://yadi.sk/d/f1HuKUg7xW2FUQ";
+			var metaUrl = $"{ApiUrl}?public_key={rootUrl}&path={path}&limit={Limit}";
 			var response = await GetResponse(_http, HttpMethod.Get, metaUrl, CancellationToken.None);
 			response.EnsureSuccessStatusCode();
 			var contentStr = await response.Content.ReadAsStringAsync();

@@ -21,8 +21,7 @@ namespace Mtgdb.Downloader
 		public async Task Download(string quality, IReadOnlyList<ImageDownloadProgress> allProgress, CancellationToken token)
 		{
 			var megaDownloader = new MegaDownloader(_megatools, _syncOutput);
-			var yandexDownloader =new YandexDownloader(_syncOutput, new YandexDiskClient());
-			yandexDownloader.ProgressChanged += handleProgress;
+			var yandexDownloader = new YandexDownloader(_syncOutput, new YandexDiskClient());
 
 			var downloaders = new List<IDownloader>
 			{
@@ -38,20 +37,21 @@ namespace Mtgdb.Downloader
 			_countInDownloadedDirs = 0;
 			ProgressChanged?.Invoke();
 
+			yandexDownloader.ProgressChanged += handleYandexProgress;
+			_megatools.FileDownloaded += megaFileDownloaded;
+
+			await Task.WhenAll(downloaders.Select(d => token.Run(tkn => downloadAll(queue, d, tkn))));
+
+			_megatools.FileDownloaded -= megaFileDownloaded;
+			yandexDownloader.ProgressChanged -= handleYandexProgress;
+
 			void megaFileDownloaded()
 			{
 				Interlocked.Increment(ref _countInDownloadedDirs);
 				ProgressChanged?.Invoke();
 			}
 
-			_megatools.FileDownloaded += megaFileDownloaded;
-
-			await Task.WhenAll(downloaders.Select(d => token.Run(tkn => downloadAll(queue, d, tkn))));
-
-			_megatools.FileDownloaded -= megaFileDownloaded;
-			yandexDownloader.ProgressChanged += handleProgress;
-
-			void handleProgress(ImageDownloadProgress task)
+			void handleYandexProgress(ImageDownloadProgress task)
 			{
 				Interlocked.Add(ref _countInDownloadedDirs, task.FilesOnline.Count - task.FilesDownloaded.Count);
 				ProgressChanged?.Invoke();

@@ -18,9 +18,7 @@ namespace Mtgdb.Downloader
 		public async Task<bool> Download(ImageDownloadProgress task, CancellationToken token)
 		{
 			var client = new YandexDiskClientWrapper(_client, task.ImageSource.YandexKey, _syncOutput);
-
-			string remotePath = string.Format(
-				task.ImageSource.YandexDirPath, task.QualityGroup.YandexName, task.Dir.Subdir);
+			string remotePath = task.ImageSource.GetYandexDiskPath(task.QualityGroup, task.Dir.Subdir);
 			bool success = await client.DownloadAndExtract(remotePath, task.TargetDirectory, task.Dir.Subdir.Concat(".7z"), token);
 
 			if (success)

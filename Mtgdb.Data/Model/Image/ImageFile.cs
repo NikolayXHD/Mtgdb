@@ -12,7 +12,7 @@ namespace Mtgdb.Data
 		private static readonly Regex _setCodeRegex = new Regex(@"^([\w\d]+)\b", RegexOptions.IgnoreCase);
 
 		public ImageFile(
-			[NotNull] FsPath fileName, FsPath rootPath, string setCode = null, string artist = null,
+			FsPath fileName, FsPath rootPath, string setCode = null, string artist = null,
 			bool isArt = false, int? customPriority = null)
 		{
 			var fileNameWithoutExtension = fileName.Basename(extension: false);

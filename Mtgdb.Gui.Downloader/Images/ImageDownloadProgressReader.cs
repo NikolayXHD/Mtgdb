@@ -108,9 +108,7 @@ namespace Mtgdb.Downloader
 			var result = new List<ImageDownloadProgress>();
 			foreach (var qualityGroup in _config.QualityGroups)
 			{
-				(_, FsPath signaturesFile) = getSignaturesFile(qualityGroup);
-				// do not intern image path here because it contains parent directory
-				var imagesOnline = Signer.ReadFromFile(signaturesFile, internPath: false);
+				var imagesOnline = GetOnlineImages(qualityGroup);
 
 				if (qualityGroup.YandexName != null && imagesOnline != null)
 					qualityGroup.Dirs = imagesOnline
@@ -131,6 +129,17 @@ namespace Mtgdb.Downloader
 			}
 
 			return result;
+		}
+
+		internal ImageSourcesConfig Config =>
+			_config;
+
+		internal FileSignature[] GetOnlineImages(QualityGroupConfig qualityGroup)
+		{
+			(_, FsPath signaturesFile) = getSignaturesFile(qualityGroup);
+			// do not intern image path here because it contains parent directory
+			var imagesOnline = Signer.ReadFromFile(signaturesFile, internPath: false);
+			return imagesOnline;
 		}
 
 		public static void WriteExistingSignatures(ImageDownloadProgress progress, IEnumerable<FileSignature> signatures = null)

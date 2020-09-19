@@ -139,6 +139,10 @@
       <Project>{4e1f0d65-b2b4-44de-b2a7-f9f36521e475}</Project>
       <Name>Mtgdb.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mtgdb.Gui.Downloader\Mtgdb.Gui.Downloader.csproj">
+      <Project>{3229ca82-875d-4154-92b7-2f7c47678010}</Project>
+      <Name>Mtgdb.Gui.Downloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mtgdb.Utils.Bitmaps\Mtgdb.Utils.Bitmaps.csproj">
       <Project>{24c593f8-e50b-4765-aea9-b152c68ebdbc}</Project>
       <Name>Mtgdb.Utils.Bitmaps</Name>
@@ -161,6 +165,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Images\ImageLoaderTests.cs" />
+    <Compile Include="Images\ImageMappingTests.cs" />
+    <Compile Include="Images\YandexDiskImageTests.cs" />
     <Compile Include="MetadataFromFileNameTests.cs" />
     <Compile Include="CardFacesTests.cs" />
     <Compile Include="CardDataTests.cs" />
@@ -168,8 +175,6 @@
     <Compile Include="DeckSearchTests.cs" />
     <Compile Include="DeckTransformationTests.cs" />
     <Compile Include="ExtremumFinderTests.cs" />
-    <Compile Include="ImageLoaderTests.cs" />
-    <Compile Include="ImageMappingTests.cs" />
     <Compile Include="Index\CardTextAlphabetTests.cs" />
     <Compile Include="Index\EditedTokenLocatorTests.cs" />
     <Compile Include="Index\IndexCreationTests.cs" />

@@ -9,6 +9,9 @@ namespace Mtgdb.Downloader
 	[DataContract(Name = "ImageSources")]
 	public class ImageSourcesConfig : ICombinable<ImageSourcesConfig>
 	{
+		public string GetYandexDiskPath(QualityGroupConfig quality, FsPath subdirectory) =>
+			string.Format(YandexDirPath, quality.YandexName, subdirectory);
+
 		[DataMember(Name = "QualityGroup")]
 		public QualityGroupConfig[] QualityGroups { get; set; }
 
