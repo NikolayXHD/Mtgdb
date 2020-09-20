@@ -233,6 +233,10 @@ namespace Mtgdb.Gui
 					.AppendLine()
 					.Append(nameof(KeywordDefinitions.Layout)).Append(": ").Append(card.Layout);
 
+				additionalFields
+					.AppendLine()
+					.Append(nameof(Card.CardType)).Append(": ").Append(card.CardType);
+
 				if (!string.IsNullOrEmpty(card.ImageName))
 					additionalFields
 						.AppendLine()
@@ -243,6 +247,11 @@ namespace Mtgdb.Gui
 					additionalFields.AppendLine()
 						.Append(nameof(Card.Faces)).Append(": ")
 						.Append(string.Join(", ", card.OtherFaces.Select(_=>_.NameEn)));
+
+				if (!string.IsNullOrEmpty(card.Side))
+					additionalFields
+						.AppendLine()
+						.Append(nameof(card.Side)).Append(": ").Append(card.Side);
 
 				if (additionalFields.Length > 0)
 					text
@@ -263,13 +272,6 @@ namespace Mtgdb.Gui
 						.AppendLine()
 						.AppendLine()
 						.Append(nameof(card.MultiverseId)).Append(": ").Append(card.MultiverseId.Value);
-				if (!string.IsNullOrEmpty(card.Side))
-				{
-					text
-						.AppendLine()
-						.AppendLine()
-						.Append(nameof(card.Side)).Append(": ").Append(card.Side);
-				}
 			}
 
 			return text.ToString();

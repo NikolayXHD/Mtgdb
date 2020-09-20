@@ -2,8 +2,8 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// Mtgjson 5.0.1
-		private const string Cards = "1.25";
+		// fix card card types in FJMP set
+		private const string Cards = "1.26";
 		public const string CardSearcher = Cards;
 		public const string CardSpellchecker = Cards;
 		public const string KeywordSearcher = Cards;

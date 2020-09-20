@@ -162,6 +162,8 @@ namespace Mtgdb.Data
 		{
 			foreach (var set in deserializeSets())
 			{
+				preProcessSet(set);
+
 				for (int i = set.ActualCards.Count - 1; i >= 0; i--)
 				{
 					var card = set.ActualCards[i];
@@ -288,6 +290,21 @@ namespace Mtgdb.Data
 						// card_by_name_sorting
 						gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
 						Str.Comparer);
+		}
+
+		private void preProcessSet(Set set)
+		{
+			if (Str.Equals(set.Code, "fjmp"))
+			{
+				if ((set.Tokens?.Count ?? 0) == 0 && (set.ActualCards?.Count ?? 0) > 0)
+				{
+					set.Tokens = set.ActualCards;
+					set.ActualCards = Array.Empty<Card>();
+
+					foreach (Card card in set.Tokens)
+						card.CardType = CardCardTypes.Card;
+				}
+			}
 		}
 
 		private static void preProcessCardOrToken(Card card)
