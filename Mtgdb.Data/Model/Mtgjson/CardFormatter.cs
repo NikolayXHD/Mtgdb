@@ -61,6 +61,7 @@ namespace Mtgdb.Data
 				[nameof(Card.Number)] = _ => _.Number,
 				[nameof(Card.MultiverseId)] = _ => _.MultiverseId,
 				[nameof(Card.Artist)] = _ => _.Artist,
+				[nameof(Card.ImageName)] = _ => _.ImageName
 			};
 
 		private string[][] _customLayout;

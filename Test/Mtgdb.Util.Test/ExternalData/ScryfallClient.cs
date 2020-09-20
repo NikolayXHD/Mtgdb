@@ -19,7 +19,7 @@ namespace Mtgdb.Util
 
 		public override async Task DownloadCardImage(Card card, FsPath targetPath, CancellationToken token)
 		{
-			if (string.IsNullOrEmpty(card.ScryfallId))
+			if (string.IsNullOrEmpty(card.Identifiers.ScryfallId))
 			{
 				_log.Info("Emtpy scryfall id: {0}", card);
 				return;
@@ -37,7 +37,7 @@ namespace Mtgdb.Util
 			}
 
 			string urlScryfallId = "https://api.scryfall.com/cards/" +
-				card.ScryfallId + "?format=image&version=" + format;
+				card.Identifiers.ScryfallId + "?format=image&version=" + format;
 			if (Str.Equals(card.Side, CardSides.B))
 				urlScryfallId += "&face=back";
 

@@ -22,7 +22,14 @@ namespace Mtgdb.Test
 		{
 			Formatter.CustomLayout = new []
 			{
-				new[] { nameof(Card.SetCode), nameof(Card.Number), nameof(Card.TypeEn), nameof(Card.MultiverseId) }
+				new[]
+				{
+					nameof(Card.SetCode),
+					nameof(Card.Number),
+					nameof(Card.TypeEn),
+					nameof(Card.MultiverseId),
+					nameof(Card.ImageName),
+				}
 			};
 		}
 

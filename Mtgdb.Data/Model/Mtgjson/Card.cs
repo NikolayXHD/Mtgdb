@@ -187,13 +187,10 @@ namespace Mtgdb.Data
 		public string MtgjsonId { get; set; }
 
 		[JsonProperty("identifiers")]
-		private CardIdentifiers Identifiers { get; set; }
+		public CardIdentifiers Identifiers { get; set; }
 
 		[JsonIgnore]
 		public int? MultiverseId => Identifiers.MultiverseId;
-
-		[JsonIgnore]
-		public string ScryfallId => Identifiers.ScryfallId;
 
 		[JsonProperty("side")]
 		[JsonConverter(typeof(InternedStringConverter))]
@@ -802,5 +799,9 @@ namespace Mtgdb.Data
 		[JsonProperty("scryfallId")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string ScryfallId { get; set; }
+
+		[JsonProperty("scryfallIllustrationId")]
+		[JsonConverter(typeof(InternedStringConverter))]
+		public string ScryfallIllustrationId { get; set; }
 	}
 }
