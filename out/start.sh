@@ -5,8 +5,8 @@
 # run:
 # $ ./start.sh
 
-MONO_PATH=$(which mono)
-if [ ! $MONO_PATH ];then
+MONO_PATH=$(command -v mono)
+if [ ! "$MONO_PATH" ];then
   echo "Mtgdb.Gui cannot be started because Mono runtime is missing.
 Mono is required to run Mtgdb.Gui in GNU/Linux. Shell command to install mono:
 
@@ -20,6 +20,6 @@ exit 1
 fi
 
 DIR=$( cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" && pwd )
-ALL_VERSION_DIRS=("$DIR/bin/v*")
+ALL_VERSION_DIRS=("$DIR"/bin/v*)
 latest="${ALL_VERSION_DIRS[${#ALL_VERSION_DIRS[@]}-1]}"
-mono ${latest}/Mtgdb.Gui.exe
+mono "${latest}"/Mtgdb.Gui.exe

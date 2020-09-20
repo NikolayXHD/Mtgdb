@@ -8,19 +8,19 @@ namespace Mtgdb.Dev
 		private static readonly Dictionary<bool, FsPath> _windowsDrive = new Dictionary<bool, FsPath>
 		{
 			[false] = new FsPath("C:\\"),
-			[true] = new FsPath("media", "kolia", "windows")
+			[true] = new FsPath("/", "home", "kolia", "win10")
 		};
 
 		private static readonly Dictionary<bool, FsPath> _dataDrive = new Dictionary<bool, FsPath>
 		{
 			[false] = new FsPath("D:\\"),
-			[true] = new FsPath("media", "kolia", "data")
+			[true] = new FsPath("/", "home", "kolia", "data")
 		};
 
 		private static readonly Dictionary<bool, FsPath> _repoDrive = new Dictionary<bool, FsPath>
 		{
 			[false] = new FsPath("C:\\"),
-			[true] = new FsPath("home", "kolia")
+			[true] = new FsPath("/", "home", "kolia")
 		};
 
 		public static readonly FsPath WindowsDrive = _windowsDrive[Runtime.IsLinux];

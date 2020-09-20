@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dev", "Test\Mtgdb.Dev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Test", "Test\Mtgdb.Util.Test\Mtgdb.Util.Test.csproj", "{71505A79-B810-4C19-9DC4-C880F23E2A16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util", "Mtgdb.Util\Mtgdb.Util.csproj", "{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13
@@ -143,6 +145,10 @@ Global
 		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71505A79-B810-4C19-9DC4-C880F23E2A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

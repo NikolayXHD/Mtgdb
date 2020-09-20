@@ -31,3 +31,4 @@ out/data/AllPrices.json
 out/data/translations.json
 out/LICENSE
 out/Mtgdb.Gui.lnk
+venv/

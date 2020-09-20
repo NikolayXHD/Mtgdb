@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingEx", "Subrepo\Drawin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dev", "Test\Mtgdb.Dev\Mtgdb.Dev.csproj", "{991E5B1F-8E0C-48FE-A470-9C747B0BCFBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Win", "Mtgdb.Util.Win\Mtgdb.Util.Win.csproj", "{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		out\out.projitems*{37029487-6a56-4fa3-aa23-b2e46d5aa1b0}*SharedItemsImports = 13

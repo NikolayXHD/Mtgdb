@@ -71,7 +71,7 @@ namespace Mtgdb.Downloader
 
 				if (isAlreadyDownloaded(task))
 				{
-					Console.WriteLine("[Skip] {0}", task.Dir.Subdir);
+					Console.WriteLine("[Skip] {0} {1}", task.QualityGroup.Name ?? string.Empty, task.Dir.Subdir);
 					Interlocked.Add(ref _countInDownloadedDirs, task.FilesOnline.Count);
 					ProgressChanged?.Invoke();
 				}

@@ -81,7 +81,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine(e.Data);
 		}
 
-		private static readonly FsPath _executable = new FsPath("Mtgdb.Util.exe");
+		private static readonly FsPath _executable = new FsPath("Mtgdb.Util.Win.exe");
 		private bool _errorReceived;
 		private Process _process;
 	}

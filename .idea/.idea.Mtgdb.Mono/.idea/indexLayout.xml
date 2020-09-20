@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelUserStore">
+    <attachedFolders>
+      <Path>etc</Path>
+      <Path>out</Path>
+      <Path>tools</Path>
+    </attachedFolders>
+    <explicitIncludes />
+    <explicitExcludes>
+      <Path>out/data</Path>
+      <Path>out/data/index</Path>
+      <Path>out/help</Path>
+      <Path>out/history</Path>
+      <Path>out/images</Path>
+      <Path>out/logs</Path>
+      <Path>out/save</Path>
+      <Path>out/update/7z</Path>
+      <Path>out/update/img</Path>
+      <Path>out/update/megatools-1.9.98-win32</Path>
+      <Path>out/update/notifications</Path>
+      <Path>tools/7z</Path>
+      <Path>tools/NUnit.Console-3.7.0</Path>
+      <Path>tools/tessdata</Path>
+    </explicitExcludes>
+  </component>
+</project>
