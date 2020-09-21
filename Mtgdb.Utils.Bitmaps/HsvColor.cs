@@ -70,6 +70,6 @@ namespace Mtgdb
 			!left.Equals(right);
 
 		public override string ToString() =>
-			$"H{H:F0} S{S:F2} V{V:F2}";
+			$"H{H:F2} S{S:F2} V{V:F2}";
 	}
-}
+}

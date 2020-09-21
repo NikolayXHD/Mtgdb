@@ -24,22 +24,22 @@ namespace Mtgdb.Test
 		[Test]
 		public void Black_is_transformed_to_first_color()
 		{
-			Color c1 = Color.FromArgb(unchecked((int) 0xFF_FF_FF_00));
-			Color c2 = Color.FromArgb(unchecked((int) 0xFF_00_FF_00));
+			Color c1 = Color.FromArgb(unchecked((int) 0xFF_FF_FF_FF));
+			Color c2 = Color.FromArgb(unchecked((int) 0xFF_00_00_00));
 
 
 			var transformation = new ColorSchemeTransformation(c1.ToHsv(), c2.ToHsv());
 			var sourceColor = Color.FromArgb(unchecked((int) 0xFF_00_00_00));
 			var transformed = transformation.TransformColor(sourceColor);
 
-			Assert.That(transformed.ToArgb(), Is.EqualTo(unchecked((int) 0xFF_FF_FF_00)));
+			Assert.That(transformed.ToArgb(), Is.EqualTo(c1.ToArgb()));
 		}
 
 		[Test]
 		public void Black_is_transformed_to_first_color_In_byte_array()
 		{
-			Color c1 = Color.FromArgb(unchecked((int) 0xFF_FF_FF_00));
-			Color c2 = Color.FromArgb(unchecked((int) 0xFF_00_FF_00));
+			Color c1 = Color.FromArgb(unchecked((int) 0xFF_FF_FF_FF));
+			Color c2 = Color.FromArgb(unchecked((int) 0xFF_00_00_00));
 
 
 			var transformation = new ColorSchemeTransformation(c1.ToHsv(), c2.ToHsv());
@@ -47,7 +47,7 @@ namespace Mtgdb.Test
 
 			transformation.Transform(rgbValues, 0);
 
-			var expectedTransformed = new byte[] { 0xFF, 0xFF, 0x00, 0xFF };
+			var expectedTransformed = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF };
 
 			Assert.That(rgbValues, Is.EquivalentTo(expectedTransformed));
 		}
@@ -62,29 +62,13 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Hsv_to_rgb_Is_reversible([Values(0f, 60f, 120f, 180f, 240f, 300f)]float h)
+		public void Hsv_to_rgb_Is_reversible(
+			[Values(0f / 360f, 60f / 360f, 120f / 360f, 180f / 360f, 240f / 360f, 300f / 360f)] float h)
 		{
-			var hAfterReversal = new HsvColor(h, 1f, 1f).ToRgb().ToHsv().H;
-			Assert.That(hAfterReversal, Is.EqualTo(h).Within(0.02));
-		}
-
-		[Test]
-		public void Brightness_adaptation_Interpolates_hue_saturation_and_value(
-			[Values(0f, 0.5f, 1f)] float v,
-			[Values(90f)] float c1h,
-			[Values(-30f, 30f)] float dh)
-		{
-			HsvColor c1 = new HsvColor(c1h, 1f, 1f);
-			HsvColor c2 = new HsvColor(c1h + dh, 1f, 1f);
-
-			var transformation = new ColorSchemeTransformation(c1, c2);
-
-			var sourceColor = new HsvColor(0, 0, v);
-			var resultColor = transformation.Transform(sourceColor);
-
-			Assert.That(resultColor.H, Is.EqualTo(c1.H + v * (c2.H - c1.H)).Within(0.01f));
-			Assert.That(resultColor.S, Is.EqualTo(c1.S + v * (c2.S - c1.S)).Within(0.01f));
-			Assert.That(resultColor.V, Is.EqualTo(c1.V + v * (c2.V - c1.V)).Within(0.01f));
+			var originalHsv = new HsvColor(h, 0.5f, 0.5f);
+			var rgb = originalHsv.ToRgb();
+			var hsv = rgb.ToHsv();
+			Assert.That(hsv.H, Is.EqualTo(h).Within(0.02));
 		}
 	}
 }
