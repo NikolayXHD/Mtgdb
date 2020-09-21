@@ -13,7 +13,7 @@ namespace Mtgdb.Data
 		[DataMember(Name = "Root")]
 		public RootConfig[] Roots { get; set; }
 
-		public IList<DirectoryConfig> GetEnabledDirectories(IEnumerable<string> enabledGroups = null)
+		public IList<DirectoryConfig> GetEnabledDirectories(IEnumerable<string> overrideEnabledGroups = null)
 		{
 			var rootsByName = Roots.ToDictionary(_ => _.Name, Str.Comparer);
 
@@ -35,10 +35,14 @@ namespace Mtgdb.Data
 				directory.Path = directory.Path.ToAppRootedPath();
 			}
 
-			if (EnabledGroups == null)
+			var enabledGroups = Runtime.IsLinux
+				? EnabledGroupsLinux ?? EnabledGroups
+				: EnabledGroups;
+
+			if (enabledGroups == null)
 				return Directories;
 
-			var groups = new HashSet<string>(enabledGroups ?? EnabledGroups.Split(';', ' ', ',', '|'));
+			var groups = new HashSet<string>(overrideEnabledGroups ?? enabledGroups.Split(';', ' ', ',', '|'));
 
 			return Directories
 				.Where(_ => groups.Contains(_.Group ?? string.Empty))
@@ -62,7 +66,10 @@ namespace Mtgdb.Data
 		}
 
 		[DataMember(Name = "EnabledGroups")]
-		public string EnabledGroups { get; set; }
+		private string EnabledGroups { get; set; }
+
+		[DataMember(Name = "EnabledGroupsLinux")]
+		private string EnabledGroupsLinux { get; set; }
 	}
 
 	[DataContract]
