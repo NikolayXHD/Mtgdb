@@ -14,6 +14,8 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public void OneTimeSetup()
 		{
+			LoadModules();
+
 			_repo = new CardRepository(Kernel.Get<CardFormatter>(), () => null)
 			{
 				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer),
@@ -21,6 +23,11 @@ namespace Mtgdb.Test
 
 			_repo.LoadFile();
 			_repo.Load();
+
+			_repo.LoadPriceFile();
+			_repo.LoadPrice();
+			_repo.FillPrice();
+
 			_transformation = new CollectedCardsDeckTransformation(_repo);
 		}
 
