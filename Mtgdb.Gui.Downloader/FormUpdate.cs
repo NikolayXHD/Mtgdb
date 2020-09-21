@@ -62,8 +62,6 @@ namespace Mtgdb.Downloader
 			RegisterDragControl(_labelTitle);
 
 			scale();
-
-			OnInitializationComplete();
 		}
 
 		public override string Text

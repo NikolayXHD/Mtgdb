@@ -170,8 +170,6 @@ namespace Mtgdb.Gui
 
 			_ctsLifetime = new CancellationTokenSource();
 			_ctsLifetime.Token.When(_repo.IsLoadingComplete).Run(repositoryLoaded);
-
-			OnInitializationComplete();
 		}
 
 		private void updateFormBorderColor()

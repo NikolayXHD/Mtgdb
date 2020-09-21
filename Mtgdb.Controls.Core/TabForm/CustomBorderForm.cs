@@ -55,14 +55,6 @@ namespace Mtgdb.Controls
 
 			applySystemColors();
 			ColorSchemeController.SystemColorsChanging += applySystemColors;
-
-			OnInitializationComplete();
-		}
-
-		protected void OnInitializationComplete()
-		{
-			if (Runtime.IsMono)
-				BoundsBeforeMaximized = Bounds;
 		}
 
 		protected override bool FixShadowTransparency =>

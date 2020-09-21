@@ -155,18 +155,26 @@ namespace Mtgdb.Gui
 
 		private void updateFormPosition()
 		{
+			if (Runtime.IsMono)
+			{
+				_formRoot.SnapTo(Direction.Top, null);
+				return;
+			}
+
 			var snapDirection = _history.Current.WindowSnapDirection ?? Direction.Top;
 			var windowArea = _history.Current.WindowArea;
 
 			if (windowArea.HasValue)
-				if (!Runtime.IsMono)
-					_formRoot.BoundsBeforeMaximized = windowArea.Value;
+				_formRoot.BoundsBeforeMaximized = windowArea.Value;
 
 			_formRoot.SnapTo(snapDirection, windowArea?.TopLeft());
 		}
 
 		private void historyUpdateFormPosition(GuiSettings settings)
 		{
+			if (Runtime.IsMono)
+				return;
+
 			settings.WindowSnapDirection = _formRoot.SnapDirection;
 			settings.WindowArea = _formRoot.BoundsBeforeMaximized;
 		}
