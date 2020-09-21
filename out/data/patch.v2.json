@@ -246,19 +246,23 @@
 		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." },
 		"Cast Down": { "Set": "pmei", "Flavor": "\"Your life is finished, your name lost, and your work forgotten. It is as though Mazeura never existed.\"\n—Chainer's Torment" },
 
-        "Chandra Nalaar": {
-          "Set": "DD2",
-          "OriginalType": "Planeswalker - Chandra",
-          "OriginalText": "+1: Chandra Nalaar deals 1 damage to target player.\n-X: Chandra Nalaar deals X damage to target creature.\n-8: Chandra Nalaar deals 10 damage to target player and each creature he or she controls."
-        },
-        "Jace Beleren": {
-          "Set": "DD2",
-          "OriginalType": "Planeswalker - Jace",
-          "OriginalText": "+2: Each player draws a card.\n-1: Target player draws a card.\n-10: Target player puts the top twenty cards of his or her library into his or her graveyard."
-        },
-        "Lava Coil": { "Set": "PMEI", "Flavor": "\"Commander, we caught the Dimir spy and took her ashes into custody.\"\n—Kramm, Wojek security officer" },
-        "Experimental Frenzy": { "Set": "PPRO", "Flavor": "Turns out coffee is the weird aunt of invention." },
-        "Loam Lion": { "Set": "PRES", "Flavor": "In Zendikar, today's grassland could be tomorrow's jungle, and hunting grounds change as quickly as the weather." },
+		"Chandra Nalaar": {
+			"Set": "DD2",
+			"OriginalType": "Planeswalker - Chandra",
+			"OriginalText": "+1: Chandra Nalaar deals 1 damage to target player.\n-X: Chandra Nalaar deals X damage to target creature.\n-8: Chandra Nalaar deals 10 damage to target player and each creature he or she controls."
+		},
+		"Jace Beleren": {
+			"Set": "DD2",
+			"OriginalType": "Planeswalker - Jace",
+			"OriginalText": "+2: Each player draws a card.\n-1: Target player draws a card.\n-10: Target player puts the top twenty cards of his or her library into his or her graveyard."
+		},
+		"Lava Coil": { "Set": "PMEI", "Flavor": "\"Commander, we caught the Dimir spy and took her ashes into custody.\"\n—Kramm, Wojek security officer" },
+		"Experimental Frenzy": { "Set": "PPRO", "Flavor": "Turns out coffee is the weird aunt of invention." },
+		"Loam Lion": { "Set": "PRES", "Flavor": "In Zendikar, today's grassland could be tomorrow's jungle, and hunting grounds change as quickly as the weather." },
+
+		"Sprite Dragon": { "Set": "PMEI", "Flavor": "Size of a pixie, rage of a hellkite." },
+		"Phantasmal Dragon": { "Set": "PMEI", "Flavor": "Its hunger and ire are no less for being wrought of lies and mist." },
+		"Staggering Insight": { "Set": "PMEI", "Flavor": "\"Only cowards flee from the truth.\"\n—Perisophia the philosopher" },
 
 		"Ob Nixilis Reignited Emblem": { "Remove": true },
 		"Gifts Given (b)": { "Remove": true },
@@ -456,32 +460,32 @@
 		"DD3_DVD": {
 			"Swamp": { "order": [1, 2, 4, 3] }
 		},
-        "AKR": {
-          "Authority": { "ImageName": "Appeal"   },
-          "Fame":      { "ImageName": "Claim"    },
-          "Memory":    { "ImageName": "Commit"   },
-          "Oblivion":  { "ImageName": "Consign"  },
-          "Ribbons":   { "ImageName": "Cut"      },
-          "Lead":      { "ImageName": "Destined" },
-          "Despair":   { "ImageName": "Driven"   },
-          "Dawn":      { "ImageName": "Dusk"     },
-          "Comply":    { "ImageName": "Failure"  },
-          "Market":    { "ImageName": "Farm"     },
-          "Dust":      { "ImageName": "Grind"    },
-          "Earth":     { "ImageName": "Heaven"   },
-          "Injury":    { "ImageName": "Insult"   },
-          "Chance":    { "ImageName": "Leave"    },
-          "Feed":      { "ImageName": "Mouth"    },
-          "Return":    { "ImageName": "Never"    },
-          "Victory":   { "ImageName": "Onward"   },
-          "Fight":     { "ImageName": "Prepare"  },
-          "Riches":    { "ImageName": "Rags"     },
-          "Believe":   { "ImageName": "Reason"   },
-          "Rubble":    { "ImageName": "Reduce"   },
-          "Cooperate": { "ImageName": "Refuse"   },
-          "Mind":      { "ImageName": "Spring"   },
-          "Finish":    { "ImageName": "Start"    },
-          "Survive":   { "ImageName": "Struggle" }
-        }
+		"AKR": {
+			"Authority": { "ImageName": "Appeal"   },
+			"Fame":	     { "ImageName": "Claim"	   },
+			"Memory":	   { "ImageName": "Commit"   },
+			"Oblivion":  { "ImageName": "Consign"  },
+			"Ribbons":   { "ImageName": "Cut"	     },
+			"Lead":	     { "ImageName": "Destined" },
+			"Despair":   { "ImageName": "Driven"   },
+			"Dawn":	     { "ImageName": "Dusk"	   },
+			"Comply":	   { "ImageName": "Failure"  },
+			"Market":	   { "ImageName": "Farm"	   },
+			"Dust":	     { "ImageName": "Grind"	   },
+			"Earth":	   { "ImageName": "Heaven"   },
+			"Injury":	   { "ImageName": "Insult"   },
+			"Chance":	   { "ImageName": "Leave"	   },
+			"Feed":	     { "ImageName": "Mouth"	   },
+			"Return":	   { "ImageName": "Never"	   },
+			"Victory":   { "ImageName": "Onward"   },
+			"Fight":	   { "ImageName": "Prepare"  },
+			"Riches":	   { "ImageName": "Rags"	   },
+			"Believe":   { "ImageName": "Reason"   },
+			"Rubble":	   { "ImageName": "Reduce"   },
+			"Cooperate": { "ImageName": "Refuse"   },
+			"Mind":	     { "ImageName": "Spring"   },
+			"Finish":	   { "ImageName": "Start"	   },
+			"Survive":   { "ImageName": "Struggle" }
+		}
 	}
 }

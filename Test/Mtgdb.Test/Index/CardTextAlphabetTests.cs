@@ -21,10 +21,6 @@ namespace Mtgdb.Test
 			var latin = new HashSet<char>("abcdefghijklmnopqrstuvwxyz");
 			var cyrillic = new HashSet<char>("абвгдежзийклмнопрстуфхцчшщьыъэюя");
 			var numbers = new HashSet<char>("01234567890");
-			var ideographicArtistNames =
-				"林泰玄 コーヘー"
-					.Except(" ")
-					.ToArray();
 			var knownSpecialChars = new HashSet<char>("ºß"); // artist name
 			// ReSharper restore StringLiteralTypo
 
@@ -54,7 +50,7 @@ namespace Mtgdb.Test
 				cardChars.UnionWith(card.TextEn ?? empty);
 				cardChars.UnionWith(card.OriginalText ?? empty);
 				cardChars.UnionWith(card.OriginalType ?? empty);
-				cardChars.UnionWith(card.Artist?.Except(ideographicArtistNames) ?? empty);
+				cardChars.UnionWith(card.Artist?.Where(_ => !_.IsCjk()) ?? empty);
 
 				foreach (string lang in languages)
 				{
@@ -79,7 +75,7 @@ namespace Mtgdb.Test
 
 			var notConsideredChars = new string(unknownChars.Where(shouldBeConsidered).ToArray());
 
-			Assert.That(failedCards, Is.Empty);
+			Assert.That(failedCards, Is.Empty, "Bad symbols in {0} cards", failedCards.Count);
 
 			Assert.That(notConsideredChars, Is.Empty);
 
