@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingEx", "Subrepo\Drawin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Dev", "Test\Mtgdb.Dev\Mtgdb.Dev.csproj", "{991E5B1F-8E0C-48FE-A470-9C747B0BCFBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Win", "Mtgdb.Util.Win\Mtgdb.Util.Win.csproj", "{E1349E1C-77A7-4FC3-BDA8-735CD5CB2735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mtgdb.Util.Win", "Mtgdb.Util.Win\Mtgdb.Util.Win.csproj", "{40390DA2-253D-4143-97EA-FA61C1AFA6EA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -61,6 +61,7 @@ Global
 		tools\tools.projitems*{b1c7f4d9-46ba-4d18-92a0-2e8214973929}*SharedItemsImports = 13
 		shared\shared.projitems*{c2763956-008b-4e6b-8ac7-b634d8741c3b}*SharedItemsImports = 13
 		shared\shared.projitems*{e1349e1c-77a7-4fc3-bda8-735cd5cb2735}*SharedItemsImports = 4
+		shared\shared.projitems*{40390da2-253d-4143-97ea-fa61c1afa6ea}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +152,10 @@ Global
 		{991E5B1F-8E0C-48FE-A470-9C747B0BCFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{991E5B1F-8E0C-48FE-A470-9C747B0BCFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{991E5B1F-8E0C-48FE-A470-9C747B0BCFBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40390DA2-253D-4143-97EA-FA61C1AFA6EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40390DA2-253D-4143-97EA-FA61C1AFA6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40390DA2-253D-4143-97EA-FA61C1AFA6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40390DA2-253D-4143-97EA-FA61C1AFA6EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
