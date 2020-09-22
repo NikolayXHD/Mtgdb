@@ -25,7 +25,7 @@ namespace Mtgdb.Test
 		[TestCase("TextEn", "disk", null, "disk")]
 		[TestCase("Name", "гел", "ru", "ангел")]
 		[TestCase("*", "арха", "ru", "архангел")]
-		[TestCase("*", "ange", "en", "angel")]
+		[TestCase("*", "huma", "en", "human")]
 		[TestCase("layout", "aft", null, "aftermath")]
 		[TestCase("generatedmana", "w", null, "{w}")]
 		public void Suggest_text_values(string field, string value, string language, string expectedSuggest)

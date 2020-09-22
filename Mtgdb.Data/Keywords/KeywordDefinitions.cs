@@ -253,7 +253,7 @@ namespace Mtgdb.Data
 			cost("Embalm"),
 			cost("Emerge"),
 			cost("Eternalize"),
-			"Extra turn",
+			custom("Extra turn", bound(sequence("extra", "turns?"))),
 			custom("Flash", bound("flash",
 				notBefore: "(conscription|foliage|of Insight)",
 				notAfter: "aether")),
@@ -299,7 +299,12 @@ namespace Mtgdb.Data
 						@"(?<!\bcan't )(attacks? or )?block(s|ed)?\b", "if able"),
 					sequence("able to\\b", "block\\b", "do (it|so)"),
 					"must be blocked"))),
-			custom("Can't attack", bound(or(cant("(?<!didn't )attack"), cant("be", "attacked")))),
+			custom("Can't attack", bound(
+				or(
+					cant("(?<!didn't )attack(?! each combat if able)"),
+					cant("be", "attacked")
+				)
+			)),
 			custom("Can't be blocked", bound(cant("be", "blocked"),
 				notAfter: "this spell works on creatures that")),
 			custom("Can't be regenerated", bound(cant("be", "regenerated"))),

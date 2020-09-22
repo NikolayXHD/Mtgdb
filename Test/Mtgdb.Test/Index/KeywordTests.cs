@@ -140,7 +140,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (""/attacks?/ if able""~10 AND NOT ""/attacks?/ /block(s|ed)?/ if able""~10) AND NOT Keywords: ""attack if able""")]
 		[TestCase(@"Keywords: ""attack if able"" AND Text: (NOT (""/attacks?/ if able""~3 OR ""/attacks?/ (this OR next OR each) (turn OR combat) if able""~11))")]
 		//
-		[TestCase(@"Text: (""/block(s|ed)?/ if able""~10 OR ""able to block"" OR ""must be blocked""~3 OR ""must block""~3) AND NOT Keywords: ""block if able""")]
+		[TestCase(@"Text: (""/block(s|ed)?/ if able""~10 AND NOT ""/block(s|ed)?/ attack if able""~10 OR ""able to block"" OR ""must be blocked""~3 OR ""must block""~3) AND NOT Keywords: ""block if able""")]
 		[TestCase(
 			@"Keywords: ""block if able"" AND NOT Text: (""must be blocked"" OR ""/blocks?/ (if OR do) (able OR so)""~6)")]
 		[TestCase(@"Text: (aura* AND swap*) AND NOT Keywords: ""aura swap""")]
@@ -149,11 +149,11 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (battle AND cry) AND NOT Keywords: ""battle cry""")]
 		[TestCase(@"Text: *bestow*  AND NOT Keywords: bestow")]
 		[TestCase(@"Text: *bloodthirst*  AND NOT Keywords: bloodthirst AND NOT Name:bloodthirsty")]
-		[TestCase(@"Keywords: bury AND NOT Type: card")]
+		[TestCase(@"Keywords: bury AND NOT TextEn: ""bury target creature"" AND NOT Type: card")]
 		[TestCase(@"Text: *bushido* AND NOT Keywords: bushido")]
 		[TestCase(@"Text: *buyback* AND NOT Keywords: buyback")]
 		//
-		[TestCase(@"Text: (""can't attack""~5 OR ""/(can)?not/ attack""~5) AND NOT Keywords: ""can't attack""")]
+		[TestCase(@"Text: ((""can't attack""~5 OR ""/(can)?not/ attack""~5) AND NOT ""can't block attack""~5) AND NOT Keywords: ""can't attack""")]
 		[TestCase(@"Keywords: ""can't attack"" AND NOT Text: (""can't attack"" OR ""you can't be attacked"")")]
 		//
 		[TestCase(@"Text: ""can't block""~5 AND NOT Keywords: ""can't block"" AND NOT Name: ""Wall of Air""")]
@@ -173,15 +173,15 @@ namespace Mtgdb.Test
 		//
 		[TestCase(@"Text: *cascad* AND NOT Keywords: cascade AND NOT Name: ""Skyline Cascade""")]
 		[TestCase(@"Text: (cast* AND NOT (caste OR caster OR castle OR castaway* OR castigator)) AND NOT Keywords: cast")]
-		[TestCase(@"Text: (*champion* AND NOT championship) AND NOT Type: card AND NOT Keywords: champion AND NOT Name: champion")]
+		[TestCase(@"Text: (*champion* AND NOT championship AND NOT ""champion of freedom"") AND NOT Type: card AND NOT Keywords: champion AND NOT Name: /champions?/")]
 		[TestCase(@"Text: *changeling* AND NOT Keywords: changeling")]
 		[TestCase(@"Text: *cipher* AND NOT Keywords: cipher")]
 		[TestCase(@"Text: *cohort* AND NOT Keywords: cohort AND NOT Name: cohort")]
 		[TestCase(@"Text: (*conspir* AND NOT conspiracy) AND NOT Keywords: conspire")]
 		[TestCase(@"Text: *convok* AND NOT Keywords: convoke")]
-		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia) AND NOT Keywords: copy")]
+		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia AND NOT capricopian) AND NOT Keywords: copy")]
 		//
-		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT Type: card AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/.*[0-9]/ OR poison OR energy OR experience OR lore OR another OR spark OR have) /counters?/"" OR ""can't be countered"")) AND NOT keywords: counter")]
+		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT Type: card AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/.*[0-9]/ OR poison OR energy OR experience OR lore OR another OR spark OR have OR acorn) /counters?/"" OR ""can't be countered"" OR ""kind of counter"")) AND NOT keywords: counter")]
 		[TestCase(@"Keywords: counter AND NOT Type: card AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (instant OR creature OR >) (/spells?/ OR /abilit(y|ies)/)""~5) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
 		//
 		[TestCase(@"Text: (*creat* AND NOT *creature* AND NOT creativity) AND NOT Keywords: ""create token""")]
@@ -191,7 +191,7 @@ namespace Mtgdb.Test
 		//
 		[TestCase(@"Text: (cumulativ* AND upkeep*) AND NOT Keywords: ""cumulative upkeep""")]
 		[TestCase(@"Text: (*cycl* AND NOT (cyclo* OR recycla*)) AND NOT Keywords: cycling AND NOT Name: (cyclical OR ""cycle of life"" OR recycler OR ""growth cycle"")")]
-		[TestCase(@"Keywords: cycling AND NOT Text: (*cycling OR ""cycles a card"" OR ""can't cycle cards"" OR ""cycle or discard a card"" OR ""cycled or discarded"")")]
+		[TestCase(@"Keywords: cycling AND NOT Text: (*cycling OR ""/cycles?/ a card"" OR ""can't cycle cards"" OR ""cycle or discard a card"" OR ""cycled or discarded"")")]
 		[TestCase(@"Text: *dash* AND NOT Keywords: dash AND NOT Name: (dash OR dasher)  AND NOT Text: ""rainbow dash""")]
 		[TestCase(@"Text: *deathtouch* AND NOT Keywords: deathtouch")]
 		[TestCase(@"Text: *defender* AND NOT Keywords: defender AND NOT Name: defender*")]
@@ -200,15 +200,15 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (*destr* AND NOT indestructible) AND NOT Type: card AND NOT Keywords: destroy AND NOT Name: destructi*")]
 		[TestCase(@"Text: *dethron* AND NOT Keywords: dethrone")]
 		[TestCase(@"Text: *devoid* AND NOT Keywords: devoid")]
-		[TestCase(@"Text: *devour* AND NOT Keywords: devour AND NOT Name: *devour*")]
+		[TestCase(@"Text: (*devour* AND NOT ""devourer of the free"") AND NOT Keywords: devour AND NOT Name: *devour*")]
 		[TestCase(@"Text: *discard* AND NOT Keywords: discard")]
 		//
-		[TestCase(@"Text: (extra AND turn) AND NOT Keywords: ""extra turn""")]
-		[TestCase(@"Keywords: ""extra turn"" AND NOT Text: ""extra turn""")]
+		[TestCase(@"Text: (extra AND /turns?/) AND NOT Keywords: ""extra turn""")]
+		[TestCase(@"Keywords: ""extra turn"" AND NOT Text: ""extra /turns?/""")]
 		//
 		[TestCase(@"Keywords: ""mill"" AND NOT Text: ""mill""")]
 		[TestCase(@"Text: ""mill"" AND NOT Keywords: ""mill"" AND NOT NameEn: ""tread mill""")]
-		public void Keyword_pattern_Has_perfect_presision_and_recall(string query)
+		public void Keyword_pattern_Has_perfect_precision_and_recall(string query)
 		{
 			var cardNames = Searcher.SearchCards(query, "en")
 				.Select(c => c.NameEn)

@@ -29,7 +29,7 @@ namespace Mtgdb.Data
 		public IReadOnlyList<string> SuggestAllFieldValues(string value, string language)
 		{
 			if (string.IsNullOrEmpty(value))
-				throw new ArgumentException($"empty {nameof(value)}", nameof(value));
+				return Empty<string>.Array;
 
 			var numericValues = new HashSet<string>();
 
