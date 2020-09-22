@@ -340,11 +340,7 @@ namespace Mtgdb.Data
 
 		private void preProcessCard(Card card)
 		{
-			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
-				card.Patch(patch);
-
-			if (Patch.Cards.TryGetValue(card.NameEn, out patch) && (string.IsNullOrEmpty(patch.Set) || Str.Equals(patch.Set, card.SetCode)))
-				card.Patch(patch);
+			applyPatch(card);
 
 			if (!string.IsNullOrEmpty(card.OriginalText) && Str.Equals(card.OriginalText, card.TextEn))
 				card.OriginalText = null;
@@ -371,8 +367,10 @@ namespace Mtgdb.Data
 			card.CardType = CardCardTypes.Normal;
 		}
 
-		private static void preProcessToken(Card card)
+		private void preProcessToken(Card card)
 		{
+			applyPatch(card);
+
 			if (Str.Equals(card.Layout, "double_faced_token"))
 				card.Layout = CardLayouts.Transform;
 			else if (
@@ -388,6 +386,22 @@ namespace Mtgdb.Data
 				card.CardType = type;
 			else if (CardCardTypes.ByName.TryGetValue(card.NameEn, out type))
 				card.CardType = type;
+		}
+
+		private void applyPatch(Card card)
+		{
+			if (Patch.Cards.TryGetValue(card.SetCode, out var patch))
+				card.Patch(patch);
+
+			if (Patch.Cards.TryGetValue(card.NameEn, out patch))
+			{
+				if (
+					string.IsNullOrEmpty(patch.Set) && patch.Sets == null ||
+					Str.Equals(patch.Set, card.SetCode) ||
+					patch.Sets != null && patch.Sets.Contains(card.SetCode, Str.Comparer)
+				)
+					card.Patch(patch);
+			}
 		}
 
 		private void patchLegality()

@@ -9,48 +9,88 @@ namespace Mtgdb.Test
 	public class CardLayoutTests : TestsBase
 	{
 		[OneTimeSetUp]
-		public void Setup() =>
+		public void OneTimeSetup() =>
 			LoadCards();
 
-		[Test]
-		public void All_cards_have_known_layout()
+		[SetUp]
+		public void Setup()
 		{
-			Repo.Cards.Should().OnlyContain(card => card.IsKnownLayout());
-			Repo.Cards.Should().OnlyContain(card => card.IsMultiFace() ^ card.IsSingleFace());
+			Formatter.CustomLayout = new[]
+			{
+				nameof(Card.SetCode),
+				nameof(Card.NameEn),
+			};
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			Formatter.CustomLayout = null;
 		}
 
 		[Test]
 		public void Single_faced_cards_dont_have_multiple_values_in_names_list()
 		{
 			foreach (var card in Repo.Cards.Where(CardLayouts.IsSingleFace))
-				Assert.That(card.OtherFaceIds, Is.Null.Or.Count.EqualTo(0), card.ToStringShort);
+			{
+				if (card.OtherFaceIds != null && card.OtherFaceIds.Count > 0)
+					Assert.Fail("card with single-face layout {0} has {1} sides: {2}", card.Layout, card.OtherFaceIds.Count, card);
+			}
 		}
 
 		[Test]
-		public void Multiface_cards_have_expected_faces_count()
+		public void Meld_cards_have_side_a_and_b()
 		{
-			var multifaceCards = Repo.Cards.Where(card => card.IsMultiFace()).ToArray();
-			multifaceCards
-				.Should().NotContain(c => !c.IsToken && c.OtherFaceIds == null);
+			foreach (var card in Repo.Cards.Where(CardLayouts.IsMeld))
+				Assert.That(card.Side, Is.EqualTo(CardSides.A).Or.EqualTo(CardSides.B));
+		}
 
-			multifaceCards.Where(c => c.IsMeld())
+		[Test]
+		public void Meld_side_a_only_references_meld_result()
+		{
+			foreach (var card in Repo.Cards.Where(CardLayouts.IsMeld).Where(CardSides.IsSideA))
+			{
+				Assert.That(card.OtherFaceIdsMtgjson, Has.Count.EqualTo(1));
+				Assert.That(card.Set.MapById(card.IsToken)[card.OtherFaceIdsMtgjson[0]].Side, Is.EqualTo(CardSides.B));
+			}
+		}
+
+		[Test]
+		public void Meld_side_b_references_both_meld_parts()
+		{
+			foreach (var card in Repo.Cards.Where(CardLayouts.IsMeld).Where(CardSides.IsSideB))
+			{
+				Assert.That(card.OtherFaceIdsMtgjson, Has.Count.EqualTo(2));
+				Assert.That(card.OtherFaceIdsMtgjson[0], Is.Not.EqualTo(card.OtherFaceIdsMtgjson[1]));
+				for (int i = 0; i < 2; i++)
+					Assert.That(card.Set.MapById(card.IsToken)[card.OtherFaceIdsMtgjson[i]].Side, Is.EqualTo(CardSides.A));
+			}
+		}
+
+		[Test]
+		public void Multiface_cards_should_specify_other_faces() =>
+			Repo.Cards.Where(CardLayouts.IsMultiFace)
+				.Should().NotContain(c => c.OtherFaceIds == null || c.OtherFaceIds.Count == 0);
+
+		[Test]
+		public void Meld_cards_should_specify_two_other_faces() =>
+			Repo.Cards.Where(CardLayouts.IsMeld)
 				.Should().OnlyContain(c => c.OtherFaceIds.Count == 2);
 
-			multifaceCards.Where(c => c.IsSplit())
+		[Test]
+		public void Split_cards_should_specify_other_faces() =>
+			Repo.Cards.Where(CardLayouts.IsSplit)
 				.Should().OnlyContain(c => c.OtherFaceIds.Count > 0);
 
-			multifaceCards.Where(c => !c.IsMeld() && !c.IsSplit() && !c.IsToken)
+		[Test]
+		public void Typical_multiface_layouts_have_2_faces() =>
+			Repo.Cards.Where(CardLayouts.IsMultiFace).Where(c => !c.IsMeld() && !c.IsSplit())
 				.Should().OnlyContain(c => c.OtherFaceIds.Count == 1);
 
-			multifaceCards.Where(c => c.IsToken)
-				.Should().OnlyContain(c => c.IsTransform());
-
-			multifaceCards.Where(c => c.IsToken && c.IsTransform())
-				.Should().OnlyContain(c =>
-					c.OtherFaceIds != null && c.OtherFaceIds.Count == 1 ||
-					!string.IsNullOrEmpty(c.Side) &&
-					c.Namesakes.Any(ns => ns.Set == c.Set && !string.IsNullOrEmpty(ns.Side) && !Str.Equals(ns.Side, c.Side)));
-		}
+		[Test]
+		public void Multiface_tokens_do_not_exist() =>
+			Repo.Cards.Where(CardLayouts.IsMultiFace).Where(c => c.IsToken)
+				.Should().BeEmpty();
 
 		[Test]
 		public void Aftermath_card_sides_Have_layout_aftermath()

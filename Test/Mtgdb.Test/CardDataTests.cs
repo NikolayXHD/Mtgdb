@@ -20,16 +20,12 @@ namespace Mtgdb.Test
 		[SetUp]
 		public void Setup()
 		{
-			Formatter.CustomLayout = new []
+			Formatter.CustomLayout = new[]
 			{
-				new[]
-				{
-					nameof(Card.SetCode),
-					nameof(Card.Number),
-					nameof(Card.TypeEn),
-					nameof(Card.MultiverseId),
-					nameof(Card.ImageName),
-				}
+				nameof(Card.SetCode),
+				nameof(Card.Number),
+				nameof(Card.MultiverseId),
+				nameof(Card.ImageName),
 			};
 		}
 

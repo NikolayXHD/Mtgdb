@@ -86,15 +86,32 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		internal string FaceName { get; set; }
 
-		/// <summary>
-		/// Names of each face on the card. Meld cards are listed in the order of CardA, Meld, CardB.
-		/// </summary>
 		[JsonProperty("otherFaceIds")]
 		[JsonConverter(typeof(InternedStringArrayConverter))]
-		public IList<string> OtherFaceIds { get; set; }
+		internal List<string> OtherFaceIdsMtgjson { get; set; }
+
+		public IReadOnlyList<string> OtherFaceIds => _otherFaceIds ??= getOtherFaceIds();
+
+		private IReadOnlyList<string> getOtherFaceIds()
+		{
+			if (OtherFaceIdsMtgjson == null || OtherFaceIdsMtgjson.Count == 0)
+				return Empty<string>.Array;
+
+			if (this.IsMeld() && this.IsSideA())
+			{
+				var meldResult = Set.MapById(IsToken)[OtherFaceIdsMtgjson[0]];
+				return meldResult.OtherFaceIdsMtgjson.Where(F.IsNotEqualTo(MtgjsonId))
+					.Append(meldResult.MtgjsonId)
+					.ToArray();
+			}
+
+			return OtherFaceIdsMtgjson;
+		}
+
+		private IReadOnlyList<string> _otherFaceIds;
 
 		public IEnumerable<Card> OtherFaces =>
-			OtherFaceIds?.Select(id => Set.MapById(IsToken)[id]) ?? Enumerable.Empty<Card>();
+			OtherFaceIds.Select(id => Set.MapById(IsToken)[id]);
 
 		/// <summary>
 		/// Number of the card.
@@ -582,6 +599,9 @@ namespace Mtgdb.Data
 				patch.Remove ||
 				patch.FullDuplicate && !_foundDuplicates.Add($"{SetCode}.{NameEn}") ||
 				patch.FlipDuplicate && TextEn != OriginalText;
+
+			if (patch.HasNoSide == true)
+				Side = null;
 
 			if (patch.Life != null)
 				Life = patch.Life;

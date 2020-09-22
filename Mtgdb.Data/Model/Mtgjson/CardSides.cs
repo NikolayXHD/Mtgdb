@@ -9,5 +9,11 @@
 		public const string C = "c";
 		public const string D = "d";
 		public const string E = "e";
+
+		public static bool IsSideA(this Card c) =>
+			Str.Equals(c.Side, A);
+
+		public static bool IsSideB(this Card c) =>
+			Str.Equals(c.Side, B);
 	}
 }

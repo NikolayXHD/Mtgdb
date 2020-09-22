@@ -6,9 +6,7 @@ namespace Mtgdb.Data
 {
 	public class CardFormatter
 	{
-		public Func<Card, string> CustomFormat { get; set; }
-
-		public string[][] CustomLayout
+		public string[] CustomLayout
 		{
 			get => _customLayout;
 			set
@@ -18,7 +16,7 @@ namespace Mtgdb.Data
 
 				if (value != null)
 				{
-					var missingProps = value.SelectMany(_ => _).ToHashSet();
+					var missingProps = value.ToHashSet();
 					missingProps.ExceptWith(_properties.Keys);
 					if (missingProps.Count > 0)
 						throw new ArgumentException($"Fields {string.Join(", ", missingProps)} are not supported");
@@ -30,22 +28,16 @@ namespace Mtgdb.Data
 
 		public string ToString(Card card)
 		{
-			if (CustomFormat != null)
-				return CustomFormat(card);
-
 			return string.Join(
 				" / ",
-				(CustomLayout ?? _layout).Select(
-					line => string.Concat(
-						line
-							.Select(_ => _properties[_](card))
-							.Where(F.IsNotNull)
-							.Select(_ => $"[ {_} ]")))
-				.Where(formatted => !string.IsNullOrEmpty(formatted)));
+				(CustomLayout ?? _layout)
+					.Select(_ => _properties[_](card))
+					.Where(F.IsNotNull)
+			);
 		}
 
 		private readonly Dictionary<string, Func<Card, object>> _properties =
-			new Dictionary<string, Func<Card, object>>()
+			new Dictionary<string, Func<Card, object>>
 			{
 				[nameof(Card.NameEn)] = _ => _.NameEn,
 				[nameof(Card.TypeEn)] = _ => _.TypeEn,
@@ -64,16 +56,7 @@ namespace Mtgdb.Data
 				[nameof(Card.ImageName)] = _ => _.ImageName
 			};
 
-		private string[][] _customLayout;
-
-		private static readonly string[][] _layout =
-		{
-			new [] { nameof(Card.NameEn), nameof(Card.ManaCost), nameof(Card.SetCode), nameof(Card.Number) },
-			new [] { nameof(Card.TypeEn), nameof(Card.Layout) },
-			new [] { nameof(Card.Loyalty), nameof(Card.Power), nameof(Card.Toughness) },
-			new [] { nameof(Card.TextEn) },
-			new [] { nameof(Card.FlavorEn) },
-			new [] { nameof(Card.Artist) },
-		};
+		private string[] _customLayout;
+		private static readonly string[] _layout = {nameof(Card.SetCode), nameof(Card.Number), nameof(Card.NameEn)};
 	}
 }
