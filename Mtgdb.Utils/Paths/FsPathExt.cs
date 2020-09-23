@@ -34,7 +34,7 @@ namespace Mtgdb
 			return replacement.Join(relative);
 		}
 
-		public static FsPath Rename(this FsPath path, Func<string, string> transformation)
+		public static FsPath WithName(this FsPath path, Func<string, string> transformation)
 		{
 			var tail = path.Basename();
 			string transformed = transformation(tail);

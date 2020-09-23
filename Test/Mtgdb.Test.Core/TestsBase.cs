@@ -54,7 +54,6 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			Repo.RememberOriginalPrices = true;
 			Repo.LoadFile();
 			Repo.Load();
 
@@ -90,10 +89,35 @@ namespace Mtgdb.Test
 			_loadedTranslations = true;
 		}
 
+		protected static void LoadPrices()
+		{
+			if (_loadedPrices)
+				return;
+
+			LoadCards();
+
+			var sw = new Stopwatch();
+			sw.Start();
+
+			Repo.RememberOriginalPrices = true;
+			Repo.LoadPriceFile();
+			Repo.LoadPrice();
+			Repo.FillPrice();
+
+			sw.Stop();
+			_log.Info($"Prices loaded in {sw.ElapsedMilliseconds} ms");
+
+			LogManager.Flush();
+
+			_loadedPrices = true;
+		}
+
 		protected static void LoadIndexes()
 		{
 			if (_loadedIndexes)
 				return;
+
+			LoadPrices();
 
 			LoadTranslations();
 
@@ -142,6 +166,7 @@ namespace Mtgdb.Test
 
 		private static bool _loadedModules;
 		private static bool _loadedCards;
+		private static bool _loadedPrices;
 		private static bool _loadedTranslations;
 		private static bool _loadedIndexes;
 		private static bool _loadedSmallAndZoomImages;

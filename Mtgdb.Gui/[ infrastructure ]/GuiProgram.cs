@@ -67,6 +67,10 @@ namespace Mtgdb.Gui
 			luceneSearcher.InvalidateIndex();
 			luceneSearcher.Spellchecker.InvalidateIndex();
 			keywordSearcher.InvalidateIndex();
+
+			var cardRepo = _kernel.Get<CardRepository>();
+			if (cardRepo.PriceCacheExists())
+				cardRepo.DeletePriceCache();
 		}
 
 		private static void beginInstall()

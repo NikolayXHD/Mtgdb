@@ -28,6 +28,7 @@ out/update/notifications/
 out/data/index/
 out/data/AllPrintings.json
 out/data/AllPrices.json
+out/data/AllPrices.cache.json
 out/data/translations.json
 out/LICENSE
 out/Mtgdb.Gui.lnk

@@ -50,8 +50,7 @@ namespace Mtgdb.Test
 		[Test]
 		public void Price_can_be_temporarily_cleared()
 		{
-			const string name = "plains";
-			var card = _repo.CardsByName[name][1];
+			var card = _repo.CardsByName["plains"][1];
 
 			using (TemporaryPrice.Clear(card))
 				Assert.That(card.Price, Is.Null);
@@ -145,20 +144,20 @@ namespace Mtgdb.Test
 			public static TemporaryPrice Clear(Card c) =>
 				new TemporaryPrice(c, null);
 
-			public static TemporaryPrice Set(Card c, MtgjsonPrices p) =>
+			public static TemporaryPrice Set(Card c, float? p) =>
 				new TemporaryPrice(c, p);
 
-			private TemporaryPrice(Card c, MtgjsonPrices p)
+			private TemporaryPrice(Card c, float? p)
 			{
-				_originalPrice = c.Prices;
+				_originalPrice = c.Price;
 				_card = c;
-				c.Prices = p;
+				c.Price = p;
 			}
 
 			public void Dispose() =>
-				_card.Prices = _originalPrice;
+				_card.Price = _originalPrice;
 
-			private readonly MtgjsonPrices _originalPrice;
+			private readonly float? _originalPrice;
 			private readonly Card _card;
 		}
 	}

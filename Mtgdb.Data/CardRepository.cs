@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 
 namespace Mtgdb.Data
 {
@@ -23,6 +25,7 @@ namespace Mtgdb.Data
 			_downloaderFactory = downloaderFactory;
 			SetsFile = AppDir.Data.Join("AllPrintings.json");
 			PricesFile = AppDir.Data.Join("AllPrices.json");
+			PricesCacheFile = AppDir.Data.Join("AllPrices.cache.json");
 			CustomSetCodes = new string[0];
 			PatchFile = AppDir.Data.Join("patch.v2.json");
 			Cards = new List<Card>();
@@ -30,7 +33,7 @@ namespace Mtgdb.Data
 
 		public async Task DownloadPriceFile(CancellationToken token)
 		{
-			if (PricesFile.IsValid() && !PricesFile.IsFile())
+			if (PricesFile.IsValid() && !PricesFile.IsFile() && !PriceCacheExists())
 				await Downloader.DownloadPrices(token);
 
 			IsDownloadPriceComplete.Signal();
@@ -38,14 +41,24 @@ namespace Mtgdb.Data
 
 		public void LoadPriceFile()
 		{
-			_priceContent = PricesFile.IsFile()
-				? PricesFile.ReadAllBytes()
-				: null;
+			if (PriceCacheExists())
+			{
+				_priceCacheContent = loadPriceCacheFile();
+			}
+			else
+			{
+				_priceContent = PricesFile.IsFile()
+					? PricesFile.ReadAllBytes()
+					: null;
+			}
 		}
 
 		public void LoadPrice()
 		{
-			Prices = deserializePrices();
+			if (_priceCacheContent != null)
+				_priceCache = deserializePriceCache(_priceCacheContent);
+			else
+				_prices = deserializePrices();
 		}
 
 		public void FillPrice()
@@ -53,11 +66,21 @@ namespace Mtgdb.Data
 			if (!IsLoadingComplete.Signaled)
 				throw new InvalidOperationException("Cards must be loaded filling price");
 
-			foreach (var set in SetsByCode.Values)
+			bool cacheExists = _priceCache != null;
+			if (cacheExists)
 			{
+				foreach (var set in SetsByCode.Values)
+				foreach (var card in set.Cards)
+					card.Price = _priceCache.TryGetValue(card.Id, out float price)
+						? (float?)price
+						: null;
+			}
+			else if (_prices != null)
+			{
+				foreach (var set in SetsByCode.Values)
 				foreach (var card in set.Cards)
 				{
-					if (Prices != null && Prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
+					if (_prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
 					{
 						if (RememberOriginalPrices)
 							card.OriginalPrices = card.Prices;
@@ -67,7 +90,11 @@ namespace Mtgdb.Data
 			}
 
 			IsLoadingPriceComplete.Signal();
-			Prices = null; // free memory
+			_prices = null; // free memory
+			_priceCache = null;
+
+			if (!cacheExists)
+				savePriceCache();
 		}
 
 		public async Task DownloadFile(CancellationToken token)
@@ -299,7 +326,7 @@ namespace Mtgdb.Data
 				if ((set.Tokens?.Count ?? 0) == 0 && (set.ActualCards?.Count ?? 0) > 0)
 				{
 					set.Tokens = set.ActualCards;
-					set.ActualCards = Array.Empty<Card>();
+					set.ActualCards = Empty<Card>.Array;
 
 					foreach (Card card in set.Tokens)
 						card.CardType = CardCardTypes.Card;
@@ -508,7 +535,69 @@ namespace Mtgdb.Data
 			IsLocalizationLoadingComplete.Signal();
 		}
 
+		public bool PriceCacheExists()
+		{
+			lock (_syncPriceCacheFile)
+				return PricesCacheFile.IsFile();
+		}
 
+		public void DeletePriceCache()
+		{
+			try
+			{
+				lock (_syncPriceCacheFile)
+					PricesFile.DeleteFile();
+			}
+			catch (Exception ex)
+			{
+				_log.Error(ex);
+			}
+		}
+
+		private byte[] loadPriceCacheFile()
+		{
+			lock (_syncPriceCacheFile)
+			{
+				if (PricesCacheFile.IsFile())
+					return PricesCacheFile.ReadAllBytes();
+
+				return null;
+			}
+		}
+
+		private void savePriceCache()
+		{
+			var priceByCardId = createPriceCache();
+			var cacheContent = serializePriceCache(priceByCardId);
+			PricesCacheFile.WriteAllBytes(cacheContent);
+		}
+
+		private Dictionary<string, float> createPriceCache()
+		{
+			var priceByCard = Cards
+				.Where(_ => _.Price.HasValue) // ReSharper disable once PossibleInvalidOperationException
+				.ToDictionary(_ => _.Id, _ => _.Price.Value);
+			return priceByCard;
+		}
+
+		private byte[] serializePriceCache(Dictionary<string, float> priceByCardId)
+		{
+			using var stream = new MemoryStream();
+
+			using (var streamWriter = new StreamWriter(stream))
+			using (var jsonTextWriter = new JsonTextWriter(streamWriter))
+				new JsonSerializer().Serialize(jsonTextWriter, priceByCardId);
+
+			return stream.ToArray();
+		}
+
+		private Dictionary<string, float> deserializePriceCache(byte[] priceCacheContent)
+		{
+			using var stream = new MemoryStream(priceCacheContent);
+			using var streamReader = new StreamReader(stream);
+			using var jsonTextReader = new JsonTextReader(streamReader);
+			return new JsonSerializer().Deserialize<Dictionary<string, float>>(jsonTextReader);
+		}
 
 		public event Action SetAdded;
 		public AsyncSignal IsDownloadComplete { get; } = new AsyncSignal();
@@ -521,6 +610,7 @@ namespace Mtgdb.Data
 
 		internal FsPath SetsFile { get; set; }
 		internal FsPath PricesFile { get; set; }
+		private FsPath PricesCacheFile { get; set; }
 
 		internal string[] CustomSetCodes
 		{
@@ -567,6 +657,11 @@ namespace Mtgdb.Data
 		private IDataDownloader Downloader => _downloader ??= _downloaderFactory();
 
 		private Patch Patch { get; set; }
-		private Dictionary<string, MtgjsonPrices> Prices { get; set; }
+		private Dictionary<string, MtgjsonPrices> _prices;
+		private byte[] _priceCacheContent;
+		private Dictionary<string, float> _priceCache;
+
+		private static readonly object _syncPriceCacheFile = new object();
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

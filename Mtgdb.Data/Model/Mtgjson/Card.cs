@@ -453,6 +453,12 @@ namespace Mtgdb.Data
 				readyPrices();
 				return _price;
 			}
+
+			internal set
+			{
+				_pricesReady = true;
+				_price = value;
+			}
 		}
 
 		public CardKeywords GetAllKeywords() =>

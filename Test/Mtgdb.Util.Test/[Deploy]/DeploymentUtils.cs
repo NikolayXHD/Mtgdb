@@ -78,7 +78,7 @@ namespace Mtgdb.Util
 
 						if (targetFile.Basename(extension: false).EndsWith("1"))
 						{
-							var unnumbered = targetFile.Rename(_ => _.Replace("1.png", ".png"));
+							var unnumbered = targetFile.WithName(_ => _.Replace("1.png", ".png"));
 							if (unnumbered.IsFile())
 							{
 								unnumbered.MoveFileTo(targetFile);
@@ -189,7 +189,7 @@ namespace Mtgdb.Util
 							{
 								FsPath zoomImg = smallImg.ChangeDirectory(smallDir, zoomDir);
 								FsPath convertedImg = zoomImg.ChangeDirectory(zoomPngDir, zoomJpgDir)
-									.Rename(_ => _.Replace(".png", ".jpg"));
+									.WithName(_ => _.Replace(".png", ".jpg"));
 
 								if (_keepExisting && (
 									zoomImg.IsFile() && isZoomed(zoomImg) ||
