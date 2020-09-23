@@ -411,7 +411,6 @@ namespace Mtgdb.Gui
 				status = "downloading cards… prices…";
 			else if (cardsDownloaded && priceDownloaded)
 			{
-				status = _cardRepo.SetsByCode.Count.ToString();
 				if (_cardRepo.IsLoadingPriceComplete.Signaled || !_cardRepo.IsLoadingComplete.Signaled)
 					status = _cardRepo.SetsByCode.Count.ToString();
 				else

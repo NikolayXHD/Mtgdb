@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import platform
 import pexpect
 import shutil
 import subprocess
@@ -44,42 +45,53 @@ def get_lnk_bytes(text: str) -> bytes:
 
 def run(
         command: typing.Union[str, os.PathLike],
-        args: typing.Iterable[typing.Union[str, os.PathLike]],
+        args: typing.Union[
+            typing.List[typing.Union[str, os.PathLike]],
+            typing.Tuple[typing.Union[str, os.PathLike], ...]
+        ],
         timeout: int = 3600
 ) -> None:
-    actual_command = str(command)
-    actual_args = list(str(arg) for arg in args)
-    p = pexpect.spawn(
-        actual_command,
-        actual_args,
-        timeout=timeout,
-        encoding='utf-8',
-    )
-    while p.isalive():
-        while True:
-            try:
-                c = p.read_nonblocking(size=1024)
-            except pexpect.EOF:
-                break
-            else:
-                if len(c):
-                    sys.stdout.write(c)
-                else:
+    if is_windows:
+        if command == 'mono':
+            command = args[0]
+            args = args[1:]
+        args.insert(0, command)
+        subprocess.run(args, check=True)
+    else:
+        actual_command = str(command)
+        actual_args = list(str(arg) for arg in args)
+        p = pexpect.spawn(
+            actual_command,
+            actual_args,
+            timeout=timeout,
+            encoding='utf-8',
+        )
+        while p.isalive():
+            while True:
+                try:
+                    c = p.read_nonblocking(size=1024)
+                except pexpect.EOF:
                     break
-    if p.exitstatus != 0:
-        sys.exit(p.exitstatus)
+                else:
+                    if len(c):
+                        sys.stdout.write(c)
+                    else:
+                        break
+        if p.exitstatus != 0:
+            sys.exit(p.exitstatus)
 
 
+is_windows = platform.system() == 'Windows'
 configuration = 'release'
 origin = pathlib.Path(__file__).parent.parent
 repos = origin.parent
 output = origin / 'out'
 version = get_version()
 
-target_root = (
-    pathlib.Path('/home/kolia/mtg/packaged')
-    / version
+local_dev_dir = pathlib.Path(
+    r'D:\distrib\games\mtg' if is_windows else '/home/kolia/mtg/'
 )
+target_root = local_dev_dir / 'packaged' / version
 
 package_name = 'Mtgdb.Gui.v' + version
 package_name_zip = package_name + '.zip'
@@ -89,7 +101,10 @@ target = target_root / package_name
 target_bin = target / 'bin' / ('v' + version)
 util_exe = output / 'bin' / configuration / 'Mtgdb.Util.exe'
 
-yandex_dir = pathlib.Path('/home/kolia/Documents/shared')
+yandex_dir = pathlib.Path(
+    r'C:\Users\hidal\YandexDisk' if is_windows
+    else '/home/kolia/Documents/shared'
+)
 yandex_dir_app = yandex_dir / 'Mtgdb.Gui' / 'app'
 remote_dir = yandex_dir_app / 'release'
 remote_test_dir = yandex_dir_app / 'test'
@@ -98,22 +113,37 @@ remote_deflate_dir = yandex_dir_app / 'deflate'
 
 def build():
     print_green('build')
-    run('msbuild', [str(origin / 'Mtgdb.Mono.sln'), '-verbosity:m'])
+    if is_windows:
+        run(
+            r'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools'
+            r'\MSBuild\Current\Bin\MSBuild.exe', [
+                str(origin / 'Mtgdb.sln'),
+                '-verbosity:m',
+                '-p:Configuration=' + configuration
+            ]
+        )
+    else:
+        run('msbuild', [
+            str(origin / 'Mtgdb.Mono.sln'),
+            '-verbosity:m',
+            '-p:Configuration=' + configuration
+        ])
 
 
 def create_publish_dir():
     print_green('create publish directory')
-    shutil.rmtree(target, ignore_errors=True)
+    shutil.rmtree(target_root, ignore_errors=True)
     target.mkdir(parents=True)
 
 
 def copy_files():
     print_green('copy files')
 
-    def ignore_data(path, names):
+    def ignore_data(path, _):
         if path == str(output / 'data'):
             return (
                 'allSets-x.json',
+                'AllPrices.json',
                 'AllSets.v42.json',
             )
         if path == str(output / 'data' / 'index'):
@@ -191,7 +221,8 @@ def copy_files():
 
 def make_shortcut():
     print_green('make shortcut')
-    lnk_content_template = (output / 'Mtgdb.Gui.lnk.template').read_bytes()
+    template_path = origin / 'tools' / 'shortcut.lnk.template'
+    lnk_content_template = template_path.read_bytes()
     lnk_content = lnk_content_template.replace(
         get_lnk_bytes('v0.0.0.0'),
         get_lnk_bytes('v' + version)
@@ -255,7 +286,9 @@ def publish_zip_to_test_update_url():
 def run_installed_app():
     print_green('run installed app')
     subprocess.Popen(
-        pathlib.Path('/home/kolia/Mtgdb.Gui/start.sh'),
+        ['explorer', pathlib.Path(r'D:\games\mtgdb.gui\Mtgdb.Gui.lnk')]
+        if is_windows
+        else pathlib.Path('/home/kolia/Mtgdb.Gui/start.sh'),
         close_fds=True
     )
 
@@ -278,6 +311,7 @@ def publish_update_notification():
     repos_notifications = repos / 'mtgdb.notifications'
     run('git', ['-C', repos_wiki, 'pull'])
     run('mono', [util_exe, '-notify'])
+    run('git', ['-C', repos_notifications, 'pull'])
     run('git', ['-C', repos_notifications, 'add', '-A'])
     run('git', ['-C', repos_notifications, 'commit', '-m', 'auto'])
     run('git', ['-C', repos_notifications, 'push'])
@@ -299,9 +333,9 @@ def create_deflate_compressed_zip():
         target_root / 'deflate' / 'Mtgdb.Gui.zip',
         '-tzip',
         '-ir!' + str(target_root / package_name / '*'),
-        '-x!data/index/*',
-        '-x!data/AllPrintings.json',
-        '-x!data/AllPrices.json',
+        '-x!' + str(pathlib.Path('data') / 'index' / '*'),
+        '-x!' + str(pathlib.Path('data') / 'AllPrintings.json'),
+        '-x!' + str(pathlib.Path('data') / 'AllPrices.json'),
         '-mm=deflate'
     ])
 
@@ -324,7 +358,7 @@ def main():
     sign_zip()
     publish_zip_to_test_update_url()
     run_installed_app()
-    # run_tests()
+    run_tests()
     prompt_user_confirmation()
     publish_update_notification()
     publish_zip_to_actual_update_url()

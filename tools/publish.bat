@@ -98,7 +98,7 @@ echo %packageName%.zip %target%\update\version.txt
 
 %out% make shortcut
 
-cscript shortcut.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
+cscript shortcut-relative.vbs %target%\Mtgdb.Gui.lnk %version% %output%\bin\%configuration%\mtg64.ico
 
 %out% sign binary files
 

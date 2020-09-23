@@ -5,19 +5,44 @@ namespace Mtgdb.Downloader
 {
 	internal class UtilExe
 	{
-		public bool CreateShortcut(FsPath exePath, FsPath iconPath, FsPath shortcutPath) =>
-			run($"-create_shortcut -exe_path \"{exePath}\" -ico_path \"{iconPath}\" -src_path \"{shortcutPath}\"");
+		public bool CreateShortcut(FsPath exePath, FsPath iconPath, FsPath shortcutPath)
+		{
+			bool useBackup = false;
+			FsPath backupPath = FsPath.None;
+			if (shortcutPath.IsFile())
+			{
+				backupPath = shortcutPath.WithName(_ => _ + ".bak");
+				useBackup = !backupPath.IsFile();
+				if (useBackup)
+					shortcutPath.MoveFileTo(backupPath);
+				else
+					shortcutPath.DeleteFile();
+			}
+
+			bool success = run($"\"{_script}\" \"{shortcutPath}\" \"{exePath}\" \"{iconPath}\"");
+
+			if (!success && useBackup)
+				backupPath.MoveFileTo(shortcutPath);
+
+			return success;
+		}
 
 		private bool run(string args)
 		{
 			if (_process != null)
-				throw new InvalidOperationException($"{_executable} is already running. Use another instance.");
+				throw new InvalidOperationException($"{_script} is already running. Use another instance.");
+
+			if (!_script.IsFile())
+			{
+				Console.Write(_script + " not found");
+				return false;
+			}
 
 			_errorReceived = false;
 
 			_process = new Process
 			{
-				StartInfo = new ProcessStartInfo(_executable.ToString(), args)
+				StartInfo = new ProcessStartInfo("cscript", args)
 				{
 					RedirectStandardOutput = true,
 					RedirectStandardError = true,
@@ -81,7 +106,7 @@ namespace Mtgdb.Downloader
 			Console.WriteLine(e.Data);
 		}
 
-		private static readonly FsPath _executable = new FsPath("Mtgdb.Util.Win.exe");
+		private static readonly FsPath _script = AppDir.Update.Join("shortcut.vbs");
 		private bool _errorReceived;
 		private Process _process;
 	}
