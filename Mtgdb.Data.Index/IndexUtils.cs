@@ -132,7 +132,7 @@ namespace Mtgdb.Data
 		public static TopDocs SearchWrapper(this IndexSearcher searcher, Query query, int maxHits)
 		{
 			if (maxHits == 0)
-				return new TopDocs(0, Array.Empty<ScoreDoc>(), 0f);
+				return new TopDocs(0, Empty<ScoreDoc>.Array, 0f);
 
 			return searcher.Search(query, maxHits);
 		}

@@ -25,6 +25,6 @@ namespace Mtgdb
 		public static string[] Lines(this string original, StringSplitOptions splitOptions = StringSplitOptions.None) =>
 			original.Split(_lineEnds, splitOptions);
 
-		private static readonly string[] _lineEnds = Array.From("\r\n", "\r", "\n");
+		private static readonly string[] _lineEnds = Sequence.Array("\r\n", "\r", "\n");
 	}
 }

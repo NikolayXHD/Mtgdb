@@ -38,5 +38,11 @@ namespace Mtgdb
 			yield return value4;
 			yield return value5;
 		}
+
+		public static int IndexOf<T>(this T[] values, T val) =>
+			((IList<T>)values).IndexOf(val);
+
+		public static T[] Array<T>(params T[] values) =>
+			values;
 	}
 }

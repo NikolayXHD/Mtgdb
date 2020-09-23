@@ -63,7 +63,6 @@
     <Compile Include="Paths\Range.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="String\ArgsExt.cs" />
-    <Compile Include="Collection\Array.cs" />
     <Compile Include="Collection\BinarySearch.cs" />
     <Compile Include="Collection\CollectionExtensions.cs" />
     <Compile Include="ComparableExtension.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="Collection\ListSegment.cs" />
     <Compile Include="Collection\OrderedSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Collection\ReadOnlyList.cs" />
     <Compile Include="Collection\Sequence.cs" />
     <Compile Include="String\StringExtensions.cs" />
     <Compile Include="String\TextRange.cs" />

@@ -79,7 +79,7 @@ namespace Mtgdb.Gui
 					result.Add("1 " + line.Trim());
 				else if (line.IndexOf("\t", Str.Comparison) >= 0)
 				{
-					var parts = line.Split(Array.From('\t'), StringSplitOptions.RemoveEmptyEntries);
+					var parts = line.Split(Sequence.Array('\t'), StringSplitOptions.RemoveEmptyEntries);
 
 					for (int i = 0; i < parts.Length; i++)
 					{
@@ -137,7 +137,7 @@ namespace Mtgdb.Gui
 
 		public static string FromMtgoName(string mtgoName)
 		{
-			var separators = Array.From(" // ", " / ", "//", "/");
+			var separators = Sequence.Array(" // ", " / ", "//", "/");
 
 			int separatorIndex = -1;
 

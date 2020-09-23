@@ -20,7 +20,7 @@ namespace Mtgdb
 
 		public static string TrimComment(this string name)
 		{
-			return name.Split(Array.From(@"//"), StringSplitOptions.None)[0].TrimEnd();
+			return name.Split(Sequence.Array(@"//"), StringSplitOptions.None)[0].TrimEnd();
 		}
 
 		public static Tuple<string, int> SplitTailingNumber(this string value)

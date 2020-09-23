@@ -104,7 +104,7 @@ namespace Mtgdb.Data.Index
 			field = field.ToLower(Str.Culture);
 			return new MoreLikeThisQuery(
 				value,
-				Array.From(field),
+				Sequence.Array(field),
 				Analyzer,
 				field)
 			{

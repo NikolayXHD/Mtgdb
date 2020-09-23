@@ -180,7 +180,7 @@ namespace Mtgdb.Util
 
 		private static Dictionary<char, HashSet<int>> toGroupByChar(string groups)
 		{
-			var parts = groups.Split(Array.From(','), StringSplitOptions.None);
+			var parts = groups.Split(Sequence.Array(','), StringSplitOptions.None);
 			var result = Enumerable.Range(0, parts.Length)
 				.Select(i => new { index = i, chars = parts[i] })
 				.SelectMany(_ => _.chars.Select(c => new { chr = c, _.index }))
@@ -213,7 +213,7 @@ namespace Mtgdb.Util
 				.SelectMany(l =>
 				{
 					var lines = keyboardLayouts[l].Split(
-						Array.From(Str.Endl),
+						Sequence.Array(Str.Endl),
 						StringSplitOptions.RemoveEmptyEntries);
 
 					return Enumerable

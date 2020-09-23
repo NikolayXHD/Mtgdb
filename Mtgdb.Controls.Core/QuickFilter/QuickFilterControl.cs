@@ -599,7 +599,7 @@ namespace Mtgdb.Controls
 					fillBorder = (c, r, w) =>
 					{
 						using var pen = new Pen(c, w);
-						e.Graphics.DrawRectangles(pen, Array.From(r));
+						e.Graphics.DrawRectangles(pen, Sequence.Array(r));
 					};
 				else
 					throw new NotSupportedException();

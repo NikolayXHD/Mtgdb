@@ -136,7 +136,7 @@ namespace Mtgdb.Data
 		private IReadOnlyList<string> getAnalyzedTokens(Token t, string queryStr)
 		{
 			if (t.Type.IsAny(TokenType.RegexBody))
-				return ReadOnlyList.From(t.Value);
+				return new[] {t.Value};
 
 			if (!t.Type.IsAny(TokenType.FieldValue))
 				return null;

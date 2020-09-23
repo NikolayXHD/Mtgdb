@@ -14,6 +14,6 @@ namespace Mtgdb.Data
 			.ToList();
 
 		public static readonly IntellisenseSuggest EmptySuggest =
-			new IntellisenseSuggest(null, ReadOnlyList.Empty<string>(), Enumerable.Empty<TokenType>().ToList());
+			new IntellisenseSuggest(null, Empty<string>.Array, Enumerable.Empty<TokenType>().ToList());
 	}
 }

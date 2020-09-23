@@ -57,7 +57,7 @@ namespace Mtgdb.Data
 				IReadOnlyList<string> valueSuggest;
 
 				if (isFieldInvalid || string.IsNullOrEmpty(userField) && string.IsNullOrEmpty(valuePart))
-					valueSuggest = ReadOnlyList.Empty<string>();
+					valueSuggest = Empty<string>.Array;
 				else
 				{
 					if (Adapter.IsAnyField(userField))
@@ -151,7 +151,7 @@ namespace Mtgdb.Data
 				nextIndex = allValues.Count - 1;
 
 			var nextValue = allValues[nextIndex];
-			return new IntellisenseSuggest(token, ReadOnlyList.From(nextValue), _allTokensAreValues);
+			return new IntellisenseSuggest(token, new[] {nextValue}, _allTokensAreValues);
 		}
 
 

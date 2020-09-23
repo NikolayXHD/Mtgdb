@@ -21,7 +21,7 @@ namespace Mtgdb.Dev
 			var imageRepository = new ImageRepository(
 				new ImageLocationsConfig
 				{
-					Directories = Array.From(
+					Directories = Sequence.Array(
 						new DirectoryConfig
 						{
 							Path = directory,

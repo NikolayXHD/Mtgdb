@@ -99,7 +99,7 @@ namespace Mtgdb.Data
 				if (!directory.Path.HasValue())
 					continue;
 
-				var excludes = directory.Exclude?.Split(Array.From(';'), StringSplitOptions.RemoveEmptyEntries);
+				var excludes = directory.Exclude?.Split(Sequence.Array(';'), StringSplitOptions.RemoveEmptyEntries);
 				foreach (FsPath file in getDirectoryFiles(filesByDirCache, directory.Path))
 				{
 					if (excludes != null && excludes.Any(exclude => file.Value.IndexOf(exclude, Str.Comparison) >= 0))
@@ -285,7 +285,7 @@ namespace Mtgdb.Data
 		{
 			lock (modelsByNameBySetByVariant)
 			{
-				int separator = imageFile.Name.IndexOfAny(Array.From('_', '»'));
+				int separator = imageFile.Name.IndexOfAny(Sequence.Array('_', '»'));
 
 				if (separator > 0 && separator < imageFile.Name.Length - 1)
 				{

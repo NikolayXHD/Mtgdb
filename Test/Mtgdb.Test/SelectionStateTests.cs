@@ -36,10 +36,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 10));
 			state.MoveTo(new Point(-10, -10));
 
-			var expectedDelta = Array.From(
-				new Rectangle(0, 0, 10, 10),
-				new Rectangle(-10, -10, 10, 10)
-			);
+			var expectedDelta = Sequence.Array(new Rectangle(0, 0, 10, 10), new Rectangle(-10, -10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -56,10 +53,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 10));
 			state.MoveTo(new Point(20, 20));
 
-			var expectedDelta = Array.From(
-				new Rectangle(10, 0, 10, 20),
-				new Rectangle(0, 10, 10, 10)
-			);
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 20), new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -76,10 +70,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(20, 20));
 			state.MoveTo(new Point(10, 10));
 
-			var expectedDelta = Array.From(
-				new Rectangle(10, 0, 10, 20),
-				new Rectangle(0, 10, 10, 10)
-			);
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 20), new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -96,10 +87,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 20));
 			state.MoveTo(new Point(20, 10));
 
-			var expectedDelta = Array.From(
-				new Rectangle(10, 0, 10, 20),
-				new Rectangle(0, 10, 10, 10)
-			);
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 20), new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -116,10 +104,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(20, 10));
 			state.MoveTo(new Point(10, 20));
 
-			var expectedDelta = Array.From(
-				new Rectangle(10, 0, 10, 20),
-				new Rectangle(0, 10, 10, 10)
-			);
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 20), new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -136,7 +121,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 10));
 			state.MoveTo(new Point(20, 10));
 
-			var expectedDelta = Array.From(new Rectangle(10, 0, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -153,7 +138,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 10));
 			state.MoveTo(new Point(10, 20));
 
-			var expectedDelta = Array.From(new Rectangle(0, 10, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -170,7 +155,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(20, 10));
 			state.MoveTo(new Point(10, 10));
 
-			var expectedDelta = Array.From(new Rectangle(10, 0, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(10, 0, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -187,7 +172,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(10, 20));
 			state.MoveTo(new Point(10, 10));
 
-			var expectedDelta = Array.From(new Rectangle(0, 10, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(0, 10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -204,9 +189,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-10, -10));
 			state.MoveTo(new Point(-20, -20));
 
-			var expectedDelta = Array.From(
-				new Rectangle(-20, -20, 10, 20),
-				new Rectangle(-10, -20, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(-20, -20, 10, 20), new Rectangle(-10, -20, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -223,9 +206,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-20, -20));
 			state.MoveTo(new Point(-10, -10));
 
-			var expectedDelta = Array.From(
-				new Rectangle(-20, -20, 10, 20),
-				new Rectangle(-10, -20, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(-20, -20, 10, 20), new Rectangle(-10, -20, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -242,9 +223,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-10, -20));
 			state.MoveTo(new Point(-20, -10));
 
-			var expectedDelta = Array.From(
-				new Rectangle(-20, -20, 10, 20),
-				new Rectangle(-10, -20, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(-20, -20, 10, 20), new Rectangle(-10, -20, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -261,9 +240,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-20, -10));
 			state.MoveTo(new Point(-10, -20));
 
-			var expectedDelta = Array.From(
-				new Rectangle(-20, -20, 10, 20),
-				new Rectangle(-10, -20, 10, 10));
+			var expectedDelta = Sequence.Array(new Rectangle(-20, -20, 10, 20), new Rectangle(-10, -20, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -280,7 +257,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-10, -10));
 			state.MoveTo(new Point(-20, -10));
 
-			var expectedDelta =  Array.From(new Rectangle(-20, -10, 10, 10));
+			var expectedDelta =  Sequence.Array(new Rectangle(-20, -10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -317,7 +294,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-20, -10));
 			state.MoveTo(new Point(-10, -10));
 
-			var expectedDelta =  Array.From(new Rectangle(-20, -10, 10, 10));
+			var expectedDelta =  Sequence.Array(new Rectangle(-20, -10, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}
@@ -334,7 +311,7 @@ namespace Mtgdb.Test
 			state.MoveTo(new Point(-10, -20));
 			state.MoveTo(new Point(-10, -10));
 
-			var expectedDelta =  Array.From(new Rectangle(-10, -20, 10, 10));
+			var expectedDelta =  Sequence.Array(new Rectangle(-10, -20, 10, 10));
 
 			Assert.That(delta, Is.EquivalentTo(expectedDelta));
 		}

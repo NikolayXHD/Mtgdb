@@ -91,8 +91,8 @@ namespace Mtgdb.Test
 					Sequence.From(new KeywordQueryTerm
 					{
 						FieldName = "Cmc",
-						Patterns = Array.From(new Regex("^0$")),
-						Values = Array.From("0")
+						Patterns = Sequence.Array(new Regex("^0$")),
+						Values = Sequence.Array("0")
 					}),
 					Enumerable.Empty<KeywordQueryTerm>())
 				.ToArray();

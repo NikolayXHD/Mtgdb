@@ -20,7 +20,7 @@ namespace Mtgdb.Data
 
 			FullPath = fileName;
 
-			string[] parts = fileNameWithoutExtension.Split(Array.From('.'), StringSplitOptions.None);
+			string[] parts = fileNameWithoutExtension.Split(Sequence.Array('.'), StringSplitOptions.None);
 			var lastNamePart = Enumerable.Range(0, parts.Length)
 				.Last(i =>
 					i == 0 ||

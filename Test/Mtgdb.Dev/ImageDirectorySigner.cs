@@ -27,7 +27,7 @@ namespace Mtgdb.Dev
 			else if (packagePath.IsFile())
 			{
 				var metadata = Signer.CreateSignature(packagePath);
-				Signer.WriteToFile(output, Array.From(metadata));
+				Signer.WriteToFile(output, Sequence.Array(metadata));
 			}
 			else
 			{

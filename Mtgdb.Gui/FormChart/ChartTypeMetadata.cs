@@ -9,7 +9,7 @@ namespace Mtgdb.Gui
 	{
 		private static readonly Type[] _pointChartTypes =
 			Runtime.IsMono
-				? Array.Empty<Type>()
+				? Empty<Type>.Array
 				: new[]
 				{
 					findChartType(SeriesChartType.Point),
@@ -19,7 +19,7 @@ namespace Mtgdb.Gui
 
 		private static readonly Type[] _pieChartTypes =
 			Runtime.IsMono
-				? Array.Empty<Type>()
+				? Empty<Type>.Array
 				: new[] { findChartType(SeriesChartType.Pie) };
 
 		public static readonly Dictionary<SeriesChartType, ChartTypeMetadata> ByType =

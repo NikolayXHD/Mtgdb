@@ -80,7 +80,7 @@ namespace Mtgdb.Data
 			}
 
 			if (!IsLoaded)
-				return ReadOnlyList.Empty<string>();
+				return Empty<string>.Array;
 
 			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, language);
 			return _spellchecker.SuggestSimilar(spellcheckerField, value, _maxCount());
@@ -89,7 +89,7 @@ namespace Mtgdb.Data
 		public IReadOnlyList<string> GetValuesCache(string userField,  string lang)
 		{
 			if (_abort)
-				return ReadOnlyList.Empty<string>();
+				return Empty<string>.Array;
 
 			var spellcheckerField = _adapter.GetSpellcheckerFieldIn(userField, lang);
 			IReadOnlyList<string> values;
@@ -103,7 +103,7 @@ namespace Mtgdb.Data
 				: _reader?.Invoke1(readAllValuesFrom, spellcheckerField);
 
 			if (values == null)
-				return ReadOnlyList.Empty<string>();
+				return Empty<string>.Array;
 
 			lock (_valuesCache)
 				_valuesCache[spellcheckerField] = values;

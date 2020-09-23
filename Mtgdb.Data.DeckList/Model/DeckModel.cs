@@ -210,7 +210,7 @@ namespace Mtgdb.Data.Model
 					return _legalFormatsCache;
 
 				if (!_repo.IsLoadingComplete.Signaled)
-					return ReadOnlyList.Empty<string>();
+					return Empty<string>.Array;
 
 				bool isAllowedIn(string format, string id, int count)
 				{

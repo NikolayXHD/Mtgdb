@@ -257,22 +257,22 @@ namespace Mtgdb.Test
 			switch (langs)
 			{
 				case EnRu:
-					languages = Array.From("en", "ru");
-					queryLanguageVariants = Array.From(originalQuery, originalQuery);
+					languages = Sequence.Array("en", "ru");
+					queryLanguageVariants = Sequence.Array(originalQuery, originalQuery);
 					break;
 
 				case EnRuEn:
-					languages = Array.From("en", "ru", "en");
+					languages = Sequence.Array("en", "ru", "en");
 
 					string queryWithLocalizedField = _enSuffixPattern.Replace(originalQuery, string.Empty);
 					Assert.That(queryWithLocalizedField, Is.Not.EqualTo(originalQuery));
 
-					queryLanguageVariants = Array.From(originalQuery, originalQuery, queryWithLocalizedField);
+					queryLanguageVariants = Sequence.Array(originalQuery, originalQuery, queryWithLocalizedField);
 					break;
 
 				case Ru:
-					languages = Array.From("ru");
-					queryLanguageVariants = Array.From(originalQuery);
+					languages = Sequence.Array("ru");
+					queryLanguageVariants = Sequence.Array(originalQuery);
 					break;
 
 				default:
@@ -283,9 +283,13 @@ namespace Mtgdb.Test
 			{
 				string queryLanguageVariant = queryLanguageVariants[i];
 
-				var queryCasingVariants = Array.From(
-					_boolOperatorPattern.Replace(queryLanguageVariant.ToLower(Str.Culture), match => match.Value.ToUpper(Str.Culture)),
-					queryLanguageVariant.ToUpper(Str.Culture));
+				var queryCasingVariants = Sequence.Array(
+					_boolOperatorPattern.Replace(
+						queryLanguageVariant.ToLower(Str.Culture),
+						match => match.Value.ToUpper(Str.Culture)
+					),
+					queryLanguageVariant.ToUpper(Str.Culture)
+				);
 
 				foreach (string queryCasingVariant in queryCasingVariants)
 				{
