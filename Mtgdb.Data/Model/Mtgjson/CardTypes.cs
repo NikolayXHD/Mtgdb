@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Mtgdb.Data
 {
 	public static class CardTypes

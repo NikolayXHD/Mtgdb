@@ -1,5 +1,3 @@
-using System;
-
 namespace Mtgdb.Data
 {
 	public static class CardExtensions

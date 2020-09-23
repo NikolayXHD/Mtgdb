@@ -1,11 +1,8 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using DrawingEx.ColorManagement.ColorModels;
 using DrawingEx.ColorManagement.ColorModels.Selection;
