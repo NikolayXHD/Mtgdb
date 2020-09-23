@@ -213,7 +213,7 @@ namespace Mtgdb.Data
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string Side { get; set; }
 
-		[JsonProperty("prices")]
+		[JsonIgnore]
 		internal MtgjsonPrices Prices
 		{
 			get => _prices;
@@ -223,9 +223,6 @@ namespace Mtgdb.Data
 				resetPrices();
 			}
 		}
-
-		[JsonIgnore]
-		internal MtgjsonPrices OriginalPrices { get; set; }
 
 		[JsonIgnore]
 		public string Id { get; internal set; }

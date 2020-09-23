@@ -99,7 +99,6 @@ namespace Mtgdb.Test
 			var sw = new Stopwatch();
 			sw.Start();
 
-			Repo.RememberOriginalPrices = true;
 			Repo.LoadPriceFile();
 			Repo.LoadPrice();
 			Repo.FillPrice();

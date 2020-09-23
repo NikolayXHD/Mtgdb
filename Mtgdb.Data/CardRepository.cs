@@ -16,8 +16,6 @@ namespace Mtgdb.Data
 			// str => Str.Equals(str, "ISD");
 			_ => true;
 
-		internal bool RememberOriginalPrices { get; set; }
-
 		public CardRepository(CardFormatter formatter, Func<IDataDownloader> downloaderFactory)
 		{
 			_formatter = formatter;
@@ -78,14 +76,8 @@ namespace Mtgdb.Data
 			{
 				foreach (var set in SetsByCode.Values)
 				foreach (var card in set.Cards)
-				{
 					if (_prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices))
-					{
-						if (RememberOriginalPrices)
-							card.OriginalPrices = card.Prices;
 						card.Prices = mtgjsonPrices;
-					}
-				}
 			}
 
 			IsLoadingPriceComplete.Signal();
