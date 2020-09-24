@@ -227,7 +227,7 @@ namespace Mtgdb.Gui
 				.Run(localizationLoadingComplete);
 			_app.CancellationToken.When(_cardRepo.IsLoadingComplete)
 				.Run(repoLoadingComplete);
-			_app.CancellationToken.When(_cardRepo.IsLoadingPriceComplete)
+			_app.CancellationToken.When(_priceRepo.IsLoadingPriceComplete)
 				.Run(repoLoadingPriceComplete);
 			_cardRepo.SetAdded += cardRepoSetAdded;
 		}

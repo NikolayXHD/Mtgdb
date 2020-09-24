@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -50,44 +49,12 @@ namespace Mtgdb.Test
 		}
 
 		[Test]
-		public void Price_dates_are_correct()
-		{
-			foreach (var card in Repo.Cards)
-			{
-				if ((card.Prices?.Paper?.Count ?? 0) == 0)
-					continue;
-
-				foreach ((string shopName, ShopPriceHistory shopPrices) in card.Prices.Paper)
-				{
-					if ((shopPrices.Retail?.Normal?.Count ?? 0) == 0)
-						continue;
-
-					for (var i = 0; i < shopPrices.Retail.Normal.Count; i++)
-					{
-						var list = shopPrices.Retail.Normal;
-
-						var date = list[i].Key;
-						Assert.That(date, Is.Not.Null);
-						Assert.That(date, Is.Not.Empty);
-						Assert.That(date, Does.Match(@"^\d{4}-\d{2}-\d{2}$"));
-
-						if (i > 0)
-						{
-							var prevDate = list[i - 1].Key;
-							Assert.That(date, Is.GreaterThan(prevDate).Using<string>(StringComparer.Ordinal));
-						}
-					}
-				}
-			}
-		}
-
-		[Test]
 		public void Tokens_have_exclusive_type_or_name()
 		{
 			foreach (Set set in Repo.SetsByCode.Values)
 			{
-				set.Tokens.Should().NotContain(card => !isToken(card));
-				set.ActualCards.Should().NotContain(card => isToken(card));
+				set.Tokens.Should().NotContain(card => !shouldBeToken(card));
+				set.ActualCards.Should().NotContain(card => shouldBeToken(card));
 			}
 		}
 
@@ -179,7 +146,7 @@ namespace Mtgdb.Test
 				.Should().BeEmpty();
 		}
 
-		private static bool isToken(Card c) =>
+		private static bool shouldBeToken(Card c) =>
 			CardCardTypes.ByName.ContainsKey(c.NameEn) || c.TypesArr.Any(CardCardTypes.ByType.ContainsKey);
 	}
 }

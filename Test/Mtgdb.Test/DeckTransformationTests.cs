@@ -21,14 +21,16 @@ namespace Mtgdb.Test
 				FilterSetCode = F.IsWithin(Sequence.From("ME2", "ICE"), Str.Comparer),
 			};
 
+			var priceRepo = new PriceRepository(() => null);
+
 			_repo.LoadFile();
 			_repo.Load();
 
-			_repo.LoadPriceFile();
-			_repo.LoadPrice();
-			_repo.FillPrice();
+			priceRepo.LoadPriceFile();
+			priceRepo.LoadPrice();
+			priceRepo.FillPrice(_repo);
 
-			_transformation = new CollectedCardsDeckTransformation(_repo);
+			_transformation = new CollectedCardsDeckTransformation(_repo, priceRepo);
 		}
 
 		[SetUp]

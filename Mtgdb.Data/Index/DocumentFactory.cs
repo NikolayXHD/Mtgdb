@@ -272,12 +272,12 @@ namespace Mtgdb.Data.Index
 			foreach (var lang in Languages)
 			{
 				// Tested
-				string name = card.Localization?.GetName(lang);
+				string name = card.Localization?.TryGet(lang)?.Name;
 				if (!string.IsNullOrEmpty(name))
 					doc.addTextField(nameof(Card.Name), lang, name);
 
 				// Tested
-				string type = card.Localization?.GetType(lang);
+				string type = card.Localization?.TryGet(lang)?.Type;
 				if (!string.IsNullOrEmpty(type))
 				{
 					var typeParts = type.Split(Sequence.Array(' ', '—'), StringSplitOptions.RemoveEmptyEntries);
@@ -287,12 +287,12 @@ namespace Mtgdb.Data.Index
 				}
 
 				// Tested
-				string text = card.Localization?.GetAbility(lang);
+				string text = card.Localization?.TryGet(lang)?.Text;
 				if (!string.IsNullOrEmpty(text))
 					doc.addTextField(nameof(Card.Text), lang, text);
 
 				// Tested
-				string flavor = card.Localization?.GetFlavor(lang);
+				string flavor = card.Localization?.TryGet(lang)?.Flavor;
 				if (!string.IsNullOrEmpty(flavor))
 					doc.addTextField(nameof(Card.Flavor), lang, flavor);
 			}

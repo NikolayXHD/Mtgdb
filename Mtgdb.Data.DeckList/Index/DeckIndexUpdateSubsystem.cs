@@ -9,12 +9,12 @@ namespace Mtgdb.Data.Index
 		[UsedImplicitly] // in GuiLoader
 		public DeckIndexUpdateSubsystem(
 			DeckSearcher searcher,
-			CardRepository repo,
+			PriceRepository priceRepo,
 			DeckListModel listModel,
 			IApplication app)
 		{
 			_searcher = searcher;
-			_repo = repo;
+			_priceRepo = priceRepo;
 			_listModel = listModel;
 			_app = app;
 		}
@@ -26,7 +26,7 @@ namespace Mtgdb.Data.Index
 
 		private void modelChanged()
 		{
-			if (!_repo.IsLoadingPriceComplete.Signaled)
+			if (!_priceRepo.IsLoadingPriceComplete.Signaled)
 				throw new InvalidOperationException();
 
 			_modelUpdatedTime = DateTime.UtcNow;
@@ -50,7 +50,7 @@ namespace Mtgdb.Data.Index
 		private readonly DeckSearcher _searcher;
 		private readonly DeckListModel _listModel;
 		private readonly IApplication _app;
-		private readonly CardRepository _repo;
+		private readonly PriceRepository _priceRepo;
 		private readonly object _sync = new object();
 	}
 }

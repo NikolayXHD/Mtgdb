@@ -114,7 +114,6 @@
     <Compile Include="Tcg\TcgCard.cs" />
     <Compile Include="Tcg\TcgParser.cs" />
     <Compile Include="Tcg\TcgSet.cs" />
-    <Compile Include="ExternalData\TranslationDownloaderUtils.cs" />
     <Compile Include="Images\ImageMappingUtils.cs" />
     <Compile Include="Images\WaifuScaler.cs" />
     <Compile Include="Images\OcrUtils.cs" />

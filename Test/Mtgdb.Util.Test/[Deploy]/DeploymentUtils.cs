@@ -41,7 +41,6 @@ namespace Mtgdb.Util
 			var repo = new CardRepository(new CardFormatter(), () => null)
 			{
 				FilterSetCode = setCode => setCodes?.Contains(setCode.ToLower()) != false,
-				PricesFile = FsPath.None
 			};
 
 			repo.LoadFile();
@@ -369,7 +368,6 @@ namespace Mtgdb.Util
 			kernel.Load<DalModule>();
 
 			var repo = kernel.Get<CardRepository>();
-			repo.PricesFile = FsPath.None;
 			repo.LoadFile();
 			repo.Load();
 

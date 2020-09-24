@@ -187,6 +187,7 @@
     <Compile Include="Index\LuceneSearcherTests.cs" />
     <Compile Include="Index\LuceneSpellcheckerTests.cs" />
     <Compile Include="MtgaIntegrationTests.cs" />
+    <Compile Include="PriceDataTests.cs" />
     <Compile Include="SelectionStateTests.cs" />
     <Compile Include="BinarySearchTests.cs" />
     <Compile Include="TaskCancellationTests.cs" />

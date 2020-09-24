@@ -17,17 +17,12 @@ namespace Mtgdb.Test
 				FilterSetCode = F.IsEqualTo("ISD", Str.Comparer)
 			};
 
-			_localizationRepo = new LocalizationRepository();
 			_cardSearcher = new CardSearcher(_repo, new CardDocumentAdapter(_repo));
 			_keywordSearcher = new KeywordSearcher(_repo);
 
 			_repo.LoadFile();
 			_repo.Load();
-
-			_localizationRepo.LoadFile();
-			_localizationRepo.Load();
-
-			_repo.FillLocalizations(_localizationRepo);
+			_repo.FillLocalizations();
 		}
 
 		[Test, Order(0)]
@@ -117,7 +112,6 @@ namespace Mtgdb.Test
 		}
 
 		private CardRepository _repo;
-		private LocalizationRepository _localizationRepo;
 		private CardSearcher _cardSearcher;
 		private KeywordSearcher _keywordSearcher;
 	}

@@ -20,6 +20,7 @@ namespace Mtgdb.Gui
 		[UsedImplicitly]
 		public FormMain(
 			CardRepository cardRepo,
+			PriceRepository priceRepo,
 			ImageRepository imageRepo,
 			ImageLoader imageLoader,
 			UiConfigRepository uiConfigRepository,
@@ -44,6 +45,7 @@ namespace Mtgdb.Gui
 			_quickFilterControls = QuickFilterSetup.GetQuickFilterControls(this);
 
 			_cardRepo = cardRepo;
+			_priceRepo = priceRepo;
 			_imageLoader = imageLoader;
 			_uiConfigRepository = uiConfigRepository;
 			_collectionEditor = collectionEditor;
@@ -239,6 +241,7 @@ namespace Mtgdb.Gui
 		private readonly bool _keywordsIndexUpToDate;
 
 		private readonly CardRepository _cardRepo;
+		private readonly PriceRepository _priceRepo;
 		private readonly ImageLoader _imageLoader;
 		private readonly UiConfigRepository _uiConfigRepository;
 		private readonly QuickFilterFacade _quickFilterFacade;

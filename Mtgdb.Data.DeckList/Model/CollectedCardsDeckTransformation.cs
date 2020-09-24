@@ -7,14 +7,15 @@ namespace Mtgdb.Data.Model
 {
 	public class CollectedCardsDeckTransformation
 	{
-		public CollectedCardsDeckTransformation(CardRepository repo)
+		public CollectedCardsDeckTransformation(CardRepository repo, PriceRepository priceRepo)
 		{
 			_repo = repo;
+			_priceRepo = priceRepo;
 		}
 
 		public Deck Transform(Deck original, CollectionSnapshot collection, Deck previousTransformed = null, HashSet<string> affectedNames = null)
 		{
-			if (!_repo.IsLoadingPriceComplete.Signaled)
+			if (!_priceRepo.IsLoadingPriceComplete.Signaled)
 				return original;
 
 			var target = Deck.Create();
@@ -106,5 +107,6 @@ namespace Mtgdb.Data.Model
 		}
 
 		private readonly CardRepository _repo;
+		private readonly PriceRepository _priceRepo;
 	}
 }

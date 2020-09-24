@@ -14,6 +14,7 @@ namespace Mtgdb.Gui
 		public GuiLoader(
 			Loader loader,
 			CardRepository repo,
+			PriceRepository priceRepo,
 			NewsService newsService,
 			DownloaderSubsystem downloaderSubsystem,
 			DeckListModel deckListModel,
@@ -22,6 +23,7 @@ namespace Mtgdb.Gui
 		{
 			_loader = loader;
 			_repo = repo;
+			_priceRepo = priceRepo;
 
 			_loader.AddTask(newsService.FetchNews);
 			_loader.AddTask(token => downloaderSubsystem.CalculateProgress());
@@ -31,11 +33,11 @@ namespace Mtgdb.Gui
 				if (deckSearcher.IsIndexSaved)
 				{
 					deckSearcher.LoadIndexes();
-					await _repo.IsLoadingPriceComplete.Wait(token);
+					await _priceRepo.IsLoadingPriceComplete.Wait(token);
 				}
 				else
 				{
-					await _repo.IsLoadingPriceComplete.Wait(token);
+					await _priceRepo.IsLoadingPriceComplete.Wait(token);
 					deckSearcher.LoadIndexes();
 				}
 
@@ -50,5 +52,6 @@ namespace Mtgdb.Gui
 
 		private readonly Loader _loader;
 		private readonly CardRepository _repo;
+		private readonly PriceRepository _priceRepo;
 	}
 }

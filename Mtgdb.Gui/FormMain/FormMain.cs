@@ -404,14 +404,14 @@ namespace Mtgdb.Gui
 			_panelStatus.SuspendLayout();
 
 			bool cardsDownloaded = _cardRepo.IsDownloadComplete.Signaled;
-			bool priceDownloaded = _cardRepo.IsDownloadPriceComplete.Signaled;
+			bool priceDownloaded = _priceRepo.IsDownloadPriceComplete.Signaled;
 
 			string status;
 			if (!cardsDownloaded && !priceDownloaded)
 				status = "downloading cards… prices…";
 			else if (cardsDownloaded && priceDownloaded)
 			{
-				if (_cardRepo.IsLoadingPriceComplete.Signaled || !_cardRepo.IsLoadingComplete.Signaled)
+				if (_priceRepo.IsLoadingPriceComplete.Signaled || !_cardRepo.IsLoadingComplete.Signaled)
 					status = _cardRepo.SetsByCode.Count.ToString();
 				else
 					status = $"{_cardRepo.SetsByCode.Count.ToString()} loading prices…" ;
@@ -1044,7 +1044,7 @@ namespace Mtgdb.Gui
 
 		public void ButtonPivot()
 		{
-			var formChart = new FormChart(_cardRepo, getUiSnapshot, _fields);
+			var formChart = new FormChart(_cardRepo, _priceRepo, getUiSnapshot, _fields);
 			formChart.SnapTo(Direction.Top, _formRoot.Location);
 			formChart.Show();
 		}

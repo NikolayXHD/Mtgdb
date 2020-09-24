@@ -5,26 +5,7 @@ namespace Mtgdb.Data
 {
 	public class CardLocalization
 	{
-		private readonly Dictionary<string, Translation> _translations =
-			new Dictionary<string, Translation>(Str.Comparer);
-
-		private readonly Dictionary<string, ForeignName> _names =
-			new Dictionary<string, ForeignName>(Str.Comparer);
-
-		public void Add(Card card, ForeignName name, Translation translation)
-		{
-			var lang = getLang(name.Language);
-			
-			if (_names.ContainsKey(lang) || _translations.ContainsKey(lang))
-				return;
-
-			_translations.Add(lang, translation);
-
-			if (!string.IsNullOrEmpty(name.Name) && !Str.Equals(name.Name, card.NameEn))
-				_names.Add(lang, name);
-		}
-
-		private static string getLang(string language)
+		public static string GetLang(string language)
 		{
 			switch (language)
 			{
@@ -51,29 +32,16 @@ namespace Mtgdb.Data
 					return "ru";
 				case "Spanish":
 					return "es";
+				case "Phyrexian":
+				case "Sanskrit":
+				case "Hebrew":
+				case "Ancient Greek":
+				case "Latin":
+				case "Arabic":
+					return null;
 				default:
 					throw new NotSupportedException();
 			}
-		}
-
-		public string GetName(string language)
-		{
-			return _names.TryGet(language)?.Name;
-		}
-
-		public string GetType(string language)
-		{
-			return _translations.TryGet(language)?.Type;
-		}
-
-		public string GetAbility(string language)
-		{
-			return _translations.TryGet(language)?.Text;
-		}
-
-		public string GetFlavor(string language)
-		{
-			return _translations.TryGet(language)?.Flavor;
 		}
 
 		public const string DefaultLanguage = "en";

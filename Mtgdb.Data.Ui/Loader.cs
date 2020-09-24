@@ -15,15 +15,15 @@ namespace Mtgdb.Ui
 		[UsedImplicitly] // by ninject
 		public Loader(
 			CardRepository repository,
+			PriceRepository priceRepository,
 			ImageRepository imageRepository,
-			LocalizationRepository localizationRepository,
 			CardSearcher cardSearcher,
 			KeywordSearcher keywordSearcher,
 			IApplication app)
 		{
 			_repository = repository;
+			_priceRepository = priceRepository;
 			_imageRepository = imageRepository;
-			_localizationRepository = localizationRepository;
 			_cardSearcher = cardSearcher;
 			_keywordSearcher = keywordSearcher;
 			_app = app;
@@ -80,29 +80,27 @@ namespace Mtgdb.Ui
 			AddTask(async token =>
 			{
 				await _repository.IsDownloadComplete.Wait(token);
-				await _repository.DownloadPriceFile(token);
-				_repository.LoadPriceFile();
-				_repository.LoadPrice();
+				await _priceRepository.DownloadPriceFile(token);
+				_priceRepository.LoadPriceFile();
+				_priceRepository.LoadPrice();
 				await _repository.IsLoadingComplete.Wait(token);
-				_repository.FillPrice();
+				_priceRepository.FillPrice(_repository);
+				_priceRepository.SaveCache(_repository);
+				_priceRepository.Clear();
 			});
 
 			AddTask(async token =>
 			{
 				await _repository.IsFileLoadingComplete.Wait(token);
 				_repository.Load();
+				_repository.FillLocalizations();
 
 				await _imageRepository.IsLoadingZoomComplete.Wait(token);
-				_localizationRepository.LoadFile();
-				_localizationRepository.Load();
-
-				_repository.FillLocalizations(_localizationRepository);
-				_localizationRepository.Clear();
 
 				if (!_keywordSearcher.IsUpToDate)
 					_keywordSearcher.Load();
 
-				await _repository.IsLoadingPriceComplete.Wait(token);
+				await _priceRepository.IsLoadingPriceComplete.Wait(token);
 
 				if (!(_cardSearcher.IsUpToDate && _cardSearcher.Spellchecker.IsUpToDate))
 					_cardSearcher.LoadIndexes();
@@ -113,8 +111,8 @@ namespace Mtgdb.Ui
 		}
 
 		private readonly CardRepository _repository;
+		private readonly PriceRepository _priceRepository;
 		private readonly ImageRepository _imageRepository;
-		private readonly LocalizationRepository _localizationRepository;
 		private readonly CardSearcher _cardSearcher;
 		private readonly KeywordSearcher _keywordSearcher;
 		private readonly IApplication _app;

@@ -74,7 +74,7 @@ namespace Mtgdb.Gui
 			_menuMruFiles.BackColor = SystemColors.Control;
 		}
 
-		public FormChart(CardRepository repository, Func<UiModel> uiSnapshotFactory, CardFields fields)
+		public FormChart(CardRepository repository, PriceRepository priceRepository, Func<UiModel> uiSnapshotFactory, CardFields fields)
 			: this()
 		{
 			_checkBoxes = new[]
@@ -90,6 +90,7 @@ namespace Mtgdb.Gui
 				.ToArray();
 
 			_repository = repository;
+			_priceRepository = priceRepository;
 			_uiSnapshotFactory = uiSnapshotFactory;
 
 			Load += load;
@@ -999,7 +1000,7 @@ namespace Mtgdb.Gui
 				display(settings);
 			}
 
-			if (!_repository.IsLoadingPriceComplete.Signaled && settings.GetAllFields().Contains(nameof(Card.Price)))
+			if (!_priceRepository.IsLoadingPriceComplete.Signaled && settings.GetAllFields().Contains(nameof(Card.Price)))
 			{
 				MessageBox.Show(
 					$"Price loading is still in progress." + Environment.NewLine +
@@ -1229,6 +1230,7 @@ namespace Mtgdb.Gui
 		private readonly IList<string> _fieldsOrder;
 
 		private readonly CardRepository _repository;
+		private readonly PriceRepository _priceRepository;
 		private readonly Func<UiModel> _uiSnapshotFactory;
 		private bool _applyingSettings;
 		private readonly ButtonBase[] _headerButtons;

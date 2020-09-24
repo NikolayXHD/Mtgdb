@@ -15,11 +15,11 @@ namespace Mtgdb.Data
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<KeywordSearcher>()
+			Kernel.Bind<PriceRepository>()
 				.ToSelf()
 				.InSingletonScope();
 
-			Kernel.Bind<LocalizationRepository>()
+			Kernel.Bind<KeywordSearcher>()
 				.ToSelf()
 				.InSingletonScope();
 

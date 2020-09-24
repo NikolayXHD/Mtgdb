@@ -404,7 +404,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text:Демон", "Демон", "ru")]
 		public void Search_by_Text(string queryStr, string expected, string lang)
 		{
-			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetAbility(lang)}", lang);
+			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization?.TryGet(lang)?.Text}", lang);
 			foreach (var card in cards)
 				Assert.That(card.GetText(lang), Does.Contain(expected).IgnoreCase);
 		}
@@ -412,7 +412,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Flavor:Демон", "Демон", "ru")]
 		public void Search_by_Flavor(string queryStr, string expected, string lang)
 		{
-			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization.GetFlavor(lang)}", lang);
+			var cards = search(queryStr, c => $"{c.NameEn}: {c.Localization?.TryGet(lang)?.Flavor}", lang);
 
 			foreach (var card in cards)
 				Assert.That(card.GetFlavor(lang), Does.Contain(expected).IgnoreCase);
@@ -421,7 +421,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Name:Демон", "Демон", "ru")]
 		public void Search_by_Name(string queryStr, string expected, string lang)
 		{
-			var cards = search(queryStr, c => c.Localization.GetName(lang), lang);
+			var cards = search(queryStr, c => c.Localization?.TryGet(lang)?.Name, lang);
 
 			foreach (var card in cards)
 				Assert.That(card.GetName(lang), Does.Contain(expected).IgnoreCase);
@@ -430,7 +430,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Type:Демон", "Демон", "ru")]
 		public void Search_by_Type(string queryStr, string expected, string lang)
 		{
-			var cards = search(queryStr, c => c.NameEn + ": " + c.Localization.GetType(lang), lang);
+			var cards = search(queryStr, c => c.NameEn + ": " + c.Localization?.TryGet(lang)?.Type, lang);
 
 			foreach (var card in cards)
 				Assert.That(card.GetType(lang), Does.Contain(expected).IgnoreCase);

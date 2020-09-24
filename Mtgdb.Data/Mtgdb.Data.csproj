@@ -142,7 +142,7 @@
     <Compile Include="Model\Ui\UiConfigRepository.cs" />
     <Compile Include="MtgArenaIntegration.cs" />
     <Compile Include="KeywordRegexUtil.cs" />
-    <Compile Include="Translations\Translation.cs" />
+    <Compile Include="PriceRepository.cs" />
     <Compile Include="[ infrastructure ]\MtgaIntegrationConfig.cs" />
     <Compile Include="Images\ImageCacheEntry.cs" />
     <Compile Include="[ infrastructure ]\ImageLocationsConfig.cs" />
@@ -153,7 +153,7 @@
     <Compile Include="CardRepository.cs" />
     <Compile Include="Images\ImageLoader.cs" />
     <Compile Include="Model\Mtgjson\Card.cs" />
-    <Compile Include="Model\Mtgjson\ForeignName.cs" />
+    <Compile Include="Model\Mtgjson\ForeignData.cs" />
     <Compile Include="Model\Image\ImageFile.cs" />
     <Compile Include="Model\GeneratedManaParser.cs" />
     <Compile Include="Model\Ui\ICardCollection.cs" />
@@ -162,7 +162,6 @@
     <Compile Include="Model\Ui\UiModel.cs" />
     <Compile Include="[ infrastructure ]\DalModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translations\LocalizationRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -206,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forge" />
+    <Folder Include="Translations" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\shared\shared.projitems" Label="Shared" />

@@ -2,8 +2,8 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// updated keyword definitions
-		private const string Cards = "1.27";
+		// use mtgjson translations
+		private const string Cards = "1.28";
 		public const string CardSearcher = Cards;
 		public const string CardSpellchecker = Cards;
 		public const string KeywordSearcher = Cards;

@@ -8,6 +8,7 @@ namespace Mtgdb.Data.Model
 	{
 		public DeckAggregateCache(
 			CardRepository repo,
+			PriceRepository priceRepo,
 			Func<Deck> deck,
 			Func<TAggr> aggregationSeed,
 			Func<TAggr, TVal, TAggr> add,
@@ -15,6 +16,7 @@ namespace Mtgdb.Data.Model
 			Func<TAggr, TResult> transform)
 		{
 			_repo = repo;
+			_priceRepo = priceRepo;
 			_deck = deck;
 			_aggregationSeed = aggregationSeed;
 			_add = add;
@@ -27,7 +29,7 @@ namespace Mtgdb.Data.Model
 
 		public TResult GetAggregate(Zone zone, Func<Card, bool> filter)
 		{
-			if (!_repo.IsLoadingPriceComplete.Signaled)
+			if (!_priceRepo.IsLoadingPriceComplete.Signaled)
 				return _transform(_aggregationSeed());
 
 			var key = (zone, filter);
@@ -62,6 +64,7 @@ namespace Mtgdb.Data.Model
 			new Dictionary<(Zone Zone, Func<Card, bool> Filter), TResult>();
 
 		private readonly CardRepository _repo;
+		private readonly PriceRepository _priceRepo;
 		private readonly Func<Deck> _deck;
 		private readonly Func<TAggr> _aggregationSeed;
 		private readonly Func<TAggr, TVal, TAggr> _add;

@@ -7,7 +7,7 @@ namespace Mtgdb.Data.Model
 {
 	public class DeckModel
 	{
-		public DeckModel(Deck originalDeck, CardRepository repo, CollectionSnapshot collection, CollectedCardsDeckTransformation transformation)
+		public DeckModel(Deck originalDeck, CardRepository repo, PriceRepository priceRepo, CollectionSnapshot collection, CollectedCardsDeckTransformation transformation)
 		{
 			int countInMain(Card c) => Deck.MainDeck.Count.TryGet(c.Id);
 			int countTotal(Card c, int countInDeck) => countInDeck;
@@ -29,25 +29,26 @@ namespace Mtgdb.Data.Model
 			Deck deck() => Deck;
 
 			_priceTotalCache =
-				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceTotal, fE);
+				new DeckAggregateCache<float, float, float>(repo, priceRepo, deck, f0, fSum, priceTotal, fE);
 
 			_countTotalCache =
-				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countTotal, iE);
+				new DeckAggregateCache<int, int, int>(repo, priceRepo, deck, i0, iSum, countTotal, iE);
 
 			_priceCollectedCache =
-				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceCollected, fE);
+				new DeckAggregateCache<float, float, float>(repo, priceRepo, deck, f0, fSum, priceCollected, fE);
 
 			_countCollectedCache =
-				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countCollected, iE);
+				new DeckAggregateCache<int, int, int>(repo, priceRepo, deck, i0, iSum, countCollected, iE);
 
 			_priceCollectedSideCache =
-				new DeckAggregateCache<float, float, float>(repo, deck, f0, fSum, priceCollectedSide, fE);
+				new DeckAggregateCache<float, float, float>(repo, priceRepo, deck, f0, fSum, priceCollectedSide, fE);
 
 			_countCollectedSideCache =
-				new DeckAggregateCache<int, int, int>(repo, deck, i0, iSum, countCollectedSide, iE);
+				new DeckAggregateCache<int, int, int>(repo, priceRepo, deck, i0, iSum, countCollectedSide, iE);
 
 			_generatedManaCache = new DeckAggregateCache<IList<string>, Dictionary<string, int>, string>(
 				repo,
+				priceRepo,
 				() => OriginalDeck,
 				() => new Dictionary<string, int>(Str.Comparer),
 				(a, b) =>

@@ -45,7 +45,7 @@ namespace Mtgdb.Data
 		/// Foreign language names for the card, if this card in this set was printed in another language. An array of objects, each object having 'language', 'name' and 'multiverseid' keys. Not available for all sets.
 		/// </summary>
 		[JsonProperty("foreignData")]
-		public List<ForeignName> ForeignNames { get; set; }
+		public List<ForeignData> ForeignData { get; set; }
 
 		/// <summary>
 		/// Type of card. Can be normal, split, flip, transform, meld, leveler, saga, planar, scheme, vanguard, token, double_faced_token, emblem, augment, or host. (If normal, it is usually omitted.)
@@ -212,17 +212,6 @@ namespace Mtgdb.Data
 		[JsonProperty("side")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string Side { get; set; }
-
-		[JsonIgnore]
-		internal MtgjsonPrices Prices
-		{
-			get => _prices;
-			set
-			{
-				_prices = value;
-				resetPrices();
-			}
-		}
 
 		[JsonIgnore]
 		public string Id { get; internal set; }
@@ -440,23 +429,10 @@ namespace Mtgdb.Data
 		}
 
 		[JsonIgnore]
-		public CardLocalization Localization { get; internal set; }
+		public Dictionary<string, ForeignData> Localization { get; internal set; }
 
 		[JsonIgnore]
-		public float? Price
-		{
-			get
-			{
-				readyPrices();
-				return _price;
-			}
-
-			internal set
-			{
-				_pricesReady = true;
-				_price = value;
-			}
-		}
+		public float? Price { get; internal set; }
 
 		public CardKeywords GetAllKeywords() =>
 			_keywords ??= new CardKeywords(this);
@@ -487,71 +463,23 @@ namespace Mtgdb.Data
 			Str.Equals(legality, legalityValue);
 
 		public string GetName(string language) =>
-			getLocalizedField(nameof(NameEn), language, (loc, lang) => loc.GetName(lang), c => c.NameEn);
+			getLocalizedField(nameof(NameEn), language, loc => loc.Name, c => c.NameEn);
 
 		public string GetType(string language) =>
-			getLocalizedField(nameof(TypeEn), language, (loc, lang) => loc.GetType(lang), c => c.TypeEn);
+			getLocalizedField(nameof(TypeEn), language, loc => loc.Type, c => c.TypeEn);
 
 		public string GetText(string language) =>
 			_textDeltaApplied
 				? TextEn
-				: getLocalizedField(nameof(TextEn), language, (loc, lang) => loc.GetAbility(lang),
-					c => c.TextEn);
+				: getLocalizedField(nameof(TextEn), language, loc => loc.Text, c => c.TextEn);
 
 		public string GetFlavor(string language) =>
-			getLocalizedField(nameof(FlavorEn), language, (loc, lang) => loc.GetFlavor(lang),
-				c => c.FlavorEn);
+			getLocalizedField(nameof(FlavorEn), language, loc => loc.Flavor, c => c.FlavorEn);
 
 		private string getLocalizedField(string propertyName, string language,
-			Func<CardLocalization, string, string> getter, Func<Card, string> defaultGetter)
+			Func<ForeignData, string> getter, Func<Card, string> defaultGetter)
 		{
-			string result =
-				Localization?.Invoke1(getter, language) ??
-				findNamesakeTranslation(propertyName, language, getter) ??
-				defaultGetter(this);
-
-			return result;
-		}
-
-		private string findNamesakeTranslation(string propertyName, string language,
-			Func<CardLocalization, string, string> getter)
-		{
-			if (Namesakes == null)
-				return null;
-
-			string result;
-
-			lock (_namesakeTranslations)
-				if (_namesakeTranslations.TryGetValue((propertyName, language), out result))
-					return result;
-
-			result = Namesakes.Where(_ => _ != this)
-				.Select(namesake => namesake.Localization?.Invoke1(getter, language))
-				.FirstOrDefault(transl => transl != null);
-
-			lock (_namesakeTranslations)
-				_namesakeTranslations[(propertyName, language)] = result;
-
-			return result;
-		}
-
-
-		private void resetPrices()
-		{
-			_pricesReady = false;
-			_price = null;
-		}
-
-		private void readyPrices()
-		{
-			if (_pricesReady)
-				return;
-
-			_pricesReady = true;
-			_price = Prices?.Paper?.SelectMany(entry =>
-				(IEnumerable<KeyValuePair<string, float?>>)entry.Value?.Retail?.Normal ??
-				Enumerable.Empty<KeyValuePair<string, float?>>()
-			).AtMin(entry => entry.Key).FindOrDefault().Value;
+			return Localization?.TryGet(language)?.Invoke0(getter) ?? defaultGetter(this);
 		}
 
 		internal void Patch(CardPatch patch)
@@ -802,7 +730,6 @@ namespace Mtgdb.Data
 
 
 
-		private float? _price;
 		private bool _pricesReady;
 		private MtgjsonPrices _prices;
 		private (int? Number, string Letter)? _sortableNumber;

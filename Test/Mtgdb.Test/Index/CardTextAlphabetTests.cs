@@ -11,7 +11,7 @@ namespace Mtgdb.Test
 		[OneTimeSetUp]
 		public static void Setup()
 		{
-			LoadTranslations();
+			LoadCards();
 		}
 
 		[Test]

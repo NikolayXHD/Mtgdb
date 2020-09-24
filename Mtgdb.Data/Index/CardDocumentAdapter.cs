@@ -127,7 +127,7 @@ namespace Mtgdb.Data.Index
 			= new Dictionary<string, Func<Card, string, IEnumerable<string>>>(Str.Comparer)
 		{
 			[nameof(Card.Name)] = (c, lang) =>
-				c.Localization?.GetName(lang)?.Invoke0(Sequence.From) ?? Enumerable.Empty<string>(),
+				c.Localization?.TryGet(lang)?.Name?.Invoke0(Sequence.From) ?? Enumerable.Empty<string>(),
 
 			[nameof(Card.NameEn)] = (c, lang) => Sequence.From(c.NameEn),
 			[nameof(Card.Artist)] = (c, lang) => Sequence.From(c.Artist),

@@ -17,12 +17,14 @@ namespace Mtgdb.Data.Model
 		[UsedImplicitly]
 		public DeckListModel(
 			CardRepository repo,
+			PriceRepository priceRepo,
 			CollectedCardsDeckTransformation transformation,
 			CollectionEditorModel collection,
 			IApplication app)
 		{
 			_app = app;
 			_repo = repo;
+			_priceRepo = priceRepo;
 			_transformation = transformation;
 			_collectionEditor = collection;
 			_state.Collection = _collectionEditor.Snapshot();
@@ -41,7 +43,7 @@ namespace Mtgdb.Data.Model
 
 		private void collectionChanged(bool listChanged, bool countChanged, Card card)
 		{
-			if (!_repo.IsLoadingPriceComplete.Signaled)
+			if (!_priceRepo.IsLoadingPriceComplete.Signaled)
 				throw new InvalidOperationException();
 
 			if (!listChanged && !countChanged)
@@ -104,7 +106,7 @@ namespace Mtgdb.Data.Model
 		}
 
 		public DeckModel CreateModel(Deck deck) =>
-			new DeckModel(deck, _repo, _state.Collection, _transformation);
+			new DeckModel(deck, _repo, _priceRepo, _state.Collection, _transformation);
 
 		public void Remove(DeckModel deck)
 		{
@@ -186,7 +188,7 @@ namespace Mtgdb.Data.Model
 				_state = state;
 
 				_deckModels = _state.Decks
-					.Select(d => new DeckModel(d, _repo, _state.Collection, _transformation))
+					.Select(d => new DeckModel(d, _repo, _priceRepo, _state.Collection, _transformation))
 					.ToList();
 
 				_decksByName = _deckModels.ToMultiDictionary(_ => _.Name, Str.Comparer);
@@ -271,6 +273,7 @@ namespace Mtgdb.Data.Model
 			new Dictionary<DeckModel, int>();
 
 		private readonly CardRepository _repo;
+		private readonly PriceRepository _priceRepo;
 		private readonly CollectedCardsDeckTransformation _transformation;
 		private readonly CollectionEditorModel _collectionEditor;
 
