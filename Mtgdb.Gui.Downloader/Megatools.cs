@@ -29,6 +29,7 @@ namespace Mtgdb.Downloader
 				if (!MegadlExePath.IsFile())
 				{
 					var webClient = new YandexDiskClientWrapper(new YandexDiskClient(), _yandexKey);
+					// alternatively download from https://yadi.sk/d/f1HuKUg7xW2FUQ/tools?w=1
 					await webClient.DownloadAndExtract(_megatoolsUrl, AppDir.Update, new FsPath("megatools.7z"), token);
 				}
 			}

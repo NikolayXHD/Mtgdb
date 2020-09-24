@@ -10,7 +10,8 @@ namespace Mtgdb.Util
 		{
 			int parallelism = Environment.ProcessorCount;
 
-			FsPath exe = DevPaths.DataDrive.Join("portable", "waifu2x-converter-cpp", "waifu2x-converter-cpp.exe");
+			// download from https://yadi.sk/d/f1HuKUg7xW2FUQ/tools?w=1
+			FsPath exe = DevPaths.MtgToolsDir.Join("waifu2x-converter-cpp", "waifu2x-converter-cpp.exe");
 			string args = $"--jobs {parallelism} --mode scale -i \"{sourceFile}\" -o \"{targetFile}\"";
 			FsPath workingDirectory = exe.Parent();
 

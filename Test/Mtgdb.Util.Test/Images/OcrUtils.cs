@@ -21,10 +21,11 @@ namespace Mtgdb.Util
 		[OneTimeSetUp]
 		public void Setup()
 		{
-			string tessdataPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", "tools", "tessdata");
+			// download from https://yadi.sk/d/f1HuKUg7xW2FUQ/tools?w=1
+			var tessdataPath = DevPaths.MtgToolsDir.Join("tessdata");
 
 			_engine = new TesseractEngine(
-				tessdataPath,
+				tessdataPath.Value,
 				"eng",
 				EngineMode.CubeOnly);
 

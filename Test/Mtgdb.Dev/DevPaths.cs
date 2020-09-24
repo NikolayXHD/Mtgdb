@@ -56,6 +56,7 @@ namespace Mtgdb.Dev
 		};
 
 		public static readonly FsPath MtgContentDir = DataDrive.Join("distrib", "games", "mtg");
+		public static readonly FsPath MtgToolsDir = MtgContentDir.Join("tools");
 
 		public static readonly FsPath XlhqDir = MtgContentDir.Join("Mega", "XLHQ");
 		public static readonly FsPath TorrentsDir = MtgContentDir.Join("XLHQ-Sets-Torrent.Unpacked");
