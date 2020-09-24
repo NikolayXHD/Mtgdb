@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class MetadataFromFileNameTests
 	{
 		[TestCase("name.jpg", ExpectedResult = "name.jpg")]

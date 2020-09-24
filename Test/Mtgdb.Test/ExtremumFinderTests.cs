@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class ExtremumFinderTests
 	{
 		[TestCase(1, 3, 2, ExpectedResult = 3)]

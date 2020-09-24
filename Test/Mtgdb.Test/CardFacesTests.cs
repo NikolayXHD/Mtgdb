@@ -6,27 +6,12 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class CardLayoutTests : TestsBase
 	{
 		[OneTimeSetUp]
 		public void OneTimeSetup() =>
 			LoadCards();
-
-		[SetUp]
-		public void Setup()
-		{
-			Formatter.CustomLayout = new[]
-			{
-				nameof(Card.SetCode),
-				nameof(Card.NameEn),
-			};
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			Formatter.CustomLayout = null;
-		}
 
 		[Test]
 		public void Single_faced_cards_dont_have_multiple_values_in_names_list()

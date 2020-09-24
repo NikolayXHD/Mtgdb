@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Mtgdb.Test
 {
+	[Parallelizable(ParallelScope.All)]
 	public class CardTextAlphabetTests : TestsBase
 	{
 		[OneTimeSetUp]

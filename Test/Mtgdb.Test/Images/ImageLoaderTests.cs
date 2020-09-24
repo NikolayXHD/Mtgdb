@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.Children)]
 	public class ImageLoaderTests : TestsBase
 	{
 		[OneTimeSetUp]

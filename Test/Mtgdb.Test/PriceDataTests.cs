@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class PriceDataTests : TestsBase
 	{
 		[OneTimeSetUp]
@@ -20,6 +21,7 @@ namespace Mtgdb.Test
 			{
 				if (mtgjsonPrices.Paper == null)
 					continue;
+
 				foreach ((string shopName, ShopPriceHistory shopPrices) in mtgjsonPrices.Paper)
 				{
 					if ((shopPrices.Retail?.Normal?.Count ?? 0) == 0)

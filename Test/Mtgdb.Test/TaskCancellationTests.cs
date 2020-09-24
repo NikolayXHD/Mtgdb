@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class TaskCancellationTests
 	{
 		[Test]
@@ -14,14 +15,14 @@ namespace Mtgdb.Test
 			// await Task.Delay(int, CancellationToken)
 			// is unusable
 			var cts = new CancellationTokenSource();
-			var delay = Task.Delay(100, cts.Token);
+			var delay = Task.Delay(300, cts.Token);
 
 			Assert.ThrowsAsync<TaskCanceledException>(async () => await Task.WhenAll(delay, interrupt()));
 
 			async Task interrupt()
 			{
 				// ReSharper disable once MethodSupportsCancellation
-				await Task.Delay(50);
+				await Task.Delay(10);
 				cts.Cancel();
 			}
 		}

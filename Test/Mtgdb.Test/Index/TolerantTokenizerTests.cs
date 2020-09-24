@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class TolerantTokenizerTests : TestsBase
 	{
 		[TestCase(@"PricingLow:{10 TO ?]")]

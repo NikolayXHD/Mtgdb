@@ -7,6 +7,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.Children)]
 	public class ImageMappingTests : TestsBase
 	{
 		[OneTimeSetUp]

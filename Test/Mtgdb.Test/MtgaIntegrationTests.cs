@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture, Explicit]
+	[Parallelizable(ParallelScope.All)]
 	public class MtgaIntegrationTests
 	{
 		private StandardKernel _kernel;

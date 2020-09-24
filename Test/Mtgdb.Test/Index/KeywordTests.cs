@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class KeywordTests : TestsBase
 	{
 		[OneTimeSetUp]

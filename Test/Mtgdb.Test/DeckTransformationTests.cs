@@ -9,6 +9,7 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.Self)]
 	public class DeckTransformationTests : TestsBase
 	{
 		[OneTimeSetUp]

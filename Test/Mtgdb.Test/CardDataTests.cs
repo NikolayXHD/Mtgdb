@@ -8,30 +8,13 @@ using NUnit.Framework;
 namespace Mtgdb.Test
 {
 	[TestFixture]
+	[Parallelizable(ParallelScope.All)]
 	public class CardDataTests : TestsBase
 	{
 		[OneTimeSetUp]
 		public void OneTimeSetup()
 		{
 			LoadCards();
-		}
-
-		[SetUp]
-		public void Setup()
-		{
-			Formatter.CustomLayout = new[]
-			{
-				nameof(Card.SetCode),
-				nameof(Card.Number),
-				nameof(Card.MultiverseId),
-				nameof(Card.ImageName),
-			};
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			Formatter.CustomLayout = null;
 		}
 
 		[Test]
