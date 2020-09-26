@@ -69,8 +69,8 @@ namespace Mtgdb.Gui
 			keywordSearcher.InvalidateIndex();
 
 			var priceRepo = _kernel.Get<PriceRepository>();
-			if (priceRepo.PriceCacheExists())
-				priceRepo.DeletePriceCache();
+			if (priceRepo.CacheExists())
+				priceRepo.DeleteCache();
 		}
 
 		private static void beginInstall()

@@ -18,19 +18,19 @@ namespace Mtgdb.Data
 			PriceCacheFile = AppDir.Data.Join("AllPrices.cache.json");
 		}
 
-		public async Task DownloadPriceFile(CancellationToken token)
+		public async Task DownloadFile(CancellationToken token)
 		{
-			if (PricesFile.IsValid() && !PricesFile.IsFile() && !PriceCacheExists())
+			if (PricesFile.IsValid() && !PricesFile.IsFile() && !CacheExists())
 				await Downloader.DownloadPrices(token);
 
 			IsDownloadPriceComplete.Signal();
 		}
 
-		public void LoadPriceFile(bool ignoreCache = false)
+		public void LoadFile(bool ignoreCache = false)
 		{
-			if (!ignoreCache && PriceCacheExists())
+			if (!ignoreCache && CacheExists())
 			{
-				_priceCacheContent = loadPriceCacheFile();
+				_priceCacheContent = loadCacheFile();
 			}
 			else
 			{
@@ -40,10 +40,10 @@ namespace Mtgdb.Data
 			}
 		}
 
-		public void LoadPrice(bool ignoreCache = false)
+		public void Load(bool ignoreCache = false)
 		{
 			if (!ignoreCache && _priceCacheContent != null)
-				_priceCache = deserializePriceCache(_priceCacheContent);
+				_priceCache = deserializeCache(_priceCacheContent);
 			else
 				_prices = deserializePrices();
 
@@ -85,8 +85,8 @@ namespace Mtgdb.Data
 		{
 			if (_priceCache == null)
 			{
-				var cache = createPriceCache(repo);
-				savePriceCache(cache);
+				var cache = createCache(repo);
+				saveCache(cache);
 			}
 		}
 
@@ -96,13 +96,13 @@ namespace Mtgdb.Data
 			_priceCache = null;
 		}
 
-		public bool PriceCacheExists()
+		public bool CacheExists()
 		{
 			lock (_syncPriceCacheFile)
 				return PriceCacheFile.IsFile();
 		}
 
-		public void DeletePriceCache()
+		public void DeleteCache()
 		{
 			try
 			{
@@ -115,7 +115,7 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private byte[] loadPriceCacheFile()
+		private byte[] loadCacheFile()
 		{
 			lock (_syncPriceCacheFile)
 			{
@@ -126,13 +126,13 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private void savePriceCache(Dictionary<string, float> cache)
+		private void saveCache(Dictionary<string, float> cache)
 		{
-			var cacheContent = serializePriceCache(cache);
+			var cacheContent = serializeCache(cache);
 			PriceCacheFile.WriteAllBytes(cacheContent);
 		}
 
-		private Dictionary<string, float> createPriceCache(CardRepository repo)
+		private Dictionary<string, float> createCache(CardRepository repo)
 		{
 			var priceByCard = repo.Cards
 				.Where(_ => _.Price.HasValue) // ReSharper disable once PossibleInvalidOperationException
@@ -140,7 +140,7 @@ namespace Mtgdb.Data
 			return priceByCard;
 		}
 
-		private byte[] serializePriceCache(Dictionary<string, float> priceByCardId)
+		private byte[] serializeCache(Dictionary<string, float> priceByCardId)
 		{
 			using var stream = new MemoryStream();
 
@@ -151,7 +151,7 @@ namespace Mtgdb.Data
 			return stream.ToArray();
 		}
 
-		private Dictionary<string, float> deserializePriceCache(byte[] priceCacheContent)
+		private Dictionary<string, float> deserializeCache(byte[] priceCacheContent)
 		{
 			using var stream = new MemoryStream(priceCacheContent);
 			using var streamReader = new StreamReader(stream);

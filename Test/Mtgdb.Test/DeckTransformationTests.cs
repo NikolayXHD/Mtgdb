@@ -27,8 +27,8 @@ namespace Mtgdb.Test
 			_repo.LoadFile();
 			_repo.Load();
 
-			priceRepo.LoadPriceFile();
-			priceRepo.LoadPrice();
+			priceRepo.LoadFile();
+			priceRepo.Load();
 			priceRepo.FillPrice(_repo);
 
 			_transformation = new CollectedCardsDeckTransformation(_repo, priceRepo);

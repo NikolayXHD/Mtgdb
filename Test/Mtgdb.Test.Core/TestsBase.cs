@@ -85,8 +85,8 @@ namespace Mtgdb.Test
 				var sw = new Stopwatch();
 				sw.Start();
 
-				PriceRepo.LoadPriceFile();
-				PriceRepo.LoadPrice();
+				PriceRepo.LoadFile();
+				PriceRepo.Load();
 				PriceRepo.FillPrice(Repo);
 
 				sw.Stop();
@@ -95,7 +95,7 @@ namespace Mtgdb.Test
 				LogManager.Flush();
 
 				_loadedPrices = true;
-				if (!PriceRepo.PriceCacheExists())
+				if (!PriceRepo.CacheExists())
 					_loadedMtgjsonPrices = true;
 			}
 		}
@@ -112,8 +112,8 @@ namespace Mtgdb.Test
 				var sw = new Stopwatch();
 				sw.Start();
 
-				PriceRepo.LoadPriceFile(ignoreCache: true);
-				PriceRepo.LoadPrice(ignoreCache: true);
+				PriceRepo.LoadFile(ignoreCache: true);
+				PriceRepo.Load(ignoreCache: true);
 				if (!PriceRepo.IsLoadingPriceComplete.Signaled)
 					PriceRepo.FillPrice(Repo);
 

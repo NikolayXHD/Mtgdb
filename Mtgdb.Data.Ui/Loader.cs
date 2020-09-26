@@ -80,9 +80,9 @@ namespace Mtgdb.Ui
 			AddTask(async token =>
 			{
 				await _repository.IsDownloadComplete.Wait(token);
-				await _priceRepository.DownloadPriceFile(token);
-				_priceRepository.LoadPriceFile();
-				_priceRepository.LoadPrice();
+				await _priceRepository.DownloadFile(token);
+				_priceRepository.LoadFile();
+				_priceRepository.Load();
 				await _repository.IsLoadingComplete.Wait(token);
 				_priceRepository.FillPrice(_repository);
 				_priceRepository.SaveCache(_repository);

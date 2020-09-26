@@ -205,7 +205,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forge" />
-    <Folder Include="Translations" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\shared\shared.projitems" Label="Shared" />
