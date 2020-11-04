@@ -2,7 +2,7 @@
 <module type="RIDER_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python facet">
-      <configuration sdkName="Python 3.8 (.idea.Mtgdb)" />
+      <configuration sdkName="Python 3.8" />
     </facet>
   </component>
   <component name="NewModuleRootManager">
@@ -11,6 +11,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Python 3.8 (.idea.Mtgdb) interpreter library" level="application" />
+    <orderEntry type="library" name="Python 3.8 interpreter library" level="application" />
   </component>
 </module>
