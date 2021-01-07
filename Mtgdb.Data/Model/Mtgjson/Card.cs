@@ -728,10 +728,6 @@ namespace Mtgdb.Data
 		public override string ToString() =>
 			Formatter.ToString(this);
 
-
-
-		private bool _pricesReady;
-		private MtgjsonPrices _prices;
 		private (int? Number, string Letter)? _sortableNumber;
 	}
 
