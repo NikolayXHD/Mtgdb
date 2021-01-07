@@ -104,6 +104,9 @@ namespace Mtgdb.Data
 
 		public void Load()
 		{
+			if (!IsFileLoadingComplete.Signaled)
+				throw new InvalidOperationException();
+
 			foreach (var set in deserializeAllSets())
 			{
 				preProcessSet(set);

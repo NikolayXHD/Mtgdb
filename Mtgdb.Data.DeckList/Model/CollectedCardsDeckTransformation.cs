@@ -13,7 +13,11 @@ namespace Mtgdb.Data.Model
 			_priceRepo = priceRepo;
 		}
 
-		public Deck Transform(Deck original, CollectionSnapshot collection, Deck previousTransformed = null, HashSet<string> affectedNames = null)
+		public Deck Transform(
+			Deck original,
+			CollectionSnapshot collection,
+			Deck previousTransformed = null,
+			HashSet<string> affectedNames = null)
 		{
 			if (!_priceRepo.IsLoadingPriceComplete.Signaled)
 				return original;
@@ -65,7 +69,9 @@ namespace Mtgdb.Data.Model
 						return;
 					}
 
-					int takeCount = Math.Min(count, candidate.AvailableCount);
+					int takeCount = i < candidates.Count - 1
+						? Math.Min(count, candidate.AvailableCount)
+						: count;
 
 					count -= takeCount;
 					use(candidate.Card, takeCount, targetZone);
