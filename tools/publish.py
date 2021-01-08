@@ -1,5 +1,6 @@
 #!/bin/python3
 from __future__ import annotations
+import argparse
 import os
 import pathlib
 import platform
@@ -103,7 +104,7 @@ util_exe = output / 'bin' / configuration / 'Mtgdb.Util.exe'
 
 yandex_dir = pathlib.Path(
     r'C:\Users\hidal\YandexDisk' if is_windows
-    else '/home/kolia/Documents/shared'
+    else '/home/kolia/shared'
 )
 yandex_dir_app = yandex_dir / 'Mtgdb.Gui' / 'app'
 remote_dir = yandex_dir_app / 'release'
@@ -112,7 +113,6 @@ remote_deflate_dir = yandex_dir_app / 'deflate'
 
 
 def build():
-    print_green('build')
     if is_windows:
         run(
             r'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools'
@@ -131,13 +131,11 @@ def build():
 
 
 def create_publish_dir():
-    print_green('create publish directory')
     shutil.rmtree(target_root, ignore_errors=True)
     target.mkdir(parents=True)
 
 
 def copy_files():
-    print_green('copy files')
 
     def ignore_data(path, _):
         if path == str(output / 'data'):
@@ -220,7 +218,6 @@ def copy_files():
 
 
 def make_shortcut():
-    print_green('make shortcut')
     template_path = origin / 'tools' / 'shortcut.lnk.template'
     lnk_content_template = template_path.read_bytes()
     lnk_content = lnk_content_template.replace(
@@ -231,7 +228,6 @@ def make_shortcut():
 
 
 def sign_binary_files():
-    print_green('sign binary files')
     for match in target.glob('*.vshost.*'):
         match.unlink()
     run('mono', [
@@ -244,7 +240,6 @@ def sign_binary_files():
 
 
 def create_lzma_compressed_zip():
-    print_green('create LZMA - compressed zip')
     run('7z', [
         'a',
         str(target_root / package_name_zip),
@@ -259,7 +254,6 @@ def create_lzma_compressed_zip():
 
 
 def sign_zip():
-    print_green('sign zip')
     run('mono', [
         util_exe,
         '-sign',
@@ -270,7 +264,6 @@ def sign_zip():
 
 
 def publish_zip_to_test_update_url():
-    print_green('publish zip to test update URL')
     for match in remote_test_dir.glob('*.zip'):
         match.unlink()
     shutil.copy(
@@ -284,7 +277,6 @@ def publish_zip_to_test_update_url():
 
 
 def run_installed_app():
-    print_green('run installed app')
     subprocess.Popen(
         ['explorer', pathlib.Path(r'D:\games\mtgdb.gui\Mtgdb.Gui.lnk')]
         if is_windows
@@ -294,7 +286,6 @@ def run_installed_app():
 
 
 def run_tests():
-    print_green('run tests')
     run('mono', [
         origin / 'tools' / 'NUnit.Console-3.7.0' / 'nunit3-console.exe',
         origin / 'out' / 'bin' / 'release-test' / 'Mtgdb.Test.dll'
@@ -306,7 +297,6 @@ def prompt_user_confirmation():
 
 
 def publish_update_notification():
-    print_green('publish update notification')
     repos_wiki = repos / 'mtgdb.wiki'
     repos_notifications = repos / 'mtgdb.notifications'
     run('git', ['-C', repos_wiki, 'pull'])
@@ -318,7 +308,6 @@ def publish_update_notification():
 
 
 def publish_zip_to_actual_update_url():
-    print_green('publish zip to actual update URL')
     for match in remote_dir.glob('*.zip'):
         match.unlink()
     shutil.copy(target_root / package_name_zip, remote_dir / package_name_zip)
@@ -326,7 +315,6 @@ def publish_zip_to_actual_update_url():
 
 
 def create_deflate_compressed_zip():
-    print_green('create deflate - compressed zip')
     (target_root / 'deflate').mkdir()
     run('7z', [
         'a',
@@ -341,7 +329,6 @@ def create_deflate_compressed_zip():
 
 
 def upload_deflate_compressed_zip():
-    print_green('upload deflate - compressed zip')
     for match in remote_deflate_dir.glob('*.zip'):
         match.unlink()
     for match in (target_root / 'deflate').glob('*'):
@@ -349,21 +336,50 @@ def upload_deflate_compressed_zip():
 
 
 def main():
-    build()
-    create_publish_dir()
-    copy_files()
-    make_shortcut()
-    sign_binary_files()
-    create_lzma_compressed_zip()
-    sign_zip()
-    publish_zip_to_test_update_url()
-    run_installed_app()
-    run_tests()
-    prompt_user_confirmation()
-    publish_update_notification()
-    publish_zip_to_actual_update_url()
-    create_deflate_compressed_zip()
-    upload_deflate_compressed_zip()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-f',
+        '--from',
+        dest='from_step',
+        type=str,
+        nargs='?',
+        help='skip steps before specified',
+    )
+    parser.add_argument(
+        '-l',
+        '--list',
+        dest='list_steps',
+        action='store_true',
+    )
+    args = parser.parse_args()
+
+    steps: list[typing.Callable[[], None]] = [
+        build,
+        create_publish_dir,
+        copy_files,
+        make_shortcut,
+        sign_binary_files,
+        create_lzma_compressed_zip,
+        sign_zip,
+        publish_zip_to_test_update_url,
+        run_installed_app,
+        run_tests,
+        prompt_user_confirmation,
+        publish_update_notification,
+        publish_zip_to_actual_update_url,
+        create_deflate_compressed_zip,
+        upload_deflate_compressed_zip,
+    ]
+
+    skip = bool(args.from_step)
+    for step in steps:
+        skip &= step.__name__ != args.from_step
+        if skip:
+            print_green(f'skip step: {step.__name__}')
+        else:
+            print_green(f'step: {step.__name__}')
+            if not args.list_steps:
+                step()
 
 
 if __name__ == "__main__":
