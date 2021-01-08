@@ -27,19 +27,19 @@ namespace Mtgdb.Data
 			loadFilesArt(enabledDirectories, filesByDirCache);
 		}
 
-		public void LoadFilesSmall()
+		public void LoadFilesSmall(IEnumerable<string> enabledGroups = null)
 		{
-			loadFilesSmall(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
+			loadFilesSmall(_config.GetEnabledDirectories(enabledGroups), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
-		public void LoadFilesZoom()
+		public void LoadFilesZoom(IEnumerable<string> enabledGroups = null)
 		{
-			loadFilesZoom(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
+			loadFilesZoom(_config.GetEnabledDirectories(enabledGroups), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
-		public void LoadFilesArt()
+		public void LoadFilesArt(IEnumerable<string> enabledGroups = null)
 		{
-			loadFilesArt(_config.GetEnabledDirectories(), new Dictionary<FsPath, IList<FsPath>>());
+			loadFilesArt(_config.GetEnabledDirectories(enabledGroups), new Dictionary<FsPath, IList<FsPath>>());
 		}
 
 		private void loadFilesSmall(IList<DirectoryConfig> enabledDirectories, Dictionary<FsPath, IList<FsPath>> filesByDirCache)
@@ -321,10 +321,16 @@ namespace Mtgdb.Data
 
 		public ImageModel GetSmallImage(Card card, Func<string, string, string> setCodePreference)
 		{
-			var result = getImage(card, setCodePreference, _modelsByNameBySetByVariant);
+			ImageModel result;
+			if (IsLoadingSmallComplete.Signaled)
+			{
+				result = getImage(card, setCodePreference, _modelsByNameBySetByVariant);
+				if (result != null)
+					return result;
+			}
 
-			if (result != null)
-				return result;
+			if (!IsLoadingZoomComplete.Signaled)
+				return null;
 
 			result = getImage(card, setCodePreference, _modelsByNameBySetByVariantZoom);
 			return result;

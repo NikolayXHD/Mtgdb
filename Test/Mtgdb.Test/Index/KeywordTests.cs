@@ -181,10 +181,10 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: *convok* AND NOT Keywords: convoke")]
 		[TestCase(@"Text: (*copy* OR *copi* AND NOT cornucopia AND NOT capricopian) AND NOT Keywords: copy")]
 		//
-		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT Type: card AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/.*[0-9]/ OR poison OR energy OR experience OR lore OR another OR spark OR have OR acorn) /counters?/"" OR ""can't be countered"" OR ""kind of counter"")) AND NOT keywords: counter")]
+		[TestCase(@"Text: (/counter(s|ed)?/ AND NOT Type: card AND NOT (""/counters?/ (from OR on OR put OR to OR are OR aren't OR can't)"" OR ""(/.*[0-9]/ OR poison OR energy OR experience OR lore OR another OR spark OR have OR acorn OR loyalty) /counters?/"" OR ""can't be countered"" OR ""kind of counter"")) AND NOT keywords: counter")]
 		[TestCase(@"Keywords: counter AND NOT Type: card AND NOT Text: ((countered AND NOT ""can't be countered"") OR ""counter it"" OR ""/counters?/ (target OR a OR all OR that OR the) (instant OR creature OR >) (/spells?/ OR /abilit(y|ies)/)""~5) AND NOT Name: (""Brain Gorgers"" OR Phantasmagorian OR ""Temporal Extortion"")")]
 		//
-		[TestCase(@"Text: (*creat* AND NOT *creature* AND NOT creativity) AND NOT Keywords: ""create token""")]
+		[TestCase(@"Text: (*creat* AND NOT *creature* AND NOT creativity AND NOT creation) AND NOT Keywords: ""create token""")]
 		//
 		[TestCase(@"Text: *crew* AND NOT Keywords: crew AND NOT Name: *crew*")]
 		[TestCase(@"Keywords: crew AND NOT Text: (""crew /[0-9]/"" OR ""/crews?/ (a OR >) /vehicles?/"")")]
@@ -203,7 +203,7 @@ namespace Mtgdb.Test
 		[TestCase(@"Text: (*devour* AND NOT ""devourer of the free"") AND NOT Keywords: devour AND NOT Name: *devour*")]
 		[TestCase(@"Text: *discard* AND NOT Keywords: discard")]
 		//
-		[TestCase(@"Text: (extra AND /turns?/) AND NOT Keywords: ""extra turn""")]
+		[TestCase(@"Text: ""extra /turns?/""~5 AND NOT Keywords: ""extra turn""")]
 		[TestCase(@"Keywords: ""extra turn"" AND NOT Text: ""extra /turns?/""")]
 		//
 		[TestCase(@"Keywords: ""mill"" AND NOT Text: ""mill""")]

@@ -16,7 +16,7 @@ obj/
 /out/update/*.txt
 /out/update/*.zip
 /out/update/img/art/filelist.txt
-/out/update/img/**/*.7z
+/out/update/img/
 /out/images/**/*.jpg
 /out/images/**/*.txt
 /out/images/**/*.bak

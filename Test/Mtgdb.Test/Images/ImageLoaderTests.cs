@@ -11,8 +11,7 @@ namespace Mtgdb.Test
 		public void Setup()
 		{
 			LoadCards();
-
-			ImgRepo.LoadFilesSmall();
+			ImgRepo.LoadFilesSmall(Sequence.From("dev", "xlhq"));
 			ImgRepo.LoadSmall();
 		}
 

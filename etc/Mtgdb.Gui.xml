@@ -34,9 +34,9 @@
 		<Directory Group="prod-dev" Root="Installed" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
 		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\LQ"       />
-		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\LQ-token" />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\LQ-Token" />
 		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\MQ"              Zoom="True" />
-		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\MQ-token"        Zoom="True" />
+		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Mtgdb.Pictures\MQ-Token"        Zoom="True" />
 		<Directory Group="linux-install" Root="LinuxInstall" Path="images\Artworks" Art="True" ReadMetadataFromAttributes="False" />
 
 		<Directory Group="dev" Zoom="False" Root="Original"     Path="cards" />
