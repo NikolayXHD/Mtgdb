@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\git\mtgdb" t="IncludeFlat">
-      <e p=".git\info\exclude" t="IncludeRecursive" />
       <e p="Mtgdb.App" t="IncludeRecursive">
         <e p="[ infrastructure ]" t="Include">
           <e p="CoreModule.cs" t="Include" />
@@ -1162,6 +1161,7 @@
           <e p="CardDataTests.cs" t="Include" />
           <e p="CardFacesTests.cs" t="Include" />
           <e p="ColorTransformationTests.cs" t="Include" />
+          <e p="DeckModelTests.cs" t="Include" />
           <e p="DeckSearchTests.cs" t="Include" />
           <e p="DeckTransformationTests.cs" t="Include" />
           <e p="ExtremumFinderTests.cs" t="Include" />
@@ -1252,21 +1252,20 @@
         </e>
       </e>
     </e>
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Rider2020.2\python_stubs\-1723952621" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_Mtgdb.635712971.00" t="ExcludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\python-skeletons" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\typeshed\stdlib\2and3" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\typeshed\stdlib\3" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\typeshed\stdlib\3.7" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\typeshed\third_party\2and3" t="IncludeRecursive" />
-    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\202.7660.16.plugins\python-ce\helpers\typeshed\third_party\3" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Mtgdb.635712971.00" t="ExcludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\python-skeletons" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\typeshed\stdlib\2and3" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\typeshed\stdlib\3" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\typeshed\stdlib\3.7" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\typeshed\third_party\2and3" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\203.6682.21.plugins\python-ce\helpers\typeshed\third_party\3" t="IncludeRecursive" />
     <e p="C:\Users\hidal\AppData\Local\Programs\Python\Python38" t="IncludeRecursive">
       <e p="DLLs" t="IncludeRecursive" />
       <e p="Lib" t="IncludeRecursive">
         <e p="site-packages" t="IncludeRecursive" />
       </e>
     </e>
-    <e p="C:\Users\hidal\AppData\Roaming\JetBrains\Rider2020.2\scratches" t="IncludeRecursive" />
+    <e p="C:\Users\hidal\AppData\Roaming\JetBrains\Rider2020.3\scratches" t="IncludeRecursive" />
   </component>
 </project>

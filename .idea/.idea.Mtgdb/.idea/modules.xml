@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/.idea.Mtgdb/.idea/.idea.Mtgdb.iml" filepath="$PROJECT_DIR$/.idea/.idea.Mtgdb/.idea/.idea.Mtgdb.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/.idea.Mtgdb/riderModule.iml" filepath="$PROJECT_DIR$/.idea/.idea.Mtgdb/riderModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/.idea.Mtgdb/.idea/riderModule.iml" filepath="$PROJECT_DIR$/.idea/.idea.Mtgdb/.idea/riderModule.iml" />
     </modules>
   </component>
 </project>
