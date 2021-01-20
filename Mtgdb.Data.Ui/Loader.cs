@@ -43,21 +43,22 @@ namespace Mtgdb.Ui
 		public void AddTask(Func<CancellationToken, Task> a) =>
 			_loadingTasks.Add(a);
 
-		public async Task AsyncRun()
-		{
-			try
+		public Task AsyncRun() =>
+			Task.WhenAll(_loadingTasks.Select(async task =>
 			{
-				await Task.WhenAll(_loadingTasks.Select(task => _app.CancellationToken.Run(task)));
-			}
-			catch (TaskCanceledException ex) when (ex.CancellationToken == _app.CancellationToken)
-			{
-				_log.Info(ex);
-			}
-			catch (Exception ex)
-			{
-				_log.Error(ex);
-			}
-		}
+				try
+				{
+					await _app.CancellationToken.Run(task);
+				}
+				catch (TaskCanceledException ex) when (ex.CancellationToken == _app.CancellationToken)
+				{
+					_log.Info(ex);
+				}
+				catch (Exception ex)
+				{
+					_log.Error(ex);
+				}
+			}));
 
 		private void createLoadingActions()
 		{
