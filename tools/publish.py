@@ -322,7 +322,7 @@ def create_deflate_compressed_zip():
         '-tzip',
         '-ir!' + str(target_root / package_name / '*'),
         '-x!' + str(pathlib.Path('data') / 'index' / '*'),
-        # '-x!' + str(pathlib.Path('data') / 'AllPrintings.json'),
+        '-x!' + str(pathlib.Path('data') / 'AllPrintings.json'),
         '-x!' + str(pathlib.Path('data') / 'AllPrices.json'),
         '-mm=deflate'
     ])
