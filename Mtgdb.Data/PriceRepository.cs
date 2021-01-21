@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Mtgdb.Data
@@ -164,13 +165,27 @@ namespace Mtgdb.Data
 			if (_priceContent == null)
 				return null;
 
+			var serializer = new JsonSerializer();
 			using Stream stream = new MemoryStream(_priceContent);
 			using var stringReader = new StreamReader(stream);
 			using var jsonReader = new JsonTextReader(stringReader);
 			jsonReader.Read(); // {
-			jsonReader.Read(); //   "data":
+
+			while (true)
+			{
+				jsonReader.Read(); //   "data":
+				var rootField = (string)jsonReader.Value;
+				if (Str.Equals(rootField, "data"))
+					break;
+
+				//   "meta":
+				jsonReader.Read(); //   {
+				serializer.Deserialize<JObject>(jsonReader);
+			}
+
 			jsonReader.Read(); //   {
-			var result = new JsonSerializer().Deserialize<Dictionary<string, MtgjsonPrices>>(jsonReader);
+
+			var result = serializer.Deserialize<Dictionary<string, MtgjsonPrices>>(jsonReader);
 			return result;
 		}
 

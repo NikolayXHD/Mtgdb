@@ -480,7 +480,7 @@ namespace Mtgdb.Ui
 		{
 			if (repo.IsLoadingComplete.Signaled)
 				return zone.CountById
-					.Where(_ => !repo.CardsById[_.Key].IsToken)
+					.Where(_ => !repo.CardsById.TryGet(_.Key)?.IsToken != false)
 					.Sum(_ => _.Value);
 
 			return zone.CountById.Values.Sum();
