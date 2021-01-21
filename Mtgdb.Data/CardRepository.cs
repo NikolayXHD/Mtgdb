@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mtgdb.Data
 {
@@ -72,7 +73,19 @@ namespace Mtgdb.Data
 				using var stringReader = new StreamReader(stream);
 				using var jsonReader = new JsonTextReader(stringReader);
 				jsonReader.Read(); // {
-				jsonReader.Read(); //   "data":
+
+				while (true)
+				{
+					jsonReader.Read(); //   "data":
+					var rootField = (string)jsonReader.Value;
+					if (Str.Equals(rootField, "data"))
+						break;
+
+					//   "meta":
+					jsonReader.Read(); //   {
+					serializer.Deserialize<JObject>(jsonReader);
+				}
+
 				jsonReader.Read(); //   {
 
 				while (true)
