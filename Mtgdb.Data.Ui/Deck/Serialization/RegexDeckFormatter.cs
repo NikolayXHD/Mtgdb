@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Mtgdb.Data;
-using Mtgdb.Ui;
 using NLog;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public abstract class RegexDeckFormatter : IDeckFormatter
 	{

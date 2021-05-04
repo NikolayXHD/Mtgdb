@@ -2,12 +2,11 @@
 using System.Linq;
 using Mtgdb.Data;
 using Mtgdb.Dev;
-using Mtgdb.Gui;
-using Mtgdb.Test;
+using Mtgdb.Ui;
 using Ninject;
 using NUnit.Framework;
 
-namespace Mtgdb.Util
+namespace Mtgdb.Test
 {
 	[TestFixture]
 	public class DeckFormattersTests: TestsBase

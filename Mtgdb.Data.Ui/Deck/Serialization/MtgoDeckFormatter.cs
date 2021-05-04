@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mtgdb.Data;
-using Mtgdb.Ui;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public class MtgoDeckFormatter : RegexDeckFormatter
 	{

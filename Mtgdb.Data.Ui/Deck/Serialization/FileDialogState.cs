@@ -1,4 +1,4 @@
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public class FileDialogState
 	{

@@ -827,7 +827,7 @@ namespace Mtgdb.Gui
 			_deckZones.HideSampleHand();
 
 			_collectionEditor.LoadCollection(settings.CollectionModel, append: false);
-			_copyPaste.LoadDeck(_requiredDeck ?? settings.Deck);
+			_copyPaste.LoadDeck(_requiredDeck ?? settings.GetDeck());
 
 			_legality.SetFilterFormat(settings.LegalityFilterFormat);
 			_legality.SetAllowLegal(settings.LegalityAllowLegal != false);
@@ -970,7 +970,7 @@ namespace Mtgdb.Gui
 			if (!_cardRepo.IsLoadingComplete.Signaled)
 				return;
 
-			var saved = _serialization.SaveDeck(_history.Current.Deck);
+			var saved = _serialization.SaveDeck(_history.Current.GetDeck());
 
 			if (saved == null)
 				return;

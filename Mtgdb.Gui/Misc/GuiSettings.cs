@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Mtgdb.Gui
 {
 	[JsonObject]
-	public class GuiSettings
+	public class GuiSettings: IDeckSettings
 	{
 		public GuiSettings()
 		{
@@ -88,30 +88,6 @@ namespace Mtgdb.Gui
 		public FilterByDeckMode? FilterByDeckMode { get; set; }
 
 		public ZoomSettings Zoom { get; set; }
-
-		[JsonIgnore]
-		public Deck Deck
-		{
-			get
-			{
-				var deck = Deck.Create(MainDeckCount, MainDeckOrder, SideDeckCount, SideDeckOrder, MaybeDeckCount, MaybeDeckOrder, null, null);
-
-				deck.Name = DeckName;
-				deck.File = DeckFile.OrNone();
-
-				return deck;
-			}
-
-			set
-			{
-				MainDeckCount = value.MainDeck.Count;
-				MainDeckOrder = value.MainDeck.Order;
-				SideDeckCount = value.Sideboard.Count;
-				SideDeckOrder = value.Sideboard.Order;
-				MaybeDeckCount = value.Maybeboard.Count;
-				MaybeDeckOrder = value.Maybeboard.Order;
-			}
-		}
 
 		[JsonIgnore]
 		public Deck CollectionModel

@@ -165,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeckFormatter\TcgPlayerCsvFormatterTests.cs" />
     <Compile Include="DeckModelTests.cs" />
     <Compile Include="Images\ImageLoaderTests.cs" />
     <Compile Include="Images\ImageMappingTests.cs" />

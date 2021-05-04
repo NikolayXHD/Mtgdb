@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mtgdb.Data;
-using Mtgdb.Ui;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	internal class XitaxDeckTransformation
 	{

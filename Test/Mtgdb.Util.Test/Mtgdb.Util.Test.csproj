@@ -102,7 +102,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\DeckFormattersTests.cs" />
-    <Compile Include="Dal\TcgPlayerCsvFormatterTests.cs" />
     <Compile Include="EditDistance\DamerauLevenshteinDistance.cs" />
     <Compile Include="EditDistance\ReplaceCost.cs" />
     <Compile Include="EditDistance\Similarity.cs" />

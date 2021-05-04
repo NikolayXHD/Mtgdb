@@ -59,9 +59,6 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="FileHelpers, Version=3.4.2.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
-      <HintPath>..\packages\FileHelpers.3.4.2\lib\net45\FileHelpers.dll</HintPath>
-    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
       <HintPath>..\packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -103,18 +100,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeckSerialization\DeckedBuilderDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\DeckFile.cs" />
-    <Compile Include="DeckSerialization\ForgeDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\FileDialogState.cs" />
-    <Compile Include="DeckSerialization\JsonDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\MagarenaDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\MtgArenaFormatter.cs" />
-    <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\TcgCsvDeckFormatter.cs" />
-    <Compile Include="DeckSerialization\XitaxDeckTransformation.cs" />
-    <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
     <Compile Include="FormChart\Aggregates.cs" />
     <Compile Include="FormChart\ChartFilesSubsystem.cs" />
     <Compile Include="FormChart\ChartPalettes.cs" />
@@ -140,7 +125,6 @@
     <Compile Include="FormMain\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="DeckSerialization\IDeckFormatter.cs" />
     <Compile Include="FormMain\FormMain.EventHandlers.cs">
       <SubType>UserControl</SubType>
     </Compile>

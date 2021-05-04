@@ -1,6 +1,4 @@
-using Mtgdb.Ui;
-
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	public interface IDeckFormatter
 	{

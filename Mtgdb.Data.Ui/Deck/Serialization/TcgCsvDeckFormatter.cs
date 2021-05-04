@@ -4,10 +4,9 @@ using System.Linq;
 using FileHelpers;
 using JetBrains.Annotations;
 using Mtgdb.Data;
-using Mtgdb.Ui;
 using NLog;
 
-namespace Mtgdb.Gui
+namespace Mtgdb.Ui
 {
 	/// <summary>
 	/// Supports importing the CSV format created by exporting a list from TCG Player's mobile app.
@@ -45,7 +44,7 @@ namespace Mtgdb.Gui
 			var csvCards = _fileHelperEngine.ReadStringAsList(serialized);
 			foreach (CsvCardModel csvCard in csvCards)
 			{
-				var card = getCard(csvCard.SimpleName, csvCard.ProductId, csvCard.SetCode,csvCard.CardNumber);
+				var card = getCard(csvCard);
 
 				if (card == null)
 				{
@@ -75,13 +74,13 @@ namespace Mtgdb.Gui
 		public string ExportDeck(string name, Deck current, bool exact = false) =>
 			throw new NotSupportedException();
 
-		private Card getCard(string cardName, int tcgPlayerProductId, string setCode= null, string cardNumber=null)
+		private Card getCard(CsvCardModel cardModel)
 		{
 			// Note TCGPlayer set codes are unreliable, there's some rogue codes like PPELD and PRE that don't exist mtgjson data models
 
 			// Instead, use TCG product ID.
 			// Unique by printing, alt / extended art, promo.  But not by foil.
-			var cardVariants = CardsAndTokensByProductId.TryGet(tcgPlayerProductId);
+			var cardVariants = CardsAndTokensByProductId.TryGet(cardModel.ProductId);
 
 			// TODO: Foil variant from the "Printing" CSV field which has values "Normal" or "Foil"
 			var card = cardVariants?.FirstOrDefault();
@@ -113,48 +112,45 @@ namespace Mtgdb.Gui
 
 		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
-		[DelimitedRecord(",")]
-		[IgnoreEmptyLines]
-		[IgnoreFirst]
-		[UsedImplicitly]
+		[DelimitedRecord(","), IgnoreEmptyLines, IgnoreFirst, UsedImplicitly]
 		private class CsvCardModel
 		{
-			[FieldCaption("Quantity")]
+			[FieldCaption("Quantity"), UsedImplicitly]
 			public int Quantity { get; set; }
 
 			// E.g.  Castle Locthwain (Extended Art), Faerie Guidemother (Showcase), "Goat // Food (16)"
-			[FieldCaption("Name")]
+			[FieldCaption("Name"), UsedImplicitly]
 			public string Name { get; set; }
 
 			// E.g. Castle Locthwain
-			[FieldCaption("SimpleName")]
+			[FieldCaption("SimpleName"), UsedImplicitly]
 			public string SimpleName { get; set; }
 
-			[FieldCaption("Set")]
+			[FieldCaption("Set"), UsedImplicitly]
 			public string Set { get; set; }
 
-			[FieldCaption("CardNumber")]
+			[FieldCaption("CardNumber"), UsedImplicitly]
 			public string CardNumber { get; set; }
 
-			[FieldCaption("SetCode")]
+			[FieldCaption("SetCode"), UsedImplicitly]
 			public string SetCode { get; set; }
 
-			[FieldCaption("Printing")]
+			[FieldCaption("Printing"), UsedImplicitly]
 			public string Printing { get; set; }
 
-			[FieldCaption("Condition")]
+			[FieldCaption("Condition"), UsedImplicitly]
 			public string Condition { get; set; }
 
-			[FieldCaption("Language")]
+			[FieldCaption("Language"), UsedImplicitly]
 			public string Language { get; set; }
 
-			[FieldCaption("Rarity")]
+			[FieldCaption("Rarity"), UsedImplicitly]
 			public string Rarity { get; set; }
 
-			[FieldCaption("ProductID")]
+			[FieldCaption("ProductID"), UsedImplicitly]
 			public int ProductId { get; set; }
 
-			[FieldCaption("SKU")]
+			[FieldCaption("SKU"), UsedImplicitly]
 			public string Sku { get; set; }
 		}
 	}
