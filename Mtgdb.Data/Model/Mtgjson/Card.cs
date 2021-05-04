@@ -749,5 +749,12 @@ namespace Mtgdb.Data
 		[JsonProperty("scryfallIllustrationId")]
 		[JsonConverter(typeof(InternedStringConverter))]
 		public string ScryfallIllustrationId { get; set; }
+
+
+		/// <summary>
+		/// Unique by printing, alt/extended art, promo.  But NOT unique per foil.  The foil/non-foil version have same product ID.
+		/// </summary>
+		[JsonProperty("tcgplayerProductId")]		
+		public int TcgPlayerProductId { get; set; }
 	}
 }

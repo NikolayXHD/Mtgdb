@@ -59,6 +59,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="FileHelpers, Version=3.4.2.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.4.2\lib\net45\FileHelpers.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
       <HintPath>..\packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -109,6 +112,7 @@
     <Compile Include="DeckSerialization\MtgArenaFormatter.cs" />
     <Compile Include="DeckSerialization\MtgoDeckFormatter.cs" />
     <Compile Include="DeckSerialization\RegexDeckFormatter.cs" />
+    <Compile Include="DeckSerialization\TcgCsvDeckFormatter.cs" />
     <Compile Include="DeckSerialization\XitaxDeckTransformation.cs" />
     <Compile Include="DeckSerialization\XMageDeckFormatter.cs" />
     <Compile Include="FormChart\Aggregates.cs" />
@@ -118,7 +122,9 @@
     <Compile Include="FormChart\DataElement.cs" />
     <Compile Include="FormChart\DataSource.cs" />
     <Compile Include="FormChart\CardFields.cs" />
-    <Compile Include="FormChart\FormChart.NPlot.cs" />
+    <Compile Include="FormChart\FormChart.NPlot.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormMain\CopyPasteSubsystem.cs" />
     <Compile Include="FormMain\CountInputSubsystem.cs" />
     <Compile Include="FormMain\DeckZoneSubsystem.cs" />
@@ -129,20 +135,20 @@
     <Compile Include="FormMain\Evaluators.cs" />
     <Compile Include="FormMain\FilterGroup.cs" />
     <Compile Include="FormMain\FormMain.Definitions.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FormMain\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="DeckSerialization\IDeckFormatter.cs" />
     <Compile Include="FormMain\FormMain.EventHandlers.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FormMain\FormMain.Scale.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FormMain\FormMain.Tooltip.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FormMain\IconRecognizerFactory.cs" />
     <Compile Include="FormMain\ImagePreloadingSubsystem.cs" />
@@ -254,7 +260,7 @@
       <DependentUpon>ResourcesType.resx</DependentUpon>
     </Compile>
     <Compile Include="FormMain\FormMain.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="[ infrastructure ]\GuiProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
