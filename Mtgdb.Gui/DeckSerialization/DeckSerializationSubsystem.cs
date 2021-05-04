@@ -23,6 +23,7 @@ namespace Mtgdb.Gui
 			_formatters = new[]
 			{
 				new JsonDeckFormatter(),
+				new TcgCsvDeckFormatter(cardRepository),
 				new ForgeDeckFormatter(cardRepository, forgeSetRepo),
 				new MagarenaDeckFormatter(cardRepository),
 				new DeckedBuilderDeckFormatter(cardRepository),

@@ -99,6 +99,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="TestArtifacts\TcgCsvDeckFormatterInputTestCase.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\DeckFormattersTests.cs" />
