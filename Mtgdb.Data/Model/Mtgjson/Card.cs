@@ -754,7 +754,7 @@ namespace Mtgdb.Data
 		/// <summary>
 		/// Unique by printing, alt/extended art, promo.  But NOT unique per foil.  The foil/non-foil version have same product ID.
 		/// </summary>
-		[JsonProperty("tcgplayerProductId")]		
+		[JsonProperty("tcgplayerProductId")]
 		public int TcgPlayerProductId { get; set; }
 	}
 }

@@ -215,8 +215,6 @@ namespace Mtgdb.Data
 			CardPrintingsByName = CardsByName.ToDictionary(_ => _.Key, toPrintings, Str.Comparer);
 			TokenPrintingsByName = TokensByName.ToDictionary(_ => _.Key, toPrintings, Str.Comparer);
 
-			CardsAndTokensByTcgPlayerProductId = toTcgPlayerProductIdMap(Cards);
-
 			for (int i = 0; i < Cards.Count; i++)
 			{
 				var card = Cards[i];
@@ -251,13 +249,6 @@ namespace Mtgdb.Data
 						// card_by_name_sorting
 						gr => gr.OrderByDescending(_ => _.ReleaseDate).ToList(),
 						Str.Comparer);
-
-			Dictionary<int, List<Card>> toTcgPlayerProductIdMap(IEnumerable<Card> cards) =>
-				cards.GroupBy(_ => _.Identifiers.TcgPlayerProductId)
-					.ToDictionary(
-						gr => gr.Key,
-						gr => gr//.OrderByDescending(_ => _.ReleaseDate)
-						.ToList());
 		}
 
 		private void preProcessSet(Set set)
@@ -548,7 +539,6 @@ namespace Mtgdb.Data
 		public IDictionary<string, Card> CardsById { get; } = new Dictionary<string, Card>(Str.Comparer);
 
 		public IDictionary<string, List<Card>> CardsByName { get; private set; }
-		public IDictionary<int, List<Card>> CardsAndTokensByTcgPlayerProductId { get; private set; }
 		public IDictionary<string, List<Card>> TokensByName { get; private set; }
 		public IDictionary<string, HashSet<string>> CardIdsByName { get; private set; }
 		public IDictionary<string, HashSet<string>> TokenIdsByName { get; private set; }
