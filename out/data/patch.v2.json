@@ -1,11 +1,11 @@
 ﻿{
 	"Cards": {
-		"Plains": { "Text": "{T}: Add {W} to your mana pool." },
-		"Island": { "Text": "{T}: Add {U} to your mana pool." },
-		"Swamp": { "Text": "{T}: Add {B} to your mana pool." },
-		"Mountain": { "Text": "{T}: Add {R} to your mana pool." },
-		"Forest": { "Text": "{T}: Add {G} to your mana pool." },
-		"Wastes": { "Text": "{T}: Add {C} to your mana pool." },
+		"Plains": { "Text": "{T}: Add {W} to your mana pool.", "ClearOriginalType": true },
+		"Island": { "Text": "{T}: Add {U} to your mana pool.", "ClearOriginalType": true },
+		"Swamp": { "Text": "{T}: Add {B} to your mana pool.", "ClearOriginalType": true },
+		"Mountain": { "Text": "{T}: Add {R} to your mana pool.", "ClearOriginalType": true },
+		"Forest": { "Text": "{T}: Add {G} to your mana pool.", "ClearOriginalType": true },
+		"Wastes": { "Text": "{T}: Add {C} to your mana pool.", "ClearOriginalType": true },
 		"Snow-Covered Plains": { "Text": "{T}: Add {W} to your mana pool." },
 		"Snow-Covered Island": { "Text": "{T}: Add {U} to your mana pool." },
 		"Snow-Covered Swamp": { "Text": "{T}: Add {B} to your mana pool." },
@@ -242,9 +242,21 @@
 		"Mons's Goblin Waiters (b)": { "Name": "Mons's Goblin Waiters" },
 		"Keeper of the Sacred Word (b)": { "Name": "Keeper of the Sacred Word" },
 
-		"Glory": { "Set": "ppre", "Flavor": "Glory was gone; Glory was everywhere.\" —Scroll of Beginnings" },
+		"Glory": { "Set": "pjud", "Flavor": "Glory was gone; Glory was everywhere.\" —Scroll of Beginnings" },
 		"Serra Angel": { "Set": "pdom", "Flavor": "The angel remembers her past lives like dreams. Her song held up meadows. Her blade drove back darkness. Her wings carried her across the ages." },
 		"Cast Down": { "Set": "pmei", "Flavor": "\"Your life is finished, your name lost, and your work forgotten. It is as though Mazeura never existed.\"\n—Chainer's Torment" },
+		"Dark Ritual": {
+			"Set": "pmei",
+			"Flavor": "\"Leshrac, my liege, grant me the power I am due.\"\n—Lim-Dûl, the Necromancer"
+		},
+		"Tangled Florahedron": {
+			"Set": "pmei",
+			"Flavor": "\"As Bala Ged regrows, new forms of life blossom with unfettered wonder.\"\n—Doral, Bala Ged guide"
+		},
+		"Mystical Dispute": {
+			"Set": "ppro",
+			"Flavor": "\"Poor, lost mage. Your feet are on land, yet you're in over your head, aren't you?\""
+		},
 
 		"Chandra Nalaar": {
 			"Set": "DD2",

@@ -29,7 +29,10 @@ namespace Mtgdb.Downloader
 				yandexDownloader,
 			};
 
-			var queue = new ImageDownloadQueue(_repository, downloaders, allProgress.Where(_ => Str.Equals(_.QualityGroup.Quality, quality)));
+			var tasks = allProgress.Where(_ => Str.Equals(_.QualityGroup.Quality, quality)).ToArray();
+			deleteDuplicateSubdirs(tasks);
+
+			var queue = new ImageDownloadQueue(_repository, downloaders, tasks);
 
 			Console.WriteLine("Found {0} directories for quality '{1}' in configuration", queue.Count, quality);
 			TotalCount = queue.TotalOnlineFilesCount;
@@ -56,6 +59,41 @@ namespace Mtgdb.Downloader
 				Interlocked.Add(ref _countInDownloadedDirs, task.FilesOnline.Count - task.FilesDownloaded.Count);
 				ProgressChanged?.Invoke();
 			}
+		}
+
+		private static void deleteDuplicateSubdirs(IReadOnlyList<ImageDownloadProgress> tasks)
+		{
+			if (!Runtime.IsLinux)
+				return;
+
+			if (!tasks.All(_ => _.Dir.Subdir.HasValue()))
+				return;
+
+			// cards and tokens tasks point to different directories
+			tasks.GroupBy(_ => _.TargetDirectory).ForEach(gr =>
+			{
+				var targetDirectory = gr.Key;
+				if (!targetDirectory.IsDirectory())
+					return; // images have not been downloaded yet
+
+				var subdirsCaseSensitiveSet = gr.Select(_ => _.Dir.Subdir.Value).ToHashSet(StringComparer.Ordinal);
+				var subdirsCaseInsensitiveSelfMap = gr.Select(_ => _.Dir.Subdir.Value)
+					.ToDictionary(_ => _, _ => _, StringComparer.OrdinalIgnoreCase);
+
+				var duplicateSubdirs = targetDirectory
+					.EnumerateDirectories(option: SearchOption.TopDirectoryOnly)
+					.Where(subdir =>
+						subdirsCaseInsensitiveSelfMap.ContainsKey(subdir.Basename()) &&
+						!subdirsCaseSensitiveSet.Contains(subdir.Basename()))
+					.ToArray(); // materialize to avoid deleting subdirs while enumerating them
+
+				foreach (FsPath duplicateSubdir in duplicateSubdirs)
+				{
+					string name = duplicateSubdir.Basename();
+					Console.WriteLine($"Remove subdirectory '{name}' duplicating '{subdirsCaseInsensitiveSelfMap[name]}'");
+					duplicateSubdir.DeleteDirectory(recursive: true);
+				}
+			});
 		}
 
 		private async Task downloadAll(ImageDownloadQueue queue, IDownloader downloader, CancellationToken token)

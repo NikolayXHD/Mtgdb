@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using JetBrains.Annotations;
 
 namespace Mtgdb.Data
 {
@@ -128,7 +127,6 @@ namespace Mtgdb.Data
 		public int VariantNumber { get; }
 		private string Type { get; }
 
-		[NotNull]
 		public FsPath FullPath { get; }
 
 		public int Priority { get; }

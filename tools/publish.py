@@ -1,10 +1,10 @@
 #!/bin/python3
 from __future__ import annotations
+
 import argparse
 import os
 import pathlib
 import platform
-import pexpect
 import shutil
 import subprocess
 import sys
@@ -45,46 +45,21 @@ def get_lnk_bytes(text: str) -> bytes:
 
 
 def run(
-        command: typing.Union[str, os.PathLike],
-        args: typing.Union[
-            typing.List[typing.Union[str, os.PathLike]],
-            typing.Tuple[typing.Union[str, os.PathLike], ...]
-        ],
+        command: str | os.PathLike,
+        args: typing.Sequence[str | os.PathLike],
         timeout: int = 3600
 ) -> None:
     if is_windows:
         if command == 'mono':
             command = args[0]
             args = args[1:]
-        args.insert(0, command)
-        subprocess.run(args, check=True)
-    else:
-        actual_command = str(command)
-        actual_args = list(str(arg) for arg in args)
-        p = pexpect.spawn(
-            actual_command,
-            actual_args,
-            timeout=timeout,
-            encoding='utf-8',
-        )
-        while p.isalive():
-            while True:
-                try:
-                    c = p.read_nonblocking(size=1024)
-                except pexpect.EOF:
-                    break
-                else:
-                    if len(c):
-                        sys.stdout.write(c)
-                    else:
-                        break
-        if p.exitstatus != 0:
-            sys.exit(p.exitstatus)
+    args.insert(0, command)
+    subprocess.run(args, check=True)
 
 
 is_windows = platform.system() == 'Windows'
 configuration = 'release'
-origin = pathlib.Path(__file__).parent.parent.absolute()
+origin = pathlib.Path(__file__).parent.absolute().parent
 repos = origin.parent
 output = origin / 'out'
 version = get_version()
@@ -189,7 +164,7 @@ def copy_files():
                 'megatools-1.9.98-win32',
             ))
         elif path == str(output / 'update' / 'img' / 'art'):
-            ignored.update(('filelist_txt',))
+            ignored.update((filelist_txt,))
         return ignored
 
     shutil.copytree(
@@ -362,8 +337,8 @@ def main():
         create_lzma_compressed_zip,
         sign_zip,
         publish_zip_to_test_update_url,
-        run_installed_app,
-        run_tests,
+        # run_installed_app,
+        # run_tests,
         prompt_user_confirmation,
         publish_update_notification,
         publish_zip_to_actual_update_url,

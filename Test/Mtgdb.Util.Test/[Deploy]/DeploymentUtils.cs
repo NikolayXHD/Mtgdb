@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Mtgdb.Controls;
 using Mtgdb.Data;
 using Mtgdb.Dev;
@@ -19,17 +20,45 @@ namespace Mtgdb.Util
 	[TestFixture]
 	public class DeploymentUtils
 	{
-		private const string SetCodes = "2xm,ajmp,akr,anb,c20,cc1,cmr,fjmp,ha3,htr18,iko,jmp,m21,plgs,slu,ss3";
+		private const string SetCodes =
+			"pmei,ptc,wc00,wc01,wc02,wc03,wc04,wc97,wc98,wc99";
+
 		private const bool NonToken = true;
 		private const bool Token = true;
 		private const bool SelectSmall = true;
 		private const bool SelectZoom = true;
 
+		[Order(0)]
+		[TestCase(SetCodes)]
+		public void EnsureNoSetSubdirDuplicates(string setCodesStr)
+		{
+			var setCodes = setCodesStr?.Split(',') ?? Empty<string>.Array;
 
+			foreach (FsPath qualityDir in getQualities(small: true, zoom: true))
+				foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken: true, token: true))
+				{
+					FsPath sourceRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix);
+					var caseInsensitiveMap = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+					var caseSensitiveMap = new Dictionary<string, bool>(StringComparer.Ordinal);
+					using (new AssertionScope($"Set subdirectory duplicates in {sourceRoot}"))
+						foreach (var subdir in sourceRoot.EnumerateDirectories())
+						{
+							string subdirRelative = subdir.Basename();
+							caseInsensitiveMap.Should().NotContainKey(subdirRelative);
+							caseInsensitiveMap[subdirRelative] = true;
+							caseSensitiveMap[subdirRelative] = true;
+						}
+
+					using (new AssertionScope($"Affected set duplicates in {sourceRoot}"))
+						foreach (string setCode in setCodes)
+							if (caseInsensitiveMap.ContainsKey(setCode))
+								caseSensitiveMap.Should().ContainKey(setCode);
+				}
+		}
 
 		[Order(1)]
 		[TestCase(SetCodes, NonToken, Token)]
-		public async Task DownloadGathererImages(string setCodesList, bool nonToken, bool token)
+		public async Task DownloadGathererImages(string setCodesStr, bool nonToken, bool token)
 		{
 			var clients = new List<ImageDownloaderBase>(2)
 			{
@@ -37,10 +66,10 @@ namespace Mtgdb.Util
 				new ScryfallClient(),
 			};
 
-			var setCodes = setCodesList?.ToLower().Split(',');
+			var setCodes = setCodesStr?.Split(',').ToHashSet(StringComparer.OrdinalIgnoreCase);
 			var repo = new CardRepository(new CardFormatter(), () => null)
 			{
-				FilterSetCode = setCode => setCodes?.Contains(setCode.ToLower()) != false,
+				FilterSetCode = setCode => setCodes?.Contains(setCode) != false,
 			};
 
 			repo.LoadFile();
@@ -48,7 +77,7 @@ namespace Mtgdb.Util
 
 			foreach (Set set in repo.SetsByCode.Values)
 			{
-				if (setCodes != null && !setCodes.Contains(set.Code, Str.Comparer))
+				if (setCodes?.Contains(set.Code) == false)
 					continue;
 
 				foreach ((bool isToken, FsPath typeSubdir, _) in getIsToken(nonToken, token))
@@ -61,7 +90,9 @@ namespace Mtgdb.Util
 
 					FsPath setSubdir = new FsPath(set.Code + (Str.Equals(set.Code, "con") ? " escape" : string.Empty));
 					FsPath downloadRootDir = DevPaths.MtgContentDir.Join(_createZoom ? OriginalSubdir : PreProcessedSubdir);
+					FsPath rootDirZoom = DevPaths.MtgContentDir.Join(PreProcessedSubdir);
 					FsPath setDirectory = downloadRootDir.Join(typeSubdir, setSubdir);
+					FsPath setDirectoryZoom = rootDirZoom.Join(typeSubdir, setSubdir);
 					FsPath setDirectoryPng = setDirectory.Concat(".png");
 
 					bool dirExisted = setDirectoryPng.IsDirectory();
@@ -72,7 +103,8 @@ namespace Mtgdb.Util
 					{
 						FsPath targetFile = setDirectoryPng.Join(card.ImageName + ".png");
 						FsPath processedFile = setDirectory.Join(card.ImageName + ".jpg");
-						if (targetFile.IsFile() || processedFile.IsFile())
+						FsPath processedFileZoom = setDirectoryZoom.Join(card.ImageName + ".jpg");
+						if (targetFile.IsFile() || processedFile.IsFile() && processedFileZoom.IsFile())
 							continue;
 
 						if (targetFile.Basename(extension: false).EndsWith("1"))
@@ -124,7 +156,7 @@ namespace Mtgdb.Util
 
 		[Order(2)]
 		[TestCase(SetCodes, NonToken, Token)]
-		public void PreProcessImages(string setCodesList, bool nonToken, bool token)
+		public void PreProcessImages(string setCodesStr, bool nonToken, bool token)
 		{
 			setupImageConversion();
 
@@ -133,7 +165,7 @@ namespace Mtgdb.Util
 			FsPath smallDirBak = BakDir.Join(smallDir.Basename());
 			FsPath zoomDirBak = BakDir.Join(zoomDir.Basename());
 
-			var setCodes = setCodesList?.Split(',');
+			var setCodes = setCodesStr?.Split(',').ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 			IEnumerable<FsPath> getSetSubdirs(FsPath typeSubdir)
 			{
@@ -151,7 +183,7 @@ namespace Mtgdb.Util
 			{
 				foreach (FsPath setSubdir in getSetSubdirs(typeSubdir))
 				{
-					if (setCodes != null && !setCodes.Contains(setSubdir.Value, Str.Comparer))
+					if (setCodes?.Contains(setSubdir.Value) == false)
 						continue;
 
 					FsPath smallJpgDir = smallDir.Join(typeSubdir, setSubdir);
@@ -222,73 +254,92 @@ namespace Mtgdb.Util
 
 		[Order(3)]
 		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
-		public void SelectImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
+		public void SelectImages(string setCodesStr, bool small, bool zoom, bool nonToken, bool token)
 		{
 			setupExport();
 
 			foreach ((bool isToken, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
 				_export.ExportCardImages(TargetDir,
-					small,
-					zoom,
-					setCodes,
-					LqDir.Concat(tokenSuffix),
-					MqDir.Concat(tokenSuffix),
-					true,
-					isToken);
+					small: small,
+					zoom: zoom,
+					setCodes: setCodesStr,
+					smallSubdir: LqDir.Concat(tokenSuffix),
+					zoomedSubdir: MqDir.Concat(tokenSuffix),
+					forceRemoveCorner: true,
+					token: isToken);
 		}
 
 		[Order(4)]
 		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
-		public void SignImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
+		public void SignImages(string setCodesStr, bool small, bool zoom, bool nonToken, bool token)
 		{
 			foreach (FsPath qualityDir in getQualities(small, zoom))
-			foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
-			{
-				FsPath outputFile = getSignatureFile(qualityDir, tokenSuffix);
-				FsPath packagePath = TargetDir.Join(qualityDir).Concat(tokenSuffix);
-				new ImageDirectorySigner().SignFiles(packagePath, outputFile, setCodes);
+				foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
+				{
+					FsPath outputFile = getSignatureFile(qualityDir, tokenSuffix);
+					FsPath packagePath = TargetDir.Join(qualityDir).Concat(tokenSuffix);
+					new ImageDirectorySigner().SignFiles(packagePath, outputFile, setCodesStr);
 
-				FsPath signatureFile = getSignatureFile(qualityDir, tokenSuffix);
-				FsPath compressedSignatureFile = signatureFile
-					.Parent()
-					.Join(signatureFile.Basename(extension: false))
-					.Concat(SevenZipExtension);
+					FsPath signatureFile = getSignatureFile(qualityDir, tokenSuffix);
+					FsPath compressedSignatureFile = signatureFile
+						.Parent()
+						.Join(signatureFile.Basename(extension: false))
+						.Concat(SevenZipExtension);
 
-				if (compressedSignatureFile.IsFile())
-					compressedSignatureFile.DeleteFile();
+					if (compressedSignatureFile.IsFile())
+						compressedSignatureFile.DeleteFile();
 
-				new SevenZip(false).Compress(signatureFile, compressedSignatureFile)
-					.Should().BeTrue();
-			}
+					new SevenZip(false).Compress(signatureFile, compressedSignatureFile)
+						.Should().BeTrue();
+				}
 		}
 
 		[Order(5)]
 		[TestCase(SetCodes, SelectSmall, SelectZoom, NonToken, Token)]
-		public void ZipImages(string setCodes, bool small, bool zoom, bool nonToken, bool token)
+		public void ZipImages(string setCodesStr, bool small, bool zoom, bool nonToken, bool token)
 		{
-			var list = setCodes?.Split(',').ToHashSet(Str.Comparer);
+			var setCodes = setCodesStr?.Split(',').ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 			foreach (FsPath qualityDir in getQualities(small, zoom))
-			foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
-			{
-				FsPath compressedRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix).Concat(ZipDirSuffix);
-				compressedRoot.CreateDirectory();
-
-				FsPath sourceRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix);
-				foreach (var subdir in sourceRoot.EnumerateDirectories())
+				foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken, token))
 				{
-					string subdirRelative = subdir.Basename();
-					if (list?.Contains(subdirRelative) == false)
-						continue;
+					FsPath compressedRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix).Concat(ZipDirSuffix);
+					compressedRoot.CreateDirectory();
 
-					var targetFile = compressedRoot.Join(subdirRelative).Concat(SevenZipExtension);
-					if (targetFile.IsFile())
-						targetFile.DeleteFile();
+					FsPath sourceRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix);
+					foreach (var subdir in sourceRoot.EnumerateDirectories())
+					{
+						string subdirRelative = subdir.Basename();
+						if (setCodes?.Contains(subdirRelative) == false)
+							continue;
 
-					new SevenZip(false).Compress(subdir, targetFile)
-						.Should().BeTrue();
+						var targetFile = compressedRoot.Join(subdirRelative).Concat(SevenZipExtension);
+						if (targetFile.IsFile())
+							targetFile.DeleteFile();
+
+						new SevenZip(false).Compress(subdir, targetFile)
+							.Should().BeTrue();
+					}
 				}
-			}
+		}
+
+		[Order(6)]
+		[Test]
+		public void EnsureNoCompressedDuplicates()
+		{
+			foreach (FsPath qualityDir in getQualities(small: true, zoom: true))
+				foreach ((_, _, FsPath tokenSuffix) in getIsToken(nonToken: true, token: true))
+				{
+					FsPath compressedRoot = TargetDir.Join(qualityDir).Concat(tokenSuffix).Concat(ZipDirSuffix);
+					var caseInsensitiveMap = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+					using var scope = new AssertionScope($"Duplicates in {compressedRoot}");
+					foreach (var name in compressedRoot.EnumerateFiles("*.7z", SearchOption.TopDirectoryOnly))
+					{
+						string nameRelative = name.Basename();
+						caseInsensitiveMap.Should().NotContainKey(nameRelative);
+						caseInsensitiveMap[nameRelative] = true;
+					}
+				}
 		}
 
 

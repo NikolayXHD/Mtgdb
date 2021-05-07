@@ -14,12 +14,12 @@ namespace Mtgdb.Downloader
 			_commonQueue = new HashSet<ImageDownloadProgress>();
 
 			foreach (var task in tasks)
-			foreach (var (downloader, queue) in _queueByDownloader)
-			{
-				_commonQueue.Add(task);
-				if (downloader.CanDownload(task))
-					queue.Add(task);
-			}
+				foreach (var (downloader, queue) in _queueByDownloader)
+				{
+					_commonQueue.Add(task);
+					if (downloader.CanDownload(task))
+						queue.Add(task);
+				}
 		}
 
 		private string getReleaseDate(ImageDownloadProgress progress)

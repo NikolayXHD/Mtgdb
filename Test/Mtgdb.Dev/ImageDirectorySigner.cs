@@ -13,7 +13,9 @@ namespace Mtgdb.Dev
 
 			if (packagePath.IsDirectory())
 			{
-				var sets = setCodes?.Split(';', ',', '|').ToHashSet(Str.Comparer);
+				var sets = setCodes?.Split(';', ',', '|')
+					// to remove duplicates with different set name casing
+					.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 				var prevSignatureByPath = sets != null && output.IsFile()
 					? Signer.ReadFromFile(output, internPath: false)

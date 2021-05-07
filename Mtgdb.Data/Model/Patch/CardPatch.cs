@@ -27,5 +27,7 @@ namespace Mtgdb.Data
 		public int? Life { get; [UsedImplicitly] set; }
 
 		public bool? HasNoSide { get; [UsedImplicitly] set; }
+
+		public bool? ClearOriginalType { get; [UsedImplicitly] set; }
 	}
 }

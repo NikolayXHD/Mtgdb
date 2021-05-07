@@ -60,23 +60,23 @@ namespace Mtgdb.Data
 			if (_priceCache != null)
 			{
 				foreach (var set in repo.SetsByCode.Values)
-				foreach (var card in set.Cards)
-					card.Price = _priceCache.TryGetValue(card.Id, out float price)
-						? (float?)price
-						: null;
+					foreach (var card in set.Cards)
+						card.Price = _priceCache.TryGetValue(card.Id, out float price)
+							? (float?)price
+							: null;
 			}
 			else if (_prices != null)
 			{
 				foreach (var set in repo.SetsByCode.Values)
-				foreach (var card in set.Cards)
-					card.Price = _prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices)
-						? mtgjsonPrices.Paper
-							?.SelectMany(entry =>
-								(IEnumerable<KeyValuePair<string, float?>>)entry.Value?.Retail?.Normal ??
-								Enumerable.Empty<KeyValuePair<string, float?>>())
-							.AtMin(entry => entry.Key)
-							.FindOrDefault().Value
-						: null;
+					foreach (var card in set.Cards)
+						card.Price = _prices.TryGetValue(card.MtgjsonId, out var mtgjsonPrices)
+							? mtgjsonPrices.Paper
+								?.SelectMany(entry =>
+									(IEnumerable<KeyValuePair<string, float?>>)entry.Value?.Retail?.Normal ??
+									Enumerable.Empty<KeyValuePair<string, float?>>())
+								.AtMin(entry => entry.Key)
+								.FindOrDefault().Value
+							: null;
 			}
 
 			IsLoadingPriceComplete.Signal();
@@ -189,7 +189,8 @@ namespace Mtgdb.Data
 			return result;
 		}
 
-		public IReadOnlyDictionary<string, MtgjsonPrices> Prices => _prices;
+		public IReadOnlyDictionary<string, MtgjsonPrices> Prices =>
+			_prices;
 
 		private FsPath PricesFile { get; set; }
 		private FsPath PriceCacheFile { get; set; }
@@ -197,7 +198,9 @@ namespace Mtgdb.Data
 
 		private readonly Func<IDataDownloader> _downloaderFactory;
 		private IDataDownloader _downloader;
-		private IDataDownloader Downloader => _downloader ??= _downloaderFactory();
+
+		private IDataDownloader Downloader =>
+			_downloader ??= _downloaderFactory();
 
 		public AsyncSignal IsDownloadPriceComplete { get; } = new AsyncSignal();
 		public AsyncSignal IsLoadingPriceComplete { get; } = new AsyncSignal();

@@ -539,6 +539,9 @@ namespace Mtgdb.Data
 
 			if (patch.Hand != null)
 				Hand = patch.Hand;
+
+			if (patch.ClearOriginalType == true)
+				OriginalType = null;
 		}
 
 

@@ -23,7 +23,15 @@ namespace Mtgdb.Util
 			_imageLoader = imageLoader;
 		}
 
-		public void ExportCardImages(FsPath directory, bool small, bool zoom, string setCodes, FsPath smallSubdir, FsPath zoomedSubdir, bool forceRemoveCorner, bool token)
+		public void ExportCardImages(
+			FsPath directory,
+			bool small,
+			bool zoom,
+			string setCodes,
+			FsPath smallSubdir,
+			FsPath zoomedSubdir,
+			bool forceRemoveCorner,
+			bool token)
 		{
 			var exportedSmall = new HashSet<FsPath>();
 			var exportedZoomed = new HashSet<FsPath>();
@@ -36,7 +44,7 @@ namespace Mtgdb.Util
 
 		private void export(
 			FsPath directory,
-			string setCodes,
+			string setCodesStr,
 			ISet<FsPath> exportedSmall,
 			ISet<FsPath> exportedZoomed,
 			bool small,
@@ -47,12 +55,12 @@ namespace Mtgdb.Util
 			bool forceRemoveCorner,
 			bool token)
 		{
-			var setCodesArr = setCodes?.Split(',');
+			var setCodes = setCodesStr?.Split(',').ToHashSet(StringComparer.OrdinalIgnoreCase);
 			foreach ((string setCode, Set set) in _cardRepo.SetsByCode)
 			{
 				Console.WriteLine(setCode);
 
-				if (setCodesArr != null && !setCodesArr.Contains(setCode, Str.Comparer))
+				if (setCodes?.Contains(setCode) == false)
 					continue;
 
 				FsPath smallSetSubdir = FsPath.None;

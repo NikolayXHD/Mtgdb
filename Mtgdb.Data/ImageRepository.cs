@@ -297,7 +297,10 @@ namespace Mtgdb.Data
 			}
 		}
 
-		private static void add(ImageFile imageFile, Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant, string name)
+		private static void add(
+			ImageFile imageFile,
+			Dictionary<string, Dictionary<string, Dictionary<int, ImageFile>>> modelsByNameBySetByVariant,
+			string name)
 		{
 			name = string.Intern(name);
 

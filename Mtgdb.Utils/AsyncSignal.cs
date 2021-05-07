@@ -15,8 +15,8 @@ namespace Mtgdb
 
 		public void Signal()
 		{
-			_semaphore.Release();
 			Signaled = true;
+			_semaphore.Release();
 		}
 
 		public async Task Wait(CancellationToken token)
