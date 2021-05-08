@@ -64,9 +64,6 @@ namespace Mtgdb
 			var lines = targetFile.ReadAllLines()
 				.Where(_ => !string.IsNullOrEmpty(_));
 
-			if (Path.DirectorySeparatorChar != '\\')
-				lines = lines.Select(_ => _.Replace('\\', Path.DirectorySeparatorChar));
-
 			var result = lines
 				.Select(_ => new FileSignature
 				{

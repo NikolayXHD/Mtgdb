@@ -20,6 +20,8 @@ namespace Mtgdb.Downloader
 
 		public async Task Download(string quality, IReadOnlyList<ImageDownloadProgress> allProgress, CancellationToken token)
 		{
+			_abort = false;
+
 			var megaDownloader = new MegaDownloader(_megatools, _syncOutput);
 			var yandexDownloader = new YandexDownloader(_syncOutput, new YandexDiskClient());
 

@@ -13,6 +13,8 @@ namespace Mtgdb
 		{
 			if (Path.DirectorySeparatorChar != '\\')
 				value = value.Replace('\\', Path.DirectorySeparatorChar);
+			if (Path.DirectorySeparatorChar != '/')
+				value = value.Replace('/', Path.DirectorySeparatorChar);
 
 			var result = new FsPath(value);
 

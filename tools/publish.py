@@ -47,15 +47,16 @@ def get_lnk_bytes(text: str) -> bytes:
 def run(
         command: str | os.PathLike,
         args: typing.Sequence[str | os.PathLike],
-        timeout: int = 3600
-) -> None:
+        timeout: int = 3600,
+        check: bool = True,
+) -> bool:
     if is_windows:
         if command == 'mono':
             command = args[0]
             args = args[1:]
     args.insert(0, command)
-    subprocess.run(args, check=True)
-
+    proc = subprocess.run(args, check=check)
+    return proc.returncode == 0
 
 is_windows = platform.system() == 'Windows'
 configuration = 'release'
@@ -278,8 +279,8 @@ def publish_update_notification():
     run('mono', [util_exe, '-notify'])
     run('git', ['-C', repos_notifications, 'pull'])
     run('git', ['-C', repos_notifications, 'add', '-A'])
-    run('git', ['-C', repos_notifications, 'commit', '-m', 'auto'])
-    run('git', ['-C', repos_notifications, 'push'])
+    if run('git', ['-C', repos_notifications, 'commit', '-m', 'auto'], check=False):
+        run('git', ['-C', repos_notifications, 'push'])
 
 
 def publish_zip_to_actual_update_url():
@@ -326,6 +327,16 @@ def main():
         dest='list_steps',
         action='store_true',
     )
+    parser.add_argument(
+        '--no-tests',
+        dest='no_tests',
+        action='store_true',
+    )
+    parser.add_argument(
+        '--no-run',
+        dest='no_run',
+        action='store_true',
+    )
     args = parser.parse_args()
 
     steps: list[typing.Callable[[], None]] = [
@@ -337,8 +348,8 @@ def main():
         create_lzma_compressed_zip,
         sign_zip,
         publish_zip_to_test_update_url,
-        # run_installed_app,
-        # run_tests,
+        *((run_tests,) if not args.no_tests else ()),
+        *((run_installed_app,) if not args.no_run else ()),
         prompt_user_confirmation,
         publish_update_notification,
         publish_zip_to_actual_update_url,

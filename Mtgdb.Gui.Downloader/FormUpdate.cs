@@ -404,8 +404,9 @@ namespace Mtgdb.Downloader
 		{
 			_imageLoader.ClearCache();
 
-			foreach (var card in _cardRepository.Cards)
-				card.ResetImageModel();
+			if (_cardRepository.IsLoadingComplete.Signaled)
+				foreach (var card in _cardRepository.Cards)
+					card.ResetImageModel();
 		}
 
 		private static void write(IReadOnlyList<ImageDownloadProgress> imageDownloadProgresses)
