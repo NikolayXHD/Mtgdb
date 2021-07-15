@@ -258,29 +258,31 @@ namespace Mtgdb.Downloader
 			// due to a mismatch between physical and localized directory names
 			var tempLocation = new FsPath(Path.GetTempPath());
 			FsPath tempPath = tempLocation.Join(ShortcutFileName);
-			if (!createApplicationShortcut(tempPath, execPath, iconPath))
-				return;
-			try
-			{
-				tempPath.MoveFileTo(shortcutPath);
-				Console.WriteLine("Moved application shortcut from {0} to {1}",
-					tempLocation, shortcutLocation);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Failed to move application shortcut from {0} to {1}: {2}",
-					tempLocation, shortcutLocation, ex);
-
+			if (createApplicationShortcut(tempPath, execPath, iconPath))
 				try
 				{
-					tempPath.DeleteFile();
+					if (shortcutPath.IsFile())
+						shortcutPath.DeleteFile();
+
+					tempPath.MoveFileTo(shortcutPath);
+					Console.WriteLine("Moved application shortcut from {0} to {1}",
+						tempLocation, shortcutLocation);
 				}
-				catch (Exception cleanupEx)
+				catch (Exception ex)
 				{
-					Console.WriteLine("Failed to remove application shortcut from {0}: {1}",
-						tempLocation, cleanupEx);
+					Console.WriteLine("Failed to move application shortcut from {0} to {1}: {2}",
+						tempLocation, shortcutLocation, ex);
+
+					try
+					{
+						tempPath.DeleteFile();
+					}
+					catch (Exception cleanupEx)
+					{
+						Console.WriteLine("Failed to remove application shortcut from {0}: {1}",
+							tempLocation, cleanupEx);
+					}
 				}
-			}
 		}
 
 		private static string getVersionFromAssembly()
