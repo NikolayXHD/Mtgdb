@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ContentModelUserStore">
+  <component name="UserContentModel">
     <attachedFolders>
       <Path>etc</Path>
       <Path>out</Path>
@@ -8,6 +8,7 @@
     </attachedFolders>
     <explicitIncludes />
     <explicitExcludes>
+      <Path>out/bin</Path>
       <Path>out/data</Path>
       <Path>out/data/index</Path>
       <Path>out/help</Path>
