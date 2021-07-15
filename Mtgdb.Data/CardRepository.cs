@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Mtgdb.Data
 {
@@ -185,11 +186,31 @@ namespace Mtgdb.Data
 						gr => gr.ToList(),
 						Str.Comparer);
 
-				set.ActualCardsById = set.ActualCards
-					.ToDictionary(_ => _.MtgjsonId);
+				var duplicateCards = set.ActualCards.GroupBy(_ => _.MtgjsonId)
+					.Where(gr => gr.Skip(1).Any())
+					.ToDictionary(gr => gr.Key, gr => gr.ToList());
 
-				set.TokensById = set.Tokens
-					.ToDictionary(_ => _.MtgjsonId);
+				if (duplicateCards.Count > 0)
+				{
+					_log.Warn($"{duplicateCards.Count} duplicate card ids {set.Code}");
+					_log.Warn(string.Join("\\n", duplicateCards.Keys));
+				}
+
+				set.ActualCardsById = set.ActualCards.GroupBy(_ => _.MtgjsonId)
+					.ToDictionary(gr => gr.Key, gr => gr.First());
+
+				var duplicateTokens = set.Tokens.GroupBy(_ => _.MtgjsonId)
+					.Where(gr => gr.Skip(1).Any())
+					.ToDictionary(gr => gr.Key, gr => gr.ToList());
+
+				if (duplicateTokens.Count > 0)
+				{
+					_log.Warn($"{duplicateTokens.Count} duplicate token ids {set.Code}");
+					_log.Warn(string.Join(Environment.NewLine, duplicateTokens.Keys));
+				}
+
+				set.TokensById = set.Tokens.GroupBy(_ => _.MtgjsonId)
+					.ToDictionary(gr => gr.Key, gr=> gr.First());
 
 				foreach (var card in set.Cards)
 					CardsById[card.Id] = card;
@@ -367,18 +388,18 @@ namespace Mtgdb.Data
 		{
 			if (Patch.Legality != null)
 				foreach ((string format, var patch) in Patch.Legality)
-				foreach (var card in Cards)
-				{
-					if (card.IsBannedIn(format) && !patch.Banned.Remove.Contains(card.NameEn) || patch.Banned.Add.Contains(card.NameEn))
-						card.SetLegality(format, Legality.Banned);
-					else if (card.IsRestrictedIn(format) && !patch.Restricted.Remove.Contains(card.NameEn) ||
-						patch.Restricted.Add.Contains(card.NameEn))
-						card.SetLegality(format, Legality.Restricted);
-					else if (card.IsLegalIn(format) && !card.Printings.Any(patch.Sets.Remove.Contains) || card.Printings.Any(patch.Sets.Add.Contains))
-						card.SetLegality(format, Legality.Legal);
-					else
-						card.SetLegality(format, Legality.Illegal);
-				}
+					foreach (var card in Cards)
+					{
+						if (card.IsBannedIn(format) && !patch.Banned.Remove.Contains(card.NameEn) || patch.Banned.Add.Contains(card.NameEn))
+							card.SetLegality(format, Legality.Banned);
+						else if (card.IsRestrictedIn(format) && !patch.Restricted.Remove.Contains(card.NameEn) ||
+							patch.Restricted.Add.Contains(card.NameEn))
+							card.SetLegality(format, Legality.Restricted);
+						else if (card.IsLegalIn(format) && !card.Printings.Any(patch.Sets.Remove.Contains) || card.Printings.Any(patch.Sets.Add.Contains))
+							card.SetLegality(format, Legality.Legal);
+						else
+							card.SetLegality(format, Legality.Illegal);
+					}
 
 			foreach (var card in Cards)
 				card.LegalityByFormat = card.LegalityByFormat?
@@ -559,5 +580,6 @@ namespace Mtgdb.Data
 		private Patch Patch { get; set; }
 
 		public static readonly Regex IncompleteChaosPattern = new Regex("(?<!{)CHAOS(?!})");
+		private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 	}
 }

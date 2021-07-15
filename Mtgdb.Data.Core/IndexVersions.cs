@@ -2,8 +2,8 @@ namespace Mtgdb.Data
 {
 	public static class IndexVersions
 	{
-		// Mtgjson.com v 5.1.0
-		private const string Cards = "1.31";
+		// Mtgjson.com v5.1.0+20210714
+		private const string Cards = "1.32";
 		public const string CardSearcher = Cards;
 		public const string CardSpellchecker = Cards;
 		public const string KeywordSearcher = Cards;
