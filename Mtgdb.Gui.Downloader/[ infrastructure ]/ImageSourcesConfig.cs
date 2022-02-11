@@ -18,9 +18,6 @@ namespace Mtgdb.Downloader
 		[DataMember(Name = "MegaPrefix")]
 		public string MegaPrefix { get; [UsedImplicitly] set; }
 
-		[DataMember(Name = "GdrivePrefix")]
-		public string GdrivePrefix { get; [UsedImplicitly] set; }
-
 		[DataMember(Name = "YandexKey")]
 		public string YandexKey { get; set; }
 

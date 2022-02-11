@@ -37,7 +37,6 @@
 
 	<ImageSources
 			MegaPrefix="https://mega.nz/#F!"
-			GdrivePrefix="https://drive.google.com/uc?export=download&amp;id="
 			YandexKey="oZys52trJjEUJ9U7XSb4cKpduHKboapl4JvINZqbpIEC85CkM4GdTyqrS2JkBEt5q/J6bpmRyOJonT3VoXnDag=="
 			YandexListPath="/{0}-list/filelist.7z"
 			YandexDirPath="/{0}-7z/{1}.7z">
