@@ -1081,7 +1081,10 @@ namespace Mtgdb.Gui
 			_menuDataSource.SelectedIndex = (int) settings.DataSource;
 			_buttonFilterBySearchResult.Checked = settings.ApplyFilter;
 			_menuLabelDataElement.SelectedIndex = (int) settings.LabelDataElement;
-			_menuChartType.SelectedIndex = _menuChartType.MenuValues.IndexOf(settings.ChartType.ToString());
+			int chartTypeIndex = _menuChartType.MenuValues.IndexOf(settings.ChartType.ToString());
+			if (Runtime.IsMono && chartTypeIndex < 0)
+				chartTypeIndex = 0;
+			_menuChartType.SelectedIndex = chartTypeIndex;
 
 			_buttonArgumentTotal.Checked = settings.ShowArgumentTotal;
 			_buttonSeriesTotal.Checked = settings.ShowSeriesTotal;
@@ -1120,7 +1123,9 @@ namespace Mtgdb.Gui
 				DataSource = (DataSource) Enum.Parse(typeof(DataSource), _menuDataSource.SelectedValue),
 				ApplyFilter = _buttonFilterBySearchResult.Checked,
 				LabelDataElement = (DataElement) Enum.Parse(typeof(DataElement), _menuLabelDataElement.SelectedValue),
-				ChartType = (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuChartType.SelectedValue),
+				ChartType = Runtime.IsMono
+					? SeriesChartType.StackedBar 
+					: (SeriesChartType) Enum.Parse(typeof(SeriesChartType), _menuChartType.SelectedValue),
 				ColumnFields = readFields(_tabCols),
 				ColumnFieldsSort = readEnum<SortDirection>(_tabCols),
 				SeriesFields = readFields(_tabRows),
