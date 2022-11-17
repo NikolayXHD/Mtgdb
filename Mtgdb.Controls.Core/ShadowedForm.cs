@@ -38,7 +38,7 @@ namespace Mtgdb.Controls
 
 		private static bool isAeroEnabled()
 		{
-			if (Environment.OSVersion.Version.Major >= 6)
+			if (!Runtime.IsMono && Environment.OSVersion.Version.Major >= 6)
 			{
 				int enabled = 0;
 				DwmIsCompositionEnabled(ref enabled);
