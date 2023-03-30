@@ -11,21 +11,30 @@ window.onload = function () {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', get_link_url, true);
 	xhr.send();
+
+	function append_anchor(href, innerText, dlTarget) {
+		var a = document.createElement('a');
+		a.href = href;
+		if (dlTarget !== undefined) {
+			a.download = dlTarget;
+		}			
+		a.innerText = innerText;
+		document.body.appendChild(a);
+		return a;
+	}
+	
 	xhr.onreadystatechange = function () {
 		if (xhr.readyState !== 4) {
 			return;
 		}
 
 		if (xhr.status !== 200) {
+			append_anchor('https://disk.yandex.ru/d/vJ19nJ5n_omPxQ', 'Yandex.Disk page for downloading Mtgdb.Gui.zip')		
 			return;
 		}
 
 		var link_model = JSON.parse(xhr.responseText);
-		var a = document.createElement('a');
-		a.href = link_model.href;
-		a.download = 'Mtgdb.Gui.zip';
-		a.innerText = 'download';
-		document.body.appendChild(a);
+		var a = append_anchor(link_model.href, 'download', 'Mtgdb.Gui.zip');
 		a.click();
 	}
 }
