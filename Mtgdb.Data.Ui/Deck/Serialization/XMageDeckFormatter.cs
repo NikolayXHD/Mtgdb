@@ -85,7 +85,7 @@ namespace Mtgdb.Ui
 				var count = zone.Count[cardId];
 				var card = Repo.CardsById[cardId];
 
-				result.AppendLine($"{prefix}{count} [{card.SetCode}:{0}] {card.NameNormalized}");
+				result.AppendLine($"{prefix}{count} [{card.SetCode}:{card.Number}] {card.NameNormalized}");
 			}
 		}
 
