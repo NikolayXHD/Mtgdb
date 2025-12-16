@@ -39,7 +39,7 @@ Generated mana
 
 Seek for unknown patterns for generating mana.
 - Ban all generated mana in filter by Generated mana
-- search: 
+- search:
 ```
 texten:(mana OR add*)
 ```
@@ -77,7 +77,7 @@ also update these files in out/update/img/
     mq-token-list/filelist.txt
 
 update
-  
+
 Additional data
 ===============
 
