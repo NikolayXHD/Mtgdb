@@ -256,7 +256,7 @@ def run_installed_app():
     subprocess.Popen(
         ['explorer', pathlib.Path(r'D:\games\mtgdb.gui\Mtgdb.Gui.lnk')]
         if is_windows
-        else pathlib.Path('/run/media/kolia/ssd/apps/mtgdb.gui/start.sh'),
+        else pathlib.Path('/run/media/kolia/ssd/apps/Mtgdb.Gui/start.sh'),
         close_fds=True
     )
 

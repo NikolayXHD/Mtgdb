@@ -135,9 +135,9 @@ namespace Mtgdb.Data
 
 		private Dictionary<string, float> createCache(CardRepository repo)
 		{
-			var priceByCard = repo.Cards
-				.Where(_ => _.Price.HasValue) // ReSharper disable once PossibleInvalidOperationException
-				.ToDictionary(_ => _.Id, _ => _.Price.Value);
+			var priceByCard = repo.CardsById.Keys
+				.Where(_ => repo.CardsById[_].Price.HasValue) // ReSharper disable once PossibleInvalidOperationException
+				.ToDictionary(_ => _, _ => repo.CardsById[_].Price.Value);
 			return priceByCard;
 		}
 

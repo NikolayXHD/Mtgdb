@@ -32,15 +32,8 @@ namespace Mtgdb.Data
 					return "ru";
 				case "Spanish":
 					return "es";
-				case "Phyrexian":
-				case "Sanskrit":
-				case "Hebrew":
-				case "Ancient Greek":
-				case "Latin":
-				case "Arabic":
-					return null;
 				default:
-					throw new NotSupportedException();
+					return null;
 			}
 		}
 
